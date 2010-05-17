@@ -1,0 +1,12 @@
+% File to make the booklet with the right margins
+
+\documentclass[letter]{article}
+\usepackage{pdfpages}
+\usepackage[letterpaper, top=.4in, bottom=.4in]{geometry}
+
+\begin{document}
+\pagestyle{empty}
+\includepdf[pages=-, noautoscale, scale=.9]{booklet_0.pdf}
+
+\end{document}
+
