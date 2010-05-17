@@ -1,3 +1,20 @@
+:author: Gaius Caesar
+:email: jj@rome.it
+:institution: Senate House
+
+:author: Mark Anthony
+:email: mark37@rome.it
+:institution: Egyption Embassy
+
+------------------------------------------------
+A Numerical Perspective to Terraforming a Desert
+------------------------------------------------
+
+.. class:: abstract
+
+   A short version of the long version that is way too long to be written as a
+   short version anyway.
+
 Introduction
 ------------
 
