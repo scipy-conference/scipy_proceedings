@@ -356,7 +356,7 @@ def mk_abstract_preview(abstract, outfilename, attach_dir, start_page=None):
             destfile = os.path.abspath(os.path.join(outdir, f))
             shutil.copy2(f, outdir)
 
-    outbasename = os.path.splitext(outfilename)[0]
+    outbasename = outdir + os.sep + os.path.splitext(outfilename)[0]
     outfilename = outbasename + '.tex'
 
     outfile = codecs.open(outfilename, 'w', 'utf-8')
