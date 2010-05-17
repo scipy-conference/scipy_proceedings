@@ -1,6 +1,6 @@
 # Ignore this file
 
-{'paper_abstract': 'An abstract',
+{'paper_abstract': '',
  'authors': [{'first_names': 'XX',
               'surname': 'XXX',
               'address': 'XXX',
