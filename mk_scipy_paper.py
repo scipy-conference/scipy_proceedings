@@ -82,16 +82,16 @@ def tex2pdf(filename, remove_tex=True, timeout=10, runs=2):
         and cleans up the mess afterwards
     """
     current_dir = os.getcwd()
-    os.chdir(os.path.dirname(filename))
+    os.chdir(outdir)
     print >> sys.stderr, "Compiling document to pdf"
-    basename = os.path.splitext(os.path.basename(filename))[0]
+    basename = os.path.join(outdir, os.path.splitext(os.path.basename(filename))[0])
     if os.path.exists(basename + '.pdf'):
         os.unlink(basename + '.pdf')
     for _ in range(runs):
         supervise_popen(("pdflatex",  "--interaction", "scrollmode",
                         os.path.basename(filename)), timeout=timeout)
     error_file = None
-    errors =  file(os.path.abspath(basename + '.log')).readlines()[-1]
+    errors =  file(os.path.abspath('../' + basename + '.log')).readlines()[-1]
     if not os.path.exists(basename + '.pdf') or \
                                     "Fatal error" in errors:
         error_file = os.path.abspath(basename + '.log')
@@ -343,10 +343,9 @@ def mk_abstract_preview(abstract, outfilename, attach_dir, start_page=None):
     """ Generate a preview for an given paper.
     """
     copy_files()
-    outdir = os.path.dirname(os.path.abspath(outfilename))
     for f in glob(os.path.join(attach_dir, '*')):
-        if  os.path.isdir(f) and not os.path.exists(f):
-            os.makedirs(f)
+        if os.path.isdir(f):
+            continue
         else:
             if not outdir == os.path.dirname(os.path.abspath(f)):
                 shutil.copy2(f, outdir)
@@ -367,7 +366,7 @@ def mk_abstract_preview(abstract, outfilename, attach_dir, start_page=None):
     outfile.close()
 
     tex2pdf(outbasename, remove_tex=False)
-    abstract.num_pages = count_pages(outbasename + '.pdf')
+#    abstract.num_pages = count_pages(outbasename + '.pdf')
 
     # Generate the tex file again, now that we know the length.
     outfile = codecs.open(outfilename, 'w', 'utf-8')
