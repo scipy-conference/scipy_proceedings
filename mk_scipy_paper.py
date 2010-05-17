@@ -10,7 +10,7 @@ from glob import glob
 
 from docutils import core as docCore
 
-conf_name = 'SciPy2009'
+conf_name = 'SciPy2010'
 
 current_dir = os.path.dirname(__file__)
 if current_dir == '':
@@ -18,7 +18,7 @@ if current_dir == '':
 
 outdir = current_dir + os.sep + 'output'
 
-sourcedir = current_dir + os.sep + 'sources'
+sourcedir = current_dir + os.sep + 'source'
 try:
     os.mkdir(outdir)
 except:
