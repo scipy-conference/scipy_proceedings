@@ -257,8 +257,8 @@ def render_abstract(outfile, abstract, start_page=None):
             author_cite_list = author_cite_list[:3]
             author_cite_list.append('et al.')
         citation = ', '.join(author_cite_list) + \
-        'in Proc. SciPy 2009, G. Varoquaux, S. van der Walt, J. Millman (Eds), '
-        copyright = '\\copyright 2009, %s' % ( ', '.join(author_cite_list))
+        'in Proc. SciPy 2010, S. J. van der Walt, J. Millman, G. Varoquaux (Eds) '
+        copyright = '\\copyright 2010, %s' % ( ', '.join(author_cite_list))
     else:
         authors = ''
         citation = 'Citation'
