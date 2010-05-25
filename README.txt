@@ -3,3 +3,9 @@
 
 Note that we have not written the parser for author, institute, abstract, etc.
 yet, so the output is not *exactly* like the final version.
+
+TODO
+----
+- Parse author, institute, abstract
+- Fix math rendering bug
+
