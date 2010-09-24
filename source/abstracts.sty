@@ -1,0 +1,200 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{abstracts}
+\RequirePackage{graphicx}
+%\RequirePackage{setspace}
+\RequirePackage[a4paper,textwidth=16cm,textheight=25cm]{geometry}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+\RequirePackage{titlesec}
+\RequirePackage{fancyhdr}
+\RequirePackage{framed}
+\RequirePackage[hyphens]{url}
+\RequirePackage{enumitem}
+\RequirePackage{hyperref}
+
+% For ltxgrid to work
+%\newcommand{\class@name}{gael}
+
+%-----------------------------------------------------------------------------
+% Special-purpose color definitions (dark enough to print OK in black and white)
+\usepackage{color}
+
+% A few colors to replace the defaults for certain link types
+\definecolor{orange}{cmyk}{0,0.4,0.8,0.2}
+\definecolor{darkorange}{rgb}{.71,0.21,0.01}
+\definecolor{darkblue}{rgb}{.01,0.21,0.71}
+\definecolor{darkgreen}{rgb}{.1,.52,.09}
+
+%-----------------------------------------------------------------------------
+% The hyperref package gives us a pdf with properly built
+% internal navigation ('pdf bookmarks' for the table of contents,
+% internal cross-reference links, web links for URLs, etc.)
+\usepackage{hyperref}
+\hypersetup{pdftex,  % needed for pdflatex
+  breaklinks=true,  % so long urls are correctly broken across lines
+  colorlinks=true,
+  urlcolor=blue,
+  linkcolor=darkblue,
+  citecolor=darkgreen,
+  }
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Definitions of the commands used in abstracts :
+
+% For the hyperref package we need to include section call in the source,
+% so let's render them useless :
+
+\setlength\parindent{0pt}
+
+\def\title#1{
+ \noindent
+ \section*{\Large #1}
+ \addcontentsline{toc}{section}{\sffamily #1}
+}
+
+\def\addauthorstoc#1{%
+\addtocontents{toc}{\vspace*{-.5ex}{\small #1}\protect\newline\smallskip}
+}
+
+\def\presentingauthor#1{
+\begin{minipage}{0.8\linewidth}
+~ ~ ~\underline{#1}
+\end{minipage}
+}
+
+\def\email#1{{\small \tt \url{#1}}}
+
+\renewenvironment{abstract}{\sffamily\bfseries}{\par\smallskip}
+
+
+\def\otherauthors#1{
+{\sffamily #1}\par
+}
+
+\def\address#1{{\em #1}}
+
+\def\tablefootnote#1#2{\hbox to 0pt{$^{\rm #1}$\footnotesize #2\hss}}
+
+\def\thebibliography#1{
+\list{[\arabic{enumi}]}{\settowidth\labelwidth{[#1]}
+\leftmargin\labelwidth\advance\leftmargin\labelsep\itemsep-\parsep
+\topsep0pt\usecounter{enumi}\small}
+\small
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Styling
+\titleformat*{\section}{\large\bfseries\sffamily}
+\titleformat*{\subsection}{\bfseries\sffamily}
+\titleformat*{\subsubsection}{\sffamily}
+
+\def\resetheadings#1#2#3#4{
+    \fancyhf{} %delete the current section for header and footer
+    \fancyfoot[RE,LO]{\sffamily\bfseries\thepage}
+    \fancyhead[LO]{\bfseries Proceedings of the 9$^{\text{th}}$ Python in
+Science Conference (SciPy 2010)}
+    \fancyfoot[RO]{\footnotesize #3}
+    \fancyfoot[LE]{\footnotesize #4}
+    \fancyhead[RE]{#1}
+    \renewcommand{\headrulewidth}{1pt}
+    \renewcommand{\footrulewidth}{1pt}
+    \renewcommand{\headwidth}{\textwidth}
+    \pagestyle{fancy}
+
+    \gdef\this@citation{#2}
+
+    \fancypagestyle{mytitle}{%
+	\fancyhf{} % clear all header and footer fields
+	\fancyfoot[RE,LO]{\sffamily\bfseries\thepage}
+	\fancyfoot[LE,RO]{\footnotesize \this@citation}
+	\fancyhead[LO,RE]{\bfseries Proceedings of the 9$^{\text{th}}$ Python 
+	in Science Conference (SciPy 2010)}
+	\renewcommand{\headrulewidth}{1pt}
+	\renewcommand{\footrulewidth}{1pt}
+	\renewcommand{\headwidth}{\textwidth}
+    }
+    \thispagestyle{mytitle}
+}
+
+\resetheadings{}{}{}{}
+
+\setlength\columnsep{3ex}
+
+\setlength\parindent{0pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% A cooler caption
+\renewcommand{\caption}[2][foo]{%
+\begin{minipage}{0.9\linewidth}
+\small\sffamily\sl%
+\hspace*{-0.05\linewidth}%
+#2
+\end{minipage}}%
+%}
+
+% Float parameters, for more full pages.
+\renewcommand{\topfraction}{0.9}	% max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}	% max fraction of floats at bottom
+
+\renewcommand{\textfraction}{0.07}	% allow minimal text w. figs
+%   Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.6}	% require fuller float pages
+%    % N.B.: floatpagefraction MUST be less than topfraction !!
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% A hack to have longtable work without problems with mutlicolumn
+
+\renewenvironment{longtable}[2][1]{%
+%\setlength{\locallinewidth}{1.3\linewidth}
+\footnotesize
+% Hack
+%\def\textbf#1{{\sffamily\bfseries #1}}
+\sffamily
+\begin{center}
+\begin{tabular}{#2}
+}{%
+\end{tabular}
+\end{center}
+}
+
+\def\endhead{\small}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Code blocks
+\newlength\leftsidespace
+
+\renewenvironment{quote}{%
+\par
+\smallskip
+\hspace{0.03\linewidth}%
+\begin{minipage}{0.97\linewidth}
+\footnotesize}{%
+\end{minipage}
+\smallskip
+}
+
+% Hack to restore or original font size }in lists:
+\let\old@item\item
+\def\item#1{%
+\normalsize\old@item{#1}%
+}
+
+\setitemize{leftmargin=1em}
+
+\setlength{\parskip}{0.1em plus 0.5em minus 0.1em}
+
+%% Hack to get good linebreaking in tt:
+%\let\oldtexttt\textt
+%\DeclareUrlCommand\mytexttt{%
+%\mathchardef\UrlBreakPenalty=0
+%\mathchardef\UrlBigBreakPenalty=0
+%}
+%\def\texttt#1{\mytexttt{#1}}
+
+% :vim:ft=tex:
