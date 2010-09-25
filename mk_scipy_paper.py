@@ -405,7 +405,7 @@ class Bunch(dict):
         return repr(self.__dict__)
 
 author_like = Bunch(
-        first_names='XX', 
+        first_names='XX',
         surname='XXX',
         email_address='xxx@XXX',
         institution='XXX',
@@ -422,45 +422,55 @@ abstract_like = Bunch(
 
 if __name__ == '__main__':
     from optparse import OptionParser
+
     parser = OptionParser()
-    parser.add_option("-o", "--output", dest="outfilename",
-                    default="./paper.pdf",
-                    help="output to FILE", metavar="FILE")
-    parser.usage = """%prog [options] rst_file [data_file]
-    Compiles a given rest file and information file to pdf for the SciPy
-    proceedings.
+    parser.usage = """%prog paper_path
+
+    Compiles a paper from the SciPy proceedings.
+
+    The following files are required:
+
+               .------ paper path
+               v
+    paper/01_vanderwalt/01_vanderwalt.rst
+    paper/01_vanderwalt/01_vanderwalt.py <-- paper meta-data
+
     """
-    
+
     (options, args) = parser.parse_args()
-    if not len(args) in (1, 2):
-        print "One or two arguments required: the input rest file and " \
-                "the input data file"
+    if not len(args) == 1:
+        print "Please supply the paper path as an argument."
         print ''
         parser.print_help()
         sys.exit(1)
-    infile = args[0]
-    if len(args)==1:
-        data_file = 'data.py'
-        if os.path.exists('data.py'):
-            print "Using data file 'data.py'"
-        else:
-            print "Generating the data file and storing it in data.py"
-            print "You will need to edit this file to add title, author " \
-                "information, and abstract."
-            abstract = abstract_like
-            file('data.py', 'w').write(repr(abstract))
-    elif len(args)==2:
-        data_file = args[1]
-    
+
+    paper_dir = args[0]
+    if not os.path.exists(paper_dir):
+        print "The given paper path does not exist."
+        sys.exit(1)
+
+    basedir, paper_name = os.path.split(os.path.abspath(paper_dir))
+    data_file = os.path.join(basedir, paper_name, paper_name + '.py')
+    infile = os.path.join(basedir, paper_name, paper_name + '.rst')
+
+    if os.path.exists(data_file):
+        print "Using data file '%s'" % data_file
+    else:
+        print "Generating the data file and storing it in '%s'" % data_file
+        print "You will need to edit this file to add title, author " \
+              "information, and abstract."
+        abstract = abstract_like
+        file(data_file, 'w').write(repr(abstract))
+
+
     abstract = Bunch( **eval(file(data_file).read()))
     abstract.authors = [Bunch(**a) for a in abstract.authors]
 
     abstract['summary'] = u''
     abstract['paper_text'] = file(infile).read().decode('utf-8')
 
-    outfilename = options.outfilename
+    mk_abstract_preview(abstract, paper_name, paper_dir)
 
-    mk_abstract_preview(abstract, options.outfilename, 
-                            os.path.dirname(options.outfilename))
     # Ugly, but I don't want to wait on the thread.
     sys.exit()
+
