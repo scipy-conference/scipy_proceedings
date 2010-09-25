@@ -10,7 +10,11 @@ from glob import glob
 
 from docutils import core as docCore
 
-conf_name = 'SciPy2010'
+conf = 'SciPy'
+year = '2010'
+conf_nr = '9th'
+conf_name = conf + year
+editors = 'S. J. van der Walt, J. Millman, G. Varoquaux'
 
 current_dir = os.path.dirname(__file__)
 if current_dir == '':
@@ -169,10 +173,10 @@ def preamble(outfile):
     \geometry{left=.8cm, textwidth=17cm, bindingoffset=0.6cm,
                 textheight=25.3cm, twoside}
     \usepackage{hyperref}
-    \hypersetup{pdftitle={Proceedings of the 8th Annual Python in Science Conference}}
+    \hypersetup{pdftitle={Proceedings of the %s Annual Python in Science Conference}}
     \begin{document}
 
-    '''.encode('utf-8') % get_latex_preamble())
+    '''.encode('utf-8') % (get_latex_preamble(), conf_nr))
 
     # XXX SciPy08 should not be hard coded, but to run out of the webapp
 
@@ -257,8 +261,9 @@ def render_abstract(outfile, abstract, start_page=None):
             author_cite_list = author_cite_list[:3]
             author_cite_list.append('et al.')
         citation = ', '.join(author_cite_list) + \
-        'in Proc. SciPy 2010, S. J. van der Walt, J. Millman, G. Varoquaux (Eds) '
-        copyright = '\\copyright 2010, %s' % ( ', '.join(author_cite_list))
+        'in Proc. %s %s, %s (Eds) ' \
+        % (conf, year, editors)
+        copyright = '\\copyright %s, %s' % (year, ', '.join(author_cite_list))
     else:
         authors = ''
         citation = 'Citation'
