@@ -336,7 +336,7 @@ def copy_files(dest=outfilename):
         destfile = os.path.abspath(dirname + os.sep +
                                 os.path.basename(filename))
         shutil.copy2(filename, destfile)
-                            
+
 
 
 def mk_abstract_preview(abstract, outfilename, attach_dir, start_page=None):
@@ -452,6 +452,15 @@ if __name__ == '__main__':
     basedir, paper_name = os.path.split(os.path.abspath(paper_dir))
     data_file = os.path.join(basedir, paper_name, paper_name + '.py')
     infile = os.path.join(basedir, paper_name, paper_name + '.rst')
+
+    print """
+
+************************************************************
+Building paper: %s
+************************************************************
+""" % paper_name
+
+    sys.stdout.flush()
 
     if os.path.exists(data_file):
         print "Using data file '%s'" % data_file
