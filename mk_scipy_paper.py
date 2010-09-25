@@ -10,7 +10,11 @@ from glob import glob
 
 from docutils import core as docCore
 
-conf_name = 'SciPy2010'
+conf = 'SciPy'
+year = '2010'
+conf_nr = '9th'
+conf_name = conf + year
+editors = 'S. J. van der Walt, J. Millman, G. Varoquaux'
 
 current_dir = os.path.dirname(__file__)
 if current_dir == '':
@@ -169,10 +173,10 @@ def preamble(outfile):
     \geometry{left=.8cm, textwidth=17cm, bindingoffset=0.6cm,
                 textheight=25.3cm, twoside}
     \usepackage{hyperref}
-    \hypersetup{pdftitle={Proceedings of the 8th Annual Python in Science Conference}}
+    \hypersetup{pdftitle={Proceedings of the %s Annual Python in Science Conference}}
     \begin{document}
 
-    '''.encode('utf-8') % get_latex_preamble())
+    '''.encode('utf-8') % (get_latex_preamble(), conf_nr))
 
     # XXX SciPy08 should not be hard coded, but to run out of the webapp
 
@@ -257,8 +261,9 @@ def render_abstract(outfile, abstract, start_page=None):
             author_cite_list = author_cite_list[:3]
             author_cite_list.append('et al.')
         citation = ', '.join(author_cite_list) + \
-        'in Proc. SciPy 2010, S. J. van der Walt, J. Millman, G. Varoquaux (Eds) '
-        copyright = '\\copyright 2010, %s' % ( ', '.join(author_cite_list))
+        'in Proc. %s %s, %s (Eds) ' \
+        % (conf, year, editors)
+        copyright = '\\copyright %s, %s' % (year, ', '.join(author_cite_list))
     else:
         authors = ''
         citation = 'Citation'
@@ -336,7 +341,7 @@ def copy_files(dest=outfilename):
         destfile = os.path.abspath(dirname + os.sep +
                                 os.path.basename(filename))
         shutil.copy2(filename, destfile)
-                            
+
 
 
 def mk_abstract_preview(abstract, outfilename, attach_dir, start_page=None):
@@ -424,53 +429,72 @@ if __name__ == '__main__':
     from optparse import OptionParser
 
     parser = OptionParser()
-    parser.usage = """%prog paper_path
+    parser.usage = """%prog paper_path [paper_path] [paper_path] ...
 
-    Compiles a paper from the SciPy proceedings.
+    Compiles one or more papers from the SciPy proceedings.
 
-    The following files are required:
+    The following files are required inside paper_path:
 
                .------ paper path
                v
-    paper/01_vanderwalt/01_vanderwalt.rst
+    paper/01_vanderwalt/01_vanderwalt.rst <-- paper content
     paper/01_vanderwalt/01_vanderwalt.py <-- paper meta-data
+    paper/01_vanderwalt/01_vanderwalt_fig1.png <-- included gfx, if required
 
     """
 
-    (options, args) = parser.parse_args()
-    if not len(args) == 1:
-        print "Please supply the paper path as an argument."
+    (options, papers) = parser.parse_args()
+
+    if not len(papers) >= 1:
+        print "Please supply at least one paper path as an argument."
         print ''
         parser.print_help()
         sys.exit(1)
 
-    paper_dir = args[0]
-    if not os.path.exists(paper_dir):
-        print "The given paper path does not exist."
-        sys.exit(1)
+    for paper_dir in papers:
+        if not os.path.exists(paper_dir):
+            print "The given paper path (%s) does not exist." % paper_dir
+            sys.exit(1)
 
-    basedir, paper_name = os.path.split(os.path.abspath(paper_dir))
-    data_file = os.path.join(basedir, paper_name, paper_name + '.py')
-    infile = os.path.join(basedir, paper_name, paper_name + '.rst')
+    for paper_dir in papers:
 
-    if os.path.exists(data_file):
-        print "Using data file '%s'" % data_file
-    else:
-        print "Generating the data file and storing it in '%s'" % data_file
-        print "You will need to edit this file to add title, author " \
-              "information, and abstract."
-        abstract = abstract_like
-        file(data_file, 'w').write(repr(abstract))
+        basedir, paper_name = os.path.split(os.path.abspath(paper_dir))
+        data_file = os.path.join(basedir, paper_name, paper_name + '.py')
+        infile = os.path.join(basedir, paper_name, paper_name + '.rst')
+        all_out = os.path.join(basedir, '../output/all.tex') 
+
+        all_tex = open(all_out, 'w')
+
+        print """
+
+    ************************************************************
+    Building paper: %s
+    ************************************************************
+    """ % paper_name
+
+        sys.stdout.flush()
+
+        if os.path.exists(data_file):
+            print "Using data file '%s'" % data_file
+        else:
+            print "Generating the data file and storing it in '%s'" % data_file
+            print "You will need to edit this file to add title, author " \
+                  "information, and abstract."
+            abstract = abstract_like
+            file(data_file, 'w').write(repr(abstract))
 
 
-    abstract = Bunch( **eval(file(data_file).read()))
-    abstract.authors = [Bunch(**a) for a in abstract.authors]
+        abstract = Bunch( **eval(file(data_file).read()))
+        abstract.authors = [Bunch(**a) for a in abstract.authors]
 
-    abstract['summary'] = u''
-    abstract['paper_text'] = file(infile).read().decode('utf-8')
+        abstract['summary'] = u''
+        abstract['paper_text'] = file(infile).read().decode('utf-8')
 
-    mk_abstract_preview(abstract, paper_name, paper_dir)
+        all_tex.write('\include{%s}\n' % paper_name)
+        mk_abstract_preview(abstract, paper_name, paper_dir)
 
     # Ugly, but I don't want to wait on the thread.
+
+    all_tex.close()
     sys.exit()
 
