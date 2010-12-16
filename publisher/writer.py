@@ -83,6 +83,9 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
             self.paper_title = self.encode(node.astext())
             raise nodes.SkipNode
 
+        if node.astext() == 'References':
+            raise nodes.SkipNode
+
         LaTeXTranslator.visit_title(self, node)
 
     def visit_paragraph(self, node):
@@ -92,6 +95,13 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
     def depart_paragraph(self, node):
         if 'abstract' in node['classes']:
             self.out.append('\\end{abstract}')
+
+    def visit_image(self, node):
+        attrs = node.attributes
+        node.attributes['width'] = '\columnwidth'
+
+        LaTeXTranslator.visit_image(self, node)
+
 
 writer = Writer()
 writer.translator_class = Translator
