@@ -7,9 +7,15 @@ from docutils import nodes
 from docutils.writers.latex2e import (Writer, LaTeXTranslator,
                                       PreambleCmds)
 
+PreambleCmds.float_settings = '''
+\\usepackage[font={small,it},labelfont=bf]{caption}
+\\usepackage{float}
+'''
+
 class Translator(LaTeXTranslator):
     def __init__(self, *args, **kwargs):
         LaTeXTranslator.__init__(self, *args, **kwargs)
+        self.pdfsetup.append('\usepackage{mathdesign}')
 
     # Handle author declarations
 
@@ -99,6 +105,7 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
     def visit_image(self, node):
         attrs = node.attributes
         node.attributes['width'] = '\columnwidth'
+        node.attributes['align'] = 'left'
 
         LaTeXTranslator.visit_image(self, node)
 

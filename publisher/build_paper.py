@@ -6,9 +6,15 @@ import os.path
 import sys
 import glob
 
-settings = {'documentclass': 'IEEEtran'}
+preamble = '\n'.join([r'% PDF Standard Fonts',
+                      r'\usepackage{mathptmx}',
+                      r'\usepackage[scaled=.80]{helvet}',
+                      r'\usepackage{courier}'],)
 
-
+settings = {'documentclass': 'IEEEtran',
+            'use_verbatim_when_possible': True,
+            'use_latex_citations': True,
+            'latex_preamble': preamble}
 
 if len(sys.argv) != 2:
     print "Usage: build_paper.py paper_directory"
