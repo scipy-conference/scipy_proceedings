@@ -70,8 +70,17 @@ class Translator(LaTeXTranslator):
     def visit_title(self, node):
         if self.section_level == 1:
             self.paper_title = self.encode(node.astext())
+            raise nodes.SkipNode
 
         LaTeXTranslator.visit_title(self, node)
+
+    def visit_paragraph(self, node):
+        if 'abstract' in node['classes']:
+            self.out.append('\\begin{abstract}')
+
+    def depart_paragraph(self, node):
+        if 'abstract' in node['classes']:
+            self.out.append('\\end{abstract}')
 
 writer = Writer()
 writer.translator_class = Translator
