@@ -2,4 +2,5 @@ all: papers
 
 .PHONY: papers
 papers: papers/*
-	./build_paper.py $?
+	python publisher/build_paper.py $?
+
