@@ -18,6 +18,7 @@ class Translator(LaTeXTranslator):
     author_names = []
     author_institutions = []
     author_emails = []
+    paper_title = ''
 
     def visit_docinfo(self, node):
         pass
@@ -60,11 +61,17 @@ class Translator(LaTeXTranslator):
     def depart_document(self, node):
         LaTeXTranslator.depart_document(self, node)
 
-        doc_title = '\\title{Test 1 2 3}'
+        doc_title = '\\title{%s}' % self.paper_title
         doc_title += '\\author{%s}' % ', '.join(self.author_names)
         doc_title += '\\maketitle'
 
         self.body_pre_docinfo = [doc_title]
+
+    def visit_title(self, node):
+        if self.section_level == 1:
+            self.paper_title = self.encode(node.astext())
+
+        LaTeXTranslator.visit_title(self, node)
 
 writer = Writer()
 writer.translator_class = Translator
