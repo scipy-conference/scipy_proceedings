@@ -15,6 +15,10 @@ class Translator(LaTeXTranslator):
 
     current_field = ''
 
+    author_names = []
+    author_institutions = []
+    author_emails = []
+
     def visit_docinfo(self, node):
         pass
 
@@ -22,7 +26,7 @@ class Translator(LaTeXTranslator):
         pass
 
     def visit_author(self, node):
-        self.author_stack.append([self.encode(node.astext())])
+        self.author_names.append(self.encode(node.astext()))
         raise nodes.SkipNode
 
     def depart_author(self, node):
@@ -39,11 +43,12 @@ class Translator(LaTeXTranslator):
         raise nodes.SkipNode
 
     def visit_field_body(self, node):
+        text = self.encode(node.astext())
+
         if self.current_field == 'email':
-            pass
+            self.author_emails.append(text)
         elif self.current_field == 'institution':
-            institute = '\\thanks{%s}' % self.encode(node.astext())
-            self.author_stack[-1].append(institute)
+            self.author_institutions.append(text)
 
         self.current_field = ''
 
@@ -55,7 +60,9 @@ class Translator(LaTeXTranslator):
     def depart_document(self, node):
         LaTeXTranslator.depart_document(self, node)
 
-        doc_title = r'\title{Test 1 2 3}\author{Me}\maketitle'
+        doc_title = '\\title{Test 1 2 3}'
+        doc_title += '\\author{%s}' % ', '.join(self.author_names)
+        doc_title += '\\maketitle'
 
         self.body_pre_docinfo = [doc_title]
 
