@@ -1,9 +1,24 @@
 import docutils.core as dc
 from writer import writer
 
+import os.path
+import sys
+import glob
+
 settings = {'documentclass': 'IEEEtran'}
 
-f = open('papers/00_vanderwalt/00_vanderwalt.rst', 'r')
+if len(sys.argv) != 2:
+    print "Usage: build_paper.py paper_directory"
+    sys.exit(-1)
+
+path = sys.argv[1]
+if not os.path.isdir(path):
+    print("Cannot open directory: %s" % path)
+    sys.exit(-1)
+
+rst = glob.glob(os.path.join(path, '*.rst'))[0]
+
+f = open(rst, 'r')
 tex = dc.publish_string(source=f.read(), writer=writer,
                         settings_overrides=settings)
 
