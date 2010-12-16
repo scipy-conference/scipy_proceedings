@@ -61,11 +61,22 @@ class Translator(LaTeXTranslator):
     def depart_document(self, node):
         LaTeXTranslator.depart_document(self, node)
 
-        doc_title = '\\title{%s}' % self.paper_title
-        doc_title += '\\author{%s}' % ', '.join(self.author_names)
-        doc_title += '\\maketitle'
+        title = self.paper_title
+        authors = ', '.join(self.author_names)
 
-        self.body_pre_docinfo = [doc_title]
+        author_notes = ['''
+The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
+''' % (self.author_institutions[0], self.author_emails[0],
+       self.author_emails[0])]
+
+        author_notes = ''.join('\\thanks{%s}' % n for n in author_notes)
+
+        title_template = '\\title{%s}\\author{%s%s}\\maketitle'
+        title_template = title_template % (title,
+                                           authors,
+                                           author_notes)
+
+        self.body_pre_docinfo = [title_template]
 
     def visit_title(self, node):
         if self.section_level == 1:
