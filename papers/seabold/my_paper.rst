@@ -6,18 +6,19 @@
 :email: josef.pktd@gmail.com
 :institution: CIRANO, University of North Carolina Chapel Hill
 
--------------------------------------------------------------
+=============================================================
 Statsmodels: Econometric and Statistical Modeling with Python
--------------------------------------------------------------
+=============================================================
 
 .. class:: abstract
 
-    Statsmodels is a library for statistical and econometric analysis in Python.     This paper discusses the current relationship between statistics and Python 
-    and open source more generally, outlining how the statsmodels package fills
-    a gap in this relationship.  An overview of statsmodels is provided, 
-    including a discussion of the overarching design and philosophy, what can be
-    found in the package, and some usage examples.  The paper concludes with 
-    a look at what the future holds.
+    Statsmodels is a library for statistical and econometric analysis in
+    Python. This paper discusses the current relationship between
+    statistics and Python and open source more generally, outlining how the
+    statsmodels package fills a gap in this relationship.  An overview of
+    statsmodels is provided, including a discussion of the overarching design
+    and philosophy, what can be found in the package, and some usage examples.
+    The paper concludes with a look at what the future holds.
 
 
 Introduction
@@ -232,8 +233,8 @@ parameters that solve the objective function.::
                         data.endog)
 
 The instance *longley_res* has several attributes and methods of interest.  The 
-first is the fitted values, commonly :math:`$\Beta$` in the general linear 
-model, :math:`$Y=X\Beta$`, which is called *params* in statsmodels.::
+first is the fitted values, commonly :math:`$\beta$` in the general linear 
+model, :math:`$Y=X\beta$`, which is called *params* in statsmodels.::
 
     >>> longley_res.params
     array([  1.50618723e+01, -3.58191793e-02,  
@@ -351,12 +352,12 @@ percentile is::
     -11.88 percent
 
 The next example concerns the testing of joint hypotheses on coefficients and is
-inspired by a similar example in Bill Greene's *Econometric Analysis* [Green]_.
+inspired by a similar example in Bill Greene's *Econometric Analysis* [Greene]_.
 Consider a simple static investment function for a macro economy
 
 .. raw:: latex
 
-   \[\ln{I_{t}}=\beta_{1}+\beta_{2}\ln Y_{t}+\beta_{3}i_{t}+\beta_{4}\Delta p_{t}+\beta_{5}t+\epsilon_{t}\end{equation}\]
+   \begin{equation}\ln{I_{t}}=\beta_{1}+\beta_{2}\ln Y_{t}+\beta_{3}i_{t}+\beta_{4}\Delta p_{t}+\beta_{5}t+\epsilon_{t}\end{equation}
 
 In this example, (log) investment, :math:`$I_{t}$` is a function of the interest 
 rate, :math:`$i_{t}$`, inflation, :math:`$\Delta p_{t}$`, (log) real GDP, 
@@ -368,7 +369,7 @@ following model
 
 .. raw:: latex
 
-   \[\ln I_{t}=\beta_{1}+\beta_{2}\ln Y_{t}+\beta_{3}\left(i_{t}-\Delta p_{t}\right)+\beta_{5}t+\epsilon_{t}\end{equation}\]
+   \begin{equation}\ln I_{t}=\beta_{1}+\beta_{2}\ln Y_{t}+\beta_{3}\left(i_{t}-\Delta p_{t}\right)+\beta_{5}t+\epsilon_{t}\end{equation}
 
 In terms of the first equation this implies that :math:`$\beta_{3}+\beta_{4}=0$`.
 Our further hypotheses are that :math:`$\beta_{2}=1$` and :math:`$\beta_{5}=0$`.
