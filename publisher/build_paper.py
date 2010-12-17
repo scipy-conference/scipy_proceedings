@@ -27,6 +27,7 @@ preamble = r'''
 % Provide AMS mathematical commands such as "align"
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{bm}
 
 % Define colours for hyperref
 \usepackage{color}
@@ -44,6 +45,10 @@ preamble = r'''
   linkcolor=darkblue,
   citecolor=darkgreen,
   }
+
+% Include graphics for authors who raw-inlined figures
+% (then docutils won't automatically add the package)
+\usepackage{graphicx}
 '''
 
 settings = {'documentclass': 'IEEEtran',
