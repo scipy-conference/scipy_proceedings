@@ -120,7 +120,7 @@ Ultimately we intend to have a GUI, likely built with Chaco/ETS, to replicate an
 
 .. raw:: latex
 
-   \[g(x) = \int_0^\infty f(x) dx\end{equation}\]
+   \begin{equation*}g(x) = \int_0^\infty f(x) dx\end{equation*}
 
 
 References
