@@ -51,7 +51,7 @@ preamble = r'''
 \usepackage{graphicx}
 
 \ifthenelse{\isundefined{\longtable}}{}{
-  \renewenvironment{longtable}{\begin{tabular}}{\end{tabular}\vspace{2mm}}
+  \renewenvironment{longtable}{\begin{table}\begin{tabular}}{\end{tabular}\vspace{2mm}\end{table}}
 }
 '''
 
