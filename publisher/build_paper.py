@@ -8,10 +8,21 @@ import os.path
 import sys
 import glob
 
-preamble = '\n'.join([r'% PDF Standard Fonts',
-                      r'\usepackage{mathptmx}',
-                      r'\usepackage[scaled=.80]{helvet}',
-                      r'\usepackage{courier}'],)
+preamble = r'''
+% These preamble commands are from build_paper.py
+
+% PDF Standard Fonts
+\usepackage{mathptmx}
+\usepackage[scaled=.90]{helvet}
+\usepackage{courier}
+
+% Make verbatim environment smaller
+\makeatletter
+\g@addto@macro\@verbatim\footnotesize
+\makeatother
+
+\renewcommand{\quote}{}
+'''
 
 settings = {'documentclass': 'IEEEtran',
             'use_verbatim_when_possible': True,
