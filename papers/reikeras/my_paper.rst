@@ -35,11 +35,9 @@ Motivated by the multi-modal manner humans perceive their environment, research 
 
 Functional requirements for an AVASR system include acoustic and visual feature extraction, probabilistic model learning and classification. 
 
-In this paper we propose a basic AVASR system implemented using  SciPy [1]_. In the proposed system mel-frequency cepstrum coefficients (MFCCs) and active appearance model (AAM) parameters are used as acoustic and visual features, respectively. Gaussian mixture models are used to learn the distributions of the feature vectors given a particular class such as a word or a phoneme. We present two alternatives for learning the GMMs, expectation maximization (EM) and variational Bayesian (VB) inference.
+In this paper we propose a basic AVASR system implemented using  SciPy. In the proposed system mel-frequency cepstrum coefficients (MFCCs) and active appearance model (AAM) parameters are used as acoustic and visual features, respectively. Gaussian mixture models are used to learn the distributions of the feature vectors given a particular class such as a word or a phoneme. We present two alternatives for learning the GMMs, expectation maximization (EM) and variational Bayesian (VB) inference.
 
 The performance of the system is tested using the CUAVE database. The performance is evaluated by calculating the misclassification rate of the system on a separate test data data.  We find that visual speech information is in itself not sufficient for automatic speech recognition. However, by integrating visual and acoustic speech we are able to obtain better performance than what is possible with audio-only ASR. 
-
-.. [1] SciPy is available at http://www.scipy.org/
 
 Feature extraction
 ==================
