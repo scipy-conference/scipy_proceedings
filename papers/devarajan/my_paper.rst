@@ -60,7 +60,7 @@ The biological aim of this study was to determine if the location of each weaver
 Study Area and Methods
 -----------------------
 
-Nest surveys were conducted at the 20,000 ha of Mpala Research Center in the Laikipia District in central Kenya (0°20′ N, 36°53′ E).
+Nest surveys were conducted at the 20,000 ha of Mpala Research Center in the Laikipia District in central Kenya (0^{\circ}20' N, 36^{\circ}53' E).
 
 We surveyed a total of sixteen trees and 515 nests. For each nest, its distance from the ground, distance from the trunk, estimated size, entrance direction (entrance facing north, south, west, east, down or so on), distance to its closest neighbor, and general condition (ranging from “dilapidated” to “in construction”) were recorded. All measurements were taken with a telescopic graded bar and a decameter, along with compasses. We also determined the species of the bird for each nest, as several trees were cohabited by more than one species. When  assessment by field observation was not possible, the bird species was determined based on the nest descriptions given by Zimmerman et al.[Zimmerman96].  Additionally, each tree was mapped and photographed for further reference.
 
@@ -104,7 +104,7 @@ Visualization
 
 The objective of the visualization was to automate the simulation of trees using the parameters from the dataset. This was implemented predominantly using the 3D visualization toolkit, Mayavi2, along with Python scripts.  
 
-.. image:: /home/kadambari/Documents/Gradschool/UIC/CS594/weaver_bird_project/tree_images/14.png
+.. image:: fig1_colorcoded.png
 
 **Figure 1:** 3-D visualization of a real tree with weaver bird nests studied at the Mpala Research Station, based on parameters recorded.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -118,7 +118,7 @@ Results and Discussion
 
 As shown in Figure 2, there appear to be two or possibly three main factors explaining as much as 99% of the variance in the dataset gathered. Based on spatial constraints, our initial prediction was that tree architecture and requirements of the specific weaver birdspecies would play the most important roles in determining nest arrangement. To test this we looked into the individual characteristics of the variables predicted by the PCA analysis.
 	
-.. image:: /home/kadambari/Documents/Gradschool/UIC/CS594/weaver_bird_project/presentation/fig2.png
+.. image:: fig2.png
 
 **Figure 2:** Proportion of variance explained by the top five principal components of the weavers nest arrangement at Mpala Research Station.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -127,14 +127,14 @@ When looking for variables that explain most of the variance, canopy size (total
 
 Of the species analyzed, Grey-capped weavers and Black-capped weavers show closest relations with respect to the importance of the variables (Fig. 3), which was also evident in the field since these two species tend to nest in tree together (85.7% of the trees examined with one species had the other present), while the White-browed Sparrow nests cluster independently in the PCA analysis (Fig. 3).
 	
-.. image:: /home/kadambari/Documents/Gradschool/UIC/CS594/weaver_bird_project/presentation/fig3_pca_biplot_presentation.png
+.. image:: fig3_pca_biplot_presentation.png
 
 **Figure 3:** Projection of the top two principal component planes. Data points are colored by the bird species they represent.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If we look at species difference we can see that the White-browed sparrow weaver clearly distinguishes itself from the other studied species (Fig. 4) by building nests closer to one another, in trees with smaller canopies and fewer nests.  In contrast, Grey-capped weavers and Black-capped weavers present a wide variety of spatial conditions for the nest location (the scattered points in the tri-dimensional cube shown in Fig 4), with a lot of overlap between the data points representing the two species, indicating similar characteristics of the local arrangements of their nests colonies.
 
-.. image:: /home/kadambari/Documents/Gradschool/UIC/CS594/weaver_bird_project/presentation/fig4_3d_plot_species.jpg
+.. image:: fig4_3d_plot_species.jpg
 
 **Figure 4:**  3-D plot of the canopy (C), number of nests (T) and distance between nests (D). Data points are colored-coded for the bird species they represent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -143,7 +143,7 @@ If we look at species difference we can see that the White-browed sparrow weaver
 
 When analysing specific trees, 67% of the trees in which nests were found, are represented by *Acacia mellifera*, which generally has a bigger canopy than the other trees studied, that supports a larger number of nests (Fig 5). Another tree species widely surveyed (25% of the total trees) was *Acacia xanthophloea*, where the canopy is taller but smaller than the former. However due to its height, it allows for the establishment of nests in multiple levels, creating a different vertical distribution. Finally *Acacia etbaica*, presents a small canopy with reduced number of nests, closer to each other; which was overall mostly occupied by the White-browed sparrow weaver. 
 
-.. image:: /home/kadambari/Documents/Gradschool/UIC/CS594/weaver_bird_project/presentation/fig5_3d_plot_trees.jpg
+.. image:: fig5_3d_plot_trees.jpg
 
 **Figure 5:** 3-D plot of canopy (C), number of nests (T), and distance between nests (D). Data points are colored-coded for the tree species in which they exist.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
