@@ -116,6 +116,12 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
 
         LaTeXTranslator.visit_image(self, node)
 
+    def visit_footnote(self, node):
+        self.out.append('\\footnote{')
+
+    def leave_footnote(self, node):
+        self.out.append('}')
+
 
 writer = Writer()
 writer.translator_class = Translator
