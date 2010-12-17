@@ -35,11 +35,8 @@ Rebuilding the Hubble Exposure Time Calculator
 .. class:: abstract
 
  An Exposure Time Calculator (ETC) is an invaluable web tool for astronomers wishing to submit proposals to use the Hubble Space Telescope (HST). It provide a means of estimating how much telescope time will be needed to observe a specified source to the required accuracy.
-
  The current HST ETC was written in Java and has been used for several proposing cycles, but for various reasons has become difficult to maintain and keep reliable. Last year we decided a complete rewrite--in Python, of course--was needed and began an intensive effort to develop a well-tested replacement before the next proposing cycle this year.
-
  This paper will explain what the ETC does and outline the challenges involved in developing a new implementation that clearly demonstrates that it gets the right answers and meet the needed level of reliability (astronomers get cranky when the calculator stops working on the day before the proposal deadline). The new ETC must be flexible enough to enable quick updates for new features and accommodate changing data about HST instruments. The architecture of the new system will allow Python-savvy astronomers to use the calculation engine directly for batch processing or science exploration.
-
  Testing is a very large component of this effort, and we discuss how we use existing test cases, as well as new systematic test generators to properly explore parameter space for doing test comparisons, and a locally developed test management system, Pandokia, to monitor and efficiently analyze thousands of complex test cases.
 
 Introduction
@@ -52,7 +49,7 @@ ETCs are used to answer important questions such as: how long must I observe to 
 - What instrument will be used? What kind of observing mode (e.g., imaging, spectroscopy, coronography, or target acquisition). What filters or gratings? What detector parameters?
 - What kind of source? In particular, what are the spectral details of the source. Any dust extinction or redshifts involved?
 - How bright is the source? How is the brightness to be specified?
-- How much area around image or spectral feature do you plan to use to extract signal? Is it a point source or is it extended?
+- How much area arou.. figure or spectral feature do you plan to use to extract signal? Is it a point source or is it extended?
 - What kinds of sky background levels do you expect?
 
 All of these choices affect the answer. Some of them involve many possible options.
@@ -159,17 +156,17 @@ To date all of the supported instrument modes have been implemented as far as th
 
 Figure 1 shows an example of an input form. Figure 2 shows the results obtained from that form, and Figure 3 shows plots of related information associated with those results.
 
-.. image:: acs_input.png
+.. figure:: acs_input.png
 
-Figure 1. Part of the input form for the Advanced Camera for Surveys. This shows most of the choices available to users.
+   Part of the input form for the Advanced Camera for Surveys. This shows most of the choices available to users.
 
-.. image:: acs_results.png
+.. figure:: acs_results.png
 
-Figure 2. The results page for the input parameters shown in Figure 1.
+   The results page for the input parameters shown in Figure 1.
 
-.. image:: acs_plot.png
+.. figure:: acs_plot.png
 
-Figure 3. One of the plot options for the results shown in Figure 2. In this case the instrument throughput is shown as a function of wavelength for the selected observing mode.
+   One of the plot options for the results shown in Figure 2. In this case the instrument throughput is shown as a function of wavelength for the selected observing mode.
 
 Plans
 -----
@@ -189,38 +186,25 @@ The ETC computational engine will be made available with an Open Source License 
 Conclusions
 -----------
 
-The rewrite has resulted in a far smaller and consistent code base. More importantly, we can test on the same system that is used operationally. The cycle of building, delivering, and testing the software now can be done in hours instead of weeks giving us far greater ability to fix problems and add enhancements. Django, and our pre-existing tools (matplotlib, pysynphot, pandokia) greatly facilitated this effort. We will be in a much better position to adapt to JWST ETC requirements.
+The rewrite has resulted in a far smaller and consistent code base. More
+importantly, we can test on the same system that is used operationally. The
+cycle of building, delivering, and testing the software now can be done in
+hours instead of weeks giving us far greater ability to fix problems and add
+enhancements. Django, and our pre-existing tools (matplotlib, pysynphot,
+pandokia) greatly facilitated this effort. We will be in a much better
+position to adapt to JWST ETC requirements.
 
-There were certainly general lessons to be learned from this experience and other work we've done. In coming up with this list, we are generalizing about some issues that didn't necessarily affect this project. Among them:
+There were certainly general lessons to be learned from this experience and
+other work we've done. In coming up with this list, we are generalizing about
+some issues that didn't necessarily affect this project. Among them:
 
-- There is a big difference between scientific programming as most scientists do it, and what is needed for operational purposes. The following table contrasts some of the differences in approach that one usually sees. This isn't to say that scientists couldn't benefit from some of the approaches and tools for operational software (often they could), it's just that that they usually don't use them. These differences result in important management issues discussed later.
-
-+------------------------+---------------------------+
-| Scientist              | Operations                |
-+------------------------+---------------------------+
-| Ad-hoc changes to      | One code base to          |
-| handle various needs   | handle all needed         |
-|                        | alternatives              |
-+------------------------+---------------------------+
-| Corner cases often     | Special cases given       |
-| ignored                | more attention            |
-+------------------------+---------------------------+
-| Little attention to    | Much more attention       |
-| user interface         | to user interface         |
-+------------------------+---------------------------+
-| Minimal error checking | Extensive error checking  |
-+------------------------+---------------------------+
-| No version control     | Version Control           |
-+------------------------+---------------------------+
-| No unit or regression  | Extensive tests           |
-| tests                  |                           |
-+------------------------+---------------------------+
-| Minimal documentation  | More extensive            |
-|                        | documentation             |
-+------------------------+---------------------------+
-| Refactoring rare       | Hopefully not...          |
-+------------------------+---------------------------+
-
+ - There is a big difference between scientific programming as most scientists
+   do it, and what is needed for operational purposes. The following table
+   contrasts some of the differences in approach that one usually sees. This
+   isn't to say that scientists couldn't benefit from some of the approaches
+   and tools for operational software (often they could), it's just that that
+   they usually don't use them. These differences result in important
+   management issues discussed later.
  - Databases are a double-edged sword. They clearly have important uses, particularly for web applications. On the other hand, they introduce a number of strong constraints on flexibility and ease of distribution. Think carefully about what you use them for and when you really need it.
  - Resist temptation to continually put new features over internal coherence. Refactor when needed.
  - Routine builds and testing are extremely important. The installation process needs to be as automatic as possible.
@@ -228,7 +212,47 @@ There were certainly general lessons to be learned from this experience and othe
  - No matter how much analysis you do up front about the design, you probably won't get it right. Be ready to redo it when you face the real world.
  - It has to work for all cases, not just the common ones. Even crazy input parameters must at least give a useful error message that will help the user identify the problem.
 
-Complicating the interface between the astronomers and developers is the fact that many astronomers have written programs for their research purposes, but have never had to write programs for distribution or operational settings, and have never had to support software they have written. As a result many astronomers do not appreciate the effort required to produce reliable and distributable software that can be used by individuals or complex systems. That effort is typically up to an order of magnitude more than needed to get software that works for their particular need. It is not unusual to see astronomers become frustrated at the effort required for implementation when they think they could have done it in one fifth the time. As important as any programming, software engineering, or management technique, is the management of the expectations of such customers, and resistance against such expectations driving software into an unmaintainable state.
+.. table:: Please provide a caption
+
+    +------------------------+---------------------------+
+    | Scientist              | Operations                |
+    +------------------------+---------------------------+
+    | Ad-hoc changes to      | One code base to          |
+    | handle various needs   | handle all needed         |
+    |                        | alternatives              |
+    +------------------------+---------------------------+
+    | Corner cases often     | Special cases given       |
+    | ignored                | more attention            |
+    +------------------------+---------------------------+
+    | Little attention to    | Much more attention       |
+    | user interface         | to user interface         |
+    +------------------------+---------------------------+
+    | Minimal error checking | Extensive error checking  |
+    +------------------------+---------------------------+
+    | No version control     | Version Control           |
+    +------------------------+---------------------------+
+    | No unit or regression  | Extensive tests           |
+    | tests                  |                           |
+    +------------------------+---------------------------+
+    | Minimal documentation  | More extensive            |
+    |                        | documentation             |
+    +------------------------+---------------------------+
+    | Refactoring rare       | Hopefully not...          |
+    +------------------------+---------------------------+
+
+Complicating the interface between the astronomers and developers is the fact
+that many astronomers have written programs for their research purposes, but
+have never had to write programs for distribution or operational settings, and
+have never had to support software they have written. As a result many
+astronomers do not appreciate the effort required to produce reliable and
+distributable software that can be used by individuals or complex systems.
+That effort is typically up to an order of magnitude more than needed to get
+software that works for their particular need. It is not unusual to see
+astronomers become frustrated at the effort required for implementation when
+they think they could have done it in one fifth the time. As important as any
+programming, software engineering, or management technique, is the management
+of the expectations of such customers, and resistance against such
+expectations driving software into an unmaintainable state.
 
 References
 ----------
