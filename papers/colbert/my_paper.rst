@@ -150,7 +150,6 @@ geometry can be described with the following procedure and associated graphic:
 
 .. raw:: latex
 
-   \[
    \begin{enumerate}
    \item Let the center of the camera be $\mathbf{c}_{0}$.
    \item Let the center of the sphere be $\mathbf{x}_{0}$.
@@ -173,7 +172,6 @@ geometry can be described with the following procedure and associated graphic:
       \end{enumerate}
       \item Repeat steps 2-6 for each silhouette image. 
    \end{enumerate}
-   \]
 
 .. figure:: lineintersection.png   
 
