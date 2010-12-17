@@ -21,7 +21,29 @@ preamble = r'''
 \g@addto@macro\@verbatim\footnotesize
 \makeatother
 
+% Do not indent code sections
 \renewcommand{\quote}{}
+
+% Provide AMS mathematical commands such as "align"
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+% Define colours for hyperref
+\usepackage{color}
+
+\definecolor{orange}{cmyk}{0,0.4,0.8,0.2}
+\definecolor{darkorange}{rgb}{.71,0.21,0.01}
+\definecolor{darkblue}{rgb}{.01,0.21,0.71}
+\definecolor{darkgreen}{rgb}{.1,.52,.09}
+
+\usepackage{hyperref}
+\hypersetup{pdftex,  % needed for pdflatex
+  breaklinks=true,  % so long urls are correctly broken across lines
+  colorlinks=true,
+  urlcolor=blue,
+  linkcolor=darkblue,
+  citecolor=darkgreen,
+  }
 '''
 
 settings = {'documentclass': 'IEEEtran',
