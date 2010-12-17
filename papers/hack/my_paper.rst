@@ -42,7 +42,7 @@ Introduction
 .. figure:: ariane5launch_sm.png
 
   An Ariane 5 launch similar to the launcher that will be used to 
-  place JWST into orbit about the L2 point. 
+  place JWST into orbit about the L2 point. Photo: ESA.
 
 The James Webb Space Telescope (JWST) will be NASA's next Great
 Observatory.  It will be an infrared-optimized telescope with a
