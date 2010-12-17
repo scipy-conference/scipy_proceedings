@@ -33,7 +33,7 @@ Sudoku puzzles vary widely in difficulty.  Determining the hardness of Sudoku pu
 
 The Sudoku puzzles which are published for entertainment invariably have unique solutions. A Sudoku puzzle is said to be *well-formed* if it has a unique solution. Another challenging research problem is to determine how few cells need to be filled for a Sudoku puzzle to be well-formed. Well-formed Sudoku with 17 symbols exist. It is unknown whether or not there exists a well-formed puzzle with only 16 clues. In this paper we consider all Sudoku puzzles, as defined in the next paragraph, not only the well-formed ones.
 
- .. image:: puzzle.pdf
+ .. figure:: puzzle.pdf
 
 By *Sudoku puzzle of boxsize* :math:`$n$`, in this paper, is meant a partial assignment of values from :math:`$\{1,\ldots,n^2\}$` to the cells of an :math:`$n^2 \times n^2$` grid in such a way that at most one of each symbols occurs in any row, column or box. A *solution* of a Sudoku puzzle is a complete assignment to the cells, satisfying the same conditions on row, columns and boxes, which extends the original partial assignment.
 
@@ -554,11 +554,11 @@ An interesting problem is to investigate the behavior of different models on ran
 
 Two plots produced by this script highlight the different behavior of the constraint model and the integer programming model.
 
- .. image:: random_CP.png
+ .. figure:: random_CP.png
 
 The first plot has time on the vertical axis and the number of clues on the horizontal axis. From this plot it seems that the constraint propogation algorithm finds puzzles with many or few clues easy. The difficult problems for the constraint solver appear to be clustered in the range of 20 to 35 clues.
 
- .. image:: random_lp.png
+ .. figure:: random_lp.png
 
 A different picture emerges with the linear programming model. With the same set of randomly generated puzzles it appears that the more clues the faster the solver finds a solution.
 

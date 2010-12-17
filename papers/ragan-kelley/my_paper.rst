@@ -98,9 +98,9 @@ PyCUDA tests
 We built a simple test problem with PyCUDA [pycuda]_. It is a short-range n-body particle simulation, where particles interact with each other within a cutoff radius. The density is controlled, such that each particle has several (~10) interactions. This was mainly a test of simple data structures, and we found very good performance (~40% peak) in single precision, and very promising.
 
 
-.. image:: flops.pdf
+.. figure:: flops.pdf
 
-.. image:: timezoom.pdf
+.. figure:: timezoom.pdf
 
 Challenges
 ==========
