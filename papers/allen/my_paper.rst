@@ -21,7 +21,7 @@ Astrodata
     
 
 The Problem Domain: Handling Data Across Instrument-Modes
-----------------------------------------------------------
+---------------------------------------------------------
 
 Gemini
 ======
@@ -35,7 +35,7 @@ institutions from our partner
 countries.
 
 Multi-Extension FITS
-=====================
+====================
 
 Gemini Observatory relies on a file format called "Multi-Extension FITS" 
 (MEF) format to store all datasets, one standard all instruments obey.
@@ -82,7 +82,7 @@ the user and scientist, but which require implementations unique to the
 instrument-mode.
 
 Removing Incidental Differences
-================================
+===============================
 
 Our goal with a new abstraction higher than the level of the "HDU list" 
 is to remove the incidental differences for the user of the new abstraction, 
@@ -136,10 +136,10 @@ Incidental Dataset Differences Normalized
 * differences in storage structure
 
 The AstroData Class
---------------------
+-------------------
 
 MEF I/O
-========
+=======
 
 To load a MEF into an AstroData instance one generally gives the filename to the
 AstroData contructor::
@@ -190,7 +190,7 @@ and return an AstroData instance containing just those found.
 
 
 Astrodata Grammar
---------------------------------------
+-----------------
 
 Breaking our knowledge of our datasets into parts  involves creating a
 language of terms for our family of datasets. The terms defined will belong to
@@ -278,19 +278,19 @@ case for GMOS_IMAGE::
     requirement = ISCLASS("GMOS") & PHU(GRATING="MIRROR")
 
 Name,
-==================
+=====
 
 The ``name`` member specifies the string name used to identify this type.
 
 Usage
-=======
+=====
 
 The ``usage`` member is a 
 printable string containing information about the meaning of the type, used
 to generate documentation. 
 
 Parent
-=======
+======
 
 The ``parent`` member is the string name of 
 the parent classification, if any. The ``parent`` member is
@@ -299,7 +299,7 @@ is in turn used to
 resolve conflicts in feature assignments, children overriding parents.
 
 Requirements
-=================
+============
 
 The ``requirement`` member contains a single instance of an astrodata
 *Requirement* class, which is how the classification actually 
@@ -319,7 +319,7 @@ due to their peculiar use in the classification
 definitions.  
 
 PHU Requirements:
-________________
+_________________
 
 The PHU class is a Requirement subclass which ultimately is the workhorse of
 the system. Classifications generally resolve to sets of 
@@ -367,7 +367,7 @@ instrument-agnostic GEMINI type, which is therefore given as its explicit
 parent.
 
 Logical Requirements:
-_______________________ 
+_____________________
 
 Three Requirement subclasses execute logical operations to combine other
 requirements, AND, OR, and NOT. These each override the "&", "|", and "!"
@@ -376,7 +376,7 @@ take a list of requirements to combine logically, though they will, again
 for convienience, roll the list from arguments.
 
 Adding New Requirements:
-________________________________
+________________________
 
 This general arrangement 
 allows easy addition of other types of requirement classes. We know,
@@ -394,7 +394,7 @@ reasons we specifically do
 not look at pixel data.
 
 Examples
-=========
+========
 
 Access to type (aka "classification") information goes throug the
 AstroData instance. The AstroData class relies internally on the 
@@ -484,8 +484,8 @@ calculator class would be created, and the descriptor requiring special
 handling would be overriden, and this class would be assigned to 
 the type which requires a special case, e.g. NIFS_SPECT.
 
-Descriptor Calculator Classes 
-==============================
+Descriptor Calculator Classes
+=============================
 
 A descriptor function, associated and named with the official descriptor name, is
 implemented as a member function  of a "Descriptor Calculator" (descending from
@@ -593,7 +593,7 @@ dictionaries returned are keyed by the extension naming information if present, 
 integer location in the list otherwise.
 
 Primitives
------------
+----------
 
 *Primitives* are the third type of term defined in the astrodata grammar. 
 Primitives name transformations, and conceptually recieve a list of input data and
@@ -667,10 +667,10 @@ IMAGE types will not do this, since that table-HDU does not apply to imaging.
 
 
 Final Thoughts
-----------------
+--------------
 
 Current and Future Activities
-==============================
+=============================
 
 We are currently deploying the astrodata package internally at Gemini for
 development and preliminary dataflow operations. We have a medium term project to
@@ -705,8 +705,8 @@ designed to
 handle other telescope's data.  Anyone interested should contact
 Craig Allen, callen@gemini.edu, at Gemini Observatory, Data Processing Software Group.
 
-Speaking About Data 
-====================
+Speaking About Data
+===================
 
 Creating a language about our data in order to inform the astrodata software
 how our data should be organized has already helped us to 
