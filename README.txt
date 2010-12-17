@@ -6,12 +6,13 @@ Paper Format
 
 General Guidelines
 ``````````````````
-- All figures should have captions.
+- All figures and tables should have captions.
 - License conditions on images and figures must be respected
   (Creative Commons, etc.).
 - Code snippets should be formatted to fit inside a single column
   without overflow.
 - Try to use as little custom LaTeX markup as possible.
+- The paper abstract should be a single paragraph.
 
 Authors and affiliations
 ````````````````````````
