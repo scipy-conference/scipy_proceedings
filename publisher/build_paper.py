@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import docutils.core as dc
 
 from writer import writer
