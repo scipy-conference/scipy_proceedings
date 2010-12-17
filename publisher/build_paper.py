@@ -49,6 +49,10 @@ preamble = r'''
 % Include graphics for authors who raw-inlined figures
 % (then docutils won't automatically add the package)
 \usepackage{graphicx}
+
+\ifthenelse{\isundefined{\longtable}}{}{
+  \renewenvironment{longtable}{\begin{tabular}}{\end{tabular}\vspace{2mm}}
+}
 '''
 
 settings = {'documentclass': 'IEEEtran',
