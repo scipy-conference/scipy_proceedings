@@ -618,7 +618,7 @@ automatically based on the value given during initialization.
     \hline
     \end{tabular}
     \caption{
-    {\bf Table 1:} Overview of Theano's core Types and Ops set.
+    Overview of Theano's core Types and Ops set.
     This list is not exhaustive, and is superseded by the
     online documentation. More details are given in text for items marked with
     an asterisk. {\tt dimshuffle} is like {\tt numpy.swapaxes}.
