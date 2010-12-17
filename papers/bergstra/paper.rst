@@ -577,7 +577,7 @@ automatically based on the value given during initialization.
     \begin{center}
     \begin{table}
     \centering \small
-    \begin{tabular}{|p{1.6cm}|>{\raggedright}p{5.7cm}|}
+    \begin{tabular}{|p{1.6cm}|p{5.7cm}|}
     \hline
     Operators              &    {\tt +}, {\tt -}, {\tt /}, {\tt *}, {\tt **}, {\tt //},
                                 {\tt eq}, {\tt neq}, {\tt <}, {\tt <=}, {\tt >}, {\tt >=},
