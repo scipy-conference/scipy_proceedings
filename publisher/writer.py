@@ -26,6 +26,7 @@ class Translator(LaTeXTranslator):
     author_institutions = []
     author_emails = []
     paper_title = ''
+    table_caption = []
 
     def visit_docinfo(self, node):
         pass
@@ -102,7 +103,7 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
                 self.paper_title = self.encode(node.astext())
             raise nodes.SkipNode
 
-        if node.astext() == 'References':
+        elif node.astext() == 'References':
             raise nodes.SkipNode
 
         LaTeXTranslator.visit_title(self, node)
@@ -127,6 +128,31 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         # "%" is prepended to footnote text.
         LaTeXTranslator.visit_footnote(self, node)
         self.out[-1] = self.out[-1].strip('%')
+
+    def visit_table(self, node):
+        self.out.append(r'\begin{table}')
+        LaTeXTranslator.visit_table(self, node)
+
+    def depart_table(self, node):
+        LaTeXTranslator.depart_table(self, node)
+
+        self.out.append(r'\caption{%s}' % ''.join(self.table_caption))
+        self.table_caption = []
+
+        self.out.append(r'\end{table}')
+        self.active_table.set('preamble written', 1)
+
+    def visit_thead(self, node):
+        # Store table caption locally and then remove it
+        # from the table so that docutils doesn't render it
+        # (in the wrong place)
+        self.table_caption = self.active_table.caption
+        self.active_table.caption = []
+
+        LaTeXTranslator.visit_thead(self, node)
+
+    def depart_thead(self, node):
+        LaTeXTranslator.depart_thead(self, node)
 
 
 writer = Writer()
