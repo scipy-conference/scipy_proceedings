@@ -4,6 +4,15 @@ SciPy Proceedings
 Paper Format
 ------------
 
+General Guidelines
+``````````````````
+- All figures should have captions.
+- License conditions on images and figures must be respected
+  (Creative Commons, etc.).
+- Code snippets should be formatted to fit inside a single column
+  without overflow.
+- Try to use as little custom LaTeX markup as possible.
+
 Authors and affiliations
 ````````````````````````
 Define the fields in the beginning of the paper::
