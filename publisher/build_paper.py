@@ -27,7 +27,8 @@ preamble = r'''
 settings = {'documentclass': 'IEEEtran',
             'use_verbatim_when_possible': True,
             'use_latex_citations': True,
-            'latex_preamble': preamble}
+            'latex_preamble': preamble,
+            'documentoptions': 'letterpaper,compsoc,twoside'}
 
 if len(sys.argv) != 2:
     print "Usage: build_paper.py paper_directory"
