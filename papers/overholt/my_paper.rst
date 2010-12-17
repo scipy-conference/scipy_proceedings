@@ -6,7 +6,7 @@
 Numerical Pyromaniacs: The Use of Python in Fire Research
 ---------------------------------------------------------
 
-.. image:: cssci_art.jpg
+.. figure:: cssci_art.jpg
 
 .. class:: abstract
 
@@ -39,7 +39,7 @@ We can use Python to automate our workflow and generate plots from updated data 
 
 From data fitting to generating beautiful plots using matplotlib, I feel that Python is quickly emerging as a viable tool for engineers and scientists to interact with data in a meaningful and programmatic manner that is familiar to them. An example plot of experimental data and a fit from Python that was used in my master's thesis is shown as:
 
-.. image:: mlr_trimmed.png
+.. figure:: mlr_trimmed.png
 
 I believe that the development of interactive tools such as Spyder and Sage will continue to grow (the projects are gaining a large amount of momentum), and students will continue to explore how Python can enhance their research experience due to the abilities of rapid prototyping and data exploration, the opportunity to easily create GUI or web tools, and the ability to effortlessly share their data and programs without wondering if the recipient has the required proprietary software.
 
@@ -53,13 +53,13 @@ A few years ago, I was attending a fire conference, and someone that was working
 
 But not this time. The presenter showed a video with real-time seismic data plots superimposed over a video showing the actual burning building. “Amazing!”, I thought, and it stuck with me. It was certainly a useful way to convey information in parallel and make the data tell a story. Because people can gather more meaning from videos rather than plots, why not tell the qualitative AND quantitative story at the same time?
 
-After the conference, I worked on writing a script that would import videos, adjust frame rates, plot on the imported images, and so on. I used it to show video plots of warehouse commodity fire tests with actual and predicted flame heights vs. time:
+After the conference, I worked on writing a script that would import videos, adjust frame rates, plot on the imported figures, and so on. I used it to show video plots of warehouse commodity fire tests with actual and predicted flame heights vs. time:
 
-.. image:: warehouse_vid.png
+.. figure:: warehouse_vid.png
 
 I also used the script to show video plots of the predicted flame heights for a small-scale test in an way that just about anyone can relate to, whether you're a fire-crazed scientist or not:
 
-.. image:: bench_vid.png
+.. figure:: bench_vid.png
 
 Real-time video plots are a great visual method for teaching, communication, and telling a story with your data. Surprisingly enough, I haven’t found any existing programs or tools that do this. Python was the perfect tool for this, and, as described in the previous section, it wouldn't take much more effort on my part to create a GUI for this tool and release it.
 
@@ -69,13 +69,13 @@ Data analysis and visualization is common to many different fields, and I wanted
 
 The calculator interface is shown as:
 
-.. image:: mesh_calc.png
+.. figure:: mesh_calc.png
 
 Today, on my website, the tool gets used about 500 times a month by engineers and scientists around the world. Often, when I am attending conferences, a stranger will gaze at my name tag for a few seconds, then greet me and thank me for the mesh size calculator tool. The tool is available at: http://www.koverholt.com/fds-mesh-size-calc.
 
 The results of the calculator are shown as:
 
-.. image:: mesh_calc2.png
+.. figure:: mesh_calc2.png
 
 After this wonderful experience, I cannot stop the ideas and possibilities from flowing. I continuously dream up new tools and calculators that could easily be created with the use of Python, such as a suite of fire engineering and fire dynamics tools that can be used online. For example, there is a program called FPEtool (fire protection engineering tool), which contains a set of fire dynamics calculations and was heavily used in the 1980s and 1990s. It is still available for free from NIST - as a DOS executable. Because of this, the use of the excellent tools and fire dynamics calculators in FPEtool are no longer used in the field. I think it would be great to revive FPEtool as a web-based, open-source, and community supported project using Python. In conclusion, Python offers our field the ability to easily and quickly create web tools, from simple calculators to complex web applications, and this results in a more efficient workflow for engineers, a method for third-party developers to contribute to the fire modeling community, and promotion of the effective use of fire dynamics and tools for life safety designs.
 
@@ -83,11 +83,11 @@ Creating 3D Geometry for Fire Models
 ------------------------------------
 Regarding the increasing amount of interaction between Python and fire models, some third-party developers in the fire modeling community (including myself) have recently released a tool to model 3D geometry and generate a text-based input file for the fire modeling software, FDS. The tool is called BlenderFDS, and is an extension for Blender that was created using Python. Before the release of BlenderFDS, users of FDS had to create geometry for a case using either a text editor or an expensive commercial GUI. Now, using BlenderFDS, users can create complex buildings and irregular geometry (e.g., cylinders, angled roofs) and automatically have it broken up into the rectilinear format that FDS requires. The interface for the BlenderFDS extension in Blender is shown as:
 
-.. image:: testcase_obj2obst
+.. figure:: testcase_obj2obst
 
 BlenderFDS allows for the quick creation of complex geometry in a visual manner, and it can even be used to model the complex geometry of an entire building:
 
-.. image:: fds2.jpg
+.. figure:: fds2.jpg
 
 We hope to continue adding functionality to BlenderFDS to result in a comprehensive GUI for creating input files for fire models, and we (the developers) have appreciated the ease of use and the implementation process of Python interaction with Blender for this project. More information about the BlenderFDS project can be found at http://www.blenderfds.org. We also continue to explore additional solutions in Blender and other popular CFD postprocessing tools, which will be discussed in the next section.
 
@@ -95,7 +95,7 @@ Visualizing Smoke and Fire for CFD simulations
 -----------------------------------------------
 With the availability of numerous CFD-related tools such as Paraview, Mayavi, and Blender, we have been exploring the use of these tools for the visualization of realistic and scientifically-meaningful fire and smoke from the results of CFD fire simulations. An example of realistic fire in the upcoming release of Blender 2.5 is shown (from Andrew Price, blenderguru.com) as:
 
-.. image:: campfire.jpg
+.. figure:: campfire.jpg
 
 Not only would such a visualization tool allow for graphical improvements in the output, but it would also allow for a standard format for visualization and analysis, which exists in many other fields that utilize CFD simulations. Finally, such a tool would also allow for community involvement and support for the visualization software.
 
