@@ -117,10 +117,10 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         LaTeXTranslator.visit_image(self, node)
 
     def visit_footnote(self, node):
-        self.out.append('\\footnote{')
-
-    def leave_footnote(self, node):
-        self.out.append('}')
+        # Work-around for a bug in docutils where a
+        # "%" is prepended to footnote text.
+        LaTeXTranslator.visit_footnote(self, node)
+        self.out[-1] = self.out[-1].strip('%')
 
 
 writer = Writer()
