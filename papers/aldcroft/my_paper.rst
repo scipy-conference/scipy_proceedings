@@ -43,7 +43,9 @@ place when viewed with X-ray photons, for then the sky comes alive with
 black holes, supernova explosions, massive galaxy clusters, pulsars, and many
 other highly energetic phenomena.  
 
-.. image:: chandra_satellite.jpg
+.. figure:: chandra_satellite.jpg
+
+   Test figure caption.
 
 Early in the mission it became apparent that temperatures on the spacecraft,
 particularly on the side which normally faces the Sun, were increasing at a
@@ -64,7 +66,7 @@ get too hot.  Thus in order to plan the weekly observing schedule a few simple
 models were created to predict temperatures or otherwise constrain the observing
 duration at certain attitudes.
 
-.. image:: constraints.png
+.. figure:: constraints.png
 
 As the constraints became more significant a need developed to improve the
 models in order to maintain the highest scientific output without endangering
@@ -160,7 +162,7 @@ Creating a Thermal model
 The thermal model which was developed for modeling Chandra subsystems is
 illustrated in the figure below.
 
-.. image:: multimass.png
+.. figure:: multimass.png
 
 Here each of the boxes (:math:`$T_0$, $T_1$, $T_2$`) represents a physical node
 on the spacecraft where a thermistor is located.  It is then assumed that each
@@ -284,14 +286,14 @@ used to accurately predict the system temperatures given the planned sequence
 of maneuvers and instrument configurations.  The figure below shows an example
 of the data for one thermistor "1PDEAAT" in red with the model prediction in blue.
 
-.. image:: psmc_calibration.png
+.. figure:: psmc_calibration.png
 
 The next plot below now shows the post-facto model prediction (blue) for a
 two-week period of data (red) that is outside the calibration time range.  Most
 of the features are well reproduced and the distribution of residuals is
 roughly gaussian.
 
-.. image:: psmc_prediction.png
+.. figure:: psmc_prediction.png
 
 Parallelization of fitting
 --------------------------
@@ -316,7 +318,7 @@ statistic.  All of the individual :math:`$Chi^2$` values are then summed.  In
 this way the communication overhead between master and workers is minimal.  The
 figure below illustrates the process.
 
-.. image:: parallel.png
+.. figure:: parallel.png
 
 The actual job of handling the interprocess communication and job creation is
 done with the mpi4py [MPI4PY]_ package using the MPICH2 [MPICH2]_ library.  As
