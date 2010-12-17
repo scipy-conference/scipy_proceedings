@@ -93,7 +93,13 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
 
     def visit_title(self, node):
         if self.section_level == 1:
-            self.paper_title = self.encode(node.astext())
+            if self.paper_title:
+                import warnings
+                warnings.warn(RuntimeWarning("Title set twice--ignored. "
+                                             "Could be due to ReST"
+                                             "error.)"))
+            else:
+                self.paper_title = self.encode(node.astext())
             raise nodes.SkipNode
 
         if node.astext() == 'References':
