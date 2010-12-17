@@ -7,6 +7,8 @@ from docutils import nodes
 from docutils.writers.latex2e import (Writer, LaTeXTranslator,
                                       PreambleCmds)
 
+from options import options
+
 PreambleCmds.float_settings = '''
 \\usepackage[font={small,it},labelfont=bf]{caption}
 \\usepackage{float}
@@ -15,7 +17,6 @@ PreambleCmds.float_settings = '''
 class Translator(LaTeXTranslator):
     def __init__(self, *args, **kwargs):
         LaTeXTranslator.__init__(self, *args, **kwargs)
-        self.pdfsetup.append('\usepackage{mathdesign}')
 
     # Handle author declarations
 
@@ -81,6 +82,12 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         title_template = title_template % (title,
                                            authors,
                                            author_notes)
+
+        marks = r'''
+        \renewcommand{\leftmark}{%s}
+        \renewcommand{\rightmark}{%s}
+        ''' % (options['proceedings_title'], title.upper())
+        title_template += marks
 
         self.body_pre_docinfo = [title_template]
 
