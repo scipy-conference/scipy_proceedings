@@ -51,7 +51,7 @@ Build Process
 -------------
 ::
 
-  python publisher/build_paper.py directory_to_my_paper
+  ./make_paper.sh papers/my_paper_dir
 
 Requirements
 ------------
