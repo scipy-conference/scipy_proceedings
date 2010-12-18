@@ -123,31 +123,38 @@ The old ETC had tests in two basic forms (with many variations in details). Some
 
 We have nightly regression tests running more than 8000 cases a night. Initially the reference results are those taken from the old ETC. Once commissioning is complete, the reference results will be a snapshot of the new ETC results to ensure that future software updates do not change the results in unexpected ways. Table 1 shows an example of a single night's run.
 
-+-------------------+-------+------+------+-------+
-| Daily             | count | pass | fail | error |
-|                   |       |      |      |       |
-| (2010-05-13)      |       |      |      |       |
-+-------------------+-------+------+------+-------+
-|                   |  8705 | 7234 |  865 |   606 |
-+-------------------+-------+------+------+-------+
-| engine/*          |  7068 | 5794 |  668 |   606 |
-+-------------------+-------+------+------+-------+
-| server/*          |  1626 | 1429 |  197 |     0 |
-+-------------------+-------+------+------+-------+
-| web/*             |    11 |   11 |    0 |     0 |
-+-------------------+-------+------+------+-------+
-| Engine Only       | count | pass | fail | error |
-+-------------------+-------+------+------+-------+
-|                   |  7068 | 5794 |  668 |   606 |
-+-------------------+-------+------+------+-------+
-| engine.*          |     2 |    2 |    0 |     0 |
-+-------------------+-------+------+------+-------+
-| migrated/*        |  6963 | 5690 |  668 |   605 |
-+-------------------+-------+------+------+-------+
-| spider/*          |   103 |  102 |    0 |     1 |
-+-------------------+-------+------+------+-------+
+.. table:: The report of test results from one night's test run. Count
+           refers to the number of tests in that category; pass refers
+           to the number that run and match the expected results to
+           within the specified threshold; fail refers to the number
+           of tests that produce results but do not match all results
+           to the required threshold; and error indicates the number
+           of tests that fail to produce all necessary results.
 
-Table 1: The report of test results from one night's test run. Count refers to the number of tests in that category; pass refers to the number that run and match the expected results to within the specified threshold; fail refers to the number of tests that produce results but do not match all results to the required threshold; and error indicates the number of tests that fail to produce all necessary results.
+   +-------------------+-------+------+------+-------+
+   | Daily             | count | pass | fail | error |
+   |                   |       |      |      |       |
+   | (2010-05-13)      |       |      |      |       |
+   +-------------------+-------+------+------+-------+
+   |                   |  8705 | 7234 |  865 |   606 |
+   +-------------------+-------+------+------+-------+
+   | engine/*          |  7068 | 5794 |  668 |   606 |
+   +-------------------+-------+------+------+-------+
+   | server/*          |  1626 | 1429 |  197 |     0 |
+   +-------------------+-------+------+------+-------+
+   | web/*             |    11 |   11 |    0 |     0 |
+   +-------------------+-------+------+------+-------+
+   | Engine Only       | count | pass | fail | error |
+   +-------------------+-------+------+------+-------+
+   |                   |  7068 | 5794 |  668 |   606 |
+   +-------------------+-------+------+------+-------+
+   | engine.*          |     2 |    2 |    0 |     0 |
+   +-------------------+-------+------+------+-------+
+   | migrated/*        |  6963 | 5690 |  668 |   605 |
+   +-------------------+-------+------+------+-------+
+   | spider/*          |   103 |  102 |    0 |     1 |
+   +-------------------+-------+------+------+-------+
+
 
 Current Status
 --------------
@@ -212,7 +219,7 @@ some issues that didn't necessarily affect this project. Among them:
  - No matter how much analysis you do up front about the design, you probably won't get it right. Be ready to redo it when you face the real world.
  - It has to work for all cases, not just the common ones. Even crazy input parameters must at least give a useful error message that will help the user identify the problem.
 
-.. table:: Please provide a caption
+.. table:: Comparison of attributes of software developed by researchers to those of software developed for widespread or operational use.
 
     +------------------------+---------------------------+
     | Scientist              | Operations                |
