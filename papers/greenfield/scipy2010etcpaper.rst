@@ -262,14 +262,6 @@ References
           Astronomical Data Analysis Software and Systems, IV, 216, 695-698.
 .. [Lai08] V. Laidler, P. Greenfield, I. Busko, R. Jedrzejewski.
           *Pysynphot: A Python Re-Implementation of a  Legacy App in Astronomy*,
-          Proceedings of  the 7th Python in Science Conference, 2008, 36-38
- an unmaintainable state.
+          Proceedings of  the 7th Python in Science Conference, 2008,
+          36-38.
 
-References
-----------
-
-.. [Gro00] S. R. Grosvenor, C. Burkhardt, A. Koratkar, M. Fishman, K. R. Wolf,
-          J. E. Jones, L. Ruley. *The Scientist's  Expert Assistant Demonstration*,
-          Astronomical Data Analysis Software and Systems, IV, 216, 695-698.
-.. [Lai08] V. Laidler, P. Greenfield, I. Busko, R. Jedrzejewski.
-          *Pysynphot: A Python Re-Implementation of a 
