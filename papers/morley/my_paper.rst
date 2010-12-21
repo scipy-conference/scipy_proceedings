@@ -390,7 +390,7 @@ open and query a CDF file, the following code is used:
 >>> myfile = cdf.CDF()
 >>> myfile.keys()
 
-The CDF object inherits from the ``collections.MutableMapping'' object and provides the
+The CDF object inherits from the ``collections.MutableMapping`` object and provides the
 user a familiar 'dictionary-like' interface to the file contents. Write and edit 
 capabilities are also fully supported, further development is being targeted towards 
 the generation of ISTP-compliant CDF files [#]_ for the upcoming Radiation Belt Storm Probes 
@@ -402,7 +402,7 @@ similar syntax to opening one:
 >>> cdffile = cdf.CDF('cdf_file.cdf', 
 'master_cdf_file.cdf')
 
-This creates and opens ``cdf_filename.cdf'' as a copy of ``master_cdf_filename.cdf''. The
+This creates and opens ``cdf_filename.cdf`` as a copy of ``master_cdf_filename.cdf``. The
 variables can then be populated by direct assignment, as one would populate any new object.
 Full documentation can be found both in the docstrings and on the SpacePy website.
 
