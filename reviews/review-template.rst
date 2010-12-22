@@ -6,11 +6,12 @@ Independent Review Report
 
 Reviewer:
 
-Institution:
+Department/Center/Area of expertise:
 
-Address (country):
+Institution/University/Company:
 
-Department (area of expertise):
+Country:
+
 
 Article reviewed:
 
