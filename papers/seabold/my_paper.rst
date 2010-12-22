@@ -81,7 +81,7 @@ statistics and can be the one toolbox for researchers across discplines.  A few
 examples of stastics-related packages that are outside of the main numpy/scipy 
 code are packages for Markov Chain Monte Carlo and Bayesian statistics [PyMC]_, 
 machine learning and multivariate pattern analysis [scikits-learn]_ [PyMVPA]_, 
-neuroimaging and time-series [NiPy]_ (nitime), visualization tools [Matplotlib]_[Enthought]_, and efficient handling of large datasets [PyTables]_.
+neuroimaging and time-series [NIPY]_ (nitime), visualization tools [Matplotlib]_[Enthought]_, and efficient handling of large datasets [PyTables]_.
 
 We hope that statsmodels too can become an integral a part of the Scientific 
 Python community and serve as a step in the direction of Python's becoming a 
@@ -556,6 +556,10 @@ References
 
 .. [PyTables] F. Alted, I. Vilata, *et al.*  PyTables: Hierarchical Datasets
                in Python.  Available at http://www.pytables.org.
+
+.. [scikits-learn] Pedregosa, F. *et al.* ``scikits.learn``: machine learning
+                   in Python. Available at
+                   http://scikits-learn.sourceforge.net.
 
 .. [SciPy] T. Oliphant, *et al.*  SciPy.  Available at 
            http://www.scipy.org.
