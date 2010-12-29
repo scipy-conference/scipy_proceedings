@@ -6,14 +6,43 @@ Independent Review Report
 
 Reviewer:
 
-Department/Center/Area of expertise:
+Department/Center/Division:
 
 Institution/University/Company:
+
+Field of interest / expertise:
 
 Country:
 
 
 Article reviewed:
+
+INSTRUCTIONS
+------------
+
+Please read the submitted article and fully complete this form. Since we don't
+have a copy editor, we also request that you annotate the PDF to highlight
+typos, formatting issues, and grammatical mistakes.
+
+The goal of the review process is two-fold.  First, it guides authors in
+improving their papers and, secondly, ensures that published works are of a
+professional academic standard.
+
+Research in science and engineering increasingly relies on software for
+data processing and management as well as theoretical exploration.  However,
+the effort necessary to develop this software is rarely recognized as having
+the same academic worth as other aspects of the research. These proceedings
+are, at least in part, intended to address this shortcoming.
+
+An article focused on software development necessarily differs from the
+standard scientific article with respect to format. For instance, it is
+unlikely to have the same sections (i.e., introduction, methods, results,
+conclusion). You may therefore have to rely on other factors to decide whether
+the paper sets a high enough standards as an academic publication.
+
+Please note that, while reviewers' recommendations regarding a paper's
+suitability for publication are seriously considered, the final decision rests
+with the proceeding editors.
 
 GENERAL EVALUATION
 ------------------
@@ -40,9 +69,9 @@ answer 'no',  please provide a brief, one- to two-sentence explanation.
 
 - Is the code made publicly available and does the article sufficiently
   describe how to access it?  We aim not to publish papers that essentially
-  advertise propetiary software.  Therefore, if the code is not publicly available,
-  please provide a one- to two- sentence response to each of the following
-  questions: 
+  advertise propetiary software.  Therefore, if the code is not publicly
+  available, please provide a one- to two- sentence response to each of the
+  following questions: 
 
   - Does the article focus on a topic other than the features
     of the software itself?
@@ -84,7 +113,7 @@ answer 'no',  please provide a brief, one- to two-sentence explanation.
 
 - Should any part of the article be shortened or expanded? Please explain.
 
-- In your view, is the paper fit for publication in the SciPy proceedings?
+- In your view, is the paper fit for publication in the conference proceedings?
   Please suggest specific improvements and indicate whether you think the
   article needs a significant rewrite (rather than a minor revision).
  
