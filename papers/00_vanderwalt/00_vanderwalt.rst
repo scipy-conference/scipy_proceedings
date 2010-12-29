@@ -15,6 +15,10 @@ A Numerical Perspective to Terraforming a Desert
    A short version of the long version that is way too long to be written as a
    short version anyway.
 
+.. class:: keywords
+
+   terraforming, desert, numerical perspective
+
 Introduction
 ------------
 
