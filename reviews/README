@@ -1,0 +1,17 @@
+README
+======
+
+For each SciPy review and update the substitutions in the two templates
+for inviting reviewers to review the abstracts and papers::
+
+  invite-abstract-reviews.rst
+  invite-paper-reviews.rst
+
+Generate the invite to review the abstracts::
+
+  rst2html.py invite-abstract-reviews.rst > invite-abstract-reviews.rst
+
+Generate the invite to review the papers as well as the review template::
+
+  rst2html.py invite-paper-reviews.rst >  invite-paper-reviews.rst
+  rst2html.py review-template.rst > review-template.html
