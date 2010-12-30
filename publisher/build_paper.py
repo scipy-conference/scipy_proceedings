@@ -77,9 +77,18 @@ print "Building:", in_path
 rst = glob.glob(os.path.join(in_path, '*.rst'))[0]
 
 content = open(rst, 'r').read()
-content = '''
+content = r'''
 .. role:: math(raw)
    :format: latex
+
+.. role:: ref
+
+.. role:: label
+
+.. raw::  latex
+
+  \newcommand*{\docutilsroleref}{\ref}
+  \newcommand*{\docutilsrolelabel}{\label}
 
 ''' + content
 

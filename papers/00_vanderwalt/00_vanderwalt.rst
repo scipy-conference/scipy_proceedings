@@ -64,6 +64,13 @@ lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
 volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
 pulvinar id metus.
 
+.. figure:: figure1.png
+
+   :label:`egfig` This is the caption.
+
+As you can see in Figure :ref:`egfig`, this is how you reference auto-numbered
+figures.
+
 References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
