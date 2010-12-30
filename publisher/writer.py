@@ -112,8 +112,11 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         if 'abstract' in node['classes']:
             self.out.append('\\begin{abstract}')
 
-        if 'keywords' in node['classes']:
+        elif 'keywords' in node['classes']:
             self.out.append('\\begin{IEEEkeywords}')
+
+        else:
+            self.out.append('\n\n')
 
     def depart_paragraph(self, node):
         if 'abstract' in node['classes']:
