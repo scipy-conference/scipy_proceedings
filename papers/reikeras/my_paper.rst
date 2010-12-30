@@ -74,7 +74,7 @@ Figure :raw-latex:`\ref{fig:mfcc}` shows the original audio sample and mel-frequ
     \begin{figure}
 
         \begin{center}
-        \includegraphics[width=\textwidth]{mfcc.pdf}
+        \includegraphics[width=\columnwidth]{mfcc.pdf}
         \end{center}
         \caption{Acoustic feature extraction from an audio sample of the word `zero'. Mel-frequency cepstrum (top) and original audio sample (bottom).}
         \label{fig:mfcc}
@@ -135,7 +135,7 @@ The appearance model is generated from the shape-normalized images using PCA. Fi
 
     \begin{figure}
         \begin{center}
-        \includegraphics[width=\textwidth]{appearance.pdf}
+        \includegraphics[width=\columnwidth]{appearance.pdf}
         \end{center}
         \caption{Mean appearance $A_{0}$ (top left) and first three appearance images $A_{1}$ (top right), $A_{2}$ (bottom left) and $A_{3}$ (bottom right).}
         \label{fig:appearance}
@@ -276,7 +276,7 @@ Example usage::
     \begin{figure}
 
         \begin{center}
-        \includegraphics[width=\textwidth]{aam_fit.pdf}
+        \includegraphics[width=\columnwidth]{aam_fit.pdf}
         \end{center}
         \caption{AAM fitted to an image}
         \label{fig:aam_fit}
@@ -485,7 +485,7 @@ Figure :raw-latex:`\ref{fig:vb}` shows a GMM learned using VB on the same data a
 
     \begin{figure}
         \begin{center}
-        \includegraphics[width=\textwidth]{vb.pdf}
+        \includegraphics[width=\columnwidth]{vb.pdf}
         \end{center}
         \caption{Visual speech GMM of the word `zero' learned using VB algorithm on two-dimensional feature vectors.}
 
@@ -506,7 +506,7 @@ In order to test the system we use the CUAVE database [Pat02]_. The CUAVE databa
 
     \begin{figure}
         \begin{center}
-        \includegraphics[width=\textwidth]{thumb.png}
+        \includegraphics[width=\columnwidth]{thumb.png}
         \end{center}
         \caption{Frames from the CUAVE audio-visual data corpus}
         \label{fig:data}
@@ -583,7 +583,7 @@ From the results we observe that the visual channel does contain information rel
 
     \begin{figure}
         \begin{center}
-        \includegraphics[width=\textwidth]{results.pdf}
+        \includegraphics[width=\columnwidth]{results.pdf}
         \end{center}
         \caption{Misclassification rate}
         \label{fig:results}
