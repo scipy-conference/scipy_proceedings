@@ -166,12 +166,12 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
     def visit_literal_block(self, node):
         if 'language' in node.attributes:
             # do highlighting
-
             from pygments import highlight
-            from pygments.lexers import PythonLexer
+            from pygments.lexers import PythonLexer, get_lexer_by_name
             from pygments.formatters import LatexFormatter
 
-            tex = highlight(node.astext(), PythonLexer(), LatexFormatter())
+            lexer = get_lexer_by_name(node.attributes['language'])
+            tex = highlight(node.astext(), lexer, LatexFormatter())
 
             self.out.append(tex)
             raise nodes.SkipNode

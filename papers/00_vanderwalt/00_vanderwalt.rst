@@ -46,6 +46,17 @@ Of course, no paper would be complete without some source code:
 
        return a + b
 
+Maybe also in another language:
+
+.. code-block:: c
+
+   int main() {
+       for (int i = 0; i < 10; i++) {
+           /* do something */
+       }
+       return 0;
+   }
+
 Important Part
 --------------
 
