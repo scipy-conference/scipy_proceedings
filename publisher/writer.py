@@ -163,6 +163,24 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
     def depart_thead(self, node):
         LaTeXTranslator.depart_thead(self, node)
 
+    def visit_literal_block(self, node):
+        if 'language' in node.attributes:
+            # do highlighting
+
+            from pygments import highlight
+            from pygments.lexers import PythonLexer
+            from pygments.formatters import LatexFormatter
+
+            tex = highlight(node.astext(), PythonLexer(), LatexFormatter())
+
+            self.out.append(tex)
+            raise nodes.SkipNode
+        else:
+            LaTeXTranslator.visit_literal_block(self, node)
+
+    def depart_literal_block(self, node):
+        pass
+
 
 writer = Writer()
 writer.translator_class = Translator

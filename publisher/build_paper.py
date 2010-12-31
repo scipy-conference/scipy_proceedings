@@ -54,13 +54,32 @@ preamble = r'''
   \renewenvironment{longtable}{\begin{center}\begin{tabular}}%
     {\end{tabular}\end{center}\vspace{2mm}}
 }
+
+% Packages required for code highlighting
+\usepackage{fancyvrb}
 '''
+
+# Add the LaTeX commands required by Pygments to do syntax highlighting
+
+try:
+    import pygments
+except ImportError:
+    import warnings
+    warnings.warn(RuntimeWarning('Could not import Pygments. '
+                                 'Syntax highlighting will fail.'))
+    pygments = None
+
+if pygments:
+    from pygments.formatters import LatexFormatter
+    preamble += LatexFormatter().get_style_defs()
+
 
 settings = {'documentclass': 'IEEEtran',
             'use_verbatim_when_possible': True,
             'use_latex_citations': True,
             'latex_preamble': preamble,
             'documentoptions': 'letterpaper,compsoc,twoside'}
+
 
 # --- Code-block directive from Sphinx ---
 
