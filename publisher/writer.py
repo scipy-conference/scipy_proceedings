@@ -170,8 +170,10 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
             from pygments.lexers import PythonLexer, get_lexer_by_name
             from pygments.formatters import LatexFormatter
 
+            linenos = node.attributes.get('linenos', False)
             lexer = get_lexer_by_name(node.attributes['language'])
-            tex = highlight(node.astext(), lexer, LatexFormatter())
+            tex = highlight(node.astext(), lexer,
+                            LatexFormatter(linenos=linenos))
 
             self.out.append(tex)
             raise nodes.SkipNode

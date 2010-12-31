@@ -46,9 +46,10 @@ Of course, no paper would be complete without some source code:
 
        return a + b
 
-Maybe also in another language:
+Maybe also in another language, and with line numbers:
 
 .. code-block:: c
+   :linenos:
 
    int main() {
        for (int i = 0; i < 10; i++) {
