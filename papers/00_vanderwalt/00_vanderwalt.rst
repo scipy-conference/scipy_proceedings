@@ -37,6 +37,15 @@ nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
 Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
 justo vitae odio tincidunt tempus at vitae tortor.
 
+Of course, no paper would be complete without some source code:
+
+.. code-block:: python
+
+   def sum(a, b):
+       """Sum two numbers."""
+
+       return a + b
+
 Important Part
 --------------
 
