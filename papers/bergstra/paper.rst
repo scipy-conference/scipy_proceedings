@@ -185,11 +185,26 @@ use stochastic gradient descent.
     **Listing 2:** A Theano program for fitting and 
     applying a logistic regression model.
 
-The code in `Listing 2`_ implements this minimization with Theano.
-Since Theano functions involve some overhead, treating many examples in parallel
-is important for getting good performance from the model. ``x`` is thus defined
-as a matrix, where each row is a training example, (Line 7) and the labels ``y`` as a
-vector (Line 8).
+The code in `Listing 2`_ implements this minimization.
+The code is organized into four conceptual steps with respect to Theano:
+  1. declare symbolic variables
+  2. use these variables to build a symbolic expression graph,
+  3. compile a function, and
+  4. call the compiled function to perform computations.
+
+Lines 7-10 declare the symbolic inputs for our logistic regression problem.
+Notice that ``x`` is defined as a matrix, and ``y`` as a vector.
+The Type of a Theano variables includes its number of dimensions,
+its data type,
+and the dimensions along which it may broadcast in element-wise expressions.
+Here, ``x`` and ``y`` have the default data type which is ``float64``.
+
+We did we not make ``x`` a vector and ``y`` a scalar, because it would limit the
+speed of the program.
+Matrix-matrix multiplication is more efficient on modern x86
+architecture than matrix-vector multiplication
+and Theano function calls involve overhead.
+Treating several examples in parallel mitigates that overhead.
 
 The ``shared()`` function (Lines 9+10 of `Listing 2`_) creates *shared variables* for :math:`$W$` and :math:`$b$` and assigns them initial values.
 Shared variables are
