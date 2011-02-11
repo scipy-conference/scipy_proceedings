@@ -77,12 +77,12 @@ of native machine-language code for numerical calculations, including [NumPy]_, 
 [NumPy]_ provides an N-dimensional array data type, and many functions
 for indexing, reshaping, and performing elementary computations (``exp``, ``log``, ``sin``, etc.)
 on entire arrays at once. These functions are implemented in C for use within Python programs.
-However, the composition of many such NumPy functions
-inevitably leads to suboptimal performance, because there is no support for optimizations
-such as loop fusion or the amalgamation of several operations into an equivalent but faster
-one. As a partial solution, [numexpr]_ provides faster implementations than NumPy when
-several elementwise computations are composed, by implementing a loop fusion optimization. However,
-numexpr requires writing the expression as a string, which can be cumbersome for complicated expressions,
+However, the composition of such NumPy functions
+can be unnecessarily slow when each call is dominated by the cost of transfering memory rather than the cost of performing calculations [Alted]_.
+As a partial solution, [numexpr]_ provides faster implementations than NumPy when
+several elementwise computations are composed, by implementing a loop fusion optimization.
+However,
+numexpr requires unusual syntax (the expression must be encoded as a string within the code),
 and it is limited to elementwise computations.
 In many use-cases, hand-written native machine language
 implementations are much faster than these common alternatives.
@@ -719,10 +719,13 @@ References
 .. [scipy.weave] SciPy Weave module, 
                  http://www.scipy.org/Weave
 
+.. [Alted]  F. Alted, Why Modern CPUs Are Starving And What Can
+    Be Done About It, Computing in Science and Engineering, 12(2):68-71, 2010.
+
 .. [SymPy] SymPy, http://code.google.com/p/sympy/
 
 .. [BLAS] J. J. Dongarra, J. Du Croz, I. S. Duff, and S. Hammarling, 
-          Algorithm 679: A set of Level 3 Basic Linear Algebra Subprograms, ACM Trans. Math. Soft., 16 (1990), pp. 18--28. 
+          Algorithm 679: A set of Level 3 Basic Linear Algebra Subprograms, ACM Trans. Math. Soft., 16:18-28, 1990. 
           http://www.netlib.org/blas
 
 .. [LAPACK] E. Anderson et al., 
