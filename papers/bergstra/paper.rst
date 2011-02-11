@@ -521,7 +521,7 @@ Ops. More extensive reference documentation is available online
 
 Allocating random number variables
 and seeding generators is typically done via a ``RandomStreams`` instance, which
-replicates the ``numpy.random.RandomState`` interface 
+replicates the ``numpy.random.RandomState`` interface
 and wraps ``numpy.random.RandomState`` functionality.
 Theano also provides an experimental new ``MRG_RandomStreams`` generator which
 provides a few distributions using an ``MRG`` algorithm with both a CPU and GPU
@@ -529,12 +529,12 @@ implementation [Ecu]_.
 
 
 There is a narrower range of Ops that work on SparseType Variables: packing and
-unpacking of compressed sparse row/column 
+unpacking of compressed sparse row/column
 sparse matrices into dense variables is supported,
 as is conversion between sparse and dense matrices.  Transpose, negation,
 addition, and subtraction are supported.  Scalar and elementwise multiplication
 with a dense matrix is supported, and matrix multiplication between sparse and
-dense is supported. 
+dense is supported.
 
 Roughly 90\% of Ops for tensors have implementations for the GPU, notable
 exceptions being advanced indexing, scan, summation over certain combinations of
@@ -544,7 +544,7 @@ Our goal is extend coverage to all ops.
 Theano does *not* currently have ops for sparse or dense matrix inversion, nor linear
 algebra decompositions.  Ops for complex number dtypes are also not as widely
 implemented or well-tested as those for integer and float dtypes. Object dtypes
-are not implemented in Theano. 
+are not implemented in Theano.
 
 
 Transformations
@@ -592,7 +592,8 @@ implementations are substituted in.
 Lastly, Theano replaces Ops with equivalents that reuse the memory of
 their inputs and also invalidate those inputs by side-effect of running.
 Many Ops (e.g. GEMM and all elementwise Ops) have such equivalents.
-Reusing memory this way can improve speed by reducing CPU cache misses.
+Reusing memory this way can improve speed by reducing cache misses
+and allowing more computations to fit on GPUs where memory is at a premium.
 
 Code Generators
 ~~~~~~~~~~~~~~~~
