@@ -5,7 +5,7 @@ rng = numpy.random
 
 # Declare Theano variables
 x = T.matrix()
-y = T.vector()
+y = T.ivector()
 w = shared(rng.randn(100))
 b = shared(numpy.zeros(()))
 print "Initial model:"

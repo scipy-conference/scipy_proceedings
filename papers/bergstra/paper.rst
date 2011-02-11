@@ -193,11 +193,11 @@ The code is organized into four conceptual steps with respect to Theano:
   4. call the compiled function to perform computations.
 
 Lines 7-10 declare the symbolic inputs for our logistic regression problem.
-Notice that ``x`` is defined as a matrix, and ``y`` as a vector.
+Notice that ``x`` is defined as a matrix of the default data type (``float64``),
+and ``y`` as a vector of ``int32``.
 The Type of a Theano variables includes its number of dimensions,
 its data type,
 and the dimensions along which it may broadcast in element-wise expressions.
-Here, ``x`` and ``y`` have the default data type which is ``float64``.
 
 We did we not make ``x`` a vector and ``y`` a scalar, because it would limit the
 speed of the program.
