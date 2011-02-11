@@ -9,7 +9,7 @@ y = T.vector()
 w = shared(rng.randn(100))
 b = shared(numpy.zeros(()))
 print "Initial model:"
-print w.value, b.value
+print w.get_value(), b.get_value()
 
 # Construct Theano expression graph
 p_1 = 1 / (1 + T.exp(-T.dot(x, w)-b))
@@ -32,7 +32,7 @@ training_steps = 10
 for i in range(training_steps):
     pred, err = train(D[0], D[1])
 print "Final model:"
-print w.value, b.value
+print w.get_value(), b.get_value()
 
 print "target values for D"
 print D[1]

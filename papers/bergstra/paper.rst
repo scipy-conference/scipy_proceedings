@@ -213,7 +213,7 @@ a sense, they behave like global variables which any Theano function
 may use without having to declare them in its inputs list.
 A shared variable's value is maintained
 throughout the execution of the program and
-can be accessed for reading or writing using the ``.value`` attribute, as shown in Line 12.
+can be accessed with ``.get_value()`` and ``.set_value()``, as shown in Line 12.
 Theano manages the storage of
 these values. In particular, it stores single-precision dense *shared* tensors on the GPU by
 default when a GPU is available.  In such cases it uses a different
@@ -408,10 +408,12 @@ In the latter case, the Variable will have a ``.owner`` attribute pointing to th
 ``theano.function`` takes two arguments: the input list, which is a list of Variables; and the output value or list, which is a Variable or list of Variables.
 *Constant* nodes each have a ``.value`` attribute, which is the immutable (read-only) value of this variable.
 ``10`` in `Listing 1`_ was converted to a Constant node.
-*Shared Variable* nodes each have a mutable (read and write) ``.value`` attribute.
-This value can be modified by calling a Theano function that was defined with ``updates``, like ``train`` in `Listing 2`_.
-When a Shared variable is stored on the GPU, reading and writing its ``.value``
-attribute transfers data to and from the GPU device.
+*Shared Variable* nodes have ``.get_value()`` and ``.set_value(new_val)`` methods that
+behave by default as if they are transfering from and to (respectively) Theano-managed
+memory. Sometimes this is done for consistency, and other times (like when a
+type conversion takes place, or the transfer requires moving data to or from a
+GPU) it is a necessary copy.
+This value can also be modified by calling a Theano function that was defined with ``updates``, like ``train`` in `Listing 2`_.
 
 Types
 ~~~~~~~~~~~~~~~~~~~
