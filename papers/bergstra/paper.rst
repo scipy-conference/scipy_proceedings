@@ -159,11 +159,11 @@ The model estimates the probability
     P(Y=1|x^{(i)}) &= p^{(i)} = \frac {e^{W x^{(i)} + b}} {1 +  e^{Wx^{(i)} + b}}
     \end{align}
 
-We are given a set of :math:`N` training examples, :math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`.
-Our goal is to pick :math:`W` and :math:`b` such that the model predicts
-:math:`$p^{(i)} = 1$` for examples with :math:`$y^{(i)} = 1$`,
-and predicts 0 when :math:`$y^{(i)} = 0$`.
-More precisely, we wish to minimize the average cross-entropy over :math:`$\mathcal{D}$` with an :math:`$\ell_2$` penalty on :math:`$W$`, giving a cost function defined as:
+The problem is to optimize the log probability of
+:math:`N` training examples, :math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`,
+with respect to :math:`W` and :math:`b`.
+To make it a bit more interesting, we can also include an
+:math:`$\ell_2$` penalty on :math:`$W$`, giving a cost function defined as:
 
 .. raw:: latex
 
@@ -173,8 +173,8 @@ More precisely, we wish to minimize the average cross-entropy over :math:`$\math
     \end{align*}
 
 Tuning parameters :math:`W` and :math:`b` to minimize this cost can be
-performed by more sophisticated algorithms, but for our example we will 
-use stochastic gradient descent (SGD).
+performed by more sophisticated algorithms, but for our example we will
+use stochastic gradient descent.
 
 .. _Listing 2:
 .. _ListingLogReg:
