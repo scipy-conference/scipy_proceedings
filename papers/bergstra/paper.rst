@@ -94,47 +94,22 @@ compared to automatic optimization.
 
 Theano combines the convenience of NumPy with the speed of hand-optimized
 C/C++ code by generating and compiling native implementations
-from a complete, high-level description of the computation graph.
-Theano optimizes this computation graph before translating it into C/C++ code.
-In our benchmarks, Theano's optimization of this computation graph can lead
-to significant performance boosts over competing math libraries.
+from a complete, high-level description of the computation graph, which it
+optimizes before translating it into C/C++ code.
+In our benchmarks, this can lead
+to significant performance gains over competing math libraries.
 Theano is capable of generating CPU as well as GPU implementations
 (the latter using CUDA), without requiring changes to user code.
-The end user is offered an interface similar to NumPy's to 
-declare variables and expressions involving those variables, creating
-a symbolic representation of the computations to perform. Any number of expressions
-can then be compiled into a highly optimized function taking ``numpy.ndarray`` instances as
-arguments and yielding the result(s) of the expression(s).
-
-The general principle of Theano is to describe calculations as a high-level mathematical graph.
-This symbolic description
-is separate from execution. Before executing the mathematical graph, the user must once compile it into a callable function.
-This callable function can then be executed repeatedly on a variety of inputs.
-There are several advantages to this approach:
-Theano lets user code stay clean, easy to read and familiar to NumPy users,
-while the ugly performance-oriented hacks are inserted automatically at
-compile time.
-For example, large expressions involving addition, subtraction, multiplication, and matrix products are rearranged to make the best use of low-level BLAS subroutines [BLAS]_.
-Besides this user-facing advantage, there are backend advantages to separating the description of the calculations from their execution.
-Theano supports full program
-transformations and macros, which allows
-useful features such as automatic differentiation.
-Theano 
-recognizes many unnecessary, sub-optimal, and numerically unstable
-expression patterns, and replaces them with superior
-alternatives. 
-Theano's
-expression graphs can contain information about the shape, number of
-dimensions as well as "broadcastability" of most variables, so Theano
-can specialize many operations.
-Theano is similar to [SymPy]_, insofar as both manipulate symbolic
-mathematical graphs. SymPy implements a more extensive set of mathematical
-operations, but it does not offer as efficient numerical evaluation.
-
-
-Theano is designed for applications where the same computations will be repeated many times on different inputs,
+It supports full program transformations and macros,
+including automatic differentiation.
+It also performs more local transformations that correct many unnecessary, slow, or numerically unstable
+expression patterns.
+This pattern is appropriate for applications where the same computation will be repeated many times on different inputs,
 so that the time invested in the initial optimization and compilation (typically on the order of seconds) is
 negligible in comparison to time saved on the repeated calculations.
+Theano is similar to [SymPy]_, in that both manipulate symbolic
+mathematical graphs. SymPy implements a more extensive set of mathematical
+operations, but it does not offer as efficient numerical evaluation.
 
 Theano is free open source software, licensed under the New (3-clause) BSD license.
 It depends upon NumPy, and can optionally use SciPy, as well as custom C and CUDA code generators which are able to specialize for particular types, sizes, and shapes of inputs. 
