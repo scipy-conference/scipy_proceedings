@@ -27,7 +27,7 @@
 :institution: University of Montreal
 
 :author: David Warde-Farley
-:email: dwfarley@iro.umontreal.ca
+:email: wardefar@iro.umontreal.ca
 :institution: University of Montreal
 
 :author: Yoshua Bengio
