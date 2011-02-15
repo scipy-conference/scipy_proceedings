@@ -68,45 +68,44 @@ Theano: A CPU and GPU Math Compiler in Python
 Introduction
 ------------
 
-Python is a great language for describing large-scale mathematical calculations in a high level way,
-but the Python interpreter is not a good engine for executing them. Python
-numbers are full-fledged objects on the heap, but large-scale mathematical
+Python is a powerful and flexible language for describing large-scale mathematical
+calculations in a high level way,
+but the Python interpreter is in many cases a poor engine for executing them. Python
+numeric scalars are full-fledged objects on the heap, but large-scale mathematical
 calculations should be carried out using a processor's native types with minimal overhead.
-There are several options available to a Python programmer to get the speed 
+There are several options available to a Python programmer to get the speed
 of native machine-language code for numerical calculations, including [NumPy]_, [numexpr]_, [Cython]_, and [scipy.weave]_.
 [NumPy]_ provides an N-dimensional array data type, and many functions
 for indexing, reshaping, and performing elementary computations (``exp``, ``log``, ``sin``, etc.)
 on entire arrays at once. These functions are implemented in C for use within Python programs.
-However, the composition of such NumPy functions
-can be unnecessarily slow when each call is dominated by the cost of transfering memory rather than the cost of performing calculations [Alted]_.
+However, the composition of many such NumPy functions
+can be unnecessarily slow when each call is dominated by the cost of transferring memory rather than the cost of performing calculations [Alted]_.
 As a partial solution, [numexpr]_ provides faster implementations than NumPy when
-several elementwise computations are composed, by implementing a loop fusion optimization.
+several elementwise computations are composed by implementing a loop fusion optimization.
 However,
 numexpr requires unusual syntax (the expression must be encoded as a string within the code),
-and it is limited to elementwise computations.
-In many use-cases, hand-written native machine language
-implementations are much faster than these common alternatives.
-[Cython]_ and [scipy.weave]_ make it easier to write just the crucial bottleneck code in C,
-and keep the rest of the program in Python. However, if the bottleneck
-is a large mathematical expression comprising hundreds of operations,
-manual optimization of the math can be time-consuming and suboptimal
-compared to automatic optimization.
+and is limited to elementwise computations.
+In many use-cases, hand-written native machine language implementations are
+still much faster than common alternatives.  [Cython]_ and [scipy.weave]_ make
+it easy to rewrite the crucial bottlenecks in C. However, if the bottleneck is
+a large mathematical expression comprising hundreds of operations, manual
+optimization of the math can be time-consuming and suboptimal compared to
+automatic optimization.
 
-Theano combines the convenience of NumPy with the speed of hand-optimized
-C/C++ code by generating and compiling native implementations
-from a complete, high-level description of the computation graph, which it
-optimizes before translating it into C/C++ code.
-In our benchmarks, this can lead
-to significant performance gains over competing math libraries.
-Theano is capable of generating CPU as well as GPU implementations
-(the latter using CUDA), without requiring changes to user code.
-It supports full program transformations and macros,
+Theano combines the convenience of NumPy with the speed of hand-optimized C/C++
+code by generating and compiling native implementations from a complete,
+high-level description of the computation graph, which it optimizes before
+translating it into C/C++ code.  Our benchmarks demonstrate that this can lead
+to significant performance gains over competing math libraries.  Theano is
+capable of generating CPU as well as GPU implementations (the latter using
+CUDA) without requiring changes to user code.
+It supports full program transformations and macros
 including automatic differentiation.
-It also performs more local transformations that correct many unnecessary, slow, or numerically unstable
+It also performs local graph transformations that correct many unnecessary, slow, or numerically unstable
 expression patterns.
-This pattern is appropriate for applications where the same computation will be repeated many times on different inputs,
-so that the time invested in the initial optimization and compilation (typically on the order of seconds) is
-negligible in comparison to time saved on the repeated calculations.
+This pattern is appropriate in scenarios where the same computation will be repeated many times on different inputs,
+such that the time invested in the initial optimization and compilation (typically on the order of seconds) is
+negligible in comparison to the time saved on the repeated calculations.
 Theano is similar to [SymPy]_, in that both manipulate symbolic
 mathematical graphs. SymPy implements a more extensive set of mathematical
 operations, but it does not offer as efficient numerical evaluation.
