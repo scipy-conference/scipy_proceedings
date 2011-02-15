@@ -107,8 +107,10 @@ This pattern is appropriate in scenarios where the same computation will be repe
 such that the time invested in the initial optimization and compilation (typically on the order of seconds) is
 negligible in comparison to the time saved on the repeated calculations.
 Theano is similar to [SymPy]_, in that both manipulate symbolic
-mathematical graphs. SymPy implements a more extensive set of mathematical
-operations, but it does not offer as efficient numerical evaluation.
+mathematical graphs, but the two projects have a distinctly different focus.
+While SymPy implements a richer set of mathematical operations of the kind
+expected in a modern computer algebra system, Theano focuses on fast, efficient
+evaluation of primarily array-valued expressions.
 
 Theano is free open source software, licensed under the New (3-clause) BSD license.
 It depends upon NumPy, and can optionally use SciPy, as well as custom C and CUDA code generators which are able to specialize for particular types, sizes, and shapes of inputs. 
