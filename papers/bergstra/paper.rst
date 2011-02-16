@@ -276,17 +276,16 @@ and decrement ``w`` by its scaled gradient.
 Benchmarking Results
 --------------------
 
-Theano was developed to allow the rapid development of algorithms
-in machine learning.
-This section presents performance in two tasks from that domain:
-the training of a multi-layer perceptron (MLP) and a convolutional network. 
-More extensive benchmarks are forthcoming, and will be posted on our website.
+Theano started as a library for easing rapid development of complex machine 
+learning algorithms. This section presents performance in two tasks from that
+domain: training a multi-layer perceptron (MLP) and training a convolutional
+network. More extensive benchmarks are forthcoming, and will be posted on our
+website [theano]_.
 
-We chose these
-architectures because of their popularity in machine learning and their different 
-computational demands. Large matrix-matrix multiplications dominate in the MLP example, 
-and two-dimensional image convolutions with small kernels dominate 
-computations in the convolutional network.
+We chose these architectures because of their popularity in the machine learning
+community and their different computational demands. Large matrix-matrix
+multiplications dominate in the MLP example while two-dimensional image
+convolutions with small kernels dominate the convolutional network.
 More information about these models and their learning algorithms is available 
 from the Deep Learning Tutorials [DLT]_. 
 The implementations used in these benchmarks are available online [dlb]_.
@@ -300,12 +299,11 @@ CPU computations were done at double-precision.
 GPU computations were done at single-precision.
 
 Our first benchmark is training
-a single layer MLP by mini-batch gradient descent. 
-Each implementation multiplied 60 784-element
-input vectors by a :math:`$784 \times 500$` weight matrix, compressed by a tanh
-function, then multiplied by a :math:`$500 \times 10$` matrix, and finally classified using a
-multi-class generalization of logistic regression.  The gradient was calculated
-by performing similar calculations, but in reverse.
+a single layer MLP by mini-batch gradient descent. Roughly, the computations
+carried out by any of the implenetations are to multiply multiple times
+matrices of shapes :math:`$60\ times 784$`, `$784 \times 500$` and
+:math:`$500 \times 10$` and apply several element-wise operations like
+:math:`tanh`.
 
 .. _Figure 3:
 .. _Benchmark1:
@@ -317,17 +315,19 @@ by performing similar calculations, but in reverse.
     784 inputs, 500 hidden units, a 10-way classification, and are trained 60
     examples at a time.
 
-`Figure 3`_ compares the number of examples processed per second 
-by different implementations.
-We compared Theano (revision #ec057beb6c), NumPy 1.4.1, Matlab 7.9.0.529, and
-Torch 5 (a machine learning 
-library written in C/C++) [torch5]_.  On the GPU we compared Theano with GPUMat 0.25 for Matlab
-([gpumat]_).
-As shown in `Figure 3`_, on the CPU Theano is 1.8x faster than NumPy,
+`Figure 3`_ looks at the number of examples processed per second 
+by different implementations. We compared Theano (revision #ec057beb6c) against
+NumPy 1.4.1, Matlab 7.9.0.529, and Torch 5 (a machine learning 
+library written in C/C++) [torch5]_ on the CPU and  GPUMat 0.25 for Matlab
+([gpumat]_) on the GPU.
+
+When running on the CPU, Theano is 1.8x faster than NumPy,
 1.6x faster than Matlab, and 7.5x faster than Torch 5. Torch was written
 for flexibility, not speed (Ronan Collobert, p.c.).
-Theano's speed increases 5.8x on the GPU from the CPU, a total increase of 11x over NumPy on the CPU and 44x over Torch 5 on the CPU.
-GPUmat increases the Matlab speed on the GPU only 1.4x from the CPU, far
+Theano's speed increases 5.8x on the GPU from the CPU, a total increase of 11x over
+NumPy (CPU) and 44x over Torch 5 (CPU).
+GPUmat brings about a speed increase of only 1.4x when switching to the GPU
+for the Matlab implementation, far
 less than the 5.8x increase Theano achieves through CUDA specializations.
 
 .. _Benchmark2:
@@ -343,21 +343,24 @@ less than the 5.8x increase Theano achieves through CUDA specializations.
 Because of the difficulty in implementing efficient convolutional networks, we only
 benchmark against known libraries that offer a pre-existing implementation.
 We compare against EBLearn [EBL]_ and Torch, two libraries written in C++. 
-EBLearn was implemented by Yann LeCun's lab at NYU, which has done extensive research in convolutional networks, so EBLearn is a solid baseline.
-To put these results
-into perspective, we implemented approximately half (no gradient calculation)
-of the algorithm using SciPy's ``signal.convolve2d`` function.  This benchmark
-uses convolutions of medium sized images
+EBLearn was implemented by Yann LeCun's lab at NYU, which has done extensive
+research in convolutional networks, so EBLearn is a solid baseline.
+To put these results into perspective, we implemented approximately half (no
+gradient calculation) of the algorithm using SciPy's ``signal.convolve2d`` function. 
+This benchmark uses convolutions of medium sized images
 (:math:`$256 \times 256$`) with
 small filters (:math:`$7 \times 7$`).
 `Figure 4`_ shows the performance of Theano (both CPU and GPU)
 against competing implementations.
-On the CPU, Theano is 2.2x faster than EBLearn, its best competitor. This is because Theano compiles more specialized convolution routines.
-Theano's speed increases 4.9x on the GPU from the CPU, a total of 10.7x over EBLearn on the CPU.
-On the CPU, Theano is 5.8x faster than SciPy even though SciPy is doing only half the algorithm because 
-SciPy's convolution routine has not been optimized for this application.
+On the CPU, Theano is 2.2x faster than EBLearn, its best competitor. This is because
+Theano compiles more specialized convolution routines.
+Theano's speed increases 4.9x on the GPU from the CPU, a total of 10.7x over
+EBLearn (CPU).
+On the CPU, Theano is 5.8x faster than SciPy even though SciPy is doing only
+half the computations. This is because SciPy's convolution routine has not been
+optimized for this application.
 
-We also compared Theano with numexpr and NumPy for evaluating elementwise
+We also compared Theano with numexpr and NumPy for evaluating element-wise
 expressions on the CPU (`Figure 5`_).
 For small amounts of data, the extra function-call overhead of numexpr and
 Theano makes them slower.  For larger amounts of data, and for more complicated
