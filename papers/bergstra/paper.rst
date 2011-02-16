@@ -67,11 +67,12 @@ Introduction
 
 Python is a powerful and flexible language for describing large-scale mathematical
 calculations, but the Python interpreter is in many cases a poor engine for executing
-them. One reason is that Python uses full-fledged objects on the heap to
-represent even simple numeric scalars instead of processor's native types which have a
-minimal overhead. To overcome these limitantions there are several tools 
-available for numerical calculations, including [NumPy]_, [numexpr]_, [Cython]_,
-and [scipy.weave]_.
+them. One reason is that Python uses full-fledged Python objects on the heap to
+represent simple numeric scalars.
+To reduce the overhead in numeric calculations, it is important to use array
+types such as NumPy's ``ndarray`` so that single Python objects on the heap can
+stand for multidimensional arrays of numeric scalars, each stored efficiently in
+the host processor's native format.
 
 [NumPy]_ provides an N-dimensional array data type, and many functions
 for indexing, reshaping, and performing elementary computations (``exp``, ``log``,
