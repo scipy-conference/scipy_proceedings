@@ -95,7 +95,7 @@ automatic optimization.
 Theano on the other hand works on a symbolic representation of the
 mathematical expressions, provided by the user through NumPy-like syntax.
 Having access to a computational graph, Theano can
-provide automatic differentiation of complex expressions, but more
+provide symbolic differentiation of complex expressions, but more
 importantly, it can perform local graph trasnformations that corrects
 many unnecessary, slow or numerically unstable expression patterns.
 Once optimized, the graph can be used to generate CPU as well as GPU 
@@ -231,7 +231,7 @@ Line 16 defines the cross-entropy term in :math:`cost` as ``xent``.
 Line 17 defines the predictor by thresholding over :math:`$P(Y=1|x^{(i)}) = 1$` as ``prediction``.
 Line 18 defines :math:`cost` as ``cost``, by adding the cross-entropy term to the :math:`$\ell_2$` penalty.
 
-Line 19 (``gw,gb = T.grad(cost, [w,b])``) performs automatic
+Line 19 (``gw,gb = T.grad(cost, [w,b])``) performs symbolic
 differentiation of scalar-valued ``cost`` with respect to variables ``w`` and ``b``.
 It works like a macro, iterating backward over the expression
 graph, applying the chain rule of differentiation and building expressions for the
@@ -571,7 +571,7 @@ The first stage removes duplicate expressions, and when several constants are
 actually equal, they are replaced with a single node.
 Theano treats two apply nodes with the same inputs and the same Op as being
 duplicates and only keeps one.
-The automatic gradient mechanism often introduces this sort of redundancy,
+The symbolic gradient mechanism often introduces this sort of redundancy,
 so this phase is quite important.  The ``'FAST_COMPILE'`` mode includes only this
 stage.
 
