@@ -93,8 +93,8 @@ optimization of the math can be time-consuming and suboptimal compared to
 automatic optimization.
 
 Theano on the other hand works on a symbolic representation of the
-mathematical expressions, provided by the user through a simple syntax
-that mimcs Numpy. Having access to a computational graph, Theano can 
+mathematical expressions, provided by the user through NumPy-like syntax.
+Having access to a computational graph, Theano can
 provide automatic differentiation of complex expressions, but more
 importantly, it can perform local graph trasnformations that corrects
 many unnecessary, slow or numerically unstable expression patterns.
