@@ -195,6 +195,7 @@ use stochastic gradient descent.
 
 The code in `Listing 2`_ implements this minimization.
 The code is organized into four conceptual steps with respect to Theano:
+
   1. declare symbolic variables
   2. use these variables to build a symbolic expression graph,
   3. compile a function, and
