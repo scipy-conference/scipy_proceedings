@@ -41,23 +41,25 @@ Theano: A CPU and GPU Math Compiler in Python
 .. class:: abstract
 
     *Theano is a compiler for mathematical expressions in Python that
-    successfully combines the convenience of NumPy's syntax with the speed
-    of optimized native machine language. It manages to do so by
-    manupilating the symbolic graph that the user provides, using 
-    a library of graph transformation heuristics for improving 
-    computation speed and stability. The optmized graph gets
-    translated into C/C++ or CUDA transparently.
+    combines the convenience of NumPy's syntax with the speed
+    of optimized native machine language.
+    The user composes mathematical expressions in a high-level
+    description that mimics NumPy's syntax and semantics, while being statically
+    typed and functional (as opposed to imperative).
+    These expressions allow Theano to provide symbolic differentiation.
+    Before performing computation, Theano optimizes the choice of expressions,
+    translates them into C++ (or CUDA for GPU),
+    compiles them into dynamically loaded Python modules, all automatically.
     Common machine learning algorithms implemented with Theano
     are from* :math:`$1.6\times$` *to* :math:`$7.5\times$` *faster
     than competitive alternatives (including those implemented with
     C/C++, NumPy/SciPy and Matlab) when compiled for the CPU
     and between* :math:`$6.5\times$` *and* :math:`$44\times$` *faster
-    when compiled for the GPU. Theano provides automatic differentiation
-    and is optimal for hiding implementation details of a variety of 
-    backend technologies. This paper illustrates how to use
+    when compiled for the GPU.
+    This paper illustrates how to use
     Theano, outlines the scope of the compiler, provides benchmarks
-    on both CPU and GPU processors, and explains its overall design.
-    Theano development and use began in January 2008.*
+    on both CPU and GPU processors, and explains its overall design.*
+
 
 
 Introduction
