@@ -701,6 +701,12 @@ Theano-specific tools.  The reason is two-fold: 1) definition
 of Theano expressions is separate from their execution, and 2) optimizations
 can introduce many changes to the computation graph.
 
+We plan to extend GPU support to the full range of C data types, but only float32
+tensors are supported as of writing.
+There no support for sparse vectors or matrices on the GPU,
+although algorithms from the CUSPARSE package should make it easy to add at least basic
+support for sparse GPU objects.
+
 
 Conclusion
 ------------
