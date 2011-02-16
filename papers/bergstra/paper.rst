@@ -584,7 +584,39 @@ The difference in speed on a GPU between
 a naïve and an optimal implementation of even a simple algorithm like row/column
 summation in a matrix can be an order of magnitude or more.
 Theano's ability to generate custom-made CUDA kernels for many important
-mathematical operations accounts for the good GPU performance in our benchmarks. 
+mathematical operations accounts for the good GPU performance in our benchmarks.
+
+Moving Computation to the GPU
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Each expression in Theano is associated with an implementation that runs on
+either the host (a host expression) or a GPU device (a GPU expression).
+One important application of graph transformations is to replace host
+expressions with GPU expressions.
+The majority of host expression types have GPU equivalents and the proportion is
+always growing.
+
+The heuristic that guides GPU allocation is simple:
+if any input or output of an expression resides on the GPU and the expression
+has a GPU equivalent, then we replace it.
+How does this chain reaction get started?
+.. mentioned already in section ***
+Shared variables storing float32 tensors default to GPU storage,
+and the expressions derived from them consequently default to using GPU
+implementations.
+It is possible to explicitly force any float32 variable to reside on the GPU,
+so you can start the chain reaction of optimizations and use the GPU even
+in graphs with no shared variables.
+It is possible (though awkward, and discouraged)
+to specify exactly which computations to perform on the GPU
+by disabling the default GPU optimizations.
+
+Tensors stored on the GPU use a special internal data type with an interface
+similar to the ``ndarray``.
+This datatype fully supports strided tensors, and
+arbitrary numbers of dimensions.
+The support for strides means that several operations such as the transpose and
+simple slice indexing can be performed in constant time.
 
 
 Limitations and Future Work
@@ -630,6 +662,12 @@ Debugging Theano functions can require non-standard techniques and
 Theano-specific tools.  The reason is two-fold: 1) definition
 of Theano expressions is separate from their execution, and 2) optimizations
 can introduce many changes to the computation graph.
+
+We plan to extend GPU support to the full range of C data types, but only float32
+tensors are supported as of writing.
+There no support for sparse vectors or matrices on the GPU,
+although algorithms from the CUSPARSE package should make it easy to add at least basic
+support for sparse GPU objects.
 
 
 Conclusion
