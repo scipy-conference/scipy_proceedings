@@ -8,83 +8,66 @@ Data structures for statistical computing in Python
 
 .. class:: abstract
 
-    In this paper we are concerned with the practical issues of
-    working with data sets common to finance, statistics, and other
-    related fields. **pandas** is a new library which aims to
-    facilitate working with these data sets and to provide a set of
-    fundamental building blocks for implementing statistical
-    models. We will discuss specific design issues encountered in the
-    course of developing pandas with relevant examples and some
-    comparisons with the R language. We conclude by discussing
-    possible future directions for statistical computing and data
-    analysis using Python.
+    In this paper we are concerned with the practical issues of working with
+    data sets common to finance, statistics, and other related
+    fields. **pandas** is a new library which aims to facilitate working with
+    these data sets and to provide a set of fundamental building blocks for
+    implementing statistical models. We will discuss specific design issues
+    encountered in the course of developing **pandas** with relevant examples
+    and some comparisons with the R language. We conclude by discussing possible
+    future directions for statistical computing and data analysis using Python.
 
 Introduction
 ------------
 
-Python is being used increasingly in scientific applications
-traditionally dominated by R, MATLAB, Stata, SAS, or other commercial
-or open-source languages. However, for statistics and data analysis
-applications, there are still a number of barriers slowing adoption of
-Python among academic and industry practitioners. What is important to
-such users?
+Python is being used increasingly in scientific applications traditionally
+dominated by [R]_, [MATLAB]_, [Stata]_, [SAS]_, other commercial or open-source
+research environments. The increasing maturity and stability of the fundamental
+numerical libraries ([NumPy]_, [SciPy]_, and others), quality of documentation,
+and availability of "kitchen-sink" distributions ([EPD]_, [Pythonxy]_) have gone
+a long way toward making Python accessible and convenient for a broad
+audience. Additionally [matplotlib]_ integrated with [IPython]_ provides an
+interactive research and development environment with data visualization
+suitable for most users. However, adoption of Python for applied statistical
+modeling has been relatively slow compared with other areas of computational
+science.
 
-* Standard suite of linear algebra, matrix operations
-* Availability of statistical models and functions
-* Robust input / output tools
-* Tools for performing data manipulations
-* Data visualization and graphics tools
-* Interactive research and development environment
-* Well-written and navigable documentation
-* Easy installation and sources of community support
-* To speak the *lingua franca* of their colleagues
+A major issue for would-be statistical Python programmers in the past has been
+the lack of libraries implementing standard models and a cohesive framework for
+specifying models. However, in recent years there have been significant new
+developments in econometrics ([StaM]_), Bayesian statistics ([PyMC]_), and
+machine learning ([SciL]_), among others fields. However, it is still difficult
+for many statisticians to choose Python over R given the domain-specific nature
+of the R language breadth of well-vetted open-source libraries available to R
+users ([CRAN]_). In spite of this obstacle, we believe that the Python language
+and the libraries and tools currently available can be leveraged to make Python
+a superior environment for data analysis and statistical computing.
 
-The increasing maturity and stability of fundamental libraries
-([NumPy]_, [SciPy]_, and others), quality of documentation, and
-availability of "kitchen-sink" distributions ([EPD]_, [Pythonxy]_)
-have gone a long way toward addressing some of these
-points. [matplotlib]_ integrated with [IPython]_ provides an
-interactive research environment with data visualization.
-
-Recent years' development has brought about a number of packages
-addressing the former lack of Python libraries for statistical
-modeling ([StaM]_, [PyMC]_, [SciL]_, others). While great progress has
-been made in making these tools available to Python programmers, it
-would still be perhaps ill-advised for a statistical researcher to
-choose Python over R given the breadth of open-source libraries
-available to R users ([CRAN]_).
-
-In spite of this, we believe that the Python language and the
-programming tools currently available can be leveraged to make Python
-a superior environment for data analysis and statistical computing. In
-this paper we are primarily concerned with data structures and tools
-for working with data sets *in-memory*. These are the fundamental
-building blocks with which models are constructed.
-
-pandas was initially developed for financial modeling and hence most
-of our examples here stem from time series and cross-sectional data
-arising in that area. The package's name derives from *panel data*,
-which is a term for 3-dimensional data sets encountered in statistics
-and econometrics. We recognize that the approach taken in pandas may
-not be universally applicable, but its goals are in line with the
-broader goal of making the scientific Python stack a more attractive
-and practical data analysis environment.
+In this paper we are concerned with data structures and tools for working with
+data sets *in-memory*, as these are fundamental building blocks for constructing
+statistical models. **pandas** is a new Python library of data structures and
+statistical tools initially developed for quantitative finance applications. Most
+of our examples here stem from time series and cross-sectional data arising in
+financial modeling. The package's name derives from *panel data*, which is a
+term for 3-dimensional data sets encountered in statistics and econometrics. We
+hope that **pandas** will help make scientific Python a more attractive and
+practical statistical computing environment for academic and industry
+practitioners alike.
 
 Statistical data sets
 ---------------------
 
 Statistical data sets commonly arrive in tabular format, i.e. as a
-two-dimensional list of *observations* and names for the fields of
-each observation. Usually an observation can be uniquely identified by
-one or more values or keys. We will show an example data set for a pair
-of stocks over the course of several days.
+two-dimensional list of *observations* and names for the fields of each
+observation. Usually an observation can be uniquely identified by one or more
+values or keys. We will show an example data set for a pair of stocks over the
+course of several days.
 
-The NumPy ndarray object can be used to hold this data:
+The NumPy ndarray with structured dtype can be used to hold this data:
 
 ::
 
-    >>> np.genfromtxt('data', delimiter=',',
-                      names=True, dtype=None)
+    >>> data
     array([('GOOG', '2009-12-28', 622.87, 1697900.0),
 	   ('GOOG', '2009-12-29', 619.40, 1424800.0),
 	   ('GOOG', '2009-12-30', 622.73, 1465600.0),
@@ -100,14 +83,19 @@ The NumPy ndarray object can be used to hold this data:
     array([622.87, 619.4, 622.73, 619.98, 211.61, 209.1,
            211.64, 210.73])
 
-Structured (or record) arrays can be effective in many applications,
-but in our experience they do not provide as-is the functionality
-present in other statistical computing environments. One issue is that
-they do not integrate well with the rest of NumPy, which is mostly
+Structured (or record) arrays such as this can be effective in many
+applications, but in our experience they do not provide the same level of
+flexibility and ease of use as other statistical environments. One major issue
+is that they do not integrate well with the rest of NumPy, which is mostly
 intended for working with arrays of homogeneous dtype.
 
-R provides the ``data.frame`` class which can similarly store
-mixed-type data, but also has the benefit of being flexible in size:
+R provides the ``data.frame`` class which can similarly store mixed-type data.
+The core R language and its 3rd-party libraries were built with the
+``data.frame`` object in mind, so most operations on such a data set are very
+natural. A ``data.frame`` is also flexible in size, an important feature when
+assembling a collection of data. The following code fragment loads the data
+stored in the CSV file ``data`` into the variable ``df`` and adds a column of
+boolean values:
 
 ::
 
@@ -134,13 +122,11 @@ mixed-type data, but also has the benefit of being flexible in size:
     7 AAPL 2009-12-30 211.64 14696800 FALSE
     8 AAPL 2009-12-31 210.73 12571000 FALSE
 
-Since the core R language and its 3rd-party libraries were built (in
-large part) with ``data.frame`` in mind, many operations on such a
-data set can be quite natural.
-
-pandas provides the aptly-named ``DataFrame`` class which implements
-similar functionality to its R counterpart, though with some
-enhancements (namely, built-in data alignment) which we will discuss.
+**pandas** provides a similarly-named ``DataFrame`` class which implements much
+of the functionality to its R counterpart, though with some important
+enhancements (namely, built-in data alignment) which we will discuss. Here we
+load the same CSV file as above into a ``DataFrame`` object using the
+``fromcsv`` function and similarly add the above indicator column:
 
 ::
 
@@ -154,9 +140,10 @@ enhancements (namely, built-in data alignment) which we will discuss.
     5    2009-12-29     AAPL     209.1      1.587e+07
     6    2009-12-30     AAPL     211.6      1.47e+07
     7    2009-12-31     AAPL     210.7      1.257e+07
-    >>> df['ind'] = df['item'] == 'GOOG'
+    >>> data['ind'] = data['item'] == 'GOOG'
 
-This data can be reshaped into a different form for future examples:
+This data can be reshaped into a different form for future examples by means of
+the ``DataFrame`` method ``pivot``:
 
 ::
 
@@ -168,10 +155,11 @@ This data can be reshaped into a different form for future examples:
     2009-12-30    211.6          622.7
     2009-12-31    210.7          620
 
-Beyond observational data, one will also frequently encounter
-*categorical* data, which can be used to partition identifiers into
-broader groupings. For example, stock tickers might be categorized by
-their industry or country of incorporation:
+Beyond observational data, one will also frequently encounter *categorical*
+data, which can be used to partition identifiers into broader groupings. For
+example, stock tickers might be categorized by their industry or country of
+incorporation. Here we have created a ``DataFrame`` ``cats`` storing country and
+industry classifications for a group of stocks:
 
 ::
 
@@ -192,18 +180,17 @@ their industry or country of incorporation:
 
 We will use these data sets to illustrate features of interest.
 
-pandas data model
------------------
+**pandas** data model
+---------------------
 
-The pandas data model is quite simple: link the axes of an ndarray to
-arrays of unique labels. These labels are stored in the ``Index``
-class, which is a 1-D ``ndarray`` subclass implementing an *ordered
-set*. In the data set above, the row labels are simply sequential
-observation numbers, while the columns are the field names.
+The **pandas** data structures internally link the axes of a NumPy ndarray with
+arrays of unique labels. These labels are stored in instances of the ``Index``
+class, which is a 1-D ``ndarray`` subclass implementing an *ordered set*. In the
+stock data above, the row labels are simply sequential observation numbers,
+while the columns are the field names.
 
-The Index stores the labels in two ways: as a ndarray and as a dict
-mapping the values to integer indices (hence they must be unique and
-hashable):
+An ``Index`` stores the labels in two ways: as a ndarray and as a dict mapping
+the values (which must therefore be unique and hashable) to the integer indices:
 
 ::
 
@@ -221,20 +208,25 @@ membership in constant time.
     >>> 'a' in index
     True
 
-The essence of pandas's data model is to label the axes of an ndarray
-with Index objects. These labels are used to provide alignment when
-performing operations with differently-labeled objects. There are
-multiple data structures (which handle 1-, 2-, and 3-dimensional
-data), as opposed to one, primarily to allow for specialized semantics
-for working with the various types of data sets.
+These labels are used to provide alignment when performing data manipulations
+using differently-labeled objects. There are specialized data structures,
+representing 1-, 2-, and 3-dimensional data, which incorporate useful data
+handling semantics for both interactive research and constructing statistical
+models. A general *n*-dimensional data structure would be useful in some cases,
+but data sets of dimension higher than 3 are very uncommon in most statistical
+and econometric applications, with 2-dimensional being the most prevalent. We
+took a pragmatic approach, driven by application needs, to designing the data
+structures in order to make them as easy-to-use as possible. Also, we wanted the
+objects to be idiomatically similar to those present in other statistical
+environments, such as R.
 
 Data alignment
 --------------
 
-Operations between related, but differently-sized data sets can pose a
-problem as the user must first ensure that the data are properly
-aligned. As an example, consider time series over different date
-ranges or economic data series over varying sets of entities:
+Operations between related, but differently-sized data sets can pose a problem
+as the user must first ensure that the data are properly aligned. As an example,
+consider time series over different date ranges or economic data series over
+varying sets of entities:
 
 ::
 
@@ -249,9 +241,8 @@ ranges or economic data series over varying sets of entities:
     DB     0.281
     VW     0.040
 
-One might choose to explicitly align (or *reindex*) one of these
-1D ``Series`` objects with the other before adding them, for
-example
+One might choose to explicitly align (or *reindex*) one of these 1D ``Series``
+objects with the other before adding them, for example
 
 ::
 
@@ -264,8 +255,8 @@ example
     GOOG    0.112861123629
     IBM     0.0496445829129
 
-However, we often find it preferable to simply ignore the state of
-data alignment:
+However, we often find it preferable to simply ignore the state of data
+alignment:
 
 ::
 
@@ -281,35 +272,35 @@ data alignment:
     SCGLY    NaN
     VW       NaN
 
-Here, the data have been matched on index and added together. The
-result object contains the union of the labels between the two objects
-so that no information is lost. We will discuss the use of ``NaN``
-(Not a Number) to represent missing data in the next section.
+Here, the data have been matched on index and added together. The result object
+contains the union of the labels between the two objects so that no information
+is lost. We will discuss the use of ``NaN`` (Not a Number) to represent missing
+data in the next section.
 
-Clearly, the user pays linear overhead whenever automatic data
-alignment occurs and we seek to minimize that overhead to the extent
-possible ([Cython]_ proves helpful). Reindexing can be avoided when
-``Index`` objects are shared, which can be an effective strategy in
-performance-sensitive applications.
+Clearly, the user pays linear overhead whenever automatic data alignment occurs
+and we seek to minimize that overhead to the extent possible. Reindexing can be
+avoided when ``Index`` objects are shared, which can be an effective strategy in
+performance-sensitive applications.  [Cython]_, a widely-used tool for easily
+creating Python C extensions, has been utilized to speed up these core
+algorithms.
 
 Handling missing data
 ---------------------
 
-It is common for a data set to have missing observations. For example,
-a group of related economic time series stored in a ``DataFrame`` may
-start on different dates. Carrying out calculations in the presence of
-missing data can lead to both complicated code and considerable
-performance loss. We chose to use ``NaN`` as opposed to using NumPy
-MaskedArrays primarily for performance reasons (which are beyond the
-scope of this paper). ``NaN`` propagates in floating-point operations
-in a natural way and can be easily detected in algorithms. While this
-leads to good performance, it comes with drawbacks: namely that
-``NaN`` cannot be used in integer-type arrays, and it is not an
-intuitive "null" value in object or string arrays.
+It is common for a data set to have missing observations. For example, a group
+of related economic time series stored in a ``DataFrame`` may start on different
+dates. Carrying out calculations in the presence of missing data can lead both
+to complicated code and considerable performance loss. We chose to use ``NaN``
+as opposed to using NumPy MaskedArrays for performance reasons (which are beyond
+the scope of this paper). ``NaN`` propagates in floating-point operations in a
+natural way and can be easily detected in algorithms. While this leads to good
+performance, it comes with drawbacks: namely that ``NaN`` cannot be used in
+integer-type arrays, and it is not an intuitive "null" value in object or string
+arrays.
 
-We regard the use of ``NaN`` as an implementation detail and attempt
-to provide the user with the necessary functions for performing common
-operations on the data points points. From the above example:
+We regard the use of ``NaN`` as an implementation detail and attempt to provide
+the user with appropriate API functions for performing common operations on
+missing data points. From the above example:
 
 ::
 
@@ -321,7 +312,7 @@ operations on the data points points. From the above example:
     GOOG    0.26666583847
     IBM     0.0833057542385
 
-    >>> (s1 + s2).fill(0)
+    >>> (s1 + s2).fillna(0)
     AAPL     0.0686791008184
     BAR      0.358165479807
     C        0.16586702944
@@ -333,8 +324,8 @@ operations on the data points points. From the above example:
     SCGLY    0.0
     VW       0.0
 
-Common ndarray methods have been rewritten to automatically exclude
-such data points:
+Common ndarray methods have been rewritten to automatically exclude such data
+points:
 
 ::
 
@@ -344,9 +335,9 @@ such data points:
     >>> (s1 + s2).count()
     6
 
-There are specialized API functions (similar to R's ``is.na``) for
-determining the validity of a data point or series. These can be used
-with dtypes other than float as well:
+There are specialized API functions (similar to R's ``is.na``) for determining
+the validity of a data point or series. These can be used with dtypes other than
+float as well:
 
 ::
 
@@ -362,18 +353,17 @@ with dtypes other than float as well:
     SCGLY    True
     VW       True
 
-The R language has a built-in ``NA`` value which is distinct from
-``NaN`` but has similar semantics. While the addition of such a
-feature to NumPy would be useful, it is most likely too
-domain-specific to merit inclusion.
+The R language has a built-in ``NA`` (Not Available) value which is distinct
+from ``NaN`` but has similar semantics. While the addition of such a feature to
+NumPy would be useful, it is most likely too domain-specific to merit inclusion.
 
 Combining or joining data sets
 ------------------------------
 
-Combining, joining, or merging related data sets is a quite common
-operation. In doing so we are interested in associating observations
-from one data set with another via a *merge key* of some kind. For
-similarly-indexed 2D data, the row labels serve as a natural key:
+Combining, joining, or merging related data sets is a quite common operation. In
+doing so we are interested in associating observations from one data set with
+another via a *merge key* of some kind. For similarly-indexed 2D data, the row
+labels serve as a natural key:
 
 ::
 
@@ -393,9 +383,8 @@ similarly-indexed 2D data, the row labels serve as a natural key:
     2009-12-30  211.6   622.7   30.96   16.98
     2009-12-31  210.7   620     NaN     NaN
 
-One might be interested in joining on something other than the index
-as well, such as the categorical data we presented in an earlier
-section:
+One might be interested in joining on something other than the index as well,
+such as the categorical data we presented in an earlier section:
 
 ::
 
@@ -415,10 +404,9 @@ This is akin to a SQL join operation between two tables.
 Categorical variables and "Group by" operations
 -----------------------------------------------
 
-One might want to perform an operation (for example, an aggregation)
-on a subset of a data set determined by a categorical variable. For
-example, suppose we wished to compute the mean value by industry for a
-set of stock data:
+One might want to perform an operation (for example, an aggregation) on a subset
+of a data set determined by a categorical variable. For example, suppose we
+wished to compute the mean value by industry for a set of stock data:
 
 ::
 
@@ -437,8 +425,8 @@ set of stock data:
                        TM     AUTO
 
 This concept of "group by" is a built-in feature of many data-oriented
-languages, such as R and SQL. In R, any vector of non-numeric data can
-be used as an input to a groupby operation:
+languages, such as R and SQL. In R, any vector of non-numeric data can be used
+as an input to a groupby operation:
 
 ::
 
@@ -453,7 +441,7 @@ be used as an input to a groupby operation:
        AAPL    GOOG
     210.770 621.245
 
-pandas allows you to do this in a similar fashion:
+**pandas** allows you to do this in a similar fashion:
 
 ::
 
@@ -473,9 +461,9 @@ Or, as in the above industry data:
 
 
 In the most general case, groupby uses a function or mapping to produce
-groupings from one of the axes of a pandas object. By returning a
-``GroupBy`` object we can support more operations than just
-aggregation. Here we can subtract industry means from a data set:
+groupings from one of the axes of a **pandas** object. By returning a
+``GroupBy`` object we can support more operations than just aggregation. Here we
+can subtract industry means from a data set:
 
 ::
 
@@ -500,15 +488,13 @@ aggregation. Here we can subtract industry means from a data set:
 Manipulating panel (3D) data
 ----------------------------
 
-A data set about a set of individuals or entities over a time range is
-commonly referred to as *panel data*; i.e., for each entity over a
-date range we observe a set of variables. This data can be found both
-in *balanced* form (same number of time observations for each
-individual) or *unbalanced* (different number). Panel data
-manipulations are important primarily for constructing the inputs to
-statistical estimation routines, such as a linear regression. Consider
-the Grunfeld data set [Grun]_ frequently used in econometrics (sorted
-by year):
+A data set about a set of individuals or entities over a time range is commonly
+referred to as *panel data*; i.e., for each entity over a date range we observe
+a set of variables. This data can be found both in *balanced* form (same number
+of time observations for each individual) or *unbalanced* (different
+number). Panel data manipulations are important primarily for constructing the
+inputs to statistical estimation routines, such as a linear regression. Consider
+the Grunfeld data set [Grun]_ frequently used in econometrics (sorted by year):
 
 ::
 
@@ -536,11 +522,11 @@ by year):
     181    4.71      10        2         87.94     1936
     ...
 
-Really this data is 3-dimensional, with *firm*, *year*, and *data
-type* being the three unique keys identifying a data point. Panel data
-presented in tabular format is often referred to as the *stacked* or
-*long* format. We refer to the truly 3-dimensional form as the *wide*
-form. pandas provides classes for operating on both:
+Really this data is 3-dimensional, with *firm*, *year*, and *data type* being
+the three unique keys identifying a data point. Panel data presented in tabular
+format is often referred to as the *stacked* or *long* format. We refer to the
+truly 3-dimensional form as the *wide* form. **pandas** provides classes for
+operating on both:
 
 ::
 
@@ -586,29 +572,27 @@ separately or compute descriptive statistics more easily:
     9     389.2       196.7       1236
     10    428.5       197.4       1233
 
-For unbalanced panel data, constructing dummy variables identifying
-dates or entities can be difficult. But, since these data structures
-have all the necessary labelling data, it can be implemented as an
-instance method.
+For unbalanced panel data, constructing dummy variables identifying dates or
+entities can be difficult. But, since these data structures have all the
+necessary labelling data, it can be implemented as an instance method.
 
 Implementing statistical models
 -------------------------------
 
-When applying a statistical model, data preparation and cleaning can
-be one of the most tedious or time consuming tasks. Ideally the
-majority of this work would be taken care of by the library. In R,
-while ``NA`` data can be automatically excluded from a linear
-regression, one must either align the data and put it into a
-``data.frame`` or otherwise prepare a collection of 1-D arrays which
-are all the same length.
+When applying a statistical model, data preparation and cleaning can be one of
+the most tedious or time consuming tasks. Ideally the majority of this work
+would be taken care of by the library. In R, while ``NA`` data can be
+automatically excluded from a linear regression, one must either align the data
+and put it into a ``data.frame`` or otherwise prepare a collection of 1-D arrays
+which are all the same length.
 
-Using pandas, the user can avoid much of this data preparation
-work. As a exemplary model leveraging the pandas data model, we
-implemented ordinary least squares regression in both the standard
-case (making no assumptions about the content of the regressors) and
-the panel case (which has additional options to allow for entity and
-time dummy variables). Facing the user is a single function, ``ols``,
-which infers the type of model to estimate based on the inputs:
+Using **pandas**, the user can avoid much of this data preparation work. As a
+exemplary model leveraging the **pandas** data model, we implemented ordinary
+least squares regression in both the standard case (making no assumptions about
+the content of the regressors) and the panel case (which has additional options
+to allow for entity and time dummy variables). Facing the user is a single
+function, ``ols``, which infers the type of model to estimate based on the
+inputs:
 
 ::
 
@@ -619,17 +603,16 @@ which infers the type of model to estimate based on the inputs:
     MSFT         0.207564901899
     intercept    -0.000896535166817
 
-If the response variable ``Y`` is a ``DataFrame`` (2D) or dict of 1D
-``Series``, a panel regression will be run on stacked (pooled)
-data. The ``x`` would then need to be any number of things: a
-``WidePanel``, ``LongPanel``, or dict of ``DataFrame`` objects. Since
-these objects contain all of the necessary information to construct
-the design matrices for the regression, there is nothing for the user
-to worry about (except the formulation of the model).
+If the response variable ``Y`` is a ``DataFrame`` (2D) or dict of 1D ``Series``,
+a panel regression will be run on stacked (pooled) data. The ``x`` would then
+need to be any number of things: a ``WidePanel``, ``LongPanel``, or dict of
+``DataFrame`` objects. Since these objects contain all of the necessary
+information to construct the design matrices for the regression, there is
+nothing for the user to worry about (except the formulation of the model).
 
-The ``ols`` function is also capable of estimating a *moving window*
-regression for time series data. This can be useful for estimating
-statistical relationships that change through time:
+The ``ols`` function is also capable of estimating a *moving window* regression
+for time series data. This can be useful for estimating statistical
+relationships that change through time:
 
 ::
 
@@ -648,29 +631,27 @@ statistical relationships that change through time:
 Date/time handling
 ------------------
 
-In applications involving time series data, manipulations involving
-dates and times can be quite tedious and inefficient. Tools for
-working with dates in MATLAB, R, and many other languages are kludgy
-at best. Since Python has a datetime type with a clean Python and C
-API and many useful built-in functions, we can hopefully craft
-easier-to-use and more elegant date and time functionality.
+In applications involving time series data, manipulations involving dates and
+times can be quite tedious and inefficient. Tools for working with dates in
+MATLAB, R, and many other languages are kludgy at best. Since Python has a
+datetime type with a clean Python and C API and many useful built-in functions,
+we can hopefully craft easier-to-use and more elegant date and time
+functionality.
 
-For a number of years **scikits.timeseries** [SciTS]_ has been
-available to scientific Python users. It is built on top of
-MaskedArray and is intended for fixed-frequency time series. While
-forcing data to be fixed frequency can enable better performance in
-some areas, in general we have found that criterion to be quite rigid
-in practice. The user of scikits.timeseries must also explicitly align
-data; operations involving unaligned data yield unintuitive results.
+For a number of years **scikits.timeseries** [SciTS]_ has been available to
+scientific Python users. It is built on top of MaskedArray and is intended for
+fixed-frequency time series. While forcing data to be fixed frequency can enable
+better performance in some areas, in general we have found that criterion to be
+quite rigid in practice. The user of scikits.timeseries must also explicitly
+align data; operations involving unaligned data yield unintuitive results.
 
-In designing pandas we hoped to make working with time series data
-intuitive without adding too much overhead to the underlying data
-model. The pandas data structures are *datetime-aware* but make no
-assumptions about the dates. Instead, when frequency or regularity
-matters, the user has the ability to generate date ranges or conform a
-set of time series to a particular frequency. To do this, we have the
-``DateRange`` class (which is also a subclass of ``Index``, so no
-conversion is necessary) and the ``DateOffset`` class, whose
+In designing **pandas** we hoped to make working with time series data intuitive
+without adding too much overhead to the underlying data model. The **pandas**
+data structures are *datetime-aware* but make no assumptions about the
+dates. Instead, when frequency or regularity matters, the user has the ability
+to generate date ranges or conform a set of time series to a particular
+frequency. To do this, we have the ``DateRange`` class (which is also a subclass
+of ``Index``, so no conversion is necessary) and the ``DateOffset`` class, whose
 subclasses implement various general purpose and domain-specific time
 increments.  ::
 
@@ -689,10 +670,9 @@ increments.  ::
     2009-11-30   199.9     583       29.41     14.97
     2009-12-31   210.7     620       30.48     16.78
 
-Some things which are not easily accomplished in scikits.timeseries
-can be done using the ``DateOffset`` model, like deriving custom
-offsets on the fly or shifting monthly data forward by a number of
-business days:
+Some things which are not easily accomplished in scikits.timeseries can be done
+using the ``DateOffset`` model, like deriving custom offsets on the fly or
+shifting monthly data forward by a number of business days:
 
 ::
 
@@ -712,44 +692,40 @@ business days:
     2009-12-07    199.9   583     29.41   14.97
     2010-01-07    210.7   620     30.48   16.78
 
-Since pandas uses the built-in Python ``datetime`` object, one could
-foresee performance issues with very large or high frequency time series
-data sets. For most general applications financial or econometric
-applications we cannot justify complicating the model for datetime
-handling in order to solve these issues; specialized tools would need
-to be created. Of course, we see no reason why such tools could not
-live within a common framework.
+Since **pandas** uses the built-in Python ``datetime`` object, one could foresee
+performance issues with very large or high frequency time series data sets. For
+most general applications financial or econometric applications we cannot
+justify complicating the model for datetime handling in order to solve these
+issues; specialized tools would need to be created. Of course, we see no reason
+why such tools could not live within a common framework.
 
 Related packages
 ----------------
 
-A number of other Python packages have appeared recently which provide
-some similar functionality to pandas. Among these, **la** ([Larry]_)
-is the most similar, as it implements a labeled ndarray object with
-automatic data alignment. **tabular** ([Tab]_) is intended primarily
-for 2D data and provides many spreadsheet-style operations.
-[pydataframe]_ implements a like-named ``DataFrame`` class which seeks
-to closely emulate its R counterpart.
+A number of other Python packages have appeared recently which provide some
+similar functionality to **pandas**. Among these, **la** ([Larry]_) is the most
+similar, as it implements a labeled ndarray object with automatic data
+alignment. **tabular** ([Tab]_) is intended primarily for 2D data and provides
+many spreadsheet-style operations.  [pydataframe]_ implements a like-named
+``DataFrame`` class which seeks to closely emulate its R counterpart.
 
-On the statistical front, in 2009 Josef Perktold and Skipper Seabold
-picked up Jonathan Taylor's and the [nipy]_ team's work on
-implementing regression models to create **scikits.statsmodels**
-([StaM]_). While we plan to continue implementing a number of
-econometric models integrating closely with pandas (especially
-time-evolving models), it would be preferable to use statsmodels when
-possible.
+On the statistical front, in 2009 Josef Perktold and Skipper Seabold picked up
+Jonathan Taylor's and the [nipy]_ team's work on implementing regression models
+to create **scikits.statsmodels** ([StaM]_). While we plan to continue
+implementing a number of econometric models integrating closely with **pandas**
+(especially time-evolving models), it would be preferable to use statsmodels
+when possible.
 
 Conclusions
 -----------
 
-We believe that in the coming years there will be great opportunity to
-attract users to Python who might have otherwise chosen to use another
-programming language or research environment in the past. By designing
-robust, easy-to-use data structures that cohere with the rest of the
-scientific Python stack, we can make Python a desirable environment
-for data analysis applications. While pandas may not currently be
-useful in every situation, we hope that it will add to the discourse
-and help guide future development.
+We believe that in the coming years there will be great opportunity to attract
+users to Python who might have otherwise chosen to use another programming
+language or research environment in the past. By designing robust, easy-to-use
+data structures that cohere with the rest of the scientific Python stack, we can
+make Python a desirable environment for data analysis applications. While
+**pandas** may not currently be useful in every situation, we hope that it will
+add to the discourse and help guide future development.
 
 References
 ----------
@@ -813,3 +789,15 @@ References
 
 .. [pydataframe] A. Straw, F. Finkernagel, *pydataframe*,
                  http://code.google.com/p/pydataframe/
+
+.. [R] R Development Core Team. 2010, *R: A Language and Environment for Statistical Computing*,
+       http://www.R-project.org
+
+.. [MATLAB] The MathWorks Inc. 2010, *MATLAB*,
+            http://www.mathworks.com
+
+.. [Stata] StatCorp. 2010, *Stata Statistical Software: Release 11*
+           http://www.stata.com
+
+.. [SAS] SAS Institute Inc., *SAS System*,
+         http://www.sas.com
