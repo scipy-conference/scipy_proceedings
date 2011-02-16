@@ -40,95 +40,88 @@ Theano: A CPU and GPU Math Compiler in Python
 
 .. class:: abstract
 
-
-    *Theano is a compiler for mathematical expressions in Python. It combines the convenience of NumPy with the speed of optimized native machine language.
-    The user composes mathematical expressions in a high-level
-    description that mimics NumPy's syntax and semantics, while being statically typed and purely functional.
-    Theano optimizes the expression, translates the optimized expression into C/C++, and runs an optimizing compiler on the C/C++ code, all automatically.
-    Theano can also generate CUDA code to produce GPU implementations for those high-level description.
+    *Theano is a compiler for mathematical expressions in Python that
+    successfully combines the convenience of NumPy's syntax with the speed
+    of optimized native machine language. It manages to do so by
+    manupilating the symbolic graph that the user provides, using 
+    a library of graph transformation heuristics for improving 
+    computation speed and stability. The optmized graph gets
+    translated into C/C++ or CUDA transparently.
     Common machine learning algorithms implemented with Theano
-    are from* :math:`$1.6\times$` *to* :math:`$7.5\times$` *faster than competitive alternatives (including those implemented with C/C++, NumPy/SciPy
-    and Matlab) when compiled for the CPU
-    and between* :math:`$6.5\times$` *and* :math:`$44\times$` *faster when compiled for the GPU.
-    Theano's speed comes from optimizations at a high level of granularity, namely over the symbolic graph representing a complicated mathematical expression.
-    Theano's speed on GPUs, in particular, is owed to its ability to generate custom-made CUDA kernels for many important
-    mathematical operations.
-    Theano uses a library of graph transformation
-    heuristics to optimize expression graphs for fast and
-    numerically stable computation.
-    Theano has been designed to hide the implementation details of a variety of backend technologies.
-    With a single line of code, expressions in Theano can be automatically differentiated. These derivative expressions are also compiled by Theano.
-    This paper illustrates how to use
-    Theano, outlines the scope of the compiler,
-    provides benchmarks on both CPU and GPU processors, and explains its overall design.
+    are from* :math:`$1.6\times$` *to* :math:`$7.5\times$` *faster
+    than competitive alternatives (including those implemented with
+    C/C++, NumPy/SciPy and Matlab) when compiled for the CPU
+    and between* :math:`$6.5\times$` *and* :math:`$44\times$` *faster
+    when compiled for the GPU. Theano provides automatic differentiation
+    and is optimal for hiding implementation details of a variety of 
+    backend technologies. This paper illustrates how to use
+    Theano, outlines the scope of the compiler, provides benchmarks
+    on both CPU and GPU processors, and explains its overall design.
     Theano development and use began in January 2008.*
-
 
 
 Introduction
 ------------
 
 Python is a powerful and flexible language for describing large-scale mathematical
-calculations in a high level way,
-but the Python interpreter is in many cases a poor engine for executing them. Python
-numeric scalars are full-fledged objects on the heap, but large-scale mathematical
-calculations should be carried out using a processor's native types with minimal overhead.
-There are several options available to a Python programmer to get the speed
-of native machine-language code for numerical calculations, including [NumPy]_, [numexpr]_, [Cython]_, and [scipy.weave]_.
+calculations, but the Python interpreter is in many cases a poor engine for executing
+them. One reason is that Python uses full-fledged objects on the heap to
+represent even simple numeric scalars instead of processor's native types which have a
+minimal overhead. To overcome these limitantions there are several tools 
+available for numerical calculations, including [NumPy]_, [numexpr]_, [Cython]_,
+and [scipy.weave]_.
+
 [NumPy]_ provides an N-dimensional array data type, and many functions
-for indexing, reshaping, and performing elementary computations (``exp``, ``log``, ``sin``, etc.)
-on entire arrays at once. These functions are implemented in C for use within Python programs.
-However, the composition of many such NumPy functions
-can be unnecessarily slow when each call is dominated by the cost of transferring memory rather than the cost of performing calculations [Alted]_.
-As a partial solution, [numexpr]_ provides faster implementations than NumPy when
-several elementwise computations are composed by implementing a loop fusion optimization.
-However,
-numexpr requires unusual syntax (the expression must be encoded as a string within the code),
-and is limited to elementwise computations.
-In many use-cases, hand-written native machine language implementations are
-still much faster than common alternatives.  [Cython]_ and [scipy.weave]_ make
-it easy to rewrite the crucial bottlenecks in C. However, if the bottleneck is
-a large mathematical expression comprising hundreds of operations, manual
+for indexing, reshaping, and performing elementary computations (``exp``, ``log``,
+``sin``, etc.) on entire arrays at once. These functions are implemented in C for
+use within Python programs. However, the composition of many such NumPy functions
+can be unnecessarily slow when each call is dominated by the cost of transferring
+memory rather than the cost of performing calculations [Alted]_.
+[numexpr]_ goes one step further by providing a loop fusion optimization
+that can glue several elementwise computations together. Unfortunately, the syntax required
+by numexpr is a bit unusual (the expression must be encoded as a string
+within the code), and it is limited to elementwise computations.
+[Cython]_ and [scipy.weave]_ address Python's performance issue by offering a simple way to
+hand-write crucial segments of code into C. While this might bring about 
+significant improvements, if the bottleneck of a program is a large 
+mathematical expression, comprising hundreds of operations, manual
 optimization of the math can be time-consuming and suboptimal compared to
 automatic optimization.
 
-Theano combines the convenience of NumPy with the speed of hand-optimized C/C++
-code by generating and compiling native implementations from a complete,
-high-level description of the computation graph, which it optimizes before
-translating it into C/C++ code.  Our benchmarks demonstrate that this can lead
-to significant performance gains over competing math libraries.  Theano is
-capable of generating CPU as well as GPU implementations (the latter using
-CUDA) without requiring changes to user code.
-It supports full program transformations and macros
-including automatic differentiation.
-It also performs local graph transformations that correct many unnecessary, slow, or numerically unstable
-expression patterns.
-This pattern is appropriate in scenarios where the same computation will be repeated many times on different inputs,
-such that the time invested in the initial optimization and compilation (typically on the order of seconds) is
-negligible in comparison to the time saved on the repeated calculations.
-Theano is similar to [SymPy]_, in that both manipulate symbolic
+Theano on the other hand works on a symbolic representation of the
+mathematical expressions, provided by the user through a simple syntax
+that mimcs Numpy. Having access to a computational graph, Theano can 
+provide automatic differentiation of complex expressions, but more
+importantly, it can perform local graph trasnformations that corrects
+many unnecessary, slow or numerically unstable expression patterns.
+Once optimized, the graph can be used to generate CPU as well as GPU 
+implementations ( the latter using CUDA) without requireing changes to 
+user code. 
+
+It is similar to [SymPy]_, in that both libraries manipulate symbolic
 mathematical graphs, but the two projects have a distinctly different focus.
 While SymPy implements a richer set of mathematical operations of the kind
 expected in a modern computer algebra system, Theano focuses on fast, efficient
 evaluation of primarily array-valued expressions.
 
 Theano is free open source software, licensed under the New (3-clause) BSD license.
-It depends upon NumPy, and can optionally use SciPy, as well as custom C and CUDA code generators which are able to specialize for particular types, sizes, and shapes of inputs. 
-Theano can be extended to use ``scipy.weave``, PyCUDA, Cython, and other
-numerical libraries and compilation technologies.
-Theano has been actively and continuously developed and used since January 2008.
-It has been used in
-several scientific papers and it is used to teach machine learning in
-graduate courses at the Université de Montréal.
+It depends upon NumPy, and can optionally use SciPy, as well as custom C and CUDA code
+generators which are able to specialize for particular types, sizes, and shapes of
+inputs. It can be extended to use ``scipy.weave``, PyCUDA, Cython, and other
+numerical libraries and compilation technologies. Theano has been actively and
+continuously developed and used since January 2008.
+It has been used in several scientific papers and it is used to teach machine
+learning in graduate courses at the Université de Montréal.
 Documentation and installation instructions can be found on Theano's website [theano]_.
 All Theano users should subscribe to the
-`announce <http://groups.google.com/group/theano-announce>`_ [#]_ mailing list (low traffic).
-There are medium traffic mailing lists for `developer discussion <http://groups.google.com/group/theano-dev>`_ [#]_ and `user support <http://groups.google.com/group/theano-users>`_ [#]_.
+`announce <http://groups.google.com/group/theano-announce>`_ [#]_ mailing list
+(low traffic). There are medium traffic mailing lists for
+`developer discussion <http://groups.google.com/group/theano-dev>`_ [#]_
+and `user support <http://groups.google.com/group/theano-users>`_ [#]_.
 
 This paper is divided as follows:
 Section `Case Study: Logistic Regression`_ shows how Theano can be used to solve
 a simple problem in statistical prediction.
-GPU use, and some of the expression transformations Theano performs.
 Section `Benchmarking Results`_ presents some results of performance
 benchmarking on problems related to machine learning and expression evaluation.
 Section `What's in Theano`_ gives an overview of the design of Theano.
@@ -152,7 +145,8 @@ Binary logistic regression is a classification model
 parametrized by a weight matrix :math:`W` and
 bias vector :math:`b`.
 The model estimates the probability
-:math:`$P(Y=1|x)$` (which we will denote with shorthand :math:`$p$`) that the input `x` belongs to class `y=1` as:
+:math:`$P(Y=1|x)$` (which we will denote with shorthand :math:`$p$`) that the input
+`x` belongs to class `y=1` as:
 
 .. raw:: latex
 
@@ -160,8 +154,8 @@ The model estimates the probability
     P(Y=1|x^{(i)}) = p^{(i)} = \frac {e^{W x^{(i)} + b}} {1 +  e^{Wx^{(i)} + b}}
     \end{equation}
 
-The problem is to optimize the log probability of
-:math:`N` training examples, :math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`,
+The problem is to optimize the log probability of :math:`N` training examples,
+:math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`,
 with respect to :math:`W` and :math:`b`.
 To make it a bit more interesting, we can also include an
 :math:`$\ell_2$` penalty on :math:`$W$`, giving a cost function :math:`$E(W,b)$` defined as:
@@ -286,17 +280,16 @@ and decrement ``w`` by its scaled gradient.
 Benchmarking Results
 --------------------
 
-Theano was developed to allow the rapid development of algorithms
-in machine learning.
-This section presents performance in two tasks from that domain:
-the training of a multi-layer perceptron (MLP) and a convolutional network. 
-More extensive benchmarks are forthcoming, and will be posted on our website.
+Theano started as a library for easing rapid development of complex machine 
+learning algorithms. This section presents performance in two tasks from that
+domain: training a multi-layer perceptron (MLP) and training a convolutional
+network. More extensive benchmarks are forthcoming, and will be posted on our
+website [theano]_.
 
-We chose these
-architectures because of their popularity in machine learning and their different 
-computational demands. Large matrix-matrix multiplications dominate in the MLP example, 
-and two-dimensional image convolutions with small kernels dominate 
-computations in the convolutional network.
+We chose these architectures because of their popularity in the machine learning
+community and their different computational demands. Large matrix-matrix
+multiplications dominate in the MLP example while two-dimensional image
+convolutions with small kernels dominate the convolutional network.
 More information about these models and their learning algorithms is available 
 from the Deep Learning Tutorials [DLT]_. 
 The implementations used in these benchmarks are available online [dlb]_.
@@ -310,12 +303,11 @@ CPU computations were done at double-precision.
 GPU computations were done at single-precision.
 
 Our first benchmark is training
-a single layer MLP by mini-batch gradient descent. 
-Each implementation multiplied 60 784-element
-input vectors by a :math:`$784 \times 500$` weight matrix, compressed by a tanh
-function, then multiplied by a :math:`$500 \times 10$` matrix, and finally classified using a
-multi-class generalization of logistic regression.  The gradient was calculated
-by performing similar calculations, but in reverse.
+a single layer MLP by mini-batch gradient descent. Roughly, the computations
+carried out by any of the implenetations are to multiply multiple times
+matrices of shapes :math:`$60\ times 784$`, `$784 \times 500$` and
+:math:`$500 \times 10$` and apply several element-wise operations like
+:math:`tanh`.
 
 .. _Figure 3:
 .. _Benchmark1:
@@ -327,16 +319,19 @@ by performing similar calculations, but in reverse.
     784 inputs, 500 hidden units, a 10-way classification, and are trained 60
     examples at a time.
 
-`Figure 3`_ compares the number of examples processed per second 
-by different implementations.
-We compared Theano (revision #ec057beb6c), NumPy 1.4.1, Matlab 7.9.0.529, and
-Torch 5 (a machine learning 
-library written in C/C++) [torch5]_.  On the GPU we compared Theano with GPUMat 0.25 for Matlab
-([gpumat]_).
-As shown in `Figure 3`_, on the CPU Theano is 1.8x faster than NumPy,
-1.6x faster than Matlab, and 7.5x faster than Torch 5 [#]_. 
-Theano's speed increases 5.8x on the GPU from the CPU, a total increase of 11x over NumPy on the CPU and 44x over Torch 5 on the CPU.
-GPUmat increases the Matlab speed on the GPU only 1.4x from the CPU, far
+`Figure 3`_ looks at the number of examples processed per second 
+by different implementations. We compared Theano (revision #ec057beb6c) against
+NumPy 1.4.1, Matlab 7.9.0.529, and Torch 5 (a machine learning 
+library written in C/C++) [torch5]_ on the CPU and  GPUMat 0.25 for Matlab
+([gpumat]_) on the GPU.
+
+When running on the CPU, Theano is 1.8x faster than NumPy,
+1.6x faster than Matlab, and 7.5x faster than Torch 5. Torch was written
+for flexibility, not speed (Ronan Collobert, p.c.).
+Theano's speed increases 5.8x on the GPU from the CPU, a total increase of 11x over
+NumPy (CPU) and 44x over Torch 5 (CPU).
+GPUmat brings about a speed increase of only 1.4x when switching to the GPU
+for the Matlab implementation, far
 less than the 5.8x increase Theano achieves through CUDA specializations.
 
 .. [#] Torch was designed and implemented with flexibility in mind, not speed (Ronan Collobert, p.c.).
@@ -354,21 +349,24 @@ less than the 5.8x increase Theano achieves through CUDA specializations.
 Because of the difficulty in implementing efficient convolutional networks, we only
 benchmark against known libraries that offer a pre-existing implementation.
 We compare against EBLearn [EBL]_ and Torch, two libraries written in C++. 
-EBLearn was implemented by Yann LeCun's lab at NYU, which has done extensive research in convolutional networks, so EBLearn is a solid baseline.
-To put these results
-into perspective, we implemented approximately half (no gradient calculation)
-of the algorithm using SciPy's ``signal.convolve2d`` function.  This benchmark
-uses convolutions of medium sized images
+EBLearn was implemented by Yann LeCun's lab at NYU, which has done extensive
+research in convolutional networks, so EBLearn is a solid baseline.
+To put these results into perspective, we implemented approximately half (no
+gradient calculation) of the algorithm using SciPy's ``signal.convolve2d`` function. 
+This benchmark uses convolutions of medium sized images
 (:math:`$256 \times 256$`) with
 small filters (:math:`$7 \times 7$`).
 `Figure 4`_ shows the performance of Theano (both CPU and GPU)
 against competing implementations.
-On the CPU, Theano is 2.2x faster than EBLearn, its best competitor. This is because Theano compiles more specialized convolution routines.
-Theano's speed increases 4.9x on the GPU from the CPU, a total of 10.7x over EBLearn on the CPU.
-On the CPU, Theano is 5.8x faster than SciPy even though SciPy is doing only half the algorithm because 
-SciPy's convolution routine has not been optimized for this application.
+On the CPU, Theano is 2.2x faster than EBLearn, its best competitor. This is because
+Theano compiles more specialized convolution routines.
+Theano's speed increases 4.9x on the GPU from the CPU, a total of 10.7x over
+EBLearn (CPU).
+On the CPU, Theano is 5.8x faster than SciPy even though SciPy is doing only
+half the computations. This is because SciPy's convolution routine has not been
+optimized for this application.
 
-We also compared Theano with numexpr and NumPy for evaluating elementwise
+We also compared Theano with numexpr and NumPy for evaluating element-wise
 expressions on the CPU (`Figure 5`_).
 For small amounts of data, the extra function-call overhead of numexpr and
 Theano makes them slower.  For larger amounts of data, and for more complicated
@@ -392,80 +390,14 @@ each expression.
 What's in Theano?
 -----------------
 
-This section gives an overview the design of Theano.
-
-A Theano expression graph is a bi-partite directed acyclic graph.
-It is bi-partite because there are two kinds of nodes: *variable* nodes are the
-inputs to and outputs from *apply* nodes.
-A *variable* node represents input or an intermediate mathematical result.
-It has a *Type* (``.type``) that signals the sort of value the variable might take at
-runtime.
-An *apply* node represents the application of the *Op* (``.op``) to some input *variables* (``.inputs``) producing some output *variables* (``.outputs``).
-Figures 1 and 2 have been simplified for clarity.
-Technically there is an
-intermediate result for the output of the ``Elemwise{pow,no_inplace}``,
-and the variable nodes (box) and apply nodes (ellipse) are distinct from the
-Type and Op instances respectively (not shown) that give them meaning.
-
-
-Variables
-~~~~~~~~~~~~~~~~~~~
-
-Theano supports three kinds of variable nodes: *Variables*, *Constants*, and *Shared variables*. 
-*Variable* nodes (with a capital V) are the most common kind - a Variable is either found as a
-leaf of the graph (if it was created explicitly with a call like ``theano.tensor.vector()``),
-or as the output of an *apply* node (if it was defined by the application
-of an Op).
-In the latter case, the Variable will have a ``.owner`` attribute pointing to the *apply* node.
-``a`` and ``b`` in Listing 1 are Variables (without ``.owner``).
-``p_1`` in Listing 2 is also a Variable (with ``.owner``).
-``theano.function`` takes two arguments: the input list, which is a list of Variables; and the output value or list, which is a Variable or list of Variables.
-*Constant* nodes each have a ``.value`` attribute, which is the immutable (read-only) value of this variable.
-``10`` in Listing 1 was converted to a Constant node.
-*Shared Variable* nodes have ``.get_value()`` and ``.set_value(new_val)`` methods that
-behave by default as if they are transfering from and to (respectively) Theano-managed
-memory. Sometimes this is done for consistency, and other times (like when a
-type conversion takes place, or the transfer requires moving data to or from a
-GPU) it is a necessary copy.
-This value can also be modified by calling a Theano function that was defined with ``updates``, like ``train`` in Listing 2.
-
-Types
-~~~~~~~~~~~~~~~~~~~
-
-The important variable Types in Theano are:
-
- * ``TensorType`` - 
-   denotes a ``numpy.ndarray`` with specific number of dimensions,
-   a record of which of these dimensions are broadcastable, and *dtype*. The dtype is the data types,
-   e.g. ``int32``, ``float64``, etc.
-
- * ``SparseType`` -
-   denotes one of the ``csr`` or ``csc`` formats in ``scipy.sparse``.
-
- * ``RandomStateType`` -
-   denotes a NumPy ``RandomState`` object. They are rarely used directly
-   by Theano user code. They are storage containers for the random
-   number generator.
-
- * ``Generic`` -
-   denotes any Python value.
-   They are rarely used directly by Theano user code.
-   Generic Variables exist mainly for Ops to be able
-   to allocate workspace outputs.
-
-
-Theano types are often stricter
-than their NumPy/SciPy equivalents. For example,
-there are different versions of ``SparseType`` in Theano, which are specific
-to different encodings like ``csr`` or ``csc``. The Theano ``TensorType`` that 
-corresponds to a ``numpy.ndarray`` also specifies
-the number of dimensions (scalar=0, vector=1, etc.), which of them are
-broadcastable, and what *dtype* should be used. This information is used 
-when performing graph transformations.
-
-For *Shared Variables* and *Constants*, the type is inferred 
-automatically based on the value given during initialization.
-
+Theano supports tensor variables of different dimensions,
+from scalar to n-dimensional tensors, and types (int, 
+single-precision floats, double-precision floats etc.) as 
+well as random streams of numbers ( much as Numpy does). 
+There is also limited support for sparse matrices and 
+generic objects. `Table 1`_ presents 
+a comprehensive list of operations that you would find 
+in Theano. It also supports debugging and profiling functionalities.
 
 .. _Table 1:
 .. _Table1:
@@ -481,35 +413,59 @@ automatically based on the value given during initialization.
                                 {\tt eq}, {\tt neq}, {\tt <}, {\tt <=}, {\tt >}, {\tt >=},
                                 {\tt \&}, \verb'|', \verb'^' 
                                 \tabularnewline
+                           &
+                                \tabularnewline
     Allocation             &    {\tt alloc}, {\tt eye}, {\tt [ones,zeros]\_like},
                                 {\tt identity\{\_like\} }
+                                \tabularnewline
+                           & 
                                 \tabularnewline
     Indexing*              &    basic slicing (see {\tt set\_subtensor} and 
                                 {\tt inc\_subtensor} for slicing lvalues);
                                 limited support for advanced indexing
                                 \tabularnewline
+                           & 
+                                \tabularnewline
     Math. Functions        &    {\tt exp}, {\tt log}, {\tt tan[h]}, {\tt cos[h]}, {\tt sin[h]}, 
                                 {\tt real}, {\tt imag}, {\tt sqrt}, {\tt floor}, {\tt ceil}, 
                                 {\tt round}, {\tt abs}
+                                \tabularnewline
+                           &  
                                 \tabularnewline
     Tensor Operations      &    {\tt all}, {\tt any}, {\tt mean}, {\tt sum}, {\tt min}, {\tt max}, 
                                 {\tt var}, {\tt prod}, {\tt argmin} , {\tt argmax}
                                 {\tt reshape}, {\tt flatten},
                                 {\tt dimshuffle}
                                 \tabularnewline
+                           &
+                                \tabularnewline
     Conditional            &    {\tt cond}, {\tt switch}
+                                \tabularnewline
+                           & 
                                 \tabularnewline
     Looping                &    {\tt Scan}
                                 \tabularnewline
+                           &
+                                \tabularnewline
     Linear Algebra         &     {\tt dot}, {\tt outer}, {\tt tensordot}
                                 \tabularnewline
+                           & 
+                                 \tabularnewline
     Calculus*              &     {\tt grad}
+                                \tabularnewline
+                           &
                                 \tabularnewline
     Signal Processing      &    {\tt conv2d}, {\tt FFT}, {\tt max\_pool\_2d}
                                 \tabularnewline
+                           &
+                                \tabularnewline
     Random                 &    {\tt RandomStreams}, {\tt MRG\_RandomStreams}
                                 \tabularnewline
-    Printing               &    {\tt Print} Op
+                           &
+                                \tabularnewline
+    Printing               &    {\tt Print}
+                                \tabularnewline
+                           & 
                                 \tabularnewline
     Sparse                 &    limited operator support, {\tt dot}
                                 \tabularnewline
@@ -634,44 +590,77 @@ The difference in speed on a GPU between
 a naïve and an optimal implementation of even a simple algorithm like row/column
 summation in a matrix can be an order of magnitude or more.
 Theano's ability to generate custom-made CUDA kernels for many important
-mathematical operations accounts for the good GPU performance in our benchmarks. 
+mathematical operations accounts for the good GPU performance in our benchmarks.
+
+Moving Computation to the GPU
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Each expression in Theano is associated with an implementation that runs on
+either the host (a host expression) or a GPU device (a GPU expression).
+One important application of graph transformations is to replace host
+expressions with GPU expressions.
+The majority of host expression types have GPU equivalents and the proportion is
+always growing.
+
+The heuristic that guides GPU allocation is simple:
+if any input or output of an expression resides on the GPU and the expression
+has a GPU equivalent, then we replace it.
+How does this chain reaction get started?
+.. mentioned already in section ***
+Shared variables storing float32 tensors default to GPU storage,
+and the expressions derived from them consequently default to using GPU
+implementations.
+It is possible to explicitly force any float32 variable to reside on the GPU,
+so you can start the chain reaction of optimizations and use the GPU even
+in graphs with no shared variables.
+It is possible (though awkward, and discouraged)
+to specify exactly which computations to perform on the GPU
+by disabling the default GPU optimizations.
+
+Tensors stored on the GPU use a special internal data type with an interface
+similar to the ``ndarray``.
+This datatype fully supports strided tensors, and
+arbitrary numbers of dimensions.
+The support for strides means that several operations such as the transpose and
+simple slice indexing can be performed in constant time.
 
 
 Limitations and Future Work
 ---------------------------
 
-Theano does not make significant efforts to optimize the compilation process itself.
-Theano can take up to a few seconds to construct a Theano function
-(especially when it must compile freshly-generated C code), even when a naïve
-implementation of the function's expression would require only a fraction of a
-second. So Theano takes time when creating Theano functions, which is not the case
-for libraries such as NumPy
-and SciPy whose functions have already been compiled.
-Theano is therefore suited to applications where a function will be called enough times
-that the time spent on the initial compilation is negligible.
-Theano has been tested primarily with graphs from 10-1000 nodes, which is
-sufficient for many algorithms.
-The time spent on applying graph transformations tends to grow super-linearly with the size
+While most of the development effort went into making Theano produce fast code,
+not as much went into optimizing the compilation process itself. Therefore 
+compiling a symbolic graph can take up to a few seconds (especially when it
+must compile freshly-generated C code). This is not the case for libraries
+such as NumPy and SciPy whose functions have already been compile. Theano
+is therefore suited to applications where a function will be called enough times
+that the compilation overhead is negligible. 
+Unoptimal compilation can have other repercursions. For example we have
+only used the library with graphs of ten to thousands of nodes,
+which is sufficient for many algorithms. The time spent on applying graph
+transformations tends to grow super-linearly with the size
 of the expression graph. Beyond a few thousand nodes, Theano's optimization
 algorithm can be impractically slow, unless you disable some of the more
 expensive optimizations, or compile pieces of the graph separately.
 
-A Theano function call also requires more overhead (on the order of microseconds) than a native Python function
-call. For this reason, Theano is suited to applications where functions correspond to
-expressions that are not too small (see `Figure 5`_).
+A Theano function call also requires more overhead (on the order of microseconds)
+than a native Python function call. For this reason, Theano is suited to
+applications where functions correspond to expressions that are not too
+small (see `Figure 5`_).
 
-The set of Types and Ops that Theano provides continues to grow, but it does not
+The set of types and operations that Theano provides continues to grow, but it does not
 cover all the functionality of NumPy and covers only a few features of SciPy.
 Wrapping functions from these and other libraries is often straightforward,
-but implementing related graph transformations and implementing Ops for
-gradients can be more difficult.
-We expect to improve support for advanced indexing and linear algebra in the
-coming months.
-Documentation online describes how to add new Ops, Types, and transformations.
+but implementing related graph transformations for optimize expression
+containing the operations, or implementing their gradients can be more difficult.
 
-Theano's graph transformations give good results for expressions related to
-machine learning with neural networks, but they are not as well tested outside
-that domain.  Theano is not a powerful computer algebra system, and 
+We expect to improve support for advanced indexing and linear algebra in the
+coming months. Documentation online describes how to add new operations, 
+new type or new graph transformations.
+
+Also the library has been tuned towards expressions related to machine 
+learning with neural netowrks, and it was not as well tested outside 
+thist domain. Theano is not a powerful computer algebra system, and 
 it is an important area of future work to improve its ability to recognize
 numerical instability in complicated elementwise expression graphs.
 
@@ -679,6 +668,12 @@ Debugging Theano functions can require non-standard techniques and
 Theano-specific tools.  The reason is two-fold: 1) definition
 of Theano expressions is separate from their execution, and 2) optimizations
 can introduce many changes to the computation graph.
+
+We plan to extend GPU support to the full range of C data types, but only float32
+tensors are supported as of writing.
+There no support for sparse vectors or matrices on the GPU,
+although algorithms from the CUSPARSE package should make it easy to add at least basic
+support for sparse GPU objects.
 
 
 Conclusion
