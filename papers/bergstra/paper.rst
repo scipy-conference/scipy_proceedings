@@ -186,7 +186,7 @@ We will now step through each of these sections in more detail.
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics{logreg1.pdf}
+        \includegraphics[scale=.75]{logreg1.pdf}
     \end{figure}
 
 In the above code, we declare two symbolic variables ``x`` and ``y`` which will
@@ -212,7 +212,7 @@ can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 12.
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics{logreg2.pdf}
+        \includegraphics[scale=.75]{logreg2.pdf}
     \end{figure}
 
 Lines 7-10 declare the symbolic inputs for our logistic regression problem.
@@ -231,7 +231,7 @@ gradients on ``w`` and ``b``.
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics{logreg3.pdf}
+        \includegraphics[scale=.75]{logreg3.pdf}
     \end{figure}
 
 Lines 22-25 (``train = function...``) introduce the ``updates`` argument to ``function``.
@@ -253,7 +253,7 @@ hence their name.
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics{logreg4.pdf}
+        \includegraphics[scale=.75]{logreg4.pdf}
     \end{figure}
 
 Lines 28-30 randomly generate four training examples, each with 100 feature values. 
