@@ -74,7 +74,10 @@ for p in (in_path, out_path):
 
 print "Building:", in_path
 
-rst = glob.glob(os.path.join(in_path, '*.rst'))[0]
+try:
+    rst, = glob.glob(os.path.join(in_path, '*.rst'))
+except ValueError:
+    raise RuntimeError("Found more than one input .rst--not sure which one to use.")
 
 content = open(rst, 'r').read()
 content = r'''
