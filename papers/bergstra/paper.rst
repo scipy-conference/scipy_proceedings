@@ -522,50 +522,63 @@ are not implemented in Theano.
 Transformations
 ~~~~~~~~~~~~~~~~
 
-Theano uses graph transformations to implement a range of
-tasks from merging redundant calculations to transferring computations to the
-GPU.
-The optimization of expression graphs is carried out several stages.
+Theano uses graph transformations to implement a range of tasks from
+merging redundant calculations to transferring computations to the
+GPU. The optimization of expression graphs is a pipeline comprising
+several stages.
 
-The first stage removes duplicate expressions, and when several constants are
-actually equal, they are replaced with a single node.
-Theano treats two apply nodes with the same inputs and the same Op as being
-duplicates and only keeps one.
-The automatic gradient mechanism often introduces this sort of redundancy,
-so this phase is quite important.  The ``'FAST_COMPILE'`` mode includes only this
-stage.
+The first stage merges duplicate expressions, so as to only compute
+them once. Two expressions are considered duplicates if they carry out
+the same operation and that all inputs are the same - since Theano is
+purely functional, these expressions must return the same value and
+thus the operation is safe to carry. The automatic gradient mechanism
+often introduces redundancy, so this phase is quite important.
 
-The second stage transforms the graph into an equivalent, canonical form,
-so that subsequent patterns do not have to recognize as
-wide a variety of equivalent expressions.
-For example, expression subgraphs involving just multiplication and division are
-put into a standard fraction form (e.g. ``a / (b * c / d) -> (a * d) / (b * c)``),
-and terms in both numerator and denominator are cancelled.
+The second stage transforms the expression into an equivalent
+canonical form. For example, sub-expressions involving only
+multiplication and division are put into a standard fraction form
+(e.g. ``a / (((a * b) / c) / d) -> (a * c * d) / (a * b) -> (c * d) /
+(b)``). Some useless calculations are eliminated in this phase, for
+instance crossing out uses of the ``a`` term in the previous example,
+reducing ``exp(log(x))`` to ``x``, and doing constant
+folding. Furthermore, since the canonicalization collapses many
+different expressions into a single normal form, it becomes easier to
+define reliable transformations on them.
 
-The third stage replaces expressions to improve numerical stability. The
-logistic sigmoid substitution described at the end of Section `Case Study: Logistic Regression`_ is an example.
-After numerically unstable subgraphs have been replaced with more stable ones,
-Theano pre-calculates expressions involving only constants.
+The third stage transforms expressions to improve numerical
+stability. For instance, consider the function ``log(1 + exp(x))``,
+which is zero in the limit of negative ``x`` and ``x`` in the limit of
+large ``x``. Due to limitations in the representation of double
+precision numbers, the expression yields infinity for ``x >
+709``. Theano is able to identify this pattern and replace it with an
+implementation that simply returns ``x`` if ``x`` is sufficiently
+large (using doubles, this is accurate beyond the least significant
+digit).
 
 The fourth stage specializes generic expressions and subgraphs.
-Expressions like ``pow(x,2)`` become ``sqr(x)``.
-Theano also performs more elaborate specializations:
-expressions involving scalar-multiplied matrix additions and multiplications may
-become
-BLAS General matrix multiply (GEMM) nodes, sums of incremented tensors become incremented
-sums, and ``reshape``, ``dimshuffle``, and ``subtensor`` Ops
-are replaced by constant-time versions that work by aliasing memory.
+Expressions like ``pow(x,2)`` become ``sqr(x)``. Theano also performs
+more elaborate specializations: for example, expressions involving
+scalar-multiplied matrix additions and multiplications may become BLAS
+General matrix multiply (GEMM) nodes and ``reshape``, ``transpose``,
+and ``subtensor`` Ops (which create copies by default) are replaced by
+constant-time versions that work by aliasing memory.
 
-After this stage of specialization, Elementwise subgraphs are fused into
-Compound ones that permit loop fusion (such as the ``Elemwise{Composite{...}}``
-Op in Figure 2).  If Theano is using a GPU, Ops with corresponding GPU
-implementations are substituted in.
+After this stage of specialization, Sub-expressions involving
+element-wise operations are fused together in order to avoid the
+creation of unnecessary temporaries. For instance, denoting the ``a +
+b`` operation on tensors as ``map(+, a, b)``, then an expression such
+as ``map(+, map(*, a, b), c)`` would become ``map(lambda ai,bi,ci:
+ai*bi+ci, a, b, c)``. If the user desires to use the GPU, Ops with
+corresponding GPU implementations are substituted in, and transfer Ops
+are introduced where needed.
 
 Lastly, Theano replaces Ops with equivalents that reuse the memory of
-their inputs and also invalidate those inputs by side-effect of running.
-Many Ops (e.g. GEMM and all elementwise Ops) have such equivalents.
-Reusing memory this way can improve speed by reducing cache misses
-and allowing more computations to fit on GPUs where memory is at a premium.
+their inputs (which means, as a side effect, that no subsequent Ops
+may use the original values). Many Ops (e.g. GEMM and all elementwise
+Ops) have such equivalents.  Reusing memory this way can improve speed
+by reducing cache misses and allowing more computations to fit on GPUs
+where memory is at a premium.
+
 
 Code Generators
 ~~~~~~~~~~~~~~~~
