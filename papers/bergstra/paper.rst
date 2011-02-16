@@ -153,8 +153,8 @@ The model estimates the probability
     P(Y=1|x^{(i)}) = p^{(i)} = \frac {e^{W x^{(i)} + b}} {1 +  e^{Wx^{(i)} + b}}
     \end{equation}
 
-The problem is to optimize the log probability of
-:math:`N` training examples, :math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`,
+The problem is to optimize the log probability of :math:`N` training examples,
+:math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`,
 with respect to :math:`W` and :math:`b`.
 To make it a bit more interesting, we can also include an
 :math:`$\ell_2$` penalty on :math:`$W$`, giving a cost function defined as:
