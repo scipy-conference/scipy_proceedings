@@ -185,7 +185,7 @@ We will use these data sets to illustrate features of interest.
 
 The **pandas** data structures internally link the axes of a NumPy ndarray with
 arrays of unique labels. These labels are stored in instances of the ``Index``
-class, which is a 1-D ``ndarray`` subclass implementing an *ordered set*. In the
+class, which is a 1D ``ndarray`` subclass implementing an *ordered set*. In the
 stock data above, the row labels are simply sequential observation numbers,
 while the columns are the field names.
 
@@ -300,7 +300,9 @@ arrays.
 
 We regard the use of ``NaN`` as an implementation detail and attempt to provide
 the user with appropriate API functions for performing common operations on
-missing data points. From the above example:
+missing data points. From the above example, we can use the ``valid`` method to
+drop missing data, or we could use ``fillna`` to replace missing data with a
+specific value:
 
 ::
 
@@ -324,8 +326,8 @@ missing data points. From the above example:
     SCGLY    0.0
     VW       0.0
 
-Common ndarray methods have been rewritten to automatically exclude such data
-points:
+Common ndarray methods have been rewritten to automatically exclude missing data
+from calculations:
 
 ::
 
@@ -335,9 +337,12 @@ points:
     >>> (s1 + s2).count()
     6
 
-There are specialized API functions (similar to R's ``is.na``) for determining
-the validity of a data point or series. These can be used with dtypes other than
-float as well:
+Similar to R's ``is.na`` function, which detects ``NA`` (Not Available) values,
+**pandas** has special API functions ``isnull`` and ``notnull`` for determining
+the validity of a data point or series. These contrast with ``numpy.isnan`` in
+that they can be used with dtypes other than ``float`` and also detect some
+other markers for "missing" occurring in the wild, such as the Python ``None``
+value.
 
 ::
 
@@ -353,9 +358,9 @@ float as well:
     SCGLY    True
     VW       True
 
-The R language has a built-in ``NA`` (Not Available) value which is distinct
-from ``NaN`` but has similar semantics. While the addition of such a feature to
-NumPy would be useful, it is most likely too domain-specific to merit inclusion.
+Note that R's ``NA`` value is distinct from ``NaN``. While the addition of a
+special ``NA`` value to NumPy would be useful, it is most likely too
+domain-specific to merit inclusion.
 
 Combining or joining data sets
 ------------------------------
@@ -363,7 +368,7 @@ Combining or joining data sets
 Combining, joining, or merging related data sets is a quite common operation. In
 doing so we are interested in associating observations from one data set with
 another via a *merge key* of some kind. For similarly-indexed 2D data, the row
-labels serve as a natural key:
+labels serve as a natural key for the ``join`` function:
 
 ::
 
@@ -388,7 +393,7 @@ such as the categorical data we presented in an earlier section:
 
 ::
 
-    >>> df.join(cats, on='item')
+    >>> data.join(cats, on='item')
 	 country  date        industry item   value
     0    US       2009-12-28  TECH     GOOG   622.9
     1    US       2009-12-29  TECH     GOOG   619.4
@@ -426,7 +431,7 @@ wished to compute the mean value by industry for a set of stock data:
 
 This concept of "group by" is a built-in feature of many data-oriented
 languages, such as R and SQL. In R, any vector of non-numeric data can be used
-as an input to a groupby operation:
+as an input to a grouping function such as ``tapply``:
 
 ::
 
@@ -449,18 +454,18 @@ as an input to a groupby operation:
     AAPL    210.77
     GOOG    621.245
 
-Or, as in the above industry data:
+One can use ``groupby`` to concisely express operations on relational
+data, such as counting group sizes:
 
 ::
 
-    # count group sizes
     >>> s.groupby(ind).aggregate(len)
     AUTO    1
     FIN     4
     TECH    4
 
 
-In the most general case, groupby uses a function or mapping to produce
+In the most general case, ``groupby`` uses a function or mapping to produce
 groupings from one of the axes of a **pandas** object. By returning a
 ``GroupBy`` object we can support more operations than just aggregation. Here we
 can subtract industry means from a data set:
@@ -491,8 +496,8 @@ Manipulating panel (3D) data
 A data set about a set of individuals or entities over a time range is commonly
 referred to as *panel data*; i.e., for each entity over a date range we observe
 a set of variables. This data can be found both in *balanced* form (same number
-of time observations for each individual) or *unbalanced* (different
-number). Panel data manipulations are important primarily for constructing the
+of time observations for each individual) or *unbalanced* (different numbers of
+observations). Panel data manipulations are important primarily for constructing
 inputs to statistical estimation routines, such as a linear regression. Consider
 the Grunfeld data set [Grun]_ frequently used in econometrics (sorted by year):
 
@@ -522,11 +527,11 @@ the Grunfeld data set [Grun]_ frequently used in econometrics (sorted by year):
     181    4.71      10        2         87.94     1936
     ...
 
-Really this data is 3-dimensional, with *firm*, *year*, and *data type* being
-the three unique keys identifying a data point. Panel data presented in tabular
-format is often referred to as the *stacked* or *long* format. We refer to the
-truly 3-dimensional form as the *wide* form. **pandas** provides classes for
-operating on both:
+Really this data is 3-dimensional, with *firm*, *year*, and *item* (data field
+name) being the three unique keys identifying a data point. Panel data presented
+in tabular format is often referred to as the *stacked* or *long* format. We
+refer to the truly 3-dimensional form as the *wide* form. **pandas** provides
+classes for operating on both:
 
 ::
 
@@ -541,7 +546,8 @@ operating on both:
     Minor axis: 1 to 10
 
 Now with the data in 3-dimensional form, we can examine the data items
-separately or compute descriptive statistics more easily:
+separately or compute descriptive statistics more easily (here the ``head``
+function just displays the first 10 rows of the ``DataFrame`` for ``capital``):
 
 ::
 
@@ -558,7 +564,11 @@ separately or compute descriptive statistics more easily:
     9   264.1     1777      301.8     623.6     319.9
     10  201.6     2226      279.1     669.7     321.3
 
-    # mean over time for each firm
+In this form, computing summary statistics, such as the time series mean for
+each (item, firm) pairs, is easily carried out:
+
+::
+
     >>> wp.mean(axis='major')
 	  capital     inv         value
     1     140.8       98.45       923.8
@@ -572,25 +582,27 @@ separately or compute descriptive statistics more easily:
     9     389.2       196.7       1236
     10    428.5       197.4       1233
 
-For unbalanced panel data, constructing dummy variables identifying dates or
-entities can be difficult. But, since these data structures have all the
-necessary labelling data, it can be implemented as an instance method.
+As an example application of these panel data structures, consider constructing
+dummy variables (columns of 1's and 0's identifying dates or entities) for
+linear regressions. Especially for unbalanced panel data, this can be a
+difficult task. Since we have all of the necessary labeling data here, we can
+easily implement such an operation as an instance method.
 
 Implementing statistical models
 -------------------------------
 
 When applying a statistical model, data preparation and cleaning can be one of
 the most tedious or time consuming tasks. Ideally the majority of this work
-would be taken care of by the library. In R, while ``NA`` data can be
+would be taken care of by the model class itself. In R, while ``NA`` data can be
 automatically excluded from a linear regression, one must either align the data
-and put it into a ``data.frame`` or otherwise prepare a collection of 1-D arrays
+and put it into a ``data.frame`` or otherwise prepare a collection of 1D arrays
 which are all the same length.
 
 Using **pandas**, the user can avoid much of this data preparation work. As a
 exemplary model leveraging the **pandas** data model, we implemented ordinary
 least squares regression in both the standard case (making no assumptions about
-the content of the regressors) and the panel case (which has additional options
-to allow for entity and time dummy variables). Facing the user is a single
+the content of the regressors) and the panel case, which has additional options
+to allow for entity and time dummy variables. Facing the user is a single
 function, ``ols``, which infers the type of model to estimate based on the
 inputs:
 
@@ -605,13 +617,13 @@ inputs:
 
 If the response variable ``Y`` is a ``DataFrame`` (2D) or dict of 1D ``Series``,
 a panel regression will be run on stacked (pooled) data. The ``x`` would then
-need to be any number of things: a ``WidePanel``, ``LongPanel``, or dict of
-``DataFrame`` objects. Since these objects contain all of the necessary
-information to construct the design matrices for the regression, there is
-nothing for the user to worry about (except the formulation of the model).
+need to be either a ``WidePanel``, ``LongPanel``, or a dict of ``DataFrame``
+objects. Since these objects contain all of the necessary information to
+construct the design matrices for the regression, there is nothing for the user
+to worry about (except the formulation of the model).
 
-The ``ols`` function is also capable of estimating a *moving window* regression
-for time series data. This can be useful for estimating statistical
+The ``ols`` function is also capable of estimating a *moving window* linear
+regression for time series data. This can be useful for estimating statistical
 relationships that change through time:
 
 ::
@@ -628,15 +640,20 @@ relationships that change through time:
     intercept    1103  non-null values
     dtype: float64(4)
 
+Here we have estimated a moving window regression with a window size of 250 time
+periods. The resulting regression coefficients stored in ``model.beta`` are now
+a ``DataFrame`` of time series.
+
 Date/time handling
 ------------------
 
-In applications involving time series data, manipulations involving dates and
-times can be quite tedious and inefficient. Tools for working with dates in
-MATLAB, R, and many other languages are kludgy at best. Since Python has a
-datetime type with a clean Python and C API and many useful built-in functions,
-we can hopefully craft easier-to-use and more elegant date and time
-functionality.
+In applications involving time series data, manipulations on dates and times can
+be quite tedious and inefficient. Tools for working with dates in MATLAB, R, and
+many other languages are clumsy or underdeveloped. Since Python has a built-in
+datetime type easily accessible at both the Python and C / Cython level, we aim
+to craft easy-to-use and efficient date and time functionality. When the NumPy
+``datetime64`` dtype has matured, we will, of course, reevaluate our date
+handling strategy where appropriate.
 
 For a number of years **scikits.timeseries** [SciTS]_ has been available to
 scientific Python users. It is built on top of MaskedArray and is intended for
@@ -653,16 +670,25 @@ to generate date ranges or conform a set of time series to a particular
 frequency. To do this, we have the ``DateRange`` class (which is also a subclass
 of ``Index``, so no conversion is necessary) and the ``DateOffset`` class, whose
 subclasses implement various general purpose and domain-specific time
-increments.  ::
+increments. Here we generate a date range between 1/1/2000 and 1/1/2010 at the
+"business month end" frequency ``BMonthEnd``:
+
+::
 
     >>> DateRange('1/1/2000', '1/1/2010',
-                   offset=datetools.BMonthEnd())
+                   offset=BMonthEnd())
     <class 'pandas.core.daterange.DateRange'>
     offset: <1 BusinessMonthEnd>
     [2000-01-31 00:00:00, ..., 2009-12-31 00:00:00]
     length: 120
 
-    >>> monthly = df.asfreq(datetools.BMonthEnd())
+A ``DateOffset`` instance can be used to convert an object containing time
+series data, such as a ``DataFrame`` as in our earlier example, to a different
+frequency using the ``asfreq`` function:
+
+::
+
+    >>> monthly = df.asfreq(BMonthEnd())
                  AAPL      GOOG      MSFT      YHOO
     2009-08-31   168.2     461.7     24.54     14.61
     2009-09-30   185.3     495.9     25.61     17.81
@@ -672,19 +698,21 @@ increments.  ::
 
 Some things which are not easily accomplished in scikits.timeseries can be done
 using the ``DateOffset`` model, like deriving custom offsets on the fly or
-shifting monthly data forward by a number of business days:
+shifting monthly data forward by a number of business days using the ``shift``
+function:
 
 ::
 
-    >>> offset = datetools.Minute(12)
-    >>> DateRange('6/18/2010 8:00:00', '6/18/2010 12:00:00',
+    >>> offset = Minute(12)
+    >>> DateRange('6/18/2010 8:00:00',
+                  '6/18/2010 12:00:00',
                   offset=offset)
     <class 'pandas.core.daterange.DateRange'>
     offset: <12 Minutes>
     [2010-06-18 08:00:00, ..., 2010-06-18 12:00:00]
     length: 21
 
-    >>> monthly.shift(5, offset=datetools.BDay())
+    >>> monthly.shift(5, offset=BDay())
 		  AAPL    GOOG    MSFT    YHOO
     2009-09-07    168.2   461.7   24.54   14.61
     2009-10-07    185.3   495.9   25.61   17.81
@@ -695,37 +723,34 @@ shifting monthly data forward by a number of business days:
 Since **pandas** uses the built-in Python ``datetime`` object, one could foresee
 performance issues with very large or high frequency time series data sets. For
 most general applications financial or econometric applications we cannot
-justify complicating the model for datetime handling in order to solve these
-issues; specialized tools would need to be created. Of course, we see no reason
-why such tools could not live within a common framework.
+justify complicating datetime handling in order to solve these issues;
+specialized tools will need to be created in such cases. This may be indeed be a
+fruitful avenue for future development work.
 
 Related packages
 ----------------
 
 A number of other Python packages have appeared recently which provide some
 similar functionality to **pandas**. Among these, **la** ([Larry]_) is the most
-similar, as it implements a labeled ndarray object with automatic data
-alignment. **tabular** ([Tab]_) is intended primarily for 2D data and provides
-many spreadsheet-style operations.  [pydataframe]_ implements a like-named
-``DataFrame`` class which seeks to closely emulate its R counterpart.
+similar, as it implements a labeled ndarray object intending to closely mimic
+NumPy arrays. **tabular** ([Tab]_) is intended for manipulating 2D data and
+provides many spreadsheet-style operations.  [pydataframe]_ implements a
+like-named ``DataFrame`` class which seeks to closely emulate its R counterpart.
 
-On the statistical front, in 2009 Josef Perktold and Skipper Seabold picked up
-Jonathan Taylor's and the [nipy]_ team's work on implementing regression models
-to create **scikits.statsmodels** ([StaM]_). While we plan to continue
-implementing a number of econometric models integrating closely with **pandas**
-(especially time-evolving models), it would be preferable to use statsmodels
-when possible.
+While **pandas** provides some useful linear regression models, it is not
+intended to be comprehensive. We plan to work closely with the developers of
+**scikits.statsmodels** ([StaM]_) to generally improve the cohesiveness of
+statistical modeling tools in Python. It is very likely that **pandas** will
+become a "lite" dependency of **scikits.statsmodels** in the near future.
 
 Conclusions
 -----------
 
 We believe that in the coming years there will be great opportunity to attract
-users to Python who might have otherwise chosen to use another programming
-language or research environment in the past. By designing robust, easy-to-use
-data structures that cohere with the rest of the scientific Python stack, we can
-make Python a desirable environment for data analysis applications. While
-**pandas** may not currently be useful in every situation, we hope that it will
-add to the discourse and help guide future development.
+users in need of statistical data analysis to Python who might have previously
+chosen R, MATLAB, or another research environment. By designing robust,
+easy-to-use data structures that cohere with the rest of the scientific Python
+stack, we can make Python a compelling choice for data analysis applications.
 
 References
 ----------
