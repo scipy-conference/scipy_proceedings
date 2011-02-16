@@ -85,7 +85,7 @@ that can glue several elementwise computations together.
 Unfortunately, the syntax required
 by numexpr is a bit unusual (the expression must be encoded as a string
 within the code), and it is limited to elementwise computations.
-[Cython]_ and [scipy.weave]_ address the issue by offering a simple way to
+[Cython]_ and [scipy.weave]_ address Python's performance issue by offering a simple way to
 hand-write crucial segments of code into C. While this might bring about 
 significant improvements, if the bottleneck of a program is a large 
 mathematical expression, comprising hundreds of operations, manual
@@ -162,80 +162,84 @@ The problem is to optimize the log probability of :math:`N` training examples,
 :math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`,
 with respect to :math:`W` and :math:`b`.
 To make it a bit more interesting, we can also include an
-:math:`$\ell_2$` penalty on :math:`$W$`, giving a cost function defined as:
+:math:`$\ell_2$` penalty on :math:`$W$`, giving a cost function :math:`$E(W,b)$` defined as:
 
 .. raw:: latex
 
     \begin{equation}
-    cost = 0.01 \cdot W^2 - \frac{1}{N} \sum_i ( y^{(i)} \cdot p^{(i)} + (1-y^{(i)}) \cdot (1 - p^{(i)}) )
+    E(W,b) = 0.01 \cdot ||W||^2 - \frac{1}{N} \sum_i ( y^{(i)} \cdot p^{(i)} + (1-y^{(i)}) \cdot (1 - p^{(i)}) )
     \end{equation}
 
-Tuning parameters :math:`W` and :math:`b` to minimize this cost can be
-performed by more sophisticated algorithms, but for our example we will
-use stochastic gradient descent.
+In this example, tuning parameters :math:`W` and :math:`b` will be done through
+stochastic gradient descent (SGD) of :math:`$E(W,b)$`, even though more sophisticated
+algorithms could also be used. Implementing this minimization procedure in
+Theano involves the following four conceptual steps:
+(1) declaring symbolic variables,
+(2) using these variables to build a symbolic expression graph,
+(3) compiling a Theano function, and
+(4) calling said function to perform numerical computations.
+We will now step through each of these sections in more detail.
 
-.. _Listing 1:
 
-    TODO: remove all references to Listing 1
+.. raw:: latex
 
-.. _Figure 2:
+    \begin{figure}[H]
+        \includegraphics[scale=.75]{logreg1.pdf}
+    \end{figure}
 
-    TODO: remove all references to Figure 2
+In the above code, we declare two symbolic variables ``x`` and ``y`` which will
+serve as input to the rest of the computation graph. Theano variables are
+strictly typed and include the data type, the number of dimensions, and the
+dimensions along which it may broadcast in element-wise expressions. Here we
+define ``x`` to be a matrix of the default data type (``float64``), where each
+row of ``x`` corresponds to an example :math:`$x^{(i)}$`. Similarly, ``y`` is
+declared as a vector of type ``int32`` whose entries correspond to the labels
+:math:`$y^{(i)}$`. Treating multiple data points at the same time allows us to
+implement SGD with mini-batches, a variant of SGD which is both computationally
+and statistically efficient.
 
-.. _Listing 2:
-.. _ListingLogReg:
-
-.. figure:: logreg.pdf
-    :scale: 100
-
-    **Listing 2:** A Theano program for fitting and 
-    applying a logistic regression model.
-
-The code in `Listing 2`_ implements this minimization.
-The code is organized into four conceptual steps with respect to Theano:
-
-  1. declare symbolic variables
-  2. use these variables to build a symbolic expression graph,
-  3. compile a function, and
-  4. call the compiled function to perform computations.
-
-Lines 7-10 declare the symbolic inputs for our logistic regression problem.
-Notice that ``x`` is defined as a matrix of the default data type (``float64``),
-and ``y`` as a vector of ``int32``.
-The Type of a Theano variables includes its number of dimensions,
-its data type,
-and the dimensions along which it may broadcast in element-wise expressions.
-
-We did we not make ``x`` a vector and ``y`` a scalar, because it would limit the
-speed of the program.
-Matrix-matrix multiplication is more efficient on modern x86
-architecture than matrix-vector multiplication
-and Theano function calls involve overhead.
-Treating several examples in parallel mitigates that overhead.
-
-The ``shared()`` function (Lines 9+10 of `Listing 2`_) creates *shared variables* for :math:`$W$` and :math:`$b$` and assigns them initial values.
-Shared variables are
-similar to standard Theano variables, but are stateful. In
-a sense, they behave like global variables which any Theano function
-may use without having to declare them in its inputs list.
+The ``shared()`` function creates *shared variables* for :math:`$W$` and :math:`$b$` and assigns them initial values.
+Shared variables are similar to standard Theano variables, but differ in that
+they have a persistent state. As we will see shortly, any Theano function can
+operate directly on these shared variables, without having to declare them
+explicitely as an input.
 A shared variable's value is maintained
 throughout the execution of the program and
-can be accessed with ``.get_value()`` and ``.set_value()``, as shown in Line 12.
-Theano manages the storage of
-these values. In particular, it stores single-precision dense *shared* tensors on the GPU by
-default when a GPU is available.  In such cases it uses a different
-Theano-specific data type for internal storage in place of the NumPy ``ndarray``.
+can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
 
-Line 15 defines :math:`$P(Y=1|x^{(i)}) = 1$` as ``p_1``.
-Line 16 defines the cross-entropy term in :math:`cost` as ``xent``.
-Line 17 defines the predictor by thresholding over :math:`$P(Y=1|x^{(i)}) = 1$` as ``prediction``.
-Line 18 defines :math:`cost` as ``cost``, by adding the cross-entropy term to the :math:`$\ell_2$` penalty.
+.. raw:: latex
 
-Line 19 (``gw,gb = T.grad(cost, [w,b])``) performs symbolic
-differentiation of scalar-valued ``cost`` with respect to variables ``w`` and ``b``.
-It works like a macro, iterating backward over the expression
-graph, applying the chain rule of differentiation and building expressions for the
-gradients on ``w`` and ``b``.
+    \begin{figure}[H]
+        \includegraphics[scale=.75]{logreg2.pdf}
+    \end{figure}
+
+The above code-block specifies the computational graph required to perform
+gradient descent of our cost function. Since Theano's interface shares much in
+common with that of ``numpy``, lines 13-17 should be self-explanatory for anyone
+familiar with ``numpy``. On line 13, we start by defining :math:`$P(Y=1|x^{(i)}) = 1$`
+as the symbolic variable ``p_1``. Notice that the dot product and element-wise exponential
+functions are simply called via the ``T.dot`` and ``T.exp`` functions,
+analoguous to ``numpy.dot`` and ``numpy.exp``. ``xent`` defines the
+cross-entropy loss function, which is then combined with the :math:`$\ell_2$`
+penalty on line 15, to form the cost function of Eq (2) and denoted by ``cost``.
+
+Line 16 is crucial to our implementation of SGD, as it performs symbolic
+differentiation of the scalar-valued ``cost`` variable with respect to variables
+``w`` and ``b``.  ``T.grad`` operates by iterating backwards over the expression
+graph, applying the chain rule of differentiation and building symbolic
+expressions for the gradients on ``w`` and ``b``. As such, ``gw`` and ``gb`` are
+also symbolic Theano variables, representing :math:`$\partial E / \partial W$` 
+and :math:`$\partial E / \partial b$` respectively.
+
+Finally, line 18 defines the actual prediction (``prediction``) of the logistic
+regression by thresholding :math:`$P(Y=1|x^{(i)}) = 1$`.
+
+
+.. raw:: latex
+
+    \begin{figure}[H]
+        \includegraphics[scale=.75]{logreg3.pdf}
+    \end{figure}
 
 Lines 22-25 (``train = function...``) introduce the ``updates`` argument to ``function``.
 An update is an expression that will be computed by the function, like a return
@@ -251,6 +255,13 @@ expression graph that corresponds to some application domain, and then compile
 several functions from it to compute various sub-regions of the graph. Note that
 all these functions may read and write the states of the various shared variables,
 hence their name.
+
+
+.. raw:: latex
+
+    \begin{figure}[H]
+        \includegraphics[scale=.75]{logreg4.pdf}
+    \end{figure}
 
 Lines 28-30 randomly generate four training examples, each with 100 feature values. 
 (In practice, training examples would be inputs to the program.)
@@ -274,6 +285,8 @@ When updating ``w`` with its new value, Theano also
 recognizes that a single call to the BLAS ``dgemv`` routine can implement the
 :math:`$\ell_2$`-regularization of ``w``, scale its gradient, 
 and decrement ``w`` by its scaled gradient.
+
+
 
 .. _benchmark:
 
@@ -338,6 +351,8 @@ GPUmat brings about a speed increase of only 1.4x when switching to the GPU
 for the Matlab implementation, far
 less than the 5.8x increase Theano achieves through CUDA specializations.
 
+.. [#] Torch was designed and implemented with flexibility in mind, not speed (Ronan Collobert, p.c.).
+
 .. _Benchmark2:
 .. _Figure 4:
 .. figure:: conv.pdf
@@ -392,80 +407,14 @@ each expression.
 What's in Theano?
 -----------------
 
-This section gives an overview the design of Theano.
-
-A Theano expression graph is a bi-partite directed acyclic graph.
-It is bi-partite because there are two kinds of nodes: *variable* nodes are the
-inputs to and outputs from *apply* nodes.
-A *variable* node represents input or an intermediate mathematical result.
-It has a *Type* (``.type``) that signals the sort of value the variable might take at
-runtime.
-An *apply* node represents the application of the *Op* (``.op``) to some input *variables* (``.inputs``) producing some output *variables* (``.outputs``).
-Figures 1 and 2 have been simplified for clarity.
-Technically there is an
-intermediate result for the output of the ``Elemwise{pow,no_inplace}``,
-and the variable nodes (box) and apply nodes (ellipse) are distinct from the
-Type and Op instances respectively (not shown) that give them meaning.
-
-
-Variables
-~~~~~~~~~~~~~~~~~~~
-
-Theano supports three kinds of variable nodes: *Variables*, *Constants*, and *Shared variables*. 
-*Variable* nodes (with a capital V) are the most common kind - a Variable is either found as a
-leaf of the graph (if it was created explicitly with a call like ``theano.tensor.vector()``),
-or as the output of an *apply* node (if it was defined by the application
-of an Op).
-In the latter case, the Variable will have a ``.owner`` attribute pointing to the *apply* node.
-``a`` and ``b`` in `Listing 1`_ are Variables (without ``.owner``).
-``p_1`` in `Listing 2`_ is also a Variable (with ``.owner``).
-``theano.function`` takes two arguments: the input list, which is a list of Variables; and the output value or list, which is a Variable or list of Variables.
-*Constant* nodes each have a ``.value`` attribute, which is the immutable (read-only) value of this variable.
-``10`` in `Listing 1`_ was converted to a Constant node.
-*Shared Variable* nodes have ``.get_value()`` and ``.set_value(new_val)`` methods that
-behave by default as if they are transfering from and to (respectively) Theano-managed
-memory. Sometimes this is done for consistency, and other times (like when a
-type conversion takes place, or the transfer requires moving data to or from a
-GPU) it is a necessary copy.
-This value can also be modified by calling a Theano function that was defined with ``updates``, like ``train`` in `Listing 2`_.
-
-Types
-~~~~~~~~~~~~~~~~~~~
-
-The important variable Types in Theano are:
-
- * ``TensorType`` - 
-   denotes a ``numpy.ndarray`` with specific number of dimensions,
-   a record of which of these dimensions are broadcastable, and *dtype*. The dtype is the data types,
-   e.g. ``int32``, ``float64``, etc.
-
- * ``SparseType`` -
-   denotes one of the ``csr`` or ``csc`` formats in ``scipy.sparse``.
-
- * ``RandomStateType`` -
-   denotes a NumPy ``RandomState`` object. They are rarely used directly
-   by Theano user code. They are storage containers for the random
-   number generator.
-
- * ``Generic`` -
-   denotes any Python value.
-   They are rarely used directly by Theano user code.
-   Generic Variables exist mainly for Ops to be able
-   to allocate workspace outputs.
-
-
-Theano types are often stricter
-than their NumPy/SciPy equivalents. For example,
-there are different versions of ``SparseType`` in Theano, which are specific
-to different encodings like ``csr`` or ``csc``. The Theano ``TensorType`` that 
-corresponds to a ``numpy.ndarray`` also specifies
-the number of dimensions (scalar=0, vector=1, etc.), which of them are
-broadcastable, and what *dtype* should be used. This information is used 
-when performing graph transformations.
-
-For *Shared Variables* and *Constants*, the type is inferred 
-automatically based on the value given during initialization.
-
+Theano supports tensor variables of different dimensions,
+from scalar to n-dimensional tensors, and types (int, 
+single-precision floats, double-precision floats etc.) as 
+well as random streams of numbers ( much as Numpy does). 
+There is also limited support for sparse matrices and 
+generic objects. `Table 1`_ presents 
+a comprehensive list of operations that you would find 
+in Theano. It also supports debugging and profiling functionalities.
 
 .. _Table 1:
 .. _Table1:
@@ -481,35 +430,59 @@ automatically based on the value given during initialization.
                                 {\tt eq}, {\tt neq}, {\tt <}, {\tt <=}, {\tt >}, {\tt >=},
                                 {\tt \&}, \verb'|', \verb'^' 
                                 \tabularnewline
+                           &
+                                \tabularnewline
     Allocation             &    {\tt alloc}, {\tt eye}, {\tt [ones,zeros]\_like},
                                 {\tt identity\{\_like\} }
+                                \tabularnewline
+                           & 
                                 \tabularnewline
     Indexing*              &    basic slicing (see {\tt set\_subtensor} and 
                                 {\tt inc\_subtensor} for slicing lvalues);
                                 limited support for advanced indexing
                                 \tabularnewline
+                           & 
+                                \tabularnewline
     Math. Functions        &    {\tt exp}, {\tt log}, {\tt tan[h]}, {\tt cos[h]}, {\tt sin[h]}, 
                                 {\tt real}, {\tt imag}, {\tt sqrt}, {\tt floor}, {\tt ceil}, 
                                 {\tt round}, {\tt abs}
+                                \tabularnewline
+                           &  
                                 \tabularnewline
     Tensor Operations      &    {\tt all}, {\tt any}, {\tt mean}, {\tt sum}, {\tt min}, {\tt max}, 
                                 {\tt var}, {\tt prod}, {\tt argmin} , {\tt argmax}
                                 {\tt reshape}, {\tt flatten},
                                 {\tt dimshuffle}
                                 \tabularnewline
+                           &
+                                \tabularnewline
     Conditional            &    {\tt cond}, {\tt switch}
+                                \tabularnewline
+                           & 
                                 \tabularnewline
     Looping                &    {\tt Scan}
                                 \tabularnewline
+                           &
+                                \tabularnewline
     Linear Algebra         &     {\tt dot}, {\tt outer}, {\tt tensordot}
                                 \tabularnewline
+                           & 
+                                 \tabularnewline
     Calculus*              &     {\tt grad}
+                                \tabularnewline
+                           &
                                 \tabularnewline
     Signal Processing      &    {\tt conv2d}, {\tt FFT}, {\tt max\_pool\_2d}
                                 \tabularnewline
+                           &
+                                \tabularnewline
     Random                 &    {\tt RandomStreams}, {\tt MRG\_RandomStreams}
                                 \tabularnewline
-    Printing               &    {\tt Print} Op
+                           &
+                                \tabularnewline
+    Printing               &    {\tt Print}
+                                \tabularnewline
+                           & 
                                 \tabularnewline
     Sparse                 &    limited operator support, {\tt dot}
                                 \tabularnewline
@@ -566,50 +539,63 @@ are not implemented in Theano.
 Transformations
 ~~~~~~~~~~~~~~~~
 
-Theano uses graph transformations to implement a range of
-tasks from merging redundant calculations to transferring computations to the
-GPU.
-The optimization of expression graphs is carried out several stages.
+Theano uses graph transformations to implement a range of tasks from
+merging redundant calculations to transferring computations to the
+GPU. The optimization of expression graphs is a pipeline comprising
+several stages.
 
-The first stage removes duplicate expressions, and when several constants are
-actually equal, they are replaced with a single node.
-Theano treats two apply nodes with the same inputs and the same Op as being
-duplicates and only keeps one.
-The symbolic gradient mechanism often introduces this sort of redundancy,
-so this phase is quite important.  The ``'FAST_COMPILE'`` mode includes only this
-stage.
+The first stage merges duplicate expressions, so as to only compute
+them once. Two expressions are considered duplicates if they carry out
+the same operation and that all inputs are the same - since Theano is
+purely functional, these expressions must return the same value and
+thus the operation is safe to carry. The symbolic gradient mechanism
+often introduces redundancy, so this phase is quite important.
 
-The second stage transforms the graph into an equivalent, canonical form,
-so that subsequent patterns do not have to recognize as
-wide a variety of equivalent expressions.
-For example, expression subgraphs involving just multiplication and division are
-put into a standard fraction form (e.g. ``a / (b * c / d) -> (a * d) / (b * c)``),
-and terms in both numerator and denominator are cancelled.
+The second stage transforms the expression into an equivalent
+canonical form. For example, sub-expressions involving only
+multiplication and division are put into a standard fraction form
+(e.g. ``a / (((a * b) / c) / d) -> (a * c * d) / (a * b) -> (c * d) /
+(b)``). Some useless calculations are eliminated in this phase, for
+instance crossing out uses of the ``a`` term in the previous example,
+reducing ``exp(log(x))`` to ``x``, and doing constant
+folding. Furthermore, since the canonicalization collapses many
+different expressions into a single normal form, it becomes easier to
+define reliable transformations on them.
 
-The third stage replaces expressions to improve numerical stability. The
-logistic sigmoid substitution described at the end of Section `Case Study: Logistic Regression`_ is an example.
-After numerically unstable subgraphs have been replaced with more stable ones,
-Theano pre-calculates expressions involving only constants.
+The third stage transforms expressions to improve numerical
+stability. For instance, consider the function ``log(1 + exp(x))``,
+which is zero in the limit of negative ``x`` and ``x`` in the limit of
+large ``x``. Due to limitations in the representation of double
+precision numbers, the expression yields infinity for ``x >
+709``. Theano is able to identify this pattern and replace it with an
+implementation that simply returns ``x`` if ``x`` is sufficiently
+large (using doubles, this is accurate beyond the least significant
+digit).
 
 The fourth stage specializes generic expressions and subgraphs.
-Expressions like ``pow(x,2)`` become ``sqr(x)``.
-Theano also performs more elaborate specializations:
-expressions involving scalar-multiplied matrix additions and multiplications may
-become
-BLAS General matrix multiply (GEMM) nodes, sums of incremented tensors become incremented
-sums, and ``reshape``, ``dimshuffle``, and ``subtensor`` Ops
-are replaced by constant-time versions that work by aliasing memory.
+Expressions like ``pow(x,2)`` become ``sqr(x)``. Theano also performs
+more elaborate specializations: for example, expressions involving
+scalar-multiplied matrix additions and multiplications may become BLAS
+General matrix multiply (GEMM) nodes and ``reshape``, ``transpose``,
+and ``subtensor`` Ops (which create copies by default) are replaced by
+constant-time versions that work by aliasing memory.
 
-After this stage of specialization, Elementwise subgraphs are fused into
-Compound ones that permit loop fusion (such as the ``Elemwise{Composite{...}}``
-Op in `Figure 2`_).  If Theano is using a GPU, Ops with corresponding GPU
-implementations are substituted in.
+After this stage of specialization, Sub-expressions involving
+element-wise operations are fused together in order to avoid the
+creation of unnecessary temporaries. For instance, denoting the ``a +
+b`` operation on tensors as ``map(+, a, b)``, then an expression such
+as ``map(+, map(*, a, b), c)`` would become ``map(lambda ai,bi,ci:
+ai*bi+ci, a, b, c)``. If the user desires to use the GPU, Ops with
+corresponding GPU implementations are substituted in, and transfer Ops
+are introduced where needed.
 
 Lastly, Theano replaces Ops with equivalents that reuse the memory of
-their inputs and also invalidate those inputs by side-effect of running.
-Many Ops (e.g. GEMM and all elementwise Ops) have such equivalents.
-Reusing memory this way can improve speed by reducing cache misses
-and allowing more computations to fit on GPUs where memory is at a premium.
+their inputs (which means, as a side effect, that no subsequent Ops
+may use the original values). Many Ops (e.g. GEMM and all elementwise
+Ops) have such equivalents.  Reusing memory this way can improve speed
+by reducing cache misses and allowing more computations to fit on GPUs
+where memory is at a premium.
+
 
 Code Generators
 ~~~~~~~~~~~~~~~~
@@ -650,7 +636,7 @@ The heuristic that guides GPU allocation is simple:
 if any input or output of an expression resides on the GPU and the expression
 has a GPU equivalent, then we replace it.
 How does this chain reaction get started?
-.. mentioned already in section ***
+.. mentioned already in another section
 Shared variables storing float32 tensors default to GPU storage,
 and the expressions derived from them consequently default to using GPU
 implementations.
@@ -672,38 +658,39 @@ simple slice indexing can be performed in constant time.
 Limitations and Future Work
 ---------------------------
 
-Theano does not make significant efforts to optimize the compilation process itself.
-Theano can take up to a few seconds to construct a Theano function
-(especially when it must compile freshly-generated C code), even when a naïve
-implementation of the function's expression would require only a fraction of a
-second. So Theano takes time when creating Theano functions, which is not the case
-for libraries such as NumPy
-and SciPy whose functions have already been compiled.
-Theano is therefore suited to applications where a function will be called enough times
-that the time spent on the initial compilation is negligible.
-Theano has been tested primarily with graphs from 10-1000 nodes, which is
-sufficient for many algorithms.
-The time spent on applying graph transformations tends to grow super-linearly with the size
+While most of the development effort went into making Theano produce fast code,
+not as much went into optimizing the compilation process itself. Therefore 
+compiling a symbolic graph can take up to a few seconds (especially when it
+must compile freshly-generated C code). This is not the case for libraries
+such as NumPy and SciPy whose functions have already been compile. Theano
+is therefore suited to applications where a function will be called enough times
+that the compilation overhead is negligible. 
+Unoptimal compilation can have other repercursions. For example we have
+only used the library with graphs of ten to thousands of nodes,
+which is sufficient for many algorithms. The time spent on applying graph
+transformations tends to grow super-linearly with the size
 of the expression graph. Beyond a few thousand nodes, Theano's optimization
 algorithm can be impractically slow, unless you disable some of the more
 expensive optimizations, or compile pieces of the graph separately.
 
-A Theano function call also requires more overhead (on the order of microseconds) than a native Python function
-call. For this reason, Theano is suited to applications where functions correspond to
-expressions that are not too small (see `Figure 5`_).
+A Theano function call also requires more overhead (on the order of microseconds)
+than a native Python function call. For this reason, Theano is suited to
+applications where functions correspond to expressions that are not too
+small (see `Figure 5`_).
 
-The set of Types and Ops that Theano provides continues to grow, but it does not
+The set of types and operations that Theano provides continues to grow, but it does not
 cover all the functionality of NumPy and covers only a few features of SciPy.
 Wrapping functions from these and other libraries is often straightforward,
-but implementing related graph transformations and implementing Ops for
-gradients can be more difficult.
-We expect to improve support for advanced indexing and linear algebra in the
-coming months.
-Documentation online describes how to add new Ops, Types, and transformations.
+but implementing related graph transformations for optimize expression
+containing the operations, or implementing their gradients can be more difficult.
 
-Theano's graph transformations give good results for expressions related to
-machine learning with neural networks, but they are not as well tested outside
-that domain.  Theano is not a powerful computer algebra system, and 
+We expect to improve support for advanced indexing and linear algebra in the
+coming months. Documentation online describes how to add new operations, 
+new type or new graph transformations.
+
+Also the library has been tuned towards expressions related to machine 
+learning with neural netowrks, and it was not as well tested outside 
+thist domain. Theano is not a powerful computer algebra system, and 
 it is an important area of future work to improve its ability to recognize
 numerical instability in complicated elementwise expression graphs.
 
@@ -802,5 +789,15 @@ References
 .. [Ecu] P. L'Ecuyer, F. Blouin, and R. Couture,
          A Search for Good Multiple Recursive Generators,
          ACM Transactions on Modeling and Computer Simulation, 3:87-98, 1993. 
+
+TODO:
+
+* (Guillaume says) I believe this would be better suited to the "What's in
+  Theano - GPU" section.
+
+    Theano manages the storage of these values. In particular, it stores
+    single-precision dense *shared* tensors on the GPU by default when a GPU is
+    available.  In such cases it uses a different Theano-specific data type for
+    internal storage in place of the NumPy ``ndarray``.
 
 
