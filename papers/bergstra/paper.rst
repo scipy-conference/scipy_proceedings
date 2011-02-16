@@ -164,69 +164,58 @@ The problem is to optimize the log probability of
 :math:`N` training examples, :math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`,
 with respect to :math:`W` and :math:`b`.
 To make it a bit more interesting, we can also include an
-:math:`$\ell_2$` penalty on :math:`$W$`, giving a cost function defined as:
+:math:`$\ell_2$` penalty on :math:`$W$`, giving a cost function :math:`$E(W,b)$` defined as:
 
 .. raw:: latex
 
     \begin{equation}
-    cost = 0.01 \cdot W^2 - \frac{1}{N} \sum_i ( y^{(i)} \cdot p^{(i)} + (1-y^{(i)}) \cdot (1 - p^{(i)}) )
+    E(W,b) = 0.01 \cdot ||W||^2 - \frac{1}{N} \sum_i ( y^{(i)} \cdot p^{(i)} + (1-y^{(i)}) \cdot (1 - p^{(i)}) )
     \end{equation}
 
-Tuning parameters :math:`W` and :math:`b` to minimize this cost can be
-performed by more sophisticated algorithms, but for our example we will
-use stochastic gradient descent.
+In this example, tuning parameters :math:`W` and :math:`b` will be done through
+stochastic gradient descent (SGD) of :math:`$E(W,b)$`, even though more sophisticated
+algorithms could also be used. Implementing this minimization procedure in
+Theano involves the following four conceptual steps:
+(1) declaring symbolic variables,
+(2) using these variables to build a symbolic expression graph,
+(3) compiling a Theano function, and
+(4) calling said function to perform numerical computations.
+We will now step through each of these sections in more detail.
 
-.. _Listing 1:
 
-    TODO: remove all references to Listing 1
+.. raw:: latex
 
-.. _Figure 2:
+    \begin{figure}[H]
+        \includegraphics{logreg1.pdf}
+    \end{figure}
 
-    TODO: remove all references to Figure 2
+In the above code, we declare two symbolic variables ``x`` and ``y`` which will
+serve as input to the rest of the computation graph. Theano variables are
+strictly typed and include the data type, the number of dimensions, and the
+dimensions along which it may broadcast in element-wise expressions. Here we
+define ``x`` to be a matrix of the default data type (``float64``), where each
+row of ``x`` corresponds to an example :math:`$x^{(i)}$`. Similarly, ``y`` is
+declared as a vector of type ``int32`` whose entries correspond to the labels
+:math:`$y^{(i)}$`. Treating multiple data points at the same time allows us to
+implement SGD with mini-batches, a variant of SGD which is both computationally
+and statistically efficient.
 
-.. _Listing 2:
-.. _ListingLogReg:
-
-.. figure:: logreg.pdf
-    :scale: 100
-
-    **Listing 2:** A Theano program for fitting and 
-    applying a logistic regression model.
-
-The code in `Listing 2`_ implements this minimization.
-The code is organized into four conceptual steps with respect to Theano:
-  1. declare symbolic variables
-  2. use these variables to build a symbolic expression graph,
-  3. compile a function, and
-  4. call the compiled function to perform computations.
-
-Lines 7-10 declare the symbolic inputs for our logistic regression problem.
-Notice that ``x`` is defined as a matrix of the default data type (``float64``),
-and ``y`` as a vector of ``int32``.
-The Type of a Theano variables includes its number of dimensions,
-its data type,
-and the dimensions along which it may broadcast in element-wise expressions.
-
-We did we not make ``x`` a vector and ``y`` a scalar, because it would limit the
-speed of the program.
-Matrix-matrix multiplication is more efficient on modern x86
-architecture than matrix-vector multiplication
-and Theano function calls involve overhead.
-Treating several examples in parallel mitigates that overhead.
-
-The ``shared()`` function (Lines 9+10 of `Listing 2`_) creates *shared variables* for :math:`$W$` and :math:`$b$` and assigns them initial values.
-Shared variables are
-similar to standard Theano variables, but are stateful. In
-a sense, they behave like global variables which any Theano function
-may use without having to declare them in its inputs list.
+The ``shared()`` function creates *shared variables* for :math:`$W$` and :math:`$b$` and assigns them initial values.
+Shared variables are similar to standard Theano variables, but differ in that
+they have a persistent state. As we will see shortly, any Theano function can
+operate directly on these shared variables, without having to declare them
+explicitely as an input.
 A shared variable's value is maintained
 throughout the execution of the program and
-can be accessed with ``.get_value()`` and ``.set_value()``, as shown in Line 12.
-Theano manages the storage of
-these values. In particular, it stores single-precision dense *shared* tensors on the GPU by
-default when a GPU is available.  In such cases it uses a different
-Theano-specific data type for internal storage in place of the NumPy ``ndarray``.
+can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 12.
 
+.. raw:: latex
+
+    \begin{figure}[H]
+        \includegraphics{logreg2.pdf}
+    \end{figure}
+
+Lines 7-10 declare the symbolic inputs for our logistic regression problem.
 Line 15 defines :math:`$P(Y=1|x^{(i)}) = 1$` as ``p_1``.
 Line 16 defines the cross-entropy term in :math:`cost` as ``xent``.
 Line 17 defines the predictor by thresholding over :math:`$P(Y=1|x^{(i)}) = 1$` as ``prediction``.
@@ -237,6 +226,13 @@ differentiation of scalar-valued ``cost`` with respect to variables ``w`` and ``
 It works like a macro, iterating backward over the expression
 graph, applying the chain rule of differentiation and building expressions for the
 gradients on ``w`` and ``b``.
+
+
+.. raw:: latex
+
+    \begin{figure}[H]
+        \includegraphics{logreg3.pdf}
+    \end{figure}
 
 Lines 22-25 (``train = function...``) introduce the ``updates`` argument to ``function``.
 An update is an expression that will be computed by the function, like a return
@@ -252,6 +248,13 @@ expression graph that corresponds to some application domain, and then compile
 several functions from it to compute various sub-regions of the graph. Note that
 all these functions may read and write the states of the various shared variables,
 hence their name.
+
+
+.. raw:: latex
+
+    \begin{figure}[H]
+        \includegraphics{logreg4.pdf}
+    \end{figure}
 
 Lines 28-30 randomly generate four training examples, each with 100 feature values. 
 (In practice, training examples would be inputs to the program.)
@@ -275,6 +278,8 @@ When updating ``w`` with its new value, Theano also
 recognizes that a single call to the BLAS ``dgemv`` routine can implement the
 :math:`$\ell_2$`-regularization of ``w``, scale its gradient, 
 and decrement ``w`` by its scaled gradient.
+
+
 
 .. _benchmark:
 
@@ -329,11 +334,12 @@ Torch 5 (a machine learning
 library written in C/C++) [torch5]_.  On the GPU we compared Theano with GPUMat 0.25 for Matlab
 ([gpumat]_).
 As shown in `Figure 3`_, on the CPU Theano is 1.8x faster than NumPy,
-1.6x faster than Matlab, and 7.5x faster than Torch 5. Torch was written
-for flexibility, not speed (Ronan Collobert, p.c.).
+1.6x faster than Matlab, and 7.5x faster than Torch 5 [#]_. 
 Theano's speed increases 5.8x on the GPU from the CPU, a total increase of 11x over NumPy on the CPU and 44x over Torch 5 on the CPU.
 GPUmat increases the Matlab speed on the GPU only 1.4x from the CPU, far
 less than the 5.8x increase Theano achieves through CUDA specializations.
+
+.. [#] Torch was designed and implemented with flexibility in mind, not speed (Ronan Collobert, p.c.).
 
 .. _Benchmark2:
 .. _Figure 4:
@@ -411,17 +417,17 @@ leaf of the graph (if it was created explicitly with a call like ``theano.tensor
 or as the output of an *apply* node (if it was defined by the application
 of an Op).
 In the latter case, the Variable will have a ``.owner`` attribute pointing to the *apply* node.
-``a`` and ``b`` in `Listing 1`_ are Variables (without ``.owner``).
-``p_1`` in `Listing 2`_ is also a Variable (with ``.owner``).
+``a`` and ``b`` in Listing 1 are Variables (without ``.owner``).
+``p_1`` in Listing 2 is also a Variable (with ``.owner``).
 ``theano.function`` takes two arguments: the input list, which is a list of Variables; and the output value or list, which is a Variable or list of Variables.
 *Constant* nodes each have a ``.value`` attribute, which is the immutable (read-only) value of this variable.
-``10`` in `Listing 1`_ was converted to a Constant node.
+``10`` in Listing 1 was converted to a Constant node.
 *Shared Variable* nodes have ``.get_value()`` and ``.set_value(new_val)`` methods that
 behave by default as if they are transfering from and to (respectively) Theano-managed
 memory. Sometimes this is done for consistency, and other times (like when a
 type conversion takes place, or the transfer requires moving data to or from a
 GPU) it is a necessary copy.
-This value can also be modified by calling a Theano function that was defined with ``updates``, like ``train`` in `Listing 2`_.
+This value can also be modified by calling a Theano function that was defined with ``updates``, like ``train`` in Listing 2.
 
 Types
 ~~~~~~~~~~~~~~~~~~~
@@ -596,7 +602,7 @@ are replaced by constant-time versions that work by aliasing memory.
 
 After this stage of specialization, Elementwise subgraphs are fused into
 Compound ones that permit loop fusion (such as the ``Elemwise{Composite{...}}``
-Op in `Figure 2`_).  If Theano is using a GPU, Ops with corresponding GPU
+Op in Figure 2).  If Theano is using a GPU, Ops with corresponding GPU
 implementations are substituted in.
 
 Lastly, Theano replaces Ops with equivalents that reuse the memory of
@@ -758,5 +764,15 @@ References
 .. [Ecu] P. L'Ecuyer, F. Blouin, and R. Couture,
          A Search for Good Multiple Recursive Generators,
          ACM Transactions on Modeling and Computer Simulation, 3:87-98, 1993. 
+
+TODO:
+
+* (Guillaume says) I believe this would be better suited to the "What's in
+  Theano - GPU" section.
+
+    Theano manages the storage of these values. In particular, it stores
+    single-precision dense *shared* tensors on the GPU by default when a GPU is
+    available.  In such cases it uses a different Theano-specific data type for
+    internal storage in place of the NumPy ``ndarray``.
 
 
