@@ -201,7 +201,7 @@ operate directly on these shared variables, without having to declare them
 explicitely as an input.
 A shared variable's value is maintained
 throughout the execution of the program and
-can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 12.
+can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
 
 .. raw:: latex
 
@@ -209,17 +209,25 @@ can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 12.
         \includegraphics[scale=.75]{logreg2.pdf}
     \end{figure}
 
-Lines 7-10 declare the symbolic inputs for our logistic regression problem.
-Line 15 defines :math:`$P(Y=1|x^{(i)}) = 1$` as ``p_1``.
-Line 16 defines the cross-entropy term in :math:`cost` as ``xent``.
-Line 17 defines the predictor by thresholding over :math:`$P(Y=1|x^{(i)}) = 1$` as ``prediction``.
-Line 18 defines :math:`cost` as ``cost``, by adding the cross-entropy term to the :math:`$\ell_2$` penalty.
+The above code-block specifies the computational graph required to perform
+gradient descent of our cost function. Since Theano's interface shares much in
+common with that of ``numpy``, lines 13-17 should be self-explanatory for anyone
+familiar with ``numpy``. On line 13, we start by defining :math:`$P(Y=1|x^{(i)}) = 1$`
+as the symbolic variable ``p_1``. Notice that the dot product and element-wise exponential
+functions are simply called via the ``T.dot`` and ``T.exp`` functions,
+analoguous to ``numpy.dot`` and ``numpy.exp``. ``xent`` defines the
+cross-entropy loss function, which is then combined with the :math:`$\ell_2$`
+penalty on line 15, to form the cost function of Eq (2) and denoted by ``cost``.
 
-Line 19 (``gw,gb = T.grad(cost, [w,b])``) performs automatic
-differentiation of scalar-valued ``cost`` with respect to variables ``w`` and ``b``.
-It works like a macro, iterating backward over the expression
-graph, applying the chain rule of differentiation and building expressions for the
-gradients on ``w`` and ``b``.
+Line 16 is crucial to our implementation of SGD, as it performs automatic
+differentiation of the scalar-valued ``cost`` variable with respect to variables
+``w`` and ``b``.  ``T.grad`` operates by iterating backwards over the expression
+graph, applying the chain rule of differentiation and building symbolic
+expressions for the gradients on ``w`` and ``b``. As such, ``gw`` and ``gb`` are
+also symbolic Theano variables, representing :math:`$\partial E / \partial W$` and :math:`$\partial E / \partial b$` respectively.
+
+Finally, line 18 defines the actual prediction (``prediction``) of the logistic
+regression by thresholding :math:`$P(Y=1|x^{(i)}) = 1$`.
 
 
 .. raw:: latex
