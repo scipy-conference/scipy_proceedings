@@ -66,7 +66,7 @@ Introduction
 Python is a powerful and flexible language for describing large-scale mathematical
 calculations, but the Python interpreter is in many cases a poor engine for executing
 them. One reason is that Python uses full-fledged objects on the heap to
-represent numeric scalars instead of processor's native types which have a
+represent even simple numeric scalars instead of processor's native types which have a
 minimal overhead. To overcome these limitantions there are several tools 
 available for numerical calculations, including [NumPy]_, [numexpr]_, [Cython]_,
 and [scipy.weave]_.
