@@ -81,7 +81,7 @@ memory rather than the cost of performing calculations [Alted]_.
 that can glue several elementwise computations together. Unfortunately, the syntax required
 by numexpr is a bit unusual (the expression must be encoded as a string
 within the code), and it is limited to elementwise computations.
-[Cython]_ and [scipy.weave]_ address the issue by offering a simple way to
+[Cython]_ and [scipy.weave]_ address Python's performance issue by offering a simple way to
 hand-write crucial segments of code into C. While this might bring about 
 significant improvements, if the bottleneck of a program is a large 
 mathematical expression, comprising hundreds of operations, manual
@@ -384,80 +384,14 @@ each expression.
 What's in Theano?
 -----------------
 
-This section gives an overview the design of Theano.
-
-A Theano expression graph is a bi-partite directed acyclic graph.
-It is bi-partite because there are two kinds of nodes: *variable* nodes are the
-inputs to and outputs from *apply* nodes.
-A *variable* node represents input or an intermediate mathematical result.
-It has a *Type* (``.type``) that signals the sort of value the variable might take at
-runtime.
-An *apply* node represents the application of the *Op* (``.op``) to some input *variables* (``.inputs``) producing some output *variables* (``.outputs``).
-Figures 1 and 2 have been simplified for clarity.
-Technically there is an
-intermediate result for the output of the ``Elemwise{pow,no_inplace}``,
-and the variable nodes (box) and apply nodes (ellipse) are distinct from the
-Type and Op instances respectively (not shown) that give them meaning.
-
-
-Variables
-~~~~~~~~~~~~~~~~~~~
-
-Theano supports three kinds of variable nodes: *Variables*, *Constants*, and *Shared variables*. 
-*Variable* nodes (with a capital V) are the most common kind - a Variable is either found as a
-leaf of the graph (if it was created explicitly with a call like ``theano.tensor.vector()``),
-or as the output of an *apply* node (if it was defined by the application
-of an Op).
-In the latter case, the Variable will have a ``.owner`` attribute pointing to the *apply* node.
-``a`` and ``b`` in `Listing 1`_ are Variables (without ``.owner``).
-``p_1`` in `Listing 2`_ is also a Variable (with ``.owner``).
-``theano.function`` takes two arguments: the input list, which is a list of Variables; and the output value or list, which is a Variable or list of Variables.
-*Constant* nodes each have a ``.value`` attribute, which is the immutable (read-only) value of this variable.
-``10`` in `Listing 1`_ was converted to a Constant node.
-*Shared Variable* nodes have ``.get_value()`` and ``.set_value(new_val)`` methods that
-behave by default as if they are transfering from and to (respectively) Theano-managed
-memory. Sometimes this is done for consistency, and other times (like when a
-type conversion takes place, or the transfer requires moving data to or from a
-GPU) it is a necessary copy.
-This value can also be modified by calling a Theano function that was defined with ``updates``, like ``train`` in `Listing 2`_.
-
-Types
-~~~~~~~~~~~~~~~~~~~
-
-The important variable Types in Theano are:
-
- * ``TensorType`` - 
-   denotes a ``numpy.ndarray`` with specific number of dimensions,
-   a record of which of these dimensions are broadcastable, and *dtype*. The dtype is the data types,
-   e.g. ``int32``, ``float64``, etc.
-
- * ``SparseType`` -
-   denotes one of the ``csr`` or ``csc`` formats in ``scipy.sparse``.
-
- * ``RandomStateType`` -
-   denotes a NumPy ``RandomState`` object. They are rarely used directly
-   by Theano user code. They are storage containers for the random
-   number generator.
-
- * ``Generic`` -
-   denotes any Python value.
-   They are rarely used directly by Theano user code.
-   Generic Variables exist mainly for Ops to be able
-   to allocate workspace outputs.
-
-
-Theano types are often stricter
-than their NumPy/SciPy equivalents. For example,
-there are different versions of ``SparseType`` in Theano, which are specific
-to different encodings like ``csr`` or ``csc``. The Theano ``TensorType`` that 
-corresponds to a ``numpy.ndarray`` also specifies
-the number of dimensions (scalar=0, vector=1, etc.), which of them are
-broadcastable, and what *dtype* should be used. This information is used 
-when performing graph transformations.
-
-For *Shared Variables* and *Constants*, the type is inferred 
-automatically based on the value given during initialization.
-
+Theano supports tensor variables of different dimensions,
+from scalar to n-dimensional tensors, and types (int, 
+single-precision floats, double-precision floats etc.) as 
+well as random streams of numbers ( much as Numpy does). 
+There is also limited support for sparse matrices and 
+generic objects. `Table 1`_ presents 
+a comprehensive list of operations that you would find 
+in Theano. It also supports debugging and profiling functionalities.
 
 .. _Table 1:
 .. _Table1:
@@ -473,35 +407,59 @@ automatically based on the value given during initialization.
                                 {\tt eq}, {\tt neq}, {\tt <}, {\tt <=}, {\tt >}, {\tt >=},
                                 {\tt \&}, \verb'|', \verb'^' 
                                 \tabularnewline
+                           &
+                                \tabularnewline
     Allocation             &    {\tt alloc}, {\tt eye}, {\tt [ones,zeros]\_like},
                                 {\tt identity\{\_like\} }
+                                \tabularnewline
+                           & 
                                 \tabularnewline
     Indexing*              &    basic slicing (see {\tt set\_subtensor} and 
                                 {\tt inc\_subtensor} for slicing lvalues);
                                 limited support for advanced indexing
                                 \tabularnewline
+                           & 
+                                \tabularnewline
     Math. Functions        &    {\tt exp}, {\tt log}, {\tt tan[h]}, {\tt cos[h]}, {\tt sin[h]}, 
                                 {\tt real}, {\tt imag}, {\tt sqrt}, {\tt floor}, {\tt ceil}, 
                                 {\tt round}, {\tt abs}
+                                \tabularnewline
+                           &  
                                 \tabularnewline
     Tensor Operations      &    {\tt all}, {\tt any}, {\tt mean}, {\tt sum}, {\tt min}, {\tt max}, 
                                 {\tt var}, {\tt prod}, {\tt argmin} , {\tt argmax}
                                 {\tt reshape}, {\tt flatten},
                                 {\tt dimshuffle}
                                 \tabularnewline
+                           &
+                                \tabularnewline
     Conditional            &    {\tt cond}, {\tt switch}
+                                \tabularnewline
+                           & 
                                 \tabularnewline
     Looping                &    {\tt Scan}
                                 \tabularnewline
+                           &
+                                \tabularnewline
     Linear Algebra         &     {\tt dot}, {\tt outer}, {\tt tensordot}
                                 \tabularnewline
+                           & 
+                                 \tabularnewline
     Calculus*              &     {\tt grad}
+                                \tabularnewline
+                           &
                                 \tabularnewline
     Signal Processing      &    {\tt conv2d}, {\tt FFT}, {\tt max\_pool\_2d}
                                 \tabularnewline
+                           &
+                                \tabularnewline
     Random                 &    {\tt RandomStreams}, {\tt MRG\_RandomStreams}
                                 \tabularnewline
-    Printing               &    {\tt Print} Op
+                           &
+                                \tabularnewline
+    Printing               &    {\tt Print}
+                                \tabularnewline
+                           & 
                                 \tabularnewline
     Sparse                 &    limited operator support, {\tt dot}
                                 \tabularnewline
@@ -632,38 +590,39 @@ mathematical operations accounts for the good GPU performance in our benchmarks.
 Limitations and Future Work
 ---------------------------
 
-Theano does not make significant efforts to optimize the compilation process itself.
-Theano can take up to a few seconds to construct a Theano function
-(especially when it must compile freshly-generated C code), even when a naïve
-implementation of the function's expression would require only a fraction of a
-second. So Theano takes time when creating Theano functions, which is not the case
-for libraries such as NumPy
-and SciPy whose functions have already been compiled.
-Theano is therefore suited to applications where a function will be called enough times
-that the time spent on the initial compilation is negligible.
-Theano has been tested primarily with graphs from 10-1000 nodes, which is
-sufficient for many algorithms.
-The time spent on applying graph transformations tends to grow super-linearly with the size
+While most of the development effort went into making Theano produce fast code,
+not as much went into optimizing the compilation process itself. Therefore 
+compiling a symbolic graph can take up to a few seconds (especially when it
+must compile freshly-generated C code). This is not the case for libraries
+such as NumPy and SciPy whose functions have already been compile. Theano
+is therefore suited to applications where a function will be called enough times
+that the compilation overhead is negligible. 
+Unoptimal compilation can have other repercursions. For example we have
+only used the library with graphs of ten to thousands of nodes,
+which is sufficient for many algorithms. The time spent on applying graph
+transformations tends to grow super-linearly with the size
 of the expression graph. Beyond a few thousand nodes, Theano's optimization
 algorithm can be impractically slow, unless you disable some of the more
 expensive optimizations, or compile pieces of the graph separately.
 
-A Theano function call also requires more overhead (on the order of microseconds) than a native Python function
-call. For this reason, Theano is suited to applications where functions correspond to
-expressions that are not too small (see `Figure 5`_).
+A Theano function call also requires more overhead (on the order of microseconds)
+than a native Python function call. For this reason, Theano is suited to
+applications where functions correspond to expressions that are not too
+small (see `Figure 5`_).
 
-The set of Types and Ops that Theano provides continues to grow, but it does not
+The set of types and operations that Theano provides continues to grow, but it does not
 cover all the functionality of NumPy and covers only a few features of SciPy.
 Wrapping functions from these and other libraries is often straightforward,
-but implementing related graph transformations and implementing Ops for
-gradients can be more difficult.
-We expect to improve support for advanced indexing and linear algebra in the
-coming months.
-Documentation online describes how to add new Ops, Types, and transformations.
+but implementing related graph transformations for optimize expression
+containing the operations, or implementing their gradients can be more difficult.
 
-Theano's graph transformations give good results for expressions related to
-machine learning with neural networks, but they are not as well tested outside
-that domain.  Theano is not a powerful computer algebra system, and 
+We expect to improve support for advanced indexing and linear algebra in the
+coming months. Documentation online describes how to add new operations, 
+new type or new graph transformations.
+
+Also the library has been tuned towards expressions related to machine 
+learning with neural netowrks, and it was not as well tested outside 
+thist domain. Theano is not a powerful computer algebra system, and 
 it is an important area of future work to improve its ability to recognize
 numerical instability in complicated elementwise expression graphs.
 
