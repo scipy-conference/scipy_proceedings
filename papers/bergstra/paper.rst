@@ -352,7 +352,7 @@ Because of the difficulty in implementing efficient convolutional networks, we o
 benchmark against known libraries that offer a pre-existing implementation.
 We compare against EBLearn [EBL]_ and Torch, two libraries written in C++. 
 EBLearn was implemented by Yann LeCun's lab at NYU, which has done extensive
-research in convolutional networks, so EBLearn is a solid baseline.
+research in convolutional networks.
 To put these results into perspective, we implemented approximately half (no
 gradient calculation) of the algorithm using SciPy's ``signal.convolve2d`` function. 
 This benchmark uses convolutions of medium sized images
