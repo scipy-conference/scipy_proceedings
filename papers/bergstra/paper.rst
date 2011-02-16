@@ -46,7 +46,7 @@ Theano: A CPU and GPU Math Compiler in Python
     manupilating the symbolic graph that the user provides, using 
     a library of graph transformation heuristics for improving 
     computation speed and stability. The optmized graph gets
-    translated into C/C++ or CUDA transperently.
+    translated into C/C++ or CUDA transparently.
     Common machine learning algorithms implemented with Theano
     are from* :math:`$1.6\times$` *to* :math:`$7.5\times$` *faster
     than competitive alternatives (including those implemented with
