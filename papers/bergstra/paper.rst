@@ -81,9 +81,10 @@ memory rather than the cost of performing calculations [Alted]_.
 that can glue several elementwise computations together. Unfortunately, the syntax required
 by numexpr is a bit unusual (the expression must be encoded as a string
 within the code), and it is limited to elementwise computations.
-[Cython]_ and [scipy.weave]_ offer a simple way to hand-write crucial segments
-of code into C. Unfortunately if the bottlenec is a large 
-mathematical expression comprising hundreds of operations, manual
+[Cython]_ and [scipy.weave]_ address the issue by offering a simple way to
+hand-write crucial segments of code into C. While this might bring about 
+significant improvements, if the bottleneck of a program is a large 
+mathematical expression, comprising hundreds of operations, manual
 optimization of the math can be time-consuming and suboptimal compared to
 automatic optimization.
 
