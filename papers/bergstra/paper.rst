@@ -619,7 +619,7 @@ The heuristic that guides GPU allocation is simple:
 if any input or output of an expression resides on the GPU and the expression
 has a GPU equivalent, then we replace it.
 How does this chain reaction get started?
-.. mentioned already in section ***
+.. mentioned already in another section
 Shared variables storing float32 tensors default to GPU storage,
 and the expressions derived from them consequently default to using GPU
 implementations.
