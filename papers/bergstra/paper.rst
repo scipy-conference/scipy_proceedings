@@ -303,11 +303,15 @@ CPU computations were done at double-precision.
 GPU computations were done at single-precision.
 
 Our first benchmark is training
-a single layer MLP by mini-batch gradient descent. Roughly, the computations
-carried out by any of the implenetations are to multiply multiple times
-matrices of shapes :math:`$60\ times 784$`, `$784 \times 500$` and
-:math:`$500 \times 10$` and apply several element-wise operations like
-:math:`tanh`.
+a single layer MLP by mini-batch gradient descent.
+Each implementation repeatedly carried out the following steps:
+(1) multiply 60 784-element input vectors by a :math:`$784 \times 500$` weight matrix,
+(2) compress the result by tanh,
+(3) multiply the result by a :math:`$500 \times 10$` matrix,
+(4) classify the result using a multi-class generalization of logistic regression,
+(5) compute the gradient by performing similar calculations but in reverse, and finally
+(6) add the gradients to the parameters.
+This program tests the use of BLAS routines and elementwise computations.
 
 .. _Figure 3:
 .. _Benchmark1:
