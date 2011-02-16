@@ -81,7 +81,8 @@ use within Python programs. However, the composition of many such NumPy function
 can be unnecessarily slow when each call is dominated by the cost of transferring
 memory rather than the cost of performing calculations [Alted]_.
 [numexpr]_ goes one step further by providing a loop fusion optimization
-that can glue several elementwise computations together. Unfortunately, the syntax required
+that can glue several elementwise computations together.
+Unfortunately, the syntax required
 by numexpr is a bit unusual (the expression must be encoded as a string
 within the code), and it is limited to elementwise computations.
 [Cython]_ and [scipy.weave]_ address the issue by offering a simple way to
