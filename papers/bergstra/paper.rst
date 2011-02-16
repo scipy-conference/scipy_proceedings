@@ -156,9 +156,9 @@ The model estimates the probability
 
 .. raw:: latex
 
-    \begin{align}
-    P(Y=1|x^{(i)}) &= p^{(i)} = \frac {e^{W x^{(i)} + b}} {1 +  e^{Wx^{(i)} + b}}
-    \end{align}
+    \begin{equation}
+    P(Y=1|x^{(i)}) = p^{(i)} = \frac {e^{W x^{(i)} + b}} {1 +  e^{Wx^{(i)} + b}}
+    \end{equation}
 
 The problem is to optimize the log probability of
 :math:`N` training examples, :math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`,
@@ -168,14 +168,21 @@ To make it a bit more interesting, we can also include an
 
 .. raw:: latex
 
-    \begin{align*}
-    cost = 0.01 \cdot W^2 - \frac{1}{N} \sum_i ( \ & y^{(i)} \cdot p^{(i)} + \\
-        & (1-y^{(i)}) \cdot (1 - p^{(i)}) )
-    \end{align*}
+    \begin{equation}
+    cost = 0.01 \cdot W^2 - \frac{1}{N} \sum_i ( y^{(i)} \cdot p^{(i)} + (1-y^{(i)}) \cdot (1 - p^{(i)}) )
+    \end{equation}
 
 Tuning parameters :math:`W` and :math:`b` to minimize this cost can be
 performed by more sophisticated algorithms, but for our example we will
 use stochastic gradient descent.
+
+.. _Listing 1:
+
+    TODO: remove all references to Listing 1
+
+.. _Figure 2:
+
+    TODO: remove all references to Figure 2
 
 .. _Listing 2:
 .. _ListingLogReg:
