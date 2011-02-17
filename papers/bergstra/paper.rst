@@ -102,7 +102,7 @@ Once optimized, the graph can be used to generate CPU as well as GPU
 implementations ( the latter using CUDA) without requireing changes to 
 user code. 
 
-It is similar to [SymPy]_, in that both libraries manipulate symbolic
+Theano is similar to [SymPy]_, in that both libraries manipulate symbolic
 mathematical graphs, but the two projects have a distinctly different focus.
 While SymPy implements a richer set of mathematical operations of the kind
 expected in a modern computer algebra system, Theano focuses on fast, efficient
