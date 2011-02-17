@@ -662,19 +662,12 @@ Limitations and Future Work
 ---------------------------
 
 While most of the development effort went into making Theano produce fast code,
-not as much went into optimizing the compilation process itself. Therefore 
-compiling a symbolic graph can take up to a few seconds (especially when it
-must compile freshly-generated C code). This is not the case for libraries
-such as NumPy and SciPy whose functions have already been compiled. Theano
-is therefore suited to applications where a function will be called enough times
-that the compilation overhead is negligible. 
-Unoptimal compilation can have other repercursions. For example we have
-only used the library with graphs of ten to thousands of nodes,
-which is sufficient for many algorithms. The time spent on applying graph
-transformations tends to grow super-linearly with the size
-of the expression graph. Beyond a few thousand nodes, Theano's optimization
-algorithm can be impractically slow, unless you disable some of the more
-expensive optimizations, or compile pieces of the graph separately.
+not as much went into optimizing the compilation process itself, thus 
+the compilation time tends to grow super-linearly with the size of 
+the expression graph. Theano can deal with graphs up to a few thousand
+nodes, with compilation times typically in the range of seconds. Beyond 
+that, it can be impractically slow, unless you disable some of the more 
+expensive optimizations, or compile pieces of the graph separately. 
 
 A Theano function call also requires more overhead (on the order of microseconds)
 than a native Python function call. For this reason, Theano is suited to
