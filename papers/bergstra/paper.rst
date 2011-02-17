@@ -442,13 +442,13 @@ in Theano. It also supports debugging and profiling functionalities.
                                 \tabularnewline
                            & 
                                 \tabularnewline
-    Math. Functions        &    {\tt exp}, {\tt log}, {\tt tan[h]}, {\tt cos[h]}, {\tt sin[h]}, 
+    Mathematical \newline Functions        &    {\tt exp}, {\tt log}, {\tt tan[h]}, {\tt cos[h]}, {\tt sin[h]}, 
                                 {\tt real}, {\tt imag}, {\tt sqrt}, {\tt floor}, {\tt ceil}, 
                                 {\tt round}, {\tt abs}
                                 \tabularnewline
                            &  
                                 \tabularnewline
-    Tensor Operations      &    {\tt all}, {\tt any}, {\tt mean}, {\tt sum}, {\tt min}, {\tt max}, 
+    Tensor \newline Operations      &    {\tt all}, {\tt any}, {\tt mean}, {\tt sum}, {\tt min}, {\tt max}, 
                                 {\tt var}, {\tt prod}, {\tt argmin} , {\tt argmax}
                                 {\tt reshape}, {\tt flatten},
                                 {\tt dimshuffle}
@@ -471,7 +471,7 @@ in Theano. It also supports debugging and profiling functionalities.
                                 \tabularnewline
                            &
                                 \tabularnewline
-    Signal Processing      &    {\tt conv2d}, {\tt FFT}, {\tt max\_pool\_2d}
+    Signal \newline Processing      &    {\tt conv2d}, {\tt FFT}, {\tt max\_pool\_2d}
                                 \tabularnewline
                            &
                                 \tabularnewline
