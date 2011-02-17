@@ -177,7 +177,7 @@ To make it a bit more interesting, we can also include an
 .. raw:: latex
 
     \begin{equation}
-    E(W,b) = \ell(W, b) + \sum_i \sum_j w_{ij}^2
+    E(W,b) = \ell(W, b) + 0.01 \sum_i \sum_j w_{ij}^2
     \end{equation}
 
 In this example, tuning parameters :math:`W` and :math:`b` will be done through
