@@ -96,10 +96,10 @@ Theano on the other hand works on a symbolic representation of the
 mathematical expressions, provided by the user through NumPy-like syntax.
 Having access to a computational graph, Theano can
 provide symbolic differentiation of complex expressions, but more
-importantly, it can perform local graph trasnformations that corrects
+importantly, it can perform local graph transformations that corrects
 many unnecessary, slow or numerically unstable expression patterns.
 Once optimized, the graph can be used to generate CPU as well as GPU 
-implementations ( the latter using CUDA) without requireing changes to 
+implementations (the latter using CUDA) without requiring changes to 
 user code. 
 
 It is similar to [SymPy]_, in that both libraries manipulate symbolic
