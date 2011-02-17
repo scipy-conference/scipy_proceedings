@@ -528,7 +528,7 @@ with a dense matrix is supported, and matrix multiplication between sparse and
 dense is supported.
 
 Roughly 90\% of Ops for tensors have implementations for the GPU, notable
-exceptions being advanced indexing, scan, summation over certain combinations of
+exceptions being advanced indexing, summation over certain combinations of
 axes, and reductions max, min and prod.
 Our goal is extend coverage to all ops.
 
@@ -682,7 +682,9 @@ can be more difficult.
 
 We expect to improve support for advanced indexing and linear algebra in the
 coming months. Documentation online describes how to add new operations, 
-new type or new graph transformations.
+new type or new graph transformations. There are also experimental version
+of the scan operation, used for looping, for the GPU and an experimental lazy-evalution 
+enabled Theano.
 
 Also the library has been tuned towards expressions related to machine 
 learning with neural networks, and it was not as well tested outside 
