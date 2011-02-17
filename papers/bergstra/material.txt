@@ -125,11 +125,122 @@ of Python integers given in the example is internally converted to a ``numpy.nda
 of doubles, to match the declaration of variable ``a``.
 
 
-
-
-
 This section introduces basic usage of Theano, as well as
 This section describes a more involved example to illustrate some useful Theano features:
 *shared variables*, which make code more concise and make it easy to take advantage of an available GPU;
 automatic differentiation; and some graph transformations that bring numerical stability
 and speed improvements, even on a CPU.
+
+
+Cut from old logistic regression section
+----------------------------------------
+
+* (Guillaume says) I believe this would be better suited to the "What's in
+Theano - GPU" section.
+
+Theano manages the storage of these values. In particular, it stores
+single-precision dense *shared* tensors on the GPU by default when a GPU is
+available.  In such cases it uses a different Theano-specific data type for
+internal storage in place of the NumPy ``ndarray``.
+
+On a GPU, this means that a shared variable and its updated value can all reside
+on the device. Having both on the device can be
+important for performance, because it is slow to copy between the host and the GPU.
+
+* (Guillaume) This should go in the optimization section of "What's in Theano".
+We should try as much as possible to have the Theano concepts refer back to
+the logistic regression example.
+
+Theano applies some graph transformations to optimize the ``train`` and
+``predict`` functions for speed and numerical stability, when compiling them
+in Lines 22-25 and 26, respectively.  For example, in the ``predict``
+function, ``1/(1+exp(-u))`` is recognized as the logistic sigmoid function
+and replaced with an implementation that is faster for large positive and
+negative values of ``u``.  All the element-wise operations are fused
+together after the vector-matrix multiplication and compiled as a
+specialized C function with a single loop over the data.  In the ``train``
+function, Theano additionally recognizes ``log(sigmoid(u))`` and
+``log(1-sigmoid(u))`` as instances of the softplus function:
+``log1p(exp(u))``, for which Theano has an implementation that avoids a
+dangerous potential overflow.  When updating ``w`` with its new value,
+Theano also recognizes that a single call to the BLAS ``dgemv`` routine can
+implement the :math:`$\ell_2$`-regularization of ``w``, scale its gradient,
+and decrement ``w`` by its scaled gradient.
+
+
+SECTIONS REMOVED BY RAZVAN:
+---------------------------
+
+This section gives an overview the design of Theano.
+
+A Theano expression graph is a bi-partite directed acyclic graph.
+It is bi-partite because there are two kinds of nodes: *variable* nodes are the
+inputs to and outputs from *apply* nodes.
+A *variable* node represents input or an intermediate mathematical result.
+It has a *Type* (``.type``) that signals the sort of value the variable might take at
+runtime.
+An *apply* node represents the application of the *Op* (``.op``) to some input *variables* (``.inputs``) producing some output *variables* (``.outputs``).
+Figures 1 and 2 have been simplified for clarity.
+Technically there is an
+intermediate result for the output of the ``Elemwise{pow,no_inplace}``,
+and the variable nodes (box) and apply nodes (ellipse) are distinct from the
+Type and Op instances respectively (not shown) that give them meaning.
+
+
+Variables
+~~~~~~~~~~~~~~~~~~~
+
+Theano supports three kinds of variable nodes: *Variables*, *Constants*, and *Shared variables*. 
+*Variable* nodes (with a capital V) are the most common kind - a Variable is either found as a
+leaf of the graph (if it was created explicitly with a call like ``theano.tensor.vector()``),
+or as the output of an *apply* node (if it was defined by the application
+of an Op).
+In the latter case, the Variable will have a ``.owner`` attribute pointing to the *apply* node.
+``a`` and ``b`` in `Listing 1`_ are Variables (without ``.owner``).
+``p_1`` in `Listing 2`_ is also a Variable (with ``.owner``).
+``theano.function`` takes two arguments: the input list, which is a list of Variables; and the output value or list, which is a Variable or list of Variables.
+*Constant* nodes each have a ``.value`` attribute, which is the immutable (read-only) value of this variable.
+``10`` in `Listing 1`_ was converted to a Constant node.
+*Shared Variable* nodes have ``.get_value()`` and ``.set_value(new_val)`` methods that
+behave by default as if they are transfering from and to (respectively) Theano-managed
+memory. Sometimes this is done for consistency, and other times (like when a
+type conversion takes place, or the transfer requires moving data to or from a
+GPU) it is a necessary copy.
+This value can also be modified by calling a Theano function that was defined with ``updates``, like ``train`` in `Listing 2`_.
+
+Types
+~~~~~~~~~~~~~~~~~~~
+
+The important variable Types in Theano are:
+
+ * ``TensorType`` - 
+   denotes a ``numpy.ndarray`` with specific number of dimensions,
+   a record of which of these dimensions are broadcastable, and *dtype*. The dtype is the data types,
+   e.g. ``int32``, ``float64``, etc.
+
+ * ``SparseType`` -
+   denotes one of the ``csr`` or ``csc`` formats in ``scipy.sparse``.
+
+ * ``RandomStateType`` -
+   denotes a NumPy ``RandomState`` object. They are rarely used directly
+   by Theano user code. They are storage containers for the random
+   number generator.
+
+ * ``Generic`` -
+   denotes any Python value.
+   They are rarely used directly by Theano user code.
+   Generic Variables exist mainly for Ops to be able
+   to allocate workspace outputs.
+
+
+Theano types are often stricter
+than their NumPy/SciPy equivalents. For example,
+there are different versions of ``SparseType`` in Theano, which are specific
+to different encodings like ``csr`` or ``csc``. The Theano ``TensorType`` that 
+corresponds to a ``numpy.ndarray`` also specifies
+the number of dimensions (scalar=0, vector=1, etc.), which of them are
+broadcastable, and what *dtype* should be used. This information is used 
+when performing graph transformations.
+
+For *Shared Variables* and *Constants*, the type is inferred 
+automatically based on the value given during initialization.

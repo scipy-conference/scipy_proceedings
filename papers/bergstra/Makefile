@@ -4,8 +4,6 @@ paper:
 	pushd ../../; ./make_paper.sh papers/bergstra/; popd;
 
 figs:
-	enscript -B -C --color -E -p - logreg.py | ps2pdf - logreg.pdf
-	pdfcrop --margins '0 0 0 10' logreg.pdf logreg.pdf
 	enscript -B --line-numbers=1 --color -E -p - logreg1.py | ps2pdf - logreg1.pdf
 	pdfcrop --margins '0 0 0 10' logreg1.pdf logreg1.pdf
 	enscript -B --line-numbers=12 --color -E -p - logreg2.py | ps2pdf - logreg2.pdf
