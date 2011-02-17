@@ -483,7 +483,10 @@ in Theano. It also supports debugging and profiling functionalities.
                                 \tabularnewline
                            & 
                                 \tabularnewline
-    Sparse                 &    limited operator support, {\tt dot}
+    Sparse                 &    compressed row/col storage,
+                                limited operator support,
+                                {\tt dot}, {\tt transpose},
+                                conversion to/from dense
                                 \tabularnewline
     \hline
     \end{tabular}
