@@ -794,39 +794,3 @@ References
 .. [Ecu] P. L'Ecuyer, F. Blouin, and R. Couture,
          A Search for Good Multiple Recursive Generators,
          ACM Transactions on Modeling and Computer Simulation, 3:87-98, 1993. 
-
-TODO:
-
-* (Guillaume says) I believe this would be better suited to the "What's in
-  Theano - GPU" section.
-
-    Theano manages the storage of these values. In particular, it stores
-    single-precision dense *shared* tensors on the GPU by default when a GPU is
-    available.  In such cases it uses a different Theano-specific data type for
-    internal storage in place of the NumPy ``ndarray``.
-
-    On a GPU, this means that a shared variable and its updated value can all reside
-    on the device. Having both on the device can be
-    important for performance, because it is slow to copy between the host and the GPU.
-
-* (Guillaume) This should go in the optimization section of "What's in Theano".
-  We should try as much as possible to have the Theano concepts refer back to
-  the logistic regression example.
-
-    Theano applies some graph transformations to optimize the ``train`` and
-    ``predict`` functions for speed and numerical stability, when compiling them
-    in Lines 22-25 and 26, respectively.  For example, in the ``predict``
-    function, ``1/(1+exp(-u))`` is recognized as the logistic sigmoid function
-    and replaced with an implementation that is faster for large positive and
-    negative values of ``u``.  All the element-wise operations are fused
-    together after the vector-matrix multiplication and compiled as a
-    specialized C function with a single loop over the data.  In the ``train``
-    function, Theano additionally recognizes ``log(sigmoid(u))`` and
-    ``log(1-sigmoid(u))`` as instances of the softplus function:
-    ``log1p(exp(u))``, for which Theano has an implementation that avoids a
-    dangerous potential overflow.  When updating ``w`` with its new value,
-    Theano also recognizes that a single call to the BLAS ``dgemv`` routine can
-    implement the :math:`$\ell_2$`-regularization of ``w``, scale its gradient,
-    and decrement ``w`` by its scaled gradient.
-
-
