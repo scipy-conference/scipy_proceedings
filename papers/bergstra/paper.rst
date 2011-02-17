@@ -146,7 +146,7 @@ Case Study: Logistic Regression
 To get a sense of how Theano feels from a user's perspective,
 we will look at how to solve a binary logistic regression problem.
 Binary logistic regression is a classification model
-parametrized by a weight matrix :math:`W` and
+parameterized by a weight matrix :math:`W` and
 bias vector :math:`b`.
 The model estimates the probability
 :math:`$P(Y=1|x)$` (which we will denote with shorthand :math:`$p$`) that the input
