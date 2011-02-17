@@ -130,7 +130,7 @@ Section `Benchmarking Results`_ presents some results of performance
 benchmarking on problems related to machine learning and expression evaluation.
 Section `What's in Theano`_ gives an overview of the design of Theano.
 Section `Limitations and Future Work`_ outlines current limitations
-outlines planned future work.
+and planned future work.
 
 .. [#] http://groups.google.com/group/theano-announce
 .. [#] http://groups.google.com/group/theano-dev
