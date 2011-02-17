@@ -598,6 +598,7 @@ Ops) have such equivalents.  Reusing memory this way can improve speed
 by reducing cache misses and allowing more computations to fit on GPUs
 where memory is at a premium.
 
+.. verify with Fred
 
 Code Generators
 ~~~~~~~~~~~~~~~~
