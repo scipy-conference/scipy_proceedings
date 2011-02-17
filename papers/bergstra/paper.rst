@@ -160,14 +160,24 @@ The model estimates the probability
 
 The problem is to optimize the log probability of :math:`N` training examples,
 :math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`,
-with respect to :math:`W` and :math:`b`.
+with respect to :math:`W` and :math:`b`. To maximize the log likelihood we
+will instead minimize the (average) negative log likelihood [#]_:
+
+.. raw:: latex
+
+    \begin{equation}
+    \ell(W,b) = -\frac{1}{N}\sum_i ( y^{(i)} \log p^{(i)} + (1-y^{(i)}) \log (1 - p^{(i)}) )
+    \end{equation}
+
+.. [#] Taking the mean in this fashion decouples the choice of the regularization coefficient and the stochastic gradient step size from the number of training examples.
+
 To make it a bit more interesting, we can also include an
 :math:`$\ell_2$` penalty on :math:`$W$`, giving a cost function :math:`$E(W,b)$` defined as:
 
 .. raw:: latex
 
     \begin{equation}
-    E(W,b) = 0.01 \cdot ||W||^2 - \frac{1}{N} \sum_i ( y^{(i)} \cdot p^{(i)} + (1-y^{(i)}) \cdot (1 - p^{(i)}) )
+    E(W,b) = \ell(W, b) + \sum_i \sum_j w_{ij}^2
     \end{equation}
 
 In this example, tuning parameters :math:`W` and :math:`b` will be done through
