@@ -243,7 +243,7 @@ regression by thresholding :math:`$P(Y=1|x^{(i)})$`.
 The above code defines two Theano functions which are required to learn and
 test our logistic regression module. Theano functions are in their simplest
 form, callable objects which compute the value of certain nodes in the
-computation graph, given the necessary symbolic inputs. For example, the
+computation graph, given values for the symbolic inputs indicated. For example, the
 ``predict`` function computes the actual output of the logistic regression
 module (``prediction``). Since this value is a function of both ``x`` and ``y``,
 these are given as input to the function. Parameters ``w`` and ``b`` are passed
