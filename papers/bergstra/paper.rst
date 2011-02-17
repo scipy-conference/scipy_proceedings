@@ -677,8 +677,8 @@ small (see `Figure 5`_).
 The set of types and operations that Theano provides continues to grow, but it does not
 cover all the functionality of NumPy and covers only a few features of SciPy.
 Wrapping functions from these and other libraries is often straightforward,
-but implementing related graph transformations for optimize expression
-containing the operations, or implementing their gradients can be more difficult.
+but implementing their gradients or related graph transformations
+can be more difficult.
 
 We expect to improve support for advanced indexing and linear algebra in the
 coming months. Documentation online describes how to add new operations, 
