@@ -230,9 +230,8 @@ graph, applying the chain rule of differentiation and building symbolic
 expressions for the gradients on ``w`` and ``b``. As such, ``gw`` and ``gb`` are
 also symbolic Theano variables, representing :math:`$\partial E / \partial W$` 
 and :math:`$\partial E / \partial b$` respectively.
-
 Finally, line 18 defines the actual prediction (``prediction``) of the logistic
-regression by thresholding :math:`$P(Y=1|x^{(i)}) = 1$`.
+regression by thresholding :math:`$P(Y=1|x^{(i)})$`.
 
 
 .. raw:: latex
@@ -241,20 +240,32 @@ regression by thresholding :math:`$P(Y=1|x^{(i)}) = 1$`.
         \includegraphics[scale=.75]{logreg3.pdf}
     \end{figure}
 
-Lines 22-25 (``train = function...``) introduce the ``updates`` argument to ``function``.
-An update is an expression that will be computed by the function, like a return
-value, but the computed result is stored in a shared variable instead of returned to the caller.
-On a GPU, this means that a shared variable and its updated value can all reside
-on the device. Having both on the device can be
-important for performance, because it is slow to copy between the host and the GPU.
-Here we adjust ``w`` and ``b`` by their gradients, the direction that causes the cost to drop most sharply. This update step implements stochastic gradient descent.
+The above code defines two Theano functions which are required to learn and
+test our logistic regression module. Theano functions are in their simplest
+form, callable objects which compute the value of certain nodes in the
+computation graph, given the necessary symbolic inputs. For example, the
+``predict`` function computes the actual output of the logistic regression
+module (``prediction``). Since this value is a function of both ``x`` and ``y``,
+these are given as input to the function. Parameters ``w`` and ``b`` are passed
+implicitely, as is always the case with shared variables.
 
-Line 26 compiles a second function (``predict = function...``) from the same expression graph.
-This is a standard pattern when using Theano - we define one big
-expression graph that corresponds to some application domain, and then compile
-several functions from it to compute various sub-regions of the graph. Note that
-all these functions may read and write the states of the various shared variables,
-hence their name.
+``train`` highlights two other important features of Theano functions. Firstly,
+functions can compute multiple outputs. In this case, ``train`` computes both
+the prediction (``prediction``) of the classifier as well as the cross-entropy
+error function (``xent``). Computing both outputs together is computationally
+efficient since it allows for sharing of all intermediate computations.
+Secondly, the ``updates`` keyword argument enables functions to have
+side-effects. It is a dictionary whose (key,value) pairs encode an update
+to perform on a shared variable. This update is executed each time the
+associated function is called. In this example, calling the ``train`` function
+will also update the parameters ``w`` and ``b``, with the value obtained after a
+single step of gradient descent. The update on ``w`` thus corresponds to the
+expression 
+
+:math:`$W \leftarrow W - \mu \frac{1}{N'} \sum_i \left. \frac{\partial E(W,b,x,y)}{\partial W} \right |_{x=x^{(i)},y=y^{(i)}}$`,
+
+where :math:`$\mu=0.1$` is the learning rate and :math:`$N'$` the size of the
+minibatch (number of rows of ``x``).
 
 
 .. raw:: latex
@@ -263,28 +274,16 @@ hence their name.
         \includegraphics[scale=.75]{logreg4.pdf}
     \end{figure}
 
-Lines 28-30 randomly generate four training examples, each with 100 feature values. 
-(In practice, training examples would be inputs to the program.)
-Line 31-33 runs the ``train`` gradient update step, ten times.
-Lines 34-41 print some debug output.
-
-Theano applies some graph transformations to optimize the ``train`` and ``predict``
-functions for speed and numerical stability, when compiling them in Lines 22-25 and 26, respectively.
-For example, in the ``predict``
-function, ``1/(1+exp(-u))`` is recognized as the logistic sigmoid
-function and replaced with an implementation that is faster for large positive
-and negative values of ``u``.
-All the element-wise operations are fused together after
-the vector-matrix multiplication and compiled as a specialized C function with a
-single loop over the data.  
-In the ``train`` function, Theano additionally recognizes ``log(sigmoid(u))``
-and ``log(1-sigmoid(u))`` as instances of the softplus function:
-``log1p(exp(u))``, for which Theano has an implementation that avoids a
-dangerous potential overflow.
-When updating ``w`` with its new value, Theano also
-recognizes that a single call to the BLAS ``dgemv`` routine can implement the
-:math:`$\ell_2$`-regularization of ``w``, scale its gradient, 
-and decrement ``w`` by its scaled gradient.
+In this code-block, we finally show how Theano functions are used to perform the
+task at hand. We start by generating four random training examples: ``D[0]``
+is the input ``x`` and ``D[1]`` the labels we must learn to predict. We then
+loop (lines 30-31) ten times, calling the ``train`` function repeatedly with
+inputs ``x=D[0]`` and ``y=D[1]``. Notice that calling a Theano function is no
+more complicated then calling a standard Python function: the graph
+transformations, optimizations, compilation and calling of efficient C-functions
+(whether targeted for the CPU or GPU) are all done under the hood, in a way
+which is transparent to the user. Finally, we print the state of the model
+parameters and show that the model accurately predicts the training labels.
 
 
 
@@ -799,5 +798,29 @@ TODO:
     single-precision dense *shared* tensors on the GPU by default when a GPU is
     available.  In such cases it uses a different Theano-specific data type for
     internal storage in place of the NumPy ``ndarray``.
+
+    On a GPU, this means that a shared variable and its updated value can all reside
+    on the device. Having both on the device can be
+    important for performance, because it is slow to copy between the host and the GPU.
+
+* (Guillaume) This should go in the optimization section of "What's in Theano".
+  We should try as much as possible to have the Theano concepts refer back to
+  the logistic regression example.
+
+    Theano applies some graph transformations to optimize the ``train`` and
+    ``predict`` functions for speed and numerical stability, when compiling them
+    in Lines 22-25 and 26, respectively.  For example, in the ``predict``
+    function, ``1/(1+exp(-u))`` is recognized as the logistic sigmoid function
+    and replaced with an implementation that is faster for large positive and
+    negative values of ``u``.  All the element-wise operations are fused
+    together after the vector-matrix multiplication and compiled as a
+    specialized C function with a single loop over the data.  In the ``train``
+    function, Theano additionally recognizes ``log(sigmoid(u))`` and
+    ``log(1-sigmoid(u))`` as instances of the softplus function:
+    ``log1p(exp(u))``, for which Theano has an implementation that avoids a
+    dangerous potential overflow.  When updating ``w`` with its new value,
+    Theano also recognizes that a single call to the BLAS ``dgemv`` routine can
+    implement the :math:`$\ell_2$`-regularization of ``w``, scale its gradient,
+    and decrement ``w`` by its scaled gradient.
 
 
