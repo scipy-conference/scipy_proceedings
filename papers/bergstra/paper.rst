@@ -102,7 +102,7 @@ Once optimized, the graph can be used to generate CPU as well as GPU
 implementations ( the latter using CUDA) without requireing changes to 
 user code. 
 
-It is similar to [SymPy]_, in that both libraries manipulate symbolic
+Theano is similar to [SymPy]_, in that both libraries manipulate symbolic
 mathematical graphs, but the two projects have a distinctly different focus.
 While SymPy implements a richer set of mathematical operations of the kind
 expected in a modern computer algebra system, Theano focuses on fast, efficient
@@ -146,7 +146,7 @@ Case Study: Logistic Regression
 To get a sense of how Theano feels from a user's perspective,
 we will look at how to solve a binary logistic regression problem.
 Binary logistic regression is a classification model
-parametrized by a weight matrix :math:`W` and
+parameterized by a weight matrix :math:`W` and
 bias vector :math:`b`.
 The model estimates the probability
 :math:`$P(Y=1|x)$` (which we will denote with shorthand :math:`$p$`) that the input
@@ -160,14 +160,24 @@ The model estimates the probability
 
 The problem is to optimize the log probability of :math:`N` training examples,
 :math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`,
-with respect to :math:`W` and :math:`b`.
+with respect to :math:`W` and :math:`b`. To maximize the log likelihood we
+will instead minimize the (average) negative log likelihood [#]_:
+
+.. raw:: latex
+
+    \begin{equation}
+    \ell(W,b) = -\frac{1}{N}\sum_i ( y^{(i)} \log p^{(i)} + (1-y^{(i)}) \log (1 - p^{(i)}) )
+    \end{equation}
+
+.. [#] Taking the mean in this fashion decouples the choice of the regularization coefficient and the stochastic gradient step size from the number of training examples.
+
 To make it a bit more interesting, we can also include an
 :math:`$\ell_2$` penalty on :math:`$W$`, giving a cost function :math:`$E(W,b)$` defined as:
 
 .. raw:: latex
 
     \begin{equation}
-    E(W,b) = 0.01 \cdot ||W||^2 - \frac{1}{N} \sum_i ( y^{(i)} \cdot p^{(i)} + (1-y^{(i)}) \cdot (1 - p^{(i)}) )
+    E(W,b) = \ell(W, b) + \sum_i \sum_j w_{ij}^2
     \end{equation}
 
 In this example, tuning parameters :math:`W` and :math:`b` will be done through
@@ -406,8 +416,8 @@ each expression.
 What's in Theano?
 -----------------
 
-Theano supports tensor variables of different dimensions,
-from scalar to n-dimensional tensors, and types (int, 
+Theano supports arrays of different dimensions 
+(from scalar to n-dimensional tensors) and types (int, 
 single-precision floats, double-precision floats etc.) as 
 well as random streams of numbers ( much as Numpy does). 
 There is also limited support for sparse matrices and 
@@ -528,7 +538,7 @@ with a dense matrix is supported, and matrix multiplication between sparse and
 dense is supported.
 
 Roughly 90\% of Ops for tensors have implementations for the GPU, notable
-exceptions being advanced indexing, scan, summation over certain combinations of
+exceptions being advanced indexing, summation over certain combinations of
 axes, and reductions max, min and prod.
 Our goal is extend coverage to all ops.
 
@@ -662,19 +672,12 @@ Limitations and Future Work
 ---------------------------
 
 While most of the development effort went into making Theano produce fast code,
-not as much went into optimizing the compilation process itself. Therefore 
-compiling a symbolic graph can take up to a few seconds (especially when it
-must compile freshly-generated C code). This is not the case for libraries
-such as NumPy and SciPy whose functions have already been compile. Theano
-is therefore suited to applications where a function will be called enough times
-that the compilation overhead is negligible. 
-Unoptimal compilation can have other repercursions. For example we have
-only used the library with graphs of ten to thousands of nodes,
-which is sufficient for many algorithms. The time spent on applying graph
-transformations tends to grow super-linearly with the size
-of the expression graph. Beyond a few thousand nodes, Theano's optimization
-algorithm can be impractically slow, unless you disable some of the more
-expensive optimizations, or compile pieces of the graph separately.
+not as much went into optimizing the compilation process itself, thus 
+the compilation time tends to grow super-linearly with the size of 
+the expression graph. Theano can deal with graphs up to a few thousand
+nodes, with compilation times typically in the range of seconds. Beyond 
+that, it can be impractically slow, unless you disable some of the more 
+expensive optimizations, or compile pieces of the graph separately. 
 
 A Theano function call also requires more overhead (on the order of microseconds)
 than a native Python function call. For this reason, Theano is suited to
@@ -684,15 +687,17 @@ small (see `Figure 5`_).
 The set of types and operations that Theano provides continues to grow, but it does not
 cover all the functionality of NumPy and covers only a few features of SciPy.
 Wrapping functions from these and other libraries is often straightforward,
-but implementing related graph transformations for optimize expression
-containing the operations, or implementing their gradients can be more difficult.
+but implementing their gradients or related graph transformations
+can be more difficult.
 
 We expect to improve support for advanced indexing and linear algebra in the
 coming months. Documentation online describes how to add new operations, 
-new type or new graph transformations.
+new type or new graph transformations. There are also experimental version
+of the scan operation, used for looping, for the GPU and an experimental lazy-evalution 
+enabled Theano.
 
 Also the library has been tuned towards expressions related to machine 
-learning with neural netowrks, and it was not as well tested outside 
+learning with neural networks, and it was not as well tested outside 
 thist domain. Theano is not a powerful computer algebra system, and 
 it is an important area of future work to improve its ability to recognize
 numerical instability in complicated elementwise expression graphs.
