@@ -416,8 +416,8 @@ each expression.
 What's in Theano?
 -----------------
 
-Theano supports tensor variables of different dimensions,
-from scalar to n-dimensional tensors, and types (int, 
+Theano supports arrays of different dimensions 
+(from scalar to n-dimensional tensors) and types (int, 
 single-precision floats, double-precision floats etc.) as 
 well as random streams of numbers ( much as Numpy does). 
 There is also limited support for sparse matrices and 
