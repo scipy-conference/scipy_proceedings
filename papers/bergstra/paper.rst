@@ -289,7 +289,7 @@ task at hand. We start by generating four random training examples: ``D[0]``
 is the input ``x`` and ``D[1]`` the labels we must learn to predict. We then
 loop (lines 30-31) ten times, calling the ``train`` function repeatedly with
 inputs ``x=D[0]`` and ``y=D[1]``. Notice that calling a Theano function is no
-more complicated then calling a standard Python function: the graph
+more complicated than calling a standard Python function: the graph
 transformations, optimizations, compilation and calling of efficient C-functions
 (whether targeted for the CPU or GPU) are all done under the hood, in a way
 which is transparent to the user. Finally, we print the state of the model
@@ -419,7 +419,7 @@ What's in Theano?
 Theano supports arrays of different dimensions 
 (from scalar to n-dimensional tensors) and types (int, 
 single-precision floats, double-precision floats etc.) as 
-well as random streams of numbers ( much as Numpy does). 
+well as random streams of numbers (much as Numpy does). 
 There is also limited support for sparse matrices and 
 generic objects. `Table 1`_ presents 
 a comprehensive list of operations that you would find 
@@ -459,7 +459,7 @@ in Theano. It also supports debugging and profiling functionalities.
                            &  
                                 \tabularnewline
     Tensor \newline Operations      &    {\tt all}, {\tt any}, {\tt mean}, {\tt sum}, {\tt min}, {\tt max}, 
-                                {\tt var}, {\tt prod}, {\tt argmin} , {\tt argmax}
+                                {\tt var}, {\tt prod}, {\tt argmin}, {\tt argmax},
                                 {\tt reshape}, {\tt flatten},
                                 {\tt dimshuffle}
                                 \tabularnewline
@@ -649,7 +649,6 @@ The heuristic that guides GPU allocation is simple:
 if any input or output of an expression resides on the GPU and the expression
 has a GPU equivalent, then we replace it.
 How does this chain reaction get started?
-.. mentioned already in another section
 Shared variables storing float32 tensors default to GPU storage,
 and the expressions derived from them consequently default to using GPU
 implementations.
@@ -693,7 +692,7 @@ can be more difficult.
 We expect to improve support for advanced indexing and linear algebra in the
 coming months. Documentation online describes how to add new operations, 
 new type or new graph transformations. There are also experimental version
-of the scan operation, used for looping, for the GPU and an experimental lazy-evalution 
+of the scan operation, used for looping, for the GPU and an experimental lazy-evaluation 
 enabled Theano.
 
 Also the library has been tuned towards expressions related to machine 
