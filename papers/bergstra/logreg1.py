@@ -4,7 +4,7 @@ from theano import shared, function
 
 # 1. Declare Theano variables
 x = T.matrix()
-y = T.ivector()
+y = T.lvector()
 w = shared(numpy.random.randn(100))
 b = shared(numpy.zeros(()))
 print "Initial model:"
