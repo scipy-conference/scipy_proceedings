@@ -28,6 +28,8 @@ class Translator(LaTeXTranslator):
     paper_title = ''
     table_caption = []
 
+    abstract_in_progress = False
+
     def visit_docinfo(self, node):
         pass
 
@@ -109,8 +111,13 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         LaTeXTranslator.visit_title(self, node)
 
     def visit_paragraph(self, node):
-        if 'abstract' in node['classes']:
+        if 'abstract' not in node['classes'] and self.abstract_in_progress:
+            self.out.append('\\end{abstract}')
+            self.abstract_in_progress = False
+
+        if 'abstract' in node['classes'] and not self.abstract_in_progress:
             self.out.append('\\begin{abstract}')
+            self.abstract_in_progress = True
 
         elif 'keywords' in node['classes']:
             self.out.append('\\begin{IEEEkeywords}')
@@ -119,9 +126,6 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
             self.out.append('\n\n')
 
     def depart_paragraph(self, node):
-        if 'abstract' in node['classes']:
-            self.out.append('\\end{abstract}')
-
         if 'keywords' in node['classes']:
             self.out.append('\\end{IEEEkeywords}')
 
