@@ -749,13 +749,10 @@ References
 
 .. [theano] Theano, http://www.deeplearning.net/software/theano
 
-.. [NumPy] D. Ascher et al., Numerical Python, tech. report UCRL-MA-128569, 
-           Lawrence Livermore National Laboratory, 2001, 
-           http://numpy.scipy.org
+.. [NumPy] T. E. Oliphant, Python for Scientific Computing, 
+           Computing in Science & Engineering 9, 10 (2007).
 
-.. [numexpr] D. Cooke et al., 
-             numexpr, 
-             http://code.google.com/p/numexpr/
+.. [numexpr] D. Cooke et al., numexpr, http://code.google.com/p/numexpr/
 
 .. [Cython] S. Behnel, R. Bradshaw, and D. S. Seljebotn, 
             Cython C-Extensions for Python,
