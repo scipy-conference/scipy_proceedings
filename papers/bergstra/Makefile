@@ -1,7 +1,7 @@
 all: paper figs
 
 paper:
-	pushd ../../; make_paper.sh papers/bergstra/; popd;
+	pushd ../../; ./make_paper.sh papers/bergstra/; popd;
 
 figs:
 	enscript -B -C --color -E -p - logreg.py | ps2pdf - logreg.pdf

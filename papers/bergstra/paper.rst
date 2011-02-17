@@ -130,7 +130,7 @@ Section `Benchmarking Results`_ presents some results of performance
 benchmarking on problems related to machine learning and expression evaluation.
 Section `What's in Theano`_ gives an overview of the design of Theano.
 Section `Limitations and Future Work`_ outlines current limitations
-outlines planned future work.
+and planned future work.
 
 .. [#] http://groups.google.com/group/theano-announce
 .. [#] http://groups.google.com/group/theano-dev
@@ -243,7 +243,7 @@ regression by thresholding :math:`$P(Y=1|x^{(i)})$`.
 The above code defines two Theano functions which are required to learn and
 test our logistic regression module. Theano functions are in their simplest
 form, callable objects which compute the value of certain nodes in the
-computation graph, given the necessary symbolic inputs. For example, the
+computation graph, given values for the symbolic inputs indicated. For example, the
 ``predict`` function computes the actual output of the logistic regression
 module (``prediction``). Since this value is a function of both ``x`` and ``y``,
 these are given as input to the function. Parameters ``w`` and ``b`` are passed
@@ -442,13 +442,13 @@ in Theano. It also supports debugging and profiling functionalities.
                                 \tabularnewline
                            & 
                                 \tabularnewline
-    Math. Functions        &    {\tt exp}, {\tt log}, {\tt tan[h]}, {\tt cos[h]}, {\tt sin[h]}, 
+    Mathematical \newline Functions        &    {\tt exp}, {\tt log}, {\tt tan[h]}, {\tt cos[h]}, {\tt sin[h]}, 
                                 {\tt real}, {\tt imag}, {\tt sqrt}, {\tt floor}, {\tt ceil}, 
                                 {\tt round}, {\tt abs}
                                 \tabularnewline
                            &  
                                 \tabularnewline
-    Tensor Operations      &    {\tt all}, {\tt any}, {\tt mean}, {\tt sum}, {\tt min}, {\tt max}, 
+    Tensor \newline Operations      &    {\tt all}, {\tt any}, {\tt mean}, {\tt sum}, {\tt min}, {\tt max}, 
                                 {\tt var}, {\tt prod}, {\tt argmin} , {\tt argmax}
                                 {\tt reshape}, {\tt flatten},
                                 {\tt dimshuffle}
@@ -471,7 +471,7 @@ in Theano. It also supports debugging and profiling functionalities.
                                 \tabularnewline
                            &
                                 \tabularnewline
-    Signal Processing      &    {\tt conv2d}, {\tt FFT}, {\tt max\_pool\_2d}
+    Signal \newline Processing      &    {\tt conv2d}, {\tt FFT}, {\tt max\_pool\_2d}
                                 \tabularnewline
                            &
                                 \tabularnewline
@@ -483,7 +483,10 @@ in Theano. It also supports debugging and profiling functionalities.
                                 \tabularnewline
                            & 
                                 \tabularnewline
-    Sparse                 &    limited operator support, {\tt dot}
+    Sparse                 &    compressed row/col storage,
+                                limited operator support,
+                                {\tt dot}, {\tt transpose},
+                                conversion to/from dense
                                 \tabularnewline
     \hline
     \end{tabular}
@@ -595,6 +598,7 @@ Ops) have such equivalents.  Reusing memory this way can improve speed
 by reducing cache misses and allowing more computations to fit on GPUs
 where memory is at a premium.
 
+.. verify with Fred
 
 Code Generators
 ~~~~~~~~~~~~~~~~
@@ -745,13 +749,10 @@ References
 
 .. [theano] Theano, http://www.deeplearning.net/software/theano
 
-.. [NumPy] D. Ascher et al., Numerical Python, tech. report UCRL-MA-128569, 
-           Lawrence Livermore National Laboratory, 2001, 
-           http://numpy.scipy.org
+.. [NumPy] T. E. Oliphant, Python for Scientific Computing, 
+           Computing in Science & Engineering 9, 10 (2007).
 
-.. [numexpr] D. Cooke et al., 
-             numexpr, 
-             http://code.google.com/p/numexpr/
+.. [numexpr] D. Cooke et al., numexpr, http://code.google.com/p/numexpr/
 
 .. [Cython] S. Behnel, R. Bradshaw, and D. S. Seljebotn, 
             Cython C-Extensions for Python,
