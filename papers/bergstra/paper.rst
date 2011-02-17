@@ -665,7 +665,7 @@ While most of the development effort went into making Theano produce fast code,
 not as much went into optimizing the compilation process itself. Therefore 
 compiling a symbolic graph can take up to a few seconds (especially when it
 must compile freshly-generated C code). This is not the case for libraries
-such as NumPy and SciPy whose functions have already been compile. Theano
+such as NumPy and SciPy whose functions have already been compiled. Theano
 is therefore suited to applications where a function will be called enough times
 that the compilation overhead is negligible. 
 Unoptimal compilation can have other repercursions. For example we have
