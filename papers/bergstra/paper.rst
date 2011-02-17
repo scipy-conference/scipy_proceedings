@@ -692,7 +692,7 @@ coming months. Documentation online describes how to add new operations,
 new type or new graph transformations.
 
 Also the library has been tuned towards expressions related to machine 
-learning with neural netowrks, and it was not as well tested outside 
+learning with neural networks, and it was not as well tested outside 
 thist domain. Theano is not a powerful computer algebra system, and 
 it is an important area of future work to improve its ability to recognize
 numerical instability in complicated elementwise expression graphs.
