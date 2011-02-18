@@ -147,11 +147,11 @@ Case Study: Logistic Regression
 To get a sense of how Theano feels from a user's perspective,
 we will look at how to solve a binary logistic regression problem.
 Binary logistic regression is a classification model
-parameterized by a weight matrix :math:`W` and
-bias vector :math:`b`.
+parameterized by a weight matrix :math:`$W$` and
+bias vector :math:`$b$`.
 The model estimates the probability
 :math:`$P(Y=1|x)$` (which we will denote with shorthand :math:`$p$`) that the input
-`x` belongs to class `y=1` as:
+`x` belongs to class `$y=1$` as:
 
 .. raw:: latex
 
@@ -159,7 +159,7 @@ The model estimates the probability
     P(Y=1|x^{(i)}) = p^{(i)} = \frac {e^{W x^{(i)} + b}} {1 +  e^{Wx^{(i)} + b}}
     \end{equation}
 
-The problem is to optimize the log probability of :math:`N` training examples,
+The problem is to optimize the log probability of :math:`$N$` training examples,
 :math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`,
 with respect to :math:`W` and :math:`b`. To maximize the log likelihood we
 will instead minimize the (average) negative log likelihood [#]_:
