@@ -345,18 +345,17 @@ interoperate normally with other scientific python libraries and tools.
 Benchmarking Results
 --------------------
 
-Theano started as a library for easing rapid development of complex machine 
-learning algorithms. This section presents performance in two tasks from that
+Theano was developed to simplify the implementation of complex high-performance machine
+learning algorithms. This section presents performance in two
+processor-intensive tasks from that
 domain: training a multi-layer perceptron (MLP) and training a convolutional
-network. More extensive benchmarks are forthcoming, and will be posted on our
-website [theano]_.
-
+network.
 We chose these architectures because of their popularity in the machine learning
 community and their different computational demands. Large matrix-matrix
-multiplications dominate in the MLP example while two-dimensional image
+multiplications dominate in the MLP example and two-dimensional image
 convolutions with small kernels dominate the convolutional network.
-More information about these models and their learning algorithms is available 
-from the Deep Learning Tutorials [DLT]_. 
+More information about these models and their learning algorithms is available
+from the Deep Learning Tutorials [DLT]_.
 The implementations used in these benchmarks are available online [dlb]_.
 
 CPU timing was carried out on an
