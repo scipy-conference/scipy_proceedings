@@ -219,8 +219,8 @@ Implementing this minimization procedure in
 Theano involves the following four conceptual steps:
 (1) declaring symbolic variables,
 (2) using these variables to build a symbolic expression graph,
-(3) compiling a Theano function, and
-(4) calling said function to perform numerical computations.
+(3) compiling Theano functions, and
+(4) calling said functions to perform numerical computations.
 The code listings in Figures `1 <logreg1>`_ - `4 <logreg4>`_ illustrate these steps
 with a working program that fits a logistic regression model to random
 data.
