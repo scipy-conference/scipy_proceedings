@@ -181,9 +181,22 @@ To make it a bit more interesting, we can also include an
     E(W,b) = \ell(W, b) + 0.01 \sum_i \sum_j w_{ij}^2
     \end{equation}
 
-In this example, tuning parameters :math:`W` and :math:`b` will be done through
-stochastic gradient descent (SGD) of :math:`$E(W,b)$`, even though more sophisticated
-algorithms could also be used. Implementing this minimization procedure in
+In this example, tuning parameters :math:`$W$` and :math:`$b$` will be done through
+stochastic gradient descent (SGD) on :math:`$E(W, b)$`. Stochastic gradient
+descent is a method for minimizing a differentiable loss function that is the
+expectation of some per-example loss over a set of training examples. SGD
+estimates this expectation with an average over one or several examples and
+performs a step in the approximate direction of steepest descent.  Though more
+sophisticated algorithms for numerical optimization exist, in particular for
+smooth convex functions such as :math:`$E(W, b)$`, stochastic gradient descent
+remains the method of choice when the number of training examples is too large
+to fit in memory, or in the setting where training examples arrive in a
+continuous stream. Even with relatively manageable dataset sizes, SGD can be
+particularly advantageous for non-convex loss functions (such as those explored
+in `Benchmarking Results`_), where the stochasticity can allow the optimizer to
+escape shallow local minima [Bottou].
+
+Implementing this minimization procedure in
 Theano involves the following four conceptual steps:
 (1) declaring symbolic variables,
 (2) using these variables to build a symbolic expression graph,
