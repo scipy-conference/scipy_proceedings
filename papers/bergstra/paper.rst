@@ -167,7 +167,7 @@ will instead minimize the (average) negative log likelihood [#]_:
 .. raw:: latex
 
     \begin{equation}
-    \ell(W,b) = -\frac{1}{N}\sum_i ( y^{(i)} \log p^{(i)} + (1-y^{(i)}) \log (1 - p^{(i)}) )
+    \ell(W,b) = -\frac{1}{N}\sum_i y^{(i)} \log p^{(i)} + (1-y^{(i)}) \log (1 - p^{(i)})
     \end{equation}
 
 .. [#] Taking the mean in this fashion decouples the choice of the regularization coefficient and the stochastic gradient step size from the number of training examples.
