@@ -233,6 +233,7 @@ A shared variable's value is maintained
 throughout the execution of the program and
 can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
 
+.. _logreg2:
 .. raw:: latex
 
     \begin{figure}[H]
@@ -261,6 +262,7 @@ Finally, line 18 defines the actual prediction (``prediction``) of the logistic
 regression by thresholding :math:`$P(Y=1|x^{(i)})$`.
 
 
+.. _logreg3:
 .. raw:: latex
 
     \begin{figure}[H]
@@ -278,7 +280,7 @@ these are given as input to the function. Parameters ``w`` and ``b`` are passed
 implicitly - all shared variables are available as inputs to all functions as
 a convenience to the user.
 
-Line 16 which creates the ``train`` function highlights two other important
+Line 16 (Figure `logreg3`_) which creates the ``train`` function highlights two other important
 features of Theano functions: the potential for multiple outputs and updates.
 In our example, ``train`` computes both
 the prediction (``prediction``) of the classifier as well as the cross-entropy
