@@ -81,10 +81,10 @@ use within Python programs. However, the composition of many such NumPy function
 can be unnecessarily slow when each call is dominated by the cost of transferring
 memory rather than the cost of performing calculations [Alted]_.
 [numexpr]_ goes one step further by providing a loop fusion optimization
-that can glue several elementwise computations together.
+that can glue several element-wise computations together.
 Unfortunately, numexpr requires an unusual (the expression
 must be encoded as a string within the code), and at the time of this writing,
-numexpr is limited to optimizing elementwise computations.  [Cython]_ and
+numexpr is limited to optimizing element-wise computations.  [Cython]_ and
 [scipy.weave]_ address Python's performance issue by offering a simple way to
 hand-write crucial segments of code in C (or a dialect of Python which can be
 easily compiled to C, in Cython's case). While this approach can yield
@@ -375,7 +375,7 @@ Each implementation repeatedly carried out the following steps:
 (4) classify the result using a multi-class generalization of logistic regression,
 (5) compute the gradient by performing similar calculations but in reverse, and finally
 (6) add the gradients to the parameters.
-This program tests the use of BLAS routines and elementwise computations.
+This program stresses element-wise computations and the use of BLAS routines.
 
 .. _Figure 3:
 .. _Benchmark1:
@@ -447,7 +447,7 @@ each expression.
     :scale: 100
 
     Speed comparison between NumPy,
-    numexpr, and Theano for different sizes of input on four elementwise
+    numexpr, and Theano for different sizes of input on four element-wise
     formulae.  In each subplot, the solid blue line represents Theano, the
     dashed red line represent numexpr, and performance is plotted with respect
     to NumPy.
@@ -575,7 +575,7 @@ There is a narrower range of Ops that work on SparseType Variables: packing and
 unpacking of compressed sparse row/column
 sparse matrices into dense variables is supported,
 as is conversion between sparse and dense matrices.  Transpose, negation,
-addition, and subtraction are supported.  Scalar and elementwise multiplication
+addition, and subtraction are supported.  Scalar and element-wise multiplication
 with a dense matrix is supported, and matrix multiplication between sparse and
 dense is supported.
 
@@ -645,7 +645,7 @@ are introduced where needed.
 
 Lastly, Theano replaces Ops with equivalents that reuse the memory of
 their inputs (which means, as a side effect, that no subsequent Ops
-may use the original values). Many Ops (e.g. GEMM and all elementwise
+may use the original values). Many Ops (e.g. GEMM and all element-wise
 Ops) have such equivalents.  Reusing memory this way can improve speed
 by reducing cache misses and allowing more computations to fit on GPUs
 where memory is at a premium.
@@ -658,7 +658,7 @@ Code Generators
 
 Many (roughly 80%) of Theano's Ops generate and compile C or CUDA code during
 ``theano.function``.
-The majority of Ops (such as all elementwise Ops and ``Sum``) that generate C code specialize the code based on the dtype and
+The majority of Ops (such as all element-wise Ops and ``Sum``) that generate C code specialize the code based on the dtype and
 number of dimensions of their arguments.
 Some Ops, such as the small-filter convolution (``conv2d``), further specialize code based on
 the size the arguments will have.
@@ -741,7 +741,7 @@ Also the library has been tuned towards expressions related to machine
 learning with neural networks, and it was not as well tested outside 
 thist domain. Theano is not a powerful computer algebra system, and 
 it is an important area of future work to improve its ability to recognize
-numerical instability in complicated elementwise expression graphs.
+numerical instability in complicated element-wise expression graphs.
 
 Debugging Theano functions can require non-standard techniques and
 Theano-specific tools.  The reason is two-fold: 1) definition
