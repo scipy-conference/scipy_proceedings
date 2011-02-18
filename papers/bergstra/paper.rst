@@ -757,7 +757,6 @@ especially:
 Arnaud Bergeron, Thierry Bertin-Mahieux, Olivier Delalleau, 
 Douglas Eck, Dumitru Erhan, Philippe Hamel, Simon Lemieux,
 Pierre-Antoine Manzagol, and François Savard.
-David Warde-Farley contributed to the preparation of this paper.
 The authors acknowledge the support of the following agencies for
 research funding and computing support: NSERC, RQCHP, CIFAR, SHARCNET and CLUMEQ.
 
