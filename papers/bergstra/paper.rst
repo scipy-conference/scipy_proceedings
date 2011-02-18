@@ -212,7 +212,7 @@ The ``shared()`` function creates *shared variables* for :math:`$W$` and :math:`
 Shared variables are similar to standard Theano variables, but differ in that
 they have a persistent state. As we will see shortly, any Theano function can
 operate directly on these shared variables, without having to declare them
-explicitely as an input.
+explicitly as an input.
 A shared variable's value is maintained
 throughout the execution of the program and
 can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
@@ -257,7 +257,7 @@ computation graph, given values for the symbolic inputs indicated. For example, 
 ``predict`` function computes the actual output of the logistic regression
 module (``prediction``). Since this value is a function of both ``x`` and ``y``,
 these are given as input to the function. Parameters ``w`` and ``b`` are passed
-implicitely, as is always the case with shared variables.
+implicitly, as is always the case with shared variables.
 
 ``train`` highlights two other important features of Theano functions. Firstly,
 functions can compute multiple outputs. In this case, ``train`` computes both
