@@ -252,7 +252,7 @@ as the symbolic variable ``p_1``. Notice that the matrix multiplication and elem
 functions are simply called via the ``T.dot`` and ``T.exp`` functions,
 analoguous to ``numpy.dot`` and ``numpy.exp``. ``xent`` defines the
 cross-entropy loss function, which is then combined with the :math:`$\ell_2$`
-penalty on line 15, to form the cost function of Eq (2) and denoted by ``cost``.
+penalty on line 15, to form the cost function of Eq (3) and denoted by ``cost``.
 
 Line 16 is crucial to our implementation of SGD, as it performs symbolic
 differentiation of the scalar-valued ``cost`` variable with respect to variables
