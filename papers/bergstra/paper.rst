@@ -92,16 +92,15 @@ significant improvements, if the bottleneck of a program is a large
 mathematical expression comprising hundreds of elementary operations, manual
 optimization of the math can be time-consuming and error-prone when compared
 with an automated approach.
- 
-Theano on the other hand works on a symbolic representation of the
-mathematical expressions, provided by the user through NumPy-like syntax.
-Having access to a computational graph, Theano can
-provide symbolic differentiation of complex expressions, but more
-importantly, it can perform local graph transformations that corrects
-many unnecessary, slow or numerically unstable expression patterns.
-Once optimized, the graph can be used to generate CPU as well as GPU 
-implementations (the latter using CUDA) without requiring changes to 
-user code. 
+
+Theano, on the other hand, works on a symbolic representation of mathematical
+expressions, provided by the user in a NumPy-like syntax.  Access to the full
+computational graph of an expression opens the door to advanced features such
+as symbolic differentiation of complex expressions, but more importantly allows
+Theano to perform local graph transformations that can correct many unnecessary,
+slow or numerically unstable expression patterns.  Once optimized, the same
+graph can be used to generate CPU as well as GPU implementations (the latter
+using CUDA) without requiring changes to user code.
 
 Theano is similar to [SymPy]_, in that both libraries manipulate symbolic
 mathematical graphs, but the two projects have a distinctly different focus.
