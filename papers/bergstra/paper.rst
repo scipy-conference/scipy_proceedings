@@ -124,12 +124,12 @@ All Theano users should subscribe to the
 and `user support <http://groups.google.com/group/theano-users>`_ [#]_.
 
 This paper is divided as follows:
-Section `Case Study: Logistic Regression`_ shows how Theano can be used to solve
+`Case Study: Logistic Regression`_ shows how Theano can be used to solve
 a simple problem in statistical prediction.
-Section `Benchmarking Results`_ presents some results of performance
+`Benchmarking Results`_ presents some results of performance
 benchmarking on problems related to machine learning and expression evaluation.
-Section `What's in Theano`_ gives an overview of the design of Theano.
-Section `Limitations and Future Work`_ outlines current limitations
+`What's in Theano`_ gives an overview of the design of Theano.
+`Limitations and Future Work`_ outlines current limitations
 and planned future work.
 
 .. [#] http://groups.google.com/group/theano-announce
