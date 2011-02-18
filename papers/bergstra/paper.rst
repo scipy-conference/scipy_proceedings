@@ -195,7 +195,8 @@ We will now step through each of these sections in more detail.
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics[scale=.75,clip=true,trim=30 630 170 42]{logreg1.pdf}
+        \includegraphics[scale=.75,clip=true,trim=30 640 170 42]{logreg1.pdf}
+        \caption{Logistic regression part 1: declaring variables.}
     \end{figure}
 
 In the above code, we declare two symbolic variables ``x`` and ``y`` which will
@@ -222,7 +223,8 @@ can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics[scale=.75,clip=true,trim=30 685 170 42]{logreg2.pdf}
+        \includegraphics[scale=.75,clip=true,trim=30 695 170 42]{logreg2.pdf}
+        \caption{Logistic regression part 2: the computation graph.}
     \end{figure}
 
 The above code-block specifies the computational graph required to perform
@@ -249,7 +251,8 @@ regression by thresholding :math:`$P(Y=1|x^{(i)})$`.
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics[scale=.75,clip=true,trim=30 686 170 42]{logreg3.pdf}
+        \includegraphics[scale=.75,clip=true,trim=30 696 170 42]{logreg3.pdf}
+        \caption{Logistic regression part 3: compilation.}
     \end{figure}
 
 The above code defines two Theano functions which are required to learn and
@@ -283,7 +286,8 @@ minibatch (number of rows of ``x``).
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics[scale=.75,clip=true,trim=30 570 170 42]{logreg4.pdf}
+        \includegraphics[scale=.75,clip=true,trim=30 630 170 42]{logreg4.pdf}
+        \caption{Logistic regression part 3: computation.}
     \end{figure}
 
 In this code-block, we finally show how Theano functions are used to perform the

@@ -2,7 +2,6 @@ import numpy
 import theano.tensor as T
 from theano import shared, function
 
-# 1. Declare Theano variables
 x = T.matrix()
 y = T.lvector()
 w = shared(numpy.random.randn(100))
