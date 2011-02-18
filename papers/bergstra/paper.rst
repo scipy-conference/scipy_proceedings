@@ -1,38 +1,38 @@
 :author: James Bergstra
 :email: james.bergstra@umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: Olivier Breuleux
 :email: breuleuo@iro.umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: Frédéric Bastien
 :email: bastienf@iro.umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: Pascal Lamblin
 :email: lamblinp@iro.umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: Razvan Pascanu
 :email: pascanur@iro.umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: Guillaume Desjardins
 :email: desjagui@iro.umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: Joseph Turian
 :email: turian@iro.umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: David Warde-Farley
 :email: wardefar@iro.umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: Yoshua Bengio
 :email: yoshua.bengio@umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 --------------------------------------------------------------------
 Theano: A CPU and GPU Math Compiler in Python
@@ -116,7 +116,7 @@ leverage ``scipy.weave``, PyCUDA, Cython, and other
 numerical libraries and compilation technologies at the user's discretion. Theano has been actively and
 continuously developed and used since January 2008.
 It has been used in the preparation of numerous scientific papers and as a teaching platform for machine
-learning in graduate courses at the Université de Montréal.
+learning in graduate courses at l'Université de Montréal.
 Documentation and installation instructions can be found on Theano's website [theano]_.
 All Theano users should subscribe to the
 `announce <http://groups.google.com/group/theano-announce>`_ [#]_ mailing list
@@ -757,15 +757,14 @@ GPU implementations as well.
 Acknowledgements
 ----------------
 
-Theano has benefited from the contributions of many members
-of Yoshua Bengio's machine learning group in the computer science department
-(Informatique) at the University of Montreal,
-especially: 
-Arnaud Bergeron, Thierry Bertin-Mahieux, Olivier Delalleau, 
-Douglas Eck, Dumitru Erhan, Philippe Hamel, Simon Lemieux,
-Pierre-Antoine Manzagol, and François Savard.
-The authors acknowledge the support of the following agencies for
-research funding and computing support: NSERC, RQCHP, CIFAR, SHARCNET and CLUMEQ.
+Theano has benefited from the contributions of many members of Yoshua Bengio's
+machine learning group in the computer science department (Départment
+d'Informatique et de Recherche Operationelle) at l'Université de Montréal,
+especially Arnaud Bergeron, Thierry Bertin-Mahieux, Olivier Delalleau, Douglas
+Eck, Dumitru Erhan, Philippe Hamel, Simon Lemieux, Pierre-Antoine Manzagol, and
+François Savard. The authors acknowledge the support of the following agencies
+for research funding and computing support: NSERC, RQCHP, CIFAR, SHARCNET and
+CLUMEQ.
 
 References
 ----------
