@@ -6,7 +6,7 @@
 :email: breuleuo@iro.umontreal.ca
 :institution: University of Montreal
 
-:author: Frederic Bastien
+:author: Frédéric Bastien
 :email: bastienf@iro.umontreal.ca
 :institution: University of Montreal
 
