@@ -73,10 +73,22 @@ pulvinar id metus.
 
 .. figure:: figure1.png
 
-   :label:`egfig` This is the caption.
+   This is the caption. :label:`egfig`
 
 As you can see in Figure :ref:`egfig`, this is how you reference auto-numbered
 figures.
+
+.. table:: This is the caption for the materials table. :label:`mtable`
+
+   +------------+-------+
+   | Material   | Units |
+   +------------+-------+
+   | Stone      | 3     |
+   +------------+-------+
+   | Water      | 12    |
+   +------------+-------+
+
+We show the different quantities of materials required in Table :ref:`mtable`.
 
 References
 ----------
