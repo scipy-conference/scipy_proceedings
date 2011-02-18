@@ -218,9 +218,7 @@ dimensions along which it may broadcast in element-wise expressions. Here we
 define ``x`` to be a matrix of the default data type (``float64``), where each
 row of ``x`` corresponds to an example :math:`$x^{(i)}$`. Similarly, ``y`` is
 declared as a vector of type ``int32`` whose entries correspond to the labels
-:math:`$y^{(i)}$`. Treating multiple data points at the same time allows us to
-implement SGD with mini-batches, a variant of SGD which is both computationally
-and statistically efficient.
+:math:`$y^{(i)}$`.
 
 The ``shared()`` function creates *shared variables* for :math:`$W$` and :math:`$b$` and assigns them initial values.
 Shared variables are similar to standard Theano variables, but differ in that
@@ -288,8 +286,9 @@ expression
 
 :math:`$W \leftarrow W - \mu \frac{1}{N'} \sum_i \left. \frac{\partial E(W,b,x,y)}{\partial W} \right |_{x=x^{(i)},y=y^{(i)}}$`,
 
-where :math:`$\mu=0.1$` is the learning rate and :math:`$N'$` the size of the
-minibatch (number of rows of ``x``).
+where :math:`$\mu=0.1$` is the step size and :math:`$N'$` is the number of
+examples with which we will approximate the gradient (i.e. the number of rows
+of ``x``).
 
 
 .. raw:: latex
@@ -339,7 +338,7 @@ CPU computations were done at double-precision.
 GPU computations were done at single-precision.
 
 Our first benchmark is training
-a single layer MLP by mini-batch gradient descent.
+a single layer MLP by stochastic gradient descent.
 Each implementation repeatedly carried out the following steps:
 (1) multiply 60 784-element input vectors by a :math:`$784 \times 500$` weight matrix,
 (2) compress the result by tanh,
