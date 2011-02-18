@@ -204,10 +204,10 @@ strictly typed and include the data type, the number of dimensions, and the
 dimensions along which it may broadcast (like NumPy's broadcasting)
 in element-wise expressions. We
 define ``x`` to be a matrix of the default data type (``float64``), and we will
-use each row of ``x`` to store an example :math:`$x^{(i)}$`. Similarly, ``y`` is
-declared as a vector of type ``int32`` whose entries correspond to the labels
-:math:`$y^{(i)}$`. Treating multiple data points at the same time allows us to
-implement SGD with mini-batches, a variant of SGD which is both computationally
+use each row of ``x`` to store an example :math:`$x^{(i)}$`. Similarly, we
+declare ``y`` as a vector of type ``long`` (or ``int64``)
+whose entries correspond to the labels
+:math:`$y^{(i)}$`. Treating multiple examples at once is both computationally
 and statistically efficient.
 
 The ``shared()`` function creates *shared variables* for :math:`$W$` and :math:`$b$` and assigns them initial values.
