@@ -81,8 +81,8 @@ use within Python programs. However, the composition of many such NumPy function
 can be unnecessarily slow when each call is dominated by the cost of transferring
 memory rather than the cost of performing calculations [Alted]_.
 [numexpr]_ goes one step further by providing a loop fusion optimization
-that can glue several element-wise computations together.
-Unfortunately, numexpr requires an unusual (the expression
+that can glue several elementwise computations together.
+Unfortunately, numexpr requires an unusual syntax (the expression
 must be encoded as a string within the code), and at the time of this writing,
 numexpr is limited to optimizing element-wise computations.  [Cython]_ and
 [scipy.weave]_ address Python's performance issue by offering a simple way to
@@ -108,10 +108,12 @@ While SymPy implements a richer set of mathematical operations of the kind
 expected in a modern computer algebra system, Theano focuses on fast, efficient
 evaluation of primarily array-valued expressions.
 
-Theano is free open source software, licensed under the New (3-clause) BSD license.
-It depends upon NumPy, and can optionally use SciPy, as well as custom C and CUDA code
-generators which are able to specialize for particular types, sizes, and shapes of
-inputs. It can be easily extended with custom graph components, known as "ops", which can
+Theano is free open source software, licensed under the New (3-clause) BSD
+license.  It depends upon NumPy, and can optionally use SciPy. Theano includes
+many custom C and CUDA code generators which are able to specialize for
+particular types, sizes, and shapes of inputs; leveraging these code generators
+requires gcc (CPU) and nvcc (GPU) compilers, respectively.  Theano can be easily extended with custom graph
+components, known as "ops", which can
 leverage ``scipy.weave``, PyCUDA, Cython, and other
 numerical libraries and compilation technologies at the user's discretion. Theano has been actively and
 continuously developed and used since January 2008.
@@ -130,8 +132,8 @@ a simple problem in statistical prediction.
 `Benchmarking Results`_ presents some results of performance
 benchmarking on problems related to machine learning and expression evaluation.
 `What's in Theano`_ gives an overview of the design of Theano.
-`Limitations and Future Work`_ outlines current limitations
-and planned future work.
+`Limitations and Future Work`_ outlines current limitations of our implementation
+and currently planned additions to Theano.
 
 .. [#] http://groups.google.com/group/theano-announce
 .. [#] http://groups.google.com/group/theano-dev
@@ -159,9 +161,9 @@ The model estimates the probability
     P(Y=1|x^{(i)}) = p^{(i)} = \frac {e^{W x^{(i)} + b}} {1 +  e^{Wx^{(i)} + b}}
     \end{equation}
 
-The problem is to optimize the log probability of :math:`$N$` training examples,
+The goal is to optimize the log probability of :math:`$N$` training examples,
 :math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`,
-with respect to :math:`W` and :math:`b`. To maximize the log likelihood we
+with respect to :math:`$W$` and :math:`$b$`. To maximize the log likelihood we
 will instead minimize the (average) negative log likelihood [#]_:
 
 .. raw:: latex
@@ -247,7 +249,8 @@ The number of examples to use at once represents a tradeoff between
 computational and statistical efficiency.
 
 The ``shared()`` function creates *shared variables* for :math:`$W$` and :math:`$b$` and assigns them initial values.
-Shared variables are distinguished by their having a persistent value.
+Shared variables behave much like other Theano variables, with the exception
+that they also have a persistent value.
 A shared variable's value is maintained
 throughout the execution of the program and
 can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
@@ -261,14 +264,15 @@ can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
     \end{figure}
 
 The above code-block specifies the computational graph required to perform
-gradient descent of our cost function. Since Theano's interface shares much in
-common with that of ``numpy``, lines 13-17 should be self-explanatory for anyone
+stochastic gradient descent on the parameters of our cost function. Since
+Theano's interface shares much in
+common with that of NumPy, lines 13-17 should be self-explanatory for anyone
 familiar with ``numpy``. On line 13, we start by defining :math:`$P(Y=1|x^{(i)}) = 1$`
-as the symbolic variable ``p_1``. Notice that the dot product and element-wise exponential
+as the symbolic variable ``p_1``. Notice that the matrix multiplication and element-wise exponential
 functions are simply called via the ``T.dot`` and ``T.exp`` functions,
 analoguous to ``numpy.dot`` and ``numpy.exp``. ``xent`` defines the
 cross-entropy loss function, which is then combined with the :math:`$\ell_2$`
-penalty on line 15, to form the cost function of Eq (2) and denoted by ``cost``.
+penalty on line 15, to form the cost function of Eq (3) and denoted by ``cost``.
 
 Line 16 is crucial to our implementation of SGD, as it performs symbolic
 differentiation of the scalar-valued ``cost`` variable with respect to variables
