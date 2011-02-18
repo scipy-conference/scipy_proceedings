@@ -82,25 +82,25 @@ can be unnecessarily slow when each call is dominated by the cost of transferrin
 memory rather than the cost of performing calculations [Alted]_.
 [numexpr]_ goes one step further by providing a loop fusion optimization
 that can glue several elementwise computations together.
-Unfortunately, the syntax required
-by numexpr is a bit unusual (the expression must be encoded as a string
-within the code), and it is limited to elementwise computations.
-[Cython]_ and [scipy.weave]_ address Python's performance issue by offering a simple way to
-hand-write crucial segments of code into C. While this might bring about 
-significant improvements, if the bottleneck of a program is a large 
-mathematical expression, comprising hundreds of operations, manual
-optimization of the math can be time-consuming and suboptimal compared to
-automatic optimization.
+Unfortunately, the syntax required by numexpr is a bit unusual (the expression
+must be encoded as a string within the code), and at the time of this writing,
+numexpr is limited to optimizing elementwise computations.  [Cython]_ and
+[scipy.weave]_ address Python's performance issue by offering a simple way to
+hand-write crucial segments of code into C (or a dialect of Python which can be
+easily compiled to C, in Cython's case). While this approach can yield
+significant speed gains, it is labor-intensive: if the bottleneck of a program
+is a large mathematical expression comprising hundreds of elementary
+operations, manual program optimization can be time-consuming and error-prone,
+making an automated approach to performance optimization highly desirable.
 
-Theano on the other hand works on a symbolic representation of the
-mathematical expressions, provided by the user through NumPy-like syntax.
-Having access to a computational graph, Theano can
-provide symbolic differentiation of complex expressions, but more
-importantly, it can perform local graph transformations that corrects
-many unnecessary, slow or numerically unstable expression patterns.
-Once optimized, the graph can be used to generate CPU as well as GPU 
-implementations (the latter using CUDA) without requiring changes to 
-user code. 
+Theano, on the other hand, works on a symbolic representation of mathematical
+expressions, provided by the user in a NumPy-like syntax.  Access to the full
+computational graph of an expression opens the door to advanced features such
+as symbolic differentiation of complex expressions, but more importantly allows
+Theano to perform local graph transformations that can correct many unnecessary,
+slow or numerically unstable expression patterns.  Once optimized, the same
+graph can be used to generate CPU as well as GPU implementations (the latter
+using CUDA) without requiring changes to user code.
 
 Theano is similar to [SymPy]_, in that both libraries manipulate symbolic
 mathematical graphs, but the two projects have a distinctly different focus.
@@ -111,10 +111,11 @@ evaluation of primarily array-valued expressions.
 Theano is free open source software, licensed under the New (3-clause) BSD license.
 It depends upon NumPy, and can optionally use SciPy, as well as custom C and CUDA code
 generators which are able to specialize for particular types, sizes, and shapes of
-inputs. It can be extended to use ``scipy.weave``, PyCUDA, Cython, and other
-numerical libraries and compilation technologies. Theano has been actively and
+inputs. It can be easily extended with custom graph components, known as "ops", which can
+leverage ``scipy.weave``, PyCUDA, Cython, and other
+numerical libraries and compilation technologies at the user's discretion. Theano has been actively and
 continuously developed and used since January 2008.
-It has been used in several scientific papers and it is used to teach machine
+It has been used in the preparation of numerous scientific papers and as a teaching platform for machine
 learning in graduate courses at the Université de Montréal.
 Documentation and installation instructions can be found on Theano's website [theano]_.
 All Theano users should subscribe to the
@@ -124,12 +125,12 @@ All Theano users should subscribe to the
 and `user support <http://groups.google.com/group/theano-users>`_ [#]_.
 
 This paper is divided as follows:
-Section `Case Study: Logistic Regression`_ shows how Theano can be used to solve
+`Case Study: Logistic Regression`_ shows how Theano can be used to solve
 a simple problem in statistical prediction.
-Section `Benchmarking Results`_ presents some results of performance
+`Benchmarking Results`_ presents some results of performance
 benchmarking on problems related to machine learning and expression evaluation.
-Section `What's in Theano`_ gives an overview of the design of Theano.
-Section `Limitations and Future Work`_ outlines current limitations
+`What's in Theano`_ gives an overview of the design of Theano.
+`Limitations and Future Work`_ outlines current limitations
 and planned future work.
 
 .. [#] http://groups.google.com/group/theano-announce
@@ -212,7 +213,7 @@ The ``shared()`` function creates *shared variables* for :math:`$W$` and :math:`
 Shared variables are similar to standard Theano variables, but differ in that
 they have a persistent state. As we will see shortly, any Theano function can
 operate directly on these shared variables, without having to declare them
-explicitely as an input.
+explicitly as an input.
 A shared variable's value is maintained
 throughout the execution of the program and
 can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
@@ -257,7 +258,7 @@ computation graph, given values for the symbolic inputs indicated. For example, 
 ``predict`` function computes the actual output of the logistic regression
 module (``prediction``). Since this value is a function of both ``x`` and ``y``,
 these are given as input to the function. Parameters ``w`` and ``b`` are passed
-implicitely, as is always the case with shared variables.
+implicitly, as is always the case with shared variables.
 
 ``train`` highlights two other important features of Theano functions. Firstly,
 functions can compute multiple outputs. In this case, ``train`` computes both
