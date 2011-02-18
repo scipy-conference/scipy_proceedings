@@ -53,7 +53,7 @@ Theano: A CPU and GPU Math Compiler in Python
     Common machine learning algorithms implemented with Theano
     are from* :math:`$1.6\times$` *to* :math:`$7.5\times$` *faster
     than competitive alternatives (including those implemented with
-    C/C++, NumPy/SciPy and Matlab) when compiled for the CPU
+    C/C++, NumPy/SciPy and MATLAB) when compiled for the CPU
     and between* :math:`$6.5\times$` *and* :math:`$44\times$` *faster
     when compiled for the GPU.
     This paper illustrates how to use
@@ -367,17 +367,17 @@ This program tests the use of BLAS routines and elementwise computations.
 
 `Figure 3`_ looks at the number of examples processed per second 
 by different implementations. We compared Theano (revision #ec057beb6c) against
-NumPy 1.4.1, Matlab 7.9.0.529, and Torch 5 (a machine learning 
-library written in C/C++) [torch5]_ on the CPU and  GPUMat 0.25 for Matlab
+NumPy 1.4.1, MATLAB 7.9.0.529, and Torch 5 (a machine learning
+library written in C/C++) [torch5]_ on the CPU and  GPUMat 0.25 for MATLAB
 ([gpumat]_) on the GPU.
 
 When running on the CPU, Theano is 1.8x faster than NumPy,
-1.6x faster than Matlab, and 7.5x faster than Torch 5. Torch was written
+1.6x faster than MATLAB, and 7.5x faster than Torch 5. Torch was written
 for flexibility, not speed (Ronan Collobert, p.c.).
 Theano's speed increases 5.8x on the GPU from the CPU, a total increase of 11x over
 NumPy (CPU) and 44x over Torch 5 (CPU).
 GPUmat brings about a speed increase of only 1.4x when switching to the GPU
-for the Matlab implementation, far
+for the MATLAB implementation, far
 less than the 5.8x increase Theano achieves through CUDA specializations.
 
 .. [#] Torch was designed and implemented with flexibility in mind, not speed (Ronan Collobert, p.c.).
