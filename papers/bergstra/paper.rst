@@ -201,23 +201,21 @@ data.
         \caption{Logistic regression, part 1: declaring variables.}
     \end{figure}
 
-In the above code, we declare two symbolic variables ``x`` and ``y`` which will
-serve as input to the rest of the computation graph. Theano variables are
-strictly typed and include the data type, the number of dimensions, and the
+The code in Figure `1 <logreg1>`_ declares four symbolic variables ``x``, ``y``
+``w``, and ``b`` to represent the data and parameters of the model.
+Each tensor variable is
+strictly typed to include its data type, its number of dimensions, and the
 dimensions along which it may broadcast (like NumPy's broadcasting)
-in element-wise expressions. We
-define ``x`` to be a matrix of the default data type (``float64``), and we will
-use each row of ``x`` to store an example :math:`$x^{(i)}$`. Similarly, we
-declare ``y`` as a vector of type ``long`` (or ``int64``)
-whose entries correspond to the labels
-:math:`$y^{(i)}$`. The number of examples to use at once represents a tradeoff between
+in element-wise expressions. The variable
+``x`` is a matrix of the default data type (``float64``),
+and ``y`` is a vector of type ``long`` (or ``int64``).
+Each row of ``x`` will store an example :math:`$x^{(i)}$`, and each element
+of ``y`` will store the corresponding label :math:`$y^{(i)}$`.
+The number of examples to use at once represents a tradeoff between
 computational and statistical efficiency.
 
 The ``shared()`` function creates *shared variables* for :math:`$W$` and :math:`$b$` and assigns them initial values.
-Shared variables are similar to standard Theano variables, but differ in that
-they have a persistent state. As we will see shortly, any Theano function can
-operate directly on these shared variables, without having to declare them
-explicitly as an input.
+Shared variables are distinguished by their having a persistent value.
 A shared variable's value is maintained
 throughout the execution of the program and
 can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
