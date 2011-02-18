@@ -83,15 +83,15 @@ memory rather than the cost of performing calculations [Alted]_.
 [numexpr]_ goes one step further by providing a loop fusion optimization
 that can glue several elementwise computations together.
 Unfortunately, the syntax required by numexpr is a bit unusual (the expression
-must be encoded as a string within the code), and is limited, at the time of
-this writing, to optimizing elementwise computations.  [Cython]_ and
+must be encoded as a string within the code), and at the time of this writing,
+numexpr is limited to optimizing elementwise computations.  [Cython]_ and
 [scipy.weave]_ address Python's performance issue by offering a simple way to
 hand-write crucial segments of code into C (or a dialect of Python which can be
 easily compiled to C, in Cython's case). While this approach can yield
-significant improvements, if the bottleneck of a program is a large
-mathematical expression comprising hundreds of elementary operations, manual
-optimization of the math can be time-consuming and error-prone when compared
-with an automated approach.
+significant speed gains, it is labor-intensive: if the bottleneck of a program
+is a large mathematical expression comprising hundreds of elementary
+operations, manual program optimization can be time-consuming and error-prone,
+making an automated approach to performance optimization highly desirable.
 
 Theano, on the other hand, works on a symbolic representation of mathematical
 expressions, provided by the user in a NumPy-like syntax.  Access to the full
