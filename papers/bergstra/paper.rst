@@ -84,7 +84,7 @@ memory rather than the cost of performing calculations [Alted]_.
 that can glue several elementwise computations together.
 Unfortunately, numexpr requires an unusual syntax (the expression
 must be encoded as a string within the code), and at the time of this writing,
-numexpr is limited to optimizing elementwise computations.  [Cython]_ and
+numexpr is limited to optimizing element-wise computations.  [Cython]_ and
 [scipy.weave]_ address Python's performance issue by offering a simple way to
 hand-write crucial segments of code in C (or a dialect of Python which can be
 easily compiled to C, in Cython's case). While this approach can yield
@@ -198,12 +198,31 @@ particularly advantageous for non-convex loss functions (such as those explored
 in `Benchmarking Results`_), where the stochasticity can allow the optimizer to
 escape shallow local minima [Bottou]_.
 
+According to the SGD algorithm, the update on ``w`` is
+
+.. raw:: latex
+
+    \begin{equation*}
+        W \leftarrow W - \mu \frac{1}{N'} \sum_i \left. \frac{\partial E(W,b,x,y)}{\partial W} \right|_{x=x^{(i)},y=y^{(i)}},
+    \end{equation*}
+
+where :math:`$\mu=0.1$` is the step size and :math:`$N'$` is the number of
+examples with which we will approximate the gradient (i.e. the number of rows
+of ``x``).
+The update on ``b`` is likewise
+
+.. raw:: latex
+
+    \begin{equation*}
+        b \leftarrow b - \mu \frac{1}{N'} \sum_i \left. \frac{\partial E(W,b,x,y)}{\partial b} \right|_{x=x^{(i)},y=y^{(i)}}.
+    \end{equation*}
+
 Implementing this minimization procedure in
 Theano involves the following four conceptual steps:
 (1) declaring symbolic variables,
 (2) using these variables to build a symbolic expression graph,
-(3) compiling a Theano function, and
-(4) calling said function to perform numerical computations.
+(3) compiling Theano functions, and
+(4) calling said functions to perform numerical computations.
 The code listings in Figures `1 <logreg1>`_ - `4 <logreg4>`_ illustrate these steps
 with a working program that fits a logistic regression model to random
 data.
@@ -236,6 +255,7 @@ A shared variable's value is maintained
 throughout the execution of the program and
 can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
 
+.. _logreg2:
 .. raw:: latex
 
     \begin{figure}[H]
@@ -265,6 +285,7 @@ Finally, line 18 defines the actual prediction (``prediction``) of the logistic
 regression by thresholding :math:`$P(Y=1|x^{(i)})$`.
 
 
+.. _logreg3:
 .. raw:: latex
 
     \begin{figure}[H]
@@ -272,36 +293,31 @@ regression by thresholding :math:`$P(Y=1|x^{(i)})$`.
         \caption{Logistic regression, part 3: compilation.}
     \end{figure}
 
-The above code defines two Theano functions which are required to learn and
-test our logistic regression module. Theano functions are in their simplest
-form, callable objects which compute the value of certain nodes in the
-computation graph, given values for the symbolic inputs indicated. For example, the
-``predict`` function computes the actual output of the logistic regression
-module (``prediction``). Since this value is a function of both ``x`` and ``y``,
-these are given as input to the function. Parameters ``w`` and ``b`` are passed
+The code of Figure `3 <logreg3>`_ creates the two functions required to learn and
+test our logistic regression model. Theano functions are
+callable objects that compute zero or more *outputs*
+from values given for one or more symbolic *inputs*. For example, the
+``predict`` function computes and returns the value of ``prediction``
+for a given value for ``x``. Parameters ``w`` and ``b`` are passed
 implicitly - all shared variables are available as inputs to all functions as
 a convenience to the user.
 
-Line 16 which creates the ``train`` function highlights two other important
+.. Since this value is a function of both ``x`` and ``y``, these are given as input to the function. 
+Line 16 (Figure `logreg3`_) which creates the ``train`` function highlights two other important
 features of Theano functions: the potential for multiple outputs and updates.
 In our example, ``train`` computes both
 the prediction (``prediction``) of the classifier as well as the cross-entropy
 error function (``xent``). Computing both outputs together is computationally
-efficient since it allows for sharing of all intermediate computations.
+efficient since it allows for the reuse of intermediate computations, such as
+``dot(x,w)``.
 The optional ``updates`` parameter enables functions to have
 side-effects on shared variables.
 The updates argument is a dictionary whose (shared variable, new value)
 items encode how to update various shared variables after each call to the
-function.
+function, just before returning.
 In our example, calling the ``train`` function
 will update the parameters ``w`` and ``b`` with new values as per the SGD
-algorithm.  The update on ``w`` corresponds to the expression 
-
-:math:`$W \leftarrow W - \mu \frac{1}{N'} \sum_i \left. \frac{\partial E(W,b,x,y)}{\partial W} \right |_{x=x^{(i)},y=y^{(i)}}$`,
-
-where :math:`$\mu=0.1$` is the step size and :math:`$N'$` is the number of
-examples with which we will approximate the gradient (i.e. the number of rows
-of ``x``).
+algorithm.
 
 
 .. _logreg4:
@@ -312,16 +328,19 @@ of ``x``).
         \caption{Logistic regression, part 4: computation.}
     \end{figure}
 
-In this code-block, we finally show how Theano functions are used to perform the
-task at hand. We start by generating four random training examples: ``D[0]``
-is the input ``x`` and ``D[1]`` the labels we must learn to predict. We then
-loop (lines 30-31) ten times, calling the ``train`` function repeatedly with
-inputs ``x=D[0]`` and ``y=D[1]``. Notice that calling a Theano function is no
-more complicated than calling a standard Python function: the graph
+Our example concludes (Figure `4 <logreg4>`_) by using the functions
+``train`` and ``predict`` to fit the logistic regression model.
+Our trivial data ``D`` is just four random vectors and labels.
+Still, repeatedly calling the ``train`` function (lines 30-31) fits
+our parameters to the data, such as it is.
+Note that calling a Theano function is no
+different than calling a standard Python function: the graph
 transformations, optimizations, compilation and calling of efficient C-functions
-(whether targeted for the CPU or GPU) are all done under the hood, in a way
-which is transparent to the user. Finally, we print the state of the model
-parameters and show that the model accurately predicts the training labels.
+(whether targeted for the CPU or GPU) have all been done under the hood.
+The arguments and return values of these functions are NumPy ``ndarray`` objects that
+interoperate normally with other scientific python libraries and tools.
+.. Finally, we print the state of the model
+.. parameters and show that the model accurately predicts the training labels.
 
 
 
@@ -330,18 +349,17 @@ parameters and show that the model accurately predicts the training labels.
 Benchmarking Results
 --------------------
 
-Theano started as a library for easing rapid development of complex machine 
-learning algorithms. This section presents performance in two tasks from that
+Theano was developed to simplify the implementation of complex high-performance machine
+learning algorithms. This section presents performance in two
+processor-intensive tasks from that
 domain: training a multi-layer perceptron (MLP) and training a convolutional
-network. More extensive benchmarks are forthcoming, and will be posted on our
-website [theano]_.
-
+network.
 We chose these architectures because of their popularity in the machine learning
 community and their different computational demands. Large matrix-matrix
-multiplications dominate in the MLP example while two-dimensional image
+multiplications dominate in the MLP example and two-dimensional image
 convolutions with small kernels dominate the convolutional network.
-More information about these models and their learning algorithms is available 
-from the Deep Learning Tutorials [DLT]_. 
+More information about these models and their learning algorithms is available
+from the Deep Learning Tutorials [DLT]_.
 The implementations used in these benchmarks are available online [dlb]_.
 
 CPU timing was carried out on an
@@ -361,9 +379,9 @@ Each implementation repeatedly carried out the following steps:
 (4) classify the result using a multi-class generalization of logistic regression,
 (5) compute the gradient by performing similar calculations but in reverse, and finally
 (6) add the gradients to the parameters.
-This program tests the use of BLAS routines and elementwise computations.
+This program stresses element-wise computations and the use of BLAS routines.
 
-.. _Figure 3:
+.. _Figure 5:
 .. _Benchmark1:
 .. figure:: mlp.pdf
     :scale: 100
@@ -373,7 +391,7 @@ This program tests the use of BLAS routines and elementwise computations.
     784 inputs, 500 hidden units, a 10-way classification, and are trained 60
     examples at a time.
 
-`Figure 3`_ looks at the number of examples processed per second 
+`Figure 5`_ looks at the number of examples processed per second 
 by different implementations. We compared Theano (revision #ec057beb6c) against
 NumPy 1.4.1, MATLAB 7.9.0.529, and Torch 5 (a machine learning
 library written in C/C++) [torch5]_ on the CPU and  GPUMat 0.25 for MATLAB
@@ -391,7 +409,7 @@ less than the 5.8x increase Theano achieves through CUDA specializations.
 .. [#] Torch was designed and implemented with flexibility in mind, not speed (Ronan Collobert, p.c.).
 
 .. _Benchmark2:
-.. _Figure 4:
+.. _Figure 6:
 .. figure:: conv.pdf
     :scale: 100
 
@@ -410,7 +428,7 @@ gradient calculation) of the algorithm using SciPy's ``signal.convolve2d`` funct
 This benchmark uses convolutions of medium sized images
 (:math:`$256 \times 256$`) with
 small filters (:math:`$7 \times 7$`).
-`Figure 4`_ shows the performance of Theano (both CPU and GPU)
+`Figure 6`_ shows the performance of Theano (both CPU and GPU)
 against competing implementations.
 On the CPU, Theano is 2.2x faster than EBLearn, its best competitor. This is because
 Theano compiles more specialized convolution routines.
@@ -421,19 +439,19 @@ half the computations. This is because SciPy's convolution routine has not been
 optimized for this application.
 
 We also compared Theano with numexpr and NumPy for evaluating element-wise
-expressions on the CPU (`Figure 5`_).
+expressions on the CPU (`Figure 7`_).
 For small amounts of data, the extra function-call overhead of numexpr and
 Theano makes them slower.  For larger amounts of data, and for more complicated
 expressions, Theano is fastest because it uses an implementation specialized for
 each expression.
 
-.. _Figure 5:
+.. _Figure 7:
 .. _Benchmark3:
 .. figure:: multiple_graph.pdf
     :scale: 100
 
     Speed comparison between NumPy,
-    numexpr, and Theano for different sizes of input on four elementwise
+    numexpr, and Theano for different sizes of input on four element-wise
     formulae.  In each subplot, the solid blue line represents Theano, the
     dashed red line represent numexpr, and performance is plotted with respect
     to NumPy.
@@ -561,7 +579,7 @@ There is a narrower range of Ops that work on SparseType Variables: packing and
 unpacking of compressed sparse row/column
 sparse matrices into dense variables is supported,
 as is conversion between sparse and dense matrices.  Transpose, negation,
-addition, and subtraction are supported.  Scalar and elementwise multiplication
+addition, and subtraction are supported.  Scalar and element-wise multiplication
 with a dense matrix is supported, and matrix multiplication between sparse and
 dense is supported.
 
@@ -631,7 +649,7 @@ are introduced where needed.
 
 Lastly, Theano replaces Ops with equivalents that reuse the memory of
 their inputs (which means, as a side effect, that no subsequent Ops
-may use the original values). Many Ops (e.g. GEMM and all elementwise
+may use the original values). Many Ops (e.g. GEMM and all element-wise
 Ops) have such equivalents.  Reusing memory this way can improve speed
 by reducing cache misses and allowing more computations to fit on GPUs
 where memory is at a premium.
@@ -644,7 +662,7 @@ Code Generators
 
 Many (roughly 80%) of Theano's Ops generate and compile C or CUDA code during
 ``theano.function``.
-The majority of Ops (such as all elementwise Ops and ``Sum``) that generate C code specialize the code based on the dtype and
+The majority of Ops (such as all element-wise Ops and ``Sum``) that generate C code specialize the code based on the dtype and
 number of dimensions of their arguments.
 Some Ops, such as the small-filter convolution (``conv2d``), further specialize code based on
 the size the arguments will have.
@@ -727,7 +745,7 @@ Also the library has been tuned towards expressions related to machine
 learning with neural networks, and it was not as well tested outside 
 thist domain. Theano is not a powerful computer algebra system, and 
 it is an important area of future work to improve its ability to recognize
-numerical instability in complicated elementwise expression graphs.
+numerical instability in complicated element-wise expression graphs.
 
 Debugging Theano functions can require non-standard techniques and
 Theano-specific tools.  The reason is two-fold: 1) definition
