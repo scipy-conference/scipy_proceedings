@@ -108,10 +108,12 @@ While SymPy implements a richer set of mathematical operations of the kind
 expected in a modern computer algebra system, Theano focuses on fast, efficient
 evaluation of primarily array-valued expressions.
 
-Theano is free open source software, licensed under the New (3-clause) BSD license.
-It depends upon NumPy, and can optionally use SciPy, as well as custom C and CUDA code
-generators which are able to specialize for particular types, sizes, and shapes of
-inputs. It can be easily extended with custom graph components, known as "ops", which can
+Theano is free open source software, licensed under the New (3-clause) BSD
+license.  It depends upon NumPy, and can optionally use SciPy. Theano includes
+many custom C and CUDA code generators which are able to specialize for
+particular types, sizes, and shapes of inputs; leveraging these code generators
+requires gcc (CPU) and nvcc (GPU) compilers, respectively.  Theano can be easily extended with custom graph
+components, known as "ops", which can
 leverage ``scipy.weave``, PyCUDA, Cython, and other
 numerical libraries and compilation technologies at the user's discretion. Theano has been actively and
 continuously developed and used since January 2008.
