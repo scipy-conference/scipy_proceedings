@@ -196,6 +196,25 @@ particularly advantageous for non-convex loss functions (such as those explored
 in `Benchmarking Results`_), where the stochasticity can allow the optimizer to
 escape shallow local minima [Bottou].
 
+According to the SGD algorithm, the update on ``w`` is
+
+.. raw:: latex
+
+    \begin{equation*}
+        W \leftarrow W - \mu \frac{1}{N'} \sum_i \left. \frac{\partial E(W,b,x,y)}{\partial W} \right|_{x=x^{(i)},y=y^{(i)}},
+    \end{equation*}
+
+where :math:`$\mu=0.1$` is the step size and :math:`$N'$` is the number of
+examples with which we will approximate the gradient (i.e. the number of rows
+of ``x``).
+The update on ``b`` is likewise
+
+.. raw:: latex
+
+    \begin{equation*}
+        b \leftarrow b - \mu \frac{1}{N'} \sum_i \left. \frac{\partial E(W,b,x,y)}{\partial b} \right|_{x=x^{(i)},y=y^{(i)}}.
+    \end{equation*}
+
 Implementing this minimization procedure in
 Theano involves the following four conceptual steps:
 (1) declaring symbolic variables,
@@ -293,13 +312,7 @@ items encode how to update various shared variables after each call to the
 function.
 In our example, calling the ``train`` function
 will update the parameters ``w`` and ``b`` with new values as per the SGD
-algorithm.  The update on ``w`` corresponds to the expression 
-
-:math:`$W \leftarrow W - \mu \frac{1}{N'} \sum_i \left. \frac{\partial E(W,b,x,y)}{\partial W} \right |_{x=x^{(i)},y=y^{(i)}}$`,
-
-where :math:`$\mu=0.1$` is the step size and :math:`$N'$` is the number of
-examples with which we will approximate the gradient (i.e. the number of rows
-of ``x``).
+algorithm.
 
 
 .. _logreg4:
