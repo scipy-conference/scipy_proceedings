@@ -189,9 +189,11 @@ Theano involves the following four conceptual steps:
 (2) using these variables to build a symbolic expression graph,
 (3) compiling a Theano function, and
 (4) calling said function to perform numerical computations.
-We will now step through each of these sections in more detail.
+The code listings in Figures `1 <logreg1>`_ - `4 <logreg4>`_ illustrate these steps
+with a working program that fits a logistic regression model to random
+data.
 
-
+.. _logreg1:
 .. raw:: latex
 
     \begin{figure}[H]
@@ -283,6 +285,7 @@ where :math:`$\mu=0.1$` is the learning rate and :math:`$N'$` the size of the
 minibatch (number of rows of ``x``).
 
 
+.. _logreg4:
 .. raw:: latex
 
     \begin{figure}[H]
