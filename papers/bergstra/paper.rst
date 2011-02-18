@@ -377,7 +377,7 @@ Each implementation repeatedly carried out the following steps:
 (6) add the gradients to the parameters.
 This program stresses element-wise computations and the use of BLAS routines.
 
-.. _Figure 3:
+.. _Figure 5:
 .. _Benchmark1:
 .. figure:: mlp.pdf
     :scale: 100
@@ -387,7 +387,7 @@ This program stresses element-wise computations and the use of BLAS routines.
     784 inputs, 500 hidden units, a 10-way classification, and are trained 60
     examples at a time.
 
-`Figure 3`_ looks at the number of examples processed per second 
+`Figure 5`_ looks at the number of examples processed per second 
 by different implementations. We compared Theano (revision #ec057beb6c) against
 NumPy 1.4.1, MATLAB 7.9.0.529, and Torch 5 (a machine learning
 library written in C/C++) [torch5]_ on the CPU and  GPUMat 0.25 for MATLAB
@@ -405,7 +405,7 @@ less than the 5.8x increase Theano achieves through CUDA specializations.
 .. [#] Torch was designed and implemented with flexibility in mind, not speed (Ronan Collobert, p.c.).
 
 .. _Benchmark2:
-.. _Figure 4:
+.. _Figure 6:
 .. figure:: conv.pdf
     :scale: 100
 
@@ -424,7 +424,7 @@ gradient calculation) of the algorithm using SciPy's ``signal.convolve2d`` funct
 This benchmark uses convolutions of medium sized images
 (:math:`$256 \times 256$`) with
 small filters (:math:`$7 \times 7$`).
-`Figure 4`_ shows the performance of Theano (both CPU and GPU)
+`Figure 6`_ shows the performance of Theano (both CPU and GPU)
 against competing implementations.
 On the CPU, Theano is 2.2x faster than EBLearn, its best competitor. This is because
 Theano compiles more specialized convolution routines.
@@ -435,13 +435,13 @@ half the computations. This is because SciPy's convolution routine has not been
 optimized for this application.
 
 We also compared Theano with numexpr and NumPy for evaluating element-wise
-expressions on the CPU (`Figure 5`_).
+expressions on the CPU (`Figure 7`_).
 For small amounts of data, the extra function-call overhead of numexpr and
 Theano makes them slower.  For larger amounts of data, and for more complicated
 expressions, Theano is fastest because it uses an implementation specialized for
 each expression.
 
-.. _Figure 5:
+.. _Figure 7:
 .. _Benchmark3:
 .. figure:: multiple_graph.pdf
     :scale: 100
