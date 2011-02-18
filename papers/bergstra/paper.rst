@@ -373,7 +373,7 @@ less than the 5.8x increase Theano achieves through CUDA specializations.
 .. figure:: conv.pdf
     :scale: 100
 
-    **Figure 4:** Fitting a convolutional network using different
+    Fitting a convolutional network using different
     software. The benchmark stresses convolutions of medium-sized (256 by 256) images with
     small (7 by 7) filters.
 
@@ -410,7 +410,7 @@ each expression.
 .. figure:: multiple_graph.pdf
     :scale: 100
 
-    **Figure 5:** Speed comparison between NumPy,
+    Speed comparison between NumPy,
     numexpr, and Theano for different sizes of input on four elementwise
     formulae.  In each subplot, the solid blue line represents Theano, the
     dashed red line represent numexpr, and performance is plotted with respect
