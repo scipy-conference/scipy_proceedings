@@ -6,7 +6,7 @@
 :email: breuleuo@iro.umontreal.ca
 :institution: University of Montreal
 
-:author: Frederic Bastien
+:author: Frédéric Bastien
 :email: bastienf@iro.umontreal.ca
 :institution: University of Montreal
 
@@ -86,7 +86,7 @@ Unfortunately, numexpr requires an unusual (the expression
 must be encoded as a string within the code), and at the time of this writing,
 numexpr is limited to optimizing elementwise computations.  [Cython]_ and
 [scipy.weave]_ address Python's performance issue by offering a simple way to
-hand-write crucial segments of code into C (or a dialect of Python which can be
+hand-write crucial segments of code in C (or a dialect of Python which can be
 easily compiled to C, in Cython's case). While this approach can yield
 significant speed gains, it is labor-intensive: if the bottleneck of a program
 is a large mathematical expression comprising hundreds of elementary
@@ -147,11 +147,11 @@ Case Study: Logistic Regression
 To get a sense of how Theano feels from a user's perspective,
 we will look at how to solve a binary logistic regression problem.
 Binary logistic regression is a classification model
-parameterized by a weight matrix :math:`W` and
-bias vector :math:`b`.
+parameterized by a weight matrix :math:`$W$` and
+bias vector :math:`$b$`.
 The model estimates the probability
 :math:`$P(Y=1|x)$` (which we will denote with shorthand :math:`$p$`) that the input
-`x` belongs to class `y=1` as:
+`x` belongs to class `$y=1$` as:
 
 .. raw:: latex
 
@@ -159,7 +159,7 @@ The model estimates the probability
     P(Y=1|x^{(i)}) = p^{(i)} = \frac {e^{W x^{(i)} + b}} {1 +  e^{Wx^{(i)} + b}}
     \end{equation}
 
-The problem is to optimize the log probability of :math:`N` training examples,
+The problem is to optimize the log probability of :math:`$N$` training examples,
 :math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`,
 with respect to :math:`W` and :math:`b`. To maximize the log likelihood we
 will instead minimize the (average) negative log likelihood [#]_:
@@ -167,7 +167,7 @@ will instead minimize the (average) negative log likelihood [#]_:
 .. raw:: latex
 
     \begin{equation}
-    \ell(W,b) = -\frac{1}{N}\sum_i ( y^{(i)} \log p^{(i)} + (1-y^{(i)}) \log (1 - p^{(i)}) )
+    \ell(W,b) = -\frac{1}{N}\sum_i y^{(i)} \log p^{(i)} + (1-y^{(i)}) \log (1 - p^{(i)})
     \end{equation}
 
 .. [#] Taking the mean in this fashion decouples the choice of the regularization coefficient and the stochastic gradient step size from the number of training examples.
@@ -181,9 +181,22 @@ To make it a bit more interesting, we can also include an
     E(W,b) = \ell(W, b) + 0.01 \sum_i \sum_j w_{ij}^2
     \end{equation}
 
-In this example, tuning parameters :math:`W` and :math:`b` will be done through
-stochastic gradient descent (SGD) of :math:`$E(W,b)$`, even though more sophisticated
-algorithms could also be used. Implementing this minimization procedure in
+In this example, tuning parameters :math:`$W$` and :math:`$b$` will be done through
+stochastic gradient descent (SGD) on :math:`$E(W, b)$`. Stochastic gradient
+descent is a method for minimizing a differentiable loss function that is the
+expectation of some per-example loss over a set of training examples. SGD
+estimates this expectation with an average over one or several examples and
+performs a step in the approximate direction of steepest descent.  Though more
+sophisticated algorithms for numerical optimization exist, in particular for
+smooth convex functions such as :math:`$E(W, b)$`, stochastic gradient descent
+remains the method of choice when the number of training examples is too large
+to fit in memory, or in the setting where training examples arrive in a
+continuous stream. Even with relatively manageable dataset sizes, SGD can be
+particularly advantageous for non-convex loss functions (such as those explored
+in `Benchmarking Results`_), where the stochasticity can allow the optimizer to
+escape shallow local minima [Bottou].
+
+Implementing this minimization procedure in
 Theano involves the following four conceptual steps:
 (1) declaring symbolic variables,
 (2) using these variables to build a symbolic expression graph,
@@ -282,8 +295,9 @@ algorithm.  The update on ``w`` corresponds to the expression
 
 :math:`$W \leftarrow W - \mu \frac{1}{N'} \sum_i \left. \frac{\partial E(W,b,x,y)}{\partial W} \right |_{x=x^{(i)},y=y^{(i)}}$`,
 
-where :math:`$\mu=0.1$` is the learning rate and :math:`$N'$` the size of the
-minibatch (number of rows of ``x``).
+where :math:`$\mu=0.1$` is the step size and :math:`$N'$` is the number of
+examples with which we will approximate the gradient (i.e. the number of rows
+of ``x``).
 
 
 .. _logreg4:
@@ -335,7 +349,7 @@ CPU computations were done at double-precision.
 GPU computations were done at single-precision.
 
 Our first benchmark is training
-a single layer MLP by mini-batch gradient descent.
+a single layer MLP by stochastic gradient descent.
 Each implementation repeatedly carried out the following steps:
 (1) multiply 60 784-element input vectors by a :math:`$784 \times 500$` weight matrix,
 (2) compress the result by tanh,
@@ -754,7 +768,6 @@ especially:
 Arnaud Bergeron, Thierry Bertin-Mahieux, Olivier Delalleau, 
 Douglas Eck, Dumitru Erhan, Philippe Hamel, Simon Lemieux,
 Pierre-Antoine Manzagol, and François Savard.
-David Warde-Farley contributed to the preparation of this paper.
 The authors acknowledge the support of the following agencies for
 research funding and computing support: NSERC, RQCHP, CIFAR, SHARCNET and CLUMEQ.
 
@@ -763,10 +776,16 @@ References
 
 .. [theano] Theano, http://www.deeplearning.net/software/theano
 
-.. [NumPy] T. E. Oliphant, Python for Scientific Computing, 
-           Computing in Science & Engineering 9, 10 (2007).
+.. [NumPy] T. E. Oliphant. "Python for Scientific Computing".
+           *Computing in Science & Engineering* 9, 10 (2007).
 
-.. [numexpr] D. Cooke et al., numexpr, http://code.google.com/p/numexpr/
+
+.. [Bottou] L. Bottou. "Online Algorithms and Stochastic Approximations".
+            In D. Saad, ed. *Online Learning and Neural Networks* (1998).
+            Cambridge University Press, Cambridge, UK.
+            Online: http://leon.bottou.org/papers/bottou-98x
+
+.. [numexpr] D. Cooke *et al*. numexpr, http://code.google.com/p/numexpr/
 
 .. [Cython] S. Behnel, R. Bradshaw, and D. S. Seljebotn, 
             Cython C-Extensions for Python,
@@ -775,23 +794,23 @@ References
 .. [scipy.weave] SciPy Weave module, 
                  http://www.scipy.org/Weave
 
-.. [Alted]  F. Alted, Why Modern CPUs Are Starving And What Can
-    Be Done About It, Computing in Science and Engineering, 12(2):68-71, 2010.
+.. [Alted]  F. Alted. "Why Modern CPUs Are Starving And What Can
+    Be Done About It". *Computing in Science and Engineering* 12(2):68-71, 2010.
 
 .. [SymPy] SymPy, http://code.google.com/p/sympy/
 
-.. [BLAS] J. J. Dongarra, J. Du Croz, I. S. Duff, and S. Hammarling, 
-          Algorithm 679: A set of Level 3 Basic Linear Algebra Subprograms, ACM Trans. Math. Soft., 16:18-28, 1990. 
+.. [BLAS] J. J. Dongarra, J. Du Croz, I. S. Duff, and S. Hammarling.
+          "Algorithm 679: A set of Level 3 Basic Linear Algebra Subprograms". *ACM Trans. Math. Soft.*, 16:18-28, 1990.
           http://www.netlib.org/blas
 
-.. [LAPACK] E. Anderson et al., 
-            LAPACK Users' Guide Third Edition,
+.. [LAPACK] E. Anderson *et al*.
+            "LAPACK Users' Guide, Third Edition".
             http://www.netlib.org/lapack/lug/index.html
 
 .. [DLT] Deep Learning Tutorials, 
          http://deeplearning.net/tutorial/
 
-.. [dlb] Benchmarking code, 
+.. [dlb] Benchmarking code:
          http://github.com/pascanur/DeepLearningBenchmarks
 
 .. [torch5] Torch 5, http://torch5.sourceforge.net
@@ -800,6 +819,7 @@ References
 
 .. [gpumat] GPUmat: GPU toolbox for MATLAB, http://gp-you.org
 
-.. [Ecu] P. L'Ecuyer, F. Blouin, and R. Couture,
-         A Search for Good Multiple Recursive Generators,
-         ACM Transactions on Modeling and Computer Simulation, 3:87-98, 1993. 
+.. [Ecu] P. L'Ecuyer, F. Blouin, and R. Couture.
+         "A Search for Good Multiple Recursive Generators".
+         *ACM Transactions on Modeling and Computer Simulation*, 3:87-98, 1993.
+
