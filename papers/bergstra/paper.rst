@@ -115,7 +115,7 @@ inputs. It can be easily extended with custom graph components, known as "ops", 
 leverage ``scipy.weave``, PyCUDA, Cython, and other
 numerical libraries and compilation technologies at the user's discretion. Theano has been actively and
 continuously developed and used since January 2008.
-It has been used in several scientific papers and it is used to teach machine
+It has been used in the preparation of numerous scientific papers and as a teaching platform for machine
 learning in graduate courses at the Université de Montréal.
 Documentation and installation instructions can be found on Theano's website [theano]_.
 All Theano users should subscribe to the
