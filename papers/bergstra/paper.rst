@@ -194,7 +194,7 @@ to fit in memory, or in the setting where training examples arrive in a
 continuous stream. Even with relatively manageable dataset sizes, SGD can be
 particularly advantageous for non-convex loss functions (such as those explored
 in `Benchmarking Results`_), where the stochasticity can allow the optimizer to
-escape shallow local minima [Bottou].
+escape shallow local minima [Bottou]_.
 
 Implementing this minimization procedure in
 Theano involves the following four conceptual steps:
