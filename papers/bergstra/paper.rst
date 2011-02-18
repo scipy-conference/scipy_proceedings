@@ -436,13 +436,13 @@ each expression.
 What's in Theano?
 -----------------
 
-Theano supports arrays of different dimensions 
-(from scalar to n-dimensional tensors) and types (int, 
-single-precision floats, double-precision floats etc.) as 
-well as random streams of numbers (much as Numpy does). 
-There is also limited support for sparse matrices and 
-generic objects. `Table 1`_ presents 
-a comprehensive list of operations that you would find 
+Theano supports arrays of different dimensions
+(from scalar to n-dimensional tensors) and types (int,
+single-precision floats, double-precision floats etc.) as
+well as random streams of numbers (much as NumPy does).
+There is also limited support for sparse matrices and
+generic objects. `Table 1`_ presents
+a comprehensive list of operations that you would find
 in Theano. It also supports debugging and profiling functionalities.
 
 .. _Table 1:
