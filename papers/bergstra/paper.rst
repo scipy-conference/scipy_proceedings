@@ -765,10 +765,16 @@ References
 
 .. [theano] Theano, http://www.deeplearning.net/software/theano
 
-.. [NumPy] T. E. Oliphant, Python for Scientific Computing, 
-           Computing in Science & Engineering 9, 10 (2007).
+.. [NumPy] T. E. Oliphant. "Python for Scientific Computing".
+           *Computing in Science & Engineering* 9, 10 (2007).
 
-.. [numexpr] D. Cooke et al., numexpr, http://code.google.com/p/numexpr/
+
+.. [Bottou] L. Bottou. "Online Algorithms and Stochastic Approximations".
+            In D. Saad, ed. *Online Learning and Neural Networks* (1998).
+            Cambridge University Press, Cambridge, UK.
+            Online: http://leon.bottou.org/papers/bottou-98x
+
+.. [numexpr] D. Cooke *et al*. numexpr, http://code.google.com/p/numexpr/
 
 .. [Cython] S. Behnel, R. Bradshaw, and D. S. Seljebotn, 
             Cython C-Extensions for Python,
@@ -777,23 +783,23 @@ References
 .. [scipy.weave] SciPy Weave module, 
                  http://www.scipy.org/Weave
 
-.. [Alted]  F. Alted, Why Modern CPUs Are Starving And What Can
-    Be Done About It, Computing in Science and Engineering, 12(2):68-71, 2010.
+.. [Alted]  F. Alted. "Why Modern CPUs Are Starving And What Can
+    Be Done About It". *Computing in Science and Engineering* 12(2):68-71, 2010.
 
 .. [SymPy] SymPy, http://code.google.com/p/sympy/
 
-.. [BLAS] J. J. Dongarra, J. Du Croz, I. S. Duff, and S. Hammarling, 
-          Algorithm 679: A set of Level 3 Basic Linear Algebra Subprograms, ACM Trans. Math. Soft., 16:18-28, 1990. 
+.. [BLAS] J. J. Dongarra, J. Du Croz, I. S. Duff, and S. Hammarling.
+          "Algorithm 679: A set of Level 3 Basic Linear Algebra Subprograms". *ACM Trans. Math. Soft.*, 16:18-28, 1990.
           http://www.netlib.org/blas
 
-.. [LAPACK] E. Anderson et al., 
-            LAPACK Users' Guide Third Edition,
+.. [LAPACK] E. Anderson *et al*.
+            "LAPACK Users' Guide, Third Edition".
             http://www.netlib.org/lapack/lug/index.html
 
 .. [DLT] Deep Learning Tutorials, 
          http://deeplearning.net/tutorial/
 
-.. [dlb] Benchmarking code, 
+.. [dlb] Benchmarking code:
          http://github.com/pascanur/DeepLearningBenchmarks
 
 .. [torch5] Torch 5, http://torch5.sourceforge.net
@@ -802,6 +808,7 @@ References
 
 .. [gpumat] GPUmat: GPU toolbox for MATLAB, http://gp-you.org
 
-.. [Ecu] P. L'Ecuyer, F. Blouin, and R. Couture,
-         A Search for Good Multiple Recursive Generators,
-         ACM Transactions on Modeling and Computer Simulation, 3:87-98, 1993. 
+.. [Ecu] P. L'Ecuyer, F. Blouin, and R. Couture.
+         "A Search for Good Multiple Recursive Generators".
+         *ACM Transactions on Modeling and Computer Simulation*, 3:87-98, 1993.
+
