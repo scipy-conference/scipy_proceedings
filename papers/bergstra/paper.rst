@@ -304,7 +304,8 @@ features of Theano functions: the potential for multiple outputs and updates.
 In our example, ``train`` computes both
 the prediction (``prediction``) of the classifier as well as the cross-entropy
 error function (``xent``). Computing both outputs together is computationally
-efficient since it allows for sharing of all intermediate computations.
+efficient since it allows for the reuse of intermediate computations, such as
+``dot(x,w)``.
 The optional ``updates`` parameter enables functions to have
 side-effects on shared variables.
 The updates argument is a dictionary whose (shared variable, new value)
