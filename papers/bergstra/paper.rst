@@ -262,20 +262,23 @@ computation graph, given values for the symbolic inputs indicated. For example, 
 ``predict`` function computes the actual output of the logistic regression
 module (``prediction``). Since this value is a function of both ``x`` and ``y``,
 these are given as input to the function. Parameters ``w`` and ``b`` are passed
-implicitly, as is always the case with shared variables.
+implicitly - all shared variables are available as inputs to all functions as
+a convenience to the user.
 
-``train`` highlights two other important features of Theano functions. Firstly,
-functions can compute multiple outputs. In this case, ``train`` computes both
+Line 16 which creates the ``train`` function highlights two other important
+features of Theano functions: the potential for multiple outputs and updates.
+In our example, ``train`` computes both
 the prediction (``prediction``) of the classifier as well as the cross-entropy
 error function (``xent``). Computing both outputs together is computationally
 efficient since it allows for sharing of all intermediate computations.
-Secondly, the ``updates`` keyword argument enables functions to have
-side-effects. It is a dictionary whose (key,value) pairs encode an update
-to perform on a shared variable. This update is executed each time the
-associated function is called. In this example, calling the ``train`` function
-will also update the parameters ``w`` and ``b``, with the value obtained after a
-single step of gradient descent. The update on ``w`` thus corresponds to the
-expression 
+The optional ``updates`` parameter enables functions to have
+side-effects on shared variables.
+The updates argument is a dictionary whose (shared variable, new value)
+items encode how to update various shared variables after each call to the
+function.
+In our example, calling the ``train`` function
+will update the parameters ``w`` and ``b`` with new values as per the SGD
+algorithm.  The update on ``w`` corresponds to the expression 
 
 :math:`$W \leftarrow W - \mu \frac{1}{N'} \sum_i \left. \frac{\partial E(W,b,x,y)}{\partial W} \right |_{x=x^{(i)},y=y^{(i)}}$`,
 
