@@ -230,7 +230,8 @@ The number of examples to use at once represents a tradeoff between
 computational and statistical efficiency.
 
 The ``shared()`` function creates *shared variables* for :math:`$W$` and :math:`$b$` and assigns them initial values.
-Shared variables are distinguished by their having a persistent value.
+Shared variables behave much like other Theano variables, with the exception
+that they also have a persistent value.
 A shared variable's value is maintained
 throughout the execution of the program and
 can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
