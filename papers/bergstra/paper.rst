@@ -207,8 +207,8 @@ define ``x`` to be a matrix of the default data type (``float64``), and we will
 use each row of ``x`` to store an example :math:`$x^{(i)}$`. Similarly, we
 declare ``y`` as a vector of type ``long`` (or ``int64``)
 whose entries correspond to the labels
-:math:`$y^{(i)}$`. Treating multiple examples at once is both computationally
-and statistically efficient.
+:math:`$y^{(i)}$`. The number of examples to use at once represents a tradeoff between
+computational and statistical efficiency.
 
 The ``shared()`` function creates *shared variables* for :math:`$W$` and :math:`$b$` and assigns them initial values.
 Shared variables are similar to standard Theano variables, but differ in that
