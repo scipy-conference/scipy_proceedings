@@ -1,38 +1,38 @@
 :author: James Bergstra
 :email: james.bergstra@umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: Olivier Breuleux
 :email: breuleuo@iro.umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: Frédéric Bastien
 :email: bastienf@iro.umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: Pascal Lamblin
 :email: lamblinp@iro.umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: Razvan Pascanu
 :email: pascanur@iro.umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: Guillaume Desjardins
 :email: desjagui@iro.umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: Joseph Turian
 :email: turian@iro.umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: David Warde-Farley
 :email: wardefar@iro.umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 :author: Yoshua Bengio
 :email: yoshua.bengio@umontreal.ca
-:institution: University of Montreal
+:institution: Université de Montréal
 
 --------------------------------------------------------------------
 Theano: A CPU and GPU Math Compiler in Python
@@ -53,7 +53,7 @@ Theano: A CPU and GPU Math Compiler in Python
     Common machine learning algorithms implemented with Theano
     are from* :math:`$1.6\times$` *to* :math:`$7.5\times$` *faster
     than competitive alternatives (including those implemented with
-    C/C++, NumPy/SciPy and Matlab) when compiled for the CPU
+    C/C++, NumPy/SciPy and MATLAB) when compiled for the CPU
     and between* :math:`$6.5\times$` *and* :math:`$44\times$` *faster
     when compiled for the GPU.
     This paper illustrates how to use
@@ -116,7 +116,7 @@ leverage ``scipy.weave``, PyCUDA, Cython, and other
 numerical libraries and compilation technologies at the user's discretion. Theano has been actively and
 continuously developed and used since January 2008.
 It has been used in the preparation of numerous scientific papers and as a teaching platform for machine
-learning in graduate courses at the Université de Montréal.
+learning in graduate courses at l'Université de Montréal.
 Documentation and installation instructions can be found on Theano's website [theano]_.
 All Theano users should subscribe to the
 `announce <http://groups.google.com/group/theano-announce>`_ [#]_ mailing list
@@ -194,7 +194,7 @@ to fit in memory, or in the setting where training examples arrive in a
 continuous stream. Even with relatively manageable dataset sizes, SGD can be
 particularly advantageous for non-convex loss functions (such as those explored
 in `Benchmarking Results`_), where the stochasticity can allow the optimizer to
-escape shallow local minima [Bottou].
+escape shallow local minima [Bottou]_.
 
 According to the SGD algorithm, the update on ``w`` is
 
@@ -387,17 +387,17 @@ This program tests the use of BLAS routines and elementwise computations.
 
 `Figure 3`_ looks at the number of examples processed per second 
 by different implementations. We compared Theano (revision #ec057beb6c) against
-NumPy 1.4.1, Matlab 7.9.0.529, and Torch 5 (a machine learning 
-library written in C/C++) [torch5]_ on the CPU and  GPUMat 0.25 for Matlab
+NumPy 1.4.1, MATLAB 7.9.0.529, and Torch 5 (a machine learning
+library written in C/C++) [torch5]_ on the CPU and  GPUMat 0.25 for MATLAB
 ([gpumat]_) on the GPU.
 
 When running on the CPU, Theano is 1.8x faster than NumPy,
-1.6x faster than Matlab, and 7.5x faster than Torch 5. Torch was written
+1.6x faster than MATLAB, and 7.5x faster than Torch 5. Torch was written
 for flexibility, not speed (Ronan Collobert, p.c.).
 Theano's speed increases 5.8x on the GPU from the CPU, a total increase of 11x over
 NumPy (CPU) and 44x over Torch 5 (CPU).
 GPUmat brings about a speed increase of only 1.4x when switching to the GPU
-for the Matlab implementation, far
+for the MATLAB implementation, far
 less than the 5.8x increase Theano achieves through CUDA specializations.
 
 .. [#] Torch was designed and implemented with flexibility in mind, not speed (Ronan Collobert, p.c.).
@@ -456,13 +456,13 @@ each expression.
 What's in Theano?
 -----------------
 
-Theano supports arrays of different dimensions 
-(from scalar to n-dimensional tensors) and types (int, 
-single-precision floats, double-precision floats etc.) as 
-well as random streams of numbers (much as Numpy does). 
-There is also limited support for sparse matrices and 
-generic objects. `Table 1`_ presents 
-a comprehensive list of operations that you would find 
+Theano supports arrays of different dimensions
+(from scalar to n-dimensional tensors) and types (int,
+single-precision floats, double-precision floats etc.) as
+well as random streams of numbers (much as NumPy does).
+There is also limited support for sparse matrices and
+generic objects. `Table 1`_ presents
+a comprehensive list of operations that you would find
 in Theano. It also supports debugging and profiling functionalities.
 
 .. _Table 1:
@@ -777,15 +777,14 @@ GPU implementations as well.
 Acknowledgements
 ----------------
 
-Theano has benefited from the contributions of many members
-of Yoshua Bengio's machine learning group in the computer science department
-(Informatique) at the University of Montreal,
-especially: 
-Arnaud Bergeron, Thierry Bertin-Mahieux, Olivier Delalleau, 
-Douglas Eck, Dumitru Erhan, Philippe Hamel, Simon Lemieux,
-Pierre-Antoine Manzagol, and François Savard.
-The authors acknowledge the support of the following agencies for
-research funding and computing support: NSERC, RQCHP, CIFAR, SHARCNET and CLUMEQ.
+Theano has benefited from the contributions of many members of Yoshua Bengio's
+machine learning group in the computer science department (Départment
+d'Informatique et de Recherche Operationelle) at l'Université de Montréal,
+especially Arnaud Bergeron, Thierry Bertin-Mahieux, Olivier Delalleau, Douglas
+Eck, Dumitru Erhan, Philippe Hamel, Simon Lemieux, Pierre-Antoine Manzagol, and
+François Savard. The authors acknowledge the support of the following agencies
+for research funding and computing support: NSERC, RQCHP, CIFAR, SHARCNET and
+CLUMEQ.
 
 References
 ----------
@@ -795,7 +794,6 @@ References
 .. [NumPy] T. E. Oliphant. "Python for Scientific Computing".
            *Computing in Science & Engineering* 9, 10 (2007).
 
-
 .. [Bottou] L. Bottou. "Online Algorithms and Stochastic Approximations".
             In D. Saad, ed. *Online Learning and Neural Networks* (1998).
             Cambridge University Press, Cambridge, UK.
@@ -803,12 +801,12 @@ References
 
 .. [numexpr] D. Cooke *et al*. numexpr, http://code.google.com/p/numexpr/
 
-.. [Cython] S. Behnel, R. Bradshaw, and D. S. Seljebotn, 
+.. [Cython] S. Behnel, R. Bradshaw, and D. S. Seljebotn,
             Cython C-Extensions for Python,
             http://www.cython.org/
 
-.. [scipy.weave] SciPy Weave module, 
-                 http://www.scipy.org/Weave
+.. [scipy.weave] SciPy Weave module,
+                 http://docs.scipy.org/doc/scipy/reference/tutorial/weave.html
 
 .. [Alted]  F. Alted. "Why Modern CPUs Are Starving And What Can
     Be Done About It". *Computing in Science and Engineering* 12(2):68-71, 2010.
@@ -823,7 +821,7 @@ References
             "LAPACK Users' Guide, Third Edition".
             http://www.netlib.org/lapack/lug/index.html
 
-.. [DLT] Deep Learning Tutorials, 
+.. [DLT] Deep Learning Tutorials,
          http://deeplearning.net/tutorial/
 
 .. [dlb] Benchmarking code:
