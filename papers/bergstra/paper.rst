@@ -324,16 +324,19 @@ algorithm.
         \caption{Logistic regression, part 4: computation.}
     \end{figure}
 
-In this code-block, we finally show how Theano functions are used to perform the
-task at hand. We start by generating four random training examples: ``D[0]``
-is the input ``x`` and ``D[1]`` the labels we must learn to predict. We then
-loop (lines 30-31) ten times, calling the ``train`` function repeatedly with
-inputs ``x=D[0]`` and ``y=D[1]``. Notice that calling a Theano function is no
-more complicated than calling a standard Python function: the graph
+Our example concludes (Figure `4 <logreg4>`_) by using the functions
+``train`` and ``predict`` to fit the logistic regression model.
+Our trivial data ``D`` is just four random vectors and labels.
+Still, repeatedly calling the ``train`` function (lines 30-31) fits
+our parameters to the data, such as it is.
+Note that calling a Theano function is no
+different than calling a standard Python function: the graph
 transformations, optimizations, compilation and calling of efficient C-functions
-(whether targeted for the CPU or GPU) are all done under the hood, in a way
-which is transparent to the user. Finally, we print the state of the model
-parameters and show that the model accurately predicts the training labels.
+(whether targeted for the CPU or GPU) have all been done under the hood.
+The arguments and return values of these functions are NumPy ``ndarray`` objects that
+interoperate normally with other scientific python libraries and tools.
+.. Finally, we print the state of the model
+.. parameters and show that the model accurately predicts the training labels.
 
 
 
