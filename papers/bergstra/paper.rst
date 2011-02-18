@@ -202,33 +202,33 @@ Theano involves the following four conceptual steps:
 (2) using these variables to build a symbolic expression graph,
 (3) compiling a Theano function, and
 (4) calling said function to perform numerical computations.
-We will now step through each of these sections in more detail.
+The code listings in Figures `1 <logreg1>`_ - `4 <logreg4>`_ illustrate these steps
+with a working program that fits a logistic regression model to random
+data.
 
-
+.. _logreg1:
 .. raw:: latex
 
     \begin{figure}[H]
         \includegraphics[scale=.75,clip=true,trim=30 640 170 42]{logreg1.pdf}
-        \caption{Logistic regression part 1: declaring variables.}
+        \caption{Logistic regression, part 1: declaring variables.}
     \end{figure}
 
-In the above code, we declare two symbolic variables ``x`` and ``y`` which will
-serve as input to the rest of the computation graph. Theano variables are
-strictly typed and include the data type, the number of dimensions, and the
+The code in Figure `1 <logreg1>`_ declares four symbolic variables ``x``, ``y``
+``w``, and ``b`` to represent the data and parameters of the model.
+Each tensor variable is
+strictly typed to include its data type, its number of dimensions, and the
 dimensions along which it may broadcast (like NumPy's broadcasting)
-in element-wise expressions. We
-define ``x`` to be a matrix of the default data type (``float64``), and we will
-use each row of ``x`` to store an example :math:`$x^{(i)}$`. Similarly, we
-declare ``y`` as a vector of type ``long`` (or ``int64``)
-whose entries correspond to the labels
-:math:`$y^{(i)}$`. The number of examples to use at once represents a tradeoff between
+in element-wise expressions. The variable
+``x`` is a matrix of the default data type (``float64``),
+and ``y`` is a vector of type ``long`` (or ``int64``).
+Each row of ``x`` will store an example :math:`$x^{(i)}$`, and each element
+of ``y`` will store the corresponding label :math:`$y^{(i)}$`.
+The number of examples to use at once represents a tradeoff between
 computational and statistical efficiency.
 
 The ``shared()`` function creates *shared variables* for :math:`$W$` and :math:`$b$` and assigns them initial values.
-Shared variables are similar to standard Theano variables, but differ in that
-they have a persistent state. As we will see shortly, any Theano function can
-operate directly on these shared variables, without having to declare them
-explicitly as an input.
+Shared variables are distinguished by their having a persistent value.
 A shared variable's value is maintained
 throughout the execution of the program and
 can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
@@ -237,7 +237,7 @@ can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
 
     \begin{figure}[H]
         \includegraphics[scale=.75,clip=true,trim=30 695 170 42]{logreg2.pdf}
-        \caption{Logistic regression part 2: the computation graph.}
+        \caption{Logistic regression, part 2: the computation graph.}
     \end{figure}
 
 The above code-block specifies the computational graph required to perform
@@ -265,7 +265,7 @@ regression by thresholding :math:`$P(Y=1|x^{(i)})$`.
 
     \begin{figure}[H]
         \includegraphics[scale=.75,clip=true,trim=30 696 170 42]{logreg3.pdf}
-        \caption{Logistic regression part 3: compilation.}
+        \caption{Logistic regression, part 3: compilation.}
     \end{figure}
 
 The above code defines two Theano functions which are required to learn and
@@ -275,20 +275,23 @@ computation graph, given values for the symbolic inputs indicated. For example, 
 ``predict`` function computes the actual output of the logistic regression
 module (``prediction``). Since this value is a function of both ``x`` and ``y``,
 these are given as input to the function. Parameters ``w`` and ``b`` are passed
-implicitly, as is always the case with shared variables.
+implicitly - all shared variables are available as inputs to all functions as
+a convenience to the user.
 
-``train`` highlights two other important features of Theano functions. Firstly,
-functions can compute multiple outputs. In this case, ``train`` computes both
+Line 16 which creates the ``train`` function highlights two other important
+features of Theano functions: the potential for multiple outputs and updates.
+In our example, ``train`` computes both
 the prediction (``prediction``) of the classifier as well as the cross-entropy
 error function (``xent``). Computing both outputs together is computationally
 efficient since it allows for sharing of all intermediate computations.
-Secondly, the ``updates`` keyword argument enables functions to have
-side-effects. It is a dictionary whose (key,value) pairs encode an update
-to perform on a shared variable. This update is executed each time the
-associated function is called. In this example, calling the ``train`` function
-will also update the parameters ``w`` and ``b``, with the value obtained after a
-single step of gradient descent. The update on ``w`` thus corresponds to the
-expression 
+The optional ``updates`` parameter enables functions to have
+side-effects on shared variables.
+The updates argument is a dictionary whose (shared variable, new value)
+items encode how to update various shared variables after each call to the
+function.
+In our example, calling the ``train`` function
+will update the parameters ``w`` and ``b`` with new values as per the SGD
+algorithm.  The update on ``w`` corresponds to the expression 
 
 :math:`$W \leftarrow W - \mu \frac{1}{N'} \sum_i \left. \frac{\partial E(W,b,x,y)}{\partial W} \right |_{x=x^{(i)},y=y^{(i)}}$`,
 
@@ -297,11 +300,12 @@ examples with which we will approximate the gradient (i.e. the number of rows
 of ``x``).
 
 
+.. _logreg4:
 .. raw:: latex
 
     \begin{figure}[H]
         \includegraphics[scale=.75,clip=true,trim=30 630 170 42]{logreg4.pdf}
-        \caption{Logistic regression part 3: computation.}
+        \caption{Logistic regression, part 4: computation.}
     \end{figure}
 
 In this code-block, we finally show how Theano functions are used to perform the
