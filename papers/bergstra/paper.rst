@@ -132,8 +132,8 @@ a simple problem in statistical prediction.
 `Benchmarking Results`_ presents some results of performance
 benchmarking on problems related to machine learning and expression evaluation.
 `What's in Theano`_ gives an overview of the design of Theano.
-`Limitations and Future Work`_ outlines current limitations
-and planned future work.
+`Limitations and Future Work`_ outlines current limitations of our implementation
+and currently planned additions to Theano.
 
 .. [#] http://groups.google.com/group/theano-announce
 .. [#] http://groups.google.com/group/theano-dev
