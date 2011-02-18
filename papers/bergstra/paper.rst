@@ -299,6 +299,7 @@ implicitly - all shared variables are available as inputs to all functions as
 a convenience to the user.
 
 .. Since this value is a function of both ``x`` and ``y``, these are given as input to the function. 
+
 Line 16 (Figure `logreg3`_) which creates the ``train`` function highlights two other important
 features of Theano functions: the potential for multiple outputs and updates.
 In our example, ``train`` computes both
@@ -323,6 +324,7 @@ algorithm.
         \includegraphics[scale=.75,clip=true,trim=30 630 170 42]{logreg4.pdf}
         \caption{Logistic regression, part 4: computation.}
     \end{figure}
+
 
 Our example concludes (Figure `4 <logreg4>`_) by using the functions
 ``train`` and ``predict`` to fit the logistic regression model.
