@@ -82,7 +82,7 @@ can be unnecessarily slow when each call is dominated by the cost of transferrin
 memory rather than the cost of performing calculations [Alted]_.
 [numexpr]_ goes one step further by providing a loop fusion optimization
 that can glue several elementwise computations together.
-Unfortunately, the syntax required by numexpr is a bit unusual (the expression
+Unfortunately, numexpr requires an unusual syntax (the expression
 must be encoded as a string within the code), and at the time of this writing,
 numexpr is limited to optimizing elementwise computations.  [Cython]_ and
 [scipy.weave]_ address Python's performance issue by offering a simple way to
