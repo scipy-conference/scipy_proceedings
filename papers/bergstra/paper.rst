@@ -111,8 +111,9 @@ evaluation of primarily array-valued expressions.
 Theano is free open source software, licensed under the New (3-clause) BSD license.
 It depends upon NumPy, and can optionally use SciPy, as well as custom C and CUDA code
 generators which are able to specialize for particular types, sizes, and shapes of
-inputs. It can be extended to use ``scipy.weave``, PyCUDA, Cython, and other
-numerical libraries and compilation technologies. Theano has been actively and
+inputs. It can be easily extended with custom graph components, known as "ops", which can
+leverage ``scipy.weave``, PyCUDA, Cython, and other
+numerical libraries and compilation technologies at the user's discretion. Theano has been actively and
 continuously developed and used since January 2008.
 It has been used in several scientific papers and it is used to teach machine
 learning in graduate courses at the Université de Montréal.
