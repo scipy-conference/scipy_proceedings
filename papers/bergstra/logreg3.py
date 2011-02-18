@@ -1,4 +1,3 @@
-# 3. Compile expressions to functions
 train = function(
             inputs=[x,y],
             outputs=[prediction, xent],

@@ -82,7 +82,7 @@ can be unnecessarily slow when each call is dominated by the cost of transferrin
 memory rather than the cost of performing calculations [Alted]_.
 [numexpr]_ goes one step further by providing a loop fusion optimization
 that can glue several elementwise computations together.
-Unfortunately, the syntax required by numexpr is a bit unusual (the expression
+Unfortunately, numexpr requires an unusual (the expression
 must be encoded as a string within the code), and at the time of this writing,
 numexpr is limited to optimizing elementwise computations.  [Cython]_ and
 [scipy.weave]_ address Python's performance issue by offering a simple way to
@@ -208,17 +208,21 @@ We will now step through each of these sections in more detail.
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics[scale=.75]{logreg1.pdf}
+        \includegraphics[scale=.75,clip=true,trim=30 640 170 42]{logreg1.pdf}
+        \caption{Logistic regression part 1: declaring variables.}
     \end{figure}
 
 In the above code, we declare two symbolic variables ``x`` and ``y`` which will
 serve as input to the rest of the computation graph. Theano variables are
 strictly typed and include the data type, the number of dimensions, and the
-dimensions along which it may broadcast in element-wise expressions. Here we
-define ``x`` to be a matrix of the default data type (``float64``), where each
-row of ``x`` corresponds to an example :math:`$x^{(i)}$`. Similarly, ``y`` is
-declared as a vector of type ``int32`` whose entries correspond to the labels
-:math:`$y^{(i)}$`.
+dimensions along which it may broadcast (like NumPy's broadcasting)
+in element-wise expressions. We
+define ``x`` to be a matrix of the default data type (``float64``), and we will
+use each row of ``x`` to store an example :math:`$x^{(i)}$`. Similarly, we
+declare ``y`` as a vector of type ``long`` (or ``int64``)
+whose entries correspond to the labels
+:math:`$y^{(i)}$`. The number of examples to use at once represents a tradeoff between
+computational and statistical efficiency.
 
 The ``shared()`` function creates *shared variables* for :math:`$W$` and :math:`$b$` and assigns them initial values.
 Shared variables are similar to standard Theano variables, but differ in that
@@ -232,7 +236,8 @@ can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics[scale=.75]{logreg2.pdf}
+        \includegraphics[scale=.75,clip=true,trim=30 695 170 42]{logreg2.pdf}
+        \caption{Logistic regression part 2: the computation graph.}
     \end{figure}
 
 The above code-block specifies the computational graph required to perform
@@ -259,7 +264,8 @@ regression by thresholding :math:`$P(Y=1|x^{(i)})$`.
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics[scale=.75]{logreg3.pdf}
+        \includegraphics[scale=.75,clip=true,trim=30 696 170 42]{logreg3.pdf}
+        \caption{Logistic regression part 3: compilation.}
     \end{figure}
 
 The above code defines two Theano functions which are required to learn and
@@ -294,7 +300,8 @@ of ``x``).
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics[scale=.75]{logreg4.pdf}
+        \includegraphics[scale=.75,clip=true,trim=30 630 170 42]{logreg4.pdf}
+        \caption{Logistic regression part 3: computation.}
     \end{figure}
 
 In this code-block, we finally show how Theano functions are used to perform the
@@ -353,7 +360,7 @@ This program tests the use of BLAS routines and elementwise computations.
 .. figure:: mlp.pdf
     :scale: 100
 
-    **Figure 3:** Fitting a multi-layer perceptron to simulated data with 
+    Fitting a multi-layer perceptron to simulated data with 
     various implementations of stochastic gradient descent.  These models have
     784 inputs, 500 hidden units, a 10-way classification, and are trained 60
     examples at a time.
@@ -380,7 +387,7 @@ less than the 5.8x increase Theano achieves through CUDA specializations.
 .. figure:: conv.pdf
     :scale: 100
 
-    **Figure 4:** Fitting a convolutional network using different
+    Fitting a convolutional network using different
     software. The benchmark stresses convolutions of medium-sized (256 by 256) images with
     small (7 by 7) filters.
 
@@ -417,7 +424,7 @@ each expression.
 .. figure:: multiple_graph.pdf
     :scale: 100
 
-    **Figure 5:** Speed comparison between NumPy,
+    Speed comparison between NumPy,
     numexpr, and Theano for different sizes of input on four elementwise
     formulae.  In each subplot, the solid blue line represents Theano, the
     dashed red line represent numexpr, and performance is plotted with respect
