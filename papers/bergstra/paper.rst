@@ -774,7 +774,6 @@ References
 .. [NumPy] T. E. Oliphant. "Python for Scientific Computing".
            *Computing in Science & Engineering* 9, 10 (2007).
 
-
 .. [Bottou] L. Bottou. "Online Algorithms and Stochastic Approximations".
             In D. Saad, ed. *Online Learning and Neural Networks* (1998).
             Cambridge University Press, Cambridge, UK.
@@ -782,12 +781,12 @@ References
 
 .. [numexpr] D. Cooke *et al*. numexpr, http://code.google.com/p/numexpr/
 
-.. [Cython] S. Behnel, R. Bradshaw, and D. S. Seljebotn, 
+.. [Cython] S. Behnel, R. Bradshaw, and D. S. Seljebotn,
             Cython C-Extensions for Python,
             http://www.cython.org/
 
-.. [scipy.weave] SciPy Weave module, 
-                 http://www.scipy.org/Weave
+.. [scipy.weave] SciPy Weave module,
+                 http://docs.scipy.org/doc/scipy/reference/tutorial/weave.html
 
 .. [Alted]  F. Alted. "Why Modern CPUs Are Starving And What Can
     Be Done About It". *Computing in Science and Engineering* 12(2):68-71, 2010.
@@ -802,7 +801,7 @@ References
             "LAPACK Users' Guide, Third Edition".
             http://www.netlib.org/lapack/lug/index.html
 
-.. [DLT] Deep Learning Tutorials, 
+.. [DLT] Deep Learning Tutorials,
          http://deeplearning.net/tutorial/
 
 .. [dlb] Benchmarking code:
