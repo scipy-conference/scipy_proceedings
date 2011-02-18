@@ -346,7 +346,7 @@ This program tests the use of BLAS routines and elementwise computations.
 .. figure:: mlp.pdf
     :scale: 100
 
-    **Figure 3:** Fitting a multi-layer perceptron to simulated data with 
+    Fitting a multi-layer perceptron to simulated data with 
     various implementations of stochastic gradient descent.  These models have
     784 inputs, 500 hidden units, a 10-way classification, and are trained 60
     examples at a time.
