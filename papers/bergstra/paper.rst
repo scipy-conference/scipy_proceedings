@@ -201,7 +201,8 @@ We will now step through each of these sections in more detail.
 In the above code, we declare two symbolic variables ``x`` and ``y`` which will
 serve as input to the rest of the computation graph. Theano variables are
 strictly typed and include the data type, the number of dimensions, and the
-dimensions along which it may broadcast in element-wise expressions. We
+dimensions along which it may broadcast (like NumPy's broadcasting)
+in element-wise expressions. We
 define ``x`` to be a matrix of the default data type (``float64``), and we will
 use each row of ``x`` to store an example :math:`$x^{(i)}$`. Similarly, ``y`` is
 declared as a vector of type ``int32`` whose entries correspond to the labels
