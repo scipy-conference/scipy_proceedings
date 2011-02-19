@@ -603,7 +603,7 @@ pipeline.
 Prior to these stages the expression graph is copied,
 so that the compilation process does not change anything in
 the graph built by the user.
-As illustrated in Figure :label:`fig:pipeline`,
+As illustrated in Figure :ref:`fig:pipeline`,
 the expression graph is subjected to several transformations:
 (1) canonicalization,
 (2) stabilization,
@@ -615,7 +615,11 @@ but at a high level they have different objectives.
 (The interested reader should note that
 these transformations correspond roughly, but not exactly to the optimization
 objects that are implemented in the project source code.)
-TODO: MAKE A BLOCK DIAGRAM SHOWING THE COMPILATION PIPELINE. 
+
+.. figure:: pipeline.pdf
+
+    :label:`fig:pipeline` The compilation pipeline for functions compiled for GPU.  Functions compiled for the CPU omit the GPU transfer step.
+    v2
 
 
 Canonicalization
