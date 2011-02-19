@@ -293,7 +293,7 @@ regression by thresholding :math:`$P(Y=1|x^{(i)})$`.
         \caption{Logistic regression, part 3: compilation.}
     \end{figure}
 
-The code of Figure `3 <logreg3>`_ creates the two functions required to learn and
+The code of Figure `3 <logreg3>`_ creates the two functions required to train and
 test our logistic regression model. Theano functions are
 callable objects that compute zero or more *outputs*
 from values given for one or more symbolic *inputs*. For example, the
