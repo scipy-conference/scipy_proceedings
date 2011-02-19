@@ -532,7 +532,9 @@ Our goal is to provide GPU implementations for all expressions.
                                 \tabularnewline
                            &
                                 \tabularnewline
-    Linear Algebra         &     {\tt dot}, {\tt outer}, {\tt tensordot}
+    Linear Algebra         &     {\tt dot}, {\tt outer}, {\tt tensordot},
+                                 {\tt diag}, {\tt cholesky}, {\tt inv},
+                                 {\tt solve}
                                 \tabularnewline
                            & 
                                  \tabularnewline
