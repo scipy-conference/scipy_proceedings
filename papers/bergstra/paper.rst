@@ -599,13 +599,23 @@ implemented or well-tested as those for integer and float dtypes. Object dtypes
 are not implemented in Theano.
 
 
-Transformations
-~~~~~~~~~~~~~~~~
+Compilation
+-----------
 
-Theano uses graph transformations to implement a range of tasks from
-merging redundant calculations to transferring computations to the
-GPU. The optimization of expression graphs is a pipeline comprising
-several stages.
+What happens under the hood when creating a function?
+This section outlines in broad strokes the various stages of the compilation
+pipeline.
+The very first step in compilation is to copy the graph,
+so that the compilation process does not change anything about the original
+graph built by the user. Once copied, the graph is the subject of several
+transformations:
+(1) canonicalization,
+(2) stabilization,
+(3) specialization,
+(4) optional GPU transfer,
+(5) code generation.
+There are some amount of overlap between these transformations,
+but these high-level distinctions are still useful.
 
 The first stage merges duplicate expressions, so as to only compute
 them once. Two expressions are considered duplicates if they carry out
