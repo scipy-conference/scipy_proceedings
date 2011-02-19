@@ -658,28 +658,32 @@ computations. It helps in some cases, but the user is still advised to
 be wary of numerically problematic computations.
 
 
-The fourth stage specializes generic expressions and subgraphs.
+Specialization
+~~~~~~~~~~~~~~
+The specialization transformation replaces expressions with faster ones.
 Expressions like ``pow(x,2)`` become ``sqr(x)``. Theano also performs
 more elaborate specializations: for example, expressions involving
 scalar-multiplied matrix additions and multiplications may become BLAS
 General matrix multiply (GEMM) nodes and ``reshape``, ``transpose``,
-and ``subtensor`` Ops (which create copies by default) are replaced by
+and ``subtensor`` expressions (which create copies by default) are replaced by
 constant-time versions that work by aliasing memory.
-
-After this stage of specialization, Sub-expressions involving
-element-wise operations are fused together in order to avoid the
-creation of unnecessary temporaries. For instance, denoting the ``a +
+Expressions subgraphs involving
+element-wise operations are fused together (as in numexpr)
+in order to avoid the
+creation and use of unnecessary temporary variables.
+For instance, denoting the ``a +
 b`` operation on tensors as ``map(+, a, b)``, then an expression such
 as ``map(+, map(*, a, b), c)`` would become ``map(lambda ai,bi,ci:
 ai*bi+ci, a, b, c)``. If the user desires to use the GPU, Ops with
 corresponding GPU implementations are substituted in, and transfer Ops
 are introduced where needed.
-
-Lastly, Theano replaces Ops with equivalents that reuse the memory of
-their inputs (which means, as a side effect, that no subsequent Ops
-may use the original values). Many Ops (e.g. GEMM and all element-wise
-Ops) have such equivalents.  Reusing memory this way can improve speed
-by reducing cache misses and allowing more computations to fit on GPUs
+Specialization also introduces expressions that treat inputs as
+workspace buffers.  Such expressions use less memory and make better use
+of hierarchical memory, but they must be used with care because they
+effectively destroy intermediate results.
+Many Ops (e.g. GEMM and all element-wise
+Ops) have such equivalents.
+Reusing memory this way allows more computation to take place on GPUs,
 where memory is at a premium.
 
 .. verify with Fred
