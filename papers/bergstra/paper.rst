@@ -616,24 +616,29 @@ transformations:
 (5) code generation.
 There are some amount of overlap between these transformations,
 but these high-level distinctions are still useful.
+TODO: MAKE A BLOCK DIAGRAM SHOWING THE COMPILATION PIPELINE. 
 
-The first stage merges duplicate expressions, so as to only compute
-them once. Two expressions are considered duplicates if they carry out
-the same operation and that all inputs are the same - since Theano is
+Canonicalization
+~~~~~~~~~~~~~~~~
+The canonicalization transformation puts the user's expression graph into a
+standard form.
+For example, duplicate expressions are merged into a single one.
+Two expressions are considered duplicates if they carry out
+the same operation and have the same inputs.
+Since Theano expressions are
 purely functional, these expressions must return the same value and
 thus the operation is safe to carry. The symbolic gradient mechanism
-often introduces redundancy, so this phase is quite important.
-
-The second stage transforms the expression into an equivalent
-canonical form. For example, sub-expressions involving only
+often introduces redundancy, so this step is quite important.
+For another example, sub-expressions involving only
 multiplication and division are put into a standard fraction form
 (e.g. ``a / (((a * b) / c) / d) -> (a * c * d) / (a * b) -> (c * d) /
 (b)``). Some useless calculations are eliminated in this phase, for
 instance crossing out uses of the ``a`` term in the previous example,
-reducing ``exp(log(x))`` to ``x``, and doing constant
-folding. Furthermore, since the canonicalization collapses many
-different expressions into a single normal form, it becomes easier to
-define reliable transformations on them.
+but also reducing ``exp(log(x))`` to ``x``, and doing constant
+folding. Canonicalization simplifies and optimizes the graph to some extent,
+but its primary function is to collapse many
+different expressions into a single normal form so that it is easier to
+recognize expression patterns in subsequent compilation stages.
 
 The third stage transforms expressions to improve numerical
 stability. For instance, consider the function ``log(1 + exp(x))``,
