@@ -720,30 +720,42 @@ The support for strides means that several operations such as the transpose and
 simple slice indexing can be performed in constant time.
 
 
-Code Generators
-~~~~~~~~~~~~~~~~
-
-
-Many (roughly 80%) of Theano's Ops generate and compile C or CUDA code during
+Code Generation
+~~~~~~~~~~~~~~~
+The code generation phase of the compilation process produces and loads
+dynamically-compiled
+Python modules with specialized implementations for the expressions in the
+computation graph.
+Not all expressions have C (technically C++) implementations, but
+many (roughly 80%) of Theano's expressions generate and compile C or CUDA code during
 ``theano.function``.
-The majority of Ops (such as all element-wise Ops and ``Sum``) that generate C code specialize the code based on the dtype and
-number of dimensions of their arguments.
-Some Ops, such as the small-filter convolution (``conv2d``), further specialize code based on
+The majority of expressions
+that generate C code specialize the code based on the dtype, broadcasting
+pattern, and number of dimensions of their arguments.
+A few expressions,
+such as the small-filter convolution (``conv2d``),
+further specialize code based on
 the size the arguments will have.
 
-Modern x86 architectures are relatively forgiving if code is not perfectly
-specialized to the input dimensions, and only the ``conv2d`` Op goes to any great
+Why is it so important to specialize C code in this way?
+Modern x86 architectures are relatively forgiving of code that does not
+make good use techniques such as loop unrolling and prefetching contiguous
+blocks of memory,
+and only the ``conv2d`` expression goes to any great
 length to generate many special case implementations for the CPU.
 By comparison, GPU architectures are much less forgiving of code that is not carefully specialized
 for the size and physical layout of function arguments.
-Theano's code generators for ``GpuSum``, ``GpuElementwise``, and ``GpuConv2d``
+Consequently, the code generators for GPU expressions like
+``GpuSum``, ``GpuElementwise``, and ``GpuConv2d``
 generate a wider variety of implementations than
-their respective CPU-targeting Ops.
+their respective host expressions.
 The difference in speed on a GPU between 
-a naïve and an optimal implementation of even a simple algorithm like row/column
+a naïve and an optimal implementation of an expression as simple as row
 summation in a matrix can be an order of magnitude or more.
-Theano's ability to generate custom-made CUDA kernels for many important
-mathematical operations accounts for the good GPU performance in our benchmarks.
+The fact that Theano's GPU ``ndarray``-like type supports strided tensors makes
+it even more important for the GPU code generators to support a variety of memory
+layouts.
+Still, these custom-made CUDA kernels account for the good GPU performance in our benchmarks.
 
 
 Limitations and Future Work
