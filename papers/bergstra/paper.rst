@@ -603,21 +603,23 @@ Compilation
 -----------
 
 What happens under the hood when creating a function?
-This section outlines in broad strokes the various stages of the compilation
+This section outlines in broad strokes the stages of the compilation
 pipeline.
-The very first step in compilation is to copy the graph,
-so that the compilation process does not change anything about the original
-graph built by the user. Once copied, the graph is the subject of several
-transformations:
+Prior to these stages the expression graph is copied,
+so that the compilation process does not change anything in
+the graph built by the user.
+As illustrated in Figure :label:`fig:pipeline`,
+the expression graph is subjected to several transformations:
 (1) canonicalization,
 (2) stabilization,
 (3) specialization,
 (4) optional GPU transfer,
 (5) code generation.
-There are some amount of overlap between these transformations,
-but these high-level distinctions are still useful.
-These transformations correspond roughly, but not exactly to the optimization
-objects that are implemented in the project source code.
+There is some overlap between these transformations,
+but at a high level they have different objectives.
+(The interested reader should note that
+these transformations correspond roughly, but not exactly to the optimization
+objects that are implemented in the project source code.)
 TODO: MAKE A BLOCK DIAGRAM SHOWING THE COMPILATION PIPELINE. 
 
 
