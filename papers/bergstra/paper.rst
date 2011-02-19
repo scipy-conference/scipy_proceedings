@@ -473,6 +473,7 @@ generic objects. `Table 1`_ presents
 a comprehensive list of operations that you would find
 in Theano. It also supports debugging and profiling functionalities.
 
+
 .. _Table 1:
 .. _Table1:
 
@@ -559,6 +560,8 @@ in Theano. It also supports debugging and profiling functionalities.
 
     \vspace{-1cm}
 
+
+
 Ops & Functionality
 ~~~~~~~~~~~~~~~~~~~
 
@@ -588,7 +591,7 @@ dense is supported.
 Roughly 90\% of Ops for tensors have implementations for the GPU, notable
 exceptions being advanced indexing, summation over certain combinations of
 axes, and reductions max, min and prod.
-Our goal is extend coverage to all ops.
+Our goal is to extend coverage to all ops.
 
 Theano does *not* currently have ops for sparse or dense matrix inversion, nor linear
 algebra decompositions.  Ops for complex number dtypes are also not as widely
@@ -745,7 +748,7 @@ enabled Theano.
 
 Also the library has been tuned towards expressions related to machine 
 learning with neural networks, and it was not as well tested outside 
-thist domain. Theano is not a powerful computer algebra system, and 
+this domain. Theano is not a powerful computer algebra system, and 
 it is an important area of future work to improve its ability to recognize
 numerical instability in complicated element-wise expression graphs.
 
