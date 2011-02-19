@@ -112,8 +112,9 @@ Theano is free open source software, licensed under the New (3-clause) BSD
 license.  It depends upon NumPy, and can optionally use SciPy. Theano includes
 many custom C and CUDA code generators which are able to specialize for
 particular types, sizes, and shapes of inputs; leveraging these code generators
-requires gcc (CPU) and nvcc (GPU) compilers, respectively.  Theano can be easily extended with custom graph
-components, known as "ops", which can
+requires gcc (CPU) and nvcc (GPU) compilers, respectively.
+Theano can be extended with custom graph
+expressions, which can
 leverage ``scipy.weave``, PyCUDA, Cython, and other
 numerical libraries and compilation technologies at the user's discretion. Theano has been actively and
 continuously developed and used since January 2008.
@@ -550,7 +551,7 @@ in Theano. It also supports debugging and profiling functionalities.
     \hline
     \end{tabular}
     \caption{
-    Overview of Theano's core Types and Ops set.
+    Overview of Theano's core functionality.
     This list is not exhaustive, and is superseded by the
     online documentation. More details are given in text for items marked with
     an asterisk. {\tt dimshuffle} is like {\tt numpy.swapaxes}.
@@ -678,15 +679,15 @@ creation and use of unnecessary temporary variables.
 For instance, denoting the ``a +
 b`` operation on tensors as ``map(+, a, b)``, then an expression such
 as ``map(+, map(*, a, b), c)`` would become ``map(lambda ai,bi,ci:
-ai*bi+ci, a, b, c)``. If the user desires to use the GPU, Ops with
-corresponding GPU implementations are substituted in, and transfer Ops
+ai*bi+ci, a, b, c)``. If the user desires to use the GPU, expressions with
+corresponding GPU implementations are substituted in, and transfer expressions
 are introduced where needed.
 Specialization also introduces expressions that treat inputs as
 workspace buffers.  Such expressions use less memory and make better use
 of hierarchical memory, but they must be used with care because they
 effectively destroy intermediate results.
-Many Ops (e.g. GEMM and all element-wise
-Ops) have such equivalents.
+Many expressions (e.g. GEMM and all element-wise ones)
+have such equivalents.
 Reusing memory this way allows more computation to take place on GPUs,
 where memory is at a premium.
 
