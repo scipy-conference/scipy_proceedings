@@ -1,4 +1,5 @@
-predict = function(inputs=[x], outputs=prediction)
+predict = function(inputs=[x], 
+                   outputs=prediction)
 train = function(
             inputs=[x,y],
             outputs=[prediction, xent],

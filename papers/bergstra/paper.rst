@@ -153,7 +153,7 @@ parameterized by a weight matrix :math:`$W$` and
 bias vector :math:`$b$`.
 The model estimates the probability
 :math:`$P(Y=1|x)$` (which we will denote with shorthand :math:`$p$`) that the input
-`x` belongs to class `$y=1$` as:
+`x` belongs to class :math:`$y=1$` as:
 
 .. raw:: latex
 
@@ -185,7 +185,7 @@ To make it a bit more interesting, we can also include an
 
 In this example, tuning parameters :math:`$W$` and :math:`$b$` will be done through
 stochastic gradient descent (SGD) on :math:`$E(W, b)$`. Stochastic gradient
-descent is a method for minimizing a differentiable loss function that is the
+descent is a method for minimizing a differentiable loss function which is the
 expectation of some per-example loss over a set of training examples. SGD
 estimates this expectation with an average over one or several examples and
 performs a step in the approximate direction of steepest descent.  Though more
@@ -198,7 +198,7 @@ particularly advantageous for non-convex loss functions (such as those explored
 in `Benchmarking Results`_), where the stochasticity can allow the optimizer to
 escape shallow local minima [Bottou]_.
 
-According to the SGD algorithm, the update on ``w`` is
+According to the SGD algorithm, the update on :math:`$W$` is
 
 .. raw:: latex
 
@@ -231,7 +231,7 @@ data.
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics[scale=.75,clip=true,trim=30 640 170 42]{logreg1.pdf}
+        \includegraphics[scale=.75,clip=true,trim=30 640 170 28]{logreg1.pdf}
         \caption{Logistic regression, part 1: declaring variables.}
     \end{figure}
 
@@ -253,35 +253,35 @@ Shared variables behave much like other Theano variables, with the exception
 that they also have a persistent value.
 A shared variable's value is maintained
 throughout the execution of the program and
-can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 11.
+can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 10.
 
 .. _logreg2:
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics[scale=.75,clip=true,trim=30 695 170 42]{logreg2.pdf}
+        \includegraphics[scale=.75,clip=true,trim=30 695 170 28]{logreg2.pdf}
         \caption{Logistic regression, part 2: the computation graph.}
     \end{figure}
 
 The above code-block specifies the computational graph required to perform
 stochastic gradient descent on the parameters of our cost function. Since
 Theano's interface shares much in
-common with that of NumPy, lines 13-17 should be self-explanatory for anyone
-familiar with ``numpy``. On line 13, we start by defining :math:`$P(Y=1|x^{(i)}) = 1$`
+common with that of NumPy, lines 11-15 should be self-explanatory for anyone
+familiar with ``numpy``. On line 11, we start by defining :math:`$P(Y=1|x^{(i)}) = 1$`
 as the symbolic variable ``p_1``. Notice that the matrix multiplication and element-wise exponential
 functions are simply called via the ``T.dot`` and ``T.exp`` functions,
 analoguous to ``numpy.dot`` and ``numpy.exp``. ``xent`` defines the
 cross-entropy loss function, which is then combined with the :math:`$\ell_2$`
-penalty on line 15, to form the cost function of Eq (3) and denoted by ``cost``.
+penalty on line 13, to form the cost function of Eq (3) and denoted by ``cost``.
 
-Line 16 is crucial to our implementation of SGD, as it performs symbolic
+Line 14 is crucial to our implementation of SGD, as it performs symbolic
 differentiation of the scalar-valued ``cost`` variable with respect to variables
 ``w`` and ``b``.  ``T.grad`` operates by iterating backwards over the expression
 graph, applying the chain rule of differentiation and building symbolic
 expressions for the gradients on ``w`` and ``b``. As such, ``gw`` and ``gb`` are
 also symbolic Theano variables, representing :math:`$\partial E / \partial W$` 
 and :math:`$\partial E / \partial b$` respectively.
-Finally, line 18 defines the actual prediction (``prediction``) of the logistic
+Finally, line 15 defines the actual prediction (``prediction``) of the logistic
 regression by thresholding :math:`$P(Y=1|x^{(i)})$`.
 
 
@@ -289,7 +289,7 @@ regression by thresholding :math:`$P(Y=1|x^{(i)})$`.
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics[scale=.75,clip=true,trim=30 696 170 42]{logreg3.pdf}
+        \includegraphics[scale=.75,clip=true,trim=30 696 170 28]{logreg3.pdf}
         \caption{Logistic regression, part 3: compilation.}
     \end{figure}
 
@@ -298,13 +298,13 @@ test our logistic regression model. Theano functions are
 callable objects that compute zero or more *outputs*
 from values given for one or more symbolic *inputs*. For example, the
 ``predict`` function computes and returns the value of ``prediction``
-for a given value for ``x``. Parameters ``w`` and ``b`` are passed
+for a given value of ``x``. Parameters ``w`` and ``b`` are passed
 implicitly - all shared variables are available as inputs to all functions as
 a convenience to the user.
 
 .. Since this value is a function of both ``x`` and ``y``, these are given as input to the function. 
 
-Line 16 (Figure `logreg3`_) which creates the ``train`` function highlights two other important
+Line 18 (Figure `3 <logreg3>`_) which creates the ``train`` function highlights two other important
 features of Theano functions: the potential for multiple outputs and updates.
 In our example, ``train`` computes both
 the prediction (``prediction``) of the classifier as well as the cross-entropy
@@ -324,7 +324,7 @@ SGD algorithm.
 .. raw:: latex
 
     \begin{figure}[H]
-        \includegraphics[scale=.75,clip=true,trim=30 630 170 42]{logreg4.pdf}
+        \includegraphics[scale=.75,clip=true,trim=30 630 170 28]{logreg4.pdf}
         \caption{Logistic regression, part 4: computation.}
     \end{figure}
 
@@ -332,7 +332,7 @@ SGD algorithm.
 Our example concludes (Figure `4 <logreg4>`_) by using the functions
 ``train`` and ``predict`` to fit the logistic regression model.
 Our trivial data ``D`` is just four random vectors and labels.
-Still, repeatedly calling the ``train`` function (lines 30-31) fits
+Still, repeatedly calling the ``train`` function (lines 27-28) fits
 our parameters to the data, such as it is.
 Note that calling a Theano function is no
 different than calling a standard Python function: the graph
@@ -340,6 +340,7 @@ transformations, optimizations, compilation and calling of efficient C-functions
 (whether targeted for the CPU or GPU) have all been done under the hood.
 The arguments and return values of these functions are NumPy ``ndarray`` objects that
 interoperate normally with other scientific python libraries and tools.
+
 .. Finally, we print the state of the model
 .. parameters and show that the model accurately predicts the training labels.
 

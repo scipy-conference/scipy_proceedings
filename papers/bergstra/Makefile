@@ -15,7 +15,7 @@ logreg3.pdf: logreg3.py
 	enscript -B --line-numbers=16 --color -E -p - logreg3.py | ps2pdf - logreg3.pdf
 	#pdfcrop --margins '0 0 0 10' logreg3.pdf logreg3.pdf
 logreg4.pdf: logreg4.py
-	enscript -B --line-numbers=21 --color -E -p - logreg4.py | ps2pdf - logreg4.pdf
+	enscript -B --line-numbers=22 --color -E -p - logreg4.py | ps2pdf - logreg4.pdf
 	#pdfcrop --margins '0 0 0 10' logreg4.pdf logreg4.pdf
 fig_simple.pdf: fig_simple.py
 	enscript -B -C --color -E -p - fig_simple.py | ps2pdf - fig_simple.pdf
