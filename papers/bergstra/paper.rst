@@ -559,6 +559,10 @@ Our goal is to provide GPU implementations for all expressions.
                                 {\tt dot}, {\tt transpose},
                                 conversion to/from dense
                                 \tabularnewline
+                           &
+                                \tabularnewline
+    Machine Learning       &  sigmoid, softmax, multi-class hinge loss
+                                \tabularnewline
     \hline
     \end{tabular}
     \caption{
