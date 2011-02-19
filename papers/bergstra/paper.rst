@@ -313,12 +313,11 @@ efficient since it allows for the reuse of intermediate computations, such as
 ``dot(x,w)``.
 The optional ``updates`` parameter enables functions to have
 side-effects on shared variables.
-The updates argument is a dictionary whose (shared variable, new value)
-items encode how to update various shared variables after each call to the
-function, just before returning.
-In our example, calling the ``train`` function
-will update the parameters ``w`` and ``b`` with new values as per the SGD
-algorithm.
+The updates argument is a dictionary which specifies how shared variables
+should be updated after all other computation for the function takes place,
+just before the function returns. In our example, calling the ``train``
+function will update the parameters ``w`` and ``b`` with new values as per the
+SGD algorithm.
 
 
 .. _logreg4:
