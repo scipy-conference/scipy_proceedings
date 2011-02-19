@@ -640,15 +640,23 @@ but its primary function is to collapse many
 different expressions into a single normal form so that it is easier to
 recognize expression patterns in subsequent compilation stages.
 
-The third stage transforms expressions to improve numerical
-stability. For instance, consider the function ``log(1 + exp(x))``,
-which is zero in the limit of negative ``x`` and ``x`` in the limit of
-large ``x``. Due to limitations in the representation of double
-precision numbers, the expression yields infinity for ``x >
-709``. Theano is able to identify this pattern and replace it with an
-implementation that simply returns ``x`` if ``x`` is sufficiently
+Stabilization
+~~~~~~~~~~~~~
+The stabilization transformation improves the numerical stability of
+the computations implied by the expression graph.
+For instance, consider the function ``log(1 + exp(x))``,
+which is zero as :math:`$\lim_{x\rightarrow -\infty}$`,
+and ``x`` as :math:`$\lim_{x\rightarrow -\infty}$`.
+Due to limitations in the representation of double
+precision numbers, the computation as written yields infinity for ``x >
+709``. The stabilization phase replaces patterns like one with an
+expression that simply returns ``x`` when ``x`` is sufficiently
 large (using doubles, this is accurate beyond the least significant
 digit).
+It should be noted that this phase cannot guarantee the stability of
+computations. It helps in some cases, but the user is still advised to
+be wary of numerically problematic computations.
+
 
 The fourth stage specializes generic expressions and subgraphs.
 Expressions like ``pow(x,2)`` become ``sqr(x)``. Theano also performs
