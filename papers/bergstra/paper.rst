@@ -616,7 +616,10 @@ transformations:
 (5) code generation.
 There are some amount of overlap between these transformations,
 but these high-level distinctions are still useful.
+These transformations correspond roughly, but not exactly to the optimization
+objects that are implemented in the project source code.
 TODO: MAKE A BLOCK DIAGRAM SHOWING THE COMPILATION PIPELINE. 
+
 
 Canonicalization
 ~~~~~~~~~~~~~~~~
