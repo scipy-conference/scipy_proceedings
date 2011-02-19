@@ -462,18 +462,27 @@ each expression.
 .. _What's in Theano:
 .. _intheano:
 
-What's in Theano?
------------------
+What kinds of work does Theano support?
+---------------------------------------
 
-Theano supports arrays of different dimensions
-(from scalar to n-dimensional tensors) and types (int,
-single-precision floats, double-precision floats etc.) as
-well as random streams of numbers (much as NumPy does).
-There is also limited support for sparse matrices and
-generic objects. `Table 1`_ presents
-a comprehensive list of operations that you would find
-in Theano. It also supports debugging and profiling functionalities.
+Theano's expression types cover much of the same functionality as
+NumPy, and include some of what can be found in SciPy.
+`Table 1`_ lists some of the most-used expressions in Theano.
+More extensive reference documentation is available online
+[theano]_.
 
+
+
+Theano's strong suit is its support
+for strided N-dimensional arrays of integers and floating point values.
+Signed and unsigned integers of all native bit widths are supported, 
+as are both single-precision and double-precision floats.
+Single-precision and double-precision complex numbers are also supported,
+but less so - for example, gradients through several mathematical functions
+are not implemented.
+Roughly 90\% of expressions for single-precision
+N-dimensional arrays have GPU implementations.
+Our goal is to provide GPU implementations for all expressions.
 
 .. _Table 1:
 .. _Table1:
@@ -562,41 +571,46 @@ in Theano. It also supports debugging and profiling functionalities.
     \vspace{-1cm}
 
 
+Random numbers are provided in two ways: via NumPy's random module, and
+via an internal generator from the MRG family [Ecu]_.
+Theano's ``RandomStreams`` replicates the 
+``numpy.random.RandomState`` interface, and acts as a proxy to NumPy's random
+number generator and the various random distributions that use it.
+The ``MRG_RandomStreams`` class implements a different random number
+generation algorithm (called MRG31k3p) that maps naturally to GPU architectures.
+It is implemented for both the CPU and GPU so that programs can produce the
+same results on either architecture without sacrificing speed. 
+The ``MRG_RandomStreams`` class offers a more limited selection of random number
+distributions than NumPy though: uniform, normal, and multinomial.
 
-Ops & Functionality
-~~~~~~~~~~~~~~~~~~~
+Sparse vectors and matrices are supported via SciPy's ``sparse`` module.
+Only compressed-row and compressed-column formats are supported by most
+expressions.
+There are expressions for packing and unpacking these sparse types,
+some operator support (e.g. scaling, negation), matrix transposition,
+and matrix multiplication with both
+sparse and dense matrices.
+Sparse expressions currently have no GPU equivalents.
 
-*Ops* are objects that define computations.
-Most of the ops (e.g. ``add``, ``exp``) behave like NumPy counterparts.
-`Table 1`_ lists the core functionality offered by Theano's
-Ops. More extensive reference documentation is available online
-[theano]_.
+There is also support in Theano for arbitrary Python objects.
+However there are very few expressions that make use of that support because
+the compilation pipeline works on the basis of inferring properties of
+intermediate results.  If an intermediate result can be an arbitrary Python
+object, then there is little to infer.  Still, it is occasionally useful
+to have such objects in Theano graphs.
 
-Allocating random number variables
-and seeding generators is typically done via a ``RandomStreams`` instance, which
-replicates the ``numpy.random.RandomState`` interface
-and wraps ``numpy.random.RandomState`` functionality.
-Theano also provides an experimental new ``MRG_RandomStreams`` generator which
-provides a few distributions using an ``MRG`` algorithm with both a CPU and GPU
-implementation [Ecu]_.
-
-
-There is a narrower range of Ops that work on SparseType Variables: packing and
-unpacking of compressed sparse row/column
-sparse matrices into dense variables is supported,
-as is conversion between sparse and dense matrices.  Transpose, negation,
-addition, and subtraction are supported.  Scalar and element-wise multiplication
-with a dense matrix is supported, and matrix multiplication between sparse and
-dense is supported.
-
-Roughly 90\% of Ops for tensors have implementations for the GPU, notable
-exceptions being advanced indexing, summation over certain combinations of
-axes, and reductions max, min and prod.
-Our goal is to extend coverage to all ops.
+Theano has been developed to support machine learning research,
+and that has motivated the inclusion of more specialized expression types such
+as the logistic sigmoid, the softmax function, and multi-class hinge loss.
 
 
-Compilation
------------
+.. It also supports debugging and profiling functionalities.
+
+
+
+
+Compilation by ``theano.function``
+----------------------------------
 
 What happens under the hood when creating a function?
 This section outlines in broad strokes the stages of the compilation
