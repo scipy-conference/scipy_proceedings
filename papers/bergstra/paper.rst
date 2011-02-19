@@ -202,9 +202,9 @@ According to the SGD algorithm, the update on ``w`` is
 
 .. raw:: latex
 
-    \begin{equation*}
+    \begin{equation}
         W \leftarrow W - \mu \frac{1}{N'} \sum_i \left. \frac{\partial E(W,b,x,y)}{\partial W} \right|_{x=x^{(i)},y=y^{(i)}},
-    \end{equation*}
+    \end{equation}
 
 where :math:`$\mu=0.1$` is the step size and :math:`$N'$` is the number of
 examples with which we will approximate the gradient (i.e. the number of rows
@@ -213,9 +213,9 @@ The update on ``b`` is likewise
 
 .. raw:: latex
 
-    \begin{equation*}
+    \begin{equation}
         b \leftarrow b - \mu \frac{1}{N'} \sum_i \left. \frac{\partial E(W,b,x,y)}{\partial b} \right|_{x=x^{(i)},y=y^{(i)}}.
-    \end{equation*}
+    \end{equation}
 
 Implementing this minimization procedure in
 Theano involves the following four conceptual steps:
