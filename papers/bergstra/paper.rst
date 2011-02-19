@@ -593,11 +593,6 @@ exceptions being advanced indexing, summation over certain combinations of
 axes, and reductions max, min and prod.
 Our goal is to extend coverage to all ops.
 
-Theano does *not* currently have ops for sparse or dense matrix inversion, nor linear
-algebra decompositions.  Ops for complex number dtypes are also not as widely
-implemented or well-tested as those for integer and float dtypes. Object dtypes
-are not implemented in Theano.
-
 
 Compilation
 -----------
@@ -781,6 +776,12 @@ cover all the functionality of NumPy and covers only a few features of SciPy.
 Wrapping functions from these and other libraries is often straightforward,
 but implementing their gradients or related graph transformations
 can be more difficult.
+Theano does not yet have expressions for sparse or dense matrix inversion,
+nor linear algebra decompositions, although work on these is underway outside
+of the Theano trunk.
+Support for complex numbers is also not as widely
+implemented or as well-tested as for integers and floating point numbers.
+Object dtypes are not supported.
 
 We expect to improve support for advanced indexing and linear algebra in the
 coming months. Documentation online describes how to add new operations, 
