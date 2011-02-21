@@ -71,7 +71,9 @@ except ImportError:
 
 if pygments:
     from pygments.formatters import LatexFormatter
-    preamble += LatexFormatter().get_style_defs()
+    from sphinx_highlight import SphinxStyle
+
+    preamble += LatexFormatter(style=SphinxStyle).get_style_defs()
 
 
 settings = {'documentclass': 'IEEEtran',
