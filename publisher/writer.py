@@ -177,6 +177,8 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         LaTeXTranslator.depart_thead(self, node)
 
     def visit_literal_block(self, node):
+        self.non_breaking_paragraph = True
+
         if 'language' in node.attributes:
             # do highlighting
             from pygments import highlight
