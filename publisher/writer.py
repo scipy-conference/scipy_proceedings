@@ -184,7 +184,7 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
             LaTeXTranslator.visit_literal_block(self, node)
 
     def depart_literal_block(self, node):
-        pass
+        LaTeXTranslator.depart_literal_block(self, node)
 
 
 writer = Writer()
