@@ -233,8 +233,8 @@ parameters that solve the objective function.::
                         data.endog)
 
 The instance *longley_res* has several attributes and methods of interest.  The 
-first is the fitted values, commonly :math:`$\beta$` in the general linear 
-model, :math:`$Y=X\beta$`, which is called *params* in statsmodels.::
+first is the fitted values, commonly :math:`\beta` in the general linear 
+model, :math:`Y=X\beta`, which is called *params* in statsmodels.::
 
     >>> longley_res.params
     array([  1.50618723e+01, -3.58191793e-02,  
@@ -359,9 +359,9 @@ Consider a simple static investment function for a macro economy
 
    \begin{equation}\ln{I_{t}}=\beta_{1}+\beta_{2}\ln Y_{t}+\beta_{3}i_{t}+\beta_{4}\Delta p_{t}+\beta_{5}t+\epsilon_{t}\end{equation}
 
-In this example, (log) investment, :math:`$I_{t}$` is a function of the interest 
-rate, :math:`$i_{t}$`, inflation, :math:`$\Delta p_{t}$`, (log) real GDP, 
-:math:`$Y_{t}$`, and possibly follows a linear time trend, :math:`$t$`.  Suppose 
+In this example, (log) investment, :math:`I_{t}` is a function of the interest 
+rate, :math:`i_{t}`, inflation, :math:`\Delta p_{t}`, (log) real GDP, 
+:math:`Y_{t}`, and possibly follows a linear time trend, :math:`t`.  Suppose 
 we wanted to test the hypothesis that investors care *only* about real 
 interest rates, while also restricting the marginal propensity to invest to be 
 unity, and proposing that there is no linear time trend.  This suggests the 
@@ -371,8 +371,8 @@ following model
 
    \begin{equation}\ln I_{t}=\beta_{1}+\beta_{2}\ln Y_{t}+\beta_{3}\left(i_{t}-\Delta p_{t}\right)+\beta_{5}t+\epsilon_{t}\end{equation}
 
-In terms of the first equation this implies that :math:`$\beta_{3}+\beta_{4}=0$`.
-Our further hypotheses are that :math:`$\beta_{2}=1$` and :math:`$\beta_{5}=0$`.
+In terms of the first equation this implies that :math:`\beta_{3}+\beta_{4}=0`.
+Our further hypotheses are that :math:`\beta_{2}=1` and :math:`\beta_{5}=0`.
 This can be implemented in statsmodels as::
 
     >>> data = sm.datasets.macrodata.load()
@@ -388,12 +388,12 @@ Macrodata has no *endog* and *exog* attributes in order to be more flexible so::
     >>> exog = sm.add_constant(exog, prepend=True)
     >>> inv_model = sm.OLS(endog, exog).fit()
 
-Now we need to make linear restrictions in the form of :math:`$R\beta=q$`.::
+Now we need to make linear restrictions in the form of :math:`R\beta=q`.::
 
     >>> R = [[0,1,0,0,0],[0,0,1,1,0],[0,0,0,0,1]]
     >>> q = [1,0,0]
 
-Now :math:`$R\beta=q$` implies the hypotheses outlined above.  We can test the
+Now :math:`R\beta=q` implies the hypotheses outlined above.  We can test the
 joint hypothesis using an F test, which returns a *ContrastResults* class.::
 
     >>> Ftest = inv_model.f_test(R,q)
