@@ -141,9 +141,9 @@ matter to extend it with new data values after a communication pass::
     h5.root.quality.append(new_quality)
     h5.close()
 
-At this time the largest individual tables have about :math:`$1.3 \times 10^9$`
+At this time the largest individual tables have about :math:`1.3 \times 10^9`
 rows (for the highest sampling rate of 4 times per second).  The data retrieval
-speed from this archive of HDF5 tables is approximately :math:`$10^7$` items per
+speed from this archive of HDF5 tables is approximately :math:`10^7` items per
 second.  This means that typical data retrieval requests can be handled in
 seconds rather than hours.  Such an improvement changes the landscape of
 questions that can be asked and then answered.
@@ -164,11 +164,11 @@ illustrated in the figure below.
 
 .. figure:: multimass.png
 
-Here each of the boxes (:math:`$T_0$, $T_1$, $T_2$`) represents a physical node
+Here each of the boxes (:math:`T_0`, :math:`T_1`, :math:`T_2`) represents a physical node
 on the spacecraft where a thermistor is located.  It is then assumed that each
-node :math:`$i$` has an external heat input :math:`$P_i(p)$` and has
-conductances :math:`$U_{i,j}$` to other nodes and an external heat bath with
-temperature :math:`$T_{e,i}$`.  For most models the external heat input is Solar
+node :math:`i` has an external heat input :math:`P_i(p)` and has
+conductances :math:`U_{i,j}` to other nodes and an external heat bath with
+temperature :math:`T_{e,i}`.  For most models the external heat input is Solar
 and depends purely on the spacecraft pitch angle with respect to the Sun.  In
 some cases however the heat input due to internal electronics is also
 included.  Given these definitions and the nodal connectivity the temperatures
@@ -242,7 +242,7 @@ thermistors whose data are averaged over 5 minute intervals.  Up to five
 years of such data are fit at once.
 
 What is not immediately apparent in the concise matrix formulation
-:math:`$\mathbf{ \dot{T} } = \mathbf{\tilde{A} T} + \mathbf{b} \vspace*{.5em}$`
+:math:`\mathbf{ \dot{T} } = \mathbf{\tilde{A} T} + \mathbf{b} \vspace*{.5em}`
 of the thermal model is that it contains a lot of free parameters.  In addition
 to the conductances and external heat bath temperatures, the external Solar
 power input for each node is complicated.  First it is a function of the pitch
@@ -313,8 +313,8 @@ fit optimization process while each of the workers takes care of all model
 computations for a particular time segment.  The worker is initially sent the
 time range and model definition and it is then responsible for retrieving the
 appropriate telemetry data.  After initialization the model parameters for each
-fit iteration are sent and the worker computes the model and :math:`$Chi^2$` fit
-statistic.  All of the individual :math:`$Chi^2$` values are then summed.  In
+fit iteration are sent and the worker computes the model and :math:`Chi^2` fit
+statistic.  All of the individual :math:`Chi^2` values are then summed.  In
 this way the communication overhead between master and workers is minimal.  The
 figure below illustrates the process.
 

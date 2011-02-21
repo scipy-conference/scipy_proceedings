@@ -175,14 +175,14 @@ geometry can be described with the following procedure and associated graphic:
 
 .. figure:: lineintersection.png   
 
-   The geometry of point :math:`$\mathbf{x}_{i_{new}}$`, which is the 
-   intersection of lines :math:`$\mathbf{L}_{1}$` and :math:`$\mathbf{L}_{2}$`.
-   The line :math:`$\mathbf{L}_{2}$` is defined by known points 
-   :math:`$\mathbf{x}_{i}$` and :math:`$\mathbf{x}_{0}$`. The line 
-   :math:`$\mathbf{L}_{1}$` is defined by point :math:`$\mathbf{c}_{0}$`, which 
-   is the camera center, and point :math:`$\mathbf{p}$`, which is the 
-   reprojection of the image point :math:`$\mathbf{p}'$` into   
-   :math:`$\mathbb{R}^{3}$`.   
+   The geometry of point :math:`\mathbf{x}_{i_{new}}`, which is the 
+   intersection of lines :math:`\mathbf{L}_{1}` and :math:`\mathbf{L}_{2}`.
+   The line :math:`\mathbf{L}_{2}` is defined by known points 
+   :math:`\mathbf{x}_{i}` and :math:`\mathbf{x}_{0}`. The line 
+   :math:`\mathbf{L}_{1}` is defined by point :math:`\mathbf{c}_{0}`, which 
+   is the camera center, and point :math:`\mathbf{p}`, which is the 
+   reprojection of the image point :math:`\mathbf{p}'` into   
+   :math:`\mathbb{R}^{3}`.   
 
 2.2 Superquadrics
 ~~~~~~~~~~~~~~~~~

@@ -167,38 +167,38 @@ and the default modules. While this is usually not a problem if
 we start a few instances, it can become troublesome on a large 
 system such as JUGENE.
 
-Taking a look at `Table 1`_ we see that 
+Taking a look at :ref:`Table1` we see that 
 already for a single rack, it takes more than 5 minutes to run a 
 simple helloworld program. A C++ program for comparison takes 
 only 5 s. Plotting the run time of the helloworld program, we 
 quickly see that the time increases linearly with the number of 
-MPI tasks at a rate of 0.1 s per task (`Figure 1`_). Extrapolating this to 
+MPI tasks at a rate of 0.1 s per task (Figure :ref:`Figure1`). Extrapolating this to 
 all 294912 cores of JUGENE, it would take more than 8 hours to 
 start the Python interpreter. 
 
-+-------------+-----------+--------------------------------------------+
-| # of Cores  | Time [s]  |                 Comments                   |
-+-------------+-----------+--------------------------------------------+
-|          1  |        5  |                                            |
-+-------------+-----------+--------------------------------------------+
-|        128  |       50  |            A single node card              |
-+-------------+-----------+--------------------------------------------+
-|        512  |       55  |           Midplane in SMP mode             |
-+-------------+-----------+--------------------------------------------+
-|       1024  |      100  |            Only rank 0 writes              |
-+-------------+-----------+--------------------------------------------+
-|       2048  |      376  |       195 s if only rank 0 writes          |
-+-------------+-----------+--------------------------------------------+
-|       4096  |      321  |1 rack (smallest size for production runs)  |
-+-------------+-----------+--------------------------------------------+
-|       8192  |      803  |                 2 racks                    |
-+-------------+-----------+--------------------------------------------+
-|      16384  |     1817  | 4 racks. For comparison, a C++ program     |
-|             |           | takes 25 s.                                |
-+-------------+-----------+--------------------------------------------+
+.. table:: Time measured for a simple MPI hello world program written using mpi4py on the Blue Gene/P JUGENE. :label:`Table1`
 
+   +-------------+-----------+--------------------------------------------+
+   | # of Cores  | Time [s]  |                 Comments                   |
+   +-------------+-----------+--------------------------------------------+
+   |          1  |        5  |                                            |
+   +-------------+-----------+--------------------------------------------+
+   |        128  |       50  |            A single node card              |
+   +-------------+-----------+--------------------------------------------+
+   |        512  |       55  |           Midplane in SMP mode             |
+   +-------------+-----------+--------------------------------------------+
+   |       1024  |      100  |            Only rank 0 writes              |
+   +-------------+-----------+--------------------------------------------+
+   |       2048  |      376  |       195 s if only rank 0 writes          |
+   +-------------+-----------+--------------------------------------------+
+   |       4096  |      321  |1 rack (smallest size for production runs)  |
+   +-------------+-----------+--------------------------------------------+
+   |       8192  |      803  |                 2 racks                    |
+   +-------------+-----------+--------------------------------------------+
+   |      16384  |     1817  | 4 racks. For comparison, a C++ program     |
+   |             |           | takes 25 s.                                |
+   +-------------+-----------+--------------------------------------------+
 
-    _`Table 1`: Time measured for a simple MPI hello world program written using mpi4py on the Blue Gene/P JUGENE.
 
 
 The linear behavior hints at serialization when the Python 
@@ -208,8 +208,8 @@ parallel file system and all nodes access the same Python image on the disk.
 
 .. figure:: startupJugene.pdf
 
-    _`Figure 1`: Scaling of the startup time of the Python interpreter on JUGENE 
-    up to 20480 tasks.
+    Scaling of the startup time of the Python interpreter on JUGENE 
+    up to 20480 tasks. :label:`Figure1`
 
 A similar behavior was discussed for the GPAW code in the mpi4py 
 forum [PyOn10k]_. GPAW [GPAW]_ uses its own Python MPI interface. Their work around 
@@ -245,25 +245,28 @@ the energy function when called from Python and Fortran.
 
 Scaling in parallel programs refers to the speedup when the program runs on 
 *p* processors compared to running it on one processor. If the run time with *p* 
-processors is given by :math:`$t(p)$` then the speedup *s* is defined as 
-:math:`$s(p) = t(0) / t(p)$` and the efficiency of the scaling is given by
-:math:`$e(p) = s(p) / p$`. An efficiency of 50% is often considered acceptable. 
+processors is given by :math:`t(p)` then the speedup *s* is defined as 
+:math:`s(p) = t(0) / t(p)` and the efficiency of the scaling is given by
+:math:`e(p) = s(p) / p`. An efficiency of 50% is often considered acceptable. 
 
-As a benchmark system, I used the three-helix bundle GS-:math:`$\alpha_3$W`
+As a benchmark system, I used the three-helix bundle
+GS-:math:`\alpha_3\mathrm{W}` 
 (PDB code: `1LQ7 <http://www.rcsb.org/pdb/explore/explore.do?structureId=1lq7>`_) 
-with 67 amino acids and 1110 atoms (see `Figure 2`_) 
+with 67 amino acids and 1110 atoms (see Figure :ref:`Figure2`) 
 
 .. figure:: 1lq7.png
 
-    _`Figure 2`: Cartoon rendering of the three-helix bundle GS-:math:`$\alpha_{3}$W`. The 
-    rendering was done with PyMOL [PyMOL]_.
+    Cartoon rendering of the three-helix bundle
+    GS-:math:`\alpha_{3}\mathrm{W}`. The 
+    rendering was done with PyMOL [PyMOL]_. :label:`Figure2`
 
 On JuRoPA, I used f2py's default optimization options for the Intel compiler
 to create the bindings. The Fortran program was compiled with the -fast 
 option, which activates most optimizations and includes 
 interprocedural optimizations. For a single core, the Fortran 
 program is about 10% faster. The scaling on a single node is comparable, 
-but it breaks down for PySMMP if more than one node is used (see `Figure 3`_).
+but it breaks down for PySMMP if more than one node is used (see
+Figure :ref:`Figure3`).
 
 On JUGENE, the behavior is quite different. PySMMP was compiled with gfortran, 
 SMMP with IBM's xlf compiler, which produces code that is almost three times faster
@@ -272,11 +275,11 @@ on a single core. The shape of the scaling is comparable and saturates at about
 
 .. figure:: scaling_combined.pdf
 
-    _`Figure 3`: Parallel scaling of the duration of the energy calculation 
-    for the three-helix bundle GS-:math:`$\alpha_{3}$W` on JuRoPA (red) and JUGENE 
+    Parallel scaling of the duration of the energy calculation 
+    for the three-helix bundle GS-:math:`\alpha_{3}\mathrm{W}` on JuRoPA (red) and JUGENE 
     (blue). The speedup is relative to the time needed by the Fortran program for the
     calculation of the energy on a single core. The square symbols represent SMMP, 
-    the disks PySMMP.
+    the disks PySMMP. :label:`Figure3`
 
 
 Parallel tempering
@@ -288,9 +291,9 @@ a system are simulated at different temperatures. In addition
 to regular Monte Carlo [MC]_ moves that change a configuration, we 
 introduce a move that exchanges conformations of two different 
 temperatures. The probability for such a move is 
-:math:`$P_{\mathrm{{PT}}}=\exp(\Delta\beta\Delta E)$`, 
-where :math:`$\beta=1/k_{B}T$`, :math:`$T$` is the temperature and 
-:math:`$k_{B}$`
+:math:`P_{\mathrm{{PT}}}=\exp(\Delta\beta\Delta E)`, 
+where :math:`\beta=1/k_{B}T`, :math:`T` is the temperature and 
+:math:`k_{B}`
 is the Boltzmann constant. With this exchange probability the 
 statistics at each temperature remains correct, yet conformations 
 can move to higher temperatures where it is easier to overcome 
@@ -299,16 +302,16 @@ conformational space of a protein.
 
 Parallel tempering is by its very nature a parallel algorithm. 
 At each temperature, we perform a regular canonical MC 
-simulation. After a number of updates :math:`$n_{up}$`, we attempt an 
+simulation. After a number of updates :math:`n_{up}`, we attempt an 
 exchange between temperatures. If we create our own MPI 
 communicators, we can use two levels of parallelism. For each 
-temperature :math:`$T_{i}$`, we use a number of processors :math:`$p_{i}$` to 
-calculate the energy in parallel. Usually, :math:`$p_{i}$` is the same for 
-all temperatures, but this is not a requirement. Assuming that :math:`$p_{i}=p$`
-, and using :math:`$n_{T}$` temperatures, we use a total of :math:`$p_{\mathrm{tot}}=n_{T}*p$`
+temperature :math:`T_{i}`, we use a number of processors :math:`p_{i}` to 
+calculate the energy in parallel. Usually, :math:`p_{i}` is the same for 
+all temperatures, but this is not a requirement. Assuming that :math:`p_{i}=p`
+, and using :math:`n_{T}` temperatures, we use a total of :math:`p_{\mathrm{tot}}=n_{T}*p`
 processors. For an average protein domain consisting of about 
-150 amino acids and 3000 atoms, :math:`$p=128$`, and :math:`$n_{T}=64$` is a 
-reasonable choice on a Blue Gene/P, for a total of :math:`$p_{\mathrm{tot}}=8192$`
+150 amino acids and 3000 atoms, :math:`p=128`, and :math:`n_{T}=64` is a 
+reasonable choice on a Blue Gene/P, for a total of :math:`p_{\mathrm{tot}}=8192`
 |---| a good size for a production run.
 
 Parallel tempering is implemented in Fortran as part of SMMP. The 
@@ -322,7 +325,7 @@ only the calculation of the energy of a conformation is done in Fortran.
 
 For parallel tempering, the number of processes increases proportionally with
 the number of replicas. This kind of scaling is called weak scaling. Ideally,
-the time stays constant. `Figure 4`_ shows the scaling of parallel tempering
+the time stays constant. Figure :ref:`Figure4` shows the scaling of parallel tempering
 on JuRoPA and JUGENE with respect to the pure Fortran program. On JuRoPA,
 one processor was used per replica. On JUGENE 128 processors were used per
 replica. The overhead of implementing the algorithm in Python is about 5% on 
@@ -333,7 +336,7 @@ about 10% longer.
 
 .. figure:: scalingPT.pdf
 
-    _`Figure 4`: Efficiency of the scaling of parallel tempering. Parallel 
+    Efficiency of the scaling of parallel tempering. Parallel 
     tempering is an example for weak scaling. The problem size,
     i.e., the number of temperatures, increases proportional to the number of 
     processors. Ideally, the time stays constant and the efficiency is one.
@@ -343,7 +346,7 @@ about 10% longer.
     (squares). On JUGENE (blue) each replica uses
     128 cores for the energy calculation. The Python implementation takes about 20%
     longer for 2 replica  than the Fortran implementation but for 16 replica the
-    difference is down to about 10%.
+    difference is down to about 10%. :label:`Figure4`
     
     
 Clustering
@@ -369,7 +372,7 @@ algorithms. A cluster can be defined in many different ways.
 Three intuitive definitions are
 
 * Elements belong to the same cluster if their distance to each 
-  other is less than a given distance :math:`$d_{\mathrm{cluster}}$`.
+  other is less than a given distance :math:`d_{\mathrm{cluster}}`.
 
 * Elements belong to the same cluster if they have more 
   connections to each other than to other elements.
@@ -378,7 +381,7 @@ Three intuitive definitions are
   cluster is much higher than between clusters.
 
 The first definition works well with rmsd as distance measure if 
-we choose :math:`$d_{\mathrm{cluster}}$` small enough and is an intuitive 
+we choose :math:`d_{\mathrm{cluster}}` small enough and is an intuitive 
 definition for clusters of structures, but it is computationally 
 expensive. We usually have several tens of thousands of structures 
 requiring billions of rmsd calculations to complete the distance 
@@ -388,35 +391,35 @@ spaces (the third definition). MAFIA [MAFIA]_ is a adaptive grid algorithm
 to determine such clusters. 
 It looks for dense regions in increasingly higher
 dimension. A one-dimensional region is considered dense if the number
-of elements is larger than a threshold :math:`$n_t = \alpha \bar{n} w$`,
-where :math:`$\alpha$` is a parameter, :math:`$\bar{n}$` is the average
+of elements is larger than a threshold :math:`n_t = \alpha \bar{n} w`,
+where :math:`\alpha` is a parameter, :math:`\bar{n}` is the average
 density of elements in that dimension, and *w* is the width of the region.
 An n-dimensional region is considered dense if the number of elements it
 contains is larger than the threshold of each of its one-dimensional sub
 spaces
-For each dimension, MAFIA divides space into :math:`$n_\mathrm{bins}$` 
-uniform bins (see `Figure 5`_). For each bin, it counts the number of elements in that bin 
+For each dimension, MAFIA divides space into :math:`n_\mathrm{bins}` 
+uniform bins (see Figure :ref:`Figure5`). For each bin, it counts the number of elements in that bin 
 creating a histogram. The next step is to reduce the number of bins by 
-enveloping the histogram using :math:`$n_\mathrm{windows}$` windows. The
+enveloping the histogram using :math:`n_\mathrm{windows}` windows. The
 value of each window is the maximum of the bins it contains. 
 To build an adaptive grid, neighboring windows are combined into larger cells
-if their values differ by less than a factor :math:`$\beta$`. For each 
-adaptive-grid cell, the threshold :math:`$n_t$` is calculated. 
+if their values differ by less than a factor :math:`\beta`. For each 
+adaptive-grid cell, the threshold :math:`n_t` is calculated. 
 The one-dimensional dense cells are used to find two dimensional candidate
 dense units. The algorithm combines the dense units found to find 
 increasingly higher-dimensional dense units. It takes
-advantage of the fact that all :math:`$n-1$`-dimensional projections
+advantage of the fact that all :math:`n-1`-dimensional projections
 of an *n*-dimensional dense unit are also dense to quickly reduce the number 
 of higher-dimensional cells that need to be tested.
 
 .. figure:: example.pdf
 
-    _`Figure 5`: An illustration of MAFIA using a simple two-dimensional 
-    example with :math:`$\alpha=1.5$`. The light green columns and the 
+    An illustration of MAFIA using a simple two-dimensional 
+    example with :math:`\alpha=1.5`. The light green columns and the 
     light blue row are one-dimensional dense units. The areas where they
     cross are two-dimensional candidates for dense units, but only the 
     darker cyan area is dense. It contains more particles than required 
-    by the thresholds of its one-dimensional components.
+    by the thresholds of its one-dimensional components. :label:`Figure5`
 
 Since, we couldn't find an implementation of 
 MAFIA, I implemented a Python version using NumPy and mpi4py. MAFIA 
@@ -443,7 +446,7 @@ this is mostly due to the overhead of loading the Python interpreter
 which, extrapolating the data to the almost 300000 cores on JUGENE, 
 would take more than 8 hours resulting in 25 lost rack days (70 CPU 
 years with 4 cores per CPU) and almost 10 metric tons of 
-:math:`$\mathrm{CO}_{2}$`. 
+:math:`\mathrm{CO}_{2}`. 
 Using ram disks is an effective means to reduce the startup time 
 by an order of magnitude, but this is not enough and 
 ram disks are not always available to the user.
@@ -453,7 +456,7 @@ down to that of a regular binary program, PySMMP becomes an attractive
 alternative for development *and* production runs.
 
 On JuRoPA, the scaling of the energy calculation for the protein
-GS-:math:`$\alpha_{3}$W` breaks down as soon as more than one node is used
+GS-:math:`\alpha_{3}\mathrm{W}` breaks down as soon as more than one node is used
 when called from Python. For larger systems, this is not the case,
 but the scaling of the energy calculation when called from Fortran
 is still better. The overhead of using Python instead of Fortran 

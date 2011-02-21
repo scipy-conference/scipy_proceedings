@@ -13,6 +13,10 @@ OUTDIR="output/$AUTHOR"
 mkdir -p $OUTDIR
 cp $DIR/* $OUTDIR
 python publisher/build_paper.py $DIR $OUTDIR
+if [ "$?" -ne "0" ]; then
+    echo "Error building paper $DIR. Aborting."
+    exit 1
+fi
 cd $OUTDIR
 pdflatex paper.tex && pdflatex paper.tex
 

@@ -7,6 +7,9 @@ from docutils import nodes
 from docutils.writers.latex2e import (Writer, LaTeXTranslator,
                                       PreambleCmds)
 
+from rstmath import mathEnv
+import code_block
+
 from options import options
 
 PreambleCmds.float_settings = '''
@@ -27,6 +30,9 @@ class Translator(LaTeXTranslator):
     author_emails = []
     paper_title = ''
     table_caption = []
+
+    abstract_in_progress = False
+    non_breaking_paragraph = False
 
     def visit_docinfo(self, node):
         pass
@@ -109,19 +115,24 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         LaTeXTranslator.visit_title(self, node)
 
     def visit_paragraph(self, node):
-        if 'abstract' in node['classes']:
+        if 'abstract' not in node['classes'] and self.abstract_in_progress:
+            self.out.append('\\end{abstract}')
+            self.abstract_in_progress = False
+
+        if 'abstract' in node['classes'] and not self.abstract_in_progress:
             self.out.append('\\begin{abstract}')
+            self.abstract_in_progress = True
 
         elif 'keywords' in node['classes']:
             self.out.append('\\begin{IEEEkeywords}')
+
+        elif self.non_breaking_paragraph:
+            self.non_breaking_paragraph = False
 
         else:
             self.out.append('\n\n')
 
     def depart_paragraph(self, node):
-        if 'abstract' in node['classes']:
-            self.out.append('\\end{abstract}')
-
         if 'keywords' in node['classes']:
             self.out.append('\\end{IEEEkeywords}')
 
@@ -133,10 +144,12 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         LaTeXTranslator.visit_image(self, node)
 
     def visit_footnote(self, node):
-        # Work-around for a bug in docutils where a
-        # "%" is prepended to footnote text.
+        # Work-around for a bug in docutils where
+        # "%" is prepended to footnote text
         LaTeXTranslator.visit_footnote(self, node)
-        self.out[-1] = self.out[-1].strip('%')
+        self.out[-1] = self.out[1].strip('%')
+
+        self.non_breaking_paragraph = True
 
     def visit_table(self, node):
         self.out.append(r'\begin{table}')
@@ -162,6 +175,50 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
 
     def depart_thead(self, node):
         LaTeXTranslator.depart_thead(self, node)
+
+    def visit_literal_block(self, node):
+        self.non_breaking_paragraph = True
+
+        if 'language' in node.attributes:
+            # do highlighting
+            from pygments import highlight
+            from pygments.lexers import PythonLexer, get_lexer_by_name
+            from pygments.formatters import LatexFormatter
+
+            linenos = node.attributes.get('linenos', False)
+            lexer = get_lexer_by_name(node.attributes['language'])
+            tex = highlight(node.astext(), lexer,
+                            LatexFormatter(linenos=linenos,
+                                           verboptions='fontsize=\\footnotesize'))
+
+            self.out.append(tex)
+            raise nodes.SkipNode
+        else:
+            LaTeXTranslator.visit_literal_block(self, node)
+
+    def depart_literal_block(self, node):
+        LaTeXTranslator.depart_literal_block(self, node)
+
+
+    # Math directives from rstex
+
+    def visit_InlineMath(self, node):
+        self.requirements['amsmath'] = r'\usepackage{amsmath}'
+        self.body.append('$' + node['latex'] + '$')
+        raise nodes.SkipNode
+
+    def visit_PartMath(self, node):
+        self.requirements['amsmath'] = r'\usepackage{amsmath}'
+        self.body.append(mathEnv(node['latex'], node['label'], node['type']))
+        self.non_breaking_paragraph = True
+        raise nodes.SkipNode
+
+    def visit_PartLaTeX(self, node):
+        if node["usepackage"]:
+            for package in node["usepackage"]:
+                self.requirements[package] = r'\usepackage{%s}' % package
+        self.body.append("\n" + node['latex'] + "\n")
+        raise nodes.SkipNode
 
 
 writer = Writer()

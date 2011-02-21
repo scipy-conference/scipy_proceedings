@@ -1,6 +1,3 @@
-.. role:: math(raw)
-  :format: latex
-
 :author: Rob Speer
 :email: rspeer@mit.edu
 :institution: MIT Media Lab
@@ -62,22 +59,22 @@ includes implementations of some SVD-inspired algorithms
 such as CCIPCA [Wen03]_ and landmark multi-dimensional scaling
 [Sil04]_.
 
-Using singular value decomposition, any matrix :math:`$A$` can be factored into an
-orthonormal matrix :math:`$U$`, a diagonal matrix :math:`$\Sigma$`, and an orthonormal matrix
-:math:`$V^T$`, so that  :math:`$A = U\Sigma V^T$`. The singular
-values in :math:`$\Sigma$` can be ordered from largest to smallest, where the larger
-values correspond to the vectors in :math:`$U$` and :math:`$V$` that are more significant
-components of the initial :math:`$A$` matrix. The largest singular values, and their
-corresponding rows of :math:`$U$` and columns of :math:`$V$`, represent the principal
+Using singular value decomposition, any matrix :math:`A` can be factored into an
+orthonormal matrix :math:`U`, a diagonal matrix :math:`\Sigma`, and an orthonormal matrix
+:math:`V^T`, so that  :math:`A = U\Sigma V^T`. The singular
+values in :math:`\Sigma` can be ordered from largest to smallest, where the larger
+values correspond to the vectors in :math:`U` and :math:`V` that are more significant
+components of the initial :math:`A` matrix. The largest singular values, and their
+corresponding rows of :math:`U` and columns of :math:`V`, represent the principal
 components of the data.
 
-To create the truncated SVD,  discard all but the first :math:`$k$`
-components -- the principal components of :math:`$A$` -- resulting in the smaller
-matrices :math:`$U_k$`, :math:`$\Sigma_k$`, and :math:`$V^T_k$`. The
+To create the truncated SVD,  discard all but the first :math:`k`
+components -- the principal components of :math:`A` -- resulting in the smaller
+matrices :math:`U_k`, :math:`\Sigma_k`, and :math:`V^T_k`. The
 components that are discarded represent relatively small variations in the
 data, and the principal components form a low-rank approximation of the
 original data. One can then reconstruct a smoothed version of the input matrix as an 
-approximation: :math:`$A \approx U_k\Sigma_k V^T_k = A_k$`.
+approximation: :math:`A \approx U_k\Sigma_k V^T_k = A_k`.
 
 To make it easier to work with SVD in understandable Python
 code, Divisi provides an abstraction over sparse and dense matrices that
@@ -236,12 +233,12 @@ arbitrarily choose 10 for this example.
 >>> u, sigma, v = normalized.svd(k=10)
 
 Here, ``sigma`` is an array of diagonal entries; the actual diagonal
-matrix :math:`$\Sigma$` is given by ``np.diag(sigma)``.
+matrix :math:`\Sigma` is given by ``np.diag(sigma)``.
 
-Since :math:`$A \approx U \Sigma V^T$`, we can execute various queries
+Since :math:`A \approx U \Sigma V^T`, we can execute various queries
 simply by matrix multiplication. For example, which documents are
 likely to contain terms like "book"? That's just a row of
-:math:`$A$`. Using the approximation, we can compute that row:
+:math:`A`. Using the approximation, we can compute that row:
 
 >>> from pprint import pprint
 >>> booky = divisi2.dot(u.row_named('book'), divisi2.dot(np.diag(sigma), v.T))
@@ -472,7 +469,7 @@ A.
 -0.26456066802309008
 
 As shown in the earlier LSA example, we can also reconstruct an approximation
-to the similarity matrix :math:`$A^T A$`, describing how similar the nodes are
+to the similarity matrix :math:`A^T A`, describing how similar the nodes are
 to each other. (Long floating point values are rounded off here for brevity.)
 
 >>> sim = divisi2.reconstruct_similarity(U, S)

@@ -45,7 +45,7 @@ and [Lucy77]_ in 1977.  Since then, it has been used in numerous other
 fields including fluid-dynamics, gas-dynamics and solid mechanics. 
 
 The central idea behind SPH is the use of integral interpolants.
-Consider a function :math:`$f(r)$`.  It can be represented by the
+Consider a function :math:`f(r)`.  It can be represented by the
 equation
 
 .. raw:: latex
@@ -56,7 +56,7 @@ equation
     \]
 
 Replacing the delta distribution with an approximate delta function,
-:math:`$W$`, gives us:
+:math:`W`, gives us:
 
 .. raw:: latex
 
@@ -65,15 +65,15 @@ Replacing the delta distribution with an approximate delta function,
     f(r) = \int{f(r^\prime)W(r-r^\prime,h)dr^\prime}.
     \]
 
-The above equation estimates the value of function :math:`$f$` at a
-point :math:`$r$` in space using the weighted values of :math:`$f$` at
-points near it. The weight decreases as the distance between :math:`$r$`
-and :math:`$r^\prime$` increase. :math:`$h$` in the above equation
+The above equation estimates the value of function :math:`f` at a
+point :math:`r` in space using the weighted values of :math:`f` at
+points near it. The weight decreases as the distance between :math:`r`
+and :math:`r^\prime` increase. :math:`h` in the above equation
 represents the particle interaction radius. The *support* of the kernel
-:math:`$W$` is some small multiple of :math:`$h$`. Outside the support,
-the value of :math:`$W$` is set to zero.  Compact support is
+:math:`W` is some small multiple of :math:`h`. Outside the support,
+the value of :math:`W` is set to zero.  Compact support is
 computationally advantageous since it allows us to avoid an
-:math:`$N^2$` interaction among particles.
+:math:`N^2` interaction among particles.
 
 The above equation can be written in summation form as 
 

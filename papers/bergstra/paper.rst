@@ -178,8 +178,6 @@ will instead minimize the (average) negative log likelihood [#]_:
 To make it a bit more interesting, we can also include an
 :math:`$\ell_2$` penalty on :math:`$W$`, giving a cost function :math:`$E(W,b)$` defined as:
 
-.. raw:: latex
-
     \begin{equation}
     E(W,b) = \ell(W, b) + 0.01 \sum_i \sum_j w_{ij}^2
     \end{equation}
@@ -344,7 +342,6 @@ interoperate normally with other scientific python libraries and tools.
 
 .. Finally, we print the state of the model
 .. parameters and show that the model accurately predicts the training labels.
-
 
 
 .. _benchmark:

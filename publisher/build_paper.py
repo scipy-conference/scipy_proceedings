@@ -54,7 +54,27 @@ preamble = r'''
   \renewenvironment{longtable}{\begin{center}\begin{tabular}}%
     {\end{tabular}\end{center}\vspace{2mm}}
 }
+
+% Packages required for code highlighting
+\usepackage{fancyvrb}
 '''
+
+# Add the LaTeX commands required by Pygments to do syntax highlighting
+
+try:
+    import pygments
+except ImportError:
+    import warnings
+    warnings.warn(RuntimeWarning('Could not import Pygments. '
+                                 'Syntax highlighting will fail.'))
+    pygments = None
+
+if pygments:
+    from pygments.formatters import LatexFormatter
+    from sphinx_highlight import SphinxStyle
+
+    preamble += LatexFormatter(style=SphinxStyle).get_style_defs()
+
 
 settings = {'documentclass': 'IEEEtran',
             'use_verbatim_when_possible': True,
@@ -74,13 +94,13 @@ for p in (in_path, out_path):
 
 print "Building:", in_path
 
-rst = glob.glob(os.path.join(in_path, '*.rst'))[0]
+try:
+    rst, = glob.glob(os.path.join(in_path, '*.rst'))
+except ValueError:
+    raise RuntimeError("Found more than one input .rst--not sure which one to use.")
 
 content = open(rst, 'r').read()
 content = r'''
-.. role:: math(raw)
-   :format: latex
-
 .. role:: ref
 
 .. role:: label
