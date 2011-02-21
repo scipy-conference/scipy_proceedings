@@ -101,7 +101,21 @@ figures.
    | Water      | 12    |
    +------------+-------+
 
-We show the different quantities of materials required in Table :ref:`mtable`.
+We show the different quantities of materials required in Table
+:ref:`mtable`.
+
+.. Customised LaTeX packages
+.. -------------------------
+
+.. Please avoid using this feature, unless agreed upon with the
+.. proceedings editors.
+
+.. ::
+
+..   .. latex::
+..      :usepackage: somepackage
+
+..      Some custom LaTeX source here.
 
 References
 ----------
