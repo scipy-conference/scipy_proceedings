@@ -368,7 +368,7 @@ CPU timing was carried out on an
 a Intel(R) Core(TM)2 Duo CPU E8500 @ 3.16GHz with 2 GB of RAM. 
 All implementations were linked against the BLAS implemented in the Intel Math
 Kernel Library, version 10.2.4.032 and allowed to use only one thread.
-GPU timing was done on a GForce GTX 285.
+GPU timing was done on a GeForce GTX 285.
 CPU computations were done at double-precision.
 GPU computations were done at single-precision.
 
