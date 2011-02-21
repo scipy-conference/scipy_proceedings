@@ -17,15 +17,20 @@ class PartLaTeX(nodes.Part, nodes.Element):
     pass
 
 def mathEnv(math, label, type):
-    if type in ("split", "gathered"):
-        begin = "\\begin{equation}\n\\begin{%s}\n" % type
-        end = "\\end{%s}\n\\end{equation}\n" % type
+    if label:
+        eqn_star = ''
     else:
-        begin = "\\begin{%s}\n" % type
-        end = "\\end{%s}\n" % type
+        eqn_star = '*'
+
+    if type in ("split", "gathered"):
+        begin = "\\begin{equation%s}\n\\begin{%s}\n" % (type, eqn_star)
+        end = "\\end{%s}\n\\end{equation%s}\n" % (type, eqn_star)
+    else:
+        begin = "\\begin{%s%s}\n" % (type, eqn_star)
+        end = "\\end{%s%s}" % (type, eqn_star)
     if label:
         begin += "\\label{%s}\n" % label
-    return begin + math + "\n" + end
+    return begin + math + '\n' + end
 
 def mathRole(role, rawtext, text, lineno, inliner, options={}, content=[]):
     latex = utils.unescape(text, restore_backslashes=True)
