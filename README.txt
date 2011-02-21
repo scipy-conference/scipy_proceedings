@@ -26,27 +26,14 @@ Define the fields in the beginning of the paper::
   :email: two@myplace.com
   :institution: Some University
 
-Figures
-```````
-Use the following markup::
+Other markup
+------------
+Please refer to the example paper in ``papers/00_vanderwalt`` for
+examples of how to:
 
- .. figure:: filename.png
-
-    Caption of figure goes here.
-
-Mathematics
-```````````
-Use the inline ``math``-role::
-
- This is some inline :math:`$f(x)`.
-
-Or insert an equation on a separate line::
-
- Let us examine the following equation:
-
- .. raw:: latex
-
-    \begin{equation*}\int_0^\infty f(x) dx\end{equation*}
+ - Label figures, equations and tables
+ - Use math markup
+ - Include code snippets
 
 Build Process
 -------------
@@ -57,5 +44,5 @@ Build Process
 Requirements
 ------------
  - IEEETran and AMSmath LaTeX classes
- - Latest docutils (development version, they haven't released in years)
+ - **Latest** docutils (development version, they haven't released in years)
 
