@@ -1,6 +1,3 @@
-.. role:: math(raw)
-  :format: latex
-
 :author: Rob Speer
 :email: rspeer@mit.edu
 :institution: MIT Media Lab
