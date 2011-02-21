@@ -8,6 +8,7 @@ from docutils.writers.latex2e import (Writer, LaTeXTranslator,
                                       PreambleCmds)
 
 from rstmath import mathEnv
+import code_block
 
 from options import options
 
@@ -175,6 +176,28 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
     def depart_thead(self, node):
         LaTeXTranslator.depart_thead(self, node)
 
+    def visit_literal_block(self, node):
+        if 'language' in node.attributes:
+            # do highlighting
+            from pygments import highlight
+            from pygments.lexers import PythonLexer, get_lexer_by_name
+            from pygments.formatters import LatexFormatter
+
+            linenos = node.attributes.get('linenos', False)
+            lexer = get_lexer_by_name(node.attributes['language'])
+            tex = highlight(node.astext(), lexer,
+                            LatexFormatter(linenos=linenos,
+                                           verboptions='fontsize=\\footnotesize'))
+
+            self.out.append(tex)
+            raise nodes.SkipNode
+        else:
+            LaTeXTranslator.visit_literal_block(self, node)
+
+    def depart_literal_block(self, node):
+        LaTeXTranslator.depart_literal_block(self, node)
+
+
     # Math directives from rstex
 
     def visit_InlineMath(self, node):
@@ -194,8 +217,6 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
                 self.requirements[package] = r'\usepackage{%s}' % package
         self.body.append("\n" + node['latex'] + "\n")
         raise nodes.SkipNode
-
-
 
 
 writer = Writer()
