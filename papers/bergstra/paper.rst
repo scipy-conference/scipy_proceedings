@@ -400,8 +400,7 @@ library written in C/C++) [torch5]_ on the CPU and  GPUMat 0.25 for MATLAB
 ([gpumat]_) on the GPU.
 
 When running on the CPU, Theano is 1.8x faster than NumPy,
-1.6x faster than MATLAB, and 7.5x faster than Torch 5. Torch was written
-for flexibility, not speed (Ronan Collobert, p.c.).
+1.6x faster than MATLAB, and 7.5x faster than Torch 5. [#]_
 Theano's speed increases 5.8x on the GPU from the CPU, a total increase of 11x over
 NumPy (CPU) and 44x over Torch 5 (CPU).
 GPUmat brings about a speed increase of only 1.4x when switching to the GPU
