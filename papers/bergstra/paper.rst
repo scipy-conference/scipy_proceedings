@@ -271,7 +271,7 @@ common with that of NumPy, lines 11-15 should be self-explanatory for anyone
 familiar with that module. On line 11, we start by defining :math:`P(Y=1|x^{(i)}) = 1`
 as the symbolic variable ``p_1``. Notice that the matrix multiplication and element-wise exponential
 functions are simply called via the ``T.dot`` and ``T.exp`` functions,
-analoguous to ``numpy.dot`` and ``numpy.exp``. ``xent`` defines the
+analogous to ``numpy.dot`` and ``numpy.exp``. ``xent`` defines the
 cross-entropy loss function, which is then combined with the :math:`\ell_2`
 penalty on line 13, to form the cost function of Eq (3) and denoted by ``cost``.
 
