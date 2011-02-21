@@ -51,10 +51,10 @@ Theano: A CPU and GPU Math Compiler in Python
     translates them into C++ (or CUDA for GPU),
     compiles them into dynamically loaded Python modules, all automatically.
     Common machine learning algorithms implemented with Theano
-    are from* :math:`$1.6\times$` *to* :math:`$7.5\times$` *faster
+    are from* :math:`1.6\times` *to* :math:`7.5\times` *faster
     than competitive alternatives (including those implemented with
     C/C++, NumPy/SciPy and MATLAB) when compiled for the CPU
-    and between* :math:`$6.5\times$` *and* :math:`$44\times$` *faster
+    and between* :math:`6.5\times` *and* :math:`44\times` *faster
     when compiled for the GPU.
     This paper illustrates how to use
     Theano, outlines the scope of the compiler, provides benchmarks
@@ -150,11 +150,11 @@ Case Study: Logistic Regression
 To get a sense of how Theano feels from a user's perspective,
 we will look at how to solve a binary logistic regression problem.
 Binary logistic regression is a classification model
-parameterized by a weight matrix :math:`$W$` and
-bias vector :math:`$b$`.
+parameterized by a weight matrix :math:`W` and
+bias vector :math:`b`.
 The model estimates the probability
-:math:`$P(Y=1|x)$` (which we will denote with shorthand :math:`$p$`) that the input
-`x` belongs to class :math:`$y=1$` as:
+:math:`P(Y=1|x)` (which we will denote with shorthand :math:`p`) that the input
+`x` belongs to class :math:`y=1` as:
 
 .. raw:: latex
 
@@ -162,9 +162,9 @@ The model estimates the probability
     P(Y=1|x^{(i)}) = p^{(i)} = \frac {e^{W x^{(i)} + b}} {1 +  e^{Wx^{(i)} + b}}
     \end{equation}
 
-The goal is to optimize the log probability of :math:`$N$` training examples,
-:math:`$\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})$`,
-with respect to :math:`$W$` and :math:`$b$`. To maximize the log likelihood we
+The goal is to optimize the log probability of :math:`N` training examples,
+:math:`\mathcal{D} = \{(x^{(i)},y^{(i)}) , 0 < i \leq N\})`,
+with respect to :math:`W` and :math:`b`. To maximize the log likelihood we
 will instead minimize the (average) negative log likelihood [#]_:
 
 .. raw:: latex
@@ -176,20 +176,22 @@ will instead minimize the (average) negative log likelihood [#]_:
 .. [#] Taking the mean in this fashion decouples the choice of the regularization coefficient and the stochastic gradient step size from the number of training examples.
 
 To make it a bit more interesting, we can also include an
-:math:`$\ell_2$` penalty on :math:`$W$`, giving a cost function :math:`$E(W,b)$` defined as:
+:math:`\ell_2` penalty on :math:`W`, giving a cost function :math:`E(W,b)` defined as:
+
+.. raw:: latex
 
     \begin{equation}
     E(W,b) = \ell(W, b) + 0.01 \sum_i \sum_j w_{ij}^2
     \end{equation}
 
-In this example, tuning parameters :math:`$W$` and :math:`$b$` will be done through
-stochastic gradient descent (SGD) on :math:`$E(W, b)$`. Stochastic gradient
+In this example, tuning parameters :math:`W` and :math:`b` will be done through
+stochastic gradient descent (SGD) on :math:`E(W, b)`. Stochastic gradient
 descent is a method for minimizing a differentiable loss function which is the
 expectation of some per-example loss over a set of training examples. SGD
 estimates this expectation with an average over one or several examples and
 performs a step in the approximate direction of steepest descent.  Though more
 sophisticated algorithms for numerical optimization exist, in particular for
-smooth convex functions such as :math:`$E(W, b)$`, stochastic gradient descent
+smooth convex functions such as :math:`E(W, b)`, stochastic gradient descent
 remains the method of choice when the number of training examples is too large
 to fit in memory, or in the setting where training examples arrive in a
 continuous stream. Even with relatively manageable dataset sizes, SGD can be
@@ -197,7 +199,7 @@ particularly advantageous for non-convex loss functions (such as those explored
 in `Benchmarking Results`_), where the stochasticity can allow the optimizer to
 escape shallow local minima [Bottou]_.
 
-According to the SGD algorithm, the update on :math:`$W$` is
+According to the SGD algorithm, the update on :math:`W` is
 
 .. raw:: latex
 
@@ -205,7 +207,7 @@ According to the SGD algorithm, the update on :math:`$W$` is
         W \leftarrow W - \mu \frac{1}{N'} \sum_i \left. \frac{\partial E(W,b,x,y)}{\partial W} \right|_{x=x^{(i)},y=y^{(i)}},
     \end{equation}
 
-where :math:`$\mu=0.1$` is the step size and :math:`$N'$` is the number of
+where :math:`\mu=0.1` is the step size and :math:`N` is the number of
 examples with which we will approximate the gradient (i.e. the number of rows
 of ``x``).
 The update on ``b`` is likewise
@@ -242,12 +244,12 @@ dimensions along which it may broadcast (like NumPy's broadcasting)
 in element-wise expressions. The variable
 ``x`` is a matrix of the default data type (``float64``),
 and ``y`` is a vector of type ``long`` (or ``int64``).
-Each row of ``x`` will store an example :math:`$x^{(i)}$`, and each element
-of ``y`` will store the corresponding label :math:`$y^{(i)}$`.
+Each row of ``x`` will store an example :math:`x^{(i)}`, and each element
+of ``y`` will store the corresponding label :math:`y^{(i)}`.
 The number of examples to use at once represents a tradeoff between
 computational and statistical efficiency.
 
-The ``shared()`` function creates *shared variables* for :math:`$W$` and :math:`$b$` and assigns them initial values.
+The ``shared()`` function creates *shared variables* for :math:`W` and :math:`b` and assigns them initial values.
 Shared variables behave much like other Theano variables, with the exception
 that they also have a persistent value.
 A shared variable's value is maintained
@@ -266,11 +268,11 @@ The above code-block specifies the computational graph required to perform
 stochastic gradient descent on the parameters of our cost function. Since
 Theano's interface shares much in
 common with that of NumPy, lines 11-15 should be self-explanatory for anyone
-familiar with ``numpy``. On line 11, we start by defining :math:`$P(Y=1|x^{(i)}) = 1$`
+familiar with ``numpy``. On line 11, we start by defining :math:`P(Y=1|x^{(i)}) = 1`
 as the symbolic variable ``p_1``. Notice that the matrix multiplication and element-wise exponential
 functions are simply called via the ``T.dot`` and ``T.exp`` functions,
 analoguous to ``numpy.dot`` and ``numpy.exp``. ``xent`` defines the
-cross-entropy loss function, which is then combined with the :math:`$\ell_2$`
+cross-entropy loss function, which is then combined with the :math:`\ell_2`
 penalty on line 13, to form the cost function of Eq (3) and denoted by ``cost``.
 
 Line 14 is crucial to our implementation of SGD, as it performs symbolic
@@ -278,10 +280,10 @@ differentiation of the scalar-valued ``cost`` variable with respect to variables
 ``w`` and ``b``.  ``T.grad`` operates by iterating backwards over the expression
 graph, applying the chain rule of differentiation and building symbolic
 expressions for the gradients on ``w`` and ``b``. As such, ``gw`` and ``gb`` are
-also symbolic Theano variables, representing :math:`$\partial E / \partial W$` 
-and :math:`$\partial E / \partial b$` respectively.
+also symbolic Theano variables, representing :math:`\partial E / \partial W`
+and :math:`\partial E / \partial b` respectively.
 Finally, line 15 defines the actual prediction (``prediction``) of the logistic
-regression by thresholding :math:`$P(Y=1|x^{(i)})$`.
+regression by thresholding :math:`P(Y=1|x^{(i)})`.
 
 
 .. _logreg3:
@@ -373,9 +375,9 @@ GPU computations were done at single-precision.
 Our first benchmark is training
 a single layer MLP by stochastic gradient descent.
 Each implementation repeatedly carried out the following steps:
-(1) multiply 60 784-element input vectors by a :math:`$784 \times 500$` weight matrix,
+(1) multiply 60 784-element input vectors by a :math:`784 \times 500` weight matrix,
 (2) compress the result by tanh,
-(3) multiply the result by a :math:`$500 \times 10$` matrix,
+(3) multiply the result by a :math:`500 \times 10` matrix,
 (4) classify the result using a multi-class generalization of logistic regression,
 (5) compute the gradient by performing similar calculations but in reverse, and finally
 (6) add the gradients to the parameters.
@@ -426,8 +428,8 @@ research in convolutional networks.
 To put these results into perspective, we implemented approximately half (no
 gradient calculation) of the algorithm using SciPy's ``signal.convolve2d`` function. 
 This benchmark uses convolutions of medium sized images
-(:math:`$256 \times 256$`) with
-small filters (:math:`$7 \times 7$`).
+(:math:`256 \times 256`) with
+small filters (:math:`7 \times 7`).
 `Figure 6`_ shows the performance of Theano (both CPU and GPU)
 against competing implementations.
 On the CPU, Theano is 2.2x faster than EBLearn, its best competitor. This is because
@@ -667,8 +669,8 @@ Stabilization
 The stabilization transformation improves the numerical stability of
 the computations implied by the expression graph.
 For instance, consider the function ``log(1 + exp(x))``,
-which is zero as :math:`$\lim_{x\rightarrow -\infty}$`,
-and ``x`` as :math:`$\lim_{x\rightarrow -\infty}$`.
+which is zero as :math:`\lim_{x\rightarrow -\infty}`,
+and ``x`` as :math:`\lim_{x\rightarrow -\infty}`.
 Due to limitations in the representation of double
 precision numbers, the computation as written yields infinity for ``x >
 709``. The stabilization phase replaces patterns like one with an
