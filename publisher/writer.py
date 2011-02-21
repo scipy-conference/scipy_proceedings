@@ -7,6 +7,8 @@ from docutils import nodes
 from docutils.writers.latex2e import (Writer, LaTeXTranslator,
                                       PreambleCmds)
 
+from rstmath import mathEnv
+
 from options import options
 
 PreambleCmds.float_settings = '''
@@ -29,6 +31,7 @@ class Translator(LaTeXTranslator):
     table_caption = []
 
     abstract_in_progress = False
+    end_of_equation = False
 
     def visit_docinfo(self, node):
         pass
@@ -122,6 +125,9 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         elif 'keywords' in node['classes']:
             self.out.append('\\begin{IEEEkeywords}')
 
+        elif self.end_of_equation:
+            self.end_of_equation = False
+
         else:
             self.out.append('\n\n')
 
@@ -166,6 +172,28 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
 
     def depart_thead(self, node):
         LaTeXTranslator.depart_thead(self, node)
+
+    # Math directives from rstex
+
+    def visit_InlineMath(self, node):
+        self.requirements['amsmath'] = r'\usepackage{amsmath}'
+        self.body.append('$' + node['latex'] + '$')
+        raise nodes.SkipNode
+
+    def visit_PartMath(self, node):
+        self.requirements['amsmath'] = r'\usepackage{amsmath}'
+        self.body.append(mathEnv(node['latex'], node['label'], node['type']))
+        self.end_of_equation = True
+        raise nodes.SkipNode
+
+    def visit_PartLaTeX(self, node):
+        if node["usepackage"]:
+            for package in node["usepackage"]:
+                self.requirements[package] = r'\usepackage{%s}' % package
+        self.body.append("\n" + node['latex'] + "\n")
+        raise nodes.SkipNode
+
+
 
 
 writer = Writer()

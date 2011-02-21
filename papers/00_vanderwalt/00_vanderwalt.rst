@@ -48,14 +48,27 @@ Important Part
 --------------
 
 It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
-some maths, for example :math:`$e^{\pi i} + 3 \delta$`.  Or maybe an
+some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
 equation on a separate line:
 
-.. raw:: latex
+.. math::
 
-   \begin{equation}
    g(x) = \int_0^\infty f(x) dx
-   \end{equation}
+
+The area of a circle and volume of a sphere are given as
+
+.. math::
+   :label: circarea
+
+   A(r) = \pi r^2.
+
+.. math::
+   :label: spherevol
+
+   V(r) = \frac{4}{3} \pi r^3
+
+We can then refer back to Equation (:ref:`circarea`) or
+(:ref:`spherevol`) later.
 
 Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
 consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
@@ -88,7 +101,21 @@ figures.
    | Water      | 12    |
    +------------+-------+
 
-We show the different quantities of materials required in Table :ref:`mtable`.
+We show the different quantities of materials required in Table
+:ref:`mtable`.
+
+.. Customised LaTeX packages
+.. -------------------------
+
+.. Please avoid using this feature, unless agreed upon with the
+.. proceedings editors.
+
+.. ::
+
+..   .. latex::
+..      :usepackage: somepackage
+
+..      Some custom LaTeX source here.
 
 References
 ----------
