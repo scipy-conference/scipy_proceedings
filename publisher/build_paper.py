@@ -81,9 +81,6 @@ except ValueError:
 
 content = open(rst, 'r').read()
 content = r'''
-.. role:: math(raw)
-   :format: latex
-
 .. role:: ref
 
 .. role:: label

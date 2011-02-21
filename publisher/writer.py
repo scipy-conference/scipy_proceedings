@@ -7,6 +7,8 @@ from docutils import nodes
 from docutils.writers.latex2e import (Writer, LaTeXTranslator,
                                       PreambleCmds)
 
+from rstmath import mathEnv
+
 from options import options
 
 PreambleCmds.float_settings = '''
@@ -166,6 +168,27 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
 
     def depart_thead(self, node):
         LaTeXTranslator.depart_thead(self, node)
+
+    # Math directives from rstex
+
+    def visit_InlineMath(self, node):
+        self.requirements['amsmath'] = r'\usepackage{amsmath}'
+        self.body.append('$' + node['latex'] + '$')
+        raise nodes.SkipNode
+
+    def visit_PartMath(self, node):
+        self.requirements['amsmath'] = r'\usepackage{amsmath}'
+        self.body.append(mathEnv(node['latex'], node['label'], node['type']))
+        raise nodes.SkipNode
+
+    def visit_PartLaTeX(self, node):
+        if node["usepackage"]:
+            for package in node["usepackage"]:
+                self.requirements[package] = r'\usepackage{%s}' % package
+        self.body.append("\n" + node['latex'] + "\n")
+        raise nodes.SkipNode
+
+
 
 
 writer = Writer()
