@@ -268,7 +268,7 @@ The above code-block specifies the computational graph required to perform
 stochastic gradient descent on the parameters of our cost function. Since
 Theano's interface shares much in
 common with that of NumPy, lines 11-15 should be self-explanatory for anyone
-familiar with ``numpy``. On line 11, we start by defining :math:`P(Y=1|x^{(i)}) = 1`
+familiar with that module. On line 11, we start by defining :math:`P(Y=1|x^{(i)}) = 1`
 as the symbolic variable ``p_1``. Notice that the matrix multiplication and element-wise exponential
 functions are simply called via the ``T.dot`` and ``T.exp`` functions,
 analoguous to ``numpy.dot`` and ``numpy.exp``. ``xent`` defines the
