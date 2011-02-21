@@ -387,7 +387,7 @@ This program stresses element-wise computations and the use of BLAS routines.
 .. figure:: mlp.pdf
     :scale: 100
 
-    Fitting a multi-layer perceptron to simulated data with 
+    Fitting a multi-layer perceptron to simulated data with
     various implementations of stochastic gradient descent.  These models have
     784 inputs, 500 hidden units, a 10-way classification, and are trained 60
     examples at a time.
@@ -420,11 +420,11 @@ less than the 5.8x increase Theano achieves through CUDA specializations.
 
 Because of the difficulty in implementing efficient convolutional networks, we only
 benchmark against known libraries that offer a pre-existing implementation.
-We compare against EBLearn [EBL]_ and Torch, two libraries written in C++. 
+We compare against EBLearn [EBL]_ and Torch, two libraries written in C++.
 EBLearn was implemented by Yann LeCun's lab at NYU, who have done extensive
 research in convolutional networks.
 To put these results into perspective, we implemented approximately half (no
-gradient calculation) of the algorithm using SciPy's ``signal.convolve2d`` function. 
+gradient calculation) of the algorithm using SciPy's ``signal.convolve2d`` function.
 This benchmark uses convolutions of medium sized images
 (:math:`256 \times 256`) with
 small filters (:math:`7 \times 7`).
@@ -472,7 +472,7 @@ More extensive reference documentation is available online
 
 Theano's strong suit is its support
 for strided N-dimensional arrays of integers and floating point values.
-Signed and unsigned integers of all native bit widths are supported, 
+Signed and unsigned integers of all native bit widths are supported,
 as are both single-precision and double-precision floats.
 Single-precision and double-precision complex numbers are also supported,
 but less so - for example, gradients through several mathematical functions
