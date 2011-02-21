@@ -7,6 +7,8 @@ from docutils import nodes
 from docutils.writers.latex2e import (Writer, LaTeXTranslator,
                                       PreambleCmds)
 
+import code_block
+
 from options import options
 
 PreambleCmds.float_settings = '''
@@ -173,7 +175,8 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
             linenos = node.attributes.get('linenos', False)
             lexer = get_lexer_by_name(node.attributes['language'])
             tex = highlight(node.astext(), lexer,
-                            LatexFormatter(linenos=linenos))
+                            LatexFormatter(linenos=linenos,
+                                           verboptions='fontsize=\small'))
 
             self.out.append(tex)
             raise nodes.SkipNode
