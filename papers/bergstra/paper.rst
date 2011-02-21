@@ -359,25 +359,24 @@ network.
 We chose these architectures because of their popularity in the machine learning
 community and their different computational demands. Large matrix-matrix
 multiplications dominate in the MLP example and two-dimensional image
-convolutions with small kernels dominate the convolutional network.
-More information about these models and their learning algorithms is available
+convolutions with small kernels are the major bottleneck in a convolutional network.
+More information about these models and their associated learning algorithms is available
 from the Deep Learning Tutorials [DLT]_.
 The implementations used in these benchmarks are available online [dlb]_.
 
 CPU timing was carried out on an
-a Intel(R) Core(TM)2 Duo CPU E8500 @ 3.16GHz with 2 GB of RAM. 
+an Intel(R) Core(TM)2 Duo CPU E8500 @ 3.16GHz with 2 GB of RAM.
 All implementations were linked against the BLAS implemented in the Intel Math
 Kernel Library, version 10.2.4.032 and allowed to use only one thread.
 GPU timing was done on a GeForce GTX 285.
-CPU computations were done at double-precision.
-GPU computations were done at single-precision.
+CPU computations were done at double-precision, whereas GPU computations were done at single-precision.
 
-Our first benchmark is training
+Our first benchmark involves training
 a single layer MLP by stochastic gradient descent.
 Each implementation repeatedly carried out the following steps:
 (1) multiply 60 784-element input vectors by a :math:`784 \times 500` weight matrix,
-(2) compress the result by tanh,
-(3) multiply the result by a :math:`500 \times 10` matrix,
+(2) apply an element-wise hyperbolic tangent operator (tanh) to the result,
+(3) multiply the result of the tanh operation by a :math:`500 \times 10` matrix,
 (4) classify the result using a multi-class generalization of logistic regression,
 (5) compute the gradient by performing similar calculations but in reverse, and finally
 (6) add the gradients to the parameters.
@@ -393,8 +392,8 @@ This program stresses element-wise computations and the use of BLAS routines.
     784 inputs, 500 hidden units, a 10-way classification, and are trained 60
     examples at a time.
 
-`Figure 5`_ looks at the number of examples processed per second 
-by different implementations. We compared Theano (revision #ec057beb6c) against
+`Figure 5`_ compares the number of examples processed per second
+across different implementations. We compared Theano (revision #ec057beb6c) against
 NumPy 1.4.1, MATLAB 7.9.0.529, and Torch 5 (a machine learning
 library written in C/C++) [torch5]_ on the CPU and  GPUMat 0.25 for MATLAB
 ([gpumat]_) on the GPU.
@@ -422,16 +421,16 @@ less than the 5.8x increase Theano achieves through CUDA specializations.
 Because of the difficulty in implementing efficient convolutional networks, we only
 benchmark against known libraries that offer a pre-existing implementation.
 We compare against EBLearn [EBL]_ and Torch, two libraries written in C++. 
-EBLearn was implemented by Yann LeCun's lab at NYU, which has done extensive
+EBLearn was implemented by Yann LeCun's lab at NYU, who have done extensive
 research in convolutional networks.
 To put these results into perspective, we implemented approximately half (no
 gradient calculation) of the algorithm using SciPy's ``signal.convolve2d`` function. 
 This benchmark uses convolutions of medium sized images
 (:math:`256 \times 256`) with
 small filters (:math:`7 \times 7`).
-`Figure 6`_ shows the performance of Theano (both CPU and GPU)
-against competing implementations.
-On the CPU, Theano is 2.2x faster than EBLearn, its best competitor. This is because
+`Figure 6`_ compares the performance of Theano (both CPU and GPU)
+with that of competing implementations.
+On the CPU, Theano is 2.2x faster than EBLearn, its best competitor. This advantage is owed to the fact that
 Theano compiles more specialized convolution routines.
 Theano's speed increases 4.9x on the GPU from the CPU, a total of 10.7x over
 EBLearn (CPU).
@@ -480,7 +479,7 @@ but less so - for example, gradients through several mathematical functions
 are not implemented.
 Roughly 90\% of expressions for single-precision
 N-dimensional arrays have GPU implementations.
-Our goal is to provide GPU implementations for all expressions.
+Our goal is to provide GPU implementations for all expressions supported by Theano.
 
 .. _Table 1:
 .. _Table1:
@@ -597,10 +596,10 @@ sparse and dense matrices.
 Sparse expressions currently have no GPU equivalents.
 
 There is also support in Theano for arbitrary Python objects.
-However there are very few expressions that make use of that support because
+However, there are very few expressions that make use of that support because
 the compilation pipeline works on the basis of inferring properties of
 intermediate results.  If an intermediate result can be an arbitrary Python
-object, then there is little to infer.  Still, it is occasionally useful
+object, very little can be inferred.  Still, it is occasionally useful
 to have such objects in Theano graphs.
 
 Theano has been developed to support machine learning research,
@@ -617,9 +616,9 @@ Compilation by ``theano.function``
 ----------------------------------
 
 What happens under the hood when creating a function?
-This section outlines in broad strokes the stages of the compilation
+This section outlines, in broad strokes, the stages of the compilation
 pipeline.
-Prior to these stages the expression graph is copied,
+Prior to these stages, the expression graph is copied
 so that the compilation process does not change anything in
 the graph built by the user.
 As illustrated in Figure :ref:`fig:pipeline`,
@@ -645,30 +644,33 @@ Canonicalization
 ~~~~~~~~~~~~~~~~
 The canonicalization transformation puts the user's expression graph into a
 standard form.
-For example, duplicate expressions are merged into a single one.
+For example, duplicate expressions are merged into a single expression.
 Two expressions are considered duplicates if they carry out
 the same operation and have the same inputs.
 Since Theano expressions are
-purely functional, these expressions must return the same value and
-thus the operation is safe to carry. The symbolic gradient mechanism
+purely functional (i.e., cannot have side effects),
+these expressions must return the same value and
+thus it is safe to perform the operation once and reuse the result.
+The symbolic gradient mechanism
 often introduces redundancy, so this step is quite important.
 For another example, sub-expressions involving only
 multiplication and division are put into a standard fraction form
 (e.g. ``a / (((a * b) / c) / d) -> (a * c * d) / (a * b) -> (c * d) /
 (b)``). Some useless calculations are eliminated in this phase, for
-instance crossing out uses of the ``a`` term in the previous example,
-but also reducing ``exp(log(x))`` to ``x``, and doing constant
-folding. Canonicalization simplifies and optimizes the graph to some extent,
-but its primary function is to collapse many
-different expressions into a single normal form so that it is easier to
-recognize expression patterns in subsequent compilation stages.
+instance cancelling out uses of the ``a`` term in the previous example,
+but also reducing ``exp(log(x))`` to ``x``, and computing outright the values
+of any expression whose inputs are fully known at compile time.
+Canonicalization simplifies and optimizes the graph to some extent, but its
+primary function is to collapse many different expressions into a single normal
+form so that it is easier to recognize expression patterns in subsequent
+compilation stages.
 
 Stabilization
 ~~~~~~~~~~~~~
 The stabilization transformation improves the numerical stability of
 the computations implied by the expression graph.
 For instance, consider the function ``log(1 + exp(x))``,
-which is zero as :math:`\lim_{x\rightarrow -\infty}`,
+which tends toward zero as :math:`\lim_{x\rightarrow -\infty}`,
 and ``x`` as :math:`\lim_{x\rightarrow -\infty}`.
 Due to limitations in the representation of double
 precision numbers, the computation as written yields infinity for ``x >
