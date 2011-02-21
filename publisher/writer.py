@@ -176,7 +176,7 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
             lexer = get_lexer_by_name(node.attributes['language'])
             tex = highlight(node.astext(), lexer,
                             LatexFormatter(linenos=linenos,
-                                           verboptions='fontsize=\small'))
+                                           verboptions='fontsize=\\footnotesize'))
 
             self.out.append(tex)
             raise nodes.SkipNode
