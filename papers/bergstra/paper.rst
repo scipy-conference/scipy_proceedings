@@ -332,15 +332,15 @@ SGD algorithm.
 
 Our example concludes (Figure `4 <logreg4>`_) by using the functions
 ``train`` and ``predict`` to fit the logistic regression model.
-Our trivial data ``D`` is just four random vectors and labels.
-Still, repeatedly calling the ``train`` function (lines 27-28) fits
-our parameters to the data, such as it is.
+Our data ``D`` in this example is just four random vectors and labels.
+Repeatedly calling the ``train`` function (lines 27-28) fits
+our parameters to the data.
 Note that calling a Theano function is no
 different than calling a standard Python function: the graph
 transformations, optimizations, compilation and calling of efficient C-functions
 (whether targeted for the CPU or GPU) have all been done under the hood.
 The arguments and return values of these functions are NumPy ``ndarray`` objects that
-interoperate normally with other scientific python libraries and tools.
+interoperate normally with other scientific Python libraries and tools.
 
 .. Finally, we print the state of the model
 .. parameters and show that the model accurately predicts the training labels.
