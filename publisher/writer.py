@@ -31,7 +31,7 @@ class Translator(LaTeXTranslator):
     table_caption = []
 
     abstract_in_progress = False
-    end_of_equation = False
+    non_breaking_paragraph = False
 
     def visit_docinfo(self, node):
         pass
@@ -125,8 +125,8 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         elif 'keywords' in node['classes']:
             self.out.append('\\begin{IEEEkeywords}')
 
-        elif self.end_of_equation:
-            self.end_of_equation = False
+        elif self.non_breaking_paragraph:
+            self.non_breaking_paragraph = False
 
         else:
             self.out.append('\n\n')
@@ -143,10 +143,12 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         LaTeXTranslator.visit_image(self, node)
 
     def visit_footnote(self, node):
-        # Work-around for a bug in docutils where a
-        # "%" is prepended to footnote text.
+        # Work-around for a bug in docutils where
+        # "%" is prepended to footnote text
         LaTeXTranslator.visit_footnote(self, node)
-        self.out[-1] = self.out[-1].strip('%')
+        self.out[-1] = self.out[1].strip('%')
+
+        self.non_breaking_paragraph = True
 
     def visit_table(self, node):
         self.out.append(r'\begin{table}')
@@ -183,7 +185,7 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
     def visit_PartMath(self, node):
         self.requirements['amsmath'] = r'\usepackage{amsmath}'
         self.body.append(mathEnv(node['latex'], node['label'], node['type']))
-        self.end_of_equation = True
+        self.non_breaking_paragraph = True
         raise nodes.SkipNode
 
     def visit_PartLaTeX(self, node):
