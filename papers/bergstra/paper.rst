@@ -696,7 +696,7 @@ Expressions subgraphs involving
 element-wise operations are fused together (as in numexpr)
 in order to avoid the
 creation and use of unnecessary temporary variables.
-For instance, denoting the ``a +
+For instance, if we denote the ``a +
 b`` operation on tensors as ``map(+, a, b)``, then an expression such
 as ``map(+, map(*, a, b), c)`` would become ``map(lambda ai,bi,ci:
 ai*bi+ci, a, b, c)``. If the user desires to use the GPU, expressions with
@@ -722,13 +722,12 @@ always growing.
 
 The heuristic that guides GPU allocation is simple:
 if any input or output of an expression resides on the GPU and the expression
-has a GPU equivalent, then we replace it.
-How does this chain reaction get started?
+has a GPU equivalent, then the GPU equivalent is substituted in.
 Shared variables storing ``float32`` tensors default to GPU storage,
 and the expressions derived from them consequently default to using GPU
 implementations.
 It is possible to explicitly force any ``float32`` variable to reside on the GPU,
-so you can start the chain reaction of optimizations and use the GPU even
+so one can start the chain reaction of optimizations and use the GPU even
 in graphs with no shared variables.
 It is possible (though awkward, and discouraged)
 to specify exactly which computations to perform on the GPU
@@ -771,25 +770,26 @@ Consequently, the code generators for GPU expressions like
 ``GpuSum``, ``GpuElementwise``, and ``GpuConv2d``
 generate a wider variety of implementations than
 their respective host expressions.
-The difference in speed on a GPU between 
-a naïve and an optimal implementation of an expression as simple as row
-summation in a matrix can be an order of magnitude or more.
+With the current generation of graphics cards, the difference in speed between
+a naïve implementation and an optimal implementation of an expression as simple as matrix row
+summation can be an order of magnitude or more.
 The fact that Theano's GPU ``ndarray``-like type supports strided tensors makes
 it even more important for the GPU code generators to support a variety of memory
 layouts.
-Still, these custom-made CUDA kernels account for the good GPU performance in our benchmarks.
+These compile-time specialized CUDA kernels are integral to Theano's GPU performance.
 
 
 Limitations and Future Work
 ---------------------------
 
-While most of the development effort went into making Theano produce fast code,
-not as much went into optimizing the compilation process itself, thus 
-the compilation time tends to grow super-linearly with the size of 
+While most of the development effort has been directed at making Theano produce
+fast code, not as much attention has been paid to the optimization of the
+compilation process itself.
+At present, the compilation time tends to grow super-linearly with the size of
 the expression graph. Theano can deal with graphs up to a few thousand
-nodes, with compilation times typically in the range of seconds. Beyond 
-that, it can be impractically slow, unless you disable some of the more 
-expensive optimizations, or compile pieces of the graph separately. 
+nodes, with compilation times typically on the order of seconds. Beyond
+that, it can be impractically slow, unless some of the more
+expensive optimizations are disabled, or pieces of the graph are compiledseparately.
 
 A Theano function call also requires more overhead (on the order of microseconds)
 than a native Python function call. For this reason, Theano is suited to
@@ -806,17 +806,18 @@ nor linear algebra decompositions, although work on these is underway outside
 of the Theano trunk.
 Support for complex numbers is also not as widely
 implemented or as well-tested as for integers and floating point numbers.
-Object dtypes are not supported.
+NumPy arrays with non-numeric dtypes (strings, Unicode, Python objects) are not
+supported at present.
 
 We expect to improve support for advanced indexing and linear algebra in the
-coming months. Documentation online describes how to add new operations, 
-new type or new graph transformations. There are also experimental version
-of the scan operation, used for looping, for the GPU and an experimental lazy-evaluation 
-enabled Theano.
+coming months. Documentation online describes how to add new operations and
+new graph transformations. There is currently an experimental GPU version
+of the scan operation, used for looping, and an experimental lazy-evaluation
+scheme for branching conditionals.
 
-Also the library has been tuned towards expressions related to machine 
-learning with neural networks, and it was not as well tested outside 
-this domain. Theano is not a powerful computer algebra system, and 
+The library has been tuned towards expressions related to machine
+learning with neural networks, and it is not as well tested outside of
+this domain. Theano is not a powerful computer algebra system, and
 it is an important area of future work to improve its ability to recognize
 numerical instability in complicated element-wise expression graphs.
 
@@ -832,16 +833,16 @@ results before and after their application), as well as comparing the outputs of
 both C and Python implementations.
 
 We plan to extend GPU support to the full range of C data types, but only float32
-tensors are supported as of writing.
+tensors are supported as of this writing.
 There is also no support for sparse vectors or matrices on the GPU, although
 algorithms from the CUSPARSE package should make it easy to add at least basic
-support for sparse GPU objects. 
+support for sparse GPU objects.
 
 
 Conclusion
 ------------
 
-Theano is a mathematical expression compiler for Python 
+Theano is a mathematical expression compiler for Python
 that translates high level NumPy-like code
 into machine language for efficient CPU and GPU computation.
 Theano achieves good performance by minimizing the use
@@ -850,11 +851,11 @@ making full use of ``gemm`` and ``gemv`` BLAS subroutines, and generating fast C
 that is specialized to sizes and constants in the expression graph.
 Theano implementations of machine learning algorithms related to neural networks
 on one core of an E8500 CPU are up to 1.8 times faster than implementations in NumPy, 1.6 times faster than
-MATLAB, and 7.6 times faster than a related C++ library.  Using a Nvidia GTX285 GPU, Theano
-is 5.8 times faster again.
+MATLAB, and 7.6 times faster than a related C++ library.  Using a Nvidia GeForce GTX285 GPU, Theano
+is an additional 5.8 times faster.
 One of
 Theano's greatest strengths is its ability to generate custom-made CUDA
-kernels, 
+kernels,
 which can not only significantly outperform CPU implementations but alternative
 GPU implementations as well.
 
@@ -874,7 +875,7 @@ CLUMEQ.
 References
 ----------
 
-.. [theano] Theano, http://www.deeplearning.net/software/theano
+.. [theano] Theano. http://www.deeplearning.net/software/theano
 
 .. [NumPy] T. E. Oliphant. "Python for Scientific Computing".
            *Computing in Science & Engineering* 9, 10 (2007).
@@ -884,19 +885,19 @@ References
             Cambridge University Press, Cambridge, UK.
             Online: http://leon.bottou.org/papers/bottou-98x
 
-.. [numexpr] D. Cooke *et al*. numexpr, http://code.google.com/p/numexpr/
+.. [numexpr] D. Cooke *et al*. "numexpr". http://code.google.com/p/numexpr/
 
-.. [Cython] S. Behnel, R. Bradshaw, and D. S. Seljebotn,
-            Cython C-Extensions for Python,
+.. [Cython] S. Behnel, R. Bradshaw, and D. S. Seljebotn.
+            "Cython: C-Extensions for Python".
             http://www.cython.org/
 
-.. [scipy.weave] SciPy Weave module,
+.. [scipy.weave] SciPy Weave module.
                  http://docs.scipy.org/doc/scipy/reference/tutorial/weave.html
 
 .. [Alted]  F. Alted. "Why Modern CPUs Are Starving And What Can
     Be Done About It". *Computing in Science and Engineering* 12(2):68-71, 2010.
 
-.. [SymPy] SymPy, http://code.google.com/p/sympy/
+.. [SymPy] SymPy Development Team. "SymPy: Python Library for Symbolic Mathematics". http://www.sympy.org/
 
 .. [BLAS] J. J. Dongarra, J. Du Croz, I. S. Duff, and S. Hammarling.
           "Algorithm 679: A set of Level 3 Basic Linear Algebra Subprograms". *ACM Trans. Math. Soft.*, 16:18-28, 1990.
@@ -906,17 +907,17 @@ References
             "LAPACK Users' Guide, Third Edition".
             http://www.netlib.org/lapack/lug/index.html
 
-.. [DLT] Deep Learning Tutorials,
+.. [DLT] Deep Learning Tutorials.
          http://deeplearning.net/tutorial/
 
 .. [dlb] Benchmarking code:
          http://github.com/pascanur/DeepLearningBenchmarks
 
-.. [torch5] Torch 5, http://torch5.sourceforge.net
+.. [torch5] R. Collobert. "Torch 5". http://torch5.sourceforge.net
 
-.. [EBL] EBLearn: Energy Based Learning, http://eblearn.sourceforge.net/
+.. [EBL] "EBLearn: Energy Based Learning, a C++ Machine Learning Library". http://eblearn.sourceforge.net/
 
-.. [gpumat] GPUmat: GPU toolbox for MATLAB, http://gp-you.org
+.. [gpumat] "GPUmat: GPU toolbox for MATLAB". http://gp-you.org
 
 .. [Ecu] P. L'Ecuyer, F. Blouin, and R. Couture.
          "A Search for Good Multiple Recursive Generators".
