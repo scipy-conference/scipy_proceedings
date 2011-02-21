@@ -45,4 +45,5 @@ Requirements
 ------------
  - IEEETran and AMSmath LaTeX classes
  - **Latest** docutils (development version, they haven't released in years)
+ - Pygments for code highlighting
 
