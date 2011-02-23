@@ -59,14 +59,14 @@ includes implementations of some SVD-inspired algorithms
 such as CCIPCA [Wen03]_ and landmark multi-dimensional scaling
 [Sil04]_.
 
-Using singular value decomposition, any matrix :math:`A` can be factored into an
-orthonormal matrix :math:`U`, a diagonal matrix :math:`\Sigma`, and an orthonormal matrix
-:math:`V^T`, so that  :math:`A = U\Sigma V^T`. The singular
-values in :math:`\Sigma` can be ordered from largest to smallest, where the larger
-values correspond to the vectors in :math:`U` and :math:`V` that are more significant
-components of the initial :math:`A` matrix. The largest singular values, and their
-corresponding rows of :math:`U` and columns of :math:`V`, represent the principal
-components of the data.
+Using singular value decomposition, any matrix :math:`A` can be factored into
+an orthonormal matrix :math:`U`, a diagonal matrix :math:`\Sigma`, and an
+orthonormal matrix :math:`V^T`, so that  :math:`A = U\Sigma V^T`. The singular
+values in :math:`\Sigma` can be ordered from largest to smallest, where the
+larger values correspond to the vectors in :math:`U` and :math:`V` that are
+more significant components of the initial :math:`A` matrix. The largest
+singular values, and their corresponding rows of :math:`U` and columns of
+:math:`V`, represent the principal components of the data.
 
 To create the truncated SVD,  discard all but the first :math:`k`
 components -- the principal components of :math:`A` -- resulting in the smaller
@@ -172,11 +172,14 @@ yields all the stemmed words from a document in the Brown corpus:
 ...            yield stemmer.stem(word.lower())
 
 Now that we have the input data, we can load it into a Divisi sparse
-matrix. The function ``csc.divisi2.make_sparse`` creates a sparse
+matrix. The function ``divisi2.make_sparse`` [#]_ creates a sparse
 matrix from a list of entries, each of which is a tuple of ``(value,
-row, col)`` [#]_:
+row, col)``:
 
-.. [#] Example output in this paper is truncated or rounded for brevity.
+.. [#] The version of Divisi described in this paper, Divisi 2.0, would be
+   installed in a namespace package called ``csc``. Divisi 2.2 can now be
+   imported directly as ``divisi2``, but references to ``csc.divisi2`` still
+   work.
 
 >>> from csc import divisi2
 >>> entries = ((1, term, doc)
@@ -198,7 +201,9 @@ A Divisi sparse matrix behaves like a NumPy array, but has additional
 facilities for labeling entries. Notice that ``row`` and ``col`` were both
 specified as strings (a term and a filename) rather than
 numbers. The ``row_labels`` and ``col_labels`` attributes keep track
-of what label is assigned to each row or column index:
+of what label is assigned to each row or column index: [#]_:
+
+.. [#] Example output in this paper is truncated or rounded for brevity.
 
 >>> matrix.row_labels
 <OrderedSet of 8976 items like the>
@@ -400,7 +405,7 @@ this reason, we often use it to learn from ConceptNet [Hav07]_, a network
 of people's general "common sense" knowledge about the real world. A graph
 representation of ConceptNet 4.0 is included with Divisi 2.0.
 
-The ``csc.divisi2.network`` module defines the various ways to extract
+The ``divisi2.network`` module defines the various ways to extract
 information from these labeled semantic networks. Its ``sparse_triples()``
 function turns the list of edges into a list of (value, rowlabel, columnlabel)
 triples that can be used to build a sparse matrix, and uses the arguments
