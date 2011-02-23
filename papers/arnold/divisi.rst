@@ -445,13 +445,13 @@ SVD. We will show an example of doing this with ConceptNet here.
 
 Learning from ConceptNet
 ````````````````````````
-Start by loading the pre-defined ConceptNet 4.0 graph.
+Start by loading the pre-defined ConceptNet 4.0 graph:
 
 >>> conceptnet_graph = divisi2.load(
       'data:graphs/conceptnet_en.graph')
 
 We can break this graph down into nodes and features, and see a sample of what
-it looks like.
+it looks like:
 
 >>> from csc.divisi2.network import sparse_matrix
 >>> A = sparse_matrix(graph, 'nodes', 'features',
@@ -467,7 +467,7 @@ dog         ---        ---        ---     0.792481
 ...
 
 And with that, we can make a truncated SVD and reconstruct an approximation to
-A.
+A:
 
 >>> U, S, V = A.svd(k=100)
 >>> Ak = divisi2.reconstruct(U, S, V)
@@ -479,7 +479,7 @@ A.
 
 As shown in the earlier LSA example, we can also reconstruct an approximation
 to the similarity matrix :math:`A^T A`, describing how similar the nodes are
-to each other. (Long floating point values are rounded off here for brevity.)
+to each other:
 
 >>> sim = divisi2.reconstruct_similarity(U, S)
 >>> sim.entry_named('horse', 'cow')
@@ -507,8 +507,8 @@ normalize the vectors to unit vectors *before* the SVD, so that nodes
 that are weakly described by the SVD do not end up magnified.
 
 Divisi allows for this with the SparseMatrix methods
-``.normalize_rows()``, ``.normalize_cols()``, and
-``.normalize_all()``. (tf-idf normalization, like in the LSA example,
+``normalize_rows()``, ``normalize_cols()``, and
+``normalize_all()``. (tf-idf normalization, like in the LSA example,
 is also an option, but it is inappropriate here because it
 de-emphasizes common concepts.) The first two scale the rows or
 columns, respectively, of the input so that they become unit vectors.
