@@ -514,6 +514,7 @@ also increases the predictive accuracy of the reconstructed SVD (which we will
 be able to quantify in a moment).
 
 In this representation, we can look again at the similarities for "table":
+
 >>> U, S, V = A.normalize_all().svd(k=100)
 >>> sim = divisi2.reconstruct_similarity(U, S)
 >>> sim.row_named('table').top_items()
