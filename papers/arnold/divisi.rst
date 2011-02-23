@@ -638,35 +638,35 @@ References
 
 .. MovieLens
 
-.. [Kon98] J. Konstan, J. Riedl, A. Borchers, and J. Herlocke. *Recommender Systems: A GroupLens Perspective* Papers from the 1998 Workshop on Rcommender Systems, Chapel Hill, NC.  1998.
+.. [Kon98] J.\  Konstan, J. Riedl, A. Borchers, and J. Herlocke. *Recommender Systems: A GroupLens Perspective*. Papers from the 1998 Workshop on Recommender Systems, Chapel Hill, NC. 1998.
 
 .. Networkx
 
-.. [Net10] NetworkX Developers. *NetworkX* Viewable online at:http://networkx.lanl.gov/, 2010.
+.. [Net10] NetworkX Developers. *NetworkX*. Viewable online at:http://networkx.lanl.gov/, 2010.
 
 .. Svdlibc
 
-.. [Roh10] Doug Rohde. *SVDLibC* Viewable online at: http://tedlab.mit.edu/~dr/SVDLIBC/, 2010.
+.. [Roh10] Doug Rohde. *SVDLIBC*. Viewable online at: http://tedlab.mit.edu/~dr/SVDLIBC/, 2010.
 
 .. pysparse
 
-.. [Geu08] Roman Geus, Daniel Wheeler, and Dominique Orban. *PySparse* Viewable online at: http://pysparse.sourceforge.net/, 2008.
+.. [Geu08] Roman Geus, Daniel Wheeler, and Dominique Orban. *PySparse*. Viewable online at: http://pysparse.sourceforge.net/, 2008.
 
 .. numpy
 
-.. [Oli10] Travis Oliphant. *Guide to Numpy* Viewable online at: http://www.tramy.us/, 2010.
+.. [Oli10] Travis Oliphant. *Guide to Numpy*. Viewable online at: http://www.tramy.us/, 2010.
 
 .. Lmds
 
-.. [Sil04] Vin. de Silva and Josh.B. Tenenbaum. *Sparse multidimensional scaling using landmark points* Stanford University Technical Report, 2004.
+.. [Sil04] Vin de Silva and Joshua B. Tenenbaum. *Sparse multidimensional scaling using landmark points*. Stanford University Technical Report, 2004.
 
 .. ccipca
 
-.. [Wen03] Juyang Weng and Yilu Zhang and Wey-Shiuan Hwang. * Candid covariance-free incremental principal component analysis* IEEE Transactions on Pattern Analysis and Machine Intelligence, 25(8):1034-1040, August 2003.
+.. [Wen03] Juyang Weng and Yilu Zhang and Wey-Shiuan Hwang. *Candid covariance-free incremental principal component analysis* IEEE Transactions on Pattern Analysis and Machine Intelligence, 25(8):1034-1040, August 2003.
 
 .. lanczos
 
-.. [Lan98] Cornelius Lanczos and William R. Davis (ed). *Collected published papers with commentaries* North Carolina State University, 1998.
+.. [Lan98] Cornelius Lanczos and William R. Davis (ed). *Collected published papers with commentaries*. North Carolina State University, 1998.
 
 .. cnet
 
