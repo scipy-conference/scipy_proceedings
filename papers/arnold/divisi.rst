@@ -174,7 +174,9 @@ yields all the stemmed words from a document in the Brown corpus:
 Now that we have the input data, we can load it into a Divisi sparse
 matrix. The function ``csc.divisi2.make_sparse`` creates a sparse
 matrix from a list of entries, each of which is a tuple of ``(value,
-row, col)``:
+row, col)`` [#]_:
+
+.. [#] Example output in this paper is truncated or rounded for brevity.
 
 >>> from csc import divisi2
 >>> entries = ((1, term, doc)
@@ -241,7 +243,8 @@ likely to contain terms like "book"? That's just a row of
 :math:`A`. Using the approximation, we can compute that row:
 
 >>> from pprint import pprint
->>> booky = divisi2.dot(u.row_named('book'), divisi2.dot(np.diag(sigma), v.T))
+>>> booky = divisi2.dot(u.row_named('book'),
+                divisi2.dot(np.diag(sigma), v.T))
 >>> pprint(booky.top_items(3))
 [('ca44', 0.0079525209393728428),
  ('ca31', 0.0017088410316380212),
@@ -256,22 +259,25 @@ Reconstructing an approximate matrix
 Divisi provides simpler ways of working with matrix reconstructions:
 the ``ReconstructedMatrix`` class:
 
->>> booky2 = divisi2.reconstruct(u, sigma, v).row_named('book')
+>>> reconstructed = divisi2.reconstruct(u, sigma, v)
+>>> booky2 = reconstructed.row_named('book')
 >>> assert np.allclose(booky, booky2)
 
 Another common query, often seen in blog posts, is which articles are
 similar to the one in question. Mathematically, which other document
 has the term vector with the highest dot product with the term vector
 of this document? The answer is again found in a matrix slice, this
-time of:
+time of
 
 .. raw:: latex
 
-    \[A^TA = V\Sigma U^T\,U\Sigma V^T = V\Sigma^2V^T\]
+    \[A^TA = V\Sigma U^T\,U\Sigma V^T = V\Sigma^2V^T.\]
 
 Again, Divisi provides functionality for easily slicing similarity matrices:
 
->>> similar_docs = divisi2.reconstruct_similarity(v, sigma).row_named('ca44')
+>>> similar_docs = \
+...   divisi2.reconstruct_similarity(v, sigma)\
+...     .row_named('ca44')
 >>> pprint(similar_docs.top_items(3))
 [('ca44', 0.99999999999999978),
  ('ca31', 0.82249752503164653),
@@ -348,11 +354,11 @@ vector of their recommendations and query for the best ones:
 
 >>> recs_for_5 = recommendations.col_named(5)
 >>> recs_for_5.top_items(5)
-[('Star Wars (1977)', 4.8162083389753922),
- ('Return of the Jedi (1983)', 4.5493663133402142),
- ('Wrong Trousers, The (1993)', 4.5292462987734297),
- ('Close Shave, A (1995)', 4.4162031221502778),
- ('Empire Strikes Back, The (1980)', 4.3923239529719762)]
+[('Star Wars (1977)', 4.816),
+ ('Return of the Jedi (1983)', 4.549),
+ ('Wrong Trousers, The (1993)', 4.529),
+ ('Close Shave, A (1995)', 4.416),
+ ('Empire Strikes Back, The (1980)', 4.392)]
 
 We see that this user should really like the Star Wars Trilogy, but this is
 unsurprising because the user in fact already told MovieLens they liked those
@@ -360,14 +366,14 @@ movies. To get true recommendations, we should make sure to filter for movies
 they have not yet rated.
 
 >>> recs_for_5 = recommendations.col_named(5)
->>> unrated = list(set(xrange(movie_data.shape[0]))\
+>>> unrated = list(set(xrange(movie_data.shape[0]))
 ...   - set(recs_for_5.nonzero_indices()))
 >>> rec[unrated].top_items(5)
-[('Wallace & Gromit: [...] (1996)', 4.19675664354898),
- ('Terminator, The (1984)', 4.1025473251923152),
- ('Casablanca (1942)', 4.0439402179346571),
- ('Pather Panchali (1955)', 4.004128767977936),
- ('Dr. Strangelove [...] (1963)', 3.9979437577787826)]
+[('Wallace & Gromit: [...] (1996)', 4.197),
+ ('Terminator, The (1984)', 4.103),
+ ('Casablanca (1942)', 4.044),
+ ('Pather Panchali (1955)', 4.004),
+ ('Dr. Strangelove [...] (1963)', 3.998)]
 
 And on the other end of the scale, if we look for the best anti-recommendation
 in ``(-rec[unrated])``, we find that user 5 should give "3 Ninjas: High Noon At
@@ -439,38 +445,41 @@ SVD. We will show an example of doing this with ConceptNet here.
 
 Learning from ConceptNet
 ````````````````````````
-Start by loading the pre-defined ConceptNet 4.0 graph.
+Start by loading the pre-defined ConceptNet 4.0 graph:
 
->>> conceptnet_graph = divisi2.load('data:graphs/conceptnet_en.graph')
+>>> conceptnet_graph = divisi2.load(
+      'data:graphs/conceptnet_en.graph')
 
 We can break this graph down into nodes and features, and see a sample of what
-it looks like.
+it looks like:
 
 >>> from csc.divisi2.network import sparse_matrix
->>> A = sparse_matrix(graph, 'nodes', 'features', cutoff=3)
+>>> A = sparse_matrix(graph, 'nodes', 'features',
+                      cutoff=3)
 >>> print A
 SparseMatrix (12564 by 19719)
-         IsA/spor   IsA/game   UsedFor/   UsedFor/   person\\C ...
-baseball 3.609584   2.043731   0.792481   0.500000   0.500000  
-sport       ---     1.292481      ---     1.000000      ---    
-yo-yo       ---        ---        ---        ---        ---    
-toy         ---     0.500000      ---     1.160964      ---    
-dog         ---        ---        ---     0.792481      ---    
+         IsA/spor   IsA/game   UsedFor/   UsedFor/
+baseball 3.609584   2.043731   0.792481   0.500000
+sport       ---     1.292481      ---     1.000000
+yo-yo       ---        ---        ---        ---
+toy         ---     0.500000      ---     1.160964
+dog         ---        ---        ---     0.792481
 ...
 
 And with that, we can make a truncated SVD and reconstruct an approximation to
-A.
+A:
 
 >>> U, S, V = A.svd(k=100)
 >>> Ak = divisi2.reconstruct(U, S, V)
 >>> Ak.entry_named('pig', ('right', 'HasA', 'leg'))
 0.15071150848740383
->>> Ak.entry_named('pig', ('right', 'CapableOf', 'fly'))
+>>> Ak.entry_named('pig',
+                   ('right', 'CapableOf', 'fly'))
 -0.26456066802309008
 
 As shown in the earlier LSA example, we can also reconstruct an approximation
 to the similarity matrix :math:`A^T A`, describing how similar the nodes are
-to each other. (Long floating point values are rounded off here for brevity.)
+to each other:
 
 >>> sim = divisi2.reconstruct_similarity(U, S)
 >>> sim.entry_named('horse', 'cow')
@@ -478,10 +487,11 @@ to each other. (Long floating point values are rounded off here for brevity.)
 >>> sim.entry_named('horse', 'stapler')
 -0.031
 >>> sim.row_named('table').top_items()
-[('table', 1.000), ('newspaper article', 0.694), ('dine table', 0.681),
-('dine room table', 0.676), ('table chair', 0.669), ('dine room', 0.663),
-('bookshelve', 0.636), ('table set', 0.629), ('home depot', 0.591),
-('wipe mouth', 0.587)]
+[('table', 1.000), ('newspaper article', 0.694),
+ ('dine table', 0.681), ('dine room table', 0.676),
+ ('table chair', 0.669), ('dine room', 0.663),
+ ('bookshelve', 0.636), ('table set', 0.629),
+ ('home depot', 0.591), ('wipe mouth', 0.587)]
 
 Recall that ``reconstruct_similarity`` normalizes its values to
 between -1 and 1. Here, this normalization makes some nodes, such as
@@ -493,8 +503,8 @@ normalize the vectors to unit vectors *before* the SVD, so that nodes
 that are weakly described by the SVD do not end up magnified.
 
 Divisi allows for this with the SparseMatrix methods
-``.normalize_rows()``, ``.normalize_cols()``, and
-``.normalize_all()``. (tf-idf normalization, like in the LSA example,
+``normalize_rows()``, ``normalize_cols()``, and
+``normalize_all()``. (tf-idf normalization, like in the LSA example,
 is also an option, but it is inappropriate here because it
 de-emphasizes common concepts.) The first two scale the rows or
 columns, respectively, of the input so that they become unit vectors.
@@ -510,12 +520,15 @@ also increases the predictive accuracy of the reconstructed SVD (which we will
 be able to quantify in a moment).
 
 In this representation, we can look again at the similarities for "table":
+
 >>> U, S, V = A.normalize_all().svd(k=100)
 >>> sim = divisi2.reconstruct_similarity(U, S)
 >>> sim.row_named('table').top_items()
-[('table', 1.718), ('desk', 1.195), ('kitchen', 0.988), ('chair', 0.873),
-('restaurant', 0.850), ('plate', 0.822), ('bed', 0.772), ('cabinet', 0.678), 
-('refrigerator', 0.652), ('cupboard', 0.617)]
+[('table', 1.718), ('desk', 1.195),
+ ('kitchen', 0.988), ('chair', 0.873),
+ ('restaurant', 0.850), ('plate', 0.822),
+ ('bed', 0.772), ('cabinet', 0.678),
+ ('refrigerator', 0.652), ('cupboard', 0.617)]
 
 Choosing parameters
 ```````````````````
@@ -553,7 +566,8 @@ Then, after applying that normalization method, we can try truncated SVDs with v
 >>> for k in xrange(1, 200):
 ...     U, S, V = conceptnet.svd(k=k)
 ...     rec = divisi2.reconstruct(U, S, V)
-...     correct, total, accuracy = rec.evaluate_ranking(testdata)
+...     correct, total, accuracy =\
+...         rec.evaluate_ranking(testdata)
 ...     accuracy_data.append(accuracy)
 
 Plotting the resulting ``accuracy_data`` shows a plateau of good values of *k*,
