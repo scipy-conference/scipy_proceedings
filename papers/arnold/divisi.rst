@@ -97,7 +97,7 @@ sparse or dense, and they can be 1-D vectors or 2-D matrices.
 
 .. figure:: divisi2_classes.png
 
-   Figure 1: Relationships between the main classes in Divisi 2.0, as well as
+   Relationships between the main classes in Divisi 2.0, as well as
    some externally-defined classes.
 
 Figure 1 shows the relationships between classes in Divisi2. The
@@ -483,10 +483,6 @@ to each other. (Long floating point values are rounded off here for brevity.)
 ('bookshelve', 0.636), ('table set', 0.629), ('home depot', 0.591),
 ('wipe mouth', 0.587)]
 
-The similarity values would be more useful if we knew what scale they were
-measured on. Moreover, they seem to favor very common concepts such as
-"person",
-
 Recall that ``reconstruct_similarity`` normalizes its values to
 between -1 and 1. Here, this normalization makes some nodes, such as
 "newspaper article" and "home depot", get a spuriously high weight
@@ -565,7 +561,7 @@ roughly between *k* = 100 and *k* = 200.
 
 .. figure:: k-value-graph.png
 
-   Figure 2: Evaluating the predictive accuracy of the truncated SVD on
+   Evaluating the predictive accuracy of the truncated SVD on
    ConceptNet for various values of *k*. 
 
 .. Working with categories
@@ -577,17 +573,49 @@ roughly between *k* = 100 and *k* = 200.
 .. ---------------------
 .. show a Luminoso or SVDview screenshot without going into too much detail
 
+Memory use and scalability
+``````````````````````````
+The main use case of Divisi2 is to decompose a sparse matrix whose entries fit
+in memory. The objects that primarily consume memory are:
+
+* The linked lists that comprise the PySparse matrix
+* The compressed-sparse-column copy of this matrix used by SVDLIBC
+* The dense matrices U and V, and the vector S, that SVDLIBC returns
+* The NumPy copies of U, V, and S
+* The optional OrderedSets of labels (a Python list and dictionary)
+
+Each nonzero entry in a sparse matrix and each entry in a dense matrix requires
+the space of a C double (assumed to be 8 bytes). The PySparse matrix also
+requires an integer (4 bytes), acting as a pointer, for each entry and each
+row.  (This implementation incidentally limits matrices to having fewer than
+:math:`2^{31}` nonzero entries.)
+
+So, without labels, a rank :math:`k` decomposition of an :math:`m \times n`
+matrix with `z` non-zero entries requires :math:`(20z + 4m + 16k(m+n))` bytes,
+plus a considerably smaller amount of overhead. As a practical example, it is
+possible within the 4 GB memory limit of 32-bit CPython to take a rank-100
+decomposition of a :math:`10^6 \times 10^6` matrix with :math:`10^7` entries,
+or a rank-10 decomposition of a :math:`10^7 \times 10^7` matrix with
+:math:`10^7` entries, each of which requires 3.4 GB plus overhead.
+
+In order to support even larger, denser data sets, Divisi 2.2 includes an
+experimental implementation of Hebbian incremental SVD that does not require
+storing the sparse data in memory.
+
 Conclusion
 -----------
-The SVD is a versitile analysis tool for many different kinds of
+The SVD is a versatile analysis tool for many different kinds of
 data. Divisi provides an easy way to compute the SVD of large sparse
 datasets in Python, and additionally provides Pythonic wrappers for
 performing common types of queries on the result.
 
 Divisi also includes a variety of other functionality. For example, it
 can analyze combinations of multiple matrices of data, a technique
-called *Blending*, which is useful for drawing conclusions from
+called *blending*, which is useful for drawing conclusions from
 multiple data sources simultaneously.
+
+Further documentation about Divisi2, including the presentation from SciPy
+2010, is available at http://csc.media.mit.edu/docs/divisi2/.
 
 References
 ----------
