@@ -594,9 +594,9 @@ in memory. The objects that primarily consume memory are:
 
 * The linked lists that comprise the PySparse matrix
 * The compressed-sparse-column copy of this matrix used by SVDLIBC
-* The dense matrices U and V, and the vector S, that SVDLIBC returns
-* The NumPy copies of U, V, and S
-* The optional OrderedSets of labels (a Python list and dictionary)
+* The dense matrices U and V, and the vector S, that are returned by SVDLIBC
+  and used directly by NumPy
+* The optional OrderedSets of labels (each using a Python list and dictionary)
 
 Each nonzero entry in a sparse matrix and each entry in a dense matrix requires
 the space of a C double (assumed to be 8 bytes). The PySparse matrix also
@@ -605,12 +605,13 @@ row.  (This implementation incidentally limits matrices to having fewer than
 :math:`2^{31}` nonzero entries.)
 
 So, without labels, a rank :math:`k` decomposition of an :math:`m \times n`
-matrix with `z` non-zero entries requires :math:`(20z + 4m + 16k(m+n))` bytes,
-plus a considerably smaller amount of overhead. As a practical example, it is
-possible within the 4 GB memory limit of 32-bit CPython to take a rank-100
-decomposition of a :math:`10^6 \times 10^6` matrix with :math:`10^7` entries,
-or a rank-10 decomposition of a :math:`10^7 \times 10^7` matrix with
-:math:`10^7` entries, each of which requires 3.4 GB plus overhead.
+matrix with `z` non-zero entries requires :math:`(20z + 4m + 8k(m+n))` bytes,
+plus a negligible amount of overhead from Python and C structures. As a
+practical example, it is possible within the 4 GB memory limit of 32-bit
+CPython to take a rank-100 decomposition of a :math:`10^6 \times 10^6` matrix
+with :math:`10^8` entries, or a rank-10 decomposition of a :math:`10^7 \times
+10^7` matrix with :math:`10^8` entries, each of which requires 3.6 GB plus
+overhead.
 
 In order to support even larger, denser data sets, Divisi 2.2 includes an
 experimental implementation of Hebbian incremental SVD that does not require
