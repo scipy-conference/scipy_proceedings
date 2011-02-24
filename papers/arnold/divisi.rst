@@ -605,18 +605,20 @@ in memory. The objects that primarily consume memory are:
 
 Each nonzero entry in a sparse matrix and each entry in a dense matrix requires
 the space of a C double (assumed to be 8 bytes). The PySparse matrix also
-requires an integer (4 bytes), acting as a pointer, for each entry and each
-row.  (This implementation incidentally limits matrices to having fewer than
-:math:`2^{31}` nonzero entries.)
+requires an integer (4 bytes), acting as a pointer, for each entry. (This
+implementation incidentally limits matrices to having fewer than :math:`2^{31}`
+nonzero entries.) The non-zero entries in the compressed-sparse-column matrix
+also come with integer row numbers.  Finally, each allocated row requires two
+integer pointers.
 
 So, without labels, a rank :math:`k` decomposition of an :math:`m \times n`
-matrix with `z` non-zero entries requires :math:`(20z + 4m + 8k(m+n))` bytes,
+matrix with `z` non-zero entries requires :math:`(24z + 8m + 8k(m+n))` bytes,
 plus a negligible amount of overhead from Python and C structures. As a
-practical example, it is possible within the 4 GB memory limit of 32-bit
+practical example, it is possible within the 4 GiB memory limit of 32-bit
 CPython to take a rank-100 decomposition of a :math:`10^6 \times 10^6` matrix
 with :math:`10^8` entries, or a rank-10 decomposition of a :math:`10^7 \times
-10^7` matrix with :math:`10^8` entries, each of which requires 3.6 GB plus
-overhead.
+10^7` matrix with :math:`10^8` entries, each of which requires 3.7 to 3.8 GiB
+plus overhead.
 
 In order to support even larger, denser data sets, Divisi 2.2 includes an
 experimental implementation of Hebbian incremental SVD that does not require
