@@ -129,7 +129,7 @@ Of the species analyzed, Grey-capped Weavers and Black-capped Weavers show close
 	
 .. figure:: fig3_pca_biplot_presentation.png
 
-   Projection of the top two principal component planes. Data points are colored by the bird species they represent.
+   Projection of data on the top two principal component axes. Data points are colored by the bird species they represent.
 
 If we look at the species difference, we can see that the White-browed Sparrow Weaver clearly distinguishes itself from the other studied species (Fig. 4) by building nests closer to one another, in trees with smaller canopies and fewer nests.  In contrast, Grey-capped Weavers and Black-capped Weavers present a wide variety of spatial conditions for the nest location (the scattered points in the tri-dimensional cube shown in Fig 4), with a lot of overlap between the data points representing the two species, indicating similar characteristics of the local arrangements of their nests colonies.
 
