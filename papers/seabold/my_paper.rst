@@ -39,7 +39,7 @@ now at Stanford, as part of SciPy under the name models.  Eventually, models
 was removed from SciPy and became part of the NIPY neuroimaging project [NIPY]_ 
 in order to mature.  The models code was later accepted as a SciPy-focused 
 project for the Google Summer of Code 2009 and now again in 2010.  It is now 
-distributed as a SciKit, or add-on packages for SciPy.
+distributed as a SciKit, or add-on package for SciPy.
 
 The current main developers of statsmodels are trained as economists with a 
 background in econometrics.  As such, much of the development over the last year 
@@ -54,8 +54,8 @@ modeling.
 The State of the Union: Open Source and Statistics
 --------------------------------------------------
 
-Currently R is the open source language of choice for applied statistics.  As 
-for applied econometrics, proprietary software pacakges such as Gauss, MATLAB, 
+Currently R is the open source language of choice for applied statistics.  In
+applied econometrics, proprietary software pacakges such as Gauss, MATLAB, 
 Stata, SAS, and NLOGIT remain the most popular and are taught in most graduate 
 programs. However, there is a growing call for the use of open source software 
 in economic research due in large part to its reliability, transparency, and the
@@ -78,13 +78,15 @@ In depth arguments for the choice of Python are beyond the scope of this paper;
 however, Python is well known for its simple syntax, gentle learning curve, and 
 large standard library.  Beyond this, it is a language for much more than 
 statistics and can be the one toolbox for researchers across discplines.  A few
-examples of stastics-related packages that are outside of the main numpy/scipy 
-code are packages for Markov Chain Monte Carlo and Bayesian statistics [PyMC]_, 
-machine learning and multivariate pattern analysis [scikits-learn]_ [PyMVPA]_, 
-neuroimaging and time-series [NIPY]_ (nitime), visualization tools [Matplotlib]_[Enthought]_, and efficient handling of large datasets [PyTables]_.
+examples of statistics-related packages that are outside of the main 
+numpy/scipy code are packages for Markov Chain Monte Carlo and Bayesian 
+statistics [PyMC]_, machine learning and multivariate pattern analysis 
+[scikits-learn]_ [PyMVPA]_, neuroimaging [NIPY]_ and neuroscience time series 
+[NITIME]_, visualization [Matplotlib]_ [Enthought]_, and efficient handling of 
+large datasets [PyTables]_.
 
 We hope that statsmodels too can become an integral a part of the Scientific 
-Python community and serve as a step in the direction of Python's becoming a 
+Python community and serve as a step in the direction of Python becoming a 
 serious open source language for statistics.  Towards this end, others are 
 working on an R-like formula framework to help users specify and manipulate 
 models, and packages like pandas [pandas]_ (discussed in these proceedings) and 
@@ -114,8 +116,8 @@ best API or bug hunting, take place in the main branch's, or trunk's, sandbox
 directory so that they can be tried out by users and developers who follow the 
 trunk code.  Tests are then written with results taken from another statistical 
 package or Monte Carlo simulation when it is not possible to obtain results from
-elsewhere.  After the tests are written, the developer asks for a code review on 
-our mailing list (http://groups.google.ca/group/pystatsmodels).  When all is 
+elsewhere.  After the tests are written, the developer asks for a code review 
+on our mailing list (http://groups.google.ca/group/pystatsmodels).  When all is
 settled, the code becomes part of the main codebase.  Periodically, we release 
 the software in the trunk as with any other program for those who just want to 
 download a tarball or install from PyPI, using *setuptools*' easy_install.  
@@ -141,7 +143,7 @@ is a subclass of *Model* that is the workhorse for the regression models.  All
 *fit* methods are expected to return some results class.  Towards this end, we 
 also have a base class *Results* and *LikelihoodModelResults* which inherits 
 from *Results*.  The result objects have attributes and methods that contain 
-common post-estimation results and statsitical tests.  Further, these are 
+common post-estimation results and statistical tests.  Further, these are 
 computed lazily, meaning that they are not computed until the user asks for 
 them so that those who are only interested in, say, the fitted parameters are 
 not slowed by computation of extraneous results.  Every effort is made to 
@@ -156,7 +158,7 @@ Package Overview
 Currently, we have five modules in the main codebase that contain statistical 
 models.  These are regression (least squares regression models), glm 
 (generalized linear models), rlm (robust linear models), discretemod (discrete 
-choice models), and constrast (contrast analysis).  Regression contains 
+choice models), and contrast (contrast analysis).  Regression contains 
 generalized least squares (GLS), weighted least squares (WLS), and ordinary 
 least squares (OLS).  Glm contains generalized linear models with support for 
 six common exponential family distributions and at least ten standard link 
@@ -171,13 +173,15 @@ there are a number of convenience classes and functions to help with tasks
 related to statistical analysis.  These include functions for conveniently 
 viewing descriptive statistics, a class for creating publication quality tables,
 and functions for translating foreign datasets, currently only Stata's binary 
-dta format, to numpy arrays. 
+*.dta* format, to numpy arrays. 
 
 The last main part of the package is the datasets.  There are currently fourteen
-datasets that are either part of the public domain or used with expressed 
-consent of the original authors.  These datasets follow a common pattern so that they are easy to use, and it is trivial for others to add additional datasets.  
-The datasets are used in our test suite and examples as illustrated below.  
-Further, there are verbose examples in the examples directory of the package.
+datasets that are either part of the public domain or used with express 
+consent of the original authors.  These datasets follow a common pattern so 
+that they are easy to use, and it is trivial for others to add additional 
+Datasets.  The datasets are used in our test suite and examples as illustrated 
+below.  Further, there are verbose examples in the examples directory of the 
+package.
 
 
 Examples
@@ -193,7 +197,7 @@ to import the package.  The suggested convention for importing statsmodels is::
 
     >>> import scikits.statsmodels as sm
 
-Numpy is assumed to be import as::
+Numpy is assumed to be imported as::
 
     >>> import numpy as np
     
@@ -474,16 +478,9 @@ Acknowledgements
 
 In addition to the authors of this paper, many others have worked on or 
 contributed to the codebase.  Many thanks are due to Jonathan Taylor and the 
-other contributors who worked on the models code while it was in SciPy and NIPY.
-Thanks also go to Alan Isaac for contributing the SimpleTable class from econpy
-and encouraging the initial interest in the project, to Pierre G. Marchand for 
-writing the decorators we use for lazy evaluation and caching, to Vincent Davis 
-for his work on descriptive statistics and documentation writing, to Mike Crowe 
-for working on non-parametric regression, to Joe Presbrey for relicensing PyDTA 
-so that we can now go seamlessly from Stata datasets to NumPy arrays, to Wes 
-McKinney for promoting statistical analysis in Python, and the numerous other 
-people who have provided code, constructive comments, and discussion on the 
-mailing lists.
+contributors who worked on the models code while it was in SciPy and NIPY.
+Thanks are also due to the numerous other people who have provided code, 
+constructive comments, and discussion on the mailing lists.
 
 .. [1] Users who wish to learn more about NumPy can do so at 
         http://www.scipy.org/Tentative_NumPy_Tutorial, 
@@ -544,6 +541,9 @@ References
            http://larry.sourceforge.net/.
 
 .. [NIPY] NIPY: Neuroimaging in Python.  Available at http://nipy.org.
+
+.. [NITIME] Nitime: time-series analysis for neuroscience. Available at 
+            http://nipy.org/nitime
 
 .. [pandas] W. McKinney.  Pandas: A Python Data Analysis Library.  Available 
             at http://pandas.sourceforge.net/.
