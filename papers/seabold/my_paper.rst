@@ -288,17 +288,11 @@ various interaction terms.  The model can be fit as follows::
                          family=sm.families.Binomial())
 
 Note that you must specify the distribution family of the endogenous variable.
-The available families are::
+The available families in *scikits.statsmodels.families* are *Binomial*, 
+*Gamma*, *Gaussian*, *InverseGaussian*, *NegativeBinomial*, and *Poisson*.
 
-    >>> from inspect import getmembers as gm
-    >>> [fam[0] for fam in gm(sm.families) if 
-            fam[0][0].isupper() and not 
-            fam[0].startswith('F')]
-    ['Binomial', 'Gamma', 'Gaussian', 'InverseGaussian', 
-    'NegativeBinomial', 'Poisson']
-
-The above also uses the default canonical logit link for the Binomial family, 
-though to be explicit we could do the following::
+The above examples also uses the default canonical logit link for the Binomial 
+family, though to be explicit we could do the following::
 
     >>> links = sm.families.links
     >>> glm_bin = sm.GLM(data.endog, data.exog,
