@@ -59,14 +59,14 @@ includes implementations of some SVD-inspired algorithms
 such as CCIPCA [Wen03]_ and landmark multi-dimensional scaling
 [Sil04]_.
 
-Using singular value decomposition, any matrix :math:`A` can be factored into an
-orthonormal matrix :math:`U`, a diagonal matrix :math:`\Sigma`, and an orthonormal matrix
-:math:`V^T`, so that  :math:`A = U\Sigma V^T`. The singular
-values in :math:`\Sigma` can be ordered from largest to smallest, where the larger
-values correspond to the vectors in :math:`U` and :math:`V` that are more significant
-components of the initial :math:`A` matrix. The largest singular values, and their
-corresponding rows of :math:`U` and columns of :math:`V`, represent the principal
-components of the data.
+Using singular value decomposition, any matrix :math:`A` can be factored into
+an orthonormal matrix :math:`U`, a diagonal matrix :math:`\Sigma`, and an
+orthonormal matrix :math:`V^T`, so that  :math:`A = U\Sigma V^T`. The singular
+values in :math:`\Sigma` can be ordered from largest to smallest, where the
+larger values correspond to the vectors in :math:`U` and :math:`V` that are
+more significant components of the initial :math:`A` matrix. The largest
+singular values, and their corresponding rows of :math:`U` and columns of
+:math:`V`, represent the principal components of the data.
 
 To create the truncated SVD,  discard all but the first :math:`k`
 components -- the principal components of :math:`A` -- resulting in the smaller
@@ -97,7 +97,7 @@ sparse or dense, and they can be 1-D vectors or 2-D matrices.
 
 .. figure:: divisi2_classes.png
 
-   Figure 1: Relationships between the main classes in Divisi 2.0, as well as
+   Relationships between the main classes in Divisi 2.0, as well as
    some externally-defined classes.
 
 Figure 1 shows the relationships between classes in Divisi2. The
@@ -172,9 +172,14 @@ yields all the stemmed words from a document in the Brown corpus:
 ...            yield stemmer.stem(word.lower())
 
 Now that we have the input data, we can load it into a Divisi sparse
-matrix. The function ``csc.divisi2.make_sparse`` creates a sparse
+matrix. The function ``divisi2.make_sparse`` [#]_ creates a sparse
 matrix from a list of entries, each of which is a tuple of ``(value,
 row, col)``:
+
+.. [#] The version of Divisi described in this paper, Divisi 2.0, would be
+   installed in a namespace package called ``csc``. Divisi 2.2 can now be
+   imported directly as ``divisi2``, but references to ``csc.divisi2`` still
+   work.
 
 >>> from csc import divisi2
 >>> entries = ((1, term, doc)
@@ -196,7 +201,9 @@ A Divisi sparse matrix behaves like a NumPy array, but has additional
 facilities for labeling entries. Notice that ``row`` and ``col`` were both
 specified as strings (a term and a filename) rather than
 numbers. The ``row_labels`` and ``col_labels`` attributes keep track
-of what label is assigned to each row or column index:
+of what label is assigned to each row or column index: [#]_:
+
+.. [#] Example output in this paper is truncated or rounded for brevity.
 
 >>> matrix.row_labels
 <OrderedSet of 8976 items like the>
@@ -241,7 +248,8 @@ likely to contain terms like "book"? That's just a row of
 :math:`A`. Using the approximation, we can compute that row:
 
 >>> from pprint import pprint
->>> booky = divisi2.dot(u.row_named('book'), divisi2.dot(np.diag(sigma), v.T))
+>>> booky = divisi2.dot(u.row_named('book'),
+                divisi2.dot(np.diag(sigma), v.T))
 >>> pprint(booky.top_items(3))
 [('ca44', 0.0079525209393728428),
  ('ca31', 0.0017088410316380212),
@@ -256,22 +264,25 @@ Reconstructing an approximate matrix
 Divisi provides simpler ways of working with matrix reconstructions:
 the ``ReconstructedMatrix`` class:
 
->>> booky2 = divisi2.reconstruct(u, sigma, v).row_named('book')
+>>> reconstructed = divisi2.reconstruct(u, sigma, v)
+>>> booky2 = reconstructed.row_named('book')
 >>> assert np.allclose(booky, booky2)
 
 Another common query, often seen in blog posts, is which articles are
 similar to the one in question. Mathematically, which other document
 has the term vector with the highest dot product with the term vector
 of this document? The answer is again found in a matrix slice, this
-time of:
+time of
 
 .. raw:: latex
 
-    \[A^TA = V\Sigma U^T\,U\Sigma V^T = V\Sigma^2V^T\]
+    \[A^TA = V\Sigma U^T\,U\Sigma V^T = V\Sigma^2V^T.\]
 
 Again, Divisi provides functionality for easily slicing similarity matrices:
 
->>> similar_docs = divisi2.reconstruct_similarity(v, sigma).row_named('ca44')
+>>> similar_docs = \
+...   divisi2.reconstruct_similarity(v, sigma)\
+...     .row_named('ca44')
 >>> pprint(similar_docs.top_items(3))
 [('ca44', 0.99999999999999978),
  ('ca31', 0.82249752503164653),
@@ -348,11 +359,11 @@ vector of their recommendations and query for the best ones:
 
 >>> recs_for_5 = recommendations.col_named(5)
 >>> recs_for_5.top_items(5)
-[('Star Wars (1977)', 4.8162083389753922),
- ('Return of the Jedi (1983)', 4.5493663133402142),
- ('Wrong Trousers, The (1993)', 4.5292462987734297),
- ('Close Shave, A (1995)', 4.4162031221502778),
- ('Empire Strikes Back, The (1980)', 4.3923239529719762)]
+[('Star Wars (1977)', 4.816),
+ ('Return of the Jedi (1983)', 4.549),
+ ('Wrong Trousers, The (1993)', 4.529),
+ ('Close Shave, A (1995)', 4.416),
+ ('Empire Strikes Back, The (1980)', 4.392)]
 
 We see that this user should really like the Star Wars Trilogy, but this is
 unsurprising because the user in fact already told MovieLens they liked those
@@ -360,14 +371,14 @@ movies. To get true recommendations, we should make sure to filter for movies
 they have not yet rated.
 
 >>> recs_for_5 = recommendations.col_named(5)
->>> unrated = list(set(xrange(movie_data.shape[0]))\
+>>> unrated = list(set(xrange(movie_data.shape[0]))
 ...   - set(recs_for_5.nonzero_indices()))
 >>> rec[unrated].top_items(5)
-[('Wallace & Gromit: [...] (1996)', 4.19675664354898),
- ('Terminator, The (1984)', 4.1025473251923152),
- ('Casablanca (1942)', 4.0439402179346571),
- ('Pather Panchali (1955)', 4.004128767977936),
- ('Dr. Strangelove [...] (1963)', 3.9979437577787826)]
+[('Wallace & Gromit: [...] (1996)', 4.197),
+ ('Terminator, The (1984)', 4.103),
+ ('Casablanca (1942)', 4.044),
+ ('Pather Panchali (1955)', 4.004),
+ ('Dr. Strangelove [...] (1963)', 3.998)]
 
 And on the other end of the scale, if we look for the best anti-recommendation
 in ``(-rec[unrated])``, we find that user 5 should give "3 Ninjas: High Noon At
@@ -394,7 +405,7 @@ this reason, we often use it to learn from ConceptNet [Hav07]_, a network
 of people's general "common sense" knowledge about the real world. A graph
 representation of ConceptNet 4.0 is included with Divisi 2.0.
 
-The ``csc.divisi2.network`` module defines the various ways to extract
+The ``divisi2.network`` module defines the various ways to extract
 information from these labeled semantic networks. Its ``sparse_triples()``
 function turns the list of edges into a list of (value, rowlabel, columnlabel)
 triples that can be used to build a sparse matrix, and uses the arguments
@@ -439,38 +450,41 @@ SVD. We will show an example of doing this with ConceptNet here.
 
 Learning from ConceptNet
 ````````````````````````
-Start by loading the pre-defined ConceptNet 4.0 graph.
+Start by loading the pre-defined ConceptNet 4.0 graph:
 
->>> conceptnet_graph = divisi2.load('data:graphs/conceptnet_en.graph')
+>>> conceptnet_graph = divisi2.load(
+      'data:graphs/conceptnet_en.graph')
 
 We can break this graph down into nodes and features, and see a sample of what
-it looks like.
+it looks like:
 
 >>> from csc.divisi2.network import sparse_matrix
->>> A = sparse_matrix(graph, 'nodes', 'features', cutoff=3)
+>>> A = sparse_matrix(graph, 'nodes', 'features',
+                      cutoff=3)
 >>> print A
 SparseMatrix (12564 by 19719)
-         IsA/spor   IsA/game   UsedFor/   UsedFor/   person\\C ...
-baseball 3.609584   2.043731   0.792481   0.500000   0.500000  
-sport       ---     1.292481      ---     1.000000      ---    
-yo-yo       ---        ---        ---        ---        ---    
-toy         ---     0.500000      ---     1.160964      ---    
-dog         ---        ---        ---     0.792481      ---    
+         IsA/spor   IsA/game   UsedFor/   UsedFor/
+baseball 3.609584   2.043731   0.792481   0.500000
+sport       ---     1.292481      ---     1.000000
+yo-yo       ---        ---        ---        ---
+toy         ---     0.500000      ---     1.160964
+dog         ---        ---        ---     0.792481
 ...
 
 And with that, we can make a truncated SVD and reconstruct an approximation to
-A.
+A:
 
 >>> U, S, V = A.svd(k=100)
 >>> Ak = divisi2.reconstruct(U, S, V)
 >>> Ak.entry_named('pig', ('right', 'HasA', 'leg'))
 0.15071150848740383
->>> Ak.entry_named('pig', ('right', 'CapableOf', 'fly'))
+>>> Ak.entry_named('pig',
+                   ('right', 'CapableOf', 'fly'))
 -0.26456066802309008
 
 As shown in the earlier LSA example, we can also reconstruct an approximation
 to the similarity matrix :math:`A^T A`, describing how similar the nodes are
-to each other. (Long floating point values are rounded off here for brevity.)
+to each other:
 
 >>> sim = divisi2.reconstruct_similarity(U, S)
 >>> sim.entry_named('horse', 'cow')
@@ -478,14 +492,11 @@ to each other. (Long floating point values are rounded off here for brevity.)
 >>> sim.entry_named('horse', 'stapler')
 -0.031
 >>> sim.row_named('table').top_items()
-[('table', 1.000), ('newspaper article', 0.694), ('dine table', 0.681),
-('dine room table', 0.676), ('table chair', 0.669), ('dine room', 0.663),
-('bookshelve', 0.636), ('table set', 0.629), ('home depot', 0.591),
-('wipe mouth', 0.587)]
-
-The similarity values would be more useful if we knew what scale they were
-measured on. Moreover, they seem to favor very common concepts such as
-"person",
+[('table', 1.000), ('newspaper article', 0.694),
+ ('dine table', 0.681), ('dine room table', 0.676),
+ ('table chair', 0.669), ('dine room', 0.663),
+ ('bookshelve', 0.636), ('table set', 0.629),
+ ('home depot', 0.591), ('wipe mouth', 0.587)]
 
 Recall that ``reconstruct_similarity`` normalizes its values to
 between -1 and 1. Here, this normalization makes some nodes, such as
@@ -497,8 +508,8 @@ normalize the vectors to unit vectors *before* the SVD, so that nodes
 that are weakly described by the SVD do not end up magnified.
 
 Divisi allows for this with the SparseMatrix methods
-``.normalize_rows()``, ``.normalize_cols()``, and
-``.normalize_all()``. (tf-idf normalization, like in the LSA example,
+``normalize_rows()``, ``normalize_cols()``, and
+``normalize_all()``. (tf-idf normalization, like in the LSA example,
 is also an option, but it is inappropriate here because it
 de-emphasizes common concepts.) The first two scale the rows or
 columns, respectively, of the input so that they become unit vectors.
@@ -514,12 +525,15 @@ also increases the predictive accuracy of the reconstructed SVD (which we will
 be able to quantify in a moment).
 
 In this representation, we can look again at the similarities for "table":
+
 >>> U, S, V = A.normalize_all().svd(k=100)
 >>> sim = divisi2.reconstruct_similarity(U, S)
 >>> sim.row_named('table').top_items()
-[('table', 1.718), ('desk', 1.195), ('kitchen', 0.988), ('chair', 0.873),
-('restaurant', 0.850), ('plate', 0.822), ('bed', 0.772), ('cabinet', 0.678), 
-('refrigerator', 0.652), ('cupboard', 0.617)]
+[('table', 1.718), ('desk', 1.195),
+ ('kitchen', 0.988), ('chair', 0.873),
+ ('restaurant', 0.850), ('plate', 0.822),
+ ('bed', 0.772), ('cabinet', 0.678),
+ ('refrigerator', 0.652), ('cupboard', 0.617)]
 
 Choosing parameters
 ```````````````````
@@ -557,7 +571,8 @@ Then, after applying that normalization method, we can try truncated SVDs with v
 >>> for k in xrange(1, 200):
 ...     U, S, V = conceptnet.svd(k=k)
 ...     rec = divisi2.reconstruct(U, S, V)
-...     correct, total, accuracy = rec.evaluate_ranking(testdata)
+...     correct, total, accuracy =\
+...         rec.evaluate_ranking(testdata)
 ...     accuracy_data.append(accuracy)
 
 Plotting the resulting ``accuracy_data`` shows a plateau of good values of *k*,
@@ -565,7 +580,7 @@ roughly between *k* = 100 and *k* = 200.
 
 .. figure:: k-value-graph.png
 
-   Figure 2: Evaluating the predictive accuracy of the truncated SVD on
+   Evaluating the predictive accuracy of the truncated SVD on
    ConceptNet for various values of *k*. 
 
 .. Working with categories
@@ -577,17 +592,52 @@ roughly between *k* = 100 and *k* = 200.
 .. ---------------------
 .. show a Luminoso or SVDview screenshot without going into too much detail
 
+Memory use and scalability
+``````````````````````````
+The main use case of Divisi2 is to decompose a sparse matrix whose entries fit
+in memory. The objects that primarily consume memory are:
+
+* The linked lists that comprise the PySparse matrix
+* The compressed-sparse-column copy of this matrix used by SVDLIBC
+* The dense matrices U and V, and the vector S, that are returned by SVDLIBC
+  and used directly by NumPy
+* The optional OrderedSets of labels (each using a Python list and dictionary)
+
+Each nonzero entry in a sparse matrix and each entry in a dense matrix requires
+the space of a C double (assumed to be 8 bytes). The PySparse matrix also
+requires an integer (4 bytes), acting as a pointer, for each entry. (This
+implementation incidentally limits matrices to having fewer than :math:`2^{31}`
+nonzero entries.) The non-zero entries in the compressed-sparse-column matrix
+also come with integer row numbers.  Finally, each allocated row requires two
+integer pointers.
+
+So, without labels, a rank :math:`k` decomposition of an :math:`m \times n`
+matrix with `z` non-zero entries requires :math:`(24z + 8m + 8k(m+n))` bytes,
+plus a negligible amount of overhead from Python and C structures. As a
+practical example, it is possible within the 4 GiB memory limit of 32-bit
+CPython to take a rank-100 decomposition of a :math:`10^6 \times 10^6` matrix
+with :math:`10^8` entries, or a rank-10 decomposition of a :math:`10^7 \times
+10^7` matrix with :math:`10^8` entries, each of which requires 3.7 to 3.8 GiB
+plus overhead.
+
+In order to support even larger, denser data sets, Divisi 2.2 includes an
+experimental implementation of Hebbian incremental SVD that does not require
+storing the sparse data in memory.
+
 Conclusion
 -----------
-The SVD is a versitile analysis tool for many different kinds of
+The SVD is a versatile analysis tool for many different kinds of
 data. Divisi provides an easy way to compute the SVD of large sparse
 datasets in Python, and additionally provides Pythonic wrappers for
 performing common types of queries on the result.
 
 Divisi also includes a variety of other functionality. For example, it
 can analyze combinations of multiple matrices of data, a technique
-called *Blending*, which is useful for drawing conclusions from
+called *blending*, which is useful for drawing conclusions from
 multiple data sources simultaneously.
+
+Further documentation about Divisi2, including the presentation from SciPy
+2010, is available at http://csc.media.mit.edu/docs/divisi2/.
 
 References
 ----------
@@ -596,40 +646,40 @@ References
 
 .. MovieLens
 
-.. [Kon98] J. Konstan, J. Riedl, A. Borchers, and J. Herlocke. *Recommender Systems: A GroupLens Perspective* Papers from the 1998 Workshop on Rcommender Systems, Chapel Hill, NC.  1998.
+.. [Kon98] J.\  Konstan, J. Riedl, A. Borchers, and J. Herlocke. *Recommender Systems: A GroupLens Perspective*. Papers from the 1998 Workshop on Recommender Systems, Chapel Hill, NC. 1998.
 
 .. Networkx
 
-.. [Net10] NetworkX Developers. *NetworkX* Viewable online at:http://networkx.lanl.gov/, 2010.
+.. [Net10] NetworkX Developers. *NetworkX*. Viewable online at:http://networkx.lanl.gov/, 2010.
 
 .. Svdlibc
 
-.. [Roh10] Doug Rohde. *SVDLibC* Viewable online at: http://tedlab.mit.edu/~dr/SVDLIBC/, 2010.
+.. [Roh10] Doug Rohde. *SVDLIBC*. Viewable online at: http://tedlab.mit.edu/~dr/SVDLIBC/, 2010.
 
 .. pysparse
 
-.. [Geu08] Roman Geus, Daniel Wheeler, and Dominique Orban. *PySparse* Viewable online at: http://pysparse.sourceforge.net/, 2008.
+.. [Geu08] Roman Geus, Daniel Wheeler, and Dominique Orban. *PySparse*. Viewable online at: http://pysparse.sourceforge.net/, 2008.
 
 .. numpy
 
-.. [Oli10] Travis Oliphant. *Guide to Numpy* Viewable online at: http://www.tramy.us/, 2010.
+.. [Oli10] Travis Oliphant. *Guide to Numpy*. Viewable online at: http://www.tramy.us/, 2010.
 
 .. Lmds
 
-.. [Sil04] Vin. de Silva and Josh.B. Tenenbaum. *Sparse multidimensional scaling using landmark points* Stanford University Technical Report, 2004.
+.. [Sil04] Vin de Silva and Joshua B. Tenenbaum. *Sparse multidimensional scaling using landmark points*. Stanford University Technical Report, 2004.
 
 .. ccipca
 
-.. [Wen03] Juyang Weng and Yilu Zhang and Wey-Shiuan Hwang. * Candid covariance-free incremental principal component analysis* IEEE Transactions on Pattern Analysis and Machine Intelligence, 25(8):1034-1040, August 2003.
+.. [Wen03] Juyang Weng and Yilu Zhang and Wey-Shiuan Hwang. *Candid covariance-free incremental principal component analysis*. IEEE Transactions on Pattern Analysis and Machine Intelligence, 25(8):1034-1040, August 2003.
 
 .. lanczos
 
-.. [Lan98] Cornelius Lanczos and William R. Davis (ed). *Collected published papers with commentaries* North Carolina State University, 1998.
+.. [Lan98] Cornelius Lanczos and William R. Davis (ed). *Collected published papers with commentaries*. North Carolina State University, 1998.
 
 .. cnet
 
-.. [Hav07] Catherine Havasi, Robert Speer, and Jason Alonso. *ConceptNet 3: a Flexible, Multilingual Semantic Network for Common Sense Knowledge*, Recent Advances in Natural Language Processing, September 2007.
+.. [Hav07] Catherine Havasi, Robert Speer, and Jason Alonso. *ConceptNet 3: a Flexible, Multilingual Semantic Network for Common Sense Knowledge*. Recent Advances in Natural Language Processing, September 2007.
 
 .. aspace
 
-.. [Spe08] Robert Speer and Catherine Havasi and Henry Lieberman. *AnalogySpace: Reducing the Dimensionality of Common Sense Knowledge*, Proceedings of AAAI 2008, July 2008.
+.. [Spe08] Robert Speer and Catherine Havasi and Henry Lieberman. *AnalogySpace: Reducing the Dimensionality of Common Sense Knowledge*. Proceedings of AAAI 2008, July 2008.
