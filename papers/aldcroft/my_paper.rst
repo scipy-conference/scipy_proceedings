@@ -45,7 +45,9 @@ other highly energetic phenomena.
 
 .. figure:: chandra_satellite.jpg
 
-   Test figure caption.
+   Artist's rendering of the Chandra X-ray satellite.  The silverized teflon
+   which wraps the spacecraft has degraded so it is now far less reflective
+   than shown.
 
 Early in the mission it became apparent that temperatures on the spacecraft,
 particularly on the side which normally faces the Sun, were increasing at a
@@ -59,7 +61,7 @@ repair is possible.
 
 Different parts of the spacecraft are heated at different pitch angles (the
 angle that the telescope boresight axis makes to the sun line).  This is shown
-in the figure below that shows a side view of Chandra along with the subsystems
+in Figure 2 which presents a side view of Chandra along with the subsystems
 that are sensitive over different pitch ranges.  Temperatures can be maintained
 within limits by ping-ponging to different attitudes, never letting one part
 get too hot.  Thus in order to plan the weekly observing schedule a few simple
@@ -67,6 +69,8 @@ models were created to predict temperatures or otherwise constrain the observing
 duration at certain attitudes.
 
 .. figure:: constraints.png
+
+   Thermal constraint regions depending on the pitch angle to the sun line.
 
 As the constraints became more significant a need developed to improve the
 models in order to maintain the highest scientific output without endangering
@@ -80,7 +84,7 @@ group.
 Early in the process the author chose Python as the programming language for
 supporting this effort.  Around this time NumPy had emerged as a strong (and
 consolidated) numeric array manipulation tool for Python.  Adding in IPython,
-Matplotlib and SciPy provided an development and interactive analysis
+Matplotlib and SciPy provided a development and interactive analysis
 environment that was ideal for the task.  
 
 Telemetry access
@@ -95,7 +99,7 @@ for processing and access were largely designed with mid-1990's era hardware
 and storage capabilities in mind.
 
 Two standard methods exist for retrieving archival telemetry.  Within the
-Flight Operations Team (FOT) environment at the OCC the primary tool stores no
+Flight Operations Team (FOT) environment at the Operations Control Center the primary tool stores no
 intermediate products and instead always falls back to the raw telemetry
 stream.  This stream contains over 6000 individual engineering telemetry items
 (MSIDs) that are interleaved according to different sampling rates and
@@ -104,7 +108,7 @@ or more to retrieve a year of data needed for analysis.
 
 Within the Chandra X-ray Center (CXC) which is responsible for processing the
 science data, the situation is somewhat better.  In this case the "Level-0
-decommutation" process is done just once and the results stored in FITS files
+decommutation" process is done just once and the results stored in FITS [FITS]_ files
 available through an archive server.  These files each contain about two hours
 of data for MSIDs that are related by subsystem (thermal, pointing control,
 etc) and sampling rate.  However, access to a single MSID of interest (e.g. a
@@ -156,13 +160,19 @@ examples had to be clear and explicit.  The final documentation package
 included a tutorial covering the telemetry access interface as well as IPython,
 NumPy, and Matplotlib.
 
-Creating a Thermal model
+Creating a thermal model
 --------------------------
 
 The thermal model which was developed for modeling Chandra subsystems is
-illustrated in the figure below.
+illustrated in Figure 3.
 
 .. figure:: multimass.png
+
+   Schematic diagram of the thermal Chandra thermal model.  Boxes
+   (:math:`T_0`, :math:`T_1`, :math:`T_2`) represent physical nodes on the
+   spacecraft where a thermistor is located.  External solar heat input is shown 
+   as :math:`P_i(p)`, conductances are :math:`U_{i,j}`, and external 
+   heat bath temperatures are :math:`T_{e,i}`.
 
 Here each of the boxes (:math:`T_0`, :math:`T_1`, :math:`T_2`) represents a physical node
 on the spacecraft where a thermistor is located.  It is then assumed that each
@@ -170,7 +180,7 @@ node :math:`i` has an external heat input :math:`P_i(p)` and has
 conductances :math:`U_{i,j}` to other nodes and an external heat bath with
 temperature :math:`T_{e,i}`.  For most models the external heat input is Solar
 and depends purely on the spacecraft pitch angle with respect to the Sun.  In
-some cases however the heat input due to internal electronics is also
+some cases, however, the heat input due to internal electronics is also
 included.  Given these definitions and the nodal connectivity the temperatures
 can be written in matrix form as a simple first order differential equation:
 
@@ -213,12 +223,18 @@ can be written in matrix form as a simple first order differential equation:
    }
    \\
 
+Here :math:`\mathbf{T}` is a vector of node temperatures,
+:math:`\mathbf{\tilde{A}}` is the matrix describing the coupling between nodes,
+:math:`\mathbf{b}` is a vector describing the heat inputs, :math:`\mathbf{v}_i`
+and :math:`{\lambda_i}` are the eigenvectors and eigenvalues of
+:math:`\mathbf{\tilde{A}}`, and :math:`t` is time.
+
 The solution can be expressed analytically as long as the model parameters
 (external heat inputs, conductances) are constant.  Most of the time Chandra
 dwells at a particular attitude and so this is a good assumption during such a
 dwell.  The computational strategy for making a model prediction of
 temperatures is to identify "states" where the parameters are constant and
-propagate temperatures from the beginning to the end of the state.  Then use
+propagate temperatures from the beginning to the end of the state, then use
 the end temperatures as the starting point for the next state.
 
 The first implementation of this core model calculation was a literal
@@ -242,7 +258,7 @@ thermistors whose data are averaged over 5 minute intervals.  Up to five
 years of such data are fit at once.
 
 What is not immediately apparent in the concise matrix formulation
-:math:`\mathbf{ \dot{T} } = \mathbf{\tilde{A} T} + \mathbf{b} \vspace*{.5em}`
+:math:`\mathbf{ \dot{T} } = \mathbf{\tilde{A} T} + \mathbf{b}`
 of the thermal model is that it contains a lot of free parameters.  In addition
 to the conductances and external heat bath temperatures, the external Solar
 power input for each node is complicated.  First it is a function of the pitch
@@ -263,7 +279,7 @@ time-dependent behavior of temperatures on the spacecraft can necessarily be
 captured by any model with a large number of parameters.
 
 The second objection is that fitting for so many parameters is bound for
-failure.  However, what makes this problem tractable is that the many of
+failure.  However, what makes this problem tractable is that many of the
 parameters are only loosely coupled.  This makes it possible to selectively fit
 for subsets of the parameters and iteratively home in on a reasonable global
 set of parameters.  Unlike many problems in parameter estimation where the
@@ -274,7 +290,7 @@ The Sherpa [SHP]_ package is used to handle the actual optimization of
 parameters to achieve the best model fit to the data.  Sherpa is a modeling and
 fitting application for Python that contains a powerful language for combining
 simple models into complex expressions that can be fit to the data using a
-variety of statistics and optimization methods. It is easily extensible to
+variety of statistics and optimization methods. It is easily extendible to
 include user models, statistics and optimization methods.  For this application
 the key feature is a robust implementation of the Nelder-Mead (aka Simplex)
 optimization method that is able to handle many free parameters.  Sherpa
@@ -283,17 +299,25 @@ model parameters using Python expressions.
 
 The result of the fitting process is a calibrated thermal model that can be
 used to accurately predict the system temperatures given the planned sequence
-of maneuvers and instrument configurations.  The figure below shows an example
+of maneuvers and instrument configurations.  Figure 4 shows an example
 of the data for one thermistor "1PDEAAT" in red with the model prediction in blue.
 
 .. figure:: psmc_calibration.png
 
-The next plot below now shows the post-facto model prediction (blue) for a
+   Long-term comparison of the actual spacecraft thermistor data (red) with the model prediction 
+   (blue).  This span of data is used for fitting the model coefficients.
+
+
+Figure 5 now shows the post-facto model prediction (blue) for a
 two-week period of data (red) that is outside the calibration time range.  Most
 of the features are well reproduced and the distribution of residuals is
 roughly gaussian.
 
 .. figure:: psmc_prediction.png
+
+   Detailed comparison of the actual spacecraft thermistor data (red) with the model prediction 
+   (blue).  The thermistor is located within the power-supply box for one of 
+   the main science instruments.
 
 Parallelization of fitting
 --------------------------
@@ -315,10 +339,13 @@ time range and model definition and it is then responsible for retrieving the
 appropriate telemetry data.  After initialization the model parameters for each
 fit iteration are sent and the worker computes the model and :math:`Chi^2` fit
 statistic.  All of the individual :math:`Chi^2` values are then summed.  In
-this way the communication overhead between master and workers is minimal.  The
-figure below illustrates the process.
+this way the communication overhead between master and workers is minimal.  Figure 6
+illustrates the process.
 
 .. figure:: parallel.png
+
+   Schematic illustration of parallelizing the fitting process by breaking the
+   data and model generation into smaller time slices.
 
 The actual job of handling the interprocess communication and job creation is
 done with the mpi4py [MPI4PY]_ package using the MPICH2 [MPICH2]_ library.  As
@@ -341,8 +368,8 @@ file ``mpd.hosts``) with a command like the following::
 
   mpdboot --totalnum=12 --file=mpd.hosts --maxbranch=12
 
-An abridged version of the basic code used for parallel fitting is shown
-below.    Communication with and control of the workers is localized in three functions::
+An abridged version of three key functions in the main parallel fitting code is shown
+below.    These functions support communication with and control of the workers::
 
   def init_workers(metadata)
       """Init workers using values in metadata dict"""
@@ -350,12 +377,15 @@ below.    Communication with and control of the workers is localized in three fu
       comm.bcast(msg, root=MPI.ROOT)
 
   def calc_model(pars):
-      """Calculate the model for given pars"""
+      """Broadcast a message to each worker to calculate 
+         the model for given pars."""
       comm.bcast(msg={'cmd': 'calc_model', 'pars': pars}, 
                  root=MPI.ROOT)
 
   def calc_stat()
-      """Calculate chi^2 diff between model and data"""
+      """Broadcast message to calculate chi^2 diff between
+         model and data.  After that collect the sum of
+         results from workers using the Reduce function."""
       msg = {'cmd': 'calc_statistic'}
       comm.bcast(msg, root=MPI.ROOT)
       fit_stat = numpy.array(0.0, 'd')
@@ -363,11 +393,12 @@ below.    Communication with and control of the workers is localized in three fu
                   op=MPI.SUM, root=MPI.ROOT)
       return fit_stat
 
-The main processing code first uses the MPI Spawn method to dynamically
-create the desired number of worker instances via the previously created ``mpd``
-servers.  Then the workers receive an initialization command with the start and
-stop date of the data being used in fitting.  The Sherpa user model and fit
-statistic are configured, and finally the Sherpa fit command is executed::
+After defining the above functions the main processing code first uses the MPI
+Spawn method to dynamically create the desired number of worker instances via
+the previously created ``mpd`` servers.  Then the workers receive an
+initialization command with the start and stop date of the data being used in
+fitting.  The Sherpa user model and fit statistic are configured, and finally
+the Sherpa fit command is executed::
 
   comm = MPI.COMM_SELF.Spawn(sys.executable,
                              args=['fit_worker.py'],
@@ -375,12 +406,11 @@ statistic are configured, and finally the Sherpa fit command is executed::
   init_workers({"start": date_start, "stop": date_stop})
 
   # Sherpa commands to register and configure a function 
-  # as a user model
-  load_user_model(calc_model, 'mpimod')
-  add_user_pars('mpimod', parnames)
+  # as a user model for fitting to the data.
+  load_user_model(calc_model, 'mpimod')  
   set_model(mpimod)
 
-  # Configure the fit statistic
+  # Set function to be called to calculate fit statistic
   load_user_stat('mpistat', calc_stat)
   set_stat(mpistat)
 
@@ -405,12 +435,18 @@ this worker within the ensemble of ``size`` workers.
           break
 
       elif msg['cmd'] == 'init':
+          # Get the vectors of times and temperatures 
+          # for this worker node
           x, y = get_data(msg['metadata'], rank, size)
 
       elif msg['cmd'] == 'calc_model':
-          model = calc_model(msg['pars'], x, y)
+          # Calculate the thermal model for times 
+          # covered by this worker
+          model = worker_calc_model(msg['pars'], x, y)
 
       elif msg['cmd'] == 'calc_statistic':
+          # Calculate the chi^2 fit statistic and send 
+          # back to the master process
           fit_stat = numpy.sum((y - model)**2)
           comm.Reduce([fit_stat, MPI.DOUBLE], None,
                       op=MPI.SUM, root=0)
@@ -423,7 +459,7 @@ Using the techniques and tools just described, two flight-certified
 implementations of the models have been created and are being used in Chandra
 operations.  One models the temperature of the power supply for the ACIS
 science instrument [ACIS]_.  The other models five temperatures on the
-Sun-pointed side of the forward structure that surrounds the HRMA X-ray mirror.
+Sun-pointed side of the forward structure that surrounds the X-ray mirror.
 Each week, as the schedule of observations for the following week is assembled
 the models are used to confirm that no thermal limits are violated.
 Separate cron jobs also run daily to perform post-facto "predictions" of
@@ -448,12 +484,19 @@ nearly every day in the author's work, two additional packages were discussed:
 * MPI for Python (mpi4py) with the MPICH2 library provides an accessible
   mechanism for parallelization of compute-intensive tasks.
 
+Acknowledgments
+---------------
+
+Thanks to the reviewer James Turner for a detailed evaluation and helpful comments.
+
 References
 ----------
 
 .. [ACIS] http://cxc.harvard.edu/proposer/POG/html/ACIS.html
 
 .. [CHANDRA] http://chandra.harvard.edu/
+
+.. [FITS] http://fits.gsfc.nasa.gov/
 
 .. [HDF5] http://www.hdfgroup.org/HDF5/
 
