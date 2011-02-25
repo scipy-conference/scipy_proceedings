@@ -157,16 +157,16 @@ Package Overview
 ----------------
 
 Currently, we have five modules in the main codebase that contain statistical 
-models.  These are regression (least squares regression models), glm 
-(generalized linear models), rlm (robust linear models), discretemod (discrete 
-choice models), and contrast (contrast analysis).  Regression contains 
-generalized least squares (GLS), weighted least squares (WLS), and ordinary 
-least squares (OLS).  Glm contains generalized linear models with support for 
+models.  These are *regression* (least squares regression models), *glm* 
+(generalized linear models), *rlm* (robust linear models), *discretemod* (discrete 
+choice models), and *contrast* (contrast analysis).  *Regression* contains 
+generalized least squares (*GLS*), weighted least squares (*WLS*), and ordinary 
+least squares (*OLS*).  *Glm* contains generalized linear models with support for 
 six common exponential family distributions and at least ten standard link 
-functions.  Rlm supports M-estimator type robust linear models with support for
-eight norms.  Discretemod includes several discrete choice models such as the 
-Logit, Probit, Multinomial Logit, and Poisson within a maximum likelihood 
-framework. Contrast contains helper functions for working with linear contrasts. There are also tests for heteroskedasticity, autocorrelation, and a framework 
+functions.  *Rlm* supports M-estimator type robust linear models with support for
+eight norms.  *Discretemod* includes several discrete choice models such as the 
+*Logit*, *Probit*, Multinomial Logit (*MNLogit*), and *Poisson* within a maximum likelihood 
+framework. *Contrast* contains helper functions for working with linear contrasts. There are also tests for heteroskedasticity, autocorrelation, and a framework 
 for testing hypotheses about linear combinations of the coefficients.
 
 In addition to the models and the related post-estimation results and tests, 
@@ -180,7 +180,7 @@ The last main part of the package is the datasets.  There are currently fourteen
 datasets that are either part of the public domain or used with express 
 consent of the original authors.  These datasets follow a common pattern so 
 that they are easy to use, and it is trivial for others to add additional 
-Datasets.  The datasets are used in our test suite and examples as illustrated 
+datasets.  The datasets are used in our test suite and examples as illustrated 
 below.  Further, there are verbose examples in the examples directory of the 
 package.
 
@@ -213,8 +213,8 @@ notices, that may be of interest; however, we will just load the data.::
 
 Many of the *Dataset* objects have two attributes that are helpful for tests 
 and examples -*endog* and *exog*- though the whole dataset is available.  We 
-will use them to construct an *OLS* model instance.  The constructor for OLS is 
-simply::
+will use them to construct an *OLS* model instance.  The constructor for *OLS*
+is::
 
     def __init__(self, endog, exog)
 
@@ -229,7 +229,7 @@ We are now ready to fit the model, which returns a *RegressionResults* class.::
 
     >>> longley_res = longley_model.fit()
     >>> type(longley_res)
-    <class 'scikits.statsmodels.regression.RegressionResults'>
+    <class 'sm.regression.RegressionResults'>
 
 By default, the least squares models use the pseudoinverse to compute the 
 parameters that solve the objective function.::
