@@ -465,11 +465,10 @@ All in all, we believe that the future for Python and statistics looks bright.
 Acknowledgements
 ----------------
 
-In addition to the authors of this paper, many others have worked on or 
-contributed to the codebase.  Many thanks are due to Jonathan Taylor and the 
-contributors who worked on the models code while it was in SciPy and NIPY.
-Thanks are also due to the numerous other people who have provided code, 
-constructive comments, and discussion on the mailing lists.
+In addition to the authors of this paper, many others have contributed to the 
+codebase.  Thanks are due to Jonathan Taylor and contributors to the models 
+code while it was in SciPy and NIPY.  Thanks also go to those who have 
+provided code, constructive comments, and discussion on the mailing lists.
 
 .. [1] The examples reflect the state of the code at the time of writing.
        The main model API is relatively stable; however, recent refactoring
