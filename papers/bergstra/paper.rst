@@ -224,19 +224,17 @@ Theano involves the following four conceptual steps:
 (2) using these variables to build a symbolic expression graph,
 (3) compiling Theano functions, and
 (4) calling said functions to perform numerical computations.
-The code listings in Figures `1 <logreg1>`_ - `4 <logreg4>`_ illustrate these steps
+The code listings in Figures 1 - 4 illustrate these steps
 with a working program that fits a logistic regression model to random
 data.
 
-.. _logreg1:
-.. raw:: latex
+.. _Figure 1:
+.. figure:: logreg1.pdf
+    :scale: 75
 
-    \begin{figure}[H]
-        \includegraphics[scale=.75,clip=true,trim=30 640 170 28]{logreg1.pdf}
-        \caption{Logistic regression, part 1: declaring variables.}
-    \end{figure}
+    Logistic regression, part 1: declaring variables.
 
-The code in Figure `1 <logreg1>`_ declares four symbolic variables ``x``, ``y``
+The code in `Figure 1`_ declares four symbolic variables ``x``, ``y``
 ``w``, and ``b`` to represent the data and parameters of the model.
 Each tensor variable is
 strictly typed to include its data type, its number of dimensions, and the
@@ -256,15 +254,13 @@ A shared variable's value is maintained
 throughout the execution of the program and
 can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 10.
 
-.. _logreg2:
-.. raw:: latex
+.. _Figure 2:
+.. figure:: logreg2.pdf
+    :scale: 75
 
-    \begin{figure}[H]
-        \includegraphics[scale=.75,clip=true,trim=30 695 170 28]{logreg2.pdf}
-        \caption{Logistic regression, part 2: the computation graph.}
-    \end{figure}
+    Logistic regression, part 2: the computation graph.
 
-The above code-block specifies the computational graph required to perform
+The code in `Figure 2`_ specifies the computational graph required to perform
 stochastic gradient descent on the parameters of our cost function. Since
 Theano's interface shares much in
 common with that of NumPy, lines 11-15 should be self-explanatory for anyone
@@ -285,16 +281,13 @@ and :math:`\partial E / \partial b` respectively.
 Finally, line 15 defines the actual prediction (``prediction``) of the logistic
 regression by thresholding :math:`P(Y=1|x^{(i)})`.
 
+.. _Figure 3:
+.. figure:: logreg3.pdf
+    :scale: 75
 
-.. _logreg3:
-.. raw:: latex
+    Logistic regression, part 3: compilation.
 
-    \begin{figure}[H]
-        \includegraphics[scale=.75,clip=true,trim=30 696 170 28]{logreg3.pdf}
-        \caption{Logistic regression, part 3: compilation.}
-    \end{figure}
-
-The code of Figure `3 <logreg3>`_ creates the two functions required to train and
+The code of `Figure 3`_ creates the two functions required to train and
 test our logistic regression model. Theano functions are
 callable objects that compute zero or more *outputs*
 from values given for one or more symbolic *inputs*. For example, the
@@ -305,7 +298,7 @@ a convenience to the user.
 
 .. Since this value is a function of both ``x`` and ``y``, these are given as input to the function. 
 
-Line 18 (Figure `3 <logreg3>`_) which creates the ``train`` function highlights two other important
+Line 18 (`Figure 3`_) which creates the ``train`` function highlights two other important
 features of Theano functions: the potential for multiple outputs and updates.
 In our example, ``train`` computes both
 the prediction (``prediction``) of the classifier as well as the cross-entropy
@@ -321,16 +314,13 @@ function will update the parameters ``w`` and ``b`` with new values as per the
 SGD algorithm.
 
 
-.. _logreg4:
-.. raw:: latex
+.. _Figure 4:
+.. figure:: logreg4.pdf
+    :scale: 75
 
-    \begin{figure}[H]
-        \includegraphics[scale=.75,clip=true,trim=30 630 170 28]{logreg4.pdf}
-        \caption{Logistic regression, part 4: computation.}
-    \end{figure}
+    Logistic regression, part 4: computation.
 
-
-Our example concludes (Figure `4 <logreg4>`_) by using the functions
+Our example concludes (`Figure 4`_) by using the functions
 ``train`` and ``predict`` to fit the logistic regression model.
 Our data ``D`` in this example is just four random vectors and labels.
 Repeatedly calling the ``train`` function (lines 27-28) fits
@@ -570,9 +560,6 @@ Our goal is to provide GPU implementations for all expressions supported by Thea
     }
     \end{table}
     \end{center}
-
-    \vspace{-1cm}
-
 
 Random numbers are provided in two ways: via NumPy's random module, and
 via an internal generator from the MRG family [Ecu]_.
