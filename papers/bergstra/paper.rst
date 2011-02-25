@@ -230,7 +230,7 @@ data.
 
 .. _Figure 1:
 .. figure:: logreg1.pdf
-    :scale: 75
+    :scale: 80%
 
     Logistic regression, part 1: declaring variables.
 
@@ -256,7 +256,7 @@ can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 10.
 
 .. _Figure 2:
 .. figure:: logreg2.pdf
-    :scale: 75
+    :scale: 80%
 
     Logistic regression, part 2: the computation graph.
 
@@ -283,7 +283,7 @@ regression by thresholding :math:`P(Y=1|x^{(i)})`.
 
 .. _Figure 3:
 .. figure:: logreg3.pdf
-    :scale: 75
+    :scale: 80%
 
     Logistic regression, part 3: compilation.
 
@@ -316,7 +316,7 @@ SGD algorithm.
 
 .. _Figure 4:
 .. figure:: logreg4.pdf
-    :scale: 75
+    :scale: 80%
 
     Logistic regression, part 4: computation.
 
@@ -375,7 +375,6 @@ This program stresses element-wise computations and the use of BLAS routines.
 .. _Figure 5:
 .. _Benchmark1:
 .. figure:: mlp.pdf
-    :scale: 100
 
     Fitting a multi-layer perceptron to simulated data with
     various implementations of stochastic gradient descent.  These models have
@@ -401,7 +400,6 @@ less than the 5.8x increase Theano achieves through CUDA specializations.
 .. _Benchmark2:
 .. _Figure 6:
 .. figure:: conv.pdf
-    :scale: 100
 
     Fitting a convolutional network using different
     software. The benchmark stresses convolutions of medium-sized (256 by 256) images with
@@ -438,7 +436,6 @@ each expression.
 .. _Figure 7:
 .. _Benchmark3:
 .. figure:: multiple_graph.pdf
-    :scale: 100
 
     Speed comparison between NumPy,
     numexpr, and Theano for different sizes of input on four element-wise
