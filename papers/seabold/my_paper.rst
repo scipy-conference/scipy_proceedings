@@ -192,60 +192,52 @@ rest of the package, using Longley's 1967 dataset [Longley]_ on the US
 macro economy.  Note that the Longley data is known to be highly collinear (it 
 has a condition number of 456,037), and as such it is used to test accuracy
 of least squares routines than to examine any economic theory.  First we need 
-to import the package.  The suggested convention for importing statsmodels is
-:: 
+to import the package.  The suggested convention for importing statsmodels is :: 
 
     >>> import scikits.statsmodels as sm
 
-Numpy is assumed to be imported as
-::
+Numpy is assumed to be imported as::
 
     >>> import numpy as np
     
-Then we load the example dataset.
-::
+Then we load the example dataset. ::
 
     >>> longley = sm.datasets.longley
 
 The datasets have several attributes, such as descriptives and copyright 
-notices, that may be of interest; however, we will just load the data.::
+notices, that may be of interest; however, we will just load the data. ::
 
     >>> data = longley.load()
 
 Many of the *Dataset* objects have two attributes that are helpful for tests 
 and examples -*endog* and *exog*- though the whole dataset is available.  We 
 will use them to construct an *OLS* model instance.  The constructor for *OLS*
-is
-::
+is ::
 
     def __init__(self, endog, exog)
 
 It is currently assumed that the user has cleaned the dataset and that a 
 constant is included, so we first add a constant and then instantiate the 
-model.
-::
+model. ::
 
     >>> data.exog = sm.add_constant(data.exog)
     >>> longley_model = sm.OLS(data.endog, data.exog)
 
-We are now ready to fit the model, which returns a *RegressionResults* class.
-::
+We are now ready to fit the model, which returns a *RegressionResults* class. ::
 
     >>> longley_res = longley_model.fit()
     >>> type(longley_res)
     <class 'sm.regression.RegressionResults'>
 
 By default, the least squares models use the pseudoinverse to compute the 
-parameters that solve the objective function.
-::
+parameters that solve the objective function. ::
 
     >>> params = np.dot(np.linalg.pinv(data.exog),
                         data.endog)
 
 The instance *longley_res* has several attributes and methods of interest.  The 
 first is the fitted values, commonly :math:`\beta` in the general linear 
-model, :math:`Y=X\beta`, which is called *params* in statsmodels.
-::
+model, :math:`Y=X\beta`, which is called *params* in statsmodels. ::
 
     >>> longley_res.params
     array([  1.50618723e+01, -3.58191793e-02,  
@@ -253,8 +245,7 @@ model, :math:`Y=X\beta`, which is called *params* in statsmodels.
         -5.11041057e-02,   1.82915146e+03,
         -3.48225863e+06])
 
-Also available are
-::
+Also available are ::
 
     >>> [_ for _ in dir(longley_res) if not 
          _.startswith('_')]
@@ -288,8 +279,7 @@ families, the percentage of minority students and teachers, the median teacher
 salary, the mean years of teacher experience, per-pupil expenditures, the pupil
 -teacher ratio, the percentage of student taking college credit courses, the 
 percentage of charter schools, the percent of schools open year round, and 
-various interaction terms.  The model can be fit as follows
-::
+various interaction terms.  The model can be fit as follows ::
 
     >>> data = sm.datasets.star98.load()
     >>> data.exog = sm.add_constant(data.exog)
@@ -301,8 +291,7 @@ The available families in *scikits.statsmodels.families* are *Binomial*,
 *Gamma*, *Gaussian*, *InverseGaussian*, *NegativeBinomial*, and *Poisson*.
 
 The above examples also uses the default canonical logit link for the Binomial 
-family, though to be explicit we could do the following
-::
+family, though to be explicit we could do the following ::
 
     >>> links = sm.families.links
     >>> glm_bin = sm.GLM(data.endog, data.exog,
@@ -311,8 +300,7 @@ family, though to be explicit we could do the following
 
 We fit the model using iteratively reweighted least squares, but we must
 first specify the number of trials for the endogenous variable for the Binomial 
-model with the endogenous variable given as (success, failure).
-::
+model with the endogenous variable given as (success, failure). ::
 
     >>> trials = data.endog.sum(axis=1)
     >>> bin_results = glm_bin.fit(data_weights=trials)
@@ -332,8 +320,7 @@ model with the endogenous variable given as (success, failure).
 Since we have fit a GLM with interactions, we might be interested in comparing 
 interquartile differences of the response between groups.  For instance, the 
 interquartile difference between the percentage of low income households per 
-school district while holding the other variables constant at their mean is
-::
+school district while holding the other variables constant at their mean is ::
 
     >>> means = data.exog.mean(axis=0) # overall means
     >>> means25 = means.copy() # copy means
@@ -341,24 +328,21 @@ school district while holding the other variables constant at their mean is
 
 We can now replace the first column, the percentage of low income households,
 with the value at the first quartile using scipy.stats and likewise for the 
-75th percentile.
-::
+75th percentile. ::
 
     >>> from scipy.stats import scoreatpercentile as sap
     >>> means25[0] = sap(data.exog[:,0], 25)
     >>> means75[0] = sap(data.exog[:,0], 75)
 
 And compute the fitted values, which are the inverse of the link function at the 
-linear predicted values.
-::
+linear predicted values. ::
 
     >>> lin_resp25 = glm_bin.predict(means25)
     >>> lin_resp75 = glm_bin.predict(means75)
 
 Therefore the percentage difference in scores on the standardized math tests for 
 school districts in the 75th percentile of low income households versus the 25th 
-percentile is
-::
+percentile is ::
 
     >>> print "%4.2f percent" % ((lin_resp75-
                                   lin_resp25)*100)
@@ -386,19 +370,17 @@ theory suggests that the following model may instead be correct
 In terms of the (:ref:`eq1`) this implies that :math:`\beta_{3}+\beta_{4}=0`,
 :math:`\beta_{2}=1`, and :math:`\beta_{5}=0`.  This can be implemented in 
 statsmodels using the *macrodata* dataset. Assume that *endog* and *exog* are 
-given as in (:ref:`eq1`)
-::
+given as in (:ref:`eq1`) ::
   
     >>> inv_model = sm.OLS(endog, exog).fit()
 
-Now we need to make linear restrictions in the form of :math:`R\beta=q`::
+Now we need to make linear restrictions in the form of :math:`R\beta=q` ::
 
     >>> R = [[0,1,0,0,0],[0,0,1,1,0],[0,0,0,0,1]]
     >>> q = [1,0,0]
 
 :math:`R\beta=q` implies the hypotheses outlined above.  We can test the
-joint hypothesis using an F test, which returns a *ContrastResults* class
-::
+joint hypothesis using an F test, which returns a *ContrastResults* class ::
 
     >>> Ftest = inv_model.f_test(R,q)
     >>> print Ftest
@@ -411,14 +393,12 @@ essentially zero.
 
 As a final example we will demonstrate how the `SimpleTable` class can be used 
 to generate tables.  SimpleTable is also currently used to generate our 
-regression results summary.  Continuing the example above, one could do
-::
+regression results summary.  Continuing the example above, one could do ::
 
     >>> print inv_model.summary(yname="lninv", 
                 xname=["const","lnY","i","dP","t"])
        
-To build a table, we could do
-::
+To build a table, we could do::
 
     >>> gdpmean = data.data['realgdp'].mean()
     >>> invmean = data.data['realinv'].mean()
@@ -441,8 +421,7 @@ To build a table, we could do
     --------------------------------
 
 
-LaTeX output can be generated with something like
-::
+LaTeX output can be generated with something like ::
 
     >>> fh = open('./tmp.tex', 'w')
     >>> fh.write(tbl.as_latex_tabular())
