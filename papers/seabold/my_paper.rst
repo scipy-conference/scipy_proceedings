@@ -89,9 +89,9 @@ We hope that statsmodels too can become an integral a part of the Scientific
 Python community and serve as a step in the direction of Python becoming a 
 serious open source language for statistics.  Towards this end, others are 
 working on an R-like formula framework to help users specify and manipulate 
-models, and packages like pandas [pandas]_ (discussed in these proceedings) and 
-larry [larry]_ are providing flexible data structures and routines for data 
-analysis currently lacking in NumPy.
+models [charlton]_, and packages like pandas [pandas]_ (discussed in these 
+proceedings) and larry [larry]_ are providing flexible data structures and 
+routines for data analysis currently lacking in NumPy.
 
 
 Statsmodels: Development and Design
@@ -492,6 +492,8 @@ References
 .. [BilinaLawford] R. Bilina and S. Lawford.  July 4, 2009. *Python for Unified 
                 Research in Econometrics and Statistics*, July 4, 2009.  
                 Available at SSRN: http://ssrn.com/abstract=1429822
+
+.. [charlton] Charlton. Available at https://github.com/charlton
 
 .. [ChoiratSeri] C. Choirat and R. Seri.  2009.  "Econometrics with Python."
                     *Journal of Applied Econometrics*, 24.4, 698-704.  
