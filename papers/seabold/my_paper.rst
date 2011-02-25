@@ -38,7 +38,7 @@ On a historical note, statsmodels was started by Jonathan Taylor, a statistician
 now at Stanford, as part of SciPy under the name models.  Eventually, models 
 was removed from SciPy and became part of the NIPY neuroimaging project [NIPY]_ 
 in order to mature.  The models code was later accepted as a SciPy-focused 
-project for the Google Summer of Code 2009 and now again in 2010.  It is now 
+project for the Google Summer of Code 2009 and again in 2010.  It is currently 
 distributed as a SciKit, or add-on package for SciPy.
 
 The current main developers of statsmodels are trained as economists with a 
@@ -107,7 +107,8 @@ This process is known as Test-Driven Development (TDD).  In its strictest form,
 TDD means that tests are written before the functionality which it is supposed
 to test.  While we do not often take the strict approach, there are several 
 layers in our development process that ensure that our results are correct 
-versus existing software (often R, SAS, or Stata).
+versus existing software (often R, SAS, or Stata). Any deviations from results 
+in other software are noted in the test suite.
 
 First, we employ a distributed version control system in which each developer 
 has his own copy of the code, or branch, to make changes outside of the main 
