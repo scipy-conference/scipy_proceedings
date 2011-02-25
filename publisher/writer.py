@@ -98,7 +98,14 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
 
         self.body_pre_docinfo = [title_template]
 
+    def end_open_abstract(self, node):
+        if 'abstract' not in node['classes'] and self.abstract_in_progress:
+            self.out.append('\\end{abstract}')
+            self.abstract_in_progress = False
+
     def visit_title(self, node):
+        self.end_open_abstract(node)
+
         if self.section_level == 1:
             if self.paper_title:
                 import warnings
@@ -115,9 +122,7 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         LaTeXTranslator.visit_title(self, node)
 
     def visit_paragraph(self, node):
-        if 'abstract' not in node['classes'] and self.abstract_in_progress:
-            self.out.append('\\end{abstract}')
-            self.abstract_in_progress = False
+        self.end_open_abstract(node)
 
         if 'abstract' in node['classes'] and not self.abstract_in_progress:
             self.out.append('\\begin{abstract}')
