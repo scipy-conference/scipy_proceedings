@@ -25,14 +25,14 @@ Introduction
 ------------
 
 Statsmodels (http://statsmodels.sourceforge.net/) is a library for statistical 
-and econometric analysis in Python.  Its intended audience is both theoretical 
+and econometric analysis in Python [1]_.  Its intended audience is both theoretical 
 and applied statisticians and econometricians as well as Python users and 
 developers across disciplines who use statistical models. Users of R, Stata, 
 SAS, SPSS, NLOGIT, GAUSS or MATLAB for statistics, financial econometrics, or 
 econometrics who would rather work in Python for all its benefits may find 
 statsmodels a useful addition to their toolbox.  This paper introduces 
 statsmodels and is aimed at the researcher who has some prior experience with 
-Python, NumPy/SciPy [SciPy]_ [1]_.
+Python, NumPy/SciPy [SciPy]_ [2]_.
 
 On a historical note, statsmodels was started by Jonathan Taylor, a statistician 
 now at Stanford, as part of SciPy under the name models.  Eventually, models 
@@ -138,7 +138,7 @@ maintain the endogenous-exogenous terminology throughout the package, however.
  
 With this in mind, we have a base class, *Model*, that is intended to be a 
 template for parametric models.  It has two main attributes *endog* and *exog*
-[2]_ and placeholders for *fit* and *predict* methods.  *LikelihoodModel* 
+[3]_ and placeholders for *fit* and *predict* methods.  *LikelihoodModel* 
 is a subclass of *Model* that is the workhorse for the regression models.  All 
 *fit* methods are expected to return some results class.  Towards this end, we 
 also have a base class *Results* and *LikelihoodModelResults* which inherits 
@@ -482,7 +482,12 @@ contributors who worked on the models code while it was in SciPy and NIPY.
 Thanks are also due to the numerous other people who have provided code, 
 constructive comments, and discussion on the mailing lists.
 
-.. [1] Users who wish to learn more about NumPy can do so at 
+.. [1] The examples reflect the state of the code at the time of writing.
+       The main model API is relatively stable; however, recent refactoring
+       has changed the organization fo the code. See online documentation 
+       for the current usage.
+
+.. [2] Users who wish to learn more about NumPy can do so at 
         http://www.scipy.org/Tentative_NumPy_Tutorial, 
         http://www.scipy.org/Numpy_Example_List, or 
         http://mentat.za.net/numpy/intro/intro.html.  For those coming from R or
@@ -490,7 +495,7 @@ constructive comments, and discussion on the mailing lists.
         http://mathesaurus.sourceforge.net/ and 
         http://www.scipy.org/NumPy_for_Matlab_Users
 
-.. [2] The `exog` attribute is actually optional, given that we are developing
+.. [3] The `exog` attribute is actually optional, given that we are developing
        support for (vector) autoregressive processes in which all variables 
        could at times be thought of as "endogenous".
 
