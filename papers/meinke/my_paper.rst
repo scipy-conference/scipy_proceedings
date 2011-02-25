@@ -21,16 +21,17 @@ Protein Folding with Python on Supercomputers
     offers bindings to MPI that can be used to develop parallel algorithms
     for distributed memory machines.
     
-    PySMMP provides bindings to the protein simulation package SMMP. 
-    Combined with mpi4py, PySMMP can be used to perform parallel tempering 
-    simulations of small proteins on the supercomputers JUGENE and JuRoPA. 
-    In this paper, the performance of the Fortran implementation of parallel
-    tempering in SMMP is compared with the Python implementation in PySMMP.
-    Both codes use the same Fortran code for the calculation of the energy.
+    PySMMP provides bindings to the protein simulation package SMMP.
+    Combined with mpi4py, PySMMP can be used to perform parallel   
+    tempering simulations of small proteins on the supercomputers JUGENE and   
+    JuRoPA. In this paper, the performance of the Fortran implementation of   
+    parallel tempering in SMMP is compared with the Python implementation in   
+    PySMMP. Both codes use the same Fortran code for the calculation of the   
+    energy.
     
     The performance of the implementations is comparable on both machines,
-    but some challenges remain before the Python implementation can be 
-    used for large-scale production runs.
+    but some challenges remain before the Python implementation can replace the
+    Fortran implementation for all production runs.
 
 
 Introduction
@@ -75,15 +76,17 @@ interface for its reaction partners. In fact, changing the
 interface is a way to turn proteins on and off and regulate their 
 activity. 
 
-Proteins are long chains of amino acids. The sequence of amino 
-acids is encoded in the genome and expressed through the ribosome 
-- itself a complex of RNA and proteins - amino acid by amino acid. 
-Proteins need anywhere from a few micro seconds to several 
-seconds to obtain their native structure. This process called 
-protein folding occurs reliably in our body many times each 
-second yet the process is still poorly understood. For some globular 
-proteins, it has been shown that they can unfold and refold in a 
-test tube. At least for these proteins folding is driven purely 
+Proteins are long chains of amino acids. The sequence of amino acids determines 
+a protein's native shape. The sequence is encoded in the genome and assembled
+by the ribosome |---| itself a complex of RNA and proteins |---| amino acid by 
+amino acid. 
+
+Proteins need anywhere from a few micro seconds to several minutes to obtain 
+their native structure. This process is called protein folding. It occurs
+reliably in our body many times each second yet it is still poorly understood. 
+
+For some globular proteins it has been shown that they can unfold and
+refold in a test tube. At least for these proteins folding is driven purely 
 by classical physical interactions. This is the basis for folding 
 simulations using classical force fields.
 
@@ -167,39 +170,52 @@ and the default modules. While this is usually not a problem if
 we start a few instances, it can become troublesome on a large 
 system such as JUGENE.
 
-Taking a look at :ref:`Table1` we see that 
+Taking a look at the first two columns in Table :ref:`Tab-Startup` we see that 
 already for a single rack, it takes more than 5 minutes to run a 
-simple helloworld program. A C++ program for comparison takes 
+simple helloworld program using the default Python installation location. A C++ 
+program for comparison takes 
 only 5 s. Plotting the run time of the helloworld program, we 
 quickly see that the time increases linearly with the number of 
-MPI tasks at a rate of 0.1 s per task (Figure :ref:`Figure1`). Extrapolating this to 
-all 294912 cores of JUGENE, it would take more than 8 hours to 
-start the Python interpreter. 
+MPI tasks at a rate of 0.1 s per task (Blue squares in Figure :ref:`fig-scaling-of-the`).
+Extrapolating this to all 294912 cores of JUGENE, it would take more than 8
+hours to start the Python interpreter resulting in 25 lost rack days (70 CPU 
+years with 4 cores per CPU) and almost 10 metric tons of 
+:math:`\mathrm{CO}_{2}`.
 
-.. table:: Time measured for a simple MPI hello world program written using mpi4py on the Blue Gene/P JUGENE. :label:`Table1`
+.. table:: Time measured for a simple MPI hello world program written using
+   mpi4py on the Blue Gene/P JUGENE. The second column gives the times using the 
+   default location for Python on Blue Gene. The third column lists the times if
+   Python is installed in the Work file system. :label:`Tab-Startup`
 
-   +-------------+-----------+--------------------------------------------+
-   | # of Cores  | Time [s]  |                 Comments                   |
-   +-------------+-----------+--------------------------------------------+
-   |          1  |        5  |                                            |
-   +-------------+-----------+--------------------------------------------+
-   |        128  |       50  |            A single node card              |
-   +-------------+-----------+--------------------------------------------+
-   |        512  |       55  |           Midplane in SMP mode             |
-   +-------------+-----------+--------------------------------------------+
-   |       1024  |      100  |            Only rank 0 writes              |
-   +-------------+-----------+--------------------------------------------+
-   |       2048  |      376  |       195 s if only rank 0 writes          |
-   +-------------+-----------+--------------------------------------------+
-   |       4096  |      321  |1 rack (smallest size for production runs)  |
-   +-------------+-----------+--------------------------------------------+
-   |       8192  |      803  |                 2 racks                    |
-   +-------------+-----------+--------------------------------------------+
-   |      16384  |     1817  | 4 racks. For comparison, a C++ program     |
-   |             |           | takes 25 s.                                |
-   +-------------+-----------+--------------------------------------------+
-
-
+   +-----------+---------+---------+--------------------------------+
+   | # of Cores| Time [s]| Time [s]|                 Comments       |
+   +-----------+---------+---------+--------------------------------+
+   |          1|        5|         |                                |
+   +-----------+---------+---------+--------------------------------+
+   |        128|       50|       20|            A single node card  |
+   +-----------+---------+---------+--------------------------------+
+   |        512|       55|         |           Midplane in SMP mode |
+   +-----------+---------+---------+--------------------------------+
+   |       1024|      100|         |        Only rank 0 writes      |
+   +-----------+---------+---------+--------------------------------+
+   |       2048|      376|         |   195 s if only rank 0 writes  |
+   +-----------+---------+---------+--------------------------------+
+   |       4096|      321|      130| 1 rack (smallest size for      |
+   |           |         |         | production runs)               |
+   +-----------+---------+---------+--------------------------------+
+   |       8192|      803|      246|                 2 racks        |
+   +-----------+---------+---------+--------------------------------+
+   |      16384|     1817|      371| 4 racks. For comparison, a C++ |
+   |           |         |         | program takes 25 s.            |
+   +-----------+---------+---------+--------------------------------+
+   |      20480|         |      389|        5 racks                 |
+   +-----------+---------+---------+--------------------------------+
+   |      32768|         |      667|        8 racks                 |
+   +-----------+---------+---------+--------------------------------+
+   |      65536|         |      927|       16 racks                 |
+   +-----------+---------+---------+--------------------------------+
+   |     131071|         |     1788|       32 rack                  |
+   +-----------+---------+---------+--------------------------------+
 
 The linear behavior hints at serialization when the Python 
 interpreter is loaded. As mentioned above, JUGENE's, compute nodes don't 
@@ -208,15 +224,33 @@ parallel file system and all nodes access the same Python image on the disk.
 
 .. figure:: startupJugene.pdf
 
-    Scaling of the startup time of the Python interpreter on JUGENE 
-    up to 20480 tasks. :label:`Figure1`
+    :label:`fig-scaling-of-the` Scaling of the startup time of the Python
+    interpreter on JUGENE before and after optimization. Using the default
+    location of the Python installation, the startup time increases linearly
+    with the number of MPI tasks. Moving the Python installation to the faster
+    Work file system reduces the scaling exponent from 1 to 0.77.
 
 A similar behavior was discussed for the GPAW code in the mpi4py 
 forum [PyOn10k]_. GPAW [GPAW]_ uses its own Python MPI interface. Their work around 
 was to use the ram disks of the IO nodes on Blue Gene/P.
 
-On JuRoPA the effect is less pronounced. JuRoPA is an Intel 
-Nehalem cluster. Each of its 3288 node has two quad-core 
+Based on this data, we filed a service request with IBM. After some 
+experimentation, IBM finally suggested to install Python on the Work file 
+system. The Work file system is usually used as a skratch space for simulation
+data that is written during a run. Its block size of 2 MB is optimized for large
+files and it reaches a bandwidth of 30 GB/s. Files written to the Work file
+system usually are deleted automatically after 90 days. In comparison the system
+and home file systems use a block size of 1 MB and reach a bandwidth of 8 GB/s.
+
+With Python installed on the Work file system, the scaling of the runtime of the
+helloworld program becomes sublinear with an exponent of about 0.77 (see column
+three in Table :ref:`Tab-Startup` and green disks in Figure
+:ref:`fig-scaling-of-the`). This make production runs of up to 32 racks (131071
+cores) feasible. Extrapolating the data to 72 racks, it would now take less than
+an hour to start a run on the entire machine.
+
+I also ran the same test on our second supercomputer, JuRoPA. JuRoPA is an
+Intel Nehalem cluster. Each of its 3288 node has two quad-core 
 processors with 24 GB of memory for a total 26304 cores and 79 TB 
 of main memory. It has a peak performance of 308 teraflops and 
 is currently number 14 in the Top 500 list with 90% efficiency in 
@@ -246,40 +280,42 @@ the energy function when called from Python and Fortran.
 Scaling in parallel programs refers to the speedup when the program runs on 
 *p* processors compared to running it on one processor. If the run time with *p* 
 processors is given by :math:`t(p)` then the speedup *s* is defined as 
-:math:`s(p) = t(0) / t(p)` and the efficiency of the scaling is given by
+:math:`s(p) = t(1) / t(p)` and the efficiency of the scaling is given by
 :math:`e(p) = s(p) / p`. An efficiency of 50% is often considered acceptable. 
 
-As a benchmark system, I used the three-helix bundle
-GS-:math:`\alpha_3\mathrm{W}` 
+As a benchmark system, I used the three-helix bundle GS-:math:`\alpha_3` W
 (PDB code: `1LQ7 <http://www.rcsb.org/pdb/explore/explore.do?structureId=1lq7>`_) 
-with 67 amino acids and 1110 atoms (see Figure :ref:`Figure2`) 
+with 67 amino acids and 1110 atoms (see Figure :ref:`fig-cartoon-rendering`).
 
+.. _`Figure 2`:
 .. figure:: 1lq7.png
 
-    Cartoon rendering of the three-helix bundle
-    GS-:math:`\alpha_{3}\mathrm{W}`. The 
-    rendering was done with PyMOL [PyMOL]_. :label:`Figure2`
+    :label:`fig-cartoon-rendering` Cartoon rendering of the three-helix bundle 
+    GS- :math:`\alpha_{3}` W. The rendering was done with PyMOL [PyMOL]_.
 
 On JuRoPA, I used f2py's default optimization options for the Intel compiler
 to create the bindings. The Fortran program was compiled with the -fast 
 option, which activates most optimizations and includes 
 interprocedural optimizations. For a single core, the Fortran 
 program is about 10% faster. The scaling on a single node is comparable, 
-but it breaks down for PySMMP if more than one node is used (see
-Figure :ref:`Figure3`).
+but it breaks down for PySMMP if more than one node is used (see Figure 
+:ref:`fig-parallel-scaling`). This may be due to interactions between mpi4py
+and JuRoPA's MPI installation.
 
 On JUGENE, the behavior is quite different. PySMMP was compiled with gfortran, 
 SMMP with IBM's xlf compiler, which produces code that is almost three times faster
 on a single core. The shape of the scaling is comparable and saturates at about 
 128 cores.
 
+.. _`Figure 3`: 
 .. figure:: scaling_combined.pdf
 
-    Parallel scaling of the duration of the energy calculation 
-    for the three-helix bundle GS-:math:`\alpha_{3}\mathrm{W}` on JuRoPA (red) and JUGENE 
+    :label:`fig-parallel-scaling` Parallel scaling of the duration of the energy calculation 
+    for the three-helix bundle GS-:math:`\alpha_{3}W` on JuRoPA (red) and
+    JUGENE 
     (blue). The speedup is relative to the time needed by the Fortran program for the
     calculation of the energy on a single core. The square symbols represent SMMP, 
-    the disks PySMMP. :label:`Figure3`
+    the disks PySMMP.
 
 
 Parallel tempering
@@ -308,10 +344,12 @@ communicators, we can use two levels of parallelism. For each
 temperature :math:`T_{i}`, we use a number of processors :math:`p_{i}` to 
 calculate the energy in parallel. Usually, :math:`p_{i}` is the same for 
 all temperatures, but this is not a requirement. Assuming that :math:`p_{i}=p`
-, and using :math:`n_{T}` temperatures, we use a total of :math:`p_{\mathrm{tot}}=n_{T}*p`
+, and using :math:`n_{T}` temperatures, we use a total of
+:math:`p_{\mathrm{tot}}=n_{T}*p`
 processors. For an average protein domain consisting of about 
 150 amino acids and 3000 atoms, :math:`p=128`, and :math:`n_{T}=64` is a 
-reasonable choice on a Blue Gene/P, for a total of :math:`p_{\mathrm{tot}}=8192`
+reasonable choice on a Blue Gene/P, for a total of
+:math:`p_{\mathrm{tot}}=8192`
 |---| a good size for a production run.
 
 Parallel tempering is implemented in Fortran as part of SMMP. The 
@@ -325,18 +363,19 @@ only the calculation of the energy of a conformation is done in Fortran.
 
 For parallel tempering, the number of processes increases proportionally with
 the number of replicas. This kind of scaling is called weak scaling. Ideally,
-the time stays constant. Figure :ref:`Figure4` shows the scaling of parallel tempering
+the time stays constant. Figure :ref:`fig-efficiency` shows the scaling of parallel tempering
 on JuRoPA and JUGENE with respect to the pure Fortran program. On JuRoPA,
-one processor was used per replica. On JUGENE 128 processors were used per
+one node was used per replica. On JUGENE 128 processors were used per
 replica. The overhead of implementing the algorithm in Python is about 5% on 
 JuRoPA and the scaling is comparable to the Fortran code. On JUGENE, the 
 overhead of the Python implementation is about 20% for 2 replica. But the 
 scaling of PySMMP is better and for 16 replicas, the Python version takes
-about 10% longer.
+only about 10% longer.
 
+.. _`Figure 4`: 
 .. figure:: scalingPT.pdf
 
-    Efficiency of the scaling of parallel tempering. Parallel 
+    :label:`fig-efficiency` Efficiency of the scaling of parallel tempering. Parallel 
     tempering is an example for weak scaling. The problem size,
     i.e., the number of temperatures, increases proportional to the number of 
     processors. Ideally, the time stays constant and the efficiency is one.
@@ -346,7 +385,7 @@ about 10% longer.
     (squares). On JUGENE (blue) each replica uses
     128 cores for the energy calculation. The Python implementation takes about 20%
     longer for 2 replica  than the Fortran implementation but for 16 replica the
-    difference is down to about 10%. :label:`Figure4`
+    difference is down to about 10%.
     
     
 Clustering
@@ -398,7 +437,8 @@ An n-dimensional region is considered dense if the number of elements it
 contains is larger than the threshold of each of its one-dimensional sub
 spaces
 For each dimension, MAFIA divides space into :math:`n_\mathrm{bins}` 
-uniform bins (see Figure :ref:`Figure5`). For each bin, it counts the number of elements in that bin 
+uniform bins (see Figure :ref:`fig-an-illustration`). For each bin, it counts
+the number of elements in that bin 
 creating a histogram. The next step is to reduce the number of bins by 
 enveloping the histogram using :math:`n_\mathrm{windows}` windows. The
 value of each window is the maximum of the bins it contains. 
@@ -412,14 +452,16 @@ advantage of the fact that all :math:`n-1`-dimensional projections
 of an *n*-dimensional dense unit are also dense to quickly reduce the number 
 of higher-dimensional cells that need to be tested.
 
+.. _`Figure 5`: 
 .. figure:: example.pdf
 
-    An illustration of MAFIA using a simple two-dimensional 
+    :label:`fig-an-illustration` An illustration of MAFIA using a simple
+    two-dimensional 
     example with :math:`\alpha=1.5`. The light green columns and the 
     light blue row are one-dimensional dense units. The areas where they
     cross are two-dimensional candidates for dense units, but only the 
     darker cyan area is dense. It contains more particles than required 
-    by the thresholds of its one-dimensional components. :label:`Figure5`
+    by the thresholds of its one-dimensional components.
 
 Since, we couldn't find an implementation of 
 MAFIA, I implemented a Python version using NumPy and mpi4py. MAFIA 
@@ -440,37 +482,26 @@ Today's supercomputers consist of tens to hundreds of thousands
 of cores and the number of cores is likely to grow. Using these 
 large systems efficiently requires algorithms that provide a lot 
 of parallelism. Python with mpi4py provides an avenue to 
-implement and test these algorithms quickly and cleanly, but it 
-is not yet ready for large-scale production runs. On Blue Gene/P
-this is mostly due to the overhead of loading the Python interpreter 
-which, extrapolating the data to the almost 300000 cores on JUGENE, 
-would take more than 8 hours resulting in 25 lost rack days (70 CPU 
-years with 4 cores per CPU) and almost 10 metric tons of 
-:math:`\mathrm{CO}_{2}`. 
-Using ram disks is an effective means to reduce the startup time 
-by an order of magnitude, but this is not enough and 
-ram disks are not always available to the user.
+implement and test these algorithms quickly and cleanly. The implementation
+of MAFIA shows that prototyping of a parallel program can be done efficiently in
+pure Python
 
-If the startup time of the Python interpreter on JUGENE can be brought
-down to that of a regular binary program, PySMMP becomes an attractive
-alternative for development *and* production runs.
+On JuRoPA, the overhead of using Python instead of Fortran 
+for the parallel tempering algorithm, is only about 3% if the energy
+calculation is done on a single node. But the scaling of the energy calculation
+when called from Fortran is better than the scaling of the same function called
+from Python. This may be due to the interplay between mpi4py and JuRoPA's MPI
+installation and needs further investigation.
 
-On JuRoPA, the scaling of the energy calculation for the protein
-GS-:math:`\alpha_{3}\mathrm{W}` breaks down as soon as more than one node is used
-when called from Python. For larger systems, this is not the case,
-but the scaling of the energy calculation when called from Fortran
-is still better. The overhead of using Python instead of Fortran 
-for the parallel tempering algorithm, on the other hand, is only about 3%.
+Vendors are interested in making Python work on their machines. IBM helped us to
+improve the scaling of the startup time of Python on our Blue Gene/P. This now
+makes production runs with more than 100000 cores feasible and reduces the
+extrapolated time to start Python on the entire machine from more than eight
+hours to less than one hour.
 
-The parallel scaling of the energy function when called
-from Python needs to be improved to be able to replace the Fortran 
-program for production.
-
-Even with the remaining challenges, there is no reason not to use
-PySMMP for the development and testing of new algorithms and even 
-small production runs. Furthermore, the implementation of MAFIA shows 
-that prototyping of a parallel program can be done efficiently in pure 
-Python as well.
+Still, the goal remains to bring the startup time of the Python interpreter on
+JUGENE down near that of a regular binary program. We will continue to
+investigate.
 
 
 References
