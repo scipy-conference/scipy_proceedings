@@ -98,9 +98,9 @@ sparse or dense, and they can be 1-D vectors or 2-D matrices.
 .. figure:: divisi2_classes.png
 
    Relationships between the main classes in Divisi 2.0, as well as
-   some externally-defined classes.
+   some externally-defined classes. :label:`classes`
 
-Figure 1 shows the relationships between classes in Divisi2. The
+Figure :ref:`classes` shows the relationships between classes in Divisi2. The
 yellow-highlighted classes are the ones that are intended to be instantiated.
 The core representations use multiple inheritance: for example, the properties
 of a SparseMatrix are separately defined by the fact that it is sparse and the
