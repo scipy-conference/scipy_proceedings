@@ -141,6 +141,16 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         if 'keywords' in node['classes']:
             self.out.append('\\end{IEEEkeywords}')
 
+    def visit_figure(self, node):
+        self.requirements['float_settings'] = PreambleCmds.float_settings
+        if 'classes' in node.attributes:
+            placements = ''.join(node.attributes['classes'])
+            self.out.append('\\begin{figure}[%s]'%placements)
+        else:
+            self.out.append('\\begin{figure}')
+        if node.get('ids'):
+            self.out += ['\n'] + self.ids_to_labels(node)
+
     def visit_image(self, node):
         attrs = node.attributes
 
