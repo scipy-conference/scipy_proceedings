@@ -37,9 +37,9 @@ Python, NumPy/SciPy [SciPy]_ [2]_.
 On a historical note, statsmodels was started by Jonathan Taylor, a statistician 
 now at Stanford, as part of SciPy under the name models.  Eventually, models 
 was removed from SciPy and became part of the NIPY neuroimaging project [NIPY]_ 
-in order to mature.  The models code was later accepted as a SciPy-focused 
-project for the Google Summer of Code 2009 and again in 2010.  It is currently 
-distributed as a SciKit, or add-on package for SciPy.
+in order to mature.  Improving the models code was later accepted as a 
+SciPy-focused project for the Google Summer of Code 2009 and again in 2010.  It 
+is currently distributed as a SciKit, or add-on package for SciPy.
 
 The current main developers of statsmodels are trained as economists with a 
 background in econometrics.  As such, much of the development over the last year 
@@ -111,7 +111,7 @@ versus existing software (often R, SAS, or Stata). Any deviations from results
 in other software are noted in the test suite.
 
 First, we employ a distributed version control system in which each developer 
-has his own copy of the code, or branch, to make changes outside of the main 
+has his own copy of the code, a branch, to make changes outside of the main 
 codebase.  Once a model is specified, early changes, such as working out the 
 best API or bug hunting, take place in the main branch's, or trunk's, sandbox 
 directory so that they can be tried out by users and developers who follow the 
@@ -120,18 +120,18 @@ package or Monte Carlo simulation when it is not possible to obtain results from
 elsewhere.  After the tests are written, the developer asks for a code review 
 on our mailing list (http://groups.google.ca/group/pystatsmodels).  When all is
 settled, the code becomes part of the main codebase.  Periodically, we release 
-the software in the trunk as with any other program for those who just want to 
-download a tarball or install from PyPI, using *setuptools*' easy_install.  
-This workflow, while not foolproof, helps make sure our results are and remain 
-correct.  If they are not, we are able to know why and document discrepancies 
-resulting in the utmost transparency for end users.  And if all else fails, 
-looking at the source code is trivial to do (and encouraged!).
+the software in the trunk for those who just want to download a tarball or 
+install from PyPI, using *setuptools*' easy_install.  This workflow, while not 
+foolproof, helps make sure our results are and remain correct.  If they are not,
+we are able to know why and document discrepancies resulting in the utmost 
+transparency for end users.  And if all else fails, looking at the source code 
+is trivial to do (and encouraged!).
 
 The design of the package itself is straightforward.  The main idea behind the 
 design is that a model is itself an object to be used for data reduction.  Data 
 can be both endogenous and exogenous to a model, and these constituent parts 
 are related to each other through statistical theory.  This statistical 
-relationship is usually justified by a further appeal to discipline-specific 
+relationship is usually justified by an appeal to discipline-specific 
 theory.  Note that in place of endogenous and exogenous, one could substitute 
 the terms dependent and independent variables, regressand and regressors, 
 response and explanatory variables, etc., respectively, as you prefer.  We 
@@ -149,8 +149,8 @@ computed lazily, meaning that they are not computed until the user asks for
 them so that those who are only interested in, say, the fitted parameters are 
 not slowed by computation of extraneous results.  Every effort is made to 
 ensure that the constructors of each sublcass of *Model*, the call signatures of
-its methods, and the post-estimation results are consistently named throughout 
-the package.
+its methods, and the post-estimation results are consistent throughout the 
+package.
 
 
 Package Overview
@@ -170,19 +170,17 @@ framework. *Contrast* contains helper functions for working with linear contrast
 for testing hypotheses about linear combinations of the coefficients.
 
 In addition to the models and the related post-estimation results and tests, 
-there are a number of convenience classes and functions to help with tasks 
-related to statistical analysis.  These include functions for conveniently 
+statsmodels includes a number of convenience classes and functions to help with
+tasks related to statistical analysis.  These include functions for conveniently 
 viewing descriptive statistics, a class for creating publication quality tables,
 and functions for translating foreign datasets, currently only Stata's binary 
 *.dta* format, to numpy arrays. 
 
 The last main part of the package is the datasets.  There are currently fourteen
 datasets that are either part of the public domain or used with express 
-consent of the original authors.  These datasets follow a common pattern so 
-that they are easy to use, and it is trivial for others to add additional 
-datasets.  The datasets are used in our test suite and examples as illustrated 
-below.  Further, there are verbose examples in the examples directory of the 
-package.
+consent of the original authors.  These datasets follow a common pattern for 
+ease of use, and it is trivial to add additional ones.  The datasets are 
+used in our test suite and in examples as illustrated below.
 
 
 Examples
@@ -263,7 +261,7 @@ Also available are::
 
 All of the attributes and methods are well-documented in the docstring and in 
 our online documentation.  See, for instance, help(longley_res).  Note as well 
-that all results objects carry an attribute *model* that is a pointer to the 
+that all results objects carry an attribute *model* that is a reference to the 
 original model instance that was fit whether or not it is instantiated before 
 fitting.
 
@@ -390,7 +388,7 @@ joint hypothesis using an F test, which returns a *ContrastResults* class::
     p=[[  1.27044954e-58]], df_denom=197, df_num=3>
 
 Assuming that we have a correctly specified model, given the high value of the
-F statistic the probability that our joint null hypothesis is true is 
+F statistic, the probability that our joint null hypothesis is true is 
 essentially zero.
 
 As a final example we will demonstrate how the `SimpleTable` class can be used 
@@ -400,7 +398,7 @@ regression results summary.  Continuing the example above, one could do::
     >>> print inv_model.summary(yname="lninv", 
                 xname=["const","lnY","i","dP","t"])
        
-To build a table, you could the following::
+To build a table, we could do::
 
     >>> gdpmean = data.data['realgdp'].mean()
     >>> invmean = data.data['realinv'].mean()
@@ -423,7 +421,7 @@ To build a table, you could the following::
     --------------------------------
 
 
-LaTeX output can be had doing something along the lines of::
+LaTeX output can be generated with something like::
 
     >>> fh = open('./tmp.tex', 'w')
     >>> fh.write(tbl.as_latex_tabular())
@@ -431,7 +429,8 @@ LaTeX output can be had doing something along the lines of::
 
 While not all of the functionality of statsmodels is covered in the above,
 we hope it offers a good overview of the basic usage from model to model.  
-Anything not touched on is available in our documentation and examples.
+Anything not touched on is available in our documentation and in the examples
+directory of the package.
 
 
 Conclusion and Outlook
@@ -447,7 +446,7 @@ information theory and maximum entropy models.
 
 We hope that the above discussion gives some idea of the appoach taken by 
 the project and provides a good overview of what is currently offered.  We 
-invite  feedback, discussion, or contributions of any level.  If you would like 
+invite  feedback, discussion, or contributions at any level.  If you would like 
 to get involved, please join us on our mailing list available at 
 http://groups.google.com/group/pystatsmodels or on the scipy-user list.  If you 
 would like to follow along with the latest development, the project blog is 
@@ -467,7 +466,7 @@ provided code, constructive comments, and discussion on the mailing lists.
 
 .. [1] The examples reflect the state of the code at the time of writing.
        The main model API is relatively stable; however, recent refactoring
-       has changed the organization fo the code. See online documentation 
+       has changed the organization of the code. See online documentation 
        for the current usage.
 
 .. [2] Users who wish to learn more about NumPy can do so at 
