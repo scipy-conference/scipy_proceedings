@@ -231,6 +231,7 @@ data.
 .. _Figure 1:
 .. figure:: logreg1.pdf
     :scale: 80%
+    :figclass: h
 
     Logistic regression, part 1: declaring variables.
 
@@ -257,6 +258,7 @@ can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 10.
 .. _Figure 2:
 .. figure:: logreg2.pdf
     :scale: 80%
+    :figclass: h
 
     Logistic regression, part 2: the computation graph.
 
@@ -284,6 +286,7 @@ regression by thresholding :math:`P(Y=1|x^{(i)})`.
 .. _Figure 3:
 .. figure:: logreg3.pdf
     :scale: 80%
+    :figclass: h
 
     Logistic regression, part 3: compilation.
 
@@ -317,6 +320,7 @@ SGD algorithm.
 .. _Figure 4:
 .. figure:: logreg4.pdf
     :scale: 80%
+    :figclass: h
 
     Logistic regression, part 4: computation.
 
