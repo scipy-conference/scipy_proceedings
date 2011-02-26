@@ -841,7 +841,7 @@ GPU implementations as well.
 Acknowledgements
 ----------------
 
-Theano has benefited from the contributions of many members of Yoshua Bengio's
+Theano has benefited from the contributions of many members of the
 machine learning group in the computer science department (Départment
 d'Informatique et de Recherche Operationelle) at l'Université de Montréal,
 especially Arnaud Bergeron, Thierry Bertin-Mahieux, Olivier Delalleau, Douglas
