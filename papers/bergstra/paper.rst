@@ -143,6 +143,10 @@ and currently planned additions to Theano.
 .. [#] http://groups.google.com/group/theano-dev
 .. [#] http://groups.google.com/group/theano-users
 
+.. raw:: latex
+
+    \vspace{0.5cm}
+
 Case Study: Logistic Regression
 ------------------------------------------
 
@@ -463,12 +467,12 @@ Roughly 90\% of expressions for single-precision
 N-dimensional arrays have GPU implementations.
 Our goal is to provide GPU implementations for all expressions supported by Theano.
 
-
 .. _Table 1:
 .. raw:: latex
 
+    \vspace{-0.8cm}
     \begin{center}
-    \begin{table}
+    \begin{table}[t]
     \centering \small
     % HACK TO GET THE HYPERLINK TO WORK
     \phantomsection\label{table-1}
