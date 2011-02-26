@@ -125,14 +125,14 @@ Compiling the Modules
 JUGENE is a 72-rack IBM Blue Gene/P (BG/P) system installed at JSC. 
 Each rack consists of 1024 
 compute nodes. Each compute node has a 4-core PowerPC 450 
-processors running at 850 MHz and 2 GB of memory for a total of 
+processor running at 850 MHz and 2 GB of memory for a total of 
 294912 cores and 147 TB of memory. The nodes are connected via a 
 three dimensional torus network. Each node is linked to its six 
 neighbors. In addition to the torus network, BG/P features a tree 
 network that is used for global communication. The nodes are 
 diskless. They forward IO requests to special IO nodes, which in 
 turn talk to the GPFS file system. JUGENE's peak performance is 
-about one petaflops and it reaches about 825 teraflops in the 
+about one petaflop and it reaches about 825 teraflops in the 
 Linpack benchmark. This makes it Europe's fastest computer and the 
 number 5 in the world [Top500]_. While the slow clock rate makes 
 the system very energy efficient (364 MFlops/W), it also makes 
@@ -250,8 +250,8 @@ cores) feasible. Extrapolating the data to 72 racks, it would now take less than
 an hour to start a run on the entire machine.
 
 I also ran the same test on our second supercomputer, JuRoPA. JuRoPA is an
-Intel Nehalem cluster. Each of its 3288 node has two quad-core 
-processors with 24 GB of memory for a total 26304 cores and 79 TB 
+Intel Nehalem cluster. Each of its 3288 nodes has two quad-core 
+processors with 24 GB of memory for a total of 26304 cores and 79 TB 
 of main memory. It has a peak performance of 308 teraflops and 
 is currently number 14 in the Top 500 list with 90% efficiency in 
 the Linpack benchmark [Top500]_. It uses Infiniband in a fat tree topology 
@@ -283,7 +283,7 @@ processors is given by :math:`t(p)` then the speedup *s* is defined as
 :math:`s(p) = t(1) / t(p)` and the efficiency of the scaling is given by
 :math:`e(p) = s(p) / p`. An efficiency of 50% is often considered acceptable. 
 
-As a benchmark system, I used the three-helix bundle GS-:math:`\alpha_3` W
+As a benchmark system, I used the three-helix bundle GS-:math:`\alpha_{3}W`
 (PDB code: `1LQ7 <http://www.rcsb.org/pdb/explore/explore.do?structureId=1lq7>`_) 
 with 67 amino acids and 1110 atoms (see Figure :ref:`fig-cartoon-rendering`).
 
@@ -291,7 +291,7 @@ with 67 amino acids and 1110 atoms (see Figure :ref:`fig-cartoon-rendering`).
 .. figure:: 1lq7.png
 
     :label:`fig-cartoon-rendering` Cartoon rendering of the three-helix bundle 
-    GS- :math:`\alpha_{3}` W. The rendering was done with PyMOL [PyMOL]_.
+    GS-:math:`\alpha_{3}W`. The rendering was done with PyMOL [PyMOL]_.
 
 On JuRoPA, I used f2py's default optimization options for the Intel compiler
 to create the bindings. The Fortran program was compiled with the -fast 
@@ -365,10 +365,10 @@ For parallel tempering, the number of processes increases proportionally with
 the number of replicas. This kind of scaling is called weak scaling. Ideally,
 the time stays constant. Figure :ref:`fig-efficiency` shows the scaling of parallel tempering
 on JuRoPA and JUGENE with respect to the pure Fortran program. On JuRoPA,
-one node was used per replica. On JUGENE 128 processors were used per
+one node was used per replica. On JUGENE 128 cores were used per
 replica. The overhead of implementing the algorithm in Python is about 5% on 
 JuRoPA and the scaling is comparable to the Fortran code. On JUGENE, the 
-overhead of the Python implementation is about 20% for 2 replica. But the 
+overhead of the Python implementation is about 20% for 2 replicas. But the 
 scaling of PySMMP is better and for 16 replicas, the Python version takes
 only about 10% longer.
 
