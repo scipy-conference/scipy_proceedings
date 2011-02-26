@@ -80,7 +80,7 @@ class Translator(LaTeXTranslator):
 
         author_notes = ['''
 The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
-''' % (self.author_institutions[0], self.author_emails[0],
+        ''' % (self.author_institutions[0], 'mailto:' + self.author_emails[0],
        self.author_emails[0])]
 
         author_notes = ''.join('\\thanks{%s}' % n for n in author_notes)
