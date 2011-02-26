@@ -621,7 +621,6 @@ objects that are implemented in the project source code.)
 .. figure:: pipeline.pdf
 
     :label:`fig:pipeline` The compilation pipeline for functions compiled for GPU.  Functions compiled for the CPU omit the GPU transfer step.
-    v2
 
 
 Canonicalization
