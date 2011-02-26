@@ -777,7 +777,7 @@ expensive optimizations are disabled, or pieces of the graph are compiledseparat
 A Theano function call also requires more overhead (on the order of microseconds)
 than a native Python function call. For this reason, Theano is suited to
 applications where functions correspond to expressions that are not too
-small (see `Figure 5`_).
+small (see `Figure 7`_).
 
 The set of types and operations that Theano provides continues to grow, but it does not
 cover all the functionality of NumPy and covers only a few features of SciPy.
