@@ -772,7 +772,8 @@ At present, the compilation time tends to grow super-linearly with the size of
 the expression graph. Theano can deal with graphs up to a few thousand
 nodes, with compilation times typically on the order of seconds. Beyond
 that, it can be impractically slow, unless some of the more
-expensive optimizations are disabled, or pieces of the graph are compiledseparately.
+expensive optimizations are disabled, or pieces of the graph are compiled
+separately.
 
 A Theano function call also requires more overhead (on the order of microseconds)
 than a native Python function call. For this reason, Theano is suited to
