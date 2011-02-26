@@ -134,6 +134,8 @@ a simple problem in statistical prediction.
 benchmarking on problems related to machine learning and expression evaluation.
 `What kinds of work does Theano support?`_  gives an overview of the design of Theano
 and the sort of computations to which it is suited.
+`Compilation by theano.function`_ provides a brief introduction
+to the compilation pipeline.
 `Limitations and Future Work`_ outlines current limitations of our implementation
 and currently planned additions to Theano.
 
@@ -590,8 +592,8 @@ as the logistic sigmoid, the softmax function, and multi-class hinge loss.
 
 
 
-Compilation by ``theano.function``
-----------------------------------
+Compilation by theano.function
+------------------------------
 
 What happens under the hood when creating a function?
 This section outlines, in broad strokes, the stages of the compilation
