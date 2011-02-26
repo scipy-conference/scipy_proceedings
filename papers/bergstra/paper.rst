@@ -133,7 +133,7 @@ a simple problem in statistical prediction.
 `Benchmarking Results`_ presents some results of performance
 benchmarking on problems related to machine learning and expression evaluation.
 `What kinds of work does Theano support?`_  gives an overview of the design of Theano
-and the sort of computations to which it is suited.
+and the sorts of computations to which it is suited.
 `Compilation by theano.function`_ provides a brief introduction
 to the compilation pipeline.
 `Limitations and Future Work`_ outlines current limitations of our implementation
