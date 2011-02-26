@@ -140,10 +140,6 @@ and currently planned additions to Theano.
 .. [#] http://groups.google.com/group/theano-dev
 .. [#] http://groups.google.com/group/theano-users
 
-.. _example1:
-
-.. _caseStudy:
-
 Case Study: Logistic Regression
 ------------------------------------------
 
@@ -299,7 +295,7 @@ for a given value of ``x``. Parameters ``w`` and ``b`` are passed
 implicitly - all shared variables are available as inputs to all functions as
 a convenience to the user.
 
-.. Since this value is a function of both ``x`` and ``y``, these are given as input to the function. 
+.. Since this value is a function of both ``x`` and ``y``, these are given as input to the function.
 
 Line 18 (`Figure 3`_) which creates the ``train`` function highlights two other important
 features of Theano functions: the potential for multiple outputs and updates.
@@ -340,8 +336,6 @@ interoperate normally with other scientific Python libraries and tools.
 .. parameters and show that the model accurately predicts the training labels.
 
 
-.. _benchmark:
-
 Benchmarking Results
 --------------------
 
@@ -377,7 +371,6 @@ Each implementation repeatedly carried out the following steps:
 This program stresses element-wise computations and the use of BLAS routines.
 
 .. _Figure 5:
-.. _Benchmark1:
 .. figure:: mlp.pdf
 
     Fitting a multi-layer perceptron to simulated data with
@@ -401,7 +394,6 @@ less than the 5.8x increase Theano achieves through CUDA specializations.
 
 .. [#] Torch was designed and implemented with flexibility in mind, not speed (Ronan Collobert, p.c.).
 
-.. _Benchmark2:
 .. _Figure 6:
 .. figure:: conv.pdf
 
@@ -438,7 +430,6 @@ expressions, Theano is fastest because it uses an implementation specialized for
 each expression.
 
 .. _Figure 7:
-.. _Benchmark3:
 .. figure:: multiple_graph.pdf
 
     Speed comparison between NumPy,
@@ -446,9 +437,6 @@ each expression.
     formulae.  In each subplot, the solid blue line represents Theano, the
     dashed red line represent numexpr, and performance is plotted with respect
     to NumPy.
-
-.. _What's in Theano:
-.. _intheano:
 
 What kinds of work does Theano support?
 ---------------------------------------
@@ -472,40 +460,41 @@ Roughly 90\% of expressions for single-precision
 N-dimensional arrays have GPU implementations.
 Our goal is to provide GPU implementations for all expressions supported by Theano.
 
-.. _Table 1:
-.. _Table1:
 
+.. _Table 1:
 .. raw:: latex
 
     \begin{center}
     \begin{table}
     \centering \small
+    % HACK TO GET THE HYPERLINK TO WORK
+    \phantomsection\label{table-1}
     \begin{tabular}{|p{1.6cm}|p{5.7cm}|}
     \hline
     Operators              &    {\tt +}, {\tt -}, {\tt /}, {\tt *}, {\tt **}, {\tt //},
                                 {\tt eq}, {\tt neq}, {\tt <}, {\tt <=}, {\tt >}, {\tt >=},
-                                {\tt \&}, \verb'|', \verb'^' 
+                                {\tt \&}, \verb'|', \verb'^'
                                 \tabularnewline
                            &
                                 \tabularnewline
     Allocation             &    {\tt alloc}, {\tt eye}, {\tt [ones,zeros]\_like},
                                 {\tt identity\{\_like\} }
                                 \tabularnewline
-                           & 
+                           &
                                 \tabularnewline
-    Indexing*              &    basic slicing (see {\tt set\_subtensor} and 
+    Indexing*              &    basic slicing (see {\tt set\_subtensor} and
                                 {\tt inc\_subtensor} for slicing lvalues);
                                 limited support for advanced indexing
                                 \tabularnewline
-                           & 
+                           &
                                 \tabularnewline
-    Mathematical \newline Functions        &    {\tt exp}, {\tt log}, {\tt tan[h]}, {\tt cos[h]}, {\tt sin[h]}, 
-                                {\tt real}, {\tt imag}, {\tt sqrt}, {\tt floor}, {\tt ceil}, 
+    Mathematical \newline Functions        &    {\tt exp}, {\tt log}, {\tt tan[h]}, {\tt cos[h]}, {\tt sin[h]},
+                                {\tt real}, {\tt imag}, {\tt sqrt}, {\tt floor}, {\tt ceil},
                                 {\tt round}, {\tt abs}
                                 \tabularnewline
-                           &  
+                           &
                                 \tabularnewline
-    Tensor \newline Operations      &    {\tt all}, {\tt any}, {\tt mean}, {\tt sum}, {\tt min}, {\tt max}, 
+    Tensor \newline Operations      &    {\tt all}, {\tt any}, {\tt mean}, {\tt sum}, {\tt min}, {\tt max},
                                 {\tt var}, {\tt prod}, {\tt argmin}, {\tt argmax},
                                 {\tt reshape}, {\tt flatten},
                                 {\tt dimshuffle}
@@ -514,7 +503,7 @@ Our goal is to provide GPU implementations for all expressions supported by Thea
                                 \tabularnewline
     Conditional            &    {\tt cond}, {\tt switch}
                                 \tabularnewline
-                           & 
+                           &
                                 \tabularnewline
     Looping                &    {\tt Scan}
                                 \tabularnewline
@@ -524,7 +513,7 @@ Our goal is to provide GPU implementations for all expressions supported by Thea
                                  {\tt diag}, {\tt cholesky}, {\tt inv},
                                  {\tt solve}
                                 \tabularnewline
-                           & 
+                           &
                                  \tabularnewline
     Calculus*              &     {\tt grad}
                                 \tabularnewline
@@ -540,7 +529,7 @@ Our goal is to provide GPU implementations for all expressions supported by Thea
                                 \tabularnewline
     Printing               &    {\tt Print}
                                 \tabularnewline
-                           & 
+                           &
                                 \tabularnewline
     Sparse                 &    compressed row/col storage,
                                 limited operator support,
@@ -564,13 +553,13 @@ Our goal is to provide GPU implementations for all expressions supported by Thea
 
 Random numbers are provided in two ways: via NumPy's random module, and
 via an internal generator from the MRG family [Ecu]_.
-Theano's ``RandomStreams`` replicates the 
+Theano's ``RandomStreams`` replicates the
 ``numpy.random.RandomState`` interface, and acts as a proxy to NumPy's random
 number generator and the various random distributions that use it.
 The ``MRG_RandomStreams`` class implements a different random number
 generation algorithm (called MRG31k3p) that maps naturally to GPU architectures.
 It is implemented for both the CPU and GPU so that programs can produce the
-same results on either architecture without sacrificing speed. 
+same results on either architecture without sacrificing speed.
 The ``MRG_RandomStreams`` class offers a more limited selection of random number
 distributions than NumPy though: uniform, normal, and multinomial.
 
