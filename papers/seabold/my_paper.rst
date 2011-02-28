@@ -12,11 +12,11 @@ Statsmodels: Econometric and Statistical Modeling with Python
 
 .. class:: abstract
 
-    Statsmodels is a library for statistical and econometric analysis in
+    *Statsmodels* is a library for statistical and econometric analysis in
     Python. This paper discusses the current relationship between
     statistics and Python and open source more generally, outlining how the
-    statsmodels package fills a gap in this relationship.  An overview of
-    statsmodels is provided, including a discussion of the overarching design
+    *statsmodels* package fills a gap in this relationship.  An overview of
+    *statsmodels* is provided, including a discussion of the overarching design
     and philosophy, what can be found in the package, and some usage examples.
     The paper concludes with a look at what the future holds.
 
@@ -24,26 +24,26 @@ Statsmodels: Econometric and Statistical Modeling with Python
 Introduction
 ------------
 
-Statsmodels (http://statsmodels.sourceforge.net/) is a library for statistical 
+*Statsmodels* (http://statsmodels.sourceforge.net/) is a library for statistical 
 and econometric analysis in Python [1]_.  Its intended audience is both theoretical 
 and applied statisticians and econometricians as well as Python users and 
 developers across disciplines who use statistical models. Users of R, Stata, 
 SAS, SPSS, NLOGIT, GAUSS or MATLAB for statistics, financial econometrics, or 
 econometrics who would rather work in Python for all its benefits may find 
-statsmodels a useful addition to their toolbox.  This paper introduces 
-statsmodels and is aimed at the researcher who has some prior experience with 
+*statsmodels* a useful addition to their toolbox.  This paper introduces 
+*statsmodels* and is aimed at the researcher who has some prior experience with 
 Python, NumPy/SciPy [SciPy]_ [2]_.
 
-On a historical note, statsmodels was started by Jonathan Taylor, a statistician 
-now at Stanford, as part of SciPy under the name models.  Eventually, models 
+On a historical note, *statsmodels* was started by Jonathan Taylor, a statistician 
+now at Stanford, as part of SciPy under the name *models*.  Eventually, *models*
 was removed from SciPy and became part of the NIPY neuroimaging project [NIPY]_ 
-in order to mature.  Improving the models code was later accepted as a 
+in order to mature.  Improving the *models* code was later accepted as a 
 SciPy-focused project for the Google Summer of Code 2009 and again in 2010.  It 
 is currently distributed as a SciKit, or add-on package for SciPy.
 
-The current main developers of statsmodels are trained as economists with a 
+The current main developers of *statsmodels* are trained as economists with a 
 background in econometrics.  As such, much of the development over the last year 
-has focused on econometric applications.  However, the design of statsmodels 
+has focused on econometric applications.  However, the design of *statsmodels*
 follows a consistent pattern to make it user-friendly and easily extensible by 
 developers from any discipline.  New contributions and ongoing work are making 
 the code more useful for common statistical modeling needs. We hope that 
@@ -85,7 +85,7 @@ statistics [PyMC]_, machine learning and multivariate pattern analysis
 [NITIME]_, visualization [Matplotlib]_ [Enthought]_, and efficient handling of 
 large datasets [PyTables]_.
 
-We hope that statsmodels too can become an integral a part of the Scientific 
+We hope that *statsmodels* too can become an integral a part of the Scientific 
 Python community and serve as a step in the direction of Python becoming a 
 serious open source language for statistics.  Towards this end, others are 
 working on an R-like formula framework to help users specify and manipulate 
@@ -102,7 +102,7 @@ data depending on the choice of statistical software or its version; however,
 this is precisely what Altman and MacDonald (2003) find [AltmanMcDonald]_.  
 Given the importance of numerical accuracy and replicablity of research and the 
 multitude of software choices for statistical analysis, the development of 
-statsmodels follows a process to help ensure accurate and transparent results.  
+*statsmodels* follows a process to help ensure accurate and transparent results.  
 This process is known as Test-Driven Development (TDD).  In its strictest form, 
 TDD means that tests are written before the functionality which it is supposed
 to test.  While we do not often take the strict approach, there are several 
@@ -170,7 +170,7 @@ framework. *Contrast* contains helper functions for working with linear contrast
 for testing hypotheses about linear combinations of the coefficients.
 
 In addition to the models and the related post-estimation results and tests, 
-statsmodels includes a number of convenience classes and functions to help with
+*statsmodels* includes a number of convenience classes and functions to help with
 tasks related to statistical analysis.  These include functions for conveniently 
 viewing descriptive statistics, a class for creating publication quality tables,
 and functions for translating foreign datasets, currently only Stata's binary 
@@ -186,13 +186,13 @@ used in our test suite and in examples as illustrated below.
 Examples
 --------
 
-All of the following examples use the datasets included in statsmodels.  The 
+All of the following examples use the datasets included in *statsmodels*.  The 
 first example is a basic use case of the OLS model class to get a feel for the
 rest of the package, using Longley's 1967 dataset [Longley]_ on the US 
 macro economy.  Note that the Longley data is known to be highly collinear (it 
 has a condition number of 456,037), and as such it is used to test accuracy
 of least squares routines than to examine any economic theory.  First we need 
-to import the package.  The suggested convention for importing statsmodels is :: 
+to import the package.  The suggested convention for importing *statsmodels* is :: 
 
     >>> import scikits.statsmodels as sm
 
@@ -237,7 +237,7 @@ parameters that solve the objective function. ::
 
 The instance *longley_res* has several attributes and methods of interest.  The 
 first is the fitted values, commonly :math:`\beta` in the general linear 
-model, :math:`Y=X\beta`, which is called *params* in statsmodels. ::
+model, :math:`Y=X\beta`, which is called *params* in *statsmodels*. ::
 
     >>> longley_res.params
     array([  1.50618723e+01, -3.58191793e-02,  
@@ -369,7 +369,7 @@ theory suggests that the following model may instead be correct
 
 In terms of the (:ref:`eq1`) this implies that :math:`\beta_{3}+\beta_{4}=0`,
 :math:`\beta_{2}=1`, and :math:`\beta_{5}=0`.  This can be implemented in 
-statsmodels using the *macrodata* dataset. Assume that *endog* and *exog* are 
+*statsmodels* using the *macrodata* dataset. Assume that *endog* and *exog* are 
 given as in (:ref:`eq1`) ::
   
     >>> inv_model = sm.OLS(endog, exog).fit()
@@ -427,7 +427,7 @@ LaTeX output can be generated with something like ::
     >>> fh.write(tbl.as_latex_tabular())
     >>> fh.close()
 
-While not all of the functionality of statsmodels is covered in the above,
+While not all of the functionality of *statsmodels* is covered in the above,
 we hope it offers a good overview of the basic usage from model to model.  
 Anything not touched on is available in our documentation and in the examples
 directory of the package.
@@ -436,7 +436,7 @@ directory of the package.
 Conclusion and Outlook
 ----------------------
 
-Statsmodels is very much still a work in progress, and perhaps the most 
+*Statsmodels* is very much still a work in progress, and perhaps the most 
 exciting part of the project is what is to come.  We currently have a good deal
 of code in our sandbox that is being cleaned up, tested, and pushed into the 
 main codebase as part of the Google Summer of Code 2010.  This includes models 
