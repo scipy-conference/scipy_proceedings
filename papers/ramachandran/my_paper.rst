@@ -48,22 +48,18 @@ The central idea behind SPH is the use of integral interpolants.
 Consider a function :math:`f(r)`.  It can be represented by the
 equation
 
-.. raw:: latex
+.. math::
+   :label: deltafunc
 
-    \[
-    \label{deltafunc}
     f(r) = \int{f(r^\prime)\delta(r-r^\prime)dr^\prime}
-    \]
 
 Replacing the delta distribution with an approximate delta function,
 :math:`W`, gives us:
 
-.. raw:: latex
+.. math::
+   :label: sphintegral
 
-    \[
-    \label{sphintegral}
     f(r) = \int{f(r^\prime)W(r-r^\prime,h)dr^\prime}.
-    \]
 
 The above equation estimates the value of function :math:`f` at a
 point :math:`r` in space using the weighted values of :math:`f` at
@@ -77,20 +73,18 @@ computationally advantageous since it allows us to avoid an
 
 The above equation can be written in summation form as 
 
-.. raw:: latex
+.. math::
+   :label: sphsummation
 
-    \[
-    \label{sphsummation}
-    f(r_i) = \sum_jf(r_j)\frac{m_j}{\rho_j}W(r_i-r_j,h)
-    \]
+   f(r_i) = \sum_jf(r_j)\frac{m_j}{\rho_j}W(r_i-r_j,h)
 
 The above equation forms the core of all SPH calculations. The index *j*
 loops over all neighboring particles. :math:`m_j` is the mass of a
 particle and :math:`\rho_j` is the density of the particle. The term 
 
-.. raw:: latex
-    
-    $\frac{m_j}{\rho_j}$,
+.. math::
+
+    \frac{m_j}{\rho_j},
 
 can be thought of as representing a volume element [Morris96]_.
 Gradients and divergence encountered in the equations representing fluid
@@ -185,17 +179,15 @@ A simulation always involves a few key objects:
    collection of fluids and solids using this.  This allows a user to
    set up a simulation with a collection of physical entities.
 
-The high level view outlined in Figure 1 served as the guiding principle
+The high level view outlined in Figure :ref:`figure1` served as the guiding principle
 while designing various components of the framework.
 
 
 .. figure:: high-level-outline.png
-   :target: figure1 
-   :alt: figure 1: Outline of tasks
-   
-   Figure 1: Outline of tasks to set up a simulation.
+ 
+   Outline of tasks to set up a simulation. :label:`figure1`
 
-The various tasks shown in figure 1 are explained below:
+The various tasks shown in Figure :ref:`figure1` are explained below:
 
     * **Create and set up the solver**: Initially, we create an
       appropriate solver object for the simulation.  Different solvers
@@ -257,7 +249,7 @@ The architecture may be broadly split into the following:
 
   * serial and parallel solvers.
 
-The overall architecture of the framework is shown in Figure 2.  We
+The overall architecture of the framework is shown in Figure :ref:`figure2`.  We
 discuss this in detail in the following sections.
 
 Particle kernel
@@ -274,10 +266,8 @@ arrays may be resized and are up to 4 times faster than numpy arrays
 when used from Cython.
 
 .. figure:: framework-architecture.png
-   :target: figure2
-   :alt: figure 2 architecture of framework
 
-   Figure 2: Architecture of the framework
+   Architecture of the framework :label:`figure2`
 
 The **ParticleArray** module uses these arrays extensively and allows us
 to represent collections of particles in the framework. It is also
@@ -405,18 +395,16 @@ In addition, the **ParallelCellManager** ensures that each processor has
 all the necessary information such that an SPH computation may be
 performed on the the particles it manages.
 
-Figure 3 outlines how the parallel and serial solvers are set up
+Figure :ref:`figure3` outlines how the parallel and serial solvers are set up
 internally.   In both cases, solver components operate on cell managers
 to obtain the nearest neighbors and get the particles, the only
 difference being the **ParallelCellManager**, which manages the load
 distribution and communication in the parallel case. 
 
 .. figure:: parallel-approach.pdf
-   :target: figure3
-   :alt: figure 3 parallel approach
 
-   Figure 3: The parallel solvers simply use a ParallelCellManager
-   instead of a CellManager.
+   The parallel solvers simply use a ParallelCellManager
+   instead of a CellManager. :label:`figure3`
 
 
 It is important to note that the basic ideas for the parallel algorithm
@@ -438,35 +426,29 @@ Current status
 ==============
 
 .. figure:: square-drop-1.png
-   :target: figure4
-   :alt: figure 4 simulation
-   
-   Figure 4: Initial condition of a square block of water falling towards
-   a vessel with water.
+
+   Initial condition of a square block of water falling towards
+   a vessel with water. :label:`figure4`
 
 .. figure:: square-drop-2.png
-   :target: figure5
-   :alt: figure 5 simulation
 
-   Figure 5: Square block of water after it strikes a vessel containing
-   water simulated with the SPH.
+   Square block of water after it strikes a vessel containing
+   water simulated with the SPH. :label:`figure5`
 
 
-Figures 4, 5 show the fluid at a particular instant when a square block
+Figures :ref:`figure4`, :ref:`figure5` show the fluid at a particular instant when a square block
 of water strikes a vessel filled with water.  This is a two-dimensional
 simulation. 
 
-Figure 6 shows a typical 3D dam-break problem being simulated with 8
+Figure :ref:`figure6` shows a typical 3D dam-break problem being simulated with 8
 processors.  The fluid involved is water.  The colors indicate the
 processor on which the particles are located.
 
 .. figure:: 3d_dam_break_8_proc.png
-   :target: figure6
-   :alt: figure 6 simulation
 
-   Figure 6: 3D dam-break problem simulated on 8 processors with
+   3D dam-break problem simulated on 8 processors with
    particles colored as per processor ID indicating a load balanced
-   simulation.
+   simulation. :label:`figure6`
 
 
 The current capabilities of PySPH include the following:
