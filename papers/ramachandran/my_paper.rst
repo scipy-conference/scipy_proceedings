@@ -7,19 +7,19 @@
 :institution: IIT Bombay.
 
 
----------------------------------
-PySPH: A Python framework for SPH
----------------------------------
+--------------------------------------------------------------
+PySPH: A Python framework for smoothed particle hydrodynamics 
+--------------------------------------------------------------
 
 .. class:: abstract 
 
-    [PySPH]_ is an open source, parallel, framework for Smoothed Particle
-    Hydrodynamics (SPH) simulations developed at IIT Bombay.  It is
-    distributed under a BSD license.  It is implemented in Python and the
-    performance critical parts are implemented in [Cython]_. The framework
-    provides a load balanced, parallel execution of solvers. It is
-    designed to be easy to extend.  In this paper we describe the
-    architecture of PySPH and how it can be used.  
+    [PySPH]_ is a Python-based open source parallel framework for
+    Smoothed Particle Hydrodynamics (SPH) simulations.  It is
+    distributed under a BSD license.  The performance critical parts are
+    implemented in [Cython]_. The framework provides a load balanced,
+    parallel execution of solvers.  It is designed to be easy to extend.
+    In this paper we describe the architecture of PySPH and how it can
+    be used.  
 
     At it's core PySPH provides a particle kernel, an SPH kernel and a
     solver framework.  Serial and parallel versions of solvers for some
@@ -85,7 +85,8 @@ The above equation can be written in summation form as
     \]
 
 The above equation forms the core of all SPH calculations. The index *j*
-loops over all neighboring particles. The term 
+loops over all neighboring particles. :math:`m_j` is the mass of a
+particle and :math:`\rho_j` is the density of the particle. The term 
 
 .. raw:: latex
     
@@ -104,15 +105,15 @@ Despite the age of SPH and its applicability to many domains, there does
 not seem to be much effort in developing a unified framework for SPH.
 [SPHysics]_ is a FORTRAN-based open source package for performing SPH.
 It's primary objective is to model free-surface flows.  From the
-provided documentation we feel that it is not easy to setup simulations
+provided documentation we feel that it is not easy to set up simulations
 in this package.  [SPH2000]_ is another parallel framework for SPH
 written in C++. This code however does not seem to be in active
 development currently. Moreover, they show exactly one example
-simulation with their code. Both packages do not have a publicly
-accessible source code repository.  Therefore, an open source package
-that is easy to experiment with and extend will be a useful contribution
-to the community, especially when combined with the flexibility of
-Python [Oliphant07]_.
+simulation with their code. Neither package has a publicly accessible
+source code repository.  Therefore, an open source package that is easy
+to experiment with and extend will be a useful contribution to the
+community, especially when combined with the flexibility of Python
+[Oliphant07]_.
 
 PySPH [PySPH]_ was created to address this need.  It is an open source,
 parallel, framework for Smoothed Particle Hydrodynamics (SPH)
@@ -137,7 +138,7 @@ for scientific computing.
 Python, however, is an interpreted language. Thus, compute-intensive
 tasks implemented in pure Python will be prohibitively slow. To overcome
 this, we delegate all performance-critical tasks to a language called
-Cython [Cython]_. Cython makes writing C extensions for Python, as
+Cython [Cython]_. Cython makes writing C extensions for Python nearly as
 simple as writing Python code itself. A Cython module is compiled by a
 compiler into a C extension module.  When the C code is compiled, it
 becomes a module that may be imported from Python.  Most of Python's
@@ -149,9 +150,9 @@ all of Python's features.
 An overview of features
 ------------------------
 
-PySPH currently allows a user to setup simulations involving
+PySPH currently allows a user to set up simulations involving
 incompressible fluids and free surfaces in two and three dimensions.
-The framework supports complex geometries, however, only a few simple
+The framework supports complex geometries. However, only a few simple
 shapes have been currently implemented.  The framework has been designed
 from the ground up to be parallel.  We use mpi4py [mpi4py]_ for the
 parallel solver.  The parallel solver is automatically load balanced.
@@ -163,7 +164,7 @@ The Framework
 =============
 
 The whole framework was designed to enable simple simulations to be
-setup very easily, and yet be flexible enough to add complex features.
+set up very easily, and yet be flexible enough to add complex features.
 We present a high level view of a particle-based simulation in the
 following.
 
@@ -182,7 +183,7 @@ A simulation always involves a few key objects:
    derived class from the base class *EntityBase*.  For example, *Fluid*
    and *Solid* are two different classes and a user may create a
    collection of fluids and solids using this.  This allows a user to
-   setup a simulation with a collection of physical entities.
+   set up a simulation with a collection of physical entities.
 
 The high level view outlined in Figure 1 served as the guiding principle
 while designing various components of the framework.
@@ -192,13 +193,13 @@ while designing various components of the framework.
    :target: figure1 
    :alt: figure 1: Outline of tasks
    
-   Figure 1: Outline of tasks to setup a simulation.
+   Figure 1: Outline of tasks to set up a simulation.
 
 The various tasks shown in figure 1 are explained below:
 
-    * **Create and setup the solver**: Initially, we create an
+    * **Create and set up the solver**: Initially, we create an
       appropriate solver object for the simulation.  Different solvers
-      are used for different kinds of simulations. We also setup various
+      are used for different kinds of simulations. We also set up various
       parameters of the solver.
 
     * **Create physical entities**: In this step, we add the physical
@@ -220,8 +221,8 @@ pseudo-Python code to run a simple serial simulation::
 
     # Imports...
     solver = FSFSolver(time_step=0.0001,
-                       total_simulation_time=10., 
-                       kernel=CubicSpline2D())
+                  total_simulation_time=10., 
+                  kernel=CubicSpline2D())
 
     # create the two entities.
     dam_wall  = Solid(name='dam_wall')
@@ -229,11 +230,13 @@ pseudo-Python code to run a simple serial simulation::
 
     # The particles for the wall.
     rg = RectangleGenerator(...)
-    dam_wall.add_particles(rg.get_particles())
+    dam_wall.add_particles(
+                      rg.get_particles())
     solver.add_entity(dam_wall)
     # Particles for the left column of fluid.
     rg = RectangleGenerator(...)
-    dam_fluid.add_particles(rg.get_particles())
+    dam_fluid.add_particles(
+                      rg.get_particles())
     solver.add_entity(dam_fluid)
 
     # start the solver.
@@ -319,7 +322,7 @@ inherit from various classes to implement new formulations.  The
 solver.  It is also responsible for the property requirements of each of
 the components involved in a calculation.  Thus, if an entity is
 operated by a component that requires a particular property to be
-available, the manager ensures that the entity is suitably setup.  An
+available, the manager ensures that the entity is suitably set up.  An
 **Integrator** class handles the actual time integration.  The
 **Integrator** is also a **SolverComponent**.  These are
 implemented in a combination of Python and Cython. 
@@ -356,7 +359,7 @@ framework, ideally only the **CellManager** needs to be aware of the
 parallelism. The components in the solver framework simply operate on
 particle data that they are presented with. This is achievable to a good
 extent, except when a component requires global data, in which case the
-serial component may need to be derived and a parallel version written,
+serial component may need to subclassed and a parallel version written,
 which collects the global data before executing the serial version code.
 A good example for this is when a component needs to know the maximum
 speed of sound in the entire domain in order to limit the time-step say. 
@@ -369,7 +372,8 @@ serial example given earlier with just one change to the solver as below::
                   total_simulation_time=10., 
                   kernel=CubicSpline2D())
 
-    # Code to load particles in proc with rank 0.
+    # Code to load particles in proc with 
+    # rank 0.
 
 In the above pseudo-code, the only thing that changes is the fact that
 we instantiate a parallel solver rather than a serial one.  We also
@@ -401,7 +405,7 @@ In addition, the **ParallelCellManager** ensures that each processor has
 all the necessary information such that an SPH computation may be
 performed on the the particles it manages.
 
-Figure 3 outlines how the parallel and serial solvers are setup
+Figure 3 outlines how the parallel and serial solvers are set up
 internally.   In both cases, solver components operate on cell managers
 to obtain the nearest neighbors and get the particles, the only
 difference being the **ParallelCellManager**, which manages the load
@@ -448,7 +452,7 @@ Current status
    water simulated with the SPH.
 
 
-Figure 4, 5 shows the fluid at a particular instant when a square block
+Figures 4, 5 show the fluid at a particular instant when a square block
 of water strikes a vessel filled with water.  This is a two-dimensional
 simulation. 
 
