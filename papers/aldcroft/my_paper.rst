@@ -29,8 +29,7 @@ relatively challenging engineering problem facing the Chandra X-ray Observatory
 satellite [CHANDRA]_.  While presenting no fundamentally new algorithms or
 packages, the goal here is to take this as a case study for understanding how
 scientists and engineers can make Python the foundation of their analysis
-toolkit.  Some apologies are offered for the length of background material
-required to tell this story.
+toolkit.
 
 Chandra
 --------
