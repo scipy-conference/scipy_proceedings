@@ -15,6 +15,7 @@ class CodeBlock(Directive):
     final_argument_whitespace = False
     option_spec = {
         'linenos': directives.flag,
+        'linenostart': directives.nonnegative_int,
     }
 
     def run(self):
@@ -22,6 +23,7 @@ class CodeBlock(Directive):
         literal = nodes.literal_block(code, code)
         literal['language'] = self.arguments[0]
         literal['linenos'] = 'linenos' in self.options
+        literal['linenostart'] = self.options.get('linenostart', 1)
         return [literal]
 
 directives.register_directive('code-block', CodeBlock)

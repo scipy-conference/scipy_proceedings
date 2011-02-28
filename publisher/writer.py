@@ -204,11 +204,18 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
             from pygments.lexers import PythonLexer, get_lexer_by_name
             from pygments.formatters import LatexFormatter
 
+            extra_opts = 'fontsize=\\footnotesize'
+
             linenos = node.attributes.get('linenos', False)
+            linenostart = node.attributes.get('linenostart', 1)
+            if linenos:
+                extra_opts += ',xleftmargin=2.25mm,numbersep=3pt'
+
             lexer = get_lexer_by_name(node.attributes['language'])
             tex = highlight(node.astext(), lexer,
                             LatexFormatter(linenos=linenos,
-                                           verboptions='fontsize=\\footnotesize'))
+                                           linenostart=linenostart,
+                                           verboptions=extra_opts))
 
             self.out.append(tex)
             raise nodes.SkipNode

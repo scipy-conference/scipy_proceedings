@@ -73,6 +73,16 @@ Maybe also in another language, and with line numbers:
        return 0;
    }
 
+Or a snippet from the above code, starting at the correct line number:
+
+.. code-block:: c
+   :linenos:
+   :linenostart: 2
+
+   for (int i = 0; i < 10; i++) {
+       /* do something */
+   }
+ 
 Important Part
 --------------
 
