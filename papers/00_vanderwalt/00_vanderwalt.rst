@@ -122,10 +122,10 @@ pulvinar id metus.
    :figclass: bht
 
    This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top. :label:`egfig2`.
+   bottom of the page, and failing that it will be placed inline or at the top.
    Note that for now, scale is relative to a completely arbitrary original
    reference size which might be the original size of your image - you probably
-   have to play with it.
+   have to play with it. :label:`egfig2`
 
 As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
 figures.
