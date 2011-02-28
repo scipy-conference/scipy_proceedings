@@ -143,7 +143,11 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
 
     def visit_image(self, node):
         attrs = node.attributes
-        node.attributes['width'] = '\columnwidth'
+
+        # Only add \columnwidth if scale or width have not been specified.
+        if 'scale' not in node.attributes and 'width' not in node.attributes:
+            node.attributes['width'] = '\columnwidth'
+
         node.attributes['align'] = 'left'
 
         LaTeXTranslator.visit_image(self, node)
