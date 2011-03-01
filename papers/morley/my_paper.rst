@@ -39,16 +39,15 @@ Allen radiation belts and the deposition of energy into the upper
 atmosphere are key areas of investigation. SpacePy is a package for
 Python, targeted at the space sciences, that aims to make basic data
 analysis, modeling and visualization easier. It builds on the capabilities
-of the well-known NumPy and MatPlotLib packages. Publication quality
+of the well-known NumPy and matplotlib packages. Publication quality
 output direct from analyses is emphasized. The SpacePy project seeks to
 promote accurate and open research standards by providing an open
 environment for code development. In the space physics community there has
 long been a significant reliance on proprietary languages that restrict
 free transfer of data and reproducibility of results. By providing a
-comprehensive, open-source library of widely-used analysis and
+comprehensive library of widely-used analysis and
 visualization tools in a free, modern and intuitive language, we hope that
-this reliance will be diminished.
-
+this reliance will be diminished for non-commercial users.
 SpacePy includes implementations of widely used empirical models,
 statistical techniques used frequently in space science (e.g. superposed
 epoch analysis), and interfaces to advanced tools such as electron drift
@@ -60,11 +59,10 @@ include well-known magnetic field models, high-precision time
 conversions and coordinate transformations are accessed 
 from Python using ctypes and f2py. The rest of the tools have been 
 implemented directly in Python.
-
 The provision of open-source tools to perform common tasks will provide
 openness in the analysis methods employed in scientific studies and will
-give access to advanced tools to all space scientists regardless of
-affiliation or circumstance.
+give access to advanced tools to all space scientists, currently 
+distribution is limited to non-commercial use.
 
 
 Introduction
@@ -87,19 +85,21 @@ space sciences. A number of routine analyses used in space science are much
 less common in other fields (e.g. superposed epoch analysis) and modules to 
 perform these analyses are provided.
 This article describes the initial release of SpacePy (0.1.0), available from 
-Los Alamos National Laboratory. at http://spacepy.lanl.gov.
+Los Alamos National Laboratory. at http://spacepy.lanl.gov. Currently SpacePy is
+available on a non-commercial research license, but open-sourcing of the software
+is in process.
 
 
 SpacePy organization
 --------------------
 
-As packages such as NumPy, SciPy and MatPlotLib have become de facto standards
+As packages such as NumPy, SciPy and matplotlib have become de facto standards
 in Python, we have adopted these as the prerequisites for SpacePy.
 
 The SpacePy package provides a number of modules, for a variety of tasks, which 
 will be briefly described in this article. HTML help
 for SpacePy is generated using epydoc and is bundled with the package. This can be 
-most easily accessed on import of spacepy (or any of its modules) by running the 
+most easily accessed on import of SpacePy (or any of its modules) by running the 
 help() function in the appropriate namespace. A schematic of the organization of SpacePy 
 is shown in figure 1. In this article we will describe the core modules of SpacePy 
 and provide some short examples of usage and output.
@@ -113,7 +113,7 @@ leap-second list; comparison of two time series for overlap or common elements.
 
 .. figure:: snapshot.png
    
-   Figure 1. A schematic of the organization and contents of the SpacePy package
+   A schematic of the organization and contents of the SpacePy package
    at the time of writing.
 
 The other modules have more specific aims and are primarily based on new classes.
@@ -314,7 +314,7 @@ xunits=`days', yunits=`km s$^{-1}$')
 
 .. figure:: SEA_snapshot.png
    
-   Figure 2. A typical output from the SpacePy Sea class using OMNI solar wind velocity data.
+   A typical output from the SpacePy Sea class using OMNI solar wind velocity data.
    The black line marks the superposed epoch median, the red dashed line marks the 
    superposed epoch mean, and the blue fill marks the interquartile range. This 
    figure was generated using the code in the text and a list of 67 events 
@@ -358,7 +358,7 @@ lags, halfwindow)
 
 ..  figure:: imadethis.png
 
-    Figure 3. Reproduction of the association analysis done by [Wil09]_, using the *PoPPy*
+    Reproduction of the association analysis done by [Wil09]_, using the *PoPPy*
     module of SpacePy. The figure shows a significant association around zero
     time lag between the two point processes under study (northward turnings of
     the interplanetary magnetic field and auroral substorm onsets).
@@ -448,7 +448,7 @@ instance method that accepts *datetime* or *Ticktock* arguments.  Finally, the
 ``evolve`` method is called to perform the simulation, filling the ``PSD``
 attribute with phase space densities for all *L* and times specified during 
 configuration.  The instance method ``plot`` yields a quick way to visualize 
-the results using Matplotlib functionality. The example given models the phase 
+the results using matplotlib functionality. The example given models the phase 
 space density during the \``Hallowe'en'' storms of 2003.
 The results are displayed in figure 4.  In the top frame, the 
 phase space density is shown.  The white line plotted over the spectrogram 
@@ -470,7 +470,7 @@ of lines of code, the model was setup, executed, and the results were visualized
 
 ..  figure:: RBhalloween.png
 
-    Figure 4. RadBelt simulation results for the 2003 Hallowe'en storms.  The top 
+    RadBelt simulation results for the 2003 Hallowe'en storms.  The top 
     frame shows phase space density as a function of drift shell and time.
     The bottom frame shows the geomagnetic Kp and Dst indices during the 
     storm.
@@ -514,9 +514,9 @@ all of these solutions rely on proprietary software, there are always license
 fees involved before plots can be made.
 
 The *PyBats* package of SpacePy attempts to overcome these difficulties by 
-providing an open source, platform independent way to read and visualize 
+providing a free, platform independent way to read and visualize 
 BATS-R-US output as well as output from models that are coupled to it.  
-It builds on the functionality of Numpy and Matplotlib to provide specialized 
+It builds on the functionality of NumPy and matplotlib to provide specialized 
 visualization tools that allow the user to begin evaluating and exploring 
 output as quickly as possible.
 
@@ -533,7 +533,7 @@ calculations.
 
 ..  figure:: bats.png
 
-    Figure 5. Typical output desired by users of BATS-R-US and the SWMF. The upper 
+    Typical output desired by users of BATS-R-US and the SWMF. The upper 
     left frame is a cut through the noon-midnight meridian of the 
     magnetosphere as simulated by BATS-R-US at 7:15 UT on September 1, 
     2005.  The dial plots to the left are the ionospheric electric 
@@ -553,15 +553,15 @@ the ability to carefully walk through the variable-sized records stored in
 the file. The data is again stored in a dictionary as is grid information; there 
 is no time information for the static output file.  Extra information, such as 
 simulation parameters and units, are also placed into object attributes. The 
-unstructured grid is not suited for Matplotlib, so the object method *regrid* 
+unstructured grid is not suited for matplotlib, so the object method *regrid* 
 is called.  The object remembers that it now has a regular grid; all data and 
 grid vectors are now two dimensional arrays.  Because this is a computationally 
 expensive step, the regridding is performed to a resolution of 0.25 Earth radii 
 and only for a subset of the total domain.  The object method ``contourf``, a 
-wrapper to the Matplotlib method of the same name, is used to add the pressure 
+wrapper to the matplotlib method of the same name, is used to add the pressure 
 contour to an existing axis, ``ax``.  The wrapped function accepts keys to the 
 *grid* and *data* dictionaries of the `Bats2d` object to prevent the command 
-from becoming overly verbose.  Extra keyword arguments are passed to Matplotlib's 
+from becoming overly verbose.  Extra keyword arguments are passed to matplotlib's 
 ``contourf`` method.  If the original file contains the size of the inner boundary 
 of the code, this is reflected in the object and the method ``add_body`` is used 
 to place it in the plot.
@@ -607,7 +607,7 @@ placement algorithms.  ``Bats3d`` objects are being developed to complement the
 more frequently used two dimensional counterpart.  A GUI interface is also 
 under development to provide users with a point-and-click way to add field 
 lines, browse a time series of data, and quickly customize plots.  Though these 
-future features are important, *PyBats* has already become a viable open-source 
+future features are important, *PyBats* has already become a viable free 
 alternative to current, proprietary solutions.
 
 
@@ -622,7 +622,9 @@ the RBSP mission is also incorporating SpacePy into its
 processing stream.
 
 The tools described here cover a wide range of routine analysis
-and visualization tasks utilized in space science. Providing 
+and visualization tasks utilized in space science. This software is currently
+available on a non-commercial research license, but the process to release
+it as free and open-source software is underway. Providing 
 this package in Python makes these tools accessible to all, 
 provides openness in the analysis methods employed in scientific 
 studies and will give access to advanced tools to all space 
