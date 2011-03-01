@@ -162,10 +162,12 @@ SpacePy is released under license.
 See __licence__ for details, 
 and help() for HTML help.
 >>> ts = spt.Ticktock([`2009-01-12T14:30:00',
-`2009-01-13T14:30:00'], `ISO')
+...                    `2009-01-13T14:30:00'],
+...                    `ISO')
 >>> ts
-Ticktock( [`2009-01-12T14:30:00', 
-`2009-01-13T14:30:00'] ), dtype=ISO
+Ticktock([`2009-01-12T14:30:00',
+          `2009-01-13T14:30:00']),
+          dtype=ISO
 >>> ts.UTC
 [datetime.datetime(2009, 1, 12, 14, 30),
  datetime.datetime(2009, 1, 13, 14, 30)]
@@ -173,8 +175,8 @@ Ticktock( [`2009-01-12T14:30:00',
 array([  1.61046183e+09,   1.61054823e+09])
 >>> ts.isoformat(`microseconds')
 >>> ts.ISO
-[`2009-01-12T14:30:00.000000', 
-`2009-01-13T14:30:00.000000']
+[`2009-01-12T14:30:00.000000',
+ `2009-01-13T14:30:00.000000']
 
 
 Coordinate handling
@@ -195,11 +197,12 @@ or the plane of the Earth's dipole axis, which are time-dependent.
 
 >>> import spacepy.coordinates as spc
 >>> import spacepy.time as spt
->>> cvals = spc.Coords([[1,2,4],[1,2,2]], 
-`GEO', `car')
+>>> cvals = spc.Coords([[1,2,4],[1,2,2]],
+...                    `GEO', `car')
 >>> cvals.ticktock = spt.Ticktock(
-[`2002-02-02T12:00:00', `2002-02-02T12:00:00'], 
-`ISO')
+...     [`2002-02-02T12:00:00',
+...      `2002-02-02T12:00:00'],
+...     `ISO')
 >>> newcoord = cvals.convert(`GSM', `sph')
 
 A new, higher-precision C library to perform time conversions, coordinate 
@@ -297,23 +300,22 @@ are also available. The output of the example below is shown in figure 2.
 >>> import spacepy.seapy as se
 >>> import spacepy.omni as om
 >>> import spacepy.toolbox as tb
->>> epochs = se.readepochs(
-`SI_GPS_epochs_OMNI.txt')
+>>> epochs = se.readepochs(`SI_GPS_epochs_OMNI.txt')
 >>> st, en = datetime.datetime(2005,1,1),
-datetime.datetime(2009,1,1)
+...          datetime.datetime(2009,1,1)
 >>> einds, oinds = tb.tOverlap([st, en],
-om.omnidata[`UTC'])
+...                            om.omnidata[`UTC'])
 >>> omni1hr = array(om.omnidata[`UTC'])[oinds]
 >>> delta = datetime.timedelta(hours=1)
 >>> window= datetime.timedelta(days=3)
 >>> sevx = se.Sea(om.omnidata[`velo'][oinds],
-omni1hr, epochs, window, delta)
+...               omni1hr, epochs, window, delta)
 >>> sevx.sea()
->>> sevx.plot(epochline=True, yquan=`V$_{sw}$', 
-xunits=`days', yunits=`km s$^{-1}$')
+>>> sevx.plot(epochline=True, yquan=`V$_{sw}$',
+              xunits=`days', yunits=`km s$^{-1}$')
 
 .. figure:: SEA_snapshot.png
-   
+
    A typical output from the SpacePy Sea class using OMNI solar wind velocity data.
    The black line marks the superposed epoch median, the red dashed line marks the 
    superposed epoch mean, and the blue fill marks the interquartile range. This 
@@ -343,15 +345,13 @@ gain speed.
 
 >>> import datetime as dt
 >>> import spacepy.time as spt
->>> onsets = spt.Ticktock(onset_epochs, 
-`CDF')
->>> ticksR1 = spt.Ticktock(tr_list,
-`CDF')
->>> lags = [dt.timedelta(minutes=n) 
-for n in xrange(-400,401,2)]
+>>> onsets = spt.Ticktock(onset_epochs, `CDF')
+>>> ticksR1 = spt.Ticktock(tr_list, `CDF')
+>>> lags = [dt.timedelta(minutes=n)
+...         for n in xrange(-400,401,2)]
 >>> halfwindow = dt.timedelta(minutes=10)
->>> pp1 = poppy.PPro(onsets.UTC, ticksR1.UTC, 
-lags, halfwindow)
+>>> pp1 = poppy.PPro(onsets.UTC, ticksR1.UTC,
+...                  lags, halfwindow)
 >>> pp1.assoc()
 >>> pp1.aa_ci(95, n_boots=4000)
 >>> pp1.plot()
@@ -398,9 +398,9 @@ the generation of ISTP-compliant CDF files [#]_ for the upcoming Radiation Belt 
 
 As an example of this use, creating a new CDF from a master (skeleton) CDF has 
 similar syntax to opening one:
-    
->>> cdffile = cdf.CDF('cdf_file.cdf', 
-'master_cdf_file.cdf')
+
+>>> cdffile = cdf.CDF('cdf_file.cdf',
+...                   'master_cdf_file.cdf')
 
 This creates and opens ``cdf_filename.cdf`` as a copy of ``master_cdf_filename.cdf``. The
 variables can then be populated by direct assignment, as one would populate any new object.
@@ -464,7 +464,7 @@ of lines of code, the model was setup, executed, and the results were visualized
 >>> endtime   = dt.datetime(2003,12,5)
 >>> delta = dt.timedelta(minutes=60)
 >>> r.setup_ticks(starttime, endtime, 
-    delta, dtype=`UTC')
+...               delta, dtype=`UTC')
 >>> r.evolve()
 >>> r.plot(clims=[4,11])
 
