@@ -575,13 +575,14 @@ Then, after applying that normalization method, we can try truncated SVDs with v
 ...         rec.evaluate_ranking(testdata)
 ...     accuracy_data.append(accuracy)
 
-Plotting the resulting ``accuracy_data`` shows a plateau of good values of *k*,
-roughly between *k* = 100 and *k* = 200.
+The plot of the resulting ``accuracy_data`` in Figure :ref:`k-values`
+shows a plateau of good values of *k*, roughly between *k* = 100 and
+*k* = 200.
 
 .. figure:: k-value-graph.png
 
    Evaluating the predictive accuracy of the truncated SVD on
-   ConceptNet for various values of *k*. 
+   ConceptNet for various values of *k*. :label:`k-values`
 
 .. Working with categories
 .. -----------------------
