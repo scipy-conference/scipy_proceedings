@@ -507,7 +507,7 @@ assertions that could be true -- we have found it more useful to
 normalize the vectors to unit vectors *before* the SVD, so that nodes
 that are weakly described by the SVD do not end up magnified.
 
-Divisi allows for this with the SparseMatrix methods
+Divisi allows for pre-SVD normalization with the SparseMatrix methods
 ``normalize_rows()``, ``normalize_cols()``, and
 ``normalize_all()``. (tf-idf normalization, like in the LSA example,
 is also an option, but it is inappropriate here because it
