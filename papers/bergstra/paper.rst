@@ -377,15 +377,14 @@ Each implementation repeatedly carried out the following steps:
 (6) add the gradients to the parameters.
 This program stresses element-wise computations and the use of BLAS routines.
 
-.. _Figure 5:
 .. figure:: mlp.pdf
 
-    Fitting a multi-layer perceptron to simulated data with
+    :label:`fig:mlp` Fitting a multi-layer perceptron to simulated data with
     various implementations of stochastic gradient descent.  These models have
     784 inputs, 500 hidden units, a 10-way classification, and are trained 60
     examples at a time.
 
-`Figure 5`_ compares the number of examples processed per second
+Figure :ref:`fig:mlp` compares the number of examples processed per second
 across different implementations. We compared Theano (revision #ec057beb6c) against
 NumPy 1.4.1, MATLAB 7.9.0.529, and Torch 5 (a machine learning
 library written in C/C++) [torch5]_ on the CPU and  GPUMat 0.25 for MATLAB
@@ -401,10 +400,9 @@ less than the 5.8x increase Theano achieves through CUDA specializations.
 
 .. [#] Torch was designed and implemented with flexibility in mind, not speed (Ronan Collobert, p.c.).
 
-.. _Figure 6:
 .. figure:: conv.pdf
 
-    Fitting a convolutional network using different
+    :label:`fig:conv` Fitting a convolutional network using different
     software. The benchmark stresses convolutions of medium-sized (256 by 256) images with
     small (7 by 7) filters.
 
@@ -419,7 +417,7 @@ gradient calculation) of the algorithm using SciPy's ``signal.convolve2d`` funct
 This benchmark uses convolutions of medium sized images
 (:math:`256 \times 256`) with
 small filters (:math:`7 \times 7`).
-`Figure 6`_ compares the performance of Theano (both CPU and GPU)
+Figure :ref:`fig:conv` compares the performance of Theano (both CPU and GPU)
 with that of competing implementations.
 On the CPU, Theano is 2.2x faster than EBLearn, its best competitor. This advantage is owed to the fact that
 Theano compiles more specialized convolution routines.
@@ -430,16 +428,15 @@ half the computations. This is because SciPy's convolution routine has not been
 optimized for this application.
 
 We also compared Theano with numexpr and NumPy for evaluating element-wise
-expressions on the CPU (`Figure 7`_).
+expressions on the CPU (Figure :ref:`fig:multi`).
 For small amounts of data, the extra function-call overhead of numexpr and
 Theano makes them slower.  For larger amounts of data, and for more complicated
 expressions, Theano is fastest because it uses an implementation specialized for
 each expression.
 
-.. _Figure 7:
 .. figure:: multiple_graph.pdf
 
-    Speed comparison between NumPy,
+    :label:`fig:multi` Speed comparison between NumPy,
     numexpr, and Theano for different sizes of input on four element-wise
     formulae.  In each subplot, the solid blue line represents Theano, the
     dashed red line represent numexpr, and performance is plotted with respect
@@ -778,7 +775,7 @@ separately.
 A Theano function call also requires more overhead (on the order of microseconds)
 than a native Python function call. For this reason, Theano is suited to
 applications where functions correspond to expressions that are not too
-small (see `Figure 7`_).
+small (see Figure :ref:`fig:multi`).
 
 The set of types and operations that Theano provides continues to grow, but it does not
 cover all the functionality of NumPy and covers only a few features of SciPy.
