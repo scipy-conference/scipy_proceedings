@@ -238,7 +238,7 @@ data.
 
     Logistic regression, part 1: declaring variables.
 
-The code in `Figure 1`_ declares four symbolic variables ``x``, ``y``
+The code in Figure `1`__ declares four symbolic variables ``x``, ``y``
 ``w``, and ``b`` to represent the data and parameters of the model.
 Each tensor variable is
 strictly typed to include its data type, its number of dimensions, and the
@@ -250,6 +250,8 @@ Each row of ``x`` will store an example :math:`x^{(i)}`, and each element
 of ``y`` will store the corresponding label :math:`y^{(i)}`.
 The number of examples to use at once represents a tradeoff between
 computational and statistical efficiency.
+
+.. __: `Figure 1`_
 
 The ``shared()`` function creates *shared variables* for :math:`W` and :math:`b` and assigns them initial values.
 Shared variables behave much like other Theano variables, with the exception
@@ -265,7 +267,7 @@ can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 10.
 
     Logistic regression, part 2: the computation graph.
 
-The code in `Figure 2`_ specifies the computational graph required to perform
+The code in Figure `2`__ specifies the computational graph required to perform
 stochastic gradient descent on the parameters of our cost function. Since
 Theano's interface shares much in
 common with that of NumPy, lines 11-15 should be self-explanatory for anyone
@@ -275,6 +277,8 @@ functions are simply called via the ``T.dot`` and ``T.exp`` functions,
 analogous to ``numpy.dot`` and ``numpy.exp``. ``xent`` defines the
 cross-entropy loss function, which is then combined with the :math:`\ell_2`
 penalty on line 13, to form the cost function of Eq (3) and denoted by ``cost``.
+
+.. __: `Figure 2`_
 
 Line 14 is crucial to our implementation of SGD, as it performs symbolic
 differentiation of the scalar-valued ``cost`` variable with respect to variables
@@ -293,7 +297,7 @@ regression by thresholding :math:`P(Y=1|x^{(i)})`.
 
     Logistic regression, part 3: compilation.
 
-The code of `Figure 3`_ creates the two functions required to train and
+The code of Figure `3`__ creates the two functions required to train and
 test our logistic regression model. Theano functions are
 callable objects that compute zero or more *outputs*
 from values given for one or more symbolic *inputs*. For example, the
@@ -302,9 +306,11 @@ for a given value of ``x``. Parameters ``w`` and ``b`` are passed
 implicitly - all shared variables are available as inputs to all functions as
 a convenience to the user.
 
+.. __: `Figure 3`_
+
 .. Since this value is a function of both ``x`` and ``y``, these are given as input to the function.
 
-Line 18 (`Figure 3`_) which creates the ``train`` function highlights two other important
+Line 18 (Figure `3`__) which creates the ``train`` function highlights two other important
 features of Theano functions: the potential for multiple outputs and updates.
 In our example, ``train`` computes both
 the prediction (``prediction``) of the classifier as well as the cross-entropy
@@ -319,6 +325,7 @@ just before the function returns. In our example, calling the ``train``
 function will update the parameters ``w`` and ``b`` with new values as per the
 SGD algorithm.
 
+.. __: `Figure 3`_
 
 .. _Figure 4:
 .. figure:: logreg4.pdf
@@ -327,7 +334,7 @@ SGD algorithm.
 
     Logistic regression, part 4: computation.
 
-Our example concludes (`Figure 4`_) by using the functions
+Our example concludes (Figure `4`__) by using the functions
 ``train`` and ``predict`` to fit the logistic regression model.
 Our data ``D`` in this example is just four random vectors and labels.
 Repeatedly calling the ``train`` function (lines 27-28) fits
@@ -338,6 +345,8 @@ transformations, optimizations, compilation and calling of efficient C-functions
 (whether targeted for the CPU or GPU) have all been done under the hood.
 The arguments and return values of these functions are NumPy ``ndarray`` objects that
 interoperate normally with other scientific Python libraries and tools.
+
+.. __: `Figure 4`_
 
 .. Finally, we print the state of the model
 .. parameters and show that the model accurately predicts the training labels.
