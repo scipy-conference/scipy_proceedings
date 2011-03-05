@@ -227,7 +227,7 @@ Theano involves the following four conceptual steps:
 (2) using these variables to build a symbolic expression graph,
 (3) compiling Theano functions, and
 (4) calling said functions to perform numerical computations.
-The code listings in Figures 1 - 4 illustrate these steps
+The code listings in Figures :ref:`listing1` - :ref:`listing4` illustrate these steps
 with a working program that fits a logistic regression model to random
 data.
 
