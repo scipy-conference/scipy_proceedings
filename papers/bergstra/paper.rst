@@ -227,18 +227,17 @@ Theano involves the following four conceptual steps:
 (2) using these variables to build a symbolic expression graph,
 (3) compiling Theano functions, and
 (4) calling said functions to perform numerical computations.
-The code listings in Figures 1 - 4 illustrate these steps
+The code listings in Figures :ref:`listing1` - :ref:`listing4` illustrate these steps
 with a working program that fits a logistic regression model to random
 data.
 
-.. _Figure 1:
 .. figure:: logreg1.pdf
     :scale: 80%
     :figclass: h
 
-    Logistic regression, part 1: declaring variables.
+    :label:`listing1` Logistic regression, part 1: declaring variables.
 
-The code in `Figure 1`_ declares four symbolic variables ``x``, ``y``
+The code in Figure :ref:`listing1` declares four symbolic variables ``x``, ``y``
 ``w``, and ``b`` to represent the data and parameters of the model.
 Each tensor variable is
 strictly typed to include its data type, its number of dimensions, and the
@@ -258,14 +257,13 @@ A shared variable's value is maintained
 throughout the execution of the program and
 can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 10.
 
-.. _Figure 2:
 .. figure:: logreg2.pdf
     :scale: 80%
     :figclass: h
 
-    Logistic regression, part 2: the computation graph.
+    :label:`listing2` Logistic regression, part 2: the computation graph.
 
-The code in `Figure 2`_ specifies the computational graph required to perform
+The code in Figure :ref:`listing2` specifies the computational graph required to perform
 stochastic gradient descent on the parameters of our cost function. Since
 Theano's interface shares much in
 common with that of NumPy, lines 11-15 should be self-explanatory for anyone
@@ -286,14 +284,13 @@ and :math:`\partial E / \partial b` respectively.
 Finally, line 15 defines the actual prediction (``prediction``) of the logistic
 regression by thresholding :math:`P(Y=1|x^{(i)})`.
 
-.. _Figure 3:
 .. figure:: logreg3.pdf
     :scale: 80%
     :figclass: h
 
-    Logistic regression, part 3: compilation.
+    :label:`listing3` Logistic regression, part 3: compilation.
 
-The code of `Figure 3`_ creates the two functions required to train and
+The code of Figure :ref:`listing3` creates the two functions required to train and
 test our logistic regression model. Theano functions are
 callable objects that compute zero or more *outputs*
 from values given for one or more symbolic *inputs*. For example, the
@@ -304,7 +301,7 @@ a convenience to the user.
 
 .. Since this value is a function of both ``x`` and ``y``, these are given as input to the function.
 
-Line 18 (`Figure 3`_) which creates the ``train`` function highlights two other important
+Line 18 (Figure :ref:`listing3`) which creates the ``train`` function highlights two other important
 features of Theano functions: the potential for multiple outputs and updates.
 In our example, ``train`` computes both
 the prediction (``prediction``) of the classifier as well as the cross-entropy
@@ -319,15 +316,13 @@ just before the function returns. In our example, calling the ``train``
 function will update the parameters ``w`` and ``b`` with new values as per the
 SGD algorithm.
 
-
-.. _Figure 4:
 .. figure:: logreg4.pdf
     :scale: 80%
     :figclass: h
 
-    Logistic regression, part 4: computation.
+    :label:`listing4` Logistic regression, part 4: computation.
 
-Our example concludes (`Figure 4`_) by using the functions
+Our example concludes (Figure :ref:`listing4`) by using the functions
 ``train`` and ``predict`` to fit the logistic regression model.
 Our data ``D`` in this example is just four random vectors and labels.
 Repeatedly calling the ``train`` function (lines 27-28) fits
@@ -377,15 +372,14 @@ Each implementation repeatedly carried out the following steps:
 (6) add the gradients to the parameters.
 This program stresses element-wise computations and the use of BLAS routines.
 
-.. _Figure 5:
 .. figure:: mlp.pdf
 
-    Fitting a multi-layer perceptron to simulated data with
+    :label:`fig:mlp` Fitting a multi-layer perceptron to simulated data with
     various implementations of stochastic gradient descent.  These models have
     784 inputs, 500 hidden units, a 10-way classification, and are trained 60
     examples at a time.
 
-`Figure 5`_ compares the number of examples processed per second
+Figure :ref:`fig:mlp` compares the number of examples processed per second
 across different implementations. We compared Theano (revision #ec057beb6c) against
 NumPy 1.4.1, MATLAB 7.9.0.529, and Torch 5 (a machine learning
 library written in C/C++) [torch5]_ on the CPU and  GPUMat 0.25 for MATLAB
@@ -401,10 +395,9 @@ less than the 5.8x increase Theano achieves through CUDA specializations.
 
 .. [#] Torch was designed and implemented with flexibility in mind, not speed (Ronan Collobert, p.c.).
 
-.. _Figure 6:
 .. figure:: conv.pdf
 
-    Fitting a convolutional network using different
+    :label:`fig:conv` Fitting a convolutional network using different
     software. The benchmark stresses convolutions of medium-sized (256 by 256) images with
     small (7 by 7) filters.
 
@@ -419,7 +412,7 @@ gradient calculation) of the algorithm using SciPy's ``signal.convolve2d`` funct
 This benchmark uses convolutions of medium sized images
 (:math:`256 \times 256`) with
 small filters (:math:`7 \times 7`).
-`Figure 6`_ compares the performance of Theano (both CPU and GPU)
+Figure :ref:`fig:conv` compares the performance of Theano (both CPU and GPU)
 with that of competing implementations.
 On the CPU, Theano is 2.2x faster than EBLearn, its best competitor. This advantage is owed to the fact that
 Theano compiles more specialized convolution routines.
@@ -430,16 +423,15 @@ half the computations. This is because SciPy's convolution routine has not been
 optimized for this application.
 
 We also compared Theano with numexpr and NumPy for evaluating element-wise
-expressions on the CPU (`Figure 7`_).
+expressions on the CPU (Figure :ref:`fig:multi`).
 For small amounts of data, the extra function-call overhead of numexpr and
 Theano makes them slower.  For larger amounts of data, and for more complicated
 expressions, Theano is fastest because it uses an implementation specialized for
 each expression.
 
-.. _Figure 7:
 .. figure:: multiple_graph.pdf
 
-    Speed comparison between NumPy,
+    :label:`fig:multi` Speed comparison between NumPy,
     numexpr, and Theano for different sizes of input on four element-wise
     formulae.  In each subplot, the solid blue line represents Theano, the
     dashed red line represent numexpr, and performance is plotted with respect
@@ -778,7 +770,7 @@ separately.
 A Theano function call also requires more overhead (on the order of microseconds)
 than a native Python function call. For this reason, Theano is suited to
 applications where functions correspond to expressions that are not too
-small (see `Figure 7`_).
+small (see Figure :ref:`fig:multi`).
 
 The set of types and operations that Theano provides continues to grow, but it does not
 cover all the functionality of NumPy and covers only a few features of SciPy.
