@@ -231,14 +231,13 @@ The code listings in Figures 1 - 4 illustrate these steps
 with a working program that fits a logistic regression model to random
 data.
 
-.. _Figure 1:
 .. figure:: logreg1.pdf
     :scale: 80%
     :figclass: h
 
-    Logistic regression, part 1: declaring variables.
+    :label:`listing1` Logistic regression, part 1: declaring variables.
 
-The code in Figure `1`__ declares four symbolic variables ``x``, ``y``
+The code in Figure :ref:`listing1` declares four symbolic variables ``x``, ``y``
 ``w``, and ``b`` to represent the data and parameters of the model.
 Each tensor variable is
 strictly typed to include its data type, its number of dimensions, and the
@@ -251,8 +250,6 @@ of ``y`` will store the corresponding label :math:`y^{(i)}`.
 The number of examples to use at once represents a tradeoff between
 computational and statistical efficiency.
 
-.. __: `Figure 1`_
-
 The ``shared()`` function creates *shared variables* for :math:`W` and :math:`b` and assigns them initial values.
 Shared variables behave much like other Theano variables, with the exception
 that they also have a persistent value.
@@ -260,14 +257,13 @@ A shared variable's value is maintained
 throughout the execution of the program and
 can be accessed with ``.get_value()`` and ``.set_value()``, as shown in line 10.
 
-.. _Figure 2:
 .. figure:: logreg2.pdf
     :scale: 80%
     :figclass: h
 
-    Logistic regression, part 2: the computation graph.
+    :label:`listing2` Logistic regression, part 2: the computation graph.
 
-The code in Figure `2`__ specifies the computational graph required to perform
+The code in Figure :ref:`listing2` specifies the computational graph required to perform
 stochastic gradient descent on the parameters of our cost function. Since
 Theano's interface shares much in
 common with that of NumPy, lines 11-15 should be self-explanatory for anyone
@@ -277,8 +273,6 @@ functions are simply called via the ``T.dot`` and ``T.exp`` functions,
 analogous to ``numpy.dot`` and ``numpy.exp``. ``xent`` defines the
 cross-entropy loss function, which is then combined with the :math:`\ell_2`
 penalty on line 13, to form the cost function of Eq (3) and denoted by ``cost``.
-
-.. __: `Figure 2`_
 
 Line 14 is crucial to our implementation of SGD, as it performs symbolic
 differentiation of the scalar-valued ``cost`` variable with respect to variables
@@ -290,14 +284,13 @@ and :math:`\partial E / \partial b` respectively.
 Finally, line 15 defines the actual prediction (``prediction``) of the logistic
 regression by thresholding :math:`P(Y=1|x^{(i)})`.
 
-.. _Figure 3:
 .. figure:: logreg3.pdf
     :scale: 80%
     :figclass: h
 
-    Logistic regression, part 3: compilation.
+    :label:`listing3` Logistic regression, part 3: compilation.
 
-The code of Figure `3`__ creates the two functions required to train and
+The code of Figure :ref:`listing3` creates the two functions required to train and
 test our logistic regression model. Theano functions are
 callable objects that compute zero or more *outputs*
 from values given for one or more symbolic *inputs*. For example, the
@@ -306,11 +299,9 @@ for a given value of ``x``. Parameters ``w`` and ``b`` are passed
 implicitly - all shared variables are available as inputs to all functions as
 a convenience to the user.
 
-.. __: `Figure 3`_
-
 .. Since this value is a function of both ``x`` and ``y``, these are given as input to the function.
 
-Line 18 (Figure `3`__) which creates the ``train`` function highlights two other important
+Line 18 (Figure :ref:`listing3`) which creates the ``train`` function highlights two other important
 features of Theano functions: the potential for multiple outputs and updates.
 In our example, ``train`` computes both
 the prediction (``prediction``) of the classifier as well as the cross-entropy
@@ -325,16 +316,13 @@ just before the function returns. In our example, calling the ``train``
 function will update the parameters ``w`` and ``b`` with new values as per the
 SGD algorithm.
 
-.. __: `Figure 3`_
-
-.. _Figure 4:
 .. figure:: logreg4.pdf
     :scale: 80%
     :figclass: h
 
-    Logistic regression, part 4: computation.
+    :label:`listing4` Logistic regression, part 4: computation.
 
-Our example concludes (Figure `4`__) by using the functions
+Our example concludes (Figure :ref:`listing4`) by using the functions
 ``train`` and ``predict`` to fit the logistic regression model.
 Our data ``D`` in this example is just four random vectors and labels.
 Repeatedly calling the ``train`` function (lines 27-28) fits
@@ -345,8 +333,6 @@ transformations, optimizations, compilation and calling of efficient C-functions
 (whether targeted for the CPU or GPU) have all been done under the hood.
 The arguments and return values of these functions are NumPy ``ndarray`` objects that
 interoperate normally with other scientific Python libraries and tools.
-
-.. __: `Figure 4`_
 
 .. Finally, we print the state of the model
 .. parameters and show that the model accurately predicts the training labels.
