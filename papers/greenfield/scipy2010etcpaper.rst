@@ -37,19 +37,19 @@ Rebuilding the Hubble Exposure Time Calculator
  An Exposure Time Calculator (ETC) is an invaluable web tool for astronomers wishing to submit proposals to use the Hubble Space Telescope (HST). It provide a means of estimating how much telescope time will be needed to observe a specified source to the required accuracy.
  The current HST ETC was written in Java and has been used for several proposing cycles, but for various reasons has become difficult to maintain and keep reliable. Last year we decided a complete rewrite--in Python, of course--was needed and began an intensive effort to develop a well-tested replacement before the next proposing cycle this year.
  This paper will explain what the ETC does and outline the challenges involved in developing a new implementation that clearly demonstrates that it gets the right answers and meet the needed level of reliability (astronomers get cranky when the calculator stops working on the day before the proposal deadline). The new ETC must be flexible enough to enable quick updates for new features and accommodate changing data about HST instruments. The architecture of the new system will allow Python-savvy astronomers to use the calculation engine directly for batch processing or science exploration.
- Testing is a very large component of this effort, and we discuss how we use existing test cases, as well as new systematic test generators to properly explore parameter space for doing test comparisons, and a locally developed test management system, Pandokia, to monitor and efficiently analyze thousands of complex test cases.
+ Testing is a very large component of this effort, and we discuss how we use existing test cases, as well as new systematic test generators to properly explore parameter space for doing test comparisons, and a locally developed test management system to monitor and efficiently analyze thousands of complex test cases.
 
 Introduction
 ------------
 
-Observing time on the Hubble Space Telescope (HST) is quite valuable. One orbit of observing time (typically 45 or less minutes of on-target time) costs on the order of $100K. Understandably, no one would like to waste that. As a result, understanding how much time is needed to accomplish the planned science is important. Asking for too little or too much will result in wasted telescope resources. Hence, the need for exposure time calculators.
+Observing time on the Hubble Space Telescope (HST) is quite valuable. One orbit of observing time (typically 45 or fewer minutes of on-target time) costs on the order of $100K. Understandably, no one would like to waste that. As a result, understanding how much time is needed to accomplish the planned science is important. Asking for too little or too much will result in wasted telescope resources. Hence, the need for exposure time calculators.
 
-ETCs are used to answer important questions such as: how long must I observe to achieve a desired signal-to-noise ratio, or what signal-to-noise ratio can I expect for a planned observation? Computing these quantities requires specifying many input parameters. These fall into few basic categories.
+ETCs are used to answer important questions such as: how long must one observe to achieve a desired signal-to-noise ratio, or what signal-to-noise ratio can one expect for a planned observation? Computing these quantities requires specifying many input parameters. These fall into few basic categories.
 
 - What instrument will be used? What kind of observing mode (e.g., imaging, spectroscopy, coronography, or target acquisition). What filters or gratings? What detector parameters?
 - What kind of source? In particular, what are the spectral details of the source. Any dust extinction or redshifts involved?
 - How bright is the source? How is the brightness to be specified?
-- How much area arou.. figure or spectral feature do you plan to use to extract signal? Is it a point source or is it extended?
+- How much area around an image or spectral feature do you plan to use to extract signal? Is it a point source or is it extended?
 - What kinds of sky background levels do you expect?
 
 All of these choices affect the answer. Some of them involve many possible options.
@@ -86,7 +86,7 @@ Rather than try to fix these with the existing code base, we decided to re-imple
 
 A rewrite was begun in April 2009 with a proof of concept computational prototype. After approval to go ahead in June, a major effort began to design and implement a new system. The new design had a number of requirements it had to meet:
 
-- One step install
+- One-step install
 - Ability to support multiple installations on the same computer
 - Consistent test scheme
 - Nightly regression testing
@@ -169,7 +169,7 @@ Figure 1 shows an example of an input form. Figure 2 shows the results obtained 
 
 .. figure:: acs_results.png
 
-   The results page for the input parameters shown in Figure 1.
+   The results page shown corresponding to the input parameters shown in Figure 1.
 
 .. figure:: acs_plot.png
 
@@ -178,7 +178,7 @@ Figure 1 shows an example of an input form. Figure 2 shows the results obtained 
 Plans
 -----
 
-The ETC must be operational by December of this year. Future activities include web security analysis, load testing, through-the-browser tests (manual and automatic), and documentation.
+The ETC must be operational by December 2010. Future activities include web security analysis, load testing, through-the-browser tests (manual and automatic), and documentation.
 
 This ETC framework will be the basis of the James Webb Space Telescope ETCs. JWST is expected to be launched in 2015. Work has begun on understanding what features will be needed for JWST that don't already exist for the HST ETCs. Besides providing the instrument performance information, it is already clear that much more sophisticated sky background models will be needed to be developed to determine which of several detector operations modes will yield the best signal-to-noise ratio.
 
@@ -197,8 +197,8 @@ The rewrite has resulted in a far smaller and consistent code base. More
 importantly, we can test on the same system that is used operationally. The
 cycle of building, delivering, and testing the software now can be done in
 hours instead of weeks giving us far greater ability to fix problems and add
-enhancements. Django, and our pre-existing tools (matplotlib, pysynphot,
-pandokia) greatly facilitated this effort. We will be in a much better
+enhancements. Django, and our pre-existing tools (matplotlib, pysynphot) greatly 
+facilitated this effort. We will be in a much better
 position to adapt to JWST ETC requirements.
 
 There were certainly general lessons to be learned from this experience and
@@ -206,7 +206,7 @@ other work we've done. In coming up with this list, we are generalizing about
 some issues that didn't necessarily affect this project. Among them:
 
  - There is a big difference between scientific programming as most scientists
-   do it, and what is needed for operational purposes. The following table
+   do it, and what is needed for operational purposes. Table 2
    contrasts some of the differences in approach that one usually sees. This
    isn't to say that scientists couldn't benefit from some of the approaches
    and tools for operational software (often they could), it's just that that
