@@ -36,90 +36,7 @@ The aggregate data and maps are primarily displayed in a web application, used b
 
      Figure 1. screenshot of portion of ForecastWatch web interface.
 
-
-Using Django
-------------
-
-Django [DJ]_ is the web front-end for both ForecastWatch and ForecastAdvisor.com.  It can be used to quickly build robust, dynamic websites.  For example, Dr. Bruce Rose, Principal Scientist and Vice President at The Weather Channel, is studying snowfall forecast accuracy [Ros10]_.  There is a common perception that snowfall forecasts are "overdone".  Specifically, that forecasts of snowfall generally predict more snowfall than actually occurs.  Despite this common perception, little scientific research has been done to verify snowfall forecasts.  Dr. Rose wanted a public site that would collect the snowfall forecasts and observations, and provide an intuitive, easy-to-use, dynamic data-driven site that updated automatically when data came in.  One of the big challenges in science and scientific research is the increasingly large amounts of data research is based on.  Challenges of curation, storage, and accessibility are becoming more frequent.  "Climategate" brought the issue of reproducibility of research when large amounts of data are used, as the raw data on which several papers were based was found to have been deleted.  While this does not invalidate the research, it does present a credibility issue, and puts roadblocks in one of the tenets of the scientific method: that of reproducibility.
-
-Django provides a built-in ORM, templating system, URL dispatch, and administration components in a model-view-controller (MVC) architecture that makes building data-driven websites easy.  The snowfall accuracy data ingest system is in Python, using the Django ORM to populate the database and perform the scoring calculations.  The public-facing website [SNOW]_ is written using Django as well.  It is instructive to take a more detailed look at this site as it is less complex than either the ForecastWatch or ForecastAdvisor websites, while having a similar architecture.
-
-A Django project is made up of a number of "applications".  A Django application is a logically-related set of functionality that share models, views (the controller in the MVC sense), and templates (the view in the MVC sense).  Applications can be dependent on other applications, but keeping each application, or group of applications, as self-contained as possible, helps improve reusability and keeps code clean.  Applications need not be complex, in the sense of a desktop application.  The snowfall website needs to display daily forecast data, observation data, and forecast error calculations.  Therefore, "forecast", "observation", and "error" applications were created.  Each application contains the database model code, the views, and the templates to display the daily forecasts, observations, and error respectively.
-
-The website needs to present a day of data as a table on a web page, thus it would be convenient to have a navigation mechanism to move from month to month, and select a specific day to display.  Therefore there is also a "calendar view" application whose sole responsibility is to provide the navigation pages to get to the daily forecasts, observations, and error pages.  There is also a "station" application that displays information on the location and name of each observation station.  Finally, there is a "source" application that holds all data sources.  There are currently no views associated with the "source" application, just a model that stores filenames that the forecast and observation rows reference along with a line number.  This is for audit and traceability of data.  However, in the future this application could also have templates and views that might let a user traverse to the raw file and the specific line each data element originated from.  All told, there are six applications within the snowfall website.
-
-Within an application there are models (which are the database table access classes), views (which are the code that controls the loading and display of the data), and templates (which control the look and feel of the presented page).  The station application is a representative illustration.  A station has a name, a location (both an address and a latitude/longitude), and an elevation.  The station model code looks like: ::
-
-  class Station(models.Model):
-    # Identification (ICAO is id)
-    id = models.CharField(max_length=4, primary_key=True)
-    name = models.CharField(null=True, blank=True)
-
-    # Address and station information
-    ... city_name, state, lat/long, etc. ...
-
-    @property
-    def city_state(self):
-      if self.city_name:
-        return "{c}, {s}".format(s=self.state.id,
-	  c=self.city_name.title())
-      else:
-        return "Unknown"
-        
-Models can also have additional, derived properties.  The "city_state" property is once such example.  For display on the web page, all that is required is to show the station information along with a Google Map pinpointing it's location.  Stations are identified by their ICAO code, which is a four-digit assigned identifier.  The ICAO code is used as the primary key in the database, and is represented by the "id" member variable in the code above.  The ICAO code for the observation station at Port Columbus International Airport in Columbus, Ohio, is "KCMH".  We'd like the URL structure to be http://..something../KCMH/.  This is a very simple view.  It is just displaying information that is in a single row of the station table, which is just an instance of the Station model class.  Django provides scaffolding for simple views like this, called "generic views".  Generic views require no view code to be written.  In this case, the generic view used is the "object detail" view, which provides the template with an instance of the requested object.  All that needs done is to create an URL dispatcher with proper URL structure: ::
-
-  station_dict = { 'queryset': Station.objects.all() }
-  url(r'^(?P<object_id>\w+)/$', 
-       'django.views.generic.list_detail.object_detail',
-       station_dict)
-
-The station_dict variable holds the query set that is searched into.  In this case it will search over all stations, but it could just as easily be a subset of all stations.  This queryset is lazy instantiated.  It does *not* bring the entire table into memory.  Additional query parameters can be appended to the queryset in order to further limit the number of objects returned.  The object detail generic view will add a query parameter to return a single record object with the ICAO id passed in.
-
-The next line is the URL dispatcher object.  It is comprised of the URL regular expression pattern, the view method (controller), and the extra data to pass to the view method.  The URL pattern matches a set of alphanumeric characters followed by a forward-slash at the end of an URL string.  The set of alphanumeric characters is named 'object_id', and the matched value will be passed to the view method as a parameter with that name.  The view method itself is a Django generic view.  When the view is passed in a parameter named 'object_id' (in this case via the named regular expression match) and a parameter named 'queryset' (in this case via the dictionary of extra parameters), it will look for a template called "{model name}_detail.html" and provide it with a variable named "object".  The object is an instance of the Station class, by searching for the row with the id equal to object_id in the set of rows described by the passed in queryset.
-
-The last needed item is a template called station_detail.html which will be displayed when a browser requests http://..something../KCMH/ (or any other ICAO id).  The template is very simple: ::
-
-  {% extends "base.html" %}
-  {% block title %}
-    Station {{object.id}} ({{object.city_state}})
-  {% endblock %}
-  {% block body %}
-    <h1>{{ object.id }} &mdash; {{ object.name }}</h1>
-    <h2>{{ object.city_state }}</h2>
-    {% if object.address %}
-      <p>{{ object.address }}</p>
-    {% endif %}
-    <p>Station Elevation:
-       {{ object.station_elevation }} feet<br>
-    Coordinates:
-       {{ object.latitude }}, {{ object.longitude }}</p>
-    <p>..Google Map Display..</p>
-  {% endblock %}
-
-The "extends" tag incorporates the base.html template, which in this case contains the header, footer, CSS import, etc.  It also has placeholders for the "title" and "body" blocks, which are defined immediately following.  Those blocks will be seamlessly inserted into the proper place in the base.html template.  The variable named "object" is passed to the template from the view, and that "object" is a Station class instance.  In order to display the station name all that is needed is to reference it with '{{ object.name }}'.  The same holds true for any member variable on the object instance.  There are also conditional tags available.  For example, this template will only create a paragraph and display the station's address if there is one.
-
-This "stations" application is complete and can now be dropped into any Django project.  It will create the station table if it does not exist, and the application can even supply custom SQL to allow Django to build indexes or populate the table, by simply dropping an appropriately named file in a directory named "sql" in the application.  There are only two things that are required before we can use this application.  First, we need to create the "base.html" file that defines the "title" and "body" blocks, and we need to hook the application into the project's URL structure.  Right now, our application will match the URL 'http://..something../KCMH/' (with KCMH being any station id), but we need to figure out what that "something" is.  In the snow accuracy site's case, it will be 'http://snow.forecastwatch.com/stations'.  Our base project therefore needs to define the 'station' path and hook it into the station URL dispatcher.  At that point, the station application is completely in charge of the URL name-space below "/stations/", so if we later want to add additional URLs in the station application, we do not have to change the project code, just the application.  To hook up the stations application to our project, we just add the following to the project url.py file: ::
-
-  urlpatterns = patterns('',
-    ...
-    (r'^stations/', include('stations.urls')),
-    ...)
-
-The result of this is shown in Figure 2.  This is the result of retrieving the URL 'http://snow.forecastwatch.com/stations/KCMH/'.
-
-.. figure:: snow_stations_detail.png
-
-     Figure 2. screenshot of station detail web page
-
-The current station application only shows the location of one station on the Google map.  One possible extension would be to also display nearby stations, perhaps with a different marker color.  For more complex location-type applications like that, Django comes bundled with a set of geospatial extensions called GeoDjango.  GeoDjango interfaces nicely with geospatial-aware databases like PostgreSQL with PostGIS extensions.  Using these extensions one can perform distance, intersection, within, and other types of geospatial queries.  For example, in addition to the latitude and longitude location, the station table has a location column, which is a geometry field of type 'POINT' in PostGIS: ::
-
-  location = models.PointField()
-
-Performing a distance query with GeoDjango is just like performing a regular query, with the addition of special operators.  In the following example, the operator "distance_lte" (distance less than or equal to) is used to find stations within 30 miles of station KCMH.  This will get converted into a SQL query that, in the case of PostGIS, will perform an ST_distance_sphere() function call. ::
-
-  kcmh = Station.objects.get(id='KCMH')
-  nearby_stations = Station.objects.filter(
-      location__distance_lte=(kcmh.location, D(mi=30)))
+Django [DJ]_ is the web front-end for both ForecastWatch and ForecastAdvisor.com.  It can be used to quickly build robust, dynamic websites.  For example, Dr. Bruce Rose, Principal Scientist and Vice President at The Weather Channel, is studying snowfall forecast accuracy [Ros10]_.  There is a common perception that snowfall forecasts are "overdone".  Specifically, that forecasts of snowfall generally predict more snowfall than actually occurs.  Despite this common perception, little scientific research has been done to verify snowfall forecasts.  Dr. Rose wanted a public site that would collect the snowfall forecasts and observations, and provide an intuitive, easy-to-use, dynamic data-driven site that updated automatically when data came in.  One of the big challenges in science and scientific research is the increasingly large amounts of data research is based on.  Challenges of curation, storage, and accessibility are becoming more frequent.  "Climategate" brought the issue of reproducibility of research when large amounts of data are used, as the raw data on which several papers were based was found to have been deleted.  While this does not invalidate the research, it does present a credibility issue, and puts roadblocks in one of the tenets of the scientific method: that of reproducibility.  Python and Django were used to create a data-driven site that allowed all the data to be navigated and explored.
 
 
 Some Findings
@@ -127,27 +44,27 @@ Some Findings
 
 ForecastWatch started as an answer to the question "Is there any difference between weather forecasts from different providers?"  It turns out there is a difference.  As an amateur scientist, it has been interesting to look at all the data in a number of different ways.  While many forecast providers perform continuous internal verification of forecasts, and the National Weather Service has an entire group devoted to it, there has been little information communicated at the popular level regarding weather forecast accuracy.  One of the goals of ForecastWatch is to help meteorologists educate their customers as to their accuracy, and begin to help dissipate some of the skepticism that is reflected in comments such as "I wish I could have a job where I'm wrong half the time an still keep my job".
 
-Figure 3 shows a histogram of one-day-out and four-day-out high temperature forecast forecast error against 24-hour high observations from all providers over all of 2009.  There are nearly two million forecasts represented in each day's histogram.  As expected, but nice to confirm, the histogram of high temperature forecast error follows a normal distribution.  As also might be expected, the histogram for four-day-out forecasts is more spread out than that of the one-day-out forecasts.  The further out the forecast is for, the greater the standard deviation of error.  Eagle-eyed readers may notice that the histogram "leans" slightly negative, meaning that average error has a light negative bias.  The reason for this is subtle, and demonstrates the care that must be taken when interpreting results.
+Figure 2 shows a histogram of one-day-out and four-day-out high temperature forecast forecast error against 24-hour high observations from all providers over all of 2009.  There are nearly two million forecasts represented in each day's histogram.  As expected, but nice to confirm, the histogram of high temperature forecast error follows a normal distribution.  As also might be expected, the histogram for four-day-out forecasts is more spread out than that of the one-day-out forecasts.  The further out the forecast is for, the greater the standard deviation of error.  Eagle-eyed readers may notice that the histogram "leans" slightly negative, meaning that average error has a light negative bias.  The reason for this is subtle, and demonstrates the care that must be taken when interpreting results.
 
 .. figure:: high_temp_error_histogram.png
 
-    Figure 3. High temperature error histogram.
+    Figure 2. High temperature error histogram.
 
 This histogram represents the error of forecasts when compared against the 24-hour high temperature reported in the daily observations.  However, some forecasters' valid time for high temperature is 7am to 7pm local standard time.  While nearly all high temperatures for the day fall in this period, very rarely they do not.  In this case, the 24-hour high observation will be higher than the high temperature between 7am and 7pm.  Thus, the forecast will under-predict the high from the perspective of the 24-hour high temperature verification.  This leads to the slight negative bias.  In general, short-term temperature forecasts are well-calibrated and bias corrected.  Generating a high or low temperature observation between an hourly range (for example, 7am to 7pm) also results in a slight error bias.  This is because hourly observations are taken at a specific time.  The odds are high that the true high or low temperature in a span will occur intra-hour.  The probability that a single observation each hour will capture the true high temperature is small, and thus the generated high or low temperature will be lower than the actual high.  The 24-hour high and low temperature observations are nearly continuous and reflect the true high and low temperatures of the day.
 
-One fact of weather forecasts that consistently surprises people, even people using weather forecasts in quantitative modeling and decision-making is that weather forecast accuracy is seasonal, and varies greatly geographically.  There are many people using weather forecasts as input to risk and prediction models that do not factor in seasonality or location along with the temperature forecast.  Figure 4 shows the accuracy of U.S. and Canadian temperature forecasts for the past six years.  Temperatures are more accurate in the summer than winter, with high temperature accuracy swinging by one degree and low temperature accuracy even more.  Additionally, a high temperature forecast for Atlanta in July has less error on average than a high temperature forecast for Chicago in December.
+One fact of weather forecasts that consistently surprises people, even people using weather forecasts in quantitative modeling and decision-making is that weather forecast accuracy is seasonal, and varies greatly geographically.  There are many people using weather forecasts as input to risk and prediction models that do not factor in seasonality or location along with the temperature forecast.  Figure 3 shows the accuracy of U.S. and Canadian temperature forecasts for the past six years.  Temperatures are more accurate in the summer than winter, with high temperature accuracy swinging by one degree and low temperature accuracy even more.  Additionally, a high temperature forecast for Atlanta in July has less error on average than a high temperature forecast for Chicago in December.
 
 .. figure:: high_low_error_by_month.png
 
-    Figure 4. High and low temperature forecast error by month.
+    Figure 3. High and low temperature forecast error by month.
 
 ForecastWatch also generates skill measures, by comparing unskilled forecasts with skilled predictions.  An unskilled forecast is a forecast that requires no skill to produce.  The two unskilled forecasts that are used by ForecastWatch are persistence forecasts and climatology forecasts.  A persistence forecast is a forecast that says "tomorrow, and the next day, and the next, etc. will be exactly like today".  If the high temperature is 95 degrees Fahrenheit today, the persistence forecast will be for 95 degrees Fahrenheit tomorrow.  If it is raining today, the prediction will be that it will be raining tomorrow.  The climatology forecast will predict that the high and low temperature will be exactly "average".  Specifically, the ForecastWatch climatology forecast uses the daily climatic normals (CLIM84) from the National Climatic Data Center [NCDC]_ which are statistically fitted daily temperatures smoothed through monthly values.
 
-Figure 5 shows high temperature forecast accuracy by days-out for 2009 between the two unskilled forecasts, and the average accuracy of all providers' forecasts.  The climatic unskilled forecast is a straight line because the climatic forecast for a given day never changes.  It is always the calculated 30-year average temperature as expressed by the nearest station in the CLIM84 product.  The two intersections between the forecast error lines are the most interesting features of this figure.  The first intersection, between the unskilled persistence forecast and the climatology forecast, occurs between the one- and two-day-out forecasts.  This means that a persistence forecast is only better than climatology at predicting high temperature one day out.  After one day out, climatology has more influence than local weather perturbations.  
+Figure 4 shows high temperature forecast accuracy by days-out for 2009 between the two unskilled forecasts, and the average accuracy of all providers' forecasts.  The climatic unskilled forecast is a straight line because the climatic forecast for a given day never changes.  It is always the calculated 30-year average temperature as expressed by the nearest station in the CLIM84 product.  The two intersections between the forecast error lines are the most interesting features of this figure.  The first intersection, between the unskilled persistence forecast and the climatology forecast, occurs between the one- and two-day-out forecasts.  This means that a persistence forecast is only better than climatology at predicting high temperature one day out.  After one day out, climatology has more influence than local weather perturbations.  
 
 .. figure:: high_skilled_vs_unskilled.png
 
-    Figure 5. High temperature skilled versus unskilled forecasts.
+    Figure 4. High temperature skilled versus unskilled forecasts.
 
 Possibly the more interesting intersection is between skilled forecast providers and climatology forecasts between eight and nine days out.  What this graph is saying is that weather forecasts from weather forecast providers are **worse** than an unskilled climatology forecast beyond eight days out.  The American Meteorological Society said in 2007 that "the current skill in forecasting daily weather conditions beyond eight days is relatively low" [AMS07]_ in a statement on weather analysis and forecasting.  This graphs shows how "relatively low" the skill really is.  One question that is asked about this is why do forecasters not replace their forecast with the climatology forecast for their nine-day and beyond forecasts?  One reason is that these extended forecasts might be skillful in forecasting temperature trends (above or below normal) which the climatology forecast cannot do.  Research is ongoing on this aspect of longer-term forecasts.
 
@@ -156,7 +73,6 @@ References
 
 .. [FW] `ForecastWatch Website <http://www.forecastwatch.com/>`_
 .. [FA] `ForecastAdvisor Website <http://www.forecastadvisor.com/>`_
-.. [SNOW] `Snowfall Research Website <http://snow.forecastwatch.com/>`_
 .. [GMT] `Generic Mapping Tools <http://gmt.soest.hawaii.edu/>`_
 .. [DJ] `Django Web Application Framework <http://www.djangoproject.com/>`_
 .. [NDFD] `NWS National Digitial Forecast Database <http://www.nws.noaa.gov/ndfd/>`_
