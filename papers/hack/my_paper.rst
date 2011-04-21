@@ -93,7 +93,7 @@ NASA required a test that demonstrated the stability of this
 engineering article and which verified that the design and
 construction techniques will work to meet the requirements of the
 telescope: namely, that it will remain stable to within 68nm from
-30-50K (-405 to -370 :math:'\deg'F).  They also wished to track the
+30-50K (-405 to -370 :math:`^{\circ}\mathrm{F}`).  They also wished to track the
 structural changes from ambient (~295K) to cryogenic temperatures
 (~30K) in order to better understand the accuracy of their structural
 models.  The primary test equipment, a special interferometer,
@@ -123,7 +123,7 @@ then recombines the reflected signal with a reference beam split from the same
 laser pulse, to create an interferometric map of the surface speckles.
 As the structure moves, the speckles change phase reflecting the
 change in interference between the incident and reference laser pulses.
-However, those phases cycle from :math:'-\pi' to :math:'\pi' and back
+However, those phases cycle from :math:`-\pi` to :math:`\pi` and back
 as the surface continues to move. This required the use of phase
 unwrapping across the surface, spatial phase unwrapping, using an
 algorithm developed by the manufacturers of the ESPI.
@@ -134,20 +134,20 @@ algorithm developed by the manufacturers of the ESPI.
   Schematic of ESPI showing how the ESPI measures the change in the object due to thermal or mechanical stress by tracking the speckles' phase change on the surface.
 
 As the surface tilted during the test, it produced fringes where
-the phases across the structure would transition from :math:'\pi'
-to :math:'-\pi'. This tilt needed to be removed in order to allow
+the phases across the structure would transition from :math:`\pi`
+to :math:`-\pi`. This tilt needed to be removed in order to allow
 us to measure the relative changes from one region of the structure
 to another.
 
 .. figure:: ESPI_tilt_schematic.jpg
 
-  Schematic showing how bulk tilt introduces multiple :math:'2\pi' 
+  Schematic showing how bulk tilt introduces multiple :math:`2\pi` 
   variations across the structure and how it gets corrected in processing,
   allowing for relative variations to be measured across the surface as 
   described in "Testing the BSTA".
   
 
-Since the measured phase is ambiguous by multiples of :math:'2\pi',
+Since the measured phase is ambiguous by multiples of :math:`2\pi`,
 special techniques are required to remove these ambiguities. One is
 to presume that continuous surfaces have continuous phase, and any
 discontinuities on continuous surfaces are due to phase wrapping. Thus
@@ -163,7 +163,7 @@ on spatially contiguous sections. Gross tilts are fit to the largest
 contiguous sections, and then the average tilt is removed (as well
 as the average displacement). However, there are areas of interest
 (the mirror pad supports) which are discontiguous and as a result
-possibly several factors of 2pi offset in reality as a result of the
+possibly several factors of :math:`2\pi` offset in reality as a result of the
 tilt, and thus improperly corrected when tilts are removed. Since
 these areas are assumed to change slowly in time, temporal phase
 unwrapping is applied to these areas.
