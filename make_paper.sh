@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DIR=$1
+WD=`pwd`
 
 if [[ ! -d $DIR ]]; then
   echo "Usage: make_paper.sh source_dir"
@@ -18,5 +19,5 @@ if [ "$?" -ne "0" ]; then
     exit 1
 fi
 cd $OUTDIR
-pdflatex paper.tex && pdflatex paper.tex
+pdflatex paper.tex && pdflatex paper.tex | (python $WD/publisher/paper_cut.py)
 
