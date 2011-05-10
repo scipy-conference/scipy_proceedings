@@ -8,7 +8,7 @@ import re
 
 regexp = re.compile('Output written on paper.pdf \((\d+) pages')
 
-f = open('paper_stats.ini', 'w')
+f = open('paper_stats.cfg', 'w')
 
 line = ''
 for line in sys.stdin:
