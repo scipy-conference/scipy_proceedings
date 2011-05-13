@@ -16,10 +16,13 @@ def cfg2dict(filename=default_filename):
     """
     options = {}
 
-    cp = ConfigParser()
-    cp.read(filename)
-    for key in cp.options('default'):
-        options[key] = cp.get('default', key)
+    if not os.path.isfile(filename):
+        print "*** Warning: Could not load config file '%s'." % filename
+    else:
+        cp = ConfigParser()
+        cp.read(filename)
+        for key in cp.options('default'):
+            options[key] = cp.get('default', key)
 
     return options
 
