@@ -8,8 +8,6 @@ import os.path
 import sys
 import glob
 
-from string import Template
-
 if len(sys.argv) != 3:
     print "Usage: build_paper.py paper_directory target_directory"
     sys.exit(-1)
@@ -75,15 +73,6 @@ preamble = r'''
 \usepackage{fancyvrb}
 
 '''
-
-preamble += Template(r'''
-
-% Paper-specific conditional
-\usepackage{etoolbox}
-\newtoggle{$paper_id}
-\toggletrue{$paper_id}
-
-''').substitute({'paper_id': paper_id})
 
 # Add the LaTeX commands required by Pygments to do syntax highlighting
 
