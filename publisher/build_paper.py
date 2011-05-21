@@ -8,6 +8,22 @@ import os.path
 import sys
 import glob
 
+from string import Template
+
+if len(sys.argv) != 3:
+    print "Usage: build_paper.py paper_directory target_directory"
+    sys.exit(-1)
+
+in_path, out_path = sys.argv[1:]
+for p in (in_path, out_path):
+    if not os.path.isdir(p):
+        print("Cannot open directory: %s" % p)
+        sys.exit(-1)
+
+print "Building:", in_path
+
+paper_id = os.path.basename(out_path)
+
 preamble = r'''
 % These preamble commands are from build_paper.py
 
@@ -57,7 +73,17 @@ preamble = r'''
 
 % Packages required for code highlighting
 \usepackage{fancyvrb}
+
 '''
+
+preamble += Template(r'''
+
+% Paper-specific conditional
+\usepackage{etoolbox}
+\newtoggle{$paper_id}
+\toggletrue{$paper_id}
+
+''').substitute({'paper_id': paper_id})
 
 # Add the LaTeX commands required by Pygments to do syntax highlighting
 
@@ -82,17 +108,6 @@ settings = {'documentclass': 'IEEEtran',
             'latex_preamble': preamble,
             'documentoptions': 'letterpaper,compsoc,twoside'}
 
-if len(sys.argv) != 3:
-    print "Usage: build_paper.py paper_directory target_directory"
-    sys.exit(-1)
-
-in_path, out_path = sys.argv[1:]
-for p in (in_path, out_path):
-    if not os.path.isdir(p):
-        print("Cannot open directory: %s" % p)
-        sys.exit(-1)
-
-print "Building:", in_path
 
 try:
     rst, = glob.glob(os.path.join(in_path, '*.rst'))
