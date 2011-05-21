@@ -48,6 +48,7 @@ Building the entire Proceedings
   ./make_all.sh
   ./build_index.py
   ./make_all.sh
+  ./concat_proceedings_pdf.sh
 
 Requirements
 ------------
