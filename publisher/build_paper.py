@@ -122,7 +122,7 @@ content = r'''
 
 .. raw::  latex
 
-  \include{page_numbers.tex}
+  \input{page_numbers.tex}
   \newcommand*{\docutilsroleref}{\ref}
   \newcommand*{\docutilsrolelabel}{\label}
 
@@ -135,5 +135,7 @@ out = open(os.path.join(out_path, 'paper.tex'), 'w')
 out.write(tex)
 out.close()
 
-out = open(os.path.join(out_path, 'page_numbers.tex'), 'w')
-out.close()
+page_nr_f = os.path.join(out_path, 'page_numers.tex')
+if not os.path.exists(page_nr_f):
+    out = open(page_nr_f, 'w')
+    out.close()
