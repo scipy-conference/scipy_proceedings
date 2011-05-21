@@ -41,6 +41,14 @@ Build Process
 
   ./make_paper.sh papers/my_paper_dir
 
+Building the entire Proceedings
+-------------------------------
+::
+
+  ./make_all.sh
+  ./build_index.py
+  ./make_all.sh
+
 Requirements
 ------------
  - IEEETran and AMSmath LaTeX classes
