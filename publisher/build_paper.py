@@ -122,6 +122,7 @@ content = r'''
 
 .. raw::  latex
 
+  \include{page_numbers.tex}
   \newcommand*{\docutilsroleref}{\ref}
   \newcommand*{\docutilsrolelabel}{\label}
 
@@ -132,4 +133,7 @@ tex = dc.publish_string(source=content, writer=writer,
 
 out = open(os.path.join(out_path, 'paper.tex'), 'w')
 out.write(tex)
+out.close()
+
+out = open(os.path.join(out_path, 'page_numbers.tex'), 'w')
 out.close()

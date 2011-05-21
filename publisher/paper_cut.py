@@ -15,7 +15,7 @@ for line in sys.stdin:
     m = regexp.match(line)
     if m:
         pages = m.groups()[0]
-        f.writelines(['[all]\n', 'pages = %s\n' % pages])
+        f.writelines(['[default]\n', 'pages = %s\n' % pages])
 
 f.close()
 
