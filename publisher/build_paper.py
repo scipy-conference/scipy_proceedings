@@ -124,7 +124,7 @@ out = open(os.path.join(out_path, 'paper.tex'), 'w')
 out.write(tex)
 out.close()
 
-page_nr_f = os.path.join(out_path, 'page_numers.tex')
+page_nr_f = os.path.join(out_path, 'page_numbers.tex')
 if not os.path.exists(page_nr_f):
     out = open(page_nr_f, 'w')
     out.close()
