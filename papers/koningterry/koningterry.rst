@@ -21,7 +21,7 @@ Automation of Inertial Fusion Target Design with Python
 
 .. class:: keywords
 
-   terraforming, desert, numerical perspective
+   inertial confinement fusion, python, automation
 
 Introduction
 ------------
