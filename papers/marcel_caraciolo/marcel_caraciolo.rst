@@ -33,3 +33,42 @@ Crab: A Recommendation Engine Framework for Python
 .. class:: keywords
 
    data mining, machine learning, recommendation systems, information filtering, framework
+
+
+Introduction
+------------
+With the great advancements of machine learning in the past few years, many new learning algorithms have been
+proposed and one of the most recognizable techniques in use today are the recommender engines. There are several
+services or sites that attempt to recommend books or movies or articles based on users past actions. By trying to
+infer tastes and preferences, those systems focus to identify unknown items that are are of interest.
+
+
+
+
+Recommender Engines 
+-------------------
+
+Representing Data
+-----------------
+
+Making Recommendations
+----------------------
+
+Taking Recommenders to Production
+---------------------------------
+
+Distributing Recommendation Computations
+----------------------------------------
+
+.. Customised LaTeX packages
+.. -------------------------
+.. Please avoid using this feature, unless agreed upon with the
+.. proceedings editors.
+
+
+Conclusion and Future Works
+---------------------------
+
+
+References
+----------
