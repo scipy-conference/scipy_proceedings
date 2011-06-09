@@ -68,11 +68,37 @@ extensive. In scientific computing field, high-quality extensive libraries such 
 attractive alternative for researchers in academy and industry to write machine learning implementations and toolkits such as Brain,
 Shogun, Scikit-learn, Milk and many others (reference).
 
+The reason of not having an alternative for python machine learning developers by providing an unified and easy-to-use recommendation framework 
+motivated us to develop a recommendation engine toolbox that provides a rich set of features from which you can build a customized recommender system
+from a set of algorithms. The result is a framework, called CRAB, with focus on large-scale learning making use of scientific python packages
+such as Scipy, Numpy and Matplotlib to provide simple and efficient solutions for constructing recommender systems
+that are acessible and reusable in various contexts. The framework Crab provides a generic interface for recommender systems implementations,
+among them the collaborative filtering approaches such as Slope-One, User-Based and Item-Based filtering, which are already available for use.
+The Recommender interfaces can be easily combined with more than 10 different pairwise metrics already implemented, like the cosine, tanimoto,
+pearson, euclidean already efficient implemented using Scipy and Numpy basic optimized functions (references.) Moreover,  it offers support
+for using similarities functions such as user-to-user or item-to-item  and allows easy integration with different input domains like databases,
+text files or python dictionaries. One of Crab's key features is the 
 
+Currently, the collaborative filtering algorithms are widely supported. In addition to the User-Based and Item-Based filtering 
+techniques, Crab implements several pairwise metrics and provides the basic interfaces for developers to build their own 
+customized recommender algorithms. Finally, several commonly used performance measures, such as accuracy, precision, recall are
+implemented in Crab.
 
+An important aspect in the design of Crab was to enable very large-scale recommendations. Crab is currently being rewritten
+to support optimized scientific computations by using Scipy and Numpy routines. Another feature concerned by the current mantainers
+is make Crab support sparse and large datasets in a way that there is a little as possible overhead for storing the data
+and intermediate results. Moreover, Crab also aims to support scaling in recommender systems in order to build high-scale, 
+dynamic and fast recommendation over simple calls. Futhermore, Crab is also being developed to support distributed 
+recommendation computation by interfacing with the distributed computation library MrJob written in Python currently
+developed by Yelp. What sets Crab apart from many other recommender systems toolboxes, is that it provides 
+interactive interfaces to build, deploy and test customized recommender algorithms written in Python running on several
+platforms such as Linux, BSD, Mac OS and Windows.
 
- 
-
+The outline of this paper is as follows. We first discuss the Crab's main features by explaining the architecture of the framework.
+Next, we provide our current approach for representing the data in our system and current challenges. Then, we also presents
+how Crab can be used in production by showing a real scenario where it is already deployed. Finally, we discuss about our plans
+to handle with distributed recommendation computations. Also, our conclusions and future works are also presented at the end of
+this paper.
 
 
 Recommender Engines 
