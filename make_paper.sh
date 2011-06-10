@@ -10,10 +10,15 @@ fi
 
 AUTHOR=`basename $DIR`
 OUTDIR="output/$AUTHOR"
+if [ x${USER} == x"koning" ] ; then
+PYTHON=~/Python/$SYS_TYPE/py2.6/bin/python
+else
+PYTHON=python
+fi
 
 mkdir -p $OUTDIR
 cp $DIR/* $OUTDIR
-python publisher/build_paper.py $DIR $OUTDIR
+${PYTHON} publisher/build_paper.py $DIR $OUTDIR
 if [ "$?" -ne "0" ]; then
     echo "Error building paper $DIR. Aborting."
     exit 1
