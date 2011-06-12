@@ -26,14 +26,14 @@ Automation of Inertial Fusion Target Design with Python
 Introduction
 ------------
 
-ICF is fun.  It uses comptuers and now python
+ICF is fun.  It uses computers and now python
  
-Parallel python interpeters for pre-existing programs
+Parallel python interpreters for pre-existing programs
 -----------------------------------------------------
 
 We added python to Hydra.  It was hard.
 
-Automation of target design with python
+Automation of target design with Python
 ---------------------------------------
 
 Look at the cool stuff we can do with our new bindings.
