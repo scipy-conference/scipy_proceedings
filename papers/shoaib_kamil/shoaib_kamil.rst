@@ -10,9 +10,11 @@
 :email: fox@cs.berkeley.edu
 :institution: Department of Computer Science, UC Berkeley
 
-------------------------------------------------
-Bringing Parallel Performance to Python 
-------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+Bringing Parallel Performance to Python  with Domain-Specific Selective Embedded Just-in-Time Specialization
+------------------------------------------------------------------------------------------------------------
+
+
 
 .. class:: abstract
 
@@ -51,6 +53,8 @@ Approach/Mechanics of Asp
 2 pages including the next 2 sections.  Need to make sure we differentiate between the host language and the transformation language.
 
 
+
+
 Walkthru Example
 ----------------
 Here is where the walkthru of the stencil example goes.
@@ -75,10 +79,28 @@ Related Work
 ------------
 0.5 page.  Auto-tuning, Pochoir, Python stuff.
 
+Allowing domain scientists to program in higher-level languages is the
+goal of a number of projects in Python, including SciPy [SciPy]_ which
+brings Matlab-like functionality for numeric computations into
+Python. In addition, domain-specific projects such as Biopython [Biopy]_
+and the Python Imaging Library (PIL) [PIL]_ also attempt to hide complex
+operations and data structures behind Python infrastructure, 
+making programming simpler for users.  
+
+Another approach, used by the
+Weave subpackage of SciPy, allows users to express C++ code
+that uses the Python C API as strings, inline with other Python code,
+that is then compiled and run.  Cython [Cython]_ is an effort to write
+a compiler for a subset of Python, while also allowing users to write
+extension code in C.
+
 
 References
 ----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
+.. [SciPy] Scientific Tools for Python. http://www.scipy.org.
 
+.. [Biopy] Biopython.  http://biopython.org.
 
+.. [PIL] Python Imaging Library. http://pythonware.com/products/pil.
+
+.. [Cython] R. Bradshaw, S. Behnel, D. S. Seljebotn, G. Ewing, et al., The Cython compiler, http://cython.org.
