@@ -138,7 +138,7 @@ References
 
 .. [OSKI] OSKI: Optimized Sparse Kernel Interface.  http://bebop.cs.berkeley.edu/oski.
 
-.. [SPIRAL] M. P\"uschel, J. M. F. Moura, J. Johnson, D. Padua,
+.. [SPIRAL] M. Püschel, J. M. F. Moura, J. Johnson, D. Padua,
     M. Veloso, B. Singer, J. Xiong, F. Franchetti, A. Gacic,
     Y. Voronenko, K. Chen, R. W. Johnson,  N. Rizzolo. 
     SPIRAL: Code generation for DSP transforms. Proceedings of the
