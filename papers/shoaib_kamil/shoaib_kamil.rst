@@ -28,13 +28,21 @@ Bringing Parallel Performance to Python  with Domain-Specific Selective Embedded
     addition, many domain scientists do not have the expertise to directly write
     parallel codes for many different kinds of hardware, each with specific
     idiosyncrasies.
-    Instead, we propose SEJITS, a methodology that uses high-level abstractions and the
+
+    Instead, we propose SEJITS [Cat09]_, a methodology that uses high-level abstractions and the
     capabilities of powerful scripting languages to bridge this
     performance-productivity gap.  SEJITS, or Selective Embedded Just-In-Time Specialization,
     takes code written to use domain-specific abstractions and selectively generates efficient, parallel,
     low-level C++ code, compiles it and runs it, all invisibly to the user.  Efficiency programmers, who 
     know how to obtain the highest performance from a parallel machine, encapsulate their knowledge into 
-    domain-specific "specializers", which translate abstractions into parallel code.
+    domain-specific "specializers", which translate abstractions into
+    parallel code.
+
+    We have been implementing Asp, A SEJITS implementation for Python,
+    to bring the SEJITS methodology to Python programmers.  Although
+    Asp is still under development, the current version shows
+    promising results and provides insights and ideas into the
+    viability of the SEJITS approach.
 
 .. class:: keywords
 
@@ -42,7 +50,23 @@ Bringing Parallel Performance to Python  with Domain-Specific Selective Embedded
 
 Introduction
 ------------
-Intro.
+Clock speed scaling is no longer a viable way to increase delivered
+performance due to physical limitations, and thus, hardware architects
+have instead begun focusing on increasing parallelism using multiple
+cores to maximize performance capabilities of modern hardware.  
+
+
+High-level productivity or scripting languages have evolved to include
+sophisticated introspection and FFI (foreign function interface)
+capabilities.  SEJITS [Cat09]_, or Selective Embedded JIT
+Specialization, refers to the technique of using these capabilities to
+build kernel- and machine-specific *specializers* that transform
+user-written code in a high-level language in various ways to expose
+parallelism, and then generate the code for a a specific machine.
+Then, the code is compiled, linked, and executed.  This entire process
+occurs without user knowledge; to the user, it appears that a
+interpreted function is being called.
+
 
 Vision: SEJITS and Asp
 ----------------------
@@ -143,3 +167,8 @@ References
     Y. Voronenko, K. Chen, R. W. Johnson,  N. Rizzolo. 
     SPIRAL: Code generation for DSP transforms. Proceedings of the
     IEEE special issue on "Program Generation, Optimization, and Adaptation".
+
+.. [Cat09] B. Catanzaro, S. Kamil, Y. Lee, K. Asanovic, J. Demmel,
+   K. Keutzer, J. Shalf, K. Yelick, A. Fox. SEJITS: Getting
+   Productivity and Performance with Selective Embedded Just-in-Time
+   Specialization. Workshop on Programming Models for Emerging Architectures (PMEA), 2009
