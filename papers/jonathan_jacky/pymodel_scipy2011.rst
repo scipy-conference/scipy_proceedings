@@ -208,7 +208,7 @@ Most interesting systems require infinite models.  A system requires
 an infinite model when it has an infinite number of actions.  This
 occurs whenever any of its action arguments are drawn from types
 that have an infinite number of values: numbers, strings, or compound
-types such as tuples, lists, dictionaries, or classes.
+types such as tuples.
 
 Simple systems can be infinite.  Consider a stack, a last-in
 first-out queue which provides a ``Push`` action that puts a value on
@@ -424,8 +424,11 @@ strategies::
 Composition
 -----------
 
-*Composition* is a versatile technique that combines models.
-PyModel uses it for scenario control, validation, and program structuring.
+*Composition* is a versatile technique that combines models.  PyModel
+uses it for scenario control, validation, and program structuring.
+All of the PyModel commands can accept a list of models to be composed
+in any context where they expect a model.
+
 Composition combines two or more models to form a new model, the
 *product*.  (In the following discussion and examples, just two
 models are composed.)
