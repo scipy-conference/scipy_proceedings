@@ -94,6 +94,21 @@ that is then compiled and run.  Cython [Cython]_ is an effort to write
 a compiler for a subset of Python, while also allowing users to write
 extension code in C.
 
+The idea of using multiple code variants, with different optimizations 
+applied to each variant, is a cornerstone of auto-tuning.  Auto-tuning
+was first applied to dense matrix computations in the PHiPAC (Portable
+High Performance ANSI C) library [PHiPAC]_. Using parametrized code
+generation scripts written in Perl, PHiPAC generated variants of
+generalized matrix multiply (GEMM) with loop unrolling, cache
+blocking, and a number of other optimizations, plus a search engine,
+to, at install time, determine the best GEMM routine for the particular machine.
+After PHiPAC, auto-tuning has been applied to a number of domains
+including sparse matrix-vector multiplication (SpMV) [OSKI]_, Fast
+Fourier Transforms (FFTs) [SPIRAL]_, and multicore versions of 
+stencils [KaDa09]_, [Kam10]_, [Poich]_, showing large improvements 
+in performance over simple implementations of these kernels.
+
+
 
 References
 ----------
@@ -104,3 +119,27 @@ References
 .. [PIL] Python Imaging Library. http://pythonware.com/products/pil.
 
 .. [Cython] R. Bradshaw, S. Behnel, D. S. Seljebotn, G. Ewing, et al., The Cython compiler, http://cython.org.
+
+.. [PHiPAC] J. Bilmes, K. Asanovic, J. Demmel, D. Lam, and
+   C.W. Chin. PHiPAC: A Portable, High-Performance, ANSI C Coding
+   Methodology and its Application to Matrix Multiply. LAPACK Working Note 111.
+
+.. [KaDa09] K. Datta. Auto-tuning Stencil Codes for Cache-Based
+   Multicore Platforms. PhD thesis, EECS Department, University of
+   California, Berkeley, Dec 2009.
+
+.. [Kam10] S. Kamil, C. Chan, L. Oliker, J. Shalf, and S. Williams. An
+   Auto-Tuning Framework for Parallel Multicore Stencil Computations.
+   International Parallel and Distributed Processing Symposium, 2010.
+
+.. [Poich] Y.Tang, R. A. Chowdhury, B. C. Kuszmaul, C.-K. Luk, and
+   C. E. Leiserson. The Pochoir Stencil Compiler. 23rd ACM Symposium 
+   on Parallelism in Algorithms and Architectures, 2011.
+
+.. [OSKI] OSKI: Optimized Sparse Kernel Interface.  http://bebop.cs.berkeley.edu/oski.
+
+.. [SPIRAL] M. Püschel, J. M. F. Moura, J. Johnson, D. Padua,
+    M. Veloso, B. Singer, J. Xiong, F. Franchetti, A. Gacic,
+    Y. Voronenko, K. Chen, R. W. Johnson,  N. Rizzolo. 
+    SPIRAL: Code generation for DSP transforms. Proceedings of the
+    IEEE special issue on "Program Generation, Optimization, and Adaptation".
