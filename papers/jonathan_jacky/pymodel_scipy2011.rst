@@ -90,13 +90,25 @@ operation called *composition*.  It is also possible to code an
 optional *strategy* in order to improve test coverage according to
 some chosen measure.  Some useful strategies are already provided.
 
-PyModel is an open-source model-based testing framework for Python.
-It provides the PyModel Analyzer ``pma``, the PyModel Graphics program
-``pmg`` for visualizing the analyzer output, and the PyModel Tester
-``pmt`` for generating, executing, and checking tests, both offline
-and on-the-fly.  It also includes several demonstration samples, each
-including a contract model program, scenario machines, and a test
-harness.
+Model-based testing supports close integration of design and analysis
+with testing.  The analyzer is similar to a model checker; it can can
+check safety, liveness, and temporal properties.  And, the *same
+models* are used for these analyses as for automated testing.
+Moreover, the models are written in the *same language* as the
+implementation.
+
+PyModel is an open-source model-based testing framework for Python
+[PyModel11]_.  It provides the PyModel Analyzer ``pma``, the PyModel
+Graphics program ``pmg`` for visualizing the analyzer output, and the
+PyModel Tester ``pmt`` for generating, executing, and checking tests,
+both offline and on-the-fly.  It also includes several demonstration
+samples, each including a contract model program, scenario machines,
+and a test harness.
+
+The PyModel framework is written in Python.  The models and scenarios
+must be written in Python.  It is often convenient, but not required, if the
+system under test is also written in Python, because it can be 
+easier to write the test harness in that case.
 
 
 Traces and Actions
@@ -301,6 +313,47 @@ analyses are conclusive; they are machine-generated proofs that the
 safety and liveness properties hold (or not) for the model program
 over the given finite domains.
 
+Test Harness
+------------
+
+In order to execute tests, it is necessary to write a *test harness*
+that connects the model program to the test runner ``pmt``.  The test
+harness usually encapsulates the implementation details that are
+abstracted away from the model.  It is often convenient, but not required,
+if the implementation under test is also written in Python, because it
+can be easier to write the test harness in that case.
+
+Here is a fragment of the code from the harness for testing a web
+application.  As it happens, the server code of the web application
+that we are testing here is in PHP, not Python, but this is not an
+inconvenience because the test harness acts as a remote web
+client, using the Python standard library module ``urllib``, among
+others.  The model includes ``Initialize``, ``Login``, and ``Logout``
+actions, among others::
+
+  def TestAction(aname, args, modelResult):
+    ...
+
+    if aname == 'Initialize':
+      session = dict() # clear out cookies/session IDs
+
+    elif aname == 'Login':
+      user = users[args[0]]
+      ...
+      password = passwords[user] if args[1] == 'Correct' 
+                                 else wrongPassword
+      postArgs = urllib.urlencode({'username':user, 
+                                  'password':password})
+      # GET login page
+      page = session[user].opener.open(webAppUrl).read() 
+      ... 
+      if result != modelResult:
+        return 'received Login %s, expected %s' % \
+                   (result, modelResult)
+
+    elif aname == 'Logout':
+      ...
+
 
 Offline Testing
 ---------------
@@ -463,15 +516,15 @@ be allowed or forbidden can act as a unit test suite for a model
 program.  Composing the model with each scenario in turn is, in
 effect, executing the unit test suite.
 
-Figures :ref:`comp-shared` and
-:ref:`comp-interesting` both show examples where the model program can
-execute the scenario.  In Figure :ref:`comp-validate` we compose the
-stack model with a scenario that executes ``Push(1)`` followed by
-``Pop(),0``.  This is forbidden, because pop should only return the
-value that was most recently pushed.  As expected, we see that the
-product only contains the push action because it is unable to
-synchronize on the pop action, which is not enabled in the model.
-The product does not reach an accepting state, which shows that the model does not allow this scenario.
+Figures :ref:`comp-shared` and :ref:`comp-interesting` both show
+examples where the model program can execute the scenario.  In Figure
+:ref:`comp-validate` we compose the stack model with a scenario that
+executes ``Push(1)`` followed by ``Pop(),0``.  This is forbidden,
+because pop should only return the value that was most recently
+pushed.  As expected, we see that the product only contains the push
+action because it is unable to synchronize on the pop action, which is
+not enabled in the model.  The product does not reach an accepting
+state, which shows that the model does not allow this scenario.
 
 .. figure:: comp-validate.pdf
    :figclass: bht
@@ -484,20 +537,64 @@ temporal logic formula.  Exploration with composition is similar to
 model checking, and is a powerful complement to the state-based safety
 and liveness analyses described earlier.
 
-Related work 
+Conclusions
+-----------
+
+Model-based testing can encourage different approaches to testing.  It
+encourages on-the-fly testing --- but in general, on-the-fly test runs
+are not reproducible, due to nondeterminism.  It suggests extending
+testing to noninvasive monitoring or *run time verification* --- if
+the test harness supports observable actions, the test runner can
+check log files or monitor network traffic for conformance violations.
+
+The most intruiging prospect might be better integration of design and
+analysis with testing.  Exploration with composition is like model
+checking; it can can check for safety, liveness, and temporal
+properties.  And, the *same models*  are used for these analyses as
+for automated testing.  Moreover, the models are written in the *same
+language* as the implementation, which could make them accessible to
+developers and test engineers, not just formal methods experts.
+
+Model-based testing has been used on large projects in industry, but
+only *post-hoc*.  Test engineers were given informal documentation and
+an implementation to test, and then reverse-engineered the models
+[Grieskamp08]_.  A more rational workflow might be to write the model
+*before* writing the implementation, analyze and tweak the design,
+then implement and test.
+
+
+Related work
 ------------
 
-All is explained in [Jacky08]_.  
+The techniques described in this paper can be expressed in any
+programming language.  More detailed explanations and examples, using
+the NModel framework for C# [NModel11]_, appear in [Jacky08]_.
+Another view of model-based testing appears in [Utting07]_.
+Model checking is discussed in [Peled01]_.
 
 
 References
 ----------
 
-.. [ABP11] Alternating Bit Protocol, Wikpedia, viewed June 2011.
+.. [ABP11] Alternating Bit Protocol, Wikpedia, accessed June 2011.
            http://en.wikipedia.org/wiki/Alternating_bit_protocol
+
+.. [Grieskamp08] W. Grieskamp, N. Kicillof, D. MacDonald, A. Nandan,
+                 K. Stobie, and F.L. Wurden.  Model-based quality assurance
+                 of Windows protocol documentation.  In: *ICST*, pages 502-506.
+                 IEEE Computer Society, 2008.
 
 .. [Jacky08] Jonathan Jacky, Margus Veanes, Colin Campbell, and Wolfram Schulte.
              *Model-Based Software Testing and Analysis with C#*,
 	     Cambridge University Press, 2008.
 
+.. [NModel11] NModel software, accessed June 2011.
+              http://nmodel.codeplex.com/
 
+.. [Peled01] Doron Peled. *Software Reliability Methods*, Springer, 2001.
+
+.. [PyModel11] PyModel software, accessed June 2011.
+               http://staff.washington.edu/jon/pymodel/www/
+
+.. [Utting07] Mark Utting and Bruno Legeard. *Practical Model-Based Testing:
+              a Tools Approach*, Morgan-Kaufmann, 2007.
