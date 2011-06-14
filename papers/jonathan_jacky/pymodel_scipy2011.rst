@@ -35,6 +35,7 @@ coverage according to programmable strategies coded by the programmer.
    specification, finite state machine, nondeterminism, exploration,
    offline testing, on-the-fly testing, scenario, composition
 
+
 Introduction
 ------------
 
@@ -87,7 +88,7 @@ model that describes a particular scenario.  The tools can combine
 this with the comprehensive *contract model program* using an
 operation called *composition*.  It is also possible to code an
 optional *strategy* in order to improve test coverage according to
-some chosen measure.
+some chosen measure.  Some useful strategies are already provided.
 
 PyModel is an open-source model-based testing framework for Python.
 It provides the PyModel Analyzer ``pma``, the PyModel Graphics program
@@ -96,6 +97,7 @@ It provides the PyModel Analyzer ``pma``, the PyModel Graphics program
 and on-the-fly.  It also includes several demonstration samples, each
 including a contract model program, scenario machines, and a test
 harness.
+
 
 Traces and Actions
 ------------------
@@ -111,13 +113,13 @@ with the new bit until it receives an acknowledgement with that new
 bit, and so on.  When the connection starts up, both ends send bit 1.
 The sender labels the first real message with 0.
 
-A sample of behavior is called a *trace*.  A trace is a sequence of
-*actions*, where each action has a name and may have arguments (so
-actions resemble function calls).  The alternating bit protocol has
+A sample of behavior is called a *trace*.  A trace is a sequence
+of *actions*, where each action has a name and may have arguments (so
+actions resemble function calls). The alternating bit protocol has
 only two actions, named ``Send`` and ``Ack``.  Each action has one
 argument that can take on only two values, ``0`` or ``1``.  (We
 abstract away the message contents, which do not affect the protocol
-behavior). Here are some traces that are allowed by the protocol, and
+behavior.) Here are some traces that are allowed by the protocol, and
 others that are forbidden::
 
   Allowed    Allowed   Allowed   Forbidden  Forbidden 
@@ -135,7 +137,7 @@ Traces like these might be collected by a test harness connected to
 the sender.  The ``Send`` are *controllable actions* invoked by the
 sender while the ``Ack`` are *observable actions* that are observed by
 monitoring the network.  (If the test harness were connected to the
-receiver instead, the ``Send`` would be the observable actions and the
+receiver instead, the ``Send`` would be the observable action and the
 ``Ack`` would be controllable.)
 
 
@@ -153,11 +155,11 @@ finite number of actions (only a finite number of possible values for
 each action argument).  Therefore this protocol can be modeled by a
 *finite state machine* (FSM), which can be represented by a graph
 where the edges represent actions and the nodes represent states
-(Figure :ref:`abp`).  Every allowed trace can be obtained by tracing
+(Figure :ref:`abp`).  Every allowed trace can be obtained by traversing
 paths around this graph.  In the figure, some of the nodes have
 doubled borders.  These are the *accepting states* where traces are
 allowed to stop.  A trace that stops in a non-accepting state is
-forbidden.  If not accepting states are specified, all states are
+forbidden.  If no accepting states are specified, all states are
 considered accepting states.
 
 .. figure:: abp.pdf
@@ -177,7 +179,6 @@ current state (a node), the action (an edge), and the next state
            ... etc. ...
            (4, (Send, (0,),), 1))
 
-
 The PyModel Graphics program ``pmg`` generated Figure :ref:`abp` from
 this code.
 
@@ -186,6 +187,7 @@ finite state machines. In PyModel, finite state machines are most
 often used to describe *scenario machines* that are composed with
 infinite *contract model programs* to focus test case generation on
 scenarios of interest.
+
 
 Infinite Models
 ---------------
@@ -199,7 +201,7 @@ types such as tuples, lists, dictionaries, or classes.
 Simple systems can be infinite.  Consider a stack, a last-in
 first-out queue which provides a ``Push`` action that puts a value on
 top of the stack and a ``Pop`` action that removes the value from the top of
-the stack and returns it.  Here are some allowed traces:::
+the stack and returns it.  Here are some allowed traces::
 
   Push(1,)      Push(1,)      Push(1,)     
   Push(2,)      Pop(), 1      Push(2,)
@@ -212,7 +214,7 @@ the stack and returns it.  Here are some allowed traces:::
   Push(1.)      Push(1,)      Push(1,)
   Push(1,)      Pop(), 1      Push(1,)
 
-In PyModel, an infinite model is expressed by a Python module with a
+In PyModel, an infinite model is expressed by a Python module with
 an *action function* for each action and variables to represent the
 *state*, the information stored in the system.  In this example, the
 state is a list that stores the stack contents in order.  Constraints
@@ -239,6 +241,7 @@ the module ``Stack``::
   def PopEnabled():   # Pop enabled when stack not empty
     return stack      
 
+
 Analysis
 --------
 
@@ -248,11 +251,16 @@ state machine, as in Figure :ref:`abp`.  The PyModel Analyzer ``pma``
 generates a finite state machine from an infinite model program, by a
 process called *exploration* which is a kind of concrete state
 model-checking.  In order to finitize the model program, it is
-necessary to limit the action arguments to finite *domains* and it is
-also necessary to limit the state by *state filters*, Boolean
-functions which the state must satisfy.  This domain limits the
-arguments to ``Push`` to the domain ``0, 1`` and this state filter
-limits the stack to fewer than four elements:::
+necessary to limit the action arguments to finite *domains* and it may
+also be necessary to limit the state by *state filters*, Boolean
+functions which the state must satisfy.  Exploration in effect
+performs exhaustive testing of the model program over these finite
+domains, generating all possible traces and representing them
+compactly as an FSM.
+
+Here we define a domain that limits the arguments of ``Push`` to the
+domain ``0, 1``; we also define a state filter that limits the stack to
+fewer than four elements::
 
   domains = { Push: {’x’:[0,1]} }
 
@@ -264,12 +272,163 @@ limits the stack to fewer than four elements:::
 
    FSM for finitized Stack model program, generated by exploration. :label:`stack`
 
-Subject to these limitions, ``pma`` generates a finite state machine
-that is rendered this way by ``pmg`` (Figure :ref:`stack`).
+Subject to these limitations, ``pma`` generates a finite state machine
+that is rendered by ``pmg`` (Figure :ref:`stack`).  
+
+Every trace allowed by the (finitized) model can be obtained by
+traversing paths around the graph.  This is useful for validation: you
+can check whether the graph allows the expected behaviors.
+
+
+Safety and Liveness
+-------------------
+
+In addition to providing visualization, the analyzer can check other
+properties.  *Safety analysis* checks whether anything bad can happen.
+You specify safety requirements by defining a *state invariant*, a
+Boolean function on state variables that is supposed to be satisfied
+in every state.  The analyzer checks the invariant in every state
+reached during exploration and marks *unsafe states* where the
+invariant is violated. *Liveness analysis* checks whether something
+good will happen.  You specify liveness requirements by defining an
+*accepting state condition*, a Boolean function on state variables
+that is supposed to be satisfied in the states where a trace ends.
+The analyzer checks the accepting state condition in every state and
+marks the terminal states (which have no outgoing actions) where the
+condition is violated; these are *dead states* from which an accepting
+state cannot be reached.  Since exploration is exhaustive, these
+analyses are conclusive; they are machine-generated proofs that the
+safety and liveness properties hold (or not) for the model program
+over the given finite domains.
+
+
+Offline Testing
+---------------
+
+*Offline testing* uses a similar workflow to unit testing, except the
+test cases and expected results are generated automatically from the
+model program.
+
+Traces can be used as test cases.  The PyModel Tester ``pmt`` can
+generate traces from a (finitized) model program; these include the
+expected return values from function calls, so they contain all the
+information needed for testing.  Later, ``pmt`` can act as the test
+runner: it executes the generated tests (via the test harness) and
+checks that the return values from the implementation match the ones
+in the trace calculated by the model program.
+
+
+On-the-fly Testing
+------------------
+
+In *On-the-fly testing* the test runner ``pmt`` generates the test
+case from the model as the test run is executing.  On-the-fly testing
+can execute indefinitely long nonrepeating test runs.  On-the-fly
+testing is necessary to accommodate nondeterminism in the
+implementation or its environment.
+
+Accommodating nondeterminism requires distinguishing between
+*controllable actions* (functions that the test runner can call via
+the test harness), and *observable actions* (events that the test
+harness can detect).  For example, when testing the sender side of the
+alternating bit protocol, ``Send`` is controllable and ``Ack`` is
+observable.  Handling observable actions may require asynchronous
+programming techniques in the test harness.
+
+
+Strategies
+----------
+
+During test generation, alternatives arise in every state where
+multiple actions are enabled (that is, where there are multiple
+outgoing edges in the graph of the FSM).  Only one action can be
+chosen.  The algorithm for choosing the action is called a *strategy*.
+In PyModel, the default strategy is random choice among the enabled
+actions.  It is also possible to code an optional *strategy* in order
+to improve test coverage according to some chosen measure.  
+
+Some useful strategies are already provided.  The
+``ActionNameCoverage`` strategy chooses different actions, while the
+``StateCoverage`` strategy attempts to reach unvisited states.  Here
+are some test cases generated from the stack model using different
+strategies::
+ 
+  Random        Action name   State
+  (default)     coverage      coverage
+  --------      --------      --------
+  Push(1,)      Push(1,)      Push(1,)     
+  Push(2,)      Pop(), 1      Push(2,)
+  Push(2,)      Push(2,)      Push(2,)
+  Push(1,)      Pop(), 2      Push(1,)
+  Pop(), 1      Push(1,)      Push(1,)
+  Pop(), 2      Pop(), 1      Push(1,)
+  Pop(), 2      Push(2,)      Push(2,)
+  Push(2,)      Pop(), 2      Push(2,)
+  Push(1.)      Push(1,)      Push(1,)
+  Push(1,)      Pop(), 1      Push(1,)
+
+
+Composition
+-----------
+
+We need *scenario control* to limit test runs to scenarios of
+interest.  PyModel uses *composition*, a versatile technique that
+combines two or more models to form a new model, the *product*.
+
+.. math::
+
+   M_1 \times M_2 = P
+
+Usually we combine a *contract model program* (with action
+functions, etc.) with a *scenario machine*, an FSM.
+
+.. math::
+
+   Contract \times Scenario = Product
+
+Composition can also be used for validation and program
+structuring.
+
+Composition syncrhonizes on shared actions.  This usually has the
+effect of restricting behavior (Figure :ref:`comp-shared`).
+
+.. figure:: comp-shared.pdf
+   :figclass: bht
+
+   Composition synchronizes on shared actions. :label:`comp-shared`
+
+Composition interleaves unshared actions.  This usually has the
+effect of adding behavior (Figure :ref:`comp-unshared`).
+
+.. figure:: comp-unshared.pdf
+   :figclass: bht
+
+   Composition interleaves unshared actions. :label:`comp-unshared`
+
+In this example we compose the model program with a scenario machine
+to eliminate redundant startup and shutdown paths.  Now the product
+will only generate interesting traces. (Figure
+:ref:`comp-interesting`).
+
+.. figure:: comp-interesting.pdf
+   :figclass: bht
+
+   Composition interleaves unshared actions. :label:`comp-interesting`
+
+
+Composition with a scenario can help validate a model program.  The
+product shows whether the model program can execute the complete
+scenario.  Does the product reach an accepting state? (Figure
+:ref:`comp-validate`).
+
+.. figure:: comp-validate.pdf
+   :figclass: bht
+
+   Composition with a scenario can help validate a model program. :label:`comp-validate`
 
 
 
-Related work
+Related work 
 ------------
 
 All is explained in [Jacky08]_.  
