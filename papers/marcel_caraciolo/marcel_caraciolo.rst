@@ -135,7 +135,19 @@ developers to connect with databases via Django's ORM or text files containing t
 we will consider a simple dataset including data about users, cleverly named "1" to "5" and their preferences for four movies, which we call
 "101" through "104". By loading this dataset and passing as parameter to the dataset loader, all the inputs will be loaded in memory by creating
 a Data Model object.  
- 
+
+Analyzing the data set, it is possible to notice that Users 1 and 5 seem to have similar tastes. Users 1 and 3 don't overlap much since the only
+movie they both express a preference for is 101. On other hand, users 1 and 2 tastes are opposite- 1 likes 101 while 2 doesn't, and 1 likes 103
+while 2 is just the opposite. By using one of recommender algorithms available in Crab such as the User-Based-Filtering with the given data set 
+loaded in a Data Model as input, just run this script using your favorite IDE as you can see the snippet code in the Figure 02 below.
+
+
+The output of running program should be:    . We asked for one top recommendation, and got one. The recommender engine recommended the
+book 104 to user 1. This happens because it estimated user 1's preference for book 104 to be about 4.3 and that was the highest among
+all the items eligible for recommendations. It is important to notice that all recommenders are estimators, so they estimate how much
+users may like certain items. The recommender worked well considering a small data set. Analyzing the data you can see that the recommender
+picked the movie 104 over all items, since 104 is a bit more highly rated overall. This can be refforced since user 1 has similar preferences
+to the users 4 and 5, where both have highly rated.
 
 For small data sets, producing recommendations appears trivial as showed above. However, for 
 data sets that are huge and noisy, it is a different situation. For instance, consider a popular news
@@ -144,6 +156,7 @@ many of these "preferences" may be noisy - maybe a reader clicked an article but
 or, had clicked the wrong story. Imagine also the size of the data set - perhaps billions of clicks in a 
 month. It is necessary for recommender engines to handle with real-life data sets, and Crab as Mahout
 is focusing on how to deal with large and sparse data sets, one of the main issues faced by Crab developers.
+
 
 Therefore, before deploying recommender engines in Crab into production, it is necessary to present 
 another main concept in Crab at the next section: representation of data.
