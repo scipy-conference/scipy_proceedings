@@ -105,6 +105,50 @@ this paper.
 
 Recommender Engines 
 -------------------
+Crab contains a recommender engine, in fact, several types beginning with conventional in the literature
+user-based and item-based recommenders. Crab provides an assortment of components that may be plugged together
+and customized to create an ideal recommender for a particular domain. The toolkit is implemented using Python
+and the scientific enviroments for numerical applications such as Scipy and NumPy. The decision of choosing those 
+libraries is because they are widely used in scientific computations specially in python programs. Another reason
+is because the framework uses the Scikit-learn toolkit as dependant, which provides basic components from our recommender
+interfaces derive. The Figure 01 presents the relationship between these basic components. Not all Crab-based recommenders
+will look like this -- some will employ different components with different relationships, but this gives a sense 
+of the role of each component. 
+
+FIGURE 01
+
+
+The Data Model implementation stores and provides access to all the preference, user and item data needed in the recommendation. The Similarity
+interface provides the notion of how similar two users or items are; where this could be based on one of many possible metrics or calculations.
+Finally, a Recommender interface which inherits the BaseEstimator from scikit-learn pull all these components together to recommend items
+to users, and related functionality. 
+
+It is easy to explore recommendations with Crab. Let's go through a trivial example. First, we need input to the recommender, data on which
+to base recommendations. Generally, this data takes the form of preferences which are associations from users to items, where these users and items
+could be anything. A preference consist of a user ID and an item ID, and usually a number expressing the strength of the user's preference
+for the item. IDs in Crab can be represented by any type indexable such as string, integers, etc. The preference value could be anything,
+as long as larger values mean strong positive preferences. For instance, these values can be considered as ratings on a scale of 1 to 5, where
+the user has assigned "1" to items he can't stand, and "5" to his favorites.
+
+Crab is able to work with text files containing information about users and their preferences. The current state of the framework allows
+developers to connect with databases via Django's ORM or text files containing the user IDs, product IDs and preferences. For instance, 
+we will consider a simple dataset including data about users, cleverly named "1" to "5" and their preferences for four movies, which we call
+"101" through "104". By loading this dataset and passing as parameter to the dataset loader, all the inputs will be loaded in memory by creating
+a Data Model object.  
+ 
+
+For small data sets, producing recommendations appears trivial as showed above. However, for 
+data sets that are huge and noisy, it is a different situation. For instance, consider a popular news
+site recommending new articles to readers. Preferences are inferred from article clicks. But,
+many of these "preferences" may be noisy - maybe a reader clicked an article but did not like it,
+or, had clicked the wrong story. Imagine also the size of the data set - perhaps billions of clicks in a 
+month. It is necessary for recommender engines to handle with real-life data sets, and Crab as Mahout
+is focusing on how to deal with large and sparse data sets, one of the main issues faced by Crab developers.
+
+Therefore, before deploying recommender engines in Crab into production, it is necessary to present 
+another main concept in Crab at the next section: representation of data.
+
+
 
 Representing Data
 -----------------
@@ -120,6 +164,9 @@ Distributing Recommendation Computations
 
 Conclusion and Future Works
 ---------------------------
+
+In this paper we have presented our efforts in building this toolkit in Python, which we believe that may be useful and make an increasing impact
+beyond the recommendation systems community by benefiting diverse applications. 
 
 
 References
