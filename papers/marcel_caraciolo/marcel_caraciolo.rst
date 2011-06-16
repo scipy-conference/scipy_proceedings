@@ -187,7 +187,19 @@ some association between user and item, an interesting scenario for using the Bo
 
 FIGURE 4 Simple Data Model with Boolean Data.
 
-Falar DE DATABASE E DEPOIS DE MEMORY ISSUES COM NUMPY (INVESTIGATING).
+Crab also support store and access preference data from a relational database. The developer can easily implement their recommender by using
+customized DataModels integrated with serveral databases. One example is the MongoDB, a NoN-SQL database commonly used for non-structured
+data. By using the Django's ORM, a popular web framework in Python and MongoEngine, a ORM adapter for integrating MongoDB with Django, we could
+easily set up a customized Data Model to access and retrieve data from MongoDB databases easily. In fact, it is already in production at 
+a recommender engine using Crab for a brazilian social network called Atepassar. But we will explore more about it in the next sections.
+
+One of the current challenges that we are facing is how to handle with all this data in-memory. Specially for recommender algorithms, which
+are data intensive. We ar currently investigating how to store data in memory and work with databases directly
+without using in-memory data representations. We are concerned that it is necessary for Crab to handle with huge data sets and keep all
+this data in memory can affects the performance of the recommender engines implemented with our framework. By now we are using Numpy arrays
+for storing the matrices and in the organization of this paper at the time we were discussing about using scipy.sparse packages, a Scipy 2-D
+sparse matrix package implemented for handling with sparse a matrices in a efficiently way.  
+
 
 Making Recommendations
 ----------------------
