@@ -145,11 +145,37 @@ Specializer Writers
 ...................
 Specializer writers use Asp infrastructure to build their domain-specific translators.  In Asp, we
 provide two ways to generate low-level code: templates (using Mako [Mako]_) and abstract syntax tree
-(AST) transformation. 
+(AST) transformation. For many kinds of computations, using templates is sufficient to translate from
+Python to C++, but for others, phased AST transformation allows application programmers to express
+arbitrary computations to specialize.
 
-Restrictions on Specializers
-............................
-Can't call back into python in parallel regions.
+In the structured grid specializer, the user-defined stencil kernel is first translated into a 
+Python AST, and analyzed to see if the specializer can produce correct code. If the application
+writer provided a kernel function that adheres to the restrictions of the specializer, the code
+is then processed through a series of AST transformations (more details are in the Example Walkthrough
+section below). Specializer writers subclass Asp infrastructure classes that implement a visitor
+patter on these ASTs (similar to Python's ``ast.NodeTransformer``) to implement their specialization
+phases. The last phase transforms the AST into a C++ AST, implemented using CodePy [CodePy_].
+
+Specializer writers can then use the Asp infrastructure to automatically compile, link, and execute
+the code in the final AST.  In many cases, the programmer may supply several code variants, represented
+by several ASTs, to the Asp infrastructure.  The different variants are run for subsequent calls to the
+specialized function until the fastest variant is determined, which is then always called by Asp. Performance
+data as well as cached compiled code is captured and stored to disk to be used even across
+interpreter startups.
+
+For specializer writers, the bulk of the work consists of exposing an understandable abstraction
+for specializer users, ensuring programs execute whether specialized or not, writing test functions
+to determine specializability (and giving the user meaningful feedback if not), and 
+expressing their translations as phased transforms.
+
+Currently, specializers do have several limitations.  The most important current limitation is
+that specialized code cannot call into the Python interpreter due to the interpreter not being
+thread safe.  We are implementing functionality to allow serialized calls back into the interpreter
+from specialized code.
+
+In the next section, we show an end-to-end walkthrough of an example using our stencil
+specializer.
 
 Example Walkthrough
 -------------------
@@ -160,7 +186,7 @@ two-dimensional stencil walks over the interior points of a grid and
 for each point computes the sum of the four surrounding points.
 
 .. figure:: exampleapp.pdf
-   :scale: 100 %
+   :scale: 80 %
    :align: center
 
    Example stencil application. Colored source lines match up to nodes of same color in Figure :ref:`pythonast`. :label:`exampleapp`
@@ -182,7 +208,7 @@ The translation performed by any specializer consists of five main phases, as sh
 #. Back end: Generate low-level source code, compile, and dynamically bind to make available from the host language.
 
 .. figure:: pipeline.pdf
-   :scale: 100 %
+   :scale: 80 %
    :align: center
 
    Pipeline architecture of a specializer. :label:`pipeline`
@@ -210,13 +236,13 @@ the DSIR shown in Figure :ref:`dsir`. Asp provides utilities to
 facilitate visiting the nodes of a tree and tree pattern matching.
 
 .. figure:: pythonast.pdf
-   :scale: 100 %
+   :scale: 90 %
    :align: center
 
    Initial Python abstract syntax tree. :label:`pythonast`
 
 .. figure:: dsir.pdf
-   :scale: 100 %
+   :scale: 90 %
    :align: center
 
    Domain-specific intermediate representation. :label:`dsir`
@@ -240,7 +266,7 @@ high-level representation used in DSIRs to the low-level
 platform-specific representation, which handles the body of the loop.
 
 .. figure:: asir.pdf
-   :scale: 100 %
+   :scale: 70 %
    :align: center
 
    Application-specific intermediate representation. :label:`asir`
@@ -312,12 +338,14 @@ on some classes of problems, as shown in Figure :ref:`gmmperfoverall`.
 
 .. figure:: gmmperf.pdf
    :figclass: bt
+   :align: center
 
    Runtimes of GMM variants as the D parameter is varied on an Nvidia Fermi GPU (lower is better).  The 
    specializer picks the best-performing variant to run. :label:`gmmperf`
 
 .. figure:: gmmperfoverall.pdf
    :figclass: bt
+   :align: center
 
    Overall performance of specialized GMM training versus original optimized CUDA algorithm.
    Even including specializer overhead, the specialized EM training outperforms the original
@@ -334,12 +362,14 @@ multicore processors.
 .. figure:: akxnaive.pdf
    :figclass: bt
    :scale: 95%
+   :align: center
 
    Naive :math:`A^kx` computation.  Communication required at each level. :label:`akxnaive`
 
 .. figure:: akxpa1.pdf
    :figclass: bt
    :scale: 95%
+   :align: center
 
    Algorithm PA1 for communication-avoiding matrix powers.  Communication occurs only
    after k levels of computation, at the cost of redundant computation. :label:`akxpa1`
@@ -369,7 +399,7 @@ communication-avoiding matrix powers kernel, Morlan implemented a conjugate grad
 solver in Python that uses the specializer. Figure :ref:`akxresults` shows the results for three test
 matrices and compares performance against ``scipy.linalg.solve`` which calls the LAPACK
 ``dgesv`` routine.  Even with just the matrix powers kernel specialized, the CA CG
-already outperforms the native C routine used by SciPy.
+already outperforms the native solver routine used by SciPy.
 
 
 Status and Future Plans
@@ -425,6 +455,8 @@ References
 .. [Cython] R. Bradshaw, S. Behnel, D. S. Seljebotn, G. Ewing, et al., The Cython compiler, http://cython.org.
 
 .. [Mako] Mako Templates for Python. http://www.makotemplates.org
+
+.. [CodePy] CodePy Homepage. http://mathema.tician.de/software/codepy
 
 .. [PHiPAC] J. Bilmes, K. Asanovic, J. Demmel, D. Lam, and
    C.W. Chin. PHiPAC: A Portable, High-Performance, ANSI C Coding
