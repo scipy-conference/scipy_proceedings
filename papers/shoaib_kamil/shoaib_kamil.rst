@@ -151,9 +151,120 @@ Restrictions on Specializers
 ............................
 Can't call back into python in parallel regions.
 
-Walkthru Example
-----------------
-Here is where the walkthru of the stencil example goes.
+Example Walkthrough
+-------------------
+In this section we will walk through a complete example of a SEJITS
+translation and execution on a simple stencil example. We begin with
+the application source shown in Figure :ref:`exampleapp`. This simple
+two-dimensional stencil walks over the interior points of a grid and
+for each point computes the sum of the four surrounding points.
+
+.. figure:: test.pdf
+   :scale: 100 %
+
+   Example stencil application. :label:`exampleapp`
+
+This code is executable Python and can be run and debugged using
+standard Python tools, but is slow. By merely modifying ExampleKernel
+to inherit from the StencilKernel base class, we activate the stencil
+specializer. Now, the first time the kernel() function is called, the
+call is redirected to the stencil specializer, which will translate it
+to low-level C++ code, compile it, and then dynamically bind the
+machine code to the Python environment and invoke it.
+
+The translation performed by any specializer consists of five main phases, as shown in Figure :ref:`pipeline`:
+
+#. Front end: Translate the application source into a domain-specific intermediate representation (DSIR).
+#. Perform platform-independent optimizations on the DSIR using domain knowledge.
+#. Select a platform and translate the DSIR into a platform-specific intermediate representation (PSIR).
+#. Perform platform-specific optimizations using platform knowledge.
+#. Back end: Generate low-level source code, compile, and dynamically bind to make available from the host language.
+
+.. figure:: test.pdf
+   :scale: 100 %
+
+   Pipeline architecture of a specializer. :label:`pipeline`
+
+As with any pipeline architecture, each phase's component is reusable
+and can be easily replaced with another component, and each component
+can be tested independently. These phases are similar to the phases of
+a typical optimizing compiler, but at a much smaller scale and with
+the aid of the Asp utilities which support many common tasks.
+
+In the stencil example, we begin by invoking the Python runtime to
+parse the kernel() function and produce the abstract syntax tree shown
+in Figure :ref:`pythonast`. The front end walks over this tree and matches certain
+patterns of nodes, replacing them with other nodes. For example, a
+call to the function interior_points() is replaced by a
+domain-specific StencilInterior node. If the walk encounters any
+pattern of Python nodes that it doesn't handle, for example a function
+call, the translation fails and produces an error message, and the
+application falls back on running the kernel() function as pure
+Python. In this case, the walk succeeds, resulting in the DSIR shown
+in Figure :ref:`DSIR`. Asp provides utilities to facilitate visiting the nodes
+pof a tree and tree pattern matching.
+
+.. figure:: test.pdf
+   :scale: 100 %
+
+   Initial Python abstract syntax tree. :label:`pythonast`
+
+.. figure:: test.pdf
+   :scale: 100 %
+
+   Domain-specific intermediate representation. :label:`dsir`
+
+The second phase uses our knowledge of the stencil domain to perform
+platform-independent optimizations. For example, we know that a point
+in a two-dimensional grid has four neighbors with known relative
+locations, allowing us to unroll the innermost loop, an optimization
+that makes sense on all platforms.
+
+The third phase selects a platform and translates to a
+platform-specific intermediate representation. In general, the
+platform selected will depend on available hardware, performance
+characteristics of the machine, and application preferences. In this
+example we will target a multicore platform using the OpenMP
+framework. At this point the loop over the interior points is mapped
+down to nested parallel for loops, as shown in Figure :ref:`asir`. The Asp
+framework provides general utilities for transforming arithmetic
+expressions and simple assignments from the high-level representation
+used in DSIRs to the low-level platform-specific representation, which
+handles the body of the loop.
+
+.. figure:: test.pdf
+   :scale: 100 %
+
+   Application-specific intermediate representation. :label:`asir`
+
+Because the specializer was invoked from the first call of the
+kernel() function, the arguments passed to that call are available. In
+particular, we know the dimensions of the input grid. By hardcoding
+these dimensions into the platform-specific intermediate
+representation, we enable a wider variety of optimizations during
+phases 4 and 5. For example, on a small grid such as the 8x8 blocks
+encountered in JPEG encoding, the loop over interior points may be
+fully unrolled.
+
+The fourth phase performs platform-specific optimizations. For
+example, we may partially unroll the inner loop to reduce branch
+penalties. This phase is the best place to include autotuning, which
+times several variants with different optimization parameters and
+selects the best one.
+
+Finally, the fifth phase, the backend, is performed by entirely by
+third-party components in the Asp framework and CodePy library. The
+PSIR is transformed into source code, compiled, and dynamically bound
+to the Python environment, which then invokes it and returns the
+result to the application. Interoperation between Python and C++ uses
+the Boost.Python library, which handles marshalling and conversion of
+types.
+
+The compiled kernel() function is cached so that if the function is
+called again later, it can be re-invoked directly without the overhead
+of specialization and compilation. If the input grid dimensions were
+used during optimization, the input dimensions must match on
+subsequent calls to reuse the cached version.
 
 
 Results
