@@ -141,6 +141,7 @@ movie they both express a preference for is 101. On other hand, users 1 and 2 ta
 while 2 is just the opposite. By using one of recommender algorithms available in Crab such as the User-Based-Filtering with the given data set 
 loaded in a Data Model as input, just run this script using your favorite IDE as you can see the snippet code in the Figure 02 below.
 
+FIGURE 02
 
 The output of running program should be:    . We asked for one top recommendation, and got one. The recommender engine recommended the
 book 104 to user 1. This happens because it estimated user 1's preference for book 104 to be about 4.3 and that was the highest among
@@ -156,31 +157,62 @@ many of these "preferences" may be noisy - maybe a reader clicked an article but
 or, had clicked the wrong story. Imagine also the size of the data set - perhaps billions of clicks in a 
 month. It is necessary for recommender engines to handle with real-life data sets, and Crab as Mahout
 is focusing on how to deal with large and sparse data sets, one of the main issues faced by Crab developers.
-
-
 Therefore, before deploying recommender engines in Crab into production, it is necessary to present 
-another main concept in Crab at the next section: representation of data.
-
-
+another main concept in our framework at the next section: representation of data.
 
 Representing Data
 -----------------
+Recommender systems are data-intensive and runtime performance is greatly affected by quantiy of data and its representation. In Crab
+the recommender-related data is encapsulated in the implementations of DataModel. DataModel provide efficient acces to data required
+by several recommender algorithms. For instance, a DataModel can provide a count or an array of all user IDs in the input data, or 
+provide access to all preferences associated to an item. 
+
+One of the implementations available in Crab  is the in-memory implementation DictDataModels. This model is appropriate if the developer
+wants to construct his data representation in memory by passing a dictionary of user IDs and their preferences for item IDs. One of benefits
+of this model is that it can easily work with JSON files, which is common as output at web services and REST APIs, since Python converts
+the json input into a bult-in dictionary. 
+
+FIGURE 3 Simple Data Model
+
+Typically the model that developers will use is the FileDataModel - which reads data from a file and stores the resulting preference data in memory,
+in a DictDataModel. Comma-separated-value or Tab-separated files which each line contains one datum: user ID, item ID and preference value are
+acceptable as input to the model. Zipped and gzipped files will also work, since they are commonly used for store huge data in a compressed format.
+
+For data sets which ignore the preference values, that is, ignore the strength of preference, Crab also has an appropriate DataModel twin of 
+DictDataModel called BooleanDictDataModel. This is likewise as in-memory DictDataModel implementation, but one which internally does not 
+store the preference values. These preferences also called "boolean preferences" have two states: exists, or does not exist and happens when
+preferences values aren't available to begin with. For instance, imagine a news site recommending articles to user based on previously viewed
+article. It is not typical for users to rate articles. So the recommender recommend articles based on previously viewed articles, whic establishes
+some association between user and item, an interesting scenario for using the BooleanDictModel.
+
+FIGURE 4 Simple Data Model with Boolean Data.
+
+Falar DE DATABASE E DEPOIS DE MEMORY ISSUES COM NUMPY (INVESTIGATING).
 
 Making Recommendations
 ----------------------
 
+* Explore Similarities, neighborhoods and comparing. 
+* Future extensions with content-based
+
 Taking Recommenders to Production
 ---------------------------------
 
+* THinking about recommendation as web-service with rest APIs
+* Show example of AtePassar Recommendations.
+
+
 Distributing Recommendation Computations
 ----------------------------------------
+* Current planning for working with Distributed computing.
+* Map-Reduces and Hadoop and Yelp.
+
 
 Conclusion and Future Works
 ---------------------------
 
 In this paper we have presented our efforts in building this toolkit in Python, which we believe that may be useful and make an increasing impact
 beyond the recommendation systems community by benefiting diverse applications. 
-
 
 References
 ----------
