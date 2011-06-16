@@ -102,10 +102,54 @@ Vision: SEJITS and Asp
 
 Approach/Mechanics of Asp
 -------------------------
-2 pages including the next 2 sections.  Need to make sure we differentiate between the host language and the transformation language.
+.. 2 pages including the next 2 sections.  Need to make sure we differentiate between the host language and the transformation language.
 
+Asp brings the SEJITS approach to Python, using Python both as the host language (i.e. 
+application programmers write their code in Python) and as the transformation system
+(code generation and transformation are also performed in Python). Specializers are
+encapsulated through classes and inheritance; other SEJITS implementations could use 
+mechanisms such as decorators.
 
+One of Asp's primary purposes is to promote a separation of concerns that separates
+application and algorithmic logic from making the application run fast.  Application
+writers need only program with high-level class-based constructs provided by 
+specializer writers.  It is the task of these specializer writers to ensure the constructs
+can be specialized into fast versions using infrastructure provided by the Asp team
+as well as third-party libraries.  An overview of this separation is shown in Figure
+:ref:`separation`.
 
+.. figure:: separation.pdf
+   :figclass: bt
+
+   Separation of concerns in Asp.  App authors write code that is transformed by specializers,
+   using Asp infrastructure and third-party libraries. :label:`separation`
+
+In the rest of this section, we outline Asp from the point of view of application writers and
+specializer writers, and outline the mechanisms the Asp infrastructure provides.
+
+Application Writers
+...................
+From the point of view of application writers, using a specializer means installing it and using
+the domain-specific classes defined by the specializer, while following the conventions outlined
+in the specializer documentation.  As a concrete example of a non-trivial specializer, we have
+implemented a specializer for structured grid (stencil) calculations, which provides a ``StencilKernel``
+class and a ``StencilGrid`` class (the latter is for the grid over which the stencil operates; it
+uses NumPy internally). An application writer merely needs to subclass the ``StencilKernel`` class
+and within this subclass, define a function ``kernel()`` which operates on ``StencilGrid`` instances.
+As long as the defined kernel function is restricted to the class of stencils outlined in the
+documentation, it will be specialized; otherwise the program will still run in pure Python.
+
+An example using our stencil specializer's constructs is shown in Figure :ref:`example`.
+
+Specializer Writers
+...................
+Specializer writers use Asp infrastructure to build their domain-specific translators.  In Asp, we
+provide two ways to generate low-level code: templates (using Mako [Mako]_) and abstract syntax tree
+(AST) transformation. 
+
+Restrictions on Specializers
+............................
+Can't call back into python in parallel regions.
 
 Walkthru Example
 ----------------
@@ -127,7 +171,8 @@ Gaussian Mixture Modeling
 .........................
 Gaussian Mixture Models (GMMs) are a class of statistical models used in a
 wide variety of applications, including image segmentation, speech recognition,
-document classification, and many other areas. Training such models is
+document classification, and many other areas. Training such models is done
+using the Expectation Maximization (EM) algorithm, which is
 iterative and highly data parallel, making it amenable to execution on GPUs as
 well as modern multicore processors. However, writing high performance GMM training
 algorithms are difficult due to the fact that different code variants will perform
@@ -136,8 +181,28 @@ a library for high performance GMM training amenable to the SEJITS approach.
 
 A specializer using the Asp infrastructure has been built by Cook and Gonina [Co10]_
 that targets both CUDA-capable GPUs and Intel multicore processors (with Cilk+).
-(Insert figure here from them?)
+The specializer implements four different parallelization strategies for the algorithm;
+depending on the sizes of the data structures used in GMM training, different strategies
+perform better.  Figure :ref:`gmmperf` shows performance for different strategies for
+GMM training on an Nvidia Fermi GPU as one of the GMM parameters are varied.  The specializer
+uses the best-performing variant (by using the different variants to do one iteration each,
+and selecting the best-performing one) for the majority of iterations.  As a result, even
+if specialization overhead (code generation, compilation/linking, etc.) is included, the 
+specialized GMM training algorithm outperforms the original, hand-tuned CUDA implementation
+on some classes of problems, as shown in Figure :ref:`gmmperfoverall`.
 
+.. figure:: gmmperf.pdf
+   :figclass: bt
+
+   Runtimes of GMM variants as the D parameter is varied on an Nvidia Fermi GPU (lower is better).  The 
+   specializer picks the best-performing variant to run. :label:`gmmperf`
+
+.. figure:: gmmperfoverall.pdf
+   :figclass: bt
+
+   Overall performance of specialized GMM training versus original optimized CUDA algorithm.
+   Even including specializer overhead, the specialized EM training outperforms the original
+   CUDA implementation. :label:`gmmperfoverall`
 
 Matrix Powers
 .............
@@ -212,6 +277,8 @@ that is then compiled and run.  Cython [Cython]_ is an effort to write
 a compiler for a subset of Python, while also allowing users to write
 extension code in C.
 
+Paragraph about Copperhead.
+
 The idea of using multiple code variants, with different optimizations 
 applied to each variant, is a cornerstone of auto-tuning.  Auto-tuning
 was first applied to dense matrix computations in the PHiPAC (Portable
@@ -237,6 +304,8 @@ References
 .. [PIL] Python Imaging Library. http://pythonware.com/products/pil.
 
 .. [Cython] R. Bradshaw, S. Behnel, D. S. Seljebotn, G. Ewing, et al., The Cython compiler, http://cython.org.
+
+.. [Mako] Mako Templates for Python. http://www.makotemplates.org
 
 .. [PHiPAC] J. Bilmes, K. Asanovic, J. Demmel, D. Lam, and
    C.W. Chin. PHiPAC: A Portable, High-Performance, ANSI C Coding
