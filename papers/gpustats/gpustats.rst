@@ -148,10 +148,10 @@ reduces numerical precision problems.
 .. point.
 
 Many numerical algorithms for fitting these likelihood-based models, especially
-Monte Carlo-based, involve evaluating the log-likelihood function at each
-iteration. Thus, as the size of the observed data grows, computational expense
-grows *as least* linearly in the number of data points. As above, if the data
-are assumed to be independently generated, the quantity :math:`\log p(x_i |
+Monte Carlo-based, involve evaluating the log-likelihood function over thousands
+of iterations. Thus, as the size of the observed data grows, computational
+expense grows *as least* linearly in the number of data points. As above, if the
+data are assumed to be independently generated, the quantity :math:`\log p(x_i |
 \Theta)` for each observation :math:`x_i` can be evaluated in parallel then
 summed to compute the full log-likelihood. This becomes a very natural setting
 for GPUs, and it is quite easy for GPUs to perform even better than large CPU
@@ -170,8 +170,8 @@ Challenges of GPU Computing in Statistical Inference
 ----------------------------------------------------
 
 As mentioned above, a CUDA or OpenCL programmer must be very mindful of the
-memory architecture of the GPU. In CUDA parlance, there are multiple memory
-management issues to address, in particular
+memory architecture of the GPU. There are multiple memory management issues to
+address, in CUDA parlance
 
 * *Coalescing* transactions between global and shared memory; this is,
   coordinating groups of typically 16 to 32 threads to copy a contiguous chunk
@@ -192,14 +192,15 @@ function which can compute the log pdf for a single datum is
       float std = params[1];
       float xstd = (*x - params[0]) / std;
       return - (xstd * xstd) / 2 - 0.5 * LOG_2_PI
-	         - log(std);
+             - log(std);
    }
 
 In practice, one would hope that implementing a new probability density such as
 this would be as simple as writing this 4-line function. Unfortunately, to
 achieve optimal performance, the majority of one's attention must be focused on
-properly addressing the above essentially cache optimization problems. Thus, the
-full form of a GPU kernel implementing a pdf is typically as follows:
+properly addressing the above data coordination / cache optimization
+problems. Thus, the full form of a GPU kernel implementing a pdf is typically as
+follows:
 
 * Coordinate threads to copy (coalesce, if possible) data needed for thread
   block to shared memory
@@ -215,8 +216,8 @@ involved. Since the kernels are structurally the same, we would be interested in
 a way to reuse the code for steps 1, 2, and 4, which will likely be nearly
 identical for most of the functions. Were we programming in C, doing so would be
 quite difficult. But, since we have PyCUDA/PyOpenCL at our disposal,
-metaprogramming techniques can be utilized to do just that, as we will discuss
-later.
+metaprogramming techniques can be utilized to do just that, as we will later
+discuss.
 
 With respect to probability densities, we will make a brief distinction between
 *univariate* (observations are a single floating point value) and *multivariate*
@@ -229,12 +230,25 @@ In a more general framework, we might wish to evaluate the pdf for multiple
 parameters at once, e.g. :math:`(\mu_1, \sigma^2_1), \dots, .. (\mu_K,
 \sigma^2_K)`. In other words, :math:`N * K` densities need to be computed. A
 naive but wasteful approach would be to make :math:`K` roundtrips to the GPU for
-each of the :math:`K` parameters. A better approach is to divide the data /
-parameter combinations among the GPU grid to maximize data reuse via the shared
-memory. This introduces the additional question of how to divide the problem
+each of the :math:`K` sets of parameters. A better approach is to divide the
+data / parameter combinations among the GPU grid to maximize data reuse via the
+shared memory and perform all :math:`N * K` density computations in a single GPU
+invocation. This introduces the additional question of how to divide the problem
 among thread blocks viz. optimally utilizing shared memory. As the available GPU
-resources are device specific, we would wish to dynamic determine the optimal
-division of labor among thread blocks based on the GPU in use.
+resources are device specific, we would wish to dynamically determine the
+optimal division of labor among thread blocks based on the GPU being used.
+
+For sampling random variables on the GPU, the process is reasonably
+similar. Just as with computing the density function, sampling requires the same
+parameters for each distribution to be passed. Many distributions can be derived
+by transforming draws from a uniform random variable on the interval [0,
+1]. Thus, for such distributions it makes most sense to precompute uniform draws
+(either using the CPU or the GPU) and pass these precomputed draws to the GPU
+kernel. However, there are widely-used distributions, such as the gamma
+distribution, which are commonly sampled via *adaptive rejection sampling*. With
+this algorithm, the number of uniform draws needed to produce a single sample is
+not known *a priori*. Thus, such distributions would be very difficult to sample
+on the GPU.
 
 .. In the **gpustats** package, we have three primary goals that we will address
 .. here. First, we hide the ubiquitous boilerplate code common to all GPU
@@ -280,6 +294,67 @@ division of labor among thread blocks based on the GPU in use.
 Metaprogramming probability density kernels and beyond
 ------------------------------------------------------
 
+The **gpustats** Python library leverages the compilation-on-the-fly
+capabilities of PyCUDA and metaprogramming techniques to simply the process of
+writing new GPU kernels for computing probability density functions, samplers,
+and other related statistical computing functionality. As described above in the
+normal distribution case, one would hope that writing a new density function
+would amount to writing the simple ``log_normal_pdf`` function and having the
+untidy global-shared cache management problem taken care of by the
+library. Additionally, we would like to have a mechanism for computing
+transformed versions of existing kernels. For example, ``log_normal_pdf`` could
+be transformed to the unlogged density by applying the exponent function.
+
+To solve these problems, we have developed a prototype object-oriented code
+generation framework to make it easy to develop new kernels with minimal effort
+by the statistical user. We do so by taking advantage of the string templating
+functionality of Python and the CUDA API's support for inline functions on the
+GPU. These inline functions are known as device functions, marked by
+``__device__``. Since the data transfer / coalescing problem needs to be only
+solved once for each variety of kernel, we can use templating to generate a
+custom kernel for each new device function implementing a new probability
+density. It is then not too much of a stretch to enable elementwise
+transformations of existing device functions, e.g. taking the ``exp`` of a
+logged probability density. In the **gpustats** framework, the code for
+implementing the logged and unlogged normal pdf is as follows:
+
+.. code-block:: python
+
+   _log_pdf_normal = """
+    __device__ float %(name)s(float* x, float* params) {
+      // mean stored in params[0]
+      float std = params[1];
+
+      // standardize
+      float xstd = (*x - params[0]) / std;
+      return - (xstd * xstd) / 2 - 0.5f * LOG_2_PI
+	         - log(std);
+    }
+   """
+   log_pdf_normal = DensityKernel('log_pdf_normal',
+                                  _log_pdf_normal)
+   pdf_normal = Exp('pdf_normal', log_pdf_normal)
+
+The **gpustats** code generator will, at import time, generate a CUDA source
+file to be compiled on the fly by PyCUDA. Note that the ``%(name)s`` template is
+there to enable the device function to be given an appropriate (and
+non-conflicting) name in the generated source code, given that multiple versions
+of a single device function may exist. For example, the ``Exp`` transform
+generates a one-line device function taking the ``exp`` of the logged density
+function.
+
+Python interface and device-specific optimization
+-------------------------------------------------
+
+Some benchmarks
+---------------
+
+Future: Port to use PyOpenCL
+----------------------------
+
+Future: PyMC integration
+------------------------
+
 References
 ----------
 
@@ -290,13 +365,13 @@ References
       http://www.khronos.org/opencl/
 
 .. [JCGS] M. Suchard, Q. Wang, C. Chan, J. Frelinger, A. Cron and M. West.
-   	  *Understanding GPU programming for statistical computation: Studies
-	  in massively parallel massive mixtures.* Journal of Computational
-	  and Graphical Statistics 19 (2010): 419-438
-	  http://pubs.amstat.org/doi/abs/10.1198/jcgs.2010.10016
+      *Understanding GPU programming for statistical computation: Studies
+      in massively parallel massive mixtures.* Journal of Computational
+      and Graphical Statistics 19 (2010): 419-438
+      http://pubs.amstat.org/doi/abs/10.1198/jcgs.2010.10016
 
 .. [NvidiaGuide] NVIDIA Corporation. *Nvidia CUDA: Programming Guide.* (2010),
-   		 http://developer.download.nvidia.com/compute/cuda/3_0/toolkit/docs/NVIDIA_CUDA_ProgrammingGuide.pdf
+         http://developer.download.nvidia.com/compute/cuda/3_0/toolkit/docs/NVIDIA_CUDA_ProgrammingGuide.pdf
 
 .. [PyMC] C. Fonnesbeck, A. Patil, D. Huard,
           *PyMC: Markov Chain Monte Carlo for Python*,
@@ -309,7 +384,7 @@ References
            http://scipy.org
 
 .. [PyCUDA] A. Klockner,
-   	    http://mathema.tician.de/software/pycuda
+        http://mathema.tician.de/software/pycuda
 
 .. [PyOpenCL] A. Klockner,
-   	      http://mathema.tician.de/software/pyopencl
+          http://mathema.tician.de/software/pyopencl
