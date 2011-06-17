@@ -15,10 +15,7 @@ Bringing Parallel Performance to Python  with Domain-Specific Selective Embedded
 ------------------------------------------------------------------------------------------------------------
 
 
-
-.. class:: abstract
-
-    Due to physical limits, processor clock scaling is no longer the path
+..    Due to physical limits, processor clock scaling is no longer the path
     to better performance.  Instead, hardware designers are using Moore's law
     scaling to increase the available hardware parallelism on modern processors.
     At the same time, domain scientists are increasingly using modern scripting
@@ -28,7 +25,6 @@ Bringing Parallel Performance to Python  with Domain-Specific Selective Embedded
     addition, many domain scientists do not have the expertise to directly write
     parallel codes for many different kinds of hardware, each with specific
     idiosyncrasies.
-
     Instead, we propose SEJITS [Cat09]_, a methodology that uses high-level abstractions and the
     capabilities of powerful scripting languages to bridge this
     performance-productivity gap.  SEJITS, or Selective Embedded Just-In-Time Specialization,
@@ -37,12 +33,39 @@ Bringing Parallel Performance to Python  with Domain-Specific Selective Embedded
     know how to obtain the highest performance from a parallel machine, encapsulate their knowledge into 
     domain-specific "specializers", which translate abstractions into
     parallel code.
-
     We have been implementing Asp, A SEJITS implementation for Python,
     to bring the SEJITS methodology to Python programmers.  Although
     Asp is still under development, the current version shows
     promising results and provides insights and ideas into the
     viability of the SEJITS approach.
+
+.. class:: abstract
+    Due to physical limits, processor clock scaling is no longer the path
+    to better performance.  Instead, hardware designers are using Moore's law
+    scaling to increase the available hardware parallelism on modern processors,
+    which are increasingly complex and difficult to program efficiently. "Efficiency"
+    languages such as CUDA, OpenCL, and C++ allow programmers to exploit this parallel
+    hardware, while more "productive" languages such as Python lack the hardware
+    transparency required.  At the same time, Python and other high-level productivity
+    languages are easier to program and maintain due to their ability to express
+    more functionality in less code.
+
+    As a result, programmers must choose whether to write high-level, maintainable
+    code or code that exploits low-level hardware features.  This "performance-productivity
+    gap" is addressed by the SEJITS (Selective Embedded Just-in-Time Specialization)
+    methodology, which allows programmers to have performance-portable, highly-productive
+    code by embedding domain-specific DSLs within high-level languages that are then
+    specialized into high-performance low-level code
+    by leveraging metaprogramming and introspection features of productivity languages,
+    all occurring invisibly to the programmer.
+
+    We present Asp (Asp is a SEJITS implementation for Python) and initial results from
+    several domains. Using domain-specific specializers, highly-productive Python code
+    can obtain high parallel performance without sacrificing maintainability or portability.
+
+    
+
+   
 
 .. class:: keywords
 
@@ -139,7 +162,7 @@ and within this subclass, define a function ``kernel()`` which operates on ``Ste
 As long as the defined kernel function is restricted to the class of stencils outlined in the
 documentation, it will be specialized; otherwise the program will still run in pure Python.
 
-An example using our stencil specializer's constructs is shown in Figure :ref:`example`.
+An example using our stencil specializer's constructs is shown in Figure :ref:`exampleapp`.
 
 Specializer Writers
 ...................
