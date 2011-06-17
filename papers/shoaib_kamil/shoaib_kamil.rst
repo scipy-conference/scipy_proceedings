@@ -157,8 +157,7 @@ with higher-level domain information than most compilers can assume.
 
 
 Asp: Approach and Mechanics
--------------------------
-.. 2 pages including the next 2 sections.  Need to make sure we differentiate between the host language and the transformation language.
+---------------------------
 
 High-level productivity or scripting languages have evolved to include
 sophisticated introspection and FFI (foreign function interface)
@@ -430,14 +429,43 @@ subsequent calls to reuse the cached version.
 
 Results
 -------
-Results.
+To demonstrate the performance and productivity effectiveness of our stencil
+specializer, we implemented two different computational stencil kernels using
+our abstractions: a 3D laplacian operator, and a 3D divergence kernel.  
+For both kernels, we run a simple benchmark that iteratively calls our specializer
+and measures the time for applying the operator (we ensure the cache is cleared in
+between calls).
+Both calculations are memory-bound; that is, they are limited by the available
+memory bandwidth from memory.  Therefore, in accordance to the roofline model [SaWi09]_,
+we measure performance compared to measured memory bandwidth performance using the
+parallel STREAM [STREAM]_ benchmark.
+
+Figure :ref:`stencilresults` shows the results of running our kernels on a single-socket
+quad-core Intel Core i7-840 machine running at 2.93 GHz, using both the OpenMP and Cilk+ backends.
+First-run time is not shown; the code
+generation and compilation takes tens of seconds (mostly due to the speed of the
+Intel compiler).  In terms of performance, for the 3D laplacian, we obtain 87% of peak
+memory bandwidth, and 64% of peak bandwidth for the more cache-unfriendly divergence
+kernel, even though we have only implemented limited optimizations.  From previous
+work [Kam10]_, we believe that, by adding only a few more tuning parameters, we can
+obtain over 95% of peak performance for these kernels.
+
+In terms of productivity, it is interesting to note the difference in LoC between the
+stencils written in Python and the produced low-level code.  Comparing the divergence
+kernel with its best-performing produced variant, we see an increase from five lines
+to over 700 lines--- an enormous difference.  The Python version expresses the computation succinctly; using
+machine characteristics to express fast code requires expressing the stencil
+more verbosely in a low-level language. With our specialization infrastructure, programmers can continue
+to write succinct code and have platform-specific fast code generated for them.
+
+
 
 .. figure:: stencilresults.pdf
    :figclass: bt
    :align: center
 
    Performance as fraction of memory bandwidth peak for two specialized stencil kernels.
-   All tests compiled using the Intel C++ compiler 12.0 on a Core i7-840.
+   All tests compiled using the Intel C++ compiler 12.0 on a Core i7-840. :label:`stencilresults`
 
 Other Specializers
 ------------------
@@ -591,6 +619,8 @@ References
 
 .. [Biopy] Biopython.  http://biopython.org.
 
+.. [STREAM] The STREAM Benchmark. http://www.cs.virginia.edu/stream
+
 .. [PIL] Python Imaging Library. http://pythonware.com/products/pil.
 
 .. [Cython] R. Bradshaw, S. Behnel, D. S. Seljebotn, G. Ewing, et al., The Cython compiler, http://cython.org.
@@ -634,3 +664,7 @@ References
 
 .. [Ho09] M. Hoemmen. Communication-Avoiding Krylov Subspace Methods.  PhD thesis, EECS Department,
    University of California, Berkeley, May 2010.
+
+.. [SaWi09] S. Williams, A. Waterman, D. Patterson. 
+   Roofline: An Insightful Visual Performance Model for Floating-Point Programs and Multicore Architectures.
+   Communications of the ACM (CACM), April 2009.
