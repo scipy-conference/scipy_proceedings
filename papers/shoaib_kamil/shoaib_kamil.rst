@@ -328,6 +328,12 @@ Results
 -------
 Results.
 
+.. figure:: stencilresults.pdf
+   :figclass: bt
+   :align: center
+
+   Performance as fraction of memory bandwidth peak for two specialized stencil kernels.
+   All tests compiled using the Intel C++ compiler 12.0 on a Core i7-840.
 
 Other Specializers
 ------------------
@@ -415,7 +421,7 @@ using vectorization is in progress.
    :figclass: bht
 
    Results comparing communication-avoiding CG with our matrix powers specializer and
-   SciPy's default solver. :label:`akxresults`
+   SciPy's default solver. FIXME: MACHINE?:label:`akxresults`
 
 To see what kinds of performance improvements are possible using the specialized
 communication-avoiding matrix powers kernel, Morlan implemented a conjugate gradient (CG)
@@ -464,6 +470,14 @@ including sparse matrix-vector multiplication (SpMV) [OSKI]_, Fast
 Fourier Transforms (FFTs) [SPIRAL]_, and multicore versions of 
 stencils [KaDa09]_, [Kam10]_, [Poich]_, showing large improvements 
 in performance over simple implementations of these kernels.
+
+Acknowledgements
+----------------
+We would like to acknowledge Henry Cook, Ekaterina Gonina, and Jeffrey Morlan
+for their work implementing specializers.  
+Research supported by DARPA as well as Microsoft (Award #024263) and Intel (Award #024894) funding 
+and by matching funding by U.C. Discovery (Award #DIG07-10227). Additional support 
+from Par Lab affiliates National Instruments, NEC, Nokia, Nvidia, Oracle, and Samsung.
 
 
 
