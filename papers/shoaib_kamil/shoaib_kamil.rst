@@ -141,18 +141,30 @@ The insight of our approach is that because each embedded DSL is
 specific to just one type of computational pattern (stencil, matrix
 multiplication, etc.), we can select an implementation strategy and
 apply optimizations that take advantage of this domain information in
-generating the efficiency-level code.  For example, returning to the
-stencil example above, a fundamental stencil "primitive" is applying the
-function to each neighbor of a stencil point.  Because we know the
-semantics of the stencil operation, optimizations such as loop unrolling
-or loop transposition can take advantage of this knowledge, which would
-be impossible if we were trying to perform loop unrolling or
-transposition without knowing the context.  (AF: need a crisper example
-of this, ie what optimizations can we do to optimize neighbor iteration
-that would not necessarily apply to loops in general) We therefore
+generating the efficiency-level code. For example, returning to the 
+domain of stencils, one optimization called *time skewing* [Wonn00]_
+involves blocking in time for a stencil applied repeatedly to the
+same grid--- a transformation that requires knowing the "footprint"
+of the stencil.  Because we have easy access to this information, since
+we know it is a stencil and are not writing a general compiler,
+we can more easily write this transformation, taking advantage of our
+domain-specific knowledge and not having to write some way to "detect"
+a stencil and its footprint from general loops.
+We therefore
 leverage the dynamic features of modern languages like Python to defer
 until runtime what most libraries must do at compile time, and to do it
 with higher-level domain information than most compilers can assume.
+
+.. For example, returning to the
+   stencil example above, a fundamental stencil "primitive" is applying the
+   function to each neighbor of a stencil point.  Because we know the
+   semantics of the stencil operation, optimizations such as loop unrolling
+   or loop transposition can take advantage of this knowledge, which would
+   be impossible if we were trying to perform loop unrolling or
+   transposition without knowing the context.  (AF: need a crisper example
+   of this, ie what optimizations can we do to optimize neighbor iteration
+   that would not necessarily apply to loops in general) 
+
 
 
 
@@ -668,3 +680,6 @@ References
 .. [SaWi09] S. Williams, A. Waterman, D. Patterson. 
    Roofline: An Insightful Visual Performance Model for Floating-Point Programs and Multicore Architectures.
    Communications of the ACM (CACM), April 2009.
+
+.. [Wonn00] D. Wonnacott. Using Time Skewing to Eliminate Idle Time due to Memory Bandwidth and Network Limitations.
+   International Parallel and Distributed Processing Symposium, 2000.
