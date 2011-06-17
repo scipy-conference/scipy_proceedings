@@ -121,7 +121,7 @@ interpreted function is being called.
 
 Vision: SEJITS and Asp
 ----------------------
-1 page.
+.. include:: papers/shoaib_kamil/vision.include
 
 Approach/Mechanics of Asp
 -------------------------
