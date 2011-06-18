@@ -84,16 +84,16 @@ Introduction
 It has always been a challenge for productivity programmers, such as
 scientists who write code to support their science, to get both good
 performance and ease of programming.  This is attested by the
-proliferation of high-performance libraries such as BLAS, OSKI and
-FFTW, by domain-specific languages like Spiral, and by the
-popularity of the natively-compiled SciPy libraries among others.
+proliferation of high-performance libraries such as BLAS, OSKI [OSKI]_ and
+FFTW [FFTW]_, by domain-specific languages like Spiral [Spiral]_, and by the
+popularity of the natively-compiled SciPy [SciPy]_ libraries among others.
 To make things worse, processor clock scaling has run into physical
 limits, so future performance increases will be the result of
 increasing hardware parallelism rather than single-core speedup,
 making the programming problem even more complex.
 
 As a result, programmers must choose between productive and maintainable
-code with modest performance (e.g. Python plus native libraries such as  SciPy [SciPy]_)
+code with modest performance (e.g. Python plus native libraries such as  SciPy)
 or complex, brittle, hardware-specific code 
 that entangles application logic with performance concerns but runs two
 to three orders of magnitude faster (e.g. C++ with OpenMP, Cuda, etc.).
@@ -124,7 +124,7 @@ driven by the fact that often runtime information is necessary to
 choose the best execution strategy or tuning-parameter values.
 
 We therefore propose a new methodology to  address this performance-productivity
-gap, called SEJITS (Selective Embedded Just-in-Time Specialization).
+gap, called SEJITS (Selective Embedded Just-in-Time Specialization) [Cat09]_.
 This methodology embeds domain-specific languages within high-level
 languages, and the embedded DSLs are 
 specialized at runtime into high-performance, low-level code
@@ -141,7 +141,7 @@ generating the efficiency-level code. For example, returning to the
 domain of stencils, one optimization called *time skewing* [Wonn00]_
 involves blocking in time for a stencil applied repeatedly to the
 same grid.  This transformation is not meaningful unless we know the
-computation is a stencil and we also know the stencil's "footprint", so
+computation is a stencil and we also know the stencil's "footprint," so
 a generic optimizing compiler would be unable to identify the
 opportunity to apply it.
 
@@ -149,17 +149,6 @@ We therefore
 leverage the dynamic features of modern languages like Python to defer
 until runtime what most libraries must do at compile time, and to do it
 with higher-level domain knowledge than can be inferred by most compilers.
-
-.. For example, returning to the
-   stencil example above, a fundamental stencil "primitive" is applying the
-   function to each neighbor of a stencil point.  Because we know the
-   semantics of the stencil operation, optimizations such as loop unrolling
-   or loop transposition can take advantage of this knowledge, which would
-   be impossible if we were trying to perform loop unrolling or
-   transposition without knowing the context.  (AF: need a crisper example
-   of this, ie what optimizations can we do to optimize neighbor iteration
-   that would not necessarily apply to loops in general) 
-
 
 
 
@@ -731,6 +720,10 @@ References
     Y. Voronenko, K. Chen, R. W. Johnson,  N. Rizzolo. 
     SPIRAL: Code generation for DSP transforms. Proceedings of the
     IEEE special issue on "Program Generation, Optimization, and Adaptation".
+
+.. [FFTW] M. Frigo and S. Johnson. The Design and Implementation of FFTW3.
+   Proceedings of the IEEE 93 (2), 216–231 (2005). Invited paper, Special Issue on Program Generation, 
+   Optimization, and Platform Adaptation.
 
 .. [Cat09] B. Catanzaro, S. Kamil, Y. Lee, K. Asanovic, J. Demmel,
    K. Keutzer, J. Shalf, K. Yelick, A. Fox. SEJITS: Getting
