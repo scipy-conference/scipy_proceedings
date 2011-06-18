@@ -191,7 +191,7 @@ Crab also support store and access preference data from a relational database. T
 customized DataModels integrated with serveral databases. One example is the MongoDB, a NoN-SQL database commonly used for non-structured
 data. By using the Django's ORM, a popular web framework in Python and MongoEngine, a ORM adapter for integrating MongoDB with Django, we could
 easily set up a customized Data Model to access and retrieve data from MongoDB databases easily. In fact, it is already in production at 
-a recommender engine using Crab for a brazilian social network called Atepassar. But we will explore more about it in the next sections.
+a recommender engine using Crab for a brazilian social network called Atepassar. We will explore more about it in the next sections.
 
 One of the current challenges that we are facing is how to handle with all this data in-memory. Specially for recommender algorithms, which
 are data intensive. We ar currently investigating how to store data in memory and work with databases directly
@@ -200,24 +200,95 @@ this data in memory can affects the performance of the recommender engines imple
 for storing the matrices and in the organization of this paper at the time we were discussing about using scipy.sparse packages, a Scipy 2-D
 sparse matrix package implemented for handling with sparse a matrices in a efficiently way.  
 
+Now we have discussed about how Crab represents the data input to recommender, in the next section it will examine the recommenders implemented
+in detail as also how to evaluate recommenders using Crab tools.
 
 Making Recommendations
 ----------------------
 
-* Explore Similarities, neighborhoods and comparing. 
-* Future extensions with content-based
+Crab already supports the collaborative recommender user-based and item-based approaches. They are considered in some of the earliest
+research in the field. The user-based recommender algorithm can be described as a process of recommending items to some user, denoted by u,
+as follows:
+
+Colocar o algoritmo.
+
+The outer loop suggests we should consider every known item that the user hasn't already expressed a preference for as a candidate
+for recommendation. The inner loop suggests that we should look to any other user who has expressed a preference for this candidate
+item and see what his or her preference value for it was. In the end, those values are averaged to come up with an estimate -- a 
+weighted average.  Each preference value is weigthed in the average by how similar that user is to the target user. The more similar
+a user, the more heavily that we weight his or her preference value. In the standard user-based recommendation algorithm, in the step
+of searching for every known item in the data set, instead, a "neighborhood" of most similar users is computed first, and only items
+known to those users are considered.
+
+In the first section we have already presented a user-based recommender in action. Let's go back to it in order to explore the 
+components the approach uses.
+
+SNIPPET CODE.
+
+UserSimilarity encapsulates the concept of similarity amongst users. The UserNeighborhood encapsulates the notion of a group
+of most-similar users. The UserNeighborhood uses a UserSimilarity, which extends the basic interface BaseSimilarity. However,
+the developers are encouraged to to plug in new ideas of similarity - just creating new BaseSimilarity implementations - 
+and get quite different results. As you will see, Crab is not one recommender engine at all, but a set of components that may be
+plugged together in order to create customized recommender systems for a particular domain. Here we sum up the components used in 
+the user-based approach:
+
+* Data model implemented via DataModel
+* User-to-User similarity metric implemented via UserSimilarity
+* User neighborhood definition implementd via UserNeighborhood
+* Recommender engine implemented via Recommender, in this case, UserBasedRecommender
+
+The same approach can be used at UserNeighborhood where developers also can create their customized neighborhood approaches 
+for defining the set of most similar users. Another important part of recommenders to examine is the pairwise metrics implementation.
+In the case of the User-based recommender, it relies most of all in this component. Crab implements several similarity metrics
+using the Numpy and Scipy scientific libraries such as Pearson Correlation, Euclidean distance, Cosine measure and metric implementations
+that ignore preferences entirely like as Tanimoto coefficient and Log-likehood.
+
+Another approach to recommendation implemented in Crab is the item-based recommender. Item-based recommendation is derived from how similar
+items are to items, instead of users to users. The algorithm implemented is familiar to the user-based recommender:
+
+ALGORITHM
+
+
+In this algorithm it is evaluated the item-item similarity, not user-user similarities as shown at the user-based approach. Although they
+look similar, there are different properties. For instance, the running time of an item-based recommender scales up as the number of 
+items increases, whereas a user-based recommender's running time goes up as the number of users increases. The perfomance advantage
+in item-based approach is significant compared to the user-based one.
+
+
+Let's see how to use item-based recommender in Crab with the following code. Here it employs ItemBasedRecommender rather than
+UserBasedRecommender, and it requires a simpler set of dependencies. It also implements the ItemSimilarity interface,
+which is similar to the UserSimilarity interface that we've already seen. The ItemSimilarity also works with the pairwise metrics
+used in the UserSimilarity. There is no itemneighborhood, since it compares series of preferences expressed by many users for one item
+instead of by one user for many items.
+
+* Evaluation
+* Future extensions with Slope one , SVD, Boltzman and Fatorization and content-based.
+
 
 Taking Recommenders to Production
 ---------------------------------
 
-* THinking about recommendation as web-service with rest APIs
-* Show example of AtePassar Recommendations.
+So far we have presented the recommender algorithms and variants that Crab provides. we also presented how Crab handles with
+performance and accuracy evaluation of a recommender. But another important step for a recommender lifecycle is to turn it into a
+deployable production-ready web service.
+
+
 
 
 Distributing Recommendation Computations
 ----------------------------------------
-* Current planning for working with Distributed computing.
-* Map-Reduces and Hadoop and Yelp.
+For large data sets with millions of preferences, the current approaches for single machines would have trouble processing recommendations
+in the way we have seen in the last sections. It is necessary to deploy a new type of recommender algorithms using a distributed 
+computing approach. One of the most popular paradigms is the MapReduce and Hadoop.
+
+Crab didn't support at the time of writting this paper distributed computing, but we are planning to develop variations on the item-based
+recommender approach in order to run it in the distributed world. One of our plans is to use the Yelp framework mrJob which supports
+Hadoop and it is written in Python, so we may easily integrate with our framework. One of the main concerns in this topic
+is to give Crab a scalable and efficient recommender implementation without having high memory and resources consumption as the number of items grows.
+
+Another concern is to investigate and develop other distributed implementations such as Slope One, Matrix Factorization, giving the developer 
+alternatives for choosing the best solution for its need specially when handling with large data sets using the power of Hadoop's MapReduce
+computations.
 
 
 Conclusion and Future Works
