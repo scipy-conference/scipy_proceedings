@@ -252,24 +252,56 @@ ALGORITHM
 In this algorithm it is evaluated the item-item similarity, not user-user similarities as shown at the user-based approach. Although they
 look similar, there are different properties. For instance, the running time of an item-based recommender scales up as the number of 
 items increases, whereas a user-based recommender's running time goes up as the number of users increases. The perfomance advantage
-in item-based approach is significant compared to the user-based one.
+in item-based approach is significant compared to the user-based one.Let's see how to use item-based recommender in Crab with the following code. 
 
+CODE
 
-Let's see how to use item-based recommender in Crab with the following code. Here it employs ItemBasedRecommender rather than
-UserBasedRecommender, and it requires a simpler set of dependencies. It also implements the ItemSimilarity interface,
+Here it employs ItemBasedRecommender rather than UserBasedRecommender, and it requires a simpler set of dependencies. It also implements the ItemSimilarity interface,
 which is similar to the UserSimilarity interface that we've already seen. The ItemSimilarity also works with the pairwise metrics
 used in the UserSimilarity. There is no itemneighborhood, since it compares series of preferences expressed by many users for one item
 instead of by one user for many items.
 
-* Evaluation
-* Future extensions with Slope one , SVD, Boltzman and Fatorization and content-based.
+
+Now that we have seen some techniques implemented at Crab, which produces recommendations for a user, it is now time to answer
+another question, "what are the best recommendations for a user ?". A recommender engine is a tool and predicts user preferences
+for items that he haven't expressed any preference for. The best possible recommender is a tool that could somehow know,
+before you do, exactly estimate how much you would like every possible item available. The remainder of this section pauses to explore
+evaluation of a recommender, a important step in the construction of a recommender system, which focus on the evaluating the quality
+of the its estimated preference values - that is, evaluating how closely the estimated preferences match the actual preferences.
+
+Crab supports several metrics widely used in the recommendation literature such as the RMSE (root-mean-square-error), precision, recall
+and F1-Score. Let's see the previous example code and instead evaluate the simple recommender we created, on our data set:
+
+CODE
+
+Most of the action happens in evaluate(). The RecommenderEvaluator handles sppliting the data into a training and test set, builds a new 
+training DataModel and Recommender to test, and compares its estimated preferences to the actual test data. See that we pass the Recommender
+to this method. This is because the evaluator will need to build a Recommender around a newly created training DataModel. This simple code
+prints the result of the evaluation: a score indicating how well the Recommender performed. The evaluator is an abstract class, so the developers
+may build their custom evaluators, just extending the base evaluator. 
+
+
+For precision, recall and F1-Score Crab provides also a simple way to compute these values for a Recommender:
+
+CODE
+
+The result you see would vary significantly due to random selection of training data and test data. Remember that precision is the proportion
+of top recommendations that are good recommendations, recall is the proportion of good recommendations that appear in top recommendations and
+F1-Score is a score that analyzes the proportion against precision and recall. So Precision at 2 with 0.75 means on average about a three
+quarters of recommendations were good. Recall at 2 with 1.0; all good recommendations are among those recommendations. In the following graph,
+it presents the precision x recall with F1-Scores evaluated. It is important to notice that the evaluator doe not measure if the algorithm
+is better or faster. It is necessary to make a comparison between the algorithms to check the accuracy specially on other data sets available.
+Crab supports several tools for testing and evaluating recommenders in a painless way. One of the future releases will support the plot of 
+charts to help the developers to better analyze and visualized their recommender behavior.
+
+PLOT
 
 
 Taking Recommenders to Production
 ---------------------------------
 
 So far we have presented the recommender algorithms and variants that Crab provides. we also presented how Crab handles with
-performance and accuracy evaluation of a recommender. But another important step for a recommender lifecycle is to turn it into a
+accuracy evaluation of a recommender. But another important step for a recommender lifecycle is to turn it into a
 deployable production-ready web service.
 
 We are extending Crab allowing developers to deploy a recommender as a stand-alone component of your application architecture,
@@ -315,8 +347,20 @@ computations.
 Conclusion and Future Works
 ---------------------------
 
-In this paper we have presented our efforts in building this toolkit in Python, which we believe that may be useful and make an increasing impact
-beyond the recommendation systems community by benefiting diverse applications. 
+In this paper we have presented our efforts in building a recommender engine toolkit in Python, which we believe that may be useful and make an increasing impact
+beyond the recommendation systems community by benefiting diverse applications. We are confident that Crab will be an interesting alternative for machine learning
+researchers and developers to create, test and deploy their recommendation algorithms writting a few lines of code with the simplicity and flexibility that
+Python with the scientific libraries Numpy and Scipy offers. The project uses as dependancy the Scikit-learn toolkit, which faces the Crab framework to keep
+with high standards of coding and testing, making a madure and efficient machine learning toolkit. Discussing the technical aspects, we are also always improving 
+the framework by bringing new recommender algorithms such as Matrix Factorization, SVD and Boltzmann machines. Another concern is to bring to the framework 
+not only collaborative filtering algorithms but also content based filtering (content analysis), social relevance proximity graphs (social/trust networks) and
+hybrid approaches. Finally it is also a requirement to a recommender engine to be scalable, that is, to handle with large and sparse data sets. We are planning 
+to develop a scalable recommendation implementation by using Yelp framework mrJob which supports Hadoop and MapReduce as explained in the previous section.
+
+Our project is hosted at Github repository and it is open for machine learning community to use, test and help this project to 
+grow up. Future releases are planned which will include more projects building on it and a evaluation tool with several plots and graphs to help the machine
+learning developer better undestand the behavior of his recommender algorithm. It is an alternative for Python developers to the Mahout machine learning project
+written in Java. The source code is freely available under the BSD license at http://github.com/muricoca/crab.
 
 References
 ----------
