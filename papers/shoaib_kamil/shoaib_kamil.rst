@@ -42,7 +42,7 @@ Bringing Parallel Performance to Python  with Domain-Specific Selective Embedded
 .. class:: abstract
 
     Today's *productivity programmers*, such as scientists who need to
-    write code to do science, are typically forced to choose between
+    write code to do science, are typically forced to 
     choose between productive and maintainable code with modest
     performance (e.g. Python plus native libraries such as SciPy
     [SciPy]_) or complex, brittle, hardware-specific code that
@@ -52,7 +52,7 @@ Bringing Parallel Performance to Python  with Domain-Specific Selective Embedded
     Python enable an alternative approach that bridges the gap between
     productivity and performance.  SEJITS (Selective, Embedded,
     Just-in-Time Specialization) embeds domain-specific languages
-    (DSLs) in Python for popular computational *kernels* such as
+    (DSLs) in high-level languages like Python for popular computational *kernels* such as
     stencils, matrix algebra, and others.  At runtime, the DSLs are
     "compiled" by combining expert-provided source code templates
     specific to each problem type, plus a strategy for optimizing an
