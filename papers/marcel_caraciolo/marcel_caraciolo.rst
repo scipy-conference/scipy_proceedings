@@ -272,8 +272,29 @@ So far we have presented the recommender algorithms and variants that Crab provi
 performance and accuracy evaluation of a recommender. But another important step for a recommender lifecycle is to turn it into a
 deployable production-ready web service.
 
+We are extending Crab allowing developers to deploy a recommender as a stand-alone component of your application architecture,
+rather than embed it inside your application. One common approach is to expose the recommendations over the web via simple HTTP
+or web services protocols such as SOAP or REST. One advantage using this service is that the recommender is deployed as a web-
+accessible service as independent component in a web container or a standalone process. In the other hand, this adds complexity, 
+but it allows other applications written in other languages or running at remote machines to access the service. We are considering
+use framework web Django with the the Django-Piston RESTful builder to expose the recommendations via a simple API using REST over
+HTTP. Our current structure is illustrated in figure x, which wraps the recommender implementation using the django models and 
+piston handlers to provide the external access.
 
+There is a recommender engine powered by Crab in production using REST APIs to access the the recommendations. The recommender engine uses
+collaborative filtering algorithms to recommend users, study groups and videos in a brazilian educational social network called AtéPassar.
+Besides the suggestions the recommender was also extendend to provide the explanations for each recommendation, in a way that the user
+not only receives the recommendation but also why the given recommendation was proposed to him. The recommender is in production since
+January 2011 and suggested more than 60.000 items for more than 50.000 users registered at the network. The following picture shows
+the web interface with the recommender engine in action at AtéPassar. One contribution of this work was a new Data Model for integrating
+with MongoDB database for retrieving and storing the recommendations and it is being rewritten for the new release of Crab supporting 
+Numpy and Scipy libraries.
 
+Figure x
+
+Crab can comfortably digest medium and small data sets on one machine and produce recommendations in real time. But it still lacks a
+mechanism that handles a much larger data set. One common approach is distribute the recommendation computations, which will be detailed
+in the next section.
 
 Distributing Recommendation Computations
 ----------------------------------------
