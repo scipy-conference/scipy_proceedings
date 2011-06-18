@@ -41,9 +41,6 @@ Bringing Parallel Performance to Python  with Domain-Specific Selective Embedded
 
 .. class:: abstract
 
-    (AF: let's focus on completing the body text, then write the
-    abstract at the end.)
-
     Today's "productivity programmers", such as scientists who need to
     write code to do science, are typically forced to choose between
     choose between productive and maintainable code with modest
@@ -144,12 +141,10 @@ apply optimizations that take advantage of this domain information in
 generating the efficiency-level code. For example, returning to the 
 domain of stencils, one optimization called *time skewing* [Wonn00]_
 involves blocking in time for a stencil applied repeatedly to the
-same grid--- a transformation that requires knowing the "footprint"
-of the stencil.  Because we have easy access to this information, since
-we know it is a stencil and are not writing a general compiler,
-we can more easily write this transformation, taking advantage of our
-domain-specific knowledge and not having to write some way to "detect"
-a stencil and its footprint from general loops.
+same grid.  This transformation is not meaningful unless we know the
+computation is a stencil and we also know the stencil's "footprint", so
+a generic optimizing compiler would be unable to identify the
+opportunity to apply it.
 We therefore
 leverage the dynamic features of modern languages like Python to defer
 until runtime what most libraries must do at compile time, and to do it
@@ -182,11 +177,13 @@ occurs without user knowledge; to the user, it appears that a
 interpreted function is being called.
 
 Asp (a recursive acronym for "Asp is SEJITS for Python") is a collection
-of libraries that realizes  the SEJITS approach in Python, using Python both as the host language (i.e. 
-application programmers write their code in Python) and as the transformation system
-(code generation and transformation are also performed in Python). Specializers are
-encapsulated through classes and inheritance; other SEJITS implementations could use 
-mechanisms such as decorators.
+of libraries that realizes  the SEJITS approach in Python, using Python
+both as the language
+in which application programmers write their code (the *host language*)
+and the language in which  transformations and code generation are
+carried out (the *transformation language*).  Note that in general the
+host and transformation languages need not be the same, but Python
+happily serves both purposes well.
 
 Specifically, Asp provides a framework for creating Python classes
 (*specializers*) each
@@ -202,6 +199,15 @@ lower it to the target ELL and inline it into the generated source code.
 Finally, the source code is compiled by an appropriate conventional
 compiler, the resulting object file is linked to the Python interpreter,
 and the method is called like a native library.
+
+Python code in the application for which no specializer exists is
+executed by Python as usual.  As we describe below, a recommended best
+practice for creating new specializers is that they include an API-compatible,
+pure-Python implementation of the kernel(s) they specialize in addition
+to providing a code-generation-based
+implementation, so that every valid
+program using Asp will also run in pure Python without Asp
+(modulo removing the import directives that refer to Asp).
 
 One of Asp's primary purposes is separating
 application and algorithmic logic from code required to make the application run fast.  Application
@@ -224,9 +230,10 @@ AST, or DAST.  That is, we immediately move the computation into a
 domain where problem-specific optimiations and knowledge can be applied,
 by applying transformations to the DAST.  Returning once again to the
 stencil, the DAST might have nodes such as "iterate over neighbors" or
-"iterate over all stencil points".  These abstract node types will
+"iterate over all stencil points".  These abstract node types, which
+differ from one specializer to another, will
 eventually be used to generate ELL code according to the code generation
-strategy chosen, but at this level of representation, one can talk about
+strategy chosen; but at this level of representation, one can talk about
 optimizations that make sense *for stencils specifically* as opposed to
 those that make sense *for iteration generally*.
 
@@ -284,24 +291,26 @@ AST transformation rules (for each of N platforms), app writer, Asp,
 generated code; i think can be made redundant with fig 1; i'll supply a
 hand drawn diagram as example]
 
-
-In the structured grid specializer, the user-defined stencil kernel is first translated into a 
+In the stencil specializer, the user-defined stencil kernel is first translated into a 
 Python AST, and analyzed to see if the specializer can produce correct code. If the application
 writer provided a kernel function that adheres to the restrictions of the specializer, the code
 is then processed through a series of AST transformations (more details are in the Example Walkthrough
 section below). Specializer writers subclass Asp infrastructure classes that implement a visitor
-patter on these ASTs (similar to Python's ``ast.NodeTransformer``) to implement their specialization
-phases. The last phase transforms the AST into a C++ AST, implemented using CodePy [CodePy_].
+pattern on these ASTs (similar to Python's ``ast.NodeTransformer``) to implement their specialization
+phases. The final phase uses CodePy [CodePy]_ to transform the DAST into a target-specific AST
+(e.g, C++ with OpenMP extensions).
 
 Specializer writers can then use the Asp infrastructure to automatically compile, link, and execute
 the code in the final AST.  In many cases, the programmer may supply
 several code variants, each represented
-by a different ASTs, to the Asp infrastructure.  The different variants are run for subsequent calls to the
-specialized function until the fastest variant is determined, which is then always called by Asp. Performance
-data as well as cached compiled code is captured and stored to disk to be used even across
-interpreter startups.
+by a different ASTs, to the Asp infrastructure.  Specializer-specific
+logic determines which variant to run; Asp provides functions to query
+the hardware features available (number of cores, GPU, etc.).  
+Asp provides for capturing and storing performance
+data and cached compiled code across
+runs of the application.
 
-For specializer writers, the bulk of the work consists of exposing an understandable abstraction
+For specializer writers, therefore, the bulk of the work consists of exposing an understandable abstraction
 for specializer users, ensuring programs execute whether specialized or not, writing test functions
 to determine specializability (and giving the user meaningful feedback if not), and 
 expressing their translations as phased transforms.
@@ -441,6 +450,42 @@ subsequent calls to reuse the cached version.
 
 Results
 -------
+
+SEJITS claims three benefits for productivity programmers.  The first is
+*performance portability*.  A single specializer can include code
+generation strategies for radically different platforms, and even
+multiple code variants using different strategies on the *same* platform
+depending on the problem parameters.  The GMM specializer described
+below illustrates this advantage: a single specializer can produce code
+either for nVIDIA GPUs (in Cuda) or x86 multicore processors (targeting
+the CILK++ compiler), and the same Python application can run on either
+platform.
+
+The second benefit is the ability to let application writers work with
+patterns requiring higher-order functions, something that is cumbersome
+to do in low-level languages.  We can inline these functions
+into the emitted source code and let the compiler optimize the whole
+thing.  Our stencil specializer demonstrates this benefit; the
+performance of the generated code reaches 87% of the achievable memory
+bandwidth of the multicore machine on which it runs.
+
+The third benefit is the ability to take advantage of autotuning or
+other runtime performance optimizations even for "simple" problems.  Our
+matrix-powers specializer, which computes :math:`\{x, Ax, A^2x, ...,A^kx\}`
+for a sparse matrix :math:`A` and vector :math:`x` (an important
+computation in Krylov-subspace solvers), demonstrates this benefit. Its
+implementation uses a recently-developed "communication-avoiding"
+algorithm for matrix powers that beats Python+SciPy by about one order
+of magnitude while remaining essentially API-compatible with SciPy.
+Beyond the inherent performance gains from communication-avoidance, a
+number of parameters in the implementation can be tuned based on the
+matrix structure in each individual problem instance; this is an example
+of an optimization that cannot easily be done in a library.
+
+
+Stencil
+.......
+
 To demonstrate the performance and productivity effectiveness of our stencil
 specializer, we implemented two different computational stencil kernels using
 our abstractions: a 3D laplacian operator, and a 3D divergence kernel.  
@@ -479,11 +524,6 @@ to write succinct code and have platform-specific fast code generated for them.
    Performance as fraction of memory bandwidth peak for two specialized stencil kernels.
    All tests compiled using the Intel C++ compiler 12.0 on a Core i7-840. :label:`stencilresults`
 
-Other Specializers
-------------------
-Aside from the stencil specializer, a number of other specializers are currently under development.
-We present limited results from two of these: a Gaussian Mixture Model training specializer and
-a specializer for the matrix powers computational kernel.
 
 Gaussian Mixture Modeling
 .........................
@@ -526,10 +566,18 @@ on some classes of problems, as shown in Figure :ref:`gmmperfoverall`.
 
 Matrix Powers
 .............
-Sentence about CA algorithms. Matrix powers, which computes :math:`\{x, Ax, A^2x, ...,A^kx\}`
-for a sparse matrix :math:`A` and vector :math:`x`, is an important building block
-for communication-avoiding sparse Krylov solvers. A specializer, currently under development
-by Jeffrey Morlan, enables efficient parallel computation of this set of vectors on
+Recent developments in communication-avoiding algorithms (AF: need
+canonical citation here, as well as specific cite for Erin and Nick's
+CA-matrix powers presentation at EuroSomethingOrOther) have shown that
+the performance of parallel implementations of several algorithms can be
+substantially improved by partitioning the problem so as to do redundant
+work in order to minimize inter-core communication.  One example of an
+algorithm that admits a communication-avoiding implementation is matrix
+powers:
+the computation :math:`\{x, Ax, A^2x, ...,A^kx\}`
+for a sparse matrix :math:`A` and vector :math:`x`, an important building block
+for communication-avoiding sparse Krylov solvers. A specializer currently under development
+enables efficient parallel computation of this set of vectors on
 multicore processors.
 
 .. figure:: akxnaive.pdf
@@ -547,7 +595,7 @@ multicore processors.
    Algorithm PA1 for communication-avoiding matrix powers.  Communication occurs only
    after k levels of computation, at the cost of redundant computation. :label:`akxpa1`
 
-The specializer generates parallel communication avoiding code using the pthread library 
+The specializer generates parallel communication avoiding code using the pthreads library 
 that implements the PA1 [Ho09]_ kernel to compute the vectors more efficiently than
 just repeatedly doing the multiplication :math:`A \times x`. The naive
 algorithm, shown in Figure :ref:`akxnaive`, requires communication at each level. However, for
@@ -615,14 +663,16 @@ Fourier Transforms (FFTs) [SPIRAL]_, and multicore versions of
 stencils [KaDa09]_, [Kam10]_, [Poich]_, showing large improvements 
 in performance over simple implementations of these kernels.
 
-Acknowledgements
+Acknowledgments
 ----------------
-We would like to acknowledge Henry Cook, Ekaterina Gonina, and Jeffrey Morlan
-for their work implementing specializers.  
-Research supported by DARPA as well as Microsoft (Award #024263) and Intel (Award #024894) funding 
-and by matching funding by U.C. Discovery (Award #DIG07-10227). Additional support 
-from Par Lab affiliates National Instruments, NEC, Nokia, Nvidia, Oracle, and Samsung.
-
+Henry Cook and Ekaterina Gonina implemented the GMM specializer.  Jeffrey Morlan
+is implementing the matrix-powers specializer based on algorithmic work
+by Erin Carson and Nick Knight.  
+Research supported by DARPA (contract #FA8750-10-1-0191), Microsoft
+Corp. (Award #024263), and Intel Corp. (Award #024894),
+with matching funding from the UC Discovery Grant (Award #DIG07-10227)
+and additional support 
+from Par Lab affiliates National Instruments, NEC, Nokia, nVIDIA, Oracle, and Samsung.
 
 
 References
