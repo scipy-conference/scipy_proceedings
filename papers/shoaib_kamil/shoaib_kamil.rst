@@ -31,7 +31,7 @@ Bringing Parallel Performance to Python  with Domain-Specific Selective Embedded
     takes code written to use domain-specific abstractions and selectively generates efficient, parallel,
     low-level C++ code, compiles it and runs it, all invisibly to the user.  Efficiency programmers, who 
     know how to obtain the highest performance from a parallel machine, encapsulate their knowledge into 
-    domain-specific "specializers", which translate abstractions into
+    domain-specific *specializers*, which translate abstractions into
     parallel code.
     We have been implementing Asp, A SEJITS implementation for Python,
     to bring the SEJITS methodology to Python programmers.  Although
@@ -41,38 +41,37 @@ Bringing Parallel Performance to Python  with Domain-Specific Selective Embedded
 
 .. class:: abstract
 
-    Today's "productivity programmers", such as scientists who need to
+    Today's *productivity programmers*, such as scientists who need to
     write code to do science, are typically forced to choose between
     choose between productive and maintainable code with modest
     performance (e.g. Python plus native libraries such as SciPy
-    [SciPy]_) or complex, brittle, hardware-specific code that entangles
-    application logic with performance concerns but runs two to three
-    orders of magnitude faster (e.g. C++ with OpenMP, Cuda, etc.).  
-    The dynamic features of modern productivity languages like Python
-    enable an alternative approach that bridges the gap between
+    [SciPy]_) or complex, brittle, hardware-specific code that
+    entangles application logic with performance concerns but runs two
+    to three orders of magnitude faster (e.g. C++ with OpenMP, CUDA,
+    etc.).  The dynamic features of modern productivity languages like
+    Python enable an alternative approach that bridges the gap between
     productivity and performance.  SEJITS (Selective, Embedded,
-    Just-in-Time Specialization) embeds problem-specific DSLs in Python
-    for popular computational "kernels" such as stencils (structured
-    grid), matrix algebra, and others.  At runtime, the DSLs are
+    Just-in-Time Specialization) embeds domain-specific languages
+    (DSLs) in Python for popular computational *kernels* such as
+    stencils, matrix algebra, and others.  At runtime, the DSLs are
     "compiled" by combining expert-provided source code templates
     specific to each problem type, plus a strategy for optimizing an
     abstract syntax tree representing a domain-specific but
     language-independent representation of the problem instance.  The
-    result is efficiency-level (C, C++) code callable from Python whose
-    performance equals or exceeds that of handcrafted code, plus
+    result is efficiency-level (e.g. C, C++) code callable from Python
+    whose performance equals or exceeds that of handcrafted code, plus
     performance portability by allowing multiple code generation
     strategies to be packaged in the same specializer, e.g. to target
     either multicore CPUs or GPUs depending on the hardware present at
-    runtime.   Application writers never leave the Python world, and we
-    do not assume any modification or support for parallelism in Python
-    itself. 
+    runtime.  Application writers never leave the Python world, and we
+    do not assume any modification or support for parallelism in
+    Python itself.
 
-    We present Asp (Asp is SEJITS for Python) and initial results from
+    We present Asp ("Asp is SEJITS for Python") and initial results from
     several domains. We demonstrate that domain-specific specializers
-    allow
-    highly-productive Python code
-    to obtain performance meeting or exceeding expert-crafted low-level
-    code on parallel hardware, without sacrificing maintainability or portability.
+    allow highly-productive Python code to obtain performance meeting
+    or exceeding expert-crafted low-level code on parallel hardware,
+    without sacrificing maintainability or portability.
 
 
 .. class:: keywords
@@ -112,20 +111,20 @@ sequential or parallel code given  a particular target platform
 (multicore, GPU, etc.) is independent of the specific function, but
 because that function is unique to each application, capturing the
 stencil abstraction in a traditional compiled library is awkward,
-especially in the ELLs typically used for performant code
+especially in the efficiency level languages typically used for performant code
 (C, C++, etc.) that don't support higher-order functions gracefully.
 
 Even if the function doesn't change much across applications, work on
-autotuning (AF: NEED CITATIONS HERE) has shown that for algorithms with
-tunable implementation parameters, the performance gain from fine-tuning
-these parameters compared to setting them naively can be up to 10x
-(AF: CHECK THIS).  Indeed, the complex internal structure of autotuning
+autotuning [ATLAS]_ has shown that for algorithms
+with tunable implementation parameters, the performance gain from
+fine-tuning these parameters compared to setting them naively can be
+up to 5x. [SC08]_ Indeed, the complex internal structure of autotuning
 libraries such as the Optimized Sparse Kernel Interface [OSKI]_ is
-driven by the fact that often runtime information is necessary to choose
-the best execution strategy or tuning-parameter values.
+driven by the fact that often runtime information is necessary to
+choose the best execution strategy or tuning-parameter values.
 
-We therefore propose a new methodology to  address this "performance-productivity
-gap", called SEJITS (Selective Embedded Just-in-Time Specialization).
+We therefore propose a new methodology to  address this performance-productivity
+gap, called SEJITS (Selective Embedded Just-in-Time Specialization).
 This methodology embeds domain-specific languages within high-level
 languages, and the embedded DSLs are 
 specialized at runtime into high-performance, low-level code
@@ -137,7 +136,7 @@ hand-written by experts.
 The insight of our approach is that because each embedded DSL is
 specific to just one type of computational pattern (stencil, matrix
 multiplication, etc.), we can select an implementation strategy and
-apply optimizations that take advantage of this domain information in
+apply optimizations that take advantage of domain knowledge in
 generating the efficiency-level code. For example, returning to the 
 domain of stencils, one optimization called *time skewing* [Wonn00]_
 involves blocking in time for a stencil applied repeatedly to the
@@ -145,10 +144,11 @@ same grid.  This transformation is not meaningful unless we know the
 computation is a stencil and we also know the stencil's "footprint", so
 a generic optimizing compiler would be unable to identify the
 opportunity to apply it.
+
 We therefore
 leverage the dynamic features of modern languages like Python to defer
 until runtime what most libraries must do at compile time, and to do it
-with higher-level domain information than most compilers can assume.
+with higher-level domain knowledge than can be inferred by most compilers.
 
 .. For example, returning to the
    stencil example above, a fundamental stencil "primitive" is applying the
@@ -173,7 +173,7 @@ to build domain- and machine-specific *specializers* that transform
 user-written code in a high-level language in various ways to expose
 parallelism, and then generate the code for a a specific machine.
 Then, the code is compiled, linked, and executed.  This entire process
-occurs without user knowledge; to the user, it appears that a
+occurs transparently to the user; to the user, it appears that an
 interpreted function is being called.
 
 Asp (a recursive acronym for "Asp is SEJITS for Python") is a collection
@@ -189,15 +189,17 @@ Specifically, Asp provides a framework for creating Python classes
 (*specializers*) each
 of which represents a particular computational pattern.  Application
 writers subclass these to express specific problem instances.  The
-specializer class's methods use a combination of pre-supplied templated source code
-snippets and manipulation of the Python AST to generate low-level source
-code in an ELL such as C, C++ or Cuda.  For problems that call for
+specializer class's methods use a combination of pre-supplied low-level source code (*templates*)
+snippets and manipulation of the Python abstract syntax tree (AST, also known as a parse tree) to generate low-level source
+code in an efficiency-level language (ELL) such as C, C++ or Cuda.
+
+For problems that call for
 passing in a function, such as the stencil example above, the
 application writer codes the function in Python (subject to some
-restrictions) and the specializer class walks the function's AST to
+restrictions) and the specializer class iterates over the function's AST to
 lower it to the target ELL and inline it into the generated source code.
 Finally, the source code is compiled by an appropriate conventional
-compiler, the resulting object file is linked to the Python interpreter,
+compiler, the resulting object file is dynamically linked to the Python interpreter,
 and the method is called like a native library.
 
 Python code in the application for which no specializer exists is
@@ -207,7 +209,9 @@ pure-Python implementation of the kernel(s) they specialize in addition
 to providing a code-generation-based
 implementation, so that every valid
 program using Asp will also run in pure Python without Asp
-(modulo removing the import directives that refer to Asp).
+(modulo removing the import directives that refer to Asp). This allows
+the kernel to be executed and debugged using standard Python tools,
+and provides a reference implementation for isolating bugs in the specializer.
 
 One of Asp's primary purposes is separating
 application and algorithmic logic from code required to make the application run fast.  Application
@@ -225,9 +229,9 @@ as well as third-party libraries.  An overview of this separation is shown in Fi
 
 An overview of the specialization process is as follows.  We intercept
 the first call to a specializable method, grab the AST of the Python
-code at call site, and immediately transform it to a domain-specific
+code of the specializable method, and immediately transform it to a domain-specific
 AST, or DAST.  That is, we immediately move the computation into a
-domain where problem-specific optimiations and knowledge can be applied,
+domain where problem-specific optimizations and knowledge can be applied,
 by applying transformations to the DAST.  Returning once again to the
 stencil, the DAST might have nodes such as "iterate over neighbors" or
 "iterate over all stencil points".  These abstract node types, which
@@ -266,18 +270,25 @@ An example using our stencil specializer's constructs is shown in Figure :ref:`e
 
 Specializer Writers
 ...................
-Specializer writers start with an existing ELL solution of a particular problem type on
+Specializer writers often start with an existing implementation of a solution,
+written in an ELL, for a particular problem type on
 particular hardware.  Such solutions are devised by human experts who
 may be different from the specializer writer, e.g.
-numerical-analysis researchers or autotuning researchers.
-The specializer writer's task is to factor
-this working solution into (a) a set of ELL source code templates, (b)
-optionally a set of rules for transforming the DAST of
+numerical-analysis researchers or autotuning researchers. Some parts
+of the solution which remain the same between problem instances, or
+the same with very small changes, can be converted into *templates*,
+which are simply ELL source code with a basic macro substitution
+facility, supplied by [Mako]_, for inserting values into fixed locations or "holes" at runtime.
+
+Other parts of the ELL solution may vary widely or in a complex
+manner based on the problem instance. For these cases, a better
+approach is to provide a set of rules for transforming the DAST of
 this type of problem in order to realize the optimizations present in
-the ELL code, (c) some transformation code to drive the entire process.
+the original ELL code. Finally, the specializer writer provides
+high-level transformation code to drive the entire process.
 
 Specializer writers use Asp infrastructure to build their domain-specific translators.  In Asp, we
-provide two ways to generate low-level code: templates (using Mako [Mako]_) and abstract syntax tree
+provide two ways to generate low-level code: templates and abstract syntax tree
 (AST) transformation. For many kinds of computations, using templates is sufficient to translate from
 Python to C++, but for others, phased AST transformation allows application programmers to express
 arbitrary computations to specialize.  At runtime, then, the input to
@@ -291,14 +302,17 @@ AST transformation rules (for each of N platforms), app writer, Asp,
 generated code; i think can be made redundant with fig 1; i'll supply a
 hand drawn diagram as example]
 
-In the stencil specializer, the user-defined stencil kernel is first translated into a 
-Python AST, and analyzed to see if the specializer can produce correct code. If the application
-writer provided a kernel function that adheres to the restrictions of the specializer, the code
-is then processed through a series of AST transformations (more details are in the Example Walkthrough
-section below). Specializer writers subclass Asp infrastructure classes that implement a visitor
+In a specializer, the user-defined kernel is first translated into a 
+Python AST, and analyzed to see if the code supplied by the application
+writer adheres to the restrictions of the specializer. Only code adhering
+to a narrow subset of Python, characterizing the embedded domain-specific
+language, will be accepted. Since specializer writers frequently need to
+iterate over ASTs, the Asp infrastructure provides classes that implement a visitor
 pattern on these ASTs (similar to Python's ``ast.NodeTransformer``) to implement their specialization
 phases. The final phase uses CodePy [CodePy]_ to transform the DAST into a target-specific AST
-(e.g, C++ with OpenMP extensions).
+(e.g, C++ with OpenMP extensions). The Example Walkthrough
+section below explains these steps in the context of a particular specializer,
+the stencil kernel specializer. 
 
 Specializer writers can then use the Asp infrastructure to automatically compile, link, and execute
 the code in the final AST.  In many cases, the programmer may supply
@@ -367,7 +381,8 @@ application languages and other hardware platforms, and helps divide
 labor between domain experts and platform performance experts. These
 phases are similar to the phases of a typical optimizing compiler, but
 are dramatically less complex due to the domain-specific focus and the
-Asp framework, which provides utilities to support many common tasks.
+Asp framework, discussed in the last section, which provides utilities
+to support many common tasks.
 
 In the stencil example, we begin by invoking the Python runtime to
 parse the kernel() function and produce the abstract syntax tree shown
@@ -464,23 +479,25 @@ platform.
 The second benefit is the ability to let application writers work with
 patterns requiring higher-order functions, something that is cumbersome
 to do in low-level languages.  We can inline these functions
-into the emitted source code and let the compiler optimize the whole
-thing.  Our stencil specializer demonstrates this benefit; the
+into the emitted source code and let the low-level compiler optimize the
+solution using the maximum available information.  Our stencil specializer,
+also described below, demonstrates this benefit; the
 performance of the generated code reaches 87% of the achievable memory
 bandwidth of the multicore machine on which it runs.
 
 The third benefit is the ability to take advantage of autotuning or
-other runtime performance optimizations even for "simple" problems.  Our
-matrix-powers specializer, which computes :math:`\{x, Ax, A^2x, ...,A^kx\}`
-for a sparse matrix :math:`A` and vector :math:`x` (an important
-computation in Krylov-subspace solvers), demonstrates this benefit. Its
-implementation uses a recently-developed "communication-avoiding"
-algorithm for matrix powers that beats Python+SciPy by about one order
-of magnitude while remaining essentially API-compatible with SciPy.
+other runtime performance optimizations even for simple problems.  Our
+matrix-powers specializer, which computes :math:`\{x, Ax, A^2x,
+...,A^kx\}` for a sparse matrix :math:`A` and vector :math:`x` (an
+important computation in Krylov-subspace solvers), demonstrates this
+benefit. Its implementation uses a recently-developed
+*communication-avoiding* algorithm for matrix powers that runs about
+an order of magnitude faster than Python+SciPy (see performance
+details below) while remaining essentially API-compatible with SciPy.
 Beyond the inherent performance gains from communication-avoidance, a
 number of parameters in the implementation can be tuned based on the
-matrix structure in each individual problem instance; this is an example
-of an optimization that cannot easily be done in a library.
+matrix structure in each individual problem instance; this is an
+example of an optimization that cannot easily be done in a library.
 
 
 Stencil
@@ -542,7 +559,7 @@ that targets both CUDA-capable GPUs and Intel multicore processors (with Cilk+).
 The specializer implements four different parallelization strategies for the algorithm;
 depending on the sizes of the data structures used in GMM training, different strategies
 perform better.  Figure :ref:`gmmperf` shows performance for different strategies for
-GMM training on an Nvidia Fermi GPU as one of the GMM parameters are varied.  The specializer
+GMM training on an NVIDIA Fermi GPU as one of the GMM parameters are varied.  The specializer
 uses the best-performing variant (by using the different variants to do one iteration each,
 and selecting the best-performing one) for the majority of iterations.  As a result, even
 if specialization overhead (code generation, compilation/linking, etc.) is included, the 
@@ -733,3 +750,10 @@ References
 
 .. [Wonn00] D. Wonnacott. Using Time Skewing to Eliminate Idle Time due to Memory Bandwidth and Network Limitations.
    International Parallel and Distributed Processing Symposium, 2000.
+
+.. [ATLAS] R. C. Whaley, A. Petitet, and J. Dongarra. Automated Empirical Optimization of Software and the ATLAS project.
+   Parallel Computing, vol. 27(1-2), pp. 3–35, 2001.
+
+.. [SC08] Kaushik Datta, Mark Murphy, Vasily Volkov, Samuel Williams, Jonathan Carter, Leonid Oliker, David Patterson, John Shalf, and Katherine Yelick.
+   Stencil computation optimization and autotuning on state-of-the-art multicore architectures.
+   SC2008: High performance computing, networking, and storage conference, 2008.
