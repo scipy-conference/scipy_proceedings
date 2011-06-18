@@ -24,7 +24,7 @@ gpustats: GPU Library for Statistical Computing in Python
 .. class:: keywords
 
    GPU, CUDA, OpenCL, Python, statistical inference, statistics,
-   metaprogramming, Monte Carlo
+   metaprogramming, Markov Chain Monte Carlo, PyMC
 
 Introduction
 ------------
@@ -36,8 +36,8 @@ major catalyst for making GPUs widely accessible was the development of the
 general purpose GPU computing frameworks, [CUDA]_ and [OpenCL]_, which enable
 the user to implement general numerical algorithms in a simple extension of the
 C language to run on the GPU. In this paper, we will restrict our technical
-discussion to the CUDA / NVIDIA architecture, while later commenting on CUDA
-versus OpenCL.
+discussion to the CUDA architecture for NVIDIA cards, while later commenting on
+CUDA versus OpenCL.
 
 .. The basic process for GPU computing involves
 .. copying data to the (GPU) device memory, performing some computation (written
@@ -171,7 +171,7 @@ Challenges of GPU Computing in Statistical Inference
 
 As mentioned above, a CUDA or OpenCL programmer must be very mindful of the
 memory architecture of the GPU. There are multiple memory management issues to
-address, in CUDA parlance
+address, i.e. in CUDA parlance
 
 * *Coalescing* transactions between global and shared memory; this is,
   coordinating groups of typically 16 to 32 threads to copy a contiguous chunk
@@ -184,7 +184,7 @@ the normal probability density function (pdf) :ref:`normpdf`. Given a data set
 with :math:`N` observations, we wish to evaluate the pdf on each point for a set
 of parameters, i.e. the mean :math:`\mu` and variance :math:`\sigma^2`. Thus,
 all that needs to be passed to the GPU is the data set and the parameters. A C
-function which can compute the log pdf for a single datum is
+function which can compute the log pdf for a single data point is
 
 .. code-block:: c
 
@@ -237,6 +237,15 @@ invocation. This introduces the additional question of how to divide the problem
 among thread blocks viz. optimally utilizing shared memory. As the available GPU
 resources are device specific, we would wish to dynamically determine the
 optimal division of labor among thread blocks based on the GPU being used.
+
+Avoiding *bank conflicts* as mentioned above is a somewhat thorny issue as it
+depends on the thread block layout and memory access pattern. It turns out in
+the **gpustats** framework that bank conflicts can be avoided with multivariate
+data by ensuring that the data dimension is not a multiple of 16. Thus, some
+data sets must be *padded* with arbitrary data to avoid this problem, while
+passing the true data dimension to the GPU kernel. If this is not done, bank
+conflicts will lead to noticably degraded performance. We are hopeful that such
+workarounds can be avoided with future iterations in GPU memory architecture.
 
 For sampling random variables on the GPU, the process is reasonably
 similar. Just as with computing the density function, sampling requires the same
@@ -291,8 +300,8 @@ on the GPU.
 .. that changes is the actually computation. This implies a straightforward
 .. meta-programming approach.
 
-Metaprogramming probability density kernels and beyond
-------------------------------------------------------
+Metaprogramming: probability density kernels and beyond
+-------------------------------------------------------
 
 The **gpustats** Python library leverages the compilation-on-the-fly
 capabilities of PyCUDA and metaprogramming techniques to simply the process of
@@ -328,7 +337,7 @@ implementing the logged and unlogged normal pdf is as follows:
       // standardize
       float xstd = (*x - params[0]) / std;
       return - (xstd * xstd) / 2 - 0.5f * LOG_2_PI
-	         - log(std);
+             - log(std);
     }
    """
    log_pdf_normal = DensityKernel('log_pdf_normal',
@@ -346,11 +355,69 @@ function.
 Python interface and device-specific optimization
 -------------------------------------------------
 
-Some benchmarks
----------------
+Further work is needed to interface with the generated PyCUDA ``SourceModule``
+instance. For example, the data and parameters need to be prepared in
+``ndarray`` objects in the form that the kernel expects them. Since all of the
+univariate density functions, for example, have the same function signature,
+it's relatively straightforward to create a generic function taking care of this
+often tedious process. Thus, implementing a new density function requires only
+passing the appropriate function reference to the generic *invoker*
+function. Here we show what the function implementing the normal (logged and
+unlogged) pdf on multiple sets of parameters looks like:
 
-Future: Port to use PyOpenCL
-----------------------------
+.. code-block:: python
+
+    def normpdf_multi(x, means, std, logged=True):
+        if logged:
+            cu_func = mod.get_function('log_pdf_normal')
+        else:
+            cu_func = mod.get_function('pdf_normal')
+        packed_params = np.c_[means, std]
+        return _univariate_pdf_call(cu_func, x,
+                                    packed_params)
+
+Inside the above ``_univariate_pdf_call`` function, the attributes of the
+GPU device in use are examined to dynamically determine the thread block size
+and grid layout that will maximize the shared memory utilization. This is
+definitely an area where much time could be invested to determine a more
+"optimal" scheme.
+
+Reusing data stored on the GPU
+------------------------------
+
+Since the above algorithms may be run repeatedly on the same data set, leaving a
+data set stored on the GPU global device memory is a further important
+optimization. Indeed, the time required to copy a large block of data to the GPU
+may be quite significant compared with the time required to execute the kernel.
+
+Fortunately, PyCUDA and PyOpenCL have a ``GPUArray`` class which mimics its
+CPU-based NumPy counterpart ``ndarray``, with the data being stored on the
+GPU. Thus, in functions like the above, the user can pass in a ``GPUArray`` to
+the function which will circumvent any copying of data to the GPU. Similarly,
+functions like ``normpdf_multi`` above can be augmented with an option to return
+a ``GPUArray`` instance instead of an ``ndarray``. This is useful as in some
+algorithms the results of a density calculation may be immediately used for
+sampling random variables which can also be done on the GPU. Avoiding roundtrips
+to the GPU device memory can result in a significant boost in performance,
+especially with smaller data sets.
+
+Some basic benchmarks
+---------------------
+
+Application: Bayesian Normal Mixture Modeling
+---------------------------------------------
+
+Future: Porting use OpenCL
+--------------------------
+
+As **gpustats** currently uses PyCUDA it can only be used with NVIDIA graphics
+cards. OpenCL, however, provides a parallel computing framework which can be
+executed on NVIDIA and ATI cards as well as on CPUs. Thus, it will make sense to
+enable the **gpustats** code generator to emit OpenCL code in the near
+future. Using OpenCL currently has drawbacks for statistical applications: most
+significantly the lack of a pseudorandom number generator equivalent in speed
+and quality to [CURAND]_. For simulation-based applications this can make a big
+impact. We are hopeful that this issue will be resolved in the next year or two.
 
 Future: PyMC integration
 ------------------------
@@ -373,6 +440,9 @@ References
 .. [NvidiaGuide] NVIDIA Corporation. *Nvidia CUDA: Programming Guide.* (2010),
          http://developer.download.nvidia.com/compute/cuda/3_0/toolkit/docs/NVIDIA_CUDA_ProgrammingGuide.pdf
 
+.. [CURAND] NVIDIA Corporation. CURAND Random Number Generator
+         http://developer.download.nvidia.com/compute/cuda/3_2/toolkit/docs/CURAND_Library.pdf
+
 .. [PyMC] C. Fonnesbeck, A. Patil, D. Huard,
           *PyMC: Markov Chain Monte Carlo for Python*,
           http://code.google.com/p/pymc/
@@ -383,8 +453,8 @@ References
 .. [SciPy] E. Jones, T. Oliphant, P. Peterson,
            http://scipy.org
 
-.. [PyCUDA] A. Klockner,
+.. [PyCUDA] A. Klöckner,
         http://mathema.tician.de/software/pycuda
 
-.. [PyOpenCL] A. Klockner,
+.. [PyOpenCL] A. Klöckner,
           http://mathema.tician.de/software/pyopencl
