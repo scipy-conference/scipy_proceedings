@@ -160,7 +160,7 @@ sophisticated introspection and FFI (foreign function interface)
 capabilities.  We leverage these capabilities in Python
 to build domain- and machine-specific *specializers* that transform
 user-written code in a high-level language in various ways to expose
-parallelism, and then generate the code for a a specific machine.
+parallelism, and then generate code for a a specific machine in a low-level language.
 Then, the code is compiled, linked, and executed.  This entire process
 occurs transparently to the user; to the user, it appears that an
 interpreted function is being called.
@@ -175,11 +175,11 @@ host and transformation languages need not be the same, but Python
 happily serves both purposes well.
 
 Specifically, Asp provides a framework for creating Python classes
-(*specializers*) each
+(*specializers*), each
 of which represents a particular computational pattern.  Application
 writers subclass these to express specific problem instances.  The
-specializer class's methods use a combination of pre-supplied low-level source code (*templates*)
-snippets and manipulation of the Python abstract syntax tree (AST, also known as a parse tree) to generate low-level source
+specializer class's methods use a combination of pre-supplied low-level source code 
+snippets (*templates*) and manipulation of the Python abstract syntax tree (AST, also known as a parse tree) to generate low-level source
 code in an efficiency-level language (ELL) such as C, C++ or Cuda.
 
 For problems that call for
@@ -223,7 +223,7 @@ AST, or DAST.  That is, we immediately move the computation into a
 domain where problem-specific optimizations and knowledge can be applied,
 by applying transformations to the DAST.  Returning once again to the
 stencil, the DAST might have nodes such as "iterate over neighbors" or
-"iterate over all stencil points".  These abstract node types, which
+"iterate over all stencil points."  These abstract node types, which
 differ from one specializer to another, will
 eventually be used to generate ELL code according to the code generation
 strategy chosen; but at this level of representation, one can talk about
@@ -232,7 +232,7 @@ those that make sense *for iteration generally*.
 
 After any desired optimizations are applied to the domain-specific (but
 language- and platform-independent) representation of the problem,
-conversion of the DAST into ELL code is handled largely by CodePy.  Finally,
+conversion of the DAST into ELL code is handled largely by CodePy [CodePy]_.  Finally,
 the generated source code is compiled by an appropriate downstream
 compiler (gcc, cudac, proprietary compilers, etc) into an object file that
 can be called from Python.  Code caching strategies avoid
@@ -298,19 +298,19 @@ to a narrow subset of Python, characterizing the embedded domain-specific
 language, will be accepted. Since specializer writers frequently need to
 iterate over ASTs, the Asp infrastructure provides classes that implement a visitor
 pattern on these ASTs (similar to Python's ``ast.NodeTransformer``) to implement their specialization
-phases. The final phase uses CodePy [CodePy]_ to transform the DAST into a target-specific AST
+phases. The final phase uses CodePy to transform the DAST into a target-specific AST
 (e.g, C++ with OpenMP extensions). The Example Walkthrough
-section below explains these steps in the context of a particular specializer,
+section below explains these steps in the context of 
 the stencil kernel specializer. 
 
 Specializer writers can then use the Asp infrastructure to automatically compile, link, and execute
-the code in the final AST.  In many cases, the programmer may supply
+the code in the final AST.  In many cases, the programmer will supply
 several code variants, each represented
 by a different ASTs, to the Asp infrastructure.  Specializer-specific
 logic determines which variant to run; Asp provides functions to query
 the hardware features available (number of cores, GPU, etc.).  
 Asp provides for capturing and storing performance
-data and cached compiled code across
+data and caching compiled code across
 runs of the application.
 
 For specializer writers, therefore, the bulk of the work consists of exposing an understandable abstraction
