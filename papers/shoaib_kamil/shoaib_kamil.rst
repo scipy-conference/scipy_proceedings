@@ -118,7 +118,7 @@ Even if the function doesn't change much across applications, work on
 auto-tuning [ATLAS]_ has shown that for algorithms
 with tunable implementation parameters, the performance gain from
 fine-tuning these parameters compared to setting them naively can be
-up to 5x. [SC08]_ Indeed, the complex internal structure of auto-tuning
+up to :math:`5\times`. [SC08]_ Indeed, the complex internal structure of auto-tuning
 libraries such as the Optimized Sparse Kernel Interface [OSKI]_ is
 driven by the fact that often runtime information is necessary to
 choose the best execution strategy or tuning-parameter values.
@@ -524,6 +524,13 @@ to write succinct code and have platform-specific fast code generated for them.
 
 Gaussian Mixture Modeling
 .........................
+.. figure:: gmmperf.png
+   :figclass: bt
+   :align: center
+
+   Runtimes of GMM variants as the D parameter is varied on an Nvidia Fermi GPU (lower is better).  The 
+   specializer picks the best-performing variant to run. :label:`gmmperf`
+
 Gaussian Mixture Models (GMMs) are a class of statistical models used in a
 wide variety of applications, including image segmentation, speech recognition,
 document classification, and many other areas. Training such models is done
@@ -545,13 +552,6 @@ and selecting the best-performing one) for the majority of iterations.  As a res
 if specialization overhead (code generation, compilation/linking, etc.) is included, the 
 specialized GMM training algorithm outperforms the original, hand-tuned CUDA implementation
 on some classes of problems, as shown in Figure :ref:`gmmperfoverall`.
-
-.. figure:: gmmperf.png
-   :figclass: bt
-   :align: center
-
-   Runtimes of GMM variants as the D parameter is varied on an Nvidia Fermi GPU (lower is better).  The 
-   specializer picks the best-performing variant to run. :label:`gmmperf`
 
 .. figure:: gmmperfoverall.png
    :figclass: bt
