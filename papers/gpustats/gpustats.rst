@@ -12,76 +12,83 @@ gpustats: GPU Library for Statistical Computing in Python
 
 .. class:: abstract
 
-   In this talk we will discuss **gpustats**, a new Python library for assisting
-   in "big data" statistical computing applications, particularly Monte
-   Carlo-based inference algorithms. The library provides a general code
-   generation / metaprogramming framework for easily implementing discrete and
-   continuous probability density functions and random variable samplers. These
-   functions can be utilized to achieve more than 100x speedup over their CPU
-   equivalents. We will demonstrate their use in an Bayesian MCMC application
-   and discuss avenues for future work.
+   In this talk we will discuss **gpustats**, a new Python library for
+   assisting in "big data" statistical computing applications,
+   particularly Monte Carlo-based inference algorithms. The library
+   provides a general code generation / metaprogramming framework for
+   easily implementing discrete and continuous probability density
+   functions and random variable samplers. These functions can be
+   utilized to achieve more than 100x speedup over their CPU
+   equivalents. We will demonstrate their use in an Bayesian MCMC
+   application and discuss avenues for future work.
 
 .. class:: keywords
 
    GPU, CUDA, OpenCL, Python, statistical inference, statistics,
-   metaprogramming, sampling, Markov Chain Monte Carlo (MCMC), PyMC, big data
+   metaprogramming, sampling, Markov Chain Monte Carlo (MCMC), PyMC,
+   big data
 
 Introduction
 ------------
 
-Due to the high theoretical computational power and low cost of graphical
-processing units (GPUs), researchers and scientists in a wide variety of fields
-have become interested in applying them within their problem domains. However, a
-major catalyst for making GPUs widely accessible was the development of the
-general purpose GPU computing frameworks, [CUDA]_ and [OpenCL]_, which enable
-the user to implement general numerical algorithms in a simple extension of the
-C language to run on the GPU. In this paper, we will restrict our technical
-discussion to the CUDA architecture for NVIDIA cards, while later commenting on
-CUDA versus OpenCL.
+Due to the high theoretical computational power and low cost of
+graphical processing units (GPUs), researchers and scientists in a
+wide variety of fields have become interested in applying them within
+their problem domains. A major catalyst for making GPUs widely
+accessible was the development of the general purpose GPU computing
+frameworks, [CUDA]_ and [OpenCL]_, which enable the user to implement
+general numerical algorithms in a simple extension of the C language
+to run on the GPU. In this paper, we will restrict our technical
+discussion to the CUDA architecture for NVIDIA cards, while later
+commenting on CUDA versus OpenCL.
 
-As CUDA and OpenCL provide a C API for GPU programming, significant portions of
-the development process can be quite low level and require large amounts of
-boilerplate code. To address this problem, [PyCUDA]_ and [PyOpenCL]_ provide a
-high-level Python interface to the APIs, while also streamlining the process of
-writing and testing new GPU functions, or *kernels*. PyCUDA and PyOpenCL compile
-GPU kernels on the fly and upload them to the card; this eliminates the need to
-recompile a C executable with each code iteration. The result is a much more
-rapid and user-friendly GPU development experience, as the libraries take care
-of much of the boilerplate code for interacting with the GPU. They also provide
-seamless integration with [NumPy]_, which allows GPU functionality to integrate
-easily within a larger NumPy-based computing application. And, since code is
-compiled on the fly, it is relatively straightforward to implement
-metaprogramming approaches to dynamically generate customized GPU kernels within
-a Python program.
+As CUDA and OpenCL provide a C API for GPU programming, significant
+portions of the development process can be quite low level and require
+large amounts of boilerplate code. To address this problem, [PyCUDA]_
+and [PyOpenCL]_ provide a high-level Python interface to the APIs,
+while also streamlining the process of writing and testing new GPU
+functions, or *kernels*. PyCUDA and PyOpenCL compile GPU kernels on
+the fly and upload them to the card; this eliminates the need to
+recompile a C executable with each code iteration. The result is a
+much more rapid and user-friendly GPU development experience, as the
+libraries take care of much of the boilerplate code for interacting
+with the GPU. They also provide seamless integration with [NumPy]_,
+which allows GPU functionality to integrate easily within a larger
+NumPy-based computing application. And, since code is compiled on the
+fly, it is relatively straightforward to implement metaprogramming
+approaches to dynamically generate customized GPU kernels within a
+Python program.
 
-In this paper we will discuss some of the challenges of GPU computing and how
-GPUs can be applied to statistical inference applications. We will further show
-how PyCUDA and PyOpenCL are ideal for implementing certain kinds of statistical
-computing functions on the GPU.
+In this paper we will discuss some of the challenges of GPU computing
+and how GPUs can be applied to statistical inference applications. We
+will further show how PyCUDA and PyOpenCL are ideal for implementing
+certain kinds of statistical computing functions on the GPU.
 
 Development Challenges in GPU Computing
 ---------------------------------------
 
-While a CPU may have 4 or 8 cores, a latest generation GPU may have 256, 512, or
-even more computational cores. However, the GPU memory architecture is highly
-specialized to so-called single instruction multiple data (SIMD) problems. This
-generally limits the usefulness of GPUs to highly parallelizable data processing
-applications. The developer writes a function, known as a *kernel*, to process a
-unit of data. The kernel function is then executed once for each unit or chunk
-of data according to a schedule determined by the developer.
+While a CPU may have 4 or 8 cores, a latest generation GPU may have
+256, 512, or even more computational cores. However, the GPU memory
+architecture is highly specialized to so-called single instruction
+multiple data (SIMD) problems. This generally limits the usefulness of
+GPUs to highly parallelizable data processing applications. The
+developer writes a function, known as a *kernel*, to process a unit of
+data. The kernel function is then executed once for each unit or chunk
+of data.
 
-The GPU has a large single *global* memory store (typically 512MB to 4GB) from
-which data sets can be written and read by the CPU. However, each group, or
-*block*, of threads are assigned a small piece (typically 16K to 64K) of ultra
-low-latency *shared* cache memory which is orders of magnitude faster than the
-global memory. Therefore, the main challenge for the developer, outside of
-writing the kernel function, is structuring the computation to optimally utilize
-each thread block's shared memory and minimizing reads from and writes to the
-global memory. Careful coordination of the threads is required to transfer
-memory efficiently from global to shared. We will not get into the low-level
-details of this process but instead refer the interested reader to the CUDA API
-guide ([NvidiaGuide]_). See Figure :ref:`gpuschematic` for a rough diagram of
-the computing architecture.
+The GPU has a large single *global* memory store (typically 512MB to
+4GB) from which data sets can be written and read by the CPU. However,
+each group, or *block*, of threads are assigned a small piece
+(typically 16K to 64K) of ultra low-latency *shared* cache memory
+which is orders of magnitude faster than the global memory. Therefore,
+the main challenge for the developer, outside of writing the kernel
+function, is structuring the computation to optimally utilize each
+thread block's shared memory and minimizing reads from and writes to
+the global memory. Careful coordination of the threads is required to
+transfer memory efficiently from global to shared. We will not get
+into the low-level details of this process but instead refer the
+interested reader to the CUDA API guide ([NvidiaGuide]_). See Figure
+:ref:`gpuschematic` for a rough diagram of the computing architecture.
 
 
 As a larger computation is divided up into a *grid* of thread blocks, a typical
@@ -99,13 +106,14 @@ CUDA kernel will therefore take the following structure:
 Computational Challenges in Likelihood-based Statistical Inference
 ------------------------------------------------------------------
 
-In most standard and Bayesian statistical models, a probability distribution (or
-family of distributions) is assumed for each realization of the data. For
-example, the errors (residuals) in a linear regression problem are assumed to be
-normally distributed with mean 0 and some variance :math:`\sigma^2`. In a
-standard statistical inference problem, given a set of distributional
-assumptions the task is to estimate the parameters of those distributions. Under
-this setup, we can write down the *joint likelihood* for the data in
+In most standard and Bayesian statistical models, a probability
+distribution (or family of distributions) is assumed for each
+realization of the data. For example, the errors (residuals) in a
+linear regression problem are assumed to be normally distributed with
+mean 0 and some variance :math:`\sigma^2`. In a standard statistical
+inference problem, given a set of distributional assumptions the task
+is to estimate the parameters of those distributions. Under this
+setup, we can write down the *joint likelihood* for the data in
 mathematical terms
 
 .. math::
@@ -134,7 +142,7 @@ reduces numerical precision problems.
 
 Many numerical algorithms for fitting these likelihood-based models, especially
 Monte Carlo-based, involve evaluating the log-likelihood function over thousands
-of iterations. Thus, as the size of the observed data grows, computational
+of iterations. Thus as the size of the observed data grows, computational
 expense grows *as least* linearly in the number of data points. As above, if the
 data are assumed to be independently generated, the quantity :math:`\log p(x_i |
 \Theta)` for each observation :math:`x_i` can be evaluated in parallel then
@@ -249,7 +257,7 @@ Metaprogramming: probability density kernels and beyond
 -------------------------------------------------------
 
 The **gpustats** Python library leverages the compilation-on-the-fly
-capabilities of PyCUDA and metaprogramming techniques to simply the process of
+capabilities of PyCUDA and metaprogramming techniques to simplify the process of
 writing new GPU kernels for computing probability density functions, samplers,
 and other related statistical computing functionality. As described above in the
 normal distribution case, one would hope that writing a new density function
@@ -259,17 +267,18 @@ library. Additionally, we would like to have a mechanism for computing
 transformed versions of existing kernels. For example, ``log_normal_pdf`` could
 be transformed to the unlogged density by applying the exponent function.
 
-To solve these problems, we have developed a prototype object-oriented code
-generation framework to make it easy to develop new kernels with minimal effort
-by the statistical user. We do so by taking advantage of the string templating
-functionality of Python and the CUDA API's support for inline functions on the
-GPU. These inline functions are known as device functions, marked by
-``__device__``. Since the data transfer / coalescing problem needs to be only
-solved once for each variety of kernel, we can use templating to generate a
-custom kernel for each new device function implementing a new probability
-density. It is then not too much of a stretch to enable elementwise
-transformations of existing device functions, e.g. taking the ``exp`` of a
-logged probability density. In the **gpustats** framework, the code for
+To solve these problems, we have developed a prototype object-oriented
+code generation framework to make it easy to develop new kernels with
+minimal effort by the statistical user. We do so by taking advantage
+of the string templating functionality of Python and the CUDA API's
+support for inline functions on the GPU. These inline functions are
+known as device functions, marked by ``__device__``. Since the data
+transfer / coalescing problem needs to be only solved once for each
+variety of kernel, we can use templating to generate a custom kernel
+for each new device function implementing a new probability
+density. It is then simple to enable elementwise transformations of
+existing device functions, e.g. taking the ``exp`` of a logged
+probability density. In the **gpustats** framework, the code for
 implementing the logged and unlogged normal pdf is as follows:
 
 .. code-block:: python
