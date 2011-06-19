@@ -61,9 +61,9 @@ Bringing Parallel Performance to Python  with Domain-Specific Selective Embedded
     result is efficiency-level (e.g. C, C++) code callable from Python
     whose performance equals or exceeds that of handcrafted code, plus
     performance portability by allowing multiple code generation
-    strategies to be packaged in the same specializer, e.g. to target
-    either multicore CPUs or GPUs depending on the hardware present at
-    runtime.  Application writers never leave the Python world, and we
+    strategies within the same specializer to target
+    different hardware present at runtime, e.g. multicore CPUs vs. GPUs.
+    Application writers never leave the Python world, and we
     do not assume any modification or support for parallelism in
     Python itself.
 
@@ -82,7 +82,7 @@ Introduction
 ------------
 
 It has always been a challenge for productivity programmers, such as
-scientists who write code to support their science, to get both good
+scientists who write code to support doing science, to get both good
 performance and ease of programming.  This is attested by the
 proliferation of high-performance libraries such as BLAS, OSKI [OSKI]_ and
 FFTW [FFTW]_, by domain-specific languages like SPIRAL [SPIRAL]_, and by the
@@ -90,13 +90,10 @@ popularity of the natively-compiled SciPy [SciPy]_ libraries among others.
 To make things worse, processor clock scaling has run into physical
 limits, so future performance increases will be the result of
 increasing hardware parallelism rather than single-core speedup,
-making the programming problem even more complex.
-
+making programming even more complex.
 As a result, programmers must choose between productive and maintainable
-code with modest performance (e.g. Python plus native libraries such as  SciPy)
-or complex, brittle, hardware-specific code 
-that entangles application logic with performance concerns but runs two
-to three orders of magnitude faster (e.g. C++ with OpenMP, CUDA, etc.).
+but slow-running code on the one hand, and performant but
+complex and hardware-specific code on the other hand.
 
 The usual solution to bridging this gap is to provide compiled native
 libraries for certain functions, as the SciPy package does.  However, in
@@ -652,7 +649,7 @@ to, at install time, determine the best GEMM routine for the particular machine.
 After PHiPAC, auto-tuning has been applied to a number of domains
 including sparse matrix-vector multiplication (SpMV) [OSKI]_, Fast
 Fourier Transforms (FFTs) [SPIRAL]_, and multicore versions of 
-stencils [KaDa09]_, [Kam10]_, [Poich]_, showing large improvements 
+stencils [KaDa09]_, [Kam10]_, [Tang11]_, showing large improvements 
 in performance over simple implementations of these kernels.
 
 
@@ -660,42 +657,27 @@ Conclusion
 -----------
 
 We have presented a new approach to bridging the
-"productivity/efficiency gap:" rather than relying solely on libraries
+"productivity/efficiency gap": rather than relying solely on libraries
 to allow productivity programmers to remain in high-level languages, we
-package the expertise of human experts in implementing particular
-computations on specific hardware platforms with high performance.  The
-packaging consists of a collection of code snippets in a low-level
-language (C++/OpenMP, etc.) and a set of transformation rules to
-operate on problem-specific ASTs, allowing just-in-time generation and
-compilation of optimized code for those computations even where
-higher-order functions must be used.  The low-level code typically runs
-as fast or faster than the original hand-produced version
+package the expertise of human experts as a collection of code templates
+in a low-level language (C++/OpenMP, etc.) and a set of transformation
+rules to generate and optimize problem-specific ASTs at runtime.  The
+resulting low-level code runs as fast or faster than the
+original hand-produced version.
 
-Unlike many prior approaches, we do not attempt to invent a new
-standalone DSL for any specific problem type, nor to imbue a full
+Unlike many prior approaches, we neither propose a standalone
+DSL nor try to imbue a full
 compiler with the intelligence to "auto-magically" recognize and
-optimize/parallelize compute-intensive problems.  Rather, the main
-contribution of our approach is the separation of concerns that it
-enables: programmers who understand low-level code for a particular problem family can
-express implementation optimizations that make sense only for that
-problem, and package their expertise in a way that makes it widely
-usable by Python programmers.  As well, because different code
-generation strategies can be chosen based on the hardware available at
-runtime, application writers can remain oblivious to the fact that the
-same Python code running on different hardware platforms might result in
-very different low-level code being generated, giving source-level
-performance portability.
-
-The application code is also more maintainable even for "simple"
-problems such as the matrix powers calculation: while the computation
-logic is straightforward, the code expands many-fold when the extra code
-necessary to get performance 
-is added to the main application logic.
-
-Finally, because we emit source code in a lower-level language, the
-substantial work that has gone into optimizing compilers can be directly
-leveraged downstream of Asp-- indeed, by controlling code generation we
-can emit code that is easier for downstream compilers to optimize.
+optimize compute-intensive problems.  Rather, the main
+contribution of SEJITS is separation of concerns:
+expert programmers can
+express implementation optimizations that make sense only for a particular
+problem (and perhaps only on specific hardware), and package this
+expertise in a way that makes it widely 
+reusable by Python programmers.  Application writers remain oblivious to
+the details of specialization, making their code simpler and shorter as
+well as
+performance-portable. 
 
 We hope that our promising initial results will encourage others to
 contribute to building up the ecosystem of Asp specializers.
@@ -760,7 +742,7 @@ References
 
 .. [PIL] Python Imaging Library. http://pythonware.com/products/pil.
 
-.. [Poich] Y.Tang, R. A. Chowdhury, B. C. Kuszmaul, C.-K. Luk, and
+.. [Tang11] Y.Tang, R. A. Chowdhury, B. C. Kuszmaul, C.-K. Luk, and
    C. E. Leiserson. The Pochoir Stencil Compiler. 23rd ACM Symposium 
    on Parallelism in Algorithms and Architectures, 2011.
 
