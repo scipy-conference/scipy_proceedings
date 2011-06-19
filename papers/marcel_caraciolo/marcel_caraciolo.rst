@@ -18,7 +18,7 @@ Crab: A Recommendation Engine Framework for Python
 .. class:: abstract
 
 	Crab is a flexible, fast recommender engine for Python that integrates classic information filtering
-	recommendation algorithms in the world of scientific Python packages (NumPy,SciPy, Matplotlib).The engine 
+	recommendation algorithms in the world of scientific Python packages (NumPy,SciPy, Matplotlib). The engine 
 	aims to provide a rich set of components from which you can construct a customized recommender system from 
 	a set of algorithms. It is designed for scability, flexibility and performance making use of scientific 
 	optimized python packages in order to provide simple and efficient solutions that are acessible to everybody
@@ -27,7 +27,7 @@ Crab: A Recommendation Engine Framework for Python
 	a web site that sells movies could easily use Crab to figure out, from past purchase data, which movies a
 	customer might be interested in watching to. This work presents our inniative in developing this framework
 	in Python following the standards of the well-known machine learning toolkit Scikit-Learn to be an alternative
-	solution for Mahout Taste collaborative framework for Java. Finally, we will present its main features,
+	solution for Mahout Taste collaborative framework for Java. Finally, we discuss its main features,
 	real scenarios where this framework is already applied and future extensions.
 
 .. class:: keywords
@@ -60,7 +60,7 @@ are also several another publicly available implementations of recommender engin
 Each one comes with its own interface, sometimes even not updated anymore by the project owners, a small set of recommendation techniques implemented, and
 unique benefits and drawbacks.
 
-For Python developers, which there is a considerable ammount of machine learning developers and 
+For Python developers, which has a considerable ammount of machine learning developers and 
 researchers, there is no single unified way of interfacing and testing these recommendation algorithms, even though there are some
 approaches but found incomplete or missing the required set for creating and evaluating new methods [PySuggest2005]_, [djangorecommender2008]_.
 This restraints developers and researchers from fully taking advantage of the recent developments in recommendation engines algorithms as also an
@@ -74,8 +74,8 @@ The reason of not having an alternative for python machine learning developers b
 motivated us to develop a recommendation engine toolbox that provides a rich set of features from which the developer can build a customized recommender system
 from a set of algorithms. The result is a framework, called CRAB, with focus on large-scale recommendations making use of scientific python packages
 such as Scipy, Numpy and Matplotlib to provide simple and efficient solutions for constructing recommender systems
-that are acessible and reusable in various contexts. The framework Crab provides a generic interface for recommender systems implementations,
-among them the collaborative filtering approaches such as Slope-One, User-Based and Item-Based filtering, which are already available for use.
+that are acessible and reusable in various contexts. Crab provides a generic interface for recommender systems implementations,
+among them the collaborative filtering approaches such as User-Based and Item-Based filtering, which are already available for use.
 The recommender interfaces can be easily combined with more than 10 different pairwise metrics already implemented, like the cosine, tanimoto,
 pearson, euclidean already using Scipy and Numpy basic optimized functions [Breese1998]_. Moreover, it offers support
 for using similarities functions such as user-to-user or item-to-item and allows easy integration with different input domains like databases,
@@ -83,14 +83,14 @@ text files or python dictionaries.
 
 Currently, the collaborative filtering algorithms are widely supported. In addition to the User-Based and Item-Based filtering 
 techniques, Crab implements several pairwise metrics and provides the basic interfaces for developers to build their own 
-customized recommender algorithms. Finally, several commonly used performance measures, such as accuracy, precision, recall are
+customized recommender algorithms. Finally, several widely used performance measures, such as accuracy, precision, recall are
 implemented in Crab.
 
 An important aspect in the design of Crab was to enable very large-scale recommendations. Crab is currently being rewritten
 to support optimized scientific computations by using Scipy and Numpy routines. Another feature concerned by the current mantainers
 is to make Crab support sparse and large datasets in a way that there is a little as possible overhead for storing the data
 and intermediate results. Moreover, Crab also aims to support scaling in recommender systems in order to build high-scale, 
-dynamic and fast recommendations over simple calls. Futhermore, Crab is also planned to support distributed 
+dynamic and fast recommendations over simple calls. It is also planned to support distributed 
 recommendation computation by interfacing with the distributed computation library MrJob written in Python currently
 developed by Yelp [MrJob2010]_. What sets Crab apart from many other recommender systems toolboxes, is that it provides 
 interactive interfaces to build, deploy and evaluate customized recommender algorithms written in Python running on several
@@ -106,20 +106,22 @@ this paper.
 Recommender Engines 
 -------------------
 Crab contains a recommender engine, in fact, several types beginning with conventional in the literature
-user-based and item-based recommenders. Crab provides an assortment of components that may be plugged together
+user-based and item-based recommenders. It provides an assortment of components that may be plugged together
 and customized to create an ideal recommender for a particular domain. The toolkit is implemented using Python
 and the scientific enviroments for numerical applications such as Scipy and NumPy. The decision of choosing those 
 libraries is because they are widely used in scientific computations specially in python programs. Another reason
 is because the framework uses the Scikit-learn toolkit as dependant, which provides basic components from our recommender
-interfaces derive. The Figure 01 presents the relationship between these basic components. Not all Crab-based recommenders
+interfaces derive. The Figure :ref:`egfig` presents the relationship between these basic components. Not all Crab-based recommenders
 will look like this -- some will employ different components with different relationships, but this gives a sense 
 of the role of each component. 
 
-FIGURE 01
+.. figure:: figure1.png
+
+   Simplified illustration of the component interaction in Crab . :label:`egfig`
 
 
 The Data Model implementation stores and provides access to all the preference, user and item data needed in the recommendation. The Similarity
-interface provides the notion of how similar two users or items are; where this could be based on one of many possible metrics or calculations.
+interface provides the notion of how similar two users or items are; where this could be based on one of many possible pairwise metrics or calculations.
 Finally, a Recommender interface which inherits the BaseEstimator from scikit-learn pull all these components together to recommend items
 to users, and related functionality. 
 
