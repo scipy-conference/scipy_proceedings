@@ -389,11 +389,293 @@ ARMA processes and to work with lag-polynomials: `acf`, `acovf`, `ar`,
 sandbox has a fft version of some of this to looke at the frequency domain
 properties. 
 
+ARMA Modeling
+-------------
 
+`Statsmodels` provides several helpful routines and models for working 
+Autoregressive Moving Average (ARMA) time-series models, including simulation and 
+estimation code. For example, after importing `arima_process` as `ap` from 
+`scikits.statsmodels.tsa` we can simulate a series [1]_
+
+.. code-block:: python
+
+    >>> ar_coef = [1, .75, -.25]
+    >>> ma_coef = [1, -.5]
+    >>> nobs = 100
+    >>> y = ap.arma_generate_sample(ar_coef, 
+    ...                             ma_coef, nobs)
+    >>> y += 4 # add in constant
+
+We can then estimate an ARMA model of the series
+
+.. code-block:: python
+
+    >>> mod = tsa.ARMA(y)
+    >>> res = arma_mod.fit(order=(2,1), trend='c', 
+    ...                    method='css-mle', disp=-1)
+    >>> arma_res.params
+    array([ 4.0092, -0.7747,  0.2062, -0.5563])
+
+The estimation method, 'css-mle', indicates that the starting parameters from the 
+optimization are to be obtained from the conditional sum of squares estimator and
+then the exact likelihood is optimized. The exact likelihood is implemented using 
+the Kalman Filter.
+
+Filtering
+---------
+
+We have recently implemented several filters that are commonly used in 
+economics and finance applications. The three most popular method are the 
+Hodrick-Prescott, the Baxter-King filter, and the Christiano-Fitzgerald. These
+can all be viewed as approximations of the ideal band-pass filter; however, 
+discussion of the ideal band-pass filter is beyond the scope of this paper. We
+will [briefly review the implementation details of each] give an overview of 
+each of the methods and then present some usage examples.
+
+The Hodrick-Prescott filter was proposed by Hodrick and Prescott [HPres]_, though the 
+method itself has been in use across the sciences since at least 1876 [Stigler]_. The 
+idea is to separate a time-series :math:`y_{t}` into a trend :math:`\tau_{t}` and 
+cyclical compenent :math:`\zeta_{t}`
+
+.. math:: 
+
+   y_{t} = \tau_{t} + \zeta_{t}
+
+The components are determined by minimizing the following quadratic loss function
+
+.. math:: 
+   
+   \min_{\left\{ \tau_{t}\right\} }\sum_{t}^{T}\zeta_{t}^{2}+\lambda\sum_{t=1}^{T}\left[\left(\tau_{t}-\tau_{t-1}\right)-\left(\tau_{t-1}-\tau_{t-2}\right)\right]^{2}
+
+where :math:`\tau_{t}=y_{t}-\zeta_{t}` and :math:`\lambda` is the weight placed 
+on the penalty for roughness. Hodrick and Prescott suggest using :math:`\lambda=1600`
+for quarterly data. Ravn and Uhlig [RUhlig]_ suggest :math:`\lambda=6.25` and 
+:math:`\lambda=129600` for annual and monthly data, respectively. While there are
+numerous methods for solving the loss function, our implementation uses 
+`scipy.sparse.linalg.spsolve` to find the solution to the generalized ridge-regression 
+suggested in Danthine and Girardine [DGirard]_.
+
+Baxter and King [BKing]_ propose an approximate band-pass filter that deals 
+explicitly with the periodicity of the business cycle. By applying their 
+band-pass filter to a time-series :math:`y_{t}`, they produce a series :math:`y_{t}^{*}`
+that does not contain fluctuations at frequencies higher or lower than those of the 
+business cycle. Specifically, in the time domain the Baxter-King filter takes the 
+form of a symmetric moving average
+
+.. math:: 
+
+   y_{t}^{*}=\sum_{k=-K}^{K}a_{k}y_{t-k}
+
+where :math:`a_{k}=a_{-k}` for symmetry and :math:`\sum_{k=-K}^{K}a_{k}=0` such that 
+the filter has trend elimination properties. That is, series that contain quadratic 
+deterministic trends or stochastic processes that are integrated of order 1 or 2 are 
+rendered stationary by application of the filter. The filter weights :math:`a_{k}` 
+are given as follows
+
+.. math::
+
+   a_{j} = B_{j}+\theta\text{ for }j=0,\pm1,\pm2,\dots,\pm K
+
+.. math::
+
+   B_{0} = \frac{\left(\omega_{2}-\omega_{1}\right)}{\pi}
+
+.. math::
+
+   B_{j} = \frac{1}{\pi j}\left(\sin\left(\omega_{2}j\right)-\sin\left(\omega_{1}j\right)\right)\text{ for }j=0,\pm1,\pm2,\dots,\pm K
+
+where :math:`\theta` is a normalizing constant such that the weights sum to zero
+
+.. math::
+
+   \theta=\frac{-\sum_{j=-K^{K}b_{j}}}{2K+1}
+
+and 
+
+.. math::
+
+   \omega_{1}=\frac{2\pi}{P_{H}}
+
+.. math::
+
+   \omega_{2}=\frac{2\pi}{P_{L}}
+
+with the periodicity of the low and high cut-off frequencies given by :math:`P_{L}` 
+and :math:`P_{H}`, respectively. Following Burns and Mitchell's [] pioneering work 
+which suggests that US business cycles last from 1.5 to 8 years, Baxter and King 
+suggest using :math:`P_{L}=6` and :math:`P_{H}=32` for quarterly data or 1.5 and 8 
+for annual data. The authors suggest setting the lead-lag length of the filter 
+:math:`K` to 12 for quarterly data. The transformed series will be truncated on 
+either end by `K`. Naturally the choice of these parameters depends on the 
+available sample and the frequency band of interest.
+
+The last filter that we currently provide is that of Christiano and Fitzgerald 
+[CFitz]_. The Christiano-Fitzgerald filter is again a weighted moving average. However, 
+their filter is asymmetric about :math:`t` and operates under the (generally false) 
+assumption that :math:`y_{t}` follows a random walk. This assumption allows their 
+filter to approximate the ideal filter even if the exact time-series model of 
+:math:`y_{t}` is not known. The implementation of their filter involves the 
+calculations of the weights in
+
+.. math::
+       
+   y_{t}^{*} = B_{0}y_{t}+B_{1}y_{t+1}+\dots+B_{T-1-t}y_{T-1}+\tilde{B}_{T-t}y_{T}+
+
+
+.. math::                   
+
+               B_{1}y_{t-1}+\dots+B_{t-2}y_{2}+\tilde{B}_{t-1}y_{1}
+
+for :math:`t=3,4,...,T-2`, where
+
+.. math::
+
+   B_{j} = \frac{\sin(jb)-\sin(ja)}{\pi j},j\geq1
+
+.. math::
+
+   B_{0} = \frac{b-a}{\pi},a=\frac{2\pi}{P_{u}},b=\frac{2\pi}{P_{L}}
+
+:math:`\tilde{B}_{T-t}` and :math:`\tilde{B}_{t-1}` are linear functions of the 
+:math:`B_{j}`'s, and the values for :math:`t=1,2,T-1,` and :math:`T` are also 
+calculated in much the same way. See the authors' paper or our code for the details. 
+:math:`P_{U}` and :math:`P_{L}` are as described above with the same interpretation.
+
+Moving on to some examples, the below demonstrates the API and resultant 
+filtered series for each method. We use series for unemployment and inflation 
+to demonstrate :ref:`raw`. They are traditionally thought to have a negative 
+relationship at business cycle frequencies.
+   
+.. code-block:: python
+
+    >>> from scipy.signal import lfilter
+    >>> data = sm.datasets.macrodata.load()
+    >>> infl = data.data.infl[1:]
+    >>> # get 4 qtr moving average
+    >>> infl = lfilter(np.ones(4)/4, 1, infl)[4:]
+    >>> unemp = data.data.unemp[1:]
+
+To apply the Hodrick-Prescott filter to the data :ref:`hpfilt`, we can do
+
+.. code-block:: python
+
+    >>> infl_c, infl_t = tsa.filters.hpfilter(infl)
+    >>> unemp_c, unemp_t = tsa.filters.hpfilter(unemp)
+
+The Baxter-King filter :ref:`bkfilt` is applied as
+
+.. code-block:: python
+ 
+    >>> infl_c = tsa.filters.bkfilter(infl)
+    >>> unemp_c = tsa.filters.bkfilter(unemp)
+
+The Christiano-Fitzgerald filter is similarly applied :ref:`cffilt`
+
+.. code-block:: python
+
+    >>> infl_c, infl_t = tsa.filters.cfilter(infl)
+    >>> unemp_c, unemp_t = tsa.filters.cfilter(unemp)
+
+.. figure:: raw.png
+
+   Unfiltered Inflation and Unemployment Rates 1959Q4-2009Q1 :label:`raw`
+
+.. figure:: hpfilter.png
+
+   Unfiltered Inflation and Unemployment Rates 1959Q4-2009Q1 :label:`hpfilt`
+   
+.. figure:: bkfilter.png
+
+   Unfiltered Inflation and Unemployment Rates 1959Q4-2009Q1 :label:`bkfilt`
+
+.. figure:: cffilter.png
+
+   Unfiltered Inflation and Unemployment Rates 1959Q4-2009Q1 :label:`cffilt`
+
+
+Statistical Benchmarking
+------------------------
+
+We also provide for another frequent need of those who work with time-series data of 
+varying observational frequency--that of benchmarking. Benchmarking is a kind of 
+interpolation that involves creating a high-frequency dataset from a low-frequency one
+in a consistent way. The need for benchmarking arises when one has a low-frequency 
+series that is perhaps annual and is thought to be reliable, and the researcher also 
+has a higher frequency series that is perhaps quarterly or monthly. A benchmarked series
+is a high-frequency series consistent with the benchmark of the low-frequency series.
+
+We have implemented Denton's modified method. Originally proposed by Denton [Denton]_ 
+and improved by Cholette [Cholette]_. To take the example of turning an annual series
+into a quarterly one, Denton's method entails finding a benchmarked series
+:math:`X_{t}` that solves
+
+.. math::
+
+   \min_{\{X_{t}\}}\sum_{t}^{T}\left(\frac{X_{t}}{I_{t}}-\frac{X_{t-1}}{I_{t-1}}\right)^{2}
+
+subject to
+
+.. math::
+
+   \sum_{t=2}^{T}X_{t}=A_{y}\,\, y=\left\{ 1,\dots,\beta\right\}
+
+That is, the sum of the benchmarked series must equal the annual benchmark in each year.
+In the above :math:`A_{y}` is the annual benchmark for year :math:`y`, :math:`I_{t}` 
+is the high-frequency indicator series, and :math:`\beta` is the last year for which
+the annual benchmark is available. If :math:`T>4\beta`, then extrapolation is 
+performed at the end of the series. To take an example, given the US monthly industrial
+production index and quarterly GDP data, from 2009 and 2010, we can construct a
+benchmarked monthly GDP series
+
+.. code-block:: python
+
+    >>> iprod_m = np.array([ 87.4510, 86.9878, 85.5359, 
+                    84.7761, 83.8658, 83.5261, 84.4347, 
+                    85.2174, 85.7983, 86.0163, 86.2137, 
+                    86.7197, 87.7492, 87.9129, 88.3915,
+                    88.7051, 89.9025, 89.9970, 90.7919, 
+                    90.9898, 91.2427, 91.1385, 91.4039, 
+                    92.5646])
+    >>> gdp_q = np.array([14049.7, 14034.5, 14114.7, 
+                  14277.3, 14446.4, 14578.7, 14745.1, 
+                  14871.4])
+    >>> gdp_m = tsa.interp.dentonm(iprod_m, gdp_q, freq="qm")
+
+
+.. [1] Notice that the AR coefficients and MA coefficients, both include a 1 for the 
+       zero lag. Further, the signs on the AR coefficients are reversed versus
+       those estimated by `tsa.ARMA` due to the differing conventions of 
+       `scipy.signal.lfilter`.
 
 References
 ----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
+
+.. [BKing] Baxter, M. and King, R.G. 1999. "Measuring Business Cycles: Approximate
+           Band-pass Filters for Economic Time Series." *Review of Economics and
+           Statistics*, 81.4, 575-93. 
+
+.. [Cholette] Cholette, P.A. 1984. "Adjusting Sub-annual Series to Yearly
+              Benchmarks." *Survey Methodology*, 10.1, 35-49.
+
+.. [CFitz] Christiano, L.J. and Fitzgerald, T.J. 2003. "The Band Pass Filter."
+           *International Economic Review*, 44.2, 435-65.
+
+.. [DGirard] Danthine, J.P. and Girardin, M. 1989. "Business Cycles in Switzerland:
+             A Comparative Study." *European Economic Review* 33.1, 31-50.
+
+.. [Denton] Denton, F.T. 1971. "Adjustment of Monthly or Quarterly Series to 
+            Annual Totals: An Approach Based on Quadratic Minimization." *Journal of 
+            the American Statistical Association*, 66.333, 99-102.
+
+.. [HPres] Hodrick, R.J. and Prescott, E.C. 1997. "Postwar US Business Cycles:
+           An Empirical Investigation." *Journal of Money, Credit, and Banking,*
+           29.1, 1-16.
+
+.. [RUhlig] Ravn, M.O and Uhlig, H. 2002. "On Adjusting the Hodrick-Prescott Filter for
+            the Frequency of Observations." *Review of Economics and Statistics,*
+            84.2, 371-6.
+
+.. [Stigler] Stigler, S.M. 1978. "Mathematical Statistics in the Early States." *Annals
+             of Statistics* 6, 239-65,           
 
 
