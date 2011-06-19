@@ -635,7 +635,47 @@ already outperforms the native solver routine used by SciPy.
 
 Conclusion & Future Work
 ------------------------
-0.5 page.  AspDB, platform detection.
+
+We have presented a new approach to bridging the
+"productivity/efficiency gap": rather than relying solely on libraries
+to allow productivity programmers to stick to high-level languages, we
+package the expertise of human experts in implementing particular
+computations on specific hardware platforms with high performance.  The
+packaging consists of a collection of code snippets in a low-level
+language (C, C++/OpenMP, etc.) and a set of transformation rules to
+operate on problem-specific ASTs, allowing just-in-time generation and
+compilation of optimized code for those computations even where
+higher-order functions must be used.  The low-level code typically runs
+as fast or faster than the original hand-produced version
+
+Unlike many prior approaches, we do not attempt to invent a new
+standalone DSL for any specific problem type, nor to imbue a full
+compiler with the intelligence to "automagically" recognize and
+optimize/parallelize compute-intensive problems.  Rather, the main
+contribution of our approach is the separation of concerns that it
+enables: programmers who specialize in a particular problem family can
+express implementation optimizations that make sense only for that
+problem, and package their expertise in a way that makes it widely
+reusable by Python programmers.  As well, because different code
+generation strategies can be chosen based on the hardware available at
+runtime, application writers can remain oblivious to the fact that the
+same Python code running on different hardware platforms might result in
+very different low-level code being generated, giving source-level
+performance portability.
+
+The application code is also more maintainable even for "simple"
+problems such as the matrix powers calculation: while the computation
+logic is straightforward, the code expands manyfold when the extra code
+necessary to get performance (loop unrolling, software pipelining,
+parallel annotations, etc) is added to the main application logic.
+
+Finally, because we emit source code in a lower-level language, the
+substantial work that has gone into optimizing compilers can be directly
+leveraged downstream of Asp-- indeed, by controlling code generation we
+can emit code that is easier for the downstream compilers to optimize.
+
+We hope that our promising initial results will encourage others to
+contribute to building up the ecosystem of Asp specializers.
 
 
 Related Work
