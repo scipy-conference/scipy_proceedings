@@ -235,7 +235,7 @@ After any desired optimizations are applied to the domain-specific (but
 language- and platform-independent) representation of the problem,
 conversion of the DAST into ELL code is handled largely by CodePy [CodePy]_.  Finally,
 the generated source code is compiled by an appropriate downstream
-compiler (gcc, cudac, proprietary compilers, etc) into an object file that
+compiler into an object file that
 can be called from Python.  Code caching strategies avoid
 the cost of code generation and compilation on subsequent calls.
 
@@ -293,11 +293,6 @@ the specialization process is one or more templates of ELL source code,
 optionally a set of methods for transforming or optimizing the AST
 corresponding to the problem instance, and some Python code to drive the
 process of assembling the snippets and/or transforming the DAST.
-
-[need diagram showing human expert, strategy consisting of templates and
-AST transformation rules (for each of N platforms), app writer, Asp,
-generated code; i think can be made redundant with fig 1; i'll supply a
-hand drawn diagram as example]
 
 In a specializer, the user-defined kernel is first translated into a 
 Python AST, and analyzed to see if the code supplied by the application
