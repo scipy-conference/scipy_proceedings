@@ -288,11 +288,7 @@ Specializer writers use Asp infrastructure to build their domain-specific transl
 provide two ways to generate low-level code: templates and abstract syntax tree
 (AST) transformation. For many kinds of computations, using templates is sufficient to translate from
 Python to C++, but for others, phased AST transformation allows application programmers to express
-arbitrary computations to specialize.  At runtime, then, the input to
-the specialization process is one or more templates of ELL source code,
-optionally a set of methods for transforming or optimizing the AST
-corresponding to the problem instance, and some Python code to drive the
-process of assembling the snippets and/or transforming the DAST.
+arbitrary computations to specialize.  
 
 In a specializer, the user-defined kernel is first translated into a 
 Python AST, and analyzed to see if the code supplied by the application
@@ -301,9 +297,9 @@ to a narrow subset of Python, characterizing the embedded domain-specific
 language, will be accepted. Since specializer writers frequently need to
 iterate over ASTs, the Asp infrastructure provides classes that implement a visitor
 pattern on these ASTs (similar to Python's ``ast.NodeTransformer``) to implement their specialization
-phases. The final phase uses CodePy to transform the DAST into a target-specific AST
+phases. The final phase transforms the DAST into a target-specific AST
 (e.g, C++ with OpenMP extensions). The Example Walkthrough
-section below explains these steps in the context of 
+section below demonstrates these steps in the context of 
 the stencil kernel specializer. 
 
 Specializer writers can then use the Asp infrastructure to automatically compile, link, and execute
@@ -560,6 +556,7 @@ on some classes of problems, as shown in Figure :ref:`gmmperfoverall`.
 .. figure:: gmmperfoverall.png
    :figclass: bt
    :align: center
+   :width: 80%
 
    Overall performance of specialized GMM training versus original optimized CUDA algorithm.
    Even including specializer overhead, the specialized EM training outperforms the original
