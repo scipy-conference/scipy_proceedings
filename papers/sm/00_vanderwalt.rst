@@ -170,6 +170,19 @@ We show the different quantities of materials required in Table
 Introduction
 ------------
 
+Statsmodels is a python package that provides a complement to scipy for
+statistical computations including descriptive statistics and
+estimation of statistical models. Beside the initial models, linear
+regression, robust linear models, generalized linear models and models
+for discrete data, the latest release of scikits.statsmodels includes
+some basic tools and models for time series analysis. This includes
+descriptive statistics, statistical tests and several linear model classes,
+autoregressive, AR, autoregressive moving-average, ARMA, and vector
+autoregressive models VAR. In this article we would like to introduce and
+provide an overview of the new time series analysis features of statsmodels.
+In the outlook at the end we point to some extensions and new models that
+are under development.
+
 Time Series comprises observations that are ordered along one
 dimension, that is time, which imposes specific stochastic structures
 on the data. Our current models assume that observations are
@@ -449,18 +462,19 @@ powerful of all unit roots test.
 
 To illustrate the results, we just show two results. Testing the log of the
 stock of money with a null hypothesis of unit roots against an alternative
-or stationarity around a linear trend, shows that a adf-statistic of -1.5
-and a p-value of 0.8 so we are far away from rejecting the unit root
-hypothesis
+of stationarity around a linear trend, shows an adf-statistic of -1.5
+and a p-value of 0.8, so we are far away from rejecting the unit root
+hypothesis:
 
 .. code-block:: python
 
    tsa.adfuller(endog, regression="ct")[:2]
    (-1.561, 0.807)
 
-If we test the differenced series, growth rate of monestock, with a Null
-hypothesis of Random Walk with drift, then we can strongly reject the
-hypothesis that the growth rate has a unit root (p-value 0.0002)
+If we test the differenced series, that is the growth rate of
+moneystock, with a Null hypothesis of Random Walk with drift, then we
+can strongly reject the hypothesis that the growth rate has a unit
+root (p-value 0.0002)
 
 .. code-block:: python
 
@@ -468,10 +482,54 @@ hypothesis that the growth rate has a unit root (p-value 0.0002)
    (-4.451, 0.00024)
 
 
+ARMA processes and data
+-----------------------
+
+The identification for ARIMA(p,d,q) processes, especially choosing the number
+of lagged terms, p and q, to include, remains partially an art. One
+recommendation in the Box-Jenkins methodology is to look at the pattern in
+the autocorrelation (acf) and partial autocorrelation (pacf) functions
+
+`scikits.statsmodels.tsa.arima_process` contains a class that provides several
+properties of ARMA processes and a random process generator.
+As an example, `statsmodels/examples/tsa/arma_plots.py` can be used to plot
+autocorrelation and partial autocorrelation functions for different ARMA models.
+
+.. figure:: fig1_arma_acf_pacf.png
+   :figclass: bht
+
+   ACF and PACF for ARMA(p,q) :label:`acfpacf`
+   This illustrated that the pacf is zero after p terms for AR(p) processes and
+   the acf is zero after q terms for MA(q) processes.
+
+This allows easy comparison of the theoretical properties of an ARMA process
+with their empirical counterparts. For example, define the lag coefficients
+for an ARMA(2,2) process, generate a random process and compare observed and
+theoretical pacf:
 
 
+.. code-block:: python
 
+   import scikits.statsmodels.tsa.arima_process as tsp
+   ar = np.r_[1., -0.5, -0.2]; ma = np.r_[1.,  0.2, -0.2]
+   np.random.seed(123)
+   x = tsp.arma_generate_sample(ar, ma, 20000, burnin=1000)
+   sm.tsa.pacf(x, 5)
+   array([ 1.   ,  0.675, -0.053,  0.138, -0.018,  0.038])
 
+   ap = tsp.ArmaProcess(ar, ma)
+   ap.pacf(5)
+   array([ 1.   ,  0.666, -0.035,  0.137, -0.034,  0.034])
+
+We can see that they are very close in a large generated sample like this.
+`ArmaProcess` defines several additional methods that calculate properties of
+ARMA processes and to work with lag-polynomials: `acf`, `acovf`, `ar`,
+`ar_roots`, `arcoefs`, `arma2ar`, `arma2ma`,
+`arpoly`, `from_coeffs`, `from_estimation`, `generate_sample`,
+`impulse_response`, `invertroots`, `isinvertible`, `isstationary`,
+`ma`, `ma_roots`, `macoefs`, `mapoly`, `nobs`, `pacf`, `periodogram`. The
+sandbox has a fft version of some of this to looke at the frequency domain
+properties. 
 
 
 
