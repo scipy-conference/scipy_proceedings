@@ -85,7 +85,7 @@ It has always been a challenge for productivity programmers, such as
 scientists who write code to support their science, to get both good
 performance and ease of programming.  This is attested by the
 proliferation of high-performance libraries such as BLAS, OSKI [OSKI]_ and
-FFTW [FFTW]_, by domain-specific languages like Spiral [Spiral]_, and by the
+FFTW [FFTW]_, by domain-specific languages like SPIRAL [SPIRAL]_, and by the
 popularity of the natively-compiled SciPy [SciPy]_ libraries among others.
 To make things worse, processor clock scaling has run into physical
 limits, so future performance increases will be the result of
@@ -387,13 +387,13 @@ function as pure Python. In this case, the walk succeeds, resulting in
 the DAST shown in Figure :ref:`dsir`. Asp provides utilities to
 facilitate visiting the nodes of a tree and tree pattern matching.
 
-.. figure:: pythonast.pdf
-   :scale: 60 %
+.. figure:: pythonast.png
+   :scale: 70 %
    :align: center
 
    Initial Python abstract syntax tree. :label:`pythonast`
 
-.. figure:: dsir.pdf
+.. figure:: dsir.png
    :scale: 60 %
    :align: center
 
@@ -417,11 +417,11 @@ transforming arithmetic expressions and simple assignments from the
 high-level representation used in DASTs to the low-level
 platform-specific representation, which handles the body of the loop.
 
-.. figure:: asir.pdf
+.. figure:: asir.png
    :scale: 50 %
    :align: center
 
-   Application-specific AST. :label:`asir`
+   Platform-specific AST. :label:`asir`
 
 Because the specializer was invoked from the first call of the
 ``kernel()`` function, the arguments passed to that call are available. In
@@ -637,7 +637,7 @@ Conclusion & Future Work
 ------------------------
 
 We have presented a new approach to bridging the
-"productivity/efficiency gap": rather than relying solely on libraries
+"productivity/efficiency gap:" rather than relying solely on libraries
 to allow productivity programmers to stick to high-level languages, we
 package the expertise of human experts in implementing particular
 computations on specific hardware platforms with high performance.  The

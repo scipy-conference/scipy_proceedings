@@ -13,10 +13,17 @@
    height="368.7113"
    id="svg18622"
    version="1.1"
-   inkscape:version="0.48.1 r9760"
-   sodipodi:docname="New document 118">
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="pipeline.pdf">
   <defs
      id="defs18624">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 184.35565 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="315 : 184.35565 : 1"
+       inkscape:persp3d-origin="157.5 : 122.90377 : 1"
+       id="perspective3024" />
     <marker
        inkscape:stockid="Arrow2Mend"
        orient="auto"
@@ -235,9 +242,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.97947377"
-     inkscape:cx="160.9811"
-     inkscape:cy="176.25024"
+     inkscape:zoom="2.7703702"
+     inkscape:cx="131.22467"
+     inkscape:cy="103.30952"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -246,10 +253,10 @@
      fit-margin-right="0"
      fit-margin-bottom="0"
      units="in"
-     inkscape:window-width="936"
-     inkscape:window-height="742"
-     inkscape:window-x="601"
-     inkscape:window-y="155"
+     inkscape:window-width="1146"
+     inkscape:window-height="981"
+     inkscape:window-x="371"
+     inkscape:window-y="68"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata18627">
@@ -272,13 +279,13 @@
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="309.30798"
-       y="408.5062"
+       y="410.5062"
        id="text18630"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan18632"
          x="309.30798"
-         y="408.5062">Application source</tspan></text>
+         y="410.5062">Application source</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
        d="m 373.12716,412.40271 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
@@ -314,14 +321,14 @@
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="216.83073"
+       x="300.83075"
        y="479.03098"
        id="text18630-9"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan18632-9"
-         x="216.83073"
-         y="479.03098">Domain-specific intermediate representation</tspan></text>
+         x="300.83075"
+         y="479.03098">Domain-specific AST</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
        d="m 373.12716,483.58917 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
@@ -362,14 +369,14 @@
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="271.12698"
+       x="265.12698"
        y="550.7171"
        id="text18630-9-0"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan18632-9-6"
-         x="271.12698"
-         y="550.7171">Optimized domain-specific IR</tspan></text>
+         x="265.12698"
+         y="550.7171">Optimized domain-specific AST</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
        d="m 373.12716,555.27529 c 0.0216,0 0.33026,13.62098 0.33026,13.62098"
@@ -410,14 +417,14 @@
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="214.47505"
+       x="298.47504"
        y="621.5174"
        id="text18630-9-0-4"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan18632-9-6-5"
-         x="214.47505"
-         y="621.5174">Platform-specific intermediate representation</tspan></text>
+         x="298.47504"
+         y="621.5174">Platform-specific AST</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
        d="m 373.12716,626.07558 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
@@ -458,14 +465,14 @@
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="267.61389"
+       x="261.61389"
        y="692.97931"
        id="text18630-9-0-4-0"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan18632-9-6-5-3"
-         x="267.61389"
-         y="692.97931">Optimized platform-specific IR</tspan></text>
+         x="261.61389"
+         y="692.97931">Optimized platform-specific AST</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
        d="m 373.12716,697.53754 c 0.0216,0 0.33026,13.62098 0.33026,13.62098"
@@ -507,13 +514,13 @@
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="324.78668"
-       y="766.42633"
+       y="764.42633"
        id="text18630-9-0-4-0-6"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan18632-9-6-5-3-6"
          x="324.78668"
-         y="766.42633">Machine code</tspan></text>
+         y="764.42633">Machine code</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
        d="m 373.12716,740.35396 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
