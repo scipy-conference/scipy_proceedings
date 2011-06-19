@@ -111,11 +111,14 @@ and customized to create an ideal recommender for a particular domain. The toolk
 and the scientific enviroments for numerical applications such as Scipy and NumPy. The decision of choosing those 
 libraries is because they are widely used in scientific computations specially in python programs. Another reason
 is because the framework uses the Scikit-learn toolkit as dependant, which provides basic components from our recommender
-interfaces derive. The Figure 01 presents the relationship between these basic components. Not all Crab-based recommenders
-will look like this -- some will employ different components with different relationships, but this gives a sense 
-of the role of each component. 
+interfaces derive. The Figure :ref:`egfig` presents the relationship between these basic components.
+Not all Crab-based recommenders will look like this -- some will employ different components with different relationships, 
+but this gives a sense of the role of each component. 
 
-figure01.png
+.. figure:: figure1.png
+
+   Simplified illustration of the component interaction in Crab . :label:`egfig`
+
 
 The Data Model implementation stores and provides access to all the preference, user and item data needed in the recommendation. The Similarity
 interface provides the notion of how similar two users or items are; where this could be based on one of many possible pairwise metrics or calculations.
@@ -135,14 +138,32 @@ we will consider a simple dataset including data about users, cleverly named "1"
 "101" through "104". By loading this dataset and passing as parameter to the dataset loader, all the inputs will be loaded in memory by creating
 a Data Model object.
 
-figure02.png
+.. figure::  figure2.png
+   book ratings data set - intro.csv    :label:`egfig2`
 
-Analyzing the data set shown at Figure 02, it is possible to notice that Users 1 and 5 seem to have similar tastes. Users 1 and 3 don't overlap much since the only
+
+Analyzing the data set shown at Figure :ref:`egfig2`, it is possible to notice that Users 1 and 5 seem to have similar tastes. Users 1 and 3 don't overlap much since the only
 movie they both express a preference for is 101. On other hand, users 1 and 2 tastes are opposite- 1 likes 101 while 2 doesn't, and 1 likes 103
 while 2 is just the opposite. By using one of recommender algorithms available in Crab such as the User-Based-Filtering with the given data set 
 loaded in a Data Model as input, just run this script using your favorite IDE as you can see the snippet code below.
 
-CODE 1
+.. code-block:: python
+     from models.basic_models import FileDataModel
+     from recommenders.basic_recommenders import UserBasedRecommender
+     from similarities.basic_similarities import UserSimilarity
+     from neighborhoods.basic_neighborhoods import NearestUserNeighborhood
+     from metrics.pairwise import pearson_correlation
+      
+     user_id = 1
+     load the dataset
+     model = FileDataModel('simple_dataset.csv')
+     similarity = UserSimilarity(model,pearson_correlation)
+     neighbor = NearestUserNeighborhood(similarity,model,4,0.0)
+     create the recommender engine
+     recommender = UserBasedRecommender(model,similarity,neighbor,False)
+     recommend 1 item to user 1
+     print recommender.recommend(user_id,1)
+
 
 The output of running program should be: 104. We asked for one top recommendation, and got one. The recommender engine recommended the
 book 104 to user 1. This happens because it estimated user 1's preference for book 104 to be about 4.3 and that was the highest among
@@ -174,7 +195,20 @@ wants to construct his data representation in memory by passing a dictionary of 
 of this model is that it can easily work with JSON files, which is commonly used as output at web services and REST APIs, since Python converts
 the json input into a bult-in dictionary. 
 
-CODE 2
+.. code-block:: python
+     from models.basic_models import DictPreferenceDataModel
+      
+     dataset = {'1':{'101': 3.0, '102': 3.5}, '2':{'102': 4.0, '103':2.5, '104': 3.5}}
+     #load the dataset
+     model = DictPreferenceDataModel(dataset)
+     print model.user_ids()
+     #numpy.array(['1','2'])
+     print model.preference_value('1','102')
+     #3.5
+     print model.preferences_for_item('102')
+     #numpy.array([('1',3.5),('2',4.0)])
+
+
 
 Typically the model that developers will use is the FileDataModel - which reads data from a file and stores the resulting preference data in memory,
 in a DictDataModel. Comma-separated-value or tab-separated files which each line contains one datum: user ID, item ID and preference value are
@@ -187,7 +221,19 @@ preferences values aren't available to begin with. For instance, imagine a news 
 article. It is not typical for users to rate articles. So the recommender recommend articles based on previously viewed articles, whic establishes
 some association between user and item, an interesting scenario for using the BooleanDictModel.
 
-CODE 3
+.. code-block:: python
+     from models.basic_models import DictBooleanDataModel
+      
+     dataset = {'1':['101','102'], '2':['102','103','104']}
+     #load the dataset
+     model = DictBooleanDataModel(dataset)
+     print model.user_ids()
+     #numpy.array(['1','2'])
+     print model.preference_value('1','102')
+     #1.0 - all preferences are valued with 1.0
+     print model.preferences_for_item('102')
+     #numpy.array([('1',1.0),('2',1.0)])
+
 
 Crab also supports store and access preference data from a relational database. The developer can easily implement their recommender by using
 customized DataModels integrated with serveral databases. One example is the MongoDB, a NoN-SQL database commonly used for non-structured
@@ -235,7 +281,22 @@ known to those users are considered.
 In the first section we have already presented a user-based recommender in action. Let's go back to it in order to explore the 
 components the approach uses.
 
-CODE 4.
+.. code-block:: python
+	 #do the basic imports
+	 #...
+     user_id = 1
+     #load the dataset
+     model = FileDataModel('simple_dataset.csv')
+     #Define the Similarity used and the pairwise metric
+     similarity = UserSimilarity(model,pearson_correlation)
+     #For defining the neighborhood we will use the kNN approach
+     neighbor = NearestUserNeighborhood(similarity,model,4,0.0)
+     #Now add all to the UserBasedRecommender
+     recommender = UserBasedRecommender(model,similarity,neighbor,False)
+     #recommend 2 items to user 1
+     print recommender.recommend(user_id,2)
+
+
 
 UserSimilarity encapsulates the concept of similarity amongst users. The UserNeighborhood encapsulates the notion of a group
 of most-similar users. The UserNeighborhood uses a UserSimilarity, which extends the basic interface BaseSimilarity. However,
@@ -270,13 +331,25 @@ items are to items, instead of users to users. The algorithm implemented is fami
 *return the top items, ranked by weighted average*
 
 
-
 In this algorithm it is evaluated the item-item similarity, not user-user similarity as shown at the user-based approach. Although they
 look similar, there are different properties. For instance, the running time of an item-based recommender scales up as the number of 
 items increases, whereas a user-based recommender's running time goes up as the number of users increases. The perfomance advantage
 in item-based approach is significant compared to the user-based one. Let's see how to use item-based recommender in Crab with the following code. 
 
-CODE 5.
+.. code-block:: python
+	 #do the basic imports
+	 #...
+     user_id = 1
+     #load the dataset
+     model = FileDataModel('simple_dataset.csv')
+     #Define the Similarity used and the pairwise metric
+     similarity = ItemSimilarity(model,euclidean_distance)
+     #There is no neighborhood in this approach
+     #Now add all to the ItemBasedRecommender
+     recommender = ItemBasedRecommender(model,similarity,False)
+     #recommend 2 items to user 1
+     print recommender.recommend(user_id,2)
+
 
 Here it employs ItemBasedRecommender rather than UserBasedRecommender, and it requires a simpler set of dependencies. It also implements the ItemSimilarity interface,
 which is similar to the UserSimilarity that we've already seen. The ItemSimilarity also works with the pairwise metrics
@@ -293,7 +366,16 @@ of the its estimated preference values - that is, evaluating how closely the est
 Crab supports several metrics widely used in the recommendation literature such as the RMSE (root-mean-square-error), precision, recall
 and F1-Score. Let's see the previous example code and instead evaluate the simple recommender we created, on our data set:
 
-CODE 6.
+.. code-block:: python
+     #... other basic imports
+     from evaluators.statistics import RMSRecommenderEvaluator
+     #... initialize the recommender
+     # initialize the RMSE Evaluator
+	 evaluator = RMRecommenderEvaluator()
+	 #call using training set with 70% of the available data and 30% for test.
+     print evaluator.evaluate(recommender,model,0.7,1.0)
+     #0.75
+
 
 Most of the action happens in evaluate(). The RecommenderEvaluator handles sppliting the data into a training and test set, builds a new 
 training DataModel and Recommender to test, and compares its estimated preferences to the actual test data. See that we pass the Recommender
@@ -303,17 +385,27 @@ may build their custom evaluators, just extending the base evaluator.
 
 For precision, recall and F1-Score Crab provides also a simple way to compute these values for a Recommender:
 
-CODE 7.
+.. code-block:: python
+     #... other basic imports
+     from evaluators.statistics import IRStatsRecommenderEvaluator
+     #... initialize the recommender
+     #initialize the IR Evaluator
+	 evaluator = IRStatsRecommenderEvaluator()
+	 #call evaluate considering the top 4 items recommended.
+     print evaluator.evaluate(recommender,model,2,1.0)
+     #{'precision': 0.75, 'recall': 1.0, 'f1Score': 0.6777}
+
 
 The result you see would vary significantly due to random selection of training data and test data. Remember that precision is the proportion
 of top recommendations that are good recommendations, recall is the proportion of good recommendations that appear in top recommendations and
 F1-Score is a score that analyzes the proportion against precision and recall. So Precision at 2 with 0.75 means on average about a three
-quarters of recommendations were good. Recall at 2 with 1.0; all good recommendations are among those recommendations. In the following graph,
-it presents the PrecisionxRecall with F1-Scores evaluated. A brief analysis shows that more training set size grows, more the accuracy score grows. 
+quarters of recommendations were good. Recall at 2 with 1.0; all good recommendations are among those recommendations. In the following graph at Figure
+:ref:`egfig7`, it presents the PrecisionxRecall with F1-Scores evaluated. A brief analysis shows that more training set size grows, more the accuracy score grows. 
 It is important to notice that the evaluator doe not measure if the algorithm is better or faster. It is necessary to make a comparison between the
 algorithms to check the accuracy specially on other data sets available.
 
-figure7.png
+.. figure::  figure7.png
+   PrecisionxRecall Graph with F1-Score.   :label:`egfig7`
 
 Crab supports several tools for testing and evaluating recommenders in a painless way. One of the future releases will support the plot of 
 charts to help the developers to better analyze and visualized their recommender behavior.
@@ -332,21 +424,23 @@ or web services protocols such as SOAP or REST. One advantage using this service
 accessible service as independent component in a web container or a standalone process. In the other hand, this adds complexity, 
 but it allows other applications written in other languages or running at remote machines to access the service. We are considering
 use framework web Django with the the Django-Piston RESTful builder to expose the recommendations via a simple API using REST over
-HTTP [DjangoPiston]_. Our current structure is illustrated in Figure x, which wraps the recommender implementation using the django models and 
+HTTP [DjangoPiston]_. Our current structure is illustrated in Figure :ref:`egfig5`, which wraps the recommender implementation using the django models and 
 piston handlers to provide the external access.
 
-FIGURE 05
+.. figure::  figure5.png
+  Crab Web Services server-side interaction over HTTP :label:`egfig5`
 
 There is a recommender engine powered by Crab in production using REST APIs to access the the recommendations. The recommender engine uses
 collaborative filtering algorithms to recommend users, study groups and videos in a brazilian educational social network called AtéPassar [AtePassar]_ .
 Besides the suggestions, the recommender was also extendend to provide the explanations for each recommendation, in a way that the user
 not only receives the recommendation but also why the given recommendation was proposed to him. The recommender is in production since
-January 2011 and suggested almost 60.000 items for more than 50.000 users registered at the network. The following picture shows
+January 2011 and suggested almost 60.000 items for more than 50.000 users registered at the network. The following Figure  :ref:`egfig6` shows
 the web interface with the recommender engine in action at AtéPassar. One contribution of this work was a new Data Model for integrating
 with MongoDB database for retrieving and storing the recommendations and it is being rewritten for the new release of Crab supporting 
 Numpy and Scipy libraries.
 
-FIGURE 06
+.. figure::  figure6.png
+  AtéPassar recommendation engine powered by Crab Framework   :label:`egfig6`
 
 Crab can comfortably digest medium and small data sets on one machine and produce recommendations in real time. But it still lacks a
 mechanism that handles a much larger data set. One common approach is distribute the recommendation computations, which will be detailed
