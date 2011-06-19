@@ -212,6 +212,7 @@ as well as third-party libraries.  An overview of this separation is shown in Fi
 
 .. figure:: separation.pdf
    :figclass: bt
+   :width: 80%
 
    Separation of concerns in Asp.  App authors write code that is transformed by specializers,
    using Asp infrastructure and third-party libraries. :label:`separation`
@@ -258,7 +259,7 @@ documentation, it will be specialized; otherwise the program will still run in p
 An example using our stencil specializer's constructs is shown in Figure :ref:`exampleapp`.
 
 .. figure:: exampleapp.pdf
-   :scale: 70 %
+   :scale: 60 %
    :align: center
 
    Example stencil application. Colored source lines match up to nodes of same color in Figure :ref:`pythonast`. :label:`exampleapp`
@@ -359,7 +360,7 @@ The translation performed by any specializer consists of five main phases, as sh
 #. Back end: Generate low-level source code, compile, and dynamically bind to make available from the host language.
 
 .. figure:: pipeline.pdf
-   :scale: 70 %
+   :scale: 60 %
    :align: center
 
    Pipeline architecture of a specializer. :label:`pipeline`
@@ -387,17 +388,12 @@ function as pure Python. In this case, the walk succeeds, resulting in
 the DAST shown in Figure :ref:`dsir`. Asp provides utilities to
 facilitate visiting the nodes of a tree and tree pattern matching.
 
-.. figure:: pythonast.png
+.. figure:: pythonastanddsir.png
    :scale: 70 %
    :align: center
 
-   Initial Python abstract syntax tree. :label:`pythonast`
-
-.. figure:: dsir.png
-   :scale: 60 %
-   :align: center
-
-   Domain-specific AST. :label:`dsir`
+   Left: Initial Python abstract syntax tree. :label:`pythonast`
+   Right: Domain-specific AST. :label:`dsir`
 
 The second phase uses our knowledge of the stencil domain to perform
 platform-independent optimizations. For example, we know that a point
@@ -505,7 +501,7 @@ bandwidth from memory.  Therefore, in accordance to the roofline model [SaWi09]_
 we measure performance compared to measured memory bandwidth performance using the
 parallel STREAM [STREAM]_ benchmark.
 
-Figure :ref:`stencilresults` shows the results of running our kernels on a single-socket
+Figure :ref:`stencilresults` shows the results of running our kernels for a :math:`256^3` grid on a single-socket
 quad-core Intel Core i7-840 machine running at 2.93 GHz, using both the OpenMP and Cilk Plus backends.
 First-run time is not shown; the code
 generation and compilation takes tens of seconds (mostly due to the speed of the
@@ -590,20 +586,22 @@ for communication-avoiding sparse Krylov solvers. A specializer currently under 
 enables efficient parallel computation of this set of vectors on
 multicore processors.
 
-.. figure:: akxnaive.pdf
+.. figure:: akxboth.png
    :figclass: bt
-   :scale: 95%
+   :scale: 60%
    :align: center
 
-   Naive :math:`A^kx` computation.  Communication required at each level. :label:`akxnaive`
-
-.. figure:: akxpa1.pdf
-   :figclass: bt
-   :scale: 95%
-   :align: center
-
+   Left: Naive :math:`A^kx` computation.  Communication required at each level. :label:`akxnaive`
+   Right: 
    Algorithm PA1 for communication-avoiding matrix powers.  Communication occurs only
    after k levels of computation, at the cost of redundant computation. :label:`akxpa1`
+
+..
+ figure:: akxpa1.pdf
+   :figclass: bt
+   :scale: 95%
+   :align: center
+
 
 The specializer generates parallel communication avoiding code using the pthreads library 
 that implements the PA1 [Hoe10]_ kernel to compute the vectors more efficiently than
@@ -631,51 +629,6 @@ solver in Python that uses the specializer. Figure :ref:`akxresults` shows the r
 matrices and compares performance against ``scipy.linalg.solve`` which calls the LAPACK
 ``dgesv`` routine.  Even with just the matrix powers kernel specialized, the CA CG
 already outperforms the native solver routine used by SciPy.
-
-
-Conclusion & Future Work
-------------------------
-
-We have presented a new approach to bridging the
-"productivity/efficiency gap:" rather than relying solely on libraries
-to allow productivity programmers to stick to high-level languages, we
-package the expertise of human experts in implementing particular
-computations on specific hardware platforms with high performance.  The
-packaging consists of a collection of code snippets in a low-level
-language (C, C++/OpenMP, etc.) and a set of transformation rules to
-operate on problem-specific ASTs, allowing just-in-time generation and
-compilation of optimized code for those computations even where
-higher-order functions must be used.  The low-level code typically runs
-as fast or faster than the original hand-produced version
-
-Unlike many prior approaches, we do not attempt to invent a new
-standalone DSL for any specific problem type, nor to imbue a full
-compiler with the intelligence to "automagically" recognize and
-optimize/parallelize compute-intensive problems.  Rather, the main
-contribution of our approach is the separation of concerns that it
-enables: programmers who specialize in a particular problem family can
-express implementation optimizations that make sense only for that
-problem, and package their expertise in a way that makes it widely
-reusable by Python programmers.  As well, because different code
-generation strategies can be chosen based on the hardware available at
-runtime, application writers can remain oblivious to the fact that the
-same Python code running on different hardware platforms might result in
-very different low-level code being generated, giving source-level
-performance portability.
-
-The application code is also more maintainable even for "simple"
-problems such as the matrix powers calculation: while the computation
-logic is straightforward, the code expands manyfold when the extra code
-necessary to get performance (loop unrolling, software pipelining,
-parallel annotations, etc) is added to the main application logic.
-
-Finally, because we emit source code in a lower-level language, the
-substantial work that has gone into optimizing compilers can be directly
-leveraged downstream of Asp-- indeed, by controlling code generation we
-can emit code that is easier for the downstream compilers to optimize.
-
-We hope that our promising initial results will encourage others to
-contribute to building up the ecosystem of Asp specializers.
 
 
 Related Work
@@ -709,6 +662,51 @@ including sparse matrix-vector multiplication (SpMV) [OSKI]_, Fast
 Fourier Transforms (FFTs) [SPIRAL]_, and multicore versions of 
 stencils [KaDa09]_, [Kam10]_, [Poich]_, showing large improvements 
 in performance over simple implementations of these kernels.
+
+
+Conclusion 
+-----------
+
+We have presented a new approach to bridging the
+"productivity/efficiency gap:" rather than relying solely on libraries
+to allow productivity programmers to remain in high-level languages, we
+package the expertise of human experts in implementing particular
+computations on specific hardware platforms with high performance.  The
+packaging consists of a collection of code snippets in a low-level
+language (C++/OpenMP, etc.) and a set of transformation rules to
+operate on problem-specific ASTs, allowing just-in-time generation and
+compilation of optimized code for those computations even where
+higher-order functions must be used.  The low-level code typically runs
+as fast or faster than the original hand-produced version
+
+Unlike many prior approaches, we do not attempt to invent a new
+standalone DSL for any specific problem type, nor to imbue a full
+compiler with the intelligence to "auto-magically" recognize and
+optimize/parallelize compute-intensive problems.  Rather, the main
+contribution of our approach is the separation of concerns that it
+enables: programmers who understand low-level code for a particular problem family can
+express implementation optimizations that make sense only for that
+problem, and package their expertise in a way that makes it widely
+usable by Python programmers.  As well, because different code
+generation strategies can be chosen based on the hardware available at
+runtime, application writers can remain oblivious to the fact that the
+same Python code running on different hardware platforms might result in
+very different low-level code being generated, giving source-level
+performance portability.
+
+The application code is also more maintainable even for "simple"
+problems such as the matrix powers calculation: while the computation
+logic is straightforward, the code expands many-fold when the extra code
+necessary to get performance 
+is added to the main application logic.
+
+Finally, because we emit source code in a lower-level language, the
+substantial work that has gone into optimizing compilers can be directly
+leveraged downstream of Asp-- indeed, by controlling code generation we
+can emit code that is easier for downstream compilers to optimize.
+
+We hope that our promising initial results will encourage others to
+contribute to building up the ecosystem of Asp specializers.
 
 Acknowledgments
 ----------------
