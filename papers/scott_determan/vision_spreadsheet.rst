@@ -22,7 +22,7 @@ Vision Spreadsheet is an environment for computer vision. Its purpose is to lowe
 the barrier to computer vision by:
 
 - Having a shallow learning curve by using spreadsheets, an interface many people
-  are already familiar with.
+  are familiar with.
 - Providing immediate feedback to algorithm changes. The spreadsheet interface
   along with binding GUI controls to algorithm parameters lets you explore your
   problems.
@@ -38,7 +38,7 @@ program and watch some videos of vision spreadsheet in action.
 The Spreadsheet
 ---------------
 
-Figure :ref:`bloodcells` shows a screen shot of vision spreadsheet. There are
+Figure :ref:`bloodcells` shows a screen shot of Vision Spreadsheet. There are
 three main area to the GUI: the grid of cells, the repl below the cells, and the
 GUI controls to the left of the cells.
 
@@ -111,7 +111,7 @@ in other sheets of the spreadsheet. The syntax is:
    namespace_name::variable_name
    ::variable_name # global namespace
 
-So if you have sheets g1 and g2, to refer to cell sheet's g1 cell a1, you would say:
+So if you have sheets g1 and g2, to refer to sheet g1 cell a1, you would say:
 
 .. code-block:: python
 
@@ -137,8 +137,8 @@ threshold it by typing:
 This creates an image where values greater than 128 are set to 255 and values
 less than or equal to 128 are set to zero. However, often we want to set
 thresholds interactively. We could keep typing in numbers until we get the result
-we get. A better way is to bind the parameter to a GUI controls, say a slider. The following
-command does this:
+we get. A better way is to bind the parameter to a GUI control, say a
+slider. The following command does this:
 
 .. code-block:: python
 
@@ -146,7 +146,7 @@ command does this:
 
 This creates a slider with a default value of 128, a min value of 0 and a max value of 255. If you look
 in the cell controls pane on the left of the GUI, you will see a slider (see figure :ref:`slider`). You can use this
-slider to interactively change the parameter to the threshold parameter.
+slider to interactively change the parameter to the threshold function.
 
 .. figure:: slider.png
    :scale: 25%
@@ -178,7 +178,7 @@ Images are the data structure you will use the most. Taking an image and running
 a filter, or an edge finder, or (most) segmentation algorithms transform images
 to images. It is a two dimensional array of vectors. All the elements are of the
 same numeric type (uchar through double are supported). Lots of image types are
-supported: depth images (from the kinect camera, for example), greyscale, color
+supported: depth images (from the Kinect camera, for example), grayscale, color
 (rgb, brg, hsi, cie lab, etc.). When an image is passed to a user defined python
 function it is automatically converted into a numpy array.
 
@@ -195,7 +195,7 @@ for storing higher-level objects in a data frame.  For example, rectangles are
 stored in a data frame by grouping together four numeric columns. These
 rectangles may then be overlaid and edited on an image.
 
-The last major data structure is a statistical model. You will will statistical
+The last major data structure is a statistical model. You will use statistical
 models to classify objects in images (among other uses). There are two main
 functions to a statistical model: train and predict. Train takes a data frame of
 features (labeled for supervised learning, unlabeled for supervised). Predict
@@ -212,7 +212,7 @@ Python Mode
 The ipython shell at the bottom of the GUI supports two modes, cells mode and
 python mode. To toggle between the two modes, type '##' and hit return. Cells
 mode is the default mode. Python mode is just a regular ipython shell with two
-differences: you can type '##' to toggle to another mode and there is a module
+differences: you can type '##' to toggle to cells mode and there is a module
 called 'vis_sheet' that can be used to interact with the spreadsheet.
 
 There are two interesting activities you typically do in python mode:
@@ -222,8 +222,8 @@ There are two interesting activities you typically do in python mode:
    python, and set the values back into the spreadsheet.
 
 Let's look at adding a new function to the spreadsheet. Change to python mode by
-typing '##' (followed by return). The shell should now have a black
-background. Now, define a subtraction function as follows:
+typing '##'. The shell should now have a black background. Now, define a
+subtraction function as follows:
 
 .. code-block:: python
 
@@ -231,7 +231,7 @@ background. Now, define a subtraction function as follows:
    import vis_sheet
    vis_sheet.add_python_op(my_subtract)
 
-Change back to python mode by typing '##' (the shell should now have a white
+Change back to cells mode by typing '##' (the shell should now have a white
 background). Load an image in cell a1, erode it an put it in b1, and subtract b1
 from a1 using our new function:
 
@@ -239,10 +239,10 @@ from a1 using our new function:
 
    c1 = my_subtract(a1,b1)
 
-You should see the edges from the image in cell a1. I want to note that the images in the
-spreadsheet are automatically converted to numpy arrays before they are passed to user defined
-functions. So the parameters a and b will be numpy arrays. If the result is a numpy array, it will
-automatically be converted to an image.
+You should see the edges from the image in cell a1. Note that the images in the
+spreadsheet are automatically converted to numpy arrays before they are passed to
+user defined functions. So the parameters a and b will be numpy arrays. If the
+result is a numpy array, it will automatically be converted to an image.
 
 You can get or set values in the spreadsheet from python mode with the following functions:
 
