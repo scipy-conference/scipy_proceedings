@@ -9,11 +9,11 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="315"
+   width="524.70001"
    height="368.7113"
    id="svg18622"
    version="1.1"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.48.1 r9760"
    sodipodi:docname="pipeline.pdf">
   <defs
      id="defs18624">
@@ -242,9 +242,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.7703702"
-     inkscape:cx="131.22467"
-     inkscape:cy="103.30952"
+     inkscape:zoom="1.8505812"
+     inkscape:cx="193.9931"
+     inkscape:cy="184.35565"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -257,7 +257,8 @@
      inkscape:window-height="981"
      inkscape:window-x="371"
      inkscape:window-y="68"
-     inkscape:window-maximized="0" />
+     inkscape:window-maximized="0"
+     borderlayer="false" />
   <metadata
      id="metadata18627">
     <rdf:RDF>
@@ -278,28 +279,28 @@
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="309.30798"
+       x="417.61261"
        y="410.5062"
        id="text18630"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan18632"
-         x="309.30798"
+         x="417.61261"
          y="410.5062">Application source</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
-       d="m 373.12716,412.40271 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
+       d="m 481.43179,412.40271 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
        id="path18634"
        inkscape:connector-curvature="0" />
     <g
        id="g21348"
-       transform="matrix(0.34858539,0,0,0.34858539,297.24977,380.10557)"
+       transform="matrix(0.34858539,0,0,0.34858539,405.5544,380.10557)"
        style="fill:#c7dfff;fill-opacity:1">
       <g
          id="g21351"
          style="fill:#c7dfff;fill-opacity:1">
         <rect
-           style="fill:#c7dfff;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:1"
+           style="fill:#c7dfff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
            id="rect21288"
            width="413.80765"
            height="56.946007"
@@ -310,44 +311,44 @@
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="339.9726"
+       x="448.27725"
        y="445.06943"
        id="text21290"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan21292"
-         x="339.9726"
+         x="448.27725"
          y="445.06943">Front-end</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="300.83075"
+       x="409.33713"
        y="479.03098"
        id="text18630-9"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan18632-9"
-         x="300.83075"
+         x="409.33713"
          y="479.03098">Domain-specific AST</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
-       d="m 373.12716,483.58917 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
+       d="m 481.43179,483.58917 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
        id="path18634-6"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
-       d="m 373.12716,452.95859 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
+       d="m 481.43179,452.95859 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
        id="path18634-8"
        inkscape:connector-curvature="0" />
     <g
        id="g21348-0"
-       transform="matrix(0.34858539,0,0,0.34858539,297.24977,451.7917)"
+       transform="matrix(0.34858539,0,0,0.34858539,405.5544,451.7917)"
        style="fill:#c7dfff;fill-opacity:1">
       <g
          id="g21351-1"
          style="fill:#c7dfff;fill-opacity:1">
         <rect
-           style="fill:#c7dfff;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:1"
+           style="fill:#c7dfff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
            id="rect21288-9"
            width="413.80765"
            height="56.946007"
@@ -358,44 +359,44 @@
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="310.479"
+       x="418.78363"
        y="515.43219"
        id="text21290-7"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan21292-0"
-         x="310.479"
+         x="418.78363"
          y="515.43219">Domain optimizer</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="265.12698"
+       x="372.66077"
        y="550.7171"
        id="text18630-9-0"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan18632-9-6"
-         x="265.12698"
+         x="372.66077"
          y="550.7171">Optimized domain-specific AST</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
-       d="m 373.12716,555.27529 c 0.0216,0 0.33026,13.62098 0.33026,13.62098"
+       d="m 481.43179,555.27529 c 0.0216,0 0.33026,13.62098 0.33026,13.62098"
        id="path18634-6-3"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
-       d="m 373.12716,524.64471 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
+       d="m 481.43179,524.64471 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
        id="path18634-8-0"
        inkscape:connector-curvature="0" />
     <g
        id="g21348-0-5"
-       transform="matrix(0.34858539,0,0,0.34858539,297.24977,522.59198)"
+       transform="matrix(0.34858539,0,0,0.34858539,405.5544,522.59198)"
        style="fill:#c7dfff;fill-opacity:1">
       <g
          id="g21351-1-3"
          style="fill:#c7dfff;fill-opacity:1">
         <rect
-           style="fill:#c7dfff;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:1"
+           style="fill:#c7dfff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
            id="rect21288-9-4"
            width="413.80765"
            height="56.946007"
@@ -406,44 +407,44 @@
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="313.17511"
+       x="421.47974"
        y="586.23242"
        id="text21290-7-2"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan21292-0-8"
-         x="313.17511"
+         x="421.47974"
          y="586.23242">Platform selector</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="298.47504"
+       x="406.98145"
        y="621.5174"
        id="text18630-9-0-4"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan18632-9-6-5"
-         x="298.47504"
+         x="406.98145"
          y="621.5174">Platform-specific AST</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
-       d="m 373.12716,626.07558 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
+       d="m 481.43179,626.07558 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
        id="path18634-6-3-5"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
-       d="m 373.12716,595.44499 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
+       d="m 481.43179,595.44499 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
        id="path18634-8-0-9"
        inkscape:connector-curvature="0" />
     <g
        id="g21348-0-5-7"
-       transform="matrix(0.34858539,0,0,0.34858539,297.24977,594.05395)"
+       transform="matrix(0.34858539,0,0,0.34858539,405.5544,594.05395)"
        style="fill:#c7dfff;fill-opacity:1">
       <g
          id="g21351-1-3-6"
          style="fill:#c7dfff;fill-opacity:1">
         <rect
-           style="fill:#c7dfff;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:1"
+           style="fill:#c7dfff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
            id="rect21288-9-4-7"
            width="413.80765"
            height="56.946007"
@@ -454,44 +455,44 @@
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="308.12332"
+       x="416.42798"
        y="657.69446"
        id="text21290-7-2-3"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan21292-0-8-5"
-         x="308.12332"
+         x="416.42798"
          y="657.69446">Platform optimizer</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="261.61389"
+       x="369.14767"
        y="692.97931"
        id="text18630-9-0-4-0"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan18632-9-6-5-3"
-         x="261.61389"
+         x="369.14767"
          y="692.97931">Optimized platform-specific AST</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
-       d="m 373.12716,697.53754 c 0.0216,0 0.33026,13.62098 0.33026,13.62098"
+       d="m 481.43179,697.53754 c 0.0216,0 0.33026,13.62098 0.33026,13.62098"
        id="path18634-6-3-5-8"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
-       d="m 373.12716,666.90696 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
+       d="m 481.43179,666.90696 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
        id="path18634-8-0-9-4"
        inkscape:connector-curvature="0" />
     <g
        id="g21348-0-5-7-9"
-       transform="matrix(0.34858539,0,0,0.34858539,297.24977,667.50097)"
+       transform="matrix(0.34858539,0,0,0.34858539,405.5544,667.50097)"
        style="fill:#c7dfff;fill-opacity:1">
       <g
          id="g21351-1-3-6-6"
          style="fill:#c7dfff;fill-opacity:1">
         <rect
-           style="fill:#c7dfff;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:1"
+           style="fill:#c7dfff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
            id="rect21288-9-4-7-1"
            width="413.80765"
            height="56.946007"
@@ -502,28 +503,28 @@
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="310.26114"
+       x="418.56577"
        y="731.14142"
        id="text21290-7-2-3-1"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan21292-0-8-5-2"
-         x="310.26114"
+         x="418.56577"
          y="731.14142">Backend compiler</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:13.94341564px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="324.78668"
+       x="433.09131"
        y="764.42633"
        id="text18630-9-0-4-0-6"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan18632-9-6-5-3-6"
-         x="324.78668"
+         x="433.09131"
          y="764.42633">Machine code</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.04575622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend)"
-       d="m 373.12716,740.35396 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
+       d="m 481.43179,740.35396 c 0.0216,0 0.33026,13.62097 0.33026,13.62097"
        id="path18634-8-0-9-4-0"
        inkscape:connector-curvature="0" />
   </g>
