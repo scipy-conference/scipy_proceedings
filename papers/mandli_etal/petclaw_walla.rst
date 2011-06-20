@@ -301,25 +301,30 @@ nonlinear application problems.
 On-Core Performance
 ~~~~~~~~~~~~~~~~~~~
 
-Table :ref:`SerialComparison` shows on-core serial comparison between two
-Clawpack simulations with the corresponding PetClaw simulations. Note that
-both codes rely on the same low-level kernels; only the high-level code is
-different. Because most of the computational cost is in executing these
-kernels, the difference in performance is relatively minor: 30\% for the
-acoustics test, and 17\% for the Euler test. For these runs, we have used
-gfortran 4.2 and optimization flag -O3.
+Table :ref:`SerialComparison` shows on-core serial comparison between the Fortran-only
+Clawpack implementation and the corresponding hybrid PetClaw implementation for two systems of equations.  Both codes
+rely similar Fortran kernels with the exception of array layout, the high-level code is
+different.  For both the Clawpack code and the Fortran kernels used in PetClaw,
+we used the gfortran compiler (version 4.2) with optimization setting -O3.
+
+Because most of the computational cost is in executing these low-level Fortran 
+kernels, we expect the difference in performance to be relatively minor with a slight performance benefit in favor of
+Clawpack. Indeed, we find this to be true in the case of the acoustics tests, where Clawpack is moderately (30\%)
+faster. Surprisingly, in the case of more computationally intensive Euler tests, the PetClaw code outperforms the Clawpack code
+by a factor of 1.59.   We attribute this to the new data layout in PetClaw which the code inherits from the PETSc DA,
+where degrees of freedom for the same node are consecutive in memory **TODO: VERIFY THIS STATEMENT**. 
 
 .. table:: Timing results in seconds for on-core serial experiment of an 
            acoustics and Euler problems implemented in both Clawpack and    
            PetClaw. :label:`SerialComparison`
 
-   +-----------+-----------+---------+----------+
-   |           | Clawpack  | PetClaw | Ratio    |
-   +-----------+-----------+---------+----------+
-   | Acoustics | 43.2s     | 56.1s   | 1.30     |
-   +-----------+-----------+---------+----------+
-   | Euler     | 337.2s    | 395.6s  | 1.17     |
-   +-----------+-----------+---------+----------+
+   +-----------+----------+--------+----------+------+---------+
+   |           | Clawpack | PetClaw| Grid Size| Steps| Speed up|
+   +-----------+----------+--------+----------+------+---------+
+   | Acoustics | 43.2s    | 56.1s  | 500 X 500| 445  | 0.77x   |
+   +-----------+----------+--------+----------+------+---------+
+   | Euler     | 126.3s   | 79.3s  | 640 X 160| 500  | 1.59x   |
+   +-----------+----------+--------+----------+------+---------+
 
 
 Parallel Performance
