@@ -376,8 +376,8 @@ function as pure Python. In this case, the walk succeeds, resulting in
 the DAST shown in Figure :ref:`dsir`. Asp provides utilities to
 facilitate visiting the nodes of a tree and tree pattern matching.
 
-.. figure:: pythonastanddsir.png
-   :scale: 70 %
+.. figure:: pythonastanddsir.pdf
+   :scale: 68 %
    :align: center
 
    Left: Initial Python abstract syntax tree. :label:`pythonast`
@@ -401,7 +401,7 @@ transforming arithmetic expressions and simple assignments from the
 high-level representation used in DASTs to the low-level
 platform-specific representation, which handles the body of the loop.
 
-.. figure:: asir.png
+.. figure:: asir.pdf
    :scale: 50 %
    :align: center
 
