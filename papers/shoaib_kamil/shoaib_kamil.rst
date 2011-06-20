@@ -742,10 +742,6 @@ References
 
 .. [PIL] Python Imaging Library. http://pythonware.com/products/pil.
 
-.. [Tang11] Y.Tang, R. A. Chowdhury, B. C. Kuszmaul, C.-K. Luk, and
-   C. E. Leiserson. The Pochoir Stencil Compiler. 23rd ACM Symposium 
-   on Parallelism in Algorithms and Architectures, 2011.
-
 .. [SaWi09] S. Williams, A. Waterman, D. Patterson. 
    Roofline: An Insightful Visual Performance Model for Floating-Point Programs and Multicore Architectures.
    Communications of the ACM (CACM), April 2009.
@@ -763,6 +759,10 @@ References
     IEEE special issue on "Program Generation, Optimization, and Adaptation".
 
 .. [STREAM] The STREAM Benchmark. http://www.cs.virginia.edu/stream
+
+.. [Tang11] Y.Tang, R. A. Chowdhury, B. C. Kuszmaul, C.-K. Luk, and
+   C. E. Leiserson. The Pochoir Stencil Compiler. 23rd ACM Symposium 
+   on Parallelism in Algorithms and Architectures, 2011.
 
 .. [Wonn00] D. Wonnacott. Using Time Skewing to Eliminate Idle Time due to Memory Bandwidth and Network Limitations.
    International Parallel and Distributed Processing Symposium, 2000.
