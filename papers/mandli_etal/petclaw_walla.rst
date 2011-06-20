@@ -176,7 +176,8 @@ different methods.
 
 .. figure:: pyclaw_architecture_flow.pdf
 
-   PyClaw architecture flow with solver structures.  :label:`FigSolverStructure`
+   PyClaw architecture flow with solver structures.
+   :label:`FigSolverStructure`
 
 Another very useful abstraction managed by PyClaw is that of the
 implementation language. The 1D PyClaw solvers contain a complete
@@ -280,75 +281,77 @@ industrial codes, they are not standard in academic scientific codes
 
 2D Performance Results
 ----------------------
-
 For PetClaw performance assessment with 2D problems, we have conducted on-core
 serial experiments to compare the performance of PetClaw code with the
-corresponding pure Clawpack Fortran code. We have also performed weak scaling
+corresponding pure Fortran code, Clawpack. We have also performed weak scaling
 experiments to study the scalability of PetClaw on up to four racks of the
-Shaheen system. Corresponding 1D results of PetClaw have been demonstrated in
-[petclaw11]_.
+Shaheen system. Corresponding results for PetClaw simulations in 1D may be
+found in [petclaw11]_.
 
-We have chosen two common systems for our tests. The first is a 2D acoustics
-problem that has a smooth radial hump as its initial data. The second is a
-more computationally intensive 2D Euler problem simulating a shock wave
-hitting a spherical bubble of low-density gas with initially constant pressure
-and zero velocity near the bubble and as a result of the shock wave, the
-bubble turns into a smoke ring [clawpack]_.
+We consider two systems of equations in our performance tests. The first is
+the system of 2D linear acoustics and the second is the 2D Euler equations of
+compressible fluid dynamics. The acoustics test involves a very simple Riemann
+solver and is intended to highlight any performance difficulties arising from
+the Python code overhead. The Euler test involves a more typical, costly
+Riemann solver and should be considered as more representative of realistic
+nonlinear application problems.
+
+.. simulating a shock wave hitting a spherical bubble of low-density gas with initially constant pressure and zero velocity near the bubble, as a result of the shock wave, the bubble turns into a smoke ring [clawpack]_.
 
 On-Core Performance
 ~~~~~~~~~~~~~~~~~~~
 
 Table :ref:`SerialComparison` shows on-core serial comparison between two
-Claw- pack applications with the corresponding PetClaw applica- tions. As a
-result of incorporating the Fortran kernels for the heavy computations, the
-difference between the two tools’ serial performance is less significant.
-Furthermore, the Pet- Claw code can benefit from compiling the Fortran kernels
-with optimization flags. In the case of acoustics example, the Clawpack
-version of the code runs in 77% of the time required to execute the PetClaw
-version. In the case of the more computationally intensive Euler problem, the
-difference is even less and the Clawpack version would run in about 85 percent
-of the time compared to the PetClaw code. For these runs, we have used
+Clawpack simulations with the corresponding PetClaw simulations. Note that
+both codes rely on the same low-level kernels; only the high-level code is
+different. Because most of the computational cost is in executing these
+kernels, the difference in performance is relatively minor: 30\% for the
+acoustics test, and 17\% for the Euler test. For these runs, we have used
 gfortran 4.2 and optimization flag *-O3*.
-
 
 .. table:: Timing results in seconds for on-core serial experiment of an 
            acoustics and Euler problems implemented in both Clawpack and    
            PetClaw. :label:`SerialComparison`
 
-   +-----------+-----------+---------+
-   |           | Clawpack  | PetClaw |
-   +-----------+-----------+---------+
-   | Acoustics | 43.2s     | 56.1s   |
-   +-----------+-----------+---------+
-   | Euler     | 337.2s    | 395.6s  |
-   +-----------+-----------+---------+
+   +-----------+-----------+---------+----------+
+   |           | Clawpack  | PetClaw | Ratio    |
+   +-----------+-----------+---------+----------+
+   | Acoustics | 43.2s     | 56.1s   | 1.30     |
+   +-----------+-----------+---------+----------+
+   | Euler     | 337.2s    | 395.6s  | 1.17     |
+   +-----------+-----------+---------+----------+
 
 
 Parallel Performance
 ~~~~~~~~~~~~~~~~~~~~
 
-To demonstrate the performance of our approach, we have conducted weak scaling
-studies of PetClaw on the same 2D acoustics and 2D Euler problem as outlined
-in the serial com- parison. Table :ref:`ScalingTable` shows the execution time
-for both experiments as the number of cores increases from one core up to 16
-thousands cores, while the ratio of work per core is fixed. The acoustics test
-problem was run with a square grid of 160,00 grid cells per core and evolved
-the solution 178 time steps. The Euler test problem were done with a
-rectangular grid where the number of grid cells in the x-direction is four
-times that in the y-direction. The ratio of grid cells per core is the same of
-the acoustics problem, and the solution evolves 67 time steps.
+Table :ref:`ScalingTable` shows the execution time for both experiments as the
+number of cores increases from one core up to 16 thousand cores, (four racks
+of BlueGene/P), with the ratio of work per core fixed. The acoustics problem
+used involves 178 time steps on a square grid with 160,000 (400x400) grid
+cells per core. The Euler problem used involves 67 time steps on a grid also
+with 160,000 grid cells per core. The first column for each test indicates the
+simulation time excluding the load time required to import Python modules. The
+second column indicates the total simulation time, including Python module
+imports.
 
-Profiling of the acoustics example shows that the loss of scaling in evolving
-the solution is mainly due to the communication of what is called the CFL
-number, which requires a max global reduce operation that is done each time
-step. The secondary cause of scaling loss is the communication of the ghost
-cells at each time step. These results show good scaling for the parallel
-computations required for evolving the solution in time but the total job time
-reveals the very poor scaling caused by the time required by the dynamic
-loading required by Python. Although much longer simulations can to some
-extent justify the start up time required for dynamic loading of Python, this
-loading time remains catastrophic in many cases which motivated the
-development of Walla to address this challenge.
+Excellent scaling is observed for both tests, apart from the dynamic loading.
+Profiling of the acoustics example shows that the small loss of efficiency is
+primarily due to the communication of the CFL number, which requires a max
+global reduce operation that is done each time step, and also partly due to
+the communication of ghost cell values between adjacent domains at each time
+step.
+
+In contrast, the total job time reveals the very poor scaling of the dynamic
+loading time. For the largest jobs considered, this load time is roughly one
+hour, which is significant though generally not excessive relative to typical
+simulation times, since the CFL condition means that large simulations of
+hyperbolic problems necessarily require long run times in order for waves to
+propagate across the full domain. Nevertheless, this inefficiency remains as a
+disadvantage for high performance Python codes. Although much longer
+simulations can to some extent justify the start up time required for dynamic
+loading of Python, this loading time severely impacts parallel scaling,
+motivating the development of Walla to address this challenge.
 
 .. table:: Timing results in seconds from scaling comparisons of the acoustics 
            and Euler test problems for the time required for evolving the   
@@ -406,24 +409,21 @@ development of Walla to address this challenge.
 Addressing the Catastrophic Loading Problem with Walla
 ------------------------------------------------------
 
-Catastrophic scaling is frequently observed in applications when performing
-dynamic linking and loading on large distributed systems regardless of
-language. While workarounds exist, they generally require modification of the
-application, building in a way that eliminates the use of dynamic linking and
-loading, or a significant change in the application runtime environment. Any
-of these approaches create overhead for the developer and eliminates the
-advantages of having developed a dynamically linked or loaded application in
-the first place.
+Catastrophic scaling has been observed in applications written in all
+languages when they perform dynamic linking and loading on large distribulted
+systems. Python applications are particularly prone to poor scaling due to
+systems issues as they tend to strongly exercise dynamic linking and loading.
+At the same time, Python applications provide excellent models for examining
+possible solutions to catastrophic dynamic link and load times [pynamic2007]_.
 
 Python applications are particularly prone to poor scaling due to system
 overheads. They generally exercise the sort of dynamic linking and loading
 that creates contention for file data and metadata. In general, the farther
 you scale, the worse the impact on application load times becomes. This
-problem is well understood and benchmarks, such as in Lawrence Liver- more
-National Laboratory’s Pynamic, which helps to describe and understand the
+problem is well understood and benchmarks, such as in Lawrence Livermore
+National Laboratory’s Pynamic, which help to describe and understand the
 extent to which an application may be impacted on a particular system
-[pynamic2007]_. Conversely, Python applications can highlight the deficits and
-make it an apt platform to explore solutions.
+[pynamic2007]_. Conversely, Python applications can highlight these deficits and make it an apt platform to explore solutions.
 
 The CPython interpreter’s process for importing modules is very I/O and
 metadata intensive. If dynamically linked, the overhead of loading a module is
@@ -452,12 +452,12 @@ abandoned in favor of using MPI for all communications ensuring portability
 between systems and eliminating any licensing restrictions created by use of
 vendor code.
 
-In the Walla design, the CPython importer and the *glibc libdl* are replaced
+In the Walla design, the CPython importer and the glibc libdl are replaced
 with versions that have been modified such that only a single rank performs
 metadata intensive tasks and file system I/O. Modifications are generally kept
-to a minimum with *fopen* and stat being replaced with versions that rely on
+to a minimum with *fopen* and *stat* being replaced with versions that rely on
 MPI rank 0 to perform the actual *fopen* and *stat* calls, then broadcast the
-result to all other nodes. While wasteful of memory, the *glibc fmemopen*
+result to all other nodes. While wasteful of memory, the glibc *fmemopen*
 function is used to produce a file handle returned by the *fopen* replacement.
 At no time do nodes other than MPI rank 0 access Python modules or libraries
 via the filesystem, eliminating much of the overhead and contention that is
@@ -482,7 +482,7 @@ internals, almost all changes should eventually be transparent to end users
 and require no changes to user Python codes. The runtime environment requires
 changes to the *site.py* to ensure the loading of MPI and replace the native
 importer with the Walla importer. For compatibility reasons, *libdl* is not
-completely replaced; users should link *libwalla* before the *glibc libdl* to
+completely replaced; users should link *libwalla* before the glibc *libdl* to
 ensure that the symbols for *dlopen*, *dlsym*, and *dlclose* resolve back to
 *libwalla* rather than *libdl*.
 
@@ -509,8 +509,6 @@ libraries and importing modules with code that directly maps or executes the
 contents of the broadcasted buffers. Eliminating any trace of function
 shipping has been a major focus of reworking the CPython importer on the Blue
 Gene/P platform.
-
-
 
 ..
     .. table:: Results from basic import tests.
@@ -603,6 +601,8 @@ References
               *Past and Future Perspectives on Scientific Software.* 
               In: Tveito A, Bruaset AM, Lysne O, eds. Simula Research 
               Laboratory. Springer Berlin Heidelberg; 2010:321-362. 
+
+.. [pythonisfun] http://xkcd.com/353/
 
 .. [pynamic2007] Gregory L. Lee, Dong H. Ahn, Bronis R. de Supinski, John 
                  Gyllenhaal, Patrick Miller, *Pynamic: the Python Dynamic 
