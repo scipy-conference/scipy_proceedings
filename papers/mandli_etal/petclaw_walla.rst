@@ -108,8 +108,8 @@ developed for PyClaw in a short period of time with wide success.  The basic
 building blocks of PyClaw involve the separation of the data structures
 representing the gridded data and the domain and the solution operators that 
 advance the gridded data to the end-time requested.  Both of these
-abstraction and layers also implement accessors that can be overridden to
-provide advance functionality as well as is the case in PetClaw.
+abstraction layers also implement accessors that can be overridden to
+provide advance functionality, a feature used in PetClaw.
 
 The *Solution* class represents a snap-shot of the gridded data at a single
 instance in time.  The class acts as a container object with possibly multiple
@@ -307,7 +307,7 @@ both codes rely on the same low-level kernels; only the high-level code is
 different. Because most of the computational cost is in executing these
 kernels, the difference in performance is relatively minor: 30\% for the
 acoustics test, and 17\% for the Euler test. For these runs, we have used
-gfortran 4.2 and optimization flag *-O3*.
+gfortran 4.2 and optimization flag -O3.
 
 .. table:: Timing results in seconds for on-core serial experiment of an 
            acoustics and Euler problems implemented in both Clawpack and    
@@ -410,7 +410,7 @@ Addressing the Catastrophic Loading Problem with Walla
 ------------------------------------------------------
 
 Catastrophic scaling has been observed in applications written in all
-languages when they perform dynamic linking and loading on large distribulted
+languages when they perform dynamic linking and loading on large distributed
 systems. Python applications are particularly prone to poor scaling due to
 systems issues as they tend to strongly exercise dynamic linking and loading.
 At the same time, Python applications provide excellent models for examining
@@ -423,8 +423,9 @@ you scale, the worse the impact on application load times becomes. This
 problem is well understood and benchmarks, such as in Lawrence Livermore
 National Laboratory’s Pynamic, which help to describe and understand the
 extent to which an application may be impacted on a particular system
-[pynamic2007]_. Conversely, Python applications can highlight these deficits and make it an apt platform to explore solutions.
-
+[pynamic2007]_. Conversely, Python applications can highlight the deficits and
+make it an apt platform to explore solutions.
+    
 The CPython interpreter’s process for importing modules is very I/O and
 metadata intensive. If dynamically linked, the overhead of loading a module is
 further increased as Python must work through the operating system software
@@ -601,8 +602,6 @@ References
               *Past and Future Perspectives on Scientific Software.* 
               In: Tveito A, Bruaset AM, Lysne O, eds. Simula Research 
               Laboratory. Springer Berlin Heidelberg; 2010:321-362. 
-
-.. [pythonisfun] http://xkcd.com/353/
 
 .. [pynamic2007] Gregory L. Lee, Dong H. Ahn, Bronis R. de Supinski, John 
                  Gyllenhaal, Patrick Miller, *Pynamic: the Python Dynamic 
