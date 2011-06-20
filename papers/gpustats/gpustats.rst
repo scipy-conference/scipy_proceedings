@@ -359,27 +359,41 @@ Some basic benchmarks
 
 We show some benchmarks for the univariate and multivariate normal probability
 density functions, both with and without using ``GPUArray`` to use data already
-stored on the GPU.
+stored on the GPU. These were carried out with a very modest NVIDIA GTS 250
+desktop card, which has 128 CUDA cores (latest generation cards have up to
+512). The CPU benchmarks were done on a standard Intel Core i7 930 processor. As
+you will see, the speedups with larger data sets can be quite dramatic. The
+reported numbers below are the *speedup*, i.e. the ratio of CPU average runtime
+divided by GPU average runtime.
 
-BLAH BLAH BLAH TODO BENCHMARKS WHEN I GET HOME
+
+**Univariate Normal PDF**: "Single" indicates that the density values were only
+computed for a single mean and variance. "Multi" indicates that they were
+computed for 8 (an arbitrary number) sets of means and variances in one
+shot. The column header indicates the number of data points.
 
 ::
 
-               cpu         gpu         speedup
-    100        0.0001531   0.004068    0.03765
-    1000       0.0002452   0.00103     0.238
-    10000      0.001238    0.001364    0.9073
-    100000     0.01322     0.0042      3.148
-    1000000    0.1588      0.03104     5.116
+
+                      1e3     1e4     1e5     1e6
+    Single            0.2234  1.268   7.951   23.05
+    Single (GPUArray) 0.2407  1.291   9.359   38.72
+    Multi             1.46    7.035   26.19   43.73
+    Multi  (GPUArray) 1.79    8.354   30.79   49.26
+
+**Multivariate Normal PDF**: For this distribution, we used a streamlined C
+implementation of the density function (nearly identical code to the CUDA
+kernel) for benchmarking purposes so that it's an apples-to-apples
+comparison. For the data dimension we chose 15, again arbitrarily. Here we can
+really see an even greater impact of reusing data on the GPU:
 
 ::
 
-               cpu         gpu         speedup
-    100        0.001318    0.001005    1.312
-    1000       0.00193     0.001123    1.718
-    10000      0.009805    0.002881    3.403
-    100000     0.1027      0.01312     7.829
-    1000000    1.275       0.09224     13.82
+                      1e3     1e4     1e5     1e6
+    Single            0.6998  4.167   12.55   14.09
+    Single (GPUArray) 0.8465  6.03    32.59   64.12
+    Multi             3.126   18.41   60.18   63.89
+    Multi  (GPUArray) 3.135   19.8    74.39   82
 
 .. Application: Bayesian Normal Mixture Modeling
 .. ---------------------------------------------
@@ -432,6 +446,13 @@ has drawbacks for statistical applications: most significantly the lack of a
 pseudorandom number generator equivalent in speed and quality to [CURAND]_. For
 simulation-based applications this can make a big impact. We are hopeful that
 this issue will be resolved in the next year or two.
+
+Another important addition which would be important to some users is to enable
+multiple GPUs to be run in parallel to extract even better performance. While
+this would introduce more latency for small datasets and likely be unnecessary,
+for processing large data sets, the overhead of calling out to 3 GPUs, for
+example, would likely be much less than the computation time. Ideally code could
+be seamlessly run on multiple GPUs.
 
 Note that **gpustats** is still in prototype stages, so its API will be highly
 subject to change. We are hoping to generate interest in this development
