@@ -117,7 +117,7 @@ but this gives a sense of the role of each component.
 
 .. figure:: figure1.png
 
-   Simplified illustration of the component interaction in Crab . :label:`egfig`
+   Simplified illustration of the component interaction in Crab :label:`egfig`
 
 
 The Data Model implementation stores and provides access to all the preference, user and item data needed in the recommendation. The Similarity
@@ -139,7 +139,8 @@ we will consider a simple dataset including data about users, cleverly named "1"
 a Data Model object.
 
 .. figure::  figure2.png
-   book ratings data set - intro.csv    :label:`egfig2`
+
+   Book ratings data set - intro.csv   :label:`egfig2`
 
 
 Analyzing the data set shown at Figure :ref:`egfig2`, it is possible to notice that Users 1 and 5 seem to have similar tastes. Users 1 and 3 don't overlap much since the only
@@ -148,6 +149,7 @@ while 2 is just the opposite. By using one of recommender algorithms available i
 loaded in a Data Model as input, just run this script using your favorite IDE as you can see the snippet code below.
 
 .. code-block:: python
+
      from models.basic_models import FileDataModel
      from recommenders.basic_recommenders import UserBasedRecommender
      from similarities.basic_similarities import UserSimilarity
@@ -157,12 +159,12 @@ loaded in a Data Model as input, just run this script using your favorite IDE as
      user_id = 1
      load the dataset
      model = FileDataModel('simple_dataset.csv')
-     similarity = UserSimilarity(model,pearson_correlation)
-     neighbor = NearestUserNeighborhood(similarity,model,4,0.0)
+     similarity = UserSimilarity(model, pearson_correlation)
+     neighbor = NearestUserNeighborhood(similarity, model, 4, 0.0)
      create the recommender engine
-     recommender = UserBasedRecommender(model,similarity,neighbor,False)
+     recommender = UserBasedRecommender(model, similarity, neighbor, False)
      recommend 1 item to user 1
-     print recommender.recommend(user_id,1)
+     print recommender.recommend(user_id, 1)
 
 
 The output of running program should be: 104. We asked for one top recommendation, and got one. The recommender engine recommended the
@@ -196,6 +198,7 @@ of this model is that it can easily work with JSON files, which is commonly used
 the json input into a bult-in dictionary. 
 
 .. code-block:: python
+
      from models.basic_models import DictPreferenceDataModel
       
      dataset = {'1':{'101': 3.0, '102': 3.5}, '2':{'102': 4.0, '103':2.5, '104': 3.5}}
@@ -203,7 +206,7 @@ the json input into a bult-in dictionary.
      model = DictPreferenceDataModel(dataset)
      print model.user_ids()
      #numpy.array(['1','2'])
-     print model.preference_value('1','102')
+     print model.preference_value('1', '102')
      #3.5
      print model.preferences_for_item('102')
      #numpy.array([('1',3.5),('2',4.0)])
@@ -222,6 +225,7 @@ article. It is not typical for users to rate articles. So the recommender recomm
 some association between user and item, an interesting scenario for using the BooleanDictModel.
 
 .. code-block:: python
+
      from models.basic_models import DictBooleanDataModel
       
      dataset = {'1':['101','102'], '2':['102','103','104']}
@@ -229,7 +233,7 @@ some association between user and item, an interesting scenario for using the Bo
      model = DictBooleanDataModel(dataset)
      print model.user_ids()
      #numpy.array(['1','2'])
-     print model.preference_value('1','102')
+     print model.preference_value('1', '102')
      #1.0 - all preferences are valued with 1.0
      print model.preferences_for_item('102')
      #numpy.array([('1',1.0),('2',1.0)])
@@ -282,6 +286,7 @@ In the first section we have already presented a user-based recommender in actio
 components the approach uses.
 
 .. code-block:: python
+
 	 #do the basic imports
 	 #...
      user_id = 1
@@ -290,9 +295,9 @@ components the approach uses.
      #Define the Similarity used and the pairwise metric
      similarity = UserSimilarity(model,pearson_correlation)
      #For defining the neighborhood we will use the kNN approach
-     neighbor = NearestUserNeighborhood(similarity,model,4,0.0)
+     neighbor = NearestUserNeighborhood(similarity, model, 4, 0.0)
      #Now add all to the UserBasedRecommender
-     recommender = UserBasedRecommender(model,similarity,neighbor,False)
+     recommender = UserBasedRecommender(model, similarity, neighbor, False)
      #recommend 2 items to user 1
      print recommender.recommend(user_id,2)
 
@@ -337,16 +342,17 @@ items increases, whereas a user-based recommender's running time goes up as the 
 in item-based approach is significant compared to the user-based one. Let's see how to use item-based recommender in Crab with the following code. 
 
 .. code-block:: python
+
 	 #do the basic imports
 	 #...
      user_id = 1
      #load the dataset
      model = FileDataModel('simple_dataset.csv')
      #Define the Similarity used and the pairwise metric
-     similarity = ItemSimilarity(model,euclidean_distance)
+     similarity = ItemSimilarity(model, euclidean_distance)
      #There is no neighborhood in this approach
      #Now add all to the ItemBasedRecommender
-     recommender = ItemBasedRecommender(model,similarity,False)
+     recommender = ItemBasedRecommender(model, similarity, False)
      #recommend 2 items to user 1
      print recommender.recommend(user_id,2)
 
@@ -367,13 +373,14 @@ Crab supports several metrics widely used in the recommendation literature such 
 and F1-Score. Let's see the previous example code and instead evaluate the simple recommender we created, on our data set:
 
 .. code-block:: python
+
      #... other basic imports
      from evaluators.statistics import RMSRecommenderEvaluator
      #... initialize the recommender
      # initialize the RMSE Evaluator
 	 evaluator = RMRecommenderEvaluator()
 	 #call using training set with 70% of the available data and 30% for test.
-     print evaluator.evaluate(recommender,model,0.7,1.0)
+     print evaluator.evaluate(recommender, model, 0.7, 1.0)
      #0.75
 
 
@@ -386,13 +393,14 @@ may build their custom evaluators, just extending the base evaluator.
 For precision, recall and F1-Score Crab provides also a simple way to compute these values for a Recommender:
 
 .. code-block:: python
+
      #... other basic imports
      from evaluators.statistics import IRStatsRecommenderEvaluator
      #... initialize the recommender
      #initialize the IR Evaluator
 	 evaluator = IRStatsRecommenderEvaluator()
 	 #call evaluate considering the top 4 items recommended.
-     print evaluator.evaluate(recommender,model,2,1.0)
+     print evaluator.evaluate(recommender, model, 2, 1.0)
      #{'precision': 0.75, 'recall': 1.0, 'f1Score': 0.6777}
 
 
@@ -405,6 +413,7 @@ It is important to notice that the evaluator doe not measure if the algorithm is
 algorithms to check the accuracy specially on other data sets available.
 
 .. figure::  figure7.png
+
    PrecisionxRecall Graph with F1-Score.   :label:`egfig7`
 
 Crab supports several tools for testing and evaluating recommenders in a painless way. One of the future releases will support the plot of 
@@ -428,6 +437,7 @@ HTTP [DjangoPiston]_. Our current structure is illustrated in Figure :ref:`egfig
 piston handlers to provide the external access.
 
 .. figure::  figure5.png
+
   Crab Web Services server-side interaction over HTTP :label:`egfig5`
 
 There is a recommender engine powered by Crab in production using REST APIs to access the the recommendations. The recommender engine uses
@@ -440,6 +450,7 @@ with MongoDB database for retrieving and storing the recommendations and it is b
 Numpy and Scipy libraries.
 
 .. figure::  figure6.png
+
   AtéPassar recommendation engine powered by Crab Framework   :label:`egfig6`
 
 Crab can comfortably digest medium and small data sets on one machine and produce recommendations in real time. But it still lacks a
