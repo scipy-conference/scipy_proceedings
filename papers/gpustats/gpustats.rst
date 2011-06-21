@@ -76,17 +76,16 @@ developer writes a function, known as a *kernel*, to process a unit of
 data. The kernel function is then executed once for each unit or chunk
 of data.
 
-The GPU has a large single *global* memory store (typically 512MB to
-4GB) from which data sets can be written and read by the CPU. However,
-each group, or *block*, of threads are assigned a small piece
-(typically 16K to 64K) of ultra low-latency *shared* cache memory
-which is orders of magnitude faster than the global memory. Therefore,
-the main challenge for the developer, outside of writing the kernel
-function, is structuring the computation to optimally utilize each
-thread block's shared memory and minimizing reads from and writes to
-the global memory. Careful coordination of the threads is required to
-transfer memory efficiently from global to shared. We will not get
-into the low-level details of this process but instead refer the
+The GPU has a large single *global* memory store (typically 512MB to 4GB) with
+which data sets can be transferred to and from the CPU RAM memory
+space. However, each group, or *block*, of threads are assigned a small piece
+(typically 16K to 64K) of ultra low-latency *shared* cache memory which is
+orders of magnitude faster than the global memory. Therefore, the main challenge
+for the developer, outside of writing the kernel function, is structuring the
+computation to optimally utilize each thread block's shared memory and
+minimizing reads from and writes to the global memory. Careful coordination of
+the threads is required to transfer memory efficiently from global to shared. We
+will not get into the low-level details of this process but instead refer the
 interested reader to the CUDA API guide ([NvidiaGuide]_). See Figure
 :ref:`gpuschematic` for a rough diagram of the computing architecture.
 
@@ -137,8 +136,8 @@ in which case :math:`\Theta = (\mu, \sigma^2)` and
 In many statistical inference algorithms, the "goodness of fit" of the
 parameters :math:`\Theta` is evaluated based on the full data likelihood
 :ref:`likelihood`. It is common to use the logged likelihood function as
-:ref:`likelihood` decomposes into a sum of log densities and secondly this
-reduces numerical precision problems.
+:ref:`likelihood` decomposes into a sum of log densities and this also reduces
+numerical precision problems.
 
 Many numerical algorithms for fitting these likelihood-based models, especially
 Monte Carlo-based, involve evaluating the log-likelihood function over thousands
@@ -153,7 +152,7 @@ latency. Suchard et al. studied these advantages in the Bayesian mixture model
 setting and found very promising results (100x speedup) on graphics cards that
 are now 2 years old ([JCGS]_).
 
-Another source of significant computation in statistical applications which we
+Another source of significant computation in statistical applications that we
 will address is that of generating draws from random variables. In many
 algorithms (e.g. Bayesian Markov Chain Monte Carlo methods), large data sets may
 require generating thousands or millions of random variables from various
@@ -238,7 +237,7 @@ the **gpustats** framework that bank conflicts can be avoided with multivariate
 data by ensuring that the data dimension is not a multiple of 16. Thus, some
 data sets must be *padded* with arbitrary data to avoid this problem, while
 passing the true data dimension to the GPU kernel. If this is not done, bank
-conflicts will lead to noticably degraded performance. We are hopeful that such
+conflicts will lead to noticeably degraded performance. We are hopeful that such
 workarounds can be avoided with future versions of GPU memory architecture.
 
 For sampling random variables on the GPU, the process is reasonably
@@ -276,7 +275,7 @@ known as device functions, marked by ``__device__``. Since the data
 transfer / coalescing problem needs to be only solved once for each
 variety of kernel, we can use templating to generate a custom kernel
 for each new device function implementing a new probability
-density. It is then simple to enable elementwise transformations of
+density. It is then simple to enable element wise transformations of
 existing device functions, e.g. taking the ``exp`` of a logged
 probability density. In the **gpustats** framework, the code for
 implementing the logged and unlogged normal pdf is as follows:
