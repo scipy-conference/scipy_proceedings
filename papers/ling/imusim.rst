@@ -341,7 +341,7 @@ Our first example script showed a very unrealistic simulation, with an idealised
         CM_TO_M_CONVERSION)
 
     # Convert to continuous time trajectories
-    splinedBody = SplinedBodyModel(sampledModel)
+    splinedBody = SplinedBodyModel(sampledBody)
 
     # Create a new simulation
     sim = Simulation(environment=env)
@@ -370,7 +370,7 @@ At 16 lines of code, this is only twice the length of the previous example, but 
 
 Further information on the new steps appearing in this example—including IMU calibration, and more on the use of motion capture data, of which much is freely available—can be found in the IMUSim tutorial [Ling2011]_.
 
-Plotting the measurements of the accelerometer in this simulation, using the calibration obtained for the IMU, results in Figure :ref:`accwalk`. Compare this data to that in Figure :ref:`accideal`.
+Plotting the measurements of the accelerometer in this simulation, using the calibration obtained for the IMU, results in Figure :ref:`accwalk`. Compare the appearance of this data to that from the previous, more simplistic simulation in Figure :ref:`accideal`.
 
 .. figure:: walking-acceleration-plot.png
 
@@ -381,18 +381,18 @@ Data processing algorithms
 
 Obtaining realistic sensor data in simulations is one of IMUSim's key goals, but the package is also intended to support the comparison, development and selection of algorithms for processing this data. Implementations are included for a number of existing published algorithms. These may be useful as-is in some applications. They may also be used to compare new methods. We encourage users publishing new methods to contribute implementations of their algorithms themselves, and publish the scripts used for their experiments. This allows their results to be reproduced, and reduces the risk that their work will be misrepresented by an incorrect reimplementation by another researcher.
 
-In addition to the library of existing published methods, we have tried to provide some generally useful tools for working with sensor data. In particular, we include generic implementations of both the standard linear Kalman filter, the Unscented Transform, and the Unscented Kalman Filter. These are widely useful state estimation and nonlinear system tools, and could be usefully transferred to SciPy or another library.
+In addition to the library of existing published methods, we have tried to provide some generally useful tools for working with sensor data. In particular, we include generic implementations of the standard linear Kalman filter, the Unscented Transform, and the Unscented Kalman Filter. These are widely useful state estimation and nonlinear system tools, and could be usefully transferred to SciPy or another library.
 
 Validation and testing
 ======================
 
-In order to test the accuracy of our simulations, we have conducted some experiments to directly compare our simulated sensor values to those measured by real IMUs. To achieve this, we used an optical motion capture system to capture the movements of a subject who was also wearing wireless IMUs. In addition to the normal markers on the subject, the positions and rotations of the IMUs themselves were tracked using three markers attached to each IMU. From the optical capture data we produced a rigid body model of the subject, which was used via the methods we have described to obtain simulated sensor data. We also sampled the magnetic field in the capture area, using the magnetometer of an IMU swept around the capture volume whilst being tracked by the optical system. These measurements, seen in Figure :ref:`magfield`, were used to generate an interpolated field model of the capture area which was also used in the simulation.
+In order to test the accuracy of our simulations, we have conducted some experiments to directly compare our simulated sensor values with those measured by real IMUs. To achieve this, we used an optical motion capture system to capture the movements of a subject who was also wearing wireless IMUs. In addition to the normal markers on the subject, the positions and rotations of the IMUs themselves were tracked using three markers attached to each IMU. From the optical capture data we produced a rigid body model of the subject, which was used via the methods we have described to obtain simulated sensor data. We also sampled the magnetic field in the capture area, using the magnetometer of an IMU swept around the capture volume whilst being tracked by the optical system. These measurements, seen in Figure :ref:`magfield`, were used to generate an interpolated field model of the capture area which was also used in the simulation.
 
 In our experiments we obtained correlations of :math:`r^2 > 0.95` between simulated and measured values for all three types of sensors—accelerometers, gyroscopes and magnetometers. More detail on these experiments and results can be found in [Young2011]_.
 
 The software is accompanied by test scripts designed to be used with the ``nosetests`` tool. In total the current version runs over 30,000 test cases, which aim to verify the correct behaviour of the code. The tests include checking simulated sensor values against real ones obtained in the experiments described above, to ensure that after any code change the simulator still meets its published claims of accuracy.
 
-We also generate code coverage reports from the tests and use these to identify untested code. Unfortunately at present it is not straightforward to obtain test coverage for the Cython parts of the code; some unofficial code to do this is in circulation, but official future support for this in the ``coverage`` module would be helpful.
+We also generate code coverage reports from the tests and use these to identify untested code paths. Unfortunately at present it is not straightforward to obtain test coverage for the Cython parts of the code; some unofficial code to do this is in circulation, but official future support for this in the ``coverage`` module would be helpful.
 
 Conclusion
 ==========
@@ -405,7 +405,7 @@ We have presented IMUSim, a simulation framework for inertial and magnetic senso
 
 This is achieved by careful design of an object-oriented API for the various models required in the simulation.
 
-The project was completed in a matter of months by two researchers alongside other work. We believe this demonstrates well the rapid development enabled by Python and its increasing range of scientific libraries. In the process of development we produced a few general purpose utilities which may be of wider use, and which we would like to see adopted or otherwise implemented in more general libraries. These include:
+The project was completed in a matter of months by two researchers alongside other work. We believe this demonstrates well the rapid development enabled by Python and its increasing range of scientific libraries. In the process of development we created some contributions which may be of wider use, and could be moved to more general purpose libraries. These include:
 
     - fast Cython classes for quaternion mathematics, including efficient quaternion arrays and B-spline fitting of quaternion values.
 
