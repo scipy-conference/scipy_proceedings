@@ -77,17 +77,17 @@ data. The kernel function is then executed once for each unit or chunk
 of data.
 
 The GPU has a large single *global* memory store (typically 512MB to 4GB) with
-which data sets can be transferred to and from the CPU RAM memory
-space. However, each group, or *block*, of threads are assigned a small piece
-(typically 16K to 64K) of ultra low-latency *shared* cache memory which is
-orders of magnitude faster than the global memory. Therefore, the main challenge
-for the developer, outside of writing the kernel function, is structuring the
-computation to optimally utilize each thread block's shared memory and
-minimizing reads from and writes to the global memory. Careful coordination of
-the threads is required to transfer memory efficiently from global to shared. We
-will not get into the low-level details of this process but instead refer the
-interested reader to the CUDA API guide ([NvidiaGuide]_). See Figure
-:ref:`gpuschematic` for a rough diagram of the computing architecture.
+which data sets can be transferred to and from the CPU memory space. However,
+each group, or *block*, of threads are assigned a small piece (typically 16K to
+64K) of ultra low-latency *shared* cache memory which is orders of magnitude
+faster than the global memory. Therefore, the main challenge for the developer,
+outside of writing the kernel function, is structuring the computation to
+optimally utilize each thread block's shared memory and minimizing reads from
+and writes to the global memory. Careful coordination of the threads is required
+to transfer memory efficiently from global to shared. We will not get into the
+low-level details of this process but instead refer the interested reader to the
+CUDA API guide ([NvidiaGuide]_). See Figure :ref:`gpuschematic` for a rough
+diagram of the computing architecture.
 
 
 As a larger computation is divided up into a *grid* of thread blocks, a typical
