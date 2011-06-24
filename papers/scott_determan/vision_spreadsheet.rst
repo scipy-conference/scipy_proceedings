@@ -8,12 +8,16 @@ Vision Spreadsheet: An Environment for Computer Vision
 
 .. class:: abstract
 
-   Vision Spreadsheet is an environment for computer vision. It combines a spreadsheet with
-   computer vision and scientific python.
+   Vision Spreadsheet is an environment for computer vision. It combines a
+   spreadsheet with computer vision and scientific python. The cells in the
+   spreadsheet are images, computations on images, measurements, and plots. There
+   are many built in image processing and machine learning algorithms and it
+   extensible by writing python functions and importing them into the
+   spreadsheet.
    
 .. class:: keywords
 
-   computer vision,spreadsheet
+   computer vision,spreadsheet,OpenCV
 
 Introduction
 ------------
@@ -48,13 +52,13 @@ GUI controls to the left of the cells.
 
    Vision Spreadsheet cells contain images, measurements, and plots. :label:`bloodcells`
 
-Financial spreadsheets contain a grid of numbers and labels. In vision
-spreadsheet the grid of cells contains images, computations on images,
-measurements, and plots. In a financial spreadsheet, if you sum a column of
-numbers and change a number in the column the total automatically updates
-itself. Similarly, in vision spreadsheet if you change a cell (for instance by
-loading a new image or changing an algorithm parameter) then all of the cells
-that depend on the changed cell will update themselves.
+Financial spreadsheets contain a grid of numbers and labels. Vision Spreadsheet's
+grid of cells contains images, computations on images, measurements, and
+plots. In a financial spreadsheet, if you sum a column of numbers and change a
+number in the column the total automatically updates itself. Similarly, in vision
+spreadsheet if you change a cell (for instance by loading a new image or changing
+an algorithm parameter) then all of the cells that depend on the changed cell
+will update themselves.
 
 The repl (read-eval-print-loop) is a modified ipython shell used to specify what
 a cells contains. The repl is also used to write new spreadsheet functions in
@@ -63,6 +67,56 @@ python.
 The GUI controls area contains display parameters, overlays, and controls bound
 to algorithm parameters for the current cell.
 
+
+Vision Development Process
+--------------------------
+
+Let's look at the development process of one type of vision problem: classifying
+white blood cells. The problem: given an image with one of five types of white
+blood cells, build an algorithm that correctly identifies which type of blood
+cell is in the image. The types of cells we will distinguish between are:
+lyphosites, monocytes, eosinophils, neutrophils, and basophils (See figure :ref:
+`bloodcell_types`).
+
+.. figure:: bloodcell_types.png
+   :scale: 25%
+   :figclass: bht
+
+   Bloodcell types. :label:`bloodcell_types`
+
+The typical work flow for a classification problem like this is:
+
+#. Collect sample images. There's a relationship between the number of images we
+   collect and the number of features we'll be able to use and the type of
+   classifier we'll be able to use without over training.  So get as many sample
+   images as you can.
+#. Ground truth the samples. Have an expert go through the samples and label what
+ type of cell is in the image.
+#. Randomly assign some samples to a training set and the rest of the samples to
+ a scoring set.
+#. Find features that distinguish the cells from one another. Looking at the
+ cells, we can see some distinct parts: a dark blob surrounded by a lighter
+ blob. The dark blob is the nucleus, the surrounding blob is the cytoplasm. The
+ first step to our algorithm will be to segment the nucleus and cytoplasm and
+ extract simple measurements from them (area, perimeter, average color, etc).
+#. Pick a classifier type and train it using the features from the previous
+ step. If you don't know what type of classifier to pick, don't sweat it. The choice
+ of classifier is much less important than finding good features in step 4. A random forest
+ algorithm is a good default choice.
+#. Test how well the classifier does by running it against the scoring set. If
+   the classifier doesn't work well enough, look at the misclassified images. Can
+   we see things that might improve the classification. Maybe some images are
+   brighter than others (the user turned up the light on the microscope). Or some
+   images have a dark left side and a bright right side. Or sometimes the
+   cytoplasm segmentation bleeds into the background. We'll see if we can address
+   these problems. We may also think of new features that help us distinguish
+   between the cells, like measuring the texture of the cytoplasm. We go back to
+   step 4 and repeat until we're happy with the algorithm.
+
+Of these steps, steps 1 and steps 4 are the critical steps. Vision Spreadsheet
+can't collect more images for you, but it can help you explore what features
+distinguish between your objects. The rest of this paper shows how Vision
+Spreadsheet supports exploring vision problems like this.
 
 The Cells Language
 ------------------
@@ -261,8 +315,37 @@ mention. There is an interface to the Microsoft Kinect camera. The function
 grab_kinect_rgb will stream values from the rgb camera and the grab_kinect_depth
 will stream values from the depth camera.
 
+Status
+------
+
+Vision Spreadsheet isn't released yet. But I'm very, very close. All of the
+following are done:the cells language, OpenCV is wrapped, binding GUI controls to
+function parameters, multiple spreadsheets, data frames, adding python functions
+to the spreadsheet work, the kinects camera interface, saving and loading, and
+plots. It is quite useful as it is. But if I do just a little more, it will be
+fantastically more useful.
+
+I still have to implement the tools for classifiers (like ground truthing
+images), tools for data frames (like overlaying the rectangles in a data frame on
+an image and editing them, and editing factor columns).
+
+Finally, I need some time to shake out the really bad bugs before I let anyone
+else use it.
+
+I had planned on releasing Vision Spreadsheet shortly before the conference. I
+didn't make it. I'm sorry. When it is released, you can go to
+http://visionspreadsheet.com to download it (free, of course).
+
 Conclusion
 ----------
 
-Vision spreadsheet provides a nice environment for interactively working with
-computer vision. Please go to http://visionspreadsheet.com for more information.
+Vision spreadsheet provides an environment for interactively working with
+computer vision. 
+
+Thank You
+---------
+
+I used many great open source projects. I expecially want to thank the following
+projects (alphabetical order): antlr, boost, cmake, ipython, libfreenect, numpy,
+opencv, python, scipy, vigra, wxpython, and wxwidgets.
+
