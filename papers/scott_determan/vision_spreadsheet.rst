@@ -22,11 +22,14 @@ Vision Spreadsheet: An Environment for Computer Vision
 Introduction
 ------------
 
-Vision Spreadsheet is an application to interactively explore and solve computer
-vision problems. For vision professionals, it provides a prototyping environment
-where a number of solutions to a vision problem can be quickly explored. For
-vision novices, it provides an interactive playground where vision algorithms can
-be experienced visually.
+Vision Spreadsheet is an application designed to explore and solve computer
+vision problems. It provides a visual environment and a familiar computational
+tool set to enable creative prototyping of computer vision algorithms. A novel
+interface using a spreadsheet of images encourages interactive and exploratory
+algorithm design. Computational scientists can leverage their existing knowledge
+of python, NumPy, SciPy, OpenCV, VIGRA, and other familiar technologies. Vision
+Spreadsheet aims to make the techniques of computer vision accessible to a wider
+audience.
 
 Vision Spreadsheet is modeled after familiar numerical spreadsheets, such as MS
 Excel and Apple Numbers. In a numerical spreadsheet, each cell contains a number,
@@ -39,10 +42,10 @@ intermediate steps.
 
 The cells within Vision Spreadsheet relate to each other through expressions that
 operate on images. For example, if the image in cell a2 is the dilation of the
-image in cell a1, this is expressed as "a2 = dilate(a1)". The power of these
+image in cell a1, this is expressed as "dilate(a1)". The power of these
 expressions comes from the large library of functions available, including all of
 the image processing and machine learning algorithms from OpenCV. Furthermore,
-users can easily add their own functions using python, numpy, and scipy.
+users can easily add their own functions using python, NumPy, and SciPy.
 
 Vision Spreadsheet provides many tools to make it easier to explore the solution
 space of a vision problem.
@@ -81,7 +84,7 @@ itself. Similarly, in Vision Spreadsheet if a cell changes (for instance by
 loading a new image or changing an algorithm parameter) then all of the cells
 that depend on the changed cell will update themselves.
 
-The current cell's statment is a single-line control used to show what statement
+The current cell's statement is a single-line control used to show what statement
 was used to create the current cell. This statement may be edited and updated in
 this control.
 
@@ -91,8 +94,8 @@ shell is also used to write new spreadsheet functions in python.
 The GUI controls area contains display parameters, overlays, and controls bound
 to algorithm parameters for the current cell.
 
-Specifing a Cell's Content
---------------------------
+Specifying a Cell's Content
+---------------------------
 
 Just like in a numerical spreadsheet, the content of each cell in the spreadsheet
 grid is defined by an expression. Expressions are entered by typing them into the
