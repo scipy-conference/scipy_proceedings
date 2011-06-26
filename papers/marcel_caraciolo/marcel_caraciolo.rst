@@ -45,14 +45,14 @@ Although people's tastes vary, they do follow patterns. People tend to like thin
 they like. For instance, because a person loves bacon-lettuce-and-tomato sandwiches, the recommender system could
 guess that he would enjoy a club sandwich, which is mostly the same sandwich, with turkey.  Likewise, people tend
 to like things that similar people like.  When a friend entered design school, he saw that just about every other
-design student owned a Macintoshi computer - which was no surprise, as she already a lifetime Mac User. Recommendation
+design student owned a Macintosh computer - which was no surprise, as she already a lifetime Mac User. Recommendation
 is all about predicting these patterns of taste, and using them to discover new and desirable things a person
 didn't know about.
 
 Recommendation engines have been implemented in programming languages such as C/C++, Java among others and made 
 publicly available. One of the most popular implementations is the open-source recommendation library Taste, which was
 included in the Mahout framework project in 2008 [Taste]_ . Mahout is a well-known machine learning toolkit written in Java for
-building scalable apache licensed machine libraries [Mahout]_ . It is specially a great resource for developers who are willing to 
+building scalable machine libraries [Mahout]_ . It is specially a great resource for developers who are willing to 
 take a step into recommendation and machine learning technologies. Taste has enabled systematic comparisons between
 standard developed recommendation methods, leading to an increased visibility, and supporting their broad adoption
 in the community of machine learning, information filtering and industry. There
@@ -68,11 +68,11 @@ obstacle for machine learning researchers that will not want to learn complex pr
 Python has been considered for many years a excellent choice for programming beginners since it is easy to learn with simple syntax, portable and 
 extensive. In scientific computing field, high-quality extensive libraries such as Scipy, MatPlotlib and Numpy have given Python an 
 attractive alternative for researchers in academy and industry to write machine learning implementations and toolkits such as Brain,
-Shogun, Scikit-learn, Milk and many others.
+Shogun, Scikit-Learn, Milk and many others.
 
 The reason of not having an alternative for python machine learning developers by providing an unified and easy-to-use recommendation framework 
 motivated us to develop a recommendation engine toolbox that provides a rich set of features from which the developer can build a customized recommender system
-from a set of algorithms. The result is a framework, called CRAB, with focus on large-scale recommendations making use of scientific python packages
+from a set of algorithms. The result is a framework, called Crab, with focus on large-scale recommendations making use of scientific python packages
 such as Scipy, Numpy and Matplotlib to provide simple and efficient solutions for constructing recommender systems
 that are acessible and reusable in various contexts. Crab provides a generic interface for recommender systems implementations,
 among them the collaborative filtering approaches such as User-Based and Item-Based filtering, which are already available for use.
@@ -94,7 +94,7 @@ dynamic and fast recommendations over simple calls. It is also planned to suppor
 recommendation computation by interfacing with the distributed computation library MrJob written in Python currently
 developed by Yelp [MrJob]_. What sets Crab apart from many other recommender systems toolboxes, is that it provides 
 interactive interfaces to build, deploy and evaluate customized recommender algorithms written in Python running on several
-platforms such as Linux, BSD, Mac OS and Windows.
+platforms such as Linux, BSD, MacOS and Windows.
 
 The outline of this paper is as follows. We first discuss the Crab's main features by explaining the architecture of the framework.
 Next, we provide our current approach for representing the data in our system and current challenges. Then, we also presents
@@ -257,10 +257,9 @@ some association between user and item, an interesting scenario for using the Bo
 
 
 Crab also supports store and access preference data from a relational database. The developer can easily implement their recommender by using
-customized DataModels integrated with serveral databases. One example is the MongoDB, a NoN-SQL database commonly used for non-structured
-data [MongoDB]_. By using the Django's ORM, a popular web framework in Python and MongoEngine, a ORM adapter for integrating MongoDB with Django, we could
-easily set up a customized Data Model to access and retrieve data from MongoDB databases easily [Django]_, [MongoEngine]_. In fact, it is already in production at 
-a recommender engine using Crab for a brazilian social network called AtéPassar. We will explore more about it in the next sections.
+customized DataModels integrated with serveral databases. One example is the MongoDB, a NoSQL database commonly used for non-structured
+data [MongoDB]_. By using MongoEngine, a ORM adapter for integrating MongoDB with Django, we could
+easily set up a customized Data Model to access and retrieve data from MongoDB databases easily [Django]_, [MongoEngine]_. In fact, it is already in production at a recommender engine using Crab for a brazilian social network called AtéPassar. We will explore more about it in the next sections.
 
 One of the current challenges that we are facing is how to handle with all this data in-memory. Specially for recommender algorithms, which
 are data intensive. We are currently investigating how to store data in memory and work with databases directly
@@ -509,7 +508,7 @@ is to give Crab a scalable and efficient recommender implementation without havi
 
 Another concern is to investigate and develop other distributed implementations such as Slope One, Matrix Factorization, giving the developer 
 alternatives for choosing the best solution for its need specially when handling with large data sets using the power of Hadoop's MapReduce
-computations. Another important optimization is to use the JIT compiler PyPy for Python which is is being development and will bring faster computations
+computations. Another important optimization is to use the JIT compiler PyPy for Python which is being development and will bring faster computations
 on NumPy [NumpyFollowUp]_.
 
 Conclusion and Future Works
