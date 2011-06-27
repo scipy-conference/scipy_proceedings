@@ -51,8 +51,6 @@ We added python to Hydra.  It was hard.
 Automation of target design with Python
 ---------------------------------------
 
-One of the main applications of HYDRA is in inertial confinement fusion (ICF) capsule design.  ICF targets are typically small (~1 mm radius) spheres composed of several layers of cryogenic hydrogen, plastic, metal or other materials.  The intention is to produce significant thermonuclear yield by spherically compressing the hydrogen in the capsule to very large temperature and density.  The implosion is driven by a high intensity driver which illuminates, heats, and ablatesg the outer surface of the capsule.  This ablation pressure drives the implosion.
-
 Consider the shock ignition approach to inertial fusion using lasers.  A spherical shell of frozen deuterium-tritium (DT) is compressed to high density (~x g/cc) by a sequence of moderate strength shocks.  It is then accelerated to moderate implosion velocity (~300 km/s).  When the imploding shell stagnates, it forms a central, low density, high temperature hot spot and a surrounding high density, low temperature shell.  A strong shock wave (the igniter shock) arrives at stagnation and further heats the hot spot as well as preventing the low pressure shell from coming into pressure equilibrium with the high pressure hot spot.  The combination of the stagnation of the shell and the timely arrival of the igniter shock lifts the temperature of the central hot spot above the 12 keV threshold needed to initiate s fusion burn wave.  This burn wave propagates into the cold shell, producing most of the fusion yield.
 
 .. figure:: rt_materials.pdf
