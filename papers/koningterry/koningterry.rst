@@ -90,13 +90,17 @@ Having fixed the main main pulse timing, we add the igniter pulse.  We tune the 
 Optimization Techniques
 -----------------------
 
-Typical calculations take 5-20 minutes on a single core of an 2.8 GHz Intel Xeon processor.  Typical single variable optimization methods are designed for serial evaluation.  A "quick" convergence might take 12 function evaluations, translating to approximately four hours of run time.  Instead, we use a simple parallel bounded minimum optimization with 8 simultaneous evaluations.  We routinely achieve acceptable convergence within 3 iterations.
-.. TODO: fix this sentence
-Better sampling techniques and smaller intervals could likely reduce the number of iterations or reduce the number of parallel function evaulations, but for the initial scope of this paper things are fine.
+Typical calculations take 5-20 minutes on a single core of an 2.8 GHz Intel Xeon processor.  Typical single variable optimization methods are designed for serial evaluation.  A "quick" convergence might take 12 function evaluations, translating to approximately four hours of run time.  Instead, we use a simple parallel bounded minimum optimization with 8 simultaneous evaluations.  We routinely achieve acceptable convergence within 4 iterations (3x speedup).  The use of more sophisticated sampling techniques would likely reduce the number of iterations or the number of parallel function evaulations.
 
+
+Conclusions
+-----------
+
+Python is awesome!
+
+This work performed under the auspices of the U.S. DOE by Lawrence Livermore National Laboratory under Contract DE-AC52-07NA27344.
 
 References
 ----------
 
-This work performed under the auspices of the U.S. DOE by Lawrence Livermore National Laboratory under Contract DE-AC52-07NA27344.
 
