@@ -63,18 +63,21 @@ Compression shocks must be timed to breakout into the DT gas at the same time ("
 
     Change me to include the laser profile.
 
-This is a subsection on shock syncing
-.....................................
+Synchronizing Shock Arrival
+...........................
 
-Here I talk about how to syncronize shocks
+One of the key properties of shocks in ICF is that shocks launched later propagate faster and will eventually overtake the one launched before it.  We make the design decision that shocks should be timed such that the coalesce at the gas/ice interface.  This prevents strong shocks from forming by shock coalescence.  By timing them to coalesce at the gas/ice interface, we minimize the intensification of shocks due to radial convergence.
 
 .. figure:: auto_timing.pdf
 
-    Change me to all guide lines for early and late.
+    Change me to all guide lines for early and late.  :label:`figtiming`
+
+Consider the case of radially converging shocks launched at two different times from comparable radii.  The second shock is faster and will eventually overtake the first.  If we define a "shock breakout time" as when the first shock enters the gas region, we can plot the shock breakout time as a function of the launch time of the second shock (black line in :ref:`figtiming`).  The appropriate objective function should maximize the breakout time (recognizing that it saturates for large launch times) while also minimizing the launch time of the second shock.  We construct an aggregate objective function as a linear combination of the two constraints (:math:`f(t) = \omega t - b(t)`).  We find an tuned value of :math:`0.01 m`.  Where :math:`m` is the slope between two points chosen to be clearly early and later than ideal tuning.
+.. Comments on error
 
 
 Tuning the Main Pulse and Igniter Pulse
-...........................................
+.......................................
 
 Finding optimal main and igniter pulse timings are simple optimization problems.  Since the igniter pulse is responsible for actually igniter the target, the main pulse should maximize the potential burn.  The burn fraction scales with the peak areal density (:math:`\rho R`) of the assembled target 
 (:math:`f \approx \frac{\rho R}{\rho R + 7}`) where 
