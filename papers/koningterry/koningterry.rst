@@ -12,13 +12,8 @@ Automation of Inertial Fusion Target Design with Python
 
 .. class:: abstract
 
-    Inertial confinement fusion (ICF) is a means to achieve controlled thermonuclear fusion by way of compressing hydrogen to extremely large pressures, temperatures and densities.  ICF uses a high intensity driver to compress a spherical shell of cryogenically frozen fuel to more than 100 times solid density and imploding the shell at sufficient velocity that it stagnates with pressures of more than 100 GBar.  At stagnation, a fusion burn wave propagates from a central, low-density hot spot to a colder high-density fuel region.  The inertia of the fuel keeps it intact long enough for a significant fraction of the fuel to burn.
-
-    Getting to these extreme conditions requires the driver to have a carefully designed, time dependent intensity profile.  The shape of which depends on many different physical processes in the target. The most important processes are hydrodynamic flow, radiative energy transfer, electron thermal conduction, equation of state and the energy deposition of the driver.  Performing experiments is complicated and expensive, so the ICF community relies on sophisticated multi-physics codes, such as HYDRA, to design experiments and simulate experimental measurements prior to fielding the experiment.
-
-    The process of tuning a driver pulse shape to get the desired performance characteristics is a high latency, highly iterative, interactive process.  However, we have developed several techniques that can be used to automate much of the pulse tuning process.  These methods make use of Python in automating parameter scans, templated input file instantiation, and post-processing of simulations.  In addition to its physics capabilities, HYDRA provides an embedded Python interpreter, which facilitates the development of powerful, user defined, in code diagnostics and simulation controllers.  In this paper we will discuss the embedding of they Python interpreter in HYDRA and the automation techniques that it helps to facilitate.
-
-
+    The process of tuning an inertial confinement fusion pulse shape to a specific target design is highly iterative process.  When done manually, it is also high latency and time consuming.  We have developed several techniques that can be used to automate much of the pulse tuning process.  These methods make use of Python in automating parameter scans, templated input file instantiation, and post-processing of simulations.  We describe the addition of a parallel Python interpreter to a pre-existing radiation-hydrodynamics code HYDRA and use of in-flight tuning diagnostics that this facilitates.
+    
 .. class:: keywords
 
    inertial confinement fusion, python, automation
@@ -26,7 +21,27 @@ Automation of Inertial Fusion Target Design with Python
 Introduction
 ------------
 
-ICF is fun.  It uses computers and now python
+Inertial confinement fusion (ICF) is a means to achieve controlled thermonuclear fusion by way of compressing hydrogen to extremely large pressures, temperatures and densities.  ICF uses a high intensity driver to compress a spherical shell of cryogenically frozen fuel to more than 100 times solid density and imploding the shell at sufficient velocity that it stagnates with pressures of more than 100 GBar.  At stagnation, a fusion burn wave propagates from a central, low-density hot spot to a colder high-density fuel region.  The inertia of the fuel keeps it intact long enough for a significant fraction of the fuel to burn.
+
+Reaching these extreme conditions requires the driver to have a carefully designed, time dependent intensity profile.  The shape of which depends on many different physical processes in the target. The most important processes are hydrodynamic flow, radiative energy transfer, electron thermal conduction, equation of state and the energy deposition of the driver.  Performing experiments is complicated and expensive, so the ICF community relies on sophisticated multi-physics codes, such as HYDRA, to design experiments and simulate experimental measurements prior to fielding the experiment.
+
+ICF targets are typically small (~1 mm radius) spheres composed of several layers of cryogenic hydrogen, plastic, metal or other materials.  The intention is to produce significant thermonuclear yield by spherically compressing the hydrogen in the capsule to very large temperature and density.  The implosion is driven by a high intensity driver which illuminates, heats, and ablates the outer surface of the capsule.  This ablation pressure drives the implosion.
+
+Designing an ICF target requires balancing the constraints of ... stuff. 
+One of the main applications of HYDRA is in inertial confinement fusion (ICF) capsule design.  
+
+
+Abstraction
+-----------
+
+We adopt the general strategy that a tuned pulse can be constructed by serially adding tuned pulse segments and specify the parameters of these segment by solving a numerical optimization problem.  Auto-tuning will therefore require generating many simulations that are only slight variations on nominal template simulation.   Additionally, we must automate the gathering of data from these simulations.
+
+We generate simulations by means of a Python proxy for the HYDRA input files.  The proxy has simple pre-processor like capabilities for modifying simple input file statements and for injecting more complicate structures into the input file by overwriting specially formatted directives.  Since the 
+
+.. For more complicated input file structures, we delegate responsibility to special purpose stub objects.  The input file is prepared with easily identifiable comments that will be overwritten with output from the stub object.  We adopt the convention that the string representation of an object (``str(obj)``) is appropriately formatted for insertion into a HYDRA input file.
+
+Data gathering is more complicated than post-processing output files.  We do not know a priori when a watched for even will occur.  To have sufficient time resolution must either make very frequent data dumps or modify HYDRA to be more introspective.  The following section discusses the addition of a parallel Python interpreter to HYDRA.  Without this, the data retention requirements for auto-tuning would have been prohibitive.
+
  
 Parallel python interpreters for pre-existing programs
 ------------------------------------------------------
