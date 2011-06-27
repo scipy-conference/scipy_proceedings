@@ -1,4 +1,4 @@
-:author: Kyle Mandli 
+:author: Kyle T. Mandli 
 :email: mandli@amath.washington.edu
 :institution: University of Washington
 
@@ -10,7 +10,7 @@
 :email: aron.ahmadia@kaust.edu.sa
 :institution: King Abdullah University of Science and Technology
 
-:author: David Ketcheson
+:author: David I. Ketcheson
 :email: david.ketcheson@kaust.edu.sa
 :institution: King Abdullah University of Science and Technology
 
@@ -288,50 +288,64 @@ experiments to study the scalability of PetClaw on up to four racks of the
 Shaheen system. Corresponding results for PetClaw simulations in 1D may be
 found in [petclaw11]_.
 
-We consider two systems of equations in our performance tests. The first is
-the system of 2D linear acoustics and the second is the 2D Euler equations of
-compressible fluid dynamics. The acoustics test involves a very simple Riemann
-solver and is intended to highlight any performance difficulties arising from
-the Python code overhead. The Euler test involves a more typical, costly
-Riemann solver and should be considered as more representative of realistic
-nonlinear application problems.
-
-.. simulating a shock wave hitting a spherical bubble of low-density gas with initially constant pressure and zero velocity near the bubble, as a result of the shock wave, the bubble turns into a smoke ring [clawpack]_.
 
 On-Core Performance
 ~~~~~~~~~~~~~~~~~~~
+We consider two systems of equations in our serial performance tests. The first is
+the system of 2D linear acoustics and the second is the 2D shallow water (SW)
+equations. The acoustics test involves a very simple Riemann
+solver and is intended to highlight any performance difficulties arising from
+the Python code overhead. The shallow water test involves a more typical, costly
+Riemann solver (specifically, a Roe solver with entropy fix) and should be 
+considered as more representative of realistic nonlinear application problems.
 
-Table :ref:`SerialComparison` shows on-core serial comparison between the Fortran-only
-Clawpack implementation and the corresponding hybrid PetClaw implementation for two systems of equations.  Both codes
-rely similar Fortran kernels with the exception of array layout, the high-level code is
-different.  For both the Clawpack code and the Fortran kernels used in PetClaw,
-we used the gfortran compiler (version 4.2) with optimization setting -O3.
-
-Because most of the computational cost is in executing these low-level Fortran 
-kernels, we expect the difference in performance to be relatively minor with a slight performance benefit in favor of
-Clawpack. Indeed, we find this to be true in the case of the acoustics tests, where Clawpack is moderately (30\%)
-faster. Surprisingly, in the case of more computationally intensive Euler tests, the PetClaw code outperforms the Clawpack code
-by a factor of 1.59.   We attribute this to the new data layout in PetClaw which the code inherits from the PETSc DA,
-where degrees of freedom for the same node are consecutive in memory **TODO: VERIFY THIS STATEMENT**. 
+Table :ref:`SerialComparison` shows an on-core serial comparison between the
+Fortran-only Clawpack code and the corresponding hybrid PetClaw
+implementation for two systems of equations in two different platforms.
+Both codes rely on similar Fortran kernels that differ only in the array layout.
+The tests on the first platform were compiled for the x86_64 instruction set using gfortran 4.5.1
+(4.5.1 20100506 (prerelease)). Each result was timed on a single core of a Quad-Core
+Intel Xeon 2.66GhZ Mac Pro workstation equipped with 8x2 GB 1066MHz DDR3 RAM. 
+The same tests were conducted on Shaheen, on a single core of a Quad-Core PowerPC 450 processor
+with 4GB of available RAM. IBM XLF 11.1 Fortran compiler was used to produce a PowerPC 450d binray
+code in the latter platform.
+On both platforms, the compiler optimization flag -O3 was set. 
+Because most of the computational cost is in executing the low-level Fortran
+kernels, the difference in performance is relatively minor with the difference
+owing primarily to the Python overhead in PetClaw.  Interestingly, while the
+relative acoustics performance between the two codes was similar for both
+versions of gfortran, a significant difference was observed in the relative
+performance of the codes on the shallow water example, depending on the
+compiler version.
 
 .. table:: Timing results in seconds for on-core serial experiment of an 
-           acoustics and Euler problems implemented in both Clawpack and    
-           PetClaw. :label:`SerialComparison`
+           acoustics and shallow water problems implemented in both Clawpack and    
+           PetClaw for Intel Xeon and PowerPC 450 machines. :label:`SerialComparison`
 
-   +-----------+----------+--------+----------+------+---------+
-   |           | Clawpack | PetClaw| Grid Size| Steps| Speed up|
-   +-----------+----------+--------+----------+------+---------+
-   | Acoustics | 43.2s    | 56.1s  | 500 X 500| 445  | 0.77x   |
-   +-----------+----------+--------+----------+------+---------+
-   | Euler     | 126.3s   | 79.3s  | 640 X 160| 500  | 1.59x   |
-   +-----------+----------+--------+----------+------+---------+
+   +---------------+------------+---------+--------+------+
+   |               | Processor  | Clawpack| PetClaw| Ratio|
+   +---------------+------------+---------+--------+------+
+   | Acoustics     | Intel Xeon | 28s     | 41s    | 1.5  |
+   +---------------+------------+---------+--------+------+
+   | Shallow Water | Intel Xeon | 79s     | 99s    | 1.3  |
+   +---------------+------------+---------+--------+------+
+   | Acoustics     | PowerPC 450| 192s    | 316s   | 1.6  |
+   +---------------+------------+---------+--------+------+
+   | Shallow Water | PowerPC 450| 714s    | 800s   | 1.1  |
+   +---------------+------------+---------+--------+------+
+
 
 
 Parallel Performance
 ~~~~~~~~~~~~~~~~~~~~
+In our parallel performance tests, we consider the same acoustics 2D linear system 
+used in the serial runs to represent an application where the communication over computation
+ratio can be relatively high due to the simplicity of its Riemann solver. We also tested 2D 
+Euler equations of compressible fluid dynamics as a more realistic nonlinear application
+problem that has a relatively expensive Riemann solver.
 
 Table :ref:`ScalingTable` shows the execution time for both experiments as the
-number of cores increases from one core up to 16 thousand cores, (four racks
+number of cores increases from one core up to 16 thousand cores (four racks
 of BlueGene/P), with the ratio of work per core fixed. The acoustics problem
 used involves 178 time steps on a square grid with 160,000 (400x400) grid
 cells per core. The Euler problem used involves 67 time steps on a grid also
