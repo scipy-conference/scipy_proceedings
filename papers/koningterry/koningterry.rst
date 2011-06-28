@@ -27,8 +27,10 @@ Reaching these extreme conditions requires the driver to have a carefully design
 
 ICF targets are typically small (~1 mm radius) spheres composed of several layers of cryogenic hydrogen, plastic, metal or other materials.  The intention is to produce significant thermonuclear yield by spherically compressing the hydrogen in the capsule to very large temperature and density.  The implosion is driven by a high intensity driver which illuminates, heats, and ablates the outer surface of the capsule.  This ablation pressure drives the implosion.
 
-Designing an ICF target requires balancing the constraints of ... stuff. 
-One of the main applications of HYDRA is in inertial confinement fusion (ICF) capsule design.  
+Designing an ICF target requires balancing the constraints of driver power, energy and rise times.  
+Construction
+materials
+
 
 
 Abstraction
@@ -44,7 +46,7 @@ Data gathering is more complicated than post-processing output files.  We do not
 Parallel python interpreters for pre-existing programs
 ------------------------------------------------------
 
-We added python to HYDRA.  It was hard.
+We added python to Hydra.  It was hard.
 
 Automation of target design with Python
 ---------------------------------------
