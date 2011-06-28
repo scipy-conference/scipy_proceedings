@@ -59,6 +59,21 @@ Producing the needed shocks requires precise control of the time dependent drive
 
 Simply writing the tuning algorithm in paragraph form suggests that tuning could be performed purely in software.  Furthermore, if we can construct an appropriate objective function for each tuning, we can make use of powerful, mature optimization methods.
 
+Embedded processing
+-------------------
+
+Our simulations must be appropriate parameterized so that they can be called as if they were simply expensive functions calls.  Additionally, we must gather the appropriate information from the running simulations.
+
+Characteristic trackers.  The Euler equations.  Characteristic 
+:math:`\dot{r} = v(r) - c_s(r)`   HYDRA's python interface exposes the needed variables and provides a means for registering callback functions.  Conveniently add arbitrary 
+
+Dynamic steering of problem.  Characteristic trackers for locating breakout.  Advantage of operating independent of mesh and robust to motion of grid from pre-heat or spurious grid motion.  Makes measurement of "breakout time" and its associated objective function much far less noisy and thus more tractable for algorithmic optimization.
+
+Embedding makes execution faster by easily ending the calculation when the desired has been extracted.  Especially important since it is hard to predict the time when important events will happen and to apply the appropriate resolution.
+
+Use of the same language simplifies
+
+Proxy classes and code generators.  Input file templates, ``str()`` for the HYDRA representation and ``repr()`` for the .  Pickling was an option, but does allow for easy modification.
 
 
 Synchronizing Shock Arrival
