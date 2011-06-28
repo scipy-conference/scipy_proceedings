@@ -3,12 +3,12 @@
 :institution: Intel
 
 --------------------------------------------
-Constructing scientific programs using Sympy
+Constructing scientific programs using SymPy
 --------------------------------------------
 
 .. class:: abstract
 
-We describe a method for constructing scientific programs where Sympy is
+We describe a method for constructing scientific programs where SymPy is
 used to model the mathematical steps in the derivation.  With this workflow,
 each step in the process can be checked by machine, from the derivation of
 the equations to the generation of the source code.  We present an example
@@ -16,44 +16,58 @@ based on computing the partition function integrals in statistical mechanics.
 
 .. class:: keywords
 
-   Sympy, code generation, metaprogramming
+   SymPy, code generation, metaprogramming
 
 Introduction
 ------------
 
-Writing correct scientific programs is difficult, largely manual process.
-The steps in the process include
+Writing correct scientific programs is a difficult, largely manual process.
+Steps in the process include
 deriving of the constituent equations, translating those into source code, and testing
-the result to ensure correctness.   The final step of testing is challenging because
-it is hard to untangle the set of possible errors from testing the final code.
+the result to ensure correctness.   One challenging aspect of testing 
+is untangling the cause of errors.
 For example, if the result appears incorrect, it is hard to determine whether the problem
 is with the algorithm, or a mistake was made in the derivation, or a simple transcription error
 in writing the source code.
-We wish to look at this process of writing a scientific code and see what steps, if any, can be checked
-by the computer.
+Confidence in the correctness of the program can be increased if these steps can be checked by computer.
+
+The process of scientific programming also includes the pursuit of performance.  Often the code needs to be
+heavily modified or rewritten to take best advantage of various target systems.  Each modification introduces
+the possibility of further errors, and must be checked. 
 
 
-Our approach is to operate on a symbolic representation of the scientific program, and then programmatically
+A standard approach to create a high-level description of the problem that is specialized to the particular
+domain, often through a Domain Specific Language (DSL), and then transform this to a representation in 
+a general-purpose programming language.   This is used in systems such as FEniCS [FEniCS]_ (representing PDE's) and the Tensor Contraction Engine [TCE]_ (representing matrix operations in quantum chemistry).
+
+Since the specifications for scientific software are expressed largely as mathematical equations, our high-level description
+will be formed from a symbolic mathematics representation.   A symbolic mathematics package is well-suited
+for this representation.
+In addition to this representation of the high-level description, we will model the derivation steps that
+lead to a computationally useful form.
+
+The approach taken in this work is to operate on a symbolic representation of the scientific program,
+and then programmatically
 transform it into the target system.  The specifications for scientific software are expressed
 largely as equations, and ideally suited for a symbolic mathematics package.
-We use Sympy, a symbolic mathematics package written in Python, for this part of the process.
+We use SymPy [SymPy]_, a symbolic mathematics package written in Python, for this part of the process.
 
 
 The target system is likely a source code representation (C, Fortran, Python, etc), but could encompass
 more than that.
 For instance, C might be used to target the CPU or GPU, but the source code might look
 quite different in those cases.
-Or the user may call different libraries for the same function to compare performance characteristics.
+Or the user may call different libraries for the same function to compare performance.
 
 
 
 Modeling Derivations
 --------------------
-The goal is to model on the computer a similar set of steps that one would use when manually performing the derivation.
+The first goal is to model on the computer a set of steps similar to those used when manually performing the derivation.
 Deriving the equations using in scientific software is similar to a proof where there is a series
 of logically justified steps connecting each expression until the final result is reached.
 
-The OpenMathDocuments (OMDoc) project [OMDoc]_ is a representation for mathematics that works at a
+The OpenMathDocuments (OMDoc) project [OMDoc]_ is a representation for mathematics that describes a
 higher level than expressions in MathML.  For instance, it has representations for proofs and lemmas.
 Similarly, for scientific computation we need to represent structures a higher level.   One major 
 difference between proofs and derivations in scientific software is that some steps are approximations.
@@ -72,7 +86,7 @@ Implementations
 
 Modeling Derivations
 ^^^^^^^^^^^^^^^^^^^^
-For the implementation, there is class named ``derivation``.  The constructor takes an initial equation (lhs and rhs).  The primary method is ``add_step``, which takes an operation (or list of operations) to perform
+For the implementation, the basic class named ``derivation`` has a constructor that takes an initial equation (lhs and rhs).  The primary method is ``add_step``, which takes an operation (or list of operations) to perform
 and a textual description
 of the operation(s).  There are series of classes for various operations, such ``approx_lhs``, which replaces the left-hand side of the equation with a new value.  Also there is ``add_term``, which adds the same term to
 both sides of the equation.
@@ -83,21 +97,24 @@ It is easy to start generating code by simply printing the statements of the
 target language.  However, this will eventually be unsatisfying and we will use 
 a model of the target language.  Currently this work has (incomplete) language models for Python and C.
 
-At the lowest level of transforming expressions, we developed a pattern-matching syntax that can
-concisely capture some the the Sympy idioms.
+At the lowest level of transforming expressions, we developed a pattern-matching syntax that
+concisely captures some of the SymPy idioms.
 
-
-The ``Match`` object matches a Sympy expression.  The  ``__call__`` method matches the first argument
+The ``Match`` object matches a SymPy expression.  The  ``__call__`` method matches the first argument
 as the type of the expression.  Subsequent arguments are variables to be bound to 
 arguments.  If the argument is a tuple, it is matched recursively on that argument.  In this way
 the pattern for a tree structure can be built up concisely.
 
-Variables than can match (for later binding) are members of an ``AutoVar`` class.  This class
+Variables that can match (for later binding) are members of an ``AutoVar`` class.  This class
 creates member variables upon first access, and they are bound when the match succeeds.
  
-Here is an example fragment of part of the Sympy to Python expression transformation.
-Sympy normalizes subtraction
+Here is an example fragment of part of the SymPy to Python expression transformation, that matches
+addition, subtraction, and the reciprocal.
+SymPy normalizes subtraction
 as adding two expressions where the subtractand is multiplied by negative one.
+(That is,  :math:`a-b` is represented as :math:`-1*b+a`).  Matching subtraction requires
+a nested pattern, which is shown here as well.
+
 
 .. code-block:: python
 
@@ -106,14 +123,17 @@ as adding two expressions where the subtractand is multiplied by negative one.
        v = AutoVar()
        m = Match(e)
 
+       # subtraction
        if m(Add, (Mul, S.NegativeOne, v.e1), v.e2):
          return py_expr(py_expr.PY_OP_MINUS,
             self(v.e2), self(v.e1))
 
+       # addition
        if m(Add, v.e1, v.e2):
             return py_expr(py_expr.PY_OP_PLUS,
                 self(v.e1), self(v.e2))
 
+       # reciprocal
        if m(Pow, v.e2, S.NegativeOne):
             return py_expr(py_expr.PY_OP_DIVIDE,
                 py_num(1.0), self(v.e2))
@@ -274,7 +294,7 @@ Change variables and switch to a potential that depends only on the magnitude of
   Z = \int\int e^{- \beta \operatorname{V}\left(\lvert{r_{12}}\rvert\right)}\,dr_{12} dr_{cm}
 
 
-Integrate out the center of mass (or fixed coordinate) (This step could be performed by Sympy, but isn't right now)
+Integrate out the center of mass (or fixed coordinate) (This step could be performed by SymPy, but isn't right now)
 
 .. math::
 
@@ -308,7 +328,7 @@ Insert numerical values for the box size and temperature.
  Z = 4.0 \int_{-1.0}^{1}\int_{-1.0}^{1} e^{- 4.0 \frac{1}{\left(r_{12 x}^{2} + r_{12 y}^{2}\right)^{6}} + 4.0 \frac{1}{\left(r_{12 x}^{2} + r_{12 y}^{2}\right)^{3}}}\,dr_{12 x} dr_{12 y}
 
 Now we have an integral that is completely specified numerically [1]_.  It can be evaluated by an existing
-quadrature routine in Sympy, by another another package (``scipy.quadrature.dblquad``), or by the trapezoidal
+quadrature routine in SymPy, by another another package (``scipy.quadrature.dblquad``), or by the trapezoidal
 rule code we derived earlier.
 
 
@@ -385,7 +405,7 @@ The generated program is
 
 
 
-The code and examples described here can be found in my sympy fork on GitHub,
+The code and examples described here can be found in the author's SymPy fork on GitHub,
 in the derivation_modeling branch, in the ``prototype`` directory:
 https://github.com/markdewing/sympy/tree/derivation_modeling/sympy/prototype
 
@@ -393,8 +413,8 @@ https://github.com/markdewing/sympy/tree/derivation_modeling/sympy/prototype
 
 Discussion
 ----------
-The example derivations presented here are all straightforward and linear.
-In reality, the connections form a more general
+The example derivations presented here are fairly simple and linear.
+In reality, the connections between the equations from a more general
 graph.  For instance, one is often interested in multiple properties 
 (energy, pressure, distribution functions) that may branch off the original derivation or have a
 separate thread of steps, but eventually, for efficiency they should all be evaluated
@@ -412,22 +432,21 @@ Other Work
 .. Structured derivations is a tightly specified, formal method for performing a proof used for teaching
 .. high school mathematics - it is of interest because each step is similar
 
-There are a number of systems with the same general features under various generic names, such as 'Automated Scientific Computing' [Terrel11]_, [FEniCS]_ and 'Software Automation'. 
 For solving partial differential equations, there is 
-FEniCS [FEniCS]_ and the SAGA (Scientific computing with Algebraic and Generative Abstractions)
+FEniCS [FEniCS]_ project and the SAGA (Scientific computing with Algebraic and Generative Abstractions)
 project [SAGA]_ .
 
-Ignition [Ignition]_ (also described in [Terrel11]_) is a library that provides support for writing and combining DSL's (Domain Specific Languages) for describing problems (or aspects of problems)
+Ignition [Ignition]_,[Terrel11]_ is a library that provides support for writing and combining DSL's for describing problems (or aspects of problems)
 
-Pivot [Pivot]_ is a project for modeling C++.  CodeBoost [CodeBoost]_ is the code transformation portion of the SAGA system.
+Part of this work is modeling the target language for code generation.  Several other projects for modeling programming
+languages include Pivot [Pivot]_,  a project for modeling C++.  CodeBoost [CodeBoost]_ is the code transformation portion of the SAGA system.
 PyCUDA [PyCUDA]_ is a potential target system, and it also has an associated model of C and CUDA for generation of code [CodePy]_
 
 
 Conclusions
 -----------
-We've described a snapshot of some work on some blocks necessary for a system of scientific computing,
+We presented a snapshot of some work on some software blocks necessary for a system of scientific computing,
 including modeling a derivation, transforming to a source code representation, and code generation.
-
 
 
 References
@@ -448,12 +467,16 @@ References
 
 .. [PyCUDA] http://mathema.tician.de/software/pycuda
 
+.. [TCE] Tensor Contraction Engine http://www.csc.lsu.edu/~gb/TCE/
+
 .. [Terrel11] A. Terrel. *From Equations to Code: Automated Scientific Computing*
                 Computing in Science and Engineering 13(2):78-982, March 2011
 
 .. [Trapezoid] See http://en.wikipedia.org/wiki/Trapezoidal_rule or any numerical analysis textbook
 
 .. [SAGA] http://www.ii.uib.no/saga/
+
+.. [SymPy] http://sympy.org/
 
 
 .. [1] There is a division-by-zero error at :math:`r=0` that must be avoided, either by offsetting one limit
