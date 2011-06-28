@@ -44,7 +44,7 @@ Data gathering is more complicated than post-processing output files.  We do not
 Parallel python interpreters for pre-existing programs
 ------------------------------------------------------
 
-We added python to Hydra.  It was hard.
+We added python to HYDRA.  It was hard.
 
 Automation of target design with Python
 ---------------------------------------
