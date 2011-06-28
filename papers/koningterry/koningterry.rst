@@ -59,6 +59,11 @@ Producing the needed shocks requires precise control of the time dependent drive
 
 Simply writing the tuning algorithm in paragraph form suggests that tuning could be performed purely in software.  Furthermore, if we can construct an appropriate objective function for each tuning, we can make use of powerful, mature optimization methods.
 
+Parameterization of the pulse shape
+
+We need an appropriately parameterized pulse shape and the ability to construct that pulse shape within HYDRA.  
+
+
 Embedded processing
 -------------------
 
