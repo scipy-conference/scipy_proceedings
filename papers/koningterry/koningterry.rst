@@ -36,12 +36,6 @@ Reaching these extreme conditions requires the driver to have a carefully design
 Hydra as design tool.
 
 
-Parallel python interpreters for pre-existing programs
-------------------------------------------------------
-
-We added python to Hydra.  It was hard.
-
-
 Structure of Automatic Tuning
 -----------------------------
 
@@ -76,6 +70,12 @@ Simply writing the tuning algorithm in paragraph form suggests that tuning could
 Parameterization of the pulse shape
 
 We need an appropriately parameterized pulse shape and the ability to construct that pulse shape within Hydra.  
+
+
+Parallel python interpreters for pre-existing programs
+------------------------------------------------------
+
+We added python to Hydra.  It was hard.
 
 
 Embedded processing
