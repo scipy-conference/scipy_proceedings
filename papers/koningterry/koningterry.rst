@@ -12,7 +12,7 @@ Automation of Inertial Fusion Target Design with Python
 
 .. class:: abstract
 
-    The process of tuning an inertial confinement fusion pulse shape to a specific target design is highly iterative process.  When done manually, it is also high latency and time consuming.  We have developed several techniques that can be used to automate much of the pulse tuning process.  These methods make use of Python in automating parameter scans, templated input file instantiation, and post-processing of simulations.  We describe the addition of a parallel Python interpreter to a pre-existing radiation-hydrodynamics code HYDRA and use of in-flight tuning diagnostics that this facilitates.
+    The process of tuning an inertial confinement fusion pulse shape to a specific target design is highly iterative process.  When done manually, it is also high latency and time consuming.  We have developed several techniques that can be used to automate much of the pulse tuning process.  These methods make use of Python in automating parameter scans, templated input file instantiation, and post-processing of simulations.  We describe the addition of a parallel Python interpreter to a pre-existing radiation-hydrodynamics code Hydra and use of in-flight tuning diagnostics that this facilitates.
     
 .. class:: keywords
 
@@ -23,7 +23,7 @@ Introduction
 
 Inertial confinement fusion (ICF) is a means to achieve controlled thermonuclear fusion by way of compressing hydrogen to extremely large pressures, temperatures and densities.  ICF uses a high intensity driver to compress a spherical shell of cryogenically frozen fuel to more than 100 times solid density and imploding the shell at sufficient velocity that it stagnates with pressures of more than 100 GBar.  At stagnation, a fusion burn wave propagates from a central, low-density hot spot to a colder high-density fuel region.  The inertia of the fuel keeps it intact long enough for a significant fraction of the fuel to burn.
 
-Reaching these extreme conditions requires the driver to have a carefully designed, time dependent intensity profile.  The shape of which depends on many different physical processes in the target. The most important processes are hydrodynamic flow, radiative energy transfer, electron thermal conduction, equation of state and the energy deposition of the driver.  Performing experiments is complicated and expensive, so the ICF community relies on sophisticated multi-physics codes, such as HYDRA, to design experiments and simulate experimental measurements prior to fielding the experiment.
+Reaching these extreme conditions requires the driver to have a carefully designed, time dependent intensity profile.  The shape of which depends on many different physical processes in the target. The most important processes are hydrodynamic flow, radiative energy transfer, electron thermal conduction, equation of state and the energy deposition of the driver.  Performing experiments is complicated and expensive, so the ICF community relies on sophisticated multi-physics codes, such as Hydra, to design experiments and simulate experimental measurements prior to fielding the experiment.
 
 ICF targets are typically small (~1 mm radius) spheres composed of several layers of cryogenic hydrogen, plastic, metal or other materials.  The intention is to produce significant thermonuclear yield by spherically compressing the hydrogen in the capsule to very large temperature and density.  The implosion is driven by a high intensity driver which illuminates, heats, and ablates the outer surface of the capsule.  This ablation pressure drives the implosion.
 
@@ -38,15 +38,15 @@ Abstraction
 
 We adopt the general strategy that a tuned pulse can be constructed by serially adding tuned pulse segments and specify the parameters of these segment by solving a numerical optimization problem.  Auto-tuning will therefore require generating many simulations that are only slight variations on nominal template simulation.   Additionally, we must automate the gathering of data from these simulations.
 
-We generate simulations by means of a Python proxy for the HYDRA input files.  The proxy has simple pre-processor like capabilities for modifying simple input file statements and for injecting more complicate structures into the input file by overwriting specially formatted directives.  For more complicated input file structures, we delegate responsibility to special purpose objects.  We adopt the convention that the string representation of an object (``str(obj)``) is appropriately formatted for insertion into a HYDRA input file.  Furthermore, string conversion happens when an input file is generated.  This makes it easy to evolve the simulation parameters as various parameters are tuned.
+We generate simulations by means of a Python proxy for the Hydra input files.  The proxy has simple pre-processor like capabilities for modifying simple input file statements and for injecting more complicate structures into the input file by overwriting specially formatted directives.  For more complicated input file structures, we delegate responsibility to special purpose objects.  We adopt the convention that the string representation of an object (``str(obj)``) is appropriately formatted for insertion into a Hydra input file.  Furthermore, string conversion happens when an input file is generated.  This makes it easy to evolve the simulation parameters as various parameters are tuned.
 
-Data gathering is more complicated than post-processing output files.  We do not know a priori when a watched for even will occur.  To have sufficient time resolution must either make very frequent data dumps or modify HYDRA to be more introspective.  The following section discusses the addition of a parallel Python interpreter to HYDRA.  Without this, the data retention requirements for auto-tuning would have been prohibitive.
+Data gathering is more complicated than post-processing output files.  We do not know a priori when a watched for even will occur.  To have sufficient time resolution must either make very frequent data dumps or modify Hydra to be more introspective.  The following section discusses the addition of a parallel Python interpreter to Hydra.  Without this, the data retention requirements for auto-tuning would have been prohibitive.
 
  
 Parallel python interpreters for pre-existing programs
 ------------------------------------------------------
 
-We added python to HYDRA.  It was hard.
+We added python to Hydra.  It was hard.
 
 Automation of target design with Python
 ---------------------------------------
@@ -63,7 +63,7 @@ Simply writing the tuning algorithm in paragraph form suggests that tuning could
 
 Parameterization of the pulse shape
 
-We need an appropriately parameterized pulse shape and the ability to construct that pulse shape within HYDRA.  
+We need an appropriately parameterized pulse shape and the ability to construct that pulse shape within Hydra.  
 
 
 Embedded processing
@@ -72,7 +72,7 @@ Embedded processing
 Our simulations must be appropriate parameterized so that they can be called as if they were simply expensive functions calls.  Additionally, we must gather the appropriate information from the running simulations.
 
 Characteristic trackers.  The Euler equations.  Characteristic 
-:math:`\dot{r} = v(r) - c_s(r)`   HYDRA's python interface exposes the needed variables and provides a means for registering callback functions.  Conveniently add arbitrary 
+:math:`\dot{r} = v(r) - c_s(r)`   Hydra's python interface exposes the needed variables and provides a means for registering callback functions.  Conveniently add arbitrary 
 
 Dynamic steering of problem.  Characteristic trackers for locating breakout.  Advantage of operating independent of mesh and robust to motion of grid from pre-heat or spurious grid motion.  Makes measurement of "breakout time" and its associated objective function much far less noisy and thus more tractable for algorithmic optimization.
 
@@ -80,7 +80,7 @@ Embedding makes execution faster by easily ending the calculation when the desir
 
 Use of the same language simplifies
 
-Proxy classes and code generators.  Input file templates, ``str()`` for the HYDRA representation and ``repr()`` for the .  Pickling was an option, but does allow for easy modification.
+Proxy classes and code generators.  Input file templates, ``str()`` for the Hydra representation and ``repr()`` for the .  Pickling was an option, but does allow for easy modification.
 
 
 Synchronizing Shock Arrival
