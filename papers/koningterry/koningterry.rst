@@ -18,19 +18,22 @@ Automation of Inertial Fusion Target Design with Python
 
    inertial confinement fusion, python, automation
 
-Introduction
-------------
+Inertial Confinement Fusion
+---------------------------
 
-Inertial confinement fusion (ICF) is a means to achieve controlled thermonuclear fusion by way of compressing hydrogen to extremely large pressures, temperatures and densities.  ICF uses a high intensity driver to compress a spherical shell of cryogenically frozen fuel to more than 100 times solid density and imploding the shell at sufficient velocity that it stagnates with pressures of more than 100 GBar.  At stagnation, a fusion burn wave propagates from a central, low-density hot spot to a colder high-density fuel region.  The inertia of the fuel keeps it intact long enough for a significant fraction of the fuel to burn.
+Inertial confinement fusion (ICF) is a means to achieve controlled thermonuclear fusion by way of compressing hydrogen to extremely large pressures, temperatures and densities.  ICF targets are typically small (~1 mm radius) spheres composed of several layers of cryogenic hydrogen, plastic, metal or other materials.  The intention is to produce significant fusion yield by spherically compressing the hydrogen in the capsule to very large temperature, density and pressure.  These extreme conditions are reached by illumiating the target with a very high intensity (100's TW) driver.  This compresses a shell of cryogenically frozen fuel to more than 100 times solid density and accelerates the radiially converging shell to very high velocity (300 km/s).  As the shell stagnates, a fusion burn wave propagates from a central, low-density, high temperature region to a surrounding high-density, low temperature fuel region.  The inertia of the fuel keeps it intact long enough for a significant fraction of the fuel to burn.
+
+Accurately modeling 
+
+
+
+The extreme conditions required to initiate a propagating fusion burn are difficult to attain and require balancing the constraints of driver performance, target construction, and the many underlying physical processes.
+
+Futhermore, once a general target and pulse design is chosen, the pulse must be tuned to the specific details of the target.
 
 Reaching these extreme conditions requires the driver to have a carefully designed, time dependent intensity profile.  The shape of which depends on many different physical processes in the target. The most important processes are hydrodynamic flow, radiative energy transfer, electron thermal conduction, equation of state and the energy deposition of the driver.  Performing experiments is complicated and expensive, so the ICF community relies on sophisticated multi-physics codes, such as Hydra, to design experiments and simulate experimental measurements prior to fielding the experiment.
 
-ICF targets are typically small (~1 mm radius) spheres composed of several layers of cryogenic hydrogen, plastic, metal or other materials.  The intention is to produce significant thermonuclear yield by spherically compressing the hydrogen in the capsule to very large temperature and density.  The implosion is driven by a high intensity driver which illuminates, heats, and ablates the outer surface of the capsule.  This ablation pressure drives the implosion.
-
-Designing an ICF target requires balancing the constraints of driver power, energy and rise times.  
-Construction
-materials
-
+Hydra as design tool.
 
 
 Parallel python interpreters for pre-existing programs
