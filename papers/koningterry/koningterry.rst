@@ -33,20 +33,29 @@ materials
 
 
 
-Abstraction
------------
+Parallel python interpreters for pre-existing programs
+------------------------------------------------------
 
-We adopt the general strategy that a tuned pulse can be constructed by serially adding tuned pulse segments and specify the parameters of these segment by solving a numerical optimization problem.  Auto-tuning will therefore require generating many simulations that are only slight variations on nominal template simulation.   Additionally, we must automate the gathering of data from these simulations.
+We added python to Hydra.  It was hard.
+
+
+Structure of Automatic Tuning
+-----------------------------
+
+We adopt the general strategy that a tuned pulse can be constructed by serially adding tuned pulse segments.  Additionally we require that we can "tune" each property of a pulse segment by numerically optimizing an appropriately chosen objective function.  Therefore, given a sequence of pulse properties and objective functions we can construct a program that will automatically tune the pulse.  It is important to realize that the choice and sequence of properties and objective functions embodies a strategy to achieve the desired target behavior.  The automation of this strategy does not guarantee the the tuned pulse/target will have the desired performance characteristics, just that the design strategy was faithfully executed.
+
+In our auto-tuner we must systematically generate simulations and process those simulations.
+
+Auto-tuning will therefore require generating many simulations that are only slight variations on nominal template simulation.   Additionally, we must automate the gathering of data from these simulations.
+
+Mention uncertainly quantification community and tools like Dakota.
 
 We generate simulations by means of a Python proxy for the Hydra input files.  The proxy has simple pre-processor like capabilities for modifying simple input file statements and for injecting more complicate structures into the input file by overwriting specially formatted directives.  For more complicated input file structures, we delegate responsibility to special purpose objects.  We adopt the convention that the string representation of an object (``str(obj)``) is appropriately formatted for insertion into a Hydra input file.  Furthermore, string conversion happens when an input file is generated.  This makes it easy to evolve the simulation parameters as various parameters are tuned.
 
 Data gathering is more complicated than post-processing output files.  We do not know a priori when a watched for even will occur.  To have sufficient time resolution must either make very frequent data dumps or modify Hydra to be more introspective.  The following section discusses the addition of a parallel Python interpreter to Hydra.  Without this, the data retention requirements for auto-tuning would have been prohibitive.
 
+Need for intropsective programs.
  
-Parallel python interpreters for pre-existing programs
-------------------------------------------------------
-
-We added python to Hydra.  It was hard.
 
 Automation of target design with Python
 ---------------------------------------
