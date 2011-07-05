@@ -12,7 +12,7 @@ Automation of Inertial Fusion Target Design with Python
 
 .. class:: abstract
 
-    The process of tuning an inertial confinement fusion pulse shape to a specific target design is highly iterative process.  When done manually, it is also high latency and time consuming.  We have developed several techniques that can be used to automate much of the pulse tuning process.  These methods make use of Python in automating parameter scans, templated input file instantiation, and post-processing of simulations.  We describe the addition of a parallel Python interpreter to a pre-existing radiation-hydrodynamics code Hydra and use of in-flight tuning diagnostics that this facilitates.
+    The process of tuning an inertial confinement fusion pulse shape to a specific target design is highly iterative process.  When done manually, each iteration has large latency and is consequently time consuming.  We have developed several techniques that can be used to automate much of the pulse tuning process and significantly accelerate the tuning process by removing the human induced latency.  The automated data analysis techniques require specialized diagnostics to run within the simulation.  To facilitate these techniques, we have embedded a looselly coupled Python interpreter within a pre-existing radiation-hydrodynamics code, Hydra.  To automate the tuning process we use numerical optimization techniques and construct objective functions to identify tuned parameters.
     
 .. class:: keywords
 
