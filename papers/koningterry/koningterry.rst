@@ -33,13 +33,7 @@ The final section of the pulse shape is the igniter pulse.  The ignite pulse con
 
     A Radius-Time plot of the capsule implosion with the incident laser power overlay.  Lines plot the trajectory of fluid particle boundaries.  Lines are color coded by material.  TODO add the laser power.
 
-The extreme conditions required to initiate a propagating fusion burn are difficult to attain and require balancing the constraints of driver performance, target construction, and the many underlying physical processes.
-
-Futhermore, once a general target and pulse design is chosen, the pulse must be tuned to the specific details of the target.
-
-Reaching these extreme conditions requires the driver to have a carefully designed, time dependent intensity profile.  The shape of which depends on many different physical processes in the target. The most important processes are hydrodynamic flow, radiative energy transfer, electron thermal conduction, equation of state and the energy deposition of the driver.  Performing experiments is complicated and expensive, so the ICF community relies on sophisticated multi-physics codes, such as Hydra, to design experiments and simulate experimental measurements prior to fielding the experiment.
-
-Hydra as design tool.
+While only considering laser shock shock ignition, there is a lot of potential variability in the composition and structure of capsules and in the pulse shape.  Capsule should have sufficient ablator to drive the implosion, but not in excess.  Capusule materials must anticipate the effect of fluid instabilities and laser absorption.  The capsule should have realistic fabrictaion tolerances.  Laser powers must be set to produce shocks of an appropriate strength and pulse features should be appropriately timed.  Additionally, there are several physical processes important in describing an implosion.  Due to all of these sources of complexity, ICF targets are designed using sophisticated multi-physics codes, such as Hydra.  Extensive simulation, helps identify interesting capsule/pulse shapes before resorting to expensive and difficult experiments.  The process of designing a capsule is highly iterative, time consuming, interactive process.  In this paper we describe the use of and modifications of Hydra to automate significant sections of the target design process.  Specifically, we consider the situation where a capsule design and the pulse shape power levels are specified and the timing of the pulse shape is not specified.
 
 
 Structure of Automatic Tuning
