@@ -21,11 +21,17 @@ Automation of Inertial Fusion Target Design with Python
 Inertial Confinement Fusion
 ---------------------------
 
-Inertial confinement fusion (ICF) is a means to achieve controlled thermonuclear fusion by way of compressing hydrogen to extremely large pressures, temperatures and densities.  ICF targets are typically small (~1 mm radius) spheres composed of several layers of cryogenic hydrogen, plastic, metal or other materials.  The intention is to produce significant fusion yield by spherically compressing the hydrogen in the capsule to very large temperature, density and pressure.  These extreme conditions are reached by illumiating the target with a very high intensity (100's TW) driver.  This compresses a shell of cryogenically frozen fuel to more than 100 times solid density and accelerates the radiially converging shell to very high velocity (300 km/s).  As the shell stagnates, a fusion burn wave propagates from a central, low-density, high temperature region to a surrounding high-density, low temperature fuel region.  The inertia of the fuel keeps it intact long enough for a significant fraction of the fuel to burn.
+Inertial confinement fusion (ICF) is a means to achieve controlled thermonuclear fusion by way of compressing hydrogen to extremely large pressures, temperatures and densities.  ICF capsule are typically small (~1 mm radius) spheres composed of several layers of cryogenic hydrogen, plastic, metal or other materials.  The intention is to produce significant fusion yield by spherically compressing the hydrogen in the capsule to very large temperature, density and pressure.  These extreme conditions are reached by illuminating the capsule with a very high intensity (100's TW) driver.  This compresses a shell of cryogenically frozen fuel to more than 100 times solid density and accelerates the radially converging shell to very high velocity (300 km/s).  As the shell stagnates, a fusion burn wave propagates from a central, low-density, high temperature region to a surrounding high-density, low temperature fuel region.  The inertia of the fuel keeps it intact long enough for a significant fraction of the fuel to burn.
 
-Accurately modeling 
+There are several approaches to achieving a sustained fusion burn, but for this paper consider the shock ignition approach with the capsule directly driven by by lasers.  The capsule is a spherical shell of frozen deuterium-tritium (DT), coated with plastic or another ablator material.  Laser beams directly illuminate the target and deposit energy in the outer most layer called the ablator.  The ablation of the ablator supplies the pressure to drive the implosion.  We assume a spherically symmetric illumination of the capsule with total laser power incident changing with time, referred to here as the "pulse shape."
 
+We divide the pulse shape into three logical sections, which correspond to three phases of the capsule implosion dynamics. The first section as the "pre-pulse" and is responsible for shock compression the DT shell to high density.  The pre-pulse consists of a short, high intensity spike in the laser power (the "picket") and thre pedestals, each with increasing laser power.  The pre-pulse is followed by the main pulse, which accelerates the shell to moderate implosion velocity (~300 km/s).  When the imploding shell stagnates, it forms a central, low density, high temperature hot spot and a surrounding high density, low temperature shell.
 
+The final section of the pulse shape is the igniter pulse.  The ignite pulse consists of another pedestal of very high intensity.  This section launches a strong shock that arrives just as the shell is stagnating and further heats the hot spot as well as prevents the low pressure shell from coming into pressure equilibrium with the high pressure hot spot.  The combination of the stagnation of the shell and the timely arrival of the igniter shock lifts the temperature of the central hot spot above the 12 keV threshold needed to initiate a fusion burn wave.  This burn wave propagates into the cold shell which produces most of the fusion yield.
+
+.. figure:: rt_materials.pdf
+
+    A Radius-Time plot of the capsule implosion with the incident laser power overlay.  Lines plot the trajectory of fluid particle boundaries.  Lines are color coded by material.  TODO add the laser power.
 
 The extreme conditions required to initiate a propagating fusion burn are difficult to attain and require balancing the constraints of driver performance, target construction, and the many underlying physical processes.
 
@@ -151,12 +157,6 @@ Message and callback information.
 
 Automation of target design with Python
 ---------------------------------------
-
-Consider the shock ignition approach to inertial fusion using lasers.  A spherical shell of frozen deuterium-tritium (DT) is compressed to high density (~x g/cc) by a sequence of moderate strength shocks.  It is then accelerated to moderate implosion velocity (~300 km/s).  When the imploding shell stagnates, it forms a central, low density, high temperature hot spot and a surrounding high density, low temperature shell.  A strong shock wave (the igniter shock) arrives at stagnation and further heats the hot spot as well as preventing the low pressure shell from coming into pressure equilibrium with the high pressure hot spot.  The combination of the stagnation of the shell and the timely arrival of the igniter shock lifts the temperature of the central hot spot above the 12 keV threshold needed to initiate s fusion burn wave.  This burn wave propagates into the cold shell, producing most of the fusion yield.
-
-.. figure:: rt_materials.pdf
-
-    Change me to include the laser profile.
 
 Producing the needed shocks requires precise control of the time dependent driver power.  Driver powers range three orders of magnitude.  Compression shocks must be timed to breakout into the DT gas at the same time ("shock timing").  Main pulse should produce peak :math:`\rho R`.  Igniter pulse should produce maximum yield.
 
