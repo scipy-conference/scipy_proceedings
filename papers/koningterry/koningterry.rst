@@ -1,4 +1,4 @@
-:author: Matt Terry
+:author: Matthew Terry
 :email: terry10@llnl.gov
 :institution: Lawrence Livermore National Laboratory
 
@@ -12,7 +12,7 @@ Automation of Inertial Fusion Target Design with Python
 
 .. class:: abstract
 
-    The process of tuning an inertial confinement fusion pulse shape to a specific target design is highly iterative process.  When done manually, each iteration has large latency and is consequently time consuming.  We have developed several techniques that can be used to automate much of the pulse tuning process and significantly accelerate the tuning process by removing the human induced latency.  The automated data analysis techniques require specialized diagnostics to run within the simulation.  To facilitate these techniques, we have embedded a looselly coupled Python interpreter within a pre-existing radiation-hydrodynamics code, Hydra.  To automate the tuning process we use numerical optimization techniques and construct objective functions to identify tuned parameters.
+    The process of tuning an inertial confinement fusion pulse shape to a specific target design is highly iterative process.  When done manually, each iteration has large latency and is consequently time consuming.  We have developed several techniques that can be used to automate much of the pulse tuning process and significantly accelerate the tuning process by removing the human induced latency.  The automated data analysis techniques require specialized diagnostics to run within the simulation.  To facilitate these techniques, we have embedded a loosely coupled Python interpreter within a pre-existing radiation-hydrodynamics code, Hydra.  To automate the tuning process we use numerical optimization techniques and construct objective functions to identify tuned parameters.
     
 .. class:: keywords
 
@@ -39,7 +39,7 @@ While only considering laser shock shock ignition, there is a lot of potential v
 Structure of Automatic Tuning
 -----------------------------
 
-We adopt the general strategy that a tuned pulse can be constructed by serially adding tuned pulse segments.  Additionally we require that we can "tune" each property of a pulse segment by numerically optimizing an appropriately chosen objective function.  Therefore, given a sequence of pulse properties and objective functions we can construct a program that will automatically tune the pulse.  It is important to realize that the choice and sequence of properties and objective functions embodies a strategy to achieve the desired target behavior.  The automation of this strategy does not guarantee the the tuned pulse/target will have the desired performance characteristics, just that the design strategy was faithfully executed.
+We adopt the general strategy that a tuned pulse can be constructed by serially adding tuned pulse segments.  Additionally we require that we can "tune" each property of a pulse segment by numerically optimizing an appropriately chosen objective function.  Therefore, given a sequence of pulse properties and objective functions we can construct a program that will automatically tune the pulse.  It is important to realize that the choice and sequence of properties and objective functions embodies a strategy to achieve the desired target behavior.  The automation of this strategy does not guarantee the tuned pulse/target will have the desired performance characteristics, just that the design strategy was faithfully executed.
 
 In our auto-tuner we must systematically generate simulations and process those simulations.
 
@@ -68,7 +68,7 @@ can access and alter the state while the simulation is running through
 a message interface that runs at a specific cycle, time or if a specific
 condition is met. 
 
-To improve functionality the Python interpreter was added to Hydra.
+To improve functionality, the Python interpreter was added to Hydra.
 Python was chosen 
 due to the mature set of embedding API and extending tools
 and the large number of third party libraries.  
@@ -82,13 +82,13 @@ and C functions.
 
 
 The users can send commands to the Python interpreter using three separate 
-methods a custom interactive interpreter based on the CPython interpreter;
+methods: a custom interactive interpreter based on the CPython interpreter;
 a generic code module based interactive interpreter; and a file-based Python code block interpreter.
 
 The Hydra code base is based on the message passing interface 
 (MPI) library. This MPI library allows for efficient communication of data 
 between processors in a simulation. The interactive and file based methods
-need to have access to the Python source on all of the processors used in the simulation. The MPI library is used to read a line from stdin or an entire file on the root processor and broadcast this data to all of the other processors in the simulation. The simplest method to provide an interactive parallel Python interpreter would be to override the PyOs_Readline function in the Python code base.  Unfortunately, this function cannot be overridden so an alternative Python interpreter was developed to handle the parallel stdin access.  The parallel file access reads the entire file in as a string and broadcasts this string to all of the other processors. The string is then sent through the embedded Python interpreter function PyRun_SimpleString. This C function will take a char pointer as the input and run the string through the same parsing and interpreter calls as a file using the Python program. 
+need to have access to the Python source on all of the processors used in the simulation. The MPI library is used to read a line from stdin or an entire file on the root processor and broadcast this data to all of the other processors in the simulation. The simplest method to provide an interactive parallel Python interpreter would be to override the ``PyOs_Readline`` function in the Python code base.  Unfortunately, this function cannot be overridden so an alternative Python interpreter was developed to handle the parallel stdin access.  The parallel file access reads the entire file in as a string and broadcasts this string to all of the other processors. The string is then sent through the embedded Python interpreter function ``PyRun_SimpleString``. This C function will take a char pointer as the input and run the string through the same parsing and interpreter calls as a file using the Python program. 
 
 
 .. code-block:: c
@@ -97,7 +97,7 @@ need to have access to the Python source on all of the processors used in the si
      PyRun_SimpleString(pystr);
    }
 
-One limitation of the PyRun_SimpleString call is the lack of exception 
+One limitation of the ``PyRun_SimpleString`` call is the lack of exception 
 information. To alleviate this issue a second method was implemented that 
 uses a file name or input deck information to give a better location for 
 the exception. 
@@ -122,12 +122,12 @@ by wrapping the Hydra data structures, functions, and parameters using the
 Simplified Wrapper and  Interface Generator (SWIG). The embedded Python is 
 extended by a module called hydra.  The code created by SWIG includes a C++ 
 file compiled into Hydra as a Python extension library and a Python interface
-file that is seralized and compiled into the Hydra code.
+file that is serialized and compiled into the Hydra code.
 
 The main reason for the hydra module is to allow users to access the Hydra 
 state. Hydra has several types of integer and floating point arrays ranging 
 from one to three dimensional.  The multi dimensional arrays
-have an additonal index to indicate the block.  The block defines a 
+have an additional index to indicate the block.  The block defines a 
 portion of the mesh on which the zonal, nodal, edge, and face base information
 is defined.  Meshes can consist of several blocks.  These blocks are then 
 decomposed into sub-blocks or domains depending on how many processors will 
@@ -135,11 +135,11 @@ be used in the simulation. Access to the multi-block parallel data structures
 is provided by structures wrapped by C++ interface objects and then wrapped in 
 SWIG using numpy as the array object in Python.
 
-Objects in the top level, __main__, state are saved to a restart file.
+Objects in the top level, ``__main__``, state are saved to a restart file.
 This restart file is a portable file object written through 
 the silo library interface. The restart state is a binary string
 created through the pickle interface. The Python module used for the state 
-saving functionality is the save state module by Oren Tirosh located at the activestate website [OT08]_. This module 
+saving functionality is the save state module by Oren Tirosh located at the ActiveState website [OT08]_. This module 
 has been augmented with the addition of numpy support and None and Ellipsis Singleton object support.
 
 Multiple versions of the Hydra code are available to users at any given time.
