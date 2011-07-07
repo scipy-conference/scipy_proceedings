@@ -81,7 +81,7 @@ and the large number of third party libraries.
 The Hydra interpreter was augmented by embedding the
 Python interpreter instead of extending Python itself.
 The legacy Hydra interpreter was kept due to the large number of
-existing input files or decks that could not be easily ported to a new
+existing input files that could not be easily ported to a new
 syntax.  The Simplified Wrapper and  Interface Generator (SWIG) [SWIG11]_ interface generator is used to wrap the Hydra C++ classes
 and C functions.
 
@@ -106,7 +106,7 @@ This C function will take a char pointer as the input and run the string through
 
 One limitation of the ``PyRun_SimpleString`` call is the lack of exception 
 information. To alleviate this issue a second method was implemented uses ``Py_CompileString`` then ``PyEval_EvalCode``. The ``Py_CompileString``
-uses a file name or input deck information to give a better location for 
+uses a file name or input file information to give a better location for 
 the exception. 
 
 
@@ -117,7 +117,7 @@ checking errors on Python code. The custom interactive interpreter first
 reads a line from stdin in parallel. Readline support is enabled which
 gives the user line editing and history support  similar to running the Python program 
 interactively. The line is then checked for any Hydra specific control
-sequences and compile through the Py_CompileStringFlags.  If the line 
+sequences and compiled through the Py_CompileStringFlags.  If the line 
 compiled with no errors then it is executed using the  PyEval_EvalCode command. Any errors in compiling or exceptions are checked for
 a block continuation indicator, syntax error or EOF. Exceptions will
 be displayed as in Python and available in the output of all the processors.
@@ -127,9 +127,10 @@ through the Python interpreter. One of the mandates of the effort to embed
 the Python interpreter was to provide an enhanced version of the existing Hydra 
 interpreter.  In order to provide this functionality Python must be able to 
 access the information in the running Hydra simulation. This is accomplished
-by wrapping the Hydra data structures, functions, and parameters using the 
-SWIG. The embedded Python is 
-extended by a module called hydra.  The code created by SWIG includes a C++ 
+by wrapping the Hydra data structures, functions, and parameters using *the SWIG.
+The embedded Python is extended by a module called hydra.*
+**SWIG and exposing them through the "hydra" Python extension module.**
+The code created by SWIG includes a C++ 
 file compiled into Hydra as a Python extension library and a Python interface
 file that is serialized and compiled into the Hydra code.
 
@@ -144,10 +145,10 @@ be used in the simulation. Access to the multi-block parallel data structures
 is provided by structures wrapped by C++ interface objects and then wrapped in 
 SWIG using numpy as the array object in Python.
 
-Users control the simulation by scheduling scheduling messages that 
+Users control the simulation by scheduling messages that 
 conditionally execute based on cycle number, time or specific states.
 These messages can be redefined from Python to steer the simulation
-while it is running.  In addition to the messages  there is a callback
+while it is running.  In addition to the messages, there is a callback
 functionality that will run a user defined Python function  after
 every simulation cycle has completed.  An arbitrary number of callable
 Python objects can registered in the code.
@@ -157,11 +158,11 @@ This restart file is a portable file object written through
 the silo library interface. The restart information is a binary string
 created through the pickle interface. The Python module used for the state 
 saving functionality is the save state module by Oren Tirosh located at the ActiveState website [OT08]_. This module 
-has been augmented with the addition of numpy support and None and Ellipsis Singleton object support.
+has been augmented with the addition of numpy support and None and Ellipsis singleton object support.
 
 Multiple versions of the Hydra code are available to users at any given time.
 In order to add additional functionality and maintain version integrity, the hydra Python module is embedded in the Hydra code as a frozen module. The Python file resulting from the SWIG generator is marshaled using a script based on the freeze module in the Python distribution. This guarantees the modules
-are always available even if the sys path is altered.
+are always available even if the ``sys.path`` is altered.
 
 
 
