@@ -54,8 +54,8 @@ We generate simulations by means of a Python proxy for the Hydra input files.  T
 Data gathering is more complicated than post-processing output files.  We do not know a priori when a watched for even will occur.  To have sufficient time resolution must either make very frequent data dumps or modify Hydra to be more introspective.  The following section discusses the addition of a parallel Python interpreter to Hydra.  Without this, the data retention requirements for auto-tuning would have been prohibitive.
 
 
-Parallel Python interpreters for pre-existing programs
-------------------------------------------------------
+Hydra's Parallel Python Interpreters
+------------------------------------
 
 Hydra is a massively parallel multi-physics code in use since 1993. 
 The code 
