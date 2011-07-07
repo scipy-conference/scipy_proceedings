@@ -170,33 +170,27 @@ Consider the case of radially converging shocks launched at two different times 
 
 Recall from the first section the pre-pulse launches four shocks, off of which should coalesce at the gas-ice interface at the same time.  Figure :ref:`figsync` shows the convergence of the pre-pulse shocks well within the required 50 ps tolerance.
 
-It should be noted that this shock syncing method only relies on tracking the first shock.  Trackers will sometimes fail to locate the shock if they are located in a region with heat sources that are not sonically coupled to the plasma.  Deepling penetrating x-rays, supra-thermal electrons and heavy ion beams are examples.  However, it is expected that the ablator and the DT shell should provide sufficient insulation that the fluid flow 
-
+It should be noted that this shock syncing method only relies on tracking the first shock.  Trackers will sometimes fail to locate the shock if they are located in a region with heat sources that are not sonically coupled to the plasma.  Deeply penetrating x-rays, supra-thermal electrons and heavy ion beams are examples.  However, it is expected that the ablator and the DT shell should provide sufficient insulation that the fluid flow 
 
 .. figure:: auto_timing.pdf
 
     Change me to be an rt plot with shock outlines..  :label:`figsync`
 
+Another important embedded diagnostic monitors the fuel areal density (:math:`\rho R`).  When tuning the main pulse, the diagnostic monitors the DT :math:`\rho R`, report the peak value and stops the calculation when the current :math:`\rho R` has fallen to 50% of the peak value.  The burn fraction scales with the peak areal density (:math:`\rho R`) of the assembled target 
+(:math:`f \approx \frac{\rho R}{\rho R + 7}`)
+where
+(:math:`\rho R = \int \rho(r) dr`).  The main pulse start time is tuned to maximize potential burn fraction by maximizing the fuel :math:`\rho R`.
 
+The igniter pulse start time is tuned by maximizing the fusion yield.  Hydra already already monitors for completion of fusion burn, so no embedded diagnostics are needed.
 
-Tuning the Main Pulse and Igniter Pulse
-.......................................
-
-Finding optimal main and igniter pulse timings are simple optimization problems.  Since the igniter pulse is responsible for actually igniter the target, the main pulse should maximize the potential burn.  The burn fraction scales with the peak areal density (:math:`\rho R`) of the assembled target 
-(:math:`f \approx \frac{\rho R}{\rho R + 7}`) where 
-(:math:`\rho R = \int \rho(r) dr`).  We use a modified bisection optimization method described in the following section for actual optimization.  For the particular target we under consideration, peak areal density is about 1.5, corresponding to a theoretical burn fraction of 20% and a yield of 40 MJ.  Note that this estimate does not take into account the ablation of the DT during the main pulse.  We require our optimization to converge within xx ps.  In Figure :ref:`figrhor`, we see that :math:`\rho R` peaks and is approximately flat over a xxps interval.
 
 .. figure:: rhor_tune.pdf
 
     Tuning peak areal density :label:`figrhor`
 
-Having fixed the main main pulse timing, we add the igniter pulse.  We tune the start of the igniter pulse to maximize fusion yield.
+Having fixed the main main pulse timing, we add the igniter pulse.  We tune the start of the igniter pulse to maximize fusion yield.  For the particular target we under consideration, peak areal density is about 1.5, corresponding to a theoretical burn fraction of 20% and a yield of 40 MJ.  Note that this estimate does not take into account the ablation of the DT during the main pulse.  We require our optimization to converge within xx ps.  In Figure :ref:`figrhor`, we see that :math:`\rho R` peaks and is approximately flat over a xxps interval.
 
-
-Optimization Techniques
------------------------
-
-Typical calculations take 5-20 minutes on a single core of an 2.8 GHz Intel Xeon processor.  Typical single variable optimization methods are designed for serial evaluation.  A "quick" convergence might take 12 function evaluations, translating to approximately four hours of run time.  Instead, we use a simple parallel bounded minimum optimization with 8 simultaneous evaluations.  We routinely achieve acceptable convergence within 4 iterations (3x speedup).  The use of more sophisticated sampling techniques would likely reduce the number of iterations or the number of parallel function evaluations.
+All of the optimizations use a simple eight way parallel direct search method.  Compared to Newton-like methods, direct search is very inefficient.  Typical optimizations requires 32 functions evaluations.  Converging to the same tolerance using the BFGS method requires only 12 function evaluations.  However, the inefficient direct search method requires only 4 iterations, compared to the 12 iterations with BFGS.  We are satisfied with the current performance, but recognize that the use of more sophisticated sampling techniques would likely reduce the number of iterations or the number of parallel function evaluations.
 
 
 Conclusions
