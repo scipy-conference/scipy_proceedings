@@ -36,16 +36,18 @@ The final section of the pulse shape is the igniter pulse.  The ignite pulse con
 While only considering laser shock shock ignition, there is a lot of potential variability in the composition and structure of capsules and in the pulse shape.  Capsule should have sufficient ablator to drive the implosion, but not in excess.  Capusule materials must anticipate the effect of fluid instabilities and laser absorption.  The capsule should have realistic fabrictaion tolerances.  Laser powers must be set to produce shocks of an appropriate strength and pulse features should be appropriately timed.  Additionally, there are several physical processes important in describing an implosion.  Due to all of these sources of complexity, ICF targets are designed using sophisticated multi-physics codes, such as Hydra.  Extensive simulation, helps identify interesting capsule/pulse shapes before resorting to expensive and difficult experiments.  The process of designing a capsule is highly iterative, time consuming, interactive process.  In this paper we describe the use of and modifications of Hydra to automate significant sections of the target design process.  Specifically, we consider the situation where a capsule design and the pulse shape power levels are specified and the timing of the pulse shape is not specified.
 
 
-Structure of Automatic Tuning
------------------------------
+
+Automatic Tuning
+----------------
 
 We adopt the general strategy that a tuned pulse can be constructed by serially adding tuned pulse segments.  Additionally we require that we can "tune" each property of a pulse segment by numerically optimizing an appropriately chosen objective function.  Therefore, given a sequence of pulse properties and objective functions we can construct a program that will automatically tune the pulse.  It is important to realize that the choice and sequence of properties and objective functions embodies a strategy to achieve the desired target behavior.  The automation of this strategy does not guarantee the tuned pulse/target will have the desired performance characteristics, just that the design strategy was faithfully executed.
 
-In our auto-tuner we must systematically generate simulations and process those simulations.
+In addition to a sequence of parameters and a definition of an objective function, an autotuing program will require other software infrastructure.  It needs a way to transform parameter values to input files and run directories.  The autotuing program needs to gather the appropriate information from a simulation to calculate objective functions.  Finally, it needs reasonably efficient numeric optimization routines.
 
-Auto-tuning will therefore require generating many simulations that are only slight variations on nominal template simulation.   Additionally, we must automate the gathering of data from these simulations.
+We generate Hydra input files using a Python proxy class that wraps a nearly complete Hydra input file.  The proxy has simple pre-processor like capabilities for modifying simple input file statements and for injecting more complicate structures into the input file.  For complicated structures like the laser source specification, it delegates responsibly to special purpose objects.  These object follow the convention that ``str(obj)`` is formatted for injection into a Hydra input file.  This convention allows objects that define the ``__str__()`` to lazily evaluate their Hydra representation, while actual strings can be inserted with no boilerplate.
 
-Mention uncertainly quantification community and tools like Dakota.
+
+
 
 We generate simulations by means of a Python proxy for the Hydra input files.  The proxy has simple pre-processor like capabilities for modifying simple input file statements and for injecting more complicate structures into the input file by overwriting specially formatted directives.  For more complicated input file structures, we delegate responsibility to special purpose objects.  We adopt the convention that the string representation of an object (``str(obj)``) is appropriately formatted for insertion into a Hydra input file.  Furthermore, string conversion happens when an input file is generated.  This makes it easy to evolve the simulation parameters as various parameters are tuned.
 
