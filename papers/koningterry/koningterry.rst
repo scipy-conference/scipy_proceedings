@@ -151,46 +151,32 @@ are always available even if the sys path is altered.
 Message and callback information.
 
 
-Automation of target design with Python
----------------------------------------
+Embedded Diagnositcs and Objective Functions
+--------------------------------------------
 
-Producing the needed shocks requires precise control of the time dependent driver power.  Driver powers range three orders of magnitude.  Compression shocks must be timed to breakout into the DT gas at the same time ("shock timing").  Main pulse should produce peak :math:`\rho R`.  Igniter pulse should produce maximum yield.
+Embedding a Python interpreter withing Hydra adds significant capability.  One of the first applications was to add fluid characteristic trackers.  Characteristics are eigenvectors of the Euler fluid equations and represent the highest possible signal speed.  For characteristic located near a shock, the characteristic will naturally drift toward the shock front and can be used to identify the location of the shock front without the problems of associated with post-processing a moving Lagrangian mesh (discreteness of grid, grid motion due to radiation pre-heat, etc).  The location of a characteristic is found by solving the initial value problem :math:`\dot{r} = v(r) - c_s(r)`.  Our implementation of a characteristic tracker is aware of the pulse shape and starts a new characteristic tracker for each significant feature of the pulse shape.  Tracker position must be updated every cycle and is registered as a callback.
 
-Simply writing the tuning algorithm in paragraph form suggests that tuning could be performed purely in software.  Furthermore, if we can construct an appropriate objective function for each tuning, we can make use of powerful, mature optimization methods.
+Since trackers are updated every cycle, it is easy to trigger other events based on the behavior of the tracker.  The first use is trigger the simulation to end just after shock breakout time.  This is very important as Hydra's only other relevant mechanism for ending the simulation is a maximum simulation time.  Using this mechanism either leads to under-estimating the shock breakout time and stopping the calculation before gathering important information or setting the maximum time to be very large and wasting many compute cycles.  The second trigger is to modify the   The second trigger is to modify the   The second trigger is to modify the frequency Hydra writes output files based on the location of the leading shock.  Different stages of the simulation have disparate time scales and it is useful to add resolution only when it is needed.
 
-Parameterization of the pulse shape
+The most important application of the characteristic trackers is that the objective function for syncing shock breakouts needs a smooth, non-noisy calculation of the shock breakout time.  One of the key properties of shocks in ICF is that shocks launched later propagate faster and will eventually overtake the one launched before it.  We make the design decision that shocks should be timed such that the coalesce at the gas/ice interface.  This prevents strong shocks from forming by shock coalescence.  By timing them to coalesce at the gas/ice interface, we minimize the intensification of shocks due to radial convergence.
 
-We need an appropriately parameterized pulse shape and the ability to construct that pulse shape within Hydra.  
+Consider the case of radially converging shocks launched at two different times from comparable radii.  The second shock is faster and will eventually overtake the first.  If we define a "shock breakout time" as when the first shock enters the gas region, we can plot the shock breakout time as a function of the launch time of the second shock (black line in :ref:`figobjfunc`).  The appropriate objective function should maximize the breakout time (recognizing that it saturates for large launch times) while also minimizing the launch time of the second shock.  We construct an aggregate objective function as a linear combination of the two constraints (:math:`f(t) = \omega t - b(t)`).  We find an tuned value of :math:`0.01 m`.  Where :math:`m` is the slope between two points chosen to be clearly early and later than ideal tuning.
 
-
-Embedded processing
--------------------
-
-Our simulations must be appropriate parameterized so that they can be called as if they were simply expensive functions calls.  Additionally, we must gather the appropriate information from the running simulations.
-
-Characteristic trackers.  The Euler equations.  Characteristic 
-:math:`\dot{r} = v(r) - c_s(r)`   Hydra's Python interface exposes the needed variables and provides a means for registering callback functions.  Conveniently add arbitrary 
-
-Dynamic steering of problem.  Characteristic trackers for locating breakout.  Advantage of operating independent of mesh and robust to motion of grid from pre-heat or spurious grid motion.  Makes measurement of "breakout time" and its associated objective function much far less noisy and thus more tractable for algorithmic optimization.
-
-Embedding makes execution faster by easily ending the calculation when the desired has been extracted.  Especially important since it is hard to predict the time when important events will happen and to apply the appropriate resolution.
-
-Use of the same language simplifies
-
-Proxy classes and code generators.  Input file templates, ``str()`` for the Hydra representation and ``repr()`` for the .  Pickling was an option, but does allow for easy modification.
-
-
-Synchronizing Shock Arrival
-...........................
-
-One of the key properties of shocks in ICF is that shocks launched later propagate faster and will eventually overtake the one launched before it.  We make the design decision that shocks should be timed such that the coalesce at the gas/ice interface.  This prevents strong shocks from forming by shock coalescence.  By timing them to coalesce at the gas/ice interface, we minimize the intensification of shocks due to radial convergence.
+.. Comments on error
 
 .. figure:: auto_timing.pdf
 
-    Change me to all guide lines for early and late.  :label:`figtiming`
+    Breakout time for a scan of the start time of the second shock. Notice that the objective function minimum accurately locates the inflection point in the breakout vs start time plot.  :label:`figobfunc`
 
-Consider the case of radially converging shocks launched at two different times from comparable radii.  The second shock is faster and will eventually overtake the first.  If we define a "shock breakout time" as when the first shock enters the gas region, we can plot the shock breakout time as a function of the launch time of the second shock (black line in :ref:`figtiming`).  The appropriate objective function should maximize the breakout time (recognizing that it saturates for large launch times) while also minimizing the launch time of the second shock.  We construct an aggregate objective function as a linear combination of the two constraints (:math:`f(t) = \omega t - b(t)`).  We find an tuned value of :math:`0.01 m`.  Where :math:`m` is the slope between two points chosen to be clearly early and later than ideal tuning.
-.. Comments on error
+Recall from the first section the the pre-pulse launches four shocks, off of which should coalesce at the gas-ice interface at the same time.  Figure :ref:`figsync` shows the convergence of the pre-pulse shocks well within the required 50 ps tolerance.
+
+It should be noted that this shock syncing method only relies on tracking the first shock.  Trackers will sometimes fail to locate the shock if they are located in a region with heat sources that are not sonically coupled to the plasma.  Deepling penetrating x-rays, supra-thermal electrons and heavy ion beams are examples.  However, it is expected that the ablator and the DT shell should provide sufficient insulation that the fluid flow 
+
+
+.. figure:: auto_timing.pdf
+
+    Change me to be an rt plot with shock outlines..  :label:`figsync`
+
 
 
 Tuning the Main Pulse and Igniter Pulse
