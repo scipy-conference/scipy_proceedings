@@ -82,7 +82,7 @@ The Hydra interpreter was augmented by embedding the
 Python interpreter instead of extending Python itself.
 The legacy Hydra interpreter was kept due to the large number of
 existing input files or decks that could not be easily ported to a new
-syntax.  The SWIG interface generator is used to wrap the Hydra C++ classes
+syntax.  The Simplified Wrapper and  Interface Generator (SWIG) [SWIG11]_ interface generator is used to wrap the Hydra C++ classes
 and C functions.
 
 
@@ -93,30 +93,34 @@ a generic code module based interactive interpreter; and a file-based Python cod
 The Hydra code base is based on the message passing interface 
 (MPI) library. This MPI library allows for efficient communication of data 
 between processors in a simulation. The interactive and file based methods
-need to have access to the Python source on all of the processors used in the simulation. The MPI library is used to read a line from stdin or an entire file on the root processor and broadcast this data to all of the other processors in the simulation. The simplest method to provide an interactive parallel Python interpreter would be to override the ``PyOs_Readline`` function in the Python code base.  Unfortunately, this function cannot be overridden so an alternative Python interpreter was developed to handle the parallel stdin access.  The parallel file access reads the entire file in as a string and broadcasts this string to all of the other processors. The string is then sent through the embedded Python interpreter function ``PyRun_SimpleString``. This C function will take a char pointer as the input and run the string through the same parsing and interpreter calls as a file using the Python program. 
+need to have access to the Python source on all of the processors.
+The MPI library is used to broadcast a line read from stdin or a file on the root processor to all of the other processors in the simulation.
+The simplest method to provide an interactive parallel Python interpreter would be to override the
+``PyOS_ReadlineFunctionPointer`` in the Python code base.
+This function cannot be overridden for non-interactive processes due to a tty check.
+An alternative interactive Python interpreter was developed to handle the parallel stdin access and Python code execution.
+For parallel file access the code reads the entire file in as a string and broadcasts it to all of the other processors.
+The string is then sent through the embedded Python interpreter function ``PyRun_SimpleString``.
+This C function will take a char pointer as the input and run the string through the same parsing and interpreter calls as a file using the Python program. 
 
-
-.. code-block:: c
-
-   void runpycode(char* pystr) {
-     PyRun_SimpleString(pystr);
-   }
 
 One limitation of the ``PyRun_SimpleString`` call is the lack of exception 
-information. To alleviate this issue a second method was implemented that 
+information. To alleviate this issue a second method was implemented uses ``Py_CompileString`` then ``PyEval_EvalCode``. The ``Py_CompileString``
 uses a file name or input deck information to give a better location for 
 the exception. 
 
-.. code-block:: c
 
-   void runpycode(char* pystr) {
-     pysrc = Py_CompileString(str, pyinput , start);
-     v = PyEval_EvalCode((PyCodeObject*) pysrc, 
-                          pmainDict, pmainDict);
-   }
-
-
- description of interactive parser
+The existing Hydra interpreter is the dominant interpreter and must be 
+given control when Python is not in use.  The interactive Python interpreter 
+must check for Hydra control commands as well as compiling, executing and
+checking errors on Python code. The custom interactive interpreter first 
+reads a line from stdin in parallel. Readline support is enabled which
+gives the user line editing and history support  similar to running the Python program 
+interactively. The line is then checked for any Hydra specific control
+sequences and compile through the Py_CompileStringFlags.  If the line 
+compiled with no errors then it is executed using the  PyEval_EvalCode command. Any errors in compiling or exceptions are checked for
+a block continuation indicator, syntax error or EOF. Exceptions will
+be displayed as in Python and available in the output of all the processors.
 
 With the above embedded Python support users can run arbitrary Python code 
 through the Python interpreter. One of the mandates of the effort to embed 
@@ -124,25 +128,33 @@ the Python interpreter was to provide an enhanced version of the existing Hydra
 interpreter.  In order to provide this functionality Python must be able to 
 access the information in the running Hydra simulation. This is accomplished
 by wrapping the Hydra data structures, functions, and parameters using the 
-Simplified Wrapper and  Interface Generator (SWIG). The embedded Python is 
+SWIG. The embedded Python is 
 extended by a module called hydra.  The code created by SWIG includes a C++ 
 file compiled into Hydra as a Python extension library and a Python interface
 file that is serialized and compiled into the Hydra code.
 
-The main reason for the hydra module is to allow users to access the Hydra 
+The hydra Python module allows users to access and manipulate the Hydra 
 state. Hydra has several types of integer and floating point arrays ranging 
 from one to three dimensional.  The multi dimensional arrays
 have an additional index to indicate the block.  The block defines a 
-portion of the mesh on which the zonal, nodal, edge, and face base information
+portion of the mesh on which the zonal, nodal, edge, and face based information
 is defined.  Meshes can consist of several blocks.  These blocks are then 
 decomposed into sub-blocks or domains depending on how many processors will 
 be used in the simulation. Access to the multi-block parallel data structures
 is provided by structures wrapped by C++ interface objects and then wrapped in 
 SWIG using numpy as the array object in Python.
 
-Objects in the top level, ``__main__``, state are saved to a restart file.
+Users control the simulation by scheduling scheduling messages that 
+conditionally execute based on cycle number, time or specific states.
+These messages can be redefined from Python to steer the simulation
+while it is running.  In addition to the messages  there is a callback
+functionality that will run a user defined Python function  after
+every simulation cycle has completed.  An arbitrary number of callable
+Python objects can registered in the code.
+
+Objects in the top level, __main__, state are saved to a restart file.
 This restart file is a portable file object written through 
-the silo library interface. The restart state is a binary string
+the silo library interface. The restart information is a binary string
 created through the pickle interface. The Python module used for the state 
 saving functionality is the save state module by Oren Tirosh located at the ActiveState website [OT08]_. This module 
 has been augmented with the addition of numpy support and None and Ellipsis Singleton object support.
@@ -151,7 +163,6 @@ Multiple versions of the Hydra code are available to users at any given time.
 In order to add additional functionality and maintain version integrity, the hydra Python module is embedded in the Hydra code as a frozen module. The Python file resulting from the SWIG generator is marshaled using a script based on the freeze module in the Python distribution. This guarantees the modules
 are always available even if the sys path is altered.
 
-Message and callback information.
 
 
 Embedded Diagnostics and Objective Functions
@@ -208,5 +219,6 @@ References
 .. [OT08] O. Tirosh, *Pickle the interactive interpreter state (Python recipe)*,
            http://code.activestate.com/recipes/572213-pickle-the-interactive-interpreter-state/ , 2008.
 
+.. [SWIG11] D. Beazly et al, http://www.swig.org/.
 
 
