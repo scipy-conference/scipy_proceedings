@@ -197,7 +197,7 @@ Hydra already already monitors for completion of fusion burn, so no embedded dia
 Conclusions
 -----------
 
-Python is awesome!
+Tuning an ICF pulse to a target is normally a labor intensive, high latency process.  We described the desired properties of a tuned pulse and constructed objective functions that will identify the tuned properties.  Collecting information for the objective functions requires high frequency sampling of simulation and this data must be gathered within the simulation rather than post-processing a completed simulation.  To enable introspective simulations, we add a parallel Python interpreter to Hydra.  From these pieces we constructed a program that tunes a pulse without human intervention.
 
 This work performed under the auspices of the U.S. DOE by Lawrence Livermore National Laboratory under Contract DE-AC52-07NA27344.
 
