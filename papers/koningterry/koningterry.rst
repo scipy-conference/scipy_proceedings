@@ -208,8 +208,17 @@ References
 
 .. [SWIG11] D. Beazly et al, http://www.swig.org/.
 
-.. [Betti2007] Betti
+.. [Betti2007]
+   Betti, R, et al. 2007. Shock Ignition of Thermonuclear Fuel with High 
+   Areal Density. *Phys. Rev. Lett.* 98, 155001. 
 
-.. [Munro2001] Munro
+.. [Munro2001]
+   Munro, David H, et al. 2001. Shock timing technique for the National 
+   Ignition Facility. *The 42nd annual meeting of the division of plasma 
+   physics of the American Physical Society and the 10th international 
+   congress on plasma physics* 8, 2245-2250. 
 
-.. [Fraley1974] Fraley
+.. [Fraley1974]
+   Fraley, G S, et al. 1974. Thermonuclear burn characteristics of 
+   compressed deuterium-tritium microspheres. *Physics of Fluids* 17, 
+   474-489. 
