@@ -171,36 +171,29 @@ Embedding a Python interpreter within Hydra adds significant capability.  One of
 Since the tracker is updated every cycle, it is easy to trigger other events based on the behavior of the characteristic.  The first use is trigger the simulation to end just after shock breakout time.  This is very important as Hydra's only other relevant mechanism for ending the simulation is a maximum simulation time.  Using this mechanism either leads to under-estimating the shock breakout time and stopping the calculation before gathering important information or setting the maximum time to be very large and wasting many compute cycles.  Additionally, we use The location of characteristics to set the frequency Hydra writes output files.  
 Different stages of the simulation have disparate time scales and it is useful to add resolution only when it is needed.
 
+.. figure:: auto_timing.pdf
+
+    Breakout time for a scan of the start time of the second shock. Notice that the objective function minimum accurately locates the inflection point in the breakout vs start time plot.  :label:`figobfunc`
+
 The most important application of the characteristic tracker is producing smooth, non-noisy measurements of the shock breakout time for the shock syncing objective function.  To construct a shock syncing objective function, first consider the case of two radially converging shocks launched at two different times from comparable radii.  The second shock is faster since the wake of the first is warmer and the sound speed is larger.  The second shock will eventually overtake the first.  If we define a "shock breakout time" as when the first shock enters the gas region, we can plot the shock breakout time as a function of the launch time of the second shock (black line in :ref:`figobjfunc`).  The appropriate objective function should maximize the breakout time (recognizing that it saturates for large launch times) while also minimizing the launch time of the second shock.  We construct an aggregate objective function as a linear combination of the two constraints (:math:`f(t) = \omega t - b(t)`).  We find an tuned value of :math:`0.01 m`.  Where :math:`m` is the slope between the end points of the search region.
 
 .. Comments on error
 
 .. figure:: auto_timing.pdf
 
-    Breakout time for a scan of the start time of the second shock. Notice that the objective function minimum accurately locates the inflection point in the breakout vs start time plot.  :label:`figobfunc`
-
-Recall from the first section the pre-pulse launches four shocks, off of which should coalesce at the gas-ice interface at the same time.  Figure :ref:`figsync` shows the convergence of the pre-pulse shocks well within the required 50 ps tolerance.
-
-It should be noted that this shock syncing method only relies on tracking the first shock.  Trackers will sometimes fail to locate the shock if they are located in a region with heat sources that are not sonically coupled to the plasma.  Deeply penetrating x-rays, supra-thermal electrons and heavy ion beams are examples.  However, it is expected that the ablator and the DT shell should provide sufficient insulation that the fluid flow 
-
-.. figure:: auto_timing.pdf
-
     Change me to be an rt plot with shock outlines..  :label:`figsync`
 
-Another important embedded diagnostic monitors the fuel areal density (:math:`\rho R`).  When tuning the main pulse, the diagnostic monitors the DT :math:`\rho R`, report the peak value and stops the calculation when the current :math:`\rho R` has fallen to 50% of the peak value.  The burn fraction scales with the peak areal density (:math:`\rho R`) of the assembled target 
-(:math:`f \approx \frac{\rho R}{\rho R + 7}`)
-where
-(:math:`\rho R = \int \rho(r) dr`).  The main pulse start time is tuned to maximize potential burn fraction by maximizing the fuel :math:`\rho R`.
+Recall from the first section the pre-pulse launches four shocks, all of which should coalesce at the gas-ice interface at the same time.  Figure :ref:`figsync` shows the convergence of the pre-pulse shocks well within the required 50 ps tolerance.
 
-The igniter pulse start time is tuned by maximizing the fusion yield.  Hydra already already monitors for completion of fusion burn, so no embedded diagnostics are needed.
-
+It should be noted that this shock syncing method only relies on tracking the first shock.  Characteristics will sometimes fail to locate the shock if they are located in a region with heat sources that are not sonically coupled to the plasma.  Deeply penetrating x-rays, supra-thermal electrons and heavy ion beams are examples.  However, it is expected that the ablator and the DT shell should provide sufficient insulation for the picket shock tracker to locate its shock.
 
 .. figure:: rhor_tune.pdf
 
     Tuning peak areal density :label:`figrhor`
 
-Having fixed the main main pulse timing, we add the igniter pulse.  We tune the start of the igniter pulse to maximize fusion yield.  For the particular target we under consideration, peak areal density is about 1.5, corresponding to a theoretical burn fraction of 20% and a yield of 40 MJ.  Note that this estimate does not take into account the ablation of the DT during the main pulse.  We require our optimization to converge within xx ps.  In Figure :ref:`figrhor`, we see that :math:`\rho R` peaks and is approximately flat over a xxps interval.
+Another important embedded diagnostic monitors the fuel areal density (:math:`\rho R`).  When tuning the main pulse, the diagnostic monitors the DT :math:`\rho R`, reports the peak value and stops the calculation when the current :math:`\rho R` has fallen to 50% of the peak value.  The maximum :math:`\rho R` sets the start time of the main pulse.  The igniter pulse start time is tuned by maximizing the fusion yield.
 
+Hydra already already monitors for completion of fusion burn, so no embedded diagnostics are needed.
 
 
 Conclusions
