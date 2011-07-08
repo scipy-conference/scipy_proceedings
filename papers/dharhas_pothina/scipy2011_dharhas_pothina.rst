@@ -31,39 +31,39 @@ Using Standards - WaterML, WaterOneFlow and the Observations Data Model
 
 CUAHSI-HIS provides web services, tools, standards and procedures that enhance access to more and better data for hydrologic analysis [Tarboton2009]_. CUAHSI-HIS has established a web service design called WaterOneFlow as a standard mechanism for the transfer of hydrologic data between hydrologic data servers (databases) and users. Web services streamline the often time-consuming tasks of extracting data from a data source, transforming it into a usable format and loading it in to an analysis environment [Maidment2009]_. All WaterOneFlow web services return data in a standard format called WaterML. The specifics of WaterML are documented as an Open Geospatial Consortium, Inc., discussion paper [Zaslavski2007]_.
 
-To publish data in CUAHSI-HIS, a data source provides access to their data via a WaterOneFlow web service. CUAHSI-HIS also includes mechanisms for registering WaterOneFlow web services so that users can discover and use them. Data sources often store their data locally in a CUAHSI-HIS Observations Data Model (ODM) database, where ODM is a
-database design for storing hydrologic time series data reported at discrete point locations [Horsburgh2008]_. ODM databases, ODM data loaders, and a special version of the WaterOneFlow web service specifically designed to work with ODM as its underlying data source are all available for free on the HIS website (http://his.cuahsi.org).
-
-HydroExcel and HydroGet and HydroDesktop
+To publish data in CUAHSI-HIS, a data source provides access to their data via a WaterOneFlow web service. CUAHSI-HIS also includes mechanisms for registering WaterOneFlow web services so that users can discover and use them. Data sources often store their data locally in a CUAHSI-HIS Observations Data Model (ODM) database (:ref:`odmschema`), where ODM is a database design for storing hydrologic time series data reported at discrete point locations [Horsburgh2008]_. ODM databases, ODM data loaders, and a special version of the WaterOneFlow web service specifically designed to work with ODM as its underlying data source are all available for free on the HIS website (http://his.cuahsi.org).
 
 .. figure:: odm_schema.png
 
    The Observations Data Model Schema. :label:`odmschema`
 
-
+In addition, CUAHSI-HIS provides several free community supported clients to search and retrieve data from WaterOneFlow compliant services. These include a Microsoft Excel plugin called HydroExcel and a desktop GIS softare called HydroDesktop [Ames2010]_.
 
 Barriers to Adoption
 --------------------
 
-Building on lessons learned during the development of the Texas HIS,
-an attempt was made to expand this prototype into a productioninfrastructure that could be used reliably by the scientificcommunity. In order for this to happen, data providers needed to beconvinced to supply 
+Although the technology seemed mature and had participation from several universities and a few large federal agencies like the United States Geological Service(USGS), uptake outside of this group was low.
+Data providers are often resource poor in staff, technical knowledge, time and money. In most cases, they already have a system for collecting, storing and disseminating data that works for their particular needs. In order to convince them to become part of a system like the CUAHSI-HIS, the cost of sharing their data has to be as low as possible and they have to be educated on the benifits their organization will receive through being part of the system. A review of the experiences from building the prototype Texas HIS system showed that there are significant barriers to wide scale adoption.
 
-Understanding technology, resource issues, license issues,
-platform compatibility
-
-
+While there is nothing intrinsic to the CUAHSI-HIS that requires a particular software stack, for historical reasons all currently available software for both serving data and retrieving data from the CUAHSI-HIS system was built on a Microsoft .Net software stack and in some cases also needs commercial licenses. Hence, data providers who could not or did not want to use this software stack needed to write an in-house implementation of WaterOneFlow web services from the ground up. In addition, client side tools were also not cross-platform had were built for specific use cases and could not be easily adapted for alternate needs.
 
 Changing Paradigms
 ------------------
 
-Blah Blah.
+Building a custom implementation of WaterOneFlow web services to attach to a datasource is a non trivial endeavour. It requires and understanding of the web services, XML and the particulars of the WaterML and WaterOneFlow. Hence, the paradigm followed by most participating data providers is to manipulate their data into an ODM database hosted on an MSSQL server. CUAHSI-HIS has a prebuilt WaterOneFlow implementation that can then be used to serve data. This approach requires that the data provider either adopt the ODM as their internal structure for storing data or they must build a translator and periodically dump data from their in-house database to the ODM database on a regular basis. The ODM schema is designed to hold data from multiple sources and hence is often much more complicated than most data providers in-house database schemas. It also excludes data providers that use non Microsoft operating systems.
 
 .. figure:: paradigm.png
 
    Comparison of changing paradigms. :label:`paradigm`
 
+Lowering these barriers requires flexible cross-platform software that can be relatively easily adapted to each organizations needs. A strategy involvi 
+
+we developed two 
+
 Using Python to serve data - WOFpy
 ----------------------------------
+
+
 
 Using python to retrieve data - pyhis
 -------------------------------------
@@ -113,9 +113,11 @@ References
 
 .. [Ames2009] Ames, D. P., J. Horsburgh, J. Goodall, T. Whiteaker, D. Tarboton and D. Maidment, (2009), *Introducing the Open Source CUAHSI Hydrologic Information System Desktop Application (HIS Desktop)*, 18th World IMACS Congress and MODSIM09 International Congress on Modelling and Simulation, ed. R. S. Anderssen, R. D. Braddock and L. T. H. Newham, Modelling and Simulation Society of Australia and New Zealand and International Association for Mathematics and Computers in Simulation, July 2009, p.4353-4359, http://www.mssanz.org.au/modsim09/J4/ames.pdf.
 
-.. [Tarboton2009] Tarboton, D. G., J. S. Horsburgh, D. R. Maidment, T. Whiteaker, I. Zaslavsky, M. Piasecki, J. Goodall, D. Valentine and T. Whitenack, *Development of a Community Hydrologic Information System*, 18th World IMACS Congress and MODSIM09 International Congress on Modelling and Simulation, ed. R. S. Anderssen, R. D. Braddock and L. T. H. Newham, Modelling and Simulation Society of Australia and New Zealand and International Association for Mathematics and Computers in Simulation, July 2009, p.988-994.
+.. [Tarboton2009] Tarboton, D. G., J. S. Horsburgh, D. R. Maidment, T. Whiteaker, I. Zaslavsky, M. Piasecki, J. Goodall, D. Valentine and T. Whitenack, (2009) , *Development of a Community Hydrologic Information System*, 18th World IMACS Congress and MODSIM09 International Congress on Modelling and Simulation, ed. R. S. Anderssen, R. D. Braddock and L. T. H. Newham, Modelling and Simulation Society of Australia and New Zealand and International Association for Mathematics and Computers in Simulation, July 2009, p.988-994, http://www.mssanz.org.au/modsim09/C4/tarboton_C4.pdf.
 
-.. [Whiteaker2010] Whiteaker, T. L., D. R. Maidment, D. Pothina, J. Seppi, E. Hersh, W. Harrison, *Texas Hydrologic Information System*, Proceedings of VI AWRA Spring Specialty Conference GIS and Water Resources, March 2010.
+.. [Ames2010] Ames, D. P., J. Kadlec, and J. Horsburgh, (2010), “HydroDesktop: A Free and Open Source Platform for Hydrologic Data Discovery, Visualization, and Analysis”, Francisco Olivera (Editor), 2010 AWRA Spring Specialty Conference: Geographic Information Systems (GIS) and Water Resources VI. American Water Resoruces Association, TPS-10-1, ISBN 1-882132-82-3, http://his.cuahsi.org/documents/conference-awra2010/Ames_abs_13.pdf.
+
+.. [Whiteaker2010] Whiteaker, T., D. Maidment, D. Pothina, J. Seppi, E. Hersh, and W. Harrison, (2010), “Tesas Hydrologic Information System”, Francisco Olivera (Editor), 2010 AWRA Spring Specialty Conference: Geographic Information Systems (GIS) and Water Resources VI. American Water Resoruces Association, TPS-10-1, ISBN 1-882132-82-3, http://his.cuahsi.org/documents/conference-awra2010/DavidMaidment_9eb7f8b0_6581.pdf.
 
 .. [Pothina2011] Pothina D., A. Wilson *Building a Coastal Geodatabasefor the State of Texas*, Report submitted to the Texas General LandOffice and the Mineral Management Service, Coastal Impact AssistanceProgram  Grant Award #M09AF15208, July 2011.
 
