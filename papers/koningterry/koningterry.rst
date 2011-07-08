@@ -31,7 +31,7 @@ The final section of the pulse shape is the igniter pulse.  The ignite pulse con
 
 .. figure:: rt_materials.pdf
 
-    A Radius-Time plot of the capsule implosion with the incident laser power overlay.  Lines plot the trajectory of fluid particle boundaries.  Lines are color coded by material.  TODO add the laser power.
+    A Radius-Time plot of the capsule implosion with the incident laser power overlay.  Lines plot the trajectory of fluid particle boundaries.  Lines are color coded by material.
 
 While restricting our attention to laser shock shock ignition, there is a lot of potential variability in the composition and structure of capsules and in the pulse shape.  Capsule should have sufficient ablator to drive the implosion, but not in excess.  Capsule materials must anticipate the effect of fluid instabilities and laser absorption.  The capsule should have realistic fabrication tolerances.  Laser powers must be set to produce shocks of an appropriate strength and pulse features should be appropriately timed.  Additionally, there are several physical processes important in describing an implosion.  Due to all of these sources of complexity, ICF targets are designed using sophisticated multi-physics codes, such as Hydra.  Extensive simulation, helps identify interesting capsule/pulse shapes before resorting to expensive and difficult experiments.  The process of designing a capsule is highly iterative, time consuming, interactive process.  In this paper we describe the use of and modifications of Hydra to automate significant sections of the target design process.  Specifically, we consider the situation where a capsule design and the pulse shape power levels are specified and the timing of the pulse shape is not specified.
 
@@ -171,7 +171,7 @@ Embedding a Python interpreter within Hydra adds significant capability.  One of
 Since the tracker is updated every cycle, it is easy to trigger other events based on the behavior of the characteristic.  The first use is trigger the simulation to end just after shock breakout time.  This is very important as Hydra's only other relevant mechanism for ending the simulation is a maximum simulation time.  Using this mechanism either leads to under-estimating the shock breakout time and stopping the calculation before gathering important information or setting the maximum time to be very large and wasting many compute cycles.  Additionally, we use The location of characteristics to set the frequency Hydra writes output files.  
 Different stages of the simulation have disparate time scales and it is useful to add resolution only when it is needed.
 
-.. figure:: auto_timing.pdf
+.. figure:: obj_func.pdf
 
     Breakout time for a scan of the start time of the second shock. Notice that the objective function minimum accurately locates the inflection point in the breakout vs start time plot.  :label:`figobfunc`
 
