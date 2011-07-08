@@ -212,4 +212,4 @@ References
 
 .. [Munro2001] Munro
 
-. [Fraley1974] Fraley
+.. [Fraley1974] Fraley
