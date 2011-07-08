@@ -37,11 +37,10 @@ While effective in improving volume estimates, this technique as currently imple
 
 Standard TWDB Surveying Technique
 ---------------------------------
+
 TWDB hydrographic surveys are conducted using a boat mounted single beam multi-frequency (200, 50 and 24 kHz) sub-bottom profiling sonar echo sounder integrated with differential global positioning system (DGPS) equipment along preplanned survey lines. Survey planning, operationally defined here as the spacing and orientation of pre-planned survey lines, is likely to affect volumetric calculations if there are notable bathymetric changes between surveyed lines. In many cases, however, reservoir bathymetry will not be known before the survey, and survey lines must be planned based on an interpretation of the reservoir shape in map-view and the presumed location and orientation of the submerged stream channel. Previous TWDB surveys have been conducted using lines spaced at 250 ft intervals [TWDB09]_ [TWDB06]_, and at 500 ft intervals with selected areas of 100-ft spaced survey lines [TWDB09b]_. Analyses of data collected on Lake Kemp indicate that greater volumes are obtained from surveys conducted with higher density line spacing, yet the volume increase is a result of the surface generation methodology used within ArcGIS (Furnans, 2006). reference LBJ REPORT
 
-WHICH DO YOU LIKE BETTER, survey_data or survey_data_blue???
-
-.. figure:: survey_data.png
+.. figure:: survey_data_blue.png
    :figclass: h
 
    Location of Lake Texana hydrographic survey data collection :label:`data`
@@ -66,7 +65,7 @@ One of the primary functions of the Hydroedit is to perform is to insert extra a
     53 79049 79060 3 0
     54 78326 78315 3 0
 
-This procedure has to be followed for every pair of adjacent survey lines in the dataset. In some cases, survey lines must be broken into multiple segments in order to capture a relic river channel than may require interpolation in a direction different from the rest of the transect. This is laborious work and is the cause of the majority of the time consumed in the data post-survey processing. The dependance of the technique on 4 individual survey points on adjacent survey line segments makes the interpolation survey specific requiring that new input files be created if a lake is resurveyed. This is both time consuming and prone to parts of the lake bathymetry being interpolated differently in repeat surveys. In addition, the technique starts to break down when survey lines intersect or are at sharp angles to each other. In addition, the density of the inserted artificial interpolated survey points is not consistent across the lake with some areas of high density and other areas of no interpolations. Figure :ref:`interps` below exemplifies the differences in spacing, mulitple interpolations between adjacent survey lines, and use of polygon interpolations.
+This procedure has to be followed for every pair of adjacent survey lines in the dataset. In some cases, survey lines must be broken into multiple segments in order to capture a relic river channel than may require interpolation in a direction different from the rest of the transect. This is laborious work and is the cause of the majority of the time consumed in the data post-survey processing. The dependance of the technique on 4 individual survey points on adjacent survey line segments makes the interpolation survey specific requiring that new input files be created if a lake is resurveyed. This is both time consuming and prone to parts of the lake bathymetry being interpolated differently in repeat surveys. In addition, the technique starts to break down when survey lines intersect or are at sharp angles to each other. In addition, the density of the inserted artificial interpolated survey points is not consistent across the lake with some areas of high density and other areas of no interpolations. Figure :ref:`interps` below shows the differences in spacing, mulitple interpolations between adjacent survey lines, and use of polygon interpolations.
 
 I DON'T KNOW WHERE EXACTLY TO PUT THIS FIGURE. IT CORRESPONDS TO ALL INTERPOLATION SECTIONS.
 
@@ -76,7 +75,7 @@ I DON'T KNOW WHERE EXACTLY TO PUT THIS FIGURE. IT CORRESPONDS TO ALL INTERPOLATI
 
 SHOULD ALSO MENTION THE POLYGONS IN (B) AND (C). 
 
-Streamlining HydroEdit Using Python
+Line-automated HydroEdit Using Python
 -----------------------------------
 
 Seeking to improve upon the lengthy and tedious process required to manually create a HydroEdit input text file, Python programming was utilized to automatically generate the HydroEdit input text file using GIS line shapefiles. 
@@ -99,15 +98,18 @@ To create the interpolation points grid within the (x,y) coordinate system, Nump
 
 The process is similar when creating the interpolation grid in the (s,n) coordinate system. First, the (x,y,x) survey data is converted to (s,n) coordinates. Based on the minimum and maximum s and n values as well as the desired grid spacing, s and n interpolation value lists are created using the Numpy.arange command. Based on memory restrictions, chunks are utilized to process the interpolations. The ASIDW interpolations are completed using the Idwtree with the following settings: nnear=16, eps=0, p=1, weights=None. The (s,n,z) iterpolation points are then converted from the (s,n) to the (x,y) coordinate system and written to a .csv file. 
 
-Include image of s-n coordinate
-conversion. Image of lake with ellipse oriented along direction of interpolation
+Include image of s-n coordinate conversion here and Image of lake with ellipse oriented along direction of interpolation
 
 Applying AEIDW to a Lake
 ------------------------
 
 Modifications to the ASIDW algorithm were necessary to apply the interpolation methodology to lakes. For lake ASIDW interpolations, multiple polygons and associated centerlines are needed to simulate the network of stream reaches that existed prior to impoundment. Each of the polygon and centerline pairs are assigned matching identification and priority numbers. The matching identification numbers are to ensure the proper polygon and centerline are used for each interpolation within the algorithm. The priority number allows the user to set the order in which the sections of the lake are interpolated. The ASIDW algorithm reads in the (x,y,z) survey data as an array using Numpy and the polygons and polylines are read in as a list using Shapefile, where both the polyline and polygon lists contains an array of verticies, the identification number, the priority number. The polygon list also contains a list of the bounding box vertices while the polyline list contains a grid spacing number which the user specifies. 
 
-Once the information is arranged into the necessary data structures, the algorithm sorts the polyline and polygon lists based on the priority number. Then it loops through the sets of polylines and polygons to perform the ASIDW interpolation. For each set of polylines and polygons, the interpolation points grid is created in the (x,y) coordinate system by splitting into chunks and looping through the chunks as detailed above. However, before each chunk is transformed from (x,y) coordinates to the (s,n) coordinate system, interpolation chunk points located within polygons with a higher priority number are eliminated, then interpolation points located outside the current polygon are eliminated. The remaining chunk points are transformed to the (s,n) coordinate system; the ASIDW interpolation is calculated at those locations; the calculated z values are transfered to the cooresponding points in the (x,y) coordinates; and written to the .csv file.
+Once the information is arranged into the necessary data structures, the algorithm sorts the polyline and polygon lists based on the priority number. Then it loops through the sets of polylines and polygons to perform the ASIDW interpolation. Figure :ref:`polys` shows the polygons and associated polylines for the lower portion of Lake Texana. For each set of polylines and polygons, the interpolation points grid is created in the (x,y) coordinate system by splitting into chunks and looping through the chunks as detailed above. However, before each chunk is transformed from (x,y) coordinates to the (s,n) coordinate system, interpolation chunk points located within polygons with a higher priority number are eliminated, then interpolation points located outside the current polygon are eliminated. The remaining chunk points are transformed to the (s,n) coordinate system; the ASIDW interpolation is calculated at those locations; the calculated z values are transfered to the cooresponding points in the (x,y) coordinates; and written to the .csv file. 
+
+.. figure:: poly_lines.png
+
+   AEIDW polygons and polylines for the lower portion of Lake Texana :label:`polys`
 
 Image of polygons & lines.
 
@@ -129,9 +131,7 @@ Results
 
 XX MOVE? Lake Texana had approximately 3050 manually entered interpolations requiring approximately 90 hours to complete. Specialized interpolations are also available with the appropriate text input format, allowing creativity within the lake bathymetry interpolation.
 
-
-
-An internal study showed a 63% reduction of processing time when implementing the line automation interpolation for Lake Texana. The same internal study showed a 91% and 76% reduction of processing time when implementing the ASIDW interpolation methodology for Lake Texana when compared to HydroEdit and Python streamlined Hydroedit interpolations with a defined stream channel, respectively. A summary and comparison table is presented below in Table :ref:`voltable`. 
+An internal study showed a 63% reduction of processing time when implementing the line automation interpolation for Lake Texana. The same internal study showed a 91% and 76% reduction of processing time when implementing the ASIDW interpolation methodology for Lake Texana when compared to HydroEdit and line-automated Hydroedit interpolations with a defined stream channel, respectively. A summary and comparison table is presented below in Table :ref:`voltable`. 
 
 .. table:: Volume and time comparison of interpolation methods. :label:`voltable`
 
@@ -144,7 +144,7 @@ An internal study showed a 63% reduction of processing time when implementing th
    +-------------------------------------------------+-------------+-------------------+-------------+
    | HydroEdit                                       |   161,139   |       3.11        |     90      |
    +-------------------------------------------------+-------------+-------------------+-------------+
-   | Python streamlined HydroEdit (No channel)       |   159,904   |       2.32        |     23      |
+   | Line-automated HydroEdit (Straight channel)     |   159,843   |       2.28        |     33      |
    +-------------------------------------------------+-------------+-------------------+-------------+
    | ASIDW (USGS channel, e=1/25, bounded)           |   161,693   |       3.46        |      8      |
    +-------------------------------------------------+-------------+-------------------+-------------+
@@ -168,7 +168,7 @@ resulting TIN models for the lower portion of Lake Texana.
    
    Interpolation comparison of resulting TIN models for lower part of Lake Texana :label:`lowerfig`
 
-It is evident in Figure :ref:`lowerfig` (A) that Delaunay's triangulation of survey data and the lake boundary is insufficient at connecting the relic stream channel feature and extrapolating lake bathymetry for sections of the lake which were too shallow to survey. In Figure :ref:`lowerfig` (B), using HydroEdit interpolation imporved connectivity of the channel as well as connecting features based on USGS topographic features. The areas where coves join the main section of Lake Texana show a smooth transition due to the user's ability to manipulate the HydroEdit text file to interpolate between non-parallel survey transects. This ability is most evident in the center of Figure :ref:`lowerfig` (B) where the user connected similar depths to create a horse shoe feature adjacent to the channel. In Figure :ref:`lowerfig` (A) this feature is represented by several adjacent light green areas. Also evident in Figure :ref:`lowerfig` (B) is the mixture of straight channel sections with sharp turns mixed with sinuous channel features that resemble a more natural stream channel. HydroEdit allows the user to create stream reach polygons within which the program will interpolate from one survey transect to the connected survey transect. 
+It is evident in Figure :ref:`lowerfig` (A) that Delaunay triangulation of survey data and the lake boundary is insufficient at connecting the relic stream channel feature and extrapolating lake bathymetry for sections of the lake which were too shallow to survey. In Figure :ref:`lowerfig` (B), using HydroEdit interpolation imporved connectivity of the channel as well as connecting features based on USGS topographic features. The areas where coves join the main section of Lake Texana show a smooth transition due to the user's ability to manipulate the HydroEdit text file to interpolate between non-parallel survey transects. This ability is most evident in the center of Figure :ref:`lowerfig` (B) where the user connected similar depths to create a horse shoe feature adjacent to the channel. In Figure :ref:`lowerfig` (A) this feature is represented by several adjacent light green areas. Also evident in Figure :ref:`lowerfig` (B) is the mixture of straight channel sections with sharp turns mixed with sinuous channel features that resemble a more natural stream channel. HydroEdit allows the user to create stream reach polygons within which the program will interpolate from one survey transect to the connected survey transect. 
 
 Figure :ref:`lowerfig` (C) is similar to Figure :ref:`lowerfig` (B) with less connections of features located within the floodplain. The Python streamlined HydroEdit interpolation does not utilize the polygon interpolation feature of HydroEdit except in specific instances involving the main channel. The polygon interpolation feature of HydroEdit is difficult to reproduce and it's accuracy is questionable. The TIN model in Figure :ref:`lowerfig` (C) created using simple polylines represents a more reproducable interpolation of Lake Texana. Also sparingly used are the polygon interpolations for small reaches of USGS delineated stream channel segments. In Figure :ref:`lowerfig` (C), only 2 such polygon sections are used in the highly sinuous section, which is also shown in Figure :label:`closefig` (C) and part of the polygon section is present in the upper left quadrant of Figure :ref:`interps` (C)S. 
 
@@ -186,7 +186,6 @@ Conclusions
 -----------
 
 NEED TO MAKE VOCABULARY CONSISTENT THROUGHOUT PAPER.
-VOCABULARY QUESTION: stream channel vs. stream line?, polylines or just lines?
 
 Due to the drastic increase in post-survey processing efficiency, accuracy and repeatablility, the ASIDW interpolation method is preferred to HydroEdit with or without Python streamlining. 
 

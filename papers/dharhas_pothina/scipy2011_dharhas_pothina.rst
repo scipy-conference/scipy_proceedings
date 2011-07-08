@@ -29,7 +29,11 @@ As both a consumer of water related data delivered by other entities and as a da
 Using Standards - WaterML, WaterOneFlow and the Observations Data Model
 -----------------------------------------------------------------------
 
-CUAHSI-HIS provides web services, tools, standards and procedures that enhance access to more and better data for hydrologic analysis [Tarboton2009]_. CUAHSI-HIS has established a web service design called WaterOneFlow as a standard mechanism for the transfer of hydrologic data between hydrologic data servers (databases) and users. Web services streamline the often time-consuming tasks of extracting data from a data source, transforming it into a usable format and loading it in to an analysis environment [Maidment2009]_. All WaterOneFlow web services return data in a standard format called WaterML. The specifics of WaterML are documented as an Open Geospatial Consortium, Inc., discussion paper [Zaslavski2007]_.
+CUAHSI-HIS provides web services, tools, standards and procedures that enhance access to more and better data for hydrologic analysis [Tarboton2009]_. CUAHSI-HIS has established a web service design called WaterOneFlow as a standard mechanism for the transfer of hydrologic data between hydrologic data servers (databases) and users. Web services streamline the often time-consuming tasks of extracting data from a data source, transforming it into a usable format and loading it in to an analysis environment [Maidment2009]_. All WaterOneFlow web services return data in a standard format called WaterML (Figure :ref:`waterml`). The specifics of WaterML are documented as an Open Geospatial Consortium, Inc., discussion paper [ [Zaslavsky2007]_.
+
+.. figure:: waterml.png
+
+   An example of a WaterML format file and the data it contains. :label:`waterml`
 
 To publish data in CUAHSI-HIS, a data source provides access to their data via a WaterOneFlow web service. CUAHSI-HIS also includes mechanisms for registering WaterOneFlow web services so that users can discover and use them. Data sources often store their data locally in a CUAHSI-HIS Observations Data Model (ODM) database (:ref:`odmschema`), where ODM is a database design for storing hydrologic time series data reported at discrete point locations [Horsburgh2008]_. ODM databases, ODM data loaders, and a special version of the WaterOneFlow web service specifically designed to work with ODM as its underlying data source are all available for free on the HIS website (http://his.cuahsi.org).
 
@@ -53,46 +57,59 @@ Changing Paradigms
 Building a custom implementation of WaterOneFlow web services to attach to a datasource is a non trivial endeavour. It requires and understanding of the web services, XML and the particulars of the WaterML and WaterOneFlow. Hence, the paradigm followed by most participating data providers is to manipulate their data into an ODM database hosted on an MSSQL server. CUAHSI-HIS has a prebuilt WaterOneFlow implementation that can then be used to serve data. This approach requires that the data provider either adopt the ODM as their internal structure for storing data or they must build a translator and periodically dump data from their in-house database to the ODM database on a regular basis. The ODM schema is designed to hold data from multiple sources and hence is often much more complicated than most data providers in-house database schemas. It also excludes data providers that use non Microsoft operating systems.
 
 .. figure:: paradigm.png
+   :figclass: h
 
    Comparison of changing paradigms. :label:`paradigm`
 
-Lowering these barriers requires flexible cross-platform software that can be relatively easily adapted to each organizations needs. A strategy involvi 
+Lowering these barriers requires flexible cross-platform software that can be relatively easily adapted to each organizations needs. In addition, participation in data sharing should not require large changes to an organizations internal data systems. Based on these requirements, two python modules were developed, WOFpy for serving data as WaterOneFlow services and pyhis as the basis for building customized data access tools.
 
-we developed two 
+Using Python to serve water data - WOFpy
+----------------------------------------
 
-Using Python to serve data - WOFpy
-----------------------------------
+WaterOneFlow in Python or WOFpy implements a reduced ODM data model that maps to WaterML objects. It has an implementation of both REST and SOAP web services that are compliant to the WaterOneFlow specification. This is done through the use of the Flask and SOAPlib python packages. On the backend, Data Access Objects (DAO's) are used to connect the services to the underlying database or storage mechanism. Through the use of the sqlalchemy python package DAO's can be written for any database backend that sqlalchemy supports. This allows a large degree of flexibility in attaching the web services to disparate data sources. Figure :ref:`wofpy` shows the basic architecture of WOFpy.
 
+.. figure:: wofpy.png
+   :figclass: h
+   
+   Architecture of WOFpy. :label:`wofpy`
 
+WOFpy can be used to serve data from flat files, a variety of database backends and even as an on-the-fly translator of web services that use other standards.
 
 Using python to retrieve data - pyhis
 -------------------------------------
 
-Importance of Community
------------------------
+Existing CUAHSI-HIS clients are not cross-platform and are GUI based, pyhis is a command line python package that was developed to allow access to WaterOneFlow services with requiring knowledge of how the underlying web services architecture works. Pyhis uses suds to retrieve data and caches downloaded data to a local sqlite database using sqlachemy. Using pyhis more complicated scripts can be built to conduct spatial analysis or retrieve data automatically for use in real time forcast models.
 
+.. figure:: pyhis.png
+   :figclass: h
+
+   Example of using pyhis within ipython to retrieve data from the USGS National Water Information System.
 
 Water Data For Texas
 --------------------
 
-design
-
-.. figure:: wdft_framework.png
-
-   Water Data for Texas Framework. :label:`wdftframework`
-
-Blah de Blah.
-
 .. figure:: wdft_logo.png
+   :figclass: bht
 
    Water Data for Texas logo. :label:`wdftlogo`
 
+Although the development of WOFpy and pyhis has lowered the resource requirements of sharing data, a level of resources is still required. To overcome this, TWDB has formed partnerships with three agencies, The Texas Commission on Environmental Quality (TCEQ), the Texas Parks and Wildlife Department (TPWD) and the Conrad Blucher Institute for Surveying and Science(CBI) to serve their data as WaterOneFlow services. This is being done either through scheduled data dumps or using web scapers or on-the-fly web service translations [Pothina2011]_. In addition, TWDB is partnering with the Texas Natural Resource Information System (TNRIS) to build a web based map interface that can be used by the general public to find and download water data through a easy to use interface. A high level design schematic of the entire system is presented in Figure :ref:`wdftframework`.
 
-Software Availability
----------------------
+.. figure:: wdft_framework.png
+   :figclass: bht
+
+   Water Data for Texas Framework. :label:`wdftframework`
+
+This system has been now branded *Water Data for Texas* and will  reside at the url http://waterdatafortexas.org once completed.
 
 Conclusions
 -----------
+
+*Water Data for Texas* is a community effort to build a robust, sustainable system for the sharing of water data across Federal, State and local entities. Parts of the system are live now with the rest expected to be completed by the Fall of 2011. Currently the system will provide access to all Nation CUAHSI-HIS datasets as well as data from the TCEQ, TPWD, CBI and TWDB. It is expected that new water related data sets will become available as more organizations choose to participate.
+
+Python is an integral part of building this Texas-specific HIS that employs partnerships with Federal and Texas agencies to share water data. The system inherits the national CUAHSI-HIS technology and provides additional tools and services to provide ease of use and a level of quality control for partners and clients. In order to foster continued development and uptake of the technology in a community supported environment WOFpy and pyhis are being released under a BSD open source license. Development is currently taking place under the swtools organization on GitHub (https://github.com/organizations/swtools).
+
+
 
 .. Customised LaTeX packages
 .. -------------------------
@@ -109,9 +126,15 @@ Conclusions
 
 References
 ----------
+.. [Zaslavsky2007] Zaslavsky, I., D. Valentine and T. Whiteaker, (2007), “CUAHSI WaterML,” OGC 07-041r1, Open Geospatial Consortium Discussion Paper, http://portal.opengeospatial.org/files/?artifact_id=21743.
+
 .. [Goodall2008] Goodall, J. L., J. S. Horsburgh, T. L. Whiteaker, D. R. Maidment and I. Zaslavsky, *A first approach to web services for the National Water Information System*, Environmental Modeling and Software, 23(4): 404-411, doi:10.1016/j.envsoft.2007.01.005.
 
+.. [Horsburgh2008] Horsburgh, J. S., D. G. Tarboton, D. R. Maidment and I. Zaslavsky, (2008), “A Relational Model for Environmental and Water Resources Data,” Water Resour. Res., 44: W05406, doi:10.1029/2007WR006392.
+
 .. [Ames2009] Ames, D. P., J. Horsburgh, J. Goodall, T. Whiteaker, D. Tarboton and D. Maidment, (2009), *Introducing the Open Source CUAHSI Hydrologic Information System Desktop Application (HIS Desktop)*, 18th World IMACS Congress and MODSIM09 International Congress on Modelling and Simulation, ed. R. S. Anderssen, R. D. Braddock and L. T. H. Newham, Modelling and Simulation Society of Australia and New Zealand and International Association for Mathematics and Computers in Simulation, July 2009, p.4353-4359, http://www.mssanz.org.au/modsim09/J4/ames.pdf.
+
+.. [Maidment2009] Maidment, D. R., R. P. Hooper, D. G. Tarboton and I. Zaslavsky, (2009), "Accessing and Sharing Data Using CUAHSI Water Data Services," in Hydroinformatics in Hydrology, Hydrogeology and Water Resources, Edited by I. Cluckie, Y. Chen, V. Babovic, L. Konikow, A. Mynett, S. Demuth and D. A. Savic, Proceedings of Symposium JS4 held in Hyderabad, India, September 2009, IAHS Publ. 331, Hyderabad, India, p.213-223, http://iahs.info/redbooks/331.htm.
 
 .. [Tarboton2009] Tarboton, D. G., J. S. Horsburgh, D. R. Maidment, T. Whiteaker, I. Zaslavsky, M. Piasecki, J. Goodall, D. Valentine and T. Whitenack, (2009) , *Development of a Community Hydrologic Information System*, 18th World IMACS Congress and MODSIM09 International Congress on Modelling and Simulation, ed. R. S. Anderssen, R. D. Braddock and L. T. H. Newham, Modelling and Simulation Society of Australia and New Zealand and International Association for Mathematics and Computers in Simulation, July 2009, p.988-994, http://www.mssanz.org.au/modsim09/C4/tarboton_C4.pdf.
 
