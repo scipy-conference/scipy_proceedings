@@ -191,7 +191,7 @@ Recall from the first section the pre-pulse launches four shocks, all of which s
 
 Another important embedded diagnostic monitors the fuel areal density (:math:`\rho R`).  When tuning the main pulse, the diagnostic monitors the DT :math:`\rho R`, reports the peak value and stops the calculation when the current :math:`\rho R` has fallen to 50% of the peak value.  The maximum :math:`\rho R` sets the start time of the main pulse.  The igniter pulse start time is tuned by maximizing the fusion yield.  Figure :ref:`figrhor` shows a peak :math:`\rho R` of xx :math:`g/cm^2` with a time width of xx ps.  Peak :math:`\rho R` is typically found within three iterations.  The width in the peak corresponds to mistiming robustness.
 
-Hydra already already monitors for completion of fusion burn, so no embedded diagnostics are needed.
+Hydra already already monitors for completion of fusion burn, so no Python embedded diagnostics are needed.  
 
 
 Conclusions
