@@ -134,7 +134,7 @@ is defined, these meshes can consist of several blocks.  The blocks are then
 decomposed into sub-blocks or domains depending on how many processors will 
 be used in the simulation. Access to the multi-block parallel data structures
 is provided by structures wrapped by C++ interface objects and then wrapped in 
-SWIG using ``numpy`` as the array object in Python.
+SWIG using the numerical python, ``numpy``, module to provide the array object in Python.
 
 Users control the simulation by scheduling messages that 
 conditionally execute based on cycle number, time or specific states.
