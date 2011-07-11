@@ -103,9 +103,9 @@ Recall from the first section the pre-pulse launches four shocks, all of which s
 
     Tuning peak areal density :label:`figrhor`
 
-Another important embedded diagnostic monitors the fuel areal density (:math:`\rho R`).  When tuning the main pulse, the diagnostic monitors the DT :math:`\rho R`, reports the peak value and stops the calculation when the current :math:`\rho R` has fallen to 50% of the peak value.  The maximum :math:`\rho R` sets the start time of the main pulse.  The igniter pulse start time is tuned by maximizing the fusion yield.  Figure :ref:`figrhor` shows a peak :math:`\rho R` of xx :math:`g/cm^2` with a time width of xx ps.  Peak :math:`\rho R` is typically found within three iterations.  The width in the peak corresponds to mistiming robustness.
+Another important embedded diagnostic monitors the fuel areal density (:math:`\rho R`).  When tuning the main pulse, the diagnostic monitors the DT :math:`\rho R`, reports the peak value and stops the calculation when the current :math:`\rho R` has fallen to 50% of the peak value.  The maximum :math:`\rho R` sets the start time of the main pulse.  The igniter pulse start time is tuned by maximizing the fusion yield.  Figure :ref:`figrhor` shows a peak :math:`\rho R` of :math:`1.8 \text{g}/\text{cm}^2` with a time width of :math:`500 \text{ps}`.  Peak :math:`\rho R` is typically found within three iterations.  The width in the peak corresponds to mistiming robustness.
 
-Hydra already already monitors for completion of fusion burn, so no Python embedded diagnostics are needed.  
+Hydra is already well suited for Tuning the igniter pulse for maximum fusion yield and needs no additional diagnostics.  Hydra monitors the burn rate and has triggers to end the calculation upon completion of burn.  Hydra also reports the total fusion yield.
 
 
 Conclusions
