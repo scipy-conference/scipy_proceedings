@@ -49,7 +49,7 @@ lead to a computationally useful form.
 The approach taken in this work is to operate on a symbolic representation of the scientific program,
 and then programmatically
 transform it into the target system.  The specifications for scientific software are expressed
-largely as equations, and ideally suited for a symbolic mathematics package.
+largely as equations, and are ideally suited for a symbolic mathematics package.
 We use SymPy [SymPy]_, a symbolic mathematics package written in Python, for this part of the process.
 
 
@@ -94,7 +94,7 @@ both sides of the equation.
 Code Generation
 ^^^^^^^^^^^^^^^
 It is easy to start generating code by simply printing the statements of the
-target language.  However, this will eventually be unsatisfying and we will use 
+target language.  However, for greater generality we will use 
 a model of the target language.  Currently this work has (incomplete) language models for Python and C.
 
 At the lowest level of transforming expressions, we developed a pattern-matching syntax that
@@ -118,7 +118,13 @@ a nested pattern, which is shown here as well.
 
 .. code-block:: python
 
-    class sympy_to_py(object):
+    from sympy import Add, Mul, Pow, S
+    from sympy.prototype.codegen.lang_py import \
+        py_expr, py_num
+    from sympy.prototype.codegen.pattern_match \
+         import AutoVar, Match
+
+    class expr_to_py(object):
      def __call__(self, e):
        v = AutoVar()
        m = Match(e)
@@ -126,17 +132,17 @@ a nested pattern, which is shown here as well.
        # subtraction
        if m(Add, (Mul, S.NegativeOne, v.e1), v.e2):
          return py_expr(py_expr.PY_OP_MINUS,
-            self(v.e2), self(v.e1))
+            expr_to_py(v.e2), expr_to_py(v.e1))
 
        # addition
        if m(Add, v.e1, v.e2):
             return py_expr(py_expr.PY_OP_PLUS,
-                self(v.e1), self(v.e2))
+                expr_to_py(v.e1), expr_to_py(v.e2))
 
        # reciprocal
        if m(Pow, v.e2, S.NegativeOne):
             return py_expr(py_expr.PY_OP_DIVIDE,
-                py_num(1.0), self(v.e2))
+                py_num(1.0), expr_to_py(v.e2))
 
 
 
@@ -159,10 +165,15 @@ The derivation is the following code:
 
 .. code-block:: python
 
-    from sympy import *
+    from sympy import Function, Symbol, diff, sympify
+    from sympy.prototype import derivation, approx_lhs,\
+        mul_factor, add_term
+
     f = Function('f')
     x = Symbol('x')
     df = diff(f(x),x)
+    fd = sympify('(f_1 - f_0)/h')
+
     d = derivation(df,2*x)
 
     d.add_step(approx_lhs(fd),
@@ -210,6 +221,9 @@ then manipulate the expression so the function evaluation of each point is used 
 
 .. code-block:: python
 
+ from sympy import Symbol, Function, IndexedBase, Sum
+ from sympy.prototype import derivation, identity
+
  i = Symbol('i',integer=True)
  n = Symbol('n',integer=True)
 
@@ -218,38 +232,47 @@ then manipulate the expression so the function evaluation of each point is used 
  h = Symbol('h')
  x = IndexedBase('x')
 
+ # definitions of split_sum, adjust_limits,
+ #    peel_terms not shown
+ # split_sum - expand the sum of terms into a term of sums
+ # adjust_limits - adjust the expressions in the
+ #  summation variable.  This allows matching
+ #  the index used in the summand among different sums.
+ # peel_terms - move terms from the either end of the sum
+ #   to be an explicit term this allows the sum limits
+ #   to match and be combined.
+
  trap = derivation(I, Sum(h/2*(f(x[i])+f(x[i+1])), (i,1,n)))
  trap.add_step(identity(split_sum),'Split sum')
  trap.add_step(identity(adjust_limits),'Adjust limits')
  trap.add_step(identity(peel_terms),'Peel terms')
 
-The LaTeX representation for the steps was copied from the generated output. (There is still room for
-some improvements in the notation.)
+The LaTeX representation for the steps was copied from the generated output.
 
 Start with a sum of single interval formulas
 
 .. math::
 
-  I = \sum_{i=1}^{n} \frac{1}{2} h \left(\operatorname{f}\left(x[i]\right) + \operatorname{f}\left(x[1 + i]\right)\right)
+  I = \sum_{i=1}^{n} \frac{1}{2} h \left(\operatorname{f}\left(x[i]\right) + \operatorname{f}\left(x[i + 1]\right)\right)
 
 Split into two sums ('Split sum')
 
 .. math::
 
-  I = \sum_{i=1}^{n} \frac{1}{2} h \operatorname{f}\left(x[i]\right) + \sum_{i=1}^{n} \frac{1}{2} h \operatorname{f}\left(x[1 + i]\right) 
+  I = \sum_{i=1}^{n} \frac{1}{2} h \operatorname{f}\left(x[i]\right) + \sum_{i=1}^{n} \frac{1}{2} h \operatorname{f}\left(x[i + 1]\right)
 
 
 Adjust the limits so the functions in the sum have compatible indices ('Adjust limits')
 
 .. math::
 
-  I = \sum_{i=0}^{-1 + n} \frac{1}{2} h \operatorname{f}\left(x[i]\right) + \sum_{i=1}^{n} \frac{1}{2} h \operatorname{f}\left(x[i]\right)
+  I = \sum_{i=0}^{n -1} \frac{1}{2} h \operatorname{f}\left(x[i]\right) + \sum_{i=1}^{n} \frac{1}{2} h \operatorname{f}\left(x[i]\right)
 
-Peel of some terms to the sum limits match, and combine the sums.  ('Peel terms')
+Peel off some terms so the sum limits match, and combine the sums.  ('Peel terms')
 
 .. math::
 
-  I = 2 \sum_{i=1}^{-1 + n} \frac{1}{2} h \operatorname{f}\left(x[i]\right) + \frac{1}{2} h \operatorname{f}\left(x[0]\right) + \frac{1}{2} h \operatorname{f}\left(x[n]\right)
+  I = \frac{1}{2} h \operatorname{f}\left(x[0]\right) + \frac{1}{2} h \operatorname{f}\left(x[n]\right) + 2 \sum_{i=1}^{n -1} \frac{1}{2} h \operatorname{f}\left(x[i]\right)
 
 
 Now we have the final expression and can move to the transformation step.  The approach to multiple
@@ -259,9 +282,11 @@ dimensional integrals will be iterated one-dimensional integrals.
 
 Partition Function
 ^^^^^^^^^^^^^^^^^^
-We start with the configuration integral from statistical mechanics [Partition]_.
-The dimensionality rises with the number of particles. The complexity the convergence of grid-based methods is exponential in the number of dimensions, and they quickly become overwhelmed.
-The convergence of Monte Carlo methods is independent of dimension, and so are commonly used to compute
+We start with the partition function from statistical mechanics [Partition]_.  It incorporates the interactions
+between particles (think of particles in a box), and contains all the thermodynamic information about
+a system.
+The dimension of the integral rises with the number of particles. The complexity for the convergence of grid-based methods is exponential in the number of dimensions, and they quickly become overwhelmed.
+The convergence of Monte Carlo methods is independent of dimension, and are commonly used to compute
 these integrals.
 However, it would be still be useful to use a grid method for a small number of particles as a way to
 check the Monte Carlo algorithms.
@@ -273,21 +298,75 @@ The derivation starts as follows:
   partition_function =
      derivation(Z,Integral(exp(-V/(k*T)),R))
 
-Once again, the LaTeX has been copied from the output (although some steps have been combined to
+Where :math:`V` is the inter-particle potential, :math:`T` is the temperature, :math:`k` is Boltzmann's constant,
+and :math:`Z` is the symbol for the partition function.  All of these are defined as SymPy ``Symbol``.
+
+Once again, the LaTeX has been copied from the output (although some steps have been combined
 for space)
 
 .. math::
 
   Z = \int e^{- \frac{V}{T k}}\,dR
 
+It is conventional to work with the dimensionless inverse temperature, :math:`\beta=kT`.  Create the definition
+and insert into the integral.
 
-Insert the definition of :math:`\beta =kT` and specialize to two particles
+.. Insert the definition of :math:`\beta =kT`
+
+.. code-block:: python
+
+    beta_def = definition(Beta, 1/(k*T), T) 
+    partition.function.add_step(
+        replace_definition(beta_def),
+        'Insert definition of beta')
+
+The rendered output is 
+
+.. math::
+
+    Z = \int e^{- V \beta}\,dR
+
+To support multiple child derivations branching from a single parent, there is a method to support starting
+a new derivation from the final step of the previous one.
+Specialize to two particles - the ``specialize_integral`` transform replaces the integration variables, and
+the the ``replace`` transform replaces the specified variables (using a SymPy ``subs``).
+
+.. code-block:: python
+
+    n2 = partitition_function.new_derivation()
+    n2.add_step(specialize_integral(R,(r1,r2)),
+        'specialize to N=2')
+    n2.add_step(replace(V,V2(r1,r2)),
+        'replace potential with N=2')
+
+The rendered output is
 
 .. math::
 
   Z = \int\int e^{- \beta \operatorname{V}\left(r_{1},r_{2}\right)}\,dr_{1} dr_{2}
 
+
 Change variables and switch to a potential that depends only on the magnitude of the interparticle distance
+
+.. code-block:: python
+ 
+    r_cm = Vector('r_cm',dim=2)
+    r_12 = Vector('r_12',dim=2)
+
+    r_12_def = definition(r_12, r2-r1)
+    r_cm_def = definition(r_cm, (r1+r2)/2)
+
+    V12 = Function('V')
+
+    n2.add_step(specialize_integral(r1,(r_12,r_cm)),
+        'Switch variables')
+    n2.add_step(replace(V2(r1,r2),V12(r_12)),
+        'Specialize to a potential that depends only
+         on interparticle distance')
+    n2.add_step(replace(V12(r_12),V12(Abs(r_12))),
+        'Depend only on the magnitude of the distance')
+
+The rendered output is
 
 .. math::
 
@@ -296,12 +375,33 @@ Change variables and switch to a potential that depends only on the magnitude of
 
 Integrate out the center of mass (or fixed coordinate) (This step could be performed by SymPy, but isn't right now)
 
+.. code-block:: python
+
+    Vol = Symbol('Omega')
+    n2.add_step(do_integral(Vol, [r_12]),
+        'Integrate out r_cm (this step is still a hack)')
+
+The rendered output is
+
 .. math::
 
   Z = \Omega \int e^{- \beta \operatorname{V}\left(\lvert{r_{12}}\rvert\right)}\,dr_{12}
 
 
-Decompose into vector components and specify limits
+Decompose into vector components and specify limits.   The ``identity`` transform modifies the right-hand
+side of the equation without changing its validity.  The ``decompose`` operation takes an expression involving vectors and replaces it with the expression in terms of vector components.  The ``add_limits`` transform adds upper and
+lower limits to the previously indefinite integral.
+
+
+.. code-block:: python
+
+    L = Symbol('L')
+    n2.add_step(identity(decompose),
+        'Decompose into vector components')
+    n2.add_step(identity(add_limits(-L/2,L/2)),
+        'Add integration limits')
+
+The rendered output is
 
 .. math::
 
@@ -309,6 +409,13 @@ Decompose into vector components and specify limits
 
 
 Specialize to the Lennard-Jones potential
+
+.. code-block:: python
+
+    lj_expr = 4*(1/r**12 - 1/r**6)
+    lj_pot = derivation(V(r),lj_expr)
+    n2.add_step(replace_func(V12,lj_pot.final()),
+        'Specialize to the LJ potential')
 
 .. math::
 
@@ -322,6 +429,17 @@ And get
 
 
 Insert numerical values for the box size and temperature.
+
+.. code-block:: python
+
+    L = 2.0
+    n2.add_step(replace('L',L),
+        'Insert value for box size')
+    n2.add_step(replace('Omega',L*L),
+        'Insert value for box volume')
+    n2.add_step(replace('beta',1.0),
+        'Insert value for temperature')
+
 
 .. math::
 
@@ -339,7 +457,11 @@ As an example of the language model, the classic 'Hello World' program in python
 
 .. code-block:: python
 
- from sympy.prototype.codegen.lang_py import *
+ from sympy.prototype.codegen.lang_py import py_expr,\
+     py_expr_stmt, py_function_call, py_function_def,\
+     py_if, py_print_stmt, py_stmt_block, py_string,\
+     py_var
+
 
  body = py_stmt_block()
 
@@ -373,7 +495,10 @@ For C, the program is
 
 .. code-block:: python
 
-  from sympy.prototype.codegen.lang_c import *
+  from sympy.prototype.codegen.lang_c import c_block,\
+     c_function_call, c_function_def, c_func_type, \
+     c_int, c_num, c_return, c_stmt, c_string,\
+     pp_include
 
   body = c_block()
   body.add_statement(pp_include('stdio.h'))
@@ -414,8 +539,8 @@ https://github.com/markdewing/sympy/tree/derivation_modeling/sympy/prototype
 Discussion
 ----------
 The example derivations presented here are fairly simple and linear.
-In reality, the connections between the equations from a more general
-graph.  For instance, one is often interested in multiple properties 
+In reality, the connections are more complex.
+For instance, one is often interested in multiple properties 
 (energy, pressure, distribution functions) that may branch off the original derivation or have a
 separate thread of steps, but eventually, for efficiency they should all be evaluated
 in the same integral.
@@ -480,5 +605,4 @@ References
 
 
 .. [1] There is a division-by-zero error at :math:`r=0` that must be avoided, either by offsetting one limit
-       slightly, or better, by capping the potential for small :math:`r`.  This latter step has not been
-       added to the definition of the potential yet.  
+       slightly, or by capping the potential for small :math:`r`.  This latter step has not been added to the definition of the potential yet.  
