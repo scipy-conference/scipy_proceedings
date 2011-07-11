@@ -33,7 +33,7 @@ The final section of the pulse shape is the igniter pulse.  The ignite pulse con
 
     A Radius-Time plot of the capsule implosion with the incident laser power overlay.  Lines plot the trajectory of fluid particle boundaries.  Lines are color coded by material.
 
-While restricting our attention to laser shock shock ignition, there is a lot of potential variability in the composition and structure of capsules and in the pulse shape.  Capsule should have sufficient ablator to drive the implosion, but not in excess.  Capsule materials must anticipate the effect of fluid instabilities and laser absorption.  The capsule should have realistic fabrication tolerances.  Laser powers must be set to produce shocks of an appropriate strength and pulse features should be appropriately timed.  Additionally, there are several physical processes important in describing an implosion.  Due to all of these sources of complexity, ICF targets are designed using sophisticated multi-physics codes, such as Hydra.  Extensive simulation, helps identify interesting capsule/pulse shapes before resorting to expensive and difficult experiments.  The process of designing a capsule is highly iterative, time consuming, interactive process.  In this paper we describe the use of and modifications of Hydra to automate significant sections of the target design process.  Specifically, we consider the situation where a capsule design and the pulse shape power levels are specified and the timing of the pulse shape is not specified.
+While restricting our attention to laser shock shock ignition, there is a lot of potential variability in the composition and structure of capsules and in the pulse shape.  Capsule should have sufficient ablator to drive the implosion, but not in excess.  Capsule materials must anticipate the effect of fluid instabilities and laser absorption.  The capsule should have realistic fabrication tolerances.  Laser powers must be set to produce shocks of an appropriate strength and pulse features should be appropriately timed.  Additionally, there are several physical processes important in describing an implosion.  Due to all of these sources of complexity, ICF targets are designed using sophisticated multi-physics codes, such as Hydra [Marinak1996]_.  Extensive simulation, helps identify interesting capsule/pulse shapes before resorting to expensive and difficult experiments.  The process of designing a capsule is highly iterative, time consuming, interactive process.  In this paper we describe the use of and modifications of Hydra to automate significant sections of the target design process.  Specifically, we consider the situation where a capsule design and the pulse shape power levels are specified and the timing of the pulse shape is not specified.
 
 When tuning the pre-pulse, we regard the picket as a fixed quantity functioning as a time fiducial for synchronizing the remaining pre-pulse shocks.  The picket exists to increase implosion stability by heating the plasma corona, which increase lateral thermal conduction, which in turn smooths out non-uniformities in the deposition of laser energy.  These are not effects that can be resolved in one dimensional (1D) simulations, but the picket effects the 1D dynamics and must be included.  The pre-pulse pedestals should have their start times set such that their associated shocks reach the gas/ice interface within 50 ps as the picket shock [Munro2001]_.  Spacing the pre-pulse shocks in this way, prevents them from coalescing in the ice and unnecessarily shock heating the fuel.  Also, shocks gain strength with radial convergence, so ensuring that the pre-pulse shocks escape the fuel while it is at large radius helps minimize the shock heating.
 
@@ -197,12 +197,10 @@ This work performed under the auspices of the U.S. DOE by Lawrence Livermore Nat
 
 References
 ----------
-.. [Tirosh08] O. Tirosh, *Pickle the interactive interpreter state (Python recipe)*,
+.. [Tirosh2008] O. Tirosh, *Pickle the interactive interpreter state (Python recipe)*,
            http://code.activestate.com/recipes/572213-pickle-the-interactive-interpreter-state/ , 2008.
 
-.. [SWIG11] D. Beazly et al, http://www.swig.org/.
-
-.. [SILO11] https://wci.llnl.gov/codes/silo/.
+.. [SILO2011] https://wci.llnl.gov/codes/silo/.
 
 .. [Betti2007]
    Betti, R, et al. 2007. Shock Ignition of Thermonuclear Fuel with High 
@@ -218,3 +216,12 @@ References
    Fraley, G S, et al. 1974. Thermonuclear burn characteristics of 
    compressed deuterium-tritium microspheres. *Physics of Fluids* 17, 
    474-489. 
+
+.. [Marinak1996]
+   Marinak, M M, et al. 1996. Three-dimensional simulations of Nova high 
+   growth factor capsule implosion experiments. *Physics of Plasmas* 3, 
+   2070-2076. 
+
+.. [Beazley2003]
+   Beazley,. 2003. Automated scientific software scripting with SWIG. 
+   *Future Gener. Comput. Syst.* 19, 599--609. 
