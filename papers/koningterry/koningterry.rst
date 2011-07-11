@@ -82,8 +82,8 @@ syntax.  The Simplified Wrapper and  Interface Generator (SWIG) [SWIG11]_ interf
 and C functions.
 
 Users can send commands to the Python interpreter using two separate 
-methods: a custom interactive interpreter based on the CPython interpreter;
-; and a file-based Python code block interpreter.
+methods: a custom interactive interpreter based on the CPython interpreter
+ and a file-based Python code block interpreter.
 The Hydra code base is based on the message passing interface 
 (MPI) library. This MPI library allows for efficient communication of data 
 between processors in a simulation. The embedded interactive and file based methods
@@ -109,8 +109,8 @@ checking errors on Python code. The custom interactive interpreter first
 reads a line from stdin in parallel. Readline support is enabled which
 gives the user line editing and history support  similar to running the Python program 
 interactively. The line is then checked for any Hydra specific control
-sequences and compiled through the Py_CompileStringFlags.  If the line 
-compiled with no errors then it is executed using the  PyEval_EvalCode command. Any errors in compiling or exceptions are checked for
+sequences and compiled through the ``Py_CompileStringFlags``.  If the line 
+compiled with no errors then it is executed using the  ``PyEval_EvalCode`` command. Any errors in compiling or exceptions are checked for
 a block continuation indicator, syntax error or EOF. Exceptions will
 be displayed as in Python and available in the output of all the processors.
 
@@ -134,7 +134,7 @@ is defined, these meshes can consist of several blocks.  The blocks are then
 decomposed into sub-blocks or domains depending on how many processors will 
 be used in the simulation. Access to the multi-block parallel data structures
 is provided by structures wrapped by C++ interface objects and then wrapped in 
-SWIG using the numerical python, ``numpy``, module to provide the array object in Python.
+SWIG using the numerical Python, ``numpy``, module to provide the array object in Python.
 
 Users control the simulation by scheduling messages that 
 conditionally execute based on cycle number, time or specific states.
@@ -144,7 +144,7 @@ functionality that will run a user defined Python function  after
 every simulation cycle has completed.  An arbitrary number of callable
 Python objects can be registered in the code.
 
-Objects in the top level, __main__, state are saved to a restart file.
+Objects in the top level, ``__main__``, state are saved to a restart file.
 This restart file is a portable file object written through 
 the mesh and file I/O library silo [SILO11]_. The Python component of the restart information is a binary string
 created through the pickle interface augmented with a state saving module. The Python module used for the state 
