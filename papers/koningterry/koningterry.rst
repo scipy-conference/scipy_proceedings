@@ -90,13 +90,11 @@ Different stages of the simulation have disparate time scales and it is useful t
 
 .. figure:: obj_func.pdf
 
-    Breakout time for a scan of the start time of the second shock. Notice that the objective function minimum accurately locates the inflection point in the breakout vs start time plot.  :label:`figobfunc`
+    Breakout time for a scan of the start time of the second shock. Notice that the objective function minimum accurately locates the inflection point in the breakout vs start time plot.  :label:`figobjfunc`
 
 The most important application of the characteristic tracker is producing smooth, non-noisy measurements of the shock breakout time for the shock syncing objective function.  To construct a shock syncing objective function, first consider the case of two radially converging shocks launched at two different times from comparable radii.  The second shock is faster since the wake of the first is warmer and the sound speed is larger.  The second shock will eventually overtake the first.  If we define a "shock breakout time" as when the first shock enters the gas region, we can plot the shock breakout time as a function of the launch time of the second shock (black line in :ref:`figobjfunc`).  The appropriate objective function should maximize the breakout time (recognizing that it saturates for large launch times) while also minimizing the launch time of the second shock.  We construct an aggregate objective function as a linear combination of the two constraints (:math:`f(t) = \omega t - b(t)`).  We find an tuned value of :math:`0.01 m`.  Where :math:`m` is the slope between the end points of the search region.  The parallel direct search optimization method typically converges within four iterations.
 
-.. Comments on error
-
-.. figure:: auto_timing.pdf
+.. figure:: rt_with_lines.png
 
     Change me to be an rt plot with shock outlines..  :label:`figsync`
 
