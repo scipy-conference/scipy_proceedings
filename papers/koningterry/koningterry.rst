@@ -63,10 +63,10 @@ combines hydrodynamics with radiation diffusion, laser ray trace,
 and several more packages necessary for ICF design
 and has over 40 users at national laboratories and universities. 
 
-Hydra users set up their simulations using a built-in interpreter. The 
+Hydra users set up simulations using a built-in interpreter. The 
 existing interpreter provides access to the program parameters
 and provides functions to access and manipulate the data in parallel. Users
-can access and alter the state while the simulation is running through
+can also access and alter the state while the simulation is running through
 a message interface that runs at a specific cycle, time or if a specific
 condition is met. 
 
@@ -74,33 +74,28 @@ To improve functionality, the Python interpreter was added to Hydra.
 Python was chosen 
 due to the mature set of embedding API and extending tools
 and the large number of third party libraries.  
-
-The Hydra interpreter was augmented by embedding the
-Python interpreter instead of extending Python itself.
-The legacy Hydra interpreter was kept due to the large number of
+The Python interpreter was added by embedding 
+instead of extending Python itself.
+Ths choice was made due to the large number of
 existing input files that could not be easily ported to a new
 syntax.  The Simplified Wrapper and  Interface Generator (SWIG) [SWIG11]_ interface generator is used to wrap the Hydra C++ classes
 and C functions.
 
-
-The users can send commands to the Python interpreter using three separate 
+Users can send commands to the Python interpreter using two separate 
 methods: a custom interactive interpreter based on the CPython interpreter;
-a generic code module based interactive interpreter; and a file-based Python code block interpreter.
-
+; and a file-based Python code block interpreter.
 The Hydra code base is based on the message passing interface 
 (MPI) library. This MPI library allows for efficient communication of data 
-between processors in a simulation. The interactive and file based methods
-need to have access to the Python source on all of the processors.
+between processors in a simulation. The embedded interactive and file based methods
+must have access to the Python input source on all of the processors.
 The MPI library is used to broadcast a line read from stdin or a file on the root processor to all of the other processors in the simulation.
 The simplest method to provide an interactive parallel Python interpreter would be to override the
 ``PyOS_ReadlineFunctionPointer`` in the Python code base.
-This function cannot be overridden for non-interactive processes due to a tty check.
+This function cannot be overridden for non-interactive processes due to a check for an interactive tty.
 An alternative interactive Python interpreter was developed to handle the parallel stdin access and Python code execution.
 For parallel file access the code reads the entire file in as a string and broadcasts it to all of the other processors.
 The string is then sent through the embedded Python interpreter function ``PyRun_SimpleString``.
 This C function will take a char pointer as the input and run the string through the same parsing and interpreter calls as a file using the Python program. 
-
-
 One limitation of the ``PyRun_SimpleString`` call is the lack of exception 
 information. To alleviate this issue a second method was implemented uses ``Py_CompileString`` then ``PyEval_EvalCode``. The ``Py_CompileString``
 uses a file name or input file information to give a better location for 
@@ -124,23 +119,22 @@ through the Python interpreter. One of the mandates of the effort to embed
 the Python interpreter was to provide an enhanced version of the existing Hydra 
 interpreter.  In order to provide this functionality Python must be able to 
 access the information in the running Hydra simulation. This is accomplished
-by wrapping the Hydra data structures, functions, and parameters using *the SWIG.
-The embedded Python is extended by a module called hydra.*
-**SWIG and exposing them through the "hydra" Python extension module.**
+by wrapping the Hydra data structures, functions, and parameters using 
+SWIG and exposing them through the ``hydra`` Python extension module.
 The code created by SWIG includes a C++ 
 file compiled into Hydra as a Python extension library and a Python interface
 file that is serialized and compiled into the Hydra code.
 
-The hydra Python module allows users to access and manipulate the Hydra 
+The ``hydra`` Python module allows users to access and manipulate the Hydra 
 state. Hydra has several types of integer and floating point arrays ranging 
 from one to three dimensional.  The multi dimensional arrays
-have an additional index to indicate the block.  The block defines a 
+have an additional index to indicate the block in the block-structured mesh.  The block defines a 
 portion of the mesh on which the zonal, nodal, edge, and face based information
-is defined.  Meshes can consist of several blocks.  These blocks are then 
+is defined, these meshes can consist of several blocks.  The blocks are then 
 decomposed into sub-blocks or domains depending on how many processors will 
 be used in the simulation. Access to the multi-block parallel data structures
 is provided by structures wrapped by C++ interface objects and then wrapped in 
-SWIG using numpy as the array object in Python.
+SWIG using the numerical python, ``numpy``, module to provide the array object in Python.
 
 Users control the simulation by scheduling messages that 
 conditionally execute based on cycle number, time or specific states.
@@ -148,17 +142,17 @@ These messages can be redefined from Python to steer the simulation
 while it is running.  In addition to the messages, there is a callback
 functionality that will run a user defined Python function  after
 every simulation cycle has completed.  An arbitrary number of callable
-Python objects can registered in the code.
+Python objects can be registered in the code.
 
 Objects in the top level, __main__, state are saved to a restart file.
 This restart file is a portable file object written through 
-the silo library interface. The restart information is a binary string
-created through the pickle interface. The Python module used for the state 
-saving functionality is the save state module by Oren Tirosh located at the ActiveState website [OT08]_. This module 
-has been augmented with the addition of numpy support and None and Ellipsis singleton object support.
+the mesh and file I/O library silo [SILO11]_. The Python component of the restart information is a binary string
+created through the pickle interface augmented with a state saving module. The Python module used for the state 
+saving functionality is the ``savestate`` module by Oren Tirosh [Tirosh08]_. This module 
+has been augmented with the addition of ``numpy`` support and None and Ellipsis singleton object support.
 
 Multiple versions of the Hydra code are available to users at any given time.
-In order to add additional functionality and maintain version integrity, the hydra Python module is embedded in the Hydra code as a frozen module. The Python file resulting from the SWIG generator is marshaled using a script based on the freeze module in the Python distribution. This guarantees the modules
+In order to add additional functionality and maintain version integrity, the ``hydra`` Python module is embedded in the Hydra code as a frozen module. The Python file resulting from the SWIG generator is marshaled using a script based on the freeze module in the Python distribution. This guarantees the modules
 are always available even if the ``sys.path`` is altered.
 
 
@@ -203,10 +197,12 @@ This work performed under the auspices of the U.S. DOE by Lawrence Livermore Nat
 
 References
 ----------
-.. [OT08] O. Tirosh, *Pickle the interactive interpreter state (Python recipe)*,
+.. [Tirosh08] O. Tirosh, *Pickle the interactive interpreter state (Python recipe)*,
            http://code.activestate.com/recipes/572213-pickle-the-interactive-interpreter-state/ , 2008.
 
 .. [SWIG11] D. Beazly et al, http://www.swig.org/.
+
+.. [SILO11] https://wci.llnl.gov/codes/silo/.
 
 .. [Betti2007]
    Betti, R, et al. 2007. Shock Ignition of Thermonuclear Fuel with High 
