@@ -46,8 +46,7 @@ In addition, CUAHSI-HIS provides several free community supported clients to sea
 Barriers to Adoption
 --------------------
 
-Although the technology seemed mature and had participation from several universities and a few large federal agencies like the United States Geological Service(USGS), uptake outside of this group was low.
-Data providers are often resource poor in staff, technical knowledge, time and money. In most cases, they already have a system for collecting, storing and disseminating data that works for their particular needs. In order to convince them to become part of a system like the CUAHSI-HIS, the cost of sharing their data has to be as low as possible and they have to be educated on the benifits their organization will receive through being part of the system. A review of the experiences from building the prototype Texas HIS system showed that there are significant barriers to wide scale adoption.
+Although the technology seemed mature and had participation from several universities and a few large federal agencies like the United States Geological Service(USGS), uptake outside of this group was low. Data providers are often resource poor in staff, technical knowledge, time and money. In most cases, they already have a system for collecting, storing and disseminating data that works for their particular needs. In order to convince them to become part of a system like the CUAHSI-HIS, the cost of sharing their data has to be as low as possible and they have to be educated on the benifits their organization will receive through being part of the system. A review of the experiences from building the prototype Texas HIS system showed that there are significant barriers to wide scale adoption.
 
 While there is nothing intrinsic to the CUAHSI-HIS that requires a particular software stack, for historical reasons all currently available software for both serving data and retrieving data from the CUAHSI-HIS system was built on a Microsoft .Net software stack and in some cases also needs commercial licenses. Hence, data providers who could not or did not want to use this software stack needed to write an in-house implementation of WaterOneFlow web services from the ground up. In addition, client side tools were also not cross-platform had were built for specific use cases and could not be easily adapted for alternate needs.
 
@@ -57,7 +56,7 @@ Changing Paradigms
 Building a custom implementation of WaterOneFlow web services to attach to a datasource is a non trivial endeavour. It requires and understanding of the web services, XML and the particulars of the WaterML and WaterOneFlow. Hence, the paradigm followed by most participating data providers is to manipulate their data into an ODM database hosted on an MSSQL server. CUAHSI-HIS has a prebuilt WaterOneFlow implementation that can then be used to serve data. This approach requires that the data provider either adopt the ODM as their internal structure for storing data or they must build a translator and periodically dump data from their in-house database to the ODM database on a regular basis. The ODM schema is designed to hold data from multiple sources and hence is often much more complicated than most data providers in-house database schemas. It also excludes data providers that use non Microsoft operating systems.
 
 .. figure:: paradigm.png
-   :figclass: h
+   :figclass: bht
 
    Comparison of changing paradigms. :label:`paradigm`
 
@@ -69,7 +68,7 @@ Using Python to serve water data - WOFpy
 WaterOneFlow in Python or WOFpy implements a reduced ODM data model that maps to WaterML objects. It has an implementation of both REST and SOAP web services that are compliant to the WaterOneFlow specification. This is done through the use of the Flask and SOAPlib python packages. On the backend, Data Access Objects (DAO's) are used to connect the services to the underlying database or storage mechanism. Through the use of the sqlalchemy python package DAO's can be written for any database backend that sqlalchemy supports. This allows a large degree of flexibility in attaching the web services to disparate data sources. Figure :ref:`wofpy` shows the basic architecture of WOFpy.
 
 .. figure:: wofpy.png
-   :figclass: h
+   :figclass: bht
    
    Architecture of WOFpy. :label:`wofpy`
 
@@ -81,7 +80,7 @@ Using python to retrieve data - pyhis
 Existing CUAHSI-HIS clients are not cross-platform and are GUI based, pyhis is a command line python package that was developed to allow access to WaterOneFlow services with requiring knowledge of how the underlying web services architecture works. Pyhis uses suds to retrieve data and caches downloaded data to a local sqlite database using sqlachemy. Using pyhis more complicated scripts can be built to conduct spatial analysis or retrieve data automatically for use in real time forcast models.
 
 .. figure:: pyhis.png
-   :figclass: h
+   :figclass: bht
 
    Example of using pyhis within ipython to retrieve data from the USGS National Water Information System.
 
@@ -100,7 +99,7 @@ Although the development of WOFpy and pyhis has lowered the resource requirement
 
    Water Data for Texas Framework. :label:`wdftframework`
 
-This system has been now branded *Water Data for Texas* and will  reside at the url http://waterdatafortexas.org once completed.
+This system has been now branded *Water Data for Texas* and will reside at the url http://waterdatafortexas.org once completed.
 
 Conclusions
 -----------
@@ -108,8 +107,6 @@ Conclusions
 *Water Data for Texas* is a community effort to build a robust, sustainable system for the sharing of water data across Federal, State and local entities. Parts of the system are live now with the rest expected to be completed by the Fall of 2011. Currently the system will provide access to all Nation CUAHSI-HIS datasets as well as data from the TCEQ, TPWD, CBI and TWDB. It is expected that new water related data sets will become available as more organizations choose to participate.
 
 Python is an integral part of building this Texas-specific HIS that employs partnerships with Federal and Texas agencies to share water data. The system inherits the national CUAHSI-HIS technology and provides additional tools and services to provide ease of use and a level of quality control for partners and clients. In order to foster continued development and uptake of the technology in a community supported environment WOFpy and pyhis are being released under a BSD open source license. Development is currently taking place under the swtools organization on GitHub (https://github.com/organizations/swtools).
-
-
 
 .. Customised LaTeX packages
 .. -------------------------
