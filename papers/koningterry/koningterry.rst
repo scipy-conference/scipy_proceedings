@@ -95,7 +95,7 @@ The most important application of the characteristic tracker is producing smooth
 
 .. figure:: rt_with_lines.png
 
-    Change me to be an rt plot with shock outlines..  :label:`figsync`
+    R-T plot showing optimal timing of pre-pulse shocks.  Shock fronts are identified with black lines.  :label:`figsync`
 
 Recall from the first section the pre-pulse launches four shocks, all of which should coalesce at the gas-ice interface at the same time.  Figure :ref:`figsync` shows the convergence of the pre-pulse shocks well within the required 50 ps tolerance.  It should be noted that this shock syncing method only relies on tracking the first shock.  Characteristics will sometimes fail to locate the shock if they are located in a region with heat sources that are not sonically coupled to the plasma.  Deeply penetrating x-rays, supra-thermal electrons and heavy ion beams are examples.  However, it is expected that the ablator and the DT shell should provide sufficient insulation for the picket shock tracker to locate its shock.
 
