@@ -111,7 +111,7 @@ Hydra is already well suited for tuning the igniter pulse for maximum fusion yie
 Conclusions
 -----------
 
-Tuning an ICF pulse to a target is normally a labor intensive, high latency process.  We described the desired properties of a tuned pulse and constructed objective functions that will identify the tuned properties.  Collecting information for the objective functions requires high frequency sampling of simulation and this data must be gathered within the simulation rather than post-processing a completed simulation.  To enable introspective simulations, we add a parallel Python interpreter to Hydra.  From these pieces we constructed a program that tunes a pulse without human intervention.
+Tuning an ICF pulse to a target is normally a labor intensive, high latency process.  We described the desired properties of a tuned pulse and constructed objective functions that will identify the tuned properties.  Collecting information for the objective functions requires high frequency sampling of simulation and this data must be gathered within the simulation rather than post-processing a completed simulation.  To enable introspective simulations, we add a parallel Python interpreter to Hydra.  From these pieces, we constructed a program that tunes a pulse without human intervention.  The net result is a significant time savings over manual tuning.  Where a typical manual tuning takes several days of attention, an automated tuning takes around 4 hours to execute the same number of simulations.
 
 This work performed under the auspices of the U.S. DOE by Lawrence Livermore National Laboratory under Contract DE-AC52-07NA27344.
 
