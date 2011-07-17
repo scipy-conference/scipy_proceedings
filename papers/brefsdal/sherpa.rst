@@ -179,23 +179,25 @@ Confidence Intervals
 
    :label:`fig1`
 
-The optimizer's search for the best-fit parameters stops when the fit statistic
-or error function has reached an optimal value.  For least squares, the optimal
-value is when the sum of squared residuals is a minimum.  For the maximum
-likelihood estimator, the optimal value is found when the log-likelihood is a
-maximum.  Once the best-fit parameter values are found, users typically
-determine how well contrained the parameter values are at a certain confidence
-level by calculating confidence intervals for each parameter.  The confidence
-level is a value of the fit statistic that describes a constraint on the
-parameter value.  The confidence interval is the range that likely contains the
-parameter value at which the fit statistic reaches its confidence level while
-other parameters reach new best-fit values.  See Figure :ref:`fig2`.  For
-example, consider calculating the confidence intervals at a value of
-:math:`\sigma=1`, or 68% confidence.  If the observed data is re-sampled and the
-model is fit again with new data, there would be a 68% chance that the new
-parameter value would fall within the confidence interval.  The narrower the
-confidence interval, the more the model parameter value becomes accurately
-constrained.
+The optimizer's search for the best-fit parameters stops when the fit
+statistic or error function has reached an optimal value.  For least
+squares, the optimal value is when the sum of squared residuals is a
+minimum.  For the maximum likelihood estimator, the optimal value is
+found when the log-likelihood is a maximum.  Once the best-fit
+parameter values are found, users typically determine how well
+contrained the parameter values are at a certain confidence level by
+calculating confidence intervals for each parameter.  The confidence
+level is a value of the fit statistic that describes a constraint on
+the parameter value.  The confidence interval is the range that likely
+contains the parameter value at which the fit statistic reaches its
+confidence level while other parameters reach new best-fit values.
+See Figure :ref:`fig2`.  For example, consider calculating the
+confidence intervals at a value of :math:`\sigma=1`, or 68%
+confidence.  If the observed data is re-sampled and the model is fit
+again with new data, there would be a 68% chance that the confidence
+intervals would constraint the parameter value.  The narrower the
+confidence interval, the more the model parameter value becomes
+accurately constrained.
 
 .. figure:: figure1.png
    :scale: 40%
@@ -247,23 +249,20 @@ Method for Selecting Abscissae
 ------------------------------
 
 Sherpa's confidence method uses Müller's root finding method to
-calculate the confidence intervals given three points.  Sherpa
-calculates points along the fit statistic curve using the covariance,
-if available, and the secant method.  Müller's method is the a good
-algorithm for finding the root of a curve that is approximated by a
-parabola near the minimum.  We argue that the function curve can be
-approximated by parabola given that the function can be represented as
-a Taylor's series.  The leading term in series expansion is quadratic
-since the gradient of the statistic curve can be ignored near the
-minimum.
+calculate the confidence intervals given three points.  Sherpa begins
+at the best-fit value and calculates points along the fit statistic
+curve using the covariance, if available, and the secant method.
+Müller's method is the a good algorithm for finding the root of a
+curve that is approximated by a parabola near the minimum.  We argue
+that the function curve can be approximated by parabola given that the
+function can be represented as a Taylor's series.  The leading term in
+series expansion is quadratic since the gradient of the statistic
+curve can be ignored near the minimum.
 
-
-[add additional details about calculating the three points, secant method,
-brent's root finding method]
-
-What are the assumptions/limitations for confidence?  
-
-What are the future steps for confidence?
+The confidence method assumes that the parameter values are located in
+a minimum approximated by a parabola, that the best-fit is
+sufficiently far from any parameter boundaries, and that the bracketed
+parameter interval is larger than the requested machine tolerance.
 
 
 A Bayesian Approach to Confidence
@@ -430,7 +429,7 @@ Below, the Thurber data arrays are loaded into a Sherpa data set using
 optimization method, and defines the ``calc`` function as the Sherpa
 model using ``load_user_model``.  The function ``add_user_pars``
 accepts Python lists that specify the parameter names, initial values,
-and optionally the parameter limits.  Fit the model to the data using
+and optionally the parameter limits.  A user can fit the model to the data using
 ``fit`` and access the best-fit parameter values as a NumPy array ``popt``.
 
 |
@@ -500,7 +499,7 @@ accessible as NumPy arrays ``pmins`` and ``pmaxes``.
    # upper error bars
    pmaxes = ui.get_conf_results().parmaxes
 
-The confidence limits computed by ``conf`` are shown in :ref:`tbl2`.
+The confidence limits computed by ``conf`` are shown in Table :ref:`tbl2`.
 
 .. table:: The one standard deviation confidence limits for Thurber problem. :label:`tbl2`
 
@@ -580,14 +579,15 @@ and ``pmaxes``.
 pyBLoCXS
 --------
 
-The example below uses the Metropolis-Hastings sampler indicated using
-``set_sampler``.  The likelihood and parameter draws are computed
-using the high level function ``get_draws``.  The inputs to
+The example below selects the Metropolis-Hastings using the pyBLoCXS
+function ``set_sampler``.  The likelihood and parameter draws are
+computed using the high level function ``get_draws``.  The inputs to
 ``get_draws`` at the API level are a function to calculate the
 likelihood, the best-fit parameter values, the covariance matrix
 centered on the best-fit, the degrees of freedom, and the number of
-iterations.  At the high level, the iterations is the only input.  The
-other inputs are accessed from Sherpa by pyBLoCXS.
+iterations.  At the high level, only the number of iterations is
+needed as input.  The other inputs are accessed from Sherpa by
+pyBLoCXS.
 
 |
 
@@ -604,17 +604,22 @@ pyBLoCXS includes high level plotting functions to display the trace,
 the cumulative distribution function, and the probability distribution
 function.  The trace plot for :math:`\beta_1` includes gaps in the
 line that indicate rejected parameter proposals.  This example has an
-acceptance rate of ~24%, .
+acceptance rate of ~24%, well within the accepted range for an MCMC
+chain.
 
 .. figure:: b1_trace_s.png
    :align: center
    :alt: alternate text
    :figclass: align-center
 
-A trace plot show the draws for :math:`\beta_1` per iteration :label:`trace`
+   A trace plot show the draws for :math:`\beta_1` per iteration :label:`trace`
 
-
-
+The ``scatter`` function in matplotlib can be used to visualize the
+log-likelihood according to two selected parameters.  Using
+Metropolis-Hastings as the sampler, the density plot is shown in
+Figure :ref:`figmh1` .  For parameters :math:`\beta_3` and
+:math:`\beta_4`, a distinct correlation is shown as a long and narrow
+well.
 
 |
 
@@ -629,13 +634,12 @@ A trace plot show the draws for :math:`\beta_1` per iteration :label:`trace`
    :alt: alternate text
    :figclass: align-center
 
-   Log-likelihood density using Metropolis-Hastings in pyBLoCXS 
+   Log-likelihood density using Metropolis-Hastings in pyBLoCXS. :label:`figmh1`
 
-
-
-
-
-
+To contrast the previous sampler, selecting Metropolis-Hastings mixed
+with Metropolis and re-sampling shows a density plot with a larger
+region of parameter space and distinct tail features in Figure
+:ref:`figmh2`.
 
 |
 
@@ -653,7 +657,7 @@ A trace plot show the draws for :math:`\beta_1` per iteration :label:`trace`
    :alt: alternate text
    :figclass: align-center
 
-   Log-likelihood density using Metropolis-Hastings with Metropolis in pyBLoCXS
+   Log-likelihood density using Metropolis-Hastings with Metropolis in pyBLoCXS. :label:`figmh2`
 
 
 Priors
@@ -688,7 +692,7 @@ to the first parameter in the set with
                             [True, True, True])
 
 By accepting callable functions, pyBLoCXS can support arbitrary
-functions representing the prior.
+functions representing the parameter prior.
 
 |
 
@@ -717,34 +721,39 @@ Accounting for Calibration Uncertainties
 ----------------------------------------
    :label:`calerr`
 
-Future released versions of pyBLoCXS will include methods to incorporate the
-systematic uncertainties in modeling high energy spectra.  These uncertainties
-which have largely been ignored due to the lack of a comprehensive method can
-introduce bias in the calculation of model parameters and can underestimate
-their variance.  Specifically, pyBLoCXS will utilize the calibration
-uncertainties in the effective area curve for spectral analysis.  The effective
-area for high energy detectors records the sensitivity of the detector as a
+Future released versions of pyBLoCXS will include methods to
+incorporate the systematic uncertainties in modeling high energy
+spectra.  These uncertainties which have largely been ignored due to
+the lack of a comprehensive method, can introduce bias in the
+calculation of model parameters and can underestimate their variance.
+Specifically, pyBLoCXS will utilize the calibration uncertainties in
+the effective area curve for spectral analysis.  The effective area
+for high energy detectors records the sensitivity of the detector as a
 function of energy.
 
-Calibration samples of the effective area are described in Drake et al. (2006)
-using Principle Component Analysis (PCA) to represent the curve's variability.
-Samples of the effective area can also be found using simulations.
+Calibration samples of the effective area are described in Drake et
+al. (2006) using Principle Component Analysis (PCA) to represent the
+curve's variability.  Samples of the effective area can also be found
+using simulations.
 
-pyBLoCXS perturbs the effective area curve by sampling from the calibration
-information at each iteration in the MCMC loop accurately accounting for the
-[non-linear effects in the] systematic uncertainty.  The result of this method
-is that the best-fit model parameters values and their uncertainty are estimated
-more accurately and efficiently using Sherpa and pyBLoCXS.
+pyBLoCXS perturbs the effective area curve by sampling from the
+calibration information at each iteration in the MCMC loop accurately
+accounting for the non-linear effects in the systematic uncertainty.
+With this method, best-fit model parameters values and their
+uncertainty are estimated more accurately and efficiently using Sherpa
+and pyBLoCXS.
 
 
 Conclusion
 ----------
 
-We describe the Sherpa confidence method and the techiques included in pyBLoCXS
-to estimate parameter confidence when fit parameters present with correlations
-or the parameters are not themselves normally distributed.
-
-
+We describe the Sherpa confidence method and the techiques included in
+pyBLoCXS to estimate parameter confidence when fit parameters present
+with correlations or the parameters are not themselves normally
+distributed.  Multi-dimensional parameter space is typically non-uniform and
+Sherpa provides the user with options to explore its topology.  The
+included code example describes an application of the Sherpa
+confidence method and the pyBLoCXS sampling method.
 
 Support of the development of Sherpa is provided by National Aeronautics and
 Space Administration through the Chandra X-ray Center, which is operated by
