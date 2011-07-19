@@ -23,25 +23,25 @@ Fitting and Estimating Parameter Confidence Limits with Sherpa
 
 .. class:: abstract
 
-   Sherpa is a generalized modeling and fitting package for use in Python.
-   Primarily developed for the Chandra Interactive Analysis of Observations
-   (CIAO) package by the Chandra X-ray Center, Sherpa provides an
-   Object-Oriented Programming (OOP) API for parametric data modeling.  It is
-   designed to use the forward fitting technique to search for the set of
-   best-fit parameter values in parameterized model functions.  Sherpa can also
-   estimate the confidence limits on best-fit parameters using a new confidence
-   method or using an algorithm based on Markov chain Monte Carlo (MCMC).
-   Confidence limits on parameter values are necessary for any data analysis
-   result, but can be non-trivial to compute in a non-linear and multi-parameter
-   space.  This new, robust confidence method can estimate confidence limits of
-   Sherpa parameters using a finite convergence rate.  The Sherpa extension
-   module, pyBLoCXS, implements a sophisticated Bayesian MCMC-based algorithm
-   for simple single-component spectral models defined in Sherpa.  pyBLoCXS has
-   primarily been developed in Python using high-energy X-ray spectral data.  We
-   describe the algorithm including the features for defining priors and
-   incorporating deviations in the calibration information.  We will demonstrate
-   examples of estimating confidence limits using the confidence method and
-   processing simulations using pyBLoCXS.
+   Sherpa is a generalized modeling and fitting package.  Primarily developed
+   for the Chandra Interactive Analysis of Observations (CIAO) package by the
+   Chandra X-ray Center, Sherpa provides an Object-Oriented Programming (OOP)
+   API for parametric data modeling.  It is designed to use the forward fitting
+   technique to search for the set of best-fit parameter values in parametrized
+   model functions.  Sherpa can also estimate the confidence limits on best-fit
+   parameters using a new confidence method or using an algorithm based on
+   Markov chain Monte Carlo (MCMC).  Confidence limits on parameter values are
+   necessary for any data analysis result, but can be non-trivial to compute in
+   a non-linear and multi-parameter space.  This new, robust confidence method
+   can estimate confidence limits of Sherpa parameters using a finite
+   convergence rate.  The Sherpa extension module, pyBLoCXS, implements a
+   sophisticated Bayesian MCMC-based algorithm for simple single-component
+   spectral models defined in Sherpa.  pyBLoCXS has primarily been developed in
+   Python using high-energy X-ray spectral data.  We describe the algorithm
+   including the features for defining priors and incorporating deviations in
+   the calibration information.  We will demonstrate examples of estimating
+   confidence limits using the confidence method and processing simulations
+   using pyBLoCXS.
 
 .. class:: keywords
 
@@ -51,51 +51,47 @@ Fitting and Estimating Parameter Confidence Limits with Sherpa
 Introduction
 ------------
 
-`Sherpa`_ is an extensible, general purpose modeling and fitting
-application written in Python.  Originally developed for users of
-NASA's Chandra X-ray Observatory, Sherpa has also been used to analyze
-data from other astronomy missions, and even non-astronomical data.
-Sherpa provides Python data classes to encapsulate various types of
-astronomical data sets (spectra, images, time series, light curves).
-But to provide the greatest flexibility, Sherpa is also designed to
-read in any data set that can be represented as a collection of
-arrays.  From its first version, Sherpa has been designed to help
-scientists analyze data from many different sources, and to be
+`Sherpa`_ is an extensible, general purpose modeling and fitting application
+written in Python and Python C/C++/FORTRAN extensions.  Originally developed for
+users of NASA's Chandra X-ray Observatory, Sherpa has also been used to analyze
+data from other astronomy missions, and even non-astronomical data.  Sherpa
+provides Python data classes to encapsulate various types of astronomical data
+sets (spectra, images, time series, light curves).  But to provide the greatest
+flexibility, Sherpa is also designed to read in any data set that can be
+represented as a collection of arrays.  From its first version, Sherpa has been
+designed to help scientists analyze data from many different sources, and to be
 extensible by scientific users, to help solve new problems.
 
-Sherpa's main task is to help users fit parameterized models to their
-data.  Sherpa provides a library of physical and mathematical models,
-also written in Python.  These models can be combined in arbitrarily
-complex expressions, that are interpreted by the Python parser; such
-expressions can include Sherpa models, arithmetic operators, models
-written by users in Python, and even other Python functions.
+Sherpa's main task is to help users fit parametrized models to their data.
+Sherpa provides a library of physical and mathematical models, also written in
+Python.  These models can be combined in arbitrarily complex expressions, that
+are interpreted by the Python parser; such expressions can include Sherpa
+models, arithmetic operators, models written by users in Python, and even other
+Python functions.
 
-To compare models and data, Sherpa includes statistics such as
-least-squares, chi-squared based on Gaussian statistics, and maximum
-likelihood based on Poisson statistics.  As model parameters are
-varied, Sherpa can then measure whether the new model parameter values
-improve or worsen the fit to the data, using one of these statistics.
-Sherpa also provides functions to search parameter space for the
-set of best-fit parameter values: a non-linear least squares using
-the Levenberg-Marquardt algorithm; and the Nelder-Mead simplex
-algorithm.
+To compare models and data, Sherpa includes statistics such as least-squares,
+chi-squared based on Gaussian statistics, and maximum likelihood based on
+Poisson statistics.  As model parameters are varied, Sherpa can then measure
+whether the new model parameter values improve or worsen the fit to the data,
+using one of these statistics.  Sherpa also provides functions to search
+parameter space for the set of best-fit parameter values: a non-linear least
+squares using the Levenberg-Marquardt algorithm [lm]_; and the Nelder-Mead simplex
+algorithm [nm]_.
 
-However, the analysis is not complete when a user has found a set of
-best-fit model parameter values consistent with the data.  Because of
-measurement errors and statistical noise, there is actually some
-probability distribution in parameter space of parameter values that
-are consistent with the data.  If the user can examine this
-probability distribution in some way, the user can determine how well
-the best-fit parameter values are constrained.  Such constraints are
-often summarized as confidence limits, stating that parameters are
-known to a certain level of confidence.  For example, after an
-examination of parameter space, the user might determine that, for a
-model having temperature as a parameter, a best-fit temperature of 1.2
-keV has 90% confidence limits of +0.2 keV, -0.4 keV.  Meaning that if
-the observation and resulting fit were replicated 1000 times, then in
-900 trials the best-fit temperature would be between 1.4 and 0.8 keV.
-The narrower the confidence limits, the better the constraints on the
-best-fit parameter value.
+However, the analysis is not complete when a user has found a set of best-fit
+model parameter values consistent with the data.  Because of measurement errors
+and statistical noise, there is some probability distribution in parameter space
+of parameter values that are consistent with the data.  If the user can examine
+this probability distribution in some way, the user can determine how well the
+best-fit parameter values are constrained.  Such constraints are often
+summarized as confidence limits, stating that parameters are known to a certain
+level of confidence [avn1976]_.  For example, after an examination of parameter
+space, the user might determine that, for a model having temperature as a
+parameter, a best-fit temperature of 1.2 keV has 90% confidence limits of +0.2
+keV, -0.4 keV.  Meaning that if the observation and resulting fit were
+replicated 1000 times, then in 900 trials the best-fit temperature would be
+between 1.4 and 0.8 keV.  The narrower the confidence limits, the better the
+constraints on the best-fit parameter value.
 
 In this paper, we describe several methods we make available to Sherpa
 users and Python programmers to put confidence limits on fitted
@@ -132,7 +128,7 @@ data's y-values.
 Sherpa data classes also include error bars on the dependent variable;
 these error bars are assumed to be symmetric.  (Error bars on the
 independent x-array(s) are not yet supported, and so are not assumed
-to be signifcant.)  The data classes can contain both statistical and
+to be significant.)  The data classes can contain both statistical and
 systematic errors; if both are present, they are added in quadrature
 to provide the error bars on the data.  Systematic errors come from
 measurements; if not provided along with the data, Sherpa assumes the
@@ -146,7 +142,7 @@ assumed; or, the user can do a simple least-squares fit to the data.
 Fitting Models to Data
 ----------------------
 
-Sherpa models are assumed to be parameterized functions f(x, p), where
+Sherpa models are assumed to be parametrized functions f(x, p), where
 x is the collection of x-array(s) from the data, and p is the array of
 model parameters.  When the model is calculated, the return value is
 an array of predicted data values that can be directly compared to the
@@ -164,20 +160,18 @@ In some cases, the fit parameters are not necessarily independent and
 identically distributed (i.i.d.) and correlations between parameters
 are present.  This can lead to non-linear effects and complex
 parameter spaces, see Figure :ref:`fig1`.  We present a method designed to
-calculate confidence intervals in non-linear regression and a bayesian
+calculate confidence intervals in non-linear regression and a Bayesian
 method to sample the posterior probability distribution.
-
-
-
-Confidence Intervals
---------------------
-
 
 .. figure:: figure3.png
    :scale: 40%
    :figclass: bht
 
-   :label:`fig1`
+   A local minima :label:`fig1`
+
+
+Confidence Intervals
+--------------------
 
 The optimizer's search for the best-fit parameters stops when the fit
 statistic or error function has reached an optimal value.  For least
@@ -185,7 +179,7 @@ squares, the optimal value is when the sum of squared residuals is a
 minimum.  For the maximum likelihood estimator, the optimal value is
 found when the log-likelihood is a maximum.  Once the best-fit
 parameter values are found, users typically determine how well
-contrained the parameter values are at a certain confidence level by
+constrained the parameter values are at a certain confidence level by
 calculating confidence intervals for each parameter.  The confidence
 level is a value of the fit statistic that describes a constraint on
 the parameter value.  The confidence interval is the range that likely
@@ -203,24 +197,25 @@ accurately constrained.
    :scale: 40%
    :figclass: bht
 
-   An example of a local minima in a complex parameter space :label:`fig2`
+   A closeup view of a local minima :label:`fig2`
 
 In the neighborhood of the fit statistic minimum, the multi-dimensional
 parameter space can take the shape of an asymmetric paraboloid.  The confidence
 intervals are calculated for each selected parameter independently by viewing
 the parameter space along the current parameter's dimension.  This view can be
-represented as a 1-D asymmetric parabola.  Suppose that :math:`x_{0}` represents
-a parameter's best-fit value.  Its associated confidence intervals are
-represented as :math:`x_{0} \pm ^{\delta_{1}} _{\delta_{2}}` where
-:math:`\delta_{1} \neq \delta_{2}` in non-linear parameter spaces, so each
-confidence limit must be calculated independently.  In turn, the statistic value
-should equal an amount of :math:`\sigma^{2}` (where :math:`\sigma` represents
-the degree of confidence) at each confidence interval :math:`x_{0} + \delta_{1}`
-and :math:`x_{0} - \delta_{2}` as other parameters vary to new best-fit values.
-The degree to which the confidence limit is bounded can be characterized by the
-shape of the well in a multi-dimensional parameter space.  A well that is a
-deep-and-narrow corresponds to a tight confidence interval while a well that is
-shallow-and-broad represents a wider confidence interval.
+represented as a 1-D asymmetric parabola, see Figure :ref:`fig2`.  Suppose that
+:math:`x_{0}` represents a parameter's best-fit value.  Its associated
+confidence intervals are represented as :math:`x_{0} \pm ^{\delta_{1}}
+_{\delta_{2}}` where :math:`\delta_{1} \neq \delta_{2}` in non-linear parameter
+spaces, so each confidence limit must be calculated independently.  In turn, the
+statistic value should equal an amount of :math:`\sigma^{2}` (where
+:math:`\sigma` represents the degree of confidence) at each confidence interval
+:math:`x_{0} + \delta_{1}` and :math:`x_{0} - \delta_{2}` as other parameters
+vary to new best-fit values.  The degree to which the confidence limit is
+bounded can be characterized by the shape of the well in a multi-dimensional
+parameter space.  A well that is a deep-and-narrow corresponds to a tight
+confidence interval while a well that is shallow-and-broad represents a wider
+confidence interval.
 
 
 .. figure:: figure4.png
@@ -242,7 +237,7 @@ dimension by an amount equal to :math:`\sigma^2`, the confidence
 intervals now become x-axis intercepts in the parameter dimension.
 This is an important step in the algorithm because a change in sign
 will bracket the root.  The green and blue points in Figure
-:ref:`fig3` effectly bracket the requested confidence limit.
+:ref:`fig3` effectively bracket the requested confidence limit.
 
 
 Method for Selecting Abscissae
@@ -372,17 +367,17 @@ the density.
 
    \vec{p} = \{ \beta_1, \beta_2, \beta_3, \beta_4, \beta_5, \beta_6, \beta_7 \}
 
-We define a compact high-level UI to access the Sherpa confidence
-method.  The illustrative example below minimizes the Thurber function
-using least-squares and Sherpa's implementation of Levenberg-Marquardt
-(LMDIF).  The results can be found in
-Table :ref:`tbl1`.
+We define a compact high-level UI to access the Sherpa confidence method.  The
+illustrative example below minimizes the Thurber function using least-squares
+and Sherpa's implementation of Levenberg-Marquardt (LMDIF).  The results can be
+found in Table :ref:`tbl1`.  The fit results agree to 99.99% for all parameters.
 
 
 .. figure:: thurber_fit.png
    :scale:  40%
    :figclass: bht
 
+   Thurber fit :label:`fit1`
 
 
 Loading Data
@@ -499,7 +494,7 @@ accessible as NumPy arrays ``pmins`` and ``pmaxes``.
    # upper error bars
    pmaxes = ui.get_conf_results().parmaxes
 
-The confidence limits computed by ``conf`` are shown in Table :ref:`tbl2`.
+Confidence limits on the example Thurber problem are listed in Table :ref:`tbl2`.
 
 .. table:: The one standard deviation confidence limits for Thurber problem. :label:`tbl2`
 
@@ -555,7 +550,7 @@ and ``pmaxes``.
    cov = ui.get_covar_results().extra_output
 
 
-.. table:: The one standard deviation covariance results for Thurber problem.
+.. table:: The one standard deviation covariance results for Thurber problem. :label:`tbl3`
 
    +-----------------+------------+-------------+-------------+
    | Parameter       | Best Fit   | Lower Bound | Upper Bound |
@@ -575,19 +570,22 @@ and ``pmaxes``.
    | :math:`\beta_7` | 0.0403176  | -0.0107599  | 0.0107599   |
    +-----------------+------------+-------------+-------------+
 
+It is important to note that the parameter uncertainties computed by covariance
+do not consider correlations between parameters and can underestimate or
+overestimate the true uncertainty.  Compare the differences in uncertainties
+computed by ``conf`` and ``covar`` in Tables :ref:`tbl2` and :ref:`tbl3`.
+
 
 pyBLoCXS
 --------
 
-The example below selects the Metropolis-Hastings using the pyBLoCXS
-function ``set_sampler``.  The likelihood and parameter draws are
-computed using the high level function ``get_draws``.  The inputs to
-``get_draws`` at the API level are a function to calculate the
-likelihood, the best-fit parameter values, the covariance matrix
-centered on the best-fit, the degrees of freedom, and the number of
-iterations.  At the high level, only the number of iterations is
-needed as input.  The other inputs are accessed from Sherpa by
-pyBLoCXS.
+The example below selects the Metropolis-Hastings using the pyBLoCXS [sem2011]_
+function ``set_sampler``.  The likelihood and parameter draws are computed using
+the high level function ``get_draws``.  The inputs to ``get_draws`` at the API
+level are a function to calculate the likelihood, the best-fit parameter values,
+the covariance matrix centered on the best-fit, the degrees of freedom, and the
+number of iterations.  At the high level, only the number of iterations is
+needed as input.  The other inputs are accessed from Sherpa by pyBLoCXS.
 
 |
 
@@ -743,11 +741,12 @@ With this method, best-fit model parameters values and their
 uncertainty are estimated more accurately and efficiently using Sherpa
 and pyBLoCXS.
 
+|
 
 Conclusion
 ----------
 
-We describe the Sherpa confidence method and the techiques included in
+We describe the Sherpa confidence method and the techniques included in
 pyBLoCXS to estimate parameter confidence when fit parameters present
 with correlations or the parameters are not themselves normally
 distributed.  Multi-dimensional parameter space is typically non-uniform and
@@ -763,14 +762,23 @@ Aeronautics and Space Administration contract NAS8-03060.
 
 References
 ----------
-.. [van2001] D. van Dyk et al. *Analysis of Energy Spectra with Low Photon Counts via Bayesian Posterior Simulation*, The Astrophysical Journal, 548:224, February 2001.
 
-.. [pro2002] R. Protassov et al. *Statistics, Handle with Care: Detecting Multiple Model Components with the Likelihood Ratio Test*, The Astrophysical Journal, 571:545-559, May 2002.
+.. [avn1976] Y. Avni. *Energy spectra of X-ray clusters of galaxies*, The Astrophysical Journal, 210:642-646, Dec. 1976. 
 
-.. [lee2011] H. Lee et al. *Accounting for Calibration Uncertainties in X-ray Analysis: Effective Area in Spectral Fitting*, The Astrophysical Journal 731:126, 2011.
+.. [fre2001] P. E. Freeman, S. Doe, A. Siemiginowska. *Sherpa: a Mission-Independent Data Analysis Application* SPIE Proceedings, Vol. 4477, p.76, 2001.
 
 .. [gel2004] A. Gelman et al. *Bayesian Data Analysis* Chapman & Hall Texts in Statistical Science Series, 2nd Ed. 2004.
 
+.. [lee2011] H. Lee et al. *Accounting for Calibration Uncertainties in X-ray Analysis: Effective Area in Spectral Fitting*, The Astrophysical Journal 731:126, 2011.
+
+.. [nm] Computer Journal, J.A. Nelder and R. Mead, 1965, vol 7, pp. 308-313.
+
+.. [pro2002] R. Protassov et al. *Statistics, Handle with Care: Detecting Multiple Model Components with the Likelihood Ratio Test*, The Astrophysical Journal, 571:545-559, May 2002.
+
 .. [ref2009] B. Refsdal et al. *Sherpa: 1D/2D modeling in fitting in Python* Proceedings of the 8th Python in Science conference (SciPy 2009), G Varoquaux, S van der Walt, J Millman (Eds.), pp. 51-57.
 
-.. [fre2001] P. E. Freeman, S. Doe, A. Siemiginowska. *Sherpa: a Mission-Independent Data Analysis Application* SPIE Proceedings, Vol. 4477, p.76, 2001.
+.. [sem2011] Siemiginowska et al. *pyblocxs: Bayesian Low-Counts X-ray Spectral Analysis in Sherpa*, Astronomical Society of the Pacific Conference Series, 442:439. 2011.
+
+.. [van2001] D. van Dyk et al. *Analysis of Energy Spectra with Low Photon Counts via Bayesian Posterior Simulation*, The Astrophysical Journal, 548:224, February 2001.
+
+.. [lm] Lecture Notes in Mathematics 630: Numerical Analysis, G.A. Watson (Ed.), Springer-Verlag: Berlin, 1978, pp. 105-116
