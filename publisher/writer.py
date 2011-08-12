@@ -80,8 +80,9 @@ class Translator(LaTeXTranslator):
 
         author_notes = ['''
 The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
-        ''' % (self.author_institutions[0], 'mailto:' + self.author_emails[0],
-       self.author_emails[0])]
+        ''' % (self.author_institutions[0],
+               'mailto:' + self.author_emails[0],
+               self.author_emails[0])]
 
         author_notes = ''.join('\\thanks{%s}' % n for n in author_notes)
 
@@ -97,6 +98,10 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         title_template += marks
 
         self.body_pre_docinfo = [title_template]
+
+        # Save paper stats
+        self.document.stats = {'title': title,
+                               'authors': authors}
 
     def end_open_abstract(self, node):
         if 'abstract' not in node['classes'] and self.abstract_in_progress:
