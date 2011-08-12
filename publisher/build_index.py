@@ -12,6 +12,7 @@ sys.path.insert(0, 'publisher')
 import options
 
 output_dir = 'output'
+cover_dir = 'cover_material'
 dirs = [d for d in glob.glob('%s/*' % output_dir) if os.path.isdir(d)]
 
 pages = []
@@ -45,15 +46,9 @@ for d in sorted(dirs):
 print
 print "Writing table of contents..."
 
-toc = open(os.path.join(output_dir, 'toc.tex'), 'w')
-toc.write(r'''
-\documentclass[letterpaper,compsoc,onecolumn,oneside,english]{IEEEtran}
-
-\begin{document}
-
-\Large{Table of Contents}
-\vspace{1cm}
-''')
+with open(os.path.join(cover_dir, 'toc_template.tex'), 'r') as f:
+    toc = f.read()
+toc = toc.replace(r'\end{document}', '')
 
 entry_template = r'''
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -61,14 +56,17 @@ entry_template = r'''
 \hfill
 \textbf{%(page)s}
 \\
-\hspace{5mm}
+\hspace{1cm}
 %(authors)s
 \\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 '''
 for entry in toc_entries:
-    toc.write(entry_template % entry)
+    toc += (entry_template % entry)
 
-toc.write(r'\end{document}')
-toc.close()
+toc += r'\end{document}'
+
+with open(os.path.join(output_dir, 'toc.tex'), 'w') as f:
+    f.write(toc)
+
