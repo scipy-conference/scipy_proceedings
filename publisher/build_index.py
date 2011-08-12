@@ -4,6 +4,9 @@ import glob
 import os
 import sys
 
+if not os.path.exists('publisher'):
+    raise RuntimeError('Please start this script from the proceedings root.')
+
 sys.path.insert(0, 'publisher')
 
 import options
