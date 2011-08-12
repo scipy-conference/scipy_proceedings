@@ -26,5 +26,17 @@ def cfg2dict(filename=default_filename):
 
     return options
 
+def dict2cfg(d, filename):
+    """Write dictionary out to config file.
+
+    """
+    f = open(filename, 'w')
+    
+    f.write('[default]\n')
+    for key, value in d.items():
+        f.write('%s = %s\n' % (key, value))
+
+    f.close()
+
 options = cfg2dict()
 
