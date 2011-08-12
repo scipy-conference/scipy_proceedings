@@ -7,5 +7,5 @@ if [[ ! -d output ]]; then
 fi
 
 PDFS=`find ./output -name "paper.pdf" | sort`
-pdftk $PDFS cat output output/proceedings.pdf
+pdftk output/toc.pdf $PDFS cat output output/proceedings.pdf
 
