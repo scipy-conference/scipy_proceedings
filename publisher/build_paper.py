@@ -111,7 +111,7 @@ content = r'''
 
 .. raw::  latex
 
-  \input{page_numbers.tex}
+  \InputIfFileExists{page_numbers.tex}{}{}
   \newcommand*{\docutilsroleref}{\ref}
   \newcommand*{\docutilsrolelabel}{\label}
 
