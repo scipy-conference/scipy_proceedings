@@ -470,12 +470,13 @@ fairly significant undertaking.
 Acknowledgements 
 ---------------- 
 
-We are grateful to Quanli Wang, Jacob Frelinger, and Cliburn Chan of
-Duke University for their comments and useful discussions.  Research
-reported here was partially supported by the National Institutes of
-Health under grant RC1-AI086032. Any opinions, findings and
-conclusions or recommendations expressed in this work are those of the
-authors and do not necessarily reflect the views of the NIH.
+We are grateful to Quanli Wang, Jacob Frelinger, Adam Richards, and
+Cliburn Chan of Duke University for their comments and useful
+discussions.  Research reported here was partially supported by the
+National Institutes of Health under grant RC1-AI086032. Any opinions,
+findings and conclusions or recommendations expressed in this work are
+those of the authors and do not necessarily reflect the views of the
+NIH.
 
 References
 ----------
