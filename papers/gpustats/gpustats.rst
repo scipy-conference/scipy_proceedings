@@ -167,7 +167,7 @@ address, i.e. in CUDA parlance
 
 * *Coalescing* transactions between global and shared memory; this is,
   coordinating groups of typically 16 to 32 threads to copy a contiguous chunk
-  of 64 or 128 bytes in a single transation
+  of 64 or 128 bytes in a single transaction
 * Avoiding shared memory *bank conflicts*, i.e. threads competing for read/write
   access to a shared memory address
 
@@ -466,6 +466,16 @@ programmers, would be the generation of wrapper interfaces to the generated CUDA
 or OpenCL source module for other programming languages, such as R. However,
 without the easy-to-use PyCUDA and PyOpenCL bindings this would likely be a
 fairly significant undertaking.
+
+Acknowledgements 
+---------------- 
+
+We are grateful to Quanli Wang, Jacob Frelinger, and Cliburn Chan of
+Duke University for their comments and useful discussions.  Research
+reported here was partially supported by the National Institutes of
+Health under grant RC1-AI086032. Any opinions, findings and
+conclusions or recommendations expressed in this work are those of the
+authors and do not necessarily reflect the views of the NIH.
 
 References
 ----------
