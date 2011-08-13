@@ -6,6 +6,7 @@ __all__ = ['options']
 
 from ConfigParser import ConfigParser
 import os.path
+import codecs
 
 default_filename = os.path.join(os.path.dirname(__file__),
                                 '../scipy_proc.cfg')
@@ -20,9 +21,10 @@ def cfg2dict(filename=default_filename):
         print "*** Warning: Could not load config file '%s'." % filename
     else:
         cp = ConfigParser()
-        cp.read(filename)
-        for key in cp.options('default'):
-            options[key] = cp.get('default', key)
+        with codecs.open(filename, encoding='utf-8', mode='r') as fh:
+            cp.readfp(fh)
+            for key in cp.options('default'):
+                options[key] = cp.get('default', key)
 
     return options
 
@@ -30,13 +32,11 @@ def dict2cfg(d, filename):
     """Write dictionary out to config file.
 
     """
-    f = open(filename, 'w')
-    
-    f.write('[default]\n')
-    for key, value in d.items():
-        f.write('%s = %s\n' % (key, value))
 
-    f.close()
+    with codecs.open(filename, encoding='utf-8', mode='w') as f:
+        f.write('[default]\n')
+        for key, value in d.items():
+            f.write('%s = %s\n' % (key, value))
 
 options = cfg2dict()
 

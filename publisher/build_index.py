@@ -3,6 +3,7 @@
 import glob
 import os
 import sys
+import codecs
 
 if not os.path.exists('publisher'):
     raise RuntimeError('Please start this script from the proceedings root.')
@@ -67,6 +68,7 @@ for entry in toc_entries:
 
 toc += r'\end{document}'
 
-with open(os.path.join(output_dir, 'toc.tex'), 'w') as f:
+toc_filename = os.path.join(output_dir, 'toc.tex')
+with codecs.open(toc_filename, encoding='utf-8', mode='w') as f:
     f.write(toc)
 
