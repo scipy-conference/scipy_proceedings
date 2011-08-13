@@ -44,14 +44,21 @@ for d in sorted(dirs):
     toc_entries.append(stats)
 
 
-print
-print "Writing table of contents..."
+def fill_toc_template(template_file, output_file, template):
+    with open(template_file, 'r') as f:
+        toc = f.read()
 
-with open(os.path.join(cover_dir, 'toc_template.tex'), 'r') as f:
-    toc = f.read()
-toc = toc.replace(r'\end{document}', '')
+    data = ''
+    for entry in toc_entries:
+        data += (template % entry)
 
-entry_template = r'''
+    toc = toc.replace('%(content)s', data)
+
+    with codecs.open(output_file, encoding='utf-8', mode='w') as f:
+        f.write(toc)
+
+
+toc_template_latex = r'''
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \large{%(title)s}
 \hfill
@@ -63,12 +70,10 @@ entry_template = r'''
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 '''
-for entry in toc_entries:
-    toc += (entry_template % entry)
 
-toc += r'\end{document}'
-
-toc_filename = os.path.join(output_dir, 'toc.tex')
-with codecs.open(toc_filename, encoding='utf-8', mode='w') as f:
-    f.write(toc)
-
+print "Constructing LaTeX table of contents..."
+fill_toc_template(os.path.join(cover_dir, 'toc_template.tex'),
+                  os.path.join(output_dir, 'toc.tex'),
+                  toc_template_latex)
+                  
+#print "Constructing HTML table of contents..."
