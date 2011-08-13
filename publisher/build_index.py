@@ -71,9 +71,23 @@ toc_template_latex = r'''
 
 '''
 
+toc_template_html = r'''
+<!---------------------------------------------------------->
+<p>
+<span class="title">%(title)s</span>
+<span class="pagenr">%(page)s</span><br/>
+<span class="authors">%(authors)s</span>
+</p>
+<!---------------------------------------------------------->
+
+'''
+
 print "Constructing LaTeX table of contents..."
 fill_toc_template(os.path.join(cover_dir, 'toc_template.tex'),
                   os.path.join(output_dir, 'toc.tex'),
                   toc_template_latex)
-                  
-#print "Constructing HTML table of contents..."
+
+print "Constructing HTML table of contents..."
+fill_toc_template(os.path.join(cover_dir, 'toc_template.html'),
+                  os.path.join(output_dir, 'toc.html'),
+                  toc_template_html)
