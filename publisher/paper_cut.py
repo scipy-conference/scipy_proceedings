@@ -9,7 +9,7 @@ import os
 import options
 
 regexp = re.compile('Output written on paper.pdf \((\d+) pages')
-cfgname = 'paper_stats.cfg'
+cfgname = 'paper_stats.json'
 
 d = options.cfg2dict(cfgname)
 

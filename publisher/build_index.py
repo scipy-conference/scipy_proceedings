@@ -22,7 +22,7 @@ cum_pages = [1]
 toc_entries = []
 
 for d in sorted(dirs):
-    stats = options.cfg2dict(os.path.join(d, 'paper_stats.cfg'))
+    stats = options.cfg2dict(os.path.join(d, 'paper_stats.json'))
 
     # Write page number snippet to be included in the LaTeX output
     if 'pages' in stats:

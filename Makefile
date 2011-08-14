@@ -9,7 +9,7 @@ proceedings:
 	./make_all.sh
 	# Build front material
 	(cd output && pdflatex toc.tex)
-	cp cover_material/organization.tex output
+	publisher/build_template.py cover_material/organization.tex.tmpl cover_material/committees.json > output/organization.tex
 	(cd output && pdflatex organization.tex)
 	#cp cover_material/*.pdf output
 	# Concatenate front material and paper PDFs

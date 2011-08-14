@@ -1,42 +1,29 @@
 """
-Expose options from scipy_conf.cfg as a dictionary.
+Configuration utilities.
 """
 
 __all__ = ['options']
 
-from ConfigParser import ConfigParser
 import os.path
-import codecs
+import json
 
 default_filename = os.path.join(os.path.dirname(__file__),
-                                '../scipy_proc.cfg')
+                                '../scipy_proc.json')
 
 def cfg2dict(filename=default_filename):
     """Return the content of a .ini file as a dictionary.
 
     """
-    options = {}
+    if not os.path.exists(filename):
+        print '*** Warning: %s does not exist.' % filename
+        return {}
 
-    if not os.path.isfile(filename):
-        print "*** Warning: Could not load config file '%s'." % filename
-    else:
-        cp = ConfigParser()
-        with codecs.open(filename, encoding='utf-8', mode='r') as fh:
-            cp.readfp(fh)
-            for key in cp.options('default'):
-                options[key] = cp.get('default', key)
-
-    return options
+    return json.load(open(filename, 'r'))
 
 def dict2cfg(d, filename):
     """Write dictionary out to config file.
 
     """
-
-    with codecs.open(filename, encoding='utf-8', mode='w') as f:
-        f.write('[default]\n')
-        for key, value in d.items():
-            f.write('%s = %s\n' % (key, value))
+    json.dump(d, open(filename, 'w'))
 
 options = cfg2dict()
-
