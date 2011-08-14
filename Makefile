@@ -8,11 +8,11 @@ proceedings:
 	# Build again with new page numbers
 	./make_all.sh
 	# Build front material
-	(cd output && pdflatex toc.tex)
 	publisher/build_template.py cover_material/organization.tex.tmpl cover_material/committees.json > output/organization.tex
+	publisher/build_template.py cover_material/toc.tex.tmpl output/toc.json > output/toc.tex
+	publisher/build_template.py cover_material/toc.html.tmpl output/toc.json > output/toc.html
+	(cd output && pdflatex toc.tex)
 	(cd output && pdflatex organization.tex)
-	#cp cover_material/*.pdf output
 	# Concatenate front material and paper PDFs
 	./publisher/concat_proceedings_pdf.sh
-
 

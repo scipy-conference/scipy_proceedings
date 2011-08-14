@@ -33,7 +33,17 @@ body {
 <h1>Table of Contents</h1>
 
 <div id="content">
-%(content)s
+
+{{for line in toc}}
+  <!---------------------------------------------------------->
+  <p>
+  <span class="title">{{line['title']}}</span>
+  <span class="pagenr">{{line['page']}}</span><br/>
+  <span class="authors">{{line['authors']}}</span>
+  </p>
+  <!---------------------------------------------------------->
+{{endfor}}
+
 </div>
 
 </body>

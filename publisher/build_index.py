@@ -43,51 +43,5 @@ for d in sorted(dirs):
     stats.update({'page': cum_pages[-2]})
     toc_entries.append(stats)
 
-
-def fill_toc_template(template_file, output_file, template):
-    with open(template_file, 'r') as f:
-        toc = f.read()
-
-    data = ''
-    for entry in toc_entries:
-        data += (template % entry)
-
-    toc = toc.replace('%(content)s', data)
-
-    with codecs.open(output_file, encoding='utf-8', mode='w') as f:
-        f.write(toc)
-
-
-toc_template_latex = r'''
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\large{%(title)s}
-\hfill
-\textbf{%(page)s}
-\\
-\hspace{1cm}
-%(authors)s
-\\
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-'''
-
-toc_template_html = r'''
-<!---------------------------------------------------------->
-<p>
-<span class="title">%(title)s</span>
-<span class="pagenr">%(page)s</span><br/>
-<span class="authors">%(authors)s</span>
-</p>
-<!---------------------------------------------------------->
-
-'''
-
-print "Constructing LaTeX table of contents..."
-fill_toc_template(os.path.join(cover_dir, 'toc_template.tex'),
-                  os.path.join(output_dir, 'toc.tex'),
-                  toc_template_latex)
-
-print "Constructing HTML table of contents..."
-fill_toc_template(os.path.join(cover_dir, 'toc_template.html'),
-                  os.path.join(output_dir, 'toc.html'),
-                  toc_template_html)
+toc = {'toc': toc_entries}
+options.dict2cfg(toc, os.path.join(output_dir, 'toc.json'))
