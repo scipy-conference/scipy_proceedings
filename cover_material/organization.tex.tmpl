@@ -1,0 +1,26 @@
+\documentclass[letterpaper,compsoc,onecolumn,twoside,english]{IEEEtran}
+\thispagestyle{empty}
+\pagestyle{empty}
+
+
+\begin{document}
+
+\Large{Organization}
+
+{{for committee in committees}}
+
+  \large{ {{committee['name']}} }
+
+  \begin{itemize}
+
+    {{for member in committee['members'] }}
+      \item {{member['name']}}, ({{member['org']}}) \\
+    {{endfor}}
+
+  \end{itemize}
+
+{{endfor}}
+
+Add committee names here.
+
+\end{document}
