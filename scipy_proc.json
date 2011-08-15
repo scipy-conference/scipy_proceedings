@@ -1,3 +1,25 @@
 {
-  "proc_title": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2010)"
+  "proc_title": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2010)",
+  "organization": [
+  
+        {
+            "name": "Conference Co-Chairs",
+            "members": [
+                {"name": "Jarrod Millman",
+                 "org": "UC Berkeley"},
+                {"name": "Travis Oliphant",
+                 "org": "Enthought, Inc."}
+                ]
+        },
+  
+        {
+            "name": "Programme Committee",
+            "members": [
+                {"name": "Stéfan van der Walt",
+                 "org": "Applied Mathematics, Stellenbosch University"},
+                {"name": "Someone else",
+                 "org": "Some company"}
+                ]
+        }
+    ]
 }
