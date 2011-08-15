@@ -5,22 +5,21 @@
 
 \begin{document}
 
-\Large{Organization}
+\section*{Organization}
+\vspace{1cm}
 
 {{for committee in organization}}
 
-  \large{ {{committee['name']}} }
+  \subsection*{ {{committee['name']}} }
 
   \begin{itemize}
 
     {{for member in committee['members'] }}
-      \item {{member['name']}}, ({{member['org']}}) \\
+      \item[] {{member['name']}}, ({{member['org']}})
     {{endfor}}
 
   \end{itemize}
 
 {{endfor}}
-
-Add committee names here.
 
 \end{document}
