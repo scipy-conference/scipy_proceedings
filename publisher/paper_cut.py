@@ -3,19 +3,21 @@ Parse pdflatex output for paper count, and store in a .ini file.
 """
 
 import sys
-
 import re
+import os
+
+import options
 
 regexp = re.compile('Output written on paper.pdf \((\d+) pages')
+cfgname = 'paper_stats.json'
 
-f = open('paper_stats.cfg', 'w')
+d = options.cfg2dict(cfgname)
 
-line = ''
 for line in sys.stdin:
     m = regexp.match(line)
     if m:
         pages = m.groups()[0]
-        f.writelines(['[default]\n', 'pages = %s\n' % pages])
+        d.update({'pages': pages})
+        break
 
-f.close()
-
+options.dict2cfg(d, cfgname)

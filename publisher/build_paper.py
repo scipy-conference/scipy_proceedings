@@ -7,6 +7,7 @@ from writer import writer
 import os.path
 import sys
 import glob
+import options
 
 if len(sys.argv) != 3:
     print "Usage: build_paper.py paper_directory target_directory"
@@ -111,7 +112,7 @@ content = r'''
 
 .. raw::  latex
 
-  \input{page_numbers.tex}
+  \InputIfFileExists{page_numbers.tex}{}{}
   \newcommand*{\docutilsroleref}{\ref}
   \newcommand*{\docutilsrolelabel}{\label}
 
@@ -119,6 +120,11 @@ content = r'''
 
 tex = dc.publish_string(source=content, writer=writer,
                         settings_overrides=settings)
+
+stats_file = os.path.join(out_path, 'paper_stats.json')
+d = options.cfg2dict(stats_file)
+d.update(writer.document.stats)
+options.dict2cfg(d, stats_file)
 
 out = open(os.path.join(out_path, 'paper.tex'), 'w')
 out.write(tex)

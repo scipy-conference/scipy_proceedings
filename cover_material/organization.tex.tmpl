@@ -1,0 +1,25 @@
+\documentclass[letterpaper,compsoc,onecolumn,twoside,english]{IEEEtran}
+\thispagestyle{empty}
+\pagestyle{empty}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\section*{Organization}
+\vspace{1cm}
+
+{{for committee in organization}}
+
+  \subsection*{ {{committee['name']}} }
+
+  \begin{itemize}
+
+    {{for member in committee['members'] }}
+      \item[] {{member['name']}}, ({{member['org']}})
+    {{endfor}}
+
+  \end{itemize}
+
+{{endfor}}
+
+\end{document}

@@ -1,0 +1,27 @@
+\documentclass[letterpaper,compsoc,onecolumn,twoside,english]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\setlength{\parindent}{0mm}
+\thispagestyle{empty}
+\pagestyle{empty}
+
+
+\begin{document}
+
+\section*{Contents}
+\vspace{1cm}
+
+{{for line in toc}}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \large{ {{line['title']}} }
+  \hfill
+  \textbf{ {{line['page']}} }
+  \\
+  \hspace{1cm}
+  {{line['authors']}}
+  \\
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{{endfor}}
+
+\end{document}
