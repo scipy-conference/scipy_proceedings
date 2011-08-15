@@ -15,7 +15,8 @@
   \begin{itemize}
 
     {{for member in committee['members'] }}
-      \item[] \textsc{ {{member['name']}}}, {{member['org']}}
+      \item[] \textsc{%
+{{member['name']}}},\small{ {{member['org']}}}
     {{endfor}}
 
   \end{itemize}
