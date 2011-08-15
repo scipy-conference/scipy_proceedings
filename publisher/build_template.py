@@ -15,7 +15,7 @@ if not (os.path.exists(template_fn) and os.path.exists(config_fn)):
     print "Cannot find files specified as parameters."
     sys.exit(-1)
 
-template = tempita.Template(open(template_fn, 'r').read())
+template = tempita.HTMLTemplate(open(template_fn, 'r').read())
 config = json.load(open(config_fn, 'r'))
 
 print template.substitute(config)

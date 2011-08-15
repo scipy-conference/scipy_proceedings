@@ -1,0 +1,24 @@
+
+body {
+  font-family: Verdana, sans-serif;
+}
+
+#content {
+  width: 40em;
+  background: #D0D0D5;
+  padding: 0.5em 1em 0.5em 1em;
+}
+
+.title {
+  float: left;
+}
+
+.pagenr {
+  float: right;
+}
+
+.authors {
+   font-style: italic;
+   padding-left: 1em;
+}
+

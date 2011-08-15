@@ -1,9 +1,13 @@
-.PHONY: proceedings organization papers toc cover
+.PHONY: proceedings organization papers toc cover clean
 
-all: proceedings
+all: clean proceedings
+
+clean:
+	rm -rf output/*
 
 organization:
 	publisher/build_template.py cover_material/organization.tex.tmpl scipy_proc.json > output/organization.tex
+	publisher/build_template.py cover_material/organization.html.tmpl scipy_proc.json > output/organization.html
 	(cd output && pdflatex organization.tex)
 
 papers:
@@ -17,6 +21,7 @@ papers:
 toc: papers 
 	publisher/build_template.py cover_material/toc.tex.tmpl output/toc.json > output/toc.tex
 	publisher/build_template.py cover_material/toc.html.tmpl output/toc.json > output/toc.html
+	cp cover_material/toc.css output/
 	(cd output && pdflatex toc.tex)
 
 cover:
