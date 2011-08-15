@@ -1,4 +1,4 @@
-.PHONY: proceedings organization papers toc
+.PHONY: proceedings organization papers toc cover
 
 all: proceedings
 
@@ -14,11 +14,13 @@ papers:
 	# Build again with new page numbers
 	./make_all.sh
 
-
 toc: papers 
 	publisher/build_template.py cover_material/toc.tex.tmpl output/toc.json > output/toc.tex
 	publisher/build_template.py cover_material/toc.html.tmpl output/toc.json > output/toc.html
 	(cd output && pdflatex toc.tex)
 
-proceedings: toc organization
+cover:
+	inkscape --export-dpi=600 --export-pdf=output/cover.pdf cover_material/cover.svg
+
+proceedings: toc organization cover
 	publisher/concat_proceedings_pdf.sh
