@@ -6,7 +6,7 @@
 \begin{document}
 
 \section*{Organization}
-\vspace{1cm}
+\vspace{4mm}
 
 {{for committee in organization}}
 
@@ -15,7 +15,7 @@
   \begin{itemize}
 
     {{for member in committee['members'] }}
-      \item[] {{member['name']}}, ({{member['org']}})
+      \item[] \textsc{ {{member['name']}}}, {{member['org']}}
     {{endfor}}
 
   \end{itemize}

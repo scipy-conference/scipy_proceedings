@@ -8,17 +8,19 @@
 \begin{document}
 
 \section*{Contents}
-\vspace{1cm}
+\vspace{4mm}
 
 {{for line in toc}}
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \large{ {{line['title']}} }
+  \textsf{%
+{{line['title']}}
   \hfill
   \textbf{ {{line['page']}} }
-  \\
-  \hspace{1cm}
-  {{line['authors']}}
+  \\%
+\small\textit{%
+{{line['authors']}} }
+  }
   \\
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
