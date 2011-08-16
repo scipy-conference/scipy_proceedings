@@ -1,5 +1,16 @@
 {
-  "proc_title": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2010)",
+  "proceedings": {
+     "citation_key": "proc-scipy-2010", 
+     "title": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2010)",
+     "year": "2010",
+     "editor": [
+        {"name": "Stéfan van der Walt"},
+        {"name": "Jarrod Millman"}
+     ],
+     "volume": 3,
+     "number": 1,
+     "isbn": "value"
+  },
   "organization": [
   
         {
