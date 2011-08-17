@@ -10,14 +10,15 @@ fi
 
 AUTHOR=`basename $DIR`
 OUTDIR="output/$AUTHOR"
+TEX2PDF="pdflatex -interaction=batchmode paper.tex"
 
 mkdir -p $OUTDIR
 cp $DIR/* $OUTDIR
-python publisher/build_paper.py $DIR $OUTDIR
+python publisher/build_paper.py $DIR $OUTDIR 
 if [ "$?" -ne "0" ]; then
     echo "Error building paper $DIR. Aborting."
     exit 1
 fi
-cd $OUTDIR
-pdflatex paper.tex && pdflatex paper.tex | (python $WD/publisher/paper_cut.py)
 
+cd $OUTDIR
+$TEX2PDF && $TEX2PDF | (python $WD/publisher/paper_cut.py)
