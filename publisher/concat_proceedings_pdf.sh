@@ -8,5 +8,5 @@ fi
 
 PDFS=`find ./output -name "paper.pdf" | sort`
 rm -f output/proceedings.pdf
-pdftk output/*.pdf $PDFS cat output output/proceedings.pdf
+pdftk output/front.pdf $PDFS cat output output/proceedings.pdf
 

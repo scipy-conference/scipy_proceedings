@@ -1,4 +1,4 @@
-.PHONY: proceedings organization papers toc cover clean
+.PHONY: proceedings organization papers toc cover clean copyright
 
 all: clean proceedings
 
@@ -9,6 +9,10 @@ organization:
 	publisher/build_template.py cover_material/organization.tex.tmpl scipy_proc.json > output/organization.tex
 	publisher/build_template.py cover_material/organization.html.tmpl scipy_proc.json > output/organization.html
 	(cd output && pdflatex organization.tex)
+
+copyright:
+	publisher/build_template.py cover_material/copyright.tex.tmpl scipy_proc.json > output/copyright.tex
+	(cd output && pdflatex copyright.tex)
 
 papers:
 	# Build all papers
@@ -27,5 +31,9 @@ toc: papers
 cover:
 	inkscape --export-dpi=600 --export-pdf=output/cover.pdf cover_material/cover.svg
 
-proceedings: toc organization cover
+front: copyright toc organization cover
+	cp cover_material/front.tex output/
+	(cd output && pdflatex front.tex)
+
+proceedings: front
 	publisher/concat_proceedings_pdf.sh
