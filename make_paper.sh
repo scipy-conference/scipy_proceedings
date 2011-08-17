@@ -10,7 +10,7 @@ fi
 
 AUTHOR=`basename $DIR`
 OUTDIR="output/$AUTHOR"
-TEX2PDF="pdflatex -interaction=batchmode paper.tex"
+TEX2PDF="pdflatex paper.tex"
 
 mkdir -p $OUTDIR
 cp $DIR/* $OUTDIR
@@ -21,4 +21,4 @@ if [ "$?" -ne "0" ]; then
 fi
 
 cd $OUTDIR
-$TEX2PDF && $TEX2PDF | (python $WD/publisher/paper_cut.py)
+$TEX2PDF > /dev/null && $TEX2PDF | (python $WD/publisher/paper_cut.py)
