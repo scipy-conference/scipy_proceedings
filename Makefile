@@ -31,9 +31,7 @@ toc: papers
 cover:
 	inkscape --export-dpi=600 --export-pdf=output/cover.pdf cover_material/cover.svg
 
-front: copyright toc organization cover
-	cp cover_material/front.tex output/
-	(cd output && pdflatex front.tex)
+proceedings: cover copyright organization papers
+	publisher/build_template.py cover_material/proceedings.tex.tmpl output/toc.json > output/proceedings.tex
+	(cd output && pdflatex proceedings.tex)
 
-proceedings: front
-	publisher/concat_proceedings_pdf.sh

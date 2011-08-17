@@ -1,0 +1,61 @@
+\documentclass[letterpaper,compsoc,onecolumn,twoside,english]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\setlength{\parindent}{0mm}
+\thispagestyle{empty}
+\pagestyle{empty}
+\usepackage{pdfpages}
+% Define colours for hyperref
+\usepackage{color}
+
+\definecolor{orange}{cmyk}{0,0.4,0.8,0.2}
+\definecolor{darkorange}{rgb}{.71,0.21,0.01}
+\definecolor{darkblue}{rgb}{.01,0.21,0.71}
+\definecolor{darkgreen}{rgb}{.1,.52,.09}
+
+\usepackage{hyperref}
+\hypersetup{pdftex,  % needed for pdflatex
+  breaklinks=true,  % so long urls are correctly broken across lines
+  colorlinks=true,
+  urlcolor=blue,
+  linkcolor=darkblue,
+  citecolor=darkgreen,
+  }
+
+
+\begin{document}
+
+\includepdf{cover.pdf}
+\includepdf[pages=-,openright]{copyright.pdf}
+\includepdf[pages=-,openright]{organization.pdf}
+
+\section*{Contents}
+\vspace{4mm}
+
+{{for line in toc}}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \textsf{\hyperlink{%
+{{line['dir']}}/paper.pdf.1}{%
+{{line['title']}}}%
+  \hfill%
+  \textbf{ {{line['page']}} }%
+  \\%
+\small\textit{%
+\parbox{0.9\textwidth}{
+{{line['authors']}} }%
+}%
+}%
+  \\
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{{endfor}}
+
+{{for line in toc}}
+
+\includepdf[pages=-,link]{%
+{{line['dir']}}/paper.pdf}
+
+{{endfor}}
+
+
+\end{document}
