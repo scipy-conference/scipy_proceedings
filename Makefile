@@ -1,4 +1,7 @@
 TEX2PDF := cd output && pdflatex -interaction=batchmode
+MKTEMPLATE := publisher/build_template.py cover_material/TARGET.tmpl JSON > output/TARGET
+PROCTEMPLATE := $(subst JSON,scipy_proc.json,$(MKTEMPLATE))
+TOCTEMPLATE := $(subst JSON,output/toc.json,$(MKTEMPLATE))
 
 .PHONY: proceedings organization papers toc cover clean copyright
 
@@ -11,25 +14,25 @@ cover:
 	inkscape --export-dpi=600 --export-pdf=output/cover.pdf cover_material/cover.svg
 
 organization:
-	publisher/build_template.py cover_material/organization.tex.tmpl scipy_proc.json > output/organization.tex
-	publisher/build_template.py cover_material/organization.html.tmpl scipy_proc.json > output/organization.html
+	$(subst TARGET,organization.tex,$(PROCTEMPLATE))
+	$(subst TARGET,organization.html,$(PROCTEMPLATE))
 	($(TEX2PDF) organization 1>/dev/null)
 
 copyright:
-	publisher/build_template.py cover_material/copyright.tex.tmpl scipy_proc.json > output/copyright.tex
+	$(subst TARGET,copyright.tex,$(PROCTEMPLATE))
 	($(TEX2PDF) copyright 1>/dev/null)
 
 papers:
 	./make_all.sh
 
 toc: papers 
-	publisher/build_template.py cover_material/toc.tex.tmpl output/toc.json > output/toc.tex
-	publisher/build_template.py cover_material/toc.html.tmpl output/toc.json > output/toc.html
+	$(subst TARGET,toc.tex,$(TOCTEMPLATE))
+	$(subst TARGET,toc.html,$(TOCTEMPLATE))
 	cp cover_material/toc.css output/
 	($(TEX2PDF) toc 1>/dev/null)
 
 proceedings: cover copyright organization papers
-	publisher/build_template.py cover_material/proceedings.tex.tmpl output/toc.json > output/proceedings.tex
+	$(subst TARGET,proceedings.tex,$(TOCTEMPLATE))
 	($(TEX2PDF) proceedings 1>/dev/null)
 	($(TEX2PDF) proceedings 1>/dev/null)
 
