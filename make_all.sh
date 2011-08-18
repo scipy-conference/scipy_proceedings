@@ -10,8 +10,8 @@ publisher/build_index.py
 
 # Build again with new page numbers
 for d in papers/*; do
-    ./make_paper.sh $d 1>/dev/null
+    ./make_paper.sh $d
     AUTHOR=`basename $d`
     OUTDIR="output/$AUTHOR"
-    (cd $OUTDIR && pdfannotextractor paper.pdf) 1>/dev/null
+    (cd $OUTDIR && pdfannotextractor paper.pdf)
 done
