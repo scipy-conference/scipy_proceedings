@@ -2,18 +2,12 @@
 
 import os
 import sys
-import codecs
-
-if not os.path.exists('publisher'):
-    raise RuntimeError('Please start this script from the proceedings root.')
-
-sys.path.insert(0, 'publisher')
 
 import conf
 import options
 
 output_dir = conf.output_dir
-cover_dir = conf.cover_dir
+build_dir = conf.build_dir
 dirs = conf.dirs
 
 pages = []
@@ -45,4 +39,4 @@ for d in dirs:
     toc_entries.append(stats)
 
 toc = {'toc': toc_entries}
-options.dict2cfg(toc, os.path.join(output_dir, 'toc.json'))
+options.dict2cfg(toc, os.path.join(build_dir, 'toc.json'))
