@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import glob
 import os
 import sys
 import codecs
@@ -10,18 +9,19 @@ if not os.path.exists('publisher'):
 
 sys.path.insert(0, 'publisher')
 
+import conf
 import options
 
-output_dir = 'output'
-cover_dir = 'cover_material'
-dirs = [d.split('/')[1] for d in glob.glob('%s/*' % output_dir) if os.path.isdir(d)]
+output_dir = conf.output_dir
+cover_dir = conf.cover_dir
+dirs = conf.dirs
 
 pages = []
 cum_pages = [1]
 
 toc_entries = []
 
-for d in sorted(dirs):
+for d in dirs:
     stats = options.cfg2dict(os.path.join(output_dir, d, 'paper_stats.json'))
 
     # Write page number snippet to be included in the LaTeX output
