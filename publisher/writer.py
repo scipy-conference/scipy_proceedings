@@ -78,6 +78,12 @@ class Translator(LaTeXTranslator):
         title = self.paper_title
         authors = ', '.join(self.author_names)
 
+        compsocthanks = '\IEEEcompsocitemizethanks{'
+        for auth, inst in zip(self.author_names, self.author_institutions):
+            compsocthanks += '\IEEEcompsocthanksitem '+auth+' is with the '+inst+'.'
+        
+        compsocthanks += '}'
+
         author_notes = ['''
 The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         ''' % (self.author_institutions[0],
@@ -85,6 +91,7 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
                self.author_emails[0])]
 
         author_notes = ''.join('\\thanks{%s}' % n for n in author_notes)
+        author_notes = compsocthanks+author_notes
 
         title_template = '\\title{%s}\\author{%s%s}\\maketitle'
         title_template = title_template % (title,
@@ -103,6 +110,7 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         self.document.stats = {'title': title,
                                'authors': authors,
                                'author': self.author_names,
+                               'author_institution': self.author_institutions,
                                'abstract': self.abstract}
 
     def end_open_abstract(self, node):
