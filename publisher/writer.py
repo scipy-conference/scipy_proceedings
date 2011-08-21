@@ -94,7 +94,7 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         marks = r'''
         \renewcommand{\leftmark}{%s}
         \renewcommand{\rightmark}{%s}
-        ''' % (options['proc_title'], title.upper())
+        ''' % (options['proceedings']['title']['short'], title.upper())
         title_template += marks
 
         self.body_pre_docinfo = [title_template]

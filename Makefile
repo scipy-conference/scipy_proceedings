@@ -1,24 +1,28 @@
-.PHONY: proceedings organization papers toc
+TEX2PDF := cd output && pdflatex -interaction=batchmode
+MKTEMPLATE := publisher/build_template.py cover_material/TARGET.tmpl JSON > output/TARGET
+PROCTEMPLATE := $(subst JSON,scipy_proc.json,$(MKTEMPLATE))
+TOCTEMPLATE := $(subst JSON,output/toc.json,$(MKTEMPLATE))
 
-all: proceedings
+.PHONY: front-pdf proceedings papers toc clean
 
-organization:
-	publisher/build_template.py cover_material/organization.tex.tmpl scipy_proc.json > output/organization.tex
-	(cd output && pdflatex organization.tex)
+all: clean proceedings
+
+clean:
+	rm -rf output/*
+
+front-pdf:
+	$(MAKE) -C cover_material $@
 
 papers:
-	# Build all papers
 	./make_all.sh
-	# Count page nrs and build toc
-	./publisher/build_index.py
-	# Build again with new page numbers
-	./make_all.sh
-
 
 toc: papers 
-	publisher/build_template.py cover_material/toc.tex.tmpl output/toc.json > output/toc.tex
-	publisher/build_template.py cover_material/toc.html.tmpl output/toc.json > output/toc.html
-	(cd output && pdflatex toc.tex)
+	$(subst TARGET,toc.tex,$(TOCTEMPLATE))
+	$(subst TARGET,toc.html,$(TOCTEMPLATE))
+	cp cover_material/toc.css output/
+	($(TEX2PDF) toc 1>/dev/null)
 
-proceedings: toc organization
-	publisher/concat_proceedings_pdf.sh
+proceedings: front-pdf papers
+	$(subst TARGET,proceedings.tex,$(TOCTEMPLATE))
+	($(TEX2PDF) proceedings 1>/dev/null)
+	($(TEX2PDF) proceedings 1>/dev/null)

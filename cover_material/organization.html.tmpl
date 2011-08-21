@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>Organization</title>
+<link rel="stylesheet" href="toc.css" type="text/css"/>
+</head>
+
+<body>
+
+<h1>Organization</h1>
+
+<div id="content">
+
+{{for committee in organization}}
+
+  <h2>{{html_quote(committee['name']) | html}}</h2>
+
+  <ul>
+
+    {{for member in committee['members'] }}
+      <li>{{html_quote(member['name']) | html}} ({{html_quote(member['org']) | html}})</li>
+    {{endfor}}
+  </ul>
+
+{{endfor}}
+
+</div>
+
+</body>
+
+</html>

@@ -1,31 +1,7 @@
 <html>
 <head>
-<style type="text/css">
-
-body {
-  font-family: Verdana, sans-serif;
-}
-
-#content {
-  width: 40em;
-  background: #D0D0D5;
-  padding: 0.5em 1em 0.5em 1em;
-}
-
-.title {
-  float: left;
-}
-
-.pagenr {
-  float: right;
-}
-
-.authors {
-   font-style: italic;
-   padding-left: 1em;
-}
-
-</style>
+<title>Table of Contents</title>
+<link rel="stylesheet" href="toc.css" type="text/css"/>
 </head>
 
 <body>
@@ -37,9 +13,9 @@ body {
 {{for line in toc}}
   <!---------------------------------------------------------->
   <p>
-  <span class="title">{{line['title']}}</span>
-  <span class="pagenr">{{line['page']}}</span><br/>
-  <span class="authors">{{line['authors']}}</span>
+  <span class="title">{{html_quote(line['title']) | html}}</span>
+  <span class="pagenr">{{html_quote(line['page']) | html}}</span><br/>
+  <span class="authors">{{html_quote(line['authors']) | html}}</span>
   </p>
   <!---------------------------------------------------------->
 {{endfor}}

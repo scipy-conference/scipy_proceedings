@@ -1,5 +1,22 @@
 {
-  "proc_title": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2010)",
+  "proceedings": {
+     "citation_key": "proc-scipy-2010", 
+     "title": {
+       "conference": "SciPy",
+       "short": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2010)",
+       "full": "Proceedings of the 9th Python in Science Conference"
+     },
+     "year": "2010",
+     "editor": [
+        "Stéfan van der Walt",
+        "Jarrod Millman"
+     ],
+     "volume": 3,
+     "number": 1,
+     "isbn": "value",
+     "location": "Austin, TX",
+     "dates": "June 28 - July 3"
+  },
   "organization": [
   
         {
