@@ -20,21 +20,23 @@ for d in dirs:
 
     # Write page number snippet to be included in the LaTeX output
     if 'pages' in stats:
-        pages.append(int(stats['pages']))
+        pages.append(stats['pages'])
     else:
         pages.append(1)
 
     cum_pages.append(cum_pages[-1] + pages[-1])
+    start = cum_pages[-2]
+    stop = cum_pages[-1] - 1
 
-    print '"%s" from p. %s to %s' % (d, cum_pages[-2],
-                                     cum_pages[-1] - 1)
+    print '"%s" from p. %s to %s' % (d, start, stop)
 
     f = open(os.path.join(output_dir, d, 'page_numbers.tex'), 'w')
-    f.write('\setcounter{page}{%s}' % cum_pages[-2])
+    f.write('\setcounter{page}{%s}' % start)
     f.close()
 
     # Build table of contents
-    stats.update({'page': cum_pages[-2]})
+    stats.update({'page': {'start': start,
+                           'stop': stop}})
     stats.update({'dir': d})
     toc_entries.append(stats)
 

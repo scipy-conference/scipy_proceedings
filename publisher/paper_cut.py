@@ -17,7 +17,7 @@ for line in sys.stdin:
     m = regexp.match(line)
     if m:
         pages = m.groups()[0]
-        d.update({'pages': pages})
+        d.update({'pages': int(pages)})
         break
 
 options.dict2cfg(d, cfgname)

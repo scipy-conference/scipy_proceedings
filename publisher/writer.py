@@ -101,7 +101,9 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
 
         # Save paper stats
         self.document.stats = {'title': title,
-                               'authors': authors}
+                               'authors': authors,
+                               'author': self.author_names,
+                               'abstract': self.abstract}
 
     def end_open_abstract(self, node):
         if 'abstract' not in node['classes'] and self.abstract_in_progress:
