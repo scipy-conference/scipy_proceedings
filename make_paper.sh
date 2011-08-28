@@ -21,4 +21,4 @@ if [ "$?" -ne "0" ]; then
 fi
 
 cd $OUTDIR
-$TEX2PDF > /dev/null && $TEX2PDF | (python $WD/publisher/paper_cut.py)
+$TEX2PDF > /dev/null && $TEX2PDF | (python $WD/publisher/page_count.py)
