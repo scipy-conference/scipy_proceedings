@@ -33,4 +33,9 @@ def dict2cfg(d, filename):
     """
     json.dump(d, codecs.open(filename, 'w', 'utf-8'), ensure_ascii=False)
 
+def mkdir_p(dir):
+    if os.path.isdir(dir):
+        return
+    os.makedirs(dir)
+
 options = cfg2dict(proc_conf)

@@ -6,7 +6,7 @@ from string import Template
 import codecs
 
 from conf import bib_dir
-from options import get_config
+from options import get_config, mkdir_p
 
 proceedings = Template('''@Proceedings{${citation_key},
   title     = {${booktitle}},
@@ -40,11 +40,6 @@ proc_vals = {
 def bib_write(content, filename, encoding='utf-8', mode='w'):
     with codecs.open(filename, encoding=encoding, mode=mode) as f:
         f.write(content)
-
-def mkdir_p(dir):
-    if os.path.isdir(dir):
-        return
-    os.makedirs(dir)
 
 mkdir_p(bib_dir)
 
