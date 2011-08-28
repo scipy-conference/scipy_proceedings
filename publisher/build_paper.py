@@ -1,111 +1,17 @@
 #!/usr/bin/env python
 
 import docutils.core as dc
-
-from writer import writer
-
 import os.path
 import sys
+import re
 import glob
+import shutil
+
+from writer import writer
+from conf import output_dir
 import options
 
-if len(sys.argv) != 3:
-    print "Usage: build_paper.py paper_directory target_directory"
-    sys.exit(-1)
-
-in_path, out_path = sys.argv[1:]
-for p in (in_path, out_path):
-    if not os.path.isdir(p):
-        print("Cannot open directory: %s" % p)
-        sys.exit(-1)
-
-print "Building:", in_path
-
-paper_id = os.path.basename(out_path)
-
-preamble = r'''
-% These preamble commands are from build_paper.py
-
-% PDF Standard Fonts
-\usepackage{mathptmx}
-\usepackage[scaled=.90]{helvet}
-\usepackage{courier}
-
-% Make verbatim environment smaller
-\makeatletter
-\g@addto@macro\@verbatim\footnotesize
-\makeatother
-
-% Do not indent code sections
-\renewcommand{\quote}{}
-
-% Provide AMS mathematical commands such as "align"
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{bm}
-
-% Define colours for hyperref
-\usepackage{color}
-
-\definecolor{orange}{cmyk}{0,0.4,0.8,0.2}
-\definecolor{darkorange}{rgb}{.71,0.21,0.01}
-\definecolor{darkblue}{rgb}{.01,0.21,0.71}
-\definecolor{darkgreen}{rgb}{.1,.52,.09}
-
-\usepackage{hyperref}
-\hypersetup{pdftex,  % needed for pdflatex
-  breaklinks=true,  % so long urls are correctly broken across lines
-  colorlinks=true,
-  urlcolor=blue,
-  linkcolor=darkblue,
-  citecolor=darkgreen,
-  }
-
-% Include graphics for authors who raw-inlined figures
-% (then docutils won't automatically add the package)
-\usepackage{graphicx}
-
-\ifthenelse{\isundefined{\longtable}}{}{
-  \renewenvironment{longtable}{\begin{center}\begin{tabular}}%
-    {\end{tabular}\end{center}\vspace{2mm}}
-}
-
-% Packages required for code highlighting
-\usepackage{fancyvrb}
-
-'''
-
-# Add the LaTeX commands required by Pygments to do syntax highlighting
-
-try:
-    import pygments
-except ImportError:
-    import warnings
-    warnings.warn(RuntimeWarning('Could not import Pygments. '
-                                 'Syntax highlighting will fail.'))
-    pygments = None
-
-if pygments:
-    from pygments.formatters import LatexFormatter
-    from sphinx_highlight import SphinxStyle
-
-    preamble += LatexFormatter(style=SphinxStyle).get_style_defs()
-
-
-settings = {'documentclass': 'IEEEtran',
-            'use_verbatim_when_possible': True,
-            'use_latex_citations': True,
-            'latex_preamble': preamble,
-            'documentoptions': 'letterpaper,compsoc,twoside'}
-
-
-try:
-    rst, = glob.glob(os.path.join(in_path, '*.rst'))
-except ValueError:
-    raise RuntimeError("Found more than one input .rst--not sure which one to use.")
-
-content = open(rst, 'r').read()
-content = r'''
+header = r'''
 .. role:: ref
 
 .. role:: label
@@ -116,21 +22,108 @@ content = r'''
   \newcommand*{\docutilsroleref}{\ref}
   \newcommand*{\docutilsrolelabel}{\label}
 
-''' + content
+'''
 
-tex = dc.publish_string(source=content, writer=writer,
-                        settings_overrides=settings)
 
-stats_file = os.path.join(out_path, 'paper_stats.json')
-d = options.cfg2dict(stats_file)
-d.update(writer.document.stats)
-options.dict2cfg(d, stats_file)
+def rst2tex(in_path, out_path):
 
-out = open(os.path.join(out_path, 'paper.tex'), 'w')
-out.write(tex)
-out.close()
+    options.mkdir_p(out_path)
+    for file in glob.glob(os.path.join(in_path,'*')):
+        shutil.copy(file, out_path)
 
-page_nr_f = os.path.join(out_path, 'page_numbers.tex')
-if not os.path.exists(page_nr_f):
-    out = open(page_nr_f, 'w')
-    out.close()
+    scipy_style = os.path.join(os.path.dirname(__file__),'_static/scipy.sty')
+    shutil.copy(scipy_style, out_path)
+    preamble = r'''\usepackage{scipy}'''
+    
+    # Add the LaTeX commands required by Pygments to do syntax highlighting
+    
+    try:
+        import pygments
+    except ImportError:
+        import warnings
+        warnings.warn(RuntimeWarning('Could not import Pygments. '
+                                     'Syntax highlighting will fail.'))
+        pygments = None
+    
+    if pygments:
+        from pygments.formatters import LatexFormatter
+        from sphinx_highlight import SphinxStyle
+    
+        preamble += LatexFormatter(style=SphinxStyle).get_style_defs()
+    
+    
+    settings = {'documentclass': 'IEEEtran',
+                'use_verbatim_when_possible': True,
+                'use_latex_citations': True,
+                'latex_preamble': preamble,
+                'documentoptions': 'letterpaper,compsoc,twoside'}
+    
+    
+    try:
+        rst, = glob.glob(os.path.join(in_path, '*.rst'))
+    except ValueError:
+        raise RuntimeError("Found more than one input .rst--not sure which one to use.")
+    
+    content = header + open(rst, 'r').read()
+    
+    tex = dc.publish_string(source=content, writer=writer,
+                            settings_overrides=settings)
+    
+    stats_file = os.path.join(out_path, 'paper_stats.json')
+    d = options.cfg2dict(stats_file)
+    d.update(writer.document.stats)
+    options.dict2cfg(d, stats_file)
+    
+    tex_file = os.path.join(out_path, 'paper.tex')
+    with open(tex_file, 'w') as f:
+        f.write(tex)
+
+def tex2pdf(out_path):
+
+    import shlex, subprocess
+    command_line = 'cd '+out_path+' ; pdflatex paper.tex'
+    
+    run = subprocess.Popen(command_line, shell=True, stdout=subprocess.PIPE)
+    out, err = run.communicate()
+    
+    run = subprocess.Popen(command_line, shell=True, stdout=subprocess.PIPE)
+    out, err = run.communicate()
+    return out
+
+def page_count(pdflatex_stdout, paper_dir):
+   """
+   Parse pdflatex output for paper count, and store in a .ini file.
+   """
+
+   regexp = re.compile('Output written on paper.pdf \((\d+) pages')
+   cfgname = os.path.join(paper_dir,'paper_stats.json')
+
+   d = options.cfg2dict(cfgname)
+   
+   for line in pdflatex_stdout.splitlines():
+       m = regexp.match(line)
+       if m:
+           pages = m.groups()[0]
+           d.update({'pages': int(pages)})
+           break
+   
+   options.dict2cfg(d, cfgname)
+
+if __name__ == "__main__":
+
+   if len(sys.argv) != 2:
+       print "Usage: build_paper.py paper_directory"
+       sys.exit(-1)
+   
+   in_path = sys.argv[1]
+   if not os.path.isdir(in_path):
+       print("Cannot open directory: %s" % in_path)
+       sys.exit(-1)
+   
+   paper_id = os.path.basename(in_path)
+   out_path = os.path.join(output_dir, paper_id)
+   print "Building:", paper_id
+   
+   rst2tex(in_path, out_path)
+   pdflatex_stdout = tex2pdf(out_path)
+   page_count(pdflatex_stdout, out_path)

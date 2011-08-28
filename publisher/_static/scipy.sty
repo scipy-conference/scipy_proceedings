@@ -1,0 +1,49 @@
+% These preamble commands are from build_paper.py
+
+% PDF Standard Fonts
+\usepackage{mathptmx}
+\usepackage[scaled=.90]{helvet}
+\usepackage{courier}
+
+% Make verbatim environment smaller
+\makeatletter
+\g@addto@macro\@verbatim\footnotesize
+\makeatother
+
+% Do not indent code sections
+\renewcommand{\quote}{}
+
+% Provide AMS mathematical commands such as "align"
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{bm}
+
+% Define colours for hyperref
+\usepackage{color}
+
+\definecolor{orange}{cmyk}{0,0.4,0.8,0.2}
+\definecolor{darkorange}{rgb}{.71,0.21,0.01}
+\definecolor{darkblue}{rgb}{.01,0.21,0.71}
+\definecolor{darkgreen}{rgb}{.1,.52,.09}
+
+\usepackage{hyperref}
+\hypersetup{pdftex,  % needed for pdflatex
+  breaklinks=true,  % so long urls are correctly broken across lines
+  colorlinks=true,
+  urlcolor=blue,
+  linkcolor=darkblue,
+  citecolor=darkgreen,
+  }
+
+% Include graphics for authors who raw-inlined figures
+% (then docutils won't automatically add the package)
+\usepackage{graphicx}
+
+\ifthenelse{\isundefined{\longtable}}{}{
+  \renewenvironment{longtable}{\begin{center}\begin{tabular}}%
+    {\end{tabular}\end{center}\vspace{2mm}}
+}
+
+% Packages required for code highlighting
+\usepackage{fancyvrb}
+
