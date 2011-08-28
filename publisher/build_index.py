@@ -7,8 +7,12 @@ import conf
 import options
 
 output_dir = conf.output_dir
-build_dir = conf.build_dir
-dirs = conf.dirs
+build_dir  = conf.build_dir
+bib_dir    = conf.bib_dir
+toc_conf   = conf.toc_conf
+proc_conf  = conf.proc_conf
+dirs       = conf.dirs
+
 
 pages = []
 cum_pages = [1]
@@ -41,4 +45,4 @@ for d in dirs:
     toc_entries.append(stats)
 
 toc = {'toc': toc_entries}
-options.dict2cfg(toc, os.path.join(build_dir, 'toc.json'))
+options.dict2cfg(toc, toc_conf)

@@ -2,20 +2,31 @@
 
 import os
 import sys
-import json
-import tempita
 
-if not len(sys.argv) > 1:
-    print "Usage: build_template.py templatename configfile.json"
+import tempita
+import conf
+from options import get_config
+
+template_dir = conf.template_dir
+build_dir    = conf.build_dir
+
+if not len(sys.argv) == 2:
+    print "Usage: build_template.py destination_name"
     sys.exit(-1)
 
-template_fn = sys.argv[1]
-config_fn = sys.argv[2]
-if not (os.path.exists(template_fn) and os.path.exists(config_fn)):
-    print "Cannot find files specified as parameters."
+dest_fn = sys.argv[1]
+template_fn = os.path.join(template_dir, dest_fn+'.tmpl')
+
+if not os.path.exists(template_fn):
+    print "Cannot find template."
     sys.exit(-1)
 
 template = tempita.HTMLTemplate(open(template_fn, 'r').read())
-config = json.load(open(config_fn, 'r'))
+config = get_config()
 
-print template.substitute(config)
+extension = os.path.splitext(dest_fn)[1][1:]
+outname = os.path.join(build_dir, extension, dest_fn) 
+mode = 'w'
+
+with open(outname, mode=mode) as f:
+    f.write(template.substitute(config))
