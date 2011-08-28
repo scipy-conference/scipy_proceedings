@@ -5,20 +5,8 @@ import sys
 from string import Template
 import codecs
 
-import conf
-import options
-
-output_dir = conf.output_dir
-build_dir  = conf.build_dir
-bib_dir    = conf.bib_dir
-toc_conf   = conf.toc_conf
-proc_conf  = conf.proc_conf
-dirs       = conf.dirs
-
-pages = []
-cum_pages = [1]
-
-toc_entries = []
+from conf import bib_dir
+from options import get_config
 
 proceedings = Template('''@Proceedings{${citation_key},
   title     = {${booktitle}},
@@ -38,21 +26,20 @@ inproceedings = Template('''@InProceedings{${citation_key},
   editor    = {${editor}},
 }''')
 
-proceedings_info = options.cfg2dict(proc_conf)['proceedings']
-toc_info = options.cfg2dict(toc_conf)['toc']
+proceedings = get_config()['proceedings']
+toc = get_config()['toc']
 
 proc_vals = {
- 'citation_key': proceedings_info['citation_key'],
- 'booktitle': proceedings_info['title']['full'],
- 'year': proceedings_info['year'],
- 'editor': ' and '.join(proceedings_info['editor']),
- 'isbn': proceedings_info['isbn']
+ 'citation_key': proceedings['citation_key'],
+ 'booktitle': proceedings['title']['full'],
+ 'year': proceeding['year'],
+ 'editor': ' and '.join(proceedings['editor']),
+ 'isbn': proceedings['isbn']
 }
 
 def bib_write(content, filename, encoding='utf-8', mode='w'):
     with codecs.open(filename, encoding=encoding, mode=mode) as f:
         f.write(content)
-
 
 def mkdir_p(dir):
     if os.path.isdir(dir):
@@ -64,10 +51,10 @@ mkdir_p(bib_dir)
 bib_write(proceedings.safe_substitute(proc_vals),
           os.path.join(bib_dir,proc_vals['citation_key']+'.bib'))
 
-for article in toc_info:
+for article in toc:
   art_vals = {
     'citation_key': '-'.join([article['dir'],
-                                  proceedings_info['citation_key']]),
+                                  proceedings['citation_key']]),
     'author': ' and '.join(article['author']),
     'title': article['title'],
     'booktitle': proc_vals['booktitle'],
