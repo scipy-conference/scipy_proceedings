@@ -34,9 +34,8 @@ for d in dirs:
 
     print '"%s" from p. %s to %s' % (d, start, stop)
 
-    f = open(os.path.join(output_dir, d, 'page_numbers.tex'), 'w')
-    f.write('\setcounter{page}{%s}' % start)
-    f.close()
+    with open(os.path.join(output_dir, d, 'page_numbers.tex'), 'w') as f:
+        f.write('\setcounter{page}{%s}' % start)
 
     # Build table of contents
     stats.update({'page': {'start': start,
