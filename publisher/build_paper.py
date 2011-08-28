@@ -47,7 +47,7 @@ def rst2tex(in_path, out_path):
     
     if pygments:
         from pygments.formatters import LatexFormatter
-        from sphinx_highlight import SphinxStyle
+        from writer.sphinx_highlight import SphinxStyle
     
         preamble += LatexFormatter(style=SphinxStyle).get_style_defs()
     
