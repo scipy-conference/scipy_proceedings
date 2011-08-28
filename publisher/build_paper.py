@@ -8,7 +8,7 @@ import glob
 import shutil
 
 from writer import writer
-from conf import output_dir
+from conf import papers_dir, output_dir
 import options
 
 header = r'''
@@ -109,6 +109,15 @@ def page_count(pdflatex_stdout, paper_dir):
    
    options.dict2cfg(d, cfgname)
 
+def build_paper(paper_id):
+   out_path = os.path.join(output_dir, paper_id)
+   in_path = os.path.join(papers_dir, paper_id)
+   print "Building:", paper_id
+   
+   rst2tex(in_path, out_path)
+   pdflatex_stdout = tex2pdf(out_path)
+   page_count(pdflatex_stdout, out_path)
+
 if __name__ == "__main__":
 
    if len(sys.argv) != 2:
@@ -121,9 +130,4 @@ if __name__ == "__main__":
        sys.exit(-1)
    
    paper_id = os.path.basename(in_path)
-   out_path = os.path.join(output_dir, paper_id)
-   print "Building:", paper_id
-   
-   rst2tex(in_path, out_path)
-   pdflatex_stdout = tex2pdf(out_path)
-   page_count(pdflatex_stdout, out_path)
+   build_paper(paper_id)

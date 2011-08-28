@@ -43,7 +43,7 @@ front-pdf: cover-pdf copyright-pdf organization-pdf
 front-html: organization-html toc-html
 
 papers:
-	./make_all.sh
+	./build_index.py
 
 proceedings: front-pdf papers $(TEXDIR)/proceedings.tex
 	($(TEX2PDF) proceedings 1>/dev/null)
