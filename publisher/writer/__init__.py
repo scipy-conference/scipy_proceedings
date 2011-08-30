@@ -21,18 +21,18 @@ class Translator(LaTeXTranslator):
     def __init__(self, *args, **kwargs):
         LaTeXTranslator.__init__(self, *args, **kwargs)
 
-    # Handle author declarations
+        # Handle author declarations
 
-    current_field = ''
+        self.current_field = ''
 
-    author_names = []
-    author_institutions = []
-    author_emails = []
-    paper_title = ''
-    table_caption = []
+        self.author_names = []
+        self.author_institutions = []
+        self.author_emails = []
+        self.paper_title = ''
+        self.table_caption = []
 
-    abstract_in_progress = False
-    non_breaking_paragraph = False
+        self.abstract_in_progress = False
+        self.non_breaking_paragraph = False
 
     def visit_docinfo(self, node):
         pass
