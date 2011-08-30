@@ -8,7 +8,7 @@ import codecs
 from conf import bib_dir
 from options import get_config, mkdir_p
 
-proceedings = Template('''@Proceedings{${citation_key},
+proceedingsT = Template('''@Proceedings{${citation_key},
   title     = {${booktitle}},
   booktitle = {${booktitle}},
   year      = {${year}},
@@ -16,7 +16,7 @@ proceedings = Template('''@Proceedings{${citation_key},
   isbn      = {${isbn}}
 }''')
 
-inproceedings = Template('''@InProceedings{${citation_key},
+inproceedingsT = Template('''@InProceedings{${citation_key},
   author    = {${author}},
   title     = {${title}},
   booktitle = {${booktitle}},
@@ -32,7 +32,7 @@ toc = get_config()['toc']
 proc_vals = {
  'citation_key': proceedings['citation_key'],
  'booktitle': proceedings['title']['full'],
- 'year': proceeding['year'],
+ 'year': proceedings['year'],
  'editor': ' and '.join(proceedings['editor']),
  'isbn': proceedings['isbn']
 }
@@ -43,7 +43,7 @@ def bib_write(content, filename, encoding='utf-8', mode='w'):
 
 mkdir_p(bib_dir)
 
-bib_write(proceedings.safe_substitute(proc_vals),
+bib_write(proceedingsT.safe_substitute(proc_vals),
           os.path.join(bib_dir,proc_vals['citation_key']+'.bib'))
 
 for article in toc:
@@ -58,5 +58,5 @@ for article in toc:
     'editor': proc_vals['editor']
   }
   
-  bib_write(inproceedings.safe_substitute(art_vals),
+  bib_write(inproceedingsT.safe_substitute(art_vals),
           os.path.join(bib_dir,art_vals['citation_key']+'.bib'))

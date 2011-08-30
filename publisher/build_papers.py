@@ -44,6 +44,7 @@ def paper_stats(paper_id, start):
                            'stop': stop}})
     stats.update({'dir': paper_id})
 
+    #'-'.join([article['dir'], proceedings_info['citation_key']])
     return stats, stop
 
 if __name__ == "__main__":
@@ -52,13 +53,12 @@ if __name__ == "__main__":
     toc_entries = []
     
     options.mkdir_p(pdf_dir)
-    print dirs 
     for paper_id in dirs:
         build_paper(paper_id)
      
         stats, start = paper_stats(paper_id, start)
         toc_entries.append(stats)
-    
+
         build_paper(paper_id)
     
         src_pdf = os.path.join(output_dir, paper_id, 'paper.pdf')   
