@@ -78,9 +78,18 @@ class Translator(LaTeXTranslator):
         title = self.paper_title
         authors = ', '.join(self.author_names)
 
+        d = {}
         compsocthanks = '\IEEEcompsocitemizethanks{'
         for auth, inst in zip(self.author_names, self.author_institutions):
-            compsocthanks += '\IEEEcompsocthanksitem '+auth+' is with the '+inst+'.'
+            d.setdefault(inst, []).append(auth)
+
+        for inst, authlist in d.iteritems():
+            if len(authlist) <= 2:
+                auths = ' and '.join(authlist)
+            else:
+                auths = ', '.join(authlist[:-1] + ('and ' + authlist[-1],))
+            verb= ' is ' if len(authlist)==1 else ' are '
+            compsocthanks += '\IEEEcompsocthanksitem '+auths+verb+'with the '+inst+'.'
         
         compsocthanks += '}'
 
