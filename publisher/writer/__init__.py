@@ -87,7 +87,8 @@ class Translator(LaTeXTranslator):
             if len(authlist) <= 2:
                 auths = ' and '.join(authlist)
             else:
-                auths = ', '.join(authlist[:-1] + ('and ' + authlist[-1],))
+                print authlist
+                auths = ', '.join(authlist[:-1] + ['and ' + authlist[-1],])
             verb= ' is ' if len(authlist)==1 else ' are '
             compsocthanks += '\IEEEcompsocthanksitem '+auths+verb+'with the '+inst+'.'
         
