@@ -18,9 +18,6 @@ proc_conf  = conf.proc_conf
 dirs       = conf.dirs
 
 
-#pages = []
-#cum_pages = [1]
-
 def paper_stats(paper_id, start):
     stats = options.cfg2dict(os.path.join(output_dir, paper_id, 'paper_stats.json'))
 
@@ -30,8 +27,6 @@ def paper_stats(paper_id, start):
     else:
         pages = 1
 
-    #cum_pages.append(cum_pages[-1] + pages[-1])
-    #start = cum_pages[-2]
     stop = start + pages - 1
 
     print '"%s" from p. %s to %s' % (paper_id, start, stop)
@@ -42,9 +37,8 @@ def paper_stats(paper_id, start):
     # Build table of contents
     stats.update({'page': {'start': start,
                            'stop': stop}})
-    stats.update({'dir': paper_id})
+    stats.update({'paper_id': paper_id})
 
-    #'-'.join([article['dir'], proceedings_info['citation_key']])
     return stats, stop
 
 if __name__ == "__main__":
@@ -68,7 +62,6 @@ if __name__ == "__main__":
         command_line = 'cd '+pdf_dir+' ; pdfannotextractor '+paper_id+'.pdf'
         run = subprocess.Popen(command_line, shell=True, stdout=subprocess.PIPE)
         out, err = run.communicate()
-    
     
     toc = {'toc': toc_entries}
     options.dict2cfg(toc, toc_conf)

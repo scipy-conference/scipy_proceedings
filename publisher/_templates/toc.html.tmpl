@@ -13,7 +13,7 @@
 {{for line in toc}}
   <!---------------------------------------------------------->
   <p>
-  <span class="title"><a href="pdfs/{{line['dir']}}.pdf">{{html_quote(line['title']) | html}}</a></span>
+  <span class="title"><a href="pdfs/{{line['paper_id']}}.pdf">{{html_quote(line['title']) | html}}</a></span>
   <span class="pagenr">{{html_quote(line['page']['start']) | html}}</span><br/>
   <span class="authors">{{html_quote(line['authors']) | html}}</span>
   </p>

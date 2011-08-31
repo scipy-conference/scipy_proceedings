@@ -35,7 +35,7 @@
 {{for line in toc}}
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \textsf{\hyperlink{../pdfs/{{line['dir']}}.pdf.1}{%
+  \textsf{\hyperlink{../pdfs/{{line['paper_id']}}.pdf.1}{%
 {{line['title']}}}%
   \hfill%
   \textbf{ {{line['page']['start']}} }%
@@ -52,7 +52,7 @@
 
 {{for line in toc}}
 
-\includepdf[pages=-,link]{../pdfs/{{line['dir']}}.pdf}
+\includepdf[pages=-,link]{../pdfs/{{line['paper_id']}}.pdf}
 
 {{endfor}}
 
