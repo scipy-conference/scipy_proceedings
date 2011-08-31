@@ -29,6 +29,7 @@ class Translator(LaTeXTranslator):
         self.author_institutions = []
         self.author_emails = []
         self.paper_title = ''
+        self.abstract = ''
         self.table_caption = []
 
         self.abstract_in_progress = False
@@ -151,6 +152,7 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
 
         if 'abstract' in node['classes'] and not self.abstract_in_progress:
             self.out.append('\\begin{abstract}')
+            self.abstract = self.encode(node.astext())
             self.abstract_in_progress = True
 
         elif 'keywords' in node['classes']:
