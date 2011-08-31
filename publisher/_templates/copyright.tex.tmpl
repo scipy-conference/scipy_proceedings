@@ -1,28 +1,33 @@
-\documentclass[letterpaper,compsoc,onecolumn,twoside,english]{IEEEtran}
+\documentclass[letterpaper,compsoc,onecolumn,twoside]{IEEEtran}
 \thispagestyle{empty}
 \pagestyle{empty}
 \usepackage[utf8]{inputenc}
 \usepackage{parskip}
-\setlength{\topmargin}{4in}
 
 \begin{document}
 
+\null
+\vfill
 
 \section*{%
-{{proceedings['title']['full']}}
-}
+{{proceedings['title']['full']}}}
 
-\vspace{1mm}
+%Edited by {{proceedings['editor'][0]}} and {{proceedings['editor'][1]}}.
 
-Edited by {{proceedings['editor'][0]}} and {{proceedings['editor'][1]}}.
+Edited by {{if len(proceedings['editor']) <=2:}}
+  {{' and '.join(proceedings['editor'])}}%
+{{else}}
+  {{', '.join(authlist[:-1] + ['and ' + authlist[-1],])}}%
+{{endif}}.
 
-\vspace{3mm}
+\bigskip
 
 {{proceedings['title']['conference']}} {{proceedings['year']}}\\
 {{proceedings['location']}}\\
 {{proceedings['dates']}}, {{proceedings['year']}}
 
-\vspace{1cm}
+\bigskip
+\bigskip
 
 Copyright \copyright{ {{ proceedings['year']}}}. The content of the articles of the
 Proceedings of the Python in Science Conference is copyrighted
@@ -31,7 +36,10 @@ and owned by their original authors.
 For republication or other use of the material published, please 
 contact the copyright owners to obtain permission. 
 
-\vspace{1cm}
+\bigskip
+\bigskip
+\bigskip
+\bigskip
 
 ISBN-13: {{proceedings['isbn']}}
 
