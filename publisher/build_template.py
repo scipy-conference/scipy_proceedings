@@ -2,13 +2,11 @@
 
 import os
 import sys
+import shlex, subprocess
 
 import tempita
-import conf
+from conf import bib_dir, build_dir, template_dir
 from options import get_config
-
-template_dir = conf.template_dir
-build_dir    = conf.build_dir
 
 def from_template(template_fn, config, dest_fn):
 
@@ -20,6 +18,15 @@ def from_template(template_fn, config, dest_fn):
     
     with open(outname, mode=mode) as f:
         f.write(template.substitute(config))
+
+def bib_from_tmpl(bib_type, config, target):
+    bib_tmpl = os.path.join(template_dir, bib_type + '.bib.tmpl')
+    dest_path = os.path.join(bib_dir, target + '.bib')
+    from_template(bib_tmpl, config, dest_path)
+    command_line = 'recode -d u8..ltex ' + dest_path
+    run = subprocess.Popen(command_line, shell=True, stdout=subprocess.PIPE)
+    out, err = run.communicate()
+
 
 if __name__ == "__main__":
 
