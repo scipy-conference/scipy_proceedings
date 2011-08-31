@@ -4,6 +4,7 @@ HTMLDIR = _build/html
 PDFDIR = _build/pdfs
 PAPERDIR = ../output
 TEMPLATES = _templates
+STATIC = _static
 
 BUILDTMPL = ./build_template.py
 TEX2PDF := cd $(TEXDIR) && pdflatex -interaction=batchmode
@@ -53,4 +54,4 @@ proceedings: front-pdf papers $(TEXDIR)/proceedings.tex
 
 proceedings-html: front-html proceedings
 	ln -s ../pdfs $(HTMLDIR)/pdfs
-	cp $(TEMPLATES)/toc.css $(HTMLDIR)/.
+	cp $(STATIC)/toc.css $(HTMLDIR)/.
