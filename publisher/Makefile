@@ -33,13 +33,14 @@ $(TEXDIR)/%.tex: $(TEXDIR)
 $(TEXDIR)/%.pdf: $(TEXDIR)/%.tex
 	($(TEX2PDF) $(<F) 1>/dev/null)
 
+title-pdf: $(TEXDIR)/title.pdf
 cover-pdf: $(TEXDIR)/cover.pdf
 copyright-pdf: $(TEXDIR)/copyright.pdf
 organization-pdf: $(TEXDIR)/organization.pdf
 organization-html: $(HTMLDIR)/organization.html
 toc-html: $(HTMLDIR)/toc.html
 
-front-pdf: cover-pdf copyright-pdf organization-pdf
+front-pdf: title-pdf copyright-pdf organization-pdf
 front-html: organization-html toc-html
 
 papers:

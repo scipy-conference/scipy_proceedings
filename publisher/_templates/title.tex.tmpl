@@ -1,0 +1,40 @@
+\documentclass[pdftex,letterpaper]{article}
+\usepackage[pdftex]{graphicx}
+\usepackage{palatino}
+\usepackage[utf8]{inputenc}
+\newcommand{\gargantuan}{\fontsize{34}{38}\selectfont}
+\addtolength{\oddsidemargin}{-1.125in}
+\addtolength{\textwidth}{2.0in}
+\addtolength{\textheight}{0.75in}
+
+\begin{document}
+\begin{titlepage}
+
+\begin{center}
+
+\IfFileExists{../../_static/logo.png}{\includegraphics{../../_static/logo.png} }{ \null \vspace{3 cm} }
+\bigskip
+\bigskip
+\bigskip
+% Title
+{ \gargantuan \bfseries \sffamily Proceedings of the {{proceedings['title']['ordinal']}} \\
+{{proceedings['title']['conference']}}}
+
+\bigskip
+\bigskip
+\bigskip
+{ \huge \sffamily {{proceedings['dates']}}}
+\hspace{2 mm}{ \huge \textbullet }\hspace{2 mm}
+{ \huge \sffamily {{proceedings['location']}}}\\[1cm]
+
+\end{center}
+
+\vfill
+
+{{for editor in proceedings['editor']}}
+
+  \hfill { \huge \sffamily {{editor}}}\\
+{{endfor}}
+
+\end{titlepage}
+\end{document}
