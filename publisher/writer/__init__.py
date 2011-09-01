@@ -80,7 +80,7 @@ class Translator(LaTeXTranslator):
         authors = ', '.join(self.author_names)
 
         d = {}
-        compsocthanks = '\IEEEcompsocitemizethanks{'
+        compsocthanks = ''
         for auth, inst in zip(self.author_names, self.author_institutions):
             d.setdefault(inst, []).append(auth)
 
@@ -88,29 +88,23 @@ class Translator(LaTeXTranslator):
             if len(authlist) <= 2:
                 auths = ' and '.join(authlist)
             else:
-                print authlist
                 auths = ', '.join(authlist[:-1] + ['and ' + authlist[-1],])
             verb= ' is ' if len(authlist)==1 else ' are '
-            compsocthanks += '\IEEEcompsocthanksitem '+auths+verb+'with the '+inst+'.'
+            compsocthanks += auths+verb+'with the '+inst+'. '
         
-        compsocthanks += '}'
-
         copyright_holder = self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.')
-        author_notes = [r'''
-E-mail: \protect\href{%s}{%s}.
+        author_notes = r'''E-mail: \protect\href{%s}{%s}.
 
-\noindent Copyright: \copyright %s %s %s
+\noindent \copyright %s %s %s
         ''' % ('mailto:' + self.author_emails[0],
                self.author_emails[0],
                options['proceedings']['year'],
                copyright_holder,
-               options['proceedings']['copyright']['article'])]
-
-        author_notes = ''.join('\\thanks{%s}' % n for n in author_notes)
+               options['proceedings']['copyright']['article'])
 
         author_notes = compsocthanks+author_notes
 
-        title_template = '\\title{%s}\\author{%s%s}\\maketitle'
+        title_template = '\\title{%s}\\author{%s\\thanks{%s}}\\maketitle'
         title_template = title_template % (title,
                                            authors,
                                            author_notes)
