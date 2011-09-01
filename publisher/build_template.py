@@ -5,7 +5,7 @@ import sys
 import shlex, subprocess
 
 import tempita
-from conf import bib_dir, build_dir, template_dir
+from conf import bib_dir, build_dir, template_dir, html_dir
 from options import get_config
 
 def from_template(template_fn, config, dest_fn):
@@ -27,6 +27,10 @@ def bib_from_tmpl(bib_type, config, target):
     run = subprocess.Popen(command_line, shell=True, stdout=subprocess.PIPE)
     out, err = run.communicate()
 
+def art_from_tmpl(config, target):
+    art_tmpl = os.path.join(template_dir, 'article.html.tmpl')
+    dest_path = os.path.join(html_dir, target + '.html')
+    from_template(art_tmpl, config, dest_path)
 
 if __name__ == "__main__":
 

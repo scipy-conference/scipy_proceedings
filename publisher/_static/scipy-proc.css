@@ -22,3 +22,8 @@ body {
    padding-left: 1em;
 }
 
+.abstract {
+   width: 80ex;
+   text-align: justify
+   padding-left: 1em;
+}

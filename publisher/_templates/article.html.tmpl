@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>{{html_quote(proceedings['title']['short']) | html}}: {{html_quote(article['title']) | html}}</title>
+<link rel="stylesheet" href="scipy-proc.css" type="text/css"/>
+</head>
+
+<body>
+
+<h1>{{html_quote(article['title']) | html}}</h1>
+
+<div id="content">
+
+{{for auth, inst in zip(article['author'], article['author_institution'])}}
+  <!---------------------------------------------------------->
+  <p>
+  <span class="authors">{{html_quote(auth) | html}}</span>
+  <span class="authors">{{html_quote(inst) | html}}</span><br/>
+  </p>
+  <!---------------------------------------------------------->
+{{endfor}}
+
+<!---------------------------------------------------------->
+<strong><big>Abstract</big></strong>
+<p> <span class="abstract"> {{html_quote(article['abstract']) | html}}</span>
+</p>
+<!---------------------------------------------------------->
+
+<!---------------------------------------------------------->
+<p>
+<span class="bibtex"><a href="bib/{{article['paper_id']}}.bib">Bibtex entry</a></span>
+</p>
+<p>
+<span class="pdf"><a href="pdfs/{{article['paper_id']}}.pdf">Full text PDF</a></span>
+</p>
+<!---------------------------------------------------------->
+
+</div>
+
+</body>
+
+</html>

@@ -39,7 +39,7 @@ cover-pdf: $(TEXDIR)/cover.pdf
 copyright-pdf: $(TEXDIR)/copyright.pdf
 organization-pdf: $(TEXDIR)/organization.pdf
 organization-html: $(HTMLDIR)/organization.html
-toc-html: $(HTMLDIR)/toc.html
+toc-html: $(HTMLDIR)/index.html
 
 front-pdf: title-pdf copyright-pdf organization-pdf
 front-html: organization-html toc-html
@@ -53,5 +53,5 @@ proceedings: front-pdf papers $(TEXDIR)/proceedings.tex
 	cp $(TEXDIR)/proceedings.pdf $(PDFDIR)/proceedings.pdf 
 
 proceedings-html: front-html proceedings
-	ln -s ../pdfs $(HTMLDIR)/pdfs
-	cp $(STATIC)/toc.css $(HTMLDIR)/.
+	cp -a ../pdfs $(HTMLDIR)/.
+	cp $(STATIC)/scipy-proc.css $(HTMLDIR)/.
