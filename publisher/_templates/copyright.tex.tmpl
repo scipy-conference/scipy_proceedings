@@ -29,12 +29,10 @@ Edited by {{if len(proceedings['editor']) <=2:}}
 \bigskip
 \bigskip
 
-Copyright \copyright{ {{ proceedings['year']}}}. The content of the articles of the
-Proceedings of the Python in Science Conference is copyrighted
-and owned by their original authors.
+Copyright \copyright{ {{ proceedings['year']}}}. {{for line in proceedings['copyright']['proceedings']}}
+{{line}}
 
-For republication or other use of the material published, please 
-contact the copyright owners to obtain permission. 
+{{endfor}}
 
 \bigskip
 \bigskip

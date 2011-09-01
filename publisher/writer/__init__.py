@@ -29,7 +29,7 @@ class Translator(LaTeXTranslator):
         self.author_institutions = []
         self.author_emails = []
         self.paper_title = ''
-        self.abstract = ''
+        self.abstract_text = []
         self.table_caption = []
 
         self.abstract_in_progress = False
@@ -95,13 +95,19 @@ class Translator(LaTeXTranslator):
         
         compsocthanks += '}'
 
-        author_notes = ['''
-The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
-        ''' % (self.author_institutions[0],
-               'mailto:' + self.author_emails[0],
-               self.author_emails[0])]
+        copyright_holder = self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.')
+        author_notes = [r'''
+E-mail: \protect\href{%s}{%s}.
+
+\noindent Copyright: \copyright %s %s %s
+        ''' % ('mailto:' + self.author_emails[0],
+               self.author_emails[0],
+               options['proceedings']['year'],
+               copyright_holder,
+               options['proceedings']['copyright']['article'])]
 
         author_notes = ''.join('\\thanks{%s}' % n for n in author_notes)
+
         author_notes = compsocthanks+author_notes
 
         title_template = '\\title{%s}\\author{%s%s}\\maketitle'
@@ -122,7 +128,7 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
                                'authors': authors,
                                'author': self.author_names,
                                'author_institution': self.author_institutions,
-                               'abstract': self.abstract}
+                               'abstract': self.abstract_text}
 
     def end_open_abstract(self, node):
         if 'abstract' not in node['classes'] and self.abstract_in_progress:
@@ -152,7 +158,7 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
 
         if 'abstract' in node['classes'] and not self.abstract_in_progress:
             self.out.append('\\begin{abstract}')
-            self.abstract = self.encode(node.astext())
+            self.abstract_text.append(self.encode(node.astext()))
             self.abstract_in_progress = True
 
         elif 'keywords' in node['classes']:
