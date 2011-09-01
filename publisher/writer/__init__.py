@@ -128,7 +128,8 @@ E-mail: \protect\href{%s}{%s}.
                                'authors': authors,
                                'author': self.author_names,
                                'author_institution': self.author_institutions,
-                               'abstract': self.abstract_text}
+                               'abstract': self.abstract_text,
+                               'copyright_holder': copyright_holder}
 
     def end_open_abstract(self, node):
         if 'abstract' not in node['classes'] and self.abstract_in_progress:

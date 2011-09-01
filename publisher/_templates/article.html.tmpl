@@ -1,11 +1,3 @@
-<html>
-<head>
-<title>{{html_quote(proceedings['title']['short']) | html}}: {{html_quote(article['title']) | html}}</title>
-<link rel="stylesheet" href="scipy-proc.css" type="text/css"/>
-</head>
-
-<body>
-
 <h1>{{html_quote(article['title']) | html}}</h1>
 
 <div id="content">
@@ -13,7 +5,7 @@
 {{for auth, inst in zip(article['author'], article['author_institution'])}}
   <!---------------------------------------------------------->
   <p>
-  <span class="authors">{{html_quote(auth) | html}}</span>
+  <span class="auth"><b>{{html_quote(auth) | html}}</b></span><br/>
   <span class="authors">{{html_quote(inst) | html}}</span><br/>
   </p>
   <!---------------------------------------------------------->
@@ -21,7 +13,7 @@
 
 <!---------------------------------------------------------->
 <strong><big>Abstract</big></strong>
-<p> <span class="abstract"> {{html_quote(article['abstract']) | html}}</span>
+<p> <span class="abstract"> {{html_quote(', '.join(article['abstract'])) | html}}</span>
 </p>
 <!---------------------------------------------------------->
 
@@ -35,6 +27,12 @@
 <!---------------------------------------------------------->
 
 </div>
+
+<div id="footer">
+<p>
+Copyright &copy; {{ proceedings['year']}} {{article['copyright_holder']}}
+{{proceedings['copyright']['article']}}
+</p>
 
 </body>
 

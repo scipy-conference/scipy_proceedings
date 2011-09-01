@@ -19,14 +19,8 @@ clean:
 $(TEXDIR): 
 	mkdir -p $@
 
-$(HTMLDIR):
-	mkdir -p $@
-
 $(TEXDIR)/cover.pdf: $(TEXDIR)
 	inkscape --export-dpi=600 --export-pdf=$@ $(TEMPLATES)/cover.svg
-
-$(HTMLDIR)/%.html: $(HTMLDIR)
-	$(BUILDTMPL) $(@F)
 
 $(TEXDIR)/%.tex: $(TEXDIR)
 	$(BUILDTMPL) $(@F)
@@ -38,11 +32,8 @@ title-pdf: $(TEXDIR)/title.pdf
 cover-pdf: $(TEXDIR)/cover.pdf
 copyright-pdf: $(TEXDIR)/copyright.pdf
 organization-pdf: $(TEXDIR)/organization.pdf
-organization-html: $(HTMLDIR)/organization.html
-toc-html: $(HTMLDIR)/index.html
 
 front-pdf: title-pdf copyright-pdf organization-pdf
-front-html: organization-html toc-html
 
 papers:
 	./build_papers.py
@@ -52,6 +43,5 @@ proceedings: front-pdf papers $(TEXDIR)/proceedings.tex
 	($(TEX2PDF) proceedings 1>/dev/null)
 	cp $(TEXDIR)/proceedings.pdf $(PDFDIR)/proceedings.pdf 
 
-proceedings-html: front-html proceedings
-	cp -a ../pdfs $(HTMLDIR)/.
-	cp $(STATIC)/scipy-proc.css $(HTMLDIR)/.
+proceedings-html: proceedings
+	python build_html.py

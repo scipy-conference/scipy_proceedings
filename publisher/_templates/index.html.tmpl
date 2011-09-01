@@ -1,16 +1,14 @@
-<html>
-<head>
-<title>{{html_quote(proceedings['title']['short']) | html}}</title>
-<link rel="stylesheet" href="scipy-proc.css" type="text/css"/>
-</head>
-
-<body>
-
-<h1>Table of Contents</h1>
+<h1>{{proceedings['title']['full']}} ({{proceedings['title']['acronym']}} {{proceedings['year']}})</h1>
 
 <div id="content">
 
-<a href="organization.html">Organizers</a>
+<p><b>{{', '.join(proceedings['editor'])}}</b><p>
+<p><small>{{proceedings['dates']}}</small></p>
+<p><small>{{proceedings['location']}}</small></p>
+<p>
+<p><a href="organization.html">Organizers</a>
+
+<h2>Articles</h2>
 
 {{for line in toc}}
   <!---------------------------------------------------------->
@@ -22,6 +20,21 @@
   <!---------------------------------------------------------->
 {{endfor}}
 
+<div id="footer">
+<p>
+Copyright &copy; {{ proceedings['year']}}.
+{{for line in proceedings['copyright']['proceedings']}}
+{{line}}
+</p>
+<p>
+
+{{endfor}}
+</p>
+
+<p>
+ISBN-13: {{proceedings['isbn']}}
+</p>
+</div>
 </div>
 
 </body>
