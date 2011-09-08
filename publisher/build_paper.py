@@ -124,7 +124,7 @@ if __name__ == "__main__":
        print "Usage: build_paper.py paper_directory"
        sys.exit(-1)
    
-   in_path = sys.argv[1]
+   in_path = os.path.normpath(sys.argv[1])
    if not os.path.isdir(in_path):
        print("Cannot open directory: %s" % in_path)
        sys.exit(-1)
