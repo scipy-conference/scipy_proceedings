@@ -22,7 +22,7 @@ bib_from_tmpl('proceedings',config,config['proceedings']['citation_key'])
 proc_dict = dict(config.items() +
                 {'pdf': 'pdfs/proceedings.pdf'}.items() +
                 {'bibtex': 'bib/proc-scipy-2010.bib'}.items())
-for dest_fn in ['index','organization']:
+for dest_fn in ['index','organization', 'students']:
     html_from_tmpl(dest_fn+'.html', proc_dict, dest_fn)
 
 for article in config['toc']:

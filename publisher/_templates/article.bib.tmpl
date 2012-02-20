@@ -1,8 +1,8 @@
 @InProceedings{ {{'-'.join([article['paper_id'],
                                   proceedings['citation_key']])}},
   author    = { {{' and '.join(article['author'])}} },
-  title     = {{ {{article['title']}}}},
-  booktitle = {{ {{proceedings['title']['full']}} }},
+  title     = { {{article['title']}} },
+  booktitle = { {{proceedings['title']['full']}} },
   pages     = { {{' - '.join([str(article['page']['start']), str(article['page']['stop'])])}} },
   year      = { {{proceedings['year']}} },
   editor    = { {{' and '.join(proceedings['editor'])}} }
