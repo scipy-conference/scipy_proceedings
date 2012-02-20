@@ -43,25 +43,25 @@ def paper_stats(paper_id, start):
 
 if __name__ == "__main__":
 
-    start = 1
+    start = 0
     toc_entries = []
-    
+
     options.mkdir_p(pdf_dir)
     for paper_id in dirs:
         build_paper(paper_id)
-     
-        stats, start = paper_stats(paper_id, start)
+
+        stats, start = paper_stats(paper_id, start + 1)
         toc_entries.append(stats)
 
         build_paper(paper_id)
-    
-        src_pdf = os.path.join(output_dir, paper_id, 'paper.pdf')   
-        dest_pdf = os.path.join(pdf_dir, paper_id+'.pdf')   
+
+        src_pdf = os.path.join(output_dir, paper_id, 'paper.pdf')
+        dest_pdf = os.path.join(pdf_dir, paper_id+'.pdf')
         shutil.copy(src_pdf, dest_pdf)
-    
+
         command_line = 'cd '+pdf_dir+' ; pdfannotextractor '+paper_id+'.pdf'
         run = subprocess.Popen(command_line, shell=True, stdout=subprocess.PIPE)
         out, err = run.communicate()
-    
+
     toc = {'toc': toc_entries}
     options.dict2cfg(toc, toc_conf)
