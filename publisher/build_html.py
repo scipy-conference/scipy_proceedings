@@ -17,12 +17,15 @@ mkdir_p(html_pdfs)
 for file in glob.glob(os.path.join(pdf_dir,'*.pdf')):
     shutil.copy(file, html_pdfs)
 
-bib_from_tmpl('proceedings',config,config['proceedings']['citation_key'])
+citation_key = config['proceedings']['citation_key'] # e.g. proc-scipy-2010
+
+bib_from_tmpl('proceedings', config, citation_key)
 
 proc_dict = dict(config.items() +
                 {'pdf': 'pdfs/proceedings.pdf'}.items() +
-                {'bibtex': 'bib/proc-scipy-2010.bib'}.items())
-for dest_fn in ['index','organization', 'students']:
+                {'bibtex': 'bib/' + citation_key}.items())
+
+for dest_fn in ['index', 'organization', 'students']:
     html_from_tmpl(dest_fn+'.html', proc_dict, dest_fn)
 
 for article in config['toc']:
