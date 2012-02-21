@@ -46,5 +46,13 @@
                  "org": "Some company"}
                 ]
         }
-    ]
+    ],
+
+  "sponsored_students": [
+      {
+          "name": "First name",
+          "org": "University",
+          "location": "Where from"
+      }
+  ]
 }
