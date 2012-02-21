@@ -16,11 +16,8 @@ all: clean proceedings
 clean:
 	rm -rf $(PAPERDIR)/* $(BUILDDIR)/*
 
-$(TEXDIR): 
+$(TEXDIR):
 	mkdir -p $@
-
-$(TEXDIR)/cover.pdf: $(TEXDIR)
-	inkscape --export-dpi=600 --export-pdf=$@ $(TEMPLATES)/cover.svg
 
 $(TEXDIR)/%.tex: $(TEXDIR)
 	$(BUILDTMPL) $(@F)
@@ -29,11 +26,11 @@ $(TEXDIR)/%.pdf: $(TEXDIR)/%.tex
 	($(TEX2PDF) $(<F) 1>/dev/null)
 
 title-pdf: $(TEXDIR)/title.pdf
-cover-pdf: $(TEXDIR)/cover.pdf
 copyright-pdf: $(TEXDIR)/copyright.pdf
 organization-pdf: $(TEXDIR)/organization.pdf
+students-pdf: $(TEXDIR)/students.pdf
 
-front-pdf: title-pdf copyright-pdf organization-pdf
+front-pdf: title-pdf copyright-pdf organization-pdf students-pdf
 
 papers:
 	./build_papers.py

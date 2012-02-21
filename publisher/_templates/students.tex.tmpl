@@ -1,0 +1,21 @@
+\documentclass[letterpaper,compsoc,onecolumn,twoside,english]{IEEEtran}
+\thispagestyle{empty}
+\pagestyle{empty}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\section*{Sponsored Students}
+\vspace{4mm}
+
+\begin{itemize}
+
+{{for student in sponsored_students}}
+      \item[] \normalsize\textsc{%
+{{student['name']}}}, \small{%
+{{student['org']}}, {{student['location']}}}
+{{endfor}}
+
+\end{itemize}
+
+\end{document}
