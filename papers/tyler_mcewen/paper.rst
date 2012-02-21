@@ -136,7 +136,7 @@ Differences can also be seen between all three methods near the lake boundaries.
 .. table:: Comparison of interpolation methods. :label:`voltable`
 
    +---------------------------+-------------+---------------+-------------+
-   | Interpolation Method      |   Volume    |  Increase in  | Hours for   |
+   | Interpolation Method      | Volume      |  Increase in  | Hours for   |
    |                           | (acre-feet) |  Lake Volume  | completion  |
    +---------------------------+-------------+---------------+-------------+
    | Delaunay Triangulation    |   156,283   |      <-->     |     0       |
@@ -147,6 +147,7 @@ Differences can also be seen between all three methods near the lake boundaries.
    +---------------------------+-------------+---------------+-------------+
    | AEIDW (eccentricity=1/25) |   161,693   |      3.46%    |     8       |
    +---------------------------+-------------+---------------+-------------+
+
 
 Analysis shows a 63% reduction of processing time by using the line-automated HydroEdit method for Lake Texana when compared to the original HydroEdit method. Using the AEIDW method resulted in a 91% and 76% reduction of processing time when when compared to the original HydroEdit and line-automated Hydroedit methods. A summary and comparison table is presented in Table :ref:`voltable`. The table shows that all three methods add volume to the lake volumetric estimate. The volume added by the line-automated HydroEdit method is lower probably due to it not capturing much of the sinousity of the relic stream channel. The remaining variance between AIEDW and HydroEdit can be explained by differences in the way boundaries have been handled.
 
