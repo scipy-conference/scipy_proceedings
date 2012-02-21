@@ -21,18 +21,19 @@ class Translator(LaTeXTranslator):
     def __init__(self, *args, **kwargs):
         LaTeXTranslator.__init__(self, *args, **kwargs)
 
-    # Handle author declarations
+        # Handle author declarations
 
-    current_field = ''
+        self.current_field = ''
 
-    author_names = []
-    author_institutions = []
-    author_emails = []
-    paper_title = ''
-    table_caption = []
+        self.author_names = []
+        self.author_institutions = []
+        self.author_emails = []
+        self.paper_title = ''
+        self.abstract_text = []
+        self.table_caption = []
 
-    abstract_in_progress = False
-    non_breaking_paragraph = False
+        self.abstract_in_progress = False
+        self.non_breaking_paragraph = False
 
     def visit_docinfo(self, node):
         pass
@@ -78,15 +79,32 @@ class Translator(LaTeXTranslator):
         title = self.paper_title
         authors = ', '.join(self.author_names)
 
-        author_notes = ['''
-The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
-        ''' % (self.author_institutions[0],
-               'mailto:' + self.author_emails[0],
-               self.author_emails[0])]
+        d = {}
+        compsocthanks = ''
+        for auth, inst in zip(self.author_names, self.author_institutions):
+            d.setdefault(inst, []).append(auth)
 
-        author_notes = ''.join('\\thanks{%s}' % n for n in author_notes)
+        for inst, authlist in d.iteritems():
+            if len(authlist) <= 2:
+                auths = ' and '.join(authlist)
+            else:
+                auths = ', '.join(authlist[:-1] + ['and ' + authlist[-1],])
+            verb= ' is ' if len(authlist)==1 else ' are '
+            compsocthanks += auths+verb+'with the '+inst+'. '
+        
+        copyright_holder = self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.')
+        author_notes = r'''E-mail: \protect\href{%s}{%s}.
 
-        title_template = '\\title{%s}\\author{%s%s}\\maketitle'
+\noindent \copyright %s %s %s
+        ''' % ('mailto:' + self.author_emails[0],
+               self.author_emails[0],
+               options['proceedings']['year'],
+               copyright_holder,
+               options['proceedings']['copyright']['article'])
+
+        author_notes = compsocthanks+author_notes
+
+        title_template = '\\title{%s}\\author{%s\\thanks{%s}}\\maketitle'
         title_template = title_template % (title,
                                            authors,
                                            author_notes)
@@ -94,14 +112,18 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
         marks = r'''
         \renewcommand{\leftmark}{%s}
         \renewcommand{\rightmark}{%s}
-        ''' % (options['proc_title'], title.upper())
+        ''' % (options['proceedings']['title']['short'], title.upper())
         title_template += marks
 
         self.body_pre_docinfo = [title_template]
 
         # Save paper stats
         self.document.stats = {'title': title,
-                               'authors': authors}
+                               'authors': authors,
+                               'author': self.author_names,
+                               'author_institution': self.author_institutions,
+                               'abstract': self.abstract_text,
+                               'copyright_holder': copyright_holder}
 
     def end_open_abstract(self, node):
         if 'abstract' not in node['classes'] and self.abstract_in_progress:
@@ -131,6 +153,7 @@ The corresponding author is with %s, e-mail: \protect\href{%s}{%s}.
 
         if 'abstract' in node['classes'] and not self.abstract_in_progress:
             self.out.append('\\begin{abstract}')
+            self.abstract_text.append(self.encode(node.astext()))
             self.abstract_in_progress = True
 
         elif 'keywords' in node['classes']:

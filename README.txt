@@ -41,18 +41,8 @@ Build Process
 
   ./make_paper.sh papers/my_paper_dir
 
-Building the entire Proceedings
--------------------------------
-::
-
-  ./make_all.sh
-  ./build_index.py
-  ./make_all.sh
-  ./concat_proceedings_pdf.sh
-
 Requirements
 ------------
  - IEEETran and AMSmath LaTeX classes
  - **Latest** docutils (development version, they haven't released in years)
  - Pygments for code highlighting
-

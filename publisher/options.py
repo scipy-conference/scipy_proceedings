@@ -6,11 +6,18 @@ __all__ = ['options']
 
 import os.path
 import json
+import codecs
 
-default_filename = os.path.join(os.path.dirname(__file__),
-                                '../scipy_proc.json')
+import conf
+toc_conf   = conf.toc_conf
+proc_conf  = conf.proc_conf
 
-def cfg2dict(filename=default_filename):
+def get_config():
+    config = cfg2dict(proc_conf)
+    config.update(cfg2dict(toc_conf))
+    return config
+
+def cfg2dict(filename):
     """Return the content of a .ini file as a dictionary.
 
     """
@@ -18,12 +25,17 @@ def cfg2dict(filename=default_filename):
         print '*** Warning: %s does not exist.' % filename
         return {}
 
-    return json.load(open(filename, 'r'))
+    return json.loads(codecs.open(filename, 'r', 'utf-8').read())
 
 def dict2cfg(d, filename):
     """Write dictionary out to config file.
 
     """
-    json.dump(d, open(filename, 'w'))
+    json.dump(d, codecs.open(filename, 'w', 'utf-8'), ensure_ascii=False)
 
-options = cfg2dict()
+def mkdir_p(dir):
+    if os.path.isdir(dir):
+        return
+    os.makedirs(dir)
+
+options = cfg2dict(proc_conf)

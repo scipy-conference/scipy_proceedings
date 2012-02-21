@@ -1,0 +1,39 @@
+<h1>{{html_quote(article['title']) | html}}</h1>
+
+<div id="content">
+
+{{for auth, inst in zip(article['author'], article['author_institution'])}}
+  <!---------------------------------------------------------->
+  <p>
+  <span class="auth"><b>{{html_quote(auth) | html}}</b></span><br/>
+  <span class="authors">{{html_quote(inst) | html}}</span><br/>
+  </p>
+  <!---------------------------------------------------------->
+{{endfor}}
+
+<!---------------------------------------------------------->
+<strong><big>Abstract</big></strong>
+<p> <span class="abstract"> {{html_quote(', '.join(article['abstract'])) | html}}</span>
+</p>
+<!---------------------------------------------------------->
+
+<!---------------------------------------------------------->
+<p>
+<span class="bibtex"><a href="bib/{{article['paper_id']}}.bib">Bibtex entry</a></span>
+</p>
+<p>
+<span class="pdf"><a href="pdfs/{{article['paper_id']}}.pdf">Full text PDF</a></span>
+</p>
+<!---------------------------------------------------------->
+
+</div>
+
+<div id="footer">
+<p>
+Copyright &copy; {{ proceedings['year']}} {{article['copyright_holder']}}
+{{proceedings['copyright']['article']}}
+</p>
+
+</body>
+
+</html>

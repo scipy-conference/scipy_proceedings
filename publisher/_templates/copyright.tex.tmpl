@@ -1,0 +1,44 @@
+\documentclass[letterpaper,compsoc,onecolumn,twoside]{IEEEtran}
+\thispagestyle{empty}
+\pagestyle{empty}
+\usepackage[utf8]{inputenc}
+\usepackage{parskip}
+
+\begin{document}
+
+\null
+\vfill
+
+\section*{%
+{{proceedings['title']['full']}}}
+
+%Edited by {{proceedings['editor'][0]}} and {{proceedings['editor'][1]}}.
+
+Edited by {{if len(proceedings['editor']) <=2:}}
+  {{' and '.join(proceedings['editor'])}}%
+{{else}}
+  {{', '.join(authlist[:-1] + ['and ' + authlist[-1],])}}%
+{{endif}}.
+
+\bigskip
+
+{{proceedings['title']['acronym']}} {{proceedings['year']}}\\
+{{proceedings['location']}}\\
+{{proceedings['dates']}}, {{proceedings['year']}}
+
+\bigskip
+\bigskip
+
+Copyright \copyright{ {{ proceedings['year']}}}. {{for line in proceedings['copyright']['proceedings']}}
+{{line}}
+
+{{endfor}}
+
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+
+ISBN-13: {{proceedings['isbn']}}
+
+\end{document}

@@ -1,5 +1,30 @@
 {
-  "proc_title": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2010)",
+  "proceedings": {
+     "citation_key": "proc-scipy-2010", 
+     "title": {
+       "acronym": "SciPy",
+       "conference": "Python in Science Conference",
+       "ordinal": "9th",
+       "short": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2010)",
+       "full": "Proceedings of the 9th Python in Science Conference"
+     },
+     "year": "2010",
+     "editor": [
+        "Stéfan van der Walt",
+        "Jarrod Millman"
+     ],
+     "volume": 3,
+     "number": 1,
+     "isbn": "value",
+     "location": "Austin, Texas",
+     "dates": "June 28 - July 3",
+     "copyright": {
+       "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
+       "proceedings": ["The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
+                       "This is an open-access publication and is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
+                       "For more information, please see:  http://creativecommons.org/licenses/by/3.0/"],
+       "license": "Creative Commons Attribution License (CCAL)"}
+  },
   "organization": [
   
         {
@@ -21,5 +46,13 @@
                  "org": "Some company"}
                 ]
         }
-    ]
+    ],
+
+  "sponsored_students": [
+      {
+          "name": "First name",
+          "org": "University",
+          "location": "Where from"
+      }
+  ]
 }

@@ -6,6 +6,11 @@
 :email: mark37@rome.it
 :institution: Egyptian Embassy
 
+:author: Jarrod Millman
+:email: millman@rome.it
+:institution: Egyptian Embassy
+
+
 ------------------------------------------------
 A Numerical Perspective to Terraforming a Desert
 ------------------------------------------------

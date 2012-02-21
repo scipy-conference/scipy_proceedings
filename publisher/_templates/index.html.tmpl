@@ -1,0 +1,44 @@
+<h1>{{proceedings['title']['full']}} ({{proceedings['title']['acronym']}} {{proceedings['year']}})</h1>
+
+<div id="content">
+
+<p><b>{{', '.join(proceedings['editor'])}}</b><p>
+<p><small>{{proceedings['dates']}}</small></p>
+<p><small>{{proceedings['location']}}</small></p>
+<p></p>
+<p><a href="organization.html">Organizers</a> | 
+<a href="students.html">Sponsored Students</a>
+</p>
+
+<h2>Articles</h2>
+
+{{for line in toc}}
+  <!---------------------------------------------------------->
+  <p>
+  <span class="title"><a href="{{line['paper_id']}}.html">{{html_quote(line['title']) | html}}</a></span>
+  <span class="pagenr">{{html_quote(line['page']['start']) | html}}</span><br/>
+  <span class="authors">{{html_quote(line['authors']) | html}}</span>
+  </p>
+  <!---------------------------------------------------------->
+{{endfor}}
+
+<div id="footer">
+<p>
+Copyright &copy; {{ proceedings['year']}}.
+{{for line in proceedings['copyright']['proceedings']}}
+{{line}}
+</p>
+<p>
+
+{{endfor}}
+</p>
+
+<p>
+ISBN-13: {{proceedings['isbn']}}
+</p>
+</div>
+</div>
+
+</body>
+
+</html>
