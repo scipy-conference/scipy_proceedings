@@ -31,6 +31,8 @@ def rst2tex(in_path, out_path):
     for file in glob.glob(os.path.join(in_path,'*')):
         shutil.copy(file, out_path)
 
+    scipy_status = os.path.join(os.path.dirname(__file__),'_static/status.sty')
+    shutil.copy(scipy_status, out_path)
     scipy_style = os.path.join(os.path.dirname(__file__),'_static/scipy.sty')
     shutil.copy(scipy_style, out_path)
     preamble = r'''\usepackage{scipy}'''
