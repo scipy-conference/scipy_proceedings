@@ -131,6 +131,9 @@ class Translator(LaTeXTranslator):
         if 'abstract' not in node['classes'] and self.abstract_in_progress:
             self.out.append('\\end{abstract}')
             self.abstract_in_progress = False
+        elif self.abstract_in_progress:
+            self.abstract_text.append(self.encode(node.astext()))
+
 
     def visit_title(self, node):
         self.end_open_abstract(node)
