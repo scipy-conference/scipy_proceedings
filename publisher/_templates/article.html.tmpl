@@ -13,7 +13,12 @@
 
 <!---------------------------------------------------------->
 <strong><big>Abstract</big></strong>
-<p> <span class="abstract"> {{html_quote(', '.join(article['abstract'])) | html}}</span>
+<p> <span class="abstract">
+{{for p in article['abstract']}}
+<p>
+{{html_quote(p) | html}}
+</p>
+{{endfor}}
 </p>
 <!---------------------------------------------------------->
 
