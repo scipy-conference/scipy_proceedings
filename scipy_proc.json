@@ -45,7 +45,7 @@
                 {"name": "Warren Weckesser",
                  "org": "Enthought, Inc., USA"}
                 ]
-        }
+        },
 
         {
             "name": "Program Committee",
@@ -69,7 +69,7 @@
                 {"name": "Dan Schult",
                  "org": "Department of Mathematics, Colgate University, USA"},
                 {"name": "James Turner",
-                 "org": "Gemini Observatory, Chile"},
+                 "org": "Gemini Observatory, Chile"}
                 ]
         },
 
@@ -111,7 +111,7 @@
                 {"name": "Matthew Brett",
                  "org": "Neuroscience Institute, UC Berkeley, USA"}
                 ]
-        },
+        }
 
 
     ],
