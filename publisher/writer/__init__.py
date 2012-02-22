@@ -30,6 +30,7 @@ class Translator(LaTeXTranslator):
         self.author_emails = []
         self.paper_title = ''
         self.abstract_text = []
+        self.keywords = ''
         self.table_caption = []
 
         self.abstract_in_progress = False
@@ -123,6 +124,7 @@ class Translator(LaTeXTranslator):
                                'author': self.author_names,
                                'author_institution': self.author_institutions,
                                'abstract': self.abstract_text,
+                               'keywords': self.keywords,
                                'copyright_holder': copyright_holder}
 
     def end_open_abstract(self, node):
@@ -158,6 +160,7 @@ class Translator(LaTeXTranslator):
 
         elif 'keywords' in node['classes']:
             self.out.append('\\begin{IEEEkeywords}')
+            self.keywords = self.encode(node.astext())
 
         elif self.non_breaking_paragraph:
             self.non_breaking_paragraph = False
