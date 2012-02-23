@@ -1,6 +1,6 @@
 :author: Douglas A. Starnes
 :email: douglas@poweredbyalt.net
-:institution: The University of Memphis - Institute For Intelligent Systems (Student)
+:institution: University of Memphis - Institute For Intelligent Systems
 
 ------------------------
 Google App Engine Python
