@@ -60,7 +60,7 @@ a {text-decoration: none;
 
 .midHeader {
   color: rgb(39,78,144);
-  background-color: rgb(140,170,230);
+/*  background-color: rgb(140,170,230); */  /* should be color of logo background */
   margin: 0;
   font-size: 3.2em;
   font-weight: normal;
