@@ -1,14 +1,14 @@
 :author: Shoaib Kamil
 :email: skamil@cs.berkeley.edu
-:institution: Department of Computer Science, UC Berkeley
+:institution: University of California, Berkeley
 
 :author: Derrick Coetzee
 :email: dcoetzee@cs.berkeley.edu
-:institution: Department of Computer Science, UC Berkeley
+:institution: University of California, Berkeley
 
 :author: Armando Fox
 :email: fox@cs.berkeley.edu
-:institution: Department of Computer Science, UC Berkeley
+:institution: University of California, Berkeley
 
 ------------------------------------------------------------------------------------------------------------
 Bringing Parallel Performance to Python  with Domain-Specific Selective Embedded Just-in-Time Specialization
