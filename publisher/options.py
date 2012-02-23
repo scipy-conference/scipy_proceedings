@@ -11,6 +11,7 @@ import codecs
 import conf
 toc_conf   = conf.toc_conf
 proc_conf  = conf.proc_conf
+inst_conf  = conf.inst_conf
 
 def get_config():
     config = cfg2dict(proc_conf)
@@ -39,3 +40,4 @@ def mkdir_p(dir):
     os.makedirs(dir)
 
 options = cfg2dict(proc_conf)
+inst_table = cfg2dict(inst_conf)
