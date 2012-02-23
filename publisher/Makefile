@@ -42,3 +42,4 @@ proceedings: front-pdf papers $(TEXDIR)/proceedings.tex
 
 proceedings-html: proceedings
 	python build_html.py
+	-convert $(STATIC)/logo.png -resize x120 $(HTMLDIR)/logo.png
