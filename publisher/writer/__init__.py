@@ -10,7 +10,7 @@ from docutils.writers.latex2e import (Writer, LaTeXTranslator,
 from rstmath import mathEnv
 import code_block
 
-from options import options
+from options import options, inst_table
 
 PreambleCmds.float_settings = '''
 \\usepackage[font={small,it},labelfont=bf]{caption}
@@ -91,7 +91,7 @@ class Translator(LaTeXTranslator):
             else:
                 auths = ', '.join(authlist[:-1] + ['and ' + authlist[-1],])
             verb= ' is ' if len(authlist)==1 else ' are '
-            compsocthanks += auths+verb+'with the '+inst+'. '
+            compsocthanks += auths+verb+'with '+ inst_table[inst] +' '+inst+'. '
         
         copyright_holder = self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.')
         author_notes = r'''E-mail: \protect\href{%s}{%s}.
