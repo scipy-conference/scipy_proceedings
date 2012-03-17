@@ -4,6 +4,16 @@
     <title>{{html_quote(proceedings['title']['short']) | html}}</title>
     <link rel="stylesheet" href="scipy-proc.css" type="text/css"/>
     <script type="text/javascript" src="http://conference.scipy.org/proceedings/proc_links.js"></script>
+{{if locals().has_key('article')}}
+    <meta name="citation_title" content="{{article['title']}}"/> 
+    {{for auth in article['author']}}
+    <meta name="citation_author" content="{{auth}}" />
+    {{endfor}}
+    <meta name="citation_publication_date" content="{{proceedings['year']}}" />
+    <meta name="citation_conference_title" content="{{proceedings['title']['full']}}" />
+    <meta name="citation_firstpage" content="{{article['page']['start']}}" />
+    <meta name="citation_lastpage" content="{{article['page']['stop']}}" />
+{{endif}}
 </head>
 
 <body>
