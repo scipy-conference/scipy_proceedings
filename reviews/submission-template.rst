@@ -18,9 +18,9 @@ Title of my Presentation
 :Author: John Doe <john@doe.com>
 :Affiliation: Doe Laboratories
 
-Here, include a talk summary of no longer than 500 words. Aspects such
-as relevance to Python in science, applicability, and novelty will be
-considered by the program committee.
+Here, include a talk summary of no longer than 500 words. Aspects such as
+relevance to Python in science, applicability, and novelty will be considered
+by the program committee.
 
 ...............................................................
 
@@ -41,16 +41,22 @@ accompanying paper::
 
 ...............................................................
 
-Optional: Indicate your preference for a specialized track::
+Optional: Indicate your preference for a specialized main track::
 
   [ ] High Performance Computing with Python
-
   [ ] Visualization
 
-Even if you don't select a track, we may schedule your talk
-in a track if it seems appropriate.  Also, if you select a
-track, we will also consider your submission for the regular
-session.
+Or for one of the smaller domain-specific sessions::
+
+  [ ] Computational bioinformatics
+  [ ] Meteorology and climatology
+  [ ] Astronomy and astrophysics
+  [ ] Geophysics
+  [ ] ?
+
+Please note that this selection is simply a guideline for the programme
+committee, and that talks may be scheduled in a different session than
+indicated.
 
 ...............................................................
 
