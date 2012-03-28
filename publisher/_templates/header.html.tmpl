@@ -4,6 +4,7 @@
     <title>{{html_quote(proceedings['title']['short']) | html}}</title>
     <link rel="stylesheet" href="scipy-proc.css" type="text/css"/>
     <script type="text/javascript" src="http://conference.scipy.org/proceedings/proc_links.js"></script>
+    <script type="text/javascript" src="http://conference.scipy.org/proceedings/google_analytics.js"></script>
 {{if locals().has_key('article')}}
     <meta name="citation_title" content="{{article['title']}}"/> 
     {{for auth in article['author']}}
