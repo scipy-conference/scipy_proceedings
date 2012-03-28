@@ -52,9 +52,8 @@ Or for one of the smaller domain-specific sessions::
   [ ] Meteorology and climatology
   [ ] Astronomy and astrophysics
   [ ] Geophysics
-  [ ] ?
 
-Please note that this selection is simply a guideline for the programme
+Please note that this selection is simply a guideline for the program
 committee, and that talks may be scheduled in a different session than
 indicated.
 
