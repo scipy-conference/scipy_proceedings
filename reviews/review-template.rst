@@ -21,7 +21,7 @@ INSTRUCTIONS
 ------------
 
 Please read the submitted article and fully complete this form. Since we don't
-have a copy editor, we also request that you annotate the PDF to highlight
+have a copy editor, we also request that you annotate the PDF [1]_ to highlight
 typos, formatting issues, and grammatical mistakes.
 
 The goal of the review process is two-fold.  First, it guides authors in
@@ -43,6 +43,11 @@ the paper sets a high enough standards as an academic publication.
 Please note that, while reviewers' recommendations regarding a paper's
 suitability for publication are seriously considered, the final decision rests
 with the proceeding editors.
+
+.. [1] We recommend the free version of `PDF XChange Viewer
+       <http://www.tracker-software.com/product/pdf-xchange-viewer>`__ for
+       Linux (Wine) and Windows.  Under OSX, annotation is provided by Preview
+       as well as `Skim <http://skim-app.sourceforge.net/>`__.
 
 GENERAL EVALUATION
 ------------------
@@ -71,7 +76,7 @@ answer 'no',  please provide a brief, one- to two-sentence explanation.
   describe how to access it?  We aim not to publish papers that essentially
   advertise propetiary software.  Therefore, if the code is not publicly
   available, please provide a one- to two- sentence response to each of the
-  following questions: 
+  following questions:
 
   - Does the article focus on a topic other than the features
     of the software itself?
@@ -83,14 +88,14 @@ answer 'no',  please provide a brief, one- to two-sentence explanation.
     justify including it despite the fact that the code
     isn't available?
   - Does the article discuss the reasons the software is closed?
-   
+
 - Does the article present the problem in an appropriate context?
   Specifically, does it:
-  
+
   - explain why the problem is important,
   - describe in which situations it arises,
-  - outline relevant previous work, 
-  - provide background information for non-experts 
+  - outline relevant previous work,
+  - provide background information for non-experts
 
 - Is the content of the paper accessible to a computational scientist
   with no specific knowledge in the given field?
@@ -116,4 +121,3 @@ answer 'no',  please provide a brief, one- to two-sentence explanation.
 - In your view, is the paper fit for publication in the conference proceedings?
   Please suggest specific improvements and indicate whether you think the
   article needs a significant rewrite (rather than a minor revision).
- 
