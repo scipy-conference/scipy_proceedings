@@ -48,6 +48,10 @@ for paper in paper_reviewers:
         print "->", reviewer
     print
 
+print "Papers:", len(paper_reviewers)
+print "Reviewers:", len(config['reviewers'])
+print
+
 if dry_run:
     print "** This was a dry run.  If all looks good, send the invitations"
     print "** using ./invite_reviewers.py --send-mail"
