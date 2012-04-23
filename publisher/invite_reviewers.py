@@ -36,6 +36,18 @@ for reviewer_info in config['reviewers']:
     else:
         gmail.sendmail(config['sender'], reviewer, msg, password)
 
+paper_reviewers = {}
+for reviewer_info in config['reviewers']:
+    for paper in reviewer_info['papers']:
+        d = paper_reviewers.setdefault(paper, [])
+        d.append(reviewer_info['name'])
+
+for paper in paper_reviewers:
+    print "%s:" % paper
+    for reviewer in paper_reviewers[paper]:
+        print "->", reviewer
+    print
+
 if dry_run:
-    print "\n** This was a dry run.  If all looks good, send the invitations"
+    print "** This was a dry run.  If all looks good, send the invitations"
     print "** using ./invite_reviewers.py --send-mail"
