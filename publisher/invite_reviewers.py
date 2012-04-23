@@ -34,7 +34,8 @@ for reviewer_info in config['reviewers']:
         print msg
         print "=" * 78
     else:
-        gmail.sendmail(config['sender'], reviewer, msg, password)
+        gmail.sendmail(config['sender'], reviewer + ', ' + config['cced'],
+                       msg, password)
 
 paper_reviewers = {}
 for reviewer_info in config['reviewers']:
