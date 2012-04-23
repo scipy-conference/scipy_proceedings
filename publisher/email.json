@@ -14,9 +14,11 @@
    "cced": "millman.ucb@gmail.com, sjvdwalt@gmail.com",
 
    "reviewers": [
-     {"email": "Stefan van der Walt <sjvdwalt@gmail.com>",
+     {"name": "Stefan van der Walt",
+      "email": "Stefan van der Walt <sjvdwalt@gmail.com>",
       "papers": ["00_vanderwalt", "00_vanderwalt"]},
-     {"email": "Jarrod Millman <jarrod.millman+2011@gmail.com>",
+     {"name": "Jarrod Millman",
+      "email": "Jarrod Millman <jarrod.millman+2011@gmail.com>",
       "papers": ["00_vanderwalt"]}
    ],
 
