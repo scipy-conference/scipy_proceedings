@@ -1,6 +1,7 @@
 :author: Stéfan van der Walt
 :email: stefan@sun.ac.za
-:institution: Stellenbosch University
+:department: Helen Wills Neuroscience Institute
+:institution: University of California, Berkeley
 
 :author: Jarrod Millman
 :email: millman@berkeley.edu
@@ -16,156 +17,65 @@ Preface
 
 Introduction
 ------------
-
 Welcome to the fourth publication of the SciPy conference proceedings.  This
-year marked the 10th Python in Science Conference (SciPy2011), which was held
-in Austin, Texas from July 11th to 16th.  The conference was attended by
-191 participants from both academia and industry.  Attendees came from
-far and wide, including North and South America, Europe, Africa, and Asia.
+year marks the 10th Python in Science Conference (SciPy2011), held in Austin,
+Texas from July 11th to 16th where more than 190 participants, in a truly
+global attendance from North and South America, Europe, Africa, and
+Asia, represented both academia and industry.
 
 Ten years and counting ...
 --------------------------
-
 The first "Python for Scientific Computing Workshop" was held at Caltech in
-2002.  For the first two years, the conference was a single track, 2-day
-workshop with about 70 attendees.
+2002--a single track, 2-day workshop with about 70 attendees.  Since then, the
+number of attendees nearly tripled; the 2-days of talks are now preceeded by 2
+days of tutorials and followed by 2 days of developer sprints.  Multiple
+conference tracks accommodate the increasing number of high-quality talk
+submissions, and satellite conferences are held annually in Europe and India.
+We give a brief overview of these developments:
 
-Since then, the number of attendees has nearly tripled. And the 2-days of
-talks are now preceeded by 2 days of tutorials and followed by  2 days of
-developer sprints.
+In 2004 the workshop is renamed the SciPy conference and extended by 2 days of
+developer sprints; the number of attendees increases to about 90.  The first
+keynote is given by Jim Hugunin, creator of numeric (the precursor to NumPy),
+Jython, IronPython, and co-designer of AspectJ.
 
-The number of high-quality submissions for talks has greatly expanded, which
-we've tried to accommodate by having short talks and multiple tracks.  This
-year also marks the 4th year since we started publishing a peer-reviewed
-conference proceedings.
+In 2005, the community is split between two different core numerical libraries
+-- numeric and numarray, making code exchange and shared development hard.
+Travis Oliphant, who had been working on a successor to both libraries, opens
+the conference with a presentation of the new core package now known as
+numpy. In order to move the new library forward, the number and length of talks
+are limited, and additional break sessions are held for informal discussions.
 
-In addition to the original US conference, we now have annual SciPy
-conferences in both Europe and India.
+By 2006, NumPy approaches a 1.0 release, with support from a re-united
+community. Guido van Rossum, the creator of Python, delivers the keynote, and
+tutorials appear for the first time.  The number of attendees grows to 138.
 
-Starting to grow 
-~~~~~~~~~~~~~~~~~
+The 2007 conference includes the first open call for student sponsorship,
+continued and expanded every year since.  Ivan Krstić, then the director of
+security architecture at One Laptop per Child, gives the keynote.
 
-In 2004 the workshop was renamed to the SciPy conference. The length of the
-conference was increased by 2 days of developer sprints and the number of
-attendees increased to about 90.  That year also was the first year we had a
-keynote address, which was given by Jim Hugunin.  Jim is the creator of
-Numeric Python, Jython, IronPython, and co-designer of AspectJ.
+The 2008 keynote is delivered by Alex Martelli, "Über Tech Lead" for Google,
+perhaps better known in the Python community as the MartelliBot.  A
+peer-reviewed conference proceedings appears, and EuroSciPy is held for the
+first time.
 
-By 2005, the scipy community was deeply divided between two different core
-numerical libraries -- numeric and numarray.  With some of the community
-building on top of numeric and others building on top of numarray, it was very
-difficult to share development effort and code.  Travis Oliphant had been
-working on a successor to both libraries that would hopefully allow our
-community to continue growing and moving forward. Rather than having a keynote
-address, the conference opened with Travis Oliphant presenting what came to be
-called numpy. To create a more conducive enviroment for moving this new core
-library forward, the number and length of the talks were deliberately limited
-and additional time was provided for long break sessions so the attendees
-would have plenty of time to hold informal conversations.
+In 2009, keynotes are delivered by Peter Norvig, Director of Research at
+Google, and Jon Guyer, Materials Scientist at NIST.  In addition to the second
+European SciPy conference, the 1st SciPy India is held.
 
-By 2006, NumPy was rapidly progressing toward a 1.0 release and the community
-was quickly moving behind it. Guido van Rossum, the creator of Python,
-delivered the keynote address. We also added tutorial sessions for the first
-time.  The number of attendees also grew to 138.
+The 2010 conference moves to Austin, TX, has multiple tracks and 187
+participants.  Keynotes are delivered by David Beazley (the author of the
+Python Essential Reference and creator of SWIG) and Travis Oliphant (then
+President of Enthought, Inc. one of the original co-authors of SciPy).
 
-In 2007, we had the first open call for student sponsorship, which we have
-continued and expanded every year since.  Ivan Krstić, who was then the
-director of security architecture at One Laptop per Child, delivered the
-keynote.
-
-In 2008, the keynote address was given by Alex Martelli who is the "Über Tech
-Lead" for Google and better known in the Python community as the MartelliBot.
-This was also the first year that we published a peer-reviewed conference
-proceedings.  It was also the first year that we had a European SciPy
-conference.
-
-In 2009, we had two keynote speakers:
-
-- Peter Norvig, Director of Research, Google
-- Jon Guyer, Materials Scientist, NIST - National Institute of Standards and
-  Technology
-
-And in addition to the second European SciPy conference,
-1st SciPy India
-
-In 2010
-multiple tracks,
-keynote:
-
-David Beazleythe author of the Python Essential Reference and creator
-of SWIG, a compiler used for integrating Python with C and C++
-programs.
-
-Travis Oliphant President of Enthought, Inc.,
-the primary developer of the NumPy package
-and one of the original co-authors of SciPy
-
-first year moved to Austin, TX
-187 attendees
-
-Special issue
-~~~~~~~~~~~~~
-
-Attendees this year were given copies of the March/April 2011 issue of
-Computing in Science and Engineering.
-This was a special issue on Python for Scientists and Engineers
-Computing in Science & Engineering or CiSE
-CiSE is a peer-reviewed technical magazine
-jointly published by the American Institute of Physics and the IEEE Computer
-Society
-
-A follow-up to May/June 2007 special issue,
-“Python: Batteries Included.”
-The 2007 issue had a couple articles presenting the core
-Python libraries for scientific computing:
-numpy, scipy, ipython, and matplotlib.
-As well as a series of shorter pieces presenting specific
-scientific, engineering, and educational applications.
-
-This year's special issue had fewer, but longer articles
-focusing on some of the more advanced features of
-the core stack of scientific tools for Python.
-
-1st article
-“Python: An Ecosystem for Scientific Computing,”
-
-core stack of tools developed specifically for scientific computing
-that makes Python such a highly productive environment for modern scientific
-computing.
-
-The next two articles focus on two complimentary approaches to improving the
-efficiency of Python code while retaining Python’s ease of use.
-
-“The NumPy Array: A Structure for Efficient Numerical Computation,”
-describe how NumPy provides a high-level multidimensional
-array structure, that also allows fine-grained
-control over performance and memory-management.
-
-In “Cython: The Best of Both Worlds,”
-discuss this popular tool for creating
-Python extension modules in C, C++, and Fortran.
-
-“Mayavi: 3D Visualization of Scientific Data,”
-a 3D scientific visualization package for Python.
-simple scripts to visualize their data; to load and
-explore their data with a full-blown interactive,
-graphical application; and to assemble their own
-custom applications from Mayavi widgets.
-
-
-
-Conference
-----------
-
-This year's conference consisted of several events: the tutorials,
-followed by the main conference and sprints, with some
-birds-of-a-feather sessions sprinkled throughout.  Aric Hagberg and
-the NetworkX team also held a satellite workshop preceding the main
-conference.
+2011 Conference
+---------------
+This year's conference consisted of several events: tutorials, followed by the
+main conference and sprints, with some birds-of-a-feather sessions sprinkled
+throughout.  Aric Hagberg and the NetworkX team also held a satellite workshop
+preceding the main conference.
 
 Tutorials
 ~~~~~~~~~
-
 Tutorials were divided into an introductory and an advanced track.
 This year's introductory track started with Jonathan Rocher's overview
 of numpy, ipython and matplotlib, followed by an introduction to SciPy
@@ -186,7 +96,6 @@ IPython can now be used to perform interactive parallel computing.
 
 Keynote speakers
 ~~~~~~~~~~~~~~~~
-
 The first keynote address was delivered by Eric Jones, a founder of Enthought
 and one of the first SciPy authors.  In his talk, titled "What matters in
 Scientific Software Projects: 10 Years of Success and Failures Distilled",
@@ -227,7 +136,6 @@ and continues to be central to the development of tools such as NumPy.
 
 Talks
 ~~~~~
-
 The conference had three sessions this year, and at any one time two
 would run in parallel.
 
@@ -297,6 +205,56 @@ face-to-face conversations, and put their brains together to solve
 long-standing problems or implement exciting new features.  It is
 interesting that, in today's connected world, these real-world
 conversations still have such a large impact.
+
+
+Special issue: IEEE Computing in Science and Engineering
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Attendees this year were given copies of the March/April 2011 issue of
+Computing in Science and Engineering.
+This was a special issue on Python for Scientists and Engineers
+Computing in Science & Engineering or CiSE
+CiSE is a peer-reviewed technical magazine
+jointly published by the American Institute of Physics and the IEEE Computer
+Society
+
+A follow-up to May/June 2007 special issue,
+“Python: Batteries Included.”
+The 2007 issue had a couple articles presenting the core
+Python libraries for scientific computing:
+numpy, scipy, ipython, and matplotlib.
+As well as a series of shorter pieces presenting specific
+scientific, engineering, and educational applications.
+
+This year's special issue had fewer, but longer articles
+focusing on some of the more advanced features of
+the core stack of scientific tools for Python.
+
+1st article
+“Python: An Ecosystem for Scientific Computing,”
+
+core stack of tools developed specifically for scientific computing
+that makes Python such a highly productive environment for modern scientific
+computing.
+
+The next two articles focus on two complimentary approaches to improving the
+efficiency of Python code while retaining Python’s ease of use.
+
+“The NumPy Array: A Structure for Efficient Numerical Computation,”
+describe how NumPy provides a high-level multidimensional
+array structure, that also allows fine-grained
+control over performance and memory-management.
+
+In “Cython: The Best of Both Worlds,”
+discuss this popular tool for creating
+Python extension modules in C, C++, and Fortran.
+
+“Mayavi: 3D Visualization of Scientific Data,”
+a 3D scientific visualization package for Python.
+simple scripts to visualize their data; to load and
+explore their data with a full-blown interactive,
+graphical application; and to assemble their own
+custom applications from Mayavi widgets.
 
 
 Proceedings
