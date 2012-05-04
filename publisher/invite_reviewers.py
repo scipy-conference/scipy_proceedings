@@ -55,4 +55,4 @@ print
 
 if dry_run:
     print "** This was a dry run.  If all looks good, send the invitations"
-    print "** using ./invite_reviewers.py --send-mail"
+    print "** using ./invite_reviewers.py --send-emails"
