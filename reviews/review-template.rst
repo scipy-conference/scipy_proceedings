@@ -108,7 +108,7 @@ answer 'no',  please provide a brief, one- to two-sentence explanation.
 
 - Are the code examples (if any) sound, clear, and well-written?
 
-- Is the paper factual correct?
+- Is the paper factually correct?
 
 - Is the language and grammar of sufficient quality?
 
