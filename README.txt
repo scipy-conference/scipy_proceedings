@@ -4,27 +4,32 @@ SciPy Proceedings
 Paper Format
 ------------
 
+Papers are formatted using reStructuredText and the compiled version should be
+no longer than 7 pages, including figures.  Here are the steps to produce a
+paper:
+
+- For the 2012 branch of the `scipy_proceedings
+  <https://github.com/scipy/scipy_proceedings>`__ repository on GitHub.  An
+  example paper is provided in ``papers/00_vanderwalt``.  Create a new
+  directory ``papers/firstname_surname``, copy the example paper into it, and
+  modify to your liking.
+
+- Run ``./make_paper.sh papers/firstname_surname`` to compile your paper to PDF
+  (requires LaTeX, docutils, Python).  The output appears in
+  ``output/firstname_surname/paper.pdf``.
+
+- Once you are ready to submit your paper, file a pull request on GitHub.
+
+Papers may be submitted via e-mail to 2012submissions@scipy.org by July 15th.
+
 General Guidelines
 ``````````````````
 - All figures and tables should have captions.
-- License conditions on images and figures must be respected
-  (Creative Commons, etc.).
-- Code snippets should be formatted to fit inside a single column
-  without overflow.
-- Try to use as little custom LaTeX markup as possible.
-- The paper abstract should be a single paragraph.
-
-Authors and affiliations
-````````````````````````
-Define the fields in the beginning of the paper::
-
-  :author: My Name
-  :email: myname@myplace.com
-  :institution: Some University
-
-  :author: Author Two
-  :email: two@myplace.com
-  :institution: Some University
+- License conditions on images and figures must be respected (Creative Commons,
+  etc.).
+- Code snippets should be formatted to fit inside a single column without
+  overflow.
+- Avoid custom LaTeX markup where possible.
 
 Other markup
 ------------
@@ -34,12 +39,6 @@ examples of how to:
  - Label figures, equations and tables
  - Use math markup
  - Include code snippets
-
-Build Process
--------------
-::
-
-  ./make_paper.sh papers/my_paper_dir
 
 Requirements
 ------------
