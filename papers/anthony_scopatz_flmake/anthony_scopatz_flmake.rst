@@ -52,7 +52,7 @@ fully capturing the setup metadata requires alterations to the build system.
 
 The development of flmake started by rewriting the existing build system
 to allow FLASH to be run outside of the main line subversion repository.  It separates out
-a project / simulation directory independent of the FLASH source directory.  This
+a project (or simulation) directory independent of the FLASH source directory.  This
 directory is typically under its own version control.
 
 Moreover for each of the important tasks (setup, build, run, etc), a sidecar metadata
@@ -78,6 +78,11 @@ Thus flmake shows that reproducibility - which is notably absent from most compu
 projects - is easily attainable using only version control and standard library modules.
 
 
+
+
+A Note on Repeatability
+---------------------------------
+de nada
 
 Acknowledgements
 ----------------
