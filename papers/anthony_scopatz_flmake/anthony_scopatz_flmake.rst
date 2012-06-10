@@ -102,7 +102,7 @@ of project directroies, a serachable source path, logging, dynamic run control, 
 persisted metadata descriptions.
 
 abstraction 1: projects
-=======================
+=========================
 Without flmake, FLASH must be setup and built from within the FLASH source directory
 (``FLASH_SRC_DIR``) using the setup script and make.  While this is fine for single
 runs, it fails to separate projects in a meaningful way and makes it difficult to 
@@ -111,7 +111,9 @@ track local modifications.
 On the other hand, **flmake is intended to be run external to the FLASH source directory**
 in what is known as the project directory.  When starting a new set of FLASH runs, the 
 first thing that the user should do is create a new project directory somewhere on their 
-file system::
+file system:
+
+.. code-block:: sh
 
     ~ $ mkdir proj
     ~ $ cd proj/
@@ -122,9 +124,11 @@ all of the project-specific files to be placed under version control in a reposi
 that is separate from the main FLASH source. 
 
 abstraction 2: source paths
-==============================
+============================
 After creating a project directory, the simulation source files must be assembled using
-setup.  To run the classic Sedov problem::
+setup.  To run the classic Sedov problem:
+
+.. code-block:: sh
 
     ~/proj $ flmake setup Sedov -auto
     [snip]
@@ -156,13 +160,15 @@ searched  in order of precedence:
 #. ``~/proj/source/Simulation/SimulationMain/Sedov/``
 #. ``${FLASH_SRC_DIR}/source/Simulation/SimulationMain/Sedov/``
 
-Therefore, it is reasonable for a project directory to have the following structure::
+Therefore, it is reasonable for a project directory to have the following structure:
+
+.. code-block:: sh
 
     ~/proj $ ls
     flash_desc.json  setup/  simulations/  source/
 
 abstraction 3: descriptions
-=============================
+============================
 In the previous section, after performing setup, a curious ``flash_desc.json`` file
 appeared in the project directory.  This is the description file for the FLASH 
 simulation which is currently being worked with.  This description is a sidecar
@@ -198,7 +204,7 @@ It is generally not recommended that you place this file under version control
 as it may change often and significantly.
 
 abstraction 4: logging
-==========================
+======================
 In many ways computational simulation is more akin to experimental science than
 theoretical science.  Simulations are executed in the same way that experiments
 are run.  Therefore, it is useful for computational scientists to adopt the idea
@@ -216,12 +222,16 @@ Not every command uses logging; for trivial commands which do not change state
 (such as ls-runs) log entries are not needed.  However for more serious commands 
 such as run logging is a critical component.  While sensible default messages
 will be generated automatically, it is **highly** recommended that the user provide
-more detailed messages::
+more detailed messages:
+
+.. code-block:: sh
 
     ~/proj $ flmake -m "Run with 600 J laser" run -n 10
 
-The :ref:`flmake log <ug_flmake_log>` command may then be used to display past log 
-messages::
+The ``flmake log <ug_flmake_log>`` command may then be used to display past log 
+messages:
+
+.. code-block:: sh
 
     ~/proj $ flmake log -n 1
     Run id: b2907415
@@ -254,19 +264,25 @@ The most important example of using ``flashrc.py`` is that the run and restart
 commands will update the ``flash.par`` file with values from a ``parameters``
 dictionary (or function which returns a dictionary).
 
-Initial ``flash.par``::
+Initial ``flash.par``:
+
+.. code-block:: sh
 
     order = 3
     slopeLimiter = "minmod"
     charLimiting = .true.
     RiemannSolver = "hll"
 
-Run control ``flashrc.py``::
+Run control ``flashrc.py``:
+
+.. code-block:: python
 
     parameters = {"slopeLimiter": "mc",
                   "use_flattening": False}
 
-Final ``flash.par``::
+Final ``flash.par``:
+
+.. code-block:: sh
 
     RiemannSolver = "hll"
     charLimiting = .true.
@@ -275,11 +291,13 @@ Final ``flash.par``::
     use_flattening = .true.
 
 example workflow
-==================
+=====================
 The fundamental flmake abstractions which affect users have now been explained
 above.  Bringing this all together, a typical flmake workflow which sets up, 
 builds, runs, restarts, and merges a fork of a Sedov simulation is demonstrated.
-First, construct the project repository::
+First, construct the project repository:
+
+.. code-block:: sh
 
     ~ $ mkdir my_sedov
     ~ $ cd my_sedov/
@@ -290,7 +308,9 @@ First, construct the project repository::
     ~/my_sedov $ git add .
     ~/my_sedov $ git commit -m "Initialized my Sedov project"
 
-Next, create and run the simulation::
+Next, create and run the simulation:
+
+.. code-block:: sh
 
     ~/my_sedov $ flmake setup -auto Sedov
     ~/my_sedov $ flmake build -j 20
