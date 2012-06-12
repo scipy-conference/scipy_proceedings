@@ -223,8 +223,8 @@ repetition can become tedious and usually leads to less readable inputs.
 To make the user input more concise and expressive, flmake introduces a run control
 ``flashrc.py`` file in the project directory.  This is a Python module which is 
 executed, if it exists, in an empty namespace whenever flmake is called.  The 
-flmake commands may then choose to access specific data in this file.  Please see 
-the individual command documentation for an explanation on if/how the run control
+flmake commands may then choose to access specific data in this file.  Please refer 
+to individual command documentation for an explanation on if/how the run control
 file is used.
 
 The most important example of using ``flashrc.py`` is that the run and restart
@@ -257,46 +257,47 @@ Final ``flash.par``:
     slopeLimiter = "mc"
     use_flattening = .true.
 
-abstraction 3: descriptions
+Description Sidecar Files
 ============================
-In the previous section, after performing setup, a curious ``flash_desc.json`` file
-appeared in the project directory.  This is the description file for the FLASH 
-simulation which is currently being worked with.  This description is a sidecar
-file whose purpose it is to store:
+After performing setup, a ``flash_desc.json`` file appears in the project directory, 
+as seen in the above examples.  This is the description file for the FLASH 
+simulation which is currently being worked on.  This description is a sidecar
+file whose purpose it is to store the following metadata:
 
 * the environment at execution of each flmake command,
 * the version of both project and FLASH source repository, 
 * local source code modifications (diffs),
-* the run control files (see below),
+* the run control files (see above),
 * run ids and history, 
 * and FLASH binary modification times.
 
-Thus the ``flash_desc.json`` is meant to be a full picture of the way FLASH
-code was generated, compiled, and executed.  **Total reproducibility of a FLASH
-simulation is based on having a well-formed description file.**
+Thus the description files is meant to be a full picture of the way FLASH
+code was generated, compiled, and executed.  Total reproducibility of a FLASH
+simulation is based on having a well-formed description file.
 
-The contents of this file are essentially persisted dictionary which contains 
+The contents of this file are essentially a persisted dictionary which contains 
 all of the above information.  The top level keys include setup, build, run, 
-and merge.  Each of these keys gets added with the corresponding flmake command.
-Note that restart alters the run value and does not generate a top-level key.
+and merge.  Each of these keys gets added when the corresponding flmake command is
+called.  Note that restart alters the run value and does not generate its own 
+top-level key.
 
 During setup and build, ``flash_desc.json`` is modified in the project directory.
 However, each run receives a copy of this file in the run directory with the run
 information added.  Restarts and merges inherit from the file in the previous run 
 directory.
 
-The reproduce command is thus able to recreate a FLASH simulation from only
-the ``flash_desc.json`` file and the associated repositories.  This is useful 
-for testing and verification of the same simulation across multiple different 
-machines and platforms.
-
-It is generally not recommended that you place this file under version control
+These seidecar files enable the flmake reproduce command which is capable of 
+recreating a FLASH simulation from only
+the ``flash_desc.json`` file and the associated source and project repositories.  
+This is useful for testing and verification of the same simulation across multiple 
+different machines and platforms.
+It is generally not recommended that users place this file under version control
 as it may change often and significantly.
 
-example workflow
+Example Workflow
 =====================
-The fundamental flmake abstractions which affect users have now been explained
-above.  Bringing this all together, a typical flmake workflow which sets up, 
+The fundamental flmake abstractions have now been explained
+above.  A  typical flmake workflow which sets up, 
 builds, runs, restarts, and merges a fork of a Sedov simulation is demonstrated.
 First, construct the project repository:
 
@@ -305,8 +306,10 @@ First, construct the project repository:
     ~ $ mkdir my_sedov
     ~ $ cd my_sedov/
     ~/my_sedov $ mkdir simulations/
-    ~/my_sedov $ cp -r ${FLASH_SRC_DIR}/source/Simulation/SimulationMain/Sedov simulations/
-    ~/my_sedov $ nano simulations/Sedov/Simulation_init.F90  # edit the simulation
+    ~/my_sedov $ cp -r ${FLASH_SRC_DIR}/source/Simulation/\
+                 SimulationMain/Sedov simulations/
+    ~/my_sedov $ # edit the simulation
+    ~/my_sedov $ nano simulations/Sedov/Simulation_init.F90  
     ~/my_sedov $ git init .
     ~/my_sedov $ git add .
     ~/my_sedov $ git commit -m "Initialized my Sedov project"
@@ -318,8 +321,10 @@ Next, create and run the simulation:
     ~/my_sedov $ flmake setup -auto Sedov
     ~/my_sedov $ flmake build -j 20
     ~/my_sedov $ flmake -m "First run of my Sedov" run -n 10
-    ~/my_sedov $ flmake -m "Oops, it died." restart run-5a4f619e/ -n 10
-    ~/my_sedov $ flmake -m "Merging my first run." merge run-fc6c9029 first_run
+    ~/my_sedov $ flmake -m "Oops, it died." restart \
+                 run-5a4f619e/ -n 10
+    ~/my_sedov $ flmake -m "Merging my first run." merge \
+                 run-fc6c9029 first_run
     ~/my_sedov $ flmake clean 1
 
 
