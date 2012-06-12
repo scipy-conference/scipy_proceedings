@@ -43,7 +43,7 @@ places a greater importance on the Python build system.
 To run a FLASH simulation, the user must go through three basic steps: setup, build, and
 execution.  Canonically, each of these tasks are independently handled by the user.
 However with the recent advent of flmake - a Python workflow management utility for
-FLASH - such tasks may now be performed in a repeatable way [Flmake].
+FLASH - such tasks may now be performed in a repeatable way [FLMAKE]_.
 
 Previous workflow management tools have been written for FLASH.  (For example, the
 "Milad system" was implemented entirely in Makefiles.)  However, none of the prior
@@ -80,11 +80,12 @@ projects - is easily attainable using only version control and standard library 
 
 New Workflow Features
 ----------------------
-Managing FLASH simulations may be a tedious task for both new and experienced
-users.  The flmake command line utility eases the simulation and development cycle
-by providing a modular tool that implements many common elements of a FLASH
-workflow.  Moreover, at each stage this tool captures necessary metadata about the
-task which it is performing.  Thus, flmake encapsulates the following opperations:
+As with many predictive science codes, managing FLASH simulations may be a tedious 
+task for both new and experienced users.  The flmake command line utility eases the 
+simulation burdenm and shortens the development cycle by providing a modular tool 
+which implements many common elements of a FLASH workflow.  Moreover, at each stage 
+this tool captures necessary metadata about the task which it is performing.  Thus, 
+flmake encapsulates the following opperations:
 
 * setup/configuration,
 * building,
@@ -95,38 +96,32 @@ task which it is performing.  Thus, flmake encapsulates the following opperation
 
 It is highly recommended that both novice and advanced users adopt flmake as it 
 *enables* reproducible research while simultaneously making FLASH easier to use.  
-This is accomplished by a few key abstractions of previous mechanisms of setting up,
-building, and executing FLASH.  The implemntation of these abstractions are 
+This is accomplished by a few key abstractions from previous mechanisms used to set up,
+build, and execute FLASH.  The implemntation of these abstractions are 
 critical flmake features and are discussed below.  Namely they are the sepaartion 
-of project directroies, a serachable source path, logging, dynamic run control, and 
+of project directories, a serachable source path, logging, dynamic run control, and 
 persisted metadata descriptions.
 
-abstraction 1: projects
-=========================
+Independent Project Directories
+=================================
 Without flmake, FLASH must be setup and built from within the FLASH source directory
-(``FLASH_SRC_DIR``) using the setup script and make.  While this is fine for single
-runs, it fails to separate projects in a meaningful way and makes it difficult to 
-track local modifications.  
+(``FLASH_SRC_DIR``) using the setup script and make [GMAKE].  While this is fine for single
+runs, it fails to separate projects and simulation campaigns from the source code.
+Moreover, keeping simulations next to the source makes it difficult to track local 
+modifications independent of the mainline code development.
 
-On the other hand, **flmake is intended to be run external to the FLASH source directory**
-in what is known as the project directory.  When starting a new set of FLASH runs, the 
-first thing that the user should do is create a new project directory somewhere on their 
-file system:
+Because of these difficulties in running suites of simulations from within ``FLASH_SRC_DIR``, 
+flmake is intended to be run external to the FLASH source directory.  This is known as the 
+project directory.  This directory should be managed by a version control system.
+Notably now all of the project-specific files are in a repository that is separate from 
+the main FLASH source.   Here this directory is called ``proj/`` but in practice is the 
+name of the simulation campaign. 
 
-.. code-block:: sh
-
-    ~ $ mkdir proj
-    ~ $ cd proj/
-    ~/proj $ git init .
-
-Here we called the project ``proj/`` but any name would work.  Note that this allows
-all of the project-specific files to be placed under version control in a repository
-that is separate from the main FLASH source. 
-
-abstraction 2: source paths
-============================
+Source & Project Paths Searching
+=====================================
 After creating a project directory, the simulation source files must be assembled using
-setup.  To run the classic Sedov problem:
+the flmake setup command.  This is analogous to executing the traditional setup script. 
+For example, to run the classic Sedov problem:
 
 .. code-block:: sh
 
@@ -141,31 +136,126 @@ Using the normal FLASH setup script, all of these files must live within
 ``${FLASH_SRC_DIR}/source/``.  However, flmake's setup command searches additional paths to 
 find potential source files.
 
-If there is a local ``source/`` directory in the projects directory, this directory is 
-searched first for any potential FLASH units.  The structure of this directory mirrors 
+By default, uf there is a local ``source/`` directory in the projects directory this directory 
+is searched first for any potential FLASH units.  The structure of this directory mirrors 
 the layout found in ``${FLASH_SRC_DIR}/source/``.  For example, if the user wanted to write or 
 overwrite their own driver unit, they could place all of the relevant files in 
-``~/proj/source/Driver/``.  **Units found in the project source directory take precedence over 
-units with the same name in the FLASH source.**
+``~/proj/source/Driver/``.  Units found in the project source directory take precedence over 
+units with the same name in the FLASH source.
 
 The most commonly overridden units, however, are simulations. Furthermore specific simulations 
-live somewhat deep in the file system hierarchy residing in 
-``source/Simulation/SimulationMain/${SimulationName}/``.  To make accessing simulations 
-easier, a local project ``simulations/`` directory is first searched for any possible 
+live somewhat deep in the file system hierarchy residing within 
+``source/Simulation/SimulationMain/``.  To make accessing 
+simulations easier, a local project ``simulations/`` directory is first searched for any possible 
 simulations.  Thus ``simulations/`` effectively aliases ``source/Simulation/SimulationMain/``. 
 Continuing with the previous Sedov example the following directories, if they exist, are 
 searched  in order of precedence:
 
 #. ``~/proj/simulations/Sedov/``
-#. ``~/proj/source/Simulation/SimulationMain/Sedov/``
-#. ``${FLASH_SRC_DIR}/source/Simulation/SimulationMain/Sedov/``
+#. ``~/proj/source/Simulation/``
+        ``SimulationMain/Sedov/``
+#. ``${FLASH_SRC_DIR}/source/``
+        ``Simulation/SimulationMain/Sedov/``
 
-Therefore, it is reasonable for a project directory to have the following structure:
+Therefore, it is common for a project directory to have the following structure if the 
+project require many modifications to FLASH that are - at least in the short term - 
+inappropriate for mainline inclusion:
 
 .. code-block:: sh
 
     ~/proj $ ls
     flash_desc.json  setup/  simulations/  source/
+
+Logging
+======================
+In many ways computational simulation is more akin to experimental science than
+theoretical science.  Simulations are executed to test the system at hand in analogy 
+to how physical experiments probe the netural world..  Therefore, it is useful for 
+computational scientists to adopt the time-tested strategy of a keeping a lab notebook.
+
+Various example of virtual lab notebooks exist [VLABNB]_ as a way of storing 
+information about how some experiment was performed in a particular way in 
+conjunction with the resultant data.  However, the corollary concept in
+pure software development is arguablly logging.  Unfortunately, most simulation
+science makes use of neither of these two solutions.  Rather, than using an 
+external rich-client, flmake makes use of the built-in Python logger.
+
+Every flmake command has the ability to log a message.  This follows 
+the ``-m`` convention from version control systems.  These messages and associated 
+metadata is stored in a ``flash.log`` file in the project directory. 
+
+Not every command uses logging; for trivial commands which do not change state
+(such as listing or diffing) log entries are not needed.  However for more serious commands 
+(such as building) logging is a critical component.  Understanding that many users cannot 
+be bothered to create meaningful log messages at each step, sensible and default messages
+are automatically generated.  Still, it is highly recommended that the user provide
+more detailed messages:
+
+.. code-block:: sh
+
+    ~/proj $ flmake -m "Run with 600 J laser" run -n 10
+
+The ``flmake log <ug_flmake_log>`` command may then be used to display past log 
+messages:
+
+.. code-block:: sh
+
+    ~/proj $ flmake log -n 1
+    Run id: b2907415
+    Run dir: run-b2907415
+    Command: run
+    User: scopatz
+    Date: Mon Mar 26 14:20:46 2012
+    Log id: 6b9e1a0f-cfdc-418f-8c50-87f66a63ca82
+
+        Run with 600 J laser
+
+The ``flash.log`` file should be added to the version control of the project.  Entries
+in this file are not typically deleted.
+
+Dynamic Run Control
+============================
+Many aspects of FLASH are declared in a static way.  Such declarations happen mainly
+at setup and runtime.  For certain build and run operations several parameters may 
+need to be altered in a consistent way to actually have the desired effect.  Such 
+repetition can become tedious and usually leads to less readable inputs.
+
+To make the user input more concise and expressive, flmake introduces a run control
+``flashrc.py`` file in the project directory.  This is a Python module which is 
+executed, if it exists, in an empty namespace whenever flmake is called.  The 
+flmake commands may then choose to access specific data in this file.  Please see 
+the individual command documentation for an explanation on if/how the run control
+file is used.
+
+The most important example of using ``flashrc.py`` is that the run and restart
+commands will update the ``flash.par`` file with values from a ``parameters``
+dictionary (or function which returns a dictionary).
+
+Initial ``flash.par``:
+
+.. code-block:: sh
+
+    order = 3
+    slopeLimiter = "minmod"
+    charLimiting = .true.
+    RiemannSolver = "hll"
+
+Run control ``flashrc.py``:
+
+.. code-block:: python
+
+    parameters = {"slopeLimiter": "mc",
+                  "use_flattening": False}
+
+Final ``flash.par``:
+
+.. code-block:: sh
+
+    RiemannSolver = "hll"
+    charLimiting = .true.
+    order = 3
+    slopeLimiter = "mc"
+    use_flattening = .true.
 
 abstraction 3: descriptions
 ============================
@@ -202,93 +292,6 @@ machines and platforms.
 
 It is generally not recommended that you place this file under version control
 as it may change often and significantly.
-
-abstraction 4: logging
-======================
-In many ways computational simulation is more akin to experimental science than
-theoretical science.  Simulations are executed in the same way that experiments
-are run.  Therefore, it is useful for computational scientists to adopt the idea
-of a lab notebook.  
-
-A lab notebook is a way of storing information about why something was done in a 
-particular way in conjunction with the resultant data.  The corollary concept in
-software development is known as logging.  
-
-**Thus every flmake command has the ability to log a message.**  This follows 
-the ``-m`` convention from version control systems.  These messages and associated 
-metadata is stored in the ``flash.log`` file in the project directory.  
-
-Not every command uses logging; for trivial commands which do not change state
-(such as ls-runs) log entries are not needed.  However for more serious commands 
-such as run logging is a critical component.  While sensible default messages
-will be generated automatically, it is **highly** recommended that the user provide
-more detailed messages:
-
-.. code-block:: sh
-
-    ~/proj $ flmake -m "Run with 600 J laser" run -n 10
-
-The ``flmake log <ug_flmake_log>`` command may then be used to display past log 
-messages:
-
-.. code-block:: sh
-
-    ~/proj $ flmake log -n 1
-    Run id: b2907415
-    Run dir: run-b2907415
-    Command: run
-    User: scopatz
-    Date: Mon Mar 26 14:20:46 2012
-    Log id: 6b9e1a0f-cfdc-418f-8c50-87f66a63ca82
-
-        Run with 600 J laser
-
-The ``flash.log`` file should be placed under the project's version control.  Entries
-in this file are not typically deleted.
-
-abstraction 5: run control
-============================
-Many aspects of FLASH are declared in a static way.  Such declarations happen mainly
-at setup and runtime.  For certain build and run operations several parameters may 
-need to be altered in a consistent way to actually have the desired effect.  Such 
-repetition can become tedious and usually leads to less readable inputs.
-
-**To make the user input more concise and expressive, flmake introduces a run control
-flashrc.py file in the project directory.**  This is Python module which is 
-executed, if it exists, in an empty namespace whenever flmake is run.  The 
-flmake commands may then choose to access specific data in this file.  Please see 
-the individual command documentation for an explanation on if/how the run control
-file is used.
-
-The most important example of using ``flashrc.py`` is that the run and restart
-commands will update the ``flash.par`` file with values from a ``parameters``
-dictionary (or function which returns a dictionary).
-
-Initial ``flash.par``:
-
-.. code-block:: sh
-
-    order = 3
-    slopeLimiter = "minmod"
-    charLimiting = .true.
-    RiemannSolver = "hll"
-
-Run control ``flashrc.py``:
-
-.. code-block:: python
-
-    parameters = {"slopeLimiter": "mc",
-                  "use_flattening": False}
-
-Final ``flash.par``:
-
-.. code-block:: sh
-
-    RiemannSolver = "hll"
-    charLimiting = .true.
-    order = 3
-    slopeLimiter = "mc"
-    use_flattening = .true.
 
 example workflow
 =====================
@@ -340,6 +343,11 @@ References
 .. [FLASH] FLASH Center for Computational Science, *FLASH User's Guide, Version 4.0-beta,*
             http://flash.uchicago.edu/site/flashcode/user_support/flash4b_ug.pdf, 
             University of Chicago, February 2012.
-.. [Flmake] A. Scopatz, *flmake: the flash workflow utility,* 
+.. [FLMAKE] A. Scopatz, *flmake: the flash workflow utility,* 
             http://flash.uchicago.edu/site/flashcode/user_support/tools4b/usersguide/flmake/index.html,
             The University of Chicago, June 2012.
+.. [GMAKE] Free Software Foundation, The GNU Make Manual for version 3.82, 
+            http://www.gnu.org/software/make/, 2010.
+.. [VLABNB] Rubacha, M.; Rattan, A. K.; Hosselet, S. C. (2011). *A Review of Electronic 
+            Laboratory Notebooks Available in the Market Today*. Journal of Laboratory 
+            Automation 16 (1): 90–98. DOI:10.1016/j.jala.2009.01.002. PMID 21609689. 
