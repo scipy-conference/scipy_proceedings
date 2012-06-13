@@ -328,10 +328,30 @@ Next, create and run the simulation:
     ~/my_sedov $ flmake clean 1
 
 
+Why Reproducibility is Important
+----------------------------------
+True to its part of speech, much of 'scientific computing' has the trappings of 
+science in that it is code produced to solve problems in (big-'S') Science.  
+However, the process by which said programs are written is not itself typically 
+subject to the scientific method.  The vaulted method contains components of 
+prediction, experimentation, duplication, analysis, and openess [GODFREY-SMITH]_.
+While software engineerers often engage in such activites when programming, 
+scientific developers usually forego these methods, typically to their detriment 
+[WILSON]_.
+
+
+
+The Reproduce Command
+----------------------------
+
 
 A Note on Repeatability
 ---------------------------------
 de nada
+
+
+Conclusions
+------------------------------
 
 
 Acknowledgements
@@ -356,3 +376,7 @@ References
 .. [VLABNB] Rubacha, M.; Rattan, A. K.; Hosselet, S. C. (2011). *A Review of Electronic 
             Laboratory Notebooks Available in the Market Today*. Journal of Laboratory 
             Automation 16 (1): 90–98. DOI:10.1016/j.jala.2009.01.002. PMID 21609689. 
+.. [GODFREY-SMITH] Godfrey-Smith, Peter (2003), *Theory and Reality: An introduction to 
+            the philosophy of science*, University of Chicago Press, ISBN 0-226-30063-3.
+.. [WILSON] G.V. Wilson, *Where's the real bottleneck in scientific computing?* Am Sci. 
+            2005;94:5.
