@@ -333,12 +333,30 @@ Why Reproducibility is Important
 True to its part of speech, much of 'scientific computing' has the trappings of 
 science in that it is code produced to solve problems in (big-'S') Science.  
 However, the process by which said programs are written is not itself typically 
-subject to the scientific method.  The vaulted method contains components of 
-prediction, experimentation, duplication, analysis, and openess [GODFREY-SMITH]_.
-While software engineerers often engage in such activites when programming, 
-scientific developers usually forego these methods, typically to their detriment 
-[WILSON]_.
+itself subject to the rigors of the scientific method.  The vaulted method contains 
+components of prediction, experimentation, duplication, analysis, and openess 
+[GODFREY-SMITH]_.  While software engineerers often engage in such activites when 
+programming, scientific developers usually forego these methods, typically to their 
+detriment [WILSON]_.
 
+Whatever the reason for this may be - ignorance, sloth, or other deadly sins - 
+the impetus for adopting modern software development practices only increases 
+every year.  The evolution of tools such as version control and envrionemnt 
+reproducing mechanisms (via virtual machines/hypervisors) enable researchers to 
+more easily capture information about the software during and after production.  
+Furthermore, the appearent end of Silicon-based Moore's Law has nececitated a move
+to more exotic arichteture and increased parallelism to see further speed 
+increases [MIMS]_. This implies that code that runs on machines now may not
+be able to run on future processors without significant refactoring.  
+
+Therefore the scientific computing landscape is such that there are presently the
+tools and the need to have fully reproducible simulations.  However, most scientists
+choose to not utilize these technologies.  This is akin to a chemist not keeping a
+lab notebook.  Thus lack of reproducuibility means that many solutions to science
+problems garnered through computational means are relegated to the realm of technical 
+achievements.  So much like recent advances in prorietary consumer technology, 
+irreproducible reults may be novel and interesting but they are not Science.
+Instead of the 
 
 
 The Reproduce Command
@@ -380,3 +398,6 @@ References
             the philosophy of science*, University of Chicago Press, ISBN 0-226-30063-3.
 .. [WILSON] G.V. Wilson, *Where's the real bottleneck in scientific computing?* Am Sci. 
             2005;94:5.
+.. [MIMS] C. Mims, *Moore's Law Over, Supercomputing "In Triage," Says Expert,*
+            http://www.technologyreview.com/view/427891/moores-law-over-supercomputing-in-triage-says/
+            May 2012, Technology Review, MIT.
