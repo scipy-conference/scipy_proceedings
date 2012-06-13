@@ -354,9 +354,10 @@ tools and the need to have fully reproducible simulations.  However, most scient
 choose to not utilize these technologies.  This is akin to a chemist not keeping a
 lab notebook.  Thus lack of reproducuibility means that many solutions to science
 problems garnered through computational means are relegated to the realm of technical 
-achievements.  So much like recent advances in prorietary consumer technology, 
-irreproducible reults may be novel and interesting but they are not Science.
-Instead of the 
+achievements.  Irreproducible reults may be novel and interesting but they are not 
+science.  Instead of the current paradigm of periscientific computing 
+(computing-about-science), the community should redouble our efforts around 
+diacomputiational science (computing-throughout-science).
 
 
 The Reproduce Command
