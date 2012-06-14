@@ -359,6 +359,26 @@ science.  Instead of the current paradigm of periscientific computing
 (computing-about-science), the community should redouble our efforts around 
 diacomputiational science (computing-throughout-science).
 
+The above being generally true, there are a couple of important caveats.  The first
+is that there are researchers who are congnizant and repectful of these reproducibility
+issues.  The efforts of these scientists help paint a less dire picture than the 
+one framed above.  
+
+The second exception is that while reproducibility is a key feature of fundemental science 
+it is not the only one.  For example, openness is another point whereby the statement
+"If a result is not produced openly then it is not science" holds.  Open access to 
+reults - itself is a hotly contested issue [VRIEZE]_ - is certainly a component of 
+computational science.  Additionally though, having open source and available code 
+is likely critical and often outside of normal research practice.  This is for a 
+vareity of reasons, including the fear that releasing code too early or at all will 
+negatively impact personal publication records.
+
+Therefore reproducibility is imporant because without it any results generated are 
+periscientific.  For computational science there exist computational tools to aid 
+in this endeavour, as in analouge science there are physical solutions.  Though it
+is not the only critism to be levied against modern research practices, irreproducibility
+is one that affects computation acutely and uniquely compared to other spheres.
+
 
 The Reproduce Command
 ----------------------------
@@ -402,3 +422,5 @@ References
 .. [MIMS] C. Mims, *Moore's Law Over, Supercomputing "In Triage," Says Expert,*
             http://www.technologyreview.com/view/427891/moores-law-over-supercomputing-in-triage-says/
             May 2012, Technology Review, MIT.
+.. [VRIEZE] Jop de Vrieze, *Thousands of Scientists Vow to Boycott Elsevier to Protest Journal 
+            Prices,* Science Insider, February 2012.
