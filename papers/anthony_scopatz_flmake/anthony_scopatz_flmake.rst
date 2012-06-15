@@ -383,6 +383,34 @@ is one that affects computation acutely and uniquely compared to other spheres.
 The Reproduce Command
 ----------------------------
 
+The ``flmake reproduce`` command is the key feature enabling the total reproducibility
+of a FLASH simulation.  This takes a description file (eg ``flash_desc.json``) and implicitly 
+the FLASH source and project repositories and replays the setup, build, and run commands 
+originally executed.  Thus it has the following usage string:
+
+.. code-block:: sh
+
+    flmake reproduce [options] <flash_descr>
+
+For each command, reproduction works by cloning both source and project repositories at a 
+the point in history when they were run into temporary directories.  Then any local 
+modifications which were present (and not under version control) are loaded from the 
+description file and applied to the cloned repos.  It then copies out the run control 
+file to the cloned repos and performs and command-specific modifications needed.  Finally,
+it executes the appropriate command *from the cloned repository* using the original 
+arguments provided on the command line.  Therefore ``flmake reproduce`` recreates the 
+original simulation using the original commands (and not the versions currently present).
+
+The reproduce command has the following limitations:
+
+#. FLASH source directory must be under version control,
+#. Project directory must be under version control,
+#. The FLASH run must depend on only the parfile, the FLASH executable and 
+   FLASH DATAFILES: This just means that you can’t reproduce the run if FL
+   FLASH depends on random files that are not tracked by version control 
+   since at a future date, those files might not be available,
+#. and the user cannot modify the FLASH executable between building and run
+
 
 A Note on Repeatability
 ---------------------------------
