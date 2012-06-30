@@ -125,13 +125,21 @@ After creating a project directory, the simulation source files must be assemble
 the flmake setup command.  This is analogous to executing the traditional setup script. 
 For example, to run the classic Sedov problem:
 
+.. raw:: latex
+
+    \vspace{1em}
+
 .. code-block:: sh
 
-    ~/proj $ flmake setup Sedov -auto
-    [snip]
-    SUCCESS
-    ~/proj $ ls
-    flash_desc.json  setup/
+        ~/proj $ flmake setup Sedov -auto
+        [snip]
+        SUCCESS
+        ~/proj $ ls
+        flash_desc.json  setup/
+
+.. raw:: latex
+
+    \vspace{1em}
 
 This command creates symbolic links to the the FLASH source files in the ``setup/`` directory.
 Using the normal FLASH setup script, all of these files must live within 
