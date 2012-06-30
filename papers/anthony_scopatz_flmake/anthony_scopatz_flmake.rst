@@ -143,23 +143,27 @@ For example, to run the classic Sedov problem:
 
 This command creates symbolic links to the the FLASH source files in the ``setup/`` directory.
 Using the normal FLASH setup script, all of these files must live within 
-``${FLASH_SRC_DIR}/source/``.  However, flmake's setup command searches additional paths to 
+``${FLASH_SRC_DIR}/source/``.  However, the flmake setup command searches additional paths to 
 find potential source files.
 
-By default, uf there is a local ``source/`` directory in the projects directory this directory 
+By default if there is a local ``source/`` directory in the project directory then this  
 is searched first for any potential FLASH units.  The structure of this directory mirrors 
-the layout found in ``${FLASH_SRC_DIR}/source/``.  For example, if the user wanted to write or 
-overwrite their own driver unit, they could place all of the relevant files in 
+the layout found in ``${FLASH_SRC_DIR}/source/``.  Thus if the user wanted to write a new or 
+override an existing driver unit, they could place all of the relevant files in 
 ``~/proj/source/Driver/``.  Units found in the project source directory take precedence over 
-units with the same name in the FLASH source.
+units with the same name in the FLASH source directory.
 
-The most commonly overridden units, however, are simulations. Furthermore specific simulations 
-live somewhat deep in the file system hierarchy residing within 
+The most commonly overridden units, however, are simulations. Yet specific simulations 
+live somewhat deep in the file system hierarchy as they reside within 
 ``source/Simulation/SimulationMain/``.  To make accessing 
-simulations easier, a local project ``simulations/`` directory is first searched for any possible 
+simulations easier a local project ``simulations/`` directory is first searched for any possible 
 simulations.  Thus ``simulations/`` effectively aliases ``source/Simulation/SimulationMain/``. 
-Continuing with the previous Sedov example the following directories, if they exist, are 
-searched  in order of precedence:
+Continuing with the previous Sedov example the following directories are 
+searched in order of precedence for simulation units, if they exist:
+
+.. raw:: latex
+
+    \vspace{1em}
 
 #. ``~/proj/simulations/Sedov/``
 #. ``~/proj/source/Simulation/``
@@ -167,14 +171,26 @@ searched  in order of precedence:
 #. ``${FLASH_SRC_DIR}/source/``
         ``Simulation/SimulationMain/Sedov/``
 
+.. raw:: latex
+
+    \vspace{1em}
+
 Therefore, it is common for a project directory to have the following structure if the 
-project require many modifications to FLASH that are - at least in the short term - 
+project requires many modifications to FLASH that are - at least in the short term - 
 inappropriate for mainline inclusion:
+
+.. raw:: latex
+
+    \vspace{1em}
 
 .. code-block:: sh
 
     ~/proj $ ls
     flash_desc.json  setup/  simulations/  source/
+
+.. raw:: latex
+
+    \vspace{1em}
 
 Logging
 ======================
