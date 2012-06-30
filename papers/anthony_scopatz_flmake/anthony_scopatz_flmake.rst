@@ -51,7 +51,7 @@ attempts have placed reproducibility as their primary concern.  This is in part 
 fully capturing the setup metadata required alterations to the build system.
 
 The development of flmake started by rewriting the existing build system
-to allow FLASH to be run outside of the main line subversion repository.  It separates out
+to allow FLASH to be run outside of the mainline subversion repository.  It separates out
 a project (or simulation) directory independent of the FLASH source directory.  This
 directory is typically under its own version control.
 
@@ -59,7 +59,7 @@ For each of the important tasks (setup, build, run, etc), a sidecar metadata
 *description* file is either initialized or modified.  This is a simple
 dictionary-of-dictionaries JSON file which stores the environment of the
 system and the state of the code when each flmake command is run.  This metadata includes
-the version information of both the FLASH main line and project repositories.
+the version information of both the FLASH mainline and project repositories.
 However, it also may include all local modifications since the last commit.
 A patch is automatically generated using standard posix utilities and stored directly 
 in the description.
@@ -106,17 +106,18 @@ persisted metadata descriptions.
 Independent Project Directories
 =================================
 Without flmake, FLASH must be setup and built from within the FLASH source directory
-(``FLASH_SRC_DIR``) using the setup script and make [GMAKE]_.  While this is fine for single
-runs, it fails to separate projects and simulation campaigns from the source code.
-Moreover, keeping simulations next to the source makes it difficult to track local 
-modifications independent of the mainline code development.
+(``FLASH_SRC_DIR``) using the setup script and make [GMAKE]_.  While this is sufficient 
+for single runs, such a strategy fails to separate projects and simulation campaigns from 
+the source code. Moreover, keeping simulations next to the source makes it difficult to 
+track local modifications independent of the mainline code development.
 
 Because of these difficulties in running suites of simulations from within ``FLASH_SRC_DIR``, 
 flmake is intended to be run external to the FLASH source directory.  This is known as the 
-project directory.  This directory should be managed by a version control system.
-Notably now all of the project-specific files are in a repository that is separate from 
-the main FLASH source.   Here this directory is called ``proj/`` but in practice is the 
-name of the simulation campaign. 
+project directory.  The project directory should be managed by its own version control
+systems.  By doing so, all of the project-specific files are encapsulated in a repository 
+whose history is independent from the main FLASH source.   Here this directory is called 
+``proj/`` though in practice it takes the name of the simulation campaign.   This 
+directory may be located anywhere on the user's file system.
 
 Source & Project Paths Searching
 =====================================
