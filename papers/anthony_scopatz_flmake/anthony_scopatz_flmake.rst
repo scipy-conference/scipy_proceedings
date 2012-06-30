@@ -1,6 +1,6 @@
 :author: Anthony Scopatz
 :email: scopatz@flash.uchicago.edu
-:institution: The FLASH Center for Computational Science, Astrophysics Department, The University of Chicago
+:institution: The FLASH Center for Computational Science, The University of Chicago
 
 ----------------------------------------------------------
 Total Recall: flmake and the Quest for Reproducibility
@@ -26,7 +26,7 @@ Introduction
 ------------
 FLASH is a high-performance computing (HPC) multi-physics code which is used to perform
 astrophysical and high-energy density physics simulations [FLASH]_.  It runs on the full 
-range of systems from laptops to workstations to 100,000 processor super computers - such 
+range of systems from laptops to workstations to 100,000 processor super computers, such 
 as the Blue Gene/P at Argonne National Laboratory.
 
 Historically, FLASH was born from a collection of unconnected legacy codes written
@@ -36,7 +36,7 @@ in C.  However building, testing, and documentation are all performed in Python.
 
 FLASH has a unique architecture which compiles *simulation specific* executables for each
 new type of run.  This is aided by an object-oriented-esque inheritance model that is
-implemented by inspecting the file system directory hierarchy.  This allows FLASH to
+implemented by inspecting the file system directory tree.  This allows FLASH to
 compile to faster machine code than a compile-once strategy.  However it also
 places a greater importance on the Python build system.
 
@@ -48,20 +48,20 @@ FLASH - such tasks may now be performed in a repeatable way [FLMAKE]_.
 Previous workflow management tools have been written for FLASH.  (For example, the
 "Milad system" was implemented entirely in Makefiles.)  However, none of the prior
 attempts have placed reproducibility as their primary concern.  This is in part because
-fully capturing the setup metadata requires alterations to the build system.
+fully capturing the setup metadata required alterations to the build system.
 
 The development of flmake started by rewriting the existing build system
 to allow FLASH to be run outside of the main line subversion repository.  It separates out
 a project (or simulation) directory independent of the FLASH source directory.  This
 directory is typically under its own version control.
 
-Moreover for each of the important tasks (setup, build, run, etc), a sidecar metadata
-*description* file is either written or modified.  This is a simple
+For each of the important tasks (setup, build, run, etc), a sidecar metadata
+*description* file is either initialized or modified.  This is a simple
 dictionary-of-dictionaries JSON file which stores the environment of the
 system and the state of the code when each flmake command is run.  This metadata includes
 the version information of both the FLASH main line and project repositories.
 However, it also may include all local modifications since the last commit.
-A patch is automatically generated using the standard utilities and stored directly 
+A patch is automatically generated using standard posix utilities and stored directly 
 in the description.
 
 Along with universally unique identifiers, logging, and Python run control files, the
@@ -70,21 +70,22 @@ re-executing each command in its original state.  While ``flmake reproduce``
 makes a useful debugging tool, it fundamentally increases the scientific merit of
 FLASH simulations.
 
-The methods described above may be used whenever
+The methods described herein may be used whenever
 source code itself is distributed.   While this is true for FLASH (uncommon amongst compiled
 codes), most Python packages also distribute their source.  Therefore the same
 reproducibility strategy is applicable and highly recommended for Python simulation codes.
 Thus flmake shows that reproducibility - which is notably absent from most computational science
-projects - is easily attainable using only version control and standard library modules.
+projects - is easily attainable using only version control, Python standard library modules, 
+and ever-present command line utilities.
 
 
 New Workflow Features
 ----------------------
 As with many predictive science codes, managing FLASH simulations may be a tedious 
 task for both new and experienced users.  The flmake command line utility eases the 
-simulation burdenm and shortens the development cycle by providing a modular tool 
-which implements many common elements of a FLASH workflow.  Moreover, at each stage 
-this tool captures necessary metadata about the task which it is performing.  Thus, 
+simulation burden and shortens the development cycle by providing a modular tool 
+which implements many common elements of a FLASH workflow.  At each stage 
+this tool captures necessary metadata about the task which it is performing.  Thus
 flmake encapsulates the following opperations:
 
 * setup/configuration,
@@ -105,7 +106,7 @@ persisted metadata descriptions.
 Independent Project Directories
 =================================
 Without flmake, FLASH must be setup and built from within the FLASH source directory
-(``FLASH_SRC_DIR``) using the setup script and make [GMAKE].  While this is fine for single
+(``FLASH_SRC_DIR``) using the setup script and make [GMAKE]_.  While this is fine for single
 runs, it fails to separate projects and simulation campaigns from the source code.
 Moreover, keeping simulations next to the source makes it difficult to track local 
 modifications independent of the mainline code development.
