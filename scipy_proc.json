@@ -45,15 +45,76 @@
                 {"name": "Andy Terrel",
                  "org": "TACC, University of Texas"}
                 ]
+        },
+
+        {
+            "name": "Program Committee",
+            "members": [
+                {"name": "Aron Ahmadia",
+                 "org": "KAUST"},
+                {"name": "W. Nathan Bell",
+                 "org": "NVIDIA"},
+                {"name": "John Hunter",
+                 "org": "TradeLink"},
+                {"name": "Matthew G. Knepley",
+                 "org": "University of Chicago"},
+                {"name": "Kyle Mandli",
+                 "org": "University of Texas"},
+                {"name": "Mike McKerns",
+                 "org": "Enthought, Inc."},
+                {"name": "Dan Schult",
+                 "org": "Colgate University"},
+                {"name": "Matthew Terry",
+                 "org": "LLNL"},
+                {"name": "Matthew Turk",
+                 "org": "Columbia University"},
+                {"name": "Peter Wang",
+                 "org": "Continuum Analytics"}
+            ]
+        },
+
+        {
+            "name": "Tutorial Chairs",
+            "members": [
+                {"name": "Dharhas Pothina",
+                 "org": "Texas Water Development Board"},
+                {"name": "Jonathan Rocher",
+                 "org": "Enthought, Inc."}
+            ]
+        },
+
+        {
+            "name": "Sponsorship Chairs",
+            "members": [
+                {"name": "Chris Colbert",
+                 "org": "Enthought, Inc."},
+                {"name": "William Spotz",
+                 "org": "Sandia National Laboratories"}
+            ]
+        },
+
+        {
+            "name": "Program Staff",
+            "members": [
+                {"name": "Jodi Havranek",
+                 "org": "Enthought, Inc."},
+                {"name": "Jim Ivanoff",
+                 "org": "Enthought, Inc."},
+                {"name": "Lauren Johnson",
+                 "org": "Enthought, Inc."},
+                {"name": "Leah Jones",
+                 "org": "Enthought, Inc."}
+            ]
         }
+
     ],
 
   "sponsored_students": [
       {
-          "name": "First name",
-          "org": "University",
-          "location": "Where from"
-      }
+          "name": "",
+          "org": "",
+          "location": ""
+      },
   ]
 }
 
