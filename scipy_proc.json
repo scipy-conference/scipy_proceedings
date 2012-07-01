@@ -1,23 +1,23 @@
 {
   "proceedings": {
-     "citation_key": "proc-scipy-2010", 
+     "citation_key": "proc-scipy-2012",
      "title": {
        "acronym": "SciPy",
        "conference": "Python in Science Conference",
-       "ordinal": "9th",
-       "short": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2010)",
-       "full": "Proceedings of the 9th Python in Science Conference"
+       "ordinal": "11th",
+       "short": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2012)",
+       "full": "Proceedings of the 11th Python in Science Conference"
      },
-     "year": "2010",
+     "year": "2012",
      "editor": [
         "Stéfan van der Walt",
         "Jarrod Millman"
      ],
-     "volume": 3,
+     "volume": 5,
      "number": 1,
      "isbn": "value",
      "location": "Austin, Texas",
-     "dates": "June 28 - July 3",
+     "dates": "July 16--21",
      "copyright": {
        "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
        "proceedings": ["The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
@@ -30,20 +30,20 @@
         {
             "name": "Conference Chairs",
             "members": [
-                {"name": "Jarrod Millman",
-                 "org": "UC Berkeley"},
-                {"name": "Travis Oliphant",
-                 "org": "Enthought, Inc."}
+                {"name": "Warren Weckesser",
+                 "org": "Enthought, Inc."},
+                {"name": "Stefan van der Walt",
+                 "org": "UC Berkeley"}
                 ]
         },
-  
+
         {
             "name": "Program Chairs",
             "members": [
-                {"name": "Stéfan van der Walt",
-                 "org": "Applied Mathematics, Stellenbosch University"},
-                {"name": "Someone else",
-                 "org": "Some company"}
+                {"name": "Matt McCormick",
+                 "org": "Kitware, Inc."},
+                {"name": "Andy Terrel",
+                 "org": "TACC, University of Texas"}
                 ]
         }
     ],
