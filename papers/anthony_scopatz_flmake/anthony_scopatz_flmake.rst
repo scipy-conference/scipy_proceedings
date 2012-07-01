@@ -196,33 +196,46 @@ Logging
 ======================
 In many ways computational simulation is more akin to experimental science than
 theoretical science.  Simulations are executed to test the system at hand in analogy 
-to how physical experiments probe the netural world..  Therefore, it is useful for 
-computational scientists to adopt the time-tested strategy of a keeping a lab notebook.
+to how physical experiments probe the natural world.  Therefore, it is useful for 
+computational scientists to adopt the time-tested strategy of a keeping a lab notebook
+or its electronic analogy.
 
 Various example of virtual lab notebooks exist [VLABNB]_ as a way of storing 
-information about how some experiment was performed in a particular way in 
-conjunction with the resultant data.  However, the corollary concept in
-pure software development is arguablly logging.  Unfortunately, most simulation
-science makes use of neither of these two solutions.  Rather, than using an 
-external rich-client, flmake makes use of the built-in Python logger.
+information about how an experiment was conducted.  The resultant data is often  
+stored in conjunction with the notebook.  Arguably the corollary concept in
+software development is logging.  Unfortunately, most simulation
+science makes use of neither lab notebooks nor logging.  Rather than using an 
+external rich- or web-client, flmake makes use of the built-in Python logger.
 
 Every flmake command has the ability to log a message.  This follows 
 the ``-m`` convention from version control systems.  These messages and associated 
-metadata is stored in a ``flash.log`` file in the project directory. 
+metadata are stored in a ``flash.log`` file in the project directory. 
 
 Not every command uses logging; for trivial commands which do not change state
 (such as listing or diffing) log entries are not needed.  However for more serious commands 
 (such as building) logging is a critical component.  Understanding that many users cannot 
 be bothered to create meaningful log messages at each step, sensible and default messages
 are automatically generated.  Still, it is highly recommended that the user provide
-more detailed messages:
+more detailed messages as needed.  *E.g.*:
+
+.. raw:: latex
+
+    \vspace{1em}
 
 .. code-block:: sh
 
     ~/proj $ flmake -m "Run with 600 J laser" run -n 10
 
-The ``flmake log <ug_flmake_log>`` command may then be used to display past log 
+.. raw:: latex
+
+    \vspace{1em}
+
+The ``flmake log`` command may then be used to display past log 
 messages:
+
+.. raw:: latex
+
+    \vspace{1em}
 
 .. code-block:: sh
 
@@ -235,6 +248,11 @@ messages:
     Log id: 6b9e1a0f-cfdc-418f-8c50-87f66a63ca82
 
         Run with 600 J laser
+
+.. raw:: latex
+
+    \vspace{1em}
+
 
 The ``flash.log`` file should be added to the version control of the project.  Entries
 in this file are not typically deleted.
@@ -257,7 +275,16 @@ The most important example of using ``flashrc.py`` is that the run and restart
 commands will update the ``flash.par`` file with values from a ``parameters``
 dictionary (or function which returns a dictionary).
 
-Initial ``flash.par``:
+.. raw:: latex
+
+    \vspace{1em}
+    \begin{center}
+
+Initial ``flash.par``
+
+.. raw:: latex
+
+    \end{center}
 
 .. code-block:: sh
 
@@ -266,14 +293,32 @@ Initial ``flash.par``:
     charLimiting = .true.
     RiemannSolver = "hll"
 
-Run control ``flashrc.py``:
+.. raw:: latex
+
+    \vspace{1em}
+    \begin{center}
+
+Run Control ``flashrc.py``
+
+.. raw:: latex
+
+    \end{center}
 
 .. code-block:: python
 
     parameters = {"slopeLimiter": "mc",
                   "use_flattening": False}
 
-Final ``flash.par``:
+.. raw:: latex
+
+    \vspace{1em}
+    \begin{center}
+
+Final ``flash.par``
+
+.. raw:: latex
+
+    \end{center}
 
 .. code-block:: sh
 
@@ -281,7 +326,11 @@ Final ``flash.par``:
     charLimiting = .true.
     order = 3
     slopeLimiter = "mc"
-    use_flattening = .true.
+    use_flattening = .false.
+
+.. raw:: latex
+
+    \vspace{1em}
 
 Description Sidecar Files
 ============================
