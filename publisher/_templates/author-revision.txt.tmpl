@@ -1,0 +1,36 @@
+From: {{sender['name'] | html}}
+Subject: [{{conference}}] reviews submitted, revisions requested
+To: {{email | html}}
+Cc: {{cced | html}}
+MIME-Version: 1.0
+Content-Type: text/plain
+
+Dear colleagues and friends,
+
+Your submitted articles have now all received at least one review. You can
+browse the built PDFs and reviews for all the submitted papers here:
+
+  {{download}}
+
+As you may recall from my last email, Stefan rewrote the proceedings build
+system from scratch. The code is now much smaller and cleaner.  We have also
+been able to develop much better infrastructure and several improvements to
+streamline the process going forward. You can access the complete build system
+including the original restructured text manuscripts here:
+
+  https://github.com/scipy/scipy_proceedings/tree/{{year}}
+
+If you have any problems with the build system or the generated PDF, please let
+us know ASAP.
+
+Please revise your articles based on the reviews. To make edits to your paper,
+please edit the original restructured text documents:
+
+  https://github.com/scipy/scipy_proceedings/tree/{year}}/papers
+
+You can either send us patches via email to {{submit_email}} or use your github
+account to send us a pull request by {{due}}.
+
+With best regards,
+
+{{editors}}
