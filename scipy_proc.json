@@ -5,7 +5,7 @@
        "acronym": "SciPy",
        "conference": "Python in Science Conference",
        "ordinal": "11th",
-       "short": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2012)",
+       "short": "PROC. OF THE 11th PYTHON IN SCIENCE CONF. (SCIPY 2012)",
        "full": "Proceedings of the 11th Python in Science Conference"
      },
      "year": "2012",
@@ -114,7 +114,7 @@
           "name": "",
           "org": "",
           "location": ""
-      },
+      }
   ]
 }
 
