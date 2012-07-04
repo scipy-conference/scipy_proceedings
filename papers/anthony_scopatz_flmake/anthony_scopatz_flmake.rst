@@ -683,10 +683,9 @@ system allows for one version of flmake to supervise the execution of another
 in a manner relevant to reproducibility.
 
 
-
-A Note on Repeatability
+A Note on Replication
 ---------------------------------
-de nada
+
 
 
 Conclusions
