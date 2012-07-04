@@ -47,8 +47,8 @@ away from the seed, since these articles are in general harder to find by a
 human.
 
 In addition to the staples of scientific Python computing NumPy, SciPy,
-Matplotlib, and IPython, we use the libraries RL-Glue/RL-Library [Tan09]_,
-NetworkX [Hag08]_, Gensim [Reh10]_, and scikit-learn [Ped11]_.
+Matplotlib, and IPython, we use the libraries RL-Glue [Tan09]_, NetworkX
+[Hag08]_, Gensim [Reh10]_, and scikit-learn [Ped11]_.
 
 Reinforcement Learning considers the interaction between a given environment
 and an agent. The objective is to design an agent able to learn a policy that
@@ -100,7 +100,7 @@ maximizes the total expected reward
 
 .. math::
 
-   R = \mathbf{E}\left[\sum_{k=0}^\infty \gamma r(x_k) \right],
+   R = \mathbf{E}\left[\sum_{k=0}^\infty \gamma^k r(x_k) \right],
 
 where :math:`\gamma \in (0,1)` is the discount factor. Note that typically the
 agent does not known the functions :math:`P` and :math:`r`, an it must find the
@@ -156,9 +156,9 @@ show the main methods that these three programs must implement:
 
     
 
-Note that RL-Glue is a only a thin layer among these programs, allowing to use
-any construction inside them. In particular, as described in the next section,
-we use a NetworkX graph to model the environment.
+Note that RL-Glue is a only a thin layer among these programs, allowing us to
+use any construction inside them. In particular, as described in the next
+section, we use a NetworkX graph to model the environment.
 
 
 .. [#] Currently there are codecs for Python, C/C++, Java, Lisp, MATLAB, and
@@ -172,10 +172,7 @@ we use a NetworkX graph to model the environment.
    languages.
 
 
-Representing the state space as graph
--------------------------------------
-
-Computing the similarity between documents
+Computing the Similarity between Documents
 ------------------------------------------
 
 Although in principle it is simple to compute the LSA model of a given corpus,
@@ -185,7 +182,133 @@ vector representation of the corpus in RAM memory, and (ii) we need to compute
 the SVD of a matrix whose size is beyond the limits of what standard solvers
 can handle.
 
-Visualizing the LSA space
+
+Representing the State Space as Graph
+-------------------------------------
+
+We are interested in the problem of gathering information in domains descibed
+by linked datasets. It is natural to describe such domains by graphs. We use
+the NetworkX library to build the graphs we work with. NetworkX provides data
+structures to reperesents different kinds of graphs (undirected, weighted,
+directed, etc), together with implementations of many graph
+algorithms. NetworkX allows to use any hashable Python object as a node
+identifier. Also, any Python object can be used as a node, egde, or graph
+attribute. We exploit this capability by using the LSA vector representation of
+a Wikipedia article, which is a NumPy array, as a node attribute.
+
+The following code snippet shows a function [#]_ used to build a directed graph
+where nodes represent Wikipedia articles, and the edges represent links between
+articles. Note that we compute the LSA representation of the article (line 11),
+and that this is vector is used as a node attribute (line 13). The function get
+up to ``n_max`` articles by breath-first crawling the Wikipedia, starting from
+the article defined by ``page``.
+
+.. code-block:: python
+   :linenos:
+
+    def crawl(page, n_max):
+        G = nx.DiGraph()
+        n = 0
+        links = [(page, -1, None)]
+        while n < n_max:
+            link = links.pop()
+            page = link[0]
+            dist = link[1] + 1
+            page_text = page.edit().encode('utf-8')
+            # LSI representation of page_text
+            v_lsi = get_lsi(page_text)
+            # Add node to the graph
+            G.add_node(page.name, v=v_lsi)
+            if link[2]:
+                source = link[2]
+                dest = page.name
+                if G.has_edge(source, dest):
+                    # Link already exist
+                    continue
+                else:
+                    sim = get_similarity(page_text)
+                    self.G.add_edge(source,
+                                    dest,
+                                    weight=sim,
+                                    d=dist)
+            new_links = [(l, dist, page.name) 
+                         for l in page.links()]
+            links = new_links + links
+            n += 1
+
+        return G
+
+.. [#] The parameter ``page`` is a mwclient page object. See
+       http://sourceforge.net/apps/mediawiki/mwclient/.
+
+We now show the result of running the code above for two different setups. In
+the first instance we crawl the *Simple English Wikipedia* [#]_ using "Army" as the
+seed article. We set the limit on the number of articles to visit to 100. The
+result is depicted in Fig. :ref:`figArmy`, where the node corresponding to the
+seed article is in light blue and the remaining nodes have a size proportional
+to the similarity with respect to the seed. Red nodes are the ones with
+similarity bigger than 0.5. We observe two nodes, "Defense" and "Weapon", with
+similarities 0.7 and 0.53 respectively, that are three links ahead of the seed.
+
+In the second instance we crawl Wikipedia using the article "James Gleick" [#]_
+as seed. We set the limit on the number of articles to visit to 2000. We show
+the result in Fig. :ref:`figGleick`, where, as in the previous example, the
+node corresponding to the seed is in light blue and the remaining nodes have a
+size proportional to the similarity with respect to the seed. The eleven red
+nodes are the ones with similarity bigger than 0.7. Of these, 9 are more than
+one link ahead of the seed. We see that the article with the biggest
+similarity, with a value of 0.8, is about "Robert Wright (journalist)", and it
+is two links ahead from the seed (passing through the "Slate magazine"
+article). Robert Wright writes books about sciences, history and religion. It
+is very reasonable to consider him an author similar to James Gleick. It is
+very reasonable to consider him an author similar to James Gleick.
+
+..  Table \ref{tbl:gleick} shows the ten most similar articles and theirs link
+    distances from the seed. We see that all of them are related to the
+    seed. We claim that these results validate the thesis that there are
+    similar articles separated by more than one link.
+
+.. [#] The Simple English Wikipedia (http://simple.wikipedia.org) has articles
+       written in *simple English* and has a much smaller number of articles
+       than the standard Wikipedia. We use it because of it simplicity.
+
+.. [#] James Gleick is "an American author, journalist, and biographer, whose
+    books explore the cultural ramifications of science and technology".
+
+.. figure:: army.pdf 
+
+   Graph for the "Army" article in the simple Wikipedia with 97 nodes and 99
+   edges. The seed article is in light blue. The size of the nodes (except for
+   the seed node) is proportional to the similarity. In red are all the nodes
+   with similarity bigger than 0.5. We found two articles ("Defense" and
+   "Weapon") similar to the seed three links ahead. :label:`figArmy`
+
+.. figure:: gleick.pdf
+   
+   Graph for the "James Gleick" Wikipedia article with 1975 nodes and 1999
+   edges. The seed article is in light blue. The size of the nodes (except for
+   the seed node) is proportional to the similarity. In red are all the nodes
+   with similarity bigger than 0.7. There are several articles with high
+   similarity more than one link ahead. :label:`figGleick`
+            
+
+Another place where graphs can play an important role is in the RL problem when
+we want to find basis functions to appoximate the value-function. The
+value-function is the function :math:`V: \mathcal{X} \mapsto \mathbb{R}` defined
+as
+
+.. math::
+
+   V^\pi (x) = \mathbf{E}\left[\sum_{k=0}^\infty \gamma^k r(x_k) \bigm\vert 
+   x_0 = x, a_k = \pi(x_k) \right],
+
+and plays a key role in many RL algorithms [Sze10]_. When the dimension of
+:math:`\mathcal{X}` is significant,
+
+
+
+
+Visualizing the LSA Space
 -------------------------
 
 Figure :ref:`figISOMAP` bla bla.
