@@ -84,30 +84,93 @@ connections.
 Reinforcement Learning and the Information Gathering Problem
 ------------------------------------------------------------
 
-The RL paradigm [Sut98]_ [Sze10]_ considers an agent that interacts with an
-environment described by a Markov Decision Process (MDP). Formally, an MDP is
-defined by a state space :math:`\mathcal{X}`, an action space
-:math:`\mathcal{A}`, a transition probability function :math:`P`, and a reward
-function :math:`r`. At a given sample time, the agent is at state :math:`x \in
-\mathcal{X}`, and it chooses action :math:`a \in \mathcal{A}`. Given the
-current state and selected action, the probability that the next state is
-:math:`x'` is determined by :math:`P(x,a,x')`. After reaching the next state
-:math:`x'`, the agent observe an immediate reward :math:`r(x')`. Figure xxx
-depicts the agent-environment interaction. The objective is to find a function
-:math:`\pi:\mathcal{X} \mapsto \mathcal{A}`, called the *policy*, that
+
+The RL paradigm [Sut98]_ considers an agent that interacts with an environment
+described by a Markov Decision Process (MDP). Formally, an MDP is defined by a
+state space :math:`\mathcal{X}`, an action space :math:`\mathcal{A}`, a
+transition probability function :math:`P`, and a reward function :math:`r`. At
+a given sample time, the agent is at state :math:`x \in \mathcal{X}`, and it
+chooses action :math:`a \in \mathcal{A}`. Given the current state and selected
+action, the probability that the next state is :math:`x'` is determined by
+:math:`P(x,a,x')`. After reaching the next state :math:`x'`, the agent observe
+an immediate reward :math:`r(x')`. Figure :ref:`figRL` depicts the
+agent-environment interaction. In a RL problem, the objective is to find a
+function :math:`\pi:\mathcal{X} \mapsto \mathcal{A}`, called the *policy*, that
 maximizes the total expected reward
 
 .. math::
-   :label: circarea
 
-   R = \mathbf{E}\left[\sum_{k=0}^\infty \gamma r(x_k) \right].
+   R = \mathbf{E}\left[\sum_{k=0}^\infty \gamma r(x_k) \right],
+
+where :math:`\gamma \in (0,1)` is the discount factor. Note that typically the
+agent does not known the functions :math:`P` and :math:`r`, an it must find the
+optimal policy by interacting with the environment. See [Sze10]_ for a detailed
+review of the different algorithms used in RL.
+
+.. figure:: RL_scheme.pdf
+
+   The agent-environment interaction. The agent observes the current state
+   :math:`x` and reward :math:`r`; then it executes action
+   :math:`\pi(x)=a`. :label:`figRL`
+
+We implement the RL algorithms using the RL-Glue library. The library consists
+on the *RL-Glue Core* program and a set of codecs for different laguages [#]_
+to communicate with the library. To run an instance of a RL problem one needs
+to write three different programs: the *environment*, the *agent*, and the
+*experiment*. The environment and the agent programs match exactly the
+corresponding functionalities of the RL framework, while the experiment
+orchestrates the interaction between these two. The following code snippets
+show the main methods that these three programs must implement:
+
+.. code-block:: python
+
+   ################# environment.py #################
+   class env(Environment):
+       def env_start(self):
+           # Set the current state
+
+           return current_state
+
+       def env_step(self, action):
+           # Change the current state according to 
+           # the current state and given action.
+
+           return reward 
+
+    #################### agent.py ####################
+    class agent(Agent):
+        def agent_start(self, state):
+            # First step during an experiment
+            
+            return action
+            
+        def agent_step(self, reward, obs):
+            # Execute a step of the RL algorithm
+            
+            return action
+
+    ################# experiment.py ##################
+    RLGlue.init()
+    RLGlue.RL_start() 
+    RLGlue.RL_episode(100) # Run an episode
+
+    
+
+Note that RL-Glue is a only a thin layer among these programs, allowing to use
+any construction inside them. In particular, as described in the next section,
+we use a NetworkX graph to model the environment.
+
+
+.. [#] Currently there are codecs for Python, C/C++, Java, Lisp, MATLAB, and
+       Go.
 
 
 
-Note that typically the agent does not known the functions :math:`P` and
-:math:`r`.
+.. Although there are other alternatives for writting RL programs, in our
+   opinion RL-Glue is the best alternative because it is very "thin", it match
+   the RL paradigm and allows to mix agents and environments written in diffent
+   languages.
 
-asdf aslf
 
 Representing the state space as graph
 -------------------------------------
@@ -141,6 +204,7 @@ Figure :ref:`figISOMAP` bla bla.
 Conclusions
 -----------
 
+This is much better than using domain specific languages like MATLAB. 
 .. This is a comment
 
 
