@@ -425,7 +425,7 @@ Next, create and run the simulation:
 
 Why Reproducibility is Important
 ----------------------------------
-True to its part of speech, much of 'scientific computing' has the trappings of 
+True to its part of speech, much of \`scientific computing' has the trappings of 
 science in that it is code produced to solve problems in (big-'S') Science.  
 However, the process by which said programs are written is not itself typically 
 itself subject to the rigors of the scientific method.  The vaulted method contains 
@@ -438,7 +438,7 @@ Whatever the reason for this may be - ignorance, sloth, or other deadly sins -
 the impetus for adopting modern software development practices only increases 
 every year.  The evolution of tools such as version control and envrionemnt 
 reproducing mechanisms (via virtual machines/hypervisors) enable researchers to 
-more easily capture information about the software during and after production.  
+more easily capture information about software during and after production.  
 Furthermore, the appearent end of Silicon-based Moore's Law has nececitated a move
 to more exotic arichteture and increased parallelism to see further speed 
 increases [MIMS]_. This implies that code that runs on machines now may not
@@ -447,14 +447,27 @@ be able to run on future processors without significant refactoring.
 Therefore the scientific computing landscape is such that there are presently the
 tools and the need to have fully reproducible simulations.  However, most scientists
 choose to not utilize these technologies.  This is akin to a chemist not keeping a
-lab notebook.  Thus lack of reproducuibility means that many solutions to science
+lab notebook.  The lack of reproducuibility means that many solutions to science
 problems garnered through computational means are relegated to the realm of technical 
 achievements.  Irreproducible reults may be novel and interesting but they are not 
-science.  Instead of the current paradigm of periscientific computing 
-(computing-about-science), the community should redouble our efforts around 
-diacomputiational science (computing-throughout-science).
+science.  Unlike the current paradigm of 
+computing-about-science, or 
+*periscientific computing*,
+reproducibility is a keystone of 
+*diacomputiational science* (computing-throughout-science).
 
-The above being generally true, there are a couple of important caveats.  The first
+In periscientific computing, there may exist a partition between expert software 
+developers and expert scientist each of whom must learn to partially speak the 
+others' language.   Alternatively, when expert software engineers are not available, 
+only the bare minimum development to solve computing problems in the short term is
+performed.  In diacomputational science, software exists as a substrate on top of 
+which science and engineering problems are solved.  Whether theoretical, simulation, 
+or experimental problems are at hand the scientist has a minimum knowledge of resposible
+computing tools available to them.  While the level of education required for 
+diacomputaional science may seem extreme, this is in fact no greater than what we currently 
+expect from scientists with regard to Statistics [WILSON]_.
+
+The above being generally true, there are some of notable exceptions.  The first
 is that there are researchers who are congnizant and repectful of these reproducibility
 issues.  The efforts of these scientists help paint a less dire picture than the 
 one framed above.  
@@ -463,16 +476,16 @@ The second exception is that while reproducibility is a key feature of fundement
 it is not the only one.  For example, openness is another point whereby the statement
 "If a result is not produced openly then it is not science" holds.  Open access to 
 reults - itself is a hotly contested issue [VRIEZE]_ - is certainly a component of 
-computational science.  Additionally though, having open source and available code 
-is likely critical and often outside of normal research practice.  This is for a 
-vareity of reasons, including the fear that releasing code too early or at all will 
-negatively impact personal publication records.
+computational science.  Though having open and available code 
+is likely critical for pure science, it often lies outside the scope of normal research 
+practice.  This is for a vareity of reasons, including the fear that releasing code too 
+early or at all will negatively impact personal publication records.
 
-Therefore reproducibility is imporant because without it any results generated are 
-periscientific.  For computational science there exist computational tools to aid 
+Reproducibility is, therefore, imporant because without it any results generated are 
+periscientific.  For diacomputational science there exist computational tools to aid 
 in this endeavour, as in analouge science there are physical solutions.  Though it
 is not the only critism to be levied against modern research practices, irreproducibility
-is one that affects computation acutely and uniquely compared to other spheres.
+is one that affects computation acutely and uniquely as compared to other spheres.
 
 
 The Reproduce Command
