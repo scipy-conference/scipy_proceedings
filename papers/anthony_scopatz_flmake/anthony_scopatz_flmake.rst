@@ -601,6 +601,34 @@ to clean extraneous files.  The release system is easiest in that checkout
 simply copies over the clean subdirectory.  This opperation is performed for 
 the setup, build, and run commands at reproduce time.
 
+The diff opperation may seem less than fundemental to version control. Here however, 
+diff is used to capture local modifications to the working trees of the source and
+project directories.  This diffing is in place as a fail-safe against uncommitted 
+changes.  For centralized and distributed systems, diffing is performed through 
+the selfsame command name.  In the release system (where committing is impossible), 
+diffing takes on the heavy lifting not provided by a more advanced system.  Here it is 
+performed by using the posix ``diff`` tool with the recurssive switch between the 
+``FLASH_SRC_DIR`` and the clean copy.  The diff opperation is executed when the 
+commands are originally run.  The resultant diff string is stored in the 
+description file, along with the coorresponding info.
+
+The inverse opperation to diff, therefore, is patch.  This is used at reproduce time
+after checkout to restore the working trees of the tempororary repositories to the 
+same state they were in at the setup, build, and run commands original execution. 
+While each source control management system has its own pathcing mechanism, the 
+output of diff always returns a string which is compatible with the posix ``patch``
+utility.  Therefore, for all systems (including release), the ``patch`` program 
+is used.  
+
+The above illustrates how version control abstraction may be used to define a set 
+of meta-opperations which capture all versioning information provided.  This even 
+included the case where no formal version control system is used.  It also 
+covers the case of the \`forgetful' user who may not have committed every relevant 
+local change to the repository prior to running a simulation.  What is more
+is that the flmake implementation of these abstractions is only a handful of 
+functions that which amount to less than 225 lines of code in Python.  Though small, 
+this capability is critical to the reproduce command functioning as intended. 
+
 
 Command Time Machine
 ======================================
