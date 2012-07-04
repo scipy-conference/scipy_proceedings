@@ -685,7 +685,52 @@ in a manner relevant to reproducibility.
 
 A Note on Replication
 ---------------------------------
+A weaker form of reproducibility (and thus easier to obtain) is known as
+*replication* [SCHMIDT]_.  Replication is the process of recreating a result
+when "you take all the same data and all the same tools" [GRAHAM]_ which were
+used in the original determination.  Replication is a eaker determination than
+replication because at minimum the original scientist should be able to replicate
+their own work.  Without replication, the same code executed twice will produce 
+distinct results.  In this case no trust may be placed in the conclusions 
+whatsoever.
 
+Much as version control has given developers greater control over reproducibility, 
+other modern tools are powerful instruments of replicability.  Foremost among 
+these are hypervisors.  The ease-of-use and ubiquity of virtual machines (VM) in
+the software ecosystem allows for the total capture and persistence of the environment
+in which any computation was performed.  Such environments may be hosted and shared 
+with collaborators, editors, reviewers, or the public at large.  If the original 
+anaylsis was perfomed in a VM context, shared, and rerun by other scientists, this
+is replicability.  Such a strategy has been proposed by C. T. Brown as a stop-gap 
+meausre until diacomputational science is realized [BROWN]_.
+
+However, as Brown admits (see comments), the delination bewteen replication and 
+reproduction is fuzzy.  Consider these questions with no clear answer:
+
+.. raw:: latex
+
+    \vspace{1em}
+
+* Are bit-identical results needed for replication?
+* How much of the environment must be reinstated for replication
+  versus reproduction?
+* How much of the hardware and software stack must be recreated?
+* What precisely is meant by \`the environment' and how large is it?
+* For codes depending on stochastic processes, is reusing the same 
+  random seed reproducibility or reproduction?
+
+.. raw:: latex
+
+    \vspace{1em}
+
+Without justifiable answers to the above, ad hoc definitions have 
+governed the use of replicability and reproducibility.
+Yet to the quantiatively minded a "I know reproducibility when I see it" 
+apporach  falls short of the goals of science.
+
+fuzzy diff replication and reproducibility
+
+reproduce is really reproduce, env captured but not reinstated
 
 
 Conclusions
@@ -703,6 +748,9 @@ at the University of Chicago.
 
 References
 ----------
+.. [BROWN] C. Titus Brown, "Our approach to replication in computational science," 
+           Living in an Ivory Basement, April 2012,
+           http://ivory.idyll.org/blog/replication-i.html.
 .. [FLASH] FLASH Center for Computational Science, *FLASH User's Guide, Version 4.0-beta,*
             http://flash.uchicago.edu/site/flashcode/user_support/flash4b_ug.pdf, 
             University of Chicago, February 2012.
@@ -714,10 +762,14 @@ References
             http://www.gnu.org/software/make/, 2010.
 .. [GODFREY-SMITH] Godfrey-Smith, Peter (2003), *Theory and Reality: An introduction to 
             the philosophy of science*, University of Chicago Press, ISBN 0-226-30063-3.
+.. [GRAHAM] Jim Graham, "What is \`Reproducibility,' Anyway?", Scimatic, April 2010, 
+            http://www.scimatic.com/node/361.
 .. [HG] Bryan O'Sullivan, "Mercurial: The Definitive Guide," O'Reilly Media, Inc., 2009.
 .. [MIMS] C. Mims, *Moore's Law Over, Supercomputing "In Triage," Says Expert,*
             http://www.technologyreview.com/view/427891/moores-law-over-supercomputing-in-triage-says/
             May 2012, Technology Review, MIT.
+.. [SCHMIDT] Gavin A. Schmidt, "On replication," RealClimate, Feb 2009, 
+             http://www.realclimate.org/index.php/archives/2009/02/on-replication/langswitch_lang/in/.
 .. [SVN] Ben Collins-Sussman, Brian W. Fitzpatrick, C. Michael Pilato (2011). 
          "Version Control with Subversion: For Subversion 1.7". O'Reilly.
 .. [VLABNB] Rubacha, M.; Rattan, A. K.; Hosselet, S. C. (2011). *A Review of Electronic 
