@@ -492,13 +492,21 @@ The Reproduce Command
 ----------------------------
 
 The ``flmake reproduce`` command is the key feature enabling the total reproducibility
-of a FLASH simulation.  This takes a description file (eg ``flash_desc.json``) and implicitly 
+of a FLASH simulation.  This takes a description file (e.g. ``flash_desc.json``) and implicitly 
 the FLASH source and project repositories and replays the setup, build, and run commands 
-originally executed.  Thus it has the following usage string:
+originally executed.  It has the following usage string:
+
+.. raw:: latex
+
+    \vspace{1em}
 
 .. code-block:: sh
 
     flmake reproduce [options] <flash_descr>
+
+.. raw:: latex
+
+    \vspace{1em}
 
 For each command, reproduction works by cloning both source and project repositories at a 
 the point in history when they were run into temporary directories.  Then any local 
@@ -506,18 +514,38 @@ modifications which were present (and not under version control) are loaded from
 description file and applied to the cloned repos.  It then copies out the run control 
 file to the cloned repos and performs and command-specific modifications needed.  Finally,
 it executes the appropriate command *from the cloned repository* using the original 
-arguments provided on the command line.  Therefore ``flmake reproduce`` recreates the 
-original simulation using the original commands (and not the versions currently present).
+arguments provided on the command line.  Figure :ref:`reproduce` presents a flowsheet 
+of this process.
 
+.. figure:: reproduce_flowchart.png
+    :align: center
+    :figclass: bht
+
+    The reproduce command workflow. :label:`reproduce`
+
+
+Thus the ``flmake reproduce`` recreates the 
+original simulation using the original commands (and not the versions currently present).
 The reproduce command has the following limitations:
 
-#. FLASH source directory must be under version control,
-#. Project directory must be under version control,
+.. raw:: latex
+
+    \vspace{1em}
+
+#. Source directory must be version controled,
+#. Project directory must be version controled,
 #. The FLASH run must depend on only the parfile, the FLASH executable and 
-   FLASH DATAFILES: This just means that you can’t reproduce the run if FL
-   FLASH depends on random files that are not tracked by version control 
-   since at a future date, those files might not be available,
-#. and the user cannot modify the FLASH executable between building and run
+   FLASH datafiles, 
+#. and the FLASH executable must not be modified between build and run steps.
+
+.. raw:: latex
+
+    \vspace{1em}
+
+The above restrictions enforce that the run is not considered 
+reproducible if at any point FLASH depends on externalities or alterations
+not tracked by version control.
+
 
 
 A Note on Repeatability
