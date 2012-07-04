@@ -544,8 +544,52 @@ The reproduce command has the following limitations:
 
 The above restrictions enforce that the run is not considered 
 reproducible if at any point FLASH depends on externalities or alterations
-not tracked by version control.
+not tracked by version control.  Additionally critical to this process 
+are version contol abstractions and the capabiity to execute historical 
+commands. These will be discussed in the following subsections.
 
+Meta-Version Control
+======================================
+Every user and developer tends towards one version control system or 
+another.  The mainline FLASH development team opperates in subversion
+[SVN]_ though individual developers may prefer git [GIT]_ or mercurial 
+[HG]_.  And as mentioned above, some users do not employ any source 
+control management software.  In the case where the user lacks a sophisticated 
+version control system, it is still possible to obtain reproducibility *if* a
+clean directory tree of a recent release is available. This clean tree must
+be stored in a known place, typically the ``.clean/`` subdirectory of the 
+``FLASH_SRC_DIR``.  This is known as the \`release' versioning system and 
+is managed entirely by flmake.
+
+To realize reproducibility in this environment, it is necessary for the 
+reproduce command to abstract core version control management features
+away from the underlying technology (or lack of technology).  The following
+opperations define version control in the context of reproducibility:
+
+.. raw:: latex
+
+    \vspace{1em}
+
+* info, 
+* checkout or clone, 
+* diff, 
+* and patch.
+
+.. raw:: latex
+
+    \vspace{1em}
+
+The info opperation provides version control information that points to the 
+current state of the repository.  For all source control management schemes
+this includes a unique string id for the versioning type (e.g. \`svn' for
+subversion).  For centralized version control this contains the repository 
+version number, while for for distributed systems info will return the branch
+and the hash of the current HEAD.  In the release system,
+info simply returns the release version number.
+
+
+Command Time Machine
+======================================
 
 
 A Note on Repeatability
@@ -574,17 +618,21 @@ References
 .. [FLMAKE] A. Scopatz, *flmake: the flash workflow utility,* 
             http://flash.uchicago.edu/site/flashcode/user_support/tools4b/usersguide/flmake/index.html,
             The University of Chicago, June 2012.
+.. [GIT] Scott Chacon, "Pro Git," Apress (2009) DOI: 10.1007/978-1-4302-1834-0
 .. [GMAKE] Free Software Foundation, The GNU Make Manual for version 3.82, 
             http://www.gnu.org/software/make/, 2010.
-.. [VLABNB] Rubacha, M.; Rattan, A. K.; Hosselet, S. C. (2011). *A Review of Electronic 
-            Laboratory Notebooks Available in the Market Today*. Journal of Laboratory 
-            Automation 16 (1): 90–98. DOI:10.1016/j.jala.2009.01.002. PMID 21609689. 
 .. [GODFREY-SMITH] Godfrey-Smith, Peter (2003), *Theory and Reality: An introduction to 
             the philosophy of science*, University of Chicago Press, ISBN 0-226-30063-3.
-.. [WILSON] G.V. Wilson, *Where's the real bottleneck in scientific computing?* Am Sci. 
-            2005;94:5.
+.. [HG] Bryan O'Sullivan, "Mercurial: The Definitive Guide," O'Reilly Media, Inc., 2009.
 .. [MIMS] C. Mims, *Moore's Law Over, Supercomputing "In Triage," Says Expert,*
             http://www.technologyreview.com/view/427891/moores-law-over-supercomputing-in-triage-says/
             May 2012, Technology Review, MIT.
+.. [SVN] Ben Collins-Sussman, Brian W. Fitzpatrick, C. Michael Pilato (2011). 
+         "Version Control with Subversion: For Subversion 1.7". O'Reilly.
+.. [VLABNB] Rubacha, M.; Rattan, A. K.; Hosselet, S. C. (2011). *A Review of Electronic 
+            Laboratory Notebooks Available in the Market Today*. Journal of Laboratory 
+            Automation 16 (1): 90–98. DOI:10.1016/j.jala.2009.01.002. PMID 21609689. 
 .. [VRIEZE] Jop de Vrieze, *Thousands of Scientists Vow to Boycott Elsevier to Protest Journal 
             Prices,* Science Insider, February 2012.
+.. [WILSON] G.V. Wilson, *Where's the real bottleneck in scientific computing?* Am Sci. 
+            2005;94:5.
