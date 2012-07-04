@@ -550,6 +550,7 @@ commands. These will be discussed in the following subsections.
 
 Meta-Version Control
 ======================================
+
 Every user and developer tends towards one version control system or 
 another.  The mainline FLASH development team opperates in subversion
 [SVN]_ though individual developers may prefer git [GIT]_ or mercurial 
@@ -632,6 +633,55 @@ this capability is critical to the reproduce command functioning as intended.
 
 Command Time Machine
 ======================================
+
+Another principal feature of flmake reproducibility is its ability to execute
+historical versions of the key commands (setup, build, and run) as reincarnated
+by the meta-version control.  This is akin to the bootstrapping problem whereby
+all of the instruction needed to reproduce a command are contained in the original
+information provided.  Without this capability, the most current versions of the 
+flmake commands would be acting on histrical versions of the repository.  While this
+is clearly a large leap forward for the reproducibility of FLASH simulations, it 
+falls well short of total reproducibility.  Thus in practice, historical flmake 
+command acting on historical source are needed.  This maye be termed the \`command
+time machine,' though it only travels into the past.
+
+The implementation of the command time machine requires the highly dynamic nature 
+of Python, a bit namespace slight-of-hand, and relative imports.  First note that 
+module and package which are executing the flmake reproduce command may not be 
+deleted from the ``sys.modules`` cache.  (Such a removal would cause quick and 
+sudden runtime failures.)  This effecitvely means that everything under the 
+``flash`` package name may not be modified.
+
+Nominally, the historical version of the package would be under the ``flash`` 
+namespace as well.  However, the name ``flash`` is only given at install time.
+Inside of the source directory, the package is located in ``tools/python/``.
+This allows the current reproduce command to add the checkout out and patched 
+``{temp-flash-dir}/tools/`` directory to the front of ``sys.path`` for setup, 
+build, and run.  Then the historical flmake may 
+be imported via ``python.flmake`` because the ``python/`` subdirectory 
+is in ``{temp-flash-dir}/tools/``.  
+
+Modules inside of ``python`` or ``flmake`` are gaurenteed to import other
+modules in their package because of the exclusive use of relative imports.
+This ensures that the old commands import old commands rather then mistakenly 
+importing newer iterations.  
+
+Once the historical command is obtained, it is executed with the original 
+arguments from the description file. After execution, the temprary source
+directory ``{temp-flash-dir}/tools/`` is removed from ``sys.path``.  
+Furthermore, any module whose name starts with ``python`` is also deleted 
+from ``sys.modules``.  This cleans the environment for the next historical 
+command to be run in its own temporal context.
+
+In effect, the current version of flmake 
+is located in the ``flmake`` namespace and should remain untouched while 
+the reprodice command is running.  Simelteaneously, the historic flmake 
+commands are given the namespace ``python``.   The time value of ``python``
+changes with each command reproduced but is fully independent from the 
+current flmake.  This method of renaming a package namespace on the file
+system allows for one version of flmake to supervise the execution of another
+in a manner relevant to reproducibility.
+
 
 
 A Note on Repeatability
