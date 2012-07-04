@@ -585,7 +585,21 @@ this includes a unique string id for the versioning type (e.g. \`svn' for
 subversion).  For centralized version control this contains the repository 
 version number, while for for distributed systems info will return the branch
 and the hash of the current HEAD.  In the release system,
-info simply returns the release version number.
+info simply returns the release version number.  The info data that is found
+is then stored in the description file for later use.
+
+The checkout (or sometimes clone) opperation is in effect the inverse opperation 
+to info.  This opperation takes a point in history, as described by the data 
+garnered from info, and makes a temporary copy of the whole repository at this 
+point.  Thus no matter what evolution the code has undergone since the description 
+file was written, this rolls back the source to its previous incarnation.
+For centralized version control this opperation copies the existing tree, reverts it
+to an clean version of HEAD, and performs a reverse merge on all commits from 
+HEAD to the historical target.  For distributed systems this clones the current
+repository, checkouts or updates to the historical position, and does a hard reset
+to clean extraneous files.  The release system is easiest in that checkout 
+simply copies over the clean subdirectory.  This opperation is performed for 
+the setup, build, and run commands at reproduce time.
 
 
 Command Time Machine
