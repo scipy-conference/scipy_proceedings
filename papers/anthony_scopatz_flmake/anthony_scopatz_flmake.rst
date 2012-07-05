@@ -772,7 +772,9 @@ Unfortunately, there does not appear to be an obvious and present solution
 to the problems posed.
 
 As with any software development project, there are further improvements
-and expansions that may be made to flmake.  Additional 
+and expansions that may be made to flmake.  Additional features will continue to 
+be added.  More critically, the questions posed by reproducibility will 
+be the subject of future work.
 
 
 Acknowledgements
