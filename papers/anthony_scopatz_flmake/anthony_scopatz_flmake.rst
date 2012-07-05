@@ -726,15 +726,53 @@ reproduction is fuzzy.  Consider these questions with no clear answer:
 Without justifiable answers to the above, ad hoc definitions have 
 governed the use of replicability and reproducibility.
 Yet to the quantiatively minded a "I know reproducibility when I see it" 
-apporach  falls short of the goals of science.
+apporach falls short.  Thus the science of science, at least in the 
+computational sphere, has much work remaining.
 
-fuzzy diff replication and reproducibility
+Even with the reproduction/replication dilema, the flmake reproduce 
+command *is* a reproducibility tool.  This is because it takes the 
+opposite approcah to Brown's VM-based replication.  Though the environment
+is captured within the decsription file, flmake reproduce does not attempt 
+to recreate this original environment at all.  The previous enviroment 
+information is simply there for posterity and to help uncover any 
+discrepencies which may arrise.  User specific settings on the reproducing 
+machine are maintained.  This includes but is not limited to which compiler 
+is used.
 
-reproduce is really reproduce, env captured but not reinstated
+The claim that Brown's work and flmake reproduce represent paragons of 
+replicability and reproducbibility respectively may be easily challenged.  The author, 
+like Brown himself, does not presuppose to have all - or even partially 
+satisfactory - answers.  What is presented here, therefore, is an attempt 
+to frame the discussion and bound the option space of possibilities.
+Doing so with conrete code examples is preferable to continuing to debate
+this issue in the abstract.
 
-
-Conclusions
+Conclusions & Future Work
 ------------------------------
+By capturing source code and the environment at key stages - setup, build, 
+and run - FLASH simulations may be fully reproduced in the future.   Doing 
+so required a wrapper utility called flmake.  The writing of this tool 
+involved an overhaul of the existing system.  Though portions of flmake 
+took insipration from previous systems, none were as comprehensive.  
+Additionally, to the author's knowledge, no previous system included
+a mechanism to non-destructively execute previous command incarnations  
+a la flmake reproduce.
+
+The creation of flmake itself was done as an exercise in reproducibility.
+What has been shown here is that it is indeed possible to increase the
+merit of simulation through a relatvely small, though thoughtful, amount 
+of code.  It is highly encouraged that the method illustrated here be 
+copied by other software-in-science [*]_.  
+
+Moreover, in the process of determining what flmake *should* do, several 
+fundemantal questions about reproducibility itself were raised.  This 
+points to systemic issues within the realm of computational science
+and soon, with the increasing importance of computing, science as a whole.
+Unfortunately, there does not appear to be an obvious and present solution
+to the problems posed.
+
+As with any software development project, there are further improvements
+and expansions that may be made to flmake.  Additional 
 
 
 Acknowledgements
@@ -779,3 +817,5 @@ References
             Prices,* Science Insider, February 2012.
 .. [WILSON] G.V. Wilson, *Where's the real bottleneck in scientific computing?* Am Sci. 
             2005;94:5.
+
+.. [*] Please contact the author if you require aid in any reproducibility endeavours.
