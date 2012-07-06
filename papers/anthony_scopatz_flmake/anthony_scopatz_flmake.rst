@@ -8,19 +8,21 @@ Total Recall: flmake and the Quest for Reproducibility
 
 .. class:: abstract
 
-   A short version of the long version that is way too long to be written as a
-   short version anyway.  Still, when considering the facts from first
-   principles, we find that the outcomes of this introspective approach is
-   compatible with the guidelines previously established.
-
-   In such an experiment, it is then clearly that the potential for further
-   development not only depends on previous relationships found but also on
-   connections made during exploitation of this novel new experimental
-   protocol.
+    FLASH is a high-performance computing (HPC) multi-physics code which is used to perform
+    astrophysical and high-energy density physics simulations.  
+    To run a FLASH simulation, the user must go through three basic steps: setup, build, and
+    execution.  Canonically, each of these tasks are independently handled by the user.
+    However, with the recent advent of flmake - a Python workflow management utility for
+    FLASH - such tasks may now be performed in a fully reproducible way.
+    To achieve such reproducibility a number of developments and abstractions were needed, 
+    some only enabled by Python.  These methods are widely applicable outside of FLASH.
+    The process of writing flmake opens many questions to what precisely is meant 
+    by reproducibility in computational science.  While posed here, many of these 
+    questions remain unanswered.
 
 .. class:: keywords
 
-   FLASH, reproducibility, version control
+   FLASH, reproducibility
 
 Introduction
 ------------
@@ -454,12 +456,12 @@ science.  Unlike the current paradigm of
 computing-about-science, or 
 *periscientific computing*,
 reproducibility is a keystone of 
-*diacomputiational science* (computing-throughout-science).
+*diacomputational science* (computing-throughout-science).
 
 In periscientific computing there may exist a partition between expert software 
 developers and expert scientists, each of whom must learn to partially speak the 
 language of the other camp.   Alternatively, when expert software engineers are not available, 
-canonically ill-equiped scientists perform only the bare minimum development to 
+canonically ill-equipped scientists perform only the bare minimum development to 
 solve computing problems.  
 
 On the other hand, in diacomputational science, software exists as a substrate on top of 
@@ -488,7 +490,7 @@ openness issue must be left for another paper.
 
 In summary, reproducibility is important because without it any results generated are 
 periscientific.  To achieve diacomputational science there exist computational tools to aid 
-in this endeavor, as in analouge science there are physical solutions.  Though it
+in this endeavor, as in analogue science there are physical solutions.  Though it
 is not the only criticism to be levied against modern research practices, irreproducibility
 is one that affects computation acutely and uniquely as compared to other spheres.
 
@@ -616,7 +618,7 @@ project directories.  This diffing is in place as a fail-safe against uncommitte
 changes.  For centralized and distributed systems, diffing is performed through 
 the selfsame command name.  In the release system (where committing is impossible), 
 diffing takes on the heavy lifting not provided by a more advanced system.  Thus for the 
-relase system diff is 
+release system diff is 
 performed via the posix ``diff`` tool with the recursive switch between the 
 ``FLASH_SRC_DIR`` and the clean copy.  The diff operation is executed when the 
 commands are originally run.  The resultant diff string is stored in the 
@@ -658,7 +660,7 @@ The implementation of the command time machine requires the highly dynamic natur
 of Python, a bit of namespace slight-of-hand, and relative imports.  First note that 
 module and package which are executing the flmake reproduce command may not be 
 deleted from the ``sys.modules`` cache.  (Such a removal would cause 
-sudden and terrifiying runtime failures.)  This effectively means that everything under the 
+sudden and terrifying runtime failures.)  This effectively means that everything under the 
 ``flash`` package name may not be modified.
 
 Nominally, the historical version of the package would be under the ``flash`` 
@@ -752,7 +754,7 @@ The claim that Brown's work and flmake reproduce represent paragons of
 replicability and reproducibility respectively may be easily challenged.  The author, 
 like Brown himself, does not presuppose to have all - or even partially 
 satisfactory - answers.  What is presented here is an attempt 
-to frame the discussion and bound the option space of possibile meanings for these terms.
+to frame the discussion and bound the option space of possible meanings for these terms.
 Doing so with concrete code examples is preferable to debating
 this issue in the abstract.
 
@@ -783,7 +785,7 @@ to the problems posed.
 
 As with any software development project, there are further improvements
 and expansions that will continue to be added to flmake.  
-More boradly, the questions posed by reproducibility will 
+More broadly, the questions posed by reproducibility will 
 be the subject of future work on this project and others.  Additional 
 issues (such as openness) will also 
 figure into subsequent attempts to bring about a global state of 
