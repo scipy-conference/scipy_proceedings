@@ -753,7 +753,7 @@ replicability and reproducibility respectively may be easily challenged.  The au
 like Brown himself, does not presuppose to have all - or even partially 
 satisfactory - answers.  What is presented here is an attempt 
 to frame the discussion and bound the option space of possibile meanings for these terms.
-Doing so with concrete code examples is preferable to continuing to debate
+Doing so with concrete code examples is preferable to debating
 this issue in the abstract.
 
 Conclusions & Future Work
@@ -762,28 +762,32 @@ By capturing source code and the environment at key stages - setup, build,
 and run - FLASH simulations may be fully reproduced in the future.   Doing 
 so required a wrapper utility called flmake.  The writing of this tool 
 involved an overhaul of the existing system.  Though portions of flmake 
-took inspiration from previous systems, none were as comprehensive.  
+took inspiration from previous systems none were as comprehensive.  
 Additionally, to the author's knowledge, no previous system included
 a mechanism to non-destructively execute previous command incarnations  
-a la flmake reproduce.
+similar to flmake reproduce.
 
 The creation of flmake itself was done as an exercise in reproducibility.
 What has been shown here is that it is indeed possible to increase the
-merit of simulation through a relatively small, though thoughtful, amount 
-of code.  It is highly encouraged that the method illustrated here be 
-copied by other software-in-science [*]_.  
+merit of simulation science through a relatively small, though thoughtful, amount 
+of code.  It is highly encouraged that the methods described here be 
+copied by other software-in-science project [*]_.  
 
-Moreover, in the process of determining what flmake *should* do, several 
-fundamental questions about reproducibility itself were raised.  This 
-points to systemic issues within the realm of computational science
-and soon, with the increasing importance of computing, science as a whole.
+Moreover, in the process of determining what flmake *should* be, several 
+fundamental questions about reproducibility itself were raised.  These
+point to systemic issues within the realm of computational science.
+With the increasing importance of computing, soon science as a whole
+will also be forced to reconcile these reproducibility concerns.
 Unfortunately, there does not appear to be an obvious and present solution
 to the problems posed.
 
 As with any software development project, there are further improvements
-and expansions that may be made to flmake.  Additional features will continue to 
-be added.  More critically, the questions posed by reproducibility will 
-be the subject of future work.
+and expansions that will continue to be added to flmake.  
+More boradly, the questions posed by reproducibility will 
+be the subject of future work on this project and others.  Additional 
+issues (such as openness) will also 
+figure into subsequent attempts to bring about a global state of 
+diacomputational science.
 
 
 Acknowledgements
