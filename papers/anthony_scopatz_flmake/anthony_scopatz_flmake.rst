@@ -13,7 +13,7 @@ Total Recall: flmake and the Quest for Reproducibility
    principles, we find that the outcomes of this introspective approach is
    compatible with the guidelines previously established.
 
-   In such an experiment, it is then clearl that the potential for further
+   In such an experiment, it is then clearly that the potential for further
    development not only depends on previous relationships found but also on
    connections made during exploitation of this novel new experimental
    protocol.
@@ -86,7 +86,7 @@ task for both new and experienced users.  The flmake command line utility eases 
 simulation burden and shortens the development cycle by providing a modular tool 
 which implements many common elements of a FLASH workflow.  At each stage 
 this tool captures necessary metadata about the task which it is performing.  Thus
-flmake encapsulates the following opperations:
+flmake encapsulates the following operations:
 
 * setup/configuration,
 * building,
@@ -98,9 +98,9 @@ flmake encapsulates the following opperations:
 It is highly recommended that both novice and advanced users adopt flmake as it 
 *enables* reproducible research while simultaneously making FLASH easier to use.  
 This is accomplished by a few key abstractions from previous mechanisms used to set up,
-build, and execute FLASH.  The implemntation of these abstractions are 
-critical flmake features and are discussed below.  Namely they are the sepaartion 
-of project directories, a serachable source path, logging, dynamic run control, and 
+build, and execute FLASH.  The implementation of these abstractions are 
+critical flmake features and are discussed below.  Namely they are the separation 
+of project directories, a searchable source path, logging, dynamic run control, and 
 persisted metadata descriptions.
 
 Independent Project Directories
@@ -429,27 +429,27 @@ True to its part of speech, much of \`scientific computing' has the trappings of
 science in that it is code produced to solve problems in (big-'S') Science.  
 However, the process by which said programs are written is not itself typically 
 itself subject to the rigors of the scientific method.  The vaulted method contains 
-components of prediction, experimentation, duplication, analysis, and openess 
-[GODFREY-SMITH]_.  While software engineerers often engage in such activites when 
-programming, scientific developers usually forego these methods, typically to their 
+components of prediction, experimentation, duplication, analysis, and openness 
+[GODFREY-SMITH]_.  While software engineers often engage in such activities when 
+programming, scientific developers usually forgo these methods, typically to their 
 detriment [WILSON]_.
 
 Whatever the reason for this may be - ignorance, sloth, or other deadly sins - 
 the impetus for adopting modern software development practices only increases 
-every year.  The evolution of tools such as version control and envrionemnt 
+every year.  The evolution of tools such as version control and environment 
 reproducing mechanisms (via virtual machines/hypervisors) enable researchers to 
 more easily capture information about software during and after production.  
-Furthermore, the appearent end of Silicon-based Moore's Law has nececitated a move
-to more exotic arichteture and increased parallelism to see further speed 
+Furthermore, the apparent end of Silicon-based Moore's Law has necessitated a move
+to more exotic architecture and increased parallelism to see further speed 
 increases [MIMS]_. This implies that code that runs on machines now may not
 be able to run on future processors without significant refactoring.  
 
 Therefore the scientific computing landscape is such that there are presently the
 tools and the need to have fully reproducible simulations.  However, most scientists
 choose to not utilize these technologies.  This is akin to a chemist not keeping a
-lab notebook.  The lack of reproducuibility means that many solutions to science
+lab notebook.  The lack of reproducibility means that many solutions to science
 problems garnered through computational means are relegated to the realm of technical 
-achievements.  Irreproducible reults may be novel and interesting but they are not 
+achievements.  Irreproducible results may be novel and interesting but they are not 
 science.  Unlike the current paradigm of 
 computing-about-science, or 
 *periscientific computing*,
@@ -462,29 +462,29 @@ others' language.   Alternatively, when expert software engineers are not availa
 only the bare minimum development to solve computing problems in the short term is
 performed.  In diacomputational science, software exists as a substrate on top of 
 which science and engineering problems are solved.  Whether theoretical, simulation, 
-or experimental problems are at hand the scientist has a minimum knowledge of resposible
+or experimental problems are at hand the scientist has a minimum knowledge of responsible
 computing tools available to them.  While the level of education required for 
-diacomputaional science may seem extreme, this is in fact no greater than what we currently 
+diacomputational science may seem extreme, this is in fact no greater than what we currently 
 expect from scientists with regard to Statistics [WILSON]_.
 
 The above being generally true, there are some of notable exceptions.  The first
-is that there are researchers who are congnizant and repectful of these reproducibility
+is that there are researchers who are cognizant and respectful of these reproducibility
 issues.  The efforts of these scientists help paint a less dire picture than the 
 one framed above.  
 
-The second exception is that while reproducibility is a key feature of fundemental science 
+The second exception is that while reproducibility is a key feature of fundamental science 
 it is not the only one.  For example, openness is another point whereby the statement
 "If a result is not produced openly then it is not science" holds.  Open access to 
-reults - itself is a hotly contested issue [VRIEZE]_ - is certainly a component of 
+results - itself is a hotly contested issue [VRIEZE]_ - is certainly a component of 
 computational science.  Though having open and available code 
 is likely critical for pure science, it often lies outside the scope of normal research 
-practice.  This is for a vareity of reasons, including the fear that releasing code too 
+practice.  This is for a variety of reasons, including the fear that releasing code too 
 early or at all will negatively impact personal publication records.
 
-Reproducibility is, therefore, imporant because without it any results generated are 
+Reproducibility is, therefore, important because without it any results generated are 
 periscientific.  For diacomputational science there exist computational tools to aid 
-in this endeavour, as in analouge science there are physical solutions.  Though it
-is not the only critism to be levied against modern research practices, irreproducibility
+in this endeavor, as in analogue science there are physical solutions.  Though it
+is not the only criticism to be levied against modern research practices, irreproducibility
 is one that affects computation acutely and uniquely as compared to other spheres.
 
 
@@ -511,10 +511,10 @@ originally executed.  It has the following usage string:
 For each command, reproduction works by cloning both source and project repositories at a 
 the point in history when they were run into temporary directories.  Then any local 
 modifications which were present (and not under version control) are loaded from the 
-description file and applied to the cloned repos.  It then copies out the run control 
-file to the cloned repos and performs and command-specific modifications needed.  Finally,
+description file and applied to the cloned repository.  It then copies out the run control 
+file to the cloned repositories and performs and command-specific modifications needed.  Finally,
 it executes the appropriate command *from the cloned repository* using the original 
-arguments provided on the command line.  Figure :ref:`reproduce` presents a flowsheet 
+arguments provided on the command line.  Figure :ref:`reproduce` presents a flow sheet 
 of this process.
 
 .. figure:: reproduce_flowchart.png
@@ -532,9 +532,9 @@ The reproduce command has the following limitations:
 
     \vspace{1em}
 
-#. Source directory must be version controled,
-#. Project directory must be version controled,
-#. The FLASH run must depend on only the parfile, the FLASH executable and 
+#. Source directory must be version controlled,
+#. Project directory must be version controlled,
+#. The FLASH run must depend on only the runtime parameters file, the FLASH executable and 
    FLASH datafiles, 
 #. and the FLASH executable must not be modified between build and run steps.
 
@@ -545,14 +545,14 @@ The reproduce command has the following limitations:
 The above restrictions enforce that the run is not considered 
 reproducible if at any point FLASH depends on externalities or alterations
 not tracked by version control.  Additionally critical to this process 
-are version contol abstractions and the capabiity to execute historical 
+are version control abstractions and the capability to execute historical 
 commands. These will be discussed in the following subsections.
 
 Meta-Version Control
 ======================================
 
 Every user and developer tends towards one version control system or 
-another.  The mainline FLASH development team opperates in subversion
+another.  The mainline FLASH development team operates in subversion
 [SVN]_ though individual developers may prefer git [GIT]_ or mercurial 
 [HG]_.  And as mentioned above, some users do not employ any source 
 control management software.  In the case where the user lacks a sophisticated 
@@ -565,7 +565,7 @@ is managed entirely by flmake.
 To realize reproducibility in this environment, it is necessary for the 
 reproduce command to abstract core version control management features
 away from the underlying technology (or lack of technology).  The following
-opperations define version control in the context of reproducibility:
+operations define version control in the context of reproducibility:
 
 .. raw:: latex
 
@@ -580,7 +580,7 @@ opperations define version control in the context of reproducibility:
 
     \vspace{1em}
 
-The info opperation provides version control information that points to the 
+The info operation provides version control information that points to the 
 current state of the repository.  For all source control management schemes
 this includes a unique string id for the versioning type (e.g. \`svn' for
 subversion).  For centralized version control this contains the repository 
@@ -589,40 +589,40 @@ and the hash of the current HEAD.  In the release system,
 info simply returns the release version number.  The info data that is found
 is then stored in the description file for later use.
 
-The checkout (or sometimes clone) opperation is in effect the inverse opperation 
-to info.  This opperation takes a point in history, as described by the data 
+The checkout (or sometimes clone) operation is in effect the inverse operation 
+to info.  This operation takes a point in history, as described by the data 
 garnered from info, and makes a temporary copy of the whole repository at this 
 point.  Thus no matter what evolution the code has undergone since the description 
 file was written, this rolls back the source to its previous incarnation.
-For centralized version control this opperation copies the existing tree, reverts it
+For centralized version control this operation copies the existing tree, reverts it
 to an clean version of HEAD, and performs a reverse merge on all commits from 
 HEAD to the historical target.  For distributed systems this clones the current
 repository, checkouts or updates to the historical position, and does a hard reset
 to clean extraneous files.  The release system is easiest in that checkout 
-simply copies over the clean subdirectory.  This opperation is performed for 
+simply copies over the clean subdirectory.  This operation is performed for 
 the setup, build, and run commands at reproduce time.
 
-The diff opperation may seem less than fundemental to version control. Here however, 
+The diff operation may seem less than fundamental to version control. Here however, 
 diff is used to capture local modifications to the working trees of the source and
 project directories.  This diffing is in place as a fail-safe against uncommitted 
 changes.  For centralized and distributed systems, diffing is performed through 
 the selfsame command name.  In the release system (where committing is impossible), 
 diffing takes on the heavy lifting not provided by a more advanced system.  Here it is 
-performed by using the posix ``diff`` tool with the recurssive switch between the 
-``FLASH_SRC_DIR`` and the clean copy.  The diff opperation is executed when the 
+performed by using the posix ``diff`` tool with the recursive switch between the 
+``FLASH_SRC_DIR`` and the clean copy.  The diff operation is executed when the 
 commands are originally run.  The resultant diff string is stored in the 
-description file, along with the coorresponding info.
+description file, along with the corresponding info.
 
-The inverse opperation to diff, therefore, is patch.  This is used at reproduce time
-after checkout to restore the working trees of the tempororary repositories to the 
+The inverse operation to diff, therefore, is patch.  This is used at reproduce time
+after checkout to restore the working trees of the temporary repositories to the 
 same state they were in at the setup, build, and run commands original execution. 
-While each source control management system has its own pathcing mechanism, the 
+While each source control management system has its own patching mechanism, the 
 output of diff always returns a string which is compatible with the posix ``patch``
 utility.  Therefore, for all systems (including release), the ``patch`` program 
 is used.  
 
 The above illustrates how version control abstraction may be used to define a set 
-of meta-opperations which capture all versioning information provided.  This even 
+of meta-operations which capture all versioning information provided.  This even 
 included the case where no formal version control system is used.  It also 
 covers the case of the \`forgetful' user who may not have committed every relevant 
 local change to the repository prior to running a simulation.  What is more
@@ -639,17 +639,17 @@ historical versions of the key commands (setup, build, and run) as reincarnated
 by the meta-version control.  This is akin to the bootstrapping problem whereby
 all of the instruction needed to reproduce a command are contained in the original
 information provided.  Without this capability, the most current versions of the 
-flmake commands would be acting on histrical versions of the repository.  While this
+flmake commands would be acting on historical versions of the repository.  While this
 is clearly a large leap forward for the reproducibility of FLASH simulations, it 
 falls well short of total reproducibility.  Thus in practice, historical flmake 
-command acting on historical source are needed.  This maye be termed the \`command
+command acting on historical source are needed.  This maybe be termed the \`command
 time machine,' though it only travels into the past.
 
 The implementation of the command time machine requires the highly dynamic nature 
 of Python, a bit namespace slight-of-hand, and relative imports.  First note that 
 module and package which are executing the flmake reproduce command may not be 
 deleted from the ``sys.modules`` cache.  (Such a removal would cause quick and 
-sudden runtime failures.)  This effecitvely means that everything under the 
+sudden runtime failures.)  This effectively means that everything under the 
 ``flash`` package name may not be modified.
 
 Nominally, the historical version of the package would be under the ``flash`` 
@@ -661,13 +661,13 @@ build, and run.  Then the historical flmake may
 be imported via ``python.flmake`` because the ``python/`` subdirectory 
 is in ``{temp-flash-dir}/tools/``.  
 
-Modules inside of ``python`` or ``flmake`` are gaurenteed to import other
+Modules inside of ``python`` or ``flmake`` are guaranteed to import other
 modules in their package because of the exclusive use of relative imports.
 This ensures that the old commands import old commands rather then mistakenly 
 importing newer iterations.  
 
 Once the historical command is obtained, it is executed with the original 
-arguments from the description file. After execution, the temprary source
+arguments from the description file. After execution, the temporary source
 directory ``{temp-flash-dir}/tools/`` is removed from ``sys.path``.  
 Furthermore, any module whose name starts with ``python`` is also deleted 
 from ``sys.modules``.  This cleans the environment for the next historical 
@@ -675,7 +675,7 @@ command to be run in its own temporal context.
 
 In effect, the current version of flmake 
 is located in the ``flmake`` namespace and should remain untouched while 
-the reprodice command is running.  Simelteaneously, the historic flmake 
+the reproduce command is running.  Simultaneously, the historic flmake 
 commands are given the namespace ``python``.   The time value of ``python``
 changes with each command reproduced but is fully independent from the 
 current flmake.  This method of renaming a package namespace on the file
@@ -688,7 +688,7 @@ A Note on Replication
 A weaker form of reproducibility (and thus easier to obtain) is known as
 *replication* [SCHMIDT]_.  Replication is the process of recreating a result
 when "you take all the same data and all the same tools" [GRAHAM]_ which were
-used in the original determination.  Replication is a eaker determination than
+used in the original determination.  Replication is a weaker determination than
 replication because at minimum the original scientist should be able to replicate
 their own work.  Without replication, the same code executed twice will produce 
 distinct results.  In this case no trust may be placed in the conclusions 
@@ -700,11 +700,11 @@ these are hypervisors.  The ease-of-use and ubiquity of virtual machines (VM) in
 the software ecosystem allows for the total capture and persistence of the environment
 in which any computation was performed.  Such environments may be hosted and shared 
 with collaborators, editors, reviewers, or the public at large.  If the original 
-anaylsis was perfomed in a VM context, shared, and rerun by other scientists, this
+analysis was performed in a VM context, shared, and rerun by other scientists, this
 is replicability.  Such a strategy has been proposed by C. T. Brown as a stop-gap 
-meausre until diacomputational science is realized [BROWN]_.
+measure until diacomputational science is realized [BROWN]_.
 
-However, as Brown admits (see comments), the delination bewteen replication and 
+However, as Brown admits (see comments), the delineation between replication and 
 reproduction is fuzzy.  Consider these questions with no clear answer:
 
 .. raw:: latex
@@ -725,26 +725,26 @@ reproduction is fuzzy.  Consider these questions with no clear answer:
 
 Without justifiable answers to the above, ad hoc definitions have 
 governed the use of replicability and reproducibility.
-Yet to the quantiatively minded a "I know reproducibility when I see it" 
-apporach falls short.  Thus the science of science, at least in the 
+Yet to the quantitatively minded a "I know reproducibility when I see it" 
+approach falls short.  Thus the science of science, at least in the 
 computational sphere, has much work remaining.
 
-Even with the reproduction/replication dilema, the flmake reproduce 
+Even with the reproduction/replication dilemma, the flmake reproduce 
 command *is* a reproducibility tool.  This is because it takes the 
-opposite approcah to Brown's VM-based replication.  Though the environment
-is captured within the decsription file, flmake reproduce does not attempt 
-to recreate this original environment at all.  The previous enviroment 
+opposite approach to Brown's VM-based replication.  Though the environment
+is captured within the description file, flmake reproduce does not attempt 
+to recreate this original environment at all.  The previous environment 
 information is simply there for posterity and to help uncover any 
-discrepencies which may arrise.  User specific settings on the reproducing 
+discrepancies which may arise.  User specific settings on the reproducing 
 machine are maintained.  This includes but is not limited to which compiler 
 is used.
 
 The claim that Brown's work and flmake reproduce represent paragons of 
-replicability and reproducbibility respectively may be easily challenged.  The author, 
+replicability and reproducibility respectively may be easily challenged.  The author, 
 like Brown himself, does not presuppose to have all - or even partially 
 satisfactory - answers.  What is presented here, therefore, is an attempt 
 to frame the discussion and bound the option space of possibilities.
-Doing so with conrete code examples is preferable to continuing to debate
+Doing so with concrete code examples is preferable to continuing to debate
 this issue in the abstract.
 
 Conclusions & Future Work
@@ -753,19 +753,19 @@ By capturing source code and the environment at key stages - setup, build,
 and run - FLASH simulations may be fully reproduced in the future.   Doing 
 so required a wrapper utility called flmake.  The writing of this tool 
 involved an overhaul of the existing system.  Though portions of flmake 
-took insipration from previous systems, none were as comprehensive.  
+took inspiration from previous systems, none were as comprehensive.  
 Additionally, to the author's knowledge, no previous system included
 a mechanism to non-destructively execute previous command incarnations  
 a la flmake reproduce.
 
 The creation of flmake itself was done as an exercise in reproducibility.
 What has been shown here is that it is indeed possible to increase the
-merit of simulation through a relatvely small, though thoughtful, amount 
+merit of simulation through a relatively small, though thoughtful, amount 
 of code.  It is highly encouraged that the method illustrated here be 
 copied by other software-in-science [*]_.  
 
 Moreover, in the process of determining what flmake *should* do, several 
-fundemantal questions about reproducibility itself were raised.  This 
+fundamental questions about reproducibility itself were raised.  This 
 points to systemic issues within the realm of computational science
 and soon, with the increasing importance of computing, science as a whole.
 Unfortunately, there does not appear to be an obvious and present solution
