@@ -79,9 +79,8 @@ the dimensionality of the LSA vectors obtained using Gensim from 400 to 3, we
 are able to visualize the relative position of the vectors together with their
 connections.
 
-Reinforcement Learning and the Information Gathering Problem
+Reinforcement Learning
 ------------------------------------------------------------
-
 
 The RL paradigm [Sut98]_ considers an agent that interacts with an environment
 described by a Markov Decision Process (MDP). Formally, an MDP is defined by a
@@ -102,9 +101,10 @@ maximizes the total expected reward
    R = \mathbf{E}\left[\sum_{t=1}^\infty \gamma^t r(x_t) \right],
 
 where :math:`\gamma \in (0,1)` is a given discount factor. Note that typically
-the agent does not known the functions :math:`P` and :math:`r`, an it must find
-the optimal policy by interacting with the environment. See [Sze10]_ for a
-detailed review of the theory of MDPs and the different algorithms used in RL.
+the agent does not know the functions :math:`P` and :math:`r`, an it must find
+the optimal policy by interacting with the environment. See ﻿Szepesvári [Sze10]_
+for a detailed review of the theory of MDPs and the different algorithms used
+in RL.
 
 .. figure:: RL_scheme.pdf
 
@@ -112,12 +112,12 @@ detailed review of the theory of MDPs and the different algorithms used in RL.
    :math:`x` and reward :math:`r`; then it executes action
    :math:`\pi(x)=a`. :label:`figRL`
 
-We implement the RL algorithms using the RL-Glue library. The library consists
-of the *RL-Glue Core* program and a set of codecs for different languages [#]_
-to communicate with the library. To run an instance of a RL problem one needs
-to write three different programs: the *environment*, the *agent*, and the
-*experiment*. The environment and the agent programs match exactly the
-corresponding functionalities of the RL framework, while the experiment
+We implement the RL algorithms using the RL-Glue library [Tan09]_. The library
+consists of the *RL-Glue Core* program and a set of codecs for different
+languages [#]_ to communicate with the library. To run an instance of a RL
+problem one needs to write three different programs: the *environment*, the
+*agent*, and the *experiment*. The environment and the agent programs match
+exactly the corresponding elements of the RL framework, while the experiment
 orchestrates the interaction between these two. The following code snippets
 show the main methods that these three programs must implement:
 
@@ -131,7 +131,7 @@ show the main methods that these three programs must implement:
            return current_state
 
        def env_step(self, action):
-           # Change the current state according to 
+           # Set the new state according to 
            # the current state and given action.
 
            return reward 
@@ -139,7 +139,7 @@ show the main methods that these three programs must implement:
     #################### agent.py ####################
     class agent(Agent):
         def agent_start(self, state):
-            # First step during an experiment
+            # First step of an experiment
             
             return action
             
@@ -156,8 +156,8 @@ show the main methods that these three programs must implement:
     
 
 Note that RL-Glue is only a thin layer among these programs, allowing us to use
-any construction inside them. In particular, as described in the next section,
-we use a NetworkX graph to model the environment.
+any construction inside them. In particular, as described in the following
+sections, we use a NetworkX graph to model the environment.
 
 
 .. [#] Currently there are codecs for Python, C/C++, Java, Lisp, MATLAB, and
@@ -215,7 +215,7 @@ a given document. For each document in the corpus we compute a vector of length
 entry of this vector is the :math:`\operatorname{tf-idf}` weight for each term
 (if a term does not exist in the document, the weight is set to 0). We stack
 all the vectors to build the :math:`M\times N` *term-document matrix*
-:math:`C`, where :math:`N` is the number of documents in the corpus.
+:math:`C`.
 
 Note that since typically a document contains only a small fraction of the
 total number of terms in the corpus, the columns of the term-document matrix
@@ -248,18 +248,18 @@ projected onto the :math:`k`-dimensional subspace as
 Note that this projection transform a sparse vector of length :math:`M` into a
 dense vector of length :math:`k`.
 
-In this work we use the *Gensim* library to build the vector space model. To
-test the library we downloaded the top 100 most popular books from project
-Gutenberg. [#]_ After constructing the LSA model with 200 latent dimensions, we
-compute the similarity between *Moby Dick*, which is in the corpus used to
-build the model, and 6 other documents (see the results in Table
+In this work we use the *Gensim* library [Reh10]_ to build the vector space
+model. To test the library we downloaded the top 100 most popular books from
+project Gutenberg. [#]_ After constructing the LSA model with 200 latent
+dimensions, we compute the similarity between *Moby Dick*, which is in the
+corpus used to build the model, and 6 other documents (see the results in Table
 :ref:`tblSim`). The first document is an excerpt from *Moby Dick*, 393 words
 long. The second one is an excerpt from the Wikipedia *Moby Dick* article. The
 third one is an excerpt, 185 words long, of *The Call of the Wild*. The
 remaining two documents are excerpts from Wikipedia articles not related to
-Moby Dick. The similarity values we obtain validate the model, since we can see
-high values (above 0.8) for the documents related to *Moby Dick*, and
-significantly lower values for the remaining ones.
+*Moby Dick*. The similarity values we obtain validate the model, since we can
+see high values (above 0.8) for the documents related to *Moby Dick*, and
+significantly smaller values for the remaining ones.
 
 .. table:: Similarity between Moby Dick and other documents. :label:`tblSim`
            
@@ -292,7 +292,7 @@ significant challenge. The two main difficulties are that in general (i) we
 cannot hold the vector representation of the corpus in RAM memory, and (ii) we
 need to compute the SVD of a matrix whose size is beyond the limits of what
 standard solvers can handle. Here is where Gensim does a stellar work by being
-able to handle both this challenges. 
+able to handle both these challenges.
 
 
 Representing the State Space as a Graph
@@ -300,9 +300,9 @@ Representing the State Space as a Graph
 
 We are interested in the problem of gathering information in domains described
 by linked datasets. It is natural to describe such domains by graphs. We use
-the NetworkX library to build the graphs we work with. NetworkX provides data
-structures to represents different kinds of graphs (undirected, weighted,
-directed, etc), together with implementations of many graph
+the NetworkX library [Hag08]_ to build the graphs we work with. NetworkX
+provides data structures to represents different kinds of graphs (undirected,
+weighted, directed, etc), together with implementations of many graph
 algorithms. NetworkX allows to use any hashable Python object as a node
 identifier. Also, any Python object can be used as a node, edge, or graph
 attribute. We exploit this capability by using the LSA vector representation of
@@ -311,11 +311,12 @@ a Wikipedia article, which is a NumPy array, as a node attribute.
 The following code snippet shows a function [#]_ used to build a directed graph
 where nodes represent Wikipedia articles, and the edges represent links between
 articles. Note that we compute the LSA representation of the article (line 11),
-and that this is vector is used as a node attribute (line 13). The function get
-up to ``n_max`` articles by breath-first crawling the Wikipedia, starting from
-the article defined by ``page``.
+and that this vector is used as a node attribute (line 13). The function get up
+to ``n_max`` articles by breath-first crawling the Wikipedia, starting from the
+article defined by ``page``.
 
 .. code-block:: python
+
    :linenos:
 
     def crawl(page, n_max):
@@ -385,7 +386,7 @@ is very reasonable to consider him an author similar to James Gleick.
 
 .. [#] The Simple English Wikipedia (http://simple.wikipedia.org) has articles
        written in *simple English* and has a much smaller number of articles
-       than the standard Wikipedia. We use it because of it simplicity.
+       than the standard Wikipedia. We use it because of its simplicity.
 
 .. [#] James Gleick is "an American author, journalist, and biographer, whose
     books explore the cultural ramifications of science and technology".
@@ -425,20 +426,20 @@ and plays a key role in many RL algorithms [Sze10]_. When the dimension of
    
    V^\pi \approx \hat{V} = \Phi w,
 
-where :math:`\Phi` is a :math:`n`-by-:math:`k` matrix, :math:`n` is the number
-of states, :math:`k<n` is the number of basis functions used to approximate the
-value-function, and :math:`w` is a vector of dimension :math:`k`. Typically,
-the basis functions are selected by hand, for example, by using polynomials or
+where :math:`\Phi` is a :math:`n`-by-:math:`k` matrix whose columns are the
+basis functions used to approximate the value-function, :math:`n` is the number
+of states, and :math:`w` is a vector of dimension :math:`k`. Typically, the
+basis functions are selected by hand, for example, by using polynomials or
 radial basis functions. Since choosing the right functions can be difficult,
-Mahadevan and Maggioni [Mah07]_ proposed a framework where these basis function
-are learned from the topology of the state space. The key idea is to represent
-the state space by a graph, and use the :math:`k`-smoothest eigenvectors of the
-graph laplacian as basis functions, dubbed *Proto-value* functions. Given the
-graph that represents the state space, it is very simple to find these basis
-functions. As an example, consider an environment consisting of three
-:math:`16\times 20` grid-like rooms connected in the middle, as shown in figure
-:ref:`figRooms`. Assuming the graph is stored in ``G``, the following code [#]_
-compute the eigenvectors of the laplacian::
+Mahadevan and Maggioni [Mah07]_ proposed a framework where these basis
+functions are learned from the topology of the state space. The key idea is to
+represent the state space by a graph and use the :math:`k`-smoothest
+eigenvectors of the graph laplacian, dubbed *Proto-value* functions, as basis
+functions. Given the graph that represents the state space, it is very simple
+to find these basis functions. As an example, consider an environment
+consisting of three :math:`16\times 20` grid-like rooms connected in the
+middle, as shown in figure :ref:`figRooms`. Assuming the graph is stored in
+``G``, the following code [#]_ compute the eigenvectors of the laplacian::
 
     L = nx.laplacian(G, sorted(G.nodes()))
     evalues, evec = np.linalg.eigh(L)
@@ -475,8 +476,8 @@ We believe that being able to work in a vector space will allow us to use a
 series of RL techniques that otherwise we would not be available to use. For
 example, when using Proto-value functions, it is possible to use the Nyström
 approximation to estimate the value of an eigenvector for out-of-sample states
-[Mah06]_ ; this is only possible if states can be represented as points that
-belong to a Euclidean space.
+[Mah06]_; this is only possible if states can be represented as points
+belonging to a Euclidean space.
 
 How can we embed an entity in Euclidean space? In the previous section we
 showed that LSA can effectively compute the similarity between documents. We
@@ -486,16 +487,16 @@ similarities, but also to embed documents in Euclidean space.
 To evaluate the soundness of this idea, we perform an exploratory analysis of
 the simple Wikipedia LSA space. In order to be able to visualize the vectors,
 we use ISOMAP [Ten00]_ to reduce the dimension of the LSA vectors from 200 to 3
-(we use the ISOMAP implementation provided by scikit-learn. We show a typical
-result in Fig. :ref:`figISOMAP`, where each point represents the LSA embedding
-of an article in :math:`\mathbb{R}^3`, and a line between two points represents
-a link between two articles. We can see how the points close to the "Water"
-article are, in effect, semantically related ("Fresh water", "Lake", "Snow",
-etc.). This result confirms that the LSA representation is not only useful for
-computing similarities between documents, but it is also an effective mechanism
-for embedding the information entities into a Euclidean space. This result
-encourages us to propose the use of the LSA representation in the definition of
-the state.
+(we use the ISOMAP implementation provided by scikit-learn [Ped11]_. We show a
+typical result in Fig. :ref:`figISOMAP`, where each point represents the LSA
+embedding of an article in :math:`\mathbb{R}^3`, and a line between two points
+represents a link between two articles. We can see how the points close to the
+"Water" article are, in effect, semantically related ("Fresh water", "Lake",
+"Snow", etc.). This result confirms that the LSA representation is not only
+useful for computing similarities between documents, but it is also an
+effective mechanism for embedding the information entities into a Euclidean
+space. This result encourages us to propose the use of the LSA representation
+in the definition of the state.
 
 Once again we emphasize that since Gensim vectors are NumPY arrays, we ca use
 its output as an input to scikit-learn without any effort.
@@ -518,7 +519,8 @@ We have presented an example where we use different elements of the scientific
 Python ecosystem to solve a research problem. Since we use libraries where
 NumPy arrays are used as the default vector/matrix format, the integration
 among these components is transparent. We believe that this work is a good
-success story that validates Python as viable scientific programming languages.
+success story that validates Python as a viable scientific programming
+language.
 
 We also think that our work shows that in many cases it is advantageous to use
 general purposes languages, like Python, instead of domain specific
