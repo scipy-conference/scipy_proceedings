@@ -522,12 +522,19 @@ among these components is transparent. We believe that this work is a good
 success story that validates Python as a viable scientific programming
 language.
 
-We also think that our work shows that in many cases it is advantageous to use
-general purposes languages, like Python, instead of domain specific
-languages. Although some computational parts of this work might be somewhat
-simpler to implement in such languages, the breath of tasks that we work with
-make the use of such languages, in our opinion, a poor choice.
+Our work shows that in many cases it is advantageous to use general purposes
+languages, like Python, for scientific computing. Although some computational
+parts of this work might be somewhat simpler to implement in a domain specific
+language, [#]_ the breath of tasks that we work with could make hard to
+integrate all the parts using a domain specific language.
 
+.. [#] Examples of such languages are MATLAB, Octave, SciLab, etc.
+
+
+Acknowledgment
+--------------
+
+This work was partially supported by AFOSR grant FA9550-09-1-0465.
 
 
 References
