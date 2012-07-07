@@ -18,8 +18,8 @@ A Tale of Four Libraries
 This work describes the use some scientific Python tools to solve information
 gathering problems using Reinforcement Learning. In particular, we focus on the
 problem of designing an agent able to learn how to gather information in linked
-datasets. We use four different libraries---RL-Glue, Gensim, NetworkX, and
-scikit-learn--- during different stages of our research. We show that, by using
+datasets. We use four different libraries |---| RL-Glue, Gensim, NetworkX, and
+scikit-learn |---| during different stages of our research. We show that, by using
 NumPy arrays as the default vector/matrix format, it is possible to integrate
 these libraries with minimal effort.
 
@@ -583,3 +583,8 @@ References
            representation and control in continuous Markov decision
            processes*. National Conference on Artificial Intelligence, 2006.
 
+
+
+.. |--| unicode:: U+2013   .. en dash
+.. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
+   :trim:
