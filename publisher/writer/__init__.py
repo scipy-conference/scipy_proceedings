@@ -122,6 +122,7 @@ class Translator(LaTeXTranslator):
         self.document.stats = {'title': title,
                                'authors': authors,
                                'author': self.author_names,
+                               'author_email': self.author_emails,
                                'author_institution': self.author_institutions,
                                'abstract': self.abstract_text,
                                'keywords': self.keywords,
