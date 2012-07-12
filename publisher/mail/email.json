@@ -20,16 +20,22 @@
 
    "reviewers": [
      {"name": "Stefan van der Walt",
-      "email": "Stefan van der Walt <sjvdwalt@gmail.com>",
+      "email": "sjvdwalt@gmail.com",
       "papers": ["00_vanderwalt", "00_vanderwalt"]},
      {"name": "Jarrod Millman",
-      "email": "Jarrod Millman <jarrod.millman+2011@gmail.com>",
+      "email": "jarrod.millman+2011@gmail.com",
       "papers": ["00_vanderwalt"]}
    ],
 
    "authors": [
-     "millman@berkeley.edu",
-     "jarrod.millman+2011@gmail.com"
+     {
+       "name": "Jarrod Millman",
+       "email": "millman@berkeley.edu"
+     },
+     {
+       "name": "Jarrod Millman",
+       "email": "jarrod.millman+2011@gmail.com"
+     }
    ]
 
 }

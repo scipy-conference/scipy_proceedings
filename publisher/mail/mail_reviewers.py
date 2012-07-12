@@ -19,7 +19,8 @@ for reviewer_info in config['reviewers']:
     reviewer_config.update(reviewer_info)
     reviewer = reviewer_info['email']
 
-    mailer.send_template(config['sender'], reviewer + ', ' + config['cced'],
+    to = mailer.email_addr_from(reviewer_info)
+    mailer.send_template(config['sender'], to + ', ' + config['cced'],
                          'reviewer-invite.txt', reviewer_config)
 
 
