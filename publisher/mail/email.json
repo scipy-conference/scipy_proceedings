@@ -1,6 +1,7 @@
 {
 
   "conference": "SciPy 2011",
+  "year": "2011",
   "due": "April 29, 2012",
   "download": "http://jarrodmillman.com/scipy2011",
   "editors": "Stefan van der Walt and Jarrod Millman",
@@ -9,9 +10,13 @@
      "name": "Jarrod Millman <jarrod.millman+scipy2011@gmail.com>",
      "password": "test"
    },
+
    "submit_email": "jarrod.millman+scipy2011@gmail.com",
    "review_form": "https://raw.github.com/scipy/scipy_proceedings/master/reviews/review-template.rst",
    "cced": "millman.ucb@gmail.com, sjvdwalt@gmail.com",
+
+   "reviews_url": "http://jarrodmillman.com/scipy2011-reviews",
+   "built_proceedings_url": "http://jarrodmillman.com/scipy2011",
 
    "reviewers": [
      {"name": "Stefan van der Walt",

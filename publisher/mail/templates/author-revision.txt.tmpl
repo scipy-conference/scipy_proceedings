@@ -8,12 +8,13 @@ Content-Type: text/plain
 Dear colleagues and friends,
 
 Your submitted articles have now all received at least one review. You can
-browse the built PDFs and reviews for all the submitted papers here:
+browse the reviews and PDFs for all papers here:
 
-  {{download}}
+  {{reviews_url}}
+  {{built_proceedings_url}}
 
-You can access the complete build system including the original restructured
-text manuscripts here:
+You can also access the complete build system including the original
+restructured text manuscripts:
 
   https://github.com/scipy/scipy_proceedings/tree/{{year}}
 
@@ -21,12 +22,12 @@ If you have any problems with the build system or the generated PDF, please let
 us know ASAP.
 
 Please revise your articles based on the reviews. To make edits to your paper,
-please edit the original restructured text documents:
+modify the restructured text documents on the {{year}} branch:
 
-  https://github.com/scipy/scipy_proceedings/tree/{year}}/papers
+  https://github.com/scipy/scipy_proceedings/tree/{{year}}/papers
 
-You can either send us patches via email to {{submit_email}} or use your github
-account to send us a pull request by {{due}}.
+Updates can be submitted via a GitHub pull request.  The deadline for changes
+is {{due}}.
 
 With best regards,
 
