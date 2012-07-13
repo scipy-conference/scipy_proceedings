@@ -21,7 +21,7 @@ paper:
 - Once you are ready to submit your paper, file a pull request on GitHub.
 
 Pull requests are to be submitted by **July 15th**, but modifications may be
-pushed until August 15th.
+pushed until August 12th.
 
 General Guidelines
 ``````````````````
