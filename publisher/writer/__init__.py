@@ -91,7 +91,7 @@ class Translator(LaTeXTranslator):
             else:
                 auths = ', '.join(authlist[:-1] + ['and ' + authlist[-1],])
             verb= ' is ' if len(authlist)==1 else ' are '
-            compsocthanks += auths+verb+'with '+ inst_table[inst] +' '+inst+'. '
+            compsocthanks += auths+verb+'with '+ inst_table.get(inst, '') +' '+inst+'. '
         
         copyright_holder = self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.')
         author_notes = r'''E-mail: \protect\href{%s}{%s}.
