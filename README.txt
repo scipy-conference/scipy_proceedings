@@ -20,7 +20,8 @@ paper:
 
 - Once you are ready to submit your paper, file a pull request on GitHub.
 
-Papers may be submitted via e-mail to 2012submissions@scipy.org by July 15th.
+Pull requests are to be submitted by **July 15th**, but modifications may be
+pushed until August 15th.
 
 General Guidelines
 ``````````````````
