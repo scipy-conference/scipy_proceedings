@@ -34,7 +34,30 @@ In this paper we present one solution to this problem. We can add uncertainty to
 Motivating Example
 ------------------
 
-Consider an artilleryman firing a cannon down into a valley. 
+Consider an artilleryman firing a cannon down into a valley. He knows the
+initial position :math:`(x_0, y_0)` and orientation, :math:`theta` of the cannon as well as the muzzle velocity, :math:`v`.
+
+```python
+# Inputs
+>>> x0 = 0
+>>> y0 = 0
+>>> g = -10 # gravitational constant
+>>> v = 30 # m/s
+>>> theta = pi/4```
+
+If this artilleryman has a computer nearby he may write some code to evolve
+forward the state of the cannonball. If he also has a computer algebra system
+he may choose to solve this system analytically. 
+
+```python
+>>> yf = Symbol('y_f') # SymPy variable to represent the altitude of the target
+>>> t = Symbol('t') # SymPy variable to represent time
+>>> x = x0 + v * cos(theta) * t
+>>> y = y0 + v * sin(theta) * t
+>>> impact_time = solve(y - yf, t)```
+
+
+
 
 Implementation
 --------------
