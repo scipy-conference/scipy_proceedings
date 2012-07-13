@@ -20,11 +20,16 @@ Introduction
 
 Mathematical modeling is important. 
 
-Symbolic computer algebra systems are a nice way to simplify the modeling process. 
+Symbolic computer algebra systems are a nice way to simplify the modeling process. They allow us to clearly describe a problem at a high level without simultaneously specifying the method of solution. This allows us to develop general solutions and solve specific problems independently. This enables a community to act with far greater efficiency.
 
-Uncertainty is important. 
+Uncertainty is important. Mathematical models are often flawed. The model
+itself may be overly simplified or the inputs may not be completely known. It
+is important to understand the extent to which the results of a model can be
+believed. To address these concerns it is important that we characterize the
+uncertainty in our inputs and understand how this causes uncertainty in our 
+results. 
 
-We can add uncertainty to symbolic systems by adding random variables.
+In this paper we present one solution to this problem. We can add uncertainty to symbolic systems by adding a random variable type. This enables us to describe stochastic systems while adding only minimal complexity.
 
 Motivating Example
 ------------------
