@@ -167,6 +167,11 @@ figures.
 We show the different quantities of materials required in Table
 :ref:`mtable`.
 
+Perhaps we want to end off with a quote by Lao Tse:
+
+  *Muddy water, let stand, becomes clear.*
+
+
 .. Customised LaTeX packages
 .. -------------------------
 

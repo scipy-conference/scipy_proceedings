@@ -261,6 +261,15 @@ class Translator(LaTeXTranslator):
         LaTeXTranslator.depart_literal_block(self, node)
 
 
+    def visit_block_quote(self, node):
+        self.out.append('\\begin{quotation}')
+        LaTeXTranslator.visit_block_quote(self, node)
+
+    def depart_block_quote(self, node):
+        LaTeXTranslator.depart_block_quote(self, node)
+        self.out.append('\\end{quotation}')
+
+
     # Math directives from rstex
 
     def visit_InlineMath(self, node):
