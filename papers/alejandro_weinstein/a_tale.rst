@@ -79,6 +79,9 @@ reducing the dimensionality of the LSA vectors obtained using Gensim from 400
 to 3, we are able to visualize the relative position of the vectors together
 with their connections.
 
+Source code to reproduce the results shown in this work is available at
+https://github.com/aweinstein/a_tale. 
+
 Reinforcement Learning
 ------------------------------------------------------------
 
@@ -162,13 +165,6 @@ sections, we use a NetworkX graph to model the environment.
 
 .. [#] Currently there are codecs for Python, C/C++, Java, Lisp, MATLAB, and
        Go.
-
-
-
-.. Although there are other alternatives for writing RL programs, in our
-   opinion RL-Glue is the best alternative because it is very "thin", it match
-   the RL paradigm and allows to mix agents and environments written in different
-   languages.
 
 
 Computing the Similarity between Documents
@@ -379,10 +375,6 @@ is two links ahead from the seed (passing through the "Slate magazine"
 article). Robert Wright writes books about sciences, history and religion. It
 is very reasonable to consider him an author similar to James Gleick. 
 
-..  Table \ref{tbl:gleick} shows the ten most similar articles and theirs link
-    distances from the seed. We see that all of them are related to the
-    seed. We claim that these results validate the thesis that there are
-    similar articles separated by more than one link.
 
 .. [#] The Simple English Wikipedia (http://simple.wikipedia.org) has articles
        written in *simple English* and has a much smaller number of articles
