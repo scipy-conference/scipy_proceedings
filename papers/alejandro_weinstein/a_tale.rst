@@ -64,8 +64,8 @@ data.
 
 One of the contributions of our research is the idea of representing the items
 in the datasets as vectors belonging to a linear space. To this end, we build a
-Latent Semantic Analysis (LSA) model to project documents onto a vector
-space. This allows us, in addition to being able to compute similarities
+Latent Semantic Analysis (LSA) [Dee90]_ model to project documents onto a
+vector space. This allows us, in addition to being able to compute similarities
 between documents, to leverage a variety of RL techniques that require a vector
 representation. We use the Gensim library to build the LSA model. This library
 provides all the machinery to build, among other options, the LSA model. One
@@ -219,26 +219,27 @@ all the vectors to build the :math:`M\times N` *term-document matrix*
 
 Note that since typically a document contains only a small fraction of the
 total number of terms in the corpus, the columns of the term-document matrix
-are sparse. The method known as Latent Semantic Analysis (LSA) constructs a
-low-rank approximation :math:`C_k` of rank at most :math:`k` of :math:`C`. The
-value of :math:`k`, also known as the *latent dimension*, is a design parameter
-typically chosen to be in the low hundreds. This low-rank representation
-induces a projection onto a :math:`k`-dimensional space. The similarity between
-the vector representation of the documents is now computed after projecting the
-vectors onto this subspace. One advantage of LSA is that it deals with the
-problems of *synonymy*, where different words have the same meaning, and
-*polysemy*, where one word has different meanings.
+are sparse. The method known as Latent Semantic Analysis (LSA) [Dee90]_
+constructs a low-rank approximation :math:`C_k` of rank at most :math:`k` of
+:math:`C`. The value of :math:`k`, also known as the *latent dimension*, is a
+design parameter typically chosen to be in the low hundreds. This low-rank
+representation induces a projection onto a :math:`k`-dimensional space. The
+similarity between the vector representation of the documents is now computed
+after projecting the vectors onto this subspace. One advantage of LSA is that
+it deals with the problems of *synonymy*, where different words have the same
+meaning, and *polysemy*, where one word has different meanings.
 
-Using the SVD of the term-document matrix :math:`C=U\Sigma V^T`, the
-:math:`k`-rank approximation of :math:`C` is given by
+Using the Singular Value Decomposition (SVD) of the term-document matrix
+:math:`C=U\Sigma V^T`, the :math:`k`-rank approximation of :math:`C` is given
+by
 
 .. math::
 
-   C_k = U \Sigma_k V^T,
+   C_k = U_k \Sigma_k V_k^T,
 
-where :math:`\Sigma_k` is formed by replacing with zeros the :math:`r-k`
-smallest singular values of :math:`\Sigma`, and :math:`r` is the rank of
-:math:`C`. The :math:`\operatorname{tf-idf}` representation of a document
+where :math:`U_k`, :math:`\Sigma_k`, and :math:`V_k` are the matrices formed by
+the :math:`k` first columns of :math:`U`, :math:`\Sigma`, and :math:`V`,
+respectively. The :math:`\operatorname{tf-idf}` representation of a document
 :math:`q` is projected onto the :math:`k`-dimensional subspace as
 
 .. math::
@@ -456,7 +457,7 @@ efficient approximation basis.
 .. figure:: three_rooms_eigvec.pdf
 
    Second to fourth eigenvectors of the laplacian of the three rooms
-   graph. Note how the eigendecomposition automatically capture the structure
+   graph. Note how the eigendecomposition automatically captures the structure
    of the environment. :label:`figRoomsEv`
 
 .. [#] We assume that the standard ``import numpy as np`` and ``import networkx
@@ -578,11 +579,15 @@ References
            framework for nonlinear dimensionality reduction* . Science,
            290(5500), 2319-2323, 2000
 
-.. [Mah06] S. ﻿Mahadevan,, M. Maggioni, K. Ferguson and S.Osentoski. *Learning
+.. [Mah06] S. ﻿Mahadevan, M. Maggioni, K. Ferguson and S.Osentoski. *Learning
            representation and control in continuous Markov decision
            processes*. National Conference on Artificial Intelligence, 2006.
 
-
+.. [Dee90] S. ﻿Deerwester, S.T. Dumais, G.W. Furnas, T.K. Landauer
+           and R. Harshman, R. (1990). *Indexing by latent semantic analysis.*
+           Journal of the American Society for Information Science, 41(6),
+           391-407.
+           
 
 .. |--| unicode:: U+2013   .. en dash
 .. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
