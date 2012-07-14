@@ -99,6 +99,15 @@ equation on a separate line:
 
    g(x) = \int_0^\infty f(x) dx
 
+or on multiple, aligned lines:
+
+.. math::
+   :type: eqnarray
+
+   g(x) &=& \int_0^\infty f(x) dx \\
+        &=& \ldots
+
+
 The area of a circle and volume of a sphere are given as
 
 .. math::
