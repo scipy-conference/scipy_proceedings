@@ -117,7 +117,7 @@ the velocity is normally distributed with mean 30 and standard deviation 1.
 .. code-block:: python
 
     >>> from sympy.stats import *
-    >>> z = Symbol('a')
+    >>> z = Symbol('z')
     >>> v = Normal('v', 30, 1)
     >>> pdf = density(v)
     >>> plot(pdf(z), (z, 27, 33))
@@ -131,9 +131,9 @@ the velocity is normally distributed with mean 30 and standard deviation 1.
     The distribution of possible velocity values :label:`velocity-distribution`
 
 The artilleryman can now rerun the mathematical model (reference to code
-above) without modification. The expressions x, y, impact_time, xf are now
-stochastic expressions and we can use operators like P, E, variance, density to
-convert stochasitc expressions into computational ones. 
+above) without modification. The expressions ``x, y, impact_time, xf`` are now
+stochastic expressions and we can use operators like ``P, E, variance, density``
+to convert stochasitc expressions into computational ones. 
 
 For example we can ask the probability that the muzzle velocity is greater than
 31. 
@@ -225,6 +225,38 @@ with an additional keyword argument
 Implementation
 --------------
 
+A ``RandomSymbol`` class/type and the functions ``P, E, density, sample`` are 
+the outward-facing core of sympy.stats and the ``PSpace`` class in the internal
+core representing the mathematical concept of a probability space.
+
+A ``RandomSymbol`` object behaves in every way like a standard sympy ``Symbol``
+object. Because of this one can replace standard sympy variable declarations
+like ``x = Symbol('x')`` with code like ``x = Normal('x', 0, 1)`` and continue
+to use standard SymPy without modification.
+
+After final expressions are formed the user can query them using the functions
+``P, E, density, sample``. These functions inspect the expression tree and draw
+the ``RandomSymbols`` and ask these random symbols to construct a probabaility
+space or ``PSpace`` object. 
+
+The ``PSpace`` object contains all of the logic to turn random expressions
+into computational ones. There are several types of probability spaces for
+discrete, continuous, and multivariate distributions. Each of these generate
+different computational expressions. 
+
+.. table:: Different types of random expressions reduce to different computational expressions
+
+   +-------------------------------+------------------------------+
+   | RV Type                       | Computational Type           |
+   +-------------------------------+------------------------------+
+   | Continuous                    | SymPy Integral               |
+   +-------------------------------+------------------------------+
+   | Discrete - Finite (dice)      | Python iterators / generators|
+   +-------------------------------+------------------------------+
+   | Discrete - Infinite (Poisson) | SymPy Summation              |
+   +-------------------------------+------------------------------+
+   | Multivariate Normal           | SymPy Matrix Expression      |
+   +-------------------------------+------------------------------+
 
 
 Multi-Compilation
