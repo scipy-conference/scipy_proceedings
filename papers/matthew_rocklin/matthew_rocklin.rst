@@ -104,8 +104,8 @@ obtain full solutions for impact_time and the final x position.
     + 4 g y_f + v^{2} \sin^{2}{\left (\theta \right )}}\right) \cos{\left
       (\theta \right )}}{2 g}
 
-Motivating Example - Uncertainty
---------------------------------
+Motivating Example - Uncertainty Modeling
+-----------------------------------------
 
 To control the velocity of the cannon ball the artilleryman introduces a
 certain quantity of gunpowder to the cannon. While he takes care he is aware that his estimate of the velocity is uncertain. 
@@ -231,13 +231,24 @@ core representing the mathematical concept of a probability space.
 
 A ``RandomSymbol`` object behaves in every way like a standard sympy ``Symbol``
 object. Because of this one can replace standard sympy variable declarations
-like ``x = Symbol('x')`` with code like ``x = Normal('x', 0, 1)`` and continue
-to use standard SymPy without modification.
+like 
+
+.. code-block:: python
+
+    x = Symbol('x')
+    
+with code like 
+
+.. code-block:: python
+    
+    x = Normal('x', 0, 1)
+
+and continue to use standard SymPy without modification.
 
 After final expressions are formed the user can query them using the functions
-``P, E, density, sample``. These functions inspect the expression tree and draw
-the ``RandomSymbols`` and ask these random symbols to construct a probabaility
-space or ``PSpace`` object. 
+``P, E, density, sample``. These functions inspect the expression tree, draw
+out the ``RandomSymbols`` and ask these random symbols to construct a 
+probabaility space or ``PSpace`` object. 
 
 The ``PSpace`` object contains all of the logic to turn random expressions
 into computational ones. There are several types of probability spaces for
@@ -258,6 +269,60 @@ different computational expressions.
    | Multivariate Normal           | SymPy Matrix Expression      |
    +-------------------------------+------------------------------+
 
+
+Implementation - Bayesian Conditional Probability
+-------------------------------------------------
+
+SymPy.stats can also handle conditioned variables. In this section we describe
+how the continuous implementation of sympy.stats forms integrals using an
+example from data assimilation.
+
+We measure the temperature and guess that it is about 30C with a standard
+deviation of 3C.
+
+.. code-block:: python
+
+    >>> from sympy.stats import *
+    >>> T = Normal('T', 30, 3) # Prior distribution
+
+We then make an observation of the temperature with a thermometer. This
+thermometer states that it has an uncertainty of 1.5C
+
+.. code-block:: python
+
+    >>> noise = Normal('eta', 0, 1.5)
+    >>> observation = T + noise
+
+With this thermometer we observe a temperature of 26C. We compute the posterior
+distribution that cleanly assimilates this new data into our prior
+understanding. And plot the three together. 
+
+.. code-block:: python
+
+    >>> data = 26 + noise
+    >>> T_posterior = Given(T, Eq(observation, 26))
+
+.. figure:: cannon-deterministic.png
+    
+    The prior, data, and posterior distributions of the temperature.
+     
+We now describe how SymPy.stats obtained this result. The expression
+T_posterior contains two random variables, ``T`` and ``noise`` each of
+which can independently take on different values. We plot the joint
+distribution below in figure (reference figure). We represent the observation
+that ``T + noise == 26`` as a diagonal line over the domain for which this
+statement is true. We project the probability density on this line to the left
+to obtain the posterior density of the temperature.
+
+.. figure:: cannon-deterministic.png
+    
+    The joint prior distribution of the temperature and measurement noise. The
+    constraint ``T + noise == 26`` (diagonal line) and the resultant posterior
+    distribution of temperature on the left.
+
+These gemoetric operations correspond exactly to Bayesian probability. All of
+the operations such as restricting to the condition, projecting to the
+temperature axis, etc... are all managed using core SymPy functionality.
 
 Multi-Compilation
 -----------------
@@ -317,6 +382,16 @@ computations this approach is not valid.
 
 Conclusion
 ----------
+
+We have foremost demonstrated the use of ``sympy.stats`` a module that enhances
+``sympy`` with a random variable type. We have shown how this module allows
+mathematical modellers to describe the undertainty of their inputs and compute
+the uncertainty of their outputs with simple and non-intrusive changes to their
+code.
+
+Secondarily we have motivated the use of symbolics in computation and argued
+for a more separable computational stack within the scientific computing
+domain.
 
 References
 ----------
