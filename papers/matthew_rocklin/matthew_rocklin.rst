@@ -244,7 +244,7 @@ into computational ones. There are several types of probability spaces for
 discrete, continuous, and multivariate distributions. Each of these generate
 different computational expressions. 
 
-.. table:: Different types of random expressions reduce to different computational expressions
+.. table:: Different types of random expressions reduce to different computational expressions (Note: Infinite discrete and multivariate normal are in development and not yet in the main SymPy distribution)
 
    +-------------------------------+------------------------------+
    | RV Type                       | Computational Type           |
@@ -267,7 +267,7 @@ concepts in a domain discipline (such as fluid dynamics), mathematics (such as P
 
 Often these solutions are implemented as single monolithic codes. This approach
 is challenging to accomplish, difficult to reason about after-the-fact and
-rarely allows for code reuse. As hardware becomes more demanding and the 
+rarely allows for code reuse. As hardware becomes more demanding and 
 scientific computing expands into new and less well trained fields this
 challenging approach fails to scale. This approach is not accessible to the
 average scientist.
@@ -278,6 +278,10 @@ various architectures (i.e. CPU-BLAS or GPU-cuBLAS). High quality
 implementations of the middle-to-bottom of the stack are available through 
 higher level libraries such as PETSc and Trilinos or through code generation 
 solutions such as FENICS.
+
+.. figure:: cannon-deterministic.png
+
+    The scientific computing software stack.
 
 This project takes a different approach. It solves an atomic slice of this 
 stack and establishes clean interface layers. For example SymPy.stats with 
@@ -307,9 +311,9 @@ We generally support the idea of approaching the scientific computing
 conceptual stack (Physics/PDEs/Linear-algebra/MPI/C-FORTRAN-CUDA) with a
 sequence of simple and atomic compilers. The idea of using interface layers to
 break up a complex problem is not new but is oddly infrequent in scientific
-computing and thus bears mention. It should be noted that maximal speedup often 
-requires optimizing the whole problem at once and so for heroic computations
-this approach is not valid. 
+computing and thus warrants mention. It should be noted that maximal speedup 
+often requires optimizing the whole problem at once and so for heroic 
+computations this approach is not valid. 
 
 Conclusion
 ----------
