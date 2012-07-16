@@ -68,7 +68,7 @@ he may choose to solve this system analytically.
     # Plot x vs. y for t in (0, impact_time)
     >>> plot(x, y, (t, 0, impact_time))
 
-.. figure:: cannon-deterministic.png
+.. figure:: cannon-deterministic.pdf
 
     The trajectory of a cannon shot :label:`cannon-1`
 
@@ -128,7 +128,7 @@ the velocity is normally distributed with mean 30 and standard deviation 1.
 
     \frac{\sqrt{2} e^{- \frac{1}{2} \left(z -30\right)^{2}}}{2 \sqrt{\pi}}
 
-.. figure:: velocity-distribution.png
+.. figure:: velocity-distribution.pdf
 
     The distribution of possible velocity values :label:`velocity-distribution`
 
@@ -304,7 +304,7 @@ understanding. And plot the three together.
     >>> data = 26 + noise
     >>> T_posterior = Given(T, Eq(observation, 26))
 
-.. figure:: data-assimilation.png
+.. figure:: data-assimilation.pdf
     
     The prior, data, and posterior distributions of the temperature.
      
@@ -316,7 +316,7 @@ that ``T + noise == 26`` as a diagonal line over the domain for which this
 statement is true. We project the probability density on this line to the left
 to obtain the posterior density of the temperature.
 
-.. figure:: joint-distribution.png
+.. figure:: joint-distribution.pdf
     
     The joint prior distribution of the temperature and measurement noise. The
     constraint ``T + noise == 26`` (diagonal line) and the resultant posterior
@@ -348,7 +348,8 @@ solutions such as FENICS.
 
 .. figure:: stack.pdf 
 
-    The scientific computing software stack.
+    The scientific computing software stack. Various projects are displayed
+    showing the range that they abstract. ``sympy.stats`` is a thin layer.
 
 This project takes a different approach. It solves an atomic slice of this 
 stack and establishes clean interface layers. For example SymPy.stats with 
