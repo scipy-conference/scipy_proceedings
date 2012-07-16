@@ -84,7 +84,7 @@ NumPy uses an array syntax that is based on the Python list syntax. The arrays a
 
 In the rest of this paper, we define the **array-base** as the originally allocated array that lies contiguously in memory. In addition, we will define the **array-view** as a view of the elements in an **array-base**. An **array-view** is usually a subset of the elements in the **array-base** or a re-ordering such as the reverse order of the elements or a combination.
 
-.. figure:: ../../../gfx/stencil_exp.pdf
+.. figure:: stencil_exp.pdf
 
    Matrix expression of a simple 5-point stencil computation example. See line eight in the code example, for the Python expression. :label:`fig-stencil-expr`
 
@@ -132,7 +132,7 @@ Vector Engine Manager
 
 An overview of the design can be seen in Figure :ref:`fig-cphvb-design`.
 
-.. figure:: ../../../gfx/cphvb.pdf
+.. figure:: cphvb.pdf
 
    cphVB design idea. :label:`fig-cphvb-design`
 
@@ -322,19 +322,19 @@ Finally, the synthetic stencil has an almost identical performance pattern as th
 It is promising to observe that even most basic vector engine (`simple`) shows a speedup and in none of our benchmarks a slowdown. This leads to the promising conclusion that the memory optimizations implemented outweigh the cost of using cphVB. Adding the potential of speedup due to data-blocking motivates studying further optimizations in addition to thread-level-parallelization.
 The `mcore` engine does provide speedups, the speedup does however not scale with the number of cores. This result is however expected as the benchmarks are memory-intensive and the memory subsystem is therefore the bottleneck and not the number of computational cores available.
 
-.. figure:: ../../../benchpress/jacobi_fixed_speedup.pdf
+.. figure:: jacobi_fixed_speedup.pdf
 
    Relative speedup of the Jacobi Method. The job consists of a vector with :math:`7168x7168` elements using four iterations. :label:`benchmark:jacobi`
 
-.. figure:: ../../../benchpress/knn_speedup.pdf
+.. figure:: knn_speedup.pdf
 
    Relative speedup of the k Nearest Neighbor search. The job consists of 10.000 elements and the query set also consists of 1K elements. :label:`benchmark:knn`
 
-.. figure:: ../../../benchpress/swater_speedup.pdf
+.. figure:: swater_speedup.pdf
 
    Relative speedup of the Shallow Water Equation. The job consists of 10.000 grid points that simulate 120 time steps. :label:`benchmark:swater`
 
-.. figure:: ../../../benchpress/stencil_speedup.pdf
+.. figure:: stencil_speedup.pdf
 
    Relative speedup of the synthetic stencil code. The job consists of vector with :math:`10240x1024` elements that simulate 10 time steps. :label:`benchmark:stencil`
 
