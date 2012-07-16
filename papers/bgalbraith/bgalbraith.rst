@@ -16,24 +16,18 @@
 
 
 ------------------------------------------------
-A Numerical Perspective to Terraforming a Desert
+Unlock: A Python-based framework for rapid development of practical brain-computer interface applications
 ------------------------------------------------
 
 .. class:: abstract
 
-   A short version of the long version that is way too long to be written as a
-   short version anyway.  Still, when considering the facts from first
-   principles, we find that the outcomes of this introspective approach is
-   compatible with the guidelines previously established.
+The Unlock Project aims to provide brain-computer interface (BCI) technologies to individuals suffering from locked-in syndrome, the complete or near-complete loss of voluntary motor function. While several BCI techniques have been demonstrated as feasible in a laboratory setting, limited effort has been devoted to translating that research into a system for viable home use. This is in large part due to the complexity of existing BCI software packages which are geared toward clinical use by domain experts. With Unlock, we have developed a Python-based modular framework that greatly simplifies the time and programming expertise needed to develop BCI applications and experiments. Furthermore, the entire Unlock system, including data acquisition, brain signal decoding, user interface display, and device actuation, can run on a single laptop, offering exceptional portability for this class of BCI.
 
-   In such an experiment, it is then clearl that the potential for further
-   development not only depends on previous relationships found but also on
-   connections made during exploitation of this novel new experimental
-   protocol.
+We present the current Unlock framework, along with examples from our current work with steady-state visually evoked potentials (SSVEP).
 
 .. class:: keywords
 
-   terraforming, desert, numerical perspective
+   brain-machine interface, assistive technology, framework
 
 Introduction
 ------------
