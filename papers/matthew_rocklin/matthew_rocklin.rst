@@ -128,7 +128,7 @@ the velocity is normally distributed with mean 30 and standard deviation 1.
 
     \frac{\sqrt{2} e^{- \frac{1}{2} \left(z -30\right)^{2}}}{2 \sqrt{\pi}}
 
-.. figure:: cannon-deterministic.png
+.. figure:: velocity-distribution.png
 
     The distribution of possible velocity values :label:`velocity-distribution`
 
@@ -304,7 +304,7 @@ understanding. And plot the three together.
     >>> data = 26 + noise
     >>> T_posterior = Given(T, Eq(observation, 26))
 
-.. figure:: cannon-deterministic.png
+.. figure:: data-assimilation.png
     
     The prior, data, and posterior distributions of the temperature.
      
@@ -316,7 +316,7 @@ that ``T + noise == 26`` as a diagonal line over the domain for which this
 statement is true. We project the probability density on this line to the left
 to obtain the posterior density of the temperature.
 
-.. figure:: cannon-deterministic.png
+.. figure:: joint-distribution.png
     
     The joint prior distribution of the temperature and measurement noise. The
     constraint ``T + noise == 26`` (diagonal line) and the resultant posterior
@@ -346,7 +346,7 @@ implementations of the middle-to-bottom of the stack are available through
 higher level libraries such as PETSc and Trilinos or through code generation 
 solutions such as FENICS.
 
-.. figure:: cannon-deterministic.png
+.. figure:: stack.pdf 
 
     The scientific computing software stack.
 
