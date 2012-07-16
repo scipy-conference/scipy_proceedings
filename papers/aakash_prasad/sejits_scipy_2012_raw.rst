@@ -105,6 +105,8 @@ best possible performance for their specializer.
 Related Work
 ------------
 
+Prior work on BLB includes a serial implementation of the algorithm, as described in "The Big Data Bootstrap" and a Scala implementation that runs on the Spark cluster computing framework, as described in "A Scalable Bootstrap for Massive Data". The first paper shows that the BLB algorithm produces statistically robust results on a small data set with a linear estimator function. The second paper describes how BLB scales with large data sets in distributed environments.
+
 BLB
 ---------------
 
@@ -330,12 +332,6 @@ the test data was 67.86%. Our specializers estimates yielded a mean error rate o
 with a standard deviation of 0.36 percentage points. Though the true statistic was outside
 one standard deviation from our estimate's mean, the specializer was still capable of
 delivering a reasonably accurate estimate very quickly.
-
-Related Work
-------------
-
-The original BLB paper, The Big Data Bootstrap, shows the results of applying the BLB algorithm to a least squares linear estimator. The paper, A Scalable Bootstrap for Massive Data, describes the results of experiments using a Scala implementation of BLB on the Spark cluster computing framework. 
-
 
 Limitations and Future Work
 ---------------------------
