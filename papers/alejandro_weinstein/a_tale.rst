@@ -7,8 +7,6 @@
 :email: mwakin@mines.edu
 :institution: the EECS department of the Colorado School of Mines
 
-
-
 ------------------------------------------------
 A Tale of Four Libraries
 ------------------------------------------------
