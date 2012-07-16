@@ -406,11 +406,11 @@ References
 .. [Pas05] R. V. D. Pas, *An Introduction Into OpenMP*,
             ACM SIGARCH Computer Architecture News, vol. 34, no. 5, pp. 1–82, 2005. [Online]. Available: http://portal.acm.org/citation.cfm?id=1168898
 
-.. [Cat09] B. Catanzaro, S. Kamil, Y. Lee, K. Asanovi ́ , J. Demmel, c K. Keutzer, J. Shalf, K. Yelick, and O. Fox, *SEJITS: Getting Productivity and Performance With Selective Embedded JIT Specialization*,
+.. [Cat09] B. Catanzaro, S. Kamil, Y. Lee, K. Asanov\'i, J. Demmel, c K. Keutzer, J. Shalf, K. Yelick, and O. Fox, *SEJITS: Getting Productivity and Performance With Selective Embedded JIT Specialization*,
             in Proc of 1st Workshop Programmable Models for Emerging Architecture PMEA, no. UCB/EECS-2010-23, EECS Department, University of California, Berkeley. Citeseer, 2009. [Online]. Available: http://www.eecs.berkeley.edu/Pubs/TechRpts/2010/EECS-2010-23.html
 
 .. [And08] R. Andersen and B. Vinter, *The Scientific Byte Code Virtual Machine*,
-            in Proceedings of the 2008 International Conference on Grid Computing & Applications, GCA2008 : Las Vegas, Nevada, USA, July 14-17, 2008. CSREA Press., 2008, pp. 175–181. [Online]. Available: http://dk.migrid.org/public/doc/published\ papers/sbc.pdf
+            in Proceedings of the 2008 International Conference on Grid Computing & Applications, GCA2008 : Las Vegas, Nevada, USA, July 14-17, 2008. CSREA Press., 2008, pp. 175–181. [Online]. Available: http://dk.migrid.org/public/doc/published\_papers/sbc.pdf
 
 .. [Apl00] “why apl?”
             [Online]. Available: http://www.sigapl.org/whyapl.htm
@@ -419,7 +419,7 @@ References
             2002. [Online]. Available: http://math.nist.gov/scimark2/
 
 .. [Bur10] J. Burkardt, *Shallow Water Equations*,
-            2010. [Online]. Available: http://people.sc.fsu.edu/∼jburkardt/m\ src/shallow\ water\ 2d/
+            2010. [Online]. Available: http://people.sc.fsu.edu/\~jburkardt/m\_src/shallow\_water\_2d/ 
 
 .. [Bac78] J. Backus, *Can Programming be Liberated from the von Neumann Style?: A Functional Style and its Algebra of Programs*,
             Communications of the ACM, vol. 16, no. 8, pp. 613–641, 1978.
