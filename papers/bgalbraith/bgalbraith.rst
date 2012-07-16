@@ -1,14 +1,18 @@
-:author: Gaius Caesar
-:email: jj@rome.it
-:institution: Senate House, S.P.Q.R.
+:author: Byron V. Galbraith
+:email: byron.galbraith@gmail.com
+:institution: Boston University
 
-:author: Mark Anthony
-:email: mark37@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
+:author: Jonathan S. Brumberg
+:institution: Boston University
 
-:author: Jarrod Millman
-:email: millman@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
+:author: Sean D. Lorenz
+:institution: Boston University
+
+:author: Massimiliano Versace
+:institution: Boston University
+
+:author: Frank H. Guenther
+:institution: Boston University
 
 
 ------------------------------------------------
