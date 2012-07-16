@@ -2,7 +2,7 @@
 :email: madsbk@nbi.dk
 :institution: University of Copenhagen
 
-:author: Simon Andreas Frimann lund
+:author: Simon Andreas Frimann Lund
 :email: safl@nbi.dk
 :institution: University of Copenhagen
 
