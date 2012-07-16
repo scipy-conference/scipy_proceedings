@@ -140,7 +140,8 @@ class Translator(LaTeXTranslator):
         copyright_holder = self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.')
         author_notes = r'''%%
 
-          \noindent \copyright\,%(year)s %(copyright_holder)s %(copyright)s%%
+          \noindent%%
+          Copyright\,\copyright\,%(year)s %(copyright_holder)s %(copyright)s%%
         ''' % \
         {'email': self.author_emails[0],
          'year': options['proceedings']['year'],
