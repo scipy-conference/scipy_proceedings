@@ -57,7 +57,7 @@ he may choose to solve this system analytically.
 
     >>> t = Symbol('t') # SymPy variable for time
     >>> x = x0 + v * cos(theta) * t
-    >>> y = y0 + v * sin(theta) * t
+    >>> y = y0 + v * sin(theta) * t + g*t**2
     >>> impact_time = solve(y - yf, t)
     >>> xf = x0 + v * cos(theta) * impact_time
     >>> xf.evalf() # evaluate xf numerically
