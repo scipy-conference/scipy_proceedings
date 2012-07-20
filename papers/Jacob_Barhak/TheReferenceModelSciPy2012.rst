@@ -258,7 +258,7 @@ References
 .. [McE10] P. McEwan, K. Bergenheim, Y. Yuan, A. Tetlow, J. P. Gordon *Assessing the Relationship between Computational Speed and Precision: A Case Study Comparing an Interpreted versus Compiled Programming Language using a Stochastic Simulation Model in Diabetes Care*, 
            Pharmacoeconomics:   28(8):665-674, August 2010,  doi: 10.2165/11535350-000000000-00000
 
-.. [Wil98] P.W.F. Wilson, R.B. D’Agostino, D. Levy, A.M. Belanger, H. Silbershatz, W.B. Kannel, *Prediction of Coronary Heart Disease Using Risk Factor Categories*,
+.. [Wil98] P.W.F. Wilson, R.B. D'Agostino, D. Levy, A.M. Belanger, H. Silbershatz, W.B. Kannel, *Prediction of Coronary Heart Disease Using Risk Factor Categories*,
            Circulation 97:1837-1847, 1998.
 
 .. [Ste01] R. Stevens, V. Kothari, A. Adler, I. Stratton, *The UKPDS risk engine: a model for the risk of coronary heart disease in type II diabetes UKPDS 56*, 
@@ -316,7 +316,7 @@ References
            Diabetes Care 26:2300-2304, 2003, doi: 10.2337/diacare.26.8.2300
 
 .. [Her03] W.H. Herman. *Diabetes modeling*,
-           Diabetes Care 26:3182–3183, November 2003. doi: 10.2337/diacare.26.11.3182
+           Diabetes Care 26:3182-3183, November 2003. doi: 10.2337/diacare.26.11.3182
 
 .. [MH4] The Mount Hood 4 Modeling Group, *Computer Modeling of Diabetes and Its Complications, A report on the Fourth Mount Hood Challenge Meeting*,
          Diabetes Care 30:1638-1646, 2007, doi: 10.2337/dc07-9919
@@ -327,11 +327,11 @@ References
 .. [ACC10] The ACCORD Study Group, *Effects of Intensive Blood-Pressure Control in Type 2 Diabetes Mellitus*,
            N Engl J Med 362:1575-85, March 2010, doi:10.1056/NEJMoa1001286
 
-.. [Kno06] R.H. Knopp, M. d’Emden, J.G. Smilde, S.J. Pocock, *Efficacy and Safety of Atorvastatin in the Prevention of Cardiovascular End Points in Subjects With Type 2 Diabetes: The Atorvastatin Study for Prevention of Coronary Heart Disease Endpoints in Non-Insulin-Dependent Diabetes Mellitus (ASPEN)*, 
+.. [Kno06] R.H. Knopp, M. d'Emden, J.G. Smilde, S.J. Pocock, *Efficacy and Safety of Atorvastatin in the Prevention of Cardiovascular End Points in Subjects With Type 2 Diabetes: The Atorvastatin Study for Prevention of Coronary Heart Disease Endpoints in Non-Insulin-Dependent Diabetes Mellitus (ASPEN)*, 
            Diabetes Care 29:1478-1485, July 2006, doi:10.2337/dc05-2415
 		   
 .. [UKP98] UKPDS: *UK Prospective Diabetes Study UKPDS Group, Intensive blood-glucose control with sulphonylureas or insulin compared with conventional treatment and risk of complications in patients with type 2 diabetes UKPDS 33*,
-           Lancet 352:837–853, 1998, doi:10.1016/S0140-6736(98)07019-6		   
+           Lancet 352:837-853, 1998, doi:10.1016/S0140-6736(98)07019-6		   
 
 .. [Bar] *Jacob Barhak*, Online: http://sites.google.com/site/jacobbarhak/ (Accessed: 14 July 2012)
 
@@ -347,7 +347,7 @@ References
            Statistics in Medicine 28(16):2095-2115, 2009, doi:10.1002/sim.3599. Erratum available: Statistics in Medicine 29(10):1158, 2010, doi: 10.1002/sim.3855
 
 .. [Ye12]  W. Ye, J. Barhak, D.J.M. Isaman, *Use of Secondary Data to Estimate Instantaneous Model Parameters of Diabetic Heart Disease: Lemonade Method*, 
-           Information Fusion 13(2):137–145, 2012, doi:10.1016/j.inffus.2010.08.003	 
+           Information Fusion 13(2):137-145, 2012, doi:10.1016/j.inffus.2010.08.003	 
 		 
 .. [Sim09] R.K. Simmons, R.L. Coleman, H.C. Price, R.R. Holman, K. Khaw, N.J. Wareham, S.J. Griffin, *Performance of the UKPDS Risk Engine and the Framingham risk equations in estimating cardiovascular disease in the EPIC-Norfolk cohort*,
            Diabetes Care 32:708-713 December 2009, doi: 10.2337/dc08-1918
