@@ -346,13 +346,12 @@ implementations of the middle-to-bottom of the stack are available through
 higher level libraries such as PETSc and Trilinos or through code generation 
 solutions such as FENICS.
 
-.. figure:: stack.pdf 
+.. figure:: stack_full.pdf 
 
     The scientific computing software stack. Various projects are displayed
-    showing the range that they abstract. ``sympy.stats`` is a thin layer.
+    showing the range that they abstract. We pose that scientific computing
+    needs more horizontal and thin layers in this image.
 
-This project takes a different approach. It solves an atomic slice of this 
-stack and establishes clean interface layers. For example SymPy.stats with 
 continuous random variables transforms random expressions into integral 
 expressions and then stops. It does not attempt to generate an end-to-end 
 code. Because its backend interface layer (SymPy integrals) is simple and well
