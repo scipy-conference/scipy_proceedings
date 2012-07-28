@@ -13,16 +13,16 @@ N-th-order Accurate, Distributed Interpolation Library
 .. class:: abstract
 
     The research contained herein yielded an open source interpolation library
-    implemented in and designed for use with the Python programming language. This
-    library, named smbinterp, yields an interpolation to an arbitrary degree of
-    accuracy. The smbinterp module was designed to be mesh agnostic. A plugin
-    system was implemented that allows end users to conveniently and consistently
-    present their numerical results to the library for rapid prototyping and
-    integration. The smbinterp was designed with parallel computing environments in
-    mind. The library includes modules that allow for its use in high-performance
-    parallel computing environments. These modules were implemented using built-in
-    Python modules to simplify deployment. This implementation was found to scale
-    linearly to approximately 180 participating compute processes.
+    implemented in and designed for use with the Python programming language.
+    This library, named smbinterp, yields an interpolation to an arbitrary
+    degree of accuracy. The smbinterp module was designed to be mesh agnostic.
+    A plugin system was implemented that allows end users to conveniently and
+    consistently present their numerical results to the library for rapid
+    prototyping and integration. The library includes modules that allow for
+    its use in high-performance parallel computing environments. These modules
+    were implemented using built-in Python modules to simplify deployment. This
+    implementation was found to scale linearly to approximately 180
+    participating compute processes.
 
 .. class:: keywords
 
@@ -40,10 +40,10 @@ different phenomena the numeric models used to find solutions to these problems
 employ meshes of varying topology and density in their implementation. For
 example, the unstructured/structured mesh interfaces seen in the
 combustor/turbo machinery interface [Sha01]_, or the coupling of
-Reynolds-Averaged Navier-Stokes and Large Eddy Simulation (RANS/LES) CFD codes
-in Computational Fluid Dynamics (CFD) [Med06]_. A similar situation with
-disparate meshes arises in the analysis of helicopter blade wake and vortex
-interactions, as for example when using the compressible flow code SUmb and the
+Reynolds-Averaged Navier-Stokes and Large Eddy Simulation (RANS/LES) codes in
+Computational Fluid Dynamics (CFD) [Med06]_. A similar situation with disparate
+meshes arises in the analysis of helicopter blade wake and vortex interactions,
+as for example when using the compressible flow code SUmb and the
 incompressible flow code CDP [Hah06]_. When this is the case, and the mesh
 elements do not align, the engineer must perform interpolation from the
 upstream code to the downstream code.
@@ -73,16 +73,17 @@ found in CHIMPS, AVUSINTERP was not implemented in a parallel fashion, nor does
 it allow for the engineer to arbitrarily choose the order of the interpolation
 past third-order accuracy.
 
-The research presented herein describes the development of a library that is a
-union of the best parts of the aforementioned tools. Namely, this research
-provides a library, named smbinterp, that implements the interpolation of a
-physical value from a collection of donor points to a destination point and
+The research presented herein describes the development of a library that is
+a union of the best parts of the aforementioned tools. Namely, this research
+provides a library, named smbinterp, that implements the interpolation of
+a physical value from a collection of donor points to a destination point and
 performs this interpolation to an arbitrary degree of accuracy. The library can
 perform this interpolation in both two- and three-dimensional space. Also, the
 library was designed and implemented to be used in a high-performance parallel
-computing environment. smbinterp is implemented as a python module that builds
-upon the numpy and scipy libraries and presents an API for use in multiphysics
-simulation integration.
+computing environment. The smbinterp library is implemented as a python module
+that builds upon the numpy and scipy libraries and presents an API for use in
+multiphysics simulation integration. The library is released under the GPL, and 
+project is available on github [smbinterp]_.
 
 
 Method
@@ -120,9 +121,10 @@ R` represents a simplex that surrounds the destination point :math:`\Xi`, and
 
 
 Barycentric coordinates , denoted :math:`\phi_j(\Xi)`, are used to perform the
-linear interpolation. In geometric terms, the barycentric coordinates of a
-point in a simplex are the values of the normalized areas :math:`A_j/A_{total}`
-opposite the vertex :math:`R_j` in the simplex :math:`\triangle R`.
+linear interpolation. In geometric terms, the barycentric coordinates of
+a point in a simplex are the values of the normalized areas
+:math:`A_j/A_{total}` opposite the vertex :math:`R_j` in the simplex
+:math:`\triangle R`.
 
 
 The barycentric coordinates define the influence that each point in the simplex
@@ -131,8 +133,8 @@ the ratio of :math:`A_j/A_{total}` represents the influence from :math:`0 \le
 \phi \le 1` that :math:`q(R_j)` has over the linear interpolant. If :math:`\Xi
 = R_j`, the value of :math:`q_{linear}(\Xi)` should then be influenced entirely
 by the known value of :math:`q(R_j)`. If :math:`\Xi` is placed in such a way as
-to give :math:`\frac{A_1}{A_{total}} = \frac{A_2}{A_{total}} =
-\frac{A_3}{A_{total}}`, the value :math:`q(R_j)` at each point :math:`R_j`
+to give :math:`\frac{A_1}{A_{total}} = \frac{A_2}{A_{total}}
+= \frac{A_3}{A_{total}}`, the value :math:`q(R_j)` at each point :math:`R_j`
 contributes equally to the calculated value of :math:`q_{linear}(\Xi)`.
 
 The linear interpolant, which requires the simplex :math:`\triangle R` and
@@ -150,8 +152,8 @@ space, and 4 in three-dimensional space). The values of the basis functions
 
 To solve for :math:`\phi_j(\Xi)` a system of linear equations will be defined
 involving the points in the simplex :math:`R_j`, :math:`\Xi`, and equation
-:ref:`qlinear`. If :math:`q(\Xi)` is a constant, :math:`q_1 = q_2 = q_3 =
-q_{linear} = q_{constant}`, and equation :ref:`qlinear` can be modified by
+:ref:`qlinear`. If :math:`q(\Xi)` is a constant, :math:`q_1 = q_2 = q_3
+= q_{linear} = q_{constant}`, and equation :ref:`qlinear` can be modified by
 dividing by :math:`q_{constant}`, that is:
 
 .. math::
@@ -279,26 +281,25 @@ calculated. Knowing :math:`A`, equation :ref:`qerror` is evaluated for
 :math:`q_{linear}(\Xi)` and the recently calculated value of :math:`f(\Xi)` are
 used to solve equation :ref:`qbaker` for :math:`q(\Xi)`.
 
-The interpolation function in smbinterp dynamically constructs the numpy arrays
-required to solve equations :ref:`qlinear` and :ref:`qerror` from the input
-geometry (simplex :math:`\triangle R`, extra points :math:`S_k`, and the
-destination point :math:`\Xi`) and then calculates the solution to the linear
-systems using numpy.linalg.solve. However, while solutions to the linear system
-in equation :ref:`qlinear` are well-behaved, certain vertex configurations can
-lead to a singular system of equations in equation :ref:`qerror`. These
-pathological vertex configurations occur when more than :math:`m-2` of the
-extra points lie on one extended edge of the simplex :math:`\triangle R`
-[Bak03]. If this occurs, the covariance matrix :math:`B^TB` will be singular,
-the solution will not be unique, and the error approximation will not generally
-aid in improving the interpolation.
+.. The interpolation function in smbinterp dynamically constructs the numpy 
+   arrays required to solve equations :ref:`qlinear` and :ref:`qerror` from the 
+   input geometry (simplex :math:`\triangle R`, extra points :math:`S_k`, and the 
+   destination point :math:`\Xi`) and then calculates the solution to the linear 
+   systems using numpy.linalg.solve.
 
-In the current implementation the default behavior of smbinterp is as follows:
-the LinAlgError exception raised by the attempted solve of a singular system is
-caught and a solution is found via the pseudo inverse, using numpy.linalg.pinv.
-However, this behavior is configurable, and the end user may choose to either
-simply discards the higher-order terms and return only the linear interpolation
-or alternatively require that a LinAlgError is thrown when a pathological
-vertex configuration is encountered.
+There exist known limitations to this least squares-based interpolation method. 
+First a change in vertex stencil will generally yield a discontinuity in 
+interpolation results. While this property makes this method insufficient for 
+graphical applications, it has been shown to yield sufficiently accurate 
+results to be used in engineering applications [Bak03]_, [Gal06]_.
+
+Secondly, while solutions to the linear system in equation :ref:`qlinear` are
+well-behaved, certain vertex configurations can lead to a singular system of
+equations in equation :ref:`qerror`. These pathological vertex configurations
+occur when more than :math:`n-1` of the extra points lie on one extended edge
+of the simplex :math:`\triangle R` [Bak03]_. If this occurs, the covariance
+matrix :math:`B^TB` will be singular, the solution will not be unique, and the
+error approximation will not generally aid in improving the interpolation.
 
 Extension of this method into three dimensions is non-trivial, and is explained
 in depth in [McQ11]_. A pattern exists to define any error approximation
@@ -357,7 +358,6 @@ function wrapper:
         return cache[x]
       return memf
 
-.. asdf
 
 Baker's method gives a reasonable interpolation solution for a general cloud of
 points. However, the method suggested by Baker for the vertex selection
@@ -365,7 +365,7 @@ algorithm for the terms :math:`\triangle R` and :math:`S_k` consists of simply
 selecting the points nearest :math:`\Xi`. While this is the most general point
 selection algorithm, it can lead to the aforementioned pathological vertex
 configurations. This configuration is prevalent when the source mesh is
-composed of a regular grid of verticies, and must be addressed if the method is
+composed of a regular grid of vertices, and must be addressed if the method is
 to yield a good interpolation.
 
 Furthermore a mesh may have been designed to capture the gradient information,
@@ -402,14 +402,14 @@ follows:
         # ...
         return simplex, extra_points
 
-The cells and cells_for_verts data structures are used when searching for a
-containing simplex. The structures are populated with connectivity information
-before a round of interpolations. The method employed in the default
-implementation for the location of the containing simplex in an upstream mesh
-is straight forward: first the spatial tree structure is used to find the
-location of the nearest vertex to the point of interest, then the cells are
-recursively visited in topologically adjacent order and tested for inclusion of
-the point :math:`\Xi`.
+The cells and cells_for_verts data structures are used when searching for
+a containing simplex. The structures are populated with connectivity
+information before a round of interpolations. The method employed in the
+default implementation for the location of the containing simplex in an
+upstream mesh is straight forward: first the spatial tree structure is used to
+find the location of the nearest vertex to the point of interest, then the
+cells are recursively visited in topologically adjacent order and tested for
+inclusion of the point :math:`\Xi`.
 
 The selection of the extra points :math:`S_k` is also implemented in the base
 grid class. The default algorithm simply queries the kdtree structure for
@@ -428,7 +428,6 @@ selection and makes the interpolation library mesh agnostic.
 
     Flowchart of the Parallelization Architecture :label:`pflowchart`
 
-
 A parallel mechanism for calculating :math:`q(\Xi)` was implemented in
 smbinterp. As is illustrated in figure :ref:`pflowchart`, a stream of requested
 interpolations are presented to a queuing mechanism that then distributes the
@@ -440,9 +439,10 @@ for orchestrating the control of a round of interpolations between a master and
 a set of minions. Masters and minions authenticate and connect to these four
 queues to accomplish the tasks shown in the flowchart in figure
 :ref:`pflowchart`. The master.py script is responsible for orchestrating the
-submission of interpolations and events associated with starting and stopping a
-set of interpolations. Each of the minions has access to the entire domain and
-are responsible for performing the interpolations requested by the end user.
+submission of interpolations and events associated with starting and stopping
+a set of interpolations. Each of the minions has access to the entire domain
+and are responsible for performing the interpolations requested by the end
+user.
 
 The crux of the solution lies in providing the minions with a steady stream of
 work, and a pipeline into which the resultant interpolations can be returned.
@@ -474,8 +474,8 @@ used:
 A plot of this function is found in figure :ref:`exactplot`. Each error
 :math:`\epsilon_i` was calculated as the difference between the actual value
 (from equation :ref:`eqexact`)  and calculated interpolations (at each point in
-the destination domain using smbinterp), or :math:`\epsilon_i(\Xi) =
-q_{exact}(\Xi) - q_{calculated}(\Xi)`.
+the destination domain using smbinterp), or :math:`\epsilon_i(\Xi)
+= q_{exact}(\Xi) - q_{calculated}(\Xi)`.
 
 .. figure:: exact.png
    :figclass: bht
@@ -483,8 +483,17 @@ q_{exact}(\Xi) - q_{calculated}(\Xi)`.
    Plot of Equation :ref:`eqexact` :label:`exactplot`
 
 
-A mesh resolution study was performed to determined how the RMS of error varied
-with mesh density. The results of this study are show in figure :ref:`rms`.
+.. figure:: gmsh.png
+
+    Lowest-resolution test mesh :label:`sourcemesh`
+
+
+A mesh resolution study was performed to determine how the RMS of error varied
+with mesh density. The source mesh was generated using gmsh, and the
+lowest-resolution mesh is shown in figure :ref:`sourcemesh`. The results of
+this study are show in figure :ref:`rms`. A collection of 1000 random points
+were used as the destination for interpolation.
+
 Figure :ref:`rms` plots the relationship between mesh spacing and RMS of error
 of all interpolations in the collection of destination vertexes. The x-axis
 represents the spacing between the regular mesh elements. The y-axis was
@@ -531,7 +540,7 @@ error). Also, the fine meshes experience a more significant decrease in RMS of
 error than the coarse  meshes while increasing the order of approximation,
 :math:`\nu`. While this is an intuitive result, it emphasizes the notion that
 mesh density should be chosen to best match the underlying physical systems and
-to provide as accurate of results as possible.
+to provide optimally accurate results.
 
 The parallel algorithm employed by \smbinterp was found to scale quasi-linearly
 to approximately 180 participating minion.py processes. Speedup is defined as
@@ -583,9 +592,9 @@ The library includes modules that allow for its use in high-performance
 computing environments. These modules were implemented using built-in Python
 modules to simplify deployment. This implementation was found to scale linearly
 approximately 180 participating compute processes. It is suggested to replace
-the queuing mechanism with a more performant queuing library (e.g. ØMQ) and a
-more advanced participant partitioning scheme to allow the library to scale
-past this point.
+the queuing mechanism with a more high-performance queuing library (e.g. ØMQ)
+and a more advanced participant partitioning scheme to allow the library to
+scale past this point.
 
 
 Acknowledgments
@@ -593,8 +602,8 @@ Acknowledgments
 
 The authors thank Marshall Galbraith for his friendly and crucial assistance
 which helped clarify the implementation of the numerical method used herein.
-The authors are especially grateful to have performed this research during a
-time when information is so freely shared and readily available; they are
+The authors are especially grateful to have performed this research during
+a time when information is so freely shared and readily available; they are
 indebted to all of the contributors to the Python and Scipy projects. The
 authors would also like to acknowledge the engineers in the aerospace group at
 Pratt \& Whitney for the contribution of the research topic and for the partial
@@ -603,9 +612,6 @@ funding provided at the beginning of this research.
 
 References
 ----------
-
-.. P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
 
 .. [Sha01] S. Shankaran et al.,
            *A Multi-Code-Coupling Interface for Combustor/Turbomachinery Simulations*,
@@ -625,11 +631,11 @@ References
 
 .. [Hah09] S. Hahn et al.,
            *Extension of CHIMPS for unstructured overset simulation and higher-order interpolation*,
-           AIAA Paper 2009-3999, 19th AIAA Computational Fluid Dynamics, San Antonio, Texas, June 22-25, 2009 
+           AIAA Paper 2009-3999, 19th AIAA Computational Fluid Dynamics, San Antonio, Texas, June 22-25, 2009
 
 .. [Gal06] M. Galbraith, J. Miller.
            *Development and Application of a General Interpolation Algorithm*,
-           AIAA Paper 2006-3854, 24th AIAA Applied Aerodynamics Conference, San Francisco, California, June 5-8, 2006 
+           AIAA Paper 2006-3854, 24th AIAA Applied Aerodynamics Conference, San Francisco, California, June 5-8, 2006
 
 .. [Bak03] Baker, T.
            *Interpolation from a Cloud of Points*,
@@ -642,6 +648,4 @@ References
 
 .. [WSU] http://en.wikipedia.org/wiki/Speedup
 
-.. urls
-.. _smbinterp: https://mcquay.me/hg/smbinterp
-.. _memoize:   http://en.wikipedia.org/wiki/Memoize
+.. [smbinterp] https://github.com/smcquay/smbinterp
