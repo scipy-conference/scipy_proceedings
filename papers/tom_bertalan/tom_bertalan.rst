@@ -353,6 +353,7 @@ The following code generates a particular restriction matrix, given a number of 
         return R
 
 
+
 The function ``restriction()`` is called several times by the following code to generate the complete hierarchy of restriction matrices.
 
 .. code-block:: python
@@ -369,6 +370,7 @@ The function ``restriction()`` is called several times by the following code to 
                         tuple(np.array(problemshape)\
                             / (2 ** level)))
         return R
+
 
 Using the hierarchy of restriction matrices produced by ``restrictions()`` and the user-supplied top-level coefficient matrix ``A_in``, the following code generates a similar hierarchy of left-hand-side operators using the Galerkin coarse-grid approximation, :math:`A_H = R A_h R^T` [Zeng]_.
 
@@ -407,6 +409,7 @@ Our iterative smoother is currently a simple implementation of Gauss-Seidel smoo
                             ) / A[i, i]
         return x
 
+
 Multigrid Cycle
 ---------------
 .. |implementation-cycle| replace:: *Multigrid Cycle*
@@ -416,7 +419,7 @@ The following function uses all the preceeding functions to perform a multigrid 
 
 .. code-block:: python
 
-   def amg_cycle(A, b, level, \
+    def amg_cycle(A, b, level, \
                 R, parameters, initial='None'):
         # Unpack parameters, such as pre_iterations
         exec ', '.join(parameters) +\
@@ -435,7 +438,7 @@ The following function uses all the preceeding functions to perform a multigrid 
                             b.reshape((N, 1)))
             NH = len(b_coarse)
             b_coarse.reshape((NH, ))
-            residual = getresidual(b, A[level], u_apx, N)
+            residual = b - np.dot(A[level], u_apx)
             coarse_residual = np.dot(\
                                 R[level],\
                                 residual.reshape((N, 1))\
