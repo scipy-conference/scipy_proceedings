@@ -19,7 +19,7 @@ def get_config():
     return config
 
 def cfg2dict(filename):
-    """Return the content of a .ini file as a dictionary.
+    """Return the content of a JSON config file as a dictionary.
 
     """
     if not os.path.exists(filename):

@@ -83,13 +83,21 @@ def rst2tex(in_path, out_path):
 def tex2pdf(out_path):
 
     import shlex, subprocess
-    command_line = 'cd '+out_path+' ; pdflatex paper.tex'
+    command_line = 'cd %s ' % out_path + \
+                   ' ; pdflatex -halt-on-error paper.tex'
     
     run = subprocess.Popen(command_line, shell=True, stdout=subprocess.PIPE)
     out, err = run.communicate()
     
     run = subprocess.Popen(command_line, shell=True, stdout=subprocess.PIPE)
     out, err = run.communicate()
+
+    if "Fatal" in out:
+        print "PDFLaTeX error output:"
+        print "=" * 80
+        print out
+        print "=" * 80
+
     return out
 
 def page_count(pdflatex_stdout, paper_dir):
