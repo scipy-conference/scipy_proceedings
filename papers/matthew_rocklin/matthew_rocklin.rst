@@ -180,8 +180,9 @@ Every expression in our graph that depends on ``v`` is now a random expression
 
 .. figure:: uncertain-dag.pdf
 
-    A graph of all the varibles in our system. Red variables depend on the
-    uncertain input ``v``. These expressions are stochastic as a result.
+    A graph of all the varibles in our system. Red variables are
+    stochastic. Every variable that depends on the uncertain input, ``v``, is 
+    red due to its dependence.
 
 We can ask similar questions about the these expressions. For example we can compute the probability density of the position of the ball as a function of time.
 
@@ -203,16 +204,14 @@ We can ask similar questions about the these expressions. For example we can com
         \pi t^{2} e^{900}
     }
 
-Or we can plot the probability that the ball is still in the air 
+Or we can plot the probability that the ball is still in the air at time `t`
 
 .. code-block:: python
 
-    >>> plot( P(y>yf), (t, 4.5, 6))
+    >>> plot( P(y>yf), (t, 4.5, 6.5))
 
 .. figure:: impact.pdf
     
-    The probability that the ball has not yet landed
-
 Note that to obtain these expressions the only novel work the modeler needed to do was to describe the uncertainty of the inputs. The modeling code was not touched. 
 
 We can attempt to compute more complex quantities such as the expectation and variance of ``impact_time`` the total time of flight.
@@ -228,7 +227,7 @@ We can attempt to compute more complex quantities such as the expectation and va
 
 In this case the necessary integral proved too challenging for the SymPy integration algorithms and we are left with a correct though unresolved result. 
 
-This is an unfortunate though very common result. Mathematical models are usually far too complex to yield simple analytic solutions. This unresolved result is the common case. Fortunately computing integral expressions is a problem of very broad interest with many mature techniques. SymPy stats has successfully transformed a specialized problem (uncertainty propagation) into a general one (computing integrals) to which we can apply general techniques.
+This is an unfortunate though very common result. Mathematical models are usually far too complex to yield simple analytic solutions. I.e. this unresolved result is the common case. Fortunately computing integral expressions is a problem of very broad interest with many mature techniques. SymPy stats has successfully transformed a specialized and novel problem (uncertainty propagation) into a general and well studied one (computing integrals) to which we can apply general techniques.
 
 Sampling
 ````````
@@ -240,11 +239,7 @@ SymPy.stats contains a basic Monte Carlo backend which can be easily accessed wi
 .. code-block:: python
 
     >>> E(impact_time, numsamples=10000)
-    3.09058769095056
-    >>> variance(impact_time, numsamples=30000)
-    0.00145642451022709
-    >>> E(xf, numsamples=1000)
-    65.4488501921592
+    5.36178452172906
 
 Implementation
 --------------
