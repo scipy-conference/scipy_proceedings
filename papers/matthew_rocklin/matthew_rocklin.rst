@@ -24,7 +24,7 @@ Scientific computing is becoming more challenging. On the computational machiner
 
 Symbolic mathematical modeling provides an important interface layer between the *description of a problem* by domain scientists and *description of methods of solution* by computational scientists. This allows each community to develop asynchronously and facilitates code reuse.
 
-In this paper we will discuss how a particular problem domain, uncertainty propagation, can be expressed symbolically. We do this by adding a random variable type to a popular mathematical modeling language, SymPy (ref). This allows us to describe stochastic systems in a highly separable and minimally complex way.
+In this paper we will discuss how a particular problem domain, uncertainty propagation, can be expressed symbolically. We do this by adding a random variable type to a popular mathematical modeling language, SymPy [Sym, Joy11]. This allows us to describe stochastic systems in a highly separable and minimally complex way.
 
 Uncertainty propagation is the act of determining the effects of uncertain inputs on outputs. Mathematical models are often flawed. The model itself may be overly simplified or the inputs may not be completely known. It is important to understand the extent to which the results of a model can be believed. To address these concerns it is important that we characterize the uncertainty in our inputs and understand how this causes uncertainty in our results.  **(clean this up)**
 
@@ -213,7 +213,7 @@ Or we can plot the probability that the ball is still in the air
     
     The probability that the ball has not yet landed
 
-Note that to obtain these expressions the only novel work the modeler needed to do was to describe the uncertainty of the inputs. The modeling code (cite code) was not touched. 
+Note that to obtain these expressions the only novel work the modeler needed to do was to describe the uncertainty of the inputs. The modeling code was not touched. 
 
 We can attempt to compute more complex quantities such as the expectation and variance of ``impact_time`` the total time of flight.
 
@@ -313,11 +313,11 @@ With this thermometer we observe a temperature of 26C. We compute the posterior 
     
     The prior, data, and posterior distributions of the temperature.
      
-We now describe how SymPy.stats obtained this result. The expression ``T_posterior`` contains two random variables, ``T`` and ``noise`` each of which can independently take on different values. We plot the joint distribution below in figure (reference figure). We represent the observation that ``T + noise == 26`` as a diagonal line over the domain for which this statement is true. We project the probability density on this line to the left to obtain the posterior density of the temperature.
+We now describe how SymPy.stats obtained this result. The expression ``T_posterior`` contains two random variables, ``T`` and ``noise`` each of which can independently take on different values. We plot the joint distribution below in figure :ref:`fig:joint-distribution`. We represent the observation that ``T + noise == 26`` as a diagonal line over the domain for which this statement is true. We project the probability density on this line to the left to obtain the posterior density of the temperature.
 
 .. figure:: joint-distribution.pdf
     
-    The joint prior distribution of the temperature and measurement noise. The constraint ``T + noise == 26`` (diagonal line) and the resultant posterior distribution of temperature on the left.
+    The joint prior distribution of the temperature and measurement noise. The constraint ``T + noise == 26`` (diagonal line) and the resultant posterior distribution of temperature on the left. :label:`fig:joint-distribution`
 
 These gemoetric operations correspond exactly to Bayesian probability. All of the operations such as restricting to the condition, projecting to the temperature axis, etc... are managed using core SymPy functionality.
 
@@ -445,3 +445,11 @@ Secondarily we have motivated the use of symbolics in computation and argued for
 
 References
 ----------
+.. [Sym] SymPy Development Team (2012). SymPy: Python library for symbolic mathematics 
+        URL http://www.sympy.org.
+
+.. [Roc12] M. Rocklin, A. Terrel,  *Symbolic Statistics with SymPy*
+        Computing in Science & Engineering, June 2012
+
+.. [Joy11] D. Joyner, O. Čertík, A. Meurer, B. Granger, *Open source computer algebra systems: SymPy*
+        ACM Communications in Computer Algebra, Vol 45 December 2011
