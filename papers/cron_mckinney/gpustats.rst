@@ -11,15 +11,15 @@ gpustats: GPU Library for Statistical Computing in Python
 ---------------------------------------------------------
 
 .. class:: abstract
-
-   In this talk we will discuss **gpustats**, a new Python library for
+				   
+   In this work we discuss **gpustats**, a new Python library for
    assisting in "big data" statistical computing applications,
    particularly Monte Carlo-based inference algorithms. The library
    provides a general code generation / metaprogramming framework for
    easily implementing discrete and continuous probability density
    functions and random variable samplers. These functions can be
    utilized to achieve more than 100x speedup over their CPU
-   equivalents. We will demonstrate their use in an Bayesian MCMC
+   equivalents. We demonstrate their use in an Bayesian MCMC
    application and discuss avenues for future work.
 
 .. class:: keywords
@@ -59,9 +59,9 @@ fly, it is relatively straightforward to implement metaprogramming
 approaches to dynamically generate customized GPU kernels within a
 Python program.
 
-In this paper we will discuss some of the challenges of GPU computing
+In this paper, we discuss some of the challenges of GPU computing
 and how GPUs can be applied to statistical inference applications. We
-will further show how PyCUDA and PyOpenCL are ideal for implementing
+further show how PyCUDA and PyOpenCL are ideal for implementing
 certain kinds of statistical computing functions on the GPU.
 
 Development Challenges in GPU Computing
@@ -76,22 +76,24 @@ developer writes a function, known as a *kernel*, to process a unit of
 data. The kernel function is then executed once for each unit or chunk
 of data.
 
-The GPU has a large single *global* memory store (typically 512MB to 4GB) with
-which data sets can be transferred to and from the CPU memory space. However,
-each group, or *block*, of threads are assigned a small piece (typically 16K to
-64K) of ultra low-latency *shared* cache memory which is orders of magnitude
-faster than the global memory. Therefore, the main challenge for the developer,
-outside of writing the kernel function, is structuring the computation to
-optimally utilize each thread block's shared memory and minimizing reads from
-and writes to the global memory. Careful coordination of the threads is required
-to transfer memory efficiently from global to shared. We will not get into the
-low-level details of this process but instead refer the interested reader to the
-CUDA API guide ([NvidiaGuide]_). See Figure :ref:`gpuschematic` for a rough
-diagram of the computing architecture.
+The GPU has a large single *global* memory store (typically 512MB to
+4GB) with which data sets can be transferred to and from the CPU
+memory space. However, each group, or *block*, of threads are assigned
+a small piece (typically 16K to 64K) of ultra low-latency *shared*
+cache memory which is orders of magnitude faster than the global
+memory. Therefore, the main challenge for the developer, outside of
+writing the kernel function, is structuring the computation to
+optimally utilize each thread block's shared memory and minimizing
+reads from and writes to the global memory. Careful coordination of
+the threads is required to transfer memory efficiently from global to
+shared. We omit the low-level details of this process and instead
+refer the interested reader to the CUDA API guide
+([NvidiaGuide]_). See Figure :ref:`gpuschematic` for a rough diagram
+of the computing architecture.
 
 
 As a larger computation is divided up into a *grid* of thread blocks, a typical
-CUDA kernel will therefore take the following structure:
+CUDA kernel takes the following structure:
 
 * Coordinate threads within a block to transfer relevant data for block from
   global to shared memory
@@ -110,7 +112,7 @@ distribution (or family of distributions) is assumed for each
 realization of the data. For example, the errors (residuals) in a
 linear regression problem are assumed to be normally distributed with
 mean 0 and some variance :math:`\sigma^2`. In a standard statistical
-inference problem, given a set of distributional assumptions the task
+inference problem given a set of distributional assumptions, the task
 is to estimate the parameters of those distributions. Under this
 setup, we can write down the *joint likelihood* for the data in
 mathematical terms
@@ -153,7 +155,7 @@ setting and found very promising results (100x speedup) on graphics cards that
 are now 2 years old ([JCGS]_).
 
 Another source of significant computation in statistical applications that we
-will address is that of generating draws from random variables. In many
+ address is that of generating draws from random variables. In many
 algorithms (e.g. Bayesian Markov Chain Monte Carlo methods), large data sets may
 require generating thousands or millions of random variables from various
 probability distributions at each iteration of the algorithm.
@@ -208,10 +210,9 @@ involved. Since the kernels are structurally the same, we would be interested in
 a way to reuse the code for steps 1, 2, and 4, which will likely be nearly
 identical for most of the functions. Were we programming in C, doing so would be
 quite difficult. But, since we have PyCUDA/PyOpenCL at our disposal,
-metaprogramming techniques can be utilized to do just that, as we will later
-discuss.
+metaprogramming techniques can be utilized to do just that, as we discuss later.
 
-With respect to probability densities, we will make a brief distinction between
+With respect to probability densities, we make a brief distinction between
 *univariate* (observations are a single floating point value) and *multivariate*
 (vector-valued observations) distributions. In the latter case, the dimension of
 each observation (the length of each vector) typically must be passed as
@@ -221,7 +222,7 @@ similarly.
 In a more general framework, we might wish to evaluate the pdf for multiple
 parameters at once, e.g. :math:`(\mu_1, \sigma^2_1), \dots, .. (\mu_K,
 \sigma^2_K)`. In other words, :math:`N * K` densities need to be computed. A
-naive but wasteful approach would be to make :math:`K` roundtrips to the GPU for
+naive but wasteful approach would be to make :math:`K` round trips to the GPU for
 each of the :math:`K` sets of parameters. A better approach is to divide the
 data / parameter combinations among the GPU grid to maximize data reuse via the
 shared memory and perform all :math:`N * K` density computations in a single GPU
@@ -350,7 +351,7 @@ the function which will circumvent any copying of data to the GPU. Similarly,
 functions like ``normpdf_multi`` above can be augmented with an option to return
 a ``GPUArray`` instead of an ``ndarray``. This is useful as in some algorithms
 the results of a density calculation may be immediately used for sampling random
-variables on the GPU. Avoiding roundtrips to the GPU device memory can result in
+variables on the GPU. Avoiding round trips to the GPU device memory can result in
 a significant boost in performance, especially with smaller data sets.
 
 Some basic benchmarks
@@ -451,15 +452,21 @@ multiple GPUs to be run in parallel to extract even better performance. While
 this would introduce more latency for small datasets and likely be unnecessary,
 for processing large data sets, the overhead of calling out to 3 GPUs, for
 example, would likely be much less than the computation time. Ideally code could
-be seamlessly run on multiple GPUs.
+be seamlessly run on multiple GPUs. Furthermore, the device memory on the GPU can
+be small. However, most GPUs allow asynchronous memory copying and thread execution,
+so a streaming approach can be taken on large datasets that can be partitioned. 
+In some cases, the streaming overhead can be virtually eliminated by the 
+asynchronous calls.
 
 Note that **gpustats** is still in prototype stages, so its API will be highly
-subject to change. We are hoping to generate interest in this development
-direction as it could be highly impactful in boosting Python's status as a
+subject to change. We hope to generate interest in this development
+direction as it could have an impact in boosting Python's status as a
 desirable statistical computing environment for big data. An end goal would be
 to reimplement most of the probability distributions (densities, samplers, etc.)
 in **scipy.stats** on the GPU and to fully integrate these where possible
-throughout PyMC and other related libraries.
+throughout PyMC and other related libraries. The meta-programming approach
+offers a development friendly environment that could also be considered a 
+prototype for a useful GPU programming model in general. 
 
 Another interesting avenue, but perhaps of less importance for Python
 programmers, would be the generation of wrapper interfaces to the generated CUDA
