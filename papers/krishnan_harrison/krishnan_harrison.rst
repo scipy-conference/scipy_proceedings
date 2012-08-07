@@ -92,7 +92,7 @@ Listing 1: Trace streamlines along the gradient of a scalar field.
     SetOperatorOptions(tatts)
     DrawPlots()
     # Find the maximum value of the field 'hardyglobal'
-    Query("Maximum")
+    Query("Max")
     val = GetQueryOutputValue()
     print "Max value of 'hardyglobal' = ", val 
     # Create a streamline plot that follows 
@@ -427,7 +427,7 @@ Using a Python Expression to host a new OpenCL Expression Framework.
 The HPC compute landscape is quickly evolving towards accelerators and many-core CPUs. The complexity of porting existing codes to the new programming models supporting these architectures is a looming concern. We have an active research effort exploring OpenCL [OpenCL]_ for visualization and analysis applications on GPU clusters. 
 
 One nice feature of OpenCL is the that it provides runtime kernel compilation.
-This opens up the possibility of assembling custom kernels that dynamically encapsulate multiple steps of a visualization pipeline into a single GPU kernel. A subset of our OpenCL research effort is focused on exploring this concept, with the goal of creating a framework that uses OpenCL as a backend for user defined expressions. This research is joint work with Maysam Moussalem and Paul Navrátil at the Texas Advanced Computing Center, and Ming Jiang at Lawrence Livermore National Laboratory. A paper with the full details of the framework was submitted to LDAV 2012 [HMNJ12]_.
+This opens up the possibility of assembling custom kernels that dynamically encapsulate multiple steps of a visualization pipeline into a single GPU kernel. A subset of our OpenCL research effort is focused on exploring this concept, with the goal of creating a framework that uses OpenCL as a backend for user defined expressions. This research is joint work with Maysam Moussalem and Paul Navrátil at the Texas Advanced Computing Center, and Ming Jiang at Lawrence Livermore National Laboratory. 
 
 For productivity reasons we chose Python to prototype this framework. We dropped this framework into VisIt's existing data parallel infrastructure using a Python Expression. This allowed us to test the viability of our framework on large data sets in a distributed-memory parallel setting. Rapid development and testing of this framework leveraged the following Python modules:
 
@@ -435,8 +435,7 @@ For productivity reasons we chose Python to prototype this framework. We dropped
 
 - *PyOpenCL* [PyOpenCL]_ was used to interface with OpenCL and launch GPU kernels. PyOpenCL provides a wonderful interface to OpenCL that saved us an untold amount of time over the OpenCL C-API. PyOpenCL also uses *ndarrays* for data transfer between the CPU and GPU, and this was a great fit because we can easily access our data arrays as *ndarrays* using the VTK Python wrapper module.
 
-
-Again, the full details of this framework are outlined in [HMNJ12]_. For this paper we provide a high level execution overview and a few performance highlights:
+We are in the process of conducting performance studies and writing a paper with the full details of the framework. For this paper we provide a high-level execution overview and a few performance highlights:
 
 **Execution Overview:** 
 
@@ -521,8 +520,6 @@ References
 
     http://www.riverbankcomputing.co.uk/software/pyqt/
 
-
-.. [HMNJ12] Harrison, C. et al, 2012. Accelerator-Based Data Transformations for Improving Large-Scale Visualization Performance. Submitted to *IEEE Symposium on Large-Scale Data Analysis and Visualization (LDAV) 2012*
 
 .. [UVCDAT] Ultra Visualization - Climate Data Analysis Tools.
 

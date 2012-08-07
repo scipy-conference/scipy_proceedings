@@ -19,7 +19,7 @@ tatts.z = -10
 SetOperatorOptions(tatts)
 DrawPlots()
 # Find the maximum value of the field 'hardyglobal'
-Query("Maximum")
+Query("Max")
 val = GetQueryOutputValue()
 print "Max value of 'hardyglobal' = ", val 
 # Create a streamline plot that follows 
