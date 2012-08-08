@@ -26,7 +26,7 @@ Symbolic mathematical modeling provides an important interface layer between the
 
 In this paper we will discuss how a particular problem domain, uncertainty propagation, can be expressed symbolically. We do this by adding a random variable type to a popular mathematical modeling language, SymPy [Sym, Joy11]. This allows us to describe stochastic systems in a highly separable and minimally complex way.
 
-Uncertainty propagation is the act of determining the effects of uncertain inputs on outputs. Mathematical models are often flawed. The model itself may be overly simplified or the inputs may not be completely known. It is important to understand the extent to which the results of a model can be believed. To address these concerns it is important that we characterize the uncertainty in our inputs and understand how this causes uncertainty in our results.  **(clean this up)**
+Mathematical models are often flawed. The model itself may be overly simplified or the inputs may not be completely known. It is important to understand the extent to which the results of a model can be believed. Uncertainty propagation is the act of determining the effects of uncertain inputs on outputs. To address these concerns it is important that we characterize the uncertainty in our inputs and understand how this causes uncertainty in our results.
 
 Motivating Example - Mathematical Modeling
 ------------------------------------------
