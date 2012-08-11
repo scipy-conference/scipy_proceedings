@@ -89,7 +89,7 @@ neural network simulations (and neurotransmitter diffusion) [Bakshi]_.
 
 .. Interestingly, the problem of realistic brain simulation is one in which two completely different types of problems could benefits from a multigrid approach.
 
-Multigrid concepts are not limited to applications in simulation. Mipmapped textures for computer graphics and ultra-high-resolution image viewing applications such as satellite imaging both rely on the concept of a hierarchy of grid resolutions, although intergrid transfer operators and iterative methods are of less importance since an equation typically is not being solved.
+Multigrid concepts are not limited to applications in simulation. Mipmapped textures for computer graphics and ultra-high-resolution image viewing applications such as satellite imaging both rely on the concept of a hierarchy of grid resolutions. Here, intergrid transfer operators are used for the purpose of creating images at different resolutions than the original.
 
 
 Existing Python Implementations
@@ -98,7 +98,7 @@ Existing Python Implementations
 
 .. What open source multigrid packages are available and brief overview of them from their website/documentation. Also mention about Matlab version which is not an open source, but openly available.
 
-The current open-source python package, PyAMG, due to Nathan Bell at Nvidia [Bell]_ is a very capable and extremely speedy multigrid solver, with a core written in C. However, because of the extent of optimizations (and the inclusion of C code), it is not particularly readable.
+The current open-source Python multigrid implementation *PyAMG* (due to Nathan Bell [Bell]_) is a very capable and speedy multigrid solver, with a core written in C. However, because of the extent of optimizations (and the inclusion of C code), it is not particularly readable.
 
 .. Additionally, it is not parallelized to make use of multiple CPUs or GPU compute units. 
 
@@ -154,7 +154,7 @@ where :math:`u` is the vector of unknowns, for which we must solve, and the righ
  
 The basic requirement of multigrid is, unsurprisingly, a multiplicy of grids, each discretizing the problem domain at a different resolution. In the simplest ("two-grid") scheme, there are two grid levels, :math:`h` and :math:`H`, where grid :math:`h` has :math:`N_h` unknowns, grid :math:`H` has :math:`N_H` unknowns, :math:`N_h > N_H`, and (for regular Cartesian grids) the values of :math:`h` and :math:`H` represent the fine and coarse grid spacings, respectively.
 
-In *geometric multigrid*, the operator at the fine level :math:`A_h` is replaced by the operator at the coarse level :math:`A_H` re-discretizing the underlying PDE. However, this method, while potentially faster, enforces a tighter coupling between the solver and the simulation problem at hand.
+In *geometric multigrid*, the operator at the fine level :math:`A_h` is replaced by the operator at the coarse level :math:`A_H` by re-discretizing the underlying PDE. However, this method, while potentially faster, enforces a tighter coupling between the solver and the simulation problem at hand.
 
 The alternative to geometric multigrid is *algebraic multigrid*, in which the coarse operator is derived not from the PDE but only from the fine operator. Ruge-Steuben coarsening bases this transformation on the pattern of coefficients in :math:`A_h`, but our current implementation (see |implementation|) instead uses a stencil-based average.
 
