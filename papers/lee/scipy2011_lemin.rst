@@ -156,7 +156,7 @@ PyML
 ----
 
 PyML is a machine learning library that focuses on SVM and kernel methods. 
-As other python packages such as scikit-learn, shogun, orange, mlpy, PyML efficientl wraps the state of the art SVM library, libsvm. 
+As other python packages such as scikit-learn, shogun, orange, and mlpy, PyML efficiently wraps the state of the art SVM library, libsvm. 
 PyML provides several dataset containers that hold class labels and a collection of data patterns. The Numpy array object concatenating our hurricane data can be easily converted to VectorDataSet in PyML. Since we have observed the significant difference between hurricane and non-hurricane data patterns, we apply a simple linear kernel for classification. Based on the dataset and linear kernel, the SVM is trained for hurricane prediction.
 
 
