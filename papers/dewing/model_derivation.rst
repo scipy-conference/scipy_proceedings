@@ -119,9 +119,9 @@ a nested pattern, which is shown here as well.
 .. code-block:: python
 
     from sympy import Add, Mul, Pow, S
-    from sympy.prototype.codegen.lang_py import \
+    from derivation_modeling.codegen.lang_py import \
         py_expr, py_num
-    from sympy.prototype.codegen.pattern_match \
+    from derivation_modeling.codegen.pattern_match \
          import AutoVar, Match
 
     class expr_to_py(object):
@@ -166,8 +166,8 @@ The derivation is the following code:
 .. code-block:: python
 
     from sympy import Function, Symbol, diff, sympify
-    from sympy.prototype import derivation, approx_lhs,\
-        mul_factor, add_term
+    from derivation_modeling import derivation, \
+        approx_lhs, mul_factor, add_term
 
     f = Function('f')
     x = Symbol('x')
@@ -222,7 +222,7 @@ then manipulate the expression so the function evaluation of each point is used 
 .. code-block:: python
 
  from sympy import Symbol, Function, IndexedBase, Sum
- from sympy.prototype import derivation, identity
+ from derivation_modeling import derivation, identity
 
  i = Symbol('i',integer=True)
  n = Symbol('n',integer=True)
@@ -457,9 +457,10 @@ As an example of the language model, the classic 'Hello World' program in python
 
 .. code-block:: python
 
- from sympy.prototype.codegen.lang_py import py_expr,\
-     py_expr_stmt, py_function_call, py_function_def,\
-     py_if, py_print_stmt, py_stmt_block, py_string,\
+ from derivation_modeling.codegen.lang_py import
+     py_expr, py_expr_stmt, py_function_call, \
+     py_function_def, py_if, py_print_stmt, \
+     py_stmt_block, py_string, \
      py_var
 
 
@@ -495,10 +496,10 @@ For C, the program is
 
 .. code-block:: python
 
-  from sympy.prototype.codegen.lang_c import c_block,\
-     c_function_call, c_function_def, c_func_type, \
-     c_int, c_num, c_return, c_stmt, c_string,\
-     pp_include
+  from derivation_modeling.codegen.lang_c import
+     c_block, c_function_call, c_function_def, \
+     c_func_type, c_int, c_num, c_return, c_stmt, \
+     c_string, pp_include
 
   body = c_block()
   body.add_statement(pp_include('stdio.h'))
@@ -530,9 +531,9 @@ The generated program is
 
 
 
-The code and examples described here can be found in the author's SymPy fork on GitHub,
-in the derivation_modeling branch, in the ``prototype`` directory:
-https://github.com/markdewing/sympy/tree/derivation_modeling/sympy/prototype
+The code and examples described here can be found in the author's ``derivation_modeling`` repository on GitHub:
+
+https://github.com/markdewing/derivation_modeling
 
 
 
