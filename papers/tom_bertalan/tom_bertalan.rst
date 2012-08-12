@@ -485,16 +485,15 @@ In our test example we simulate the geologic sequestration of :math:`CO_2`. The 
 
     v = - \mathbf{K}( \lambda_w + \lambda_{CO_2} ) \nabla p + \mathbf{K}( \lambda_w \rho_w + \lambda_{CO_2} \rho_{CO_2} )G
 
-where the gravitational pull-down force :math:`G` is :math:`-g \nabla  z`.
 
-The saturation equation is
+and the saturation equation is
 
 .. math::
     :label: saturation
     
     \phi \frac{ \partial s_w }{ \partial t } + \nabla \left( f_w (s_w)[ v + d(s_w, \nabla s_w)+g(s_w)] \right) = \frac{q_w}{ \rho_w }
 
-where subscript :math:`w` represents water-saturated porous medium, :math:`g` represents gravitational acceleration, :math:`\mathbf{K}` represents the permeability tensor, :math:`p` represents fluid pressure, :math:`q` models sources and sinks, (outflow or inflow), :math:`S` represents saturation, :math:`z` represents the vertical direction, :math:`\rho` represents water density, :math:`\phi` represents porosity, and :math:`\lambda` represents mobility (ratio of permeability to viscosity).
+where :math:`v` is a velocity vector, the gravitational pull-down force :math:`G` is :math:`-g \nabla  z`, subscript :math:`w` represents water-saturated porous medium, :math:`g` represents gravitational acceleration, :math:`\mathbf{K}` represents the permeability tensor, :math:`p` represents fluid pressure, :math:`q` models sources and sinks, (outflow or inflow), :math:`S` represents saturation, :math:`z` represents the vertical direction, :math:`\rho` represents water density, :math:`\phi` represents porosity, and :math:`\lambda` represents mobility (ratio of permeability to viscosity).
     
 
 Equation :ref:`saturation`, the saturation equation, is generally parabolic. However, the terms for the viscous force :math:`f(s)v` and the gravity force :math:`f(s)g(s)` usually dominate the capillary force :math:`f(s)d(s, \nabla s)`. Therefore the equation will have a strong hyperbolic nature and can be solved by many schemes [Aarnes]_. On  the other hand, Equation :ref:`pressure`, the pressure equation, is of elliptic form. After discretization, this equation will reduce to :math:`Au = b` and a multigrid scheme can be used for efficient computation especially if the problem size is big (for instance, millions of cells [Carlson]_).
