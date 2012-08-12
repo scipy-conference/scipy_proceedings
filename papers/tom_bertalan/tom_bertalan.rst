@@ -181,7 +181,7 @@ It should be noted that the labels `h` and `H` are used because, in cartesian st
 
 An iterative solver is used to produce an initial estimate of the solution. This solver can be a Jacobi, Gauss-Seidel, or conjugate gradient implementation, or any other solver that can use a number-of-iterations parameter to make a tradeoff between overall accuracy and speed.
 
-These iterative solvers begin with some initial guess of the solution, which could either be the work of previous solvers or simply a zero-vector. Because the iterative solvers reduce the high-frequency components of the error in this guess more quickly than they reduce the low-frequency, they are often referred to as “smoothers” in the context of multigrid methods. The purpose of a multigrid scheme is to use these high-resolution iterative smoothers only to reduce the high-frequency error, relying on lower-resolution corrections to reduce the low-frequency components of the error. [Harimi]_ See Figure :ref:`results` c, and accompanying explanations in |test-defn|.
+These iterative solvers begin with some initial guess of the solution, which could either be the work of previous solvers or simply a zero-vector. Because the iterative solvers reduce the high-frequency components of the error in this guess more quickly than they reduce the low-frequency ones, they are often referred to as “smoothers” in the context of multigrid methods. The purpose of a multigrid scheme is to use these iterative smoothers only at high resolution to reduce the high-frequency error, relying on corrections at lower resolution to reduce the low-frequency components of the error. [Harimi]_ See Figure :ref:`results` c, and accompanying explanations in |test-defn|.
 
 So,
 
@@ -196,7 +196,7 @@ where :math:`iterations` is a small integer, often simply :math:`1`.
 ------------------------
 .. |theory-resid| replace:: *Residual*
 
-After the iterative solution, an error :math:`r_h` in the approximation :math:`u_{apx,h}` can still be defined as
+After the iterative solution, an error :math:`r_h` in the approximation :math:`u_{apx,h}` can be defined as
 
 .. math::
     :label: residual
@@ -248,7 +248,7 @@ The unknown vector and right-hand side of Equation :ref:`solveforvH` can now be 
 
     A_H u_H = b_H
 
-Because this is simply another matrix equation similar in form to Equation :ref:`Aub`, it can be solved either with a recursive call to the multigrid solver, or with a direct solver, such Numpy's ``np.linalg.solve`` or Scipy's ``scpy.base.np.linalg.solve``.
+Because this is simply another matrix equation similar in form to Equation :ref:`Aub`, it can be solved either with a recursive call to the multigrid solver, or with a direct solver, such Numpy's ``np.linalg.solve`` or SciPy's ``scipy.base.np.linalg.solve``.
 
 6. Interpolate Correction
 -------------------------
@@ -276,11 +276,11 @@ With the correction vector in hand, it is now possible to return a solution whos
 
     u_h = u_{apx} + v_h
 
-It is also possible to insert a second “post-smoothing” step between the interpolation and the return steps.
+It is also possible to insert a second “post-smoothing” step between the interpolation and the return steps, similar to Equation :ref:`solveforuapx`.
 
 .. Add a diagram showing several different V and W cycles.
 
-As described in this section, this algorithm is a 2-grid V-cycle, because the high-resolution :math:`\rightarrow` low-resolution :math:`\rightarrow` high-resolution pattern can be visualized as a V shape. In our small sample problem, using more grid levels than two actually wasted enough time on grid setup to make the solver converge less quickly. However, repeated V-cycles were usually necessary for visually compelling convergence. That is, the solution from one V-cycle is used as the initial guess for the fine-grid pre-smoother of the next V-cycle. More complicated cycling patterns are also possible, such as W-cycles, or the full-multigrid ("FMG") pattern, which actually starts at the coarse level. However, these patterns are not yet addressed by OpenMG.
+As described in this section, this algorithm is a 2-grid V-cycle, because the high-resolution :math:`\rightarrow` low-resolution :math:`\rightarrow` high-resolution pattern can be visualized as a V shape. In our small sample problem, using more grid levels than two actually wasted enough time on grid setup to make the solver converge less quickly. However, repeated V-cycles were usually necessary for visually compelling convergence. That is, the solution from one V-cycle was used as the initial guess for the fine-grid pre-smoother of the next V-cycle. More complicated cycling patterns are also possible, such as W-cycles, or the full-multigrid ("FMG") pattern, which actually starts at the coarse level. However, these patterns are not yet addressed by OpenMG.
 
 .. I should probably cite something for both W-cycles and FMG.
 
@@ -302,15 +302,15 @@ Any restriction can be described by a restriction matrix. Our current implementa
 
 .. figure:: restriction.png
 
-    Eight-point average restriction method. All points are included in the fine set, but red points are additionally included in the coarse set. Blue points are used in the calculation of eight-point average for the coarse point nearest to the camera in the bottom plane. :label:`restriction`
+    Eight-point average restriction method. All points are included in the fine set, but red points included in both the fine set and the coarse set. Blue points are used in the calculation of eight-point average for the coarse point nearest to the camera in the bottom plane. :label:`restriction`
 
 .. These code blocks should somehow be made to fit in one column each, according to the SciPy Proceedings README_.
 
 .. _README: https://github.com/scipy/scipy_proceedings/blob/master/README.txt
 
-Other simplifications have also been made |--| for example, automatic V-cycling has been removed, although, in the actual code, this is contained with in the wrapper function ``openmg.mg_solve``. Forced line breaks have also reduced the readability of this sample code, and perhaps broke key parts. We recommend downloading the most up-to-date OpenMG code from `https://github.com/tsbertalan/openmg <https://github.com/tsbertalan/openmg>`_ for working examples.
+Other simplifications have also been made |--| for example, automatic V-cycling has been removed, although, in the actual code, this is contained with in the wrapper function ``openmg.mg_solve()``. Forced line breaks have also reduced the readability of this sample code. We recommend downloading the most up-to-date OpenMG code from `https://github.com/tsbertalan/openmg <https://github.com/tsbertalan/openmg>`_ for working examples.
 
-The following code generates a particular restriction matrix, given a number of unknowns ``N``, and a problem domain shape tuple, ``shape``.
+The following code generates a particular restriction matrix, given a number of unknowns ``N``, and a problem domain shape tuple, ``shape``. It fails (or works very inefficiently) for domains that have odd numbers of points along one or more dimensions. Operator-based coarsening would remove this restriction.
 
 .. code-block:: python
 
@@ -372,7 +372,7 @@ The function ``restriction()`` is called several times by the following code to 
         return R
 
 
-Using the hierarchy of restriction matrices produced by ``restrictions()`` and the user-supplied top-level coefficient matrix ``A_in``, the following code generates a similar hierarchy of left-hand-side operators using the Galerkin coarse-grid approximation, :math:`A_H = R A_h R^T` [Zeng]_.
+Using the hierarchy of restriction matrices produced by ``restrictions()`` and the user-supplied top-level coefficient matrix ``A_in``, the following code generates a similar hierarchy of left-hand-side operators using the Galerkin coarse-grid approximation, :math:`A_H = R A_h R^T`.
 
 .. code-block:: python
 
@@ -415,7 +415,7 @@ Multigrid Cycle
 .. |implementation-cycle| replace:: *Multigrid Cycle*
 
 
-The following function uses all the preceeding functions to perform a multigrid cycle, which encompasses the Residual, Coarse Solution, Interpolate Correction, and Return Corrected Solution steps from the theoretical discussion above. It calls itself recursively until the specified number of ``gridlevels`` is reached. It can be called directly, or through a wrapper function with a more simplified prototype, ``mg_solve(A_in, b, parameters)`` (not shown here).
+The following function uses all the preceeding functions to perform a multigrid cycle, which encompasses the |theory-resid|, |theory-uH|, |theory-interpolate|, and |theory-u| steps from the theoretical discussion above. It calls itself recursively until the specified number of ``gridlevels`` is reached. It can be called directly, or through a wrapper function with a more simplified prototype, ``mg_solve(A_in, b, parameters)`` (not shown here).
 
 .. code-block:: python
 
@@ -494,7 +494,7 @@ The saturation equation is
     
     \phi \frac{ \partial s_w }{ \partial t } + \nabla \left( f_w (s_w)[ v + d(s_w, \nabla s_w)+g(s_w)] \right) = \frac{q_w}{ \rho_w }
 
-where subscript :math:`w` represents water-saturated porous medium, :math:`g` represents gravitational acceleration, :math:`K` represents permeability, :math:`q` models sources and sinks, (outflow or inflow), :math:`S` represents saturation, :math:`z` represents the vertical direction, :math:`\rho` represents water density, :math:`\phi` represents porosity, and :math:`\lambda` represents mobility (ratio of permeability to viscosity).
+where subscript :math:`w` represents water-saturated porous medium, :math:`g` represents gravitational acceleration, :math:`\mathbf{K}` represents the permeability tensor, :math:`p` represents fluid pressure, :math:`q` models sources and sinks, (outflow or inflow), :math:`S` represents saturation, :math:`z` represents the vertical direction, :math:`\rho` represents water density, :math:`\phi` represents porosity, and :math:`\lambda` represents mobility (ratio of permeability to viscosity).
     
 
 Equation :ref:`saturation`, the saturation equation, is generally parabolic. However, the terms for the viscous force :math:`f(s)v` and the gravity force :math:`f(s)g(s)` usually dominate the capillary force :math:`f(s)d(s, \nabla s)`. Therefore the equation will have a strong hyperbolic nature and can be solved by many schemes [Aarnes]_. On  the other hand, Equation :ref:`pressure`, the pressure equation, is of elliptic form. After discretization, this equation will reduce to :math:`Au = b` and a multigrid scheme can be used for efficient computation especially if the problem size is big (for instance, millions of cells [Carlson]_).
@@ -533,7 +533,7 @@ In Figure :ref:`results` a, we show the results of a V-cycle convergence test wi
 
 This contrasts with Figure :ref:`results` b, where we show the convergence behavior of the ordinary Gauss-Seidel on its own. Similarly to the method used for Fig. :ref:`results` a, we used the number of iterations as the independent variable, and examined the residual norm as the dependent variable. There were :math:`12^3=1723` unknowns, and the test took 43 hours to complete 200,000 iterations. However (for this sample problem), the Gauss-Seidel solver quickly exhausts the high-frequency portions of the solution error, and begins slower work on the low-frequency components.
 
-This spectral effect can be seen more clearly in Figure :ref:`results` c, where we show the Fourier transform of the error (:math:`u - u_{apx}` ) after different numbers of Gauss-Seidel iterations. A Hann-window smoother with a window width of 28 was applied after the Fourier transform to better distinguish the several curves. For this test, we used a 1D Poisson coefficent matrix and an expected solution vector generated using ``np.random.random((N,)).reshape((N,1))``, where ``N`` was 18,000 unknowns. Because of this method of noise generation (a continuous uniform distribution, or equal probability of all permitted magnitudes at all points in the domain), the pre-generated solution sampled all frequencies unequally, unlike true white noise. This accounts for the initial bell-shaped error in the frequency domain. However, the unequal rate of error-reduction for different frequencies that was observed as iterations were completed is to be expected of iterative solvers, hence their description as "smoother" in the context of multigrid methods. This recalls the argument from a frequency-domain perspective for a multigrid solver [Brandt2]_.
+This frequency-domain effect can be seen more clearly in Figure :ref:`results` c, where we show the Fourier transform of the error (:math:`u - u_{apx}` ) after different numbers of Gauss-Seidel iterations. A Hann-window smoother with a window width of 28 was applied after the Fourier transform to better distinguish the several curves. For this test, we used a 1D Poisson coefficent matrix and an expected solution vector generated using ``np.random.random((N,)).reshape((N,1))``, where ``N`` was 18,000 unknowns. Because of this method of noise generation (a continuous uniform distribution, or equal probability of all permitted magnitudes at all points in the domain), the pre-generated solution sampled all frequencies unequally, unlike true white noise. This accounts for the initial bell-shaped error in the frequency domain. However, the unequal rate of error-reduction for different frequencies that was observed as iterations were completed is to be expected of iterative solvers, hence their description as "smoother" in the context of multigrid methods. This recalls the argument from a frequency-domain perspective for a multigrid solver [Brandt2]_.
 
 In Figure :ref:`results` d, we examine the effect of this Gauss-Seidel pre-smoother by increasing the number of pre-smoothing iterations from our default value of only one. Dependent variables include the number of V-cycles required to obtain a residual norm of 0.00021, and the time taken by the whole OpenMG solver to arrive at that precision. There were :math:`8^3=512` unknowns and two grid levels, and all restriction and coefficient matrices used were stored in dense format. As expected, increasing the number of pre-smoothing iterations does decrease the number of required V-cycles for convergence, but this does not generally improve the solution time, except in the transition from 3 V-cycles to 2 V-cycles. However, this trend is useful to validate that the smoother is behaving as expected, and might be useful if, in the future, some coarsening method is employed that makes V-cycling more expensive.
 
