@@ -58,8 +58,7 @@ provide a portable, high-performance interface for common tasks, but the usabili
 and efficiency of an interface often varies inversely to its generality. In 
 addition, SciPy's implementations are sequential, due to both the wide variety of 
 parallel programming models and the difficulty of selecting parameters such as 
-degree of concurrency, thread fan-out, etc. These problems are addressed in the 
-literature on autotuning [CITE THINGS].
+degree of concurrency, thread fan-out, etc. 
 
 SEJITS [SEJITS]_ provides the best of both worlds by allowing very compact 
 Domain-Specific Embedded Languages (DSELs) to be embedded in Python. Specializers 
@@ -176,7 +175,7 @@ estimate of the test error of our classifier.
 
 .. image:: code_sample.png
 
-*figure 1. User-supplied code for model verification application using BLB 
+*Figure 1. User-supplied code for model verification application using BLB 
 specializer.*
 
 The Specializer: A Compiler for the BLB DSEL
