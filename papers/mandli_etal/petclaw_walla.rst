@@ -242,7 +242,7 @@ for::
     import petclaw as pyclaw
 
 Arrays for the solution and for coefficients that vary in space are
-represented by numpy arrays in PyClaw but by a custom distributed `Vec` class
+represented by numpy arrays in PyClaw, but by custom distributed `Vec` objects
 in PETSc. Using the *property* Python language feature, this difference is
 completely transparent to the user. Parallel solver classes are implemented
 via multiple inheritance; in most cases, a parallel solver is created merely
@@ -301,9 +301,9 @@ considered as more representative of realistic nonlinear application problems.
 
 Table :ref:`SerialComparison` shows an on-core serial comparison between the
 Fortran-only Clawpack code and the corresponding hybrid PetClaw
-implementation for two systems of equations in two different platforms.
+implementation for two systems of equations on two different platforms.
 Both codes rely on similar Fortran kernels that differ only in the array layout.
-The tests on the first platform were compiled for the x86_64 instruction set using gfortran 4.5.1
+The tests on the first platform were both compiled for the x86_64 instruction set using gfortran 4.5.1
 (4.5.1 20100506 (prerelease)). Each result was timed on a single core of a Quad-Core
 Intel Xeon 2.66GhZ Mac Pro workstation equipped with 8x2 GB 1066MHz DDR3 RAM. 
 The same tests were conducted on Shaheen, on a single core of a Quad-Core PowerPC 450 processor
@@ -312,27 +312,23 @@ code in the latter platform.
 On both platforms, the compiler optimization flag -O3 was set. 
 Because most of the computational cost is in executing the low-level Fortran
 kernels, the difference in performance is relatively minor with the difference
-owing primarily to the Python overhead in PetClaw.  Interestingly, while the
-relative acoustics performance between the two codes was similar for both
-versions of gfortran, a significant difference was observed in the relative
-performance of the codes on the shallow water example, depending on the
-compiler version.
+owing primarily to the Python overhead in PetClaw.
 
 .. table:: Timing results in seconds for on-core serial experiment of an 
            acoustics and shallow water problems implemented in both Clawpack and    
            PetClaw for Intel Xeon and PowerPC 450 machines. :label:`SerialComparison`
 
-   +---------------+------------+---------+--------+------+
-   |               | Processor  | Clawpack| PetClaw| Ratio|
-   +---------------+------------+---------+--------+------+
-   | Acoustics     | Intel Xeon | 28s     | 41s    | 1.5  |
-   +---------------+------------+---------+--------+------+
-   | Shallow Water | Intel Xeon | 79s     | 99s    | 1.3  |
-   +---------------+------------+---------+--------+------+
-   | Acoustics     | PowerPC 450| 192s    | 316s   | 1.6  |
-   +---------------+------------+---------+--------+------+
-   | Shallow Water | PowerPC 450| 714s    | 800s   | 1.1  |
-   +---------------+------------+---------+--------+------+
+   +---------------+------------+---------+--------+-------+
+   |               | Processor  | Clawpack| PetClaw| Ratio |
+   +---------------+------------+---------+--------+-------+
+   | Acoustics     | Intel Xeon | 28s     | 41s    | 1.5   |
+   +---------------+------------+---------+--------+-------+
+   | Shallow Water | Intel Xeon | 79s     | 99s    | 1.3   |
+   +---------------+------------+---------+--------+-------+
+   | Acoustics     | PowerPC 450| 192s    | 316s   | 1.6   |
+   +---------------+------------+---------+--------+-------+
+   | Shallow Water | PowerPC 450| 714s    | 800s   | 1.1   |
+   +---------------+------------+---------+--------+-------+
 
 
 
@@ -440,7 +436,7 @@ overheads. They generally exercise the sort of dynamic linking and loading
 that creates contention for file data and metadata. In general, the farther
 you scale, the worse the impact on application load times becomes. This
 problem is well understood and benchmarks, such as in Lawrence Livermore
-National Laboratory’s Pynamic, which help to describe and understand the
+National Laboratory’s Pynamic, help to describe and understand the
 extent to which an application may be impacted on a particular system
 [pynamic2007]_. Conversely, Python applications can highlight the deficits and
 make it an apt platform to explore solutions.
@@ -468,8 +464,8 @@ called GPAW. Initial efforts were focused on using the low-level interface to
 the Blue Gene/P’s high performance networks with the goal of being able to use
 Walla to speed all aspects of loading by coming in before the loading of MPI
 libraries. Due to community interest and feedback, the original codebase was
-abandoned in favor of using MPI for all communications ensuring portability
-between systems and eliminating any licensing restrictions created by use of
+abandoned in favor of using MPI for all communications to ensure portability
+between systems and to elliminate any licensing restrictions created by use of
 vendor code.
 
 In the Walla design, the CPython importer and the glibc libdl are replaced
@@ -491,17 +487,17 @@ at the time Walla is first invoked. As Walla relies on MPI, it cannot be used
 to load MPI itself. The file handle generated by *fmemopen* does not contain
 and cannot be used to generate a file descriptor as the file handle is created
 in user space and file descriptors require the allocation of resources by the
-kernel. While the the handle is sufficient for use with most codes, this does
+kernel. While the handle is sufficient for use with most codes, this does
 create compatibility issues when an application contains calls expecting a
 file descriptor. Finally, some thought has to be given to the bandwidth
 available through I/O networks versus the MPI broadcast otherwise it becomes
 easy to replace one slow loading interface with another.
 
 Despite the need for substantial reengineering of the CPython importer
-internals, almost all changes should eventually be transparent to end users
-and require no changes to user Python codes. The runtime environment requires
-changes to the *site.py* to ensure the loading of MPI and replace the native
-importer with the Walla importer. For compatibility reasons, *libdl* is not
+internals, almost all changes should eventually be transparent to end users and
+require no changes to user Python codes. The runtime environment requires
+changes to the *site.py* file to ensure and is loaded and the native importer is
+replaced with the Walla importer. For compatibility reasons, *libdl* is not
 completely replaced; users should link *libwalla* before the glibc *libdl* to
 ensure that the symbols for *dlopen*, *dlsym*, and *dlclose* resolve back to
 *libwalla* rather than *libdl*.
@@ -517,7 +513,7 @@ Gigabit Ethernet link to a site’s storage infrastructure. All Blue Gene/P
 nodes have three bidirectional 850MBps connections to a collective network
 designed for one-to-all high-bandwidth communications. When a compute node
 performs an I/O function, the operation is shipped to the I/O node via a
-collective network link, then processed on the I/O node, and the result
+collective network link, then processed on the I/O node, and the result is
 returned to the compute node.
 
 While metadata operations are easily reduced and eliminated with Walla on
