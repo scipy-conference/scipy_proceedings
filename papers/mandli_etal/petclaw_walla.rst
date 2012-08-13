@@ -26,25 +26,24 @@ Using Python to Construct a Scalable Parallel Nonlinear Wave Solver
 
 Computational scientists seek to provide efficient, easy-to-use tools and
 frameworks that enable application scientists within a specific discipline to
-build and/or apply numerical models with up-to-date computing technologies
-that can be executed on all available computing systems. Although many tools
-could be useful for groups beyond a specific application, it is often
-difficult and time consuming to combine existing software, or to adapt it for
-a more general purpose. Python enables a high-level approach where a general
-framework can be supplemented with tools written for different fields and in
-different languages. This is particularly important when a large number of
-tools are necessary, as is the case for high performance scientific codes.
-This motivated our development of PetClaw, a scalable distributed-memory
-solver for time-dependent nonlinear wave propagation, as a case-study for how
-Python can be used as a high-level framework leveraging a multitude of codes,
-efficient both in the reuse of code and programmer productivity. We present
-scaling results for computations on up to four racks of Shaheen, an IBM
-BlueGene/P supercomputer at King Abdullah University of Science and
-Technology. One particularly important issue that PetClaw has faced is the
-overhead associated with dynamic loading leading to catastrophic scaling. We
-use the walla library to solve the issue which does so by supplanting
-high-cost filesystem calls with MPI operations at a low enough level that
-developers may avoid any changes to their codes.
+build and/or apply numerical models with up-to-date computing technologies that
+can be executed on all available computing systems. Although many custom tools
+could be generalized to broader applications, it is often difficult and time
+consuming to combine existing software, or to adapt it for a more general
+purpose. Python enables a high-level approach where a general framework can be
+supplemented with tools written for different fields and in different languages.
+This is particularly important when a large number of tools are necessary, as is
+the case for high performance scientific codes.  This motivated our development
+of PetClaw, a scalable distributed-memory solver for time-dependent nonlinear
+wave propagation.  This tool demonstrates the use of Python as a high-level
+framework leveraging a multitude of codes, efficient both in the reuse of code
+and programmer productivity. We present scaling results for computations on up
+to four racks of Shaheen, an IBM BlueGene/P supercomputer at King Abdullah
+University of Science and Technology. One particularly important issue that
+PetClaw has faced is the overhead associated with dynamic loading leading to
+catastrophic scaling. We use the walla library to solve the issue which does so
+by supplanting high-cost filesystem calls with MPI operations at a low enough
+level that developers may avoid any changes to their codes.
 
 .. class:: keywords
 
@@ -53,51 +52,51 @@ developers may avoid any changes to their codes.
 Introduction
 ------------
 
-Nowadays, highly efficient, robust, and reliable open source implementations
-of many numerical algorithms are available to computational scientists.
-However, different tools needed for a single project may not be available in a
-single package and may even be implemented in different programming languages.
-In this case, a common solution is to re-implement the various tools required
-in yet another software package. This approach is quite expensive in terms of
-effort, since a completely new code must be written, tested, and debugged. An
+Nowadays, highly efficient, robust, and reliable open source implementations of
+many numerical algorithms are available to computational scientists. However,
+different tools needed for a single project may not be available in a single
+package and may even be implemented in different programming languages. In this
+case, a common solution is to re-implement the various tools required in yet
+another software package. This approach is quite expensive in terms of effort,
+since a completely new code must be written, tested, and debugged. An
 alternative approach is to bring together the existing software tools by
-wrapping them in a small code based on abstractions compatible with all of
-them and able to interface with each programming language involved. The latter
+wrapping them in a small code based on abstractions compatible with all of them
+and able to interface with each programming language involved. The latter
 approach has the advantage that only a small amount of relatively high-level
 code needs to be written and debugged; the bulk of the work will still be done
 by the reliable, tested packages. In this paper, PyClaw and PetClaw are
 presented as examples of the philosophy that bridging well-established codes
 with high-level maintainable code is an alternative approach that leads to
 advantages in usability, extensibility, and maintainability when compared to
-completely custom built scientific software.
-
-PyClaw and PetClaw are implemented in the Python programming language, and
-this choice of language has been essential to their success, for multiple
-reasons. Python is an interpreted scripting language that has become
-recognized in the scientific computing community as a viable alternative to
-Matlab, Octave, and other languages that are specialized for scientific work
-[cai2005]_. For instance, Python (with the numpy package) possesses a natural
-and inuitive syntax for mathematical operations, has a built-in user-friendly
-interactive debugger, and allows simulation and visualization to be integrated
-into a single environment. At the same time, Python is a powerful, elegant,
-and flexible language. Furthermore, there exist many Python packages that make
-it simple to incorporate code written in C, C++, and Fortran into Python
-programs. Python has been suggested as particularly useful in enabling
-reproducible computational research [leveque2009]_.
+completely custom built scientific software.  PyClaw and PetClaw are implemented
+in the Python programming language, and this choice of language has been
+essential to their success, for multiple reasons. Python is an interpreted
+scripting language that has become recognized in the scientific computing
+community as a viable alternative to Matlab, Octave, and other languages that
+are specialized for scientific work [cai2005]_. For instance, Python (with the
+numpy package) possesses a natural and inuitive syntax for mathematical
+operations, has a built-in user-friendly interactive debugger, and allows
+simulation and visualization to be integrated into a single environment. At the
+same time, Python is a powerful, elegant, and flexible language. Furthermore,
+there exist many Python packages that make it simple to incorporate code written
+in C, C++, and Fortran into Python programs. Python has been suggested as
+particularly useful in enabling reproducible computational research
+[leveque2009]_.
 
 PyClaw and PetClaw Design and Implementation
 --------------------------------------------
 
-PyClaw and PetClaw are designed to facilitate the implementation of new
-algorithms and methods in the existing framework established in the well-known
-software package Clawpack [clawpack]_. Clawpack is used to solve linear and
-nonlinear hyperbolic systems of partial differential equations using a Godunov
-type method with limiters and is written primarily in Fortran. It has been
-freely available since 1994 and has more than 7,000 registered users in a
-large variety of applications. The goal in the design of PyClaw and PetClaw is
-to provide interfaces to Clawpack that will facilitate the use of advanced
-parallel strategies, algorithm improvements, and other possible enhancements
-that may be field specific to the original algorithms available in Clawpack.
+PyClaw has been designed to facilitate the implementation of new algorithms and
+methods in the existing framework established in the well-known software package
+Clawpack [clawpack]_. Clawpack is used to solve linear and nonlinear hyperbolic
+systems of partial differential equations using a Godunov type method with
+limiters and is written primarily in Fortran. It has been freely available since
+1994 and has more than 7,000 registered users in a large variety of
+applications. The goal in the design of PyClaw is to provide interfaces to
+Clawpack that will facilitate the use of advanced parallel strategies, algorithm
+improvements, and other possible enhancements that may be field specific to the
+original algorithms available in Clawpack.  One example of these enhancements is
+PetClaw, which uses PETSc to add parallel processing capabilities.
 
 PyClaw
 ~~~~~~
@@ -119,9 +118,7 @@ objects also contain a set of `Dimension` objects that define the domain that
 each *Grid* is defined on.  Using this hierarchical class structure allows the
 gridded data in PyClaw to not only represent relatively arbitrarily complex 
 gridded data but also allows individual components of the data structures to 
-be sub-classed without the knowledge of the rest of the data structure.  This
-is why the implementation of a package like PetClaw is as transparent as it is
-to the end-user.  An example of a *Solution* object can be seen in figure 
+be sub-classed without the knowledge of the rest of the data structure.  An example of a *Solution* object can be seen in figure 
 :ref:`FigSolutionStructure`.
     
 .. figure:: pyclaw_solution_structure.pdf
@@ -157,13 +154,12 @@ Fortran versions of these programs share only a small fraction of code and
 require significantly different setup by the user, but in PyClaw switching
 between them is trivial.
 
-The solvers currently available are the 2nd-order algorithms of 
-Clawpack  and the high order algorithms found in SharpClaw [sharpclaw]_.
-Clawpack is based on a Lax-Wendroff approach plus TVD limiters, while
-SharpClaw is based on a method of lines approach using weighted
-essentially non-oscillatory (WENO) reconstruction and high order Runge-Kutta 
-methods.  The abstract Solver class has been carefully designed to allow these
-solvers to be swapped trivially, i.e. by using either::
+The solvers currently available are the 2nd-order algorithms of  Clawpack  and
+the high order algorithms found in SharpClaw [sharpclaw]_.  The primary
+difference in these packages lies in the order of the methods available,
+Clawpack is limited to second order while SharpClaw can be theoretically
+arbitrarily high-order.  The abstract Solver class has been carefully designed
+to allow these solvers to be swapped trivially, i.e. by using either::
 
     solver = pyclaw.ClawSolver2D()
 
@@ -188,7 +184,7 @@ typically developed in a 1D setting. Since this code is written using *numpy*
 and vectorization, it is tolerably fast, but still significantly slower than
 compiled C or Fortran (vectorized *numpy* code is similar in speed to
 vectorized MATLAB code). For production runs, the user can easily switch to
-the more efficient wrapped Fortran codes. This is handled simply by setting
+the more efficiently wrapped Fortran codes. This is handled simply by setting
 the `kernel_language` attribute of the `Solver` object to "Python" or
 "Fortran" (the latter being the default). Even more efficient CUDA
 implementations of these kernels are in preparation. The benefit of this
@@ -268,9 +264,9 @@ PyClaw includes a suite of regression tests that currently cover 57\% of the
 code and are being expanded. The Python package *nose* is used to easily run
 the tests or any desired subset of them. Code development is coordinated using
 the distributed version control software Git and the code hosting website
-Github. The project has an active issue tracker where bugs are reported and
+Github (http://www.github.com/clawpack/pyclaw). The project has an active issue tracker where bugs are reported and
 new features are suggested, as well as an online forum
-(petclaw-dev@googlegroups.com) where more detailed discussions take place.
+(claw-dev@googlegroups.com) where more detailed discussions take place.
 Finally, online documentation including both reference material and tutorials
 is maintained using the Python package *Sphinx*, which allows, among other
 things, for mathematical expressions to be included in inline code
@@ -291,28 +287,29 @@ found in [petclaw11]_.
 
 On-Core Performance
 ~~~~~~~~~~~~~~~~~~~
-We consider two systems of equations in our serial performance tests. The first is
-the system of 2D linear acoustics and the second is the 2D shallow water (SW)
-equations. The acoustics test involves a very simple Riemann
-solver and is intended to highlight any performance difficulties arising from
-the Python code overhead. The shallow water test involves a more typical, costly
-Riemann solver (specifically, a Roe solver with entropy fix) and should be 
-considered as more representative of realistic nonlinear application problems.
+We consider two systems of equations in
+our serial performance tests. The first is the system of 2D linear acoustics and
+the second is the 2D shallow water (SW) equations. The acoustics test involves a
+very simple Riemann solver and is intended to highlight any performance
+difficulties arising from the Python code overhead. The shallow water test
+involves a more typical, costly Riemann solver (specifically, a Roe solver with
+entropy fix) and should be  considered as more representative of realistic
+nonlinear application problems.
 
 Table :ref:`SerialComparison` shows an on-core serial comparison between the
-Fortran-only Clawpack code and the corresponding hybrid PetClaw
-implementation for two systems of equations on two different platforms.
-Both codes rely on similar Fortran kernels that differ only in the array layout.
-The tests on the first platform were both compiled for the x86_64 instruction set using gfortran 4.5.1
-(4.5.1 20100506 (prerelease)). Each result was timed on a single core of a Quad-Core
-Intel Xeon 2.66GhZ Mac Pro workstation equipped with 8x2 GB 1066MHz DDR3 RAM. 
-The same tests were conducted on Shaheen, on a single core of a Quad-Core PowerPC 450 processor
-with 4GB of available RAM. IBM XLF 11.1 Fortran compiler was used to produce a PowerPC 450d binray
-code in the latter platform.
-On both platforms, the compiler optimization flag -O3 was set. 
-Because most of the computational cost is in executing the low-level Fortran
-kernels, the difference in performance is relatively minor with the difference
-owing primarily to the Python overhead in PetClaw.
+Fortran-only Clawpack code and the corresponding hybrid PetClaw (running in
+serial mode) implementation for two systems of equations on two different
+platforms. Both codes rely on similar Fortran kernels that differ only in the
+array layout. The tests on the first platform were both compiled for the x86_64
+instruction set using gfortran 4.5.1 (4.5.1 20100506 (prerelease)). Each result
+was timed on a single core of a Quad-Core Intel Xeon 2.66GhZ Mac Pro workstation
+equipped with 8x2 GB 1066MHz DDR3 RAM.  The same tests were conducted on
+Shaheen, on a single core of a Quad-Core PowerPC 450 processor with 4GB of
+available RAM. IBM XLF 11.1 Fortran compiler was used to produce a PowerPC 450d
+binray code in the latter platform. On both platforms, the compiler optimization
+flag -O3 was set.  Because most of the computational cost is in executing the
+low-level Fortran kernels, the difference in performance is relatively minor
+with the difference owing primarily to the Python overhead in PetClaw.
 
 .. table:: Timing results in seconds for on-core serial experiment of an 
            acoustics and shallow water problems implemented in both Clawpack and    
@@ -352,7 +349,7 @@ imports.
 
 Excellent scaling is observed for both tests, apart from the dynamic loading.
 Profiling of the acoustics example shows that the small loss of efficiency is
-primarily due to the communication of the CFL number, which requires a max
+primarily due to the communication of the CFL number [CFL]_, which requires a max
 global reduce operation that is done each time step, and also partly due to
 the communication of ghost cell values between adjacent domains at each time
 step.
@@ -372,7 +369,7 @@ motivating the development of Walla to address this challenge.
            and Euler test problems for the time required for evolving the   
            solution and the communication between processes. The total time 
            includes the overhead due to the dynamic loading in Python and 
-           reveals the catastrophic dynamic loading problem.    
+           reveals the catastrophic dynamic loading problem.  Since the complexity rises proportionally to the core count, these timings would ideally be constant.  
            :label:`ScalingTable`
 
    +-----------+-------------------------+-------------------------+
@@ -433,7 +430,7 @@ possible solutions to catastrophic dynamic link and load times [pynamic2007]_.
 
 Python applications are particularly prone to poor scaling due to system
 overheads. They generally exercise the sort of dynamic linking and loading
-that creates contention for file data and metadata. In general, the farther
+that creates contention for file data and metadata. In general, the further
 you scale, the worse the impact on application load times becomes. This
 problem is well understood and benchmarks, such as in Lawrence Livermore
 National Laboratory’s Pynamic, help to describe and understand the
@@ -460,7 +457,7 @@ The Walla project attempts to take advantage of the high speed interconnects
 normally used for interprocess communication to speed dynamic loading without
 alteration of user codes. The project originated on IBM’s Blue Gene/P platform
 where load times at 8,192 nodes exceeded 45 minutes for a large Python code
-called GPAW. Initial efforts were focused on using the low-level interface to
+called GPAW []_. Initial efforts were focused on using the low-level interface to
 the Blue Gene/P’s high performance networks with the goal of being able to use
 Walla to speed all aspects of loading by coming in before the loading of MPI
 libraries. Due to community interest and feedback, the original codebase was
@@ -468,21 +465,22 @@ abandoned in favor of using MPI for all communications to ensure portability
 between systems and to elliminate any licensing restrictions created by use of
 vendor code.
 
-In the Walla design, the CPython importer and the glibc libdl are replaced
+In the Walla design, the CPython importer and the glibc *libdl* are replaced
 with versions that have been modified such that only a single rank performs
 metadata intensive tasks and file system I/O. Modifications are generally kept
-to a minimum with *fopen* and *stat* being replaced with versions that rely on
-MPI rank 0 to perform the actual *fopen* and *stat* calls, then broadcast the
-result to all other nodes. While wasteful of memory, the glibc *fmemopen*
-function is used to produce a file handle returned by the *fopen* replacement.
-At no time do nodes other than MPI rank 0 access Python modules or libraries
-via the filesystem, eliminating much of the overhead and contention that is
-caused by large number of ranks attempting to perform loads simultaneously.
+to a minimum with *fopen* and *stat* being replaced with versions that rely on a
+particular process to perform the actual *fopen* and *stat* calls, then
+broadcast the result to all other nodes. While wasteful of memory, the glibc
+*fmemopen* function is used to produce a file handle returned by the *fopen*
+replacement. At no time do nodes other than MPI rank 0 access Python modules or
+libraries via the filesystem, eliminating much of the overhead and contention
+that is caused by large number of ranks attempting to perform loads
+simultaneously.
 
 There are a handful of caveats to using Walla. First, users must be in a
 situation where I/O is more expensive than broad- cast operations. While
 initial numbers show no significant performance hit from using Walla at small
-node counts, this is not guaranteed. Second, MPI_Init must already be called
+node counts, this is not guaranteed. Second, MPI must be initialized
 at the time Walla is first invoked. As Walla relies on MPI, it cannot be used
 to load MPI itself. The file handle generated by *fmemopen* does not contain
 and cannot be used to generate a file descriptor as the file handle is created
@@ -623,3 +621,5 @@ References
                  Benchmark* IEEE Workload Characterization Symposium, pp. 
                  101-106, 2007 IEEE 10th International Symposium on Workload 
                  Characterization, 2007.
+.. [CFL] Courant, R., Friedrichs, K. & Lewy, H. On the partial difference 
+         equations of mathematical physics. IBM Journal of Resarch and Development 11, 215–234 (1967).
