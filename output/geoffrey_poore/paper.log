@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/W32TeX) (format=pdflatex 2012.7.25)  10 AUG 2012 17:04
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/W32TeX) (format=pdflatex 2012.7.25)  12 AUG 2012 23:24
 entering extended mode
  restricted \write18 enabled.
  Source specials enabled.
@@ -868,23 +868,23 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 211.
 LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <8> not available
-(Font)              Font shape `T1/pcr/b/n' tried instead on input line 258.
+(Font)              Font shape `T1/pcr/b/n' tried instead on input line 259.
  [1{c:/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
-Underfull \hbox (badness 1596) in paragraph at lines 286--297
+Underfull \hbox (badness 1596) in paragraph at lines 287--298
 \T1/ptm/m/n/10 and \T1/pcr/m/n/10 \stdoutpythontex\T1/ptm/m/n/10 . These bring 
 in any printed
  []
 
 [2]
-Underfull \hbox (badness 3460) in paragraph at lines 415--417
+Underfull \hbox (badness 3460) in paragraph at lines 416--418
 [][]\T1/ptm/m/n/10 PythonTeX pro-vides such func-tion-al-ity through user-
  []
 
 
-Underfull \hbox (badness 2173) in paragraph at lines 415--417
+Underfull \hbox (badness 2173) in paragraph at lines 416--418
 \T1/ptm/m/n/10 defined ses-sions. All com-mands and en-vi-ron-ments take
  []
 
@@ -910,14 +910,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 579--579
  []
 
 
-Underfull \hbox (badness 1728) in paragraph at lines 579--579
-\T1/pcr/m/n/10 LatexPrinter \T1/ptm/m/n/10 and the as-so-ci-ated \T1/pcr/m/n/10
- latex() \T1/ptm/m/n/10 func-tion
+Underfull \hbox (badness 10000) in paragraph at lines 579--579
+\T1/pcr/m/n/10 LatexPrinter \T1/ptm/m/n/10 class and the as-so-ci-ated \T1/pcr/
+m/n/10 latex()
  []
 
 
-Underfull \hbox (badness 1735) in paragraph at lines 579--579
-\T1/ptm/m/n/10 pro-vide La-TeX rep-re-sen-ta-tions of ob-jects. For ex-am-ple,
+Underfull \hbox (badness 2469) in paragraph at lines 579--579
+\T1/ptm/m/n/10 func-tion pro-vide La-TeX rep-re-sen-ta-tions of ob-jects. For
  []
 
 
@@ -928,35 +928,35 @@ Underfull \hbox (badness 3514) in paragraph at lines 619--631
 
 [4] [5] [6]
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 10.79993pt on input line 1032.
+(Font)              scaled to size 10.79993pt on input line 1031.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 1032.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 1031.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 10.79993pt on input line 1032.
+(Font)              scaled to size 10.79993pt on input line 1031.
 LaTeX Font Info:    Font shape `T1/phv/bx/sc' in size <12> not available
-(Font)              Font shape `T1/phv/b/sc' tried instead on input line 1032.
+(Font)              Font shape `T1/phv/b/sc' tried instead on input line 1031.
 LaTeX Font Info:    Font shape `T1/phv/b/sc' will be
-(Font)              scaled to size 10.79993pt on input line 1032.
+(Font)              scaled to size 10.79993pt on input line 1031.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1039.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1038.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1039.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1038.
 
-Underfull \hbox (badness 2495) in paragraph at lines 1050--1052
+Underfull \hbox (badness 2495) in paragraph at lines 1049--1051
 [][]\T1/ptm/m/n/8 T. Molteno. ``The sympy-tex pack-age.'' [][]$https : / / gith
 ub . com /
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1077.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1076.
 [7]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1077.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1076.
  (./paper.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1077.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1077.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1076.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1076.
 
 Package rerunfilecheck Info: File `paper.out' has not changed.
 (rerunfilecheck)             Checksum: 599B738A7FCE3911E1A914776F6E8A0E;819.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1077.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1076.
  ) 
 Here is how much of TeX's memory you used:
  9000 strings out of 493488
@@ -980,10 +980,10 @@ ve/2012/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb><c:/texlive/2012/texmf-dis
 t/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2012/texmf-dist/fonts/type1/urw/
 times/utmri8a.pfb><c:/texlive/2012/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb
 >
-Output written on paper.pdf (7 pages, 339955 bytes).
+Output written on paper.pdf (7 pages, 340189 bytes).
 PDF statistics:
- 233 PDF objects out of 1000 (max. 8388607)
- 200 compressed objects within 2 object streams
+ 235 PDF objects out of 1000 (max. 8388607)
+ 201 compressed objects within 3 object streams
  32 named destinations out of 1000 (max. 500000)
  130 words of extra memory for PDF output out of 10000 (max. 10000000)
 

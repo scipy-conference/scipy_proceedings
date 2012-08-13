@@ -47,7 +47,7 @@ needs tweaking, the user must switch between LaTeX and the scientific
 software. The user must locate the code that created the calculation or 
 figure, modify it, and execute it before returning to LaTeX. 
 
-One way to streamline this process is to allow non-LaTeX code within 
+One way to streamline this process is to include non-LaTeX code within 
 LaTeX documents, with a means to execute this code and access the 
 output. Sweave is one of the earlier and better-known examples of this 
 approach [Sweave]_.  It provides access to the R statistical environment.
@@ -86,12 +86,13 @@ within LaTeX documents. It emphasizes performance and usability.
 * Code may be typeset with highlighting provided by Pygments [Pyg]_—this 
   includes any language supported by Pygments, not just Python. 
   Unicode is supported.
-* Native Python code is fully supported. No changes to Python code are 
-  required to make it compatible with PythonTeX.
+* Native Python code is fully supported, including imports from
+  ``__future__``.  No changes to Python code are required to make 
+  it compatible with PythonTeX.
 
 This paper presents the main features of PythonTeX and considers 
 several examples.  It also briefly discusses the internal workings of 
-the program. For additional information, please consult the full 
+the package. For additional information, please consult the full 
 documentation and source code at https://github.com/gpoore/pythontex. 
 
 
@@ -255,7 +256,7 @@ it requires only a single external file per document for bringing in content,
 while ``print`` requires an external file for each environment and command in 
 which it is used.  This is discussed in greater detail in the discussion of
 PythonTeX's internals.  Second, the way in which ``\py`` converts its argument 
-to a valid LaTeX string can be specified by the user.  This can reduce typing 
+to a valid LaTeX string can be specified by the user.  This can save typing 
 when several conversions or formatting operations are needed.  The examples 
 below using SymPy illustrate this approach.
 
@@ -264,7 +265,7 @@ curly brackets to delimit the code.  This system breaks down if the code
 itself contains an unmatched curly bracket.  Thus, all inline commands 
 also accept arbitrary matched characters as delimiters.  This is similar 
 to the behavior of LaTeX's ``\verb`` macro.  For example, 
-``\pyc!myvar = 1!`` and ``\pyc#myvar = 1#`` are valid.  No such 
+``\pyc!myvar = 123!`` and ``\pyc#myvar = 123#`` are valid.  No such 
 consideration is required for environments, since they are delimited 
 by ``\begin`` and ``\end`` commands.
 
@@ -281,7 +282,7 @@ Python session, and all console content is executed within a separate
 session.  In many cases, such behavior is desired because of the continuity 
 it provides.  At times, however, it may be useful to isolate some independent 
 code in its own session.  A long calculation could be placed in 
-its own session, so that it only runs when its code is changed, independently 
+its own session, so that it only runs when its code is modified, independently 
 of other code.
 
 PythonTeX provides such functionality through user-defined sessions.  All 
@@ -329,8 +330,7 @@ The commands for creating a plot may be included directly within the LaTeX
 source, and the plot may be edited in place to get the appearance just 
 right.  Matplotlib's LaTeX option may be used to keep fonts consistent 
 between the plot and the document.  The code below illustrates this 
-approach.  Notice that the plot is created in its own session, since 
-plotting is sometimes a little slow with matplotlib's LaTeX option.
+approach.  Notice that the plot is created in its own session, to increase performance.
 
 .. code-block:: latex
 
@@ -376,7 +376,7 @@ Solving equations with NumPy
 
 PythonTeX didn't require any special modifications to the Python 
 code in the previous example with matplotlib.  
-The code to create the plot was the same as it would 
+The code that created the plot was the same as it would 
 have been had an external script been used to generate the plot.  In some 
 situations, however, it can be beneficial to acknowledge the LaTeX context 
 of the Python code.  This may be illustrated by solving an equation with
@@ -402,8 +402,8 @@ This yields
    :math:`-1.2807764064` and :math:`0.780776406404`.
    
 
-Such an approach works, but the code must be modified every time the order 
-of the polynomial changes.  A more sophisticated approach automatically 
+Such an approach works, but the code must be modified significantly whenever
+the polynomial changes.  A more sophisticated approach automatically 
 generates the LaTeX code and perhaps rounds the roots as well, for an 
 arbitrary polynomial.
 
@@ -453,7 +453,7 @@ environments that begin with the prefix ``sympy``.  These are
 identical to their ``py`` counterparts, except that SymPy is 
 automatically imported via ``from sympy import *``.
 
-SymPy is ideal for PythonTeX use, because its ``LatexPrinter`` and the associated ``latex()`` function provide LaTeX representations of objects.  For example, returning to solving the same polynomial,
+SymPy is ideal for PythonTeX use, because its ``LatexPrinter`` class and the associated ``latex()`` function provide LaTeX representations of objects.  For example, returning to solving the same polynomial,
 
 .. code-block:: latex
 
@@ -473,7 +473,7 @@ creates
    & - \frac{1}{4} + \frac{1}{4} \sqrt{17}\end{bmatrix}`
 
 Notice that the printed content appears as a single uninterrupted line, 
-even though it was produced by multiple print functions.  This is because 
+even though it was produced by multiple prints.  This is because 
 the printed content is interpreted as LaTeX code, and in LaTeX an empty 
 line is required to end a paragraph.
 
@@ -501,7 +501,7 @@ a utilities class, and an instance of this class called ``pytex`` is
 created within each PythonTeX session.  The ``formatter()`` method of 
 this class is responsible for converting objects into strings for ``\py``,
 ``\pylab``, and ``\sympy``.  In the case of SymPy, ``pytex.formatter()``
-provides an interface to LatexPrinter, with provision for context-dependent
+provides an interface to ``LatexPrinter``, with provision for context-dependent
 customization.  In LaTeX, there are four possible math styles:  displaystyle
 (regular equations), textstyle (inline), scriptstyle (superscripts and 
 subscripts), and scriptscriptstyle (superscripts and subscripts, of 
@@ -728,7 +728,7 @@ would be the name of a temporary file that was executed:
                    ^
      SyntaxError: invalid syntax
 
-Thus, finding code error locations is made as simple as it would be if 
+Thus, finding code error locations is as simple as it would be if 
 the code were written in separate files and executed individually.  
 PythonTeX is the first Python-LaTeX solution to provide such 
 comprehensive error line synchronization.
@@ -790,7 +790,7 @@ General code highlighting with Pygments
 
 The primary purpose of PythonTeX is to execute Python code included in 
 LaTeX documents and provide access to the output.  Once support for 
-Pygments highlighting of Python code was added, however, it was simple 
+Pygments highlighting of Python code was added [Pyg]_, however, it was simple 
 to add support for general code highlighting.
 
 PythonTeX provides a ``\pygment`` command for typesetting inline code 
@@ -886,7 +886,7 @@ compared with the settings for the last run, to determine what needs
 to be highlighted again with new settings.
 
 Next, Python's ``multiprocessing`` package is used to perform all 
-necessary tasks.  Each of the external code files is executed within 
+necessary tasks.  Each of the session code files is executed within 
 a separate process.  The process executes the file, parses the stdout 
 into separate files of printed content based on the command or 
 environment from which it originated, and parses the stderr to 
@@ -927,16 +927,15 @@ documents and presentations.
 
 One of the potential drawbacks of using a special LaTeX package 
 like PythonTeX is that publishers may not support it.  Since PythonTeX 
-saves all Python-generated content, it already supports document 
-compilation without the execution of any Python code, so that will 
-not be an issue.  Adding an option to automatically generate a version 
-of a PythonTeX document that does not require the PythonTeX package 
-is under consideration for an upcoming release.
+saves all Python-generated content, it already provides document 
+compilation without the execution of any Python code, so that aspect will 
+not be an issue.  Ideally, a PythonTeX document and its Python output
+could be merged into a single, new document that does not require the
+PythonTeX package.  This feature is being considered for an upcoming release.
 
 PythonTeX provides many features not discussed here, including 
-methods of dealing with ``__future__`` imports under Python 2, 
-methods for including custom code in all sessions, and a 
-number of formatting options.  PythonTeX is also under active 
+a number of formatting options and methods for adding custom code to 
+all sessions.  PythonTeX is also under active 
 development.  For additional information and the latest code, 
 please visit https://github.com/gpoore/pythontex.
 
