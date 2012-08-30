@@ -1,0 +1,36 @@
+From: {{sender['name'] | html}}
+Subject: [{{conference}}] invitation to review proceedings
+To: {{email | html}}
+Cc: {{cced | html}}
+MIME-Version: 1.0
+Content-Type: text/plain
+
+Dear colleague and friend,
+
+Considering your expertise, we would like to invite you to review the
+following papers for the {{conference}} conference proceedings:
+
+
+{{for p in papers}}
+  {{download}}/{{p}}.html
+{{endfor}}
+
+We would appreciate it if, within the next week, you could confirm
+whether or not you'll be able to take part in this process.  Reviews are due by
+{{due}} and should be submitted via email to {{submit_email}}.
+
+For further instructions, please refer to the reviewer report:
+
+ {{review_form}}
+
+Of course, you are more than welcome (and encouraged!) to review additional
+papers, if time and interest permits.  You can browse all submitted papers
+here:
+
+  {{download}}
+
+Please note that reviews are made public, including the reviewer's name.
+
+With best regards,
+
+{{editors}}

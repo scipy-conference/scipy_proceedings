@@ -91,7 +91,7 @@ class Translator(LaTeXTranslator):
             else:
                 auths = ', '.join(authlist[:-1] + ['and ' + authlist[-1],])
             verb= ' is ' if len(authlist)==1 else ' are '
-            compsocthanks += auths+verb+'with '+ inst_table.get(inst, '') +' '+inst+'. '
+            compsocthanks += auths+verb+'with '+inst+'. '
         
         copyright_holder = self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.')
         author_notes = r'''E-mail: \protect\href{%s}{%s}.
@@ -122,7 +122,6 @@ class Translator(LaTeXTranslator):
         self.document.stats = {'title': title,
                                'authors': authors,
                                'author': self.author_names,
-                               'author_email': self.author_emails,
                                'author_institution': self.author_institutions,
                                'abstract': self.abstract_text,
                                'keywords': self.keywords,
