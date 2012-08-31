@@ -104,8 +104,12 @@ AuNP modeling is straightforward; however, exploratory analysis is uncommon.  En
    Left: A nanoparticle with heterogeneous core and shell dielectrics :math:`(\epsilon_1, \epsilon_2)`, of radius, :math:`r=r_1 + r_2`.  Right: Composite approximation of a homogeneous material, with effective dielectric :math:`\epsilon^\prime`, and radius, :math:`r^\prime`. :label:`comp`
 
 .. figure:: ss.png
+<<<<<<< HEAD
    :width: 250
    :height: 175
+=======
+   :scale: 25
+>>>>>>> d42ebc001b0f5cbcac44ee92cda188ca3e655209
 
    Screenshot of an interactive ``TraitsUI`` program for modeling the scenario in Fig. (:ref:`comp`): the extinction spectra of a protein-coated AuNP (blue) compared to that of an equivalent core-shell composite  (red). :label:`ss`
 
