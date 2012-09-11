@@ -8,22 +8,22 @@ A Computational Framework for Plasmonic Nanobiosensing
 
 .. class:: abstract
 
-   Basic principles in biosensing and nanomaterials precede the introduction of a novel fiberoptic sensor.  Software limitations in the biosensing domain are presented, followed by the development of a Python-based simulation environment. Finally, the current state of spectral data analysis within the Python ecosystem is discussed.
+   Basic principles in biosensing and nanomaterials precede the introduction of a novel fiber optic sensor.  Software limitations in the biosensing domain are presented, followed by the development of a Python-based simulation environment. Finally, the current state of spectral data analysis within the Python ecosystem is discussed.
 
 .. class:: keywords
 
-   nanoparticles, fiberoptic, biosensor, Python, immunoassay, plasmonics, proteins, gold nanoparticles, metallic colloids, IPython, Traits, Chaco, Pandas
+   nanoparticles, fiber optic, biosensor, Python, immunoassay, plasmonics, proteins, gold nanoparticles, metallic colloids, IPython, Traits, Chaco, Pandas
 
 Introduction
 ------------
 
-Because of their unique optical properties, metallic colloids, especially gold nanoparticles (AuNPs), have found novel applications in biology.  They are utilized in the domain of *nanobiosensing* as platforms for biomolecule recognition.  Nanobiosensing refers to the incorporation of nanomaterials into biosensing apparatuses.  Sensors whose primary signal transduction mechanism is the interaction of light and metallic colloids are known as *plasmonic* sensors. [*]_
+Because of their unique optical properties, metallic colloids, especially gold nanoparticles (AuNPs), have found novel applications in biology.  They are utilized in the domain of *nanobiosensing* as platforms for biomolecule recognition.  Nanobiosensing refers to the incorporation of nanomaterials into biosensing instrumentation.  Sensors whose primary signal transduction mechanism is the interaction of light and metallic colloids are known as *plasmonic* sensors. [*]_
 
-Plasmonic sensors are constructed by depositing metallic layers (bulk or colloidal) onto a substrate such as glass, or in our case, onto a stripped optical fiber.  Upon illumination, they relay continuous information about their surrounding physical and chemical environment.  These sensors behave similarly to conventional assays with the added benefits of increased sensitivity, smaller apparatuses, reduced sample size, low cost, and real-time data acquisition.  Despite these benefits, nanobiosensing research in general is faced with several hinderances. 
+Plasmonic sensors are constructed by depositing metallic layers (bulk or colloidal) onto a substrate such as glass, or in our case, onto a stripped optical fiber.  Upon illumination, they relay continuous information about their surrounding physical and chemical environment.  These sensors behave similarly to conventional assays with the added benefits of increased sensitivity, compact equipment, reduced sample size, low cost, and real-time data acquisition.  Despite these benefits, nanobiosensing research in general is faced with several hinderances. 
 
 .. [*] This exposition is germane to plasmonic sensors moreso than to other nanobiosensor subgroups.
 
-It is often difficult to objectively compare results between research groups, and sometimes even between experimental trials.  This is mainly because the performance of custom apparatuses is highly dependent on design specifics as well as experimental conditions.  The extensive characterization process found in commercial biosensors [*]_ exceeds the resources and capabilities of the average research group. This partially due to a disproportionate investment in supplies and manpower; however, it is also due to a dearth of computational resources.  As a result, the design, implementation and interpretation of sensing experiments is largely asystematic.  To compound matters, dedicated software is not evolving fast enough keep up with new biosensing technology. This lends an advantage to commercial biosensors, which use highly customized software to both control the experimental apparatuses and extract underlying information from the data. Without a general software framework to develop such tools, it is unreasonable to expect the research community to achieve the same breadth in application when pioneering new nanobiosening technology.
+It is often difficult to objectively compare results between research groups, and sometimes even between experimental trials.  This is mainly because the performance of custom sensors is highly dependent on design specifics as well as experimental conditions.  The extensive characterization process found in commercial biosensors [*]_ exceeds the resources and capabilities of the average research group. This partially due to a disproportionate investment in supplies and manpower; however, it is also due to a dearth of computational resources.  As a result, the design, implementation and interpretation of sensing experiments is largely asystematic.  To compound matters, dedicated software is not evolving fast enough keep up with new biosensing technology. This lends an advantage to commercial biosensors, which use highly customized software to both control the experimental apparatus and extract underlying information from the data. Without a general software framework to develop such tools, it is unreasonable to expect the research community to achieve the same breadth in application when pioneering new nanobiosening technology.
 
 
 .. [*] Biacore_:math:`^\copyright` and ForteBio_:math:`^\copyright` are examples of prominent nanobiosensing companies.
@@ -32,7 +32,7 @@ It is often difficult to objectively compare results between research groups, an
 
 .. _ForteBio: http://www.fortebio.com/company_overview.html
 
-Publications on novel biosensors often belaud improvement in sensitivity and cost over commercial alternatives; however, the aforementioned shortcomings relegate many new apparatuses to prototype limbo.  Until the following two freeware components are developed, new biosensors, despite any technical advantages over their commercial counterparts, will fall short in applicability:
+Publications on novel biosensors often belaud improvement in sensitivity and cost over commercial alternatives; however, the aforementioned shortcomings relegate many new biosensors to prototype limbo.  Until the following two freeware components are developed, new biosensors, despite any technical advantages over their commercial counterparts, will fall short in applicability:
 
 	1. A general and systematic framework for the development and objective quantification of nanobiosensors.
 	2. Domain-tailored software tools for conducting simulations and interpreting experimental data.
@@ -43,12 +43,12 @@ In regard to both points, analytical methods have been developed to interpret va
 Optical Setup
 -------------
 
-We have developed an operational benchtop setup which records rapid spectroscopic measurements in the light reflectance of a AuNP-coated optical fiber. The nanoparticles are deposited on the flat endface of the fiber, in contrast to the commonly encountered method of depositing the AuNPs along the transversal length [*]_ of an etched optical fiber. [2]_ [3]_   In either configuration, only the near-field interaction affects the signal, offering an advantage over far-field methods.   The simple design is outlined in Fig. :ref:`setup` (left).  Light from a bright LED is focused through a :math:`10 {\bf \times}` objective (not shown) into a :math:`125 \mu \mbox{m}` core diameter optical fiber.  AuNP-coated probes are connected into the setup via an optical splice.  The probes are dipped into samples, and the return light is captured in an OceanOptics_:math:`^\copyright` USB2000 benchtop spectrometer and subsequently output as ordered series data.
+We have developed an operational benchtop setup which records rapid spectroscopic measurements in the light reflectance of a AuNP-coated optical fiber. The nanoparticles are deposited on the flat endface of the fiber, in contrast to the commonly encountered method of depositing the AuNPs along the transversal length [*]_ of an etched optical fiber. [2]_ [3]_   In either configuration, only the near-field interaction affects the signal, offering an advantage over far-field methods.   The simple design is outlined in Fig. :ref:`setup` (left).  Light from a bright LED is focused through a :math:`10 {\bf \times}` objective (not shown) into a :math:`125 \mu \mbox{m}` core diameter optical fiber.  AuNP-coated probes are connected into the setup via an optical splice.  The probes are dipped into solutions containing biomolecules, and the return light is captured by an OceanOptics_:math:`^\copyright` USB2000 benchtop spectrometer and subsequently output as ordered series data.
 
 .. figure:: sensor.png
    :scale: 35
 
-   Left: Bench-top fiberoptic configuration schematic, adapted from [4].  Right: Depiction from bottom to top of fiber endface, MPTMS monolayer, AuNPs, antibody-antigen coating. :label:`setup`
+   Left: Bench-top fiber optic configuration schematic, adapted from [4].  Right: Depiction from bottom to top of fiber endface, APTMS monolayer, AuNPs, antibody-antigen coating. :label:`setup`
 
 .. _OceanOptics: http://www.oceanoptics.com/
 
@@ -58,9 +58,9 @@ We have developed an operational benchtop setup which records rapid spectroscopi
 Fiber Surface Functionalization
 -------------------------------
 
-16nm gold nanospheres are deposited covalently onto the optical fiber through the linker molecule, (3-Mercaptopropyl)trimethoxysilane, or MPTMS. [*]_  The surface chemistry of the gold may be further modified to the specifications of the experiment.  One common modification is to covalently bind a ligand to the AuNPs using Dithiobis[succinimidyl propionate] (Lomant's reagent), and then use the fiber to study specificity in antibody-antigen interactions.  This is depicted in Fig. :ref:`setup` (right).
+16nm gold nanospheres are attatched to the optical fiber via a linker molecule, (3-Aminoptopropyl)trimethoxysilane, or APTMS. [*]_  The surface chemistry of the gold may be further modified to the specifications of the experiment.  One common modification is to covalently bind a ligand to the AuNPs using Dithiobis[succinimidyl propionate] (Lomant's reagent), and then use the fiber to study specificity in antibody-antigen interactions.  This is depicted in Fig. :ref:`setup` (right).
 
-.. [*] MPTMS is a heterobifunctional crosslinker that binds covalently to glass and gold respectively through silane and thiol functional groups.
+.. [*] APTMS is a heterobifunctional crosslinker that binds strongly to glass and gold respectively through silane and amine functional groups.
 
 
 Modeling [*]_ the Optical System in Python
@@ -73,7 +73,7 @@ Modeling [*]_ the Optical System in Python
 
 
 
-Nanobiosensing resides at a cross-section of optics, biology, and material science.  To simulate such a system requires background in all three fields, and new tools to integrate the pieces seamlessly.  Nanobiosensor modeling must describe phenomena at three distinct length scales.  In order of increasing length, these are:
+Nanobiosensing resides at a intersection of optics, biology, and material science.  To simulate such a system requires background in all three fields and new tools to integrate the pieces seamlessly.  Nanobiosensor modeling must describe phenomena at three distinct length scales.  In order of increasing length, these are:
 
 	1. A description of the optical properties of nanoparticles with various surface coatings.
 	2. The properties of light transmission through multi-layered materials at the fiber endface.
@@ -85,17 +85,17 @@ Nanobiosensing resides at a cross-section of optics, biology, and material scien
 
    Three size regimes of the optical setup.  Top: Optical fiber with an AuNP-coated endface.  Left: Coarse approximation of a multilayered material. Right: Individual nanoparticles with protein shells. :label:`system`
 
-The size regimes, shown in Fig. :ref:`system`, will be discussed separately in the following subsections. It is important to note that the computational description of a *material* is identical at all three length scales.  As such, general classes have been created and interfaced to accomadate material datafiles [5]_ and models [6]_.  This allows for a wide variety of experimental and theoretical materials to be easily incorporated into the simulation environment.
+The size regimes, shown in Fig. :ref:`system`, will be discussed separately in the following subsections. It is important to note that the computational description of a *material* is identical at all three length scales.  As such, general classes have been created and interfaced to accommodate material datafiles [5]_ and models [6]_.  This allows for a wide variety of experimental and theoretical materials to be easily incorporated into the simulation environment.
 
 Modeling Nanoparticles
 ``````````````````````
-AuNPs respond to their surrounding environment through a phenomenon known as *surface plasmon resonance*.  Incoming light couples to free electrons and induces surface oscillations around the nanoparticle.  The magnitude and dispersion of these oscillations is highly influenced by the dielectric media in direct contact with the particle's surface.  As such, the scattering and absorption properties of the gold particles will change in response to changes in solution, as well as to the binding of biomolecules.  
+AuNPs respond to their surrounding environment through a phenomenon known as *surface plasmon resonance*.  Incoming light couples to free electrons and induces surface oscillations on the nanoparticle.  The magnitude and dispersion of these oscillations is highly influenced by the dielectric media in direct contact with the particle's surface.  As such, the scattering and absorption properties of the gold particles will change in response to changes in solution, as well as to the binding of biomolecules.  
 
-To model AuNPs, the complex dielectric function [*]_ of gold is imported from various sources, both from material models [5]_ and datasets. [6]_ The optical properties of bare and coated spheroids is described analytically through Mie theory. [7]_  Scattering and absorption coefficients are computed using spherical Bessel functions from the *scipy.special* library of mathematical functions.  Special routines and packages are available for computing the optical properties of non-spheroidal colloids; however, they have not yet been incorporated in this package.  
+To model AuNPs, the complex dielectric function [*]_ of gold is imported from various sources, both from material models [5]_ and datasets. [6]_ The optical properties of bare and coated spheroids are described analytically by Mie theory. [7]_  Scattering and absorption coefficients are computed using spherical Bessel functions from the *scipy.special* library of mathematical functions.  Special routines and packages are available for computing the optical properties of non-spheroidal colloids; however, they have not yet been incorporated in this package.  
 
 .. [*] The dielectric function and shape of the particle are the only parameters required to compute its absorption and scattering cross sections.
 
-AuNP modeling is straightforward; however, exploratory analysis is uncommon.  Enthought's ``Traits`` and ``Chaco`` packages are used extensively to provide interactivity.  To demonstrate a use case, consider a gold nanoparticle with a shell of protein coating.  The optical properties of the core-shell particle may be obtained analytically using Mie Theory; [*]_ however, analysis performed at a coarser scale requires this core-shell system to be approximated as a single composite particle (Fig. :ref:`comp`).  With ``Traits``, it is very easy for the user to interactively adjust the mixing parameters to ensure the scattering properties of the approximated composite are as close as possible to those of the analytical core-shell particle.  This is one of many examples in which interactivity is favorable over complex optimization techniques.
+AuNP modeling is straightforward; however, parametric analysis is uncommon.  Enthought's ``Traits`` and ``Chaco`` packages are used extensively to provide interactivity.  To demonstrate a use case, consider a gold nanoparticle with a shell of protein coating.  The optical properties of the core-shell particle may be obtained analytically using Mie Theory; [*]_ however, analysis performed at a coarser scale requires this core-shell system to be approximated as a single composite particle (Fig. :ref:`comp`).  With ``Traits``, it is very easy for the user to interactively adjust the mixing parameters to ensure that the scattering properties of the approximated composite are as close as possible to those of the analytical core-shell particle.  This is one of many examples in which interactivity is favorable over complex optimization techniques.
 
 .. [*] Assuming that the shell is perfectly modeled; however, in practice the optical properties of protein mixtures are approximated by a variety of mixing models and methods.
 
@@ -124,7 +124,7 @@ The fiber endface at a more coarse resolution resembles a multilayered dielectri
 
 Optical Configurations and Simulation Environment
 `````````````````````````````````````````````````
-With the material and multilayer APIs in place, it is straightforward to incorporate an optical fiber platform.  The light source and fiber parameters merely serve as the initial conditions of light entering the multilayer interface; thus, once the correct multilayered environment is established, it easy to compare performance between different fiberoptic configurations.  Built-in parameters already account for the material makeup and physical dimensions of many commercially available optical fibers.  A phase angle has been introduced to distinguish nanomaterial deposition on the fiber endface from transversal deposition.  This amounts to a :math:`90^{\circ}` rotation of the incident light rays at the multilayered interface. 
+With the material and multilayer APIs in place, it is straightforward to incorporate an optical fiber platform.  The light source and fiber parameters merely constrain the initial conditions of light entering the multilayer interface; thus, once the correct multilayered environment is established, it easy to compare performance between different fiber optic configurations.  Built-in parameters already account for the material makeup and physical dimensions of many commercially available optical fibers.  A phase angle has been introduced to distinguish nanomaterial deposition on the fiber endface from transversal deposition.  This amounts to a :math:`90^{\circ}` rotation of the incident light rays at the multilayered interface. 
 
 .. [*] The diameter of the optical fiber as well as the angle at which light rays interact with the material interface has a drastic effect on the system because each light mode contributes differently to the overall signal, which is the summation over all modes.
 
@@ -135,7 +135,7 @@ Data Analysis
 
 Our work flow is designed to handle ordered series spectra, output from both experiment and simulation.  The Python packages ``IPython``, ``Traits``, and ``Pandas`` synergistically facilitate swift data processing and visualization.  Biosensing results are information-rich, both in the spectral and temporal dimensions.  Molecular interactions on the AuNP's surface have spectral signatures which are discernable from those of environmental changes.  Likewise, the broad temporal signature of a binding event stands apart from the stepwise behavior of incremental environment changes Fig. :ref:`glyc`.  
 
-These recognizable temporal and spectral signatures serve as benchmarks and aid in the comprehension of more complex experiments.  When relying on such patterns, visualization tools that retain spectral and temporal transparency prove invaluable.  Indeed, with the flexibility of ``Chaco`` and ``Pandas``, simplistic, exploratory analysis emerges as a predominant means for rapidly interpreting biosensor data, with sophisticated spectral techniques merely providing supportive or ancillary information.
+These recognizable temporal and spectral signatures serve as benchmarks and aid in the interpretation of more complex experiments.  When relying on such patterns, visualization tools that retain spectral and temporal transparency prove invaluable.  Indeed, with the flexibility of ``Chaco`` and ``Pandas``, simplistic, exploratory analysis emerges as a predominant means for rapidly interpreting biosensor data, with sophisticated spectral techniques merely providing supportive or ancillary information.
 
 .. figure:: double_fib.png
    :scale: 28
@@ -147,7 +147,7 @@ Two-Dimensional Correlation Analysis (2DCA) [9]_ is a popular and specialized wa
    1.  Noda's rules change or fail to apply in certain circumstances.
    2.  Valid interpretation becomes exceedingly difficult for multi-stage events.  
 
-In regard to the second point, most non-trivial biosensing experiments evolve in stages (binding, unbinding, purging of the sensor surface, etc.).  It is necessary to decompose a multi-stage dataset into its constituent phases, and because of high experimental variability, this usually requires manual curation.  Indeed, it is advantageous to explore and manipulate the data simultaneously, as interaction events often commence and culminate inconspicuously.  In ``Pandas``, slicing a set of ordered series data by rows (spectral dimension) and columns (temporal dimension) is extremely easy:
+In regard to the second point, most non-trivial biosensing experiments evolve in stages (binding, unbinding, purging of the sensor surface, etc.).  It is necessary to decompose a multi-stage dataset into its constituent phases, and because high experimental variability usually requires manual curation.  Indeed, it is advantageous to visualize and manipulate the data simultaneously, as interaction events often commence and culminate inconspicuously.  In ``Pandas``, slicing a set of ordered series data by rows (spectral dimension) and columns (temporal dimension) is quite simple:
 
 .. code-block:: python
 
@@ -176,26 +176,31 @@ Python's scientific libraries provide practical tools for dynamic visualization.
 
 Conclusions
 -----------
-A benchtop nanobiosensor has been developed for the realtime detection of biomolecular interactions.  This, as well as other emergent biosensing technology, is hindered by a lack of a dedicated open-source software.  In an effort to remedy this, prototypical simulation and analysis tools have been developed to assist with our plasmonic sensor and certainly have the potential for wider applicability.  Scientific Python libraries, especially ``Chaco`` and ``Pandas``, form the core of our data analysis toolkit and are proving invaluable for interacting with and visualizing results.  Just as it has suffused the domains of astronomy and finance, Python seems primed to emerge as a formidable design platform for biosensing and its related fields.   
+A benchtop nanobiosensor has been developed for the realtime detection of biomolecular interactions.  This, as well as other emergent biosensing technology, are hindered by a lack of a dedicated open-source software.  In an effort to remedy this, prototypical simulation and analysis tools have been developed to assist with our plasmonic sensor and certainly have the potential for wider applicability.  Scientific Python libraries, especially ``Chaco`` and ``Pandas``, form the core of our data analysis toolkit and are proving invaluable for interacting with and visualizing results.  Just as it has suffused the domains of astronomy and finance, Python seems primed to emerge as a formidable design platform for biosensing and its related fields.   
  
+Acknowledgements
+----------------
+
+THE AUTHOR WOULD LIKE TO ACKNOWLEDGE Mark Reeves, Annie, GWU/Fellowship, Stefan, various Python community
+
 References
 ----------
 
-.. [1] Anuj K. Sharma B.D. Gupta. *Fiberoptic sensor based on surface plasmon resonance with nanoparticle films.* Photonics and Nanostructures - Fundamentals and Applications, 3:30,37, 2005.
+.. [1] Anuj K. Sharma B.D. Gupta. *Fiber Optic Sensor Based on Surface Plasmon Resonance with Nanoparticle Films.* Photonics and Nanostructures - Fundamentals and Applications, 3:30,37, 2005.
 
-.. [2] Ching-Te Huang Chun-Ping Jen Tzu-Chien Chao. *A novel design of grooved fibers for fiber-optic localized plasmon resonance biosensors.*, 
+.. [2] Ching-Te Huang Chun-Ping Jen Tzu-Chien Chao. *A Novel Design of Grooved Fibers for Fiber-optic Localized Plasmon Resonance Biosensors.*, 
            Sensors, 9:15, August 2009.
 
-.. [3] Wen-Chi Tsai Pi-Ju Rini Pai. *Surface plasmon resonance-based immunosensor with oriented immobilized antibody fragments on a mixed self-assembled monolayer for the determination of staphylococcal enterotoxin b.*, MICROCHIMICA ACTA, 166(1-2):115–122, February 2009.
+.. [3] Wen-Chi Tsai Pi-Ju Rini Pai. *Surface Plasmon Resonance-based Immunosensor with Oriented Immobilized Antibody Fragments on a Mixed Self-Assembled Monolayer for the Determination of Staphylococcal Enterotoxin B.*, MICROCHIMICA ACTA, 166(1-2):115–122, February 2009.
 
-.. [4] Mitsui Handa Kajikawa. *Optical fiber affinity biosensor based on localized surface plasmon resonance.*, 
+.. [4] Mitsui Handa Kajikawa. *Optical Fiber Affinity Biosensor Based on Localized Surface Plasmon Resonance.*, 
 	   Applied Physics Letters, 85(18):320–340, November 2004.
 
-.. [5] Etchegoin Ru Meyer.  *An analytic model for the optical properties of gold.* The Journal of chemical Physics, 125, 164705, 2006.
+.. [5] Etchegoin Ru Meyer.  *An Analytic Model for the Optical Properties of Gold.* The Journal of Chemical Physics, 125, 164705, 2006.
 
 .. [6] Christy, Johnson.   *Optical Constants of Noble Metals.* Physics Review, 6 B:4370-4379, 1972.
 
-.. [7] Bohren Huffman.  *Absorption and scattering of light by small particles*, Wiley Publishing, 1983.
+.. [7] Bohren Huffman.  *Absorption and Scattering of Light by Small Particles*, Wiley Publishing, 1983.
 
 .. [8] Orfanidis, Sophocles.  *Electromagnetic Waves and Antennas.* 2008
 
