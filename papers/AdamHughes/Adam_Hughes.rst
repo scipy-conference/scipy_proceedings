@@ -12,7 +12,7 @@ A Computational Framework for Plasmonic Nanobiosensing
 
 .. class:: keywords
 
-   nanoparticles, fiber optic, biosensor, Python, immunoassay, plasmonics, proteins, gold nanoparticles, metallic colloids, IPython, Traits, Chaco, Pandas
+   gold nanoparticles, fiber optics, biosensor, Python, immunoassay, plasmonics, proteins, metallic colloids, IPython, Traits, Chaco, Pandas, SEM, 
 
 Introduction
 ------------
@@ -23,7 +23,7 @@ Plasmonic sensors are constructed by depositing metallic layers (bulk or colloid
 
 .. [*] This exposition is germane to plasmonic sensors moreso than to other nanobiosensor subgroups.
 
-It is often difficult to objectively compare results between research groups, and sometimes even between experimental trials.  This is mainly because the performance of custom sensors is highly dependent on design specifics as well as experimental conditions.  The extensive characterization process found in commercial biosensors [*]_ exceeds the resources and capabilities of the average research group. This partially due to a disproportionate investment in supplies and manpower; however, it is also due to a dearth of computational resources.  As a result, the design, implementation and interpretation of sensing experiments is largely asystematic.  To compound matters, dedicated software is not evolving fast enough keep up with new biosensing technology. This lends an advantage to commercial biosensors, which use highly customized software to both control the experimental apparatus and extract underlying information from the data. Without a general software framework to develop such tools, it is unreasonable to expect the research community to achieve the same breadth in application when pioneering new nanobiosening technology.
+It is often difficult to objectively compare results between research groups, and sometimes even between experimental trials.  This is mainly because the performance of custom sensors is highly dependent on design specifics as well as experimental conditions.  The extensive characterization process found in commercial biosensors [*]_ exceeds the resources and capabilities of the average research group. This is partially due to a disproportionate investment in supplies and manpower; however, is also due to a dearth of computational resources.  The ad-hoc nature of emperical biosensor characterization often leads to asystematic experimental designs, implementations and conclusions between research groups.  To compound matters, dedicated software is not evolving fast enough keep up with new biosensing technology. This lends an advantage to commercial biosensors, which use highly customized software to both control the experimental apparatus and extract underlying information from the data. Without a general software framework to develop similar tools, it is unreasonable to expect the research community to achieve the same breadth in application when pioneering new nanobiosening technology.
 
 
 .. [*] Biacore_:math:`^\copyright` and ForteBio_:math:`^\copyright` are examples of prominent nanobiosensing companies.
@@ -43,7 +43,7 @@ In regard to both points, analytical methods have been developed to interpret va
 Optical Setup
 -------------
 
-We have developed an operational benchtop setup which records rapid spectroscopic measurements in the light reflectance of a AuNP-coated optical fiber. The nanoparticles are deposited on the flat endface of the fiber, in contrast to the commonly encountered method of depositing the AuNPs along the transversal length [*]_ of an etched optical fiber. [2]_ [3]_   In either configuration, only the near-field interaction affects the signal, offering an advantage over far-field methods.   The simple design is outlined in Fig. :ref:`setup` (left).  Light from a bright LED is focused through a :math:`10 {\bf \times}` objective (not shown) into a :math:`125 \mu \mbox{m}` core diameter optical fiber.  AuNP-coated probes are connected into the setup via an optical splice.  The probes are dipped into solutions containing biomolecules, and the return light is captured by an OceanOptics_:math:`^\copyright` USB2000 benchtop spectrometer and subsequently output as ordered series data.
+We have developed an operational benchtop setup which records rapid spectroscopic measurements in the reflected light from the end of an AuNP-coated optical fiber. The nanoparticles are deposited on the flat endface of the fiber, in contrast to the commonly encountered method of depositing the AuNPs axially [*]_ along an etched region of the fiber. [2]_ [3]_   In either configuration, only the near-field interaction affects the signal, with no interference from far-field effects.   The simple design is outlined in Fig. :ref:`setup` (left).  Broadband emission from a white LED is focused through a :math:`10 {\bf \times}` objective (not shown) into the :math:`125 \mu \mbox{m}` core diameter of an optical fiber.  AuNP-coated probes are connected into the setup via an optical splice.  The probes are dipped into solutions containing biomolecules, and the return light is captured by an OceanOptics_:math:`^\copyright` USB2000 benchtop spectrometer and output as ordered series data.
 
 .. figure:: sensor.png
    :scale: 35
@@ -52,7 +52,7 @@ We have developed an operational benchtop setup which records rapid spectroscopi
 
 .. _OceanOptics: http://www.oceanoptics.com/
 
-.. [*] Transversal deposition allows for more control of the fiber's optical properties; however, it makes probe creation more difficult and less reproducible. 
+.. [*] Axial deposition allows for more control of the fiber's optical properties; however, it makes probe creation more difficult and less reproducible. 
 
 
 Fiber Surface Functionalization
@@ -85,7 +85,7 @@ Nanobiosensing resides at a intersection of optics, biology, and material scienc
 
    Three size regimes of the optical setup.  Top: Optical fiber with an AuNP-coated endface.  Left: Coarse approximation of a multilayered material. Right: Individual nanoparticles with protein shells. :label:`system`
 
-The size regimes, shown in Fig. :ref:`system`, will be discussed separately in the following subsections. It is important to note that the computational description of a *material* is identical at all three length scales.  As such, general classes have been created and interfaced to accommodate material datafiles [5]_ and models [6]_.  This allows for a wide variety of experimental and theoretical materials to be easily incorporated into the simulation environment.
+The size regimes, shown in Fig. :ref:`system`, will be discussed separately in the following subsections. It is important to note that the computational description of a *material* is identical at all three length scales.  As such, general classes have been created and interfaced to accommodate material properties from datasets [5]_ and models [6]_.  This allows for a wide variety of experimental and theoretical materials to be easily incorporated into the simulation environment.
 
 Modeling Nanoparticles
 ``````````````````````
@@ -95,7 +95,7 @@ To model AuNPs, the complex dielectric function [*]_ of gold is imported from va
 
 .. [*] The dielectric function and shape of the particle are the only parameters required to compute its absorption and scattering cross sections.
 
-AuNP modeling is straightforward; however, parametric analysis is uncommon.  Enthought's ``Traits`` and ``Chaco`` packages are used extensively to provide interactivity.  To demonstrate a use case, consider a gold nanoparticle with a shell of protein coating.  The optical properties of the core-shell particle may be obtained analytically using Mie Theory; [*]_ however, analysis performed at a coarser scale requires this core-shell system to be approximated as a single composite particle (Fig. :ref:`comp`).  With ``Traits``, it is very easy for the user to interactively adjust the mixing parameters to ensure that the scattering properties of the approximated composite are as close as possible to those of the analytical core-shell particle.  This is one of many examples in which interactivity is favorable over complex optimization techniques.
+AuNP modeling is straightforward; however, parametric analysis is uncommon.  Enthought_'s ``Traits`` and ``Chaco`` packages are used extensively to provide interactivity.  To demonstrate a use case, consider a gold nanoparticle with a shell of protein coating.  The optical properties of the core-shell particle may be obtained analytically using Mie Theory; [*]_ however, analysis performed at a coarser scale requires this core-shell system to be approximated as a single composite particle (Fig. :ref:`comp`).  With ``Traits``, it is very easy for the user to interactively adjust the mixing parameters to ensure that the scattering properties of the approximated composite are as close as possible to those of the analytical core-shell particle.  In this example, and in others, interactivity is favorable over complex optimization techniques.
 
 .. [*] Assuming that the shell is perfectly modeled; however, in practice the optical properties of protein mixtures are approximated by a variety of mixing models and methods.
 
@@ -124,35 +124,58 @@ The fiber endface at a more coarse resolution resembles a multilayered dielectri
 
 Optical Configurations and Simulation Environment
 `````````````````````````````````````````````````
-With the material and multilayer APIs in place, it is straightforward to incorporate an optical fiber platform.  The light source and fiber parameters merely constrain the initial conditions of light entering the multilayer interface; thus, once the correct multilayered environment is established, it easy to compare performance between different fiber optic configurations.  Built-in parameters already account for the material makeup and physical dimensions of many commercially available optical fibers.  A phase angle has been introduced to distinguish nanomaterial deposition on the fiber endface from transversal deposition.  This amounts to a :math:`90^{\circ}` rotation of the incident light rays at the multilayered interface. 
+With the material and multilayer APIs in place, it is straightforward to incorporate an optical fiber platform.  The light source and fiber parameters merely constrain the initial conditions of light entering the multilayer interface; thus, once the correct multilayered environment is established, it easy to compare performance between different fiber optic configurations.  Built-in parameters already account for the material makeup and physical dimensions of many commercially available optical fibers.  A phase angle has been introduced to distinguish nanomaterial deposition on the fiber endface from axial deposition.  This amounts to a :math:`90^{\circ}` rotation of the incident light rays at the multilayered interface. [*]_ 
 
 .. [*] The diameter of the optical fiber as well as the angle at which light rays interact with the material interface has a drastic effect on the system because each light mode contributes differently to the overall signal, which is the summation over all modes.
 
-The entire application was designed for exploratory analysis, so adjusting most parameters will automatically trigger system-wide updates.  To run simulations, one merely automates setting ``Trait`` attributes in an iterative manner.  For example, by iterating over a range of values for the index of refraction of the AuNP shells, one effectively simulates materials binding to the AuNPs.  After each iteration, ``Numpy`` arrays are stored for the updated optical variables such as the extinction spectra of the particles, dielectric functions of the mixed layers, and the total light reflectance at the interface.  All data output is formatted as ordered series to mimic the actual output of experiments; thus, it can be analyzed side-by-side without further processing.  With this work flow, it is quite easy to run experiments and simulations in parallel as well as compare a variety of plasmonic sensors objectively.
+The entire application was designed for exploratory analysis, so adjusting most parameters will automatically trigger system-wide updates.  To run simulations, one merely automates setting ``Trait`` attributes in an iterative manner.  For example, by iterating over a range of values for the index of refraction of the AuNP shells, one effectively simulates materials binding to the AuNPs.  After each iteration, ``Numpy`` arrays are stored for the updated optical variables such as the extinction spectra of the particles, dielectric functions of the mixed layers, and the total light reflectance at the interface.  All data output is formatted as ordered series to mimic the actual output of experiments; thus, simulations and experiments can be analyzed side-by-side without further processing.  With this work flow, it is quite easy to run experiments and simulations in parallel as well as compare a variety of plasmonic sensors objectively.
 
 Data Analysis
 -------------
 
-Our work flow is designed to handle ordered series spectra, output from both experiment and simulation.  The Python packages ``IPython``, ``Traits``, and ``Pandas`` synergistically facilitate swift data processing and visualization.  Biosensing results are information-rich, both in the spectral and temporal dimensions.  Molecular interactions on the AuNP's surface have spectral signatures which are discernable from those of environmental changes.  Likewise, the broad temporal signature of a binding event stands apart from the stepwise behavior of incremental environment changes Fig. :ref:`glyc`.  
-
-These recognizable temporal and spectral signatures serve as benchmarks and aid in the interpretation of more complex experiments.  When relying on such patterns, visualization tools that retain spectral and temporal transparency prove invaluable.  Indeed, with the flexibility of ``Chaco`` and ``Pandas``, simplistic, exploratory analysis emerges as a predominant means for rapidly interpreting biosensor data, with sophisticated spectral techniques merely providing supportive or ancillary information.
+Our work flow is designed to handle ordered series spectra generated from both experiment and simulation.  The Python packages ``IPython``, ``Traits``, and ``Pandas`` synergistically facilitate swift data processing and visualization.  Biosensing results are information-rich, both in the spectral and temporal dimensions.  Molecular interactions on the AuNP's surface have spectral signatures discernible from those of environmental changes.  For example, the slow timescale of protein binding events is orders of magnitude less than the rapid temporal response to environmental changes. 
 
 .. figure:: double_fib.png
-   :scale: 28
+   :scale: 29
 
-   Temporal evolution (top) and spectral absorbance (bottom) of the light reflectance at the fiber endface due to a protein-protein interaction (left) as opposed to the stepwise addition of glycerin(right). :label:`glyc`
+   Temporal evolution (top) and spectral absorbance (bottom) of the light reflectance at the fiber endface due to a protein-protein interaction (left) as opposed to the stepwise addition of glycerin (right). :label:`glyc`
 
-Two-Dimensional Correlation Analysis (2DCA) [9]_ is a popular and specialized way to analyze multi-dimensional spectral series by projecting the entire dataset into its orthogonal synchronous and asynchronous components.  Results are then visualized as contour maps, which consolidate the entirety of the information in the dataset into two plots.  Using the so-called Noda's rules, one can interpret from the plots the order in which events unfold in the system.  Although this technique is powerful and useful, it has two major drawbacks in the context of biosensing:
+Fig. :ref:`glyc` illustrates a fiber whose endface has been coated with gold nanoparticles and subsequently immersed in water.  The top left plot shows the reflected light spectrum function of time.  When submerged in water, the signal is very stable. Upon the addition of micromolar concentrations of Bovine Serum Albumin (BSA), the signal steadily increases as the proteins in the serum bind to the gold.  About an hour after BSA addition, the nanoparticle binding sites saturate and the signal plateaus.
 
-   1.  Noda's rules change or fail to apply in certain circumstances.
-   2.  Valid interpretation becomes exceedingly difficult for multi-stage events.  
+Fig. :ref:`glyc` (top right) corresponds to a different situation.  Again, an AuNP-coated fiber is immersed in water.  Instead of proteins, glycerin droplets are added.  The fiber responds to these refractive index changes in an abrupt, stepwise fashion.  Whereas the serum binding event evolves over a timescale of about two hours, the response to an abrupt environmental change takes mere seconds.  This is a simple demonstration of how timescale provides insights to the physiochemical nature of the underlying process.
 
-In regard to the second point, most non-trivial biosensing experiments evolve in stages (binding, unbinding, purging of the sensor surface, etc.).  It is necessary to decompose a multi-stage dataset into its constituent phases, and because high experimental variability usually requires manual curation.  Indeed, it is advantageous to visualize and manipulate the data simultaneously, as interaction events often commence and culminate inconspicuously.  In ``Pandas``, slicing a set of ordered series data by rows (spectral dimension) and columns (temporal dimension) is quite simple:
+The dataset's spectral dimension can be used to identify physiochemical phenomena as well.  Absorbance plots corresponding to BSA binding and glycerin addition are shown at the bottom of Fig. :ref:`glyc`.  These profiles tend to depend on the size of the biomolecules in the interaction.  The spectral profile of BSA-AuNP binding, for example, is representative of other large proteins binding to gold.  Similarly, index changes from saline, buffers and other viscous solutions are consistent with the dispersion profile of glycerin.  Small biomolecules such as amino acids have yet another spectral signature (not shown), as well as a timestamp that splits the difference between protein binding and refractive index changes.  This surprising relationship between the physiochemistry of an interaction and its temporal and spectral profiles aids in the interpretation of convoluted results in complex experiments.
+
+
+.. figure:: varplot.png
+   :height: 160
+   :width: 250
+
+   Top: Absorbance plot of the real-time deposition of AuNPs onto an optical fiber.  Bottom: Time-slice later in the datasets shows that the signal is dominated by signal at the surface plasmon resonance peak for gold, :math:`\lambda_{\mbox{SPR} } \approx 520 \; \mbox{nm}`.  The exemplifies the correct timescale over which spectral events manifest.  :label:`varplot`
+
+Consistent binding profiles require similar nanoparticle coverage between fibers.  If the coating process is lithographic, it is easier to ensure consistent coverage; however, many plasmonic biosensors are created through a *wet* crosslinking process similar to the APTMS deposition described here.  Wet methods are more susceptible to extraneous factors; yet remarkably, we can use  the binding profile as a tool to monitor and control nanoparticle deposition in realtime.
+
+Fig. :ref:`varplot` (top) is an absorbance plot of the deposition of gold nanoparticles onto the endface of an optical fiber (dataset begins at :math:`y=1`).  As the nanoparticles accumulate, they initially absorb signal, resulting in a drop in light reflectance; however, eventually the curves invert and climb rapidly.  This seems to suggest the existence of a second process; however, simulations have confirmed that this inflection is merely a consequence of the nanoparticle film density and its orientation on the fiber.  The spectral signature of the AuNP's may be observed by timeslicing the data (yellow curves) and renormalizing to the first curve in the subset.  This is plotted in Fig. :ref:`varplot` (bottom), and clearly shows spectral dispersion with major weight around :math:`\lambda=520` nm, the surface plasmon resonance peak of our gold nanoparticles.  
+
+This approach to monitoring AuNP deposition not only allows one to control coverage, [*]_ but also provides information on deposition quality.  Depending on various factors, gold nanoparticles may tend to aggregate into clusters, rather than form a monolayer.  When this occurs, red-shifted absorbance profiles appear in the timeslicing analysis.  Because simple plots like Fig. :ref:`varplot` contain so much quantitative and qualitative information about nanoparticle coverage, we have begun an effort to calibrate these curves to measured particle coverage using scanning electron microscopy (SEM) (Fig. :ref:`sem`).  
+
+.. [*] The user merely removes the fiber from AuNP when the absorbance reaches a preset value.
+
+The benefits of such a calibration are two-fold. First, it turns out that the number of AuNP's on the fiber is a crucial parameter for predicting relevant biochemical quantities such as the binding affinity of two ligands.  Secondly, it is important to find several coverages that optimize sensor performance.  There are situations when maximum dynamic range at low particle coverage is desirable, for example in measuring non-equilibrium binding kinetics.  Because of mass transport limitations, estimations of binding affinity tend to be in error for densely populated monolayers.  In addition, there are coverages that impair dynamic range.  Thus, it is important to optimize and characterize sensor performance at various particle coverages.   Although simulations can estimate this relationship, it should also be confirmed experimentally. 
+
+
+.. figure:: sem_dual.png
+   :scale: 29
+   :align: center
+
+   SEM images of fiber endfaces with 25% (left) and 5% (right) AuNP surface coverage at 30,000 X magnification. :label:`sem`
+
+Since most non-trivial biosensing experiments contain multiple phases (binding, unbinding, purging of the sensor surface, etc.), the subsequent data analysis requires the ability to rescale, resample and perform other manual curations on-the-fly.  ``Pandas`` provides a great tool set for manipulating series data in such a manner.  For example, slicing a set of ordered series data by rows (spectral dimension) and columns (temporal dimension) is quite simple:
 
 .. code-block:: python
 
-   ## Read series data from tab-delimited file
-   ## into a pandas DataFrame object
+   ## Read series data from tab-delimited 
+   ## file into a pandas DataFrame object
    from pandas import read_csv
    data=read_csv('path to file', sep='\t')  
 	
@@ -162,30 +185,27 @@ In regard to the second point, most non-trivial biosensing experiments evolve in
    ## Slice data by row label (wavelength)
    data.ix[500.0:750.0]
 
-By interfacing to ``Chaco``, and using ``Pandas'`` plotting interface, we can slice, resample and visualize interesting regions in the dataspace almost effortlessly.  
+By interfacing to ``Chaco``, and to the ``Pandas`` plotting interface, one can slice, resample and visualize interesting regions in the dataspace quite easily.  Through these packages, it is possible for non-computer scientists to not just visualize, but to dynamically *explore* the dataset.  The prior examples of BSA and glycerin demonstrated just how much information could be extracted from the data using only simple, interactive methods.  
 
-Sequestering the data into event subsets simplifies information extraction.  By applying a sliding reference point and renormalizing the data each time the slice updates (see Fig. :ref:`varplot`), consistent spectral patterns as well as intrinsic event timescales emerge naturally.  
+our interactive approach is in contrast to popular *all-in-one* analysis methods.  In Two-Dimensional Correlation Analysis (2DCA), [9]_ for example, cross correlations of the entire dataset are consolidated into two contour plots.  These plots tend to be difficult to interpret, [*]_ and become intractable for multi-staged events.  Additionally, under certain experimental conditions they cannot be interpreted at all.  It turns out that much of the same information provided by 2DCA can be ascertained using the simple, dynamic analysis methods presented here.  This is not to suggest that techniques like 2DCA are disadvantageous, merely that some of the results may be obtained more simply.  Perhaps in the future, transparent, interactive approaches will constitute the core of the spectral data analysis pipeline with sophisticated techniques like 2DCA adopting a complimentary role.
 
-Python's scientific libraries provide practical tools for dynamic visualization.  These aid in the interpretation of intricate static plots, such as the contour maps of 2DCA, and sometimes supplant them altogether.  As biosensing evolves in complexity, these robust tools will continually evolve to meet the growing demand for an accessible and robust data analysis design framework.
-
-.. figure:: varplot.png
-   :height: 160
-   :width: 250
-
-   Top: Absorbance plot of the real-time deposition of AuNPs onto an optical fiber.  Bottom: Time-slice later in the datasets shows that the signal is dominated by signal at the surface plasmon resonance peak for gold, :math:`\lambda_{\mbox{SPR} } \approx 520 \; \mbox{nm}`.  The exemplifies the correct timescale over which spectral events manifest.  :label:`varplot`
+.. [*] 2DCA decomposes series data into orthogonal synchronous and asynchronous components. By applying the so-called Noda's rules, one can then analyze the resultant contour maps and infer information about events unfolding in the system.
+ 
 
 Conclusions
 -----------
-A benchtop nanobiosensor has been developed for the realtime detection of biomolecular interactions.  This, as well as other emergent biosensing technology, are hindered by a lack of a dedicated open-source software.  In an effort to remedy this, prototypical simulation and analysis tools have been developed to assist with our plasmonic sensor and certainly have the potential for wider applicability.  Scientific Python libraries, especially ``Chaco`` and ``Pandas``, form the core of our data analysis toolkit and are proving invaluable for interacting with and visualizing results.  Just as it has suffused the domains of astronomy and finance, Python seems primed to emerge as a formidable design platform for biosensing and its related fields.   
+A benchtop nanobiosensor has been developed for the realtime detection of biomolecular interactions.  It, as well as other emergent biosensing technologies, is hindered by a lack of dedicated open-source software.  In an effort to remedy this, prototypical simulation and analysis tools have been developed to assist with our plasmonic sensor and certainly have the potential for wider applicability.  Scientific Python libraries, especially ``Chaco`` and ``Pandas``, reside at the core of our data analysis toolkit and are proving invaluable for interacting with and visualizing results.  Unexpected physiochemical identifiers appear consistently within experimental results.  These binding profiles not only provide new qualitative insights, but with the help of SEM imaging, may soon open new avenues towards the difficult task of quantifying biosensor output.  Python has proven invaluable to our research, and just as it has suffused the domains of astronomy and finance, seems primed to emerge as the de-facto design platform in biosensing and its related fields.   
  
+-----------------------------------------------------------------------
+
 Acknowledgements
 ----------------
+I would like to thank my advisor, Dr. Mark Reeves, for his devoted guidance and support.  I owe a great debt to Annie Matsko for her dedication in the lab and assistance in drafting this document.  In regard to the programming community, I must foremost thank Enthought_ and the other sponsors of the SciPy2012 conference.  Their generous student sponsorship program made it possible for me to attend for that I am gracious.  Although indebted to countless members of the Python community, I must explicitly thank Jonathan March, Robert Kern and Stéfan van der Walt for their patience in helping me through various programming quandries.  Thank you De-Hao Tsai and Vincent Hackley at the Material Measurement Laboratory at NIST for your helpful discussions and allowing our group to use your zeta-potential instrumentation.  Finally, I must thank the George Gamow Research Fellowship Program, the Luther Rice Collaborative Research Fellowship program, and the George Washington University for the Knox fellowship for generous financial support. 
 
-THE AUTHOR WOULD LIKE TO ACKNOWLEDGE Mark Reeves, Annie, GWU/Fellowship, Stefan, various Python community
+.. _Enthought: http://www.enthought.com/
 
-References
-----------
-
+Referenced Works   
+----------------
 .. [1] Anuj K. Sharma B.D. Gupta. *Fiber Optic Sensor Based on Surface Plasmon Resonance with Nanoparticle Films.* Photonics and Nanostructures - Fundamentals and Applications, 3:30,37, 2005.
 
 .. [2] Ching-Te Huang Chun-Ping Jen Tzu-Chien Chao. *A Novel Design of Grooved Fibers for Fiber-optic Localized Plasmon Resonance Biosensors.*, 
