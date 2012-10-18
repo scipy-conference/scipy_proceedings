@@ -2,9 +2,9 @@
 :email: mrocklin@cs.uchicago.edu
 :institution: University of Chicago, Computer Science
 
-------------------------------------------------
-Symbolic Statistics with SymPy
-------------------------------------------------
+-------------------------------------
+Uncertainty Modeling with SymPy Stats
+-------------------------------------
 
 .. class:: abstract
 
