@@ -17,8 +17,8 @@ def from_template(tmpl_basename, config, dest_fn):
 
     outfile = _from_template(tmpl_basename, config)
     extension = os.path.splitext(dest_fn)[1][1:]
-    outname = os.path.join(build_dir, extension, dest_fn)
-
+    outname = os.path.join(build_dir, extension, dest_fn) 
+    
     with open(outname, mode='w') as f:
         f.write(outfile)
 
@@ -44,7 +44,7 @@ def html_from_tmpl(src, config, target):
     outfile = header+content
     dest_fn = os.path.join(html_dir, target + '.html')
     extension = os.path.splitext(dest_fn)[1][1:]
-    outname = os.path.join(build_dir, extension, dest_fn)
+    outname = os.path.join(build_dir, extension, dest_fn) 
     with open(outname, mode='w') as f:
         f.write(outfile)
 
@@ -53,10 +53,10 @@ if __name__ == "__main__":
     if not len(sys.argv) == 2:
         print "Usage: build_template.py destination_name"
         sys.exit(-1)
-
+    
     dest_fn = sys.argv[1]
     template_fn = os.path.join(template_dir, dest_fn+'.tmpl')
-
+    
     if not os.path.exists(template_fn):
         print "Cannot find template."
         sys.exit(-1)

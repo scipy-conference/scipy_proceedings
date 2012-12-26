@@ -12,8 +12,6 @@ import code_block
 
 from options import options, inst_table
 
-from collections import OrderedDict
-
 PreambleCmds.float_settings = '''
 \\usepackage[font={small,it},labelfont=bf]{caption}
 \\usepackage{float}
@@ -79,87 +77,42 @@ class Translator(LaTeXTranslator):
     def depart_document(self, node):
         LaTeXTranslator.depart_document(self, node)
 
-        ## Generate footmarks
-
-        # build map: institution -> (author1, author2)
-        institution_authors = OrderedDict()
-        for auth, inst in zip(self.author_names, self.author_institutions):
-            institution_authors.setdefault(inst, []).append(auth)
-
-        def footmark(n):
-            """Insert footmark #n.  Footmark 1 is reserved for
-            the corresponding author.\
-            """
-            return ('\\setcounter{footnotecounter}{%d}' % n,
-                    '\\fnsymbol{footnotecounter}')
-
-        # Build one footmark for each institution
-        institute_footmark = {}
-        for i, inst in enumerate(institution_authors):
-            institute_footmark[inst] = footmark(i + 2)
-
-        footmark_template = r'\thanks{%(footmark)s %(instutions)}'
-        corresponding_auth_template = r'''%%
-          %(footmark_counter)s\thanks{%(footmark)s %%
-          Corresponding author: \protect\href{mailto:%(email)s}{%(email)s}}'''
-
         title = self.paper_title
-        authors = []
-        institutions_mentioned = set()
-        for n, (auth, inst) in enumerate(zip(self.author_names,
-                                             self.author_institutions)):
-            # Corresponding author
-            if n == 0:
-                authors += [r'%(author)s$^{%(footmark)s}$' % \
-                            {'author': auth,
-                             'footmark': ''.join(footmark(1)) + ''.join(institute_footmark[inst])}]
+        authors = ', '.join(self.author_names)
 
-                fm_counter, fm = footmark(1)
-                authors[-1] += corresponding_auth_template % \
-                               {'footmark_counter': fm_counter,
-                                'footmark': fm,
-                                'email': self.author_emails[0]}
+        d = {}
+        compsocthanks = ''
+        for auth, inst in zip(self.author_names, self.author_institutions):
+            d.setdefault(inst, []).append(auth)
 
+        for inst, authlist in d.iteritems():
+            if len(authlist) <= 2:
+                auths = ' and '.join(authlist)
             else:
-                authors += [r'%(author)s$^{%(footmark)s}$' %
-                            {'author': auth,
-                             'footmark': ''.join(institute_footmark[inst])}]
-
-            if not inst in institutions_mentioned:
-                fm_counter, fm = institute_footmark[inst]
-                authors[-1] += r'%(footmark_counter)s\thanks{%(footmark)s %(institution)s}' % \
-                               {'footmark_counter': fm_counter,
-                                'footmark': fm,
-                                'institution': inst}
-
-            institutions_mentioned.add(inst)
-
-
-        ## Add copyright
-
+                auths = ', '.join(authlist[:-1] + ['and ' + authlist[-1],])
+            verb= ' is ' if len(authlist)==1 else ' are '
+            compsocthanks += auths+verb+'with '+inst+'. '
+        
         copyright_holder = self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.')
-        author_notes = r'''%%
+        author_notes = r'''E-mail: \protect\href{%s}{%s}.
 
-          \noindent%%
-          Copyright\,\copyright\,%(year)s %(copyright_holder)s %(copyright)s%%
-        ''' % \
-        {'email': self.author_emails[0],
-         'year': options['proceedings']['year'],
-         'copyright_holder': copyright_holder,
-         'copyright': options['proceedings']['copyright']['article']}
+\noindent \copyright %s %s %s
+        ''' % ('mailto:' + self.author_emails[0],
+               self.author_emails[0],
+               options['proceedings']['year'],
+               copyright_holder,
+               options['proceedings']['copyright']['article'])
 
-        authors[-1] += r'\thanks{%s}' % author_notes
+        author_notes = compsocthanks+author_notes
 
-
-        ## Set up title and page headers
-
-        title_template = r'\newcounter{footnotecounter}' \
-                         r'\title{%s}\author{%s}\maketitle'
-        title_template = title_template % (title, ', '.join(authors))
+        title_template = '\\title{%s}\\author{%s\\thanks{%s}}\\maketitle'
+        title_template = title_template % (title,
+                                           authors,
+                                           author_notes)
 
         marks = r'''
-          \renewcommand{\leftmark}{%s}
-          \renewcommand{\rightmark}{%s}
+        \renewcommand{\leftmark}{%s}
+        \renewcommand{\rightmark}{%s}
         ''' % (options['proceedings']['title']['short'], title.upper())
         title_template += marks
 
@@ -167,14 +120,12 @@ class Translator(LaTeXTranslator):
 
         # Save paper stats
         self.document.stats = {'title': title,
-                               'authors': ', '.join(self.author_names),
+                               'authors': authors,
                                'author': self.author_names,
-                               'author_email': self.author_emails,
                                'author_institution': self.author_institutions,
                                'abstract': self.abstract_text,
                                'keywords': self.keywords,
                                'copyright_holder': copyright_holder}
-
 
     def end_open_abstract(self, node):
         if 'abstract' not in node['classes'] and self.abstract_in_progress:
@@ -307,15 +258,6 @@ class Translator(LaTeXTranslator):
 
     def depart_literal_block(self, node):
         LaTeXTranslator.depart_literal_block(self, node)
-
-
-    def visit_block_quote(self, node):
-        self.out.append('\\begin{quotation}')
-        LaTeXTranslator.visit_block_quote(self, node)
-
-    def depart_block_quote(self, node):
-        LaTeXTranslator.depart_block_quote(self, node)
-        self.out.append('\\end{quotation}')
 
 
     # Math directives from rstex

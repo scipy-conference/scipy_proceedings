@@ -74,7 +74,7 @@ answer 'no',  please provide a brief, one- to two-sentence explanation.
 
 - Is the code made publicly available and does the article sufficiently
   describe how to access it?  We aim not to publish papers that essentially
-  advertise proprietary software.  Therefore, if the code is not publicly
+  advertise propetiary software.  Therefore, if the code is not publicly
   available, please provide a one- to two- sentence response to each of the
   following questions:
 
