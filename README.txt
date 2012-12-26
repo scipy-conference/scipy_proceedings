@@ -44,5 +44,5 @@ examples of how to:
 Requirements
 ------------
  - IEEETran and AMSmath LaTeX classes
- - **Latest** docutils (development version, they haven't released in years)
+ - `docutils` 0.8 or later 
  - Pygments for code highlighting
