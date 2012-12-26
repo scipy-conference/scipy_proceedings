@@ -15,11 +15,10 @@ html_dir      = os.path.join(build_dir, 'html')
 bib_dir       = os.path.join(html_dir, 'bib')
 toc_conf      = os.path.join(build_dir, 'toc.json')
 proc_conf     = os.path.join(work_dir,'../scipy_proc.json')
-
 if os.path.isfile(toc_list):
     with open(toc_list) as f:
-        dirs = f.read().splitlines()
+        dirs  = f.read().splitlines()
 else:
-    dirs = sorted([os.path.basename(d)
-                   for d in glob.glob('%s/*' % papers_dir)
-                   if os.path.isdir(d)])
+    dirs      = sorted([os.path.basename(d)
+                        for d in glob.glob('%s/*' % papers_dir)
+                        if os.path.isdir(d)])
