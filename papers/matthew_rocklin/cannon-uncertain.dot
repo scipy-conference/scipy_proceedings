@@ -1,0 +1,33 @@
+graph{
+
+    x0[color="#000000"];
+    y0[color="#000000"];
+    v[color="#FF0000"];
+    theta[color="#000000"];
+    g[color="#000000"];
+    yf[color="#000000"];
+    t[color="#000000"];
+    x[color="#FF0000"];
+    y[color="#FF0000"];
+    impact_time[color="#FF0000"];
+    xf[color="#FF0000"];
+
+    x -- x0
+    x -- v
+    x -- theta
+    x -- t
+
+    y -- y0
+    y -- v
+    y -- theta
+    y -- t
+    y -- g
+
+    impact_time -- y
+    impact_time -- yf
+    
+    xf -- x0
+    xf -- v
+    xf -- theta
+    xf -- impact_time
+}
