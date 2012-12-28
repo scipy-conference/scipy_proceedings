@@ -1,0 +1,33 @@
+graph{
+
+    x;
+    y;
+    x0;
+    y0;
+    v;
+    theta;
+    g;
+    yf;
+    t;
+    impact_time;
+    xf;
+
+    x -- x0
+    x -- v
+    x -- theta
+    x -- t
+
+    y -- y0
+    y -- v
+    y -- theta
+    y -- t
+    y -- g
+
+    impact_time -- y
+    impact_time -- yf
+    
+    xf -- x0
+    xf -- v
+    xf -- theta
+    xf -- impact_time
+}
