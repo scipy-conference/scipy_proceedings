@@ -101,23 +101,21 @@ def tex2pdf(out_path):
     return out
 
 def page_count(pdflatex_stdout, paper_dir):
-   """
-   Parse pdflatex output for paper count, and store in a .ini file.
-   """
+    """
+    Parse pdflatex output for paper count, and store in a .ini file.
+    """
 
-   regexp = re.compile('Output written on paper.pdf \((\d+) pages')
-   cfgname = os.path.join(paper_dir,'paper_stats.json')
-
-   d = options.cfg2dict(cfgname)
-   
-   for line in pdflatex_stdout.splitlines():
-       m = regexp.match(line)
-       if m:
-           pages = m.groups()[0]
-           d.update({'pages': int(pages)})
-           break
-   
-   options.dict2cfg(d, cfgname)
+    if pdflatex_stdout is not None:
+        regexp = re.compile('Output written on paper.pdf \((\d+) pages')
+        cfgname = os.path.join(paper_dir,'paper_stats.json')
+        d = options.cfg2dict(cfgname)
+        for line in pdflatex_stdout.splitlines():
+            m = regexp.match(line)
+            if m:
+                pages = m.groups()[0]
+                d.update({'pages': int(pages)})
+                break
+        options.dict2cfg(d, cfgname)
 
 def build_paper(paper_id):
    out_path = os.path.join(output_dir, paper_id)
