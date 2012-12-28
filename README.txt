@@ -9,16 +9,23 @@ no longer than 7 pages, including figures.  Here are the steps to produce a
 paper:
 
 - Fork the 2012 branch of the `scipy_proceedings
-  <https://github.com/scipy/scipy_proceedings>`__ repository on GitHub.  An
-  example paper is provided in ``papers/00_vanderwalt``.  Create a new
+  <https://github.com/scipy/scipy_proceedings>`__ repository on GitHub.
+
+- Check out the 2012 branch (`git checkout 2012`).
+
+- An example paper is provided in ``papers/00_vanderwalt``.  Create a new
   directory ``papers/firstname_surname``, copy the example paper into it, and
   modify to your liking.
 
 - Run ``./make_paper.sh papers/firstname_surname`` to compile your paper to PDF
-  (requires LaTeX, docutils, Python).  The output appears in
+  (requires LaTeX, docutils, Python--see below).  The output appears in
   ``output/firstname_surname/paper.pdf``.
 
 - Once you are ready to submit your paper, file a pull request on GitHub.
+  Please ensure that you file against the correct branch--your branch should be
+  named 2012, and the pull-request should be against our 2012 branch.
+
+- Please do not modify any files outside of your paper directory.
 
 Pull requests are to be submitted by **July 15th**, but modifications may be
 pushed until August 12th.
