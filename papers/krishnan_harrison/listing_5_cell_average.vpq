@@ -1,0 +1,46 @@
+#
+# file: listing_5_cell_average.vpq
+#
+# Usage:
+#  Invoke using the example Python Interface code in listing 6.
+#  
+#
+
+
+class CellAverageQuery(SimplePythonQuery):
+    def __init__(self):
+        # basic initialization
+        super(CellAverageQuery,self).__init__()
+        self.name = "Cell Average Query"
+        self.description = "Calculating scalar average."
+    def pre_execute(self):
+        # called just prior to main execution
+        self.local_ncells = 0
+        self.local_sum    = 0.0
+    def execute_chunk(self,ds_in,domain_id):
+        # called per mesh chunk assigned to 
+        # the local MPI task.
+        ncells = ds_in.GetNumberOfCells()
+        if ncells == 0:
+            return
+        vname  = self.input_var_names[0]
+        varray = ds_in.GetCellData().GetArray(vname)
+        self.local_ncells += ncells
+        for i in range(ncells):
+            self.local_sum += varray.GetTuple1(i)
+    def post_execute(self):
+        # called after all mesh chunks on all 
+        # processors have been processed.
+        tot_ncells = mpicom.sum(self.local_ncells)
+        tot_sum    = mpicom.sum(self.local_sum)
+        avg = tot_sum  / float(tot_ncells)
+        if mpicom.rank() == 0:
+            vname = self.input_var_names[0]
+            msg = "Average value of %s = %s"
+            msg = msg % (vname,str(avg))
+            self.set_result_text(msg)
+            self.set_result_value(avg)
+
+# Tell the Python Filter Runtime which class to use 
+# as the Query filter.
+py_filter = CellAverageQuery
