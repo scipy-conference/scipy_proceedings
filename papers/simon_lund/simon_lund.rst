@@ -14,16 +14,16 @@
 :email: vinter@nbi.dk
 :institution: University of Copenhagen
 
--------------------------------------------------------------------------------------------------
-cphVB: A System for Automated Runtime Optimization and Parallelization of Vectorized Applications
--------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+Bohrium: A System for Automated Runtime Optimization and Parallelization of Vectorized Applications
+---------------------------------------------------------------------------------------------------
 
 .. class:: abstract
 
     Modern processor architectures, in addition to having still more cores, also require still more consideration to memory-layout in order to run at full capacity.
     The usefulness of most languages is deprecating as their abstractions, structures or objects are hard to map onto modern processor architectures efficiently.
 
-    The work in this paper introduces a new abstract machine framework, cphVB, that enables vector oriented high-level programming languages to map onto a broad range of architectures efficiently. The idea is to close the gap between high-level languages and hardware optimized low-level implementations. By translating high-level vector operations into an intermediate vector bytecode, cphVB enables specialized vector engines to efficiently execute the vector operations.
+    The work in this paper introduces a new abstract machine framework, Bohrium, that enables vector oriented high-level programming languages to map onto a broad range of architectures efficiently. The idea is to close the gap between high-level languages and hardware optimized low-level implementations. By translating high-level vector operations into an intermediate vector bytecode, Bohrium enables specialized vector engines to efficiently execute the vector operations.
 
     The primary success parameters are to maintain a complete abstraction from low-level details and to provide efficient code execution across different, modern, processors. We evaluate the presented design through a setup that targets multi-core CPU architectures. We evaluate the performance of the implementation using Python implementations of well-known algorithms: a jacobi solver, a kNN search, a shallow water simulation and a synthetic stencil simulation. All demonstrate good performance.
 
@@ -42,41 +42,41 @@ There exist high-productivity language and libraries that automatically utilize 
 
 A tight coupling between front-end technology and back-end presents another problem; the usefulness of the developed program expires as soon as the back-end does. With the rapid development of hardware architectures the time spend on implementing optimized programs for specific hardware, is lost as soon as the hardware product expires.
  
-In this paper, we present a novel approach to the problem of closing the gap between high-productivity languages and parallel architectures, which allows a high degree of modularity and reusability. The approach involves creating a framework, cphVB [*]_ (Copenhagen Vector Bytecode). cphVB defines a clear and easy to understand intermediate bytecode language and provides a runtime environment for executing the bytecode. cphVB also contains a protocol to govern the safe, and efficient exchange, creation, and destruction of model data.
+In this paper, we present a novel approach to the problem of closing the gap between high-productivity languages and parallel architectures, which allows a high degree of modularity and reusability. The approach involves creating a framework, Bohrium [*]_. Bohrium defines a clear and easy to understand intermediate bytecode language and provides a runtime environment for executing the bytecode. Bohrium also contains a protocol to govern the safe, and efficient exchange, creation, and destruction of model data.
 
-cphVB provides a retargetable framework in which the user can write programs utilizing whichever cphVB supported programming interface they prefer and run the program on their own workstation while doing prototyping, such as testing correctness and functionality of their programs. Users can then deploy exactly the same program in a more powerful execution environment without changing a single line of code and thus effectively solve greater problem sets.
+Bohrium provides a retargetable framework in which the user can write programs utilizing whichever Bohrium supported programming interface they prefer and run the program on their own workstation while doing prototyping, such as testing correctness and functionality of their programs. Users can then deploy exactly the same program in a more powerful execution environment without changing a single line of code and thus effectively solve greater problem sets.
 
-The rest of the paper is organized as follows. In Section `Programming Model`. we describe the programming model supported by cphVB. The section following gives a brief description of `Numerical Python`, which is the first programming interface that fully supports cphVB. Sections `Design` and `Implementation` cover the overall cphVB design and an implementation of it. In Section `Performance Study`, we conduct an evaluation of the implementation. Finally, in Section `Future Work` and `Conclusion` we discuss future work and conclude.
+The rest of the paper is organized as follows. In Section `Programming Model`. we describe the programming model supported by Bohrium. The section following gives a brief description of `Numerical Python`, which is the first programming interface that fully supports Bohrium. Sections `Design` and `Implementation` cover the overall Bohrium design and an implementation of it. In Section `Performance Study`, we conduct an evaluation of the implementation. Finally, in Section `Future Work` and `Conclusion` we discuss future work and conclude.
 
-.. [*] Open Source Project - Website: http://cphvb.bitbucket.org.
+.. [*] Open Source Project - Website: http://www.bh107.org/.
 
 
 Related Work
 ~~~~~~~~~~~~
 
-The key motivation for cphVB is to provide a framework for the utilization of heterogeneous computing systems with the goal of obtaining high-performance, high-productivity and high-portability (:math:`HP^3`). Systems such as pyOpenCL/pyCUDA [Klo09]_ provides a direct mapping from front-end language to the optimization target. In this case, providing the user with direct access to the low-level systems OpenCL [Khr10]_ and CUDA [Nvi10]_ from the high-level language Python [Ros10]_.
-The work in [Klo09]_ enables the user to write a low-level implementation in a high-productivity language. The goal is similar to cphVB – the approach however is entirely different. cphVB provides a means to hide low-level target specific code behind a programming model and providing a framework and runtime environment to support it.
+The key motivation for Bohrium is to provide a framework for the utilization of heterogeneous computing systems with the goal of obtaining high-performance, high-productivity and high-portability (:math:`HP^3`). Systems such as pyOpenCL/pyCUDA [Klo09]_ provides a direct mapping from front-end language to the optimization target. In this case, providing the user with direct access to the low-level systems OpenCL [Khr10]_ and CUDA [Nvi10]_ from the high-level language Python [Ros10]_.
+The work in [Klo09]_ enables the user to write a low-level implementation in a high-productivity language. The goal is similar to Bohrium – the approach however is entirely different. Bohrium provides a means to hide low-level target specific code behind a programming model and providing a framework and runtime environment to support it.
 
-Intel Math Kernel Library [Int08]_ is in this regard more comparable to cphVB. Intel MKL is a programming library providing utilization of multiple targets ranging from a single-core CPU to a multi-core shared memory CPU and even to a cluster of computers all through the same programming API. However, cphVB is not only a programming library it is a runtime system providing support for a vector oriented programming model. The programming model is well-known from high-productivity languages such as MATLAB [Mat10]_, [Rrr11]_, [Idl00]_, GNU Octave [Oct97]_ and Numerical Python (NumPy) [Oli07]_ to name a few.
+Intel Math Kernel Library [Int08]_ is in this regard more comparable to Bohrium. Intel MKL is a programming library providing utilization of multiple targets ranging from a single-core CPU to a multi-core shared memory CPU and even to a cluster of computers all through the same programming API. However, Bohrium is not only a programming library it is a runtime system providing support for a vector oriented programming model. The programming model is well-known from high-productivity languages such as MATLAB [Mat10]_, [Rrr11]_, [Idl00]_, GNU Octave [Oct97]_ and Numerical Python (NumPy) [Oli07]_ to name a few.
 
-cphVB is more closely related to the work described in [Gar10]_, here a compilation framework is provided for execution in a hybrid environment consisting of both CPUs and GPUs. Their framework uses a Python/NumPy based front-end that uses Python decorators as hints to do selective optimizations. cphVB similarly provides a NumPy based front-end and equivalently does selective optimizations.
-However, cphVB uses a slightly less obtrusive approach; program selection hints are sent from the front-end via the NumPy-bridge. This approach provides the advantage that any existing NumPy program can run unaltered and take advantage of cphVB without changing a single line of code. Whereas unPython requires the user to manually modify the source code by applying hints in a manner similar to that of OpenMP [Pas05]_. This non-obtrusive design at the source level is to the author's knowledge novel.
+Bohrium is more closely related to the work described in [Gar10]_, here a compilation framework is provided for execution in a hybrid environment consisting of both CPUs and GPUs. Their framework uses a Python/NumPy based front-end that uses Python decorators as hints to do selective optimizations. Bohrium similarly provides a NumPy based front-end and equivalently does selective optimizations.
+However, Bohrium uses a slightly less obtrusive approach; program selection hints are sent from the front-end via the NumPy-bridge. This approach provides the advantage that any existing NumPy program can run unaltered and take advantage of Bohrium without changing a single line of code. Whereas unPython requires the user to manually modify the source code by applying hints in a manner similar to that of OpenMP [Pas05]_. This non-obtrusive design at the source level is to the author's knowledge novel.
 
-Microsoft Accelerator [Dav04]_ introduces ParallelArray, which is similar to the utilization of the NumPy arrays in cphVB but there are strict limitations to the utilization of ParallelArrays. ParallelArrays does not allow the use of direct indexing, which means that the user must copy a ParallelArray into a conventional array before indexing. cphVB instead allows indexed operations and additionally supports **array-views**, which are array-aliases that provide multiple ways to access the same chunk of allocated memory. Thus, the data structure in cphVB is highly flexible and provides elegant programming solutions for a broad range of numerical algorithms. 
+Microsoft Accelerator [Dav04]_ introduces ParallelArray, which is similar to the utilization of the NumPy arrays in Bohrium but there are strict limitations to the utilization of ParallelArrays. ParallelArrays does not allow the use of direct indexing, which means that the user must copy a ParallelArray into a conventional array before indexing. Bohrium instead allows indexed operations and additionally supports **array-views**, which are array-aliases that provide multiple ways to access the same chunk of allocated memory. Thus, the data structure in Bohrium is highly flexible and provides elegant programming solutions for a broad range of numerical algorithms. 
 Intel provides a similar approach called Intel Array Building Blocks (ArBB) [New11]_ that provides retargetability and dynamic compilation. It is thereby possible to utilize heterogeneous architectures from within standard C++.
-The retargetability aspect of Intel ArBB is represented in cphVB as a plain and simple configuration file that define the cphVB runtime environment. Intel ArBB provides a high performance library that utilizes a heterogeneous environment and hides the low-level details behind a vector oriented programming model similar to cphVB. However, ArBB only provides access to the programming model via C++ whereas cphVB is not biased towards any one specific front-end language.
+The retargetability aspect of Intel ArBB is represented in Bohrium as a plain and simple configuration file that define the Bohrium runtime environment. Intel ArBB provides a high performance library that utilizes a heterogeneous environment and hides the low-level details behind a vector oriented programming model similar to Bohrium. However, ArBB only provides access to the programming model via C++ whereas Bohrium is not biased towards any one specific front-end language.
 
-On multiple points cphVB is closely related in functionality and goals to the SEJITS [Cat09]_ project. SEJITS takes a different approach towards the front-end and programming model. SEJITS provides a rich set of computational kernels in a high-productivity language such as Python or Ruby. These kernels are then specialized towards an optimality criteria. This approach has shown to provide performance that at times out-performs even hand-written specialized code towards a given architecture. Being able to construct computational kernels is a core issue in data-parallel programming. 
+On multiple points Bohrium is closely related in functionality and goals to the SEJITS [Cat09]_ project. SEJITS takes a different approach towards the front-end and programming model. SEJITS provides a rich set of computational kernels in a high-productivity language such as Python or Ruby. These kernels are then specialized towards an optimality criteria. This approach has shown to provide performance that at times out-performs even hand-written specialized code towards a given architecture. Being able to construct computational kernels is a core issue in data-parallel programming. 
 
-The programming model in cphVB does not provide this kernel methodology. cphVB has a strong NumPy heritage which also shows in the programming model. The advantage is easy adaptability of the cphVB programming model for users of NumPy, Matlab, Octave and R. The cphVB programming model is not a stranger to computational kernels – cphVB deduce computational kernels at runtime by inspecting the vector bytecode generated by the Bridge.
+The programming model in Bohrium does not provide this kernel methodology. Bohrium has a strong NumPy heritage which also shows in the programming model. The advantage is easy adaptability of the Bohrium programming model for users of NumPy, Matlab, Octave and R. The Bohrium programming model is not a stranger to computational kernels – Bohrium deduce computational kernels at runtime by inspecting the vector bytecode generated by the Bridge.
 
-cphVB provides in this sense a virtual machine optimized for execution of vector operations, previous work [And08]_ was based on a complete virtual machine for generic execution whereas cphVB provides an optimized subset.
+Bohrium provides in this sense a virtual machine optimized for execution of vector operations, previous work [And08]_ was based on a complete virtual machine for generic execution whereas Bohrium provides an optimized subset.
 
 
 Numerical Python
 ----------------
 
-Before describing the design of cphVB, we will briefly go through Numerical Python (NumPy) [Oli07]_. Numerical Python heavily influenced many design decisions in cphVB – it also uses a vector oriented programming model as cphVB.
+Before describing the design of Bohrium, we will briefly go through Numerical Python (NumPy) [Oli07]_. Numerical Python heavily influenced many design decisions in Bohrium – it also uses a vector oriented programming model as Bohrium.
 
 NumPy is a library for numerical operations in Python, which is implemented in the C programming language. NumPy provides the programmer with a multidimensional array object and a whole range of supported array operations. By using the array operations, NumPy takes advantage of efficient C-implementations while retaining the high abstraction level of Python.
 
@@ -107,39 +107,39 @@ Target Programming Model
 
 To hide the complexities of obtaining high-performance from a heterogeneous environment any given system must provide a meaningful high-level abstraction. This can be realized in the form of domain specific languages, embedded languages, language extensions, libraries, APIs etc. Such an abstraction serves two purposes: 1) It must provide meaning for the end-user such that the goal of high-productivity can be met with satisfaction. 2) It must provide an abstraction that consists of a sufficient amount of information for the system to optimize its utilization.
 
-cphVB is not biased towards any specific choice of abstraction or front-end technology as long as it is compatible with a vector oriented programming model. This provides means to use cphVB in functional programming languages, provide a front-end with a strict mathematic notation such as APL [Apl00]_ or a more relaxed syntax such as MATLAB.
+Bohrium is not biased towards any specific choice of abstraction or front-end technology as long as it is compatible with a vector oriented programming model. This provides means to use Bohrium in functional programming languages, provide a front-end with a strict mathematic notation such as APL [Apl00]_ or a more relaxed syntax such as MATLAB.
 
 The vector oriented programming model encourages expressing programs in the form of high-level array operations, e.g. by expressing the addition of two arrays using one high-level function instead of computing each element individually. The NumPy application in the code example above figure :ref:`fig-stencil-expr` is a good example of using the vector oriented programming model.
 
-Design of cphVB
----------------
+Design of Bohrium
+-----------------
 
-The key contribution in this paper is a framework, cphVB, that support a vector oriented programming model. The idea of cphVB is to provide the mechanics to seamlessly couple a programming language or library with an architecture-specific implementation of vectorized operations.
+The key contribution in this paper is a framework, Bohrium, that support a vector oriented programming model. The idea of Bohrium is to provide the mechanics to seamlessly couple a programming language or library with an architecture-specific implementation of vectorized operations.
 
-cphVB consists of a number of components that communicate using a simple protocol. Components are allowed to be architecture-specific but they are all interchangeable since all uses the same communication protocol. The idea is to make it possible to combine components in a setup that perfectly match a specific execution environment. cphVB consist of the following components:
+Bohrium consists of a number of components that communicate using a simple protocol. Components are allowed to be architecture-specific but they are all interchangeable since all uses the same communication protocol. The idea is to make it possible to combine components in a setup that perfectly match a specific execution environment. Bohrium consist of the following components:
 
 Programming Interface
-  The programming language or library exposed to the user. cphVB was initially meant as a computational back-end for the Python library NumPy, but we have generalized cphVB to potential support all kinds of languages and libraries. Still, cphVB has design decisions that are influenced by NumPy and its representation of vectors/matrices.
+  The programming language or library exposed to the user. Bohrium was initially meant as a computational back-end for the Python library NumPy, but we have generalized Bohrium to potential support all kinds of languages and libraries. Still, Bohrium has design decisions that are influenced by NumPy and its representation of vectors/matrices.
 
 Bridge
-  The role of the Bridge is to integrate cphVB into existing languages and libraries. The Bridge generates the cphVB bytecode that corresponds to the user-code.
+  The role of the Bridge is to integrate Bohrium into existing languages and libraries. The Bridge generates the Bohrium bytecode that corresponds to the user-code.
 
 Vector Engine
-  The Vector Engine is the architecture-specific implementation that executes cphVB bytecode. 
+  The Vector Engine is the architecture-specific implementation that executes Bohrium bytecode. 
 
 Vector Engine Manager
   The Vector Engine Manager manages data location and ownership of vectors. It also manages the distribution of computing jobs between potentially several Vector Engines, hence the name.
 
-An overview of the design can be seen in Figure :ref:`fig-cphvb-design`.
+An overview of the design can be seen in Figure :ref:`fig-Bohrium-design`.
 
-.. figure:: cphvb.pdf
+.. figure:: bohrium.pdf
 
-   cphVB design idea. :label:`fig-cphvb-design`
+   Bohrium design idea. :label:`fig-Bohrium-design`
 
 Configuration
 ~~~~~~~~~~~~~
 
-To make cphVB as flexible a framework as possible, we manage the setup of all the components at runtime through a configuration file. The idea is that the user can change the setup of components simply by editing the configuration file before executing the user application. Additionally, the user only has to change the configuration file in order to run the application on different systems with different computational resources. The configuration file uses the ini syntax, an example is provided below.
+To make Bohrium as flexible a framework as possible, we manage the setup of all the components at runtime through a configuration file. The idea is that the user can change the setup of components simply by editing the configuration file before executing the user application. Additionally, the user only has to change the configuration file in order to run the application on different systems with different computational resources. The configuration file uses the ini syntax, an example is provided below.
 
 
 .. code-block:: c
@@ -157,21 +157,21 @@ To make cphVB as flexible a framework as possible, we manage the setup of all th
    # Vector Engine Manager for a single machine
    [node]
    type = vem
-   impl = libcphvb_vem_node.so
+   impl = libbh_vem_node.so
    children = mcore
 
    # Vector Engine using TLP on shared memory
    [mcore]
    type = ve
-   impl = libcphvb_ve_mcore.so
+   impl = libbh_ve_mcore.so
 
 
 This example configuration provides a setup for utilizing a shared memory machine with thread-level-parallelism (TLP) on one machine by instructing the vector engine manager to use a single multi-core TLP engine.
 
 Bytecode
-~~~~~~~~~
+~~~~~~~~
 
-The central part of the communication between all the components in cphVB is vector bytecode. The goal with the bytecode language is to be able to express operations on multidimensional vectors. Taking inspiration from single instruction, multiple data (SIMD) instructions but adding structure to the data. This, of course, fits very well with the array operations in NumPy but is not bound nor limited to these.
+The central part of the communication between all the components in Bohrium is vector bytecode. The goal with the bytecode language is to be able to express operations on multidimensional vectors. Taking inspiration from single instruction, multiple data (SIMD) instructions but adding structure to the data. This, of course, fits very well with the array operations in NumPy but is not bound nor limited to these.
 
 We would like the bytecode to be a concept that is easy to explain and understand. It should have a simple design that is easy to implement. It should be easy and inexpensive to generate and decode. To fulfill these goals we chose a design that conceptually is an assembly language where the operands are multidimensional vectors. Furthermore, to simplify the design the assembly language should have a one-to-one mapping between instruction mnemonics and opcodes.
 
@@ -191,7 +191,7 @@ The Vector Engine and the Vector Engine Manager exposes simple API that consists
 Bridge
 ~~~~~~
 
-The Bridge is the **bridge** between the programming interface, e.g. Python/NumPy, and the Vector Engine Manager. The Bridge is the only component that is specifically implemented for the programming interface. In order to add cphVB support to a new language or library, one only has to implement the bridge component. It generates bytecode based on programming interface and sends them to the Vector Engine Manager.
+The Bridge is the **bridge** between the programming interface, e.g. Python/NumPy, and the Vector Engine Manager. The Bridge is the only component that is specifically implemented for the programming interface. In order to add Bohrium support to a new language or library, one only has to implement the bridge component. It generates bytecode based on programming interface and sends them to the Vector Engine Manager.
 
 Vector Engine Manager
 ~~~~~~~~~~~~~~~~~~~~~
@@ -200,7 +200,7 @@ Instead of allowing the front-end to communicate directly with the Vector Engine
 
 To facilitate late allocation, and early release of resources, the VEM handles instantiation and destruction of arrays. At array creation only the meta data is actually created. Often arrays are created with structured data (e.g. random, constants), with no data at all (e.g. empty), or as a result of calculation. In any case it saves, potentially several, memory copies to delay the actual memory allocation. Typically, array data will exist on the computing device exclusively.
 
-In order to minimize data copying we introduce a data ownership scheme. It keeps track of which components in cphVB that needs to access a given array. The goal is to allow the system to have several copies of the same data while ensuring that they are in synchronization. We base the data ownership scheme on two instructions, **sync** and **discard**:
+In order to minimize data copying we introduce a data ownership scheme. It keeps track of which components in Bohrium that needs to access a given array. The goal is to allow the system to have several copies of the same data while ensuring that they are in synchronization. We base the data ownership scheme on two instructions, **sync** and **discard**:
 
 Sync 
   is issued by the bridge to request read access to a data object. This means that when acknowledging a **sync** request, the copy existing in shared memory needs to be the most resent copy.
@@ -208,7 +208,7 @@ Sync
 Discard
   is used to signal that the copy in shared memory has been updated and all other copies are now invalid. Normally used by the bridge to upgrading a read access to a write access.
 
-The cphVB components follow the following four rules when implementing the data ownership scheme:
+The Bohrium components follow the following four rules when implementing the data ownership scheme:
 
 1. The Bridge will always ask the Vector Engine Manager for access to a given data object. It will send a **sync** request for read access, followed by a **release** request for write access. The Bridge will not keep track of ownership itself.
 
@@ -223,29 +223,29 @@ Additionally, the Vector Engine Manager needs the capability to handle multiple 
 Vector Engine
 ~~~~~~~~~~~~~
 
-Though the Vector Engine is the most complex component of cphVB, it has a very simple and a clearly defined role. It has to execute all instructions it receives in a manner that obey the serialization dependencies between instructions. Finally, it has to ensure that the rest of the system has access to the results as governed by the rules of the **sync**, **release**, and **discard** instructions.
+Though the Vector Engine is the most complex component of Bohrium, it has a very simple and a clearly defined role. It has to execute all instructions it receives in a manner that obey the serialization dependencies between instructions. Finally, it has to ensure that the rest of the system has access to the results as governed by the rules of the **sync**, **release**, and **discard** instructions.
 
 
-Implementation of cphVB
------------------------
+Implementation of Bohrium
+-------------------------
 
-In order to demonstrate our cphVB design we have implemented a basic cphVB setup. This concretization of cphVB is by no means exhaustive. The setup is targeting the NumPy library executing on a single machine with multiple CPU-cores. In this section, we will describe the implementation of each component in the cphVB setup – the Bridge, the Vector Engine Manager, and the Vector Engine. The cphVB design rules (Sec. Design) govern the interplay between the components.
+In order to demonstrate our Bohrium design we have implemented a basic Bohrium setup. This concretization of Bohrium is by no means exhaustive. The setup is targeting the NumPy library executing on a single machine with multiple CPU-cores. In this section, we will describe the implementation of each component in the Bohrium setup – the Bridge, the Vector Engine Manager, and the Vector Engine. The Bohrium design rules (Sec. Design) govern the interplay between the components.
 
 Bridge
 ~~~~~~
 
-The role of the Bridge is to introduce cphVB into an already existing project. In this specific case NumPy, but could just as well be ``R`` or any other language/tool that works primarily on vectorizable operations on large data objects. 
+The role of the Bridge is to introduce Bohrium into an already existing project. In this specific case NumPy, but could just as well be ``R`` or any other language/tool that works primarily on vectorizable operations on large data objects. 
 
-It is the responsibility of the Bridge to generate cphVB instructions on basis of the Python program that is being run. The NumPy Bridge is an extension of NumPy version 1.6. It uses hooks to divert function call where the program access cphVB enabled NumPy arrays. The hooks will translate a given function into its corresponding cphVB bytecode when possible. When it is not possible, the hooks will feed the function call back into NumPy and thereby forcing NumPy to handle the function call itself.
+It is the responsibility of the Bridge to generate Bohrium instructions on basis of the Python program that is being run. The NumPy Bridge is an extension of NumPy version 1.6. It uses hooks to divert function call where the program access Bohrium enabled NumPy arrays. The hooks will translate a given function into its corresponding Bohrium bytecode when possible. When it is not possible, the hooks will feed the function call back into NumPy and thereby forcing NumPy to handle the function call itself.
 
-The Bridge operates with two address spaces for arrays: the cphVB space and the NumPy space. All arrays starts in the NumPy space as a default. The original NumPy implementation handles these arrays and all operations using them. It is possible to assign an array to the cphVB space explicitly by using an optional cphVB parameter in array creation functions such as ``empty`` and ``random``. The cphVB bridge implementation handles these arrays and all operations using them. 
+The Bridge operates with two address spaces for arrays: the Bohrium space and the NumPy space. All arrays starts in the NumPy space as a default. The original NumPy implementation handles these arrays and all operations using them. It is possible to assign an array to the Bohrium space explicitly by using an optional Bohrium parameter in array creation functions such as ``empty`` and ``random``. The Bohrium bridge implementation handles these arrays and all operations using them. 
 
 In two circumstances, it is possible for an array to transfer from one address space to the other implicitly at runtime. 
 
- 1. When an operation accesses an array in the cphVB address space but it is not possible for the bridge to translate the operation into cphVB code. In this case, the bridge will synchronize and move the data to the NumPy address space. For efficiency no data is actually copied instead the bridge uses the ``mremap`` [*]_ function to re-map the relevant memory pages. 
- 2. When an operations access arrays in different address spaces the Bridge will transfer the arrays in the NumPy space to the cphVB space. Afterwards, the bridge will translate the operation into bytecode that cphVB can execute.
+ 1. When an operation accesses an array in the Bohrium address space but it is not possible for the bridge to translate the operation into Bohrium code. In this case, the bridge will synchronize and move the data to the NumPy address space. For efficiency no data is actually copied instead the bridge uses the ``mremap`` [*]_ function to re-map the relevant memory pages. 
+ 2. When an operations access arrays in different address spaces the Bridge will transfer the arrays in the NumPy space to the Bohrium space. Afterwards, the bridge will translate the operation into bytecode that Bohrium can execute.
 
-In order to detect direct access to arrays in the cphVB address space by the user, the original NumPy implementation, a Python library or any other external source, the bridge protects the memory of arrays that are in the cphVB address space using ``mprotect`` [*]_. Because of this memory protection, subsequently accesses to the memory will trigger a segmentation fault. The Bridge can then handle this kernel signal by transferring the array to the NumPy address space and cancel the segmentation fault. This technique makes it possible for the Bridge to support all valid Python/NumPy application since it can always fallback to the original NumPy implementation.
+In order to detect direct access to arrays in the Bohrium address space by the user, the original NumPy implementation, a Python library or any other external source, the bridge protects the memory of arrays that are in the Bohrium address space using ``mprotect`` [*]_. Because of this memory protection, subsequently accesses to the memory will trigger a segmentation fault. The Bridge can then handle this kernel signal by transferring the array to the NumPy address space and cancel the segmentation fault. This technique makes it possible for the Bridge to support all valid Python/NumPy application since it can always fallback to the original NumPy implementation.
 
 In order to gather greatest possible information at runtime, the Bridge will collect a batch of instructions rather than executing one instruction at a time. The Bridge will keep recording instruction until either the application reaches the end of the program or untranslatable NumPy operations forces the Bridge to move an array to the NumPy address space. When this happens, the Bridge will call the Vector Engine Manager to execute all instructions recorded in the batch.
 
@@ -293,9 +293,9 @@ Performance Study
    | Compiler                     | GCC 4.6.3            |
    +------------------------------+----------------------+
 
-In order to demonstrate the performance of our initial cphVB implementation and thereby the potential of the cphVB design, we will conduct some performance benchmarks using NumPy [*]_. We execute the benchmark applications on ASUS P31SD with an Intel Core i5-2410M processor (Table :ref:`tab:specs`). 
+In order to demonstrate the performance of our initial Bohrium implementation and thereby the potential of the Bohrium design, we will conduct some performance benchmarks using NumPy [*]_. We execute the benchmark applications on ASUS P31SD with an Intel Core i5-2410M processor (Table :ref:`tab:specs`). 
 
-The experiments used the three vector engines: `simple`, `score` and `mcore` and for each execution we calculate the relative speedup of cphVB compared to NumPy. We perform strong scaling experiments, in which the problem size is constant though all the executions. For each experiment, we find the block size that results in best performance and we calculate the result of each experiment using the average of three executions.
+The experiments used the three vector engines: `simple`, `score` and `mcore` and for each execution we calculate the relative speedup of Bohrium compared to NumPy. We perform strong scaling experiments, in which the problem size is constant though all the executions. For each experiment, we find the block size that results in best performance and we calculate the result of each experiment using the average of three executions.
 
 The benchmark consists of the following Python/NumPy applications. All are pure Python applications that make use of NumPy and none uses any external libraries.
 
@@ -315,11 +315,11 @@ The jacobi solver shows an efficient utilization of data-blocking to an extent c
 
 On the other hand, our naive implementation of the k Nearest Neighbor search is not an embarrassingly parallel problem. However, it has a time complexity of :math:`O(n^2)` when the number of elements and the size of the query set is :math:`n`, thus the problem should be scalable. The result of our experiment is also promising – with a performance speedup of of 3.57x (:math:`5.40sec` to :math:`1.51sec`) even with the two single-core engines and a speed-up of nearly 6.8x (:math:`5.40sec` to :math:`0.79`)  with the multi-core engine.
 
-The Shallow Water simulation only has a time complexity of :math:`O(n)` thus it is the most memory intensive application in our benchmark. Still, cphVB manages to achieve a performance speedup of 1.52x (:math:`7.86sec` to :math:`5.17sec`) due to memory-allocation optimization and 2.98x (:math:`7.86sec` to :math:`2.63sec`) using the multi-core engine. 
+The Shallow Water simulation only has a time complexity of :math:`O(n)` thus it is the most memory intensive application in our benchmark. Still, Bohrium manages to achieve a performance speedup of 1.52x (:math:`7.86sec` to :math:`5.17sec`) due to memory-allocation optimization and 2.98x (:math:`7.86sec` to :math:`2.63sec`) using the multi-core engine. 
 
 Finally, the synthetic stencil has an almost identical performance pattern as the shallow water benchmark the `score` engine does however give slightly better results than the `simple` engine. Score achieves a speedup of 1.6x (:math:`6.60sec` to :math:`4.09sec`) and the `mcore` engine achieves a speedup of 3.04x (:math:`6.60sec` to :math:`2.17sec`).
 
-It is promising to observe that even most basic vector engine (`simple`) shows a speedup and in none of our benchmarks a slowdown. This leads to the promising conclusion that the memory optimizations implemented outweigh the cost of using cphVB. Adding the potential of speedup due to data-blocking motivates studying further optimizations in addition to thread-level-parallelization.
+It is promising to observe that even most basic vector engine (`simple`) shows a speedup and in none of our benchmarks a slowdown. This leads to the promising conclusion that the memory optimizations implemented outweigh the cost of using Bohrium. Adding the potential of speedup due to data-blocking motivates studying further optimizations in addition to thread-level-parallelization.
 The `mcore` engine does provide speedups, the speedup does however not scale with the number of cores. This result is however expected as the benchmarks are memory-intensive and the memory subsystem is therefore the bottleneck and not the number of computational cores available.
 
 .. figure:: jacobi_fixed_speedup.pdf
@@ -343,20 +343,20 @@ The `mcore` engine does provide speedups, the speedup does however not scale wit
 Future Work
 -----------
 
-The future goals of cphVB involves improvement in two major areas; expanding support and improving performance. Work has started on a CIL-bridge which will leverage the use of cphVB to every CIL based programming language which among others include: C\#, F\#, Visual C++ and VB.NET. Another project in current progress within the area of support is a C++ bridge providing a library-like interface to cphVB using operator overloading and templates to provide a high-level interface in C++.
+The future goals of Bohrium involves improvement in two major areas; expanding support and improving performance. Work has started on a CIL-bridge which will leverage the use of Bohrium to every CIL based programming language which among others include: C\#, F\#, Visual C++ and VB.NET. Another project in current progress within the area of support is a C++ bridge providing a library-like interface to Bohrium using operator overloading and templates to provide a high-level interface in C++.
 
-To improve both support and performance, work is in progress on a vector engine targeting OpenCL compatible hardware, mainly focusing on using GPU-resources to improve performance. Additionally the support for program execution using distributed memory is on progress. This functionality will be added to cphVB in the form a vector engine manager.
+To improve both support and performance, work is in progress on a vector engine targeting OpenCL compatible hardware, mainly focusing on using GPU-resources to improve performance. Additionally the support for program execution using distributed memory is on progress. This functionality will be added to Bohrium in the form a vector engine manager.
 
-In terms of pure performance enhancement, cphVB will introduce JIT compilation in order to improve memory intensive applications. The current vector engine for multi-cores CPUs uses data blocking to improve cache utilization but as our experiments show then the memory intensive applications still suffer from the von Neumann bottleneck [Bac78]_. By JIT compile the instruction kernels, it is possible to improve cache utilization drastically.
+In terms of pure performance enhancement, Bohrium will introduce JIT compilation in order to improve memory intensive applications. The current vector engine for multi-cores CPUs uses data blocking to improve cache utilization but as our experiments show then the memory intensive applications still suffer from the von Neumann bottleneck [Bac78]_. By JIT compile the instruction kernels, it is possible to improve cache utilization drastically.
 
 Conclusion
 ----------
 
-The vector oriented programming model used in cphVB provides a framework for high-performance and high-productivity. It enables the end-user to execute vectorized applications on a broad range of hardware architectures efficiently without any hardware specific knowledge. Furthermore, the cphVB design supports scalable architectures such as clusters and supercomputers. It is even possible to combine architectures in order to exploit hybrid programming where multiple levels of parallelism exist. The authors in [Kri11]_ demonstrate that combining shared memory and distributed memory parallelism through hybrid programming is essential in order to utilize the Blue Gene/P architecture fully.
+The vector oriented programming model used in Bohrium provides a framework for high-performance and high-productivity. It enables the end-user to execute vectorized applications on a broad range of hardware architectures efficiently without any hardware specific knowledge. Furthermore, the Bohrium design supports scalable architectures such as clusters and supercomputers. It is even possible to combine architectures in order to exploit hybrid programming where multiple levels of parallelism exist. The authors in [Kri11]_ demonstrate that combining shared memory and distributed memory parallelism through hybrid programming is essential in order to utilize the Blue Gene/P architecture fully.
 
-In a case study, we demonstrate the design of cphVB by implementing a front-end for Python/NumPy that targets multi-core CPUs in a shared memory environment. The implementation executes vectorized applications in parallel without any user intervention. Thus showing that it is possible to retain the high abstraction level of Python/NumPy while fully utilizing the underlying hardware. Furthermore, the implementation demonstrates scalable performance – a k-nearest neighbor search purely written in Python/NumPy obtains a speedup of more than five compared to a native execution.
+In a case study, we demonstrate the design of Bohrium by implementing a front-end for Python/NumPy that targets multi-core CPUs in a shared memory environment. The implementation executes vectorized applications in parallel without any user intervention. Thus showing that it is possible to retain the high abstraction level of Python/NumPy while fully utilizing the underlying hardware. Furthermore, the implementation demonstrates scalable performance – a k-nearest neighbor search purely written in Python/NumPy obtains a speedup of more than five compared to a native execution.
 
-Future work will further test the cphVB design model as new front-end technologies and heterogeneous architectures are supported. 
+Future work will further test the Bohrium design model as new front-end technologies and heterogeneous architectures are supported. 
 
 References
 ----------
