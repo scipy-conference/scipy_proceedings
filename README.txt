@@ -8,10 +8,10 @@ Papers are formatted using reStructuredText and the compiled version should be
 no longer than 7 pages, including figures.  Here are the steps to produce a
 paper:
 
-- Fork the 2012 branch of the `scipy_proceedings
-  <https://github.com/scipy/scipy_proceedings>`__ repository on GitHub.
+- Fork the `scipy_proceedings <https://github.com/scipy/scipy_proceedings>`__
+  repository on GitHub.
 
-- Check out the 2012 branch (`git checkout 2012`).
+- Check out the 2013 branch (`git checkout 2013`).
 
 - An example paper is provided in ``papers/00_vanderwalt``.  Create a new
   directory ``papers/firstname_surname``, copy the example paper into it, and
@@ -22,13 +22,13 @@ paper:
   ``output/firstname_surname/paper.pdf``.
 
 - Once you are ready to submit your paper, file a pull request on GitHub.
-  Please ensure that you file against the correct branch--your branch should be
-  named 2012, and the pull-request should be against our 2012 branch.
+  **Please ensure that you file against the correct branch**--your branch should
+  be named 2013, and the pull-request should be against our 2013 branch.
 
 - Please do not modify any files outside of your paper directory.
 
-Pull requests are to be submitted by **July 15th**, but modifications may be
-pushed until August 12th.
+Pull requests are to be submitted by **May 19th**, but modifications are
+allowed during the review period until June 16th.
 
 General Guidelines
 ``````````````````
