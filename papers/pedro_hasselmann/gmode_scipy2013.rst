@@ -37,8 +37,8 @@ Finally, results for Asteroids Taxonomy and tests for different sample sizes and
 
 Introduction
 ------------
-The classes were defined using the G-mode multivariate clustering method, designed by A. I. Gavrishin [Coradini+1976] and 
-previously implemented to FORTRAN V by [Coradini+1977] to classify geochemical samples, but applicable to a wide range of research fields, 
+The classes were defined using the G-mode multivariate clustering method, designed by A. I. Gavrishin [Coradini1976] and 
+previously implemented to FORTRAN V by [Coradini1977] to classify geochemical samples, but applicable to a wide range of research fields, 
 as planetary sciences [REF], disk-resolved remote sensing [REF] and cosmology [REF]. 
 The G-mode classifies *N* elements into *Nc* unimodal clusters containing *Na* elements each. Elements are described by M variables. 
 
@@ -46,8 +46,8 @@ This method is unsupervised, which allows an automatic identification of cluster
 For that, user must control only two critical parameters for the classification, the confidence levels *q1* and *q2*, that may be equated, 
 for simplification. The smaller these parameters get, more clusters are resolved and lower their variances are.
 
-The G-mode procedure used here follows a adapted version of the method published by [Gavrishin+1992], briefly described by Fulchignoni et al. 
-(2000) and reviewed by Tosi et al. (2005) and Leyrat et al. (2010). 
+The G-mode procedure used here follows a adapted version of the method published by [Gavrishin1992], briefly described by [Fulchignoni2000] and 
+reviewed by [Tosi2005] and [Leyrat2010]. 
 Robust estimators, a faster initial seed finder and statistical whitenning were introduced to produce a more robust set of clusters and 
 optimize the processing time. The coding was performed in Python 2.7 with help of Matplotlib, Numpy and Scipy packages. 
 The method procedure can be briefly summarized in two parts: the first one is the cluster recognition and 
@@ -129,22 +129,22 @@ When density decreases or the minimal number of points set by the user is reache
 The initial seed is chosen from the elements of the most crowded sector before ending the procedure. 
 In the end, starting central tendency and absolute deviation are estimated from the initial seed. 
 If any absolute deviation is zeroth, the value is replaced by the median error of the variable.                 
-
+|
 
 - *Z² criterion*. In the next step, the mahalanobis distance (``scipy.spatial.distance.mahalanobis``) between the tested cluster and all elements are computed.
-
+|
 
 - *Hypothesis Testing*. The Z² estimator follows a *X* ² distribution, but for sake of simplification, Z² can be transformed to gaussian estimator G
   if the degree of freedom is larger enough, which is satisfied for most of the samples. Now, the critical value ``G_{q1}
   in hypothesis testing are given as multiples of \sigma, simplifying its interpretation. 
   Therefore, the vectorized transformation can be written (Abramowitz and Stegun 1972):
-
+|
   
 - *|mgr| and |sfgr| are redefined in each iterative run*. The iteration is executed until the *Na*
   and R become unchanged over successive runs. Once the first unimodal cluster is formed, its members are removed from the sample and 
   the above procedure is applied again until all the sample is depleted, no more initial seed is found or the condition ``N > M-1``
   is not satisfied anymore. If a initial seed fails to produce a cluster, its elements are also excluded from the sample.
-
+|
   
 As soon as all unimodal clusters are found and its central tendency and absolute deviation are computed, the method goes to the next stage: 
 to measure the hyperdimension distance between classes and evaluate the variable relevance to the classification.
@@ -152,10 +152,11 @@ to measure the hyperdimension distance between classes and evaluate the variable
 
 References
 ----------
-.. [Coradini+1976] 
-.. [Coradini+1977] 
-.. [Gavrishin+1992] 
-.. [Fulchignoni+2000] 
-..
+.. [Coradini1976] 
+.. [Coradini1977] 
+.. [Gavrishin1992] 
+.. [Fulchignoni2000] 
+.. [Tosi2005] 
+.. [Leyrat2010] 
 
 
