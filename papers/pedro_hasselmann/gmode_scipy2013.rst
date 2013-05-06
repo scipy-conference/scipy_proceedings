@@ -62,7 +62,7 @@ The first procedure can be summarized on the following topics:
 
 - *The data is arranged according to the code*:
 
-.. code-block:: 
+.. code-block:: python
    def LoadData(self,filename):
 
        from operator import getitem, itemgetter
@@ -83,16 +83,16 @@ The first procedure can be summarized on the following topics:
 
 - *Initial seed of a forming cluster is identified*. 
   At the original implementation, the G-mode relied on a force-brute algorithm to find the three closest elements as initial seed, 
-  which required long processing time. Therefore, in our version the initial seeds are searched recursively using 'numpy.histogramdd', which
+  which required long processing time. Therefore, in our version, the initial seeds are searched recursively using `numpy.histogramdd`, which
   produced a faster result:
 
-.. code-block::
+.. code-block:: python
     def boolist(index, values, lim):
         if all([boo(item[0],item[1]) for item in izip(values,lim)]):
            return index
 
     def pairwise(iterable):
-        "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+        """s -> (s0,s1), (s1,s2), (s2, s3), ..."""
         a, b = tee(iterable)
         next(b, None)
         return izip(a, b)
@@ -126,12 +126,16 @@ The first procedure can be summarized on the following topics:
 
        else:
           return filter(lambda x: x != None, \
-                   imap(lambda i, y: boolist(i,y,zone), xrange(data.shape[0]), data))
+                 imap(lambda i, y: boolist(i,y,zone), xrange(data.shape[0]), data))
+
+The function above divides the variable hyperspace into large sectors, and just in the most crowded sector the initial seed is searched for. 
+Recursively, the most crowded sector is once divided as long as the density grows up. 
+When density decreases or the minimal number of points set by the user is reached, the procedure stops. 
+The initial seed is chosen from the elements of the most crowded sector before ending the procedure. 
+In the end, starting central tendency and absolute deviation are estimated from the initial seed. 
+If any absolute deviation is zeroth, the value is replaced by the median error of the variable.                 
 
 - *Z² criterion*. In the next step, all elements are replaced to a single variable given by the equation:
-.. math:: 
-   Z_{j}^{2}=\frac{M}{\sum_{k,s=1}^{M}r_{ks}^{2}}\sum_{i=1}^{M}\left(\frac{\chi_{ji}-\mu_{i}}{\sigma_{i}}\right)^{2}
-   \overrightarrow{Z^{2}}_{j}=(\overrightarrow{\chi_{j}}-\overrightarrow{\mu})^{T}S^{-1}(\overrightarrow{\chi_{j}}-\overrightarrow{\mu})
 
 - *Hypothesis Testing*. The Z² estimator follows a \chi^{2} distribution, but for sake of simplification, Z^{2} can be transformed to gaussian 
   estimator G for large degree of fredom. Now, the critical value G_{q_{1}} in hypothesis testing are given as multiples of \sigma, 
