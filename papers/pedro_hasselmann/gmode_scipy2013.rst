@@ -63,6 +63,7 @@ The first procedure can be summarized on the following topics:
 - *The data is arranged according to the code*:
 
 .. code-block:: python
+
    def LoadData(self,filename):
 
        from operator import getitem, itemgetter
@@ -87,11 +88,12 @@ The first procedure can be summarized on the following topics:
   produced a faster result:
 
 .. code-block:: python
-    def boolist(index, values, lim):
+
+   def boolist(index, values, lim):
         if all([boo(item[0],item[1]) for item in izip(values,lim)]):
            return index
 
-    def pairwise(iterable):
+   def pairwise(iterable):
         """s -> (s0,s1), (s1,s2), (s2, s3), ..."""
         a, b = tee(iterable)
         next(b, None)
@@ -128,12 +130,12 @@ The first procedure can be summarized on the following topics:
           return filter(lambda x: x != None, \
                  imap(lambda i, y: boolist(i,y,zone), xrange(data.shape[0]), data))
 
-The function above divides the variable hyperspace into large sectors, and just in the most crowded sector the initial seed is searched for. 
-Recursively, the most crowded sector is once divided as long as the density grows up. 
-When density decreases or the minimal number of points set by the user is reached, the procedure stops. 
-The initial seed is chosen from the elements of the most crowded sector before ending the procedure. 
-In the end, starting central tendency and absolute deviation are estimated from the initial seed. 
-If any absolute deviation is zeroth, the value is replaced by the median error of the variable.                 
+  The function above divides the variable hyperspace into large sectors, and just in the most crowded sector the initial seed is searched for. 
+  Recursively, the most crowded sector is once divided as long as the density grows up. 
+  When density decreases or the minimal number of points set by the user is reached, the procedure stops. 
+  The initial seed is chosen from the elements of the most crowded sector before ending the procedure. 
+  In the end, starting central tendency and absolute deviation are estimated from the initial seed. 
+  If any absolute deviation is zeroth, the value is replaced by the median error of the variable.                 
 
 - *Z² criterion*. In the next step, all elements are replaced to a single variable given by the equation:
 
@@ -145,10 +147,6 @@ If any absolute deviation is zeroth, the value is replaced by the median error o
   and R become unchanged over successive runs. Once the first unimodal cluster is formed, its members are removed from the sample and 
   the above procedure is applied again until all the sample is depleted, no more initial seed is found or the condition N>M-1
   is not satisfied anymore. If a initial seed fails to produce a cluster, its elements are also excluded from the sample.
-
-- In the final step, the non-classified elements and the excluded initial seeds are once again tested against the null hypothesis \chi_{ij}=\mu_{i}
-  to be reclassified. However, now \mu_{i}
-  is the central tendency of each previously identified class. This step is basically the extension proposed by Fulchignoni et al. (2000).
 
 As soon as all unimodal clusters are found and its central tendency and absolute deviation are computed, the method goes to the next stage: 
 to measure the hyperdimension distance between classes and evaluate the variable relevance to the classification.
