@@ -64,27 +64,27 @@ The first procedure can be summarized on the following topics:
 
 .. code-block:: python
 
-   def LoadData(self,filename):
+   def LoadData(filename):
 
        from operator import getitem, itemgetter
        from numpy import genfromtxt
 
        data = map(list,genfromtxt(filename, dtype=None))
 
-       self.design   = map(itemgetter(0),data)
-       self.uniq_id  = map(itemgetter(1),data)
+       design   = map(itemgetter(0),data)
+       unique_id  = map(itemgetter(1),data)
 
-       self.elems  = [array(item[2::2], dtype=float64) for item in data]
-       self.errs   = [array(item[3::2], dtype=float64) for item in data]
+       elements  = [array(item[2::2], dtype=float64) for item in data]
+       errors   = [array(item[3::2], dtype=float64) for item in data]
 
-       self.indexs = range(len(self.design))
+       indexes = range(len(self.design))
 
-  All variables are whiten (:math: scipy.cluster.vq.whiten), which means they are divided by their absolute deviation to scale all them up. 
-  This is a important measure when dealing with percentage variables, such as geometric albedos.
+All variables are whiten (:scipy.cluster.vq.whiten:), which means they are divided by their absolute deviation to scale all them up. 
+This is a important measure when dealing with percentage variables, such as geometric albedos.
 
 - *Initial seed of a forming cluster is identified*. 
   At the original implementation, the G-mode relied on a force-brute algorithm to find the three closest elements as initial seed, 
-  which required long processing time. Therefore, in our version, the initial seeds are searched recursively using `numpy.histogramdd`, which
+  which required long processing time. Therefore, in our version, the initial seeds are searched recursively using :numpy.histogramdd:, which
   produced a faster result:
 
 .. code-block:: python
@@ -106,46 +106,40 @@ The first procedure can be summarized on the following topics:
     
    def barycenter_density(data, grid, upper, lower, dens = 0e0, nmin = 6):
    
-       from numpy import histogramdd, array
+       from numpy import histogramdd, array, unravel_index, amax
    
        rng   = range(data.shape[1])
-
        nbin = map(int,array([grid]*data.shape[1]))
-
        hist, edges = histogramdd(data,bins=nbin,range=tuple(zip(lower, upper)))
-
        limits = array([list(pairwise(edges[i])) for i in rng])
-
        ind = unravel_index(argmax(hist), hist.shape) 
-
        zone = array([limits[i,j] for i, j in izip(rng, ind)])
-
        density = amax(hist) / volume(zone)
-    
+       
        if density > dens and amax(hist) > nmin:
           zone = zone.T
           return barycenter_density(data, grid, zone[1], zone[0], density, nmin)
-
        else:
           return filter(lambda x: x != None, \
                  imap(lambda i, y: boolist(i,y,zone), xrange(data.shape[0]), data))
 
-  The function above divides the variable hyperspace into large sectors, and just in the most crowded sector the initial seed is searched for. 
-  Recursively, the most crowded sector is once divided as long as the density grows up. 
-  When density decreases or the minimal number of points set by the user is reached, the procedure stops. 
-  The initial seed is chosen from the elements of the most crowded sector before ending the procedure. 
-  In the end, starting central tendency and absolute deviation are estimated from the initial seed. 
-  If any absolute deviation is zeroth, the value is replaced by the median error of the variable.                 
+The function above divides the variable hyperspace into large sectors, and just in the most crowded sector the initial seed is searched for. 
+Recursively, the most crowded sector is once divided as long as the density grows up. 
+When density decreases or the minimal number of points set by the user is reached, the procedure stops. 
+The initial seed is chosen from the elements of the most crowded sector before ending the procedure. 
+In the end, starting central tendency and absolute deviation are estimated from the initial seed. 
+If any absolute deviation is zeroth, the value is replaced by the median error of the variable.                 
 
-- *Z² criterion*. In the next step, all elements are replaced to a single variable given by the equation:
+- *Z² criterion*. In the next step, the mahalanobis distance (:scipy.spatial.distance.mahalanobis:) between the tested cluster and all elements are computed.
 
-- *Hypothesis Testing*. The Z² estimator follows a \chi^{2} distribution, but for sake of simplification, Z^{2} can be transformed to gaussian 
-  estimator G for large degree of fredom. Now, the critical value G_{q_{1}} in hypothesis testing are given as multiples of \sigma, 
-  which simplify its interpretation.
+- *Hypothesis Testing*. The Z² estimator follows a |Xgr|² distribution, but for sake of simplification, Z² can be transformed to gaussian estimator G
+  if the degree of freedom is larger enough, which is satisfied for most of the samples. Now, the critical value G_{q1}
+  in hypothesis testing are given as multiples of \sigma, simplifying its interpretation. 
+  Therefore, the vectorized transformation can be written (Abramowitz and Stegun 1972):
 
-- *|mgr| and |sfgr| are redefined in each iterative run*. The iteration is executed until the N_{a}
+- *|mgr| and |sfgr| are redefined in each iterative run*. The iteration is executed until the *Na*
   and R become unchanged over successive runs. Once the first unimodal cluster is formed, its members are removed from the sample and 
-  the above procedure is applied again until all the sample is depleted, no more initial seed is found or the condition N>M-1
+  the above procedure is applied again until all the sample is depleted, no more initial seed is found or the condition ``N > M-1``
   is not satisfied anymore. If a initial seed fails to produce a cluster, its elements are also excluded from the sample.
 
 As soon as all unimodal clusters are found and its central tendency and absolute deviation are computed, the method goes to the next stage: 
