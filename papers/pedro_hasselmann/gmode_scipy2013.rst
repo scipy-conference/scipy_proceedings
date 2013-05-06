@@ -130,30 +130,49 @@ The initial seed is chosen from the elements of the most crowded sector before e
 In the end, starting central tendency and absolute deviation are estimated from the initial seed. 
 If any absolute deviation is zeroth, the value is replaced by the median error of the variable.                 
 |
-
 - *Z² criterion*. In the next step, the mahalanobis distance (``scipy.spatial.distance.mahalanobis``) between the tested cluster and all elements are computed.
 |
-
-- *Hypothesis Testing*. The Z² estimator follows a *X* ² distribution, but for sake of simplification, Z² can be transformed to gaussian estimator G
-  if the degree of freedom is larger enough, which is satisfied for most of the samples. Now, the critical value ``G_{q1}
+- *Hypothesis Testing*. The Z² estimator follows a *X* ² distribution, but for sake of simplification, Z² can be transformed to gaussian estimator ``G``
+  if the degree of freedom is larger enough, which is satisfied for most of the samples. Now, the critical value ``G_{q1}``
   in hypothesis testing are given as multiples of \sigma, simplifying its interpretation. 
   Therefore, the vectorized transformation can be written (Abramowitz and Stegun 1972):
+
+.. code-block:: python
+
+   from numpy import all, sqrt, ravel, sum
+
+    """ R is the correlation matrix """
+    f = lambda R: ravel( R.shape[1]/sum(R, axis=0) )
+
+   def G(N, f, Z2):   
+       from numpy import all, sqrt
+
+       if all(N*f > 100e0):
+          return  sqrt(2e0*z2) -  sqrt(2e0*f - 1e0)
+
+       elif all(N*f >= 30e0) and aall(N*f <= 100e0):
+            return ((z2/f)**(1e0/3) - (1e0 - (2e0/9)*f))/sqrt((2e0/9)*f)
+    
+       elif all(N*f < 30e0):
+            return None
+
+   def hyp_test(N, q1, f, index, Z2):
+       if all(G(N, f, Z2) < q1):
+          return index
 |
-  
 - *|mgr| and |sfgr| are redefined in each iterative run*. The iteration is executed until the *Na*
   and R become unchanged over successive runs. Once the first unimodal cluster is formed, its members are removed from the sample and 
   the above procedure is applied again until all the sample is depleted, no more initial seed is found or the condition ``N > M-1``
   is not satisfied anymore. If a initial seed fails to produce a cluster, its elements are also excluded from the sample.
-|
-  
+| 
 As soon as all unimodal clusters are found and its central tendency and absolute deviation are computed, the method goes to the next stage: 
 to measure the hyperdimension distance between classes and evaluate the variable relevance to the classification.
 
 
 References
 ----------
-.. [Coradini1976] 
-.. [Coradini1977] 
+.. [Coradini1976] Coradini
+.. [Coradini1977] Coradini
 .. [Gavrishin1992] 
 .. [Fulchignoni2000] 
 .. [Tosi2005] 
