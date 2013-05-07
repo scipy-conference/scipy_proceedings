@@ -37,8 +37,8 @@ Finally, results for Asteroids Taxonomy and tests for different sample sizes and
 
 Introduction
 ------------
-The classes were defined using the G-mode multivariate clustering method, designed by A. I. Gavrishin [Cor76] and 
-previously implemented to FORTRAN V by [Cor77] to classify geochemical samples, but applicable to a wide range of research fields, 
+The classes were defined using the G-mode multivariate clustering method, designed by A. I. Gavrishin [Cor76]_ and 
+previously implemented to FORTRAN V by [Cor77]_ to classify geochemical samples, but applicable to a wide range of research fields, 
 as planetary sciences [REF], disk-resolved remote sensing [REF] and cosmology [REF]. 
 The G-mode classifies *N* elements into *Nc* unimodal clusters containing *Na* elements each. Elements are described by M variables. 
 
@@ -46,13 +46,11 @@ This method is unsupervised, which allows an automatic identification of cluster
 For that, user must control only two critical parameters for the classification, the confidence levels *q1* and *q2*, that may be equated 
 for simplification. Smaller these parameters get, more clusters are resolved and lower their variances are.
 
-The G-mode used here follows a adapted version of the method published by [Gav92], briefly described by [Ful00] and 
-reviewed by [Tosi05] and [Ley10]. 
-Robust estimators, a faster initial seed finder and statistical whitenning were introduced to produce a more robust set of clusters and 
-optimize the processing time. The coding was performed in Python 2.7 with help of Matplotlib, Numpy and Scipy packages. 
+The G-mode used here follows a adapted version of the method published by [Gav92]_, briefly described by [Ful00]_ and reviewed by [Tosi05]_ and [Ley10]_. 
+Robust central tendency and absolute deviation estimators, a faster initial seed finder and statistical whitenning were introduced to produce a more 
+robust set of clusters and optimize the processing time. The coding was performed in Python 2.7 with help of Matplotlib, Numpy and Scipy packages. 
 The method procedure can be briefly summarized in two parts: the first one is the cluster recognition and 
-the second evaluates each variable in the classification process. Each are described in the following subsections. 
-In the last subsection, the central tendency and absolute deviation estimators, based on robust statistics, are then presented.
+the second evaluates each variable in the classification process. Each are described in the following sections. 
 
  
 Recognition Of The Unimodal Clusters
@@ -128,13 +126,13 @@ The function above divides the variable hyperspace into large sectors, and just 
 Recursively, the most crowded sector is once divided as long as the density grows up. 
 When density decreases or the minimal number of points set by the user is reached, the procedure stops. 
 The initial seed is chosen from the elements of the most crowded sector before ending the procedure. 
-In the end, starting central tendency :math: `|mgr|_{i}` and absolute deviation :math: `|sfgr|_{i}` are estimated from the initial seed. 
+In the end, starting central tendency :math:`|mgr|_{i}` and absolute deviation :math:`|sfgr|_{i}` are estimated from the initial seed. 
 If any absolute deviation is zeroth, the value is replaced by the median error of the variable.                 
-|
+
 - *Z² criterion*. In the next step, the mahalanobis distance (``scipy.spatial.distance.mahalanobis``) between the tested cluster and all elements are computed.
 
 - *Hypothesis Testing*. The Z² estimator follows a *X* ² distribution, but for sake of simplification, Z² can be transformed to gaussian estimator ``G``
-  if the degree of freedom is larger enough, which is satisfied for most of samples. Now, the critical value ``G_{q1}``
+  if the degree of freedom is larger enough, which is satisfied for most of samples. Now, the critical value :math:`G_{q1}`
   in hypothesis testing are given as multiples of |sfgr|, simplifying its interpretation. 
   Therefore, the vectorized transformation [Abra72] can be put into the following line of code:
 
@@ -160,7 +158,7 @@ If any absolute deviation is zeroth, the value is replaced by the median error o
        elif all(N*f < 30e0):
             return None
 
-   """ Hypothesis Testing """
+   # Hypothesis Testing
    """ Gq1 --> critical values related to confidence level q1 """
    def hyp_test(N, Gq1, f, index, Z2):
        if all(G(N, f, Z2) < Gq1):
@@ -210,23 +208,82 @@ The variables are tested for their power to discriminate clusters against each o
    # Absolute Distance Matrix.
    D2[a][b] = (Z2ab + Z2ba)/(fab + fba - 1e0)
 
-The :math: `G_{i}` matrix gives the efficiency of variable i to resolve the clusters, thus the smaller are its element values, less separated are the classes. 
-To discriminate the redundant variables, all the elements of :math: `G_{i}` matrix are tested against the null hypothesis :math: `|mgr|_{i,a} = |mgr|_{i,b}` , 
-and if all of them does not satisfies :math: `G_{i}(a,b) < G_{q_{2}}`, the method is run again without the variable i. 
+The :math:`G_{i}` matrix gives the efficiency of variable i to resolve the clusters, thus the smaller are its element values, less separated are the classes. 
+To discriminate the redundant variables, all the elements of :math:`G_{i}` matrix are tested against the null hypothesis :math:`|mgr|_{i,a} = |mgr|_{i,b}` , 
+and if all of them does not satisfies :math:`G_{i}(a,b) < G_{q_{2}}`, the method is run again without the variable i. 
 The method is repeated until stability is found on the most suitable set of meaningful variables for the sample.
 
 The ``Nc X Nc`` symmetric Distance Matrix between clusters with respect to all meaningful variables is also calculated. 
-The same interpretation given to :math: `G_{i}`  matrices can be used here: higher D²(a,b) elements, more distinct are the clusters from each other.
+The same interpretation given to :math:`G_{i}`  matrices can be used here: higher D²(a,b) elements, more distinct are the clusters from each other.
 D²(a,b) matrix is used to produce a ``scipy.cluster.hierarchy.dendogram``, which graphically shows the relation among all clusters.
 
 Robust Median Statistics
 ------------------------
 
 Robust Statistics seeks alternative estimators which are not excessively affected by outliers or departures from an assumed sample distribution. 
-For central tendency estimator : math: `|mgr|_{i}`, the median was chosen over mean due to its breakdown point of 50 % against 0% for mean. 
+For central tendency estimator : math:`|mgr|_{i}`, the median was chosen over mean due to its breakdown point of 50 % against 0% for mean. 
 Higher the breakdown point, the estimator is more resistant to variations due to errors or outliers. 
-Following a median-based statistics, the Median of Absolute Deviation (MAD) was selected for deviation estimator |sfgr|. 
-The MAD is said to be conceived by Gauss in 1816 ([Hampel 1974]) and is given by:
+Following a median-based statistics, the Median of Absolute Deviation (MAD) was selected to represent the deviation estimator |sfgr|. 
+The MAD is said to be conceived by Gauss in 1816 [Ham74]_ and can be expressed in function below:
+
+.. code-block:: python
+   
+    from numpy import fabs, median
+    
+    # X is a array and ct is the median of tested cluster.
+    def mad(X, ct, K=1.4826):
+        return K*median(fabs(X - ct), axis=0)
+   
+To be used as a estimator of standard deviation, the MAD must be multiplied by a scaling factor K, which adjusts the value for a assumed distribution. 
+For Gaussian distribution, which is the distribution assumed for clusters in the G-mode, ``K = 1.426``.
+
+To compute the mahalanobis distance is necessary to estimate the covariance matrix.
+MAD is expanded to calculate its terms:
+
+.. code-block:: python
+
+    from numpy import matrix, median
+
+    # X is a array and ct is the median of tested cluster.
+    def cov(X, ct, K=1.4826):
+        X = X - ct
+        return matrix( [median(X.T*X[:,i], axis=1)*K**2 for i in xrange(X.shape[1])] )
+
+The correlation coefficient r_{s,k} used in this G-mode version was proposed by [Shev97]_ to be a median counterpart to 
+pearson correlation coefficient, with breakpoint of 50%, like MAD against standard deviation. 
+The coefficient is based on linear data transformation and depends on MAD and the deviation of each element from the median:        
+
+.. code-block:: python
+
+   from numpy import median, matrix, isnan, fabs
+   from collections import deque
+
+   # X is a array
+   # ct is the median of testec cluster.
+   # dev is the MAD of tested cluster.
+   def Robust_R(X, ct, dev):
+
+       X = (X - ct)/dev
+       r2 = deque()
+    
+       for i in xrange(X.shape[1]):
+           u  = median(fabs(X.T + X[:,i]), axis=1)**2
+           v  = median(fabs(X.T - X[:,i]), axis=1)**2
+           ri = (u - v)/(u + v)
+           r2.append(ri**2)
+
+       r2 = matrix(r2)
+
+       if aall(isnan(r2)) : 
+          r2 = matrix(eye(X.shape[1]))
+       else:
+          whereNaN = isnan(r2)
+          r2[whereNaN] = 1e0
+
+       return r2
+
+The application of median statistics on G-mode is a departure from the original concept of the method. 
+The goal is producing more stable classes and save processing time from unnecessary sucessive iterations.
 
 References
 ----------
@@ -237,4 +294,5 @@ References
 .. [Tosi05] Tosi et al. 2005
 .. [Ley10] Leyrat et al. 2010
 .. [Abra72] Abramowitz and Stegun 1972
-
+.. [Ham74] Hampel 1974
+.. [Shev97] Shevlyakov 1997
