@@ -37,17 +37,17 @@ Finally, results for Asteroids Taxonomy and tests for different sample sizes and
 
 Introduction
 ------------
-The classes were defined using the G-mode multivariate clustering method, designed by A. I. Gavrishin [Coradini1976] and 
-previously implemented to FORTRAN V by [Coradini1977] to classify geochemical samples, but applicable to a wide range of research fields, 
+The classes were defined using the G-mode multivariate clustering method, designed by A. I. Gavrishin [Cor76] and 
+previously implemented to FORTRAN V by [Cor77] to classify geochemical samples, but applicable to a wide range of research fields, 
 as planetary sciences [REF], disk-resolved remote sensing [REF] and cosmology [REF]. 
 The G-mode classifies *N* elements into *Nc* unimodal clusters containing *Na* elements each. Elements are described by M variables. 
 
 This method is unsupervised, which allows an automatic identification of clusters without any a priori knowledge of the sample distribution. 
-For that, user must control only two critical parameters for the classification, the confidence levels *q1* and *q2*, that may be equated, 
-for simplification. The smaller these parameters get, more clusters are resolved and lower their variances are.
+For that, user must control only two critical parameters for the classification, the confidence levels *q1* and *q2*, that may be equated 
+for simplification. Smaller these parameters get, more clusters are resolved and lower their variances are.
 
-The G-mode procedure used here follows a adapted version of the method published by [Gavrishin1992], briefly described by [Fulchignoni2000] and 
-reviewed by [Tosi2005] and [Leyrat2010]. 
+The G-mode used here follows a adapted version of the method published by [Gav92], briefly described by [Ful00] and 
+reviewed by [Tosi05] and [Ley10]. 
 Robust estimators, a faster initial seed finder and statistical whitenning were introduced to produce a more robust set of clusters and 
 optimize the processing time. The coding was performed in Python 2.7 with help of Matplotlib, Numpy and Scipy packages. 
 The method procedure can be briefly summarized in two parts: the first one is the cluster recognition and 
@@ -55,8 +55,8 @@ the second evaluates each variable in the classification process. Each are descr
 In the last subsection, the central tendency and absolute deviation estimators, based on robust statistics, are then presented.
 
  
-Recognition of the unimodal clusters
---------------
+Recognition Of The Unimodal Clusters
+------------------------------------
 
 The first procedure can be summarized on the following topics:
 
@@ -116,6 +116,7 @@ This is a important measure when dealing with percentage variables, such as geom
        zone = array([limits[i,j] for i, j in izip(rng, ind)])
        density = amax(hist) / volume(zone)
        
+       """ Recurvise until the density goes lower or the minimum number is reached. """
        if density > dens and amax(hist) > nmin:
           zone = zone.T
           return barycenter_density(data, grid, zone[1], zone[0], density, nmin)
@@ -127,15 +128,15 @@ The function above divides the variable hyperspace into large sectors, and just 
 Recursively, the most crowded sector is once divided as long as the density grows up. 
 When density decreases or the minimal number of points set by the user is reached, the procedure stops. 
 The initial seed is chosen from the elements of the most crowded sector before ending the procedure. 
-In the end, starting central tendency and absolute deviation are estimated from the initial seed. 
+In the end, starting central tendency :math: `|mgr|_{i}` and absolute deviation :math: `|sfgr|_{i}` are estimated from the initial seed. 
 If any absolute deviation is zeroth, the value is replaced by the median error of the variable.                 
 |
 - *Z² criterion*. In the next step, the mahalanobis distance (``scipy.spatial.distance.mahalanobis``) between the tested cluster and all elements are computed.
-|
+
 - *Hypothesis Testing*. The Z² estimator follows a *X* ² distribution, but for sake of simplification, Z² can be transformed to gaussian estimator ``G``
-  if the degree of freedom is larger enough, which is satisfied for most of the samples. Now, the critical value ``G_{q1}``
-  in hypothesis testing are given as multiples of \sigma, simplifying its interpretation. 
-  Therefore, the vectorized transformation can be written (Abramowitz and Stegun 1972):
+  if the degree of freedom is larger enough, which is satisfied for most of samples. Now, the critical value ``G_{q1}``
+  in hypothesis testing are given as multiples of |sfgr|, simplifying its interpretation. 
+  Therefore, the vectorized transformation [Abra72] can be put into the following line of code:
 
 .. code-block:: python
 
@@ -144,7 +145,10 @@ If any absolute deviation is zeroth, the value is replaced by the median error o
     """ R is the correlation matrix """
     f = lambda R: ravel( R.shape[1]/sum(R, axis=0) )
 
-   def G(N, f, Z2):   
+   """ G  --> Gaussian vector Estimator """
+   """ Z2 --> Chi-squared vector Estimator """
+   """ N is the number of elements """
+   def G(N, f, Z2):
        from numpy import all, sqrt
 
        if all(N*f > 100e0):
@@ -156,11 +160,13 @@ If any absolute deviation is zeroth, the value is replaced by the median error o
        elif all(N*f < 30e0):
             return None
 
-   def hyp_test(N, q1, f, index, Z2):
-       if all(G(N, f, Z2) < q1):
+   """ Hypothesis Testing """
+   """ Gq1 --> critical values related to confidence level q1 """
+   def hyp_test(N, Gq1, f, index, Z2):
+       if all(G(N, f, Z2) < Gq1):
           return index
-|
-- *|mgr| and |sfgr| are redefined in each iterative run*. The iteration is executed until the *Na*
+
+- *|mgr|_{i} and |sfgr|_{i} are redefined in each iterative run*. The iteration is executed until the *Na*
   and R become unchanged over successive runs. Once the first unimodal cluster is formed, its members are removed from the sample and 
   the above procedure is applied again until all the sample is depleted, no more initial seed is found or the condition ``N > M-1``
   is not satisfied anymore. If a initial seed fails to produce a cluster, its elements are also excluded from the sample.
@@ -168,14 +174,67 @@ If any absolute deviation is zeroth, the value is replaced by the median error o
 As soon as all unimodal clusters are found and its central tendency and absolute deviation are computed, the method goes to the next stage: 
 to measure the hyperdimension distance between classes and evaluate the variable relevance to the classification.
 
+Variable Evaluation and Distance Matrix
+---------------------------------------
+
+This part of the method is also based on Z² criterion, but now the objects of evaluation are the clusters identified on the previous stage. 
+The variables are tested for their power to discriminate clusters against each other. For this purpose, the elements of the ``Nc X Nc``
+(*Nc*, the number of classes) symmetric matrices of G estimators are computed for each variable i as follows:
+
+.. code-block:: python
+
+   from numpy import sum
+
+   """ a, b --> a pair of evaluated clusters. """
+   """ member[a], member[b] --> array of members of a cluster. """
+   """ ct[a], ct[b]   --> Central Tendencies. """
+   """ dev[a], dev[b] --> Median Absolute Deviations. """
+   """ R[a], R[b]     --> Inverted Correlation Matrix. """
+   
+   # Degrees of freedom:
+   fab = (Nb - 1e0)*(M**2)/sum(R_a)
+   fba = (Na - 1e0)*(M**2)/sum(R_b)
+          
+   # Calculating Z²i(a,b) e Z²i(b,a) --> Normalized Eucliadean Distance. 
+   Z2iab = sum( ( (member[b] - ct[a])/dev[a] )**2, axis=0 )
+   Z2iba = sum( ( (member[a] - ct[b])/dev[b] )**2, axis=0 )
+
+   # Calculating Z²(a,b) e Z2(b,a):
+   Z2ab = sum( dot(iR[a], Z2iab) )
+   Z2ba = sum( dot(iR[b], Z2iba) )
+
+   # Calculating Gc :
+   for i in xrange(M):
+       Gc[i][a][b] = sqrt(2e0*(Z2iab[i] + Z2iba[i])) - sqrt(2e0*(Na + Nb) - 1e0)
+
+   # Absolute Distance Matrix.
+   D2[a][b] = (Z2ab + Z2ba)/(fab + fba - 1e0)
+
+The :math: `G_{i}` matrix gives the efficiency of variable i to resolve the clusters, thus the smaller are its element values, less separated are the classes. 
+To discriminate the redundant variables, all the elements of :math: `G_{i}` matrix are tested against the null hypothesis :math: `|mgr|_{i,a} = |mgr|_{i,b}` , 
+and if all of them does not satisfies :math: `G_{i}(a,b) < G_{q_{2}}`, the method is run again without the variable i. 
+The method is repeated until stability is found on the most suitable set of meaningful variables for the sample.
+
+The ``Nc X Nc`` symmetric Distance Matrix between clusters with respect to all meaningful variables is also calculated. 
+The same interpretation given to :math: `G_{i}`  matrices can be used here: higher D²(a,b) elements, more distinct are the clusters from each other.
+D²(a,b) matrix is used to produce a ``scipy.cluster.hierarchy.dendogram``, which graphically shows the relation among all clusters.
+
+Robust Median Statistics
+------------------------
+
+Robust Statistics seeks alternative estimators which are not excessively affected by outliers or departures from an assumed sample distribution. 
+For central tendency estimator : math: `|mgr|_{i}`, the median was chosen over mean due to its breakdown point of 50 % against 0% for mean. 
+Higher the breakdown point, the estimator is more resistant to variations due to errors or outliers. 
+Following a median-based statistics, the Median of Absolute Deviation (MAD) was selected for deviation estimator |sfgr|. 
+The MAD is said to be conceived by Gauss in 1816 ([Hampel 1974]) and is given by:
 
 References
 ----------
-.. [Coradini1976] Coradini
-.. [Coradini1977] Coradini
-.. [Gavrishin1992] 
-.. [Fulchignoni2000] 
-.. [Tosi2005] 
-.. [Leyrat2010] 
-
+.. [Cor76] Coradini et al. 1976
+.. [Cor77] Coradini et al. 1977
+.. [Gav92] Gavrishin et al. 1992
+.. [Ful00] Fulchignoni et al. 2000
+.. [Tosi05] Tosi et al. 2005
+.. [Ley10] Leyrat et al. 2010
+.. [Abra72] Abramowitz and Stegun 1972
 
