@@ -39,3 +39,20 @@ Using Python to Study Rotational Velocity Distributions of Hot Stars
 Introduction
 ------------
 
+blahblah
+
+Science
+-------
+
+blehbleh
+
+Python workflow
+---------------
+
+blihblih
+
+Conclusions
+-----------
+
+blahblah
+
