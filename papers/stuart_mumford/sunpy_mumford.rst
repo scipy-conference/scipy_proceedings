@@ -19,69 +19,29 @@ SunPy: Python for Solar Physicists
 Introduction
 ------------
 
+* Solar Data
+* SunPy Data types
+* IDL / SSW
+* Data processing / analysis
 
- 
-Example rst code:
------------------
+SunPy Data Types
+----------------
+Function, Scope and Organisation of
 
-With code-highlighting:
+* Map
+* Spectra
+* LightCurve
 
-.. code-block:: python
+Downloaders and Data Retrevial
+------------------------------
 
-   def sum(a, b):
-       """Sum two numbers."""
+* VSO
+* HEK / Helio
+* Local Database
 
-       return a + b
-       
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
+Community
+---------
 
-.. math::
-
-   g(x) = \int_0^\infty f(x) dx
-
-or on multiple, aligned lines:
-
-.. math::
-   :type: eqnarray
-
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
-
-.. math::
-   :label: circarea
-
-   A(r) = \pi r^2.
-
-.. figure:: figure1.png
-
-   This is the caption. :label:`egfig`
-
-.. figure:: figure1.png
-   :scale: 20%
-   :figclass: bht
-
-.. table:: This is the caption for the materials table. :label:`mtable`
-
-   +------------+-------+
-   | Material   | Units |
-   +------------+-------+
-   | Stone      | 3     |
-   +------------+-------+
-   | Water      | 12    |
-   +------------+-------+
-
-We show the different quantities of materials required in Table
-:ref:`mtable`.
-
-Perhaps we want to end off with a quote by Lao Tse:
-
-  *Muddy water, let stand, becomes clear.*
-
-References
-----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
-
+* Solar physics and open source
+* Scientific Python
+* GSOC / SOCIS
