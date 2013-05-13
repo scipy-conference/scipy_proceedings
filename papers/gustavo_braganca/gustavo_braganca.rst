@@ -50,7 +50,13 @@ The Python programming language is very well suited to scientific studies. Also,
 Science
 -------
 
-blehbleh
+1. Star classification
+
+2. Effective temperature through photometric calibration
+
+3. Projected rotational velocities
+
+4. Results
 
 Python workflow
 ---------------
