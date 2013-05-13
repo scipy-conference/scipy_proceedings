@@ -45,3 +45,10 @@ Community
 * Solar physics and open source
 * Scientific Python
 * GSOC / SOCIS
+
+Future
+------
+
+* Goals and Scope
+* AstroPy
+* Publicity
