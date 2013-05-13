@@ -47,8 +47,8 @@ Stars are born inside molecular clouds, and, usually, a molecular cloud can gene
 
 The Python programming language is very well suited to scientific studies. Also, on the last years, it has been widely adopted on the Astronomic community. Because this, several packages are being translated to python or just being created.
 
-Science
--------
+Research development
+--------------------
 
 1. Star classification
 
@@ -58,10 +58,6 @@ Science
 
 4. Results
 
-Python workflow
----------------
-
-blihblih
 
 Conclusions
 -----------
