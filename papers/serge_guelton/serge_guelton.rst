@@ -10,6 +10,10 @@
 :email: alan.raynaud@telecom-bretagne.eu
 :institution: Télécom Bretagne, Plouzané, France
 
+:author: Adrien Merlini
+:email: adrien.merlini.eu
+:institution: Télécom Bretagne, Plouzané, France
+
 :author: Mehdi Amini
 :email: mehdi.amini@silkan.com
 :institution: Silkan, Meudon Val-Fleury, France
@@ -98,11 +102,11 @@ allocation removal or constant folding. These transformations are backed up by
 code analysis such as alias aliasing, inter-procedural memory effect
 computations or use-def chains.
 
-The article is structured as follows: Section 1 introduces the Pythran
-compiler compilation flow and internal representation.  Section 2  presents
-several code analysis while Section 3 focuses on code optimizations. Section
-4 illustrates the performance of generated code on a few synthetic benchmarks
-and concludes.
+The article is structured as follows: Section 1 introduces the Pythran compiler
+compilation flow and internal representation.  Section 2  presents several code
+analysis while Section 3 focuses on code optimizations. Section 4 presents
+back-end optimizations for the `numpy` expressions. Section 5 illustrates the
+performance of generated code on a few synthetic benchmarks and concludes.
 
 Pythran Compiler Infrastructure
 -------------------------------
@@ -196,14 +200,334 @@ tools.
 Code Analysis
 -------------
 
+A code analyse is a function that takes a part of the IR (or the whole module's
+IR) as input and returns aggregated high-level information. For instance, a
+simple Pythran analyse calld `Identifiers` gathers the set of all identifiers
+used throughout the program. It is used to create new identifiers that do not
+conflict with existing ones.
+
+One of the most important analyse in Pythran is *alias analysis*, sometimes
+referred as point-to analysis. For each identifiers, it computes an
+approximation of the set of locations this identifier may point to. For
+instance, let us consider the polymorphic function `foo` defined as follows:
+
+.. code-block:: python
+
+    def foo(a,b):
+        c = a or b
+        return c*2
+
+The identifier `c` involved in the multiplication may refer to
+
+- a fresh location if `a` and `b` are scalars
+
+- the same location as `a` if `a` evaluates to `True`
+
+- the same location as `b` otherwise.
+
+As we do not specialise the analyse for different type and the truth value of
+`a` is unknown at compilation time, the alias analysis yields the approximated
+result that `c` may points to a fresh location, `a` or `b`.
+
+Without this kind of information, even a simple instruction like `sum(a)` would
+yield very few informations as there is no guarantee that the `sum` identifiers
+points to the `sum` built-in.
+
+When turning Python AST to Pythran IR, nested functions are turned into global
+functions taking their closure as parameter. This closure is computed using the
+information provided by the `Globals` analyse that statically computes the
+state of the dictionary of globals, and `ImportedIds` that computes the set of
+identifiers used by an instruction but not declared in this instruction.
+
+A rather high-level analyse is the `PureFunctions` analyse, that computes the
+set of functions declared in the module that are pure, i.e. whose return value
+only depends from the value of their argument. This analyse depends on two
+other analyse, namely `GlobalEffects` that computes for each function whether
+this function modifies the global state (including I/O, random generators etc)
+and `ArgumentEffects` that computes for each argument of each function whether
+this argument may be updated in the function body. These three analyse works
+inter-procedurally, as illustrated by the following example:
+
+.. code-block:: python
+
+    def fibo(n):
+        return n if n < 2 else fibo(n-1) + fibo(n-2)
+
+    def bar(l):
+        return map(fibo, l)
+
+    def foo(l):
+        return map(fibo, random.sample(l, 3))
+
+The `fibo` function is pure as it has no global effects or argument effects and
+only calls itself. As a consequence the `bar` function is also pure has the
+`map` intrinsic is pure when its first argument is pure. However the `foo`
+function is not pure as it calls the `sample` function from the `random`
+module, which has a global effect (on the underlying random number generator).
+
+Several analysis depends on the `PureFunctions` analyse. `ParallelMaps` uses
+aliasing information to check if an identifier points to the `map` intrinsic,
+and checks if the first argument is a pure function using `PureFunctions`. In
+that case the `map` is added to the set of parallel maps, because it can be
+executed in any order. `ConstantExpressions` uses function purity to decide
+whether a given expression is constant, i.e. its value only depends from
+literals. For instance the expression `fibo(12)` is a constant expression
+because `fibo` is pure and its argument is a literal.
+
+`UsedDefChains` is a typical analyse from the static compilation world. For each
+variable defined in a function, it computes the chain of *use* and *def*. The
+result can be used to perform various code transformation, for instance to remove
+dead code, as a *def* not followed by a *use* is useless. It is used in Pythran
+to avoid false polymorphism.
+
+All the above analyse are used by the Pythran developer to build code
+transformation to optimize the execution time of the generated code.
+
 Code Optimizations
 ------------------
+
+One of the benefit of translating Python code to C++ code is that it removes
+most of the dynamic lookups. It also unveils all the optimizations available at
+C++ level. For instance, a function call is quite costly in Python, which
+advocates in favor of using inlining. This transformation comes at no cost when
+using C++ as the back-end language, as the C++ compiler does it.
+
+However, there are some informations available at the Python level that cannot
+be recovered at the C++ level. For instance, Pythran uses functor with an
+internal state and a goto dispatch table to represent generators. Although effective,
+this approach is not very efficient, especially for trivial cases. Such trivial
+cases appear when a generator expression is converted, in the front-end, to a
+looping generator. To avoid this extra cost, Pythran turns generator expressions
+into call to `imap` and `ifilter` from the `itertools` module whenever possible,
+removing the unnecessary goto dispatching table. This kind of transformation
+cannot be made by the C++ compiler.
+
+A similar optimization consists in turning `map`, `zip` or `filter` into their
+equivalent version from the `itertool` module. The benefit is double: first it
+removes a temporary allocation, second it gives an opportunity to the compiler
+to replaces list accesses by scalar accesses. This transformation is not always
+valid, nor profitable. It is not valid if the content of the output list is
+written later on, and not profitable if the content of the output list is
+read several times, as each read implies the (re) computation.
+
+The information concerning constant expressions is used to perform a classical
+transformation called constant unfolding, which consists in the compile-time
+evaluation of constant expressions. The validity is guaranteed by the
+`ConstantExpressions` analyse, and the evaluation relies on Python ability to
+compile an AST into byte code and run it, benefiting from the fact that Pythran
+IR is a subset of Python AST.
+
+Sometimes, coders use the same variable in a function to represent value with
+different types, which leads to false polymorphism, as in:
+
+.. code-block:: python
+
+    a = cos(1)
+    a = str(a)
+
+These instructions cannot be translated to C++ directly because `a` would have
+both `double` and `str` type. However, using `UsedDefChains` it is possible to
+assert the validity of the renaming of the instructions into:
+
+.. code-block:: python
+
+    a = cos(1)
+    a_ = str(a)
+
+that does not have the same typing issue.
+
+In addition to this python-level optimizations, the Pythran backend library,
+`pythonic`, uses several well known optimisations, especially for `numpy`
+expressions.
+
+Library Level Optimizations
+---------------------------
+
+Using the proper library, the C++ language provides an abstraction level close
+to what Python proposes. Pythran provides a wrapper library, `pythonic`, that
+leverage on the Standard Template Library(STL), the GNU Multiple Precision
+Arithmetic Library(GMP) and the Numerical Template Toolbox(NT2) to emulate
+Python standard library. The STL is used to provide a typed version of the
+standard containers (`list`, `set`, `dict` and `str`), as well as
+reference-based memory management through `shared_ptr`. Generic algorithms such
+as `accumulate` are used when possible. GMP is the natural pick to represent
+Python's `long` in C++. NT2 provides a generic vector library called
+`boost.simd` that makes it possible to access the vector instruction unit of
+modern processors in a generic way. It is used to efficiently compile `numpy`
+expressions.
+
+`numpy` expressions are the perfect candidate for library level optimization.
+Pythran implements three optimizations on such expressions:
+
+1. Expression templates[ref]_ are used to avoid multiple iterations and the
+   creation of intermediate arrays. Because they aggregates all `ufunc` into a single
+   expression at compile time, they also increase the computation intensity of the
+   loop body, which increases the impact of the two following optimizations.
+
+2. Loop vectorization. All modern processors have a vector instruction unit
+   capable of applying the same operation on a vector of data instead of a
+   single data. For instance Intel's i7 can run 8 single-precision additions in
+   a single instruction. One can directly use the vector instruction set
+   assembly to use these vector units, or use C/C++ intrinsics. Pythran relies
+   on `boost.simd` from NT2 that offers a generic vector implementation of all
+   standard math functions to generate a vectorized version of `numpy`
+   expressions. Again, the aggregation of operators performed by the expression
+   templates proves to be beneficial, as it reduces the number of (costly) load
+   from the main memory to the vector unit.
+
+3. Loop parallelization through OpenMP[ref]_. Numpy expression computation do
+   not carry any loop-dependency. They are perfect candidates for loop
+   parallelization, especially after the aggregation from expression templates,
+   as OpenMP generally performs better on loops with a higher computation
+   intensity that masks the scheduling overhead.
+
+To illustrate the benefits of these three optimizations, let us consider the
+simple numpy expression:
+
+.. code-block:: python
+
+    d = numpy.sqrt(b*b+c*c)
+
+When benchmarked with the `timeit` module on an hyper threaded quadcore i7, the
+standard versions yields:
+
+.. code-block:: python
+
+    >>> %timeit np.sqrt(b*b+c*c)
+    1000 loops, best of 3: 1.23 ms per loop
+
+
+then with Pythran and expression templates:
+
+.. code-block:: python
+
+    >>> %timeit my.pythranized(b,c)
+    1000 loops, best of 3: 621 us per loop
+
+Expression templates replace 4 temporary array creations and 4 loops by a
+single allocation and a single loop.
+
+Going a step further and vectorizing the generated loop yields an extra performance boost:
+
+.. code-block:: python
+
+    >>> %timeit my.pythranized(b,c)
+    1000 loops, best of 3: 418 us per loop
+
+Although the AVX instruction sets makes it possible to store 4 double precision
+float, one does not get a 4x speed up because of the unaligned memory transfer
+to and from vector registers.
+
+Finally, with expression templates, vectorization and OpenMP:
+
+.. code-block:: python
+
+    >>> %timeit my.pythranized(b,c)
+    1000 loops, best of 3: 105 us per loop
+
+The 4 hyper threaded cores give an extra performance boost. Unfortunately, the
+load is not sufficient to get more than an average 4x speed up compared to the
+vectorized version. In the end, Pythran generates a native module that performs
+roughly 11 times faster than the original version.
+
+As a reference, the `numexpr` module that performs JIT optimization of the
+expression yields the following timings:
+
+.. code-block:: python
+
+    >>> %timeit numexpr.evaluate("sqrt(b*b+c*c)")
+    1000 loops, best of 3: 395 us per loop
+ 
+Next section performs an in-depth comparison of Pythran with three Python
+optimizers: PyPy, Shedskin and numexpr.
 
 Benchmarks
 ----------
 
+All benchmarks presented in this section are run on an hyper-threaded i7
+quadcore, using the code available in the Pythran sources available at
+https://github.com/serge-sans-paille/pythran in the `pythran/test/cases`
+directory. The Pythran version used is `deqzffzr`, Shedskin 0.9.2, PyPy 2.0
+compiled with the `-jit` flag, CPython 2.7.3 and numexpr 2.0.1.
+
+Pystone is a Python translation of whetstone, a famous floating point number
+benchmarks that dates back to Algol60 and the 70's. Although non representative
+of real applications, it illustrates the general performance of floating point
+number manipulations. Figure :ref:`pystone-table` illustrates the benchmark
+result for CPython, PyPy, Shedskin and Pythran.
+
+.. table:: Benchmarking result on the Pystone program. :label:`pystone-table`
+
+    +-------------+---------------+------------+
+    |  bla        |   bla         |     bla    |
+    +-------------+---------------+------------+
+
+It shows that...
+
+Nqueen is a benchmark extracted from the now dead project Unladen Swallow. It
+is particularly interesting as it makes an intensive use of non-trivial
+generator and integer sets. Figure :ref:`nqueen-table` illustrates the benchmark
+result for CPython, PyPy, Shedskin and Pythran. 
+
+.. table:: Benchmarking result on the NQueen program. :label:`nqueen-table`
+
+    +-------------+---------------+------------+
+    |  bla        |   bla         |     bla    |
+    +-------------+---------------+------------+
+
+It shows that...
+
+Hyantes is a geomatic application that exhibits typical usage of numpy
+array using loops instead of generalized expressions. It is helpful to measure
+the performance of direct array indexing. Figure :ref:`hyantes-table`
+illustrates the benchmark result for CPython, PyPy and Pythran[*]_.
+
+.. [*] Shedsking does not support numpy
+
+.. table:: Benchmarking result on the hyantes program. :label:`hyantes-table`
+
+    +-------------+---------------+------------+
+    |  bla        |   bla         |     bla    |
+    +-------------+---------------+------------+
+
+It shows that...
+
+Finally, `arc_distance` is a typical usage of numpy expression that is
+typically more efficient with CPython than its loop alternative as all the
+looping is done directly in C. Figure :ref:`hyantes-table`
+illustrates the benchmark result for CPython, PyPy, Numexpr and Pythran.
+
+.. table:: Benchmarking result on the hyantes program. :label:`hyantes-table`
+
+    +-------------+---------------+------------+
+    |  bla        |   bla         |     bla    |
+    +-------------+---------------+------------+
+
+It shows that...
+
+
 Conclusion
 ----------
+
+This paper presents the Pytran compiler, a translator and optimizer from Python
+to C++. Unlike existing static compilers for Python, this compiler leverages on
+several function-level or module-level analysis to provide several generic or
+Python-centric code optimizations. Additionally, it uses a C++ library that
+makes heavy use of template programming to provide an efficient API similar to
+a subset of Python standard library. This library takes advantage of modern
+hardware capabilities --- vector instruction unit and multi-cores --- in its
+implementation of part of the Numpy package.
+
+The paper gives an overview of the compilation flow, the analysis involved and
+the optimization used. It also compares the performance of compiled python
+module against CPython and other optimizers: Shedskin, PyPy and numexpr.
+
+To conclude, limiting Python to a statically typed subset does not hinders the
+expressively when it comes to scientific or mathematic computations, but makes
+it possible to use a wide variety of classical optimizations to have Python
+match the performance of statically compiled language. Moreover, one can use
+high level informations to generate efficient code that would proved to be
+difficult to write to the average programmer.
 
 References
 ----------
