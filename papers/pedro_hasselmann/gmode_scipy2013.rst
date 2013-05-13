@@ -16,7 +16,7 @@ Adapted G-mode Clustering Method applied to Asteroid Taxonomy
 
 .. class:: abstract
 
-   The original G-mode was a clustering method developed by A. I. Gavrishin in the 60's for geochemical classification of rocks, 
+   The original G-mode was a clustering method developed by A. I. Gavrishin in the 70's for geochemical classification of rocks, 
    but was also applied to asteroid photometry, cosmic rays, lunar sample and planetary science spectroscopy data. 
    In this work, we used a adapted version to classify the asteroid photometry from SDSS Moving Objects Catalog. 
    The method works identifying normal distributions in a multidimensional space of variables. 
@@ -58,7 +58,7 @@ the second evaluates each variable in the classification process. Each one are g
 .. [*] The codebase_ is hosted through GitHub_ .
 
 .. _codebase: http://pedrohasselmann.github.com/GmodeClass
-.. _GitHub: http://github.com
+.. _GitHub: http://pedrohasselmann.github.com
  
 Recognition Of The Unimodal Clusters
 ------------------------------------
@@ -350,14 +350,14 @@ Thus, the last code version ended up with the following input parameters:
   replacing all deviation lower than minimum limit by this own value. This number is given in percent of median error of each variable.
   
 - ``Upper Deviation Limit`` (``--ulim``, ``-u``, ``self.ulim``) : This parameter is important when the clusters have high degree of superposition. 
-  The upper limit is a barrier which determines how much a cluster can grow up. 
+  The upper limit is a restriction which determines how much a cluster might grow up. 
   This value is given in percent of total standard deviation of each variable.
 
 The output is contained in a directory created in ``/TESTS/`` and organized in a series of lists and plots. 
 On the directory ``/TESTS/.../maps/`` , there are on-the-fly density distribution plots showing the *locus* of each cluster in sample.
 On ``/TESTS/.../plots/`` , a series of variable plots permits the user to verify each cluster profile.
-On lists ``clump_xxx.dat`` , ``gmode1_xxx.dat`` , ``gmode2_xxx.dat`` and ``log_xxx.dat`` the informations about the cluster statistics, 
-classification of each data element, classification per unique ID and report on the formation of clusters and distance matrices are gathered.
+On the lists ``clump_xxx.dat`` , ``gmode1_xxx.dat`` , ``gmode2_xxx.dat`` and ``log_xxx.dat`` the informations about cluster statistics, 
+classification per each data element, classification per unique ID and report of the formation of clusters and distance matrices are gathered.
 
 Users must be aware that input data should be formatted on columns in this order: measurement designation, unique identificator, variables, errors.
 If errors are not available, its values should be replaced by ``0.0`` and ``mlim`` parameter might not be used. There is no limit on data size, however
@@ -431,33 +431,83 @@ the misaligned clusters. For cluster number 3 in Table :ref:`tabgauss` , a anti-
 If the undersizing becomes too large, its possible that “lost elements” are identified as new cluster. 
 Therefore, may be necessary to group clusters according to its d²(a,b) distances.
 
-Adapted G-mode Applied to Sloan Digital Sky Survey Moving Objects Catalog 4
+Sloan Digital Sky Survey Moving Objects Catalog 4
 ---------------------------------------------------------------------------
 
-jhjgjhgjfytf.
+SDSS Moving Objects Catalog 4th (SDSSMOC4) release is now the largest photometric data set of asteroids (Ivezić et al., 2002; Ivezic et al., 2010), 
+containing 471,569 detections of moving objects, where 202,101 are linked to 104,449 unique objects. 
+It has a system of five magnitudes in the visible [Fuk96]_ , providing measurements and corresponding uncertainties. 
+As the photometric observations are obtained almost simultaneously, rotational variations can be discarded for most of the asteroids. 
+The SDSS-MOC4 magnitudes employed here are first converted to normalized reflected intensities [1]_ [Lup99]_. 
+Thereby solar colors were obtained from Ive01_ and extracted from asteroid measurements. A middle band called *g'* was chosen as reference [Car10]_, 
+thus being discarded from the classification procedure.
+
+.. [1] http://ned.ipac.caltech.edu/help/sdss/dr6/photometry.html
+
+In what follows, all observations of non-numbered asteroids, with uncertainties in each filter greater than the 3rd quartile, have been excluded. 
+Moreover, all detections 15 degrees from the Galactic Plane and with :math:`|DEC| < 1.26` were eliminated due to inclusion of sources in crowded stellar regions, 
+which have a high possibility of misidentification [2]_ . Finally, the sample contained 21,419 detections linked to 17,027 asteroids.
+
+.. [2] http://www.astro.washington.edu/users/ivezic/sdssmoc/sdssmoc.html
 
 Preliminary Results on Asteroid Photometric Classification
 ----------------------------------------------------------
 
-jhfhgfhgdtrdt.
+.. figure:: 0.png
+   :scale: 40%
+   
+   Density distributions of reflected intensities measured from asteroid observations by SDSSMOC4. The colors correspond to degrees of point agglomeration. :label:`fig0`
+   
+.. figure:: 3.png
+   :scale: 40
+
+   Density distributions with the largest cluster identified by G-mode without upper limit. The largest cluster is marked by red filled circles. :label:`fig3`
+   
+.. figure:: 1.png
+   :scale: 40
+
+   Density distributions with the largest cluster identified by G-mode with upper limit. The largest cluster is marked by red filled circles. :label:`fig1`
+   
+When looking at the density distributions (Figure :ref:`fig0`) it is possible to notice two large agglomerations with accentuated superposition between them.
+Those two groups are the most common asteroid types *S* (from Stone) and *C* (from Carbonaceous). A indicative that  a classification method is working for
+asteroid taxonomy is at least the detachment of both groups. However, previous photometry-based taxonomic systems [Tho84,Bar87]_ were developed over smaller samples, 
+with less than 1,000 asteroids, so superposition was not a huge problem. Therefore, when the SDSSMOC4 sample was classified, a single class
+engoulfed part of members of both groups (Figure :ref:`fig3`).  To deal with this behavior, a upper deviation limit was introduced to halt the 
+cluster evolution, thus not permiting clusters to become comparable in sample size. Figure :ref:`fig1` is a example of a cluster recognized with
+uper deviation limit on. Thus, the upper limit parameter turned up useful for sample with varied degrees of superposition.
 
 Conclusions
 -----------
 
-khgjhfhgcgfd.
+Along this paper a refined version of a clustering method developed in the 70's was presented. 
+The Adapted G-mode used mahalonobis distance as estimator to better recognize misaligned clusters, and used ``Numpy.histogramdd`` to find
+initial seeds faster. Robust median statistics was also implemented to more precisely estimate central tendency and standard deviation, and
+take less iteration to stabilize clusters.
+
+Tests with simulated samples showed a quality increase and sucessfulness in the recognition of clusters among random points. 
+However, tests with asteroid sample indicated that for presence of superposition is necessary introduction of one more parameter.
+Therefore, users must previously inspected their samples before enabling upper limit parameter.
+
+Finally, the Adapted G-mode is available for anyone through GitHub_ . The codebase_ has no restriction on sample or variable size. 
+Users must only fullfill the requirements related to installed packages and data format.
 
 References
 ----------
-.. [Abr72] Abramowitz and Stegun. 1972.
+.. [Abr72] Abramowitz and Stegun 1972.
 .. [Ham74] Hampel. 1974.
 .. [Cor76] Coradini et al. 1976.
 .. [Cor77] Coradini et al. 1977.
+.. [Tho84] Tholen 1984.
 .. [Zel85] Zellner et al. 1985.
 .. [Mat86] Matson et al. 1986.
 .. [Bar87] Barucci et al. 1987
 .. [Gav92] Gavrishin et al. 1992.
-.. [She97] Shevlyakov. 1997.
+.. [Fuk96] Fukugita et al., 1996.
+.. [She97] Shevlyakov 1997.
+.. [Lup99] Lupton et al., 1999.
 .. [Ful00] Fulchignoni et al. 2000.
+.. [Ive01] Ivezić et al. 2001.
 .. [Tos05] Tosi et al. 2005.
 .. [Ley10] Leyrat et al. 2010.
+.. [Car10] Carvano et al., 2010
 
