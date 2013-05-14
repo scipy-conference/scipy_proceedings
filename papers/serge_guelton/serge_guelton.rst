@@ -657,21 +657,54 @@ the Pythran version in 4.6ms, that is a speedup of x97.8.
 
 Finally, `arc_distance` presents a classical usage of numpy expression that is
 typically more efficient with CPython than its loop alternative as all the
-looping is done directly in C. Figure :ref:`arc-distance-table`
-illustrates the benchmark result for CPython, Numexpr and Pythran.
+looping is done directly in C. Its code is repoduced below:
+
+.. code-block:: python
+
+    def arc_distance(theta_1, phi_1, theta_2, phi_2):
+        """
+        Calculates the pairwise arc distance
+        between all points in vector a and b.
+        """
+        temp = (np.sin((theta_2-theta_1)/2)**2
+            + np.cos(theta_1)*np.cos(theta_2)
+              * np.sin((phi_2-phi_1)/2)**2)
+        distance_matrix = 2 * np.arctan2(
+                sqrt(temp),sqrt(1-temp))
+        return distance_matrix
+
+
+Figure :ref:`arc-distance-table` illustrates the benchmark result for CPython,
+Numexpr and Pythran, using random input arrays of `10**6` elements. Table
+:ref:`arc-distance-2-table` details the Pythran performance.
 
 .. table:: Benchmarking result on the arc distance kernel. :label:`arc-distance-table`
 
-    +---------+-------------+---------------+-------------+
-    | Tool    |  CPython    |   Pythran     |  Numexpr    |
-    +---------+-------------+---------------+-------------+
-    | Timing  |  nan        |   nan         |  nan        |
-    +---------+-------------+---------------+-------------+
-    | Speedup |  x1         |    x4.79      |  x1         | 
-    +---------+-------------+---------------+-------------+
+    +---------+-------------+-------------+----------+
+    | Tool    |  CPython    |  Numexpr    | Pythran  |
+    +---------+-------------+-------------+----------+
+    | Timing  |  207.2ms    |    65.9ms   |  15.6ms  |
+    +---------+-------------+-------------+----------+
+    | Speedup |  x1         |  x3.14      |  x13.28  | 
+    +---------+-------------+-------------+----------+
 
 
-It shows that...
+.. table:: Benchmarking result on the arc distance kernel, Pythran details. :label:`arc-distance-2-table`
+
+    +---------------+----------------+-------------------+
+    | Pythran (raw) | Pythran (+AVX) | Pythran (+Openmp) |
+    +---------------+----------------+-------------------+
+    |   148.1ms     |    65.7ms      |    38.5ms         |
+    +---------------+----------------+-------------------+
+    |    x1.40      |    x3.15       |    x5.38          |
+    +---------------+----------------+-------------------+
+
+It shows a small benefit from using expression template on their own, and a
+decent x2 speed-up when using AVX over not using it. The benefit of OpenMP,
+although related to the number of core, makes a whole speedup greaater than x13
+over the original Numpy version, without changing the input code. To the
+opposite, Numexpr requires to rewrite the input and does not achieve the same
+level of performance than Pythran.
 
 
 Conclusion
