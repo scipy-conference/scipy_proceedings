@@ -26,18 +26,18 @@ Pythran: Enabling Static Optimization of Scientific Python Programs
 .. class:: abstract
 
 
-    Pythran is a young open source static compiler that turns Python modules
-    into native ones. Based on the fact that scientific modules do not rely
-    much on the dynamic features of the language, it trades them against
-    powerful, eventually inter procedural, optimizations, such as automatic
-    detection of pure functions, temporary allocation removal, constant
-    folding, numpy ufunc fusion and parallelization, explicit parallelism
-    through OpenMP annotations, false variable polymorphism pruning and AVX/SSE
-    vector instruction generation.
+    Pythran is a young open source static compiler that turns modules written
+    in a Python subset into native ones. Based on the fact that scientific
+    modules do not rely much on the dynamic features of the language, it trades
+    them against powerful, eventually inter procedural, optimizations, such as
+    automatic detection of pure functions, temporary allocation removal,
+    constant folding, numpy ufunc fusion and parallelization, explicit
+    parallelism through OpenMP annotations, false variable polymorphism pruning
+    and AVX/SSE vector instruction generation.
 
     In addition to these compilation steps, Pythran provides a C++ runtime that
     leverages on the C++ STL for generic containers, and the Numeric Template
-    Toolbox (nt2) for numpy support. It takes advantage of modern C++11
+    Toolbox (nt2) for Numpy support. It takes advantage of modern C++11
     features such as variadic templates, type inference, move semantics and
     perfect forwarding, as well as classical ones such as expression templates.
 
@@ -68,20 +68,21 @@ Several tools  have been proposed by an active community to fill this
 performance gap, either through static compilation or Just In Time(JIT)
 compilation.
 
-An approach pioneered by Psyco[ref]_ is to suppress the interpretation
-overhead by translating Python Programs to C programs calling the Python C
-API[ref]_. More recently, Nuitka[ref]_ has taken the same approach using
-C++ has a backend. Going a step further Cython[ref]_ uses an hybrid
+An approach used by Cython[cython]_ is to suppress the interpretation overhead
+by translating Python Programs to C programs calling the Python C
+API[pythoncapi]_. More recently, Nuitka[nuitka]_ has taken the same approach
+using C++ has a back-end. Going a step further Cython also uses an hybrid
 C/Python language that can efficiently be translated to C code, relying on the
-Python C API for some parts and on plain C for others.  Shedskin[ref]_
+Python C API for some parts and on plain C for others.  Shedskin[shedskin]_
 translates implicitly strongly typed Python program into C++, without any call
 to the Python C API.
 
 The alternate approach consist in writing a Just In Time(JIT) compiler embeded
 into the interpreter, to dynamically turn the computation intensive parts into
-native code. The `numexpr` module [ref]_ does so for Numpy expressions
-by JIT-compiling them from a string representation to native code.  PyPy[ref]_
-applies this approach to the whole language.
+native code. The `numexpr` module [numexpr]_ does so for Numpy expressions by
+JIT-compiling them from a string representation to native code. Numba[numba]_
+extends it to Numpy-centric applications and PyPy[pypy]_ applies the approach
+to the whole language.
 
 To the notable exception of PyPy, these compilers do not apply any of the
 static optimizations techniques that have been known for decades and
@@ -94,19 +95,26 @@ i.e. at the Python level.
 Taking into account the specificities of the Python language can unlock many
 new transformations. For instance, PyPy automates the conversion of the `range`
 builtin into `xrange` through the use of a dedicated structure called
-`range-list`. This article presents Pythran, an optimizing compiler for a large
+`range-list`. This article presents Pythran, an optimizing compiler for a
 subset of the Python language that turns implicitly statically typed modules
-into parametric C++ code. Unlike existing alternatives, it does perform various
-compiler optimizations such as detection of pure functions, temporary
-allocation removal or constant folding. These transformations are backed up by
-code analysis such as alias aliasing, inter-procedural memory effect
-computations or use-def chains.
+into parametric C++ code. It supports many high-level constructs of the 2.7
+version of the Python language such as list comprehension, set comprehension,
+dict comprehension, generator expression, lambda functions, nested functions or
+polymorphic functions. It does *not* support user classes or any dynamic
+feature such as introspection, polymorphic variables.
+
+Unlike existing alternatives, Pythran does not solely performs static typing of
+Python programs. It also performs various compiler optimizations such as
+detection of pure functions, temporary allocation removal or constant folding.
+These transformations are backed up by code analysis such as alias aliasing,
+inter-procedural memory effect computations or use-def chains.
 
 The article is structured as follows: Section 1 introduces the Pythran compiler
 compilation flow and internal representation.  Section 2  presents several code
 analysis while Section 3 focuses on code optimizations. Section 4 presents
 back-end optimizations for the `numpy` expressions. Section 5 illustrates the
 performance of generated code on a few synthetic benchmarks and concludes.
+
 
 Pythran Compiler Infrastructure
 -------------------------------
@@ -168,7 +176,34 @@ possible to detect several false variable polymorphism cases using use-def
 chains. Function polymorphism is achieved through template parameters: a
 template function can be applied to several types as long as an implicit
 structural typing is respected, which is very similar to Python's duck typing,
-except that it is checked at compile time.
+except that it is checked at compile time, as illustrated by the following
+implementation of a generic dot product in Python and C++:
+
+.. code-block:: python
+
+    def dot(l0, l1):
+        return sum(x*y for x,y in zip(l0,l1))
+
+.. code-block:: c++
+
+    template<class T0, class T1>
+        auto dot(T0&& t0, T1&& t1)
+        -> decltype(/* skipped */)
+        {
+            return pythonic::sum(
+                pythonic::map(
+                    operator.multipy(),
+                        pythonic::zip(
+                            std::forward<T0>(t0),
+                            std::forward<T1>(t1))
+                )
+            );
+        }
+
+Provided `sum`, `map` and `zip` are implemented in a third party library. The
+only assumption these two version make are that `l0` and `l1` are iterable,
+their content can be multiplied and the result of the multiplication is
+accumulatable.
 
 Second step only consists in the instantiation of the top-level function of the
 module, using user-provided signature. Template instantiation then triggers the
@@ -179,10 +214,12 @@ The type of all internal functions is then inferred from the call site.
 Last step involves a template library, called `pythonic` that contains a
 polymorphic implementation of many functions from the Python standard library
 in the form of C++ template functions. Several optimizations, most notably
-expression template, are delegated to this library. Pythran relies on a
-C++11-aware compiler for the native code generation and on `boost::python` for
-the Python-to-C++ glue. Generated code is compatible with g++ 4.7.2 and clang++
-3.2.
+expression template, are delegated to this library. Pythran relies on a the
+C++11[cxx11]_ language, as it makes heavy use of recent features such as move
+semantics, type inference through `decltype(...)` and variadic templates. As a
+consequence requires a compatible C++ compiler for the native code generation
+and on Boost.Python[boost_python]_ for the Python-to-C++ glue. Generated code
+is compatible with g++ 4.7.2 and clang++ 3.2.
 
 It is important to note that all Pythran analysis are type-agnostic, i.e. they
 do not assume any type for the variables manipulated by the program. Type
@@ -237,7 +274,19 @@ When turning Python AST to Pythran IR, nested functions are turned into global
 functions taking their closure as parameter. This closure is computed using the
 information provided by the `Globals` analyse that statically computes the
 state of the dictionary of globals, and `ImportedIds` that computes the set of
-identifiers used by an instruction but not declared in this instruction.
+identifiers used by an instruction but not declared in this instruction. For
+instance in the following snippet:
+
+.. code-block:: python
+
+    def outer(outer_argument):
+        def inner(inner_argument):
+            return cos(outer_argument) + inner_argument
+        return inner
+
+The `Globals` analyse called on the `inner` function definition marks `cos` as
+a global variable, and `ImportedIds` marks `outer_argument` and `cos` as
+imported identifiers.
 
 A rather high-level analyse is the `PureFunctions` analyse, that computes the
 set of functions declared in the module that are pure, i.e. whose return value
@@ -269,16 +318,57 @@ Several analysis depends on the `PureFunctions` analyse. `ParallelMaps` uses
 aliasing information to check if an identifier points to the `map` intrinsic,
 and checks if the first argument is a pure function using `PureFunctions`. In
 that case the `map` is added to the set of parallel maps, because it can be
-executed in any order. `ConstantExpressions` uses function purity to decide
+executed in any order. This is the case for the first `map` in the following snippet,
+but not for the second.
+
+.. code-block:: python
+
+    def pure(a):
+        return a**2
+
+    def guilty(a):
+        b = pure(a)
+        print b
+        return b
+
+    l = list(...)
+    map(pure, l)
+    map(guilty, l)
+
+`ConstantExpressions` uses function purity to decide
 whether a given expression is constant, i.e. its value only depends from
 literals. For instance the expression `fibo(12)` is a constant expression
 because `fibo` is pure and its argument is a literal.
 
-`UsedDefChains` is a typical analyse from the static compilation world. For each
-variable defined in a function, it computes the chain of *use* and *def*. The
-result can be used to perform various code transformation, for instance to remove
-dead code, as a *def* not followed by a *use* is useless. It is used in Pythran
-to avoid false polymorphism.
+`UsedDefChains` is a typical analyse from the static compilation world. For
+each variable defined in a function, it computes the chain of *use* and *def*.
+The result can be used to perform various code transformation, for instance to
+remove dead code, as a *def* not followed by a *use* is useless. It is used in
+Pythran to avoid false polymorphism. An intuitive way to represent used-def
+chains is illustrated on next code snippet:
+
+.. code-block:: python
+
+    a = 1
+    if cond:
+        a = a + 2
+    else:
+        a = 3
+    print a
+    a = 4
+
+In this example, there are two possible chains starting from the first
+assignment. Using `U` to denote *use* and `D` to denote *def*, one gets::
+
+    D U D U D
+
+and::
+
+    D D U D
+
+The fact that all chains finish by a *def* indicates that the last assignment
+can be removed (but not necessarily its right hand part that could have a
+side-effect).
 
 All the above analyse are used by the Pythran developer to build code
 transformation to optimize the execution time of the generated code.
@@ -294,28 +384,65 @@ using C++ as the back-end language, as the C++ compiler does it.
 
 However, there are some informations available at the Python level that cannot
 be recovered at the C++ level. For instance, Pythran uses functor with an
-internal state and a goto dispatch table to represent generators. Although effective,
-this approach is not very efficient, especially for trivial cases. Such trivial
-cases appear when a generator expression is converted, in the front-end, to a
-looping generator. To avoid this extra cost, Pythran turns generator expressions
-into call to `imap` and `ifilter` from the `itertools` module whenever possible,
-removing the unnecessary goto dispatching table. This kind of transformation
-cannot be made by the C++ compiler.
+internal state and a goto dispatch table to represent generators. Although
+effective, this approach is not very efficient, especially for trivial cases.
+Such trivial cases appear when a generator expression is converted, in the
+front-end, to a looping generator. To avoid this extra cost, Pythran turns
+generator expressions into call to `imap` and `ifilter` from the `itertools`
+module whenever possible, removing the unnecessary goto dispatching table. This
+kind of transformation cannot be made by the C++ compiler. For instance, the
+one-liner `len(set(vec[i]+i for i in cols))` extracted from the `nqueens`
+benchmarks from the Unladen Swallow project is rewritten as
+`len(set(itertools.imap(lambda i: vec[i]+i,cols)))`. This new form is less
+efficient in pure Python (it implies one extra function call per iteration),
+but can be compiled into C++ more efficiently than a general generator.
 
 A similar optimization consists in turning `map`, `zip` or `filter` into their
 equivalent version from the `itertool` module. The benefit is double: first it
 removes a temporary allocation, second it gives an opportunity to the compiler
 to replaces list accesses by scalar accesses. This transformation is not always
 valid, nor profitable. It is not valid if the content of the output list is
-written later on, and not profitable if the content of the output list is
-read several times, as each read implies the (re) computation.
+written later on, and not profitable if the content of the output list is read
+several times, as each read implies the (re) computation, as illustrated in the
+following code:
+
+.. code-block:: python
+
+    def valid_conversion(n):
+        # this map can be converted to imap
+        l = map(math.cos, range(n))
+        return sum(l) # sum iterates once on its input
+
+    def invalid_conversion(n):
+        # this map cannot be converted to imap
+        l = map(math.cos, range(n))
+        return sum(l) + max(l) # sum iterates once
 
 The information concerning constant expressions is used to perform a classical
 transformation called constant unfolding, which consists in the compile-time
 evaluation of constant expressions. The validity is guaranteed by the
 `ConstantExpressions` analyse, and the evaluation relies on Python ability to
 compile an AST into byte code and run it, benefiting from the fact that Pythran
-IR is a subset of Python AST.
+IR is a subset of Python AST. A typical illustration is the initialization of a
+cache at compile-time:
+
+.. code-block:: python
+
+    def esieve(n):
+        candidates = range(2, n+1)
+        return sorted(
+            set(candidates)
+            -
+            set(p*i
+                for p in candidates
+                for i in range(p, n+1))
+            )
+
+    cache = esieve(100) 
+
+Pythran automatically detects that `eseive` is a pure function and evaluates
+the `cache` variable value at compile time.
+
 
 Sometimes, coders use the same variable in a function to represent value with
 different types, which leads to false polymorphism, as in:
@@ -346,7 +473,7 @@ Library Level Optimizations
 Using the proper library, the C++ language provides an abstraction level close
 to what Python proposes. Pythran provides a wrapper library, `pythonic`, that
 leverage on the Standard Template Library(STL), the GNU Multiple Precision
-Arithmetic Library(GMP) and the Numerical Template Toolbox(NT2) to emulate
+Arithmetic Library(GMP) and the Numerical Template Toolbox(NT2)[nt2]_ to emulate
 Python standard library. The STL is used to provide a typed version of the
 standard containers (`list`, `set`, `dict` and `str`), as well as
 reference-based memory management through `shared_ptr`. Generic algorithms such
@@ -359,7 +486,7 @@ expressions.
 `numpy` expressions are the perfect candidate for library level optimization.
 Pythran implements three optimizations on such expressions:
 
-1. Expression templates[ref]_ are used to avoid multiple iterations and the
+1. Expression templates[expression_templates]_ are used to avoid multiple iterations and the
    creation of intermediate arrays. Because they aggregates all `ufunc` into a single
    expression at compile time, they also increase the computation intensity of the
    loop body, which increases the impact of the two following optimizations.
@@ -375,7 +502,7 @@ Pythran implements three optimizations on such expressions:
    templates proves to be beneficial, as it reduces the number of (costly) load
    from the main memory to the vector unit.
 
-3. Loop parallelization through OpenMP[ref]_. Numpy expression computation do
+3. Loop parallelization through OpenMP[openmp]_. Numpy expression computation do
    not carry any loop-dependency. They are perfect candidates for loop
    parallelization, especially after the aggregation from expression templates,
    as OpenMP generally performs better on loops with a higher computation
@@ -531,7 +658,56 @@ difficult to write to the average programmer.
 
 References
 ----------
-.. [ref] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
+
+.. [boost_python] D. Abrahams and R. W. Grosse-Kunstleve.
+                    *Building Hybrid Systems with Boost.Python*,
+                    C/C++ Users Journal, 21(7), July 2003.
+
+.. [cython]  S. Behnel, R. Bradshaw, C. Citro, L. Dalcin, D. S. Seljebotn and K. Smith.
+                *Cython: The Best of Both Worlds*,
+                Computing in Science Engineering, 13(2):31-39, March 2011.
+
+.. [cxx11] ISO, Geneva, Switzerland.
+            *Programming Languages -- C++*,
+            ISO/IEC 14882:2011.
+
+.. [expression_templates] T. Veldhuizen.
+            *Expression Templates*,
+            C++ Report, 7:26-31, 1995.
+
+.. [nt2] M. Gaunard, J. Falcou and J-T. Lapresté.
+            *The Numerical Template Toolbox*,
+            https://github.com/MetaScale/nt2.
+
+.. [nuitka] K. Hayen.
+            *Nuitka - The Python Compiler*,
+            Talk at EuroPython2012.
+
+.. [numba] T. Oliphant et al.
+            *Numba*,
+            http://numba.pydata.org/.
+
+.. [numexpr] D. Cooke, T. Hochberg et al.
+            *Numexpr - Fast numerical array expression evaluator for Python and NumPy*,
+            http://code.google.com/p/numexpr/.
+
+.. [openmp] *OpenMP Application Program Interface*,
+            http://www.openmp.org/mp-documents/OpenMP3.1.pdf,
+            July 2011.
+
+.. [pypy] C. F. Bolz, A. Cuni, M. Fijalkowski and A. Rigo.
+            *Tracing the meta-level: PyPy's tracing JIT compiler*,
+            Proceedings of the 4th workshop on the
+            Implementation, Compilation, Optimization of
+            Object-Oriented Languages and Programming Systems,
+            18-25, 2009.
+
+.. [pythoncapi] G. v. Rossum and F. L. Jr. Drake.
+                *Python/C API Reference Manual*,
+                September 20012.
+
+.. [shedskin] M. Dufour.
+                *Shed skin: An optimizing python-to-c++ compiler*,
+                Delft University of Technology, 2006.
 
 
