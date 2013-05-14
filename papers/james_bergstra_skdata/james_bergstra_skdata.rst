@@ -46,7 +46,36 @@ Skdata: Data Sets and Algorithm Evaluation Protocols in Python
 Introduction
 ------------
 
-Machine learning
+Machine learning is a broad field, but one of the principal themes is the study of algorithms that generalize from data.
+Machine learning algorithms have been developed for kinds of data.
+
+Support Vector Machines, Decision Trees, Naive Bayes, Neural Networks, Nearest Neighbors, various Graphical Models,
+
+
+* *classification* is the prediction of a discrete label from some number of real-valued or discrete-valued *feature* variables
+* *regression* the prediction of real-valued responses from some number of real-valued or discrete-valued *feature* variables
+* *density estimation*
+
+
+Cross-validation
+* training
+* validation
+* testing
+
+Kfold cross-validation
+
+
+Sklearn: input is sanitized
+
+
+Pre-processing
+
+
+
+Even within particular kinds of data, such as the prediction of a real valued response from another real-valued control variable,
+different algorithms generalize from data differently.
+For example, a linear model predicts very different values most points than a higher-order polynomial,
+even if both the linear model and the polynomial have been fit to the same few examples (called "training data").
 
 Machine learning benchmark data sets come in all shapes and sizes.
 The nature of data sets varies widely, from features of flower petals (Iris) to pixel values of tiny images scraped from the internet (CIFAR-10),
