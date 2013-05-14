@@ -100,13 +100,13 @@ subset of the Python language that turns implicitly statically typed modules
 into parametric C++ code. It supports many high-level constructs of the 2.7
 version of the Python language such as list comprehension, set comprehension,
 dict comprehension, generator expression, lambda functions, nested functions or
-polymorphic functions. It does *not* support user classes or any dynamic
-feature such as introspection, polymorphic variables.
+polymorphic functions. It does *not* support global variables, user classes or
+any dynamic feature such as introspection, polymorphic variables.
 
 Unlike existing alternatives, Pythran does not solely performs static typing of
 Python programs. It also performs various compiler optimizations such as
 detection of pure functions, temporary allocation removal or constant folding.
-These transformations are backed up by code analysis such as alias aliasing,
+These transformations are backed up by code analysis such as aliasing,
 inter-procedural memory effect computations or use-def chains.
 
 The article is structured as follows: Section 1 introduces the Pythran compiler
@@ -192,7 +192,7 @@ implementation of a generic dot product in Python and C++:
         {
             return pythonic::sum(
                 pythonic::map(
-                    operator.multipy(),
+                    operator_::multiply(),
                         pythonic::zip(
                             std::forward<T0>(t0),
                             std::forward<T1>(t1))
@@ -214,12 +214,12 @@ The type of all internal functions is then inferred from the call site.
 Last step involves a template library, called `pythonic` that contains a
 polymorphic implementation of many functions from the Python standard library
 in the form of C++ template functions. Several optimizations, most notably
-expression template, are delegated to this library. Pythran relies on a the
+expression template, are delegated to this library. Pythran relies on the
 C++11[cxx11]_ language, as it makes heavy use of recent features such as move
 semantics, type inference through `decltype(...)` and variadic templates. As a
-consequence requires a compatible C++ compiler for the native code generation
-and on Boost.Python[boost_python]_ for the Python-to-C++ glue. Generated code
-is compatible with g++ 4.7.2 and clang++ 3.2.
+consequence it requires a compatible C++ compiler for the native code
+generation and on Boost.Python[boost_python]_ for the Python-to-C++ glue.
+Generated code is compatible with g++ 4.7.2 and clang++ 3.2.
 
 It is important to note that all Pythran analysis are type-agnostic, i.e. they
 do not assume any type for the variables manipulated by the program. Type
