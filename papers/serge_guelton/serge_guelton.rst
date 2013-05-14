@@ -68,20 +68,20 @@ Several tools  have been proposed by an active community to fill this
 performance gap, either through static compilation or Just In Time(JIT)
 compilation.
 
-An approach used by Cython[cython]_ is to suppress the interpretation overhead
+An approach used by Cython [cython]_ is to suppress the interpretation overhead
 by translating Python Programs to C programs calling the Python C
-API[pythoncapi]_. More recently, Nuitka[nuitka]_ has taken the same approach
+API [pythoncapi]_. More recently, Nuitka [nuitka]_ has taken the same approach
 using C++ has a back-end. Going a step further Cython also uses an hybrid
 C/Python language that can efficiently be translated to C code, relying on the
-Python C API for some parts and on plain C for others.  Shedskin[shedskin]_
+Python C API for some parts and on plain C for others.  Shed Skin [shedskin]_
 translates implicitly strongly typed Python program into C++, without any call
 to the Python C API.
 
 The alternate approach consist in writing a Just In Time(JIT) compiler embeded
 into the interpreter, to dynamically turn the computation intensive parts into
 native code. The `numexpr` module [numexpr]_ does so for Numpy expressions by
-JIT-compiling them from a string representation to native code. Numba[numba]_
-extends it to Numpy-centric applications and PyPy[pypy]_ applies the approach
+JIT-compiling them from a string representation to native code. Numba [numba]_
+extends it to Numpy-centric applications and PyPy [pypy]_ applies the approach
 to the whole language.
 
 To the notable exception of PyPy, these compilers do not apply any of the
@@ -177,12 +177,14 @@ chains. Function polymorphism is achieved through template parameters: a
 template function can be applied to several types as long as an implicit
 structural typing is respected, which is very similar to Python's duck typing,
 except that it is checked at compile time, as illustrated by the following
-implementation of a generic dot product in Python and C++:
+implementation of a generic dot product in Python:
 
 .. code-block:: python
 
     def dot(l0, l1):
         return sum(x*y for x,y in zip(l0,l1))
+
+and in C++:
 
 .. code-block:: c++
 
@@ -200,10 +202,10 @@ implementation of a generic dot product in Python and C++:
             );
         }
 
-Provided `sum`, `map` and `zip` are implemented in a third party library. The
-only assumption these two version make are that `l0` and `l1` are iterable,
-their content can be multiplied and the result of the multiplication is
-accumulatable.
+Altough far more verbose than the Python version, the C++ version also uses a
+form of structural typing : the only assumption these two version make are that
+`l0` and `l1` are iterable, their content can be multiplied and the result of
+the multiplication is accumulatable. 
 
 Second step only consists in the instantiation of the top-level function of the
 module, using user-provided signature. Template instantiation then triggers the
@@ -214,11 +216,11 @@ The type of all internal functions is then inferred from the call site.
 Last step involves a template library, called `pythonic` that contains a
 polymorphic implementation of many functions from the Python standard library
 in the form of C++ template functions. Several optimizations, most notably
-expression template, are delegated to this library. Pythran relies on the
-C++11[cxx11]_ language, as it makes heavy use of recent features such as move
+expression template, are delegated to this library. Pythran relies on the C++11
+[cxx11]_ language, as it makes heavy use of recent features such as move
 semantics, type inference through `decltype(...)` and variadic templates. As a
 consequence it requires a compatible C++ compiler for the native code
-generation and on Boost.Python[boost_python]_ for the Python-to-C++ glue.
+generation and on Boost.Python [boost_python]_ for the Python-to-C++ glue.
 Generated code is compatible with g++ 4.7.2 and clang++ 3.2.
 
 It is important to note that all Pythran analysis are type-agnostic, i.e. they
@@ -232,7 +234,7 @@ tools.
 
 .. figure:: compilation-flow.pdf
 
-   Pythran compilation flow.
+   Pythran compilation flow. :label:`compilation-flow`
 
 Code Analysis
 -------------
@@ -473,20 +475,20 @@ Library Level Optimizations
 Using the proper library, the C++ language provides an abstraction level close
 to what Python proposes. Pythran provides a wrapper library, `pythonic`, that
 leverage on the Standard Template Library(STL), the GNU Multiple Precision
-Arithmetic Library(GMP) and the Numerical Template Toolbox(NT2)[nt2]_ to emulate
-Python standard library. The STL is used to provide a typed version of the
-standard containers (`list`, `set`, `dict` and `str`), as well as
+Arithmetic Library(GMP) and the Numerical Template Toolbox(NT2) [nt2]_ to
+emulate Python standard library. The STL is used to provide a typed version of
+the standard containers (`list`, `set`, `dict` and `str`), as well as
 reference-based memory management through `shared_ptr`. Generic algorithms such
 as `accumulate` are used when possible. GMP is the natural pick to represent
 Python's `long` in C++. NT2 provides a generic vector library called
-`boost.simd` that makes it possible to access the vector instruction unit of
-modern processors in a generic way. It is used to efficiently compile `numpy`
-expressions.
+`boost.simd` [boost_simd]_ that makes it possible to access the vector
+instruction unit of modern processors in a generic way. It is used to
+efficiently compile `numpy` expressions.
 
 `numpy` expressions are the perfect candidate for library level optimization.
 Pythran implements three optimizations on such expressions:
 
-1. Expression templates[expression_templates]_ are used to avoid multiple iterations and the
+1. Expression templates [expression_templates]_ are used to avoid multiple iterations and the
    creation of intermediate arrays. Because they aggregates all `ufunc` into a single
    expression at compile time, they also increase the computation intensity of the
    loop body, which increases the impact of the two following optimizations.
@@ -502,7 +504,7 @@ Pythran implements three optimizations on such expressions:
    templates proves to be beneficial, as it reduces the number of (costly) load
    from the main memory to the vector unit.
 
-3. Loop parallelization through OpenMP[openmp]_. Numpy expression computation do
+3. Loop parallelization through OpenMP [openmp]_. Numpy expression computation do
    not carry any loop-dependency. They are perfect candidates for loop
    parallelization, especially after the aggregation from expression templates,
    as OpenMP generally performs better on loops with a higher computation
@@ -566,7 +568,7 @@ expression yields the following timings:
     1000 loops, best of 3: 395 us per loop
  
 Next section performs an in-depth comparison of Pythran with three Python
-optimizers: PyPy, Shedskin and numexpr.
+optimizers: PyPy, Shed Skin and numexpr.
 
 Benchmarks
 ----------
@@ -574,61 +576,100 @@ Benchmarks
 All benchmarks presented in this section are run on an hyper-threaded i7
 quadcore, using the code available in the Pythran sources available at
 https://github.com/serge-sans-paille/pythran in the `pythran/test/cases`
-directory. The Pythran version used is `deqzffzr`, Shedskin 0.9.2, PyPy 2.0
-compiled with the `-jit` flag, CPython 2.7.3 and numexpr 2.0.1.
+directory. The Pythran version used is `deqzffzr`, Shed Skin 0.9.2, PyPy 2.0
+compiled with the `-jit` flag, CPython 2.7.3 and numexpr 2.0.1. All timings are
+made using the `timeit` module, taking the best of all runs. All C++ codes are
+compiled with g++ 4.7.3, using the tool default compiler option, generally
+`-O2` plus a few optimizing flags depending on the target.
 
 Pystone is a Python translation of whetstone, a famous floating point number
 benchmarks that dates back to Algol60 and the 70's. Although non representative
 of real applications, it illustrates the general performance of floating point
-number manipulations. Figure :ref:`pystone-table` illustrates the benchmark
-result for CPython, PyPy, Shedskin and Pythran.
+number manipulations. Table :ref:`pystone-table` illustrates the benchmark
+result for CPython, PyPy, Shed Skin and Pythran, using an input value of
+`10**3`. Note that the original version has been updated to replace the user
+class by a function call.
 
 .. table:: Benchmarking result on the Pystone program. :label:`pystone-table`
 
-    +-------------+---------------+------------+
-    |  bla        |   bla         |     bla    |
-    +-------------+---------------+------------+
+    +---------+-------------+---------------+------------+-------------+
+    | Tool    |  CPython    |   Pythran     |     PyPy   |  Shed Skin  |
+    +---------+-------------+---------------+------------+-------------+
+    | Timing  |  861ms      |   11.8ms      |     29.1ms |  24.7ms     |
+    +---------+-------------+---------------+------------+-------------+
+    | Speedup |  x1         |   x72.9       |    x29.6   |  x34.8      | 
+    +---------+-------------+---------------+------------+-------------+
 
-It shows that...
+It comes at no surprise that all tools get more than decent on this benchmark. PyPy generates code almost as performant as Shed Skin. Altough both generates C++, Pythran outperforms Shed Skin thanks to a higher level generated code. For instance all arrays are represented in Shed Skin by pointers to arrays that likely disturbs g++ optimizer, while Pythran uses a vector class wrapping shared pointers.
 
 Nqueen is a benchmark extracted from the now dead project Unladen Swallow. It
 is particularly interesting as it makes an intensive use of non-trivial
-generator and integer sets. Figure :ref:`nqueen-table` illustrates the benchmark
-result for CPython, PyPy, Shedskin and Pythran. 
+generator expressions and integer sets. Table :ref:`nqueen-table` illustrates
+the benchmark result for CPython, PyPy, Shed Skin and Pythran. The code had to
+be slightly updated to run with shedskin because Shedskin type inference does
+not support mixed scalar and None variables. The input value is `9`.
 
 .. table:: Benchmarking result on the NQueen program. :label:`nqueen-table`
 
-    +-------------+---------------+------------+
-    |  bla        |   bla         |     bla    |
-    +-------------+---------------+------------+
+    +---------+-------------+---------------+------------+-------------+
+    | Tool    |  CPython    |   Pythran     |     PyPy   |  Shed Skin  |
+    +---------+-------------+---------------+------------+-------------+
+    | Timing  |  1904.6ms   |   358.3ms     |    546.1ms |  701.5ms    |
+    +---------+-------------+---------------+------------+-------------+
+    | Speedup |  x1         |    x5.31      |    x3.49   |  x2.71      | 
+    +---------+-------------+---------------+------------+-------------+
 
-It shows that...
+It seems that compiler have difficulties to take advantage of high level
+constructs such as generator expressions, as the overall speedup is not
+flubbergasting. Pythran benefits from the conversion to `itertools.map` here,
+while Shed Skin and PyPy rely on more costly constructs. A deeper look at the
+Pythran profiling trace shows that more than half of the execution time is
+spent allocating and deallocating a `set` used in the internal loop. There is a
+memory allocation invariant that could be taken advantage of there, but none of
+the compiler does.
 
-Hyantes is a geomatic application that exhibits typical usage of numpy
-array using loops instead of generalized expressions. It is helpful to measure
-the performance of direct array indexing. Figure :ref:`hyantes-table`
-illustrates the benchmark result for CPython, PyPy and Pythran[*]_.
+Hyantes is a geomatic application that exhibits typical usage of arrays using
+loops instead of generalized expressions. It is helpful to measure the
+performance of direct array indexing.
 
-.. [*] Shedsking does not support numpy
+Table :ref:`hyantes-table` illustrates the benchmark result for CPython, PyPy,
+Shedskin and Pythran, when using lists as the data container. The output window
+used is `100x100`.
 
-.. table:: Benchmarking result on the hyantes program. :label:`hyantes-table`
+.. table:: Benchmarking result on the hyantes kernel, list version. :label:`hyantes-table`
 
-    +-------------+---------------+------------+
-    |  bla        |   bla         |     bla    |
-    +-------------+---------------+------------+
+    +---------+-------------+---------------+------------+-------------+
+    | Tool    |  CPython    |   Pythran     |     PyPy   |  Shed Skin  |
+    +---------+-------------+---------------+------------+-------------+
+    | Timing  |  1295.4ms   |   270.5ms     |    277.5ms |  281.5ms    |
+    +---------+-------------+---------------+------------+-------------+
+    | Speedup |  x1         |    x4.79      |    x4.67   |  x4.60      | 
+    +---------+-------------+---------------+------------+-------------+
 
-It shows that...
+The speed ups are not amazing for a numerical application. there are two
+reasons for this poor speedups. First, the `hyantes` benchmark makes heavy
+usage of trigonometric functions, and there is not much gain there. Second, and
+most important, the benchmark ouputs a big 2D array stored as a list of list,
+so the application suffers from the heavy overhead of converting them from C++
+to Python. Running the same benchmark using numpy arrays as core containers
+confirms this assumption: the CPython version yields its result in 450.0ms and
+the Pythran version in 4.6ms, that is a speedup of x97.8.
 
-Finally, `arc_distance` is a typical usage of numpy expression that is
+Finally, `arc_distance` presents a classical usage of numpy expression that is
 typically more efficient with CPython than its loop alternative as all the
-looping is done directly in C. Figure :ref:`hyantes-table`
-illustrates the benchmark result for CPython, PyPy, Numexpr and Pythran.
+looping is done directly in C. Figure :ref:`arc-distance-table`
+illustrates the benchmark result for CPython, Numexpr and Pythran.
 
-.. table:: Benchmarking result on the hyantes program. :label:`hyantes-table`
+.. table:: Benchmarking result on the arc distance kernel. :label:`arc-distance-table`
 
-    +-------------+---------------+------------+
-    |  bla        |   bla         |     bla    |
-    +-------------+---------------+------------+
+    +---------+-------------+---------------+-------------+
+    | Tool    |  CPython    |   Pythran     |  Numexpr    |
+    +---------+-------------+---------------+-------------+
+    | Timing  |  nan        |   nan         |  nan        |
+    +---------+-------------+---------------+-------------+
+    | Speedup |  x1         |    x4.79      |  x1         | 
+    +---------+-------------+---------------+-------------+
+
 
 It shows that...
 
@@ -647,7 +688,7 @@ implementation of part of the Numpy package.
 
 The paper gives an overview of the compilation flow, the analysis involved and
 the optimization used. It also compares the performance of compiled python
-module against CPython and other optimizers: Shedskin, PyPy and numexpr.
+module against CPython and other optimizers: Shed Skin, PyPy and numexpr.
 
 To conclude, limiting Python to a statically typed subset does not hinders the
 expressively when it comes to scientific or mathematic computations, but makes
@@ -663,6 +704,10 @@ References
                     *Building Hybrid Systems with Boost.Python*,
                     C/C++ Users Journal, 21(7), July 2003.
 
+.. [boost_simd] P. Estérie, M. Gaunard, J. Falcou, J. T. Lapresté, B. Rozoy.
+                *Boost.SIMD: generic programming for portable SIMDization*,
+                Proceedings of the 21st international conference on Parallel architectures and compilation techniques, 431-432, 2012.
+
 .. [cython]  S. Behnel, R. Bradshaw, C. Citro, L. Dalcin, D. S. Seljebotn and K. Smith.
                 *Cython: The Best of Both Worlds*,
                 Computing in Science Engineering, 13(2):31-39, March 2011.
@@ -675,8 +720,9 @@ References
             *Expression Templates*,
             C++ Report, 7:26-31, 1995.
 
-.. [nt2] M. Gaunard, J. Falcou and J-T. Lapresté.
-            *The Numerical Template Toolbox*,
+.. [nt2]    J. Falcou, J. Sérot, L. Pech, J. T. Lapresté
+            *Meta-programming applied to automatic SMP parallelization of linear algebra code*,
+            Euro-Par, 729-738, January 2008,
             https://github.com/MetaScale/nt2.
 
 .. [nuitka] K. Hayen.
