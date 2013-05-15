@@ -2,6 +2,9 @@
 :email: stuart@mumford.me.uk
 :institution: The University of Sheffield
 
+:author: David Pérez-Suárez
+:email: dps.helio@gmail.com
+:institution: Finnnish Meteorological Institute
 
 ----------------------------------
 SunPy: Python for Solar Physicists
