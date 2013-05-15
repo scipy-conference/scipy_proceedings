@@ -64,9 +64,14 @@ and high level programming. Additionally, the Python compiler performs no
 optimisation on the bytecode, while scientific applications are first-class
 candidates for many of them.
 
-Several tools  have been proposed by an active community to fill this
-performance gap, either through static compilation or Just In Time(JIT)
-compilation.
+Following the saying that scientific applications spend 90% of their time in
+10% of the code, it is natural to focus on computation-intensive piece of code.
+So the aim may not be to optimize the full Python application, but rather a
+small subset of the application.
+
+Several tools  have been proposed by an active community to fill the
+performance gap met when running these computation-intensive piece of code,
+either through static compilation or Just In Time(JIT) compilation.
 
 An approach used by Cython [cython]_ is to suppress the interpretation overhead
 by translating Python Programs to C programs calling the Python C
@@ -118,6 +123,25 @@ performance of generated code on a few synthetic benchmarks and concludes.
 
 Pythran Compiler Infrastructure
 -------------------------------
+
+Pythran is a compiler for a subset of the Python language. In this paper, the
+name *Pythran* will be used indifferently to refer to the language or the
+associated compiler. The input of the Pythran compiler is a Python module --
+not a Python program -- meant to be turned into a native module. Typically,
+computation-intensive part of the program are moved to a module fed to Pythran.
+
+Pythran maintains backward compatibility with CPython. In addition to language
+restrictions detailed in the following, Pythran understands special comments
+such as:
+
+.. code-block:: python
+
+    #pythran export foo(int list, float)
+
+as optional module signature. One does not need to list all the module
+functions in an `export` directive, only the functions meant to be used outside
+of the module. Polymorphic functions can be listed several times with different
+types.
 
 The Pythran compiler is built as a traditional static compiler: a front-end
 turns Python code into an Internal Representation(IR), a middle-end performs
@@ -202,7 +226,7 @@ and in C++:
             );
         }
 
-Altough far more verbose than the Python version, the C++ version also uses a
+Although far more verbose than the Python version, the C++ version also uses a
 form of structural typing : the only assumption these two version make are that
 `l0` and `l1` are iterable, their content can be multiplied and the result of
 the multiplication is accumulatable. 
@@ -294,7 +318,7 @@ A rather high-level analyse is the `PureFunctions` analyse, that computes the
 set of functions declared in the module that are pure, i.e. whose return value
 only depends from the value of their argument. This analyse depends on two
 other analyse, namely `GlobalEffects` that computes for each function whether
-this function modifies the global state (including I/O, random generators etc)
+this function modifies the global state (including I/O, random generators etc.)
 and `ArgumentEffects` that computes for each argument of each function whether
 this argument may be updated in the function body. These three analyse works
 inter-procedurally, as illustrated by the following example:
@@ -465,7 +489,7 @@ assert the validity of the renaming of the instructions into:
 
 that does not have the same typing issue.
 
-In addition to this python-level optimizations, the Pythran backend library,
+In addition to this python-level optimizations, the Pythran back end library,
 `pythonic`, uses several well known optimisations, especially for `numpy`
 expressions.
 
@@ -582,6 +606,10 @@ made using the `timeit` module, taking the best of all runs. All C++ codes are
 compiled with g++ 4.7.3, using the tool default compiler option, generally
 `-O2` plus a few optimizing flags depending on the target.
 
+Cython is not considered in this benchmark, because to get an efficient binary,
+one need to rewrite the original code, while all the considered tools are
+running the very same Python code that remains compatible with CPython.
+
 Pystone is a Python translation of whetstone, a famous floating point number
 benchmarks that dates back to Algol60 and the 70's. Although non representative
 of real applications, it illustrates the general performance of floating point
@@ -600,13 +628,18 @@ class by a function call.
     | Speedup |  x1         |   x72.9       |    x29.6   |  x34.8      | 
     +---------+-------------+---------------+------------+-------------+
 
-It comes at no surprise that all tools get more than decent on this benchmark. PyPy generates code almost as performant as Shed Skin. Altough both generates C++, Pythran outperforms Shed Skin thanks to a higher level generated code. For instance all arrays are represented in Shed Skin by pointers to arrays that likely disturbs g++ optimizer, while Pythran uses a vector class wrapping shared pointers.
+It comes at no surprise that all tools get more than decent on this benchmark.
+PyPy generates code almost as efficient as Shed Skin. Altough both generates
+C++, Pythran outperforms Shed Skin thanks to a higher level generated code. For
+instance all arrays are represented in Shed Skin by pointers to arrays that
+likely disturbs g++ optimizer, while Pythran uses a vector class wrapping
+shared pointers.
 
 Nqueen is a benchmark extracted from the now dead project Unladen Swallow. It
 is particularly interesting as it makes an intensive use of non-trivial
 generator expressions and integer sets. Table :ref:`nqueen-table` illustrates
 the benchmark result for CPython, PyPy, Shed Skin and Pythran. The code had to
-be slightly updated to run with shedskin because Shedskin type inference does
+be slightly updated to run with Shed Skin because Shed Skin type inference does
 not support mixed scalar and None variables. The input value is `9`.
 
 .. table:: Benchmarking result on the NQueen program. :label:`nqueen-table`
@@ -621,19 +654,19 @@ not support mixed scalar and None variables. The input value is `9`.
 
 It seems that compiler have difficulties to take advantage of high level
 constructs such as generator expressions, as the overall speedup is not
-flubbergasting. Pythran benefits from the conversion to `itertools.map` here,
+flabbergasting. Pythran benefits from the conversion to `itertools.map` here,
 while Shed Skin and PyPy rely on more costly constructs. A deeper look at the
 Pythran profiling trace shows that more than half of the execution time is
 spent allocating and deallocating a `set` used in the internal loop. There is a
 memory allocation invariant that could be taken advantage of there, but none of
 the compiler does.
 
-Hyantes is a geomatic application that exhibits typical usage of arrays using
+Hyantes [*]_ is a geomatic application that exhibits typical usage of arrays using
 loops instead of generalized expressions. It is helpful to measure the
 performance of direct array indexing.
 
 Table :ref:`hyantes-table` illustrates the benchmark result for CPython, PyPy,
-Shedskin and Pythran, when using lists as the data container. The output window
+Shed Skin and Pythran, when using lists as the data container. The output window
 used is `100x100`.
 
 .. table:: Benchmarking result on the hyantes kernel, list version. :label:`hyantes-table`
@@ -649,15 +682,15 @@ used is `100x100`.
 The speed ups are not amazing for a numerical application. there are two
 reasons for this poor speedups. First, the `hyantes` benchmark makes heavy
 usage of trigonometric functions, and there is not much gain there. Second, and
-most important, the benchmark ouputs a big 2D array stored as a list of list,
+most important, the benchmark produces a big 2D array stored as a list of list,
 so the application suffers from the heavy overhead of converting them from C++
 to Python. Running the same benchmark using numpy arrays as core containers
 confirms this assumption: the CPython version yields its result in 450.0ms and
 the Pythran version in 4.6ms, that is a speedup of x97.8.
 
-Finally, `arc_distance` presents a classical usage of numpy expression that is
+Finally, `arc_distance` [*]_ presents a classical usage of numpy expression that is
 typically more efficient with CPython than its loop alternative as all the
-looping is done directly in C. Its code is repoduced below:
+looping is done directly in C. Its code is reproduced below:
 
 .. code-block:: python
 
@@ -683,9 +716,9 @@ Numexpr and Pythran, using random input arrays of `10**6` elements. Table
     +---------+-------------+-------------+----------+
     | Tool    |  CPython    |  Numexpr    | Pythran  |
     +---------+-------------+-------------+----------+
-    | Timing  |  207.2ms    |    65.9ms   |  15.6ms  |
+    | Timing  |  192.2ms    |    41.2ms   |  17.1ms  |
     +---------+-------------+-------------+----------+
-    | Speedup |  x1         |  x3.14      |  x13.28  | 
+    | Speedup |  x1         |  x4.67      |  x11.23  | 
     +---------+-------------+-------------+----------+
 
 
@@ -694,18 +727,36 @@ Numexpr and Pythran, using random input arrays of `10**6` elements. Table
     +---------------+----------------+-------------------+
     | Pythran (raw) | Pythran (+AVX) | Pythran (+Openmp) |
     +---------------+----------------+-------------------+
-    |   148.1ms     |    65.7ms      |    38.5ms         |
+    |   186.3ms     |    75.4ms      |    41.1ms         |
     +---------------+----------------+-------------------+
-    |    x1.40      |    x3.15       |    x5.38          |
+    |    x1.03      |    x2.54       |    x4.67          |
     +---------------+----------------+-------------------+
 
-It shows a small benefit from using expression template on their own, and a
-decent x2 speed-up when using AVX over not using it. The benefit of OpenMP,
-although related to the number of core, makes a whole speedup greaater than x13
-over the original Numpy version, without changing the input code. To the
-opposite, Numexpr requires to rewrite the input and does not achieve the same
-level of performance than Pythran.
+It shows a small benefit from using expression template on their own, most
+certainly because the looping overhead is negligible in front of the
+trigonometric functions. It gets a decent x2.5 speed-up when using AVX over
+not using it. The benefit of OpenMP, although related to the number of core,
+makes a whole speedup greater than x11 over the original Numpy version,
+without changing the input code. To the opposite, Numexpr requires to rewrite
+the input and does not achieve the same level of performance than Pythran when
+OpenMP and AVX are combined.
 
+.. [*] http://hyantes.gforge.inria.fr/
+.. [*] The arc_distance test_bed is taken from to https://bitbucket.org/FedericoV/numpy-tip-complex-modeling
+
+Future Works
+------------
+
+Although Pythran focuses on a subset of Python and its standard library, many
+optimisations opportunities are still possible. Using as Domain Specific
+Language(DSL) approach, one could use a rewriting engine to optimize several
+Python idioms, such as `len(set(x))` that could lead to an optimized
+`count_uniq` that would loop only once on the input sequence.
+
+There is naturally more work to be done at the numpy level, be it to support
+more functions from the original module. The extraction of numpy expression
+from for loops is also a natural optimization candidate, which shares
+similarity with code refactoring.
 
 Conclusion
 ----------
@@ -729,6 +780,15 @@ it possible to use a wide variety of classical optimizations to have Python
 match the performance of statically compiled language. Moreover, one can use
 high level informations to generate efficient code that would proved to be
 difficult to write to the average programmer.
+
+Acknowledgments
+---------------
+
+This project has been partially founded by the CARP Project [*]_ and the Silkan
+Company [*]_. 
+
+.. [*] http://carp.doc.ic.ac.uk/external/
+.. [*] http://www.silkan.com/
 
 References
 ----------
