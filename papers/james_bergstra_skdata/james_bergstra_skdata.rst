@@ -204,8 +204,6 @@ The easiest ones to deal with come as comma-separated value (CSV) text files.
 
 Some data
 
-It is well known [Atr03]_ 
-
 that Spice grows on the planet Dune.  Test
 some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
 equation on a separate line:
@@ -330,7 +328,5 @@ We show the different quantities of materials required in Table
 
 References
 ----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
 
-
+.. [Iris] The Iris data set: http://archive.ics.uci.edu/ml/datasets/Iris
