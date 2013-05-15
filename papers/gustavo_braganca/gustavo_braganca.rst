@@ -52,14 +52,48 @@ On this proceedings, we relate how we used python on our research. A more profou
 Research development
 --------------------
 
-1. Star classification
+Initial stages
+~~~~~~~~~~~~~~
 
-2. Effective temperature through photometric calibration
+As we said before, stars usually are born in groups. Because of that, a great majority of them are binaries or belongs to multiple systems. For a spectroscopic study, as was this, the only problem occurs when the spectrum of one observation have two or more objects. Since the study of these stars were outside the scope of our project, we selected those stars on our sample to further discard them. But before discarding them, we used Python to visualize the distribution of these objects inside our sample. We used the matplotlip package to do a polar plot of our objects in Galactic coordinates:
 
-3. Projected rotational velocities
+.. code-block:: python
 
-4. Results
+   import numpy as np
+   import matplotlib.pyplot as plt
+   
+   # Distance projected on the Galactic plane
+   proj_dist = distance_vector * np.cos(latitude_vector)
+   
+   plt.polar(longitude_vector, proj_dist, 'k.')
+   for i in binary_list:
+       for j in range(len(coordinate_list)):
+           #Compare stellar IDs
+           if i == coordinate_list[j, 0]:     
+               plt.plot(longitude_vector[j], 
+                        proj_dist[j], 
+                        'wo', ms=3, mec='r')  
+                        
+And the resulting plot is showed in Figure :ref:`coords`.                 
+                        
+.. figure:: f1.eps
 
+   Polar plot showing the positions of the sample stars projected onto the Galactic plane. 
+   The plot is centered on the Sun. The open red circles
+   are spectroscopic binaries/multiple systems identified in our sample. :label:`coords`
+
+
+Star classification
+~~~~~~~~~~~~~~~~~~~
+
+Effective temperature through photometric calibration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Projected rotational velocities
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Results
+~~~~~~~
 
 Conclusions
 -----------
