@@ -42,19 +42,131 @@ Skdata: Data Sets and Algorithm Evaluation Protocols in Python
 
     machine learning, cross validation, reproducibility
 
+Introduction
+------------
+
+One of the most basic testing strategies for an implementation of a machine learning algorithm,
+whether it implements a new algorithm or one that is widely known,
+is "How well does it perform on standard benchmarks?"
+Answering this question for new algorithms is often a principal contribution of research papers in machine learning.
+Anyone implementing an algorithm from scientific literature must first verify that their implementation matches the results reported in that literature.
+Adherence to standard algorithm evaluation protocols is critical to
+obtaining an accurate answer to this central question.
+
+At the same time, it is not always obvious what exactly the standard protocol
+is.
+For example, the widely-used "Iris" data set is simply an enumeration of 150 specimens' petal and sepal measurements along with the label of which kind of iris each one is [Iris]_. 
+If we are interested in matching the generalization error of our implementation to a generalization error in the literature, then we would like to know more than just the accuracy;
+we would like to know exactly which examples were used for training, and which
+examples were used for measuring that generalization error.
+It would be tedious to write such detail into a paper (and to transcribe it back into code afterward!), but it is natural to express
+this kind of precision in programming logic.
+Indeed, the authors of every scientific papers with empirical results of this type used some programmatic logic to 
+
+1. obtain their data,
+1. unpack it into some working directory,
+1. load it into the data structures of their programming language of choice,
+1. convert those examples into the training, validation, and testing sets used
+   for cross-validation, and
+1. provide those training examples as input to some machine learning algorithm.
+
+These steps are typically not formalized by authors of scientific papers as
+reusable software. We conjecture that the vast majority of researchers use web
+browsers and hand-typed unix shell commands to accomplish the first two steps in this
+sequence. We conjecture that the third step (loading into language data structures) is
+typically accomplished with a
+"write-once" script, after which the data is saved in a derived
+language-specific storage format so that the script isn't necessary anymore.
+(Further speculating, we wager that this script is then typically either lost, or kept in a private stash of similar scripts.)
+Finally, the logic that divides examples into specific training and testing
+"splits" is often messy code interwoven with various debugging statements and
+diagnostic logic specific to the learning algorithm under investigation. It is
+considered to be private research code, and not meant for distribution.
+
+The skdata library takes these ugly little details of machine learning practice
+and consolidates them into a library of reusable code.
+It serves as both a gateway to access a growing list of standard public data sets,
+and a conceptual framework for expressing the exact evaluation protocols that
+should be used for those data sets.
+
+
 
 Introduction
 ------------
 
-Machine learning is a broad field, but one of the principal themes is the study of algorithms that generalize from data.
-Machine learning algorithms have been developed for kinds of data.
-
-Support Vector Machines, Decision Trees, Naive Bayes, Neural Networks, Nearest Neighbors, various Graphical Models,
-
+The number of conceptually different kinds of statistical inferences that dominate the attention of machine learning researchers is not so large.
+Some of the standard kinds of inferences include:
 
 * *classification* is the prediction of a discrete label from some number of real-valued or discrete-valued *feature* variables
 * *regression* the prediction of real-valued responses from some number of real-valued or discrete-valued *feature* variables
 * *density estimation*
+* *matrix completion* often arises in user rating scenarios
+* *ranking and structured prediction*
+
+These inference categories correspond to industrially relevant applications, and algorithms for solving them have seen a lot of attention for decades.
+Consequently they are supported by many mature inference algorithms (see e.g. [sklearn]_), even while research continues to develop new ones.
+Other kinds of machine learning problems exist (see e.g. [Langford]_, [bigPDFmaybeByRoweis]_) but skdata has been developed foremost to support
+the popular inference types mentioned above.
+
+In contrast to the relatively short list of common inference types,
+the number of data sets in active use for evaluating relevant inference algorithms is quite a lot larger and grows every year.
+As computers get faster, storage gets cheaper, and research interests shift, we
+see a steady stream of new public data sets for that focus researchers on
+industrially or scientifically relevant challenges.
+
+There is nothing standard about data sets.
+The nature of data sets varies widely, from features of flower petals (Iris) to pixel values of tiny images scraped from the internet (CIFAR-10),
+but even such widely disparate data sets can be interpreted as providing features (X) and labels (y) for a machine learning *classification problem*, and be treated
+
+Data sets are typically distributed via public web pages.
+A data set's web page describes the nature of the data set and provides links to compressed archive files containing
+the data set itself.
+
+The data set itself may be just about anything, but some of the more popular data sets in machine learning and computer vision
+include one or more of:
+* comma-separated-value text files exported from a spreadsheet program,
+* XML documents (with custom internal structure),
+* text files with ad-hoc formatting,
+* nested directory structures of images (which may or may not have identical encodings, shapes, and colour spaces),
+* collections of MPG movies,
+* collections of audio files,
+* matlab workspaces, and
+* pickled NumPy ndarray objects.
+
+
+
+
+
+There is a typical pattern in the workflow of researchers as they approach a machine learning challenge.
+(I am summarizing my observations of many graduate students as well as my own working habits.)
+
+What typically happens when a machine learning researcher, say a graduate
+student, starts to work on a new project is that they:
+
+1. start with an idea for a new algorithm
+
+1. read papers on the subject and learn what the standard benchmarks
+   are
+
+1. implement their idea and want to compare it with the previous work
+
+1. download a relevant data set and spend a day or two ensuring that they
+   have understood it correctly
+
+1. try to determine from the paper exactly which examples were used for
+   training and testing (possibly failing to do so, and guessing)
+
+1. download another data set and spend another day or two on that one
+   
+1. download a third data set (etc.)
+
+In terms of this workflow, the skdata library helps with steps 4-7.
+The skdata library
+Relative
+
+
+Support Vector Machines, Decision Trees, Naive Bayes, Neural Networks, Nearest Neighbors, various Graphical Models,
+
 
 
 Cross-validation
@@ -78,23 +190,6 @@ For example, a linear model predicts very different values most points than a hi
 even if both the linear model and the polynomial have been fit to the same few examples (called "training data").
 
 Machine learning benchmark data sets come in all shapes and sizes.
-The nature of data sets varies widely, from features of flower petals (Iris) to pixel values of tiny images scraped from the internet (CIFAR-10),
-but even such widely disparate data sets can be interpreted as providing features (X) and labels (y) for a machine learning *classification problem*, and be treated
-
-Data sets are typically distributed via public web pages.
-A data set's web page describes the nature of the data set and provides links to compressed archive files containing
-the data set itself.
-
-The data set itself may be just about anything, but some of the more popular data sets in machine learning and computer vision
-include one or more of:
-* comma-separated-value text files exported from a spreadsheet program,
-* XML documents (with custom internal structure),
-* text files with ad-hoc formatting,
-* nested directory structures of images (which may or may not have identical encodings, shapes, and colour spaces),
-* collections of MPG movies,
-* collections of audio files,
-* matlab workspaces, and
-* pickled NumPy ndarray objects.
 
 
 
