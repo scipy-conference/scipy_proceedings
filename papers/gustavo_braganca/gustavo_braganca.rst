@@ -1,14 +1,14 @@
-:author: Gustavo Bragan/c ca
+:author: Gustavo Braganca
 :email: ga.braganca@gmail.com
-:institution: Observat/'orio Nacional, Brazil
+:institution: Observatorio Nacional, Brazil
 
 :author: Simone Daflon
 :email: daflon@on.br
-:institution: Observat/'orio Nacional, Brazil
+:institution: Observatorio Nacional, Brazil
 
 :author: Katia Cunha
 :email: cunha@email.noao.edu
-:institution: Observat/'orio Nacional, Brazil; National Optical Astronomy Observatory, University of Arizona, U. S. A.
+:institution: Observatorio Nacional, Brazil; National Optical Astronomy Observatory, University of Arizona, U. S. A.
 
 :author: Thomas Bensby
 :email: tbensby@astro.lu.se
@@ -47,7 +47,7 @@ Stars are born inside molecular clouds, and, usually, a molecular cloud can gene
 
 The Python programming language is very well suited to scientific studies. The scipy, numpy and matplotlib are the basic packages to start doing scientific research using python. Also, on the last years, it has been widely adopted on the Astronomic community. Because this, several packages are being translated to python or just being created. The existence of these packages are one of the reasons that attracted us to use python on our research. Its easy learning and its script nature are other reasons as well. The script nature allows the researcher to have a dynamic workflow and not to loose too much time with debugging and compiling.
 
-On this proceedings, we relate how we used python on our research. A more profound scientific analysis can be found at [Brag12]_
+On this proceedings, we relate how we used python on our research. A more profound scientific analysis can be found at [Brag12]_.
 
 Research development
 --------------------
@@ -69,7 +69,4 @@ blahblah
 References
 ----------
 
-.. [Brag12] Bragan/c ca, G. A; Daflon, S.; Cunha, K.; Bensby, T.; Oey, M. S.; Walth, G.
-            *Projected Rotational Velocities and Stellar Characterization of 350 B Stars 
-             in the Nearby Galactic Disk*,
-             Astronomical Journal, 144:130, November 2012. 
+.. [Brag12] Braganca, G. A, et al., Astronomical Journal, 144:130, November 2012. 
