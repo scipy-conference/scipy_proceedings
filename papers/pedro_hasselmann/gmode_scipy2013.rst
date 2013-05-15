@@ -18,41 +18,43 @@ Adapted G-mode Clustering Method applied to Asteroid Taxonomy
 
    The original G-mode was a clustering method developed by A. I. Gavrishin in the 70's for geochemical classification of rocks, 
    but was also applied to asteroid photometry, cosmic rays, lunar sample and planetary science spectroscopy data. 
-   In this work, we used a adapted version to classify the asteroid photometry from SDSS Moving Objects Catalog. 
-   The method works identifying normal distributions in a multidimensional space of variables. 
-   The identification starts with finding the closest points in the sample, which is a consumable problem when the data is not planar. 
-   Therefore, to achieve satisfying results in a human bearable time, we implemented the method, 
+   In this work, we used an adapted version to classify the asteroid photometry from SDSS Moving Objects Catalog. 
+   The method works by identifying normal distributions in a multidimensional space of variables. 
+   The identification starts by locating a set of points with smallest mutual distance in the sample, 
+   which is a inefficient problem when data is not planar. 
+   Here we present a modified version of the G-mode algorithm,
    which was previously written in FORTRAN 77, in Python 2.7 and using NumPy, SciPy and Matplotlib packages. 
    The NumPy was used for array and matrix manipulation and Matplotlib for plot control. 
    The Scipy had a import role in speeding up G-mode, Scipy.cKD-Tree and Numpy.histogramdd were applied to find the initial seeds 
    from which clusters are going to evolve. Scipy was also used to quickly produce dendrograms showing the distances among clusters.
 
-   Finally, results for Asteroids Taxonomy and tests for different sample sizes and implementations are going to be presented.
+   Finally, results for Asteroids Taxonomy and tests for different sample sizes and implementations are presented.
 
 .. class:: keywords
 
-   clustering, taxonomy, asteroids, multivariate data, scipy, numpy
+   clustering, taxonomy, asteroids, statistics, multivariate data, scipy, numpy
 
 Introduction
 ------------
 
-The clusters are identified using the G-mode multivariate clustering method, designed by A. I. Gavrishin and Coradini [Cor76]_, 
-originally written in FORTRAN V by Cor77_ to classify geochemical samples, but applicable to a wide range of research fields, 
+The clusters can be identified using the G-mode multivariate clustering method, designed by A. I. Gavrishin and Coradini [Cor76]_. 
+The algorithm was originally written in FORTRAN V by Cor77_ to classify geochemical samples, but is also applicable to a wide range of research fields, 
 as planetary sciences [REF], disk-resolved remote sensing [REF] and cosmology [REF]. 
-In 1987, Bar87_ used Original G-mode to classify asteroids intersected by the Eight-Color Asteroid Survey catalog [Zel85]_ and 
-IRAS geometric albedos [Mat86]_. Helding a sample of 442 asteroids with 8 variables, they recognized 18 valid classes using a confidence level
+In 1987, Bar87_ used original G-mode implementation to classify measurements of asteroids made by the Eight-Color Asteroid Survey catalog [Zel85]_ and 
+IRAS geometric albedos [Mat86]_. Using a sample of 442 asteroids with 8 variables, they recognized 18 classes using a confidence level
 of 97.7 %. Thoses classes were grouped to represent the asteroid taxonomic types. G-mode also identified that just 3 variables
 were enough to characterize the asteroid taxonomy.
 
 The G-mode classifies *N* elements into *Nc* unimodal clusters containing *Na* elements each. Elements are described by *M* variables. 
 This method is unsupervised, which allows an automatic identification of clusters without any *a priori* knowledge of sample distribution. 
-For that, user must control only one critical parameter for the classification, the confidence levels *q1*. 
-Smaller this parameter get, more clusters are resolved and lower their spreads are.
+For that, user must control only one critical parameter for the classification, the confidence levels *q1* or
+its corresponding critical value :math:`G_{q1}`. 
+Smaller this parameter get, more clusters are resolved and smaller their spreads are.
 
-The G-mode used here follows a adapted version of the original method published by Gav92_ , briefly described by Ful00_ and reviewed by Tos05_ and Ley10_  . 
-median central tendency and absolute deviation estimators, a faster initial seed finder and statistical whitenning were introduced to produce a more 
-robust set of clusters and optimize the processing time. The coding was performed using Python 2.7 with help of Matplotlib, NumPy and SciPy packages [*]_. 
-The method procedure can be briefly summarized in two parts: the first one is the cluster recognition and 
+The G-mode used here follows an adapted version of the original method published by Gav92_ , briefly described by Ful00_ and reviewed by Tos05_ and Ley10_  . 
+Median central tendency and absolute deviation estimators, a faster initial seed locator and statistical whitenning were introduced to produce a more 
+robust set of clusters and optimize the processing time. The coding was performed using Python 2.7 with support of Matplotlib, NumPy and SciPy packages [*]_. 
+The algorithm can be briefly summarized by two parts: the first one is the cluster recognition and 
 the second evaluates each variable in the classification process. Each one are going to be described in the following sections. 
 
 .. [*] The codebase_ is hosted through GitHub_ .
@@ -63,7 +65,7 @@ the second evaluates each variable in the classification process. Each one are g
 Recognition Of The Unimodal Clusters
 ------------------------------------
 
-The first procedure can be summarized with following topics and code snippets:
+The first procedure can be summarized by the following topics and code snippets:
 
 - *The data is arranged in N X M matrix*. All variables are ``scipy.cluster.vq.whiten`` , 
   which means they are divided by their absolute deviation to scale all them up. 
@@ -71,96 +73,106 @@ The first procedure can be summarized with following topics and code snippets:
 
 - *Initial seed of a forming cluster is identified*. 
   At the original implementation, the G-mode relied on a force-brute algorithm to find the three closest elements as initial seed, 
-  which required long processing time. Therefore, in our version, the initial seeds are searched recursively using ``numpy.histogramdd`` , which
+  which required long processing time. Therefore, in this version, the initial seeds are searched recursively using ``numpy.histogramdd`` , which
   speeds up the output:
 
-.. code-block:: python
+  .. code-block:: python
 
-   ###### barycenter.py ######
+      ###### barycenter.py ######
 
-   def boolist(index, values, lim):
-       if all([boo(item[0],item[1]) \
-          for item in izip(values,lim)]):
-          return index
+      def boolist(index, values, lim):
+          if all([boo(item[0],item[1]) \
+             for item in izip(values,lim)]):
+             return index
 
-   def pairwise(iterable):
-       """s -> (s0,s1), (s1,s2), (s2, s3), ..."""
-       a, b = tee(iterable)
-       next(b, None)
-       return izip(a, b)
+       def pairwise(iterable):
+           """s -> (s0,s1), (s1,s2), (s2, s3), ..."""
+           a, b = tee(iterable)
+           next(b, None)
+           return izip(a, b)
 
-   def volume(lst):
-       p = 1
-       for i in lst: p *= i[1] - i[0]
-       return p
+       def volume(lst):
+           p = 1
+           for i in lst: p *= i[1] - i[0]
+           return p
     
-   def barycenter_density(data, grid, upper, \
-       lower, dens, nmin):
+       def barycenter_density(data, grid, upper, \
+           lower, dens, nmin):
    
-       from numpy import histogramdd, array, \
-       unravel_index, amax
+           from numpy import histogramdd, array, \
+           unravel_index, amax
    
-       rng   = range(data.shape[1])
+           rng   = range(data.shape[1])
        
-       nbin = map(int,array([grid]*data.shape[1]))
+           nbin = map(int,array([grid]*data.shape[1]))
        
-       hist, edges = histogramdd( \
-       data,bins=nbin,range=tuple(zip(lower, upper)))
+           hist, edges = histogramdd( \
+           data,bins=nbin,range=tuple(zip(lower, upper)))
        
-       limits = array( \ 
-       [list(pairwise(edges[i])) for i in rng])
+           limits = array( \ 
+           [list(pairwise(edges[i])) for i in rng])
        
-       ind = unravel_index(argmax(hist), hist.shape) 
+           ind = unravel_index(argmax(hist), hist.shape) 
 
-       zone = array([limits[i,j] \
-              for i, j in izip(rng, ind)])
+           zone = array([limits[i,j] \
+                  for i, j in izip(rng, ind)])
        
-       density = amax(hist) / volume(zone)
+           density = amax(hist) / volume(zone)
        
-       if density > dens and amax(hist) > nmin:
-          zone = zone.T
-          return barycenter_density(data, grid, \
-                 zone[1], zone[0], density, nmin)
-       else:
-          return filter(lambda x: x != None, \
-                 imap(lambda i, y: boolist(i,y,zone), \
-                 xrange(data.shape[0]), data))
+           if density > dens and amax(hist) > nmin:
+              zone = zone.T
+              return barycenter_density(data, grid, \
+                     zone[1], zone[0], density, nmin)
+           else:
+              return filter(lambda x: x != None, \
+                     imap(lambda i, y: boolist(i,y,zone), \
+                     xrange(data.shape[0]), data))
 
 The function above divides the variable hyperspace into large sectors, and just in the most crowded sector the initial seed is searched for. 
 Recursively, the most crowded sector is once divided as long as the density grows up. 
 When density decreases or the minimal number of points set by the user is reached, the procedure stops. 
-The initial seed is chosen from the elements of the most crowded sector before ending the procedure. 
+The initial seed is chosen from the elements of the most crowded sector. 
 In the end, starting central tendency :math:`\mu_{i}` and standard deviation :math:`\sigma_{i}` are estimated from the initial seed. 
-If any standard deviation is zeroth, the value is replaced by the median error of the variable.                 
+If any standard deviation is zero, the value is replaced by the median uncertainty of the variable.                 
 
 - *Z² criterion*. In the next step, the mahalanobis distance (``scipy.spatial.distance.mahalanobis``) between 
-  the tested cluster and all elements are computed.
+  the tested cluster and all elements are computed:
+  
+.. math::
+
+   \overrightarrow{Z^{2}}_{j}=(\overrightarrow{\chi_{j}}-\overrightarrow{\mu})^{T}S^{-1}(\overrightarrow{\chi_{j}}-\overrightarrow{\mu})
+
+where :math:`\chi_{j}`  is the jth element and ``S`` is covariance matrix of the tested cluster.
 
 - *Hypothesis Testing*. The Z² estimator follows a :math:`\chi^{2}` distribution, but for sake of simplification, 
-  Z² can be transformed to gaussian estimator ``G`` if the degree of freedom :math:`\vec{f}` is larger enough, which is satisfied for most of samples. 
+  Z² can be transformed to gaussian estimator ``G`` if the degree of freedom :math:`\vec{f}` is large enough, which is satisfied for most of samples. 
   Now, the critical value :math:`G_{q1}` in hypothesis testing are given as multiples of :math:`\sigma` , simplifying its interpretation. 
   Therefore, the vectorized transformation [Abr72]_ can be written:
 
 .. math:: 
 
-   \vec{G_{j}}=\sqrt{2\cdot\vec{Z^{2}}}-\sqrt{2\cdot\vec{f}-1}
+   \vec{G_{j}}=\sqrt{2\cdot\vec{Z^{2}}}-\sqrt{2\cdot\frac{\vec{f}}{N}-1}
+ 
 
+while the elements of the vector degree of freedom are given by:
+   
 .. math::
 
    f_{k}=N\cdot\frac{M}{\sum_{s=1}^{M}r_{ks}^{2}}
  
-for :math:`\vec{f} > 100` , where :math:`r_{ks}^{2}` is the correlation coefficient. For :math:`30 < \vec{f} < 100` , the ``G`` parameter becomes: 
+for :math:`f_{k} > 100` , where :math:`r_{ks}^{2}` is the correlation coefficient. For :math:`30 < f_{k} < 100` , the ``G`` parameter becomes: 
 
 .. math::
 
-   \vec{G_{j}}=\frac{\left(\frac{Z^{2}}{\vec{f}}\right)^{1/3}-(1-\frac{2}{9}\cdot\vec{f})}{\sqrt{\frac{2}{9}\cdot\vec{f}}}
+   \vec{G_{j}}=\frac{\left(\frac{Z^{2}}{\vec{f}}\right)^{1/3}-(1-\frac{2}{9}\cdot\frac{\vec{f}}{N})}{\sqrt{\frac{2}{9}\cdot\frac{\vec{f}}{N}}}
  
-Then the null hypothesis :math:`\chi_{ij} = \mu_{i}` is tested with a statistical significance of :math:`P(G_{j} \leq G_{q_{1},f})` for a :math:`\chi_{j}`
-element to belong to a tested class, i.e., a class contains the :math:`\chi_{j}` sample if its estimator :math:`G_{j}` satisfies :math:`G_{j} \leq G_{q_{1}}` .
 
-- :math:`\mu_{i}` *and* :math:`\sigma_{i}` *are redefined in each iterative run*. The iteration is executed until the *Na*
-  and *R* become unchanged over successive runs. Once the first unimodal cluster is formed, its members are removed from the sample and 
-  the above procedure is applied again until all the sample is depleted, no more initial seed is found or the condition ``N > M-1``
+Then the null hypothesis :math:`\chi_{ij} = \mu_{i}` is tested with a statistical significance of :math:`P(G_{j} \leq G_{q_{1},f})` for a :math:`\chi_{j}`
+to belong to a tested class, i.e., a class contains the :math:`\chi_{j}` element if its estimator :math:`G_{j}` satisfies :math:`G_{j} \leq G_{q_{1}}` .
+
+- :math:`\mu_{i}` *and* :math:`\sigma_{i}` *are redefined on each iteration*. The iteration is executed until the *Na*
+  and correlation matrix *R* become unchanged. Once the first unimodal cluster is formed, its members are removed from sample and 
+  the above procedure is applied again until all the sample is depleted, no more initial seeds are located or the condition ``N > M-1``
   is not satisfied anymore. If a initial seed fails to produce a cluster, its elements are also excluded from the sample.
 
 
@@ -347,11 +359,11 @@ Thus, the last code version ended up with the following input parameters:
   according to the borders of the sample. Values between 2 and 4 are preferable.
 
 - ``Minimum Deviation Limit`` (``--mlim``, ``-m``, ``self.mlim``) : Sometimes the initial seeds starts with zeroth deviation, thus this singularity is corrected
-  replacing all deviation lower than minimum limit by this own value. This number is given in percent of median error of each variable.
+  replacing all deviation by the minimum limit when lower than it. This number is given in fraction of median error of each variable.
   
 - ``Upper Deviation Limit`` (``--ulim``, ``-u``, ``self.ulim``) : This parameter is important when the clusters have high degree of superposition. 
   The upper limit is a restriction which determines how much a cluster might grow up. 
-  This value is given in percent of total standard deviation of each variable.
+  This value is given in fraction of total standard deviation of each variable.
 
 The output is contained in a directory created in ``/TESTS/`` and organized in a series of lists and plots. 
 On the directory ``/TESTS/.../maps/`` , there are on-the-fly density distribution plots showing the *locus* of each cluster in sample.
@@ -362,7 +374,8 @@ classification per each data element, classification per unique ID and report of
 Users must be aware that input data should be formatted on columns in this order: measurement designation, unique identificator, variables, errors.
 If errors are not available, its values should be replaced by ``0.0`` and ``mlim`` parameter might not be used. There is no limit on data size, however
 the processing time is very sensitive to the number of identified cluster, which may slow down the method larger its number.
-For 20,000 elements and 41 clusters, the G-mode takes around to 2 minutes for whole procedure (plots creation not included).
+For 20,000 elements and 41 clusters, the G-mode takes around to 2 minutes for whole procedure (plots creation not included) when executed in a
+Intel Core 2 Quad 2.4 GHz with 4 Gb RAM.
 
 Our implementation also allows to ``import Gmode`` and use it in ``Python IDLE`` or through shell command, like the example::
 
@@ -371,7 +384,7 @@ Our implementation also allows to ``import Gmode`` and use it in ``Python IDLE``
 
 Finally, since the plot limits, normalization and axis are optimized to asteroid photometry, 
 users using the method on shell are invited to directly change this parameters in ``Gmode.Plot()``. 
-A easier way to control the method aesthetics is going to be put to work on future versions.
+A easier way to control the method aesthetics is going to be inserted on future versions.
 
 
 Code Testing
@@ -402,12 +415,14 @@ Code Testing
 .. figure:: Classic_Gmode_Identification.png 
    :scale: 50%
    
-   Red filled circles are the elements of clusters identified by Original G-mode. The green filled circles represent the initial seed. :label:`figorig`
+   Red filled circles are the elements of clusters identified by Original G-mode. The green filled circles represent the initial seed. 
+   Classification made by :math:`q_{1} = 2.2 \sigma`. :label:`figorig`
 
 .. figure:: Vectorized_Gmode_Identification.png
    :scale: 50%
  
-   Clusters identified by Adapted G-mode. Labels are the same as previous graphics. :label:`figadapted`
+   Clusters identified by Adapted G-mode. Labels are the same as previous graphics. 
+   Classification made by :math:`q_{1} = 2.2 \sigma`. :label:`figadapted`
 
    
 For testing the efficiency of the Adapted G-mode version, a bidimensional sample of 2000 points was simulated using ``numpy.random``. 
@@ -458,23 +473,28 @@ Preliminary Results on Asteroid Photometric Classification
    
    Density distributions of reflected intensities measured from asteroid observations by SDSSMOC4. The colors correspond to degrees of point agglomeration. :label:`fig0`
    
-.. figure:: 3.png
+.. figure:: vec3.png
    :scale: 40
 
-   Density distributions with the largest cluster identified by G-mode without upper limit. The largest cluster is marked by red filled circles. :label:`fig3`
+   Density distributions with the third cluster identified by G-mode without upper limit. The cluster is marked by red filled circles.
+   Classification made with :math:`q_{1} = 1.5 \sigma` and ``minlim = 0.5``. :label:`figvec`
    
-.. figure:: 1.png
+.. figure:: upper3.png
    :scale: 40
 
-   Density distributions with the largest cluster identified by G-mode with upper limit. The largest cluster is marked by red filled circles. :label:`fig1`
+   Density distributions with the third cluster identified by G-mode with upper limit. The cluster is marked by red filled circles. 
+   Classification made with :math:`q_{1} = 1.5 \sigma`, ``minlim = 0.5`` and ``upperlim = 0.5``. :label:`figupper`
    
 When looking at the density distributions (Figure :ref:`fig0`) it is possible to notice two large agglomerations with accentuated superposition between them.
-Those two groups are the most common asteroid types *S* (from Stone) and *C* (from Carbonaceous). A indicative that  a classification method is working for
-asteroid taxonomy is at least the detachment of both groups. However, previous photometry-based taxonomic systems [Tho84,Bar87]_ were developed over smaller samples, 
-with less than 1,000 asteroids, so superposition was not a huge problem. Therefore, when the SDSSMOC4 sample was classified, a single class
-engoulfed part of members of both groups (Figure :ref:`fig3`).  To deal with this behavior, a upper deviation limit was introduced to halt the 
-cluster evolution, thus not permiting clusters to become comparable in sample size. Figure :ref:`fig1` is a example of a cluster recognized with
-uper deviation limit on. Thus, the upper limit parameter turned up useful for sample with varied degrees of superposition.
+Previous photometry-based taxonomic systems [Tho84,Bar87]_ were developed over smaller samples, with less than 1,000 asteroids, thus superposition was not a huge problem.
+Those two groups are the most common asteroid types *S* (from Stone) and *C* (from Carbonaceous). A important indicative that  a classification method is working for
+asteroid taxonomy is at least the detachment of both groups. Nonetheless, even though both groups are being identified in the first and second clusters
+when SDSSMOC4 sample is classified, the third cluster was engoulfing part of members left from both groups and other smaller groups mingled
+among them (Figure :ref:`figvec`). This behavior was interrupting the capacity of the method to identify smaller clusters.
+Therefore, to deal with that, a upper deviation limit was introduced to halt the cluster evolution, thus not permiting clusters to become comparable in sample size. 
+Figure :ref:`figupper` is a example of a cluster recognized with upper deviation limit on, showing that third cluster is not getting into a large size anymore,
+allowing other cluster to be identified. This specific test resulted into 58 cluster recognitions, most of them lower than 100 members.
+Thus, the upper limit parameter turned up useful for sample with varied degrees of superposition.
 
 Conclusions
 -----------
