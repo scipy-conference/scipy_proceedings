@@ -14,7 +14,7 @@
 :email: tbensby@astro.lu.se
 :institution: Lund Observatory, Sweden
 
-:author: M. Sally Oey
+:author: Sally Oey
 :email: msoey@umich.edu
 :institution: University of Michigan, U. S. A.
 
