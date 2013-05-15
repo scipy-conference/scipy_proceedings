@@ -369,9 +369,9 @@ because `fibo` is pure and its argument is a literal.
 `UsedDefChains` is a typical analyse from the static compilation world. For
 each variable defined in a function, it computes the chain of *use* and *def*.
 The result can be used to perform various code transformation, for instance to
-remove dead code, as a *def* not followed by a *use* is useless. It is used in
-Pythran to avoid false polymorphism. An intuitive way to represent used-def
-chains is illustrated on next code snippet:
+remove dead code, as a *def* followed by a *def* or nothing is useless. It is
+used in Pythran to avoid false polymorphism. An intuitive way to represent
+used-def chains is illustrated on next code snippet:
 
 .. code-block:: python
 
