@@ -31,7 +31,7 @@ Pythran: Enabling Static Optimization of Scientific Python Programs
     modules do not rely much on the dynamic features of the language, it trades
     them against powerful, eventually inter procedural, optimizations, such as
     automatic detection of pure functions, temporary allocation removal,
-    constant folding, numpy ufunc fusion and parallelization, explicit
+    constant folding, Numpy ufunc fusion and parallelization, explicit
     parallelism through OpenMP annotations, false variable polymorphism pruning
     and AVX/SSE vector instruction generation.
 
@@ -78,7 +78,7 @@ by translating Python Programs to C programs calling the Python C
 API [pythoncapi]_. More recently, Nuitka [nuitka]_ has taken the same approach
 using C++ has a back-end. Going a step further Cython also uses an hybrid
 C/Python language that can efficiently be translated to C code, relying on the
-Python C API for some parts and on plain C for others.  Shed Skin [shedskin]_
+Python C API for some parts and on plain C for others.  ShedSkin [shedskin]_
 translates implicitly strongly typed Python program into C++, without any call
 to the Python C API.
 
@@ -117,8 +117,10 @@ inter-procedural memory effect computations or use-def chains.
 The article is structured as follows: Section 1 introduces the Pythran compiler
 compilation flow and internal representation.  Section 2  presents several code
 analysis while Section 3 focuses on code optimizations. Section 4 presents
-back-end optimizations for the `numpy` expressions. Section 5 illustrates the
-performance of generated code on a few synthetic benchmarks and concludes.
+back-end optimizations for the Numpy expressions. Section 5 briefly introduces
+OpenMP-like annotations for explicit parallelization of Python programs and
+section 6 illustrates the performance of generated code on a few synthetic
+benchmarks and concludes.
 
 
 Pythran Compiler Infrastructure
@@ -126,8 +128,8 @@ Pythran Compiler Infrastructure
 
 Pythran is a compiler for a subset of the Python language. In this paper, the
 name *Pythran* will be used indifferently to refer to the language or the
-associated compiler. The input of the Pythran compiler is a Python module --
-not a Python program -- meant to be turned into a native module. Typically,
+associated compiler. The input of the Pythran compiler is a Python module —not
+a Python program— meant to be turned into a native module. Typically,
 computation-intensive part of the program are moved to a module fed to Pythran.
 
 Pythran maintains backward compatibility with CPython. In addition to language
@@ -490,7 +492,7 @@ assert the validity of the renaming of the instructions into:
 that does not have the same typing issue.
 
 In addition to this python-level optimizations, the Pythran back end library,
-`pythonic`, uses several well known optimisations, especially for `numpy`
+`pythonic`, uses several well known optimisations, especially for Numpy
 expressions.
 
 Library Level Optimizations
@@ -507,9 +509,9 @@ as `accumulate` are used when possible. GMP is the natural pick to represent
 Python's `long` in C++. NT2 provides a generic vector library called
 `boost.simd` [boost_simd]_ that makes it possible to access the vector
 instruction unit of modern processors in a generic way. It is used to
-efficiently compile `numpy` expressions.
+efficiently compile Numpy expressions.
 
-`numpy` expressions are the perfect candidate for library level optimization.
+Numpy expressions are the perfect candidates for library level optimization.
 Pythran implements three optimizations on such expressions:
 
 1. Expression templates [expression_templates]_ are used to avoid multiple iterations and the
@@ -523,7 +525,7 @@ Pythran implements three optimizations on such expressions:
    a single instruction. One can directly use the vector instruction set
    assembly to use these vector units, or use C/C++ intrinsics. Pythran relies
    on `boost.simd` from NT2 that offers a generic vector implementation of all
-   standard math functions to generate a vectorized version of `numpy`
+   standard math functions to generate a vectorized version of Numpy
    expressions. Again, the aggregation of operators performed by the expression
    templates proves to be beneficial, as it reduces the number of (costly) load
    from the main memory to the vector unit.
@@ -535,7 +537,7 @@ Pythran implements three optimizations on such expressions:
    intensity that masks the scheduling overhead.
 
 To illustrate the benefits of these three optimizations, let us consider the
-simple numpy expression:
+simple Numpy expression:
 
 .. code-block:: python
 
@@ -592,7 +594,51 @@ expression yields the following timings:
     1000 loops, best of 3: 395 us per loop
  
 Next section performs an in-depth comparison of Pythran with three Python
-optimizers: PyPy, Shed Skin and numexpr.
+optimizers: PyPy, ShedSkin and numexpr.
+
+Explicit Parallelization
+------------------------
+
+Many scientific applications can benefit from parallelization of their kernels.
+As modern computers generally feature several processors and several cores per
+processor, it is important for the scientific application developer to be able
+to take advantage of them.
+
+As explained in the previous section, Pythran takes advantage of multiple cores
+when compiling Numpy expressions. However, when possible, it is often more
+profitable to parallelize the outermost loops rather than the inner loops —the
+Numpy expressions— because it avoids the synchronization barrier at the end of
+each parallel section, and generally offers more computation intensive
+computations.
+
+The OpenMP standard [openmp]_ is a widely used solution for Fortran, C and C++
+to describe loop-based and task-based parallelism. It consists on a few
+directives attached to the code, that describes parallel loops, parallel code
+sections and the memory access relative to a shared memory model.
+
+Pythran makes this directives available at the Python level through string
+instructions. The semantic is roughly similar to the original semantic,
+assuming that all variables have function level scope.
+
+Following listings give a simple example of explicit loop-based parallelism.
+task-based parallelism from OpenMP 3.0 is also supported.
+
+.. code-block:: python
+
+    def pi_estimate(darts):
+        hits = 0
+        "omp parallel for private(x,y,dist), reduction(+:hits)"
+        for i in xrange(darts):
+            x,y = random(), random()
+            dist = sqrt(pow(x, 2) + pow(y, 2))
+            if dist <= 1.0:
+                hits += 1.0
+        pi = 4 * (hits / DARTS)
+        return pi
+
+The loop is flagged as parallel, performing a reduction using the `+` operator
+on the `hits` variable. Variable marked as `private` are local to a thread and
+not shared with other threads.
 
 Benchmarks
 ----------
@@ -600,7 +646,7 @@ Benchmarks
 All benchmarks presented in this section are run on an hyper-threaded i7
 quadcore, using the code available in the Pythran sources available at
 https://github.com/serge-sans-paille/pythran in the `pythran/test/cases`
-directory. The Pythran version used is `deqzffzr`, Shed Skin 0.9.2, PyPy 2.0
+directory. The Pythran version used is `deqzffzr`, ShedSkin 0.9.2, PyPy 2.0
 compiled with the `-jit` flag, CPython 2.7.3 and numexpr 2.0.1. All timings are
 made using the `timeit` module, taking the best of all runs. All C++ codes are
 compiled with g++ 4.7.3, using the tool default compiler option, generally
@@ -614,48 +660,48 @@ Pystone is a Python translation of whetstone, a famous floating point number
 benchmarks that dates back to Algol60 and the 70's. Although non representative
 of real applications, it illustrates the general performance of floating point
 number manipulations. Table :ref:`pystone-table` illustrates the benchmark
-result for CPython, PyPy, Shed Skin and Pythran, using an input value of
+result for CPython, PyPy, ShedSkin and Pythran, using an input value of
 `10**3`. Note that the original version has been updated to replace the user
 class by a function call.
 
 .. table:: Benchmarking result on the Pystone program. :label:`pystone-table`
 
-    +---------+-------------+---------------+------------+-------------+
-    | Tool    |  CPython    |   Pythran     |     PyPy   |  Shed Skin  |
-    +---------+-------------+---------------+------------+-------------+
-    | Timing  |  861ms      |   11.8ms      |     29.1ms |  24.7ms     |
-    +---------+-------------+---------------+------------+-------------+
-    | Speedup |  x1         |   x72.9       |    x29.6   |  x34.8      | 
-    +---------+-------------+---------------+------------+-------------+
+    +---------+-------------+---------------+------------+------------+
+    | Tool    |  CPython    |   Pythran     |     PyPy   |  ShedSkin  |
+    +---------+-------------+---------------+------------+------------+
+    | Timing  |  861ms      |   11.8ms      |     29.1ms |  24.7ms    |
+    +---------+-------------+---------------+------------+------------+
+    | Speedup |  x1         |   x72.9       |    x29.6   |  x34.8     | 
+    +---------+-------------+---------------+------------+------------+
 
 It comes at no surprise that all tools get more than decent on this benchmark.
-PyPy generates code almost as efficient as Shed Skin. Altough both generates
-C++, Pythran outperforms Shed Skin thanks to a higher level generated code. For
-instance all arrays are represented in Shed Skin by pointers to arrays that
+PyPy generates code almost as efficient as ShedSkin. Altough both generates
+C++, Pythran outperforms ShedSkin thanks to a higher level generated code. For
+instance all arrays are represented in ShedSkin by pointers to arrays that
 likely disturbs g++ optimizer, while Pythran uses a vector class wrapping
 shared pointers.
 
-Nqueen is a benchmark extracted from the now dead project Unladen Swallow. It
+Nqueen is a benchmark extracted from the now dead project Unladen Swallow [*]_. It
 is particularly interesting as it makes an intensive use of non-trivial
 generator expressions and integer sets. Table :ref:`nqueen-table` illustrates
-the benchmark result for CPython, PyPy, Shed Skin and Pythran. The code had to
-be slightly updated to run with Shed Skin because Shed Skin type inference does
+the benchmark result for CPython, PyPy, ShedSkin and Pythran. The code had to
+be slightly updated to run with ShedSkin because ShedSkin type inference does
 not support mixed scalar and None variables. The input value is `9`.
 
 .. table:: Benchmarking result on the NQueen program. :label:`nqueen-table`
 
-    +---------+-------------+---------------+------------+-------------+
-    | Tool    |  CPython    |   Pythran     |     PyPy   |  Shed Skin  |
-    +---------+-------------+---------------+------------+-------------+
-    | Timing  |  1904.6ms   |   358.3ms     |    546.1ms |  701.5ms    |
-    +---------+-------------+---------------+------------+-------------+
-    | Speedup |  x1         |    x5.31      |    x3.49   |  x2.71      | 
-    +---------+-------------+---------------+------------+-------------+
+    +---------+-------------+---------------+------------+------------+
+    | Tool    |  CPython    |   Pythran     |     PyPy   |  ShedSkin  |
+    +---------+-------------+---------------+------------+------------+
+    | Timing  |  1904.6ms   |   358.3ms     |    546.1ms |  701.5ms   |
+    +---------+-------------+---------------+------------+------------+
+    | Speedup |  x1         |    x5.31      |    x3.49   |  x2.71     | 
+    +---------+-------------+---------------+------------+------------+
 
 It seems that compiler have difficulties to take advantage of high level
 constructs such as generator expressions, as the overall speedup is not
 flabbergasting. Pythran benefits from the conversion to `itertools.map` here,
-while Shed Skin and PyPy rely on more costly constructs. A deeper look at the
+while ShedSkin and PyPy rely on more costly constructs. A deeper look at the
 Pythran profiling trace shows that more than half of the execution time is
 spent allocating and deallocating a `set` used in the internal loop. There is a
 memory allocation invariant that could be taken advantage of there, but none of
@@ -666,29 +712,39 @@ loops instead of generalized expressions. It is helpful to measure the
 performance of direct array indexing.
 
 Table :ref:`hyantes-table` illustrates the benchmark result for CPython, PyPy,
-Shed Skin and Pythran, when using lists as the data container. The output window
+ShedSkin and Pythran, when using lists as the data container. The output window
 used is `100x100`.
 
 .. table:: Benchmarking result on the hyantes kernel, list version. :label:`hyantes-table`
 
-    +---------+-------------+---------------+------------+-------------+
-    | Tool    |  CPython    |   Pythran     |     PyPy   |  Shed Skin  |
-    +---------+-------------+---------------+------------+-------------+
-    | Timing  |  1295.4ms   |   270.5ms     |    277.5ms |  281.5ms    |
-    +---------+-------------+---------------+------------+-------------+
-    | Speedup |  x1         |    x4.79      |    x4.67   |  x4.60      | 
-    +---------+-------------+---------------+------------+-------------+
+    +---------+-------------+---------------+------------+------------+
+    | Tool    |  CPython    |   Pythran     |     PyPy   |  ShedSkin  |
+    +---------+-------------+---------------+------------+------------+
+    | Timing  |  1295.4ms   |   270.5ms     |    277.5ms |  281.5ms   |
+    +---------+-------------+---------------+------------+------------+
+    | Speedup |  x1         |    x4.79      |    x4.67   |  x4.60     | 
+    +---------+-------------+---------------+------------+------------+
 
 The speed ups are not amazing for a numerical application. there are two
 reasons for this poor speedups. First, the `hyantes` benchmark makes heavy
 usage of trigonometric functions, and there is not much gain there. Second, and
 most important, the benchmark produces a big 2D array stored as a list of list,
 so the application suffers from the heavy overhead of converting them from C++
-to Python. Running the same benchmark using numpy arrays as core containers
-confirms this assumption: the CPython version yields its result in 450.0ms and
-the Pythran version in 4.6ms, that is a speedup of x97.8.
+to Python. Running the same benchmark using Numpy arrays as core containers
+confirms this assumption, as illustrated by Table :ref:`np-hyantes-table`. This
+table also demonstrates the benefits of manual parallelization using OpenMP.
 
-Finally, `arc_distance` [*]_ presents a classical usage of numpy expression that is
+.. table:: Benchmarking result on the hyantes kernel, numpy version. :label:`np-hyantes-table`
+
+    +---------+-------------+---------------+------------------+
+    | Tool    |  CPython    |   Pythran     | Pythran+OpenMP   |
+    +---------+-------------+---------------+------------------+
+    | Timing  |  450.0ms    |   4.8ms       |      2.3ms       |
+    +---------+-------------+---------------+------------------+
+    | Speedup |  x1         |    x93.8      |    x195.7        | 
+    +---------+-------------+---------------+------------------+
+
+Finally, `arc_distance` [*]_ presents a classical usage of Numpy expression that is
 typically more efficient with CPython than its loop alternative as all the
 looping is done directly in C. Its code is reproduced below:
 
@@ -706,6 +762,10 @@ looping is done directly in C. Its code is reproduced below:
                 sqrt(temp),sqrt(1-temp))
         return distance_matrix
 
+
+.. [*] http://code.google.com/p/unladen-swallow/
+.. [*] http://hyantes.gforge.inria.fr/
+.. [*] The arc_distance test_bed is taken from to https://bitbucket.org/FedericoV/numpy-tip-complex-modeling
 
 Figure :ref:`arc-distance-table` illustrates the benchmark result for CPython,
 Numexpr and Pythran, using random input arrays of `10**6` elements. Table
@@ -741,8 +801,6 @@ without changing the input code. To the opposite, Numexpr requires to rewrite
 the input and does not achieve the same level of performance than Pythran when
 OpenMP and AVX are combined.
 
-.. [*] http://hyantes.gforge.inria.fr/
-.. [*] The arc_distance test_bed is taken from to https://bitbucket.org/FedericoV/numpy-tip-complex-modeling
 
 Future Works
 ------------
@@ -753,26 +811,30 @@ Language(DSL) approach, one could use a rewriting engine to optimize several
 Python idioms, such as `len(set(x))` that could lead to an optimized
 `count_uniq` that would loop only once on the input sequence.
 
-There is naturally more work to be done at the numpy level, be it to support
-more functions from the original module. The extraction of numpy expression
+There is naturally more work to be done at the Numpy level, be it to support
+more functions from the original module. The extraction of Numpy expression
 from for loops is also a natural optimization candidate, which shares
 similarity with code refactoring.
+
+Numpy expressions also fits perfectly well in the polyhedral model. Exploring
+the coupling of polyhedral tools with the code generated from Pythran offers
+enthusiastic perspectives.
 
 Conclusion
 ----------
 
-This paper presents the Pytran compiler, a translator and optimizer from Python
+This paper presents the Pythran compiler, a translator and optimizer from Python
 to C++. Unlike existing static compilers for Python, this compiler leverages on
 several function-level or module-level analysis to provide several generic or
 Python-centric code optimizations. Additionally, it uses a C++ library that
 makes heavy use of template programming to provide an efficient API similar to
 a subset of Python standard library. This library takes advantage of modern
-hardware capabilities --- vector instruction unit and multi-cores --- in its
-implementation of part of the Numpy package.
+hardware capabilities —vector instruction unit and multi-cores— in its
+implementation of part of the `numpy` package.
 
 The paper gives an overview of the compilation flow, the analysis involved and
 the optimization used. It also compares the performance of compiled python
-module against CPython and other optimizers: Shed Skin, PyPy and numexpr.
+module against CPython and other optimizers: ShedSkin, PyPy and numexpr.
 
 To conclude, limiting Python to a statically typed subset does not hinders the
 expressively when it comes to scientific or mathematic computations, but makes
