@@ -55,7 +55,7 @@ Research development
 Initial stages
 ~~~~~~~~~~~~~~
 
-As we said before, stars usually are born in groups. Because of that, a great majority of them are binaries or belongs to multiple systems. For a spectroscopic study, as was this, the only problem occurs when the spectrum of one observation have two or more objects. Since the study of these stars were outside the scope of our project, we selected those stars on our sample to further discard them. But before discarding them, we used Python to visualize the distribution of these objects inside our sample. We used the matplotlip package to do a polar plot of our objects in Galactic coordinates:
+As we have said before, stars usually are born in groups. Because of that, a great majority of them are binaries or belongs to multiple systems. For a spectroscopic study, as was this, the only problem occurs when the spectrum of one observation have two or more objects. Since the study of these stars were outside the scope of our project, we selected those stars on our sample to further discard them. But before discarding them, we used Python to visualize our sample and the distribution of these objects. We used the matplotlib package to do a polar plot of our objects in Galactic coordinates:
 
 .. code-block:: python
 
@@ -74,6 +74,7 @@ As we said before, stars usually are born in groups. Because of that, a great ma
                         proj_dist[j], 
                         'wo', ms=3, mec='r')  
                         
+               
 And the resulting plot is showed in Figure :ref:`coords`.                 
                         
 .. figure:: f1.eps
@@ -81,7 +82,29 @@ And the resulting plot is showed in Figure :ref:`coords`.
    Polar plot showing the positions of the sample stars projected onto the Galactic plane. 
    The plot is centered on the Sun. The open red circles
    are spectroscopic binaries/multiple systems identified in our sample. :label:`coords`
+   
+   
+To analyse our observation spectra images we have used `IRAF <http://iraf.noao.edu/>`__ (Image and Reduction Analysis Facility), which is a suite of softwares to handle astronomic images developed by the NOAO [^1]. We had to do several tasks on our spectra (e.g. cut it in a certain wavelength and normalization) to prepare our sample to further analysis. Some of these tsaks had to be done manully on a one-by-on basis, but some other were automated. The automation ould have bnn done using the IRAF scripting, but fortunately, 
+the STSCI [^2] has developed a python wrapper for IRAF called `PyRAF <http://www.stsci.edu/institute/software_hardware/pyraf>`__.
+For example, we show how we used IRAF task SCOPY to cut images using pyRAF:
 
+.. code-block:: python
+   from pyraf import iraf
+   
+   iraf.noao.onedspec.scopy.w1 = 4050  # Starting wavelength
+   iraf.noao.onedspec.scopy.w2 = 4090  # Ending wavelength
+   
+   for i, name in enumerate(list_of_stars):
+       # Spectrum to be cut
+       iraf.noao.onedspec.scopy.input = name
+       # Nanme of resulting spectrum
+       result = name.split('.fits')[0] + '_cut.fits'
+       iraf.noao.onedspec.scopy.output = result
+       # Execute
+       iraf.noao.onedspec.scopy(mode = 'h')
+
+[^1]: National Optical Astronomy Observatory
+[^2]: Space Telescope Science Institute
 
 Star classification
 ~~~~~~~~~~~~~~~~~~~
