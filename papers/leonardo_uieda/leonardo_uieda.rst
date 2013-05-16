@@ -144,7 +144,8 @@ ilustrates the use
 of the ``fatiando.vis.mpl.contourf`` function
 to automatically grid and plot
 some irregularly sampled data
-(Figure ):
+(Figure 1):
+
 
 .. code-block:: python
 
@@ -156,10 +157,10 @@ some irregularly sampled data
     data = x**2 + y**2
     mpl.figure()
     mpl.axis('scaled')
-    mpl.contourf(x, y, data, shape=(50, 50), levels=30, interp=True)
+    mpl.contourf(x, y, data, shape=(50, 50), levels=30,
+        interp=True)
     mpl.colorbar(orientation='horizontal')
     mpl.plot(x, y, '.k')
-
 
 .. figure:: gridding_plotting1.png
     :align: center
@@ -168,7 +169,6 @@ some irregularly sampled data
     synthetic data, and automatically gridding and plotting it using a
     a Fatiando a Terra wrapper for the Matplotlib ``contourf``
     function.
-
 
 .. figure:: gridding_plotting2.png
     :align: center
@@ -192,7 +192,7 @@ References
 ----------
 
 .. [Hunter] Hunter, J. D. (2007), Matplotlib: A 2D Graphics Environment,
-    Computing in Science and Engineering, 9(3), 90-95, doi:10.1109/MCSE.2007.55.
+    Computing in Science & Engineering, 9(3), 90-95, doi:10.1109/MCSE.2007.55.
 
 .. [MadagascarDev] Madagascar Development Team. Madagascar Software, 2013,
     http://www.ahay.org/
@@ -203,11 +203,11 @@ References
     classroom and across disciplines, Eos Trans. AGU, 90, 12, 2009.
 
 .. [Ramachandran_Varoquaux] Ramachandran, P., and G. Varoquaux (2011), Mayavi:
-    3D Visualization of Scientific Data, Computing in Science and Engineering,
+    3D Visualization of Scientific Data, Computing in Science & Engineering,
     13(2), 40-51, doi:10.1109/MCSE.2011.35
 
 .. [Stockwell_Jr] J. W. Stockwell Jr. The CWP/SU: Seismic Unx package,
-    Computers and Geosciences, 25(4):415-419, 1999,
+    Computers & Geosciences, 25(4):415-419, 1999,
     doi:10.1016/S0098-3004(98)00145-9
 
 .. [Wessel_Smith] P. Wessel and W. H. F. Smith. Free software helps map and
