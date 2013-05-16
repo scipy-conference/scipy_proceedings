@@ -24,19 +24,19 @@ Introduction
 
 Modern solar physics uses a large amount of high resolution ground- and space-based telescopes
 to observe the Sun at different wavelengths and spatial scales. This data results in solar physicists 
-having to download and process gigabytes of data; for example NASA's SDO satellite downloads over 1TB 
+having to download and process gigabytes of data; for example NASA's lastest solar spacecraft, the Solar Dynamic Observatory (SDO), downloads over 1TB 
 of data per day. This influx of data comes in many forms; the most common solar data type is that of images. 
 However, there are many other types of regularly collected data types, such as 1D lightcurves or spectra of 
 the whole Sun or parts of it. It is clear therefore that solar physicists require access to the tools to 
 process and analyse large quantities of data at different times, wavelengths and spatial scales.
 
-Currently most solar physics is currently performed with a library of IDL routines called solarsoft,
+Currently most solar physics is currently performed with a library of IDL routines called solarsoft [SSW]_,
 while this library of software is freely avalible the IDL program itself is not. One of SunPy's key aims
 is to provide a free and open source alternative to the solarsoft library.
 
 The scope of a solar physics library can be divided up into two main parts, data analysis and data processing.
-Data analysis is the scientific analysis of calibrated aligned data where as data processing is the process 
-of calibrating and aliging the data. SunPy's current scope is data analysis with minimal data processing.
+Data analysis is the scientific analysis of calibrated aligned data whereas data processing is the process 
+of calibrating and aligning the data. SunPy's current scope is data analysis with minimal data processing.
 
 .. * Solar Data
 .. * SunPy Data types
@@ -54,15 +54,30 @@ Function, Scope and Organisation of
 Downloaders and Data Retrevial
 ------------------------------
 
-Most of solar data observed from space mission follows an open policy[#]_ which makes it available to everyone as soon the data is downloaded.
+Most of solar data observed from space missions follow an open policy[#]_ which makes it available to everyone as soon the data is downloaded.
 However, they are normally archived by the institution in charge of the instrument that made the observations.  
-Making the browsing and data retrieval a very tedious task for the scientist.  
+Such sparsity of archives makes the browsing and data retrieval a very tedious task for the scientist.  
 The `Virtual Solar Observatory <http://virtualsolar.org>`_ (VSO) [VSO]_ has considerably simplified such work by building a centralized database with access to multiple archives.  
 VSO allows the user to query by few parameters as instrument name or type, time, physical obsevable and/or spectral range.   
-VSO's main interface is web based, however, they have developed an API based on a WSDL webservice.
-SunPy has includes the capability to get data from VSO by used of that webservice.
+VSO's main interface is web based, however, it can also be accessed by their WSDL webservice.
+SunPy uses such API to query and download data from VSO.
+
 -- this is made -- Florian/Joe should write about this...
-* VSO
+
+A new problem arise with the SDO mission.  The large size of the images (4 times larger than the previous mission), 
+together with the fastest cadence of their cameras (~10 images per minute) makes challenging to use of the data as it used to be.
+The `Heliophysics Event Knowledgebase <http://www.lmsal.com/hek/>`_ [HEK]_ was created to solve this overload of data.  
+The principle behind the HEK is to run a number of automated detection algorithms on the pipeline of the data that is downloaded
+from SDO in order to fill a database with information about the features and event observed in each image.  
+Thus, allowing the solar physicist to search for an event type or property and download just the portion and slices of the images
+needed for its further analysis.  In SunPy the implementation just covers the search and retrieve of the information related with 
+the events and not the downloading of the observational data.  This allows, for example, to plot the feature contours on an image,
+study their properties and their evolution, etc.
+The implementation in SunPy of this tool was done based on the VSO tool but changing observatory and instruments by features and
+their properties
+
+-- Jack and Florian are the best to describe how this was done.
+
 * HEK / Helio
 
 Community
@@ -82,8 +97,12 @@ Future
 
 References
 ----------
+.. [SSW] S. L. Freeland and B. N. Handy. *Data Analysis with the Solarsoft System*,
+         Solar Physics, 182:497-500, October 1998. DOI: 10.1023/A:1005038224881
 .. [VSO] F. Hill, et al. *The Virtual Solar Observatory—A Resource for International Heliophysics Research*,
          Earth Moon and Planets, 104:315-330, April 2009. DOI: 10.1007/s11038-008-9274-7
+.. [HEK] N. Hurlburt, et al. *Heliophysics Event Knowledgebase for the Solar Dynamics Observatory (SDO) and Beyond*,
+         Solar Physics, 275:67-78, January 2012. DOI: 10.1007/s11207-010-9624-2 arXiv:1008.1291
 	
 
 
