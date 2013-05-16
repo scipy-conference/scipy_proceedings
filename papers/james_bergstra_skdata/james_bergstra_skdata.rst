@@ -53,8 +53,7 @@ Anyone implementing an algorithm from scientific literature must first verify th
 Adherence to standard algorithm evaluation protocols is critical to
 obtaining an accurate answer to this central question.
 
-At the same time, it is not always obvious what exactly the standard protocol
-is.
+At the same time, it is not always obvious what exactly the standard protocol is.
 For example, the widely-used "Iris" data set is simply an enumeration of 150 specimens' petal and sepal measurements along with the label of which kind of iris each one is [Iris]_. 
 If we are interested in matching the generalization error of our implementation to a generalization error in the literature, then we would like to know more than just the accuracy;
 we would like to know exactly which examples were used for training, and which
@@ -340,169 +339,340 @@ the results from that work in the loops on lines 17-21.
     for report in algo.results['loss']:
         print report['task_name'], report['err_rate']
 
-The `protocol` method encapsulates a sort of dialog
-between the `iris_view` object as a driver,
-and the `algo` as a handler of commands from the driver.
-The protocol in question (`iris.view.SimpleCrossValidation`)
-happens to use just two kinds of command:
+The `protocol` method encapsulates a sort of dialog between the `iris_view` object as a driver, and the `algo` as a handler of commands from the driver.
+The protocol in question (`iris.view.SimpleCrossValidation`) happens to use just two kinds of command:
 * Learn the best model for training data
 * Evaluate a model on testing data
 
-The first kind of command produces an entry in the
-`algo.results['best_model']` list.
-The second kind of command produces an entry in the
-`algo.results['loss']` list.
+The first kind of command produces an entry in the `algo.results['best_model']` list.
+The second kind of command produces an entry in the `algo.results['loss']` list.
 
-So after the protocol method has returned,
-we can loop over these lists to obtain a summary of what happened during our
-evaluation protocol.
-(Some data sets offer this protocol as an iterator so that very long sequences
-of commands can be aborted early.)
+After the protocol method has returned, we can loop over these lists to obtain a summary of what happened during our evaluation protocol.
+(Some data sets offer this protocol as an iterator so that very long sequences of commands can be aborted early.)
 
 The `SklearnClassifier` class serves two roles:
-(a) it is meant to illustrate how to create an adapter between an
-existing implementation of a machine learning algorithm, and the various
-data sets defined in the skdata library;
+(a) it is meant to illustrate how to create an adapter between an existing implementation of a machine learning algorithm, and the various data sets defined in the skdata library;
 (b) it is used for unit-testing the protocol classes in the library.
 Researchers are encouraged to implement their own adapter classes
 following the example of the `SklearnClassifier` class (i.e. by cut & paste)
 to measure the statistics they care about when handling the various
 methods (e.g. best_model_vector_classification) and to save those
-statistics to a convenient place. The practice of appending a summary
-dictionary to the lists in self.results has proved to be useful for our work,
-but it likely not the best technique for all scenarios.
+statistics to a convenient place.
+The practice of appending a summary dictionary to the lists in self.results has proved to be useful for our work, but it likely not the best technique for all scenarios.
 
 
 
 How the Protocol Layer Works
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
-The `SklearnClassifier` serves as an adapter between the
+The skdata library's protocol layer is built around a command-driven interface in which protocol objects (such as `iris.view.SimpleCrossValidation`)
+walk a learning algorithm (e.g. `SklearnClassifier`) through the process of running an experiment.
+In our example, the protocol object used two commands:
+.. One of the commands that a protocol object might send is to "produce the best model" according to some given training data.
+
+.. code-block:: python
+
+    model = algo.best_model(task=training_data)
+    err_rate = algo.loss(model, task=testing_data)
+
+These commands involve arguments `training_data` and `testing_data` which are instances of a `Task` class, which we have not seen yet.
+Before we go through the list of protocol commands in any more detail, it is important to understand what these Task objects are.
 
 
-XXX
+Task Objects: Protocol Layer Data Abstraction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The skdata.base file defines a class called `Task` that is used in all aspects of the protocol layer.
+A `Task` instance represents a subsample from a data set.
+In all settings so far, a Task instance represents *all* of the information about a *subset* of the examples in a data set
+(although future protocols looking at e.g. user ratings data may define task semantics differently).
+For example, in cross-validation the training set and the testing set would be represented by Task objects.
+In a K-fold cross-validation setting, there would be 2K Task objects representing each of the training sets and each of the test sets
+involved in the evaluation protocol.
+Task objects may, in general, overlap in the examples they represent.
+
+A `Task` class is simply a dotdict (dictionary container with access to elements by object attribute)
+but it has two required attributes: `name` and `semantics`.
+The name is a string that uniquely identifies this Task among all tasks involved in a Protocol.
+The semantics attribute is a string that identifies what kind of Task this is;
+the identifiers we have used so far include:
+
+* "vector_classification"
+* "indexed_vector_classification"
+* "indexed_image_classification"
+* "image_match_indexed"
+
+A task's semantics identifies (to the learning algorithm) which other attributes are present in the task object, and how they should be interpreted.
+For example, if a task object has "vector_classification" semantics,
+then it is expected to have (a) an ndarray `.x` attribute whose rows are examples and columns are features,
+and (b) an ndarray vector `.y` attribute whose elements are the labels of the rows of `x`.
+If a task object has "indexed_image_classification" semantics, then it is expected to have
+(a) a sequence of RGBA image ndarrays in attribute `.all_images`,
+(b) a corresponding sequence of labels `.all_labels`, and
+(c) a sequence of integers `.idxs` that picks out the relevant items from `all_images` and `all_labels` as defined by NumPy's `take` function.
 
 
+The Evaluation Protocol
+~~~~~~~~~~~~~~~~~~~~~~~
 
-(including very lightweight description (similar in some ways to a domain-specific
-language) of all 6 steps
+The protocol objects (such as `iris.view.SimpleCrossValidation`) are responsible for fashioning their respective data sets (e.g. Iris) into Task objects
+and passing these task objects as arguments to a relatively small number of possible learning commands:
+
+best_model(task)
+    Instruct a learning algorithm to find the best possible model for the given task, and return that model to the protocol driver.
+
+loss(model, task)
+    Instruct a learning algorithm to evaluate the given model for the given task. The returned value should be a floating point scalar,
+    but the semantics of that scalar are defined by the semantics of the task.
+
+forget_task(task)
+    Instruct the learning algorithm to free any possible memory that has been used to cache computations related to this task,
+    because the task will not be used again by the protocol.
+
+retrain_classifier(model, task)
+    Instruct the learning algorithm, to retrain only the classifier, and not repeat any internal model selection that has taken place.
+    (This command will only be used by protocols that involve classification tasks!)
 
 
-In the skdata library, this series of steps for evaluating an algorithm is called
-an evaluation *protocol*.
+In our call above to `iris_view.protocol(algo)` what happened was that `iris_view` constructed two Task objects corresponding to the training and test sets,
+and called
+.. code-block:: python
+
+    model = algo.best_model(train)
+    err = algo.loss(model, test)
+    return err
+
+More elaborate protocols differ in constructing more task objects, and training and testing more models.
+
+One of the strengths of using Python to glue these various components together is that very few things need to be carved in stone at the design phase.
+Every data set has quirks, and there will be variations on the protocols we have used so far.
+Certainly new semantics identifiers will be required to support a wider variety of machine learning applications.
+For better or for worse, the protocol and the set of allowed semantics is not strictly defined anywhere;
+"Adding a command to the protocol" is as simple as implementing and calling an unused attribute of the algo object passed to a protocol method.
+Of course, if you add new commands to this protocol then you will not be able to use existing learning algorithms (e.g. `SklearnClassifier`).
+Presumably though, you are adding a command because existing learning algorithms couldn't do what was necessary in the first place, so losing
+compatibility is not a big loss.
+A quick and dirty way to determine what semantics strings are in use is to apply a text search to the source tree (`grep -R semantics skdata`)
+To see what protocol commands are supported by the SklearnClassifier, see its source definition in `skdata.base`.
+
+
+.. The design of the protocol makes it natural to provide fallback implementations that allow more generic learning algorithms (e.g. SVC)
+.. to serve in place of more specialized ones (e.g. image classification algorithms)
+
+Dealing with Large Data
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Some data sets are naturally large, and some datasets simply appear large by virtue of the way they are meant to be used
+by experimental protocols.
+Two techniques are used within the skdata library to keep memory usage under control.
+The first technique is to use the "indexed" Task semantics to avoid 
+The second, related technique is to use the *lazy array* in `skdata.larray` to avoid allocating intermediate buffers for
+certain kinds of transformations of original bulk data.
+
+Indexed task semantics, such as "indexed_vector_classification" describe data subsets in terms of advanced NumPy indexing syntax
+to reduce memory usage. NumPy's ndarrays are required to be layed out in a particular way in a computer's RAM,
+so if we need to create many arbitrary subset views of an ndarray, it generally requires making many copies of that data.
+Since the subsets involved in defining Tasks relative to a base set of examples only require manipulating set membership,
+it is easier to leave the original base set of examples alone, and manipulate vectors of positions within that base set.
+Making many Tasks simply means making many integer vectors that specify which examples are in which Task. These integer
+vectors are much smaller than copies of the base set of examples would be, when the examples are associated with many features.
+
+The *lazy array* described in `skdata.larray` makes it possible lazily evaluate certain transformations of ndarray data.
+Lazy evaluation is done on an example-by-example basis, so if a protocol only requires examples `10:100` then only those examples will be computed.
+A lazy evaluation pipeline used together with apropriate cache techniques ensure that even when a data set is very large,
+only those examples which are actually needed are loaded from disk and processed.
+
+Of course, very large data sets must be fit using appropriate algorithms (such as online algorithms),
+but the protocol layer does not stand in the way of using online learning algorithms on very large data sets.
+In fact, the lazy array represents a mechanism to ensure that online algorithms that loop over enormous (or infinite) data sets
+traverse the examples in a cache-efficient way.
 
 
 Low Level: Data Layer Usage
 ---------------------------
 
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
+When the high level protocol layer does not suit your needs,
+skdata also provides a lower-level interface that provides low level logic for each of the data sets in the library:
 
-   def sum(a, b):
-       """Sum two numbers."""
+* Downloading
+* Verifying archive integrity
+* Decompressing
+* Loading into Python
 
-       return a + b
+Whereas not all data sets have defined high-level protocol objects, all data sets define a low-level interface.
+The high-level classes are implemented in terms of the low-level logic.
+
+There is a convention that this low-level logic for each data (e.g. "foo") should be written in a Python file called "skdata.foo.dataset".
+Technically, there is no requirement that the low-level routines adhere to any standard interface, because the skdata library has been
+designed such that there are no functions that should work "for any data set".
+With that said, there are some common patterns, like downloading, deleting, and accessing whatever data a data set provides.
+A data set wrapper for the "Labeled Faces in the Wild" data set [lfw]_ provides a representative example of what low-level data set objects look like.
+What follows is an abridged version of what appears in `skdata.lfw.dataset`.
+
+.. code-block:: python
+    """
+    <Description of data set>
+    <Citations to key publications>
+    """
+
+    url_to_data_file = ...
+    sha1_of_data_file = ...
+
+    class LFW(object):
+
+        @property
+        def home(self):
+            """Return cache folder for this data set"""
+            return os.path.join(
+                skdata.data_home.get_data_home(),
+                'lfw')
+
+        def fetch(self, download_if_missing=True):
+            """Return iff required data is in cache."""
+            ...
+
+        def clean_up(self):
+            """Remove cached and downloaded files"""
+            ...
+
+        @property
+        def meta(self):
+            """Return data set meta-data as list of dicts"""
+            ...
+            
+First, the file includes a significant docstring describing the data set and providing some history / context regarding it's usage.
+The docstring should always provide links to key publications that either introduced or used this data set.
+
+When a public data set is free for download, the dataset file should include the url of the original data,
+and a checksum for verifying the correctness of downloaded data.
+
+Most dataset files use the `skdata.data_home.get_data_home` mechanism to identify a local location for storing large files.
+This location defaults to `.skdata/` but it can be set via a `$SKDATA_ROOT` environment variable.
+In our code example, `LFW.home()` uses this mechanism to identify a location where it can store downloaded and decompressed data.
+
+The `fetch` and `clean_up` methods download and delete the LFW data set, respectively.
+The `fetch` method downloads, verifies the correctness-of, and decompresses the various files that make up the LFW data set.
+It stores them all within the folder named by `LFW.home()`.
+If `download_if_missing` is False, then `fetch` raises an exception if the data is not present.
+The `clean_up` method recursively deletes the entire `LFW.home()` folder, erasing the downloaded data and all derived files.
+
+The `meta` method parses a few text files and walks the directory structure within `LFW.home()` in order to provide a succint summary
+of what images are present, what individual is in each image.
+
+In the case of the LFW data set, an additional method called `parse_pairs_file` helps to parse some additional text files that describe
+the train/test splits that the LFW authors recommend using for the development and evaluation of algorithms.
+Generally, these low-level classes serve to support their corresponding high-level protocol objects (in e.g. `skdata.lfw.view`)
 
 
+Command-Line Interface
+----------------------
 
-Skdata Project Architecture
----------------------------
+Some data sets also provide a `main.py` file that provides a command-line interface for certain operations, such as downloading and visualizing.
+The LFW data set for example, has a simple main.py script that supports one command that downloads (if necessary) and visualzes
+a particular variant of the LFW data set using [glumpy]_.
 
-The skdata library aims to provide two levels of interface to data sets.
-The lower level interface provides a "raw" view of the underlying data set.
+.. code-block:: bash
 
+    $ python -c skdata/lfw/main.py show funneled
 
-Skdata consists primarily of independent submodules that deal with individual data sets.
-Each submodule has three important sub-sub-module files:
-
-1. a 'dataset' file with the nitty-gritty details of how to download, extract,
-   and parse a particular data set;
-
-2. a 'view' file with any standard evaluation protocols from relevant
-   literature; and
-
-3. a 'main' file with CLI entry points for e.g. downloading and visualizing
-   the data set in question.
-
-
-The evaluation protocols represent the logic that turns parsed (but potentially ideosyncratic) data into one or more standardized learning tasks.
-
-
-The skdata library provides two levels of interfacing to each data set
-that it provides.
-A low level interface provides relatively *raw* access to the contents of
-a data set, in terms that reflect what was (in most cases) downloaded from the web.
-The goal of the low level interface is save users the trouble of unpacking
-and parsing downloaded files, while giving them direct acces to the
-downloaded content.
-
-A high level ("protocol") interface provides a sanitized version of a data
-set, in which examples have been assembled into e.g. (X, y) pairs,
-standard preprocessing has been applied, and the examples have been
-partitioned into standard training, validation, and testing splits, where
-applicable. The goal of this high level interface is to allow algorithm
-designers to simply "plug in" classification and feature transformation algorithms,
-and rest assured that they have trained and tested on the right examples
-which allow them to make direct comparisons in academic literature.
-
-Skdata consists primarily of independent submodules that deal with individual data sets.
-Each submodule has three important sub-sub-module files:
-
-The basic approach has been developed over years of combined experience by the authors, and used extensively in recent work (e.g. [2]).
-The presentation will cover the design of data set submodules, and the basic interactions between a learning algorithm and an evaluation protocol.
-
-
-.. figure:: figure1.png
-
-   This is the caption. :label:`egfig`
-
-.. figure:: figure1.png
-   :scale: 20%
-   :figclass: bht
-
-   This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top.
-   Note that for now, scale is relative to a completely arbitrary original
-   reference size which might be the original size of your image - you probably
-   have to play with it. :label:`egfig2`
-
-
-
-Cache directory
-~~~~~~~~~~~~~~~
-
-Various skdata utilities help to manage the data sets themselves, which are stored in the user's "~/.skdata" directory.
+Running a main.py file with no arguments should always print out a short description of usage,
+but the files themselves are almost always very short and easy to read.
 
 
 Current list of data sets
 -------------------------
 
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
+The skdata library currently provides some level of support for about 40 data sets.
+The data sets marked with (*) provide the full set of low-level, high-level, and script interfaces described above.
 
-.. table:: This is the caption for the materials table. :label:`mtable`
+Blobs
+    Synthetic: isotropic Gaussian blobs
+Boston
+    Real-estate features and prices
+Brodatz
+    Texture images
+CALTECH101
+    Med-res Images of 101 types of object
+CALTECH256
+    Med-res Images of 256 types of object
+CIFAR10 (*)
+    Low-res images of 10 types of object
+Convex
+    Small images of convex and non-convex shapes
+Digits
+    Small images of hand-written digigs
+Diabetes
+    Small non-synthetic temporal binary classification
+IICBU2008
+    Benchark suite for biological image analysis
+Iris (*)
+    Features and labels of iris specimens
+FourRegions
+    Synthetic
+Friedman{1, 2, 3}
+    Synthetic
+Labeled Faces in the Wild  (*)
+    Face pair match verification
+Linnerud
+    Synthetic
+LowRankMatrix
+    Synthetic
+Madelon
+    Synthetic
+MNIST (*)
+    Small images of hand-written digigs
+MNIST Background Images
+    MNIST superimposed on natural images
+MNIST Background Random
+    MNIST superimposed on noise
+MNIST Basic
+    MNIST subset
+MNIST Rotated
+    MNIST digits rotated around
+MNIST Rotated Background Images
+    Rotated MNIST over natural images
+MNIST Noise {1,2,3,4,5,6}
+    MNIST with various amounts of noise
+Randlin
+    Synthetic
+Rectangles
+    Synthetic
+Rectangles Images
+    Synthetic
+PascalVOC {2007, 2008, 2009, 2010, 2011}
+    Labelled images from PascalVOC challenges
+PosnerKeele (*)
+    Dot pattern classification task
+PubFig83
+    Face identification
+S Curve
+    Synthetic
+SampleImages
+    Synthetic
+SparseCodedSignal
+    Synthetic
+SparseUncorrelated
+    Synthetic
+SVHN (*)
+    Street View House Numbers    
+Swiss Roll
+    Synthetic dimensionality reduction test
+Van Hateren Natural Images
+    High-res natural images
 
-   +------------+-------+
-   | Material   | Units |
-   +------------+-------+
-   | Stone      | 3     |
-   +------------+-------+
-   | Water      | 12    |
-   +------------+-------+
 
-We show the different quantities of materials required in Table
-:ref:`mtable`.
+Conclusions
+-----------
+
+Standard practice for handling data in machine learning and related research applications involves a significant amount of manual work.
+ The lack of formalization of data handline steps is a barrier to reproducible science in these domains.
+The skdata library provides a host for both low-level data wrangling logic (downloading, decrompressing, loading into Python) and high-level experimental protocols.
+To date the development effort has focused on classification tasks, and image labeling problems in particular.
+The abstractions used in the library should apply to natural language processing and audio information retrieval, as well as timeseries data.
+The protocol layer of the skdata library (especially using the larray module) has been designed to accomodate large or infinite (virual) data sets.
+The library currently provides some degree of support for about 40 data sets, and about a dozen of those have full support for the high-level,low-level, and script APIs.
 
 
-
-.. Customised LaTeX packages
-.. -------------------------
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-.. ::
-..   .. latex::
-..      :usepackage: somepackage
-..      Some custom LaTeX source here.
 
 References
 ----------
@@ -513,3 +683,4 @@ References
 .. [sklearn] XXX
 .. [LangfordReductions] XXX
 .. [Netflix] XXX
+.. [glumpy] XXX
