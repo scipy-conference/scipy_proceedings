@@ -171,7 +171,8 @@ The code used to plot it was:
    
 There is evidence that there is real differences between the 
 :math:`v\sin i` distributions of cluster members when compared to 
-field; there are fewer slow rotators in the clusters when compared to 
+field ([Wolf07]_, [Huan08]_); there are fewer slow rotators in the 
+clusters when compared to 
 the field or the stars in clusters tend to rotate faster.    
 Using literature results, we separated our sample on three different 
 categories accordingly to the star's membership: field, 
@@ -229,7 +230,9 @@ blahblah
 References
 ----------
 
-.. [Brag12] Braganca, G. A, et al., Astronomical Journal, 144:130, November 2012. 
+.. [Brag12] Braganca, G. A, et al., Astronomical Journal, 144:130,2012. 
 .. [Dafl07] Daflon, S., Cunha, K., de Araujo, F. S. W., & Przybilla, N., Astronomical Journal, 134:1570, 2007
 .. [John58] Johnson, H. L., Lowell Obs. Bull., 4:37, 1958
+.. [Huan08] Huang, W., & Gies, D. R., Astronomical Journal, 683: 1045, 2008
 .. [Mass89] Massey, P., Silkey, M., Garmany, C. D., Degioia-Eastwood, K., Astronomical Journal, 97:107, 1989,
+.. [Wolf07] Wolff, S. C., Strom, S. E., Dror, D., & Venn, K., Astronomical Journal, 133:1092, 2007
