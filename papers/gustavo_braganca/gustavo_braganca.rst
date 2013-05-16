@@ -167,6 +167,31 @@ The code used to plot it was:
     horizontalalignment='center') for i in range(0,8)]
    # Save figure
    plt.savefig('boxplot.eps')   
+   
+There is evidence that there is real differences between the 
+:math:`v\sin i` distributions of cluster members when compared to 
+field; there are fewer slow rotators in the clusters when compared to 
+the field or the stars in clusters tend to rotate faster.    
+Using literature results, we separated our sample on three different 
+categories accordingly to the star's membership: field, 
+cluster, association and runaway. 
+We have merged our sample with that of [Dafl07]_ in which their results 
+were obtained using the same methodology than ours.
+We present on Figure :ref:`ClusterAssociation` the distributions of 
+stars belonging to clusters and from associations.
+
+.. figure:: f9.png
+
+   Distribution of :math:`v\sin i` for the studied samples of OB 
+   association (top panel) and cluster members (lower panel) are shown 
+   as red dashed line histograms.
+   The black solid line histograms represent the combined sample: stars 
+   in this study plus 143 star members of clusters and associations 
+   from [Dafl07]_. Both studies use the same methodology to derive 
+   :math:`v\sin i`.
+   :label:`ClusterAssociation`
+   
+   
       
 
 Results
@@ -181,5 +206,6 @@ References
 ----------
 
 .. [Brag12] Braganca, G. A, et al., Astronomical Journal, 144:130, November 2012. 
+.. [Dafl07] Daflon, S., Cunha, K., de Araujo, F. S. W., & Przybilla, N., Astronomical Journal, 134:1570, 2007
 .. [John58] Johnson, H. L., Lowell Obs. Bull., 4:37, 1958
-.. [Mass89] Massey, P., Silkey, M., Garmany, C. D., Degioia-Eastwood, K., Aastronomical Journal, 97, 107, 1989,
+.. [Mass89] Massey, P., Silkey, M., Garmany, C. D., Degioia-Eastwood, K., Astronomical Journal, 97:107, 1989,
