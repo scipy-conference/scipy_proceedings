@@ -196,8 +196,12 @@ stars belonging to clusters and from associations.
 
 We have used the Kolmogorov-Smirnov (KS) statistics to test the null 
 hypothesis that memberships subsamples are drawn from the same 
-population. For this we used the ks_2samp task available on the 
-scipy.stats package. The resulting values are available on Table 
+
+population. For this we used the `ks_2samp 
+<http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.ks_2samp.html#scipy.stats.ks_2samp>`__ 
+task available on the 
+`scipy.stats <http://docs.scipy.org/doc/scipy/reference/stats.html>`__ 
+package. The resulting values are available on Table 
 :ref:`mtable`. Note that, any differences
 between the distributions of clusters and associations in this
 study are not so clear and may not be statistically significant;
