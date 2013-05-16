@@ -361,7 +361,6 @@ statistics to a convenient place.
 The practice of appending a summary dictionary to the lists in self.results has proved to be useful for our work, but it likely not the best technique for all scenarios.
 
 
-
 How the Protocol Layer Works
 ----------------------------
 
@@ -436,6 +435,7 @@ retrain_classifier(model, task)
 
 In our call above to `iris_view.protocol(algo)` what happened was that `iris_view` constructed two Task objects corresponding to the training and test sets,
 and called
+
 .. code-block:: python
 
     model = algo.best_model(train)
@@ -454,7 +454,6 @@ Presumably though, you are adding a command because existing learning algorithms
 compatibility is not a big loss.
 A quick and dirty way to determine what semantics strings are in use is to apply a text search to the source tree (`grep -R semantics skdata`)
 To see what protocol commands are supported by the SklearnClassifier, see its source definition in `skdata.base`.
-
 
 .. The design of the protocol makes it natural to provide fallback implementations that allow more generic learning algorithms (e.g. SVC)
 .. to serve in place of more specialized ones (e.g. image classification algorithms)
@@ -487,7 +486,6 @@ but the protocol layer does not stand in the way of using online learning algori
 In fact, the lazy array represents a mechanism to ensure that online algorithms that loop over enormous (or infinite) data sets
 traverse the examples in a cache-efficient way.
 
-
 Low Level: Data Layer Usage
 ---------------------------
 
@@ -510,6 +508,7 @@ A data set wrapper for the "Labeled Faces in the Wild" data set [lfw]_ provides 
 What follows is an abridged version of what appears in `skdata.lfw.dataset`.
 
 .. code-block:: python
+
     """
     <Description of data set>
     <Citations to key publications>
@@ -539,8 +538,8 @@ What follows is an abridged version of what appears in `skdata.lfw.dataset`.
         def meta(self):
             """Return data set meta-data as list of dicts"""
             ...
-            
-First, the file includes a significant docstring describing the data set and providing some history / context regarding it's usage.
+
+First, a dataset.py file includes a significant docstring describing the data set and providing some history / context regarding it's usage.
 The docstring should always provide links to key publications that either introduced or used this data set.
 
 When a public data set is free for download, the dataset file should include the url of the original data,
@@ -571,9 +570,9 @@ Some data sets also provide a `main.py` file that provides a command-line interf
 The LFW data set for example, has a simple main.py script that supports one command that downloads (if necessary) and visualzes
 a particular variant of the LFW data set using [glumpy]_.
 
-.. code-block:: bash
+.. code-block:: python
 
-    $ python -c skdata/lfw/main.py show funneled
+    python -c skdata/lfw/main.py show funneled
 
 Running a main.py file with no arguments should always print out a short description of usage,
 but the files themselves are almost always very short and easy to read.
@@ -585,78 +584,115 @@ Current list of data sets
 The skdata library currently provides some level of support for about 40 data sets.
 The data sets marked with (*) provide the full set of low-level, high-level, and script interfaces described above.
 
+
 Blobs
     Synthetic: isotropic Gaussian blobs
+
 Boston
     Real-estate features and prices
+
 Brodatz
     Texture images
+
 CALTECH101
     Med-res Images of 101 types of object
+
 CALTECH256
     Med-res Images of 256 types of object
+
 CIFAR10 (*)
     Low-res images of 10 types of object
+
 Convex
     Small images of convex and non-convex shapes
+
 Digits
     Small images of hand-written digigs
+
 Diabetes
     Small non-synthetic temporal binary classification
+
 IICBU2008
     Benchark suite for biological image analysis
+
 Iris (*)
     Features and labels of iris specimens
+
 FourRegions
     Synthetic
+
 Friedman{1, 2, 3}
     Synthetic
+
 Labeled Faces in the Wild  (*)
     Face pair match verification
+
 Linnerud
     Synthetic
+
 LowRankMatrix
     Synthetic
+
 Madelon
     Synthetic
+
 MNIST (*)
     Small images of hand-written digigs
+
 MNIST Background Images
     MNIST superimposed on natural images
+
 MNIST Background Random
     MNIST superimposed on noise
+
 MNIST Basic
     MNIST subset
+
 MNIST Rotated
     MNIST digits rotated around
+
 MNIST Rotated Background Images
     Rotated MNIST over natural images
+
 MNIST Noise {1,2,3,4,5,6}
     MNIST with various amounts of noise
+
 Randlin
     Synthetic
+
 Rectangles
     Synthetic
+
 Rectangles Images
     Synthetic
+
 PascalVOC {2007, 2008, 2009, 2010, 2011}
     Labelled images from PascalVOC challenges
+
 PosnerKeele (*)
     Dot pattern classification task
+
 PubFig83
     Face identification
+
 S Curve
     Synthetic
+
 SampleImages
     Synthetic
+
 SparseCodedSignal
     Synthetic
+
 SparseUncorrelated
     Synthetic
+
 SVHN (*)
-    Street View House Numbers    
+    Street View House Numbers
+
 Swiss Roll
     Synthetic dimensionality reduction test
+
 Van Hateren Natural Images
     High-res natural images
 
@@ -665,7 +701,7 @@ Conclusions
 -----------
 
 Standard practice for handling data in machine learning and related research applications involves a significant amount of manual work.
- The lack of formalization of data handline steps is a barrier to reproducible science in these domains.
+The lack of formalization of data handline steps is a barrier to reproducible science in these domains.
 The skdata library provides a host for both low-level data wrangling logic (downloading, decrompressing, loading into Python) and high-level experimental protocols.
 To date the development effort has focused on classification tasks, and image labeling problems in particular.
 The abstractions used in the library should apply to natural language processing and audio information retrieval, as well as timeseries data.
@@ -680,6 +716,7 @@ References
 .. [CIFAR-10] XXX
 .. [Iris] The Iris data set: http://archive.ics.uci.edu/ml/datasets/Iris
 .. [skdata] XXX
+.. [lfw] XXX
 .. [sklearn] XXX
 .. [LangfordReductions] XXX
 .. [Netflix] XXX

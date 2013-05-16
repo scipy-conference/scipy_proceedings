@@ -1,5 +1,116 @@
 
 
+Introduction
+------------
+
+but even such widely disparate data sets can be interpreted as providing features (X) and labels (y) for a machine learning *classification problem*, and be treated
+
+
+The number of conceptually different kinds of statistical inferences that dominate the attention of machine learning researchers is not so large.
+Some of the standard kinds of inferences include:
+
+* *classification* is the prediction of a discrete label from some number of real-valued or discrete-valued *feature* variables
+* *regression* the prediction of real-valued responses from some number of real-valued or discrete-valued *feature* variables
+* *density estimation*
+* *matrix completion* often arises in user rating scenarios
+* *ranking and structured prediction*
+
+These inference categories correspond to industrially relevant applications, and algorithms for solving them have seen a lot of attention for decades.
+Consequently they are supported by many mature inference algorithms (see e.g. [sklearn]_), even while research continues to develop new ones.
+Other kinds of machine learning problems exist (see e.g. [LangfordReductions]_) but skdata has been developed foremost to support
+the popular inference types mentioned above.
+
+In contrast to the relatively short list of common inference types,
+the number of data sets in active use for evaluating relevant inference algorithms is quite a lot larger and grows every year.
+As computers get faster, storage gets cheaper, and research interests shift, we
+see a steady stream of new public data sets for that focus researchers on
+industrially or scientifically relevant challenges.
+
+
+
+
+There is a typical pattern in the workflow of researchers as they approach a machine learning challenge.
+(I am summarizing my observations of many graduate students as well as my own working habits.)
+
+What typically happens when a machine learning researcher, say a graduate
+student, starts to work on a new project is that they:
+
+1. start with an idea for a new algorithm
+
+1. read papers on the subject and learn what the standard benchmarks
+   are
+
+1. implement their idea and want to compare it with the previous work
+
+1. download a relevant data set and spend a day or two ensuring that they
+   have understood it correctly
+
+1. try to determine from the paper exactly which examples were used for
+   training and testing (possibly failing to do so, and guessing)
+
+1. download another data set and spend another day or two on that one
+   
+1. download a third data set (etc.)
+
+In terms of this workflow, the skdata library helps with steps 4-7.
+The skdata library
+Relative
+
+
+
+
+
+Cross-validation
+* training
+* validation
+* testing
+
+Kfold cross-validation
+
+
+Sklearn: input is sanitized
+
+
+Pre-processing
+
+
+
+Even within particular kinds of data, such as the prediction of a real valued response from another real-valued control variable,
+different algorithms generalize from data differently.
+For example, a linear model predicts very different values most points than a higher-order polynomial,
+even if both the linear model and the polynomial have been fit to the same few examples (called "training data").
+
+Machine learning benchmark data sets come in all shapes and sizes.
+
+
+Most data sets have relevant internal structure, especially when they
+represent a number of joint samples of several random variables.
+It is often important to distinguish between the variables
+
+*meta-data* of image data sets (image
+sizes, compact description of semantic content), and the
+*pixel* data itself. The meta-data typically is not overwhelmingly large, whereas
+signal data such as image pixels, audio recordings, and video data can easily be too
+large to load all at once on a single computer.
+
+
+
+
+
+that Spice grows on the planet Dune.  Test
+some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
+equation on a separate line:
+
+
+
+
+
+
+
+
+
+
+
 
 
 
