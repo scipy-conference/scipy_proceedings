@@ -166,7 +166,8 @@ The code used to plot it was:
    [plt.text(i+1, 395, WSint(length[i]), fontsize=12,
     horizontalalignment='center') for i in range(0,8)]
    # Save figure
-   plt.savefig('boxplot.eps')   
+   plt.savefig('boxplot.eps') 
+     
    
 There is evidence that there is real differences between the 
 :math:`v\sin i` distributions of cluster members when compared to 
@@ -191,9 +192,32 @@ stars belonging to clusters and from associations.
    :math:`v\sin i`.
    :label:`ClusterAssociation`
    
-   
-      
 
+We have used the Kolmogorov-Smirnov (KS) statistics to test the null 
+hypothesis that memberships subsamples are drawn from the same 
+population. For this we used the ks2_sample task available on the 
+scipy.stats package. The resulting values are available on Table 
+:ref:`mtable`. Note that, any differences
+between the distributions of clusters and associations in this
+study are not so clear and may not be statistically significant;
+larger studies are needed.
+
+
+.. table:: Resulting values for the KS test for the membership
+           groups. :label:`mtable`
+
+   +-------------+-------+-------------+---------+---------+
+   |             | Field | Association | Cluster | Runaway |
+   +-------------+-------+-------------+---------+---------+
+   | Field       |   --  |    92%      |   88%   |   18%   |
+   +-------------+-------+-------------+---------+---------+
+   | Association |   92% |    --       |   50%   |   40%   |
+   +-------------+-------+-------------+---------+---------+
+   | Cluster     |   88% |    50%      |   --    |   71%   |
+   +-------------+-------+-------------+---------+---------+      
+   | Runaway     |  18%  |    40%      |   71%   |   --    |
+   +-------------+-------+-------------+---------+---------+
+   
 Results
 ~~~~~~~
 
