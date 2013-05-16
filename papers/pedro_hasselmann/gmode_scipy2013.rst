@@ -38,7 +38,8 @@ Introduction
 
 The clusters can be identified using the G-mode multivariate clustering method, designed by A. I. Gavrishin and Coradini [Cor76]_. 
 The algorithm was originally written in FORTRAN V by Cor77_ to classify geochemical samples [Cor76;Bia80]_, but is also applicable to a wide range of astrophysical fields, 
-as Small Solar System Bodies [Bar87;Bir96;Ful08;Per10]_ , disk-resolved remote sensing [Pos80;Tos05;Cor08;Ley10;Tos10]_, cosmic rays [Gio81]_ and quasars [Cor83]_. 
+as Small Solar System Bodies [Bar87_, Bir96_, Ful08_, Per10_] , 
+disk-resolved remote sensing [Pos80_, Tos05_, Cor08_, Ley10_, Tos10_], cosmic rays [Gio81]_ and quasars [Cor83]_. 
 In 1987, Bar87_ used original G-mode implementation to classify measurements of asteroids made by the Eight-Color Asteroid Survey [Zel85]_ and 
 IRAS geometric albedos [Mat86]_ to produce a taxonomic scheme. Using a sample of 442 asteroids with 8 variables, they recognized 18 classes using a confidence level
 of 97.7 %. Thoses classes were grouped to represent the asteroid taxonomic types. G-mode also identified that just 3 variables
@@ -460,7 +461,7 @@ Therefore, may be necessary to group clusters according to its d²(a,b) distance
 Sloan Digital Sky Survey Moving Objects Catalog 4
 ---------------------------------------------------------------------------
 
-SDSS Moving Objects Catalog 4th (SDSSMOC4) release is now the largest photometric data set of asteroids [Ive01;Ive10]_, 
+SDSS Moving Objects Catalog 4th (SDSSMOC4) release is now the largest photometric data set of asteroids [Ive01_, Ive10_], 
 containing 471,569 detections of moving objects, where 202,101 are linked to 104,449 unique objects. 
 It has a system of five magnitudes in the visible [Fuk96]_ , providing measurements and corresponding uncertainties. 
 As the photometric observations are obtained almost simultaneously, rotational variations can be discarded for most of the asteroids. 
@@ -497,7 +498,7 @@ Preliminary Results on Asteroid Photometric Classification
    Classification made with :math:`q_{1} = 1.5 \sigma`, ``minlim = 0.5`` and ``upperlim = 0.5``. :label:`figupper`
 
 When looking at the density distributions (Figure :ref:`fig0`) it is possible to notice two large agglomerations with accentuated superposition between them.
-Previous photometry-based taxonomic systems [Tho84,Bar87]_ were developed over smaller samples, with less than 1,000 asteroids, thus superposition was not a huge problem.
+Previous photometry-based taxonomic systems [Tho84_, Bar87_] were developed over smaller samples, with less than 1,000 asteroids, thus superposition was not a huge problem.
 Those two groups are the most common asteroid types *S* (from Stone) and *C* (from Carbonaceous). A important indicative that  a classification method is working for
 asteroid taxonomy is at least the detachment of both groups. Nonetheless, even though both groups are being identified in the first and second clusters
 when SDSSMOC4 sample is classified, the third cluster was engoulfing part of members left from both groups and other smaller groups mingled
@@ -614,6 +615,9 @@ References
            *Search for Steinsrsquo surface inhomogeneities from OSIRIS Rosetta images*. 
            PLANSS, 2010, 58, 1097-1106.
 
+.. [Tos10] Tosi, F.; Turrini, D.; Coradini, A. & Filacchione, G. 
+           *Probing the origin of the dark material on Iapetus*. Monthly Notices of the Royal Astronomical Society, 2010, 403, 1113-1130.
+           
 .. [Car10] Carvano, J. M.; Hasselmann, P. H.; Lazzaro, D. & Mothé-Diniz, T. 
            *SDSS-based taxonomic classification and orbital distribution of main belt asteroids*. 
            Astronomy and Astrophysics, 2010, 510, A43+.
