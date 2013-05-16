@@ -189,11 +189,11 @@ Variable Evaluation and Distance Matrix
  
 This part of the method is also based on Z² criterion, but now the objects of evaluation are the clusters identified on the previous stage. 
 The variables are tested for their power to discriminate clusters against each other. For this purpose, the elements of the :math:`Nc \times Nc`
-(*Nc*, the number of classes) symmetric matrices of G estimators are computed for each variable i as follows:
+(*Nc*, the number of classes) symmetric matrices of Gc estimators are computed for each variable i as follows:
 
 .. math::
 
-   G_{i}(a,b)=\sqrt{2\left[Z_{i}^{2}(a,b)+Z_{i}^{2}(b,a)\right]}-\sqrt{2\left(N_{a}+N_{b}\right)-1}
+   Gc_{i}(a,b)=\sqrt{2\left[Z_{i}^{2}(a,b)+Z_{i}^{2}(b,a)\right]}-\sqrt{2\left(N_{a}+N_{b}\right)-1}
  
 where *Na* and *Nb* are respectively the number of members in the a-th and b-th class, while :math:`Z_{i}^{2}(a,b)` and :math:`Z_{i}^{2}(b,a)` 
 are a reformulation of Z² estimator, now given by:
@@ -204,9 +204,9 @@ are a reformulation of Z² estimator, now given by:
  
 :math:`Z_{i}^{2}(b,a)` can be found just by  permuting the equation indices.
 
-The :math:`G_{i}` matrix gives the efficiency of variable i to resolve the clusters, thus the smaller are its element values, less separated are the classes. 
-To discriminate the redundant variables, all the elements of :math:`G_{i}` matrix are tested against the null hypothesis :math:`\mu_{i,a} = \mu_{i,b}` , 
-and if all of them does not satisfies :math:`G_{i}(a,b) < G_{q_{2}}`, the method is iterated again without the variable *i*. 
+The :math:`Gc_{i}` matrix gives the efficiency of variable i to resolve the clusters, thus the smaller are its element values, less separated are the classes. 
+To discriminate the redundant variables, all the elements of :math:`Gc_{i}` matrix are tested against the null hypothesis :math:`\mu_{i,a} = \mu_{i,b}` , 
+and if all of them does not satisfies :math:`Gc_{i}(a,b) < G_{q_{1}}`, the method is iterated again without the variable *i*. 
 The method is repeated until stability is found on the most suitable set of meaningful variables for the sample.
 
 The :math:`Nc \times Nc` symmetric Distance Matrix between clusters with respect to all meaningful variables is also calculated. 
@@ -297,17 +297,20 @@ and also highlighting its dependences:
          def Run(self, q1, sector, ulim, minlim):
          # dependencies: kernel.py
          # Actually run the recognition procedure.
+         # returns self.cluster_members, self.cluster_stats
          
-         def Evaluate(self, q2):
+         def Evaluate(self, q1):
          # dependencies: eval_variables.py
          # Evaluate the significance of each variable and
          # produce the distance matrices.
+         # returns self.Gc and self.D2
          
          def Extension(self, q1):
          # dependencies: itertools
          # Classify data elements excluded 
          # from the main classification. 
-         # Optional feature. 
+         # Optional feature.
+         # modify self.cluster_members
          
          def Classification(self):
          # Write Classification into a list.
@@ -375,11 +378,14 @@ On the directory ``/TESTS/.../maps/`` , there are on-the-fly density distributio
 On ``/TESTS/.../plots/`` , a series of variable plots permits the user to verify each cluster profile.
 On the lists ``clump_xxx.dat`` , ``gmode1_xxx.dat`` , ``gmode2_xxx.dat`` and ``log_xxx.dat`` the informations about cluster statistics, 
 classification per each data element, classification per unique ID and report of the formation of clusters and distance matrices are gathered.
+Working on ``Python IDLE`` or ``IPython``, once ``Gmode.Run()`` was executed, users might call ``self.all_groups`` to get a ``list`` of sample indexes
+organized into each cluster they are members of. The ``self.all_stats_groups`` returns a ``list`` with each cluster statistics.
+``Gmode.Evaluate()`` gives the ``self.Gc`` matrix and ``self.D2`` distance matrix among clusters. 
 
 Users must be aware that input data should be formatted on columns in this order: measurement designation, unique identificator, variables, errors.
 If errors are not available, its values should be replaced by ``0.0`` and ``mlim`` parameter might not be used. There is no limit on data size, however
-the processing time is very sensitive to the number of identified cluster, which may slow down the method larger its number.
-For 20,000 elements and 41 clusters, the G-mode takes around to 2 minutes for whole procedure (plots creation not included) when executed in a
+the processing time is very sensitive to the number of identified cluster, which may slow down the method for a bigger number.
+For example, with 20,000 elements and 41 clusters, the G-mode takes around to 2 minutes for whole procedure (plots creation not included) when executed in a
 Intel Core 2 Quad 2.4 GHz with 4 Gb RAM.
 
 Our implementation also allows to ``import Gmode`` and use it in ``Python IDLE`` or through shell command, like the example::
@@ -389,7 +395,7 @@ Our implementation also allows to ``import Gmode`` and use it in ``Python IDLE``
 
 Finally, since the plot limits, normalization and axis are optimized to asteroid photometry, 
 users using the method on shell are invited to directly change this parameters in ``Gmode.Plot()``. 
-A easier way to control the method aesthetics is going to be inserted on future versions.
+A easier way to control the method aesthetics is going to be worked out on future versions.
 
 
 Code Testing
@@ -515,6 +521,11 @@ Therefore, users must previously inspected their samples before enabling upper l
 
 Finally, the Adapted G-mode is available for anyone through GitHub_ . The codebase_ has no restriction on sample or variable size. 
 Users must only fullfill the requirements related to installed packages and data format.
+
+Acknowledgements
+----------------
+
+The authors acknowledge the following brazilian fundations for science support, CAPES, FAPERJ and CNPq, for several grants and fellowships.
 
 References
 ----------
