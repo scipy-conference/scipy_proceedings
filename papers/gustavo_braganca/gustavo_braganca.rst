@@ -196,7 +196,7 @@ stars belonging to clusters and from associations.
 
 We have used the Kolmogorov-Smirnov (KS) statistics to test the null 
 hypothesis that memberships subsamples are drawn from the same 
-population. For this we used the ks2_sample task available on the 
+population. For this we used the ks_2samp task available on the 
 scipy.stats package. The resulting values are available on Table 
 :ref:`mtable`. Note that, any differences
 between the distributions of clusters and associations in this
@@ -230,7 +230,7 @@ blahblah
 References
 ----------
 
-.. [Brag12] Braganca, G. A, et al., Astronomical Journal, 144:130,2012. 
+.. [Brag12] Braganca, G. A, et al., Astronomical Journal, 144:130, 2012. 
 .. [Dafl07] Daflon, S., Cunha, K., de Araujo, F. S. W., & Przybilla, N., Astronomical Journal, 134:1570, 2007
 .. [John58] Johnson, H. L., Lowell Obs. Bull., 4:37, 1958
 .. [Huan08] Huang, W., & Gies, D. R., Astronomical Journal, 683: 1045, 2008
