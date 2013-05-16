@@ -378,8 +378,8 @@ On the directory ``/TESTS/.../maps/`` , there are on-the-fly density distributio
 On ``/TESTS/.../plots/`` , a series of variable plots permits the user to verify each cluster profile.
 On the lists ``clump_xxx.dat`` , ``gmode1_xxx.dat`` , ``gmode2_xxx.dat`` and ``log_xxx.dat`` the informations about cluster statistics, 
 classification per each data element, classification per unique ID and report of the formation of clusters and distance matrices are gathered.
-Working on ``Python IDLE`` or ``IPython``, once ``Gmode.Run()`` was executed, users might call ``self.all_groups`` to get a ``list`` of sample indexes
-organized into each cluster they are members of. The ``self.all_stats_groups`` returns a ``list`` with each cluster statistics.
+Working on ``Python IDLE`` or ``IPython``, once ``Gmode.Run()`` was executed, users might call ``self.cluster_members`` to get a ``list`` of sample indexes
+organized into each cluster they are members of. The ``self.cluster_stats`` returns a ``list`` with each cluster statistics.
 ``Gmode.Evaluate()`` gives the ``self.Gc`` matrix and ``self.D2`` distance matrix among clusters. 
 
 Users must be aware that input data should be formatted on columns in this order: measurement designation, unique identificator, variables, errors.
