@@ -4,6 +4,7 @@ import docutils.core as dc
 import os.path
 import sys
 import re
+import tempfile
 import glob
 import shutil
 
@@ -59,7 +60,9 @@ def rst2tex(in_path, out_path):
                 'use_verbatim_when_possible': True,
                 'use_latex_citations': True,
                 'latex_preamble': preamble,
-                'documentoptions': 'letterpaper,compsoc,twoside'}
+                'documentoptions': 'letterpaper,compsoc,twoside',
+                'halt_level': 3,  # 2: warn; 3: error; 4: severe
+                }
 
     try:
         rst, = glob.glob(os.path.join(in_path, '*.rst'))
@@ -88,17 +91,33 @@ def tex2pdf(out_path):
     command_line = 'cd %s ' % out_path + \
                    ' ; pdflatex -halt-on-error paper.tex'
 
-    run = subprocess.Popen(command_line, shell=True, stdout=subprocess.PIPE)
+    # -- dummy tempfile is a hacky way to prevent pdflatex
+    #    from asking for any missing files via stdin prompts,
+    #    which mess up our build process.
+    dummy = tempfile.TemporaryFile()
+    run = subprocess.Popen(command_line, shell=True,
+            stdin=dummy,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
     out, err = run.communicate()
 
-    run = subprocess.Popen(command_line, shell=True, stdout=subprocess.PIPE)
-    out, err = run.communicate()
+    # -- returncode always 0, have to check output for error
+    if "Fatal" not in out:
+        # -- pdflatex has to run twice to actually work
+        run = subprocess.Popen(command_line, shell=True,
+                stdin=dummy,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE)
+        out, err = run.communicate()
 
-    if "Fatal" in out:
+    if "Fatal" in out or run.returncode:
         print "PDFLaTeX error output:"
         print "=" * 80
         print out
         print "=" * 80
+        if err:
+            print err
+            print "=" * 80
 
     return out
 
