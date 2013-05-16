@@ -43,8 +43,9 @@ Pythran: Enabling Static Optimization of Scientific Python Programs
 
     The input code remains compatible with the Python interpreter, and output
     code is generally as efficient as the annotated Cython equivalent, if not
-    more, without the backward compatibility loss. Numpy expressions runs as
-    fast as if compiled with numexpr, without change on the original code.
+    more, without the backward compatibility loss. Numpy expressions runs
+    faster than when compiled with numexpr, without change on the original
+    code.
 
 .. class:: keywords
 
@@ -158,7 +159,7 @@ code. The front-end performs two steps:
 
 Pythran IR is similar to Python AST, as defined in the `ast` module, except
 that several nodes are forbidden (most notably Pythran does not support
-used-defined classes or the `exec` instruction), and some nodes are converted
+user-defined classes or the `exec` instruction), and some nodes are converted
 to others to form a simpler AST easier to deal with for further analyse and
 optimizations. The transformations applied by Pythran on Python AST are the
 following:
@@ -646,15 +647,17 @@ Benchmarks
 All benchmarks presented in this section are run on an hyper-threaded i7
 quadcore, using the code available in the Pythran sources available at
 https://github.com/serge-sans-paille/pythran in the `pythran/test/cases`
-directory. The Pythran version used is `deqzffzr`, ShedSkin 0.9.2, PyPy 2.0
-compiled with the `-jit` flag, CPython 2.7.3 and numexpr 2.0.1. All timings are
-made using the `timeit` module, taking the best of all runs. All C++ codes are
-compiled with g++ 4.7.3, using the tool default compiler option, generally
-`-O2` plus a few optimizing flags depending on the target.
+directory. The Pythran version used is the `HEAD` of the `scipy2013` branch,
+ShedSkin 0.9.2, PyPy 2.0 compiled with the `-jit` flag, CPython 2.7.3, Cython
+0.19.1 and Numexpr 2.0.1. All timings are made using the `timeit` module,
+taking the best of all runs. All C++ codes are compiled with g++ 4.7.3, using
+the tool default compiler option, generally `-O2` plus a few optimizing flags
+depending on the target.
 
-Cython is not considered in this benchmark, because to get an efficient binary,
-one need to rewrite the original code, while all the considered tools are
-running the very same Python code that remains compatible with CPython.
+Cython is not considered in most benchmarks, because to get an efficient
+binary, one need to rewrite the original code, while all the considered tools
+are running the very same Python code that remains compatible with CPython. The
+experiment was only done to have a comparison with Numexpr.
 
 Pystone is a Python translation of whetstone, a famous floating point number
 benchmarks that dates back to Algol60 and the 70's. Although non representative
@@ -700,7 +703,7 @@ not support mixed scalar and None variables. The input value is `9`.
 
 It seems that compiler have difficulties to take advantage of high level
 constructs such as generator expressions, as the overall speedup is not
-flabbergasting. Pythran benefits from the conversion to `itertools.map` here,
+flabbergasting. Pythran benefits from the conversion to `itertools.imap` here,
 while ShedSkin and PyPy rely on more costly constructs. A deeper look at the
 Pythran profiling trace shows that more than half of the execution time is
 spent allocating and deallocating a `set` used in the internal loop. There is a
@@ -768,39 +771,47 @@ looping is done directly in C. Its code is reproduced below:
 .. [*] The arc_distance test_bed is taken from to https://bitbucket.org/FedericoV/numpy-tip-complex-modeling
 
 Figure :ref:`arc-distance-table` illustrates the benchmark result for CPython,
-Numexpr and Pythran, using random input arrays of `10**6` elements. Table
-:ref:`arc-distance-2-table` details the Pythran performance.
+Cython, Numexpr and Pythran, using random input arrays of `10**6` elements.
+Table :ref:`arc-distance-2-table` details the Pythran performance. Cython code
+is written using the `parallel.prange` feature and compiled with `-fopenmp -O2
+-march=native`.
 
 .. table:: Benchmarking result on the arc distance kernel. :label:`arc-distance-table`
 
-    +---------+-------------+-------------+----------+
-    | Tool    |  CPython    |  Numexpr    | Pythran  |
-    +---------+-------------+-------------+----------+
-    | Timing  |  192.2ms    |    41.2ms   |  17.1ms  |
-    +---------+-------------+-------------+----------+
-    | Speedup |  x1         |  x4.67      |  x11.23  | 
-    +---------+-------------+-------------+----------+
+    +---------+-------------+----------+-------------+-----------+
+    | Tool    |  CPython    |  Cython  |  Numexpr    | Pythran   |
+    +---------+-------------+----------+-------------+-----------+
+    | Timing  |  192.2ms    |  36.0ms  |    41.2ms   |  17.1ms   |
+    +---------+-------------+----------+-------------+-----------+
+    | Speedup |  x1         |  x5.33   |  x4.67      |  x11.23   | 
+    +---------+-------------+----------+-------------+-----------+
 
 
 .. table:: Benchmarking result on the arc distance kernel, Pythran details. :label:`arc-distance-2-table`
 
-    +---------------+----------------+-------------------+
-    | Pythran (raw) | Pythran (+AVX) | Pythran (+Openmp) |
-    +---------------+----------------+-------------------+
-    |   186.3ms     |    75.4ms      |    41.1ms         |
-    +---------------+----------------+-------------------+
-    |    x1.03      |    x2.54       |    x4.67          |
-    +---------------+----------------+-------------------+
+    +---------------+----------------+----------------+-----------------+
+    | Pythran (raw) | Pythran (+AVX) | Pythran (+OMP) | Pythran (full)  |
+    +---------------+----------------+----------------+-----------------+
+    |   186.3ms     |    75.4ms      |    41.1ms      |  17.1ms         |
+    +---------------+----------------+----------------+-----------------+
+    |    x1.03      |    x2.54       |    x4.67       |  x11.23         |
+    +---------------+----------------+----------------+-----------------+
 
 It shows a small benefit from using expression template on their own, most
 certainly because the looping overhead is negligible in front of the
-trigonometric functions. It gets a decent x2.5 speed-up when using AVX over
-not using it. The benefit of OpenMP, although related to the number of core,
-makes a whole speedup greater than x11 over the original Numpy version,
-without changing the input code. To the opposite, Numexpr requires to rewrite
-the input and does not achieve the same level of performance than Pythran when
-OpenMP and AVX are combined.
+trigonometric functions. It gets a decent x2.5 speed-up when using AVX over not
+using it. The benefit of OpenMP, although related to the number of core, makes
+a whole speedup greater than x11 over the original Numpy version, without
+changing the input code. To the opposite, Numexpr requires to rewrite the input
+and does not achieve the same level of performance than Pythran when OpenMP and
+AVX are combined.
 
+Writting efficient Cython code requires more work than just typing the variable
+declarations using Cython's specific syntax: it only takes advantage of
+parallelism because we made it explicit. Without explicit parallization,
+generated code run around 176ms. Cython does not generates vectorized code, and
+`gcc` does not vectorized the inner loop, which explains the better Pythran
+performances.
 
 Future Works
 ------------
@@ -837,7 +848,7 @@ the optimization used. It also compares the performance of compiled python
 module against CPython and other optimizers: ShedSkin, PyPy and numexpr.
 
 To conclude, limiting Python to a statically typed subset does not hinders the
-expressively when it comes to scientific or mathematic computations, but makes
+expressivity when it comes to scientific or mathematic computations, but makes
 it possible to use a wide variety of classical optimizations to have Python
 match the performance of statically compiled language. Moreover, one can use
 high level informations to generate efficient code that would proved to be
