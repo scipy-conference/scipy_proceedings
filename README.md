@@ -28,10 +28,10 @@ paper:
 - Please do not modify any files outside of your paper directory.
 
 Pull requests are to be submitted by **May 19th**, but modifications are
-allowed during the review period until June 16th.
+allowed during the review period until June 14th.
 
 General Guidelines
-``````````````````
+------------------
 - All figures and tables should have captions.
 - License conditions on images and figures must be respected (Creative Commons,
   etc.).
