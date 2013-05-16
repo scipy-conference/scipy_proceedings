@@ -60,7 +60,9 @@ def rst2tex(in_path, out_path):
                 'use_verbatim_when_possible': True,
                 'use_latex_citations': True,
                 'latex_preamble': preamble,
-                'documentoptions': 'letterpaper,compsoc,twoside'}
+                'documentoptions': 'letterpaper,compsoc,twoside',
+                'halt_level': 3,  # 2: warn; 3: error; 4: severe
+                }
 
     try:
         rst, = glob.glob(os.path.join(in_path, '*.rst'))
