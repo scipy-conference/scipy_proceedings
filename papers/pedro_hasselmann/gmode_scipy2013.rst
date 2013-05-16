@@ -37,9 +37,8 @@ Introduction
 ------------
 
 The clusters can be identified using the G-mode multivariate clustering method, designed by A. I. Gavrishin and Coradini [Cor76]_. 
-The algorithm was originally written in FORTRAN V by Cor77_ to classify geochemical samples [Cor76;Bia80]_, but is also applicable to a wide range of astrophysical fields, 
-as Small Solar System Bodies [Bar87_, Bir96_, Ful08_, Per10_] , 
-disk-resolved remote sensing [Pos80_, Tos05_, Cor08_, Ley10_, Tos10_], cosmic rays [Gio81]_ and quasars [Cor83]_. 
+The algorithm was originally written in FORTRAN V by Cor77_ to classify geochemical samples [Cor76_, Bia80_], but is also applicable to a wide range of astrophysical fields, 
+as Small Solar System Bodies [Bar87_, Bir96_, Ful08_, Per10_], disk-resolved remote sensing [Pos80_, Tos05_, Cor08_, Ley10_, Tos10_], cosmic rays [Gio81]_ and quasars [Cor83]_. 
 In 1987, Bar87_ used original G-mode implementation to classify measurements of asteroids made by the Eight-Color Asteroid Survey [Zel85]_ and 
 IRAS geometric albedos [Mat86]_ to produce a taxonomic scheme. Using a sample of 442 asteroids with 8 variables, they recognized 18 classes using a confidence level
 of 97.7 %. Thoses classes were grouped to represent the asteroid taxonomic types. G-mode also identified that just 3 variables
