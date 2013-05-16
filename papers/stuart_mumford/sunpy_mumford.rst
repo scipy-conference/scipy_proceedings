@@ -57,7 +57,7 @@ Downloaders and Data Retrevial
 Most of solar data observed from space missions follow an open policy[#]_ which makes it available to everyone as soon the data is downloaded.
 However, they are normally archived by the institution in charge of the instrument that made the observations.  
 Such sparsity of archives makes the browsing and data retrieval a very tedious task for the scientist.  
-The `Virtual Solar Observatory <http://virtualsolar.org>`_ (VSO) [VSO]_ has considerably simplified such work by building a centralized database with access to multiple archives.  
+The `Virtual Solar Observatory <http://virtualsolar.org>`_ [VSO]_ has considerably simplified such work by building a centralized database with access to multiple archives.  
 VSO allows the user to query by few parameters as instrument name or type, time, physical obsevable and/or spectral range.   
 VSO's main interface is web based, however, it can also be accessed by their WSDL webservice.
 SunPy uses such API to query and download data from VSO.
@@ -78,7 +78,16 @@ their properties
 
 -- Jack and Florian are the best to describe how this was done.
 
-* HEK / Helio
+Solar physicist are also interested in the understanding of how solar events disturb the solar system.  
+Very high energy radiation produced during solar flares has effects on our ionosphere almost instantaneously, 
+high-energy particles arriving few minutes later can permantly damage spacecraft, similarly
+big blob of plasma travelling at high velocities (~1000 km/s) produced as an effect of a coronal mass ejection
+can have multiple of effects on our technological dependent society.  
+This effects can be meassured everywhere in the solar system, and the `HELiophysics Integrated Observatory <http://helio-vo.eu/>`_ [HELIO]_ has built a set of tools that helps to find where these events have been measured having into account the speed of the different events and the movement of planets and spacecraft within that timerange.
+HELIO includes Features and Event catalogues similar to what is offered by HEK, it also offers access to solar observations - as VSO - enhanced with access meassurements of the environment at other planetes and a propagation model to link any event with its origin or its effects.  
+Each of these tools counts with their independent webservice, therefore it could be easily implemented as a set of independent tools. 
+However, SunPy offers the opportunity to create a better implementation where the data retrieved could interact with the rest of SunPy's ecosystem.
+HELIO implementation on SunPy is on early development stages.
 
 Community
 ---------
@@ -103,6 +112,8 @@ References
          Earth Moon and Planets, 104:315-330, April 2009. DOI: 10.1007/s11038-008-9274-7
 .. [HEK] N. Hurlburt, et al. *Heliophysics Event Knowledgebase for the Solar Dynamics Observatory (SDO) and Beyond*,
          Solar Physics, 275:67-78, January 2012. DOI: 10.1007/s11207-010-9624-2 arXiv:1008.1291
+.. [HELIO] D. Pérez-Suárez et al. *Studying Sun–Planet Connections Using the Heliophysics Integrated Observatory (HELIO)*
+           Solar Physics, 280:603-621, October 2012. DOI: 10.1007/s11207-012-0110-x
 	
 
 
