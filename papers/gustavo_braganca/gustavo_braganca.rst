@@ -77,18 +77,23 @@ As we have said before, stars usually are born in groups. Because of that, a gre
                
 And the resulting plot is showed in Figure :ref:`coords`.                 
                         
-.. figure:: f1.eps
+.. figure:: f1.png
 
    Polar plot showing the positions of the sample stars projected onto the Galactic plane. 
    The plot is centered on the Sun. The open red circles
    are spectroscopic binaries/multiple systems identified in our sample. :label:`coords`
    
    
-To analyse our observation spectra images we have used `IRAF <http://iraf.noao.edu/>`__ (Image and Reduction Analysis Facility), which is a suite of softwares to handle astronomic images developed by the NOAO [^1]. We had to do several tasks on our spectra (e.g. cut it in a certain wavelength and normalization) to prepare our sample to further analysis. Some of these tsaks had to be done manully on a one-by-on basis, but some other were automated. The automation ould have bnn done using the IRAF scripting, but fortunately, 
-the STSCI [^2] has developed a python wrapper for IRAF called `PyRAF <http://www.stsci.edu/institute/software_hardware/pyraf>`__.
+To analyse our observation spectra images we have used `IRAF <http://iraf.noao.edu/>`__ (Image and Reduction Analysis Facility), which is a suite of softwares to handle astronomic images developed by the NOAO [1]_. 
+We had to do several tasks on our spectra (e.g. cut it in a certain wavelength and normalization) to prepare our sample to further analysis. Some of these tsaks had to be done manully on a one-by-on basis, but some other were automated. The automation ould have bnn done using the IRAF scripting, but fortunately, 
+the STSCI [2]_ has developed a python wrapper for IRAF called `PyRAF <http://www.stsci.edu/institute/software_hardware/pyraf>`__.
 For example, we show how we used IRAF task SCOPY to cut images using pyRAF:
 
+.. [1] National Optical Astronomy Observatory
+.. [2] Space Telescope Science Institute
+
 .. code-block:: python
+
    from pyraf import iraf
    
    iraf.noao.onedspec.scopy.w1 = 4050  # Starting wavelength
@@ -103,8 +108,7 @@ For example, we show how we used IRAF task SCOPY to cut images using pyRAF:
        # Execute
        iraf.noao.onedspec.scopy(mode = 'h')
 
-[^1]: National Optical Astronomy Observatory
-[^2]: Space Telescope Science Institute
+
 
 Star classification
 ~~~~~~~~~~~~~~~~~~~
