@@ -110,12 +110,21 @@ For example, we show how we used IRAF task SCOPY to cut images from a list using
 
 
 
-Star classification
-~~~~~~~~~~~~~~~~~~~
+We also have performed a spectral classification on the stars and, since this was not done using Python, more information can be obtained on the original paper. 
 
 Effective temperature through photometric calibration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+We have obtained effective temperature (Teff) from a calibration presentend in [Mass89]_ that uses the photometric reddening-free parameter index  :math:`Q` ([John58]_). 
+
+A histogram showing the distribution of effective temperatures for OB stars with available photometry is shown in Figure :ref:`TqHist`.
+The effective temperatures of the target sample peak around 17,000 K, with most stars being cooler than 28,000 K.
+                        
+.. figure:: f6.png
+
+    Histogram showing the distribution of effective temperatures for the studied sample. :label:`TqHist`
+    
+    
 Projected rotational velocities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -131,3 +140,5 @@ References
 ----------
 
 .. [Brag12] Braganca, G. A, et al., Astronomical Journal, 144:130, November 2012. 
+.. [John58] Johnson, H. L., Lowell Obs. Bull., 4:37, 1958
+.. [Mass89] Massey, P., Silkey, M., Garmany, C. D., Degioia-Eastwood, K., Aastronomical Journal, 97, 107, 1989,
