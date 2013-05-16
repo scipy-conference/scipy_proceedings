@@ -122,11 +122,52 @@ The effective temperatures of the target sample peak around 17,000 K, with most 
                         
 .. figure:: f6.png
 
-    Histogram showing the distribution of effective temperatures for the studied sample. :label:`TqHist`
-    
+   Histogram showing the distribution of effective temperatures for the studied sample. :label:`TqHist`
     
 Projected rotational velocities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We have obtained projected rotational velocities (:math:`v\sin i`) for 266 stars of our sample. 
+We do not used Python to obtain :math:`v\sin i`, so, for more information, we suggest the reader to look in the original paper. 
+However, for the analysis we used Python, specially the matplotlib package for visualization analysis and the Scipy.stats package to statistics analysis.
+
+The boxplot is a great plot to compare several distributions side by side. 
+On this work, we used a boxplot to analyze the :math:`v\sin i` for each spectral type subset, as can be seen on Figure :ref:`boxplot`. 
+
+.. figure:: f7.png
+
+   Box plot for the studied stars in terms of the spectral type. 
+   The average :math:`v\sin i` for the stars in each spectral type bin 
+   is roughly constant, even considering the least populated bins. 
+   :label:`boxplot`
+   
+The code used to plot it was:
+
+.. code-block:: python
+
+   import matplotlib.pyplot as plt
+   
+   #Start boxplot
+   bp = plt.boxplot(box, notch=0)
+   # Define color of medians
+   plt.setp(bp['medians'], color='red')
+   # Add small box on the mean values
+   plt.scatter(range(1,9), mean_vector, 
+               c='w', marker='s', edgecolor='r')
+   # Set labl for the axis
+   plt.xlabel(u'Spectral Type')
+   plt.ylabel(r'$v\sin i$ (km s$^{-1}$)')
+   # Set limit for the axis
+   plt.axis([0, 9, 0, 420])
+   # Set spectral types on the x-axis 
+   plt.xticks(range(1,9), ['O9', 'B0', 'B1', 
+              'B2', 'B3', 'B4', 'B5', 'B6'])
+   # Put a text with the number of objects on each bin
+   [plt.text(i+1, 395, WSint(length[i]), fontsize=12,
+    horizontalalignment='center') for i in range(0,8)]
+   # Save figure
+   plt.savefig('boxplot.eps')   
+      
 
 Results
 ~~~~~~~
