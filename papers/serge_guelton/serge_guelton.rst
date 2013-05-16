@@ -216,15 +216,15 @@ and in C++:
 .. code-block:: c++
 
     template<class T0, class T1>
-        auto dot(T0&& t0, T1&& t1)
+        auto dot(T0&& l0, T1&& l1)
         -> decltype(/* skipped */)
         {
             return pythonic::sum(
                 pythonic::map(
                     operator_::multiply(),
                         pythonic::zip(
-                            std::forward<T0>(t0),
-                            std::forward<T1>(t1))
+                            std::forward<T0>(l0),
+                            std::forward<T1>(l1))
                 )
             );
         }
