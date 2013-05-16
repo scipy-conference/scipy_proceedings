@@ -505,8 +505,8 @@ Conclusions
 -----------
 
 Along this paper a refined version of a clustering method developed in the 70's was presented. 
-The Adapted G-mode used mahalonobis distance as estimator to better recognize misaligned clusters, and used ``Numpy.histogramdd`` to find
-initial seeds faster. Robust median statistics was also implemented to more precisely estimate central tendency and standard deviation, and
+The Adapted G-mode used mahalonobis distance as estimator to better recognize misaligned clusters, and used ``Numpy.histogramdd`` to faster locate
+initial seeds. Robust median statistics was also implemented to more precisely estimate central tendency and standard deviation, and
 take less iteration to stabilize clusters.
 
 Tests with simulated samples showed a quality increase and sucessfulness in the recognition of clusters among random points. 
@@ -522,7 +522,8 @@ References
 .. [Abr72] Abramowitz, M. & Stegun, I. A. 
            *Handbook of Mathematical Functions Handbook of Mathematical Functions*. New York: Dover, 1972.
 
-.. [Ham74] Hampel. 1974.
+.. [Ham74] Hampel, F. R. 
+           *The Influence Curve and its Role in Robust Estimation*. Journal ofthe American Statistical Association, 1974, 69, 383-393.
 
 .. [Cor76] Coradini, A.; Fulchignoni, M. & Gavrishin, A. I. 
            *Classification of lunar rocks and glasses by a new statistical technique*. The Moon, 1976, 16, 175-190.
@@ -564,23 +565,23 @@ References
 .. [Fuk96] Fukugita, M.; Ichikawa, T.; Gunn, J. E.; Doi, M.; Shimasaku, K. & Schneider, D. P. 
            *The Sloan Digital Sky Survey Photometric System*. Astrophisical Journal, 1996, 111, 1748-+.
 
-.. [She97] Shevlyakov 1997.
-
+.. [She97] Shevlyakov, G. L. 
+           *On robust estimation of a correlation coefficient*. Journal of Mathematical Sciences, Vol. 83, No. 3, 1997.
+ 
 .. [Lup99] Lupton, R. H.; Gunn, J. E. & Szalay, A. S. 
            *A Modified Magnitude System that Produces Well-Behaved Magnitudes, Colors, and Errors Even for Low Signal-to-Noise Ratio Measurements*. 
-            Astrphysical Journal, 1999, 118, 1406-1410.
+           Astrphysical Journal, 1999, 118, 1406-1410.
            
 .. [Ful00] Fulchignoni, M.; Birlan, M. & Antonietta Barucci, M. 
            *The Extension of the G-Mode Asteroid Taxonomy*. Icarus, 2000, 146, 204-212.
 
 .. [Ive01] Ivezić, v. Z.; Tabachnik, S.; Rafikov, R.; Lupton, R. H.; Quinn, T.; Hammergren, M.; Eyer, L.; Chu, J.; Armstrong, J. C.; Fan, X.; Finlator, K.; 
            Geballe, T. R.; Gunn, J. E.; Hennessy, G. S.; Knapp, G. R.; Leggett, S. K.; Munn, J. A.; Pier, J. R.; Rockosi, C. M.; Schneider, D. P.; 
-           Strauss, M. A.; Yanny, B.; Brinkmann, J.; Csabai, I.; Hindsley, R. B.; Kent, S.; Lamb, D. Q.; Margon, B.; McKay, T. A.; Smith, J. A.; Waddel, P.; 
-           York, D. G. & the SDSS Collaboration 
+           Strauss, M. A.; Yanny, B.; Brinkmann, J.; Csabai, I.; Hindsley, R. B.; Kent, S.; Lamb, D. Q.; Margon, B.; McKay, T. A.; Smith, J. A.; Waddel, P.; York, D. G. & the SDSS Collaboration.
            *Solar System Objects Observed in the Sloan Digital Sky Survey Commissioning Data*. Astrophysical Journal, 2001, 122, 2749-278.
 
 .. [Tos05] Tosi, F.; Coradini, A.; Gavrishin, A. I.; Adriani, A.; Capaccioni, F.; Cerroni, P.; Filacchione, G. & Brown, R. H. 
-           *G-Mode Classification of Spectroscopic Data*. Earth Moon and Planets, 2005, 96, 165-197
+           *G-Mode Classification of Spectroscopic Data*. Earth Moon and Planets, 2005, 96, 165-197.
 
 .. [Cor08] Coradini, A.; Tosi, F.; Gavrishin, A. I.; Capaccioni, F.; Cerroni, P.; Filacchione, G.; Adriani, A.; Brown, R. H.; Bellucci, G.; 
            Formisano, V.; D'Aversa, E.; Lunine, J. I.; Baines, K. H.; Bibring, J.-P.; Buratti, B. J.; Clark, R. N.; Cruikshank, D. P.; Combes, M.; 
@@ -601,7 +602,8 @@ References
 .. [Ley10] Leyrat, C.; Fornasier, S.; Barucci, A.; Magrin, S.; Lazzarin, M.; Fulchignoni, M.; Jorda, L.; Belskaya, I.; Marchi, S.; Barbieri, C.; Keller, U.; Sierks, H. & Hviid, S. 
            *Search for Steinsrsquo surface inhomogeneities from OSIRIS Rosetta images*. 
            PLANSS, 2010, 58, 1097-1106.
+
 .. [Car10] Carvano, J. M.; Hasselmann, P. H.; Lazzaro, D. & Mothé-Diniz, T. 
            *SDSS-based taxonomic classification and orbital distribution of main belt asteroids*. 
-           Astronomy and Astrophysics, 2010, 510, A43+
+           Astronomy and Astrophysics, 2010, 510, A43+.
 
