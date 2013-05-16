@@ -1,4 +1,7 @@
+
 output
 _build
 *.pyc
 *~
+*.swp
+*.swo
