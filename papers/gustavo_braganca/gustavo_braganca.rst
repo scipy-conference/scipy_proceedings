@@ -87,7 +87,7 @@ And the resulting plot is showed in Figure :ref:`coords`.
 To analyse our observation spectra images we have used `IRAF <http://iraf.noao.edu/>`__ (Image and Reduction Analysis Facility), which is a suite of softwares to handle astronomic images developed by the NOAO [1]_. 
 We had to do several tasks on our spectra (e.g. cut it in a certain wavelength and normalization) to prepare our sample to further analysis. Some of these tsaks had to be done manully on a one-by-on basis, but some other were automated. The automation ould have bnn done using the IRAF scripting, but fortunately, 
 the STSCI [2]_ has developed a python wrapper for IRAF called `PyRAF <http://www.stsci.edu/institute/software_hardware/pyraf>`__.
-For example, we show how we used IRAF task SCOPY to cut images using pyRAF:
+For example, we show how we used IRAF task SCOPY to cut images from a list using pyRAF:
 
 .. [1] National Optical Astronomy Observatory
 .. [2] Space Telescope Science Institute
@@ -99,7 +99,7 @@ For example, we show how we used IRAF task SCOPY to cut images using pyRAF:
    iraf.noao.onedspec.scopy.w1 = 4050  # Starting wavelength
    iraf.noao.onedspec.scopy.w2 = 4090  # Ending wavelength
    
-   for i, name in enumerate(list_of_stars):
+   for name in list_of_stars:
        # Spectrum to be cut
        iraf.noao.onedspec.scopy.input = name
        # Nanme of resulting spectrum
