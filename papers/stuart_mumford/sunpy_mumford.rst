@@ -70,7 +70,9 @@ The Map type is designed for processing the most common type of solar data, that
 GenericMap, CompositeMap and MapCube have a common super class MapBase. This is designed with compatibility to AstroPy's NDData object 
 in mind. Map base itself provides very limited functionality as it is catering to 2D or 3D data with different coordinates for each axis.
 
-2D image types are all derived from a GenericMap
+2D image types are all derived from a GenericMap class that provides 2D specific calibration and coordinate methods. This super class 
+is designed to be subclassed by subclasses specific to instruments or detectors. To instantiate the correct subclass of GenericMap a 
+MapFacotry 
 
 The 2D image data processed by Map comes from a variety of instruments with different header parameters and processing reqirements. 
 This is catered for in Map by defining "sources" for each instrument, which subclass GenericMap, the base 2D class. These sources 
