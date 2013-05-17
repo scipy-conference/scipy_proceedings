@@ -457,8 +457,21 @@ The choice variable creates a special node in the expression graph that prevents
 expression graph from being evaluated at all.
 During optimization, similar special-case logic prevents any association between the return value of the objective function
 and irrelevant hyperparameters (ones that were not chosen, and hence not involved in the creation of the configuration passed to the objective function).
+
+The ``hp.pchoice`` hyperparameter constructor is similar to ``choice`` except that we can provide a list of probabilities
+corresponding to the options, so that random sampling chooses some of the options more often than others.
+
+.. code-block:: python
+
+    w_space_with_probs = hp.pchoice('case', [
+        (0.8, {'use_var': 'x',
+               'x': hp.normal('x', 0, 1)}),
+        (0.2, {'use_var': 'y',
+               'y': hp.uniform('y', 1, 3)})])
+
+Using the ``w_space_with_probs`` configuration space expresses to fmin that we believe the first case (using "x") is five times as likely to yield an optimal configuration that the second case.
 If your objective function only uses a subset of the configuration space on any given evaluation, then you should
-use choice variables to communicate that pattern of inter-dependencies to ``fmin``.
+use ``choice`` or ``pchoice`` hyperparameter variables to communicate that pattern of inter-dependencies to ``fmin``.
 
 
 Sharing a configuration variable across choice branches
@@ -488,11 +501,11 @@ so they would correctly associate ``c`` with all evaluations of the objective fu
 
 
 
-Example of basic usage: `sklearn.svm.SVC`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Configuration Example: ``sklearn`` classifiers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To see all these possibilities in action, let's look at how one might go about describing the space of hyperparameters of classification algorithms in scikit-learn.
-(I think that there's room for a library that actually does this, possibly even bundled with hyperopt itself in the future, but for now it's just an idea.)
+To see several configuration space description techniques in action,
+let's look at how one might go about describing the space of hyperparameters of classification algorithms in [sklearn]_.
 
 .. code-block:: python
 
@@ -518,6 +531,8 @@ To see all these possibilities in action, let's look at how one might go about d
         },
         ])
 
+
+At the top level we have a ``choice`` between
 
 
 Advanced Configuration Spaces
