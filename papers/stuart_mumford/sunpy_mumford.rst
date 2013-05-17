@@ -45,11 +45,44 @@ of calibrating and aliging the data. SunPy's current scope is data analysis with
 
 SunPy Data Types
 ----------------
-Function, Scope and Organisation of
 
-* Map
-* Spectra
-* LightCurve
+SunPy's core is based around defining interoperable data types that cover the wide range of observational data 
+avalible. These cover muti-dimesional data and provide basic manipulation and visualisation routines while having 
+a consistent API. There are three core data types: Lightcurve, Map and Spectrum / Spectrogram.
+
+Lightcurve is a 1D data type for analysis of lightcurves or more generally flux over time data products.
+Map is a core 2D image data type with 3D extensions for CompositeMap, different 2D images at different wavelengths, and 
+MapCube, for time series of 2D Maps. Spectrum is a 1D flux agaisnt wavelength data type while Spectrogram is a 2D flux 
+with wavelength and time type.
+
+While these different data types have clear applications to different types of observations, there is also clear inter-links 
+between them, for example a 1 pixel slice of a MapCube should result in a Lightcurve and a 1 pixel slice of a composite map 
+should be a Spectrum. While these types of interoperability are not yet implemented in SunPy it is a future goal.
+
+To this end, the 0.3 release of SunPy will include a large scale refactoring of all the data types. This is primarily motivated 
+by the desire to move away from a structure where we inherit a numpy ndarray to the data type containing the data as an attribute. 
+This design is also mirrored by AstroPy's NDData object which has many similarities to function of our data types especially the Map.
+
+Map
+===
+
+The Map type is designed for processing the most common type of solar data, that of the 2D image. As of SunPy 0.3 all of the Map types, 
+GenericMap, CompositeMap and MapCube have a common super class MapBase. This is designed with compatibility to AstroPy's NDData object 
+in mind. Map base itself provides very limited functionality as it is catering to 2D or 3D data with different coordinates for each axis.
+
+2D image types are all derived from a GenericMap
+
+The 2D image data processed by Map comes from a variety of instruments with different header parameters and processing reqirements. 
+This is catered for in Map by defining "sources" for each instrument, which subclass GenericMap, the base 2D class. These sources 
+register with a MapFactory which then automatically determines the instrument of the data being read and returns the correct source 
+subclass.
+
+
+.. Function, Scope and Organisation of
+
+.. * Map
+.. * Spectra
+.. * LightCurve
 
 Downloaders and Data Retrevial
 ------------------------------
