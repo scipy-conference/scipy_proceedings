@@ -193,7 +193,15 @@ some irregularly sampled data
 
 
 
-.. figure:: gridding_plotting1.png
+.. figure:: gridding_plotting_contourf.png
+    :align: center
+
+    Example of generating a random scatter of points, using that to make
+    synthetic data, and automatically gridding and plotting it using a
+    a Fatiando a Terra wrapper for the Matplotlib ``contourf``
+    function.
+
+.. figure:: gridding_plotting_basemap.png
     :align: center
 
     Example of generating a random scatter of points, using that to make
