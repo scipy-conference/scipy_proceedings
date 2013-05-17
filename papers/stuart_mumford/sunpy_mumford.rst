@@ -2,7 +2,7 @@
 :email: stuart@mumford.me.uk
 :institution: The University of Sheffield
 
-:author: David Pérez-Suárez
+:author: David Prez-Surez
 :email: dps.helio@gmail.com
 :institution: Finnnish Meteorological Institute
 
@@ -89,7 +89,7 @@ subclass.
 Downloaders and Data Retrevial
 ------------------------------
 
-Most of solar data observed from space mission follows an open policy[#]_ which makes it available to everyone as soon the data is downloaded.
+Most of solar data observed from space mission follows an open policy [1]_ which makes it available to everyone as soon the data is downloaded.
 However, they are normally archived by the institution in charge of the instrument that made the observations.  
 Making the browsing and data retrieval a very tedious task for the scientist.  
 The `Virtual Solar Observatory <http://virtualsolar.org>`_ (VSO) [VSO]_ has considerably simplified such work by building a centralized database with access to multiple archives.  
@@ -117,9 +117,7 @@ Future
 
 References
 ----------
-.. [VSO] F. Hill, et al. *The Virtual Solar Observatory—A Resource for International Heliophysics Research*,
+.. [VSO] F. Hill, et al. *The Virtual Solar ObservatoryA Resource for International Heliophysics Research*,
          Earth Moon and Planets, 104:315-330, April 2009. DOI: 10.1007/s11038-008-9274-7
 	
-
-
-.. [#] All use of data comming from NASA mission from the Heliophysics Division followes a explicit `copyright and Rules of the Road <http://sdo.gsfc.nasa.gov/data/rules.php>`_.
+.. [1] All use of data comming from NASA mission from the Heliophysics Division followes a explicit `copyright and Rules of the Road <http://sdo.gsfc.nasa.gov/data/rules.php>`_.
