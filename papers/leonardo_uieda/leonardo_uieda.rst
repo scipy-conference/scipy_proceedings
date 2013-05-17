@@ -285,16 +285,75 @@ usually take as arguments
 geometric elements from ``fatiando.mesher``
 with assigned physical properties
 and return the modeled data.
-The following code sample
-shows how to interactively generate
-a 3D polygonal prism model
-and calculate its gravity anomaly
-(Figures 4 and 5):
+For example,
+the module ``fatiando.gravmag.tesseroid``
+is a Python implementation of
+the program Tesseroids (http://leouieda.github.io/tesseroids)
+and calculates the gravity anomaly
+of tesseroids, e.g. spherical prisms (Figure 4):
 
 .. code-block:: python
 
     from fatiando import gravmag, gridder, mesher
     from fatiando.vis import mpl, myv
+    model = [
+        mesher.Tesseroid(-60, -55, -30, -27, 500000, 0,
+            props={'density':200}),
+        mesher.Tesseroid(-66, -62, -18, -12, 300000, 0,
+            props={'density':-500})]
+    area = [-80, -30, -40, 10]
+    shape = (50, 50)
+    lons, lats, heights = gridder.regular(area, shape,
+        z=2500000)
+    gz = gravmag.tesseroid.gz(lons, lats, heights, model)
+    mpl.figure()
+    bm = mpl.basemap(area, 'ortho')
+    bm.drawcoastlines()
+    bm.drawmapboundary()
+    bm.bluemarble()
+    mpl.title('Gravity anomaly (mGal)')
+    mpl.contourf(lons, lats, gz, shape, 30, basemap=bm)
+    mpl.colorbar()
+    mpl.show()
+    fig = myv.figure(zdown=False)
+    scene = fig.scene
+    myv.tesseroids(model, 'density')
+    myv.continents(linewidth=2)
+    myv.earth(opacity=0.8)
+    myv.meridians(range(0, 360, 45), opacity=0.2)
+    myv.parallels(range(-90, 90, 45), opacity=0.2)
+    scene.camera.position = [21199620.406122234,
+        -12390254.839673528, -14693312.866768979]
+    scene.camera.focal_point = [-535799.97230670298,
+        -774902.33205294283, 826712.82283183688]
+    scene.camera.view_angle = 19.199999999999996
+    scene.camera.view_up = [0.33256519487680014,
+        -0.47008782429014295, 0.81756824095039038]
+    scene.camera.clipping_range = [7009580.0037488714,
+        55829873.658824757]
+    scene.camera.compute_view_plane_normal()
+    scene.render()
+    myv.show()
+
+.. figure:: gravmag_tesseroid.png
+    :align: center
+
+    Example of forward modeling using tesseroids (e.g., spherical prisms).
+    a) a tesseroid model.
+    b) the modeled gravity anomaly of the tesseroid model.
+
+The module ``fatiando.gravmag.polyprism``
+implements the method of [Plouff]_
+to forward model the gravity fields
+of a 3D right polygonal prism.
+The following code sample
+shows how to interactively generate
+a polygonal prism model
+and calculate its gravity anomaly
+(Figures 5 and 6):
+
+.. code-block:: python
+
     # Draw a polygon and make a polygonal prism
     bounds = [-1000, 1000, -1000, 1000, 0, 1000]
     area = bounds[:4]
@@ -366,7 +425,7 @@ The following code sample
 uses the "sandwich model" method [Pedersen]_
 to image the polygonal prism,
 produced in the previous section,
-based on its gravity anomaly (Figure 6):
+based on its gravity anomaly (Figure 7):
 
 .. code-block:: python
 
@@ -406,8 +465,8 @@ i.e., it estimates a physical property distribution
 that fits the observed data.
 This particular method
 requires the user to specify
-a "seed" (Figure 7) around which
-the estimated density distribution grows (Figure 8):
+a "seed" (Figure 8) around which
+the estimated density distribution grows (Figure 9):
 
 .. code-block:: python
 
@@ -523,6 +582,10 @@ References
 
 .. [Pedersen] Pedersen, L. B., 1991, Relations between potential fields and some
     equivalent sources: Geophysics, 56, 961–971, doi: 10.1190/1.1443129.
+
+.. [Plouff] Plouff, D. (1976), Gravity and magnetic fields of polygonal prisms
+    and application to magnetic terrain corrections, Geophysics, 41(4), 727,
+    doi:10.1190/1.1440645.
 
 .. [Ramachandran_Varoquaux] Ramachandran, P., and G. Varoquaux (2011), Mayavi:
     3D Visualization of Scientific Data, Computing in Science & Engineering,
