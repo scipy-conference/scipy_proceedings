@@ -181,7 +181,6 @@ some irregularly sampled data
 
     from fatiando import gridder
     from fatiando.vis import mpl
-
     area = [-50, 50, -20, 20]
     x, y = gridder.scatter(area, n=100)
     data = x**2 + y**2
@@ -191,7 +190,7 @@ some irregularly sampled data
         levels=30, interp=True)
     mpl.colorbar(orientation='horizontal')
     mpl.plot(x, y, '.k')
-
+    mpl.show()
 
 .. figure:: gridding_plotting_contourf.png
     :align: center
@@ -219,6 +218,7 @@ of this toolkit (Figure 2):
     mpl.contourf(x, y, data, shape=(50, 50), levels=30,
         interp=True, basemap=bm)
     mpl.colorbar(orientation='horizontal')
+    mpl.show()
 
 .. figure:: gridding_plotting_basemap.png
     :align: center
@@ -248,7 +248,6 @@ a 3D right rectangular prism model
 
     from fatiando import mesher
     from fatiando.vis import myv
-
     model = [mesher.Prism(5, 8, 3, 7, 1, 7)]
     bounds = [0, 10, 0, 10, 0, 10]
     myv.figure()
@@ -257,7 +256,6 @@ a 3D right rectangular prism model
     myv.wall_bottom(bounds)
     myv.wall_north(bounds)
     myv.show()
-
 
 .. figure:: gridding_plotting_3d.png
     :align: center
@@ -268,9 +266,78 @@ a 3D right rectangular prism model
 Forward modeling
 ----------------
 
+In geophysics,
+the term "forward modeling"
+is used to describe
+the process of generating model data
+from a given Earth model.
+Conversely,
+geophysical inversion is
+the process of estimating Earth model parameters
+from observed data.
 
-Gravity and magnetic inversion
-------------------------------
+The Fatiando a Terra packages
+have separate modules for
+forward modeling
+and inversion algorithms.
+The forward modeling functions
+usually take as arguments
+geometric elements from ``fatiando.mesher``
+with assigned physical properties
+and return the modeled data.
+The following code sample
+shows how to interactively generate
+a 3D polygonal prism model
+and calculate its gravity anomaly
+(Figure 4):
+
+.. code-block:: python
+
+    from fatiando import gravmag, gridder, mesher
+    from fatiando.vis import mpl, myv
+    # Draw a polygon and make a polygonal prism
+    bounds = [-1000, 1000, -1000, 1000, 0, 1000]
+    area = bounds[:4]
+    mpl.figure()
+    mpl.axis('scaled')
+    vertices = mpl.draw_polygon(area, mpl.gca(),
+        xy2ne=True)
+    model = [mesher.PolygonalPrism(vertices, z1=0,
+        z2=500, props={'density':500})]
+    # Calculate the gravity anomaly
+    shape = (100, 100)
+    x, y, z = gridder.scatter(area, 300, z=-1)
+    gz = gravmag.polyprism.gz(x, y, z, model)
+    mpl.figure()
+    mpl.axis('scaled')
+    mpl.title("Gravity anomaly (mGal)")
+    mpl.contourf(y, x, gz, shape=(50, 50),
+        levels=30, interp=True)
+    mpl.colorbar()
+    mpl.polygon(model[0], '.-k', xy2ne=True)
+    mpl.set_area(area)
+    mpl.m2km()
+    mpl.show()
+    myv.figure()
+    myv.polyprisms(model, 'density')
+    myv.axes(myv.outline(bounds),
+            ranges=[i*0.001 for i in bounds])
+    myv.wall_north(bounds)
+    myv.wall_bottom(bounds)
+    myv.show()
+
+.. figure:: forward_modeling_polyprism.png
+    :align: center
+
+    Example of forward modeling the gravity anomaly of a 3D polygonal prism.
+    a) interactive drawing of the polygonal prism as seen from above.
+    b) forward modeled gravity anomaly.
+    c) 3D plot of the polygonal prism.
+
+
+
+Gravity and magnetic methods
+----------------------------
 
 
 Inverse problem solvers
