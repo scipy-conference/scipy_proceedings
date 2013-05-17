@@ -17,145 +17,109 @@ Hyperopt: A Python Library for Optimizing the Hyperparamters of Machine Learning
 
 .. class:: abstract
 
-    The difficulty of manual algorithm configuration causes three problems in empirical machine learning:
-    (1) research claims are not easily reproduced by fellow researchers and practitioners,
-    (2) good performance does not transfer readily to data sets beyond those actually used to motivate new algorithms, and
-    (3) algorithm researchers {\em themselves} may fail to discover how good
-    their algorithms can be because they overlook part of the configuration
-    space.
-    Model-based optimization strategies (i.e. based on Bayesian optimization) have emerged as viable and effective
-    alternatives to standard practice of grid-assisted manual search.
-    The Hyperopt library (Hyperopt) makes model-based optimization available
-    in Python, and provides an implementation of the TPE algorithm, which has
-    proven to be an effective strategy for optimizing neural networks, deep
-    networks, and computer vision systems.
+    Model-based optimization (i.e. based on Bayesian optimization) is one of the most efficient
+    methods for optimizing expensive functions over awkward spaces.
+    The Hyperopt library (Hyperopt) provides model-based optimization in Python.
+    Hyperopt provides an implementation of the TPE algorithm, which has proven to be an effective strategy for optimizing neural networks, deep networks, and computer vision systems.
+    Hyperopt supports parallel and asynchronous evaluation of hyperparameter configurations via its MongoDB backend.
+    This paper describes the usage and architecture of hyperopt.
 
 .. class:: keywords
 
-   terraforming, desert, numerical perspective
+    Bayesian optimization, hyperparameter optimization, model selection
+
 
 Introduction
 ------------
 
-With code-highlighting:
+Sequential model-based optimization (SMBO, also known as Bayesian optimization) is a family of optimization methods that includes some of the most efficient
+(in terms of function evaluations) methods currently available.
+Originally developed for oil exploration [mockus78]_
+SMBO methods are generally applicable to scenarios in which a user wishes to minimize some
+scalar-valued function :math:`f(x)` that is costly to evaluate, e.g. in terms of time or money.
+Compared with standard optimization strategies such as conjugate gradient descent methods,
+model-based optimization algorithms invest more time between function
+evaluations in order to reduce the number of function evaluations overall.
 
-.. code-block:: python
 
-   def sum(a, b):
-       """Sum two numbers."""
+Sequential Model-Based Optimization
+-----------------------------------
 
-       return a + b
+* Does not require gradient
 
-Maybe also in another language, and with line numbers:
+* Can leverage function smoothness even without analytic gradient
 
-.. code-block:: c
-   :linenos:
+* Works over awkward spaces (product of real-valued, discrete, conditional variables)
 
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
+* Can parallelize the evaluation of :math:`f` new points :math:`x`
 
-Or a snippet from the above code, starting at the correct line number:
 
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
-
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
- 
-Important Part
+Hyperopt Usage
 --------------
 
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
+Basic usage of the hyperopt library is illustrated by the following code.
 
-.. math::
+.. code-block::python
 
-   g(x) = \int_0^\infty f(x) dx
+    # define an objective function
+    def objective(args):
+        case, val = args
+        if case == 'case 1':
+            return val
+        else:
+            return val ** 2
 
-or on multiple, aligned lines:
+    # define a search space
+    from hyperopt import hp
+    space = hp.choice('a',
+        [
+            ('case 1', 1 + hp.lognormal('c1', 0, 1)),
+            ('case 2', hp.uniform('c2', -10, 10))
+        ])
 
-.. math::
-   :type: eqnarray
+    # minimize the objective over the space
+    from hyperopt import fmin, tpe
+    best = fmin(objective, space, algo=tpe.suggest, max_evals=100)
 
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
-
-
-The area of a circle and volume of a sphere are given as
-
-.. math::
-   :label: circarea
-
-   A(r) = \pi r^2.
-
-.. math::
-   :label: spherevol
-
-   V(r) = \frac{4}{3} \pi r^3
-
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
-pulvinar id metus.
-
-.. figure:: figure1.png
-
-   This is the caption. :label:`egfig`
+    print best
+    # -> {'a': 1, 'c2': 0.01420615366247227}
+    print hyperopt.space_eval(space, best)
+    # -> ('case 2', 0.01420615366247227}
 
 
-.. table:: This is the caption for the materials table. :label:`mtable`
-
-   +------------+-------+
-   | Material   | Units |
-   +------------+-------+
-   | Stone      | 3     |
-   +------------+-------+
-   | Water      | 12    |
-   +------------+-------+
-
-We show the different quantities of materials required in Table
-:ref:`mtable`.
-
-Perhaps we want to end off with a quote by Lao Tse:
-
-  *Muddy water, let stand, becomes clear.*
+This code illustrates hyperopt's `fmin` function.
+The `fmin` function is the main interface for both synchronous and asynchronous
+(parallel, including across hosts)
+execution.
 
 
-.. Customised LaTeX packages
-.. -------------------------
 
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
+* fmin
+* configuration language
+* returning more than the loss function
+* Trials
+* MongoDB
+* Parallel/Asynchronous optimization
+* MongoTrials
+* algorithms
+* pyll
+* vectorization?
+* TPE
 
-.. ::
 
-..   .. latex::
-..      :usepackage: somepackage
+Planned Future Work
+-------------------
 
-..      Some custom LaTeX source here.
+Drivers for other systems: 
+* Jasper Snoek's "spearmint" package for Gaussian process-based Bayesian optimization
+* Frank Hutter's SMAC and ROAR algorithms, as implemented in XXX.
+
+
+Wrapper layer around sklearn.
+
 
 References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
-
 
