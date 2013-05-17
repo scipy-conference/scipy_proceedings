@@ -72,7 +72,7 @@ in mind. Map base itself provides very limited functionality as it is catering t
 
 2D image types are all derived from a GenericMap class that provides 2D specific calibration and coordinate methods. This super class 
 is designed to be subclassed by subclasses specific to instruments or detectors. To instantiate the correct subclass of GenericMap a 
-MapFacotry 
+MapFactory was developed which is accecible to the user through a class named Map.
 
 The 2D image data processed by Map comes from a variety of instruments with different header parameters and processing reqirements. 
 This is catered for in Map by defining "sources" for each instrument, which subclass GenericMap, the base 2D class. These sources 
