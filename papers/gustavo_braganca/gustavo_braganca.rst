@@ -1,14 +1,15 @@
-:author: Gustavo Braganca
+:author: Gustavo Bragança
 :email: ga.braganca@gmail.com
-:institution: Observatorio Nacional, Brazil
+:institution: Observatório Nacional, Brazil
 
 :author: Simone Daflon
 :email: daflon@on.br
-:institution: Observatorio Nacional, Brazil
+:institution: Observatório Nacional, Brazil
 
 :author: Katia Cunha
 :email: cunha@email.noao.edu
-:institution: Observatorio Nacional, Brazil; National Optical Astronomy Observatory, University of Arizona, U. S. A.
+:institution: Observatório Nacional, Brazil; National Optical Astronomy 
+              Observatory, University of Arizona, U. S. A.
 
 :author: Thomas Bensby
 :email: tbensby@astro.lu.se
@@ -30,14 +31,14 @@ Using Python to Study Rotational Velocity Distributions of Hot Stars
 
    Stars are a fundamental pieces that compose our Universe. By 
    studying them we can better comprehend the environment in which we 
-   live. On this work, we have studied a sample of almost 350 nearby OB 
-   stars and have  characterized them in aspects of their temperature 
-   and projected rotational velocity.
+   live. On this work, we have studied a sample of 350 nearby O and B 
+   stars and have  characterized them in aspects of their multiplitcity, 
+   temperature, spectral classifications, and projected rotational 
+   velocity.
    
    Python is a robust language with a steep learning curve, i.e. one 
-   can make rapid progress with it. In this proceeding, we will be 
-   discussing our  progress in learning Python at the same time in 
-   which the research were being made.
+   can make rapid progress with it. In this proceeding, we will 
+   present how we used Python on our research.
 
 .. class:: keywords
 
@@ -48,13 +49,14 @@ Introduction
 
 The study of O and B stars are an important key to understand how star 
 formation occurs. When these stars born, they have the greatest mass, 
-temperature and rotation. Their mass can achieve **.....**, their 
-temperatures, **....**, and rotation up to 400 km/s. 
+temperature and rotation. Their mass can go from 2.5 up to 120 times 
+the Solar mass, their temperatures from 11,000 K up to 60,000 K, 
+and rotation up to 400 km/s. 
 
-By definition, a star is born when it start synthetizing Hydrogen into
+By definition, a star is born when it start synthesizing Hydrogen into
 Helium through nuclear fusion. The star perform this nucleosynthesis 
 during somewhat 90% of their life. When stars are at this stage, they 
-are called dwarfs. Most of the studied stars of this work are dwarfs. 
+are called dwarfs. Most of the studied stars on this work are dwarfs. 
 Due to their young age, dwarf stars do not have lost too much of their 
 mass, and so, the most of their stellar properties are kept unchanged. 
 This help us understand how this stars formed.
@@ -66,35 +68,40 @@ bounded. With their unchanged properties, it is possible to trace the
 membership of these stars and then verify if some stars are from the 
 same association.
 
-The Python programming language is very well suited to scientific 
-studies. The scipy, numpy and matplotlib are the basic packages to 
-start doing scientific research using python. Also, on the last years, 
-it has been widely adopted on the Astronomic community. Because this, 
-several packages are being translated to python or just being created. 
-The existence of these packages are one of the reasons that attracted 
-us to use python on our research. Its easy learning and its script 
-nature are other reasons as well. The script nature allows the 
-researcher to have a dynamic workflow and not to loose too much time 
+The Python programming language is very powerful, robust, clean and 
+easy to learn. 
+The script nature allows the 
+programmer to have a dynamic workflow and not to loose too much time 
 with debugging and compiling.
+With a set of packages, like `Scipy <http://www.scipy.org/>`__, 
+`Numpy <http://www.numpy.org/>`__ and 
+`Matplotlib <http://matplotlib.org/>`__, Python becomes very suited to 
+scientific research. 
+On the last years, 
+it has been widely adopted on the Astronomic community and 
+several astronomical packages are being translated to Python or just 
+being created. 
+All of these motivated us to use Python on our research.
 
-On this proceedings, we relate how we used python on our research. A 
+On this proceedings, we relate how we used Python on our research. A 
 more profound scientific analysis can be found at [Brag12]_.
 
 Research development
 --------------------
 
-Initial stages
-~~~~~~~~~~~~~~
+Sample Characterization
+~~~~~~~~~~~~~~~~~~~~~~~
 
-As we have said before, stars usually are born in groups. Because of 
-that, a great majority of them are binaries or belongs to multiple 
-systems. For a spectroscopic study, as was this, the only problem 
-occurs when the spectrum of one observation have two or more objects. 
-Since the study of these stars were outside the scope of our project, 
-we selected those stars on our sample to further discard them. But 
-before discarding them, we used Python to visualize our sample and the 
-distribution of these objects. We used the matplotlib package to do a 
-polar plot of our objects in Galactic coordinates:
+
+The observed sample of stars is displayed in Figure :ref:`coords` in 
+terms of their Galactic longitude and heliocentric distance projected 
+onto the Galactic plane. The stars in the sample are all nearby
+(:math:`\sim80`\% are within 700 pc) and relatively bright 
+(:math:`V\sim 5-10`).
+
+We used Python allied to the Matplotlib package to construct the plot 
+presented of Figure :ref:`coords` and all plots of this work. The code 
+for this plot is:
 
 .. code-block:: python
 
@@ -106,15 +113,16 @@ polar plot of our objects in Galactic coordinates:
    
    plt.polar(longitude_vector, proj_dist, 'k.')
    for i in binary_list:
-       for j in range(len(coordinate_list)):
+       for j, star in enumerate(stars_id_list):
            #Compare stellar IDs
-           if i == coordinate_list[j, 0]:     
+           if i == star:     
                plt.plot(longitude_vector[j], 
                         proj_dist[j], 
-                        'wo', ms=3, mec='r')  
-                        
-               
-And the resulting plot is showed in Figure :ref:`coords`.                 
+                        'wo', ms=3, mec='r') 
+   # Configure aesthetics and save
+   plt.ylim([0,1])
+   plt.yticks([0.7]])
+   plt.xlabel(u'Longitude (${\degree}$)')
                         
 .. figure:: f1.png
 
@@ -123,25 +131,68 @@ And the resulting plot is showed in Figure :ref:`coords`.
    circles are spectroscopic binaries/multiple systems identified in 
    our sample. :label:`coords`
    
-Our sample is composed of high-resolution spectroscopic observations. 
+As we have said before, stars usually are born in groups. 
+Thus, a great majority of them are binaries or belong to multiple 
+systems. For a spectroscopic study, as was this, the only problem 
+occurs when the spectrum of one observation have two or more objects. 
+The identification of these objects were done on a visual inspection 
+and with support of the works of [Lefe09]_ and [Egle08]_.
+Since the study of these stars were outside the scope of our project, 
+we discarded them. These objects are represented on Figure 
+:ref:`coords` as red circles.
+   
+Our sample is composed of high-resolution spectroscopic observations 
+with wavelength coverage from 3350 up to 9500 Angstrons.
 Sample spectra are shown
 in Figure :ref:`spectra` in the spectral region between 4625 and 
-4665 Angstrom, which contains spectral lines of C, N, O, and Si.
-To analyse the spectra images we have used `IRAF <http://iraf.noao.
-edu/>`__ (Image and Reduction Analysis Facility), which is a suite of 
-softwares to handle astronomic images developed by the NOAO [1]_. 
-We had to do several tasks on our spectra (e.g. cut it in a certain 
-wavelength and normalization) to prepare our sample to further 
-analysis. Some of these tsaks had to be done manully on a one-by-on 
-basis, but some other were automated. The automation ould have bnn 
-done using the IRAF scripting, but fortunately, the STSCI [2]_ has 
-developed a python wrapper for IRAF called `PyRAF <http://www.stsci.
-edu/institute/software_hardware/pyraf>`__.
-For example, we show how we used IRAF task SCOPY to cut images from a 
-list using pyRAF:
+4665 Angstrom, which contains spectral lines of C, N, O, and Si. The 
+code to plot this Figure is:
 
-.. [1] National Optical Astronomy Observatory
-.. [2] Space Telescope Science Institute
+.. code-block:: python
+
+   # set some constants
+   # stars ID
+   HIP = ['53018', '24618', '23060', '36615', '85720']
+   # temperature of each star
+   T = ['16540', '18980', '23280', '26530', '32420']
+   # spectral lines to be identified
+   lines = ['N II', 'Si IV', 'N III', 'O II', 'N III', 
+            'O II', 'N II', 'C III', 'O II', 'Si IV',
+            'O II']
+   # wavelength of spectral lines
+   lines_coord = [4632.05, 4632.80, 4635.60, 4640.45, 
+                  4642.10, 4643.50, 4644.89, 4649.00, 
+                  4650.84, 4656.00, 4663.25]
+   # displacement values               
+   displace = [0, 0.3, 0.6, 0.9, 1.2]
+
+   # iterate on stars
+   for i, star_id in enumerate(HIP):
+      # load spectra
+      norm = np.loadtxt('HIP' + star_id + '.dat')
+      # if it is the first star, 
+      # make small correction on wavelength
+           if i == 0:
+         norm[:,0] += 1
+      # plot and add texts
+      plt.plot(norm[:,0], norm[:,1] + displace[i], '-')
+      plt.text(4621, 1.065 + displace[i], 
+               'HIP '+ star_id, fontsize = 10)
+      plt.text(4621, 1.02 + displace[i], 
+               'T(Q) = ' + T[i] + ' K', fontsize = 10)
+
+   # add line identification
+   for i, line_id in enumerate(lines):
+      plt.vlines(lines_coord[i], 2.25, 2.40, 
+                 linestyles = 'dashed', lw=0.5)
+      plt.text(lines_coord[i], 2.45, line_id, 
+               fontsize = 8, ha = 'center', 
+               va = 'bottom', rotation =' vertical')
+
+   # define aesthetics and save	
+   plt.xlabel(u'Wavelength (\u212B )')
+   plt.ylabel('Flux')
+   plt.axis([4620, 4670, 0.85, 2.55])
 
 .. figure:: f2.png
 
@@ -150,12 +201,32 @@ list using pyRAF:
    arbitrarily displaced in intensity for better viewing.
    :label:`spectra`
 
+
+To analyse the spectra images we have used `IRAF <http://iraf.noao.
+edu/>`__ (Image and Reduction Analysis Facility), which is a suite of 
+softwares to handle astronomic images developed by the NOAO [1]_. 
+We had to do several tasks on our spectra (e.g. cut it in a certain 
+wavelength and normalization) to prepare our sample to further 
+analysis. Some of these tasks had to be done manually and on a 
+one-by-one basis, but some other were automated. The automation could 
+have been done through IRAF scrips, but fortunately, the 
+STSCI [2]_ has developed a Python wrapper for IRAF called 
+`PyRAF <http://www.stsci.edu/institute/software_hardware/pyraf>`__.
+For example, we show how we used IRAF task SCOPY to cut images from a 
+list using pyRAF:
+
+.. [1] National Optical Astronomy Observatory
+.. [2] Space Telescope Science Institute
+
+
 .. code-block:: python
 
    from pyraf import iraf
    
-   iraf.noao.onedspec.scopy.w1 = 4050  # Starting wavelength
-   iraf.noao.onedspec.scopy.w2 = 4090  # Ending wavelength
+   # Starting wavelength
+   iraf.noao.onedspec.scopy.w1 = 4050
+   # Ending wavelength  
+   iraf.noao.onedspec.scopy.w2 = 4090  
    
    for name in list_of_stars:
        # Spectrum to be cut
@@ -166,18 +237,13 @@ list using pyRAF:
        # Execute
        iraf.noao.onedspec.scopy(mode = 'h')
 
-
-
 We also have performed a spectral classification on the stars and, 
 since this was not done using Python, more information can be obtained 
 on the original paper. 
 
-Effective temperature through photometric calibration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 We have obtained effective temperature (Teff) from a calibration 
 presentend in [Mass89]_ that uses the photometric reddening-free 
-parameter index  :math:`Q` ([John58]_). 
+parameter index :math:`Q` ([John58]_). 
 
 A histogram showing the distribution of effective temperatures for OB 
 stars with available photometry is shown in Figure :ref:`TqHist`.
@@ -199,13 +265,18 @@ measure of He I lines and interpolation in a synthetic grid from
 [Dafl07]_.
 We do not used Python to obtain :math:`v\sin i`, so, for more 
 information, we suggest the reader to look in the original paper. 
-However, for the analysis we used Python, specially the matplotlib 
-package for visualization analysis and the Scipy.stats package to 
-statistics analysis.
+However, to analyze the stars :math:`v\sin i` we used Python, specially 
+the matplotlib package for visualization analysis and the 
+`Scipy.stats <http://docs.scipy.org/doc/scipy/reference/stats.html>`__ 
+package to statistics analysis.
 
-The boxplot is a great plot to compare several distributions side by 
+The `boxplot <http://en.wikipedia.org/wiki/Box_plot>`__ 
+is a great plot to compare several distributions side by 
 side. On this work, we used a boxplot to analyze the :math:`v\sin i` 
-for each spectral type subset, as can be seen on Figure :ref:`boxplot`. 
+for each spectral type subset, as can be seen on Figure :ref:`boxplot`.
+The average :math:`v\sin i` for the stars in each spectral type bin 
+is roughly constant, even considering the least populated bins. 
+The code used to plot it was:
 
 .. figure:: f7.png
 
@@ -214,12 +285,8 @@ for each spectral type subset, as can be seen on Figure :ref:`boxplot`.
    is roughly constant, even considering the least populated bins. 
    :label:`boxplot`
    
-The code used to plot it was:
-
 .. code-block:: python
 
-   import matplotlib.pyplot as plt
-   
    #Start boxplot
    bp = plt.boxplot(box, notch=0)
    # Define color of medians
@@ -239,17 +306,16 @@ The code used to plot it was:
    [plt.text(i+1, 395, WSint(length[i]), fontsize=12,
     horizontalalignment='center') for i in range(0,8)]
    # Save figure
-   plt.savefig('boxplot.eps') 
 
 And the distribution of :math:`v\sin i` for the stars of our sample is 
 presented on Figure :ref:`vsiniDist`. The distribution has
-a modest peak at low :math:`v\sin i` (:math:`\sim0–50` km/s) but it is 
+a modest peak at low :math:`v\sin i` (:math:`\sim0-50` km/s) but it is 
 overall flat (a broad distribution) for :math:`v\sin i` roughly between 
-0 and 150 km/s ; the number of stars drops for higher values of
-:math:`v\sin i`. [Abt02] provide the cornerstone work of the 
+0 and 150 km/s; the number of stars drops for higher values of
+:math:`v\sin i`. [Abt02]_ provide the cornerstone work of the 
 distributions of projected rotational velocities of the so-called 
 field OB stars. To compare our sample with Abt's, we subselected our 
-sample on magnitude and Abt's sample in spectral type. Both 
+sample on magnitude and Abt's sample on spectral type. Both 
 distributions are shown on bottom panel of Figure :ref:`vsiniDist`. 
 The code used to build this plot follows:
 
@@ -300,15 +366,14 @@ The code used to build this plot follows:
    ax2.set_yticks(np.arange(0,0.5,0.1))
    ax2.set_ylim([0,0.45])
    plt.subplots_adjust(hspace=0)
-   plt.savefig('vsini_distribution.eps')
-     
    
 There is evidence that there is real differences between the 
 :math:`v\sin i` distributions of cluster members when compared to 
 field ([Wolf07]_, [Huan08]_); there are fewer slow rotators in the 
 clusters when compared to 
 the field or the stars in clusters tend to rotate faster.    
-Using literature results, we separated our sample on three different 
+Using literature results ([Hump84]_, [Brow94]_, [Zeeu99]_, [Robi99]_, 
+[Merm03]_, [Tetz11]_), we separated our sample on three different 
 categories accordingly to the star's membership: field, 
 cluster, association and runaway. 
 We have merged our sample with that of [Dafl07]_ in which their results 
@@ -373,9 +438,9 @@ with most stars being cooler than 28,000 K.
 We calculated the projected 
 rotational velocities using the full width at half measure of He I 
 lines and found that the distribution has
-a modest peak at low :math:`v\sin i` (:math:`\sim0–50` km/s) but it is 
+a modest peak at low :math:`v\sin i` (:math:`\sim0-50` km/s) but it is 
 overall flat (a broad distribution) for :math:`v\sin i` roughly between 
-0 and 150 km/s ; the number of stars drops for higher values of
+0 and 150 km/s; the number of stars drops for higher values of
 :math:`v\sin i`. 
 
 We subselected our sample on membership basis and, when the OB 
@@ -402,7 +467,7 @@ Michigan and of NOAO on his visit and also thanks all
 Python developers for their great work. G.A.B. also acknowledges 
 Conselho Nacional de
 Desenvolvimento Cientifico e Tecnologico (CNPq-Brazil) and Coordenacao 
-de Aperfoiçamento de Pessoas de Nível Superior
+de Aperfeiçoamento de Pessoas de Nível Superior
 (CAPES - Brazil) for his fellowship.
 T.B. was funded by grant
 No. 621-2009-3911 from the Swedish Research Council (VR).
@@ -412,20 +477,36 @@ visit. K.C. acknowledges funding from NSF grant AST-907873.
 This research has made use of the SIMBAD database, operated
 at CDS, Strasbourg, France.
 
-
-
 References
 ----------
 
 .. [Abt02]  Abt, H. A., Levato, H., Grosso, M., Astrophysical Journal, 
             573: 359, 2002
-.. [Brag12] Braganca, G. A, et al., Astronomical Journal, 144:130, 2012. 
+.. [Brag12] Braganca, G. A, et al., Astronomical Journal, 144:130, 2012.
+.. [Brow94] Brown, A. G. A., de Geus, E. J., de Zeeuw, P. T., 
+            Astronomy \& Astrophysics, 289: 101, 1994 
 .. [Dafl07] Daflon, S., Cunha, K., de Araujo, F. S. W., & Przybilla, 
             N., Astronomical Journal, 134:1570, 2007
+.. [Egle08] Eggleton, P. P., & Tokovinin, A. A., M.N.R.A.S., 
+            389:869, 2008           
 .. [John58] Johnson, H. L., Lowell Obs. Bull., 4:37, 1958
 .. [Huan08] Huang, W., & Gies, D. R., Astronomical Journal, 683: 1045, 
             2008
+.. [Hump84] Humphreys, R. M., McElroy, D. B.,
+            Astrophysical  Journal, 284:565, 1984
+.. [Lefe09] Lefevre, L., Marchenko, S. V., Moffat, A. F. J., Acker, A., 
+            Astronomy \& Astrophysics, 507:1141, 2009
 .. [Mass89] Massey, P., Silkey, M., Garmany, C. D., Degioia-Eastwood, 
             K., Astronomical Journal, 97:107, 1989,
+.. [Merm03] Mermilliod, J.-C., Paunzen, E.,
+            Astronomy \& Astrophysics, 410:51, 2003
+.. [Robi99] Robichon, N., Arenou, F., Mermilliod, J.-C., Turon, C.,
+            Astronomy \& Astrophysics, 345:471, 1999
+.. [Tetz11] Tetzlaff, N., Neuhäuser, R., Hohle, M. M., M.N.R.A.S., 
+            410:190, 2011
 .. [Wolf07] Wolff, S. C., Strom, S. E., Dror, D., & Venn, K., 
             Astronomical Journal, 133:1092, 2007
+            
+.. [Zeeu99] de Zeeuw, P. T., Hoogerwerf, R., de Bruijne, J. H. J., 
+            Brown, A. G. A., Blaauw, A., Astronomical Journal, 
+            117:354, 1999
