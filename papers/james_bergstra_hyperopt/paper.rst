@@ -63,7 +63,7 @@ To experts and non-experts alike, adjusting hyperparameters to optimize end-to-e
 Hyperparameters come in many varieties--continuous-valued ones with and without bounds, discrete ones that are either ordered or not, and conditional ones that do not even always apply
 (e.g., the parameters of an optional pre-processing stage).
 Because of this variety, conventional continuous and combinatorial optimization algorithms either do not directly apply,
-or else operate without leveraging valuable structure in the search space.
+or else operate without leveraging valuable structure in the configuration space.
 Common practice for the optimization of hyperparameters is
 (a) for algorithm developers to tune them by hand on representative problems to get good rules of thumb and default values,
 and (b) for algorithm users to tune them manually for their particular prediction problems, perhaps with the assistance of [multiresolution] grid search.
@@ -71,9 +71,9 @@ However, when dealing with more than a few hyperparameters (e.g. 5) this standar
 in such cases even random search has been shown to be competitive with domain experts [BB12]_.
 
 Hyperopt [Hyperopt]_ provides algorithms and software infrastructure for carrying out hyperparameter optimization for machine learning algorithms.
-Hyperopt provides an optimization interface that distinguishes a *search space* and an *evaluation function* that assigns real-valued
-*loss values* to points within the search space.
-Unlike the fmin interface in [SciPy]_ or [Matlab]_, Hyperopt's fmin interface requires users to specify the search domain as a probability distribution.
+Hyperopt provides an optimization interface that distinguishes a *configuration space* and an *evaluation function* that assigns real-valued
+*loss values* to points within the configuration space.
+Unlike the fmin interface in [SciPy]_ or [Matlab]_, Hyperopt's fmin interface requires users to specify the configuration space as a probability distribution.
 Specifying a probability distribution rather than just bounds and hard constraints allows domain experts to encode more of their intuitions
 regarding which values are plausible for various hyperparameters.
 Like SciPy's new fmin interface, hyperopt makes the SMBO algorithm itself an interchangeable component, so it is easy for a user to search a specific
@@ -99,16 +99,16 @@ Hyperopt can in principle be used for any SMBO problem, but our development and 
 hyperparameters for neural networks [XXX]_, deep networks [XXX]_, and computer vision systems for object recognition [XXX]_.
 
 
-Getting Started
----------------
+Getting Started with Hyperopt
+-----------------------------
 
 This section introduces basic usage of the ``hyperopt.fmin`` function, which is hyperopt's basic optimization driver. 
-We will look at how to write an objective function that ``fmin`` can optimize, and how to describe a search space that ``fmin`` can search.
+We will look at how to write an objective function that ``fmin`` can optimize, and how to describe a configuration space that ``fmin`` can search.
 
 Hyperopt shoulders the responsibility of finding the best value of a scalar-valued,
 possibly-stochastic function over a set of possible arguments to that function.
 Whereas most optimization packages assume that these inputs are drawn from a vector space,
-Hyperopt encourages you, the user, to describe your search space in more detail.
+Hyperopt encourages you, the user, to describe your configuration space in more detail.
 Hyperopt is typically aimed at very difficult search settings, especially ones with many hyperparameters and a small budget for function evaluations.
 By providing more information about where your function is defined, and where you think the best values are,
 you allow algorithms in hyperopt to search more efficiently.
@@ -120,49 +120,126 @@ The way to use hyperopt is to describe:
 * a trials database [optional]
 * the search algorithm to use [optional]
 
-This section will explain how to describe the objective function, search space, and optimization algorithm.
+This section will explain how to describe the objective function, configuration space, and optimization algorithm.
 Section XXX below will explain how to use a non-default trials database to analyze the results of a search,
 and to make parallel search possible.
 
 
-Basic usage step 1: define an objective function
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Step 1: define an objective function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Hyperopt provides a few levels of increasing flexibility / complexity when it comes to specifying an objective function to minimize.
 In the simplest case, an objective function is a Python function that accepts a single argument that stands for :math:`x` (which can be an arbitrary object),
 and returns a single scalar value that represents the *loss* (:math:`f(x)`) incurred by that argument.
 
-So for a trivial example, if we want to minimize a quadratic function :math:`q(x) := x^2` then we could define our objective to be ``q(x)``.
+So for a trivial example, if we want to minimize a quadratic function :math:`q(x, y) := x^2 + y^2` then we could define our objective ``q`` as follows:
 
 .. code-block:: python
 
-    def q(x):
-        return x ** 2
+    def q(args):
+        x, y = args
+        return x ** 2 + y ** 2
 
-Hyperopt can also be used optimize over more general Python objects, such as the ``w`` function below that optimizes over dictionaries with "type" and either "x" and "y" keys.
-
-.. code-block:: python
-
-    def w(pos):
-        t = pos['type']
-        if t:
-            return pos['x'] ** 2
-        else:
-            return math.exp(pos['y'])
-
-Part of what makes Hyperopt so convenient for optimizing machine learning hyperparameters is
-this possibility of organizing a arguments for minimization within Python data structures, so we'll use this contrived ``w`` function as our 
-working example in the next few sections.
-Hyperopt's functions can be more complex in both the arguments they accept and their return value.
-We will use this simple calling and return convention for the next few sections that introduce search spaces, optimization algorithms, and basic usage
+Although hyperopt accepts objective functions that are more complex in both the arguments they accept and their return value,
+we will use this simple calling and return convention for the next few sections that introduce configuration spaces, optimization algorithms, and basic usage
 of the fmin interface.
 Later, as we explain how to use the Trials object to analyze search results, and how to search in parallel with a cluster,
 we will introduce different calling and return conventions.
 
+Step 2: define a configuration space
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A *configuration space* object describes the domain over which hyperopt is allowed to search.
+If we want to search :math:`q` over values of :math:`x \in [0, 1]`, and values of :math:`y \in {\mathbb R}` ,
+then we can write our search space as:
+
+.. code-block:: python
+
+    from hyperopt import hp
+
+    space = [hp.uniform('x', 0, 1), hp.normal('y', 0, 1)]
+
+Note that for both :math:`x` and :math:`y` we have specified not only the hard bound constraints, but also
+we have given hyperopt an idea of what range of values for :math:`y` to prioritize. 
 
 
-Basic usage step 2: define a search space
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Step 3: choose a search algorithm
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Choosing the search algorithm is currently as simple as passing ``algo=hyperopt.tpe.suggest`` or ``algo=hyperopt.rand.suggest``
+as a keyword argument to ``hyperopt.fmin``.
+To use random search to our search problem we can type:
+
+.. code-block:: python
+
+    from hyperopt import hp, fmin, rand, tpe, space_eval
+    best = fmin(q, space, algo=rand.suggest)
+    print best
+    # =>  XXX
+    print space_eval(space, best)
+    # =>  XXX
+
+    best = fmin(q, space, algo=tpe.suggest)
+    print best
+    # =>  XXX
+    print space_eval(space, best)
+    # =>  XXX
+
+
+The search algorithms are global functions which may generally have extra keyword arguments
+that control their operation beyond the ones used by ``fmin`` (they represent hyper-hyper-parameters!).
+The intention is that these hyper-hyper-parameters are set to default that work for a range of configuration problems,
+but if you wish to change them you can do it like this:
+
+.. code-block:: python
+
+    from functools import partial
+    from hyperopt import hp, fmin, tpe
+    algo = partial(tpe.suggest, n_startup_jobs=10)
+    best = fmin(q, space, algo=algo)
+    print best
+    # =>  XXX
+
+
+In a nutshell, these are the steps to using hyperopt.
+Implement an objective function that maps configuration points to a real-valued loss value,
+define a configuration space of valid configuration points,
+and then call ``fmin`` to search the space to optimize the objective function.
+The remainder of the paper describes
+(a) how to describe more elaborate configuration spaces,
+especially ones that enable more efficient search by expressing *conditional variables*,
+(b) how to analyse the results of a search as stored in a ``Trials`` object,
+and (c) how to use a cluster of computers to search in parallel.
+
+
+
+Configuration Spaces
+--------------------
+
+Part of what makes Hyperopt a good fit for optimizing machine learning hyperparameters is that
+it can optimize over general Python objects, not just e.g. vector spaces.
+Consider the simple function ``w`` below, which optimizes over dictionaries with "type" and either "x" and "y" keys:
+
+.. code-block:: python
+
+    def w(pos):
+        if pos['use_var'] == 'x':
+            return pos['x'] ** 2
+        else:
+            return math.exp(pos['y'])
+
+To be efficient about optimizing ``w`` we must be able to
+(a) describe the kinds of dictionaries that ``w`` requires and
+(b) correctly associate ``w``'s return value to the elements of ``pos`` that actually contributed to that return value.
+Hyperopt's configuration space description objects address both of these requirements.
+This section describes the nature of configuration space description objects,
+and how the description language can be extended with new expressions,
+and how the ``choice`` expression supports the creation of *conditional variables* that support
+efficient evaluation of structured search spaces of the sort we need to optimize ``w``.
+
+
+Configuration space primitives
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A search space is a stochastic expression that always evaluates to a valid input argument for your objective function.
 A search space consists of nested function expressions.
@@ -222,72 +299,193 @@ with a unique string.  The other hyperparameter distributions at our disposal as
     as compared with more distant integer values (e.g. random seeds).
 
 
+Structure in configuration spaces
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-
-It's best to think of search spaces as stochastic argument-sampling programs. For example
+Search spaces can also include lists, and dictionaries.
+Using these containers make it possible for a search space to include multiple variables (hyperparameters).
+The following code fragment illustrates the syntax:
 
 .. code-block:: python
 
     from hyperopt import hp
-    space = hp.choice('a',
-        [
-            ('case 1', 1 + hp.lognormal('c1', 0, 1)),
-            ('case 2', hp.uniform('c2', -10, 10))
-        ])
 
-The result of running this code fragment is a variable `space` that refers to a graph of expression identifiers and their arguments.
-Nothing has actually been sampled, it's just a graph describing *how* to sample a point.
-The code for dealing with this sort of expression graph is in `hyperopt.pyll` and I will refer to these graphs as *pyll graphs* or *pyll programs*.
+    list_space = [
+        hp.uniform('a', 0, 1),
+        hp.loguniform('b', 0, 1)]
 
-If you like, you can evaluate a sample space by sampling from it.
+    tuple_space = (
+        hp.uniform('a', 0, 1),
+        hp.loguniform('b', 0, 1))
+
+    dict_space = {
+        'a': hp.uniform('a', 0, 1),
+        'b': hp.loguniform('b', 0, 1)}
+
+There should be no functional difference between using list and tuple syntax to describe a sequence of elements in a configuration space,
+but both syntaxes are supported for everyone's convenience.
+
+Creating list, tuple, and dictionary spaces as illustrated above is just one example of nesting. Each of these container types can be nested
+to form deeper configuration structures:
 
 .. code-block:: python
 
-    import hyperopt.pyll.stochastic
-    print hyperopt.pyll.stochastic.sample(space)
+    nested_space = [
+        [ {'case': 1, 'a': hp.uniform('a', 0, 1)},
+          {'case': 2, 'b': hp.loguniform('b', 0, 1)}],
+        'extra literal string',
+        hp.randint('r', 10) ]
 
-This search space described by `space` has 3 parameters:
-* 'a' - selects the case
-* 'c1' - a positive-valued parameter that is used in 'case 1'
-* 'c2' - a bounded real-valued parameter that is used in 'case 2'
-
-One thing to notice here is that every optimizable stochastic expression has a *label* as the first argument.
-These labels are used to return parameter choices to the caller, and in various ways internally as well.
-
-A second thing to notice is that we used tuples in the middle of the graph (around each of 'case 1' and 'case 2').
-Lists, dictionaries, and tuples are all upgraded to "deterministic function expressions" so that they can be part of the search space stochastic program.
-
-A third thing to notice is the numeric expression `1 + hp.lognormal('c1', 0, 1)`, that is embedded into the description of the search space.
-As far as the optimization algorithms are concerned, there is no difference between adding the 1 directly in the search space
-and adding the 1 within the logic of the objective function itself.
-As the designer, you can choose where to put this sort of processing to achieve the kind modularity you want.
-Note that the intermediate expression results within the search space can be arbitrary Python objects, even when optimizing in parallel using mongodb.
-It is easy to add new types of non-stochastic expressions to a search space description, see below (Section 2.3) for how to do it.
-
-A fourth thing to note is that 'c1' and 'c2' are examples what we will call *conditional parameters*.
-Each of 'c1' and 'c2' only figures in the returned sample for a particular value of 'a'.
-If 'a' is 0, then 'c1' is used but not 'c2'.
-If 'a' is 1, then 'c2' is used but not 'c1'.
-Whenever it makes sense to do so, you should encode parameters as conditional ones this way,
-rather than simply ignoring parameters in the objective function.
-If you expose the fact that 'c1' sometimes has no effect on the objective function (because it has no effect on the argument to the objective function) then search can be more efficient about credit assignment.
+There are no requirement that list elements have some kind of similarity, each element can be any valid configuration expression.
+Note that Python values (e.g. numbers, strings, and objects) can be embedded in the configuration space.
+These values will be treated as constants from the point of view of the optimization algorithms, but they will be included
+in the configuration argument objects passed to the objective function.
 
 
+Sampling from a configuration space by hand
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Choosing a search algorithm
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The previous few code fragments have defined various configuration spaces.
+These spaces are not objective function arguments yet, they are simply a description of *how to sample* objective function arguments.
+You can use the routines in ``hyperopt.pyll.stochastic`` to sample values from these configuration spaces.
 
-Choosing the search algorithm is as simple as passing `algo=hyperopt.tpe.suggest` instead of `algo=hyperopt.random.suggest`.
-The search algorithms are actually callable objects, whose constructors
-accept configuration arguments, but that's about all there is to say about the
-mechanics of choosing a search algorithm.
+.. code-block:: python
 
-XXX arguments of TPE
+    from hyperopt.pyll.stochastic import sample
 
-XXX Advanced:
-The hyperparameter optimization algorithms work by replacing normal "sampling" logic with
-adaptive exploration strategies, which make no attempt to actually sample from the distributions specified in the search space.
+    print sample(list_space)
+    # => [0.13, .235]
+
+    print sample(nested_space)
+    # => [[{'case': 1, 'a', 0.12}, {'case': 2, 'b': 2.3}],
+    #     'extra_literal_string',
+    #     3]
+
+Note that the labels of the random configuration variables have no bearing on the sampled values themselves,
+the labels are only used internally by the optimization algorithms.
+Later when we look at the ``trials`` parameter to fmin we will see that the labels are used for analyzing
+search results too.
+For now though, simply note that the labels are not for the objective function.
+
+
+
+Deterministic expressions in configuration spaces
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It is also possible to include deterministic expressions within the description of a configuration space.
+For example, we can write
+
+.. code-block:: python
+
+    from hyperopt.pyll import scope
+
+    def foo(x):
+        return str(x) * 3
+
+    expr_space = {
+        'a': 1 + hp.uniform('a', 0, 1),
+        'b': scope.minimum(hp.loguniform('b', 0, 1), 10),
+        'c': scope.call(foo, args=(hp.randint('c', 5),)),
+        }
+
+The ``hyperopt.pyll`` submodule implements an expression language that stores
+this logic in a symbolic representation.
+Significant processing can be carried out by these intermediate expressions.
+In fact, when you call ``fmin(f, space)``, your arguments are quickly combined into
+a single objective-and-configuration evaluation graph of the form:
+``scope.call(f, space)``.
+Feel free to move computations between these intermediate functions and the final
+objective function as you see fit in your application.
+
+You can add new functions to the ``scope`` object with the ``define`` decorator:
+
+.. code-block:: python
+
+    from hyperopt.pyll import scope
+
+    @scope.define
+    def foo(x):
+        return str(x) * 3
+
+    # -- this will print "000"; foo is called as usual.
+    print foo(0)
+
+    expr_space = {
+        'a': 1 + hp.uniform('a', 0, 1),
+        'b': scope.minimum(hp.loguniform('b', 0, 1), 10),
+        'c': scope.foo(hp.randint('cbase', 5)),
+        }
+
+    # -- this will draw a sample by running foo(x)
+    #    on a random integer x.
+    print sample(expr_space)
+
+Read through ``hyperopt.pyll.base`` and ``hyperopt.pyll.stochastic`` to see the
+functions that are available, and feel free to add your own.
+One important caveat is that functions used in configuration space descriptions
+must be picklable in order to be compatible with parallel search (discussed below).
+
+
+Defining conditional variables with ``choice`` and ``pchoice``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Having introduced nested configuration spaces, it is worth coming back to the ``hp.choice`` and ``hp.pchoice`` hyperparameter types.
+An ``hp.choice(label, options)`` hyperparameter *chooses* one of the options that you provide, where the ``options`` must be a list.
+We can use ``choice`` to define an appropriate configuration space for the ``w`` objective function (introduced pg XXX).
+
+.. code-block:: python
+
+    w_space = hp.choice('case', [
+        {'use_var': 'x', 'x': hp.normal('x', 0, 1)},
+        {'use_var': 'y', 'y': hp.uniform('y', 1, 3)}])
+
+    print sample(w_space)
+    # ==> {'use_var': 'x', 'x': -0.89}
+
+    print sample(w_space)
+    # ==> {'use_var': 'y', 'y': 2.63}
+
+Recall that in ``w``, the "y" key of the configuration is not used if the "use_var" value is "x".
+Similarly, the "x" key of the configuration is not used if the "use_var" value is "y". 
+The use of ``choice`` in the ``w_space`` search space reflects the conditional usage of keys "x" and "y" in the ``w`` function.
+We have used the ``choice`` variable to define a space that never has more variables than is necessary.
+
+The choice variable here plays more than the a cosmetic role, it can make optimization much more efficient.
+In terms of ``w`` and ``w_space``, the choice node prevents ``y`` for being *blamed* for poor performance when "use_var" is "x",
+or *credited* for good performance when "use_var" is "x".
+The choice variable creates a special node in the expression graph that prevents the conditionally un-necessary part of the
+expression graph from being evaluated at all.
+During optimization, similar special-case logic prevents any association between the return value of the objective function
+and irrelevant hyperparameters (ones that were not chosen, and hence not involved in the creation of the configuration passed to the objective function).
+If your objective function only uses a subset of the configuration space on any given evaluation, then you should
+use choice variables to communicate that pattern of inter-dependencies to ``fmin``.
+
+
+Sharing a configuration variable across choice branches
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When using choice variables to divide a configuration space into many mutually exclusive possibilities,
+it can be natural to re-use some configuration variables across a few of those possible branches.
+Hyperopt's configuration space supports this in a natural way, by allowing the objects to appear in multiple places within
+a nested configuration expression. For example, if we wanted to add a ``randint`` choice to the returned dictionary
+that did not depend on the "use_var" value, we could do it like this:
+
+.. code-block:: python
+
+    c = hp.randint('c', 10)
+
+    w_space_c = hp.choice('case', [
+        {'use_var': 'x',
+         'x': hp.normal('x', 0, 1),
+         'c': c},
+        {'use_var': 'y',
+         'y': hp.uniform('y', 1, 3),
+         'c': c}])
+
+
+Optimization algorithms in hyperopt would see that ``c`` is used regardless of the outcome of the ``choice`` value,
+so they would correctly associate ``c`` with all evaluations of the objective function. 
+
 
 
 Example of basic usage: `sklearn.svm.SVC`
@@ -325,41 +523,15 @@ To see all these possibilities in action, let's look at how one might go about d
 Advanced Configuration Spaces
 -----------------------------
 
+XXX Advanced:
+The hyperparameter optimization algorithms work by replacing normal "sampling" logic with
+adaptive exploration strategies, which make no attempt to actually sample from the distributions specified in the search space.
+
+
 
 2.3 Adding Non-Stochastic Expressions with pyll
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can use such nodes as arguments to pyll functions (see pyll).
-File a github issue if you want to know more about this.
-
-In a nutshell, you just have to decorate a top-level (i.e. pickle-friendly) function so
-that it can be used via the `scope` object.
-
-.. code-block:: python
-
-    import hyperopt.pyll
-    from hyperopt.pyll import scope
-
-    @scope.define
-    def foo(a, b=0):
-         print 'runing foo', a, b
-         return a + b / 2
-
-    # -- this will print 0, foo is called as usual.
-    print foo(0)
-
-    # In describing search spaces you can use `foo` as you
-    # would in normal Python. These two calls will not actually call foo,
-    # they just record that foo should be called to evaluate the graph.
-
-    space1 = scope.foo(hp.uniform('a', 0, 10))
-    space2 = scope.foo(hp.uniform('a', 0, 10), hp.normal('b', 0, 1)
-
-    # -- this will print an pyll.Apply node
-    print space1
-
-    # -- this will draw a sample by running foo()
-    print hyperopt.pyll.stochastic.sample(space1)
 
 
 Using a non-Python Evaluation Function
