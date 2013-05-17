@@ -1,14 +1,14 @@
 :author: Pedro Henrique Hasselmann
 :email: hasselmann@on.br
-:institution: Observatorio Nacional
+:institution: Observatorio Nacional, Rio de Janeiro, Brazil
 
 :author: Jorge Márcio Carvano
 :email: carvano@on.br
-:institution: Observatorio Nacional
+:institution: Observatorio Nacional, Rio de Janeiro, Brazil
 
 :author: Daniela Lazzaro
 :email: lazzaro@on.br
-:institution: Observatorio Nacional
+:institution: Observatorio Nacional, Rio de Janeiro, Brazil
 
 -------------------------------------------------------------
 Adapted G-mode Clustering Method applied to Asteroid Taxonomy
@@ -611,7 +611,7 @@ References
            NASA Planetary Data System, 2010, 124.
 
 .. [Ley10] Leyrat, C.; Fornasier, S.; Barucci, A.; Magrin, S.; Lazzarin, M.; Fulchignoni, M.; Jorda, L.; Belskaya, I.; Marchi, S.; Barbieri, C.; Keller, U.; Sierks, H. & Hviid, S. 
-           *Search for Steinsrsquo surface inhomogeneities from OSIRIS Rosetta images*. 
+           *Search for Steins surface inhomogeneities from OSIRIS Rosetta images*. 
            PLANSS, 2010, 58, 1097-1106.
 
 .. [Tos10] Tosi, F.; Turrini, D.; Coradini, A. & Filacchione, G. 
