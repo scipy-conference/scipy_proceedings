@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="348.31"
+   height="147.46001"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="forward_modeling_polyprism.svg"
+   inkscape:export-filename="/home/leo/pub/scipy_proceedings/papers/leonardo_uieda/forward_modeling_polyprism.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300">
+  <defs
+     id="defs4">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2993">
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:2.20000005;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="rect2995"
+         width="158.57144"
+         height="137.85715"
+         x="72.14286"
+         y="73.076469"
+         rx="2.9560852"
+         ry="3.3709679" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="91.382904"
+     inkscape:cy="-23.448522"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="744"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-72.14286,-70.529913)">
+    <image
+       y="44.526077"
+       x="221.61903"
+       id="image3015"
+       xlink:href="file:///home/leo/pub/scipy_proceedings/papers/leonardo_uieda/forward_modeling_polyprism_model.png"
+       height="173.46365"
+       width="216.82957"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <image
+       y="66.474594"
+       x="57.041309"
+       id="image2993"
+       xlink:href="file:///home/leo/pub/scipy_proceedings/papers/leonardo_uieda/forward_modeling_polyprism_data.png"
+       height="149.16316"
+       width="198.88422"
+       clip-path="url(#clipPath2993)"
+       inkscape:export-filename="/home/leo/pub/scipy_proceedings/papers/leonardo_uieda/image3015.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Sans"
+       x="94.231354"
+       y="97.350327"
+       id="text3018"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/leo/pub/scipy_proceedings/papers/leonardo_uieda/image3015.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200"><tspan
+         sodipodi:role="line"
+         id="tspan3020"
+         x="94.231354"
+         y="97.350327">(a)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Sans"
+       x="237.14262"
+       y="97.350327"
+       id="text3018-66"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/leo/pub/scipy_proceedings/papers/leonardo_uieda/image3015.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200"><tspan
+         sodipodi:role="line"
+         id="tspan3020-7"
+         x="237.14262"
+         y="97.350327">(b)</tspan></text>
+  </g>
+</svg>
