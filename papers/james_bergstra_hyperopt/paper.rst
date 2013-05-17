@@ -102,65 +102,128 @@ hyperparameters for neural networks [XXX]_, deep networks [XXX]_, and computer v
 Getting Started
 ---------------
 
-This page is a tutorial on basic usage of `hyperopt.fmin()`.
-It covers how to write an objective function that fmin can optimize, and how to describe a search space that fmin can search.
+This section introduces basic usage of the ``hyperopt.fmin`` function, which is hyperopt's basic optimization driver. 
+We will look at how to write an objective function that ``fmin`` can optimize, and how to describe a search space that ``fmin`` can search.
 
-Hyperopt's job is to find the best value of a scalar-valued, possibly-stochastic function over a set of possible arguments to that function.
-Whereas many optimization packages will assume that these inputs are drawn from a vector space,
-Hyperopt is different in that it encourages you to describe your search space in more detail.
-By providing more information about where your function is defined, and where you think the best values are, you allow algorithms in hyperopt to search more efficiently.
+Hyperopt shoulders the responsibility of finding the best value of a scalar-valued,
+possibly-stochastic function over a set of possible arguments to that function.
+Whereas most optimization packages assume that these inputs are drawn from a vector space,
+Hyperopt encourages you, the user, to describe your search space in more detail.
+Hyperopt is typically aimed at very difficult search settings, especially ones with many hyperparameters and a small budget for function evaluations.
+By providing more information about where your function is defined, and where you think the best values are,
+you allow algorithms in hyperopt to search more efficiently.
 
 The way to use hyperopt is to describe:
 
 * the objective function to minimize
 * the space over which to search
-* the database in which to store all the point evaluations of the search
-* the search algorithm to use
+* a trials database [optional]
+* the search algorithm to use [optional]
 
-This (most basic) tutorial will walk through how to write functions and search spaces,
-using the default `Trials` database, and the dummy `random` search algorithm.
-Section (1) is about the different calling conventions for communication between an objective function and hyperopt.
-Section (2) is about describing search spaces.
-
-Parallel search is possible when replacing the `Trials` database with
-a `MongoTrials` one;
-there is another wiki page on the subject of [using mongodb for parallel search](Parallelizing-Evaluations-During-Search-via-MongoDB).
-
-Choosing the search algorithm is as simple as passing `algo=hyperopt.tpe.suggest` instead of `algo=hyperopt.random.suggest`.
-The search algorithms are actually callable objects, whose constructors
-accept configuration arguments, but that's about all there is to say about the
-mechanics of choosing a search algorithm.
+This section will explain how to describe the objective function, search space, and optimization algorithm.
+Section XXX below will explain how to use a non-default trials database to analyze the results of a search,
+and to make parallel search possible.
 
 
-Define a function to minimize
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Basic usage step 1: define an objective function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Hyperopt provides a few levels of increasing flexibility / complexity when it comes to specifying an objective function to minimize.
-The questions to think about as a designer are
-* Do you want to save additional information beyond the function return value, such as other statistics and diagnostic information collected during the computation of the objective?
-* Do you want to use optimization algorithms that require more than the function value?
-* Do you want to communicate between parallel processes? (e.g. other workers, or the minimization algorithm)
+In the simplest case, an objective function is a Python function that accepts a single argument that stands for :math:`x` (which can be an arbitrary object),
+and returns a single scalar value that represents the *loss* (:math:`f(x)`) incurred by that argument.
 
-The next few sections will look at various ways of implementing an objective
-function that minimizes a quadratic objective function over a single variable.
-In each section, we will be searching over a bounded range from -10 to +10,
-which we can describe with a *search space*:
+So for a trivial example, if we want to minimize a quadratic function :math:`q(x) := x^2` then we could define our objective to be ``q(x)``.
 
 .. code-block:: python
 
-    space = hp.uniform('x', -10, 10)
+    def q(x):
+        return x ** 2
 
-Below, Section 2, covers how to specify search spaces that are more complicated.
+Hyperopt can also be used optimize over more general Python objects, such as the ``w`` function below that optimizes over dictionaries with "type" and either "x" and "y" keys.
+
+.. code-block:: python
+
+    def w(pos):
+        t = pos['type']
+        if t:
+            return pos['x'] ** 2
+        else:
+            return math.exp(pos['y'])
+
+Part of what makes Hyperopt so convenient for optimizing machine learning hyperparameters is
+this possibility of organizing a arguments for minimization within Python data structures, so we'll use this contrived ``w`` function as our 
+working example in the next few sections.
+Hyperopt's functions can be more complex in both the arguments they accept and their return value.
+We will use this simple calling and return convention for the next few sections that introduce search spaces, optimization algorithms, and basic usage
+of the fmin interface.
+Later, as we explain how to use the Trials object to analyze search results, and how to search in parallel with a cluster,
+we will introduce different calling and return conventions.
 
 
-2. Defining a Search Space
-~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A search space consists of nested function expressions, including stochastic expressions.
+Basic usage step 2: define a search space
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A search space is a stochastic expression that always evaluates to a valid input argument for your objective function.
+A search space consists of nested function expressions.
 The stochastic expressions are the hyperparameters.
-Sampling from this nested stochastic program defines the random search algorithm.
-The hyperparameter optimization algorithms work by replacing normal "sampling" logic with
-adaptive exploration strategies, which make no attempt to actually sample from the distributions specified in the search space.
+(Random search is implemented by simply sampling these stochastic expressions.)
+
+The stochastic expressions currently recognized by hyperopt's optimization algorithms are in the ``hyperopt.hp`` module.
+The simplest kind of search spaces are ones that are not nested at all.
+For example, to optimize the simple function ``q`` (defined above) on the interval :math:`[0, 1]`, we could type
+``fmin(q, space=hp.uniform('a', 0, 1))``.
+
+The first argument to ``hp.uniform`` here is the *label*. Each of the hyperparameters in a configuration space must be labeled like this
+with a unique string.  The other hyperparameter distributions at our disposal as modelers are as follows:
+
+``hp.choice(label, options)``
+    Returns one of the options, which should be a list or tuple.  The elements of `options` can themselves be [nested] stochastic expressions.  In this case, the stochastic choices that only appear in some of the options become *conditional* parameters.
+
+``hp.pchoice(label, options, probs)``
+    Return one of the options according to the probabilities listed in ``probs`` (which should sum to 1).
+
+``hp.uniform(label, low, high)``
+    Draws uniformly between ``low`` and ``high``.
+    When optimizing, this variable is constrained to a two-sided interval.
+
+``hp.quniform(label, low, high, q)``
+    Drawn by ``round(uniform(low, high) / q) * q``,
+    Suitable for a discrete value with respect to which the objective is still somewhat smooth.
+
+``hp.loguniform(label, low, high)``
+    Drawn by ``exp(uniform(low, high))``.
+    When optimizing, this variable is constrained to the interval :math:`[e^{\text{low}}, e^{\text{high}}]`.
+
+``hp.qloguniform(label, low, high, q)``
+    Drawn by ``round(exp(uniform(low, high)) / q) * q``.
+    Suitable for a discrete variable with respect to which the objective is smooth and gets smoother with the increasing size of the value.
+
+``hp.normal(label, mu, sigma)``
+    Draws a normally-distributed real value.
+    When optimizing, this is an unconstrained variable.
+
+``hp.qnormal(label, mu, sigma, q)``
+    Drawn by ``round(normal(mu, sigma) / q) * q``.
+    Suitable for a discrete variable that probably takes a value around mu, but is technically unbounded.
+
+``hp.lognormal(label, mu, sigma)``
+    Drawn by ``exp(normal(mu, sigma))``.
+    When optimizing, this variable is constrained to be positive.
+
+``hp.qlognormal(label, mu, sigma, q)``
+    Drawn by ``round(exp(normal(mu, sigma)) / q) * q``.
+    Suitable for a discrete variable with respect to which the objective is smooth and gets smoother with the size of the variable, which is non-negative.
+
+``hp.randint(label, upper)``
+    Returns a random integer in the range :math:`[0, upper)`.
+    In contrast to ``quniform``
+    optimization algorithms should assume *no* additional correlation in the loss function between nearby integer values,
+    as compared with more distant integer values (e.g. random seeds).
+
+
+
+
 
 It's best to think of search spaces as stochastic argument-sampling programs. For example
 
@@ -211,48 +274,24 @@ rather than simply ignoring parameters in the objective function.
 If you expose the fact that 'c1' sometimes has no effect on the objective function (because it has no effect on the argument to the objective function) then search can be more efficient about credit assignment.
 
 
-2.1 Parameter Expressions
-~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The stochastic expressions currently recognized by hyperopt's optimization algorithms are:
+Choosing a search algorithm
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`hp.choice(label, options)`
-   Returns one of the options, which should be a list or tuple.  The elements of `options` can themselves be [nested] stochastic expressions.  In this case, the stochastic choices that only appear in some of the options become *conditional* parameters.
+Choosing the search algorithm is as simple as passing `algo=hyperopt.tpe.suggest` instead of `algo=hyperopt.random.suggest`.
+The search algorithms are actually callable objects, whose constructors
+accept configuration arguments, but that's about all there is to say about the
+mechanics of choosing a search algorithm.
 
-`hp.randint(label, upper)`
-   Returns a random integer in the range [0, upper). The semantics of this distribution is that there is *no* more correlation in the loss function between nearby integer values, as compared with more distant integer values.  This is an appropriate distribution for describing random seeds    for example.  If the loss function is probably more correlated for nearby integer values, then you should probably use one of the "quantized" continuous distributions, such as either `quniform`, `qloguniform`, `qnormal` or `qlognormal`.
+XXX arguments of TPE
 
-`hp.uniform(label, low, high)`
-   Returns a value uniformly between `low` and `high`.  When optimizing, this variable is constrained to a two-sided interval.
+XXX Advanced:
+The hyperparameter optimization algorithms work by replacing normal "sampling" logic with
+adaptive exploration strategies, which make no attempt to actually sample from the distributions specified in the search space.
 
-`hp.quniform(label, low, high, q)`
-    Returns a value like round(uniform(low, high) / q) * q Suitable for a discrete value with respect to which the objective is still somewhat "smooth", but which should be bounded both above and below.
 
-`hp.loguniform(label, low, high)`
-    * Returns a value drawn according to exp(uniform(low, high)) so that the logarithm of the return value is uniformly distributed.
-    * When optimizing, this variable is constrained to the interval [exp(low), exp(high)].
-
-`hp.qloguniform(label, low, high, q)`
-    * Returns a value like round(exp(uniform(low, high)) / q) * q
-    * Suitable for a discrete variable with respect to which the objective is "smooth" and gets smoother with the size of the value, but which should be bounded both above and below.
-
-`hp.normal(label, mu, sigma)`
-    * Returns a real value that's normally-distributed with mean mu and standard deviation sigma. When optimizing, this is an unconstrained variable.
-
-`hp.qnormal(label, mu, sigma, q)`
-    * Returns a value like round(normal(mu, sigma) / q) * q
-    * Suitable for a discrete variable that probably takes a value around mu, but is fundamentally unbounded.
-
-`hp.lognormal(label, mu, sigma)`
-    * Returns a value drawn according to exp(normal(mu, sigma)) so that the logarithm of the return value is normally distributed.
-        When optimizing, this variable is constrained to be positive.
-
-`hp.qlognormal(label, mu, sigma, q)`
-    * Returns a value like round(exp(normal(mu, sigma)) / q) * q
-    * Suitable for a discrete variable with respect to which the objective is smooth and gets smoother with the size of the variable, which is bounded from one side.
-
-2.2 A Search Space Example: scikit-learn
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Example of basic usage: `sklearn.svm.SVC`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To see all these possibilities in action, let's look at how one might go about describing the space of hyperparameters of classification algorithms in scikit-learn.
 (I think that there's room for a library that actually does this, possibly even bundled with hyperopt itself in the future, but for now it's just an idea.)
@@ -280,6 +319,11 @@ To see all these possibilities in action, let's look at how one might go about d
             'min_samples_split': hp.qlognormal('dtree_min_samples_split', 2, 1, 1),
         },
         ])
+
+
+
+Advanced Configuration Spaces
+-----------------------------
 
 
 2.3 Adding Non-Stochastic Expressions with pyll
