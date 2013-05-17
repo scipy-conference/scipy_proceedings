@@ -130,7 +130,8 @@ The first procedure can be summarized by the following topics and code snippets:
                      zone[1], zone[0], density, nmin)
            else:
               return filter(lambda x: x != None, \
-                     imap(lambda i, y: boolist(i,y,zone), \
+                     imap(lambda i, y: \
+                     boolist(i,y,zone), \
                      xrange(data.shape[0]), data))
 
 The function above divides the variable hyperspace into large sectors, and just in the most crowded sector the initial seed is searched for. 
@@ -418,26 +419,29 @@ Code Testing
 
 .. figure:: simulated.png
    :scale: 40%
+   :align: center
    
    Simulated Sample of 2000 points. 
    Blue dots represent the bidimensional elements and the clusters are three Gaussian distributions composed of random points. :label:`figsimul`
 
 .. figure:: Classic_Gmode_Identification.png 
    :scale: 50%
+   :align: center
    
    Red filled circles are the elements of clusters identified by Original G-mode. The green filled circles represent the initial seed. 
    Classification made by :math:`q_{1} = 2.2 \sigma`. :label:`figorig`
 
 .. figure:: Vectorized_Gmode_Identification.png
    :scale: 50%
+   :align: center
  
    Clusters identified by Adapted G-mode. Labels are the same as previous graphics. 
    Classification made by :math:`q_{1} = 2.2 \sigma`. :label:`figadapted`
 
    
 For testing the efficiency of the Adapted G-mode version, a bidimensional sample of 2000 points was simulated using ``Numpy.random``. 
-The points filled a range of 0 to 10. Three random Gaussian distributions containing 500 points each ( ``Numpy.random.normal`` ), 
-plus 500 random points ( ``Numpy.random.rand`` ) composed the final sample (Figure :ref:`figsimul` ). 
+The points filled a range of 0 to 10. Three random Gaussian distributions containing 500 points each (``Numpy.random.normal``), 
+plus 500 random points (``Numpy.random.rand``) composed the final sample (Figure :ref:`figsimul`). 
 These Gaussians were the aim for the recognition ability of clustering method, while the random points worked as background noise.
 Then, simulated sample was classified using the Original [Gav92]_ and Adapted G-mode version. 
 The results are presented in Table :ref:`tabgauss` and figures below.
@@ -451,7 +455,7 @@ random elements in, as seen in Figure :ref:`figorig` .
 
 The Adapted version, otherwise, seeks the initial seed through densest regions, thus ensuring its start inside or close to clusters. 
 Moreover, by using the Mhalonobis distance as estimator, the covariance matrix is taken into account, which makes a more precise 
-identification of cluster boundaries (Figure :ref:`figadapted` ). Nevertheless, Adapted G-mode has tendency to undersize the number of elements on 
+identification of cluster boundaries (Figure :ref:`figadapted`). Nevertheless, Adapted G-mode has tendency to undersize the number of elements on 
 the misaligned clusters. For cluster number 3 in Table :ref:`tabgauss` , a anti-correlated gaussian distribution, the undersizing reaches 30.8%. 
 If the undersizing becomes too large, its possible that “lost elements” are identified as new cluster. 
 Therefore, may be necessary to group clusters according to its d²(a,b) distances.
@@ -480,17 +484,20 @@ Preliminary Results on Asteroid Photometric Classification
 
 .. figure:: 0.png
    :scale: 40%
+   :align: center
    
    Density distributions of reflected intensities measured from asteroid observations by SDSSMOC4. The colors correspond to degrees of point agglomeration. :label:`fig0`
    
 .. figure:: vec3.png
    :scale: 40
+   :align: center
 
    Density distributions with the third cluster identified by G-mode without upper limit. The cluster is marked by red filled circles.
    Classification made with :math:`q_{1} = 1.5 \sigma` and ``minlim = 0.5``. :label:`figvec`
    
 .. figure:: upper3.png
    :scale: 40
+   :align: center
 
    Density distributions with the third cluster identified by G-mode with upper limit. The cluster is marked by red filled circles. 
    Classification made with :math:`q_{1} = 1.5 \sigma`, ``minlim = 0.5`` and ``upperlim = 0.5``. :label:`figupper`
