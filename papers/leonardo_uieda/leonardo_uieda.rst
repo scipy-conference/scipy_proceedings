@@ -445,7 +445,6 @@ the estimated density distribution grows (Figure 8):
     myv.wall_bottom(bounds)
     myv.show()
 
-
 .. figure:: gravmag_harvester_seed.png
     :align: center
 
@@ -460,6 +459,49 @@ the estimated density distribution grows (Figure 8):
     ``fatiando.gravmag.harvester``. The black contours are the true source of
     the gravity anomaly. Notice how the inversion was able to recover the
     approximate geometry of the true source.
+
+Conclusion
+----------
+
+The Fatiando a Terra package
+provides an API
+to develop modeling algorithms
+for a variety of geophysical methods.
+The current version (0.1)
+has state-of-the-art
+gravity and magnetic modeling and inversion algorithms.
+There are also
+toy problems in gravity, seismics and seismology
+that are useful for teaching
+basic concepts of
+geophysics, modeling, and inverse problems.
+
+Fatiando a Terra enables
+quick prototyping of
+new algorithms
+because of
+the collection of
+fast forward modeling routines and
+the simple syntax and high level of
+the Python language.
+After protyping,
+the performance bottlenecks of these algorithms
+can be easily diagnosed
+using the advanced
+profiling tools
+available in the Python language.
+Optimization of
+only small components of code
+can be done without loss of flexibility
+using the Cython language.
+
+The biggest challenge that Fatiando a Terra
+faces in the near future
+is the development of
+a user and, consequently, a developer community.
+This is a key part
+for the survival of
+any open-source project.
 
 References
 ----------
