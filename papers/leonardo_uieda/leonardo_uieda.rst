@@ -170,7 +170,7 @@ and overwrites others
 to automate repetitive tasks
 (such as gridding).
 The following example
-ilustrates the use
+illustrates the use
 of the ``fatiando.vis.mpl.contourf`` function
 to automatically grid and plot
 some irregularly sampled data
@@ -178,19 +178,19 @@ some irregularly sampled data
 
 .. code-block:: python
 
+
     from fatiando import gridder
     from fatiando.vis import mpl
 
-    area = [-20, 20, -10, 10]
+    area = [-50, 50, -20, 20]
     x, y = gridder.scatter(area, n=100)
     data = x**2 + y**2
     mpl.figure()
     mpl.axis('scaled')
-    mpl.contourf(x, y, data, shape=(50, 50), levels=30,
-        interp=True)
+    mpl.contourf(x, y, data, shape=(50, 50),
+        levels=30, interp=True)
     mpl.colorbar(orientation='horizontal')
     mpl.plot(x, y, '.k')
-
 
 
 .. figure:: gridding_plotting_contourf.png
@@ -201,15 +201,65 @@ some irregularly sampled data
     a Fatiando a Terra wrapper for the Matplotlib ``contourf``
     function.
 
+Map projections
+are handled by
+the Matplotlib Basemap toolkit
+(http://matplotlib.org/basemap).
+The ``fatiando.vis.mpl`` module
+also provides helper functions
+to automate the use
+of this toolkit (Figure 2):
+
+.. code-block:: python
+
+    mpl.figure()
+    bm = mpl.basemap(area, projection='robin')
+    bm.drawmapboundary()
+    bm.drawcoastlines()
+    mpl.contourf(x, y, data, shape=(50, 50), levels=30,
+        interp=True, basemap=bm)
+    mpl.colorbar(orientation='horizontal')
+
 .. figure:: gridding_plotting_basemap.png
     :align: center
 
-    Example of generating a random scatter of points, using that to make
-    synthetic data, and automatically gridding and plotting it using a
-    a Fatiando a Terra wrapper for the Matplotlib ``contourf``
-    function.
+    Example of map plotting with the Robinson projection using the Matplotlib
+    Basemap toolkit.
 
-.. figure:: gridding_plotting2.png
+The ``fatiando.vis.myv`` module
+contains functions
+for 3D plotting
+using Mayavi [Ramachandran_Varoquaux]_.
+These functions create TVTK representations
+of ``fatiando.mesher`` objects
+and plot them in Mayavi
+using the ``mayavi.mlab`` interface.
+The ``fatiando.vis.myv.figure`` function
+creates a figure
+and rotates it so that
+the z-axis points down,
+as is standard in geophysics.
+The following example
+shows how to create and plot
+a 3D right rectangular prism model
+(Figure 3):
+
+.. code-block:: python
+
+    from fatiando import mesher
+    from fatiando.vis import myv
+
+    model = [mesher.Prism(5, 8, 3, 7, 1, 7)]
+    bounds = [0, 10, 0, 10, 0, 10]
+    myv.figure()
+    myv.prisms(model)
+    myv.axes(myv.outline(bounds))
+    myv.wall_bottom(bounds)
+    myv.wall_north(bounds)
+    myv.show()
+
+
+.. figure:: gridding_plotting_3d.png
     :align: center
 
     Example of generating a right rectangular prism model and visualising it
