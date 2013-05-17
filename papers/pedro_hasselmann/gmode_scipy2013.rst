@@ -46,15 +46,15 @@ were enough to characterize the asteroid taxonomy.
 
 The G-mode classifies *N* elements into *Nc* unimodal clusters containing *Na* elements each. Elements are described by *M* variables. 
 This method is unsupervised, which allows an automatic identification of clusters without any *a priori* knowledge of sample distribution. 
-For that, user must control only one critical parameter for the classification, the confidence levels *q1* or
+For that, user must control only one critical parameter for the classification, the confidence levels :math:`q_{1}` or
 its corresponding critical value :math:`G_{q1}`.Smaller this parameter get, more clusters are resolved and smaller their spreads are.
 
 So, we choose this method to classify the asteroid observations from Sloan Digital Sky Moving Object Catalog, 
 the largest data set on photometry containing around 400,000 moving object entries, 
 due to its previous success on asteroid taxonomy, unsupervision and lower number of input parameters. 
-However, we were aware the computational limitation we were going to face, since the method never was applied to samples larger than 10,000 elements [ley10]_
+However, we were aware the computational limitation we were going to face, since the method never was applied to samples larger than 10,000 elements [Ley10]_
 and its last implementation was outdated. Therefore, the G-mode used here follows an adapted version of the original method published by Gav92_ , 
-briefly described by Ful00_ and reviewed by Tos05_ and Ley10_  . 
+briefly described by Ful00_ and reviewed by Tos05_ . 
 Median central tendency and absolute deviation estimators, a faster initial seed locator and statistical whitenning were introduced to produce a more 
 robust set of clusters and optimize the processing time. The coding was performed using Python 2.7 with support of Matplotlib, NumPy and SciPy packages [*]_. 
 The algorithm can be briefly summarized by two parts: the first one is the cluster recognition and 
@@ -612,7 +612,7 @@ References
 
 .. [Ley10] Leyrat, C.; Fornasier, S.; Barucci, A.; Magrin, S.; Lazzarin, M.; Fulchignoni, M.; Jorda, L.; Belskaya, I.; Marchi, S.; Barbieri, C.; Keller, U.; Sierks, H. & Hviid, S. 
            *Search for Steins surface inhomogeneities from OSIRIS Rosetta images*. 
-           PLANSS, 2010, 58, 1097-1106.
+           Planetary and Space Science, 2010, 58, 1097-1106.
 
 .. [Tos10] Tosi, F.; Turrini, D.; Coradini, A. & Filacchione, G. 
            *Probing the origin of the dark material on Iapetus*. Monthly Notices of the Royal Astronomical Society, 2010, 403, 1113-1130.
