@@ -91,8 +91,9 @@ means that the code for these programs
 cannot be easily combined
 to create new modeling tools.
 
-Fatiando a Terra aims
-at providing such an API
+Fatiando a Terra
+(http://www.fatiando.org)
+aims at providing such an API
 for geophysical modeling.
 Functions in Fatiando
 use compatible data and mesh formats
@@ -119,8 +120,37 @@ for teaching geophysics.
 The ``fatiando`` package
 ------------------------
 
-meh
+The modules and packages
+of Fatiando a Terra
+are bundled into
+the ``fatiando`` package.
+Each type of geophysical method
+has its own package.
+As of version 0.1,
+the available modules and packages are:
 
+* ``fatiando.gravmag``:
+  gravity and magnetic methods;
+* ``fatiando.seismic``:
+  seismics and seismology;
+* ``fatiando.geothermal``:
+  geothermal modeling;
+* ``fatiando.mesher``:
+  geometric elements and meshes;
+* ``fatiando.gridder``:
+  grid generation, slicing, interpolation, etc;
+* ``fatiando.io``:
+  I/O of models and data sets from web repositories;
+* ``fatiando.utils``:
+  miscelaneous utilities;
+* ``fatiando.constants``:
+  physical constants;
+* ``fatiando.gui``:
+  simple graphical user interfaces;
+* ``fatiando.vis``:
+  2D and 3D plotting;
+* ``fatiando.inversion``:
+  inverse problem solvers and regularization;
 
 Gridding and plotting
 ---------------------
@@ -146,7 +176,6 @@ to automatically grid and plot
 some irregularly sampled data
 (Figure 1):
 
-
 .. code-block:: python
 
     from fatiando import gridder
@@ -161,6 +190,8 @@ some irregularly sampled data
         interp=True)
     mpl.colorbar(orientation='horizontal')
     mpl.plot(x, y, '.k')
+
+
 
 .. figure:: gridding_plotting1.png
     :align: center
