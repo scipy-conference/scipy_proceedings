@@ -84,7 +84,7 @@ Python C API for some parts and on plain C for others.  ShedSkin [shedskin]_
 translates implicitly strongly typed Python program into C++, without any call
 to the Python C API.
 
-The alternate approach consists in writing a Just In Time(JIT) compiler, embeded
+The alternate approach consists in writing a Just In Time(JIT) compiler, embedded
 into the interpreter, to dynamically turn the computation intensive parts into
 native code. The `numexpr` module [numexpr]_ does so for Numpy expressions by
 JIT-compiling them from a string representation to native code. Numba [numba]_
@@ -443,6 +443,7 @@ following code:
     def invalid_conversion(n):
         # this map cannot be converted to imap
         l = map(math.cos, range(n))
+        l[0] = 1  # invalid assignment
         return sum(l) + max(l) # sum iterates once
 
 The information concerning constant expressions is used to perform a classical
@@ -743,9 +744,9 @@ table also demonstrates the benefits of manual parallelization using OpenMP.
     | Speedup |  x1         |    x93.8      |    x195.7        |
     +---------+-------------+---------------+------------------+
 
-Finally, `arc_distance` [*]_ presents a classical usage of a Numpy expression
-that is typically more efficient with CPython than its loop alternative as all
-the looping is done directly in C. Its code is reproduced below:
+Finally, `arc_distance` [*]_ presents a classical usage of Numpy expression. It
+is typically more efficient than its loop alternative as all the iterations are
+done directly in C. Its code is reproduced below:
 
 .. code-block:: python
 
@@ -802,9 +803,9 @@ changing the input code. To the opposite, Numexpr requires to rewrite the input
 and does not achieve the same level of performance than Pythran when OpenMP and
 AVX are combined.
 
-Writting efficient Cython code requires more work than just typing the variable
+Writing efficient Cython code requires more work than just typing the variable
 declarations using Cython's specific syntax: it only takes advantage of
-parallelism because we made it explicit. Without explicit parallization,
+parallelism because we made it explicit. Without explicit parallelization,
 the generated code runs around 176ms instead of 36ms. Cython does not generate
 vectorized code, and `gcc` does not vectorized the inner loop, which explains
 the better result obtained with Pythran.
@@ -813,10 +814,10 @@ Future Work
 -----------
 
 Although Pythran focuses on a subset of Python and its standard library, many
-optimisations opportunities are still possible. Using a Domain Specific
-Language (DSL) approach, one could use a rewriting engine to optimize several
-Python idioms, such as `len(set(x))` that could lead to an optimized
-`count_uniq` that would loop only once on the input sequence.
+optimisations opportunities are still possible. Using as Domain Specific
+Language(DSL) approach, one could use rewriting rules to optimize several
+Python idioms. For instance, `len(set(x))` could lead to an optimized
+`count_uniq` that would iterate only once on the input sequence.
 
 There is naturally more work to be done at the Numpy level, for instance to
 support more functions from the original module. The extraction of Numpy
