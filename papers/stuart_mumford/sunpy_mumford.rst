@@ -79,6 +79,16 @@ This is catered for in Map by defining "sources" for each instrument, which subc
 register with a MapFactory which then automatically determines the instrument of the data being read and returns the correct source 
 subclass.
 
+The Map types provide methods for calibration to physical units as well as image manipulation routines such as rescale, rotate and 
+visualisation routines. Calibration routines for different instruments are generally placed inside SunPy's "instr" module and take 
+Maps as arguments.
+
+LightCurve
+==========
+
+Spectra
+=======
+
 
 .. Function, Scope and Organisation of
 
@@ -89,7 +99,7 @@ subclass.
 Downloaders and Data Retrevial
 ------------------------------
 
-Most of solar data observed from space mission follows an open policy [#] which makes it available to everyone as soon the data is downloaded.
+Most of solar data observed from space mission follows an open policy [#]_ which makes it available to everyone as soon the data is downloaded.
 However, they are normally archived by the institution in charge of the instrument that made the observations.  
 Making the browsing and data retrieval a very tedious task for the scientist.  
 The `Virtual Solar Observatory <http://virtualsolar.org>`_ (VSO) [VSO]_ has considerably simplified such work by building a centralized database with access to multiple archives.  
@@ -103,17 +113,31 @@ SunPy has includes the capability to get data from VSO by used of that webservic
 Community
 ---------
 
-* Solar physics and open source
-* Scientific Python
-* GSOC / SOCIS
+One of SunPy's major advantages over it's predecessors is the development of SunPy as an open source community inside the wide 
+and diverse general scientific python community. While the SolarSoft library is "open source" in terms of the code being freely 
+avalible most of the development takes place behind closed doors and there is no clear process for contribution. As well as 
+transitioning the solar physics communtity to Python SunPy also aims to instill the prinicpals of open source development in 
+the community.
+
+The scientifc python community is much more establised in other diciplines than solar physics. SunPy is making use of existing 
+scientific python projects with deeper integration with projects like AstroPy and scikit-image possible in the future. This
+collaboration is another strength that sets the scientific python community apart from other similar solutions.
+
+SunPy has been in existance since **[enter date here]** and in this time has already developed into a vaiable analysis platform 
+for solar data. This has been achieved with very little in the way of external funding apart from two ESA Summer Of Code In Space 
+funded summer students and two Google Summer Of Code students in 2013. These students have made a massive contribution to the 
+SunPy code base and enabled development at a much higer rate than would have been possible otherwise.
 
 Future
 ------
 
-* Goals and Scope
-* Local Database?
-* AstroPy
-* Publicity
+SunPy 0.3 provides a excellent, flexable base for future development expansion of the project. The immediate goal for SunPy is 
+to develop the project into a flexible package for data analysis and scientific application. While in the long term SunPy aims 
+to become the defacto package for all solar physics data processing and analysis. 
+To achive this goal it is required that SunPy gains more traction within the solar physics community. This is both to increase 
+the user base and to attract new missions and instruments to adopt Python/SunPy for their data processing pipeline.
+
+**??????**
 
 References
 ----------
