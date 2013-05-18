@@ -94,7 +94,13 @@ Community
 
 * Solar physics and open source
 * Scientific Python
-* GSOC / SOCIS
+
+SunPy has benefitiated mainly from Summer of Code projects.  During its two first years (2011, 2012), Sunpy has participated on the `ESA Summer of code in space <http://sophia.estec.esa.int/socis2012/>`_ (SOCIS).  This programme is inspired by `Google summer of code <https://developers.google.com/open-source/soc/>`_ (GSOC) and it is aimed to raise the awareness of open source projects related to space, promote the `European Space Agency <http://www.esa.int/>`_ and to improve the excisting space-related open-source software.  VSO implementation, and the first graphical user interface (GUI) were developed during these two summer programmes.
+
+In 2013 SunPy is also taking part on GSOC under the umbrella of the `Python Software Fundation <http://www.python.org/psf/>`_ (PSF), looking forward to the advances this will bring to the capabilities and spread of the project.
+
+SunPy has also been benefitiated on investements made by solar physics group, as it was the case on 2012 when the `Astrophysics Research Group <http://physics.tcd.ie/Astrophysics/>`_ at `Trinity College Dublin <http://www.tcd.ie>`_ contracted for the summer our first year SOCIS student to work on the addition of `CALLISTO solar radio spectrometer <http://www.e-callisto.org/>`_ to SunPy. CALLISTO is a very economic radio spectrometer that has been set on more than 30 different locations worldwide.
+
 
 Future
 ------
