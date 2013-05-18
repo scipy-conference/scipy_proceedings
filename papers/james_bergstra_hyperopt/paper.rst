@@ -504,228 +504,222 @@ so they would correctly associate ``c`` with all evaluations of the objective fu
 Configuration Example: ``sklearn`` classifiers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To see several configuration space description techniques in action,
-let's look at how one might go about describing the space of hyperparameters of classification algorithms in [sklearn]_.
+To see how we can use these mechanisms to describe a more realistic
+configuration space,
+let's look at how one might describe a set of classification algorithms in [sklearn]_.
 
 .. code-block:: python
 
     from hyperopt import hp
-    space = hp.choice('classifier_type', [
-        {
-            'type': 'naive_bayes',
-        },
-        {
-            'type': 'svm',
-            'C': hp.lognormal('svm_C', 0, 1),
-            'kernel': hp.choice('svm_kernel', [
-                {'ktype': 'linear'},
-                {'ktype': 'RBF', 'width': hp.lognormal('svm_rbf_width', 0, 1)},
-                ]),
-        },
-        {
-            'type': 'dtree',
-            'criterion': hp.choice('dtree_criterion', ['gini', 'entropy']),
-            'max_depth': hp.choice('dtree_max_depth',
-                [None, hp.qlognormal('dtree_max_depth_int', 3, 1, 1)]),
-            'min_samples_split': hp.qlognormal('dtree_min_samples_split', 2, 1, 1),
-        },
+    from hyperopt.pyll import scope
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.svm import SVC
+    from sklearn.tree import DecisionTreeClassifier\
+        as DTree
+
+    scope.define(GaussianNB)
+    scope.define(SVC)
+    scope.define(DTree, name='DTree')
+
+    C = hp.lognormal('svm_C', 0, 1)
+    space = hp.pchoice('estimator', [
+        (0.1, scope.GaussianNB()),
+        (0.2, scope.SVC(C=C, kernel='linear')),
+        (0.3, scope.SVC(C=C, kernel='rbf',
+            width=hp.lognormal('svm_rbf_width', 0, 1),
+            )),
+        (0.4, scope.DTree(
+            criterion=hp.choice('dtree_criterion',
+                ['gini', 'entropy']),
+            max_depth=hp.choice('dtree_max_depth',
+                [None, hp.qlognormal('dtree_max_depth_N',
+                    2, 2, 1)],
         ])
 
-
-At the top level we have a ``choice`` between
-
-
-Advanced Configuration Spaces
------------------------------
-
-XXX Advanced:
-The hyperparameter optimization algorithms work by replacing normal "sampling" logic with
-adaptive exploration strategies, which make no attempt to actually sample from the distributions specified in the search space.
-
-
-
-2.3 Adding Non-Stochastic Expressions with pyll
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-
-Using a non-Python Evaluation Function
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-There are basically two ways to interface hyperopt with other languages: 
-
-1. you can write a Python wrapper around your cost function that is not written in Python, or 
-2. you can replace the `hyperopt-mongo-worker` program and communicate with MongoDB directly using JSON.
-
-The easiest way to use hyperopt to optimize the arguments to a non-python function, such as for example an external executable, is to write a Python function wrapper around that external executable. Supposing you have an executable `foo` that takes an integer command-line argument `--n` and prints out a score, you might wrap it like this:
-
-.. code-block:: python
-
-    import subprocess
-    def foo_wrapper(n):
-        # Optional: write out a script for the external executable
-        # (we just call foo with the argument proposed by hyperopt)
-        proc = subprocess.Popen(['foo', '--n', n], stdout=subprocess.PIPE)
-        proc_out, proc_err = proc.communicate()
-        # <you might have to do some more elaborate parsing of foo's output here>
-        score = float(proc_out)
-        return score
-
-Of course, to optimize the `n` argument to `foo` you also need to call hyperopt.fmin, and define the search space. I can only imagine that you will want to do this part in Python.
-
-.. code-block:: python
-
-    from hyperopt import fmin, hp, random
-
-    best_n = fmin(foo_wrapper, hp.quniform('n', 1, 100, 1), algo=random.suggest)
-
-    print best_n
-
-When the search space is larger than the simple one here, you might want or need the wrapper function to translate its argument into some kind of configuration file/script for the external executable.
-
-This approach is perfectly compatible with MongoTrials.
+This example illustrates nesting, the use of custom expression types,
+the use of ``pchoice`` to indicate independence among configuration branches,
+several numeric hyperparameters, a discrete hyperparameter (the Dtree
+criterion),
+and a specification of our prior preference among the four possible classifiers.
+At the top level we have a ``pchoice`` between four sklearn algorithms:
+Naive Bayes (NB), a Support Vector Machine (SVM) using a linear kernel,
+an SVM using an "radial basis function" (rbf) kernel, and a decision tree
+(Dtree).
+The result of evaluating the configuration space is actually a sklearn
+estimator corresponding to one of the three possible branches of the top-level
+choice.
+Note that the example uses the same 
+:math:`C` variable for both types of SVM kernel. This is a technique for
+injecting domain knowledge to assist with search;
+if each of the SVMs prefers roughly the same value of :math:`C` then this will
+buy us some search efficiency, but it may hurt search efficiency if the two SVMs
+require very different values of :math:`C`.
+Note also that the hyperparameters all have unique names;
+it is tempting to think they should be named automatically by their path to the
+root of the configuration space,
+but the configuration space is not a tree (consider the ``C`` above).
+These names are also invaluable in analyzing the results of search after
+``fmin``
+has been called, as we will see in the next section, on the ``Trials`` object.
 
 
 The Trials Object
 -----------------
 
-The simplest protocol for communication between hyperopt's optimization
-algorithms and your objective function, is that your objective function
-receives a valid point from the search space, and returns the floating-point
-*loss* (aka negative utility) associated with that point.
-
+The ``fmin`` function returns the best result found during search, but can also
+be useful to analyze all of the trials evaluated during search.
+Pass a ``trials`` argument to ``fmin``  to retain access to all of the points
+accessed during search.
+In this case the call to fmin proceeds as before, but by passing in a trials object directly,
+we can inspect all of the return values that were calculated during the experiment.
 
 .. code-block:: python
 
-    from hyperopt import fmin, tpe, hp
-    best = fmin(fn=lambda x: x ** 2,
-        space=hp.uniform('x', -10, 10),
-        algo=tpe.suggest,
-        max_evals=100)
+    from hyperopt import (hp, fmin, space_eval,
+        Trials)
+    trials = Trials()
+    best = fmin(q, space, trials=trials)
     print best
+    # =>  XXX
+    print space_eval(space, best)
+    # =>  XXX
+
+Information about all of the points evaluated during the search can be accessed
+via attributes of the ``trials`` object.
+The ``.trials`` attribute of a Trials object (``trials.trials`` here)
+is a list with all of the saved state information. It is a list of dictionaries
+with keys:
+
+``'tid'``: type int
+    identifier of the trial
+``'results'``: type dict
+    dict with "loss" returned by objective function ``q``, "status" of "ok" for
+    evaluations that succeeded, and other auxiliary information returned by the
+    evaluation function (see below for how an objective function should use this
+    mechanism).
+``'misc'`` dict with keys ``'idxs'`` and ``'vals'``
+    Compressed representation of all hyperparameter values.
+
+This trials object can be pickled, analyzed with your own code, or passed to Hyperopt's plotting routines (described below).
 
 
-This protocol has the advantage of being extremely readable and quick to
-type. As you can see, it's nearly a one-liner.
-The disadvantages of this protocol are
-(1) that this kind of function cannot return extra information about each evaluation into the trials database, and
-(2) that this kind of function cannot interact with the search algorithm or other concurrent function evaluations.
-You will see in the next examples why you might want to do these things.
+Returning more than just the loss
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Often when evaluating a long-running function, we would like to save more
+than just a single floating point number at the end of it.
+We might want to save some statistics of what happened during the function
+evaluation, we might want to pre-compute some things to have on hand if the
+trial does turn out to be the best-performing one at the end of search.
 
-1.2 Attaching Extra Information via the Trials Object
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Hyperopt supports saving extra information alongside the trial loss,
+if the objective function returns a dictionary instead of a float.
+The returned dictionary must have keys "loss" and "status".
+The status should be either ``STATUS_OK`` or ``STATUS_FAIL`` depending on whether the loss
+was computed successfully or not.
+If the status is ``STATUS_OK``, then the loss must be the objective function value for
+the trial.
+Writing the ``f`` function seen earlier in this dictionary-returning style, it
+would look like:
 
-If your objective function is complicated and takes a long time to run, you will almost certainly want to save more statistics
-and diagnostic information than just the one floating-point loss that comes out at the end.
-For such cases, the fmin function is written to handle dictionary return values.
-The idea is that your loss function can return a nested dictionary with all the statistics and diagnostics you want.
-The reality is a little less flexible than that though: when using mongodb for example,
-the dictionary must be a valid JSON document.
-Still, there is lots of flexibility to store domain specific auxiliary results.
+.. code-block:: python
 
-When the objective function returns a dictionary, the fmin function looks for some special key-value pairs
-in the return value, which it passes along to the optimization algorithm.
-There are two mandatory key-value pairs:
-* `status` - one of the keys from `hyperopt.STATUS_STRINGS`, such as 'ok' for successful completion, and 'fail' in cases where the function turned out to be undefined.
-* `loss` - the float-valued function value that you are trying to minimize, if the status is 'ok' then this has to be present.
+    import time
+    from hyperopt import fmin, Trials
+    from hyperopt import STATUS_OK, STATUS_FAIL
 
-The fmin function responds to some optional keys too:
+    def f(x):
+        try:
+            return {'loss': x ** 2,
+                    'time': time.time(),
+                    'status': STATUS_OK }
+        except Exception, e:
+            return {'status': STATUS_FAIL,
+                    'time': time.time(),
+                    'exception': str(e)}
+    trials = Trials()
+    fmin(f, space=hp.uniform('x', -10, 10),
+        trials=trials)
+    print trials.trials[0]['results']
 
-* `attachments` -  a dictionary of key-value pairs whose keys are short strings (like filenames) and whose values are potentially long strings (like file contents) that should not be loaded from a database every time we access the record. (Also, MongoDB limits the length of normal key-value pairs so once your value is in the megabytes, you may *have* to make it an attachment.)
-* `loss_variance` - float - the uncertainty in a stochastic objective function
-* `true_loss` - float - When doing hyper-parameter optimization, if you store the generalization error of your model with this name, then you can sometimes get spiffier output from the built-in plotting routines.
-* `true_loss_variance` - float - the uncertainty in the generalization error
+An objective function can use just about any keys to store whatever values
+are relevant to the objective function, but there are a few special keys
+that are interpreted by hyperopt routines:
 
-Since dictionary is meant to go with a variety of back-end storage
-mechanisms, you should make sure that it is JSON-compatible.  As long as it's
-a tree-structured graph of dictionaries, lists, tuples, numbers, strings, and
-date-times, you'll be fine.
+``'loss_variance'``: type float
+    variance in a stochastic objective function
+``'true_loss'``: type float
+    if you pre-compute a test error for a validation error loss, store it here so that hyperopt plotting routines can find it.
+``'true_loss_variance'``: type float 
+    variance in test error estimator
+``'attachments'``: type dict
+    short (string) keys with potentially long (string) values
+
+The ``'attachments'`` mechanism is primarily useful for reducing data transfer times when using the ``MongoTrials`` trials object (discussed below) in the context of parallel function evaluation.
+In that case any strings longer than a few megabytes actually *have* to be
+placed in the attachments because of limitations in certain versions of the mongodb database format.
+Another important consideration when using ``MongoTrials`` is that the
+entire dictionary returned from the objective function is JSON-compatible--
+Only strings, numbers, dictionaries, lists, tuples, and date-times are permitted in that
+case.
 
 **HINT:** To store numpy arrays, serialize them to a string, and consider storing
 them as attachments.
 
-Writing the function above in dictionary-returning style, it
-would look like this:
+
+Parallel Evaluation with a Cluster
+----------------------------------
+
+Hyperopt has been designed to make use of a cluster of computers for faster
+search. Of course, parallel evaluation of trials runs contrary to the spirit of
+*sequential* model-based optimization. Evaluating trials in parallel means that
+efficiency per function evaluation will suffer, but the improvement in
+efficiency as a function of wall time can make the sacrifice worthwhile.
+
+Hyperopt supports parallel search via a different trials object of type
+``MongoTrials``. Setting up a parallel search is as simple as using
+``MongoTrials`` instead of ``Trials``.
 
 .. code-block:: python
 
-    import pickle
-    import time
-    from hyperopt import fmin, tpe, hp, STATUS_OK
+    from hyperopt import fmin
+    from hyperopt.mongo import MongoTrials
+    trials = MongoTrials('mongo://host:port/fmin_db/')
+    best = fmin(q, space, trials=trials)
 
-    def objective(x):
-        return {'loss': x ** 2, 'status': STATUS_OK }
+This call uses a [mongod]_ process to handle inter-process communication between
+the ``fmin`` producer-process and other *worker* processes that act as the
+consumers in a producer-consumer processing  model.
+To get this code fragment to work requires a little work outside of this
+Python process:
 
-    best = fmin(objective,
-        space=hp.uniform('x', -10, 10),
-        algo=tpe.suggest,
-        max_evals=100)
+1. Ensure that mongod is running on the specified "host" and "port".
+#. Pick a database name to use for a *particular fmin call*.
+#. Start one or more `hyperopt-mongo-worker` processes.
 
-    print best
+The `hyperopt-mongo-worker` that will also connect to the mongod process,
+and carry out the search while `fmin` blocks.
 
-1.3 The Trials Object
-~~~~~~~~~~~~~~~~~~~~~
 
-To really see the purpose of returning a dictionary,
-let's modify the objective function to return some more things,
-and pass an explicit `trials` argument to `fmin`.
+Trial Attachments
+~~~~~~~~~~~~~~~~~
 
-.. code-block:: python
+XXX What are attachments, why would one use them?
 
-    import pickle
-    import time
-    from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
+XXX How to pass attachments
 
-    def objective(x):
-        return {
-            'loss': x ** 2,
-            'status': STATUS_OK,
-            # -- store other results like this
-            'eval_time': time.time(),
-            'other_stuff': {'type': None, 'value': [0, 1, 2]},
-            # -- attachments are handled differently
-            'attachments':
-                {'time_module': pickle.dumps(time.time)}
-            }
-    trials = Trials()
-    best = fmin(objective,
-        space=hp.uniform('x', -10, 10),
-        algo=tpe.suggest,
-        max_evals=100,
-        trials=trials)
+XXX How to load them back again
 
-    print best
-
-In this case the call to fmin proceeds as before, but by passing in a trials object directly,
-we can inspect all of the return values that were calculated during the experiment.
-
-So for example:
-* `trials.trials` - a list of dictionaries representing everything about the search
-* `trials.results` - a list of dictionaries returned by 'objective' during the search
-* `trials.losses()` - a list of losses (float for each 'ok' trial)
-* `trials.statuses()` - a list of status strings
-
-This trials object can be saved, passed on to the built-in plotting routines,
-or analyzed with your own custom code.
 
 The *attachments* are handled by a special mechanism that makes it possible to use the same code
 for both `Trials` and `MongoTrials`.
-
-You can retrieve a trial attachment like this, which retrieves the 'time_module' attachment of the 5th trial:
-```python
-msg = trials.trial_attachments(trials.trials[5])['time_module']
-time_module = pickle.loads(msg)
-```
 
 The syntax is somewhat involved because the idea is that attachments are large strings,
 so when using MongoTrials, we do not want to download more than necessary.
 Strings can also be attached globally to the entire trials object via trials.attachments,
 which behaves like a string-to-string dictionary.
 
-
 **N.B.** Currently, the trial-specific attachments to a Trials object are tossed into the same global trials attachment dictionary, but that may change in the future and it is not true of MongoTrials.
-
 
 
 Hyperopt with a Cluster
@@ -750,6 +744,49 @@ but I wanted to give some mention of what's possible with the current code base,
 and provide some terms to grep for in the hyperopt source, the unit test,
 and example projects, such as [hyperopt-convnet](https://github.com/jaberg/hyperopt-convnet).
 Email me or file a github issue if you'd like some help getting up to speed with this part of the code.
+
+
+
+Ongoing and Future Work
+------------------------
+
+Drivers for other systems: 
+* Jasper Snoek's "spearmint" package for Gaussian process-based Bayesian optimization
+* Frank Hutter's SMAC and ROAR algorithms, as implemented in XXX.
+
+[hp-dbn]_
+[hp-sklearn]_
+[hp-convnet]_
+
+
+Acknowedgements
+---------------
+
+NSF grant, NSERC Banting Fellowship program.
+Nicolas Pinto for design advice.
+Hristijan Bogoevski for the `pchoice` function and ongoing work on an sklearn driver.
+
+References
+----------
+.. [BB12] J. Bergstra  and Y. Bengio. *Random Search for Hyperparameter Optimization* J. Machine Learning Research, XXX:XX, 2012. http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf
+.. [BBBK11]  XXX http://www.eng.uwaterloo.ca/~jbergstr/files/pub/11_nips_hyperopt.pdf
+.. [Brochu10] XXX
+.. [Hyperopt] github link XXX
+.. [hp-dbn] github link XXX https://github.com/jaberg/hyperopt-dbn) - optimize Deep Belief Networks
+.. [hp-sklearn] github link XXX https://github.com/jaberg/hyperopt-sklearn
+.. [hp-convnet] github link XXX https://github.com/jaberg/hyperopt-convnet optimize convolutional architectures for image classification used in Bergstra, Yamins, and Cox in (ICML 2013).
+.. [MATLAB] XXX
+.. [Mockus78] Mockus. *XXX*, XXX, 1978.
+.. [ROAR] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software
+.. [sklearn] http://scikit-learn.org
+.. [SLA13]  XXX
+.. [Spearmint] http://www.cs.toronto.edu/~jasper/software.html Gaussian-process SMBO in Python.
+.. [SMAC] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software Sequential Model-based Algorithm Configuration (based on regression trees)
+.. [SciPy] XXX
+.. [XXX] XXX
+
+
+
 
 
 To Organize
@@ -963,43 +1000,4 @@ execution.
 * vectorization?
 * TPE
 
-
-
-Ongoing and Future Work
-------------------------
-
-Drivers for other systems: 
-* Jasper Snoek's "spearmint" package for Gaussian process-based Bayesian optimization
-* Frank Hutter's SMAC and ROAR algorithms, as implemented in XXX.
-
-[hp-dbn]_
-[hp-sklearn]_
-[hp-convnet]_
-
-
-Acknowedgements
----------------
-
-NSF grant, NSERC Banting Fellowship program.
-Nicolas Pinto for design advice.
-Hristijan Bogoevski for the `pchoice` function and ongoing work on an sklearn driver.
-
-References
-----------
-.. [BB12] J. Bergstra  and Y. Bengio. *Random Search for Hyperparameter Optimization* J. Machine Learning Research, XXX:XX, 2012. http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf
-.. [BBBK11]  XXX http://www.eng.uwaterloo.ca/~jbergstr/files/pub/11_nips_hyperopt.pdf
-.. [Brochu10] XXX
-.. [Hyperopt] github link XXX
-.. [hp-dbn] github link XXX https://github.com/jaberg/hyperopt-dbn) - optimize Deep Belief Networks
-.. [hp-sklearn] github link XXX https://github.com/jaberg/hyperopt-sklearn
-.. [hp-convnet] github link XXX https://github.com/jaberg/hyperopt-convnet optimize convolutional architectures for image classification used in Bergstra, Yamins, and Cox in (ICML 2013).
-.. [MATLAB] XXX
-.. [Mockus78] Mockus. *XXX*, XXX, 1978.
-.. [ROAR] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software
-.. [sklearn] http://scikit-learn.org
-.. [SLA13]  XXX
-.. [Spearmint] http://www.cs.toronto.edu/~jasper/software.html Gaussian-process SMBO in Python.
-.. [SMAC] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software Sequential Model-based Algorithm Configuration (based on regression trees)
-.. [SciPy] XXX
-.. [XXX] XXX
 
