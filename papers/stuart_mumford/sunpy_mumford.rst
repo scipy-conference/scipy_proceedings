@@ -29,19 +29,10 @@ build upon current work in the AstroPy library to bring greater functionality to
 Introduction
 ------------
 
-Modern solar physics, similar to astrophysics, requires increasingly complex tools and 
+Modern solar physics, similar to astrophysics, requires increasingly complex software tools both for the retrieval as well as the analysis of data. The Sun is the most well-observed star. As such, solar physics is unique in its ability to access large amounts of high resolution ground- and space-based observations of the Sun at many different wavelengths and spatial scales with high time candence. For example, NASA's SDO satellite records over 1TB 
+of data per day all of which is telemtered to the ground and available for analysis. This results in scientists having to process large volumes of complex data products. In order to make meaningful advances in solar physics, it is important for the software tools to be standardized, easy to use, and transparent, so that the community can build upon a common foundation.
 
-Modern solar physics uses a large amount of high resolution ground- and space-based telescopes
-to observe the Sun at different wavelengths and spatial scales. This data results in solar physicists 
-having to download and process gigabytes of data; for example NASA's SDO satellite downloads over 1TB 
-of data per day. This influx of data comes in many forms; the most common solar data type is that of images. 
-However, there are many other types of regularly collected data types, such as 1D lightcurves or spectra of 
-the whole Sun or parts of it. It is clear therefore that solar physicists require access to the tools to 
-process and analyse large quantities of data at different times, wavelengths and spatial scales.
-
-Currently most solar physics is currently performed with a library of IDL routines called solarsoft,
-while this library of software is freely avalible the IDL program itself is not. One of SunPy's key aims
-is to provide a free and open source alternative to the solarsoft library.
+Currently, most solar physics analysis is performed with a library of routines called SolarSoft [SSW]. SolarSoft is a set of integrated software libraries, data bases, and system utilities which provide a common programming and data analysis environment for Solar Physics. It is primarily an IDL-based system, although some instrument teams integrate executables written in other languages. While this library is open-source and freely available, IDL is not. In addition, contributing to the library is not open to the public. One of SunPy's key aims is to provide a free and open source alternative to the solarsoft library.
 
 The scope of a solar physics library can be divided up into two main parts, data analysis and data processing.
 Data analysis is the scientific analysis of calibrated aligned data where as data processing is the process 
