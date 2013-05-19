@@ -119,13 +119,19 @@ LightCurve
 Spectra
 =======
 
+SunPy offers a Spectrogram object, with currently a specialization for e-Callisto spectrograms. It allows the user to seamlessly join different observations,
+download data through an interface that only requires to specify location and time-range, linearizes the frequency axis and automatically downsamples large
+observations to allow them to be rendered on a normal computer screen and much more to help analyze spectrograms.
+
+The data can currently be read from Callisto FITS files (using PyFITS), but the system is designed in way that makes it easy to include new data-sources
+with potentially other data formats (such as LOFAR).
 
 .. Function, Scope and Organisation of
 
 .. * Map
 .. * Spectra
 .. * LightCurve
-
+	
 Solar Data Retrieval and Access
 -------------------------------
 
