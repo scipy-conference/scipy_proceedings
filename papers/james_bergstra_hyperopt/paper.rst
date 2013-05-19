@@ -11,9 +11,9 @@
 :institution: Harvard University
 
 
--------------------------------------------------------------------------------------------
-Hyperopt: A Python Library for Optimizing the Hyperparamters of Machine Learning Algorithms
--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+Hyperopt: A Python Library for Optimizing the Hyperparameters of Machine Learning Algorithms
+--------------------------------------------------------------------------------------------
 
 .. class:: abstract
 
@@ -579,48 +579,43 @@ we can inspect all of the return values that were calculated during the experime
         Trials)
     trials = Trials()
     best = fmin(q, space, trials=trials)
-    print best
-    # =>  XXX
-    print space_eval(space, best)
-    # =>  XXX
+    print trials.trials
 
 Information about all of the points evaluated during the search can be accessed
 via attributes of the ``trials`` object.
 The ``.trials`` attribute of a Trials object (``trials.trials`` here)
-is a list with all of the saved state information. It is a list of dictionaries
-with keys:
+is a list with an element for every function evaluation made by fmin.
+Each element is a dictionary with at least keys:
 
-``'tid'``: type int
-    identifier of the trial
-``'results'``: type dict
-    dict with "loss" returned by objective function ``q``, "status" of "ok" for
-    evaluations that succeeded, and other auxiliary information returned by the
-    evaluation function (see below for how an objective function should use this
-    mechanism).
-``'misc'`` dict with keys ``'idxs'`` and ``'vals'``
-    Compressed representation of all hyperparameter values.
+``'tid'``: value of type int
+    "trial identifier" of the trial within the search
+``'results'``: value of type dict
+    dict with "loss", "status", and other information returned by the objective function
+    (see below for details)
+``'misc'`` value of dict with keys ``'idxs'`` and ``'vals'``
+    compressed representation of hyperparameter values
 
 This trials object can be pickled, analyzed with your own code, or passed to Hyperopt's plotting routines (described below).
 
 
-Returning more than just the loss
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Trial results: more than just the loss
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Often when evaluating a long-running function, we would like to save more
-than just a single floating point number at the end of it.
-We might want to save some statistics of what happened during the function
-evaluation, we might want to pre-compute some things to have on hand if the
-trial does turn out to be the best-performing one at the end of search.
+Often when evaluating a long-running function, there is more to save
+after it has run than a single floating point loss value.
+For example there may be statistics of what happened during the function
+evaluation, or it might be expedient to pre-compute results to have them ready if the
+trial in question turns out to be the best-performing one.
 
-Hyperopt supports saving extra information alongside the trial loss,
-if the objective function returns a dictionary instead of a float.
+Hyperopt supports saving extra information alongside the trial loss.
+To use this mechanism, an objective function must return a dictionary instead of a float.
 The returned dictionary must have keys "loss" and "status".
 The status should be either ``STATUS_OK`` or ``STATUS_FAIL`` depending on whether the loss
 was computed successfully or not.
 If the status is ``STATUS_OK``, then the loss must be the objective function value for
 the trial.
-Writing the ``f`` function seen earlier in this dictionary-returning style, it
-would look like:
+Writing a quadratic ``f(x)`` function in this dictionary-returning style,
+it might look like:
 
 .. code-block:: python
 
@@ -642,8 +637,8 @@ would look like:
         trials=trials)
     print trials.trials[0]['results']
 
-An objective function can use just about any keys to store whatever values
-are relevant to the objective function, but there are a few special keys
+An objective function can use just about any keys to store auxiliary
+information, but there are a few special keys
 that are interpreted by hyperopt routines:
 
 ``'loss_variance'``: type float
@@ -656,12 +651,11 @@ that are interpreted by hyperopt routines:
     short (string) keys with potentially long (string) values
 
 The ``'attachments'`` mechanism is primarily useful for reducing data transfer times when using the ``MongoTrials`` trials object (discussed below) in the context of parallel function evaluation.
-In that case any strings longer than a few megabytes actually *have* to be
+In that case, any strings longer than a few megabytes actually *have* to be
 placed in the attachments because of limitations in certain versions of the mongodb database format.
 Another important consideration when using ``MongoTrials`` is that the
-entire dictionary returned from the objective function is JSON-compatible--
-Only strings, numbers, dictionaries, lists, tuples, and date-times are permitted in that
-case.
+entire dictionary returned from the objective function must be JSON-compatible.
+JSON allows for only strings, numbers, dictionaries, lists, tuples, and date-times.
 
 **HINT:** To store numpy arrays, serialize them to a string, and consider storing
 them as attachments.
@@ -671,14 +665,15 @@ Parallel Evaluation with a Cluster
 ----------------------------------
 
 Hyperopt has been designed to make use of a cluster of computers for faster
-search. Of course, parallel evaluation of trials runs contrary to the spirit of
+search. Of course, parallel evaluation of trials sits at odds with
 *sequential* model-based optimization. Evaluating trials in parallel means that
-efficiency per function evaluation will suffer, but the improvement in
+efficiency per function evaluation will suffer (to an extent that is difficult
+to assess a-priori), but the improvement in
 efficiency as a function of wall time can make the sacrifice worthwhile.
 
-Hyperopt supports parallel search via a different trials object of type
+Hyperopt supports parallel search via a special trials type called
 ``MongoTrials``. Setting up a parallel search is as simple as using
-``MongoTrials`` instead of ``Trials``.
+``MongoTrials`` instead of ``Trials``:
 
 .. code-block:: python
 
@@ -687,76 +682,137 @@ Hyperopt supports parallel search via a different trials object of type
     trials = MongoTrials('mongo://host:port/fmin_db/')
     best = fmin(q, space, trials=trials)
 
-This call uses a [mongod]_ process to handle inter-process communication between
-the ``fmin`` producer-process and other *worker* processes that act as the
+When we construct a ``MongoTrials`` object, we must specify a running *mongod*
+database [mongodb]_ for inter-process communication between
+the ``fmin`` producer-process and *worker* processes, which act as the
 consumers in a producer-consumer processing  model.
-To get this code fragment to work requires a little work outside of this
-Python process:
+If you simply type the code fragment above, you may find that it either
+crashes (if no mongod is found)
+or hangs (if no worker processes are connected to the same database).
+When used with ``MongoTrials`` the ``fmin`` call simply enqueues
+configurations and waits until they are evaluated.
+If no workers are running, ``fmin`` will block after enqueing one trial.
+To run ``fmin`` with ``MongoTrials`` requires that you:
 
-1. Ensure that mongod is running on the specified "host" and "port".
-#. Pick a database name to use for a *particular fmin call*.
-#. Start one or more `hyperopt-mongo-worker` processes.
+1. ensure that mongod is running on the specified "host" and "port",
+#. choose a database name to use for a *particular fmin call*, and
+#. start one or more `hyperopt-mongo-worker` processes.
 
-The `hyperopt-mongo-worker` that will also connect to the mongod process,
-and carry out the search while `fmin` blocks.
+There is a generic `hyperopt-mongo-worker` script in Hyperopt's ``scripts`` subdirectory
+that can be run from a command line like this:
 
+.. code-block:: bash
 
-Trial Attachments
-~~~~~~~~~~~~~~~~~
+    hyperopt-mongo-worker --mongo=host:port/db
 
-XXX What are attachments, why would one use them?
+To evaluate multiple trial points in parallel, simply start multiple scripts
+in this way that all work on the same database.
 
-XXX How to pass attachments
+Note that mongodb databases persist until they are deleted, and ``fmin`` will
+never delete things from mongodb. If you call ``fmin`` using a particular
+database one day, stop the search, and start it again later,  then ``fmin``
+will continue where it left off.
 
-XXX How to load them back again
-
-
-The *attachments* are handled by a special mechanism that makes it possible to use the same code
-for both `Trials` and `MongoTrials`.
-
-The syntax is somewhat involved because the idea is that attachments are large strings,
-so when using MongoTrials, we do not want to download more than necessary.
-Strings can also be attached globally to the entire trials object via trials.attachments,
-which behaves like a string-to-string dictionary.
-
-**N.B.** Currently, the trial-specific attachments to a Trials object are tossed into the same global trials attachment dictionary, but that may change in the future and it is not true of MongoTrials.
-
-
-Hyperopt with a Cluster
------------------------
 
 The Ctrl Object for Realtime Communication with MongoDB
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-It is possible for `fmin()` to give your objective function a handle to the mongodb used by a parallel experiment. This mechanism makes it possible to update the database with partial results, and to communicate with other concurrent processes that are evaluating different points.
-Your objective function can even add new search points, just like `random.suggest`.
+When running a search in parallel, you may wish to provide your objective
+function with a handle to the mongodb database used by the search.
+This mechanism makes it possible for objective functions to
+* update the database with partial results,
+* to communicate with concurrent processes, and
+* even to enqueue new configuration points.
 
-The basic technique involves:
+This is an advanced usage of hyperopt, but it is supported via syntax like the
+following:
 
-* Using the `fmin_pass_expr_memo_ctrl` decorator
-* call `pyll.rec_eval` in your own function to build the search space point
-  from `expr` and `memo`.
-* use `ctrl`, an instance of `hyperopt.Ctrl` to communicate with the live
-  trials object.
+.. code-block:: python
 
-It's normal if this doesn't make a lot of sense to you after this short tutorial,
-but I wanted to give some mention of what's possible with the current code base,
-and provide some terms to grep for in the hyperopt source, the unit test,
-and example projects, such as [hyperopt-convnet](https://github.com/jaberg/hyperopt-convnet).
-Email me or file a github issue if you'd like some help getting up to speed with this part of the code.
+    from hyperopt import pyll
 
+    @hyperopt.fmin_pass_expr_memo_ctrl
+    def realtime_objective(expr, memo, ctrl):
+        config = pyll.rec_eval(expr, memo=memo)
+        # .. config is a configuration point
+        # .. ctrl can be used to interact with database
+        return {'loss': f(config),
+                'status': STATUS_OK, ...}
+
+The ``fmin_pass_expr_memo_ctrl`` decorator tells ``fmin`` to use a different
+calling convention for the objective function, in which internal objects
+``expr``, ``memo`` and ``ctrl`` are exposed to the objective function.
+The ``expr`` the configuration space, the ``memo`` is a dictionary mapping
+nodes in the configuration space description graph to values for those nodes
+(most importantly, values for the hyperparameters).
+The recursive evaluation function ``rec_eval`` computes the configuration
+point from the values in the ``memo`` dictionary. The ``config`` object
+produced by ``rec_eval`` is what would normally have been passed
+as the argument to the objective function.
+The ``ctrl`` object is an instance of ``hyperopt.Ctrl``, and it can be
+used to to communicate with the trials object being used by ``fmin``.
+It is possible to use a ``ctrl`` object with a (sequential) ``Trials`` object,
+but it is most useful when used with ``MongoTrials``.
+
+To summarize, Hyperopt can be used both purely sequentially, as well as
+*broadly sequentially* with multiple current candidates under evaluation at a
+time. In the parallel case, mongodb is used for inter-process communication
+and doubles as a persistent storage mechanism for post-hoc analysis.
+Parallel search can be done with the same objective functions as the ones used
+for sequential search, but users wishing to take advantage of asynchronous
+evaluation in the parallel case can do so by using a lower-level calling
+convention for their objective function.
 
 
 Ongoing and Future Work
 ------------------------
 
-Drivers for other systems: 
-* Jasper Snoek's "spearmint" package for Gaussian process-based Bayesian optimization
-* Frank Hutter's SMAC and ROAR algorithms, as implemented in XXX.
+Hyperopt is the subject of ongoing and planned future work in the
+algorithms that it provides, the domains that it covers, and the technology
+that it builds on.
 
-[hp-dbn]_
-[hp-sklearn]_
-[hp-convnet]_
+Related Bayesian optimization software such as
+* Frank Hutter et al's [SMAC]_, and
+* Jasper Snoek's [spearmint]_
+implement state-of-the-art algorithms that are different from the TPE
+algorithm currently implemented in Hyperopt.
+Questions about which of these algorithms performs best in which circumstances,
+and over what search budgets remain topics of active research.
+One of the first technical milestones on the road to answering those research
+questions is to make each of those algorithms applicable to common search
+problems.
+We are working with the authors of these other software packages to build
+those bridges, but no fixed timeline has been put in place.
+
+Hyperopt was developed to support research into deep learning [BBBK11]_
+and computer vision [BYC13]_. Corresponding projects [hp-dbn]_ and
+[hp-convnet]_ have been made public on Github to illustrate how hyperopt can
+be used to define and optimize large-scale hyperparameter optimization
+problems.
+Currently, Hristijan Bogoevski is investigating Hyperopt as a tool for
+optimizing the suite of machine learning algorithms provided by sklearn;
+with luck, that work will appear in the [hp-sklearn]_ project in the
+not-too-distant future.
+
+With regards to implementation decisions in Hyperopt,
+several people have asked about the possibility of using IPython instead of
+mongodb to support parallelism.
+This would allow us to build on IPython's cluster management interface,
+and relax the constraint that objective function results be JSON-compatible.
+If anyone implements this functionality,
+a pull request to Hyperopt's master branch would be most welcome.
+
+
+Summary and Further Reading
+---------------------------
+
+Hyperopt is a Python library for Sequential Model-Based Optimization (SMBO)
+that has been designed to meet the needs of machine learning researchers
+performing hyperparameter optimization. It provides a flexible and powerful
+language for describing search spaces, and supports scheduling asynchronous function
+evaluations for evaluation by multiple processes and computers.
+It is BSD-licensed and available for download from PyPI and Github.
+Further documentation is available at [http://jaberg.github.com/hyperopt].
 
 
 Acknowedgements
@@ -770,6 +826,7 @@ References
 ----------
 .. [BB12] J. Bergstra  and Y. Bengio. *Random Search for Hyperparameter Optimization* J. Machine Learning Research, XXX:XX, 2012. http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf
 .. [BBBK11]  XXX http://www.eng.uwaterloo.ca/~jbergstr/files/pub/11_nips_hyperopt.pdf
+.. [BYC13] XXX
 .. [Brochu10] XXX
 .. [Hyperopt] github link XXX
 .. [hp-dbn] github link XXX https://github.com/jaberg/hyperopt-dbn) - optimize Deep Belief Networks
@@ -777,6 +834,7 @@ References
 .. [hp-convnet] github link XXX https://github.com/jaberg/hyperopt-convnet optimize convolutional architectures for image classification used in Bergstra, Yamins, and Cox in (ICML 2013).
 .. [MATLAB] XXX
 .. [Mockus78] Mockus. *XXX*, XXX, 1978.
+.. [mongodb] XXX
 .. [ROAR] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software
 .. [sklearn] http://scikit-learn.org
 .. [SLA13]  XXX
@@ -784,220 +842,4 @@ References
 .. [SMAC] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software Sequential Model-based Algorithm Configuration (based on regression trees)
 .. [SciPy] XXX
 .. [XXX] XXX
-
-
-
-
-
-To Organize
-~~~~~~~~~~~
-
-Hyperopt is designed to support different kinds of trial databases.
-The default trial database (`Trials`) is implemented with Python lists and dictionaries.
-The default implementation is a reference implementation and it is easy to work with,
-but it does not support the asynchronous updates required to evaluate trials in parallel.
-For parallel search, hyperopt includes a `MongoTrials` implementation that supports asynchronous updates.
-
-To run a parallelized search, you will need to do the following (after [installing mongodb](Installation-Notes)):
-
-1. Start a mongod process somewhere network-visible.
-
-#. Modify your call to `hyperopt.fmin` to use a MongoTrials backend connected to that mongod process.
-
-#. Start one or more `hyperopt-mongo-worker` processes that will also connect to the mongod process,
-    and carry out the search while `fmin` blocks.
-
-1. Start a mongod process
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Once mongodb is installed, starting a database process (mongod) is as easy as typing e.g.
-
-.. code-block:: bash
-
-    mongod --dbpath . --port 1234
-    # or storing each db its own directory is nice:
-    mongod --dbpath . --port 1234 --directoryperdb --journal --nohttpinterface
-    # or consider starting mongod as a daemon:
-    mongod --dbpath . --port 1234 --directoryperdb --fork --journal --logpath log.log --nohttpinterface
-
-Mongo has a habit of pre-allocating a few GB of space (you can disable this with --noprealloc) for better performance, so think a little about where you want to create this database.
-Creating a database on a networked filesystem may give terrible performance not only to your database but also to everyone else on your network, be careful about it.
-
-Also, if your machine is visible to the internet, then either bind to the loopback interface and connect via ssh or read mongodb's documentation on password protection.
-
-The rest of the tutorial is based on mongo running on **port 1234** of the **localhost**.
-
-2. Use MongoTrials
-~~~~~~~~~~~~~~~~~~
-
-Suppose, to keep things really simple, that you wanted to minimize the `math.sin` function with hyperopt.
-To run things in-process (serially) you could type things out like this:
-
-.. code-block:: python
-
-    import math
-    from hyperopt import fmin, tpe, hp, Trials
-
-    trials = Trials()
-    best = fmin(math.sin, hp.uniform('x', -2, 2), trials=trials, algo=tpe.suggest)
-
-To use the mongo database for persistent storage of the experiment, use a `MongoTrials` object instead of `Trials` like this:
-
-.. code-block:: python
-
-    import math
-    from hyperopt import fmin, tpe, hp
-    from hyperopt.mongoexp import MongoTrials
-
-    trials = MongoTrials('mongo://localhost:1234/foo_db/jobs', exp_key='exp1')
-    best = fmin(math.sin, hp.uniform('x', -2, 2), trials=trials, algo=tpe.suggest, max_evals=10)
-
-The first argument to MongoTrials tells it what mongod process to use, and which *database* (here 'foo_db') within that process to use.
-The second argument (`exp_key='exp_1'`) is useful for tagging a particular set of trials *within* a database.
-The exp_key argument is technically optional.
-
-**N.B.** There is currently an implementation requirement that the database name be followed by '/jobs'.
-
-Whether you always put your trials in separate databases or whether you use the exp_key mechanism to distinguish them is up to you.
-In favour of databases: they can be manipulated from the shell (they appear as distinct files) and they ensure greater independence/isolation of experiments.
-In favour of exp_key: hyperopt-mongo-worker processes (see below) poll at the database level so they can simultaneously support multiple experiments that are using the same database.
-
-
-3. Run `hyperopt-mongo-worker`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If you run the code fragment above, you will see that it blocks (hangs) at the call fmin.
-MongoTrials describes itself internally to fmin as an *asynchronous* trials object, so fmin
-does not actually evaluate the objective function when a new search point has been suggested.
-Instead, it just sits there, patiently waiting for another process to do that work and update the mongodb with the results.
-The `hyperopt-mongo-worker` script included in the `bin` directory of hyperopt was written for this purpose.
-It should have been installed on your `$PATH` when you installed hyperopt.
-
-While the `fmin` call in the script above is blocked, open a new shell and type
-
-.. code-block:: bash
-
-    hyperopt-mongo-worker --mongo=localhost:1234/foo_db --poll-interval=0.1
-
-It will dequeue a work item from the mongodb, evaluate the `math.sin` function, store the results back to the database.
-After the `fmin` function has tried enough points it will return and the script above will terminate.
-The `hyperopt-mongo-worker` script will then sit around for a few minutes waiting for more work to appear, and then terminate too.
-
-We set the poll interval explicitly in this case because the default timings are set up for jobs (search point evaluations) that take at least a minute or two to complete.
-
-MongoTrials is a Persistent Object
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If you run the example above a second time,
-
-.. code-block:: python
-
-    best = fmin(math.sin, hp.uniform('x', -2, 2), trials=trials, algo=tpe.suggest, max_evals=10)
-
-you will see that it returns right away and nothing happens.
-That's because the database you are connected to already has enough trials in it; you already computed them when you ran the first experiment.
-If you want to do another search, you can change the database name or the `exp_key`.
-If you want to extend the search, then you can call fmin with a higher number for `max_evals`.
-Alternatively, you can launch other processes that create the MongoTrials specifically to analyze the results that are already in the database. Those other processes do not need to call fmin at all.
-
-
-
-Hyperopt Architecture
----------------------
-
-
-Hyperopt provides serial and parallelizable HOAs via a Python library [2, 3].
-Fundamental to its design is a protocol for communication between
-(a) the description of a hyperparameter search space,
-(b) a hyperparameter evaluation function (machine learning system), and
-(c) a hyperparameter search algorithm.
-This protocol makes it possible to make generic HOAs (such as the bundled "TPE" algorithm) work for a range of specific search problems.
-Specific machine learning algorithms (or algorithm families) are implemented as hyperopt *search spaces* in related projects:
-Deep Belief Networks [4],
-convolutional vision architectures [5],
-and scikit-learn classifiers [6].
-My presentation will explain what problem hyperopt solves, how to use it, and how it can deliver accurate models from data alone, without operator intervention.
-
-
-Adding Optimization Algorithms 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-Adding Hyperparameter Distributions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-
-Stuff from Website
-------------------
-
-
-2.4 Adding New Kinds of Hyperparameter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Adding new kinds of stochastic expressions for describing parameter search spaces should be avoided if possible.
-In order for all search algorithms to work on all spaces, the search algorithms must agree on the kinds of hyperparameter that describe the space.
-As the maintainer of the library, I am open to the possibility that some kinds of expressions should be added from time to time, but like I said, I would like to avoid it as much as possible.
-Adding new kinds of stochastic expressions is not one of the ways hyperopt is meant to be extensible.
-
-
-Basic usage of the hyperopt library is illustrated by the following code.
-
-.. code-block:: python
-
-    # define an objective function
-    def objective(args):
-        case, val = args
-        if case == 'case 1':
-            return val
-        else:
-            return val ** 2
-
-    # define a search space
-    from hyperopt import hp
-    space = hp.choice('a',
-        [
-            ('case 1', 1 + hp.lognormal('c1', 0, 1)),
-            ('case 2', hp.uniform('c2', -10, 10))
-        ])
-
-    # minimize the objective over the space
-    from hyperopt import fmin, tpe
-    best = fmin(objective, space, algo=tpe.suggest, max_evals=100)
-
-    print best
-    # -> {'a': 1, 'c2': 0.01420615366247227}
-    print hyperopt.space_eval(space, best)
-    # -> ('case 2', 0.01420615366247227}
-
-
-
-
-Communicating with MongoDB Directly
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-It is possible to interface more directly with the search process (when using MongoTrials) by communicating with MongoDB directly, just like `hyperopt-mongo-worker` does. It's beyond the scope of a tutorial to explain how to do this, but Hannes Schultz (@temporaer) got hyperopt working with his MDBQ project, which is a standalone mongodb-based task queue:
-
-https://github.com/temporaer/MDBQ/blob/master/src/example/hyperopt_client.cpp
-
-Have a look at that code, as well as the contents of [hyperopt/mongoexp.py](https://github.com/jaberg/hyperopt/blob/master/hyperopt/mongoexp.py) to understand how worker processes are expected to reserve jobs in the work queue, and store results back to MongoDB.
-
-
-This code illustrates hyperopt's `fmin` function.
-The `fmin` function is the main interface for both synchronous and asynchronous
-(parallel, including across hosts)
-execution.
-
-* fmin
-* configuration language
-* returning more than the loss function
-* Trials
-* MongoDB
-* Parallel/Asynchronous optimization
-* MongoTrials
-* algorithms
-* pyll
-* vectorization?
-* TPE
-
 
