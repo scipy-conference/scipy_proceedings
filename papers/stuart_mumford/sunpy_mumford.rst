@@ -107,6 +107,9 @@ Future
 * AstroPy
 * Publicity
 
+
+Based on recent work in the capabilities of AstroPy combined with the overlapping requirements of SunPy and AstroPy, future releases of SunPy will incorporate AstroPy-based functionality. The next release of SunPy will make use of the NDData type of Astropy which is built upon ndarray and combines metadata with arrays of data. The SunPy team would like to thank the organizers of SciPy for the opportunity to present on the SunPy project. 
+
 References
 ----------
 .. [VSO] F. Hill, et al. *The Virtual Solar Observatory—A Resource for International Heliophysics Research*,
