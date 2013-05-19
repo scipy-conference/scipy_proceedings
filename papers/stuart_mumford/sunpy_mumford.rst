@@ -137,9 +137,6 @@ The VSO strives to provides a one stop shop to solar data by building a centrali
 The VSO allows the user to search using parameters as instrument name or type, time, physical obsevable and/or spectral range.  
 VSO's main interface is web-based, however, an API based on a WSDL webservice is also available. SunPy provides a python front-end to this API. 
 
-SunPy has includes the capability to get data from VSO by used of that webservice.
--- this is made -- Florian/Joe should write about this...
-
 A new problem arise with the SDO mission. 
 The large size of the images (4 times larger than the previous mission), together with the fastest cadence of their cameras (~10 images per minute) makes challenging to use of the data as it used to be. 
 The `Heliophysics Event Knowledgebase <http://www.lmsal.com/hek/>`_ [HEK]_ was created to solve this overload of data. 
@@ -162,8 +159,13 @@ HELIO implementation on SunPy is on early development stages.
 Community
 ---------
 
-* Solar physics and open source
-* Scientific Python
+One of SunPy's major advantages over it's predecessors is the development of SunPy as an open source community inside the wide and diverse general scientific python community. 
+While the SolarSoft library is "open source" in terms of the code being freely avalible most of the development takes place behind closed doors and there is no clear process for contribution. 
+As well as transitioning the solar physics communtity to Python SunPy also aims to instill the prinicpals of open source development in the community.
+
+The scientifc python community is much more establised in other diciplines than solar physics. 
+SunPy is making use of existing scientific python projects with deeper integration with projects like AstroPy and scikit-image possible in the future. 
+This collaboration is another strength that sets the scientific python community apart from other similar solutions.
 
 SunPy has benefitiated mainly from Summer of Code projects. 
 During its two first years (2011, 2012), Sunpy has participated on the `ESA Summer of code in space <http://sophia.estec.esa.int/socis2012/>`_ (SOCIS). 
@@ -174,24 +176,27 @@ In 2013 SunPy is also taking part on GSOC under the umbrella of the `Python Soft
 SunPy has also been benefitiated on investements made by solar physics group, as it was the case on 2012 when the `Astrophysics Research Group <http://physics.tcd.ie/Astrophysics/>`_ at `Trinity College Dublin <http://www.tcd.ie>`_ contracted for the summer our first year SOCIS student to work on the addition of `CALLISTO solar radio spectrometer <http://www.e-callisto.org/>`_ to SunPy. 
 CALLISTO is a very economic radio spectrometer that has been set on more than 30 different locations worldwide.
 
-
 Future
 ------
 
-* Goals and Scope
-* Local Database?
-* AstroPy
-* Publicity
+SunPy 0.3 provides a excellent, flexable base for future development expansion of the project. The immediate goal for SunPy is 
+to develop the project into a flexible package for data analysis and scientific application. While in the long term SunPy aims 
+to become the defacto package for all solar physics data processing and analysis. 
+To achive this goal it is required that SunPy gains more traction within the solar physics community. This is both to increase 
+the user base and to attract new missions and instruments to adopt Python/SunPy for their data processing pipeline.
+
+**??????**
 
 References
 ----------
 .. [VSO] F. Hill, et al. *The Virtual Solar Observatory—A Resource for International Heliophysics Research*,
          Earth Moon and Planets, 104:315-330, April 2009. DOI: 10.1007/s11038-008-9274-7
+         
 .. [HEK] N. Hurlburt, et al. *Heliophysics Event Knowledgebase for the Solar Dynamics Observatory (SDO) and Beyond*,
          Solar Physics, 275:67-78, January 2012. DOI: 10.1007/s11207-010-9624-2 arXiv:1008.1291
+         
 .. [HELIO] D. Pérez-Suárez et al. *Studying Sun–Planet Connections Using the Heliophysics Integrated Observatory (HELIO)*
            Solar Physics, 280:603-621, October 2012. DOI: 10.1007/s11207-012-0110-x
-	
 
 .. [WCS] W. T. Thompson, *Coordinate systems for solar image data*, A&A 449, 791–803 (2006)
 
