@@ -61,7 +61,7 @@ While these different data types have clear applications to different types of o
 between them, for example a 1 pixel slice of a MapCube should result in a Lightcurve and a 1 pixel slice of a composite map 
 should be a Spectrum. While these types of interoperability are not yet implemented in SunPy it is a future goal.
 
-To this end, the 0.3 release of SunPy will include a large scale refactoring of all the data types. This is primarily motivated 
+To this end, the 0.3 release of SunPy include a large scale refactoring of all the data types. This is primarily motivated 
 by the desire to move away from a structure where we inherit a numpy ndarray to the data type containing the data as an attribute. 
 This design is also mirrored by AstroPy's NDData object which has many similarities to function of our data types especially the Map.
 
@@ -76,25 +76,19 @@ conform to a historic standard to describe the image such as observation time, w
 The SunPy map object recognizes different types of map types and is based on a common super class called MapBase. This object will likely inherit from AstroPy's NDData object in the next release of SunPy. MapBase provides very limited functionality while 2D image types are all derived from a GenericMap class that provides mission-specific 2D specific calibration and coordinate methods. To instantiate the correct subclass of GenericMap a 
 MapFactory is used which is accesible to the user through a class named Map. The 2D image data processed by Map comes from a variety of instruments with different header parameters and processing reqirements. The map factory defines "sources" for each instrument, which subclasses GenericMap, the base 2D class. These sources register with a MapFactory which then automatically determines the instrument of the data being read and returns the correct source subclass. Other derived classes are GenericMap, meant to contain a single map. Other map types are CompositeMap and MapCube. These map classes are meant to hold many maps of a similar spatial region and a time series of maps respectively. 
 
-
-
 .. Function, Scope and Organisation of
 
 .. * Map
 .. * Spectra
 .. * LightCurve
 
-Downloaders and Data Retrevial
-------------------------------
+Solar Data Retrieval and Access
+-------------------------------
 
-Most of solar data observed from space mission follows an open policy [#] which makes it available to everyone as soon the data is downloaded.
-However, they are normally archived by the institution in charge of the instrument that made the observations.  
-Making the browsing and data retrieval a very tedious task for the scientist.  
-The `Virtual Solar Observatory <http://virtualsolar.org>`_ (VSO) [VSO]_ has considerably simplified such work by building a centralized database with access to multiple archives.  
-VSO allows the user to query by few parameters as instrument name or type, time, physical obsevable and/or spectral range.   
-VSO's main interface is web based, however, they have developed an API based on a WSDL webservice.
-SunPy has includes the capability to get data from VSO by used of that webservice.
--- this is made -- Florian/Joe should write about this...
+Most solar observations provided by NASA or ESA follow an open data policy [#] which means that all data is available to everyone as soon the data is telemetered to the ground.
+However, these data are normally archived by the institution in charge of the instrument that made the observations. This fact makes browsing data and data retrieval a difficult and tedious task for the scientist.  In recognition of this fact, the `Virtual Solar Observatory <http://virtualsolar.org>`_ (VSO) [VSO]_ was developed. The VSO strives to provides a one stop shop to solar data by building a centralized database with access to multiple archives.  The VSO allows the user to search using parameters as instrument name or type, time, physical obsevable and/or spectral range.   
+VSO's main interface is web-based, however, an API based on a WSDL webservice is also available. SunPy provides a python front-end to this API. 
+
 * VSO
 * HEK / Helio
 
