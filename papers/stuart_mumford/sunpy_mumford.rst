@@ -40,7 +40,7 @@ For example, NASA's SDO satellite records over 1TB of data per day all of which 
 This results in scientists having to process large volumes of complex data products. 
 In order to make meaningful advances in solar physics, it is important for the software tools to be standardized, easy to use, and transparent, so that the community can build upon a common foundation.
 
-Currently, most solar physics analysis is performed with a library of routines called SolarSoft [SSW]. 
+Currently, most solar physics analysis is performed with a library of routines called SolarSoft [SSW]_. 
 SolarSoft is a set of integrated software libraries, data bases, and system utilities which provide a common programming and data analysis environment for Solar Physics. 
 It is primarily an IDL-based system, although some instrument teams integrate executables written in other languages. 
 While this library is open-source and freely available, IDL is not. 
@@ -51,12 +51,12 @@ The scope of a solar physics library can be divided up into two main parts, data
 Data analysis is the scientific analysis of calibrated aligned data where as data processing is the process of calibrating and aliging the data. 
 SunPy's current scope is data analysis with minimal data processing.
 
-.. * Solar Data
-.. * SunPy Data types
-.. * IDL / SSW
-.. * Data processing / analysis
+SunPy currently depends upon the core scientific packages like NumPy, SciPy and matplotlib. 
+As well as Pandas, suds, PYFITS / Astropy.io.fits and beautifulsoup4.
+The latest release of SunPy is avalible in PyPI and can be installed thus:: 
+    
+    pip install sunpy
 
-Need to add a list of dependencies.
 
 SunPy Data Types
 ----------------
