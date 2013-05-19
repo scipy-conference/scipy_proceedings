@@ -137,8 +137,10 @@ The VSO strives to provides a one stop shop to solar data by building a centrali
 The VSO allows the user to search using parameters as instrument name or type, time, physical obsevable and/or spectral range.  
 VSO's main interface is web-based, however, an API based on a WSDL webservice is also available. SunPy provides a python front-end to this API. 
 
-SunPy has includes the capability to get data from VSO by used of that webservice.
--- this is made -- Florian/Joe should write about this...
+SunPy has includes the capability to get data from VSO by the use of that webservice.
+It includes both a legacy interface that tries to mimic the origin vso_search SSW function and a new interface that allows the user to specify boolean condition
+that the data needs to match, such as (instrument aia or instrument eit) and (time between 2013-01-01 and 2013-01-12), leaving the tool to resolve these conditions
+to queries to the VSO and getting their results.
 
 A new problem arise with the SDO mission. 
 The large size of the images (4 times larger than the previous mission), together with the fastest cadence of their cameras (~10 images per minute) makes challenging to use of the data as it used to be. 
@@ -148,6 +150,8 @@ Thus, allowing the solar physicist to search for an event type or property and d
 In SunPy the implementation just covers the search and retrieve of the information related with the events and not the downloading of the observational data. 
 This allows, for example, to plot the feature contours on an image, study their properties and their evolution, etc.
 The implementation in SunPy of this tool was done based on the VSO tool but changing observatory and instruments by features and their properties
+
+Is uses the same approach as the VSO, allowing the user to specify boolean conditions the events need to match.
 
 -- Jack and Florian are the best to describe how this was done.
 
