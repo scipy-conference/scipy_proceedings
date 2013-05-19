@@ -17,7 +17,7 @@ SunPy: Python for Solar Physicists
 .. class:: abstract
 
 SunPy is a data analysis toolkit specializing in providing the software necessary to analyze solar and heliospheric datasets in Python. 
-The goal of SunPy is to provide a free and open-source alternative to the standard IDL-based SolarSoft (SSW) solar data analysis environment. 
+A key goal of SunPy is to provide a free and open-source alternative to the standard IDL-based SolarSoft (SSW) solar data analysis environment. 
 We present on the latest release of SunPy (0.3). 
 Though still in active development SunPy already provides important functionality such as integration with the the Virtual Solar Observatory (VSO) which provides access to most solar data sets as well as integration with the Heliophysics Event Knowledgebase (HEK), a database of transient solar events such as solar flares or coronal mass ejections. 
 One of the major goals of SunPy is to provide a user-friendly, common programming and data analysis environmnent. 
@@ -41,7 +41,7 @@ This results in scientists having to process large volumes of complex data produ
 In order to make meaningful advances in solar physics, it is important for the software tools to be standardized, easy to use, and transparent, so that the community can build upon a common foundation.
 
 Currently, most solar physics analysis is performed with a library of routines called SolarSoft [SSW]_. 
-SolarSoft is a set of integrated software libraries, data bases, and system utilities which provide a common programming and data analysis environment for Solar Physics. 
+SolarSoft is a set of integrated software libraries, databases, and system utilities which provide a common programming and data analysis environment for Solar Physics. 
 It is primarily an IDL-based system, although some instrument teams integrate executables written in other languages. 
 While this library is open-source and freely available, IDL is not. 
 In addition, contributing to the library is not open to the public. 
@@ -112,6 +112,10 @@ These sources register with a MapFactory which then automatically determines the
 Other derived classes are GenericMap, meant to contain a single map. 
 Other map types are CompositeMap and MapCube. 
 These map classes are meant to hold many maps of a similar spatial region and a time series of maps respectively. 
+
+.. figure:: plotting_ex1.png
+
+   Default visualisation of a AIAMap. :label:'aiamap'
 
 LightCurve
 ==========
