@@ -1,5 +1,18 @@
 
 
+    The skdata library provides both scripts and library routines for tasks related to data sets, including several large datasets of images that must be handled with care in order to fit in typical amounts of RAM.
+    Scripts are provided for downloading, verifying, and visualizing many public benchmark datasets.
+    Routines and data types are provided for interfacing to data sets as both raw and structured things.
+    A low level interface provides relatively *raw* access to the contents of
+    each data set, in terms that closely reflect what was (in most cases) downloaded from the web.
+    Each data set may also be associated with zero or more high level interfaces.
+    A high level interface provides a *sanitized* view of a data set, in which the data have been assembled into e.g. (X, y) pairs,
+    in order to look like a standard machine learning problem such as classification, regression, or density estimation.
+    The high level interface ensures that learning algorithms see exactly the right examples for training and testing,
+    so that results are directly comparable to ones published in academic literature.
+
+
+
 Introduction
 ------------
 

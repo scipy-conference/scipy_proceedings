@@ -17,25 +17,18 @@ Skdata: Data Sets and Algorithm Evaluation Protocols in Python
 
 .. class:: abstract
 
-    Machine learning benchmark data sets come in all shapes and sizes, yet classification algorithm implementations often insist on operating on sanitized input, such as (x, y) pairs with vector-valued input x and integer class label y.
-    Researchers and practitioners are well aware of how tedious it can be to get from the URL of a new data set to an ndarray fit for e.g. pandas or sklearn.
-    The skdata library [1] handles that work for a growing number of benchmark data sets,
+    Machine learning benchmark data sets come in all shapes and sizes,
+    whereas classification algorithms assume sanitized input,
+    such as (x, y) pairs with vector-valued input x and integer class label y.
+    Researchers and practitioners know all too well how tedious it can be to
+    get from the URL of a new data set to a NumPy ndarray suitable for e.g. pandas or sklearn.
+    The skdata library handles that work for a growing number of benchmark data sets
+    (small and large)
     so that one-off in-house scripts for downloading and parsing data sets can be replaced with library code that is reliable, community-tested, and documented.
-
-    The skdata library provides both scripts and library routines for tasks related to data sets, including several large datasets of images that must be handled with care in order to fit in typical amounts of RAM.
-    Scripts are provided for downloading, verifying, and visualizing many public benchmark datasets.
-    Routines and data types are provided for interfacing to data sets as both raw and structured things.
-    A low level interface provides relatively *raw* access to the contents of
-    each data set, in terms that closely reflect what was (in most cases) downloaded from the web.
-    Each data set may also be associated with zero or more high level interfaces.
-    A high level interface provides a *sanitized* view of a data set, in which the data have been assembled into e.g. (X, y) pairs,
-    in order to look like a standard machine learning problem such as classification, regression, or density estimation.
-    The high level interface ensures that learning algorithms see exactly the right examples for training and testing,
-    so that results are directly comparable to ones published in academic literature.
-
-    This paper describes the architecture and usage of the skdata library.
-    It is hoped that the library will make it easier for researchers to reproduce published results on public benchmarks,
-    and to run valid experiments aimed at improving on those benchmarks.
+    The skdata library also introduces an open-ended formalization of training and
+    testing protocols that facilitates direct comparison with published
+    research.
+    This paper describes the usage and architecture of the skdata library.
 
 
 .. class:: keywords
@@ -62,11 +55,11 @@ It would be tedious to write such detail into a paper (and to transcribe it back
 this kind of precision in programming logic.
 Indeed, the authors of every scientific papers with empirical results of this type used some programmatic logic to
 
-1. obtain their data,
-#. unpack it into some working directory,
-#. load it into the data structures of their programming language of choice,
-#. convert those examples into the training, validation, and testing sets used for cross-validation, and
-#. provide those training examples as input to some machine learning algorithm.
+1. Obtain their data,
+#. Unpack it into some working directory,
+#. Load it into the data structures of their programming language of choice,
+#. Convert those examples into the training, validation, and testing sets used for cross-validation, and
+#. Provide those training examples as input to some machine learning algorithm.
 
 These steps are typically not formalized by authors of scientific papers as
 reusable software. We conjecture that instead, the vast majority of researchers use web
@@ -92,7 +85,7 @@ Data Sets
 
 There is nothing standard about data sets.
 The nature of data sets varies widely, from physical measurements of flower petals ([Iris]_),
-to pixel values of tiny images scraped from the internet ([CIFAR-10]_),
+to pixel values of tiny public domain images ([CIFAR-10]_),
 to the movie watching habits of NetFlix users ([Netflix]_).
 Some data sets are tiny, and others are too large to store in RAM.
 Different data sets are used to test different algorithms' ability to make statistical inferences,
@@ -131,14 +124,17 @@ loading media collections that include files with non-homogeneous
 formats, encoding types, sampling frequencies, and color spaces can be
 awkward.
 
-The skdata library provides logic for dealing with the ideosyncracies of data
+The skdata library provides logic for dealing with the idiosyncrasies of data
 sets so that they are accessible via familiar Python data structures such as
 lists, dictionaries, and NumPy ndarrays.  The sordid details of parsing e.g.
 ad-hoc text files and turning them into appropriate data structures is
 encapsulated in the submodules of the skdata library.
 
-XXX Discuss UCI, MLData, and other central repos of data sets: how does skdata
-library relate to those?
+Relative to the well known UCI database [UCI]_, the sklearn library provides
+logic for downloading and loading diverse data representations into more
+standardized in-memory formats.
+Relative to MLData (mldata.org) the sklearn library provides downloading and
+loading logic, and a formal protocol for model selection and evaluation.
 
 
 Machine Learning: Problems and Protocols
@@ -198,7 +194,7 @@ through this standard pattern: the low level data-wrangling that loads the data 
 and a high-level description of the entire 6-step protocol
 (including the partitioning of data into particular training and testing sets).
 The skdata library therefore fills in important gaps around the scope of the
-sklearn library: it addresses how to get data into the `X` and `y` numpy
+sklearn library: it addresses how to get data into the `X` and `y` NumPy
 arrays expected by the `fit()` and `predict()` methods of `Estimator`
 subclasses and it provides formal description of how machine learning
 algorithms should be used to obtain standard measures of generalization error
@@ -354,7 +350,7 @@ The `SklearnClassifier` class serves two roles:
 (a) it is meant to illustrate how to create an adapter between an existing implementation of a machine learning algorithm, and the various data sets defined in the skdata library;
 (b) it is used for unit-testing the protocol classes in the library.
 Researchers are encouraged to implement their own adapter classes
-following the example of the `SklearnClassifier` class (i.e. by cut & paste)
+following the example of the `SklearnClassifier` class (e.g. by cut & paste)
 to measure the statistics they care about when handling the various
 methods (e.g. best_model_vector_classification) and to save those
 statistics to a convenient place.
@@ -390,7 +386,7 @@ In a K-fold cross-validation setting, there would be 2K Task objects representin
 involved in the evaluation protocol.
 Task objects may, in general, overlap in the examples they represent.
 
-A `Task` class is simply a dotdict (dictionary container with access to elements by object attribute)
+A `Task` class is simply a dictionary container with access to elements by object attribute,
 but it has two required attributes: `name` and `semantics`.
 The name is a string that uniquely identifies this Task among all tasks involved in a Protocol.
 The semantics attribute is a string that identifies what kind of Task this is;
@@ -478,7 +474,7 @@ vectors are much smaller than copies of the base set of examples would be, when 
 
 The *lazy array* described in `skdata.larray` makes it possible lazily evaluate certain transformations of ndarray data.
 Lazy evaluation is done on an example-by-example basis, so if a protocol only requires examples `10:100` then only those examples will be computed.
-A lazy evaluation pipeline used together with apropriate cache techniques ensure that even when a data set is very large,
+A lazy evaluation pipeline used together with appropriate cache techniques ensure that even when a data set is very large,
 only those examples which are actually needed are loaded from disk and processed.
 
 Of course, very large data sets must be fit using appropriate algorithms (such as online algorithms),
@@ -542,7 +538,7 @@ What follows is an abridged version of what appears in `skdata.lfw.dataset`.
 First, a dataset.py file includes a significant docstring describing the data set and providing some history / context regarding it's usage.
 The docstring should always provide links to key publications that either introduced or used this data set.
 
-When a public data set is free for download, the dataset file should include the url of the original data,
+When a public data set is free for download, the dataset file should include the URL of the original data,
 and a checksum for verifying the correctness of downloaded data.
 
 Most dataset files use the `skdata.data_home.get_data_home` mechanism to identify a local location for storing large files.
@@ -701,11 +697,11 @@ Conclusions
 -----------
 
 Standard practice for handling data in machine learning and related research applications involves a significant amount of manual work.
-The lack of formalization of data handline steps is a barrier to reproducible science in these domains.
-The skdata library provides a host for both low-level data wrangling logic (downloading, decrompressing, loading into Python) and high-level experimental protocols.
+The lack of formalization of data handling steps is a barrier to reproducible science in these domains.
+The skdata library provides a host for both low-level data wrangling logic (downloading, decompressing, loading into Python) and high-level experimental protocols.
 To date the development effort has focused on classification tasks, and image labeling problems in particular.
 The abstractions used in the library should apply to natural language processing and audio information retrieval, as well as timeseries data.
-The protocol layer of the skdata library (especially using the larray module) has been designed to accomodate large or infinite (virual) data sets.
+The protocol layer of the skdata library (especially using the larray module) has been designed to accommodate large or infinite (virtual) data sets.
 The library currently provides some degree of support for about 40 data sets, and about a dozen of those have full support for the high-level,low-level, and script APIs.
 
 
@@ -721,3 +717,4 @@ References
 .. [LangfordReductions] XXX
 .. [Netflix] XXX
 .. [glumpy] XXX
+.. [UCI] http://archive.ics.uci.edu/ml/
