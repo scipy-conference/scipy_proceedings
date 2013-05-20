@@ -73,7 +73,7 @@ in such cases even random search has been shown to be competitive with domain ex
 Hyperopt [Hyperopt]_ provides algorithms and software infrastructure for carrying out hyperparameter optimization for machine learning algorithms.
 Hyperopt provides an optimization interface that distinguishes a *configuration space* and an *evaluation function* that assigns real-valued
 *loss values* to points within the configuration space.
-Unlike the fmin interface in [SciPy]_ or [Matlab]_, Hyperopt's fmin interface requires users to specify the configuration space as a probability distribution.
+Unlike the fmin interface in SciPy or Matlab, Hyperopt's fmin interface requires users to specify the configuration space as a probability distribution.
 Specifying a probability distribution rather than just bounds and hard constraints allows domain experts to encode more of their intuitions
 regarding which values are plausible for various hyperparameters.
 Like SciPy's new fmin interface, hyperopt makes the SMBO algorithm itself an interchangeable component, so it is easy for a user to search a specific
@@ -96,7 +96,7 @@ We are motivated to make hyperparameter optimization more reliable for four reas
 
 This paper describes the usage and architecture of Hyperopt, for both sequential and parallel optimization of expensive functions.
 Hyperopt can in principle be used for any SMBO problem, but our development and testing efforts have been limited so far to the optimization of
-hyperparameters for neural networks [XXX]_, deep networks [XXX]_, and computer vision systems for object recognition [XXX]_.
+hyperparameters for deep neural networks [hp-dbn]_ and convnet-based computer vision systems for object recognition [hp-convnet]_.
 
 
 Getting Started with Hyperopt
@@ -121,8 +121,10 @@ The way to use hyperopt is to describe:
 * the search algorithm to use [optional]
 
 This section will explain how to describe the objective function, configuration space, and optimization algorithm.
-Section XXX below will explain how to use a non-default trials database to analyze the results of a search,
-and to make parallel search possible.
+Later,
+Section `Trial results: more than just the loss`_  will explain how to use the trials database to analyze the results of a search,
+and Section `Parallel Evaluation with a Cluster`_ will explain how to use parallel computation to search
+faster.
 
 
 Step 1: define an objective function
@@ -431,7 +433,7 @@ Defining conditional variables with ``choice`` and ``pchoice``
 
 Having introduced nested configuration spaces, it is worth coming back to the ``hp.choice`` and ``hp.pchoice`` hyperparameter types.
 An ``hp.choice(label, options)`` hyperparameter *chooses* one of the options that you provide, where the ``options`` must be a list.
-We can use ``choice`` to define an appropriate configuration space for the ``w`` objective function (introduced pg XXX).
+We can use ``choice`` to define an appropriate configuration space for the ``w`` objective function (introduced in Section `Configuration Spaces`_).
 
 .. code-block:: python
 
@@ -773,7 +775,7 @@ that it builds on.
 
 Related Bayesian optimization software such as
 * Frank Hutter et al's [SMAC]_, and
-* Jasper Snoek's [spearmint]_
+* Jasper Snoek's [Spearmint]_
 implement state-of-the-art algorithms that are different from the TPE
 algorithm currently implemented in Hyperopt.
 Questions about which of these algorithms performs best in which circumstances,
@@ -818,28 +820,42 @@ Further documentation is available at [http://jaberg.github.com/hyperopt].
 Acknowedgements
 ---------------
 
-NSF grant, NSERC Banting Fellowship program.
-Nicolas Pinto for design advice.
-Hristijan Bogoevski for the `pchoice` function and ongoing work on an sklearn driver.
+Thanks to Nicolas Pinto for some influential design advice,
+Hristijan Bogoevski for ongoing work on an sklearn driver, and to many users
+who have contributed feedback.
+This project has been supported by NSF grant XXX, and the NSERC Banting Fellowship program.
 
 References
 ----------
-.. [BB12] J. Bergstra  and Y. Bengio. *Random Search for Hyperparameter Optimization* J. Machine Learning Research, XXX:XX, 2012. http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf
-.. [BBBK11]  XXX http://www.eng.uwaterloo.ca/~jbergstr/files/pub/11_nips_hyperopt.pdf
-.. [BYC13] XXX
-.. [Brochu10] XXX
-.. [Hyperopt] github link XXX
-.. [hp-dbn] github link XXX https://github.com/jaberg/hyperopt-dbn) - optimize Deep Belief Networks
-.. [hp-sklearn] github link XXX https://github.com/jaberg/hyperopt-sklearn
-.. [hp-convnet] github link XXX https://github.com/jaberg/hyperopt-convnet optimize convolutional architectures for image classification used in Bergstra, Yamins, and Cox in (ICML 2013).
-.. [MATLAB] XXX
-.. [Mockus78] Mockus. *XXX*, XXX, 1978.
-.. [mongodb] XXX
+.. [BB12] J. Bergstra  and Y. Bengio.
+    *Random Search for Hyperparameter Optimization*
+    J. Machine Learning Research, 13:281--305, 2012.
+.. [BBBK11] J. Bergstra, R. Bardenet, Y. Bengio and B. Kégl.
+    *Algorithms for Hyper-parameter Optimization*.
+    Proc. Neural Information Processing Systems 24 (NIPS2011), 2546–2554, 2011.
+.. [BYC13] J. Bergstra, D. Yamins and D. D. Cox.
+    *Making a Science of Model Search: Hyperparameter Optimization in Hundreds of
+    Dimensions for Vision Architectures*.
+    Proc. ICML, 2013.
+.. [Brochu10] E. Brochu.
+    *Interactive Bayesian Optimization: Learning Parameters for Graphics and
+    Animation*,
+    PhD thesis, University of British Columbia, 2010.
+.. [Hyperopt] http://jaberg.github.com/hyperopt
+.. [hp-dbn] https://github.com/jaberg/hyperopt-dbn
+.. [hp-sklearn] https://github.com/jaberg/hyperopt-sklearn
+.. [hp-convnet] https://github.com/jaberg/hyperopt-convnet
+.. [Mockus78] J. Mockus, V. Tiesis, and A. Zilinskas.
+    *The applicatoin of Bayesian methods for seeking the extremum*,
+    Towards Global Optimization, Elsevier, 1978.
+.. [mongodb] www.mongodb.org
 .. [ROAR] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software
 .. [sklearn] http://scikit-learn.org
-.. [SLA13]  XXX
-.. [Spearmint] http://www.cs.toronto.edu/~jasper/software.html Gaussian-process SMBO in Python.
-.. [SMAC] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software Sequential Model-based Algorithm Configuration (based on regression trees)
-.. [SciPy] XXX
-.. [XXX] XXX
+.. [SLA13] J. Snoek, H. Larochelle and R. P. Adams.
+    *Practical Bayesian Optimization of Machine Learning Algorithms*,
+    NIPS, 2012.
+.. [Spearmint] http://www.cs.toronto.edu/~jasper/software.html
+.. [SMAC] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software
 
+..  <http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf>
+.. <http://www.eng.uwaterloo.ca/~jbergstr/files/pub/11_nips_hyperopt.pdf>
