@@ -10,14 +10,6 @@
 DMTCP: Bringing Checkpoint-Restart to Python
 ============================================
 
-.. class:: abstract
-
-   DMTCP[1] is a mature user-space checkpoint-restart package.  One can
-   think of checkpoint-restart as a generalization of pickling.  Instead
-   of saving an object to a file, one saves the entire Python session to
-   a file.  Checkpointing Python visualization software is as easy as
-   checkpointing a VNC session with Python running inside.
-
 .. class:: keywords
 
    checkpointing, fault-tolerance
@@ -66,9 +58,9 @@ Background of DMTCP
 
    Architecture of DMTCP. :label:`dmtcp-arch`
 
-DMTCP (Distributed MultiThreaded CheckPointing) [Ans09]_ is a
+DMTCP (Distributed MultiThreaded CheckPointing) [Ansel09]_ is a
 transparent checkpoint-restart package with its roots going back eight
-years [Rie06]_.  It works completely in user space
+years [Rieker06]_.  It works completely in user space
 and does not require any changes to the application or the operating
 system.  DMTCP can be used to checkpoint a variety of user application
 including Python.
@@ -341,9 +333,11 @@ this checkpoint image.
 
 Fast/Slow Execution with Cython
 ===============================
+**FILL IN**
 
 Checkpointing with graphics (inside vnc)
 ========================================
+**FILL IN**
 
 Reversible Debugging with FReD
 ==============================
@@ -366,7 +360,7 @@ problem.
 
    Fast Reversible DeBugger. :label:`fred-arch`
 
-FReD (Fast Reversible Debugger) [Ary12]_ is a reversible debugger based on
+FReD (Fast Reversible Debugger) [Arya12]_ is a reversible debugger based on
 checkpoint-restart. FReD is implemented as a set of Python scipts and
 uses DMTCP to create checkpoints during the
 debugging session and keeps track of the debugging history. Figure
@@ -411,7 +405,7 @@ last checkpoint image. However, if the command issued was
 :code:`reverse-step`, a simple undo may not work. In this case, the
 desired behavior is to take the debugger to the last statement of
 the function :code:`f()`. In such situations we need to decompose the
-last command [Vis11]_ into a series of commands. At the end of
+last command [Visan11]_ into a series of commands. At the end of
 this decomposition, the last command in the history is a :code:`step`.
 At this point, the
 history may look like: :code:`[next,step,next, ...,next,step]`. At this
@@ -445,6 +439,11 @@ the fault for a given expression in the history of the program
 execution.  It brings the user directly to a statement (one that is not
 a function call) at which the expression is correct, but executing the
 statement will cause the expression to become incorrect.
+
+.. figure:: rw-new.eps
+   :figwidth: 200%
+
+   Reverse Expression Watchpoint. :label:`reverse-watch`
 
 Figure :ref:`reverse-watch` provides a simple example.  Assume that a
 bug occurs whenever a linked list has length longer than one million.
@@ -485,11 +484,6 @@ form a checkpoint at each phase of the binary search.  In that case, no
 particular sub-interval over the time period needs to be executed more
 than twice.
 
-.. figure:: rw-new.eps
-   :figwidth: 200%
-
-   Reverse Expression Watchpoint. :label:`reverse-watch`
-
 
 
 
@@ -506,25 +500,25 @@ Conclusion and Future Work
 References
 ==========
 
-.. [Ans09] Jason Ansel, Kapil Arya, and Gene Cooperman.
+.. [Ansel09] Jason Ansel, Kapil Arya, and Gene Cooperman.
            *DMTCP: Transparent Checkpointing for Cluster Computations
            and the Desktop*,
            23rd IEEE International Symposium on Parallel and Distributed
            Processing (IPDPS-09), 1-12, 2009
            http://dmtcp.sourceforge.net/.
 
-.. [Ary12] Kapil Arya, Tyler Denniston, Ana Maria Visan, and Gene
+.. [Arya12] Kapil Arya, Tyler Denniston, Ana Maria Visan, and Gene
            Cooperman.
            *FReD: Automated Debugging via Binary Search through a
            Process Lifetime*,
            http://arxiv.org/abs/1212.5204.
 
-.. [Rie06] Michael Rieker, Jason Ansel, and Gene Cooperman.
+.. [Rieker06] Michael Rieker, Jason Ansel, and Gene Cooperman.
            *Transparent User-Level Checkpointing for the Native POSIX
            Thread Library for Linux*,
            Proceeding of PDPTA-06, 492-498, 2006.
 
-.. [Vis11] Ana-Maria Visan, Kapil Arya, Gene Cooperman, and Tyler
+.. [Visan11] Ana-Maria Visan, Kapil Arya, Gene Cooperman, and Tyler
            Denniston.
            *URDB: A Universal Reversible Debugger Based on Decomposing
            Debugging Histories*,
