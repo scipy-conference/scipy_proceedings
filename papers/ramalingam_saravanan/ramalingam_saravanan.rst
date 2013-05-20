@@ -12,7 +12,7 @@
   use for a number of years in commercial mathematical software and is
   now finding more widespread usage in scientific Python with the
   availability browser-based front-ends like the Sage and IPython
-  notebooks. This talk will describe a new open-source Python project,
+  notebooks. This paper describes a new open-source Python project,
   GraphTerm, that takes a slightly different approach to blending text
   and graphics to create a notebook-like interface. Rather than
   operating at the application level, it works at the unix shell level
@@ -36,7 +36,7 @@
   for the server component and HTML+Javascript for the browser
   client. This paper discusses the architecture and capabilities of
   GraphTerm, and provides usage examples such as inline data
-  visualization using matplotlib and the notebook interface.
+  visualization using matplotlib and the notebook mode.
 
 .. class:: keywords
 
@@ -46,7 +46,7 @@
 Introduction
 ------------
 
-Text and graphics form important components of the the user interface
+Text and graphics form important components of the user interface
 when working with computers. Early personal computers only supported
 the textual user interface, more commonly known as the *command line
 interface* (CLI). However, when the Apple Macintosh popularized the
@@ -66,10 +66,10 @@ required by more advanced users.
 
 The dichotomy between the textual and graphical modes of interaction
 also extends to scientific data analysis tools. Traditionally,
-commands for data analysis are typed into a terminal window with an
-interactive shell and the graphical output is displayed in a separate
+commands for data analysis were typed into a terminal window with an
+interactive shell and the graphical output was displayed in a separate
 window. Some commercial sofware, such as Mathematica and Maple,
-provide a more integrated notebook interface that blends text and
+provided a more integrated notebook interface that blended text and
 graphics, thus combining aspects of the CLI with the GUI. One of the
 exciting recent developments in scientific Python has been the
 development of alternative, open source, notebook interfaces for
@@ -112,7 +112,7 @@ python notebook interface for the first time in January 2013, when I
 began teaching an introductory undergraduate programming course for
 geoscientists using Python. It was the first time the course was
 taught using Python; it had previously been taught using either Matlab
-or IDL. After initially using the command line python shell on the
+or IDL. After initially using the command line python interpreter in the
 terminal, we switched to IPython Notebook. The inline code editing and
 graphics display turned out to be really convenient. I found the
 notebook to be really versatile for presenting lecture material and
@@ -139,7 +139,7 @@ with similar goals, such as `TermKit
 The distinctive features of the notebook interface, such as inline
 editing and graphics, are not specific to any particular programming
 language or interactive shell. Also, the GraphTerm code already had
-the capability to incroporate GUI-like features into the terminal.
+the capability to incorporate GUI-like features into the terminal.
 Therefore, it seemed worth experimenting with GraphTerm to see how far
 it could be extended to support a generic, language-independent,
 notebook interface, while still retaining *full backward
@@ -162,7 +162,7 @@ screen buffer* used by text editors like ``vi`` etc. Special character
 strings known as *escape sequences* are output by programs to switch
 the terminal between the two buffers. GraphTerm currently supports
 most of the standard ``xterm`` escape sequences and introduces
-additonal escape sequences that allows displayed HTML fragments in the
+additonal escape sequences that allow display of HTML fragments in the
 scroll buffer and the full screen buffer. The HTML fragments can
 contain just about anything that can be displayed on a web page,
 including text with markup, tables, and images.
@@ -191,8 +191,8 @@ them accessible as hosts for connection from the browser.
 
 A pseudo-tty (``pty``) is opened on the host for each terminal
 session. By setting the ``PROMPT_COMMAND`` environment variable,
-GraphTerm determines when the ``stdout`` of the previous command ends,
-and the ``prompt`` for the new command begins. The connection between
+GraphTerm determines when the standard output of the previous command ends,
+and the prompt for the new command begins. The connection between
 the browser and the GraphTerm server is implemented using websockets
 (bi-directional HTTP). The GraphTerm server acts as a router sending
 input from controlling browser terminal sessions to the appropriate
@@ -207,17 +207,17 @@ laptop browser when you get home. This allows GraphTerm to be used
 like the GNU ``screen`` or ``tmux`` programs. Storing the content on
 the server also allows multiple users to share access the same
 terminal session for collaboration, like using Google Docs, for
-example. This means that multiple users can view and modify a GraphTerm
+example. This means that multiple users would be able to view and modify a GraphTerm
 notebook session in real time.
 
 
-GraphTerm API
----------------
+The GraphTerm API
+-------------------------
 
 Programs running within a GraphTerm shell communicate with it by
 writing to its standard output a block of text using a format
 similar to a HTTP response, preceded and followed by ``xterm``-like
-*escape sequences*:::
+*escape sequences*::
 
    \x1b[?1155;<cookie>h
    {"content_type": "text/html", ...}
@@ -278,11 +278,11 @@ sessions using the URL ``http://localhost:8900``.  At this point,
 GraphTerm can be used like a regular terminal, with commands like
 ``ls``, ``vi`` etc. However, to use the graphical capabilities of
 GraphTerm, one needs to use GraphTerm-aware versions of these commands,
-``gls`` and ``gvi``, that are part of the command toolchain that is
+with names like ``gls`` and ``gvi``, that are part of the command toolchain that is
 bundled with the code. The toolchain commands may be written any language,
 e.g., Bash shell script, Python etc., using the GraphTerm API
-described above. Additional features of GraphTerm are discussed and illustrated
-below.
+described above. The GUI-like features of GraphTerm implemented using
+this toolchain are discussed and illustrated below.
 
 
 Clickable folders and files
@@ -309,10 +309,10 @@ menubar (Figure :ref:`glsfig`).
    Output of ``gls`` with icon display enabled. Clicking on the folder
    icon for ``00_vanderwalt`` (red rectangle) executes the command
    ``cd 00_vanderwalt; gls -f`` via the command line (green rectangle)
-   to navigate to the folder and list its directory contents. This
+   to navigate to the folder and list its directory contents. (This
    action also overwrites any immediate previous file navigation
    command in the GraphTerm command history, to avoid command
-   clutter. :label:`glsfig`
+   clutter.) :label:`glsfig`
 
 You can navigate folders in GraphTerm using GUI-like actions, like you
 would do in the Windows Explorer or the Mac Finder, while retaining
@@ -348,16 +348,16 @@ future reference.
    File ``fig2.png`` is dragged from the ``Downloads`` folder from the
    source terminal and dropped into the ``.`` (current directory)
    folder icon displayed by ``gls`` in the destination terminal. This
-   executes the command ``mv /user/rsarava/Downloads/fig2.png`` in the
+   executes the command ``mv /user/rsarava/Downloads/fig2.png .`` in the
    destination terminal to move the file. :label:`mvfig`
 
-Screen sharing and theming
+Session sharing and theming
 ========================================
 
 .. figure:: scipy-fig-theme.png
    :scale: 22%
 
-   Two views of a GraphTerm terminal session showing the output of the
+   Two shared views of a GraphTerm terminal session showing the output of the
    command ``head -20 episodeIV.txt`` on a computer running OS X
    Lion. The left view is in a Firefox window with the **default** theme
    and the right view shows the same terminal in a Chrome window,
@@ -378,15 +378,19 @@ Inline graphics
 Since GraphTerm can display arbitrary HTML fragments, it is easy to
 display graphical output from programs. The ``gimage`` command in the
 toolchain can be used to display inline images. The toolchain also
-includes the ``yweather`` to display the current weather
-forecast graphically using the Yahoo Weather API.
+includes the ``yweather`` command to display the current weather
+forecast graphically using the Yahoo Weather API. Other toolchain
+commands include ``glandslide`` to use the Python-based `landslide
+<https://github.com/adamzap/landslide>`_ presentation tool and
+``greveal`` that uses `reveal.js <http://lab.hakim.se/reveal-js>`_ to
+display slideshows within a GraphTerm window.
 
 GraphTerm can be used for inline display of graphical output from
 ``matplotlib`` (Figure :ref:`contourfig`). The API bundled with
 GraphTerm uses the ``StringIO`` module to capture the binary plot data
 using the ``png`` image output produced by the ``Agg`` renderer and
-then displays the image using the GraphTerm escape sequences. A module
-called ``gmatplot`` is supplied with GraphTerm to provide explict
+then displays the image using GraphTerm escape sequences. A module
+called ``gmatplot`` is supplied with GraphTerm to provide explicit
 access to this plotting API. Another module ``gpylab`` is also
 provided, for *monkey patching* existing plotting code to work within
 GraphTerm with little or changes. For example, if the Python
@@ -395,8 +399,8 @@ interpreter is invoked using the following command::
    python -i gpylab.py
 
 then ``pylab`` functions like ``draw``, ``figure``, and ``show`` will
-automatically use the Graphterm API to display inline graphics (Figure
-:ref:`nb1fig`).
+automatically use the Graphterm API to display inline graphics (e.g.
+see the notebook example shown in Figure :ref:`nb1fig`).
 
 .. figure:: scipy-fig-contourplot.png
    :scale: 27%
@@ -411,7 +415,7 @@ Since communication with GraphTerm occurs solely via the standard
 output of a program, inline graphics can be displayed from any
 plotting program, including commercial software like IDL and other
 plotting packages like the NCAR Command Language (NCL). Inline
-graphics can also be used across SSH login boundaries simply by
+graphics display can also be used across SSH login boundaries by
 including support for the GraphTerm API in the plotting program on the
 remote machine.
 
@@ -424,7 +428,7 @@ menubar. The user can also click on a notebook file displayed in the
 ``gls`` directory listing to open it and pre-fill the notebook cells
 with content from the file (Figure :ref:`nb1fig`). The notebook mode supports the normal
 terminal operations, such as reading from the standard input (i.e.,
-``raw_input`` in Python) and using debuggers, as well the GraphTerm
+``raw_input`` in Python) and using debuggers, as well as GraphTerm
 extensions like inline graphics. (Full screen terminal operations are
 not currently supported in the notebook mode.)
 
@@ -434,14 +438,14 @@ not currently supported in the notebook mode.)
    GraphTerm notebook mode, where the notebook contents are read from
    a file saved using the ``ipynb`` format. The first cell contains
    Markdown text and the second cell contains python code to generate
-   a simple plot using ``matplotlib``. Note the use ``raw_input`` to
-   prompt the user for terminal input. image. :label:`nb1fig`
+   a simple plot using ``matplotlib``. Note the use of ``raw_input`` to
+   prompt the user for terminal input. :label:`nb1fig`
 
-The user can also save the contents of the
-displayed notebook to a file at any time. The user can exit the
+Users can save the contents of the
+displayed notebook to a file at any time. Users exit the
 notebook mode and revert to the normal terminal mode using the menubar
-or simply by typing *Control-C*. On exiting the notebook mode, the
-user has the option of merging the content of scroll buffers of all
+or simply by typing *Control-C*. On exiting the notebook mode,
+users have the option of merging the content of scroll buffers of all
 the notebook cells back into the main terminal scroll buffer (Figure :ref:`nb2fig`).
 
 .. figure:: scipy-fig-nb2.png
@@ -452,21 +456,22 @@ the notebook cells back into the main terminal scroll buffer (Figure :ref:`nb2fi
    normal terminal output, as shown above. :label:`nb2fig`
 
 The notebook implementation GraphTerm attempts to preserve
-interoperability with the IPython notebook as much as possble.
+interoperability with the IPython notebook to the extent possible.
 GraphTerm can read and write notebooks using the IPython notebook
 format (``*.ipynb``), although it uses the `Markdown
 <http://daringfireball.net/projects/markdown>`_ format for saving
 notebook content. (Markdown was chosen as the native format because it
-is more human-friendly than reStructured Text or JSON, allows easy
+is more human-friendly than reStructuredText or JSON, allows easy
 concatenation or splitting of notebook files, and can be processed by
-numerous markdown-aware publishing and presentation programs like
+numerous Markdown-aware publishing and presentation programs like
 ``landslide`` and ``reveal.js``. ) GraphTerm also
 supports many of the same keyboard shortcuts as IPython
-notebook. However, the generic, loosely-coupled notebook interface
+notebook. GraphTerm can also be used with the command line version
+of IPython. However, the generic, loosely-coupled notebook interface
 supported by GraphTerm will never be able to support all the features
-of the IPython notebook
+of the IPython notebook.
  
-Here is how the notebook mode is implemented within GraphTerm: When
+Here is how the notebook mode is implemented within GraphTerm: when
 the user switches to the notebook mode, a separate scroll buffer is
 created for each cell.  When the user executes a line of code within a
 GraphTerm notebook cell, the code output is parsed for prompts to
@@ -475,9 +480,10 @@ or to return focus to the input cell. This text-parsing approach does
 make the GraphTerm notebook implementation somewhat fragile, compared
 to other notebook implementations that have a tighter coupling with
 the underlying code interpreter (or kernel). However it allows
-GraphTerm to potentially work with interactive shells for any language
+GraphTerm to potentially work with interactive shells for any
+language, such as the REPL for ``node.js``
 (or any interactive program with prompts, including closed source
-binaries).
+binaries for languages like IDL).
 
 Since all GraphTerm content is stored on the server, the notebook can
 be accessed by multiple users simultaneously for collaboration. Like
@@ -493,7 +499,8 @@ Conclusion
 ---------------
 
 The GraphTerm project extends the standard unix terminal to support
-many GUI-like capabilities.  Adding features like clickable folder
+many GUI-like capabilities, including inline graphics display for data
+analysis and visualization.  Adding features like clickable folder
 navigation to the CLI also makes it more touch-friendly, which is
 likely to be very useful on tablet computers.  Incorporating GUI
 actions within the CLI allows recording of many user actions as
