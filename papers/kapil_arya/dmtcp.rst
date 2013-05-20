@@ -13,7 +13,8 @@ DMTCP: Bringing Checkpoint-Restart to Python
 Introduction
 ============
 
-DMTCP[1] is a mature user-space checkpoint-restart package.  One can
+DMTCP (Distributed MultiThreaded CheckPointing) [Ansel09]_ is a mature
+user-space checkpoint-restart package.  One can
 view checkpoint-restart as a generalization of pickling.  Instead of
 saving an object to a file, one saves the entire Python session to a
 file.  Checkpointing graphics in Python is also supported --- by
@@ -24,12 +25,12 @@ checkpoint is executed as "import dmtcp; dmtcp.checkpoint()".  This Python
 module provides this and other functions to support the features of DMTCP.
 The module for DMTCP functions equally well in IPython.
 
-This DMTCP module implements a generalization of asaveWorkspace function,
+This DMTCP module implements a generalization of a saveWorkspace function,
 which additionally supports graphics and the distributed processes of
 IPython.  In addition, at least three novel uses of DMTCP for helping
 debug Python are discussed.
 
-1.  Fast/Slow Computation[3] --- Cython provides both traditional
+1.  Fast/Slow Computation --- Cython provides both traditional
     interpreted functions and compiled C functions.  Interpreted
     functions are slow, but correct.  Compiled functions are fast,
     but users sometimes declare incorrect C types, causing the
@@ -39,7 +40,7 @@ debug Python are discussed.
     intervals.  Separate computer nodes are used to check each interval
     in interpreted mode between checkpoints.
 
-2.  FReD[2] --- a Fast Reversible Debugger that works closely with
+2.  FReD --- a Fast Reversible Debugger that works closely with
     the Python pdb debugger, as well as other Python debuggers.
 
 3.  Reverse Expression Watchpoint --- A bug occurred in the past.
@@ -55,7 +56,7 @@ Background of DMTCP
 
    Architecture of DMTCP. :label:`dmtcp-arch`
 
-DMTCP (Distributed MultiThreaded CheckPointing) [Ansel09]_ is a
+DMTCP [Ansel09]_ is a
 transparent checkpoint-restart package with its roots going back eight
 years [Rieker06]_.  It works completely in user space
 and does not require any changes to the application or the operating
@@ -377,7 +378,7 @@ problem.
    Fast Reversible DeBugger. :label:`fred-arch`
 
 FReD (Fast Reversible Debugger) [Arya12]_ is a reversible debugger based on
-checkpoint-restart. FReD is implemented as a set of Python scipts and
+checkpoint-restart. FReD is implemented as a set of Python scripts and
 uses DMTCP to create checkpoints during the
 debugging session and keeps track of the debugging history. Figure
 :ref:`fred-arch` shows the architecture of FReD.
