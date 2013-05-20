@@ -10,10 +10,6 @@
 DMTCP: Bringing Checkpoint-Restart to Python
 ============================================
 
-.. class:: keywords
-
-   checkpointing, fault-tolerance
-
 Introduction
 ============
 
