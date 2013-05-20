@@ -17,12 +17,17 @@ Hyperopt: A Python Library for Optimizing the Hyperparameters of Machine Learnin
 
 .. class:: abstract
 
-    Model-based optimization (i.e. based on Bayesian optimization) is one of the most efficient
-    methods for optimizing expensive functions over awkward spaces.
-    The Hyperopt library (Hyperopt) provides model-based optimization in Python.
-    Hyperopt provides an implementation of the TPE algorithm, which has proven to be an effective strategy for optimizing neural networks, deep networks, and computer vision systems.
-    Hyperopt supports parallel and asynchronous evaluation of hyperparameter configurations via its MongoDB backend.
-    This paper describes the usage and architecture of hyperopt.
+    Sequential model-based optimization (also known as Bayesian optimization)
+    is one of the most efficient
+    methods (per function evaluation) of function minimization.
+    This efficiency makes it appropriate for optimizing the hyperparameters
+    of machine learning algorithms that are slow to train.
+    The Hyperopt library provides algorithms and parallelization
+    infrastructure for performing hyperparameter optimization (model
+    selection) in Python.
+    This paper describes basic and advanced usage of the Hyperopt library,
+    introduces the high-level design, and lists some of the ongoing work
+    related to the project.
 
 .. class:: keywords
 
