@@ -340,6 +340,7 @@ assumption for a particular input.  Thus, one has to choose
 between speed of computation and a guarantee that that the
 compiled computation is faithful to the interpreted computation.
 
+
 The core idea is to run the compiled code, while creating checkpoint
 images at regular intervals.  A compiled computation interval is checked
 by copying the two corresponding checkpoints (at the beginning and end of
@@ -351,6 +352,9 @@ The interval of computation is then re-executed in interpreted mode
 until the end of the computation interval.  The results at the end of
 that interval can then be compared to the results at the end of the same
 interval in compiled mode.
+A similar idea has been used by [Ghoshal11]_ for distributed speculative
+parallelization.
+
 
 Checkpointing with graphics (inside vnc)
 ========================================
@@ -521,6 +525,12 @@ References
            *FReD: Automated Debugging via Binary Search through a
            Process Lifetime*,
            http://arxiv.org/abs/1212.5204.
+
+.. [Ghoshal11] Devarshi Ghoshal, Sreesudhan R. Ramkumar, and
+               Arun Chauhan}.
+               *Distributed Speculative Parallelization using Checkpoint
+               Restart*,
+               Procedia Computer Science, 2011.
 
 .. [Rieker06] Michael Rieker, Jason Ansel, and Gene Cooperman.
            *Transparent User-Level Checkpointing for the Native POSIX
