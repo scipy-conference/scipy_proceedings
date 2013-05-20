@@ -20,15 +20,15 @@ SunPy: Python for Solar Physicists
 
 .. class:: abstract
 
-SunPy is a data analysis toolkit specializing in providing the software necessary to analyze solar and heliospheric datasets in Python. 
-A key goal of SunPy is to provide a free and open-source alternative to the standard IDL-based SolarSoft (SSW) solar data analysis environment. 
-We present on the latest release of SunPy (0.3). 
-Though still in active development SunPy already provides important functionality such as integration with the the Virtual Solar Observatory (VSO) which provides access to most solar data sets as well as integration with the Heliophysics Event Knowledgebase (HEK), a database of transient solar events such as solar flares or coronal mass ejections. 
-One of the major goals of SunPy is to provide a user-friendly, common programming and data analysis environmnent. 
-In order to achieve this goal SunPy provides data objects for most data types such as images, lightcurves, and spectra. 
-Using PyFits, SunPy can open image fits files from major solar missions (SDO/AIA, SOHO/EIT, SOHO/LASCO, STEREO) into WCS-aware maps. 
-Using pandas, SunPy provides advanced time-series tools for data from mission such as GOES, SDO/EVE, and Proba2/LYRA as well as support for radio spectra (e.g. e-Callisto). 
-Future releases will build upon current work in the AstroPy library to bring greater functionality to SunPy users.
+SunPy is a data analysis toolkit which provides the necessary software for analyzing solar and heliospheric datasets in Python. 
+The goal of SunPy is to provide a free and open-source alternative to the current standard, an IDL-based solar data analysis environment known as SolarSoft (SSW). 
+We present the latest release of SunPy, version  0.3. 
+Though still in active development, SunPy already provides important functionality for solar data analysis.  
+For example, SunPy has integration with the Virtual Solar Observatory (VSO), a single source for accessing most solar data sets, and integration with the Heliophysics Event Knowledgebase (HEK), a database of transient solar events such as solar flares or coronal mass ejections. 
+One of the major goals of SunPy is to provide an open and user-friendly, common programming and data analysis environmnent for solar physics. 
+In order to achieve this goal, SunPy provides data structures for representing the most common solar data types: images, lightcurves, and spectra. 
+SunPy utilizes many packages from the greater scientific Python community, including Numpy and SciPy for core data types and analysis routines, PyFits for opening image files, in FITS format, from major solar missions (e.g., SDO/AIA, SOHO/EIT, SOHO/LASCO, and STEREO) into WCS-aware map objects, and pandas for advanced time-series analysis tools for  data from missions such as GOES, SDO/EVE, and Proba2/LYRA, as well as support for radio spectra (e.g. e-Callisto). 
+Future releases will build upon and integrate with current work in the AstroPy library, to bring greater functionality to SunPy users.
 
 .. class:: keywords
 
@@ -139,7 +139,7 @@ with potentially other data formats (such as LOFAR).
 .. * Map
 .. * Spectra
 .. * LightCurve
-	
+
 Solar Data Retrieval and Access
 -------------------------------
 
@@ -150,6 +150,9 @@ In recognition of this fact, the `Virtual Solar Observatory <http://virtualsolar
 The VSO strives to provides a one stop shop to solar data by building a centralized database with access to multiple archives. 
 The VSO allows the user to search using parameters as instrument name or type, time, physical obsevable and/or spectral range.  
 VSO's main interface is web-based, however, an API based on a WSDL webservice is also available. SunPy provides a python front-end to this API. 
+
+SunPy has includes the capability to get data from VSO by used of that webservice.
+-- this is made -- Florian/Joe should write about this...
 
 A new problem arise with the SDO mission. 
 The large size of the images (4 times larger than the previous mission), together with the fastest cadence of their cameras (~10 images per minute) makes challenging to use of the data as it used to be. 
@@ -190,6 +193,7 @@ In 2013 SunPy is also taking part on GSOC under the umbrella of the `Python Soft
 SunPy has also been benefitiated on investements made by solar physics group, as it was the case on 2012 when the `Astrophysics Research Group <http://physics.tcd.ie/Astrophysics/>`_ at `Trinity College Dublin <http://www.tcd.ie>`_ contracted for the summer our first year SOCIS student to work on the addition of `CALLISTO solar radio spectrometer <http://www.e-callisto.org/>`_ to SunPy. 
 CALLISTO is a very economic radio spectrometer that has been set on more than 30 different locations worldwide.
 
+
 Future
 ------
 
@@ -211,6 +215,7 @@ References
          
 .. [HELIO] D. Pérez-Suárez et al. *Studying Sun–Planet Connections Using the Heliophysics Integrated Observatory (HELIO)*
            Solar Physics, 280:603-621, October 2012. DOI: 10.1007/s11207-012-0110-x
+	
 
 .. [WCS] W. T. Thompson, *Coordinate systems for solar image data*, A&A 449, 791–803 (2006)
 
