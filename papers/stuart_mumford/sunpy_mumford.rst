@@ -10,6 +10,10 @@
 :email: steven.d.christe@nasa.gov
 :institution: NASA Goddard Space Flight Center
 
+:author: Florian Mayer
+:email: florian.mayer@bitsrc.org
+:institution: Vienna University of Technology
+
 ----------------------------------
 SunPy: Python for Solar Physicists
 ----------------------------------
