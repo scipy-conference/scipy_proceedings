@@ -66,7 +66,7 @@ Because of this variety, conventional continuous and combinatorial optimization 
 or else operate without leveraging valuable structure in the configuration space.
 Common practice for the optimization of hyperparameters is
 (a) for algorithm developers to tune them by hand on representative problems to get good rules of thumb and default values,
-and (b) for algorithm users to tune them manually for their particular prediction problems, perhaps with the assistance of [multiresolution] grid search.
+and (b) for algorithm users to tune them manually for their particular prediction problems, perhaps with the assistance of [multi-resolution] grid search.
 However, when dealing with more than a few hyperparameters (e.g. 5) this standard practice of manual search with grid refinement is not guaranteed to work well;
 in such cases even random search has been shown to be competitive with domain experts [BB12]_.
 
@@ -77,7 +77,7 @@ Unlike the fmin interface in SciPy or Matlab, Hyperopt's fmin interface requires
 Specifying a probability distribution rather than just bounds and hard constraints allows domain experts to encode more of their intuitions
 regarding which values are plausible for various hyperparameters.
 Like SciPy's new fmin interface, hyperopt makes the SMBO algorithm itself an interchangeable component, so it is easy for a user to search a specific
-space using any of the provided SMBO implementations. Currently just two algorithms are provided --random search and Tree-of-Parzen-Estimators (TPE) --
+space using any of the provided SMBO implementations. Currently just two algorithms are provided --random search and Tree-of-Parzen-Estimators (TPE) algorithm introduced in [BBBK11]_ --
 but more algorithms are planned: [SMAC]_, [ROAR]_, and Gaussian-process-based ones such as [Brochu10]_ and [SLA13]_.
 
 We are motivated to make hyperparameter optimization more reliable for four reasons:
@@ -210,7 +210,7 @@ and then call ``fmin`` to search the space to optimize the objective function.
 The remainder of the paper describes
 (a) how to describe more elaborate configuration spaces,
 especially ones that enable more efficient search by expressing *conditional variables*,
-(b) how to analyse the results of a search as stored in a ``Trials`` object,
+(b) how to analyze the results of a search as stored in a ``Trials`` object,
 and (c) how to use a cluster of computers to search in parallel.
 
 
@@ -425,7 +425,7 @@ You can add new functions to the ``scope`` object with the ``define`` decorator:
 Read through ``hyperopt.pyll.base`` and ``hyperopt.pyll.stochastic`` to see the
 functions that are available, and feel free to add your own.
 One important caveat is that functions used in configuration space descriptions
-must be picklable in order to be compatible with parallel search (discussed below).
+must be serializable (with pickle module) in order to be compatible with parallel search (discussed below).
 
 
 Defining conditional variables with ``choice`` and ``pchoice``
@@ -452,10 +452,10 @@ Similarly, the "x" key of the configuration is not used if the "use_var" value i
 The use of ``choice`` in the ``w_space`` search space reflects the conditional usage of keys "x" and "y" in the ``w`` function.
 We have used the ``choice`` variable to define a space that never has more variables than is necessary.
 
-The choice variable here plays more than the a cosmetic role, it can make optimization much more efficient.
+The choice variable here plays more than a cosmetic role, it can make optimization much more efficient.
 In terms of ``w`` and ``w_space``, the choice node prevents ``y`` for being *blamed* for poor performance when "use_var" is "x",
 or *credited* for good performance when "use_var" is "x".
-The choice variable creates a special node in the expression graph that prevents the conditionally un-necessary part of the
+The choice variable creates a special node in the expression graph that prevents the conditionally unnecessary part of the
 expression graph from being evaluated at all.
 During optimization, similar special-case logic prevents any association between the return value of the objective function
 and irrelevant hyperparameters (ones that were not chosen, and hence not involved in the creation of the configuration passed to the objective function).
@@ -659,7 +659,7 @@ Another important consideration when using ``MongoTrials`` is that the
 entire dictionary returned from the objective function must be JSON-compatible.
 JSON allows for only strings, numbers, dictionaries, lists, tuples, and date-times.
 
-**HINT:** To store numpy arrays, serialize them to a string, and consider storing
+**HINT:** To store NumPy arrays, serialize them to a string, and consider storing
 them as attachments.
 
 
@@ -696,9 +696,9 @@ configurations and waits until they are evaluated.
 If no workers are running, ``fmin`` will block after enqueing one trial.
 To run ``fmin`` with ``MongoTrials`` requires that you:
 
-1. ensure that mongod is running on the specified "host" and "port",
-#. choose a database name to use for a *particular fmin call*, and
-#. start one or more `hyperopt-mongo-worker` processes.
+1. Ensure that mongod is running on the specified "host" and "port",
+#. Choose a database name to use for a *particular fmin call*, and
+#. Start one or more `hyperopt-mongo-worker` processes.
 
 There is a generic `hyperopt-mongo-worker` script in Hyperopt's ``scripts`` subdirectory
 that can be run from a command line like this:
@@ -783,8 +783,6 @@ and over what search budgets remain topics of active research.
 One of the first technical milestones on the road to answering those research
 questions is to make each of those algorithms applicable to common search
 problems.
-We are working with the authors of these other software packages to build
-those bridges, but no fixed timeline has been put in place.
 
 Hyperopt was developed to support research into deep learning [BBBK11]_
 and computer vision [BYC13]_. Corresponding projects [hp-dbn]_ and
@@ -817,8 +815,8 @@ It is BSD-licensed and available for download from PyPI and Github.
 Further documentation is available at [http://jaberg.github.com/hyperopt].
 
 
-Acknowedgements
----------------
+Acknowledgements
+----------------
 
 Thanks to Nicolas Pinto for some influential design advice,
 Hristijan Bogoevski for ongoing work on an sklearn driver, and to many users
