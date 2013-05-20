@@ -14,37 +14,38 @@ Introduction
 ============
 
 DMTCP[1] is a mature user-space checkpoint-restart package.  One can
-think of checkpoint-restart as a generalization of pickling.  Instead of
+view checkpoint-restart as a generalization of pickling.  Instead of
 saving an object to a file, one saves the entire Python session to a
-file.  Checkpointing Python visualization software is as easy as
-checkpointing a VNC session with Python running inside.
+file.  Checkpointing graphics in Python is also supported --- by
+checkpointing a VNC session with Python running inside that session.
 
-A DMTCP plugin can be built in the form of a Python module.
-This Python module provides functions by which a Python session
-can checkpoint itself to disk.  The same ideas extend to IPython.
+DMTCP is made accessible to Python as a Python module.  Hence, a
+checkpoint is executed as "import dmtcp; dmtcp.checkpoint()".  This Python
+module provides this and other functions to support the features of DMTCP.
+The module for DMTCP functions equally well in IPython.
 
-Classically, this is used to implement a saveWorkspace function
-(including visualization and the distributed processes of IPython).
-In addition, at least three novel uses of DMTCP for helping debug
-Python are demonstrated.
+This DMTCP module implements a generalization of asaveWorkspace function,
+which additionally supports graphics and the distributed processes of
+IPython.  In addition, at least three novel uses of DMTCP for helping
+debug Python are discussed.
 
-1.  FReD[2] --- a Fast Reversible Debugger that works closely with
+1.  Fast/Slow Computation[3] --- Cython provides both traditional
+    interpreted functions and compiled C functions.  Interpreted
+    functions are slow, but correct.  Compiled functions are fast,
+    but users sometimes declare incorrect C types, causing the
+    compiled function silently return a wrong answer.  The idea
+    of fast/slow computation is to run the compiled version on
+    one computer node, while creating checkpoint images at regular
+    intervals.  Separate computer nodes are used to check each interval
+    in interpreted mode between checkpoints.
+
+2.  FReD[2] --- a Fast Reversible Debugger that works closely with
     the Python pdb debugger, as well as other Python debuggers.
 
-2.  Reverse Expression Watchpoint --- A bug occurred in the past.
+3.  Reverse Expression Watchpoint --- A bug occurred in the past.
     It is associated with the point in time when a certain 
     expression changed.  Bring the user back to a pdb session
     at the step before the bug occurred.
-
-3.  Fast/Slow Computation[3] --- Cython provides both traditional
-    interpreted functions and compiled C functions.  Interpreted
-    functions are slow, but correct.  Compiled functions are fast,
-    but users sometimes define them incorrectly, whereupon the
-    compiled function silently returns a wrong answer.  The idea
-    of fast/slow computation is to run the compiled version on
-    one core, with checkpoints at frequent intervals, and to
-    copy a checkpoint to another core.  The second core re-runs
-    the computation over that interval, but in interpreted mode.
 
 Background of DMTCP
 ===================
@@ -329,7 +330,26 @@ this checkpoint image.
 
 Fast/Slow Execution with Cython
 ===============================
-**FILL IN**
+
+A common problem for compiled versions of Python is how to check
+whether the compiled computation is faithful to the interpreted
+computation.  Compilation errors can occur if the compiled code
+assumes a particular C type, and the computation violates that
+assumption for a particular input.  Thus, one has to choose
+between speed of computation and a guarantee that that the
+compiled computation is faithful to the interpreted computation.
+
+The core idea is to run the compiled code, while creating checkpoint
+images at regular intervals.  A compiled computation interval is checked
+by copying the two corresponding checkpoints (at the beginning and end of
+the interval) to a separate computer node for checking.  The computation
+is restarted from the first checkpoint image, on the checking node.
+But when the computation is first restarted, the variables for all
+user Python functions are set to the interpreted function object.
+The interval of computation is then re-executed in interpreted mode
+until the end of the computation interval.  The results at the end of
+that interval can then be compared to the results at the end of the same
+interval in compiled mode.
 
 Checkpointing with graphics (inside vnc)
 ========================================
@@ -482,14 +502,6 @@ than twice.
 
 
 
-
-
-
-
-Conclusion and Future Work
-==========================
-
-**FILL IN**
 
 
 
