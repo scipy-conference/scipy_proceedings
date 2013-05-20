@@ -16,15 +16,15 @@ SunPy: Python for Solar Physicists
 
 .. class:: abstract
 
-SunPy is a data analysis toolkit specializing in providing the software necessary to analyze solar and heliospheric datasets in Python. 
-The goal of SunPy is to provide a free and open-source alternative to the standard IDL-based SolarSoft (SSW) solar data analysis environment. 
-We present on the latest release of SunPy (0.3). 
-Though still in active development SunPy already provides important functionality such as integration with the the Virtual Solar Observatory (VSO) which provides access to most solar data sets as well as integration with the Heliophysics Event Knowledgebase (HEK), a database of transient solar events such as solar flares or coronal mass ejections. 
-One of the major goals of SunPy is to provide a user-friendly, common programming and data analysis environmnent. 
-In order to achieve this goal SunPy provides data objects for most data types such as images, lightcurves, and spectra. 
-Using PyFits, SunPy can open image fits files from major solar missions (SDO/AIA, SOHO/EIT, SOHO/LASCO, STEREO) into WCS-aware maps. 
-Using pandas, SunPy provides advanced time-series tools for data from mission such as GOES, SDO/EVE, and Proba2/LYRA as well as support for radio spectra (e.g. e-Callisto). 
-Future releases will build upon current work in the AstroPy library to bring greater functionality to SunPy users.
+SunPy is a data analysis toolkit which provides the necessary software for analyzing solar and heliospheric datasets in Python. 
+The goal of SunPy is to provide a free and open-source alternative to the current standard, an IDL-based solar data analysis environment known as SolarSoft (SSW). 
+We present the latest release of SunPy, version  0.3. 
+Though still in active development, SunPy already provides important functionality for solar data analysis.  
+For example, SunPy has integration with the Virtual Solar Observatory (VSO), a single source for accessing most solar data sets, and integration with the Heliophysics Event Knowledgebase (HEK), a database of transient solar events such as solar flares or coronal mass ejections. 
+One of the major goals of SunPy is to provide an open and user-friendly, common programming and data analysis environmnent for solar physics. 
+In order to achieve this goal, SunPy provides data structures for representing the most common solar data types: images, lightcurves, and spectra. 
+SunPy utilizes many packages from the greater scientific Python community, including Numpy and SciPy for core data types and analysis routines, PyFits for opening image files, in FITS format, from major solar missions (e.g., SDO/AIA, SOHO/EIT, SOHO/LASCO, and STEREO) into WCS-aware map objects, and pandas for advanced time-series analysis tools for  data from missions such as GOES, SDO/EVE, and Proba2/LYRA, as well as support for radio spectra (e.g. e-Callisto). 
+Future releases will build upon and integrate with current work in the AstroPy library, to bring greater functionality to SunPy users.
 
 .. class:: keywords
 
