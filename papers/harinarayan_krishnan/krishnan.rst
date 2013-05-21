@@ -3,15 +3,15 @@
 :institution: Lawrence Berkeley National Laboratory
 
 :author: Cyrus Harrison
-:email: hkrishnan@lbl.gov
+:email: cyrush@llnl.gov
 :institution: Lawrence Livermore National Laboratory
 
 :author: Brad Whitlock
-:email: hkrishnan@lbl.gov
+:email: whitlock2@llnl.gov
 :institution: Lawrence Livermore National Laboratory
 
-:author: Dave Pugmire
-:email: hkrishnan@lbl.gov
+:author: David Pugmire
+:email: pugmire@ornl.gov
 :institution: Oak Ridge National Laboratory
 
 :author: Hank Childs
