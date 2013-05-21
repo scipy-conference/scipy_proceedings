@@ -285,7 +285,8 @@ of an IPython session.
 Attempting to restore all configuration files during restart poses yet
 another problem -- the existing configuration files might have newer
 contents and overwriting them with copies from the checkpoint time may
-not be desired by the user.  This may result in the user ending up losing important changes to those files.
+not be desired by the user.  This may result in the user ending up
+losing important changes to those files.
 
 One possible solution to handles this situation by taking snapshots of
 the entire configuration directory along with the checkpoint image.
@@ -358,13 +359,26 @@ parallelization.
 
 Checkpointing with graphics (inside vnc)
 ========================================
-**FILL IN**
+
+Python is popular for scientific visualizations. It is possible to
+checkpoint a Python session with active graphical windows by using VNC.
+DMTCP supports checkpoint-restart of VNC-server. In this case,
+a VNC-server can be started automatically. The process environment
+is modified to allow the Python interpretor to communicate with the
+VNC-server instead of the X-window server. For visualization, a
+VNC-client can be fired automatically to display the graphical window.
+During checkpoint, the VNC-server is checkpointed as part of the
+computation, while the VNC-client is not. During restart, the Python
+session and the VNC-server are restored from their checkpoint images,
+and a fresh VNC-client is launched. This VNC-client communicates with
+the restored server and displays the graphics to the end user.
 
 Reversible Debugging with FReD
 ==============================
 While debugging a program, often the programmer over steps and has to
 restart the debugging session. For example, while debugging a program,
-if the programmer steps over (by issue :code:`next` command inside the debugger) a function :code:`f()` only to determine
+if the programmer steps over (by issue :code:`next` command inside the
+debugger) a function :code:`f()` only to determine
 that the bug is in function :code:`f()` itself, he is left with no
 choice but to restart from the beginning.
 
@@ -506,9 +520,15 @@ particular sub-interval over the time period needs to be executed more
 than twice.
 
 
+Conclusion
+==========
 
-
-
+DMTCP is a widely used standalone checkpoint-restart package. We have
+shown that it can be closely integrated with Python. Specifically,
+parallel sessions with IPython, alterating interpreted and compiled
+execution modes, graphics, and enhancing Python debugger with
+reversibility. The implementation can be extended by the end users to
+suit their needs both at the level of Python and DMTCP.
 
 References
 ==========
