@@ -51,7 +51,7 @@ debug Python are discussed.
 Background of DMTCP
 ===================
 
-.. figure:: dmtcp-arch.eps
+.. figure:: dmtcp-arch.png
    :figwidth: 100%
 
    Architecture of DMTCP. :label:`dmtcp-arch`
@@ -84,7 +84,7 @@ thread which communicates with the coordinator.
 
 DMTCP Plugins
 -------------
-.. figure:: plugin-architecture-simple.eps
+.. figure:: plugin-architecture-simple.png
    :figwidth: 100%
 
    DMTCP Plugins. :label:`dmtcp-plugins`
@@ -390,7 +390,7 @@ command which takes it to the previous step. He can then issue
 :code:`step` command to step into the function in order to find the
 problem.
 
-.. figure:: fred-arch-python.eps
+.. figure:: fred-arch-python.png
    :figwidth: 200%
 
    Fast Reversible DeBugger. :label:`fred-arch`
@@ -422,7 +422,7 @@ interval to reduce the time spent in replaying the debugging history.
 
 More complex reverse commands
 -----------------------------
-.. figure:: commands.eps
+.. figure:: commands.png
    :figwidth: 200%
 
    Reverse Commands. :label:`reverse-xxx`
@@ -475,7 +475,7 @@ execution.  It brings the user directly to a statement (one that is not
 a function call) at which the expression is correct, but executing the
 statement will cause the expression to become incorrect.
 
-.. figure:: rw-new.eps
+.. figure:: rw-new.png
    :figwidth: 200%
 
    Reverse Expression Watchpoint. :label:`reverse-watch`
