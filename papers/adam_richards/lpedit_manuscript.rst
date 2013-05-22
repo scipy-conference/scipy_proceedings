@@ -184,7 +184,7 @@ inspired syntax (``*.nw``); and the reST file extension
 are a number of different workflows available as shown in Figure
 :ref:`fig:workflow`.
 
-.. figure:: Workflow.eps
+.. figure:: Workflow.pdf
 
    **Summary of the possible workflows using lpEdit**. First, a
    language, either R or Python is selected then it is embedded into a
@@ -367,7 +367,7 @@ The schema figure was generated using the Python package
 `sqlalchemy_schemadisplay`
 https://pypi.python.org/pypi/sqlalchemy_schemadisplay.
 
-.. figure:: SchemaDB.eps
+.. figure:: SchemaDB.pdf
 
    **Database entity diagram**. A gene-centric relational database for
    data available through NCBI’s FTP website. :label:`fig:schemadb`
