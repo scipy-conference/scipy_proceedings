@@ -1,25 +1,22 @@
 :author: Adam J Richards
 :email: adam.richards@stat.duke.edu
-:institution: Biostatistics \& Bioinformatics, Duke University Medical Center, Durham, NC, 27710, USA
-:institution: Station d’Ecologie Experimentale du CNRS, USR 2936, Moulis, 09200, France
+:institution: Biostatistics \& Bioinformatics, Duke University Medical Center, Durham, NC, 27710, USA and Station d'Ecologie Experimentale du CNRS, USR 2936, Moulis, 09200, France.
 
-:author: Andrzej Kosinski
+:author: Andrzej S. Kosinski
 :email: andrzej.kosinski@duke.edu
-:institution: Biostatistics \& Bioinformatics, Duke University Medical Center, Durham, NC, 27710, USA
+:institution: Biostatistics \& Bioinformatics, Duke University Medical Center, Durham, NC, 27710, USA.
 
 :author: Camille Bonneaud
 :email: C.Bonneaud@exeter.ac.uk
-:institution: Station d’Ecologie Experimentale du CNRS, USR 2936, Moulis, 09200, France
-:institution: Centre for Ecology and Conservation, University of Exeter Cornwall, Penryn, TR10 9EZ, UK
+:institution: Station d'Ecologie Experimentale du CNRS, USR 2936, Moulis, 09200, France and Centre for Ecology and Conservation, University of Exeter Cornwall, Penryn, TR10 9EZ, UK.
 
 :author: Delphine Legrand
 :email: legrand@dr14.cnrs.fr
-:institution: Station d’Ecologie Experimentale du CNRS, USR 2936, Moulis, 09200, France
+:institution: Station d'Ecologie Experimentale du CNRS, USR 2936, Moulis, 09200, France.
 
 :author: Kouros Owzar
 :email: kouros.owzar@duke.edu
 :institution: Duke Cancer Institute, Duke University Medical Center, Durham, NC, 27710, USA
-:institution: Biostatistics \& Bioinformatics, Duke University Medical Center, Durham, NC, 27710, USA
 
 -------------------------------------------------------------------------------
 lpEdit: an editor to facilitate reproducible analysis via literate programming
@@ -75,7 +72,7 @@ The difficulties in reproducing a study can be broadly categorized as
 experimental and analytic. Whether it is in the laboratory or on a
 computer, problems with replication can be minimized through the use
 of three key concepts: (1) data sharing, (2) leaving an audit trail
-and (3) documenta- tion. Data sharing refers to all raw data and
+and (3) documentation. Data sharing refers to all raw data and
 appropriate metadata, provided under a convenient set of standards,
 ideally through a free and open repository, like the Gene Expression
 Omnibus [Edgar02]_. Laying an audit trail in the laboratory can be done
@@ -92,13 +89,13 @@ analyses that go along with experiments are far more difficult to
 properly document, and unsurprisingly this aspect of reproducible
 research remains a major obstacle particularly in the life-sciences.
 
-Apart from data sharing, leaving an audit trail and documentation
+Apart from data sharing, leaving an audit trail and documentation,
 there are other important aspects of reproducible research to consider
 such as the over-reliance on p-values [Ioannidis08]_ [Gadbury12]_ and
 the use of inappropriate statistical tests. Statistical problems would
 be drastically easier for other scientists to identify if the original
 data and well-documented code were made readily available. In computer
-science extensively documented code is often produced through the use
+science, extensively documented code is often produced through the use
 of literate programming [Knuth84]_.
 
 In general, literate programming is the mixing of programming code and
@@ -108,7 +105,7 @@ programming in that our focus is on producing reports that are
 intended for non-programmers, yet while still embracing many of the
 important tenets of literate programming. For those with an extensive
 computing background there are a number of great tools like Org-mode
-[Schulte12]_ that are available. Many if not most biologists, chemists and
+[Schulte12]_ that are available. Often, biologists, chemists and
 other wet-lab scientists, however, lack the time to adequately learn a
 complicated environment and the prospect of learning is daunting when
 it comes to many of the available tools.  
@@ -120,23 +117,24 @@ reproducible manner. This work is not intended for those already
 well-versed in the use of text editors and literate programming
 environments, although the simplicity and ability to use either the
 application programming interface (API) version or a graphical user
-interface (GUI) version has appeal to variety of researchers.
+interface (GUI) version has appeal to a variety of researchers.
 
 lpEdit: a literate programming editor
 -------------------------------------
 
 Many of the tools available for literate programming do not provide a
 graphical editor, which is a barrier for adoption by
-non-specialists. Other tools are specific to a particular
+non-specialists. Other tools depend on a particular
 operating-system and only a handful of tools can switch freely between
 several programming languages. The motivation to build lpEdit arose
 because there was no apparent library/tool that fit these three
-criteria in a simple and intuitive way.  We have developed here an
-environment for literate programming, based on the
-model-view-controller (MVC) software architecture pattern. The only
-major difference from conventional realizations of MVC patterns is
-that instead of the user interacting directly with the controller in a
-non-GUI mode, we have developed a convenience class called
+criteria in a simple and intuitive way.  
+
+We have developed here an environment for literate programming, based
+on the model-view-controller (MVC) software architecture pattern. The
+only major difference from conventional realizations of MVC patterns
+is that instead of the user interacting directly with the controller
+in a non-GUI mode, we have developed a convenience class called
 NoGuiAnalysis for this purpose.
 
 The GUI editor portion of lpEdit is written with PyQt4
@@ -145,10 +143,12 @@ bindings to the widget toolkit Qt http://qt.digia.com. For the basic
 editing component of the software we use the Qt port of Scintilla
 http://www.scintilla.  org called QScintilla
 http://www.riverbankcomputing.com/software/qscintilla. The additional
-prerequisites are the Python packages for numeric computing (Numpy)
+prerequisites are the Python packages for numeric computing (`NumPy`)
 [Oliphant07]_ and the ubiquitous documentation tool Sphinx http:
-//sphinx-doc.org.  The software is available under the GNU General
-Public License version 3.0 or later from
+//sphinx-doc.org.  
+
+The software is available under the GNU General Public License version
+3.0 or later from
 http://bitbucket.org/ajrichards/reproducible-research. The
 accompanying documentation can be found at
 http://ajrichards.bitbucket.org/lpEdit/index.html.
@@ -157,17 +157,17 @@ http://ajrichards.bitbucket.org/lpEdit/index.html.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Perhaps the most widely used literate programming tool is Sweave
-[Leisch02]_ which embeds R code into a LATEX document. Due to its
-popularity and because Sweave is now part of the R project [RCore12]_
-the Sweave environment may be used from within lpEdit. Another notable
-projects that mixes R and :math:`\textrm{\LaTeX}` is knitr
-http://yihui.name/knitr. RStudio [RStudio]_ is a graphical editor that
-supports Sweave and knitr.
+[Leisch02]_ which embeds R code into a :math:`\textrm{\LaTeX}`
+document. Due to its popularity and because Sweave is now part of the
+R project [RCore12]_, the Sweave environment may be used from within
+lpEdit. Another notable projects that mixes R and
+:math:`\textrm{\LaTeX}` is knitr http://yihui.name/knitr. RStudio
+[RStudio]_ is a graphical editor that supports Sweave and knitr.
 
-R is a standard language for statistics, but for other common computa-
-tional tasks, like text processing and web-applications, it is used
-less frequently than scripting languages. We opted to add Python, a
-scripting language, as well because it is being increasingly used in
+R is a standard language for statistics, but for other common
+computational tasks, like text processing and web-applications, it is
+used less frequently than scripting languages. We opted to add Python,
+a scripting language, because it is being increasingly used in
 the life-sciences [Bassi07]_ and because it has a clean syntax that
 ultimately aids transparency and reproducibility. Several
 well-featured literate programming tools exist for Python including
@@ -185,8 +185,6 @@ are a number of different workflows available as shown in Figure
 :ref:`fig:workflow`.
 
 .. figure:: Workflow.eps
-   :align: center
-   :figclass: align-center
 
    **Summary of the possible workflows using lpEdit**. First, a
    language, either R or Python is selected then it is embedded into a
@@ -198,7 +196,7 @@ are a number of different workflows available as shown in Figure
 lpEdit as a library
 ^^^^^^^^^^^^^^^^^^^
 
-lpEdit has a simple API, which facilitates the use of unittests and
+lpEdit has a simple API, which facilitates the use of unit testing and
 exposes the functions of this library for those who are not in need of
 a text editor. In this section, we explain how to create a project and
 build reports using the command line, in order to illustrate the basic
@@ -207,6 +205,7 @@ bundled with the package lpEdit. To build a project and compile it
 into report form only a few commands are needed.
 
 .. code-block:: python
+   :linenos:
 
    from lpEdit import NoGuiAnalysis
    nga = NoGuiAnalysis()
@@ -215,20 +214,21 @@ into report form only a few commands are needed.
    nga.compile_latex()
    nga.compile_html()
 
-First the class is imported from the module lpEdit and then it is
-instantiated. The file is then loaded and the language may be
-specified. The ``build()`` method creates a directory to contain the
-project in the same folder as ``BasicPython.nw``.  This directory is
-what lpEdit refers to as a project and it is where both reST and
+First the class is imported (line 1) from the module lpEdit and then
+it is instantiated (line 2). The file is then loaded and the language
+may be specified (line 3). The ``build()`` method creates a directory
+to contain the project in the same folder as ``BasicPython.nw``.  The
+build-step also creates a `*.tex` document.  This directory is what
+lpEdit refers to as a project and it is where both reST and
 :math:`\textrm{\LaTeX}` projects are managed. The ``compile_latex()``
 command either uses ``sphinx-build`` or ``pdflatex``. The
-``compile_html()`` command defaults to ``sphinx-build`` or ``latex2pdf``
-depending on the project type. In most cases the default paths for
-``pdflatex``, ``python``, ``R``, and ``sphinx-build`` are found automatically,
-however, they may be customized to a user’s preference. To
-modify these variables without the GUI, there is a configuration file
-corresponding to the current version of lpEdit located in 
-
+``compile_html()`` command defaults to ``sphinx-build`` or
+``latex2pdf`` depending on the project type. In most cases the default
+paths for ``pdflatex``, ``python``, ``R``, and ``sphinx-build`` are
+found automatically, however, they may be customized to a user’s
+preference. To modify these variables without the GUI, there is a
+configuration file corresponding to the current version of lpEdit
+located in the user's home directory.
 
 .. code-block:: python
 
@@ -239,13 +239,13 @@ corresponding to the current version of lpEdit located in
 lpEdit as an editor
 ^^^^^^^^^^^^^^^^^^^
 
-The primary purpose of lpEdit is as a text editor that was originally
-intended to benefit students and those who are learning to program
-statistical analyses. In order to make it easier on these user groups,
-we provide as part of lpEdit’s documentation a number of examples that
-illustrate different statistical tests. We have left out features
-found in other editors or literate programming environments to make it
-easier to focus on report content.
+The primary purpose of lpEdit as a text editor was to benefit students
+and those who are learning to program statistical analyses. In order
+to make it easier on these user groups, we provide as part of lpEdit’s
+documentation a number of examples that illustrate different
+statistical tests. We have left out features found in other editors or
+literate programming environments to make it easier to focus on report
+content.
 
 
 Documenting by example
@@ -254,11 +254,11 @@ Documenting by example
 Like Sweave, lpEdit uses a Noweb [Ramsey94]_ inspired syntax. The
 advantages are that due to a simplified syntax, the flow of the
 document is only minimally interrupted by the presence of code. Also,
-to reduce the learning burden on new users we suggest they concentrate
+to reduce the learning burden on new users, we suggest they concentrate
 on learning :math:`\textrm{\LaTeX}`, reST and the embedded programming
 language of choice instead of lpEdit-specific tricks to embed plots,
 tables or other convenient features. For ``*.rnw``, ``*.nw`` and
-``*.rst`` documents we embed code in the following way.
+``*.rst`` documents, we embed code in the following way.
 
 .. sourcecode::
 
@@ -266,22 +266,23 @@ tables or other convenient features. For ``*.rnw``, ``*.nw`` and
    print("Hello World!")
    @
 
-Although this particular example may not be executed in lpEdit,
-because it is not a valid :math:`\textrm{\LaTeX}`, or reST document it
+Although this particular example may not be executed in lpEdit because
+it is not a valid :math:`\textrm{\LaTeX}` or reST document, it
 illustrates that code, in this case just a print statement, is
-included by placing it between "<< txt >>=" and "@", where ``txt`` is any
-arbitrary string, preferably something informative. Note that under
-Sweave ``txt`` is a place where options may be passed.
+included by placing it between "<< txt >>=" and "@", where ``txt`` is
+any arbitrary string, preferably something informative. Note that
+under Sweave ``txt`` is a place where options may be passed.  Refer to the
+official documentation for more comprehensive examples.
 
 Documents written in :math:`\textrm{\LaTeX}`, or reST are written as
-they normally would be although now there is a way execute embedded
+they normally would be although now there is a way to execute embedded
 code within the document. There is no limit to the number of code
 chunks and lpEdit will execute them in sequential order, preserving
 the variable space. The building step is where code chunks are
 executed and output gathered. There is one thing to keep in mind when
-working with projects and that is the idea of scope. Suppose, there
+working with projects, and that is the idea of scope. Suppose, there
 are two documents ``document1.rst`` and ``document2.rst``. If we build
-``document1.rst`` then ``document2.rst`` the results from
+``document1.rst`` then ``document2.rst``, the results from
 ``document1.rst`` will be preserved, which is convenient when there
 are code chunks that take significant time to run.
 
@@ -291,7 +292,7 @@ Involved analyses
 
 Analyses can take the form of long complicated pipelines, that may not
 reasonably be reproduced at the click of a button. This may happen if,
-for example a database needs to be populated before an analysis can be
+for example, a database needs to be populated before an analysis can be
 carried out or perhaps there is a hardware constraint, such as the
 requirement of a high-performance computing infrastructure. In these
 cases, lpEdit or another documentation software may still be used to
@@ -322,7 +323,7 @@ Analyzing the *Pieris brassicae* transcriptome
 
 The analysis of high-throughput sequencing data has the earmarks of a
 highly involved analysis pipeline. The appeal of high-performance
-sequencing [Margulies05]_, referred to as RNA-seq when applied to
+sequencing [Margulies05]_, referred to as RNA-seq, when applied to
 messenger RNA, is that a large number of genes are quickly examined in
 terms of both expression and genetic polymorphisms. For RNA-seq the
 sheer quantity of data and diversity of analysis pipelines can be
@@ -332,8 +333,8 @@ cabbage butterfly (*Pieris brassicae*) [Feltwell82]_, a species prevalent
 throughout much of Europe, that is an interesting model for studying
 species mobility with respect to different selection pressures [Ducatez12]_.
 
-cDNA library construction, sequencing, quality assurance and assembly
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cDNA library construction
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Messenger RNA was extracted from the thorax, head and limbs of 12 male
 and female *P. brassicae* and pooled to construct a normalized cDNA
@@ -351,24 +352,26 @@ into 16,889 isotigs and 11,891 isogroups.
 Analysis database and environment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Because *P. brassicae* is a species without a reference genome the
+Because *P. brassicae* is a species without a reference genome, the
 assembled isotigs must be compared to species that have functional
 descriptions. In order to make time-efficient comparisons we first
 created a database using PostgreSQL http://postgresql.org (version
-9.1.9). The database contained gene, accession, taxon, and
-functional ontology information all of which is available through the
-National Center for Biotechnology Infomation (NCBI) FTP site
-http://www.ncbi.nlm.nih.gov/Ftp. The database is detailed in
-Figure :ref:`fig:schemadb`. The interaction with tables in the database was simplified
-through the use of the object relational mapper available as part of
-the python package SQLAlchemy http://www.sqlalchemy.org.
+9.1.9). The database contained gene, accession, taxon, and functional
+ontology information all of which is available through the National
+Center for Biotechnology Infomation (NCBI) FTP site
+http://www.ncbi.nlm.nih.gov/Ftp. The database is detailed in Figure
+:ref:`fig:schemadb`. The interaction with tables in the database was
+simplified through the use of the object relational mapper available
+as part of the python package SQLAlchemy http://www.sqlalchemy.org.
+The schema figure was generated using the Python package
+`sqlalchemy_schemadisplay`
+https://pypi.python.org/pypi/sqlalchemy_schemadisplay.
 
- .. figure:: SchemaDB.eps
-   :align: center
-   :figclass: align-center
+.. figure:: SchemaDB.eps
 
    **Database entity diagram**. A gene-centric relational database for
-   data available through NCBI’s FTP cite. :label:`fig:schemadb`
+   data available through NCBI’s FTP website. :label:`fig:schemadb`
+
 
 Functional characterization of the transcriptome
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -405,9 +408,9 @@ newcomers with programming and statistics. With the API version, of
 lpEdit there remains the possibility that it may be adapted as a
 plug-in or extension to existing text editors.  
 
-Given that the target user-base for lpEdit are those with limited com-
-puting background, there are a number of power-user features left out
-of the current version for the sake of a nearly ‘push button
+Given that the target user-base for lpEdit are those with limited
+computing background, there are a number of power-user features left
+out of the current version for the sake of a nearly ‘push button
 approach’. Despite this restricted approach, lpEdit is free to use,
 fork and modify as the community would like and over time more
 interesting features will make it into the project without sacrificing
@@ -429,9 +432,6 @@ organizations.
 
 References
 ----------
-
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
 
 .. [Altschul90] S. F. Altschul, W Gish, W Miller, E W Myers, and D. J. Lipman. *Basic local alignment search tool*,
                 Journal of Molecular Biology, 215:403-410, 1990.
