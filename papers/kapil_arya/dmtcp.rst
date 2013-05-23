@@ -583,6 +583,12 @@ execution modes, graphics, and enhancing Python debugger with
 reversibility. The implementation can be extended by the end users to
 suit their needs both at the level of Python and DMTCP.
 
+Acknowledgment
+==============
+
+This work was partially supported by the National Science Foundation
+under Grant OCI-0960978.
+
 References
 ==========
 
