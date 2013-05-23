@@ -1,6 +1,6 @@
 :author: Adam J Richards
 :email: adam.richards@stat.duke.edu
-:institution: Biostatistics \& Bioinformatics, Duke University Medical Center, Durham, NC, 27710, USA and Station d'Ecologie Experimentale du CNRS, USR 2936, Moulis, 09200, France.
+:institution: Biostatistics \& Bioinformatics, Duke University Medical Center, Durham, NC, 27710, USA and Station d'Ecologie Experimentale du CNRS, Moulis, 09200, France.
 
 :author: Andrzej S. Kosinski
 :email: andrzej.kosinski@duke.edu
@@ -8,15 +8,15 @@
 
 :author: Camille Bonneaud
 :email: C.Bonneaud@exeter.ac.uk
-:institution: Station d'Ecologie Experimentale du CNRS, USR 2936, Moulis, 09200, France and Centre for Ecology and Conservation, University of Exeter Cornwall, Penryn, TR10 9EZ, UK.
+:institution: Station d'Ecologie Experimentale du CNRS, Moulis, 09200, France and Centre for Ecology and Conservation, University of Exeter Cornwall, Penryn, UK.
 
 :author: Delphine Legrand
 :email: legrand@dr14.cnrs.fr
-:institution: Station d'Ecologie Experimentale du CNRS, USR 2936, Moulis, 09200, France.
+:institution: Station d'Ecologie Experimentale du CNRS, Moulis, 09200, France.
 
 :author: Kouros Owzar
 :email: kouros.owzar@duke.edu
-:institution: Duke Cancer Institute, Duke University Medical Center, Durham, NC, 27710, USA
+:institution: Duke Cancer Institute, Duke University Medical Center, Durham, NC, 27710, USA.
 
 -------------------------------------------------------------------------------
 lpEdit: an editor to facilitate reproducible analysis via literate programming
@@ -211,7 +211,7 @@ into report form only a few commands are needed.
    nga = NoGuiAnalysis()
    nga.load_file("BasicPython.nw",fileLang="python")
    nga.build()
-   nga.compile_latex()
+   nga.compile_pdf()
    nga.compile_html()
 
 First the class is imported (line 1) from the module lpEdit and then
@@ -220,7 +220,7 @@ may be specified (line 3). The ``build()`` method creates a directory
 to contain the project in the same folder as ``BasicPython.nw``.  The
 build-step also creates a `*.tex` document.  This directory is what
 lpEdit refers to as a project and it is where both reST and
-:math:`\textrm{\LaTeX}` projects are managed. The ``compile_latex()``
+:math:`\textrm{\LaTeX}` projects are managed. The ``compile_pdf()``
 command either uses ``sphinx-build`` or ``pdflatex``. The
 ``compile_html()`` command defaults to ``sphinx-build`` or
 ``latex2pdf`` depending on the project type. In most cases the default
