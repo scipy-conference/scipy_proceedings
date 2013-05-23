@@ -357,7 +357,7 @@ until the end of the computation interval.  The results at the end of
 that interval can then be compared to the results at the end of the same
 interval in compiled mode.
 
-Figure :ref:`fast-slow` illustrates the above idea.` 
+Figure :ref:`fast-slow` illustrates the above idea.
 A similar idea has been used by [Ghoshal11]_ for distributed speculative
 parallelization.
 
@@ -604,7 +604,7 @@ References
                Computing in Science Engineering, 2010.
 
 .. [Ghoshal11] Devarshi Ghoshal, Sreesudhan R. Ramkumar, and
-               Arun Chauhan}.
+               Arun Chauhan.
                *Distributed Speculative Parallelization using Checkpoint
                Restart*,
                Procedia Computer Science, 2011.
