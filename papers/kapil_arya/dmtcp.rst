@@ -10,6 +10,27 @@
 DMTCP: Bringing Checkpoint-Restart to Python
 ============================================
 
+.. class:: abstract
+
+DMTCP (Distributed MultiThreaded CheckPointing) is a mature
+checkpoint-restart package.  It operates in user-space without kernel
+privilege, and can adapt to specific applications through plugins.
+While DMTCP has been able to checkpoint Python and IPython "from  the
+outside" for many years, a Python module has recently been created to
+support DMTCP.  A checkpoint can be requested interactively within a
+Python session, or under the control of a specific Python program.
+Further, the Python program can execute specific Python code prior
+to checkpoint, upon resuming (within the original process), and upon
+restarting (from a checkpoint image).  Applications of DMTCP are demonstrated
+for: (i) Python-based graphics using VNC; (ii) a Fast/Slow technique
+to use multiple hosts or cores to check one Cython computation in parallel;
+and (iii) a reversible debugger, FReD, with a novel reverse-expression
+watchpoint feature for locating the cause of a bug.
+
+.. class:: keywords
+
+   checkpoint-restart, DMTCP, IPython, Cython, reversible debugger
+
 Introduction
 ============
 
@@ -20,7 +41,25 @@ saving an object to a file, one saves the entire Python session to a
 file.  Checkpointing graphics in Python is also supported --- by
 checkpointing a VNC session with Python running inside that session.
 
-DMTCP is made accessible to Python as a Python module.  Hence, a
+DMTCP is available as a Linux package for many popular Linux distributions.
+DMTCP can checkpoint Python or IPython from the *outside* i.e. by treating
+Python as a black box. To enable checkpointing, the Python interpreter
+is launched in the following manner:
+
+.. code-block:: sh
+
+     $:> dmtcp_checkpoint python <args>
+
+     $:> dmtcp_command -c
+
+The command ``dmtcp_command`` can be used at any point to create a
+checkpoint of the entire session.
+
+However, most Python programmers will prefer to request a checkpoint
+interactively within a Python session, or else programmatically from
+inside a Python or Cython program.
+
+DMTCP is made accessible to Python programmers as a Python module.  Hence, a
 checkpoint is executed as "import dmtcp; dmtcp.checkpoint()".  This Python
 module provides this and other functions to support the features of DMTCP.
 The module for DMTCP functions equally well in IPython.
@@ -47,6 +86,14 @@ debug Python are discussed.
     It is associated with the point in time when a certain 
     expression changed.  Bring the user back to a pdb session
     at the step before the bug occurred.
+
+The remaining sections describe: the `Background of DMTCP`_; the
+`DMTCP-Python Integration through a Python Module`_; and several
+extensions of the integration of DMTCP with Python.  The extensions
+include support for `Checkpointing Python-Based Graphics`_;
+`Checking Cython with Multiple CPython Instances`_ (fast/slow technique); and
+`Reversible Debugging with FReD`_.  FReD is a reversible debugger that
+supports a novel debugging technique, *reverse expression watchpoints*.
 
 Background of DMTCP
 ===================
@@ -159,35 +206,22 @@ the restart notification and restore their underlying resources,
 translation tables etc.  Finally, the checkpoint thread un-quiesces the
 user threads and the user threads resume executing application code.
 
-DMTCP Python Integration
-========================
+DMTCP-Python Integration through a Python Module
+================================================
 
-DMTCP can checkpoint Python from the *outside* i.e. by treating
-Python as a black box. To enable checkpointing, the Python interpreter
-is launched in the following manner:
+A Python module, ``dmtcp.py``, has been created to support checkpointing
+both from within an interactive Python/IPython session and programmatically
+from within a Python or Cython program.  
+DMTCP has been able to asynchronously generate checkpoints of a Python
+session for many years.  However, most users prefer the more fine-grained
+control of a Python programmatic interface to DTMCP.  This allows one
+to avoid checkpointing in the middle of a communication with an external
+server or other atomic transaction.
 
-.. code-block:: sh
-
-     $:> dmtcp_checkpoint python <args>
-
-     $:> dmtcp_command -c
-
-The command ``dmtcp_command`` can be used at any point to create a
-checkpoint of the entire session.
-
-DMTCP Module for Python
------------------------
-Checkpointing Python session or script from the outside doesn't provide
-the user application with any mechanism for a finer grain control. A
-typical use case arises in situation where the application wants to
-checkpoint only at *safe points*. For example, if the application is
-communicating with an external database server, checkpointing in the
-middle of a transaction is undesired.
-To solve this problem we present a DMTCP module for Python. This module
-allows the application interact with
-the DMTCP engine and enables the application to request a checkpoint at
-pre-determined points in the code. In the following example, the
-checkpoint request is made from within the application.
+A Python Module to Support DMTCP
+--------------------------------
+Some of the features of ``module.py`` are best illustrated through an example.
+Here, a checkpoint request is made from within the application.
 
 .. code-block:: python
 
@@ -200,11 +234,7 @@ checkpoint request is made from within the application.
    # Checkpoint image has been created
    ...
 
-It is also possible to do pre and post processing during checkpoint and
-restart. The application can provide hooks that should be executed
-during checkpoint and restart. A trivial way to execute pre and post
-hooks during checkpoint and restart is exhibited in the following
-example:
+It is also easy to add pre- and post-checkpoint processing actions.
 
 .. code-block:: python
 
@@ -238,8 +268,7 @@ user and can be called from within the user application at any point.
 
 Extending DMTCP Module for Managing Sessions
 --------------------------------------------
-So far we have discussed the services provided by the DMTCP module to
-interact with the DMTCP engine. These services can further extended to
+These core checkpoint-restart services are further extended to
 provide the user with the concept of multiple sessions. A checkpointed
 Python session is given a unique session id to distinguish it from other
 sessions.  When running interactively, the user can view the list of
@@ -271,8 +300,8 @@ the restore function. Those extra arguments can be made available to the
 :code:`dmtcp.isRestart()` path. The application can thus take a
 different branch now instead of following the same route.
 
-Save-Restore IPython Sessions
------------------------------
+Save-Restore for IPython Sessions
+---------------------------------
 To checkpoint an IPython session, one must consider the configuration
 files. The configuration files are typically stored in user's home
 directory. During restart, if the configuration files are missing, the
@@ -286,7 +315,7 @@ contents and overwriting them with copies from the checkpoint time may
 not be desired by the user.  This may result in the user ending up
 losing important changes to those files.
 
-One possible solution to handles this situation by taking snapshots of
+One possible solution is to handle this situation by taking snapshots of
 the entire configuration directory along with the checkpoint image.
 After restart, the IPython session should be made to use the
 checkpointed copy of the configuration directory instead of the default
@@ -300,12 +329,12 @@ checkpointed copy.  The IPython process is unaware of the changes and
 continues to work without any problems.
 
 The session management capabilities of the DMTCP module can be further
-extended to manage session for IPython. In case of IPython, each session
+extended to manage sessions for IPython. In the case of IPython, each session
 contains the configuration directory in addition to the checkpoint
 image(s).
 
-Save-Restore Parallel IPython Sessions
---------------------------------------
+Save-Restore for Parallel IPython Sessions
+------------------------------------------
 
 DMTCP is capable of checkpointing a distributed computations with
 processes running on multiple nodes. It automatically checkpoints and
@@ -328,8 +357,26 @@ initialization and is checkpointed at the end of initialization.
 Next, several processes are launched by restarting multiple copies of
 this checkpoint image.
 
-Fast/Slow Execution with Cython
-===============================
+
+Checkpointing Python-Based Graphics
+===================================
+
+Python is popular for scientific visualizations. It is possible to
+checkpoint a Python session with active graphical windows by using VNC.
+DMTCP supports checkpoint-restart of VNC-server. In this case,
+a VNC-server can be started automatically. The process environment
+is modified to allow the Python interpreter to communicate with the
+VNC-server instead of the X-window server. For visualization, a
+VNC-client can be fired automatically to display the graphical window.
+During checkpoint, the VNC-server is checkpointed as part of the
+computation, while the VNC-client is not. During restart, the Python
+session and the VNC-server are restored from their checkpoint images,
+and a fresh VNC-client is launched. This VNC-client communicates with
+the restored server and displays the graphics to the end user.
+
+
+Checking Cython with Multiple CPython Instances
+===============================================
 
 A common problem for compiled versions of Python such asi
 Cython [Behnel10]_ is how to check
@@ -345,6 +392,9 @@ compiled Cython version ran for hours and produced an unexpected
 answer.  One wishes to also check the answer in a matter of hours,
 but pure Python (CPython) would take much longer.
 
+Informally, the solution is known as a *fast/slow* technique.
+There is one *fast* process (Cython), whose correctness is checked by multiple
+*slow* processes (CPython).
 The core idea is to run the compiled code, while creating checkpoint
 images at regular intervals.  A compiled computation interval is checked
 by copying the two corresponding checkpoints (at the beginning and end of
@@ -405,23 +455,6 @@ interpreted code.  If the Cython code consists of direct C calls between
 functions, then it will also be necessary to modify the functions of
 the C code generated by Cython, to force them to call the pure Python
 functions on restart after a checkpoint. 
-
-
-Checkpointing with graphics (inside vnc)
-========================================
-
-Python is popular for scientific visualizations. It is possible to
-checkpoint a Python session with active graphical windows by using VNC.
-DMTCP supports checkpoint-restart of VNC-server. In this case,
-a VNC-server can be started automatically. The process environment
-is modified to allow the Python interpretor to communicate with the
-VNC-server instead of the X-window server. For visualization, a
-VNC-client can be fired automatically to display the graphical window.
-During checkpoint, the VNC-server is checkpointed as part of the
-computation, while the VNC-client is not. During restart, the Python
-session and the VNC-server are restored from their checkpoint images,
-and a fresh VNC-client is launched. This VNC-client communicates with
-the restored server and displays the graphics to the end user.
 
 Reversible Debugging with FReD
 ==============================
@@ -495,8 +528,8 @@ history may look like: :code:`[next,step,next, ...,next,step]`. At this
 point, the process is restarted from the last checkpoint and the
 debugging history is executed excluding the last :code:`step` command.
 
-A typical debuggin session in FRed with Python
-----------------------------------------------
+A typical debugging session in FRed with Python
+----------------------------------------------=
 
 .. code-block:: python
    :linenos:
