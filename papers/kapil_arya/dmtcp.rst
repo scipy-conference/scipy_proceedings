@@ -14,10 +14,11 @@ DMTCP: Bringing Checkpoint-Restart to Python
 
 DMTCP (Distributed MultiThreaded CheckPointing) is a mature
 checkpoint-restart package.  It operates in user-space without kernel
-privilege, and can adapt to specific applications through plugins.
+privilege, and adapts to application-specific requirements through plugins.
 While DMTCP has been able to checkpoint Python and IPython "from  the
 outside" for many years, a Python module has recently been created to
-support DMTCP.  A checkpoint can be requested interactively within a
+support DMTCP.  IPython support is included through a new DMTCP plugin.
+A checkpoint can be requested interactively within a
 Python session, or under the control of a specific Python program.
 Further, the Python program can execute specific Python code prior
 to checkpoint, upon resuming (within the original process), and upon
@@ -60,13 +61,13 @@ interactively within a Python session, or else programmatically from
 inside a Python or Cython program.
 
 DMTCP is made accessible to Python programmers as a Python module.  Hence, a
-checkpoint is executed as "import dmtcp; dmtcp.checkpoint()".  This Python
+checkpoint is executed as ``import dmtcp; dmtcp.checkpoint()``.  This Python
 module provides this and other functions to support the features of DMTCP.
 The module for DMTCP functions equally well in IPython.
 
 This DMTCP module implements a generalization of a saveWorkspace function,
 which additionally supports graphics and the distributed processes of
-IPython.  In addition, at least three novel uses of DMTCP for helping
+IPython.  In addition, three novel uses of DMTCP for helping
 debug Python are discussed.
 
 1.  Fast/Slow Computation --- Cython provides both traditional
@@ -82,7 +83,8 @@ debug Python are discussed.
 2.  FReD --- a Fast Reversible Debugger that works closely with
     the Python pdb debugger, as well as other Python debuggers.
 
-3.  Reverse Expression Watchpoint --- A bug occurred in the past.
+3.  Reverse Expression Watchpoint --- This is a novel feature
+    within the FReD reversible debugger.  Assume a bug occurred in the past.
     It is associated with the point in time when a certain 
     expression changed.  Bring the user back to a pdb session
     at the step before the bug occurred.
@@ -92,8 +94,7 @@ The remaining sections describe: the `Background of DMTCP`_; the
 extensions of the integration of DMTCP with Python.  The extensions
 include support for `Checkpointing Python-Based Graphics`_;
 `Checking Cython with Multiple CPython Instances`_ (fast/slow technique); and
-`Reversible Debugging with FReD`_.  FReD is a reversible debugger that
-supports a novel debugging technique, *reverse expression watchpoints*.
+`Reversible Debugging with FReD`_.
 
 Background of DMTCP
 ===================
@@ -413,7 +414,7 @@ parallelization.
 
 .. figure:: fast-slow.png
 
-   Fast Cython / Slow CPython "checking" nodes. :label:`fast-slow`
+   Fast Cython with Slow CPython "checking" nodes. :label:`fast-slow`
 
 Note that in order to compare the results at the end of a
 computation interval, it is important that the interpreted version
