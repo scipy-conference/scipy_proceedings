@@ -89,123 +89,13 @@ debug Python are discussed.
     expression changed.  Bring the user back to a pdb session
     at the step before the bug occurred.
 
-The remaining sections describe: the `Background of DMTCP`_; the
+The remaining sections describe: the
 `DMTCP-Python Integration through a Python Module`_; and several
 extensions of the integration of DMTCP with Python.  The extensions
 include support for `Checkpointing Python-Based Graphics`_;
 `Checking Cython with Multiple CPython Instances`_ (fast/slow technique); and
-`Reversible Debugging with FReD`_.
-
-Background of DMTCP
-===================
-
-.. figure:: dmtcp-arch.png
-
-   Architecture of DMTCP. :label:`dmtcp-arch`
-
-DMTCP [Ansel09]_ is a
-transparent checkpoint-restart package with its roots going back eight
-years [Rieker06]_.  It works completely in user space
-and does not require any changes to the application or the operating
-system.  DMTCP can be used to checkpoint a variety of user application
-including Python.
-
-Using DMTCP to checkpoint an application is as simple as executing the
-following commands:
-
-.. code-block:: sh
-
-   dmtcp_checkpoint ./a.out
-   dmtcp_command -c
-   ./dmtcp_restart_script.sh
-
-DMTCP automatically tracks all local and remote child processes and
-their relationships.
-
-As seen in Figure :ref:`dmtcp-arch` , a computation running under DMTCP
-consists of a centralized coordinator process and several user
-processes. The user processes may be local or distributed.  User
-processes may communicate with each other using sockets, shared-memory,
-pseudo-terminals, etc.  Further, each user process has a checkpoint
-thread which communicates with the coordinator.
-
-DMTCP Plugins
--------------
-.. figure:: plugin-architecture-simple.png
-
-   DMTCP Plugins. :label:`dmtcp-plugins`
-
-DMTCP plugins are used to keep DMTCP modular. There is a separate plugin
-for each operating system resource. Examples of plugins are pid plugin,
-socket plugin, and file plugin. Plugins are responsible for
-checkpointing and restoring the state of their corresponding resources.
-The execution environment can change between checkpoint and restart. For
-example, the computation might be restarted on a different computer
-which has different file mount points, different network address, etc.
-Plugins handle such changes in the execution environment by virtualizing
-these aspects. Figure :ref:`dmtcp-plugins` shows the layout of DMTCP
-plugins within the application.
-
-DMTCP Coordinator
------------------
-DMTCP uses a stateless centralized process, the DMTCP coordinator, to
-synchronize checkpoint and restart between distributed processes.
-The user interacts with the  coordinator through the console to initiate
-checkpoint, check status of the computation, kill the computation, etc.
-It is also possible to run the coordinator as a daemon process, in which
-case, the use may communicate with the coordinator using the command
-``dmtcp_command``.
-
-Checkpoint Thread
------------------
-The checkpoint thread waits for a checkpoint request from the DMTCP
-coordinator.  On receiving the checkpoint request, the checkpoint thread
-quiesces the user threads and creates the checkpoint image. To quiesce
-user threads, it installs a signal handler for a dedicated POSIX signal
-(by default, SIGUSR2).
-Once the checkpoint image has been created, the user threads are allowed
-to resume executing application code. Similarly, during restart, once the
-process memory has been restored, the user threads can resume executing
-application code.
-
-Checkpoint
-----------
-On receiving the checkpoint request from the coordinator, the checkpoint
-thread sends the checkpoint signal to all the user threads of the
-process.  This quiesces the user threads by forcing them to block inside
-a signal handler, defined by the DMTCP.  The checkpoint image is created
-by writing all of user-space memory to a checkpoint image file. Each
-process has its own checkpoint image.  Prior to checkpoint, each plugin
-will have copied into user-space memory, any kernel state associated
-with its concerns.  Examples of such concerns include network sockets,
-files, and pseudo-terminals.  Once the checkpoint image has been
-created, the checkpoint thread un-quiesces the user threads and they
-resume executing application code.
-
-At the time of checkpoint, all of user-space memory is written to a
-checkpoint image file.  The user threads are then allowed to resume
-execution.  Note that user-space memory includes the all of the run-time
-libraries (libc, libpthread, etc.), which are also saved in the
-checkpoint image.
-
-In some cases, state outside the kernel must be saved.  For example, in
-handling network sockets, data in flight must be saved.  This is done by
-draining the network data by sending a *special cookie* through the
-"send" end of each socket in one phase.  In a second phase, after a
-global barrier, data is read from the "receive" end of each socket until
-the special cookie is received. The in-flight data has now been copied
-into user-space memory, and so will be included in the checkpoint image.
-On restart, the network buffers are *refilled* by sending the in-flight
-data back to the peer process, who then sends the data back into the
-network.
-
-Restart
--------
-As the first step of restart phase, all memory areas of the process are
-restored. Next, the user threads are recreated. The plugins then receive
-the restart notification and restore their underlying resources,
-translation tables etc.  Finally, the checkpoint thread un-quiesces the
-user threads and the user threads resume executing application code.
+`Reversible Debugging with FReD`_. More information about DMTCP is added in
+`Appendix: Background of DMTCP`_.
 
 DMTCP-Python Integration through a Python Module
 ================================================
@@ -654,3 +544,116 @@ References
            Debugging Histories*,
            In Proc. of 6th Workshop on Programming Languages and Operating
            Systems (PLOS'2011) (part of Proc. of 23rd ACM SOSP), 2011.
+
+
+Appendix: Background of DMTCP
+=============================
+
+.. figure:: dmtcp-arch.png
+
+   Architecture of DMTCP. :label:`dmtcp-arch`
+
+DMTCP [Ansel09]_ is a
+transparent checkpoint-restart package with its roots going back eight
+years [Rieker06]_.  It works completely in user space
+and does not require any changes to the application or the operating
+system.  DMTCP can be used to checkpoint a variety of user application
+including Python.
+
+Using DMTCP to checkpoint an application is as simple as executing the
+following commands:
+
+.. code-block:: sh
+
+   dmtcp_checkpoint ./a.out
+   dmtcp_command -c
+   ./dmtcp_restart_script.sh
+
+DMTCP automatically tracks all local and remote child processes and
+their relationships.
+
+As seen in Figure :ref:`dmtcp-arch` , a computation running under DMTCP
+consists of a centralized coordinator process and several user
+processes. The user processes may be local or distributed.  User
+processes may communicate with each other using sockets, shared-memory,
+pseudo-terminals, etc.  Further, each user process has a checkpoint
+thread which communicates with the coordinator.
+
+DMTCP Plugins
+-------------
+.. figure:: plugin-architecture-simple.png
+
+   DMTCP Plugins. :label:`dmtcp-plugins`
+
+DMTCP plugins are used to keep DMTCP modular. There is a separate plugin
+for each operating system resource. Examples of plugins are pid plugin,
+socket plugin, and file plugin. Plugins are responsible for
+checkpointing and restoring the state of their corresponding resources.
+The execution environment can change between checkpoint and restart. For
+example, the computation might be restarted on a different computer
+which has different file mount points, different network address, etc.
+Plugins handle such changes in the execution environment by virtualizing
+these aspects. Figure :ref:`dmtcp-plugins` shows the layout of DMTCP
+plugins within the application.
+
+DMTCP Coordinator
+-----------------
+DMTCP uses a stateless centralized process, the DMTCP coordinator, to
+synchronize checkpoint and restart between distributed processes.
+The user interacts with the  coordinator through the console to initiate
+checkpoint, check status of the computation, kill the computation, etc.
+It is also possible to run the coordinator as a daemon process, in which
+case, the use may communicate with the coordinator using the command
+``dmtcp_command``.
+
+Checkpoint Thread
+-----------------
+The checkpoint thread waits for a checkpoint request from the DMTCP
+coordinator.  On receiving the checkpoint request, the checkpoint thread
+quiesces the user threads and creates the checkpoint image. To quiesce
+user threads, it installs a signal handler for a dedicated POSIX signal
+(by default, SIGUSR2).
+Once the checkpoint image has been created, the user threads are allowed
+to resume executing application code. Similarly, during restart, once the
+process memory has been restored, the user threads can resume executing
+application code.
+
+Checkpoint
+----------
+On receiving the checkpoint request from the coordinator, the checkpoint
+thread sends the checkpoint signal to all the user threads of the
+process.  This quiesces the user threads by forcing them to block inside
+a signal handler, defined by the DMTCP.  The checkpoint image is created
+by writing all of user-space memory to a checkpoint image file. Each
+process has its own checkpoint image.  Prior to checkpoint, each plugin
+will have copied into user-space memory, any kernel state associated
+with its concerns.  Examples of such concerns include network sockets,
+files, and pseudo-terminals.  Once the checkpoint image has been
+created, the checkpoint thread un-quiesces the user threads and they
+resume executing application code.
+
+At the time of checkpoint, all of user-space memory is written to a
+checkpoint image file.  The user threads are then allowed to resume
+execution.  Note that user-space memory includes the all of the run-time
+libraries (libc, libpthread, etc.), which are also saved in the
+checkpoint image.
+
+In some cases, state outside the kernel must be saved.  For example, in
+handling network sockets, data in flight must be saved.  This is done by
+draining the network data by sending a *special cookie* through the
+"send" end of each socket in one phase.  In a second phase, after a
+global barrier, data is read from the "receive" end of each socket until
+the special cookie is received. The in-flight data has now been copied
+into user-space memory, and so will be included in the checkpoint image.
+On restart, the network buffers are *refilled* by sending the in-flight
+data back to the peer process, who then sends the data back into the
+network.
+
+Restart
+-------
+As the first step of restart phase, all memory areas of the process are
+restored. Next, the user threads are recreated. The plugins then receive
+the restart notification and restore their underlying resources,
+translation tables etc.  Finally, the checkpoint thread un-quiesces the
+user threads and the user threads resume executing application code.
+
