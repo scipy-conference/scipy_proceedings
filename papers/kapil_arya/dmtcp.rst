@@ -94,8 +94,9 @@ The remaining sections describe: the
 extensions of the integration of DMTCP with Python.  The extensions
 include support for `Checkpointing Python-Based Graphics`_;
 `Checking Cython with Multiple CPython Instances`_ (fast/slow technique); and
-`Reversible Debugging with FReD`_. More information about DMTCP is added in
-`Appendix: Background of DMTCP`_.
+`Reversible Debugging with FReD`_.
+`Appendix: Background of DMTCP`_ provides further
+detals about DMTCP.
 
 DMTCP-Python Integration through a Python Module
 ================================================
