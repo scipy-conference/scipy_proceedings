@@ -90,12 +90,12 @@ debug Python are discussed.
     at the step before the bug occurred.
 
 The remaining sections describe: the
-`DMTCP-Python Integration through a Python Module`_; and several
-extensions of the integration of DMTCP with Python.  The extensions
-include support for `Checkpointing Python-Based Graphics`_;
-`Checking Cython with Multiple CPython Instances`_ (fast/slow technique); and
-`Reversible Debugging with FReD`_.
-`Appendix: Background of DMTCP`_ provides further
+"`DMTCP-Python Integration through a Python Module`_"; and several
+extensions of that integration.  The extensions
+include support for "`Checkpointing Python-Based Graphics`_";
+"`Checking Cython with Multiple CPython Instances`_" (fast/slow technique); and
+"`Reversible Debugging with FReD`_".
+"`Appendix: Background of DMTCP`_" provides further
 detals about DMTCP.
 
 DMTCP-Python Integration through a Python Module
