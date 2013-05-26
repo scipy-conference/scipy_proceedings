@@ -20,7 +20,7 @@ Modeling the Earth with Fatiando a Terra
 
 .. class:: keywords
 
-    goephysics, modeling, inverse problems
+    geophysics, modeling, inverse problems
 
 
 Introduction
@@ -38,16 +38,16 @@ from observations.
 Different geophysical methods
 use different kinds of observations.
 Electromagnetic (EM) methods
-use electromagnetic waves and difusion.
+use electromagnetic waves and diffusion.
 Gravity and magnetics
 use potential fields.
-
 Seismics and seismology
 use elastic waves
 from active (man-made)
 and passive (earthquakes) sources.
-The seismic method is among the most widely stydied
-due to the high industry demmand.
+
+The seismic method is among the most widely studied
+due to the high industry demand.
 Thus,
 a range of well established open-source softwares
 have been developed for seismic processing.
@@ -56,30 +56,36 @@ SU [Stockwell_Jr]_,
 Madagascar [MadagascarDev]_,
 OpendTect (http://opendtect.org),
 and GêBR (http://www.gebrproject.com).
-The Generic Mapping Tools [Wessel_Smith]_
-are a well established collection
+A noteworthy open-source project
+that is not seismic related
+is the Generic Mapping Tools (GMT) project [Wessel_Smith]_.
+The GMT are a well established collection
 of command-line programs
 for plotting maps
 with a variety of
 different map projections.
-The Computational Infrastructure for Geodynamics (CIG)
-(http://www.geodynamics.org)
-has grouped varios codes
+Another project worth mentioning is
+the Computational Infrastructure for Geodynamics (CIG)
+(http://www.geodynamics.org),
+which has grouped various codes
 for geodynamic modeling.
 However,
+even with this wide range
+of well maintained software projects,
 many geophysical modeling softwares
 that are provided online
-have no clear open-source license statement,
+still have no open-source license statement,
 have cryptic I/O files,
 are hard to integrate into a pipeline,
 and make code reuse and remixing challenging.
+Some of these problems
+are being worked on by
 SEATREE [Milner_etal]_
-tries to solve some of these problems
-by providing a common graphycal interface
+by providing a common graphical interface
 to existing software.
 The numerical computations
-are perfomed by
-the existing C/Fortran programs.
+are performed by
+the pre-existing underlying C/Fortran programs.
 Conversely, the SEATREE code that handles
 the I/O and user interface
 is written in Python.
@@ -101,10 +107,10 @@ so that the output of one modeling function
 can be used as input for another.
 Furthermore,
 routines can be combined and reused
-to create new modeling algorihms.
+to create new modeling algorithms.
 Fatiando also automates common tasks
 such as
-gridding,
+griding,
 map plotting with Matplotlib [Hunter]_,
 3D plotting with Mayavi [Ramachandran_Varoquaux]_,
 etc.
@@ -142,7 +148,7 @@ the available modules and packages are:
 * ``fatiando.io``:
   I/O of models and data sets from web repositories;
 * ``fatiando.utils``:
-  miscelaneous utilities;
+  miscellaneous utilities;
 * ``fatiando.constants``:
   physical constants;
 * ``fatiando.gui``:
@@ -152,23 +158,23 @@ the available modules and packages are:
 * ``fatiando.inversion``:
   inverse problem solvers and regularization;
 
-Gridding and plotting
+Griding and plotting
 ---------------------
 
 Fatiando a Terra handles map data as 1D Numpy arrays,
 typically x-, y-, z-coordinates and an extra array with the corresponding data.
 However, Matplotlib functions, like ``contourf`` and ``pcolor``, require
 data to be passed as 2D arrays.
-Moreover, geophysical datasets are often irregularly sampled
-and require gridding before they can be plotted.
-Thus, gridding and array reshaping are ideal targets for automation.
+Moreover, geophysical data sets are often irregularly sampled
+and require griding before they can be plotted.
+Thus, griding and array reshaping are ideal targets for automation.
 
 The ``fatiando.vis.mpl`` module
 loads all the functions in ``matplotlib.pyplot``,
 adds new functions,
 and overwrites others
 to automate repetitive tasks
-(such as gridding).
+(such as griding).
 The following example
 illustrates the use
 of the ``fatiando.vis.mpl.contourf`` function
@@ -197,7 +203,7 @@ some irregularly sampled data
 
     Example of generating a random scatter of points, using that to make
     synthetic data, and automatically gridding and plotting it using a
-    a Fatiando a Terra wrapper for the Matplotlib ``contourf``
+    Fatiando a Terra wrapper for the Matplotlib ``contourf``
     function.
 
 Map projections
@@ -260,7 +266,7 @@ a 3D right rectangular prism model
 .. figure:: gridding_plotting_3d.png
     :align: center
 
-    Example of generating a right rectangular prism model and visualising it
+    Example of generating a right rectangular prism model and visualizing it
     in Mayavi.
 
 Forward modeling
@@ -543,7 +549,7 @@ the collection of
 fast forward modeling routines and
 the simple syntax and high level of
 the Python language.
-After protyping,
+After prototyping,
 the performance bottlenecks of these algorithms
 can be easily diagnosed
 using the advanced
