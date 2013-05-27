@@ -27,29 +27,33 @@ Introduction
 ------------
 
 Geophysics studies the physical processes of the Earth.
-The subarea commonly referred to as Solid Earth geophysics
-uses observations of physical phenomena
-to infer the inner structure of the planet.
-This task requires the numerical modeling of physical processes.
+Geophysicists make observations of physical phenomena
+and use them to
+infer the inner structure of the planet.
+This task requires
+the numerical modeling of physical processes.
 These numerical models
 can then be used in inverse problems
 to infer inner Earth structure
 from observations.
 Different geophysical methods
 use different kinds of observations.
-Electromagnetic (EM) methods
-use electromagnetic waves and diffusion.
-Gravity and magnetics
-use potential fields.
+Geothermal methods use
+the temperature and heat flux
+of the Earth's crust.
+Potential field methods
+use gravitational and magnetic field
+measurements.
 Seismics and seismology
-use elastic waves
+use the ground motion
+caused by elastic waves
 from active (man-made)
-and passive (earthquakes) sources.
+and passive (earthquakes) sources, respectively.
 
 The seismic method is among the most widely studied
 due to the high industry demand.
 Thus,
-a range of well established open-source softwares
+a range of well established open-source software
 have been developed for seismic processing.
 These include
 SU [Stockwell_Jr]_,
@@ -64,15 +68,15 @@ of command-line programs
 for plotting maps
 with a variety of
 different map projections.
-Another project worth mentioning is
-the Computational Infrastructure for Geodynamics (CIG)
+For geodynamic modeling
+there is the Computational Infrastructure for Geodynamics (CIG)
 (http://www.geodynamics.org),
-which has grouped various codes
-for geodynamic modeling.
+which has grouped various
+well documented software packages.
 However,
 even with this wide range
 of well maintained software projects,
-many geophysical modeling softwares
+many geophysical modeling software
 that are provided online
 still have no open-source license statement,
 have cryptic I/O files,
@@ -101,21 +105,22 @@ Fatiando a Terra
 (http://www.fatiando.org)
 aims at providing such an API
 for geophysical modeling.
-Functions in Fatiando
+Functions in the ``fatiando`` package
 use compatible data and mesh formats
 so that the output of one modeling function
 can be used as input for another.
 Furthermore,
 routines can be combined and reused
 to create new modeling algorithms.
-Fatiando also automates common tasks
+Fatiando a Terra also automates common tasks
 such as
 griding,
-map plotting with Matplotlib [Hunter]_,
-3D plotting with Mayavi [Ramachandran_Varoquaux]_,
-etc.
+map plotting with Matplotlib [Hunter]_, and
+3D plotting with Mayavi [Ramachandran_Varoquaux]_.
 Version 0.1 of Fatiando a Terra
-is focused on gravity and magnetics.
+is focused on gravity and magnetic methods
+because this is the main focus
+of the developers.
 However,
 simple "toy" problems
 for seismology and geothermics
@@ -123,8 +128,8 @@ are available
 and can be useful
 for teaching geophysics.
 
-The ``fatiando`` package
-------------------------
+Package structure
+-----------------
 
 The modules and packages
 of Fatiando a Terra
@@ -158,8 +163,8 @@ the available modules and packages are:
 * ``fatiando.inversion``:
   inverse problem solvers and regularization;
 
-Griding and plotting
----------------------
+Griding and map plotting
+------------------------
 
 Fatiando a Terra handles map data as 1D Numpy arrays,
 typically x-, y-, z-coordinates and an extra array with the corresponding data.
@@ -206,6 +211,7 @@ some irregularly sampled data
     Fatiando a Terra wrapper for the Matplotlib ``contourf``
     function.
 
+
 Map projections
 are handled by
 the Matplotlib Basemap toolkit
@@ -232,9 +238,33 @@ of this toolkit (Figure 2):
     Example of map plotting with the Robinson projection using the Matplotlib
     Basemap toolkit.
 
+Meshes and 3D plotting
+----------------------
+
+The representation of
+2D and 3D geometric elements
+is handled by the classes in
+the ``fatiando.mesher`` module.
+Geometric elements in Fatiando a Terra
+can be asigned physical property values,
+like density, magnetization, seismic wave velocity,
+impedance, etc.
+This is done through a ``props`` dictionary
+whose keys are the name of the physical property
+and values are the corresponding values:
+
+.. code-block:: python
+
+    from fatiando import mesher
+    model = [
+        mesher.Prism(5, 8, 3, 7, 1, 7,
+            props={'density':200}),
+        mesher.Prism(1, 2, 4, 5, 1, 2,
+            props={'density':1000})]
+
 The ``fatiando.vis.myv`` module
 contains functions
-for 3D plotting
+to automate 3D plotting
 using Mayavi [Ramachandran_Varoquaux]_.
 These functions create TVTK representations
 of ``fatiando.mesher`` objects
@@ -246,18 +276,17 @@ and rotates it so that
 the z-axis points down,
 as is standard in geophysics.
 The following example
-shows how to create and plot
-a 3D right rectangular prism model
+shows how to plot the
+3D right rectangular prism model
+that we created previously
 (Figure 3):
 
 .. code-block:: python
 
-    from fatiando import mesher
     from fatiando.vis import myv
-    model = [mesher.Prism(5, 8, 3, 7, 1, 7)]
     bounds = [0, 10, 0, 10, 0, 10]
     myv.figure()
-    myv.prisms(model)
+    myv.prisms(model, 'density')
     myv.axes(myv.outline(bounds))
     myv.wall_bottom(bounds)
     myv.wall_north(bounds)
@@ -268,6 +297,10 @@ a 3D right rectangular prism model
 
     Example of generating a right rectangular prism model and visualizing it
     in Mayavi.
+
+
+**ADD EXAMPLE OF PRISMMESH, SQUAREMESH FROM IMAGE**
+
 
 Forward modeling
 ----------------
@@ -394,7 +427,7 @@ and calculate its gravity anomaly
 .. figure:: forward_modeling_polyprism_drawing.png
     :align: center
 
-    Screenshot of interactively drawing the contour of a 3D polygonal prism,
+    Screen-shot of interactively drawing the contour of a 3D polygonal prism,
     as view from above.
 
 .. figure:: forward_modeling_polyprism.png
