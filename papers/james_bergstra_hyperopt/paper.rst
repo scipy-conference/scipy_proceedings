@@ -262,10 +262,12 @@ The first argument to ``hp.uniform`` here is the *label*. Each of the hyperparam
 with a unique string.  The other hyperparameter distributions at our disposal as modelers are as follows:
 
 ``hp.choice(label, options)``
-    Returns one of the options, which should be a list or tuple.  The elements of `options` can themselves be [nested] stochastic expressions.  In this case, the stochastic choices that only appear in some of the options become *conditional* parameters.
+    Returns one of the options, which should be a list or tuple.  The elements of ``options`` can themselves be [nested] stochastic expressions.  In this case, the stochastic choices that only appear in some of the options become *conditional* parameters.
 
-``hp.pchoice(label, options, probs)``
-    Return one of the options according to the probabilities listed in ``probs`` (which should sum to 1).
+``hp.pchoice(label, p_options)``
+    Return one of the ``option`` terms listed in ``p_options``, a list of pairs ``(prob, option)`` in which
+    the sum of all ``prob`` elements should sum to 1. The ``pchoice`` lets a
+    user bias random search to choose some options more often than others.
 
 ``hp.uniform(label, low, high)``
     Draws uniformly between ``low`` and ``high``.
