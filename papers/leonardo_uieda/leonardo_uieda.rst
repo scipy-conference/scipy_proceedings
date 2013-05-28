@@ -379,8 +379,22 @@ using synthetic topography
     Example of generating and visualizing a prism mesh with masked topography.
     :label:`meshtopo`
 
-
-Modeling tesseroids
+When modeling involves
+the whole Earth,
+or a large area of it,
+the geophysicist needs to
+take into account the Earth's curvature.
+In such cases,
+rectangular prisms are
+inadequate for modeling
+and tesseroids (e.g., spherical prisms)
+are better suited.
+The ``fatiando.vis.myv`` module
+contains auxiliary functions to
+plot along with tesseroids:
+an Earth-sized sphere,
+meridians and parallels,
+as well as continental borders
 (Figure :ref:`tesseroid`):
 
 .. code-block:: python
@@ -450,7 +464,7 @@ The following example
 shows how to calculate
 the gravity anomaly
 of the tesseroid model
-of the previous section
+generated in the previous section
 (Figure :ref:`tesseroidgrav`):
 
 .. code-block:: python
