@@ -56,21 +56,23 @@ Thus,
 a range of well established open-source software
 have been developed for seismic processing.
 These include
-SU [Stockwell_Jr]_,
-Madagascar [MadagascarDev]_,
-OpendTect (http://opendtect.org),
-and GêBR (http://www.gebrproject.com).
+`Seismic Un*x <http://www.cwp.mines.edu/cwpcodes/>`_ (SU) [SU]_,
+`Madagascar <http://www.ahay.org/>`_ [MAD]_,
+`OpendTect <http://opendtect.org>`_,
+and `GêBR <http://www.gebrproject.com>`_.
 A noteworthy open-source project
 that is not seismic related
-is the Generic Mapping Tools (GMT) project [Wessel_Smith]_.
+is the `Generic Mapping Tools <http://gmt.soest.hawaii.edu/>`_
+(GMT) project [GMT]_.
 The GMT are a well established collection
 of command-line programs
 for plotting maps
 with a variety of
 different map projections.
 For geodynamic modeling
-there is the Computational Infrastructure for Geodynamics (CIG)
-(http://www.geodynamics.org),
+there is the
+`Computational Infrastructure for Geodynamics <http://www.geodynamics.org>`_
+(CIG),
 which has grouped various
 well documented software packages.
 However,
@@ -83,8 +85,10 @@ have cryptic I/O files,
 are hard to integrate into a pipeline,
 and make code reuse and remixing challenging.
 Some of these problems
-are being worked on by
-SEATREE [Milner_etal]_
+are being worked on by the
+`Solid Earth Teaching and Research Environment
+<http://geosys.usc.edu/projects/seatree/>`_
+(SEATREE) [SEATREE]_
 by providing a common graphical interface
 to existing software.
 The numerical computations
@@ -101,8 +105,7 @@ means that the code for these programs
 cannot be easily combined
 to create new modeling tools.
 
-Fatiando a Terra
-(http://www.fatiando.org)
+`Fatiando a Terra <http://www.fatiando.org>`_
 aims at providing such an API
 for geophysical modeling.
 Functions in the ``fatiando`` package
@@ -115,8 +118,8 @@ to create new modeling algorithms.
 Fatiando a Terra also automates common tasks
 such as
 griding,
-map plotting with Matplotlib [Hunter]_, and
-3D plotting with Mayavi [Ramachandran_Varoquaux]_.
+map plotting with Matplotlib [MPL]_, and
+3D plotting with Mayavi [MYV]_.
 Version 0.1 of Fatiando a Terra
 is focused on gravity and magnetic methods
 because this is the main focus
@@ -274,7 +277,7 @@ and values are the corresponding values:
 The ``fatiando.vis.myv`` module
 contains functions
 to automate 3D plotting
-using Mayavi [Ramachandran_Varoquaux]_.
+using Mayavi [MYV]_.
 These functions create TVTK representations
 of ``fatiando.mesher`` objects
 and plot them in Mayavi
@@ -475,7 +478,7 @@ of the previous section
     :label:`tesseroidgrav`
 
 The module ``fatiando.gravmag.polyprism``
-implements the method of [Plouff]_
+implements the method of [PLOUFF]_
 to forward model the gravity fields
 of a 3D right polygonal prism.
 The following code sample
@@ -548,13 +551,13 @@ contains the most advanced and state-of-the-art algorithms.
 
 The module ``fatiando.gravmag.imaging``
 implements the imaging methods
-described in [Fedi_Pilkington]_.
+described in [FP]_.
 These methods aim to produce
 an image of the geologic source
 from the observed
 gravity or magnetic data.
 The following code sample
-uses the "sandwich model" method [Pedersen]_
+uses the "sandwich model" method [SNDW]_
 to image the polygonal prism,
 produced in the previous section,
 based on its gravity anomaly
@@ -588,7 +591,7 @@ based on its gravity anomaly
 
 Also implemented are some recent developments
 in gravity and magnetic inversion methods.
-The method of "planting anomalous densities" by [Uieda_Barbosa]_
+The method of "planting anomalous densities" by [UB]_
 is implemented in
 the ``fatiando.gravmag.harvester`` module.
 In contrast to imaging methods,
@@ -699,39 +702,39 @@ any open-source project.
 References
 ----------
 
-.. [Fedi_Pilkington] Fedi, M., and M. Pilkington (2012), Understanding imaging
+.. [FP] Fedi, M., and M. Pilkington (2012), Understanding imaging
     methods for potential field data, Geophysics, 77(1), G13,
     doi:10.1190/geo2011-0078.1.
 
-.. [Hunter] Hunter, J. D. (2007), Matplotlib: A 2D Graphics Environment,
+.. [MPL] Hunter, J. D. (2007), Matplotlib: A 2D Graphics Environment,
     Computing in Science & Engineering, 9(3), 90-95, doi:10.1109/MCSE.2007.55.
 
-.. [MadagascarDev] Madagascar Development Team. Madagascar Software, 2013,
+.. [MAD] Madagascar Development Team. Madagascar Software, 2013,
     http://www.ahay.org/
 
-.. [Milner_etal] Milner, K., Becker, T. W., Boschi, L., Sain, J.,
+.. [SEATREE] Milner, K., Becker, T. W., Boschi, L., Sain, J.,
     Schorlemmer, D. and H. Waterhouse. The Solid Earth Research and Teaching
     Environment: a new software framework to share research tools in the
     classroom and across disciplines, Eos Trans. AGU, 90, 12, 2009.
 
-.. [Pedersen] Pedersen, L. B., 1991, Relations between potential fields and some
+.. [SNDW] Pedersen, L. B., 1991, Relations between potential fields and some
     equivalent sources: Geophysics, 56, 961–971, doi: 10.1190/1.1443129.
 
-.. [Plouff] Plouff, D. (1976), Gravity and magnetic fields of polygonal prisms
+.. [PLOUFF] Plouff, D. (1976), Gravity and magnetic fields of polygonal prisms
     and application to magnetic terrain corrections, Geophysics, 41(4), 727,
     doi:10.1190/1.1440645.
 
-.. [Ramachandran_Varoquaux] Ramachandran, P., and G. Varoquaux (2011), Mayavi:
+.. [MYV] Ramachandran, P., and G. Varoquaux (2011), Mayavi:
     3D Visualization of Scientific Data, Computing in Science & Engineering,
     13(2), 40-51, doi:10.1109/MCSE.2011.35
 
-.. [Stockwell_Jr] J. W. Stockwell Jr. The CWP/SU: Seismic Unx package,
+.. [SU] J. W. Stockwell Jr. The CWP/SU: Seismic Unx package,
     Computers & Geosciences, 25(4):415-419, 1999,
     doi:10.1016/S0098-3004(98)00145-9
 
-.. [Uieda_Barbosa] Uieda, L., and V. C. F. Barbosa (2012), Robust 3D gravity
+.. [UB] Uieda, L., and V. C. F. Barbosa (2012), Robust 3D gravity
     gradient inversion by planting anomalous densities, Geophysics, 77(4),
     G55-G66, doi:10.1190/geo2011-0388.1.
 
-.. [Wessel_Smith] P. Wessel and W. H. F. Smith. Free software helps map and
+.. [GMT] P. Wessel and W. H. F. Smith. Free software helps map and
     display data, EOS Trans. AGU, 72, 441, 1991.
