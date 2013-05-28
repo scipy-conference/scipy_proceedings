@@ -622,9 +622,9 @@ the estimated density distribution grows
 .. code-block:: python
 
     # Make a mesh and a seed
-    mesh = mesher.PrismMesh(bounds, (10, 20, 20))
+    mesh = mesher.PrismMesh(bounds, (15, 30, 30))
     seeds = gravmag.harvester.sow(
-        [[0, 0, 100, {'density':500}]],
+        [[200, 300, 100, {'density':500}]],
         mesh)
     myv.figure()
     myv.prisms([mesh[s.i] for s in seeds])
@@ -640,7 +640,7 @@ the estimated density distribution grows
     # Now perform the inversion
     data = [gravmag.harvester.Gz(x, y, z, gz)]
     estimate = gravmag.harvester.harvest(data, seeds,
-        mesh, compactness=0.5, threshold=0.0005)[0]
+        mesh, compactness=0.1, threshold=0.0001)[0]
     mesh.addprop('density', estimate['density'])
     body = mesher.vremove(0, 'density', mesh)
     myv.figure()
@@ -657,7 +657,7 @@ the estimated density distribution grows
 
 .. figure:: gravmag_harvester_seed.png
 
-    The blue prism is the seed used by ``fatiando.gravmag.harvester`` to
+    The small blue prism is the seed used by ``fatiando.gravmag.harvester`` to
     perform the inversion of a gravity anomaly. The black contours are the true
     source of the gravity anomaly.
     :label:`seed`
