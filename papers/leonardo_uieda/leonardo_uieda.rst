@@ -723,16 +723,16 @@ References
 .. [MPL] Hunter, J. D. (2007), Matplotlib: A 2D Graphics Environment,
     Computing in Science & Engineering, 9(3), 90-95, doi:10.1109/MCSE.2007.55.
 
-.. [MAD] Madagascar Development Team. Madagascar Software, 2013,
-    http://www.ahay.org/
+.. [MAD] Madagascar Development Team (2013), Madagascar Software,
+    http://www.ahay.org, accessed May 2013.
 
-.. [SEATREE] Milner, K., Becker, T. W., Boschi, L., Sain, J.,
-    Schorlemmer, D. and H. Waterhouse. The Solid Earth Research and Teaching
-    Environment: a new software framework to share research tools in the
-    classroom and across disciplines, Eos Trans. AGU, 90, 12, 2009.
+.. [SEATREE] Milner, K., T. W. Becker, L. Boschi, J. Sain,
+    D. Schorlemmer, and H. Waterhouse (2009), The Solid Earth Research and
+    Teaching Environment: a new software framework to share research tools in
+    the classroom and across disciplines, Eos Trans. AGU, 90(12).
 
-.. [SNDW] Pedersen, L. B., 1991, Relations between potential fields and some
-    equivalent sources: Geophysics, 56, 961–971, doi: 10.1190/1.1443129.
+.. [SNDW] Pedersen, L. B. (1991), Relations between potential fields and some
+    equivalent sources, Geophysics, 56, 961–971, doi: 10.1190/1.1443129.
 
 .. [PLOUFF] Plouff, D. (1976), Gravity and magnetic fields of polygonal prisms
     and application to magnetic terrain corrections, Geophysics, 41(4), 727,
@@ -742,13 +742,13 @@ References
     3D Visualization of Scientific Data, Computing in Science & Engineering,
     13(2), 40-51, doi:10.1109/MCSE.2011.35
 
-.. [SU] J. W. Stockwell Jr. The CWP/SU: Seismic Unx package,
-    Computers & Geosciences, 25(4):415-419, 1999,
+.. [SU] Stockwell Jr., J. W. (1999), The CWP/SU: Seismic Unx package,
+    Computers & Geosciences, 25(4), 415-419,
     doi:10.1016/S0098-3004(98)00145-9
 
 .. [UB] Uieda, L., and V. C. F. Barbosa (2012), Robust 3D gravity
     gradient inversion by planting anomalous densities, Geophysics, 77(4),
     G55-G66, doi:10.1190/geo2011-0388.1.
 
-.. [GMT] P. Wessel and W. H. F. Smith. Free software helps map and
-    display data, EOS Trans. AGU, 72, 441, 1991.
+.. [GMT] Wessel, P. and W. H. F. Smith (1991), Free software helps map and
+    display data, EOS Trans. AGU, 72, 441.
