@@ -185,7 +185,7 @@ illustrates the use
 of the ``fatiando.vis.mpl.contourf`` function
 to automatically grid and plot
 some irregularly sampled data
-(Figure 1):
+(Figure :ref:`contourf`):
 
 .. code-block:: python
 
@@ -208,7 +208,7 @@ some irregularly sampled data
     synthetic data, and automatically gridding and plotting it using a
     Fatiando a Terra wrapper for the Matplotlib ``contourf``
     function.
-
+    :label:`contourf`
 
 Map projections
 in Matplotlib
@@ -228,7 +228,7 @@ to the ``contourf``, ``contour`` and ``pcolor``
 functions in ``fatiando.vis.mpl``
 and they will automatically plot
 using the given projection
-(Figure 2):
+(Figure :ref:`basemap`):
 
 .. code-block:: python
 
@@ -245,6 +245,7 @@ using the given projection
 
     Example of map plotting with the Robinson projection using the Matplotlib
     Basemap toolkit.
+    :label:`basemap`
 
 Meshes and 3D plotting
 ----------------------
@@ -287,7 +288,7 @@ The following example
 shows how to plot the
 3D right rectangular prism model
 that we created previously
-(Figure 3):
+(Figure :ref:`twoprisms`):
 
 .. code-block:: python
 
@@ -303,6 +304,7 @@ that we created previously
 .. figure:: meshes_3dplotting_2prisms.png
 
     Example of plotting a list of right rectangular prisms in Mayavi.
+    :label:`twoprisms`
 
 The ``fatiando.mesher`` module
 also contains classes for
@@ -401,7 +403,8 @@ the module ``fatiando.gravmag.tesseroid``
 is a Python implementation of
 the program Tesseroids (http://leouieda.github.io/tesseroids)
 and calculates the gravity anomaly
-of tesseroids, e.g. spherical prisms (Figure 4):
+of tesseroids, e.g. spherical prisms
+(Figure :ref:`tesseroidgrav`):
 
 .. code-block:: python
 
@@ -451,6 +454,7 @@ of tesseroids, e.g. spherical prisms (Figure 4):
     Example of forward modeling using tesseroids (e.g., spherical prisms).
     a) a tesseroid model.
     b) the modeled gravity anomaly of the tesseroid model.
+    :label:`tesseroidgrav`
 
 The module ``fatiando.gravmag.polyprism``
 implements the method of [Plouff]_
@@ -460,7 +464,7 @@ The following code sample
 shows how to interactively generate
 a polygonal prism model
 and calculate its gravity anomaly
-(Figures 5 and 6):
+(Figures :ref:`drawing` and :ref:`polyprism`):
 
 .. code-block:: python
 
@@ -499,12 +503,14 @@ and calculate its gravity anomaly
 
     Screen-shot of interactively drawing the contour of a 3D polygonal prism,
     as view from above.
+    :label:`drawing`
 
 .. figure:: forward_modeling_polyprism.png
 
     Example of forward modeling the gravity anomaly of a 3D polygonal prism.
     a) forward modeled gravity anomaly.
     b) 3D plot of the polygonal prism.
+    :label:`polyprism`
 
 Gravity and magnetic methods
 ----------------------------
@@ -533,7 +539,8 @@ The following code sample
 uses the "sandwich model" method [Pedersen]_
 to image the polygonal prism,
 produced in the previous section,
-based on its gravity anomaly (Figure 7):
+based on its gravity anomaly
+(Figure :ref:`imaging`):
 
 .. code-block:: python
 
@@ -559,6 +566,7 @@ based on its gravity anomaly (Figure 7):
     of a geologic body based on its gravity anomaly. The colored blocks are a
     cutoff of the imaged body. The black contours are the true source of the
     gravity anomaly.
+    :label:`imaging`
 
 Also implemented are some recent developments
 in gravity and magnetic inversion methods.
@@ -572,8 +580,9 @@ i.e., it estimates a physical property distribution
 that fits the observed data.
 This particular method
 requires the user to specify
-a "seed" (Figure 8) around which
-the estimated density distribution grows (Figure 9):
+a "seed" (Figure :ref:`seed`) around which
+the estimated density distribution grows
+(Figure :ref:`harvester`):
 
 .. code-block:: python
 
@@ -616,6 +625,7 @@ the estimated density distribution grows (Figure 9):
     The blue prism is the seed used by ``fatiando.gravmag.harvester`` to
     perform the inversion of a gravity anomaly. The black contours are the true
     source of the gravity anomaly.
+    :label:`seed`
 
 .. figure:: gravmag_harvester.png
 
@@ -623,6 +633,7 @@ the estimated density distribution grows (Figure 9):
     ``fatiando.gravmag.harvester``. The black contours are the true source of
     the gravity anomaly. Notice how the inversion was able to recover the
     approximate geometry of the true source.
+    :label:`harvester`
 
 Conclusion
 ----------
