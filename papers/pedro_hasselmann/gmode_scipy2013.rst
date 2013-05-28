@@ -394,8 +394,9 @@ Our implementation also allows to ``import Gmode`` and use it in ``Python IDLE``
    --q1 2.0 -g 3 -u 0.5 -m 0.5
 
 Finally, since the plot limits, normalization and axis are optimized to asteroid photometry, 
-users using the method on shell are invited to directly change this parameters in ``Gmode.Plot()``. 
-A easier way to control the method aesthetics is going to be worked out on future versions.
+users on shell are invited to directly change this parameters in ``config.cfg``.
+If data is not normalized thus ``norm = None``.
+More aesthetic options are going to be implemented in future versions. 
 
 
 Code Testing
