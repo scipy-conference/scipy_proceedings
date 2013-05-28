@@ -16,7 +16,41 @@ Modeling the Earth with Fatiando a Terra
 
 .. class:: abstract
 
-    This is the abstract
+Geophysics
+is the science of
+using physical observations of the Earth
+to infer its inner structure.
+Generally, this is done
+with a variety of
+numerical modeling techniques
+and inverse problems.
+The development of new algorithms
+usually involves
+copy and pasting of code,
+which leads to errors
+and poor code reuse.
+Fatiando a Terra is
+a Python library that aims to
+automate common tasks and
+unify the modeling pipeline
+inside of the Python language.
+This allows users to replace
+the traditional shell scripting
+with more versatile and powerful
+Python scripting.
+The library can also be used
+as an API for
+quickly developing stand-alone programs.
+Algorithms implemented in Fatiando a Terra
+can be combined to build upon existing functionality.
+This flexibility facilitates
+prototyping of new algorithms
+and quickly building interactive teaching exercises.
+In the future,
+we plan to continuously implement
+sample problems to help teach geophysics
+as well as
+classic and state-of-the-art algorithms.
 
 .. class:: keywords
 
@@ -130,6 +164,14 @@ for seismology and geothermics
 are available
 and can be useful
 for teaching geophysics.
+
+The following sections
+illustrate the functionality and design
+of Fatiando a Terra
+using various code samples.
+These samples can be downloaded as
+an IPython notebook file from
+http://nbviewer.ipython.org/urls/raw.github.com/leouieda/scipy_proceedings/2013/papers/leonardo_uieda/code_samples.ipynb.
 
 Package structure
 -----------------
@@ -258,7 +300,7 @@ The representation of
 is handled by the classes in
 the ``fatiando.mesher`` module.
 Geometric elements in Fatiando a Terra
-can be asigned physical property values,
+can be assigned physical property values,
 like density, magnetization, seismic wave velocity,
 impedance, etc.
 This is done through a ``props`` dictionary
@@ -323,7 +365,7 @@ and can be passed to
 functions that ask for a list of prisms,
 like ``fatiando.vis.myv.prisms``.
 Physical properties
-can be asigned to the mesh
+can be assigned to the mesh
 using the ``addprop`` method
 (Figure :ref:`mesh`):
 
@@ -670,6 +712,132 @@ the estimated density distribution grows
     approximate geometry of the true source.
     :label:`harvester`
 
+A toy seismic tomography
+------------------------
+
+The following example
+uses module ``fatiando.seismic.srtomo``
+to perform a simplified 2D tomography
+on synthetic seismic wave travel-time data.
+To generate the travel-times
+we used a seismic wave velocity model
+constructed from an image file.
+The colors of the image
+are converted to gray-scale
+and the intensity is
+mapped to seismic wave velocity
+by the ``img2prop`` method
+of the ``fatiando.mesher.SquareMesh`` class.
+This model (Figure :ref:`tomo`) is then used
+to calculate the travel-times between
+a random set of
+earthquake locations and seismic receivers (seismometers):
+
+.. code-block:: python
+
+    import urllib
+    from fatiando import mesher, utils, seismic
+    from fatiando.vis import mpl
+    area = (0, 500000, 0, 500000)
+    shape = (30, 30)
+    model = mesher.SquareMesh(area, shape)
+    link = '/'.join(["http://fatiando.readthedocs.org",
+        "en/Version0.1/_static/logo.png"])
+    urllib.urlretrieve(link, 'model.png')
+    model.img2prop('model.png', 4000, 10000, 'vp')
+    quake_locations = utils.random_points(area, 40)
+    receiver_locations = utils.circular_points(area, 20,
+        random=True)
+    quakes, receivers = utils.connect_points(
+        quake_locations, receiver_locations)
+    traveltimes = seismic.ttime2d.straight(model, 'vp',
+        quakes, receivers)
+    noisy = utils.contaminate(traveltimes, 0.001,
+        percent=True)
+
+Now the noise-corrupted synthetic travel-times
+can be used in our simplified tomography:
+
+.. code-block:: python
+
+    mesh = mesher.SquareMesh(area, shape)
+    slowness, residuals = seismic.srtomo.run(noisy,
+        quakes, receivers, mesh, smooth=10**6)
+    velocity = seismic.srtomo.slowness2vel(slowness)
+    mesh.addprop('vp', velocity)
+    # Make the plots
+    mpl.figure(figsize=(9, 7))
+    mpl.subplots_adjust(top=0.95, bottom=0.05,
+        left=0.05, right=0.95)
+    mpl.subplot(2, 2, 1)
+    mpl.title('Velocity model (m/s)')
+    mpl.axis('scaled')
+    mpl.squaremesh(model, prop='vp', cmap=mpl.cm.seismic)
+    mpl.colorbar(pad=0.01)
+    mpl.points(quakes, '*y', label="Sources")
+    mpl.points(receivers, '^g', label="Receivers")
+    mpl.m2km()
+    mpl.subplot(2, 2, 2)
+    mpl.title('Ray paths')
+    mpl.axis('scaled')
+    mpl.squaremesh(model, prop='vp', cmap=mpl.cm.seismic)
+    mpl.colorbar(pad=0.01)
+    mpl.paths(quakes, receivers)
+    mpl.points(quakes, '*y', label="Sources")
+    mpl.points(receivers, '^g', label="Receivers")
+    mpl.m2km()
+    mpl.subplot(2, 2, 3)
+    mpl.title('Estimated velocity (m/s)')
+    mpl.axis('scaled')
+    mpl.squaremesh(mesh, prop='vp', cmap=mpl.cm.seismic,
+        vmin=4000, vmax=10000)
+    mpl.colorbar(pad=0.01)
+    mpl.m2km()
+    mpl.subplot(2, 2, 4)
+    mpl.title('Residuals (s)')
+    mpl.hist(residuals, bins=10)
+    mpl.show()
+
+.. **
+
+Even though the implementation in ``fatiando.seismic.srtomo`` is
+greatly simplified and not usable in real tomography problems,
+the result in Figure :ref:`tomo`
+illustrates interesting inverse problem concepts.
+Notice how the estimated velocity
+is blurred in the corners
+where no rays pass through.
+This is because
+the data (travel-times) provide no information
+about the velocity in those areas.
+Areas like those
+constitute the null space
+of the inverse problem [MENKE]_,
+where any velocity value estimated will provide
+an equal fit to the data.
+Thus,
+the tomography problem requires
+the use of prior information
+in the form of a smoothness constraint [MENKE]_,
+controlled by the ``smooth`` argument
+of function ``fatiando.seismic.srtomo.run``.
+That is why
+we are able to estimate a unique solution
+and the result is specially smoothed
+where there are no rays.
+
+.. figure:: seismic_tomo.png
+
+    Example run of a simplified 2D tomography. The top-left panel shows the
+    true velocity model with the locations of earthquakes (yellow stars) and
+    receivers (green triangles). The top-right panel shows the ray-paths
+    between earthquakes and receivers. The bottom-left panel is the velocity
+    estimated by the tomography. The bottom-right panel is a histogram of the
+    travel-time residuals of the tomography. Notice how the majority of
+    residuals are close to 0 s, indicating a good fit to the data.
+    :label:`tomo`
+
+
 Conclusion
 ----------
 
@@ -725,6 +893,9 @@ References
 
 .. [MAD] Madagascar Development Team (2013), Madagascar Software,
     http://www.ahay.org, accessed May 2013.
+
+.. [MENKE] Menke, W. (1984), Geophysical Data Analysis: Discrete Inverse
+    Theory, Academic Press Inc., San Diego, California, 285pp.
 
 .. [SEATREE] Milner, K., T. W. Becker, L. Boschi, J. Sain,
     D. Schorlemmer, and H. Waterhouse (2009), The Solid Earth Research and
