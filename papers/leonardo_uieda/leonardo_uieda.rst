@@ -189,7 +189,6 @@ some irregularly sampled data
 
 .. code-block:: python
 
-
     from fatiando import gridder
     from fatiando.vis import mpl
     area = [-50, 50, -20, 20]
@@ -204,7 +203,6 @@ some irregularly sampled data
     mpl.show()
 
 .. figure:: gridding_plotting_contourf.png
-    :align: center
 
     Example of generating a random scatter of points, using that to make
     synthetic data, and automatically gridding and plotting it using a
@@ -213,13 +211,24 @@ some irregularly sampled data
 
 
 Map projections
+in Matplotlib
 are handled by
-the Matplotlib Basemap toolkit
+the Basemap toolkit
 (http://matplotlib.org/basemap).
 The ``fatiando.vis.mpl`` module
 also provides helper functions
 to automate the use
-of this toolkit (Figure 2):
+of this toolkit.
+The ``fatiando.vis.mpl.basemap`` function
+automates the creation of
+the ``Basemap`` objects
+with common parameters.
+This object can then be passed
+to the ``contourf``, ``contour`` and ``pcolor``
+functions in ``fatiando.vis.mpl``
+and they will automatically plot
+using the given projection
+(Figure 2):
 
 .. code-block:: python
 
@@ -233,7 +242,6 @@ of this toolkit (Figure 2):
     mpl.show()
 
 .. figure:: gridding_plotting_basemap.png
-    :align: center
 
     Example of map plotting with the Robinson projection using the Matplotlib
     Basemap toolkit.
@@ -292,15 +300,79 @@ that we created previously
     myv.wall_north(bounds)
     myv.show()
 
-.. figure:: gridding_plotting_3d.png
-    :align: center
+.. figure:: meshes_3dplotting_2prisms.png
 
-    Example of generating a right rectangular prism model and visualizing it
-    in Mayavi.
+    Example of plotting a list of right rectangular prisms in Mayavi.
+
+The ``fatiando.mesher`` module
+also contains classes for
+collections of elements
+(e.g., meshes).
+A good example is
+the ``PrismMesh`` class
+that represents a structured mesh
+of right rectangular prisms.
+This class behaves as
+a list of ``fatiando.mesher.Prism`` objects
+and can be passed to
+functions that ask for a list of prisms,
+like ``fatiando.vis.myv.prisms``.
+Physical properties
+can be asigned to the mesh
+using the ``addprop`` method
+(Figure :ref:`mesh`):
 
 
-**ADD EXAMPLE OF PRISMMESH, SQUAREMESH FROM IMAGE**
+.. code-block:: python
 
+    mesh = mesher.PrismMesh(bounds, shape=(3, 3, 3))
+    mesh.addprop('density', range(mesh.size))
+    myv.figure()
+    myv.prisms(mesh, 'density')
+    myv.axes(myv.outline(bounds))
+    myv.show()
+
+.. figure:: meshes_3dplotting_mesh.png
+
+    Example of generating and visualizing a structured prism mesh.
+    :label:`mesh`
+
+Often times
+the mesh is used
+to make a detailed model of
+an irregular region
+of the Earth's surface.
+In such cases,
+it is necessary to consider
+the topography of the region.
+The ``PrismMesh`` class
+has a ``carvetopo`` method
+that masks the prisms
+that fall above the topography.
+The example bellow
+illustrates this functionality
+using synthetic topography
+(Figure :ref:`meshtopo`):
+
+.. code-block:: python
+
+    from fatiando import utils
+    x, y = gridder.regular(bounds[:4], (50, 50))
+    heights = -5 + 5*utils.gaussian2d(x, y, 10, 5,
+        x0=10, y0=10)
+    mesh = mesher.PrismMesh(bounds, (20, 20, 20))
+    mesh.addprop('density', range(mesh.size))
+    mesh.carvetopo(x, y, heights)
+    myv.figure()
+    myv.prisms(mesh, 'density')
+    myv.axes(myv.outline(bounds))
+    myv.wall_north(bounds)
+    myv.show()
+
+.. figure:: meshes_3dplotting_meshtopo.png
+
+    Example of generating and visualizing a prism mesh with masked topography.
+    :label:`meshtopo`
 
 Forward modeling
 ----------------
@@ -375,7 +447,6 @@ of tesseroids, e.g. spherical prisms (Figure 4):
     myv.show()
 
 .. figure:: gravmag_tesseroid.png
-    :align: center
 
     Example of forward modeling using tesseroids (e.g., spherical prisms).
     a) a tesseroid model.
@@ -425,13 +496,11 @@ and calculate its gravity anomaly
     myv.show()
 
 .. figure:: forward_modeling_polyprism_drawing.png
-    :align: center
 
     Screen-shot of interactively drawing the contour of a 3D polygonal prism,
     as view from above.
 
 .. figure:: forward_modeling_polyprism.png
-    :align: center
 
     Example of forward modeling the gravity anomaly of a 3D polygonal prism.
     a) forward modeled gravity anomaly.
@@ -485,7 +554,6 @@ based on its gravity anomaly (Figure 7):
     myv.show()
 
 .. figure:: gravmag_imaging.png
-    :align: center
 
     Example of using the "sandwich model" imaging method to recover a 3D image
     of a geologic body based on its gravity anomaly. The colored blocks are a
@@ -544,14 +612,12 @@ the estimated density distribution grows (Figure 9):
     myv.show()
 
 .. figure:: gravmag_harvester_seed.png
-    :align: center
 
     The blue prism is the seed used by ``fatiando.gravmag.harvester`` to
     perform the inversion of a gravity anomaly. The black contours are the true
     source of the gravity anomaly.
 
 .. figure:: gravmag_harvester.png
-    :align: center
 
     The blue prisms are the result of a gravity inversion using module
     ``fatiando.gravmag.harvester``. The black contours are the true source of
