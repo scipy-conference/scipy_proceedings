@@ -537,7 +537,7 @@ and calculate its gravity anomaly
 .. figure:: forward_modeling_polyprism_drawing.png
 
     Screen-shot of interactively drawing the contour of a 3D polygonal prism,
-    as view from above.
+    as viewed from above.
     :label:`drawing`
 
 .. figure:: forward_modeling_polyprism.png
