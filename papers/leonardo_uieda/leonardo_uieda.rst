@@ -888,10 +888,11 @@ Acknowledgments
 The authors were
 supported in this research by
 a scholarship (L. Uieda) from
-Coordenação de Aperfeiçoamento de Pessoal de Nível Superior (CAPES)
+Coordenação de Aperfeiçoamento de Pessoal de Nível Superior (CAPES),
+a scholarship (V.C. Oliveira Jr) from
+Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq),
 and
-a fellowship (V.C.F. Barbosa) from
-Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq), Brazil.
+a fellowship (V.C.F. Barbosa) from CNPq.
 Additional support for the authors
 was provided by
 the Brazilian agencies
