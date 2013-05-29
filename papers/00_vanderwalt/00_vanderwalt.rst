@@ -142,6 +142,13 @@ pulvinar id metus.
    This is the caption. :label:`egfig`
 
 .. figure:: figure1.png
+   :align: center
+   :figclass: w
+
+   This is a wide figure, specified by adding "w" to the figclass.  It is also
+   center aligned, by setting the align keyword (can be left, right or center).
+
+.. figure:: figure1.png
    :scale: 20%
    :figclass: bht
 
