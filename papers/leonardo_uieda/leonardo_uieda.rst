@@ -827,6 +827,12 @@ The amount of smoothness
 imposed on the solution
 is controlled by the ``smooth`` argument
 of function ``fatiando.seismic.srtomo.run``.
+That is how
+we are able to estimate
+a unique solution
+and why the result
+is specially smoothed
+where there are no rays.
 
 .. figure:: seismic_tomo.png
     :align: center
