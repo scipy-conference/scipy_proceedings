@@ -38,6 +38,9 @@ class Translator(LaTeXTranslator):
         self.abstract_in_progress = False
         self.non_breaking_paragraph = False
 
+        self.figure_type = 'figure'
+        self.figure_alignment = 'left'
+
     def visit_docinfo(self, node):
         pass
 
@@ -226,13 +229,23 @@ class Translator(LaTeXTranslator):
 
     def visit_figure(self, node):
         self.requirements['float_settings'] = PreambleCmds.float_settings
+
+        self.figure_type = 'figure'
         if 'classes' in node.attributes:
-            placements = ''.join(node.attributes['classes'])
-            self.out.append('\\begin{figure}[%s]'%placements)
-        else:
-            self.out.append('\\begin{figure}')
+            placements = '[%s]' % ''.join(node.attributes['classes'])
+            if 'w' in placements:
+                placements = placements.replace('w', '')
+                self.figure_type = 'figure*'
+
+        self.out.append('\\begin{%s}%s' % (self.figure_type, placements))
+
         if node.get('ids'):
             self.out += ['\n'] + self.ids_to_labels(node)
+
+        self.figure_alignment = node.attributes.get('align', None)
+
+    def depart_figure(self, node):
+        self.out.append('\\end{%s}' % self.figure_type)
 
     def visit_image(self, node):
         attrs = node.attributes
@@ -241,7 +254,7 @@ class Translator(LaTeXTranslator):
         if 'scale' not in node.attributes and 'width' not in node.attributes:
             node.attributes['width'] = '\columnwidth'
 
-        node.attributes['align'] = 'left'
+        node.attributes['align'] = self.figure_alignment or 'left'
 
         LaTeXTranslator.visit_image(self, node)
 
