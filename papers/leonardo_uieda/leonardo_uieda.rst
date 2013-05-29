@@ -881,12 +881,21 @@ This is a key part
 for the survival of
 any open-source project.
 
-
 Acknowledgments
 ---------------
 
-
-
+The authors were
+supported in this research by
+a scholarship (L. Uieda) from
+Coordenação de Aperfeiçoamento de Pessoal de Nível Superior (CAPES)
+and
+a fellowship (V.C.F. Barbosa) from
+Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq), Brazil.
+Additional support for the authors
+was provided by
+the Brazilian agencies
+CNPq (grant 471693/2011-1)
+and FAPERJ (grant E-26/103.175/2011).
 
 References
 ----------
