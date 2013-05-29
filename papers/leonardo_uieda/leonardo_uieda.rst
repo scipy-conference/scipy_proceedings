@@ -828,6 +828,9 @@ and the result is specially smoothed
 where there are no rays.
 
 .. figure:: seismic_tomo.png
+    :align: center
+    :figclass: w
+    :scale: 60%
 
     Example run of a simplified 2D tomography. The top-left panel shows the
     true velocity model with the locations of earthquakes (yellow stars) and
