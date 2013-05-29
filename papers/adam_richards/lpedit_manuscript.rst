@@ -344,7 +344,7 @@ is no reference genome for *P. brassicae* a *de novo* assembly
 pipeline was followed. The sequencing and assembly was carried out at
 the sequencing center Genotoul http://bioinfo.genotoul.fr and made
 available using the NG6 [Mariette12]_ software environment. Prior to
-assembly, the reads were filtered to ensure quality—a step that
+assembly, the reads were filtered to ensure quality-a step that
 included a correction for replicate bias [Mariette11]_. The assembler
 Newbler [Margulies05]_, was then used to align and order the reads
 into 16,889 isotigs and 11,891 isogroups.
@@ -377,16 +377,19 @@ Functional characterization of the transcriptome
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For each isotig, functional annotations were found by using the Basic
-Local Alignment Search Tool (BLAST) [Altschul90]_ via NCBI’s BLAST+ command line
-interface [Camacho09]_. Specifically, each isotig was locally aligned to every
-sequence in the Swiss-Prot database [UniProtConsortium12]_ then using our local
-database, accession names were mapped to gene names and corresponding
-functional annotations were gathered. Of the nearly 17,000 isotigs
-that were examined, 11,846 were considered hits (E-value :math:`\leq` 0.04). The
-isotigs were then mapped to 6901 unique genes. The appropriate Gene
-Ontology [Ashburner00]_ annotations were then mapped back to the isotigs. A
-navigable version of the analyses and results is available as part of
-the online supplement
+Local Alignment Search Tool (BLAST) [Altschul90]_ via NCBI's BLAST+
+command line interface [Camacho09]_. Specifically, each isotig was
+locally aligned to every sequence in the Swiss-Prot database
+[UniProtConsortium12]_ then using our local database, accession names
+were mapped to gene names and corresponding functional annotations
+were gathered. The handling of sequence data was done using the
+classes and functions provided by BioPython [Cock09]_. 
+
+Of the nearly 17,000 isotigs that were examined, 11,846 were considered hits
+(E-value :math:`\leq` 0.04). The isotigs were then mapped to 6901
+unique genes. The appropriate Gene Ontology [Ashburner00]_ annotations
+were then mapped back to the isotigs. A navigable version of the
+analyses and results is available as part of the online supplement
 http://ajrichards.bitbucket.org/lpedit-supplement.  The supplement is
 the documentation produced using lpEdit. All scripts that were used in
 this analysis are provided therein and the supplement details the
@@ -438,7 +441,7 @@ References
 
 .. [Ashburner00] M. Ashburner, C. A. Ball, J. A. Blake, D. Botstein, H. Butler, J. M. Cherry, A. P. Davis, K. Dolinski, S. S. Dwight, 
 		 J. T. Eppig, M. A. Harris, D. P. Hill, L. Issel-Tarver, A. Kasarskis, S. Lewis, J. C. Matese, J. E. Richardson, M. Ringwald,
-		 G. M. Rubin, and G. Sherlock. *Gene ontology: tool for the unification of biology*, Nature Genetics, 25(1):25–29, May 2000.
+		 G. M. Rubin, and G. Sherlock. *Gene ontology: tool for the unification of biology*, Nature Genetics, 25(1):25-29, May 2000.
 
 .. [Bassi07] S. Bassi. *A primer on python for life science researchers*, 
 	     PLoS Computational Biology, 3(11):e199, 2007.
@@ -449,11 +452,14 @@ References
 .. [Camacho09] C. Camacho, G. Coulouris, V. Avagyan, N. Ma, J. Papadopoulos, K. Bealer, and T. L. Madden.
 	       *BLAST+: architecture and applications*, BMC Bioinformatics, 10:421, 2009.
 
+.. [Cock09] P. J. A. Cock, T. Antao, J. T. Chang, B. A. Chapman, C. J. Cox, A. Dalke, I. Friedberg, T. Hamelryck, F. Kauff, B. Wilczynski, and M. J. L. de Hoon. *Biopython: freely available Python tools for computational molecular biology and bioinformatics*,
+	    Bioinformatics, 25(11):1422-1423, Jun 2009. 
+
 .. [Ducatez12] S. Ducatez, M. Baguette, V. M. Stevens, D. Legrand, and H. Freville. *Complex interactions between paternal and maternal effects: parental experience and age at reproduction affect fecundity and offspring performance in a butterfly*,
-	       Evolution, 66(11):3558–3569, Nov 2012.
+	       Evolution, 66(11):3558-3569, Nov 2012.
 
 .. [Edgar02] R. Edgar, M Domrachev, and A E Lash. *Gene expression omnibus: NCBI gene expression and hybridization array data repository*, 
-	     Nucleic Acids Research, 30(1):207–210, Jan 2002.
+	     Nucleic Acids Research, 30(1):207-210, Jan 2002.
 
 .. [Feltwell82] J. Feltwell. *Large white butterfly: The Biology, Biochemistry and Physiology of Pieris brassicae (Linnaeus)*,
 		Springer, 1982.
@@ -466,13 +472,13 @@ References
 		 PLoS Medicine, 2(8):e124, Aug 2005.
 
 .. [Ioannidis08] J. P. A. Ioannidis. *Effect of formal statistical significance on the credibility of observational associations*,
-		 American Journal of Epidemiology, 168(4):374–383; discussion 384–90, Aug 2008.
+		 American Journal of Epidemiology, 168(4):374-383; discussion 384-390, Aug 2008.
 
 .. [Knuth84] D. E. Knuth. *Literate programming*,
-	     The Computer Journal, 27:97–111, 1984.
+	     The Computer Journal, 27:97-111, 1984.
 
 .. [Leisch02] F. Leisch. *Sweave: Dynamic generation of statistical reports using literate data analysis*,
-	      In Comp-stat 2002 — Proceedings in Computational Statistics, pages 575–580. Physica Verlag, Heidelberg, 2002.
+	      In Comp-stat 2002 - Proceedings in Computational Statistics, pages 575–580. Physica Verlag, Heidelberg, 2002.
 
 .. [Margulies05] M. Margulies, M. Egholm, W. E. Altman, S. Attiya, J. S. Bader, L. A. Bemben, J. Berka, M. S. Braverman, 
 		 Y-J. Chen, Z. Chen, S. B. Dewell, L. Du, J. M. Fierro, X. V. Gomes, B. C. Godwin, W. He, S. Helgesen,
@@ -481,7 +487,7 @@ References
 		 M. P. McKenna, E. W. Myers, E. Nickerson, J. R. Nobile, R. Plant, B. P. Puc, M. T. Ronan, G. T. Roth,
 		 G. J. Sarkis, J. F. Simons, J. W. Simpson, M. Srinivasan, K. R. Tartaro, A. Tomasz, K. A. Vogt, G. A. Volkmer,
 		 S. H. Wang, Y. Wang, M. P. Weiner, P. Yu, R. F. Begley, and J. M. Rothberg.
-		 *Genome sequencing in microfabricated high-density picolitre reactors*, Nature, 437(7057):376–80, Sep 2005.
+		 *Genome sequencing in microfabricated high-density picolitre reactors*, Nature, 437(7057):376-380, Sep 2005.
 
 .. [Mariette11] J. Mariette, C. Noirot, and C. Klopp. *Assessment of replicate bias in 454 pyrosequencing and a multi-purpose read-filtering tool*,
 		BMC Research Notes, 4:149, 2011.
@@ -490,10 +496,10 @@ References
 		*NG6: Integrated next generation sequencing storage and pro cessing environment*, BMC Genomics, 13:462, 2012.
 
 .. [Oliphant07] T. E. Oliphant. *Python for scientific computing*,
-		Computing in Science & Engineering, 9(3):10–20, 2007.
+		Computing in Science & Engineering, 9(3):10-20, 2007.
 
 .. [Perez07] F. Perez and B. E. Granger. *IPython: a system for interactive scientific computing*,
-	     Computing in Science & Engineering,  9(3):21–29, May 2007.
+	     Computing in Science & Engineering,  9(3):21-29, May 2007.
 
 .. [Prinz11] F. Prinz, T. Schlange, and K. Asadullah. *Believe it or not: how much can we rely on published data on potential drug targets?*,
 	     Nature Reviews. Drug Discovery, 10(9):712, Sep 2011.
@@ -505,13 +511,13 @@ References
 	     Boston, MA.
 
 .. [Ramsey94] N. Ramsey. *Literate programming simplified*,
-	      IEEE Software, 11(5):97–105, 1994.
+	      IEEE Software, 11(5):97-105, 1994.
 
 .. [Russell13] J. F. Russell. *If a job is worth doing, it is worth doing twice*,
 	       Nature, 496(7443):7, Apr 2013.
 
 .. [Schulte12] E. Schulte, D. Davison, T. Dye, and C. Dominik. *A multi-language computing environment for literate programming and reproducible research*,
-	       Journal of Statistical Software, 46(3):1–24, 1 2012.
+	       Journal of Statistical Software, 46(3):1-24, 1 2012.
 
 .. [UniProtConsortium12] UniProt Consortium. *Reorganizing the protein space at the universal protein resource (UniProt)*,
-			 Nucleic Acids Research, 40(Database issue):D71–5, Jan 2012.
+			 Nucleic Acids Research, 40(Database issue):D71-5, Jan 2012.
