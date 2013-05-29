@@ -170,7 +170,7 @@ illustrate the functionality and design
 of Fatiando a Terra
 using various code samples.
 These samples can be downloaded as
-an IPython notebook file from
+an IPython [IPY]_ notebook file from
 http://nbviewer.ipython.org/urls/raw.github.com/leouieda/scipy_proceedings/2013/papers/leonardo_uieda/code_samples.ipynb.
 
 Package structure
@@ -871,7 +871,7 @@ available in the Python language.
 Optimization of
 only small components of code
 can be done without loss of flexibility
-using the Cython language.
+using the Cython language [CYTHON]_.
 
 The biggest challenge that Fatiando a Terra
 faces in the near future
@@ -881,8 +881,20 @@ This is a key part
 for the survival of
 any open-source project.
 
+
+Acknowledgments
+---------------
+
+
+
+
 References
 ----------
+
+.. [CYTHON] Behnel, S., R. Bradshaw, C. Citro, L. Dalcin, D. S. Seljebotn, and
+    K. Smith (2011), Cython: The Best of Both Worlds,
+    Computing in Science & Engineering, 13(2), 31-39,
+    doi:10.1109/MCSE.2010.118.
 
 .. [FP] Fedi, M., and M. Pilkington (2012), Understanding imaging
     methods for potential field data, Geophysics, 77(1), G13,
@@ -904,6 +916,10 @@ References
 
 .. [SNDW] Pedersen, L. B. (1991), Relations between potential fields and some
     equivalent sources, Geophysics, 56, 961–971, doi: 10.1190/1.1443129.
+
+.. [IPY] Perez, F., and B. E. Granger (2007), IPython: A System for
+    Interactive Scientific Computing, Computing in Science & Engineering,
+    9(3), 21-29, doi:10.1109/MCSE.2007.53.
 
 .. [PLOUFF] Plouff, D. (1976), Gravity and magnetic fields of polygonal prisms
     and application to magnetic terrain corrections, Geophysics, 41(4), 727,
