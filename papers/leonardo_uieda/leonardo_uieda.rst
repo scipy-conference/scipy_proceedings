@@ -913,7 +913,7 @@ References
     3D Visualization of Scientific Data, Computing in Science & Engineering,
     13(2), 40-51, doi:10.1109/MCSE.2011.35
 
-.. [SU] Stockwell Jr., J. W. (1999), The CWP/SU: Seismic Unx package,
+.. [SU] Stockwell Jr., J. W. (1999), The CWP/SU: Seismic Un*x package,
     Computers & Geosciences, 25(4), 415-419,
     doi:10.1016/S0098-3004(98)00145-9
 
