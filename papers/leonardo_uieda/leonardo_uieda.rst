@@ -169,9 +169,10 @@ The following sections
 illustrate the functionality and design
 of Fatiando a Terra
 using various code samples.
-These samples can be downloaded as
-an IPython [IPY]_ notebook file from
-http://nbviewer.ipython.org/urls/raw.github.com/leouieda/scipy_proceedings/2013/papers/leonardo_uieda/code_samples.ipynb.
+An IPython [IPY]_ notebook file
+with these code samples
+is provided by [SAMPLES]_
+at http://dx.doi.org/10.6084/m9.figshare.708390.
 
 Package structure
 -----------------
@@ -945,6 +946,10 @@ References
 .. [UB] Uieda, L., and V. C. F. Barbosa (2012), Robust 3D gravity
     gradient inversion by planting anomalous densities, Geophysics, 77(4),
     G55-G66, doi:10.1190/geo2011-0388.1.
+
+.. [SAMPLES] Uieda, L., V. C. Oliveira Jr, and V. C. F. Barbosa (2013),
+    Code samples in "Modeling the Earth with Fatiando a Terra", figshare,
+    Accessed May 29 2013, http://dx.doi.org/10.6084/m9.figshare.708390.
 
 .. [GMT] Wessel, P. and W. H. F. Smith (1991), Free software helps map and
     display data, EOS Trans. AGU, 72, 441.
