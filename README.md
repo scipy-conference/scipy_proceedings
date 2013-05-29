@@ -3,7 +3,6 @@ SciPy Proceedings
 
 Paper Format
 ------------
-
 Papers are formatted using reStructuredText and the compiled version should be
 no longer than 7 pages, including figures.  Here are the steps to produce a
 paper:
@@ -50,6 +49,9 @@ examples of how to:
 
 Requirements
 ------------
- - IEEETran and AMSmath LaTeX classes
- - `docutils` 0.8 or later
- - `pygments` for code highlighting
+ - IEEETran (often packaged as ``texlive-publishers``, or download from `CTAN
+   <http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/>`__) LaTeX
+   class
+ - AMSmath LaTeX classes (included in most LaTeX distributions)
+ - `docutils` 0.8 or later (``easy_install docutils``)
+ - `pygments` for code highlighting (``easy_install pygments``)
