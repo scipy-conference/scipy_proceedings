@@ -369,7 +369,8 @@ Thus, the last code version ended up with the following input parameters:
 - ``Minimum Deviation Limit`` (``--mlim``, ``-m``, ``self.mlim``) : Sometimes the initial seeds starts with zeroth deviation, thus this singularity is corrected
   replacing all deviation by the minimum limit when lower than it. This number is given in fraction of median error of each variable.
   
-- ``Upper Deviation Limit`` (``--ulim``, ``-u``, ``self.ulim``) : This parameter is important when the clusters have high degree of superposition. 
+- ``Upper Deviation Limit`` (``--ulim``, ``-u``, ``self.ulim``) : This parameter is important when the clusters have high degree of superposition and 
+  its necessary the identification of smaller mingled clusters. 
   The upper limit is a restriction which determines how much a cluster might grow up. 
   This value is given in fraction of total standard deviation of each variable.
 
