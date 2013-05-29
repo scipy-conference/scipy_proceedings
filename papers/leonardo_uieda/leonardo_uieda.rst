@@ -819,13 +819,14 @@ an equal fit to the data.
 Thus,
 the tomography problem requires
 the use of prior information
-in the form of a smoothness constraint [MENKE]_,
-controlled by the ``smooth`` argument
+in the form of regularization.
+Most commonly used in tomography problems
+is the Tikhonov first-order regularization,
+e.g., a smoothness constraint [MENKE]_.
+The amount of smoothness
+imposed on the solution
+is controlled by the ``smooth`` argument
 of function ``fatiando.seismic.srtomo.run``.
-That is why
-we are able to estimate a unique solution
-and the result is specially smoothed
-where there are no rays.
 
 .. figure:: seismic_tomo.png
     :align: center
@@ -888,15 +889,14 @@ any open-source project.
 Acknowledgments
 ---------------
 
-The authors were
-supported in this research by
+The authors were supported by
 a scholarship (L. Uieda) from
 Coordenação de Aperfeiçoamento de Pessoal de Nível Superior (CAPES),
 a scholarship (V.C. Oliveira Jr) from
 Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq),
 and
 a fellowship (V.C.F. Barbosa) from CNPq.
-Additional support for the authors
+Additional support
 was provided by
 the Brazilian agencies
 CNPq (grant 471693/2011-1)
