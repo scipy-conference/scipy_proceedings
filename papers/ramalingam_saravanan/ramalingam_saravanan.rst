@@ -108,7 +108,7 @@ Background
 ------------
 
 I had used other commercial notebook interfaces before, but I used the
-python notebook interface for the first time in January 2013, when I
+Python notebook interface for the first time in January 2013, when I
 began teaching an introductory undergraduate programming course for
 geoscientists using Python. It was the first time the course was
 taught using Python; it had previously been taught using either Matlab
@@ -455,7 +455,7 @@ into the terminal session or discard it (Figure :ref:`nb2fig`).
    mode, the notebook contents can either be discarded or be appended like
    normal terminal output, as shown above. :label:`nb2fig`
 
-The notebook implementation GraphTerm attempts to preserve
+The notebook implementation in GraphTerm attempts to preserve
 interoperability with the IPython Notebook to the extent possible.
 GraphTerm can read and write notebooks using the IPython Notebook
 format (``*.ipynb``), although it uses the `Markdown
@@ -464,7 +464,7 @@ notebook content. (Markdown was chosen as the native format because it
 is more human-friendly than reStructuredText or JSON, allows easy
 concatenation or splitting of notebook files, and can be processed by
 numerous Markdown-aware publishing and presentation programs like
-``landslide`` and ``reveal.js``. ) GraphTerm also
+``landslide`` and ``reveal.js``. ) GraphTerm 
 supports many of the same keyboard shortcuts as IPython
 Notebook. GraphTerm can also be used with the command-line version
 of IPython. However, the generic, loosely-coupled notebook interface
