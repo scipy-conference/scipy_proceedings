@@ -41,7 +41,7 @@
 .. class:: keywords
 
    GUI, CLI, graphical user interface, command line
-   interface , notebook interface, graphical shell
+   interface, notebook interface, graphical shell
 
 Introduction
 ------------
@@ -123,7 +123,7 @@ format) for grading.
 I had previously been working on a project called GraphTerm, which implements a "graphical
 terminal interface" using a Python backend and a HTML5+Javascript
 frontend [GraphTerm]_. It was a follow-up to two earlier projects, the
-browser-based AjaxTerm, and XMLTerm, a GUI-like browser build
+browser-based AjaxTerm, and XMLTerm, a GUI-like browser built
 using the Mozilla frameowork [Sarava00]_. GraphTerm is aimed at being
 a drop-in replacement for XTerm, the standard unix terminal, with
 additional graphical and collaborative features. It retains all the
@@ -183,7 +183,7 @@ connect to the GraphTerm server, on a different port (8899), to make
 them accessible as hosts for connection from the browser.
 
 .. figure:: scipy-fig-architecture.png
-   :scale: 30%
+   :scale: 24%
 
    Architecture of GraphTerm. Browser client connects to Tornado
    server using websockets. Hosts connect to server using TCP. :label:`archfig`
@@ -490,7 +490,7 @@ be accessed by multiple users simultaneously for collaboration. Like
 inline graphics, the notebook mode works transparently when executing
 interactive shells after a remote SSH login, because all communication
 takes place via the standard output of the shell. The non-graphical
-notebook mode can be used without the remote program being ever aware
+notebook mode can be used without the remote program ever being aware
 of the notebook interface. However, the remote program will need to
 use the GraphTerm escape sequences to display inline graphics within the notebook.
 
