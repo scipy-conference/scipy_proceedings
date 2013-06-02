@@ -40,7 +40,7 @@ with more versatile and powerful
 Python scripting.
 The library can also be used
 as an API for
-quickly developing stand-alone programs.
+developing stand-alone programs.
 Algorithms implemented in Fatiando a Terra
 can be combined to build upon existing functionality.
 This flexibility facilitates
