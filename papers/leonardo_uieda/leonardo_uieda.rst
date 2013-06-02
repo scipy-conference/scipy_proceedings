@@ -321,11 +321,23 @@ The ``fatiando.vis.myv`` module
 contains functions
 to automate 3D plotting
 using Mayavi [MYV]_.
-These functions create TVTK representations
+The ``mayavi.mlab`` interface
+requires geometric elements
+to be formatted as TVTK objects.
+Thus,
+plotting functions in ``fatiando.vis.myv``
+automatically create
+TVTK representations
 of ``fatiando.mesher`` objects
-and plot them in Mayavi
-using the ``mayavi.mlab`` interface.
-The ``fatiando.vis.myv.figure`` function
+and plot them using
+a suitable function of ``mayavi.mlab``.
+Also included
+are utility functions
+for drawing axes,
+walls on the figure bounding box,
+etc.
+For example,
+the ``fatiando.vis.myv.figure`` function
 creates a figure
 and rotates it so that
 the z-axis points down,
