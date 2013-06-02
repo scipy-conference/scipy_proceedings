@@ -152,8 +152,9 @@ to create new modeling algorithms.
 Fatiando a Terra also automates common tasks
 such as
 griding,
-map plotting with Matplotlib [MPL]_, and
-3D plotting with Mayavi [MYV]_.
+map plotting with `Matplotlib <http://matplotlib.org>`__ [MPL]_,
+and
+3D plotting with `Mayavi <http://code.enthought.com/projects/mayavi>`__ [MYV]_.
 Version 0.1 of Fatiando a Terra
 is focused on gravity and magnetic methods
 because this is the main focus
@@ -169,7 +170,7 @@ The following sections
 illustrate the functionality and design
 of Fatiando a Terra
 using various code samples.
-An IPython [IPY]_ notebook file
+An `IPython <http://ipython.org/>`__ [IPY]_ notebook file
 with these code samples
 is provided by [SAMPLES]_
 at http://dx.doi.org/10.6084/m9.figshare.708390.
@@ -259,8 +260,7 @@ some irregularly sampled data
 Map projections
 in Matplotlib
 are handled by
-the Basemap toolkit
-(http://matplotlib.org/basemap).
+the `Basemap toolkit <http://matplotlib.org/basemap>`__.
 The ``fatiando.vis.mpl`` module
 also provides helper functions
 to automate the use
