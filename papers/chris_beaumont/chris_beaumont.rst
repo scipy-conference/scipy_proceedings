@@ -42,12 +42,12 @@ Multidimensional Data Exploration with Glue
 
 .. class:: keywords
 
-   data visualization, eploratory data analysis, python
+   data visualization, exploratory data analysis, python
 
 Introduction
 ------------
 
-The world is awash in increasingly-accessible and increasingly
+The world is awash in increasingly accessible and increasingly
 interrelated data.  Modern researchers rarely consider data in
 isolation.  In astronomy, for example, researchers often complement
 newly-collected data with publicly-available survey data targeting a
@@ -206,8 +206,8 @@ changed, a subset has been added or removed, etc.).  Visualization
 clients attach callback methods to a central hub; these callback
 methods are meant to respond to a particular type of state change
 (e.g., to change the appearance of a plot). The hub is responsible for
-broadcasting messages it receives (in effect, calling each callback
-function registered with a particular message). Thus, to stay in
+broadcasting messages it receives -- in effect, calling each callback
+function registered with a particular message. Thus, to stay
 synchronized, a visualization client simply needs to implement
 callback functions that handle each type of message, and register
 these with the hub.
@@ -216,16 +216,16 @@ The hub receives messages to broadcast from data and subset
 objects. The base classes for these objects override the
 ``__setattribute__`` method, such that state changes automatically
 send messages to the hub. This means that, in most situations, code
-that edits state (for example, code that translates user-drawn
+that edits the state (for example, code that translates user-drawn
 regions-of-interest to subset definitions) need not manually
 broadcast messages.
 
 Glue enables data linking across files by providing a simple,
 dictionary-like interface for accessing attributes from data.  For
 example, consider the case where a user overplots a
-catalog on top of an image.  This overlay requires knowledge of the
+catalog on top of an image.  Such an overlay requires knowledge of the
 location of each catalog entry *in the pixel coordinate system of the
-image*. The pseudo-code to plot this looks like this:
+image*. The pseudo-code for the overlay looks like this:
 
 
 .. code-block:: python
