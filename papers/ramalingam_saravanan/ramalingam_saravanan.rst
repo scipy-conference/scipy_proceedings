@@ -480,10 +480,16 @@ or to return focus to the input cell. This text-parsing approach does
 make the GraphTerm notebook implementation somewhat fragile, compared
 to other notebook implementations that have a tighter coupling with
 the underlying code interpreter (or kernel). However it allows
-GraphTerm to potentially work with interactive shells for any
-platform, such as ``R`` or ``node.js``
+GraphTerm to work with interactive shells for any
+platform, such as ``R`` (Figure :ref:`nb3fig`)
 (or any interactive program with prompts, including closed source
 binaries for languages like IDL).
+
+.. figure:: scipy-fig-nb3.png
+   :scale: 35%
+
+   Inline graphics in notebook mode when running the standard R
+   interpreter within GraphTerm. :label:`nb3fig`
 
 Since all GraphTerm content is stored on the server, the notebook can
 be accessed by multiple users simultaneously for collaboration. Like
