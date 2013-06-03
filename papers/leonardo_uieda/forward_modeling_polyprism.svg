@@ -10,8 +10,8 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="348.31"
-   height="147.46001"
+   width="196.31"
+   height="305.45999"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
@@ -43,8 +43,8 @@
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="91.382904"
-     inkscape:cy="-23.448522"
+     inkscape:cx="6.382904"
+     inkscape:cy="112.3281"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -65,7 +65,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -73,10 +73,10 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-72.14286,-70.529913)">
+     transform="translate(-72.14286,87.469764)">
     <image
        y="44.526077"
-       x="221.61903"
+       x="69.619034"
        id="image3015"
        xlink:href="file:///home/leo/pub/scipy_proceedings/papers/leonardo_uieda/forward_modeling_polyprism_model.png"
        height="173.46365"
@@ -93,12 +93,13 @@
        clip-path="url(#clipPath2993)"
        inkscape:export-filename="/home/leo/pub/scipy_proceedings/papers/leonardo_uieda/image3015.png"
        inkscape:export-xdpi="200"
-       inkscape:export-ydpi="200" />
+       inkscape:export-ydpi="200"
+       transform="matrix(1.2162162,0,0,1.2162162,-15.598455,-175.80032)" />
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Sans"
        x="94.231354"
-       y="97.350327"
+       y="-62.649673"
        id="text3018"
        sodipodi:linespacing="125%"
        inkscape:export-filename="/home/leo/pub/scipy_proceedings/papers/leonardo_uieda/image3015.png"
@@ -107,12 +108,12 @@
          sodipodi:role="line"
          id="tspan3020"
          x="94.231354"
-         y="97.350327">(a)</tspan></text>
+         y="-62.649673">(a)</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Sans"
-       x="237.14262"
-       y="97.350327"
+       x="94.231354"
+       y="91.350342"
        id="text3018-66"
        sodipodi:linespacing="125%"
        inkscape:export-filename="/home/leo/pub/scipy_proceedings/papers/leonardo_uieda/image3015.png"
@@ -120,7 +121,7 @@
        inkscape:export-ydpi="200"><tspan
          sodipodi:role="line"
          id="tspan3020-7"
-         x="237.14262"
-         y="97.350327">(b)</tspan></text>
+         x="94.231354"
+         y="91.350342">(b)</tspan></text>
   </g>
 </svg>
