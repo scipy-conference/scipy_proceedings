@@ -36,7 +36,7 @@ Pythran: Enabling Static Optimization of Scientific Python Programs
     polymorphism pruning, and automatic vector instruction generation such as
     AVX or SSE.
 
-    In addition to these compilation steps, Pythran provides a C++ runtime that
+    In addition to these compilation steps, Pythran provides a C++ runtime library that
     leverages the C++ STL to provide generic containers, and the Numeric
     Template Toolbox (NT2) for Numpy support. It takes advantage of modern C++11
     features such as variadic templates, type inference, move semantics and
@@ -45,7 +45,7 @@ Pythran: Enabling Static Optimization of Scientific Python Programs
     The input code remains compatible with the Python interpreter, and output
     code is generally as efficient as the annotated Cython equivalent, if not
     more, without the backward compatibility loss of Cython. Numpy expressions
-    runs faster than when compiled with numexpr, without any change of the
+    run faster than when compiled with numexpr, without any change of the
     original code.
 
 .. class:: keywords
@@ -61,9 +61,9 @@ several scientific packages.
 
 However, the overhead of running a scientific application written in Python
 compared to the same algorithm written in a statically compiled language such
-as C is high, due to numerous dynamic lookup, interpretation cost and high
-level programming. Additionally, the Python compiler performs no
-optimisation on the bytecode, while scientific applications are first-class
+as C is high, due to numerous dynamic lookup and interpretation cost inherent in high
+level languages. Additionally, the Python compiler performs no
+optimization on the bytecode, while scientific applications are first-class
 candidates for many of them.
 
 Following the saying that scientific applications spend 90% of their time in
@@ -91,11 +91,11 @@ JIT-compiling them from a string representation to native code. Numba [numba]_
 extends this approach to Numpy-centric applications while PyPy [pypy]_ applies it to the whole language.
 
 To the notable exception of PyPy, these compilers do not apply any of the
-static optimizations techniques that have been known for decades and
+static optimization techniques that have been known for decades and
 successfully applied to statically compiled language such as C or C++.
 Translators to statically compiled languages do take advantage of them
 indirectly, but the quality of generated code may prevent advanced
-optimisations, such as vectorization, while they are available at higher level,
+optimizations, such as vectorization, while they are available at higher level,
 i.e. at the Python level. Taking into account the specificities of the Python
 language can unlock many new transformations. For instance, PyPy automates the conversion of the `range` builtin into `xrange` through the use of a dedicated structure called `range-list`.
 
@@ -107,7 +107,7 @@ dict comprehension, generator expression, lambda functions, nested functions or
 polymorphic functions. It does *not* support global variables, user classes or
 any dynamic feature such as introspection, polymorphic variables.
 
-Unlike existing alternatives, Pythran does not solely performs static typing of
+Unlike existing alternatives, Pythran does not solely perform static typing of
 Python programs. It also performs various compiler optimizations such as
 detection of pure functions, temporary allocation removal or constant folding.
 These transformations are backed up by code analysis such as aliasing,
@@ -129,7 +129,7 @@ Pythran is a compiler for a subset of the Python language. In this paper, the
 name *Pythran* will be used indifferently to refer to the language or the
 associated compiler. The input of the Pythran compiler is a Python module —not
 a Python program— meant to be turned into a native module. Typically,
-computation-intensive part of the program are moved to a module fed to Pythran.
+computation-intensive parts of the program are moved to a module fed to Pythran.
 
 Pythran maintains backward compatibility with CPython. In addition to language
 restrictions detailed in the following, Pythran understands special comments
@@ -189,14 +189,14 @@ The back-end works in three steps:
 
 1. turning Pythran IR into parametric C++ code;
 
-2. instanciating the C++ code for the desired types;
+2. instantiating the C++ code for the desired types;
 
 3. compiling the generated C++ code into native code.
 
 The first step requires to map polymorphic variables and polymorphic functions
 from the Python world to C++. Pythran only supports polymorphic variables for
 functions, i.e. a variable can hold several function pointers during its life
-time, but it cannot hold an integer then a string. As shown later, it is
+time, but it cannot be assigned to a string if it has already been assigned to an integer. As shown later, it is
 possible to detect several false variable polymorphism cases using use-def
 chains. Function polymorphism is achieved through template parameters: a
 template function can be applied to several types as long as an implicit
@@ -232,14 +232,14 @@ form of structural typing : the only assumption these two version make are that
 `l0` and `l1` are iterable, their content can be multiplied and the result of
 the multiplication is accumulatable.
 
-Second step only consists in the instantiation of the top-level functions of the
+The second step only consists in the instantiation of the top-level functions of the
 module, using user-provided signatures. Template instantiation then triggers the
 different correctly typed instantiations for all functions written in the
 module. Note that the user only needs to provide the type of the functions
 exported outside the module. The possible types of all internal functions are
 then inferred from the call sites.
 
-Last step involves a template library, called `pythonic` that contains a
+The last step involves a template library, called `pythonic` that contains a
 polymorphic implementation of many functions from the Python standard library
 in the form of C++ template functions. Several optimizations, most notably
 expression template, are delegated to this library. Pythran relies on the C++11
@@ -252,7 +252,7 @@ Generated C++ code is compatible with g++ 4.7.2 and clang++ 3.2.
 It is important to note that all Pythran analyses are type-agnostic, i.e. they
 do not assume any type for the variables manipulated by the program. Type
 specialization is only done in the back-end, right before native code
-generation. Said otherwise, the Pythran compiler manipulates polymorphic
+generation. Said otherwise, the Pythran compiler analyzes polymorphic
 functions and polymorphic variables.
 
 Figure :ref:`compilation-flow` summarizes the compilation flow and the involved
@@ -321,7 +321,7 @@ only depends from the value of their argument. This analysis depends on two
 other analyses, namely `GlobalEffects` that computes for each function whether
 this function modifies the global state (including I/O, random generators, etc.)
 and `ArgumentEffects` that computes for each argument of each function whether
-this argument may be updated in the function body. These three analyses works
+this argument may be updated in the function body. These three analyses work
 inter-procedurally, as illustrated by the following example:
 
 .. code-block:: python
@@ -342,7 +342,7 @@ function is not pure as it calls the `sample` function from the `random`
 module, which has a global effect (on the underlying random number generator
 internal state).
 
-Several analysis depends on the `PureFunctions` analysis. `ParallelMaps` uses
+Several analyses depend on the `PureFunctions` analysis. `ParallelMaps` uses
 aliasing information to check if an identifier points to the `map` intrinsic,
 and checks if the first argument is a pure function using `PureFunctions`. In
 that case the `map` is added to the set of parallel maps, because it can be
@@ -403,7 +403,7 @@ transformations that improve the execution time of the generated code.
 Code Optimizations
 ------------------
 
-One of the benefit of translating Python code to C++ code is that it removes
+One of the benefits of translating Python code to C++ code is that it removes
 most of the dynamic lookups. It also unveils all the optimizations available at
 C++ level. For instance, a function call is quite costly in Python, which
 advocates in favor of using inlining. This transformation comes at no cost when
@@ -427,7 +427,7 @@ but can be compiled into C++ more efficiently than a general generator.
 A similar optimization consists in turning `map`, `zip` or `filter` into their
 equivalent version from the `itertool` module. The benefit is double: first it
 removes a temporary allocation, second it gives an opportunity to the compiler
-to replaces list accesses by scalar accesses. This transformation is not always
+to replace list accesses by scalar accesses. This transformation is not always
 valid, nor profitable. It is not valid if the content of the output list is
 written later on, and not profitable if the content of the output list is read
 several times, as each read implies the (re) computation, as illustrated in the
@@ -490,7 +490,7 @@ assert the validity of the renaming of the instructions into:
 that does not have the same typing issue.
 
 In addition to these python-level optimizations, the Pythran back end library,
-`pythonic`, uses several well known optimisations, especially for Numpy
+`pythonic`, uses several well known optimizations, especially for Numpy
 expressions.
 
 Library Level Optimizations
@@ -676,16 +676,16 @@ class by a function call.
 
 It comes at no surprise that all tools get more than decent results on this
 benchmark. PyPy generates a code almost as efficient as ShedSkin. Altough both
-generates C++, Pythran outperforms ShedSkin thanks to a higher level generated
+generate C++, Pythran outperforms ShedSkin thanks to a higher level generated
 code. For instance all arrays are represented in ShedSkin by pointers to arrays
-that likely disturbs g++ optimizer, while Pythran uses a vector class wrapping
+that likely disturbs the g++ optimizer, while Pythran uses a vector class wrapping
 shared pointers.
 
 Nqueen is a benchmark extracted from the former Unladen Swallow [*]_ project. It
 is particularly interesting as it makes an intensive use of non-trivial
 generator expressions and integer sets. Table :ref:`nqueen-table` illustrates
 the benchmark results for CPython, PyPy, ShedSkin and Pythran. The code had to
-be slightly updated to run with ShedSkin because ShedSkin type inference does
+be slightly updated to run with ShedSkin because type inference in ShedSkin does
 not support mixed scalar and *None* variables. The input value is `9`.
 
 .. table:: Benchmarking result on the NQueen program. :label:`nqueen-table`
@@ -700,7 +700,7 @@ not support mixed scalar and *None* variables. The input value is `9`.
 
 It seems that compilers have difficulties to take advantage of high level
 constructs such as generator expressions, as the overall speedup is not
-flabbergasting. Pythran benefits from the conversion to `itertools.imap` here,
+breathtaking. Pythran benefits from the conversion to `itertools.imap` here,
 while ShedSkin and PyPy rely on more costly constructs. A deeper look at the
 Pythran profiling trace shows that more than half of the execution time is
 spent allocating and deallocating a `set` used in the internal loop. There is a
@@ -794,27 +794,27 @@ is written using the `parallel.prange` feature and compiled with
     |    x1.03      |    x2.54       |    x4.67       |  x11.23         |
     +---------------+----------------+----------------+-----------------+
 
-It shows a small benefit from using expression template on their own, most
+It shows a small benefit from using expression templates on their own, most
 certainly because the loop control overhead is negligible in front of the
 trigonometric functions. It gets a decent x2.5 speed-up when using AVX over not
 using it. The benefit of OpenMP, although related to the number of cores, makes
 a whole speedup greater than x11 over the original Numpy version, without
-changing the input code. To the opposite, Numexpr requires to rewrite the input
-and does not achieve the same level of performance than Pythran when OpenMP and
+changing the input code. Quite the opposite, Numexpr requires rewriting the input
+and does not achieve the same level of performance as Pythran when OpenMP and
 AVX are combined.
 
 Writing efficient Cython code requires more work than just typing the variable
 declarations using Cython's specific syntax: it only takes advantage of
 parallelism because we made it explicit. Without explicit parallelization,
 the generated code runs around 176ms instead of 36ms. Cython does not generate
-vectorized code, and `gcc` does not vectorized the inner loop, which explains
+vectorized code, and `gcc` does not vectorize the inner loop, which explains
 the better result obtained with Pythran.
 
 Future Work
 -----------
 
 Although Pythran focuses on a subset of Python and its standard library, many
-optimisations opportunities are still possible. Using as Domain Specific
+optimizations opportunities are still possible. Using as Domain Specific
 Language(DSL) approach, one could use rewriting rules to optimize several
 Python idioms. For instance, `len(set(x))` could lead to an optimized
 `count_uniq` that would iterate only once on the input sequence.
@@ -824,7 +824,7 @@ support more functions from the original module. The extraction of Numpy
 expressions from `for loops` is also a natural optimization candidate, which
 shares similarities with code refactoring.
 
-Numpy expressions also fits perfectly well in the polyhedral model. Exploring
+Numpy expressions also fit perfectly well in the polyhedral model. Exploring
 the coupling of polyhedral tools with the code generated from Pythran offers
 enthusiastic perspectives.
 
@@ -846,9 +846,9 @@ modules against CPython and other optimizers: ShedSkin, PyPy and numexpr.
 
 To conclude, limiting Python to a statically typed subset does not hinders the
 expressivity when it comes to scientific or mathematic computations, but makes
-it possible to use a wide variety of classical optimizations to have Python
-matches the performance of statically compiled language. Moreover, one can use
-high level informations to generate efficient code that would be difficult to write for the average programmer.
+it possible to use a wide variety of classical optimizations to help Python
+match the performance of statically compiled language. Moreover, one can use
+high level information to generate efficient code that would be difficult to write for the average programmer.
 
 Acknowledgments
 ---------------
