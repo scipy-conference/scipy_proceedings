@@ -42,7 +42,7 @@ The algorithm was originally written in FORTRAN V by Cor77_ to classify geochemi
 as Small Solar System Bodies [Bar87_, Bir96_, Ful08_, Per10_], disk-resolved remote sensing [Pos80_, Tos05_, Cor08_, Ley10_, Tos10_], cosmic rays [Gio81]_ and quasars [Cor83]_. 
 In 1987, Bar87_ used original G-mode implementation to classify measurements of asteroids made by the Eight-Color Asteroid Survey [Zel85]_ and 
 IRAS geometric albedos [Mat86]_ to produce a taxonomic scheme. Using a sample of 442 asteroids with 8 variables, they recognized 18 classes using a confidence level
-of 97.7 %. Those classes were grouped to represent the asteroid taxonomic types. G-mode also identified that just 3 variables
+of 97.7%. Those classes were grouped to represent the asteroid taxonomic types. G-mode also identified that just 3 variables
 were enough to characterize the asteroid taxonomy.  
 
 The G-mode classifies *N* elements into *Nc* unimodal clusters containing *Na* elements each. Elements are described by *M* variables. 
@@ -50,7 +50,7 @@ This method is unsupervised, which allows an automatic identification of cluster
 For that, user must control only one critical parameter for the classification, the confidence levels :math:`q_{1}` or
 its corresponding critical value :math:`G_{q1}`. Smaller this parameter get, more clusters are resolved and smaller their spreads are.
 
-So, we choose this method to classify the asteroid observations from Sloan Digital Sky Moving Object Catalog, 
+So, we chose this method to classify the asteroid observations from Sloan Digital Sky Moving Object Catalog, 
 the largest data set on photometry containing around 400,000 moving object entries, 
 due to its previous success on asteroid taxonomy, unsupervision and lower number of input parameters. 
 However, we were aware the computational limitation we were going to face, since the method never was applied to samples larger than 10,000 elements [Ley10]_
@@ -59,7 +59,7 @@ briefly described by Ful00_ and reviewed by Tos05_ .
 Median central tendency and absolute deviation estimators, a faster initial seed finder and statistical whitening were introduced to produce a more 
 robust set of clusters and optimize the processing time. The coding was performed using Python 2.7 with support of Matplotlib, NumPy and SciPy packages [*]_. 
 The algorithm can be briefly summarized by two parts: the first one is the cluster recognition and 
-the second evaluates each variable in the classification process. Each one are going to be described in the following sections. 
+the second evaluates each variable in the classification process. Each one is going to be described in the following sections. 
 
 .. [*] The codebase_ is hosted through GitHub_ .
 
@@ -76,13 +76,13 @@ The first procedure can be summarized by the following topics and code snippets:
   This is a important measure when dealing with percentage variables, such as geometric albedos.
 
 - *Initial seed of a forming cluster is identified*. 
-  At the original implementation, the G-mode relied on a force-brute algorithm to find the three closest elements as initial seed, 
+  At the original implementation, the G-mode relied on a brute-force algorithm to find the three closest elements as initial seed, 
   which required long processing time. Therefore, in this version, the initial seeds are searched recursively using ``Numpy.histogramdd`` , which
   speeds up the output:
 
   .. code-block:: python
 
-      ###### barycenter.py ######
+      ''' barycenter.py '''
 
       def boolist(index, values, lim):
           if all([boo(item[0],item[1]) \
@@ -90,7 +90,7 @@ The first procedure can be summarized by the following topics and code snippets:
              return index
 
        def pairwise(iterable):
-           """s -> (s0,s1), (s1,s2), (s2, s3), ..."""
+           '''s -> (s0,s1), (s1,s2), (s2, s3), ...'''
            a, b = tee(iterable)
            next(b, None)
            return izip(a, b)
@@ -134,8 +134,8 @@ The first procedure can be summarized by the following topics and code snippets:
                      boolist(i,y,zone), \
                      xrange(data.shape[0]), data))
 
-The function above divides the variable hyperspace into large sectors, and just in the most crowded sector the initial seed is searched for. 
-Recursively, the most crowded sector is once divided as long as the density grows up. 
+The function above divides the variable hyperspace into large sectors, and the initial seed is searched for only in the most crowded sector. 
+Recursively, the most crowded sector is once divided as long as the density increases. 
 When density decreases or the minimal number of points set by the user is reached, the procedure stops. 
 The initial seed is chosen from the elements of the most crowded sector. 
 In the end, starting central tendency :math:`\mu_{i}` and standard deviation :math:`\sigma_{i}` are estimated from the initial seed. 
@@ -172,11 +172,11 @@ If any standard deviation is zero, the value is replaced by the median uncertain
 
      \vec{G_{j}}=\frac{\left(\frac{Z^{2}}{\vec{f}}\right)^{1/3}-(1-\frac{2}{9}\cdot\frac{\vec{f}}{N})}{\sqrt{\frac{2}{9}\cdot\frac{\vec{f}}{N}}}
  
-  Then the null hypothesis :math:`\chi_{ij} = \mu_{i}` is tested with a statistical significance of :math:`P(G_{j} \leq G_{q_{1},f})` for a :math:`\chi_{j}`
-  to belong to a tested class, i.e., a class contains the :math:`\chi_{j}` element if its estimator :math:`G_{j}` satisfies :math:`G_{j} \leq G_{q_{1}}` .
+  Then the null hypothesis :math:`\chi_{ij} = \mu_{i}` is tested with a statistical significance level of :math:`P(G_{j} \leq G_{q_{1},f})` (*P*, probability) 
+  for a :math:`\chi_{j}` to belong to a tested class, i.e., a class contains the :math:`\chi_{j}` element if its estimator :math:`G_{j}` satisfies :math:`G_{j} \leq G_{q_{1}}` .
 
 - :math:`\mu_{i}` *and* :math:`\sigma_{i}` *are redefined on each iteration*. The iteration is executed until the *Na*
-  and correlation matrix *R* become unchanged. Once the first unimodal cluster is formed, its members are removed from sample and 
+  and correlation matrix *R* converge to stable values. Once the first unimodal cluster is formed, its members are removed from sample and 
   the above procedure is applied again until all the sample is depleted, no more initial seeds are located or the condition ``N > M-1``
   is not satisfied anymore. If a initial seed fails to produce a cluster, its elements are also excluded from the sample.
 
@@ -188,8 +188,8 @@ Variable Evaluation and Distance Matrix
 ---------------------------------------
  
 This part of the method is also based on Z² criterion, but now the objects of evaluation are the clusters identified on the previous stage. 
-The variables are tested for their power to discriminate clusters against each other. For this purpose, the elements of the :math:`Nc \times Nc`
-(*Nc*, the number of classes) symmetric matrices of Gc estimators are computed for each variable i as follows:
+The variables are tested for their power to discriminate clusters against each other. For this purpose, the :math:`Nc \times Nc`
+(*Nc*, the number of clusters) symmetric matrices of Gaussian estimators are computed for each variable i as follows:
 
 .. math::
 
@@ -204,20 +204,23 @@ are a reformulation of Z² estimator, now given by:
  
 :math:`Z_{i}^{2}(b,a)` can be found just by  permuting the equation indices.
 
-The :math:`Gc_{i}` matrix gives the efficiency of variable i to resolve the clusters, thus the smaller are its element values, less separated are the classes. 
-To discriminate the redundant variables, all the elements of :math:`Gc_{i}` matrix are tested against the null hypothesis :math:`\mu_{i,a} = \mu_{i,b}` , 
-and if all of them does not satisfies :math:`Gc_{i}(a,b) < G_{q_{1}}`, the method is iterated again without the variable *i*. 
+The :math:`Gc_{i}` matrix gives the efficiency of variable i to resolve the clusters, 
+each element represent the capacity of a variable *i* to discriminate a pair of cluster from each other. 
+If all the elements are lower then a given critical value, then this variable is not significant for the classification procedure.
+Thus, smaller matrix values indicate less distinction between clusters.
+To discriminate the redundant variables, all the elements of :math:`Gc_{i}` matrix are tested against the null hypothesis :math:`\mu_{i,a} = \mu_{i,b}`, 
+and if none of them satisfy :math:`Gc_{i}(a,b) < G_{q_{1}}`, the method is iterated again without the variable *i*. 
 The method is repeated until stability is found on the most suitable set of meaningful variables for the sample.
 
 The :math:`Nc \times Nc` symmetric Distance Matrix between clusters with respect to all meaningful variables is also calculated. 
-The same interpretation given to :math:`G_{i}`  matrices can be used here: higher D²(a,b) elements, more distinct are the clusters from each other.
+The same interpretation given to :math:`Gc_{i}`  matrices can be used here: higher D²(a,b) elements, more distinction between clusters are presented.
 D²(a,b) matrix is used to produce a ``Scipy.cluster.hierarchy.dendrogram`` , which graphically shows the relation among all clusters.
 
 Robust Median Statistics
 ------------------------
 
 Robust Statistics seeks alternative estimators which are not excessively affected by outliers or departures from an assumed sample distribution. 
-For central tendency estimator : math:`\mu_{i}`, the median was chosen over mean due to its breakdown point of 50 % against 0% for mean. 
+For central tendency estimator :math:`\mu_{i}`, the median was chosen over mean due to its breakdown point of 50% against 0% for mean. 
 Higher the breakdown point, the estimator is more resistant to variations due to errors or outliers. 
 Following a median-based statistics, the Median of Absolute Deviation (MAD) was selected to represent the standard deviation estimator :math:`\sigma`. 
 The MAD is said to be conceived by Gauss in 1816 [Ham74]_ and can be expressed as:
@@ -233,7 +236,7 @@ For Gaussian distribution, which is the distribution assumed for clusters in the
 
    \sigma_{i}=K\cdot MAD
  
-To compute the Mahalanobis distance is necessary to estimate the covariance matrix.
+Computing the Mahalanobis distance is necessary to estimate the covariance matrix.
 MAD is expanded to calculate its terms:
 
 .. math::
@@ -241,7 +244,7 @@ MAD is expanded to calculate its terms:
    S_{ik}=K^{2}\cdot med\left\{ |\left(\chi_{ji}-med\left(\chi_{i}\right)\right)\cdot\left(\chi_{jk}-med\left(\chi_{k}\right)\right)|\right\} 
  
 The correlation coefficient :math:`r_{s,k}` used in this G-mode version was proposed by She97_ to be a median counterpart to 
-Pearson correlation coefficient, with breakpoint of 50%, similar to MAD versus standard deviation. 
+the Pearson correlation coefficient, with breakpoint of 50%, similar to MAD versus standard deviation. 
 The coefficient is based on linear data transformation and depends on MAD and the deviation of each element from the median:        
 
 .. math::
@@ -265,81 +268,99 @@ Code Structure, Input And Output
 --------------------------------
 
 The ``GmodeClass`` package, hosted in GitHub_ ,  is organized in a object-oriented structure. The code snippets
-below show how main class and its objects are implemented, explaining what each one does, 
+below show how the main class and its objects are implemented, explaining what each one does, 
 and also highlighting its dependences:
 
 .. code-block:: python
 
-   ################# Gmode.py #################
+   ''' Gmode.py '''
 
-   # modules: kernel.py, eval_variables.py, 
-   # plot_module.py, file_module.py, gmode_module.py
-   
-   def main():
-       # dependencies: optparse
-       # Import shell commands
+   ''' modules: kernel.py, eval_variables.py, 
+   plot_module.py, file_module.py, gmode_module.py
+   support.py '''
    
    class Gmode:
          
          def __init__(self):
-         # Make directory where tests are hosted.
+         ''' 
+         Make directory where tests are hosted.
+         Run support.py and read shell commands. 
+         '''
          
          def Load(self):     
-         # Make directory in /TESTS/ where test's plots, 
-         # lists and logs are kept.
-         # This object is run when 
-         # __init__() or Run() is called. 
+         ''' 
+         Make directory in /TESTS/ where test's plots, 
+         lists and logs are kept.  This object is run 
+         when __init__() or Run() is called. 
+         '''
          
          def LoadData(self, file):
-         # dependencies: operator
-         # Load data to be classified.
+         '''
+         dependencies: operator
+         Load data to be classified. 
+         '''
          
          def Run(self, q1, sector, ulim, minlim):
-         # dependencies: kernel.py
-         # Actually run the recognition procedure.
-         # returns self.cluster_members, self.cluster_stats
+         ''' 
+         dependencies: kernel.py
+         Actually run the recognition procedure.
+         Returns self.cluster_members, self.cluster_stats. 
+         '''
          
          def Evaluate(self, q1):
-         # dependencies: eval_variables.py
-         # Evaluate the significance of each variable and
-         # produce the distance matrices.
-         # returns self.Gc and self.D2
+         ''' 
+         dependencies: eval_variables.py
+         Evaluate the significance of each variable and
+         produce the distance matrices.
+         Returns self.Gc and self.D2. '''
          
          def Extension(self, q1):
-         # dependencies: itertools
-         # Classify data elements excluded 
-         # from the main classification. 
-         # Optional feature.
-         # modify self.cluster_members
+         '''
+         dependencies: itertools
+         Classify data elements excluded 
+         from the main classification. 
+         Optional feature.
+         Modify self.cluster_members
+         '''
          
          def Classification(self):
-         # Write Classification into a list.
+         ''' Write Classification into a list. '''
          
          def ClassificationPerID(self):
-         # dependencies: gmode_module.py
-         # If the data elements are 
-         # measurements of group of objects, 
-         # organize the classification into 
-         # a list per Unique Identification.
+         '''
+         dependencies: gmode_module.py
+         If the data elements are 
+         measurements of group of objects, 
+         organize the classification into 
+         a list per Unique Identification.
+         '''
          
          def WriteLog(self):
-         # dependencies: file_module.py
-         # Write the procedure log with informations about 
-         # each cluster recognition,
-         # variable evaluation and distance matrices.
+         '''
+         dependencies: file_module.py
+         Write the procedure log with informations about 
+         each cluster recognition,
+         variable evaluation and distance matrices.
+         '''
          
          def Plot(self, lim, norm, axis):
-         # dependencies: plot_module.py
-         # Save spectral plots for each cluster.
+         '''
+         dependencies: plot_module.py
+         Save spectral plots for each cluster.
+         '''
          
          def Dendrogram(self):
-         # dependencies: plot_module.py
-         # Save scipy.cluster.hierarchy.dendrogram figure.
+         '''
+         dependencies: plot_module.py
+         Save scipy.cluster.hierarchy.dendrogram figure.
+         '''
          
          def TimeIt(self):
-         # dependencies time.time
-         # Time, in minutes, the whole procedure 
-         # and save into the log.
+         '''
+         dependencies: time.time
+         Time, in minutes, the whole procedure 
+         and save into the log.
+         '''
 
    if __name__ == '__main__':
   
@@ -383,7 +404,7 @@ Working on ``Python IDLE`` or ``IPython``, once ``Gmode.Run()`` was executed, us
 organized into each cluster they are members of. The ``self.cluster_stats`` returns a ``list`` with each cluster statistics.
 ``Gmode.Evaluate()`` gives the ``self.Gc`` matrix and ``self.D2`` distance matrix among clusters. 
 
-Users must be aware that input data should be formatted on columns in this order: measurement designation, unique identification, variables, errors.
+Users must be aware that input data should be formatted in columns in this order: measurement designation, unique identification, variables, errors.
 If errors are not available, its values should be replaced by ``0.0`` and ``mlim`` parameter might not be used. There is no limit on data size, however
 the processing time is very sensitive to the number of identified cluster, which may slow down the method for a bigger number.
 For example, with 20,000 elements and 41 clusters, the G-mode takes around to 2 minutes for whole procedure (plots creation not included) when executed in a
@@ -431,14 +452,14 @@ Code Testing
    :align: center
    
    Red filled circles are the elements of clusters identified by Original G-mode. The green filled circles represent the initial seed. 
-   Classification made by :math:`q_{1} = 2.2 \sigma`. :label:`figorig`
+   Classification made with :math:`q_{1} = 2.2 \sigma`. :label:`figorig`
 
 .. figure:: Vectorized_Gmode_Identification.png
    :scale: 50%
    :align: center
  
    Clusters identified by Adapted G-mode. Labels are the same as previous graphics. 
-   Classification made by :math:`q_{1} = 2.2 \sigma`. :label:`figadapted`
+   Classification made with :math:`q_{1} = 2.2 \sigma`. :label:`figadapted`
 
    
 For testing the efficiency of the Adapted G-mode version, a bidimensional sample of 2000 points was simulated using ``Numpy.random``. 
@@ -448,22 +469,22 @@ These Gaussians were the aim for the recognition ability of clustering method, w
 Then, simulated sample was classified using the Original [Gav92]_ and Adapted G-mode version. 
 The results are presented in Table :ref:`tabgauss` and figures below.
 
-Comparing results from both versions is noticeable the differences of how each version identify clusters. 
+Comparing results from both versions, it is noticeable how each version identifies clusters differently. 
 Since the initial seed in the Original G-mode starts from just the closest points, 
 there is no guarantee that initial seeds will start close or inside clusters. 
-The Original version is also limited for misaligned-axis clusters, due to the use of normalized euclidean distance estimator, 
+The Original version is also limited for misaligned-axis clusters, due to the use of a normalized euclidean distance estimator, 
 that does not have correction for covariance. This limitation turn impossible the identification of misaligned clusters without including 
 random elements in, as seen in Figure :ref:`figorig` .
 
 The Adapted version, otherwise, seeks the initial seed through densest regions, thus ensuring its start inside or close to clusters. 
 Moreover, by using the Mhalonobis distance as estimator, the covariance matrix is taken into account, which makes a more precise 
-identification of cluster boundaries (Figure :ref:`figadapted`). Nevertheless, Adapted G-mode has tendency to undersize the number of elements on 
+identification of cluster boundaries (Figure :ref:`figadapted`). Nevertheless, Adapted G-mode has a tendency to undersize the number of elements on 
 the misaligned clusters. For cluster number 3 in Table :ref:`tabgauss` , a anti-correlated gaussian distribution, the undersizing reaches 30.8%. 
 If the undersizing becomes too large, its possible that “lost elements” are identified as new cluster. 
-Therefore, may be necessary to group clusters according to its d²(a,b) distances.
+Therefore, it may be necessary to group clusters according to its d²(a,b) distances.
 
 Sloan Digital Sky Survey Moving Objects Catalog 4
----------------------------------------------------------------------------
+-------------------------------------------------
 
 SDSS Moving Objects Catalog 4th (SDSSMOC4) release is now the largest photometric data set of asteroids [Ive01_, Ive10_], 
 containing 471,569 detections of moving objects, where 202,101 are linked to 104,449 unique objects. 
@@ -508,24 +529,25 @@ When looking at the density distributions (Figure :ref:`fig0`) it is possible to
 Previous photometry-based taxonomic systems [Tho84_, Bar87_] were developed over smaller samples, with less than 1,000 asteroids, thus overlay was not a huge problem.
 Those two groups are the most common asteroid types *S* (from Stone) and *C* (from Carbonaceous). A important indicative that  a classification method is working for
 asteroid taxonomy is at least the detachment of both groups. Nonetheless, even though both groups are being identified in the first and second clusters
-when SDSSMOC4 sample is classified, the third cluster was engoulfing part of members left from both groups and other smaller groups mingled
-among them (Figure :ref:`figvec`). This behavior was interrupting the capacity of the method to identify smaller clusters.
+when SDSSMOC4 sample is classified, the third cluster was engulfing part of members left from both groups and other smaller groups mingled
+among them (Figure :ref:`figvec`). The loss of obvious unimodal distribution patterns on data may be the cause for such generalization in the third cluster. 
+This behavior was interrupting the capacity of the method to identify smaller clusters.
 Therefore, to deal with that, a upper deviation limit was introduced to halt the cluster evolution, thus not permiting clusters to become comparable in sample size. 
 Figure :ref:`figupper` is a example of a cluster recognized with upper deviation limit on, showing that third cluster is not getting into a large size anymore,
-allowing other cluster to be identified. This specific test resulted into 58 cluster recognitions, most of them lower than 100 members.
+allowing other cluster to be identified. This specific test resulted in 58 cluster recognitions, most of them with lower than 100 members.
 Thus, the upper limit parameter turned up useful for sample with varied degrees of superposition.
 
 Conclusions
 -----------
 
-Along this paper a refined version of a clustering method developed in the 70's was presented. 
+In this paper, a refined version of a clustering method developed in the 70's was presented. 
 The Adapted G-mode used Mahalonobis distance as estimator to better recognize misaligned clusters, and used ``Numpy.histogramdd`` to faster locate
 initial seeds. Robust median statistics was also implemented to more precisely estimate central tendency and standard deviation, and
 take less iteration to stabilize clusters.
 
-Tests with simulated samples showed a quality increase and successfulness in the recognition of clusters among random points. 
-However, tests with asteroid sample indicated that for presence of superposition is necessary introduction of one more parameter.
-Therefore, users must previously inspected their samples before enabling upper limit parameter.
+Tests with simulated samples showed a quality increase in classification and successful recognition of clusters among random points.  
+However, tests with asteroid samples indicated that for presence of superposition is necessary introduction of one more parameter.
+Therefore, users must previously inspect their samples before enabling an upper limit parameter.
 
 Finally, the Adapted G-mode is available for anyone through GitHub_ . The codebase_ has no restriction on sample or variable size. 
 Users must only fulfill the requirements related to installed packages and data format.
