@@ -222,14 +222,20 @@ and require griding before they can be plotted.
 Thus, griding and array reshaping are ideal targets for automation.
 
 The ``fatiando.vis.mpl`` module
-loads all the functions in ``matplotlib.pyplot``,
+imports all the functions in ``matplotlib.pyplot``,
 adds new functions,
 and overwrites others
 to automate repetitive tasks
 (such as griding).
+Thus,
+the basic functionality
+of the ``pyplot`` interface
+is maintained
+while customizations
+facilitate common tasks.
 The following example
 illustrates the use
-of the ``fatiando.vis.mpl.contourf`` function
+of the custom ``fatiando.vis.mpl.contourf`` function
 to automatically grid and plot
 some irregularly sampled data
 (Figure :ref:`contourf`):
@@ -238,15 +244,17 @@ some irregularly sampled data
 
     from fatiando import gridder
     from fatiando.vis import mpl
-    area = [-50, 50, -20, 20]
+    area = [-20, 20, -50, 50]
     x, y = gridder.scatter(area, n=100)
     data = x**2 + y**2
     mpl.figure()
     mpl.axis('scaled')
-    mpl.contourf(x, y, data, shape=(50, 50),
+    mpl.contourf(y, x, data, shape=(50, 50),
         levels=30, interp=True)
     mpl.colorbar(orientation='horizontal')
-    mpl.plot(x, y, '.k')
+    mpl.plot(y, x, '.k')
+    mpl.xlabel('y (East-West)')
+    mpl.ylabel('x (North-South)')
     mpl.show()
 
 .. figure:: gridding_plotting_contourf.png
@@ -256,6 +264,15 @@ some irregularly sampled data
     Fatiando a Terra wrapper for the Matplotlib ``contourf``
     function.
     :label:`contourf`
+
+Notice that,
+in the calls to ``mpl.contourf``
+and ``mpl.plot``,
+the x- and y-axis are switched.
+That is because
+it is common practice in geophysics
+for x to point North
+and y to point East.
 
 Map projections
 in Matplotlib
@@ -847,9 +864,6 @@ is specially smoothed
 where there are no rays.
 
 .. figure:: seismic_tomo.png
-    :align: center
-    :figclass: w
-    :scale: 60%
 
     Example run of a simplified 2D tomography. The top-left panel shows the
     true velocity model with the locations of earthquakes (yellow stars) and
