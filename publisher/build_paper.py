@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# usage:    python publisher/build_paper.py  papers/patricia_francis-lyon
+
 import docutils.core as dc
 import os.path
 import sys
@@ -86,16 +88,19 @@ def rst2tex(in_path, out_path):
 
 
 def tex2pdf(out_path):
-
+    print 'tex2pdf', out_path
     import subprocess
-    command_line = 'cd %s ' % out_path + \
-                   ' ; pdflatex -halt-on-error paper.tex'
+    ## command_line = 'cd %s ' % out_path  + \
+    ##           ' ;pdflatex -halt-on-error paper.tex'
+    command_line = 'pdflatex -halt-on-error paper.tex'
 
     # -- dummy tempfile is a hacky way to prevent pdflatex
     #    from asking for any missing files via stdin prompts,
     #    which mess up our build process.
     dummy = tempfile.TemporaryFile()
-    run = subprocess.Popen(command_line, shell=True,
+    run = subprocess.Popen(command_line, 
+            cwd=out_path,    ###### important to use this
+            shell=True,
             stdin=dummy,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
@@ -104,7 +109,9 @@ def tex2pdf(out_path):
     # -- returncode always 0, have to check output for error
     if "Fatal" not in out:
         # -- pdflatex has to run twice to actually work
-        run = subprocess.Popen(command_line, shell=True,
+        run = subprocess.Popen(command_line, 
+                cwd=out_path,    ###### important to use this
+                shell=True,
                 stdin=dummy,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
@@ -148,11 +155,10 @@ def page_count(pdflatex_stdout, paper_dir):
 def build_paper(paper_id):
     out_path = os.path.join(output_dir, paper_id)
     in_path = os.path.join(papers_dir, paper_id)
-    print "Building:", paper_id
-
     rst2tex(in_path, out_path)
     pdflatex_stdout = tex2pdf(out_path)
     page_count(pdflatex_stdout, out_path)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
