@@ -9,17 +9,18 @@ Reproducible Documents with PythonTeX
 
 .. class:: abstract
 
-   PythonTeX is a LaTeX package that allows Python code entered within a LaTeX 
-   document to be executed.  Python code may be adjacent to the calculations and 
-   figures it creates.  This makes possible reproducible documents that contain 
-   both a report of results and the code that generated the results in the 
-   first place.  Writing and editing are more efficient and less error prone 
-   since code is adjacent to its output and results may be accessed directly from 
-   within the document, without copy-and-pasting.  This paper provides an 
-   overview of PythonTeX, including caching, dependency tracking, synchronization 
-   of errors and warnings, conversion of documents to other formats, and support 
-   for languages beyond Python.  Then it presents an extended, step-by-step 
-   example of reproducible analysis performed with PythonTeX.
+   PythonTeX is a LaTeX package that allows Python code in a LaTeX 
+   document to be executed.  This makes possible reproducible documents that
+   combine analysis with the code required to perform it. 
+   Writing such documents can be more efficient since code is adjacent to its
+   output.  Writing is also less error-prone since results may be accessed
+   directly from within the document, without copy-and-pasting.  This paper
+   provides an overview of PythonTeX, including Python output caching, 
+   dependency tracking, synchronization of errors and warnings with the LaTeX
+   document, conversion of documents to other formats, and support for 
+   languages beyond Python.  These features are illustrated through an
+   extended, step-by-step example of reproducible analysis performed with 
+   PythonTeX.
 
 .. class:: keywords
 
@@ -30,52 +31,79 @@ Reproducible Documents with PythonTeX
 Introduction
 ------------
 
-The concept of reproducible documents is not new—indeed, there are at least 
-two separate concepts, each with its own history.
+The concept of "reproducible documents" is not new—indeed, there are at least 
+two definitions, each with its own history.
 
 According to one definition, a reproducible document is a document whose 
-results may be conveniently reproduced via a makefile or similar approach 
-[Schwab]_.  Software such as Madagascar represents a more recent and 
-sophisticated version of this approach [Madagascar]_.  This type of 
-reproducible document might be written in LaTeX, but the actual writing 
-process closely resembles the unreproducible case, with the exception that it 
-is much easier to make sure that figures and other results are up-to-date.
+results may be conveniently reproduced via a makefile or a similar approach 
+[Schwab]_.  Systems such as Madagascar [Mad]_ and VisTrails [Vis]_ represent
+a more recent and sophisticated version of this idea.  The actual writing 
+process for this type of document closely resembles the unreproducible case,
+except that the author must create the makefile (or equivalent), and thus
+it is easier to ensure that figures and other results are current.
 
-According to another definition, a reproducible document is a document in 
-which the analysis code is embedded.  The document itself both creates and 
-reports the results.  This approach is common among users of the R 
-language and environment for statistical analysis.  
-Sweave has allowed R to be embedded in LaTeX since 2002 [Sweave]_.  knitr 
-provides similar but more powerful functionality, and has become increasingly 
-popular since its release in 2011 [knitr]_.  This approach to reproducible 
-documents has roots in literate programming, through noweb [noweb]_ and 
-ultimately back to Knuth's original concept [Knuth]_.  The writing process 
-for such a document is significantly different from the unreproducible case, 
-since code and report are present in the same file and may be tightly 
-integrated.
+According to another definition, a reproducible document is a document 
+in which analysis code is embedded. The document itself both generates 
+and reports results, using external data. This approach is common among 
+users of the R language. Sweave has allowed R to be embedded in LaTeX 
+since 2002 [Leisch]_. The knitr package provides similar but more 
+powerful functionality, and has become increasingly popular since its 
+release in 2011 [Xie]_. This approach to reproducible documents has 
+roots in literate programming, through noweb [Ramsey]_ ultimately back 
+to Knuth's original concept [Knuth]_. The writing process for such a 
+document can be significantly different from the unreproducible case, 
+since code and document are present in the same file and may be tightly 
+integrated. For example, it is possible to create dynamic reports with 
+Sweave and knitr that automatically accomodate whatever data is 
+provided. 
+
+These two definitions of a reproducible document need not be mutually 
+exclusive. They might be thought of as two ends of a continuum, with a 
+given project potentially benefiting from some combination. The 
+makefile-style approach is more appropriate for large codebases and 
+complex computations, but even then, it may be convenient to embed 
+plotting code in reports. Likewise, even a relatively simple analysis 
+might benefit from externalizing some code and managing it via the 
+makefile-style approach, rather than embedding everything. 
 
 This paper is primarily concerned with the second type of reproducible 
 document, in which code is embedded.  In the Python ecosystem, there are 
-several options for creating such documents.  Sphinx makes possible 
-reproducible documents to at least some extent, depending on the extensions 
-employed [Sphinx]_.  The IPython notebook provides an excellent interactive 
-interface in which code, results, and text may be combined [IPy]_.  There 
-have also been native LaTeX solutions, in the form of ``python.sty`` 
-[Ehmsen]_, SageTeX [SageTeX]_, and SympyTeX [SympyTeX]_.
+several options for creating such documents.  The IPython notebook provides 
+a highly interactive interface in which code, results, and text may be 
+combined [IPY]_.  Reproducible documents may be created with Sphinx 
+[Brandl]_, though the extent to which this is possible strongly depends on 
+the extensions employed.  Pweave is essentially Sweave for Python, with 
+support for reST, Sphinx, and markdown in addition to LaTeX
+[Pastell]_.  There have also been LaTeX packages that allow Python 
+code to be included in LaTeX documents:  
+``python.sty`` [Ehmsen]_, SageTeX [Drake]_, and SympyTeX [Molteno]_.
+PythonTeX is the most recent of these packages.
 
-PythonTeX builds on previous LaTeX solutions by providing improved and 
-additional features that emphasize performance and usability. Python code 
-entered within a LaTeX 
-document may be divided into user-defined sessions, which automatically run in 
-parallel via the ``multiprocessing`` module [MULT]_.  All code output is 
-cached, and the user has fine-grained control over when Python code will be 
-re-executed.  This allows a document to be compiled at normal speeds—Python 
-code need not be executed.  Errors and warnings are synchronized with the 
-document line numbering, so that their origin may be easily located.
-Utilities are provided for tracking dependencies and for converting documents 
-to a format suitable for journal submission or format conversion.  While 
-PythonTeX's focus is on reproducible documents with Python, it may be very 
-easily extended to provide support for additional languages.
+The LaTeX-based approach has some drawbacks.  It is less interactive than 
+the IPython notebook.  And it is sometimes less convenient than a non-LaTeX
+system for converting documents to formats such as HTML.  At the same time,
+a LaTeX package has several significant advantages.  Since the user 
+directly creates a valid LaTeX document, the full power of LaTeX is 
+immediately accessible.  A LaTeX package can also provide superior 
+LaTeX integration compared to other approaches that do support LaTeX but are
+not integrated at the package level.  For example, PythonTeX makes it 
+possible to create LaTeX macros that contain Python code.
+
+The PythonTeX package builds on previous LaTeX packages, emphasizing 
+performance and usability.  Python code may be divided into user-defined
+sessions, which automatically run in parallel via the ``multiprocessing``
+module [MULT]_.  Python errors and warnings are synchronized with the 
+document's line numbering, so that their origin may be easily located.
+All code output is cached and the user has fine-grained control over 
+when code will be re-executed, including the option to track 
+document dependencies. This allows a PythonTeX document to be compiled 
+just as quickly as a normal LaTeX document so long as no Python code is 
+modified.  PythonTeX documents may be easily converted to plain LaTeX 
+documents suitable for journal submission or format conversion.  While 
+PythonTeX's focus is on Python, the package may be easily extended to 
+support additional languages. 
+
+
 
 
 PythonTeX overview
@@ -692,37 +720,42 @@ References
             *Making scientific computations reproducible*.
             Computing in Science \& Engineering, 2(6):61-67, Nov/Dec 2000.
 
-.. [Madagascar] http://www.ahay.org/.
+.. [Mad] http://www.ahay.org/.
 
-.. [Sweave] F. Leisch. *Sweave: Dynamic generation of statistical reports 
+.. [Vis] http://www.vistrails.org/
+
+.. [Leisch] F. Leisch. *Sweave: Dynamic generation of statistical reports 
             using literate data analysis*, in Wolfgang Härdle and Bernd Rönz, 
             editors, Compstat 2002 - Proceedings in Computational Statistics, 
             pages 575-580. Physica Verlag, Heidelberg, 2002. ISBN 
             3-7908-1517-9. http://www.statistik.lmu.de/~leisch/Sweave/
 
-.. [knitr] Y. Xie.  "knitr:  Elegant, flexible and fast dynamic report 
+.. [Xie] Y. Xie.  "knitr:  Elegant, flexible and fast dynamic report 
             generation with R." http://yihui.name/knitr/.
 
-.. [noweb] N. Ramsey. *Literate programming simplified*. IEEE Software, 
+.. [Ramsey] N. Ramsey. *Literate programming simplified*. IEEE Software, 
            11(5):97-105, September 1994.  http://www.cs.tufts.edu/~nr/noweb/.
 
 .. [Knuth] D. E. Knuth. *Literate Programming*. CSLI Lecture Notes, no. 27. 
            Stanford, California: Center for the Study of Language and 
            Information, 1992.
 
-.. [Sphinx] G. Brandl. "SPHINX: Python Documentation Generator." 
+.. [Brandl] G. Brandl. "SPHINX: Python Documentation Generator." 
             http://sphinx-doc.org/.
 
-.. [IPy] The IPython development team. "The IPython Notebook." 
+.. [Pastell] M. Pastell. "Pweave - reports from data with Python."
+             http://mpastell.com/pweave/
+
+.. [IPY] The IPython development team. "The IPython Notebook." 
          http://ipython.org/notebook.html.
 
 .. [Ehmsen] M. R. Ehmsen.  "Python in LaTeX." 
             http://www.ctan.org/pkg/python.
 
-.. [SageTeX] D. Drake. "The SageTeX package."
+.. [Drake] D. Drake. "The SageTeX package."
              https://bitbucket.org/ddrake/sagetex/
 
-.. [SympyTeX] T. Molteno. "The sympytex package."
+.. [Molteno] T. Molteno. "The sympytex package."
               https://github.com/tmolteno/SympyTeX/
 
 .. [MULT] Python Software Foundation. "multiprocessing — Process-based 
@@ -744,7 +777,7 @@ References
             manipulations."  http://docs.python.org/2/library/os.path.html.
 
 .. [TEX4HT] TeX User's Group. 
-            http://www.tug.org/applications/tex4ht/mn-commands.html
+            http://www.tug.org/applications/tex4ht/.
 
 .. [HEVEA] L. Maranget.  "HEVEA."  http://hevea.inria.fr/.
 
