@@ -60,8 +60,8 @@ provided.
 These two definitions of a reproducible document need not be mutually 
 exclusive. They might be thought of as two ends of a continuum, with a 
 given project potentially benefiting from some combination. The 
-makefile-style approach is more appropriate for large codebases and 
-complex computations, but even then, it may be convenient to embed 
+makefile-style approach may be more appropriate for large codebases and 
+complex computations, but even then, it can be convenient to embed 
 plotting code in reports. Likewise, even a relatively simple analysis 
 might benefit from externalizing some code and managing it via the 
 makefile-style approach, rather than embedding everything. 
@@ -90,18 +90,18 @@ not integrated at the package level.  For example, PythonTeX makes it
 possible to create LaTeX macros that contain Python code.
 
 The PythonTeX package builds on previous LaTeX packages, emphasizing 
-performance and usability.  Python code may be divided into user-defined
-sessions, which automatically run in parallel via the ``multiprocessing``
-module [MULT]_.  Python errors and warnings are synchronized with the 
-document's line numbering, so that their origin may be easily located.
-All code output is cached and the user has fine-grained control over 
-when code will be re-executed, including the option to track 
-document dependencies. This allows a PythonTeX document to be compiled 
-just as quickly as a normal LaTeX document so long as no Python code is 
-modified.  PythonTeX documents may be easily converted to plain LaTeX 
-documents suitable for journal submission or format conversion.  While 
-PythonTeX's focus is on Python, the package may be easily extended to 
-support additional languages. 
+performance and usability. Python code may be divided into user-defined 
+sessions, which automatically run in parallel via the 
+``multiprocessing`` module [MULT]_. All code output is cached and the 
+user has fine-grained control over when code will be re-executed, 
+including the option to track document dependencies. This allows a 
+PythonTeX document to be compiled just as quickly as a normal LaTeX 
+document so long as no Python code is modified. Python errors and 
+warnings are synchronized with the document's line numbering, so that 
+their source is easily located. PythonTeX documents may be easily 
+converted to plain LaTeX documents suitable for journal submission or 
+format conversion. While PythonTeX's focus is on Python, the package may 
+extended to support additional languages. 
 
 
 
@@ -109,22 +109,22 @@ support additional languages.
 PythonTeX overview
 ------------------
 
-Using the PythonTeX package is as simple adding the command
+Using the PythonTeX package is as simple as adding the command
 
 .. code-block:: latex
 
     \usepackage{pythontex}
 
 to the preamble of a LaTeX document and slightly modifying the way you
-compile documents. When a document using the PythonTeX package is
-compiled, all of the Python code contained in the document is saved,
-along with delimiters, to an auxiliary file. To execute the Python code,
-you simply run the script ``pythontex.py`` on the document. In a
-standard installation, a symlink or launching wrapper for this script is
-created in your TeX installation’s ``bin/`` directory, so that the
-script will be on your PATH. The next time you compile the document, all
-Python-generated content will be included. PythonTeX is compatible with
-the pdfTeX, XeTeX, and LuaTeX engines.
+compile the document. When a document using the PythonTeX package is
+first compiled, all of the Python code contained in the document is saved
+to an auxiliary file (with delimiters). To execute the Python code,
+you simply run the provided script ``pythontex.py`` with the document name as 
+an argument. In a standard PythonTeX installation, a symlink or launching 
+wrapper for this script is created in your TeX installation's ``bin/`` 
+directory, so that the script will be on your PATH. The next time you 
+compile the document, all Python-generated content will be included. 
+PythonTeX is compatible with the pdfTeX, XeTeX, and LuaTeX engines.
 
 
 Commands and environments
@@ -134,7 +134,7 @@ PythonTeX provides a number of commands and environments. These can be
 used to run any valid Python code; even imports from ``__future__`` are
 allowed, so long as they occur before any other code.
 
-The **code** environment runs whatever code it is given. By default, any
+The **code** environment runs whatever code is provided. By default, any
 printed content is automatically included in the document. For example,
 
 .. code-block:: python
@@ -150,7 +150,7 @@ creates
 
 The **block** environment also executes its contents. In this case, the
 code is typeset with highlighting from Pygments [Pyg]_. Printed content
-is not automatically included, but is available by using the
+is not automatically included, but may be brought in via the
 ``\printpythontex`` command. For example,
 
 .. code-block:: python
@@ -185,20 +185,21 @@ that returns a string representation of its argument. For example,
 ``\py{2**8}`` yields ``256``.
 
 PythonTeX also provides a **verbatim** command and environment that
-simply typesets highlighted code. Descriptions of other commands and
+simply typeset highlighted code. Descriptions of additional commands and
 environments are available in the documentation.
 
 
 Caching
 =======
 
-All Python output is cached. By default, code is only re-executed by the
-``pythontex.py`` script when it has been modified or when it produced
-errors on the last run.
+All Python output is cached.  PythonTeX also tracks the exit status of each
+session, including the number of errors and warnings produced (it parses
+``stderr``).  By default, code is only re-executed by ``pythontex.py`` when 
+it has been modified or when it produced errors on the last run.
 
-In some cases, the user may need finer-grained control over code
-executation. This is provided via the package option ``rerun``, which
-accepts five values:
+That approach is most efficient for many cases, but sometimes the user may 
+need finer-grained control over code executation. This is provided via the
+package option ``rerun``, which accepts five values:
 
 -  ``never``: Code is never executed; only syntax highlighting is
    performed.
@@ -218,18 +219,17 @@ Tracking dependencies and created files
 =======================================
 
 Code may need to be re-executed not just based on its own modification
-or exit status, but also based on external dependencies. PythonTeX
-provides a utilities class. An instance of this class called ``pytex``
-is automatically created in each session. The utilities class provides
-an ``add_dependencies()`` method that allows dependencies to be
-specified and tracked.
+or exit status, but also based on external dependencies.
 
-Whenever PythonTeX runs, all dependencies are checked for modification,
-and all code with changed dependencies is re-executed (unless
-``rerun=never``). By default, modification is detected via modification
-time (``os.path.getmtime()``) [OSPATH]_, since this is fast even for
-large data sets. File hashing may be used instead via the package option
-``hashdependencies``.
+PythonTeX provides a utilities class. An instance of this class 
+called ``pytex`` is automatically created in each session. The utilities 
+class provides an ``add_dependencies()`` method that allows dependencies 
+to be specified and tracked.  Whenever PythonTeX runs, all dependencies 
+are checked for modification, and all code with changed dependencies is
+re-executed (unless ``rerun=never``). By default, modification is detected 
+via modification time (``os.path.getmtime()``) [OSPATH]_, since this is 
+fast even for large data sets. File hashing may be used instead via the 
+package option ``hashdependencies``.
 
 If there are only a few dependencies, it may be simplest to specify them
 manually. For example, the line
@@ -242,77 +242,104 @@ could be added after ``<file>`` is loaded. If there are many
 dependencies, however, it may make more sense to define a custom version
 of ``open()`` (or its equivalent) that tracks dependencies
 automatically. Since ``open()`` can be used to load data or create
-files, we can also use this opportunity to track created files via the
-PythonTeX utilities ``add_created()`` method. This allows created files
+files, this is also a perfect opportunity to use the PythonTeX utilities'
+``add_created()`` method. It allows created files
 to be deleted automatically when the code that created them is
-re-executed. This prevents unused files from accumulating. For example,
-if a figure is saved under one name, and later the name is changed, this
-would delete the old version.
+re-executed, preventing unused files from accumulating. For example,
+if a figure is saved under one name, and later the name is changed, the
+old version would be deleted automatically if it were tracked.
 
-A custom version of ``open()`` could be created as follows. For
-convenience, we might add it as a property of ``pytex``.
+A custom version of ``open()`` might be created as follows. For
+convenience, it could be added as a property of ``pytex``.
 
 .. code-block:: python
 
-    def track_open(file, mode='r', *args, 
-                  **kwargs):
+    def track_open(file, mode='r', *args, **kwargs):
         if mode in ('r', 'rb'):
             pytex.add_dependencies(file)
         elif mode in ('w', 'wb'):
             pytex.add_created(file)
-        return open(file, mode, *args,
-                    **kwargs)
+        return open(file, mode, *args, **kwargs)
     pytex.open = track_open
 
 Notice that this approach does not deal with files opened for appending
 or updating; such cases may require more complex, case-by-case logic.
 
 
-When things go wrong
-====================
+Synchronizing exceptions
+========================
 
-When ``pythontex.py`` runs, it prints all errors and warnings triggered
-by user code, interspersed with information about their origin in the
-document. This greatly simplifies debugging.
+When ``pythontex.py`` runs, it prints an annotated version of the ``stderr``
+produced by user code.  Before each error or warning, a message is inserted
+that specifies the corresponding line number in the document.  For example,
+if the code environment
 
-PythonTeX provides a sophisticated system that synchronizes line numbers
-in error and warning messages with the document’s line numbering.
-Delimiters are written to stderr between each command and environment,
-so that even messages that do not reference a line number in the user’s
-code may be traced back to a single command or environment. (Some
-warning messages in imported modules can do this.) In some cases, such
-as syntax errors, a message may be triggered before any delimiters are
-written to stderr. In these cases, PythonTeX combines the code line at
-which the message was triggered with a record of where each chunk of
-code originated in the document to calculate the corresponding document
-line number.
+.. code-block:: python
 
-In most cases, errors and warning can be traced back to a single line in
-the document, and in almost all cases they can at least be traced back
-to a single command or environment.
+   \begin{pycode}
+   s = 'Python
+   \end{pycode}
+
+were on line 20 of a document, then when PythonTeX runs, it would return 
+a message in the form
+
+::
+
+   * PythonTeX exception: error on line 20
+       File "<scriptname>", line 46
+         s = 'Python
+                   ^
+     SyntaxError: EOL while scanning string literal
+
+where ``<scriptname>`` is the name of the temporary script that was 
+executed.  This greatly simplifies debugging.
+
+PythonTeX provides a sophisticated system that parses ``stderr`` and 
+synchronizes line numbers in errors and warnings with the document's 
+line numbering. As PythonTeX assembles the code to be executed, it 
+creates a record of where each chunk of code originated in the document. 
+The actual scripts that are executed are assembled by inserting user code
+into predefined templates that 
+provide access to the PythonTeX utilities class and additional 
+functionality. This means that the line numbers of the code that is 
+actually executed differ not only from the document's line numbering, 
+but also from the user code's numbering. In the example above, the error 
+occurred on line 20 of the document, on line 46 of the code that was 
+actually executed, and on line 1 of the user code. PythonTeX keeps a 
+running tally of how many lines originated in user code versus 
+templates, so that the correct line number in the document may be 
+calculated. 
+
+In some cases, errors or warnings may only reference a line number in the 
+file in which they occur.  For example, if ``warnings.warn()`` is used in 
+an imported module [WAR]_, a line number in the module will be referenced, 
+but a line number in the code that imported the module will not.  The 
+previous approach to synchronization fails.  To deal with this 
+scenario, PythonTeX writes delimiters to ``stderr`` before each command and 
+environment.  This allows messages that do not reference a line number in
+the user's code to be tracked back to a single command or environment 
+in the document.
 
 
 Converting PythonTeX documents
 ==============================
 
-One disadvantage of the PythonTeX-style reproducible document is that it
-mixes plain LaTeX with Python code. Most publishers will not accept
-documents that are not plain LaTeX. In addition, some format converters
-for LaTeX files only support a small set of basic LaTeX commands.
+One disadvantage of a reproducible document created with PythonTeX is that it
+mixes plain LaTeX with Python code. Many publishers will not accept
+documents that require specialized packages. In addition, some format 
+converters for LaTeX documents only support a small set of basic LaTeX 
+commands—so PythonTeX support is not an option.
 
-To address these issues, PythonTeX includes a ``depythontex`` utility
-that creates a version of a document in which all Python code has been
-replaced by its output. The conversion process involves adding the
-package option ``depythontex``, compiling the document, running
-``pythontex.py``, compiling one final time, and then running
-``depythontex.py``. There is no way to tell that the converted document
+To address these issues, PythonTeX includes a ``depythontex`` utility.
+It creates a version of a document in which all Python code has been
+replaced by its output. There is no way to tell that the converted document
 ever used PythonTeX. Typically, the converted document is a perfect copy
 of the original, though occasionally spacing may be slightly different
 based on the user’s choice of ``depythontex`` options.
 
-One especially important feature provided by ``depythontex`` is the
-conversion of highlighted code. ``depythontex`` can convert PythonTeX
-commands and environments that typeset highlighted code into the format
+One important feature provided by ``depythontex`` is the
+conversion of highlighted code. ``depythontex`` can convert 
+any code that was highlighted by PythonTeX into the format
 of the ``listings`` [LST]_, ``minted`` [MINT]_, or ``fancyvrb``
 packages [FV]_. Line numbering and syntax highlighting are preserved if
 the target package supports it.
@@ -322,91 +349,111 @@ When Python is not enough
 =========================
 
 While PythonTeX is focused on providing Python-LaTeX integration, most
-of the LaTeX interface is language-agnostic. In many cases, support for
-additional languages will be as simple as providing two short templates.
-For example, the following two templates, along with a command and file
-extension, are all that was needed to add basic Ruby support.
+of the LaTeX interface is language-agnostic. In many cases, adding support 
+for an additional language is as simple as providing two templates and
+creating a new instance of a class.  PythonTeX already provides 
+support for Ruby and Julia, and additional languages will be added
+in the near future.
 
-The first template provides the overall structure of the scripts that
-PythonTeX will assemble and run. Substitution fields are designated
-using Python’s curly braces notation (``format()`` method for strings).
-Encoding for stdout and stderr must be set, a utilities class for
-tracking dependencies must be created, the working directory must be
-specified, and a few input parameters must be set.
+The first template required to add a language provides the overall 
+structure of the scripts that PythonTeX assembles and runs. 
+Substitution fields are designated with double curly braces ``{{}}``, so that
+single braces need not be escaped and to maintain similarity with template
+engines.  A simplified example for Python is shown below.
 
-.. code-block:: ruby
+.. code-block:: python
+   :linenos:
 
-    # -*- coding: {encoding} -*-
+    # -*- coding: {{encoding}} -*-
 
-    $stdout.set_encoding({encoding})
-    $stderr.set_encoding({encoding})
+    {{future}}
 
-    class PythontexUtils
-      attr_accessor :input_type, 
-          :input_session, :input_restart,
-          :input_command, :input_context,
-          :input_args_run, 
-          :input_instance, :input_line
-      def before
-      end
-      def after
-      end
-      def cleanup
-        puts '{dependencies_delim}'
-        puts '{created_delim}#'
-      end
-    end
+    import os
+    import sys
+    {{extend}}
 
-    pytex = PythontexUtils.new
+    sys.path.append('{{utilspath}}')
 
-    if File.directory?('{workingdir}')
-      Dir.chdir('{workingdir}')
-    else
-      $stderr.puts 'Cannot change to 
-          directory {workingdir}; attempting 
-          to proceed'
-    end
+    from pythontex_utils import PythontexUtils
+    pytex = PythontexUtils()
 
-    pytex.input_type = '{input_type}'
-    pytex.input_session = '{input_session}'
-    pytex.input_restart = '{input_restart}'
+    if os.path.isdir('{{workingdir}}'):
+        os.chdir('{{workingdir}}')
+        sys.path.append(os.getcwd())
+    else:
+        sys.exit('Cannot find {{workingdir}}')
 
-    {body}
+    {{body}}
 
-    pytex.cleanup
+    pytex.cleanup()
 
-The second template is used for wrapping individual chunks of code from
-commands and environments. Several chunk-specific variables must be set,
-delimiters must be written to stdout and stderr, and any “hooks” from
-the utilities class must be called before and after the actual user
-code.
+The encoding for the file is set on line 1.  In the actual Python template,
+the encoding for ``stdout`` and ``stderr`` is also set.  Any imports from
+``__future__`` (including any in user code) are inserted on line 3.  Line 7
+provides an ``{{extend}}`` field that allows the template to be extended.
+For example, PythonTeX provides a set of commands and environments for 
+use with SymPy [SYMPY]_; these are created by extending the default 
+template with imports from SymPy.  Line 9 adds the location of any 
+utilities provided by PythonTeX to the path, so they may be imported.  
+Lines 11-12 create an instance of the PythonTeX utilities class; a 
+utilities class could be defined in the template instead.  Lines 14-18 
+change to a user-specified working directory and add it to the path.  Line 20 
+is where user code is actually be inserted.  Finally, on line 22, the
+``cleanup()`` method of the utilities class is called.  This saves the 
+names of any dependencies and created files that have been accumulated.
+    
+The second template needed for adding a language is used to wrap 
+the code from an individual command or environment.  A minimal
+template for Python might have the following form.
 
-.. code-block:: ruby
+.. code-block:: python
+   :linenos:
 
-    pytex.input_command = '{input_command}'
-    pytex.input_context = '{input_context}'
-    pytex.input_args_run = '{input_args_run}'
-    pytex.input_instance = {input_instance}    
-    pytex.input_line = {input_line}
+    print('{{stdoutdelim}}')
+    sys.stderr.write('{{stderrdelim}}\n')
+    pytex.input_command = '{{input_command}}'
+    pytex.input_line = {{input_line}}
+    pytex.before()
+    
+    {{code}}
+    
+    pytex.after()
 
-    puts '{stdout_delim}'
-    $stderr.puts '{stderr_delim}'
-    pytex.before
+Lines 1-2 write delimiters to ``stdout`` and ``stderr``, so that both may be
+synchronized with the document.  On line 3, an attribute of the utilities
+class is set to the type of LaTeX command in which the user code originated.
+Line 4 sets the document line number where the code originated.  In
+the full Python template used by PythonTeX, additional information from the 
+LaTeX side is stored in the utilities class.  This allows user code to take
+into account its context in the LaTeX document.  The actual user code is 
+inserted in the field on line 7.  Surrounding it are calls to the 
+``before()`` and ``after()`` methods of the utilities class.  These do 
+nothing by default, but are provided for redefinition by the user.
+For example, they could print LaTeX code that wraps user-printed content 
+in a LaTeX environment.  Or they might detect, save, and automatically 
+include in the document any figures created by the user code.
 
-    {code}
+While the two templates shown above are minimal for illustration purposes,
+templates providing full functionality are still relatively compact.  For 
+example, the two Ruby templates and the creation of the class instance that 
+governs Ruby code only require about 70 lines of code.
 
-    pytex.after
-
-PythonTeX will eventually provide basic support for several additional
-languages.
+One of the challenges in supporting multiple languages is that each language
+has its own conventions for formatting errors and warnings, complicating
+the parsing of ``stderr``.  When the class instance that defines a language 
+is created, patterns for identifying errors, warnings, and associated line 
+numbers may be specified.  For example, the class instance for Python 
+identifies errors by searching for the string ``'Error:'``, warnings by
+``'Warning:'``, and line numbers by the patterns 
+``['line {{number}}', ':{{number}}:']``.
 
 
 
 Case study: Average temperatures in Austin, TX
 ----------------------------------------------
 
-To illustrate the application of PythonTeX, I will now consider a
-reproducible analysis of average temperatures in Austin, TX. I will
+The remainder of this paper illustrates the application of PythonTeX through
+a reproducible analysis of average temperatures in Austin, TX. I will
 calculate monthly average high temperatures in 2012 at the
 Austin-Bergstrom International Airport from daily highs. In addition to
 demonstrating the basic features of PythonTeX, this example shows how
@@ -758,9 +805,12 @@ References
 .. [Molteno] T. Molteno. "The sympytex package."
               https://github.com/tmolteno/SympyTeX/
 
-.. [MULT] Python Software Foundation. "multiprocessing — Process-based 
+.. [MULT] Python Software Foundation. "``multiprocessing`` — Process-based 
           'threading' interface."
           http://docs.python.org/2/library/multiprocessing.html.
+          
+.. [WAR] Python Software Foundation. "``warnings`` — Warning control."
+         http://docs.python.org/2/library/warnings.html
 
 .. [Pyg] The Pocoo Team. "Pygments: Python Syntax Highlighter."
          http://pygments.org/
@@ -771,6 +821,8 @@ References
 .. [FV] T. Van Zandt, D. Girou, S. Rahtz, and H. Voß.  "The 'fancyvrb'
         package:  Fancy Verbatims in LaTeX." http://www.ctan.org/pkg/fancyvrb
 
+.. [SYMPY] SymPy Development Team. "SymPy." http://sympy.org/
+        
 .. [NCDC] National Climatic Data Center.  http://www.ncdc.noaa.gov.
 
 .. [OSPATH] Python Software Foundation.  "os.path — Common pathname 
