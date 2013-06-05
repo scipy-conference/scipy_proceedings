@@ -102,7 +102,7 @@ In general, literate programming is the mixing of programming code and
 prose to produce a final report that reads in a natural way. In this
 work, we differ from most of the available resources for literate
 programming in that our focus is on producing reports that are
-intended for non-programmers, yet while still embracing many of the
+intended for non-programmers, yet still embracing many of the
 important tenets of literate programming. For those with an extensive
 computing background there are a number of great tools like Org-mode
 [Schulte12]_ that are available. Often, biologists, chemists and
