@@ -472,8 +472,9 @@ center’s website provides a data search page. Setting the zip code to
 Maximum temperature TMAX was selected under the “Air temperature”
 category of daily data, and the data were downloaded in comma-separated
 values (CSV) format. The CSV file contained three columns: station name
-(the airport station’s code), date (ISO 8601), and TMAX (in tenths of a
-degree Celsius). The first three lines of the file are shown below:
+(the airport station’s code), date (ISO 8601), and TMAX (temperature 
+in tenths of a degree Celsius). The first three lines of the file are 
+shown below:
 
 ::
 
@@ -489,11 +490,13 @@ Document setup
 ==============
 
 I will use the same IEEEtran document class used by the SciPy
-proceedings with a minimal preamble. All Python sessions involved in the
-analysis should have access to the ``pickle`` module and to lists of the
-names of the months. So I add that import and create those lists for the
-``py`` family of commands and environments using the
-``pythontexcustomcode`` environment.
+proceedings, with a minimal preamble. All Python sessions involved in the
+analysis should have access to the ``pickle`` module [PKL]_ and to lists of 
+the names of the months. PythonTeX provides a ``pythontexcustomcode`` 
+environment that is used to add code to all sessions of a given type.  
+I use that environment to add the ``pickle`` import and lists to all
+sessions for the ``py`` family of commands and environments (``pycode``, 
+``pyblock``, ``\pyc``, ``\pyb``, ``\py``, etc.).
 
 .. code-block:: python
 
@@ -503,13 +506,14 @@ names of the months. So I add that import and create those lists for the
 
     \begin{pythontexcustomcode}{py}
     import pickle
-    months = ['January', 'February', 'March',
-              'April', 'May', 'June', 'July',
-              'August', 'September', 
-              'October', 'November', 
+    months = ['January', 'February', 'March', 'April', 
+              'May', 'June', 'July', 'August', 
+              'September', 'October', 'November', 
               'December']
     months_abbr = [m[:3] for m in months]
     \end{pythontexcustomcode}
+
+:: 
 
     \title{Monthly Average Highs in Austin,
         TX for 2012}
@@ -527,11 +531,12 @@ Loading data and tracking dependencies
 The first step in the analysis is loading the data. Since the data set
 is relatively small (daily values for one year) and in a simple format
 (CSV), it may be completely loaded into memory with the built-in
-``open()`` function. This may be accomplished via the following:
+``open()`` function.
 
 .. code-block:: python
 
     \subsection*{Load the data}
+    
     \begin{pyblock}[calc]
     f = open('../austin_tmax.csv')
     pytex.add_dependencies('austin_tmax.csv')
@@ -545,7 +550,7 @@ average highs. Later, I will save the final results of the calculations,
 so that they will be available to other sessions for plotting and
 further analysis. In this simple example, dividing the tasks among
 multiple sessions provides little if any performance benefit. But if I
-were working with a large dataset and/or intensive calculations, it
+were working with a larger dataset and/or more intensive calculations, it
 could be very useful to separate such calculations from the plotting and
 final analysis. That way, the calculations will only be performed when
 the data or calculation code is modified.
@@ -559,9 +564,9 @@ directory to be the document directory instead, via
 isolated in the PythonTeX directory unless a path is specified, keeping
 the document directory cleaner.
 
-The data file ``austin_tmax.csv`` is now a dependency of the analysis;
-the analysis should be rerun in the event the data file is modified (for
-example, if a better data set is obtained). Since this is a relatively
+The data file ``austin_tmax.csv`` is now a dependency of the analysis.
+The analysis should be rerun in the event the data file is modified, for
+example, if a better data set is obtained. Since this is a relatively
 simple example, I add the dependency manually via
 ``add_dependencies()``, rather than creating a custom version of
 ``open()`` that tracks dependencies and created files automatically.
@@ -581,6 +586,7 @@ wouldn't leave old versions that could cause confusion.
 .. code-block:: python
 
     \subsection*{Process the data}
+    
     \begin{pyblock}[calc]
     monthly_data = [[] for x in range(0, 12)]
     for line in raw_data[1:]:
@@ -612,6 +618,7 @@ plot to the document’s fonts.
 .. code-block:: python
 
     \subsection*{Plot average monthly TMAX}
+    
     \begin{pyblock}[plot]
     from matplotlib import pyplot as plt
     from matplotlib import rc
@@ -637,10 +644,13 @@ plot to the document’s fonts.
     plt.ylabel('Average high (Celsius)')
     plt.xlim(0, 11)
     plt.ylim(16, 39)
-    plt.savefig('ave_tmax.pdf',
+    plt.savefig('ave_tmax.pdf', 
                 bbox_inches='tight')
     pytex.add_created('ave_tmax.pdf')
     \end{pyblock}
+    
+::
+    
     \includegraphics[width=3in]{ave_tmax.pdf}
 
 
@@ -656,6 +666,7 @@ the sentence would update automatically.
 .. code-block:: python
 
     \subsection*{Final analysis}
+    
     \begin{pyblock}[analysis]
     f = open('ave_tmax.pkl', 'rb')
     pytex.add_dependencies('ave_tmax.pkl')
@@ -695,7 +706,7 @@ sentence at the end of the document is quoted below:
 The analysis is complete at this point if a PDF is all that is desired.
 But perhaps the analysis should also be posted online in HTML format. A
 number of LaTeX-to-HTML converters exist, including TeX4ht [TEX4HT]_,
-HEVEA [HEVEA]_, and Pandoc [PANDOC]_. I will use Pandoc is this
+HEVEA [HEVEA]_, and Pandoc [PAN]_. I will use Pandoc in this
 example since the document has a simple structure that Pandoc fully
 supports. One of the other converters might be more appropriate for a
 more complex document.
@@ -749,14 +760,24 @@ Conclusion
 ----------
 
 PythonTeX provides an efficient, user-friendly system for creating 
-reproducible documents with Python and LaTeX.  As support for additional 
-languages is added in the future, potential applications will only continue to 
-increase.
+reproducible documents with Python and LaTeX.  Since code output is
+cached and user-defined sessions run in parallel, document compile times
+are minimized.  Since exceptions are synchronized with the document's line
+numbering, debugging is simple.  Since PythonTeX documents can be converted
+to plain LaTeX documents, the system is suitable for writing journal papers
+and documents that must be converted to other formats.
 
-PythonTeX is under active development and provides many features not discussed 
-here. For additional information and the latest code, please visit 
-https://github.com/gpoore/pythontex.
+Most of the key elements planned for PythonTeX are in place, but several
+significant enhancements are planned for the future.  Support for
+additional languages will be added soon.  Better support for macro
+programming with PythonTeX that mixes Python and LaTeX code is also under
+development.  Several usability enhancements are in preparation, including
+the option to automatically include ``stderr`` in the document, next to its
+source, as an aid in debugging.
 
+PythonTeX is under active development and provides many features not 
+discussed here. Additional information and the latest release are 
+available at https://github.com/gpoore/pythontex.
 
 
 
@@ -825,6 +846,9 @@ References
         
 .. [NCDC] National Climatic Data Center.  http://www.ncdc.noaa.gov.
 
+.. [PKL] Python Software Foundation. "``pickle`` — Python object serialization."
+         http://docs.python.org/2/library/pickle.html
+
 .. [OSPATH] Python Software Foundation.  "os.path — Common pathname 
             manipulations."  http://docs.python.org/2/library/os.path.html.
 
@@ -833,7 +857,7 @@ References
 
 .. [HEVEA] L. Maranget.  "HEVEA."  http://hevea.inria.fr/.
 
-.. [PANDOC] J. MacFarlane.  "Pandoc: a universal document converter." 
+.. [PAN] J. MacFarlane.  "Pandoc: a universal document converter." 
             http://johnmacfarlane.net/pandoc/.
 
 .. [MINT] K. Rudolph.  "Minted." The minted package:
