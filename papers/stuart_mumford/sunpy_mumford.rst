@@ -2,7 +2,7 @@
 :email: stuart@mumford.me.uk
 :institution: The University of Sheffield
 
-:author: David Pérez-Suárez
+:author: David Prez-Surez
 :email: dps.helio@gmail.com
 :institution: Finnnish Meteorological Institute
 
@@ -131,14 +131,7 @@ SunPy offers a Spectrogram object, with currently a specialization for e-Callist
 download data through an interface that only requires to specify location and time-range, linearizes the frequency axis and automatically downsamples large
 observations to allow them to be rendered on a normal computer screen and much more to help analyze spectrograms.
 
-The data can currently be read from Callisto FITS files (using PyFITS), but the system is designed in way that makes it easy to include new data-sources
-with potentially other data formats (such as LOFAR).
-
-.. Function, Scope and Organisation of
-
-.. * Map
-.. * Spectra
-.. * LightCurve
+The data can currently be read from Callisto FITS files (using PyFITS), but the system is designed in way that makes it easy to include new data-sources with potentially other data formats (such as LOFAR).
 
 Solar Data Retrieval and Access
 -------------------------------
@@ -151,19 +144,14 @@ The VSO strives to provides a one stop shop to solar data by building a centrali
 The VSO allows the user to search using parameters as instrument name or type, time, physical obsevable and/or spectral range.  
 VSO's main interface is web-based, however, an API based on a WSDL webservice is also available. SunPy provides a python front-end to this API. 
 
-SunPy has includes the capability to get data from VSO by used of that webservice.
--- this is made -- Florian/Joe should write about this...
-
 A new problem arise with the SDO mission. 
-The large size of the images (4 times larger than the previous mission), together with the fastest cadence of their cameras (~10 images per minute) makes challenging to use of the data as it used to be. 
+The large size of the images (4 times larger than the previous mission), together with the fastest cadence of their cameras (~10 images per minute) makes challenging to use of the data in the same manner as previous observations. 
 The `Heliophysics Event Knowledgebase <http://www.lmsal.com/hek/>`_ [HEK]_ was created to solve this overload of data. 
 The principle behind the HEK is to run a number of automated detection algorithms on the pipeline of the data that is downloaded from SDO in order to fill a database with information about the features and event observed in each image. 
 Thus, allowing the solar physicist to search for an event type or property and download just the portion and slices of the images needed for its further analysis. 
-In SunPy the implementation just covers the search and retrieve of the information related with the events and not the downloading of the observational data. 
-This allows, for example, to plot the feature contours on an image, study their properties and their evolution, etc.
-The implementation in SunPy of this tool was done based on the VSO tool but changing observatory and instruments by features and their properties
-
--- Jack and Florian are the best to describe how this was done.
+In SunPy the implementation just covers the search and retrevial of the information related with the events and not the downloading of the observational data. 
+This allows, for example, over plotting of the feature contours on an image, to study their properties and evolution, etc.
+The implementation in SunPy of this tool was done based on the already implemented VSO tool, so has a consitent interface.
 
 Solar physicist are also interested in the understanding of how solar events disturb the solar system. 
 Very high energy radiation produced during solar flares has effects on our ionosphere almost instantaneously, high-energy particles arriving few minutes later can permantly damage spacecraft, similarly big blob of plasma travelling at high velocities (~1000 km/s) produced as an effect of a coronal mass ejection can have multiple of effects on our technological dependent society. 
@@ -203,21 +191,20 @@ to become the defacto package for all solar physics data processing and analysis
 To achive this goal it is required that SunPy gains more traction within the solar physics community. This is both to increase 
 the user base and to attract new missions and instruments to adopt Python/SunPy for their data processing pipeline.
 
-**??????**
 
 References
 ----------
-.. [VSO] F. Hill, et al. *The Virtual Solar Observatory—A Resource for International Heliophysics Research*,
+.. [VSO] F. Hill, et al. *The Virtual Solar ObservatoryA Resource for International Heliophysics Research*,
          Earth Moon and Planets, 104:315-330, April 2009. DOI: 10.1007/s11038-008-9274-7
          
 .. [HEK] N. Hurlburt, et al. *Heliophysics Event Knowledgebase for the Solar Dynamics Observatory (SDO) and Beyond*,
          Solar Physics, 275:67-78, January 2012. DOI: 10.1007/s11207-010-9624-2 arXiv:1008.1291
          
-.. [HELIO] D. Pérez-Suárez et al. *Studying Sun–Planet Connections Using the Heliophysics Integrated Observatory (HELIO)*
+.. [HELIO] D. Prez-Surez et al. *Studying SunPlanet Connections Using the Heliophysics Integrated Observatory (HELIO)*
            Solar Physics, 280:603-621, October 2012. DOI: 10.1007/s11207-012-0110-x
 	
 
-.. [WCS] W. T. Thompson, *Coordinate systems for solar image data*, A&A 449, 791–803 (2006)
+.. [WCS] W. T. Thompson, *Coordinate systems for solar image data*, A&A 449, 791803 (2006)
 
 .. [SSW] S. L. Freeland, B. N. Handy, *Data Analysis with the SolarSoft System*, Solar Physics, v. 182, Issue 2, p. 497-500 (1998)
 
