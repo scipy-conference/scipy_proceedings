@@ -40,7 +40,8 @@ user-space checkpoint-restart package.  One can
 view checkpoint-restart as a generalization of pickling.  Instead of
 saving an object to a file, one saves the entire Python session to a
 file.  Checkpointing graphics in Python is also supported --- by
-checkpointing a VNC session with Python running inside that session.
+checkpointing a virtual network client (VNC) session with Python running
+inside that session.
 
 DMTCP is available as a Linux package for many popular Linux distributions.
 DMTCP can checkpoint Python or IPython from the *outside* i.e. by treating
@@ -558,7 +559,7 @@ DMTCP [Ansel09]_ is a
 transparent checkpoint-restart package with its roots going back eight
 years [Rieker06]_.  It works completely in user space
 and does not require any changes to the application or the operating
-system.  DMTCP can be used to checkpoint a variety of user application
+system.  DMTCP can be used to checkpoint a variety of user applications
 including Python.
 
 Using DMTCP to checkpoint an application is as simple as executing the
@@ -582,6 +583,7 @@ thread which communicates with the coordinator.
 
 DMTCP Plugins
 -------------
+
 .. figure:: plugin-architecture-simple.png
 
    DMTCP Plugins. :label:`dmtcp-plugins`
@@ -592,7 +594,7 @@ socket plugin, and file plugin. Plugins are responsible for
 checkpointing and restoring the state of their corresponding resources.
 The execution environment can change between checkpoint and restart. For
 example, the computation might be restarted on a different computer
-which has different file mount points, different network address, etc.
+which has different file mount points, a different network address, etc.
 Plugins handle such changes in the execution environment by virtualizing
 these aspects. Figure :ref:`dmtcp-plugins` shows the layout of DMTCP
 plugins within the application.
