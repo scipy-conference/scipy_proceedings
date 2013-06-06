@@ -91,13 +91,12 @@ debug Python are discussed.
     at the step before the bug occurred.
 
 The remaining sections describe: the
-"`DMTCP-Python Integration through a Python Module`_"; and several
-extensions of that integration.  The extensions
-include support for "`Checkpointing Python-Based Graphics`_";
-"`Checking Cython with Multiple CPython Instances`_" (fast/slow technique); and
-"`Reversible Debugging with FReD`_".
-"`Appendix: Background of DMTCP`_" provides further
-detals about DMTCP.
+`DMTCP-Python Integration through a Python Module`_; and several
+extensions of the integration of DMTCP with Python.  The extensions
+include support for `Checkpointing Python-Based Graphics`_;
+`Checking Cython with Multiple CPython Instances`_ (fast/slow technique); and
+`Reversible Debugging with FReD`_. More information about DMTCP is added in
+`Appendix: Background of DMTCP`_.
 
 DMTCP-Python Integration through a Python Module
 ================================================
@@ -113,6 +112,7 @@ server or other atomic transaction.
 
 A Python Module to Support DMTCP
 --------------------------------
+
 Some of the features of ``module.py`` are best illustrated through an example.
 Here, a checkpoint request is made from within the application.
 
@@ -159,8 +159,9 @@ It is also easy to add pre- and post-checkpoint processing actions.
 The function :code:`my_ckpt` can be defined in the application by the
 user and can be called from within the user application at any point.
 
-Extending DMTCP Module for Managing Sessions
---------------------------------------------
+Extending the DMTCP Module for Managing Sessions
+------------------------------------------------
+
 These core checkpoint-restart services are further extended to
 provide the user with the concept of multiple sessions. A checkpointed
 Python session is given a unique session id to distinguish it from other
@@ -195,6 +196,7 @@ different branch now instead of following the same route.
 
 Save-Restore for IPython Sessions
 ---------------------------------
+
 To checkpoint an IPython session, one must consider the configuration
 files. The configuration files are typically stored in user's home
 directory. During restart, if the configuration files are missing, the
@@ -231,7 +233,7 @@ Save-Restore for Parallel IPython Sessions
 
 DMTCP is capable of checkpointing a distributed computations with
 processes running on multiple nodes. It automatically checkpoints and
-restores various kinds of inter process communication mechanisms such as
+restores various kinds of inter-process communication mechanisms such as
 shared-memory, message queues, pseudo-ttys, pipes and network sockets. 
 
 An IPython session involving a distributed computation running on a
@@ -239,39 +241,71 @@ cluster is checkpointed as a single unit. With DMTCP, it is possible to
 restart the distributed processes in various manners. For example, for
 debugging, it may be desirable to restart all the processes on a single
 computer. In a different example, the processes may be restarted on a
-different cluster altogether. Even further, the per node distribution
-may be different from checkpoint time to accommodate changed nodes. 
-
-Another use case involving parallel computations is to use
-pre-initialized checkpoint images if multiple processes have a common long
-initialization routine. Instead of having all processes go through the
-same initialization, only one process is made to go through the
-initialization and is checkpointed at the end of initialization.
-Next, several processes are launched by restarting multiple copies of
-this checkpoint image.
+different cluster altogether.
 
 
 Checkpointing Python-Based Graphics
 ===================================
 
 Python is popular for scientific visualizations. It is possible to
-checkpoint a Python session with active graphical windows by using VNC.
-DMTCP supports checkpoint-restart of VNC-server. In this case,
-a VNC-server can be started automatically. The process environment
-is modified to allow the Python interpreter to communicate with the
-VNC-server instead of the X-window server. For visualization, a
-VNC-client can be fired automatically to display the graphical window.
-During checkpoint, the VNC-server is checkpointed as part of the
-computation, while the VNC-client is not. During restart, the Python
-session and the VNC-server are restored from their checkpoint images,
-and a fresh VNC-client is launched. This VNC-client communicates with
-the restored server and displays the graphics to the end user.
+checkpoint a Python session with active graphics windows by using VNC.
+DMTCP supports checkpoint-restart of VNC server. In this case, a VNC
+server can be started automatically. The process environment is modified
+to allow the Python interpreter to communicate with the VNC server
+instead of the X-window server. For visualization, a VNC client can be
+fired automatically to display the graphical window.  During checkpoint,
+the VNC server is checkpointed as part of the computation, while the VNC
+client is not. During restart, the Python session and the VNC server are
+restored from their checkpoint images, and a fresh VNC client is
+launched. This VNC client communicates with the restored server and
+displays the graphics to the end user.
+
+.. code-block:: python
+
+   ...
+   import dmtcp
+   ...
+   # Start VNC server
+   dmtcp.startGraphics()
+
+   ...
+
+   # Start VNC viewer
+   dmtcp.showGraphics()
+
+   # generate graphics (will be shown in the VNC viewer)
+   ...
+
+To understand the algorithm behind the code, we recall some VNC
+concepts. X-window supports multiple virtual screens. A VNC server
+creates a new virtual screen. The graphics contained in the VNC server
+is independent of any X-window screen. The VNC server process persists
+as a daemon. A VNC viewer displays a specified virtual screen in a
+window in a console.  When python generates graphics, the graphics is
+sent to a virtual screen specified by the environment variable
+:code:`$DISPLAY`.
+
+The command :code:`dmtcp.startGraphics()` creates a new X-window screen
+by creating a new VNC server and sets the :code:`$DISPLAY` environment
+variable to the new virtual screen.  All python graphics are now sent to
+this new virtual screen.  The additional screen is invisible to the
+python user until the python command :code:`dmtcp.showGraphics()` is
+given. The Python Command :code:`dmtcp.showGraphics()` operates by
+invoking a VNC viewer.
+
+At the time of checkpoint, the VNC server process is checkpointed along
+with the python interpretor while the VNC viewer is not checkpointed.
+
+On restart, the VNC server detects the stale connection to the old VNC
+viewers. The VNC server perceives this as the VNC viewer process that
+has now died. The DMTCP module then launches anew VNC viewer to connect
+to the VNC server.
 
 
 Checking Cython with Multiple CPython Instances
 ===============================================
 
-A common problem for compiled versions of Python such asi
+A common problem for compiled versions of Python such as
 Cython [Behnel10]_ is how to check
 whether the compiled computation is faithful to the interpreted
 computation.  Compilation errors can occur if the compiled code
@@ -351,19 +385,22 @@ functions on restart after a checkpoint.
 
 Reversible Debugging with FReD
 ==============================
+
+(This is still a work-in-progress)
+
 While debugging a program, often the programmer over steps and has to
 restart the debugging session. For example, while debugging a program,
 if the programmer steps over (by issue :code:`next` command inside the
 debugger) a function :code:`f()` only to determine
-that the bug is in function :code:`f()` itself, he is left with no
+that the bug is in function :code:`f()` itself, he or she is left with no
 choice but to restart from the beginning.
 
 *Reversible debugging* is the capability
-to run the application backwards in time inside a debugger. If the
+to run an application "backwards" in time inside a debugger. If the
 programmer detects that the problem is in function :code:`f()`, instead
-of restarting from the beginning, he can issue a :code:`reverse-next`
-command which takes it to the previous step. He can then issue
-:code:`step` command to step into the function in order to find the
+of restarting from the beginning, the programmer  can issue a :code:`reverse-next`
+command which takes it to the previous step. He or she  can then issue
+a :code:`step` command to step into the function in order to find the
 problem.
 
 .. figure:: fred-arch-python.png
@@ -373,11 +410,12 @@ problem.
 FReD (Fast Reversible Debugger) [Arya12]_ is a reversible debugger based on
 checkpoint-restart. FReD is implemented as a set of Python scripts and
 uses DMTCP to create checkpoints during the
-debugging session and keeps track of the debugging history. Figure
+debugging session. FReD also keeps track of the debugging history. Figure
 :ref:`fred-arch` shows the architecture of FReD.
 
 A Simple UNDO Command
 ---------------------
+
 The *UNDO* command reverses the effect of a previous debugger command
 such as next, continue and finish. This is the most basic tool in
 implementing a reversible debugger.
@@ -387,7 +425,7 @@ trivial.  A checkpoint is taken at the beginning of the debugging
 session and a list of all debugging commands issued since the
 checkpoint are recorded.
 
-To execute UNDO command, the debugging session is restarted from the
+To execute the UNDO command, the debugging session is restarted from the
 checkpoint image, and the debugging commands are automatically
 re-executed from the list excluding the last command.  This takes the
 process back right before the debugger command was issued.
@@ -397,6 +435,7 @@ interval to reduce the time spent in replaying the debugging history.
 
 More complex reverse commands
 -----------------------------
+
 .. figure:: commands.png
 
    Reverse Commands. :label:`reverse-xxx`
@@ -408,12 +447,12 @@ direction in time.
 Suppose that the debugging history looks like :code:`[next,next]`
 i.e. the user issued two :code:`next` commands. Further, the second next
 command stepped over a function :code:`f()`.
-Suppose we take checkpoints before each of these commands.
+Suppose further that FReD takes checkpoints before each of these commands.
 Issuing a :code:`reverse-next` command is easy. Just restart from the
 last checkpoint image. However, if the command issued was
 :code:`reverse-step`, a simple undo may not work. In this case, the
 desired behavior is to take the debugger to the last statement of
-the function :code:`f()`. In such situations we need to decompose the
+the function :code:`f()`. In such situations one needs to decompose the
 last command [Visan11]_ into a series of commands. At the end of
 this decomposition, the last command in the history is a :code:`step`.
 At this point, the
@@ -422,7 +461,7 @@ point, the process is restarted from the last checkpoint and the
 debugging history is executed excluding the last :code:`step` command.
 
 A typical debugging session in FRed with Python
-----------------------------------------------=
+-----------------------------------------------
 
 .. code-block:: python
    :linenos:
@@ -464,8 +503,8 @@ duplicate-free linked list or an otherwise cycle-free graph.  But the
 current example is chosen for ease of illustrating the ideas.)
 
 If the length of the linked list is less than or equal to one million,
-call the expression "good".  If the length of the linked list is greater
-than one million, call the expression "bad".  A "bug" is defined as a
+we will call the expression "good".  If the length of the linked list is greater
+than one million, we will call the expression "bad".  A "bug" is defined as a
 transition from "good" to "bad".  There may be more than one such
 transition or bug over the process lifetime.  Our goal is simply to find
 any one occurrence of the bug.
@@ -480,10 +519,10 @@ in time.
 Since the expression is "good" at the beginning of Figure
 :ref:`reverse-watch` and it is "bad" at the end of that figure, there
 must exist a buggy statement --- a statement exhibiting the transition
-from "good" to "bad".  A standard binary search algorithm converges to
-some instance in which the next statement transitions from "good" to
-"bad".  By definition, FReD has found the statement with the bug.  This
-represents success.
+from "good" to "bad".  A standard binary search algorithm converges to a
+case in which the current statement is "good" and the next statement
+transitions from "good" to "bad".  By the earlier definition of a "bug",
+FReD has found a statement with a bug.  This represents success.
 
 If implemented naively, this binary search requires that some statements
 may need to be re-executed up to :math:`\log_2 N` times.  However, FReD
@@ -501,7 +540,8 @@ shown that it can be closely integrated with Python. Specifically,
 parallel sessions with IPython, alternating interpreted and compiled
 execution modes, graphics, and enhancing Python debugger with
 reversibility. The implementation can be extended by the end users to
-suit their needs both at the level of Python and DMTCP.
+augment the capabilities of Python beyond the simple example of
+checkpoint-restart.
 
 Acknowledgment
 ==============
@@ -574,7 +614,7 @@ following commands:
 DMTCP automatically tracks all local and remote child processes and
 their relationships.
 
-As seen in Figure :ref:`dmtcp-arch` , a computation running under DMTCP
+As seen in Figure :ref:`dmtcp-arch`, a computation running under DMTCP
 consists of a centralized coordinator process and several user
 processes. The user processes may be local or distributed.  User
 processes may communicate with each other using sockets, shared-memory,
@@ -592,6 +632,7 @@ DMTCP plugins are used to keep DMTCP modular. There is a separate plugin
 for each operating system resource. Examples of plugins are pid plugin,
 socket plugin, and file plugin. Plugins are responsible for
 checkpointing and restoring the state of their corresponding resources.
+
 The execution environment can change between checkpoint and restart. For
 example, the computation might be restarted on a different computer
 which has different file mount points, a different network address, etc.
@@ -604,9 +645,9 @@ DMTCP Coordinator
 DMTCP uses a stateless centralized process, the DMTCP coordinator, to
 synchronize checkpoint and restart between distributed processes.
 The user interacts with the  coordinator through the console to initiate
-checkpoint, check status of the computation, kill the computation, etc.
+checkpoint, check the status of the computation, kill the computation, etc.
 It is also possible to run the coordinator as a daemon process, in which
-case, the use may communicate with the coordinator using the command
+case, the user may communicate with the coordinator using the command
 ``dmtcp_command``.
 
 Checkpoint Thread
@@ -629,15 +670,15 @@ process.  This quiesces the user threads by forcing them to block inside
 a signal handler, defined by the DMTCP.  The checkpoint image is created
 by writing all of user-space memory to a checkpoint image file. Each
 process has its own checkpoint image.  Prior to checkpoint, each plugin
-will have copied into user-space memory, any kernel state associated
+will have copied into user-space memory any kernel state associated
 with its concerns.  Examples of such concerns include network sockets,
 files, and pseudo-terminals.  Once the checkpoint image has been
-created, the checkpoint thread un-quiesces the user threads and they
+created, the checkpoint thread "un-quiesces" the user threads and they
 resume executing application code.
 
 At the time of checkpoint, all of user-space memory is written to a
 checkpoint image file.  The user threads are then allowed to resume
-execution.  Note that user-space memory includes the all of the run-time
+execution.  Note that user-space memory includes all of the run-time
 libraries (libc, libpthread, etc.), which are also saved in the
 checkpoint image.
 
@@ -649,7 +690,7 @@ global barrier, data is read from the "receive" end of each socket until
 the special cookie is received. The in-flight data has now been copied
 into user-space memory, and so will be included in the checkpoint image.
 On restart, the network buffers are *refilled* by sending the in-flight
-data back to the peer process, who then sends the data back into the
+data back to the peer process, which then sends the data back into the
 network.
 
 Restart
@@ -657,6 +698,6 @@ Restart
 As the first step of restart phase, all memory areas of the process are
 restored. Next, the user threads are recreated. The plugins then receive
 the restart notification and restore their underlying resources,
-translation tables etc.  Finally, the checkpoint thread un-quiesces the
+translation tables, etc.  Finally, the checkpoint thread "un-quiesces" the
 user threads and the user threads resume executing application code.
 
