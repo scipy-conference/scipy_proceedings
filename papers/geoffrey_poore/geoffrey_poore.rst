@@ -80,7 +80,7 @@ code to be included in LaTeX documents:
 PythonTeX is the most recent of these packages.
 
 The LaTeX-based approach has some drawbacks.  It is less interactive than 
-the IPython notebook.  And it is sometimes less convenient than a non-LaTeX
+the IPython notebook.  And it can be less convenient than a non-LaTeX
 system for converting documents to formats such as HTML.  At the same time,
 a LaTeX package has several significant advantages.  Since the user 
 directly creates a valid LaTeX document, the full power of LaTeX is 
@@ -327,7 +327,7 @@ Converting PythonTeX documents
 One disadvantage of a reproducible document created with PythonTeX is that it
 mixes plain LaTeX with Python code. Many publishers will not accept
 documents that require specialized packages. In addition, some format 
-converters for LaTeX documents only support a small set of basic LaTeX 
+converters for LaTeX documents only support a subset of LaTeX 
 commands—so PythonTeX support is not an option.
 
 To address these issues, PythonTeX includes a ``depythontex`` utility.
@@ -708,14 +708,14 @@ But perhaps the analysis should also be posted online in HTML format. A
 number of LaTeX-to-HTML converters exist, including TeX4ht [TEX4HT]_,
 HEVEA [HEVEA]_, and Pandoc [PAN]_. I will use Pandoc in this
 example since the document has a simple structure that Pandoc fully
-supports. One of the other converters might be more appropriate for a
+supports. A different converter might be more appropriate for a
 more complex document.
 
-None of the converters are aware of the PythonTeX commands and
-environments, so the document cannot be converted directly. This is
-where the ``depythontex`` utility is needed. To use ``depythontex``, I
-modify the case study document by adding the ``depythontex`` option when
-the PythonTeX package is loaded:
+Since Pandoc only supports a basic subset of LaTeX, it is not aware of the 
+PythonTeX commands and environments and cannot convert the document in its
+current form.  This is where the ``depythontex`` utility is needed. 
+To use ``depythontex``, I modify the case study document by adding the
+``depythontex`` option when the PythonTeX package is loaded:
 
 .. code-block:: latex
 
