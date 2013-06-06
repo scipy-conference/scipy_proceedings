@@ -16,7 +16,7 @@ Adapted G-mode Clustering Method applied to Asteroid Taxonomy
 
 .. class:: abstract
 
-   The original G-mode was a clustering method developed by A. I. Gavrishin in the 70's for geochemical classification of rocks, 
+   The original G-mode was a clustering method developed by A. I. Gavrishin in the late 60's for geochemical classification of rocks, 
    but was also applied to asteroid photometry, cosmic rays, lunar sample and planetary science spectroscopy data. 
    In this work, we used an adapted version to classify the asteroid photometry from SDSS Moving Objects Catalog. 
    The method works by identifying normal distributions in a multidimensional space of variables. 
@@ -37,8 +37,8 @@ Adapted G-mode Clustering Method applied to Asteroid Taxonomy
 Introduction
 ------------
 
-The clusters can be identified using the G-mode multivariate clustering method, designed by A. I. Gavrishin and Coradini [Cor76]_. 
-The algorithm was originally written in FORTRAN V by Cor77_ to classify geochemical samples [Cor76_, Bia80_], but is also applicable to a wide range of astrophysical fields, 
+The clusters are identified using the G-mode multivariate clustering method, designed by A. I. Gavrishin and published in Russia in the late 60's [Cor76]_. 
+The algorithm was originally written in FORTRAN V by A. Coradini in the 70's [Cor77]_ to classify geochemical samples [Cor76_, Bia80_], but is also applicable to a wide range of astrophysical fields, 
 as Small Solar System Bodies [Bar87_, Bir96_, Ful08_, Per10_], disk-resolved remote sensing [Pos80_, Tos05_, Cor08_, Ley10_, Tos10_], cosmic rays [Gio81]_ and quasars [Cor83]_. 
 In 1987, Bar87_ used original G-mode implementation to classify measurements of asteroids made by the Eight-Color Asteroid Survey [Zel85]_ and 
 IRAS geometric albedos [Mat86]_ to produce a taxonomic scheme. Using a sample of 442 asteroids with 8 variables, they recognized 18 classes using a confidence level
@@ -385,12 +385,12 @@ Thus, the last code version ended up with the following input parameters:
   Usually it assumes values between 1.5 and 3.0 .
 
 - ``Grid`` (``--grid``, ``-g``, ``self.grid``) : Number of times which ``barycenter.barycenter_density()`` will divide each variable up on each iteration,
-  according to the borders of the sample. Values between 2 and 4 are preferable.
+  according to sample's upper and lower ranges. Values between 2 and 4 are preferable.
 
 - ``Minimum Deviation Limit`` (``--mlim``, ``-m``, ``self.mlim``) : Sometimes the initial seeds starts with zeroth deviation, thus this singularity is corrected
   replacing all deviation by the minimum limit when lower than it. This number is given in fraction of median error of each variable.
   
-- ``Upper Deviation Limit`` (``--ulim``, ``-u``, ``self.ulim``) : This parameter is important when the clusters have high degree of superposition and 
+- ``Upper Deviation Limit`` (``--ulim``, ``-u``, ``self.ulim``) : This optional parameter is important when the clusters have high degree of superposition and 
   its necessary the identification of smaller mingled clusters. 
   The upper limit is a restriction which determines how much a cluster might grow up. 
   This value is given in fraction of total standard deviation of each variable.
@@ -400,7 +400,7 @@ On the directory ``/TESTS/.../maps/`` , there are on-the-fly density distributio
 On ``/TESTS/.../plots/`` , a series of variable plots permits the user to verify each cluster profile.
 On the lists ``clump_xxx.dat`` , ``gmode1_xxx.dat`` , ``gmode2_xxx.dat`` and ``log_xxx.dat`` the informations about cluster statistics, 
 classification per each data element, classification per unique ID and report of the formation of clusters and distance matrices are gathered.
-Working on ``Python IDLE`` or ``IPython``, once ``Gmode.Run()`` was executed, users might call ``self.cluster_members`` to get a ``list`` of sample indexes
+Working on a Python Interpreter, once ``Gmode.Run()`` was executed, users might call ``self.cluster_members`` to get a ``list`` of sample indexes
 organized into each cluster they are members of. The ``self.cluster_stats`` returns a ``list`` with each cluster statistics.
 ``Gmode.Evaluate()`` gives the ``self.Gc`` matrix and ``self.D2`` distance matrix among clusters. 
 
@@ -410,15 +410,15 @@ the processing time is very sensitive to the number of identified cluster, which
 For example, with 20,000 elements and 41 clusters, the G-mode takes around to 2 minutes for whole procedure (plots creation not included) when executed in a
 Intel Core 2 Quad 2.4 GHz with 4 Gb RAM.
 
-Our implementation also allows to ``import Gmode`` and use it in ``Python IDLE`` or through shell command, like the example::
+Our implementation also allows to ``import Gmode`` and use it on a Python Interpreter or through shells as in the example below::
 
    python Gmode.py --in path/to/file \
-   --q1 2.0 -g 3 -u 0.5 -m 0.5
+   --q1 2.0 -g 3 -u 0.5 -m 0.5 -n Nickname
 
 Finally, since the plot limits, normalization and axis are optimized to asteroid photometry, 
 users on shell are invited to directly change this parameters in ``config.cfg``.
 If data is not normalized thus ``norm = None``.
-More aesthetic options are going to be implemented in future versions. 
+More aesthetic options are going to be implemented in future versions using ``Matplotlib.rcParams``. 
 
 
 Code Testing
