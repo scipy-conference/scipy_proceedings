@@ -53,7 +53,7 @@ we would like to know exactly which examples were used for training, and which
 examples were used for measuring that generalization error.
 It would be tedious to write such detail into a paper (and to transcribe it back into code afterward!), but it is natural to express
 this kind of precision in programming logic.
-Indeed, the authors of every scientific papers with empirical results of this type used some programmatic logic to
+Indeed, the authors of every scientific paper with empirical results of this type used some programmatic logic to
 
 1. Obtain their data,
 #. Unpack it into some working directory,
