@@ -364,7 +364,6 @@ How the Protocol Layer Works
 The skdata library's protocol layer is built around a command-driven interface in which protocol objects (such as `iris.view.SimpleCrossValidation`)
 walk a learning algorithm (e.g. `SklearnClassifier`) through the process of running an experiment.
 In our example, the protocol object used two commands:
-.. One of the commands that a protocol object might send is to "produce the best model" according to some given training data.
 
 .. code-block:: python
 
