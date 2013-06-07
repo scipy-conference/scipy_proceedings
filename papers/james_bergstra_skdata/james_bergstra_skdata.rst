@@ -337,6 +337,7 @@ the results from that work in the loops on lines 17-21.
 
 The `protocol` method encapsulates a sort of dialog between the `iris_view` object as a driver, and the `algo` as a handler of commands from the driver.
 The protocol in question (`iris.view.SimpleCrossValidation`) happens to use just two kinds of command:
+
 * Learn the best model for training data
 * Evaluate a model on testing data
 
