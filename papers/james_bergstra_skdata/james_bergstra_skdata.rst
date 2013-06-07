@@ -472,15 +472,14 @@ it is easier to leave the original base set of examples alone, and manipulate ve
 Making many Tasks simply means making many integer vectors that specify which examples are in which Task. These integer
 vectors are much smaller than copies of the base set of examples would be, when the examples are associated with many features.
 
-The *lazy array* described in `skdata.larray` makes it possible lazily evaluate certain transformations of ndarray data.
-Lazy evaluation is done on an example-by-example basis, so if a protocol only requires examples `10:100` then only those examples will be computed.
+The *lazy array* described in `skdata.larray` makes it possible to evaluate certain transformations of ndarray data in an on-demand manner.
+Lazy evaluation is done example by example, so if a protocol only requires the first 100 examples of a huge data set, then only those examples will be computed.
 A lazy evaluation pipeline used together with appropriate cache techniques ensure that even when a data set is very large,
 only those examples which are actually needed are loaded from disk and processed.
-
-Of course, very large data sets must be fit using appropriate algorithms (such as online algorithms),
-but the protocol layer does not stand in the way of using online learning algorithms on very large data sets.
-In fact, the lazy array represents a mechanism to ensure that online algorithms that loop over enormous (or infinite) data sets
-traverse the examples in a cache-efficient way.
+The lazy array does not make batch algorithms into online ones,
+but it provides a mechanism for designing iterators
+so that online algorithms can
+traverse large numbers of examples in a cache-efficient way.
 
 Low Level: Data Layer Usage
 ---------------------------
