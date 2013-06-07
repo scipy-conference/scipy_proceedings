@@ -222,18 +222,12 @@ like the ones in the training data.
 Matrix completion problems arise in recommendation settings,
 and many information retrieval tasks can be described more accurately as
 ranking problems than classification or regression.
-The list goes on.
-There are relationships between these different problems
-([LangfordReductions_] has pointed out that many of them can be reduced to
-binary classification, in theory) but often the best algorithms are the
-most specialized ones.
-
-Certainly skdata's low level data interface provides a natural place to put
+The skdata library's low-level data interface provides a natural place to put
 code for loading the data sets used to evaluate algorithms for these other
 kinds of machine learning problem.
 Currently skdata's high level data interfaces do not have special support
 these other kinds of protocols.
-As far as we know there is nothing about these kinds of learning problems that
+To our knowledge there is nothing about these kinds of learning problems that
 makes them incompatible with the encapsulation techniques used in skdata, but
 the design has not been pushed in this direction.
 
@@ -708,12 +702,11 @@ The library currently provides some degree of support for about 40 data sets, an
 References
 ----------
 
-.. [CIFAR-10] XXX
-.. [Iris] The Iris data set: http://archive.ics.uci.edu/ml/datasets/Iris
-.. [skdata] XXX
-.. [lfw] XXX
-.. [sklearn] XXX
-.. [LangfordReductions] XXX
-.. [Netflix] XXX
-.. [glumpy] XXX
+.. [CIFAR-10] A. Krizhevsky. *Learning Multiple Layers of Features from Tiny Images.* Masters Thesis, University of Toronto, 2009.
+.. [Iris] http://archive.ics.uci.edu/ml/datasets/Iris
+.. [skdata] http://jaberg.github.io/skdata/
+.. [lfw] G. B. Huang, M. Ramesh, T. Berg, and E. Learned-Miller. *Labeled Faces in the Wild: A Database for Studying Face Recognition in Unconstrained Environments.* University of Massachusetts, Amherst TR 07-49, 2007.
+.. [sklearn] Pedregosa et al. *Scikit-learn: Machine Learning in Python*, JMLR 12 pp. 2825--2830, 2011.
+.. [Netflix] http://www.netflixprize.com/
+.. [glumpy] https://code.google.com/p/glumpy/
 .. [UCI] http://archive.ics.uci.edu/ml/
