@@ -447,8 +447,9 @@ For better or for worse, the protocol and the set of allowed semantics is not st
 Of course, if you add new commands to this protocol then you will not be able to use existing learning algorithms (e.g. `SklearnClassifier`).
 Presumably though, you are adding a command because existing learning algorithms couldn't do what was necessary in the first place, so losing
 compatibility is not a big loss.
-A quick and dirty way to determine what semantics strings are in use is to apply a text search to the source tree (`grep -R semantics skdata`)
-To see what protocol commands are supported by the SklearnClassifier, see its source definition in `skdata.base`.
+A quick and dirty way to determine what semantics strings are in use is to apply a text search to the source tree (`grep -R semantics skdata`).
+To see what protocol commands are supported by the SklearnClassifier,
+look at its source definition in `skdata.base`.
 
 .. The design of the protocol makes it natural to provide fallback implementations that allow more generic learning algorithms (e.g. SVC)
 .. to serve in place of more specialized ones (e.g. image classification algorithms)
