@@ -162,8 +162,7 @@ training set.
 
 The organization of the sklearn library reflects this commonality of
 interfaces [sklearn]_. Continuing with classification as our working example,
-the sklearn library defines an "Estimator" interface for predictive models with a
-"fit" method and a "predict" method.
+the sklearn library defines an ``Estimator`` interface for predictive models with ``fit`` and ``predict`` methods.
 The fit method expects two arguments: a matrix `X` whose rows are independent examples and
 whose columns correspond to each input feature, and a vector `y` of integer
 target labels for each row in `X`.
@@ -176,8 +175,8 @@ When the predict method is called, it returns the models best guesses of the
 correct label for each row of `X_test`.
 
 
-Machine learning algorithms for classification (also "classification
-algorithms) are often judged on their
+Machine learning algorithms for classification (or simply "classification
+algorithms") are often judged on their
 accuracy on a *test set* of examples that were not part of the *training set*.
 This type of evaluation is called *cross-validation*. Evaluating a
 classification algorithm by cross-validation proceeds as follows:
@@ -204,7 +203,7 @@ The simple cross-validation protocol described above is standard for many data
 sets, but it is not unusual for a data set to suggest or require a
 variation.
 For example, when algorithms are evaluated on small data sets, a more
-efficient "K-fold" cross-validation is typically used.
+efficient *K-fold* cross-validation is typically used.
 When model selection is part of the training process, training sets
 must be further subdivided into a test for fitting and a *validation* set
 used for the internal model selection.
@@ -460,7 +459,7 @@ Dealing with Large Data
 Some data sets are naturally large, and some datasets simply appear large by virtue of the way they are meant to be used
 by experimental protocols.
 Two techniques are used within the skdata library to keep memory usage under control.
-The first technique is to use the "indexed" Task semantics to avoid 
+The first technique is to use the "indexed" Task semantics to avoid
 The second, related technique is to use the *lazy array* in `skdata.larray` to avoid allocating intermediate buffers for
 certain kinds of transformations of original bulk data.
 
@@ -498,9 +497,9 @@ The high-level classes are implemented in terms of the low-level logic.
 
 There is a convention that this low-level logic for each data (e.g. "foo") should be written in a Python file called "skdata.foo.dataset".
 Technically, there is no requirement that the low-level routines adhere to any standard interface, because the skdata library has been
-designed such that there are no functions that should work "for any data set".
+designed such that there are no functions that must work on any data set.
 With that said, there are some common patterns, like downloading, deleting, and accessing whatever data a data set provides.
-A data set wrapper for the "Labeled Faces in the Wild" data set [lfw]_ provides a representative example of what low-level data set objects look like.
+A data set wrapper for the Labeled Faces in the Wild (LFW) data set [lfw]_ provides a representative example of what low-level data set objects look like.
 What follows is an abridged version of what appears in `skdata.lfw.dataset`.
 
 .. code-block:: python
