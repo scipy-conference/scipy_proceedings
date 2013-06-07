@@ -701,7 +701,7 @@ The skdata library provides a host for both low-level data wrangling logic (down
 To date the development effort has focused on classification tasks, and image labeling problems in particular.
 The abstractions used in the library should apply to natural language processing and audio information retrieval, as well as timeseries data.
 The protocol layer of the skdata library (especially using the larray module) has been designed to accommodate large or infinite (virtual) data sets.
-The library currently provides some degree of support for about 40 data sets, and about a dozen of those have full support for the high-level,low-level, and script APIs.
+The library currently provides some degree of support for about 40 data sets, and about a dozen of those have full support for the high-level, low-level, and script APIs.
 
 
 
