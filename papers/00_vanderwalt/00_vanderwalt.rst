@@ -22,7 +22,7 @@ A Numerical Perspective to Terraforming a Desert
    principles, we find that the outcomes of this introspective approach is
    compatible with the guidelines previously established.
 
-   In such an experiment, it is then clearl that the potential for further
+   In such an experiment it is then clear that the potential for further
    development not only depends on previous relationships found but also on
    connections made during exploitation of this novel new experimental
    protocol.
@@ -34,7 +34,7 @@ A Numerical Perspective to Terraforming a Desert
 Introduction
 ------------
 
-Twelve hundred years ago, in a galaxy just across the hill...
+Twelve hundred years ago  |---| in a galaxy just across the hill...
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
 tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum

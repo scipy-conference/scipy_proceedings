@@ -23,6 +23,12 @@ header = r'''
   \newcommand*{\docutilsroleref}{\ref}
   \newcommand*{\docutilsrolelabel}{\label}
 
+.. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
+   :trim:
+
+.. |--| unicode:: U+2013   .. en dash
+   :trim:
+
 '''
 
 
