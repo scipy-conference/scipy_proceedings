@@ -463,10 +463,11 @@ We warmly thank Marcelo Borges, Catherine Garmany, John
 Glaspey, and Joel Lamb for fruitful discussion that greatly improved
 the original work.
 G.A.B. thanks the hospitality of University of
-Michigan and of NOAO on his visit and also thanks all
+Michigan and of NOAO on his visit, Leonardo Uieda and Katy Huff for their 
+help in this proceedings and also thanks all
 Python developers for their great work. G.A.B. also acknowledges
 Conselho Nacional de
-Desenvolvimento Científico e Tecnolígico (CNPq-Brazil) and Coordenação
+Desenvolvimento Científico e Tecnológico (CNPq-Brazil) and Coordenação
 de Aperfeiçoamento de Pessoas de Nível Superior
 (CAPES - Brazil) for his fellowship.
 T.B. was funded by grant
