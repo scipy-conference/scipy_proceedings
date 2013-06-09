@@ -55,7 +55,7 @@ and rotation up to 400 km/s.
 
 By definition, a star is born when it starts synthesizing Hydrogen into
 Helium through nuclear fusion. The star performs this nucleosynthesis
-during somewhat 90% of their life. When stars are at this stage, they
+during some 90% of their life. When stars are at this stage, they
 are called dwarfs. Most of the studied stars on this work are dwarfs.
 Due to their young age, dwarf stars have not lost too much of their
 mass, and so, the majority of their stellar properties are kept unchanged.
@@ -71,7 +71,7 @@ same association.
 The Python programming language is very powerful, robust, clean and
 easy to learn.
 The scripting nature allows the
-programmer to have a dynamic workflow and not loose too much time
+programmer to have a dynamic workflow and not lose too much time
 with debugging and compiling.
 With a set of packages, like `Scipy <http://www.scipy.org/>`__,
 `Numpy <http://www.numpy.org/>`__ and
@@ -81,9 +81,9 @@ On the last years,
 it has been widely adopted in the Astronomic community and
 several astronomical packages are being translated to Python or just recently
 being created.
-All of these motivated us to use Python on our research.
+All of these motivated us to use Python in our research.
 
-In this proceedings, we relate how we used Python on our research. A
+In this proceedings, we relate how we used Python in our research. A
 more profound scientific analysis can be found at [Brag12]_.
 
 Research development
@@ -205,7 +205,7 @@ code to plot this Figure is:
 To analyze the spectra images we have used `IRAF <http://iraf.noao.
 edu/>`__ (Image and Reduction Analysis Facility), which is a suite of
 softwares to handle astronomic images developed by the NOAO [1]_.
-We had to do several tasks on our spectra (e.g. cut it in a certain
+We had to do several tasks on our spectra (e.g. slice them at a certain
 wavelength and normalization) to prepare our sample for further
 analysis. Some of these tasks had to be done manually and on a
 one-by-one basis, but some others were automated. The automation could
@@ -260,12 +260,12 @@ Projected rotational velocities
 
 We have obtained projected rotational velocities (:math:`v\sin i`) for
 266 stars of our sample (after rejecting spectroscopic
-binaries/multiple systems) using measurements of full width at half
-measure of He I lines and interpolation in a synthetic grid from
+binaries/multiple systems) using measurements of full width at half 
+maximum of He I lines and interpolation in a synthetic grid from
 [Dafl07]_.
 We did not use Python to obtain :math:`v\sin i`, so, for more
 information, we suggest the reader to look in the original paper.
-However, to analyze the stars :math:`v\sin i` we used Python, specially
+However, to analyze the stars :math:`v\sin i` we used Python, especially
 the matplotlib package for visualization analysis and the
 `Scipy.stats <http://docs.scipy.org/doc/scipy/reference/stats.html>`__
 package for statistics analysis.
@@ -316,7 +316,7 @@ overall flat (a broad distribution) for :math:`v\sin i` roughly between
 distributions of projected rotational velocities of the so-called
 field OB stars. To compare our sample with Abt's, we subselected our
 sample on magnitude and Abt's sample on spectral type. Both
-distributions are shown in the bottom panel of Figure :ref:`vsiniDist`.
+distributions are shown on the bottom panel of Figure :ref:`vsiniDist`.
 The code used to build this plot follows:
 
 .. figure:: f8.png
