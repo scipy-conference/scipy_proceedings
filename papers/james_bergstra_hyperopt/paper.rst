@@ -450,13 +450,14 @@ We can use ``choice`` to define an appropriate configuration space for the ``w``
     print sample(w_space)
     # ==> {'use_var': 'y', 'y': 2.63}
 
-Recall that in ``w``, the "y" key of the configuration is not used if the "use_var" value is "x".
-Similarly, the "x" key of the configuration is not used if the "use_var" value is "y". 
+Recall that in ``w``, the "y" key of the configuration is not used when the "use_var" value is "x".
+Similarly, the "x" key of the configuration is not used when the "use_var" value is "y".
 The use of ``choice`` in the ``w_space`` search space reflects the conditional usage of keys "x" and "y" in the ``w`` function.
 We have used the ``choice`` variable to define a space that never has more variables than is necessary.
 
-The choice variable here plays more than a cosmetic role, it can make optimization much more efficient.
-In terms of ``w`` and ``w_space``, the choice node prevents ``y`` for being *blamed* for poor performance when "use_var" is "x",
+The choice variable here plays more than a cosmetic role; it can make optimization much more efficient.
+In terms of ``w`` and ``w_space``, the choice node prevents ``y`` for being *blamed* (in terms of the logic of the search algorithm)
+for poor performance when "use_var" is "x",
 or *credited* for good performance when "use_var" is "x".
 The choice variable creates a special node in the expression graph that prevents the conditionally unnecessary part of the
 expression graph from being evaluated at all.
@@ -794,7 +795,7 @@ be used to define and optimize large-scale hyperparameter optimization
 problems.
 Currently, Hristijan Bogoevski is investigating Hyperopt as a tool for
 optimizing the suite of machine learning algorithms provided by sklearn;
-with luck, that work will appear in the [hp-sklearn]_ project in the
+that work is slated to appear in the [hp-sklearn]_ project in the
 not-too-distant future.
 
 With regards to implementation decisions in Hyperopt,
