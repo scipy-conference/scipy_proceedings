@@ -725,7 +725,8 @@ The Ctrl Object for Realtime Communication with MongoDB
 
 When running a search in parallel, you may wish to provide your objective
 function with a handle to the mongodb database used by the search.
-This mechanism makes it possible for objective functions to
+This mechanism makes it possible for objective functions to:
+
 * update the database with partial results,
 * to communicate with concurrent processes, and
 * even to enqueue new configuration points.
@@ -777,9 +778,8 @@ Hyperopt is the subject of ongoing and planned future work in the
 algorithms that it provides, the domains that it covers, and the technology
 that it builds on.
 
-Related Bayesian optimization software such as
-* Frank Hutter et al's [SMAC]_, and
-* Jasper Snoek's [Spearmint]_
+Related Bayesian optimization software such as Frank Hutter et al's [SMAC]_, and
+Jasper Snoek's [Spearmint]_
 implement state-of-the-art algorithms that are different from the TPE
 algorithm currently implemented in Hyperopt.
 Questions about which of these algorithms performs best in which circumstances,
