@@ -12,8 +12,8 @@ Reproducible Documents with PythonTeX
    PythonTeX is a LaTeX package that allows Python code in a LaTeX 
    document to be executed.  This makes possible reproducible documents that
    combine analysis with the code required to perform it. 
-   Writing such documents can be more efficient since code is adjacent to its
-   output.  Writing is also less error-prone since results may be accessed
+   Writing such documents can be more efficient because code is adjacent to 
+   its output.  Writing is also less error-prone since results may be accessed
    directly from within the document, without copy-and-pasting.  This paper
    provides an overview of PythonTeX, including Python output caching, 
    dependency tracking, synchronization of errors and warnings with the LaTeX
@@ -124,7 +124,11 @@ an argument. In a standard PythonTeX installation, a symlink or launching
 wrapper for this script is created in your TeX installation's ``bin/`` 
 directory, so that the script will be on your PATH. The next time you 
 compile the document, all Python-generated content will be included. 
-PythonTeX is compatible with the pdfTeX, XeTeX, and LuaTeX engines.
+
+PythonTeX is compatible with all standard LaTeX engines (executable binaries):  
+pdfTeX, XeTeX, and LuaTeX.  It has been tested with TeX Live [TL]_ and 
+MiKTeX [MIK]_, and should work with other distributions.
+
 
 
 Commands and environments
@@ -184,9 +188,10 @@ commands ``\pyc`` and ``\pyb``. A special command ``\py`` is provided
 that returns a string representation of its argument. For example,
 ``\py{2**8}`` yields ``256``.
 
-PythonTeX also provides a **verbatim** command and environment that
-simply typeset highlighted code. Descriptions of additional commands and
-environments are available in the documentation.
+PythonTeX also provides a **verbatim** command ``\pyv`` and environment 
+``pyverbatim``.  These simply typeset highlighted code; nothing is executed.
+Descriptions of additional commands and environments are available in the
+documentation.
 
 
 Caching
@@ -231,39 +236,24 @@ via modification time (``os.path.getmtime()``) [OSPATH]_, since this is
 fast even for large data sets. File hashing may be used instead via the 
 package option ``hashdependencies``.
 
-If there are only a few dependencies, it may be simplest to specify them
-manually. For example, the line
+The PythonTeX utilities class also provides an ``add_created()`` method.
+This allows created files to be deleted automatically when the code that 
+created them is re-executed, preventing unused files from accumulating. For
+example, if a figure is saved under one name, and later the name is changed, 
+the old version would be deleted automatically if it were tracked.
+
+When there are only a few dependencies or created files, it may be simplest 
+to specify them manually.  For example, the line
 
 ::
 
-    pytex.add_dependencies(<file>)
+    pytex.add_dependencies('data.txt')
 
-could be added after ``<file>`` is loaded. If there are many
-dependencies, however, it may make more sense to define a custom version
-of ``open()`` (or its equivalent) that tracks dependencies
-automatically. Since ``open()`` can be used to load data or create
-files, this is also a perfect opportunity to use the PythonTeX utilities'
-``add_created()`` method. It allows created files
-to be deleted automatically when the code that created them is
-re-executed, preventing unused files from accumulating. For example,
-if a figure is saved under one name, and later the name is changed, the
-old version would be deleted automatically if it were tracked.
+could be added after ``data.txt`` is loaded.  In cases where the manual 
+approach is tedious, the entire tracking process may be automated.  A custom
+version of ``open()`` could be defined in which each file opened is tracked 
+based on whether it is opened for reading (dependency) or writing (created).
 
-A custom version of ``open()`` might be created as follows. For
-convenience, it could be added as a property of ``pytex``.
-
-.. code-block:: python
-
-    def track_open(file, mode='r', *args, **kwargs):
-        if mode in ('r', 'rb'):
-            pytex.add_dependencies(file)
-        elif mode in ('w', 'wb'):
-            pytex.add_created(file)
-        return open(file, mode, *args, **kwargs)
-    pytex.open = track_open
-
-Notice that this approach does not deal with files opened for appending
-or updating; such cases may require more complex, case-by-case logic.
 
 
 Synchronizing exceptions
@@ -332,120 +322,42 @@ commands—so PythonTeX support is not an option.
 
 To address these issues, PythonTeX includes a ``depythontex`` utility.
 It creates a version of a document in which all Python code has been
-replaced by its output. There is no way to tell that the converted document
-ever used PythonTeX. Typically, the converted document is a perfect copy
-of the original, though occasionally spacing may be slightly different
-based on the user’s choice of ``depythontex`` options.
+replaced by its output.  There is no way to tell that the converted document 
+ever used PythonTeX.  Typically, the converted document is a perfect copy 
+of the original, though occasionally spacing may be slightly different 
+based on the user's choice of ``depythontex`` options.  A few features are
+especially noteworthy.
 
-One important feature provided by ``depythontex`` is the
-conversion of highlighted code. ``depythontex`` can convert 
-any code that was highlighted by PythonTeX into the format
-of the ``listings`` [LST]_, ``minted`` [MINT]_, or ``fancyvrb``
-packages [FV]_. Line numbering and syntax highlighting are preserved if
-the target package supports it.
+* Any Python-generated figures that were included in the original document
+  will be included in the converted document; the converted document still
+  checks the same paths for figures.  It is possible to configure
+  PythonTeX so that figures created by matplotlib [MPL]_ and other plotting 
+  libraries are automatically included in the document, without the user
+  needing to enter an ``\includegraphics`` command.  (Additional details are
+  provided in the documentation.)  Even in these cases, figures are correctly
+  included in the converted document.
+* Any code highlighted by PythonTeX in the original version can also be
+  highlighted in the ``depythontex`` version.  Highlighted code can be 
+  converted into the format of the ``listings`` [LST]_, ``minted`` [MINT]_, 
+  or ``fancyvrb`` [FV]_ packages for LaTeX.  Line numbering and syntax 
+  highlighting are preserved if the target package supports them.
+
 
 
 When Python is not enough
 =========================
 
 While PythonTeX is focused on providing Python-LaTeX integration, most
-of the LaTeX interface is language-agnostic. In many cases, adding support 
+of the LaTeX interface is language-agnostic.  In many cases, adding support 
 for an additional language is as simple as providing two templates and
-creating a new instance of a class.  PythonTeX already provides 
-support for Ruby and Julia, and additional languages will be added
-in the near future.
+creating a new instance of a class.  For example, support for Ruby has 
+just been added to PythonTeX.  This required two Ruby templates and a few 
+lines of Python—only about 70 lines of code total.  The format of Ruby 
+errors, warnings, and associated line numbers was specified as part of this 
+process, so Ruby exceptions can be synchronized with the document, just like
+Python exceptions.
 
-The first template required to add a language provides the overall 
-structure of the scripts that PythonTeX assembles and runs. 
-Substitution fields are designated with double curly braces ``{{}}``, so that
-single braces need not be escaped and to maintain similarity with template
-engines.  A simplified example for Python is shown below.
-
-.. code-block:: python
-   :linenos:
-
-    # -*- coding: {{encoding}} -*-
-
-    {{future}}
-
-    import os
-    import sys
-    {{extend}}
-
-    sys.path.append('{{utilspath}}')
-
-    from pythontex_utils import PythontexUtils
-    pytex = PythontexUtils()
-
-    if os.path.isdir('{{workingdir}}'):
-        os.chdir('{{workingdir}}')
-        sys.path.append(os.getcwd())
-    else:
-        sys.exit('Cannot find {{workingdir}}')
-
-    {{body}}
-
-    pytex.cleanup()
-
-The encoding for the file is set on line 1.  In the actual Python template,
-the encoding for ``stdout`` and ``stderr`` is also set.  Any imports from
-``__future__`` (including any in user code) are inserted on line 3.  Line 7
-provides an ``{{extend}}`` field that allows the template to be extended.
-For example, PythonTeX provides a set of commands and environments for 
-use with SymPy [SYMPY]_; these are created by extending the default 
-template with imports from SymPy.  Line 9 adds the location of any 
-utilities provided by PythonTeX to the path, so they may be imported.  
-Lines 11-12 create an instance of the PythonTeX utilities class; a 
-utilities class could be defined in the template instead.  Lines 14-18 
-change to a user-specified working directory and add it to the path.  Line 20 
-is where user code is actually be inserted.  Finally, on line 22, the
-``cleanup()`` method of the utilities class is called.  This saves the 
-names of any dependencies and created files that have been accumulated.
-    
-The second template needed for adding a language is used to wrap 
-the code from an individual command or environment.  A minimal
-template for Python might have the following form.
-
-.. code-block:: python
-   :linenos:
-
-    print('{{stdoutdelim}}')
-    sys.stderr.write('{{stderrdelim}}\n')
-    pytex.input_command = '{{input_command}}'
-    pytex.input_line = {{input_line}}
-    pytex.before()
-    
-    {{code}}
-    
-    pytex.after()
-
-Lines 1-2 write delimiters to ``stdout`` and ``stderr``, so that both may be
-synchronized with the document.  On line 3, an attribute of the utilities
-class is set to the type of LaTeX command in which the user code originated.
-Line 4 sets the document line number where the code originated.  In
-the full Python template used by PythonTeX, additional information from the 
-LaTeX side is stored in the utilities class.  This allows user code to take
-into account its context in the LaTeX document.  The actual user code is 
-inserted in the field on line 7.  Surrounding it are calls to the 
-``before()`` and ``after()`` methods of the utilities class.  These do 
-nothing by default, but are provided for redefinition by the user.
-For example, they could print LaTeX code that wraps user-printed content 
-in a LaTeX environment.  Or they might detect, save, and automatically 
-include in the document any figures created by the user code.
-
-While the two templates shown above are minimal for illustration purposes,
-templates providing full functionality are still relatively compact.  For 
-example, the two Ruby templates and the creation of the class instance that 
-governs Ruby code only require about 70 lines of code.
-
-One of the challenges in supporting multiple languages is that each language
-has its own conventions for formatting errors and warnings, complicating
-the parsing of ``stderr``.  When the class instance that defines a language 
-is created, patterns for identifying errors, warnings, and associated line 
-numbers may be specified.  For example, the class instance for Python 
-identifies errors by searching for the string ``'Error:'``, warnings by
-``'Warning:'``, and line numbers by the patterns 
-``['line {{number}}', ':{{number}}:']``.
+Support for additional languages will be added in the near future.
 
 
 
@@ -830,11 +742,19 @@ References
           'threading' interface."
           http://docs.python.org/2/library/multiprocessing.html.
           
+.. [TL] TeX Live.  http://www.tug.org/texlive/.
+
+.. [MIK] MiKTeX. http://www.miktex.org/.
+          
 .. [WAR] Python Software Foundation. "``warnings`` — Warning control."
          http://docs.python.org/2/library/warnings.html
 
 .. [Pyg] The Pocoo Team. "Pygments: Python Syntax Highlighter."
          http://pygments.org/
+
+.. [MPL] J. D. Hunter. *Matplotlib: A 2D Graphics Environment*, in Computing 
+         in Science & Engineering, Vol. 9, No. 3. (2007), pp. 90-95.
+         http://matplotlib.org/
 
 .. [LST] C. Heinz and B. Moses.  "The Listings Package."
          http://www.ctan.org/tex-archive/macros/latex/contrib/listings/
