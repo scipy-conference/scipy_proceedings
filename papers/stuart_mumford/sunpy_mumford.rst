@@ -28,7 +28,7 @@ For example, SunPy has integration with the Virtual Solar Observatory (VSO), a s
 One of the major goals of SunPy is to provide an open and user-friendly, common programming and data analysis environmnent for solar physics. 
 In order to achieve this goal, SunPy provides data structures for representing the most common solar data types: images, lightcurves, and spectra. 
 SunPy utilizes many packages from the greater scientific Python community, including Numpy and SciPy for core data types and analysis routines, PyFits for opening image files, in FITS format, from major solar missions (e.g., SDO/AIA, SOHO/EIT, SOHO/LASCO, and STEREO) into WCS-aware map objects, and pandas for advanced time-series analysis tools for  data from missions such as GOES, SDO/EVE, and Proba2/LYRA, as well as support for radio spectra (e.g. e-Callisto). 
-Future releases will build upon and integrate with current work in the AstroPy library, to bring greater functionality to SunPy users.
+Future releases will build upon and integrate with current work in the Astropy project, to bring greater functionality to SunPy users.
 
 .. class:: keywords
 
@@ -46,17 +46,17 @@ In order to make meaningful advances in solar physics, it is important for the s
 
 Currently, most solar physics analysis is performed with a library of routines called SolarSoft [SSW]_. 
 SolarSoft is a set of integrated software libraries, databases, and system utilities which provide a common programming and data analysis environment for Solar Physics. 
-It is primarily an IDL-based system, although some instrument teams integrate executables written in other languages. 
+It is primarily an IDL(Interactive Data Language)-based system, although some instrument teams integrate executables written in other languages. 
 While this library is open-source and freely available, IDL is not. 
 In addition, contributing to the library is not open to the public. 
 One of SunPy's key aims is to provide a free and open source alternative to the solarsoft library.
 
 The scope of a solar physics library can be divided up into two main parts, data analysis and data processing.
-Data analysis is the scientific analysis of calibrated aligned data where as data processing is the process of calibrating and aliging the data. 
+Data analysis is the scientific analysis of calibrated aligned data whereas data processing is the process of calibrating and aliging the data. 
 SunPy's current scope is data analysis with minimal data processing.
 
 SunPy currently depends upon the core scientific packages like NumPy, SciPy and matplotlib. 
-As well as Pandas, suds, PYFITS / Astropy.io.fits and beautifulsoup4.
+As well as Pandas, suds, PYFITS / astropy.io.fits and beautifulsoup4.
 The latest release of SunPy is avalible in PyPI and can be installed thus:: 
     
     pip install sunpy
@@ -73,49 +73,34 @@ Lightcurve is a 1D data type for analysis of lightcurves or more generally flux 
 Map is a core 2D image data type with 3D extensions for CompositeMap, different 2D images at different wavelengths, and MapCube, for time series of 2D Maps. 
 Spectrum is a 1D flux agaisnt wavelength data type while Spectrogram is a 2D flux with wavelength and time type.
 
-While these different data types have clear applications to different types of observations, there is also clear inter-links between them, for example a 1 pixel slice of a MapCube should result in a Lightcurve and a 1 pixel slice of a composite map should be a Spectrum. 
+While these different data types have clear applications to different types of observations, there are also clear inter-links between them, for example a 1 pixel slice of a MapCube should result in a Lightcurve and a 1 pixel slice of a composite map should be a Spectrum. 
 While these types of interoperability are not yet implemented in SunPy it is a future goal.
-
-To this end, the 0.3 release of SunPy include a large scale refactoring of all the data types. 
-This is primarily motivated by the desire to move away from a structure where we inherit a numpy ndarray to the data type containing the data as an attribute. 
-This design is also mirrored by AstroPy's NDData object which has many similarities to function of our data types especially the Map.
 
 Map
 ===
 
 The Map object is designed for interpreting and processing the most common form of solar data, that of a two-dimensional image most often taken by a CCD camera. 
 Map data consists of a data array combined with meta-data. 
-Most often these data are provided in the form of FITS files but other file types also exists such as JPG2000. 
-SunPy makes use of the AstroPy's PyFITS library to read in FITS files. 
+Most often these data are provided in the form of FITS files but other file types also exists such as JPG2000.
 The metadata in most solar FITS files conform to a historic standard to describe the image such as observation time, wavelength of the observation, exposure time, etc. 
 In addition, standard header tags are used to provide the information necessary to transform the pixel coordinates to physical coordinates such as sky coordinates. 
 Newer missions such as STEREO or AIA on SDO make use of a more precise standard defined by Thompson [WCS]_. 
 Thompson also defined standard coordinate transformations to convert from observer-based coordinates to coordinates on the Sun. 
 Since the Sun is a gaseous body with no fixed points of reference and different parts of the Sun rotate at different rates, this is a particularly tricky problem. 
-SunPy maps through its WCS (World Coordinate System) library has implemented most of these coordinates systems and provides the functions to transform between them. 
+SunPy maps, through SunPy's WCS (World Coordinate System) library, has implemented most of these coordinates systems and provides the functions to transform between them. 
 SunPy maps also provides other conveinience functions such as plotting using matplotlib.
 
-2D image types are all derived from a GenericMap class that provides 2D specific calibration and coordinate methods. 
-This super class is designed to be subclassed by subclasses specific to instruments or detectors. 
-To instantiate the correct subclass of GenericMap a MapFactory was developed which is accecible to the user through a class named Map.
+There are many forms of image data that can be stored in a Map.
+The SunPy maps can handle 2D image data as well as 3D image data for both wavelength composite images and other series, such as time series data.
+All the 2D maps have a common parent which has been designed with the possibility of integrating with the Astropy library's NDData object.
 
-The 2D image data processed by Map comes from a variety of instruments with different header parameters and processing reqirements. 
-This is catered for in Map by defining "sources" for each instrument, which subclass GenericMap, the base 2D class. 
-These sources register with a MapFactory which then automatically determines the instrument of the data being read and returns the correct source subclass.
+The other main functionality for SunPy's maps, and other data types, is to provide transparent handaling of instrument specific code.
+This code can take the form of translation of non-standard or specific metadata or more complex calibration routines.
+These functions are handled primarily by the implementation of "sources" which are subclasses of the 2D map object, which then hold this specifc code.
+This leads to many different objects being in the map 'family', this is why a automated factory class `Map` has been developed to provide the user with a transparent interface for the creation of Maps. 
 
 The Map types provide methods for calibration to physical units as well as image manipulation routines such as rescale, rotate and visualisation routines. 
 Calibration routines for different instruments are generally placed inside SunPy's "instr" module and take Maps as arguments.
-
-The SunPy map object recognizes different types of map types and is based on a common super class called MapBase. 
-This object will likely inherit from AstroPy's NDData object in the next release of SunPy. 
-MapBase provides very limited functionality while 2D image types are all derived from a GenericMap class that provides mission-specific 2D specific calibration and coordinate methods. 
-To instantiate the correct subclass of GenericMap a MapFactory is used which is accesible to the user through a class named Map. 
-The 2D image data processed by Map comes from a variety of instruments with different header parameters and processing reqirements. 
-The map factory defines "sources" for each instrument, which subclasses GenericMap, the base 2D class. 
-These sources register with a MapFactory which then automatically determines the instrument of the data being read and returns the correct source subclass. 
-Other derived classes are GenericMap, meant to contain a single map. 
-Other map types are CompositeMap and MapCube. 
-These map classes are meant to hold many maps of a similar spatial region and a time series of maps respectively. 
 
 .. figure:: plotting_ex1.png
 
@@ -181,7 +166,7 @@ While the SolarSoft library is "open source" in terms of the code being freely a
 As well as transitioning the solar physics communtity to Python SunPy also aims to instill the prinicpals of open source development in the community.
 
 The scientifc python community is much more establised in other diciplines than solar physics. 
-SunPy is making use of existing scientific python projects with deeper integration with projects like AstroPy and scikit-image possible in the future. 
+SunPy is making use of existing scientific python projects with deeper integration with projects like Astropy and scikit-image possible in the future. 
 This collaboration is another strength that sets the scientific python community apart from other similar solutions.
 
 SunPy has benefitiated mainly from Summer of Code projects. 
