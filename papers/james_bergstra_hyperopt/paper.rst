@@ -56,10 +56,9 @@ For example, Support Vector Machines (SVMs) have hyperparameters that include th
 Decision trees are another machine learning algorithm with hyperparameters related to the heuristic for creating internal nodes, and the pruning strategy for the tree after (or during) training.
 Neural networks are a classic type of machine learning algorithm but they have so many hyperparameters that they have been considered too troublesome for inclusion in the sklearn library.
 
-Generally speaking, no matter what algorithm has been chosen (i.e. SVM, decision tree, neural network, or something else), hyperparameters have a significant
-effect on the success of the training algorithm.
+Hyperparameters generally have a significant effect on the success of machine learning algorithms.
 A poorly-configured SVM may perform no better than chance, while a well-configured one may achieve state-of-the-art prediction accuracy.
-To experts and non-experts alike, adjusting hyperparameters to optimize end-to-end performance can be a daunting task.
+To experts and non-experts alike, adjusting hyperparameters to optimize end-to-end performance can be a tedious and difficult task.
 Hyperparameters come in many varieties---continuous-valued ones with and without bounds, discrete ones that are either ordered or not, and conditional ones that do not even always apply
 (e.g., the parameters of an optional pre-processing stage).
 Because of this variety, conventional continuous and combinatorial optimization algorithms either do not directly apply,
