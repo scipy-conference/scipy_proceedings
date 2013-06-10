@@ -73,12 +73,13 @@ in such cases even random search has been shown to be competitive with domain ex
 Hyperopt [Hyperopt]_ provides algorithms and software infrastructure for carrying out hyperparameter optimization for machine learning algorithms.
 Hyperopt provides an optimization interface that distinguishes a *configuration space* and an *evaluation function* that assigns real-valued
 *loss values* to points within the configuration space.
-Unlike the fmin interface in SciPy or Matlab, Hyperopt's fmin interface requires users to specify the configuration space as a probability distribution.
+Unlike the standard minimization interfaces provided by scientific programming libraries,
+Hyperopt's ``fmin`` interface requires users to specify the configuration space as a probability distribution.
 Specifying a probability distribution rather than just bounds and hard constraints allows domain experts to encode more of their intuitions
 regarding which values are plausible for various hyperparameters.
-Like SciPy's new fmin interface, Hyperopt makes the SMBO algorithm itself an interchangeable component, so it is easy for a user to search a specific
-space using any of the provided SMBO implementations. Currently just two algorithms are provided -- random search and Tree-of-Parzen-Estimators (TPE) algorithm introduced in [BBBK11]_ --
-but more algorithms are planned: [SMAC]_, [ROAR]_, and Gaussian-process-based ones such as [Brochu10]_ and [SLA13]_.
+Like SciPy's ``optimize.minimize`` interface, Hyperopt makes the SMBO algorithm itself an interchangeable component so that any search algorithm can be applied to any search problem.
+Currently two algorithms are provided -- random search and Tree-of-Parzen-Estimators (TPE) algorithm introduced in [BBBK11]_ --
+and more algorithms are planned (including simulated annealing, [SMAC]_, and Gaussian-process-based [SLA13]_).
 
 We are motivated to make hyperparameter optimization more reliable for four reasons:
 
@@ -144,7 +145,7 @@ So for a trivial example, if we want to minimize a quadratic function :math:`q(x
 
 Although Hyperopt accepts objective functions that are more complex in both the arguments they accept and their return value,
 we will use this simple calling and return convention for the next few sections that introduce configuration spaces, optimization algorithms, and basic usage
-of the fmin interface.
+of the ``fmin`` interface.
 Later, as we explain how to use the Trials object to analyze search results, and how to search in parallel with a cluster,
 we will introduce different calling and return conventions.
 
@@ -367,7 +368,7 @@ You can use the routines in ``hyperopt.pyll.stochastic`` to sample values from t
 
 Note that the labels of the random configuration variables have no bearing on the sampled values themselves,
 the labels are only used internally by the optimization algorithms.
-Later when we look at the ``trials`` parameter to fmin we will see that the labels are used for analyzing
+Later when we look at the ``trials`` parameter to ``fmin`` we will see that the labels are used for analyzing
 search results too.
 For now though, simply note that the labels are not for the objective function.
 
@@ -473,7 +474,7 @@ corresponding to the options, so that random sampling chooses some of the option
         (0.2, {'use_var': 'y',
                'y': hp.uniform('y', 1, 3)})])
 
-Using the ``w_space_with_probs`` configuration space expresses to fmin that we believe the first case (using "x") is five times as likely to yield an optimal configuration that the second case.
+Using the ``w_space_with_probs`` configuration space expresses to ``fmin`` that we believe the first case (using "x") is five times as likely to yield an optimal configuration that the second case.
 If your objective function only uses a subset of the configuration space on any given evaluation, then you should
 use ``choice`` or ``pchoice`` hyperparameter variables to communicate that pattern of inter-dependencies to ``fmin``.
 
@@ -574,7 +575,7 @@ The ``fmin`` function returns the best result found during search, but can also
 be useful to analyze all of the trials evaluated during search.
 Pass a ``trials`` argument to ``fmin``  to retain access to all of the points
 accessed during search.
-In this case the call to fmin proceeds as before, but by passing in a trials object directly,
+In this case the call to ``fmin`` proceeds as before, but by passing in a trials object directly,
 we can inspect all of the return values that were calculated during the experiment.
 
 .. code-block:: python
@@ -588,7 +589,7 @@ we can inspect all of the return values that were calculated during the experime
 Information about all of the points evaluated during the search can be accessed
 via attributes of the ``trials`` object.
 The ``.trials`` attribute of a Trials object (``trials.trials`` here)
-is a list with an element for every function evaluation made by fmin.
+is a list with an element for every function evaluation made by ``fmin``.
 Each element is a dictionary with at least keys:
 
 ``'tid'``: value of type int
