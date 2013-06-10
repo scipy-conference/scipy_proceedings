@@ -340,7 +340,7 @@ to form deeper configuration structures:
         'extra literal string',
         hp.randint('r', 10) ]
 
-There are no requirement that list elements have some kind of similarity, each element can be any valid configuration expression.
+There is no requirement that list elements have some kind of similarity, each element can be any valid configuration expression.
 Note that Python values (e.g. numbers, strings, and objects) can be embedded in the configuration space.
 These values will be treated as constants from the point of view of the optimization algorithms, but they will be included
 in the configuration argument objects passed to the objective function.
