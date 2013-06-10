@@ -76,6 +76,10 @@ Spectrum is a 1D flux agaisnt wavelength data type while Spectrogram is a 2D flu
 While these different data types have clear applications to different types of observations, there are also clear inter-links between them, for example a 1 pixel slice of a MapCube should result in a Lightcurve and a 1 pixel slice of a composite map should be a Spectrum. 
 While these types of interoperability are not yet implemented in SunPy it is a future goal.
 
+To this end, the 0.3 release of SunPy include a large scale refactoring of all the data types. 
+This is primarily motivated by the desire to move away from a structure where we inherit a numpy ndarray to the data type containing the data as an attribute. 
+This design is also mirrored by AstroPy's NDData object which has many similarities to function of our data types especially the Map.
+
 Map
 ===
 
@@ -102,9 +106,40 @@ This leads to many different objects being in the map 'family', this is why a au
 The Map types provide methods for calibration to physical units as well as image manipulation routines such as rescale, rotate and visualisation routines. 
 Calibration routines for different instruments are generally placed inside SunPy's "instr" module and take Maps as arguments.
 
+The SunPy map object recognizes different types of map types and is based on a common super class called MapBase. 
+This object will likely inherit from AstroPy's NDData object in the next release of SunPy. 
+MapBase provides very limited functionality while 2D image types are all derived from a GenericMap class that provides mission-specific 2D specific calibration and coordinate methods.
+
+It is very simple to create and visualise a map in SunPy 0.3:
+
+.. code-block:: python
+    
+    import sunpy
+    mymap = sunpy.Map(sunpy.AIA_171_IMAGE)
+    mymap.peek()
+
+the output of this command is shown in Fig. :ref:`aiamap`
+
 .. figure:: plotting_ex1.png
 
-   Default visualisation of a AIAMap. :label:'aiamap'
+   Default visualisation of a AIAMap. :label:`aiamap`
+
+SunPy's visualisation routine are designed to interface as much as possible with matplotlib's pyplot package.
+It is therefore possible to create more complex plots using custom matplotlib commands.
+
+.. code-block:: python
+    
+    import matplotlib.pyplot as plt
+    import sunpy
+    
+    mymap = sunpy.Map(sunpy.AIA_171_IMAGE)
+    
+    fig = plt.figure()
+    im = mymap.plot()
+    plt.set_title("The Sun!")
+    plt.show()
+
+This would produce the same image as Fig. :ref:`aiamap` but with a custom title.
 
 LightCurve
 ==========
@@ -116,14 +151,7 @@ SunPy offers a Spectrogram object, with currently a specialization for e-Callist
 download data through an interface that only requires to specify location and time-range, linearizes the frequency axis and automatically downsamples large
 observations to allow them to be rendered on a normal computer screen and much more to help analyze spectrograms.
 
-The data can currently be read from Callisto FITS files (using PyFITS), but the system is designed in way that makes it easy to include new data-sources
-with potentially other data formats (such as LOFAR).
-
-.. Function, Scope and Organisation of
-
-.. * Map
-.. * Spectra
-.. * LightCurve
+The data can currently be read from Callisto FITS files (using PyFITS), but the system is designed in way that makes it easy to include new data-sources with potentially other data formats (such as LOFAR).
 
 Solar Data Retrieval and Access
 -------------------------------
@@ -140,15 +168,13 @@ SunPy has includes the capability to get data from VSO by used of that webservic
 -- this is made -- Florian/Joe should write about this...
 
 A new problem arise with the SDO mission. 
-The large size of the images (4 times larger than the previous mission), together with the fastest cadence of their cameras (~10 images per minute) makes challenging to use of the data as it used to be. 
+The large size of the images (4 times larger than the previous mission), together with the fastest cadence of their cameras (~10 images per minute) makes challenging to use of the data in the same manner as previous observations. 
 The `Heliophysics Event Knowledgebase <http://www.lmsal.com/hek/>`_ [HEK]_ was created to solve this overload of data. 
 The principle behind the HEK is to run a number of automated detection algorithms on the pipeline of the data that is downloaded from SDO in order to fill a database with information about the features and event observed in each image. 
 Thus, allowing the solar physicist to search for an event type or property and download just the portion and slices of the images needed for its further analysis. 
-In SunPy the implementation just covers the search and retrieve of the information related with the events and not the downloading of the observational data. 
-This allows, for example, to plot the feature contours on an image, study their properties and their evolution, etc.
-The implementation in SunPy of this tool was done based on the VSO tool but changing observatory and instruments by features and their properties
-
--- Jack and Florian are the best to describe how this was done.
+In SunPy the implementation just covers the search and retrevial of the information related with the events and not the downloading of the observational data. 
+This allows, for example, over plotting of the feature contours on an image, to study their properties and evolution, etc.
+The implementation in SunPy of this tool was done based on the already implemented VSO tool, so has a consitent interface.
 
 Solar physicist are also interested in the understanding of how solar events disturb the solar system. 
 Very high energy radiation produced during solar flares has effects on our ionosphere almost instantaneously, high-energy particles arriving few minutes later can permantly damage spacecraft, similarly big blob of plasma travelling at high velocities (~1000 km/s) produced as an effect of a coronal mass ejection can have multiple of effects on our technological dependent society. 
@@ -192,7 +218,7 @@ the user base and to attract new missions and instruments to adopt Python/SunPy 
 
 References
 ----------
-.. [VSO] F. Hill, et al. *The Virtual Solar Observatory—A Resource for International Heliophysics Research*,
+.. [VSO] F. Hill, et al. *The Virtual Solar Observatory A Resource for International Heliophysics Research*,
          Earth Moon and Planets, 104:315-330, April 2009. DOI: 10.1007/s11038-008-9274-7
          
 .. [HEK] N. Hurlburt, et al. *Heliophysics Event Knowledgebase for the Solar Dynamics Observatory (SDO) and Beyond*,
