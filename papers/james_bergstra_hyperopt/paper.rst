@@ -75,7 +75,7 @@ Unlike the fmin interface in SciPy or Matlab, Hyperopt's fmin interface requires
 Specifying a probability distribution rather than just bounds and hard constraints allows domain experts to encode more of their intuitions
 regarding which values are plausible for various hyperparameters.
 Like SciPy's new fmin interface, Hyperopt makes the SMBO algorithm itself an interchangeable component, so it is easy for a user to search a specific
-space using any of the provided SMBO implementations. Currently just two algorithms are provided --random search and Tree-of-Parzen-Estimators (TPE) algorithm introduced in [BBBK11]_ --
+space using any of the provided SMBO implementations. Currently just two algorithms are provided -- random search and Tree-of-Parzen-Estimators (TPE) algorithm introduced in [BBBK11]_ --
 but more algorithms are planned: [SMAC]_, [ROAR]_, and Gaussian-process-based ones such as [Brochu10]_ and [SLA13]_.
 
 We are motivated to make hyperparameter optimization more reliable for four reasons:
@@ -94,13 +94,13 @@ We are motivated to make hyperparameter optimization more reliable for four reas
 
 This paper describes the usage and architecture of Hyperopt, for both sequential and parallel optimization of expensive functions.
 Hyperopt can in principle be used for any SMBO problem, but our development and testing efforts have been limited so far to the optimization of
-hyperparameters for deep neural networks [hp-dbn]_ and convnet-based computer vision systems for object recognition [hp-convnet]_.
+hyperparameters for deep neural networks [hp-dbn]_ and convolutional neural networks for object recognition [hp-convnet]_.
 
 
 Getting Started with Hyperopt
 -----------------------------
 
-This section introduces basic usage of the ``hyperopt.fmin`` function, which is Hyperopt's basic optimization driver. 
+This section introduces basic usage of the ``hyperopt.fmin`` function, which is Hyperopt's basic optimization driver.
 We will look at how to write an objective function that ``fmin`` can optimize, and how to describe a configuration space that ``fmin`` can search.
 
 Hyperopt shoulders the responsibility of finding the best value of a scalar-valued,
