@@ -57,10 +57,7 @@ SunPy's current scope is data analysis with minimal data processing.
 
 SunPy currently depends upon the core scientific packages like NumPy, SciPy and matplotlib. 
 As well as Pandas, suds, PYFITS / astropy.io.fits and beautifulsoup4.
-The latest release of SunPy is avalible in PyPI and can be installed thus:: 
-    
-    pip install sunpy
-
+The latest release of SunPy is avalible in PyPI and can be installed in the usual manner.
 
 SunPy Data Types
 ----------------
@@ -92,23 +89,16 @@ Newer missions such as STEREO or AIA on SDO make use of a more precise standard 
 Thompson also defined standard coordinate transformations to convert from observer-based coordinates to coordinates on the Sun. 
 Since the Sun is a gaseous body with no fixed points of reference and different parts of the Sun rotate at different rates, this is a particularly tricky problem. 
 SunPy maps, through SunPy's WCS (World Coordinate System) library, has implemented most of these coordinates systems and provides the functions to transform between them. 
-SunPy maps also provides other conveinience functions such as plotting using matplotlib.
+SunPy maps also provide other core functionality such as rescale, rotate and visualisation routines and conveinience wrappers such as for plotting using matplotlib.
 
 There are many forms of image data that can be stored in a Map.
 The SunPy maps can handle 2D image data as well as 3D image data for both wavelength composite images and other series, such as time series data.
-All the 2D maps have a common parent which has been designed with the possibility of integrating with the Astropy library's NDData object.
+All the 2D maps have a common parent which has been designed with the possibility of integrating with the Astropy library's NDdata object.
 
 The other main functionality for SunPy's maps, and other data types, is to provide transparent handaling of instrument specific code.
 This code can take the form of translation of non-standard or specific metadata or more complex calibration routines.
 These functions are handled primarily by the implementation of "sources" which are subclasses of the 2D map object, which then hold this specifc code.
 This leads to many different objects being in the map 'family', this is why a automated factory class `Map` has been developed to provide the user with a transparent interface for the creation of Maps. 
-
-The Map types provide methods for calibration to physical units as well as image manipulation routines such as rescale, rotate and visualisation routines. 
-Calibration routines for different instruments are generally placed inside SunPy's "instr" module and take Maps as arguments.
-
-The SunPy map object recognizes different types of map types and is based on a common super class called MapBase. 
-This object will likely inherit from AstroPy's NDData object in the next release of SunPy. 
-MapBase provides very limited functionality while 2D image types are all derived from a GenericMap class that provides mission-specific 2D specific calibration and coordinate methods.
 
 It is very simple to create and visualise a map in SunPy 0.3:
 
@@ -226,7 +216,6 @@ References
          
 .. [HELIO] D. Pérez-Suárez et al. *Studying Sun–Planet Connections Using the Heliophysics Integrated Observatory (HELIO)*
            Solar Physics, 280:603-621, October 2012. DOI: 10.1007/s11207-012-0110-x
-	
 
 .. [WCS] W. T. Thompson, *Coordinate systems for solar image data*, A&A 449, 791–803 (2006)
 
