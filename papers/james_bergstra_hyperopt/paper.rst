@@ -58,7 +58,7 @@ Generally speaking, no matter what algorithm has been chosen (i.e. SVM, decision
 effect on the success of the training algorithm.
 A poorly-configured SVM may perform no better than chance, while a well-configured one may achieve state-of-the-art prediction accuracy.
 To experts and non-experts alike, adjusting hyperparameters to optimize end-to-end performance can be a daunting task.
-Hyperparameters come in many varieties--continuous-valued ones with and without bounds, discrete ones that are either ordered or not, and conditional ones that do not even always apply
+Hyperparameters come in many varieties---continuous-valued ones with and without bounds, discrete ones that are either ordered or not, and conditional ones that do not even always apply
 (e.g., the parameters of an optional pre-processing stage).
 Because of this variety, conventional continuous and combinatorial optimization algorithms either do not directly apply,
 or else operate without leveraging valuable structure in the configuration space.
