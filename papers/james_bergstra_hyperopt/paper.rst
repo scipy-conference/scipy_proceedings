@@ -17,17 +17,10 @@ Hyperopt: A Python Library for Optimizing the Hyperparameters of Machine Learnin
 
 .. class:: abstract
 
-    Sequential model-based optimization (also known as Bayesian optimization)
-    is one of the most efficient
-    methods (per function evaluation) of function minimization.
-    This efficiency makes it appropriate for optimizing the hyperparameters
-    of machine learning algorithms that are slow to train.
-    The Hyperopt library provides algorithms and parallelization
-    infrastructure for performing hyperparameter optimization (model
-    selection) in Python.
-    This paper describes basic and advanced usage of the Hyperopt library,
-    introduces the high-level design, and lists some of the ongoing work
-    related to the project.
+    Sequential model-based optimization (also known as Bayesian optimization) is one of the most efficient methods (per function evaluation) of function minimization.
+    This efficiency makes it appropriate for optimizing the hyperparameters of machine learning algorithms that are slow to train.
+    The Hyperopt library provides algorithms and parallelization infrastructure for performing hyperparameter optimization (model selection) in Python.
+    This paper describes basic and advanced usage of the Hyperopt library, introduces the high-level design, and lists some of the ongoing work related to the project.
 
 .. class:: keywords
 
@@ -81,7 +74,7 @@ Hyperopt provides an optimization interface that distinguishes a *configuration 
 Unlike the fmin interface in SciPy or Matlab, Hyperopt's fmin interface requires users to specify the configuration space as a probability distribution.
 Specifying a probability distribution rather than just bounds and hard constraints allows domain experts to encode more of their intuitions
 regarding which values are plausible for various hyperparameters.
-Like SciPy's new fmin interface, hyperopt makes the SMBO algorithm itself an interchangeable component, so it is easy for a user to search a specific
+Like SciPy's new fmin interface, Hyperopt makes the SMBO algorithm itself an interchangeable component, so it is easy for a user to search a specific
 space using any of the provided SMBO implementations. Currently just two algorithms are provided --random search and Tree-of-Parzen-Estimators (TPE) algorithm introduced in [BBBK11]_ --
 but more algorithms are planned: [SMAC]_, [ROAR]_, and Gaussian-process-based ones such as [Brochu10]_ and [SLA13]_.
 
@@ -107,7 +100,7 @@ hyperparameters for deep neural networks [hp-dbn]_ and convnet-based computer vi
 Getting Started with Hyperopt
 -----------------------------
 
-This section introduces basic usage of the ``hyperopt.fmin`` function, which is hyperopt's basic optimization driver. 
+This section introduces basic usage of the ``hyperopt.fmin`` function, which is Hyperopt's basic optimization driver. 
 We will look at how to write an objective function that ``fmin`` can optimize, and how to describe a configuration space that ``fmin`` can search.
 
 Hyperopt shoulders the responsibility of finding the best value of a scalar-valued,
@@ -116,9 +109,9 @@ Whereas most optimization packages assume that these inputs are drawn from a vec
 Hyperopt encourages you, the user, to describe your configuration space in more detail.
 Hyperopt is typically aimed at very difficult search settings, especially ones with many hyperparameters and a small budget for function evaluations.
 By providing more information about where your function is defined, and where you think the best values are,
-you allow algorithms in hyperopt to search more efficiently.
+you allow algorithms in Hyperopt to search more efficiently.
 
-The way to use hyperopt is to describe:
+The way to use Hyperopt is to describe:
 
 * the objective function to minimize
 * the space over which to search
@@ -147,7 +140,7 @@ So for a trivial example, if we want to minimize a quadratic function :math:`q(x
         x, y = args
         return x ** 2 + y ** 2
 
-Although hyperopt accepts objective functions that are more complex in both the arguments they accept and their return value,
+Although Hyperopt accepts objective functions that are more complex in both the arguments they accept and their return value,
 we will use this simple calling and return convention for the next few sections that introduce configuration spaces, optimization algorithms, and basic usage
 of the fmin interface.
 Later, as we explain how to use the Trials object to analyze search results, and how to search in parallel with a cluster,
@@ -156,7 +149,7 @@ we will introduce different calling and return conventions.
 Step 2: define a configuration space
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A *configuration space* object describes the domain over which hyperopt is allowed to search.
+A *configuration space* object describes the domain over which Hyperopt is allowed to search.
 If we want to search :math:`q` over values of :math:`x \in [0, 1]`, and values of :math:`y \in {\mathbb R}` ,
 then we can write our search space as:
 
@@ -167,7 +160,7 @@ then we can write our search space as:
     space = [hp.uniform('x', 0, 1), hp.normal('y', 0, 1)]
 
 Note that for both :math:`x` and :math:`y` we have specified not only the hard bound constraints, but also
-we have given hyperopt an idea of what range of values for :math:`y` to prioritize. 
+we have given Hyperopt an idea of what range of values for :math:`y` to prioritize. 
 
 
 Step 3: choose a search algorithm
@@ -208,7 +201,7 @@ but if you wish to change them you can do it like this:
     # =>  XXX
 
 
-In a nutshell, these are the steps to using hyperopt.
+In a nutshell, these are the steps to using Hyperopt.
 Implement an objective function that maps configuration points to a real-valued loss value,
 define a configuration space of valid configuration points,
 and then call ``fmin`` to search the space to optimize the objective function.
@@ -253,7 +246,7 @@ A search space consists of nested function expressions.
 The stochastic expressions are the hyperparameters.
 (Random search is implemented by simply sampling these stochastic expressions.)
 
-The stochastic expressions currently recognized by hyperopt's optimization algorithms are in the ``hyperopt.hp`` module.
+The stochastic expressions currently recognized by Hyperopt's optimization algorithms are in the ``hyperopt.hp`` module.
 The simplest kind of search spaces are ones that are not nested at all.
 For example, to optimize the simple function ``q`` (defined above) on the interval :math:`[0, 1]`, we could type
 ``fmin(q, space=hp.uniform('a', 0, 1))``.
@@ -505,7 +498,7 @@ that did not depend on the "use_var" value, we could do it like this:
          'c': c}])
 
 
-Optimization algorithms in hyperopt would see that ``c`` is used regardless of the outcome of the ``choice`` value,
+Optimization algorithms in Hyperopt would see that ``c`` is used regardless of the outcome of the ``choice`` value,
 so they would correctly associate ``c`` with all evaluations of the objective function. 
 
 
@@ -648,12 +641,12 @@ it might look like:
 
 An objective function can use just about any keys to store auxiliary
 information, but there are a few special keys
-that are interpreted by hyperopt routines:
+that are interpreted by Hyperopt routines:
 
 ``'loss_variance'``: type float
     variance in a stochastic objective function
 ``'true_loss'``: type float
-    if you pre-compute a test error for a validation error loss, store it here so that hyperopt plotting routines can find it.
+    if you pre-compute a test error for a validation error loss, store it here so that Hyperopt plotting routines can find it.
 ``'true_loss_variance'``: type float 
     variance in test error estimator
 ``'attachments'``: type dict
@@ -733,7 +726,7 @@ This mechanism makes it possible for objective functions to
 * to communicate with concurrent processes, and
 * even to enqueue new configuration points.
 
-This is an advanced usage of hyperopt, but it is supported via syntax like the
+This is an advanced usage of Hyperopt, but it is supported via syntax like the
 following:
 
 .. code-block:: python
@@ -793,7 +786,7 @@ problems.
 
 Hyperopt was developed to support research into deep learning [BBBK11]_
 and computer vision [BYC13]_. Corresponding projects [hp-dbn]_ and
-[hp-convnet]_ have been made public on Github to illustrate how hyperopt can
+[hp-convnet]_ have been made public on Github to illustrate how Hyperopt can
 be used to define and optimize large-scale hyperparameter optimization
 problems.
 Currently, Hristijan Bogoevski is investigating Hyperopt as a tool for
