@@ -821,7 +821,9 @@ Acknowledgements
 Thanks to Nicolas Pinto for some influential design advice,
 Hristijan Bogoevski for ongoing work on an sklearn driver, and to many users
 who have contributed feedback.
-This project has been supported by NSF grant XXX, and the NSERC Banting Fellowship program.
+This project has been supported by the Rowland Institute of Harvard,
+the National Science Foundation (IIS 0963668),
+and the NSERC Banting Fellowship program.
 
 References
 ----------
