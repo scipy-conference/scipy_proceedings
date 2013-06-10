@@ -220,7 +220,7 @@ Configuration Spaces
 
 Part of what makes Hyperopt a good fit for optimizing machine learning hyperparameters is that
 it can optimize over general Python objects, not just e.g. vector spaces.
-Consider the simple function ``w`` below, which optimizes over dictionaries with "type" and either "x" and "y" keys:
+Consider the simple function ``w`` below, which optimizes over dictionaries with ``'type'`` and either ``'x'`` and ``'y'`` keys:
 
 .. code-block:: python
 
@@ -411,7 +411,7 @@ You can add new functions to the ``scope`` object with the ``define`` decorator:
     def foo(x):
         return str(x) * 3
 
-    # -- this will print "000"; foo is called as usual.
+    # -- This will print "000"; foo is called as usual.
     print foo(0)
 
     expr_space = {
@@ -420,7 +420,7 @@ You can add new functions to the ``scope`` object with the ``define`` decorator:
         'c': scope.foo(hp.randint('cbase', 5)),
         }
 
-    # -- this will draw a sample by running foo(x)
+    # -- This will draw a sample by running foo(x)
     #    on a random integer x.
     print sample(expr_space)
 
@@ -449,15 +449,15 @@ We can use ``choice`` to define an appropriate configuration space for the ``w``
     print sample(w_space)
     # ==> {'use_var': 'y', 'y': 2.63}
 
-Recall that in ``w``, the "y" key of the configuration is not used when the "use_var" value is "x".
-Similarly, the "x" key of the configuration is not used when the "use_var" value is "y".
-The use of ``choice`` in the ``w_space`` search space reflects the conditional usage of keys "x" and "y" in the ``w`` function.
+Recall that in ``w``, the ``'y'`` key of the configuration is not used when the ``'use_var'`` value is ``'x'``.
+Similarly, the ``'x'`` key of the configuration is not used when the ``'use_var'`` value is ``'y'``.
+The use of ``choice`` in the ``w_space`` search space reflects the conditional usage of keys ``'x'`` and ``'y'`` in the ``w`` function.
 We have used the ``choice`` variable to define a space that never has more variables than is necessary.
 
 The choice variable here plays more than a cosmetic role; it can make optimization much more efficient.
 In terms of ``w`` and ``w_space``, the choice node prevents ``y`` for being *blamed* (in terms of the logic of the search algorithm)
-for poor performance when "use_var" is "x",
-or *credited* for good performance when "use_var" is "x".
+for poor performance when ``'use_var'`` is ``'x'``,
+or *credited* for good performance when ``'use_var'`` is ``'x'``.
 The choice variable creates a special node in the expression graph that prevents the conditionally unnecessary part of the
 expression graph from being evaluated at all.
 During optimization, similar special-case logic prevents any association between the return value of the objective function
@@ -474,7 +474,7 @@ corresponding to the options, so that random sampling chooses some of the option
         (0.2, {'use_var': 'y',
                'y': hp.uniform('y', 1, 3)})])
 
-Using the ``w_space_with_probs`` configuration space expresses to ``fmin`` that we believe the first case (using "x") is five times as likely to yield an optimal configuration that the second case.
+Using the ``w_space_with_probs`` configuration space expresses to ``fmin`` that we believe the first case (using ``'x'``) is five times as likely to yield an optimal configuration that the second case.
 If your objective function only uses a subset of the configuration space on any given evaluation, then you should
 use ``choice`` or ``pchoice`` hyperparameter variables to communicate that pattern of inter-dependencies to ``fmin``.
 
@@ -486,7 +486,7 @@ When using choice variables to divide a configuration space into many mutually e
 it can be natural to re-use some configuration variables across a few of those possible branches.
 Hyperopt's configuration space supports this in a natural way, by allowing the objects to appear in multiple places within
 a nested configuration expression. For example, if we wanted to add a ``randint`` choice to the returned dictionary
-that did not depend on the "use_var" value, we could do it like this:
+that did not depend on the ``'use_var'`` value, we could do it like this:
 
 .. code-block:: python
 
@@ -548,7 +548,7 @@ criterion),
 and a specification of our prior preference among the four possible classifiers.
 At the top level we have a ``pchoice`` between four sklearn algorithms:
 Naive Bayes (NB), a Support Vector Machine (SVM) using a linear kernel,
-an SVM using an "radial basis function" (rbf) kernel, and a decision tree
+an SVM using a Radial Basis Function (``'rbf'``) kernel, and a decision tree
 (Dtree).
 The result of evaluating the configuration space is actually a sklearn
 estimator corresponding to one of the three possible branches of the top-level
@@ -593,9 +593,9 @@ is a list with an element for every function evaluation made by ``fmin``.
 Each element is a dictionary with at least keys:
 
 ``'tid'``: value of type int
-    "trial identifier" of the trial within the search
+    trial identifier of the trial within the search
 ``'results'``: value of type dict
-    dict with "loss", "status", and other information returned by the objective function
+    dict with ``'loss'``, ``'status'``, and other information returned by the objective function
     (see below for details)
 ``'misc'`` value of dict with keys ``'idxs'`` and ``'vals'``
     compressed representation of hyperparameter values
@@ -614,7 +614,7 @@ trial in question turns out to be the best-performing one.
 
 Hyperopt supports saving extra information alongside the trial loss.
 To use this mechanism, an objective function must return a dictionary instead of a float.
-The returned dictionary must have keys "loss" and "status".
+The returned dictionary must have keys ``'loss'`` and ``'status'``.
 The status should be either ``STATUS_OK`` or ``STATUS_FAIL`` depending on whether the loss
 was computed successfully or not.
 If the status is ``STATUS_OK``, then the loss must be the objective function value for
@@ -699,7 +699,7 @@ configurations and waits until they are evaluated.
 If no workers are running, ``fmin`` will block after enqueing one trial.
 To run ``fmin`` with ``MongoTrials`` requires that you:
 
-1. Ensure that mongod is running on the specified "host" and "port",
+1. Ensure that mongod is running on the specified host and port,
 #. Choose a database name to use for a *particular fmin call*, and
 #. Start one or more `hyperopt-mongo-worker` processes.
 
