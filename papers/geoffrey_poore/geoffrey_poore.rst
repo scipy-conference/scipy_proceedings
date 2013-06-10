@@ -50,12 +50,14 @@ since 2002 [Leisch]_. The knitr package provides similar but more
 powerful functionality, and has become increasingly popular since its 
 release in 2011 [Xie]_. This approach to reproducible documents has 
 roots in literate programming, through noweb [Ramsey]_ ultimately back 
-to Knuth's original concept [Knuth]_. The writing process for such a 
-document can be significantly different from the unreproducible case, 
-since code and document are present in the same file and may be tightly 
-integrated. For example, it is possible to create dynamic reports with 
-Sweave and knitr that automatically accomodate whatever data is 
-provided. 
+to Knuth's original concept [Knuth]_.  Knuth suggested that programs be
+written as literature, interweaving code and documentation in a form geared 
+toward human readers.  Similarly, a reproducible document with embedded 
+code integrates code and document into a unified whole.  The writing 
+process for such a document can be significantly different from the 
+unreproducible case because of the tight integration that is possible.  
+For example, it is possible to create dynamic reports with Sweave and 
+knitr that automatically accomodate whatever data is provided. 
 
 These two definitions of a reproducible document need not be mutually 
 exclusive. They might be thought of as two ends of a continuum, with a 
@@ -226,15 +228,16 @@ Tracking dependencies and created files
 Code may need to be re-executed not just based on its own modification
 or exit status, but also based on external dependencies.
 
-PythonTeX provides a utilities class. An instance of this class 
-called ``pytex`` is automatically created in each session. The utilities 
-class provides an ``add_dependencies()`` method that allows dependencies 
-to be specified and tracked.  Whenever PythonTeX runs, all dependencies 
-are checked for modification, and all code with changed dependencies is
-re-executed (unless ``rerun=never``). By default, modification is detected 
-via modification time (``os.path.getmtime()``) [OSPATH]_, since this is 
-fast even for large data sets. File hashing may be used instead via the 
-package option ``hashdependencies``.
+PythonTeX includes a Python class that provides several important 
+utilities. An instance of this class called ``pytex`` is automatically 
+created in each session. The utilities class provides an 
+``add_dependencies()`` method that allows dependencies to be specified 
+and tracked. Whenever PythonTeX runs, all dependencies are checked for 
+modification, and all code with changed dependencies is re-executed 
+(unless ``rerun=never``). By default, modification is detected via 
+modification time (``os.path.getmtime()``) [OSPATH]_, since this is fast 
+even for large data sets. File hashing may be used instead via the 
+package option ``hashdependencies``. 
 
 The PythonTeX utilities class also provides an ``add_created()`` method.
 This allows created files to be deleted automatically when the code that 
@@ -347,15 +350,18 @@ especially noteworthy.
 When Python is not enough
 =========================
 
-While PythonTeX is focused on providing Python-LaTeX integration, most
-of the LaTeX interface is language-agnostic.  In many cases, adding support 
-for an additional language is as simple as providing two templates and
-creating a new instance of a class.  For example, support for Ruby has 
-just been added to PythonTeX.  This required two Ruby templates and a few 
-lines of Python—only about 70 lines of code total.  The format of Ruby 
-errors, warnings, and associated line numbers was specified as part of this 
-process, so Ruby exceptions can be synchronized with the document, just like
-Python exceptions.
+While PythonTeX is focused on providing Python-LaTeX integration, most 
+of the LaTeX interface is language-agnostic. In many cases, adding 
+support for an additional language is as simple as providing two 
+templates and creating a new instance of a Python class that defines 
+languages. For example, support for Ruby has just been added to 
+PythonTeX. This required two Ruby templates and a few lines of 
+Python—only about 70 lines of code total. Most of the Ruby code simply 
+implements a Ruby version of the PythonTeX utilities class, which manages 
+dependencies, created files, and LaTeX integration. Part of this process 
+also involved specifying the format of Ruby errors, warnings, and 
+associated line numbers, so that Ruby exceptions can be synchronized 
+with the document. 
 
 Support for additional languages will be added in the near future.
 
@@ -450,8 +456,9 @@ is relatively small (daily values for one year) and in a simple format
     \subsection*{Load the data}
     
     \begin{pyblock}[calc]
-    f = open('../austin_tmax.csv')
-    pytex.add_dependencies('austin_tmax.csv')
+    data_file = '../austin_tmax.csv'
+    f = open(data_file)
+    pytex.add_dependencies(data_file)
     raw_data = f.readlines()
     f.close()
     \end{pyblock}
@@ -566,10 +573,10 @@ plot to the document’s fonts.
     \includegraphics[width=3in]{ave_tmax.pdf}
 
 
-Final analysis
-==============
+Summary of results
+==================
 
-It might be nice to add some final analysis. In this case, I simply add
+It might be nice to add a summary of the results. In this case, I simply add
 a sentence giving the maximum monthly average temperature and the month
 in which it occurred. Notice the way in which Python content is
 interwoven with the text. If a dataset for a different year were used,
@@ -577,9 +584,9 @@ the sentence would update automatically.
 
 .. code-block:: python
 
-    \subsection*{Final analysis}
+    \subsection*{Summary}
     
-    \begin{pyblock}[analysis]
+    \begin{pyblock}[summary]
     f = open('ave_tmax.pkl', 'rb')
     pytex.add_dependencies('ave_tmax.pkl')
     ave_tmax = pickle.load(f)
@@ -590,8 +597,8 @@ the sentence would update automatically.
     \end{pyblock}
 
     The largest monthly average high was 
-    \py[analysis]{round(tmax, 1)} degrees 
-    Celsius, in \py[analysis]{tmax_month}.
+    \py[summary]{round(tmax, 1)} degrees 
+    Celsius, in \py[summary]{tmax_month}.
 
     \end{document}
 
@@ -601,7 +608,7 @@ Output and conversion
 
 The resulting document is shown in Figure :ref:`case-study`. The figure
 from the document is shown in Figure :ref:`case-study-fig`, and the
-sentence at the end of the document is quoted below:
+summary sentence at the end of the document is quoted below:
 
     The largest monthly average high was 36.3 degrees Celsius, in
     August.
@@ -662,7 +669,9 @@ version of ``casestudy.tex``, including syntax highlighting (Figure
 :ref:`case-study-html`).
 
 .. figure:: casestudyhtml.png
-
+   :scale: 100 %
+   :align: center
+   
    A screenshot of part of the HTML version of the case study document.
    :label:`case-study-html`
 
@@ -674,10 +683,10 @@ Conclusion
 PythonTeX provides an efficient, user-friendly system for creating 
 reproducible documents with Python and LaTeX.  Since code output is
 cached and user-defined sessions run in parallel, document compile times
-are minimized.  Since exceptions are synchronized with the document's line
-numbering, debugging is simple.  Since PythonTeX documents can be converted
-to plain LaTeX documents, the system is suitable for writing journal papers
-and documents that must be converted to other formats.
+are minimized.  Exceptions are synchronized with the document's line
+numbering so that debugging is simple.  Because PythonTeX documents can be
+converted to plain LaTeX documents, the system is suitable for writing 
+journal papers and documents that must be converted to other formats.
 
 Most of the key elements planned for PythonTeX are in place, but several
 significant enhancements are planned for the future.  Support for
