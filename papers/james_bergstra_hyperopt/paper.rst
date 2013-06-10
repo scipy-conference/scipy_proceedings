@@ -187,8 +187,8 @@ To use random search to our search problem we can type:
 
 
 The search algorithms are global functions which may generally have extra keyword arguments
-that control their operation beyond the ones used by ``fmin`` (they represent hyper-hyper-parameters!).
-The intention is that these hyper-hyper-parameters are set to default that work for a range of configuration problems,
+that control their operation beyond the ones used by ``fmin`` (they represent hyper-hyperparameters!).
+The intention is that these hyper-hyperparameters are set to default that work for a range of configuration problems,
 but if you wish to change them you can do it like this:
 
 .. code-block:: python
