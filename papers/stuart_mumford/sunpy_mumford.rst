@@ -56,9 +56,11 @@ Data analysis is the scientific analysis of calibrated aligned data where as dat
 SunPy's current scope is data analysis with minimal data processing.
 
 SunPy currently depends upon the core scientific packages like NumPy, SciPy and matplotlib. 
-As well as Pandas, suds, PYFITS / Astropy.io.fits and beautifulsoup4.
-The latest release of SunPy is avalible in PyPI and can be installed thus:: 
-    
+As well as Pandas, suds, PyFITS / Astropy.io.fits and beautifulsoup4.
+The latest release of SunPy is avalible in PyPI and can be installed thus:
+
+.. code-block:: bash
+
     pip install sunpy
 
 
@@ -108,18 +110,38 @@ Calibration routines for different instruments are generally placed inside SunPy
 
 The SunPy map object recognizes different types of map types and is based on a common super class called MapBase. 
 This object will likely inherit from AstroPy's NDData object in the next release of SunPy. 
-MapBase provides very limited functionality while 2D image types are all derived from a GenericMap class that provides mission-specific 2D specific calibration and coordinate methods. 
-To instantiate the correct subclass of GenericMap a MapFactory is used which is accesible to the user through a class named Map. 
-The 2D image data processed by Map comes from a variety of instruments with different header parameters and processing reqirements. 
-The map factory defines "sources" for each instrument, which subclasses GenericMap, the base 2D class. 
-These sources register with a MapFactory which then automatically determines the instrument of the data being read and returns the correct source subclass. 
-Other derived classes are GenericMap, meant to contain a single map. 
-Other map types are CompositeMap and MapCube. 
-These map classes are meant to hold many maps of a similar spatial region and a time series of maps respectively. 
+MapBase provides very limited functionality while 2D image types are all derived from a GenericMap class that provides mission-specific 2D specific calibration and coordinate methods.
+
+It is very simple to create and visualise a map in SunPy 0.3:
+
+.. code-block:: python
+    
+    import sunpy
+    mymap = sunpy.Map(sunpy.AIA_171_IMAGE)
+    mymap.peek()
+
+the output of this command is shown in Fig. :ref:`aiamap`
 
 .. figure:: plotting_ex1.png
 
-   Default visualisation of a AIAMap. :label:'aiamap'
+   Default visualisation of a AIAMap. :label:`aiamap`
+
+SunPy's visualisation routine are designed to interface as much as possible with matplotlib's pyplot package.
+It is therefore possible to create more complex plots using custom matplotlib commands.
+
+.. code-block:: python
+    
+    import matplotlib.pyplot as plt
+    import sunpy
+    
+    mymap = sunpy.Map(sunpy.AIA_171_IMAGE)
+    
+    fig = plt.figure()
+    im = mymap.plot()
+    plt.set_title("The Sun!")
+    plt.show()
+
+This would produce the same image as Fig. :ref:`aiamap` but with a custom title.
 
 LightCurve
 ==========

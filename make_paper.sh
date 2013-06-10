@@ -7,7 +7,7 @@ if [[ ! -d $DIR ]]; then
   exit -1
 fi
 
-python publisher/build_paper.py $DIR
+python2 publisher/build_paper.py $DIR
 if [ "$?" -ne "0" ]; then
     echo "Error building paper $DIR. Aborting."
     exit 1
