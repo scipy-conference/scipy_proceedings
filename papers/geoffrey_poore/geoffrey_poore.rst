@@ -108,7 +108,7 @@ extended to support additional languages.
 
 
 
-PythonTeX overview
+PythonTeX Overview
 ------------------
 
 Using the PythonTeX package is as simple as adding the command
@@ -133,7 +133,7 @@ MiKTeX [MIK]_, and should work with other distributions.
 
 
 
-Commands and environments
+Commands and Environments
 =========================
 
 PythonTeX provides a number of commands and environments. These can be
@@ -222,7 +222,7 @@ package option ``rerun``, which accepts five values:
 -  ``always``: Code is always executed.
 
 
-Tracking dependencies and created files
+Tracking Dependencies and Created Files
 =======================================
 
 Code may need to be re-executed not just based on its own modification
@@ -259,7 +259,7 @@ based on whether it is opened for reading (dependency) or writing (created).
 
 
 
-Synchronizing exceptions
+Synchronizing Exceptions
 ========================
 
 When ``pythontex.py`` runs, it prints an annotated version of the ``stderr``
@@ -314,7 +314,7 @@ the user's code to be tracked back to a single command or environment
 in the document.
 
 
-Converting PythonTeX documents
+Converting PythonTeX Documents
 ==============================
 
 One disadvantage of a reproducible document created with PythonTeX is that it
@@ -347,7 +347,7 @@ especially noteworthy.
 
 
 
-When Python is not enough
+When Python Is Not Enough
 =========================
 
 While PythonTeX is focused on providing Python-LaTeX integration, most 
@@ -367,7 +367,7 @@ Support for additional languages will be added in the near future.
 
 
 
-Case study: Average temperatures in Austin, TX
+Case Study: Average Temperatures in Austin, TX
 ----------------------------------------------
 
 The remainder of this paper illustrates the application of PythonTeX through
@@ -379,7 +379,7 @@ performance may be optimized and how the final document may be converted
 to other formats.
 
 
-Data set
+Data Set
 ========
 
 Daily high temperatures for 2012 at the Austin-Bergstrom International
@@ -404,7 +404,7 @@ Since the temperatures are in tenths of a degree Celsius, the 172 in the
 second line is 17.2 degrees Celsius.
 
 
-Document setup
+Document Setup
 ==============
 
 I will use the same IEEEtran document class used by the SciPy
@@ -443,7 +443,7 @@ sessions for the ``py`` family of commands and environments (``pycode``,
     \maketitle
 
 
-Loading data and tracking dependencies
+Loading Data and Tracking Dependencies
 ======================================
 
 The first step in the analysis is loading the data. Since the data set
@@ -491,7 +491,7 @@ simple example, I add the dependency manually via
 ``open()`` that tracks dependencies and created files automatically.
 
 
-Data processing
+Data Processing
 ===============
 
 Now that the data are loaded, they may be processed.  The first row of data is 
@@ -573,7 +573,7 @@ plot to the document’s fonts.
     \includegraphics[width=3in]{ave_tmax.pdf}
 
 
-Summary of results
+Summary of Results
 ==================
 
 It might be nice to add a summary of the results. In this case, I simply add
@@ -603,24 +603,46 @@ the sentence would update automatically.
     \end{document}
 
 
-Output and conversion
+Output and Conversion
 =====================
 
-The resulting document is shown in Figure :ref:`case-study`. The figure
-from the document is shown in Figure :ref:`case-study-fig`, and the
-summary sentence at the end of the document is quoted below:
+I compiled the document to PDF by running ``pdflatex``, then 
+``pythontex.py``, and finally ``pdflatex`` on the file.  The output is shown 
+in Figure :ref:`case-study`.
 
-    The largest monthly average high was 36.3 degrees Celsius, in
-    August.
+To compile this particular document, I had to run ``pythontex.py`` twice in a 
+row. The first run created the saved data in ``ave_tmax.pkl``. The 
+second run gave the ``plot`` and ``summary`` sessions access to the 
+saved data. Since all sessions are executed in parallel, there is no 
+guarantee that the data file will be created before the ``plot`` and ``block`` 
+sessions try to access it. If the data file does not exist, these sessions 
+produce errors during the first run and are automatically re-executed during 
+the second run. 
 
-.. figure:: casestudy.pdf
 
-   The temperature case study document. :label:`case-study`
-
-
-.. figure:: avetmax.pdf
+.. latex::
+   :usepackage: caption,float,graphicx
    
-   The temperature case study document. :label:`case-study-fig`
+   % If no figures are created using ReST, then some packages needed for
+   % figures are not included in the .tex output.  I'm adding those back
+   % here.  The latex directive doesn't support package options.
+   % The commands below do the equivalent of [font={small,it},labelfont=bf]
+   % for the caption package, following the caption documentation.  
+   % These commands set the caption font options.
+   
+   \renewcommand{\captionfont}{\itshape}
+   \renewcommand{\captionsize}{\small}
+   \renewcommand{\captionlabelfont}{\bfseries}
+
+   
+.. latex::
+   
+   \begin{figure*}
+   \centering
+   \fbox{\includegraphics[scale=0.8]{casestudy.pdf}}
+   \caption{The PDF version of the temperature case study.}
+   \label{case-study}
+   \end{figure*}
 
 The analysis is complete at this point if a PDF is all that is desired.
 But perhaps the analysis should also be posted online in HTML format. A
@@ -668,12 +690,14 @@ Together, ``casestudy.html`` and ``ave_tmax.png`` provide an HTML
 version of ``casestudy.tex``, including syntax highlighting (Figure
 :ref:`case-study-html`).
 
-.. figure:: casestudyhtml.png
-   :scale: 100 %
-   :align: center
+.. latex::
    
-   A screenshot of part of the HTML version of the case study document.
-   :label:`case-study-html`
+   \begin{figure}
+   \centering
+   \fbox{\includegraphics{casestudyhtml.png}}
+   \caption{A screenshot of part of the HTML version of the case study.}
+   \label{case-study-html}
+   \end{figure}
 
 
 
