@@ -124,14 +124,14 @@ are being worked on by the
 <http://geosys.usc.edu/projects/seatree/>`_
 (SEATREE) [SEATREE]_
 by providing a common graphical interface
-to existing software.
+for previously existing software.
 The numerical computations
 are performed by
 the pre-existing underlying C/Fortran programs.
-Conversely, the SEATREE code that handles
-the I/O and user interface
-is written in Python.
-This makes using these tools easier
+Conversely, the SEATREE code
+(written in Python)
+handles the I/O and user interface.
+This makes the use of these tools easier
 and more approachable to students.
 However,
 the lack of a common API
@@ -190,7 +190,7 @@ the available modules and packages are:
 * ``fatiando.gravmag``:
   gravity and magnetic methods;
 * ``fatiando.seismic``:
-  seismics and seismology;
+  seismic methods and seismology;
 * ``fatiando.geothermal``:
   geothermal modeling;
 * ``fatiando.mesher``:
@@ -259,8 +259,9 @@ some irregularly sampled data
 
 .. figure:: gridding_plotting_contourf.png
 
-    Example of generating a random scatter of points, using that to make
-    synthetic data, and automatically gridding and plotting it using a
+    Example of 1) generating a random scatter of points (black dots),
+    2) using that to make synthetic data, and
+    3) automatically gridding and plotting the data using a
     Fatiando a Terra wrapper for the Matplotlib ``contourf``
     function.
     :label:`contourf`
@@ -323,7 +324,8 @@ like density, magnetization, seismic wave velocity,
 impedance, etc.
 This is done through a ``props`` dictionary
 whose keys are the name of the physical property
-and values are the corresponding values:
+and values are the corresponding values
+in SI units:
 
 .. code-block:: python
 
@@ -510,7 +512,7 @@ Forward modeling
 In geophysics,
 the term "forward modeling"
 is used to describe
-the process of generating model data
+the process of generating synthetic data
 from a given Earth model.
 Conversely,
 geophysical inversion is
@@ -525,7 +527,7 @@ The forward modeling functions
 usually take as arguments
 geometric elements from ``fatiando.mesher``
 with assigned physical properties
-and return the modeled data.
+and return the synthetic data.
 For example,
 the module ``fatiando.gravmag.tesseroid``
 is a Python implementation of
@@ -633,7 +635,8 @@ has been focused on
 gravity and magnetic methods.
 Therefore,
 the ``fatiando.gravmag`` package
-contains the most advanced and state-of-the-art algorithms.
+contains more advanced and state-of-the-art algorithms
+than the other packages.
 
 The module ``fatiando.gravmag.imaging``
 implements the imaging methods
@@ -675,7 +678,8 @@ based on its gravity anomaly
     gravity anomaly.
     :label:`imaging`
 
-Also implemented are some recent developments
+Also implemented in Fatiando a Terra
+are some recent developments
 in gravity and magnetic inversion methods.
 The method of "planting anomalous densities" by [UB]_
 is implemented in
@@ -858,7 +862,7 @@ is controlled by the ``smooth`` argument
 of function ``fatiando.seismic.srtomo.run``.
 That is how
 we are able to estimate
-a unique solution
+a unique and stable solution
 and why the result
 is specially smoothed
 where there are no rays.
@@ -883,7 +887,7 @@ provides an API
 to develop modeling algorithms
 for a variety of geophysical methods.
 The current version (0.1)
-has state-of-the-art
+has a few state-of-the-art
 gravity and magnetic modeling and inversion algorithms.
 There are also
 toy problems in gravity, seismics and seismology
