@@ -40,6 +40,7 @@ class Translator(LaTeXTranslator):
 
         self.figure_type = 'figure'
         self.figure_alignment = 'left'
+        self.table_type = 'table'
 
     def visit_docinfo(self, node):
         pass
@@ -267,7 +268,13 @@ class Translator(LaTeXTranslator):
         self.non_breaking_paragraph = True
 
     def visit_table(self, node):
-        self.out.append(r'\begin{table}')
+        classes = node.attributes.get('classes', [])
+        if 'w' in classes:
+            self.table_type = 'table*'
+        else:
+            self.table_type = 'table'
+
+        self.out.append(r'\begin{%s}' % self.table_type)
         LaTeXTranslator.visit_table(self, node)
 
     def depart_table(self, node):
@@ -276,7 +283,7 @@ class Translator(LaTeXTranslator):
         self.out.append(r'\caption{%s}' % ''.join(self.table_caption))
         self.table_caption = []
 
-        self.out.append(r'\end{table}')
+        self.out.append(r'\end{%s}' % self.table_type)
         self.active_table.set('preamble written', 1)
 
     def visit_thead(self, node):

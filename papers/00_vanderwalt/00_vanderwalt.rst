@@ -174,6 +174,14 @@ figures.
 We show the different quantities of materials required in Table
 :ref:`mtable`.
 
+.. table:: This is the caption for the wide table.
+   :class: w
+
+   +--------+----+------+------+------+------+--------+
+   | This   | is |  a   | very | very | wide | table  |
+   +--------+----+------+------+------+------+--------+
+
+
 Perhaps we want to end off with a quote by Lao Tse:
 
   *Muddy water, let stand, becomes clear.*
