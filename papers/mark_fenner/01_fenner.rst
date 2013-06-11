@@ -415,7 +415,9 @@ and manually thresholded images, for all correlation coefficient
 calculated (Figure :ref:`coefffig`).
 
 
-.. table:: Pearson and Manders Coefficients for Endosomes. :label:`coefftable`
+.. table:: Pearson and Manders Coefficients for Endosomes. *Src* =
+	   *Auto* is Automated threshold; *Man* is Manual threshold.
+	   :label:`coefftable`
    :class: w
 
    +------+---------+------+---------------+---------------+---------------+---------------+---------------+
