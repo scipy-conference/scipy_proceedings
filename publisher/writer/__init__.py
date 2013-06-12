@@ -342,12 +342,12 @@ class Translator(LaTeXTranslator):
 
     def visit_InlineMath(self, node):
         self.requirements['amsmath'] = r'\usepackage{amsmath}'
-        self.body.append('$' + node['latex'] + '$')
+        self.out.append('$' + node['latex'] + '$')
         raise nodes.SkipNode
 
     def visit_PartMath(self, node):
         self.requirements['amsmath'] = r'\usepackage{amsmath}'
-        self.body.append(mathEnv(node['latex'], node['label'], node['type']))
+        self.out.append(mathEnv(node['latex'], node['label'], node['type']))
         self.non_breaking_paragraph = True
         raise nodes.SkipNode
 
@@ -355,7 +355,7 @@ class Translator(LaTeXTranslator):
         if node["usepackage"]:
             for package in node["usepackage"]:
                 self.requirements[package] = r'\usepackage{%s}' % package
-        self.body.append("\n" + node['latex'] + "\n")
+        self.out.append("\n" + node['latex'] + "\n")
         raise nodes.SkipNode
 
 

@@ -163,13 +163,16 @@ figures.
 
 .. table:: This is the caption for the materials table. :label:`mtable`
 
-   +------------+-------+
-   | Material   | Units |
-   +------------+-------+
-   | Stone      | 3     |
-   +------------+-------+
-   | Water      | 12    |
-   +------------+-------+
+   +------------+----------------+
+   | Material   | Units          |
+   +------------+----------------+
+   | Stone      | 3              |
+   +------------+----------------+
+   | Water      | 12             |
+   +------------+----------------+
+   | Cement     | :math:`\alpha` |
+   +------------+----------------+
+
 
 We show the different quantities of materials required in Table
 :ref:`mtable`.
