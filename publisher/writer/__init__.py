@@ -293,6 +293,10 @@ class Translator(LaTeXTranslator):
         self.table_caption = self.active_table.caption
         self.active_table.caption = []
 
+        opening = self.active_table.get_opening()
+        opening = opening.replace('linewidth', 'tablewidth')
+        self.active_table.get_opening = lambda: opening
+
         LaTeXTranslator.visit_thead(self, node)
 
     def depart_thead(self, node):

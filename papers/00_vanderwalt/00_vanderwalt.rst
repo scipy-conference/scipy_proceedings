@@ -177,6 +177,14 @@ figures.
 We show the different quantities of materials required in Table
 :ref:`mtable`.
 
+
+.. The statement below shows how to adjust the width of a table.
+
+.. raw:: latex
+
+   \setlength{\tablewidth}{0.8\linewidth}
+
+
 .. table:: This is the caption for the wide table.
    :class: w
 
