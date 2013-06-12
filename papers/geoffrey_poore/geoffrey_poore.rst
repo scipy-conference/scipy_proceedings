@@ -36,7 +36,7 @@ two definitions, each with its own history.
 
 According to one definition, a reproducible document is a document whose 
 results may be conveniently reproduced via a makefile or a similar approach 
-[Schwab]_.  Systems such as Madagascar [Mad]_ and VisTrails [Vis]_ represent
+[Schwab]_.  Systems such as Madagascar [MAD]_ and VisTrails [VIS]_ represent
 a more recent and sophisticated version of this idea.  The actual writing 
 process for this type of document closely resembles the unreproducible case,
 except that the author must create the makefile (or equivalent), and thus
@@ -57,7 +57,7 @@ code integrates code and document into a unified whole.  The writing
 process for such a document can be significantly different from the 
 unreproducible case because of the tight integration that is possible.  
 For example, it is possible to create dynamic reports with Sweave and 
-knitr that automatically accomodate whatever data is provided. 
+knitr that automatically accommodate whatever data is provided. 
 
 These two definitions of a reproducible document need not be mutually 
 exclusive. They might be thought of as two ends of a continuum, with a 
@@ -136,7 +136,7 @@ MiKTeX [MIK]_, and should work with other distributions.
 Commands and Environments
 =========================
 
-PythonTeX provides a number of commands and environments. These can be
+PythonTeX provides a number of LaTeX commands and environments. These can be
 used to run any valid Python code; even imports from ``__future__`` are
 allowed, so long as they occur before any other code.
 
@@ -155,7 +155,7 @@ creates
     A string from Python!
 
 The **block** environment also executes its contents. In this case, the
-code is typeset with highlighting from Pygments [Pyg]_. Printed content
+code is typeset with highlighting from Pygments [PYG]_. Printed content
 is not automatically included, but may be brought in via the
 ``\printpythontex`` command. For example,
 
@@ -205,7 +205,7 @@ session, including the number of errors and warnings produced (it parses
 it has been modified or when it produced errors on the last run.
 
 That approach is most efficient for many cases, but sometimes the user may 
-need finer-grained control over code executation. This is provided via the
+need finer-grained control over code execution. This is provided via the
 package option ``rerun``, which accepts five values:
 
 -  ``never``: Code is never executed; only syntax highlighting is
@@ -304,8 +304,8 @@ templates, so that the correct line number in the document may be
 calculated. 
 
 In some cases, errors or warnings may only reference a line number in the 
-file in which they occur.  For example, if ``warnings.warn()`` is used in 
-an imported module [WAR]_, a line number in the module will be referenced, 
+file in which they occur.  For example, if ``warnings.warn()`` [WAR]_ is used
+in an imported module, a line number in the module will be referenced, 
 but a line number in the code that imported the module will not.  The 
 previous approach to synchronization fails.  To deal with this 
 scenario, PythonTeX writes delimiters to ``stderr`` before each command and 
@@ -412,7 +412,7 @@ proceedings, with a minimal preamble. All Python sessions involved in the
 analysis should have access to the ``pickle`` module [PKL]_ and to lists of 
 the names of the months. PythonTeX provides a ``pythontexcustomcode`` 
 environment that is used to add code to all sessions of a given type.  
-I use that environment to add the ``pickle`` import and lists to all
+I use that environment to add the ``pickle`` import and the lists to all
 sessions for the ``py`` family of commands and environments (``pycode``, 
 ``pyblock``, ``\pyc``, ``\pyb``, ``\py``, etc.).
 
@@ -469,14 +469,14 @@ average highs. Later, I will save the final results of the calculations,
 so that they will be available to other sessions for plotting and
 further analysis. In this simple example, dividing the tasks among
 multiple sessions provides little if any performance benefit. But if I
-were working with a larger dataset and/or more intensive calculations, it
+were working with a larger data set and/or more intensive calculations, it
 could be very useful to separate such calculations from the plotting and
 final analysis. That way, the calculations will only be performed when
-the data or calculation code is modified.
+the data set or calculation code is modified.
 
-The data file ``austin_tmax.csv`` was located in my document’s root
+The data file ``austin_tmax.csv`` is located in my document’s root
 directory. Since the PythonTeX working directory is by default a
-PythonTeX directory created within the document directory, I had to
+PythonTeX directory created within the document directory, I have to
 specify a relative path to the data file. I could have set the working
 directory to be the document directory instead, via
 ``\setpythontexworkingdir{.}``. But this way all saved files will be
@@ -579,7 +579,7 @@ Summary of Results
 It might be nice to add a summary of the results. In this case, I simply add
 a sentence giving the maximum monthly average temperature and the month
 in which it occurred. Notice the way in which Python content is
-interwoven with the text. If a dataset for a different year were used,
+interwoven with the text. If a data set for a different year were used,
 the sentence would update automatically.
 
 .. code-block:: python
@@ -606,18 +606,18 @@ the sentence would update automatically.
 Output and Conversion
 =====================
 
-I compiled the document to PDF by running ``pdflatex``, then 
+I compile the document to PDF by running ``pdflatex``, then 
 ``pythontex.py``, and finally ``pdflatex`` on the file.  The output is shown 
 in Figure :ref:`case-study`.
 
-To compile this particular document, I had to run ``pythontex.py`` twice in a 
-row. The first run created the saved data in ``ave_tmax.pkl``. The 
-second run gave the ``plot`` and ``summary`` sessions access to the 
+To compile this particular document, I have to run ``pythontex.py`` twice in a 
+row. The first run creates the saved data in ``ave_tmax.pkl``. The 
+second run gives the ``plot`` and ``summary`` sessions access to the 
 saved data. Since all sessions are executed in parallel, there is no 
-guarantee that the data file will be created before the ``plot`` and ``block`` 
-sessions try to access it. If the data file does not exist, these sessions 
-produce errors during the first run and are automatically re-executed during 
-the second run. 
+guarantee that the data file will be created before the ``plot`` and 
+``summary`` sessions try to access it. If the data file does not exist, these
+sessions produce errors during the first run and are automatically 
+re-executed during the second run. 
 
 
 .. latex::
@@ -712,8 +712,8 @@ numbering so that debugging is simple.  Because PythonTeX documents can be
 converted to plain LaTeX documents, the system is suitable for writing 
 journal papers and documents that must be converted to other formats.
 
-Most of the key elements planned for PythonTeX are in place, but several
-significant enhancements are planned for the future.  Support for
+Most of the key elements planned for PythonTeX are already in place, but 
+several significant enhancements are coming in the future.  Support for
 additional languages will be added soon.  Better support for macro
 programming with PythonTeX that mixes Python and LaTeX code is also under
 development.  Several usability enhancements are in preparation, including
@@ -733,21 +733,21 @@ References
             *Making scientific computations reproducible*.
             Computing in Science \& Engineering, 2(6):61-67, Nov/Dec 2000.
 
-.. [Mad] http://www.ahay.org/.
+.. [MAD] Madagascar.  http://www.ahay.org/.
 
-.. [Vis] http://www.vistrails.org/
+.. [VIS] VisTrails.  http://www.vistrails.org/.
 
 .. [Leisch] F. Leisch. *Sweave: Dynamic generation of statistical reports 
             using literate data analysis*, in Wolfgang Härdle and Bernd Rönz, 
             editors, Compstat 2002 - Proceedings in Computational Statistics, 
             pages 575-580. Physica Verlag, Heidelberg, 2002. ISBN 
-            3-7908-1517-9. http://www.statistik.lmu.de/~leisch/Sweave/
+            3-7908-1517-9. http://www.statistik.lmu.de/~leisch/Sweave/.
 
 .. [Xie] Y. Xie.  "knitr:  Elegant, flexible and fast dynamic report 
-            generation with R." http://yihui.name/knitr/.
+         generation with R." http://yihui.name/knitr/.
 
 .. [Ramsey] N. Ramsey. *Literate programming simplified*. IEEE Software, 
-           11(5):97-105, September 1994.  http://www.cs.tufts.edu/~nr/noweb/.
+            11(5):97-105, September 1994.  http://www.cs.tufts.edu/~nr/noweb/.
 
 .. [Knuth] D. E. Knuth. *Literate Programming*. CSLI Lecture Notes, no. 27. 
            Stanford, California: Center for the Study of Language and 
@@ -757,7 +757,7 @@ References
             http://sphinx-doc.org/.
 
 .. [Pastell] M. Pastell. "Pweave - reports from data with Python."
-             http://mpastell.com/pweave/
+             http://mpastell.com/pweave/.
 
 .. [IPY] The IPython development team. "The IPython Notebook." 
          http://ipython.org/notebook.html.
@@ -766,10 +766,10 @@ References
             http://www.ctan.org/pkg/python.
 
 .. [Drake] D. Drake. "The SageTeX package."
-             https://bitbucket.org/ddrake/sagetex/
+           https://bitbucket.org/ddrake/sagetex/.
 
 .. [Molteno] T. Molteno. "The sympytex package."
-              https://github.com/tmolteno/SympyTeX/
+             https://github.com/tmolteno/SympyTeX/.
 
 .. [MULT] Python Software Foundation. "``multiprocessing`` — Process-based 
           'threading' interface."
@@ -780,39 +780,36 @@ References
 .. [MIK] MiKTeX. http://www.miktex.org/.
           
 .. [WAR] Python Software Foundation. "``warnings`` — Warning control."
-         http://docs.python.org/2/library/warnings.html
+         http://docs.python.org/2/library/warnings.html.
 
-.. [Pyg] The Pocoo Team. "Pygments: Python Syntax Highlighter."
-         http://pygments.org/
+.. [PYG] The Pocoo Team. "Pygments: Python Syntax Highlighter."
+         http://pygments.org/.
 
 .. [MPL] J. D. Hunter. *Matplotlib: A 2D Graphics Environment*, in Computing 
          in Science & Engineering, Vol. 9, No. 3. (2007), pp. 90-95.
-         http://matplotlib.org/
+         http://matplotlib.org/.
 
 .. [LST] C. Heinz and B. Moses.  "The Listings Package."
-         http://www.ctan.org/tex-archive/macros/latex/contrib/listings/
+         http://www.ctan.org/tex-archive/macros/latex/contrib/listings/.
 
 .. [FV] T. Van Zandt, D. Girou, S. Rahtz, and H. Voß.  "The 'fancyvrb'
-        package:  Fancy Verbatims in LaTeX." http://www.ctan.org/pkg/fancyvrb
-
-.. [SYMPY] SymPy Development Team. "SymPy." http://sympy.org/
+        package:  Fancy Verbatims in LaTeX." http://www.ctan.org/pkg/fancyvrb.
         
 .. [NCDC] National Climatic Data Center.  http://www.ncdc.noaa.gov.
 
-.. [PKL] Python Software Foundation. "``pickle`` — Python object serialization."
-         http://docs.python.org/2/library/pickle.html
+.. [PKL] Python Software Foundation. "``pickle`` — Python object 
+         serialization."  http://docs.python.org/2/library/pickle.html.
 
-.. [OSPATH] Python Software Foundation.  "os.path — Common pathname 
+.. [OSPATH] Python Software Foundation.  "``os.path`` — Common pathname 
             manipulations."  http://docs.python.org/2/library/os.path.html.
 
-.. [TEX4HT] TeX User's Group. 
+.. [TEX4HT] TeX User's Group.
             http://www.tug.org/applications/tex4ht/.
 
-.. [HEVEA] L. Maranget.  "HEVEA."  http://hevea.inria.fr/.
+.. [HEVEA]  L. Maranget. "HEVEA." http://hevea.inria.fr/.
 
 .. [PAN] J. MacFarlane.  "Pandoc: a universal document converter." 
-            http://johnmacfarlane.net/pandoc/.
+         http://johnmacfarlane.net/pandoc/.
 
-.. [MINT] K. Rudolph.  "Minted." The minted package:
-          Highlighted source code in LaTeX. 
+.. [MINT] K. Rudolph.  "The minted package: Highlighted source code in LaTeX."
           https://code.google.com/p/minted/.
