@@ -806,7 +806,8 @@ References
 .. [TEX4HT] TeX User's Group.
             http://www.tug.org/applications/tex4ht/.
 
-.. [HEVEA]  L. Maranget. "HEVEA." http://hevea.inria.fr/.
+.. [HEVEA] L. Maranget. "HEVEA."
+           http://hevea.inria.fr/.
 
 .. [PAN] J. MacFarlane.  "Pandoc: a universal document converter." 
          http://johnmacfarlane.net/pandoc/.
