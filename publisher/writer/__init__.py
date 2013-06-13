@@ -12,7 +12,10 @@ import code_block
 
 from options import options, inst_table
 
-from collections import OrderedDict
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
 
 PreambleCmds.float_settings = '''
 \\usepackage[font={small,it},labelfont=bf]{caption}
