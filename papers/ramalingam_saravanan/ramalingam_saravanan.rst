@@ -27,7 +27,7 @@
   and easy deployment in the cloud. The interface aims to be
   tablet-friendly, with features like clickable/tappable directory
   listings for navigating folders etc. The user can switch, as needed,
-  between standard a-line-at-a-time shell mode and the notebook mode,
+  between standard line-at-a-time shell mode and the notebook mode,
   where multiple lines of code are entered in cells, allowing for
   in-place editing and re-execution. Multiple users can share terminal
   sessions for collaborative computing.
@@ -46,6 +46,9 @@
 Introduction
 ------------
 
+.. |---| unicode:: U+02014 .. em dash
+   :trim:
+
 Text and graphics form important components of the user interface
 when working with computers. Early personal computers only supported
 the textual user interface, more commonly known as the *command line
@@ -55,32 +58,32 @@ for interacting with the computer. The GUI is more user-friendly,
 especially for beginners, and provides a more pleasant visual
 experience. The GUI typically provides buttons and widgets for the
 most common tasks, whereas the CLI requires recalling and typing out
-the commands to accomplish the tasks. However, the novice-friendliness
-of the GUI comes at a cost -- it can be much more difficult to perform
+commands to accomplish tasks. However, the friendliness
+of the GUI comes at a cost |---| it can be much more difficult to perform
 advanced tasks using the GUI as compared to using the CLI. Using a GUI
-is analogous using a phrase book to express yourself in a foreign
+is analogous to using a phrase book to express yourself in a foreign
 language, whereas using a CLI is like learning words to form new
 phrases in the foreign language. The former is more convenient for
-first-time and casual users, whereas latter provides the versatiity
+first-time and casual users, whereas the latter provides the versatility
 required by more advanced users.
 
 The dichotomy between the textual and graphical modes of interaction
 also extends to scientific data analysis tools. Traditionally,
 commands for data analysis were typed into a terminal window with an
 interactive shell and the graphical output was displayed in a separate
-window. Some commercial sofware, such as Mathematica and Maple,
+window. Some commercial software, such as Mathematica and Maple,
 provided a more integrated notebook interface that blended text and
 graphics, thus combining aspects of the CLI with the GUI. One of the
 exciting recent developments in scientific Python has been the
 development of alternative, open source, notebook interfaces for
-scientific computing and data analysis -- the Sage and IPython
+scientific computing and data analysis |---| the Sage and IPython
 notebooks [Perez12]_. Since Python is a more general-purpose language
 than Mathematica or Maple, the notebook interface could potentially
 reach a much wider audience.
 
 A notebook display consists of a sequence of cells, each of which can
 contain code, figures, or text (with markup). Although originally
-developed for exploratory research, notebooks can be be very useful
+developed for exploratory research, notebooks can be very useful
 for presentations and teaching as well. They can provide step-by-step
 documentation of complex tasks and can easily be shared. The cells in
 a notebook do not necessarily have to be executed in the sequence in
@@ -95,39 +98,37 @@ computational techniques are increasingly being used in all areas of
 research, reproducing a research finding requires not just the broad
 outline of the research methodology but also documentation of the
 software development environment used for the study. The need for
-reproducible research is higlighted by the recent controversy
+reproducible research is highlighted by the recent controversy
 surrounding the highly influential Reinhart-Rogoff study that
 identified a negative relationship between a country's debt and its
 economic growth rate. A follow-up study [Herndon13]_ identified a
 simple coding error that affects key findings of the original study.
 The self-documenting nature of code and results presented in a
-notebook format can make make it easy to share and reproduce
+notebook format can make it easy to share and reproduce
 such computations.
 
 Background
 ------------
 
-I had used other commercial notebook interfaces before, but I used the
-Python notebook interface for the first time in January 2013, when I
-began teaching an introductory undergraduate programming course for
-geoscientists using Python. It was the first time the course was
-taught using Python; it had previously been taught using either Matlab
-or IDL. After initially using the command line Python interpreter in the
-terminal, we switched to IPython Notebook. The inline code editing and
-graphics display turned out to be quite convenient. I found the
-notebook to be really versatile for presenting lecture material and
-students loved using it for their programming assignments. The
-students also turned in their homework as IPython notebooks (in PDF
-format) for grading.
+The author had some experience with commercial notebook interfaces before, but
+used the IPython Notebook interface for the first time in January 2013, when
+teaching an introductory undergraduate programming course for
+geoscientists using Python. After initially using the command line
+Python interpreter, the class switched to using IPython Notebook, whose inline code editing and
+graphics display turned out to be really convenient. The notebook
+interface was used for presenting lecture material, and
+the students used it for their programming assignments,
+turning in their notebooks for grading (in PDF format) .
 
-I had previously been working on a project called GraphTerm, which implements a "graphical
+The author had previously been working on a project called GraphTerm,
+which implements a "graphical
 terminal interface" using a Python backend and a HTML5+Javascript
 frontend [GraphTerm]_. It was a follow-up to two earlier projects, the
 browser-based AjaxTerm, and XMLTerm, a GUI-like browser built
-using the Mozilla frameowork [Sarava00]_. GraphTerm is aimed at being
+using the Mozilla framework [Sarava00]_. GraphTerm is aimed at being
 a drop-in replacement for XTerm, the standard unix terminal, with
 additional graphical and collaborative features. It retains all the
-features of the CLI, includings pipes, wildcards, command recall, tab
+features of the CLI, including pipes, wildcards, command recall, tab
 completion etc., and also incorporates web-based sharing, as well as
 GUI-like features, such as clickable folder navigation, draggable
 files, inline image display etc. (There also other terminal projects
@@ -144,7 +145,7 @@ it could be extended to support a generic, language-independent,
 notebook interface, while still retaining *full backward
 compatibility* with the unix terminal. The goal was to allow the
 terminal to be switched to a notebook mode, regardless of what
-application was running in the shell.  The backward compatibility
+application was running in the shell. The backward compatibility
 requirements and the loose coupling between the notebook and the
 underlying application could make it more fragile and restricted, but
 that would be an unavoidable trade-off. The rest of this paper reports
@@ -161,7 +162,7 @@ screen buffer* used by text editors like ``vi`` etc. Special character
 strings known as *escape sequences* are output by programs to switch
 the terminal between the two buffers [XTerm]_. GraphTerm currently supports
 most of the standard XTerm escape sequences and introduces
-additonal escape sequences that allow display of HTML fragments in the
+additional escape sequences that allow display of HTML fragments in the
 scroll buffer and the full screen buffer. The HTML fragments can
 contain just about anything that can be displayed on a web page,
 including text with markup, tables, and images.
@@ -205,8 +206,8 @@ desktop computer at work and access the exact same content on your
 laptop browser when you get home. This allows GraphTerm to be used
 like the GNU ``screen`` or ``tmux`` programs. Storing the content on
 the server also allows multiple users to share access to the same
-terminal session for collaboration, like using Google Docs, for
-example. This means that multiple users will be able to view and modify a GraphTerm
+terminal session for collaboration, similar to, e.g., Google Docs.
+This means that multiple users will be able to view and modify a GraphTerm
 notebook session in real time.
 
 
@@ -275,7 +276,7 @@ is started, it listens on port 8900 on ``localhost`` by default, and
 any browser can be used to connect to it and open new terminal
 sessions using the URL ``http://localhost:8900``.  At this point,
 GraphTerm can be used like a regular terminal, with commands like
-``ls``, ``vi`` etc. However, to use the graphical capabilities of
+``ls``, ``vi``, etc. However, to use the graphical capabilities of
 GraphTerm, one needs to use GraphTerm-aware versions of these commands,
 with names like ``gls`` and ``gvi``, that are part of the command toolchain that is
 bundled with the code. The toolchain commands communicate using pipes
@@ -324,8 +325,9 @@ new command line of the form::
 
 which will change the current directory to ``newdir`` and list its
 contents. Clicking on a hyperlinked filename will generate a new
-command line, using ``gbrowse`` or ``gopen``, that will cause the file
-to be opened by the default program for its file type. This feature illustrates one of the basic design goals
+command line to invoke
+platform-dependent commands like ``open`` or ``xdg-open`` to open
+the file using the default program for its file type. This feature illustrates one of the basic design goals
 of GraphTerm, that each GUI-like action should generate a
 corresponding shell command that actually carries out that
 action. This allows the action to be logged and reproduced later.
@@ -461,7 +463,7 @@ GraphTerm can read and write notebooks using the IPython Notebook
 format (``*.ipynb``), although it uses the `Markdown
 <http://daringfireball.net/projects/markdown>`_ format for saving
 notebook content. (Markdown was chosen as the native format because it
-is more human-friendly than reStructuredText or JSON, allows easy
+is more human-friendly than ReStructuredText or JSON, allows easy
 concatenation or splitting of notebook files, and can be processed by
 numerous Markdown-aware publishing and presentation programs like
 ``landslide`` and ``reveal.js``. ) GraphTerm 
