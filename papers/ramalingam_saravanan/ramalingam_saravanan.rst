@@ -46,9 +46,6 @@
 Introduction
 ------------
 
-.. |---| unicode:: U+02014 .. em dash
-   :trim:
-
 Text and graphics form important components of the user interface
 when working with computers. Early personal computers only supported
 the textual user interface, more commonly known as the *command line
@@ -59,7 +56,7 @@ especially for beginners, and provides a more pleasant visual
 experience. The GUI typically provides buttons and widgets for the
 most common tasks, whereas the CLI requires recalling and typing out
 commands to accomplish tasks. However, the friendliness
-of the GUI comes at a cost |---| it can be much more difficult to perform
+of the GUI comes at a cost---it can be much more difficult to perform
 advanced tasks using the GUI as compared to using the CLI. Using a GUI
 is analogous to using a phrase book to express yourself in a foreign
 language, whereas using a CLI is like learning words to form new
@@ -76,7 +73,7 @@ provided a more integrated notebook interface that blended text and
 graphics, thus combining aspects of the CLI with the GUI. One of the
 exciting recent developments in scientific Python has been the
 development of alternative, open source, notebook interfaces for
-scientific computing and data analysis |---| the Sage and IPython
+scientific computing and data analysis---the Sage and IPython
 notebooks [Perez12]_. Since Python is a more general-purpose language
 than Mathematica or Maple, the notebook interface could potentially
 reach a much wider audience.
