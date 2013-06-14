@@ -105,12 +105,164 @@ This paper is organized as follows:
 Data Set Access (Low-level Interface)
 -------------------------------------
 
+There is nothing standard about data sets, and the SkData's *low level interface*
+correspondingly comprises many modules that are not meant to be formally interchangeable.
+Still, there are *informal* sorts of similarities in some aspects of what
+users want to do with data, at least in the context of doing machine learning.
+SkData's low-level modules provide logic for several common activities for
+most of the data sets supported by the library:
 
+* downloading,
+* verifying archive integrity,
+* decompressing,
+* loading into Python, and
+* deleting cached data.
+
+These common activities are, by convention, implemented by methods on
+singleton classes within the low-level modules.
+A data set class for the Labeled Faces in the Wild ([LFW]_) data set provides a representative example of what low-level data set objects look like.
+What follows is an abridged version of what appears in ``skdata.lfw.dataset``.
+
+.. code-block:: python
+
+    """
+    <Description of data set>
+
+    <Citations to key publications>
+    """
+
+    url_to_data_file = ...
+    sha1_of_data_file = ...
+
+    class LFW(object):
+
+        @property
+        def home(self):
+            """Return cache folder for this data set"""
+            return os.path.join(
+                skdata.data_home.get_data_home(),
+                'lfw')
+
+        def fetch(self, download_if_missing=True):
+            """Return iff required data is in cache."""
+            ...
+
+        def clean_up(self):
+            """Remove cached and downloaded files"""
+            ...
+
+        @property
+        def meta(self):
+            """Return meta-data as list of dicts"""
+            ...
+
+
+There is a convention that this low-level logic for each data (e.g. *foo*) should be written in a Python file called ``skdata.foo.dataset``.
+Other projects may implement data set classes in whatever files are convenient.
+Technically, there is no requirement that the low-level routines adhere to any standard interface, because SkData includes no functions meant to work on *any* data set.
+The next few sub-sections describe, at least qualitatively, what the methods
+of this class (as a representative low-level data set class) and other elements of the module are supposed to do.
+
+
+Context and Documentation
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+First, notice that the low-level ``dataset.py`` file should includes a significant docstring describing the data set and providing some history / context regarding its usage.
+This docstring should provide links to key publications that either introduced or used this data set.
+
+If the data set has a home page, that should be documented here.
+Many data sets' home pages maintain a table of benchmarks and pointers to
+influential model evaluation papers. It is appropriate to reproduce such
+tables in this ``dataset.py`` file either in the docstring, or, more helpfully,
+as a module-level Python dictionary.
+Such a dictionaries makes it easier to produce figures showing performance
+relative to these models from the literature.
+
+
+Downloading and Deleting
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Often the order of business when dealing with a data set is to download it.
+Data sets come from a range of sources, but it is worth distinguishing those that can be downloaded freely (we will call these *public*) from the rest (*private*).
+The SkData library is suitable and useful for both public and private data,
+but it is more useful for public data sets
+because the original download from a canonical internet source can be automated.
+Whether a data set is private or public, the ``dataset.py`` file should include checksums for verifying the correctness of important data files.
+For public data sets, it is natural that these checksums correspond to the downloaded archive files.
+
+Most dataset files use the ``get_data_home()`` function to identify a local location for storing large files.
+This location defaults to ``.skdata/`` but it can be set via a ``$SKDATA_ROOT`` environment variable.
+In our code example, ``LFW.home()`` uses this mechanism to identify a location where it can store downloaded and decompressed data.
+The convention is that a dataset called ``foo`` would use ``$SKDATA_ROOT/foo`` as a persistent cache location.
+
+The ``fetch`` method downloads, verifies the correctness-of, and decompresses the various files that make up the LFW data set.
+It stores them all within the folder named by ``LFW.home()``.
+If ``download_if_missing`` is False, then ``fetch`` raises an exception if the data is not present.
+When ``fetch()`` returns, it means that the data can be loaded.
+
+Low-level data set modules should provide a mechanism for erasing cached data
+if they create cached data.
+In our LFW example, the ``clean_up`` method recursively deletes the
+entire ``LFW.home()`` folder, erasing the downloaded data and all derived files.
+Other data sets may wish to provide a more fine-grained approach to clean-up,
+that perhaps erase derived files, but not original archive files that cannot
+easily be replaced.
+
+
+Decompressing, Parsing, and Loading
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The files making up a data set may be just about anything.
+Some of the more popular data sets in machine learning and computer vision include one or more of:
+
+* Comma Separated Value (CSV) text files,
+* XML documents (with custom internal structure),
+* Text files with ad-hoc formatting,
+* Collections of image, movies, audio files,
+* Matlab workspaces,
+* Pickled NumPy ``ndarray`` objects, and
+* HDF5 databases.
+
+Correctly interpreting meta-data can be tricky and simply
+loading media collections that include files with non-homogeneous
+formats, encoding types, sampling frequencies, color spaces, and so on can be awkward.
+
+The idea of the low-level data set class's ``meta`` attribute is that the
+logic for populating that attribute
+encapsulates the idiosyncrasies of the data sets so that relevant data and
+meta-data is made available to higher-level calling code
+via appropriate Python data structures such as
+lists, dictionaries, NumPy ``ndarray`` objects, Panda data frames, or perhaps
+PyTables ``Table`` objects.
+The sordid details of parsing e.g.
+ad-hoc text files and turning them into appropriate data structures is
+encapsulated in the submodules of the SkData library.
+
+In the case of the LFW data set class, the ``meta`` attribute is computed by parsing a few text files and walking the directory structure within ``LFW.home()``.
+The ``meta`` property enumerates what images are present, how large they are, what color space they use, and what individual is in each image.
+It does not include all the pixel data because, in our judgement, it was too big.
+Access to the pixel data is provided via an indirect load-on-demand mechanism
+described below (see the section on the *lazy array*).
+
+In the case of the LFW data set, an additional method called ``parse_pairs_file`` helps to parse some additional text files that describe
+the train/test splits that the LFW authors recommend using for the development and evaluation of algorithms.
+This may seem ad-hoc, and indeed it is.
+Low-level modules are meant to be particular to individual data sets, and not standardized.
 
 
 
 Experiment Protocols (High-level Interface)
 -------------------------------------------
+
+XXX
+
+Generally, these low-level classes exist to support any corresponding high-level protocol objects (in e.g. ``skdata.lfw.view``)
+We will come to ``view`` modules in the next Section,
+
+
+
+Whereas not all data sets have defined high-level protocol objects, all data sets define a low-level interface.
+The high-level classes are implemented in terms of the low-level logic.
 
 
 
@@ -147,53 +299,6 @@ Indeed, the authors of every scientific paper with empirical results of this typ
 These steps are typically not formalized by authors of scientific papers as reusable software.
 We conjecture that instead, the vast majority of researchers use web browsers, hand-typed unix shell commands, and one-off private scripts to accomplish these steps.
 This practice stands as an obstacle to reproducibility in machine learning, computer vision, natural language processing, and other applications of machine learning.
-
-
-Data Sets
----------
-
-
-
-
-Data sets come from a range of sources, and can be public, private, or semi-public.
-Data sets are provided by academics who have developed them for their own
-research purposes, or by organizations that release a sample of their
-internal data for scientific analysis.
-Public datasets (available to anonymous requests) are the most popular in
-research, but there are private data sets too, as well as ones that are free
-for research purposes, but only available to those who ask (not available to anonymous requests).
-The SkData library is suitable for all of these types of data set,
-but it is most useful as a means of working with public data sets
-because it can automate the downloading of the data set as well as the other
-processing steps.
-
-Public data sets are typically distributed via a web page
-which describes the nature of the data set and
-provides links to compressed archive files containing
-the data set itself.
-The data set itself may be just about anything, but some of the more popular data sets in machine learning and computer vision
-include one or more of:
-
-* Comma Separated Value (CSV) text files,
-* XML documents (with custom internal structure),
-* Text files with ad-hoc formatting,
-* Collections of image, movies, audio files,
-* Matlab workspaces, and
-* Pickled NumPy ndarray objects.
-
-Correctly interpreting meta-data can be tricky (error-prone) and simply
-loading media collections that include files with non-homogeneous
-formats, encoding types, sampling frequencies, and color spaces can be
-awkward.
-
-The SkData library provides logic for dealing with the idiosyncrasies of data
-sets so that they are accessible via familiar Python data structures such as
-lists, dictionaries, and NumPy ndarrays.  The sordid details of parsing e.g.
-ad-hoc text files and turning them into appropriate data structures is
-encapsulated in the submodules of the SkData library.
-
-
-
 
 
 
@@ -508,82 +613,8 @@ but it provides a mechanism for designing iterators
 so that online algorithms can
 traverse large numbers of examples in a cache-efficient way.
 
-Low Level: Data Layer Usage
----------------------------
+Future development of the library may move toward replacing the larray in whole or part with PyTables.
 
-When the high level protocol layer does not suit your needs,
-SkData also provides a lower-level interface that provides low level logic for each of the data sets in the library:
-
-* Downloading
-* Verifying archive integrity
-* Decompressing
-* Loading into Python
-
-Whereas not all data sets have defined high-level protocol objects, all data sets define a low-level interface.
-The high-level classes are implemented in terms of the low-level logic.
-
-There is a convention that this low-level logic for each data (e.g. *foo*) should be written in a Python file called ``skdata.foo.dataset``.
-Of course other projects may implement data set classes in whatever files are convenient.
-Technically, there is no requirement that the low-level routines adhere to any standard interface, because the SkData library has been
-designed such that there are no functions that must work on any data set.
-With that said, there are some common patterns, like downloading, deleting, and accessing whatever data a data set provides.
-A data set wrapper for the Labeled Faces in the Wild (LFW) data set [lfw]_ provides a representative example of what low-level data set objects look like.
-What follows is an abridged version of what appears in ``skdata.lfw.dataset``.
-
-.. code-block:: python
-
-    """
-    <Description of data set>
-    <Citations to key publications>
-    """
-
-    url_to_data_file = ...
-    sha1_of_data_file = ...
-
-    class LFW(object):
-
-        @property
-        def home(self):
-            """Return cache folder for this data set"""
-            return os.path.join(
-                skdata.data_home.get_data_home(),
-                'lfw')
-
-        def fetch(self, download_if_missing=True):
-            """Return iff required data is in cache."""
-            ...
-
-        def clean_up(self):
-            """Remove cached and downloaded files"""
-            ...
-
-        @property
-        def meta(self):
-            """Return data set meta-data as list of dicts"""
-            ...
-
-First, a dataset.py file includes a significant docstring describing the data set and providing some history / context regarding it's usage.
-The docstring should always provide links to key publications that either introduced or used this data set.
-
-When a public data set is free for download, the dataset file should include the URL of the original data,
-and a checksum for verifying the correctness of downloaded data.
-
-Most dataset files use the ``skdata.data_home.get_data_home`` mechanism to identify a local location for storing large files.
-This location defaults to ``.skdata/`` but it can be set via a ``$SKDATA_ROOT`` environment variable.
-In our code example, ``LFW.home()`` uses this mechanism to identify a location where it can store downloaded and decompressed data.
-
-The ``fetch`` and ``clean_up`` methods download and delete the LFW data set, respectively.
-The ``fetch`` method downloads, verifies the correctness-of, and decompresses the various files that make up the LFW data set.
-It stores them all within the folder named by ``LFW.home()``.
-If ``download_if_missing`` is False, then ``fetch`` raises an exception if the data is not present.
-The ``clean_up`` method recursively deletes the entire ``LFW.home()`` folder, erasing the downloaded data and all derived files.
-
-The ``meta`` method parses a few text files and walks the directory structure within ``LFW.home()`` in order to provide a succint summary
-of what images are present, what individual is in each image.
-
-In the case of the LFW data set, an additional method called ``parse_pairs_file`` helps to parse some additional text files that describe
-the train/test splits that the LFW authors recommend using for the development and evaluation of algorithms.
-Generally, these low-level classes serve to support their corresponding high-level protocol objects (in e.g. ``skdata.lfw.view``)
 
 
 Command-Line Interface
