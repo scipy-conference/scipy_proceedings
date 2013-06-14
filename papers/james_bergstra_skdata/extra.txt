@@ -197,3 +197,9 @@ Each submodule has three important sub-sub-module files:
 
 The basic approach has been developed over years of combined experience by the authors, and used extensively in recent work (e.g. [2]).
 The presentation will cover the design of data set submodules, and the basic interactions between a learning algorithm and an evaluation protocol.
+
+
+Answering this question for new algorithms is often a principal contribution of research papers in machine learning.
+Anyone implementing an algorithm from scientific literature must first verify that their implementation matches the results reported in that literature.
+
+

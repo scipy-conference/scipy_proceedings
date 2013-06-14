@@ -12,7 +12,7 @@
 
 
 --------------------------------------------------------------
-Skdata: Data Sets and Algorithm Evaluation Protocols in Python
+SkData: Data Sets and Algorithm Evaluation Protocols in Python
 --------------------------------------------------------------
 
 .. class:: abstract
@@ -38,15 +38,99 @@ Skdata: Data Sets and Algorithm Evaluation Protocols in Python
 Introduction
 ------------
 
-One of the most basic testing techniques for any implementation of a machine learning algorithm,
-whether it implements a new algorithm or one that is widely known,
-is to verify that it meets expected performance on standard benchmarks.
-Answering this question for new algorithms is often a principal contribution of research papers in machine learning.
-Anyone implementing an algorithm from scientific literature must first verify that their implementation matches the results reported in that literature.
-Adherence to standard algorithm evaluation protocols is critical to obtaining an accurate answer to this central question.
+There is nothing standard about data sets for machine learning.
+The nature of data sets varies widely, from physical measurements of flower petals ([Iris]_),
+to pixel values of tiny public domain images ([CIFAR-10]_),
+to the movie watching habits of NetFlix users ([Netflix]_).
+Some data sets are tiny and others are vast databases that push the limits of storage technology.
+Different data sets test different algorithms' abilities to make different kinds of statistical inference.
+Often a single data set may be used in several ways to evaluate multiple kinds of algorithm.
+This flexibility and un-defined-ness makes it challenging to design software abstractions for data sets.
+
+In contrast to the great variety of data sets though,
+researchers have condensed the variety of data sets to a much smaller set of machine learning problems.
+For example, a great deal of machine learning research addresses the *classification problem* of assigning an integer-valued *label* (:math:`y`) to some vector of binary- or real-valued *features* (:math:`X`).
+Many classification algorithms have been developed, such as Support Vector Machines, Decision Trees, and Nearest Neighbors.
+The reason that they are all called classification algorithms is that they provide a common mathematical interface.
+
+.. We can see each one of these algorithms as fitting a predictive model :math:`\cal M` to a training set of :math:`(X, y)` pairs.
+.. The goal of each classification algorithm is to produce a model :math:`\cal M` that makes accurate label predictions for feature vectors that were not observed during training.
+.. There are other kinds of machine learning problem beyond classification,
+.. from more-or-less structured regression, to density estimation, to
+.. reinforcement learning and nonlinear control.
+.. We believe the SkData library is prepared to support a broad range of these
+.. problems, but classification so far has been our focus.
+
+While the neatness of these mathematical abstractions is reflected in the organization of machine learning libraries such as [sklearn]_,
+we believe there is a gap in Python's machine learning stack between raw data sets and such neat, abstract interfaces.
+Data, even when it is provided specifically to test classification algorithms,
+is seldom provided as (feature, label) pairs.
+Guidelines regarding standard experimental protocols (e.g. which data to use for training) are expressed informally in webpage text if at all.
+The SkData library consolidates myriad little details of ideosyncratic data processing required to run experiments on standard data sets, and packages them as a library of reusable code.
+It serves as both a gateway to access a growing list of standard public data sets, and as a framework for expressing precise evaluation protocols that correspond to standard ways of using those data sets.
+
+This paper introduces the SkData library ([SkData]_) for accessing data sets in Python.
+SkData serves two related purposes:
+
+1. It provides *low-level* ideosyncratic logic for acquiring, unpacking, and parsing
+   standard data sets so that they can be loaded into sensible Python data
+   structures.
+
+2. It provides *high-level* logic for evaluating machine learning algorithms
+   using strictly controlled experimental protocols, so that it is easy to
+   make direct, valid model comparisons.
+
+Relative to language-agnostic repositories (such as the [UCI]_ database of maching learning data sets),
+SkData provides Python code for downloading and loading diverse data representations into more standardized in-memory formats.
+Anyone using these data sets in a Python program would have to use something like the low-level routines in SkData anyway to simply load the data.
+Relative to standardized repositories such as [MLData]_, SkData provides convenient downloading and loading logic, as well as formal protocols (in Python) for model selection and evaluation.
+Relative to the [Pandas]_ Python library, SkData provides data set-specific
+logic for downloading, parsing, and model evaluation; Pandas provides useful
+data structures and statistical routines. It would make sense to use SkData and Pandas together,
+and future data set modules in SkData may use Pandas internally.
+The [PyTables]_ library provides a high-performance HDF5 wrapper.
+It would make sense to use SkData and PyTables together, such as for example
+for low-level SkData routines to store and manipulate downloaded data.
+
+Organization
+~~~~~~~~~~~~
+
+This paper is organized as follows:
+
+1. Data set access (low-level interface)
+2. Experiment Protocols (high-level interface)
+3. Data sets currently in the SkData library
+
+
+Data Set Access (Low-level Interface)
+-------------------------------------
+
+
+
+
+
+Experiment Protocols (High-level Interface)
+-------------------------------------------
+
+
+
+Continuing with classification as our working example, the sklearn library defines an ``Estimator`` interface for predictive models with ``fit`` and ``predict`` methods.
+The fit method expects two arguments: a matrix ``X`` whose rows are independent examples and whose columns correspond to each input feature, and a vector ``y`` of integer target labels for each row in ``X``.
+When the fit method of a predictive model is called, the model adapts itself to *learn* the pattern of association between the rows of ``X`` and the values of ``y``.
+The predict method requires just one argument: another matrix ``X_test`` whose rows are examples and columns are features.
+When the predict method is called, it returns the models best guesses of the correct label for each row of ``X_test``.
+
+
+
+Testing an implementation of a machine learning algorithms can be difficult.
+One of the most basic strategies is to verify that it yeilds the expected performance on standard benchmarks.
+More often than not though, the exactly definition of standard benchmarks is not clear.
+Exact definitions can be helpful in tracking down subtle errors because when reproducing previous work, the margins of statistical error do not apply.
+Running exactly the same algorithm on exactly the same examples should produce exactly the same results.
+
 
 At the same time, it is not always obvious what exactly the standard protocol is.
-For example, the widely-used Iris data set is simply an enumeration of 150 specimens' petal and sepal measurements along with the label of which kind of iris each one is [Iris]_. 
+For example, the widely-used Iris data set is simply an enumeration of 150 specimens' petal and sepal measurements along with the label of which kind of iris each one is [Iris]_.
 If we are interested in matching the generalization error of our implementation to a generalization error in the literature, then we would like to know more than just the accuracy;
 we would like to know exactly which examples were used for training, and which
 examples were used for measuring that generalization error.
@@ -60,37 +144,16 @@ Indeed, the authors of every scientific paper with empirical results of this typ
 #. Convert those examples into the training, validation, and testing sets used for cross-validation, and
 #. Provide those training examples as input to some machine learning algorithm.
 
-These steps are typically not formalized by authors of scientific papers as
-reusable software. We conjecture that instead, the vast majority of researchers use web
-browsers, hand-typed unix shell commands, and one-off private scripts to accomplish these steps.
-This practice stands as an obstacle to reproducibility in machine learning,
-computer vision, natural language processing, and other applications of
-machine learning.
-
-The SkData library consolidates these ugly little details of machine learning practice
-and packages them as a library of reusable code [SkData]_.
-It serves as both a gateway to access a growing list of standard public data sets,
-and as a framework for expressing precise evaluation protocols that
-correspond to standard ways of using those data sets.
-
-This paper provides an overview of the problem the SkData library aims to
-solve, a description of the project's architecture, some example usage of the
-low level and high level interfaces to the library, and a listing of the data
-sets currently provided by the library.
+These steps are typically not formalized by authors of scientific papers as reusable software.
+We conjecture that instead, the vast majority of researchers use web browsers, hand-typed unix shell commands, and one-off private scripts to accomplish these steps.
+This practice stands as an obstacle to reproducibility in machine learning, computer vision, natural language processing, and other applications of machine learning.
 
 
 Data Sets
 ---------
 
-There is nothing standard about data sets.
-The nature of data sets varies widely, from physical measurements of flower petals ([Iris]_),
-to pixel values of tiny public domain images ([CIFAR-10]_),
-to the movie watching habits of NetFlix users ([Netflix]_).
-Some data sets are tiny, and others are too large to store in RAM.
-Different data sets are used to test different algorithms' ability to make statistical inferences,
-and often a single data set may be used in several such ways.
-This flexibility and un-defined-ness makes it challenging to design software
-abstractions for data sets.
+
+
 
 Data sets come from a range of sources, and can be public, private, or semi-public.
 Data sets are provided by academics who have developed them for their own
@@ -129,11 +192,9 @@ lists, dictionaries, and NumPy ndarrays.  The sordid details of parsing e.g.
 ad-hoc text files and turning them into appropriate data structures is
 encapsulated in the submodules of the SkData library.
 
-Relative to the well known UCI database [UCI]_, the sklearn library provides
-logic for downloading and loading diverse data representations into more
-standardized in-memory formats.
-Relative to MLData (mldata.org) the sklearn library provides downloading and
-loading logic, and a formal protocol for model selection and evaluation.
+
+
+
 
 
 Machine Learning: Problems and Protocols
@@ -145,33 +206,6 @@ endlessly in their nature and formatting, the set of *machine learning algorithm
 that people tend to apply to those data sets is much more stable,
 and the set of *machine learning problems* for which those algorithms have been
 formulated changes more slowly still.
-
-For example, a great deal of machine learning research addresses
-the *classification problem* of assigning an integer-valued *label* (:math:`y`) to some vector of binary- or
-real-valued *features* (:math:`X`).
-Many classification algorithms have been developed in the last few
-decades, including Support Vector Machines (SVMs), Decision Trees (DTs), Naive Bayes Classifiers (NBs), Neural Networks (NNets), Nearest Neighbors (NNeighbs), and various other more general graphical models.
-The reason that they are all called classification algorithms is that they can
-implement a common mathematical interface.
-We can see each one of these algorithms as fitting a predictive model
-:math:`\cal M` to a
-given *training set* of :math:`(X, y)` pairs, so that :math:`\cal M` can make
-accurate label predictions for feature vectors that were not included in the
-training set.
-
-The organization of the sklearn library reflects this commonality of
-interfaces [sklearn]_. Continuing with classification as our working example,
-the sklearn library defines an ``Estimator`` interface for predictive models with ``fit`` and ``predict`` methods.
-The fit method expects two arguments: a matrix ``X`` whose rows are independent examples and
-whose columns correspond to each input feature, and a vector ``y`` of integer
-target labels for each row in ``X``.
-When the fit method of a predictive model is called, the model adapts itself
-to *learn* the pattern of association between the rows of ``X`` and the values
-of ``y``.
-The predict method requires just one argument: another matrix ``X_test`` whose
-rows are examples and columns are features.
-When the predict method is called, it returns the models best guesses of the
-correct label for each row of ``X_test``.
 
 
 Machine learning algorithms for classification (or simply *classification
@@ -704,10 +738,13 @@ References
 ----------
 
 .. [CIFAR-10] A. Krizhevsky. *Learning Multiple Layers of Features from Tiny Images.* Masters Thesis, University of Toronto, 2009.
-.. [Iris] http://archive.ics.uci.edu/ml/datasets/Iris
-.. [SkData] http://jaberg.github.io/skdata/
-.. [lfw] G. B. Huang, M. Ramesh, T. Berg, and E. Learned-Miller. *Labeled Faces in the Wild: A Database for Studying Face Recognition in Unconstrained Environments.* University of Massachusetts, Amherst TR 07-49, 2007.
-.. [sklearn] Pedregosa et al. *Scikit-learn: Machine Learning in Python*, JMLR 12 pp. 2825--2830, 2011.
-.. [Netflix] http://www.netflixprize.com/
 .. [glumpy] https://code.google.com/p/glumpy/
+.. [Iris] http://archive.ics.uci.edu/ml/datasets/Iris
+.. [LFW] G. B. Huang, M. Ramesh, T. Berg, and E. Learned-Miller. *Labeled Faces in the Wild: A Database for Studying Face Recognition in Unconstrained Environments.* University of Massachusetts, Amherst TR 07-49, 2007.
+.. [Netflix] http://www.netflixprize.com/
+.. [MLData] http://mldata.org
+.. [Pandas] http://pandas.pydata.org
+.. [PyTables] http://pytables.org
+.. [SkData] http://jaberg.github.io/skdata/
+.. [sklearn] Pedregosa et al. *Scikit-learn: Machine Learning in Python*, JMLR 12 pp. 2825--2830, 2011.
 .. [UCI] http://archive.ics.uci.edu/ml/
