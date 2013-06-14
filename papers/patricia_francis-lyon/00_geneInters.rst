@@ -156,7 +156,7 @@ in order to relax the constraints:
 
 .. math::
 
-    \mbox{where } \epsilon_i >= 0,   i= 1,2,…,m
+    \mbox{where } \epsilon_i >= 0,   i= 1,2,...,m
 
 The amount of slack is specified by the user of an SVM in the variable :math:`C`, known as the regularization or soft-margin parameter, 
 which controls the error penalty according to the equation below. Higher :math:`C` weights classification errors more, 
@@ -176,7 +176,7 @@ The optimization problem that is solved when allowing for slack :math:`\epsilon`
 
 .. math::
 
-        \mbox{where } \epsilon_i >= 0,   i= 1,2,…,m
+        \mbox{where } \epsilon_i >= 0,   i= 1,2,...,m
 
 
 SVMs have the ability to find a separating hyperplane even if one does not exist in the space of the input vector, 
