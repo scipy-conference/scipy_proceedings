@@ -373,7 +373,7 @@ field ([Wolf07]_, [Huan08]_); there are fewer slow rotators in the
 clusters when compared to
 the field or the stars in clusters tend to rotate faster.
 Using literature results ([Hump84]_, [Brow94]_, [Zeeu99]_, [Robi99]_,
-[Merm03]_, [Tetz11]_), we separated our sample into three different
+[Merm03]_, [Tetz11]_), we separated our sample into four different
 categories according to the star's membership: field,
 cluster, association and runaway.
 We have merged our sample with that of [Dafl07]_ in which their results
