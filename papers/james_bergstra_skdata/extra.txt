@@ -310,3 +310,27 @@ To our knowledge there is nothing about these kinds of learning problems that
 makes them incompatible with the encapsulation techniques used in SkData, but
 the design has not been pushed in this direction.
 
+
+
+
+.. Classification with Sklearn
+
+Continuing with classification as our working example, the sklearn library defines an ``Estimator`` interface for predictive models with ``fit`` and ``predict`` methods.
+The fit method expects two arguments: a matrix ``X`` whose rows are independent examples and whose columns correspond to each input feature, and a vector ``y`` of integer target labels for each row in ``X``.
+When the fit method of a predictive model is called, the model adapts itself to *learn* the pattern of association between the rows of ``X`` and the values of ``y``.
+The predict method requires just one argument: another matrix ``X_test`` whose rows are examples and columns are features.
+When the predict method is called, it returns the models best guesses of the correct label for each row of ``X_test``.
+
+Any classifier that behaves like an sklearn classifier (i.e. has the expected kind of ``fit`` and ``predict`` methods) can be used to configure an ``SklearnClassifier`` object.
+
+
+
+
+
+.. In all settings so far, a Task instance represents *all* of the information about a *subset* of the examples in a data set
+.. (although future protocols looking at e.g. user ratings data may define task semantics differently).
+.. For example, in cross-validation the training set and the testing set would be represented by Task objects.
+.. In a K-fold cross-validation setting, there would be 2K Task objects representing each of the training sets and each of the test sets
+.. involved in the evaluation protocol.
+.. Task objects may, in general, overlap in the examples they represent.
+
