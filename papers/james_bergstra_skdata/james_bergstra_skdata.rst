@@ -65,14 +65,14 @@ While the neatness of these mathematical abstractions is reflected in the organi
 we believe there is a gap in Python's machine learning stack between raw data sets and such neat, abstract interfaces.
 Data, even when it is provided specifically to test classification algorithms,
 is seldom provided as (feature, label) pairs.
-Guidelines regarding standard experiment protocols (e.g. which data to use for training) are expressed informally in webpage text if at all.
-The SkData library consolidates myriad little details of ideosyncratic data processing required to run experiments on standard data sets, and packages them as a library of reusable code.
+Guidelines regarding standard experiment protocols (e.g. which data to use for training) are expressed informally in web page text if at all.
+The SkData library consolidates myriad little details of idiosyncratic data processing required to run experiments on standard data sets, and packages them as a library of reusable code.
 It serves as both a gateway to access a growing list of standard public data sets, and as a framework for expressing precise evaluation protocols that correspond to standard ways of using those data sets.
 
 This paper introduces the SkData library ([SkData]_) for accessing data sets in Python.
 SkData provides two levels of interface:
 
-1. It provides *low-level* ideosyncratic logic for acquiring, unpacking, and parsing
+1. It provides *low-level* idiosyncratic logic for acquiring, unpacking, and parsing
    standard data sets so that they can be loaded into sensible Python data
    structures.
 
@@ -87,7 +87,7 @@ SkData provides a high-level interface for some, but not all supported data sets
 This high-level interface would normally be provided by submodule ``foo.view``.
 The high-level modules provide one or more views of the low-level data which make the underlying data fit the form required by machine learning algorithms.
 
-Relative to language-agnostic repositories (such as the [UCI]_ database of maching learning data sets),
+Relative to language-agnostic repositories (such as the [UCI]_ database of machine learning data sets),
 SkData provides Python code for downloading and loading diverse data representations into more standardized in-memory formats.
 Anyone using these data sets in a Python program would have to use something like the low-level routines in SkData anyway to simply load the data.
 Relative to standardized repositories such as [MLData]_, SkData provides convenient downloading and loading logic, as well as formal protocols (in Python) for model selection and evaluation.
@@ -219,7 +219,7 @@ Experienced machine learning practitioners are well aware that in terms of files
 Some of the more popular data sets in machine learning and computer vision include one or more of:
 
 * Comma Separated Value (CSV) text files,
-* XML documents (with ideosyncratic internal structure),
+* XML documents (with idiosyncratic internal structure),
 * Text files with ad-hoc formatting,
 * Collections of image, movies, audio files,
 * Matlab workspaces,
@@ -589,7 +589,7 @@ Command-Line Interface
 ----------------------
 
 Some data sets also provide a ``main.py`` file that provides a command-line interface for operations such as downloading, visualizing, and deleting data.
-The LFW data set for example, has a simple main.py script that supports one command that downloads (if necessary) and visualzes
+The LFW data set for example, has a simple main.py script that supports one command that downloads (if necessary) and visualizes
 a particular variant of the data using [glumpy]_.
 
 .. code-block:: sh
@@ -693,7 +693,7 @@ Rectangles Images
     Synthetic
 
 PascalVOC {2007, 2008, 2009, 2010, 2011}
-    Labelled images from PascalVOC challenges
+    Labeled images from PascalVOC challenges
 
 PosnerKeele (*)
     Dot pattern classification task
