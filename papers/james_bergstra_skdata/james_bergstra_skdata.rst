@@ -99,20 +99,21 @@ The [PyTables]_ library provides a high-performance HDF5 wrapper.
 It would make sense to use SkData and PyTables together, such as for example
 for low-level SkData routines to store and manipulate downloaded data.
 
-Organization
-~~~~~~~~~~~~
 
-This paper is organized as follows:
+This paper is organized into the following sections:
 
-1. Data set access (low-level interface)
-2. Experiment Protocols (high-level interface)
-3. Data sets currently in the SkData library
+1. Data set access (low-level)
+#. Intro to experiment protocols (high-level)
+#. Protocol case study: simple cross-validation
+#. The experiment protocol
+#. Command-line interface
+#. Current list of data sets
 
 
 Data Set Access (Low-level Interface)
 -------------------------------------
 
-There is nothing standard about data sets, and the SkData's *low level interface*
+There is nothing standard about data sets, and SkData's *low-level interface*
 correspondingly comprises many modules that are not meant to be formally interchangeable.
 Still, there are *informal* sorts of similarities in some aspects of what
 users want to do with data, at least in the context of doing machine learning.
@@ -175,10 +176,10 @@ Technically, there is no requirement that the low-level routines adhere to any s
 Context and Documentation
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-First, notice that the low-level ``dataset.py`` file should includes a significant docstring describing the data set and providing some history / context regarding its usage.
+First, notice that the ``dataset.py`` file includes a significant docstring describing the data set and providing some history regarding its usage.
 This docstring should provide links to key publications that either introduced or used this data set.
 
-If the data set has a home page, that should be documented here.
+If the data set has a home page, that should be documented here too.
 Many data sets' home pages maintain a table of benchmarks and pointers to influential model evaluation papers.
 It is appropriate to reproduce such tables in this ``dataset.py`` file either in the docstring, or, more helpfully,
 as a module-level Python dictionary (e.g. the ``published_scores``
@@ -197,12 +198,12 @@ but it is more useful for public data sets
 because the original download from a canonical internet source can be automated.
 Whether a data set is private or public, the ``dataset.py`` file should include checksums for verifying the correctness of important data files when it makes sense to do so.
 
-Most dataset files use SkData's ``get_data_home()`` function to identify a local location for storing large files.
+Most ``dataset`` modules use SkData's ``get_data_home()`` function to identify a local location for storing large files.
 This location defaults to ``.skdata/`` but it can be set via a ``$SKDATA_ROOT`` environment variable.
 In our code example, ``LFW.home()`` uses this mechanism to identify a location where it can store downloaded and decompressed data.
 The convention is that a dataset called ``foo`` would use ``path.join(get_data_home(), 'foo')`` as a persistent cache location.
 
-The ``fetch`` method downloads, verifies the correctness-of, and decompresses the various files that make up the LFW data set.
+The ``fetch`` method downloads, verifies the correctness-of, and decompresses the various files that make up the data set.
 It stores downloaded files within the folder returned by ``LFW.home()``.
 If ``download_if_missing`` is False, then ``fetch`` raises an exception if the data is not present.
 When ``fetch()`` returns, it means that the data can be loaded (see below).
@@ -226,24 +227,27 @@ Some of the more popular data sets in machine learning and computer vision inclu
 * Pickled NumPy ``ndarray`` objects, and
 * HDF5 databases.
 
-Correctly interpreting meta-data can be tricky and simply
-loading media collections that include files with non-homogeneous
-formats, encoding types, sampling frequencies, color spaces, and so on can be awkward.
+Correctly interpreting meta-data can be tricky and writing code to simply
+load media collections that include files with non-homogeneous
+formats, encoding types, sampling frequencies, color spaces, and so on can be tedious.
 
-One of the main reasons for developing and releasing SkData was to save scientists the trouble of re-writing scripts to make sense of data set files.
+One of the main reasons for developing and releasing SkData was to save scientists the trouble of re-writing scripts that make sense of data set files.
 A low-level data set module should include the logic for reading, walking, parsing, etc. any and all raw archive files.
-This logic should turning those raw archive files into appropriate Python data structures such as
+This logic should turn those raw archive files into appropriate Python data structures such as
 lists, dictionaries, NumPy arrays, Panda data frames, and/or PyTables ``Table`` objects.
 
 For example, the low-level LFW data set class's ``meta`` attribute is computed by parsing a few text files and walking the directory structure within ``LFW.home()``.
 The ``meta`` property is a list of dictionaries enumerating what images are present, how large they are, what color space they use, and the name of the individual in each image.
-It does not include all the pixel data because, in our judgement, the pixel data required a lot of memory and could be handled another way.
-Access to the pixel data is provided via an indirect load-on-demand mechanism described below (see the section on the *lazy array*).
-The LFW low-level module contains an additional method called ``parse_pairs_file`` which parses some additional archived text files that describe
+It does not include all the pixel data because, in our judgement, the pixel data required a lot of memory and could be provided instead by a *lazy array* (see [Dealing with Large Data] below).
+The LFW low-level module contains an additional method called ``parse_pairs_file`` which parses some additional archived text files describing
 the train/test splits that the LFW authors recommend using for the development and evaluation of algorithms.
 This may seem ad-hoc, and indeed it is.
 Low-level modules are meant to be particular to individual data sets, and not standardized.
 
+There isn't a lot more to say about low-level dataset modules in general.
+Section [Current List of Data Sets] below enumerates the data sets currently in
+SkData that have some degree of low-level support, and that list continues to
+grow.
 
 
 Intro to Experiment Protocols (High-level Interface)
@@ -252,14 +256,14 @@ Intro to Experiment Protocols (High-level Interface)
 Users who simply want a head start in getting Python access to downloaded data are well-served by the low-level modules, but
 users who want a framework to help them reproduce previous machine learning results by following specific experiment protocols
 will be more interested in using SkData's higher-level ``view`` interface.
-This section describes the high-level protocol abstractions provided by SkData's various data set-specific ``view`` modules.
+The next few sections describe the high-level protocol abstractions provided by SkData's various data set-specific ``view`` modules.
 
 
 Background: Classification and Cross-Validation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Before we get into ``view`` module abstractions for experiment protocols,
-this Section will introduce the machine learning methodology that these abstractions will ultimately provide.
+this section will introduce the machine learning methodology that these abstractions will ultimately provide.
 
 SkData's high-level modules currently provide structure for classification problems.
 A classification problem, in machine learning terms, is a scenario in which
@@ -376,7 +380,7 @@ The first statement of our cross-validation code sample creates a *view* of the 
 
     iris_view = SimpleCrossValidation()
 
-The ``SimpleCrossValidation`` class uses Iris data set's low level interface to load features
+The ``SimpleCrossValidation`` class uses Iris data set's low-level interface to load features
 into a numpy ``ndarray``, and generally prepare it for usage by sklearn.
 In general, a View may be configurable (e.g. how to partition :math:`D` into training and testing sets)
 but this simple demonstration protocol does not require any parameters.
@@ -406,11 +410,11 @@ The ``SklearnClassifer`` acts as an adapter that implements the ``skdata.base.Le
 The class serves two roles:
 (1) it provides a reference implementation for how handle commands from a protocol object;
 (2) it supports unit tests for protocol classes in Skdata.
-Researchers are encouraged to implement their own ``LearningAlgo`` classes following the example of the ``SklearnClassifier`` class (e.g. by cut & paste).
+Researchers are encouraged to implement their own ``LearningAlgo`` classes following the example of the ``SklearnClassifier`` class.
 Custom LearningAlgo classes can compute and save algorithm-specific statistics, and implement performance-enhancing hacks such as custom data iterators and pre-processing caches.
 The practice of appending a summary dictionary to the lists in self.results has proved useful in our own work, but it likely not the best technique for all scenarios.
 A ``LearningAlgo`` subclass should somehow record the results of model training and testing, but SkData's high-level ``view`` modules does not require that those results be stored in any particular way.
-We will see more about how a protocol object drives training and testing later in Section [The Evaluation Protocol].
+We will see more about how a protocol object drives training and testing later in [The Evaluation Protocol].
 
 
 Case Study Step 3: Evaluating the Learning Algorithm
@@ -441,7 +445,6 @@ The first kind of command produces an entry in the ``algo.results['best_model']`
 The second kind of command produces an entry in the ``algo.results['loss']`` list.
 
 After the ``protocol`` method has returned, we can loop over these lists (as in lines 17-21) to obtain a summary of what happened during our evaluation protocol.
-(Some data sets offer this protocol as an iterator so that very long sequences of commands can be aborted early.)
 
 
 
@@ -525,12 +528,12 @@ That protocol calls an additional method that is not widely used:
 ``retrain_classifier(model, task)``
     Instruct the learning algorithm, to retrain only the classifier, and not repeat any internal feature selection that has taken place.
 
-Going forward, when new protocols require new commands for learning algorithms, then that's OK, the design is just to add them.
-As evidenced by the short list of commands above, we haven't had to do this very often to date.
+When new protocols require new commands for learning algorithms, our policy is to add them.
+As evidenced by the short list of commands above, we have only had to do this once to date.
 
 
-The ``SemanticsDelegator`` LearningAlgo
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The SemanticsDelegator LearningAlgo
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Authors of new ``LearningAlgo`` base classes may wish to inherit from ``base.SemanticsDelegator`` instead.
 The ``SemanticsDelegator`` class handles calls to e.g. ``best_model`` by appending the semantics string to the call name,
@@ -561,14 +564,14 @@ In the case study we looked at earlier, the call to ``iris_view.protocol(algo)``
 
 More elaborate protocols construct more task objects, and train and test more models, but typically the ``protocol`` methods are quite short.
 Doubly-nested K-fold cross-validation is probably the most complicated evaluation protocol, but it still consists essentially of two nested for loops calling ``best_model`` and ``loss`` using a single K-way data partition.
+It can be useful to implement longer protocols as iterators rather than methods so that they can be aborted early.
 
 
 
 Dealing with Large Data
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Generally, each data set module is free to deal with large data in a manner befitting its data set.
-Task semantics constrain the data representations that can be used at the protocol layer.
+Generally, each data set module is free to deal with large data in a manner befitting its data set, although particular Task semantics constrain the data representations that can be used at the protocol layer.
 Two complementary techniques are used within the SkData library to keep memory and CPU usage under control when dealing with potentially enormous data sets.
 The first technique is to use the indexed Task semantics.
 Recall that when using indexed semantics, a Task includes an indexable data structure (e.g. ``ndarray``, ``DataFrame``, or ``Table``) containing the whole of the data set :math:`D`,
@@ -585,7 +588,7 @@ and for learning algorithms to treat very large data sets in sensible ways.
 The lazy array does not make batch learning algorithms into online ones, but it provides a mechanism for designing iterators so that online algorithms can traverse large numbers of examples in a cache-efficient way.
 
 
-Command-Line Interface
+Command-line Interface
 ----------------------
 
 Some data sets also provide a ``main.py`` file that provides a command-line interface for operations such as downloading, visualizing, and deleting data.
@@ -601,13 +604,13 @@ These scripts are meant to follow the convention that running them with no argum
 In most cases, the scripts are very short and easy to read so go ahead and look at the source if the help message is lacking.
 
 
-Current list of data sets
+Current List of Data Sets
 -------------------------
 
-The SkData library currently provides some level of support for about 40 data sets.
+The SkData library currently provides some level of support for about 40 data sets (some data sets are parametrically related, not clearly distinct).
 The data sets marked with (*) provide the full set of low-level, high-level, and script interfaces described above.
-Details and references for each one can be found in the SkData project source code.
-Many of the synthetic data sets are inherited from the ``sklearn`` project,
+Details and references for each one can be found in the SkData project web page, wiki, and source code.
+Many of the synthetic data sets are inherited from the ``sklearn`` project;
 the authors have contributed most of the image data sets.
 
 
