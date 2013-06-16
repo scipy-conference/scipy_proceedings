@@ -1,23 +1,23 @@
 {
   "proceedings": {
-     "citation_key": "proc-scipy-2010", 
+     "citation_key": "proc-scipy-2013",
      "title": {
        "acronym": "SciPy",
        "conference": "Python in Science Conference",
-       "ordinal": "9th",
-       "short": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2010)",
+       "ordinal": "12th",
+       "short": "PROC. OF THE 12th PYTHON IN SCIENCE CONF. (SCIPY 2013)",
        "full": "Proceedings of the 9th Python in Science Conference"
      },
-     "year": "2010",
+     "year": "2013",
      "editor": [
         "Stéfan van der Walt",
         "Jarrod Millman"
      ],
-     "volume": 3,
+     "volume": 6,
      "number": 1,
      "isbn": "value",
      "location": "Austin, Texas",
-     "dates": "June 28 - July 3",
+     "dates": "June 24 - June 29",
      "copyright": {
        "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
        "proceedings": ["The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
@@ -30,9 +30,9 @@
         {
             "name": "Conference Chairs",
             "members": [
-                {"name": "Jarrod Millman",
-                 "org": "UC Berkeley"},
-                {"name": "Travis Oliphant",
+                {"name": "Andy Terrel",
+                 "org": "University of Texas"},
+                {"name": "Jonathan Rocher",
                  "org": "Enthought, Inc."}
                 ]
         },
@@ -40,10 +40,10 @@
         {
             "name": "Program Chairs",
             "members": [
-                {"name": "Stéfan van der Walt",
-                 "org": "Applied Mathematics, Stellenbosch University"},
-                {"name": "Someone else",
-                 "org": "Some company"}
+                {"name": "Katy Huff",
+                 "org": "University of Wisconsin and Argonne National Laboratory"},
+                {"name": "Matt McCormick",
+                 "org": "Kitware, Inc."}
                 ]
         }
     ],

@@ -38,6 +38,10 @@ class Translator(LaTeXTranslator):
         self.abstract_in_progress = False
         self.non_breaking_paragraph = False
 
+        self.figure_type = 'figure'
+        self.figure_alignment = 'left'
+        self.table_type = 'table'
+
     def visit_docinfo(self, node):
         pass
 
@@ -226,13 +230,23 @@ class Translator(LaTeXTranslator):
 
     def visit_figure(self, node):
         self.requirements['float_settings'] = PreambleCmds.float_settings
+
+        self.figure_type = 'figure'
         if 'classes' in node.attributes:
-            placements = ''.join(node.attributes['classes'])
-            self.out.append('\\begin{figure}[%s]'%placements)
-        else:
-            self.out.append('\\begin{figure}')
+            placements = '[%s]' % ''.join(node.attributes['classes'])
+            if 'w' in placements:
+                placements = placements.replace('w', '')
+                self.figure_type = 'figure*'
+
+        self.out.append('\\begin{%s}%s' % (self.figure_type, placements))
+
         if node.get('ids'):
             self.out += ['\n'] + self.ids_to_labels(node)
+
+        self.figure_alignment = node.attributes.get('align', None)
+
+    def depart_figure(self, node):
+        self.out.append('\\end{%s}' % self.figure_type)
 
     def visit_image(self, node):
         attrs = node.attributes
@@ -241,7 +255,7 @@ class Translator(LaTeXTranslator):
         if 'scale' not in node.attributes and 'width' not in node.attributes:
             node.attributes['width'] = '\columnwidth'
 
-        node.attributes['align'] = 'left'
+        node.attributes['align'] = self.figure_alignment or 'left'
 
         LaTeXTranslator.visit_image(self, node)
 
@@ -254,7 +268,13 @@ class Translator(LaTeXTranslator):
         self.non_breaking_paragraph = True
 
     def visit_table(self, node):
-        self.out.append(r'\begin{table}')
+        classes = node.attributes.get('classes', [])
+        if 'w' in classes:
+            self.table_type = 'table*'
+        else:
+            self.table_type = 'table'
+
+        self.out.append(r'\begin{%s}' % self.table_type)
         LaTeXTranslator.visit_table(self, node)
 
     def depart_table(self, node):
@@ -263,7 +283,7 @@ class Translator(LaTeXTranslator):
         self.out.append(r'\caption{%s}' % ''.join(self.table_caption))
         self.table_caption = []
 
-        self.out.append(r'\end{table}')
+        self.out.append(r'\end{%s}' % self.table_type)
         self.active_table.set('preamble written', 1)
 
     def visit_thead(self, node):
@@ -272,6 +292,10 @@ class Translator(LaTeXTranslator):
         # (in the wrong place)
         self.table_caption = self.active_table.caption
         self.active_table.caption = []
+
+        opening = self.active_table.get_opening()
+        opening = opening.replace('linewidth', 'tablewidth')
+        self.active_table.get_opening = lambda: opening
 
         LaTeXTranslator.visit_thead(self, node)
 
@@ -322,12 +346,12 @@ class Translator(LaTeXTranslator):
 
     def visit_InlineMath(self, node):
         self.requirements['amsmath'] = r'\usepackage{amsmath}'
-        self.body.append('$' + node['latex'] + '$')
+        self.out.append('$' + node['latex'] + '$')
         raise nodes.SkipNode
 
     def visit_PartMath(self, node):
         self.requirements['amsmath'] = r'\usepackage{amsmath}'
-        self.body.append(mathEnv(node['latex'], node['label'], node['type']))
+        self.out.append(mathEnv(node['latex'], node['label'], node['type']))
         self.non_breaking_paragraph = True
         raise nodes.SkipNode
 
@@ -335,7 +359,7 @@ class Translator(LaTeXTranslator):
         if node["usepackage"]:
             for package in node["usepackage"]:
                 self.requirements[package] = r'\usepackage{%s}' % package
-        self.body.append("\n" + node['latex'] + "\n")
+        self.out.append("\n" + node['latex'] + "\n")
         raise nodes.SkipNode
 
 
