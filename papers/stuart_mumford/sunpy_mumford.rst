@@ -14,9 +14,9 @@
 :email: florian.mayer@bitsrc.org
 :institution: Vienna University of Technology
 
-====================================
+===================================
  SunPy: Python for Solar Physicists
-====================================
+===================================
 
 .. class:: abstract
 
