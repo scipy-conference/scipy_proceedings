@@ -37,12 +37,12 @@ Multidimensional Data Exploration with Glue
     research data is highly customized and problem-specific. Glue aims
     to accommodate this and simplify the "data munging" process, so that
     researchers can more naturally explore what their data have to
-    say. The result is a cleaner scientific workflow, and more rapid
-    interaction with data.
+    say. The result is a cleaner scientific workflow, faster
+    interaction with data, and an easier avenue to insight.
 
 .. class:: keywords
 
-   data visualization, exploratory data analysis, python
+   data visualization, exploratory data analysis, Python
 
 Introduction
 ------------
@@ -68,7 +68,7 @@ interactive data visualization environment that focuses on
 multi-dataset exploration. Glue allows users to specify how different
 datasets are related, and uses this information to dynamically link
 and overlay visualizations of several datasets. Glue also
-integrates into python-based analysis workflows, and eases the transition
+integrates into Python-based analysis workflows, and eases the back-and-forth
 between interactive and non-interactive data analysis.
 
 
@@ -76,23 +76,23 @@ The Basic Glue Workflow
 -----------------------
 
 The central visualization philosophy behind Glue is the idea of
-linked visualizations -- that is, multiple related representations
+linked views -- that is, multiple related representations
 of a dataset that are dynamically connected, such that interaction
-with one visualization affects the appearance of another. For example,
+with one view affects the appearance of another. For example,
 a user might create two different scatter plots of a multi-dimensional
 table, select a particular region of parameter space in one plot,
 and see the points in that region highlighted in both plots. Linked-view
 visualizations are especially effective at exploring high-dimensional
-data. Glue extends this idea to multiple files.
+data. Glue extends this idea to related data sets spread across multiple files.
 
 Let's illustrate the basic Glue workflow with an example. An
 astronomer is studying Infrared Dark Clouds (environments of star
-formation) in our Galaxy. Her data include a catalog of known
+formation) in our Galaxy. Her data sets include a catalog of known
 Infrared Dark Clouds, a second catalog of "cores"
 (substructures embedded in these clouds where the stars actually
 form), and a wide-field infrared survey image of a particular cloud.
 
-She begins by loading the cloud catalog into Glue. She creates a
+**Step 1** She begins by loading the cloud catalog into Glue. She creates a
 scatter plot of the position of each cloud, as well as a histogram
 showing the distribution of surface densities. She creates each
 visualization by dragging the data item onto the visualization
@@ -102,12 +102,13 @@ area. At this point, her screen looks like Figure 1.
    :scale: 34%
    :figclass: thb
 
-   The basic Glue interface. Datasets are listed on the left panel.
-   Dragging them to the right creates a new visualization.
+   The basic Glue interface, shown at the end of **step 1**. Datasets
+   are listed on the left panel.  Dragging them to the right creates a
+   new visualization.
 
-She is interested in a particular region of the sky, and thus draws
+**Step 2** She is interested in a particular region of the sky, and thus draws
 a lasso around particular points in the scatter plot. This creates
-a new "subset", which is shown in red on each visualization. If she
+a new "subset", which is shown in red on each visualization (Figure 2). If she
 traces a different region on either plot, the subset will update
 in both views automatically.
 
@@ -115,15 +116,16 @@ in both views automatically.
    :scale: 34%
    :figclass: thb
 
-   Tracing a cluster of points in the scatter plot creates a
-   new subset, The histogram plot updates automatically.
+   Glue after **step 2**. Tracing a cluster of points in the scatter
+   plot creates a new subset, The histogram plot updates
+   automatically.
 
-Next she loads the infrared image. She would like to see how the
+**Step 3** Next she loads the infrared image. She would like to see how the
 points in the catalog relate to structures in the image, by
 overplotting the subset on the image. To do this, she first "links"
 the data by defining the logical relationships between the two
 files. She opens a data linking dialog, which displays the attributes
-defined for each dataset. The image has attributes for the x and y
+defined for each dataset (Figure 3). The image has attributes for the x and y
 location of each pixel, and the catalog has columns which list the
 location of each object in the same coordinate system. She highlights
 the attribute describing the x location attribute for each dataset
@@ -136,37 +138,39 @@ location attribute (declination), and closes the dialog.
    :figclass: thb
 
    The dialog for expression relationships between different
-   datasets. Here, both datasets use the same spatial
+   datasets in **step 3**. Here, both datasets use the same spatial
    coordinates.
 
-Now, she can drag the subset onto the image, to overplot
+**Step 4** Now, she can drag the subset onto the image, to overplot
 these points at their proper location (this is possible because
 Glue now has enough information to compute the location of each
 catalog source in the image. The details of how this is accomplished
-is described in the next section). All three plots are still linked:
+are described in the next section). All three plots are still linked:
 if the user highlights a new region in the image, this will
-redefine the subset and update each plot.
+redefine the subset and update each plot. Figure 4 shows the
+Glue interface at this point.
 
 .. figure:: step_4.png
-   :scale: 18%
-   :figclass: thb
+   :scale: 38%
+   :align: center
+   :figclass: wthb
 
    Once the catalog and image are linked, the user can overplot
-   the original subset on the image.
+   the original subset on the image (**step 4**).
 
-The relationship between the catalog and image was very simple;
-each dataset described the same spatial quantities, in the same
-units. In general, connections between datasets are more
-complicated. For example, the second catalog of cores defines the location
-of points in a different coordinate system. Because of this,
-Glue allows users to connect quantities across datasets
-using transformation functions. Glue includes some of these
-functions by default, but users can also write their own
-functions for arbitrary transformations. Glue uses these functions
-as needed to transform quantities between coordinate systems,
-to correctly overlay visualizations and/or filter data in subsets.
+The relationship between the catalog and image was very simple; each
+dataset described the *same spatial quantities*, in the *same
+units*. In general, connections between datasets are more
+complicated. For example, the catalog of cores specifies positions in
+a different coordinate system. Because of this, Glue allows users to
+connect quantities across datasets using transformation
+functions. Glue includes some of these functions by default, but users
+can also write their own functions for arbitrary transformations. Glue
+uses these functions as needed to transform quantities between
+coordinate systems, to correctly overlay visualizations and/or filter
+data in subsets.
 
-Our scientist discovers several interesting relationships between
+**Step 5** Our scientist discovers several interesting relationships between
 these datasets -- in particular, that several distinct entries in the
 cloud catalog appear to form a coherent, extended structure in the
 image. Furthermore, the cores embedded in these clouds all have
@@ -183,7 +187,7 @@ definitions at any time.
    :figclass: thb
 
    Eventually, the user annotates several
-   interesting regions in parameter space. These subsets
+   interesting regions in parameter space (**step 5**). These subsets
    can be exported as masks for further analysis.
 
 
@@ -232,7 +236,7 @@ image*. The pseudo-code for the overlay looks like this:
 
  def overplot_catalog(catalog_data):
      try:
-         # lookup/compute requested quantities, if possible
+         # try to fetch requested quantities
          x = catalog_data['pixel_coord_x']
          y = catalog_data['pixel_coord_y']
      except InvalidAttribute:
@@ -293,7 +297,7 @@ between interactive and scripted analysis, and can lead to a more fluid
 workflow. Here are several examples:
 
 **Custom data linking functions** Glue allows users to specify
-arbitrary python functions to translate between quantities in
+arbitrary Python functions to translate between quantities in
 different datasets.  As a simple example, consider a function which
 translates between pounds and kilograms:
 
@@ -335,16 +339,16 @@ This function parses a data object with three attributes (the red,
 green, and blue channels). The ``data_factory`` decorator adds
 this function to the data loading user interface.
 
-**Setup Scripts** Glue can be passed a python script to run on
+**Setup Scripts** Glue can be passed a Python script to run on
 startup. This can be a convenient way to automate the task of loading
 and linking several files that are frequently visualized. This
 addresses another typical pain-point of GUIs -- the repetitive
 mouse-clicking one has to do every time a GUI is restarted.
 
 **Calling Glue from Python** Glue can be invoked during a running
-Python session. Many scientists use python for data-exploration from
+Python session. Many scientists use Python for data-exploration from
 the command line (or, more recently, the IPython notebook). Glue can
-be used to interact with live python variables. For example, Glue
+be used to interact with live Python variables. For example, Glue
 includes a convenience function, ``qglue``, that composes "normal"
 data objects like NumPy arrays and Pandas DataFrames into Glue
 objects, and initializes the Glue UI with these variables. ``qglue``
@@ -352,7 +356,7 @@ is useful for quick questions about multidimensional data that arise
 mid-analysis.
 
 Similarly, Glue embeds an IPython terminal that gives users access
-to the python command line (and Glue variables) during a glue
+to the Python command line (and Glue variables) during a glue
 session. Variables in a Glue session can be introspected and
 analyzed on this command line.
 
@@ -365,8 +369,8 @@ visualizations which can be used to identify and drill down into
 interesting data subsets.
 
 Many of the ideas behind Glue are rooted in previous efforts (for a
-more thorough summary of this from an astronomy perspective, see
-[Goodman12]_). The mathematician John Tukey pioneered many of the
+more thorough history from an astronomy perspective, see
+[Goodman12]_). The statistician John Tukey pioneered many of the
 ideas behind what he termed Exploratory Data Analysis (that is, the
 open-ended investigation of features in datasets, as distinguished
 from Confirmatory Data Analysis where specific hypotheses are tested
@@ -391,15 +395,22 @@ linked-view environment.
 Glue builds upon the ideas developed in these programs in a few key
 ways. The majority of these linked-view environments focus on the
 exploration of a single catalog. Glue generalizes this approach in two
-directions. First, Glue is designed to handle several files at a time.
-Second, Glue handles non-tabular data like images -- this
-is critical for applications in astronomy, medical imaging, and Geographic
-Information Systems.
+directions. First, Glue is designed to handle several files at a time,
+and to visually explore the connections between these files.  Second, Glue
+handles non-tabular data like images -- this is critical for
+applications in astronomy, medical imaging, and Geographic Information
+Systems.
 
-More generally, Glue is designed around the philosophy that datasets
-and their interrelationships are becoming increasingly nuanced. Glue
-aims to accommodate these nuances by providing a modular and customizable
-platform for data exploration.
+The landscape of data is evolving rapidly, and driving revolutions
+both within and beyond science. The phenomenon of "big data" is one of
+the most public facets of this revolution. Rapidly growing volumes of
+data present new engineering challenges for analysis, as well as new
+opportunities for data-driven decision making. Glue tackles a
+different but equally important facet of the data revolution, which we
+call "wide data". Data are becoming increasingly inter-related, and
+the ability to tease out these connections will enable new
+discoveries. Glue is a platform for visually and flexibly exploring these
+relationships.
 
 
 References
