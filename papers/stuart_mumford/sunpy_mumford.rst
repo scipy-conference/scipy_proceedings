@@ -44,7 +44,7 @@ Modern solar physics, similar to astrophysics, requires increasingly complex sof
 The Sun is the most well-observed star. 
 As such, solar physics is unique in its ability to access large amounts of high resolution ground- and space-based observations of the Sun at many different wavelengths and spatial scales with high time cadence. 
 Modern solar physics, similar to astrophysics, therefore requires increasingly complex software tools, both for the retrieval and  the analysis of data. 
-For example, NASA's Solar Dynamics Observatory (SDO) satellite records over 1 TB of data per day all of which is telemetered to the ground and available for analysis. 
+For example, NASA's <http://sdo.gsfc.nasa.gov>`_[Solar Dynamics Observatory (SDO)]_ satellite records over 1 TB of data per day all of which is telemetered to the ground and available for analysis. 
 As a result, scientists have to process large volumes of complex data products. 
 In order to make meaningful advances in solar physics, it is important for the software tools to be standardized, easy to use, and transparent, so that the community can build upon a common foundation.
 
@@ -137,6 +137,18 @@ This would produce the same image as Fig. :ref:`aiamap` but with a custom title.
 LightCurve
 ----------
 
+Time series data are an important element in solar physics and many data sources are
+available. In recognition of this fact, SunPy provides a lightcurve object which recognizes a number of data sources. The main engine behind the lightcurve object is the pandas data analysis library. Each lightcurve holds its data inside a pandas object. The 
+lightcurve object, as all other SunPy objects, is wrapper around a data object. Since pandas already provides many capabilities, the SunPy lightcurve object does not need to.
+The lightcurve object recognizes the following data sources; <http://www.swpc.noaa.gov/rt_plots/xray_1m.html>`_ [GOES X-ray Sensor (XRS)]_, <http://lasp.colorado.edu/home/missions-projects/quick-facts-sdo-eve/>`_ [SDO EUV Variability Experiment (EVE)]_,  and <http://proba2.sidc.be>`_ [PROBA2/LYRA]_. 
+Since time series data is generally relatively small and there is no established standard as to how it should be stored and distributed, each SunPy lightcurve object provides the ability to download it's own data in its constructor. For example
+
+.. code-block:: python
+
+    goes = sunpy.lightcurve.GOESLightCurve.create('2012/06/01', '2012/06/05')
+
+Each lightcurve can also plot it's own data in a standard format through the plot() and peek() functions. 
+
 Spectra
 -------
 
@@ -159,12 +171,12 @@ The VSO allows the user to search using parameters such as instrument name or ty
 VSO's main interface is web-based, but an API based on a WSDL webservice is also available. 
 SunPy provides a Python front-end to this API.
 
-A new problem arose with the launch of the SDO mission.
+A new problem arose with the launch of the <http://sdo.gsfc.nasa.gov>`_[SDO] mission.
 The large size of the images (4 times larger than the previous mission), together with the fastest cadence of their cameras (~10 images per minute) makes challenging to use of the data in the same manner as previous observations.
 Previsously the standard workflow was to download long time series' of data and to view animations to identify features of interest to the scientist.  
-For SDO this would involve downloading prohibitively large amouts of data.
+For <http://sdo.gsfc.nasa.gov>`_[SDO]_ this would involve downloading prohibitively large amouts of data.
 The `Heliophysics Event Knowledgebase <http://www.lmsal.com/hek/>`_ [HEK]_ was created to solve this overload of data. 
-The principle behind the HEK is to run a number of automated detection algorithms on the data that is obtained by SDO to populate a database with information about the features and events observed in each image. 
+The principle behind the HEK is to run a number of automated detection algorithms on the data that is obtained by <http://sdo.gsfc.nasa.gov>`_[SDO] to populate a database with information about the features and events observed in each image. 
 Thus allowing searches for event types or properties, enabling scientists to selectively download only the portion or slices of the images needed for further analysis. 
 SunPy provides a programatic way to search and retreve the information related to the events, but currently does not have facilities for downloading the observational data. 
 This allows, for example, over plotting of the feature contours on an image, to study their properties and evolution, etc.
