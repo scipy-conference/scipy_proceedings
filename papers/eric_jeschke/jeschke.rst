@@ -277,7 +277,7 @@ buttons to complete the viewer.
 Scanning down the code a bit, we can see that whether by dragging and
 dropping or via the click to open, we ultimately call the load_file()
 method to get the data into the viewer.  As shown, load_file uses 
-pyfits to open the file and extract the first usable HDU as a NumPy
+Astropy to open the file and extract the first usable HDU as a NumPy
 data array.  It then passes this array to the viewer via the
 set_data() method.  The Ginga widget can take in data either as 2D
 ``NumPy`` arrays, ``Astropy``/``pyfits`` HDUs or Ginga's own ``AstroImage``
@@ -410,7 +410,7 @@ The purpose of each method is as follows.
 ``__init__(self, fv, fitsimage)``:
 This method is called when the plugin is loaded for the  first time.
 ``fv`` is a reference to the Ginga shell and ``fitsimage`` is a reference to
-the FitsImageCanvas object associated with the channel on which the
+the ``FitsImageCanvas`` object associated with the channel on which the
 plugin is being invoked.  You need to call the superclass initializer
 and then do any local initialization. 
 
@@ -723,7 +723,7 @@ The Ginga FITS viewer and toolkit provides a set of building blocks for
 developers wishing to add FITS image visualization to their Python-based
 application, or end users interested in a Python-scriptable, extensible
 viewer.  Two avenues of development are possible: a "blue sky"
-approach by using a flexible FitsImageCanvas display widget and building up
+approach by using a flexible ``FitsImageCanvas`` display widget and building up
 around that, or by starting with the plugin-based reference viewer and
 customizing by modifying or writing new plugins.  In either case, the
 software can be targeted to two different widget sets (Gtk and Qt)
@@ -735,7 +735,7 @@ Future plans for Ginga mostly center around the development of some
 additional plugins to enhance capabilities.  Ideas suggested by users
 include:  
 
-- mosaicing of images
+- mosaicking of images
 - simple, user-customizable pipelines for handling flat fielding, bias
   frames, dark frame subtraction, bad pixel masking, etc.
 - improving the set of graphical plotting elements
