@@ -100,7 +100,7 @@ as black box classifiers or for producing correct regression output, it is also 
 among features that have been discovered by the trained ML model. Some approaches, such as examining neural network weights, 
 are dependent on the workings of the particular ML method, and expose how the method makes a prediction.  
 
-Other approaches however, are agnostic to the workings of the ML method even as they open up the “black box” to reveal
+Other approaches however, are agnostic to the workings of the ML method even as they open up the 'black box' to reveal
 what relationships among input parameters were discovered. Our method falls within this category. Such methods, 
 that focus on what is learned rather than how it is learned have been surveyed [Francis02]_. These include 
 visualization methods and the computation of a sensitivity value for each parameter. Sensitivities are determined 
@@ -126,7 +126,7 @@ Support Vector Machines
 -----------------------
 
 The Support Vector Machines (SVM) is a supervised learning algorithm  introduced by Vapnik which began to be widely used 
-in classification in the 1990’s.  SVMs are trained with a learning algorithm from optimization theory that 
+in classification in the 1990's.  SVMs are trained with a learning algorithm from optimization theory that 
 searches a hypothesis space of linear functions operating on data that has been pushed into a high dimensional feature space [Crist97]_.  
 Basically, an SVM is a hyperplane classifier which finds the optimal hyperplane to separate data into classes. 
 When dividing two classes, the optimal hyperplane is orthogonal to the shortest line connecting the convex hulls of the two classes, 
@@ -156,7 +156,7 @@ in order to relax the constraints:
 
 .. math::
 
-    \mbox{where } \epsilon_i >= 0,   i= 1,2,…,m
+    \mbox{where } \epsilon_i >= 0,   i= 1,2,...,m
 
 The amount of slack is specified by the user of an SVM in the variable :math:`C`, known as the regularization or soft-margin parameter, 
 which controls the error penalty according to the equation below. Higher :math:`C` weights classification errors more, 
@@ -176,7 +176,7 @@ The optimization problem that is solved when allowing for slack :math:`\epsilon`
 
 .. math::
 
-        \mbox{where } \epsilon_i >= 0,   i= 1,2,…,m
+        \mbox{where } \epsilon_i >= 0,   i= 1,2,...,m
 
 
 SVMs have the ability to find a separating hyperplane even if one does not exist in the space of the input vector, 
