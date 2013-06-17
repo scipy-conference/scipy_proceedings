@@ -142,14 +142,18 @@ Each `Lightcurve` holds its data inside a `pandas` object.
 The `Lightcurve` object, as all other SunPy objects, is wrapper around a data object. Since `pandas` already provides many capabilities, the SunPy `Lightcurve` object does not need to.
 The `Lightcurve` object recognizes the following data sources; `GOES X-ray Sensor (XRS) <http://www.swpc.noaa.gov/rt_plots/xray_1m.html>`_ , `SDO EUV Variability Experiment (EVE) <http://lasp.colorado.edu/home/missions-projects/quick-facts-sdo-eve/>`_,  and `PROBA2/LYRA <http://proba2.sidc.be>`_. 
 Since time series data is generally relatively small and there is no established standard as to how it should be stored and distributed, each SunPy `Lightcurve` object provides the ability to download it's own data in its constructor. 
-For example
+The example below retrieves the data, creates a `Lightcurve` object and plots the data in the default manner (show in :ref:`goeslc`):
 
 .. code-block:: python
 
+    import sunpy
     goes = sunpy.lightcurve.GOESLightCurve.create(
 		'2012/06/01', '2012/06/05')
+    goes.peek()
 
-Each `Lightcurve` can also plot it's own data in a standard format through the plot() and peek() functions. 
+.. figure:: plotting_ex2.png
+
+   Default visualization of a `GOESLightCurve`. :label:`goeslc`
 
 Spectra
 -------
