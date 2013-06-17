@@ -6,9 +6,9 @@
 :email: barb.fenner@gmail.com
 :institution: King's College, Wilkes-Barre, PA
 
-----------------------------------------------------------
-Automating Quantitative Confocal Microscopy Analysis (v07)
-----------------------------------------------------------
+----------------------------------------------------
+Automating Quantitative Confocal Microscopy Analysis
+----------------------------------------------------
 
 .. class:: abstract
 
@@ -44,7 +44,7 @@ labeled-proteins within a biological sample. Fluorescent labels are
 bound to molecules of interest in the sample.  The corresponding pixel
 intensity in the captured image is proportional to the amount of
 molecule in the sample.  Multiple molecules can be labelled
-simultaneously, by using fluorescent labels with different
+simultaneously by using fluorescent labels with different
 excitation/emission spectra.  We designed and executed a biological
 experiment to determine the presence of a binding protein and a
 receptor protein at sub-cellular structures over time.  The experiment
@@ -73,7 +73,7 @@ each of the three RGB color channels.
 
 Background noise is the portion of the intensity signal that does not
 represent true biological phenomena.  Confocal microscopy inherently
-reduces background noise from autofluorescence of cellular material,
+reduces background noise from auto-fluorescence of cellular material,
 light refractive scatter, and detection artifacts [Cro05].  It is
 further reduced by choosing appropriate (1) microscope hardware, (2)
 fluorescent labels, and (3) computer software settings [Bol06][Cro05].
@@ -171,7 +171,7 @@ automated thresholds. Both methods produced visually similar images
 background correction occurred in the green channel.  This is expected
 due to natural autofluorescence of cellular material in the green
 channel.  However, the green channel also demonstrated the
-greatest difference between methods, the automated method
+greatest difference between methods: the automated method
 under-corrected.
 
 .. figure:: orig-exp-pred.png
@@ -217,9 +217,9 @@ Organelle=Endosome* is shown in Figure :ref:`tlpfig`.
    :figclass: w
 
    Log-probabilities of the bivariate intensity distributions.  After
-   removing zeros, the log-probabilities of the bivariate intensity
-   distributions were plotted.  Each channel pair is represented for
-   both manual and automated threshold images.  The distributions for
+   removing zeros, we plotted the log-probabilities of the bivariate
+   intensity distributions.  Each channel pair is represented for both
+   manual and automated threshold images.  The distributions for
    manual and automated thresholds are similar.  Axis bars show 10-,
    25-, 50-, 75-, and 90-percentiles for the univariate intensity
    distributions.  Data are from *Time=10, Organelle=Endosome*
@@ -227,7 +227,7 @@ Organelle=Endosome* is shown in Figure :ref:`tlpfig`.
 
 From the panel plot, we see that the bivariate distributions under
 manual and automated thresholding are qualitatively similar.  For
-example, the RG histograms shows low green intensities distributed
+example, the RG histograms show low green intensities distributed
 over a wide range of red, with green showing a skew towards higher red
 intensities.  The RB histograms show more even distributions over both
 channels.  The GB histograms show lower green intensities over a wider
@@ -420,6 +420,9 @@ calculated (Figure :ref:`coefffig`).
 
 .. table:: Pearson and Manders Coefficients for Endosomes. *Src* =
 	   *Auto* is Automated threshold; *Man* is Manual threshold.
+	   *Coeff* = *P* is Pearson; *Coeff* = *M* is Manders.
+	   Values are mean and standard error, calculated over six
+	   repeated *Series*.
 	   :label:`coefftable`
    :class: w
 
@@ -453,7 +456,8 @@ calculated (Figure :ref:`coefffig`).
 
 
 For instance, *Pearson* at *Endosomes, 10, Manual* is
-:math:`0.32{\pm}0.02` while for *Endosome, 10, Automated* is
+:math:`0.32{\pm}0.02` (mean :math:`{\pm}` standard error over
+*Series*) while for *Endosome, 10, Automated* is
 :math:`0.35{\pm}0.01`. The *Pearson* coefficient for *Endosomes, 30,
 Manual* is :math:`0.55{\pm}0.03` and *Endosomes, 30, Automated* is
 :math:`0.55{\pm}0.03`. By *Endosomes, 60*, the Pearson’s coefficient
@@ -495,7 +499,7 @@ analysis. Microarrays are tools used to study experimental differences
 in DNA, protein, or RNA, which often produce very large datasets
 [Hell02]. Multi-channel microarray experiments have similar background
 noise challenges as confocal microscopy. Most microarray experimental
-data is captured in the form on two-color channel images with
+data is captured in the form of two-color channel images with
 background noise generated from non-specific label binding or
 processing artifacts. A third biological application for our automated
 thresholding method is magnetic resonance imaging (MRI) [Bal10]. In
@@ -532,7 +536,7 @@ this type of automated process to combine automated thresholding with
 batch processing of colocalization coefficients using *Python*.  The
 benefits of our model are: (1) reducing the time consuming effort of
 manual background correction and (2) batch processing of multiple
-correlation measures for tri-color images.  While our experiments
+correlation measures for multi-color images.  While our experiments
 focus on applying automated quantification methods to better
 understand intracellular protein transport, our computational methods
 can be used to study a wide range of biological and non-biological
