@@ -407,7 +407,7 @@ project, which is feasible because lpEdit uses the Python package
 ``subprocess`` to make arbitrary system calls. It is not our intention
 for lpEdit to evolve to be a replacement for already established
 tools, like Org-mode. Rather, it is meant as a simple tool to help
-newcomers with programming and statistics. With the API version, of
+newcomers with programming and statistics. With the API version of
 lpEdit there remains the possibility that it may be adapted as a
 plug-in or extension to existing text editors.  
 
