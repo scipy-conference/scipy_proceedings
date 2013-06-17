@@ -182,15 +182,15 @@ Community
 =========
 
 One of SunPy's major advantages over its predecessors is that it is being developed as an open source community inside the wide and diverse general scientific python community. 
-While the SolarSoft library is "open source" in terms of the code being freely available, most of the development takes individually and there is no clear process for contribution from outsiders. 
+While the SolarSoft library is "open source" in terms of the code being freely available, most of the development takes place internally and there is no clear process for contribution from outsiders. 
 In addition to transitioning the solar physics communtity to Python, SunPy also aims to instill the prinicpals of open source development in the community.
 
 The scientifc python community is much more established in other disciplines than it is in solar physics. 
 SunPy is making use of existing scientific python projects, with deeper integration with projects like Astropy and scikit-image possible in the future. 
 This collaboration is another strength that sets the scientific python community apart from other similar solutions.
 
-SunPy has benefitiated greatly from Summer of Code schemes. 
-During its first two years (2011, 2012), SunPy participated on the `ESA summer of code in space <http://sophia.estec.esa.int/socis2012/>`_ (SOCIS). 
+SunPy has benefitiated greatly from summer of code schemes. 
+During its first two years (2011, 2012), SunPy participated on the `ESA Summer of Code In Space <http://sophia.estec.esa.int/socis2012/>`_ (SOCIS). 
 This programme is inspired by `Google summer of code <https://developers.google.com/open-source/soc/>`_ (GSOC) and aims to raise the awareness of open source projects related to space, promote the `European Space Agency <http://www.esa.int/>`_ and to improve the existing space-related open-source software.
 VSO implementation, and the first graphical user interface (GUI) were developed during these two summer programmes. 
 In 2013 SunPy is also taking part on GSOC under the umbrella of the `Python Software Fundation <http://www.python.org/psf/>`_ (PSF).
