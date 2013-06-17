@@ -4,7 +4,7 @@
 
 :author: David Pérez-Suárez
 :email: dps.helio@gmail.com
-:institution: Finnnish Meteorological Institute
+:institution: Finnish Meteorological Institute
 
 :author: Steven Christe
 :email: steven.d.christe@nasa.gov
@@ -44,13 +44,13 @@ Modern solar physics, similar to astrophysics, requires increasingly complex sof
 The Sun is the most well-observed star. 
 As such, solar physics is unique in its ability to access large amounts of high resolution ground- and space-based observations of the Sun at many different wavelengths and spatial scales with high time cadence. 
 Modern solar physics, similar to astrophysics, therefore requires increasingly complex software tools, both for the retrieval and  the analysis of data. 
-For example, NASA's <http://sdo.gsfc.nasa.gov>`_[Solar Dynamics Observatory (SDO)]_ satellite records over 1 TB of data per day all of which is telemetered to the ground and available for analysis. 
+For example, NASA's `Solar Dynamics Observatory (SDO) <http://sdo.gsfc.nasa.gov>`_ satellite records over 1 TB of data per day all of which is telemetered to the ground and available for analysis. 
 As a result, scientists have to process large volumes of complex data products. 
 In order to make meaningful advances in solar physics, it is important for the software tools to be standardized, easy to use, and transparent, so that the community can build upon a common foundation.
 
 Currently, most solar physics analysis is performed with a library of routines called SolarSoft [SSW]_. 
-SolarSoft is a set of integrated software libraries, databases, and system utilities which provide a common programming and data analysis environment for Solar Physics. 
-It is primarily an IDL (Interactive Data Language)-based system, although some instrument teams integrate executables written in other languages. 
+SolarSoft is a set of integrated software libraries, databases, and system utilities which provide a common programming and data analysis environment for solar physics. 
+It is primarily an IDL (Interactive Data Language)-based system, although some instrument teams integrate executable written in other languages. 
 While SSW is open-source and freely available, the IDL core is not. 
 In addition, contributing to the library is not open to the public. 
 One of SunPy's key aims is to provide a free and open source alternative to the SolarSoft library.
@@ -61,30 +61,27 @@ SunPy's current scope is data analysis with minimal data processing.
 
 SunPy currently depends upon the core scientific packages like `NumPy`, `SciPy` and `matplotlib`. 
 As well as `Pandas`, `suds`, `PyFITS` / `astropy.io.fits` and `beautifulsoup4`.
-The latest release of SunPy is avalible in PyPI and can be installed in the usual manner.
+The latest release of SunPy is available in PyPI and can be installed in the usual manner.
 
 SunPy Data Types
 ================
 
 At SunPy's core are interoperable data types that cover the wide range of observational data available. 
-These core data types, Lightcurve, Map, and Spectra, cover multi-dimesional data and provide basic manipulation and visualisation routines with a consistent API. 
+These core data types, `Lightcurve`, `Map`, and `Spectra`, cover multi-dimensional data and provide basic manipulation and visualization routines with a consistent API. 
+In this section each of these key data types are described.
 
-Lightcurve is a 1D data type for analysis of lightcurves or more generally flux timeseries products.
-Map is the core 2D image data type, however it has 3D extensions, such as CompositeMap for simultaneous manipulation of composited 2D images at different wavelengths, and MapCube for working with time sequences 2D Maps. 
-Spectrum is a 1D flux against wavelength data type while Spectrogram is a 2D flux with wavelength and time type.
-
-While these different data types have clear applications to different types of observations, there are also clear inter-links between them, for example a one pixel slice of a MapCube should result in a Lightcurve and a one pixel slice of a Composite Map should be a Spectrum. 
+While these different data types have clear applications to different types of observations, there are also clear interlinks between them, for example a one pixel slice of a `MapCube` should result in a `Lightcurve` and a one pixel slice of a `Composite Map` should be a `Spectrum`. 
 While these types of interoperability are not yet implemented in SunPy, it is a future goal.
 
 The major change in version 0.3 of SunPy is a refactoring of the core data types.
-This process involved a change in the inheritance structure for Map and Spectrum away from inheriting the `numpy.ndarray` object to having a more flexible data attribute.
+This process involved a change in the inheritance structure for `Map` and `Spectrum` away from inheriting the `numpy.ndarray` object to having a more flexible data attribute.
 This refactoring has also led to some related changes and the ground work being done to facilitate the integration of Astropy's `NDdata` object.
 
 Map
 ---
 
-The Map data type is designed for interpreting and processing the most common form of solar data, that of a two-dimensional image most often taken by a CCD camera. 
-A Map object consists of a data array endowed with a coordinate syste and combined with meta data. 
+The `Map` data type is designed for interpreting and processing the most common form of solar data, that of a two-dimensional image most often taken by a CCD camera. 
+A `Map` object consists of a data array endowed with a coordinate system and combined with meta data. 
 Most often, these data are provided in the form of FITS files but image data can come from other file types, such as JPG2000, as well.
 The meta data in most solar FITS files conform to a historic standard to describe the image such as observation time, wavelength of the observation, exposure time, etc. 
 In addition, standard header tags specify a coordinate system and provide the information necessary to transform the pixel coordinates to physical coordinates such as sky coordinates. 
@@ -94,16 +91,16 @@ Since the Sun is a gaseous body with no fixed points of reference and different 
 Through SunPy's WCS (World Coordinate System) library, which has implemented most of these coordinates systems, SunPy Map objects can transform data between them. 
 SunPy maps also provide other core functionality such as routines to rescale, resample, rotate and visualize data and convenience functions for plotting using matplotlib.
 
-There are many forms of image data that can be stored in a Map.
+There are many forms of image data that can be stored in a `Map`.
 SunPy maps can handle 2D image data as well as 3D image data for both wavelength-composite images and other series, such as time series data.
-All 2D Map types have a common parent which has been designed with the possibility of integrating with the Astropy library's NDdata object.
+All 2D Map types have a common parent which has been designed with the possibility of integrating with the Astropy library's `NDData` object.
 
-The other main functionality for SunPy's Map type, and other data types, is to provide transparent handling of instrument specific code.
+The other main functionality for SunPy's `Map` type, and other data types, is to provide transparent handling of instrument specific code.
 This code can take the form of translation of non-standard or specific meta data or more complex calibration routines.
 These functions are handled primarily by the implementation of "sources" which are subclasses of the 2D map object, which then hold this specific code.
-This leads to many different objects being in the Map "family", this is why an automated factory class `Map` has been developed to provide the user with a transparent interface for the creation of Maps. 
+This leads to many different objects being in the `Map` "family", this is why an automated factory class `Map` has been developed to provide the user with a transparent interface for the creation of Maps. 
 
-It is very simple to create and visualise a map in SunPy 0.3:
+It is very simple to create and visualize a map in SunPy 0.3:
 
 .. code-block:: python
     
@@ -111,13 +108,13 @@ It is very simple to create and visualise a map in SunPy 0.3:
     mymap = sunpy.Map(sunpy.AIA_171_IMAGE)
     mymap.peek()
 
-the output of this command is shown in Fig. :ref:`aiamap`
+the output of this command is shown in Fig. :ref:`aiamap`.
 
 .. figure:: plotting_ex1.png
 
-   Default visualisation of a AIAMap. :label:`aiamap`
+   Default visualization of a AIAMap. :label:`aiamap`
 
-SunPy's visualisation routine are designed to interface as much as possible with matplotlib's pyplot package.
+SunPy's visualization routine are designed to interface as much as possible with matplotlib's pyplot package.
 It is therefore possible to create more complex plots using custom matplotlib commands.
 
 .. code-block:: python
@@ -137,32 +134,36 @@ This would produce the same image as Fig. :ref:`aiamap` but with a custom title.
 LightCurve
 ----------
 
-Time series data are an important element in solar physics and many data sources are
-available. In recognition of this fact, SunPy provides a lightcurve object which recognizes a number of data sources. The main engine behind the lightcurve object is the pandas data analysis library. Each lightcurve holds its data inside a pandas object. The 
-lightcurve object, as all other SunPy objects, is wrapper around a data object. Since pandas already provides many capabilities, the SunPy lightcurve object does not need to.
-The lightcurve object recognizes the following data sources; <http://www.swpc.noaa.gov/rt_plots/xray_1m.html>`_ [GOES X-ray Sensor (XRS)]_, <http://lasp.colorado.edu/home/missions-projects/quick-facts-sdo-eve/>`_ [SDO EUV Variability Experiment (EVE)]_,  and <http://proba2.sidc.be>`_ [PROBA2/LYRA]_. 
-Since time series data is generally relatively small and there is no established standard as to how it should be stored and distributed, each SunPy lightcurve object provides the ability to download it's own data in its constructor. For example
+Time series data are an important element in solar physics and many data sources are available. 
+In recognition of this fact, SunPy provides a `Lightcurve` object which recognizes a number of data sources. 
+The main engine behind the `Lightcurve` object is the pandas data analysis library. 
+Each `Lightcurve` holds its data inside a pandas object.
+The `Lightcurve` object, as all other SunPy objects, is wrapper around a data object. Since pandas already provides many capabilities, the SunPy `Lightcurve` object does not need to.
+The `Lightcurve` object recognizes the following data sources; `GOES X-ray Sensor (XRS) <http://www.swpc.noaa.gov/rt_plots/xray_1m.html>`_ , `SDO EUV Variability Experiment (EVE) <http://lasp.colorado.edu/home/missions-projects/quick-facts-sdo-eve/>`_,  and `PROBA2/LYRA <http://proba2.sidc.be>`_. 
+Since time series data is generally relatively small and there is no established standard as to how it should be stored and distributed, each SunPy `Lightcurve` object provides the ability to download it's own data in its constructor. 
+For example
 
 .. code-block:: python
 
-    goes = sunpy.lightcurve.GOESLightCurve.create('2012/06/01', '2012/06/05')
+    goes = sunpy.lightcurve.GOESLightCurve.create(
+		'2012/06/01', '2012/06/05')
 
-Each lightcurve can also plot it's own data in a standard format through the plot() and peek() functions. 
+Each `Lightcurve` can also plot it's own data in a standard format through the plot() and peek() functions. 
 
 Spectra
 -------
 
-SunPy offers a Spectrogram object, currently with a specialization for e-Callisto (an international network of solar radio spectrometers) spectrograms.
-It allows the user to: seamlessly join different observations; download data through an interface that only requires location and time-range to be specified; linearizes the frequency axis and automatically downsamples large observations to allow them to be rendered on a normal computer screen and much more to help analyze spectrograms.
+SunPy offers a `Spectrogram` object, currently with a specialization for e-Callisto (an international network of solar radio spectrometers) spectrograms.
+It allows the user to seamlessly join different observations; download data through an interface that only requires location and time-range to be specified; linearizes the frequency axis and automatically downsamples large observations to allow them to be rendered on a normal computer screen and much more to help analyze spectrograms.
 The data can currently be read from Callisto FITS files, but the system is designed in a way that makes it easy to include new data-sources with potentially different data formats (such as LOFAR).
 
-Spectra is designed to have a consitent interface along with the other data types.
+`Spectra` is designed to have a consistent interface along with the other data types.
 This means the plotting and manipulation methods, where there is shared functionality share the same names and the general structure of the objects are standardized.
 
 Solar Data Retrieval and Access
 ===============================
 
-Most solar observations provided by NASA or ESA follow an open data policy [#]_ which means that all data is available publically, as soon the data is telemetered to the ground. 
+Most solar observations provided by NASA or ESA follow an open data policy [#]_ which means that all data is available publicly, as soon the data is telemetered to the ground. 
 However, these data are normally archived by the institution in charge of the instrument that made the observations. 
 This fact makes browsing data and data retrieval a difficult and tedious task for the scientist. 
 In recognition of this fact, the `Virtual Solar Observatory <http://virtualsolar.org>`_ (VSO) [VSO]_ was developed. 
@@ -171,44 +172,47 @@ The VSO allows the user to search using parameters such as instrument name or ty
 VSO's main interface is web-based, but an API based on a WSDL webservice is also available. 
 SunPy provides a Python front-end to this API.
 
-A new problem arose with the launch of the <http://sdo.gsfc.nasa.gov>`_[SDO] mission.
+A new problem arose with the launch of the `SDO <http://sdo.gsfc.nasa.gov>`_ mission.
 The large size of the images (4 times larger than the previous mission), together with the fastest cadence of their cameras (~10 images per minute) makes challenging to use of the data in the same manner as previous observations.
-Previsously the standard workflow was to download long time series' of data and to view animations to identify features of interest to the scientist.  
-For <http://sdo.gsfc.nasa.gov>`_[SDO]_ this would involve downloading prohibitively large amouts of data.
+Previously the standard workflow was to download long time series of data and to view animations to identify features of interest to the scientist.  
+For `SDO <http://sdo.gsfc.nasa.gov>`_ this would involve downloading prohibitively large amounts of data.
 The `Heliophysics Event Knowledgebase <http://www.lmsal.com/hek/>`_ [HEK]_ was created to solve this overload of data. 
-The principle behind the HEK is to run a number of automated detection algorithms on the data that is obtained by <http://sdo.gsfc.nasa.gov>`_[SDO] to populate a database with information about the features and events observed in each image. 
+The principle behind the HEK is to run a number of automated detection algorithms on the data that is obtained by `SDO <http://sdo.gsfc.nasa.gov>`_ to populate a database with information about the features and events observed in each image. 
 Thus allowing searches for event types or properties, enabling scientists to selectively download only the portion or slices of the images needed for further analysis. 
-SunPy provides a programatic way to search and retreve the information related to the events, but currently does not have facilities for downloading the observational data. 
+SunPy provides a programmatic way to search and retrieve the information related to the events, but currently does not have facilities for downloading the observational data. 
 This allows, for example, over plotting of the feature contours on an image, to study their properties and evolution, etc.
-The HEK interface in SunPy was developed in concert with SunPy's VSO tool, so they a consitent interface.
+The HEK interface in SunPy was developed in concert with SunPy's VSO tool, so they a consistent interface.
 
-Events on the Sun also effect the rest of the solar system.
-Very high energy radiation produced during solar flares has effects on our ionosphere almost instantaneously, high-energy particles arriving few minutes later can permantly damage spacecraft, similarly large volumes of plasma traveling at high velocities (~1000 km/s), produced as an effect of a coronal mass ejection, can have multiple negative effects on our technological dependent society. 
-These effects can be measured everywhere in the solar system, and the `HELiophysics Integrated Observatory <http://helio-vo.eu/>`_ [HELIO]_ has built a set of tools that helps to find where these events have been measured, taking into account the speed of the different events and the movement of planets and spacecraft within that timerange. 
-HELIO includes 'Features' and 'Event' catalogues similar to what is offered by HEK, it also offers access to solar observations, like VSO, but enhanced with access to measurements of the environment at other planets and a propagation model to link any event with its origin or its effects. 
+Events on the Sun also affect the rest of the solar system.
+Very high energy radiation produced during solar flares has effects on our ionosphere almost instantaneously. 
+High-energy particles arriving few minutes later can permanently damage spacecraft.
+Similarly large volumes of plasma traveling at high velocities (~1000 km/s), produced as an effect of a coronal mass ejection, can have multiple negative effects on our technological dependent society. 
+These effects can be measured everywhere in the solar system, and the `HELiophysics Integrated Observatory <http://helio-vo.eu/>`_ [HELIO]_ has built a set of tools that helps to find where these events have been measured, taking into account the speed of the different events and the movement of planets and spacecraft within that time range. 
+HELIO includes 'Features' and 'Event' catalogs similar to what is offered by HEK. 
+It also offers access to solar observations, similar to the VSO, but enhanced with access to observations at other planets through a propagation model to link any event with its origin or its effects. 
 Each of these tools has an independent webservice, therefore they could be easily implemented as a set of independent tools. 
-However, SunPy offers the opportunity to create a better implementation where the data retrieved could interact with the rest of SunPy's ecosystem. 
-HELIO implementation on SunPy is on early development stages. 
+However, SunPy offers the opportunity to create a better implementation where the data retrieved could interact with the rest of SunPy's features. 
+HELIO implementation on SunPy is in its early development stages. 
 
 Community
 =========
 
 One of SunPy's major advantages over its predecessors is that it is being developed as an open source community inside the wide and diverse general scientific python community. 
 While the SolarSoft library is "open source" in terms of the code being freely available, most of the development takes place internally and there is no clear process for contribution from outsiders. 
-In addition to transitioning the solar physics communtity to Python, SunPy also aims to instill the prinicpals of open source development in the community.
+In addition to transitioning the solar physics community to Python, SunPy also aims to instill the principals of open source development in the community.
 
-The scientifc python community is much more established in other disciplines than it is in solar physics. 
+The scientific python community is much more established in other disciplines than it is in solar physics. 
 SunPy is making use of existing scientific python projects, with deeper integration with projects like Astropy and scikit-image possible in the future. 
 This collaboration is another strength that sets the scientific python community apart from other similar solutions.
 
-SunPy has benefitiated greatly from summer of code schemes. 
+SunPy has benefited greatly from summer of code schemes. 
 During its first two years (2011, 2012), SunPy participated on the `ESA Summer of Code In Space <http://sophia.estec.esa.int/socis2012/>`_ (SOCIS). 
-This programme is inspired by `Google summer of code <https://developers.google.com/open-source/soc/>`_ (GSOC) and aims to raise the awareness of open source projects related to space, promote the `European Space Agency <http://www.esa.int/>`_ and to improve the existing space-related open-source software.
-VSO implementation, and the first graphical user interface (GUI) were developed during these two summer programmes. 
-In 2013 SunPy is also taking part on GSOC under the umbrella of the `Python Software Fundation <http://www.python.org/psf/>`_ (PSF).
+This program is inspired by `Google Summer Of Code <https://developers.google.com/open-source/soc/>`_ (GSOC) and aims to raise the awareness of open source projects related to space, promote the `European Space Agency <http://www.esa.int/>`_ and to improve the existing space-related open-source software.
+VSO implementation, and the first graphical user interface (GUI) were developed during these two summer programs. 
+In 2013 SunPy is also taking part in GSOC under the umbrella of the `Python Software Foundation <http://www.python.org/psf/>`_ (PSF).
 We are looking forward to the advances this will bring to the capabilities and reach of the project through the work of our two students. 
 
-SunPy has also benefited from fledgeling input from the solar physics community, for example the implementation of the e-Callisto spectrograph support was enabled by the `Astrophysics Research Group <http://physics.tcd.ie/Astrophysics/>`_ at `Trinity College Dublin <http://www.tcd.ie>`_. 
+SunPy has also benefited from fledgling input from the solar physics community, for example the implementation of the e-Callisto spectrograph support was enabled by the `Astrophysics Research Group <http://physics.tcd.ie/Astrophysics/>`_ at `Trinity College Dublin <http://www.tcd.ie>`_. 
 It is hoped that this kind of contribution from the solar physics community will become the driving force for the project once a core library is in place. 
 
 
@@ -217,12 +221,12 @@ Future
 
 SunPy 0.3 provides an excellent, flexible base for future expansion of the project. 
 The immediate goal for SunPy is to develop the project into a flexible package for data analysis and scientific application. 
-While in the long term SunPy aims to become the defacto package for all solar physics data processing and analysis, to achive this goal it is required that SunPy gains more traction within the solar physics community. 
+While in the long term SunPy aims to become the defacto package for all solar physics data processing and analysis, to achieve this goal it is required that SunPy gains more traction within the solar physics community. 
 This is both to increase the user base and to attract new missions and instruments to adopt Python/SunPy for their data processing pipeline.
 
 
 
-Based on recent work in the capabilities of AstroPy combined with the overlapping requirements of SunPy and AstroPy, future releases of SunPy will incorporate AstroPy-based functionality. The next release of SunPy will make use of the NDData type of Astropy which is built upon ndarray and combines metadata with arrays of data. The SunPy team would like to thank the organizers of SciPy for the opportunity to present on the SunPy project. 
+Based on recent work in the capabilities of Astropy combined with the overlapping requirements of SunPy and Astropy, future releases of SunPy will incorporate Astropy-based functionality. The next release of SunPy will make use of the NDData type of Astropy which is built upon ndarray and combines metadata with arrays of data. The SunPy team would like to thank the organizers of SciPy for the opportunity to present on the SunPy project. 
 
 References
 ==========
@@ -239,4 +243,4 @@ References
 
 .. [SSW] S. L. Freeland, B. N. Handy, *Data Analysis with the SolarSoft System*, Solar Physics, v. 182, Issue 2, p. 497-500 (1998)
 
-.. [#] All use of data comming from NASA mission from the Heliophysics Division followes a explicit `copyright and Rules of the Road <http://sdo.gsfc.nasa.gov/data/rules.php>`_.
+.. [#] All use of data coming from NASA mission from the Heliophysics Division follows a explicit `copyright and Rules of the Road <http://sdo.gsfc.nasa.gov/data/rules.php>`_.
