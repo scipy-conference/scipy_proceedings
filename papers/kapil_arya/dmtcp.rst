@@ -44,15 +44,14 @@ checkpointing a virtual network client (VNC) session with Python running
 inside that session.
 
 DMTCP is available as a Linux package for many popular Linux distributions.
-DMTCP can checkpoint Python or IPython from the *outside* i.e. by treating
+DMTCP can checkpoint Python or IPython from the *outside*, i.e. by treating
 Python as a black box. To enable checkpointing, the Python interpreter
 is launched in the following manner:
 
 .. code-block:: sh
 
-     $:> dmtcp_checkpoint python <args>
-
-     $:> dmtcp_command -c
+     $ dmtcp_checkpoint python <args>
+     $ dmtcp_command --checkpoint
 
 The command ``dmtcp_command`` can be used at any point to create a
 checkpoint of the entire session.
@@ -106,7 +105,7 @@ both from within an interactive Python/IPython session and programmatically
 from within a Python or Cython program.  
 DMTCP has been able to asynchronously generate checkpoints of a Python
 session for many years.  However, most users prefer the more fine-grained
-control of a Python programmatic interface to DTMCP.  This allows one
+control of a Python programmatic interface to DMTCP.  This allows one
 to avoid checkpointing in the middle of a communication with an external
 server or other atomic transaction.
 
@@ -188,11 +187,11 @@ shown in the following example:
    else:
        dmtcp.restore(sessionId1)
 
-Notice that only session id is used to restore to a previous session. It
-is also possible to enhance the DMTCP module to pass extra arguments to
-the restore function. Those extra arguments can be made available to the
-:code:`dmtcp.isRestart()` path. The application can thus take a
-different branch now instead of following the same route.
+.. Note that only session id is used to restore to a previous session. It
+  is also possible to enhance the DMTCP module to pass extra arguments to
+  the restore function. Those extra arguments can be made available to the
+  :code:`dmtcp.isRestart()` path. The application can thus take a
+  different branch now instead of following the same route.
 
 Save-Restore for IPython Sessions
 ---------------------------------
@@ -200,7 +199,7 @@ Save-Restore for IPython Sessions
 To checkpoint an IPython session, one must consider the configuration
 files. The configuration files are typically stored in user's home
 directory. During restart, if the configuration files are missing, the
-restarted computation may fail to continue.  Thus DMTCP, must checkpoint
+restarted computation may fail to continue.  Thus DMTCP must checkpoint
 and restore all the files that are required for proper restoration
 of an IPython session.
 
@@ -403,9 +402,10 @@ problem.
 
 .. figure:: fred-arch-python.png
 
-   Fast Reversible DeBugger. :label:`fred-arch`
+   Fast Reversible Debugger. :label:`fred-arch`
 
-FReD (Fast Reversible Debugger) [Arya12]_, [FReD13]_ is a reversible debugger based on
+FReD (Fast Reversible Debugger) [Arya12]_, [FReD13]_ is a reversible debugger
+based on
 checkpoint-restart. FReD is implemented as a set of Python scripts and
 uses DMTCP to create checkpoints during the
 debugging session. FReD also keeps track of the debugging history. Figure
