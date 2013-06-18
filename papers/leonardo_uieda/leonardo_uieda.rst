@@ -428,7 +428,7 @@ The ``PrismMesh`` class
 has a ``carvetopo`` method
 that masks the prisms
 that fall above the topography.
-The example bellow
+The example below
 illustrates this functionality
 using synthetic topography
 (Figure :ref:`meshtopo`):
