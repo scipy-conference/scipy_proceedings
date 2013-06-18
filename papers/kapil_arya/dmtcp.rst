@@ -199,33 +199,23 @@ Save-Restore for IPython Sessions
 To checkpoint an IPython session, one must consider the configuration
 files. The configuration files are typically stored in user's home
 directory. During restart, if the configuration files are missing, the
-restarted computation may fail to continue.  Thus DMTCP must checkpoint
-and restore all the files that are required for proper restoration
+restarted computation may fail to continue.  Thus, DMTCP must checkpoint
+and restore all the files required for proper restoration
 of an IPython session.
 
 Attempting to restore all configuration files during restart poses yet
-another problem -- the existing configuration files might have newer
-contents and overwriting them with copies from the checkpoint time may
-not be desired by the user.  This may result in the user ending up
-losing important changes to those files.
+another problem: the existing configuration files might have newer
+contents. Overwriting these newer files with copies from the checkpoint time
+may result in the loss of important changes.
 
-One possible solution is to handle this situation by taking snapshots of
-the entire configuration directory along with the checkpoint image.
-After restart, the IPython session should be made to use the
-checkpointed copy of the configuration directory instead of the default
-configuration directory.  This presents a significant challenge. The
-IPython process remembers the old path, and the checkpointed copy of the
-configuration directory has a different path. To handle this situation,
-a DMTCP plugin is created for IPython. Whenever the IPython process
-issues a system call to open a particular configuration file, the plugin
-intercepts the system call and changes the file path to point to the
-checkpointed copy.  The IPython process is unaware of the changes and
-continues to work without any problems.
-
-The session management capabilities of the DMTCP module can be further
-extended to manage sessions for IPython. In the case of IPython, each session
-contains the configuration directory in addition to the checkpoint
-image(s).
+To avoid overwriting the existing configuration files, the files related
+to IPython session are restored in a
+temporary directory.  Whenever IPython shell attempts to open a file in
+the original configuration directory, the filepath is updated to point to
+the temporary directory. Thus, the files in the original configuration
+directory are never modified.
+Further, the translation from original to temporary path is transparent
+to the IPython shell.
 
 Save-Restore for Parallel IPython Sessions
 ------------------------------------------
@@ -236,10 +226,11 @@ restores various kinds of inter-process communication mechanisms such as
 shared-memory, message queues, pseudo-ttys, pipes and network sockets. 
 
 An IPython session involving a distributed computation running on a
-cluster is checkpointed as a single unit. With DMTCP, it is possible to
-restart the distributed processes in various manners. For example, for
-debugging, it may be desirable to restart all the processes on a single
-computer. In a different example, the processes may be restarted on a
+cluster is checkpointed as a single unit. DMTCP allows restarting the
+distributed processes in a different configuration than the original.
+For example, all the processes can be restarted on a single computer for
+debugging purposes.
+In another example, the computation may be restarted on a
 different cluster altogether.
 
 
