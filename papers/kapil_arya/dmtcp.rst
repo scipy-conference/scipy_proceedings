@@ -386,8 +386,6 @@ functions on restart after a checkpoint.
 Reversible Debugging with FReD
 ==============================
 
-(This is still a work-in-progress)
-
 While debugging a program, often the programmer over steps and has to
 restart the debugging session. For example, while debugging a program,
 if the programmer steps over (by issue :code:`next` command inside the
@@ -407,7 +405,7 @@ problem.
 
    Fast Reversible DeBugger. :label:`fred-arch`
 
-FReD (Fast Reversible Debugger) [Arya12]_ is a reversible debugger based on
+FReD (Fast Reversible Debugger) [Arya12]_, [FReD13]_ is a reversible debugger based on
 checkpoint-restart. FReD is implemented as a set of Python scripts and
 uses DMTCP to create checkpoints during the
 debugging session. FReD also keeps track of the debugging history. Figure
@@ -417,21 +415,21 @@ A Simple UNDO Command
 ---------------------
 
 The *UNDO* command reverses the effect of a previous debugger command
-such as next, continue and finish. This is the most basic tool in
-implementing a reversible debugger.
+such as :code:`next`, :code:`continue` or :code:`finish`.
+This is the most basic of reversible debugging commands.
 
-Getting the functionality of the UNDO command for debugging Python is
-trivial.  A checkpoint is taken at the beginning of the debugging
+The functionality of the UNDO command for debugging Python is
+trivially implemented.  A checkpoint is taken at the beginning of the debugging
 session and a list of all debugging commands issued since the
 checkpoint are recorded.
 
 To execute the UNDO command, the debugging session is restarted from the
 checkpoint image, and the debugging commands are automatically
 re-executed from the list excluding the last command.  This takes the
-process back right before the debugger command was issued.
+process back to before the debugger command was issued.
 
-In longer debugging sessions checkpoints are taken at a frequent
-interval to reduce the time spent in replaying the debugging history.
+In longer debugging sessions, checkpoints are taken at frequent
+intervals to reduce the time spent in replaying the debugging history.
 
 More complex reverse commands
 -----------------------------
@@ -444,40 +442,47 @@ Figure :ref:`reverse-xxx` shows some typical
 debugging commands being executed in forward as well as backward
 direction in time.
 
-Suppose that the debugging history looks like :code:`[next,next]`
+Suppose that the debugging history appears as :code:`[next,next]`
 i.e. the user issued two :code:`next` commands. Further, the second next
 command stepped over a function :code:`f()`.
 Suppose further that FReD takes checkpoints before each of these commands.
-Issuing a :code:`reverse-next` command is easy. Just restart from the
-last checkpoint image. However, if the command issued was
-:code:`reverse-step`, a simple undo may not work. In this case, the
+In this situation, the implementation for :code:`reverse-next` command is trivial:
+one restarts from the
+last checkpoint image. However, if the command issued were
+:code:`reverse-step`, simply restarting from the previous checkpoint
+would not suffice.
+
+In this last case, the
 desired behavior is to take the debugger to the last statement of
-the function :code:`f()`. In such situations one needs to decompose the
-last command [Visan11]_ into a series of commands. At the end of
+the function :code:`f()`. In such a situation one needs to decompose the
+last command into a series of commands.
+At the end of
 this decomposition, the last command in the history is a :code:`step`.
 At this point, the
-history may look like: :code:`[next,step,next, ...,next,step]`. At this
-point, the process is restarted from the last checkpoint and the
+history may appear as: :code:`[next,step,next, ...,next,step]`.
+The process is then restarted from the last checkpoint and the
 debugging history is executed excluding the last :code:`step` command.
+Decomposing a command into a series of commands terminating
+with :code:`step` is non-trivial, and an algorithm for that decomposition
+is presented in [Visan11]_ .
 
-A typical debugging session in FRed with Python
------------------------------------------------
+A typical debugging session in FReD with Python
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
-   :linenos:
 
-   $:> fredapp.py -mpdb python a.py
+   $ fredapp.py python -mpdb a.py
    (Pdb) break main
    (Pdb) run
    (Pdb) fred checkpoint
    (Pdb) break 6
    (Pdb) continue
    (Pdb) fred-history
-   [break 6, continue]
+     [break 6, continue]
    (Pdb) fred-reverse-next
    (Pdb) fred-history
-    [break 7, next, next, next, next, next, next, next,
-     next, next, next, step, next, next, next, where]
+     [break 7, next, next, next, next, next, next, next,
+      next, next, next, step, next, next, next, where]
 
 Reverse Expression Watchpoints
 ------------------------------
@@ -531,6 +536,32 @@ form a checkpoint at each phase of the binary search.  In that case, no
 particular sub-interval over the time period needs to be executed more
 than twice.
 
+A typical use of reverse-expression-watchpoint
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   $ ./fredapp.py python -mpdb ./autocount.py
+   -> import sys, time
+   (Pdb) break 21
+     Breakpoint 1 at /home/kapil/fred/autocount.py:21
+   (Pdb) continue
+     > /home/kapil/fred/autocount.py(21)<module>()
+   # Required for fred-reverse-watch
+   (Pdb) fred-checkpoint
+   (Pdb) break 28
+     Breakpoint 2 at /home/kapil/fred/autocount.py:28
+   (Pdb) continue
+     ...  <program output> ...
+     > /home/kapil/fred/autocount.py(28)<module>()
+   (Pdb) print num
+     10
+   (Pdb) fred-reverse-watch num < 5
+   (Pdb) print num
+     4
+   (Pdb) next
+   (Pdb) print num
+     5
 
 Conclusion
 ==========
@@ -564,6 +595,9 @@ References
            *FReD: Automated Debugging via Binary Search through a
            Process Lifetime*,
            http://arxiv.org/abs/1212.5204.
+
+.. [FReD13] FReD (Fast Reversible Debugger) Software.
+            https://github.com/fred-dbg/fred
 
 .. [Behnel10] R. Bradshaw, S. Behnel, D. S. Seljebotn, G. Ewing, et al.
                *Cython: The Best of Both Worlds*,
