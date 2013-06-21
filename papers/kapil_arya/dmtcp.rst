@@ -465,7 +465,7 @@ A typical debugging session in FReD with Python
    $ fredapp.py python -mpdb a.py
    (Pdb) break main
    (Pdb) run
-   (Pdb) fred checkpoint
+   (Pdb) fred-checkpoint
    (Pdb) break 6
    (Pdb) continue
    (Pdb) fred-history
