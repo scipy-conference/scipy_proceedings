@@ -255,7 +255,7 @@ For the Risch models, let :math:`a_i` a_i and :math:`b_j` denote the individual 
     f_{ij} =  a_ib_j 
 
 
-Three epistatic models are given by Gunther et al [Günther09]_ as penetrance matrices. In each case  
+Three epistatic models are given by Gunther et al [Gï¿½nther09]_ as penetrance matrices. In each case  
 the constant :math:`c` denotes the baseline risk of disease and :math:`r`, :math:`r_1`, :math:`r_2` denote risk increase or decrease
 
 4. EPIRR models an epistatic relationship between two recessive genes, such that disease is not impacted 
@@ -367,7 +367,7 @@ We quantify this as the metric:
  
 .. math::
 
-    m = |(P_T - P_{2,7}) - ((P_T - P_2)+ (P_T - P_7))|
+    m = |(P_T - P_{2,7}) - ((P_T - P_2)+ (P_T - P_7))| / P_T
 
 If the deviations in prediction accuracy with the single gene perturbations sum up to the deviation of 
 the double gene perturbation then this supports a claim that there are no interactions. 
@@ -391,7 +391,7 @@ The principle is the same for 3-way interactions, where the metric is:
 
 .. math::
                               
-    m = |(P_T - P_{abc}) - ((P_T - P_a)+ (P_T - P_b) + (P_T - P_c))|
+    m = |(P_T - P_{abc}) - ((P_T - P_a)+ (P_T - P_b) + (P_T - P_c))| / P_T
 
 and the cutoff is .12, since there are 4 deviations, for each we again allow .03.
 
@@ -487,7 +487,7 @@ References
 ==========
 .. [Cordell09] H. Cordell. *Detecting gene-gene interactions that underlie human diseases*,
            Nature Reviews Genetics 10:392-404, doi:10.1038/nrg2579, June 2009.         
-.. [Günther09] F. Günther, N Wawro and K Bammann. *Neural networks for modeling gene-gene interactions in association studies*, 
+.. [Gï¿½nther09] F. Gï¿½nther, N Wawro and K Bammann. *Neural networks for modeling gene-gene interactions in association studies*, 
            BMC Genetics, 10:87, 2009. 
 .. [Francis02] L. Francis. *Neural Networks Demystified*,
            Casualty Actuarial Society, 2002
