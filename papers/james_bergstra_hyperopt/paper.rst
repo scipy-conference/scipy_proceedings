@@ -346,8 +346,8 @@ These values will be treated as constants from the point of view of the optimiza
 in the configuration argument objects passed to the objective function.
 
 
-Sampling from a configuration space by hand
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Sampling from a configuration space
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The previous few code fragments have defined various configuration spaces.
 These spaces are not objective function arguments yet, they are simply a description of *how to sample* objective function arguments.
