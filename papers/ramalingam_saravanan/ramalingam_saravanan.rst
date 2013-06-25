@@ -46,9 +46,6 @@
 Introduction
 ------------
 
-.. |---| unicode:: U+02014 .. em dash
-   :trim:
-
 Text and graphics form important components of the user interface
 when working with computers. Early personal computers only supported
 the textual user interface, more commonly known as the *command line
