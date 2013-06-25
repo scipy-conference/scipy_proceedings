@@ -259,8 +259,8 @@ based on whether it is opened for reading (dependency) or writing (created).
 
 
 
-Synchronizing Exceptions
-========================
+Synchronizing Errors and Warnings
+=================================
 
 When ``pythontex.py`` runs, it prints an annotated version of the ``stderr``
 produced by user code.  Before each error or warning, a message is inserted
@@ -278,7 +278,7 @@ a message in the form
 
 ::
 
-   * PythonTeX exception: error on line 20
+   * PythonTeX stderr - error on line 20:
        File "<scriptname>", line 46
          s = 'Python
                    ^
@@ -360,7 +360,7 @@ Python—only about 70 lines of code total. Most of the Ruby code simply
 implements a Ruby version of the PythonTeX utilities class, which manages 
 dependencies, created files, and LaTeX integration. Part of this process 
 also involved specifying the format of Ruby errors, warnings, and 
-associated line numbers, so that Ruby exceptions can be synchronized 
+associated line numbers, so that Ruby errors and warnings can be synchronized 
 with the document. 
 
 Support for additional languages will be added in the near future.
@@ -707,7 +707,7 @@ Conclusion
 PythonTeX provides an efficient, user-friendly system for creating 
 reproducible documents with Python and LaTeX.  Since code output is
 cached and user-defined sessions run in parallel, document compile times
-are minimized.  Exceptions are synchronized with the document's line
+are minimized.  Errors and warnings are synchronized with the document's line
 numbering so that debugging is simple.  Because PythonTeX documents can be
 converted to plain LaTeX documents, the system is suitable for writing 
 journal papers and documents that must be converted to other formats.
