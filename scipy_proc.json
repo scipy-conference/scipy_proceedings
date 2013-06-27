@@ -37,23 +37,267 @@
                  "org": "Enthought, Inc."}
                 ]
         },
-  
+ 
         {
-            "name": "Program Chairs",
+            "name": "Program Committee Chairs",
             "members": [
                 {"name": "Katy Huff",
                  "org": "University of Wisconsin and Argonne National Laboratory"},
                 {"name": "Matt McCormick",
                  "org": "Kitware, Inc."}
                 ]
+        },
+
+        {
+            "name": "Tutorial Chairs",
+            "members": [
+                {"name": "Dharhas Pothina",
+                 "org": "Texas Water Development Board"},
+                {"name": "Francesc Alted",
+                 "org": "Continuum Analytics"}
+                ]
+        },
+
+        {
+            "name": "Sprint Chairs",
+            "members": [
+                {"name": "Corran Webster",
+                 "org": "Enthought, Inc."},
+                {"name": "Peter Wang",
+                 "org": "Continuum Analytics"}
+                ]
+        },
+
+        {
+            "name": "Birds-of-a-Feather (BoF) Chairs",
+            "members": [
+                {"name": "Kyle Mandli",
+                 "org": "University of Texas"},
+                {"name": "Matthew Turk",
+                 "org": "Columbia University"}
+                ]
+        },
+
+        {
+            "name": "Communications Chairs",
+            "members": [
+                {"name": "Anthony Scopatz",
+                 "org": "University of Chicago"},
+                {"name": "Majken Tranby",
+                 "org": "Enthought, Inc."}
+                ]
+        },
+
+        {
+            "name": "Financial Aid Chairs",
+            "members": [
+                {"name": "Jeff Daily",
+                 "org": "Pacific Northwest National Laboratory"},
+                {"name": "John Wiggins",
+                 "org": "Enthought, Inc."}
+                ]
+        },
+
+        {
+            "name": "Operations Chair",
+            "members": [
+                {"name": "Leah Jones",
+                 "org": "Enthought, Inc."}
+                ]
+        },
+
+        {
+            "name": "Sponsor Chair",
+            "members": [
+                {"name": "Brett Murphy",
+                 "org": "Enthought, Inc."}
+                ]
+        },
+
+        {
+            "name": "Financial Chair",
+            "members": [
+                {"name": "Bill Cowan",
+                 "org": "Enthought, Inc."}
+                ]
+        },
+
+        {
+            "name": "Mini-symposium Chairs",
+            "members": [
+                {"name": "Tom Aldcroft",
+                 "org": "Harvard/Smithsonian Center for Astrophysics"},
+                {"name": "Brad Chapman",
+                 "org": "Bioinformatics Core, Harvard School of Public Health"},
+                {"name": "Kelsey Jordahl",
+                 "org": "Enthought, Inc."},
+                {"name": "Gael Varoquaux",
+                 "org": "INRIA"},
+                {"name": "Chris Barker,",
+                 "org": "National Oceanic and Atmospheric Administration"}
+                ]
+        },
+
+        {
+            "name": "Program Committee",
+            "members": [
+                {"name": "Aron Ahmadia",
+                 "org": ""},
+                {"name": "Tom Aldcroft",
+                 "org": ""},
+                {"name": "Chris Barker",
+                 "org": ""},
+                {"name": "Nathan Bell",
+                 "org": ""},
+                {"name": "Joshua Bloom",
+                 "org": ""},
+                {"name": "Matthew Brett",
+                 "org": ""},
+                {"name": "Brad Chapman",
+                 "org": ""},
+                {"name": "Matt Davis",
+                 "org": ""},
+                {"name": "Daniel Dye",
+                 "org": ""},
+                {"name": "Satrajit Ghosh",
+                 "org": ""},
+                {"name": "Perry Greenfield",
+                 "org": ""},
+                {"name": "Kelsey Jordahl",
+                 "org": ""},
+                {"name": "Matthew Knepley",
+                 "org": ""},
+                {"name": "Jessica Lu",
+                 "org": ""},
+                {"name": "Hilary Mason",
+                 "org": ""},
+                {"name": "Mike McKerns",
+                 "org": ""},
+                {"name": "Zain Memon",
+                 "org": ""},
+                {"name": "Aronne Merrelli",
+                 "org": ""},
+                {"name": "Shelia Miguez",
+                 "org": ""},
+                {"name": "August Muench",
+                 "org": ""},
+                {"name": "Cait Pickens",
+                 "org": ""},
+                {"name": "Serge Rey",
+                 "org": ""},
+                {"name": "Tom Robitaille",
+                 "org": ""},
+                {"name": "Dan Schult",
+                 "org": ""},
+                {"name": "Rich Signell",
+                 "org": ""},
+                {"name": "William Spotz",
+                 "org": ""},
+                {"name": "Matt Terry",
+                 "org": ""},
+                {"name": "Erik Tollerud ",
+                 "org": ""},
+                {"name": "James Turner",
+                 "org": ""},
+                {"name": "Geraldine van der Auwera",
+                 "org": ""},
+                {"name": "Jake van der Plas",
+                 "org": ""},
+                {"name": "Gael Varoquax",
+                 "org": ""},
+                {"name": "Peter Wang",
+                 "org": ""},
+                {"name": "Andrew Wilson",
+                 "org": ""}
+            ]
+        },
+
+        {
+            "name": "Program Staff",
+            "members": [
+                {"name": "Jodi Havranek",
+                 "org": "Enthought, Inc."},
+                {"name": "Jim Ivanoff",
+                 "org": "Enthought, Inc."},
+                {"name": "Lauren Johnson",
+                 "org": "Enthought, Inc."}
+            ]
         }
+
+
     ],
 
   "sponsored_students": [
       {
-          "name": "First name",
-          "org": "University",
-          "location": "Where from"
+          "name": "Damián Avila",
+          "org": "",
+          "location": ""
+      },
+      {
+          "name": "Joshua Carp",
+          "org": "",
+          "location": ""
+      },
+      {
+          "name": "Carlos Cordoba",
+          "org": "",
+          "location": ""
+      },
+      {
+          "name": "Marianne Corvellec",
+          "org": "",
+          "location": ""
+      },
+      {
+          "name": "Serge Guelton",
+          "org": "",
+          "location": ""
+      },
+      {
+          "name": "Katy Huff",
+          "org": "",
+          "location": ""
+      },
+      {
+          "name": "Ursula Iturraran-Viveros",
+          "org": "",
+          "location": ""
+      },
+      {
+          "name": "Aaron Meurer",
+          "org": "",
+          "location": ""
+      },
+      {
+          "name": "Stuart Mumford",
+          "org": "",
+          "location": ""
+      },
+      {
+          "name": "Sam Portnow",
+          "org": "",
+          "location": ""
+      },
+      {
+          "name": "Sam Portnow",
+          "org": "",
+          "location": ""
+      },
+      {
+          "name": "Joon Ro",
+          "org": "",
+          "location": ""
+      },
+      {
+          "name": "Matthew Rocklin",
+          "org": "",
+          "location": ""
+      },
+      {
+          "name": "Joshua Warner",
+          "org": "",
+          "location": ""
       }
   ]
+
 }
