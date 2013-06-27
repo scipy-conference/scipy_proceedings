@@ -425,6 +425,7 @@ Code Testing
 ------------
 
 .. table:: Gaussian Distributions in Simulated Sample. :label:`tabgauss`
+   :class: w
 
    +-----------+-----------+------------+-----+------------+------------+
    | Gaussians | C.T. [*]_ |  S.D. [*]_ |  N  | N-Original | N-Adapted  |
@@ -506,20 +507,20 @@ Preliminary Results on Asteroid Photometric Classification
 ----------------------------------------------------------
 
 .. figure:: 0.png
-   :scale: 40%
+   :scale: 50%
    :align: center
    
    Density distributions of reflected intensities measured from asteroid observations by SDSSMOC4. The colors correspond to degrees of point agglomeration. :label:`fig0`
    
 .. figure:: vec3.png
-   :scale: 40
+   :scale: 50
    :align: center
 
    Density distributions with the third cluster identified by G-mode without upper limit. The cluster is marked by red filled circles.
    Classification made with :math:`q_{1} = 1.5 \sigma` and ``minlim = 0.5``. :label:`figvec`
    
 .. figure:: upper3.png
-   :scale: 40
+   :scale: 50
    :align: center
 
    Density distributions with the third cluster identified by G-mode with upper limit. The cluster is marked by red filled circles. 
