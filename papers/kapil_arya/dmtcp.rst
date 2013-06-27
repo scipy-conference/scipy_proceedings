@@ -39,7 +39,7 @@ DMTCP (Distributed MultiThreaded CheckPointing) [Ansel09]_ is a mature
 user-space checkpoint-restart package.  One can
 view checkpoint-restart as a generalization of pickling.  Instead of
 saving an object to a file, one saves the entire Python session to a
-file.  Checkpointing graphics in Python is also supported --- by
+file.  Checkpointing graphics in Python is also supported |---| by
 checkpointing a virtual network client (VNC) session with Python running
 inside that session.
 
@@ -70,7 +70,7 @@ which additionally supports graphics and the distributed processes of
 IPython.  In addition, three novel uses of DMTCP for helping
 debug Python are discussed.
 
-1.  Fast/Slow Computation --- Cython provides both traditional
+1.  Fast/Slow Computation |---| Cython provides both traditional
     interpreted functions and compiled C functions.  Interpreted
     functions are slow, but correct.  Compiled functions are fast,
     but users sometimes declare incorrect C types, causing the
@@ -80,10 +80,10 @@ debug Python are discussed.
     intervals.  Separate computer nodes are used to check each interval
     in interpreted mode between checkpoints.
 
-2.  FReD --- a Fast Reversible Debugger that works closely with
+2.  FReD |---| a Fast Reversible Debugger that works closely with
     the Python pdb debugger, as well as other Python debuggers.
 
-3.  Reverse Expression Watchpoint --- This is a novel feature
+3.  Reverse Expression Watchpoint |---| This is a novel feature
     within the FReD reversible debugger.  Assume a bug occurred in the past.
     It is associated with the point in time when a certain 
     expression changed.  Bring the user back to a pdb session
@@ -514,7 +514,7 @@ in time.
 
 Since the expression is "good" at the beginning of Figure
 :ref:`reverse-watch` and it is "bad" at the end of that figure, there
-must exist a buggy statement --- a statement exhibiting the transition
+must exist a buggy statement |---| a statement exhibiting the transition
 from "good" to "bad".  A standard binary search algorithm converges to a
 case in which the current statement is "good" and the next statement
 transitions from "good" to "bad".  By the earlier definition of a "bug",
