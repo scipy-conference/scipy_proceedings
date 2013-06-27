@@ -17,7 +17,8 @@
 
     {{for member in committee['members'] }}
       \item[] \normalsize\textsc{%
-{{member['name']}}},\small{ {{member['org']}}}
+{{member['name']}}}{{if member['org']}},\small{ {{member['org']}} }
+    {{endif}}
     {{endfor}}
 
   \end{itemize}
