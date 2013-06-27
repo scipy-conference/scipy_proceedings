@@ -1,6 +1,8 @@
 import glob
 import os
 
+excludes = ['vanderwalt',]
+
 work_dir      = os.path.dirname(__file__)
 papers_dir    = os.path.join(work_dir,'../papers')
 output_dir    = os.path.join(work_dir,'../output')
@@ -22,4 +24,4 @@ if os.path.isfile(toc_list):
 else:
     dirs = sorted([os.path.basename(d)
                    for d in glob.glob('%s/*' % papers_dir)
-                   if os.path.isdir(d)])
+                   if os.path.isdir(d) and not any(e in d for e in excludes)])
