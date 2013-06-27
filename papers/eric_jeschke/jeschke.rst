@@ -301,8 +301,9 @@ Part 2: Developing Plugins for Ginga
 ------------------------------------
 
 .. figure:: figure3.png
-   :scale: 15%
-   :figclass: h
+   :scale: 30%
+   :align: center
+   :figclass: hw
 
    The Ginga reference viewer (Qt version), with some plugins
    active.   :label:`fig3`
