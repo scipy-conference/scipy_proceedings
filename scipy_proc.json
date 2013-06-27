@@ -6,12 +6,13 @@
        "conference": "Python in Science Conference",
        "ordinal": "12th",
        "short": "PROC. OF THE 12th PYTHON IN SCIENCE CONF. (SCIPY 2013)",
-       "full": "Proceedings of the 9th Python in Science Conference"
+       "full": "Proceedings of the 12th Python in Science Conference"
      },
      "year": "2013",
      "editor": [
         "Stéfan van der Walt",
-        "Jarrod Millman"
+        "Jarrod Millman",
+        "Katy Huff"
      ],
      "volume": 6,
      "number": 1,
@@ -56,5 +57,3 @@
       }
   ]
 }
-
-
