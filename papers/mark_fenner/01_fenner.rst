@@ -62,7 +62,7 @@ Confocal Microscopy
 
 Conventional light microscopes produce a two-dimensional image from a
 three-dimensional sample by flattening its Z-axis into one visual
-plane [Cro05].  Thus, the notion of depth is removed by merging deep
+plane [Cro05]_.  Thus, the notion of depth is removed by merging deep
 and shallow material into a single cross-section in the XY-plane.
 Confocal microscopes maintain Z-axis fidelity by performing repeated
 scans of very thin (:math:`{\sim}5{\mu}m`) XY-sections at fixed
@@ -74,16 +74,16 @@ each of the three RGB color channels.
 Background noise is the portion of the intensity signal that does not
 represent true biological phenomena.  Confocal microscopy inherently
 reduces background noise from auto-fluorescence of cellular material,
-light refractive scatter, and detection artifacts [Cro05].  It is
+light refractive scatter, and detection artifacts [Cro05]_.  It is
 further reduced by choosing appropriate (1) microscope hardware, (2)
-fluorescent labels, and (3) computer software settings [Bol06][Cro05].
+fluorescent labels, and (3) computer software settings [Bol06]_, [Cro05]_.
 Even the best confocal microscopy technique and practice produces
 images that contain background noise.  For a detailed description of
-basic confocal optics and digital imaging, see [Bol06]. Pre-processing
+basic confocal optics and digital imaging, see [Bol06]_. Pre-processing
 tools decrease background noise, but images often need additional
-manual background correction [Bol06][Zin07][Gou05]. Image processing
+manual background correction [Bol06]_, [Zin07]_, [Gou05]_. Image processing
 filters, deconvolution, background subtraction and threshold
-techniques reduce background noise using different algorithms [Rob12].
+techniques reduce background noise using different algorithms [Rob12]_.
 Each technique has application specific advantages and weaknesses.
 
 Biological Context and Experimental Model
@@ -93,7 +93,7 @@ We used confocal microscopy to investigate the post-endocytosis
 transport of two proteins in neurons.  Specifically, we assessed the
 localization of binding proteins and their receptors to sub-cellular
 structures.  Post-endocytosis transport of proteins is a highly
-regulated, complex process [Yap12].  Briefly, the intracellular
+regulated, complex process [Yap12]_.  Briefly, the intracellular
 transport pathway is initiated when an extracellular protein binds to
 its receptor on the cell membrane.  Once internalized, the proteins
 may be localized to three sub-cellular structures: endosomes,
@@ -113,7 +113,7 @@ In these experiments, the binding protein is brain-derived
 neurotrophic factor (BDNF), the receptor is the truncated trkB
 receptor (trkB.t1), and the sub-cellular structures are endosomes,
 lysosomes, and recycling vesicles.  For the biological importance of
-this system, see [Fen12].  The co-occurrence of red, green, and blue
+this system, see [Fen12]_.  The co-occurrence of red, green, and blue
 represents the presence of BDNF and trkB.t1 at one of the sub-cellular
 structures.
 
@@ -207,7 +207,7 @@ bivariate probability distributions of intensity values for each pair
 of channels across *Time* and *Organelle*.  Due to the very large
 probability mass for low intensity values, we graphed the
 log-probabilities to visualize the behavior of the distribution tails.
-We generated a Tufte-style [Tuf01] panel plot of the bivariate
+We generated a Tufte-style [Tuf01]_ panel plot of the bivariate
 histograms for all conditions. The panel plot for *Time=10,
 Organelle=Endosome* is shown in Figure :ref:`tlpfig`.
 
@@ -239,9 +239,9 @@ Quantification of Colocalization
 
 In dual- and triple-label confocal microscopy, several measures of
 association are used to quantify the degree of colocalization among
-labeled molecules [Bol06][Zin07].  The two most commonly used
+labeled molecules [Bol06]_, [Zin07]_.  The two most commonly used
 measures are *Pearson* and *Manders* coefficients
-[Man92][Man93][Com06][Zin07]. Other measures of colocalization are
+[Man92]_, [Man93]_, [Com06]_, [Zin07]_. Other measures of colocalization are
 described below. We call all of these measures the *colocalization
 coefficients*.
 
@@ -252,14 +252,14 @@ statistics), we define the colocalization coefficients for vectors *x*
 and *y* of the same length *n*.
 
 
-Let :math:`mean(x)=sum(x)/n`,
-:math:`dot(x,y)=\sum\limits_{i} x_{i}y_{i}`,
-:math:`cov(x,y)=dot(x-mean(x),y-mean(y))/n`, and
-:math:`var(x)=cov(x,x)`:
+Let :math:`\mathrm{mean}(x)=\mathrm{sum}(x)/n`,
+:math:`\mathrm{dot}(x,y)=\sum\limits_{i} x_{i}y_{i}`,
+:math:`\mathrm{cov}(x,y)=\mathrm{dot}(x-\mathrm{mean}(x),y-\mathrm{mean}(y))/n`, and
+:math:`\mathrm{var}(x)=\mathrm{cov}(x,x)`:
 
 .. math::
 
-   Pearson(x,y)=cov(x,y)/sqrt(var(x)var(y))
+   \mathrm{Pearson}(x,y)=\mathrm{cov}(x,y)/\sqrt{\mathrm{var}(x)\mathrm{var}(y)}
 
 
 The split *k*-overlap coefficients are:
@@ -267,22 +267,22 @@ The split *k*-overlap coefficients are:
 .. math::
    :type: eqnarray
 
-   k_{1}(x,y) &=& dot(x,y)/dot(x,x) \\
-   k_{2}(x,y) &=& dot(x,y)/dot(y,y) 
+   k_{1}(x,y) &=& \mathrm{dot}(x,y)/\mathrm{dot}(x,x) \\
+   k_{2}(x,y) &=& \mathrm{dot}(x,y)/\mathrm{dot}(y,y) 
 
 Let :math:`\theta_{xy}` be the angle between *x* and *y* and recall
-:math:`sqrt(dot(x,x))` is the length of *x*:
+:math:`\sqrt{\mathrm{dot}(x,x)}` is the length of *x*:
 
 .. math::
    :type: eqnarray
 
-   Manders(x,y)     &=& cos(\theta_{xy}) \\
-	            &=& dot(x,y)/sqrt(dot(x,x)dot(y,y)) \\
-   {Manders}^2(x,y) &=& k_{1}k_{2}
+   \mathrm{Manders}(x,y)     &=& \cos(\theta_{xy}) \\
+	            &=& \mathrm{dot}(x,y)/\sqrt{\mathrm{dot}(x,x)\mathrm{dot}(y,y)} \\
+   {\mathrm{Manders}}^2(x,y) &=& k_{1}k_{2}
 
 .. math::
 
-   Pearson(x,y)=Manders(x-mean(x),y-mean(y))
+   \mathrm{Pearson}(x,y)=\mathrm{Manders}(x-\mathrm{mean}(x),y-\mathrm{mean}(y))
 
 Let :math:`I_{T_x}(x)=x>T_x`, (i.e., 1 if :math:`x>T_x`, 0 otherwise),
 then the *m*-colocalization coefficients are:
@@ -290,12 +290,12 @@ then the *m*-colocalization coefficients are:
 .. math::
    :type: eqnarray
 
-   m_{1}(x,y) &=& dot(x,I_{T_y}(y))/sum(x) \\
-   m_{2}(x,y) &=& dot(y,I_{T_x}(x))/sum(y)
+   m_{1}(x,y) &=& \mathrm{dot}(x,I_{T_y}(y))/\mathrm{sum}(x) \\
+   m_{2}(x,y) &=& \mathrm{dot}(y,I_{T_x}(x))/\mathrm{sum}(y)
 
 Generally, the colocalization coefficients have the following
 interpretations when applied to vectors.  *Pearson* is the degree of
-linear relationship between the two vectors.  :math:`Pearson^2` is the
+linear relationship between the two vectors.  :math:`\mathrm{Pearson}^2` is the
 fraction of the variance in *y* explained by the linear relationship
 with *x*.  *Manders*, more broadly known as the cosine similarity, is
 the cosine of the angle between the two intensity vectors.
@@ -303,7 +303,7 @@ the cosine of the angle between the two intensity vectors.
 :math:`m_1` is the proportion of *x*, summed when *y* is above
 threshold, to the sum total of all x values; :math:`m_2` is likewise
 for *y*.  :math:`k_1` (equivalent to
-:math:`cos(\theta_{xy})length(x)/length(y)`) is the ratio of the
+:math:`\cos(\theta_{xy})\mathrm{length}(x)/\mathrm{length}(y)`) is the ratio of the
 length of *x* and *y* times the cosine similarity between them.
 
 In colocalization analysis, the colocalization coefficients have the
@@ -322,7 +322,7 @@ indicating a stronger association between values. *Pearson*,
 *Manders*, and other *ad hoc* statistics are commonly used association
 measures in confocal colocalization, but their method of application,
 analysis, and interpretation of conclusions varies greatly in the
-literature [Bro00][Phe01][Val05][Li04][Rei12].
+literature [Bro00]_, [Phe01]_, [Val05]_, [Li04]_, [Rei12]_.
 
 We computed the set of all colocalization coefficients efficiently by
 noting the common mathematical components of the coefficients and
@@ -497,22 +497,22 @@ wide-field, live-cell, and electron microscopy. A second biological
 application for background correction is microarray
 analysis. Microarrays are tools used to study experimental differences
 in DNA, protein, or RNA, which often produce very large datasets
-[Hell02]. Multi-channel microarray experiments have similar background
+[Hell02]_. Multi-channel microarray experiments have similar background
 noise challenges as confocal microscopy. Most microarray experimental
 data is captured in the form of two-color channel images with
 background noise generated from non-specific label binding or
 processing artifacts. A third biological application for our automated
-thresholding method is magnetic resonance imaging (MRI) [Bal10]. In
+thresholding method is magnetic resonance imaging (MRI) [Bal10]_. In
 MRI images, background correction is often needed for phase distortion
 and general background noise. While other methods need to be applied
 to correct for phase distortion, our methods could be applied to
 reduce general background noise. Other biological applications include
 2-D protein gel electrophoresis, protein dot blots, and western blot
-analysis [Dow03][Gas09]. For any of these techniques, the background
+analysis [Dow03]_, [Gas09]_. For any of these techniques, the background
 noise in the resulting images must be corrected prior to
 quantification of biological phenomena. Non-biological applications
 for our background correction method include, but are not limited to,
-photo restoration and enhancement [Dep02]. The correlation coefficient
+photo restoration and enhancement [Dep02]_. The correlation coefficient
 processing can be applied in many of these applications or any generic
 RGB image workflow.
 
@@ -531,7 +531,7 @@ thresholding a large number of images and (2) batch processing of
 large image sets for statistical analysis.  In 2005, Goucher et
 al. developed an open source image analysis program, in *Perl*, to
 batch process colocalization for RGB images using an *ad hoc*
-association metric [Gou05].  The purpose of our methods was to further
+association metric [Gou05]_.  The purpose of our methods was to further
 this type of automated process to combine automated thresholding with
 batch processing of colocalization coefficients using *Python*.  The
 benefits of our model are: (1) reducing the time consuming effort of
