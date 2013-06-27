@@ -27,7 +27,15 @@ paper:
 - Please do not modify any files outside of your paper directory.
 
 Pull requests are to be submitted by **May 19th**, but modifications are
+<<<<<<< HEAD
+<<<<<<< HEAD:README.txt
+allowed during the review period until June 16th.
+=======
 allowed during the review period until June 14th.
+>>>>>>> e442add6a64cd3a72b07accaf1ead657b06cbbf0:README.md
+=======
+allowed during the review period until June 14th.
+>>>>>>> upstream/2013
 
 General Guidelines
 ------------------
