@@ -243,7 +243,7 @@ class Translator(LaTeXTranslator):
         if node.get('ids'):
             self.out += ['\n'] + self.ids_to_labels(node)
 
-        self.figure_alignment = node.attributes.get('align', None)
+        self.figure_alignment = node.attributes.get('align', 'center')
 
     def depart_figure(self, node):
         self.out.append('\\end{%s}' % self.figure_type)
@@ -255,9 +255,17 @@ class Translator(LaTeXTranslator):
         if 'scale' not in node.attributes and 'width' not in node.attributes:
             node.attributes['width'] = '\columnwidth'
 
-        node.attributes['align'] = self.figure_alignment or 'left'
+        align = self.figure_alignment or 'center'
+        scale = node.attributes.get('scale', 100) / 100.
+        filename = node.attributes['uri']
 
-        LaTeXTranslator.visit_image(self, node)
+        if self.figure_type == 'figure*':
+            width = r'\textwidth'
+        else:
+            width = r'\columnwidth'
+
+        self.out.append(r'\noindent\makebox[%s][%s]' % (width, align[0]))
+        self.out.append(r'{\includegraphics[scale=%.2f]{%s}}' % (scale, filename))
 
     def visit_footnote(self, node):
         # Work-around for a bug in docutils where
