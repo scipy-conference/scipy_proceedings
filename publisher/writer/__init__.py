@@ -252,14 +252,8 @@ class Translator(LaTeXTranslator):
         self.out.append('\\end{%s}' % self.figure_type)
 
     def visit_image(self, node):
-        attrs = node.attributes
-
-        # Only add \columnwidth if scale or width have not been specified.
-        if 'scale' not in node.attributes and 'width' not in node.attributes:
-            node.attributes['width'] = '\columnwidth'
-
         align = self.figure_alignment or 'center'
-        scale = node.attributes.get('scale', 100) / 100.
+        scale = node.attributes.get('scale', None)
         filename = node.attributes['uri']
 
         if self.figure_type == 'figure*':
@@ -267,8 +261,18 @@ class Translator(LaTeXTranslator):
         else:
             width = r'\columnwidth'
 
+        figure_opts = []
+
+        if scale is not None:
+            figure_opts.append('scale=%.2f' % scale / 100.)
+
+        # Only add \columnwidth if scale or width have not been specified.
+        if 'scale' not in node.attributes and 'width' not in node.attributes:
+            figure_opts.append(r'width=\columnwidth')
+
         self.out.append(r'\noindent\makebox[%s][%s]' % (width, align[0]))
-        self.out.append(r'{\includegraphics[scale=%.2f]{%s}}' % (scale, filename))
+        self.out.append(r'{\includegraphics[%s]{%s}}' % (','.join(figure_opts),
+                                                         filename))
 
     def visit_footnote(self, node):
         # Work-around for a bug in docutils where
