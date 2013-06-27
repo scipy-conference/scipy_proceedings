@@ -264,7 +264,7 @@ class Translator(LaTeXTranslator):
         figure_opts = []
 
         if scale is not None:
-            figure_opts.append('scale=%.2f' % scale / 100.)
+            figure_opts.append('scale=%.2f' % (scale / 100.))
 
         # Only add \columnwidth if scale or width have not been specified.
         if 'scale' not in node.attributes and 'width' not in node.attributes:
