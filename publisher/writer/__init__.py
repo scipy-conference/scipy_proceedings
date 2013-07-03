@@ -1,16 +1,17 @@
 __all__ = ['writer']
 
-import docutils.core as dc
-import docutils.writers
 from docutils import nodes
 
 from docutils.writers.latex2e import (Writer, LaTeXTranslator,
                                       PreambleCmds)
 
 from rstmath import mathEnv
-import code_block
 
-from options import options, inst_table
+from options import options
+
+from code_block import CodeBlock
+from docutils.parsers.rst import directives
+directives.register_directive('code-block', CodeBlock)
 
 try:
     from collections import OrderedDict
@@ -21,6 +22,7 @@ PreambleCmds.float_settings = '''
 \\usepackage[font={small,it},labelfont=bf]{caption}
 \\usepackage{float}
 '''
+
 
 class Translator(LaTeXTranslator):
     def __init__(self, *args, **kwargs):
@@ -95,7 +97,7 @@ class Translator(LaTeXTranslator):
 
         def footmark(n):
             """Insert footmark #n.  Footmark 1 is reserved for
-            the corresponding author.\
+            the corresponding author.
             """
             return ('\\setcounter{footnotecounter}{%d}' % n,
                     '\\fnsymbol{footnotecounter}')
@@ -105,7 +107,6 @@ class Translator(LaTeXTranslator):
         for i, inst in enumerate(institution_authors):
             institute_footmark[inst] = footmark(i + 2)
 
-        footmark_template = r'\thanks{%(footmark)s %(instutions)}'
         corresponding_auth_template = r'''%%
           %(footmark_counter)s\thanks{%(footmark)s %%
           Corresponding author: \protect\href{mailto:%(email)s}{%(email)s}}'''
@@ -117,15 +118,16 @@ class Translator(LaTeXTranslator):
                                              self.author_institutions)):
             # Corresponding author
             if n == 0:
-                authors += [r'%(author)s$^{%(footmark)s}$' % \
+                authors += [r'%(author)s$^{%(footmark)s}$' %
                             {'author': auth,
-                             'footmark': ''.join(footmark(1)) + ''.join(institute_footmark[inst])}]
+                             'footmark': ''.join(footmark(1)) +
+                                         ''.join(institute_footmark[inst])}]
 
                 fm_counter, fm = footmark(1)
                 authors[-1] += corresponding_auth_template % \
-                               {'footmark_counter': fm_counter,
-                                'footmark': fm,
-                                'email': self.author_emails[0]}
+                    {'footmark_counter': fm_counter,
+                     'footmark': fm,
+                     'email': self.author_emails[0]}
 
             else:
                 authors += [r'%(author)s$^{%(footmark)s}$' %
@@ -134,29 +136,30 @@ class Translator(LaTeXTranslator):
 
             if not inst in institutions_mentioned:
                 fm_counter, fm = institute_footmark[inst]
-                authors[-1] += r'%(footmark_counter)s\thanks{%(footmark)s %(institution)s}' % \
-                               {'footmark_counter': fm_counter,
-                                'footmark': fm,
-                                'institution': inst}
+                footmark_template = r'%(footmark_counter)s\thanks' \
+                                    '{%(footmark)s %(institution)s}'
+                authors[-1] += footmark_template % \
+                    {'footmark_counter': fm_counter,
+                     'footmark': fm,
+                     'institution': inst}
 
             institutions_mentioned.add(inst)
 
-
         ## Add copyright
 
-        copyright_holder = self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.')
+        copyright_holder = self.author_names[0] + \
+            ('.' if len(self.author_names) == 1 else ' et al.')
         author_notes = r'''%%
 
           \noindent%%
           Copyright\,\copyright\,%(year)s %(copyright_holder)s %(copyright)s%%
         ''' % \
-        {'email': self.author_emails[0],
-         'year': options['proceedings']['year'],
-         'copyright_holder': copyright_holder,
-         'copyright': options['proceedings']['copyright']['article']}
+            {'email': self.author_emails[0],
+             'year': options['proceedings']['year'],
+             'copyright_holder': copyright_holder,
+             'copyright': options['proceedings']['copyright']['article']}
 
         authors[-1] += r'\thanks{%s}' % author_notes
-
 
         ## Set up title and page headers
 
@@ -182,14 +185,12 @@ class Translator(LaTeXTranslator):
                                'keywords': self.keywords,
                                'copyright_holder': copyright_holder}
 
-
     def end_open_abstract(self, node):
         if 'abstract' not in node['classes'] and self.abstract_in_progress:
             self.out.append('\\end{abstract}')
             self.abstract_in_progress = False
         elif self.abstract_in_progress:
             self.abstract_text.append(self.encode(node.astext()))
-
 
     def visit_title(self, node):
         self.end_open_abstract(node)
@@ -323,7 +324,7 @@ class Translator(LaTeXTranslator):
         if 'language' in node.attributes:
             # do highlighting
             from pygments import highlight
-            from pygments.lexers import PythonLexer, get_lexer_by_name
+            from pygments.lexers import get_lexer_by_name
             from pygments.formatters import LatexFormatter
 
             extra_opts = 'fontsize=\\footnotesize'
@@ -347,7 +348,6 @@ class Translator(LaTeXTranslator):
     def depart_literal_block(self, node):
         LaTeXTranslator.depart_literal_block(self, node)
 
-
     def visit_block_quote(self, node):
         self.out.append('\\begin{quotation}')
         LaTeXTranslator.visit_block_quote(self, node)
@@ -355,7 +355,6 @@ class Translator(LaTeXTranslator):
     def depart_block_quote(self, node):
         LaTeXTranslator.depart_block_quote(self, node)
         self.out.append('\\end{quotation}')
-
 
     # Math directives from rstex
 
