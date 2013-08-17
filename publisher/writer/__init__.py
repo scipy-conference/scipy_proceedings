@@ -39,6 +39,7 @@ class Translator(LaTeXTranslator):
         self.abstract_text = []
         self.keywords = ''
         self.table_caption = []
+        self.video_url = ''
 
         self.abstract_in_progress = False
         self.non_breaking_paragraph = False
@@ -77,6 +78,8 @@ class Translator(LaTeXTranslator):
             self.author_emails.append(text)
         elif self.current_field == 'institution':
             self.author_institutions.append(text)
+        elif self.current_field == 'video':
+            self.video_url = text
 
         self.current_field = ''
 
@@ -163,9 +166,16 @@ class Translator(LaTeXTranslator):
 
         ## Set up title and page headers
 
+        if not self.video_url:
+            video_template = ''
+        else:
+            video_template = r'\\\vspace{5mm}\tt\url{%s}\vspace{-5mm}' % self.video_url
+
         title_template = r'\newcounter{footnotecounter}' \
-                         r'\title{%s}\author{%s}\maketitle'
-        title_template = title_template % (title, ', '.join(authors))
+                r'\title{%s}\author{%s' \
+                r'%s}\maketitle'
+        title_template = title_template % (title, ', '.join(authors),
+                                           video_template)
 
         marks = r'''
           \renewcommand{\leftmark}{%s}
