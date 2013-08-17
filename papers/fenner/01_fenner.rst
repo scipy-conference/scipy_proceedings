@@ -6,6 +6,8 @@
 :email: barb.fenner@gmail.com
 :institution: King's College, Wilkes-Barre, PA
 
+:video: http://www.youtube.com/watch?v=ar5YtgiXfNI
+
 ----------------------------------------------------
 Automating Quantitative Confocal Microscopy Analysis
 ----------------------------------------------------

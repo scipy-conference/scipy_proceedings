@@ -6,6 +6,8 @@
 :email: gene@ccs.neu.edu
 :institution: Northeastern University
 
+:video: http://www.youtube.com/watch?v=1l_wGZz0JEE
+
 ============================================
 DMTCP: Bringing Checkpoint-Restart to Python
 ============================================

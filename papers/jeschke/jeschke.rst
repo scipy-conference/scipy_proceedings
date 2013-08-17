@@ -2,6 +2,7 @@
 :email: eric@naoj.org
 :institution: Subaru Telescope, National Astronomical Observatory of Japan
 
+:video: http://www.youtube.com/watch?v=nZKy_nYUxCs
 
 -----------------------------------------------------------
 Ginga: an open-source astronomical image viewer and toolkit

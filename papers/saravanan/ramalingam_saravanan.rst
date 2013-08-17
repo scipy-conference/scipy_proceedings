@@ -2,6 +2,8 @@
 :email: sarava@tamu.edu
 :institution: Texas A&M University
 
+:video: http://www.youtube.com/watch?v=nO0ceHmTlDQ
+
 ---------------------------------------------------------------------------------------------------------
  GraphTerm: A notebook-like graphical terminal interface for collaboration and inline data visualization
 ---------------------------------------------------------------------------------------------------------

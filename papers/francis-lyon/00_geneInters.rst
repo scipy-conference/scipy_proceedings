@@ -5,6 +5,8 @@
 :author: Shashank Belvadi
 :institution: University of San Francisco
 
+:video: http://www.youtube.com/wa?v=IA09mZRCCA8
+
 ----------------------------------------------------------------------------------
 Detection and characterization of interactions of genetic risk factors in disease 
 ----------------------------------------------------------------------------------

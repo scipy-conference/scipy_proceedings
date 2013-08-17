@@ -18,6 +18,8 @@
 :email: rhewett@mit.edu
 :institution: Massachusetts Institute of Technology
 
+:video: http://www.youtube.com/watch?v=bXPPTCkaVu8
+
 ===================================
  SunPy: Python for Solar Physicists
 ===================================

@@ -2,6 +2,7 @@
 :email: gpoore@uu.edu
 :institution: Union University
 
+:video: http://www.youtube.com/watch?v=G-UDHc2UVOg
 
 ------------------------------------------------
 Reproducible Documents with PythonTeX

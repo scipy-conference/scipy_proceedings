@@ -10,6 +10,7 @@
 :email: davidcox@fas.harvard.edu
 :institution: Harvard University
 
+:video: http://www.youtube.com/watch?v=u5amehIiImo
 
 --------------------------------------------------------------
 SkData: Data Sets and Algorithm Evaluation Protocols in Python

@@ -18,6 +18,8 @@
 :email: hchilds@lbl.gov
 :institution: Lawrence Berkeley National Laboratory/The University of Oregon
 
+:video: http://www.youtube.com/watch?v=ei_pFi2xOUc
+
 ---------------------------------------------------------------------------
 Exploring Collaborative HPC Visualization Workflows using VisIt and Python
 ---------------------------------------------------------------------------

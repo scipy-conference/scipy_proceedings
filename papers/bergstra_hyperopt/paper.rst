@@ -10,7 +10,7 @@
 :email: davidcox@fas.harvard.edu
 :institution: Harvard University
 
-:video: http://youtube.com/watch/xyZZyzz
+:video: http://www.youtube.com/watch?v=Mp1xnPfE4PY
 
 --------------------------------------------------------------------------------------------
 Hyperopt: A Python Library for Optimizing the Hyperparameters of Machine Learning Algorithms

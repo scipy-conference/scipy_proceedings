@@ -18,6 +18,8 @@
 :email: kouros.owzar@duke.edu
 :institution: Duke Cancer Institute, Duke University Medical Center, Durham, NC, 27710, USA.
 
+:video: http://www.youtube.com/watch?v=1HCeSwMirIA
+
 -------------------------------------------------------------------------------
 lpEdit: an editor to facilitate reproducible analysis via literate programming
 -------------------------------------------------------------------------------

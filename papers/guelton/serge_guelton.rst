@@ -18,6 +18,7 @@
 :email: mehdi.amini@silkan.com
 :institution: SILKAN, Los Altos, USA
 
+:video: http://www.youtube.com/watch?v=KT5-uGEpnGw
 
 -------------------------------------------------------------------
 Pythran: Enabling Static Optimization of Scientific Python Programs

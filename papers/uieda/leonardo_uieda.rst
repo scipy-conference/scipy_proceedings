@@ -10,6 +10,8 @@
 :email: valcris@on.br
 :institution: Observatorio Nacional
 
+:video: http://www.youtube.com/watch?v=Ec38h1oB8cc
+
 ========================================
 Modeling the Earth with Fatiando a Terra
 ========================================
