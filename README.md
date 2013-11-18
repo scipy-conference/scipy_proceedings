@@ -6,7 +6,7 @@ Papers are formatted using reStructuredText and the compiled version should be
 no longer than 7 pages, including figures.  Here are the steps to produce a
 paper:
 
-- Fork the [scipy_proceedings](https://github.com/scipy/scipy_proceedings)
+- Fork the [scipy_proceedings](https://github.com/scipy-conference/scipy_proceedings)
   repository on GitHub.
 
 - Check out the 2013 branch (``git checkout 2013``).
