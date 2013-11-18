@@ -10,7 +10,7 @@ from docutils.writers.latex2e import (Writer, LaTeXTranslator,
 from rstmath import mathEnv
 import code_block
 
-from options import options, inst_table
+from options import options
 
 try:
     from collections import OrderedDict
