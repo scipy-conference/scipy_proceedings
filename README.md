@@ -6,27 +6,29 @@ Papers are formatted using reStructuredText and the compiled version should be
 no longer than 7 pages, including figures.  Here are the steps to produce a
 paper:
 
-- Fork the [scipy_proceedings](https://github.com/scipy-conference/scipy_proceedings)
+- Fork the
+  [scipy_proceedings](https://github.com/scipy-conference/scipy_proceedings)
   repository on GitHub.
 
-- Check out the 2013 branch (``git checkout 2013``).
+- Check out the 2014 branch (``git checkout 2014``).
 
 - An example paper is provided in ``papers/00_vanderwalt``.  Create a new
   directory ``papers/firstname_surname``, copy the example paper into it, and
   modify to your liking.
 
-- Run ``./make_paper.sh papers/firstname_surname`` to compile your paper to PDF
-  (requires LaTeX, docutils, Python--see below).  The output appears in
+- Run ``./make_paper.sh papers/firstname_surname`` to compile your paper to
+  PDF (requires LaTeX, docutils, Python--see below).  The output appears in
   ``output/firstname_surname/paper.pdf``.
 
 - Once you are ready to submit your paper, file a pull request on GitHub.
-  **Please ensure that you file against the correct branch**--your branch should
-  be named 2013, and the pull-request should be against our 2013 branch.
+  **Please ensure that you file against the correct branch**--your branch
+  should be named 2014, and the pull-request should be against our 2013
+  branch.
 
 - Please do not modify any files outside of your paper directory.
 
-Pull requests are to be submitted by **May 19th**, but modifications are
-allowed during the review period until June 14th.
+Pull requests are to be submitted by **May 18th**, but modifications are
+allowed during the open review period which ends July 5th.
 
 ## General Guidelines
 
