@@ -22,7 +22,7 @@ paper:
 
 - Once you are ready to submit your paper, file a pull request on GitHub.
   **Please ensure that you file against the correct branch**--your branch
-  should be named 2014, and the pull-request should be against our 2013
+  should be named 2014, and the pull-request should be against our 2014
   branch.
 
 - Please do not modify any files outside of your paper directory.
