@@ -28,81 +28,159 @@ Simulating X-ray Observations with Python
 
 .. class:: abstract
 
-   A short version of the long version that is way too long to be written as a
-   short version anyway.  Still, when considering the facts from first
-   principles, we find that the outcomes of this introspective approach is
-   compatible with the guidelines previously established.
-
-   In such an experiment it is then clear that the potential for further
-   development not only depends on previous relationships found but also on
-   connections made during exploitation of this novel new experimental
-   protocol.
+  We present an implementation of such an algorithm in the ``yt`` volumetric analysis 
+  software package.
 
 .. class:: keywords
 
-   terraforming, desert, numerical perspective
+  astronomical observations, visualization
 
 Introduction
 ------------
+ 
+Method
+------
 
-Twelve hundred years ago  |---| in a galaxy just across the hill...
+Emission Models
+===============
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
+One of the most common sources of X-ray emission is that from a low-density, high-temperature, thermal plasma, such as that found in the solar corona, supernova remnants, "early-type" galaxies, galaxy groups, and galaxy clusters. The specific photon emissivity associated with a given density, temperature, and metallicity of such a plasma is given by 
 
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
+.. math::
+  :label: emissivity
 
-   def sum(a, b):
-       """Sum two numbers."""
+  \epsilon_E^\gamma = n_en_H\Lambda(E,T,Z)~{\rm photons~s^{-1}~cm^{-3}}
 
-       return a + b
+where :math:`n_e` and :math:`n_H` are the electron and proton number densities in :math:`{\rm cm^{-3}}` and :math:`\Lambda(E,T,Z)` is the spectral. The dominant contributions to A number of models for the emissivity of an optically-thin, fully-ionized plasma have been developed, including . 
 
-With code-highlighting:
+However, X-ray emission may arise from a variety of physical processes and sources. For example, cosmic-ray electrons in galaxy clusters produce a power-law spectrum of X-ray emission at high energies via inverse-Compton scattering of the cosmic microwave background. The flexibility of our approach allows us to implement one or several different models for the X-ray emission as the situation requires. 
+
+
+Regardless of the emission mechanism, we 
+
+Implementation
+--------------
+
+The model described here has been implemented in ``yt`` [], a Python-based visualization and analysis toolkit for volumetric data. ``yt``'s strength is that it 
+
+Example
+-------
+
+Here we present a workable example of creating simulated X-ray events using ``yt``'s photon simulator. The code implemented here is available as a Python script at :
 
 .. code-block:: python
 
-   def sum(a, b):
-       """Sum two numbers."""
+  import yt
+  from yt.analysis_modules.photon_simulator.api import *
+  from yt.utilities.cosmology import Cosmology
 
-       return a + b
+We're going to load up an Athena dataset of a galaxy cluster core, which can be downloaded from http://yt-project.org/data:
 
-Maybe also in another language, and with line numbers:
+.. code-block:: python
 
-.. code-block:: c
-   :linenos:
+  ds = yt.load("MHDSloshing/virgo_low_res.0054.vtk",
+               parameters={"time_unit":(1.0,"Myr"),
+                           "length_unit":(1.0,"Mpc"),
+                           "mass_unit":(1.0e14,"Msun")}) 
 
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
+Slices through the density and temperature of the simulation dataset are shown in Figure . We will create the photons from a spherical region centered on the domain center, with a radius of 250 kpc:
 
-Or a snippet from the above code, starting at the correct line number:
+.. code-block:: python
 
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
+  sp = ds.sphere("c", (250., "kpc"))
+  
+This will serve as our ``data_source`` that we will use later. Next, we
+need to create the ``SpectralModel`` instance that will determine how
+the data in the grid cells will generate photons. A number of options are available, but we will use the ``XSpecThermalModel``, which allows one to
+use any thermal model that is known to `XSPEC <https://heasarc.gsfc.nasa.gov/xanadu/xspec/>`_, such as ``"mekal"`` or ``"apec"``:
 
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
- 
-Important Part
---------------
+.. code-block:: python
 
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
+  mekal_model = XSpecThermalModel("mekal", 0.01, 
+                                  10.0, 2000)
+
+This requires XSPEC and
+`PyXspec <http://heasarc.gsfc.nasa.gov/xanadu/xspec/python/html/>`_ to
+be installed. 
+
+Now that we have our ``SpectralModel`` that gives us a spectrum, we need
+to connect this model to a ``PhotonModel`` that will connect the field
+data in the ``data_source`` to the spectral model to actually generate
+photons. For thermal spectra, we have a special ``PhotonModel`` called
+``ThermalPhotonModel``:
+
+.. code-block:: python
+
+  thermal_model = ThermalPhotonModel(apec_model, X_H=0.75, 
+                                     Zmet=0.3)
+
+Where we pass in the ``SpectralModel``, and can optionally set values for
+the hydrogen mass fraction ``X_H`` and metallicity ``Z_met``, the latter of which may be a single floating-point value or the name of the ``yt`` field representing the spatially-dependent metallicity. Next, we need to specify "fiducial" values for the telescope collecting area, exposure time, and cosmological redshift. Since the initial photon generation will act as a source for Monte-Carlo sampling for more realistic values of these parameters later, we choose generous values so
+that there will be a large number of photons to sample from. We also construct a ``Cosmology`` object:
+
+.. code-block:: python
+
+  A = 6000.
+  exp_time = 4.0e5
+  redshift = 0.05
+  cosmo = Cosmology()
+
+Now, we finally combine everything together and create a ``PhotonList``
+instance:
+
+.. code-block:: python
+
+  photons = PhotonList.from_scratch(sp, redshift, A, 
+                                    exp_time,
+                                    thermal_model, 
+                                    center="c",
+                                    cosmology=cosmo)
+
+At this point, the ``photons`` are distributed in the three-dimensional
+space of the ``data_source``, with energies in the rest frame of the
+plasma. Doppler and/or cosmological shifting of the photons will be
+applied in the next step.
+
+The ``photons`` can be saved to disk in an HDF5 file:
+
+.. code-block:: python
+
+  photons.write_h5_file("my_photons.h5")
+
+Which is most useful if it takes a long time to generate the photons,
+because a ``PhotonList`` can be created in-memory from the dataset
+stored on disk:
+
+.. code-block:: python
+
+  photons = PhotonList.from_file("my_photons.h5")
+
+This enables the creation of many simulated event sets, along different
+projections, at different redshifts, with different exposure times, and
+different instruments, with the same ``data_source``, without having to
+repeat the expensive step of generating the photons.
+
+Once a set of photons is generated, they can be projected along a line of sight to create a synthetic observation. First, if simulating galactic foreground absorption is desired,  it is necessary to set up a spectral model for the absorption coefficient, similar to the spectral model for the emitted photons set up previously. Here again, there are multiple 
+options. Here, we use ``XSpecAbsorbModel``, which allows one to use any absorption model that XSpec is aware of that takes only the column density :math:`N_H` as input:
+
+.. code-block:: python
+
+  N_H = 0.1 
+  abs_model = XSpecAbsorbModel("wabs", N_H) 
+
+Now the photons may be projected. First, we choose a line-of-sight vector ``L``. Second, we adjust the exposure time and the redshift to more realistic values. Third, we'll pass in the absorption ``SpectrumModel``. Fourth, we'll specify a ``sky_center`` in RA, Dec on the sky in degrees.
+
+.. code-block:: python
+
+  ARF = "chandra_ACIS-S3_onaxis_arf.fits"
+  RMF = "chandra_ACIS-S3_onaxis_rmf.fits"
+  L = [0.0,0.0,1.0]
+  events = photons.project_photons(L, exp_time_new=2.0e5, 
+                                   redshift_new=0.07, 
+                                   absorb_model=abs_model,
+                                   sky_center=(187.5,12.333), 
+                                   responses=[ARF,RMF])
+
 some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
 equation on a separate line:
 
@@ -190,7 +268,5 @@ Perhaps we want to end off with a quote by Lao Tse:
 
 References
 ----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
 
 
