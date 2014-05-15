@@ -175,7 +175,7 @@ and automatic machine learning researchers with benchmarks for future work in al
 
 References
 ----------
-.. [Ber11] J. Bergstra, R. Bardenet, Y. Bengio, and B. Kegl. *Algorithms for hyper-parameter optimization.*,
+.. [Ber11] J. Bergstra, R. Bardenet, Y. Bengio, and B. Kegl. *Algorithms for hyper-parameter optimization*,
            NIPS, 24:2546–2554, 2011.
 .. [Ber13a] J. Bergstra, D. Yamins, and D. D. Cox. *Making a science of model search: Hyperparameter optimization in hundreds of dimensions for vision architectures*,
            In Proc. ICML, 2013a.
@@ -183,15 +183,15 @@ References
            SciPy'13, 2013b.
 .. [Egg13] K. Eggensperger, M. Feurer, F. Hutter, J. Bergstra, J. Snoek, H. Hoos, and K. Leyton-Brown. *Towards an empirical foundation for assessing bayesian optimization of hyperparameters*,
            NIPS workshop on Bayesian Optimization in Theory and Practice, 10 December 2013.
-.. [Gua09] H. Guan, J. Zhou, and M. Guo. *A class-feature-centroid classiﬁer for text categorization*,
+.. [Gua09] H. Guan, J. Zhou, and M. Guo. *A class-feature-centroid classifier for text categorization*,
            Proceedings of the 18th international conference on World wide web, 201-210. ACM, 2009.
 .. [Hal09] M. Hall, E. Frank, G. Holmes, B. Pfahringer, P. Reutemann, and I. H. Witten. *The weka data mining software: an update*,
            ACM SIGKDD explorations newsletter, 11(1):10-18, 2009.
-.. [Hut11] F. Hutter, H. Hoos, and K. Leyton-Brown. *Sequential model-based optimization for general algorithm conﬁguration*,
+.. [Hut11] F. Hutter, H. Hoos, and K. Leyton-Brown. *Sequential model-based optimization for general algorithm configuration*,
            LION-5, 2011. Extended version as UBC Tech report TR-2010-10.
 .. [Lar07] H. Larochelle, D. Erhan, A. Courville, J. Bergstra, and Y. Bengio. *An empirical evaluation of deep architectures on problems with many factors of variation*,
            ICML, 473-480, 2007.
-.. [Lec98] Y. LeCun, L. Bottou, Y. Bengio, and P. Haﬀner. *Gradient-based learning applied to document recognition*,
+.. [Lec98] Y. LeCun, L. Bottou, Y. Bengio, and P. Haffner. *Gradient-based learning applied to document recognition*,
            Proceedings of the IEEE, 86(11):2278-2324, November 1998.
 .. [Mit96] T. Mitchell. *20 newsgroups data set*,
            http://qwone.com/jason/20Newsgroups/, 1996.
@@ -201,6 +201,6 @@ References
            Journal of Machine Learning Research, 12:2825–2830, 2011.
 .. [Sno12] J. Snoek, H. Larochelle, and R. P. Adams. *Practical Bayesian optimization of machine learning algorithms*,
            Neural Information Processing Systems, 2012.
-.. [Tho12] C. Thornton, F. Hutter, H. H. Hoos, and K. Leyton-Brown. *Auto-WEKA: Automated selection and hyper-parameter optimization of classiﬁcation algorithms*,
+.. [Tho12] C. Thornton, F. Hutter, H. H. Hoos, and K. Leyton-Brown. *Auto-WEKA: Automated selection and hyper-parameter optimization of classification algorithms*,
            CoRR, abs/1208.3719, 2012.
 
