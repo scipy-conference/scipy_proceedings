@@ -60,11 +60,16 @@ Section 4 presents a discussion of the results, and directions for future work.
 Searching Scikit-learn with Hyperopt
 ------------------------------------
 
-.. figure:: figure1.png
+.. figure:: space.pdf
 
-   This is the caption. :label:`space`
+   :label:`space`
+   Hyeropt-sklearn’s full search space (“Any Classifier”) consists of a (preprocessing, classsifier) pair. 
+   There are 6 possible preprocessing modules and 6 possible classifiers. 
+   Choosing a model within this configuration space means choosing paths in an ancestral sampling process. 
+   The highlighted green edges and nodes represent a (PCA, K-Nearest Neighbor) model. 
+   The number of active hyperparameters in a model is the sum of parenthetical numbers in the selected boxes. 
+   For the PCA+KNN combination, 7 hyperparameters are activated. 
 
-[[FIGURE]]
 
 The configuration space we experiment on below includes six preprocessing algorithms and seven classification algorithms.
 The full search space is illustrated in Figure :ref:`space`.
@@ -114,33 +119,42 @@ Hyperopt-sklearn's scores are relatively good on each data set, indicating that 
 
 .. table:: This is the caption for the materials table. :label:`acc`
 
-   +------------+----------------+
-   | Material   | Units          |
-   +------------+----------------+
-   | Stone      | 3              |
-   +------------+----------------+
-   | Water      | 12             |
-   +------------+----------------+
-   | Cement     | :math:`\alpha` |
-   +------------+----------------+
+   +-----------------------------------+----------------------------------+---------------------------------+
+   | MNIST                             | 20 Newsgroups                    | 20 Newsgroups                   |
+   +-----------------------+-----------+----------------------+-----------+----------------------+----------+
+   | Approach              | Accuracy  | Approach             | F-Score   | Approach             | Accuracy |
+   +-----------------------+-----------+----------------------+-----------+----------------------+----------+
+   | Committee of convnets | 99.8%     | CFC                  | 0.928     | **hyperopt-sklearn** | **88.7** |
+   +-----------------------+-----------+----------------------+-----------+----------------------+----------+
+   | **hyperopt-sklearn**  | **98.7%** | **hyperopt-sklearn** | **0.856** | hp-dbnet             | 84.6%    |
+   +-----------------------+-----------+----------------------+-----------+----------------------+----------+
+   | libSVM grid search    | 98.6%     | SVMTorch             | 0.848     | dbn-3                | 81.4%    |
+   +-----------------------+-----------+----------------------+-----------+----------------------+----------+
+   | lBoosted trees        | 98.5%     | LibSVM               | 0.843     |                      |          |
+   +-----------------------+-----------+----------------------+-----------+---------------------------------+
 
-.. figure:: figure1.png
+.. figure:: AverageTestScoresClassifiersTPE.png
 
-   This is the caption. :label:`avgtestscores`
+   :label:`avgtestscores`
+   For each data set, searching the full configuration space (“Any Classifier”) delivered performance approximately on par with a search that was restricted to the best classifier type. 
+   (Best viewed in color.)
 
-[[FIGURE]]
 
-.. figure:: figure1.png
+.. figure:: ScoresByEval.png
 
-   This is the caption. :label:`perclf`
+.. figure:: AvgMinValidErrorTPE.png
 
-[[FIGURE]]
+   :label:`perclf`
+   Left: Using Hyperopt’s Anneal search algorithm, increasing the number of function evaluations from 150 to 2400 lead to a modest improvement in accuracy on 20 Newsgroups and MNIST, and a more dramatic improvement on Convex Shapes. 
+   We capped evaluations to 5 minutes each so 300 evaluations took between 12 and 24 hours of wall time. 
+   Right: TPE makes gradual progress on 20 Newsgroups over 300 iterations and gives no indication of convergence.
 
-.. figure:: figure1.png
 
-   This is the caption. :label:`npie`
+.. figure:: pie.png
 
-[[FIGURE]]
+   :label:`npie`
+   Looking at the best models from all optimization runs performed on the full search space (using different initial conditions, and different optimization algorithms) we see that different data sets are handled best by different classifiers. 
+   SVC was the only classifier ever chosen as the best model for Convex Shapes, and was often found to be best on MNIST and 20 Newsgroups.
 
 
 Discussion and Future Work
