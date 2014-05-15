@@ -117,7 +117,11 @@ there was no penalty for keeping all options open during search.
 Table :ref:`acc` lists the test set scores of the best models found by cross-validation, as well as some points of reference from previous work.
 Hyperopt-sklearn's scores are relatively good on each data set, indicating that with hyperopt-sklearn's parameterization, Hyperopt's optimization algorithms are competitive with human experts.
 
-.. table:: This is the caption for the materials table. :label:`acc`
+.. table:: :label:`acc`
+   Hyperopt-sklearn scores relative to selections from literature on the three data sets used in our experiments. 
+   On MNIST, hyperopt-sklearn is one of the best-scoring methods that does not use image-specific domain knowledge (these scores and others may be found at http://yann.lecun.com/exdb/mnist/). 
+   On 20 Newsgroups, hyperopt-sklearn is competitive with similar approaches from the literature (scores taken from [Gua09]_ ). 
+   On Convex Shapes, hyperopt-sklearn outperforms previous automatic algorithm configuration approaches [Egg13]_ and manual tuning [Lar07]_ .
 
    +-----------------------------------+----------------------------------+---------------------------------+
    | MNIST                             | 20 Newsgroups                    | 20 Newsgroups                   |
