@@ -44,7 +44,7 @@ Relative to DBNs and convnets, algorithms such as RBF-SVMs and Random Forests (R
 
 Taking a step back though, there is often no particular reason to use either an RBF-SVM or an RF when they are both computationally viable.
 A model-agnostic practitioner may simply prefer to go with the one that provides greater accuracy.
-In this light, *the choice of classifier can be seen as hyperparameter* alongside the $C$-value in the SVM and the max-tree-depth of the RF.
+In this light, *the choice of classifier can be seen as hyperparameter* alongside the :math:`C`-value in the SVM and the max-tree-depth of the RF.
 Indeed the choice and configuration of *pre-processing* components may likewise be seen as part of the model selection / hyperparameter optimization problem.
 The Auto-Weka project [Tho12]_ was the first to show that an entire library of machine learning approaches (Weka [Hal09]_ ) can be searched within the scope of a single run of hyperparameter tuning.
 However, Weka is a GPL-licensed Java library, and was not written with scalability in mind. These factors limit the utility of Auto-Weka.
@@ -120,8 +120,10 @@ Hyperopt-sklearn's scores are relatively good on each data set, indicating that 
 .. table:: :label:`acc`
    Hyperopt-sklearn scores relative to selections from literature on the three data sets used in our experiments. 
    On MNIST, hyperopt-sklearn is one of the best-scoring methods that does not use image-specific domain knowledge (these scores and others may be found at http://yann.lecun.com/exdb/mnist/). 
-   On 20 Newsgroups, hyperopt-sklearn is competitive with similar approaches from the literature (scores taken from [Gua09]_ ). 
+   On 20 Newsgroups, hyperopt-sklearn is competitive with similar approaches from the literature (scores taken from [Gua09]_ ).
    On Convex Shapes, hyperopt-sklearn outperforms previous automatic algorithm configuration approaches [Egg13]_ and manual tuning [Lar07]_ .
+   In the 20 Newsgroups dataset, the score reported for hyperopt-sklearn is the weighted-average F1 score provided by sklearn. 
+   The other approaches shown here use the macro-average F1 score.
 
    +-----------------------------------+----------------------------------+---------------------------------+
    | MNIST                             | 20 Newsgroups                    | 20 Newsgroups                   |
@@ -134,8 +136,8 @@ Hyperopt-sklearn's scores are relatively good on each data set, indicating that 
    +-----------------------+-----------+----------------------+-----------+----------------------+----------+
    | libSVM grid search    | 98.6%     | SVMTorch             | 0.848     | dbn-3                | 81.4%    |
    +-----------------------+-----------+----------------------+-----------+----------------------+----------+
-   | lBoosted trees        | 98.5%     | LibSVM               | 0.843     |                      |          |
-   +-----------------------+-----------+----------------------+-----------+---------------------------------+
+   | Boosted trees         | 98.5%     | LibSVM               | 0.843     |                      |          |
+   +-----------------------+-----------+----------------------+-----------+----------------------+----------+
 
 .. figure:: AverageTestScoresClassifiersTPE.png
 
