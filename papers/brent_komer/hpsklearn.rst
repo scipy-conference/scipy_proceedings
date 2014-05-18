@@ -114,30 +114,60 @@ we performed optimization runs of up to 300 function evaluations searching eithe
 We used three optimization algorithms in Hyperopt: random search, annealing, and TPE.
 Figure :ref:`avgtestscores` shows that the performance of the model found from throughout the entire search space was not statistically inferior to the best model pulled from each classifier subspace;
 there was no penalty for keeping all options open during search.
-Table :ref:`acc` lists the test set scores of the best models found by cross-validation, as well as some points of reference from previous work.
+Tables :ref:`tablemnist`, :ref:`tablenewsgroups`, and :ref:`tableconvex` list the test set scores of the best models found by cross-validation, as well as some points of reference from previous work.
 Hyperopt-sklearn's scores are relatively good on each data set, indicating that with hyperopt-sklearn's parameterization, Hyperopt's optimization algorithms are competitive with human experts.
 
-.. table:: :label:`acc`
+.. table:: :label:`tablemnist`
    Hyperopt-sklearn scores relative to selections from literature on the three data sets used in our experiments. 
    On MNIST, hyperopt-sklearn is one of the best-scoring methods that does not use image-specific domain knowledge (these scores and others may be found at http://yann.lecun.com/exdb/mnist/). 
+
+   +-----------------------------------+
+   | MNIST                             |
+   +-----------------------+-----------+
+   | Approach              | Accuracy  |
+   +-----------------------+-----------+
+   | Committee of convnets | 99.8%     |
+   +-----------------------+-----------+
+   | **hyperopt-sklearn**  | **98.7%** |
+   +-----------------------+-----------+
+   | libSVM grid search    | 98.6%     |
+   +-----------------------+-----------+
+   | Boosted trees         | 98.5%     |
+   +-----------------------+-----------+
+
+.. table:: :label:`tablenewsgroups`
    On 20 Newsgroups, hyperopt-sklearn is competitive with similar approaches from the literature (scores taken from [Gua09]_ ).
-   On Convex Shapes, hyperopt-sklearn outperforms previous automatic algorithm configuration approaches [Egg13]_ and manual tuning [Lar07]_ .
    In the 20 Newsgroups dataset, the score reported for hyperopt-sklearn is the weighted-average F1 score provided by sklearn. 
    The other approaches shown here use the macro-average F1 score.
 
-   +-----------------------------------+----------------------------------+---------------------------------+
-   | MNIST                             | 20 Newsgroups                    | Convex Shapes                   |
-   +-----------------------+-----------+----------------------+-----------+----------------------+----------+
-   | Approach              | Accuracy  | Approach             | F-Score   | Approach             | Accuracy |
-   +-----------------------+-----------+----------------------+-----------+----------------------+----------+
-   | Committee of convnets | 99.8%     | CFC                  | 0.928     | **hyperopt-sklearn** | **88.7** |
-   +-----------------------+-----------+----------------------+-----------+----------------------+----------+
-   | **hyperopt-sklearn**  | **98.7%** | **hyperopt-sklearn** | **0.856** | hp-dbnet             | 84.6%    |
-   +-----------------------+-----------+----------------------+-----------+----------------------+----------+
-   | libSVM grid search    | 98.6%     | SVMTorch             | 0.848     | dbn-3                | 81.4%    |
-   +-----------------------+-----------+----------------------+-----------+----------------------+----------+
-   | Boosted trees         | 98.5%     | LibSVM               | 0.843     |                      |          |
-   +-----------------------+-----------+----------------------+-----------+----------------------+----------+
+   +-----------------------------------+
+   | 20 Newsgroups                     |
+   +-----------------------+-----------+
+   | Approach              | F-Score   |
+   +-----------------------+-----------+
+   | CFC                   | 0.928     |
+   +-----------------------+-----------+
+   | **hyperopt-sklearn**  | **0.856** |
+   +-----------------------+-----------+
+   | SVMTorch              | 0.848     |
+   +-----------------------+-----------+
+   | LibSVM                | 0.843     |
+   +-----------------------+-----------+
+
+.. table:: :label:`tableconvex`
+   On Convex Shapes, hyperopt-sklearn outperforms previous automatic algorithm configuration approaches [Egg13]_ and manual tuning [Lar07]_ .
+
+   +-----------------------------------+
+   | Convex Shapes                     |
+   +-----------------------+-----------+
+   | Approach              | Accuracy  |
+   +-----------------------+-----------+
+   | **hyperopt-sklearn**  | **88.7**  |
+   +-----------------------+-----------+
+   | hp-dbnet              | 84.6%     |
+   +-----------------------+-----------+
+   | dbn-3                 | 81.4%     |
+   +-----------------------+-----------+
 
 .. figure:: AverageTestScoresClassifiersTPE.png
 
