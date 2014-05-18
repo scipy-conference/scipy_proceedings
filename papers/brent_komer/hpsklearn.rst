@@ -126,7 +126,7 @@ Hyperopt-sklearn's scores are relatively good on each data set, indicating that 
    The other approaches shown here use the macro-average F1 score.
 
    +-----------------------------------+----------------------------------+---------------------------------+
-   | MNIST                             | 20 Newsgroups                    | 20 Newsgroups                   |
+   | MNIST                             | 20 Newsgroups                    | Convex Shapes                   |
    +-----------------------+-----------+----------------------+-----------+----------------------+----------+
    | Approach              | Accuracy  | Approach             | F-Score   | Approach             | Accuracy |
    +-----------------------+-----------+----------------------+-----------+----------------------+----------+
@@ -148,11 +148,13 @@ Hyperopt-sklearn's scores are relatively good on each data set, indicating that 
 
 .. figure:: ScoresByEval.png
 
+   :label:`perclf`
+   Using Hyperopt’s Anneal search algorithm, increasing the number of function evaluations from 150 to 2400 lead to a modest improvement in accuracy on 20 Newsgroups and MNIST, and a more dramatic improvement on Convex Shapes. 
+   We capped evaluations to 5 minutes each so 300 evaluations took between 12 and 24 hours of wall time. 
+
 .. figure:: AvgMinValidErrorTPE.png
 
-   :label:`perclf`
-   Left: Using Hyperopt’s Anneal search algorithm, increasing the number of function evaluations from 150 to 2400 lead to a modest improvement in accuracy on 20 Newsgroups and MNIST, and a more dramatic improvement on Convex Shapes. 
-   We capped evaluations to 5 minutes each so 300 evaluations took between 12 and 24 hours of wall time. 
+   :label:`validtpe`
    Right: TPE makes gradual progress on 20 Newsgroups over 300 iterations and gives no indication of convergence.
 
 
