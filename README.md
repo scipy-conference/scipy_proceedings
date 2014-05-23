@@ -27,7 +27,7 @@ paper:
 
 - Please do not modify any files outside of your paper directory.
 
-Pull requests are to be submitted by **May 18th**, but modifications are
+Pull requests are to be submitted by **June 15th**, but modifications are
 allowed during the open review period which ends July 5th.
 
 ## General Guidelines
