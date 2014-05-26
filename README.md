@@ -56,3 +56,7 @@ examples of how to:
  - AMSmath LaTeX classes (included in most LaTeX distributions)
  - `docutils` 0.8 or later (``easy_install docutils``)
  - `pygments` for code highlighting (``easy_install pygments``)
+
+## For organizers
+
+To build the whole proceedings, see the Makefile in the publisher directory.
