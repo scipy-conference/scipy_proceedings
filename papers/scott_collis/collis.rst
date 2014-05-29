@@ -53,12 +53,12 @@ Matplotlib.
 Introduction
 ------------
 Introduce the idea of radars and remote sensing
-Meets computer science, quote BAMS
+Meets computer science, quote BAMS [Maik2014]_
 Data models
 Particular problem, how do you go from complex moments to gaining an idea as to
 the scale of precipitation and does a model achieve it?
 
-The data source: Scanning centermeter wavelength radar
+The data source: Scanning centimeter wavelength radar
 ------------
 What is a radar
 
@@ -77,3 +77,12 @@ Calculations on the grid data
 
 Spatial distribution of rainfall: a objective test of fine scale models
 ------------
+
+References
+----------
+.. [Maik2014] Heistermann, M., S. Collis, M. J. Dixon, S. E. Giangrande,
+              J. J. Helmus, B. Kelley, J. Koistinen, D. B. Michelson, M. Peura,
+              T. Pfaff and D. B. Wolff,
+              2014: The Promise of Open Source Software for the Weather Radar
+              Community. *Bulletin of the American Meteorological Society*,
+              **In Press.**
