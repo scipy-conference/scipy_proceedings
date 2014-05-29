@@ -1,18 +1,31 @@
 :author: Scott Collis
 :email: scollis@anl.gov
-:institution: Environmental Sciences Division, Argonne National Laboratory
+:institution: Environmental Sciences Division, Argonne National Laboratory.
 
-:author: Mark Anthony
-:email: mark37@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
+:author: Scott Giangrande
+:email: sgrande@bnl.gov
+:institution: Atmospheric Sciences, Brookhaven National Laboratory.
 
-:author: Jarrod Millman
-:email: millman@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
+:author: Jonathan Helmus
+:email: jhelmus@anl.gov
+:institution: Environmental Sciences Division, Argonne National Laboratory.
+
+:author: Di Wu
+:email: di.wu@nasa.gov
+:institution: Environmental Sciences Division, Argonne National Laboratory.
+
+:author: Jonathan Helmus
+:email: ann.fridlind@nasa.gov
+:institution: Environmental Sciences Division, Argonne National Laboratory.
+
+:author: Jonathan Helmus
+:email: marcus.vanlier-walqui@nasa.gov
+:institution: Environmental Sciences Division, Argonne National Laboratory.
+
 
 
 ------------------------------------------------
-A Numerical Perspective to Terraforming a Desert
+Measuring rainshafts: Bringing python to bear on remote sensing data.
 ------------------------------------------------
 
 .. class:: abstract
@@ -30,4 +43,37 @@ meteorology we will break down how we approach this problem in terms what tools
 across numerous packages we used to read, correct, map and reduce the data to
 forms able to answer our science questions. This is a "how" presentation,
 covering signal processing using linear programming methods, mapping using KD
-Trees, and image analysis using ndimage and, of course graphics using Matplotlib.
+Trees, and image analysis using ndimage and, of course graphics using
+Matplotlib.
+
+.. class:: keywords
+
+   Remote sensing, radar, meteorology, hydrology
+
+Introduction
+------------
+Introduce the idea of radars and remote sensing
+Meets computer science, quote BAMS
+Data models
+Particular problem, how do you go from complex moments to gaining an idea as to
+the scale of precipitation and does a model achieve it?
+
+The data source: Scanning centermeter wavelength radar
+------------
+What is a radar
+
+The Python ARM Radar Toolkit: Py-ART
+------------
+The idea behind Py-ART
+
+Pre-mapping corrections and calculations
+~~~~~~~~~~~~~~~~~~~~~~
+
+Mapping to a cartesian grid
+~~~~~~~~~~~~~~~~~~~~~~
+
+Calculations on the grid data
+~~~~~~~~~~~~~~~~~~~~~~
+
+Spatial distribution of rainfall: a objective test of fine scale models
+------------
