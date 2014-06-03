@@ -32,9 +32,8 @@ TracPy: Wrapping the FORTRAN Lagrangian trajectory model TRACMASS
 
 .. class:: keywords
 
-   keywords
+   Lagrangian tracking, numerical drifters, Python wrapper
 
-   .. terraforming, desert, numerical perspective
 
 Introduction
 ------------
@@ -48,6 +47,8 @@ Lagrangian trajectory modeling is a method of moving parcels through a fluid bas
 Numerical drifters may be calculated online, while a circulation model is running, in order to use the highest resolution model-predicted velocity fields available in time (on the order of seconds to minutes). Often, however, Lagrangian trajectories are calculated offline, using the velocity fields at the stored temporal resolution (on the order of minutes to hours). 
 
 A given drifter's trajectory is calculated using velocity fields that are not perfectly resolved in space, either, given any numerical model grid's spatial resolution. To move the drifter, the velocity fields must be extended to the drifter's location, which in general will not be colocated with all necessary velocity information. Many Lagrangian trajectory models use interpolation in space to accomplish this, and may use low or high orders of interpolation. The algorithm discussed in this work has a somewhat different approach.
+
+WANT A LAGRANGIAN TRAJECTORY MODEL TO PERFORM AS BEST AS POSSIBLE, BUT SHOULD ACKNOWLEDGE THE MANY SOURCES OF ERROR
 
 
 .. introduce TRACMASS with links to places it has been used
@@ -69,7 +70,7 @@ The TRACMASS algorithm for stepping numerical drifters in space is distinct from
 .. figure:: tracmass1.pdf
    :scale: 40%
 
-   A single rectangular grid cell is shown in :math:`x-y`. Zonal :math:`u(v)` velocities are calculated at the east/west (north/south) cell walls. In the vertical direction, :math:`w` velocities are calculated at the top and bottom cell walls. :label:`tracmass1`
+   A single rectangular grid cell is shown in :math:`x-y`. Zonal :math:`u(v)` velocities are calculated at the east/west (north/south) cell walls. In the vertical direction, :math:`w` velocities are calculated at the top and bottom cell walls. After (CITE TRACMASS DOCUMENTATION). :label:`tracmass1`
 
 1. To calculate the time required for the drifter to exit the grid cell in the :math:`x` direction:
 
@@ -90,15 +91,27 @@ Drifters can be stepped forward or backward in time; this is accomplished essent
 
 Time is assumed to be steady while a drifter is being stepped through a grid cell |---| how much this will affect the resulting trajectory depends on the size of the grid cell relative to the speed of the drifter. When a drifter reaches another grid cell wall, the fields are re-interpolated. The user may choose to interpolate the velocity fields at shorter intervals if desired. Additionally, a time-dependent algorithm has been developed (CITE) to address this, but previous researchers have found that the steady approximation is adequate in many cases (CITE). 
 
-The capability of the TRACMASS algorithm has been demonstrated by creating simulated model output with known trajectory solutions and comparing (Figure :ref:`validation`). EXPLAIN HERE.
+The capability of the TRACMASS algorithm has been demonstrated by creating synthetic model output with known trajectory solutions and comparing (Figure :ref:`validation`).  
+A damped inertial oscillation is used in the test, for which the analytic solutions for both the velocity fields and a particle's trajectory are known (CITE). Cases of a drifter trajectory calculated with different levels of interpolation between model outputs are shown along with the analytic solution and a trajectory calculated using the time-dependent TRACMASS algorithm. All trajectories generally following the analytic solution, but the case with no time interpolation of the fields clearly deviates. The case with 10 interpolation steps in times performs well, and with 1000 interpolation steps, the curves are indistinuishable. Note that in this case, the size of the grid cell relative to the motion of the trajectory emphasizes the effect of time interpolation.
 
 .. figure:: validation.png
    :scale: 40%
 
-   DETAILS. From (CITE). :label:`validation`
+   A trajectory from a damped inertial oscillation is shown from several simulated cases with the analytic solution. Cases shown are trajectories calculated using TRACMASS with zero [red], 10 [blue], and 1000 [green] time interpolation between model outputs; the analytic solution [black]; and the time-dependent algorithm [purple]. The green, black, and purple curves are indistinguishable. From (CITE). :label:`validation`
 
-Options are available to complement the basic algorithm of TRACMASS. GIVE SUBGRID DIFFUSION DETAILS AND OPTIONS.
+Options are available to complement the basic algorithm of TRACMASS. For example, it can be important to consider whether or not to add additional subgrid diffusion to drifters. Energy at scales below a few grid spatial grid cells is not included in an ocean circulation model except through some turbulence closure scheme or other means. This energy is included in the numerical scheme and implemented in the simulation, and in this regard is included in the saved velocity fields from the circulation model. From this perspective, adding any additional subgrid energy is duplicating the energy that is already included in the simulation. However, without including some small-scale energy to drifter tracks, drifters starting at the same time and location will follow the same path, which is clearly not realistic |---| adding a small amount of energy to drifter tracks acts to stir drifters in a way that often looks more realistic than when subgrid diffusion is not included. This added energy will also affect Lagrangian metrics that are calculated from drifter trajectories (CITE Doos PAPER, e.g.).
 
+To address this issue, there are several optional means of including subgrid diffusion in TRACMASS, all of which are low order schemes (CITE LACASCE 2008). Drifter trajectories may be stepped using not the basic velocity fields (:math:`u,v`) but with the velocity fields plus some small random velocity fluctuation (:math:`u',v'`) (Figure :ref:`turb`). Alternatively, drifter trajectory locations can be given an added random walk |---| randomly moved a small distance away from their location each step up to some radial distance away that is controlled by an input parameter (Figure :ref:`diff`). Drifters can be moved preferentially along an ellipse that aligns with the local bathymetric isobaths instead of a circle, which improves performance in some large-scale simulations (not shown) (CITE SOMEONE?). Note that when using additional subgrid diffusion, drifter tracks will not be the same forward and backward in time. 
+
+.. figure:: tracmassTurb.pdf
+   :scale: 40%
+
+   MORE. After (CITE TRACMASS DOCUMENTATION). :label:`turb`
+
+.. figure:: tracmassDiff.pdf
+   :scale: 40%
+
+   MORE. After (CITE TRACMASS DOCUMENTATION). :label:`diff`
 
 TracPy
 ------
@@ -121,18 +134,21 @@ Other improvements in the code system:
 
 .. Discuss parallelization: a lot of usage is about running lots of cases, and it is relatively easy to distribute simulations separately amongst processes. Not set up to send different drifters to different processes, but would be difficult in the amount of model output that would be required to send different places though in some cases might be helpful
 
+The parallelization of an offline Lagrangian trajectory model could be relatively straight-forward. Each drifter trajectory in any given simulation is independent of every other drifter. However, one of the slowest parts of drifter tracking is often reading in the velocity fields |---| separating out drifter trajectory calculations into different processes would most likely increase the input/output requirement. Still, there is an easy way to take advantage of the inherent decoupling of drifter calculations: running different simulations on different processes. This is demonstrated in a number of project repositories available (*e.g.*, LINK TO SOME GITHUB REPOS?) and basically just involves starting different sets of simulations on different processes. Many times, the goal of running a set of drifter simulations is to run a large amount of different simulations, in which case these separate simulations can all be distributed to different processes |---| as opposed to subdividing individual simulations to calculate different trajectories in different processes.
 
-.. Explain existing level of usage
+.. Explain existing level of usage (?)
 
 
 .. Performance: change number of drifters and plot timing for each part of the simulation, then do the same changing the number of grid nodes
 
 
+
 .. Want to test a simulation compared to times for just using TRACMASS ideal vs. with TracPy
 
 
-.. Examples of use
+.. Examples of use: time res paper, shelf eddy tracking, cross-shelf transport, lagrangian metrics
 
+The TracPy suite of code has been used to learn about a number of problems.
 
 .. Future work (GNOME, parallelization? other stuff in my list, not storing everything at once, better ways of storing drifters since many end up as NANs? or maybe ok with netCDF4?)
 
