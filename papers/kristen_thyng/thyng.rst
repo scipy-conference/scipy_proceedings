@@ -64,18 +64,40 @@ TRACMASS
 
 .. Explain algorithm
 
-The TRACMASS algorithm for stepping numerical drifters in space is distinct from many algorithms because it runs natively on a staggered Arakawa C grid. This grid is used in ocean modeling codes, including the Regional Ocean Modeling System (ROMS) CITE, MITGCM CITE, and HyCOM CITE. In the staggered Arakawa C grid, the west-east or zonal velocity, :math:`u`, is located at the west and east walls of a grid cell; the north-south or meridional velocity, :math:`v`, is located at the north and south walls; and the vertical velocity, :math:`w`, is located at the vertically top and bottom cell walls (Figure :ref:`tracmass1`). The drifter is stepped as follows:
-
-1. something
-
-2. something else
+The TRACMASS algorithm for stepping numerical drifters in space is distinct from many algorithms because it runs natively on a staggered Arakawa C grid. This grid is used in ocean modeling codes, including the Regional Ocean Modeling System (ROMS) CITE, MITGCM CITE, and HyCOM CITE. In the staggered Arakawa C grid, the west-east or zonal velocity, :math:`u`, is located at the west and east walls of a grid cell; the north-south or meridional velocity, :math:`v`, is located at the north and south walls; and the vertical velocity, :math:`w`, is located at the vertically top and bottom cell walls (Figure :ref:`tracmass1`). Note that the algorithm is calculated using fluxes through grid cell walls instead of the velocities themselves to account for differences in cell wall size due to a curvilinear grid or :math:`\sigma` coordinates being used in the vertical direction. The drifter is stepped as follows:
 
 .. figure:: tracmass1.pdf
    :scale: 40%
 
    A single rectangular grid cell is shown in :math:`x-y`. Zonal :math:`u(v)` velocities are calculated at the east/west (north/south) cell walls. In the vertical direction, :math:`w` velocities are calculated at the top and bottom cell walls. :label:`tracmass1`
 
+1. To calculate the time required for the drifter to exit the grid cell in the :math:`x` direction:
+
+   a. Linearly interpolate the velocity across the cell in the zonal direction to find :math:`u(x)`.
+   b. Solve the ordinary differential equation :math:`u(x)=\frac{dx}{dt}` for :math:`x(t)`.
+   c. Back out the time required to exit the grid cell in the zonal direction, :math:`t_x`. 
+
+#. Follow the same methodology in the meridional and vertical directions to find :math:`t_y` and :math:`t_z`.
+#. The minimum time :math:`t_{min}` is when the drifter would first exit the grid cell
+#. The subsequent :math:`(x,y,z)` position for the drifter is calculated using :math:`t_{min}`.
+
+This process occurs for each drifter each time it is moved forward from one grid cell edge to the next. If a drifter will not reach a grid cell edge, it stops in the grid cell. Calculations for the drifter trajectories are done in grid index space so that it is rectangular, which comes with a number of simplifications. The velocity fields are linearly interpolated in time for each subsequent stepping of each drifter. Because a drifter is moved according to its distinct time and location, each drifter is stepped separately, and the time step between field reinterpolation can be different. To account for this, the location of all drifters is sampled at regular intervals between the available circulation model outputs. Because reading in the model output is one of the more time-consuming parts of the process, all drifters are stepped between the velocity fields at two subsequent times, then the next one is read in in order to continue stepping in time.
+
+Drifters can be stepped forward or backward in time; this is accomplished essentially by multiplying the velocity fields by -1. Because of the analytic nature of the TRACMASS algorithm, the trajectories found forward and backward in time are the same. 
+
+
 .. Explain options like subgrid diffusion, time interpolation, and time-dependent algorithm
+
+Time is assumed to be steady while a drifter is being stepped through a grid cell |---| how much this will affect the resulting trajectory depends on the size of the grid cell relative to the speed of the drifter. When a drifter reaches another grid cell wall, the fields are re-interpolated. The user may choose to interpolate the velocity fields at shorter intervals if desired. Additionally, a time-dependent algorithm has been developed (CITE) to address this, but previous researchers have found that the steady approximation is adequate in many cases (CITE). 
+
+The capability of the TRACMASS algorithm has been demonstrated by creating simulated model output with known trajectory solutions and comparing (Figure :ref:`validation`). EXPLAIN HERE.
+
+.. figure:: validation.png
+   :scale: 40%
+
+   DETAILS. From (CITE). :label:`validation`
+
+Options are available to complement the basic algorithm of TRACMASS. GIVE SUBGRID DIFFUSION DETAILS AND OPTIONS.
 
 
 TracPy
@@ -83,11 +105,36 @@ TracPy
 
 .. Explain approach
 
+The goal of TracPy is to take advantage of the speed and cleverness of the TRACMASS algorithm, written in Fortran, but have access to the niceties of Python and for running batches of simulations. Being a scientific research code, TRACMASS has been developed over time by different researchers and with a specific research purpose in mind outside of how well the code itself may or may not be written. TracPy was written to include the important basic elements of calculating drifter trajectories from TRACMASS, and do the rest in Python.
+
+.. What have I added? Non-global variables, TracPy class, iPython user manual, test cases, unit tests
+
+TracPy uses a class for a given simulation of drifters. The TracPy class is initialized with all necessary parameters for the simulation itself, *e.g.*, number of days to run the simulation, how many times to be sure to reinterpolated between available circulation model outputs, whether to use subgrid diffusion, and whether to run in 2D or 3D. The class has methods for reading in the numerical grid, preparing for the simulation, preparing for each model step (*e.g.*, reading in the velocity fields at the next time step), stepping the drifters forward between the two time steps of velocity fields stored in memory, wrapping up the time step, and wrapping up the simulation. Utilities are provided in TracPy for necessary computations, such as moving between spaces of the drifter locations. Drifter locations may, in general, be given both in geographic space (*i.e.*, longitude/latitude) or in projected space (*e.g.*, Universal Traverse Mercator or Lambert ConiC SOMETHING) to be in meters, and positions are converted using packages Basemap or Pyproj. Additionally, drifter locations will need to be transformed between grid index space, how they are calculated in TRACMASS, and some real space. Plotting functions and common calculations are also included in the suite of code making up TracPy.
+
+Other improvements in the code system:
+
+- Global variables have been removed from the set of code in moving from the original set of TRACMASS code to the leaner TRACMASS algorithm that exists in TracPy, and have been replaced with variables that are passed directly between functions as needed. 
+
+- A user manual has been implemented in an iPython notebook (GIVE LINK?)
+
+- A few simple test cases have been provided for users to experiment with and as a set of unit tests to improve stability during code development.
+
+.. Discuss parallelization: a lot of usage is about running lots of cases, and it is relatively easy to distribute simulations separately amongst processes. Not set up to send different drifters to different processes, but would be difficult in the amount of model output that would be required to send different places though in some cases might be helpful
+
 
 .. Explain existing level of usage
 
 
-.. Future work
+.. Performance: change number of drifters and plot timing for each part of the simulation, then do the same changing the number of grid nodes
+
+
+.. Want to test a simulation compared to times for just using TRACMASS ideal vs. with TracPy
+
+
+.. Examples of use
+
+
+.. Future work (GNOME, parallelization? other stuff in my list, not storing everything at once, better ways of storing drifters since many end up as NANs? or maybe ok with netCDF4?)
 
 
 
@@ -95,6 +142,12 @@ Conclusions
 -----------
 
 
+
+
+Acknowledgements
+----------------
+
+Chris Barker
 
 .. Twelve hundred years ago  |---| in a galaxy just across the hill...
 
