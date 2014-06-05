@@ -27,5 +27,6 @@ class CodeBlock(Directive):
         return [literal]
 
 directives.register_directive('code-block', CodeBlock)
+directives.register_directive('code', CodeBlock)
 
 # --- End code-block directive from Sphinx ---
