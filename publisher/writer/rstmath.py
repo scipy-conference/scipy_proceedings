@@ -48,9 +48,9 @@ class MathDirective(Directive):
     def run(self):
         latex = '\n'.join(self.content)
         if self.arguments and self.arguments[0]:
-            latex = self.arguments[0] + '\n\n' + latex
+            latex = ' '.join(self.arguments) + '\n\n' + latex
         node = PartMath()
-        node['latex'] = latex
+        node['latex'] = latex.strip()
         node['label'] = self.options.get('label', None)
         node['type'] = self.options.get('type', "equation")
         ret = [node]
