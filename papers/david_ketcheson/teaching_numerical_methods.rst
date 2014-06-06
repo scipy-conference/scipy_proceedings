@@ -1,4 +1,4 @@
-    .. raw:: latex
+.. raw:: latex
 
    \newcommand{\DUadmonitionnote}[1]{
      \begin{center}
