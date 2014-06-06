@@ -1,4 +1,4 @@
-.. raw:: latex
+    .. raw:: latex
 
    \newcommand{\DUadmonitionnote}[1]{
      \begin{center}
@@ -256,6 +256,7 @@ Python tutorials geared toward scientific users are available.
 I find that a 1-2 hour laboratory session at the beginning of the course
 is sufficient to acquaint students with the necessary basics; further
 details can be introduced as needed later in the course.
+<<<<<<< Updated upstream
 Students should be strongly encouraged to work together in developing
 their programming skills.
 
