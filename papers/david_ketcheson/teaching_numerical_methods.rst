@@ -22,7 +22,7 @@ The IPython notebook provides a single medium in which mathematics,
 explanations, executable code, and visualizations can be combined, and
 with which the student can interact in order to learn both the theory and the
 craft of numerical methods.  The use of notebooks also lends itself naturally
-to inquiry-based learning and the flipped classroom methodology.
+to inquiry-based learning methods.
 I discuss the motivation and practice of teaching a course based on the use of
 IPython notebooks and inquiry-based learning, including some specific practical aspects.
 The discussion is based on my experience teaching a Masters-level course
@@ -37,20 +37,21 @@ Teaching numerical methods
 ==========================
 Any course in numerical methods should enable students to:
 
-- **Understand** relevant mathematical concepts like complexity, stability, and convergence
-- **Select** an appropriate method for a given problem
-- **Implement** the selected numerical algorithm
-- **Test** and debug the numerical implementation
+1. **Understand** numerical algorithms and related mathematical concepts like
+   complexity, stability, and convergence
+2. **Select** an appropriate method for a given problem
+3. **Implement** the selected numerical algorithm
+4. **Test** and debug the numerical implementation
 
 In other words, students should develop all the skills necessary to go from
-a **mathematical model** to **reliably-computed solutions**.
+a mathematical model to reliably-computed solutions.
 These skills will allow them to select and use existing numerical software responsibly
 and efficiently, and to create or extend such software when necessary.
-Usually, only the first of these objectives is actually mentioned
+Usually, only the first of the objectives above is actually mentioned
 in the course syllabus, and in some courses it is the only one taught.
-But the other three objectives are likely to be of at least as much value to students
+But the other three objectives are likely to be of just as much value to students
 in their careers.  The last two skills are practical, and teaching them
-properly is in some ways akin to teaching a craft.  Crafts, of course, are not
+properly is in some ways akin to teaching a craft.  Crafts are not
 generally taught through lectures and textbooks; rather, one learns a craft by
 *doing*.
 
@@ -59,26 +60,69 @@ generally taught through lectures and textbooks; rather, one learns a craft by
 .. or test anything; only to perform theoretical analysis of algorithms.
 
 Over the past few years, I have shifted the emphasis of my own numerical courses
-in favor of addressing all four objectives.  In doing so, I have drawn
-on ideas from *inquiry-based learning* and made heavy use of SAGE worksheets
+in favor of addressing all four of the objectives above.  In doing so, I have drawn
+on ideas from *inquiry-based learning* and used both Sage worksheets
 and IPython notebooks as an instructional medium.  I've found this approach
-to be enjoyable, and students have told me (often a year or more after completing the
-course) that it was particularly helpful to them.  Because the approach described here
-works best if the instructor is able to interact directly at times with each
-student, I have found this approach to be worthwhile when the number of the
-students in the course is less than twenty.
+to be very rewarding, and students have told me (often a year or more after completing the
+course) that the hands-on mode of learning was particularly helpful to them.
+
+
+Inquiry-based learning
+----------------------
+    *The best way to learn is to do; the worst way to teach is to talk.*
+    --P. R. Halmos [Hal75]_
+
+Many great teachers of mathematics (most famously, R.L. Moore) have argued
+against lecture-style courses, in favor of an approach in which the students
+take more responsibility and there is much more in-class interaction.
+The many related approaches that fit this description have come to be called
+*inquiry-based learning* (IBL).  In an inquiry-based mathematics course, students
+are expected to find the proofs for themselves -- with limited assistance from the
+instructor.
+For a very recent review of what IBL is and the evidence for
+its effectiveness, see [Ern14a]_, [Ern14b]_ and references therein.
+If an active, inquiry-based approach is appropriate for the teaching of
+theoretical mathematics, then certainly it is even more appropriate for
+teaching the practical craft of computational mathematics.
+
+A related notion is that of the *flipped classroom*.
+It refers to a teaching approach in which students read and
+listen to recorded lectures outside of class.  Class time is then used
+not for lectures but for more active, inquiry-based learning through things like discussions, 
+exercises, and quizzes.  
 
 
 The value of practice in computational mathematics
-==================================================
-Too often, implementation, testing, and debugging are viewed as "mundane" tasks that anyone
-should be able to pick up incidentally.  In most courses,
+--------------------------------------------------
+Too often, implementation, testing, and debugging are viewed by computational
+mathematicians as mundane tasks that anyone
+should be able to pick up without instruction.  In most courses,
 some programming is required in order to complete the homework assignments.  
 But usually no class time is spent on programming, so students learn
 it on their own -- often poorly and with much difficulty, due to the lack of
-instruction.  This is connected to (and perhaps at the
-root of) the low value placed on algorithmic implementation and software development
-in the scientific community.
+instruction.  This evident disdain and lack of training seem to mutually
+reinforce one another.  I believe that implementation, testing, and
+debugging are essential skills for anyone who uses or develops numerical
+methods, and they should be taught just as prominently as the more analytical
+mathematical skills.
+
+In some situations, a lack of practical skills has the same effect as
+a lack of mathematical understanding.
+Students who cannot meaningfully test their code are like students who cannot
+read proofs: they have no way to know if the claimed results are correct or not.
+Students who cannot debug their code will never know whether the solution blows
+up due to an instability or due to an error in the code.
+
+In many cases, it seems fair to say that the skills required to implement
+state-of-the-art numerical algorithms consists of equal parts of mathematical
+sophistication and software engineering.  In some areas, the development of correct,
+modular, portable implementations of proposed algorithms is a more significant
+stumbling block than the derivation of the algorithms themselves.  Furthermore,
+there are signs that numerical analysts need to move beyond traditional flop-counting
+complexity analysis and incorporate more intricate knowledge of modern computer
+hardware in order to design efficient algorithms for that hardware.  As 
+algorithms become increasingly adapted to hardware, the need for implementation
+skills will only increase.
 
 Perhaps the most important reason for teaching implementation, testing, and debugging
 is that these can and should be used to reinforce the theory.  The student who
@@ -98,40 +142,20 @@ Unfortunately, these courses are sometimes for less credit than a normal
 university course, with an attendant reduction in the amount of material that
 can be covered.
 
-Inquiry-based learning
-======================
-    *The best way to learn is to do; the worst way to teach is to talk.*
-    --P. R. Halmos [Hal75]_
-
-Many great teachers of mathematics (most famously, R.L. Moore) have argued
-against lecture-style courses, in favor of an approach in which the students
-take more responsibility and there is much more in-class interaction.
-The many related approaches that fit this description have come to be called
-*inquiry-based learning* (IBL).  In an inquiry-based mathematics course, students
-are expected to find the proofs for themselves -- with some assistance from the
-instructor.
-For a very recent review of what IBL is and the evidence for
-its effectiveness, see [Ern14a]_, [Ern14b]_ and references therein.
-If an active, inquiry-based approach is appropriate for the teaching of
-theoretical mathematics, then certainly it is even more appropriate for
-teaching the practical craft of computational mathematics.
-
-A related notion is that of the *flipped classroom*.
-It refers to a teaching approach in which students read and
-listen to recorded lectures outside of class.  Class time is then used
-not for lectures but for more active, inquiry-based learning through things like discussions, 
-exercises, and quizzes.  
-
-As we will see, the use of IPython notebooks and the teaching 
+Hopefully the reader is convinced that there is some value in using the
+classroom to teach students more than just the theory of numerical methods.
+In the rest of this paper, I advocate the use of inquiry-based learning and IPython
+notebooks in full-credit university courses on numerical analysis or numerical
+methods.  As we will see, the use of IPython notebooks and the teaching 
 of the craft of numerical methods in general lends itself naturally to
-inquiry-based learning and flipped classrooms.
-
-, since in-class time can be used for students
-to work on implementing, testing, and understanding the methods.
+inquiry-based learning.
 
 
-Languages for teaching numerical methods
+Teaching with the IPython notebook
 ========================================
+
+Python and IPython
+----------------------------------------
 The teacher of numerical methods has several choices of 
 programming language.  These can broadly be categorized as 
 
@@ -147,17 +171,23 @@ if they never gain experience with compiled languages.
 
 Python strikes a middle ground between these options.  It is a high-level language
 with relatively intuitive mathematical syntax and high-level libraries for everything
-needed in a course on numerical methods.  At the same time, it is a general purpose 
-language.  Although it can be relatively slow [VdP14]_ (like MATLAB), Python makes it
-relatively easy to develop fast code by using tools such as Cython or f2py.
+needed in a course on numerical methods.  At the same time, it is a general-purpose 
+language.  Although (like MATLAB) it can be relatively slow [VdP14]_, Python makes it
+relatively easy to develop fast code by using tools such as 
+`Cython <http://cython.org/>`_ or 
+`f2py <http://docs.scipy.org/doc/numpy/user/c-info.python-as-glue.html#f2py>`_.
 For the kinds of exercises used in most courses, pure Python code is sufficiently fast.
+In recent years, with the advent of tools like `numpy <http://www.numpy.org/>`_ and 
+`matplotlib <http://matplotlib.org/>`_,
+Python has increasingly been adopted as a language of instruction for numerical courses.
 
-IPython [Per07]_ is a tool for using Python interactively.  One of its most
-useful components is the IPython notebook: a document format containing text, code,
-and images that can be viewed, written, and executed in a web browser.
+`IPython <http://ipython.org/>`_ [Per07]_ is a tool for using Python interactively.  One of its most
+useful components is the `IPython notebook
+<http://ipython.org/notebook.html>`_: a document format containing text, code,
+images, and more that can be viewed, written, and executed in a web browser.
 
 The IPython notebook as a textbook medium
-=========================================
+-----------------------------------------
 Many print and electronic textbooks for numerical methods include code, either
 printed on the page or available online (or both).  Some of my favorite
 examples are [Tre00]_ and [LeV07]_.  Such books have become more and more common,
@@ -172,18 +202,19 @@ in this evolution.  It combines in a single document
 - Code (using Python or other languages)
 - Figures and animations
 
-It should be noted that media like the IPython notebook have existed for many years;
-for instance, Mathematica, Maple, and (more recently) SAGE have document formats
-with similar capabilities.  The SAGE worksheet is very similar to the IPython notebook
+Mathematica, Maple, and (more recently) `Sage <http://www.sagemath.org/>`_ 
+have document formats
+with similar capabilities.  The Sage worksheet is very similar to the IPython notebook
 (indeed, the two projects have strongly influenced each other), so most of what
-I will say about the IPython notebook applies also to the SAGE worksheet.
+I will say about the IPython notebook applies also to the Sage worksheet.
 
 The notebook has some important advantages over Mathematica and Maple documents:
 
 - It can be viewed, edited, and executed using only **free** software (in fact, with only a web browser)
 - It is stored as **text**, which allows it to be version controlled, diff'ed, merged, etc.
 - It allows the use of multiple programming languages
-- It can be collaboratively edited by multiple users at the same time
+- It can be collaboratively edited by multiple users at the same time (currently only on SageMathCloud)
+- It is open source, so users can modify and extend it as they wish
  
 Perhaps the most important advantage of the notebook is the community
 in which it has developed -- a community in which openness and collaboration are the norm.
@@ -199,7 +230,7 @@ open notebook science and full articles.
 
 
 Getting students started with the notebook
-==========================================
+------------------------------------------
 One historical disadvantage of using Python for a course was the
 difficulty of ensuring that all students had properly installed the
 required packages.  Indeed, when I began teaching with Python 5 years ago,
@@ -236,8 +267,8 @@ exist for running IPython notebooks:
 Both services are relatively new and are developing rapidly.
 Both include all relevant Python packages by default.
 I have used both of them successfully, though I have more experience
-with Sage Math Cloud (SMC) as its interface seems somewhat more intuitive
-to students.  Each SMC project is a complete sandboxed Unix environment, so it
+with Sage Math Cloud (SMC).
+Each SMC project is a complete sandboxed Unix environment, so it
 is possible for the user to install additional software if necessary.
 On SMC, it is even possible for multiple users to collaboratively edit notebooks
 at the same time.
@@ -256,7 +287,6 @@ Python tutorials geared toward scientific users are available.
 I find that a 1-2 hour laboratory session at the beginning of the course
 is sufficient to acquaint students with the necessary basics; further
 details can be introduced as needed later in the course.
-<<<<<<< Updated upstream
 Students should be strongly encouraged to work together in developing
 their programming skills.
 
@@ -309,15 +339,15 @@ good plan for completing it, or just after, to see how successful they were.
 The main advantage of having students program in class (rather than at
 home on their own) is that they can talk to the instructor and to other students
 as they go.  Most students are extremely reluctant to do this at first,
-and it is necessary to force them to explain to one another what their code
+and it is helpful to require them to explain to one another what their code
 does (or is intended to do).  This can be accomplished by having them program
 in pairs (alternating, with one programming while the other makes comments and 
 suggestions).  Another option is to have them compare and discuss their code
 after completing an exercise.
 
 When assisting students during the lab sessions, it is important not
-to give too much help; i.e., don't immediately tell them what is wrong
-or how to fix it.  Ask questions.  Help them learn to effectively read a
+to give too much help.  When the code fails, don't immediately explain what is
+wrong or how to fix it.  Ask questions.  Help them learn to effectively read a
 traceback and diagnose their code.  Let them struggle a bit to figure out
 why the solution blows up.  Even if they seem to grasp things immediately, it's
 worthwhile to discuss their code and help them develop good programming style.
@@ -336,8 +366,8 @@ stipulating the style of a textbook or lecture notes.  Each instructor
 will have his or her own preferences.  So I will merely share some
 principles I have found to be effective.
 
-Make sure that they type code
------------------------------
+Make sure that they type code from the start
+--------------------------------------------
 This goes without saying, but it's especially important early in the course.
 It's possible to write notebooks where all the code involved is
 already completely provided.  That's fine if students only need
@@ -346,7 +376,7 @@ understand the code itself (which they generally do).  The plain truth
 is that nobody reads code provided to them unless they have to,
 and when they do they understand only a fraction of it.
 Typing code, like writing equations, dramatically increases the
-degree to which students internalize concepts.  At the very
+degree to which we internalize it.  At the very
 beginning of the course, it may be helpful to have students
 work in an IPython session and type code from a notebook into
 the IPython prompt.
@@ -357,7 +387,8 @@ Help students to discover concepts on their own
 This is the central principle of inquiry-based learning.
 Students are more motivated, gain more understanding, and retain
 knowledge better when they discover things through their own
-effort.  In a numerical methods course, the traditional approach is
+effort and after mentally engaging on a deep level.  In a numerical methods
+course, the traditional approach is
 to lecture about instability or inaccuracy, perhaps showing an example
 of a method that behaves poorly.  In the flipped approach, you can instead
 allow the students to implement and experiment in class with naive algorithms
@@ -367,7 +398,7 @@ method might be improved.
 
 Tailor the difficulty to the students' level
 --------------------------------------------
-Students will quickly lose interest if either they are not challenged
+Students will lose interest or become frustrated if they are not challenged
 or they find the first exercise insurmountable.  It can be difficult
 to accommodate the varying levels of experience and skill presented by
 students in a course.  For students who struggle with programming, peer
@@ -392,7 +423,7 @@ I have students code things in the following sequence:
 
 In each step, the code from the previous step becomes a subroutine.
 In addition to being an aid to learning, this approach teaches students
-how to code well.
+how to design programs well.
 
 Use animations liberally
 ------------------------
@@ -402,20 +433,20 @@ plots or snapshots, but electronic media can show solutions in the
 natural way.  Students learn more -- and have more fun -- when they
 can visualize the results of their work in this way.  I have used
 Jake Vanderplas' JSAnimation package [VdP13]_ to easily create such animations.
-The latest release of IPyton (version 2.0) directly includes interactive
+The latest release of IPython (version 2.1.0) natively includes interactive
 widgets that can be used to animate simulation results.
 
-But time-dependent solutions are not the only things you can animate.
-How does the solution change after each algorithmic iteration?  
-What effect does this parameter have on the results?
+Time-dependent solutions are not the only things you can animate.
+For iterative solvers, how does the solution change after each algorithmic iteration?  
+What effect does a given parameter have on the results?
 Such questions can be answered most effectively through the use of
-an animation.
+animation.
 
 Drawbacks
 ==========
 The approach proposed here differs dramatically from a traditional course
 in numerical methods.  I have tried to highlight the advantages of this
-approach, but of course there are also some potential negatives.
+approach, but of course there are also some potential disadvantages.
 
 Material covered
 -----------------
@@ -428,6 +459,14 @@ techniques in general, but even more so for courses that involve programming.
 I believe that showing students the joy, beauty, and usefulness of
 numerical mathematics has more impact than the length of the syllabus
 on their long-term learning.
+
+Scalability
+-----------
+While some people do advocate IBL even for larger classes, I have found
+that this approach works best if there are no more than twenty students
+in the course.  With more students, it can be difficult to fit everyone
+in a computer lab and nearly impossible for the instructor to have
+meaningful interaction with individual students.
 
 Nonlinear notebook execution
 -------------------------------
