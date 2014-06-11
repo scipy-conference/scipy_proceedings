@@ -36,6 +36,8 @@ Introduction
 
 * History of array-oriented programming, leading up to NumPy/SciPy/Pandas.
 
+* Growth of data analysis outside of the Python world: Hadoop, R, Julia, etc.
+
 * Describe the data structures (array, relational table, data frame)
   being used in different fields (scientific computing, statistical analysis,
   data mining)
@@ -49,9 +51,6 @@ Blaze Architecture
 
 * Motivation is to write analysis code once, be able to operate on data from
   many sources and run on many backends.
-
-* Table and Array objects with pandas/numpy-like interfaces, to provide
-  friendly interfaces for domain experts whose primary focus is not programming.
 
 * Functional-style programming to map well onto multi-core and distributed
   systems.
@@ -82,6 +81,13 @@ Blaze Compute
 * Accounts for differences in naming of similar computations.
 
 * Multiple dispatch mechanism to connect to new backends.
+
+Blaze Interface
+~~~~~~~~~~~~~~~
+
+* Table and Array objects with pandas/numpy-like interfaces, to provide
+  friendly interfaces for domain experts whose primary focus is not programming.
+
 
 Datashape Type System
 ---------------------
