@@ -24,6 +24,8 @@ Python’s scientific computing and data analysis ecosystem, built around NumPy,
 
 Blaze is a project being built with the goal of addressing these limitations, and becoming a foundation to grow Python’s success in array-oriented computing long into the future. It consists of a small collection of libraries being built to generalize NumPy’s notions of array, dtype, and ufuncs to be more extensible, and to represent data and computation that is distributed or does not fit in main memory.
 
+TODO: refine the following paragraph to current architecture
+
 Datashape is the array type system that describes the structure of data, including a specification of a grammar and set of basic types, and a library for working with them. LibDyND is an in-memory array programming library, written in C++ and exposed to Python to provide the local representation of memory supporting the datashape array types. BLZ is a chunked column-oriented persistence storage format for storing Blaze data, well-suited for out of core computations. Finally, the Blaze library ties these components together with a deferred execution graph and execution engine, which can analyze desired computations together with the location and size of input data, and carry out an execution plan in memory, out of core, or in a distributed fashion as is needed.
 
 
@@ -38,19 +40,20 @@ Introduction
 
 * Growth of data analysis outside of the Python world: Hadoop, R, Julia, etc.
 
-* Describe the data structures (array, relational table, data frame)
-  being used in different fields (scientific computing, statistical analysis,
-  data mining)
+* Describe the data structures/abstractions (array, relational table, data
+  frame) being used in different fields (scientific computing, statistical
+  analysis, data mining)
 
-* Blaze aims to define and implement some generic abstractions for
-  array-oriented programming on top of systems implementing these data
-  structures, and provide glue to transform data between them.
+* Blaze defines abstractions for array-oriented programming and then provides
+  hooks to existing systems.  We hope that, like numpy, this standard interface
+  spurs a new iteration of data analytics libraries.
 
 Blaze Architecture
 ------------------
 
-* Motivation is to write analysis code once, be able to operate on data from
-  many sources and run on many backends.
+* Abstracting away data storage and computation enables the expression of
+  perfectly reusable analysis code.  This provides a write-once, run-everywhere
+  capability.
 
 * Functional-style programming to map well onto multi-core and distributed
   systems.
@@ -86,7 +89,11 @@ Blaze Compute
 
 * Accounts for differences in naming of similar computations.
 
-* Multiple dispatch mechanism to connect to new backends.
+* Serves as common repository for common analytics pattens (e.g.
+  split-apply-combine) in each backend.
+
+* Multiple dispatch mechanism to connect to new backends and define
+  interactions between heterogeneous backends.
 
 Blaze Interface
 ~~~~~~~~~~~~~~~
@@ -97,11 +104,16 @@ Blaze Interface
 Experiment
 ----------
 
-* Sample analysis, develop in Python compute layer, run on SQLLite,
-  Pandas, Spark.
+* We sketch out a simple data analytics computation with exprs, perhaps
+  split-apply-combine + Join on some bitcoin data.
 
-* Chart showing performance vs data size, plotting the performance lines
-  of each backend together.
+* We run this computation on a scale of data sizes on several backends
+  (streaming Python, Pandas, SQLite, Spark) and provide performance numbers
+
+* We compare the backends for performance and scalability, noting that Blaze
+  allows you to select the backend that best suits your needs and allows you to
+  transition when its time.
+
 
 Conclusion
 ----------
@@ -124,5 +136,4 @@ References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
-
 
