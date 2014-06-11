@@ -60,10 +60,16 @@ Blaze Data
 
 * Defines interface for reading/writing data describable with datashape.
 
+* Brief description description of datashape as combination of shape and
+  dtype from NumPy, plus more general dimensions and additional dtypes.
+
 * Two mechanisms to stream data: as Python objects, and higher performance
   via DyND array chunks.
 
 * Plugin mechanism to define new data formats.
+
+* LibDyND subsection describing how its implementation of in-memory datashaped
+  data provides glue for efficient chunked iteration, converting types, etc.
 
 Blaze Expr
 ~~~~~~~~~~
@@ -87,31 +93,6 @@ Blaze Interface
 
 * Table and Array objects with pandas/numpy-like interfaces, to provide
   friendly interfaces for domain experts whose primary focus is not programming.
-
-
-Datashape Type System
----------------------
-
-* Language for describing data that Blaze understands.
-
-* Combines NumPy's shape and dtype.
-
-* Includes types with semantic meaning - e.g. datetime, numeric
-  values with units. [Should we fill this out some more - latlong,
-  URL links, etc.?]
-
-LibDyND
--------
-
-* Implementation of in-memory array storage for data describable
-  via datashape.
-
-* Uses a superset of datashape as its type system.
-
-* In-memory storage/manipulation library, similar to numpy.
-
-* Defines low-level abstractions for representing array data and
-  array-oriented computation.
 
 Experiment
 ----------
