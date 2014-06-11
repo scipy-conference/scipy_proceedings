@@ -113,6 +113,15 @@ LibDyND
 * Defines low-level abstractions for representing array data and
   array-oriented computation.
 
+Experiment
+----------
+
+* Sample analysis, develop in Python compute layer, run on SQLLite,
+  Pandas, Spark.
+
+* Chart showing performance vs data size, plotting the performance lines
+  of each backend together.
+
 Conclusion
 ----------
 
