@@ -12,15 +12,15 @@
 
 :author: Di Wu
 :email: di.wu@nasa.gov
-:institution: Environmental Sciences Division, Argonne National Laboratory.
+:institution: NASA Goddard Space Flight Center.
 
-:author: Jonathan Helmus
+:author: Anne Fridlind
 :email: ann.fridlind@nasa.gov
-:institution: Environmental Sciences Division, Argonne National Laboratory.
+:institution: NASA Goddard Institute of Space Sciences.
 
-:author: Jonathan Helmus
+:author: Marcis Vanlier-Walqui
 :email: marcus.vanlier-walqui@nasa.gov
-:institution: Environmental Sciences Division, Argonne National Laboratory.
+:institution: NASA Goddard Institute of Space Sciences.
 
 
 
@@ -57,7 +57,7 @@ applications do not measure the atmosphere, rather, the instument measures the
 interaction of the probing radiation with the scattering medium (nominally cloud
 or precipitation droplets or ice particulate matter). Therefore, in order to
 extract geophysical insight, such as the relationshop between large scale
-environmental forcing and heterogeneity of surface precipitation patters, a
+environmental forcing and heterogeneity of surface precipitation patterns, a
 complex application chain of algorithms needs to be set up.
 
 This paper briefly outlines a framework, using a common data model approach, for
@@ -66,15 +66,10 @@ assembling such processing chains: the Python-ARM Radar Toolkit, Py-ART
 application: using rainfall maps to objectively metric the skill of fine scale
 models in representing precipitation morphology.
 
-Introduce the idea of radars and remote sensing
-Meets computer science, quote BAMS [Heistermann2014]_
-Data models
-Particular problem, how do you go from complex moments to gaining an idea as to
-the scale of precipitation and does a model achieve it?
-
 The data source: Scanning centimeter wavelength radar
 ------------
-What is a radar
+In order to understand the spatial complexity of precipitating cloud systems a
+sensor is required that can collect spatially diverse data.
 
 The Python ARM Radar Toolkit: Py-ART
 ------------
@@ -85,9 +80,14 @@ Pre-mapping corrections and calculations
 
 Mapping to a cartesian grid
 ~~~~~~~~~~~~~~~~~~~~~~
+.. figure:: c_only_rain.png
 
-Calculations on the grid data
-~~~~~~~~~~~~~~~~~~~~~~
+   Single C-Band rainfall field. :label:`C-Band only`
+
+.. figure:: x_only_rain.png
+
+   Mesh of X-Band systems. :label:`x only`
+
 
 Spatial distribution of rainfall: a objective test of fine scale models
 ------------
