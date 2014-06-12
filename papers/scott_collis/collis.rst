@@ -138,9 +138,37 @@ in a numpy array and is always in the 'data' key. For example:
 
 So the xnw_radar has a variety of data fields, including 'reflectivity' with the
 actual moment data stored in the 'data' key with 8800 time steps and 801 range
-gates.
+gates. Data on instrument pointing is stored in x_nw.azimuth and x_nw.elevation
+while the centerpoint of each range gate is stored in x_nw.range. Again these
+are dictionaries with data stored in the 'data' key. Methods in Py-ART can append
+fields or modify data in existing fields (rare).
 
+The vital key is a 'Babelfish' layer which ingests a variery of formats into the
+common data model. As of writing table :ref:`formats` outlines compatibility.
+Wrapping NASA's Radar Software Library opened a large number of formats.
 
+.. table:: Py-ART formats. :label:`formats`
+
+  +------------+-------------------------------+--------------+
+  |Format name |Example radar system(s)        | Note         |
+  +------------+-------------------------------+--------------+
+  |CF-Radial   | NCAR SPOL, ARM Cloud Radars   | Output format|
+  +------------+-------------------------------+--------------+
+  |UF          | Lots of legacy data           | Via RSL      |
+  +------------+-------------------------------+--------------+
+  |Lassen      | BoM CPOL in Darwin, Australia | Via RSL      |
+  +------------+-------------------------------+--------------+
+  |IRIS Sigmet | ARM X-SAPR                    | Native       |
+  +------------+-------------------------------+--------------+
+  |NCAR MDV    | ARM C-SAPR                    | Native       |
+  +------------+-------------------------------+--------------+
+  |ODIN        |European radar network         | Native       |
+  +------------+-------------------------------+--------------+
+  |WSR-88D     |USA operational network        | Native       |
+  +------------+-------------------------------+--------------+
+
+We also have Pull Requests on GitHub for the NSF funded Colorado State University
+CHILL radar and active development on NOAA NOX-P and NASA D3R radars. 
 
 Pre-mapping corrections and calculations
 ~~~~~~~~~~~~~~~~~~~~~~
