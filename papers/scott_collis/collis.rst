@@ -78,8 +78,8 @@ of the scattering medium $v_r$ and spectrum width $w$. Polarimetric radars trans
 pulses with the electric field vector horizontal to the earth's surface and also
 vertical to the earth's surface. These radars can give a measure of the anistropy
 of the scattering medium and collect measurements including the differential
-reflectivity $Z_{DR}$, differential phase difference $\phi_{dp}$ and correlation
-cooefficent $\rho_{HV}$. The data is laid out on a time/range grid and each ray
+reflectivity :math:`Z_{DR}`, differential phase difference :math:`\phi_{dp}` and correlation
+cooefficent :math:`\rho_{HV}`. The data is laid out on a time/range grid and each ray
 (time step) has an associated azimuth and elevation. Data presented in this paper
 are from 4 radar systems: One C-Band (5cm wavelenth) and three X-Band (3cm wavelength)
  radars as outlined in
@@ -99,7 +99,7 @@ are from 4 radar systems: One C-Band (5cm wavelenth) and three X-Band (3cm wavel
    +---------+--------+-----------+
    |Maximum Range| 40km |120km|
    +---------+--------+-----------+
-   |Beam width| 1.0$^\circ$|1.0$^\circ$|
+   |Beam width| 1.0:math:`^\circ`|1.0:math:`^\circ`|
    +---------+--------+-----------+
    |Polarimetric mode| Simul. H/V|Simul. H/V|
    +---------+--------+-----------+
