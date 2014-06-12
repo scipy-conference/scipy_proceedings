@@ -41,7 +41,7 @@ dimensionality of rainfall patterns and how well is this represented in fine
 scale atmospheric models. Rather than being specific to the domain of
 meteorology we will break down how we approach this problem in terms what tools
 across numerous packages we used to read, correct, map and reduce the data to
-forms able to answer our science questions. This is a "how" presentation,
+forms able to answer our science questions. This is a "how" paper,
 covering signal processing using linear programming methods, mapping using KD
 Trees, and image analysis using ndimage and, of course graphics using
 Matplotlib.
@@ -69,7 +69,38 @@ models in representing precipitation morphology.
 The data source: Scanning centimeter wavelength radar
 ------------
 In order to understand the spatial complexity of precipitating cloud systems a
-sensor is required that can collect spatially diverse data.
+sensor is required that can collect spatially diverse data. Radars emit a
+spatailly descrete pulse of radiation with a particular beam with and pulse length.
+A gated reciever that detects the backscattered signal and calculates a number
+of measurements based on the radar spectrum (the power as a function of phase delay
+which is due). These moments include radar reflectivity factor $Z_e$, radial velocity
+of the scattering medium $v_r$ and spectrum width $w$. Polarimetric radars transmit
+pulses with the electric field vector horizontal to the earth's surface and also
+vertical to the earth's surface. These radars can give a measure of the anistropy
+of the scattering medium and collect measurements including the differential
+reflectivity $Z_{DR}$, differential phase difference $\phi_{dp}$ and correlation
+cooefficent $\rho_{HV}$. The data is laid out on a time/range grid and each ray
+(time step) has an associated azimuth and elevation. Data presented in this paper
+are from 4 radar systems: One C-Band (5cm wavelenth) and three X-Band (3cm wavelength)
+ radars as outlined in
+
+.. table:: ARM radar systems used in this paper. :label:`radars`
+
+   +---------+--------+-----------+
+   |         | X-SAPR |  C-SAPR   |
+   +---------+--------+-----------+
+   |Frequency| 9.4 GHZ |6.25GHz|
+   |Transmitter| Magnetron|Magnetron|
+   |Power| 200kW| 350kW|
+   |Gate spacing| 50m| 120m|
+   |Maximum Range| 40km |120km|
+   |Beam width| 1.0$^\circ$|1.0$^\circ$|
+   |Polarimetric mode| Simul. H/V|Simul. H/V|
+   |Manufacturer| Radtec| Advanced Radar Corp.|
+   |Native format| Iris Sigmet| NCAR MDV|
+   +---------+--------+-----------+
+
+
 
 The Python ARM Radar Toolkit: Py-ART
 ------------
