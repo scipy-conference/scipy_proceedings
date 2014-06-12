@@ -211,6 +211,7 @@ is shown in :ref:`raw_ppi`.
 The code to plot is simply:
 
 .. code-block:: python
+
   fields_to_plot = ['differential_phase', 'reflectivity']
   ranges = [(180, 240), (0, 52)]
   display = pyart.graph.RadarMapDisplay(xnw_radar)
@@ -229,7 +230,7 @@ The code to plot is simply:
 
 Again, RadarMapDisplay class __init__ method expects a radar object but is
 insensitive to the data source. The sample plotting routines can be used for
-any source Py-ART has an ingest for. 
+any source Py-ART has an ingest for.
 
 
 Mapping to a cartesian grid
