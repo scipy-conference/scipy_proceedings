@@ -202,10 +202,11 @@ dictionary. Py-ART also comes with visualization methods allowing for the conica
 (or Plan Position Indicator, PPI) scan to be plotted up and geolocated using
 Matplotlib and Basemap. An example of raw :math:`\phi_{DP}` and reflectivity
 is shown in :ref:`raw_ppi`.
+
 .. figure:: nw_ppi.png
 
    Raw Reflectivity factor and polarimetric phase difference from the lowest (0.5 degree)
-   tilt:label:`raw_ppi`
+   tilt. :label:`raw_ppi`
 
 
 
