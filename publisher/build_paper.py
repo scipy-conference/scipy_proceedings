@@ -94,7 +94,7 @@ def rst2tex(in_path, out_path):
 def tex2pdf(out_path):
 
     import subprocess
-    command_line = 'cd %s ' % out_path + \
+    command_line = 'cd "%s" ' % out_path + \
                    ' ; pdflatex -halt-on-error paper.tex'
 
     # -- dummy tempfile is a hacky way to prevent pdflatex
