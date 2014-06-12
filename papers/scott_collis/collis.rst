@@ -343,7 +343,15 @@ Measuring rainshafts using NDimage
 ~~~~~~~~~~~~~~~~~~~~~~
 A simple technique for documenting the detail in an image is to segment it into
 "blobs" which are above a certain threshold and calculate the number of blobs,
-thier accumilated area and the mean rainfall across the blobs. 
+thier accumilated area and the mean rainfall across the blobs. The ndimage module
+of Scipy is the perfect package for achieving this. Figure :ref:`seg` shows the
+of ndimage.label to break up regions above
+
+.. figure:: segmentation.png
+
+   An example of figure segmentation using ndimage.label. :label:`seg`
+
+
 
 
 Radar results
