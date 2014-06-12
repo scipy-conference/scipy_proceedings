@@ -208,6 +208,28 @@ is shown in :ref:`raw_ppi`.
    Raw Reflectivity factor and polarimetric phase difference from the lowest (0.5 degree)
    tilt. :label:`raw_ppi`
 
+The code to plot is simply:
+
+.. code-block:: python
+  fields_to_plot = ['differential_phase', 'reflectivity']
+  ranges = [(180, 240), (0, 52)]
+  display = pyart.graph.RadarMapDisplay(xnw_radar)
+
+  nplots = len(fields_to_plot)
+  plt.figure(figsize=[7 * nplots, 4])
+  for plot_num in xrange(nplots):
+      field = fields_to_plot[plot_num]
+      vmin, vmax = ranges[plot_num]
+      plt.subplot(1, nplots, plot_num + 1)
+      display.plot_ppi_map(field, 0, vmin=vmin, vmax=vmax, lat_lines=np.arange(20,60,.2),
+                           lon_lines =  np.arange(-99,-80,.4), resolution = 'l')
+      display.basemap.drawrivers()
+      display.basemap.drawcountries()
+      display.plot_range_rings([20,40])
+
+Again, RadarMapDisplay class __init__ method expects a radar object but is
+insensitive to the data source. The sample plotting routines can be used for
+any source Py-ART has an ingest for. 
 
 
 Mapping to a cartesian grid
