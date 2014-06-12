@@ -82,7 +82,7 @@ reflectivity :math:`Z_{DR}`, differential phase difference :math:`\phi_{dp}` and
 cooefficent :math:`\rho_{HV}`. The data is laid out on a time/range grid and each ray
 (time step) has an associated azimuth and elevation. Data presented in this paper
 are from 4 radar systems: One C-Band (5cm wavelenth) and three X-Band (3cm wavelength)
- radars as outlined in table :ref:`radars`.
+radars as outlined in table :ref:`radars`.
 
 .. table:: ARM radar systems used in this paper. :label:`radars`
 
