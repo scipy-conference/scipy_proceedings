@@ -236,9 +236,8 @@ References
                 The Arm Climate Research Facility: A Review of Structure and
                 Capabilities. *Bull. Amer. Meteor. Soc.*, **94**, 377–392,
                 doi:10.1175/BAMS-D-11-00218.1.
-.. [Giangrande2014]_ TBD
-
-.. [Giangrande2013]_ Giangrande, S. E., R. McGraw, and L. Lei,
+.. [Giangrande2014] TBD
+.. [Giangrande2013] Giangrande, S. E., R. McGraw, and L. Lei,
                      2013: An Application of Linear Programming to Polarimetric
                      Radar Differential Phase Processing.
                      *Journal of Atmospheric and Oceanic Technology*, **30**,
