@@ -112,6 +112,7 @@ These are arranged as show in :ref:`sgp`.
 
 .. figure:: SGPlayout.png
    :scale: 40%
+   
    Arrangement of radars around the ARM Southern Great Plains Facility. :label:`sgp`
 
 
