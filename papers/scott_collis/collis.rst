@@ -235,6 +235,31 @@ any source Py-ART has an ingest for.
 
 Mapping to a cartesian grid
 ~~~~~~~~~~~~~~~~~~~~~~
+Radars sample in radial coordinates of elevation azimuth and range. Mathematics
+for atmospheric phenomina are greatly simplified on Cartesian and Cartesian-like
+(eg pressure surfaces) grids. Therefore the raw and processed data in the radar
+object needs to be mapped onto a regular grid. This is known as "Objective analysis"
+(see, for example [Trapp2000]_). In this paper we use a technique known as Barnes
+analysis [Barnes1964]_ which is an inverse distance weighting sphere of influence
+based technique. For each grid point in the target Cartesian grid a set of radar
+gates within a radius of influence are interpolated using a weighting function such as:
+
+.. math::
+
+   W(r) = e^\frac{-r_{infl}^2}{2.0*r^2}
+
+where :math:`r` is the distance from the grid point and :math:`r_{infl}` is the
+search radius of influence. The brute force way of doing the calculation would
+be for each cartesian point linearly search the radar gates for those within
+the radius of influence, an Order :math:`n^2` problem. With a typical grid being
+200 by 200 by 37 grid points and a modern radar having on the order of 8000 time
+samples and 800 range gates this quickly becomes untractable. A better way is to
+store the radar gates in a KD-Tree ordered by distance. This reduces the search
+to an order :math:`log(n)` problem. This is implimented in Py-ART. In addition a
+variable radius of influence algorithm is implimented which analyzes 
+
+
+
 .. figure:: c_only_rain.png
 
    Single C-Band rainfall field. :label:`C-Band only`
@@ -286,3 +311,9 @@ References
                  Potential utilization of specific attenuation for rainfall
                  estimation, mitigation of partial beam blockage, and radar
                  networking. Submitted, *J. Atmos. Oceanic Technol.*, **in press.**
+.. [Trapp2000] Trapp, R. J., and C. A. Doswell, 2000: Radar Data Objective
+               Analysis. *Journal of Atmospheric and Oceanic Technology*,
+               **17**, 105–120, doi:10.1175/1520-0426(2000)017<0105:RDOA>2.0.CO;2.
+.. [Barnes1964] Barnes, S. L., 1964: A Technique for Maximizing Details in
+                Numerical Weather Map Analysis. *Journal of Applied Meteorology*,
+                **3**, 396–409, doi:10.1175/1520-0450(1964)003<0396:ATFMDI>2.0.CO;2.
