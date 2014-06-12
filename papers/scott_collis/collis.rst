@@ -82,31 +82,31 @@ reflectivity :math:`Z_{DR}`, differential phase difference :math:`\phi_{dp}` and
 cooefficent :math:`\rho_{HV}`. The data is laid out on a time/range grid and each ray
 (time step) has an associated azimuth and elevation. Data presented in this paper
 are from 4 radar systems: One C-Band (5cm wavelenth) and three X-Band (3cm wavelength)
- radars as outlined in table :ref:`radars`
+ radars as outlined in table :ref:`radars`.
 
 .. table:: ARM radar systems used in this paper. :label:`radars`
 
-   +---------+--------+-----------+
-   |         | X-SAPR |  C-SAPR   |
-   +---------+--------+-----------+
-   |Frequency| 9.4 GHZ |6.25GHz|
-   +---------+--------+-----------+
-   |Transmitter| Magnetron|Magnetron|
-   +---------+--------+-----------+
-   |Power| 200kW| 350kW|
-   +---------+--------+-----------+
-   |Gate spacing| 50m| 120m|
-   +---------+--------+-----------+
-   |Maximum Range| 40km |120km|
-   +---------+--------+-----------+
-   |Beam width| 1.0:math:`^\circ`|1.0:math:`^\circ`|
-   +---------+--------+-----------+
-   |Polarimetric mode| Simul. H/V|Simul. H/V|
-   +---------+--------+-----------+
-   |Manufacturer| Radtec| Advanced Radar Corp.|
-   +---------+--------+-----------+
+   +-------------+------------------+-----------------+
+   |             | X-SAPR           |  C-SAPR         |
+   +-------------+------------------+-----------------+
+   |Frequency    | 9.4 GHZ          |6.25GHz          |
+   +-------------+------------------+-----------------+
+   |Transmitter  | Magnetron        |Magnetron        |
+   +-------------+------------------+-----------------+
+   |Power        | 200kW            | 350kW           |
+   +-------------+------------------+-----------------+
+   |Gate spacing | 50m              |120m             |
+   +-------------+------------------+-----------------+
+   |Maximum Range| 40km             |120km            |
+   +-------------+------------------+-----------------+
+   |Beam width   | 1.0:math:`^\circ`|1.0:math:`^\circ`|
+   +-------------+--------+-----------+
+   |Polar. mode  | Simul. H/V|Simul. H/V|
+   +-------------+--------+-----------+
+   |Manufacturer | Radtec| Advanced Radar Corp.|
+   +-------------+--------+-----------+
    |Native format| Iris Sigmet| NCAR MDV|
-   +---------+--------+-----------+
+   +-------------+--------+-----------+
 
 
 
