@@ -256,8 +256,27 @@ the radius of influence, an Order :math:`n^2` problem. With a typical grid being
 samples and 800 range gates this quickly becomes untractable. A better way is to
 store the radar gates in a KD-Tree ordered by distance. This reduces the search
 to an order :math:`log(n)` problem. This is implimented in Py-ART. In addition a
-variable radius of influence algorithm is implimented which analyzes 
+variable radius of influence algorithm is implimented which analyzes the radar
+volume coverage pattern and deduces an optimized :math:`r_{infl}(x,y,z)`. Unlike
+many other objective analysis codes Py-ART accepts a tuple of radar objects and
+treats the radar gates as a cloud of points. This allows very simple merging of
+multiple radar data sets. The method is simple to invoke, for example:
 
+.. code-block:: python
+
+  mesh_mapped_x = pyart.map.grid_from_radars((xnw_radar,xsw_radar,xse_radar),
+                                        grid_shape=(35, 201, 201),
+                                        grid_limits=((0, 17000), (-50000, 40000), (-60000, 40000)),
+                                        grid_origin = (36.57861, -97.363611),
+                                        fields=['corrected_reflectivity', 'rain_rate_A', 'reflectivity'],
+                                        refl_field='corrected_reflectivity')
+
+will map the three radar objects (in this case the three ARM X-Band systems
+in figure :ref:`sgp`) to a grid that is (z,y,x) = (35,201,201) points with a domain
+of 0 to 17km in altitude, -50 to 40km in meridional extend and -60 to 40km in
+zonal extent. The method returns a grid object which follows a very similar shape
+to a radar object: fields are in .fields, geolocation data is in .axes and data
+is always in the 'data' key. 
 
 
 .. figure:: c_only_rain.png
@@ -271,18 +290,20 @@ variable radius of influence algorithm is implimented which analyzes
 
 Spatial distribution of rainfall: a objective test of fine scale models
 ------------
+stuff
 
 Measuring rainshafts using NDimage
 ~~~~~~~~~~~~~~~~~~~~~~
+amazeballs
+
 
 Radar results
 ~~~~~~~~~~~~~~~~~~~~~~
-
-Cloud resolving model results
-~~~~~~~~~~~~~~~~~~~~~~
+coolness
 
 Conclusions
 ------------
+stuff
 
 Acknowledgements
 ------------
