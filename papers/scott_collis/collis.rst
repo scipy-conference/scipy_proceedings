@@ -265,25 +265,33 @@ multiple radar data sets. The method is simple to invoke, for example:
 .. code-block:: python
 
   mesh_mapped_x = pyart.map.grid_from_radars((xnw_radar,xsw_radar,xse_radar),
-                                        grid_shape=(35, 201, 201),
+                                        grid_shape=(35, 401, 401),
                                         grid_limits=((0, 17000), (-50000, 40000), (-60000, 40000)),
                                         grid_origin = (36.57861, -97.363611),
-                                        fields=['corrected_reflectivity', 'rain_rate_A', 'reflectivity'],
-                                        refl_field='corrected_reflectivity')
+                                        fields=['corrected_reflectivity', 'rain_rate_A', 'reflectivity'])
 
 will map the three radar objects (in this case the three ARM X-Band systems
-in figure :ref:`sgp`) to a grid that is (z,y,x) = (35,201,201) points with a domain
+in figure :ref:`sgp`) to a grid that is (z,y,x) = (35,401,401) points with a domain
 of 0 to 17km in altitude, -50 to 40km in meridional extend and -60 to 40km in
 zonal extent. The method returns a grid object which follows a very similar shape
 to a radar object: fields are in .fields, geolocation data is in .axes and data
-is always in the 'data' key. 
+is always in the 'data' key.
 
+Again, as with the radar object Py-ART has a menu of available methods to visualize
+grid data as well as an io layer that can inject CF-compliant netCDF grids and write
+the grid object out to a CF-complaint file for future analysis and distribution.
 
-.. figure:: c_only_rain.png
+For example figure :ref:`C-Band only` shows a slice thought mapped reflectivity
+from the ARM C-SAPR at 500m and cross sections at 36.5N degrees latitude and
+-97.65E longitude.
+
+.. figure:: c_only_z.png
 
    Single C-Band rainfall field. :label:`C-Band only`
 
-.. figure:: x_only_rain.png
+
+
+.. figure:: x_only_z.png
 
    Mesh of X-Band systems. :label:`x only`
 
