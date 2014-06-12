@@ -73,8 +73,8 @@ sensor is required that can collect spatially diverse data. Radars emit a
 spatailly descrete pulse of radiation with a particular beam with and pulse length.
 A gated reciever that detects the backscattered signal and calculates a number
 of measurements based on the radar spectrum (the power as a function of phase delay
-which is due). These moments include radar reflectivity factor $Z_e$, radial velocity
-of the scattering medium $v_r$ and spectrum width $w$. Polarimetric radars transmit
+which is due). These moments include radar reflectivity factor :math:`Z_e`, radial velocity
+of the scattering medium :math:`v_r` and spectrum width :math:`w`. Polarimetric radars transmit
 pulses with the electric field vector horizontal to the earth's surface and also
 vertical to the earth's surface. These radars can give a measure of the anistropy
 of the scattering medium and collect measurements including the differential
@@ -100,15 +100,16 @@ are from 4 radar systems: One C-Band (5cm wavelenth) and three X-Band (3cm wavel
    |Maximum Range| 40km             |120km            |
    +-------------+------------------+-----------------+
    |Beam width   | 1.0:math:`^\circ`|1.0:math:`^\circ`|
-   +-------------+--------+-----------+
-   |Polar. mode  | Simul. H/V|Simul. H/V|
-   +-------------+--------+-----------+
-   |Manufacturer | Radtec| Advanced Radar Corp.|
-   +-------------+--------+-----------+
-   |Native format| Iris Sigmet| NCAR MDV|
-   +-------------+--------+-----------+
+   +-------------+------------------+-----------------+
+   |Polar. mode  |Simul. H/V        |Simul. H/V       |
+   +-------------+------------------+-----------------+
+   |Manufacturer | Radtec           |Adv. Radar Corp. |
+   +-------------+------------------+-----------------+
+   |Native format| Iris Sigmet      | NCAR MDV        |
+   +-------------+------------------+-----------------+
 
 
+testyuxw wnn
 
 The Python ARM Radar Toolkit: Py-ART
 ------------
