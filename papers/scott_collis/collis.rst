@@ -113,7 +113,8 @@ These are arranged as show in :ref:`sgp`.
 .. figure:: SGPlayout.png
    :scale: 20%
 
-   Arrangement of radars around the ARM Southern Great Plains Facility. :label:`sgp`
+   Arrangement of radars around the ARM Southern Great Plains Facility from
+   [Giangrande2014]_. :label:`sgp`
 
 
 The Python ARM Radar Toolkit: Py-ART
@@ -176,14 +177,20 @@ Wrapping NASA's Radar Software Library opened a large number of formats.
 We also have Pull Requests on GitHub for the NSF funded Colorado State University
 CHILL radar and active development on NOAA NOX-P and NASA D3R radars. There is a
 single output format, CF-Radial, a NetCDF based community format on which the
-common data model is modelleded.
+common data model is modeleded.
 
 Pre-mapping corrections and calculations
 ~~~~~~~~~~~~~~~~~~~~~~
 Once raw data is collected there is often a number of processing steps that need
 to be performed. In our case this includes:
 
-- Correcting false Azimuth
+- Correcting false Azimuth readings in the Northwest X-Band system.
+- Processing the raw :math:`\phi_{DP}` and extracting the component due to
+  rain water content by using a Linear Programming technique to fit a profile
+  which mandates positive gradient, see [Giangrande2013]_.
+
+These are all outlined in the first of the three notebooks which accompany this
+manuscript: http://nbviewer.ipython.org/github/scollis/notebooks/tree/master/scipy2014/.
 
 
 Mapping to a cartesian grid
@@ -229,3 +236,10 @@ References
                 The Arm Climate Research Facility: A Review of Structure and
                 Capabilities. *Bull. Amer. Meteor. Soc.*, **94**, 377–392,
                 doi:10.1175/BAMS-D-11-00218.1.
+.. [Giangrande2014]_ TBD
+
+.. [Giangrande2013]_ Giangrande, S. E., R. McGraw, and L. Lei,
+                     2013: An Application of Linear Programming to Polarimetric
+                     Radar Differential Phase Processing.
+                     *Journal of Atmospheric and Oceanic Technology*, **30**,
+                      1716–1729, doi:10.1175/JTECH-D-12-00147.1.
