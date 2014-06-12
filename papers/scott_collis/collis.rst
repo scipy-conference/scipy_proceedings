@@ -81,7 +81,7 @@ of the scattering medium and collect measurements including the differential
 reflectivity :math:`Z_{DR}`, differential phase difference :math:`\phi_{dp}` and correlation
 cooefficent :math:`\rho_{HV}`. The data is laid out on a time/range grid and each ray
 (time step) has an associated azimuth and elevation. Data presented in this paper
-are from 4 radar systems: One C-Band (5cm wavelenth) and three X-Band (3cm wavelength)
+are from 4 ARM [Mather2013]_ radar systems: One C-Band (5cm wavelenth) and three X-Band (3cm wavelength)
 radars as outlined in table :ref:`radars`.
 
 .. table:: ARM radar systems used in this paper. :label:`radars`
@@ -109,11 +109,38 @@ radars as outlined in table :ref:`radars`.
   +-------------+------------------+-----------------+
 
 
-testyuxw wnn
 
 The Python ARM Radar Toolkit: Py-ART
 ------------
-The idea behind Py-ART
+Radar data comes in a variety of binary formats but the data shape is
+essentially the same: A time-range array with data describing the pointing and
+geolocating the platform and (for mobile radar) the platform's motion. Py-ART
+takes a common data model aproach: Carefully design the data containers and
+mandate that functions/methods accept the container as an arguement and return
+the same data structure. The common data model for radar data in Py-ART is the
+radar object which stores data and metadata in python dictionaries in the fields.
+object in the radar structure. Data is stored
+in a numpy array and is always in the 'data' key. For example:
+
+.. code-block:: python
+
+  print xnw_radar.fields.keys()
+  ['radar_echo_classification', 'corrected_reflectivity', 'differential_phase',
+  'cross_correlation_ratio', 'normalized_coherent_power', 'spectrum_width',
+  'total_power', 'reflectivity', 'differential_reflectivity', 'specific_differential_phase',
+  'velocity', 'corrected_differential_reflectivity']
+  print xnw_radar.fields['reflectivity'].keys()
+  ['_FillValue', 'coordinates', 'long_name', 'standard_name', 'units', 'data']
+  print xnw_radar.fields['reflectivity']['long_name']
+  print xnw_radar.fields['reflectivity']['data'].shape
+  Reflectivity
+  (8800, 801)
+
+So the xnw_radar has a variety of data fields, including 'reflectivity' with the
+actual moment data stored in the 'data' key with 8800 time steps and 801 range
+gates.
+
+
 
 Pre-mapping corrections and calculations
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -155,5 +182,9 @@ References
               J. J. Helmus, B. Kelley, J. Koistinen, D. B. Michelson, M. Peura,
               T. Pfaff and D. B. Wolff,
               2014: The Promise of Open Source Software for the Weather Radar
-              Community. *Bulletin of the American Meteorological Society*,
+              Community. *Bull. Amer. Meteor. Soc.*,
               **In Press.**
+.. [Mather2013] Mather, J. H., and J. W. Voyles, 2012:
+                The Arm Climate Research Facility: A Review of Structure and
+                Capabilities. *Bull. Amer. Meteor. Soc.*, **94**, 377–392,
+                doi:10.1175/BAMS-D-11-00218.1.
