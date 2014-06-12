@@ -185,12 +185,28 @@ Once raw data is collected there is often a number of processing steps that need
 to be performed. In our case this includes:
 
 - Correcting false Azimuth readings in the Northwest X-Band system.
+- Clean data of undesirable components such as multiple trips, clutter and
+  non-meteorological returns.
 - Processing the raw :math:`\phi_{DP}` and extracting the component due to
   rain water content by using a Linear Programming technique to fit a profile
   which mandates positive gradient, see [Giangrande2013]_.
+- Using reflectivity and :math:`\phi_{DP}` to retrieve attenuation (in dBZ/km)
+  due to rainwater path.
+- Using the techniques outlined in [Ryzhkov2014]_ to retrieve rainfall rate (in
+  mm/hr) from attenuation.
 
 These are all outlined in the first of the three notebooks which accompany this
 manuscript: http://nbviewer.ipython.org/github/scollis/notebooks/tree/master/scipy2014/.
+Each process either appends a new field to the radar object or returns a field
+dictionary. Py-ART also comes with visualization methods allowing for the conical
+(or Plan Position Indicator, PPI) scan to be plotted up and geolocated using
+Matplotlib and Basemap. An example of raw :math:`\phi_{DP}` and reflectivity
+is shown in :ref:`raw_ppi`.
+.. figure:: nw_ppi.png
+
+   Raw Reflectivity factor and polarimetric phase difference from the lowest (0.5 degree)
+   tilt:label:`raw_ppi`
+
 
 
 Mapping to a cartesian grid
@@ -241,4 +257,8 @@ References
                      2013: An Application of Linear Programming to Polarimetric
                      Radar Differential Phase Processing.
                      *Journal of Atmospheric and Oceanic Technology*, **30**,
-                      1716–1729, doi:10.1175/JTECH-D-12-00147.1.
+                     1716–1729, doi:10.1175/JTECH-D-12-00147.1.
+.. [Ryzhkov2014] Ryzhkov, A. V., M. Diederich, P. Zhang, C. Simmer, 2014:
+                 Potential utilization of specific attenuation for rainfall
+                 estimation, mitigation of partial beam blockage, and radar
+                 networking. Submitted, *J. Atmos. Oceanic Technol.*, **in press.**
