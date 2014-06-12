@@ -345,18 +345,49 @@ A simple technique for documenting the detail in an image is to segment it into
 "blobs" which are above a certain threshold and calculate the number of blobs,
 thier accumilated area and the mean rainfall across the blobs. The ndimage module
 of Scipy is the perfect package for achieving this. Figure :ref:`seg` shows the
-of ndimage.label to break up regions above
+of ndimage.label to break up regions above 5 and 20mm/h.
 
 .. figure:: segmentation.png
 
    An example of figure segmentation using ndimage.label. :label:`seg`
 
+The code is very simple:
+
+.. code-block:: python
+
+  def area_anal(pixel_area, rr_x, rain_rates):
+      A_rainrate = np.zeros(rr_x.shape)
+      N_rainrate = np.zeros(rr_x.shape)
+      Rm_rainrate = np.zeros(rr_x.shape)
+      my_shape = rain_rates.shape
+      for i in range(len(rr_x)):
+          b_fld = np.zeros(my_shape)
+          b_fld[rain_rates > rr_x[i]]=1.0
+          regions, N_rainrate[i] = ndimage.label(b_fld)
+          try:
+              A_rainrate[i] = len(np.where(regions > 0.5)[0])*pixel_area
+              Rm_rainrate[i] = rain_rates[np.where(regions > 0.5)].mean()
+          except IndexError:
+              A_rainrate[i] = 0.0
+              Rm_rainrate[i] = 0.0
+      return N_rainrate, A_rainrate, Rm_rainrate
+
+and produces plots for the X-Band mesh as seen in :ref:`segx` and single
+C-Band sytems in :ref:`segc`
+
+.. figure:: segc.png
+
+   Number of regions, region covered and mean rain rate as a function
+   of rain rate threshold for a rainmap produced by a single
+   C-Band system. :label:`segc`
 
 
+.. figure:: segx.png
 
-Radar results
-~~~~~~~~~~~~~~~~~~~~~~
-coolness
+   Number of regions, region covered and mean rain rate as a function
+   of rain rate threshold for a rainmap produced by a network of
+   X-Band systems. :label:`segx`
+
 
 Conclusions
 ------------
@@ -364,8 +395,11 @@ stuff
 
 Acknowledgements
 ------------
-DoE Standard
-
+Dr. Giangrande's work is supported by the Climate Science for a Sustainable
+Energy Future (CSSEF) project of the Earth System Modeling (ESM) program in the
+DOE Office of Science. Argonne National Laboratory’s work was supported by the
+U.S. Department of Energy, Office of Science, Office of Biological and Environmental
+Research (OBER), under Contract DE-AC02-06CH11357. 
 
 References
 ----------
