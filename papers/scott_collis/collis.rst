@@ -108,6 +108,11 @@ radars as outlined in table :ref:`radars`.
   |Native format| Iris Sigmet      | NCAR MDV        |
   +-------------+------------------+-----------------+
 
+These are arranged as show in :ref:`sgp`.
+
+.. figure:: SGPlayout.png
+
+   Arrangement of radars around the ARM Southern Great Plains Facility. :label:`sgp`
 
 
 The Python ARM Radar Toolkit: Py-ART
@@ -168,10 +173,17 @@ Wrapping NASA's Radar Software Library opened a large number of formats.
   +------------+-------------------------------+--------------+
 
 We also have Pull Requests on GitHub for the NSF funded Colorado State University
-CHILL radar and active development on NOAA NOX-P and NASA D3R radars. 
+CHILL radar and active development on NOAA NOX-P and NASA D3R radars. There is a
+single output format, CF-Radial, a NetCDF based community format on which the
+common data model is modelleded.
 
 Pre-mapping corrections and calculations
 ~~~~~~~~~~~~~~~~~~~~~~
+Once raw data is collected there is often a number of processing steps that need
+to be performed. In our case this includes:
+
+- Correcting false Azimuth
+
 
 Mapping to a cartesian grid
 ~~~~~~~~~~~~~~~~~~~~~~
