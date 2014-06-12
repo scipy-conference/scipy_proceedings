@@ -90,13 +90,21 @@ are from 4 radar systems: One C-Band (5cm wavelenth) and three X-Band (3cm wavel
    |         | X-SAPR |  C-SAPR   |
    +---------+--------+-----------+
    |Frequency| 9.4 GHZ |6.25GHz|
+   +---------+--------+-----------+
    |Transmitter| Magnetron|Magnetron|
+   +---------+--------+-----------+
    |Power| 200kW| 350kW|
+   +---------+--------+-----------+
    |Gate spacing| 50m| 120m|
+   +---------+--------+-----------+
    |Maximum Range| 40km |120km|
+   +---------+--------+-----------+
    |Beam width| 1.0$^\circ$|1.0$^\circ$|
+   +---------+--------+-----------+
    |Polarimetric mode| Simul. H/V|Simul. H/V|
+   +---------+--------+-----------+
    |Manufacturer| Radtec| Advanced Radar Corp.|
+   +---------+--------+-----------+
    |Native format| Iris Sigmet| NCAR MDV|
    +---------+--------+-----------+
 
