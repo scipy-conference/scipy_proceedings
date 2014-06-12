@@ -299,7 +299,8 @@ X-Band network.
    Reflectivity factor mapped from a network of X-Band radars. :label:`X-Band only`
 
 It is clear more fine scale detail is resolved due to the rain systems being closer
-to any given radar. In addition, due to the density of high elevation beams being
+to any given radar. Both radars are mapped onto a grid with 225m spacing.
+In addition, due to the density of high elevation beams being
 increased (essentially a "web" of radar beams sampling the convective anvil) sampling
 artifacts are greatly reduced and finer details aloft are able to be studied.
 
@@ -307,7 +308,15 @@ Of course mesh mapping only works for "specific" mesurements, ie not integrated
 measurements like :math:`\phi_{DP}` or directionally dependent moments
 like :math:`v_r`. One measurement that can be mapped is our retrieved rain rate.
 
-Figures
+Figures :ref:`C-Band rain` and :ref:`X-Band rain` show mappings for rain rate
+using just the C-Band measurement and X-Band network respectively. Again the
+mesh map of the X-Band retrieval shows very fine detail resolving (in a volumetric
+dataset) fall streak patterns. The maxima near 4km (just below the freezing
+level) is due to melting particles. The rainfall retrieval has a cut off at
+the sounding determined freezing level but the "bright band" can extend some depth
+below this. Future work will entail using polrimetric measurements to deterimine
+where there is only pure liquid returns and conditionally apply the rainfall
+retrieval to those positions.
 
 .. figure:: c_only_rain.png
 
@@ -322,11 +331,19 @@ Figures
 
 Spatial distribution of rainfall: a objective test of fine scale models
 ------------
-stuff
+
+Previous sections have detailed the correction, retrieval from and mapping of radar
+data to a Cartesian grid. The last section showed enhanced detail can be retrieved
+by using a network of radars. The question remains: how can objectively compare the
+detail in rain fields? Both radar derived and forecast model calculated. The meshes
+generated using the mapping techniques previously discussed can be treated just like
+image data and there are a variety of packages for analyzing images.
 
 Measuring rainshafts using NDimage
 ~~~~~~~~~~~~~~~~~~~~~~
-amazeballs
+A simple technique for documenting the detail in an image is to segment it into
+"blobs" which are above a certain threshold and calculate the number of blobs,
+thier accumilated area and the mean rainfall across the blobs. 
 
 
 Radar results
