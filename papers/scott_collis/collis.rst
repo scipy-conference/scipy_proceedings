@@ -289,11 +289,23 @@ from the ARM C-SAPR at 500m and cross sections at 36.5N degrees latitude and
 
    Single C-Band rainfall field. :label:`C-Band only`
 
+In the vertical cross sections clear artifacts can be seen due to the poor sampling.
+Figure :ref:`X-Band only` shows the same scene but a three radar meshgrid from the
+X-Band network.
 
 
 .. figure:: x_only_z.png
 
-   Mesh of X-Band systems. :label:`x only`
+   Mesh of X-Band systems. :label:`X-Band only`
+
+It is clear more fine scale detail is resolved due to the rain systems being closer
+to any given radar. In addition, due to the density of high elevation beams being
+increased (essentially a "web" of radar beams sampling the convective anvil) sampling
+artifacts are greatly reduced and finer details aloft are able to be studied.
+
+Of course mesh mapping only works for "specific" mesurements, ie not integrated
+measurements like :math:`\phi_{DP}` or directionally dependent moments
+like :math:`v_r`. 
 
 
 Spatial distribution of rainfall: a objective test of fine scale models
