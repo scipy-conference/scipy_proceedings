@@ -57,6 +57,11 @@ examples of how to:
  - `docutils` 0.8 or later (``easy_install docutils``)
  - `pygments` for code highlighting (``easy_install pygments``)
 
+To install requirements on Ubuntu:
+```
+sudo apt-get install python-docutils texlive-latex-base texlive-publishers texlive-latex-extra texlive-fonts-recommended
+```
+
 ## For organizers
 
 To build the whole proceedings, see the Makefile in the publisher directory.
