@@ -116,7 +116,7 @@ radars as outlined in table :ref:`radars`.
   |Native format| Iris Sigmet      | NCAR MDV        |
   +-------------+------------------+-----------------+
 
-These are arranged as show in :ref:`sgp`.
+These are arranged as show in figure :ref:`sgp`.
 
 .. figure:: SGPlayout.png
 
@@ -220,11 +220,12 @@ Each process either appends a new field to the radar object or returns a field
 dictionary. Py-ART also comes with visualization methods allowing for the conical
 (or Plan Position Indicator, PPI) scan to be plotted up and geolocated using
 Matplotlib and Basemap. An example of raw :math:`\phi_{DP}` and reflectivity
-is shown in :ref:`rawppi`.
+is shown in figure :ref:`rawppi`.
 
 .. figure:: nw_ppi.png
 
-   Raw Reflectivity factor and polarimetric phase difference from the lowest (0.5 degree) tilt. :label:`rawppi`
+   Raw Reflectivity factor and polarimetric phase difference from the lowest
+   (0.5 degree) tilt. :label:`rawppi`
 
 The code to plot is simply:
 
@@ -376,7 +377,9 @@ of ndimage.label to break up regions above 5 and 20mm/h.
 
    An example of figure segmentation using ndimage.label. :label:`seg`
 
-The code is very simple:
+The code is very simple, for a given rain rate it creates a "black and white"
+image with whites above the threshold point and the black below, then ndimage.label
+segments the regions into a list of regions from which metrics can be calculated:
 
 .. code-block:: python
 
@@ -400,7 +403,7 @@ The code is very simple:
       return N_rainrate, A_rainrate, Rm_rainrate
 
 and produces plots for the X-Band mesh as seen in :ref:`segx` and single
-C-Band sytems in :ref:`segc`
+C-Band sytems in :ref:`segc`.
 
 .. figure:: segc.png
 
@@ -415,11 +418,29 @@ C-Band sytems in :ref:`segc`
    of rain rate threshold for a rainmap produced by a network of
    X-Band systems. :label:`segx`
 
+These results show that the mesh produced by the C-Band system averages over
+finely detailed higher intensity rain rates which are observed using the X-band
+network. And since [Giangrande2014]_ established the veracity of rainfall retrievals
+using specific attenuation for both X and C band (verus ARM and NASA guages and
+distrometers) that the structures shown in figure :ref:`X-Band rain` are exist.
+One thing this paper has not shown is what netork density of radars is required
+to fully resolve precipitating systems. This will be a function of the large scale
+forcing environment (an interesting question in as of itself). This study does
+establish that, for the Southern great plains, studying phenomina at the sub kilometer
+scale is required.
 
 Conclusions
 -----------
 
-stuff
+This paper has covered proceeding from raw radar measurements through quality
+control and geophysical retrieval to mapping and finally the extraction of geophysical
+insight. The simple conclusion is that, with careful processing, a network of
+X-Band radars can resolve finer details than a single C-Band radar. And, more
+importantly, finer detail exists. The paper also presents a very simple, image
+processing based technique to take the "morphological finger print" of rainfall
+maps. This technique can be used on both remotely sensed and numerically modeled
+data providing a subjective bases for model assessment.
+
 
 Acknowledgements
 ----------------
@@ -450,7 +471,7 @@ References
                 The Arm Climate Research Facility: A Review of Structure and
                 Capabilities. *Bull. Amer. Meteor. Soc.*, **94**, 377–392,
                 doi:10.1175/BAMS-D-11-00218.1.
-.. [Giangrande2014] TBD
+.. [Giangrande2014] TBD.. Accepted About to go into press.. will update
 .. [Giangrande2013] Giangrande, S. E., R. McGraw, and L. Lei,
                      2013: An Application of Linear Programming to Polarimetric
                      Radar Differential Phase Processing.
