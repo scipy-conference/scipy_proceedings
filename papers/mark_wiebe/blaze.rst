@@ -51,12 +51,23 @@ Introduction
 Blaze Architecture
 ------------------
 
-* Abstracting away data storage and computation enables the expression of
-  perfectly reusable analysis code.  This provides a write-once, run-everywhere
-  capability.
+Blaze separates data analytics into three isolated components:
 
-* Functional-style programming to map well onto multi-core and distributed
-  systems.
+* Data access: efficient access across different storage systems, ``CSV``,
+  ``HDF5``, ``HDFS``, ....
+* Symbolic Expression: symbolic reasoning about the desired result, ``Join``, ``Sum``,
+  ``Split-Apply-Combine``, ....
+* Backend Computation: how to perform computations on a variety of backends (``SQL``,
+  ``Pandas``, ``Spark``, ....
+
+We isolate these elements to enble experts to create well crafted solutions in
+each domain without needing understanding the others, e.g. a Pandas expert can
+contribute without knowing Spark and vice versa.  We provide abstraction layers
+between these components to enable them to work together cleanly.
+
+This process results in a multi-format, multi-backend computational engine
+capable of common data analytics operations.
+
 
 Blaze Data
 ~~~~~~~~~~
