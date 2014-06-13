@@ -22,6 +22,10 @@
 :email: marcus.vanlier-walqui@nasa.gov
 :institution: NASA Goddard Institute of Space Sciences.
 
+:author: Adam Theisen
+:email: atheisen@ou.edu
+:institution: University of Oklahoma, Cooperative Institute for Mesoscale Meteorological Studies, ARM Climate Research Facility Data Quality Office.
+
 
 
 ---------------------------------------------------------------------
@@ -54,11 +58,11 @@ Matplotlib.
 Introduction
 ------------
 
-RADARs (RAdio Detecion And Ranging, henceforth radars) specialized to weather
-applications do not measure the atmosphere, rather, the instument measures the
+RADARs (RAdio Detection And Ranging, henceforth radars) specialized to weather
+applications do not measure the atmosphere, rather, the instrument measures the
 interaction of the probing radiation with the scattering medium (nominally cloud
 or precipitation droplets or ice particulate matter). Therefore, in order to
-extract geophysical insight, such as the relationshop between large scale
+extract geophysical insight, such as the relationship between large scale
 environmental forcing and heterogeneity of surface precipitation patterns, a
 complex application chain of algorithms needs to be set up.
 
@@ -73,19 +77,20 @@ The data source: Scanning centimeter wavelength radar
 
 In order to understand the spatial complexity of precipitating cloud systems a
 sensor is required that can collect spatially diverse data. Radars emit a
-spatailly descrete pulse of radiation with a particular beam with and pulse length.
-A gated reciever that detects the backscattered signal and calculates a number
+spatially discrete pulse of radiation with a particular beam with and pulse length.
+A gated receiver that detects the backscattered signal and calculates a number
 of measurements based on the radar spectrum (the power as a function of phase delay
 which is due). These moments include radar reflectivity factor :math:`Z_e`, radial velocity
 of the scattering medium :math:`v_r` and spectrum width :math:`w`. Polarimetric radars transmit
 pulses with the electric field vector horizontal to the earth's surface and also
-vertical to the earth's surface. These radars can give a measure of the anistropy
+vertical to the earth's surface. These radars can give a measure of the anisotropy
 of the scattering medium and collect measurements including the differential
 reflectivity :math:`Z_{DR}`, differential phase difference :math:`\phi_{dp}` and correlation
-cooefficent :math:`\rho_{HV}`. The data is laid out on a time/range grid and each ray
+coefficient :math:`\rho_{HV}`. The data is laid out on a time/range grid and each ray
 (time step) has an associated azimuth and elevation. Data presented in this paper
-are from 4 ARM [Mather2013]_ radar systems: One C-Band (5cm wavelenth) and three X-Band (3cm wavelength)
+are from 4 ARM [Mather2013]_ radar systems: One C-Band (5cm wavelength) and three X-Band (3cm wavelength)
 radars as outlined in table :ref:`radars`.
+
 
 .. table:: ARM radar systems used in this paper. :label:`radars`
 
@@ -125,12 +130,13 @@ The Python ARM Radar Toolkit: Py-ART
 Radar data comes in a variety of binary formats but the data shape is
 essentially the same: A time-range array with data describing the pointing and
 geolocating the platform and (for mobile radar) the platform's motion. Py-ART
-takes a common data model aproach: Carefully design the data containers and
-mandate that functions/methods accept the container as an arguement and return
+takes a common data model approach: Carefully design the data containers and
+mandate that functions/methods accept the container as an argument and return
 the same data structure. The common data model for radar data in Py-ART is the
 radar object which stores data and metadata in python dictionaries in the fields.
 object in the radar structure. Data is stored
 in a numpy array and is always in the 'data' key. For example:
+
 
 .. code-block:: python
 
@@ -157,13 +163,14 @@ in a numpy array and is always in the 'data' key. For example:
 So the xnw_radar has a variety of data fields, including 'reflectivity' with the
 actual moment data stored in the 'data' key with 8800 time steps and 801 range
 gates. Data on instrument pointing is stored in x_nw.azimuth and x_nw.elevation
-while the centerpoint of each range gate is stored in x_nw.range. Again these
+while the center point of each range gate is stored in x_nw.range. Again these
 are dictionaries with data stored in the 'data' key. Methods in Py-ART can append
 fields or modify data in existing fields (rare).
 
-The vital key is a 'Babelfish' layer which ingests a variery of formats into the
+The vital key is a 'Babelfish' layer which ingests a variety of formats into the
 common data model. As of writing table :ref:`formats` outlines compatibility.
 Wrapping NASA's Radar Software Library opened a large number of formats.
+
 
 .. table:: Py-ART formats. :label:`formats`
 
@@ -188,7 +195,7 @@ Wrapping NASA's Radar Software Library opened a large number of formats.
 We also have Pull Requests on GitHub for the NSF funded Colorado State University
 CHILL radar and active development on NOAA NOX-P and NASA D3R radars. There is a
 single output format, CF-Radial, a NetCDF based community format on which the
-common data model is modeleded.
+common data model is modeled.
 
 Pre-mapping corrections and calculations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -250,7 +257,7 @@ Mapping to a cartesian grid
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Radars sample in radial coordinates of elevation azimuth and range. Mathematics
-for atmospheric phenomina are greatly simplified on Cartesian and Cartesian-like
+for atmospheric phenomena are greatly simplified on Cartesian and Cartesian-like
 (eg pressure surfaces) grids. Therefore the raw and processed data in the radar
 object needs to be mapped onto a regular grid. This is known as "Objective analysis"
 (see, for example [Trapp2000]_). In this paper we use a technique known as Barnes
@@ -264,13 +271,13 @@ gates within a radius of influence are interpolated using a weighting function s
 
 where :math:`r` is the distance from the grid point and :math:`r_{infl}` is the
 search radius of influence. The brute force way of doing the calculation would
-be for each cartesian point linearly search the radar gates for those within
+be for each Cartesian point linearly search the radar gates for those within
 the radius of influence, an Order :math:`n^2` problem. With a typical grid being
 200 by 200 by 37 grid points and a modern radar having on the order of 8000 time
-samples and 800 range gates this quickly becomes untractable. A better way is to
+samples and 800 range gates this quickly becomes intractable. A better way is to
 store the radar gates in a KD-Tree ordered by distance. This reduces the search
-to an order :math:`log(n)` problem. This is implimented in Py-ART. In addition a
-variable radius of influence algorithm is implimented which analyzes the radar
+to an order :math:`log(n)` problem. This is implemented in Py-ART. In addition a
+variable radius of influence algorithm is implemented which analyzes the radar
 volume coverage pattern and deduces an optimized :math:`r_{infl}(x,y,z)`. Unlike
 many other objective analysis codes Py-ART accepts a tuple of radar objects and
 treats the radar gates as a cloud of points. This allows very simple merging of
@@ -321,7 +328,7 @@ In addition, due to the density of high elevation beams being
 increased (essentially a "web" of radar beams sampling the convective anvil) sampling
 artifacts are greatly reduced and finer details aloft are able to be studied.
 
-Of course mesh mapping only works for "specific" mesurements, ie not integrated
+Of course mesh mapping only works for "specific" measurements, ie not integrated
 measurements like :math:`\phi_{DP}` or directionally dependent moments
 like :math:`v_r`. One measurement that can be mapped is our retrieved rain rate.
 
@@ -331,7 +338,7 @@ mesh map of the X-Band retrieval shows very fine detail resolving (in a volumetr
 dataset) fall streak patterns. The maxima near 4km (just below the freezing
 level) is due to melting particles. The rainfall retrieval has a cut off at
 the sounding determined freezing level but the "bright band" can extend some depth
-below this. Future work will entail using polrimetric measurements to deterimine
+below this. Future work will entail using polarimetric measurements to determine
 where there is only pure liquid returns and conditionally apply the rainfall
 retrieval to those positions.
 
@@ -361,7 +368,7 @@ Measuring rainshafts using NDimage
 
 A simple technique for documenting the detail in an image is to segment it into
 "blobs" which are above a certain threshold and calculate the number of blobs,
-thier accumilated area and the mean rainfall across the blobs. The ndimage module
+their accumulated area and the mean rainfall across the blobs. The ndimage module
 of Scipy is the perfect package for achieving this. Figure :ref:`seg` shows the
 of ndimage.label to break up regions above 5 and 20mm/h.
 
@@ -421,7 +428,14 @@ Dr. Giangrande's work is supported by the Climate Science for a Sustainable
 Energy Future (CSSEF) project of the Earth System Modeling (ESM) program in the
 DOE Office of Science. Argonne National Laboratory’s work was supported by the
 U.S. Department of Energy, Office of Science, Office of Biological and Environmental
-Research (OBER), under Contract DE-AC02-06CH11357.
+Research (OBER), under Contract DE-AC02-06CH11357.The work has also been supported
+by the OBER of the DOE as part of the ARM Program. Adam Theisen’s work was supported
+by Battelle – Pacific Northwest National Laboratory, contract number 206248,
+and his home institution, CIMMS, is supported by NOAA/Office of Oceanic and
+Atmospheric Research under NOAA-University of Oklahoma Cooperative Agreement
+#NA11OAR4320072, U.S. Department of Commerce.   The authors wish to thank
+Dr. Alexander Ryzhkov for support on implementation of specific attenuation-based
+rainfall methods.
 
 References
 ----------
