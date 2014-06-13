@@ -24,20 +24,21 @@
 
 
 
-------------------------------------------------
+---------------------------------------------------------------------
 Measuring rainshafts: Bringing python to bear on remote sensing data.
-------------------------------------------------
+---------------------------------------------------------------------
 
 .. class:: abstract
+
 Remote sensing data is complicated, very complicated! It is not only
 geospatially tricky but also indirect as the sensor measures the interaction
 of the media with the probing radiation, not the geophysics. However the
 problem is made tractable by the large number of algorithms available in the
 Scientific Python community, what is needed is a common data model for active
 remote sensing data that can act as a layer between highly specialized file
-formats and the cloud of scientific software in Python. This presentation
+formats and the cloud of scientific software in Python. This paper
 motivates this work by asking: How big is a rainshaft? What is the natural
-dimensionality of rainfall patterns and how well is this represented in fine
+morphology of rainfall patterns and how well is this represented in fine
 scale atmospheric models. Rather than being specific to the domain of
 meteorology we will break down how we approach this problem in terms what tools
 across numerous packages we used to read, correct, map and reduce the data to
@@ -52,6 +53,7 @@ Matplotlib.
 
 Introduction
 ------------
+
 RADARs (RAdio Detecion And Ranging, henceforth radars) specialized to weather
 applications do not measure the atmosphere, rather, the instument measures the
 interaction of the probing radiation with the scattering medium (nominally cloud
@@ -67,7 +69,8 @@ application: using rainfall maps to objectively metric the skill of fine scale
 models in representing precipitation morphology.
 
 The data source: Scanning centimeter wavelength radar
-------------
+-----------------------------------------------------
+
 In order to understand the spatial complexity of precipitating cloud systems a
 sensor is required that can collect spatially diverse data. Radars emit a
 spatailly descrete pulse of radiation with a particular beam with and pulse length.
@@ -111,14 +114,14 @@ radars as outlined in table :ref:`radars`.
 These are arranged as show in :ref:`sgp`.
 
 .. figure:: SGPlayout.png
-   :scale: 20%
 
    Arrangement of radars around the ARM Southern Great Plains Facility from
    [Giangrande2014]_. :label:`sgp`
 
 
 The Python ARM Radar Toolkit: Py-ART
-------------
+------------------------------------
+
 Radar data comes in a variety of binary formats but the data shape is
 essentially the same: A time-range array with data describing the pointing and
 geolocating the platform and (for mobile radar) the platform's motion. Py-ART
@@ -132,12 +135,20 @@ in a numpy array and is always in the 'data' key. For example:
 .. code-block:: python
 
   print xnw_radar.fields.keys()
-  ['radar_echo_classification', 'corrected_reflectivity', 'differential_phase',
-  'cross_correlation_ratio', 'normalized_coherent_power', 'spectrum_width',
-  'total_power', 'reflectivity', 'differential_reflectivity', 'specific_differential_phase',
-  'velocity', 'corrected_differential_reflectivity']
+  ['radar_echo_classification',
+  'corrected_reflectivity',
+  'differential_phase',
+  'cross_correlation_ratio',
+  'normalized_coherent_power',
+  'spectrum_width',
+  'total_power', 'reflectivity',
+  'differential_reflectivity',
+  'specific_differential_phase',
+  'velocity',
+  'corrected_differential_reflectivity']
   print xnw_radar.fields['reflectivity'].keys()
-  ['_FillValue', 'coordinates', 'long_name', 'standard_name', 'units', 'data']
+  ['_FillValue', 'coordinates', 'long_name',
+  'standard_name', 'units', 'data']
   print xnw_radar.fields['reflectivity']['long_name']
   print xnw_radar.fields['reflectivity']['data'].shape
   Reflectivity
@@ -180,7 +191,8 @@ single output format, CF-Radial, a NetCDF based community format on which the
 common data model is modeleded.
 
 Pre-mapping corrections and calculations
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Once raw data is collected there is often a number of processing steps that need
 to be performed. In our case this includes:
 
@@ -201,12 +213,11 @@ Each process either appends a new field to the radar object or returns a field
 dictionary. Py-ART also comes with visualization methods allowing for the conical
 (or Plan Position Indicator, PPI) scan to be plotted up and geolocated using
 Matplotlib and Basemap. An example of raw :math:`\phi_{DP}` and reflectivity
-is shown in :ref:`raw_ppi`.
+is shown in :ref:`rawppi`.
 
 .. figure:: nw_ppi.png
 
-   Raw Reflectivity factor and polarimetric phase difference from the lowest (0.5 degree)
-   tilt. :label:`raw_ppi`
+   Raw Reflectivity factor and polarimetric phase difference from the lowest (0.5 degree) tilt. :label:`rawppi`
 
 The code to plot is simply:
 
@@ -222,8 +233,10 @@ The code to plot is simply:
       field = fields_to_plot[plot_num]
       vmin, vmax = ranges[plot_num]
       plt.subplot(1, nplots, plot_num + 1)
-      display.plot_ppi_map(field, 0, vmin=vmin, vmax=vmax, lat_lines=np.arange(20,60,.2),
-                           lon_lines =  np.arange(-99,-80,.4), resolution = 'l')
+      display.plot_ppi_map(field, 0, vmin=vmin,
+             vmax=vmax, lat_lines=np.arange(20,60,.2),
+             lon_lines =  np.arange(-99,-80,.4),
+             resolution = 'l')
       display.basemap.drawrivers()
       display.basemap.drawcountries()
       display.plot_range_rings([20,40])
@@ -234,7 +247,8 @@ any source Py-ART has an ingest for.
 
 
 Mapping to a cartesian grid
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Radars sample in radial coordinates of elevation azimuth and range. Mathematics
 for atmospheric phenomina are greatly simplified on Cartesian and Cartesian-like
 (eg pressure surfaces) grids. Therefore the raw and processed data in the radar
@@ -264,11 +278,14 @@ multiple radar data sets. The method is simple to invoke, for example:
 
 .. code-block:: python
 
-  mesh_mapped_x = pyart.map.grid_from_radars((xnw_radar,xsw_radar,xse_radar),
-                                        grid_shape=(35, 401, 401),
-                                        grid_limits=((0, 17000), (-50000, 40000), (-60000, 40000)),
-                                        grid_origin = (36.57861, -97.363611),
-                                        fields=['corrected_reflectivity', 'rain_rate_A', 'reflectivity'])
+  mesh_mapped_x = pyart.map.grid_from_radars(
+          (xnw_radar,xsw_radar,xse_radar),
+          grid_shape=(35, 401, 401),
+          grid_limits=((0, 17000), (-50000, 40000),
+          (-60000, 40000)),
+          grid_origin = (36.57861, -97.363611),
+          fields=['corrected_reflectivity',
+          'rain_rate_A', 'reflectivity'])
 
 will map the three radar objects (in this case the three ARM X-Band systems
 in figure :ref:`sgp`) to a grid that is (z,y,x) = (35,401,401) points with a domain
@@ -330,7 +347,7 @@ retrieval to those positions.
 
 
 Spatial distribution of rainfall: a objective test of fine scale models
-------------
+-----------------------------------------------------------------------
 
 Previous sections have detailed the correction, retrieval from and mapping of radar
 data to a Cartesian grid. The last section showed enhanced detail can be retrieved
@@ -340,7 +357,8 @@ generated using the mapping techniques previously discussed can be treated just 
 image data and there are a variety of packages for analyzing images.
 
 Measuring rainshafts using NDimage
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 A simple technique for documenting the detail in an image is to segment it into
 "blobs" which are above a certain threshold and calculate the number of blobs,
 thier accumilated area and the mean rainfall across the blobs. The ndimage module
@@ -365,8 +383,10 @@ The code is very simple:
           b_fld[rain_rates > rr_x[i]]=1.0
           regions, N_rainrate[i] = ndimage.label(b_fld)
           try:
-              A_rainrate[i] = len(np.where(regions > 0.5)[0])*pixel_area
-              Rm_rainrate[i] = rain_rates[np.where(regions > 0.5)].mean()
+              A_rainrate[i] =\
+              len(np.where(regions > 0.5)[0])*pixel_area
+              Rm_rainrate[i] =\
+              rain_rates[np.where(regions > 0.5)].mean()
           except IndexError:
               A_rainrate[i] = 0.0
               Rm_rainrate[i] = 0.0
@@ -390,19 +410,22 @@ C-Band sytems in :ref:`segc`
 
 
 Conclusions
-------------
+-----------
+
 stuff
 
 Acknowledgements
-------------
+----------------
+
 Dr. Giangrande's work is supported by the Climate Science for a Sustainable
 Energy Future (CSSEF) project of the Earth System Modeling (ESM) program in the
 DOE Office of Science. Argonne National Laboratory’s work was supported by the
 U.S. Department of Energy, Office of Science, Office of Biological and Environmental
-Research (OBER), under Contract DE-AC02-06CH11357. 
+Research (OBER), under Contract DE-AC02-06CH11357.
 
 References
 ----------
+
 .. [Heistermann2014] Heistermann, M., S. Collis, M. J. Dixon, S. E. Giangrande,
               J. J. Helmus, B. Kelley, J. Koistinen, D. B. Michelson, M. Peura,
               T. Pfaff and D. B. Wolff,
