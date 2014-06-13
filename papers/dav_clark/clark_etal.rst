@@ -194,7 +194,7 @@ References
 
 .. [BCE] http://collaboratool.berkeley.edu
 .. [OSGeo] http://www.osgeo.org/
-# A more proper reference
+   # A more proper reference
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
 
