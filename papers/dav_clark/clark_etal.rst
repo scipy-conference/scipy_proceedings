@@ -79,7 +79,7 @@ Or a snippet from the above code, starting at the correct line number:
    for (int i = 0; i < 10; i++) {
        /* do something */
    }
- 
+
 Important Part
 --------------
 
@@ -197,5 +197,3 @@ References
    # A more proper reference
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
-
-
