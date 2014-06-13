@@ -42,13 +42,15 @@
 % (then docutils won't automatically add the package)
 \usepackage{graphicx}
 
+\usepackage{longtable}
 \ifthenelse{\isundefined{\longtable}}{}{
   \renewenvironment{longtable}{\begin{center}\begin{tabular}}%
     {\end{tabular}\end{center}\vspace{2mm}}
 }
 
-% Packages required for code highlighting
-\usepackage{fancyvrb}
-
+\usepackage{multirow}
 \newlength{\tablewidth}
 \setlength{\tablewidth}{\linewidth}
+
+% Packages required for code highlighting
+\usepackage{fancyvrb}
