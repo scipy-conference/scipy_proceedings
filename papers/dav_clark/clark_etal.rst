@@ -13,8 +13,8 @@ BCE: Berkeley's Common Scientific Compute Environment for Research and Education
 .. class:: abstract
 
   Virtual machines are widely used, but in an ad hoc manner. Members of the UC
-  Berkeley D-Lab, Statistical Computing Facility (SCF), and Shared Research
-  Computing (SRC) have engaged in a thorough evaluation of virtualization
+  Berkeley D-Lab, Statistical Computing Facility (SCF), and Berkeley Research
+  Computing (BRC) have engaged in a thorough evaluation of virtualization
   technologies before arriving at a solution that we feel stands to become a
   broadly useful strategy for constructing the Berkeley Common Environment
   [BCE]_. We also provide a comparison with a successful, existing project
