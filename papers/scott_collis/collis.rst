@@ -359,8 +359,9 @@ Spatial distribution of rainfall: a objective test of fine scale models
 
 Previous sections have detailed the correction, retrieval from and mapping of radar
 data to a Cartesian grid. The last section showed enhanced detail can be retrieved
-by using a network of radars. The question remains: how can objectively compare the
-detail in rain fields? Both radar derived and forecast model calculated. The meshes
+by using a network of radars. The question remains: how can the detail in
+rainfields be objectively compared?
+Both radar derived and forecast model calculated. The meshes
 generated using the mapping techniques previously discussed can be treated just like
 image data and there are a variety of packages for analyzing images.
 
@@ -471,7 +472,11 @@ References
                 The Arm Climate Research Facility: A Review of Structure and
                 Capabilities. *Bull. Amer. Meteor. Soc.*, **94**, 377–392,
                 doi:10.1175/BAMS-D-11-00218.1.
-.. [Giangrande2014] TBD.. Accepted About to go into press.. will update
+.. [Giangrande2014] Giangrande, S. E., S. Collis, A. K. Theisen, and A. Tokay,
+                    2014: Precipitation Estimation from the ARM Distributed
+                    Radar Network During the MC3E Campaign.
+                    *J. Appl. Meteor. Climatol.*, doi:10.1175/JAMC-D-13-0321.1.
+                    http://journals.ametsoc.org/doi/abs/10.1175/JAMC-D-13-0321.1
 .. [Giangrande2013] Giangrande, S. E., R. McGraw, and L. Lei,
                      2013: An Application of Linear Programming to Polarimetric
                      Radar Differential Phase Processing.
