@@ -60,7 +60,7 @@ highlighting, it would look like this::
 
 With code-highlighting:
 
-.. code-block:: python
+.. code:: python
 
    def sum(a, b):
        """Sum two numbers."""
@@ -69,7 +69,7 @@ With code-highlighting:
 
 Maybe also in another language, and with line numbers:
 
-.. code-block:: c
+.. code:: c
    :linenos:
 
    int main() {
@@ -96,9 +96,7 @@ It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
 some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
 equation on a separate line:
 
-.. math::
-
-   g(x) = \int_0^\infty f(x) dx
+.. math:: g(x) = \int_0^\infty f(x) dx
 
 or on multiple, aligned lines:
 
