@@ -72,18 +72,138 @@ capable of common data analytics operations.
 Blaze Data
 ~~~~~~~~~~
 
+Blaze Data Descriptors provide uniform access to a variety of common data
+formats.  They provide standard iteration, insertion, and numpy-like fancy
+indexing over on-disk files in common formats like csv, json, and hdf5 in
+memory data strutures like core Python data structures and DyND arrays as well
+as more sophisticated data stores like SQL databases.  The data descriptor
+interface is analogous to the Python buffer interface described in PEP 3118,
+but with some more flexibility.
+
+Over the course of this document we'll refer to the following simple
+``accounts.csv`` file:
+
+::
+
+   id, name, balance
+   1, Alice, 100
+   2, Bob, 200
+   3, Charlie, 300
+   4, Denis, 400
+   5, Edith, 500
+
+.. code-block:: python
+
+   >>> csv = CSV('accounts.csv')
+
+Iteration
+`````````
+
+Data descriptors expose the ``__iter__`` method, which iterates over the
+outermost dimension of the data.  This iterator yields vanilla Python objects
+by default.
+
+.. code-block:: python
+
+   >>> list(csv)
+   [(1L, u'Alice', 100L),
+    (2L, u'Bob', 200L),
+    (3L, u'Charlie', 300L),
+    (4L, u'Denis', 400L),
+    (5L, u'Edith', 500L)]
+
+
+Data descriptors also expose a ``chunks`` method, which also iterates over the
+outermost dimension but instead of yielding single rows of Python objects
+instead yields larger chunks of compactly stored data.  These chunks emerge as
+DyND arrays which are more efficient for bulk processing and data transfer.
+DyND arrays support the ``__array__`` interface and so can be easily converted
+to NumPy arrays.
+
+.. code-block:: python
+
+   >>> next(csv.chunks())
+   nd.array([[1, "Alice", 100],
+             [2, "Bob", 200],
+             [3, "Charlie", 300],
+             [4, "Denis", 400],
+             [5, "Edith", 500]],
+            type="5 * {id : int64, name : string, balance : int64}")
+
+Insertion
+`````````
+
+Analagously to ``__iter__`` and ``chunks`` the methods ``extend`` and
+``extend_chunks`` allow for insertion of data into the data descriptor.  These
+methods take iterators of Python objects and DyND arrays respectively.  The
+data is coerced into whatever form is native for the storage medium e.g. text
+for CSV or ``INSERT`` statements for SQL.
+
+
+.. code-block:: python
+
+   >>> csv = CSV('accounts.csv', mode='a')
+   >>> csv.extend([(6, 'Frank', 600),
+   ...             (7, 'Georgina', 700)])
+
+
+Migration
+`````````
+
+The combination of uniform iteration and insertion enables trivial data
+migration between storage systems.
+
+.. code-block:: python
+
+   >>> sql = SQL('postgres://user:password@hostname/', 'accounts')
+   >>> sql.extend(iter(csv))  # Migrate csv file to Postgres database
+
+
+Indexing
+````````
+
+Data descriptors also support fancy indexing.  As with iteration this supports
+either Python objects or DyND arrays with the ``.py[...]`` and ``.dynd[...]``
+interfaces.
+
+.. code-block:: python
+
+   >>> list(csv.py[::2, ['name', 'balance']])
+   [(u'Alice', 100L),
+    (u'Charlie', 300L),
+    (u'Edith', 500L),
+    (u'Georgina', 700L),
+    (u'Georgina', 700L)]
+
+   >>> csv.dynd[::10, ['name', 'balance']]
+   nd.array([["Alice", 100],
+             ["Charlie", 300],
+             ["Edith", 500],
+             ["Georgina", 700]],
+            type="var * {name : string, balance : int64}")
+
+Performance of this approach varies depending on the underlying storage system.
+For file-based storage systems like CSV and JSON we must seek through the file
+to find the right line (see [iopro]_), but don't incur deserialization costs.
+Some storage systems, like HDF5, support random access natively.
 * Defines interface for reading/writing data describable with datashape.
 
-* Brief description description of datashape as combination of shape and
-  dtype from NumPy, plus more general dimensions and additional dtypes.
 
-* Two mechanisms to stream data: as Python objects, and higher performance
-  via DyND array chunks.
+Cohesion
+````````
 
-* Plugin mechanism to define new data formats.
+Different storage techniques manage data differently.  Cohesion between these
+disparate systems is accomplished with the two projects ``datashape``, which
+specifies the intended meaning of the data, and DyND, which manages efficient
+type coercions and serves as an efficient intermediate representation.
 
-* LibDyND subsection describing how its implementation of in-memory datashaped
-  data provides glue for efficient chunked iteration, converting types, etc.
+
+Extension
+`````````
+
+Data descriptors can be easily extended to new storage formats by implementing
+the above interface.  TODO
+
 
 Blaze Expr
 ~~~~~~~~~~
@@ -148,3 +268,4 @@ References
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
 
+.. [iopro] http://docs.continuum.io/iopro/index.html
