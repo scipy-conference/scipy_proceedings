@@ -66,9 +66,53 @@ OSGeo: A Successful Common Environment
 --------------------------------------
 
 OSGeo is an example of a collaborative distribution that has managed to achieve
-a consensus process for XXX geospatial projects. It consists of a choice of
-basic tools that are widely known to free software developers: shell, Perl, or
-Python.
+a consensus process for XXX geospatial projects. OSGeo is designed to be useable
+as a virtual machine. This was started 7-8 years ago. Success only occured after
+a few years of "tepid" progress. Part of the driver is likely the limited amount
+of funds who are doing geospatial fieldwork. These people need to be able to go
+out and be very efficient in the field. They also often lack advanced
+programming / administration skills.
+
+About 5 years ago, some funding came in for one of the contributors to document
+all of this. Included hiring a graphic designer to make intro and tutorial pages
+to introduce the templates for creating a package. This takes money (as compared
+to the tech stuff).
+
+OSGeo provides a place for a variety of projects to interoperate, and
+potentially share with each other / synergy. OSGeo raises awareness of other
+projects.
+
+Founded on Ubuntu Linux, invite mature, stable projects. Overlap in language
+group (C-based vs. JVM-based) and interest area. Code is visible, licenses are
+established.
+
+What are the steps that established credibility to get projects contributing to
+the distribution. Initially, just shell scripts to install five core / important
+packages (XXX - what were they and why?). Reached out to 50 projects, more
+outside of U.S. than in, including many non-english (as a primary language),
+esp. from Europe. The social component of building the community was not
+necessarily explicit or even shared or known to all contributors (provable?).
+
+It consists of a choice of basic tools that are widely known to free software
+developers: shell, Perl, or Python. Scripts may call package managers, few
+constraints (e.g., keep recipes contained to a particular directory). Core,
+customizable scripts designed to bootstrap new recipes.
+
+Particular example: web, including apache, WSGI, etc. Standard layout of web
+directory. Fully working examples available for each "kind" of project.
+
+The result is that certain tools are becoming more and more visible. Projects
+are encouraged that are implemented in standard frameworks (i.e., not Forth).
+
+There's still not complete consensus, but the project is moving towards some
+consensus infrastructure. Also see the transfer of, e.g., military technology to
+environmental applications.
+
+Maybe include story about Jamaica response with open source mapping.
+
+Major step in diffusion is folks knowing what the thing is at all. Value add /
+branding - OSGeo has credibility from foundation status, participants,
+consistent / good graphic design.
 
 BCE: The Berkeley Common Environment
 ------------------------------------
