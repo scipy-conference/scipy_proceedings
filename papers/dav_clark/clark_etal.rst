@@ -2,8 +2,17 @@
 :email: davclark@berkeley.edu
 :institution: UC Berkeley
 
-# Aaron Culich, Ryan Lovett, Chris Paciorek, anyone else who contributes
-# directly!
+:author: Aaron Culich
+:email: aculich@berkeley.edu
+:institution: UC Berkeley
+
+:author: Ryan Lovett
+:email: rylo@berkeley.edu
+:institution: UC Berkeley
+
+:author: Chris Paciorek
+:email: paciorek@stat.berkeley.edu
+:institution: UC Berkeley
 
 
 --------------------------------------------------------------------------------
@@ -17,7 +26,7 @@ BCE: Berkeley's Common Scientific Compute Environment for Research and Education
   Computing (BRC) have engaged in a thorough evaluation of virtualization
   technologies before arriving at a solution that we feel stands to become a
   broadly useful strategy for constructing the Berkeley Common Environment
-  [BCE]_. We also provide a comparison with a successful, existing project
+  [BCE]_. We also provide a comparison with a successful, existing project,
   [OSGeo]_.
 
 .. class:: keywords
@@ -33,17 +42,211 @@ solutions.
 Available Tools
 ---------------
 
-DevOps
+"Collaboratool" was conceived as a project for building, integrating, and
+deploying tools that support portable, reproducible data science.  We started
+thinking about how to deploy virtualized containers that provide things like
+IPython notebooks through the web. We were very inspired by
+[jiffylab](http://github.com/ptone/jiffylab). From there, we decided that it
+made more sense to focus on a complete virtual environment, which is easy to
+deploy in a variety of contexts, which is what you'll find here now.
 
-# Particularly need help from Aaron here
+*DevOps*
+
+XXX - Particularly need help from Aaron here
+
+Lightweight virturalization (/ containerization) includes Docker / LXC / VMWare
+ESX.
+
+Community
+
 
 
 
 OSGeo: A Successful Common Environment
 --------------------------------------
 
+OSGeo is an example of a collaborative distribution that has managed to achieve
+a consensus process for XXX geospatial projects. It consists of a choice of
+basic tools that are widely known to free software developers: shell, Perl, or
+Python.
+
 BCE: The Berkeley Common Environment
 ------------------------------------
+
+The goal for the BCE is to provide both the ready-made environments, and also
+the "recipes" or scripts setting up these environments. It should be easy for a
+competent linux user to create recipes for custom tools that might not be
+braodly useful (and thus, not already in BCE).
+
+For classwork and research in the sciences at Berkeley, broadly defined to
+include social science, life science, physical science, and engineering. Using
+these tools, users can start up a virtual machine (VM) with a standardized Linux
+operating environment containing a set of standard software for scientific
+computing. The user can start the VM on their laptop, on a university server, or
+in the cloud. Furthermore, users will be able to modify the instructions for
+producing or modifying the virtual machine in a reproducible way for
+communication with and distribution to others.
+
+We envision the following core use cases:
+
+  - creating a common computing environment for a course or workshop,
+  - creating a common computational environment to be shared by a group of
+    researchers or students, and
+  - disseminating the computational environment so outsiders can reproduce the
+    results of a group.
+
+Other use cases/benefits:
+
+ - Thin client / staff computing
+ - Exam environments
+ - Instructional labs
+ - Sharing licensed software?
+ - Make it easy to do the "right" thing (hard to do "wrong" thing)
+ - Stable infrastructure
+ - Managing complexity
+ - Impacts beyond "the course"
+
+What problems does BCE solve for you?
+
+ - No more obscure installation issues - download and run a single virtual
+   machine or get the same environment on a bare metal or virtual server.
+ - I'm teaching a class - when you tell a student that a program behaves a
+   certain way, it does!
+ - I'm collaborating on some scientific research - now all of your collaborators
+   can run your code without complex installation instructions.
+ - Easy Deployment
+ - Replication / Reproducible research
+ - Easy transition across scales (laptop to cluster)
+ - Tricky installs
+
+To accomplish this, we envision that BCE will encompass the following:
+
+ - a reproducible workflow that creates the standard VM/image
+   with standard scientific computing software such as Python, R, git, etc.,
+ - a standard binary image, produced by the workflow, that can be distributed as is and
+   used on-the-fly with VirtualBox or VMWare Player with minimal dependencies, and
+ - (possibly) an augmented workflow that represents multiple possible distributions tailored
+   for different types of uses (e.g., different disciplines, different
+   computational needs, class vs. research use, etc.). This might
+   represent either a sequence or a tree of possible VMs.
+
+
+*Tentative list of features*
+
+ - VMs
+
+   - A fixed, versioned VM provided each semester as a binary image for classes
+     and workshops
+   - Ideally, the same VM usable for research, with functionality for parallel
+     computing and provisioned such that it can be used as the VM for virtual
+     cluster nodes
+   - The VM runnable on user laptops (Mac/Windows/Linux) and on cloud machines
+   - The VM usable on user machines with minimal dependencies (e.g., either
+     VirtualBox or VMware) and minimal setup, and with clear instructions for
+     users on setup and on getting data/files into and out of the VM
+   - Agreement on minimal hardware requirements on the host machine - do we
+     support 32 bit, any minimum RAM required?
+   - Shared folders (EBS on AWS), or other tech to make it possible to separate
+     data from VM.
+
+ - Provisioning
+
+   - Provisioning is fully scripted - if the appropriate software is installed,
+     the recipe should run reliably.
+   - The provisioning details used to create a given VM available to users and
+     with clear instructions on how to use and modify the provisioning; ideally
+     the provisioning would be relatively simple for users to understand
+   - The ability for a user to add software to a VM and then 'export' that
+     information back into the provisioning workflow that can be used to
+     recreate the modified VM
+
+ - Logistics and training
+
+   - A GitHub repository or the like plus a project website with all BCE
+     materials available
+   - Communication with users on bugs, desired features, and the like via the
+     repository and a mailing list
+   - Management / Versioning / Snapshotting
+
+ - Problems
+
+   - VMs reserve compute resources exclusively (less of a problem with LXC-like
+     solutions).
+   - Testing / Issue tracking
+
+*Students ("horizontal" collaboration), Researchers ("vertical" collaboration)*
+
+If you'd like to use the VM as a student, researcher, or instructor, our goal is
+to make this easy for you.
+
+If you're using VirtualBox, [follow these instructions](using-virtualbox.html).
+
+If you'd like to use the VM on Amazon's EC2 cloud platform, [follow these
+instructions](using-ec2.html).
+
+Adding modules?
+
+*Creating (and modifying) the BCE VM*
+
+All the files for creating the VM are in the collaboratool repository on GitHub.
+
+To clone the repository from the command line:
+
+    git clone https://github.com/dlab-berkeley/collaboratool
+
+Then go to the provisioning directory and see the information in HOWTO.md.
+
+*VirtualBox*
+
+  * Download and install VirtualBox from the [VirtualBox
+    website](https://www.virtualbox.org/wiki/Downloads). This is the tool the
+    runs the virtual machine for you. 
+  * Download the BCE VM in the form of an OVA file from [UNDER
+    CONSTRUCTION](BCE-xubuntu-14.04-amd64.ova).
+  * Open VirtualBox and import the BCE-xubuntu-14.04-amd64.ova file you just
+    downloaded by going to "File->Import Appliance" and then selecting the .ova
+    file from wherever you downloaded it to (possible 'Downloads' in your home
+    directory on the machine). 
+  * Wait a few minutes...
+  * Start the virtual machine by clicking on the tab for "BCE-xubuntu-14.04-amd64" on the left side and then clicking "Start" at the top. This will start a virtual Linux computer within your own machine. After a few seconds you should see black screen and then soon you'll see the desktop of the VM.
+
+You now have a machine that has all the software installed as part of BCE, including IPython and useful Python packages and R, RStudio and useful R packages.
+
+You can get a terminal window that allows you to type commands in a UNIX-style shell by clicking on the icon of the black box with the $ symbo on the top panel. Using this you can start IPython Notebook by simply typing "ipython notebook" or  R by simply typing 'R' at the prompt in the terminal. This starts a bare-bones R session. To start RStudio, either type 'rstudio' at the prompt on go to "Applications->Programming->RStudio".
+
+You can restart the VM at any time by opening VirtualBox and clicking on the tab for the VM and clicking "Start" as you did above.
+
+*Sharing folders and copying files between your computer and the VM*
+
+One useful thing will be to share folders between the VM and the host machine so that you can access the files on your computer from the VM. Do the following:
+
+  * Got to "Devices->Shared Folder Settings" and click on the icon of a folder
+    with a "+" on the right side.
+  * Select a folder to share, e.g. your home directory on your computer by
+    clicking on "Folder Path" and choosing "Other" and navigating to the folder
+    of interest. For our purposes here, assume we click on "Documents".
+  * Click "make permanent" and "auto-mount" and then click "Ok".
+  * Reboot the machine by going to applications button on the left of the top
+    toolbart, clicking on "Log Out", and choosing "Restart" in the window that
+    pops up.
+  * Once the VM is running again, click on the "Shared" folder on the desktop.
+    You should see the folder "sf_Documents" (or whatever the folder name you
+    selected was, in place of 'Documents'). You can drag and drop files to
+    manipulate them.
+  * Alternatively, from the Terminal, you can also see the directory by doing
+    "cd ~/Desktop/shared/sf_Documents" and then "ls" will show you the files. 
+
+Be careful: unless you selected "read only" at the same time as "make
+permanent", any changes to the shared folder on the VM affects the folder in the
+'real world', namely your computer. 
+
+*EC2*
+
+  - Go to [EC2 management console](http://console.aws.amazon.com) and choose the US-West-2 (Oregon) region, as that is where we have posted the BCE AMI. (You'll need to have an account set up.)
+  - On the "AMIs" tab, search for the BCE AMI amongst public images.
+  - Launch an instance
+  - Follow the instructions given in the "Connect" button to SSH to the instance
+  - If you want to connect as the "oski" user, you can deposit your public SSH key in the .ssh folder of the "oski" user.
 
 
 Examples for proper rst formatting
