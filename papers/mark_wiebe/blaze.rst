@@ -245,6 +245,18 @@ Experiment
   allows you to select the backend that best suits your needs and allows you to
   transition when its time.
 
+Other Projects
+--------------
+
+Datashape
+~~~~~~~~~
+
+DyND
+~~~~
+
+Catalog
+~~~~~~~
+
 
 Conclusion
 ----------
