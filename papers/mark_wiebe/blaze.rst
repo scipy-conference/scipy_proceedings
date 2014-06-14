@@ -53,15 +53,20 @@ Blaze Architecture
 
 Blaze separates data analytics into three isolated components:
 
-* Data access: efficient access across different storage systems, ``CSV``,
-  ``HDF5``, ``HDFS``, ....
-* Symbolic Expression: symbolic reasoning about the desired result, ``Join``, ``Sum``,
-  ``Split-Apply-Combine``, ....
-* Backend Computation: how to perform computations on a variety of backends (``SQL``,
-  ``Pandas``, ``Spark``, ....
+* Data access: efficient access across different storage systems,
+
+  e.g. ``CSV``, ``HDF5``, ``HDFS``, ....
+
+* Symbolic Expression: symbolic reasoning about the desired result,
+
+  e.g. ``Join``, ``Sum``, ``Split-Apply-Combine``, ....
+
+* Backend Computation: how to perform computations on a variety of backends,
+
+  e.g. ``SQL``, ``Pandas``, ``Spark``, ....
 
 We isolate these elements to enble experts to create well crafted solutions in
-each domain without needing understanding the others, e.g. a Pandas expert can
+each domain without needing to understand the others, e.g. a Pandas expert can
 contribute without knowing Spark and vice versa.  We provide abstraction layers
 between these components to enable them to work together cleanly.
 
