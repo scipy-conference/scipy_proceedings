@@ -240,15 +240,113 @@ Blaze Interface
 Experiment
 ----------
 
-* We sketch out a simple data analytics computation with exprs, perhaps
-  split-apply-combine + Join on some bitcoin data.
+To demonstrate the capabilities and motivation for Blaze we execute a simple
+split-apply-combine computation against a few backends.  We do this for a range
+of problem sizes and so compare scalability across backends across scales.
 
-* We run this computation on a scale of data sizes on several backends
-  (streaming Python, Pandas, SQLite, Spark) and provide performance numbers
 
-* We compare the backends for performance and scalability, noting that Blaze
-  allows you to select the backend that best suits your needs and allows you to
-  transition when its time.
+Bitcoin
+~~~~~~~
+
+We consider financial transactions using the Bitcoin digital currency.  In
+particular we consider transactions between de-anonymized identities as
+computed by the process laid out in [Reid]_ and obtained from TODO.  Each
+transaction consists of a transaction ID, sender, recipient, timestamp, and a
+number of bitcoins sent.  Some example data
+
+::
+
+   # Transaction, Sender, Recipient, Timestamp, Value
+   4,39337,39337,20120617120202,0.31081764
+   4,39337,3,20120617120202,69.1
+   5,2071196,2070358,20130304143805,61.60235182
+   5,2071196,5,20130304143805,100.0
+
+Expression
+~~~~~~~~~~
+
+We load in this data using `blaze.data`
+
+.. code-block:: python
+
+   >>> from blaze.data.csv import CSV
+   >>> csv = CSV('user_edges.txt',
+   ...           columns=['transaction', 'sender', 'recipient', 'timestamp', 'value'],
+   ...           typehints={'timestamp': 'datetime'})
+
+We then build an abstract table with this same schema
+
+.. code-block:: python
+
+   >>> t = TableSymbol('t', csv.schema)
+
+And describe a simple computation, finding the ten senders that have sent the most bitcoins
+
+.. code-block:: python
+
+   >>> big_spenders = (By(t, t['sender'], t['value'].sum())
+   ...                  .sort('value', ascending=False)
+   ...                  .head(10))
+
+
+Benchmark
+~~~~~~~~~
+
+We run this computation using streaming Python, Pandas, SQLite, Postgres, and Spark.  First we migrate the data to a variety of different data stores
+
+.. code-block:: python
+
+   >>> sqlite = SQL('sqlite:///btc.db', 'user_edges', schema=csv.schema)
+   >>> sqlite.extend(csv)
+   >>> postgres = SQL('postgresql:///user:pass', 'user_edges', schema=csv.schema)
+   >>> postgres.extend(csv)
+
+   >>> df = like(DataFrame, csv)
+   >>> rdd = like(SparkContext, csv)
+   >>> py = like([], csv)
+
+We then run our computation for a variety of sizes on the variety of backends
+
+.. code-block:: python
+
+   >>> from numpy import logspace
+   >>> sizes = list(map(int, logspace(1, 8, 16)))
+
+   >>> times = [[measure(lambda: compute(big_spenders.subs({t: t.head(size)}),
+   ...                                   dataset))
+   ...              for size in sizes]
+   ...              for dataset in [py, df, rdd, sqlite, postgres]]
+
+TODO: Plot results
+
+We see roughly what we expect, that Pandas performs about an order of magnitude
+better than the others while in memory, but fails outside.  We get a good
+comparison of technologies like SQLite, Postgres, and Streaming Python.  We see
+that these technologies are able to span outside of single machine main memory.
+
+For variety we benchmark a slightly different computation.
+
+.. code-block:: python
+
+   >>> popular_senders = (By(t, t['sender'], t['recipient'].nunique())
+   ...                     .sort('value', ascending=False)
+   ...                     .head(10))
+
+TODO: Plot results
+
+Here we see surprising results.  Pandas does not perform as well as expected
+(though more performant alternatives to ``Series.nunique`` exist) and so we may
+wish to choose one of the other backends as we scale out
+
+Discussion
+~~~~~~~~~~
+
+Blaze provides both rapid ability to migrate data between data formats and the
+ability to rapidly prototype common computations against a wide variety of
+backends.  It allows us to easily compare our options and choose the best for
+our particular setting.  As that setting changes (i.e. if our data grows
+considerably) our implementation can transition easily.
+
 
 Other Projects
 --------------
@@ -286,3 +384,6 @@ References
            Transactions on Terraforming, 21(3):261-300, August 2003.
 
 .. [iopro] http://docs.continuum.io/iopro/index.html
+.. [Reid] Reid, Fergal, and Martin Harrigan. "An analysis of anonymity in the
+          bitcoin system." Security and Privacy in Social Networks. Springer New York,
+          2013. 197-223.
