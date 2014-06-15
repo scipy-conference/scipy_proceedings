@@ -166,7 +166,7 @@ Now create the left side of Figure 3.  Create the signal, noise, and data.  Sign
   plt.savefig('model.png')
   plt.show()
 
-Create the right side of Figure 3 (the model of the noise)  by applying a derivative filter on the noise.  Plot both the noise and the moise model.  The derivatice filter, (-1,1), is applied using scipy.lfilter. The code follows and the results is shown in Figure 6.
+Create the right side of Figure 3 (the model of the noise)  by applying a derivative filter on the noise.  Plot both the noise and the noise model.  The derivative filter, (-1,1), is applied using scipy.lfilter. The code follows and the resulting plot is Figure 6.
 
 .. code-block:: python
 
@@ -193,7 +193,7 @@ Now we compute the prediction error filter for the noise model (right section on
  #    ...                            ...  
  #    Mn-1                           Mn
 
-The prediction error filter is the error made by the prediction filter. The prediction error filter is 1 followed by the sign reversed prediction error filter. I solve this as a general general matrix problem, not a simple projection.  This will be useful later to compute longer filters.  The code to compute the results at a single frequency is surprisingly simple:
+The prediction error filter is the error made by the prediction filter. The prediction error filter is 1 followed by the sign reversed prediction error filter. I solve this as a general matrix problem, not a simple projection.  This will be useful later to compute longer filters.  The code to compute the results at a single frequency is surprisingly simple:
 
 .. code-block:: python
 
@@ -259,7 +259,7 @@ The next step it "To find p.e.f. c that concerns only the signal event ... decon
 
 This does indeed compute pefc= [ 1.00+0.j -1.05+0.j], matching the paper.
 
-The steps to initilize python, compute a synthetic, estimate prediction filters (pef's) have been computed (at least for one frequency).  The next step is to fit the data with a line combination of 1/pefa and 1/pefc.  The paper observes "The structure of [pef]a implies that the noise event does not change from one trace to the next in the bandwidth. Its pattern is therefore the N-dimensional vector (1, ..., 1). The structure of [pef]c implies that the pattern of the signal event ... displays ... an amplitude that increases by 1.05 from trace to trace. The N-dimensional vector that characterizes this pattern is [1, 1.05 ,..., 1.05**(N–1)]. At this stage the input gather d can be seen as a linear combination of the two patterns. The coefficients of this linear combination, the waveforms of the two events, can be easily found using the least squares method."  The code to compute these "patterns" and the coefficients is:
+The steps to initialize python, compute a synthetic, estimate prediction filters (pef's) have been computed (at least for one frequency).  The next step is to fit the data with a line combination of 1/pefa and 1/pefc.  The paper observes "The structure of [pef]a implies that the noise event does not change from one trace to the next in the bandwidth. Its pattern is therefore the N-dimensional vector (1, ..., 1). The structure of [pef]c implies that the pattern of the signal event ... displays ... an amplitude that increases by 1.05 from trace to trace. The N-dimensional vector that characterizes this pattern is [1, 1.05 ,..., 1.05**(N–1)]. At this stage the input gather d can be seen as a linear combination of the two patterns. The coefficients of this linear combination, the waveforms of the two events, can be easily found using the least squares method."  The code to compute these "patterns" and the coefficients is:
 
 .. code-block:: python
 
@@ -380,7 +380,7 @@ Discussion
 
 Most geophysicists are familiar with prediction error filters because of the deconvolution process.  The prediction error filters in this paper are different.  In these programs we start with a matrix, F, and compute a positive definite matrix, F.conj().transpose() * F.  This is similar to the  autocorrelation matrix that appears in deconvolution, but it is not Toplitz (a Toplitz matrix is a matrix in which each diagonal that descends from left to right is constant).  It is easy to make mistakes like trying to use Levinson recursion or assuming the roots of the filter are inside the unit circle.  Spitz model was likely designed to generate filters with a root of 1.05, well outside the unit circle.  It is important to set up the filter estimation equations properly (i.e. avoid end effects) in order to reproduce these results.  
 
-This code computes the positive definite matrix by matrix multiplication (F.conj().transpose() * F).  You can compute the matrix with fewer computations by computing the lower triangular part of each column from the previous column, but it is unlikely to speed up the python code.  Fortunately FX prediction error filters are usualy only three to five points and they can be quickly computed without using a fast, special purpose algorithm like Levenson recursion.  
+This code computes the positive definite matrix by matrix multiplication (F.conj().transpose() * F).  You can compute the matrix with fewer computations by computing the lower triangular part of each column from the previous column, but it is unlikely to speed up the python code.  Fortunately FX prediction error filters are usualy only three to five points and they can be quickly computed without using a fast, special purpose algorithm like Levinson recursion.  
 
 
 Conclusions
