@@ -587,11 +587,11 @@ of period :math:`n`. (Some are actually periodic points with period
 
 .. figure:: tent-map-period-4.pdf
 
-    Points with period dividing $4$ of the tent map. :label:`tent-map-period-4`
+    Points with period dividing 4 of the tent map. :label:`tent-map-period-4`
 
 .. figure:: logistic-period-4.pdf
 
-   Points with period dividing $4$ of the logistic map. :label:`logistic-map-period-4`
+   Points with period dividing 4 of the logistic map. :label:`logistic-map-period-4`
 
 It turns out [Ott]_ that the invertible change of variables
 
@@ -608,7 +608,7 @@ into the sequence :math:`(x_n)` given by iterating the logistic map
 
 Thus periodic points of the tent map, satisfying :math:`T^m(y) = y`, are
 mapped by :math:`h` into periodic points :math:`x` of the logistic map,
-satisfying :math:`T^m(x) = x`, shown in figure :ref:`logistic-period-4`
+satisfying :math:`T^m(x) = x`, shown in figure :ref:`logistic-map-period-4`
 
 The following table gives the midpoint of the intervals containing the
 fixed points :math:`x` such that :math:`f_4^4(x)=x` of the logistic map,
@@ -816,7 +816,8 @@ disc is hit or not. The trajectory is shown in :ref:`billard-traj`.
 
 .. figure:: billiard_trajectory.pdf
 
-    Trajectory of the billiard model up to time 10 :label:`billiard-traj`
+    Trajectory of the billiard model up to time 10;
+    the black dot shows the initial position. :label:`billiard-traj`
 
 
 With 96 digits, the uncertainty on the final distance, i.e. the diameter
