@@ -44,12 +44,12 @@ formats and the cloud of scientific software in Python. This paper
 motivates this work by asking: How big is a rainshaft? What is the natural
 morphology of rainfall patterns and how well is this represented in fine
 scale atmospheric models. Rather than being specific to the domain of
-meteorology we will break down how we approach this problem in terms what tools
-across numerous packages we used to read, correct, map and reduce the data to
-forms able to answer our science questions. This is a "how" paper,
-covering signal processing using linear programming methods, mapping using KD
-Trees, and image analysis using ndimage and, of course graphics using
-Matplotlib.
+meteorology, we will break down how we approach this problem in terms of the tools
+used from numerous Python packages to read, correct, map and reduce the data
+into a form better able to answer our science questions. This is a "how" paper,
+covering signal processing using linear programming methods, mapping using k-d
+trees, image analysis using SciPy's ndimage sub-module and graphics using
+matplotlib.
 
 .. class:: keywords
 
@@ -68,55 +68,56 @@ complex application chain of algorithms needs to be set up.
 
 This paper briefly outlines a framework, using a common data model approach, for
 assembling such processing chains: the Python-ARM Radar Toolkit, Py-ART
-[Heistermann2014]_. The paper also provides an example
-application: using rainfall maps to objectively metric the skill of fine scale
+[Heistermann2014]_. This paper also provides an example
+application: using rainfall maps to objectively evaluate the skill of fine scale
 models in representing precipitation morphology.
 
-The data source: Scanning centimeter wavelength radar
+The data source: scanning centimeter wavelength radar
 -----------------------------------------------------
 
 In order to understand the spatial complexity of precipitating cloud systems a
 sensor is required that can collect spatially diverse data. Radars emit a
-spatially discrete pulse of radiation with a particular beam with and pulse length.
-A gated receiver that detects the backscattered signal and calculates a number
+spatially discrete pulse of radiation with a particular beamwidth and pulse length.
+A gated receiver detects the backscattered signal and calculates a number
 of measurements based on the radar spectrum (the power as a function of phase delay
-which is due). These moments include radar reflectivity factor :math:`Z_e`, radial velocity
+which is due to the motion of the scatting medium relative to the antenna). 
+These moments include radar reflectivity factor :math:`Z_e`, radial velocity
 of the scattering medium :math:`v_r` and spectrum width :math:`w`. Polarimetric radars transmit
-pulses with the electric field vector horizontal to the earth's surface and also
-vertical to the earth's surface. These radars can give a measure of the anisotropy
-of the scattering medium and collect measurements including the differential
+pulses with the electric field vector horizontal to the earth's surface as well
+as vertical to the earth's surface. These radars can give a measure of the anisotropy
+of the scattering medium with measurements including differential
 reflectivity :math:`Z_{DR}`, differential phase difference :math:`\phi_{dp}` and correlation
-coefficient :math:`\rho_{HV}`. The data is laid out on a time/range grid and each ray
-(time step) has an associated azimuth and elevation. Data presented in this paper
-are from 4 ARM [Mather2013]_ radar systems: One C-Band (5cm wavelength) and three X-Band (3cm wavelength)
+coefficient :math:`\rho_{HV}`. The data is laid out on a time/range grid with each ray
+(time step) having an associated azimuth and elevation. Data presented in this paper
+are from 4 ARM [Mather2013]_ radar systems: One C-Band (5 cm wavelength) and three X-Band (3 cm wavelength)
 radars as outlined in table :ref:`radars`.
 
 
 .. table:: ARM radar systems used in this paper. :label:`radars`
 
-  +-------------+------------------+-----------------+
-  |             | X-SAPR           |  C-SAPR         |
-  +-------------+------------------+-----------------+
-  |Frequency    | 9.4 GHZ          |6.25GHz          |
-  +-------------+------------------+-----------------+
-  |Transmitter  | Magnetron        |Magnetron        |
-  +-------------+------------------+-----------------+
-  |Power        | 200kW            | 350kW           |
-  +-------------+------------------+-----------------+
-  |Gate spacing | 50m              |120m             |
-  +-------------+------------------+-----------------+
-  |Maximum Range| 40km             |120km            |
-  +-------------+------------------+-----------------+
-  |Beam width   |1   :math:`^\circ`|1  :math:`^\circ`|
-  +-------------+------------------+-----------------+
-  |Polar. mode  |Simul. H/V        |Simul. H/V       |
-  +-------------+------------------+-----------------+
-  |Manufacturer | Radtec           |Adv. Radar Corp. |
-  +-------------+------------------+-----------------+
-  |Native format| Iris Sigmet      | NCAR MDV        |
-  +-------------+------------------+-----------------+
+  +---------------+------------------+-------------------+
+  |               | X-SAPR           |  C-SAPR           |
+  +---------------+------------------+-------------------+
+  | Frequency     | 9.4 GHZ          | 6.25GHz           |
+  +---------------+------------------+-------------------+
+  | Transmitter   | Magnetron        | Magnetron         |
+  +---------------+------------------+-------------------+
+  | Power         | 200kW            | 350kW             |
+  +---------------+------------------+-------------------+
+  | Gate spacing  | 50m              | 120m              |
+  +---------------+------------------+-------------------+
+  | Maximum Range | 40km             | 120km             |
+  +---------------+------------------+-------------------+
+  | Beam width    |  :math:`1^\circ` |  :math:`1^\circ`  |
+  +---------------+------------------+-------------------+
+  | Polar. mode   | Simul. H/V       | Simul. H/V        |
+  +---------------+------------------+-------------------+
+  | Manufacturer  | Radtec           | Adv. Radar Corp.  |
+  +---------------+------------------+-------------------+
+  | Native format | Iris Sigmet      | NCAR MDV          |
+  +---------------+------------------+-------------------+
 
-These are arranged as show in figure :ref:`sgp`.
+These instruments are arranged as show in figure :ref:`sgp`.
 
 .. figure:: SGPlayout.png
 
@@ -127,15 +128,15 @@ These are arranged as show in figure :ref:`sgp`.
 The Python ARM Radar Toolkit: Py-ART
 ------------------------------------
 
-Radar data comes in a variety of binary formats but the data shape is
-essentially the same: A time-range array with data describing the pointing and
-geolocating the platform and (for mobile radar) the platform's motion. Py-ART
-takes a common data model approach: Carefully design the data containers and
-mandate that functions/methods accept the container as an argument and return
+Radar data comes in a variety of binary formats but the content is
+essentially the same: A time-range array for each radar moment 
+along with data describing the pointing and geolocating of the platform.  
+For for mobile radar the platform's motion must also be described in the file.
+Py-ART takes a common data model approach: Carefully design the data containers and
+mandate that functions and methods accept the container as an argument and return
 the same data structure. The common data model for radar data in Py-ART is the
-radar object which stores data and metadata in python dictionaries in the fields.
-object in the radar structure. Data is stored
-in a numpy array and is always in the 'data' key. For example:
+Radar object which stores data and metadata in Python dictionaries in classes attributes.
+Data is stored in a NumPy arrays in the 'data' key of the dictionary. For example:
 
 
 .. code-block:: python
@@ -156,46 +157,47 @@ in a numpy array and is always in the 'data' key. For example:
   ['_FillValue', 'coordinates', 'long_name',
   'standard_name', 'units', 'data']
   print xnw_radar.fields['reflectivity']['long_name']
-  print xnw_radar.fields['reflectivity']['data'].shape
   Reflectivity
+  print xnw_radar.fields['reflectivity']['data'].shape
   (8800, 801)
 
-So the xnw_radar has a variety of data fields, including 'reflectivity' with the
-actual moment data stored in the 'data' key with 8800 time steps and 801 range
-gates. Data on instrument pointing is stored in x_nw.azimuth and x_nw.elevation
+The xnw_radar has a variety of fields, including 'reflectivity' with the
+numerical moment data stored in the 'data' key with 8800 time steps and 801 range
+gates. Data on instrument pointing is stored in x_nw.azimuth and x_nw.elevation attributes
 while the center point of each range gate is stored in x_nw.range. Again these
-are dictionaries with data stored in the 'data' key. Methods in Py-ART can append
+attributes are dictionaries with data stored in the 'data' key. Functions in Py-ART can append
 fields or modify data in existing fields (rare).
 
 The vital key is a 'Babelfish' layer which ingests a variety of formats into the
-common data model. As of writing table :ref:`formats` outlines compatibility.
-Wrapping NASA's Radar Software Library opened a large number of formats.
-
+common data model. Currently table :ref:`formats` outlines the formats which
+are compatible with Py-ART.  A number of these formats are available via a 
+Cython wrapper around NASA's Radar Software Library.
 
 .. table:: Py-ART formats. :label:`formats`
 
-  +------------+-------------------------------+--------------+
-  |Format name |Example radar system(s)        | Note         |
-  +------------+-------------------------------+--------------+
-  |CF-Radial   | NCAR SPOL, ARM Cloud Radars   | Output format|
-  +------------+-------------------------------+--------------+
-  |UF          | Lots of legacy data           | Via RSL      |
-  +------------+-------------------------------+--------------+
-  |Lassen      | BoM CPOL in Darwin, Australia | Via RSL      |
-  +------------+-------------------------------+--------------+
-  |IRIS Sigmet | ARM X-SAPR                    | Native       |
-  +------------+-------------------------------+--------------+
-  |NCAR MDV    | ARM C-SAPR                    | Native       |
-  +------------+-------------------------------+--------------+
-  |ODIN        |European radar network         | Native       |
-  +------------+-------------------------------+--------------+
-  |WSR-88D     |USA operational network        | Native       |
-  +------------+-------------------------------+--------------+
+  +-------------+-------------------------------+---------------+
+  | Format name | Example radar system(s)       | Note          |
+  +-------------+-------------------------------+---------------+
+  | CF-Radial   | NCAR SPOL, ARM Cloud Radars   | Output format |
+  +-------------+-------------------------------+---------------+
+  | UF          | Lots of legacy data           | Via RSL       |
+  +-------------+-------------------------------+---------------+
+  | Lassen      | BoM CPOL in Darwin, Australia | Via RSL       |
+  +-------------+-------------------------------+---------------+
+  | IRIS Sigmet | ARM X-SAPR                    | Native        |
+  +-------------+-------------------------------+---------------+
+  | NCAR MDV    | ARM C-SAPR                    | Native        |
+  +-------------+-------------------------------+---------------+
+  | GAMIC       | European radar network        | Native        |
+  +-------------+-------------------------------+---------------+
+  | WSR-88D     | USA operational network       | Native        |
+  +-------------+-------------------------------+---------------+
 
-We also have Pull Requests on GitHub for the NSF funded Colorado State University
-CHILL radar and active development on NOAA NOX-P and NASA D3R radars. There is a
+We also have Pull Requests on GitHub which introduce support for the 
+NSF funded Colorado State University CHILL radar and active development 
+on supporting NOAA NOX-P and NASA D3R radars. There is a
 single output format, CF-Radial, a NetCDF based community format on which the
-common data model is modeled.
+common data model is derived from.
 
 Pre-mapping corrections and calculations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -204,10 +206,10 @@ Once raw data is collected there is often a number of processing steps that need
 to be performed. In our case this includes:
 
 - Correcting false Azimuth readings in the Northwest X-Band system.
-- Clean data of undesirable components such as multiple trips, clutter and
+- Cleaning data of undesirable components such as multiple trips, clutter and
   non-meteorological returns.
 - Processing the raw :math:`\phi_{DP}` and extracting the component due to
-  rain water content by using a Linear Programming technique to fit a profile
+  rain water content by using a linear programming technique to fit a profile
   which mandates positive gradient, see [Giangrande2013]_.
 - Using reflectivity and :math:`\phi_{DP}` to retrieve attenuation (in dBZ/km)
   due to rainwater path.
@@ -216,127 +218,130 @@ to be performed. In our case this includes:
 
 These are all outlined in the first of the three notebooks which accompany this
 manuscript: http://nbviewer.ipython.org/github/scollis/notebooks/tree/master/scipy2014/.
-Each process either appends a new field to the radar object or returns a field
-dictionary. Py-ART also comes with visualization methods allowing for the conical
-(or Plan Position Indicator, PPI) scan to be plotted up and geolocated using
-Matplotlib and Basemap. An example of raw :math:`\phi_{DP}` and reflectivity
+Each process either appends a new field to the Radar instance or returns a field
+dictionary which can then be added to the instance. 
+Py-ART also comes with visualization methods allowing for the conical
+(or Plan Position Indicator, PPI) scan to be plotted and geolocated using
+matplotlib and Basemap. An example plot of raw :math:`\phi_{DP}` and reflectivity
 is shown in figure :ref:`rawppi`.
 
 .. figure:: nw_ppi.png
 
-   Raw Reflectivity factor and polarimetric phase difference from the lowest
+   Raw reflectivity factor and polarimetric phase difference from the lowest
    (0.5 degree) tilt. :label:`rawppi`
 
-The code to plot is simply:
+The code necessary to create this plot:
 
 .. code-block:: python
 
-  fields_to_plot = ['differential_phase', 'reflectivity']
+  fields_to_plot = ['differential_phase',
+                    'reflectivity']
   ranges = [(180, 240), (0, 52)]
   display = pyart.graph.RadarMapDisplay(xnw_radar)
 
   nplots = len(fields_to_plot)
   plt.figure(figsize=[7 * nplots, 4])
-  for plot_num in xrange(nplots):
+  for plot_num in range(nplots):
       field = fields_to_plot[plot_num]
       vmin, vmax = ranges[plot_num]
       plt.subplot(1, nplots, plot_num + 1)
       display.plot_ppi_map(field, 0, vmin=vmin,
-             vmax=vmax, lat_lines=np.arange(20,60,.2),
-             lon_lines =  np.arange(-99,-80,.4),
-             resolution = 'l')
+          vmax=vmax, lat_lines=np.arange(20, 60, .2),
+          lon_lines=np.arange(-99, -80, .4),
+          resolution='l')
       display.basemap.drawrivers()
       display.basemap.drawcountries()
-      display.plot_range_rings([20,40])
+      display.plot_range_rings([20, 40])
 
-Again, RadarMapDisplay class __init__ method expects a radar object but is
-insensitive to the data source. The sample plotting routines can be used for
-any source Py-ART has an ingest for.
-
+Here, a RadarMapDisplay instance is instantiated by providing a Radar object
+which is insensitive to the data source. The sample plotting routines can be used to
+plot data ingested from any of the formats which Py-ART supports.
 
 Mapping to a cartesian grid
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Radars sample in radial coordinates of elevation azimuth and range. Mathematics
+Radars sample in radial coordinates of elevation, azimuth and range. Mathematics
 for atmospheric phenomena are greatly simplified on Cartesian and Cartesian-like
-(eg pressure surfaces) grids. Therefore the raw and processed data in the radar
-object needs to be mapped onto a regular grid. This is known as "Objective analysis"
-(see, for example [Trapp2000]_). In this paper we use a technique known as Barnes
-analysis [Barnes1964]_ which is an inverse distance weighting sphere of influence
-based technique. For each grid point in the target Cartesian grid a set of radar
-gates within a radius of influence are interpolated using a weighting function such as:
+(eg pressure surfaces) grids. Therefore the raw and processed data in the Radar
+object often need to be mapped onto a regular grid. In the field, this is known as
+"Objective analysis" (see, for example [Trapp2000]_). In this paper we use a technique
+known as Barnes analysis [Barnes1964]_ which is an inverse distance weighting - sphere of influence
+based technique. For each grid point in the Cartesian grid a set of radar
+gates within a radius of influence are interpolated using the weighting function:
 
 .. math::
 
    W(r) = e^\frac{-r_{infl}^2}{2.0*r^2}
 
 where :math:`r` is the distance from the grid point and :math:`r_{infl}` is the
-search radius of influence. The brute force way of doing the calculation would
-be for each Cartesian point linearly search the radar gates for those within
-the radius of influence, an Order :math:`n^2` problem. With a typical grid being
-200 by 200 by 37 grid points and a modern radar having on the order of 8000 time
-samples and 800 range gates this quickly becomes intractable. A better way is to
-store the radar gates in a KD-Tree ordered by distance. This reduces the search
-to an order :math:`log(n)` problem. This is implemented in Py-ART. In addition a
+search radius of influence. A brute force method for performing this mapping would
+be to calculated the distance from each Cartesian point to each radar gates to find those within
+the radius of influence, a method which scales as :math:`n * m`
+where :math:`n` is the number of point in the grid and :math:`m` the number of 
+gates in the radar volume. With a typical grid being
+200 by 200 by 37 points and a modern radar having on the order of 8000 time
+samples and 800 range gates this quickly becomes intractable. A better method is to
+store the radar gates in a k-d tree or related data structure. This reduces the search
+to an order :math:`n * log(m)` problem. This method is implemented in Py-ART. In addition a
 variable radius of influence algorithm is implemented which analyzes the radar
-volume coverage pattern and deduces an optimized :math:`r_{infl}(x,y,z)`. Unlike
-many other objective analysis codes Py-ART accepts a tuple of radar objects and
-treats the radar gates as a cloud of points. This allows very simple merging of
-multiple radar data sets. The method is simple to invoke, for example:
+volume coverage pattern and deduces an optimized :math:`r_{infl}` at each grid point. Unlike
+many other objective analysis codes Py-ART implementation can operate on
+multiple Radar objects simultaneously, treating the radar gates as a cloud of points. 
+This allows the merging of multiple radar data sets. The method is simple to invoke, 
+for example the code snippet:
 
 .. code-block:: python
 
   mesh_mapped_x = pyart.map.grid_from_radars(
-          (xnw_radar,xsw_radar,xse_radar),
-          grid_shape=(35, 401, 401),
-          grid_limits=((0, 17000), (-50000, 40000),
-          (-60000, 40000)),
-          grid_origin = (36.57861, -97.363611),
-          fields=['corrected_reflectivity',
-          'rain_rate_A', 'reflectivity'])
+      (xnw_radar, xsw_radar, xse_radar),
+      grid_shape=(35, 401, 401),
+      grid_limits=((0, 17000), (-50000, 40000), 
+                   (-60000, 40000)),
+      grid_origin=(36.57861, -97.363611),
+      fields=['corrected_reflectivity','rain_rate_A',
+              'reflectivity'])
 
-will map the three radar objects (in this case the three ARM X-Band systems
-in figure :ref:`sgp`) to a grid that is (z,y,x) = (35,401,401) points with a domain
-of 0 to 17km in altitude, -50 to 40km in meridional extend and -60 to 40km in
-zonal extent. The method returns a grid object which follows a very similar shape
-to a radar object: fields are in .fields, geolocation data is in .axes and data
-is always in the 'data' key.
+will map the gates in the three Radar objects (in this case the three ARM X-Band systems
+in figure :ref:`sgp`) to a grid that is (z,y,x) = (35, 401, 401) points with a domain
+of 0 to 17 km in altitude, -50 to 40 km in meridional extend and -60 to 40 km in
+zonal extent. The method returns a Grid object which follows a similar layout
+to a Radar object: fields are stored in the fields attribute, geolocation data in the 
+axes attribute with the numerical data found in the 'data' key of the dictionaries.
 
-Again, as with the radar object Py-ART has a menu of available methods to visualize
-grid data as well as an io layer that can inject CF-compliant netCDF grids and write
-the grid object out to a CF-complaint file for future analysis and distribution.
+Again, as with the Radar object Py-ART has a menu of available routines to visualize
+data contained in Grid objects as well as an input output layer that can inject CF-compliant 
+netCDF grids and write Grid object out to a CF-complaint file for future analysis and distribution.
 
 For example figure :ref:`C-Band only` shows a slice thought mapped reflectivity
-from the ARM C-SAPR at 500m and cross sections at 36.5N degrees latitude and
--97.65E longitude.
+from the ARM C-SAPR at 500 m and cross sections at 36.5 N degrees latitude and
+-97.65 E longitude.
 
 .. figure:: c_only_z.png
 
    Single C-Band reflectivity factor field. :label:`C-Band only`
 
 In the vertical cross sections clear artifacts can be seen due to the poor sampling.
-Figure :ref:`X-Band only` shows the same scene but a three radar meshgrid from the
-X-Band network.
-
+Figure :ref:`X-Band only` shows the same scene but using a grid created from three X-Band radars
+in a network. In both figures the radar data are mapped onto a grid with 225 m spacing.
 
 .. figure:: x_only_z.png
 
    Reflectivity factor mapped from a network of X-Band radars. :label:`X-Band only`
 
-It is clear more fine scale detail is resolved due to the rain systems being closer
-to any given radar. Both radars are mapped onto a grid with 225m spacing.
-In addition, due to the density of high elevation beams being
-increased (essentially a "web" of radar beams sampling the convective anvil) sampling
+It is clear that more fine scale detail is resolved due to the rain systems being closer
+to any given radar in the X-Band network grid.
+In addition, due to the higher density of high elevation beams 
+(essentially a "web" of radar beams sampling the convective anvil) sampling
 artifacts are greatly reduced and finer details aloft are able to be studied.
 
-Of course mesh mapping only works for "specific" measurements, ie not integrated
+Mesh mapping only works for "specific" measurements, ie not integrated
 measurements like :math:`\phi_{DP}` or directionally dependent moments
 like :math:`v_r`. One measurement that can be mapped is our retrieved rain rate.
 
 Figures :ref:`C-Band rain` and :ref:`X-Band rain` show mappings for rain rate
 using just the C-Band measurement and X-Band network respectively. Again the
 mesh map of the X-Band retrieval shows very fine detail resolving (in a volumetric
-dataset) fall streak patterns. The maxima near 4km (just below the freezing
+dataset) fall streak patterns. The maxima near 4 km (just below the freezing
 level) is due to melting particles. The rainfall retrieval has a cut off at
 the sounding determined freezing level but the "bright band" can extend some depth
 below this. Future work will entail using polarimetric measurements to determine
@@ -357,29 +362,29 @@ retrieval to those positions.
 Spatial distribution of rainfall: a objective test of fine scale models
 -----------------------------------------------------------------------
 
-Previous sections have detailed the correction, retrieval from and mapping of radar
-data to a Cartesian grid. The last section showed enhanced detail can be retrieved
+Previous sections have detailed the correction, retrieval from and mapping to a Cartesian grid of radar
+data. The last section showed enhanced detail can be retrieved
 by using a network of radars. The question remains: how can the detail in
-rainfields be objectively compared?
-Both radar derived and forecast model calculated. The meshes
-generated using the mapping techniques previously discussed can be treated just like
-image data and there are a variety of packages for analyzing images.
+rain fields be objectively compared?
+Can parameters derived from radar data be compared to those calculated from forecast models? The meshes
+generated using the mapping techniques previously discussed can be treated like
+image data for which a number of packages exist for analysis.
 
-Measuring rainshafts using NDimage
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Measuring rainshafts using SciPy's ndimage subpackage
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A simple technique for documenting the detail in an image is to segment it into
-"blobs" which are above a certain threshold and calculate the number of blobs,
-their accumulated area and the mean rainfall across the blobs. The ndimage module
-of Scipy is the perfect package for achieving this. Figure :ref:`seg` shows the
-of ndimage.label to break up regions above 5 and 20mm/h.
+A simple technique for documenting the features present in an image is to partition it into
+segments which are above a certain threshold and calculate the number of
+segments, their accumulated area and the mean rainfall across the segment. The ndimage subpackage
+in Scipy is perfect for accomplishing this. Figure :ref:`seg` shows the use
+of scipy.ndimage.label to segment regions above 5 and 20mm/h.
 
 .. figure:: segmentation.png
 
-   An example of figure segmentation using ndimage.label. :label:`seg`
+   An example of figure segmentation using scipy.ndimage.label. :label:`seg`
 
 The code is very simple, for a given rain rate it creates a "black and white"
-image with whites above the threshold point and the black below, then ndimage.label
+image with whites above the threshold point and the black below, then scipy.ndimage.label
 segments the regions into a list of regions from which metrics can be calculated:
 
 .. code-block:: python
@@ -388,22 +393,22 @@ segments the regions into a list of regions from which metrics can be calculated
       A_rainrate = np.zeros(rr_x.shape)
       N_rainrate = np.zeros(rr_x.shape)
       Rm_rainrate = np.zeros(rr_x.shape)
-      my_shape = rain_rates.shape
       for i in range(len(rr_x)):
-          b_fld = np.zeros(my_shape)
-          b_fld[rain_rates > rr_x[i]]=1.0
+          b_fld = np.zeros(rain_rates.shape)
+          b_fld[rain_rates > rr_x[i]] = 1.0
           regions, N_rainrate[i] = ndimage.label(b_fld)
           try:
-              A_rainrate[i] =\
-              len(np.where(regions > 0.5)[0])*pixel_area
-              Rm_rainrate[i] =\
-              rain_rates[np.where(regions > 0.5)].mean()
+              A_rainrate[i] = (len(np.where(
+                  regions > 0.5)[0]) *
+                  pixel_area)
+              Rm_rainrate[i] = rain_rates[
+                  np.where(regions > 0.5)].mean()
           except IndexError:
               A_rainrate[i] = 0.0
               Rm_rainrate[i] = 0.0
       return N_rainrate, A_rainrate, Rm_rainrate
 
-and produces plots for the X-Band mesh as seen in :ref:`segx` and single
+This produces plots for the X-Band mesh as seen in :ref:`segx` and single
 C-Band sytems in :ref:`segc`.
 
 .. figure:: segc.png
@@ -419,6 +424,9 @@ C-Band sytems in :ref:`segc`.
    of rain rate threshold for a rainmap produced by a network of
    X-Band systems. :label:`segx`
 
+
+.. XXX This paragraph needs to be re-written XXX
+
 These results show that the mesh produced by the C-Band system averages over
 finely detailed higher intensity rain rates which are observed using the X-band
 network. And since [Giangrande2014]_ established the veracity of rainfall retrievals
@@ -433,11 +441,11 @@ scale is required.
 Conclusions
 -----------
 
-This paper has covered proceeding from raw radar measurements through quality
-control and geophysical retrieval to mapping and finally the extraction of geophysical
+This paper has covered the pipeline for proceeding from raw radar measurements through quality
+control and geophysical retrieval to mapping and finally to the extraction of geophysical
 insight. The simple conclusion is that, with careful processing, a network of
-X-Band radars can resolve finer details than a single C-Band radar. And, more
-importantly, finer detail exists. The paper also presents a very simple, image
+X-Band radars can resolve finer details than a single C-Band radar. More
+importantly, finer details exists. The paper also presents a very simple, image
 processing based technique to take the "morphological finger print" of rainfall
 maps. This technique can be used on both remotely sensed and numerically modeled
 data providing a subjective bases for model assessment.
