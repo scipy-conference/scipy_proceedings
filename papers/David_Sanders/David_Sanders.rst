@@ -492,8 +492,9 @@ intervals that is guaranteed to contain the roots of the function, as
 well as a guarantee of uniqueness in many cases.
 
 The code to implement the interval Newton method completely is slightly
-involved, and may be found at
-https://github.com/computo-fc/ValidiPy/tree/master/examples.
+involved, and may be found in an IPython notebook in the
+`examples` directory at
+<https://github.com/computo-fc/ValidiPy/tree/master/examples>.
 
 Periodic points of the logistic map
 ===================================
@@ -512,19 +513,18 @@ The dynamics is given by iterating the map:
 
 so that
 
-.. math:: x_n = f(f(f(\cdots (x_0)))) = f^n(x_0),
+.. math:: x_n = f(f(f(\cdots (x_0) \cdots))) = f^n(x_0),
 
 where :math:`f^n` denotes :math:`f \circ f \circ \cdots \circ f`, i.e.
 :math:`f` composed with itself :math:`n` times.
 
-*Periodic points* play a key role: these are points :math:`x` such that
+*Periodic points* play a key role in dynamical system:
+these are points :math:`x` such that
 :math:`f^p(x) = x`; the minimal :math:`p>0` for which this is satisfied
 is the *period* of :math:`x`. Thus, starting from such a point, the
 dynamics returns to the point after :math:`p` steps, and then eternally
-repeats the same trajectory.
-
-Periodic points are important for chaotic systems, since they are dense
-in phase space, and properties of the dynamics may be calculated in
+repeats the same trajectory. In chaotic systems, periodic points are dense
+in phase space [Deva03]_, and properties of the dynamics may be calculated in
 terms of the periodic points and their stability properties [ChaosBook]_.
 The numerical enumeration of all periodic points is thus a necessary
 part of studying almost any such system. However, standard methods
@@ -554,7 +554,6 @@ given by
    2 - 2x, & \text{if } x > \frac{1}{2}.
    \end{cases}
 
-**FIG**
 
 The :math:`n`\ th iterate of the tent map has :math:`2^n` "pieces" (or
 "laps") with slopes of modulus :math:`2^n`, and hence exactly
@@ -584,13 +583,21 @@ Thus the solution of :math:`T^n_i(x) = x` satisfies
 giving the :math:`2^n` points which are candidates for periodic points
 of period :math:`n`. (Some are actually periodic points with period
 :math:`p` that is a proper divisor of :math:`n`, satisfying also
-:math:`T^p(x) = x`.)
+:math:`T^p(x) = x`.)  These points are shown in figure :ref:`tent-map-period-4`.
 
-It turns out that the invertible change of variables
+.. figure:: tent-map-period-4.pdf
+
+    Points with period dividing $4$ of the tent map. :label:`tent-map-period-4`
+
+.. figure:: logistic-period-4.pdf
+
+   Points with period dividing $4$ of the logistic map. :label:`logistic-map-period-4`
+
+It turns out [Ott]_ that the invertible change of variables
 
 .. math:: x = h(y) = \sin^2(\textstyle \frac{\pi y} {2})
 
-turns the sequence :math:`(y_n)`, given by iterating the tent map,
+converts the sequence :math:`(y_n)`, given by iterating the tent map,
 
 .. math:: y_{n+1} = T(y_n),
 
@@ -601,14 +608,15 @@ into the sequence :math:`(x_n)` given by iterating the logistic map
 
 Thus periodic points of the tent map, satisfying :math:`T^m(y) = y`, are
 mapped by :math:`h` into periodic points :math:`x` of the logistic map,
-satisfying :math:`T^m(x) = x`.
+satisfying :math:`T^m(x) = x`, shown in figure :ref:`logistic-period-4`
 
 The following table gives the midpoint of the intervals containing the
 fixed points :math:`x` such that :math:`f_4^4(x)=x` of the logistic map,
 using the interval Newton method with standard double precision, and the
 corresponding exact values using the correspondence with the tent map,
 together with the difference. We see that the method indeed works very
-well.
+well. However, to find periodic points of higher period, higher precision
+must be used.
 
 .. parsed-literal::
 
@@ -804,7 +812,12 @@ standard double precision of 53 binary digits) in order to guarantee
 that the correct trajectory is calculated up to time :math:`t=10`. With
 fewer digits than this, a moment is always reached at which the
 intervals have grown so large that it is not guaranteed whether a given
-disc is hit or not.
+disc is hit or not. The trajectory is shown in :ref:`billard-traj`.
+
+.. figure:: billiard_trajectory.pdf
+
+    Trajectory of the billiard model up to time 10 :label:`billiard-traj`
+
 
 With 96 digits, the uncertainty on the final distance, i.e. the diameter
 of the corresponding interval, is :math:`0.0788`. As the number of
@@ -859,8 +872,8 @@ Conclusions
 Interval arithmetic is a powerful tool which has been, perhaps,
 under-appreciated in the wider scientific community. Our contribution is
 aimed at making these techniques more widely known, in particular at
-including them in courses at masters', or even undergraduate, level, and
-with working code in Python and Julia.
+including them in courses at masters', or even undergraduate, level,
+with working, freely available code in Python and Julia.
 
 References
 ==========
@@ -896,6 +909,9 @@ References
 
 .. [ChaosBook] P. Cvitanović et al. (2012), *Chaos: Classical and Quantum*,
     Niels Bohr Institute. <http://ChaosBook.org>
+
+.. [Ott] E. Ott (2002), *Chaos in Dynamical Systems*, 2nd edition, Cambridge
+    University Press.
 
 .. [Deva03] R.L. Devaney (2003), *An Introduction to Chaotic Dynamical
     Systems*, Westview Press.
