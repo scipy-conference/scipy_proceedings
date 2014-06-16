@@ -43,7 +43,7 @@ is represented as
 
 The standard double-precision (64-bit) representation is that of the
 `IEEE 754 standard <http://en.wikipedia.org/wiki/IEEE_floating_point>`__
-[IEEE754]. Here, one bit is used for the sign, 11 bits for the exponent
+[IEEE754]_. Here, one bit is used for the sign, 11 bits for the exponent
 :math:`e`, which ranges from :math:`-1022` to :math:`+1023`, and the
 remaining 52 bits are used for the "mantissa" :math:`m`, a binary string
 of 53 bits, starting with a :math:`1` which is not explicitly stored.
@@ -94,7 +94,7 @@ expected value.
 
 This is already familiar to new users of any programming language when
 they see the following kinds of outputs of elementary calculations
-[Gold91]:
+[Gold91]_:
 
 .. code:: python
 
@@ -115,7 +115,7 @@ The result will be erroneous, since the actual initial condition used
 differs slightly from the desired value. In chaotic systems, for
 example, such a tiny initial deviation may be quickly magnified and
 destroy all precision in the computation. Although there are methods to
-estimate the resulting errors [High96], there is no guarantee the the
+estimate the resulting errors [High96]_, there is no guarantee the the
 true result is captured.
 
 Interval arithmetic
@@ -203,7 +203,7 @@ and hence find the exact range.
 This problem may, however, be solved by splitting the initial interval
 up into subintervals, and evaluating the interval extension over those
 subintervals instead. The union of the resulting intervals gives
-(provably) a better approximation to the exact range [Tuck11].
+(provably) a better approximation to the exact range [Tuck11]_.
 
 Validated numerics: the ``ValidiPy`` package
 ============================================
@@ -218,8 +218,8 @@ begun during a Masters' course on validated numerics that the authors
 taught in the Postgraduate Programmes in Mathematics and Physics at the
 National Autonomous University of Mexico (UNAM) during the second half
 of 2013. It is based on the excellent textbook *Validated Numerics* by
-Warwick Tucker [Tuck11], one of the foremost proponents of interval
-arithmetic today. His most well-known work is [Tuck99], in which he
+Warwick Tucker [Tuck11]_, one of the foremost proponents of interval
+arithmetic today. His most well-known work is [Tuck99]_, in which he
 proved the existence of the Lorenz attractor, a strange (fractal,
 chaotic) attractor of the Lorenz equations modelling convection in the
 atmosphere.
@@ -249,7 +249,7 @@ types, as ``class``\ es, and to define operations on those types. The
 following working sketch of an ``Interval`` class may be extended to a
 full-blown implementation (which, in particular, must include directed
 rounding; see below), available at
-https://github.com/computo-fc/ValidiPy [ValidiPy].
+https://github.com/computo-fc/ValidiPy [ValidiPy]_.
 
 .. code:: python
 
@@ -266,13 +266,15 @@ https://github.com/computo-fc/ValidiPy [ValidiPy].
         def __add__(self, other):
             if not isinstance(other, Interval):
                 other = Interval(other)
-            return Interval(self.lo+other.lo, self.hi+other.hi)
+            return Interval(self.lo+other.lo,
+                            self.hi+other.hi)
 
         def __mul__(self, other):
             if not isinstance(other, Interval):
                 other = Interval(other)
 
-            S = [self.lo*other.lo, self.lo*other.hi, self.hi*other.lo, self.hi*other.hi]
+            S = [self.lo*other.lo, self.lo*other.hi,
+                 self.hi*other.lo, self.hi*other.hi]
             return Interval(min(S), max(S))
 
         def __repr__(self):
@@ -340,10 +342,10 @@ Examples of creation and manipulation of intervals:
 
 
 To attain multiple-precision arithmetic and directed rounding, we use
-the ```gmpy2`` <https://code.google.com/p/gmpy/>`__ package [gmpy2].
+the ```gmpy2`` <https://code.google.com/p/gmpy/>`__ package [gmpy2]_.
 This provides a wrapper around the ```MPFR`` <http://www.mpfr.org>`__
-[MPFR] C package for correctly-rounded multiple-precision arithmetic
-[Fous07]. For example, a simplified version of the ``Interval``
+[MPFR]_ C package for correctly-rounded multiple-precision arithmetic
+[Fous07]_. For example, a simplified version of the ``Interval``
 constructor may be written as follows, showing how the precision and
 rounding modes are manipulated using the ``gmpy2`` package:
 
@@ -359,10 +361,10 @@ rounding modes are manipulated using the ``gmpy2`` package:
 
     def __init__(self, a, b=None):
         ctx.round = RoundDown
-        a = mpfr( str(a) )
+        a = mpfr(str(a))
 
         ctx.round = RoundUp
-        b = mpfr( str(b) )
+        b = mpfr(str(b))
 
         self.lo, self.hi = a, b
 
@@ -375,11 +377,13 @@ multiplication and exponentiation of intervals are as follows:
     def __mult__(self,other):
 
         ctx.round = RoundDown
-        S_lower = [ self.lo*other.lo, self.lo*other.hi, self.hi*other.lo, self.hi*other.hi ]
+        S_lower = [ self.lo*other.lo, self.lo*other.hi,
+                    self.hi*other.lo, self.hi*other.hi ]
         S1 = min(S_lower)
 
         ctx.round = RoundUp
-        S_upper = [ self.lo*other.lo, self.lo*other.hi, self.hi*other.lo, self.hi*other.hi ]
+        S_upper = [ self.lo*other.lo, self.lo*other.hi,
+                    self.hi*other.lo, self.hi*other.hi ]
         S2 = max(S_upper)
 
         return Interval(S1, S2)
@@ -392,6 +396,7 @@ multiplication and exponentiation of intervals are as follows:
         upper = exp(self.hi)
 
         return Interval(lower, upper)
+
 The interval Newton method
 ==========================
 
@@ -471,7 +476,7 @@ of applying the standard Newton operator at all points of the interval,
 and hence will contain *all* possible roots of the function in that
 interval.
 
-Indeed, the following strong results may be rigorously proved [Tuck11]:
+Indeed, the following strong results may be rigorously proved [Tuck11]_:
 1. If :math:`N_f(I) \cap I = \emptyset`, then :math:`I` contains no
 zeros of :math:`f`; 2. If :math:`N_f(I) \subset I`, then :math:`I`
 contains exactly one zero of :math:`f`.
@@ -495,7 +500,7 @@ Periodic points of the logistic map
 
 An interesting application of the interval Newton method is to dynamical
 systems. These may be given, for example, as the solution of systems of
-ordinary differential equations, as in the Lorenz equations [10], or by
+ordinary differential equations, as in the Lorenz equations [Lor63]_, or by
 iterating maps. The *logistic map* is a much-studied dynamical system,
 given by the map
 
@@ -520,7 +525,7 @@ repeats the same trajectory.
 
 Periodic points are important for chaotic systems, since they are dense
 in phase space, and properties of the dynamics may be calculated in
-terms of the periodic points and their stability properties [ChaosBook].
+terms of the periodic points and their stability properties [ChaosBook]_.
 The numerical enumeration of all periodic points is thus a necessary
 part of studying almost any such system. However, standard methods
 usually do not guarantee that all periodic points of a given period have
@@ -605,27 +610,6 @@ corresponding exact values using the correspondence with the tent map,
 together with the difference. We see that the method indeed works very
 well.
 
-.. code:: python
-
-    print """
-      0.0000000000000000   0.0000000000000000   0.0000000000000000
-      0.0337638852978221   0.0337638852978221  -0.0000000000000000
-      0.0432272711786996   0.0432272711786995   0.0000000000000000
-      0.1304955413896703   0.1304955413896704  -0.0000000000000001
-      0.1654346968205710   0.1654346968205709   0.0000000000000001
-      0.2771308221117308   0.2771308221117308   0.0000000000000001
-      0.3454915028125262   0.3454915028125263  -0.0000000000000001
-      0.4538658202683487   0.4538658202683490  -0.0000000000000003
-      0.5522642316338270   0.5522642316338265   0.0000000000000004
-      0.6368314950360415   0.6368314950360414   0.0000000000000001
-      0.7500000000000000   0.7499999999999999   0.0000000000000001
-      0.8013173181896283   0.8013173181896283   0.0000000000000000
-      0.9045084971874738   0.9045084971874736   0.0000000000000002
-      0.9251085678648071   0.9251085678648070   0.0000000000000001
-      0.9890738003669028   0.9890738003669027   0.0000000000000001
-      0.9914865498419509   0.9914865498419507   0.0000000000000002
-    """
-
 .. parsed-literal::
 
 
@@ -704,17 +688,20 @@ and extracting the derivative part.
             if not isinstance(other, AutoDiff):
                 other = AutoDiff(other)
 
-            return AutoDiff(self.value+other.value, self.deriv+other.deriv)
+            return AutoDiff(self.value+other.value,
+                            self.deriv+other.deriv)
 
         def __mul__(self, other):
             if not isinstance(other, AutoDiff):
                 other = AutoDiff(other)
 
             return AutoDiff(self.value*other.value,
-                            self.value*other.deriv + self.deriv*other.value)
+                            self.value*other.deriv +
+                              self.deriv*other.value)
 
         def __repr__(self):
-            return "({}, {})".format(self.value, self.deriv)
+            return "({}, {})".format(
+                  self.value, self.deriv)
 
 .. code:: python
 
@@ -723,15 +710,16 @@ and extracting the derivative part.
 
 .. code:: python
 
-    a = 3  # where we want to calculate the derivative
+    a = 3  # where want to calculate derivative
     x = AutoDiff(a, 1)
     result = f(x)
-    print("For a={}, f(a)={} and f'(a)={}".format(a, result.value, result.deriv))
+    print("a={}, f(a)={}, f'(a)={}".format(
+                a, result.value, result.deriv))
 
 
 .. parsed-literal::
 
-    For a=3, f(a)=14 and f'(a)=7.0
+    a=3, f(a)=14, f'(a)=7.0
 
 
 The derivative :math:`f'(x) = 2x + 1`, so that :math:`f(a=3) = 14` and
@@ -743,23 +731,23 @@ Simulating a chaotic billiard model
 ===================================
 
 A dynamical system is said to be *chaotic* if it satisfies certain
-conditions [Deva03], of which a key one is *sensitive dependence on
+conditions [Deva03]_, of which a key one is *sensitive dependence on
 initial conditions*: two nearby initial conditions separate
 *exponentially* fast.
 
 This leads to difficulties if we want precise answers on the long-term
 behaviour of such systems, for example simulating the solar system over
-millions of years [Lask13]. For certain types of systems, there are
+millions of years [Lask13]_. For certain types of systems, there are
 *shadowing theorems*, which say that an approximate trajectory
 calculated with floating point arithmetic, in which a small error is
-committed at each step, is close to a true trajectory [Palm09]; however,
+committed at each step, is close to a true trajectory [Palm09]_; however,
 these results tend to be applicable only for rather restricted classes
 of systems which do not include those of physical interest.
 
 Interval arithmetic provides a partial solution to this problem, since
 it automatically reports the number of significant figures in the result
 which are guaranteed correct. As an example, we show how to solve one of
-the well-known "Hundred-digit challenge problems" [Born04], which
+the well-known "Hundred-digit challenge problems" [Born04]_, which
 consists of calculating the position from the origin after time
 :math:`10` in a certain billiard problem.
 
@@ -768,7 +756,7 @@ particles (i.e. particles with radius :math:`0`) collide with fixed
 obstacles. They can be used to study systems of hard discs or hard
 spheres with elastic collisions, and are also paradigmatic examples of
 systems which can be proved to be chaotic, since the seminal work of
-Sinaï [Chern06].
+Sinaï [Chern06]_.
 
 Intuitively, when two nearby rays of light hit a circular mirror, due to
 the curvature of the surface, the two rays will separate after they
@@ -785,8 +773,8 @@ floating-point arithmetic, there is no information about when this
 occurs; interval arithmetic can guarantee that this has *not* occurred,
 and thus that the sequence of discs hit is correct.
 
-**Statement of the problem:** The second of the Hundred-digit challenge
-problems [Born04] is as follows:
+The second of the Hundred-digit challenge
+problems [Born04]_ is as follows:
 
 A point particle bounces off fixed discs of radius :math:`\frac{1}{3}`,
 placed at the points of a square lattice with unit distance between
@@ -834,7 +822,7 @@ Intervals in higher dimensions
 
 The ideas and methods of interval arithmetic may also be applied in
 higher dimensions. There are several ways of defining intervals in 2 or
-more dimensions [Moo09]. Conceptually, the simplest is perhaps to take
+more dimensions [Moo09]_. Conceptually, the simplest is perhaps to take
 the Cartesian product of one-dimensional intervals:
 
 .. math:: I = [a,b] \times [c,d]
@@ -863,7 +851,7 @@ differential equations.
 An implementation in Python is available in ValidiPy, while an
 implementation in the new `Julia language <http://julialang.org>`__ is
 available separately, including Taylor series in multiple variables
-[TaylorSeries].
+[TaylorSeries]_.
 
 Conclusions
 ===========
@@ -877,56 +865,56 @@ with working code in Python and Julia.
 References
 ==========
 
-[IEEE754] IEEE Standard for Floating-Point Arithmetic, 2008, IEEE Std
-754-2008.
+.. [IEEE754] IEEE Standard for Floating-Point Arithmetic, 2008, IEEE Std
+    754-2008.
 
-[Gold91] D. Goldberg (1991), What Every Computer Scientist Should Know
-About Floating-Point Arithmetic, ACM Computing Surveys 23 (1), 5-48.
+.. [Gold91] D. Goldberg (1991), What Every Computer Scientist Should Know
+    About Floating-Point Arithmetic, ACM Computing Surveys 23 (1), 5-48.
 
-[High96] N.J. Higham (1996), Accuracy and Stability of Numerical
-Algorithms, SIAM.
+.. [High96] N.J. Higham (1996), Accuracy and Stability of Numerical
+    Algorithms, SIAM.
 
-[Tuck11] W. Tucker (2011), Validated Numerics: A Short Introduction to
-Rigorous Computations, Princeton University Press.
+.. [Tuck11] W. Tucker (2011), Validated Numerics: A Short Introduction to
+    Rigorous Computations, Princeton University Press.
 
-[Tuck99] W. Tucker, 1999, The Lorenz attractor exists, C. R. Acad. Sci.
-Paris Sér. I Math. 328 (12), 1197-1202.
+.. [Tuck99] W. Tucker, 1999, The Lorenz attractor exists, C. R. Acad. Sci.
+    Paris Sér. I Math. 328 (12), 1197-1202.
 
-[ValidiPy] D.P. Sanders and L. Benet, ``ValidiPy`` package
-https://github.com/computo-fc/ValidiPy
+.. [ValidiPy] D.P. Sanders and L. Benet, ``ValidiPy`` package
+    <https://github.com/computo-fc/ValidiPy>
 
-[gmpy2] ``GMPY2`` package, https://code.google.com/p/gmpy/
+.. [gmpy2] ``GMPY2`` package, <https://code.google.com/p/gmpy/>
 
-[MPFR] ``MPFR`` package, http://www.mpfr.org
+.. [MPFR] ``MPFR`` package, <http://www.mpfr.org>
 
-[Fous07] L. Fousse et al. (2007), MPFR: A multiple-precision binary
-floating-point library with correct rounding, ACM Transactions on
-Mathematical Software 33 (2), Art. 13.
+.. [Fous07] L. Fousse et al. (2007), MPFR: A multiple-precision binary
+    floating-point library with correct rounding, ACM Transactions on
+    Mathematical Software 33 (2), Art. 13.
 
-[Lor63] E.N. Lorenz (1963), Deterministic nonperiodic flow, J. Atmos.
-Sci. 20 (2), 130-141.
+.. [Lor63] E.N. Lorenz (1963), Deterministic nonperiodic flow, J. Atmos.
+    Sci. 20 (2), 130-141.
 
-[ChaosBook] P. Cvitanović et al. (2012), Chaos: Classical and Quantum,
-Niels Bohr Institute. http://ChaosBook.org
+.. [ChaosBook] P. Cvitanović et al. (2012), Chaos: Classical and Quantum,
+    Niels Bohr Institute. http://ChaosBook.org
 
-[Deva03] R.L. Devaney (2003), An Introduction to Chaotic Dynamical
-Systems, Westview Press.
+.. [Deva03] R.L. Devaney (2003), An Introduction to Chaotic Dynamical
+    Systems, Westview Press.
 
-[Lask13] J. Laskar (2013), Is the Solar System Stable?, in Chaos:
-Poincaré Seminar 2010 (chapter 7), B. Duplantier, S. Nonnenmacher and V.
-Rivasseau (Eds).
+.. [Lask13] J. Laskar (2013), Is the Solar System Stable?,
+  in Chaos: Poincaré Seminar 2010 (chapter 7), B. Duplantier,
+  S. Nonnenmacher and V. Rivasseau (eds).
 
-[Palm09] K.J. Palmer (2009), Shadowing lemma for flows, Scholarpedia 4
-(4). http://www.scholarpedia.org/article/Shadowing\_lemma\_for\_flows
+.. [Palm09] K.J. Palmer (2009), Shadowing lemma for flows,
+  Scholarpedia 4 (4). http://www.scholarpedia.org/article/Shadowing\_lemma\_for\_flows
 
-[Born04] F. Bornemann, D. Laurie, S. Wagon and J. Waldvogel (2004), The
-SIAM 100-Digit Challenge: A Study in High-Accuracy Numerical Computing,
-SIAM.
+.. [Born04] F. Bornemann, D. Laurie, S. Wagon and J. Waldvogel (2004),
+  The SIAM 100-Digit Challenge: A Study in High-Accuracy Numerical Computing,
+  SIAM.
 
-[Chern06] N. Chernov and R. Markarian (2006), Chaotic Billiards, AMS.
+.. [Chern06] N. Chernov and R. Markarian (2006), Chaotic Billiards, AMS.
 
-[TaylorSeries] L. Benet and D.P. Sanders, ``TaylorSeries`` package,
-https://github.com/lbenet/TaylorSeries.jl
+.. [TaylorSeries] L. Benet and D.P. Sanders, ``TaylorSeries`` package,
+    <https://github.com/lbenet/TaylorSeries.jl>
 
-[Moo09] R.E. Moore, R.B. Kearfott and M.J. Cloud (2009), Introduction to
-Interval Analysis, SIAM.
+.. [Moo09] R.E. Moore, R.B. Kearfott and M.J. Cloud (2009), Introduction to
+  Interval Analysis, SIAM.
