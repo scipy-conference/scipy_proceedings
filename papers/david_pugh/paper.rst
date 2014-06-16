@@ -16,7 +16,7 @@ Python for research and teaching economics: a manifesto
 
 Introduction
 ------------
-In this paper, I discuss the goals, objectives, and pedagogical choices that I have made in designing and teaching a Python-based course on numerical methods to first-year graduate students in economics at the University of Edinburgh. 
+In this paper, I discuss the goals, objectives, and pedagogical choices that I have made in designing and teaching a Python-based course on numerical methods to first-year graduate students in the Scottish Graduate Programme in Economics (SGPE) at the University of Edinburgh. This course would not have been possible without the generous funding and support from the SGPE, the Scottish Insitute for Research in Economics (SIRE), the School of Economics at the University of Edinburgh, and the Challenge Investment Fund (CIF).
 
 The idea for my computational modeling and simulation course emerged out of my PhD research agenda during the summer of 2012. I originally conceived of the computational methods course as a way to partially fill what I felt was a significant gap in the training of economics post-graduate students at the University of Edinburgh. The first iteration of the course consisted of roughly six Python-based laboratory sessions and ran during the 2012-2013 academic year. 
 
