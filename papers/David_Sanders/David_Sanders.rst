@@ -610,7 +610,7 @@ Thus periodic points of the tent map, satisfying :math:`T^m(y) = y`, are
 mapped by :math:`h` into periodic points :math:`x` of the logistic map,
 satisfying :math:`T^m(x) = x`, shown in figure :ref:`logistic-map-period-4`
 
-The following table gives the midpoint of the intervals containing the
+The following table (figure :ref:`period-4-data`) gives the midpoint of the intervals containing the
 fixed points :math:`x` such that :math:`f_4^4(x)=x` of the logistic map,
 using the interval Newton method with standard double precision, and the
 corresponding exact values using the correspondence with the tent map,
@@ -618,27 +618,9 @@ together with the difference. We see that the method indeed works very
 well. However, to find periodic points of higher period, higher precision
 must be used.
 
-.. parsed-literal::
+.. figure::  period-4.pdf
 
-
-      0.0000000000000000   0.0000000000000000   0.0000000000000000
-      0.0337638852978221   0.0337638852978221  -0.0000000000000000
-      0.0432272711786996   0.0432272711786995   0.0000000000000000
-      0.1304955413896703   0.1304955413896704  -0.0000000000000001
-      0.1654346968205710   0.1654346968205709   0.0000000000000001
-      0.2771308221117308   0.2771308221117308   0.0000000000000001
-      0.3454915028125262   0.3454915028125263  -0.0000000000000001
-      0.4538658202683487   0.4538658202683490  -0.0000000000000003
-      0.5522642316338270   0.5522642316338265   0.0000000000000004
-      0.6368314950360415   0.6368314950360414   0.0000000000000001
-      0.7500000000000000   0.7499999999999999   0.0000000000000001
-      0.8013173181896283   0.8013173181896283   0.0000000000000000
-      0.9045084971874738   0.9045084971874736   0.0000000000000002
-      0.9251085678648071   0.9251085678648070   0.0000000000000001
-      0.9890738003669028   0.9890738003669027   0.0000000000000001
-      0.9914865498419509   0.9914865498419507   0.0000000000000002
-
-
+    Period 4 points: calculated, exact, and the difference.  :label:`period-4-data`
 
 Automatic differentiation
 =========================
