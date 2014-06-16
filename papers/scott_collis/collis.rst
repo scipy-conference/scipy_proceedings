@@ -265,7 +265,7 @@ for atmospheric phenomena are greatly simplified on Cartesian and Cartesian-like
 (eg pressure surfaces) grids. Therefore the raw and processed data in the Radar
 object often need to be mapped onto a regular grid. In the field, this is known as
 "Objective analysis" (see, for example [Trapp2000]_). In this paper we use a technique
-known as Barnes analysis [Barnes1964]_ which is an inverse distance weighting - sphere of influence
+known as Barnes analysis [Barnes1964]_ which is an inverse distance weighting, sphere of influence
 based technique. For each grid point in the Cartesian grid a set of radar
 gates within a radius of influence are interpolated using the weighting function:
 
