@@ -865,20 +865,20 @@ with working code in Python and Julia.
 References
 ==========
 
-.. [IEEE754] IEEE Standard for Floating-Point Arithmetic, 2008, IEEE Std
+.. [IEEE754] *IEEE Standard for Floating-Point Arithmetic*, 2008, IEEE Std
     754-2008.
 
 .. [Gold91] D. Goldberg (1991), What Every Computer Scientist Should Know
-    About Floating-Point Arithmetic, ACM Computing Surveys 23 (1), 5-48.
+    About Floating-Point Arithmetic, *ACM Computing Surveys* **23** (1), 5-48.
 
-.. [High96] N.J. Higham (1996), Accuracy and Stability of Numerical
-    Algorithms, SIAM.
+.. [High96] N.J. Higham (1996), *Accuracy and Stability of Numerical
+    Algorithms*, SIAM.
 
-.. [Tuck11] W. Tucker (2011), Validated Numerics: A Short Introduction to
-    Rigorous Computations, Princeton University Press.
+.. [Tuck11] W. Tucker (2011), *Validated Numerics: A Short Introduction to
+    Rigorous Computations*, Princeton University Press.
 
-.. [Tuck99] W. Tucker, 1999, The Lorenz attractor exists, C. R. Acad. Sci.
-    Paris Sér. I Math. 328 (12), 1197-1202.
+.. [Tuck99] W. Tucker, 1999, The Lorenz attractor exists, *C. R. Acad. Sci.
+    Paris Sér. I Math.* **328** (12), 1197-1202.
 
 .. [ValidiPy] D.P. Sanders and L. Benet, ``ValidiPy`` package
     <https://github.com/computo-fc/ValidiPy>
@@ -888,33 +888,34 @@ References
 .. [MPFR] ``MPFR`` package, <http://www.mpfr.org>
 
 .. [Fous07] L. Fousse et al. (2007), MPFR: A multiple-precision binary
-    floating-point library with correct rounding, ACM Transactions on
-    Mathematical Software 33 (2), Art. 13.
+    floating-point library with correct rounding, *ACM Transactions on
+    Mathematical Software* **33** (2), Art. 13.
 
-.. [Lor63] E.N. Lorenz (1963), Deterministic nonperiodic flow, J. Atmos.
-    Sci. 20 (2), 130-141.
+.. [Lor63] E.N. Lorenz (1963), Deterministic nonperiodic flow, *J. Atmos.
+    Sci.* **20** (2), 130-141.
 
-.. [ChaosBook] P. Cvitanović et al. (2012), Chaos: Classical and Quantum,
-    Niels Bohr Institute. http://ChaosBook.org
+.. [ChaosBook] P. Cvitanović et al. (2012), *Chaos: Classical and Quantum*,
+    Niels Bohr Institute. <http://ChaosBook.org>
 
-.. [Deva03] R.L. Devaney (2003), An Introduction to Chaotic Dynamical
-    Systems, Westview Press.
+.. [Deva03] R.L. Devaney (2003), *An Introduction to Chaotic Dynamical
+    Systems*, Westview Press.
 
 .. [Lask13] J. Laskar (2013), Is the Solar System Stable?,
-  in Chaos: Poincaré Seminar 2010 (chapter 7), B. Duplantier,
+  in *Chaos: Poincaré Seminar 2010* (chapter 7), B. Duplantier,
   S. Nonnenmacher and V. Rivasseau (eds).
 
 .. [Palm09] K.J. Palmer (2009), Shadowing lemma for flows,
-  Scholarpedia 4 (4). http://www.scholarpedia.org/article/Shadowing\_lemma\_for\_flows
+  *Scholarpedia* **4** (4). http://www.scholarpedia.org/article/Shadowing\_lemma\_for\_flows
 
 .. [Born04] F. Bornemann, D. Laurie, S. Wagon and J. Waldvogel (2004),
-  The SIAM 100-Digit Challenge: A Study in High-Accuracy Numerical Computing,
-  SIAM.
+    *The SIAM 100-Digit Challenge: A Study in High-Accuracy Numerical Computing*,
+    SIAM.
 
-.. [Chern06] N. Chernov and R. Markarian (2006), Chaotic Billiards, AMS.
+.. [Chern06] N. Chernov and R. Markarian (2006), *Chaotic Billiards*,
+    AMS.
 
 .. [TaylorSeries] L. Benet and D.P. Sanders, ``TaylorSeries`` package,
     <https://github.com/lbenet/TaylorSeries.jl>
 
-.. [Moo09] R.E. Moore, R.B. Kearfott and M.J. Cloud (2009), Introduction to
-  Interval Analysis, SIAM.
+.. [Moo09] R.E. Moore, R.B. Kearfott and M.J. Cloud (2009), *Introduction to
+    Interval Analysis*, SIAM.
