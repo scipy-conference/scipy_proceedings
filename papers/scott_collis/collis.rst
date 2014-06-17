@@ -18,7 +18,7 @@
 :email: ann.fridlind@nasa.gov
 :institution: NASA Goddard Institute of Space Sciences.
 
-:author: Marcus Vanlier-Walqui
+:author: Marcus van Lier-Walqui
 :email: marcus.vanlier-walqui@nasa.gov
 :institution: NASA Goddard Institute of Space Sciences.
 
