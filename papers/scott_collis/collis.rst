@@ -14,11 +14,11 @@
 :email: di.wu@nasa.gov
 :institution: NASA Goddard Space Flight Center.
 
-:author: Anne Fridlind
+:author: Ann Fridlind
 :email: ann.fridlind@nasa.gov
 :institution: NASA Goddard Institute of Space Sciences.
 
-:author: Marcis Vanlier-Walqui
+:author: Marcus Vanlier-Walqui
 :email: marcus.vanlier-walqui@nasa.gov
 :institution: NASA Goddard Institute of Space Sciences.
 
@@ -80,7 +80,7 @@ sensor is required that can collect spatially diverse data. Radars emit a
 spatially discrete pulse of radiation with a particular beamwidth and pulse length.
 A gated receiver detects the backscattered signal and calculates a number
 of measurements based on the radar spectrum (the power as a function of phase delay
-which is due to the motion of the scatting medium relative to the antenna). 
+which is due to the motion of the scatting medium relative to the antenna).
 These moments include radar reflectivity factor :math:`Z_e`, radial velocity
 of the scattering medium :math:`v_r` and spectrum width :math:`w`. Polarimetric radars transmit
 pulses with the electric field vector horizontal to the earth's surface as well
@@ -129,8 +129,8 @@ The Python ARM Radar Toolkit: Py-ART
 ------------------------------------
 
 Radar data comes in a variety of binary formats but the content is
-essentially the same: A time-range array for each radar moment 
-along with data describing the pointing and geolocating of the platform.  
+essentially the same: A time-range array for each radar moment
+along with data describing the pointing and geolocating of the platform.
 For for mobile radar the platform's motion must also be described in the file.
 Py-ART takes a common data model approach: Carefully design the data containers and
 mandate that functions and methods accept the container as an argument and return
@@ -170,7 +170,7 @@ fields or modify data in existing fields (rare).
 
 The vital key is a 'Babelfish' layer which ingests a variety of formats into the
 common data model. Currently table :ref:`formats` outlines the formats which
-are compatible with Py-ART.  A number of these formats are available via a 
+are compatible with Py-ART.  A number of these formats are available via a
 Cython wrapper around NASA's Radar Software Library.
 
 .. table:: Py-ART formats. :label:`formats`
@@ -193,8 +193,8 @@ Cython wrapper around NASA's Radar Software Library.
   | WSR-88D     | USA operational network       | Native        |
   +-------------+-------------------------------+---------------+
 
-We also have Pull Requests on GitHub which introduce support for the 
-NSF funded Colorado State University CHILL radar and active development 
+We also have Pull Requests on GitHub which introduce support for the
+NSF funded Colorado State University CHILL radar and active development
 on supporting NOAA NOX-P and NASA D3R radars. There is a
 single output format, CF-Radial, a NetCDF based community format on which the
 common data model is derived from.
@@ -219,7 +219,7 @@ to be performed. In our case this includes:
 These are all outlined in the first of the three notebooks which accompany this
 manuscript: http://nbviewer.ipython.org/github/scollis/notebooks/tree/master/scipy2014/.
 Each process either appends a new field to the Radar instance or returns a field
-dictionary which can then be added to the instance. 
+dictionary which can then be added to the instance.
 Py-ART also comes with visualization methods allowing for the conical
 (or Plan Position Indicator, PPI) scan to be plotted and geolocated using
 matplotlib and Basemap. An example plot of raw :math:`\phi_{DP}` and reflectivity
@@ -277,7 +277,7 @@ where :math:`r` is the distance from the grid point and :math:`r_{infl}` is the
 search radius of influence. A brute force method for performing this mapping would
 be to calculated the distance from each Cartesian point to each radar gates to find those within
 the radius of influence, a method which scales as :math:`n * m`
-where :math:`n` is the number of point in the grid and :math:`m` the number of 
+where :math:`n` is the number of point in the grid and :math:`m` the number of
 gates in the radar volume. With a typical grid being
 200 by 200 by 37 points and a modern radar having on the order of 8000 time
 samples and 800 range gates this quickly becomes intractable. A better method is to
@@ -286,8 +286,8 @@ to an order :math:`n * log(m)` problem. This method is implemented in Py-ART. In
 variable radius of influence algorithm is implemented which analyzes the radar
 volume coverage pattern and deduces an optimized :math:`r_{infl}` at each grid point. Unlike
 many other objective analysis codes Py-ART implementation can operate on
-multiple Radar objects simultaneously, treating the radar gates as a cloud of points. 
-This allows the merging of multiple radar data sets. The method is simple to invoke, 
+multiple Radar objects simultaneously, treating the radar gates as a cloud of points.
+This allows the merging of multiple radar data sets. The method is simple to invoke,
 for example the code snippet:
 
 .. code-block:: python
@@ -295,7 +295,7 @@ for example the code snippet:
   mesh_mapped_x = pyart.map.grid_from_radars(
       (xnw_radar, xsw_radar, xse_radar),
       grid_shape=(35, 401, 401),
-      grid_limits=((0, 17000), (-50000, 40000), 
+      grid_limits=((0, 17000), (-50000, 40000),
                    (-60000, 40000)),
       grid_origin=(36.57861, -97.363611),
       fields=['corrected_reflectivity','rain_rate_A',
@@ -305,11 +305,11 @@ will map the gates in the three Radar objects (in this case the three ARM X-Band
 in figure :ref:`sgp`) to a grid that is (z,y,x) = (35, 401, 401) points with a domain
 of 0 to 17 km in altitude, -50 to 40 km in meridional extend and -60 to 40 km in
 zonal extent. The method returns a Grid object which follows a similar layout
-to a Radar object: fields are stored in the fields attribute, geolocation data in the 
+to a Radar object: fields are stored in the fields attribute, geolocation data in the
 axes attribute with the numerical data found in the 'data' key of the dictionaries.
 
 Again, as with the Radar object Py-ART has a menu of available routines to visualize
-data contained in Grid objects as well as an input output layer that can inject CF-compliant 
+data contained in Grid objects as well as an input output layer that can inject CF-compliant
 netCDF grids and write Grid object out to a CF-complaint file for future analysis and distribution.
 
 For example figure :ref:`C-Band only` shows a slice thought mapped reflectivity
@@ -330,7 +330,7 @@ in a network. In both figures the radar data are mapped onto a grid with 225 m s
 
 It is clear that more fine scale detail is resolved due to the rain systems being closer
 to any given radar in the X-Band network grid.
-In addition, due to the higher density of high elevation beams 
+In addition, due to the higher density of high elevation beams
 (essentially a "web" of radar beams sampling the convective anvil) sampling
 artifacts are greatly reduced and finer details aloft are able to be studied.
 
@@ -425,18 +425,19 @@ C-Band sytems in :ref:`segc`.
    X-Band systems. :label:`segx`
 
 
-.. XXX This paragraph needs to be re-written XXX
 
-These results show that the mesh produced by the C-Band system averages over
-finely detailed higher intensity rain rates which are observed using the X-band
-network. And since [Giangrande2014]_ established the veracity of rainfall retrievals
-using specific attenuation for both X and C band (verus ARM and NASA guages and
-distrometers) that the structures shown in figure :ref:`X-Band rain` are exist.
-One thing this paper has not shown is what netork density of radars is required
-to fully resolve precipitating systems. This will be a function of the large scale
-forcing environment (an interesting question in as of itself). This study does
-establish that, for the Southern great plains, studying phenomina at the sub kilometer
-scale is required.
+The results presented in this paper show that the rainfall field for this case is
+under-resolved when observed by a single C-Band system. While we have not
+established that a nework of X-Band systems fully resolve the spatial
+complexity of the rainfall field it clearly shows more detail, especially at higher
+altitudes.
+
+Future work will focus on establishing limits to spatial complexity and understanding
+how large scale forcing (instability, mouisture etc) influence complexity. In addition
+we will be applying this technique to fine scale model data as an "observational target"
+for the model to achieve. That is the methodes outlined in this paper can be used
+as a simple optimization metric which can be used when adjusting the parameters in
+a model.
 
 Conclusions
 -----------
