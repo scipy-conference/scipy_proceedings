@@ -423,7 +423,7 @@ Below we'll consider a frequentist solution to this problem, as well as a Bayesi
 
 Frequentist Solution
 ~~~~~~~~~~~~~~~~~~~~
-A frequentist solution can be found by computing the maximum likelihood estimate by, e.g. setting ${\rm d}\mathcal{L}/{\rm d}\theta = 0$. For normal linear problems such as this, the result can be computed using efficient linear algebra. We define the *parameter vector* :math:`\theta = [\alpha~\beta]^T`, the *response vector* :math:`Y = [y_1~y_2~y_3~\cdots~y_N]^T`, and the *design matrix*
+A frequentist solution can be found by computing the maximum likelihood estimate by, e.g. setting :math:`{\rm d}\mathcal{L}/{\rm d}\theta = 0`. For normal linear problems such as this, the result can be computed using efficient linear algebra. We define the *parameter vector* :math:`\theta = [\alpha~\beta]^T`, the *response vector* :math:`Y = [y_1~y_2~y_3~\cdots~y_N]^T`, and the *design matrix*
 
 .. math::
 
@@ -622,7 +622,7 @@ Comparison
 
 The three MCMC implementations are very different: emcee offers perhaps the simplest interface, while PyMC requires more specific boilerplate code. PyStan has the most complicated interface, as the actual model specification takes place in a string of Stan code.  The three packages also use different sampling schemes: PyMC uses classic Metropolis-Hastings, PyStan uses a No U-Turn Sampler (NUTS), while emcee uses an affine-invariant ensemble MCMC. These approaches have varying performance characteristics depending on the features of the posterior being explored; as expected for the near-Gaussian posterior used here, the three approaches give very similar results.
 
-The 1 and 2 $\sigma$ (68% and 95%) posterior credible regions computed with these three packages are shown beside the corresponding frequentist confidence intervals in Figure :ref:`fig1`. The frequentist result results in slightly tighter bounds; this is primarily due to the fact that the confidence interval is computed assuming a single maximum likelihood estimate of the scatter, $\sigma$. This interpretation can be confirmed by plotting the posterior conditioned on the frequentist estimate $\hat{\sigma}$: the result of this is a credible region nearly indistinguishable from the frequentist confidence interval.
+The 1 and 2 :math:`\sigma` (68% and 95%) posterior credible regions computed with these three packages are shown beside the corresponding frequentist confidence intervals in Figure :ref:`fig1`. The frequentist result results in slightly tighter bounds; this is primarily due to the fact that the confidence interval is computed assuming a single maximum likelihood estimate of the scatter, :math:`\sigma`. This interpretation can be confirmed by plotting the posterior conditioned on the frequentist estimate :math:`\hat{\sigma}`: the result of this is a credible region nearly indistinguishable from the frequentist confidence interval.
 
 
 Conclusion
