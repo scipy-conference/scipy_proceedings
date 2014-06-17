@@ -50,12 +50,6 @@ First we'll use Python to generate some toy data to demonstrate the two approach
     >>> F = scipy.stats.poisson(1000).rvs(50)
     >>> e = numpy.sqrt(F)  # Poisson Errors
 
-The data is visualized in Figure :ref:`fig1`.
-
-.. figure:: figure1.png
-
-   Data for Example 1: simple photon counts. (TODO: is this needed?) :label:`fig1`
-
 These measurements each have a different error :math:`e_i` which is estimated from Poisson statistics using the standard square-root rule. In this toy example we already know the true flux :math:`F`, but the question is this: **given our measurements and errors, what is our best point estimate of the true flux?**
 
 Let's take a look at the frequentist and Bayesian approaches to solving this.
@@ -95,7 +89,7 @@ We can go further and ask what the uncertainty of our estimate is. In the freque
 
     \sigma_{\hat{F}} = \left(\sum_{i=1}^N w_i \right)^{-1/2}
 
-Evaluating this gives
+We can evaluate this in Python as follows:
 
 .. code-block:: python
 
@@ -103,7 +97,7 @@ Evaluating this gives
     >>> F_hat = np.sum(w * F) / np.sum(w)
     >>> sigma_F = w.sum() ** -0.5
 
-For the particular dataset in Figure :ref:`fig1`, the result is :math:`\hat{F} = 998 \pm 4` photons.
+For the particular dataset generated above, the result is :math:`\hat{F} = 998 \pm 4` photons.
 
 
 Bayesian Approach to Photon Counts
@@ -379,44 +373,21 @@ Discussion
 ~~~~~~~~~~
 Why do the frequentist CI and Bayesian CR give such different results? The reason goes back to the definitions of the CI and CR, and to the fact that *the two approaches are answering different questions*. The Bayesian CR answers a question about the value of :math:`\theta` itself, while the frequentist CI answers a question about the validity of the procedure used to construct the CI.
 
-Recall the statements about confidence intervals and credible regions made above. From the Bayesians:
+Recall the definitions of confidence intervals and credible regions above: the Bayesian CR is concerned with the probability of a parameter given a fixed region, while the frequentist CI is concerned with the probability of the region bounds given a fixed parameter.
 
-    "Given our observed data, there is a 95% probability that the true value of :math:`\theta` falls within the credible region"
+Using Monte Carlo simulations, it is possible to confirm that both the above results correctly answer their respective questions (see [VanderPlas2014], III). In particular, 95% of frequentist CIs constructed using data drawn from this model in fact contain the true :math:`\theta`. Our particular data are simply among the unhappy 5% which the confidence interval misses.
 
-And from the frequentists:
-
-    "There is a 95% probability that when I compute a confidence interval from data of this sort, the true value of :math:`\theta` will fall within it."
-
-Using Monte Carlo simulations, it is possible to confirm that both these results correctly answer their respective questions (see [VanderPlas2014], III). In particular, 95% of frequentist CIs constructed from viable data contain the true :math:`\theta`. Our particular data are simply among the unhappy 5% which the confidence interval misses.
-
-This might not be a problem, except for the fact that **the data themselves** can tell us that this is the case! The problem is that frequentism is not drawing conclusions about the model given the particular data we observed, but is drawing conclusions about the model given imaginary datasets which are somehow similar to ours. Worse than this, it's not drawing probabilistic conclusions about the model per se, but about the very process of constructing the confidence interval.
-
-The problem is that in this case, frequentism is answering the wrong question. If you are concerned with the long-term performance of a model given repeated observations, frequentism provides a nice set of tools to address the problem. But if you have *one* set of data and want to derive conclusions *from that data*, frequentism is of little help.
+Does this mean that frequentism is incorrect? No: it simply shows that we must carefully keep in mind what question frequentism is answering. Frequentism does not seek probabilities of *parameter values given data*, as the Bayesian approach does; it seeks probabilities of *computed limits given a model*. Despite this, it is common to see a 95% confidence interval interpreted in the Bayesian sense: as a fixed interval that the parameter is expected to be found in 95% of the time. As seen above, this interpretation is flawed, and should be carefully avoided. For sensible parameter constraints from a single dataset, Bayesianism may be preferred, especially if suitable prior information is available.
 
 
-*TODO: transitionary discussion here*                    
+Bayesianism in Practice: Markov Chain Monte Carlo
+-------------------------------------------------
+Though Bayesianism has some nice features in theory, in practice it can be extremely computationally intensive: while simple problems like those examined above lend themselves to relatively easy analytical integration, real-life Bayesian computations often require numerical integration of high-dimensional parameter spaces. A turning-point in Bayesian computation was the development and application of sampling methods such as Markov Chain Monte Carlo (MCMC), a class of algorithms which can efficiently draw samples from even high-dimensional posterior distributions. A detailed discussion of MCMC is well beyond the scope of this paper; an excellent introduction can be found in [Gelman2004]_. Below, we'll propose a straightforward model and compare three MCMC implementations available in Python.
 
 
-Final Example: Frequentist and Bayesian Linear Regression
----------------------------------------------------------
-
-*TODO: answer this problem with a frequentist approach*
-
-One of the weaknesses of Bayesianism is that it tends to be extremely computationally intensive: while simple problems like the billiard game above lend themselves to relatively easy analytical integration, real-life Bayesian computations require numerical integration of high-dimensional parameter spaces. A turning-point in Bayesian computation was the development of sampling methods such as Markov Chain Monte Carlo (MCMC), a class of algorithms which can efficiently draw samples from even high-dimensional posterior distributions.
-
-There are several excellent MCMC packages available in Python. I'll discuss three of them here: emcee [#emcee]_, PyMC [#pymc]_, and PyStan [#pystan]_. Here we'll propose a straightforward problem with some nontrivial elements, and compare how it is implemented in these three packages.
-
-A full discussion of the various MCMC approaches used by the packages is out of scope for this work, as is a complete discussion of performance benchmarks for the three packages. Rather, the purpose of this section is to show side-by-side examples of the Python APIs of the three packages.
-
-.. [#emcee] emcee: the MCMC Hammer http://dan.iel.fm/emcee
-
-.. [#pymc] PyMC: Bayesian Inference in Python http://pymc-devs.github.io/pymc/
-
-.. [#pystan] The Python Interface to Stan https://pystan.readthedocs.org/en/latest/
-
-A Bayesian Linear Model
-~~~~~~~~~~~~~~~~~~~~~~~
-For our test problem, we'll consider a three-parameter linear model which fits a straight-line to data. The parameters will be the the y-intercept :math:`\alpha`, the slope :math:`\beta`, and the normal scatter :math:`\sigma` about the line; the scatter in this case will be treated as a nuisance parameter.
+Application: A Simple Linear Model
+----------------------------------
+As an example of a more realistic data-driven analysis, let's consider a simple three-parameter linear model which fits a straight-line to data with unknown errors. The parameters will be the the y-intercept :math:`\alpha`, the slope :math:`\beta`, and the normal scatter :math:`\sigma` about the line; the scatter in this case will be treated as a nuisance parameter.
 
 For data :math:`D = \{x_i, y_i\}`, the model is
 
@@ -428,24 +399,88 @@ and the likelihood is
 
 .. math::
 
-    P(D|\alpha,\beta,\sigma) = (2\pi\sigma^2)^{-N/2} \prod_{i=1}^N \exp\left[\frac{-[y_i - \hat{y}(x_i|\alpha, \beta)]^2}{2\sigma^2}\right].
+    \mathcal{L}(D|\alpha,\beta,\sigma) = (2\pi\sigma^2)^{-N/2} \prod_{i=1}^N \exp\left[\frac{-[y_i - \hat{y}(x_i|\alpha, \beta)]^2}{2\sigma^2}\right].
 
-The posterior is proportional to the product of the likelihood and the prior; in this case we must be aware that a flat prior is not uninformative. Through symmetry arguments, it can be shown that an uninformative prior for this problem is given by
+We'll evaluate this model on the following data set:
+
+.. code-block:: python
+
+    import numpy as np
+    np.random.seed(42)
+    theta_true = (25, 0.5)
+    xdata = 100 * np.random.random(20)
+    ydata = theta_true[0] + theta_true[1] * xdata
+    ydata = np.random.normal(ydata, 10) # add error
+
+Below we'll consider a frequentist solution to this problem, as well as a Bayesian solution computed several ways. We'll look at three different MCMC implementations: emcee [#emcee]_, PyMC [#pymc]_, and PyStan [#pystan]_. A full discussion of the strengths and weaknesses of the various MCMC algorithms used by the packages is out of scope for this work, as is a complete discussion of performance benchmarks for the three packages. Rather, the purpose of this section is to show side-by-side examples of the Python APIs of the three packages. First, though, we'll consider a frequentist solution.
+
+.. [#emcee] emcee: the MCMC Hammer http://dan.iel.fm/emcee
+
+.. [#pymc] PyMC: Bayesian Inference in Python http://pymc-devs.github.io/pymc/
+
+.. [#pystan] The Python Interface to Stan https://pystan.readthedocs.org/en/latest/
+
+
+Frequentist Solution
+~~~~~~~~~~~~~~~~~~~~
+A frequentist solution can be found by computing the maximum likelihood estimate by, e.g. setting ${\rm d}\mathcal{L}/{\rm d}\theta = 0$. For normal linear problems such as this, the result can be computed using efficient linear algebra. We define the *parameter vector* :math:`\theta = [\alpha~\beta]^T`, the *response vector* :math:`Y = [y_1~y_2~y_3~\cdots~y_N]^T`, and the *design matrix*
+
+.. math::
+
+    X = \left[
+           \begin{array}{lllll}
+               1 & 1 & 1 &\cdots & 1\\
+               x_1 & x_2 & x_3 & \cdots & x_N
+           \end{array}\right]^T
+
+and it can be shown that the maximum likelihood solution is
+
+.. math::
+
+    \hat{\theta} = (X^TX)^{-1}(X^T Y).
+
+The confidence interval around this value is an ellipse in parameter space defined by the following matrix:
+
+.. math::
+
+    \Sigma_{\hat{\theta}}
+                   = \sigma_y^2 (M^TM)^{-1}
+                   = \left[
+                      \begin{array}{ll}
+                         \sigma_\alpha^2 & \sigma_{\alpha\beta} \\
+                          \sigma_{\alpha\beta} & \sigma_\beta^2
+                      \end{array}
+                    \right] = \sigma_y (M^TM)^{-1}
+
+Here :math:`\sigma` can be estimated based on the variance of the residuals about the fit, and the off-diagonal elements of :math:`\Sigma_{\hat{\theta}}` are the correlated uncertainty between the estimates. In code, this is what it looks like:
+
+.. code-block:: python
+
+    X = np.vstack([np.ones_like(xdata), xdata]).T
+    theta_hat = np.linalg.solve(np.dot(X.T, X),
+                                np.dot(X.T, ydata))
+    ymodel = np.dot(X, theta_hat)
+    sigma_hat = np.std(ydata - ymodel)
+    Sigma = sigma_hat ** 2 * np.linalg.inv(np.dot(X.T, X))
+
+
+Bayesian Solution: Overview
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The Bayesian result is encapsulated in the posterior, which is proportional to the product of the likelihood and the prior; in this case we must be aware that a flat prior is not uninformative. Through symmetry arguments, first developed by [Jeffreys1946]_, it can be shown that an uninformative prior for this problem is given by
 
 .. math::
 
     P(\alpha,\beta,\sigma) \propto \frac{1}{\sigma}(1 + \beta^2)^{-3/2}.
 
-With the likelihood and prior determined, we can go on to sampling the posterior using the three packages. 
+(See [VanderPlas2014]_, part IV for a straightforward derivation of this). With this prior and the above likelihood, we are prepared to numerically evaluate the posterior.
 
 
 Solution with emcee
 ~~~~~~~~~~~~~~~~~~~
-The emcee package [ForemanMackey2013]_ is a lightweight pure-Python package which implements Affine Invariant MCMC Ensemble sampling [Goodman2010]_, a very sophisticated version of classic MCMC. To use ``emcee``, all that is required is to define a Python function representing the logarithm of the posterior. For clarity, we'll factor this definition into two functions, the log-prior and the log-likelihood. The following uses emcee version 2.0:
+The emcee package [ForemanMackey2013]_ is a lightweight pure-Python package which implements Affine Invariant MCMC Ensemble sampling [Goodman2010]_, a very sophisticated version of MCMC sampling. To use ``emcee``, all that is required is to define a Python function representing the logarithm of the posterior. For clarity, we'll factor this definition into two functions, the log-prior and the log-likelihood. The following uses emcee version 2.0:
 
 .. code-block:: python
 
-    import numpy as np
     import emcee
 
     def log_prior(theta):
@@ -581,18 +616,18 @@ PyStan is the official Python interface to Stan, a probabilistic programming lan
 
 Comparison
 ~~~~~~~~~~
-The three packages are very different
+.. figure:: figure1.png
 
-.. figure:: figure2.png
+   Comparison of model fits using frequentist maximum likelihood, and Bayesian MCMC using three Python packages: emcee, PyMC, and PyStan. :label:`fig1`
 
-   Comparison MCMC results using three packages: emcee, . :label:`fig2`
+The three MCMC implementations are very different: emcee offers perhaps the simplest interface, while PyMC requires more specific boilerplate code. PyStan has the most complicated interface, as the actual model specification takes place in a string of Stan code.  The three packages also use different sampling schemes: PyMC uses classic Metropolis-Hastings, PyStan uses a No U-Turn Sampler (NUTS), while emcee uses an affine-invariant ensemble MCMC. These approaches have varying performance characteristics depending on the features of the posterior being explored; as expected for the near-Gaussian posterior used here, the three approaches give very similar results.
 
-
+The 1 and 2 $\sigma$ (68% and 95%) posterior credible regions computed with these three packages are shown beside the corresponding frequentist confidence intervals in Figure :ref:`fig1`. The frequentist result results in slightly tighter bounds; this is primarily due to the fact that the confidence interval is computed assuming a single maximum likelihood estimate of the scatter, $\sigma$. This interpretation can be confirmed by plotting the posterior conditioned on the frequentist estimate $\hat{\sigma}$: the result of this is a credible region nearly indistinguishable from the frequentist confidence interval.
 
 
 Conclusion
 ----------
-*TODO: add summary*
+This paper has offered a brief practical glimpse at the differences between frequentist and Bayesian statistics. The difference between the two approaches stem from different conceptions of probability. Though the two approaches often give indistinguishable results in simple problems, we considered two specific situations in which they differ: the treatment of nuisance parameters, and the interpretation of uncertainties in estimates. Finally, we took a detailed look at the application of these approaches to a simple linear model; and showed how the frequentist and Bayesian results can be computed using tools available in the Python programming language.
 
 
 
@@ -626,6 +661,8 @@ References
                 Papers on Probability, Statistics and Statistical Physics
                 Synthese Library 158:149-209, 1989
 
+.. [Jeffreys1946] H. Jeffreys *An Invariant Form for the Prior Probability in Estimation Problems*. Proceedings of the Royal Society of London. Series A, Mathematical and Physical Sciences 186(1007): 453–461, 1946
+
 .. [Patil2010] A. Patil, D. Huard, C.J. Fonnesbeck.
                *PyMC: Bayesian Stochastic Modelling in Python* 
                Journal of Statistical Software, 35(4):1-81, 2010.
@@ -636,6 +673,7 @@ References
                     `III <http://jakevdp.github.io/blog/2014/06/12/frequentism-and-bayesianism-3-confidence-credibility/>`_,
                     `IV <http://jakevdp.github.io/blog/2014/06/14/frequentism-and-bayesianism-4-bayesian-in-python/>`_) on *Pythonic Perambulations*
                     http://jakevdp.github.io/, 2014.
+
 .. [Wasserman2004] L. Wasserman.
                  *All of statistics: a concise course in statistical inference*.
                  Springer, 2004.

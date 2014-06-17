@@ -1,9 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
+from scipy.special import erfinv
+
 
 ############################################################
-# Example 1: Photon Counts
+# Photon Counts
 print("Example #1")
 
 # Generate the data
@@ -12,16 +14,6 @@ F_true = 1000  # true flux, say number of photons measured in 1 second
 N = 50 # number of measurements
 F = stats.poisson(F_true).rvs(N)  # N measurements of the flux
 e = np.sqrt(F)  # errors on Poisson counts estimated via square root
-
-# Visualize the data
-fig, ax = plt.subplots()
-ax.errorbar(F, np.arange(N), xerr=e, fmt='ok', ecolor='gray', alpha=0.5)
-ax.vlines([F_true], 0, N, linewidth=5, alpha=0.2)
-ax.set_xlabel("Flux");ax.set_ylabel("measurement number")
-ax.set_xlim(850, 1150)
-ax.set_ylim(0, 50)
-fig.savefig("figure1.png")
-print("  Saving figure1.png")
 
 # Frequentist Result
 w = 1. / e ** 2
@@ -32,7 +24,7 @@ print("""
 
 
 ######################################################################
-# Example 4: MCMC Examples
+# Linear Model Example
 
 #----------------------------------------------------------------------
 # Define the data
@@ -40,10 +32,21 @@ np.random.seed(42)
 theta_true = (25, 0.5)
 xdata = 100 * np.random.random(20)
 ydata = theta_true[0] + theta_true[1] * xdata
-
-# add scatter to points
-xdata = np.random.normal(xdata, 10)
 ydata = np.random.normal(ydata, 10)
+
+#----------------------------------------------------------------------
+# Compute the frequentist version
+X = np.vstack([np.ones_like(xdata), xdata]).T
+theta_freq = np.linalg.solve(np.dot(X.T, X),
+                             np.dot(X.T, ydata))
+y_model = np.dot(X, theta_freq)
+sigma_y = np.std(ydata - y_model)
+Sigma_freq = sigma_y ** 2 * np.linalg.inv(np.dot(X.T, X))
+
+print("Frequentist Version")
+print("  theta = {0}".format(theta_freq))
+print("  sigma_y = {0}".format(sigma_y))
+print("  Sigma = {0}".format(Sigma_freq))
 
 #----------------------------------------------------------------------
 # Fit with emcee
@@ -212,16 +215,50 @@ def plot_MCMC_trace(ax, xdata, ydata, trace, scatter=False, **kwargs):
     ax.set_xlabel(r'$\alpha$')
     ax.set_ylabel(r'$\beta$')
 
+
+# compute the ellipse pricipal axes and rotation from covariance
+def get_principal(Sigma):
+    # See Ivezic, Connolly, VanderPlas, and Gray, section 3.5.2
+    sigma_x2 = Sigma[0, 0]
+    sigma_y2 = Sigma[1, 1]
+    sigma_xy = Sigma[0, 1]
+
+    alpha = 0.5 * np.arctan2(2 * sigma_xy, sigma_x2 - sigma_y2)
+    tmp1 = 0.5 * (sigma_x2 + sigma_y2)
+    tmp2 = np.sqrt(0.25 * (sigma_x2 - sigma_y2) ** 2 + sigma_xy ** 2)
+
+    return np.sqrt(tmp1 + tmp2), np.sqrt(tmp1 - tmp2), alpha
+
 fig, ax = plt.subplots(figsize=(6, 6))
+
 plot_MCMC_trace(ax, xdata, ydata, emcee_trace, True,
                 colors='blue', linewidths=2)
 plot_MCMC_trace(ax, xdata, ydata, pymc_trace,
                 colors='red', linewidths=2)
 plot_MCMC_trace(ax, xdata, ydata, pystan_trace,
                 colors='green', linewidths=2)
-ax.legend(ax.collections[::2], ['emcee', 'pymc', 'pystan'], fontsize=16)
-ax.set_xlim(10, 45)
-ax.set_ylim(0.15, 0.7)
 
-print("saving figure2.png")
-fig.savefig("figure2.png")
+# plot frequentist ellipses
+from matplotlib.patches import Ellipse
+
+sigma1, sigma2, alpha = get_principal(Sigma_freq)
+for level in [0.683, 0.955]:
+    # 2 dimensions: we need frac^2 = level
+    # in order to compare directly with MCMC contours
+    nsigma_eff = np.sqrt(2) * erfinv(np.sqrt(level))
+    ax.add_patch(Ellipse(theta_freq,
+                         2 * nsigma_eff * sigma1, 2 * nsigma_eff * sigma2,
+                         angle=np.degrees(alpha),
+                         lw=2, ec='k', fc='none'))
+
+ax.plot([0, 0], [0, 0], '-k', lw=2)
+
+ax.legend(ax.lines[-1:] + ax.collections[::2],
+          ['frequentist', 'emcee', 'pymc', 'pystan'], fontsize=14)
+
+ax.set_xlim(10, 40)
+ax.set_ylim(0.2, 0.7)
+
+print("saving figure1.png")
+fig.savefig("figure1.png")
+plt.show()
