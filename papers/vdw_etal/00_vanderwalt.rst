@@ -1,5 +1,5 @@
 :author: Stefan van der Walt
-:email: 123@456.com
+:email: stefan@sun.ac.za
 :institution: Senate House, S.P.Q.R.
 
 :author: Mark Anthony
