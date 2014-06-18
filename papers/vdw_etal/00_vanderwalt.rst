@@ -1,5 +1,5 @@
-:author: Gaius Caesar
-:email: jj@rome.it
+:author: Stefan van der Walt
+:email: stefan@sun.ac.za
 :institution: Senate House, S.P.Q.R.
 
 :author: Mark Anthony
@@ -12,9 +12,9 @@
 
 .. :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
-------------------------------------------------
-A Numerical Perspective to Terraforming a Desert
-------------------------------------------------
+---------------------------------
+Webhook testing in a modern world
+---------------------------------
 
 .. class:: abstract
 
