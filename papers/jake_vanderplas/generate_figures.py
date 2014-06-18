@@ -9,18 +9,16 @@ from scipy.special import erfinv
 print("Example #1")
 
 # Generate the data
-np.random.seed(1)  # for repeatability
-F_true = 1000  # true flux, say number of photons measured in 1 second
-N = 50 # number of measurements
-F = stats.poisson(F_true).rvs(N)  # N measurements of the flux
-e = np.sqrt(F)  # errors on Poisson counts estimated via square root
+np.random.seed(2)  # for repeatability
+e = np.random.normal(30, 3, 50)
+F = np.random.normal(1000, e)
 
 # Frequentist Result
 w = 1. / e ** 2
 print("""
       F_true = {0}
       F_est  = {1:.0f} +/- {2:.0f} (based on {3} measurements)
-      """.format(F_true, (w * F).sum() / w.sum(), w.sum() ** -0.5, N))
+      """.format(1000, (w * F).sum() / w.sum(), w.sum() ** -0.5, len(F)))
 
 
 ######################################################################
