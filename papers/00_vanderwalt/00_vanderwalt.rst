@@ -1,4 +1,4 @@
-:author: Gaius Caesar
+:author: Stefan van der Walt
 :email: jj@rome.it
 :institution: Senate House, S.P.Q.R.
 
