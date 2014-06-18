@@ -147,6 +147,14 @@ class Translator(LaTeXTranslator):
 
         ## Add copyright
 
+        # If things went spectacularly wrong, we could not even parse author
+        # info.  Just fill in some dummy info so that we can see the error
+        # messages in the resulting PDF.
+        if len(self.author_names) == 0:
+            self.author_names = ['John Doe']
+            self.author_emails = ['john@doe.com']
+            authors = ['']
+
         copyright_holder = self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.')
         author_notes = r'''%%
 
@@ -319,7 +327,7 @@ class Translator(LaTeXTranslator):
         self.active_table.caption = []
 
         opening = self.active_table.get_opening()
-        opening = opening.replace(r'{\linewidth}', r'{0.8\linewidth}')
+        opening = opening.replace('linewidth', 'tablewidth')
         self.active_table.get_opening = lambda: opening
 
         LaTeXTranslator.visit_thead(self, node)
