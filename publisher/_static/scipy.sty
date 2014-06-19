@@ -46,6 +46,14 @@
 \ifthenelse{\isundefined{\longtable}}{}{
   \renewenvironment{longtable}{\begin{center}\begin{tabular}}%
     {\end{tabular}\end{center}\vspace{2mm}}
+
+% Another brittle table fix.  Have a look at this if problems crop
+% up with tables again.
+  \renewcommand{\endfirsthead}{}
+  \renewcommand{\endlastfoot}{}
+  \renewcommand{\endhead}{}
+  \renewcommand{\endfoot}{}
+
 }
 
 \usepackage{multirow}

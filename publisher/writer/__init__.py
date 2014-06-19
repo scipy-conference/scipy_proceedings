@@ -46,6 +46,8 @@ class Translator(LaTeXTranslator):
         self.figure_alignment = 'left'
         self.table_type = 'table'
 
+        self.active_table.set_table_style('booktabs')
+
     def visit_docinfo(self, node):
         pass
 
@@ -243,7 +245,10 @@ class Translator(LaTeXTranslator):
             self.non_breaking_paragraph = False
 
         else:
-            self.out.append('\n\n')
+            if self.active_table.is_open():
+                self.out.append('\n')
+            else:
+                self.out.append('\n\n')
 
     def depart_paragraph(self, node):
         if 'keywords' in node['classes']:
@@ -323,12 +328,17 @@ class Translator(LaTeXTranslator):
         # Store table caption locally and then remove it
         # from the table so that docutils doesn't render it
         # (in the wrong place)
-        self.table_caption = self.active_table.caption
-        self.active_table.caption = []
+        if self.active_table.caption:
+            self.table_caption = self.active_table.caption
+            self.active_table.caption = []
 
         opening = self.active_table.get_opening()
         opening = opening.replace('linewidth', 'tablewidth')
         self.active_table.get_opening = lambda: opening
+
+        # For some reason, docutils want to process longtable headers twice.  I
+        # don't trust this fix entirely, but it does the trick for now.
+        self.active_table.need_recurse = lambda: False
 
         LaTeXTranslator.visit_thead(self, node)
 
