@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
-from scipy.special import erfinv
+from scipy import ndimage
 
 
 ############################################################
@@ -139,7 +139,7 @@ print("PyStan version: {0}".format(pystan.__version__))
 # Create the Stan model
 #  this is done by defining a string of Stan code.
 
-fit_code = """
+model_code = """
 data {
     int<lower=0> N; // number of points
     real x[N]; // x values
@@ -171,18 +171,19 @@ model {
 """
 
 # perform the fit
-fit_data = {'N': len(xdata), 'x': xdata, 'y': ydata}
-fit = pystan.stan(model_code=fit_code, data=fit_data, iter=25000, chains=4)
+data = {'N': len(xdata), 'x': xdata, 'y': ydata}
+fit = pystan.stan(model_code=model_code, data=data,
+                  iter=25000, chains=4)
 
 # extract the traces
-traces = fit.extract()
-pystan_trace = [traces['alpha'], traces['beta'], traces['sigma']]
+tr = fit.extract()
+pystan_trace = [tr['alpha'], tr['beta'], tr['sigma']]
 
 #----------------------------------------------------------------------
 # Visualize the results
 # Create some convenience routines for plotting
 
-def compute_sigma_level(trace1, trace2, nbins=20):
+def compute_sigma_level(trace1, trace2, nbins=20, smoothing=3):
     """From a set of traces, bin by number of standard deviations"""
     L, xbins, ybins = np.histogram2d(trace1, trace2, nbins)
     L[L == 0] = 1E-16
@@ -197,17 +198,27 @@ def compute_sigma_level(trace1, trace2, nbins=20):
 
     L_cumsum = L[i_sort].cumsum()
     L_cumsum /= L_cumsum[-1]
+
+    sigma = L_cumsum[i_unsort].reshape(shape)
+
+    if smoothing > 1:
+        sigma = ndimage.zoom(sigma, smoothing)
+        xbins = np.linspace(xbins[0], xbins[-1], sigma.shape[0] + 1)
+        ybins = np.linspace(ybins[0], ybins[-1], sigma.shape[1] + 1)
     
     xbins = 0.5 * (xbins[1:] + xbins[:-1])
     ybins = 0.5 * (ybins[1:] + ybins[:-1])
 
-    return xbins, ybins, L_cumsum[i_unsort].reshape(shape)
+    return xbins, ybins, sigma
 
 
-def plot_MCMC_trace(ax, xdata, ydata, trace, scatter=False, **kwargs):
+def plot_MCMC_trace(ax, xdata, ydata, trace, scatter=False,
+                    nbins=20, smoothing=3, **kwargs):
     """Plot traces and contours"""
-    xbins, ybins, sigma = compute_sigma_level(trace[0], trace[1])
-    ax.contour(xbins, ybins, sigma.T, levels=[0.683, 0.955], **kwargs)
+    xbins, ybins, sigma = compute_sigma_level(trace[0], trace[1],
+                                              nbins, smoothing)
+
+    ax.contour(xbins, ybins, sigma.T, levels=[0.683 ** 2, 0.955 ** 2], **kwargs)
     if scatter:
         ax.plot(trace[0], trace[1], ',k', alpha=0.1)
     ax.set_xlabel(r'$\alpha$')
@@ -240,12 +251,9 @@ plot_MCMC_trace(ax, xdata, ydata, pystan_trace,
 from matplotlib.patches import Ellipse
 
 sigma1, sigma2, alpha = get_principal(Sigma_freq)
-for level in [0.683, 0.955]:
-    # 2 dimensions: we need frac^2 = level
-    # in order to compare directly with MCMC contours
-    nsigma_eff = np.sqrt(2) * erfinv(np.sqrt(level))
+for nsigma in [1, 2]:
     ax.add_patch(Ellipse(theta_freq,
-                         2 * nsigma_eff * sigma1, 2 * nsigma_eff * sigma2,
+                         2 * nsigma * sigma1, 2 * nsigma * sigma2,
                          angle=np.degrees(alpha),
                          lw=2, ec='k', fc='none'))
 
