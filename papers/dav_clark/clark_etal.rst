@@ -114,6 +114,20 @@ Major step in diffusion is folks knowing what the thing is at all. Value add /
 branding - OSGeo has credibility from foundation status, participants,
 consistent / good graphic design.
 
+Other virtual machines
+----------------------
+
+From [Mining the Social Web, a Chef+Vagrant solution](https://rawgit.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition/master/ipynb/html/_Appendix%20A%20-%20Virtual%20Machine%20Experience.html)
+
+From Matt Gee (of [DSSG](http://dssg.io): We've been trying a number of
+different approaches to the standard development environment. For this year's
+fellowship we went with a Chef cookbook + OpsWorks. This works for provisioning
+our core resources. However, for weekend learn-a-thons and more portable VM.
+We've tried our own VM using docker and well as some hosted boxes like yhat's
+new Science Box. We should compare notes.
+
+VM from Philip.
+
 BCE: The Berkeley Common Environment
 ------------------------------------
 
