@@ -166,7 +166,7 @@ figures.
 
    +------------+----------------+
    | Material   | Units          |
-   +------------+----------------+
+   +============+================+
    | Stone      | 3              |
    +------------+----------------+
    | Water      | 12             |
@@ -193,6 +193,33 @@ We show the different quantities of materials required in Table
    | This   | is |  a   | very | very | wide | table  |
    +--------+----+------+------+------+------+--------+
 
+Unfortunately, restructuredtext can be picky about tables, so if it simply
+won't work try raw LaTeX:
+
+
+.. raw:: latex
+
+   \begin{table*}
+
+     \begin{longtable*}{|l|r|r|r|}
+     \hline
+     \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
+     \cline{2-4}
+      & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
+     \hline
+     Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
+     \hline
+     Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
+     \hline
+     Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
+     \hline
+     Percent Difference & 44\% & 41\% & 43\%\tabularnewline
+     \hline
+     \end{longtable*}
+
+     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
+
+   \end{table*}
 
 Perhaps we want to end off with a quote by Lao Tse:
 
