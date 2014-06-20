@@ -20,7 +20,7 @@ Python Coding of Geospatial Processing in Web-based Mapping Applications
 
 .. class:: abstract
 
-   Python has powerful capabilities for coding elements of web-based
+   Python has powerful capabilities for coding elements of Web-based
    mapping applications. This paper highlights examples of analytical
    geospatial processing services that we have implemented for several
    Open Source-based development projects, including the Eastern
