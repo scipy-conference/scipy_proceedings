@@ -29,7 +29,7 @@ Python Coding of Geospatial Processing in Web-based Mapping Applications
    Mapper (http://solarmapper.anl.gov), and the Ecological Risk
    Calculator (http://bogi.evs.anl.gov/erc/portal). We used common
    Open Source tools such as GeoServer, PostGIS, GeoExt, and
-   OpenLayers for the basic web based portal, then added custom
+   OpenLayers for the basic Web-based portal, then added custom
    analytical tools to support more advanced functionality. The
    analytical processes were implemented as Web Processing Service
    (WPS) services running on PyWPS [PyWPS]_, a Python implementation
