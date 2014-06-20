@@ -24,7 +24,7 @@ Python Coding of Geospatial Processing in Web-based Mapping Applications
    mapping applications. This paper highlights examples of analytical
    geospatial processing services that we have implemented for several
    Open Source-based development projects, including the Eastern
-   Interconnection States Planning Council (EISPC) Energy Zones Mapping
+   Interconnection States' Planning Council (EISPC) Energy Zones Mapping
    Tool (http://eispctools.anl.gov), the Solar Energy Environmental
    Mapper (http://solarmapper.anl.gov), and the Ecological Risk
    Calculator (http://bogi.evs.anl.gov/erc/portal). We used common
