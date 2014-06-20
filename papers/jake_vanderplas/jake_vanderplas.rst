@@ -199,7 +199,7 @@ This identity follows from the definition of conditional probability, and the la
 
 To compute this result, we will manipulate the above expression for :math:`P(B|D)` until we can express it in terms of other quantities that we can compute.
 
-We'll start by applying the following definition of conditional probability to expand the term :math:`P(B,p|D)`:
+We'll start by applying the definition of conditional probability to expand the term :math:`P(B,p|D)`:
 
 .. math::
 
@@ -219,7 +219,7 @@ Finally, using the same probability identity we started with, we can expand :mat
 
 Now the desired probability is expressed in terms of three quantities that we can compute:
 
-- :math:`P(B|p,D)`: This term is proportional to the frequentist likelihood we used above. In words: given a marker placement :math:`p` and the fact that Alice's 5 wins to Bob's 3, what is the probability that Bob will go on to six wins?  Bob needs three wins in a row, i.e. :math:`P(B|p,D) = (1 - p) ^ 3`.
+- :math:`P(B|p,D)`: This term is proportional to the frequentist likelihood we used above. In words: given a marker placement :math:`p` and Alice's 5 wins to Bob's 3, what is the probability that Bob will go on to six wins?  Bob needs three wins in a row, i.e. :math:`P(B|p,D) = (1 - p) ^ 3`.
 - :math:`P(D|p)`: this is another easy-to-compute term. In words: given a probability :math:`p`, what is the likelihood of exactly 5 positive outcomes out of eight trials? The answer comes from the Binomial distribution: :math:`P(D|p) \propto p^5 (1-p)^3`
 - :math:`P(p)`: this is our prior on the probability :math:`p`. By the problem definition, we can assume that :math:`p` is evenly drawn between 0 and 1.  That is, :math:`P(p) \propto 1` for :math:`0 \le p \le 1`.
 
@@ -407,7 +407,7 @@ Below we'll consider a frequentist solution to this problem, as well as a Bayesi
 
 .. [#pymc] PyMC: Bayesian Inference in Python http://pymc-devs.github.io/pymc/
 
-.. [#pystan] PyStan: The Python Interface to the Stan https://pystan.readthedocs.org/
+.. [#pystan] PyStan: The Python Interface to Stan https://pystan.readthedocs.org/
 
 
 Frequentist Solution
