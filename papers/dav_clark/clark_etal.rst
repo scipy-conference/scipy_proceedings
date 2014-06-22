@@ -23,9 +23,8 @@ BCE: Berkeley's Common Scientific Compute Environment for Research and Education
 
   Virtual machines are widely used, but in an ad hoc manner. Members of the UC
   Berkeley D-Lab, Statistical Computing Facility (SCF), and Berkeley Research
-  Computing (BRC) have engaged in a thorough evaluation of virtualization
-  technologies before arriving at a solution that we feel stands to become a
-  broadly useful strategy for constructing the Berkeley Common Environment
+  Computing (BRC) have evaluated a breadth of virtualization technologies
+  and present a strategy for constructing the Berkeley Common Environment
   [BCE]_. We also provide a comparison with a successful, existing project,
   [OSGeo]_.
 
@@ -62,11 +61,31 @@ Community
 
 
 
-OSGeo: A Successful Common Environment
+OSGeo-Live: A Successful Common Environment
 --------------------------------------
 
-OSGeo is an example of a collaborative distribution that has managed to achieve
-a consensus process for XXX geospatial projects. OSGeo is designed to be useable
+The OSGeo-Live project is an example of both a sophisticated compute environmment, and synergistic community process; quoting from the OSGeo-Live [1] website:
+
+'''
+The OSGeo-Live is a self-contained bootable DVD, USB thumb drive or Virtual Machine based on Xubuntu, that allows you to try a wide variety of open source geospatial software without installing anything. It is composed entirely of free software, allowing it to be freely distributed, duplicated and passed around.
+
+It provides pre-configured applications for a range of geospatial use cases, including storage, publishing, viewing, analysis and manipulation of data. It also contains sample datasets and documentation.
+'''
+
+
+The OSGeo-Live is formally a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation. The OSGeo-Live began roughly eight years ago with a smaller open project based in Australia, and committed itself to the larger OSGeo Foundation structure in its second year. More than fifty (50) open-source projects now actively maintain and improve their own install scripts, examples and documentation. After long years of "tepid" progress and iteration, a combination of techincal stability, tools sets, community awareness and reproducible steps to contribute, provided the basis for substantial growth. The project is now stable, easily incorporates advances in components, and widely adopted. Let's look at each of these building blocks briefly:
+
+Technical Stability
+
+Tool Sets
+
+Community Awareness
+
+Steps to Contribute
+
+
+
+
 as a virtual machine. This was started 7-8 years ago. Success only occured after
 a few years of "tepid" progress. Part of the driver is likely the limited amount
 of funds who are doing geospatial fieldwork. These people need to be able to go
