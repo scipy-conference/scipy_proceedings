@@ -64,7 +64,7 @@ Community
 OSGeo-Live: A Successful Common Environment
 --------------------------------------
 
-The OSGeo-Live project is an example of both a sophisticated compute environmment, and synergistic community process; quoting from the OSGeo-Live [1] website:
+The OSGeo-Live project is an example of both a sophisticated compute environment, and synergistic community process; quoting from the OSGeo-Live [1] website:
 
 '''
 The OSGeo-Live is a self-contained bootable DVD, USB thumb drive or Virtual Machine based on Xubuntu, that allows you to try a wide variety of open source geospatial software without installing anything. It is composed entirely of free software, allowing it to be freely distributed, duplicated and passed around.
@@ -73,16 +73,9 @@ It provides pre-configured applications for a range of geospatial use cases, inc
 '''
 
 
-The OSGeo-Live is formally a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [3]. The OSGeo-Live began roughly eight years ago with a smaller open project based in Australia, and committed itself to the larger OSGeo Foundation structure in its second year. More than fifty (50) open-source projects now actively maintain and improve their own install scripts, examples and documentation. After long years of "tepid" progress and iteration, a combination of techincal stability, tools sets, community awareness and reproducible steps to contribute, provided the basis for substantial growth. 
+The OSGeo-Live is formally a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [3]. Eight years ago, there existed several very large and growing open-source geospatial projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and QGis.  At the same time. the OSGeo-Live began with a smaller open project based in Australia that sought to build an easy to try and use software environment for these and other spatial data applications. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent project committed itself to the larger OSGeo Foundation structure in its second year. More than fifty (50) open-source projects now actively maintain and improve their own install scripts, examples and documentation. After long years of "tepid" progress and iteration, a combination of techincal stability, tools sets, community awareness and reproducible steps to contribute, provided the basis for substantial growth.
 
-The origins of the OSGeo-Live are strongly connected to the formation of OSGeo itself; from the OSGeo.org [2] website:
-'''
-OSGeo was created to support the collaborative development of open source geospatial software, and promote its widespread use.
-'''
-
-Ten years ago, there existed several very large, sustained and growing open-source geospatial projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects incuded GRASS, Mapserver
-
-The project is now stable, easily incorporates advances in components, and widely adopted. Let's look at each of these building blocks briefly:
+The OSGeo-Live is now very stable, easily incorporates advances in components, and widely adopted. Let's look at each of these building blocks briefly:
 
 Technical Stability
 An original goal of the OSGeo-Live was to operate well on minimal hardware with broad support for common peripherals, and a license structure compatible with project goals. The XUbuntu version of Ubuntu Linux was chosen as a foundation, and it was been very successful. To this day, almost all applications would operate easily in very modest RAM and disk space (with the notable exception of Java-based software which requires substantially more RAM). 
