@@ -76,6 +76,12 @@ It provides pre-configured applications for a range of geospatial use cases, inc
 The OSGeo-Live is formally a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation. The OSGeo-Live began roughly eight years ago with a smaller open project based in Australia, and committed itself to the larger OSGeo Foundation structure in its second year. More than fifty (50) open-source projects now actively maintain and improve their own install scripts, examples and documentation. After long years of "tepid" progress and iteration, a combination of techincal stability, tools sets, community awareness and reproducible steps to contribute, provided the basis for substantial growth. The project is now stable, easily incorporates advances in components, and widely adopted. Let's look at each of these building blocks briefly:
 
 Technical Stability
+An original goal of the OSGeo-Live was to operate well on minimal hardware with broad support for common peripherals, and a license structure compatible with project goals. The XUbuntu version of Ubuntu Linux was chosen as a foundation, and it was been very successful. To this day, almost all applications would operate easily in very modest RAM and disk space (with the notable exception of Java-based software which requires substantially more RAM). 
+
+The technical stability and critical success of Linux itself, and Ubuntu Linux in particular, is widely accepted and needs no further discussion here. However,
+the OSGeo-Live is not a "linux distribution" per se, primarily because the project does not provide a seamless upgrade process from one version to another. The OSGeo-Live relies on the Ubuntu/Debian/GNU, apt-based ecosystem to handle the heavy-lifting of system updates and upgrades. This is a win-win, as updates are proven reliable over a very large Ubuntu community process, and frees the OSGeo-Live project to concentrate on adding value to the featured projects.
+
+As we shall see, due to a component architecture, individual software projects can be installed as-needed on a generic base. 
 
 Tool Sets
 
