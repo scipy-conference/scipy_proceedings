@@ -21,12 +21,7 @@ BCE: Berkeley's Common Scientific Compute Environment for Research and Education
 
 .. class:: abstract
 
-  Virtual machines are widely used, but in an ad hoc manner. Members of the UC
-  Berkeley D-Lab, Statistical Computing Facility (SCF), and Berkeley Research
-  Computing (BRC) have evaluated a breadth of virtualization technologies
-  and present a strategy for constructing the Berkeley Common Environment
-  [BCE]_. We also provide a comparison with a successful, existing project,
-  [OSGeo]_.
+  Virtual machines are widely used, but in an ad hoc manner. Members of the UC Berkeley D-Lab, Statistical Computing Facility (SCF), and Berkeley Research Computing (BRC) have evaluated a breadth of virtualization technologies and present a strategy for constructing the Berkeley Common Environment [BCE]_. We also provide a comparison with a successful, existing project, [OSGeo-Live]_.
 
 .. class:: keywords
 
@@ -72,53 +67,46 @@ The OSGeo-Live is a self-contained bootable DVD, USB thumb drive or Virtual Mach
 It provides pre-configured applications for a range of geospatial use cases, including storage, publishing, viewing, analysis and manipulation of data. It also contains sample datasets and documentation.
 '''
 
-
-The OSGeo-Live is formally a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [3]. Eight years ago, there existed several very large and growing open-source geospatial projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and QGis.  At the same time. the OSGeo-Live began with a smaller open project based in Australia that sought to build an easy to try and use software environment for these and other spatial data applications. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent project committed itself to the larger OSGeo Foundation structure in its second year. More than fifty (50) open-source projects now actively maintain and improve their own install scripts, examples and documentation. After long years of "tepid" progress and iteration, a combination of techincal stability, tools sets, community awareness and reproducible steps to contribute, provided the basis for substantial growth.
+The OSGeo-Live is formally a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [3]. Eight years ago, there existed several very large and growing open-source geospatial projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and QGis.  At the same time. the OSGeo-Live began with a smaller open project based in Australia that sought to build an "easy to try and use" software environment for these and other spatial data applications. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent OSGeo-Live project committed itself to the larger OSGeo Foundation structure in its second year. More than fifty (50) open-source projects now actively maintain and improve their own install scripts, examples and documentation. After long years of "tepid" progress and iteration, a combination of techincal stability, tools sets, community awareness and clearly-defined steps to contribute, provided the basis for substantial growth.
 
 The OSGeo-Live is now very stable, easily incorporates advances in components, and widely adopted. Let's look at each of these building blocks briefly:
 
 Technical Stability
 An original goal of the OSGeo-Live was to operate well on minimal hardware with broad support for common peripherals, and a license structure compatible with project goals. The XUbuntu version of Ubuntu Linux was chosen as a foundation, and it was been very successful. To this day, almost all applications would operate easily in very modest RAM and disk space (with the notable exception of Java-based software which requires substantially more RAM). 
 
-The technical stability and critical success of Linux itself, and Ubuntu Linux in particular, is widely accepted and needs no further discussion here. However, the OSGeo-Live is not a "linux distribution" per se, primarily because the project does not provide a seamless upgrade process from one version to another. The OSGeo-Live relies on the Ubuntu/Debian/GNU, apt-based ecosystem to handle the heavy-lifting of system updates and upgrades. This is a win-win, as updates are proven reliable over a very large Ubuntu community process, and frees the OSGeo-Live project to concentrate on adding value to its featured projects.
+The technical stability and critical success of Linux itself, and Ubuntu Linux in particular, is widely accepted and needs no further discussion here. However, the OSGeo-Live is not a "linux distribution" per se, primarily because the project does not provide a seamless upgrade process from one version to another. The OSGeo-Live relies on the Ubuntu/Debian/GNU, apt-based ecosystem to handle the heavy-lifting of system updates and upgrades. This is a win-win, as updates are proven reliable over a very large Ubuntu community process, and frees the OSGeo-Live project to concentrate on adding value to its featured components.
 
 As we shall see, due to a component architecture, individual software projects can be installed as-needed on a generic base. 
 
 Tool Sets
-From the earliest days of *nix computing, there has been a design goal of software tools that are commonly available, interoperate in predictable ways, and perform under all conditions. Decades later, the same design goals guide the choice of tool sets for the OSGeo-Live project. It cannot be overstated that, a key component to the success of the overall project has been the availability of widely-known and reliable tools, to developers from all parts of the world and in all major spoken languages.
+From the earliest days of *nix computing, there has been a design goal of software tools that are commonly available, interoperate in predictable ways, and perform under all conditions. Decades later, the same design goals guide the choice of tool sets for the OSGeo-Live project. It cannot be overstated that, a key component to the success of the overall project has been the availability of widely-known and reliable tools, to developers from all parts of the world and in all major spoken languages. It is also important to note that, rather than require formal installation packages ".deb" for each project, the OSGeo-Live chose to use a simple install script format, one per installed project. This proved crucial in the earliest stages, as an outside open-source project evaluating participation in the Live could get started with fewer barriers to entry, and then add rigor and features later. Almost by definition, the candidate open-source projects had install scripts already built for Linux which could be readily adopted to the OSGeo-Live install conventions. By providing ample examples on the OSGeo-Live of install scripts in major deployment contexts, for both applications and server processes,  and clear guidelines for installation conventions, a new open-source project could almost immediately develop and iterate their own install scripts in a straightforward way.
 
-The origins of the OSGeo-Live are 
-bash-dash-sh
-apt
+Subversion repo -- asset heirarchy -- individual install scripts -- Live build scripts 
 trac-subversion   http://trac.osgeo.org/osgeo/report/10
 
-
 Community Awareness
+There are multiple drivers for adoption of a new technology, platform and community participation. The processes of initial awareness, trialability, adoption and iteration are well-known [4].  
 
-Steps to Contribute
-
-
-
-
-as a virtual machine. This was started 7-8 years ago. Success only occured after
-a few years of "tepid" progress. Part of the driver is likely the limited amount
+Part of the driver is likely the limited amount
 of funds who are doing geospatial fieldwork. These people need to be able to go
 out and be very efficient in the field. They also often lack advanced
 programming / administration skills.
 
-About 5 years ago, some funding came in for one of the contributors to document
-all of this. Included hiring a graphic designer to make intro and tutorial pages
+Documentation of Applications - the Overview and Quickstart formats.
+About 5 years ago, some funding came in for one of the contributors to document all of this. Included hiring a graphic designer to make intro and tutorial pages
 to introduce the templates for creating a package. This takes money (as compared
 to the tech stuff).
+
 
 OSGeo provides a place for a variety of projects to interoperate, and
 potentially share with each other / synergy. OSGeo raises awareness of other
 projects.
 
-Founded on Ubuntu Linux, invite mature, stable projects. Overlap in language
-group (C-based vs. JVM-based) and interest area. Code is visible, licenses are
-established.
+Steps to Contribute
 
+A FAQ was written and published in an easily accessible location. Outreach was conducted through formal and informal networks.
+
+----
 What are the steps that established credibility to get projects contributing to
 the distribution. Initially, just shell scripts to install five core / important
 packages (XXX - what were they and why?). Reached out to 50 projects, more
@@ -150,6 +138,7 @@ consistent / good graphic design.
 [1] http://live.osgeo.org
 [2] http://www.osgeo.org/content/faq/foundation_faq.html
 [3] 
+[4] Diffusion of Innovation; Rogers et al 1962  http://en.wikipedia.org/wiki/Diffusion_of_Innovations
 
 
 Other virtual machines
