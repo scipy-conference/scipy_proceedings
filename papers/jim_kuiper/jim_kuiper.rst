@@ -88,7 +88,7 @@ primarily for use by regulating agencies, project planners, and
 public stakeholders. More details about Solar Mapper can be found
 in [Sol13]_.
 
-The Ecological Risk Calculator (ERC) [ERC]_ estimates risk in
+The Ecological Risk Calculator (ERC) [Erc]_ estimates risk in
 individual watersheds in the western United States to federally listed
 threatened and endangered species, and their designated critical
 habitats from energy related surface and groundwater withdrawals.
@@ -779,7 +779,7 @@ behalf of the Government.
            Environmental Impact Statement for Solar Energy Development in
            Six Southwestern States*, FES 12-24, DOE/EIS-0403, July 2012.
            Available at http://solareis.anl.gov/documents/fpeis
-.. [ERC] http://bogi.evs.anl.gov/erc/portal
+.. [Erc] http://bogi.evs.anl.gov/erc/portal
 .. [Ezmt] http://eispctools.anl.gov
 .. [Ggl] http://maps.google.com
 .. [GRASS] http://grass.osgeo.org
