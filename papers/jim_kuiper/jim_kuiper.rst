@@ -711,7 +711,7 @@ compatibility with GeoServer, and the projection is set using
    user_dir = "/srv/ez/shared/models/users/"+
      str(self.user_id)
    if not os.path.exists(user_dir):
-   os.makedirs(user_dir)
+     os.makedirs(user_dir)
 
    # Export the model result to GeoTIFF format
    WPSProcess.cmd(self, "r.out.gdal -c input="+
