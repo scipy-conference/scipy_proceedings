@@ -57,7 +57,7 @@ Community
 
 
 OSGeo-Live: A Successful Common Environment
---------------------------------------
+-------------------------------------------
 
 The OSGeo-Live project is an example of both a sophisticated compute environment, and synergistic community process; quoting from the OSGeo-Live [1] website:
 
@@ -72,20 +72,20 @@ The OSGeo-Live is formally a project of the Open Source Geospatial Foundation (O
 The OSGeo-Live is now very stable, easily incorporates advances in components, and widely adopted. Let's look at each of these building blocks briefly:
 
 Technical Stability
-An original goal of the OSGeo-Live was to operate well on minimal hardware with broad support for common peripherals, and a license structure compatible with project goals. The XUbuntu version of Ubuntu Linux was chosen as a foundation, and it was been very successful. To this day, almost all applications would operate easily in very modest RAM and disk space (with the notable exception of Java-based software which requires substantially more RAM). 
+An original goal of the OSGeo-Live was to operate well on minimal hardware with broad support for common peripherals, and a license structure compatible with project goals. The XUbuntu version of Ubuntu Linux was chosen as a foundation, and it was been very successful. To this day, almost all applications would operate easily in very modest RAM and disk space (with the notable exception of Java-based software which requires substantially more RAM).
 
 The technical stability and critical success of Linux itself, and Ubuntu Linux in particular, is widely accepted and needs no further discussion here. However, the OSGeo-Live is not a "linux distribution" per se, primarily because the project does not provide a seamless upgrade process from one version to another. The OSGeo-Live relies on the Ubuntu/Debian/GNU, apt-based ecosystem to handle the heavy-lifting of system updates and upgrades. This is a win-win, as updates are proven reliable over a very large Ubuntu community process, and frees the OSGeo-Live project to concentrate on adding value to its featured components.
 
-As we shall see, due to a component architecture, individual software projects can be installed as-needed on a generic base. 
+As we shall see, due to a component architecture, individual software projects can be installed as-needed on a generic base.
 
 Tool Sets
-From the earliest days of *nix computing, there has been a design goal of software tools that are commonly available, interoperate in predictable ways, and perform under all conditions. Decades later, the same design goals guide the choice of tool sets for the OSGeo-Live project. It cannot be overstated that, a key component to the success of the overall project has been the availability of widely-known and reliable tools, to developers from all parts of the world and in all major spoken languages. It is also important to note that, rather than require formal installation packages ".deb" for each project, the OSGeo-Live chose to use a simple install script format, one per installed project. This proved crucial in the earliest stages, as an outside open-source project evaluating participation in the Live could get started with fewer barriers to entry, and then add rigor and features later. Almost by definition, the candidate open-source projects had install scripts already built for Linux which could be readily adopted to the OSGeo-Live install conventions. By providing ample examples on the OSGeo-Live of install scripts in major deployment contexts, for both applications and server processes,  and clear guidelines for installation conventions, a new open-source project could almost immediately develop and iterate their own install scripts in a straightforward way.
+From the earliest days of \*nix computing, there has been a design goal of software tools that are commonly available, interoperate in predictable ways, and perform under all conditions. Decades later, the same design goals guide the choice of tool sets for the OSGeo-Live project. It cannot be overstated that, a key component to the success of the overall project has been the availability of widely-known and reliable tools, to developers from all parts of the world and in all major spoken languages. It is also important to note that, rather than require formal installation packages ".deb" for each project, the OSGeo-Live chose to use a simple install script format, one per installed project. This proved crucial in the earliest stages, as an outside open-source project evaluating participation in the Live could get started with fewer barriers to entry, and then add rigor and features later. Almost by definition, the candidate open-source projects had install scripts already built for Linux which could be readily adopted to the OSGeo-Live install conventions. By providing ample examples on the OSGeo-Live of install scripts in major deployment contexts, for both applications and server processes,  and clear guidelines for installation conventions, a new open-source project could almost immediately develop and iterate their own install scripts in a straightforward way.
 
-Subversion repo -- asset heirarchy -- individual install scripts -- Live build scripts 
+Subversion repo -- asset heirarchy -- individual install scripts -- Live build scripts
 trac-subversion   http://trac.osgeo.org/osgeo/report/10
 
 Community Awareness
-There are multiple drivers for adoption of a new technology, platform and community participation. The processes of initial awareness, trialability, adoption and iteration are well-known [4].  
+There are multiple drivers for adoption of a new technology, platform and community participation. The processes of initial awareness, trialability, adoption and iteration are well-known [4].
 
 Part of the driver is likely the limited amount
 of funds who are doing geospatial fieldwork. These people need to be able to go
@@ -106,7 +106,8 @@ Steps to Contribute
 
 A FAQ was written and published in an easily accessible location. Outreach was conducted through formal and informal networks.
 
-----
+missing title
+-------------
 What are the steps that established credibility to get projects contributing to
 the distribution. Initially, just shell scripts to install five core / important
 packages (XXX - what were they and why?). Reached out to 50 projects, more
@@ -137,7 +138,7 @@ consistent / good graphic design.
 
 [1] http://live.osgeo.org
 [2] http://www.osgeo.org/content/faq/foundation_faq.html
-[3] 
+[3]
 [4] Diffusion of Innovation; Rogers et al 1962  http://en.wikipedia.org/wiki/Diffusion_of_Innovations
 
 
@@ -285,13 +286,13 @@ Then go to the provisioning directory and see the information in HOWTO.md.
 
   * Download and install VirtualBox from the [VirtualBox
     website](https://www.virtualbox.org/wiki/Downloads). This is the tool the
-    runs the virtual machine for you. 
+    runs the virtual machine for you.
   * Download the BCE VM in the form of an OVA file from [UNDER
     CONSTRUCTION](BCE-xubuntu-14.04-amd64.ova).
   * Open VirtualBox and import the BCE-xubuntu-14.04-amd64.ova file you just
     downloaded by going to "File->Import Appliance" and then selecting the .ova
     file from wherever you downloaded it to (possible 'Downloads' in your home
-    directory on the machine). 
+    directory on the machine).
   * Wait a few minutes...
   * Start the virtual machine by clicking on the tab for "BCE-xubuntu-14.04-amd64" on the left side and then clicking "Start" at the top. This will start a virtual Linux computer within your own machine. After a few seconds you should see black screen and then soon you'll see the desktop of the VM.
 
@@ -319,18 +320,18 @@ One useful thing will be to share folders between the VM and the host machine so
     selected was, in place of 'Documents'). You can drag and drop files to
     manipulate them.
   * Alternatively, from the Terminal, you can also see the directory by doing
-    "cd ~/Desktop/shared/sf_Documents" and then "ls" will show you the files. 
+    "cd ~/Desktop/shared/sf_Documents" and then "ls" will show you the files.
 
 Be careful: unless you selected "read only" at the same time as "make
 permanent", any changes to the shared folder on the VM affects the folder in the
-'real world', namely your computer. 
+'real world', namely your computer.
 
 *EC2*
 
   - Go to [EC2 management console](http://console.aws.amazon.com) and choose the US-West-2 (Oregon) region, as that is where we have posted the BCE AMI. (You'll need to have an account set up.)
   - On the "AMIs" tab, search for the BCE AMI amongst public images.
   - Launch an instance
-  - Follow the instructions given in the "Connect" button to SSH to the instance
+  55. Follow the instructions given in the "Connect" button to SSH to the instance
   - If you want to connect as the "oski" user, you can deposit your public SSH key in the .ssh folder of the "oski" user.
 
 
@@ -481,7 +482,7 @@ References
 ----------
 
 .. [BCE] http://collaboratool.berkeley.edu
-.. [OSGeo] http://www.osgeo.org/
+.. [OSGeo-Live] http://www.osgeo.org/
    # A more proper reference
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
