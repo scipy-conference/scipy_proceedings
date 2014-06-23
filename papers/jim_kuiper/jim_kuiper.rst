@@ -116,11 +116,11 @@ is the need for coordinate reference systems and coordinate
 transformations (projections), which are needed to represent areas on
 the earth's oblate spheroid shape as planar maps, and manage data in
 Cartesian coordinate systems. These references appear in the code
-examples as "3857", the European Petroleum Survey Group (ESPG) Spatial
+examples as "3857", the European Petroleum Survey Group (EPSG) Spatial
 Reference ID (SRID) reference for WGS84 Web Mercator (Auxiliary Sphere)
 and "102003", the USA Contiguous Albers Equal Area Conic projection
 commonly used for multi-state and national maps of the United States.
-These standardized ESPG definitions are now maintained by the
+These standardized EPSG definitions are now maintained by the
 International Association of Oil & Gas Producers (OGP) Surveying &
 Positioning Committee [OGP]_.
 
