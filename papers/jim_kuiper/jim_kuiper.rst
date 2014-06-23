@@ -466,25 +466,21 @@ the footprint. Some example results are listed in Table 2.
    for row in cur:
      # Collect results in list of lists...
 
-.. raw:: latex
+.. table:: Example Ecorisk Calculator Results Listing Threatened and Endangered Species Occurring in a Watershed :label:`mtable`
 
-   \begin{table*}[h]
-
-   \begin{tabular*}{|l|l|l|}
-   \hline
-   \textbf{Species} & \textbf{Taxa} & \textbf{Status} \\ \hline
-   California Red-legged Frog & Amphibian & T \\ \hline
-   California Tiger Salamander - Sonoma County & Amphibian & E \\ \hline
-   Colusa Grass & Plant & T \\ \hline
-   Conservancy Fairy Shrimp & Invertebrate & E \\ \hline
-   Fleshy Owl's clover & Plant & T \\ \hline
-   \end{tabular*}
-
-   \caption{Example Ecorisk Calculator Results Listing
-            Threatened and Endangered Species Occurring
-            in a Watershed \DUrole{label}{TABLE 2:}}
-
-   \end{table*}
+   +---------------------------------------------+--------------+-------+
+   | Species                                     | Taxa         |Status |
+   +---------------------------------------------+--------------+-------+
+   | California Red-legged Frog                  | Amphibian    | T     |
+   +---------------------------------------------+--------------+-------+
+   | California Tiger Salamander - Sonoma County | Amphibian    | E     |
+   +---------------------------------------------+--------------+-------+
+   | Colusa Grass                                | Plant        | T     |
+   +---------------------------------------------+--------------+-------+
+   | Conservancy Fairy Shrimp                    | Invertebrate | E     |
+   +---------------------------------------------+--------------+-------+
+   | Fleshy Owls clover                          | Plant        | T     |
+   +---------------------------------------------+--------------+-------+
 
 Footprint Analysis of Imperiled Species Sensitivity Stored as Raster (Cell-based) Data
 --------------------------------------------------------------------------------------
