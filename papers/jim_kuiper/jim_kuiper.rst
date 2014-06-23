@@ -174,7 +174,7 @@ SOFTWARE ENVIRONMENT
 
 Each of these systems was built with a multi-tier architecture composed
 of a Javascript/HTML (hypertext markup language) interface built on
-Bootstrap [Btsrp]_, OpenLayers [OpLyr]_, and ExtJS [Sen]; a web
+Bootstrap [Btsrp]_, OpenLayers [OpLyr]_, and ExtJS [Sen]_; a web
 application tier built on Ruby on Rails [RoR]_; a mapping tier implemented
 with GeoServer [Gsrvr]_; a persistence tier implemented with PostGIS [PGIS]_;
 and an analysis tier built on Python, PyWPS [PyWPS]_, GRASS [GRASS]_,
