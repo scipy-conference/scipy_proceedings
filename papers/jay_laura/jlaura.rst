@@ -36,7 +36,7 @@ In the context of this work, we focus on binary weights where the adjacency crit
    :align: center
    :figclass: w
 
-Rook (shared edge) and Queen (shared vertex) adjacency on a regular 3 by 3 lattice.  :label:`adjacency`
+   Rook (shared edge) and Queen (shared vertex) adjacency on a regular 3 by 3 lattice.  :label:`adjacency`
 
 PySAL
 ======
@@ -63,7 +63,7 @@ The primary advantage of this approach over the naive algorithm is the reduction
 
 Parallel Spatial Binning
 ========================
-One approach to improve the performance of the binning algorithm would be to utilize multiple processing cores (workers).  In this implementation binning is performed in serial and then each bin is mapped to an available processing core for processing.  Therefore, the expensive :math:`O(\frac{n^{2}}{2}) computation can be performed concurrently, up to the number of available processing cores.  An implementation of this type requires three processing steps, with only the second step being performed concurrently.  First, derive a domain decomposition and assign each geometry to one or more bins[#]_.  Second, concurrently apply the naive algorithm to all geometries within a bin.  This requires that the full geometries be communicated from the mother process to the worker process or that the geometries be stored in a globally accessible shared memory space.  Finally, aggregate the results from each worker.  Boundary crossing geometries will be processed by more than one worker that does not have knowledge of adjacent bins.  Therefore, this step is required to remove redundant adjacencies and generate a single adjacency list.
+One approach to improve the performance of the binning algorithm would be to utilize multiple processing cores (workers).  In this implementation binning is performed in serial and then each bin is mapped to an available processing core for processing.  Therefore, the expensive :math:`O(\frac{n^{2}}{2})` computation can be performed concurrently, up to the number of available processing cores.  An implementation of this type requires three processing steps, with only the second step being performed concurrently.  First, derive a domain decomposition and assign each geometry to one or more bins[#]_.  Second, concurrently apply the naive algorithm to all geometries within a bin.  This requires that the full geometries be communicated from the mother process to the worker process or that the geometries be stored in a globally accessible shared memory space.  Finally, aggregate the results from each worker.  Boundary crossing geometries will be processed by more than one worker that does not have knowledge of adjacent bins.  Therefore, this step is required to remove redundant adjacencies and generate a single adjacency list.
 
 Like the binning approach, decomposition is a non-trivial compute cost.  Additionally, the cost to communicate native python data structures is high in parallel environment.  Representation in efficient arrays requires the generation of those arrays, another upfront processing cost.
 
@@ -133,15 +133,15 @@ Finally, in Figure (:ref:`merged`)(d) the total compute time using randomly dist
    :align: center
    :figclass: w
 
-Spatial binning and list based performance comparison showing: (a) scaling a total synthetic data size increases, (b) list based scaling using synthetic data, (c) scaling performance as the total number of vertices is increased, and (d) randomly distirbuted data with varying neighbor cardinality and vertex counts. :label:`merged`
+   Spatial binning and list based performance comparison showing: (a) scaling a total synthetic data size increases, (b) list based scaling using synthetic data, (c) scaling performance as the total number of vertices is increased, and (d) randomly distirbuted data with varying neighbor cardinality and vertex counts. :label:`merged`
 
 To test algorithm performance with real world data, we utilize four, increasingly large subsets of the global U.S. census block dataset, Figure (:ref:`realworld`).  We report that neither binning nor our list based solution are dominant in all use cases.  We report that, as a function of the total geometry count, it appears that a threshold exhists around :math:`n = 32500` (lower x-axis).  Utilizing the upper x-axis, the previous assertion appear erroneous; overall algorithm scaling is a function of the total count, but comparative performance is a function of the geometric complexity with parity existing around :math:`n=275` and dominance of the list based method being lost between :math:`275 < n < 575`.  
 
-..figure:: realworld.png
+.. figure:: realworld.png
    :align: center
-   "figclass: w
+   :figclass: w
 
-Spatial binning and list performance for the Queen contiguity case using four subsets of census blocks in the Western United states with varying spatial densities, geometry counts, and mean vertex counts.  Plot origin is based upon the number of geometries (lower x-axis). :label:`realworld`
+   Spatial binning and list performance for the Queen contiguity case using four subsets of census blocks in the Western United states with varying spatial densities, geometry counts, and mean vertex counts.  Plot origin is based upon the number of geometries (lower x-axis). :label:`realworld`
 
 
 Discussion
@@ -184,6 +184,6 @@ References
 
 .. [#] :math:`{32, 64, 128, 160, 192, 256, 288, 320, 384, 448, 512}` geometries squared.
 .. [#] :math:`n = 3,144`
-.. [#] :math:`n = 74,134` in the 2010census
+.. [#] :math:`n = 74,134` in the 2010 census
 .. [#] Conversely assign each bin to those geometries it contains.
 .. [#] While this section describes the function of an r-tree from fine to coarse, they are generated from coarse to fine.
