@@ -298,6 +298,10 @@ class Translator(LaTeXTranslator):
                                                          filename))
 
     def visit_footnote(self, node):
+        # Handle case where footnote consists only of math
+        if len(node.astext().split()) < 2:
+            node.append(nodes.label(text='_abcdefghijklmno_'))
+
         # Work-around for a bug in docutils where
         # "%" is prepended to footnote text
         LaTeXTranslator.visit_footnote(self, node)
