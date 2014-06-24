@@ -83,24 +83,24 @@ In implementation, Algorithm (:ref:`twostep`), the algorithm utilizes a defaultd
 .. code:: python
     :linenos:
 
- def twostep(fname):
-    shpFileObject = fname
-    if shpFileObject.type != ps.cg.Polygon:
-        return
-    numPoly = len(shpFileObject)
-    
-    vertices = collections.defaultdict(set)
-    for i, s in enumerate(shpFileObject):
-        newvertices = s.vertices[:-1]
-        for v in newvertices:
-            vertices[v].add(i)      
-            
-    w = collections.defaultdict(set)
-    for neighbors in vertices.itervalues():
-        for neighbor in neighbors:
-            w[neighbor] = w[neighbor] | neighbors
+    def twostep(fname):
+        shpFileObject = fname
+        if shpFileObject.type != ps.cg.Polygon:
+            return
+        numPoly = len(shpFileObject)
         
-    return w
+        vertices = collections.defaultdict(set)
+        for i, s in enumerate(shpFileObject):
+            newvertices = s.vertices[:-1]
+            for v in newvertices:
+                vertices[v].add(i)      
+                
+        w = collections.defaultdict(set)
+        for neighbors in vertices.itervalues():
+            for neighbor in neighbors:
+                w[neighbor] = w[neighbor] | neighbors
+            
+        return w
 
 Two step algorithm using higher performance containers for the Queen case. :label:`twostep`
 
@@ -156,7 +156,7 @@ Utilizing real world data, the binning approach is also able to leverage an esse
 Finally, in profiling both the binning and list based approaches, we see that reading the input shapefile requires at least one third of the processing time.  Therefore, I/O is the largest current processing bottleneck for which parallelization maybe a solution.
 
 Next Steps
-==========
+===========
 
 As described above, the r-tree implementation was significantly slower than anticipated.  To that end, we intend to profile and potentially optimize the PySAL r-tree implementation with the goal of identifying whether poor performance is a function of the implementation or a product of the necessary overhead required to generate the tree structure.  
 
@@ -164,9 +164,6 @@ The improved adjacency algorithm provides multiple avenues for future work.  Fir
 
 References
 -----------
-
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
 
 .. [Anselin:1988aa] Anselin, L. *Spatial econometrics: Methods and models*, Matrinus
 		    Nijhoff, Dordrecht, the Netherlands. 1988.
@@ -176,6 +173,8 @@ References
 		    36(1):67 – 89, 1996.
 
 .. [Duque2012] Duque, J. C., Anselin, L., and Rey, S. J. *The Max-P-Regions Problem*, Journal of Regional Science, 		       52(3):397–419, 2012.
+
+.. [Gutman] Gutman, A. *R-Trees: A dynamic index structure for spatial searching*, Proceedings of the 1984 ACM SIGMOD International Conference on Management of Data, 1984. 
 
 .. [Rey2010] Rey, S. J. and Anselin, L. *PySAL: A Python library of spatial
 	     analytical methods*, In Fischer, M.M ; Getis, A., editor, Handbook of
