@@ -66,11 +66,11 @@ The Eastern Interconnection States' Planning Council (EISPC) Energy
 Zones Mapping Tool (EZMT) [Ezmt]_ was developed primarily to
 facilitate identification of potential energy zones or areas of
 high resource concentration for nine different low- or no-carbon
-energy resources, spanning over 30 grid-scale energy generation
+energy resources, spanning more than 30 grid-scale energy generation
 technologies. The geographic scope is the Eastern Interconnection
-(EI), the electrical grid which serves the eastern United States and parts
-of Canada. The EZMT includes over 250 map layers, a flexible
-suitability modeling capability with over 35 pre-configured models
+(EI), the electrical grid that serves the eastern United States and parts
+of Canada. The EZMT includes more than 250 map layers, a flexible
+suitability modeling capability with more than 35 pre-configured models
 and 65 input modeling layers, and 19 reports that can be run for
 user-specified areas within the EI. More background about the
 project is available from [Arg13]_.
@@ -91,7 +91,7 @@ in [Sol13]_.
 The Ecological Risk Calculator (ERC) [Erc]_ estimates risk in
 individual watersheds in the western United States to federally listed
 threatened and endangered species, and their designated critical
-habitats from energy related surface and groundwater withdrawals.
+habitats from energy-related surface and groundwater withdrawals.
 The approach takes into account several biogeographical
 characteristics of watersheds including occupancy, distribution, and
 imperilment of species, and their sensitivity to impacts from water
@@ -107,18 +107,18 @@ Each of these Web-based mapping applications includes both vector
 data stored as a matrix of equally sized cells) spatial data stored
 in a relational database. For each application, Python was used to
 add one or more custom geoprocessing, modeling, or reporting
-services. The following section provides a background of the
+services. The following section provides background on the
 software environment used, followed by specific examples
 of code with a discussion about the unique details in each.
 
 One of the distinctive elements of geographic data management and processing
 is the need for coordinate reference systems and coordinate
 transformations (projections), which are needed to represent areas on
-the earth's oblate spheroid shape as planar maps, and manage data in
+the earth's oblate spheroid shape as planar maps and to manage data in
 Cartesian coordinate systems. These references appear in the code
-examples as "3857", the European Petroleum Survey Group (EPSG) Spatial
+examples as "3857," the European Petroleum Survey Group (EPSG) Spatial
 Reference ID (SRID) reference for WGS84 Web Mercator (Auxiliary Sphere)
-and "102003", the USA Contiguous Albers Equal Area Conic projection
+and "102003," the USA Contiguous Albers Equal Area Conic projection
 commonly used for multi-state and national maps of the United States.
 These standardized EPSG definitions are now maintained by the
 International Association of Oil & Gas Producers (OGP) Surveying &
@@ -128,7 +128,7 @@ The Web Mercator projection has poor properties for many elements of
 mapping and navigation [NGA]_ but is used for most current Web-based
 mapping applications because of the wide availability of high-quality
 base maps in the Web Mercator projection from providers such as Google
-Maps. In the Solar Mapper project we compared area computations in the
+Maps. In the Solar Mapper project, we compared area computations in the
 southwestern United States using Web Mercator against the Albers Equal Area
 projection and found very large discrepancies in the results (Table 1).
 
@@ -174,7 +174,7 @@ SOFTWARE ENVIRONMENT
 
 Each of these systems was built with a multi-tier architecture composed
 of a Javascript/HTML (hypertext markup language) interface built on
-Bootstrap [Btsrp]_, OpenLayers [OpLyr]_, and ExtJS [Sen]_; a web
+Bootstrap [Btsrp]_, OpenLayers [OpLyr]_, and ExtJS [Sen]_; a Web
 application tier built on Ruby on Rails [RoR]_; a mapping tier implemented
 with GeoServer [Gsrvr]_; a persistence tier implemented with PostGIS [PGIS]_;
 and an analysis tier built on Python, PyWPS [PyWPS]_, GRASS [GRASS]_,
@@ -198,8 +198,8 @@ Full Process for Footprint Analysis of Power Plant Locations Stored as Point Fea
 This example is from the EZMT and illustrates part of its Power Plant
 report. The user draws an area of interest over the map (Figure 1) and
 specifies other report parameters (Figure 2). The "Launch Report" button
-submits a request to the web application server to schedule, launch,
-track, and manage the reports execution.
+submits a request to the Web application server to schedule, launch,
+track, and manage the report's execution.
 
 .. figure:: figure1.png
 
@@ -207,12 +207,12 @@ track, and manage the reports execution.
 
 .. figure:: figure2.png
 
-   EZMT Interface View of the Report Run Launcher. :label:`FIGURE 2:`
+   EZMT Interface View of the Report Run Launcher :label:`FIGURE 2:`
 
-The web application initiates the report run by making a WPS request to
+The Web application initiates the report run by making a WPS request to
 the service, which is implemented in PyWPS. The request is an XML
 (extensible markup language) document describing the WPS "Execute"
-operation, and is submitted via a hypertext transfer protocol (HTTP)
+operation and is submitted via a hypertext transfer protocol (HTTP)
 POST. PyWPS receives this POST request, performs some basic
 validation and preprocessing, and routes the request to the custom
 ``WPSProcess`` implementation for that request. PyWPS then prepares the
@@ -221,7 +221,7 @@ below illustrates the major steps used to generate the data for the
 report.
 
 We use the ``psycopg2`` library to interact with the database, including
-leveraging the GIS capabilities of PostGIS.
+leveraging the geographic information system (GIS) capabilities of PostGIS.
 
 .. code-block:: python
 
@@ -230,7 +230,7 @@ leveraging the GIS capabilities of PostGIS.
 
 The user-specified footprint corresponding to Figure 1 is hard-coded
 in this example with Web Mercator coordinates specified in meters and
-using Well-Known Text (WKT) format.
+using the Well-Known Text (WKT) format.
 
 .. code-block:: python
 
@@ -255,9 +255,9 @@ A database connection is then established, and a cursor is created.
 Structured Query Language (SQL) is used to (1) convert the Web Mercator
 footprint to the Albers Equal Area projection, (2) generate a buffer
 around the Albers version of the footprint, and (3) convert that buffer
-back to Web Mercator. In these sections ``ST_GeomFromText`` converts
+back to Web Mercator. In these sections, ``ST_GeomFromText`` converts
 WKT to binary geometry, and ``ST_AsText`` converts binary geometry
-back to WKT. Since WKT doesnt store projection information, it is
+back to WKT. Because WKT does not store projection information, it is
 given as a parameter in ``ST_GeomFromText``.
 
 .. code-block:: python
@@ -355,9 +355,9 @@ example, (1) in contrast to points, line features can cross the
 footprint boundary; and (2) we want to report the total length
 of the portion within the footprint rather than only listing
 the matching records. Note that ``ST_Intersects`` is used to
-collect the lines overlapping the footprint, while
+collect the lines overlapping the footprint, whereas
 ``ST_Intersection`` is used to calculate lengths of only the
-portion of the lines within the footprint. Also the coordinates
+portion of the lines within the footprint. In addition, the coordinates
 are transformed into the Albers Equal Area projection for the
 length computation.
 
@@ -405,7 +405,7 @@ with areas. The ``sma_code`` field contains jurisdiction types. The query below
 uses ``ST_Intersects`` to isolate the features overlapping the outer buffer and
 computes the areas within the buffer and footprint for each jurisdiction
 that it finds for a particular report run. For the area computations,
-``ST_Intersection`` is used to remove extents outside the footprint or buffer,
+``ST_Intersection`` is used to remove extents outside of the footprint or buffer,
 and ``ST_Transform`` is used to convert the coordinates to an Albers Equal Area
 projection before the area computation is performed.
 
@@ -490,7 +490,7 @@ data rather than vector (coordinate-based) data. The ``ST_Clip`` method can
 retrieve raster or vector data and returns the data within the footprint. The
 ``WHERE`` clause is important for performance because images in the database are
 usually stored as many records, each with a tile. ``ST_Intersects`` restricts
-the much more processing intensive ``ST_Clip`` method to the tiles overlapping the
+the much more processing-intensive ``ST_Clip`` method to the tiles overlapping the
 footprint. When the footprint overlaps multiple image tiles, multiple records
 are returned to the cursor, and results are combined in the loop.
 
@@ -531,10 +531,10 @@ Elevation Profile along User-Specified Corridor Centerline of Using Elevation Da
 --------------------------------------------------------------------------------------------------------
 
 The Corridor Report in the EZMT includes elevation profiles along the
-user-input corridor centerline.  In this example an elevation layer is
-sampled along a regular interval along the centerline. First the
+user-input corridor centerline.  In this example, an elevation layer is
+sampled along a regular interval along the centerline. First, the
 coordinate of the sample point is generated with ``ST_Line_Interpolate_Point``,
-then the elevation data is retrieved from the layer with ``ST_Value``.
+next, the elevation data are retrieved from the layer with ``ST_Value``.
 
 .. code-block:: python
 
@@ -604,16 +604,16 @@ Footprint Analysis of Population Density Stored as Raster Data
 
 In this example, the input data consist of population density
 values in raster format, and we want to estimate the total
-population within the footprint. As in the previous example
+population within the footprint. As in the previous example,
 ``ST_Intersects`` is used in the ``WHERE`` clause to limit the
 tiles processed by the rest of the query, and multiple records
-will be output if the footprint overlaps multiple tiles. First
+will be output if the footprint overlaps multiple tiles. First,
 image cells overlapped by the footprint are collected and
 converted to polygons (``ST_DumpAsPolygons``). Next, the
 polygons are trimmed with the footprint (``ST_Intersection``) to
 remove portions of cells outside the footprint and are converted to an
-equal area projection (``ST_Transform``); and the area is computed.
-Finally the total population is computed (density * area),
+equal area projection (``ST_Transform``); and then the area is computed.
+Finally, the total population is computed (density * area),
 prorated by the proportion of the cell within the footprint.
 
 .. code-block:: python
@@ -644,13 +644,13 @@ Computation of Suitability for Wind Turbines Using Raster Data Using GRASS
 --------------------------------------------------------------------------
 
 The suitability models implemented in the EZMT use GRASS software
-for computations, accessed in Python through WPSs. The code below
+for computations, which are accessed in Python through WPSs. The code below
 shows the main steps followed when running a suitability model in
 the EZMT. The models use a set of raster layers as inputs, each
 representing a siting factor such as wind energy level, land cover,
 environmental sensitivity, proximity to existing transmission
 infrastructure, etc. Each input layer is coded with values ranging
-from 0 (Completely unsuitable) to 100 (Completely suitable) and
+from 0 (Completely unsuitable) to 100 (Completely suitable), and
 weights are assigned to each layer representing its relative
 importance. A composite suitability map is computed using a
 weighted geometric mean. Figure 4 shows the EZMT model launcher
@@ -658,19 +658,20 @@ with the default settings for land-based wind turbines with
 80-meter hub heights.
 
 Processing in the Python code follows the same steps that would
-be used in the command-line interface.  First the processing
-resolution is set, using ``g.region``. Then the input layers are
+be used in the command-line interface.  First, the processing
+resolution is set using ``g.region``. Then, the input layers are
 processed to normalize the weights to sum to 1.0 (this approach
-simplifies the model computation). Next an expression is
-generated, specifying the formula for the model and ``r.mapcalc``
+simplifies the model computation). Next, an expression is
+generated, specifying the formula for the model, and ``r.mapcalc``
 is called to perform the model computation. ``r.out.gdal`` is used
 to export the model result from GRASS format to GeoTiff for
 compatibility with GeoServer, and the projection is set using
-``gdal_translate`` from the GDAL plugin for GRASS.
+``gdal_translate`` from the Geospatial Data Abstractin Library
+[GDAL]_ plugin for GRASS.
 
 .. figure:: figure4.png
 
-   Land-based Wind Turbine Suitability Model Launcher in the EISPC Energy Zones Mapping Tool. :label:`FIGURE 4:`
+   Land-based Wind Turbine Suitability Model Launcher in the EISPC Energy Zones Mapping Tool :label:`FIGURE 4:`
 
 .. code-block:: python
 
@@ -728,9 +729,9 @@ CONCLUSIONS
 -----------
 
 Python is the de-facto standard scripting language in both the
-open source and proprietary GIS world. Most, if not all of the major
+open source and proprietary GIS world. Most, if not all, of the major
 GIS software systems provide Python libraries for system
-integration, analysis and automation, including PostGIS, GeoServer,
+integration, analysis, and automation, including PostGIS, GeoServer,
 GRASS, and ArcGIS. The examples in this paper include vector and raster
 data, as well as code for converting projections, creating buffers,
 retrieving features within a specified area, computing areas and
@@ -742,18 +743,18 @@ One of the key points we make is that the Web Mercator projection
 should not be used for generating buffers or computing lengths or
 areas because of the distortion inherent in the projection. The
 examples illustrate how these computations can be performed easily in
-PostGIS. We chose to use the Albers Equal Area projection which is
+PostGIS. We chose to use the Albers Equal Area projection, which is
 commonly used for regional and national maps for the United States.
 Different projections should be used for more localized areas.
 
-So far our web-based mapping applications include fairly
+So far our Web-based mapping applications include fairly
 straightforward analysis and modeling services. However, the same
 approaches can be used for much more sophisticated applications
 that tap into the abundant scientific libraries available in the
 Python ecosystem.
 
-ACKNOWLEDGEMENTS
-----------------
+ACKNOWLEDGMENTS
+---------------
 
 This work was supported by the U.S. Department of Energy, Office of
 Electricity Delivery and Energy Reliability; and the U.S. Department
@@ -781,6 +782,7 @@ behalf of the Government.
            Available at http://solareis.anl.gov/documents/fpeis
 .. [Erc] http://bogi.evs.anl.gov/erc/portal
 .. [Ezmt] http://eispctools.anl.gov
+.. [GDAL] http://www.gdal.org
 .. [Ggl] http://maps.google.com
 .. [GRASS] http://grass.osgeo.org
 .. [Gsrvr] http://geoserver.org
