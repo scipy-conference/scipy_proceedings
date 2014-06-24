@@ -135,8 +135,11 @@ consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
 orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
 sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
 lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
+volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
 pulvinar id metus.
+
+.. [#] On the one hand, a footnote.
+.. [#] On the other hand, another footnote.
 
 .. figure:: figure1.png
 
