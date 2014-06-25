@@ -34,6 +34,12 @@ BCE: Berkeley's Common Scientific Compute Environment for Research and Education
 Introduction
 ------------
 
+Quote: "btw- I have never setup for this LaTeX workflow, so the make_paper.sh
+fails for me miserably. Therefore, no advanced formatting and very probably
+more basic errors right now.. but, the prose is coming along" - One of the
+Authors
+
+
 Here we frame the problem space and describe the general class of devops
 solutions.
 
@@ -348,7 +354,7 @@ Then go to the provisioning directory and see the information in HOWTO.md.
 *VirtualBox*
 
   * Download and install VirtualBox from the [VirtualBox
-    website](https://www.virtualbox.org/wiki/Downloads). This is the tool the
+    website](https://www.virtualbox.org/wiki/Downloads). This is the tool that
     runs the virtual machine for you.
   * Download the BCE VM in the form of an OVA file from [UNDER
     CONSTRUCTION](BCE-xubuntu-14.04-amd64.ova).
