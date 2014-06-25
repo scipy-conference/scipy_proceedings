@@ -24,10 +24,14 @@ Python’s scientific computing and data analysis ecosystem, built around NumPy,
 
 Blaze is a project being built with the goal of addressing these limitations, and becoming a foundation to grow Python’s success in array-oriented computing long into the future. It consists of a small collection of libraries being built to generalize NumPy’s notions of array, dtype, and ufuncs to be more extensible, and to represent data and computation that is distributed or does not fit in main memory.
 
-TODO: refine the following paragraph to current architecture
+Blaze provides abstractions to connect users familiar with NumPy and Pandas to
+other data analytics libraries both within and without the standard numeric
+Python ecosystem.  Blaze specifically targets backends that support streaming
+out-of-core, or distributed storage and computation.
 
-Datashape is the array type system that describes the structure of data, including a specification of a grammar and set of basic types, and a library for working with them. LibDyND is an in-memory array programming library, written in C++ and exposed to Python to provide the local representation of memory supporting the datashape array types. BLZ is a chunked column-oriented persistence storage format for storing Blaze data, well-suited for out of core computations. Finally, the Blaze library ties these components together with a deferred execution graph and execution engine, which can analyze desired computations together with the location and size of input data, and carry out an execution plan in memory, out of core, or in a distributed fashion as is needed.
-
+We give an overview of the Blaze architecture and then demonstrate its use on a
+typical problem.  We use the abstract nature of Blaze to quickly benchmark and
+compare the performance of a variety of backends on a standard problem.
 
 .. class:: keywords
 
@@ -36,17 +40,76 @@ Datashape is the array type system that describes the structure of data, includi
 Introduction
 ------------
 
-* History of array-oriented programming, leading up to NumPy/SciPy/Pandas.
+Standard Interfaces
+~~~~~~~~~~~~~~~~~~~
 
-* Growth of data analysis outside of the Python world: Hadoop, R, Julia, etc.
+The data analytics ecosystem grows rapidly.  Today we see a growth both in
+computational systems such as Postgres, Pandas and Hadoop and also an
+increasing breadth of users ranging from physical scientists with a strong
+tradition of computation to social scientists and policy makers with less
+rigorous training.  While these upward trends are encouraging, they also place
+significant strain on the programming ecosystem.  Keeping novice users adapted
+to quickly changing programming paradigms and operational systems is
+challenging.
 
-* Describe the data structures/abstractions (array, relational table, data
-  frame) being used in different fields (scientific computing, statistical
-  analysis, data mining)
+Standard interfaces facilitate interactions between layers of complex and
+changing systems.  For example NumPy fancy indexing syntax has become a
+standard among array programming systems within the Python ecosystem.  Projects
+with very different backends (e.g. NumPy, SciPy.sparse, Theano, SciDB) all
+provide the same indexing interface despite operating very differently.
+This uniformity facilitates smoother adoption by existing user communities.
 
-* Blaze defines abstractions for array-oriented programming and then provides
-  hooks to existing systems.  We hope that, like numpy, this standard interface
-  spurs a new iteration of data analytics libraries.
+Standard interfaces help users to adapt to new technologies.  Standard
+interfaces allow library developers to evolve rapidly without the drag of a
+hostage user community.
+
+Interactive Arrays and Tables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Projects like NumPy and Pandas have demonstrated the value of interactive array
+and table objects.  These projects connect a broad base of users to efficient
+low-level code through a high-level interface.  This approach has given rise to
+large and productive software ecosystems within numeric Python (e.g. SciPy,
+Scikits, ....)  However both NumPy and Pandas are largely restricted to an in-memory
+computational model, limiting problem sizes to a certain scale.  They also both
+use somewhat custom in memory storage, requiring explicit conversions when
+dealing data from foreign systems.
+
+Concurrently developed foreign data analytic ecosystems like R and Julia
+provide similar styles of functionality with different application foci.
+The Hadoop File System (HDFS) has accrued a menagerie of powerful distributed
+computing systems like Hadoop, Spark, and Impala.  The broader scientific
+computing community has produced projects like Elemental and SciDB for
+distributed array computing in various contexts.  Finally traditional SQL
+databases like MySQL and Postgres remain both popular and very powerful.
+
+As problem sizes increase (growth of big data) and applications become more
+interdisciplinary (e.g. the increased use of machine learning), analysts
+increasingly require interaction with projects outside of the NumPy/Pandas
+ecosystem.  Unfortunately these foreign projects rarely feel as comfortable or
+as usable as the Pandas DataFrame.
+
+What is Blaze
+~~~~~~~~~~~~~
+
+Blaze provides a familiar DataFrame interface around computation on other
+systems.  It provides extensible mechanisms to connect this interface to
+diverse computational backends.  The Blaze project explicitly provides hooks to
+Streaming Python, Pandas, SQLAlchemy, and Spark.
+
+This abstract connection to a variety of projects has the following virtues:
+
+*   Novice users gain access to relatively exotic technologies
+*   Users can trivially shift computational backends within a single workflow
+*   Projects can trivially shift backends as technologies change
+*   New technologies are provided with a stable interface and a trained set of
+    users
+
+Blaze doesn't do any computation itself.  Instead it depends heavily on
+existing projects to perform that computation.  Blaze orchestrates other
+projects to perform Table-like computations.  We intend to extend this to array
+and more general models in the future.
+
 
 Blaze Architecture
 ------------------
