@@ -1,9 +1,9 @@
 :author: David R. Pugh
 :email: pugh@maths.ox.ac.uk
-:institution: Oxford Mathematical Institute, INET@Oxford
+:institution: School of Economics, University of Edinburgh; Institute for New Economic Thinking at the Oxford Martin School and Oxford Mathematical Institute, University of Oxford
 
 -------------------------------------------------------
-Python for research and teaching economics: a manifesto 
+Python for research and teaching economics
 -------------------------------------------------------
 
 .. class:: abstract
@@ -16,35 +16,53 @@ Python for research and teaching economics: a manifesto
 
 Introduction
 ------------
-In this paper, I discuss the goals, objectives, and pedagogical choices that I have made in designing and teaching a Python-based course on numerical methods to first-year graduate students in the Scottish Graduate Programme in Economics (SGPE) at the University of Edinburgh. This course would not have been possible without the generous funding and support from the SGPE, the Scottish Insitute for Research in Economics (SIRE), the School of Economics at the University of Edinburgh, and the Challenge Investment Fund (CIF).
+In this paper, I discuss the goals, objectives, and pedagogical choices that I have made in designing and teaching a Python-based course on computational modeling and simulation to first-year graduate students in the Scottish Graduate Programme in Economics (SGPE) at the University of Edinburgh.[#]_ The idea for my computational modeling and simulation course emerged out of my PhD research agenda during the summer of 2012. I originally conceived of the course as a way to partially fill what I felt was a significant gap in the training of economics post-graduate students at the University of Edinburgh. The first iteration of the course consisted of roughly six Python-based laboratory sessions and ran during the 2012-2013 academic year. Thus far the course has been a huge success and I am now working to develop a more extensive curriculum for a three part course on computational methods and simulation for economists.
 
-The idea for my computational modeling and simulation course emerged out of my PhD research agenda during the summer of 2012. I originally conceived of the computational methods course as a way to partially fill what I felt was a significant gap in the training of economics post-graduate students at the University of Edinburgh. The first iteration of the course consisted of roughly six Python-based laboratory sessions and ran during the 2012-2013 academic year. 
+.. [#] This course would not have been possible without the generous funding and support from the Scottish Graduate Programme in Economics (SGPE), the Scottish Insitute for Research in Economics (SIRE), the School of Economics at the University of Edinburgh, and the Challenge Investment Fund (CIF).
+ 
+The first part of the course is a suite of Python-based, interactive laboratory sessions designed to expose students to the basics of scientific programming in Python. The second part of the course is a week-long intensive computational methods “boot camp.”  The boot camp curriculum focuses on deepening students’ computer programming skills using the Python programming language and teaching important software design principles that are crucial for generating high-quality, reproducible scientific research using computational methods. The final part of the course will be an advanced training course targeted at PhD students nad will focus on applying more cutting edge computational science techniques to economic problems via a series of interactive lectures and tutorials. The curriculum for this part of the course will derive primarily from [judd1998]_, [stachurski2009]_, and [sargent2014]_.
 
-The course was a huge success and I am now working to develop a more extensive curriculum for a three part course on computational methods. The first part of the course is a suite of Python-based laboratory sessions designed to expose students to the basics of computer programming in Python. 
-
-The second part of the course is a week-long intensive computational methods “boot camp.”  The boot camp curriculum focuses on deepening students’ computer programming skills using the Python programming language and teaching important software design principles that are crucial for generating high-quality, reproducible scientific research using computational methods. 
-
-The final part of the course focuses on applying key computational science techniques to economic problems via a series of interactive lectures and tutorials. The curriculum for this part of the course will derive from 
+The remainder of this paper proceeds as follows. In the next section I discuss a number of important decisions regarding software that I faced when developing the course. In section ?? I provide some motivation for applying computational methods and simulation in economics. In section ??, I provide a detailed outline of my course. Finally, section ?? concludes.  
 
 Software
 --------
-In this section I discuss my decisions regarding software.
+In this section I discuss the software that I decided to use for the course. For the laboratory sessions I needed to decide whether to use Python or Matlab, and conditional on using Python I needed to choose an appropriate Python distribution. For the Python boot camp and the Advanced training course I needed to make additional decisions regarding text editors and version control software.  
 
-Python vs. MATLAB
+Python vs. Matlab
 ~~~~~~~~~~~~~~~~~
-Discussion of MatLab vs Python. Why Python rocks comapred with MatLab.
+Python is a modern, object-oriented programming language widely used in academia and private industry, whose clean, yet expressive syntax, makes it an easy programming language to learn while still remaining powerful enough for serious scientific computing. Python's syntax was designed from the start with the human reader in mind and generates code that is easy to understand and debug which shortens development time relative to low-level, compiled languages such as Fortran and C++.  Among the high-level, general purpose languages, Python has the largest number of Matlab-style library modules (both installed in the standard library and through additional downloads) which meaning that one can quickly construct sophisticated programs.
 
-The School of Economics at the University of Edinburgh, like most economics departments in the U.S. in Europe has a site license for MATLAB.
+Python is completely free and platform independent, making it a very attractive option as a teaching platform relative to other high-level scripting languages, particularly Matlab. Python is also open-source, making it equally attractive as a research tool for scientists interested in generating computational results that are more easily reproducible.[#]_ Finally, Python comes with a powerful interactive interpreter that allows real-time code development and live experimentation. The functionality of the basic Python interpreter can be greatly increased by using the Interactive Python (or IPython) interpreter.  Working via the Python or IPython interpreter eliminates the time-consuming (and productivity-destroying) compilation step required when working with low-level languages at the expense of slower execution speed. In many cases, it may be possible to achieve the best of both worlds using "mixed language" programming as Python can be easily extended by wrapping compiled code written in Fortran, C, or C++ using libraries such as f2Py, Cython, or swig. See [oliphant2007]_, [peterson2009]_, [behnel2011]_, [van2011]_ and references therein for more details.  
 
-Miranda does not have a desire to turn his students into computer programmers. Probably explains why he uses MATLAB! I on the other hand believe that it is important to teach good programming practices to students from the beginning. Too many papers using computational methods (typically MATLAB code) are being published where the code used to generate the results is poorly written and insufficiently documented. This makes results difficult replicate, and even if they can be replicated it is often difficult to understand how the results are being obtained (i.e., what is the code really doing?). Python is an excellent programming langauge in this regard.
+.. [#] The Python Software Foundation License (PSFL) is a BSD-style license that allows a developer to sell, use, or distribute his Python-based application in anyway he sees fit.  In addition, the source code for the entire Python scientific computing stack is available on GitHub making it possible to directly examine the code for any specific algorithm in order to better understand exactly how a result has been obtained.    
+
+While the Python programming language has found widespread use in private industry and many fields within academia,[#]_ the capabilities of Python as a research tool remain relatively unknown within the economics research community. Notable exceptions are [stachurski2009]_ and [sargent2014]_. 
+
+.. [#] A non-exhaustive list of organizations currently using Python for scientific research and teaching: MIT's legendary *Introduction to Computer Science and Programming*, CS 6.00, is taught using Python; Python is the in-house programming language at Google; NASA, CERN, Los Alamos National Labs (LANL), Lawrence Livermore National Labs (LLNL), and Industrial Light and Magic (ILM) all rely heavily on Python.
+
+.. Miranda does not have a desire to turn his students into computer programmers. Probably explains why he uses Matlab! I on the other hand believe that it is important to teach good programming practices to students from the beginning. Too many papers using computational methods (typically Matlab code) are being published where the code used to generate the results is poorly written and insufficiently documented. This makes results difficult replicate, and even if they can be replicated it is often difficult to understand how the results are being obtained (i.e., what is the code really doing?). Python is an excellent programming langauge in this regard.
 
 Which Python distribution to use?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-First year I taught the course I used Sage. Needed a Python distro that would work on all platforms (even within a VM). Web-based notebooks were really useful for teaching purposes.Sage worked OK, but the creation and rapid advancement of the IPython notebook basically killed Sage for me. For IS reasons really only had a choice between Enthought Canopy and Continuum Analytics Anaconda distributions. I settled on Enthought Canopy for legacy reasons (I had used EPD heavily in my PhD research). Considering switching to Anaconda in the near future in order to make use of the Accelerate add-ons for multi-core and GPU enabled computations.
+Having settled on Python over Matlab as my programming language for the course, I was then faced with a decision regarding which Python distribution to use. Like most universities, the computing labs at the University of Edinburgh are all stocked with PCs running Windows. However, while the majority of students have Windows-based laptops, a substantial (and growing) minority are using UNIX-based machines (primarly running Mac OSX, with an occasional Linux-user to spice things up). Thus I needed a Python distribution that was easy to install and would work "out of the box" on all computing platforms (particularly Windows-based PCs). In order for the course to be well received by the median student, I felt that I had to avoid terminal-based versions of the Python interpreter. Thus I limited my search to Python implementations that could be run within a web browser.
+ 
+I also needed a Python distribution that came pre-installed with, at a minimum, the Python Scientific computing stack of Matplotlib, NumPy, Pandas, SciPy, and Sympy. Getting software installed on university computers is an incredibly tedious and bueauracratic process: it is simply not feasible to request both a base Python distribution as well as individual Python libraries (many of which need to be built and compiled prior to installation as they make heavy on compiled Fortran and C code). Additionally, given that students are used to using software that "just works", a complicated installation and build process for individual libraries would deter even the reasonably computer-savvy students. 
+
+Finally, given that A major reason for not using Matlab was the fact that it is not free, I wanted some version of the Python distribution to be completely free. 
+
+During the first year that I taught the course (i.e., 2012-2013) I used `Sage`_ as my primary teaching platform. My decision to use Sage was largely an artifact of Google: Sage was the top hit for a Google search for a web browser based implementation of Python.[#]_
+
+.. _`Sage`: www.sagemath.org
+
+.. [#] Oddly, even though the IPython Notebook was first released in December of 2011, I only became aware of its existence in late fall of 2012 (roughly one month after the start of the course).
+
+Sage worked OK. The html-based web notebooks were really useful, but what I originally thought would be a feature of Sage (i.e., its installation within a VM) turned out to be a bug. What really killed Sage for me was the creation and rapid development of the IPython notebook. 
+
+For IS reasons really only had a choice between Enthought Canopy and Continuum Analytics Anaconda distributions. I settled on Enthought Canopy for legacy reasons (I had used EPD heavily in my PhD research). I am actively considering switching to Anaconda in the near future in order to make use of the Accelerate add-ons for multi-core and GPU enabled computations.
 
 Which text editor to use?
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-Many possibilities: Typical student is familiar with MS Word and notepad (Texit if a Mac user). This rules out high-performance editors like Vim and Emacs (learning curve is too high). I went with Sublime.  
+Many possibilities: Typical student is familiar with MS Word and notepad (maybe also Texit if a Mac user). This rules out high-performance editors like Vim and Emacs (learning curve is too high). I went with Sublime.  
 
 Version control: Git.
 ~~~~~~~~~~~~~~~~~~~~~
@@ -123,10 +141,10 @@ Much of the empirical work based on the Solow model focuses on the model's predi
 
 Finally, given some data, estimation of the model's structural parameters (i.e., :math:`\alpha,\ \delta,\ \sigma,\ n,\ g,\ s`) requires solving a non-linear, constrained optimization problem. Typical input to algorithms for solving non-linear programs is the Jacobian of the objective function with respect to the parameters being estimated. The Hessian of the objective function is also needed for computing standard errors of the parameter estimates. Structural estimation of the parameters of the model allows me to demonstrate the use of non-linear optimization algorithms as well as how to compute the Jacobian and Hessian matrices of the objective function. 
 
-In addition to the various generic numerical methods that can be demonstrated in a computational solution to the Solow growth model, solving the model computationally allows me to demonstrate a particular Python workflow that I have found to be useful in a wide variety of scientific computing applications:
+In addition to the various generic numerical methods that can be demonstrated by a numerically solving the Solow growth model, the model allows me to demonstrate a particular Python workflow that I have found to useful in a wide variety of scientific computing applications.
 
 1. Specify the original problem symbolically using SymPy. Use Sympy to compute relevant Jacobians and Hessians and then convert them into vectorized functions that are NumPy aware.
-2. Solve the functional equations, root-finding, and optimization problems using various SciPy routines.
+2. Solve the functional equations, root-finding, and/or optimization problems using various SciPy routines.
 3. Finally, conduct data analysis and generate publication-ready graphics using Matplotlib, Pandas, and Statsmodels.
 
 Course outline
@@ -153,6 +171,19 @@ Python boot camp
 Whilst the laboratory sessions expose students to some of the basics of programming in Python as well as numerous applications of computational methods in economics, these lab sessions are inadequate preparation for those students wishing to apply such methods as part of their MSc dissertations or PhD theses. 
 
 In order to provide interested students with the skills needed to appy computational methods in their own research I have developed a week-long intensive computational methods “boot camp.” The boot camp requires no prior knowledge or experience with computer programming or software development and all current and future course materials are made freely available online.
+
+This is the second year that I have run the boot camp. The first year I did not advertise the course outside of the SGPE. The boot camp was attended by a small, but enthusiastic,  group of students.[#]_ This year I decided to advertise the Python boot camp outside of the SGPE via the Scottish Insitite for Research in Economics (SIRE) and almost 50 students registered interest in attending including:
+
+* undergraduate economics students from University of Edinburgh;
+* SGPE MSc students as well as MSc students from other University of Edinburgh schools (i.e., maths and physics);
+* PhD students from at least 5 Scottish Universities;
+* PhD students from at least 2 English Universities;
+* Faculty members from at least 2 Scottish Universities;
+* Faculty members from one English University. 
+
+Of the 50 students that registered interest, close to 40 actually attended the boot camp. 40 students represents a 400% increase in attendance relative to last year's boot camp and suggests that there is significant demand amongst UK economists for the type of training that I am providing. 
+
+.. [#] Attendees were primarly SGPE MSc students, however there were also a few economics PhD students from the Universities of Edinburgh and Glasgow.
 
 Each day of the boot camp is split into morning and afternoon sessions. The morning sessions are designed to develop attendees Python programming skills while teaching important software design principles that are crucial for generating high-quality, reproducible scientific research using computational methods. The syllabus for the morning sessions closely follows `Think Python`_ by Allen Downey.
 
@@ -238,38 +269,22 @@ Teaching material will be based on parts 3 and 4 of `Quantitative Economics`_ wi
 
 Conclusion
 ----------
-This is the second year that I have run the boot camp. The first year I did not advertise the course outside of the SGPE. Small group of students (mostly MSc students, but we also have a few economics PhD students from Edinburgh and Glasgow).  This year I decided to advertise the course via SGPE and SIRE. Almost 50 students registered interest in attending this year's Python boot camp.
-
-* Undergraduate economics students from University of Edinburgh.
-* SGPE MSc students as well as MSc students from other University of Edinburgh schools (i.e., maths and physics).
-* PhD students from at least 5 Scottish Universities.
-* PhD students from at least 2 English Universities.
-* Faculty members from at least 2 Scottish Universities.
-* Faculty members from one English University. 
-
-Of the 50 students that registered interest almost 40 completed the course. 40 students represents a rougly 400% increase in attendance from last year suggesting that there is significant demand amongst UK economists for the type of training that I am providing. 
 
 There is an increasing demand for both applied and theoretical economists interested in inter-disciplinary collaboration. The key to developing and building the capacity for inter-disciplinary research is effective communication using a common language. Historically that common language has been mathematics. Increasingly however this language is becoming computation. Economists and other social sciences can greatly benefit from scientific collaboration and the use of the numerical techniques used across disciplines such as mathematics, physics, biology, computer science and informatics. 
 
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
-
 References
 ----------
+
+.. [behnel2011] S. Behnel, et al. *Cython: The best of both worlds*, Computing in Science and Engineering, 13(2):31-39, 2011.
 .. [judd1998] K. Judd. *Numerical Methods for Economists*, MIT Press, 1998.
 .. [mankiw2010] N.G. Mankiw. *Intermediate Macroeconomics, 7th edition*, Worth Publishers, 2010. 
+.. [oliphant2007] T. Oliphant. *Python for scientific computing*, Computing in Science and Engineering, 9(3):10-20, 2007.
+.. [peterson2009] P. Peterson. *F2PY: a tool for connecting Fortran and Python programs*, International Journal of Computational Science and Engineering, 4(4):296-305, 2009. 
 .. [romer2011] D. Romer. *Advanced Macroeconomics, 4th edition*, MacGraw Hill, 2011.
+.. [sargent2014] T. Sargent and J. Stachurski. *Quantitative Economics*, 2014.
 .. [sato1963] R. Sato. *Fiscal policy in a neo-classical growth model: An analysis of time required for equilibrating adjustment*, Review of Economic Studies, 30(1):16-23, 1963.
 .. [solow1956] R. Solow. *A contribution to the theory of economic growth*, Quarterly Journal of Economics, 70(1):64-95, 1956.
+.. [stachurski2009] J. Stachurski. *Economic dynamics: theory and computation*, MIT Press, 2009.
+.. [van2011] S. Van Der Walt, et al. *The NumPy array: a structure for efficient numerical computation*, Computing in Science and Engineering, 13(2):31-39, 2011.
 
 
