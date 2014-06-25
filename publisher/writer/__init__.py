@@ -371,7 +371,8 @@ class Translator(LaTeXTranslator):
                                            linenostart=linenostart,
                                            verboptions=extra_opts))
 
-            self.out.append(tex)
+            self.out.append("\\vspace{1mm}\n" + tex +
+                            "\\vspace{1mm}\n")
             raise nodes.SkipNode
         else:
             LaTeXTranslator.visit_literal_block(self, node)
