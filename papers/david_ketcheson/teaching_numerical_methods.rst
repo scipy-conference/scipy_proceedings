@@ -74,7 +74,7 @@ Inquiry-based learning
 
 Many great teachers of mathematics (most famously, R.L. Moore) have argued
 against lecture-style courses, in favor of an approach in which the students
-take more responsibility and there is much more in-class interaction.
+take more responsibility and there is more in-class interaction.
 The many related approaches that fit this description have come to be called
 *inquiry-based learning* (IBL).  In an inquiry-based mathematics course, students
 are expected to find the proofs for themselves -- with limited assistance from the
@@ -82,7 +82,7 @@ instructor.
 For a very recent review of what IBL is and the evidence for
 its effectiveness, see [Ern14a]_, [Ern14b]_ and references therein.
 If an active, inquiry-based approach is appropriate for the teaching of
-theoretical mathematics, then certainly it is even more appropriate for
+theoretical mathematics, then it seems even more appropriate for
 teaching the practical craft of computational mathematics.
 
 A related notion is that of the *flipped classroom*.
@@ -103,8 +103,7 @@ it on their own -- often poorly and with much difficulty, due to the lack of
 instruction.  This evident disdain and lack of training seem to mutually
 reinforce one another.  I believe that implementation, testing, and
 debugging are essential skills for anyone who uses or develops numerical
-methods, and they should be taught just as prominently as the more analytical
-mathematical skills.
+methods, and they should be also taught in our courses.
 
 In some situations, a lack of practical skills has the same effect as
 a lack of mathematical understanding.
@@ -116,8 +115,8 @@ up due to an instability or due to an error in the code.
 In many cases, it seems fair to say that the skills required to implement
 state-of-the-art numerical algorithms consists of equal parts of mathematical
 sophistication and software engineering.  In some areas, the development of correct,
-modular, portable implementations of proposed algorithms is a more significant
-stumbling block than the derivation of the algorithms themselves.  Furthermore,
+modular, portable implementations of proposed algorithms is as significant a challenge
+as the development of the algorithms themselves.  Furthermore,
 there are signs that numerical analysts need to move beyond traditional flop-counting
 complexity analysis and incorporate more intricate knowledge of modern computer
 hardware in order to design efficient algorithms for that hardware.  As 
@@ -125,7 +124,7 @@ algorithms become increasingly adapted to hardware, the need for implementation
 skills will only increase.
 
 Perhaps the most important reason for teaching implementation, testing, and debugging
-is that these can and should be used to reinforce the theory.  The student who
+is that these skills can and should be used to reinforce the theory.  The student who
 learns about numerical instability by reading in a textbook will forget it
 after the exam.  The student who discovers numerical instability by implementing
 an apparently correct (but actually unstable) algorithm by himself and subsequently
@@ -142,6 +141,7 @@ Unfortunately, these courses are sometimes for less credit than a normal
 university course, with an attendant reduction in the amount of material that
 can be covered.
 
+<<<<<<< Updated upstream
 Hopefully the reader is convinced that there is some value in using the
 classroom to teach students more than just the theory of numerical methods.
 In the rest of this paper, I advocate the use of inquiry-based learning and IPython
@@ -162,15 +162,15 @@ programming language.  These can broadly be categorized as
 - specialized high-level interpreted languages (MATLAB, Mathematica, Maple) 
 - general-purpose compiled languages (C, C++, Fortran).
 
-High-level languages, especially MATLAB, are used most widely and have several advantages.
+High-level languages, especially MATLAB, are used widely in numerical courses and have several advantages.
 Namely, the syntax is very similar to the mathematical formulas themselves,
 the learning curve is short, and debugging is relatively simple.
-The main drawback is that such languages often do not provide the necessary performance
+The main drawback is that such languages do not provide the necessary performance
 to solve large research or industrial problems.  This may be a handicap for students
 if they never gain experience with compiled languages.
 
 Python strikes a middle ground between these options.  It is a high-level language
-with relatively intuitive mathematical syntax and high-level libraries for everything
+with intuitive syntax and high-level libraries for everything
 needed in a course on numerical methods.  At the same time, it is a general-purpose 
 language.  Although (like MATLAB) it can be relatively slow [VdP14]_, Python makes it
 relatively easy to develop fast code by using tools such as 
@@ -184,22 +184,21 @@ Python has increasingly been adopted as a language of instruction for numerical 
 `IPython <http://ipython.org/>`_ [Per07]_ is a tool for using Python interactively.  One of its most
 useful components is the `IPython notebook
 <http://ipython.org/notebook.html>`_: a document format containing text, code,
-images, and more that can be viewed, written, and executed in a web browser.
+images, and more, that can be written, viewed, and executed in a web browser.
 
 The IPython notebook as a textbook medium
 -----------------------------------------
 Many print and electronic textbooks for numerical methods include code, either
 printed on the page or available online (or both).  Some of my favorite
-examples are [Tre00]_ and [LeV07]_.  Such books have become more and more common,
+examples are [Tre00]_ and [LeV07]_.  Such books have become more common,
 as the importance of exposing students to the craft of numerical methods -- and 
 the value of experimentation in learning the theory -- has become
-more apparent.  These books are an important step forward from older texts that only
-talked *about* numerical methods.  I view the IPython notebook as the next step
+more recognized.  The IPython notebook can be viewed as the next step
 in this evolution.  It combines in a single document
 
 - Mathematics (using LaTeX)
 - Text (using Markdown)
-- Code (using Python or other languages)
+- Code (in Python or other languages)
 - Figures and animations
 
 Mathematica, Maple, and (more recently) `Sage <http://www.sagemath.org/>`_ 
@@ -210,11 +209,12 @@ I will say about the IPython notebook applies also to the Sage worksheet.
 
 The notebook has some important advantages over Mathematica and Maple documents:
 
-- It can be viewed, edited, and executed using only **free** software (in fact, with only a web browser)
-- It is stored as **text**, which allows it to be version controlled, diff'ed, merged, etc.
-- It allows the use of multiple programming languages
-- It can be collaboratively edited by multiple users at the same time (currently only on SageMathCloud)
-- It is open source, so users can modify and extend it as they wish
+- It can be viewed, edited, and executed using only **free** software;
+- It is stored as **text**, which allows it to be version controlled, diff'ed, merged, and
+  converted to other useful formats;
+- It allows the use of multiple programming languages;
+- It can be collaboratively edited by multiple users at the same time (currently only on SageMathCloud);
+- It is open source, so users can modify and extend it.
  
 Perhaps the most important advantage of the notebook is the community
 in which it has developed -- a community in which openness and collaboration are the norm.
@@ -224,9 +224,31 @@ see for example Lorena Barba's AeroPython course [Bar14] or
 `this huge list of books, tutorials, and lessons <https://github.com/ipython/ipython/wiki/A-gallery-of-interesting-IPython-Notebooks>`_.
 Due to this culture, the volume and quality of
 available materials for teaching with the notebook is quickly surpassing what is
-available in older proprietary formats.  It should be mentioned that the
+available in proprietary formats.  It should be mentioned that the
 notebook is also being used as a medium for publishing research, both as
 open notebook science and full articles.
+
+
+Mechanics of an interactive, notebook-based course
+==================================================
+I have successfully used IPython notebooks as a medium of instruction in
+both
+
+- semester-length university courses; and
+- short 1-3 day tutorials
+
+I will focus on the mechanics of teaching a university course, but
+much of what I will say applies also to short tutorials.
+The notebook is especially advantageous in the context of a tutorial
+because one does not usually have the luxury of ensuring that students
+have a textbook.  The notebooks for the course can comprise a complete,
+self-contained curriculum.
+
+Typically I have used a partially-flipped approach, in which half of the
+class sessions are traditional lectures and the other half are *lab sessions*
+in which the students spend most of the time programming and discussing
+their programs.  Others have used IPython notebooks with a fully-flipped
+approach; see for example [Bar13]_.
 
 
 Getting students started with the notebook
@@ -257,9 +279,8 @@ Windows systems.
 Cloud platforms
 ---------------
 In order to avoid potential installation issues altogether, or as a
-secondary option, it is possible to run a course where students only
-need access to a computer with a web browser.  Two free platforms
-exist for running IPython notebooks:
+secondary option, notebooks can be run using only cloud services.
+Two free services exist for running IPython notebooks:
 
 - `Sage Math Cloud <http://cloud.sagemath.org>`_
 - `Wakari <http://wakari.io>`_
@@ -291,29 +312,8 @@ Students should be strongly encouraged to work together in developing
 their programming skills.
 
 
-Mechanics of an interactive, notebook-based course
-==================================================
-I have successfully used IPython notebooks as a medium of instruction in
-both
 
-- semester-length university courses; and
-- short 1-3 day tutorials
-
-I will focus on the mechanics of teaching a university course, but
-much of what I will say applies also to short tutorials.
-The notebook is especially advantageous in the context of a tutorial
-because one does not usually have the luxury of ensuring that students
-have a textbook.  The notebooks for the course can comprise a complete,
-self-contained curriculum.
-
-Typically I have used a partially-flipped approach, in which half of the
-class sessions are traditional lectures and the other half are *lab sessions*
-in which the students spend most of the time programming and discussing
-their programs.  Others have used IPython notebooks with a fully-flipped
-approach; see for example [Bar13]_.
-
-
-What to do during lab sessions
+Lab sessions
 ------------------------------
 At the beginning of each lab session, the students open a new notebook
 that contains some explanations and exercises.  Generally they have already
@@ -363,7 +363,7 @@ Designing effective notebooks
 =============================
 Prescribing how to structure the notebooks themselves is like 
 stipulating the style of a textbook or lecture notes.  Each instructor
-will have his or her own preferences.  So I will merely share some
+will have his or her own preferences.  So I will share some
 principles I have found to be effective.
 
 Make sure that they type code from the start
@@ -395,6 +395,13 @@ allow the students to implement and experiment in class with naive algorithms
 that seem reasonable but may be inaccurate or unstable.  Have them discuss what
 they observe and what might be responsible for it.  Ask them how they think the
 method might be improved.
+
+Teaching is tricky because you want the students to come up to date on topics
+which have taken perhaps decades to develop. But they gain the knowledge
+quickly without the discipline of having struggled with issues. By letting them
+struggle and discover you simulate the same circumstances which produced the
+knowledge in the first place.
+
 
 Tailor the difficulty to the students' level
 --------------------------------------------
@@ -456,9 +463,8 @@ students.  Therefore, the amount of material that can be covered in a
 semester-length course on numerical methods is substantially less under the
 interactive or flipped model.  This is true for inquiry-based learning
 techniques in general, but even more so for courses that involve programming.
-I believe that showing students the joy, beauty, and usefulness of
-numerical mathematics has more impact than the length of the syllabus
-on their long-term learning.
+I believe that it is better to show less material and have it fully absorbed
+and loved than to quickly dispense knowledge that falls on deaf ears.
 
 Scalability
 -----------
