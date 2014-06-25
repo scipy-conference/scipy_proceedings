@@ -108,7 +108,6 @@ or on multiple, aligned lines:
    g(x) &=& \int_0^\infty f(x) dx \\
         &=& \ldots
 
-
 The area of a circle and volume of a sphere are given as
 
 .. math::
@@ -135,8 +134,11 @@ consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
 orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
 sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
 lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
+volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
 pulvinar id metus.
+
+.. [#] On the one hand, a footnote.
+.. [#] On the other hand, another footnote.
 
 .. figure:: figure1.png
 
@@ -166,7 +168,7 @@ figures.
 
    +------------+----------------+
    | Material   | Units          |
-   +------------+----------------+
+   +============+================+
    | Stone      | 3              |
    +------------+----------------+
    | Water      | 12             |
@@ -193,11 +195,39 @@ We show the different quantities of materials required in Table
    | This   | is |  a   | very | very | wide | table  |
    +--------+----+------+------+------+------+--------+
 
+Unfortunately, restructuredtext can be picky about tables, so if it simply
+won't work try raw LaTeX:
 
-Perhaps we want to end off with a quote by Lao Tse:
+
+.. raw:: latex
+
+   \begin{table*}
+
+     \begin{longtable*}{|l|r|r|r|}
+     \hline
+     \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
+     \cline{2-4}
+      & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
+     \hline
+     Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
+     \hline
+     Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
+     \hline
+     Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
+     \hline
+     Percent Difference & 44\% & 41\% & 43\%\tabularnewline
+     \hline
+     \end{longtable*}
+
+     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
+
+   \end{table*}
+
+Perhaps we want to end off with a quote by Lao Tse [#]_:
 
   *Muddy water, let stand, becomes clear.*
 
+.. [#] :math:`\mathrm{e^{-i\pi}}`
 
 .. Customised LaTeX packages
 .. -------------------------

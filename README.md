@@ -22,12 +22,12 @@ paper:
 
 - Once you are ready to submit your paper, file a pull request on GitHub.
   **Please ensure that you file against the correct branch**--your branch
-  should be named 2014, and the pull-request should be against our 2013
+  should be named 2014, and the pull-request should be against our 2014
   branch.
 
 - Please do not modify any files outside of your paper directory.
 
-Pull requests are to be submitted by **May 18th**, but modifications are
+Pull requests are to be submitted by **June 15th**, but modifications are
 allowed during the open review period which ends July 5th.
 
 ## General Guidelines
@@ -56,3 +56,14 @@ examples of how to:
  - AMSmath LaTeX classes (included in most LaTeX distributions)
  - `docutils` 0.8 or later (``easy_install docutils``)
  - `pygments` for code highlighting (``easy_install pygments``)
+
+On Debian-like distributions:
+
+```
+sudo apt-get install python-docutils texlive-latex-base texlive-publishers \
+                     texlive-latex-extra texlive-fonts-recommended
+```
+
+## For organizers
+
+To build the whole proceedings, see the Makefile in the publisher directory.
