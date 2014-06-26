@@ -112,9 +112,9 @@ where :math:`z` is the cosmological redshift and :math:`D_A` is the angular diam
 .. math::
   :label: n_phot
   
-  N_{\rm phot} = \displaystyle\sum_i{F^{\gamma}_i}t_{\rm exp}A_{\rm det}
+  N_{\rm phot} = \displaystyle\sum_i{F^{\gamma}_i}t_{\rm exp,0}A_{\rm det,0}
   
-where :math:`t_{\rm exp}` is the exposure time of the observation and :math:`A_{\rm det}` is the collecting area of the instrument. Following the approach of [Biffi12]_, for this step a large number of photons :math:`N_{\rm phot}` are generated with energies in the source frame, by setting :math:`t_{\rm exp}` and :math:`A_{\rm det}` to values that are much larger than those associated with typical exposure times and actual detector areas. This is so that they be used as a suitably large Monte-Carlo sample to draw subsets of photons for more realistic observational parameters. Figure :ref:`schematic` shows a schematic representation of this model for a roughly spherical source of X-ray photons, such as a galaxy cluster. The photons are first generated for each volume element at position :math:`{\bf r}_i` in the source's coordinate system :math:`{\cal O}`, with the spectrum determined by its density :math:`\rho_i`, temperature :math:`T_i`, and metallicity :math:`Z_i`. 
+where :math:`t_{\rm exp,0}` is the exposure time of the observation and :math:`A_{\rm det,0}` is the collecting area of the instrument. Following the approach of [Biffi12]_, for this step a large number of photons :math:`N_{\rm phot}` are generated with energies in the source frame, by setting :math:`t_{\rm exp,0}` and :math:`A_{\rm det,0}` to values that are much larger than those associated with typical exposure times and actual detector areas. This is so that they be used as a suitably large Monte-Carlo sample to draw subsets of photons for more realistic observational parameters. Figure :ref:`schematic` shows a schematic representation of this model for a roughly spherical source of X-ray photons, such as a galaxy cluster. The photons are first generated for each volume element at position :math:`{\bf r}_i` in the source's coordinate system :math:`{\cal O}`, with the spectrum determined by its density :math:`\rho_i`, temperature :math:`T_i`, and metallicity :math:`Z_i`. 
 
 The second step in the ``PHOX`` algorithm involves using this large 3-D sample of photons to create 2-D projections. A line-of-sight vector :math:`\hat{\bf n}` is chosen to define the primed coordinate system from which the photon sky positions :math:`(x',y')` in the observer's coordinate system :math:`{\cal O}'` are determined. The volume element has a velocity :math:`{\bf v}_i` in :math:`{\cal O}`, and the component :math:`v_{i,z'}` of this velocity along the line of sight results in a Doppler shift of the photon's energy of 
 
@@ -124,6 +124,15 @@ The second step in the ``PHOX`` algorithm involves using this large 3-D sample o
   E_1 = E_0\sqrt{\frac{c+v_{z'}}{c-v_{z'}}}
 
 where :math:`E_1` and :math:`E_0` are the Doppler-shifted and rest-frame energies of the photon, respectively, and :math:`c` is the speed of light in vacuum. For :math:`v_{z'} > 0` (an approaching source), the photon will be blueshifted, and for :math:`v_{z'} < 0` (a receding source), the photon will be redshifted. The photon's energy will be further reduced/redshifted by a factor of :math:`1/(1+z)`, before being received in the observer's frame. 
+
+Since we are now simulating an actual observation, we now choose realistic values for the exposure time :math:`t_{\rm exp}` and detector area :math:`A_{\rm det}` to decide on the number of photons to use from the original Monte-Carlo sample. At this point, we may also specify alternative values for the angular diameter distance :math:`D_A` and the cosmological redshift :math:`z`, if desired. The fraction :math:`f` of the photons that will be used in the actual observation is given by 
+
+.. math::
+  :label: fraction
+  
+  f = \frac{t_{\rm exp}}{t_{\rm exp,0}}\frac{A_{\rm det}}{A_{\rm det,0}}\frac{D_{A,0}^2}{D_A^2}\frac{(1+z_0)^3}{(1+z)^3}
+
+where :math:`f \leq 1`, and the values with the :math:`0` subscript represent the values used in generating the original sample. 
 
 The advantage of the ``PHOX`` algorithm is that the two steps of generating the photons in the source frame and projecting them along a given line of sight are separated, so that the first step, which is the most computationally expensive, need only be done once for a given source, whereas the typically cheaper second step may be repeated many times for many different lines of sight, different instruments, and different exposure times.  
 
