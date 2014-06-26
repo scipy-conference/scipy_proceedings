@@ -21,17 +21,17 @@ BCE: Berkeley's Common Scientific Compute Environment for Research and Education
 
 .. class:: abstract
 
-  - A common problem is running scientific codes across a range of machines.
-  - We examine the success of [OSGeo-Live]_ in providing a standard environment for GIS projects, both for developer deployment (e.g. developers of QGIS) and for researcher evaluation of new tools.
-  - We introduce available tools for Virtual machines and devops. These are somewhat widely used, but in an ad hoc manner.
-  - We also provide a brief review of existing projects, and how they are using these technologies.
-  - Members of the UC
-  Berkeley D-Lab, Statistical Computing Facility (SCF), and Berkeley Research
-  Computing (BRC) have evaluated a breadth of virtualization technologies and
-  present a strategy for constructing the Berkeley Common Environment [BCE]_.
-  - We examine a variety of concrete training and research use-cases in which
+  * A common problem is running scientific codes across a range of machines.
+  * We examine the success of [OSGeo-Live]_ in providing a standard environment for GIS projects, both for developer deployment (e.g. developers of QGIS) and for researcher evaluation of new tools.
+  * We introduce available tools for Virtual machines and devops. These are somewhat widely used, but in an ad hoc manner.
+  * We also provide a brief review of existing projects, and how they are using these technologies.
+  * Members of the UC
+    Berkeley D-Lab, Statistical Computing Facility (SCF), and Berkeley Research
+    Computing (BRC) have evaluated a breadth of virtualization technologies and
+    present a strategy for constructing the Berkeley Common Environment [BCE]_.
+  * We examine a variety of concrete training and research use-cases in which
     this approach increases productivity, reuse, and reproducibility.
-  - Recommendations.
+  * Recommendations.
 
 .. class:: keywords
 
@@ -42,7 +42,7 @@ Introduction
 
 Quote: "btw- I have never setup for this LaTeX workflow, so the make_paper.sh
 fails for me miserably. Therefore, no advanced formatting and very probably
-more basic errors right now.. but, the prose is coming along" - One of the
+more basic errors right now.. but, the prose is coming along" --One of the
 Authors
 
 Segue to general problem, perhaps mention nbconvert tooling (parallel to the above).
@@ -91,11 +91,6 @@ The big difficulty (for me) is to choose the right VM tool. Any experience with 
 So far VM tools are mostly used on individual laptops. The idea that a VM can be used on computer systems at a university and could services as well, and that one can simply move the laptop VM to these platforms, is something that will greatly increase productivity.[a]
 
 
-Community
-
-
-
-
 OSGeo-Live: A Successful Common Environment
 -------------------------------------------
 
@@ -136,7 +131,10 @@ components, and widely adopted.
 OSGeo-Live is now very stable, easily incorporates advances in components,
 and widely adopted. Let's look at each of these building blocks briefly:
 
-_Technical Stability_: An original goal of the OSGeo-Live was to operate well on minimal hardware with
+Technical Stability
+^^^^^^^^^^^^^^^^^^^
+
+An original goal of the OSGeo-Live was to operate well on minimal hardware with
 broad support for common peripherals, and a license structure compatible with
 project goals. The XUbuntu version of Ubuntu Linux was chosen as a foundation,
 and it was been very successful. To this day, almost all applications
@@ -153,7 +151,10 @@ project participants to concentrate on adding value to its featured components.
 As we shall see, due to a component architecture, individual software projects
 can be installed as-needed on a generic base.
 
-_Tool Sets_: It cannot be overstated that a
+Tool Sets
+^^^^^^^^^
+
+It cannot be overstated that a
 key component to the success of the overall project has been the availability of
 widely-known and reliable tools, to developers from all parts of the world and
 in all major spoken languages. It is also important to note that, rather than
@@ -178,7 +179,10 @@ Subversion repo -- asset heirarchy -- individual install scripts -- Live build
 
 see screenshots
 
-_Community Awareness_: The processes of  adoption of new
+Community Awareness
+^^^^^^^^^^^^^^^^^^^
+
+The processes of  adoption of new
 technology - initial awareness, trialability, adoption and iteration -
 are well-known [4].
 
@@ -220,7 +224,7 @@ consistent / good graphic design.
 [4] Diffusion of Innovation; Rogers et al 1962
 http://en.wikipedia.org/wiki/Diffusion_of_Innovations
 
-misc cut text --
+**misc cut text**
 
 Eight
 years ago, there existed several very large and growing open-source geospatial
@@ -295,43 +299,43 @@ communication with and distribution to others.
 
 We envision the following core use cases:
 
-  - creating a common computing environment for a course or workshop,
-  - creating a common computational environment to be shared by a group of
+  * creating a common computing environment for a course or workshop,
+  * creating a common computational environment to be shared by a group of
     researchers or students, and
-  - disseminating the computational environment so outsiders can reproduce the
+  * disseminating the computational environment so outsiders can reproduce the
     results of a group.
 
 Other use cases/benefits:
 
- - Thin client / staff computing
- - Exam environments
- - Instructional labs
- - Sharing licensed software?
- - Make it easy to do the "right" thing (hard to do "wrong" thing)
- - Stable infrastructure
- - Managing complexity
- - Impacts beyond "the course"
+ * Thin client / staff computing
+ * Exam environments
+ * Instructional labs
+ * Sharing licensed software?
+ * Make it easy to do the "right" thing (hard to do "wrong" thing)
+ * Stable infrastructure
+ * Managing complexity
+ * Impacts beyond "the course"
 
 What problems does BCE solve for you?
 
- - No more obscure installation issues - download and run a single virtual
+ * No more obscure installation issues - download and run a single virtual
    machine or get the same environment on a bare metal or virtual server.
- - I'm teaching a class - when you tell a student that a program behaves a
+ * I'm teaching a class - when you tell a student that a program behaves a
    certain way, it does!
- - I'm collaborating on some scientific research - now all of your collaborators
+ * I'm collaborating on some scientific research - now all of your collaborators
    can run your code without complex installation instructions.
- - Easy Deployment
- - Replication / Reproducible research
- - Easy transition across scales (laptop to cluster)
- - Tricky installs
+ * Easy Deployment
+ * Replication / Reproducible research
+ * Easy transition across scales (laptop to cluster)
+ * Tricky installs
 
 To accomplish this, we envision that BCE will encompass the following:
 
- - a reproducible workflow that creates the standard VM/image
+ * a reproducible workflow that creates the standard VM/image
    with standard scientific computing software such as Python, R, git, etc.,
- - a standard binary image, produced by the workflow, that can be distributed as is and
+ * a standard binary image, produced by the workflow, that can be distributed as is and
    used on-the-fly with VirtualBox or VMWare Player with minimal dependencies, and
- - (possibly) an augmented workflow that represents multiple possible distributions tailored
+ * (possibly) an augmented workflow that represents multiple possible distributions tailored
    for different types of uses (e.g., different disciplines, different
    computational needs, class vs. research use, etc.). This might
    represent either a sequence or a tree of possible VMs.
@@ -339,46 +343,46 @@ To accomplish this, we envision that BCE will encompass the following:
 
 *Tentative list of features*
 
- - VMs
+ * VMs
 
-   - A fixed, versioned VM provided each semester as a binary image for classes
+   * A fixed, versioned VM provided each semester as a binary image for classes
      and workshops
-   - Ideally, the same VM usable for research, with functionality for parallel
+   * Ideally, the same VM usable for research, with functionality for parallel
      computing and provisioned such that it can be used as the VM for virtual
      cluster nodes
-   - The VM runnable on user laptops (Mac/Windows/Linux) and on cloud machines
-   - The VM usable on user machines with minimal dependencies (e.g., either
+   * The VM runnable on user laptops (Mac/Windows/Linux) and on cloud machines
+   * The VM usable on user machines with minimal dependencies (e.g., either
      VirtualBox or VMware) and minimal setup, and with clear instructions for
      users on setup and on getting data/files into and out of the VM
-   - Agreement on minimal hardware requirements on the host machine - do we
+   * Agreement on minimal hardware requirements on the host machine - do we
      support 32 bit, any minimum RAM required?
-   - Shared folders (EBS on AWS), or other tech to make it possible to separate
+   * Shared folders (EBS on AWS), or other tech to make it possible to separate
      data from VM.
 
- - Provisioning
+ * Provisioning
 
-   - Provisioning is fully scripted - if the appropriate software is installed,
+   * Provisioning is fully scripted - if the appropriate software is installed,
      the recipe should run reliably.
-   - The provisioning details used to create a given VM available to users and
+   * The provisioning details used to create a given VM available to users and
      with clear instructions on how to use and modify the provisioning; ideally
      the provisioning would be relatively simple for users to understand
-   - The ability for a user to add software to a VM and then 'export' that
+   * The ability for a user to add software to a VM and then 'export' that
      information back into the provisioning workflow that can be used to
      recreate the modified VM
 
- - Logistics and training
+ * Logistics and training
 
-   - A GitHub repository or the like plus a project website with all BCE
+   * A GitHub repository or the like plus a project website with all BCE
      materials available
-   - Communication with users on bugs, desired features, and the like via the
+   * Communication with users on bugs, desired features, and the like via the
      repository and a mailing list
-   - Management / Versioning / Snapshotting
+   * Management / Versioning / Snapshotting
 
- - Problems
+ * Problems
 
-   - VMs reserve compute resources exclusively (less of a problem with LXC-like
+   * VMs reserve compute resources exclusively (less of a problem with LXC-like
      solutions).
-   - Testing / Issue tracking
+   * Testing / Issue tracking
 
 *Students ("horizontal" collaboration), Researchers ("vertical" collaboration)*
 
@@ -461,13 +465,13 @@ permanent", any changes to the shared folder on the VM affects the folder in the
 
 *EC2*
 
-  - Go to [EC2 management console](http://console.aws.amazon.com) and choose the
+  * Go to [EC2 management console](http://console.aws.amazon.com) and choose the
     US-West-2 (Oregon) region, as that is where we have posted the BCE AMI.
     (You'll need to have an account set up.)
-  - On the "AMIs" tab, search for the BCE AMI amongst public images.
-  - Launch an instance 55. Follow the instructions given in the "Connect" button
+  * On the "AMIs" tab, search for the BCE AMI amongst public images.
+  * Launch an instance 55. Follow the instructions given in the "Connect" button
     to SSH to the instance
-  - If you want to connect as the "oski" user, you can deposit your public SSH
+  * If you want to connect as the "oski" user, you can deposit your public SSH
     key in the .ssh folder of the "oski" user.
 
 
