@@ -18,8 +18,8 @@ Creating a browser-based virtual computer lab for classroom instruction
    discussed. The need for collaborative features, such as
    terminal/notebook sharing, is emphasized. A virtual computer lab is
    implemented using the GraphTerm server, with experimental features
-   such as a virtual dashboard for monitoring users and fillable
-   notebooks for progressive assignments.
+   such as a virtual dashboard for monitoring users and progressively
+   fillable notebooks for step-by-step instruction.
 
 
 .. class:: keywords
@@ -56,11 +56,13 @@ virtual approach. Some of the advantages of a physical lab are:
 
 Some of the shorcomings of physical computer labs are:
 
-(i) Need to purchase expensive hardware and maintain it
+(i) Need to purchase and maintain hardware, ensuring security
 
-(ii) Need to install software and ensure network security
+(ii) Need to create user accounts, install course-specific software, and ensure security
 
-(iii) Students typically need to be physically present to use the lab
+(iii) Instructor may not want or may not have root access, leading to delays in fixing problems
+
+(iv) Students typically need to be physically present to use the lab
 
 Many of the advantages of the physical computer lab are difficult to
 replicate when students use laptops in an *ad hoc* fashion, with
@@ -164,7 +166,7 @@ by using GraphTerm's own notebook interface or by running the full
 IPython Notebook server on their account. Having a custom, lightweight
 notebook interface enabled the implementation and testing of several
 experimental features to the GraphTerm server to support collaboration
-and *fillable* notebooks.
+and progressively fillable notebooks.
 
 
 
@@ -178,11 +180,11 @@ web server. GraphTerm can be installed using the following shell command::
    sudo pip install graphterm
 
 To start up a multi-user server on a Linux/Mac computer, a variation
-of the following command may be used::
+of the following command may be executed (as root)::
 
-   sudo gtermserver --daemon=start --auth_type=multiuser
-   --user_setup=manual --users_dir=/home --logging
-   --port=80 --host=server_domain_or_ip
+   gtermserver --daemon=start --auth_type=multiuser
+      --user_setup=manual --users_dir=/home --logging
+      --port=80 --host=server_domain_or_ip
 
 If a physical Linux server is not readily available for multi-user
 access, a virtual server can be created on demand using Amazon Web
@@ -200,7 +202,7 @@ and the ``boto`` Python module needs to be installed.)
    options for ``ec2launch`` :label:`ec2launch`
 
 .. figure:: gt-ec2list.png
-   :scale: 25%
+   :scale: 27%
 
    Output of the ``ec2list`` command, listing currently active AWS
    cloud instances running the virtual computer lab. Clickable links
@@ -226,8 +228,8 @@ it will automatically generate and execute a command line which looks
 like this::
 
    ec2launch --type=m3.medium --key_name=ec2key
-   --ami=ami-2f8f9246 --gmail_addr=user@gmail.com
-   --auth_type=multiuser --pylab --netcdf testlab
+      --ami=ami-2f8f9246 --gmail_addr=user@gmail.com
+      --auth_type=multiuser --pylab --netcdf testlab
 
 After the new AWS Linux server has launched and completed
 configuration, which can take several minutes, its IP address and
@@ -327,6 +329,7 @@ be used with caution, because it can lead to unpredictable results
 due to the time lags between terminal operations by multiple users.
 
 
+
 Notebook interface
 --------------------------------------------------------------------
 
@@ -343,6 +346,18 @@ server in two ways, depending upon individual preference:
 
  2. Running the IPython Notebook server on the remote computer and
  accessing it using a browser on the local computer.
+
+
+
+.. figure:: gt-lab-nb1.png
+
+   Snippet showing a portion of a notebook session in the virtual
+   lab.  :label:`notebook1`
+
+.. figure:: gt-lab-nb2.png
+
+   Another snippet showing a notebook session in the virtual
+   lab, with inline graphics. :label:`notebook2`
 
 The GraphTerm notebook interface is implemented as a wrapper on top of
 the standard Python command line interface. It provides basic notebook
@@ -366,32 +381,8 @@ across shared terminals, and inline graphics display across SSH login
 boundaries.
 
 
-.. figure:: gt-lab-nb1.png
-
-   Snippet showing a portion of a notebook session in the virtual
-   lab.  :label:`notebook1`
-
-.. figure:: gt-lab-nb2.png
-
-   Another snippet showing a notebook session in the virtual
-   lab, with inline graphics. :label:`notebook2`
-
-
-
-Dashboard for the lab
-----------------------------
-
-An important advantage of a physical computer lab is the ability to
-look around and get a feel for the overall level of student activity.
-The GraphTerm server keeps track of terminal activity in all the
-sessions (Fig. :ref:`gadmin1`). The idle times of all the terminals can be viewed to see
-which users are actively using the terminal (Fig. :ref:`gadmin2`). If an user is running a
-notebook session, the name of the notebook and the number of the last
-modified cell are also tracked. During the programming course, this was
-used assess how much progress was being made during notebook-based
-assignments.
-
 .. figure:: gt-lab-hosts.png
+   :scale: 35%
 
    The instructor "dashboard" in the virtual computer lab,
    showing all currently logged in users. Clicking on the user name
@@ -405,11 +396,19 @@ assignments.
    command. Clicking on the terminal session name will open a view of
    the terminal. :label:`gadmin2`
 
-.. figure:: gt-screen-gadmin-terminals.png
 
-   The instructor "dashboard" in the virtual computer lab,
-   with embedded views of student terminals generated using the
-   ``gframe`` command. :label:`gadmin3`
+A dashboard for the lab
+----------------------------
+
+An important advantage of a physical computer lab is the ability to
+look around and get a feel for the overall level of student activity.
+The GraphTerm server keeps track of terminal activity in all the
+sessions (Fig. :ref:`gadmin1`). The idle times of all the terminals can be viewed to see
+which users are actively using the terminal (Fig. :ref:`gadmin2`). If an user is running a
+notebook session, the name of the notebook and the number of the last
+modified cell are also tracked. During the programming course, this was
+used assess how much progress was being made during notebook-based
+assignments.
 
 The ``gadmin`` command is used to list terminal activity, serving as a
 *dashboard*. Regular expressions can be used to filter the list of
@@ -420,15 +419,40 @@ feature. This alert button serves as the virtual equivalent of
 *raising a hand*, and can be used to attract the attention of the
 instructor by flagging the terminal name in ``gadmin`` output.
 
+.. figure:: gt-screen-gadmin-terminals.png
+   :align: center
+   :figclass: w
+   :scale: 33%
+
+   The instructor "dashboard" in the virtual computer lab,
+   with embedded views of student terminals generated using the
+   ``gframe`` command. :label:`gadmin3`
+
 The terminal list displayed by ``gadmin`` is hyperlinked.  As the
 super user has access to all terminals, clicking on the output of
 ``gadmin`` will open a specific terminal for monitoring
 (Fig. :ref:`gadmin3`). Once a terminal is opened, the chat feature can
 be used to communicate with the user.
 
+.. figure:: gt-screen-fillable1.png
+
+   View of progressively fillable notebook before user completes ``Step 1``. Note two
+   comment line where it says ``(fill in code here)``. The user can
+   replace these lines with code and execute it. The resulting output
+   should be compared to the expected output, shown below the code cell.
+   :label:`fillable1`
+
+.. figure:: gt-screen-fillable2.png
+
+   View of progressively fillable notebook after user has completed ``Step 1``. The last
+   version of code entered and executed by the user is included the
+   markup, and the code cell now displays the "correct" version of the
+   code. Note the comment suffix ``## ANSWER`` on selected lines of
+   code. These lines were hidden in the unfilled view.
+   :label:`fillable2`
 
 
-"Fillable" notebooks
+Progressively fillable notebooks
 ---------------------------------------------------
 
 A common difficulty encountered by students on their first exposure to
@@ -444,9 +468,9 @@ whole lab, the stronger students will need to wait at
 each step for the weaker students to catch up.
 
 An alternative approach is to automate this process to allow students
-make incremental progress asynchronously. As the Notebook interface
+make incremental progress. As the Notebook interface
 has proved to be extremely popular with the students, an experimental
-*fill in the blanks* version of notebooks has recently been
+*progressively fillable* version of notebooks has recently been
 implemented in the GraphTerm server. A notebook code cell is assigned
 to each step of a multi-step task, with associated markup cells for
 explanatory text. Initially, only the first code cell is visible, and
@@ -463,24 +487,7 @@ executed to produce the desired result (Fig. :ref:`fillable2`). The
 next code cell becomes visible and the whole process is repeated for
 the next step of the task.
 
-.. figure:: gt-screen-fillable1.png
-
-   View of fillable form before user completes ``Step 1``. Note two
-   comment line where it says ``(fill in code here)``. The user can
-   replace these lines with code and execute it. The resulting output
-   should be compared to the expected output, shown below the code cell.
-   :label:`fillable1`
-
-.. figure:: gt-screen-fillable2.png
-
-   View of fillable form after user has completed ``Step 1``. The last
-   version of code entered and executed by the user is included the
-   markup, and the code cell now displays the "correct" version of the
-   code. Note the comment suffix ``## ANSWER`` on selected lines of
-   code. These lines were hidden in the unfilled view.
-   :label:`fillable2`
-
-The user interface for creating fillable notebooks in this
+The user interface for creating progressively fillable notebooks in this
 experimental version is very simple. The instructor creates a regular
 notebook, with each code cell corresponding to a specific step of a
 complex task. The comment string ``## ANSWER`` is appended to all code
@@ -490,12 +497,12 @@ correctly. Each code cell is executed in sequence to produce output
 for the step. The notebook is then saved with the suffix ``-fill``
 appended to the base filename to indicate that it is fillable. The
 saving step creates new markup from the output of each code cell to
-display the *expected* output in the fillable version of the
+display the expected output in the progressive version of the
 notebook. Once filled by the students, the notebooks can be
-*submitted* for grading, as they contain a record of the last attempt
+submitted for grading, as they contain a record of the last attempt
 at completing each step, even if unsuccessful.
 
-One can think of fillable notebooks as providing *training wheels* for
+One can think of progressively fillable notebooks as providing "training wheels" for
 the inexperienced programmer trying to balance different algorithmic
 concepts at the same time. This approach is somewhat analogous to simple
 unit testing using the ``doctest`` Python module, which runs functions
@@ -566,7 +573,7 @@ of tricks to implement the virtual "dashboard":
 
 The notebook interface is growing rapidly in popularity as a tool for
 using Python, and any new teaching solutions will need to be
-designed around it. *Fillable* notebooks, where the basic
+designed around it. Progressively fillable notebooks, where the basic
 "scaffolding" for a programming assignment is provided, and students
 are asked to fill in the details, can potentially serve as a powerful
 pedagogical tool.
