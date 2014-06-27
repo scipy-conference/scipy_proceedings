@@ -155,10 +155,10 @@ Over the course of this document we'll refer to the following simple
 
    id, name, balance
    1, Alice, 100
-   2, Bob, 200
+   2, Bob, -200
    3, Charlie, 300
    4, Denis, 400
-   5, Edith, 500
+   5, Edith, -500
 
 .. code-block:: python
 
@@ -284,7 +284,7 @@ Let's start with a single table, for which we'll create an expression node
 .. code-block:: python
 
     >>> accounts = TableSymbol('accounts',
-    ...             '{name: string, balance: intl}')
+    ...       '{id: int, name: string, balance: int}')
 
 to represent a abstract table of accounts. By defining operations on expression
 nodes which construct new abstract expression trees, we can provide a familiar
@@ -297,7 +297,7 @@ balance.
 
 .. code-block:: python
 
-    >>> deadbeats = accounts[accounts['balance'] < 0]
+    >>> deadbeats = accounts[accounts['balance'] < 0]['name']
 
 or apply the split-apply-combine pattern to get the highest grade in
 each class
@@ -343,8 +343,56 @@ to its way of dealing with it, either by computing it on the fly as the
 Pandas back end does, or by building up an expression in the target system
 such as an SQL statement or an RDD map and groupByKey in Spark.
 
-The multiple dispatch provides a pluggable mechanism to connect new back
+Multiple dispatch provides a pluggable mechanism to connect new back
 ends, and handle interactions between different back ends.
+
+Example
+~~~~~~~
+
+We demonstrate the pieces of Blaze in a small toy example.
+
+Recall our accounts dataset
+
+>>> L = [(1, 'Alice', 100),
+         (2, 'Bob', -200),
+         (3, 'Charlie', 300),
+         (4, 'Denis', 400),
+         (5, 'Edith', -500)]
+
+And our computation for names of account holders with negative balances
+
+>>> deadbeats = accounts[accounts['balance'] < 0]['name']
+
+We compose the abstract expression, ``deadbeats`` with the data ``L`` using the
+function ``compute``.
+
+>>> list(compute(deadbeats, L))
+['Bob', 'Edith']
+
+We observe that the correct answer was returned as a list.
+
+If we now store our same data ``L`` into a Pandas DataFrame and then run the
+exact same ``deadbeats`` computation against it we find the same semantic
+answer.
+
+>>> df = DataFrame(L, columns=['id', 'name', 'balance'])
+1      Bob
+4    Edith
+Name: name, dtype: object
+
+Similarly against Spark
+
+>>> sc = pyspark.SparkContext('local', 'Spark-app')
+>>> rdd = sc.parallelize(L)  # a Spark Resilient Distributed DataStructure
+
+>>> compute(deadbeats, rdd)
+PythonRDD[1] at RDD at PythonRDD.scala:37
+
+>>> _.collect()
+['Bob', 'Edith']
+
+In each case of running ``compute(deadbeats, ...)`` against a different data source a Blaze orchestrated the right computational backend to execute the desired query.  The result was given in the form recieved and computation was done either with streaming Python, in memory Pandas, or distributed memory Spark.  The user experience was much the same.
+
 
 Blaze Interface
 ~~~~~~~~~~~~~~~
