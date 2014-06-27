@@ -353,21 +353,27 @@ We demonstrate the pieces of Blaze in a small toy example.
 
 Recall our accounts dataset
 
->>> L = [(1, 'Alice', 100),
-         (2, 'Bob', -200),
-         (3, 'Charlie', 300),
-         (4, 'Denis', 400),
-         (5, 'Edith', -500)]
+.. code-block:: python
+
+   >>> L = [(1, 'Alice', 100),
+            (2, 'Bob', -200),
+            (3, 'Charlie', 300),
+            (4, 'Denis', 400),
+            (5, 'Edith', -500)]
 
 And our computation for names of account holders with negative balances
 
->>> deadbeats = accounts[accounts['balance'] < 0]['name']
+.. code-block:: python
+
+   >>> deadbeats = accounts[accounts['balance'] < 0]['name']
 
 We compose the abstract expression, ``deadbeats`` with the data ``L`` using the
 function ``compute``.
 
->>> list(compute(deadbeats, L))
-['Bob', 'Edith']
+.. code-block:: python
+
+   >>> list(compute(deadbeats, L))
+   ['Bob', 'Edith']
 
 We observe that the correct answer was returned as a list.
 
@@ -375,21 +381,25 @@ If we now store our same data ``L`` into a Pandas DataFrame and then run the
 exact same ``deadbeats`` computation against it we find the same semantic
 answer.
 
->>> df = DataFrame(L, columns=['id', 'name', 'balance'])
-1      Bob
-4    Edith
-Name: name, dtype: object
+.. code-block:: python
+
+   >>> df = DataFrame(L, columns=['id', 'name', 'balance'])
+   1      Bob
+   4    Edith
+   Name: name, dtype: object
 
 Similarly against Spark
 
->>> sc = pyspark.SparkContext('local', 'Spark-app')
->>> rdd = sc.parallelize(L)  # a Spark Resilient Distributed DataStructure
+.. code-block:: python
 
->>> compute(deadbeats, rdd)
-PythonRDD[1] at RDD at PythonRDD.scala:37
+   >>> sc = pyspark.SparkContext('local', 'Spark-app')
+   >>> rdd = sc.parallelize(L)  # a Spark Resilient Distributed DataStructure
 
->>> _.collect()
-['Bob', 'Edith']
+   >>> compute(deadbeats, rdd)
+   PythonRDD[1] at RDD at PythonRDD.scala:37
+
+   >>> _.collect()
+   ['Bob', 'Edith']
 
 In each case of running ``compute(deadbeats, ...)`` against a different data source a Blaze orchestrated the right computational backend to execute the desired query.  The result was given in the form recieved and computation was done either with streaming Python, in memory Pandas, or distributed memory Spark.  The user experience was much the same.
 
@@ -403,20 +413,22 @@ for a novice programmer.  To this end we provide an interactive object that
 feels much like a Pandas DataFrame, but in fact can be driving any of our
 backends.
 
->>> sql = SQL('postgresql://postgres@localhost', 'accounts')
->>> t = Table(sql)
->>> t
-   id     name  balance
-0   1    Alice      100
-1   2      Bob     -200
-2   3  Charlie      300
-3   4    Denis      400
-4   5    Edith     -500
+.. code-block:: python
 
->>> t[t['balance'] < 0]['name']
-    name
-0    Bob
-1  Edith
+   >>> sql = SQL('postgresql://postgres@localhost', 'accounts')
+   >>> t = Table(sql)
+   >>> t
+      id     name  balance
+   0   1    Alice      100
+   1   2      Bob     -200
+   2   3  Charlie      300
+   3   4    Denis      400
+   4   5    Edith     -500
+
+   >>> t[t['balance'] < 0]['name']
+       name
+   0    Bob
+   1  Edith
 
 The astute reader will note the use of Pandas like user experience and output.
 Note however that these outputs are the result of computations on a Postgres
@@ -524,14 +536,20 @@ Here we see surprising results.  Pandas does not perform as well as expected
 wish to choose one of the other backends as we scale out.
 
 A quick survey of StackOverflow shows that ``df.nunique()`` is
-significantly slower than ``df.distinct().size()``.  We alter the
-implementation for the ``NUnique`` operation on ``DataFrame``s.
+significantly slower than ``len(df.unique())``.  We alter the
+implementation for the ``nunique`` operation on a ``DataFrame``.
 
-@dispatch(nunique, DataFrame)
-def compute(expr, df):
-    parent = compute(expr.parent, df)  # Recurse up the tree
-    # return parent.nunique()
-    return len(parent.unique())
+.. code-block:: python
+
+   @dispatch(nunique, DataFrame)
+   def compute(expr, df):
+       parent = compute(expr.parent, df)  # Recurse up the tree
+       # return parent.nunique()
+       return len(parent.unique())
+
+With this quick change we can redefine how Blaze interprets abstract
+``nunique`` operations on Pandas DataFrames.  This change (if committed) can
+accelerate all future Blaze/Pandas computations.
 
 
 Discussion
