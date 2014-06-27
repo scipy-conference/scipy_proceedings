@@ -242,7 +242,9 @@ The third major strength is that implementing our model in ``yt`` makes it possi
 Example
 -------
 
-Here we present a workable example of creating simulated X-ray events using ``yt``'s photon simulator. This code has been implemented in ``yt`` v. 3.0 and is available as a Python script at . We will use an ``Athena`` dataset of a galaxy cluster core, which can be downloaded from the ``yt`` website at http://yt-project.org/data/MHDSloshing.tar.gz.
+Here we present a workable example of creating simulated X-ray events using ``yt``'s photon simulator. This code has been implemented in ``yt`` v. 3.0 and is available as a IPython notebook at . 
+
+We will use an ``Athena`` dataset of a galaxy cluster core, which can be downloaded from the ``yt`` website at http://yt-project.org/data/MHDSloshing.tar.gz.
 You will also need to download a version of ``APEC`` from http://www.atomdb.org. Finally, the absorption cross section table used here and the *Chandra* response files may be downloaded from http://yt-project.org/data/xray_data.tar.gz. 
 
 First, we must import the necessary modules: 
@@ -301,7 +303,7 @@ Now that we have our ``SpectralModel``, we need to connect this model to a ``Pho
                                      Zmet=0.3)
 
 Where we pass in the ``SpectralModel``, and can optionally set values for
-the hydrogen mass fraction ``X_H`` and metallicity ``Z_met``, the latter of which may be a single floating-point value or the name of the ``yt`` field representing the spatially-dependent metallicity. Other models may be defined by the user, 
+the hydrogen mass fraction ``X_H`` and metallicity ``Z_met``, the latter of which may be a single floating-point value or the name of the ``yt`` field representing the spatially-dependent metallicity.
 
 Next, we need to specify "fiducial" values for the telescope collecting area, exposure time, and cosmological redshift, choosing generous values so that there will be a large number of photons to sample from. We also construct a ``Cosmology`` object, which will be used to determine the source distance from its redshift:
 
@@ -358,14 +360,14 @@ so that they may be used later to generate different samples.
    was made with ``MARX``, while the others were made with ``SIMX``. All images have the
    same angular scale. :label:`comparison`
 
-At this point the photons can be projected along a line of sight to create a synthetic observation. First, it is necessary to set up a spectral model for the absorption coefficient, similar to the spectral model for the emitted photons set up previously. Here again, there are multiple options, but for the current example we use ``TableAbsorbModel``, which allows one to use an absorption cross section vs. energy table written in HDF5 format. The only other argument that is needed is the column density ``N_H`` in units of :math:`10^{20} {\rm cm}^{-2}`.
+At this point the photons can be projected along a line of sight to create a synthetic observation. First, it is necessary to set up a spectral model for the absorption coefficient, similar to the spectral model for the emitted photons set up previously. Here again, there are multiple options, but for the current example we use ``TableAbsorbModel``, which allows one to use an absorption cross section vs. energy table written in HDF5 format. The only other argument that is needed is the column density ``N_H`` in units of :math:`10^{20}~{\rm cm}^{-2}`.
 
 .. code-block:: python
 
   N_H = 0.1 
   a_mod = TableAbsorbModel("tbabs_table.h5", N_H) 
 
-Second, we choose a line-of-sight vector ``L``. Third, we may adjust the exposure time, telescope area, and the source redshift to more appropriate values for the particular observation we are trying to simulate. Third, we'll pass in the absorption ``SpectrumModel``. Fourth, we'll specify a ``sky_center`` in RA, Dec on the sky in degrees. In this case, we'll also provide two instrumental responses to convolve the observed photons with.     
+Second, we choose a line-of-sight vector ``L``. Third, we may adjust the exposure time, telescope area, and the source redshift to more appropriate values for the particular observation we are trying to simulate. Fourth, we'll pass in the absorption ``SpectrumModel``. We'll specify a ``sky_center`` in RA, Dec on the sky in degrees. In this case, we'll also provide two instrumental responses to convolve the observed photons with.     
      
 .. code-block:: python
       
@@ -416,7 +418,7 @@ Input to ``SIMX`` and ``Sixte`` is handled via |simput|_, a file format designed
 
   events.write_simput_file("my_events", 
                            clobber=True, 
-                           emin=0.1, emax=10.0))
+                           emin=0.1, emax=10.0)
   
 where ``emin`` and ``emax`` are the energy range in keV of the outputted events. Figure :ref:`comparison` shows several examples of the generated photons passed through various instrument simulations. For this to work correctly, the ``events`` object must be generated by a call to ``project_photons`` which does not apply responses, since these will be applied by the instrument simulator. 
 
