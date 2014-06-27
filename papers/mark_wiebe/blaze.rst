@@ -436,9 +436,9 @@ Bitcoin
 
 We consider financial transactions using the Bitcoin digital currency.  In
 particular we consider transactions between de-anonymized identities as
-computed by the process laid out in [Reid]_ and obtained from TODO.  Each
-transaction consists of a transaction ID, sender, recipient, timestamp, and a
-number of bitcoins sent.  Some example data
+computed by the process laid out in [Reid]_.  Each transaction consists of a
+transaction ID, sender, recipient, timestamp, and a number of bitcoins sent.
+Some example data
 
 ::
 
@@ -482,14 +482,13 @@ We run this computation using streaming Python, Pandas, SQLite, Postgres, and Sp
 
 .. code-block:: python
 
-   >>> sqlite = SQL('sqlite:///btc.db', 'user_edges', schema=csv.schema)
-   >>> sqlite.extend(csv)
-   >>> postgres = SQL('postgresql:///user:pass', 'user_edges', schema=csv.schema)
-   >>> postgres.extend(csv)
+   >>> sqlite = into(SQL('sqlite:///btc.db', 'user_edges', schema=csv.schema), csv)
+   >>> postgres = into(SQL('postgresql:///user:pass', 'user_edges', schema=csv.schema), csv)
+   >>> hdf5 = into(HDF5('btc.hdf5', 'user_edges', schema=csv.schema), csv)
 
-   >>> df = like(DataFrame, csv)
-   >>> rdd = like(SparkContext, csv)
-   >>> py = like([], csv)
+   >>> df = into(DataFrame, csv)
+   >>> rdd = into(SparkContext, csv)
+   >>> py = into([], csv)
 
 We then run our computation for a variety of sizes on the variety of backends
 
@@ -501,7 +500,7 @@ We then run our computation for a variety of sizes on the variety of backends
    >>> times = [[measure(lambda: compute(big_spenders.subs({t: t.head(size)}),
    ...                                   dataset))
    ...              for size in sizes]
-   ...              for dataset in [py, df, rdd, sqlite, postgres]]
+   ...              for dataset in [py, df, rdd, sqlite, postgres, hdf5]]
 
 TODO: Plot results
 
@@ -522,7 +521,18 @@ TODO: Plot results
 
 Here we see surprising results.  Pandas does not perform as well as expected
 (though more performant alternatives to ``Series.nunique`` exist) and so we may
-wish to choose one of the other backends as we scale out
+wish to choose one of the other backends as we scale out.
+
+A quick survey of StackOverflow shows that ``df.nunique()`` is
+significantly slower than ``df.distinct().size()``.  We alter the
+implementation for the ``NUnique`` operation on ``DataFrame``s.
+
+@dispatch(nunique, DataFrame)
+def compute(expr, df):
+    parent = compute(expr.parent, df)  # Recurse up the tree
+    # return parent.nunique()
+    return len(parent.unique())
+
 
 Discussion
 ~~~~~~~~~~
