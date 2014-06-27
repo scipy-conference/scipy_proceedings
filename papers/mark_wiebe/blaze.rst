@@ -397,8 +397,31 @@ In each case of running ``compute(deadbeats, ...)`` against a different data sou
 Blaze Interface
 ~~~~~~~~~~~~~~~
 
-* Table and Array objects with pandas/numpy-like interfaces, to provide
-  friendly interfaces for domain experts whose primary focus is not programming.
+The separation of expressions and backend computation provides a powerful
+multi-backend experience.  Unfortunately this separation may also be confusing
+for a novice programmer.  To this end we provide an interactive object that
+feels much like a Pandas DataFrame, but in fact can be driving any of our
+backends.
+
+>>> sql = SQL('postgresql://postgres@localhost', 'accounts')
+>>> t = Table(sql)
+>>> t
+   id     name  balance
+0   1    Alice      100
+1   2      Bob     -200
+2   3  Charlie      300
+3   4    Denis      400
+4   5    Edith     -500
+
+>>> t[t['balance'] < 0]['name']
+    name
+0    Bob
+1  Edith
+
+The astute reader will note the use of Pandas like user experience and output.
+Note however that these outputs are the result of computations on a Postgres
+database.
+
 
 Experiment
 ----------
