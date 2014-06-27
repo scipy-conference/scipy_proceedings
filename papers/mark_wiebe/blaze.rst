@@ -240,10 +240,9 @@ interfaces.
    [(u'Alice', 100L),
     (u'Charlie', 300L),
     (u'Edith', 500L),
-    (u'Georgina', 700L),
     (u'Georgina', 700L)]
 
-   >>> csv.dynd[::10, ['name', 'balance']]
+   >>> csv.dynd[::2, ['name', 'balance']]
    nd.array([["Alice", 100],
              ["Charlie", 300],
              ["Edith", 500],
@@ -254,7 +253,6 @@ Performance of this approach varies depending on the underlying storage system.
 For file-based storage systems like CSV and JSON we must seek through the file
 to find the right line (see [iopro]_), but don't incur deserialization costs.
 Some storage systems, like HDF5, support random access natively.
-* Defines interface for reading/writing data describable with datashape.
 
 
 Cohesion
@@ -264,15 +262,6 @@ Different storage techniques manage data differently.  Cohesion between these
 disparate systems is accomplished with the two projects ``datashape``, which
 specifies the intended meaning of the data, and DyND, which manages efficient
 type coercions and serves as an efficient intermediate representation.
-
-
-Extension
-`````````
-
-Data descriptors can be easily extended to new storage formats by implementing
-the above interface.  TODO
-
-
 
 
 Blaze Expr
@@ -294,42 +283,42 @@ Let's start with a single table, for which we'll create an expression node
 
 .. code-block:: python
 
-    >>> students = TableSymbol('students',
-    ...                        '{name: string, course: int, grade: real}')
+    >>> accounts = TableSymbol('accounts',
+    ...             '{name: string, balance: intl}')
 
-to represent a table of students. By defining operations on expression nodes
-which construct new abstract expression trees, we can provide a familiar
-interface closely matching that of NumPy and Pandas. For example, in
-structured arrays and dataframes you can access fields as ``students['name']``.
+to represent a abstract table of accounts. By defining operations on expression
+nodes which construct new abstract expression trees, we can provide a familiar
+interface closely matching that of NumPy and of Pandas. For example, in
+structured arrays and dataframes you can access fields as ``accounts['name']``.
 
-Extracting fields from the table gives us ``Column`` objects, which we
-can now apply operations to. For example, we can select all the students
-with a certain grade
+Extracting fields from the table gives us ``Column`` objects, to which we can
+now apply operations. For example, we can select all accounts with a negative
+balance.
 
 .. code-block:: python
 
-    >>> astudents = students[students['grade'] >= 90]
+    >>> deadbeats = accounts[accounts['balance'] < 0]
 
 or apply the split-apply-combine pattern to get the highest grade in
 each class
 
 .. code-block:: python
 
-    >>> By(students, students['course'], students['grade'].max())
+    >>> By(accounts, accounts['name'], accounts['balance'].sum())
 
 In each of these cases we get an abstract expression tree representing
-the analytics operation we have performed, in a form independent of a
+the analytics operation we have performed, in a form independent of any
 particular back end.
 
 ::
 
                    -----By-----------
                  /       |            \
-            students   Column         Max
+            accounts   Column         Sum
                       /     \           |
-                 students  'course'   Column
-                                     /     \
-                                students  'grade'
+                 accounts  'name'     Column
+                                     /      \
+                                accounts  'balance'
 
 Blaze Compute
 ~~~~~~~~~~~~~
@@ -344,10 +333,10 @@ previous section into a Pandas back end. The code which handles this is
 an overload of ``compute`` which takes a ``By`` node and a
 ``DataFrame`` object. First, each of the child nodes must be computed,
 so ``compute`` gets called on the three child nodes. This validates the
-provided dataframe against the ``students`` schema, and extracts the
-'course' and 'grade' columns from it. Then, the pandas ``groupby``
-call is used to group the 'grade' column according to the 'course'
-column, and apply the ``max`` operation.
+provided dataframe against the ``accounts`` schema, and extracts the
+'name' and 'balance' columns from it. Then, the pandas ``groupby``
+call is used to group the 'balance' column according to the 'name'
+column, and apply the ``sum`` operation.
 
 Each back end can map the common analytics patterns supported by Blaze
 to its way of dealing with it, either by computing it on the fly as the
