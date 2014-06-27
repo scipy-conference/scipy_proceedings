@@ -196,7 +196,7 @@ to NumPy arrays.
              [3, "Charlie", 300],
              [4, "Denis", 400],
              [5, "Edith", 500]],
-            type="5 * {id : int64, name : string, balance : int64}")
+    type="5 * {id : int64, name : string, balance : int64}")
 
 Insertion
 `````````
@@ -223,8 +223,9 @@ migration between storage systems.
 
 .. code-block:: python
 
-   >>> sql = SQL('postgres://user:password@hostname/', 'accounts')
-   >>> sql.extend(iter(csv))  # Migrate csv file to Postgres database
+   >>> sql = SQL('postgresql://user:pass@host/',
+                 'accounts', schema=csv.schema)
+   >>> sql.extend(iter(csv))  # Migrate csv file to DB
 
 
 Indexing
@@ -247,7 +248,7 @@ interfaces.
              ["Charlie", 300],
              ["Edith", 500],
              ["Georgina", 700]],
-            type="var * {name : string, balance : int64}")
+        type="var * {name : string, balance : int64}")
 
 Performance of this approach varies depending on the underlying storage system.
 For file-based storage systems like CSV and JSON we must seek through the file
@@ -283,13 +284,13 @@ Let's start with a single table, for which we'll create an expression node
 
 .. code-block:: python
 
-    >>> accounts = TableSymbol('accounts',
+    >>> accts = TableSymbol('accounts',
     ...       '{id: int, name: string, balance: int}')
 
 to represent a abstract table of accounts. By defining operations on expression
 nodes which construct new abstract expression trees, we can provide a familiar
 interface closely matching that of NumPy and of Pandas. For example, in
-structured arrays and dataframes you can access fields as ``accounts['name']``.
+structured arrays and dataframes you can access fields as ``accts['name']``.
 
 Extracting fields from the table gives us ``Column`` objects, to which we can
 now apply operations. For example, we can select all accounts with a negative
@@ -297,14 +298,14 @@ balance.
 
 .. code-block:: python
 
-    >>> deadbeats = accounts[accounts['balance'] < 0]['name']
+    >>> deadbeats = accts[accts['balance'] < 0]['name']
 
 or apply the split-apply-combine pattern to get the highest grade in
 each class
 
 .. code-block:: python
 
-    >>> By(accounts, accounts['name'], accounts['balance'].sum())
+    >>> By(accts, accts['name'], accts['balance'].sum())
 
 In each of these cases we get an abstract expression tree representing
 the analytics operation we have performed, in a form independent of any
@@ -314,11 +315,11 @@ particular back end.
 
                    -----By-----------
                  /       |            \
-            accounts   Column         Sum
+              accts   Column         Sum
                       /     \           |
-                 accounts  'name'     Column
+                  accts    'name'     Column
                                      /      \
-                                accounts  'balance'
+                                accts    'balance'
 
 Blaze Compute
 ~~~~~~~~~~~~~
@@ -333,7 +334,7 @@ previous section into a Pandas back end. The code which handles this is
 an overload of ``compute`` which takes a ``By`` node and a
 ``DataFrame`` object. First, each of the child nodes must be computed,
 so ``compute`` gets called on the three child nodes. This validates the
-provided dataframe against the ``accounts`` schema, and extracts the
+provided dataframe against the ``accts`` schema, and extracts the
 'name' and 'balance' columns from it. Then, the pandas ``groupby``
 call is used to group the 'balance' column according to the 'name'
 column, and apply the ``sum`` operation.
@@ -365,7 +366,7 @@ And our computation for names of account holders with negative balances
 
 .. code-block:: python
 
-   >>> deadbeats = accounts[accounts['balance'] < 0]['name']
+   >>> deadbeats = accts[accts['balance'] < 0]['name']
 
 We compose the abstract expression, ``deadbeats`` with the data ``L`` using the
 function ``compute``.
@@ -393,7 +394,7 @@ Similarly against Spark
 .. code-block:: python
 
    >>> sc = pyspark.SparkContext('local', 'Spark-app')
-   >>> rdd = sc.parallelize(L)  # a Spark Resilient Distributed DataStructure
+   >>> rdd = sc.parallelize(L) # Distributed DataStructure
 
    >>> compute(deadbeats, rdd)
    PythonRDD[1] at RDD at PythonRDD.scala:37
@@ -415,7 +416,8 @@ backends.
 
 .. code-block:: python
 
-   >>> sql = SQL('postgresql://postgres@localhost', 'accounts')
+   >>> sql = SQL('postgresql://postgres@localhost',
+   ...           'accounts')
    >>> t = Table(sql)
    >>> t
       id     name  balance
@@ -469,7 +471,8 @@ We load in this data using `blaze.data`
 
    >>> from blaze.data.csv import CSV
    >>> csv = CSV('user_edges.txt',
-   ...           columns=['transaction', 'sender', 'recipient', 'timestamp', 'value'],
+   ...           columns=['transaction', 'sender',
+   ...              'recipient', 'timestamp', 'value'],
    ...           typehints={'timestamp': 'datetime'})
 
 We then build an abstract table with this same schema
@@ -482,7 +485,9 @@ And describe a simple computation, finding the ten senders that have sent the mo
 
 .. code-block:: python
 
-   >>> big_spenders = (By(t, t['sender'], t['value'].sum())
+   >>> big_spenders = (By(t,
+                          t['sender'],
+                          t['value'].sum())
    ...                  .sort('value', ascending=False)
    ...                  .head(10))
 
@@ -494,10 +499,13 @@ We run this computation using streaming Python, Pandas, SQLite, Postgres, and Sp
 
 .. code-block:: python
 
-   >>> sqlite = into(SQL('sqlite:///btc.db', 'user_edges', schema=csv.schema), csv)
-   >>> postgres = into(SQL('postgresql:///user:pass', 'user_edges', schema=csv.schema), csv)
-   >>> hdf5 = into(HDF5('btc.hdf5', 'user_edges', schema=csv.schema), csv)
-
+   >>> sqlite = into(SQL('sqlite:///btc.db', 'user_edges',
+                         schema=csv.schema), csv)
+   >>> postgres = into(SQL('postgresql:///user:pass',
+                           'user_edges', schema=csv.schema),
+                       csv)
+   >>> hdf5 = into(HDF5('btc.hdf5', 'user_edges',
+                        schema=csv.schema), csv)
    >>> df = into(DataFrame, csv)
    >>> rdd = into(SparkContext, csv)
    >>> py = into([], csv)
