@@ -242,7 +242,7 @@ The third major strength is that implementing our model in ``yt`` makes it possi
 Example
 -------
 
-Here we present a workable example of creating simulated X-ray events using ``yt``'s photon simulator. This code has been implemented in ``yt`` v. 3.0 and is available as a IPython notebook at . 
+Here we present a workable example of creating simulated X-ray events using ``yt``'s photon simulator. This code has been implemented in ``yt`` v. 3.0 and is available as an IPython notebook at . 
 
 We will use an ``Athena`` dataset of a galaxy cluster core, which can be downloaded from the ``yt`` website at http://yt-project.org/data/MHDSloshing.tar.gz.
 You will also need to download a version of ``APEC`` from http://www.atomdb.org. Finally, the absorption cross section table used here and the *Chandra* response files may be downloaded from http://yt-project.org/data/xray_data.tar.gz. 
@@ -288,12 +288,6 @@ the data in the grid cells will generate photons. A number of options are availa
 
 where the first argument specifies the path to the ``APEC`` files, the next three specify the bounds in keV of the energy spectrum and the number of bins in the table, and the remaining arguments specify the ``APEC`` version to use and whether or not to apply thermal broadening to the spectral lines. 
 
-.. figure:: aplpy_figure.png
-   :scale: 33 %
-   
-   100 ks exposure of our simulated galaxy cluster, from a FITS image plotted with
-   ``APLpy``. :label:`image`
-
 Now that we have our ``SpectralModel``, we need to connect this model to a ``PhotonModel`` that will connect the field data in the ``data_source`` to the spectral model to actually generate the photons which will serve as the sample distribution for observations. For thermal spectra, we have a special ``PhotonModel`` called ``ThermalPhotonModel``:
 
 .. code-block:: python
@@ -326,11 +320,6 @@ instance, which contains the photon samples:
                                     cosmology=cosmo)
 
 where we have used all of the parameters defined above, and ``center`` defines the reference coordinate which will become the origin of the photon coordinates.
-
-.. figure:: spectrum.png
-   :scale: 33 %
-   
-   Counts spectrum of the photons from our simulated observation. :label:`spectrum`
    
 At this point, the ``photons`` are distributed in the three-dimensional
 space of the ``data_source``, with energies in the rest frame of the
@@ -349,16 +338,6 @@ stored on disk:
   photons = PhotonList.from_file("my_photons.h5")
 
 so that they may be used later to generate different samples.
-
-.. figure:: comparison.png
-   :align: center
-   :figclass: w
-   :scale: 50 %
-   
-   100 ks exposures of our simulated galaxy cluster, observed with several
-   different existing and planned X-ray detectors. The `Chandra` image
-   was made with ``MARX``, while the others were made with ``SIMX``. All images have the
-   same angular scale. :label:`comparison`
 
 At this point the photons can be projected along a line of sight to create a synthetic observation. First, it is necessary to set up a spectral model for the absorption coefficient, similar to the spectral model for the emitted photons set up previously. Here again, there are multiple options, but for the current example we use ``TableAbsorbModel``, which allows one to use an absorption cross section vs. energy table written in HDF5 format. The only other argument that is needed is the column density ``N_H`` in units of :math:`10^{20}~{\rm cm}^{-2}`.
 
@@ -382,6 +361,12 @@ Second, we choose a line-of-sight vector ``L``. Third, we may adjust the exposur
                                    responses=resp)
        
 ``project_photons`` draws events uniformly from the ``photons`` sample, the number of which is set by the (optional) parameters ``redshift_new``, ``exp_time_new``, and ``area_new``, orients their positions in the coordinate frame defined by ``L``, and applies the Doppler and cosmological energy shifts. Lastly, a number of the events are removed according to the supplied Galactic absorption model ``absorb_model`` before arriving in the observer's frame. 
+
+.. figure:: aplpy_figure.png
+   :scale: 33 %
+   
+   100 ks exposure of our simulated galaxy cluster, from a FITS image plotted with
+   ``APLpy``. :label:`image`
 
 In the case where instrumental ``responses`` are provided, there are two additional steps. If an ARF is provided, the maximum value of the effective area curve will serve as the ``area_new`` parameter, and after the absorption step a number of events are further removed using the effective area curve as the acceptance/rejection criterion. If an RMF is provided, the event energies will convolved with it to produce a new array with their resulting spectral channels. 
 
@@ -413,6 +398,22 @@ For outputting the photons for use with other software packages to simulate spec
   events.write_h5_file("my_events.h5")
   
 Input to ``SIMX`` and ``Sixte`` is handled via |simput|_, a file format designed specifically for the output of simulated X-ray data:
+
+.. figure:: spectrum.png
+   :scale: 33 %
+   
+   Counts spectrum of the photons from our simulated observation. :label:`spectrum`
+
+.. figure:: comparison.png
+   :align: center
+   :figclass: w
+   :scale: 50 %
+   
+   100 ks exposures of our simulated galaxy cluster, observed with several
+   different existing and planned X-ray detectors. The `Chandra` image
+   was made with ``MARX``, while the others were made with ``SIMX``. All images have the
+   same angular scale. :label:`comparison`
+
 
 .. code-block:: python
 
