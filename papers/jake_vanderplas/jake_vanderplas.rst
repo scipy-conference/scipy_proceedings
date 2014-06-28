@@ -23,7 +23,7 @@ One of the first things a scientist in a data-intensive field hears about statis
 
 This paper seeks to synthesize the philosophical and pragmatic aspects of this debate, so that scientists who use these approaches might be better prepared to understand the tools available to them. Along the way we'll explore the fundamental philosophical divergence of frequentism and Bayesianism, explore the practical aspects of how this divergence affects data analysis, and discuss the ways that these practices may affect scientific results.
 
-This paper is not meant to be a full introduction to statistics. In particular, concepts such as the likelihood are assumed rather than derived, and many advanced Bayesian and frequentist diagnostics are left out in favor of showing the most fundamental aspects of the approaches. For a fuller treatment, see, e.g. [Wasserman2004]_.
+This paper is not meant to be a full introduction to statistics. In particular, concepts such as the likelihood are assumed rather than derived, and many advanced Bayesian and frequentist diagnostics are left out in favor of showing the most fundamental aspects of the approaches. For a fuller treatment, see, e.g. [Wasserman2004]_ or [Gelman2004]_.
 
 
 The Disagreement: The Definition of Probability
@@ -34,7 +34,7 @@ For frequentists, probability only has meaning in terms of **a limiting case of 
 
 For Bayesians, the concept of probability is extended to cover **degrees of certainty about statements**. A Bayesian might claim to know the flux :math:`F` of a star with some probability :math:`P(F)`: that probability can certainly be estimated from frequencies in the limit of a large number of repeated experiments, but this is not fundamental. The probability is a statement of the researcher's knowledge of what the true flux is. For Bayesians, **probabilities are fundamentally related to their own knowledge about an event**. This means, for example, that in a Bayesian view, we can meaningfully talk about the probability that the *true* flux of a star lies in a given range.  That probability codifies our knowledge of the value based on prior information and available data.
 
-The surprising thing is that this arguably subtle difference in philosophy can lead, in practice, to vastly different approaches to the statistical analysis of data.  Below I will give a few practical examples of the differences in approach, along with associated Python code to demonstrate the practical aspects of the resulting methods. Due to space limitations, we'll not go into much depth regarding the subtleties of the mathematical formalism involved. For this purpose, there are other excellent resources available; e.g. [Wasserman2004]_.
+The surprising thing is that this arguably subtle difference in philosophy can lead, in practice, to vastly different approaches to the statistical analysis of data.  Below I will give a few practical examples of the differences in approach, along with associated Python code to demonstrate the practical aspects of the resulting methods. Due to space limitations, we'll not go into much depth regarding the subtleties of the mathematical formalism involved. For a more detailed treatment, see the references cited above.
 
 
 A Simple Example: Flux Measurements
