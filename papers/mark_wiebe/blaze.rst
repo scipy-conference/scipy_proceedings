@@ -569,41 +569,8 @@ backends.  It allows us to easily compare our options and choose the best for
 our particular setting.  As that setting changes (i.e. if our data grows
 considerably) our implementation can transition easily.
 
-
-Other Projects
---------------
-
-Datashape
-~~~~~~~~~
-
-DyND
-~~~~
-
-Catalog
-~~~~~~~
-
-
-Conclusion
-----------
-
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
-
 References
 ----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
 
 .. [iopro] http://docs.continuum.io/iopro/index.html
 .. [Reid] Reid, Fergal, and Martin Harrigan. "An analysis of anonymity in the
