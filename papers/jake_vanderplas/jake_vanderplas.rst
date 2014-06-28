@@ -23,6 +23,8 @@ One of the first things a scientist in a data-intensive field hears about statis
 
 This paper seeks to synthesize the philosophical and pragmatic aspects of this debate, so that scientists who use these approaches might be better prepared to understand the tools available to them. Along the way we'll explore the fundamental philosophical divergence of frequentism and Bayesianism, explore the practical aspects of how this divergence affects data analysis, and discuss the ways that these practices may affect scientific results.
 
+This paper is not meant to be a full introduction to statistics. In particular, concepts such as the likelihood are assumed rather than derived, and many advanced Bayesian and frequentist diagnostics are left out in favor of showing the most fundamental aspects of the approaches. For a fuller treatment, see, e.g. [Wasserman2004]_.
+
 
 The Disagreement: The Definition of Probability
 -----------------------------------------------
