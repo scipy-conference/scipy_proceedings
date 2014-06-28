@@ -50,7 +50,8 @@ Every author of a paper in a SciPy proceedings has to deal with the tooling requ
 
 This problem is quite general. In a university setting, students in a class, collaborating researchers, and the provision of reproducible workflows for literally anyone to run the code used for a set of research results. Developers in industry similarly need to ensure code will work in a specified environment (like on production servers!), and a large number of tools have been developed and widely adopted to manage this piece of complexity.
 
-A number of solutions have also been developed to allow for multiple *Python* environments, including environments that peacefully co-exist on the same computer (e.g., virtualenv, venv, conda, buildout), but our compute environment often pulls in non-trivial tooling outside of Python (though tools like conda *can* pull in non-python tooling).
+A number of solutions have also been developed to allow for multiple *Python* environments, including environments that peacefully co-exist on the same computer (e.g., virtualenv, venv, conda, buildout), but our compute environment often pulls in non-trivial tooling outside of Python (though tools like conda *can* pull in non-python tooling). While these tools cannot solve all of the problems we describe below, there is no reason that any of them could not be used within the broader approach we’ll describe. Indeed, a tool like conda could ultimately perform *most* of the work – though as we’ll see, it should likely never be able to perform all of that work.
+
 Prosaic examples include the toolchain required to use nbconvert (very much parallel to the above). Or, for example, ensuring that a properly configured database is available.
 
 The afore-mentioned “tools from industry” -- generally referred to as *devops* tools -- are directed at solving this larger problem. Unfortunately, the variety and complexity of tools match the variety and complexity of the problem space, and the target space for most of them was *not* scientific computing. Thus, before discussing available tooling, we first lay out a set of issues relevant to supporting scientific computing.
@@ -168,7 +169,8 @@ Problem 2: We will consider a participant’s laptop the unit-of-compute since i
 Solution 2: Enable computing beyond the laptop. Though a workstation with plentiful memory by virtue of exactly replicating the environment available in Solution 1, the participant is guaranteed to replicate the data processing, transformations, and analysis steps they ran on their laptop in these other environments with the benefit of more memory available on those systems. This also includes the ability to use the common GUI interface provided by BCE as a VDI (Virtual Desktop Integration).
 
 Problem 3: Even though Solution 2 allows us to grow beyond the laptop, the time required
-Solution 3: Enable pleasantly parallel scale-out. A cluster may be available in your department or at your institution or at national facilities that provides the equivalent of a hundred or a thousand of the workstations you may have in your lab, enabled by Solution 2. BCE works in these environments and allows you to install additional software comp
+
+Solution 3: Enable pleasantly parallel scale-out. A cluster may be available in your department or at your institution or at national facilities that provides the equivalent of a hundred or a thousand of the workstations you may have in your lab, enabled by Solution 2. BCE works in these environments and allows you to install additional software components as you wish without relying on cluster administrators for help.
 
 Problem 4: Assuming you have the grant money to buy a large workstation with lots of memory and many processors, you may only need that resource for a 1 to 2 week period of time, so spending your money on a resource that remains unused 95% of the time is a waste of your grant money.
 
@@ -631,7 +633,7 @@ Recipe for setting up sicpy_proceedings build system on Ubuntu 14.04 (or BCE pro
 Important Part
 --------------
 
-It is well known [Atr03]_ that Spice grows on the planet Dune.  
+It is well known [Atr03]_ that Spice grows on the planet Dune.
 
 References
 ----------
