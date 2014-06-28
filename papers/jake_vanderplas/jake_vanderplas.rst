@@ -12,7 +12,7 @@ Frequentism and Bayesianism: A Python-driven Primer
 
 .. class:: keywords
 
-   statistics, frequentism, bayesian inference
+   statistics, frequentism, Bayesian inference
 
 .. [#blog] This paper draws from content originally published on the author's blog, *Pythonic Perambulations* [VanderPlas2014]_.
 
@@ -130,7 +130,7 @@ That is, with a flat prior in :math:`F`, the Bayesian posterior is maximized at 
 
 You might notice that we glossed over one important piece here: the prior, :math:`P(F)`. The prior allows inclusion of other information into the computation, which becomes very useful in cases where multiple measurement strategies are being combined to constrain a single model (as is the case in, e.g. cosmological parameter estimation). The necessity to specify a prior, however, is one of the more controversial pieces of Bayesian analysis.
 
-A frequentist will point out that the prior is problematic when no true prior information is available. Though it might seem straightforward to use a **noninformative prior** like the flat prior mentioned above, there are some surprisingly subtleties involved. [#stark]_ It turns out that in many situations, a truly uninformative prior cannot exist! Frequentists point out that the subjective choice of a prior which necessarily biases the result has no place in scientific data analysis.
+A frequentist will point out that the prior is problematic when no true prior information is available. Though it might seem straightforward to use a **non-informative prior** like the flat prior mentioned above, there are some surprising subtleties involved. [#stark]_ It turns out that in many situations, a truly uninformative prior cannot exist! Frequentists point out that the subjective choice of a prior which necessarily biases the result has no place in scientific data analysis.
 
 A Bayesian would counter that frequentism doesn't solve this problem, but simply skirts the question. Frequentism can often be viewed as simply a special case of the Bayesian approach for some (implicit) choice of the prior: a Bayesian would say that it's better to make this implicit choice explicit, even if the choice might include some subjectivity. Furthermore, as we'll see below, the question frequentism answers is not always the question the researcher wants to ask.
 
@@ -306,7 +306,7 @@ In the large-:math:`N` limit, the central limit theorem tells us that the sampli
 
 For our particular observed data, this gives a confidence interval around our unbiased estimator of :math:`CI(\theta) = (10.2, 12.5)`, entirely above our common-sense bound of :math:`\theta < 10`! We might hope that this discrepancy is due to our use of the large-:math:`N` approximation with a paltry :math:`N=3` samples. A more careful treatment of the problem (See [Jaynes1976]_ or part III of [VanderPlas2014]_) gives the exact confidence interval :math:`(10.2, 12.2)`: the 95% confidence interval entirely excludes the sensible bound :math:`\theta < 10`!
 
-Though this may seem counterintuitive, this result is in fact correct: the approach has successfully answered the frequentist question. 95% of CIs so constructed on data from this model will in fact contain the true :math:`\theta`; this particular draw of :math:`D` just happens to be in the unlucky 5%.
+Though this may seem counter-intuitive, this result is in fact correct: the approach has successfully answered the frequentist question. 95% of CIs so constructed on data from this model will in fact contain the true :math:`\theta`; this particular draw of :math:`D` just happens to be in the unlucky 5%.
 
 
 Truncated Exponential: A Bayesian Approach
@@ -369,7 +369,7 @@ Does this mean that frequentism is incorrect? No: it simply shows that we must c
 
 Bayesianism in Practice: Markov Chain Monte Carlo
 -------------------------------------------------
-Though Bayesianism has some nice features in theory, in practice it can be extremely computationally intensive: while simple problems like those examined above lend themselves to relatively easy analytical integration, real-life Bayesian computations often require numerical integration of high-dimensional parameter spaces.
+Though Bayesianism has some nice features in theory, in practice it can be extremely computationally intensive: while simple problems like those examined above lend themselves to relatively easy analytic integration, real-life Bayesian computations often require numerical integration of high-dimensional parameter spaces.
 
 A turning-point in practical Bayesian computation was the development and application of sampling methods such as Markov Chain Monte Carlo (MCMC). MCMC is a class of algorithms which can efficiently characterize even high-dimensional posterior distributions through drawing of randomized samples such that the points are distributed according to the posterior. A detailed discussion of MCMC is well beyond the scope of this paper; an excellent introduction can be found in [Gelman2004]_. Below, we'll propose a straightforward model and compare three MCMC implementations available in Python.
 
@@ -491,7 +491,7 @@ The emcee package [ForemanMackey2013]_ is a lightweight pure-Python package whic
     def log_posterior(theta, x, y):
         return log_prior(theta) + log_like(theta,x,y)
 
-Next we set up the computation. ``emcee`` combines multiple "walkers", each of which is its own markov chain. We'll also specify a burn-in period, to allow the chains to stabilize prior to drawing our final traces:
+Next we set up the computation. ``emcee`` combines multiple "walkers", each of which is its own Markov chain. We'll also specify a burn-in period, to allow the chains to stabilize prior to drawing our final traces:
 
 .. code-block:: python
 
@@ -523,7 +523,7 @@ Solution with PyMC
 ~~~~~~~~~~~~~~~~~~
 The PyMC package [Patil2010]_ is an MCMC implementation written in Python and Fortran. It makes use of the classic Metropolis-Hastings MCMC sampler [Gelman2004]_, and includes many built-in features, such as support for efficient sampling of common prior distributions. Because of this, it requires more specialized boilerplate than does emcee, but the result is a very powerful tool for flexible Bayesian inference.
 
-The example below uses PyMC verion 2.3; as of this writing, there exists an early release of version 3.0, which is a complete rewrite of the package with a more streamlined API and more efficient computational backend. To use PyMC, we first we define all the variables using its classes and decorators:
+The example below uses PyMC version 2.3; as of this writing, there exists an early release of version 3.0, which is a complete rewrite of the package with a more streamlined API and more efficient computational backend. To use PyMC, we first we define all the variables using its classes and decorators:
 
 .. code-block:: python
 
@@ -565,7 +565,7 @@ The result is shown by the red curve in Figure :ref:`fig1`.
 
 Solution with PyStan
 ~~~~~~~~~~~~~~~~~~~~
-PyStan is the official Python interface to Stan, a probabilistic programming languate implemented in C++ and making use of a Hamiltonian MCMC using a No U-Turn Sampler [Hoffman2014]_. The Stan language is specifically designed for the expression of probabilistic models; PyStan lets Stan models specified in the form of Python strings be parsed, compiled, and executed by the Stan library. Because of this, PyStan is the least "Pythonic" of the three frameworks:
+PyStan is the official Python interface to Stan, a probabilistic programming language implemented in C++ and making use of a Hamiltonian MCMC using a No U-Turn Sampler [Hoffman2014]_. The Stan language is specifically designed for the expression of probabilistic models; PyStan lets Stan models specified in the form of Python strings be parsed, compiled, and executed by the Stan library. Because of this, PyStan is the least "Pythonic" of the three frameworks:
 
 .. code-block:: python
 
