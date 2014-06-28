@@ -2,31 +2,24 @@
 :email: davclark@berkeley.edu
 :institution: UC Berkeley
 
-
 :author: Aaron Culich
 :email: aculich@berkeley.edu
 :institution: UC Berkeley
 
+:author: Brian Hamlin
+:email: maplabs@light42.com
+:institution: UC Berkeley
 
 :author: Ryan Lovett
 :email: rylo@berkeley.edu
 :institution: UC Berkeley
 
 
-:author: Chris Paciorek
-:email: paciorek@stat.berkeley.edu
-:institution: UC Berkeley
-
-
-
-
 --------------------------------------------------------------------------------
 BCE: Berkeley's Common Scientific Compute Environment for Research and Education
 --------------------------------------------------------------------------------
 
-
 .. class:: abstract
-
 
   * A common problem is running scientific codes across a range of machines.
   * We examine the success of [OSGeo-Live]_ in providing a standard environment for GIS projects, both for developer deployment (e.g. developers of QGIS) and for researcher evaluation of new tools.
@@ -40,33 +33,60 @@ BCE: Berkeley's Common Scientific Compute Environment for Research and Education
     this approach increases productivity, reuse, and reproducibility.
   * Recommendations.
 
-
 .. class:: keywords
 
-
    education, reproducibility, virtualization
-
 
 Introduction
 ------------
 
+  btw- I have never setup for this LaTeX workflow, so the make_paper.sh
+  fails for me miserably. Therefore, no advanced formatting and very probably
+  more basic errors right now.. but, the prose is coming along
 
-Quote: "btw- I have never setup for this LaTeX workflow, so the make_paper.sh
-fails for me miserably. Therefore, no advanced formatting and very probably
-more basic errors right now.. but, the prose is coming along" --One of the
-Authors
+  --One of the Authors
 
+Every author of a paper in a SciPy proceedings has to deal with the tooling required to test that their paper is building and displays properly. This is not a profoundly difficult problem, but it serves to illustrate the point. In particular, documenting the “solution” to building SciPy papers is unnecessarily complex due to the variety of potential environments (e.g., Mac, Windows, \*nix), and even methods that authors might have used to set up Python on their machine (e.g., Anaconda, Canopy, python.org).
 
-Segue to general problem, perhaps mention nbconvert tooling (parallel to the above).
+This problem is quite general. In a university setting, students in a class, collaborating researchers, and the provision of reproducible workflows for literally anyone to run the code used for a set of research results. Developers in industry similarly need to ensure code will work in a specified environment (like on production servers!), and a large number of tools have been developed and widely adopted to manage this piece of complexity.
 
+A number of solutions have also been developed to allow for multiple *Python* environments, including environments that peacefully co-exist on the same computer (e.g., virtualenv, venv, conda, buildout), but our compute environment often pulls in non-trivial tooling outside of Python (though tools like conda *can* pull in non-python tooling).
+Prosaic examples include the toolchain required to use nbconvert (very much parallel to the above). Or, for example, ensuring that a properly configured database is available.
 
-Here we frame the problem space and describe the general class of devops
-solutions.
+The afore-mentioned “tools from industry” -- generally referred to as *devops* tools -- are directed at solving this larger problem. Unfortunately, the variety and complexity of tools match the variety and complexity of the problem space, and the target space for most of them was *not* scientific computing. Thus, before discussing available tooling, we first lay out a set of issues relevant to supporting scientific computing.
+
+Use Cases
+---------
+
+Historically, the users of computational tools (and their collaborators) were equipped with a suite of largely self-taught or informally learned foundational skills (command line usage, basic software architecture, etc.). However, we are entering an era where experimental philosophers want to take serious courses in computationally demanding statistics and sociologists have a need for best-of-breed text analysis, or psychologists wish to pick up scalable machine learning techniques. These students are often willing to work hard, and might sign up for the university courses meant to provide these skills. But while the group that the course was originally designed for (e.g., statistics or computer science students) have a set of *assumed* skills that are necessary to succeed in the class, but that aren’t taught *anywhere* in the curriculum. It’s difficult to write instructions on how to set every possible environment up to successfully engage in a course, but if a standardized environment is provided, this task becomes much simpler. Written instructions need fewer special cases, and illustrations can be essentially pixel-identical to what students should be seeing on their screen.
+
+Even among collaborators who are competent in their own domain, crossing disciplines can often demand the use of novel tools – for example, a neuroscientist may be well-versed in Matlab, and wish to collaborate with a policy researcher who’s skilled in SPSS. It’s easy to end up with a collaboration where neither party has any idea how to use the tools of the other.
+
+In other words, I have an environment and you have an environment. I want to do things my way, you want to do them yours. If we wish to work together, either as student and teacher, or as collaborators, this doesn’t really work.
+
+Uniformity of the environment in which the user is clicking.
+
+Our primary concern at present is educational, particularly introductory computational science.
+
+A place to ensure reproducability.
+
+Some students will not be able to run the VM, so consistency across server and 
+
+Environment
+^^^^^^^^^^^
+
+Simple things like gedit, nano with tab-stops set up properly. Setting up the background to be more efficient solid color.
+
+There are also idiosyncratic things about individual VM software, like the way shared folders are handled (managing group membership, symlinks to the appropriate mount folder).
+
+Python packages are installed from a basic pip requirements file.
+
+Debian packages are similarly installed from a list.
+Other packages are installed via bash, e.g., downloading and installing RStudio.
 
 
 Available Tools
 ---------------
-
 
 "Collaboratool" was conceived as a project for building, integrating, and
 deploying tools that support portable, reproducible data science.  We started
@@ -76,63 +96,49 @@ IPython notebooks through the web. We were very inspired by
 made more sense to focus on a complete virtual environment, which is easy to
 deploy in a variety of contexts, which is what you'll find here now.
 
+Sage?
 
 *Virtual Machines (VMs)*
 
-
 Full virtualization: VirtualBox, (VMware, mention encryption), others? (KVM, etc.)
 
-
 Systems like EC2, only available as a VM.
-
 
 Lightweight virturalization (/ containerization) includes Docker / LXC / VMWare
 ESX.
 
-
 Only with exotic hardware is GPGPU [unpack] available to fully virtualized environments. Check on containers? [XXX IT people?]
-
 
 port-mapping, shared files, GUI vs. “remote-like” operation
 
-
 *DevOps*
 
-
 XXX - Particularly need help from Aaron here (Richard
-
 
 Vagrant (heavily explored, set aside)
 Packer (currently used)
 Docker (potential future)
 
-
-XXX - Is Hashdist here or in exsting projects?
-
-
-
-
+XXX - Is Hashdist here or in exsting projects? Conda goes here also. Why not conda? Still hard to just install a list of pip requirements
 
 
 
 
 Do not expect the readership to be familiar with VM technologies such as VMWare, VirtualBox, Vagrant, Docker. Most scientists do not clearly see what they are good for when looking at the original documentation (which is more written for system administrators or web site developers). However, it should be easy to explain the problem setting to scientists: it is always a big mess to get all software up and running on a platform, especially for a course. Very often scientific computing implies a lot of sophisticated software beyond Anaconda or Enthought ready-make setups. You present smooth solutions, and most scientists will benefit from them.
 Explain or avoid terms in the VM community such as provisioning. Make sure you reach out to the average scientist (who knows very well that setting up a Python environment is often non-trivial).
-The big difficulty (for me) is to choose the right VM tool. Any experience with VMWare, VirtualBox, Vagrant, Docker would be very useful at this stage.[a][b]
-So far VM tools are mostly used on individual laptops. The idea that a VM can be used on computer systems at a university and could services as well, and that one can simply move the laptop VM to these platforms, is something that will greatly increase productivity.[c][d]
+The big difficulty (for me) is to choose the right VM tool. Any experience with VMWare, VirtualBox, Vagrant, Docker would be very useful at this stage.
+So far VM tools are mostly used on individual laptops. The idea that a VM can be used on computer systems at a university and could services as well, and that one can simply move the laptop VM to these platforms, is something that will greatly increase productivity.
 
-
-
+Summarizing the pull-request feedback
+- the most common case for VM tools is the laptop
+- mobility of VMs between 
 
 OSGeo-Live: A Successful Common Environment
 -------------------------------------------
 
-
 The OSGeo-Live, a project the Open Source Geospatial Foundation, is a vivid example
 of both a sophisticated compute environment, and synergistic community process;
 quoting from the OSGeo-Live [1] website:
-
-
 
 
 '''
@@ -141,12 +147,10 @@ Machine based on Xubuntu, that allows you to try a wide variety of open source
 geospatial software without installing anything. It is composed entirely of free
 software, allowing it to be freely distributed, duplicated and passed around.
 
-
 It provides pre-configured applications for a range of geospatial use cases,
 including storage, publishing, viewing, analysis and manipulation of data. It
 also contains sample datasets and documentation.
 '''
-
 
 The OSGeo-Live is formally a project of the Open Source Geospatial Foundation
 (OSGeo), an international body modeled on the Apache Foundation [3]. Eight years
@@ -166,15 +170,11 @@ for substantial growth. The OSGeo-Live is now very stable, easily incorporates a
 components, and widely adopted.
 
 
-
-
 OSGeo-Live is now very stable, easily incorporates advances in components,
 and widely adopted. Let's look at each of these building blocks briefly:
 
-
 Technical Stability
 ^^^^^^^^^^^^^^^^^^^
-
 
 An original goal of the OSGeo-Live was to operate well on minimal hardware with
 broad support for common peripherals, and a license structure compatible with
@@ -183,7 +183,6 @@ and it was been very successful. To this day, almost all applications
 operate easily in very modest RAM and disk space (with the notable exception of
 Java-based software which requires substantially more RAM).
 
-
 OSGeo-Live itself is not a "linux distribution" per se, primarily because the
 project does not provide a seamless upgrade process from one version to another.
 OSGeo-Live relies on the Ubuntu/Debian/GNU, apt-based ecosystem to handle
@@ -191,14 +190,11 @@ the heavy-lifting of system updates and upgrades. This is a win-win, as updates
 are proven reliable over a very large Ubuntu community process, and frees
 project participants to concentrate on adding value to its featured components.
 
-
 As we shall see, due to a component architecture, individual software projects
 can be installed as-needed on a generic base.
 
-
 Tool Sets
 ^^^^^^^^^
-
 
 It cannot be overstated that, a key component to the success of the 
 overall project has been the availability of widely-known and reliable tools, 
@@ -215,24 +211,19 @@ contexts, for both applications and server processes,  and clear guidelines for
 installation conventions, a new open-source project could almost immediately
 develop and iterate their own install scripts in a straightforward way.
 
-
 **detailed build directions here**
 Particular example: web, including apache, WSGI, etc. Standard layout of web
 directory. Fully working examples available for each "kind" of project.
 
-
 Subversion repo -- asset heirarchy -- individual install scripts -- Live build
  scripts trac-subversion   http://trac.osgeo.org/osgeo/report/10
 
-
 see screenshots
 
-
 Directory gisvm - a detailed layout
---
-File Structure:
-==============
 
+File Structure
+==============
 
 bin/
      /main.sh # Call all the other scripts
@@ -243,32 +234,26 @@ bin/
        /install_main_docs.sh
        /setdown.sh
 
-
        /build_iso.sh
          /load_mac_installers.sh
          /load_win_installers.sh
-
 
      bootstrap.sh
      inchroot.sh
      package.sh
      sync_livedvd.sh
 
-
 app-conf/
      /project1/   # config files used by install_package1.sh script
      /project2/   # config files used by install_package2.sh script
-
-
 
 
 app-data/
      /project1/   # data & help files used by package1
      /project2/   # data & help files used by package2
 
-
 desktop-conf/     # data files and images used for the main desktop background
-     
+
 doc/
      /index_pre.html            # header for summary help page
      /index_post.html           # footer for summary help page
@@ -278,35 +263,26 @@ doc/
      /template_description.html # example of project_description.html file
      /template_licence.html     # incorportate into project_description.html???
 
-
      /descriptions/
        /package_definition.html    # short (1 sentence) summary of installed pkg 
        /package_description.html   # getting started instructions for the LiveDVD user
 
-
 download/       # copy of the livedvd project's download server webpage
 
-
 sources.list.d/ # Supplimentary package repositories for /etc/apt/sources.list
---
-
 
 
 
 Community Awareness
 ^^^^^^^^^^^^^^^^^^^
 
-
 The processes of  adoption of new
 technology - initial awareness, trialability, adoption and iteration -
 are well-known [4].
 
-
 In the case of the OSGeo-Live, an orginial design goal was to provide tools
 to those doing geospatial fieldwork with limited resources, and who often lack
 advanced programming and administration skills.
-
-
 
 
 Several years into the project, funding was established via a grant from the Australian
@@ -320,28 +296,21 @@ competition. This has proved very successful. Note that the initial effort to bu
 standardized documentation required paid professionals. It seems unlikely that the
 documentation would have been successful if only ad-hoc volunteer efforts were used.
 
-
 The Open Source Geospatial Foundation (OSGeo) the hub for a variety of projects to interoperate, and
 potentially share with each other / synergy. OSGeo raises awareness of other projects.
-
 
 (see the transfer of tech, e.g., military technology to environmental applications)
 (Maybe include story about Haiti response with open source mapping)
 
 
-
-
 Steps to Contribute
-
 
 A FAQ was written and published in an easily accessible location. Outreach was
 conducted through formal and informal networks.
 
-
 Major step in diffusion is folks knowing what the thing is at all. Value add /
 branding - OSGeo has credibility from foundation status, participants,
 consistent / good graphic design.
-
 
 [1] http://live.osgeo.org
 [2]  build stuff
@@ -349,9 +318,7 @@ consistent / good graphic design.
 [4] Diffusion of Innovation; Rogers et al 1962
 http://en.wikipedia.org/wiki/Diffusion_of_Innovations
 
-
 **misc cut text**
-
 
 Eight
 years ago, there existed several very large and growing open-source geospatial
@@ -365,8 +332,6 @@ across the globe on the Internet, the nascent OSGeo-Live project committed
 itself to the larger OSGeo Foundation structure in its second year.
 
 
-
-
 missing title
 -------------
 What are the steps that established credibility to get projects contributing to
@@ -376,39 +341,29 @@ outside of U.S. than in, including many non-english (as a primary language),
 esp. from Europe. The social component of building the community was not
 necessarily explicit or even shared or known to all contributors (provable?).
 
-
 It consists of a choice of basic tools that are widely known to free software
 developers: shell, Perl, or Python. Scripts may call package managers, few
 constraints (e.g., keep recipes contained to a particular directory). Core,
 customizable scripts designed to bootstrap new recipes.
 
-
 Particular example: web, including apache, WSGI, etc. Standard layout of web
 directory. Fully working examples available for each "kind" of project.
 
-
 The result is that certain tools are becoming more and more visible. Projects
 are encouraged that are implemented in standard frameworks (i.e., not Forth).
-
 
 There's still not complete consensus, but the project is moving towards some
 consensus infrastructure. Also see the transfer of, e.g., military technology to
 environmental applications.
 
-
 Maybe include story about Jamaica response with open source mapping.
-
-
-
 
 
 
 Other virtual machines
 ----------------------
 
-
 From [Mining the Social Web, a Chef+Vagrant solution](https://rawgit.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition/master/ipynb/html/_Appendix%20A%20-%20Virtual%20Machine%20Experience.html)
-
 
 From Matt Gee (of [DSSG](http://dssg.io): We've been trying a number of
 different approaches to the standard development environment. For this year's
@@ -417,19 +372,15 @@ our core resources. However, for weekend learn-a-thons and more portable VM.
 We've tried our own VM using docker and well as some hosted boxes like yhat's
 new Science Box. We should compare notes.
 
-
 VM from Philip.
-
 
 BCE: The Berkeley Common Environment
 ------------------------------------
-
 
 The goal for the BCE is to provide both the ready-made environments, and also
 the "recipes" or scripts setting up these environments. It should be easy for a
 competent linux user to create recipes for custom tools that might not be
 braodly useful (and thus, not already in BCE).
-
 
 For classwork and research in the sciences at Berkeley, broadly defined to
 include social science, life science, physical science, and engineering. Using
@@ -440,9 +391,7 @@ in the cloud. Furthermore, users will be able to modify the instructions for
 producing or modifying the virtual machine in a reproducible way for
 communication with and distribution to others.
 
-
 We envision the following core use cases:
-
 
   * creating a common computing environment for a course or workshop,
   * creating a common computational environment to be shared by a group of
@@ -450,9 +399,7 @@ We envision the following core use cases:
   * disseminating the computational environment so outsiders can reproduce the
     results of a group.
 
-
 Other use cases/benefits:
-
 
  * Thin client / staff computing
  * Exam environments
@@ -463,9 +410,7 @@ Other use cases/benefits:
  * Managing complexity
  * Impacts beyond "the course"
 
-
 What problems does BCE solve for you?
-
 
  * No more obscure installation issues - download and run a single virtual
    machine or get the same environment on a bare metal or virtual server.
@@ -478,9 +423,7 @@ What problems does BCE solve for you?
  * Easy transition across scales (laptop to cluster)
  * Tricky installs
 
-
 To accomplish this, we envision that BCE will encompass the following:
-
 
  * a reproducible workflow that creates the standard VM/image
    with standard scientific computing software such as Python, R, git, etc.,
@@ -492,13 +435,9 @@ To accomplish this, we envision that BCE will encompass the following:
    represent either a sequence or a tree of possible VMs.
 
 
-
-
 *Tentative list of features*
 
-
  * VMs
-
 
    * A fixed, versioned VM provided each semester as a binary image for classes
      and workshops
@@ -514,9 +453,7 @@ To accomplish this, we envision that BCE will encompass the following:
    * Shared folders (EBS on AWS), or other tech to make it possible to separate
      data from VM.
 
-
  * Provisioning
-
 
    * Provisioning is fully scripted - if the appropriate software is installed,
      the recipe should run reliably.
@@ -527,9 +464,7 @@ To accomplish this, we envision that BCE will encompass the following:
      information back into the provisioning workflow that can be used to
      recreate the modified VM
 
-
  * Logistics and training
-
 
    * A GitHub repository or the like plus a project website with all BCE
      materials available
@@ -537,49 +472,35 @@ To accomplish this, we envision that BCE will encompass the following:
      repository and a mailing list
    * Management / Versioning / Snapshotting
 
-
  * Problems
-
 
    * VMs reserve compute resources exclusively (less of a problem with LXC-like
      solutions).
    * Testing / Issue tracking
 
-
 *Students ("horizontal" collaboration), Researchers ("vertical" collaboration)*
-
 
 If you'd like to use the VM as a student, researcher, or instructor, our goal is
 to make this easy for you.
 
-
 If you're using VirtualBox, [follow these instructions](using-virtualbox.html).
-
 
 If you'd like to use the VM on Amazon's EC2 cloud platform, [follow these
 instructions](using-ec2.html).
 
-
 Adding modules?
-
 
 *Creating (and modifying) the BCE VM*
 
-
 All the files for creating the VM are in the collaboratool repository on GitHub.
-
 
 To clone the repository from the command line:
 
-
     git clone https://github.com/dlab-berkeley/collaboratool
-
 
 Then go to the provisioning directory and see the information in HOWTO.md.
 
-
 *VirtualBox*
-
 
   * Download and install VirtualBox from the [VirtualBox
     website](https://www.virtualbox.org/wiki/Downloads). This is the tool that
@@ -597,11 +518,9 @@ Then go to the provisioning directory and see the information in HOWTO.md.
     a few seconds you should see black screen and then soon you'll see the
     desktop of the VM.
 
-
 You now have a machine that has all the software installed as part of BCE,
 including IPython and useful Python packages and R, RStudio and useful R
 packages.
-
 
 You can get a terminal window that allows you to type commands in a UNIX-style
 shell by clicking on the icon of the black box with the $ symbo on the top
@@ -610,17 +529,13 @@ notebook" or  R by simply typing 'R' at the prompt in the terminal. This starts
 a bare-bones R session. To start RStudio, either type 'rstudio' at the prompt on
 go to "Applications->Programming->RStudio".
 
-
 You can restart the VM at any time by opening VirtualBox and clicking on the tab
 for the VM and clicking "Start" as you did above.
 
-
 *Sharing folders and copying files between your computer and the VM*
-
 
 One useful thing will be to share folders between the VM and the host machine so
 that you can access the files on your computer from the VM. Do the following:
-
 
   * Got to "Devices->Shared Folder Settings" and click on the icon of a folder
     with a "+" on the right side.
@@ -638,14 +553,11 @@ that you can access the files on your computer from the VM. Do the following:
   * Alternatively, from the Terminal, you can also see the directory by doing
     "cd ~/Desktop/shared/sf_Documents" and then "ls" will show you the files.
 
-
 Be careful: unless you selected "read only" at the same time as "make
 permanent", any changes to the shared folder on the VM affects the folder in the
 'real world', namely your computer.
 
-
 *EC2*
-
 
   * Go to [EC2 management console](http://console.aws.amazon.com) and choose the
     US-West-2 (Oregon) region, as that is where we have posted the BCE AMI.
@@ -658,18 +570,12 @@ permanent", any changes to the shared folder on the VM affects the folder in the
 
 
 
-
-
-
 Conclusion
 ----------
 
-
 Keep in mind that *you* are now at the cutting edge. Extra care should be taken to make your tooling accessible to your collaborators. Where possible, use tools that your collaborators already know - shell, scripting, package management, etc.
 
-
 That said, technologies that allow efficient usage of available hardware stand to provide substantial savings, and potential for re-use by researchers with less direct access to capital. [e.g., Docker, aggregation of cloud VM providers]
-
 
 Let’s be intentional.
 Be transparent/explicit about our choices/assumptions.
@@ -677,36 +583,26 @@ That *doesn’t* have to be technical - a simple text file or even a PDF can pro
 Be willing to make strong recommendations based on what we are actually using (eat own dogfood)
 Be willing to adopt/adapt/change/throw stuff out (have an exit strategy)
 
-
 Recipe for setting up sicpy_proceedings build system on Ubuntu 14.04.
 
-
 ________________
-
 
 Examples for proper rst formatting
 ----------------------------------
 
-
 Code highlighting:
 
-
 .. code-block:: python
-
 
    def sum(a, b):
        """Sum two numbers."""
 
-
        return a + b
-
 
 Maybe also in another language, and with line numbers:
 
-
 .. code-block:: c
    :linenos:
-
 
    int main() {
        for (int i = 0; i < 10; i++) {
@@ -715,88 +611,65 @@ Maybe also in another language, and with line numbers:
        return 0;
    }
 
-
 Or a snippet from the above code, starting at the correct line number:
-
 
 .. code-block:: c
    :linenos:
    :linenostart: 2
 
-
    for (int i = 0; i < 10; i++) {
        /* do something */
    }
 
-
 Important Part
 --------------
-
 
 It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
 some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
 equation on a separate line:
 
-
 .. math::
-
 
    g(x) = \int_0^\infty f(x) dx
 
-
 or on multiple, aligned lines:
-
 
 .. math::
    :type: eqnarray
-
 
    g(x) &=& \int_0^\infty f(x) dx \\
         &=& \ldots
 
 
-
-
 The area of a circle and volume of a sphere are given as
-
 
 .. math::
    :label: circarea
 
-
    A(r) = \pi r^2.
-
 
 .. math::
    :label: spherevol
 
-
    V(r) = \frac{4}{3} \pi r^3
-
 
 We can then refer back to Equation (:ref:`circarea`) or
 (:ref:`spherevol`) later.
 
-
 .. figure:: figure1.png
 
-
    This is the caption. :label:`egfig`
-
 
 .. figure:: figure1.png
    :align: center
    :figclass: w
 
-
    This is a wide figure, specified by adding "w" to the figclass.  It is also
    center aligned, by setting the align keyword (can be left, right or center).
-
 
 .. figure:: figure1.png
    :scale: 20%
    :figclass: bht
-
 
    This is the caption on a smaller figure that will be placed by default at the
    bottom of the page, and failing that it will be placed inline or at the top.
@@ -804,13 +677,10 @@ We can then refer back to Equation (:ref:`circarea`) or
    reference size which might be the original size of your image - you probably
    have to play with it. :label:`egfig2`
 
-
 As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
 figures.
 
-
 .. table:: This is the caption for the materials table. :label:`mtable`
-
 
    +------------+----------------+
    | Material   | Units          |
@@ -823,65 +693,45 @@ figures.
    +------------+----------------+
 
 
-
-
 We show the different quantities of materials required in Table
 :ref:`mtable`.
 
 
-
-
 .. The statement below shows how to adjust the width of a table.
 
-
 .. raw:: latex
-
 
    \setlength{\tablewidth}{0.8\linewidth}
 
 
-
-
 .. table:: This is the caption for the wide table.
    :class: w
-
 
    +--------+----+------+------+------+------+--------+
    | This   | is |  a   | very | very | wide | table  |
    +--------+----+------+------+------+------+--------+
 
 
-
-
 Perhaps we want to end off with a quote by Lao Tse:
 
-
   *Muddy water, let stand, becomes clear.*
-
-
 
 
 .. Customised LaTeX packages
 .. -------------------------
 
-
 .. Please avoid using this feature, unless agreed upon with the
 .. proceedings editors.
 
-
 .. ::
-
 
 ..   .. latex::
 ..      :usepackage: somepackage
 
-
 ..      Some custom LaTeX source here.
-
 
 References
 ----------
-
 
 .. [BCE] http://collaboratool.berkeley.edu
 .. [OSGeo-Live] http://www.osgeo.org/
@@ -890,12 +740,4 @@ References
            Transactions on Terraforming, 21(3):261-300, August 2003.
 
 
-
-
 [a]Copied from https://github.com/scipy-conference/scipy_proceedings/pull/98#issuecomment-46784086
-
-
-[a]I think he wants a recommendation. Are we making a recommendation? Dav suggests a soft recommendation.
-[b]A recommendation about specific tools or about patterns and thinking about tools to enable that?
-[c]Copied from https://github.com/scipy-conference/scipy_proceedings/pull/98#issuecomment-46784086
-[d]This in BRC-speak would be "Mobility of Compute". This is also an example of a need that many people might have, but don't know how to articulate (yet). How can we paint the picture of what's possible and what this will enable (the incentive) so that thinking about these tools is compelling?
