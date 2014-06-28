@@ -55,36 +55,47 @@ Prosaic examples include the toolchain required to use nbconvert (very much para
 
 The afore-mentioned “tools from industry” -- generally referred to as *devops* tools -- are directed at solving this larger problem. Unfortunately, the variety and complexity of tools match the variety and complexity of the problem space, and the target space for most of them was *not* scientific computing. Thus, before discussing available tooling, we first lay out a set of issues relevant to supporting scientific computing.
 
-Use Cases
----------
+Issues
+------
 
-Historically, the users of computational tools (and their collaborators) were equipped with a suite of largely self-taught or informally learned foundational skills (command line usage, basic software architecture, etc.). However, we are entering an era where experimental philosophers want to take serious courses in computationally demanding statistics, sociologists have a need for best-of-breed text analysis, and psychologists wish to pick up scalable machine learning techniques. These students are often willing to work hard, and might sign up for the university courses meant to provide these skills. But while the group that the course was originally designed for (e.g., statistics or computer science students) have a set of *assumed* skills that are necessary to succeed in the class, these skills aren’t taught *anywhere* in the curriculum. After some struggle, students with divergent backgrounds often drop these classes with the sense that they simply can’t obtain these skills. This is not an equitable situation.
+Historically, the users of computational tools (and their collaborators) were equipped with a suite of largely self-taught or informally learned foundational skills (command line usage, basic software architecture, etc.). The tooling and technical skills employed by members of a discipline provide notable boundaries between those who do and do not (and perhaps cannot) participate in that discipline. However, we are entering an era where these boundaries are becoming barriers to the mission of our university (and presumably others).
+
+For the purposes of BCE, there are three broad use-cases. Instructional use requires simultaneous support of *teaching* and *learning*. *Collaboration* introduces difficulties where individuals from different backgrounds have disjoint tooling and skill-sets. A further difficulty arises with the general problem of “collaborating” with scientists around the world that may be interested in *re-using* our code, or *reproducing* our research. Finally, it’s important to consider the demands that might be placed on the individuals actually *developing* and *supporting* the common environment.
+
+Our primary concern at present for the BCE is educational, particularly introductory computational science and statistics. However, where possible, we wish to build an environment that supports the broader set of uses we outline here.
+
+For instruction
+^^^^^^^^^^^^^^^
+
+We are entering an era where experimental philosophers want to take serious courses in computationally demanding statistics, sociologists have a need for best-of-breed text analysis, and psychologists wish to pick up scalable machine learning techniques. These students are often willing to work hard, and might sign up for the university courses meant to provide these skills. But while the group that the course was originally designed for (e.g., statistics or computer science students) have a set of *assumed* skills that are necessary to succeed in the class, these skills aren’t taught *anywhere* in the curriculum. After some struggle, students with divergent backgrounds often drop these classes with the sense that they simply can’t obtain these skills. This is not an equitable situation.
 
 Given current standards for university courses, it’s difficult to write instructions that would work for any potential student. As mentioned above, students come to a course with many possible environments (i.e., on their laptop or a server). But if a standardized environment is provided, this task becomes much simpler. Written instructions need fewer special cases, and illustrations can be essentially pixel-identical to what students should be seeing on their screen.
+
+Uniformity of the environment in which the user is clicking.
+
+In our experience, some students will not be able to run the VM while others have difficulty getting regular access to a stable network connection (though fortunately, almost never both!). So, consistency across server and local versions of the environment is critical to effectively support students with either of these difficulties.
+
+For scientific collaboration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Even among collaborators who are competent in their own domain, crossing disciplines can often demand the use of novel tools – for example, a neuroscientist may be well-versed in Matlab, and wish to collaborate with a policy researcher who’s skilled in SPSS. It’s easy to end up with a collaboration where neither party has any idea how to use the tools of the other.
 
 In other words, I have an environment and you have an environment. I want to do things my way, you want to do them yours. If we wish to work together, either as student and teacher, or as collaborators, this doesn’t really work.
 
-Uniformity of the environment in which the user is clicking.
-
-Our primary concern at present is educational, particularly introductory computational science.
-
 A place to ensure reproducability.
 
-Some students will not be able to run the VM, so consistency across server and 
 
-Administration
-^^^^^^^^^^^^^^
+For administration
+^^^^^^^^^^^^^^^^^^
 
-The solution of using standardized virtual environments, or accounts on a shared server for instruction is not new. At UC Berkeley, the D-Lab has supported courses and short trainings with these technologies. Similarly, the Statistical Computing Facility supports an instructional lab and cloud-based VMs for some courses, and computer science courses often provide a VM (often provisioned by a graduate student assistant). In each and every case, multiple technical challenges are common. These technical glitches can delay or reduce the quality of instruction as compared to an environment that students are already familiar with. It is also a drag on the time of those supporting the course
+The solution of using standardized virtual environments, or accounts on a shared server for instruction is not new. At UC Berkeley, the D-Lab has supported courses and short trainings with these technologies. Similarly, the Statistical Computing Facility supports an instructional lab and cloud-based VMs for some courses, and computer science courses often provide a VM (often provisioned by a graduate student assistant). In each and every case, multiple technical challenges are common. These technical glitches can delay or reduce the quality of instruction as compared to an environment that students are already familiar with. It is also a drag on the time of those supporting the course – time that could be better directed at course content!
 
+However, if we had a standard environment, developed in an open-source fashion, many of these problems rapidly diminish, and likely reverse to net *savings* in time wasted. The more broadly an environment is adopted across campus, the more familiar it will be to all students. Technical glitches can be tracked or resolved by a community of competent contributors, allowing course instructors to simply use a well-polished end product, while reducing the complexity of instructions for students to set up course-specific software. These environments can also be tuned in ways that would be beyond the scope of what would be worth doing for an individual course - for example simple optimizations to increase the efficiency of numeric computations or network bandwidth for remote desktops.
 
+It is at this point that our use case starts to sound like the case in which product developers are working together to deploy software on a production server, while maintaining a useful development environment on their own machines, testing servers, and so on. However, going forwards, we will suggest that these tools be largely the domain of administrator-contributors to a useful common environment. Students and even professors and researchers can continue to use the tools they are familiar with, such as the Ubuntu package manager, pip, shell scripts, and so on. However, before considering the tooling that might be used for this process, we provide a brief list of what a reasonable common environment should be like.
 
-It is at this point that our use case starts to sound like the case in which product developers are working together to deploy software on a production server, while maintaining a useful development environment on their own machines, testing servers, and so on.
-
-Environment
-^^^^^^^^^^^
+Features of a useful common environment
+---------------------------------------
 
 Simple things like gedit, nano with tab-stops set up properly. Setting up the background to be more efficient solid color.
 
@@ -148,8 +159,25 @@ Summarizing the pull-request feedback
 - to reach a general (scientific) audience, avoid VM jargon
 - scientific computing requires more than just the packaging basics
 
+Problem 1: The quote at the beginning of this paper represents the first barrier to collaboration in which the full set of requirements are not explicitly stated and there is an assumption that all collaborators already have or can set up an environment to collaborate. The number of steps or the time required to satisfy these assumptions is unknown, and regularly exceeds the time available. For example, in the context of a 1.5 hour workshop or a class with only handful of participants, if all cannot be set up within a fixed amount of time (typically 20 minutes at most) it will jeopardize successfully completing the workshop or class materials and will discourage participation.
+
+Solution 1: Eliminate dependency hell. Provide a method to ensure that all participants can successfully complete the installation with a fixed number of well-known steps across all platforms within a fixed amount of time. The BCE platform provides this in a scalable and quantifiable way.
+
+Problem 2: We will consider a participant’s laptop the unit-of-compute since it is the primary platform widely used across the research and teaching space and is a reasonable assumption to require: specifically a 64-bit laptop with 4GB of RAM. These requirements are usually sufficient to get started, however the algorithms or size of in-memory data may exceed the available memory of this unit-of-compute and the participant may need to migrate to another compute resource such as a powerful workstation with 128GB of RAM, an amount of memory not yet available in even the most advanced laptops which typically max-out at 16GB at the time of this writing.
+
+Solution 2: Enable computing beyond the laptop. Though a workstation with plentiful memory by virtue of exactly replicating the environment available in Solution 1, the participant is guaranteed to replicate the data processing, transformations, and analysis steps they ran on their laptop in these other environments with the benefit of more memory available on those systems. This also includes the ability to use the common GUI interface provided by BCE as a VDI (Virtual Desktop Integration).
+
+Problem 3: Even though Solution 2 allows us to grow beyond the laptop, the time required
+Solution 3: Enable pleasantly parallel scale-out. A cluster may be available in your department or at your institution or at national facilities that provides the equivalent of a hundred or a thousand of the workstations you may have in your lab, enabled by Solution 2. BCE works in these environments and allows you to install additional software comp
+
+Problem 4: Assuming you have the grant money to buy a large workstation with lots of memory and many processors, you may only need that resource for a 1 to 2 week period of time, so spending your money on a resource that remains unused 95% of the time is a waste of your grant money.
+
+Solution 4: Enable on-demand resizing of resources. The BCE solution works on cloud resources that may allow you to scale out
+
 OSGeo-Live: A Successful Common Environment
 -------------------------------------------
+
+The OSGeo-Live virtual machine is an example of exactly the kind of environment described above. Despite the availability of sophisticated devops tools, and considerable technical competence amongst contributors to the project, the project is configured using a combination of Python, Perl and shell scripts, along with some straightforward conventions that support easy inter-operation of different projects.
 
 The OSGeo-Live, a project the Open Source Geospatial Foundation, is a vivid example
 of both a sophisticated compute environment, and synergistic community process;
