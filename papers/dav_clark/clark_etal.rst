@@ -21,17 +21,17 @@ BCE: Berkeley's Common Scientific Compute Environment for Research and Education
 
 .. class:: abstract
 
-  * A common problem is running scientific codes across a range of machines (e.g. laptop, workstation, hpc cluster, cloud platform).
-  * We examine the success of [OSGeo-Live]_ in providing a standard environment for GIS projects, both for developer deployment (e.g. developers of QGIS) and for researcher evaluation of new tools.
-  * We introduce available tools for Virtual machines and devops. These are somewhat widely used, but in an ad hoc manner.
-  * We also provide a brief review of existing projects, and how they are using these technologies.
-  * Members of the UC
-    Berkeley D-Lab, Statistical Computing Facility (SCF), and Berkeley Research
-    Computing (BRC) have evaluated a breadth of virtualization technologies and
-    present a strategy for constructing the Berkeley Common Environment [BCE]_.
-  * We examine a variety of concrete training and research use-cases in which
-    this approach increases productivity, reuse, and reproducibility.
-  * Recommendations.
+It is increasingly common for users of various levels of technical skill to run scientific codes from a variety of sources (most notably from different academic backgrounds) across a range of machines (e.g. laptop, workstation, hpc cluster, cloud platform). 
+Members of the UC
+Berkeley D-Lab, Statistical Computing Facility (SCF), and Berkeley Research
+Computing (BRC) have been supporting such use-cases, and have developed strategies that reduce the pain points that arise.
+We begin by describing the variety of concrete training and research use-cases in which
+our strategy might increase productivity, reuse, and reproducibility.
+We then introduce available tools for the “recipe-based” creation of computational environments, attempting to demystify and provide a framework for thinking about *devops* tools (along with explaining what “devops” means!). These are somewhat widely used, but in an ad hoc manner.
+We proceed to provide a brief review of existing projects, and how they are using these technologies.
+In particular, we examine the success of [OSGeo-Live]_ in providing a standard environment for GIS projects, both for developer deployment (e.g. developers of QGIS) and for researcher evaluation of new tools.
+Given our thorough evaluation of a breadth of virtualization technologies and
+use-cases, we present our current strategy for constructing the Berkeley Common Environment [BCE]_, along with general recommendations for building environments for your own use-cases.
 
 .. class:: keywords
 
