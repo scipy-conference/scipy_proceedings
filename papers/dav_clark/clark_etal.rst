@@ -21,7 +21,7 @@ BCE: Berkeley's Common Scientific Compute Environment for Research and Education
 
 .. class:: abstract
 
-  * A common problem is running scientific codes across a range of machines.
+  * A common problem is running scientific codes across a range of machines (e.g. laptop, workstation, hpc cluster, cloud platform).
   * We examine the success of [OSGeo-Live]_ in providing a standard environment for GIS projects, both for developer deployment (e.g. developers of QGIS) and for researcher evaluation of new tools.
   * We introduce available tools for Virtual machines and devops. These are somewhat widely used, but in an ad hoc manner.
   * We also provide a brief review of existing projects, and how they are using these technologies.
@@ -58,7 +58,9 @@ The afore-mentioned “tools from industry” -- generally referred to as *devop
 Use Cases
 ---------
 
-Historically, the users of computational tools (and their collaborators) were equipped with a suite of largely self-taught or informally learned foundational skills (command line usage, basic software architecture, etc.). However, we are entering an era where experimental philosophers want to take serious courses in computationally demanding statistics and sociologists have a need for best-of-breed text analysis, or psychologists wish to pick up scalable machine learning techniques. These students are often willing to work hard, and might sign up for the university courses meant to provide these skills. But while the group that the course was originally designed for (e.g., statistics or computer science students) have a set of *assumed* skills that are necessary to succeed in the class, but that aren’t taught *anywhere* in the curriculum. It’s difficult to write instructions on how to set every possible environment up to successfully engage in a course, but if a standardized environment is provided, this task becomes much simpler. Written instructions need fewer special cases, and illustrations can be essentially pixel-identical to what students should be seeing on their screen.
+Historically, the users of computational tools (and their collaborators) were equipped with a suite of largely self-taught or informally learned foundational skills (command line usage, basic software architecture, etc.). However, we are entering an era where experimental philosophers want to take serious courses in computationally demanding statistics, sociologists have a need for best-of-breed text analysis, and psychologists wish to pick up scalable machine learning techniques. These students are often willing to work hard, and might sign up for the university courses meant to provide these skills. But while the group that the course was originally designed for (e.g., statistics or computer science students) have a set of *assumed* skills that are necessary to succeed in the class, these skills aren’t taught *anywhere* in the curriculum. After some struggle, students with divergent backgrounds often drop these classes with the sense that they simply can’t obtain these skills. This is not an equitable situation.
+
+Given current standards for university courses, it’s difficult to write instructions that would work for any potential student. As mentioned above, students come to a course with many possible environments (i.e., on their laptop or a server). But if a standardized environment is provided, this task becomes much simpler. Written instructions need fewer special cases, and illustrations can be essentially pixel-identical to what students should be seeing on their screen.
 
 Even among collaborators who are competent in their own domain, crossing disciplines can often demand the use of novel tools – for example, a neuroscientist may be well-versed in Matlab, and wish to collaborate with a policy researcher who’s skilled in SPSS. It’s easy to end up with a collaboration where neither party has any idea how to use the tools of the other.
 
@@ -71,6 +73,15 @@ Our primary concern at present is educational, particularly introductory computa
 A place to ensure reproducability.
 
 Some students will not be able to run the VM, so consistency across server and 
+
+Administration
+^^^^^^^^^^^^^^
+
+The solution of using standardized virtual environments, or accounts on a shared server for instruction is not new. At UC Berkeley, the D-Lab has supported courses and short trainings with these technologies. Similarly, the Statistical Computing Facility supports an instructional lab and cloud-based VMs for some courses, and computer science courses often provide a VM (often provisioned by a graduate student assistant). In each and every case, multiple technical challenges are common. These technical glitches can delay or reduce the quality of instruction as compared to an environment that students are already familiar with. It is also a drag on the time of those supporting the course
+
+
+
+It is at this point that our use case starts to sound like the case in which product developers are working together to deploy software on a production server, while maintaining a useful development environment on their own machines, testing servers, and so on.
 
 Environment
 ^^^^^^^^^^^
@@ -131,7 +142,11 @@ So far VM tools are mostly used on individual laptops. The idea that a VM can be
 
 Summarizing the pull-request feedback
 - the most common case for VM tools is the laptop
-- mobility of VMs between 
+- mobility of VMs between computing platforms will increase productivity
+- Choosing between the multiplicity of VM tools is a big difficulty
+- explain what is possible or what these tools enable: the utility of VM tools is not obvious to scientists by reading the tool’s documentation
+- to reach a general (scientific) audience, avoid VM jargon
+- scientific computing requires more than just the packaging basics
 
 OSGeo-Live: A Successful Common Environment
 -------------------------------------------
@@ -253,7 +268,7 @@ app-data/
      /project2/   # data & help files used by package2
 
 desktop-conf/     # data files and images used for the main desktop background
-
+     
 doc/
      /index_pre.html            # header for summary help page
      /index_post.html           # footer for summary help page
@@ -583,152 +598,12 @@ That *doesn’t* have to be technical - a simple text file or even a PDF can pro
 Be willing to make strong recommendations based on what we are actually using (eat own dogfood)
 Be willing to adopt/adapt/change/throw stuff out (have an exit strategy)
 
-Recipe for setting up sicpy_proceedings build system on Ubuntu 14.04.
-
-________________
-
-Examples for proper rst formatting
-----------------------------------
-
-Code highlighting:
-
-.. code-block:: python
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-Maybe also in another language, and with line numbers:
-
-.. code-block:: c
-   :linenos:
-
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
-
-Or a snippet from the above code, starting at the correct line number:
-
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
-
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
+Recipe for setting up sicpy_proceedings build system on Ubuntu 14.04 (or BCE proper?).
 
 Important Part
 --------------
 
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
-
-.. math::
-
-   g(x) = \int_0^\infty f(x) dx
-
-or on multiple, aligned lines:
-
-.. math::
-   :type: eqnarray
-
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
-
-
-The area of a circle and volume of a sphere are given as
-
-.. math::
-   :label: circarea
-
-   A(r) = \pi r^2.
-
-.. math::
-   :label: spherevol
-
-   V(r) = \frac{4}{3} \pi r^3
-
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
-
-.. figure:: figure1.png
-
-   This is the caption. :label:`egfig`
-
-.. figure:: figure1.png
-   :align: center
-   :figclass: w
-
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
-
-.. figure:: figure1.png
-   :scale: 20%
-   :figclass: bht
-
-   This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top.
-   Note that for now, scale is relative to a completely arbitrary original
-   reference size which might be the original size of your image - you probably
-   have to play with it. :label:`egfig2`
-
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
-
-.. table:: This is the caption for the materials table. :label:`mtable`
-
-   +------------+----------------+
-   | Material   | Units          |
-   +------------+----------------+
-   | Stone      | 3              |
-   +------------+----------------+
-   | Water      | 12             |
-   +------------+----------------+
-   | Cement     | :math:`\alpha` |
-   +------------+----------------+
-
-
-We show the different quantities of materials required in Table
-:ref:`mtable`.
-
-
-.. The statement below shows how to adjust the width of a table.
-
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.8\linewidth}
-
-
-.. table:: This is the caption for the wide table.
-   :class: w
-
-   +--------+----+------+------+------+------+--------+
-   | This   | is |  a   | very | very | wide | table  |
-   +--------+----+------+------+------+------+--------+
-
-
-Perhaps we want to end off with a quote by Lao Tse:
-
-  *Muddy water, let stand, becomes clear.*
-
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
+It is well known [Atr03]_ that Spice grows on the planet Dune.  
 
 References
 ----------
