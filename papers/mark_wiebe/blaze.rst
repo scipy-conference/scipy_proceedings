@@ -155,10 +155,10 @@ Over the course of this document we'll refer to the following simple
 
    id, name, balance
    1, Alice, 100
-   2, Bob, 200
+   2, Bob, -200
    3, Charlie, 300
    4, Denis, 400
-   5, Edith, 500
+   5, Edith, -500
 
 .. code-block:: python
 
@@ -196,7 +196,7 @@ to NumPy arrays.
              [3, "Charlie", 300],
              [4, "Denis", 400],
              [5, "Edith", 500]],
-            type="5 * {id : int64, name : string, balance : int64}")
+    type="5 * {id : int64, name : string, balance : int64}")
 
 Insertion
 `````````
@@ -223,8 +223,9 @@ migration between storage systems.
 
 .. code-block:: python
 
-   >>> sql = SQL('postgres://user:password@hostname/', 'accounts')
-   >>> sql.extend(iter(csv))  # Migrate csv file to Postgres database
+   >>> sql = SQL('postgresql://user:pass@host/',
+                 'accounts', schema=csv.schema)
+   >>> sql.extend(iter(csv))  # Migrate csv file to DB
 
 
 Indexing
@@ -240,21 +241,19 @@ interfaces.
    [(u'Alice', 100L),
     (u'Charlie', 300L),
     (u'Edith', 500L),
-    (u'Georgina', 700L),
     (u'Georgina', 700L)]
 
-   >>> csv.dynd[::10, ['name', 'balance']]
+   >>> csv.dynd[::2, ['name', 'balance']]
    nd.array([["Alice", 100],
              ["Charlie", 300],
              ["Edith", 500],
              ["Georgina", 700]],
-            type="var * {name : string, balance : int64}")
+        type="var * {name : string, balance : int64}")
 
 Performance of this approach varies depending on the underlying storage system.
 For file-based storage systems like CSV and JSON we must seek through the file
 to find the right line (see [iopro]_), but don't incur deserialization costs.
 Some storage systems, like HDF5, support random access natively.
-* Defines interface for reading/writing data describable with datashape.
 
 
 Cohesion
@@ -264,15 +263,6 @@ Different storage techniques manage data differently.  Cohesion between these
 disparate systems is accomplished with the two projects ``datashape``, which
 specifies the intended meaning of the data, and DyND, which manages efficient
 type coercions and serves as an efficient intermediate representation.
-
-
-Extension
-`````````
-
-Data descriptors can be easily extended to new storage formats by implementing
-the above interface.  TODO
-
-
 
 
 Blaze Expr
@@ -294,42 +284,42 @@ Let's start with a single table, for which we'll create an expression node
 
 .. code-block:: python
 
-    >>> students = TableSymbol('students',
-    ...                        '{name: string, course: int, grade: real}')
+    >>> accts = TableSymbol('accounts',
+    ...       '{id: int, name: string, balance: int}')
 
-to represent a table of students. By defining operations on expression nodes
-which construct new abstract expression trees, we can provide a familiar
-interface closely matching that of NumPy and Pandas. For example, in
-structured arrays and dataframes you can access fields as ``students['name']``.
+to represent a abstract table of accounts. By defining operations on expression
+nodes which construct new abstract expression trees, we can provide a familiar
+interface closely matching that of NumPy and of Pandas. For example, in
+structured arrays and dataframes you can access fields as ``accts['name']``.
 
-Extracting fields from the table gives us ``Column`` objects, which we
-can now apply operations to. For example, we can select all the students
-with a certain grade
+Extracting fields from the table gives us ``Column`` objects, to which we can
+now apply operations. For example, we can select all accounts with a negative
+balance.
 
 .. code-block:: python
 
-    >>> astudents = students[students['grade'] >= 90]
+    >>> deadbeats = accts[accts['balance'] < 0]['name']
 
 or apply the split-apply-combine pattern to get the highest grade in
 each class
 
 .. code-block:: python
 
-    >>> By(students, students['course'], students['grade'].max())
+    >>> By(accts, accts['name'], accts['balance'].sum())
 
 In each of these cases we get an abstract expression tree representing
-the analytics operation we have performed, in a form independent of a
+the analytics operation we have performed, in a form independent of any
 particular back end.
 
 ::
 
                    -----By-----------
                  /       |            \
-            students   Column         Max
+              accts   Column         Sum
                       /     \           |
-                 students  'course'   Column
-                                     /     \
-                                students  'grade'
+                  accts    'name'     Column
+                                     /      \
+                                accts    'balance'
 
 Blaze Compute
 ~~~~~~~~~~~~~
@@ -344,24 +334,108 @@ previous section into a Pandas back end. The code which handles this is
 an overload of ``compute`` which takes a ``By`` node and a
 ``DataFrame`` object. First, each of the child nodes must be computed,
 so ``compute`` gets called on the three child nodes. This validates the
-provided dataframe against the ``students`` schema, and extracts the
-'course' and 'grade' columns from it. Then, the pandas ``groupby``
-call is used to group the 'grade' column according to the 'course'
-column, and apply the ``max`` operation.
+provided dataframe against the ``accts`` schema, and extracts the
+'name' and 'balance' columns from it. Then, the pandas ``groupby``
+call is used to group the 'balance' column according to the 'name'
+column, and apply the ``sum`` operation.
 
 Each back end can map the common analytics patterns supported by Blaze
 to its way of dealing with it, either by computing it on the fly as the
 Pandas back end does, or by building up an expression in the target system
 such as an SQL statement or an RDD map and groupByKey in Spark.
 
-The multiple dispatch provides a pluggable mechanism to connect new back
+Multiple dispatch provides a pluggable mechanism to connect new back
 ends, and handle interactions between different back ends.
+
+Example
+~~~~~~~
+
+We demonstrate the pieces of Blaze in a small toy example.
+
+Recall our accounts dataset
+
+.. code-block:: python
+
+   >>> L = [(1, 'Alice', 100),
+            (2, 'Bob', -200),
+            (3, 'Charlie', 300),
+            (4, 'Denis', 400),
+            (5, 'Edith', -500)]
+
+And our computation for names of account holders with negative balances
+
+.. code-block:: python
+
+   >>> deadbeats = accts[accts['balance'] < 0]['name']
+
+We compose the abstract expression, ``deadbeats`` with the data ``L`` using the
+function ``compute``.
+
+.. code-block:: python
+
+   >>> list(compute(deadbeats, L))
+   ['Bob', 'Edith']
+
+We observe that the correct answer was returned as a list.
+
+If we now store our same data ``L`` into a Pandas DataFrame and then run the
+exact same ``deadbeats`` computation against it we find the same semantic
+answer.
+
+.. code-block:: python
+
+   >>> df = DataFrame(L, columns=['id', 'name', 'balance'])
+   1      Bob
+   4    Edith
+   Name: name, dtype: object
+
+Similarly against Spark
+
+.. code-block:: python
+
+   >>> sc = pyspark.SparkContext('local', 'Spark-app')
+   >>> rdd = sc.parallelize(L) # Distributed DataStructure
+
+   >>> compute(deadbeats, rdd)
+   PythonRDD[1] at RDD at PythonRDD.scala:37
+
+   >>> _.collect()
+   ['Bob', 'Edith']
+
+In each case of running ``compute(deadbeats, ...)`` against a different data source a Blaze orchestrated the right computational backend to execute the desired query.  The result was given in the form recieved and computation was done either with streaming Python, in memory Pandas, or distributed memory Spark.  The user experience was much the same.
+
 
 Blaze Interface
 ~~~~~~~~~~~~~~~
 
-* Table and Array objects with pandas/numpy-like interfaces, to provide
-  friendly interfaces for domain experts whose primary focus is not programming.
+The separation of expressions and backend computation provides a powerful
+multi-backend experience.  Unfortunately this separation may also be confusing
+for a novice programmer.  To this end we provide an interactive object that
+feels much like a Pandas DataFrame, but in fact can be driving any of our
+backends.
+
+.. code-block:: python
+
+   >>> sql = SQL('postgresql://postgres@localhost',
+   ...           'accounts')
+   >>> t = Table(sql)
+   >>> t
+      id     name  balance
+   0   1    Alice      100
+   1   2      Bob     -200
+   2   3  Charlie      300
+   3   4    Denis      400
+   4   5    Edith     -500
+
+   >>> t[t['balance'] < 0]['name']
+       name
+   0    Bob
+   1  Edith
+
+The astute reader will note the use of Pandas like user experience and output.
+Note however that these outputs are the result of computations on a Postgres
+database.
+
 
 Experiment
 ----------
@@ -376,9 +450,9 @@ Bitcoin
 
 We consider financial transactions using the Bitcoin digital currency.  In
 particular we consider transactions between de-anonymized identities as
-computed by the process laid out in [Reid]_ and obtained from TODO.  Each
-transaction consists of a transaction ID, sender, recipient, timestamp, and a
-number of bitcoins sent.  Some example data
+computed by the process laid out in [Reid]_.  Each transaction consists of a
+transaction ID, sender, recipient, timestamp, and a number of bitcoins sent.
+Some example data
 
 ::
 
@@ -397,7 +471,8 @@ We load in this data using `blaze.data`
 
    >>> from blaze.data.csv import CSV
    >>> csv = CSV('user_edges.txt',
-   ...           columns=['transaction', 'sender', 'recipient', 'timestamp', 'value'],
+   ...           columns=['transaction', 'sender',
+   ...              'recipient', 'timestamp', 'value'],
    ...           typehints={'timestamp': 'datetime'})
 
 We then build an abstract table with this same schema
@@ -410,7 +485,9 @@ And describe a simple computation, finding the ten senders that have sent the mo
 
 .. code-block:: python
 
-   >>> big_spenders = (By(t, t['sender'], t['value'].sum())
+   >>> big_spenders = (By(t,
+                          t['sender'],
+                          t['value'].sum())
    ...                  .sort('value', ascending=False)
    ...                  .head(10))
 
@@ -422,14 +499,16 @@ We run this computation using streaming Python, Pandas, SQLite, Postgres, and Sp
 
 .. code-block:: python
 
-   >>> sqlite = SQL('sqlite:///btc.db', 'user_edges', schema=csv.schema)
-   >>> sqlite.extend(csv)
-   >>> postgres = SQL('postgresql:///user:pass', 'user_edges', schema=csv.schema)
-   >>> postgres.extend(csv)
-
-   >>> df = like(DataFrame, csv)
-   >>> rdd = like(SparkContext, csv)
-   >>> py = like([], csv)
+   >>> sqlite = into(SQL('sqlite:///btc.db', 'user_edges',
+                         schema=csv.schema), csv)
+   >>> postgres = into(SQL('postgresql:///user:pass',
+                           'user_edges', schema=csv.schema),
+                       csv)
+   >>> hdf5 = into(HDF5('btc.hdf5', 'user_edges',
+                        schema=csv.schema), csv)
+   >>> df = into(DataFrame, csv)
+   >>> rdd = into(SparkContext, csv)
+   >>> py = into([], csv)
 
 We then run our computation for a variety of sizes on the variety of backends
 
@@ -441,7 +520,7 @@ We then run our computation for a variety of sizes on the variety of backends
    >>> times = [[measure(lambda: compute(big_spenders.subs({t: t.head(size)}),
    ...                                   dataset))
    ...              for size in sizes]
-   ...              for dataset in [py, df, rdd, sqlite, postgres]]
+   ...              for dataset in [py, df, rdd, sqlite, postgres, hdf5]]
 
 TODO: Plot results
 
@@ -462,7 +541,24 @@ TODO: Plot results
 
 Here we see surprising results.  Pandas does not perform as well as expected
 (though more performant alternatives to ``Series.nunique`` exist) and so we may
-wish to choose one of the other backends as we scale out
+wish to choose one of the other backends as we scale out.
+
+A quick survey of StackOverflow shows that ``df.nunique()`` is
+significantly slower than ``len(df.unique())``.  We alter the
+implementation for the ``nunique`` operation on a ``DataFrame``.
+
+.. code-block:: python
+
+   @dispatch(nunique, DataFrame)
+   def compute(expr, df):
+       parent = compute(expr.parent, df)  # Recurse up the tree
+       # return parent.nunique()
+       return len(parent.unique())
+
+With this quick change we can redefine how Blaze interprets abstract
+``nunique`` operations on Pandas DataFrames.  This change (if committed) can
+accelerate all future Blaze/Pandas computations.
+
 
 Discussion
 ~~~~~~~~~~
