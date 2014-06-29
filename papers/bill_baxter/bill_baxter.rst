@@ -84,15 +84,9 @@ We begin with plotting and visualization.  Viewing data is the first step to det
 errorbars and no experience with when or how to use logarithmic scales.  This topic also includes reading and writing of data files.  We follow 
 this with a discussion and exercises on fitting.  Students are given five noisy data sets.  With no additional information on each, they must determine the correct functional form with uncertainties on all parameters and plot the fitted curve through the data.  "Guessing" the functional form is difficult for many students, but they are strongly motivated by the fact that they know they will have to use this skill in their upcoming experiments.  Examples of the data sets and fitted curves are shown in figure :ref:`fitting`.  
 
-.. figure:: two_fits.png
+.. figure:: two_fits_b.png
 
    Examples of two data sets used for fitting practice.  Students are given only a simple data file with no additional information.  They must decide on the appropriate function and the necessary fit parameters.  In **(a)**, :math:`y(x)=8.0e^{-0.5x}\cos{(5.0x)}+0.25` and in **(b)** :math:`y(x)=3.3e^{-2.5(x-2.0)^2} + 0.30x` .  :label:`fitting`
-
-.. figure:: two_fits.png
-   :align: center
-   :figclass: w
-
-   Caption for figure two.
 
 Notice that there is little discussion of the numerical technique.  We are choosing to treat this as a *tool* and save discussions of the details of the numerical technique for a numerical analysis course, an optional course in our major but not a requirement.  After plotting the data, students must determine the appropriate 
 function, the necessary parameters required to describe the data, and appropriate initial conditions.  This is very difficult for students who have no prior experience.  Other topics are introduced as needed depending on which experiments students have chosen.  The differential equations material is introduced so that it can be used in a Junior/Senior classical mechanics class offered the following semester.  
