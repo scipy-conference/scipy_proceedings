@@ -29,7 +29,7 @@ We begin by describing the variety of concrete training and research use-cases i
 our strategy might increase productivity, reuse, and reproducibility.
 We then introduce available tools for the “recipe-based” creation of computational environments, attempting to demystify and provide a framework for thinking about *devops* tools (along with explaining what “devops” means!). These are somewhat widely used, but in an ad hoc manner.
 We proceed to provide a brief review of existing projects, and how they are using these technologies.
-In particular, we examine the success of [OSGeo-Live]_ in providing a standard environment for GIS projects, both for developer deployment (e.g. developers of QGIS) and for researcher evaluation of new tools.
+In particular, we examine the success of [OSGeo-Live]_ in providing a standard environment for spatial data projects, both for script and software development, and for researcher evaluation of new tools.
 Given our thorough evaluation of a breadth of virtualization technologies and
 use-cases, we present our current strategy for constructing the Berkeley Common Environment [BCE]_, along with general recommendations for building environments for your own use-cases.
 
@@ -85,9 +85,9 @@ For scientific collaboration
 
 Even among collaborators who are competent in their own domain, crossing disciplines can often demand the use of novel tools – for example, a neuroscientist may be well-versed in Matlab, and wish to collaborate with a policy researcher who’s skilled in SPSS. It’s easy to end up with a collaboration where neither party has any idea how to use the tools of the other.
 
-In other words, I have an environment and you have an environment. I want to do things my way, you want to do them yours. If we wish to work together, either as student and teacher, or as collaborators, this doesn’t really work.
+In other words, I have an environment and you have an environment. I want to do things my way, you want to do them yours. If we wish to work together – either as student and teacher, or as collaborators – this doesn’t really work.
 
-A place to ensure reproducability.
+This issue becomes even more pronounced when we begin “collaborating” with other researchers we know nothing about – as when we try to re-use someone elses scientific code, or reproduce their results. Structurally, this situation is not much different than the above-described issues that arise between students and instructors – the publishing researcher clearly has (or should have!) mastery of their tool stack, and they should ideally publish instructions that are as broadly usable as possible.
 
 
 For administration
@@ -98,6 +98,19 @@ The solution of using standardized virtual environments, or accounts on a shared
 However, if we had a standard environment, developed in an open-source fashion, many of these problems rapidly diminish, and likely reverse to net *savings* in time wasted. The more broadly an environment is adopted across campus, the more familiar it will be to all students. Technical glitches can be tracked or resolved by a community of competent contributors, allowing course instructors to simply use a well-polished end product, while reducing the complexity of instructions for students to set up course-specific software. These environments can also be tuned in ways that would be beyond the scope of what would be worth doing for an individual course - for example simple optimizations to increase the efficiency of numeric computations or network bandwidth for remote desktops.
 
 It is at this point that our use case starts to sound like the case in which product developers are working together to deploy software on a production server, while maintaining a useful development environment on their own machines, testing servers, and so on. However, going forwards, we will suggest that these tools be largely the domain of administrator-contributors to a useful common environment. Students and even professors and researchers can continue to use the tools they are familiar with, such as the Ubuntu package manager, pip, shell scripts, and so on. However, before considering the tooling that might be used for this process, we provide a brief list of what a reasonable common environment should be like.
+
+Other Concerns
+^^^^^^^^^^^^^^
+
+* Thin client / staff computing
+* Exam environments
+* Instructional labs
+* Sharing licensed software?
+* Make it easy to do the "right" thing (hard to do "wrong" thing)
+* Stable infrastructure
+* Managing complexity
+* Impacts beyond "the course"
+
 
 Features of a useful common environment
 ---------------------------------------
@@ -112,41 +125,6 @@ Debian packages are similarly installed from a list.
 Other packages are installed via bash, e.g., downloading and installing RStudio.
 
 
-Available Tools
----------------
-
-"Collaboratool" was conceived as a project for building, integrating, and
-deploying tools that support portable, reproducible data science.  We started
-thinking about how to deploy virtualized containers that provide things like
-IPython notebooks through the web. We were very inspired by
-[jiffylab](http://github.com/ptone/jiffylab). From there, we decided that it
-made more sense to focus on a complete virtual environment, which is easy to
-deploy in a variety of contexts, which is what you'll find here now.
-
-Sage?
-
-*Virtual Machines (VMs)*
-
-Full virtualization: VirtualBox, (VMware, mention encryption), others? (KVM, etc.)
-
-Systems like EC2, only available as a VM.
-
-Lightweight virturalization (/ containerization) includes Docker / LXC / VMWare
-ESX.
-
-Only with exotic hardware is GPGPU [unpack] available to fully virtualized environments. Check on containers? [XXX IT people?]
-
-port-mapping, shared files, GUI vs. “remote-like” operation
-
-*DevOps*
-
-XXX - Particularly need help from Aaron here (Richard
-
-Vagrant (heavily explored, set aside)
-Packer (currently used)
-Docker (potential future)
-
-XXX - Is Hashdist here or in exsting projects? Conda goes here also. Why not conda? Still hard to just install a list of pip requirements
 
 
 
@@ -164,31 +142,92 @@ Summarizing the pull-request feedback
 - to reach a general (scientific) audience, avoid VM jargon
 - scientific computing requires more than just the packaging basics
 
-Problem 1: The quote at the beginning of this paper represents the first barrier to collaboration in which the full set of requirements are not explicitly stated and there is an assumption that all collaborators already have or can set up an environment to collaborate. The number of steps or the time required to satisfy these assumptions is unknown, and regularly exceeds the time available. For example, in the context of a 1.5 hour workshop or a class with only handful of participants, if all cannot be set up within a fixed amount of time (typically 20 minutes at most) it will jeopardize successfully completing the workshop or class materials and will discourage participation.
+Dependency hell
+^^^^^^^^^^^^^^^
 
-Solution 1: Eliminate dependency hell. Provide a method to ensure that all participants can successfully complete the installation with a fixed number of well-known steps across all platforms within a fixed amount of time. The BCE platform provides this in a scalable and quantifiable way.
+Problem 1: The quote at the beginning of this paper represents the first barrier to collaboration in which the full set of requirements are not explicitly stated and there is an assumption that all collaborators already have or can set up an environment to collaborate. The number of steps or the time required to satisfy these assumptions is unknown, and regularly exceeds the time available. For example, in the context of a 1.5 hour workshop or a class with only handful of participants, if all cannot be set up within a fixed amount of time (typically 20 minutes at most) it will jeopardize successfully completing the workshop or class materials and will discourage participation. An additional difficulty arises when users are using versions of the “same” software across different platforms. For example, Git Bash lacks a `man` command.
+
+Solution 1: Eliminate *dependency hell*. Provide a method to ensure that all participants can successfully complete the installation with a fixed number of well-known steps across all platforms within a fixed amount of time. We *cannot* control the base environment that users will have on their laptop or workstation, nor do we wish to! The BCE platform provides a scalable and quantifiable approach to ensuring all users have the necessary dependencies to engage with specific code or content.
+
+Going beyond the laptop
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Problem 2: We will consider a participant’s laptop the unit-of-compute since it is the primary platform widely used across the research and teaching space and is a reasonable assumption to require: specifically a 64-bit laptop with 4GB of RAM. These requirements are usually sufficient to get started, however the algorithms or size of in-memory data may exceed the available memory of this unit-of-compute and the participant may need to migrate to another compute resource such as a powerful workstation with 128GB of RAM, an amount of memory not yet available in even the most advanced laptops which typically max-out at 16GB at the time of this writing.
 
-Solution 2: Enable computing beyond the laptop. Though a workstation with plentiful memory by virtue of exactly replicating the environment available in Solution 1, the participant is guaranteed to replicate the data processing, transformations, and analysis steps they ran on their laptop in these other environments with the benefit of more memory available on those systems. This also includes the ability to use the common GUI interface provided by BCE as a VDI (Virtual Desktop Integration).
+Solution 2: Enable computing *beyond the laptop*. Though a workstation with plentiful memory by virtue of exactly replicating the environment available in Solution 1, the participant is guaranteed to replicate the data processing, transformations, and analysis steps they ran on their laptop in these other environments with the benefit of more memory available on those systems. This also includes the ability to use the common GUI interface provided by BCE as a VDI (Virtual Desktop Integration).
 
-Problem 3: Even though Solution 2 allows us to grow beyond the laptop, the time required
+Pleasant parallelization
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-Solution 3: Enable pleasantly parallel scale-out. A cluster may be available in your department or at your institution or at national facilities that provides the equivalent of a hundred or a thousand of the workstations you may have in your lab, enabled by Solution 2. BCE works in these environments and allows you to install additional software components as you wish without relying on cluster administrators for help.
+Problem 3: Even though Solution 2 allows us to grow beyond the laptop, the time and skill required to access needed compute resources may be prohibitive.
+
+Solution 3: Enable *pleasantly parallel* scale-out. A cluster may be available in your department or at your institution or at national facilities that provides the equivalent of a hundred or a thousand of the workstations you may have in your lab, enabled by Solution 2. BCE works in these environments and allows you to install additional software components as you wish without relying on cluster administrators for help.
+
+Managing cost / maximizing value
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Problem 4: Assuming you have the grant money to buy a large workstation with lots of memory and many processors, you may only need that resource for a 1 to 2 week period of time, so spending your money on a resource that remains unused 95% of the time is a waste of your grant money.
 
-Solution 4: Enable on-demand resizing of resources. The BCE solution works on cloud resources that may allow you to scale out
+Solution 4: Enable on-demand resizing of resources. The BCE solution works on cloud resources that may allow you to scale out. A private cloud approach to managing owned resources can also allow more researchers to get value out of those resources.
+
+Existing Tools
+--------------
+
+"Collaboratool" was conceived as a project for building, integrating, and
+deploying tools that support portable, reproducible data science.  We started
+thinking about how to deploy virtualized containers that provide things like
+IPython notebooks through the web. We were very inspired by
+[jiffylab](http://github.com/ptone/jiffylab). From there, we decided that it
+made more sense to focus on a complete virtual environment, which is easy to
+deploy in a variety of contexts, which is what you'll find here now.
+
+Sage (+ Cloud)?
+
+*Virtual Machines (VMs)*
+
+Full virtualization: VirtualBox, (VMware, mention encryption), others? (KVM, etc.)
+
+Problem: VMs reserve compute resources exclusively (less of a problem with LXC-like
+solutions).
+
+Systems like EC2, only available as a VM.
+
+Lightweight virturalization (/ containerization) includes Docker / LXC / VMWare
+ESX.
+
+Only with exotic hardware is GPGPU [unpack] available to fully virtualized environments. Check on containers? [XXX IT people?]
+
+port-mapping, shared files, GUI vs. “remote-like” operation
+
+*DevOps*
+
+XXX - Particularly need help from Aaron here (Richard
+
+Vagrant (heavily explored, set aside)
+Packer (currently used)
+Docker (potential future)
+Provisioning / orchestration - e.g., Ansible (mention chef, puppet, salt, …)
+
+XXX - Is Hashdist here or in exsting projects? Conda goes here also. Why not conda? Still hard to just install a list of pip requirements
+
+Other virtual machines
+----------------------
+
+From [Mining the Social Web, a Chef+Vagrant solution](https://rawgit.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition/master/ipynb/html/_Appendix%20A%20-%20Virtual%20Machine%20Experience.html)
+
+From Matt Gee (of [DSSG](http://dssg.io): We've been trying a number of
+different approaches to the standard development environment. For this year's
+fellowship we went with a Chef cookbook + OpsWorks. This works for provisioning
+our core resources. However, for weekend learn-a-thons and more portable VM.
+We've tried our own VM using docker and well as some hosted boxes like yhat's
+new Science Box. We should compare notes.
+
+VM from Philip.
 
 OSGeo-Live: A Successful Common Environment
 -------------------------------------------
 
-The OSGeo-Live virtual machine is an example of exactly the kind of environment described above. Despite the availability of sophisticated devops tools, and considerable technical competence amongst contributors to the project, the project is configured using a combination of Python, Perl and shell scripts, along with some straightforward conventions that support easy inter-operation of different projects.
-
-The OSGeo-Live, a project the Open Source Geospatial Foundation, is a vivid example
-of both a sophisticated compute environment, and synergistic community process;
-quoting from the OSGeo-Live [1] website:
-
+The OSGeo-Live virtual machine, both a sophisticated compute environment, and synergistic community process, is an example of just the kind of environment described above. Eschewing elaborate devops tools, the fundamental build system is instead configured using simple and modular combinations of Python, Perl and shell scripts, along with clear install conventions by example. 
 
 '''
 The OSGeo-Live is a self-contained bootable DVD, USB thumb drive or Virtual
@@ -198,29 +237,19 @@ software, allowing it to be freely distributed, duplicated and passed around.
 
 It provides pre-configured applications for a range of geospatial use cases,
 including storage, publishing, viewing, analysis and manipulation of data. It
-also contains sample datasets and documentation.
+also contains sample datasets and documentation. [1g]
 '''
 
-The OSGeo-Live is formally a project of the Open Source Geospatial Foundation
-(OSGeo), an international body modeled on the Apache Foundation [3]. Eight years
-ago, there existed several very large and growing open-source geospatial
-projects, whose founders and developers decided would benefit from a common
-legal and technical infrastructure. Those projects included GRASS, Mapserver,
-GDAL and QGis.  At the same time. the OSGeo-Live began with a smaller open
-project based in Australia that sought to build an "easy to try and use"
-software environment for these and other spatial data applications. After some
-discussion and planning conducted between a handful of intrepid principals
-across the globe on the Internet, the nascent OSGeo-Live project committed
-itself to the larger OSGeo Foundation structure in its second year. More than
-fifty (50) open-source projects now actively maintain and improve their own
-install scripts, examples and documentation. After long years of "tepid" progress and iteration, a combination of techincal stability,
-tool sets, community awareness and clearly-defined steps to contribute, provided the basis
-for substantial growth. The OSGeo-Live is now very stable, easily incorporates advances in
-components, and widely adopted.
+The OSGeo-Live is a project of the Open Source Geospatial Foundation
+(OSGeo), an international body modeled on the Apache Foundation [2g]. In 2006 there existed several large and growing open-source geospatial software projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and later, QGis.  At roughly the same time, the OSGeo-Live began as a smaller open project based in Australia that sought to build an "easy to try and use" software environment for these and other spatial data applications. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent Live project committed itself to the larger OSGeo Foundation structure in its second year. The OSGeo Live is not the only attempt at building such an environment [3g]
 
+More than fifty (50) open-source projects now actively maintain and improve their own
+install scripts, examples and documentation.
 
-OSGeo-Live is now very stable, easily incorporates advances in components,
-and widely adopted. Let's look at each of these building blocks briefly:
+After long years of "tepid" progress and iteration, a combination of technical stability,
+standardized tool sets, community awareness and clearly-defined steps to contribute, provided the basis for substantial growth. The OSGeo-Live is now very stable, easily incorporates advances in components, and widely adopted.
+
+Let's look at each of these building blocks briefly.
 
 Technical Stability
 ^^^^^^^^^^^^^^^^^^^
@@ -265,7 +294,7 @@ Particular example: web, including apache, WSGI, etc. Standard layout of web
 directory. Fully working examples available for each "kind" of project.
 
 Subversion repo -- asset heirarchy -- individual install scripts -- Live build
- scripts trac-subversion   http://trac.osgeo.org/osgeo/report/10
+scripts trac-subversion   http://trac.osgeo.org/osgeo/report/10
 
 see screenshots
 
@@ -325,28 +354,14 @@ sources.list.d/ # Supplimentary package repositories for /etc/apt/sources.list
 Community Awareness
 ^^^^^^^^^^^^^^^^^^^
 
-The processes of  adoption of new
-technology - initial awareness, trialability, adoption and iteration -
-are well-known [4].
+Underlying processes of adoption of new technology - initial awareness, trialability, adoption and iteration - are well-known [4g]. OSGeo-Live intentionally incorporates targeted outreach, professional graphic design and “easy to try” structure to build participation from both developers and end-users.
 
-In the case of the OSGeo-Live, an orginial design goal was to provide tools
-to those doing geospatial fieldwork with limited resources, and who often lack
-advanced programming and administration skills.
-
+An original project design goal was to provide tools to those doing geospatial fieldwork with limited resources around the globe, and who often lack advanced programming and administration skills. (in a somewhat fortunate coincidence, the qualities of a software environment that makes it suitable for low-spec hardware, also makes for an efficient VM implementation)
 
 Several years into the project, funding was established via a grant from the Australian
-government to build documentation on applications in the Overview and Quickstart formats
-to professional graphic design standards. A single page for every application,
-(Overview) and a second page with step-by-step instructions for a capable reader but no previous
-exposure to the software (Quickstart). Each of these two pages is then translated into
-various spoken languages, primarily by volunteers. Much later, a graph of "percentage complete"
-for each human language group was added, which essentially makes translation into a sort of
-competition. This has proved very successful. Note that the initial effort to build
-standardized documentation required paid professionals. It seems unlikely that the
-documentation would have been successful if only ad-hoc volunteer efforts were used.
+government to build documentation on applications in the Overview and Quickstart formats used today, to professional graphic design standards, and in a workflow such that many human language versions could be maintained and improved efficiently, specifically to support field work. That documentation format consists of a single page for every application, (Overview) and a second page with step-by-step instructions for a capable reader but no previous exposure to the software (Quickstart). Each of these two pages for every included project, is then translated into various spoken languages, primarily by volunteers. Much later, a graph of "percentage complete" for each human language group was added, which essentially makes translation into a sort of competition. This “gamification” of translation has proven very successful. Note that the initial effort to build standardized documentation required paid professionals. It seems unlikely that the documentation would have been successful if only ad-hoc volunteer efforts were used.
 
-The Open Source Geospatial Foundation (OSGeo) the hub for a variety of projects to interoperate, and
-potentially share with each other / synergy. OSGeo raises awareness of other projects.
+The Open Source Geospatial Foundation (OSGeo) itself is a hub for multiple ecosystems of standards and language groups of projects to interoperate synergetically. OSGeo project status raises awareness of one project to other projects.
 
 (see the transfer of tech, e.g., military technology to environmental applications)
 (Maybe include story about Haiti response with open source mapping)
@@ -354,18 +369,19 @@ potentially share with each other / synergy. OSGeo raises awareness of other pro
 
 Steps to Contribute
 
-A FAQ was written and published in an easily accessible location. Outreach was
-conducted through formal and informal networks.
+All build scripts are organized in the open, in source control [5g]. 
 
 Major step in diffusion is folks knowing what the thing is at all. Value add /
 branding - OSGeo has credibility from foundation status, participants,
 consistent / good graphic design.
 
-[1] http://live.osgeo.org
-[2]  build stuff
-[3]  repo stuff
-[4] Diffusion of Innovation; Rogers et al 1962
+[1g]  http://live.osgeo.org
+[2g]  http://www.osgeo.org/content/foundation/about.html
+[3g]  http://en.wikipedia.org/wiki/GIS_Live_DVD
+[4g] Diffusion of Innovation; Rogers et al 1962
 http://en.wikipedia.org/wiki/Diffusion_of_Innovations
+[5g]  http://svn.osgeo.org/osgeo/livedvd
+
 
 **misc cut text**
 
@@ -405,171 +421,40 @@ There's still not complete consensus, but the project is moving towards some
 consensus infrastructure. Also see the transfer of, e.g., military technology to
 environmental applications.
 
-Maybe include story about Jamaica response with open source mapping.
-
-
-
-Other virtual machines
-----------------------
-
-From [Mining the Social Web, a Chef+Vagrant solution](https://rawgit.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition/master/ipynb/html/_Appendix%20A%20-%20Virtual%20Machine%20Experience.html)
-
-From Matt Gee (of [DSSG](http://dssg.io): We've been trying a number of
-different approaches to the standard development environment. For this year's
-fellowship we went with a Chef cookbook + OpsWorks. This works for provisioning
-our core resources. However, for weekend learn-a-thons and more portable VM.
-We've tried our own VM using docker and well as some hosted boxes like yhat's
-new Science Box. We should compare notes.
-
-VM from Philip.
-
 BCE: The Berkeley Common Environment
 ------------------------------------
 
 The goal for the BCE is to provide both the ready-made environments, and also
-the "recipes" or scripts setting up these environments. It should be easy for a
+the "recipes" or scripts for setting up these environments. It should be easy for a
 competent linux user to create recipes for custom tools that might not be
-braodly useful (and thus, not already in BCE).
+broadly useful (and thus, not already in BCE).
 
-For classwork and research in the sciences at Berkeley, broadly defined to
+For class work and research in the sciences at Berkeley, broadly defined to
 include social science, life science, physical science, and engineering. Using
 these tools, users can start up a virtual machine (VM) with a standardized Linux
 operating environment containing a set of standard software for scientific
 computing. The user can start the VM on their laptop, on a university server, or
-in the cloud. Furthermore, users will be able to modify the instructions for
+in the cloud. Furthermore, advanced users and project contributors will be able to easily modify the instructions for
 producing or modifying the virtual machine in a reproducible way for
 communication with and distribution to others.
 
-We envision the following core use cases:
+BCE targets the following core use cases (elaborated above):
 
-  * creating a common computing environment for a course or workshop,
-  * creating a common computational environment to be shared by a group of
-    researchers or students, and
-  * disseminating the computational environment so outsiders can reproduce the
-    results of a group.
+* Creating a common computing environment for a course or workshop,
+* creating a common computational environment to be shared by a group of
+  researchers or students, and
+* disseminating the computational environment so outsiders can reproduce the
+  results of a group.
 
-Other use cases/benefits:
+In short, the BCE provides a standard location that eliminates the complexity of describing how to run a large variety of projects across a wide variety of platforms. We can now target our instruction to a single platform. The environment is easy to deploy, and guaranteed to provide identical results across any base platform – if this is not the case, it’s a bug! This environment is already available on VirtualBox and Amazon EC2, and is straightforward to provision for other environments.
 
- * Thin client / staff computing
- * Exam environments
- * Instructional labs
- * Sharing licensed software?
- * Make it easy to do the "right" thing (hard to do "wrong" thing)
- * Stable infrastructure
- * Managing complexity
- * Impacts beyond "the course"
+Using the BCE
+^^^^^^^^^^^^^
 
-What problems does BCE solve for you?
-
- * No more obscure installation issues - download and run a single virtual
-   machine or get the same environment on a bare metal or virtual server.
- * I'm teaching a class - when you tell a student that a program behaves a
-   certain way, it does!
- * I'm collaborating on some scientific research - now all of your collaborators
-   can run your code without complex installation instructions.
- * Easy Deployment
- * Replication / Reproducible research
- * Easy transition across scales (laptop to cluster)
- * Tricky installs
-
-To accomplish this, we envision that BCE will encompass the following:
-
- * a reproducible workflow that creates the standard VM/image
-   with standard scientific computing software such as Python, R, git, etc.,
- * a standard binary image, produced by the workflow, that can be distributed as is and
-   used on-the-fly with VirtualBox or VMWare Player with minimal dependencies, and
- * (possibly) an augmented workflow that represents multiple possible distributions tailored
-   for different types of uses (e.g., different disciplines, different
-   computational needs, class vs. research use, etc.). This might
-   represent either a sequence or a tree of possible VMs.
-
-
-*Tentative list of features*
-
- * VMs
-
-   * A fixed, versioned VM provided each semester as a binary image for classes
-     and workshops
-   * Ideally, the same VM usable for research, with functionality for parallel
-     computing and provisioned such that it can be used as the VM for virtual
-     cluster nodes
-   * The VM runnable on user laptops (Mac/Windows/Linux) and on cloud machines
-   * The VM usable on user machines with minimal dependencies (e.g., either
-     VirtualBox or VMware) and minimal setup, and with clear instructions for
-     users on setup and on getting data/files into and out of the VM
-   * Agreement on minimal hardware requirements on the host machine - do we
-     support 32 bit, any minimum RAM required?
-   * Shared folders (EBS on AWS), or other tech to make it possible to separate
-     data from VM.
-
- * Provisioning
-
-   * Provisioning is fully scripted - if the appropriate software is installed,
-     the recipe should run reliably.
-   * The provisioning details used to create a given VM available to users and
-     with clear instructions on how to use and modify the provisioning; ideally
-     the provisioning would be relatively simple for users to understand
-   * The ability for a user to add software to a VM and then 'export' that
-     information back into the provisioning workflow that can be used to
-     recreate the modified VM
-
- * Logistics and training
-
-   * A GitHub repository or the like plus a project website with all BCE
-     materials available
-   * Communication with users on bugs, desired features, and the like via the
-     repository and a mailing list
-   * Management / Versioning / Snapshotting
-
- * Problems
-
-   * VMs reserve compute resources exclusively (less of a problem with LXC-like
-     solutions).
-   * Testing / Issue tracking
-
-*Students ("horizontal" collaboration), Researchers ("vertical" collaboration)*
+For students ("horizontal" collaboration), Researchers ("vertical" collaboration)
 
 If you'd like to use the VM as a student, researcher, or instructor, our goal is
 to make this easy for you.
-
-If you're using VirtualBox, [follow these instructions](using-virtualbox.html).
-
-If you'd like to use the VM on Amazon's EC2 cloud platform, [follow these
-instructions](using-ec2.html).
-
-Adding modules?
-
-*Creating (and modifying) the BCE VM*
-
-All the files for creating the VM are in the collaboratool repository on GitHub.
-
-To clone the repository from the command line:
-
-    git clone https://github.com/dlab-berkeley/collaboratool
-
-Then go to the provisioning directory and see the information in HOWTO.md.
-
-*VirtualBox*
-
-  * Download and install VirtualBox from the [VirtualBox
-    website](https://www.virtualbox.org/wiki/Downloads). This is the tool that
-    runs the virtual machine for you.
-  * Download the BCE VM in the form of an OVA file from [UNDER
-    CONSTRUCTION](BCE-xubuntu-14.04-amd64.ova).
-  * Open VirtualBox and import the BCE-xubuntu-14.04-amd64.ova file you just
-    downloaded by going to "File->Import Appliance" and then selecting the .ova
-    file from wherever you downloaded it to (possible 'Downloads' in your home
-    directory on the machine).
-  * Wait a few minutes...
-  * Start the virtual machine by clicking on the tab for
-    "BCE-xubuntu-14.04-amd64" on the left side and then clicking "Start" at the
-    top. This will start a virtual Linux computer within your own machine. After
-    a few seconds you should see black screen and then soon you'll see the
-    desktop of the VM.
-
-You now have a machine that has all the software installed as part of BCE,
-including IPython and useful Python packages and R, RStudio and useful R
-packages.
 
 You can get a terminal window that allows you to type commands in a UNIX-style
 shell by clicking on the icon of the black box with the $ symbo on the top
@@ -578,46 +463,66 @@ notebook" or  R by simply typing 'R' at the prompt in the terminal. This starts
 a bare-bones R session. To start RStudio, either type 'rstudio' at the prompt on
 go to "Applications->Programming->RStudio".
 
-You can restart the VM at any time by opening VirtualBox and clicking on the tab
-for the VM and clicking "Start" as you did above.
+* A fixed, versioned VM provided each semester as a binary image for classes
+  and workshops
+* Our goal is for the same VM usable for research, with functionality for parallel
+  computing and provisioned such that it can be used as the VM for virtual
+  cluster nodes
+* The VM runnable on user laptops (Mac/Windows/Linux) and on cloud machines
+* The VM usable on user machines with minimal dependencies (e.g., either
+  VirtualBox or VMware) and minimal setup, and with clear instructions for
+  users on setup and on getting data/files into and out of the VM
+* Agreement on minimal hardware requirements on the host machine - do we
+  support 32 bit, any minimum RAM required?
+* Shared folders (EBS on AWS), or other tech to make it possible to separate
+  data from VM.
 
-*Sharing folders and copying files between your computer and the VM*
+**If you’re using VirtualBox**, the full instructions for setting up a BCE VM on Virtualbox are available on our project website [BCEVB]_. In brief, one downloads and installs VirtualBox. The BCE VM is available in the form of a pre-built OVA file that can be imported via the GUI menu in VirtualBox. Start the virtual machine by clicking on the tab for the VM and then clicking "Start" at the top.
+After performing these fairly accessible steps, a user will have a machine that has all the software installed as part of BCE, including IPython and useful Python packages and R, RStudio and useful R
+packages.
 
-One useful thing will be to share folders between the VM and the host machine so
-that you can access the files on your computer from the VM. Do the following:
+The VM can be halted just like you would halt linux running directly on your machine, or by closing the window as you would a native application on the host OS. You can restart the VM at any time by opening VirtualBox and clicking on the tab
+for the VM and clicking "Start" as you did above. Detailed instructions are provided for 
+Sharing folders and copying files between your computer and the VM, and the various necessary configuration steps to make this work have already been performed.
 
-  * Got to "Devices->Shared Folder Settings" and click on the icon of a folder
-    with a "+" on the right side.
-  * Select a folder to share, e.g. your home directory on your computer by
-    clicking on "Folder Path" and choosing "Other" and navigating to the folder
-    of interest. For our purposes here, assume we click on "Documents".
-  * Click "make permanent" and "auto-mount" and then click "Ok".
-  * Reboot the machine by going to applications button on the left of the top
-    toolbart, clicking on "Log Out", and choosing "Restart" in the window that
-    pops up.
-  * Once the VM is running again, click on the "Shared" folder on the desktop.
-    You should see the folder "sf_Documents" (or whatever the folder name you
-    selected was, in place of 'Documents'). You can drag and drop files to
-    manipulate them.
-  * Alternatively, from the Terminal, you can also see the directory by doing
-    "cd ~/Desktop/shared/sf_Documents" and then "ls" will show you the files.
+**If you’re using a BCE image on EC2**: (XXX - make a paragraph)
 
-Be careful: unless you selected "read only" at the same time as "make
-permanent", any changes to the shared folder on the VM affects the folder in the
-'real world', namely your computer.
+* Go to [EC2 management console](http://console.aws.amazon.com) and choose the
+  US-West-2 (Oregon) region, as that is where we have posted the BCE AMI.
+  (You'll need to have an account set up.)
+* On the "AMIs" tab, search for the BCE AMI amongst public images.
+* Launch an instance 55. Follow the instructions given in the "Connect" button
+  to SSH to the instance
+* If you want to connect as the "oski" user, you can deposit your public SSH
+  key in the .ssh folder of the "oski" user.
 
-*EC2*
+Communicating with the maintainers of the BCE project
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  * Go to [EC2 management console](http://console.aws.amazon.com) and choose the
-    US-West-2 (Oregon) region, as that is where we have posted the BCE AMI.
-    (You'll need to have an account set up.)
-  * On the "AMIs" tab, search for the BCE AMI amongst public images.
-  * Launch an instance 55. Follow the instructions given in the "Connect" button
-    to SSH to the instance
-  * If you want to connect as the "oski" user, you can deposit your public SSH
-    key in the .ssh folder of the "oski" user.
+All development occurs in the open in our GitHub repository. This repository currently also hosts the  project website, with links to all BCE
+materials.
+We provide channels for communication on bugs, desired features, and the like via the
+repository and a mailing list (also linked from the project page), or if a user is comfortable with it, via the GitHub issue tracker.
+BCE will be clearly versioned for each semester (which will not be extended, except for potential bugfix releases).
 
+Contributing to the BCE project
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+BCE provides:
+
+* a reproducible workflow that creates the standard VM/image
+  with standard scientific computing software such as Python, R, git, etc.,
+* a standard binary image, produced by the workflow, that can be distributed as is and
+  used on-the-fly with VirtualBox or VMWare Player with minimal dependencies, and
+
+You should generally not need to build the binary VM for BCE for a given semester. However, you may wish to customize or extend BCE. The best way to do this is by simply writing a shell script that will install requirements properly in the context of the BCE (for a complex example, see our bootstrap-bce.sh script in the provisioning directory of the master branch of the repository [XXX reference?].
+
+Provisioning is fully scripted - if the appropriate software is installed,
+the recipe should run reliably.
+The provisioning details used to create a given VM available to users and
+with clear instructions on how to use and modify the provisioning.
+We have chosen our approach to provisioning to be relatively simple for users to understand.
+It is our goal for instructors or domain experts to be able to easily extend the recipe for building BCE VMs or images. If not, that’s a bug!
 
 Conclusion
 ----------
@@ -647,6 +552,7 @@ References
    # A more proper reference
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
+.. [BCEVB] http://collaboratool.berkeley.edu/using-virtualbox.html
 
 
 [a]Copied from https://github.com/scipy-conference/scipy_proceedings/pull/98#issuecomment-46784086
