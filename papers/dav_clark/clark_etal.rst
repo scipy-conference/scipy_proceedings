@@ -173,17 +173,10 @@ Solution 4: Enable on-demand resizing of resources. The BCE solution works on cl
 Existing Tools
 --------------
 
-"Collaboratool" was conceived as a project for building, integrating, and
-deploying tools that support portable, reproducible data science.  We started
-thinking about how to deploy virtualized containers that provide things like
-IPython notebooks through the web. We were very inspired by
-[jiffylab](http://github.com/ptone/jiffylab). From there, we decided that it
-made more sense to focus on a complete virtual environment, which is easy to
-deploy in a variety of contexts, which is what you'll find here now.
+As previously discussed, the problems outlined above are not unique to scientific computing. Developers and administrators, especially in the domain of web service development, have produced a wide variety of tools that make it easier for common environments to be used across all kinds of infrastructure, ranging from a slice of your personal laptop, to a dynamically provisioned slice of your hybrid public/private cloud.
 
-Sage (+ Cloud)?
-
-*Virtual Machines (VMs)*
+Virtual machine images (VMs)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Full virtualization: VirtualBox, (VMware, mention encryption), others? (KVM, etc.)
 
@@ -199,19 +192,26 @@ Only with exotic hardware is GPGPU [unpack] available to fully virtualized envir
 
 port-mapping, shared files, GUI vs. “remote-like” operation
 
-*DevOps*
+While such systems often allow for easy snapshotting, it may be hard to capture exactly what happened – especially changes and configuration that was made “by hand.”
 
-XXX - Particularly need help from Aaron here (Richard
+“DevOps” tools for building images and managing deployment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Vagrant (heavily explored, set aside)
+Building an image or environment is often called *provisioning*, managing deployments is often called *orchestration*. Unfortunately, it’s not possible to split a discussion of tools into these two categories, as many tools do a bit of both.
+
+Vagrant (heavily explored, set aside).
 Packer (currently used)
 Docker (potential future)
 Provisioning / orchestration - e.g., Ansible (mention chef, puppet, salt, …)
 
 XXX - Is Hashdist here or in exsting projects? Conda goes here also. Why not conda? Still hard to just install a list of pip requirements
 
-Other virtual machines
-----------------------
+It is currently common for individuals to *only* distribute a script, though the reasons for this are somewhat unclear (particularly given the many free services for distributing these potentially large binary files).
+
+Example environments
+--------------------
+
+Most environments you’ll find for a book or a course are either an image on a cloud service (usually Amazon EC2) *or* a VM (likely for VirtualBox, sometimes also requiring the use of Vagrant).
 
 From [Mining the Social Web, a Chef+Vagrant solution](https://rawgit.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition/master/ipynb/html/_Appendix%20A%20-%20Virtual%20Machine%20Experience.html)
 
@@ -222,7 +222,19 @@ our core resources. However, for weekend learn-a-thons and more portable VM.
 We've tried our own VM using docker and well as some hosted boxes like yhat's
 new Science Box. We should compare notes.
 
+"Collaboratool" was conceived as a project for building, integrating, and
+deploying tools that support portable, reproducible data science.  We started
+thinking about how to deploy virtualized containers that provide things like
+IPython notebooks through the web. We were very inspired by
+[jiffylab](http://github.com/ptone/jiffylab). From there, we decided that it
+made more sense to focus on a complete virtual environment, which is easy to
+deploy in a variety of contexts, which is what you'll find here now.
+
+Sage (+ Cloud)?
+
 VM from Philip.
+
+Software Carpentry provides a VM for it’s weekend-long intensive trainings. The maintainer of this VM has used puppet to provision a base Lubuntu image, though he has realized that this adds complexity without solving any actual problems. In the next section, we examine a successful environment that uses only widely known tools to install a wide variety of inter-operating software components.
 
 OSGeo-Live: A Successful Common Environment
 -------------------------------------------
@@ -240,8 +252,7 @@ including storage, publishing, viewing, analysis and manipulation of data. It
 also contains sample datasets and documentation. [1g]
 '''
 
-The OSGeo-Live is a project of the Open Source Geospatial Foundation
-(OSGeo), an international body modeled on the Apache Foundation [2g]. In 2006 there existed several large and growing open-source geospatial software projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and later, QGis.  At roughly the same time, the OSGeo-Live began as a smaller open project based in Australia that sought to build an "easy to try and use" software environment for these and other spatial data applications. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent Live project committed itself to the larger OSGeo Foundation structure in its second year. The OSGeo Live is not the only attempt at building such an environment [3g]
+The OSGeo-Live is a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [2g]. In 2006 there existed several large and growing open-source geospatial software projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and later, QGis.  At roughly the same time, the OSGeo-Live began as a smaller open project based in Australia that sought to build an "easy to try and use" software environment for these and other spatial data applications. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent Live project committed itself to the larger OSGeo Foundation structure in its second year. The OSGeo Live is not the only attempt at building such an environment [3g]
 
 More than fifty (50) open-source projects now actively maintain and improve their own
 install scripts, examples and documentation.
@@ -257,7 +268,7 @@ Technical Stability
 An original goal of the OSGeo-Live was to operate well on minimal hardware with
 broad support for common peripherals, and a license structure compatible with
 project goals. The XUbuntu version of Ubuntu Linux was chosen as a foundation,
-and it was been very successful. To this day, almost all applications
+and it has been very successful. To this day, almost all applications
 operate easily in very modest RAM and disk space (with the notable exception of
 Java-based software which requires substantially more RAM).
 
@@ -278,16 +289,8 @@ It cannot be overstated that, a key component to the success of the
 overall project has been the availability of widely-known and reliable tools, 
 to developers from all parts of the world and in all major spoken languages. 
 It is also important to note that rather than require formal installation 
-packages ".deb" for each project, the OSGeo-Live chose to use a simple install script format, one per installed project. This
-choice proved crucial in the earliest stages, as an outside open-source project
-evaluating participation in the Live could get started with fewer barriers to
-entry, and then add rigor and features later. Almost by definition, the
-candidate open-source projects had install scripts already built for Linux which
-could be readily adopted to the OSGeo-Live install conventions. By providing
-ample examples on the OSGeo-Live of install scripts in major deployment
-contexts, for both applications and server processes,  and clear guidelines for
-installation conventions, a new open-source project could almost immediately
-develop and iterate their own install scripts in a straightforward way.
+packages ".deb" for each project, the OSGeo-Live chose to use a simple install script format, one per installed project. This choice proved crucial in the earliest stages, as an outside open-source project evaluating participation in the Live could get started with fewer barriers to entry, and then add rigor and features later. Almost by definition, participating open-source projects had install scripts already built for Linux which could be readily adopted to the OSGeo-Live install conventions. By providing
+ample examples on the OSGeo-Live of install scripts in major deployment contexts, for both applications and server processes,  and clear guidelines for installation conventions, an open-source project could almost immediately develop and iterate their own install scripts in a straightforward way.
 
 **detailed build directions here**
 Particular example: web, including apache, WSGI, etc. Standard layout of web
@@ -359,21 +362,18 @@ Underlying processes of adoption of new technology - initial awareness, trialabi
 An original project design goal was to provide tools to those doing geospatial fieldwork with limited resources around the globe, and who often lack advanced programming and administration skills. (in a somewhat fortunate coincidence, the qualities of a software environment that makes it suitable for low-spec hardware, also makes for an efficient VM implementation)
 
 Several years into the project, funding was established via a grant from the Australian
-government to build documentation on applications in the Overview and Quickstart formats used today, to professional graphic design standards, and in a workflow such that many human language versions could be maintained and improved efficiently, specifically to support field work. That documentation format consists of a single page for every application, (Overview) and a second page with step-by-step instructions for a capable reader but no previous exposure to the software (Quickstart). Each of these two pages for every included project, is then translated into various spoken languages, primarily by volunteers. Much later, a graph of "percentage complete" for each human language group was added, which essentially makes translation into a sort of competition. This “gamification” of translation has proven very successful. Note that the initial effort to build standardized documentation required paid professionals. It seems unlikely that the documentation would have been successful if only ad-hoc volunteer efforts were used.
+government to build documentation on applications in the Overview and Quickstart formats used today, to professional graphic design standards, and in a workflow such that many human language versions could be maintained and improved efficiently, specifically to support local field work. That documentation format consists of a single page for every application, (Overview) and a second page with step-by-step instructions for a capable reader but no previous exposure to the software (Quickstart). Each of these two pages for every included project is then translated into various spoken languages, primarily by volunteers. Much later, a graph of "percentage complete" for each human language group was added, which essentially makes translation into a sort of competition. This “gamification” of translation has proven very successful. Note that the initial effort to build standardized documentation required paid professionals. It seems unlikely that the documentation would have been successful based on only ad-hoc volunteer efforts.
 
-The Open Source Geospatial Foundation (OSGeo) itself is a hub for multiple ecosystems of standards and language groups of projects to interoperate synergetically. OSGeo project status raises awareness of one project to other projects.
+The Open Source Geospatial Foundation (OSGeo) itself is a hub for multiple ecosystems of standards and language groups of projects to interoperate synergistically. OSGeo project status raises awareness of one project to other projects.
 
-(see the transfer of tech, e.g., military technology to environmental applications)
-(Maybe include story about Haiti response with open source mapping)
+(mention concepts of the transfer of tech, e.g., military technology to environmental applications?)
+(Maybe include a story about Haiti response with open source mapping - this is really an OpenStreetMap success story though, and OSM is distinct from OSGeo)
 
 
 Steps to Contribute
 
 All build scripts are organized in the open, in source control [5g]. 
 
-Major step in diffusion is folks knowing what the thing is at all. Value add /
-branding - OSGeo has credibility from foundation status, participants,
-consistent / good graphic design.
 
 [1g]  http://live.osgeo.org
 [2g]  http://www.osgeo.org/content/foundation/about.html
@@ -420,6 +420,8 @@ are encouraged that are implemented in standard frameworks (i.e., not Forth).
 There's still not complete consensus, but the project is moving towards some
 consensus infrastructure. Also see the transfer of, e.g., military technology to
 environmental applications.
+<end of osgeo section>
+
 
 BCE: The Berkeley Common Environment
 ------------------------------------
@@ -524,6 +526,8 @@ with clear instructions on how to use and modify the provisioning.
 We have chosen our approach to provisioning to be relatively simple for users to understand.
 It is our goal for instructors or domain experts to be able to easily extend the recipe for building BCE VMs or images. If not, that’s a bug!
 
+While we have experimented with Docker, Vagrant, and Ansible for setting up the various BCE images, the only foundationally useful tool for our current set of problems has been Packer. Packer is a simple way to automate the things you would type to install an operating system from the base distribution (specifically, the ISO file that you might download from the Ubuntu project), followed by running a simple shell script. This shell script uses standard installation mechanisms like pip and apt-get to complete the setup of our environment.
+
 Conclusion
 ----------
 
@@ -556,3 +560,4 @@ References
 
 
 [a]Copied from https://github.com/scipy-conference/scipy_proceedings/pull/98#issuecomment-46784086
+
