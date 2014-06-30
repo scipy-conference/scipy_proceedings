@@ -50,11 +50,11 @@ Every author of a paper in a SciPy proceedings has to deal with the tooling requ
 
 This problem is quite general. In a university setting, students in a class, collaborating researchers, and the provision of reproducible workflows for literally anyone to run the code used for a set of research results. Developers in industry similarly need to ensure code will work in a specified environment (like on production servers!), and a large number of tools have been developed and widely adopted to manage this piece of complexity.
 
-A number of solutions have also been developed to allow for multiple *Python* environments, including environments that peacefully co-exist on the same computer (e.g., virtualenv, venv, conda, buildout), but our compute environment often pulls in non-trivial tooling outside of Python (though tools like conda *can* pull in non-python tooling). While these tools cannot solve all of the problems we describe below, there is no reason that any of them could not be used within the broader approach we’ll describe. Indeed, a tool like conda could ultimately perform *most* of the work – though as we’ll see, it should likely never be able to perform all of that work.
+A number of solutions have also been developed to allow for multiple *Python* environments, including environments that peacefully co-exist on the same computer (e.g., virtualenv, venv, conda, buildout), but our compute environment often pulls in non-trivial tooling outside of Python (though tools like conda *can* pull in non-python tooling). While these tools from the Python community cannot solve all of the problems we describe below, there is no reason that any of them could not be used within the broader approach we’ll describe. Indeed, a tool like conda could ultimately perform *most* of the work – though as we’ll see, it should likely never be able to perform all of that work.
 
 Prosaic examples include the toolchain required to use nbconvert (very much parallel to the above). Or, for example, ensuring that a properly configured database is available.
 
-The afore-mentioned “tools from industry” -- generally referred to as *devops* tools -- are directed at solving this larger problem. Unfortunately, the variety and complexity of tools match the variety and complexity of the problem space, and the target space for most of them was *not* scientific computing. Thus, before discussing available tooling, we first lay out a set of issues relevant to supporting scientific computing.
+The afore-mentioned “tools from industry” – generally referred to as *devops* tools – are directed at solving this larger problem. Unfortunately, the variety and complexity of tools match the variety and complexity of the problem space, and the target space for most of them was *not* scientific computing. Thus, before discussing available tooling, we first lay out a set of issues relevant to supporting scientific computing.
 
 Issues
 ------
@@ -124,17 +124,7 @@ Python packages are installed from a basic pip requirements file.
 Debian packages are similarly installed from a list.
 Other packages are installed via bash, e.g., downloading and installing RStudio.
 
-
-
-
-
-
-Do not expect the readership to be familiar with VM technologies such as VMWare, VirtualBox, Vagrant, Docker. Most scientists do not clearly see what they are good for when looking at the original documentation (which is more written for system administrators or web site developers). However, it should be easy to explain the problem setting to scientists: it is always a big mess to get all software up and running on a platform, especially for a course. Very often scientific computing implies a lot of sophisticated software beyond Anaconda or Enthought ready-make setups. You present smooth solutions, and most scientists will benefit from them.
-Explain or avoid terms in the VM community such as provisioning. Make sure you reach out to the average scientist (who knows very well that setting up a Python environment is often non-trivial).
-The big difficulty (for me) is to choose the right VM tool. Any experience with VMWare, VirtualBox, Vagrant, Docker would be very useful at this stage.
-So far VM tools are mostly used on individual laptops. The idea that a VM can be used on computer systems at a university and could services as well, and that one can simply move the laptop VM to these platforms, is something that will greatly increase productivity.
-
-Summarizing the pull-request feedback
+Summarizing the pull-request feedback:
 - the most common case for VM tools is the laptop
 - mobility of VMs between computing platforms will increase productivity
 - Choosing between the multiplicity of VM tools is a big difficulty
@@ -185,7 +175,7 @@ solutions).
 
 Systems like EC2, only available as a VM.
 
-Lightweight virturalization (/ containerization) includes Docker / LXC / VMWare
+Lightweight virtualization (/ containerization) includes Docker / LXC / VMWare
 ESX.
 
 Only with exotic hardware is GPGPU [unpack] available to fully virtualized environments. Check on containers? [XXX IT people?]
@@ -239,7 +229,7 @@ Software Carpentry provides a VM for it’s weekend-long intensive trainings. Th
 OSGeo-Live: A Successful Common Environment
 -------------------------------------------
 
-The OSGeo-Live virtual machine, both a sophisticated compute environment, and synergistic community process, is an example of just the kind of environment described above. Eschewing elaborate devops tools, the fundamental build system is instead configured using simple and modular combinations of Python, Perl and shell scripts, along with clear install conventions by example. 
+The OSGeo-Live virtual machine, both a sophisticated compute environment, and synergistic community process, is an example of just the kind of build described above. Eschewing elaborate devops tools, the fundamental build system is instead configured using simple and modular combinations of Python, Perl and shell scripts, along with clear install conventions by example. 
 
 '''
 The OSGeo-Live is a self-contained bootable DVD, USB thumb drive or Virtual
@@ -252,7 +242,7 @@ including storage, publishing, viewing, analysis and manipulation of data. It
 also contains sample datasets and documentation. [1g]
 '''
 
-The OSGeo-Live is a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [2g]. In 2006 there existed several large and growing open-source geospatial software projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and later, QGis.  At roughly the same time, the OSGeo-Live began as a smaller open project based in Australia that sought to build an "easy to try and use" software environment for these and other spatial data applications. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent Live project committed itself to the larger OSGeo Foundation structure in its second year. The OSGeo Live is not the only attempt at building such an environment [3g]
+The OSGeo-Live is a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [2g]. In 2006 there existed several large and growing open-source geospatial software projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and later, QGis.  At roughly the same time, the OSGeo-Live began as a smaller open project based in Australia that sought to build an "easy to try and use" software environment for these and other spatial data applications. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent Live project committed itself to the larger OSGeo Foundation structure in its second year. OSGeo-Live is not the only attempt at building such an environment [3g]
 
 More than fifty (50) open-source projects now actively maintain and improve their own
 install scripts, examples and documentation.
@@ -285,21 +275,18 @@ can be installed as-needed on a generic base.
 Tool Sets
 ^^^^^^^^^
 
-It cannot be overstated that, a key component to the success of the 
-overall project has been the availability of widely-known and reliable tools, 
-to developers from all parts of the world and in all major spoken languages. 
-It is also important to note that rather than require formal installation 
-packages ".deb" for each project, the OSGeo-Live chose to use a simple install script format, one per installed project. This choice proved crucial in the earliest stages, as an outside open-source project evaluating participation in the Live could get started with fewer barriers to entry, and then add rigor and features later. Almost by definition, participating open-source projects had install scripts already built for Linux which could be readily adopted to the OSGeo-Live install conventions. By providing
-ample examples on the OSGeo-Live of install scripts in major deployment contexts, for both applications and server processes,  and clear guidelines for installation conventions, an open-source project could almost immediately develop and iterate their own install scripts in a straightforward way.
+It cannot be overstated that, a key component to the success of the overall project has been the availability of widely-known and reliable tools, to developers from all parts of the world and in all major spoken languages. It is also important to note that rather than require formal installation packages ".deb" for each project, the OSGeo-Live chose to use a simple install script format, one per installed project. This choice proved crucial in the earliest stages, as an outside open-source project evaluating participation in the Live could get started with fewer barriers to entry, and then add rigor and features later. Almost by definition, participating open-source projects had install scripts already built for Linux which could be readily adapted to the OSGeo-Live install conventions. By providing ample examples on the OSGeo-Live of install scripts in major deployment contexts, for both applications and server processes, and clear guidelines for installation conventions, an open-source project could almost immediately develop and iterate their own install scripts in a straightforward way.
 
-**detailed build directions here**
+**detailed build directions here?**available in svn, verbose**
 Particular example: web, including apache, WSGI, etc. Standard layout of web
 directory. Fully working examples available for each "kind" of project.
+**very little conflict among WSGI apps, port numbers do have to be tracked globally**
 
-Subversion repo -- asset heirarchy -- individual install scripts -- Live build
-scripts trac-subversion   http://trac.osgeo.org/osgeo/report/10
+Subversion repo -- asset hierarchy -- individual install scripts -- Live build
+scripts trac-subversion   [6g]
 
-see screenshots
+(see screenshots)
+trac ticketing system  http://trac.osgeo.org/osgeo/report/10
 
 Directory gisvm - a detailed layout
 
@@ -359,20 +346,20 @@ Community Awareness
 
 Underlying processes of adoption of new technology - initial awareness, trialability, adoption and iteration - are well-known [4g]. OSGeo-Live intentionally incorporates targeted outreach, professional graphic design and “easy to try” structure to build participation from both developers and end-users.
 
-An original project design goal was to provide tools to those doing geospatial fieldwork with limited resources around the globe, and who often lack advanced programming and administration skills. (in a somewhat fortunate coincidence, the qualities of a software environment that makes it suitable for low-spec hardware, also makes for an efficient VM implementation)
+An original project design goal was to provide tools to those doing geospatial fieldwork with limited resources around the globe, and who often lack advanced programming and administration skills. (in a somewhat fortunate coincidence, the original qualities of a software environment suitable for low-spec hardware also makes for an efficient VM implementation)
 
 Several years into the project, funding was established via a grant from the Australian
-government to build documentation on applications in the Overview and Quickstart formats used today, to professional graphic design standards, and in a workflow such that many human language versions could be maintained and improved efficiently, specifically to support local field work. That documentation format consists of a single page for every application, (Overview) and a second page with step-by-step instructions for a capable reader but no previous exposure to the software (Quickstart). Each of these two pages for every included project is then translated into various spoken languages, primarily by volunteers. Much later, a graph of "percentage complete" for each human language group was added, which essentially makes translation into a sort of competition. This “gamification” of translation has proven very successful. Note that the initial effort to build standardized documentation required paid professionals. It seems unlikely that the documentation would have been successful based on only ad-hoc volunteer efforts.
+government to build documentation on applications in the Overview and Quickstart formats used today, to professional graphic design standards, and in a workflow such that many human language versions could be maintained and improved efficiently, specifically to support local field work. That documentation format consists of a single page for every application, (Overview) and a second page with step-by-step instructions for a capable reader but no previous exposure to the software (Quickstart). Each of these two pages for every included project is then translated into various spoken languages, primarily by volunteers. Much later, a graph of "percentage complete" for each human language group was added, which essentially makes translation into a sort of competition. This modest “gamification” of translation has proven very successful. Note that the initial effort to build standardized documentation required paid professionals. It seems unlikely that the documentation would have been successful based on only ad-hoc volunteer efforts.
 
-The Open Source Geospatial Foundation (OSGeo) itself is a hub for multiple ecosystems of standards and language groups of projects to interoperate synergistically. OSGeo project status raises awareness of one project to other projects.
+The Open Source Geospatial Foundation (OSGeo) itself is a hub for multiple ecosystems of standards and language groups of projects to interoperate synergistically. OSGeo project status raises awareness of one project to other projects. Users around the world are encouraged to record on a common wiki page, an event at which the OSGeo-Live was presented. [5g]
 
 (mention concepts of the transfer of tech, e.g., military technology to environmental applications?)
-(Maybe include a story about Haiti response with open source mapping - this is really an OpenStreetMap success story though, and OSM is distinct from OSGeo)
+(Maybe,not, include a story about Haiti response with open source mapping - this is really an OpenStreetMap success story though, and OSM is distinct from OSGeo)
 
 
 Steps to Contribute
 
-All build scripts are organized in the open, in source control [5g]. 
+All build scripts are organized in the open, in source control [6g]. A new contributors FAQ is maintained via wiki [7g] for software projects, and for translation [8g]. A quality/testing page was used, but has been discontinued [9g]
 
 
 [1g]  http://live.osgeo.org
@@ -380,21 +367,15 @@ All build scripts are organized in the open, in source control [5g].
 [3g]  http://en.wikipedia.org/wiki/GIS_Live_DVD
 [4g] Diffusion of Innovation; Rogers et al 1962
 http://en.wikipedia.org/wiki/Diffusion_of_Innovations
-[5g]  http://svn.osgeo.org/osgeo/livedvd
+[5g]  http://wiki.osgeo.org/wiki/Live_GIS_History
+[6g]  http://svn.osgeo.org/osgeo/livedvd
+[7g]  http://wiki.osgeo.org/wiki/Live_GIS_Add_Project
+[8g]  http://wiki.osgeo.org/wiki/Live_GIS_Translate
+[9g]  http://wiki.osgeo.org/wiki/Live_GIS_Disc_Testing
+
 
 
 **misc cut text**
-
-Eight
-years ago, there existed several very large and growing open-source geospatial
-projects, whose founders and developers decided would benefit from a common
-legal and technical infrastructure. Those projects included GRASS, Mapserver,
-GDAL and QGis.  At the same time. the OSGeo-Live began with a smaller open
-project based in Australia that sought to build an "easy to try and use"
-software environment for these and other spatial data applications. After some
-discussion and planning conducted between a handful of intrepid principals
-across the globe on the Internet, the nascent OSGeo-Live project committed
-itself to the larger OSGeo Foundation structure in its second year.
 
 
 missing title
@@ -448,7 +429,15 @@ BCE targets the following core use cases (elaborated above):
 * disseminating the computational environment so outsiders can reproduce the
   results of a group.
 
-In short, the BCE provides a standard location that eliminates the complexity of describing how to run a large variety of projects across a wide variety of platforms. We can now target our instruction to a single platform. The environment is easy to deploy, and guaranteed to provide identical results across any base platform – if this is not the case, it’s a bug! This environment is already available on VirtualBox and Amazon EC2, and is straightforward to provision for other environments.
+In short, the BCE provides a standard location that eliminates the complexity of describing how to run a large variety of projects across a wide variety of platforms. We can now target our instruction to a single platform. The environment is easy to deploy, and guaranteed to provide identical results across any base platform – if this is not the case, it’s a bug! This environment is already available on VirtualBox and Amazon EC2, and is straightforward to provision for other environments. You can see what the BCE looks like (in a relatively small window) in Figure :ref:`BCE-screenshot`.
+
+.. figure:: BCE-screenshot.png
+
+   The Berkeley Common Environment running in VirtualBox on OS X. The interface is 
+   minimal, and opportunities for confusion are minimized. For example, all users have 
+   the same text editor available, and in particular, it’s easy to configure common 
+   gotchas like spaces for tabs. :label:`BCE-screenshot`
+
 
 Using the BCE
 ^^^^^^^^^^^^^
