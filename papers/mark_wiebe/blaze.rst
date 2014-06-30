@@ -115,6 +115,31 @@ computations as might fit into the SQL or Pandas model of computation.  We
 intend to extend this model to arrays and other highly-regular computational
 models in the future.
 
+Related Work
+~~~~~~~~~~~~
+
+We separate related work into two categories:
+
+1.  Computational backends useful to Blaze
+2.  Similar efforts in uniform interfaces
+
+Computational backends on which Blaze currently relies include Pandas,
+SQLAlchemy, PyToolz, Spark, PyTables, NumPy, and DyND.  Pandas [McK10]_ provides an
+efficient in-memory table object.  SQLAlchemy [sqlal]_ handles connection to a variety
+of SQL dialects like SQLite and Postgres.  PyToolz [Roc13]_ provides tuned functions for
+streaming computation on core Python data structures.  NumPy [Van11]_ and DyND
+[Wie13]_ serve as in-memory arrays and common data interchange formats.
+PyTables [Alt03]_ provides efficient sequential computations on out-of-core
+HDF5 files.
+
+Uniform symbolic interfaces on varied computational resources are also common.
+SQLAlchemy provides a uniform interface onto various SQL implementations.
+Theano [Ber10]_ maps array operations onto Python/NumPy, C, or CUDA code generation.
+While computer algebra projects like SymPy [Sym08]_ often have expression trees they
+also commonly include some form of code generation to low-level languages like
+``C``, ``Fortran`` but also to languages like ``LaTeX`` and ``DOT`` for
+visualization.
+
 
 Blaze Architecture
 ------------------
@@ -181,10 +206,10 @@ by default.
 
    >>> list(csv)
    [(1L, u'Alice', 100L),
-    (2L, u'Bob', 200L),
+    (2L, u'Bob', -200L),
     (3L, u'Charlie', 300L),
     (4L, u'Denis', 400L),
-    (5L, u'Edith', 500L)]
+    (5L, u'Edith', -500L)]
 
 
 Data descriptors also expose a ``chunks`` method, which also iterates over the
@@ -198,10 +223,10 @@ to NumPy arrays.
 
    >>> next(csv.chunks())
    nd.array([[1, "Alice", 100],
-             [2, "Bob", 200],
+             [2, "Bob", -200],
              [3, "Charlie", 300],
              [4, "Denis", 400],
-             [5, "Edith", 500]],
+             [5, "Edith", -500]],
     type="5 * {id : int64, name : string, balance : int64}")
 
 Insertion
@@ -246,13 +271,13 @@ interfaces.
    >>> list(csv.py[::2, ['name', 'balance']])
    [(u'Alice', 100L),
     (u'Charlie', 300L),
-    (u'Edith', 500L),
+    (u'Edith', -500L),
     (u'Georgina', 700L)]
 
    >>> csv.dynd[::2, ['name', 'balance']]
    nd.array([["Alice", 100],
              ["Charlie", 300],
-             ["Edith", 500],
+             ["Edith", -500],
              ["Georgina", 700]],
         type="var * {name : string, balance : int64}")
 
@@ -364,11 +389,11 @@ Recall our accounts dataset
 
 .. code-block:: python
 
-   >>> L = [(1, 'Alice', 100),
-            (2, 'Bob', -200),
+   >>> L = [(1, 'Alice',   100),
+            (2, 'Bob',    -200),
             (3, 'Charlie', 300),
-            (4, 'Denis', 400),
-            (5, 'Edith', -500)]
+            (4, 'Denis',   400),
+            (5, 'Edith',  -500)]
 
 And our computation for names of account holders with negative balances
 
@@ -584,7 +609,27 @@ considerably) our implementation can transition easily.
 References
 ----------
 
-.. [iopro] http://docs.continuum.io/iopro/index.html
-.. [Reid] Reid, Fergal, and Martin Harrigan. "An analysis of anonymity in the
-          bitcoin system." Security and Privacy in Social Networks. Springer New York,
-          2013. 197-223.
+.. [iopro]      http://docs.continuum.io/iopro/index.html
+.. [Reid]       Reid, Fergal, and Martin Harrigan. "An analysis of anonymity in the
+                bitcoin system." Security and Privacy in Social Networks. Springer New York,
+                2013. 197-223.
+.. [Zah10]      Zaharia, Matei, et al. "Spark: cluster computing with working sets."
+                Proceedings of the 2nd USENIX conference on Hot topics in cloud
+                computing. 2010.
+.. [McK10]      Wes McKinney. *Data Structures for Statistical Computing in
+                Python*, Proceedings of the 9th Python in Science Conference,
+                51-56 (2010)
+.. [sqlal]      http://www.sqlalchemy.org/
+.. [Roc13]      Rocklin, Matthew and Welch, Erik and Jacobsen, John.
+                *Toolz Documentation*, 2014 http://toolz.readthedocs.org/
+.. [Wie13]      Wiebe, Mark. *LibDyND* https://github.com/ContinuumIO/libdynd
+.. [Sym08]      SymPy Development Team. "SymPy: Python library for symbolic
+                mathematics." (2008).
+.. [Ber10]      Bergstra, James, et al. "Theano: a CPU and GPU math compiler in
+                Python." Proc. 9th Python in Science Conf. 2010.
+.. [Bor07]       Borthakur, Dhruba. "The hadoop distributed file system: Architecture
+                and design." Hadoop Project Website 11 (2007): 21.
+.. [Alt03]   Alted, Francesc, and Mercedes Fernández-Alonso. "PyTables: processing and analyzing extremely large amounts of data in Python." PyCon 2003 (2003).
+.. [Van11]      Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux. *The
+                NumPy Array: A Structure for Efficient Numerical Computation*,
+                Computing in Science & Engineering, 13, 22-30 (2011),
