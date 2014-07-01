@@ -108,21 +108,15 @@ In other words, I have an environment and you have an environment. I want to do 
 Features of a useful common environment
 ---------------------------------------
 
-* Make it easy to do the "right" thing (hard to do "wrong" thing)
-* Stable infrastructure
-* Managing complexity
-* Impacts beyond "the course"
+In the most general sense, a common environment should make it easy to do the "right" thing (or hard to do "wrong" things), where “right” means you’ve managed to use someone else’s code in the manner that was intended. This environment should be stable, reliable, and reduce complexity more than it increases it. We are also interested in exploring how a common environment might scaffold improved software use and creation beyond "the course" or “the collaboration.”
 
-Simple things like gedit, nano with tab-stops set up properly. Setting up the background to be more efficient solid color.
+More prosaically, a common environment provides simple things like a GUI text editor, and a command-line editor for when a GUI is not available. If it is not straightforward to configure from inside the interface (as is the case with nano), the application should be pre-configured with sensible defaults (again with nano, spaces for tab-stops should be set up properly). This environment should be configured to make minimal demands on underlying resources. In BCE, for example, we’ve set the background to a solid color to minimize network utilization for remote desktop sessions.
 
-There are also idiosyncratic things about individual VM software, like the way shared folders are handled (managing group membership, symlinks to the appropriate mount folder).
+There are also idiosyncratic things about individual VM software, like the way shared folders are handled. With BCE, this involves managing group membership for the default user and creating obvious symlinks on the desktop to the appropriate mount folder.
 
-Python packages are installed from a basic pip requirements file.
+A base of generally useful software should be provided, and it should be clear how it was installed and configured. It should equally clear how one could set up additional software following the pattern of the “recipe” for the environment, so that this software is also easy to share with other users of the environment.
 
-Debian packages are similarly installed from a list.
-Other packages are installed via bash, e.g., downloading and installing RStudio.
-
-
+More generally, we seek to address the following challenges:
 
 Dependency hell
 ^^^^^^^^^^^^^^^
@@ -131,24 +125,24 @@ Problem 1: The quote at the beginning of this paper represents the first barrier
 
 Future Solution 1: Eliminate *dependency hell*. Provide a method to ensure that all participants can successfully complete the installation with a fixed number of well-known steps across all platforms within a fixed amount of time. We *cannot* control the base environment that users will have on their laptop or workstation, nor do we wish to! The BCE platform provides a scalable and quantifiable approach to ensuring all users have the necessary dependencies to engage with specific code or content.
 
-Current status: BCE image is [available via dropbox](http://putlinkhere) and is 
+Current status: BCE image is [BCE-VB](http://putlinkhere) and is also available as an Amazon Machine Image (AMI) [BCE-AMI]_.
 
 Enabling tools:
 - Packer
-- VirtualBox, VMWare
+- VirtualBox, VMWare Fusion/Workstation
 
 Going beyond the laptop
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 Problem 2: We will consider a participant’s laptop the unit-of-compute since it is the primary platform widely used across the research and teaching space and is a reasonable assumption to require: specifically a 64-bit laptop with 4GB of RAM. These requirements are usually sufficient to get started, however the algorithms or size of in-memory data may exceed the available memory of this unit-of-compute and the participant may need to migrate to another compute resource such as a powerful workstation with 128GB of RAM, an amount of memory not yet available in even the most advanced laptops which typically max-out at 16GB at the time of this writing.
 
-Solution 2: Enable computing *beyond the laptop*. Though a workstation with plentiful memory by virtue of exactly replicating the environment available in Solution 1, the participant is guaranteed to replicate the data processing, transformations, and analysis steps they ran on their laptop in these other environments with the benefit of more memory available on those systems. This also includes the ability to use the common GUI interface provided by BCE as a VDI (Virtual Desktop Integration).
+Solution 2: Enable computing *beyond the laptop*. Though a workstation with plentiful memory by virtue of exactly replicating the environment available in Solution 1, the participant is guaranteed to replicate the data processing, transformations, and analysis steps they ran on their laptop in these other environments with the benefit of more memory available on those systems.
 
 Current status:
 
 Enabling tools:
 - Packer
-- VirtualBox, VMWare
+- VirtualBox, VMWare Fusion/Workstation
 
 Pleasant parallelization
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -159,7 +153,7 @@ Solution 3: Enable *pleasantly parallel* scale-out. A cluster may be available i
 
 Current status:
 
-Further development of BCE with the proper enabling tools could provide a way to run in these environments and allows you to install additional software components as you wish without relying on cluster administrators for help.
+Further development of BCE with the proper enabling tools could provide a way to run in these other environments by allowing you to install additional software components as you wish without relying on cluster administrators for help.
 
 Enabling tools:
 - Packer
@@ -184,22 +178,24 @@ Existing Tools
 
 As previously discussed, the problems outlined above are not unique to scientific computing. Developers and administrators, especially in the domain of web service development, have produced a wide variety of tools that make it easier for common environments to be used across all kinds of infrastructure, ranging from a slice of your personal laptop, to a dynamically provisioned slice of your hybrid public/private cloud.
 
+The tools mentioned in the previous section will now be described in depth to give the reader some insight into the DevOps mindset and the reasons each tool is chosen to enable the possible solutions outlined. Though myriad other similar tools are available (and surely others are emerging), here we describe some of the tools that we’ve evaluated in the context of building the first iteration of BCE. Suggestions for other tools would be very welcome in the form of proofs-of-concept, pull-requests, or existing use cases in the wild.
+
+Table :ref:`tools` provides an overview from the perspective of the
+DevOps/Maintainer person...
+
+
 Virtual machine images (VMs)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Full virtualization: VirtualBox, (VMware, mention encryption), others? (KVM, etc.)
+Challenges / shortcomings vs. running on “bare metal”: VMs reserve compute resources exclusively (less of a problem with LXC-like
+solutions). Port-mapping, shared files, GUI vs. “remote-like” operation.
 
-Problem: VMs reserve compute resources exclusively (less of a problem with LXC-like
-solutions).
+Systems like EC2 only provide virtual machines (no access to “bare metal”).
 
-Systems like EC2, only available as a VM.
 
-Lightweight virtualization (/ containerization) includes Docker / LXC / VMWare
-ESX.
+While specialized GPU hardware is available for cloud deployment, commodity GPUs will generally not work with fully virtualized systems. For example, VirtualBox presents a virtual GPU with at most 128MB of video memory. However, providing better access for containers (e.g., in Docker) is an active research topic [HPC]_.
 
-While specialized GPU hardware is available for cloud deployment, commodity GPUs will generally not work with fully virtualized systems. For example, VirtualBox presents a virtual GPU with at most 128MB of video memory. However, providing better access to containers is an active research topic [HPC]_.
 
-port-mapping, shared files, GUI vs. “remote-like” operation
 
 While such systems often allow for easy snapshotting, it may be hard to capture exactly what happened – especially changes and configuration that was made “by hand.”
 
@@ -210,8 +206,8 @@ Building an image or environment is often called *provisioning*, managing deploy
 
 Vagrant (heavily explored, set aside).
 Packer (currently used)
-Docker (potential future)
-Provisioning / orchestration - e.g., Ansible (mention chef, puppet, salt, …)
+Docker (used in a non-useful way previously, potentially useful in the future)
+Provisioning / orchestration - Ansible (mention chef, puppet)
 
 XXX - Is Hashdist here or in exsting projects? Conda goes here also. Why not conda? Still hard to just install a list of pip requirements
 
@@ -260,10 +256,10 @@ software, allowing it to be freely distributed, duplicated and passed around.
 
 It provides pre-configured applications for a range of geospatial use cases,
 including storage, publishing, viewing, analysis and manipulation of data. It
-also contains sample datasets and documentation. [1g]
+also contains sample datasets and documentation. [1g]_
 '''
 
-OSGeo-Live is a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [2g]. In 2006 there existed several large and growing open-source geospatial software projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and later, QGis.  At roughly the same time, OSGeo-Live began as a smaller open project based in Australia that sought to build an "easy to try and use" software environment for these and other spatial data applications. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent Live project committed itself to the larger OSGeo Foundation structure in its second year. OSGeo-Live is not the only attempt at building such an environment [3g]
+OSGeo-Live is a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [2g]_. In 2006 there existed several large and growing open-source geospatial software projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and later, QGis.  At roughly the same time, OSGeo-Live began as a smaller open project based in Australia that sought to build an "easy to try and use" software environment for these and other spatial data applications. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent Live project committed itself to the larger OSGeo Foundation structure in its second year. OSGeo-Live is not the only attempt at building such an environment [3g]_
 
 More than fifty (50) open-source projects now actively maintain and improve their own
 install scripts, examples and documentation.
@@ -304,7 +300,7 @@ directory. Fully working examples available for each "kind" of project.
 **very little conflict among WSGI apps, port numbers do have to be tracked globally**
 
 Subversion repo -- asset hierarchy -- individual install scripts -- Live build
-scripts trac-subversion   [6g]
+scripts trac-subversion   [6g]_
 
 (see screenshots)
 trac ticketing system  http://trac.osgeo.org/osgeo/report/10
@@ -365,14 +361,14 @@ sources.list.d/ # Supplimentary package repositories for /etc/apt/sources.list
 Community Awareness
 ^^^^^^^^^^^^^^^^^^^
 
-Underlying processes of adoption of new technology - initial awareness, trialability, adoption and iteration - are well-known [4g]. OSGeo-Live intentionally incorporates targeted outreach, professional graphic design and “easy to try” structure to build participation from both developers and end-users.
+Underlying processes of adoption of new technology - initial awareness, trialability, adoption and iteration - are well-known [4g]_. OSGeo-Live intentionally incorporates targeted outreach, professional graphic design and “easy to try” structure to build participation from both developers and end-users.
 
 An original project design goal was to provide tools to those doing geospatial fieldwork with limited resources around the globe, and who often lack advanced programming and administration skills. (in a somewhat fortunate coincidence, the original qualities of a software environment suitable for low-spec hardware also makes for an efficient VM implementation)
 
 Several years into the project, funding was established via a grant from the Australian
 government to build documentation on applications in the Overview and Quickstart formats used today, to professional graphic design standards, and in a workflow such that many human language versions could be maintained and improved efficiently, specifically to support local field work. That documentation format consists of a single page for every application, (Overview) and a second page with step-by-step instructions for a capable reader but no previous exposure to the software (Quickstart). Each of these two pages for every included project is then translated into various spoken languages, primarily by volunteers. Much later, a graph of "percentage complete" for each human language group was added, which essentially makes translation into a sort of competition. This modest “gamification” of translation has proven very successful. Note that the initial effort to build standardized documentation required paid professionals. It seems unlikely that the documentation would have been successful based on only ad-hoc volunteer efforts.
 
-The Open Source Geospatial Foundation (OSGeo) itself is a hub for multiple ecosystems of standards and language groups of projects to interoperate synergistically. OSGeo project status raises awareness of one project to other projects. Users around the world are encouraged to record on a common wiki page, an event at which the OSGeo-Live was presented. [5g]
+The Open Source Geospatial Foundation (OSGeo) itself is a hub for multiple ecosystems of standards and language groups of projects to interoperate synergistically. OSGeo project status raises awareness of one project to other projects. Users around the world are encouraged to record on a common wiki page, an event at which the OSGeo-Live was presented. [5g]_
 
 (mention concepts of the transfer of tech, e.g., military technology to environmental applications?)
 
@@ -380,19 +376,7 @@ The Open Source Geospatial Foundation (OSGeo) itself is a hub for multiple ecosy
 Steps to Contribute
 ^^^^^^^^^^^^^^^^^^^
 
-All build scripts are organized in the open, in source control [6g]. A new contributors FAQ is maintained via wiki [7g] for software projects, and for translation [8g]. A quality/testing page was used, but has been discontinued [9g]
-
-
-[1g]  http://live.osgeo.org
-[2g]  http://www.osgeo.org/content/foundation/about.html
-[3g]  http://en.wikipedia.org/wiki/GIS_Live_DVD
-[4g] Diffusion of Innovation; Rogers et al 1962
-http://en.wikipedia.org/wiki/Diffusion_of_Innovations
-[5g]  http://wiki.osgeo.org/wiki/Live_GIS_History
-[6g]  http://svn.osgeo.org/osgeo/livedvd
-[7g]  http://wiki.osgeo.org/wiki/Live_GIS_Add_Project
-[8g]  http://wiki.osgeo.org/wiki/Live_GIS_Translate
-[9g]  http://wiki.osgeo.org/wiki/Live_GIS_Disc_Testing
+All build scripts are organized in the open, in source control [6g]_. A new contributors FAQ is maintained via wiki [7g]_ for software projects, and for translation [8g]_. A quality/testing page was used, but has been discontinued [9g]_.
 
 
 
@@ -453,6 +437,11 @@ In short, the BCE provides a standard location that eliminates the complexity of
    gotchas like spaces for tabs. :label:`BCE-screenshot`
 
 
+Python packages are installed from a basic pip requirements file.
+
+Debian packages are similarly installed from a list.
+Other packages are installed via bash, e.g., downloading and installing RStudio.
+
 Using the BCE
 ^^^^^^^^^^^^^
 
@@ -482,7 +471,7 @@ go to "Applications->Programming->RStudio".
 * Shared folders (EBS on AWS), or other tech to make it possible to separate
   data from VM.
 
-**If you’re using VirtualBox**, the full instructions for setting up a BCE VM on Virtualbox are available on our project website [BCEVB]_. In brief, one downloads and installs VirtualBox. The BCE VM is available in the form of a pre-built OVA file that can be imported via the GUI menu in VirtualBox. Start the virtual machine by clicking on the tab for the VM and then clicking "Start" at the top.
+**If you’re using VirtualBox**, the full instructions for setting up a BCE VM on Virtualbox are available on our project website [BCE-VB]_. In brief, one downloads and installs VirtualBox. The BCE VM is available in the form of a pre-built OVA file that can be imported via the GUI menu in VirtualBox. Start the virtual machine by clicking on the tab for the VM and then clicking "Start" at the top.
 After performing these fairly accessible steps, a user will have a machine that has all the software installed as part of BCE, including IPython and useful Python packages and R, RStudio and useful R
 packages.
 
@@ -536,7 +525,7 @@ Conclusion
 
 Keep in mind that *you* are now at the cutting edge. Extra care should be taken to make your tooling accessible to your collaborators. Where possible, use tools that your collaborators already know - shell, scripting, package management, etc.
 
-That said, technologies that allow efficient usage of available hardware stand to provide substantial savings, and potential for re-use by researchers with less direct access to capital. [e.g., Docker, aggregation of cloud VM providers]
+That said, technologies that allow efficient usage of available hardware stand to provide substantial savings, and potential for re-use by researchers with less direct access to capital (e.g., Docker, aggregation of cloud VM providers).
 
 Let’s be intentional.
 Be transparent/explicit about our choices/assumptions.
@@ -559,11 +548,21 @@ References
    # A more proper reference
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
-.. [BCEVB] http://collaboratool.berkeley.edu/using-virtualbox.html
+.. [BCE-VB] http://collaboratool.berkeley.edu/using-virtualbox.html
+.. [BCE-AMI]
 .. [HPC] FIX (in Zotero): Performance Evaluation of Container-based Virtualization for 
    High Performance Computing Environments
    http://www.inf.pucrs.br/~ferreto/resources/pdp2013.pdf
-
+.. [1g]  http://live.osgeo.org
+.. [2g]  http://www.osgeo.org/content/foundation/about.html
+.. [3g]  http://en.wikipedia.org/wiki/GIS_Live_DVD
+.. [4g] Diffusion of Innovation; Rogers et al 1962
+    http://en.wikipedia.org/wiki/Diffusion_of_Innovations
+.. [5g]  http://wiki.osgeo.org/wiki/Live_GIS_History
+.. [6g]  http://svn.osgeo.org/osgeo/livedvd
+.. [7g]  http://wiki.osgeo.org/wiki/Live_GIS_Add_Project
+.. [8g]  http://wiki.osgeo.org/wiki/Live_GIS_Translate
+.. [9g]  http://wiki.osgeo.org/wiki/Live_GIS_Disc_Testing
 
 References to use/potentially cite
 ----------------------------------
@@ -573,3 +572,36 @@ http://on-demand.gputechconf.com/gtc/2013/presentations/S3214-Enabling-HPC-Workl
 
 
 [a]Copied from https://github.com/scipy-conference/scipy_proceedings/pull/98#issuecomment-46784086
+
+Useful Glossary of VM Image terms (e.g. EC2 AMI vs Azure VHD, etc)
+http://docs.openstack.org/image-guide/content/ch_introduction.html
+
+
+
+
+ReST version of the table above
+-------------------------------
+
+.. table:: Tools we think you should know about. 
+   :label:`tools`
+   :class: w
+
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   | Generate OS image for multiple platforms                                        | build-time     | blob distribution                                                                     | Packer                              |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   | Apply configurations in a repeatable fashion                                    | build-time     | repeatability                                                                         | Shell Script, Puppet, Ansible, Chef |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   | Manage OS image modifications                                                   | build-time     | image “trees”                                                                         | Docker                              |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   | Enable a different OS for end-user across a variety of “host” OSes              | run-time       | control group / host platform independence / dependency isolation / security (VMWare) | VirtualBox, VMWare                  |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   | Enable light-weight custom environment (instead of heavy-weight virtualization) | run-time       | performance                                                                           | Docker, LXC                         |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   |                                                                                 | run-time       | local cluster                                                                         | institutional cluster               |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   |                                                                                 | run-time       | public cloud                                                                          | AWS, Azure, GCE                     |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   |                                                                                 | run-time       | private or hybrid cloud                                                               | OpenStack (and others)              |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   |                                                                                 | (out of scope) | community / ecosystem / governance                                                    | Docker                              |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
