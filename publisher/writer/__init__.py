@@ -298,6 +298,10 @@ class Translator(LaTeXTranslator):
                                                          filename))
 
     def visit_footnote(self, node):
+        # Handle case where footnote consists only of math
+        if len(node.astext().split()) < 2:
+            node.append(nodes.label(text='_abcdefghijklmno_'))
+
         # Work-around for a bug in docutils where
         # "%" is prepended to footnote text
         LaTeXTranslator.visit_footnote(self, node)
@@ -367,7 +371,8 @@ class Translator(LaTeXTranslator):
                                            linenostart=linenostart,
                                            verboptions=extra_opts))
 
-            self.out.append(tex)
+            self.out.append("\\vspace{1mm}\n" + tex +
+                            "\\vspace{1mm}\n")
             raise nodes.SkipNode
         else:
             LaTeXTranslator.visit_literal_block(self, node)
