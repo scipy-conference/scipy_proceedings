@@ -27,7 +27,7 @@ Berkeley D-Lab, Statistical Computing Facility (SCF), and Berkeley Research
 Computing (BRC) have been supporting such use-cases, and have developed strategies that reduce the pain points that arise.
 We begin by describing the variety of concrete training and research use-cases in which
 our strategy might increase productivity, reuse, and reproducibility.
-We then introduce available tools for the “recipe-based” creation of computational environments, attempting to demystify and provide a framework for thinking about *devops* tools (along with explaining what “devops” means!). These are somewhat widely used, but in an ad hoc manner.
+We then introduce available tools for the “recipe-based” creation of computational environments, attempting to demystify and provide a framework for thinking about *DevOps* tools (along with explaining what “DevOps” means!). These are somewhat widely used, but in an ad hoc manner.
 We proceed to provide a brief review of existing projects, and how they are using these technologies.
 In particular, we examine the success of [OSGeo-Live]_ in providing a standard environment for spatial data projects, both for script and software development, and for researcher evaluation of new tools.
 Given our thorough evaluation of a breadth of virtualization technologies and
@@ -54,7 +54,7 @@ A number of solutions have also been developed to allow for multiple *Python* en
 
 Prosaic examples include the toolchain required to use nbconvert (very much parallel to the above). Or, for example, ensuring that a properly configured database is available.
 
-The afore-mentioned “tools from industry” – generally referred to as *devops* tools – are directed at solving this larger problem. Unfortunately, the variety and complexity of tools match the variety and complexity of the problem space, and the target space for most of them was *not* scientific computing. Thus, before discussing available tooling, we first lay out a set of issues relevant to supporting scientific computing.
+The aforementioned “tools from industry” – generally referred to as *DevOps* tools – are directed at solving this larger problem. Unfortunately, the variety and complexity of tools match the variety and complexity of the problem space, and the target space for most of them was *not* scientific computing. Thus, before discussing available tooling, we first lay out a set of issues relevant to supporting scientific computing.
 
 Issues
 ------
@@ -93,7 +93,7 @@ For administration
 
 The solution of using standardized virtual environments, or accounts on a shared server for instruction is not new. At UC Berkeley, the D-Lab has supported courses and short trainings with these technologies. Similarly, the Statistical Computing Facility supports an instructional lab and cloud-based VMs for some courses, and computer science courses often provide a VM (often provisioned by a graduate student assistant). In each and every case, multiple technical challenges are common. These technical glitches can delay or reduce the quality of instruction as compared to an environment that students are already familiar with. It is also a drag on the time of those supporting the course – time that could be better directed at course content!
 
-However, if we had a standard environment, developed in an open-source fashion, many of these problems rapidly diminish, and likely reverse to net *savings* in time wasted. The more broadly an environment is adopted across campus, the more familiar it will be to all students. Technical glitches can be tracked or resolved by a community of competent contributors, allowing course instructors to simply use a well-polished end product, while reducing the complexity of instructions for students to set up course-specific software. These environments can also be tuned in ways that would be beyond the scope of what would be worth doing for an individual course - for example simple optimizations to increase the efficiency of numeric computations or network bandwidth for remote desktops.
+However, if we had a standard environment, developed in an open-source fashion, many of these problems rapidly diminish, and likely reverse to net *savings* in time wasted. The more broadly an environment is adopted across campus, the more familiar it will be to all students. Technical glitches can be tracked or resolved by a community of competent contributors, allowing course instructors to simply use a well-polished end product, while reducing the complexity of instructions for students to set up course-specific software. These environments can also be tuned in ways that would be beyond the scope of what would be worth doing for an individual course – for example simple optimizations to increase the efficiency of numeric computations or network bandwidth for remote desktops.
 
 It is at this point that our use case starts to sound like the case in which product developers are working together to deploy software on a production server, while maintaining a useful development environment on their own machines, testing servers, and so on. However, going forwards, we will suggest that these tools be largely the domain of administrator-contributors to a useful common environment. Technically skilled students, professors and researchers can continue to use the tools they are familiar with, such as the Ubuntu package manager, pip, shell scripts, and so on. More will be said about tooling below.
 
@@ -125,11 +125,12 @@ Problem 1: The quote at the beginning of this paper represents the first barrier
 
 Future Solution 1: Eliminate *dependency hell*. Provide a method to ensure that all participants can successfully complete the installation with a fixed number of well-known steps across all platforms within a fixed amount of time. We *cannot* control the base environment that users will have on their laptop or workstation, nor do we wish to! The BCE platform provides a scalable and quantifiable approach to ensuring all users have the necessary dependencies to engage with specific code or content.
 
-Current status: BCE image is [BCE-VB](http://putlinkhere) and is also available as an Amazon Machine Image (AMI) [BCE-AMI]_.
+Current status: BCE image is [BCE-VB]_ and is also available as an Amazon Machine Image (AMI) [BCE-AMI]_.
 
 Enabling tools:
-- Packer
-- VirtualBox, VMWare Fusion/Workstation
+
+* Packer
+* VirtualBox, VMWare Fusion/Workstation
 
 Going beyond the laptop
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -141,8 +142,9 @@ Solution 2: Enable computing *beyond the laptop*. Though a workstation with plen
 Current status:
 
 Enabling tools:
-- Packer
-- VirtualBox, VMWare Fusion/Workstation
+
+* Packer
+* VirtualBox, VMWare Fusion/Workstation
 
 Pleasant parallelization
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -156,8 +158,9 @@ Current status:
 Further development of BCE with the proper enabling tools could provide a way to run in these other environments by allowing you to install additional software components as you wish without relying on cluster administrators for help.
 
 Enabling tools:
-- Packer
-- Docker, LXC
+
+* Packer
+* Docker, LXC
 
 
 Managing cost / maximizing value
@@ -170,8 +173,9 @@ Solution 4: Enable on-demand resizing of resources. The BCE solution works on cl
 Current status:
 
 Enabling tools:
-- Packer
-- EC2 AMI, Azure VHD
+
+* Packer
+* EC2 AMI, Azure VHD
 
 Existing Tools
 --------------
@@ -180,9 +184,32 @@ As previously discussed, the problems outlined above are not unique to scientifi
 
 The tools mentioned in the previous section will now be described in depth to give the reader some insight into the DevOps mindset and the reasons each tool is chosen to enable the possible solutions outlined. Though myriad other similar tools are available (and surely others are emerging), here we describe some of the tools that we’ve evaluated in the context of building the first iteration of BCE. Suggestions for other tools would be very welcome in the form of proofs-of-concept, pull-requests, or existing use cases in the wild.
 
-Table :ref:`tools` provides an overview from the perspective of the
-DevOps/Maintainer person...
+Table :ref:`tools` (XXX - to be relocated once finalized) provides an overview from the perspective of the
+DevOps engineer (i.e., contributor, maintainer, etc.).
 
+.. table:: Tools we think you should know about. 
+   :label:`tools`
+   :class: w
+
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   | Generate OS image for multiple platforms                                        | build-time     | blob distribution                                                                     | Packer                              |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   | Apply configurations in a repeatable fashion                                    | build-time     | repeatability                                                                         | Shell Script, Puppet, Ansible, Chef |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   | Manage OS image modifications                                                   | build-time     | image “trees”                                                                         | Docker                              |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   | Enable a different OS for end-user across a variety of “host” OSes              | run-time       | control group / host platform independence / dependency isolation / security (VMWare) | VirtualBox, VMWare                  |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   | Enable light-weight custom environment (instead of heavy-weight virtualization) | run-time       | performance                                                                           | Docker, LXC                         |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   |                                                                                 | run-time       | local cluster                                                                         | institutional cluster               |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   |                                                                                 | run-time       | public cloud                                                                          | AWS, Azure, GCE                     |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   |                                                                                 | run-time       | private or hybrid cloud                                                               | OpenStack (and others)              |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
+   |                                                                                 | (out of scope) | community / ecosystem / governance                                                    | Docker                              |
+   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
 
 Virtual machine images (VMs)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -194,8 +221,6 @@ Systems like EC2 only provide virtual machines (no access to “bare metal”).
 
 
 While specialized GPU hardware is available for cloud deployment, commodity GPUs will generally not work with fully virtualized systems. For example, VirtualBox presents a virtual GPU with at most 128MB of video memory. However, providing better access for containers (e.g., in Docker) is an active research topic [HPC]_.
-
-
 
 While such systems often allow for easy snapshotting, it may be hard to capture exactly what happened – especially changes and configuration that was made “by hand.”
 
@@ -209,35 +234,34 @@ Packer (currently used)
 Docker (used in a non-useful way previously, potentially useful in the future)
 Provisioning / orchestration - Ansible (mention chef, puppet)
 
-XXX - Is Hashdist here or in exsting projects? Conda goes here also. Why not conda? Still hard to just install a list of pip requirements
+Hashdist here? Conda goes here also. Why not conda? Still hard to just install a list of pip requirements
 
 It is currently common for individuals to *only* distribute a script, though the reasons for this are somewhat unclear (particularly given the many free services for distributing these potentially large binary files).
 
 Example environments
 --------------------
 
-Most environments you’ll find for a book or a course are either an image on a cloud service (usually Amazon EC2) *or* a VM (likely for VirtualBox, sometimes also requiring the use of Vagrant).
-
-From [Mining the Social Web, a Chef+Vagrant solution](https://rawgit.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition/master/ipynb/html/_Appendix%20A%20-%20Virtual%20Machine%20Experience.html)
-
-From Matt Gee (of [DSSG](http://dssg.io): We've been trying a number of
-different approaches to the standard development environment. For this year's
-fellowship we went with a Chef cookbook + OpsWorks. This works for provisioning
-our core resources. However, for weekend learn-a-thons and more portable VM.
-We've tried our own VM using docker and well as some hosted boxes like yhat's
-new Science Box. We should compare notes.
-
-"Collaboratool" was conceived as a project for building, integrating, and
+At UC Berkeley, we conceived a project for building, integrating, and
 deploying tools that support portable, reproducible data science.  We started
 thinking about how to deploy virtualized containers that provide things like
-IPython notebooks through the web. We were very inspired by
-[jiffylab](http://github.com/ptone/jiffylab). From there, we decided that it
+IPython notebooks through the web. We were very initially very inspired by
+jiffylab [jl]_. However, that approach relies on fairly cutting-edge software (that is therefore sometimes broken), and utilized a model that was confusing to students. In the end, it resulted in a net increase in complexity. From there, we decided that it
 made more sense to focus on a complete virtual environment, which is easy to
-deploy in a variety of contexts, which is what you'll find here now.
+deploy in a variety of contexts a variety of other projects have developed similar products, some of which we review here.
+
+Most environments you’ll find for a book or a course are either an image on a cloud service (usually Amazon EC2) *or* a VM (likely for VirtualBox, sometimes also requiring the use of Vagrant).
+
+Mining the Social Web provides a VM built and managed with Chef+Vagrant [MSW]_. 
+
+The Data Science for Social Good summer fellows program [DSSG]_ has the need to efficiently provide a group of graduate and undergraduate students with server resources. They've been trying a number of
+different approaches to the standard development environment. For this year's
+fellowship they used a Chef cookbook with OpsWorks (an Amazon product that supports management of many servers on their cloud system). This works for provisioning
+their core resources for the summer fellows program. However, for weekend learn-a-thons and more portable VMs, they've tried their own VM using docker and well as some hosted boxes like yhat's
+new “Science Box.”
 
 Sage (+ Cloud)?
 
-VM from Philip.
+Data Science Toolbox [DSTb]_ and Data Science Toolkit [DSTk]_.
 
 Software Carpentry provides a VM for it’s weekend-long intensive trainings. The maintainer of this VM has used puppet to provision a base Lubuntu image, though he has realized that this adds complexity without solving any actual problems. In the next section, we examine a successful environment that uses only widely known tools to install a wide variety of inter-operating software components.
 
@@ -246,22 +270,20 @@ It is worth noting that while indexes are available for a variety of images (e.g
 OSGeo-Live: A Successful Common Environment
 -------------------------------------------
 
-The OSGeo-Live virtual machine, both a sophisticated compute environment, and synergistic community process, is an example of just the kind of build described above. Eschewing elaborate devops tools, OSGeo-Live is instead configured using simple and modular combinations of Python, Perl and shell scripts, along with clear install conventions by example. 
+The OSGeo-Live virtual machine is an example of a comprehensive geospatial compute environment, and a synergistic community process. It is a relatively mature project that  provides a successful example of solving many of the problems described above. Eschewing elaborate DevOps tools, OSGeo-Live is instead configured using simple and modular combinations of Python, Perl and shell scripts, along with clear install conventions by example. 
 
-'''
-OSGeo-Live is a self-contained bootable DVD, USB thumb drive or Virtual
-Machine based on Xubuntu, that allows you to try a wide variety of open source
-geospatial software without installing anything. It is composed entirely of free
-software, allowing it to be freely distributed, duplicated and passed around.
 
-It provides pre-configured applications for a range of geospatial use cases,
-including storage, publishing, viewing, analysis and manipulation of data. It
-also contains sample datasets and documentation. [1g]_
-'''
+  OSGeo-Live is a self-contained bootable DVD, USB thumb drive or Virtual
+  Machine based on Xubuntu, that allows you to try a wide variety of open source
+  geospatial software without installing anything. It is composed entirely of free
+  software, allowing it to be freely distributed, duplicated and passed around.
 
-OSGeo-Live is a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [2g]_. In 2006 there existed several large and growing open-source geospatial software projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and later, QGis.  At roughly the same time, OSGeo-Live began as a smaller open project based in Australia that sought to build an "easy to try and use" software environment for these and other spatial data applications. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent Live project committed itself to the larger OSGeo Foundation structure in its second year. OSGeo-Live is not the only attempt at building such an environment [3g]_
+  It provides pre-configured applications for a range of geospatial use cases,
+  including storage, publishing, viewing, analysis and manipulation of data. It
+  also contains sample datasets and documentation. [1g]_
 
-More than fifty (50) open-source projects now actively maintain and improve their own
+
+OSGeo-Live is a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [2g]_. In 2006 there existed several large and growing open-source geospatial software projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and later, QGis.  At roughly the same time, OSGeo-Live began as a smaller open project based in Australia that sought to build an "easy to try and use" software environment for these and other spatial data applications. Initially, shell scripts were produced to install five core geospatial packages. These examples provided clear guides to the projects by that were invited and ultimately contributed packages to the project. Many of these later contributors spoke English as a second language, further highlighting the importance of clear, working code examples. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent Live project committed itself to the larger OSGeo Foundation structure in its second year. OSGeo-Live is not the only attempt at building such an environment [3g]_, but it is a highly successful one. More than fifty (50) open-source projects now contribute by actively maintaining and improving their own
 install scripts, examples and documentation.
 
 After long years of "tepid" progress and iteration, a combination of technical stability,
@@ -292,115 +314,76 @@ can be installed as-needed on a generic base.
 Tool Sets
 ^^^^^^^^^
 
-It cannot be overstated that, a key component to the success of the overall project has been the availability of widely-known and reliable tools, to developers from all parts of the world and in all major spoken languages. It is also important to note that rather than require formal installation packages ".deb" for each project, OSGeo-Live chose to use a simple install script format, one per installed project. This choice proved crucial in the earliest stages, as an outside open-source project evaluating participation in the Live could get started with fewer barriers to entry, and then add rigor and features later. Almost by definition, participating open-source projects had install scripts already built for Linux which could be readily adapted to OSGeo-Live install conventions. By providing ample examples on OSGeo-Live of install scripts in major deployment contexts, for both applications and server processes, and clear guidelines for installation conventions, an open-source project could almost immediately develop and iterate their own install scripts in a straightforward way.
+It cannot be overstated that a key component to the success of the overall project has been the availability of widely-known and reliable tools, to developers from all parts of the world and in all major spoken languages. It is also important to note that rather than require formal installation packages ".deb" for each project, OSGeo-Live chose to use a simple install script format, one per installed project. This choice proved crucial in the earliest stages, as an outside open-source project evaluating participation in the Live ISO could get started with fewer barriers to entry, and then add rigor and features later. Participating open-source projects had install scripts already built for Linux which could be readily adapted to OSGeo-Live install conventions. By providing ample examples on OSGeo-Live of install scripts in major deployment contexts, for both applications and server processes, and clear guidelines for installation conventions, an open-source project could almost immediately develop and iterate their own install scripts in a straightforward way, with the flexibility to use the tools they were already using, such as shell, Perl, or Python. Scripts may call package managers, and generally have few
+constraints (apart from conventions like keeping recipes contained to a particular directory). The project also maintains packages that support broader *kinds* of packages, such as web-based applications. In this case, OSGeo-Live provides a standard configuration for apache, WSGI, and other components. A standard layout is provided for the web
+directory of projects that rely on this core. Fully working examples available for each "kind" of project. As a result, there is very little conflict among packages that share common resources, such as WSGI apps. Though there are some concerns that have to be explicitly managed, for example port numbers do have to be tracked globally.
 
-**detailed build directions here?**available in svn, verbose**
-Particular example: web, including apache, WSGI, etc. Standard layout of web
-directory. Fully working examples available for each "kind" of project.
-**very little conflict among WSGI apps, port numbers do have to be tracked globally**
+All recipes are currently maintained in a common subversion repo, using standardized asset hierarchies, including installation scripts [6g]_. 
+An OSGeo-Live specific report is maintained on the project trac ticketing system that collects issues across packages [10g]_.
+Following are the contents of the full *gisvm* package that is used to build for the OSGeo-Live ISO, as well as provide the relevant web materials on the OSGeo website::
 
-Subversion repo -- asset hierarchy -- individual install scripts -- Live build
-scripts trac-subversion   [6g]_
+  bin/
+       /main.sh # Call all the other scripts
+         /setup.sh # install core files and config
+         /install_project1.sh # includes downloads
+         /install_project2.sh
+         /install_desktop.sh
+         /install_main_docs.sh
+         /setdown.sh
 
-(see screenshots)
-trac ticketing system  http://trac.osgeo.org/osgeo/report/10
+         /build_iso.sh
+           /load_mac_installers.sh
+           /load_win_installers.sh
 
-Directory gisvm - a detailed layout
+       bootstrap.sh
+       inchroot.sh
+       package.sh
+       sync_livedvd.sh
 
-File Structure
-==============
+  app-conf/
+       /project1/ # used by install_project1.sh
+       /project2/ # used by install_project2.sh
 
-bin/
-     /main.sh # Call all the other scripts
-       /setup.sh # Download, and install all core files and set up config files
-       /install_project1.sh # Download, and install all files for project1
-       /install_project2.sh # Download, and install all files for project2
-       /install_desktop.sh
-       /install_main_docs.sh
-       /setdown.sh
+  app-data/ # data & help files
+       /project1/
+       /project2/
 
-       /build_iso.sh
-         /load_mac_installers.sh
-         /load_win_installers.sh
+  desktop-conf/ # desktop background, etc.
 
-     bootstrap.sh
-     inchroot.sh
-     package.sh
-     sync_livedvd.sh
+  doc/
+       /index_pre.html  # header for summary page
+       /index_post.html # footer for summary page
+       /arramagong.css
+       /jquery.js
+       /template_definition.html
+       /template_description.html
+       /template_licence.html
 
-app-conf/
-     /project1/   # config files used by install_package1.sh script
-     /project2/   # config files used by install_package2.sh script
+       /descriptions/
+         /package_definition.html  # short summary
+         /package_description.html # quick-start
 
+  download/ # the download server webpage
 
-app-data/
-     /project1/   # data & help files used by package1
-     /project2/   # data & help files used by package2
-
-desktop-conf/     # data files and images used for the main desktop background
-     
-doc/
-     /index_pre.html            # header for summary help page
-     /index_post.html           # footer for summary help page
-     /arramagong.css
-     /jquery.js
-     /template_definition.html  # example of project_definition.html file
-     /template_description.html # example of project_description.html file
-     /template_licence.html     # incorportate into project_description.html???
-
-     /descriptions/
-       /package_definition.html    # short (1 sentence) summary of installed pkg 
-       /package_description.html   # getting started instructions for the LiveDVD user
-
-download/       # copy of the livedvd project's download server webpage
-
-sources.list.d/ # Supplimentary package repositories for /etc/apt/sources.list
-
-
+  sources.list.d/ # Supplementary repositories
 
 Community Awareness
 ^^^^^^^^^^^^^^^^^^^
 
-Underlying processes of adoption of new technology - initial awareness, trialability, adoption and iteration - are well-known [4g]_. OSGeo-Live intentionally incorporates targeted outreach, professional graphic design and “easy to try” structure to build participation from both developers and end-users.
+Underlying processes of adoption of new technology – initial awareness, trialability, adoption and iteration – are well-known [4g]_. OSGeo-Live intentionally incorporates targeted outreach, professional graphic design and “easy to try” structure to build participation from both developers and end-users.
 
 An original project design goal was to provide tools to those doing geospatial fieldwork with limited resources around the globe, and who often lack advanced programming and administration skills. (in a somewhat fortunate coincidence, the original qualities of a software environment suitable for low-spec hardware also makes for an efficient VM implementation)
 
 Several years into the project, funding was established via a grant from the Australian
 government to build documentation on applications in the Overview and Quickstart formats used today, to professional graphic design standards, and in a workflow such that many human language versions could be maintained and improved efficiently, specifically to support local field work. That documentation format consists of a single page for every application, (Overview) and a second page with step-by-step instructions for a capable reader but no previous exposure to the software (Quickstart). Each of these two pages for every included project is then translated into various spoken languages, primarily by volunteers. Much later, a graph of "percentage complete" for each human language group was added, which essentially makes translation into a sort of competition. This modest “gamification” of translation has proven very successful. Note that the initial effort to build standardized documentation required paid professionals. It seems unlikely that the documentation would have been successful based on only ad-hoc volunteer efforts.
 
-The Open Source Geospatial Foundation (OSGeo) itself is a hub for multiple ecosystems of standards and language groups of projects to interoperate synergistically. OSGeo project status raises awareness of one project to other projects. Users around the world are encouraged to record on a common wiki page, an event at which the OSGeo-Live was presented. [5g]_
-
-(mention concepts of the transfer of tech, e.g., military technology to environmental applications?)
+The Open Source Geospatial Foundation (OSGeo) itself is a hub for multiple ecosystems of standards and language groups of projects to interoperate synergistically. OSGeo project status raises awareness of one project to other projects. Users around the world are encouraged to keep a record of events where OSGeo-Live was presented on a common wiki page [5g]_.  The project has moreover facilitated collaboration across developer communities. For example, we have seen productive application of software developed by the U.S. military to environmental applications.
 
 
 Steps to Contribute
 ^^^^^^^^^^^^^^^^^^^
 
-All build scripts are organized in the open, in source control [6g]_. A new contributors FAQ is maintained via wiki [7g]_ for software projects, and for translation [8g]_. A quality/testing page was used, but has been discontinued [9g]_.
-
-
-
-**misc cut text**
-
-
-missing title
--------------
-Q. What are the steps that established credibility to get projects contributing to
-the distribution. 
-Q. Initially, just shell scripts to install five core / important packages (XXX - what were they and why?). 
-
-Reached out to 50 projects, more outside of U.S. than in, including many non-english (as a primary language), esp. from Europe. The social component of building the community was not necessarily explicit or even shared or known to all contributors (provable?).
-
-It consists of a choice of basic tools that are widely known to free software
-developers: shell, Perl, or Python. Scripts may call package managers, few
-constraints (e.g., keep recipes contained to a particular directory). Core,
-customizable scripts designed to bootstrap new recipes.
-
-Particular example: web, including apache, WSGI, etc. Standard layout of web
-directory. Fully working examples available for each "kind" of project.
-
-<--  end of osgeo section -->
-
+All build scripts are organized in the open, in source control [6g]_. A new contributors FAQ is maintained via wiki [7g]_ for software projects, and for translation [8g]_. A quality/testing page was used, but has been discontinued [9g]_. At it’s foundation, the OSGeo-Live project is quite similar to the “old way” of doing system administration (i.e., before we had the current plethora of DevOps tools available). The primary difference is the particular attention to documenting each and every step, and that standard approaches are encouraged across the project. This low barrier to entry (allowing contributing projects to use skills they likely already have), combined with guidelines to ensure interoperability have led to OSGeo-Live becoming a standard way to evaluate and install software in the geospatial community.
 
 BCE: The Berkeley Common Environment
 ------------------------------------
@@ -466,7 +449,7 @@ go to "Applications->Programming->RStudio".
 * The VM usable on user machines with minimal dependencies (e.g., either
   VirtualBox or VMware) and minimal setup, and with clear instructions for
   users on setup and on getting data/files into and out of the VM
-* Agreement on minimal hardware requirements on the host machine - do we
+* Agreement on minimal hardware requirements on the host machine – do we
   support 32 bit, any minimum RAM required?
 * Shared folders (EBS on AWS), or other tech to make it possible to separate
   data from VM.
@@ -479,7 +462,7 @@ The VM can be halted just like you would halt linux running directly on your mac
 for the VM and clicking "Start" as you did above. Detailed instructions are provided for 
 Sharing folders and copying files between your computer and the VM, and the various necessary configuration steps to make this work have already been performed.
 
-**If you’re using a BCE image on EC2**: (XXX - make a paragraph)
+**If you’re using a BCE image on EC2**:
 
 * Go to [EC2 management console](http://console.aws.amazon.com) and choose the
   US-West-2 (Oregon) region, as that is where we have posted the BCE AMI.
@@ -511,7 +494,7 @@ BCE provides:
 
 You should generally not need to build the binary VM for BCE for a given semester. However, you may wish to customize or extend BCE. The best way to do this is by simply writing a shell script that will install requirements properly in the context of the BCE (for a complex example, see our bootstrap-bce.sh script in the provisioning directory of the master branch of the repository [XXX reference?].
 
-Provisioning is fully scripted - if the appropriate software is installed,
+Provisioning is fully scripted – if the appropriate software is installed,
 the recipe should run reliably.
 The provisioning details used to create a given VM available to users and
 with clear instructions on how to use and modify the provisioning.
@@ -523,17 +506,17 @@ While we have experimented with Docker, Vagrant, and Ansible for setting up the 
 Conclusion
 ----------
 
-Keep in mind that *you* are now at the cutting edge. Extra care should be taken to make your tooling accessible to your collaborators. Where possible, use tools that your collaborators already know - shell, scripting, package management, etc.
+Keep in mind that *you* are now at the cutting edge. Extra care should be taken to make your tooling accessible to your collaborators. Where possible, use tools that your collaborators already know – shell, scripting, package management, etc.
 
 That said, technologies that allow efficient usage of available hardware stand to provide substantial savings, and potential for re-use by researchers with less direct access to capital (e.g., Docker, aggregation of cloud VM providers).
 
 Let’s be intentional.
 Be transparent/explicit about our choices/assumptions.
-That *doesn’t* have to be technical - a simple text file or even a PDF can provide ample explanation that a human can understand.
+That *doesn’t* have to be technical – a simple text file or even a PDF can provide ample explanation that a human can understand.
 Be willing to make strong recommendations based on what we are actually using (eat own dogfood)
 Be willing to adopt/adapt/change/throw stuff out (have an exit strategy)
 
-XXX - Recipe for setting up sicpy_proceedings build system on Ubuntu 14.04 (or BCE proper?).
+XXX – Recipe for setting up sicpy_proceedings build system on Ubuntu 14.04 (or BCE proper?).
 
 Important Part
 --------------
@@ -553,6 +536,10 @@ References
 .. [HPC] FIX (in Zotero): Performance Evaluation of Container-based Virtualization for 
    High Performance Computing Environments
    http://www.inf.pucrs.br/~ferreto/resources/pdp2013.pdf
+.. [jl] http://github.com/ptone/jiffylab
+.. [DSTb] http://datasciencetoolbox.org/
+.. [DSTk] http://www.datasciencetoolkit.org/
+.. [DSSG] http://dssg.io
 .. [1g]  http://live.osgeo.org
 .. [2g]  http://www.osgeo.org/content/foundation/about.html
 .. [3g]  http://en.wikipedia.org/wiki/GIS_Live_DVD
@@ -563,6 +550,8 @@ References
 .. [7g]  http://wiki.osgeo.org/wiki/Live_GIS_Add_Project
 .. [8g]  http://wiki.osgeo.org/wiki/Live_GIS_Translate
 .. [9g]  http://wiki.osgeo.org/wiki/Live_GIS_Disc_Testing
+.. [10g] http://trac.osgeo.org/osgeo/report/10
+.. [MSW] https://rawgit.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition/master/ipynb/html/_Appendix%20A%20-%20Virtual%20Machine%20Experience.html 
 
 References to use/potentially cite
 ----------------------------------
@@ -575,33 +564,3 @@ http://on-demand.gputechconf.com/gtc/2013/presentations/S3214-Enabling-HPC-Workl
 
 Useful Glossary of VM Image terms (e.g. EC2 AMI vs Azure VHD, etc)
 http://docs.openstack.org/image-guide/content/ch_introduction.html
-
-
-
-
-ReST version of the table above
--------------------------------
-
-.. table:: Tools we think you should know about. 
-   :label:`tools`
-   :class: w
-
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   | Generate OS image for multiple platforms                                        | build-time     | blob distribution                                                                     | Packer                              |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   | Apply configurations in a repeatable fashion                                    | build-time     | repeatability                                                                         | Shell Script, Puppet, Ansible, Chef |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   | Manage OS image modifications                                                   | build-time     | image “trees”                                                                         | Docker                              |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   | Enable a different OS for end-user across a variety of “host” OSes              | run-time       | control group / host platform independence / dependency isolation / security (VMWare) | VirtualBox, VMWare                  |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   | Enable light-weight custom environment (instead of heavy-weight virtualization) | run-time       | performance                                                                           | Docker, LXC                         |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   |                                                                                 | run-time       | local cluster                                                                         | institutional cluster               |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   |                                                                                 | run-time       | public cloud                                                                          | AWS, Azure, GCE                     |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   |                                                                                 | run-time       | private or hybrid cloud                                                               | OpenStack (and others)              |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   |                                                                                 | (out of scope) | community / ecosystem / governance                                                    | Docker                              |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
