@@ -46,6 +46,8 @@ class Translator(LaTeXTranslator):
         self.figure_alignment = 'left'
         self.table_type = 'table'
 
+        self.active_table.set_table_style('booktabs')
+
     def visit_docinfo(self, node):
         pass
 
@@ -147,6 +149,14 @@ class Translator(LaTeXTranslator):
 
         ## Add copyright
 
+        # If things went spectacularly wrong, we could not even parse author
+        # info.  Just fill in some dummy info so that we can see the error
+        # messages in the resulting PDF.
+        if len(self.author_names) == 0:
+            self.author_names = ['John Doe']
+            self.author_emails = ['john@doe.com']
+            authors = ['']
+
         copyright_holder = self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.')
         author_notes = r'''%%
 
@@ -235,7 +245,10 @@ class Translator(LaTeXTranslator):
             self.non_breaking_paragraph = False
 
         else:
-            self.out.append('\n\n')
+            if self.active_table.is_open():
+                self.out.append('\n')
+            else:
+                self.out.append('\n\n')
 
     def depart_paragraph(self, node):
         if 'keywords' in node['classes']:
@@ -285,6 +298,10 @@ class Translator(LaTeXTranslator):
                                                          filename))
 
     def visit_footnote(self, node):
+        # Handle case where footnote consists only of math
+        if len(node.astext().split()) < 2:
+            node.append(nodes.label(text='_abcdefghijklmno_'))
+
         # Work-around for a bug in docutils where
         # "%" is prepended to footnote text
         LaTeXTranslator.visit_footnote(self, node)
@@ -315,12 +332,17 @@ class Translator(LaTeXTranslator):
         # Store table caption locally and then remove it
         # from the table so that docutils doesn't render it
         # (in the wrong place)
-        self.table_caption = self.active_table.caption
-        self.active_table.caption = []
+        if self.active_table.caption:
+            self.table_caption = self.active_table.caption
+            self.active_table.caption = []
 
         opening = self.active_table.get_opening()
-        opening = opening.replace(r'{\linewidth}', r'{0.8\linewidth}')
+        opening = opening.replace('linewidth', 'tablewidth')
         self.active_table.get_opening = lambda: opening
+
+        # For some reason, docutils want to process longtable headers twice.  I
+        # don't trust this fix entirely, but it does the trick for now.
+        self.active_table.need_recurse = lambda: False
 
         LaTeXTranslator.visit_thead(self, node)
 
@@ -349,7 +371,8 @@ class Translator(LaTeXTranslator):
                                            linenostart=linenostart,
                                            verboptions=extra_opts))
 
-            self.out.append(tex)
+            self.out.append("\\vspace{1mm}\n" + tex +
+                            "\\vspace{1mm}\n")
             raise nodes.SkipNode
         else:
             LaTeXTranslator.visit_literal_block(self, node)
