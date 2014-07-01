@@ -80,7 +80,7 @@ sensor is required that can collect spatially diverse data. Radars emit a
 spatially discrete pulse of radiation with a particular beamwidth and pulse length.
 A gated receiver detects the backscattered signal and calculates a number
 of measurements based on the radar spectrum (the power as a function of phase delay
-which is due to the motion of the scatting medium relative to the antenna).
+which is due to the motion of the scattering medium relative to the antenna).
 These moments include radar reflectivity factor :math:`Z_e`, radial velocity
 of the scattering medium :math:`v_r` and spectrum width :math:`w`. Polarimetric radars transmit
 pulses with the electric field vector horizontal to the earth's surface as well
@@ -135,8 +135,8 @@ For for mobile radar the platform's motion must also be described in the file.
 Py-ART takes a common data model approach: Carefully design the data containers and
 mandate that functions and methods accept the container as an argument and return
 the same data structure. The common data model for radar data in Py-ART is the
-Radar object which stores data and metadata in Python dictionaries in classes attributes.
-Data is stored in a NumPy arrays in the 'data' key of the dictionary. For example:
+Radar class which stores data and metadata in Python dictionaries in classes attributes.
+Data is stored in a NumPy array in the 'data' key of the dictionary. For example:
 
 
 .. code-block:: python
@@ -275,9 +275,9 @@ gates within a radius of influence are interpolated using the weighting function
 
 where :math:`r` is the distance from the grid point and :math:`r_{infl}` is the
 search radius of influence. A brute force method for performing this mapping would
-be to calculated the distance from each Cartesian point to each radar gates to find those within
+be to calculate the distance from each Cartesian point to each radar gate to find those within
 the radius of influence, a method which scales as :math:`n * m`
-where :math:`n` is the number of point in the grid and :math:`m` the number of
+where :math:`n` is the number of points in the grid and :math:`m` the number of
 gates in the radar volume. With a typical grid being
 200 by 200 by 37 points and a modern radar having on the order of 8000 time
 samples and 800 range gates this quickly becomes intractable. A better method is to
@@ -312,7 +312,7 @@ Again, as with the Radar object Py-ART has a menu of available routines to visua
 data contained in Grid objects as well as an input output layer that can inject CF-compliant
 netCDF grids and write Grid object out to a CF-complaint file for future analysis and distribution.
 
-For example figure :ref:`C-Band only` shows a slice thought mapped reflectivity
+For example figure :ref:`C-Band only` shows a slice through mapped reflectivity
 from the ARM C-SAPR at 500 m and cross sections at 36.5 N degrees latitude and
 -97.65 E longitude.
 
@@ -449,7 +449,7 @@ X-Band radars can resolve finer details than a single C-Band radar. More
 importantly, finer details exists. The paper also presents a very simple, image
 processing based technique to take the "morphological finger print" of rainfall
 maps. This technique can be used on both remotely sensed and numerically modeled
-data providing a subjective bases for model assessment.
+data providing a objective basis for model assessment.
 
 
 Acknowledgements
