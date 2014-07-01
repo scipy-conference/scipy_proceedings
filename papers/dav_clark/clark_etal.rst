@@ -8,7 +8,7 @@
 
 :author: Brian Hamlin
 :email: maplabs@light42.com
-:institution: UC Berkeley
+:institution: OSGeo California Chapter
 
 :author: Ryan Lovett
 :email: rylo@berkeley.edu
@@ -48,7 +48,7 @@ Introduction
 
 Every author of a paper in a SciPy proceedings has to deal with the tooling required to test that their paper is building and displays properly. This is not a profoundly difficult problem, but it serves to illustrate the point. In particular, documenting the “solution” to building SciPy papers is unnecessarily complex due to the variety of potential environments (e.g., Mac, Windows, \*nix), and even methods that authors might have used to set up Python on their machine (e.g., Anaconda, Canopy, python.org).
 
-This problem is quite general. In a university setting, students in a class, collaborating researchers, and the provision of reproducible workflows for literally anyone to run the code used for a set of research results. Developers in industry similarly need to ensure code will work in a specified environment (like on production servers!), and a large number of tools have been developed and widely adopted to manage this piece of complexity.
+This problem is quite general. In a university setting, students need to sufficiently reproduce an environment required to run the software a professor has chosen for a course. Collaborating researchers need to reproduce each other’s workflows, and ideally anyone should to run the code used for a set of research results. Developers in industry similarly need to ensure code they develop on their laptop or workstation will work in a specified environment – for example on production servers. This complexity was once managed via the use of monolithic software, but as more and more essential functionality is built out across a variety of systems and languages, the value of spanning multiple tools continues to increase. Whether we are producing research results or web services, it is becoming increasingly essential to set up new languages, libraries, databases, and more. As such, a large number of tools have been developed and widely adopted to manage this complexity.
 
 A number of solutions have also been developed to allow for multiple *Python* environments, including environments that peacefully co-exist on the same computer (e.g., virtualenv, venv, conda, buildout), but our compute environment often pulls in non-trivial tooling outside of Python (though tools like conda *can* pull in non-python tooling). While these tools from the Python community cannot solve all of the problems we describe below, there is no reason that any of them could not be used within the broader approach we’ll describe. Indeed, a tool like conda could ultimately perform *most* of the work – though as we’ll see, it should likely never be able to perform all of that work.
 
@@ -68,7 +68,7 @@ Our primary concern at present for the BCE is educational, particularly introduc
 For instruction
 ^^^^^^^^^^^^^^^
 
-We are entering an era where experimental philosophers want to take serious courses in computationally demanding statistics, sociologists have a need for best-of-breed text analysis, and psychologists wish to pick up scalable machine learning techniques. These students are often willing to work hard, and might sign up for the university courses meant to provide these skills. But while the group that the course was originally designed for (e.g., statistics or computer science students) have a set of *assumed* skills that are necessary to succeed in the class, these skills aren’t taught *anywhere* in the curriculum. After some struggle, students with divergent backgrounds often drop these classes with the sense that they simply can’t obtain these skills. This is not an equitable situation.
+We are entering an era where experimental philosophers want to take serious courses in computationally demanding statistics, sociologists have a need for best-of-breed text analysis, and psychologists wish to pick up scalable machine learning techniques. These students are often willing to work hard, and might sign up for the university courses meant to provide these skills. But while the group that the course was originally designed for (e.g., statistics or computer science students) have a set of *assumed* skills that are necessary to succeed in the class, these skills aren’t taught *anywhere* in the curriculum. After some struggle, students with divergent backgrounds often drop these classes with the sense that they simply can’t obtain these skills. Alternatively, instructors may spend a large amount of time addressing installation and setup issues – taking time away from higher value instruction. This is not an equitable situation.
 
 Given current standards for university courses, it’s difficult to write instructions that would work for any potential student. As mentioned above, students come to a course with many possible environments (i.e., on their laptop or a server). But if a standardized environment is provided, this task becomes much simpler. Written instructions need fewer special cases, and illustrations can be essentially pixel-identical to what students should be seeing on their screen.
 
@@ -83,9 +83,7 @@ In our experience, some students will not be able to run the VM while others hav
 For scientific collaboration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Even among collaborators who are competent in their own domain, crossing disciplines can often demand the use of novel tools – for example, a neuroscientist may be well-versed in Matlab, and wish to collaborate with a policy researcher who’s skilled in SPSS. It’s easy to end up with a collaboration where neither party has any idea how to use the tools of the other.
-
-In other words, I have an environment and you have an environment. I want to do things my way, you want to do them yours. If we wish to work together – either as student and teacher, or as collaborators – this doesn’t really work.
+Even among collaborators who are competent in their own domain, crossing disciplines can often demand the use of novel tools – for example, a neuroscientist may be well-versed in Matlab, and wish to collaborate with a policy researcher who’s skilled in SPSS. It’s easy to end up with a collaboration where neither party has any idea how to use the tools of the other. Perhaps some helpful graduate students can integrate their work using Python, but it will be difficult to get two busy professors with dramatically different backgrounds working in the same computational environment. And critically, we don’t want to disrupt the already productive environments that these researchers are using!
 
 This issue becomes even more pronounced when we begin “collaborating” with other researchers we know nothing about – as when we try to re-use someone elses scientific code, or reproduce their results. Structurally, this situation is not much different than the above-described issues that arise between students and instructors – the publishing researcher clearly has (or should have!) mastery of their tool stack, and they should ideally publish instructions that are as broadly usable as possible.
 
@@ -97,23 +95,23 @@ The solution of using standardized virtual environments, or accounts on a shared
 
 However, if we had a standard environment, developed in an open-source fashion, many of these problems rapidly diminish, and likely reverse to net *savings* in time wasted. The more broadly an environment is adopted across campus, the more familiar it will be to all students. Technical glitches can be tracked or resolved by a community of competent contributors, allowing course instructors to simply use a well-polished end product, while reducing the complexity of instructions for students to set up course-specific software. These environments can also be tuned in ways that would be beyond the scope of what would be worth doing for an individual course - for example simple optimizations to increase the efficiency of numeric computations or network bandwidth for remote desktops.
 
-It is at this point that our use case starts to sound like the case in which product developers are working together to deploy software on a production server, while maintaining a useful development environment on their own machines, testing servers, and so on. However, going forwards, we will suggest that these tools be largely the domain of administrator-contributors to a useful common environment. Students and even professors and researchers can continue to use the tools they are familiar with, such as the Ubuntu package manager, pip, shell scripts, and so on. However, before considering the tooling that might be used for this process, we provide a brief list of what a reasonable common environment should be like.
+It is at this point that our use case starts to sound like the case in which product developers are working together to deploy software on a production server, while maintaining a useful development environment on their own machines, testing servers, and so on. However, going forwards, we will suggest that these tools be largely the domain of administrator-contributors to a useful common environment. Technically skilled students, professors and researchers can continue to use the tools they are familiar with, such as the Ubuntu package manager, pip, shell scripts, and so on. More will be said about tooling below.
 
-Other Concerns
-^^^^^^^^^^^^^^
+Summary
+^^^^^^^
 
-* Thin client / staff computing
-* Exam environments
-* Instructional labs
-* Sharing licensed software?
-* Make it easy to do the "right" thing (hard to do "wrong" thing)
-* Stable infrastructure
-* Managing complexity
-* Impacts beyond "the course"
+Above, we’ve highlighted how a common environment might support instruction, research, and efficient IT support. We are looking forward to the potential for impacts on thin clients for staff computing, exam environments, instructional labs, and providing easier mechanisms to sharing licensed software.
+
+In other words, I have an environment and you have an environment. I want to do things my way, you want to do them yours. If we wish to work together – either as student and teacher, or as collaborators – this doesn’t really work. One solution is to allow individuals to maintain their existing, productive environments, and provide a virtual common environment that can be run either on each individuals’ personal computer, or on a shared server. This environment provides a shared context where one can provide instructions that are relatively certain to work, and should even be quantifiable in terms of how much time the steps will take. As any individual gains understanding of the code, they are still free to work in their own environment, or customize the common environment in ways that don’t disrupt collaboration (e.g., by installing text editors, etc.). Below, we consider what the useful features of such an environment might be.
 
 
 Features of a useful common environment
 ---------------------------------------
+
+* Make it easy to do the "right" thing (hard to do "wrong" thing)
+* Stable infrastructure
+* Managing complexity
+* Impacts beyond "the course"
 
 Simple things like gedit, nano with tab-stops set up properly. Setting up the background to be more efficient solid color.
 
@@ -124,20 +122,20 @@ Python packages are installed from a basic pip requirements file.
 Debian packages are similarly installed from a list.
 Other packages are installed via bash, e.g., downloading and installing RStudio.
 
-Summarizing the pull-request feedback:
-- the most common case for VM tools is the laptop
-- mobility of VMs between computing platforms will increase productivity
-- Choosing between the multiplicity of VM tools is a big difficulty
-- explain what is possible or what these tools enable: the utility of VM tools is not obvious to scientists by reading the tool’s documentation
-- to reach a general (scientific) audience, avoid VM jargon
-- scientific computing requires more than just the packaging basics
+
 
 Dependency hell
 ^^^^^^^^^^^^^^^
 
 Problem 1: The quote at the beginning of this paper represents the first barrier to collaboration in which the full set of requirements are not explicitly stated and there is an assumption that all collaborators already have or can set up an environment to collaborate. The number of steps or the time required to satisfy these assumptions is unknown, and regularly exceeds the time available. For example, in the context of a 1.5 hour workshop or a class with only handful of participants, if all cannot be set up within a fixed amount of time (typically 20 minutes at most) it will jeopardize successfully completing the workshop or class materials and will discourage participation. An additional difficulty arises when users are using versions of the “same” software across different platforms. For example, Git Bash lacks a `man` command.
 
-Solution 1: Eliminate *dependency hell*. Provide a method to ensure that all participants can successfully complete the installation with a fixed number of well-known steps across all platforms within a fixed amount of time. We *cannot* control the base environment that users will have on their laptop or workstation, nor do we wish to! The BCE platform provides a scalable and quantifiable approach to ensuring all users have the necessary dependencies to engage with specific code or content.
+Future Solution 1: Eliminate *dependency hell*. Provide a method to ensure that all participants can successfully complete the installation with a fixed number of well-known steps across all platforms within a fixed amount of time. We *cannot* control the base environment that users will have on their laptop or workstation, nor do we wish to! The BCE platform provides a scalable and quantifiable approach to ensuring all users have the necessary dependencies to engage with specific code or content.
+
+Current status: BCE image is [available via dropbox](http://putlinkhere) and is 
+
+Enabling tools:
+- Packer
+- VirtualBox, VMWare
 
 Going beyond the laptop
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -146,12 +144,27 @@ Problem 2: We will consider a participant’s laptop the unit-of-compute since i
 
 Solution 2: Enable computing *beyond the laptop*. Though a workstation with plentiful memory by virtue of exactly replicating the environment available in Solution 1, the participant is guaranteed to replicate the data processing, transformations, and analysis steps they ran on their laptop in these other environments with the benefit of more memory available on those systems. This also includes the ability to use the common GUI interface provided by BCE as a VDI (Virtual Desktop Integration).
 
+Current status:
+
+Enabling tools:
+- Packer
+- VirtualBox, VMWare
+
 Pleasant parallelization
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 Problem 3: Even though Solution 2 allows us to grow beyond the laptop, the time and skill required to access needed compute resources may be prohibitive.
 
-Solution 3: Enable *pleasantly parallel* scale-out. A cluster may be available in your department or at your institution or at national facilities that provides the equivalent of a hundred or a thousand of the workstations you may have in your lab, enabled by Solution 2. BCE works in these environments and allows you to install additional software components as you wish without relying on cluster administrators for help.
+Solution 3: Enable *pleasantly parallel* scale-out. A cluster may be available in your department or at your institution or at national facilities that provides the equivalent of a hundred or a thousand of the workstations you may have in your lab, enabled by Solution 2.
+
+Current status:
+
+Further development of BCE with the proper enabling tools could provide a way to run in these environments and allows you to install additional software components as you wish without relying on cluster administrators for help.
+
+Enabling tools:
+- Packer
+- Docker, LXC
+
 
 Managing cost / maximizing value
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -159,6 +172,12 @@ Managing cost / maximizing value
 Problem 4: Assuming you have the grant money to buy a large workstation with lots of memory and many processors, you may only need that resource for a 1 to 2 week period of time, so spending your money on a resource that remains unused 95% of the time is a waste of your grant money.
 
 Solution 4: Enable on-demand resizing of resources. The BCE solution works on cloud resources that may allow you to scale out. A private cloud approach to managing owned resources can also allow more researchers to get value out of those resources.
+
+Current status:
+
+Enabling tools:
+- Packer
+- EC2 AMI, Azure VHD
 
 Existing Tools
 --------------
@@ -178,7 +197,7 @@ Systems like EC2, only available as a VM.
 Lightweight virtualization (/ containerization) includes Docker / LXC / VMWare
 ESX.
 
-Only with exotic hardware is GPGPU [unpack] available to fully virtualized environments. Check on containers? [XXX IT people?]
+While specialized GPU hardware is available for cloud deployment, commodity GPUs will generally not work with fully virtualized systems. For example, VirtualBox presents a virtual GPU with at most 128MB of video memory. However, providing better access to containers is an active research topic [HPC]_.
 
 port-mapping, shared files, GUI vs. “remote-like” operation
 
@@ -226,13 +245,15 @@ VM from Philip.
 
 Software Carpentry provides a VM for it’s weekend-long intensive trainings. The maintainer of this VM has used puppet to provision a base Lubuntu image, though he has realized that this adds complexity without solving any actual problems. In the next section, we examine a successful environment that uses only widely known tools to install a wide variety of inter-operating software components.
 
+It is worth noting that while indexes are available for a variety of images (e.g, vagrantbox.es, the Docker index, and Amazon’s impressive list of AMIs), there is surprisingly little effort to provide a consistent environment that allows one to readily migrate between platforms. However, a project might choose to use tools for building their environment 
+
 OSGeo-Live: A Successful Common Environment
 -------------------------------------------
 
-The OSGeo-Live virtual machine, both a sophisticated compute environment, and synergistic community process, is an example of just the kind of build described above. Eschewing elaborate devops tools, the fundamental build system is instead configured using simple and modular combinations of Python, Perl and shell scripts, along with clear install conventions by example. 
+The OSGeo-Live virtual machine, both a sophisticated compute environment, and synergistic community process, is an example of just the kind of build described above. Eschewing elaborate devops tools, OSGeo-Live is instead configured using simple and modular combinations of Python, Perl and shell scripts, along with clear install conventions by example. 
 
 '''
-The OSGeo-Live is a self-contained bootable DVD, USB thumb drive or Virtual
+OSGeo-Live is a self-contained bootable DVD, USB thumb drive or Virtual
 Machine based on Xubuntu, that allows you to try a wide variety of open source
 geospatial software without installing anything. It is composed entirely of free
 software, allowing it to be freely distributed, duplicated and passed around.
@@ -242,20 +263,20 @@ including storage, publishing, viewing, analysis and manipulation of data. It
 also contains sample datasets and documentation. [1g]
 '''
 
-The OSGeo-Live is a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [2g]. In 2006 there existed several large and growing open-source geospatial software projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and later, QGis.  At roughly the same time, the OSGeo-Live began as a smaller open project based in Australia that sought to build an "easy to try and use" software environment for these and other spatial data applications. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent Live project committed itself to the larger OSGeo Foundation structure in its second year. OSGeo-Live is not the only attempt at building such an environment [3g]
+OSGeo-Live is a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [2g]. In 2006 there existed several large and growing open-source geospatial software projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and later, QGis.  At roughly the same time, OSGeo-Live began as a smaller open project based in Australia that sought to build an "easy to try and use" software environment for these and other spatial data applications. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent Live project committed itself to the larger OSGeo Foundation structure in its second year. OSGeo-Live is not the only attempt at building such an environment [3g]
 
 More than fifty (50) open-source projects now actively maintain and improve their own
 install scripts, examples and documentation.
 
 After long years of "tepid" progress and iteration, a combination of technical stability,
-standardized tool sets, community awareness and clearly-defined steps to contribute, provided the basis for substantial growth. The OSGeo-Live is now very stable, easily incorporates advances in components, and widely adopted.
+standardized tool sets, community awareness and clearly-defined steps to contribute, provided the basis for substantial growth. The OSGeo-Live is now very stable, easily incorporates advances in components, and widely adopted. And, while OSGeo-Live primarily targets a live/bootable ISO, the scripts that are used to build that ISO provide a straightforward method for building OSGeo software in other contexts – with a small bit of setup, one need merely run the appropriate scripts for the desired packages.
 
 Let's look at each of these building blocks briefly.
 
 Technical Stability
 ^^^^^^^^^^^^^^^^^^^
 
-An original goal of the OSGeo-Live was to operate well on minimal hardware with
+An original goal of OSGeo-Live was to operate well on minimal hardware with
 broad support for common peripherals, and a license structure compatible with
 project goals. The XUbuntu version of Ubuntu Linux was chosen as a foundation,
 and it has been very successful. To this day, almost all applications
@@ -275,7 +296,7 @@ can be installed as-needed on a generic base.
 Tool Sets
 ^^^^^^^^^
 
-It cannot be overstated that, a key component to the success of the overall project has been the availability of widely-known and reliable tools, to developers from all parts of the world and in all major spoken languages. It is also important to note that rather than require formal installation packages ".deb" for each project, the OSGeo-Live chose to use a simple install script format, one per installed project. This choice proved crucial in the earliest stages, as an outside open-source project evaluating participation in the Live could get started with fewer barriers to entry, and then add rigor and features later. Almost by definition, participating open-source projects had install scripts already built for Linux which could be readily adapted to the OSGeo-Live install conventions. By providing ample examples on the OSGeo-Live of install scripts in major deployment contexts, for both applications and server processes, and clear guidelines for installation conventions, an open-source project could almost immediately develop and iterate their own install scripts in a straightforward way.
+It cannot be overstated that, a key component to the success of the overall project has been the availability of widely-known and reliable tools, to developers from all parts of the world and in all major spoken languages. It is also important to note that rather than require formal installation packages ".deb" for each project, OSGeo-Live chose to use a simple install script format, one per installed project. This choice proved crucial in the earliest stages, as an outside open-source project evaluating participation in the Live could get started with fewer barriers to entry, and then add rigor and features later. Almost by definition, participating open-source projects had install scripts already built for Linux which could be readily adapted to OSGeo-Live install conventions. By providing ample examples on OSGeo-Live of install scripts in major deployment contexts, for both applications and server processes, and clear guidelines for installation conventions, an open-source project could almost immediately develop and iterate their own install scripts in a straightforward way.
 
 **detailed build directions here?**available in svn, verbose**
 Particular example: web, including apache, WSGI, etc. Standard layout of web
@@ -354,10 +375,10 @@ government to build documentation on applications in the Overview and Quickstart
 The Open Source Geospatial Foundation (OSGeo) itself is a hub for multiple ecosystems of standards and language groups of projects to interoperate synergistically. OSGeo project status raises awareness of one project to other projects. Users around the world are encouraged to record on a common wiki page, an event at which the OSGeo-Live was presented. [5g]
 
 (mention concepts of the transfer of tech, e.g., military technology to environmental applications?)
-(Maybe,not, include a story about Haiti response with open source mapping - this is really an OpenStreetMap success story though, and OSM is distinct from OSGeo)
 
 
 Steps to Contribute
+^^^^^^^^^^^^^^^^^^^
 
 All build scripts are organized in the open, in source control [6g]. A new contributors FAQ is maintained via wiki [7g] for software projects, and for translation [8g]. A quality/testing page was used, but has been discontinued [9g]
 
@@ -380,12 +401,11 @@ http://en.wikipedia.org/wiki/Diffusion_of_Innovations
 
 missing title
 -------------
-What are the steps that established credibility to get projects contributing to
-the distribution. Initially, just shell scripts to install five core / important
-packages (XXX - what were they and why?). Reached out to 50 projects, more
-outside of U.S. than in, including many non-english (as a primary language),
-esp. from Europe. The social component of building the community was not
-necessarily explicit or even shared or known to all contributors (provable?).
+Q. What are the steps that established credibility to get projects contributing to
+the distribution. 
+Q. Initially, just shell scripts to install five core / important packages (XXX - what were they and why?). 
+
+Reached out to 50 projects, more outside of U.S. than in, including many non-english (as a primary language), esp. from Europe. The social component of building the community was not necessarily explicit or even shared or known to all contributors (provable?).
 
 It consists of a choice of basic tools that are widely known to free software
 developers: shell, Perl, or Python. Scripts may call package managers, few
@@ -395,13 +415,7 @@ customizable scripts designed to bootstrap new recipes.
 Particular example: web, including apache, WSGI, etc. Standard layout of web
 directory. Fully working examples available for each "kind" of project.
 
-The result is that certain tools are becoming more and more visible. Projects
-are encouraged that are implemented in standard frameworks (i.e., not Forth).
-
-There's still not complete consensus, but the project is moving towards some
-consensus infrastructure. Also see the transfer of, e.g., military technology to
-environmental applications.
-<end of osgeo section>
+<--  end of osgeo section -->
 
 
 BCE: The Berkeley Common Environment
@@ -530,7 +544,7 @@ That *doesn’t* have to be technical - a simple text file or even a PDF can pro
 Be willing to make strong recommendations based on what we are actually using (eat own dogfood)
 Be willing to adopt/adapt/change/throw stuff out (have an exit strategy)
 
-Recipe for setting up sicpy_proceedings build system on Ubuntu 14.04 (or BCE proper?).
+XXX - Recipe for setting up sicpy_proceedings build system on Ubuntu 14.04 (or BCE proper?).
 
 Important Part
 --------------
@@ -546,7 +560,16 @@ References
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
 .. [BCEVB] http://collaboratool.berkeley.edu/using-virtualbox.html
+.. [HPC] FIX (in Zotero): Performance Evaluation of Container-based Virtualization for 
+   High Performance Computing Environments
+   http://www.inf.pucrs.br/~ferreto/resources/pdp2013.pdf
+
+
+References to use/potentially cite
+----------------------------------
+
+CUDA in the Cloud – Enabling HPC Workloads in OpenStack
+http://on-demand.gputechconf.com/gtc/2013/presentations/S3214-Enabling-HPC-Workloads-OpenStack.pdf
 
 
 [a]Copied from https://github.com/scipy-conference/scipy_proceedings/pull/98#issuecomment-46784086
-
