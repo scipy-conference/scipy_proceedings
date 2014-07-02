@@ -84,14 +84,14 @@ forward.
 Approach and Design Decisions
 =============================
 
-We started this effort in 2009 to promote FOSS, with the Indian
-Government support and funding . Although there are many good FOSS
-systems, they are difficult to use because of lack of documentation and
-support. If we could bridge this gap, FOSS would become accessible to
-our students, who do not have access to good software otherwise, as many
-of them are of proprietary in nature. We also did not want to promote
-commercial software with tax payer’s money. Our funding agency had also
-made a policy decision to exclusively use FOSS.
+We started this effort in 2009 to promote FOSS, with the Indian Government
+support and funding [nm09]_. Although there are many good FOSS systems, they
+are difficult to use because of lack of documentation and support. If we could
+bridge this gap, FOSS would become accessible to our students, who do not have
+access to good software otherwise, as many of them are of proprietary in
+nature. We also did not want to promote commercial software with tax payer’s
+money. Our funding agency [nm09]_ had also made a policy decision to
+exclusively use FOSS.
 
 It does not mean that we wanted to erect a wall between us and those who
 use commercial software. We do work with students who only know how to
@@ -105,11 +105,11 @@ We have been using simple technologies to create our instructional material,
 as these allow school going students also to participate in the creation
 effort. For example, we have eschewed the use of instructional methodologies
 that help embed interaction in our tutorials. In contrast, open source screen
-recording software, such as RecordMyDesktop , has limited features.
+recording software, such as RecordMyDesktop [rmd]_, has limited features.
 Nevertheless, we have made the learning effective by strict processes to
-create tutorials and to use them, for example, the side-by-side method (see
-Fig. :ref:`fig:side-by-side`) and SELF workshops, explained in Sec.
-:ref:`sec-spoken`.
+create tutorials [guidelines]_ and to use them, for example, the side-by-side
+method (see Fig. :ref:`fig:side-by-side`) and SELF workshops, explained in
+Sec. :ref:`sec-spoken`.
 
 .. figure:: side-by-side.jpg
    :alt: A side by side arrangement for effective use of Spoken Tutorials.
@@ -237,7 +237,7 @@ A Spoken Tutorial is an audio - video instructional material created for
 self learning through the Screencast technology. When this project
 started in 2009, the main objective was to create documentation for
 FOSS, so that it is accessible to everyone. A detailed set of objectives
-and the method followed to achieve them are summarised in .
+and the method followed to achieve them are summarised in [kmm14]_.
 
 We will begin with the reasons for calling this instructional material
 as a Spoken Tutorial. When this work started, there were a large number
@@ -248,10 +248,10 @@ capture the face of the person creating the tutorials, it is strictly
 not a video tutorial. Owing to the fact that one can use Spoken Tutorial
 to learn a topic, we call it a tutorial.
 
-Spoken Tutorials have been released under a Creative Commons license and
-are freely downloadable from . There are about 500 original spoken
-tutorials in English and more than 2,000 dubbed tutorials in various
-Indian languages.
+Spoken Tutorials have been released under a Creative Commons license and are
+freely downloadable from [Spoken]_. There are about 500 original spoken
+tutorials in English and more than 2,000 dubbed tutorials in various Indian
+languages.
 
 The Python Team created a set of 14 Spoken Tutorials on Python at the
 beginning. On using these tutorials, it was found that the pace of some
@@ -340,7 +340,7 @@ At the advanced level, we have the following tutorials:
 
 Spoken tutorials are created for self learning. The side-by-side method,
 illustrated in Fig. :ref:`fig:side-by-side` is recommended for the effective
-use of spoken tutorials . The learner is supposed to reproduce all the
+use of spoken tutorials [kmm14]_. The learner is supposed to reproduce all the
 steps demonstrated in the tutorial. To achieve this, all supplementary
 material required for a tutorial are provided. We illustrate this with
 the Python Spoken Tutorial, loading data from files. In
@@ -362,88 +362,86 @@ tutorial for offline use.
    displayed in a new window. :label:`fig:st-resources`
 
 As these are created for self learning, and are freely downloadable, one
-should be able to learn from spoken tutorials directly from the website.
-Nevertheless, there are many reasons why we have been conducting organised
-workshops using spoken tutorials. As these are created for self learning, a
-domain expert is not required to explain the use of spoken tutorials - a
-volunteer can organise these workshops. Based on trial and error, we have
-decided that our workshops should be of two hour duration and should be
-conducted as SELF workshops, as mentioned previously. Although these workshops
-are of only two hour duration, quite a bit can be learnt in a two hour
-workshop. For example, by no other method can a beginner learn LaTeX topics,
-such as compilation, letter writing, report writing, mathematical typesetting
-and introduction to beamer, in a two hour workshop . Although no domain
-experts may be available during these workshops, one may get their questions
-answered through a specifically designed forum .
+should be able to learn from spoken tutorials directly from the website
+[Spoken]_. Nevertheless, there are many reasons why we have been conducting
+organised workshops [kmm14]_ using spoken tutorials. As these are created for
+self learning, a domain expert is not required to explain the use of spoken
+tutorials - a volunteer can organise these workshops. Based on trial and
+error, we have decided that our workshops should be of two hour duration and
+should be conducted as SELF workshops, as mentioned previously. Although these
+workshops are of only two hour duration, quite a bit can be learnt in a two
+hour workshop. For example, by no other method can a beginner learn LaTeX
+topics, such as compilation, letter writing, report writing, mathematical
+typesetting and introduction to beamer, in a two hour workshop
+[kmm11-TUGboat]_. Although no domain experts may be available during these
+workshops, one may get their questions answered through a specifically
+designed forum [forums]_.
 
-Most students in India do not have access to good bandwidth and hence
-cannot access our web page. As a result, we need to provide the
-tutorials for offline use. In the previous paragraph, we have explained
-how to download a single video. To be consistent with our ethos, we have
-implemented a tool that allows the creation of an image consisting of
-many tutorials and downloading it for offline use. On choosing at ,
-Software Training :math:`>` Download Tutorials :math:`>` Create your own
-disk image, one reaches the page shown in Fig. :ref:`fig:mk-image`. Through
-this shopping cart like facility, we can create an image consisting of
-different FOSS families of spoken tutorials, in languages of one’s
-choice. In this figure, one can see that the Python spoken tutorials in
-English and Tamil have been selected and these will take up about 680
-MB. One may add many more FOSS categories, in one or more languages to
-the Selected Items list. Once all required tutorials are selected, one
-may click the Submit button. The image consisting of all the tutorials
-will be download as a zip file. On unzipping this file and opening the
-index.html file contained therein in a web browser, such as Firefox, all
-the selected videos can be played from the local drive. This zip file
-can be copied to all computer systems that are meant to be used in a
-workshop.
+Most students in India do not have access to good bandwidth and hence cannot
+access our web page. As a result, we need to provide the tutorials for offline
+use. In the previous paragraph, we have explained how to download a single
+video. To be consistent with our ethos, we have implemented a tool that allows
+the creation of an image consisting of many tutorials and downloading it for
+offline use. On choosing at [Spoken]_, Software Training :math:`>` Download
+Tutorials :math:`>` Create your own disk image, one reaches the page shown in
+Fig. :ref:`fig:mk-image`. Through this shopping cart like facility, we can
+create an image consisting of different FOSS families of spoken tutorials, in
+languages of one’s choice. In this figure, one can see that the Python spoken
+tutorials in English and Tamil have been selected and these will take up about
+680 MB. One may add many more FOSS categories, in one or more languages to the
+Selected Items list. Once all required tutorials are selected, one may click
+the Submit button. The image consisting of all the tutorials will be download
+as a zip file. On unzipping this file and opening the index.html file
+contained therein in a web browser, such as Firefox, all the selected videos
+can be played from the local drive. This zip file can be copied to all
+computer systems that are meant to be used in a workshop.
 
 .. figure:: mk-image.jpg
    :alt: Automatic CD content creation facility.
 
-   The automatic CD content creation facility, available through , by
-   clicking Software Training :math:`>` Download Tutorials :math:`>`
-   Create your own disk image. One can see that English and Tamil
-   versions of Python tutorials are selected, with a size estimate of
-   about 680 MB. :label:`fig:mk-image`
+   The automatic CD content creation facility, available through [Spoken]_, by
+   clicking Software Training :math:`>` Download Tutorials :math:`>` Create
+   your own disk image. One can see that English and Tamil versions of Python
+   tutorials are selected, with a size estimate of about 680 MB.
+   :label:`fig:mk-image`
 
-The Spoken Tutorial Team helps conduct SELF workshops . The workshops
-are offered on about 20 topics, such as Python, Scilab, C, C++, Java,
-LibreOffice, LaTeX, PHP, Oscad and GNU/Linux. Organisers of SELF
-workshops at different institutions download the required spoken
-tutorials using the facility explained through Fig. :ref:`fig:mk-image`,
-install the software to learn and ensure that the computer system,
-audio/video player and the head phone are in working condition. These
-organised workshops create a conducive ecosystem to learn through spoken
-tutorials.
+The Spoken Tutorial Team helps conduct SELF workshops [events-team]_. The
+workshops are offered on about 20 topics, such as Python, Scilab, C, C++,
+Java, LibreOffice, LaTeX, PHP, Oscad and GNU/Linux. Organisers of SELF
+workshops at different institutions download the required spoken tutorials
+using the facility explained through Fig. :ref:`fig:mk-image`, install the
+software to learn and ensure that the computer system, audio/video player and
+the head phone are in working condition. These organised workshops create a
+conducive ecosystem to learn through spoken tutorials.
 
-During a two hour workshop, one may not learn all the tutorials. After
-the workshop, the students are encouraged to download the tutorials and
-to practise by themselves at their home or office. The learners can post
-their difficulties, if any, on the Spoken Tutorial Forum based on the
-time line of a spoken tutorial. This special forum helps even beginners
-to locate previous discussions relating to spoken tutorials. An online
-exam is conducted a few weeks after the workshop and the participants
-who pass the exam are provided with certificates.
+During a two hour workshop, one may not learn all the tutorials. After the
+workshop, the students are encouraged to download the tutorials and to
+practise by themselves at their home or office. The learners can post their
+difficulties, if any, on the Spoken Tutorial Forum [forums]_ based on the time
+line of a spoken tutorial. This special forum helps even beginners to locate
+previous discussions relating to spoken tutorials. An online exam is conducted
+a few weeks after the workshop and the participants who pass the exam are
+provided with certificates.
 
-It is possible to get details of SELF workshops conducted by our team.
-In , one can see summary details of the Python workshops that have taken
-place in the state of Gujarat. One can reach this information on by
-clicking the map of India, choosing Gujarat and sorting the result by
-FOSS. A screenshot is given in Fig. :ref:`fig:python-workshop-info`. In this
-figure, we have shown a red rectangle around a particular workshop that
-took place in Surat on 12 July 2013. By clicking the lens symbol, one
-can see the details of where the workshop took place, who conducted this
-workshop and so on. When the number of students who attended this
-workshop is shown in red (in this case, it is 51), it means that they
-have given their feedback. By clicking the number in red, one may locate
-the feedback given by students. A typical feedback is shown in
-Fig. :ref:`fig:feedback`.
+It is possible to get details of SELF workshops conducted by our team. In
+[python-ws-info]_, one can see summary details of the Python workshops that
+have taken place in the state of Gujarat. One can reach this information on
+[Spoken]_ by clicking the map of India, choosing Gujarat and sorting the
+result by FOSS. A screenshot is given in Fig. :ref:`fig:python-workshop-info`.
+In this figure, we have shown a red rectangle around a particular workshop
+that took place in Surat on 12 July 2013. By clicking the lens symbol, one can
+see the details of where the workshop took place, who conducted this workshop
+and so on. When the number of students who attended this workshop is shown in
+red (in this case, it is 51), it means that they have given their feedback. By
+clicking the number in red, one may locate the feedback given by students. A
+typical feedback is shown in Fig. :ref:`fig:feedback`.
 
 .. figure:: python-workshop-info.jpg
    :alt: Summary of Python workshops.
 
-   Summary of Python workshops, obtained by clicking the India map in ,
-   choosing Gujarat and then sorting by FOSS. :label:`fig:python-workshop-info`
+   Summary of Python workshops, obtained by clicking the India map in
+   [Spoken]_, choosing Gujarat and then sorting by FOSS.
+   :label:`fig:python-workshop-info`
 
 .. figure:: feedback.jpg
    :alt: Feedback given by a student.
@@ -486,31 +484,36 @@ testimonials:
     which in turn can develop an interest in one’s mind to learn more about
     python. Thank you very much for this wonderful workshop.
 
+    -- Brindersingh - Guru Nanak Institute of Technology, West Bengal
+
     Got the initiative of how to work on python that makes the programming
     comparative easy. Apart from this, graphical representation of
     mathematical formulation is quite good.
 
+    -- Abhishek Bhargava - Institute of Engineering & Technology, Alwar
+
     It is a very efficient way of learning new languages as the videos seem to
     be practical and help the learning of the language along with examples.
 
-Our website is becoming popular. Fig. :ref:`fig:yr-stat` gives details of
-page views on our website. One can see that the number of page views are
-doubling every year. The number of people who benefit from our work is
-much higher than the numbers indicated in this figure. This is because,
-there are a lot of students in India who access our material through
-offline mechanisms, as explained earlier. For example, even though more
-than 80,000 students have undergone SELF workshops on Linux
-(Table :ref:`tab:workshops`), the largest number of times any Linux video is
-seen is only about 2,500. It seems that the equivalent number of page
-views on our page is at least ten times the number indicated in
-Fig. :ref:`fig:yr-stat`.
+    -- Mahima - Jaypee University of Information Technology, Himachal Pradesh
+
+Our website [Spoken]_ is becoming popular. Fig. :ref:`fig:yr-stat` gives
+details of page views on our website. One can see that the number of page
+views are doubling every year. The number of people who benefit from our work
+is much higher than the numbers indicated in this figure. This is because,
+there are a lot of students in India who access our material through offline
+mechanisms, as explained earlier. For example, even though more than 80,000
+students have undergone SELF workshops on Linux (Table :ref:`tab:workshops`),
+the largest number of times any Linux video is seen is only about 2,500. It
+seems that the equivalent number of page views on our page is at least ten
+times the number indicated in Fig. :ref:`fig:yr-stat`.
 
 .. figure:: hist-24-june-2014.jpg
    :alt: Number of page views since the beginning of this website.
 
-   Number of page views since the beginning of this website. As
-   there are many offline viewers in India, the effective number of page
-   views may be considered to be at least twice these numbers. :label:`fig:yr-stat`
+   Number of page views on [Spoken]_, since the beginning of this website. As
+   there are many offline viewers in India, the effective number of page views
+   may be considered to be at least twice these numbers. :label:`fig:yr-stat`
 
 A student who is trained through a SELF workshop is ready to contribute
 to the society. A textbook companion is the easiest way for them to
@@ -559,11 +562,10 @@ successful completion of a PTC, the participant is awarded with a
 certificate and a handsome honorarium. PTCs are presented in the form of
 IPython Notebooks.
 
-The PTC interface displays all the completed books together with a
-screen-shot of code snippets, so that the user can easily download the
-PTC of their interest. The interface also allows the users to view all
-the codes of a chapter as an IPyton notebook, which makes learning
-python easy.
+The PTC interface [PTC]_ displays all the completed books together with a
+screen-shot of code snippets, so that the user can easily download the PTC of
+their interest. The interface also allows the users to view all the codes of a
+chapter as an IPyton notebook, which makes learning python easy.
 
 We use the following process to develop a PTC:
 
@@ -596,7 +598,7 @@ Chemical Engineering, Thermodynamics, Mechanical Engineering, Signal
 Processing, Digital Communications, Electrical Technology, Mathematics &
 Pure Science, Analog Electronics, Computer Programming and others.
 Currently, there are 80 completed PTCs and 80 are in progress. PTCs so
-created are available for free download at .
+created are available for free download at [PTC]_.
 
 The creators of PTC learn Python in a practical and effective way. One
 may see below testimonials from a few of the participants:
@@ -606,17 +608,20 @@ may see below testimonials from a few of the participants:
     as I approached further in it. I got the IIT-B certifcate, plus i
     got paid a handsome amount of cheque after completion which was good
     enough for me at then.
+    --  Amitesh Kumar
 
     The FOSSE-Textbook Companion Project has been a scintillating point in my
     career. It has been instrumental in tuning my programming and presentation
     skills. It provided an ideal forum for me to learn Python and contribute
     to the open source community.
+    -- Abhiram Padu
 
     I learnt python from Spoken-Tutorials available on the
     website.The Python TBC team also helped me a lot in starting my
     internship. Till now,I have completed 3 TBCs and now,I know pretty
-    much about python.I plan to take this project forward and Python is
-    really helping me shine by resume.
+    much about python. I plan to take this project forward and Python is
+    really helping me shine my resume.
+    -- Deepak Shakya
 
     This internship provided me a perfect platform and environment to learn
     python.It helped me to incorporate both my ideas and practical work skills
@@ -624,6 +629,9 @@ may see below testimonials from a few of the participants:
     gave me an awesome experience.Moreover, experience gained from it will
     make me capable of facing and overcoming the upcoming challenges under its
     applications.
+    -- Ramgopal Pandey
+
+
 
 We would like to point out some of the processes we have followed in the
 creation of PTC. Initially we tried to use the Sprint route to create
@@ -640,11 +648,11 @@ the creation of PTCs and this has yielded good results, as explained
 above. We are also in the process of contacting all who created Scilab
 TBC urging them to take up the PTC work.
 
-The FOSSEE project at IIT Bombay supports the following FOSS systems:
-Python, Scilab, OpenFOAM, COIN-OR, Oscad (a locally developed for
-Electronic Design Automation and a FOSS alternative to OrCAD) and Sandhi
-(a FOSS alternative to LabVIEW). We are in the process of creating TBCs
-for all of these systems.
+The FOSSEE project at IIT Bombay [FOSSEE]_ supports the following FOSS
+systems: Python, Scilab, OpenFOAM, COIN-OR, Oscad (a locally developed for
+Electronic Design Automation and a FOSS alternative to OrCAD) and Sandhi (a
+FOSS alternative to LabVIEW). We are in the process of creating TBCs for all
+of these systems.
 
 Aakash: World’s lowest cost computing device
 ============================================
@@ -656,7 +664,7 @@ the students do not have an affordable access device. If a student does
 not have an access device, they cannot participate in some of our
 projects. This affects their learning, while simultaneously resulting in
 loss of possible honorarium income. Aakash is the result of our efforts
-to address this problem .
+to address this problem [mpsv13]_, [sp13]_.
 
 Aakash has indeed become a convergence device for our projects. Spoken
 Tutorials can be played on Aakash, see Fig. :ref:`fig:spoken-aakash`.
@@ -726,15 +734,16 @@ feedback from a student who completed his Master’s thesis using Oscad:
     and Analog communication” and “Power Electronics” labs. Your support
     is very much needed mainly for power electronics lab. Hope you will
     provide it. Thanks a lot.
+    -- Harish Bhat
 
-The next task is to help improve the FOSS itself or to use the FOSS to
-create new software. Typically, existing FOSS tools are used to create
-new FOSS systems. Python turns out to be an excellent gluing solution.
-We have used Python extensively in the creation of Oscad . We are using
-Python extensively, once again, in the creation of Sandhi, a FOSS
-alternative to LabVIEW. Sandhi is yet to be released to the public. We
-have been using Python also to create online evaluation software to
-administer post SELF workshop tests.
+The next task is to help improve the FOSS itself or to use the FOSS to create
+new software. Typically, existing FOSS tools are used to create new FOSS
+systems. Python turns out to be an excellent gluing solution. We have used
+Python extensively in the creation of Oscad [oscad-book]_, [oscad-lj]_. We are
+using Python extensively, once again, in the creation of Sandhi, a FOSS
+alternative to LabVIEW. Sandhi is yet to be released to the public. We have
+been using Python also to create online evaluation software to administer post
+SELF workshop tests.
 
 The next level in this progression is possibly entrepreneurship. We are
 exploring the viability of it. At present we train about 200,000
@@ -761,6 +770,7 @@ testimonial:
     doing the assignments. He also told that the video tutorials cleared
     most of his doubts on java and helped him in passing the makeup
     exam.
+    -- Prof. K. V. Nagarjuna, Sree Dattha Inst. of Engg. and Science
 
 Then, there are several levels of employment, starting from routine IT
 work, all the way up to work in niche areas, with attractive salaries.
@@ -803,3 +813,62 @@ members of the FOSSEE and Spoken Tutorial teams. The author wishes to
 acknowledge the contributions of the Principal Investigators of these
 projects. The author wants to thank Prabhu Ramachandran for his help in
 converting this article to the required format.
+
+References
+==========
+
+.. [nm09] Ministry of Human Resource Development. National mission on
+   education through ICT. http://www.sakshat.ac.in, Last seen on 11 Feb. 2014.
+
+.. [rmd] recordMyDesktop Team.,
+   http://sourceforge.net/projects/recordmydesktop/, Last seen on 27 June
+   2014.
+
+.. [guidelines] Spoken Tutorial Team. Guidelines to create spoken tutorials.
+   See http://process.spoken-tutorial.org/index.php/FOSS_Stages/Checklist,
+   seen on 11 Feb. 2014.
+
+.. [kmm14] K. M. Moudgalya. Pedagogical and organisational issues in the
+   campaign for it literacy through spoken tutorials. In R. Huang, Kinshuk,
+   and N.-S. Chen, editors, *The new development of technology enhanced
+   learning*, chapter 13. Springer-Verlag, Berlin Heidelberg, 2014.
+
+.. [Spoken] Spoken Tutorial Project. Official web page.
+   http://spoken-tutorial.org/, seen on 11 Feb. 2014.
+
+.. [kmm11-TUGboat] K. M. Moudgalya. LaTeX Training through Spoken Tutorials.
+   TUGboat, 32(3):251–257, 2011.
+
+.. [forums] Spoken Tutorial Project. Online forum.
+   http://forums.spoken-tutorial.org/, seen on 11 Feb. 2014.
+
+.. [events-team] Spoken Tutorial Project. Events team contact details.
+   http://process.spoken-tutorial.org/index.php/Software-Training#Organising_Workshops,
+   seen on 29 June 2014.
+
+.. [python-ws-info] Spoken Tutorial Team. List of python workshops in Gujarat.
+   http://www.spoken-tutorial.org/completed_workshops_list/GUJ?page=42&sort=asc&order=FOSS,
+   Last seen on 29 June 2014.
+
+.. [PTC] Python Team. Python textbook companion. http://tbc-python.fossee.in,
+   Seen on 19 June 2014.
+
+.. [FOSSEE] FOSSEE Team. Free and open source software in education. http://fossee.in,
+    Seen on 11 Feb. 2014.
+
+.. [mpsv13] K. M. Moudgalya, D. B. Phatak, N. K. Sinha, and Pradeep Varma.
+   Genesis of Aakash 2. CSI Communications, pages 21--23 and 29, Jan. 2013.
+   Available at http://aakashlabs.org/media/pubs/genesis-reprint.pdf, seen on
+   11 Feb. 2014.
+
+.. [sp13] S. Patil and S. Patnaik. GNU/Linux on Aakash. CSI Communications,
+   pages 28–31, July 2013. Available at
+   http://aakashlabs.org/media/pubs/GNU_Linux_on_Aakash.pdf.
+
+.. [oscad-book] Y. Save, R Rakhi, N. D. Shambulingayya, R. M. Rokade, A.
+   Srivastava, M. R. Das, L. Pereira, S. Patil, S. Patnaik, and K. M.
+   Moudgalya. Oscad: An open source EDA tool for circuit design, simulation,
+   analysis and PCB design. Shroff Publishers, Mumbai, 2013.
+
+.. [oscad-lj] R. Rakhi and K. M. Moudgalya. Oscad: open source computer aided
+   design tool. Linux Journal, pages 96–113, May 2014.
