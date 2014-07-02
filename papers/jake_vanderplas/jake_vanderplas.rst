@@ -488,7 +488,7 @@ The result is shown by the black ellipse in Figure :ref:`fig1`. In practice, the
     Kurtosis:         2.486    Condition No.:       100 
     ====================================================
 
-The summary output includes many advanced statistics which we don't have space to fully discuss here; these numbers give the trained practitioner insight into the quality of the fit and are very useful for evaluating the fit, especially for more complicated models; see [Wasserman2004]_ for more details.
+The summary output includes many advanced statistics which we don't have space to fully discuss here; these numbers give the trained practitioner insight into the quality of the fit and are very useful for evaluating the fit, especially for more complicated models; see [Wasserman2004]_ and the statsmodels documentation for more details.
 
 
 Bayesian Solution: Overview
@@ -501,7 +501,7 @@ The Bayesian result is encapsulated in the posterior, which is proportional to t
 
 (See [VanderPlas2014]_, part IV for a straightforward derivation of this). With this prior and the above likelihood, we are prepared to numerically evaluate the posterior via MCMC.
 
-Below we gloss-over many of the practical aspects of using MCMC: for example, it is important to establish a *burn-in* phase, in which the Markov chains stabilize or converge, before using the traces to compute the desired result. Each of the three packages below have tools to help evaluate chain stabilization and other details. See [Gelman2004]_ or the documentation of the following packages for more detail.
+Below we gloss-over many of the practical aspects of using MCMC: for example, it is important to establish a *burn-in* phase, in which the Markov chains stabilize or converge, before using the traces to compute the desired result. Each of the three packages below have tools to help evaluate chain stabilization and other details. Additionally, more advanced diagnostic tests can be used within the Bayesian framework to evaluate goodness-of-fit. These tend to be very problem-specific, so there is generally no standard Bayesian equivalent to the summary routines included in ``statsmodels``.  See [Gelman2004]_ or the documentation of the following packages for more detail on this subject.
 
 
 Solution with emcee
