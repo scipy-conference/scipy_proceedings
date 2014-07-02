@@ -11,11 +11,11 @@ Prototyping a Geophysical Algorithm in Python  Spitz-Prony Noise Attenuation
 
 .. class:: abstract
 
-   A geophysics paper by Spitz has a long paragraph that describes an algorithm, a model, and the results of applying the algorithm to the model. I wanted to implement and test the algorithm to ensure I fully understood the method. This is a good illustration of Python for geophysics because the implementation requires Fourier transforms provided by numpy.fft, setting up linear equations using numpy.array and numpy.matrix, solving the linear equations using scipy.linalg.solve, and applying convolutional filters using  scipy.signal.lfilter
+   A geophysics paper by Spitz has a long paragraph that describes an algorithm, a model, and the results of applying the algorithm to the model. I wanted to implement and test the algorithm to ensure I fully understood the method and to develop basic scientific Python programming skills. This is a good illustration of Python for geophysics because the implementation requires Fourier transforms provided by numpy.fft, setting up linear equations using numpy.array and numpy.matrix, solving the linear equations using scipy.linalg.solve, and applying convolutional filters using scipy.signal.lfilter
 
-   I created the bandlimited flat event model using array slicing in numpy and is bandlimited in the frequency domain. Another component of the model is created by convolving a short derivative filter on a similar flat event model. After Fourier transform, linear equations are set up to compute a  prediction filter in the FX domain. These equations are created using data slicing, conjugate transpose, matrix multiply (all available in numpy). Scipy.linalg.solve is used to solve for the prediction error filter. A final filter is computed using the recursive filter capability in scipy.signal.lfilter. Results are displayed using matplotlib.
+   I created the bandlimited flat event model using array slicing in numpy and bandlimiting in the frequency domain. Another component of the model is created by convolving a short derivative filter on a similar flat event model. After Fourier transform, linear equations are set up to compute a prediction filter in the FX domain. These equations are created using array slicing, conjugate transpose, matrix multiply (all available in numpy). Scipy.linalg.solve solves for the prediction error filter. A final filter is computed using the recursive filter capability in scipy.signal.lfilter. Results are displayed using matplotlib.
 
-   This is quite a tour of scipy and numpy to implement an algorithm described in a single (although lengthy) paragraph. Many operations commonly used in geophysics are illustrated in the program. The algorithm is described and the code shared.
+   This is quite a tour of scipy and numpy to implement an algorithm described in a single (although lengthy) paragraph. Many functions commonly used in geophysics are illustrated in the program. The algorithm is described and the code shared.
 
 .. class:: keywords
 
@@ -24,30 +24,30 @@ Prototyping a Geophysical Algorithm in Python  Spitz-Prony Noise Attenuation
 Introduction
 ------------
 
-Spitz's paper on multiple attenuation [Atr01] has a long paragraph that describes an algorithm, a model, and the results of applying the algorithm to the model. I took this an an invitation to reproduce his results, implemented the algorithm and ran the model.  I encourage you to read Spitz paper to better understand the implenentation in this paper.  Although I have years of experience in geophysical research, I am a Python beginner. Writing this code was a great way for me to learn scientific Python, because the implementation requires Fourier transforms provided by numpy.fft, setting up linear equations using numpy.array and numpy.matrix, solving the linear equations using scipy.linalg.solve, and applying convolutional filters using scipy.signal.lfilter.
+Spitz' paper on multiple attenuation [Atr01] has a long paragraph that describes an algorithm, a model, and the results of applying the algorithm to the model. I understood this as an invitation to reproduce his results, so I implemented the algorithm and ran the model.  I encourage you to read Spitz' paper to better understand the implementation in this paper.  Although I have years of experience in geophysical research, I am a Python beginner. Writing this code was a great way for me to learn scientific Python, because the implementation requires Fourier transforms provided by numpy.fft, setting up linear equations using numpy.array and numpy.matrix, solving the linear equations using scipy.linalg.solve, and applying convolutional filters using scipy.signal.lfilter.  I obtained scipy, numpy, and matplotlib by installing Enthought's Canopy.  I  prototyped my code using an ipython notebook.
+  
+The algorithm is the Prony method described by Marple [Atr02], although Spitz did not use this name or provide a reference. The Prony method fits a sequence of numbers with a linear combination of a few exponential sequences. It can be applied to complex numbers to fit data with damped sinusoids.  It is one way to apply FX (frequency-space) prediction filtering, a method widely used to improve signal to noise on seismic data.
 
-The algorithm is the Prony method described by Marple [ATR01], although Spitz did not use this name or provide a reference. The Prony method fits a sequence of numbers with a linear combination of a few exponential sequences. It can be applied to complex numbers to fit data with damped sinusoids.  It is one way to apply FX (frequency-space) prediction filtering, a method widely used to improve signal to noise on seismic data.
-
-This paper shows the connection between Spitz' algorithm and the Prony method.  I also provide a Python implementation of the algorithm in Sptiz paper [Atr01] and reproduce the results on similar synthetic.  The code provides geophysicists with an example that used many of the routines frequently used in seismic processing.
+This paper shows the connection between Spitz' algorithm and the Prony method.  I also provide a Python implementation of the algorithm in Spitz' paper [Atr01] and reproduce the results on the simple synthetic.  The code provides geophysicists with an example that used many of the routines frequently used in seismic processing. The python code can be accessed at https://github.com/kschleicher/scipy_proceedings/blob/2014/papers/karl_schleicher/prony.py
 
 Theory
 ------
 
-This section provides some background theory for seismic noise attenuation with the Spitz-Prony algorithm.  You can jump directly to the “Algorithm and Code” section if your primary interest is to see the example source code that uses scipy and numpy routines  important in geophysics.  
+This section provides some background theory for seismic noise attenuation with the Spitz-Prony algorithm.  You can jump directly to the “Algorithm and Code” section if your primary interest is to see the example source code that uses scipy and numpy routines important in geophysics.  
 
-Figure 1 is a typical seismic display.  A 2-D array for floating point numbers displayed using a grey scale is a cross section image of the subsurface.  The horizontal axis is distance along the survey line and the vertical scale is time (an estimate of depth).  The geological layering appears as laterally coherent ‘events’.  FX prediction filtering is one of techniques have been developed to reduce the random specking (noise).  FX filtering is used in this paper remove coherent noise.  The data is seperated into coherent components and by "pattern matching" identifies components to be signal or noise.  Once seperated and classified the noise can be removed from the data.
+Figure 1 is a typical seismic display.  A 2-D array for floating point numbers displayed using a grey scale is a cross section image of the subsurface.  The horizontal axis is distance along the survey line and the vertical scale is time (an estimate of depth).  The geological layering appears as laterally coherent ‘events’.  FX prediction filtering is one of many techniques that reduce the random specking (noise).  FX filtering is used in this paper removes coherent noise.  The data is separated into coherent components and "pattern matching" classifies the components to be signal or noise.  Once separated and classified the noise can be removed from the data.
 
-FX noise attenuation selects small rectangular regions of the seismic section (the two dimensional array) for processing and the ouput seismic section is created by ramping (tapering) the subregions and summing them to the full output section.  A typical subregion is about 400 meters by .4 second and only contains events with 2 or 3 different dips.  A model subregion with 3 events and random noise is shown on the left in Figure 2.  On the right of Figure 2 is the data after 2-D Fourier transform. A each frequency, signal appears a three wave numbers and noise appear random.  The idea of FX prediction filtering is to estimate the data wave numbers and the amplitude at each of these wave numbers.  
+FX noise attenuation selects small rectangular regions of the seismic section (the two dimensional array) for processing and the ouput seismic section is created by ramping (tapering) the small regions and summing them to the full output section.  A typical subregion is about 400 meters by .4 second and only contains events with 2 or 3 different dips.  A model subregion with 3 events and random noise is shown on the left in Figure 2.  On the right of Figure 2 is the data after 2-D Fourier transform. At each frequency, signal appears at three wave numbers and noise appear random.  The idea of FX prediction filtering is to estimate the coherent wave numbers and the amplitude at each of these wave numbers.  
 
 The Prony method estimates these wavenumbers and amplitudes.  The method fits a series, d[x], with a few weighted exponentials :
 
-d[x] = sum  a(i) exp(k(i) x)
+d[x] ~= sum  a(i) exp(k(i) x)
 
-The exponential rates (the k’s) can be complex.  The real part is exponential increase or decrease with x and the imaginary part is the oscillatory rate (the wavenumber).  Simultaneously solving for the weights (the a’s) and the complex exponents (the k’s) is non-linear.  Prony proposed an efficient, two step approximation.  First estimate the complex exponents, then solve for the weights.  
+The exponential rates, the k(i)’s, can be complex.  The real part is exponential increase or decrease with x and the imaginary part is the oscillatory rate (the wavenumber).  Simultaneously solving for the weights, the a(i), and the complex exponents, the k(i)’s, is non-linear.  Prony proposed an efficient, two step approximation.  First estimate the complex exponents, then solve for the weights.  
 
-The first stage is to estimate the complex exponents.  This can be done using convolutional filters.  It is simple to see that the next term in a complex exponential series (eg a1, a1*b1, a1*b12, a1*b13, ,...  ) can predicted from the last term by multiplication by b1.  Convolving this sequence with the filter (1, -b1) will output (a1, 0, 0, …).  Applying the filter (1,-b2) to the series (a2, a2*b2, a2*b22, a2*b23, ,...  ) will output (a2, 0, 0, …).  The sum of these sequence can be filtered with both of these filters to obtain (…, 0, 0, 0, …).  Applying both filters is the same as applying the filter (1, -(b1+b2), b1*b2).  The algorithm to estimate N exponents is:
+The first stage, estimate the complex exponentials, can be done using convolutional filters.  The next term in a complex exponential series (a1, a1*b1, a1*b12, a1*b13, ,...  ) can predicted from the last term by multiplication by b1.  Convolving this sequence with the filter (1, -b1) will output (a1, 0, 0, …).  Applying the filter (1,-b2) to the series (a2, a2*b2, a2*b22, a2*b23, ,...  ) will output (a2, 0, 0, …).  The sum of these sequence can be filtered with both of these filters to obtain (…, 0, 0, 0, …).  Applying both filters is the same as applying the filter (1, -(b1+b2), b1*b2).  The algorithm to estimate N exponents is:
 
-1 Compute the n+1 point filter starting with 1 that when applied to the series minimizes the output energy. 
+1 Compute the n+1 point filter, with first coefficient 1, that when applied to the series minimizes the output energy. 
 
 2 Consider the filter as a polynomial and compute the roots.  
 
@@ -58,9 +58,9 @@ Once the complex wavenumbers are known, estimating the amplitude for each wavenu
 Algorithm and Code
 ------------------
 
-This section steps through Spitz’ paper and implements the synthetic and algorithm described.  The basic stages are to initialize python, compute a synthetic, estimate prediction error filters (pef's), fit the data with a linear combination of the 1/pef vectors.  
+This section steps through Spitz’ paper and implements the synthetic and the algorithm.  The basic stages are to initialize python, compute a synthetic, estimate prediction error filters (pef's), fit the data with a linear combination of the 1/pef vectors.  
 
-Before getting started on the algorithm we need some initialization and a next mixed radix function for FFT.  The code is from an ipython notebook.
+Before getting started on the algorithm, we initialize and define a "next mixed radix" function for FFT.  The ipython notebook code is:
 
 .. code-block:: python
 
@@ -95,7 +95,7 @@ Before getting started on the algorithm we need some initialization and a next m
                     break
     return min_exceeding_n
 
-Spitz says the synthetic in Figure 3 consists of  “two horizontal events... One event (signal) displays an amplitude gradient of 1.05. The amplitude of the second event (noise) does not change laterally. These two events, superposed at 200 ms, form the input” on the left of Figure 3.  On the right “is the original noise event but has a changed waveform.”.  I make these synthetics by ramping impulses in the frequency domain.  First the code for the ramp follows and Figure 4 is the matplotlib plot.
+Spitz says the synthetic in Figure 3 consists of  “two horizontal events... One event (signal) displays an amplitude gradient of 1.05. The amplitude of the second event (noise) does not change laterally. These two events, superimposed at 200 ms, form the input” on the left of Figure 3.  On the right “is the original noise event but has a changed waveform.”.  I make these synthetics by ramping impulses in the frequency domain.  First the code to compute the ramp amd create Figure 4 (the matplotib plt) follows:
 
 .. code-block:: python
 
@@ -125,7 +125,7 @@ Spitz says the synthetic in Figure 3 consists of  “two horizontal events... On
   plt.savefig('ramp.png')
   plt.show()
 
-Now create the left side of Figure 3.  Create the signal, noise, and data.  Signal is spike at .2 s increasing by 5%/trace. Noise is spike at .2 s constant amplitude. Data is sum of signal and noise.  This uses numpy array slicing, numpy fft, ramp, numpy ifft, and plots the results using matplotlib.  The code follows and the results are in Figure 5.
+Now create the left side of Figure 3.  Create the signal, noise, and data.  Signal is spike at .2 s increasing by 5% per trace. Noise is spikes at .2 s with constant amplitude. Data is sum of the signal and the noise.  This code uses numpy array slicing, numpy fft, numpy vector multiplication with ramp, numpy ifft, and plots the results using matplotlib.  The code follows and the matplotlib plot is Figure 5.
 
 .. code-block:: python
 
@@ -135,7 +135,7 @@ Now create the left side of Figure 3.  Create the signal, noise, and data.  Sign
 
   #noise plane: spike at .2s amplitude constant with x
   n=np.zeros((nt,nx))
-  n[51,:]=1.0
+  n[51,:]=1.0        # this means "put 1 at time sample 51"
 
   #apply bandpass filter in frequency domain
   # forward fft
@@ -166,7 +166,7 @@ Now create the left side of Figure 3.  Create the signal, noise, and data.  Sign
   plt.savefig('model.png')
   plt.show()
 
-Create the right side of Figure 3 (the model of the noise)  by applying a derivative filter on the noise.  Plot both the noise and the noise model.  The derivative filter, (-1,1), is applied using scipy.lfilter. The code follows and the resulting plot is Figure 6.
+Create the right side of Figure 3 (the model of the noise) by applying a derivative filter on the noise.  Plot both the noise and the noise model.  The derivative filter, (-1,1), is applied using scipy.lfilter. The code follows and the resulting plot is Figure 6.
 
 .. code-block:: python
 
@@ -183,17 +183,17 @@ Create the right side of Figure 3 (the model of the noise)  by applying a deriva
  plt.savefig('noisemodel.png')
  plt.show()
 
-Now we compute the prediction error filter for the noise model (right section on Figure 6). Spitz gives detailed instructions to estimate the prediction error filter in a way that is free from end effects.  Spits observes he gather, Figure 6 right, "is laterally predictable in the f-x domain, with a two-point spatial prediction-error filter (p.e.f.) a, of which the first term, a0, is 1. The unknown coefficient is found by minimizing the power of the prediction-error a[0]m[k] + a[1]m[k-1], from k = 2 to N."  I first compute the prediction filter, pfa.  The Each point in M is predicted from the previous value scaled by pfa[0].  We want the best fit to the equations:
+Now we compute the prediction error filter for the noise model (right section on Figure 6). Spitz gives detailed instructions to estimate the prediction error filter in a way that is free from end effects.  Spitz observes the gather, Figure 6 right, "is laterally predictable in the f-x domain, with a two-point spatial prediction-error filter (p.e.f.) a, of which the first term, a0, is 1. The unknown coefficient is found by minimizing the power of the prediction-error a[0]m[k] + a[1]m[k-1], from k = 2 to N."  I first compute the prediction filter, pfa.  Each point in M is predicted from the previous value scaled by pfa[0].  We want the best fit to the equations:
 
 .. code-block:: python
 
  #    M0              pfa0           M1
  #    M1                             M2
- #    M2         *           =       M3 
+ #    M2         *           ~=      M3 
  #    ...                            ...  
  #    Mn-1                           Mn
 
-The prediction error filter is the error made by the prediction filter. The prediction error filter is 1 followed by the sign reversed prediction error filter. I solve this as a general matrix problem, not a simple projection.  This will be useful later to compute longer filters.  The code to compute the results at a single frequency is surprisingly simple:
+The prediction error filter is the error made by the prediction filter. The prediction error filter is 1 followed by the sign reversed prediction error filter. I solve the prediction filter as a general matrix problem, overkill for a single unknown filter point, but later longer filters will be computed in the next code segment.  The matrix, Aa, and the right hand side require shifted versions of the data, M.  These shifted vectors are created using array slicing.  Both sides of the equation are multipled by the conjugate transpose of Aa (methods of the matrix class).  The equations are solved with scipy.linalg.solve.  The code to compute the results at a single frequency is surprisingly simple:
 
 .. code-block:: python
 
@@ -214,19 +214,19 @@ The prediction error filter is the error made by the prediction filter. The pred
  #print "pfa=",pfa
  print "pefa=",pefa
 
-Running this code produces pefa=[ 1.+0.j -1.-0.j], exactly reproducing the paper.
+This code produces the answer provided in the paper, [1 -1], so this code appears to recreate Spitz' algorithm.  
 
-The next step is to design a prediction error filter on the data, the right section on Figure 5.  This filter must also be computed with care for the ends of the data arrays.  Spitz' observations are "The input data set d consists of two linear events. The gather ... is also laterally predictable in the f-x domain but with a spatial p.e.f. b made of three coefficients, of which the first, b0, is 1. The two unknown coefficients are easily derived at each frequency in the band, by minimizing the power of the spatial prediction-error b[0]d[k] + b[1]d[k-1] + b[2]d[k-2], from k = 3 to N."   I compute the prediction filter, pfb.  Each point in D is predicted by the sum of the two previous value scaled by pfb0 and pfb1. We want to get to best fit to the equations: 
+The next step is to design a prediction error filter on the data, the right section on Figure 5.  Once again this filter is must also be computed with care for the ends of the data arrays.  Spitz' observations are "The input data set d consists of two linear events. The gather ... is also laterally predictable in the f-x domain but with a spatial p.e.f. b made of three coefficients, of which the first, b0, is 1. The two unknown coefficients are easily derived at each frequency in the band, by minimizing the power of the spatial prediction-error b[0]d[k] + b[1]d[k-1] + b[2]d[k-2], from k = 3 to N."   I compute the prediction filter, pfb.  Each point in D is predicted by the sum of the two previous value scaled by pfb0 and pfb1. We want to get to best fit to the equations: 
 
 .. code-block:: python
 
  #    D1   D0              pfb0          D2
  #    D2   D1              pfb1          D3
- #    D3   D2        *           =       D4 
+ #    D3   D2        *           ~=      D4 
  #    ...                            ...  
  #    Dn-1 Dn-2                          Dn
 
-The prediction error filter is 1 followed by the sign reversed prediction error filter and the code to compute the results at a single frequency is:
+This code is very similar to the previous code that computed pefa.  It uses numpy's array slicing, the matrix conj and transpose methods, and scipy.linalg.solve function.  As before, the prediction error filter is 1 followed by the sign reversed prediction filter.  The code to compute the results at a single frequency is:
 
 .. code-block:: python
 
@@ -243,9 +243,9 @@ The prediction error filter is 1 followed by the sign reversed prediction error 
   pefb[0]=1.0
   pefb[1:]=-pfb[:,0]
 
-This computes pefb= [ 1.00+0.j -2.05-0.j  1.05-0.j], reproducing the paper result.
+This computes pefb= [ 1 -2.05  1.05], reproducing the paper result.
 
-The next step it "To find p.e.f. c that concerns only the signal event ... deconvolve the p.e.f. b, obtained from the input gather, with p.e.f. a, obtained from the model gather, and obtained c = (1, –1.05)."  The code that computes this filter is:
+The next step it "To find p.e.f. c that concerns only the signal event ... deconvolve the p.e.f. b, obtained from the input gather, with p.e.f. a, obtained from the model gather, and obtained c = (1, –1.05)."  Scipy.lfilter provides a recursive filter option, which is exactly the paper's "deconvolve" function.  The code that computes this filter is:
 
 .. code-block:: python
 
@@ -257,9 +257,9 @@ The next step it "To find p.e.f. c that concerns only the signal event ... decon
  
  print "pefc=",pefc
 
-This does indeed compute pefc= [ 1.00+0.j -1.05+0.j], matching the paper.
+The code does indeed compute pefc= [ 1.00 -1.05], matching the paper.
 
-The steps to initialize python, compute a synthetic, estimate prediction filters (pef's) have been computed (at least for one frequency).  The next step is to fit the data with a line combination of 1/pefa and 1/pefc.  The paper observes "The structure of [pef]a implies that the noise event does not change from one trace to the next in the bandwidth. Its pattern is therefore the N-dimensional vector (1, ..., 1). The structure of [pef]c implies that the pattern of the signal event ... displays ... an amplitude that increases by 1.05 from trace to trace. The N-dimensional vector that characterizes this pattern is [1, 1.05 ,..., 1.05**(N–1)]. At this stage the input gather d can be seen as a linear combination of the two patterns. The coefficients of this linear combination, the waveforms of the two events, can be easily found using the least squares method."  The code to compute these "patterns" and the coefficients is:
+The steps to initialize python, compute a synthetic, estimate prediction filters (pef's) have been computed (at least for one frequency).  The next step is to fit the data with a linear combination of 1/pefa and 1/pefc.  The paper observes "The structure of [pef]a implies that the noise event does not change from one trace to the next in the bandwidth. Its pattern is therefore the N-dimensional vector (1, ..., 1). The structure of [pef]c implies that the pattern of the signal event ... displays ... an amplitude that increases by 1.05 from trace to trace. The N-dimensional vector that characterizes this pattern is [1, 1.05 ,..., 1.05**(N–1)]. At this stage the input gather d can be seen as a linear combination of the two patterns. The coefficients of this linear combination, the waveforms of the two events, can be easily found using the least squares method."  The "pattern" can be computed using the recursive filter option in scipy.lfilter.  The series computed by recursive filtering will be zeroed (other than the initial 1) when the prediction error filter is applied.  The code to compute these "patterns" and the coefficients is:
 
 .. code-block:: python
 
@@ -284,7 +284,7 @@ The steps to initialize python, compute a synthetic, estimate prediction filters
  print 'D=',D[ifreq,:6]
  print coefficients   
 
-The resulting coefficients are [[-0.70710678-0.70710678j] [-0.70710678-0.70710678j]].  
+The resulting coefficients are [[-0.70710678-0.70710678j] and [-0.70710678-0.70710678j]].  
 
 The code presented up to this point processes one frequency through each stage.  In order to process all the frequencies I need a function, estimate_pef, that will compute prediction error filters of various lengths.  The code to define this function and a unit test by recomputing pefa and pefb follows:
 
@@ -331,7 +331,7 @@ The code presented up to this point processes one frequency through each stage. 
  print "newpefa=",newpefa
  print "newpefc=",newpefc
  
-This function can be used in a loop to process all frequencies.  This code along with inverse Fourier transform and display follows.  Figure 7 is the output from the code and it recreates Figure 3 from Spitz paper.
+This function can be used in a loop to process all frequencies.  This code along with inverse Fourier transform and display follows.  Figure 7 is the output from the code and it recreates Figure 3 from Spitz' paper.
 
 .. code-block:: python
 
@@ -372,20 +372,20 @@ This function can be used in a loop to process all frequencies.  This code along
  plt.imshow(sest,aspect='auto')
  view_nest=plt.subplot(1,2,2)
  plt.imshow(nest,aspect='auto')
- plt.savefig('seperatedcomponents.png')
+ plt.savefig('separatedcomponents.png')
  plt.show()
 
 Discussion
 ----------
 
-Most geophysicists are familiar with prediction error filters because of the deconvolution process.  The prediction error filters in this paper are different.  In these programs we start with a matrix, F, and compute a positive definite matrix, F.conj().transpose() * F.  This is similar to the  autocorrelation matrix that appears in deconvolution, but it is not Toplitz (a Toplitz matrix is a matrix in which each diagonal that descends from left to right is constant).  It is easy to make mistakes like trying to use Levinson recursion or assuming the roots of the filter are inside the unit circle.  Spitz model was likely designed to generate filters with a root of 1.05, well outside the unit circle.  It is important to set up the filter estimation equations properly (i.e. avoid end effects) in order to reproduce these results.  
+Most geophysicists are familiar with prediction error filters because of the deconvolution process.  The prediction error filters in this paper are different.  In these programs we start with a matrix, F, and compute a positive definite matrix, F.conj().transpose() * F.  This is similar to the  autocorrelation matrix that appears in deconvolution, but it is not Toeplitz (a Toeplitz matrix is a matrix in which each diagonal that descends from left to right is constant).  It is easy to make mistakes like trying to use Levinson recursion or assuming the roots of the filter are inside the unit circle.  Spitz' model was likely designed to generate filters with a root of 1.05, well outside the unit circle, to illustrate the value of carefully setting up the filter estimation equations (i.e. avoid end effects).  
 
-This code computes the positive definite matrix by matrix multiplication (F.conj().transpose() * F).  You can compute the matrix with fewer computations by computing the lower triangular part of each column from the previous column, but it is unlikely to speed up the python code.  Fortunately FX prediction error filters are usualy only three to five points and they can be quickly computed without using a fast, special purpose algorithm like Levinson recursion.  
+This code computes the positive definite matrix by the matrix multiplication: F.conj().transpose() * F.  You can compute the matrix with fewer computations by computing the lower triangular part of each column from the previous column, but it is unlikely to speed up the python code.  It may provide a significant tuning oportunity for a production implementation in c or fortran.  FX prediction error filters are usually three to five points, so an implementation without a fast, special purpose algorithm like Levinson recursion is probably ecomonical.  
 
 
 Conclusions
 -----------
-Prototyping the Spitz' model processing using Python was an excellent training exercise.  I experimented with a number of scipy and numpy routines including numpy.fft, numpy.array, numpy.matric, scipy.linalg.solve, scipy.signal.lfilter, matplotlib, and numpy array slicing.  I hope sharing my code with help other geophysicists get started with python.  Experimenting with Spitz' algorithm renewed my interest in digital signal processing.  I think there are many opportunities remaining for signal processing in geophysics.
+Prototyping the Spitz' model processing using Python was an excellent training exercise.  I experimented with a number of scipy and numpy routines including numpy.fft, numpy.array, numpy.matrix, scipy.linalg.solve, scipy.signal.lfilter, matplotlib, and numpy array slicing.  I hope sharing my code with help other geophysicists get started with python.  Experimenting with Spitz' algorithm renewed my interest in digital signal processing.  I think there are many opportunities remaining for signal processing in geophysics.
 
 
 References
@@ -404,7 +404,7 @@ References
 
 .. figure:: modelandnoise.png
 
-  Spitz’s data model (left) consists of two events  at 200 ms on all traces.  One event has amplitude gradient 1.05. The other does not change laterally.   The noise model is constant amplitude at time 200 ms, with a changed wavelet.
+  Spitz’ data model (left) consists of two events  at 200 ms on all traces.  One event has amplitude gradient 1.05. The other does not change laterally.   The noise model is constant amplitude at time 200 ms, with a changed wavelet.
 
 .. figure:: ramp.png
 
