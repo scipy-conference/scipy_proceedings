@@ -174,7 +174,7 @@ insertion, and NumPy-like fancy indexing over on-disk files in common formats
 like CSV, JSON, and HDF5 in memory data strutures like core Python data
 structures and NumPy arrays as well as more sophisticated data stores like SQL
 databases.  The data descriptor interface is analogous to the Python buffer
-interface described in PEP 3118, but with a more flexible API.
+interface described in PEP 3118 [Oli06]_, but with a more flexible API.
 
 Over the course of this article we'll refer to the following simple
 ``accounts.csv`` file:
@@ -630,3 +630,4 @@ References
 .. [Van11]      Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux. *The
                 NumPy Array: A Structure for Efficient Numerical Computation*,
                 Computing in Science & Engineering, 13, 22-30 (2011),
+.. [Oli06]      Oliphant, Travis and Banks, Carl. http://legacy.python.org/dev/peps/pep-3118/
