@@ -459,7 +459,7 @@ The result is shown by the black ellipse in Figure :ref:`fig1`. In practice, the
 
 .. code-block:: python
 
-    >>> import statsmodels.api as sm
+    >>> import statsmodels.api as sm  # version 0.5
     >>> X = sm.add_constant(xdata)
     >>> result = sm.OLS(ydata, X).fit()
     >>> sigma_hat = result.params
