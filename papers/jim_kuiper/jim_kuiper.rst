@@ -182,6 +182,13 @@ and the spatial analysis functionality of PostGIS. These systems are
 deployed on Ubuntu [Ub]_ virtual machines running in a private VMware [VM]_
 cloud. The Python-orchestrated analysis tier is the focus of this paper.
 
+Many of the examples show geospatial operations using PostGIS. PostGIS extends
+the functionality of PostgreSQL for raster and vector spatial data with
+a robust library of functions. We found it to be well documented, reliable,
+and the "footprint analysis" tools we describe in the examples run significantly
+faster than similar tools we had previously developed with a popular
+commerical GIS framework.
+
 EXAMPLES
 --------
 
@@ -731,8 +738,16 @@ CONCLUSIONS
 Python is the de-facto standard scripting language in both the
 open source and proprietary GIS world. Most, if not all, of the major
 GIS software systems provide Python libraries for system
-integration, analysis, and automation, including PostGIS, GeoServer,
-GRASS, and ArcGIS. The examples in this paper include vector and raster
+integration, analysis, and automation, including ArcGIS, GeoPandas
+[GeoP]_, geoDjango [geoD]_, GeoServer, GRASS, PostGIS, pySAL [pySAL]_,
+and Shapely [Shp]_. Some of these systems, such as ArcGIS and geoDJango,
+provide frameworks for web-based mapping applications different from
+the approach we described in the SOFTWARE ENVIRONMENT section. While it
+is outside the scope of this paper to discuss the merits of these
+other approaches, we recommend considering them as alternatives when
+planning projects.
+
+The examples in this paper include vector and raster
 data, as well as code for converting projections, creating buffers,
 retrieving features within a specified area, computing areas and
 lengths, computing a raster-based model, and exporting raster
@@ -750,8 +765,11 @@ Different projections should be used for more localized areas.
 So far our Web-based mapping applications include fairly
 straightforward analysis and modeling services. However, the same
 approaches can be used for much more sophisticated applications
-that tap into the abundant scientific libraries available in the
-Python ecosystem.
+that tap more deeply into PostGIS and GRASS, or the abundant
+libraries available in the Python ecosystem. Matplotlib, NetworkX,
+NumPi, RPy2, and SciPy can each be integrated with Python to provide
+powerful visualization, networking, mathematics, statistical, scientific,
+and engineering capabilities.
 
 ACKNOWLEDGMENTS
 ---------------
@@ -783,6 +801,8 @@ behalf of the Government.
 .. [Erc] http://bogi.evs.anl.gov/erc/portal
 .. [Ezmt] http://eispctools.anl.gov
 .. [GDAL] http://www.gdal.org
+.. [geoD] http://geodjango.org
+.. [GeoP] http://geopandas.org
 .. [Ggl] http://maps.google.com
 .. [GRASS] http://grass.osgeo.org
 .. [Gsrvr] http://geoserver.org
@@ -790,9 +810,11 @@ behalf of the Government.
 .. [OGP] http://www.epsg.org
 .. [OpLyr] http://openlayers.org
 .. [PGIS] http://postgis.net/docs/manual-2.0/reference.html
+.. [pySAL] http://pysal.readthedocs.org/en/v1.7
 .. [PyWPS] http://pywps.wald.intevation.org
 .. [RoR] http://rubyonrails.org
 .. [Sen] http://www.sencha.com/products/extjs
+.. [Shp] http://pypi.python.org/pypi/Shapely
 .. [Sol] http://solarmapper.anl.gov
 .. [Sol13] Kuiper, J., Ames, D., Koehler, D., Lee, R., and Quinby, T.,
            "Web-Based Mapping Applications for Solar Energy Project Planning,"
