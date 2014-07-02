@@ -190,6 +190,7 @@ Over the course of this article we'll refer to the following simple
 
 .. code-block:: python
 
+   >>> from blaze import *
    >>> csv = CSV('accounts.csv')  # Create data object
 
 Iteration
@@ -414,7 +415,8 @@ answer.
 
 .. code-block:: python
 
-   >>> df = DataFrame(L, columns=['id', 'name', 'balance'])
+   >>> df=DataFrame(L, columns=['id', 'name', 'balance'])
+   >>> compute(deadbeats, df)
    1      Bob
    4    Edith
    Name: name, dtype: object
