@@ -20,18 +20,15 @@ Blaze: Building A Foundation for Array-Oriented Computing in Python
 
 .. class:: abstract
 
-Python’s scientific computing and data analysis ecosystem, built around NumPy, SciPy, Matplotlib, Pandas, and a host of other libraries, is a tremendous success. NumPy provides an array object, the array-oriented ufunc primitive, and standard practices for exposing and writing numerical libraries to Python all of which have assisted in making it a solid foundation for the community. Over time, however, it has become clear that there are some limitations of NumPy that are difficult to address via evolution from within. Notably, the way NumPy arrays are restricted to data with regularly strided memory structure on a single machine is not easy to change.
-
-Blaze is a project addresses these limitations, and becoming a foundation to grow Python’s success in array-oriented computing long into the future. It consists of a small collection of libraries being built to generalize NumPy’s notions of array, dtype, and ufuncs to be more extensible, and to represent data and computation that is distributed or does not fit in main memory.
-
-Blaze provides abstractions to connect users familiar with NumPy and Pandas to
-other data analytics libraries both within and without the standard numeric
-Python ecosystem.  Blaze specifically targets backends that support streaming,
-out-of-core, or distributed storage and computation.
-
-We give an overview of the Blaze architecture and then demonstrate its use on a
-typical problem.  We use the abstract nature of Blaze to quickly benchmark and
-compare the performance of a variety of backends on a standard problem.
+We present the motivation and architecture of Blaze, a library for
+cross-backend data-oriented computation.  Blaze provides a standard interface
+to connect users familiar with NumPy and Pandas to other data analytics
+libraries like SQLAlchemy, and Spark.  We motivate the use of these projects
+through Blaze and discuss the benefits of standard interfaces on top of an
+increasingly varied software ecosystem. We give an overview of the Blaze
+architecture and then demonstrate its use on a typical problem.  We use the
+abstract nature of Blaze to quickly benchmark and compare the performance of a
+variety of backends on a standard problem.
 
 .. class:: keywords
 
