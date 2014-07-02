@@ -84,6 +84,7 @@ textbook, and some of them are not self-contained (they may rely strongly on
 my unpublished course notes).  Nevertheless, I've made them publicly available 
 in case others find them useful.  For more context, you may find it helpful
 to examine the `course syllabus <https://github.com/ketch/finite-difference-course/wiki/syllabus>`_.
+You can also examine the `notebooks for my short course on hyperbolic PDEs <https://github.com/ketch/HyperPython>`_, which are more self-contained.
 
 Inquiry-based learning
 ----------------------
@@ -214,12 +215,21 @@ examples are [Tre00]_ and [LeV07]_.  Such books have become more common,
 as the importance of exposing students to the craft of numerical methods -- and 
 the value of experimentation in learning the theory -- has become
 more recognized.  The IPython notebook can be viewed as the next step
-in this evolution.  It combines in a single document
+in this evolution.  As demonstrated in Figure :ref:`traffic`, 
+it combines in a single document
 
 - Mathematics (using LaTeX)
 - Text (using Markdown)
 - Code (in Python or other languages)
 - Figures and animations
+
+.. figure:: ss5.png
+   :align: center
+
+   An excerpt from `Notebook 2 of HyperPython <http://nbviewer.ipython.org/github/ketch/HyperPython/blob/master/Lesson_02_Traffic.ipynb>`_, showing the use of
+   text, mathematics, code, and a code-generated plot in the IPython 
+   notebook.  :label:`traffic`
+
 
 Mathematica, Maple, and (more recently) `Sage <http://www.sagemath.org/>`_ 
 have document formats
@@ -236,6 +246,11 @@ The notebook has some important advantages over Mathematica and Maple documents:
 - It can be collaboratively edited by multiple users at the same time (currently only on SageMathCloud);
 - It is open source, so users can modify and extend it.
  
+The second point above was especially important when I decided
+to switch from using Sage worksheets to IPython notebooks.  Because
+both are stored as text, I was able to write `a simple script to convert them <https://github.com/ketch/sage2ipython>`_.  If I had been using a proprietary binary format, I
+would have lost a lot of time re-writing my materials in a new format.
+
 Perhaps the most important advantage of the notebook is the community
 in which it has developed -- a community in which openness and collaboration are the norm.
 Because of this, those who develop teaching and research materials with IPython notebooks
@@ -330,7 +345,7 @@ is sufficient to acquaint students with the necessary basics; further
 details can be introduced as needed later in the course.
 Students should be strongly encouraged to work together in developing
 their programming skills.  For examples of such an introduction, see
-`this notebook <http://nbviewer.ipython.org/urls/raw.github.com/ketch/HyperPython/master/Lesson_00_Python.ipynb>`_ or `this notebook <http://nbviewer.ipython.org/github/barbagroup/AeroPython/blob/master/lessons/00_Lesson00_QuickPythonIntro.ipynb>`_.
+`this notebook <http://nbviewer.ipython.org/urls/raw.github.com/ketch/HyperPython/master/Lesson_00_Python.ipynb>`_ or `this one <http://nbviewer.ipython.org/github/barbagroup/AeroPython/blob/master/lessons/00_Lesson00_QuickPythonIntro.ipynb>`_.
 
 
 
@@ -459,7 +474,9 @@ I have students code things in the following sequence:
 
 In each step, the code from the previous step becomes a subroutine.
 In addition to being an aid to learning, this approach teaches students
-how to design programs well.
+how to design programs well.  The multigrid notebook from my course can be found
+(with some exercises completed)
+`here <http://nbviewer.ipython.org/gist/ketch/78a2dd063655569c0e7f>`_.
 
 Use animations liberally
 ------------------------
@@ -476,7 +493,15 @@ Time-dependent solutions are not the only things you can animate.
 For iterative solvers, how does the solution change after each algorithmic iteration?  
 What effect does a given parameter have on the results?
 Such questions can be answered most effectively through the use of
-animation.
+animation.  One simple example of teaching a concept with such an
+animation, shown in Figure :ref:`aliasing`, can be found in 
+`this notebook on aliasing <http://nbviewer.ipython.org/gist/ketch/74cf44877c706325e524/>`_.
+
+.. figure:: ss2.png
+   :align: center
+
+   A short notebook on grid aliasing, including code, animation, and exercises.
+   :label:`aliasing`
 
 Drawbacks
 ==========
@@ -569,6 +594,8 @@ Acknowledgments
 ===============
 I am grateful to Lorena Barba for helpful discussions (both online and offline)
 of some of the ideas presented here.
+I thank Nathaniel Collier, David Folch, and Pieter Holtzhausen for their comments that
+significantly improved this paper.
 This work was supported by the King Abdullah University of Science and Technology (KAUST).
 
 .. Customised LaTeX packages
