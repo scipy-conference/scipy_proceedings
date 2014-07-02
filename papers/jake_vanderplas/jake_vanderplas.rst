@@ -8,13 +8,13 @@ Frequentism and Bayesianism: A Python-driven Primer
 
 .. class:: abstract
 
-   This paper gives a brief, semi-technical introduction to the essential differences between the frequentist and Bayesian approaches to statistical inference, with several illustrative examples implemented in Python. The differences between the approaches fundamentally stem from differing conceptions of probability. This difference of philosophy which leads to different approaches to certain problems, and different ways of asking and answering questions about unknown parameters. After discussing these and giving some examples, we briefly compare three leading Python packages for performing Bayesian inference in Python via Markov Chain Monte Carlo. [#blog]_
+   This paper gives a brief, semi-technical introduction to the essential differences between the frequentist and Bayesian approaches to statistical inference, with several illustrative examples implemented in Python. The differences between the approaches fundamentally stem from differing conceptions of probability, a difference of philosophy which leads to different approaches to certain problems as well as different ways of asking and answering questions about unknown parameters. After discussing these and giving some examples, we briefly compare leading Python packages for frequentist inference and for Bayesian inference in Python via Markov Chain Monte Carlo. [#blog]_
 
 .. class:: keywords
 
    statistics, frequentism, Bayesian inference
 
-.. [#blog] This paper draws heavily from content originally published on the author's blog, *Pythonic Perambulations* [VanderPlas2014]_.
+.. [#blog] This paper draws heavily from content originally published in a series of posts on the author's blog, *Pythonic Perambulations* [VanderPlas2014]_.
 
 Introduction
 ------------
@@ -23,7 +23,7 @@ One of the first things a scientist in a data-intensive field hears about statis
 
 This paper seeks to synthesize the philosophical and pragmatic aspects of this debate, so that scientists who use these approaches might be better prepared to understand the tools available to them. Along the way we will explore the fundamental philosophical divergence of frequentism and Bayesianism, explore the practical aspects of how this divergence affects data analysis, and discuss the ways that these practices may affect scientific results.
 
-This paper is written for scientists who may have picked up some statistical knowledge along the way, but who may not fully appreciate the philosophical differences between frequentist and Bayesian approaches, and the effect these differences have on both the practical aspects of computation and the interpretation of statistical results. As such, this paper is not meant to be a full introduction to statistics. In particular, concepts such as the likelihood are assumed rather than derived, and many advanced Bayesian and frequentist diagnostics are left out in favor of showing the most fundamental aspects of the approaches. For a more complete treatment, see, e.g. [Wasserman2004]_ or [Gelman2004]_.
+This paper is written for scientists who may have picked up some statistical knowledge along the way, but who may not fully appreciate the philosophical differences between frequentist and Bayesian approaches and the effect these differences have on both the computation and interpretation of statistical results. Because this passing statistics knowledge is generally leans toward frequentist principles, this paper will go into more depth on the details of Bayesian rather than frequentist approaches. Still, it is not meant to be a full introduction to either class of methods. In particular, concepts such as the likelihood are assumed rather than derived, and many advanced Bayesian and frequentist diagnostic tests are left out in favor of illustrating the most fundamental aspects of the approaches. For a more complete treatment, see, e.g. [Wasserman2004]_ or [Gelman2004]_.
 
 
 The Disagreement: The Definition of Probability
@@ -259,7 +259,7 @@ A second major consequence of the philosophical difference between frequentism a
 - A Bayesian would say: "Given our observed data, there is a 95% probability that the true value of :math:`\theta` lies within the credible region".
 - A frequentist would say: "If this experiment is repeated many times, in 95% of these cases the computed confidence interval will contain the true :math:`\theta`." [#wasserman_note]_
 
-.. [#wasserman_note] [Wasserman2004]_ notes on p. 92 that we need not consider repetitions of the same experiment; it's sufficient to consider repetitions of any correctly-performed frequentist procedure.
+.. [#wasserman_note] [Wasserman2004]_, however, notes on p. 92 that we need not consider repetitions of the same experiment; it's sufficient to consider repetitions of any correctly-performed frequentist procedure.
 
 Notice the subtle difference: the Bayesian makes a statement of probability about the *parameter value* given a *fixed credible region*. The frequentist makes a statement of probability about the *confidence interval itself* given a *fixed parameter value*. This distinction follows straightforwardly from the definition of probability discussed above: the Bayesian probability is a statement of degree of knowledge about a parameter; the frequentist probability is a statement of long-term limiting frequency of quantities (such as the CI) derived from the data.
 
