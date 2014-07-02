@@ -673,7 +673,7 @@ generated, specifying the formula for the model, and ``r.mapcalc``
 is called to perform the model computation. ``r.out.gdal`` is used
 to export the model result from GRASS format to GeoTiff for
 compatibility with GeoServer, and the projection is set using
-``gdal_translate`` from the Geospatial Data Abstractin Library
+``gdal_translate`` from the Geospatial Data Abstraction Library
 [GDAL]_ plugin for GRASS.
 
 .. figure:: figure4.png
