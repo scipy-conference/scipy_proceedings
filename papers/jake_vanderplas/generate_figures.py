@@ -47,6 +47,16 @@ print("  sigma_y = {0}".format(sigma_y))
 print("  Sigma = {0}".format(Sigma_freq))
 
 #----------------------------------------------------------------------
+# statsmodels version 
+import statsmodels.api as sm
+X = sm.add_constant(xdata)
+result = sm.OLS(ydata, X).fit()
+
+print(result.params)
+print(result.cov_params())
+print(result.summary2())
+
+#----------------------------------------------------------------------
 # Fit with emcee
 import emcee
 print("Emcee version {0}".format(emcee.__version__))
