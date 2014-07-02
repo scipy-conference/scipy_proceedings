@@ -384,11 +384,11 @@ BCE: The Berkeley Common Environment
 ------------------------------------
 
 The goal for the BCE is to provide both the ready-made environments, and also
-the "recipes" or scripts for setting up these environments. It should be easy for a
+the "recipe" or scripts for setting up these environments. It should be easy for a
 competent linux user to create recipes for custom tools that might not be
 broadly useful (and thus, not already in BCE).
 
-For class work and research in the sciences at Berkeley, broadly defined to
+The current target is class work and research in the sciences at Berkeley, broadly defined to
 include social science, life science, physical science, and engineering. Using
 these tools, users can start up a virtual machine (VM) with a standardized Linux
 operating environment containing a set of standard software for scientific
@@ -423,50 +423,17 @@ Other packages are installed via bash, e.g., downloading and installing RStudio.
 Using the BCE
 ^^^^^^^^^^^^^
 
-For students ("horizontal" collaboration), Researchers ("vertical" collaboration)
-
 If you'd like to use the VM as a student, researcher, or instructor, our goal is
-to make this easy for you.
+to make this easy for you. Simple instructions are provided on our site for things like opening a terminal (including a description of what the terminal icon looks like). However, for an experienced programmer, the environment should be obvious to navigate.
 
-You can get a terminal window that allows you to type commands in a UNIX-style
-shell by clicking on the icon of the black box with the $ symbo on the top
-panel. Using this you can start IPython Notebook by simply typing "ipython
-notebook" or  R by simply typing 'R' at the prompt in the terminal. This starts
-a bare-bones R session. To start RStudio, either type 'rstudio' at the prompt on
-go to "Applications->Programming->RStudio".
-
-* A fixed, versioned VM provided each semester as a binary image for classes
-  and workshops
-* Our goal is for the same VM usable for research, with functionality for parallel
-  computing and provisioned such that it can be used as the VM for virtual
-  cluster nodes
-* The VM runnable on user laptops (Mac/Windows/Linux) and on cloud machines
-* The VM usable on user machines with minimal dependencies (e.g., either
-  VirtualBox or VMware) and minimal setup, and with clear instructions for
-  users on setup and on getting data/files into and out of the VM
-* Agreement on minimal hardware requirements on the host machine – do we
-  support 32 bit, any minimum RAM required?
-* Shared folders (EBS on AWS), or other tech to make it possible to separate
-  data from VM.
-
-**If you’re using VirtualBox**, the full instructions for setting up a BCE VM on Virtualbox are available on our project website [BCE-VB]_. In brief, one downloads and installs VirtualBox. The BCE VM is available in the form of a pre-built OVA file that can be imported via the GUI menu in VirtualBox. Start the virtual machine by clicking on the tab for the VM and then clicking "Start" at the top.
-After performing these fairly accessible steps, a user will have a machine that has all the software installed as part of BCE, including IPython and useful Python packages and R, RStudio and useful R
+**If you’re using VirtualBox**, we require a 64-bit CPU with support for 64-bit virtualization (note that some 32-bit *operating systems* will support this on some hardware). A reasonable minimum of RAM is 4GB, to allow for the host OS to operate comfortably, with 1GB of RAM plus overhead used by the VM. The full instructions for setting up a BCE VM on Virtualbox are available on our project website [BCE-VB]_. In brief, one downloads and installs VirtualBox. The BCE VM is available in the form of a pre-built OVA file that can be imported via the GUI menu in VirtualBox. After starting the VM – a process that can be done entirely with the mouse – a user will have a machine that has all the software installed as part of BCE, including IPython and useful Python packages and R, RStudio and useful R
 packages.
 
 The VM can be halted just like you would halt linux running directly on your machine, or by closing the window as you would a native application on the host OS. You can restart the VM at any time by opening VirtualBox and clicking on the tab
 for the VM and clicking "Start" as you did above. Detailed instructions are provided for 
 Sharing folders and copying files between your computer and the VM, and the various necessary configuration steps to make this work have already been performed.
 
-**If you’re using a BCE image on EC2**:
-
-* Go to [EC2 management console](http://console.aws.amazon.com) and choose the
-  US-West-2 (Oregon) region, as that is where we have posted the BCE AMI.
-  (You'll need to have an account set up.)
-* On the "AMIs" tab, search for the BCE AMI amongst public images.
-* Launch an instance 55. Follow the instructions given in the "Connect" button
-  to SSH to the instance
-* If you want to connect as the "oski" user, you can deposit your public SSH
-  key in the .ssh folder of the "oski" user.
+**If you’re using BCE on EC2**, even a micro instance is sufficient for basic tasks. Again, complete instructions are provided on the BCE website [BCE-AMI]_. In brief, you can find our image (AMI) in the public list. You can readily launch in instance, and get instructions on connecting via the EC2 console.
 
 Communicating with the maintainers of the BCE project
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -480,23 +447,13 @@ BCE will be clearly versioned for each semester (which will not be extended, exc
 Contributing to the BCE project
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-BCE provides:
-
-* a reproducible workflow that creates the standard VM/image
-  with standard scientific computing software such as Python, R, git, etc.,
-* a standard binary image, produced by the workflow, that can be distributed as is and
-  used on-the-fly with VirtualBox or VMWare Player with minimal dependencies, and
-
-You should generally not need to build the binary VM for BCE for a given semester. However, you may wish to customize or extend BCE. The best way to do this is by simply writing a shell script that will install requirements properly in the context of the BCE (for a complex example, see our bootstrap-bce.sh script in the provisioning directory of the master branch of the repository [XXX reference?].
-
-Provisioning is fully scripted – if the appropriate software is installed,
+BCE provides a fully scripted (thus, reproducible) workflow that creates the standard VM/image. If the appropriate software is installed,
 the recipe should run reliably.
-The provisioning details used to create a given VM available to users and
-with clear instructions on how to use and modify the provisioning.
-We have chosen our approach to provisioning to be relatively simple for users to understand.
+However, you should generally not need to build the binary VM for BCE for a given semester. If you wish to customize or extend BCE, the best way to do this is by simply writing a shell script that will install requirements properly in the context of the BCE (for a complex example, see our bootstrap-bce.sh script [boot]_).
+Much as with OSGeo-Live, we have chosen our approach to provisioning to be relatively simple for users to understand.
 It is our goal for instructors or domain experts to be able to easily extend the recipe for building BCE VMs or images. If not, that’s a bug!
 
-While we have experimented with Docker, Vagrant, and Ansible for setting up the various BCE images, the only foundationally useful tool for our current set of problems has been Packer. Packer is a simple way to automate the things you would type to install an operating system from the base distribution (specifically, the ISO file that you might download from the Ubuntu project), followed by running a simple shell script. This shell script uses standard installation mechanisms like pip and apt-get to complete the setup of our environment.
+While we have experimented with Docker, Vagrant, and Ansible for setting up the various BCE images (and evaluated even more tools), the only foundationally useful tool for our current set of problems has been Packer. Packer is a simple way to automate the things you would type to install an operating system from the base distribution (specifically, the ISO file that you might download from the Ubuntu project), followed by copying files and running our simple shell script. This shell script uses standard installation mechanisms like pip and apt-get to complete the setup of our environment. Moreover, Packer does not require end-users to install or understand any of the current crop of DevOps tools – it operates solely at build time. However, should the need arise, Packer will readily target Vagrant, Docker, and many other targets.
 
 Conclusion
 ----------
@@ -523,32 +480,31 @@ References
 
 .. [BCE] http://collaboratool.berkeley.edu
 .. [OSGeo-Live] http://www.osgeo.org/
-   # A more proper reference
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
 .. [BCE-VB] http://collaboratool.berkeley.edu/using-virtualbox.html
-.. [BCE-AMI]
+.. [BCE-AMI] http://collaboratool.berkeley.edu/using-ec2.html
 .. [HPC] M. G. Xavier, M. V. Neves, F. D. Rossi, T. C. Ferreto, T. Lange, and C. A. De 
    Rose, “Performance evaluation of container-based virtualization for high performance 
-   computing environments,” in Parallel, Distributed and Network-Based Processing (PDP), 
-   2013 21st Euromicro International Conference on, 2013, pp. 233–240. 
-.. [SWC] G. Wilson, “Software Carpentry: lessons learned,” F1000Research, Feb. 2014.
+   computing environments,” in *the 21st Euromicro International Conference on Parallel, 
+   Distributed and Network-Based Processing (PDP)*, 2013, pp. 233–240. 
+.. [SWC] G Wilson, “Software Carpentry: lessons learned,” *F1000Research*, 2014.
 .. [jl] http://github.com/ptone/jiffylab
 .. [DSTb] http://datasciencetoolbox.org/
 .. [DSTk] http://www.datasciencetoolkit.org/
 .. [DSSG] http://dssg.io
+.. [MSW] https://rawgit.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition/master/ipynb/html/_Appendix%20A%20-%20Virtual%20Machine%20Experience.html 
 .. [1g]  http://live.osgeo.org
 .. [2g]  http://www.osgeo.org/content/foundation/about.html
 .. [3g]  http://en.wikipedia.org/wiki/GIS_Live_DVD
-.. [4g] Diffusion of Innovation; Rogers et al 1962
-    http://en.wikipedia.org/wiki/Diffusion_of_Innovations
+.. [4g]  Diffusion of Innovations, 5th ed. New York: Free Press, 2003.
 .. [5g]  http://wiki.osgeo.org/wiki/Live_GIS_History
 .. [6g]  http://svn.osgeo.org/osgeo/livedvd
 .. [7g]  http://wiki.osgeo.org/wiki/Live_GIS_Add_Project
 .. [8g]  http://wiki.osgeo.org/wiki/Live_GIS_Translate
 .. [9g]  http://wiki.osgeo.org/wiki/Live_GIS_Disc_Testing
 .. [10g] http://trac.osgeo.org/osgeo/report/10
-.. [MSW] https://rawgit.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition/master/ipynb/html/_Appendix%20A%20-%20Virtual%20Machine%20Experience.html 
+.. [boot] https://github.com/dlab-berkeley/collaboratool/blob/master/provisioning/bootstrap-bce.sh
 
 References to use/potentially cite
 ----------------------------------
@@ -556,9 +512,5 @@ References to use/potentially cite
 CUDA in the Cloud – Enabling HPC Workloads in OpenStack
 http://on-demand.gputechconf.com/gtc/2013/presentations/S3214-Enabling-HPC-Workloads-OpenStack.pdf
 
-
-[a]Copied from https://github.com/scipy-conference/scipy_proceedings/pull/98#issuecomment-46784086
-
 Useful Glossary of VM Image terms (e.g. EC2 AMI vs Azure VHD, etc)
 http://docs.openstack.org/image-guide/content/ch_introduction.html
-
