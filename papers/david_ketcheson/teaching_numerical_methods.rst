@@ -26,15 +26,23 @@ to inquiry-based learning methods.
 I discuss the motivation and practice of teaching a course based on the use of
 IPython notebooks and inquiry-based learning, including some specific practical aspects.
 The discussion is based on my experience teaching a Masters-level course
-in numerical analysis at KAUST, but is intended to be useful for those
+in numerical analysis at King Abdullah University of Science and Technology (KAUST), but is intended to be useful for those
 who teach at other levels or in industry.
 
 .. class:: keywords
 
    IPython, IPython notebook, teaching, numerical methods, inquiry-based learning
 
+
 Teaching numerical methods
 ==========================
+Numerical analysis is the study of computational algorithms for solving
+mathematical models.  It is used especially to refer to numerical methods
+for approximating the solution of continuous problems, such as those involving
+differential or algebraic equations.  Solving such problems correctly and efficiently
+with available computational resources requires both a solid theoretical foundation and 
+the ability to write and evaluate substantial computer programs.
+
 Any course in numerical methods should enable students to:
 
 1. **Understand** numerical algorithms and related mathematical concepts like
@@ -61,11 +69,21 @@ generally taught through lectures and textbooks; rather, one learns a craft by
 
 Over the past few years, I have shifted the emphasis of my own numerical courses
 in favor of addressing all four of the objectives above.  In doing so, I have drawn
-on ideas from *inquiry-based learning* and used both Sage worksheets
+on ideas from inquiry-based learning and used both Sage worksheets
 and IPython notebooks as an instructional medium.  I've found this approach
 to be very rewarding, and students have told me (often a year or more after completing the
 course) that the hands-on mode of learning was particularly helpful to them.
 
+The notebooks used in my course for the past two years are available online:
+
+- `2012 course <https://github.com/ketch/finite-difference-course>`_
+- `2013 course <https://github.com/ketch/AMCS252>`_
+
+Please note that these materials are not nearly as polished as a typical course
+textbook, and some of them are not self-contained (they may rely strongly on
+my unpublished course notes).  Nevertheless, I've made them publicly available 
+in case others find them useful.  For more context, you may find it helpful
+to examine the `course syllabus <https://github.com/ketch/finite-difference-course/wiki/syllabus>`_.
 
 Inquiry-based learning
 ----------------------
@@ -90,6 +108,7 @@ It refers to a teaching approach in which students read and
 listen to recorded lectures outside of class.  Class time is then used
 not for lectures but for more active, inquiry-based learning through things like discussions, 
 exercises, and quizzes.  
+
 
 
 The value of practice in computational mathematics
@@ -141,14 +160,15 @@ Unfortunately, these courses are sometimes for less credit than a normal
 university course, with an attendant reduction in the amount of material that
 can be covered.
 
-<<<<<<< Updated upstream
 Hopefully the reader is convinced that there is some value in using the
 classroom to teach students more than just the theory of numerical methods.
 In the rest of this paper, I advocate the use of inquiry-based learning and IPython
 notebooks in full-credit university courses on numerical analysis or numerical
 methods.  As we will see, the use of IPython notebooks and the teaching 
 of the craft of numerical methods in general lends itself naturally to
-inquiry-based learning.
+inquiry-based learning.  While most of the paper is devoted to the advantages
+of this approach, there are some significant disadvantages, which I describe
+in the *Drawbacks* section near the end.
 
 
 Teaching with the IPython notebook
@@ -309,7 +329,8 @@ I find that a 1-2 hour laboratory session at the beginning of the course
 is sufficient to acquaint students with the necessary basics; further
 details can be introduced as needed later in the course.
 Students should be strongly encouraged to work together in developing
-their programming skills.
+their programming skills.  For examples of such an introduction, see
+`this notebook <http://nbviewer.ipython.org/urls/raw.github.com/ketch/HyperPython/master/Lesson_00_Python.ipynb>`_ or `this notebook <http://nbviewer.ipython.org/github/barbagroup/AeroPython/blob/master/lessons/00_Lesson00_QuickPythonIntro.ipynb>`_.
 
 
 
@@ -411,7 +432,9 @@ to accommodate the varying levels of experience and skill presented by
 students in a course.  For students who struggle with programming, peer
 interaction in class is extremely helpful.  For students who advance
 quickly, the instructor can provide additional, optional, more challenging
-questions.
+questions.  For instance, in my `HyperPython short course <https://github.com/ketch/HyperPython>`_,
+some notebooks contain challenging "extra credit" questions that only
+the more advanced students attempt.
 
 Gradually build up complexity 
 -----------------------------
@@ -419,14 +442,20 @@ In mathematics, one learns to reason about highly abstract objects by
 building up intuition with one layer of abstraction at a time.
 Numerical algorithms should be developed and understood in the same
 way, with the building blocks first coded and then encapsulated as
-subroutines for later use.  For instance, when teaching multigrid
+subroutines for later use.  Let's consider the multigrid algorithm
+as an example.  Multigrid is a method for solving systems of linear
+equations that arise in modeling things like the distribution of heat
+in a solid.  The basic building block of multigrid is some way of smoothing
+the solution; the key idea is to apply that smoother successively on
+copmutational grids with different levels of resolution.
+
 I have students code things in the following sequence:
 
-1. Jacobi's method 
-2. Under-relaxed Jacobi
-3. A two-grid method,
-4. The V-cycle
-5. Full multigrid
+1. Jacobi's method (a smoother that doesn't quite work)
+2. Under-relaxed Jacobi (a smoother that does work for high frequencies)
+3. A two-grid method (applying the smoother on two different grids in succession)
+4. The V-cycle (applying the smoother on a sequence of grid)
+5. Full multigrid (performing a sequence of V-cycles with successively finer grids)
 
 In each step, the code from the previous step becomes a subroutine.
 In addition to being an aid to learning, this approach teaches students
