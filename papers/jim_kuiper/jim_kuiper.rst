@@ -534,8 +534,8 @@ Results in JSON format:
        }
      }
 
-Elevation Profile along User-Specified Corridor Centerline of Using Elevation Data Stored as Raster Data
---------------------------------------------------------------------------------------------------------
+Elevation Profile along User-Specified Corridor Centerline Using Elevation Data Stored as Raster Data
+-----------------------------------------------------------------------------------------------------
 
 The Corridor Report in the EZMT includes elevation profiles along the
 user-input corridor centerline.  In this example, an elevation layer is
