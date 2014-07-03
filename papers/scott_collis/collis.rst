@@ -35,7 +35,7 @@ Measuring rainshafts: Bringing Python to bear on remote sensing data
 .. class:: abstract
 
 Remote sensing data is complicated, very complicated! It is not only
-geometrically tricky but also, unlike in-situ methods, 
+geometrically tricky but also, unlike in-situ methods,
 indirect as the sensor measures the interaction
 of the scattering media (eg raindrops) with the probing radiation, not the geophysics. However the
 problem is made tractable by the large number of algorithms available in the
@@ -484,7 +484,8 @@ and his home institution, CIMMS, is supported by NOAA/Office of Oceanic and
 Atmospheric Research under NOAA-University of Oklahoma Cooperative Agreement
 #NA11OAR4320072, U.S. Department of Commerce.   The authors wish to thank
 Dr. Alexander Ryzhkov for support on implementation of specific attenuation-based
-rainfall methods.
+rainfall methods. We would also like to thank the reviews of this paper, James Bergstra
+and Terry Letsche. 
 
 References
 ----------
