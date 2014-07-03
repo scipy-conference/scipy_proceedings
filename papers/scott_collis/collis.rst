@@ -28,27 +28,31 @@
 
 
 
----------------------------------------------------------------------
-Measuring rainshafts: Bringing python to bear on remote sensing data.
----------------------------------------------------------------------
+--------------------------------------------------------------------
+Measuring rainshafts: Bringing Python to bear on remote sensing data
+--------------------------------------------------------------------
 
 .. class:: abstract
 
 Remote sensing data is complicated, very complicated! It is not only
-geospatially tricky but also indirect as the sensor measures the interaction
-of the media with the probing radiation, not the geophysics. However the
+geometrically tricky but also, unlike in-situ methods,
+ indirect as the sensor measures the interaction
+of the scattering media (eg raindrops) with the probing radiation, not the geophysics. However the
 problem is made tractable by the large number of algorithms available in the
-Scientific Python community, what is needed is a common data model for active
-remote sensing data that can act as a layer between highly specialized file
-formats and the cloud of scientific software in Python. This paper
+Scientific Python community. While SciPy provides many helpful algorithms for
+signal processing in this domain, a full software stack from highly specialized
+file formats from specific sensors to interpretable geospatial analysis requires
+a common data model for active remote sensing data that can act as a middle layer
+This paper
 motivates this work by asking: How big is a rainshaft? What is the natural
 morphology of rainfall patterns and how well is this represented in fine
 scale atmospheric models. Rather than being specific to the domain of
 meteorology, we will break down how we approach this problem in terms of the tools
 used from numerous Python packages to read, correct, map and reduce the data
 into a form better able to answer our science questions. This is a "how" paper,
-covering signal processing using linear programming methods, mapping using k-d
-trees, image analysis using SciPy's ndimage sub-module and graphics using
+covering the Python-ARM Radar Toolkit (Py-ART) containing
+signal processing using linear programming methods and mapping using k-d
+trees. We also cover image analysis using SciPy's ndimage sub-module and graphics using
 matplotlib.
 
 .. class:: keywords
@@ -75,7 +79,11 @@ models in representing precipitation morphology.
 The data source: scanning centimeter wavelength radar
 -----------------------------------------------------
 
-In order to understand the spatial complexity of precipitating cloud systems a
+Rainfall can occur at many different scales. From small, descrete storm cells at
+scales of 10's of kilometers to
+to large scale tropical systems such as hurricanes which cover 100's to 1000's of
+kilometers. Some complex systems can contain many scales and in order to
+understand this spatial complexity of precipitating cloud systems a
 sensor is required that can collect spatially diverse data. Radars emit a
 spatially discrete pulse of radiation with a particular beamwidth and pulse length.
 A gated receiver detects the backscattered signal and calculates a number
@@ -131,11 +139,11 @@ The Python ARM Radar Toolkit: Py-ART
 Radar data comes in a variety of binary formats but the content is
 essentially the same: A time-range array for each radar moment
 along with data describing the pointing and geolocating of the platform.
-For for mobile radar the platform's motion must also be described in the file.
-Py-ART takes a common data model approach: Carefully design the data containers and
-mandate that functions and methods accept the container as an argument and return
+For mobile radar the platform's motion must also be described in the file.
+Py-ART takes a common data model approach, carefully designing the data containers and
+mandating that functions and methods accept the container as an argument and return
 the same data structure. The common data model for radar data in Py-ART is the
-Radar class which stores data and metadata in Python dictionaries in classes attributes.
+Radar class which stores data and metadata in Python dictionaries in a particular instance's attributes.
 Data is stored in a NumPy array in the 'data' key of the dictionary. For example:
 
 
@@ -192,12 +200,22 @@ Cython wrapper around NASA's Radar Software Library.
   +-------------+-------------------------------+---------------+
   | WSR-88D     | USA operational network       | Native        |
   +-------------+-------------------------------+---------------+
+  | CHILL       | NSF funded deployable S-Band  | Native        |
+  +-------------+-------------------------------+---------------+
 
-We also have Pull Requests on GitHub which introduce support for the
-NSF funded Colorado State University CHILL radar and active development
-on supporting NOAA NOX-P and NASA D3R radars. There is a
-single output format, CF-Radial, a NetCDF based community format on which the
-common data model is derived from.
+
+There is also active development
+on supporting NOAA NOX-P and NASA D3R radars. Py-ART supports a single output
+format for radial geometry radar data which is, CF-Radial. CF-Radial is a NetCDF
+based community format on which the common data model in Py-ART is based on.
+
+Py-ART forms part of an ecosystem of open source radar applications, many of which
+are outlined in [Heistermann2014]_. A key challenge for the radar community is
+reaching consensus on data transport layers so that an application chain
+can be built using multiple applications. In terms of the rest of the Scientific
+python ecosystem, Py-ART brings the data into Python in a very simple way so users
+can simply and quickly get to doing Science. 
+
 
 Pre-mapping corrections and calculations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -257,7 +275,7 @@ Here, a RadarMapDisplay instance is instantiated by providing a Radar object
 which is insensitive to the data source. The sample plotting routines can be used to
 plot data ingested from any of the formats which Py-ART supports.
 
-Mapping to a cartesian grid
+Mapping to a Cartesian grid
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Radars sample in radial coordinates of elevation, azimuth and range. Mathematics
@@ -446,7 +464,7 @@ This paper has covered the pipeline for proceeding from raw radar measurements t
 control and geophysical retrieval to mapping and finally to the extraction of geophysical
 insight. The simple conclusion is that, with careful processing, a network of
 X-Band radars can resolve finer details than a single C-Band radar. More
-importantly, finer details exists. The paper also presents a very simple, image
+importantly, finer details exist. The paper also presents a very simple, image
 processing based technique to take the "morphological finger print" of rainfall
 maps. This technique can be used on both remotely sensed and numerically modeled
 data providing a objective basis for model assessment.
