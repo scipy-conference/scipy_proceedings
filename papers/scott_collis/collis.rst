@@ -35,8 +35,8 @@ Measuring rainshafts: Bringing Python to bear on remote sensing data
 .. class:: abstract
 
 Remote sensing data is complicated, very complicated! It is not only
-geometrically tricky but also, unlike in-situ methods,
- indirect as the sensor measures the interaction
+geometrically tricky but also, unlike in-situ methods, 
+indirect as the sensor measures the interaction
 of the scattering media (eg raindrops) with the probing radiation, not the geophysics. However the
 problem is made tractable by the large number of algorithms available in the
 Scientific Python community. While SciPy provides many helpful algorithms for
@@ -214,7 +214,7 @@ are outlined in [Heistermann2014]_. A key challenge for the radar community is
 reaching consensus on data transport layers so that an application chain
 can be built using multiple applications. In terms of the rest of the Scientific
 python ecosystem, Py-ART brings the data into Python in a very simple way so users
-can simply and quickly get to doing Science. 
+can simply and quickly get to doing Science.
 
 
 Pre-mapping corrections and calculations
