@@ -157,7 +157,7 @@ Alice and Bob enter a room. Behind a curtain there is a billiard table, which th
 
 Here the location of the mark (determined by the first roll) can be considered a nuisance parameter: it is unknown and not of immediate interest, but it clearly must be accounted for when predicting the outcome of subsequent rolls. If the first roll settles far to the right, then subsequent rolls will favor Alice. If it settles far to the left, Bob will be favored instead.
 
-Given this setup, here is the question to answer: *In a particular game, after eight rolls, Alice has five points and Bob has three points. What is the probability that Bob will get a sixth point and win the game?*
+Given this setup, here is the question to answer: *In a particular game, after eight rolls, Alice has five points and Bob has three points. What is the probability that Bob will get six points and win the game?*
 
 Intuitively, we realize that because Alice received five of the eight points, the marker placement likely favors her. Given that she has three opportunities to get a favorable roll before Bob can win, she seems to have clinched it.  But quantitatively speaking, what is the probability that Bob will persist to win?
 
@@ -166,13 +166,13 @@ A Naïve Frequentist Approach
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Someone following a classical frequentist approach might reason as follows:
 
-To determine the result, we need to estimate where the marker sits. We will quantify this marker placement as a probability :math:`p` that any given roll lands in Alice's favor.  Because five balls out of eight fell on Alice's side of the marker, we compute the maximum likelihood estimate of :math:`p`, given by:
+To determine the result, we need to estimate the location of the marker. We will quantify this marker placement as a probability :math:`p` that any given roll lands in Alice's favor.  Because five balls out of eight fell on Alice's side of the marker, we compute the maximum likelihood estimate of :math:`p`, given by:
 
 .. math::
 
     \hat{p} = 5/8,
 
-a result follows in a straightforward manner from the binomial likelihood. Assuming this maximum likelihood probability, we can compute the probability that Bob will win, which requires him to get a point in the next three rolls. This is given by:
+a result follows in a straightforward manner from the binomial likelihood. Assuming this maximum likelihood probability, we can compute the probability that Bob will win, which requires him to get a point in each of the next three rolls. This is given by:
 
 .. math::
 
