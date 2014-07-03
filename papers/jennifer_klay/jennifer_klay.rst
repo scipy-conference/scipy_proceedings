@@ -172,7 +172,13 @@ It was clear from the demos that the students were highly invested in their work
 Project Examples
 ----------------
 
-The most impressive example from 2014 came from a student who coded the Galaxy Merger project [Parry2014]_.  He also uploaded Youtube videos of his assigned research question (direct passage of an equal mass diruptor) from two perspectives, the second of which he coded to follow his own curiosity - it was not part of the assignment.  The main galaxy perspective can be viewed here: http://www.youtube.com/watch?v=vavfpLwmT0o  and the interaction from the perspective of the disrupting galaxy can be viewed here: http://www.youtube.com/watch?v=iy7WvV5LUZg  
+The most impressive example from 2014 came from a student who coded the Galaxy Merger project [Parry2014]_.  Figure :ref:`galaxyfig` shows a still shot from an animated video he created of the direct passage of an equal mass diruptor after the interaction has begun.  He also uploaded Youtube videos of his assigned research question (direct passage of an equal mass diruptor) from two perspectives, the second of which he coded to follow his own curiosity - it was not part of the assignment.  The main galaxy perspective can be viewed here: http://www.youtube.com/watch?v=vavfpLwmT0o  and the interaction from the perspective of the disrupting galaxy can be viewed here: http://www.youtube.com/watch?v=iy7WvV5LUZg  
+
+.. figure:: galaxy.png
+   :scale: 60%
+   :figclass: bht
+
+   Direct passage of an equal mass disruptor galaxy shortly after the disrupting galaxy passes the minimum distance of approach. [Parry2014]_  :label:`galaxyfig`
 
 There were also two other good Youtube video examples of the galaxy merger project, although the solutions exhibited pathologies that this one did not.
 
