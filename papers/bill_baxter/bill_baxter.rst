@@ -62,7 +62,7 @@ The course is taken by Junior and Senior level physics majors and some engineeri
 
 The course begins with two lectures introducing the Unix/Linux operating system.  I continue with 4 lectures on LaTeX and BibTeX.  Each lecture is followed by a homework assignment which allows the student to practice the day's topic.  Then a series of lectures on Scientific Python tools follow as shown in Table:ref:`tools`.  Students receive custom documentation [1]_ on each topic with many examples showing the commands and the results as well as homework on each topic for practice.  
 
-.. [1] Materials are available for download from `https://sites.psu.edu/teachingexperimentalphysics/<https://sites.psu.edu/teachingexperimentalphysics/>`_.  
+.. [1] Materials are available for download from  'https://sites.psu.edu/teachingexperimentalphysics/<https://sites.psu.edu/teachingexperimentalphysics/>'_.  
 
 .. table:: Software tool categories. :label:`tools`
 
