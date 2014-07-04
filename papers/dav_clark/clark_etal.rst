@@ -49,18 +49,46 @@ Introduction
 To accomplish even relatively simple tasks, one commonly needs to configure “new-to-you” computational tools. As you can see in the quote above, even the task of writing this paper required tooling that was not obvious to at least one author! Presumably, most *readers* of this paper will have dealt with far more complex demands in the course of instruction, collaboration, or shipping professional software. The process of introducing novices to new software is made unnecessarily complex due to the variety of potential end-user environments (e.g., Mac, Windows, \*nix), and even methods that authors might have used to set up Python on their machine (e.g., Anaconda, Canopy, python.org).
 
 In a university setting, students need to sufficiently reproduce an environment required to run the software a professor has chosen for a course. Collaborating researchers need to reproduce each other’s workflows, and those of us who value reproducible research would prefer that *anyone* should be able to run the code used for a set of research results. 
-The problem of documenting how to use one’s tools predates computing. But recently, a new crop of tools has emerged under the *DevOps* banner – a contraction of software *development* and systems *operation* – with a general philosophy that systems operation (configuration, deployment, maintenence, etc.) of computing environments can and should be scripted as much as possible [XXX - REF?]. 
+The problem of communicating how to use one’s tools predates computing, and likely even written language! Recently, a new crop of tools-for-managing-tools has emerged under the *DevOps* banner – a contraction of software *development* and systems *operation* – with a general philosophy that instead of merely documenting systems operation tasks (configuration, deployment, maintenence, etc.), that developers can and should be scripting these tasks as much as possible. 
 
-A simple example common to web applications development (an increasingly common way to deploy scientific applications) is ensuring that a properly configured database and secure web server is available. End users who wish to run the web application may prefer PostgreSQL or MySQL, Apache or Nginx. Instructions, then, must be generic to tool-choice (which makes things hard on novice users), or alternatively provide ample detail for all possible choices of tooling (which makes things hard for doing documentation). A DevOps approach to this problem of configuring a web application might consist of providing brief descriptions of various install paths, along with *scripts* or “recipes” that automate setup of your desired environment. As we’ll describe below, many readers will already have tools and skills to do this, in the form of package management and basic shell scripting. In other words, the primary shift that’s required is not one of new tooling (most developers already have the basic tooling they need), but rather one of *philosophy*.
+In scientific computing (and elsewhere) this complexity was commonly managed via the use of monolithic software – if you were lucky, there’d be a one-click installer along with auto-update. More recently, centralized package management has provided curated tools that work well together. But as more and more essential functionality is built out across a variety of systems and languages, the value – but also the difficulty – of coordinating multiple tools in a more agile, decentralized fashion continues to increase. Whether we are producing research results or web services, it is becoming increasingly essential to set up new languages, libraries, databases, and more.
 
-In scientific computing (and elsewhere) this complexity was once managed via the use of monolithic software, or more recently, centralized package management. But as more and more essential functionality is built out across a variety of systems and languages, the value of spanning multiple tools continues to increase. Whether we are producing research results or web services, it is becoming increasingly essential to set up new languages, libraries, databases, and more. As such, a large number of tools have been developed and widely adopted to manage this complexity.
+A simple example common to web development (an increasingly common way to deploy
+scientific applications) is ensuring that a properly configured database and
+secure web server is available. End users who wish to run the web application
+may prefer PostgreSQL or MySQL, Apache or Nginx. Instructions, then, must be
+generic to tool-choice – which makes things hard on novice users – or
+alternatively provide ample detail for all possible choices of tooling – which
+makes things hard for doing documentation. (And unfortunately, it’s common to
+find instructions that are neither generic nor detailed!) A DevOps approach to
+this problem of configuring a web application might consist of providing brief
+descriptions of various install paths, along with *scripts* or “recipes” that
+automate setup of your desired environment. This might not be any easier than
+documenting your tools with prose, but it can be more *enjoyable* and certainly
+more robustly reproducible – even if your setup instructions are wrong, they
+will be reproducibly wrong!  As we’ll describe below, many readers will already
+have tools and skills to do this, in the form of package management and basic
+shell scripting. In other words, the primary shift that’s required is not one of
+new tooling, as most developers already have the basic tooling they need.
+Rather, the needed shift is one of *philosophy*.
 
-A number of solutions have also been developed to allow for multiple *Python* environments, including environments that peacefully co-exist on the same computer (e.g., virtualenv, venv, conda, buildout), but our compute environment often pulls in non-trivial tooling outside of Python (though tools like conda *can* pull in non-python tooling). While these tools from the Python community cannot solve all of the problems we describe below, there is no reason that any of them could not be used within the broader approach we’ll describe. Indeed, a tool like conda could ultimately perform *most* of the work – though as we’ll see, it should likely never be able to perform all of that work.
+That said, consider the specialized tools that have been developed to allow for
+multiple *Python* environments, including environments that peacefully co-exist
+on the same computer (e.g., virtualenv, venv, conda, and buildout), and these
+specialized tools can increase our efficiency and provide ready access to a
+broader range of options (such as different versions or compile-time settings).
+But we’ll argue below that we may also wish to coordinate the desktop
+environment, including text editors, version control systems, and so on. As
+such, these tools from the Python community to manage packages and run-time
+environments cannot solve all of our problems. But any of them could be used
+within the broader approach we’ll describe. Indeed, as a tool like conda
+continues to improve it’s ability to pull in non-python tooling, it could
+ultimately perform *most* of the work to set up the compute environment.
 
-The aforementioned “tools from industry” – generally referred to as *DevOps* tools – are directed at solving this larger problem. Unfortunately, the variety and complexity of tools match the variety and complexity of the problem space, and the target space for most of them was *not* scientific computing. Thus, before discussing available tooling, we first lay out a set of issues relevant to supporting scientific computing.
+More recent configuration management tools are directed at solving this larger problem of configuring nearly any aspect of a compute system. Unfortunately, the variety and complexity of tools match the variety and complexity of the problem space, and the target space for most of them was *not* scientific computing. Thus, before discussing available tooling, we first lay out a fuller set of concerns relevant to supporting scientific computing.
 
-Issues
-------
+Issues for scientific computing
+-------------------------------
 
 Historically, the users of computational tools (and their collaborators) were equipped with a suite of largely self-taught or informally learned foundational skills (command line usage, basic software architecture, etc.). The tooling and technical skills employed by members of a discipline provide notable boundaries between those who do and do not (and perhaps cannot) participate in that discipline. However, we are entering an era where these boundaries are becoming barriers to the mission of our university (and presumably others).
 
@@ -284,7 +312,7 @@ Another feature of the platform is the management and distribution of the images
 
 Docker is also more than just a tool. It is a quickly growing community of Open Source and industry with a rapidly evolving ecosystem of tools built on core OS primitives. There is no clear set of best practices, and those that emerge are not likely to fit all the use cases of the academic community without us being involved in mapping the tools to our needs.
 
-XXX - reasons we rejected Docker are that currently, it requires a Linux environment to host the Docker server. As such, it clearly adds *additional* complexity on top of the requirment to support a virtual machine. Even if you are running natively on Linux, Docker introduces an extra layer of complexity for mapping ports from the inner container, through the outer container, to the host machine. While these issues can be handled elegantly if running in a fully scripted deployment, in our use-cases, we are handing a complete computational (linux) environment, potentially including a GUI to our end-users. Moreover, the default method of deploying Docker (at the time of evaluation) on personal computers is with Vagrant. This approach would then *also* add all of the complexity of using Vagrant. However, recent advances with *boot2docker* provide something akin to a VirtualBox-only, Docker-specific replacement for Vagrant that eliminates *some* of this complexity, though one still needs to grapple with the cognitive load of nested virtual environments and tooling.
+XXX - reasons we rejected Docker are that currently, it requires a Linux environment to host the Docker server. As such, it clearly adds *additional* complexity on top of the requirment to support a virtual machine. Even if you are running natively on Linux, Docker introduces an extra layer of complexity for mapping ports from the inner container, through the outer container, to the host machine. While these issues can be handled elegantly if running in a fully scripted deployment, in our use-cases, we are handing a complete compute (linux) environment, potentially including a GUI to our end-users. Moreover, the default method of deploying Docker (at the time of evaluation) on personal computers is with Vagrant. This approach would then *also* add all of the complexity of using Vagrant. However, recent advances with *boot2docker* provide something akin to a VirtualBox-only, Docker-specific replacement for Vagrant that eliminates *some* of this complexity, though one still needs to grapple with the cognitive load of nested virtual environments and tooling.
 
 Example environments
 --------------------
@@ -579,3 +607,6 @@ http://on-demand.gputechconf.com/gtc/2013/presentations/S3214-Enabling-HPC-Workl
 
 Useful Glossary of VM Image terms (e.g. EC2 AMI vs Azure VHD, etc)
 http://docs.openstack.org/image-guide/content/ch_introduction.html
+
+
+
