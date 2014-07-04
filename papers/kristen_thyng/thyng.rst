@@ -34,7 +34,7 @@ Lagrangian trajectory modeling is a method of moving parcels through a fluid bas
 
 Numerical drifters may be calculated online, while a circulation model is running, in order to use the highest resolution model-predicted velocity fields available in time (on the order of seconds to minutes).  However, due to the high costs of the hydrodynamic computation, many repeated online simulations is not usually practical.  In this case, Lagrangian trajectories can also be calculated offline, using the velocity fields at the stored temporal resolution (on the order of minutes to hours). 
 
-There are many sources of error in simulating offline Lagrangian trajectories. For example, the underlying circulation model must be capturing the dynamics to be investigated, and model output must be available often enough to represent the simulated flow conditions accurately. On top of that, the Lagrangian trajectory model must properly reproduce the transport pathways of the system.  A given drifter's trajectory is calculated using velocity fields with a spatial resolution determined by the numerical model grid. To move the drifter, the velocity fields must be available at the drifter's location, which in general will not be co-located with all necessary velocity information. Many Lagrangian trajectory models use low or high order interpolation in space to extend the velocity information to the drifter location.  The algorithm discussed in this work has a somewhat different approach.
+There are many sources of error in simulating offline Lagrangian trajectories. For example, the underlying circulation model must be capturing the dynamics to be investigated, and model output must be available often enough to represent the simulated flow conditions accurately. On top of that, the Lagrangian trajectory model must properly reproduce the transport pathways of the system.  A given drifter's trajectory is calculated using velocity fields with a spatial resolution determined by the numerical model grid. To move the drifter, the velocity fields must be available at the drifter's location, which in general will not be co-located with all necessary velocity information. Many Lagrangian trajectory models use low- or high-order interpolation in space to extend the velocity information to the drifter location.  The algorithm discussed in this work has a somewhat different approach.
 
 .. introduce TRACMASS with links to places it has been used and introduce TracPy
 
@@ -61,7 +61,7 @@ The TRACMASS algorithm for stepping numerical drifters in space is distinct from
 1. To calculate the time required for the drifter to exit the grid cell in the :math:`x` direction:
 
    a. Linearly interpolate the velocity across the cell in the zonal direction to find :math:`u(x)`.
-   b. Solve the ordinary differential equation :math:`u(x)=\frac{dx}{dt}` for :math:`x(t)`.
+   b. Solve the ordinary differential equation :math:`{u(x)=\frac{dx}{dt}}` for :math:`x(t)`.
    c. Back out the time required to exit the grid cell in the zonal direction, :math:`t_x`. 
 
 #. Follow the same methodology in the meridional and vertical directions to find :math:`t_y` and :math:`t_z`.
@@ -127,7 +127,7 @@ The parallelization of an offline Lagrangian trajectory model could be relativel
 
 Drifter tracks are saved in netCDF files. The file format was recently changed from netCDF3 to netCDF4-CLASSIC. This change was made because netCDF4-CLASSIC combines many of the good parts of netCDF3 (*e.g.*, file aggregation along a dimension) with some of the abilities of netCDF4 (compression). It does not allow for multiple unlimited dimensions (available in netCDF4), but that capability has not been necessary in this application. Changing to netCDF4-CLASSIC sped up the saving process, which had been slow with netCDF3 when a large number of drifters was used. The 64 bit format is used for saving the tracks for lossless compression of information.
 
-We ran a two-dimensional test with about 270,000 surface drifters and over 100,000 grid cells for 30 days. A nan is stored once a drifter exits the domain and forever after in time for that drifter (*i.e.*, drifters do not reenter the numerical domain). This results in a large amount of output that may not contain nans and can be really slow using netCDF3. Run time and space requirement results comparing simulations run with netCDF3 and netCDF4-CLASSIC show improved results with netCDF4-CLASSIC (Table :ref:`netcdf`). The simulation run time does not include time for saving the tracks, which is listed separately. The simulation run time was the same regardless of the file format used (since it only comes in when saving the file afterward), but the file save time was massively reduced by using netCDF4-CLASSIC (about 96%). Additionally, the file size was reduced by about 42%. Note that the file size is the same between netCDF4 and netCDF4-CLASSIC (not shown).
+We ran a two-dimensional test with about 270,000 surface drifters and over 100,000 grid cells for 30 days. A NaN is stored once a drifter exits the domain and forever after in time for that drifter (*i.e.*, drifters do not reenter the numerical domain). This results in a large amount of output (much of which may contain NaNs), and saving such a large file can be really slow using netCDF3. Run time and space requirement results comparing simulations run with netCDF3 and netCDF4-CLASSIC show improved results with netCDF4-CLASSIC (Table :ref:`netcdf`). The simulation run time does not include time for saving the tracks, which is listed separately. The simulation run time was the same regardless of the file format used (since it only comes in when saving the file afterward), but the file save time was massively reduced by using netCDF4-CLASSIC (about 96%). Additionally, the file size was reduced by about 42%. Note that the file size is the same between netCDF4 and netCDF4-CLASSIC (not shown).
 
 .. table:: Comparisons between simulations run with `netCDF3_64BIT` and `netCDF4-CLASSIC`. :label:`netcdf`
 
@@ -143,7 +143,7 @@ We ran a two-dimensional test with about 270,000 surface drifters and over 100,0
 
 .. Performance: change number of drifters and plot timing for each part of the simulation, then do the same changing the number of grid nodes
 
-Suites of simulations were run using TracPy to test its time performance on both a Linux workstation (Figure :ref:`comparison`) and a Macintosh laptop (not shown, but similar results). Changing the number of grid cells in a simulation (keeping the number of drifters constant at a moderate value) most affects the amount of time required to prepare the simulation, which is when the grid is read in. The grid will not be changing size in typical use cases so it may not be a significant problem, but the rapid increase in time required to run the code with an increasing number of grid cells probably indicates an opportunity for improvement in the way the simulations are prepared. Changing the number of drifters (keeping the number of grid cells constant at a moderate value) affects the timing of several parts of the simulation. The base time spent preparing the simulation is mostly consistent since the grid size does not change between the cases. The time for stepping the drifters with TRACMASS, and processing after stepping drifters and at the end of the simulation increase with an increasing number of drifters, as would be expected. Files used to run these tests are available on GitHub_.
+Suites of simulations were run using TracPy to test its time performance on both a Linux workstation (Figure :ref:`comparison`) and a Macintosh laptop (not shown, but similar results). Changing the number of grid cells in a simulation (keeping the number of drifters constant at a moderate value) most affects the amount of time required to prepare the simulation, which is when the grid is read in. The grid will not be changing size in typical use cases so it may not be a significant problem, but the rapid increase in time required to run the code with an increasing number of grid cells may indicate an opportunity for improvement in the way the simulations are prepared. However, the time required to read in the grid increases exponentially with number of grid cells due to the increase in memory requirement for the grid arrays, so a change in approach to what information is necessary to have on hand for a simulation may be the only way to improve this. Changing the number of drifters (keeping the number of grid cells constant at a moderate value) affects the timing of several parts of the simulation. The base time spent preparing the simulation is mostly consistent since the grid size does not change between the cases. The time for stepping the drifters with TRACMASS, and processing after stepping drifters and at the end of the simulation increase with an increasing number of drifters, as would be expected. The time required for increasing the number of drifters should scale linearly. Files used to run these tests are available on GitHub_.
 
 .. _GitHub: https://github.com/kthyng/tracpy_performance
 
@@ -171,7 +171,7 @@ The TracPy suite of code has been used to investigate several research problems 
 .. figure:: river_drifter_tracks.png
    :scale: 28%
 
-   Integrated pathways of drifters initialized in the Atchafalaya and Mississippi river inputs. :label:`pathways`
+   Integrated pathways of drifters initialized in the Atchafalaya and Mississippi river inputs to the numerical domain. :label:`pathways`
 
 .. _available: https://github.com/kthyng/shelf_transport
 
@@ -183,7 +183,7 @@ Many improvements and extensions could be made to TracPy. It is intended to be i
 
 - Placeholders for all locations for all drifters are currently stored for the entirety of a simulation run, which inflates the memory required for a simulation. Instead, drifter locations could be only temporarily stored and appended to the output file as calculated.
 
-- A drifter location is set to nan when the drifter exits the domain. This is currently somewhat accounted for by using netCDF4-CLASSIC compression. However, another way to minimize unnecessary nan storage would be to alter how drifter tracks are stored. Instead of the current approach of storing tracks in a two-dimensional array of drifter versus location in time, all drifter locations for a given time step could be stored together on the same row. This makes retrieval more difficult and requires ragged rows, but eliminates the need to store a drifter that is inactive.
+- A drifter location is set to NaN when the drifter exits the domain. This is currently somewhat accounted for by using netCDF4-CLASSIC compression. However, another way to minimize unnecessary NaN storage would be to alter how drifter tracks are stored. Instead of the current approach of storing tracks in a two-dimensional array of drifter versus location in time, all drifter locations for a given time step could be stored together on the same row. This makes retrieval more difficult and requires ragged rows, but eliminates the need to store a drifter that is inactive. Alternatively, a sparse matrix could be used to only store active drifters.
 
 - Storage could be updated to full netCDF4 format.
 
@@ -199,7 +199,7 @@ A Python wrapper, TracPy, to a Lagrangrian trajectory model, TRACMASS, combines 
 Acknowledgements
 ----------------
 
-Thanks to Chris Barker for help in improving TracPy modularity and unit tests, and for on-going work in integrating TracPy into NOAA's GNOME system.
+Thanks to Chris Barker for help in improving TracPy modularity and unit tests, and for on-going work in integrating TracPy into NOAA's GNOME system. Thanks also to helpful review comments from @LetscheT.
 
 References
 ----------
@@ -224,7 +224,7 @@ References
 
 .. [Thyng2014a] K. M. Thyng, R. D. Hetland, R. Montuoro, J. Kurian. *Lagrangian tracking errors due to temporal subsampling of numerical model output*. Submitted to Journal of Atmospheric and Oceanic Technology, 2014.
 
-.. [Thyng2014b] K. M. Thyng. TracPy. ZENODO. 10.5281/zenodo.10433, 2014.
+.. [Thyng2014b] K. M. Thyng. TracPy. ZENODO. doi: 10.5281/zenodo.10433, 2014.
 
 .. .. [Atr03] P. Atreides. *How to catch a sandworm*,
 ..            Transactions on Terraforming, 21(3):261-300, August 2003.
