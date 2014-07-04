@@ -55,7 +55,7 @@ virtual approach. Some of the advantages of a physical lab are:
 * Large files and datasets can be shared through cross-mounted file systems
 
 
-Some of the shorcomings of physical computer labs are:
+Some of the shortcomings of physical computer labs are:
 
 * Need to purchase and maintain hardware, ensuring security
 
