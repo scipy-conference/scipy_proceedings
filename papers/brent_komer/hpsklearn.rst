@@ -46,14 +46,14 @@ Taking a step back though, there is often no particular reason to use either an 
 A model-agnostic practitioner may simply prefer to go with the one that provides greater accuracy.
 In this light, *the choice of classifier can be seen as hyperparameter* alongside the :math:`C`-value in the SVM and the max-tree-depth of the RF.
 Indeed the choice and configuration of *pre-processing* components may likewise be seen as part of the model selection / hyperparameter optimization problem.
-The Auto-Weka project [Tho12]_ was the first to show that an entire library of machine learning approaches (Weka [Hal09]_ ) can be searched within the scope of a single run of hyperparameter tuning.
+The Auto-Weka project [Tho13]_ was the first to show that an entire library of machine learning approaches (Weka [Hal09]_ ) can be searched within the scope of a single run of hyperparameter tuning.
 However, Weka is a GPL-licensed Java library, and was not written with scalability in mind. These factors limit the utility of Auto-Weka.
 Scikit-learn [Ped11]_ is another library of machine learning algorithms that is written in Python with many modules in C for greater speed, and is BSD-licensed.
 Scikit-learn is widely used in the scientific Python community and supports many machine learning application areas.
 
 With this paper we introduce Hyperopt-Sklearn -- a project that brings the benefits of automatic algorithm configuration to users of Python and scikit-learn.
 Hyperopt-Sklearn uses Hyperopt [Ber13b]_ to describe a search space over possible configurations of Scikit-Learn components, including pre-processing and classification modules.
-Section 2 describes our configuration space of 7 classifiers and 4 preprocessing modules that encompasses a strong set of classification systems for dense and sparse feature classification (of images and text).
+Section 2 describes our configuration space of 6 classifiers and 5 preprocessing modules that encompasses a strong set of classification systems for dense and sparse feature classification (of images and text).
 Section 3 presents experimental evidence that search over this space is viable, meaningful, and effective.
 Section 4 presents a discussion of the results, and directions for future work.
 
@@ -61,6 +61,9 @@ Searching Scikit-learn with Hyperopt
 ------------------------------------
 
 .. figure:: space.pdf
+   :align: center
+   :figclass: w
+   :scale: 50 %
 
    :label:`space`
    Hyeropt-sklearn’s full search space (“Any Classifier”) consists of a (preprocessing, classsifier) pair. 
@@ -114,60 +117,27 @@ we performed optimization runs of up to 300 function evaluations searching eithe
 We used three optimization algorithms in Hyperopt: random search, annealing, and TPE.
 Figure :ref:`avgtestscores` shows that the performance of the model found from throughout the entire search space was not statistically inferior to the best model pulled from each classifier subspace;
 there was no penalty for keeping all options open during search.
-Tables :ref:`tablemnist`, :ref:`tablenewsgroups`, and :ref:`tableconvex` list the test set scores of the best models found by cross-validation, as well as some points of reference from previous work.
+Table :ref:`tablecompare` lists the test set scores of the best models found by cross-validation, as well as some points of reference from previous work.
 Hyperopt-sklearn's scores are relatively good on each data set, indicating that with hyperopt-sklearn's parameterization, Hyperopt's optimization algorithms are competitive with human experts.
 
-.. table:: :label:`tablemnist`
-   Hyperopt-sklearn scores relative to selections from literature on the three data sets used in our experiments. 
-   On MNIST, hyperopt-sklearn is one of the best-scoring methods that does not use image-specific domain knowledge (these scores and others may be found at http://yann.lecun.com/exdb/mnist/). 
+.. table:: Hyperopt-sklearn scores relative to selections from literature on the three data sets used in our experiments. On MNIST, hyperopt-sklearn is one of the best-scoring methods that does not use image-specific domain knowledge (these scores and others may be found at http://yann.lecun.com/exdb/mnist/). On 20 Newsgroups, hyperopt-sklearn is competitive with similar approaches from the literature (scores taken from [Gua09]_ ). In the 20 Newsgroups dataset, the score reported for hyperopt-sklearn is the weighted-average F1 score provided by sklearn. The other approaches shown here use the macro-average F1 score. On Convex Shapes, hyperopt-sklearn outperforms previous automatic algorithm configuration approaches [Egg13]_ and manual tuning [Lar07]_ . 
+   :label:`tablecompare` 
+   :class: w
+   
+   +-----------------------------------+-----------------------------------+-----------------------------------+
+   | MNIST                             | 20 Newsgroups                     | Convex Shapes                     |
+   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
+   | Approach              | Accuracy  | Approach              | F-Score   | Approach              | Accuracy  |
+   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
+   | Committee of convnets | 99.8%     | CFC                   | 0.928     | **hyperopt-sklearn**  | **88.7**  |
+   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
+   | **hyperopt-sklearn**  | **98.7%** | **hyperopt-sklearn**  | **0.856** | hp-dbnet              | 84.6%     |
+   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
+   | libSVM grid search    | 98.6%     | SVMTorch              | 0.848     | dbn-3                 | 81.4%     |
+   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
+   | Boosted trees         | 98.5%     | LibSVM                | 0.843     |                       |           |
+   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
 
-   +-----------------------------------+
-   | MNIST                             |
-   +-----------------------+-----------+
-   | Approach              | Accuracy  |
-   +-----------------------+-----------+
-   | Committee of convnets | 99.8%     |
-   +-----------------------+-----------+
-   | **hyperopt-sklearn**  | **98.7%** |
-   +-----------------------+-----------+
-   | libSVM grid search    | 98.6%     |
-   +-----------------------+-----------+
-   | Boosted trees         | 98.5%     |
-   +-----------------------+-----------+
-
-.. table:: :label:`tablenewsgroups`
-   On 20 Newsgroups, hyperopt-sklearn is competitive with similar approaches from the literature (scores taken from [Gua09]_ ).
-   In the 20 Newsgroups dataset, the score reported for hyperopt-sklearn is the weighted-average F1 score provided by sklearn. 
-   The other approaches shown here use the macro-average F1 score.
-
-   +-----------------------------------+
-   | 20 Newsgroups                     |
-   +-----------------------+-----------+
-   | Approach              | F-Score   |
-   +-----------------------+-----------+
-   | CFC                   | 0.928     |
-   +-----------------------+-----------+
-   | **hyperopt-sklearn**  | **0.856** |
-   +-----------------------+-----------+
-   | SVMTorch              | 0.848     |
-   +-----------------------+-----------+
-   | LibSVM                | 0.843     |
-   +-----------------------+-----------+
-
-.. table:: :label:`tableconvex`
-   On Convex Shapes, hyperopt-sklearn outperforms previous automatic algorithm configuration approaches [Egg13]_ and manual tuning [Lar07]_ .
-
-   +-----------------------------------+
-   | Convex Shapes                     |
-   +-----------------------+-----------+
-   | Approach              | Accuracy  |
-   +-----------------------+-----------+
-   | **hyperopt-sklearn**  | **88.7**  |
-   +-----------------------+-----------+
-   | hp-dbnet              | 84.6%     |
-   +-----------------------+-----------+
-   | dbn-3                 | 81.4%     |
-   +-----------------------+-----------+
 
 .. figure:: AverageTestScoresClassifiersTPE.png
 
@@ -193,6 +163,155 @@ Hyperopt-sklearn's scores are relatively good on each data set, indicating that 
    :label:`npie`
    Looking at the best models from all optimization runs performed on the full search space (using different initial conditions, and different optimization algorithms) we see that different data sets are handled best by different classifiers. 
    SVC was the only classifier ever chosen as the best model for Convex Shapes, and was often found to be best on MNIST and 20 Newsgroups.
+
+
+Example Usage
+-------------
+
+
+One of the important goals of hyperopt-sklearn is that it is easy to learn and to use. 
+To facilitate this, the syntax for fitting a classifier to data and making predictions is very similar to scikit-learn.
+Here is the simplest example of using this software.
+
+
+.. code-block:: python
+   
+   from hpsklearn import HyperoptEstimator
+
+   # Load Data
+   # ...
+ 
+   # Create the estimator object
+   estim = HyperoptEstimator()
+
+   # Search the space of classifiers and preprocessing 
+   # steps and their respective hyperparameters in 
+   # scikit-learn to fit a model to the data
+   estim.fit( train_data, train_label )
+
+   # Make a prediction using the optimized model
+   prediction = estim.predict( unknown_data )
+
+   # Report the accuracy of the classifier 
+   # on a given set of data
+   score = estim.score( test_data, test_label )
+
+   # Return instances of the classifier and 
+   # preprocessing steps
+   model = estim.best_model()
+
+The ``HyperoptEstimator`` object contains the information of what space to search as well as how to search it. 
+It can be configured to use a variety of hyperparameter search algorithms and also supports using a combination of algorithms.
+This is also where the user can specify the maximum number of function evaluations they would like to be run as well as a timeout (in seconds) for each run.
+
+
+.. code-block:: python
+
+   from hpsklearn import HyperoptEstimator
+   from hyperopt import tpe
+
+   estim = HyperoptEstimator( algo=tpe.suggest,
+                              max_evals=150,
+                              trial_timeout=60 )
+
+Each search algorithm can bring its own bias to the search space, and it may not be clear that one particular strategy is the best in all cases.
+Sometimes it can be helpful to use a mixture of search algorithms. 
+
+
+.. code-block:: python
+
+   from hpsklearn import HyperoptEstimator
+   from hyperopt import anneal, rand, tpe, mix
+
+   # define an algorithm that searches randomly 5% of 
+   # the time, uses TPE 75% of the time, and uses 
+   # annealing 20% of the time
+   mix_algo = partial( mix.suggest, p_suggest=[
+               (0.05, rand.suggest),
+               (0.75, tpe.suggest),
+               (0.20, anneal.suggest) ] )
+
+   estim = HyperoptEstimator( algo=mix_algo,
+                              max_evals=150,
+                              trial_timeout=60 )
+
+Searching effectively over the entire space of classifiers available in scikit-learn can use a lot of time and computational resources. 
+Sometimes the user might have a particular subspace of models that they are more interested in.
+With hyperopt-sklearn it is possible to specify a more narrow search space to allow it to be be explored in greater depth.
+
+
+.. code-block:: python
+
+   from hpsklearn import HyperoptEstimator, svc
+
+   # limit the search to only models a SVC
+   estim = HyperoptEstimator( classifier=svc('my_svc') )
+
+Combinations of different spaces can also be used.
+
+
+.. code-block:: python
+
+   from hpsklearn import HyperoptEstimator, svc, knn, \
+                         random_forest
+   from hyperopt import hp
+
+   # restrict the space to contain only random forest, 
+   # k-nearest neighbors, and SVC models. 
+   clf = hp.choice( 'my_name', 
+        [ random_forest('my_name.random_forest'),
+          svc('my_name.svc'),
+          knn('my_name.knn') ] )
+
+   estim = HyperoptEstimator( classifier=clf )
+
+In a similar manner to classifiers, the space of preprocessing modules can be fine tuned.
+Multiple successive stages of preprocessing can be specified by putting them in a list.
+An empty list means that no preprocessing will be done on the data.
+
+
+.. code-block:: python
+
+   from hpsklearn import HyperoptEstimator, pca
+
+   estim = HyperoptEstimator( 
+              preprocessing=[ pca('my_pca') ] )
+
+Combinations of different spaces can be used here as well.
+
+
+.. code-block:: python
+
+   from hpsklearn import HyperoptEstimator, tfidf, pca
+
+   preproc = hp.choice( 'my_name', 
+            [ [pca('my_name.pca')],
+              [pca('my_name.pca'), normalizer('my_name.norm')]
+              [standard_scaler('my_name.std_scaler')],
+              [] ] )
+
+   estim = HyperoptEstimator( preprocessing=preproc )
+
+Some types of preprocessing will only work on specific types of data.
+For example, the TfidfVectorizer that scikit-learn provides is designed to work with text data and would not be appropriate for other types of data.
+To address this, hyperopt-sklearn comes with a few pre-defined spaces of classifiers and preprocessing tailored to specific data types.
+
+
+.. code-block:: python
+
+   from hpsklearn import HyperoptEstimator, \
+                         any_sparse_classifier, \
+                         any_text_preprocessing
+   from hyperopt import tpe
+
+   estim = HyperoptEstimator( algo=tpe.suggest,
+                 classifier=any_sparse_classifier('my_clf')
+                 preprocessing=any_text_preprocessing('my_pp')
+                 max_evals=200,
+                 trial_timeout=60 )
+
+All of the components available to the user can be found in the ``components.py`` file.
+
 
 
 Discussion and Future Work
@@ -253,6 +372,6 @@ References
            Journal of Machine Learning Research, 12:2825–2830, 2011.
 .. [Sno12] J. Snoek, H. Larochelle, and R. P. Adams. *Practical Bayesian optimization of machine learning algorithms*,
            Neural Information Processing Systems, 2012.
-.. [Tho12] C. Thornton, F. Hutter, H. H. Hoos, and K. Leyton-Brown. *Auto-WEKA: Automated selection and hyper-parameter optimization of classification algorithms*,
-           CoRR, abs/1208.3719, 2012.
+.. [Tho13] C. Thornton, F. Hutter, H. H. Hoos, and K. Leyton-Brown. *Auto-WEKA: Automated selection and hyper-parameter optimization of classification algorithms*,
+           KDD 847-855, 2013.
 
