@@ -8,7 +8,7 @@ Python for research and teaching economics
 
 .. class:: abstract
    
-   Together with theory and experimentation, computational modeling and simulation has become a “third pillar” of scientific enquiry. I am developing a curriculum for a three part, graduate level course on computational methods designed to increase the exposure of graduate students and researchers in the College of Humanities and Social Sciences at the University of Edinburgh to basic techniques used in computational modeling and simulation using the Python programming language. My course requires no prior knowledge or experience with computer programming or software development and all current and future course materials will be made freely available online via GitHub.
+   Together with theory and experimentation, computational modeling and simulation has become a “third pillar” of scientific enquiry. I am developing a curriculum for a three part, graduate level course on computational methods designed to increase the exposure of graduate students and researchers in the School of Economics at the University of Edinburgh to basic techniques used in computational modeling and simulation using the Python programming language. My course requires no prior knowledge or experience with computer programming or software development and all current and future course materials will be made freely available online via GitHub.
 
 .. class:: keywords
 
@@ -16,20 +16,22 @@ Python for research and teaching economics
 
 Introduction
 ------------
-In this paper, I discuss the goals, objectives, and pedagogical choices that I have made in designing and teaching a Python-based course on computational modeling and simulation to first-year graduate students in the Scottish Graduate Programme in Economics (SGPE) at the University of Edinburgh.[#]_ The idea for my computational modeling and simulation course emerged out of my PhD research agenda during the summer of 2012. I originally conceived of the course as a way to partially fill what I felt was a significant gap in the training of economics post-graduate students at the University of Edinburgh. The first iteration of the course consisted of roughly six Python-based laboratory sessions and ran during the 2012-2013 academic year. Thus far the course has been a huge success and I am now working to develop a more extensive curriculum for a three part course on computational methods and simulation for economists.
+In this paper, I discuss the goals, objectives, and pedagogical choices that I made in designing and teaching a Python-based course on computational modeling and simulation to first-year graduate students in the Scottish Graduate Programme in Economics (SGPE) at the University of Edinburgh. [#]_   
 
-.. [#] This course would not have been possible without the generous funding and support from the Scottish Graduate Programme in Economics (SGPE), the Scottish Insitute for Research in Economics (SIRE), the School of Economics at the University of Edinburgh, and the Challenge Investment Fund (CIF).
- 
-The first part of the course is a suite of Python-based, interactive laboratory sessions designed to expose students to the basics of scientific programming in Python. The second part of the course is a week-long intensive computational methods “boot camp.”  The boot camp curriculum focuses on deepening students’ computer programming skills using the Python programming language and teaching important software design principles that are crucial for generating high-quality, reproducible scientific research using computational methods. The final part of the course will be an advanced training course targeted at PhD students nad will focus on applying more cutting edge computational science techniques to economic problems via a series of interactive lectures and tutorials. The curriculum for this part of the course will derive primarily from [judd1998]_, [stachurski2009]_, and [sargent2014]_.
+.. [#] This course would not have been possible without generous funding and support from the Scottish Graduate Programme in Economics (SGPE), the Scottish Insitute for Research in Economics (SIRE), the School of Economics at the University of Edinburgh, and the Challenge Investment Fund (CIF).
 
-The remainder of this paper proceeds as follows. In the next section I discuss a number of important decisions regarding software that I faced when developing the course. In section ?? I provide some motivation for applying computational methods and simulation in economics. In section ??, I provide a detailed outline of my course. Finally, section ?? concludes.  
+Like many first-year PhD students, I began my research career with great faith in the analytic methods that I learned as an undergraduate and graduate student. While I was aware that economic models without closed-form solutions did exist, at no time during my undergraduate or graduate studies was I presented with an example of an important economic result that could not be analytically derived. While these analytic results were often obtained by making seemingly restrictive assumptions, the manner in which these assumptions were often justified gives the impression that such assumptions did not substantially impact the economic content of the result. As such, I started work as a PhD student under the impression that most all "interesting" economic research questions could, and perhaps even should, be tackled analytically. Given that both of the leading graduate-level micro and macro-economics textbooks, [mas-colell1995]_ and [romer2011]_, fail to mention that computational methods are needed to fully solve even basic economic models, I do not believe that I was alone in my ignorance of the import of these methods in economics.
+
+Fortunately (or unfortunately?) I was rudely awakened to the reality of modern economics research during my first year as a PhD student. Most economic models, particularly dynamic economic models, exhibit essential non-linearities or binding constraints that render them analytically intractable. Faced with reality I was confronted with two options: give up my original PhD research agenda, which evidently required computational methods, in favor of a modified research programme that I could pursue with analytic techniques; or teach myself the necessary numerical techniques to pursue my original research proposal. I ended up spending the better part of two (out of my alloted three!) years of my PhD teaching myself computational modeling and simulation methods. The fact that I spent two-thirds of my PhD learning the techniques necessary to pursue my original research agenda indicated, to me at least, that there was a substantial gap in the graduate economics training at the University of Edinburgh. In order to fill this gap, I decided to develop a three-part course on computational modeling and simulation. 
+
+The first part of my course is a suite of Python-based, interactive laboratory sessions designed to expose students to the basics of scientific programming in Python. The second part of the course is a week-long intensive computational methods “boot camp.”  The boot camp curriculum focuses on deepening students’ computer programming skills using the Python programming language and teaching important software design principles that are crucial for generating high-quality, reproducible scientific research using computational methods. The final part of the course, which is very much under development, will be an advanced training course targeted at PhD students and will focus on applying more cutting edge computational science techniques to economic problems via a series of interactive lectures and tutorials. 
 
 Software
 --------
-In this section I discuss the software that I decided to use for the course. For the laboratory sessions I needed to decide whether to use Python or Matlab, and conditional on using Python I needed to choose an appropriate Python distribution. For the Python boot camp and the Advanced training course I needed to make additional decisions regarding text editors and version control software.  
+In this section I discuss the software that I decided to use for the course. In particular, I discuss why I chose to use Python over the dominant platform used for scientific computing in economics, Matlab. I also discuss how I came to settle on the Canopy Python distribution and the IPython Notebook as my primary teaching platform. Finally, I briefly motivate my choice of Sublime as default text editor and my use of Git for version control.
 
-Python vs. Matlab
-~~~~~~~~~~~~~~~~~
+Why Python?
+~~~~~~~~~~~
 Python is a modern, object-oriented programming language widely used in academia and private industry, whose clean, yet expressive syntax, makes it an easy programming language to learn while still remaining powerful enough for serious scientific computing. Python's syntax was designed from the start with the human reader in mind and generates code that is easy to understand and debug which shortens development time relative to low-level, compiled languages such as Fortran and C++.  Among the high-level, general purpose languages, Python has the largest number of Matlab-style library modules (both installed in the standard library and through additional downloads) which meaning that one can quickly construct sophisticated programs.
 
 Python is completely free and platform independent, making it a very attractive option as a teaching platform relative to other high-level scripting languages, particularly Matlab. Python is also open-source, making it equally attractive as a research tool for scientists interested in generating computational results that are more easily reproducible.[#]_ Finally, Python comes with a powerful interactive interpreter that allows real-time code development and live experimentation. The functionality of the basic Python interpreter can be greatly increased by using the Interactive Python (or IPython) interpreter.  Working via the Python or IPython interpreter eliminates the time-consuming (and productivity-destroying) compilation step required when working with low-level languages at the expense of slower execution speed. In many cases, it may be possible to achieve the best of both worlds using "mixed language" programming as Python can be easily extended by wrapping compiled code written in Fortran, C, or C++ using libraries such as f2Py, Cython, or swig. See [oliphant2007]_, [peterson2009]_, [behnel2011]_, [van2011]_ and references therein for more details.  
@@ -66,7 +68,16 @@ Many possibilities: Typical student is familiar with MS Word and notepad (maybe 
 
 Version control: Git.
 ~~~~~~~~~~~~~~~~~~~~~
-Never even considered using anything else. Existence of GitHub, particularly now that you can register an academic email and get free private repositories, makes Git the only real choice for version control software. 
+Quick discussion of the importance of version control. Despite importance, simply no time to teach students how to use version control software: learning curve for is a bit too steep for the median student.
+
+`Git`_ is a free, open-source distributed version control system capable of handling everything from simple scipts to large-scale collaborative projects. 
+
+`GitHub`_ How to describe GitHub? 
+
+Never even considered using anything else. Existence of GitHub, particularly now that you can register an academic email and get free private repositories, makes Git the only real choice for version control software for academics. 
+
+.. _`Git`: http://git-scm.com/
+.. _`GitHub`: https://github.com/
 
 Motivating the use of numerical methods in economics
 ----------------------------------------------------
@@ -150,6 +161,8 @@ In addition to the various generic numerical methods that can be demonstrated by
 Course outline
 ----------------------
 Having motivated the need for computational methods in economics, in this section I outline the three major components of my computational methods course: laboratory sessions, an intensive week-long Python boot camp, and an advanced PhD training course. The first two components are already up and running (thanks to funding support from the SGPE, SIRE, and the CIF). I am still looking to secure funding to develop the advanced training course component.
+
+The first iteration of the course consisted of six Python-based laboratory sessions and ran during the 2012-2013 academic year. During the 2013-2014 academic year the course expanded to include two additional laboratory sessions as well as a week-long intensive Python programming "boot camp." Thus far the course has proven to be a huge success and I am now working to develop a more extensive curriculum for a three part course on computational methods and simulation for economists.
 
 Laboratory sessions
 ~~~~~~~~~~~~~~~~~~~
@@ -267,10 +280,12 @@ The final part of the course (for which we are still looking for funding to deve
 
 Teaching material will be based on parts 3 and 4 of `Quantitative Economics`_ with additional material drawn from [judd1998]_.
 
+The curriculum for this part of the course will derive primarily from [judd1998]_, [stachurski2009]_, and [sargent2014]_.
+
 Conclusion
 ----------
-
 There is an increasing demand for both applied and theoretical economists interested in inter-disciplinary collaboration. The key to developing and building the capacity for inter-disciplinary research is effective communication using a common language. Historically that common language has been mathematics. Increasingly however this language is becoming computation. Economists and other social sciences can greatly benefit from scientific collaboration and the use of the numerical techniques used across disciplines such as mathematics, physics, biology, computer science and informatics. 
+
 
 References
 ----------
@@ -278,6 +293,7 @@ References
 .. [behnel2011] S. Behnel, et al. *Cython: The best of both worlds*, Computing in Science and Engineering, 13(2):31-39, 2011.
 .. [judd1998] K. Judd. *Numerical Methods for Economists*, MIT Press, 1998.
 .. [mankiw2010] N.G. Mankiw. *Intermediate Macroeconomics, 7th edition*, Worth Publishers, 2010. 
+.. [mas-colell1995] A.Mas-Colell,et al. *Microeconomic Theory, 7th ediition*, Oxford University Press, 1995.
 .. [oliphant2007] T. Oliphant. *Python for scientific computing*, Computing in Science and Engineering, 9(3):10-20, 2007.
 .. [peterson2009] P. Peterson. *F2PY: a tool for connecting Fortran and Python programs*, International Journal of Computational Science and Engineering, 4(4):296-305, 2009. 
 .. [romer2011] D. Romer. *Advanced Macroeconomics, 4th edition*, MacGraw Hill, 2011.
