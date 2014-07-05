@@ -74,7 +74,7 @@ Rather, the needed shift is one of *philosophy*.
 
 That said, consider the specialized tools that have been developed to allow for
 multiple *Python* environments, including environments that peacefully co-exist
-on the same computer (e.g., virtualenv, venv, conda, and buildout), and these
+on the same computer (e.g., virtualenv, venv, conda, and buildout). These
 specialized tools can increase our efficiency and provide ready access to a
 broader range of options (such as different versions or compile-time settings).
 But we’ll argue below that we may also wish to coordinate the desktop
@@ -110,7 +110,7 @@ Given these constraints, any solution should be able to be set up via GUI operat
 For scientific collaboration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the D-Lab, and more generally in “Data Science” initiatives across campus, we encounter increasing numbers of researchers who wish to borrow techniques from other researchers. These researchers often come from different domains with different standards for tools. These would-be collaborators are increasingly moving towards open-source tools – often developed in Python or R – which already dramatically reduces financial barriers to collaboration (it remains the case that more are concerned with monetary cost than access to source code). 
+In the D-Lab, and more generally in “Data Science” initiatives across campus, we encounter increasing numbers of researchers who wish to borrow techniques from other researchers. These researchers often come from different domains with different standards for tools. These would-be collaborators are increasingly moving towards open-source tools – often developed in Python or R – which already dramatically reduces financial barriers to collaboration. 
 
 The current situation, however, results in chaos, misery, and the gnashing of teeth. It is common to encounter a researcher with three or more python distributions installed on their machine, and this user will have no idea how to manage their command-line path, or which packages are installed where. In particularly pathological cases, pip will install packages to an otherwise inactive python distribution. These nascent scientific coders will have at various points had a working system for a particular task, and often arrive in a state in which nothing seems to work. A standard environment can eliminate this confusion, and if needed, isolate environments that serve different projects. Snapshots of working systems would provide even more resilience of the continued functioning of already running projects. And critically, we don’t want to disrupt the already productive environments that these researchers are using!
 
@@ -119,73 +119,45 @@ This issue becomes even more pronounced when we begin “collaborating” with o
 For administration
 ^^^^^^^^^^^^^^^^^^
 
-At UC Berkeley, the D-Lab has supported courses and short trainings with these technologies. Similarly, the Statistical Computing Facility (SCF) supports an instructional lab and cloud-based VMs for some courses, and computer science courses often provide a VM (often provisioned by a graduate student assistant). In each and every case, multiple technical challenges are common. These technical glitches can delay or reduce the quality of instruction as compared to an environment that students are already familiar with. It is also a drag on the time of those supporting the course – time that could be better directed at course content!
+At UC Berkeley, the D-Lab supports tools for courses and short trainings. Similarly, the Statistical Computing Facility (SCF) supports an instructional lab and “cloud” resources for some courses, and grad student assistants often provide virtual machines for courses (we’ll explain virtual machines later). In each and every case, multiple technical challenges are common. These technical glitches can delay or reduce the quality of instruction as compared to an environment that students are already familiar with. It is also a drag on the time of those supporting the course – time that could be better directed at course content!
 
-Thus, we have developed a standard environment, and done so in an open-source fashion. The goal is to obtain net *savings* of time spent supporting this environment, while improving the experience for our students and researchers. The more broadly this environment is adopted across campus, the more familiar it will be to all students. Using infrastructure for collaborative administration, technical glitches can be tracked or resolved by a community of competent contributors, allowing course instructors to simply use a well-polished end product, while reducing the complexity of instructions for students to set up course-specific software. These environments can also be tuned in ways that would be beyond the scope of what would be worth doing for an individual course – for example simple optimizations to increase the efficiency of numeric computations or network bandwidth for remote desktops.
+The goal is to obtain net *savings* of time spent supporting this environment, while improving the experience for our students and researchers. The more broadly a standard environment is adopted across campus, the more familiar it will be to all students. Using infrastructure for collaborative administration, technical glitches can be tracked or resolved by a community of competent contributors, allowing course instructors to simply use a well-polished end product, while reducing the complexity of instructions for students to set up course-specific software. These environments can also be tuned in ways that would be beyond the scope of what would be worth doing for an individual course – for example simple optimizations to increase the efficiency of numeric computations or network bandwidth for remote desktops.
 
-It is at this point that our use case starts to sound like the case in which product developers are working together to deploy software on a production server, while maintaining a useful development environment on their own machines, testing servers, and so on. However, going forwards, we will suggest that next-gen tools for building and managing compute environments be largely the domain of administrator-contributors to a useful common environment. Technically skilled students, professors and researchers can continue to use the tools they are familiar with, such as the Ubuntu package manager, pip, shell scripts, and so on. More will be said about tooling below.
+It is at this point that our use case starts to sound like the case in which product developers are working together to deploy software on a production server, while maintaining a useful development environment on their own machines, testing servers, and so on. However, going forwards, we will suggest that novel tools for building and managing compute environments be largely the domain of administrator-contributors to a useful common environment. Technically skilled students, professors and researchers can continue to use the tools they are familiar with, such as the Ubuntu package manager, pip, shell scripts, and so on. More will be said about tooling below.
 
 Summary
 ^^^^^^^
 
 Above, we’ve highlighted how a common environment might support instruction, research, and efficient IT support. We are looking forward to the potential for impacts on thin clients for staff computing, exam environments, instructional labs, and providing easier mechanisms for sharing licensed software. Notably, we are not looking to advance the state of the art in high-performance computing. Rather, we are focused on methods to provide access to software tools that have not traditionally been available to all disciplines.
 
-Here’s another way to think about the challenge: I have an environment and you have an environment. I want to do things my way, you want to do them yours. If we wish to work together – either as student and teacher, or as collaborators – this introduces barriers. One solution is to allow individuals to maintain their existing, productive environments, and *also* provide a common environment that can be run either on each individuals’ personal computer, or on a shared server. This environment provides a shared context where one can provide instructions that are relatively certain to work, and should even be quantifiable in terms of how much time the steps will take. As any individual gains understanding of the code, they are still free to work in their own environment, or customize the common environment in ways that don’t disrupt collaboration (e.g., by installing text editors, etc.). Below, we consider what the useful features of such an environment might be.
-
-
 Technical challenges for a common environment
 ---------------------------------------------
 
-Any common environment needs to provide a base of generally useful software, and it should be clear how it was installed and configured. It should equally clear how one could set up additional software following the pattern of the “recipe” for the environment, so that this software is also easy to share with other users of the environment. More generally, we seek to address the following challenges, though we have certainly not definitely solved them! After each solution, we list relevant tools, which will be described in full in a later section:
+Any common environment needs to provide a base of generally useful software, and it should be clear how it was installed and configured. It should equally clear how one could set up additional software following the pattern of the “recipe” for the environment, so that this software is also easy to share with other users of the environment. More generally, we seek to address the following challenges, though we have certainly not definitely solved them! After each solution, we list relevant tools, which will be described in full in a later section.
 
 Dependency hell
 ^^^^^^^^^^^^^^^
 
 The quote at the beginning of this paper represents the first barrier to collaboration in which the full set of requirements are not explicitly stated and there is an assumption that all collaborators already have or can set up an environment to collaborate. The number of steps or the time required to satisfy these assumptions is unknown, and regularly exceeds the time available. For example, in the context of a 1.5 hour workshop or a class with only handful of participants, if all cannot be set up within a fixed amount of time (typically 20 minutes at most) it will jeopardize successfully completing the workshop or class materials and will discourage participation. All participants must be able to successfully complete the installation with a fixed number of well-known steps across all platforms within a fixed amount of time, and a fallback can be provided where this is not possible. 
 
-An additional difficulty arises when users are using versions of the “same” software. For example, Git Bash on Windows lacks a `man` command.
+An additional difficulty arises when users are using versions of the “same” software. For example, Git Bash on Windows lacks a ``man`` command.
 We *cannot* control the base environment that users will have on their laptop or workstation, nor do we wish to! Thus, a useful environment should provide consistency and not depend on or interfere with users’ existing setup.
 
-Relevant tools discussed below include:
-
-* Packer
-* VirtualBox, VMWare Fusion/Workstation
-* EC2 AMI, Azure VHD, owned servers
+Relevant tools discussed below include Linux, virtual machines, and configuration management.
 
 Going beyond the laptop
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 We will consider a participant’s laptop the unit-of-compute since it is the primary platform widely used across the research and teaching space and is a reasonable assumption to require: specifically a 64-bit laptop with 4GB of RAM. These requirements are usually sufficient to get started, however the algorithms or size of in-memory data may exceed the available memory of this unit-of-compute and the participant may need to migrate to another compute resource such as a powerful workstation with 128GB of RAM, an amount of memory not yet available in even the most advanced laptops which typically max-out at 16GB at the time of this writing. Thus, an environment should not be *restricted* to personal computers. We should be able to replicate the environment across systems, so that the user is guaranteed to replicate the data processing, transformations, and analysis steps they ran on their laptop in this new environment, but with better performance.
 
-Relevant tools discussed below:
-
-* Packer
-* Docker
-
-Pleasant parallelization
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-For many, even “embarrassingly” parallelizable algorithms are hard to parallelize. Even if we can easily set up multiple instances of an environment we were running on our laptop, the time and skill required to access needed to coordinate these compute resources may be prohibitive. At UC Berkeley, we are deploying a condo-model HPC cluster that can provide the equivalent of hundreds of the workstations our users have in their lab, and we all have access to the public “cloud computing” resources at Amazon and their competitors.
-By targeting a common environment, we can build towards well-engineered building blocks that ensure basic functionality is working on the target system.
-
-Enabling tools:
-
-* Packer
-* Docker, LXC
-* EC2 AMI, Azure VHD
-* Ansible, Puppet, Chef
-
+Relevant tools discussed below include Packer and Docker.
 
 Managing cost / maximizing value
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Assuming you have the grant money to buy a large workstation with lots of memory and many processors, but you may only need that resource for a 1 to 2 week period of time. Spending your money on a resource that remains unused 95% of the time is a waste of your grant money! A homogeneous, familiar environment can enable easier usage of the public cloud. A private cloud approach to managing owned resources can also allow more researchers to get value out of those resources. This is a critical enabler to allow us to serve less well-funded researchers. In addition, more recent technologies can avoid exclusively reserving system resources for a single environment.
 
-Enabling tools:
-
-* Packer
-* Docker, LXC
-* EC2 AMI, Azure VHD
+Enabling tools here are Packer, Docker (and LXC), and cloud-based virtual machines.
 
 Existing Tools
 --------------
@@ -197,48 +169,50 @@ The tools mentioned in the previous section will now be described in depth to gi
 Table :ref:`tools` provides an overview from the perspective of the
 DevOps engineer (i.e., contributor, maintainer, *you*, etc.).
 
-.. table:: Automation tools we think you should start with.
+.. table:: Recommended automation tools for *our* use-cases.
    :label:`tools`
-   :class: w
 
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   | Generate OS image for multiple platforms                                        | build-time     | blob distribution                                                                     | Packer                              |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   | Apply configurations in a repeatable fashion                                    | build-time     | repeatability                                                                         | Shell Script, Puppet, Ansible, Chef |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   | Manage OS image modifications                                                   | build-time     | image “trees”                                                                         | Docker                              |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   | Enable a different OS for end-user across a variety of “host” OSes              | run-time       | control group / host platform independence / dependency isolation / security (VMWare) | VirtualBox, VMWare                  |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   | Enable light-weight custom environment (instead of heavy-weight virtualization) | run-time       | performance                                                                           | Docker, LXC                         |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-   |                                                                                 | run-time       | public cloud                                                                          | AWS, Azure, GCE                     |
-   +---------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------+-------------------------------------+
-
+   +------------------------------+-------------------------------------------+
+   | **Goal**                     | **Relevant tools**                        |
+   +------------------------------+-------------------------------------------+
+   | Make Linux available as a VM | Local VM tool or public cloud             |
+   | (regardless of host OS)      | (e.g., VirtualBox or Amazon EC2 – choose  |
+   |                              | something supported by Packer)            |
+   +------------------------------+-------------------------------------------+
+   | Apply configurations in a    | Shell script, package managers (e.g.,     |
+   | repeatable fashion           | apt, pip), configuration management       |
+   |                              | (e.g., Ansible)                           |
+   +------------------------------+-------------------------------------------+
+   | Generate OS image for        |                                           |
+   | multiple platforms           | Packer                                    |
+   +------------------------------+-------------------------------------------+
+   | Enable light-weight custom   |                                           |
+   | environment (instead of      |                                           |
+   | heavy-weight virtualization) | Docker, LXC                               |
+   +------------------------------+-------------------------------------------+
 
 Linux OS (Operating System)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A foundational tool for our approach has been the Linux operating system. It is far easier to standardize on a single OS instead of trying to manage the complexity of cross-platform support. Critically, it is often relatively easy to install (or build) scientific code on Linux. Likewise, the popular DevOps tool *Docker* (described below) was designed to work with a Linux kernel.  Moreover, Linux is not encumbered by licensing constraints, so lowering the barrier to collaboration, distribution, and reuse. This choice of a single target OS is a primary reason to use *virtual machines* (described below) because many people use other OSes (commonly Mac OS or Windows) as their primary laptop OS.
+A foundational tool for our approach has been the Linux operating system. It is far easier to standardize on a single OS instead of trying to manage the complexity of cross-platform support. Critically, it is often relatively easy to install (or build) scientific code on Linux. Likewise, the popular DevOps tool *Docker* (described below) was designed to work with a Linux kernel.  Moreover, Linux is not encumbered by licensing constraints, which reduces barriers to collaboration, distribution, and reuse. This choice of a single target OS is a primary reason to use *virtual machines* (described below) because many people use other OSes (commonly Mac OS or Windows) as their primary laptop OS.
 
 Virtual machines (VMs)
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Virtual machine (VM) software enables running another OS (in BCE, Ubuntu server with XFCE installed) as a guest OS inside the host OS such as Mac OS or Windows or even another variant of Linux. If a system is not virtualized (for example, the host OS), it is said to be running on “bare metal.” While there are many options for running VMs on commodity hardware, to address the needs we described above, we restrict ourselves to software that runs on Windows, Mac OS, *and* Linux, specifically VirtualBox and VMware. Cloud providers like EC2 only provide virtual machines (there is no access to “bare metal”), and similar concepts apply across local and cloud virtual systems. A notable distinction is that web tools are often available for cloud services. Both kinds of services provide command-line tools that can perform a superset of the tasks possible with graphical interfaces.
+Virtual machine (VM) software enables running another OS (in BCE, Ubuntu server with XFCE installed) as a *guest* OS inside the *host* OS such as Mac OS or Windows or even another variant of Linux. If a system is not virtualized (for example, the host OS), it is said to be running on “bare metal.” While there are many options for running VMs on commodity hardware, to address the needs we described above, we restrict ourselves to software that runs on Windows, Mac OS, *and* Linux, specifically VirtualBox and VMware (the former of which is free). Cloud providers like EC2 *only* provide virtual machines (there is no access to “bare metal”), and similar concepts apply across local and cloud virtual systems. A notable distinction is that web tools are often available for cloud services. Both kinds of services provide command-line tools that can perform a superset of the tasks possible with graphical interfaces.
 
-The primary challenge in getting students to run a virtualized environment is that for some of them, it simply will not work, generally because they have a very old operating system or personal computer. Thus, one should assume that any VM solution will not work for some individuals and provide a fallback solution. If a uniform Linux environment is being used, then this has to be on a remote server. In this case, remote desktop software may be necessary, or in our case, we were able to enable essential functionality via a web browser using IPython notebooks. RStudio server would provide a similar approach to sidestepping the need for a full remote desktop session.
+For some users, a VM simply will not work, generally because they have a very old operating system or personal computer. Thus, one should assume that any VM solution will not work for some individuals and provide a fallback solution (particularly for instructional environments). If a uniform Linux environment is being used, then this has to be on a remote server. In this case, remote desktop software may be necessary, or in the case of BCE, we are able to enable all essential functionality via a web browser using IPython notebooks. RStudio server would provide a similar approach to sidestepping the need for a full remote desktop session.
 
-An additional challenge for more real-world scientific computing is that VMs reserve compute resources exclusively (though there are approaches that allow for more elastic usage of resources, most notably with LXC-like
-solutions, discussed in the Docker section below). A final issue that can arise is dealing with mappings between host and guest OS, which vary from system to system. This includes things like port-mapping, shared files, enabling control of the display for a GUI vs. enabling network routing for remote operation. Specifically with BCE we noticed that some desktop environments interacted poorly with VirtualBox (for example, LXDE does not handle resize events properly). 
+One valid concern is that VMs reserve compute resources exclusively. This is one argument to move towards other approaches that allow for more elastic usage of resources, most notably with LXC-like
+solutions, discussed in the Docker section below. Also, While specialized GPU hardware is available for cloud deployment, commodity GPUs will generally not work with fully virtualized systems. For example, VirtualBox presents a virtual GPU with at most 128MB of video memory (which might also be addressed by LXC/Docker).
+A final set of issues that can arise is dealing with mappings between host and guest OS, which vary from system to system – arguing for the utility of an abstraction layer for VM configuration like Vagrant or Packer (discussed below). This includes things like port-mapping, shared files, enabling control of the display for a GUI vs. enabling network routing for remote operation. These concerns are handled differently across different virtualization solutions, and may interact with the way the guest OS is configured. Specifically with BCE we noticed that some desktop environments interacted poorly with VirtualBox (for example, LXDE does not handle resize events properly). 
 
-While specialized GPU hardware is available for cloud deployment, commodity GPUs will generally not work with fully virtualized systems. For example, VirtualBox presents a virtual GPU with at most 128MB of video memory. However, providing better access to hardware with containers (e.g., in Docker) is an active research topic [HPC]_.
-
-The easiest way to use a virtual machine is to use a pre-existing image – a file that contains all relevant data and metadata about an environment. It’s very easy to make modifications to an environment and make a new image by taking a snapshot. 
-Note that while both local and cloud-based VM systems often allow for easy snapshotting, it may be hard to capture exactly what happened – especially changes and configuration that was made “by hand.” So snapshots are a good fallback mechanism, but not necessarily a good solution for reproducibility. You can also install an OS to a virtual image in essentially the same manner you would install it to bare metal. The primary difference is that you need to use specialized VM software to start this process. For example, you can do this directly in VirtualBox simply by clicking the “New” button, and you’ll be guided through all of the steps. There are better ways, however! We proceed to discuss the creation of images below.
+The easiest way to use a virtual machine is to use a pre-existing image – a file that contains all relevant data and metadata about an environment (described more fully at [images]_). It’s very easy to make modifications to an environment and make a new image by taking a snapshot. 
+Note that while both local and cloud-based VM systems often allow for easy snapshotting, it may be hard to capture exactly what happened – especially changes and configuration that was made “by hand.” So snapshots are a good fallback mechanism, but not necessarily a good solution for reproducibility. You can also install an OS to a virtual image in essentially the same manner you would install it to bare metal. The primary difference is that you need to use specialized VM software to start this process. For example, you can do this directly in VirtualBox simply by clicking the “New” button, and you’ll be guided through all of the steps. There are more automated ways, however, and we discuss these below.
 
 Special case: Linux guest VM running on Linux host OS
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-If you are already running Linux on “bare metal”, installed directly on your laptop or workstation as the primary OS, do you still need to run a virtualized Linux guest OS?
+If you are already running Linux on “bare metal”, installed directly on your laptop or workstation as the primary OS, do you still need to run a virtualized Linux guest OS to use BCE?
 
 Yes! The BCE model relies on a well-known, curated set of dependencies and default configurations. To ensure that it is possible to consistently and reliably manage those elements no matter what flavor, variant, or version of Linux you may be running as the host OS.
 
@@ -251,52 +225,49 @@ Creating an image or environment is often called *provisioning*. The way this wa
 
 Package managers in particular provide high-level commands to install and configure packages. Currently, we use a combination of apt, pip, and We also evaluated conda and found that it introduced additional complexity. For example, it is still hard to install a list of pip requirements with conda if some packages are not available for conda. Most package authors currently make their packages available for, however, for pip. Standard apt packages were also adequate for things like database, and ideal for the desktop environment, where we could reap the benefit of the careful work that went into the LTS Ubuntu distribution.
 
-Steps like installing the initial Ubuntu server OS may require some manual intervention, but at one point in the BCE development process, we discussed manual creation of the VM from an Ubuntu installation ISO as one of the steps in the recipe (this was a bit of an over-reaction to the unnecessary complexity of a previous attempt). It is straightforward to make a binary image from a snapshot immediately after installing the base image, so this initial step could be done once by a careful individual. 
+Steps like installing the base guest OS may be done manually. As we explored minimizing tooling for the BCE development process, one of the steps in the recipe was manual VM creation from an Ubuntu installation ISO. It is straightforward to make a binary image from a snapshot immediately after creating a base image, so this initial step could be done once by a careful individual. 
 
-If, however, one wanted to automate installation from an ISO, this is also not terribly difficult using the Debian Installer [UDI]_, a system that allows a text file to specify answers to the standard configuration prompts at install-time, in addition to providing many more possibilities. You can find the BCE configuration file for the debian-installer in the `provisioning/http` directory. Later, we’ll discuss how we’re coordinating all of the above using Packer.
+If, however, one wanted to automate installation from an ISO, this is enabled by the Debian Installer [UDI]_, a system that allows a text file to specify answers to the standard configuration prompts at install-time, in addition to providing many more possibilities. You can find the BCE configuration file for the debian-installer in the ``provisioning/http`` directory. Later, we’ll discuss how we’re coordinating all of the above using Packer.
 
 Ansible and related tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Ansible is one of a number of recent DevOps tools for configuration management.
-It may be used at build-time and also at run-time within the guest OS, *or from any other location with SSH access to the target being configured*. The only requirements for the target are an SSH server and a Python interpreter (yes, Ansible is Python-based. Ansible enables automated configuration management of customizations applied to the default settings of software installed by the OS-level package system. This replaces editing configuration files directly by hand and provides a set of rules for applying changes that would be hard to write as shell scripts alone. 
+Ansible is one of a number of recent DevOps tools for configuration management. These tools enable automated management of customizations to the default status and configuration of software. This replaces editing configuration files directly by hand and provides checks and guarantees for applying changes that would be hard to write as shell scripts alone (somewhat akin to a makefile).
 This allows for a way to manage configuration complexity as the an environment grows in complexity. It may also allow an end-user to manage and reliably apply personal customizations across multiple versions of an environment over time.
+For BCE development, we felt Ansible added the least complexity. It may be used at build-time and also at run-time within the guest OS, *or from any other location with SSH access to the target being configured*. The only requirements for the target are an SSH server and a Python interpreter (yes, Ansible is Python-based). Ansible execution is also more linear than some systems, which is a limitation, but also a simplification.
 
-Several iterations of BCE used Ansible, but at this phase, the complexity of BCE doesn’t offset the demands of contributors learning yet another tool. The maintainer of the Software Carpentry VM, Matt Davis, has reported similar sentiments. He has used a similar tool, Puppet, to provision the Software Carpentry VM, but is leaning towards using shell scripts in the future. As we will see below from the OSGeo project, it *is* possible to coordinate certain kinds of complexity without resorting to the current crop of configuration management tools.
+At this phase, however, the complexity of BCE doesn’t warrant contributors learning even a simple configuration management tool. The maintainer of the Software Carpentry VM, Matt Davis, has reported a similar observation. He has used another tool, Puppet, to provision the Software Carpentry VM, but will likely use shell scripts in the future. And as we will see below from the OSGeo project, it *is* possible to coordinate certain kinds of complexity with more commonly known tools like shell scripting.
 
 While the syntax for each tool varies, the general concept is the same – one describes the desired machine state using functions (many of which are wrappers around things like package managers or other command-line tools). After execution of this recipe – if you did a good job – the machine state is guaranteed to be how you’ve requested it to be. Unfortunately, all DevOps tools call their recipes something different. While the process certainly seems more like baking than, say, coaching a football team, Ansible calls its scripts “playbooks.” 
-Alternate tools with similar functionality are Chef (which, unsurprisingly *does* call it’s scripts “recipes”), Salt (also Python-based! and uses “states”), and Puppet (which uses “manifests”). In any case, a great way to start would be to translate an existing configuration shell script into one of these tools.
+Alternate tools with similar functionality are Chef (which, unsurprisingly *does* call it’s scripts “recipes”), Salt (also Python-based! and uses “states”), and Puppet (which uses “manifests”). With any of these, a great way to start learning would be to translate an existing configuration shell script into one of these tools.
 
 Packer
 ^^^^^^
 Packer is used at build-time and enables creating identical machine images from a single configuration targeting multiple machine image formats. It is a relatively lightweight wrapper around many of the tools described above and below. For example, from a single Ubuntu Linux installation configured using shell scripts, we generate a BCE machine image in multiple formats including OVF for VirtualBox and AMI for AWS EC2. The Packer script specifies the Ubuntu ISO to install, automatically serves the Debian Installer config file over HTTP, and configures the installed OS by copying files and running a shell script. Packer can also readily use Ansible, Puppet, Chef, or Salt (and has a plugin system if you want to use something more exotic). Images can be built for many popular platforms, including a variety of local and cloud-based providers.
 
-Packer made it possible for us to learn a relatively simple tool that executes the entire image-creation process as a single logical operation. Moreover, end users need have no knowledge of Packer. They can use the Amazon console or the VirtualBox GUI with no concerns for the complexity at build time.
+Packer made it possible for us to learn a relatively simple tool that executes the entire image-creation process as a single logical operation. Moreover, end users need have no knowledge of Packer. They can use the Amazon web console or the VirtualBox GUI with no concerns for the complexity at build time.
 
-It is worth noting that while indexes are available for a variety of images (e.g, vagrantbox.es, the Docker index, and Amazon’s impressive list of AMIs), there is surprisingly little effort to provide a consistent environment that allows one to readily migrate between platforms. However, a project might choose to use tools for building their environment 
-
+It is worth noting that while indexes are available for a variety of images (e.g, vagrantbox.es, the Docker index, and Amazon’s list of AMIs), we have encountered surprisingly little effort to publish consistent environment that allows one to readily migrate between platforms. This is, however, precisely the goal of BCE, and is enabled by Packer.
 
 Vagrant
 ^^^^^^^
-Vagrant is a run-time component that needs to be installed on the host OS of the end user’s laptop. It can be considered a wrapper around virtualization software that automates the process of configuring and starting VirtualBox running an image created via one of the above processes (for example, with Packer). It eliminates the need to configure the virtualization software by hand using the GUI interface, and more easily and generically than command line tools provided by VirtualBox or Amazon. It should be noted that (like Packer) Vagrant does no work directly, but rather calls out to those other platform-specific command-line tools.
+Vagrant is a run-time component that needs to be installed on the host OS of the end user’s laptop. It can be considered a wrapper around virtualization software that automates the process of configuring and starting VirtualBox running an image created via one of the above processes (for example, with Packer). It eliminates the need to configure the virtualization software by hand using the GUI interface, and more easily and generically than command line tools provided by systems like VirtualBox or Amazon. It should be noted that (like Packer) Vagrant does no work directly, but rather calls out to those other platform-specific command-line tools.
 
-Currently, Vagrant is most useful for developers to share environments with each other. In our experience using Vagrant with students, it provided another piece of software, requiring command-line usage before students were comfortable with it. It is trivial, however, to create a “vagrant box” (a Vagrant-tuned virtual image) with Packer.
-
-The initial energy for the BCE project actually came from a Vagrant-based project called “jiffylab” [jl]_. With a single command, this project launched a guest Linux OS in VirtualBox or on Amazon that provided both a shell and IPython notebook through your native host web browser. A number of similar efforts have sprung up, and there is currently effort within the IPython team to develop a standard way of doing this. We are not currently using Vagrant for BCE, however, as it requires knowledge of the tool both at build time *and* at run time. While the solution is conceptually very elegant, it requires too much tooling and expertise on the part of the end user.
+The initial energy for the BCE project actually came from a Vagrant-based project called “jiffylab” [jl]_. With a single command, this project launched a guest Linux OS in VirtualBox or on Amazon that provided both a shell and IPython notebook through your native host web browser.
+But while Vagrant is conceptually very elegant (i.e., cool), we are not currently using it for BCE. In our evaluation, it introduced another piece of software, requiring command-line usage before students were comfortable with it. Should a use-case arise, however, it would be trivial to create a “vagrant box” (a Vagrant-tuned virtual image) with our current approach using Packer. That said, other “data-science” oriented VMs have chosen Vagrant as their method of distribution [DSTb,DSTk]_ (and even written their own custom configuration management tools). Clearly, our preference for avoiding complexity is not uniformly shared!
+Currently, Vagrant is most useful for experienced developers to share environments with each other. 
 
 Docker
 ^^^^^^
-Docker is a platform to build, distribute, and run images built on top of Linux Containers (LXC) which provides a lightweight style of virtualization called containerization. An important distinction of containerization is that the guest OS must match the host OS, both running Linux by sharing the same underlying kernel.
+Docker is a platform to build, distribute, and run images built on top of Linux Containers (LXC) which provides a lightweight style of virtualization called containerization. An important distinction of LXC-based containerization is that the guest OS and the host OS both run same underlying Linux kernel.
 
-At run-time Docker adds to this containerization a collection of tools to manage configuring and starting an instance in much the same way that Vagrant does for a virtualization environment.
+At run-time Docker adds to this containerization a collection of tools to manage configuring and starting an instance in much the same way that Vagrant does for a virtualization environment. Images are created using a simple build script called a Dockerfile which usually runs a series of shell script commands which might even invoke a configuration management system such as Ansible.
 
-Images are created using a simple build script called a Dockerfile which usually run a series of shell script commands which might even invoke a configuration management system such as Ansible.
+Another feature of the platform is the management and distribution of the images built by docker, including incremental differences between images. Docker makes it possible (albeit in a rudimentary way) to track changes to the binary image in a manner similar to the way git allows you to track changes to source code. This also includes the ability to efficiently maintain and distribute multiple branches of binary images that may be derived from a common root.
 
-Another feature of the platform is the management and distribution of the images built by docker, including incremental differences between images. Docker makes it possible (albeit in a rudimentary way) to track changes to the binary image in a manner similar to the way git allows you to track changes to source code. This also includes the ability to maintain multiple branches of binary images that may be derived from a common root.
+Docker is also more than just a tool. It is a quickly growing community of Open Source and industry with a rapidly evolving ecosystem of tools built on core OS primitives. There is no clear set of best practices, and those that emerge are not likely to fit all the use cases of the academic community without us being involved in mapping the tools to our needs. However, as mentioned above, providing better access to hardware with containers is an important and active research topic for performance [HPC]_.
 
-Docker is also more than just a tool. It is a quickly growing community of Open Source and industry with a rapidly evolving ecosystem of tools built on core OS primitives. There is no clear set of best practices, and those that emerge are not likely to fit all the use cases of the academic community without us being involved in mapping the tools to our needs.
-
-XXX - reasons we rejected Docker are that currently, it requires a Linux environment to host the Docker server. As such, it clearly adds *additional* complexity on top of the requirment to support a virtual machine. Even if you are running natively on Linux, Docker introduces an extra layer of complexity for mapping ports from the inner container, through the outer container, to the host machine. While these issues can be handled elegantly if running in a fully scripted deployment, in our use-cases, we are handing a complete compute (linux) environment, potentially including a GUI to our end-users. Moreover, the default method of deploying Docker (at the time of evaluation) on personal computers is with Vagrant. This approach would then *also* add all of the complexity of using Vagrant. However, recent advances with *boot2docker* provide something akin to a VirtualBox-only, Docker-specific replacement for Vagrant that eliminates *some* of this complexity, though one still needs to grapple with the cognitive load of nested virtual environments and tooling.
+Currently, Docker requires a Linux environment to host the Docker server. As such, it clearly adds *additional* complexity on top of the requirement to support a virtual machine. We also evaluated Docker as a way to potentially provide a large number of students access to a VM on a reasonably powered server. However, in our use-cases, we have full control of our Linux compute environment and existing methods of isolating users with permissions was sufficient and less complex than using Docker. Moreover, the default method of deploying Docker (at the time of evaluation) on personal computers is with Vagrant. This approach would then *also* add all of the complexity of using Vagrant. However, recent advances with *boot2docker* provide something akin to a VirtualBox-only, Docker-specific replacement for Vagrant that eliminates *some* of this complexity, though one still needs to grapple with the cognitive load of nested virtual environments and tooling.
 
 OSGeo-Live: A Successful Common Environment
 -------------------------------------------
@@ -307,103 +278,46 @@ OSGeo-Live is a project of the Open Source Geospatial Foundation (OSGeo), an int
 install scripts, examples and documentation.
 
 After long years of "tepid" progress and iteration, a combination of technical stability,
-standardized tool sets, community awareness and clearly-defined steps to contribute, provided the basis for substantial growth. The OSGeo-Live is now very stable, easily incorporates advances in components, and widely adopted. And, while OSGeo-Live primarily targets a live/bootable ISO, the scripts that are used to build that ISO provide a straightforward method for building OSGeo software in other contexts – with a small bit of setup, one need merely run the appropriate scripts for the desired packages.
+standardized tool sets, community awareness and clearly-defined steps to contribute, provided the basis for substantial growth. OSGeo-Live is now very stable, easily incorporates advances in components, and widely adopted. And, while OSGeo-Live primarily targets a live/bootable ISO, the scripts that are used to build that ISO provide a straightforward method for building OSGeo software in other contexts – with a small bit of setup, one need merely run the appropriate scripts for the desired packages.
 
 Let's look at each of these building blocks briefly.
 
 Technical Stability
 ^^^^^^^^^^^^^^^^^^^
 
-An original goal of OSGeo-Live was to operate well on minimal hardware with
-broad support for common peripherals, and a license structure compatible with
-project goals. The XUbuntu version of Ubuntu Linux was chosen as a foundation,
-and it has been very successful. To this day, almost all applications
-operate easily in very modest RAM and disk space (with the notable exception of
-Java-based software which requires substantially more RAM).
-
 OSGeo-Live itself is not a "linux distribution" per se, primarily because the
 project does not provide a seamless upgrade process from one version to another.
-OSGeo-Live relies on the Ubuntu/Debian/GNU, apt-based ecosystem to handle
-the heavy-lifting of system updates and upgrades. This is a win-win, as updates
-are proven reliable over a very large Ubuntu community process, and frees
-project participants to concentrate on adding value to its featured components.
-
+OSGeo-Live relies on an apt-based ecosystem to handle
+the heavy-lifting of system updates and upgrades. This is a win, as updates
+are proven reliable over a very large Ubuntu community process, and 
+project participants can concentrate on adding value to its featured components.
 As we shall see, due to a component architecture, individual software projects
 can be installed as-needed on a generic base.
 
 Tool Sets
 ^^^^^^^^^
 
-It cannot be overstated that a key component to the success of the overall project has been the availability of widely-known and reliable tools, to developers from all parts of the world and in all major spoken languages. It is also important to note that rather than require formal installation packages ".deb" for each project, OSGeo-Live chose to use a simple install script format, one per installed project. This choice proved crucial in the earliest stages, as an outside open-source project evaluating participation in the Live ISO could get started with fewer barriers to entry, and then add rigor and features later. Participating open-source projects had install scripts already built for Linux which could be readily adapted to OSGeo-Live install conventions. By providing ample examples on OSGeo-Live of install scripts in major deployment contexts, for both applications and server processes, and clear guidelines for installation conventions, an open-source project could almost immediately develop and iterate their own install scripts in a straightforward way, with the flexibility to use the tools they were already using, such as shell, Perl, or Python. Scripts may call package managers, and generally have few
-constraints (apart from conventions like keeping recipes contained to a particular directory). The project also maintains packages that support broader *kinds* of packages, such as web-based applications. In this case, OSGeo-Live provides a standard configuration for apache, WSGI, and other components. A standard layout is provided for the web
-directory of projects that rely on this core. Fully working examples available for each "kind" of project. As a result, there is very little conflict among packages that share common resources, such as WSGI apps. Though there are some concerns that have to be explicitly managed, for example port numbers do have to be tracked globally.
+A key component of the success of the overall project has been the availability of widely-known and reliable tools. Rather than require ``.deb`` installation packages for each project, OSGeo-Live chose to use a simple install script format, one per installed project. This choice proved crucial in the earliest stages, as an outside open-source project evaluating participation in the Live ISO could get started with fewer barriers to entry. Participating open-source projects already had install scripts already built for Linux. By providing examples of OSGeo-Live install scripts and clear guidelines for installation conventions, an open-source project could almost immediately adapt and iterate their own install scripts in a straightforward way, with the flexibility to use the tools they were already using, such as shell, Perl, or Python. Scripts may call package managers, and generally have few
+constraints (apart from conventions like keeping recipes contained to a particular directory). The project also maintains packages that support broader *kinds* of packages, such as web-based applications. In this case, OSGeo-Live provides a standard configuration for apache, WSGI, and other components, along with a standard layout for projects that rely on this core. As a result, there is very little conflict among packages that share common resources. Some concerns remain that have to be explicitly managed, for example port numbers do have to be tracked globally. But the overhead of getting 50 projects to adopt a uniform configuration management tool would likely be much greater.
 
 All recipes are currently maintained in a common subversion repo, using standardized asset hierarchies, including installation scripts [6g]_. 
 An OSGeo-Live specific report is maintained on the project trac ticketing system that collects issues across packages [10g]_.
-Following are the contents of the full *gisvm* package that is used to build for the OSGeo-Live ISO, as well as provide the relevant web materials on the OSGeo website::
-
-  bin/
-     /main.sh # Call all the other scripts
-     /setup.sh # install core files and config
-     /install_project1.sh # includes downloads
-     /install_project2.sh
-     /install_desktop.sh
-     /install_main_docs.sh
-     /setdown.sh
-
-     /build_iso.sh
-     /load_mac_installers.sh
-     /load_win_installers.sh
-
-     /bootstrap.sh
-     /inchroot.sh
-     /package.sh
-     /sync_livedvd.sh
-
-  app-conf/
-     /project1/ # used by install_project1.sh
-     /project2/ # used by install_project2.sh
-
-  app-data/ # data & help files
-     /project1/
-     /project2/
-
-  desktop-conf/ # desktop background, etc.
-
-  doc/
-     /index_pre.html  # header for summary page
-     /index_post.html # footer for summary page
-     /arramagong.css
-     /jquery.js
-     /template_definition.html
-     /template_description.html
-     /template_licence.html
-
-     /descriptions/
-        /package_definition.html  # short summary
-        /package_description.html # quick-start
-
-  download/ # the download server webpage
-
-  sources.list.d/ # Supplementary repositories
 
 Community Awareness
 ^^^^^^^^^^^^^^^^^^^
 
-Underlying processes of adoption of new technology – initial awareness, trialability, adoption and iteration – are well-known [4g]_. OSGeo-Live intentionally incorporates targeted outreach, professional graphic design and “easy to try” structure to build participation from both developers and end-users.
+Underlying processes of adoption of new technology include initial awareness, trialability, adoption and iteration [4g]_. OSGeo-Live intentionally incorporates targeted outreach, professional graphic design and “easy to try” structure to build participation from both developers and end-users.
+An original project design goal was to provide tools to those doing geospatial fieldwork with limited resources around the globe, and who often lack advanced programming and administration skills. In other words, a community was built around tools that the desired members already had.
 
-An original project design goal was to provide tools to those doing geospatial fieldwork with limited resources around the globe, and who often lack advanced programming and administration skills. (in a somewhat fortunate coincidence, the original qualities of a software environment suitable for low-spec hardware also makes for an efficient VM implementation)
-
-Several years into the project, funding was established via a grant from the Australian
-government to build documentation on applications in the Overview and Quickstart formats used today, to professional graphic design standards, and in a workflow such that many human language versions could be maintained and improved efficiently, specifically to support local field work. That documentation format consists of a single page for every application, (Overview) and a second page with step-by-step instructions for a capable reader but no previous exposure to the software (Quickstart). Each of these two pages for every included project is then translated into various spoken languages, primarily by volunteers. Much later, a graph of "percentage complete" for each human language group was added, which essentially makes translation into a sort of competition. This modest “gamification” of translation has proven very successful. Note that the initial effort to build standardized documentation required paid professionals. It seems unlikely that the documentation would have been successful based on only ad-hoc volunteer efforts.
-
-The Open Source Geospatial Foundation (OSGeo) itself is a hub for multiple ecosystems of standards and language groups of projects to interoperate synergistically. OSGeo project status raises awareness of one project to other projects. Users around the world are encouraged to keep a record of events where OSGeo-Live was presented on a common wiki page [5g]_.  The project has moreover facilitated collaboration across developer communities. For example, we have seen productive application of software developed by the U.S. military to environmental applications.
+Several years into the project, with a grant from the Australian
+government, a professional-level documentation project was initiated for a single-page overview and quick-start instructions for each application. Language internationalization was rendered more efficient, specifically to support local field work. Much later, a "percentage complete" graph for each human language group was added, making translation into a sort of competitive game. This translation has proven very successful.
+The project has moreover facilitated collaboration across developer communities. For example, we have seen productive application of software developed by the U.S. military to environmental applications.
 
 
 Steps to Contribute
 ^^^^^^^^^^^^^^^^^^^
 
-All build scripts are organized in the open, in source control [6g]_. A new contributors FAQ is maintained via wiki [7g]_ for software projects, and for translation [8g]_. A quality/testing page was used, but has been discontinued [9g]_. At it’s foundation, the OSGeo-Live project is quite similar to the “old way” of doing system administration (i.e., before we had the current plethora of DevOps tools available). The primary difference is the particular attention to documenting each and every step, and that standard approaches are encouraged across the project. This low barrier to entry (allowing contributing projects to use skills they likely already have), combined with guidelines to ensure interoperability have led to OSGeo-Live becoming a standard way to evaluate and install software in the geospatial community.
+All build scripts are organized in the open, in source control [6g]_. A new contributors FAQ is maintained via wiki [7g]_ for software projects, and for translation [8g]_. At it’s foundation, the OSGeo-Live project is quite similar to the “old way” of doing system administration (i.e., before we had the current plethora of DevOps tools available), but it very much adopts a DevOps *philosophy*. Contributors pay particular attention to documenting each and every step, and standard approaches are encouraged across the project. Gamification also played a role in spurring useful documentation contributions. The low barrier to entry (allowing contributing projects to use skills they likely already have), combined with guidelines to ensure interoperability have led to OSGeo-Live becoming a standard way to evaluate and install software in the geospatial community.
 
 BCE: The Berkeley Common Environment
 ------------------------------------
@@ -487,7 +401,7 @@ However, you should generally not need to build the binary VM for BCE for a give
 Much as with OSGeo-Live, we have chosen our approach to provisioning to be relatively simple for users to understand.
 It is our goal for instructors or domain experts to be able to easily extend the recipe for building BCE VMs or images. If not, that’s a bug!
 
-As described above, while we have experimented with Docker, Vagrant, and Ansible for setting up the various BCE images (and evaluated even more tools), the only foundationally useful tool for our current set of problems has been Packer. Packer runs a shell script that uses standard installation mechanisms like `pip` and `apt-get` to complete the setup of our environment. Most centrally, Packer does not require end-users to install or understand any of the current crop of DevOps tools – it operates solely at build time. However, should the need arise, Packer will readily target Vagrant, Docker, and many other targets, and we are not opposed to adopting other tooling.
+As described above, while we have experimented with Docker, Vagrant, and Ansible for setting up the various BCE images (and evaluated even more tools), the only foundationally useful tool for our current set of problems has been Packer. Packer runs a shell script that uses standard installation mechanisms like ``pip`` and ``apt-get`` to complete the setup of our environment. Most centrally, Packer does not require end-users to install or understand any of the current crop of DevOps tools – it operates solely at build time. However, should the need arise, Packer will readily target Vagrant, Docker, and many other targets, and we are not opposed to adopting other tooling.
 
 Conclusion
 ----------
@@ -511,6 +425,9 @@ References
 .. [OSGL] http://www.osgeo.org/
 .. [BCEVB] http://collaboratool.berkeley.edu/using-virtualbox.html
 .. [BCEAMI] http://collaboratool.berkeley.edu/using-ec2.html
+.. [Ubuntu] Ubuntu Server Guide https://help.ubuntu.com/14.04/serverguide/serverguide.pdf
+.. [images] OpenStack virtual machine image guide
+   http://docs.openstack.org/image-guide/content/ch_introduction.html
 .. [HPC] M. G. Xavier, M. V. Neves, F. D. Rossi, T. C. Ferreto, T. Lange, and C. A. De 
    Rose, “Performance evaluation of container-based virtualization for high performance 
    computing environments,” in *the 21st Euromicro International Conference on Parallel, 
@@ -535,19 +452,4 @@ References
 .. [Packer] http://www.packer.io/intro
 .. [Vagrant] http://www.vagrantup.com/about.html
 .. [VagrantWP] http://en.wikipedia.org/wiki/Vagrant_(software)
-
-References to use/potentially cite
-----------------------------------
-
-Ubuntu Server Guide
-https://help.ubuntu.com/12.04/serverguide/serverguide.pdf
-
-
-CUDA in the Cloud – Enabling HPC Workloads in OpenStack
-http://on-demand.gputechconf.com/gtc/2013/presentations/S3214-Enabling-HPC-Workloads-OpenStack.pdf
-
-Useful Glossary of VM Image terms (e.g. EC2 AMI vs Azure VHD, etc)
-http://docs.openstack.org/image-guide/content/ch_introduction.html
-
-
 
