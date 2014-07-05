@@ -22,7 +22,7 @@ Adjacency and neighbor structures play an essential role in many spatial analyti
 Introduction
 ------------
 
-Within the context of spatial analysis and spatial econometrics the topology of irregularly shaped and distributed observational units plays an essential role in modeling underlying processes [Anselin1988]_.  The concept of first and higher order spatial adjacency finds application in tests for global spatial autocorrelation, e.g., Moran's I [Anselin1996a]_, spatial regression models[Ward2007]_, and spatially constrained regionalization models [Duque2012]_.  The execution of any of these aforementioned spatial analytical techniques requires the generation of some representation of the underlying connectivity of the observational (polygon) units.
+Within the context of spatial analysis and spatial econometrics the topology of irregularly shaped and distributed observational units plays an essential role in modeling underlying processes [Anselin1988]_.  The concept of first and higher order spatial adjacency finds application in tests for global spatial autocorrelation, e.g., Moran's I [Anselin1996a]_, spatial regression models [Ward2007]_, and spatially constrained regionalization models [Duque2012]_.  The execution of any of these aforementioned spatial analytical techniques requires the generation of some representation of the underlying connectivity of the observational (polygon) units.
 
 The computation of a spatial adjacency structure is most frequently a precursor to more complex process models, i.e. a pre-processing step.  This processing step occurs dynamically, i.e. the data is not loaded into a spatial database where efficient indexing structures can be pre-generated.  Therefore, the computational cost of generating these data structures is often overlooked in the assessment of global algorithmic performance.  
 
@@ -119,7 +119,7 @@ Experiment
 
 Hardware
 =========
-All tests were performed on a 3.1 Ghz, dual core Intel i3-2100 machine with 4GB of RAM running Ubuntu 64-bit 14.04 LTS.  The iPython[Perez2007]_ notebook environment was used to initiate and analyse all tests.  All other non-system processes were terminated.
+All tests were performed on a 3.1 Ghz, dual core Intel i3-2100 machine with 4GB of RAM running Ubuntu 64-bit 14.04 LTS.  The IPython [Perez2007]_ notebook environment was used to initiate and analyse all tests.  All other non-system processes were terminated.
 
 Experiments
 ===========
@@ -138,7 +138,7 @@ Finally, in Figure (:ref:`merged`)(d) the total compute time using randomly dist
 
 .. figure:: merged.png
    :align: center
-   :scale: 30 %
+   :scale: 45 %
    :figclass: w
 
    Spatial binning and list based performance comparison showing: (a) scaling a total synthetic data size increases, (b) list based scaling using synthetic data, (c) scaling performance as the total number of vertices is increased, and (d) randomly distirbuted data with varying neighbor cardinality and vertex counts. :label:`merged`
