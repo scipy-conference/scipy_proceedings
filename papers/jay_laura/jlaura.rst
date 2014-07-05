@@ -22,7 +22,13 @@ Adjacency and neighbor structures play an essential role in many spatial analyti
 Introduction
 ------------
 
-Within the context of spatial analysis and spatial econometrics the topology of irregularly shaped and distributed observational units plays an essential role in modeling underlying processes [Anselin1988]_.  The concept of first and higher order spatial adjacency finds application in tests for global spatial autocorrelation, e.g., Moran's I [Anselin1996a]_, spatial regression models [Ward2007]_, and spatially constrained regionalization models [Duque2012]_.  The execution of any of these aforementioned spatial analytical techniques requires the generation of some representation of the underlying connectivity of the observational (polygon) units.
+Within the context of spatial analysis and spatial econometrics the topology of irregularly shaped and distributed observational units plays an essential role in modeling underlying processes [Anselin1988]_.  First and higher order spatial adjacency is leveraged across a range of spatial analysis techniques to answer the question - who are my neighbors?  In answering this simple question, more complex models can be formulated to leverage the spatial distribution of the process under study.  Three example applications are: spatial regionalization, spatial regression models, and tests for global spatial autocorrelation [#]_. 
+
+Spatial regionalization algorithms seek to aggregate :math: $n$ polygon units into :math: $r$ regions (:math: $r < n$) under some set of constraints, e.g., minimization of some attribute variance within a region [Duque2012]_.  A key constraint shared across spatial regionalization algorithms is that of contiguity as regions are required to be conterminous.  One common application of spatial regionalization is political redistricting, where large scale census units, are aggregated into political districts with a contiguity constraint and one or more additional constrains, e.g. equal population.  In this context, the generation of a representation of the spatial adjacency can become prohibitively expensive.
+
+At its most basic, spatial regression [Ward2007]_ seeks to formulate a traditional regression model with an added structure to capture the spatially definable interaction between observations when spatial autocorrelation (or spatial heterogeneity) is present.  The addition of a spatial component to the model requires the generation of some measure of the interaction between neighbors.  First and higher order spatial adjacency fulfills that requirement.  An example application could be the formulation of a model where the dependent variable is home value and the independent variables are income and crime.  Making the assumption that the data is spatially autocorrelated, a spatial regression model can be leveraged.
+
+Moran's I [Anselin1996a]_ concurrently measures some attribute value and its spatial distribution to identify spatially clustered (positively autocorrelated), random, or dispersed (negatively autocorrelated) data.  Therefore, a spatial adjacency structure is an essential input.  Measures of global spatial autocorrelation find a large range of applications including the identification of SIDs deaths [Anselin2005]_ and the identification of cancer clusters [OSullivan2010]_.  As the total number of observations becomes large, the cost to generate that data structure can become prohibitive.
 
 The computation of a spatial adjacency structure is most frequently a precursor to more complex process models, i.e. a pre-processing step.  This processing step occurs dynamically, i.e. the data is not loaded into a spatial database where efficient indexing structures can be pre-generated.  Therefore, the computational cost of generating these data structures is often overlooked in the assessment of global algorithmic performance.  
 
@@ -181,9 +187,13 @@ References
 
 .. [Anselin1996b] Anselin, L., Yong, W., and Syabri, I. *Web-based analytical tools for the exploration of spatial data*, Journal of Geographical Systems, vol. 6, no. 2,  pp. 197-218, 2004. 
 
+.. [Anselin2005] Anselin, L. *Exploring Spatial Data with GeoDa: A Workbook*, Center for Spatially Integrated Social Science, University of Illinois, Urbana-Champaign, 2005.
+
 .. [Duque2012] Duque, J. C., Anselin, L., and Rey, S. J. *The Max-P-Regions Problem*, Journal of Regional Science, 		       52(3):pp. 397–419, 2012.
 
 .. [Gutman1984] Gutman1984, A. *R-Trees: A dynamic index structure for spatial searching*, Proceedings of the 1984 ACM SIGMOD International Conference on Management of Data, 1984. 
+
+.. [OSullivan2010] O'Sullivan, D. and Unwin, D.J. *Area Objects and Spatial Autocorrelation*, Geographic Information Analysis, Wiley, Ch. 7, 2010.
 
 .. [Perez2007] Pérez, F. and  Granger, Brian E., *IPython: A System for Interactive Scientific Computing*, Computing in Science and Engineering, vol. 9, no. 3, pp. 21-29, 2007. URL: http://ipython.org
 
@@ -193,6 +203,7 @@ References
 
 .. [Yang2008] Yang, C., Li, W., Xie, J., and Zhou, B. *Distributed geospatial information processing: sharing distributed geospatial resources to support Digital Earth*, International Journal of Digital Earth, pp. 259-278, 2008.
 
+.. [#] In contrast to local measures which identify local, statistically significant autocorrelation.
 .. [#] :math:`\{32, 64, 128, 160, 192, 256, 288, 320, 384, 448, 512\}` geometries squared.
 .. [#] :math:`n = 3,144`
 .. [#] Clearly this can be overcome, in a distirbuted environment, using an excess computation strategy, but the increased cost due to algorithm performance still exists.
