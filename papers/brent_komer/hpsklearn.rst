@@ -202,7 +202,7 @@ Here is the simplest example of using this software.
 
 The ``HyperoptEstimator`` object contains the information of what space to search as well as how to search it. 
 It can be configured to use a variety of hyperparameter search algorithms and also supports using a combination of algorithms.
-This is also where the user can specify the maximum number of function evaluations they would like to be run as well as a timeout (in seconds) for each run.
+This is also where you, the user, can specify the maximum number of function evaluations you would like to be run as well as a timeout (in seconds) for each run.
 
 
 .. code-block:: python
@@ -236,7 +236,7 @@ Sometimes it can be helpful to use a mixture of search algorithms.
                               trial_timeout=60 )
 
 Searching effectively over the entire space of classifiers available in scikit-learn can use a lot of time and computational resources. 
-Sometimes the user might have a particular subspace of models that they are more interested in.
+Sometimes you might have a particular subspace of models that they are more interested in.
 With hyperopt-sklearn it is possible to specify a more narrow search space to allow it to be be explored in greater depth.
 
 
@@ -265,6 +265,33 @@ Combinations of different spaces can also be used.
 
    estim = HyperoptEstimator( classifier=clf )
 
+The support vector machine provided by scikit-learn has a number of different kernels that can be used (linear, rbf, poly, sigmoid).
+Changing the kernel can have a large effect on the performance of the model, and each kernel has its own unique hyperparameters.
+To account for this, hyperopt-sklearn treats each kernel choice as a unique model in the search space.
+If you already know which kernel works best for your data, or you are just interested in exploring models with a particular kernel, you may specify it directly rather than going through the ``svc``.
+
+
+.. code-block:: python
+
+   from hpsklearn import HyperoptEstimator, svc_rbf
+
+   estim = HyperoptEstimator( 
+             classifier=svc_rbf('my_svc') )
+
+
+It is also possible to specify which kernels you are interested in by passing a list to the ``svc``.
+
+
+.. code-block:: python
+
+   from hpsklearn import HyperoptEstimator, svc
+
+   estim = HyperoptEstimator( 
+             classifier=svc('my_svc', 
+                            kernels=['linear', 
+                                     'sigmoid']))
+
+
 In a similar manner to classifiers, the space of preprocessing modules can be fine tuned.
 Multiple successive stages of preprocessing can be specified by putting them in a list.
 An empty list means that no preprocessing will be done on the data.
@@ -275,7 +302,7 @@ An empty list means that no preprocessing will be done on the data.
    from hpsklearn import HyperoptEstimator, pca
 
    estim = HyperoptEstimator( 
-              preprocessing=[ pca('my_pca') ] )
+             preprocessing=[ pca('my_pca') ] )
 
 Combinations of different spaces can be used here as well.
 
@@ -283,12 +310,13 @@ Combinations of different spaces can be used here as well.
 .. code-block:: python
 
    from hpsklearn import HyperoptEstimator, tfidf, pca
+   from hyperopt import hp
 
    preproc = hp.choice( 'my_name', 
-            [ [pca('my_name.pca')],
-              [pca('my_name.pca'), normalizer('my_name.norm')]
-              [standard_scaler('my_name.std_scaler')],
-              [] ] )
+     [ [pca('my_name.pca')],
+       [pca('my_name.pca'), normalizer('my_name.norm')]
+       [standard_scaler('my_name.std_scaler')],
+       [] ] )
 
    estim = HyperoptEstimator( preprocessing=preproc )
 
@@ -304,11 +332,56 @@ To address this, hyperopt-sklearn comes with a few pre-defined spaces of classif
                          any_text_preprocessing
    from hyperopt import tpe
 
-   estim = HyperoptEstimator( algo=tpe.suggest,
-                 classifier=any_sparse_classifier('my_clf')
-                 preprocessing=any_text_preprocessing('my_pp')
-                 max_evals=200,
-                 trial_timeout=60 )
+   estim = HyperoptEstimator( 
+             algo=tpe.suggest,
+             classifier=any_sparse_classifier('my_clf')
+             preprocessing=any_text_preprocessing('my_pp')
+             max_evals=200,
+             trial_timeout=60 )
+
+So far in all of these examples, every hyperparameter available to the model is being searched over.
+It is also possible for you to specify the values of specific hyperparameters, and those parameters will remain constant during the search.
+This could be useful if you have some prior knowledge about what kinds of models will work best for your data.
+
+
+.. code-block:: python
+
+   from hpsklearn import HyperoptEstimator, pca, svc_poly
+
+   # restrict the space to only PCA with whitening
+   # and SVMs with polynomial kernels of degree 3
+   estim = HyperoptEstimator( 
+             preprocessing=pca('my_pca', whiten=True),
+             classifier=svc_poly('my_poly', degree=3) )
+
+It is also possible to specify ranges of individual parameters.
+This is done using the standard hyperopt syntax.
+These will override the defaults defined within hyperopt-sklearn.
+
+
+.. code-block:: python
+
+   from hpsklearn import HyperoptEstimator, pca, sgd
+   from hyperopt import hp
+   import numpy as np
+
+   sgd_loss = hp.pchoice( 'loss', 
+                          [ (0.50, 'hinge'),
+                            (0.25, 'log'),
+                            (0.25, 'huber') ] )
+   sgd_penalty = hp.choice( 'penalty',
+                            [ 'l2', 'elasticnet' ] )
+   sgd_alpha = hp.loguniform( 'alpha', 
+                              low=np.log(1e-5), 
+                              high=np.log(1) )
+
+   estim = HyperoptEstimator( 
+             classifier=sgd('my_sgd',
+                            loss=sgd_loss,
+                            penalty=sgd_penalty,
+                            alpha=sgd_alpha) )
+
+
 
 All of the components available to the user can be found in the ``components.py`` file.
 
@@ -343,6 +416,10 @@ it is able to both rival and surpass human experts in algorithm configuration.
 We hope that it provides practitioners with a useful tool for the development of machine learning systems,
 and automatic machine learning researchers with benchmarks for future work in algorithm configuration.
 
+Acknowledgements
+----------------
+
+This research was supported by the NSERC Banting Fellowship program, the NSERC Engage Program and by D-Wave Systems.
 
 References
 ----------
