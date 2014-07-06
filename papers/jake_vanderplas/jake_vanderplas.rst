@@ -490,7 +490,7 @@ Bayesian Solution: Overview
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The Bayesian result is encapsulated in the posterior, which is proportional to the product of the likelihood and the prior; in this case we must be aware that a flat prior is not uninformative. Because of the nature of the slope, a flat prior leads to a much higher probability for steeper slopes. One might imagine addressing this by transforming variables, e.g. using a flat prior on the angle the line makes with the x-axis rather than the slope. It turns out that the appropriate change of variables can be determined much more rigorously by following arguments first developed by [Jeffreys1946]_.
 
-Our model is given by :math:`y = \alpha + \beta x` with probability element :math:`P(\alpha, \beta)d\alpha d\beta`. By symmetry, we could just as well have written :math:`x = \alpha^\prime + \beta^\prime y` with probability element :math:`Q(\alpha^\prime, \beta^\prime)d\alpha^\prime d\beta^\prime`. It then follows that :math:`(\alpha^\prime, \beta^\prime) = (-\beta^{-1}\alpha, \beta^{-1})` and :math:`Q(\alpha^\prime, \beta^\prime) = \beta^3 P(\alpha, \beta)`. The symmetry of the problem requires equivalence of :math:`P` and :math:`Q`, or :math:`\beta^3 P(\alpha,\beta) = P(-\beta^{-1}\alpha, \beta^{-1})`, which is satisfied by
+Our model is given by :math:`y = \alpha + \beta x` with probability element :math:`P(\alpha, \beta)d\alpha d\beta`. By symmetry, we could just as well have written :math:`x = \alpha^\prime + \beta^\prime y` with probability element :math:`Q(\alpha^\prime, \beta^\prime)d\alpha^\prime d\beta^\prime`. It then follows that :math:`(\alpha^\prime, \beta^\prime) = (-\beta^{-1}\alpha, \beta^{-1})`. Computing the determinant of the Jacobian of this transformation, we can then show that :math:`Q(\alpha^\prime, \beta^\prime) = \beta^3 P(\alpha, \beta)`. The symmetry of the problem requires equivalence of :math:`P` and :math:`Q`, or :math:`\beta^3 P(\alpha,\beta) = P(-\beta^{-1}\alpha, \beta^{-1})`, which is a functional equation satisfied by
 
 .. math::
 
@@ -504,7 +504,7 @@ Through similar arguments based on the invariance of :math:`\sigma` under a chan
 
     P(\sigma) \propto 1/\sigma,
 
-which is known a the *Jeffreys Prior* for scale factors [Jeffreys1946]_, and is equivalently a flat prior on :math:`\log\sigma`. Putting these together, we find the following uninformative prior for our linear regression problem:
+which is most commonly known a the *Jeffreys Prior* for scale factors after [Jeffreys1946]_, and is equivalent to flat prior on :math:`\log\sigma`. Putting these together, we find the following uninformative prior for our linear regression problem:
 
 .. math::
 
