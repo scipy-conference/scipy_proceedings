@@ -46,73 +46,67 @@ Introduction
 
   --One of the Authors
 
-To accomplish even relatively simple tasks, one commonly needs to configure “new-to-you” computational tools. As you can see in the quote above, even the task of writing this paper required tooling that was not obvious to at least one author! Presumably, most *readers* of this paper will have dealt with far more complex demands in the course of instruction, collaboration, or shipping professional software. The process of introducing novices to new software is made unnecessarily complex due to the variety of potential end-user environments (e.g., Mac, Windows, \*nix), and even methods that authors might have used to set up Python on their machine (e.g., Anaconda, Canopy, python.org).
+As you can see in the quote above, even the “simple” task of compiling this paper required tooling that was not obvious to at least one author! Presumably, most *readers* of this paper will have dealt with far more complex demands in the course of instruction, collaboration, or shipping professional software. The process of introducing novices to new software is made unnecessarily complex due to the variety of potential end-user environments (e.g., Mac, Windows, \*nix), and even methods that authors might have used to set up Python on their machine (e.g., Anaconda, Canopy, python.org).
 
-In a university setting, students need to sufficiently reproduce an environment required to run the software a professor has chosen for a course. Collaborating researchers need to reproduce each other’s workflows, and those of us who value reproducible research would prefer that *anyone* should be able to run the code used for a set of research results. 
-The problem of communicating how to use one’s tools predates computing, and likely even written language! Recently, a new crop of tools-for-managing-tools has emerged under the *DevOps* banner – a contraction of software *development* and systems *operation* – with a general philosophy that instead of merely documenting systems operation tasks (configuration, deployment, maintenance, etc.), that developers can and should be scripting these tasks as much as possible. 
+In a university setting, students need to sufficiently reproduce an environment required to run the software for a course. Collaborating researchers need to reproduce each other’s workflows, and for reproducible research, *anyone* should be able to run the code used for a set of research results. 
+Recently, a new crop of tools-for-managing-tools has emerged under the *DevOps* banner – a contraction of software *development* and systems *operation* – with a general philosophy that instead of merely documenting systems operation tasks (configuration, deployment, maintenance, etc.), that developers can and should be scripting these tasks as much as possible. 
 
-In scientific computing (and elsewhere) this complexity was commonly managed via the use of monolithic software – if you were lucky, there’d be a one-click installer along with auto-update. More recently, centralized package management has provided curated tools that work well together. But as more and more essential functionality is built out across a variety of systems and languages, the value – but also the difficulty – of coordinating multiple tools in a more agile, decentralized fashion continues to increase. Whether we are producing research results or web services, it is becoming increasingly essential to set up new languages, libraries, databases, and more.
+In scientific computing (and elsewhere) this complexity was commonly managed via the use of monolithic software – if you were lucky, there’d be a one-click installer along with auto-update. More recently, centralized package management has provided curated tools that work well together. But as more and more essential functionality is built out across a variety of systems and languages, the value – and also the difficulty – of coordinating multiple tools continues to increase. Whether we are producing research results or web services, it is becoming increasingly essential to set up new languages, libraries, databases, and more.
 
-A simple example common to web development (an increasingly common way to deploy
+A simple example from web development (an increasingly common way to deploy
 scientific applications) is ensuring that a properly configured database and
-secure web server is available. End users who wish to run the web application
-may prefer PostgreSQL or MySQL, Apache or Nginx. Instructions, then, must be
-generic to tool-choice – which makes things hard on novice users – or
+secure web server is available. General instructions must be
+generic to factors like operating system – which makes things hard on novice users – or
 alternatively provide ample detail for all possible choices of tooling – which
 makes things hard for doing documentation. (And unfortunately, it’s common to
 find instructions that are neither generic nor detailed!) A DevOps approach to
 this problem of configuring a web application might consist of providing brief
 descriptions of various install paths, along with *scripts* or “recipes” that
-automate setup of your desired environment. This might not be any easier than
-documenting your tools with prose, but it can be more *enjoyable* and certainly
-more robustly reproducible – even if your setup instructions are wrong, they
+automate setup of your desired environment. This can be more *enjoyable* and certainly
+easily and robustly reproducible for end-users – even if your setup instructions are wrong, they
 will be reproducibly wrong!  As we’ll describe below, many readers will already
 have tools and skills to do this, in the form of package management and basic
 shell scripting. In other words, the primary shift that’s required is not one of
 new tooling, as most developers already have the basic tooling they need.
 Rather, the needed shift is one of *philosophy*.
 
-That said, consider the specialized tools that have been developed to allow for
-multiple *Python* environments, including environments that peacefully co-exist
-on the same computer (e.g., virtualenv, venv, conda, and buildout). These
+We recoqnize that excellent tools have been developed to allow for
+configuring *Python* environments, including environments that peacefully co-exist
+on the same computer (e.g., pip, virtualenv, venv, conda, and buildout). These
 specialized tools can increase our efficiency and provide ready access to a
 broader range of options (such as different versions or compile-time settings).
-But we’ll argue below that we may also wish to coordinate the desktop
+But, we may also wish to coordinate the desktop
 environment, including text editors, version control systems, and so on. As
 such, these tools from the Python community to manage packages and run-time
 environments cannot solve all of our problems. But any of them could be used
-within the broader approach we’ll describe. Indeed, as a tool like conda
-continues to improve it’s ability to pull in non-python tooling, it could
-ultimately perform *most* of the work to set up the compute environment.
+within the broader approach we’ll describe.
 
 More recent configuration management tools are directed at solving this larger problem of configuring nearly any aspect of a compute system. Unfortunately, the variety and complexity of tools match the variety and complexity of the problem space, and the target space for most of them was *not* scientific computing. Thus, before discussing available tooling, we first lay out a fuller set of concerns relevant to supporting scientific computing.
 
 Issues for Scientific Computing
 -------------------------------
 
-Historically, the users of computational tools (and their collaborators) were equipped with a suite of largely self-taught or informally learned foundational skills (command line usage, basic software architecture, etc.). The tooling and technical skills employed by members of a discipline provide notable boundaries between those who do and do not (and perhaps cannot) participate in that discipline. However, we are entering an era where these boundaries are becoming barriers to the mission of our university (and presumably others).
+The users of computational tools (and their collaborators) are often equipped with a suite of largely self-taught or informally learned foundational skills (command line usage, basic software architecture, etc.). The tooling and technical skills employed by members of a discipline provide notable boundaries between those who do and do not (and perhaps cannot) participate in that discipline. However, we are entering an era where these boundaries are becoming barriers to the mission of our university (and presumably others).
 
-For the purposes of the Berkeley Common Environment [BCE]_, there are three broad use-cases. Instructional use requires simultaneous support of *teaching* and *learning*. *Collaboration* introduces difficulties where individuals from different backgrounds have disjoint tooling and skill-sets. A further difficulty arises with the general problem of “collaborating” with scientists around the world that may be interested in *re-using* our code, or *reproducing* our research. Finally, it’s important to consider the demands that might be placed on the individuals actually *developing* and *supporting* the common environment.
-
-Our primary concern at present for BCE is educational, particularly introductory computational science and statistics. However, where possible, we wish to build an environment that supports the broader set of uses we outline here.
+Our primary concern at present for the Berkeley Common Environment [BCE]_ is educational, particularly introductory computational science and statistics. However, where possible, we wish to build an environment that supports the broader set of uses we outline here.
 
 For instruction
 ^^^^^^^^^^^^^^^
 
-We are entering an era where experimental philosophers want to take serious courses in computationally demanding statistics, sociologists have a need for best-of-breed text analysis, and psychologists wish to pick up scalable machine learning techniques. These students are often willing to work hard, and might sign up for the university courses meant to provide these skills. But while the group that the course was originally designed for (e.g., statistics or computer science students) have a set of *assumed* skills that are necessary to succeed in the class, these skills aren’t taught *anywhere* in the curriculum. In these cases, instructors may spend a large amount of time addressing installation and setup issues – taking time away from higher value instruction. Alternatively, students with divergent backgrounds often drop these classes with the sense that they simply can’t obtain these skills. This is not an equitable situation.
+We are entering an era where experimental philosophers want to take courses in advanced statistics, sociologists need best-of-breed text analysis, and psychologists wish to pick up scalable machine learning techniques. These students are willing to work hard, and might sign up for the university courses meant to provide these skills. But while the group that the course was originally designed for (e.g., statistics or computer science students) have a set of *assumed* skills that are necessary to succeed in the class, these skills aren’t taught *anywhere* in the curriculum. In these cases, instructors may spend a large amount of time addressing installation and setup issues – taking time away from higher value instruction. Alternatively, students with divergent backgrounds often drop these classes with the sense that they simply can’t obtain these skills. This is not an equitable situation.
 
 Given current standards for university courses, it’s difficult to write instructions that would work for any potential student. As mentioned above, students come to a course with many possible environments (i.e., on their laptop or a server). But if a standardized environment is provided, this task becomes much simpler. Written instructions need fewer special cases, and illustrations can be essentially pixel-identical to what students should be seeing on their screen.
 
-Given that we’re writing instructions on how to use course-relevant tools, we can consider what demands we’ll place on our audience. The most accessible instructions will only require skills possessed by the broadest number of people. In particular, we suggest that many potential students are not yet fluent with notions of package management, scripting, or even the basic idea of command-line interfaces [SWC]_. Switching between a command-line shell to enter some commands, and a Python interpreter for others can be incredibly confusing – many students simply don’t know where to look for the critical cues.
+Given that we’re writing instructions on how to use course-relevant tools, we can consider what demands we’ll place on our audience. The most accessible instructions will only require skills possessed by the broadest number of people. In particular, many potential students are not yet fluent with notions of package management, scripting, or even the basic idea of command-line interfaces [SWC]_. Switching between a command-line shell to enter some commands, and a Python interpreter for others can be incredibly confusing – many students simply don’t know where to look for the critical cues.
 
-Given these constraints, any solution should be able to be set up via GUI operations. Once a common environment is installed, it becomes easier to scaffold students’ use of more difficult tools, as they will look and operate in a uniform way. Note that “uniformity of the environment in which the user is clicking” cannot be implemented without full control of the graphical environment, and systems that configure only a self-contained set of libraries or computational tools cannot do this. At the other end, it would be unreasonable to reconfigure students’ desktop on their laptop. Thus, we need to set up an isolated, uniform environment in it’s totality where instructions can provide essentially pixel-identical guides to what the student will see on their own screen. Tools like conda may be rapidly moving towards being a universal package manager, but it’s certainly out-of-scope for a package manager to start configuring the color of the users desktop!
+Given these constraints, any solution should be accessible via GUI operations. Once a common environment is installed, it becomes easier to scaffold students’ use of more challenging tools, as they will look and operate in a uniform way. Note that “uniformity of the environment in which the user is clicking” cannot be implemented without full control of the graphical environment, and systems that configure only a self-contained set of libraries or computational tools cannot do this. At the other end, it would be unreasonable to reconfigure students’ desktop on their laptop. Thus, we need to set up an isolated, uniform environment in it’s totality where instructions can provide essentially pixel-identical guides to what the student will see on their own screen.
 
 For scientific collaboration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the D-Lab, and more generally in “Data Science” initiatives across campus, we encounter increasing numbers of researchers who wish to borrow techniques from other researchers. These researchers often come from different domains with different standards for tools. These would-be collaborators are increasingly moving towards open-source tools – often developed in Python or R – which already dramatically reduces financial barriers to collaboration. 
 
-The current situation, however, results in chaos, misery, and the gnashing of teeth. It is common to encounter a researcher with three or more python distributions installed on their machine, and this user will have no idea how to manage their command-line path, or which packages are installed where. In particularly pathological cases, pip will install packages to an otherwise inactive python distribution. These nascent scientific coders will have at various points had a working system for a particular task, and often arrive in a state in which nothing seems to work. A standard environment can eliminate this confusion, and if needed, isolate environments that serve different projects. Snapshots of working systems would provide even more resilience of the continued functioning of already running projects. And critically, we don’t want to disrupt the already productive environments that these researchers are using!
+The current situation, however, results in chaos, misery, and the gnashing of teeth. It is common to encounter a researcher with three or more python distributions installed on their machine, and this user will have no idea how to manage their command-line path, or which packages are installed where. In particularly pathological cases, pip will install packages to an otherwise inactive python distribution. These nascent scientific coders will have at various points had a working system for a particular task, and often arrive at a state in which nothing seems to work. A standard environment can eliminate this confusion, and if needed, isolate environments that serve different projects. Snapshots of working systems can provide even more resilience of the continued functioning of already running projects. And critically, we don’t want to disrupt the already productive environments that these researchers are using!
 
 This issue becomes even more pronounced when we begin “collaborating” with other researchers we know nothing about – as when we try to re-use someone elses scientific code, or reproduce their results. It is unreasonable to expect a researcher to develop code along with instructions on how to run that code on any potential environment. Structurally, this situation is not much different than the above-described issues that arise between students and instructors – the publishing researcher clearly has (or should have!) mastery of their tool stack, and they should ideally publish instructions that are as broadly usable as possible. An easy way to do this is to ensure others have access to the exact environment the original researcher was working on, and again, “pixel-identical” instructions can be provided.
 
@@ -121,26 +115,21 @@ For administration
 
 At UC Berkeley, the D-Lab supports tools for courses and short trainings. Similarly, the Statistical Computing Facility (SCF) supports an instructional lab and “cloud” resources for some courses, and grad student assistants often provide virtual machines for courses (we’ll explain virtual machines later). In each and every case, multiple technical challenges are common. These technical glitches can delay or reduce the quality of instruction as compared to an environment that students are already familiar with. It is also a drag on the time of those supporting the course – time that could be better directed at course content!
 
-The goal is to obtain net *savings* of time spent supporting this environment, while improving the experience for our students and researchers. The more broadly a standard environment is adopted across campus, the more familiar it will be to all students. Using infrastructure for collaborative administration, technical glitches can be tracked or resolved by a community of competent contributors, allowing course instructors to simply use a well-polished end product, while reducing the complexity of instructions for students to set up course-specific software. These environments can also be tuned in ways that would be beyond the scope of what would be worth doing for an individual course – for example simple optimizations to increase the efficiency of numeric computations or network bandwidth for remote desktops.
+The more broadly a standard environment is adopted across campus, the more familiar it will be to all students. Using infrastructure for collaborative administration, technical glitches can be tracked or resolved by a community of competent contributors, allowing course instructors to simply use a well-polished end product, while reducing the complexity of instructions for students to set up course-specific software. These environments can also be tuned in ways that would be beyond the scope of what would be worth doing for an individual course – for example simple optimizations to increase the efficiency of numeric computations or network bandwidth for remote desktops.
 
 It is at this point that our use case starts to sound like the case in which product developers are working together to deploy software on a production server, while maintaining a useful development environment on their own machines, testing servers, and so on. However, going forwards, we will suggest that novel tools for building and managing compute environments be largely the domain of administrator-contributors to a useful common environment. Technically skilled students, professors and researchers can continue to use the tools they are familiar with, such as the Ubuntu package manager, pip, shell scripts, and so on. More will be said about tooling below.
-
-Summary
-^^^^^^^
-
-Above, we’ve highlighted how a common environment might support instruction, research, and efficient IT support. We are looking forward to the potential for impacts on thin clients for staff computing, exam environments, instructional labs, and providing easier mechanisms for sharing licensed software. Notably, we are not looking to advance the state of the art in high-performance computing. Rather, we are focused on methods to provide access to software tools that have not traditionally been available to all disciplines.
 
 Technical challenges for a common environment
 ---------------------------------------------
 
 Any common environment needs to provide a base of generally useful software, and it should be clear how it was installed and configured. It should be equally clear how one could set up additional software following the pattern of the “recipe” for the environment, so that this software is also easy to share with other users of the environment. More generally, we seek to address the following challenges, though we have certainly not definitely solved them! After each solution, we list relevant tools, which will be described in full in a later section.
 
-Dependency hell
-^^^^^^^^^^^^^^^
+Complex requirements
+^^^^^^^^^^^^^^^^^^^^
 
-The quote at the beginning of this paper represents the first barrier to collaboration in which the full set of requirements are not explicitly stated and there is an assumption that all collaborators already have or can set up an environment to collaborate. The number of steps or the time required to satisfy these assumptions is unknown, and regularly exceeds the time available. For example, in the context of a 1.5 hour workshop or a class with only handful of participants, if all cannot be set up within a fixed amount of time (typically 20 minutes at most) it will jeopardize successfully completing the workshop or class materials and will discourage participation. All participants must be able to successfully complete the installation with a fixed number of well-known steps across all platforms within a fixed amount of time, and a fallback can be provided where this is not possible. 
+The quote at the beginning of this paper illustrates a case in which requirements are not explicitly stated and there is an assumption that all collaborators know how to set up the necessary environment. The number of steps or the time required is unknown, and regularly exceeds the time available. For example, in the context of a 1.5 hour workshop or a class with only handful of participants, if all cannot be set up within a fixed amount of time (typically 20 minutes at most) it will jeopardize successfully completing the workshop or class materials and will discourage participation. All participants must be able to successfully complete the installation with a fixed number of well-known steps across all platforms within a fixed amount of time, and a fallback can be provided where this is not possible. 
 
-An additional difficulty arises when users are using versions of the “same” software. For example, Git Bash on Windows lacks a ``man`` command.
+An additional difficulty arises when users are using different versions of the “same” software. For example, Git Bash on Windows lacks a ``man`` command.
 We *cannot* control the base environment that users will have on their laptop or workstation, nor do we wish to! Thus, a useful environment should provide consistency and not depend on or interfere with users’ existing setup.
 
 Relevant tools discussed below include Linux, virtual machines, and configuration management.
@@ -192,7 +181,7 @@ DevOps engineer (i.e., contributor, maintainer, *you*, etc.).
 Linux OS (Operating System)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A foundational tool for our approach has been the Linux operating system. It is far easier to standardize on a single OS instead of trying to manage the complexity of cross-platform support. Critically, it is often relatively easy to install (or build) scientific code on Linux. Likewise, the popular DevOps tool *Docker* (described below) was designed to work with a Linux kernel.  Moreover, Linux is not encumbered by licensing constraints, which reduces barriers to collaboration, distribution, and reuse. This choice of a single target OS is a primary reason to use *virtual machines* (described below) because many people use other OSes (commonly Mac OS or Windows) as their primary laptop OS.
+A foundational tool for our approach has been the Linux operating system. It is far easier to standardize on a single OS instead of trying to manage the complexity of cross-platform support. It is often relatively easy to install (or build) scientific code on Linux. Likewise, the popular DevOps tool *Docker* (described below) was designed to work with a Linux kernel.  Moreover, Linux is not encumbered by licensing constraints, which reduces barriers to collaboration, distribution, and reuse. This choice of a single target OS is a primary reason to use *virtual machines* (described below) because many people use other OSes (commonly Mac OS or Windows) as their primary laptop OS.
 
 Virtual machines (VMs)
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -202,8 +191,7 @@ Virtual machine (VM) software enables running another OS (in BCE, Ubuntu server 
 For some users, a VM simply will not work, generally because they have a very old operating system or personal computer. Thus, one should assume that any VM solution will not work for some individuals and provide a fallback solution (particularly for instructional environments). If a uniform Linux environment is being used, then this has to be on a remote server. In this case, remote desktop software may be necessary, or in the case of BCE, we are able to enable all essential functionality via a web browser using IPython notebooks. RStudio server would provide a similar approach to sidestepping the need for a full remote desktop session.
 
 One valid concern is that VMs reserve compute resources exclusively. This is one argument to move towards other approaches that allow for more elastic usage of resources, most notably with LXC-like
-solutions, discussed in the Docker section below. Also, While specialized GPU hardware is available for cloud deployment, commodity GPUs will generally not work with fully virtualized systems. For example, VirtualBox presents a virtual GPU with at most 128MB of video memory (which might also be addressed by LXC/Docker).
-A final set of issues that can arise is dealing with mappings between host and guest OS, which vary from system to system – arguing for the utility of an abstraction layer for VM configuration like Vagrant or Packer (discussed below). This includes things like port-mapping, shared files, enabling control of the display for a GUI vs. enabling network routing for remote operation. These concerns are handled differently across different virtualization solutions, and may interact with the way the guest OS is configured. Specifically with BCE we noticed that some desktop environments interacted poorly with VirtualBox (for example, LXDE does not handle resize events properly). 
+solutions, discussed in the Docker section below. Another issue that can arise is dealing with mappings between host and guest OS, which vary from system to system – arguing for the utility of an abstraction layer for VM configuration like Vagrant or Packer (discussed below). This includes things like port-mapping, shared files, enabling control of the display for a GUI vs. enabling network routing for remote operation. These concerns are handled differently across different virtualization solutions, and may interact with the way the guest OS is configured. Specifically with BCE we noticed that some desktop environments interacted poorly with VirtualBox (for example, LXDE does not handle resize events properly). 
 
 The easiest way to use a virtual machine is to use a pre-existing image – a file that contains all relevant data and metadata about an environment (described more fully at [images]_). It’s very easy to make modifications to an environment and make a new image by taking a snapshot. 
 Note that while both local and cloud-based VM systems often allow for easy snapshotting, it may be hard to capture exactly what happened – especially changes and configuration that was made “by hand.” So snapshots are a good fallback mechanism, but not necessarily a good solution for reproducibility. You can also install an OS to a virtual image in essentially the same manner you would install it to bare metal. The primary difference is that you need to use specialized VM software to start this process. For example, you can do this directly in VirtualBox simply by clicking the “New” button, and you’ll be guided through all of the steps. There are more automated ways, however, and we discuss these below.
@@ -214,7 +202,7 @@ If you are already running Linux on “bare metal”, installed directly on your
 
 Yes! The BCE model relies on a well-known, curated set of dependencies and default configurations. To ensure that it is possible to consistently and reliably manage those elements no matter what flavor, variant, or version of Linux you may be running as the host OS.
 
-However, we have intentionally made choices that allow a developer who knows what they’re doing to set up a partial environment that matches BCE. For example, python requirements are installed with pip using a requirements file. This makes it easy to set up a virtualenv or conda environment with those packages.
+However, we have intentionally made choices that allow an informed developer set up a partial environment that matches BCE. For example, python requirements are installed with pip using a requirements file. This makes it easy to set up a virtualenv or conda environment with those packages.
 
 
 Configuration management and automated image creation
@@ -223,7 +211,7 @@ Creating an image or environment is often called *provisioning*. The way this wa
 
 Package managers in particular provide high-level commands to install and configure packages. Currently, we use a combination of apt, pip, and We also evaluated conda and found that it introduced additional complexity. For example, it is still hard to install a list of pip requirements with conda if some packages are not available for conda. Most package authors currently make their packages available for, however, for pip. Standard apt packages were also adequate for things like database, and ideal for the desktop environment, where we could reap the benefit of the careful work that went into the LTS Ubuntu distribution.
 
-Steps like installing the base guest OS may be done manually. As we explored minimizing tooling for the BCE development process, one of the steps in the recipe was manual VM creation from an Ubuntu installation ISO. It is straightforward to make a binary image from a snapshot immediately after creating a base image, so this initial step could be done once by a careful individual. 
+Steps like installing the base guest OS may be done manually. As we explored managing the complexity and reducing the number of tools for the BCE development process, one of the steps in the recipe was manual VM creation from an Ubuntu installation ISO. It is straightforward to make a binary image from a snapshot immediately after creating a base image, so this initial step could be done once by a careful individual. 
 
 If, however, one wanted to automate installation from an ISO, this is enabled by the Debian Installer [UDI]_, a system that allows a text file to specify answers to the standard configuration prompts at install-time, in addition to providing many more possibilities. You can find the BCE configuration file for the debian-installer in the ``provisioning/http`` directory. Later, we’ll discuss how we’re coordinating all of the above using Packer.
 
@@ -231,7 +219,7 @@ Ansible and related tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Ansible is one of a number of recent DevOps tools for configuration management. These tools enable automated management of customizations to the default status and configuration of software. This replaces editing configuration files directly by hand and provides checks and guarantees for applying changes that would be hard to write as shell scripts alone (somewhat akin to a makefile).
-This allows for a way to manage configuration complexity as the an environment grows in complexity. It may also allow an end-user to manage and reliably apply personal customizations across multiple versions of an environment over time.
+This allows for a way to manage configuration complexity as the an environment grows in feature complexity. It may also allow an end-user to manage and reliably apply personal customizations across multiple versions of an environment over time.
 For BCE development, we felt Ansible added the least complexity. It may be used at build-time and also at run-time within the guest OS, *or from any other location with SSH access to the target being configured*. The only requirements for the target are an SSH server and a Python interpreter (yes, Ansible is Python-based). Ansible execution is also more linear than some systems, which is a limitation, but also a simplification.
 
 At this phase, however, the complexity of BCE doesn’t warrant contributors learning even a simple configuration management tool. The maintainer of the Software Carpentry VM, Matt Davis, has reported a similar observation. He has used another tool, Puppet, to provision the Software Carpentry VM, but will likely use shell scripts in the future. And as we will see below from the OSGeo project, it *is* possible to coordinate certain kinds of complexity with more commonly known tools like shell scripting.
@@ -257,13 +245,13 @@ Currently, Vagrant is most useful for experienced developers to share environmen
 
 Docker
 ^^^^^^
-Docker is a platform to build, distribute, and run images built on top of Linux Containers (LXC) which provides a lightweight style of virtualization called containerization. An important distinction of LXC-based containerization is that the guest OS and the host OS both run same underlying Linux kernel.
+Docker is a platform to build, distribute, and run images built on top of Linux Containers (LXC) which provides a lightweight style of virtualization called containerization. An important distinction of LXC-based containerization is that the guest OS and the host OS both run the same underlying Linux kernel.
 
 At run-time Docker adds to this containerization a collection of tools to manage configuring and starting an instance in much the same way that Vagrant does for a virtualization environment. Images are created using a simple build script called a Dockerfile which usually runs a series of shell script commands which might even invoke a configuration management system such as Ansible.
 
 Another feature of the platform is the management and distribution of the images built by docker, including incremental differences between images. Docker makes it possible (albeit in a rudimentary way) to track changes to the binary image in a manner similar to the way git allows you to track changes to source code. This also includes the ability to efficiently maintain and distribute multiple branches of binary images that may be derived from a common root.
 
-Docker is also more than just a tool. It is a quickly growing community of Open Source and industry with a rapidly evolving ecosystem of tools built on core OS primitives. There is no clear set of best practices, and those that emerge are not likely to fit all the use cases of the academic community without us being involved in mapping the tools to our needs. However, as mentioned above, providing better access to hardware with containers is an important and active research topic for performance [HPC]_.
+Docker is also more than just a tool. It is a quickly growing community of Open Source and industry developers with a rapidly evolving ecosystem of tools built on core OS primitives. There is no clear set of best practices, and those that emerge are not likely to fit all the use cases of the academic community without us being involved in mapping the tools to our needs. However, providing better access to hardware with containers is an important and active research topic for performance [HPC]_.
 
 Currently, Docker requires a Linux environment to host the Docker server. As such, it clearly adds *additional* complexity on top of the requirement to support a virtual machine. We also evaluated Docker as a way to potentially provide a large number of students access to a VM on a reasonably powered server. However, in our use-cases, we have full control of our Linux compute environment and existing methods of isolating users with permissions was sufficient and less complex than using Docker. Moreover, the default method of deploying Docker (at the time of evaluation) on personal computers is with Vagrant. This approach would then *also* add all of the complexity of using Vagrant. However, recent advances with *boot2docker* provide something akin to a VirtualBox-only, Docker-specific replacement for Vagrant that eliminates *some* of this complexity, though one still needs to grapple with the cognitive load of nested virtual environments and tooling.
 
@@ -301,7 +289,7 @@ An original project design goal was to provide tools to those doing geospatial f
 
 Several years into the project, with a grant from the Australian
 government, a professional-level documentation project was initiated for a single-page overview and quick-start instructions for each application. Language internationalization was rendered more efficient, specifically to support local field work. Much later, a "percentage complete" graph for each human language group was added, making translation into a sort of competitive game. This translation has proven very successful.
-The project has moreover facilitated collaboration across developer communities. For example, we have seen productive application of software developed by the U.S. military to environmental applications.
+The project has facilitated collaboration across developer communities. For example, we have seen productive application of software developed by the U.S. military to environmental applications.
 
 Steps to Contribute
 ^^^^^^^^^^^^^^^^^^^
@@ -361,7 +349,7 @@ As described above, while we have experimented with Docker, Vagrant, and Ansible
 Conclusion
 ----------
 
-Keep in mind that *you* are now at the cutting edge. Extra care should be taken to make your tooling accessible to your collaborators. Where possible, use tools that your collaborators already know – shell, scripting, package management, etc.
+Keep in mind that *you* are now at the cutting edge of DevOps for the scientific community. Extra care should be taken to make your tooling accessible to your collaborators. Where possible, use tools that your collaborators already know – shell, scripting, package management, etc.
 That said, technologies that allow efficient usage of available hardware stand to provide substantial savings, and potential for re-use by researchers with less direct access to capital (e.g., Docker, or demand aggregation of cloud VM providers).
 
 So, let’s be intentional about creating and using environments that are broadly accessible.
@@ -397,11 +385,9 @@ References
 .. [2g]  http://www.osgeo.org/content/foundation/about.html
 .. [3g]  http://en.wikipedia.org/wiki/GIS_Live_DVD
 .. [4g]  E. M. Rogers, *Diffusion of Innovations*, 5th ed. New York: Free Press, 2003.
-.. [5g]  http://wiki.osgeo.org/wiki/Live_GIS_History
 .. [6g]  http://svn.osgeo.org/osgeo/livedvd
 .. [7g]  http://wiki.osgeo.org/wiki/Live_GIS_Add_Project
 .. [8g]  http://wiki.osgeo.org/wiki/Live_GIS_Translate
-.. [9g]  http://wiki.osgeo.org/wiki/Live_GIS_Disc_Testing
 .. [10g] http://trac.osgeo.org/osgeo/report/10
 .. [boot] https://github.com/dlab-berkeley/collaboratool/blob/master/provisioning/bootstrap-bce.sh
 .. [Packer] http://www.packer.io/intro
