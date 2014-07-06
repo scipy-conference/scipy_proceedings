@@ -14,7 +14,7 @@ Frequentism and Bayesianism: A Python-driven Primer
 
    statistics, frequentism, Bayesian inference
 
-.. [#blog] This paper draws heavily from content originally published in a series of posts on the author's blog, *Pythonic Perambulations* [VanderPlas2014]_.
+.. [#blog] This paper draws heavily from content originally published in a series of posts on the author's blog, `Pythonic Perambulations <http://jakevdp.github.io/>`_ [VanderPlas2014]_.
 
 Introduction
 ------------
@@ -39,7 +39,7 @@ The surprising thing is that this arguably subtle difference in philosophy can l
 
 A Simple Example: Photon Flux Measurements
 ------------------------------------------
-First we will compare the frequentist and Bayesian approaches to the solution of an extremely simple problem. Imagine that we point a telescope to the sky, and observe the light coming from a single star. For simplicity, we will assume that the star's true photon flux is constant with time, i.e. that is it has a fixed value :math:`F`; we will also ignore effects like sky background systematic errors. We will assume that a series of :math:`N` measurements are performed, where the :math:`i^{\rm th}` measurement reports the observed flux :math:`F_i` and error :math:`e_i`. The question is, given this set of measurements :math:`D = \{F_i,e_i\}`, what is our best estimate of the true flux :math:`F`? [#note_about_errors]_ 
+First we will compare the frequentist and Bayesian approaches to the solution of an extremely simple problem. Imagine that we point a telescope to the sky, and observe the light coming from a single star. For simplicity, we will assume that the star's true photon flux is constant with time, i.e. that is it has a fixed value :math:`F`; we will also ignore effects like sky background systematic errors. We will assume that a series of :math:`N` measurements are performed, where the :math:`i^{\rm th}` measurement reports the observed flux :math:`F_i` and error :math:`e_i`. [#note_about_errors]_  The question is, given this set of measurements :math:`D = \{F_i,e_i\}`, what is our best estimate of the true flux :math:`F`?
 
 .. [#note_about_errors] We will make the reasonable assumption of normally-distributed measurement errors. In a Frequentist perspective, :math:`e_i` is the standard deviation of the results of the single measurement event in the limit of (imaginary) repetitions of *that event*. In the Bayesian perspective, :math:`e_i` describes the probability distribution which quantifies our knowledge of :math:`F` given the measured value :math:`F_i`.
 
@@ -116,23 +116,23 @@ Let's take a look at each of the terms in this expression:
 - :math:`P(F)`: The **model prior**, which encodes what we knew about the model before considering the data :math:`D`.
 - :math:`P(D)`: The **model evidence**, which in practice amounts to simply a normalization term.
 
-If we set the prior :math:`P(F) \propto 1` (a *flat prior*) [#note_flat]_, we find
+If we set the prior :math:`P(F) \propto 1` (a *flat prior*), we find
 
 .. math::
 
     P(F|D) \propto \mathcal{L}(D|F).
 
-That is, with a flat prior in :math:`F`, the Bayesian posterior is maximized at precisely the same value as the frequentist result! So despite the philosophical differences, we see that the Bayesian and frequentist point estimates are equivalent for this simple problem.
+That is, with a flat prior on :math:`F`, the Bayesian posterior is maximized at precisely the same value as the frequentist result! So despite the philosophical differences, we see that the Bayesian and frequentist point estimates are equivalent for this simple problem.
 
-.. [#note_flat] A flat prior is an example of an improper prior: that is, it cannot be normalized. In practice, we can remedy this by imposing some bounds on possible values: say, :math:`0 < F < F_{tot}`, the total flux of all sources in the sky. As this normalization term also appears in the denominator, it does not affect the posterior.
+You might notice that we glossed over one important piece here: the prior, :math:`P(F)`, which we assumed to be flat. [#note_flat]_ The prior allows inclusion of other information into the computation, which becomes very useful in cases where multiple measurement strategies are being combined to constrain a single model (as is the case in, e.g. cosmological parameter estimation). The necessity to specify a prior, however, is one of the more controversial pieces of Bayesian analysis.
 
-You might notice that we glossed over one important piece here: the prior, :math:`P(F)`. The prior allows inclusion of other information into the computation, which becomes very useful in cases where multiple measurement strategies are being combined to constrain a single model (as is the case in, e.g. cosmological parameter estimation). The necessity to specify a prior, however, is one of the more controversial pieces of Bayesian analysis.
+.. [#note_flat] A flat prior is an example of an improper prior: that is, it cannot be normalized. In practice, we can remedy this by imposing some bounds on possible values: say, :math:`0 < F < F_{tot}`, the total flux of all sources in the sky. As this normalization term also appears in the denominator of Bayes' theorem, it does not affect the posterior.
 
 A frequentist will point out that the prior is problematic when no true prior information is available. Though it might seem straightforward to use an **uninformative prior** like the flat prior mentioned above, there are some surprising subtleties involved. [#uninformative]_ It turns out that in many situations, a truly uninformative prior cannot exist! Frequentists point out that the subjective choice of a prior which necessarily biases the result should have no place in scientific data analysis.
 
 A Bayesian would counter that frequentism doesn't solve this problem, but simply skirts the question. Frequentism can often be viewed as simply a special case of the Bayesian approach for some (implicit) choice of the prior: a Bayesian would say that it's better to make this implicit choice explicit, even if the choice might include some subjectivity. Furthermore, as we will see below, the question frequentism answers is not always the question the researcher wants to ask.
 
-.. [#uninformative] The flat prior in this case can be motivated by maximum entropy; see, e.g. [Jeffreys1946]_. Still, the use of uninformative priors like this often raises eyebrows among frequentists: there are good arguments that even "uninformative" priors add information; see e.g. [Evans2002]_.
+.. [#uninformative] The flat prior in this case can be motivated by maximum entropy; see, e.g. [Jeffreys1946]_. Still, the use of uninformative priors like this often raises eyebrows among frequentists: there are good arguments that even "uninformative" priors can add information; see e.g. [Evans2002]_.
 
 
 Where The Results Diverge
@@ -150,7 +150,7 @@ We will start by discussing the first point: nuisance parameters. A nuisance par
 
 Here we consider an example of nuisance parameters borrowed from [Eddy2004]_ that, in one form or another, dates all the way back to the posthumously-published 1763 paper written by Thomas Bayes himself [Bayes1763]_. The setting is a gambling game in which Alice and Bob bet on the outcome of a process they can't directly observe.
 
-Alice and Bob enter a room. Behind a curtain there is a billiard table, which they cannot see. Their friend Carol rolls a ball down the table, and marks where it lands. Once this mark is in place, Carol begins rolling new balls down the table. If the ball lands to the left of the mark, Alice gets a point; if it lands to the right of the mark, Bob gets a point.  We can assume for the sake of example that Carol's rolls are unbiased: that is, the balls have an equal chance of ending up anywhere on the table.  The first person to reach six points wins the game.
+Alice and Bob enter a room. Behind a curtain there is a billiard table, which they cannot see. Their friend Carol rolls a ball down the table, and marks where it lands. Once this mark is in place, Carol begins rolling new balls down the table. If the ball lands to the left of the mark, Alice gets a point; if it lands to the right of the mark, Bob gets a point.  We can assume that Carol's rolls are unbiased: that is, the balls have an equal chance of ending up anywhere on the table.  The first person to reach six points wins the game.
 
 Here the location of the mark (determined by the first roll) can be considered a nuisance parameter: it is unknown and not of immediate interest, but it clearly must be accounted for when predicting the outcome of subsequent rolls. If this first roll settles far to the right, then subsequent rolls will favor Alice. If it settles far to the left, Bob will be favored instead.
 
@@ -262,7 +262,7 @@ Notice the subtle difference: the Bayesian makes a statement of probability abou
 
 This difference must necessarily affect our interpretation of results. For example, it is common in scientific literature to see it claimed that it is 95% certain that an unknown parameter lies within a given 95% CI, but this is not the case! This is erroneously applying the Bayesian interpretation to a frequentist construction. This frequentist oversight can perhaps be forgiven, as under most circumstances (such as the simple flux measurement example above), the Bayesian CR and frequentist CI will more-or-less overlap. But, as we will see below, this overlap cannot always be assumed, especially in the case of non-Gaussian distributions constrained by few data points. As a result, this common misinterpretation of the frequentist CI can lead to dangerously erroneous conclusions.
 
-To demonstrate a situation in which the frequentist confidence interval and the Bayesian credibility region do not overlap, let us turn to an example given by E.T. Jaynes, a 20th century physicist who wrote extensively on statistical inference in Physics. In his words, consider a device that
+To demonstrate a situation in which the frequentist confidence interval and the Bayesian credibility region do not overlap, let us turn to an example given by E.T. Jaynes, a 20th century physicist who wrote extensively on statistical inference. In his words, consider a device that
 
     "...will operate without failure for a time :math:`\theta` because of a protective chemical inhibitor injected into it; but at time :math:`\theta` the supply of the chemical is exhausted, and failures then commence, following the exponential failure law. It is not feasible to observe the depletion of this inhibitor directly; one can observe only the resulting failures. From data on actual failure times, estimate the time :math:`\theta` of guaranteed safe operation..." [Jaynes1976]_
 
@@ -279,7 +279,7 @@ Essentially, we have data :math:`D` drawn from the model:
 
 where :math:`p(x|\theta)` gives the probability of failure at time :math:`x`, given an inhibitor which lasts for a time :math:`\theta`. We observe some failure times, say :math:`D = \{10, 12, 15\}`, and ask for 95% uncertainty bounds on the value of :math:`\theta`.
 
-First, let's think about what common-sense would tell us. Given the model, an event can only happen after a time :math:`\theta`. Turning this around tells us that the upper-bound for :math:`\theta` must be :math:`\min(D)`. So, for our particular example, we would immediately write :math:`\theta \le 10`. With this in mind, let's explore how a frequentist and a Bayesian approach compare to this observation.
+First, let's think about what common-sense would tell us. Given the model, an event can only happen after a time :math:`\theta`. Turning this around tells us that the upper-bound for :math:`\theta` must be :math:`\min(D)`. So, for our particular data, we would immediately write :math:`\theta \le 10`. With this in mind, let's explore how a frequentist and a Bayesian approach compare to this observation.
 
 Truncated Exponential: A Frequentist Approach
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -351,13 +351,13 @@ which agrees with our common-sense bound.
 
 Discussion
 ~~~~~~~~~~
-Why do the frequentist CI and Bayesian CR give such different results? The reason goes back to the definitions of the CI and CR, and to the fact that *the two approaches are answering different questions*. The Bayesian CR answers a question about the value of :math:`\theta` itself (the probability that the parameter is in the fixed CR), while the frequentist CI answers a question about the procedure used to construct the CI (the probability that the constructed CI will contain the fixed parameter).
+Why do the frequentist CI and Bayesian CR give such different results? The reason goes back to the definitions of the CI and CR, and to the fact that *the two approaches are answering different questions*. The Bayesian CR answers a question about the value of :math:`\theta` itself (the probability that the parameter is in the fixed CR), while the frequentist CI answers a question about the procedure used to construct the CI (the probability that any potential CI will contain the fixed parameter).
 
 Using Monte Carlo simulations, it is possible to confirm that both the above results correctly answer their respective questions (see [VanderPlas2014]_, III). In particular, 95% of frequentist CIs constructed using data drawn from this model in fact contain the true :math:`\theta`. Our particular data are simply among the unhappy 5% which the confidence interval misses. But this makes clear the danger of misapplying the Bayesian interpretation to a CI: this particular CI is not 95% likely to contain the true value of :math:`\theta`; it is in fact 0% likely!
 
-Does this mean that frequentism is incorrect? Not necessarily: it simply shows that we must carefully keep in mind what question frequentism is answering. Frequentism does not seek probabilities of *parameter values given data*, as the Bayesian approach does; it seeks probabilities of *computed limits given a recipe for constructing them*. Despite this, it is common to see a 95% confidence interval interpreted in the Bayesian sense: as a fixed interval that the parameter is expected to be found in 95% of the time. As we see clearly here, this interpretation is flawed, and should be carefully avoided.
+This shows that when using frequentist methods on fixed data, we must carefully keep in mind what question frequentism is answering. Frequentism does not seek a *probabilistic statement about a fixed interval* as the Bayesian approach does; it instead seeks probabilistic statements about an *ensemble of constructed intervals*, with the particular computed interval just a single draw from among them. Despite this, it is common to see a 95% confidence interval interpreted in the Bayesian sense: as a fixed interval that the parameter is expected to be found in 95% of the time. As seen clearly here, this interpretation is flawed, and should be carefully avoided.
 
-Though we correctly used an unbiased frequentist estimator above, it should be emphasized that the unbiased estimator is not always optimal for any given problem: especially one with small :math:`N` and/or censored models; see, e.g. [Hardy2003]_. Other frequentist estimators are available: for example, if the (biased) maximum likelihood estimator were used here instead, the confidence interval would be very similar to the Bayesian credible region derived above. Regardless of the choice of frequentist estimator, however, the correct interpretation of the CI is the same: it gives probabilities concerning the *recipe for constructing limits*, not for the *parameter values given the observed data*. For sensible parameter constraints from a single dataset, Bayesianism may be preferred, especially if the difficulties of uninformative priors can be avoided through the use of true prior information.
+Though we used a correct unbiased frequentist estimator above, it should be emphasized that the unbiased estimator is not always optimal for any given problem: especially one with small :math:`N` and/or censored models; see, e.g. [Hardy2003]_. Other frequentist estimators are available: for example, if the (biased) maximum likelihood estimator were used here instead, the confidence interval would be very similar to the Bayesian credible region derived above. Regardless of the choice of frequentist estimator, however, the correct interpretation of the CI is the same: it gives probabilities concerning the *recipe for constructing limits*, not for the *parameter values given the observed data*. For sensible parameter constraints from a single dataset, Bayesianism may be preferred, especially if the difficulties of uninformative priors can be avoided through the use of true prior information.
 
 
 Bayesianism in Practice: Markov Chain Monte Carlo
@@ -394,7 +394,7 @@ We will evaluate this model on the following data set:
     ydata = theta_true[0] + theta_true[1] * xdata
     ydata = np.random.normal(ydata, 10) # add error
 
-Below we will consider a frequentist solution to this problem computed with the statsmodels package [#statsmodels]_, as well as a Bayesian solution computed with several MCMC implementations in Python: emcee [#emcee]_, PyMC [#pymc]_, and PyStan [#pystan]_. A full discussion of the strengths and weaknesses of the various MCMC algorithms used by the packages is out of scope for this paper, as is a full discussion of performance benchmarks for the three packages. Rather, the purpose of this section is to show side-by-side examples of the Python APIs of the three packages. First, though, we will consider a frequentist solution.
+Below we will consider a frequentist solution to this problem computed with the statsmodels package [#statsmodels]_, as well as a Bayesian solution computed with several MCMC implementations in Python: emcee [#emcee]_, PyMC [#pymc]_, and PyStan [#pystan]_. A full discussion of the strengths and weaknesses of the various MCMC algorithms used by the packages is out of scope for this paper, as is a full discussion of performance benchmarks for the packages. Rather, the purpose of this section is to show side-by-side examples of the Python APIs of the packages. First, though, we will consider a frequentist solution.
 
 .. [#statsmodels] statsmodels: Statistics in Python http://statsmodels.sourceforge.net/
 
@@ -407,7 +407,7 @@ Below we will consider a frequentist solution to this problem computed with the 
 
 Frequentist Solution
 ~~~~~~~~~~~~~~~~~~~~
-A frequentist solution can be found by computing the maximum likelihood estimate. For standard linear problems such as this, the result can be computed using efficient linear algebra. If we define the *parameter vector*, :math:`\theta = [\alpha~\beta]^T`; the *response vector*, :math:`Y = [y_1~y_2~y_3~\cdots~y_N]^T`; and the *design matrix*,
+A frequentist solution can be found by computing the maximum likelihood point estimate. For standard linear problems such as this, the result can be computed using efficient linear algebra. If we define the *parameter vector*, :math:`\theta = [\alpha~\beta]^T`; the *response vector*, :math:`Y = [y_1~y_2~y_3~\cdots~y_N]^T`; and the *design matrix*,
 
 .. math::
 
@@ -436,7 +436,7 @@ The confidence interval around this value is an ellipse in parameter space defin
                     \right]
                    = \sigma^2 (M^TM)^{-1}.
 
-Here :math:`\sigma` is our unknown error term; it can be estimated based on the variance of the residuals about the fit. The off-diagonal elements of :math:`\Sigma_{\hat{\theta}}` are the correlated uncertainty between the estimates. In code, this is what it looks like:
+Here :math:`\sigma` is our unknown error term; it can be estimated based on the variance of the residuals about the fit. The off-diagonal elements of :math:`\Sigma_{\hat{\theta}}` are the correlated uncertainty between the estimates. In code, the computation looks like this:
 
 .. code-block:: python
 
@@ -483,12 +483,12 @@ In practice, the frequentist approach often relies on many more statistal diagno
     Kurtosis:         2.486    Condition No.:       100 
     ====================================================
 
-The summary output includes many advanced statistics which we don't have space to fully discuss here; for a trained practitioner these diagnostics are very useful for evaluating and comparing fits, especially for more complicated models; see [Wasserman2004]_ and the statsmodels project documentation for more details.
+The summary output includes many advanced statistics which we don't have space to fully discuss here. For a trained practitioner these diagnostics are very useful for evaluating and comparing fits, especially for more complicated models; see [Wasserman2004]_ and the statsmodels project documentation for more details.
 
 
 Bayesian Solution: Overview
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The Bayesian result is encapsulated in the posterior, which is proportional to the product of the likelihood and the prior; in this case we must be aware that a flat prior is not uninformative. A flat prior on a slope leads to vertical lines having a much higher probability. One might imagine addressing this by transforming variables, e.g. using a flat prior on the angle with the x-axis rather than the slope. It turns out that the appropriate change of variables can be determined much more rigorously by following arguments first developed by [Jeffreys1946]_.
+The Bayesian result is encapsulated in the posterior, which is proportional to the product of the likelihood and the prior; in this case we must be aware that a flat prior is not uninformative. Because of the nature of the slope, a flat prior leads to a much higher probability for steeper slopes. One might imagine addressing this by transforming variables, e.g. using a flat prior on the angle the line makes with the x-axis rather than the slope. It turns out that the appropriate change of variables can be determined much more rigorously by following arguments first developed by [Jeffreys1946]_.
 
 Our model is given by :math:`y = \alpha + \beta x` with probability element :math:`P(\alpha, \beta)d\alpha d\beta`. By symmetry, we could just as well have written :math:`x = \alpha^\prime + \beta^\prime y` with probability element :math:`Q(\alpha^\prime, \beta^\prime)d\alpha^\prime d\beta^\prime`. It then follows that :math:`(\alpha^\prime, \beta^\prime) = (-\beta^{-1}\alpha, \beta^{-1})` and :math:`Q(\alpha^\prime, \beta^\prime) = \beta^3 P(\alpha, \beta)`. The symmetry of the problem requires equivalence of :math:`P` and :math:`Q`, or :math:`\beta^3 P(\alpha,\beta) = P(-\beta^{-1}\alpha, \beta^{-1})`, which is satisfied by
 
@@ -504,15 +504,13 @@ Through similar arguments based on the invariance of :math:`\sigma` under a chan
 
     P(\sigma) \propto 1/\sigma,
 
-which is known a the *Jeffreys Prior* for scale factors [Jeffreys1946]_. This is equivalently a flat prior on :math:`\log\sigma`. Putting these together, we find the following uninformative prior for our linear regression problem:
+which is known a the *Jeffreys Prior* for scale factors [Jeffreys1946]_, and is equivalently a flat prior on :math:`\log\sigma`. Putting these together, we find the following uninformative prior for our linear regression problem:
 
 .. math::
 
     P(\alpha,\beta,\sigma) \propto \frac{1}{\sigma}(1 + \beta^2)^{-3/2}.
 
 With this prior and the above likelihood, we are prepared to numerically evaluate the posterior via MCMC.
-
-Below we show three Python packages which implement MCMC, though we gloss-over many of the important practical aspects of the analysis. For example, it is important to establish a *burn-in* phase, in which the Markov chains *stabilize*: prior to this stabilization, the traces will not accurately reflect the posterior. Advanced diagnostic tests to evaluate stabilization and other aspects of MCMC are implemented within the following packages; see [Gelman2004]_ or the documentation of the following packages for more detail on this subject.
 
 
 Solution with emcee
@@ -597,14 +595,14 @@ The example below uses PyMC version 2.3; as of this writing, there exists an ear
                     observed=True, value=ydata)
 
     # package the full model in a dictionary
-    model1 = dict(alpha=alpha, beta=beta, sigma=sigma,
-                  y_model=y_model, y=y)
+    model = dict(alpha=alpha, beta=beta, sigma=sigma,
+                 y_model=y_model, y=y)
 
 Next we run the chain and extract the trace:
 
 .. code-block:: python
 
-    S = pymc.MCMC(model1)
+    S = pymc.MCMC(model)
     S.sample(iter=100000, burn=50000)
     trace = [S.trace('alpha')[:], S.trace('beta')[:],
              S.trace('sigma')[:]]
@@ -672,15 +670,15 @@ A main apparent difference between the packages is the Python interface. Emcee i
 
 Conclusion
 ----------
-This paper has offered a brief philosophical and practical glimpse at the differences between frequentist and Bayesian approaches to statistical analysis. These differences have their root in differing conceptions of probability: frequentists define probability as related to *frequencies of repeated events*, while Bayesians define probability as a *measure of uncertainty*. In practice, this means that frequentists generally quantify the properties of *data-derived quantities* in light of *fixed model parameters*, while Bayesians generally quantify the properties of *unknown models parameters* in light of *observed data*. This philosophical distinction often makes little difference in simple problems, but becomes apparent within more sophisticated analysis.
+This paper has offered a brief philosophical and practical glimpse at the differences between frequentist and Bayesian approaches to statistical analysis. These differences have their root in differing conceptions of probability: frequentists define probability as related to *frequencies of repeated events*, while Bayesians define probability as a *measure of uncertainty*. In practice, this means that frequentists generally quantify the properties of *data-derived quantities* in light of *fixed model parameters*, while Bayesians generally quantify the properties of *unknown models parameters* in light of *observed data*. This philosophical distinction often makes little difference in simple problems, but becomes important within more sophisticated analysis.
 
 We first considered the case of nuisance parameters, and showed that Bayesianism offers more natural machinery to deal with nuisance parameters through *marginalization*. Of course, this marginalization depends on having an accurate prior probability for the parameter being marginalized.
 
-Next we considered the difference between the handling of uncertainty, comparing frequentist confidence intervals with Bayesian credible regions. We showed that when attempting to find a single, fixed interval bounding the true value of a parameter, the Bayesian solution answers the question that researchers most often ask. The frequentist solution can be informative; we just must be careful to interpret the confidence interval correctly.
+Next we considered the difference in the handling of uncertainty, comparing frequentist confidence intervals with Bayesian credible regions. We showed that when attempting to find a single, fixed interval bounding the true value of a parameter, the Bayesian solution answers the question that researchers most often ask. The frequentist solution can be informative; we just must be careful to correctly interpret the frequentist confidence interval.
 
 Finally, we combined these ideas and showed several examples of the use of frequentism and Bayesianism on a more realistic linear regression problem, using several mature packages available in the Python language ecosystem. Together, these packages offer a set of tools for statistical analysis in both the frequentist and Bayesian frameworks.
 
-So which approach is best? That is somewhat a matter of personal ideology, but also depends on the nature of the problem at hand. Frequentist approaches are often easily computed and are well-suited to truly repeatible processes and measurements, though they can hit snags with small sets of data and models which depart strongly from Gaussian. Bayesian approaches require specification of a potentially subjective prior, and often involve intensive computation via MCMC. However, they pose results in a way that is much closer to the questions a scientist wishes to answer: i.e. how do *these particular data* constrain the unknowns in a particular model? Given the strengths and weaknesses of both approaches, it's probably most prudent to seek familiarity and experience with both.
+So which approach is best? That is somewhat a matter of personal ideology, but also depends on the nature of the problem at hand. Frequentist approaches are often easily computed and are well-suited to truly repeatible processes and measurements, but can hit snags with small sets of data and models which depart strongly from Gaussian. Frequentist tools for these situations do exist, but often require subtle considerations and specialized expertise. Bayesian approaches require specification of a potentially subjective prior, and often involve intensive computation via MCMC. However, they are often conceptually more straightforward, and pose results in a way that is much closer to the questions a scientist wishes to answer: i.e. how do *these particular data* constrain the unknowns in a certain model? When used with correct understanding of their application, both sets of  statistical tools can be used effectively interpret of a wide variety of scientific and technical results.
 
 
 References
