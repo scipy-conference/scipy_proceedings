@@ -8,7 +8,7 @@ Python for research and teaching economics
 
 .. class:: abstract
    
-   Together with theory and experimentation, computational modeling and simulation has become a “third pillar” of scientific enquiry. I am developing a curriculum for a three part, graduate level course on computational methods designed to increase the exposure of graduate students and researchers in the School of Economics at the University of Edinburgh to basic techniques used in computational modeling and simulation using the Python programming language. My course requires no prior knowledge or experience with computer programming or software development and all current and future course materials will be made freely available online via GitHub.
+   Together with theory and experimentation, computational modeling and simulation has become a “third pillar” of scientific inquiry. I am developing a curriculum for a three part, graduate level course on computational methods designed to increase the exposure of graduate students and researchers in the School of Economics at the University of Edinburgh to basic techniques used in computational modeling and simulation using the Python programming language. My course requires no prior knowledge or experience with computer programming or software development and all current and future course materials will be made freely available on-line via GitHub.
 
 .. class:: keywords
 
@@ -18,11 +18,11 @@ Introduction
 ------------
 In this paper, I discuss the goals, objectives, and pedagogical choices that I made in designing and teaching a Python-based course on computational modeling and simulation to first-year graduate students in the Scottish Graduate Programme in Economics (SGPE) at the University of Edinburgh. [#]_   
 
-.. [#] This course would not have been possible without generous funding and support from the Scottish Graduate Programme in Economics (SGPE), the Scottish Insitute for Research in Economics (SIRE), the School of Economics at the University of Edinburgh, and the Challenge Investment Fund (CIF).
+.. [#] This course would not have been possible without generous funding and support from the Scottish Graduate Programme in Economics (SGPE), the Scottish Institute for Research in Economics (SIRE), the School of Economics at the University of Edinburgh, and the Challenge Investment Fund (CIF).
 
 Like many first-year PhD students, I began my research career with great faith in the analytic methods that I learned as an undergraduate and graduate student. While I was aware that economic models without closed-form solutions did exist, at no time during my undergraduate or graduate studies was I presented with an example of an important economic result that could not be analytically derived. While these analytic results were often obtained by making seemingly restrictive assumptions, the manner in which these assumptions were often justified gives the impression that such assumptions did not substantially impact the economic content of the result. As such, I started work as a PhD student under the impression that most all "interesting" economic research questions could, and perhaps even should, be tackled analytically. Given that both of the leading graduate-level micro and macro-economics textbooks, [mas-colell1995]_ and [romer2011]_, fail to mention that computational methods are needed to fully solve even basic economic models, I do not believe that I was alone in my ignorance of the import of these methods in economics.
 
-Fortunately (or unfortunately?) I was rudely awakened to the reality of modern economics research during my first year as a PhD student. Most economic models, particularly dynamic economic models, exhibit essential non-linearities or binding constraints that render them analytically intractable. Faced with reality I was confronted with two options: give up my original PhD research agenda, which evidently required computational methods, in favor of a modified research programme that I could pursue with analytic techniques; or teach myself the necessary numerical techniques to pursue my original research proposal. I ended up spending the better part of two (out of my alloted three!) years of my PhD teaching myself computational modeling and simulation methods. The fact that I spent two-thirds of my PhD learning the techniques necessary to pursue my original research agenda indicated, to me at least, that there was a substantial gap in the graduate economics training at the University of Edinburgh. In order to fill this gap, I decided to develop a three-part course on computational modeling and simulation. 
+Fortunately (or unfortunately?) I was rudely awakened to the reality of modern economics research during my first year as a PhD student. Most economic models, particularly dynamic economic models, exhibit essential non-linearities or binding constraints that render them analytically intractable. Faced with reality I was confronted with two options: give up my original PhD research agenda, which evidently required computational methods, in favor of a modified research program that I could pursue with analytic techniques; or teach myself the necessary numerical techniques to pursue my original research proposal. I ended up spending the better part of two (out of my alloted three!) years of my PhD teaching myself computational modeling and simulation methods. The fact that I spent two-thirds of my PhD learning the techniques necessary to pursue my original research agenda indicated, to me at least, that there was a substantial gap in the graduate economics training at the University of Edinburgh. In order to fill this gap, I decided to develop a three-part course on computational modeling and simulation. 
 
 The first part of my course is a suite of Python-based, interactive laboratory sessions designed to expose students to the basics of scientific programming in Python. The second part of the course is a week-long intensive computational methods “boot camp.”  The boot camp curriculum focuses on deepening students’ computer programming skills using the Python programming language and teaching important software design principles that are crucial for generating high-quality, reproducible scientific research using computational methods. The final part of the course, which is very much under development, will be an advanced training course targeted at PhD students and will focus on applying more cutting edge computational science techniques to economic problems via a series of interactive lectures and tutorials. 
 
@@ -54,7 +54,7 @@ Which Python distribution to use?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Having settled on Python over Matlab as my programming language for the course, I was then faced with a decision regarding which Python distribution to use. Like most universities the majority of computing labs at the University of Edinburgh are all stocked with Windows-based PCs. However, while a majority of students have Windows-based laptops, a substantial (and growing) minority are using UNIX-based machines (primarly running some flavor of Mac OSX, with an occasional Linux-user to spice things up). Thus I needed a Python distribution that was easy to install and would work "out of the box" on all computing platforms. 
 
-I also needed a Python distribution that came pre-installed with, at a minimum, the Python Scientific computing stack of Matplotlib, NumPy, Pandas, SciPy, and Sympy. Getting software installed on university computers is an incredibly tedious and bueauracratic process: it is simply not feasible to request both a base Python distribution as well as individual Python libraries (many of which need to be built and compiled prior to installation as they make heavy on compiled Fortran and C code). Additionally, given that students are used to using software that "just works", a complicated installation and build process for individual libraries would deter even the reasonably computer-savvy students. 
+I also needed a Python distribution that came pre-installed with, at a minimum, the Python Scientific computing stack of Matplotlib, NumPy, Pandas, SciPy, and Sympy. Getting software installed on university computers is an incredibly tedious and bureaucratic process: it is simply not feasible to request both a base Python distribution as well as individual Python libraries (many of which need to be built and compiled prior to installation as they make heavy on compiled Fortran and C code). Additionally, given that students are used to using software that "just works", a complicated installation and build process for individual libraries would deter even the reasonably computer-savvy students. 
 
 Finally, given that a major reason for not using Matlab was the fact that it is not free, I wanted some version of the Python distribution to be completely free. 
 
@@ -78,7 +78,7 @@ Version control: Git.
 ~~~~~~~~~~~~~~~~~~~~~
 Quick discussion of the importance of version control. Despite importance, simply no time to teach students how to use version control software: learning curve for is a bit too steep for the median student.
 
-`Git`_ is a free, open-source distributed version control system capable of handling everything from simple scipts to large-scale collaborative projects. 
+`Git`_ is a free, open-source distributed version control system capable of handling everything from simple scripts to large-scale collaborative projects. 
 
 `GitHub`_ How to describe GitHub? 
 
@@ -125,17 +125,17 @@ A notable property of the Solow model with Cobb-Douglas production is that the m
 .. math::
    \alpha_K(k) \equiv \frac{\partial \ln\ f(k)}{\partial \ln\ k} = \alpha
 
-Unfortunately, from figure :ref:`figure1` it is clear that the prediction of constant factor shares is strongly at odds with the empirical data for most countries. Fortunately, there is a simple generalization of the Cobb-Douglas production function, known as the constant elasticity of subsitution (CES) function, that is capable of generating the variable factor shares observed in the data.
+Unfortunately, from figure :ref:`figure1` it is clear that the prediction of constant factor shares is strongly at odds with the empirical data for most countries. Fortunately, there is a simple generalization of the Cobb-Douglas production function, known as the constant elasticity of substitution (CES) function, that is capable of generating the variable factor shares observed in the data.
 
 .. math::
    f(k) = \bigg[\alpha k^{\rho} + (1-\alpha)\bigg]^{\frac{1}{\rho}}
 
-where :math:`\rho = \frac{\sigma-1}{\sigma}` and :math:`0 < \sigma < \infty` is the elasticity of substitution between capital and effective labor in production. Note that 
+where :math:`-\infty < \rho < 1` is the elasticity of substitution between capital and effective labor in production. Note that 
    
 .. math::
    \lim_{\rho\rightarrow 0} f(k) = k^{\alpha}
 
-and that the CES production function nests the Cobb-Douglas functional form as a special case. To see that the CES production function also generates variable factor shares note that 
+and thus the CES production function nests the Cobb-Douglas functional form as a special case. To see that the CES production function also generates variable factor shares note that 
 
 .. math::
    \alpha_K(k) \equiv \frac{\partial \ln\ f(k)}{\partial \ln\ k} = \frac{\alpha k^{\rho}}{\alpha k^{\rho} + (1 - \alpha)}
@@ -154,34 +154,36 @@ Numerically solving the Solow model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 A computational solution to the Solow model allows me to demonstrate a number of numerical techniques that students will find generally useful in their own research. 
 
-First and foremost, solving the model requires efficiently and accurately approximating the solution to a non-linear ordinary differential equation (ODE) with a given initial condition (i.e., an non-linear initial value problem). Finite-difference methods are commonly employed to solve such problems. Typical input to such alorithms is the Jacobian matrix of partial derivatives of the system of ODEs. Solving the Solow growth model allows me to demonstrate the use of finite difference methods as well as how to compute Jacobian matrices of non-linear systems of ODEs.  
+First and foremost, solving the model requires efficiently and accurately approximating the solution to a non-linear ordinary differential equation (ODE) with a given initial condition (i.e., an non-linear initial value problem). Finite-difference methods are commonly employed to solve such problems. Typical input to such algorithms is the Jacobian matrix of partial derivatives of the system of ODEs. Solving the Solow growth model allows me to demonstrate the use of finite difference methods as well as how to compute Jacobian matrices of non-linear systems of ODEs.  
 
-Much of the empirical work based on the Solow model focuses on the model's predictions concerning the long-run or steady state equilibrium of the model. Solving for the steady state of the Solow growth model requires solving for the roots of a non-linear equation. Root finding problems, which are equivalent to solving systems of typically non-linear equations, are one of the most widely encountered computational problems in economic applications. Typical input to root-finding alorithms is the Jacobian matrix of partial derivatives of the system of non-linear equations. Solving for the steady state of the Solow growth model allows me to demonstrate the use of various root finding algorithms as well as how to compute Jacobian matrices of non-linear systems of equations.
+Much of the empirical work based on the Solow model focuses on the model's predictions concerning the long-run or steady state equilibrium of the model. Solving for the steady state of the Solow growth model requires solving for the roots of a non-linear equation. Root finding problems, which are equivalent to solving systems of typically non-linear equations, are one of the most widely encountered computational problems in economic applications. Typical input to root-finding algorithms is the Jacobian matrix of partial derivatives of the system of non-linear equations. Solving for the steady state of the Solow growth model allows me to demonstrate the use of various root finding algorithms as well as how to compute Jacobian matrices of non-linear systems of equations.
 
-Finally, given some data, estimation of the model's structural parameters (i.e., :math:`\alpha,\ \delta,\ \sigma,\ n,\ g,\ s`) requires solving a non-linear, constrained optimization problem. Typical input to algorithms for solving non-linear programs is the Jacobian of the objective function with respect to the parameters being estimated. The Hessian of the objective function is also needed for computing standard errors of the parameter estimates. Structural estimation of the parameters of the model allows me to demonstrate the use of non-linear optimization algorithms as well as how to compute the Jacobian and Hessian matrices of the objective function. 
+Finally, given some data, estimation of the model's structural parameters (i.e., :math:`g,\ n,\ s,\ \alpha,\ \delta,\ \rho,`) using either as maximum likelihood or non-linear least squares requires solving a non-linear, constrained optimization problem. Typical inputs to algorithms for solving such non-linear programs are the Jacobian and Hessian of the objective function with respect to the parameters being estimated. [#]_ Thus structural estimation also allows me to demonstrate the symbolic and numerical differentiation techniques needed to compute the Jacobian and Hessian matrices.
+
+.. [#] The Hessian matrix is also used for computing standard errors of parameter estimates. 
 
 Course outline
 ----------------------
 Having motivated the need for computational methods in economics, in this section I outline the three major components of my computational methods course: laboratory sessions, an intensive week-long Python boot camp, and an advanced PhD training course. The first two components are already up and running (thanks to funding support from the SGPE, SIRE, and the CIF). I am still looking to secure funding to develop the advanced training course component.
 
-The first iteration of the course consisted of six Python-based laboratory sessions and ran during the 2012-2013 academic year. During the 2013-2014 academic year the course expanded to include two additional laboratory sessions as well as a week-long intensive Python programming "boot camp." Thus far the course has proven to be a huge success and I am now working to develop a more extensive curriculum for a three part course on computational methods and simulation for economists.
-
 Laboratory sessions
 ~~~~~~~~~~~~~~~~~~~
 The first part of the course is a suite of Python-based laboratory sessions that run concurrently as part of the core macroeconomics sequence. There are 8 labs in total: two introductory sessions, three labs covering computational methods for solving models that students are taught in macroeconomics I (fall term), three labs covering computational methods for solving models taught in macroeconomics II (winter term). The overall objective of these laboratory sessions is to expose students to the basics of scientific computing using Python in a way that reinforces the economic models covered in the lectures. All of the laboratory sessions make use of the excellent IPython notebooks. 
 
-The material for the two introductory labs draws heavily from parts I and II of `Quantitative Economics`_ by Thomas Sargent and John Stachurski. 
+The material for the two introductory labs draws heavily from `part I`_ and `part II`_ of `Quantitative Economics`_ by Thomas Sargent and John Stachurski. In the first lab, I introduce and motivate the use of the Python programming language and cover the bare essentials of Python: data types, imports, file i/o, iteration, functions, comparisons and logical operators, conditional logic, and Python coding style. During the second lab, I attempt to provide a quick overview of the Python scientific computing stack (i.e., IPython, Matplotlib, NumPy, Pandas, and SymPy) with a particular focus on those pieces that students will encounter repeatedly in economic applications.
 
+.. _`part I`: http://quant-econ.net/learning_python
+.. _`part II`: http://quant-econ.net/scientific_python
 .. _`Quantitative Economics`: http://quant-econ.net
 
 The material for the remaining 6 labs is designed to complement the core macroeconomic sequence of the Scottish Graduate Programme in Economics (SGPE) and thus varies a bit from year to year. During the 2013-2014 academic year I covered the following material:
 
 * `Initial value problems <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-1/lab-1.ipynb>`_: Using the [solow1956]_ model of economic growth as the motivating example, I demonstrate finite-difference methods for efficiently and accurately solving initial value problems of the type typically encountered in economics.  
 * `Boundary value problems <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-2/lab-2.ipynb>`_: Using the neo-classical optimal growth model of [ramsey1928]_, [cass]_, and [koopmans]_ as the motivating example, I demonstrate basic techniques for efficiently and accurately solving two-point boundary value problems of the type typically encountered in economics using finite-difference methods (specifically forward, reverse, and multiple shooting).  
-* `Numerical dynamic programming <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-3/lab-3.ipynb)>`_: I demonstrate basic techniques for solving discrete-time, stochastic dynamic programming problems ssing a stochastic version of the neo-classical optimal growth model as the motivating example.
+* `Numerical dynamic programming <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-3/lab-3.ipynb)>`_: I demonstrate basic techniques for solving discrete-time, stochastic dynamic programming problems using a stochastic version of the neo-classical optimal growth model as the motivating example.
 * `Real business cycle (RBC) models using dynare++ <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-4/lab-4.ipynb)>`_: I extend the stochastic optimal growth model to incorporate a household labor supply decision and demonstrate how to approximate the model solution using perturbation methods (i.e., Taylor approximations around a point in the model's state-space).
 
-In future versions of the course I hope to include laboratory sessions on Dynamic Stochastic General Equilibrium (DSGE) monetary policy models, DSGE models with financial frictions, and unemployment models with search frictions. These additional labs are likely to be based around dissertations being written by some of my current MSc students.  
+In future versions of the course I hope to include laboratory sessions on Dynamic Stochastic General Equilibrium (DSGE) monetary policy models, DSGE models with financial frictions, and unemployment models with search frictions. These additional labs are likely to be based around dissertations being written by current MSc students.  
 
 Python boot camp
 ~~~~~~~~~~~~~~~~
@@ -280,11 +282,16 @@ I do not teach Git, but rather demonsrate the usefulness of Git to students firs
 Advanced course in numerical methods
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The final part of the course (for which we are still looking for funding to develop!) is a six week course (with 3 lecture hours per week) that focuses on applying key computational science techniques to economic problems via a series of interactive lectures and tutorials.
+The final part of the course (for which we are still looking for funding to develop!) is a six week course (with 3 lecture hours per week) that focuses on applying key computational science techniques to economic problems via a series of interactive lectures and tutorials. The curriculum for this part of the course will derive primarily from [judd1998]_, [stachurski2009]_, and [sargent2014]_.
 
-Teaching material will be based on parts 3 and 4 of `Quantitative Economics`_ with additional material drawn from [judd1998]_.
+In particular, I would like to cover material from chapters 1-6 of [judd1998]_:
+* Elementary concepts in numerical analysis:
+* Linear equations and iterative methods:
+* Optimization:
+* Non-linear equations:
+* Approximation methods:
 
-The curriculum for this part of the course will derive primarily from [judd1998]_, [stachurski2009]_, and [sargent2014]_.
+First pass at developing an advanced Python-based curriculum is to map methods used to Python packages. Obviously we will heavily use NumPy and SciPy, but there is a lot of really good software developed that can be leveraged for pushing enevelope of computation in economics using Python.
 
 Conclusion
 ----------
