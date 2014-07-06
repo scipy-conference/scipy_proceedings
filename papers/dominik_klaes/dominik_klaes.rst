@@ -12,8 +12,15 @@ Teaching undergraduate students in programming is interesting and challenging at
 the same time, because one has to deal mostly with two types of students: Those 
 who have already experience with programming and those who have not. I will 
 present two models from Bonn University for Physics students with now much more 
-responsibility for the tutors and would like to initiate discussions about 
-different systems all over the world.
+responsibility for the tutors. In the past, the different topics like LaTeX, 
+plotting, Linux, data handling and fitting were shown and explained in detail in 
+the lecture and the tutorials just contained exercises. Now, there is for each 
+topic only one \``main'' lecture with an overview and all details, explanations 
+and exercises are done in the tutorials. With this talk, I would like to 
+initiate a discussion about different solutions to teach programming, especially 
+Python, to undergraduate students. This shall be done during the SciPy 
+conference and later in a provided forum.
+
 
 .. class:: keywords
 
@@ -23,14 +30,17 @@ different systems all over the world.
 Introduction
 ------------
 
-In many studies one needs sooner or later a computer which can help with or 
-solve a certain problem. Students starting their studies at a University do not 
-have necessarily experience with a computer beyond mailing and chatting. To 
-ensure that especially those students can catch up and also those, who have 
+In many university courses one needs sooner or later a computer which can help 
+with or solve a certain problem. Students starting their courses at a University 
+do not have necessarily experience with a computer beyond mailing and chatting. 
+To ensure that especially those students can catch up and also those, who have 
 already more experience in e.g. programming, can still learn something, there 
 exist a course called \``Introduction to computer science and programming'' for 
-Physics students at the University of Bonn. Later in their studies, students 
-need several aspects of this course again, especially:
+Physics students at the University of Bonn. Unfortunately not all universities 
+offer such a course for their students, they just expect that the students 
+already have the required knowledge (see below) or learn it in their free time 
+Later in their courses, students need several aspects of this course again, 
+especially:
 
 
 1. How to find help / information
@@ -58,6 +68,7 @@ limited. Also one has to keep in mind that it looks easier for people who have
 worked with Python for a long time already and so one normally underestimates 
 the time needed for learning Python.
 
+
 Basics
 ------
 
@@ -65,16 +76,19 @@ The Bachelor in Physics (duration: 6 terms, 3 years) and the Master in
 (Astro)Physics (duration: 4 terms, 2 years) both require a lot of computer 
 knowledge for different aspects. Both programs consist of so called \``modules'' 
 which normally cover one topic of the education. These modules were introduced 
-in Europe through the \``Bologna Process'' (also known as \``Bologna Reform'') 
-in 1999 which should in principle allow the students to change the university 
-during their studies very easily. This required some changes in the courses 
-themselves and also some \``generalized'' calculations of the workload of 
-individual courses so that they can compared to each other, especially between 
-different countries, where the university systems differ significantly. Besides 
-this module aspect, there are two more important properties I will use later: 
-the \``credit points'' and the \``SWS''.
+in Europe through the \``Bologna Process'' (also known as \``Bologna 
+Reform'') [#]_ in 1999 which should in principle allow the students to 
+change the university during their studies very easily. This required some 
+changes in the courses themselves and also some \``generalized'' calculations of 
+the workload of individual courses so that they can compared to each other, 
+especially between different countries, where the university systems differ 
+significantly. Besides this module aspect, there are two more important 
+properties I will use later: the \``credit points'' and the \``SWS'' (German: 
+**S**\ emester\ **w**\ ochen\ **s**\ tunden).
 
-The first one reflects the average total amount of time a student has to raise 
+.. [#] More information can be found on the official website (http://www.ehea.info/) or, for a short overview, also on Wikipedia (http://en.wikipedia.org/wiki/Bologna_Process).
+
+Credit points reflect the average total amount of time a student has to spend 
 for a module including lecture time, exercise class time, time to solve exercise 
 sheets and also preparing for the final exam(s), which is normally a written or 
 oral exam, a presentation, a report or something similar. It was defined that 1 
@@ -83,23 +97,10 @@ different modules so that a module with more credit points (so more work) can be
 weighted more in the final, averaged grade. Every semester is designed such that 
 about 30 CPs per semester are obtained.
 
-The last one gives the number of hours per week (German: **S**\ emester\ **w**\ 
-ochen\ **s**\ tunden or short SWS) the student is at the university, so normally 
+SWS gives the number of hours per week  the student is at the university, so normally 
 lecture and exercise class time. This allows the student to judge how much time 
 he or she has to spend at the university and how much time has to be used to 
 prepare the lectures / exercises and rework the materials.
-
-More information can be found on the official website (http://www.ehea.info/) 
-or, for a short overview, also on Wikipedia 
-(http://en.wikipedia.org/wiki/Bologna_Process).
-
-
-Figure :ref:`fig:overview` shows the overview of the Bachelor in Physics program 
-at Bonn University (taken from [Bachelor]_ with permission of the examination 
-board and translated). It is split up into several categories and shows when 
-which module is normally taken and assumes that the students passes all exams. 
-If not, the course can normally repeated one year later. The module of interest 
-is located in the first semester in the category \``Extra courses''.
 
 
 Usage of skills
@@ -199,27 +200,28 @@ In the beginning this course consisted of a weekly one-hour-lecture and a weekly
 two-hours-exercise class. The lecture was used to present the theoretical 
 background, followed by a live demonstration. Since this lecture took place in a 
 lecture hall and not in the CIP pool, only a few students had a computer (their 
-laptop) which they can use to directly repeat the shown examples. Due to this, 
-questions that can occur while trying out the examples could not be raised 
-directly. This also means that the lecturer gets less feedback to improve the 
-lecture and its style. Another consequence was also that less and less students 
-attended the lecture since there is no compulsory attendance in our lectures. 
-All this made the lecture more or less obsolete but cannot be dropped due to 
-regulations so that all problems and questions were shifted into the exercise 
-class and the tutor had to deal with them. For this, two hours per week is not 
-enough, especially because the students prioritize their work and besides a 
-mathematics and an experimental physics lecture, this lecture and exercise class 
-appears not very important for them. Influences on the time spent on preparation 
-are obvious. To do the splits between the regulations for the Bachelor, the 
-workload for the students and tutors and the efficient time usage, it was tested 
-to switch to one \``main'' lecture every few weeks for each \``main'' topic such 
-as Linux, LaTeX and programming, and a weekly three-hours-exercise class. This 
-enhances the possibility for the students to see how to solve a certain problem, 
-test this solution on their own and, if there are questions left, directly ask 
-the tutor who can directly help and give individual advices. In this solution, 
-the tutors have much more responsibility for the education of the students and 
-in times when it is sometimes complicated to get tutors at all, a complicated 
-issue.
+laptop) which they can use to directly repeat the shown examples (this was also 
+mentioned by the students in the lecture survey carried out by the student 
+representatives . Due to this, questions that can occur while trying out the 
+examples could not be raised directly. This also means that the lecturer gets 
+less feedback to improve the lecture and its style. Another consequence was also 
+that less and less students attended the lecture since there is no compulsory 
+attendance in our lectures. All this made the lecture more or less obsolete but 
+cannot be dropped due to regulations so that all problems and questions were 
+shifted into the exercise class and the tutor had to deal with them. For this, 
+two hours per week is not enough, especially because the students prioritize 
+their work and besides a mathematics and an experimental physics lecture, this 
+lecture and exercise class appears not very important for them. Influences on 
+the time spent on preparation are obvious. To do the splits between the 
+regulations for the Bachelor, the workload for the students and tutors and the 
+efficient time usage, it was tested to switch to one \``main'' lecture every few 
+weeks for each \``main'' topic such as Linux, LaTeX and programming, and a 
+weekly three-hours-exercise class. This enhances the possibility for the 
+students to see how to solve a certain problem, test this solution on their own 
+and, if there are questions left, directly ask the tutor who can directly help 
+and give individual advices. In this solution, the tutors have much more 
+responsibility for the education of the students and in times when it is 
+sometimes complicated to get tutors at all, a complicated issue.
 
 Besides this change, the topics that should be covered were also discussed. 
 Depending on the lecturer, different topics were chosen, e.g. one year learnt 
@@ -259,9 +261,11 @@ explain how to debug code. Python allows to go through the code line by line and
 directly check e.g. the values of variables (this is to a certain extent also 
 possible with C with additional programs). This also means that one can modify 
 the problematic line and test the solution directly without compiling and 
-running the entire script again. Up to now the advantages of Python Notebooks 
-are not used by the lecturer, but probably tested in the next term as part of 
-the exercise sheets.
+running the entire script again. Furthermore, with IPython Notebook, it is also 
+not longer needed that the students install software in their own laptop or 
+login on a machine in the university, but running it on a sever via a web 
+broweser.Up to now the advantages of Python Notebooks are not used by the 
+lecturer, but probably tested in the next term as part of the exercise sheets.
 
 
 Used Material
@@ -303,12 +307,42 @@ permanently or just going through the material. This does not leave enough time
 to think about what they have just learned and so arising questions might not be 
 asked.
 
-.. figure:: bsc2_grafik_englisch-rotated90.pdf
-   :align: center
-   :figclass: w
-   :scale: 80%
 
-   Overview of the Bachelor of Science in Physics program at the University of Bonn. :label:`fig:overview`
+Conclusion and future
+---------------------
+
+Since the described changes have been applied the first time in 2013, there are 
+currently no directly benefits for the students. These will become available in 
+their fourth semeter when they have to attend the numercial methods for 
+physicists lecture and so do not have to learn a programming language in a 
+voluntary course. It might be expected that the failure rate in the \``exam'' 
+(the report) increased due to the complexcity of a programming language for 
+those without programming experience, but this is not the case. The main reason 
+for this is that the students can write the report at home and also together 
+with other students which is expected because this also increases the ability of 
+working together with other students. The attendance of the students in the 
+lecture dereased in the past dramatically shortly after the first few lectures 
+but now, since it is concentrated and each lecture gives an overview over the 
+next topic, the attendance is much better, almost comparable to the other 
+lectures in the first semester.
+
+In the exercise class itself the students are now able to ask more questions and 
+the tutors can concentrate more on those students who have more problems with 
+programming compared to the exercise classes of the voluntary courses (if the 
+students are able to attend it at all, e.g. due to part-time jobs to finance 
+their course).
+
+For the future it will be evaluated if interactive material, such as IPython 
+Notebook, will help the students even more to learn and understand Python.
+
+For this SciPy conference, an overview of programming courses shall be set up, 
+in the ideal case from many countries and also different courses / systems and 
+also, if available, from high schools because here the base for further 
+programming skills are set. This shall be done in the board under [Board]_. With 
+a high response rate, and so available comparisons, one would be able to improve 
+the way students learn programming, improve programming skills and perhaps also 
+motivate and attract more students for programming since one spends more time on 
+what one likes more.
 
 
 References
@@ -316,3 +350,4 @@ References
 .. [Bachelor] http://tiny.iap.uni-bonn.de/mhb/bsc_grafik.pdf
 .. [ComicSans] http://www.buzzfeed.com/babymantis/cern-uses-comics-sans-to-explain-higgs-boson-1opu
 .. [ThinkPython] Allen Downey, *Think Python*, Green Tea Press, Version 2.0.10, May 2013
+.. [Board] http://teachingpython.freeforums.org
