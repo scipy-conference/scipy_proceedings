@@ -246,7 +246,7 @@ So what is the takeaway: is frequentism wrong? Not necessarily: in this case, th
 
 Another potential frequentist response is that the question itself is posed in a way that does not lend itself to the classical, frequentist approach. A frequentist might instead hope to give the answer in terms of null tests or confidence intervals: that is, they might devise a procedure to construct limits which would provably bound the correct answer in :math:`100\times(1 - \alpha)` percent of similar trials, for some value of :math:`\alpha` – say, 0.05. We will discuss the meaning of such confidence intervals below.
 
-There is one clear common point of these two frequentist responses: both require some degree of effort and/or special expertise in classical methods; perhaps a suitable frequentist approach would be immediately obvious to an expert statistician, but is not particularly obvious to a statistical lay-person simply trying to answer the question at hand. In this sense, it could be argued that for a problem like this (i.e. with a well-motivated prior), Bayesianism provides a more natural framework for handling nuisance parameters: by simple algebraic manipulation of a few well-known axioms of probability interpreted in a Bayesian sense, we straightforwardly arrive at the correct answer without need for other special statistical expertise.
+There is one clear common point of these two frequentist responses: both require some degree of effort and/or special expertise in classical methods; perhaps a suitable frequentist approach would be immediately obvious to an expert statistician, but is not particularly obvious to a statistical lay-person. In this sense, it could be argued that for a problem such as this (i.e. with a well-motivated prior), Bayesianism provides a more natural framework for handling nuisance parameters: by simple algebraic manipulation of a few well-known axioms of probability interpreted in a Bayesian sense, we straightforwardly arrive at the correct answer without need for other special statistical expertise.
 
 
 Confidence vs. Credibility: Jaynes' Truncated Exponential
@@ -488,15 +488,31 @@ The summary output includes many advanced statistics which we don't have space t
 
 Bayesian Solution: Overview
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The Bayesian result is encapsulated in the posterior, which is proportional to the product of the likelihood and the prior; in this case we must be aware that a flat prior is not uninformative. Through symmetry arguments, first developed by [Jeffreys1946]_, it can be shown that an uninformative prior for this problem is given by
+The Bayesian result is encapsulated in the posterior, which is proportional to the product of the likelihood and the prior; in this case we must be aware that a flat prior is not uninformative. A flat prior on a slope leads to vertical lines having a much higher probability. One might imagine addressing this by transforming variables, e.g. using a flat prior on the angle with the x-axis rather than the slope. It turns out that the appropriate change of variables can be determined much more rigorously by following arguments first developed by [Jeffreys1946]_.
+
+Our model is given by :math:`y = \alpha + \beta x` with probability element :math:`P(\alpha, \beta)d\alpha d\beta`. By symmetry, we could just as well have written :math:`x = \alpha^\prime + \beta^\prime y` with probability element :math:`Q(\alpha^\prime, \beta^\prime)d\alpha^\prime d\beta^\prime`. It then follows that :math:`(\alpha^\prime, \beta^\prime) = (-\beta^{-1}\alpha, \beta^{-1})` and :math:`Q(\alpha^\prime, \beta^\prime) = \beta^3 P(\alpha, \beta)`. The symmetry of the problem requires equivalence of :math:`P` and :math:`Q`, or :math:`\beta^3 P(\alpha,\beta) = P(-\beta^{-1}\alpha, \beta^{-1})`, which is satisfied by
+
+.. math::
+
+    P(\alpha, \beta) \propto (1 + \beta^2)^{-3/2}.
+
+This turns out to be equivalent to choosing flat priors on the alternate variables :math:`(\theta, \alpha_\perp) = (\tan^{-1}\beta, \alpha\cos\theta)`.
+
+Through similar arguments based on the invariance of :math:`\sigma` under a change of units, we can show that
+
+.. math::
+
+    P(\sigma) \propto 1/\sigma,
+
+which is known a the *Jeffreys Prior* for scale factors [Jeffreys1946]_. This is equivalently a flat prior on :math:`\log\sigma`. Putting these together, we find the following uninformative prior for our linear regression problem:
 
 .. math::
 
     P(\alpha,\beta,\sigma) \propto \frac{1}{\sigma}(1 + \beta^2)^{-3/2}.
 
-(See [VanderPlas2014]_, part IV for a straightforward derivation of this). With this prior and the above likelihood, we are prepared to numerically evaluate the posterior via MCMC.
+With this prior and the above likelihood, we are prepared to numerically evaluate the posterior via MCMC.
 
-Below we gloss-over many of the practical aspects of using MCMC. For example, it is important to establish a *burn-in* phase, in which the Markov chains *stabilize*: prior to this stabilization, the traces will not accurately reflect the posterior. Each of the three packages below have tools to help evaluate chain stabilization and other details. Additionally, more advanced diagnostic tests can be used within the Bayesian framework to evaluate goodness-of-fit. These tend to be very problem-specific, so there is generally no standard Bayesian equivalent to the summary routines included in ``statsmodels``.  See [Gelman2004]_ or the documentation of the following packages for more detail on this subject.
+Below we show three Python packages which implement MCMC, though we gloss-over many of the important practical aspects of the analysis. For example, it is important to establish a *burn-in* phase, in which the Markov chains *stabilize*: prior to this stabilization, the traces will not accurately reflect the posterior. Advanced diagnostic tests to evaluate stabilization and other aspects of MCMC are implemented within the following packages; see [Gelman2004]_ or the documentation of the following packages for more detail on this subject.
 
 
 Solution with emcee
