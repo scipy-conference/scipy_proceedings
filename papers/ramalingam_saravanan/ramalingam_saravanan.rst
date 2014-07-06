@@ -472,6 +472,26 @@ number of students, server capacity should not be an issue, because
 classroom assignments are rarely compute-intensive. For large class
 sizes, more expensive servers may be needed.
 
+When compared to using a physical computer lab, typically managed by
+professional system administrators, instructors planning to set up
+their own virtual computer lab would need some minimal command line
+skills. The GraphTerm server runs only on Linux/Mac systems, as it
+requires access to the Unix terminal interface. (The browser-based
+GraphTerm client can be used on Windows computers, as well as iPads
+and Android tablets.)
+
+GraphTerm supports a basic notebook interface that is closely
+integrated with the command line, and supports the
+collaborative/administrative features of the virtual computer
+lab. However, this interface will never be as full-featured as the
+IPython Notebook interface, which is a more comprehensive and mature
+product. For this reason, the virtual computer lab also provides the
+ability for users who need more advanced notebook features to run
+their own IPython Notebook server and access it remotely. The
+compatibility of the ``.ipynb`` notebook file format and the shared
+user directory should make it fairly easy to switch between the two
+interfaces.
+
 Although the notebook interface has been a boon for teaching students,
 it is not without its disadvantages.
 It has led to decreased awareness of the file and directory structure,
@@ -494,7 +514,8 @@ anytime. However, the human interactions in a physical computer lab
 have considerable pedagogical value, and any virtual environment would
 need to support collaborative features to make up for that. With further
 development of the IPython Notebook, and other projects like SMC,
-one can expect to see increased support for collaboration.
+one can expect to see increased support for collaboration through
+browser-based graphical interfaces.
 
 The collaborative features of the GraphTerm server enable it to be used
 as a virtual computer lab, with automatic user creation, password-less
