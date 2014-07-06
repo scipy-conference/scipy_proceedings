@@ -133,7 +133,7 @@ Above, we’ve highlighted how a common environment might support instruction, r
 Technical challenges for a common environment
 ---------------------------------------------
 
-Any common environment needs to provide a base of generally useful software, and it should be clear how it was installed and configured. It should equally clear how one could set up additional software following the pattern of the “recipe” for the environment, so that this software is also easy to share with other users of the environment. More generally, we seek to address the following challenges, though we have certainly not definitely solved them! After each solution, we list relevant tools, which will be described in full in a later section.
+Any common environment needs to provide a base of generally useful software, and it should be clear how it was installed and configured. It should be equally clear how one could set up additional software following the pattern of the “recipe” for the environment, so that this software is also easy to share with other users of the environment. More generally, we seek to address the following challenges, though we have certainly not definitely solved them! After each solution, we list relevant tools, which will be described in full in a later section.
 
 Dependency hell
 ^^^^^^^^^^^^^^^
@@ -163,8 +163,6 @@ Existing Tools
 --------------
 
 As previously discussed, the problems outlined above are not unique to scientific computing. Developers and administrators, especially in the domain of web service development, have produced a wide variety of tools that make it easier to ensure consistent environments across all kinds of infrastructure, ranging from a slice of your personal laptop, to a dynamically provisioned slice of your hybrid public/private cloud. We cannot cover the breadth of tooling available here, and so we will restrict ourselves to focusing on those tools that we’ve found useful to automate the steps that come before you start *doing science*. We’ll also discuss those that we’ve tried and appear to add more complexity for our use-cases than they eliminate.
-
-The tools mentioned in the previous section will now be described in depth to give the reader some insight into the DevOps mindset and the reasons each tool is chosen to enable the possible solutions outlined. Though myriad other similar tools are available (and surely others are emerging), here we describe some of the tools that we’ve evaluated in the context of building the first iteration of BCE. Suggestions for other tools would be very welcome in the form of proofs-of-concept, pull-requests, or existing use cases in the wild.
 
 Table :ref:`tools` provides an overview from the perspective of the
 DevOps engineer (i.e., contributor, maintainer, *you*, etc.).
@@ -272,18 +270,13 @@ Currently, Docker requires a Linux environment to host the Docker server. As suc
 OSGeo-Live: A Successful Common Environment
 -------------------------------------------
 
-The OSGeo-Live virtual machine is an example of a comprehensive geospatial compute environment with a vibrant community process. It is a relatively mature project that  provides a successful example of solving the problems of dependency hell described above. Eschewing elaborate DevOps tools, OSGeo-Live is instead configured using simple and modular combinations of Python, Perl and shell scripts, along with clear install conventions and examples.
+The OSGeo-Live VM is an example of a comprehensive geospatial compute environment with a vibrant community process. It provides a successful example of solving the problems of dependency hell described above. Eschewing elaborate DevOps tools, OSGeo-Live is instead configured using simple and modular combinations of Python, Perl and shell scripts, along with clear install conventions and examples. Documentation is given high priority.
 
-OSGeo-Live is a project of the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [2g]_. In 2006 there existed several large and growing open-source geospatial software projects, whose founders and developers decided would benefit from a common legal and technical infrastructure. Those projects included GRASS, Mapserver, GDAL and later, QGis.  At roughly the same time, OSGeo-Live began as a smaller open project based in Australia that sought to build an "easy to try and use" software environment for these and other spatial data applications. Initial efforts consisted of shell scripts to install core geospatial packages. These examples provided guides to the projects by that were invited and ultimately contributed packages to the project. Many of these later contributors spoke English as a second language, further highlighting the importance of clear, working code examples. After some discussion and planning conducted between a handful of intrepid principals across the globe on the Internet, the nascent Live project committed itself to the larger OSGeo Foundation structure in its second year. OSGeo-Live is not the only attempt at building such an environment [3g]_, but it is a highly successful one. More than fifty (50) open-source projects now contribute by actively maintaining and improving their own
+The VM project began around the same time as, and ultimately joined the Open Source Geospatial Foundation (OSGeo), an international body modeled on the Apache Foundation [2g]_. It started as a smaller open project that sought to build an "easy to try and use" software environment for spatial data applications. Initial efforts consisted of shell scripts to install core geospatial packages. These examples provided guides to the projects by that were invited and ultimately contributed packages to the project. Many of these later contributors spoke English as a second language, further highlighting the importance of clear, working code examples. OSGeo-Live is not the only attempt at building such an environment [3g]_, but it is a highly successful one. More than fifty (50) open-source projects now contribute by actively maintaining and improving their own
 install scripts, examples and documentation.
 
-After long years of "tepid" progress and iteration, a combination of technical stability,
-standardized tool sets, community awareness and clearly-defined steps to contribute, provided the basis for substantial growth. OSGeo-Live is now very stable, easily incorporates advances in components, and widely adopted. And, while OSGeo-Live primarily targets a live/bootable ISO, the scripts that are used to build that ISO provide a straightforward method for building OSGeo software in other contexts – with a small bit of setup, one need merely run the appropriate scripts for the desired packages.
-
-Let's look at each of these building blocks briefly.
-
-Technical Stability
-^^^^^^^^^^^^^^^^^^^
+Tool Sets
+^^^^^^^^^
 
 OSGeo-Live itself is not a "linux distribution" per se, primarily because the
 project does not provide a seamless upgrade process from one version to another.
@@ -294,14 +287,11 @@ project participants can concentrate on adding value to its featured components.
 As we shall see, due to a component architecture, individual software projects
 can be installed as-needed on a generic base.
 
-Tool Sets
-^^^^^^^^^
-
 A key component of the success of the overall project has been the availability of widely-known and reliable tools. Rather than require ``.deb`` installation packages for each project, OSGeo-Live chose to use a simple install script format, one per installed project. This choice proved crucial in the earliest stages, as an outside open-source project evaluating participation in the Live ISO could get started with fewer barriers to entry. Participating open-source projects already had install scripts already built for Linux. By providing examples of OSGeo-Live install scripts and clear guidelines for installation conventions, an open-source project could almost immediately adapt and iterate their own install scripts in a straightforward way, with the flexibility to use the tools they were already using, such as shell, Perl, or Python. Scripts may call package managers, and generally have few
 constraints (apart from conventions like keeping recipes contained to a particular directory). The project also maintains packages that support broader *kinds* of packages, such as web-based applications. In this case, OSGeo-Live provides a standard configuration for apache, WSGI, and other components, along with a standard layout for projects that rely on this core. As a result, there is very little conflict among packages that share common resources. Some concerns remain that have to be explicitly managed, for example port numbers do have to be tracked globally. But the overhead of getting 50 projects to adopt a uniform configuration management tool would likely be much greater.
 
 All recipes are currently maintained in a common subversion repo, using standardized asset hierarchies, including installation scripts [6g]_. 
-An OSGeo-Live specific report is maintained on the project trac ticketing system that collects issues across packages [10g]_.
+An OSGeo-Live specific report is maintained on the project trac ticketing system that collects issues across packages [10g]_. And while OSGeo-Live primarily targets a live/bootable ISO, the scripts that are used to build that ISO provide a straightforward method for building OSGeo software in other contexts – with a small bit of setup, one need merely run the appropriate scripts for the desired packages.
 
 Community Awareness
 ^^^^^^^^^^^^^^^^^^^
@@ -313,73 +303,38 @@ Several years into the project, with a grant from the Australian
 government, a professional-level documentation project was initiated for a single-page overview and quick-start instructions for each application. Language internationalization was rendered more efficient, specifically to support local field work. Much later, a "percentage complete" graph for each human language group was added, making translation into a sort of competitive game. This translation has proven very successful.
 The project has moreover facilitated collaboration across developer communities. For example, we have seen productive application of software developed by the U.S. military to environmental applications.
 
-
 Steps to Contribute
 ^^^^^^^^^^^^^^^^^^^
 
-All build scripts are organized in the open, in source control [6g]_. A new contributors FAQ is maintained via wiki [7g]_ for software projects, and for translation [8g]_. At it’s foundation, the OSGeo-Live project is quite similar to the “old way” of doing system administration (i.e., before we had the current plethora of DevOps tools available), but it very much adopts a DevOps *philosophy*. Contributors pay particular attention to documenting each and every step, and standard approaches are encouraged across the project. Gamification also played a role in spurring useful documentation contributions. The low barrier to entry (allowing contributing projects to use skills they likely already have), combined with guidelines to ensure interoperability have led to OSGeo-Live becoming a standard way to evaluate and install software in the geospatial community.
+All build scripts are organized in the open, in source control [6g]_. A new contributors FAQ is maintained via wiki [7g]_ for software projects, and for translation [8g]_. At it’s foundation, the OSGeo-Live project uses common skills for system administration as opposed to more recent DevOps available, but it very much adopts a DevOps *philosophy*. Contributors pay particular attention to documenting each and every step, and standard approaches are encouraged across the project. Gamification also played a role in spurring useful documentation contributions. The low barrier to entry (allowing contributing projects to use skills they likely already have), combined with guidelines to ensure interoperability have led to OSGeo-Live becoming a standard way to evaluate and install software in the geospatial community.
 
 BCE: The Berkeley Common Environment
 ------------------------------------
 
-The most general, aspirational goal for the Berkeley Common Environment (BCE) is to make it easy to do the "right" thing (or hard to do "wrong" things), where “right” means you’ve managed to use someone else’s code in the manner that was intended. This environment should be stable, reliable, and reduce complexity more than it increases it. We are also interested in exploring how BCE might scaffold improved software use and creation beyond "the course" or “the collaboration.”
+The most general, aspirational goal for the Berkeley Common Environment (BCE) is to make it *easy* to do the "right" thing (or hard to do "wrong" things), where “right” means you’ve managed to use someone else’s code in the manner that was intended. In particular, it allows for targeted instructions that can assume all features of BCE are present. BCE also aims to be stable, reliable, and reduce complexity more than it increases it.
 
-More prosaically, to be useful in the cases described above, a common environment provides simple things like a GUI text editor, and a command-line editor for when a GUI is not available. If it is not straightforward to configure from inside the interface (as is the case with the *nano* terminal-based editor), the application should be pre-configured with sensible defaults (e.g., spaces for tab-stops should be set up properly). This environment should be configured to make minimal demands on underlying resources. In BCE, for example, we’ve set the background to a solid color to minimize network utilization for remote desktop sessions.
+More prosaically, to be useful in the cases described above, BCE provides simple things like a standard GUI text editor, and a command-line editor for when a GUI is not available. BCE pre-configures applications with sensible defaults (e.g., spaces for tab-stops are set up for ``nano``). BCE also enables idiosyncratic features on different VM platforms, for example, enabling simple access to shared folders in VirtualBox and ensuring NFS functions properly on Amazon EC2. The environment is also configured to make minimal demands on underlying resources. For example, the BCE desktop is a solid color to minimize network utilization for remote desktop sessions, and efficient numerics libraries are configured.
 
-There are also idiosyncratic features of individual tools one uses to enable this environment.
-
-
-The goal for the BCE is to provide both the ready-made environments, and also
-the "recipe" or scripts for setting up these environments. It is currently common for individuals to *only* distribute a script, which requires all potential users to install and configure the relevant stack of DevOps tools. There are, however, many free services for distributing these potentially large binary files. We strongly recommend distributing a binary along with the recipe for any environment that includes novices in its audience.
-It should also be easy for a
-competent linux user to create recipes for custom tools that might not be
-broadly useful (and thus, not already in BCE).
-
-The current target is class work and research in the sciences at Berkeley, broadly defined to
-include social science, life science, physical science, and engineering. Using
-these tools, users can start up a virtual machine (VM) with a standardized Linux
-operating environment containing a set of standard software for scientific
-computing. The user can start the VM on their laptop, on a university server, or
-in the cloud. Furthermore, advanced users and project contributors will be able to easily modify the instructions for
-producing or modifying the virtual machine in a reproducible way for
-communication with and distribution to others.
-
-BCE targets the following core use cases (elaborated above):
-
-* Creating a common computing environment for a course or workshop,
-* creating a common compute environment to be shared by a group of
-  researchers or students, and
-* disseminating the compute environment so outsiders can reproduce the
-  results of a group.
-
-In short, the BCE provides a standard location that eliminates the complexity of describing how to run a large variety of projects across a wide variety of platforms. We can now target our instruction to a single platform. The environment is easy to deploy, and guaranteed to provide identical results across any base platform – if this is not the case, it’s a bug! This environment is already available on VirtualBox and Amazon EC2, and is straightforward to provision for other environments. You can see what the BCE looks like (in a relatively small window) in Figure :ref:`BCE-screenshot`.
+BCE provides ready-made images for end-users, and
+the "recipe" for setting up the image using Packer is maintained on GitHub. Lists of Python packages are maintained in a separate requirements file, and all setup is done via a master Bash script. 
+It is currently common for individuals to *only* distribute scripts, which requires all potential users to install and configure the relevant stack of DevOps tools. There are, however, free services for distributing images for particular tools (e.g., the Docker index), and services like Amazon can host AMIs for pennies a month. We strongly recommend distributing a binary along with the recipe for any environment that includes novices in its audience.
 
 .. figure:: BCE-screenshot.png
 
-   The Berkeley Common Environment running in VirtualBox on OS X. The interface is 
-   minimal, and opportunities for confusion are minimized. For example, all users have 
+   The Berkeley Common Environment running in VirtualBox on OS X. The interface (and 
+   opportunities for confusion) are minimized. For example, all users have 
    the same text editor available, and in particular, it’s easy to configure common 
    gotchas like spaces for tabs. :label:`BCE-screenshot`
-
-Python packages are installed from a basic pip requirements file.
-
-Debian packages are similarly installed from a list.
-Other packages are installed via bash, e.g., downloading and installing RStudio.
 
 Using the BCE
 ^^^^^^^^^^^^^
 
-Throughout the various iterations, students have found working on a BCE VM to be horribly misguided to being incredibly useful and efficient. It seems critical both to provide a rationale for the use of VMs (i.e., explaining how a standard, “pixel-identical” environment speeds instruction), and also a smooth initial experience. Thus, our goal is
-to make BCE easy for students, researchers, and instructors. Simple instructions are provided on our site for things like opening a terminal (including a description of what the terminal icon looks like). However, for an experienced programmer, the environment should be obvious to navigate.
+You can see what BCE currently looks like (in a relatively small window) in Figure :ref:`BCE-screenshot`. Throughout various iterations, students have found working on a BCE VM to be confusing and counterproductive to being incredibly useful and efficient. It seems critical both to provide a rationale for the use of VMs (i.e., explaining how a standard, “pixel-identical” environment speeds instruction), and also a smooth initial experience. Thus, we’ve worked to make BCE easy for students, researchers, and instructors. Simple instructions are provided on our site for things like opening a terminal (including a description of what the terminal icon looks like). However, for an experienced programmer, the environment should be obvious to navigate.
 
 In our experience, some students will not be able to run the VM while others have difficulty getting regular access to a stable network connection (though fortunately, almost never both!). So, consistency across server and local versions of the environment is critical to effectively support students with either of these difficulties.
 
-**If you’re using VirtualBox**, we require a 64-bit CPU with support for 64-bit virtualization (note that some 32-bit *operating systems* will support this on some hardware). A reasonable minimum of RAM is 4GB, to allow for the host OS to operate comfortably, with 1GB of RAM plus overhead used by the VM. The full instructions for setting up a BCE VM on Virtualbox are available on our project website [BCEVB]_. In brief, one downloads and installs VirtualBox. The BCE VM is available in the form of a pre-built OVA file that can be imported via the GUI menu in VirtualBox. After starting the VM – a process that can be done entirely with the mouse – a user will have a machine that has all the software installed as part of BCE, including IPython and useful Python packages and R, RStudio and useful R
+**If you’re using VirtualBox**, we require a 64-bit CPU with support for 64-bit virtualization (note that some 32-bit *operating systems* will support this on some hardware). A reasonable minimum of RAM is 4GB. The full instructions for importing BCE from an OVA image into Virtualbox are available on our project website [BCEVB]_. After starting the VM – a process that can be done entirely with the mouse – a user will have all the software installed as part of BCE, including IPython, RStudio, and useful
 packages.
-
-The VM can be halted just like you would halt linux running directly on your machine, or by closing the window as you would a native application on the host OS. You can restart the VM at any time by opening VirtualBox and clicking on the tab
-for the VM and clicking "Start" as you did above. Detailed instructions are provided for 
-Sharing folders and copying files between your computer and the VM, and the various necessary configuration steps to make this work have already been performed.
 
 **If you’re using BCE on EC2**, even a micro instance is sufficient for basic tasks. Again, complete instructions are provided on the BCE website [BCEAMI]_. In brief, you can find our image (AMI) in the public list. You can readily launch in instance, and get instructions on connecting via the EC2 console.
 
@@ -390,33 +345,33 @@ All development occurs in the open in our GitHub repository. This repository cur
 materials.
 We provide channels for communication on bugs, desired features, and the like via the
 repository and a mailing list (also linked from the project page), or if a user is comfortable with it, via the GitHub issue tracker.
-BCE will be clearly versioned for each semester (which will not be extended, except for potential bugfix releases).
+BCE will be clearly versioned for each semester (which will not be modified, except for potential bugfix releases).
 
 Contributing to the BCE project
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 BCE provides a fully scripted (thus, reproducible) workflow that creates the standard VM/image. If the appropriate software is installed,
 the recipe should run reliably.
-However, you should generally not need to build the binary VM for BCE for a given semester. If you wish to customize or extend BCE, the best way to do this is by simply writing a shell script that will install requirements properly in the context of the BCE (for a complex example, see our bootstrap-bce.sh script [boot]_).
+However, you should generally not need to build the binary VM for BCE for a given semester. If you wish to customize or extend BCE, the best way to do this is by simply writing a shell script that will install requirements properly in the context of the BCE (for a complex example, see our ``bootstrap-bce.sh`` script [boot]_).
 Much as with OSGeo-Live, we have chosen our approach to provisioning to be relatively simple for users to understand.
 It is our goal for instructors or domain experts to be able to easily extend the recipe for building BCE VMs or images. If not, that’s a bug!
 
-As described above, while we have experimented with Docker, Vagrant, and Ansible for setting up the various BCE images (and evaluated even more tools), the only foundationally useful tool for our current set of problems has been Packer. Packer runs a shell script that uses standard installation mechanisms like ``pip`` and ``apt-get`` to complete the setup of our environment. Most centrally, Packer does not require end-users to install or understand any of the current crop of DevOps tools – it operates solely at build time. However, should the need arise, Packer will readily target Vagrant, Docker, and many other targets, and we are not opposed to adopting other tooling.
+As described above, while we have experimented with Docker, Vagrant, and Ansible for setting up the various BCE images (and evaluated even more tools), the only foundationally useful tool for our current set of problems has been Packer. Packer runs a shell script that uses standard installation mechanisms like ``pip`` and ``apt-get`` to complete the setup of our environment. Of central importance, Packer does not require end-users to install or understand any of the current crop of DevOps tools – it operates solely at build time. However, should the need arise, Packer will readily target Vagrant, Docker, and many other targets, and we are not opposed to adopting other tooling.
 
 Conclusion
 ----------
 
 Keep in mind that *you* are now at the cutting edge. Extra care should be taken to make your tooling accessible to your collaborators. Where possible, use tools that your collaborators already know – shell, scripting, package management, etc.
+That said, technologies that allow efficient usage of available hardware stand to provide substantial savings, and potential for re-use by researchers with less direct access to capital (e.g., Docker, or demand aggregation of cloud VM providers).
 
-That said, technologies that allow efficient usage of available hardware stand to provide substantial savings, and potential for re-use by researchers with less direct access to capital (e.g., Docker, aggregation of cloud VM providers).
-
-Let’s be intentional.
-Be transparent/explicit about our choices/assumptions.
+So, let’s be intentional about creating and using environments that are broadly accessible.
+Let’s follow the DevOps philosophy of being
+transparent and explicit about our choices and assumptions.
 That *doesn’t* have to be technical – a simple text file or even a PDF can provide ample explanation that a human can understand.
-Be willing to make strong recommendations based on what we are actually using (eat own dogfood)
-Be willing to adopt/adapt/change/throw stuff out (have an exit strategy)
+In this paper, we’ve made fairly strong recommendations based on what we are actually using (we are eating our own dogfood!).
+Central to our process has been a willingness to adopt, adapt, change, and throw stuff out. As we’ve seen with OSGeo-Live, such a process can allow many projects to collaborate on a standard reference so we can all focus on the interesting bits of developing *our* code and *doing science*.
 
-XXX – Recipe for setting up sicpy_proceedings build system on Ubuntu 14.04 (or BCE proper?).
+The BCE currently provides a standard reference, built with  that eliminates the complexity of describing how to run a large variety of projects across a wide variety of platforms. We can now target our instruction to a single platform. The environment is easy to deploy, and guaranteed to provide identical results across any base platform – if this is not the case, it’s a bug! This environment is already available on VirtualBox and Amazon EC2, and is straightforward to provision for other environments. We welcome lose collaboration in the form of forks that are specialized for other institutions, and eventually, perhaps standardizing across institutions.
 
 References
 ----------
@@ -441,7 +396,7 @@ References
 .. [UDI] https://help.ubuntu.com/14.04/installation-guide/i386/apb.html
 .. [2g]  http://www.osgeo.org/content/foundation/about.html
 .. [3g]  http://en.wikipedia.org/wiki/GIS_Live_DVD
-.. [4g]  Diffusion of Innovations, 5th ed. New York: Free Press, 2003.
+.. [4g]  E. M. Rogers, *Diffusion of Innovations*, 5th ed. New York: Free Press, 2003.
 .. [5g]  http://wiki.osgeo.org/wiki/Live_GIS_History
 .. [6g]  http://svn.osgeo.org/osgeo/livedvd
 .. [7g]  http://wiki.osgeo.org/wiki/Live_GIS_Add_Project
