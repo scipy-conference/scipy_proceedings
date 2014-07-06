@@ -120,6 +120,17 @@ there was no penalty for keeping all options open during search.
 Table :ref:`tablecompare` lists the test set scores of the best models found by cross-validation, as well as some points of reference from previous work.
 Hyperopt-sklearn's scores are relatively good on each data set, indicating that with hyperopt-sklearn's parameterization, Hyperopt's optimization algorithms are competitive with human experts.
 
+The model with the best performance on the MNIST Digits dataset uses deep artificial neural networks. Small receptive fields of convolutional winner-take-all neurons build up the large network.
+Each neural column becomes an expert on inputs preprocessed in different ways.
+This model averages the predictions of 35 deep neural columns to come up with a single final prediction [Cir12]_.
+This model is much more advanced than those available in scikit-learn.
+
+The CFC model that performed quite well on the 20 newsgroups dataset is a Class-Feature-Centroid classifier.
+Centroid approaches are typically inferior to an SVM, due to the centroids found during training being far from the optimal location.
+The CFC method reported here uses a centroid built from the inter-class term index and the inner-class term index.
+It uses a novel combination of these indices along with a denormalized cosine measure to calculate the similarity score between the centroid and a text vector [Gua09]_. 
+This style of model is not currently implemented in hyperopt-sklearn, making it difficult to compete with it. It may be the case that once it is implemented, hyperopt may find a set of parameters that provides even greater classification accuracy.
+
 .. table:: Hyperopt-sklearn scores relative to selections from literature on the three data sets used in our experiments. On MNIST, hyperopt-sklearn is one of the best-scoring methods that does not use image-specific domain knowledge (these scores and others may be found at http://yann.lecun.com/exdb/mnist/). On 20 Newsgroups, hyperopt-sklearn is competitive with similar approaches from the literature (scores taken from [Gua09]_ ). In the 20 Newsgroups dataset, the score reported for hyperopt-sklearn is the weighted-average F1 score provided by sklearn. The other approaches shown here use the macro-average F1 score. On Convex Shapes, hyperopt-sklearn outperforms previous automatic algorithm configuration approaches [Egg13]_ and manual tuning [Lar07]_ . 
    :label:`tablecompare` 
    :class: w
@@ -429,6 +440,8 @@ References
            In Proc. ICML, 2013a.
 .. [Ber13b] J. Bergstra, D. Yamins, and D. D. Cox. *Hyperopt: A Python library for optimizing the hyperparameters of machine learning algorithms*,
            SciPy'13, 2013b.
+.. [Cir12] D. Ciresan, U. Meier, and J. Schmidhuber. *Multi-column Deep Neural Networks for Image Classification*,
+           IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 3642-3649. 2012.
 .. [Egg13] K. Eggensperger, M. Feurer, F. Hutter, J. Bergstra, J. Snoek, H. Hoos, and K. Leyton-Brown. *Towards an empirical foundation for assessing bayesian optimization of hyperparameters*,
            NIPS workshop on Bayesian Optimization in Theory and Practice, 10 December 2013.
 .. [Gua09] H. Guan, J. Zhou, and M. Guo. *A class-feature-centroid classifier for text categorization*,
