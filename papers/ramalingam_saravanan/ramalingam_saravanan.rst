@@ -90,7 +90,7 @@ on during the course. Some of them installed Enthought or Anaconda
 distributions on their laptop computers and used the bundled notebook
 server. They were also given the option of
 remotely accessing a browser-based virtual computer lab using GraphTerm,
-which is a graphical terminal interface that is backwards compatible
+which is an open-source graphical terminal interface that is backwards compatible
 with the ``xterm`` terminal, and also supports a lightweight notebook
 interface [Saravanan13]_. Some of the students used the remote
 GraphTerm option to work on their assignments and collaborate on their
@@ -123,6 +123,7 @@ collaborative features that are important if the
 virtual environment is to retain some of the advantages a physical
 computer lab. User isolation and security issues that arise in a
 multi-user software environment are also considered.
+
 
 
 Multi-user virtual computing environments for Python
@@ -386,6 +387,7 @@ be used to communicate with the user.
    :label:`fillable2`
 
 
+
 Progressively fillable notebooks
 ---------------------------------------------------
 
@@ -446,9 +448,9 @@ unit testing using the ``doctest`` Python module, which runs functions
 with specified input and compares the results to the expected output.)
 
 
+
 Some shortcomings
 ------------------
-
 
 Cost is an issue for virtual computer labs, because running a remote
 server using a cloud service vendor does not come free. For example,
@@ -539,14 +541,6 @@ of the following command may be executed (as root)::
       --user_setup=manual --users_dir=/home
       --port=80 --host=server_domain_or_ip
 
-If a physical server is not readily available for multi-user
-access, a virtual server can be created on demand using Amazon Web
-Services (AWS).  The GraphTerm distribution includes the convenience
-scripts ``ec2launch, ec2list, ec2scp,`` and ``ec2ssh`` to launch and
-monitor AWS Elastic Computing Cloud (EC2) instances running a
-GraphTerm server. (An AWS account is required to use these scripts,
-and the ``boto`` Python module needs to be installed.)
-
 .. figure:: gt-ec2launch.png
 
    Automatic form display for the ``ec2launch`` command, used to
@@ -554,12 +548,13 @@ and the ``boto`` Python module needs to be installed.)
    form elements are automatically generated from the command line
    options for ``ec2launch`` :label:`ec2launch`
 
-.. figure:: gt-ec2list.png
-   :scale: 27%
-
-   Output of the ``ec2list`` command, listing currently active AWS
-   cloud instances running the virtual computer lab. Clickable links
-   are displayed for terminating each instance :label:`ec2list`
+If a physical server is not readily available for multi-user
+access, a virtual server can be created on demand using Amazon Web
+Services (AWS).  The GraphTerm distribution includes the convenience
+scripts ``ec2launch, ec2list, ec2scp,`` and ``ec2ssh`` to launch and
+monitor AWS Elastic Computing Cloud (EC2) instances running a
+GraphTerm server. (An AWS account is required to use these scripts,
+and the ``boto`` Python module needs to be installed.)
 
 To launch a GraphTerm server in the cloud using AWS, first start up
 the single-user version of GraphTerm::
@@ -595,6 +590,13 @@ AWS account (Fig. :ref:`ec2list`)::
 
 Detailed instructions for accessing the newly launched server are
 provided on the GraphTerm website [GraphTerm]_.
+
+.. figure:: gt-ec2list.png
+   :scale: 27%
+
+   Output of the ``ec2list`` command, listing currently active AWS
+   cloud instances running the virtual computer lab. Clickable links
+   are displayed for terminating each instance :label:`ec2list`
 
 
 Appendix 2: Multiple user authentication and remote access
