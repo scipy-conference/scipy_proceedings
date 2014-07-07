@@ -38,9 +38,10 @@ already more experience in e.g. programming, can still learn something, there
 exist a course called \``Introduction to computer science and programming'' for 
 Physics students at the University of Bonn. Unfortunately not all universities 
 offer such a course for their students, they just expect that the students 
-already have the required knowledge (see below) or learn it in their free time 
-Later in their courses, students need several aspects of this course again, 
-especially:
+already have the required knowledge (see below) or learn it in their free time. 
+Also, especially due to the crowded curriculum, there is no extra space for a 
+dedicated programming course. Later in their courses, students need several 
+aspects of this course again, especially:
 
 
 1. How to find help / information
@@ -107,8 +108,8 @@ Usage of skills
 ---------------
 
 This part will explain which skills are needed during the studies and are 
-obtained during the EDP module. For this purpose, the numeration used in the 
-introduction is used.
+obtained during the compulsory EDP module. For this purpose, the numeration used 
+in the introduction is used.
 
 
 1. How to find help / information: One might assume that high school students 
@@ -202,7 +203,7 @@ background, followed by a live demonstration. Since this lecture took place in a
 lecture hall and not in the CIP pool, only a few students had a computer (their 
 laptop) which they can use to directly repeat the shown examples (this was also 
 mentioned by the students in the lecture survey carried out by the student 
-representatives . Due to this, questions that can occur while trying out the 
+representatives. Due to this, questions that can occur while trying out the 
 examples could not be raised directly. This also means that the lecturer gets 
 less feedback to improve the lecture and its style. Another consequence was also 
 that less and less students attended the lecture since there is no compulsory 
@@ -239,8 +240,8 @@ to include Python into the EDP lecture besides Linux and LaTeX, and skip the
 other topics (Mathematica, Maple) or move them to other modules (fitting).
 
 
-Why Python and not C?
----------------------
+Why Python and not e.g. C?
+--------------------------
 
 Two of the important differences between Python and C for a beginner are the 
 declaration of variables (and how to use them) and the principles of pointers. 
@@ -266,6 +267,25 @@ not longer needed that the students install software in their own laptop or
 login on a machine in the university, but running it on a sever via a web 
 broweser.Up to now the advantages of Python Notebooks are not used by the 
 lecturer, but probably tested in the next term as part of the exercise sheets.
+
+
+There are also other programming languages available such as e.g. Fortran, R, 
+Matlab etc. The reasons why those were not discussed at all are simply they are 
+too old (e.g. Fortran even if a lot of used programs are still using this 
+language) and/or are simply not used by the majority of the research groups in 
+Bonn. Also, for Matlab, many commands work in Python (matplotlib) so the 
+students see only one program (Python) with \``add-ons'' and not different 
+programs for different tasks which also reduces the inhibition level for the 
+students.
+
+
+During one year of Bachelor students it was tried to teach ROOT for fitting / 
+plotting without teaching C because in the older curriculum there was not enough 
+time to teach both in detail and fitting / plotting was more important w.r.t. to 
+the laboratory courses. The result was that without programming knowledge it was 
+not completely understood by the students what they were actually doing. 
+Compared to matplotlib, a lot of commands were needed for very simple plots such 
+as plotting data.
 
 
 Used Material
