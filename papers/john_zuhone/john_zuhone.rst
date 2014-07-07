@@ -99,7 +99,7 @@ Simulating X-ray Observations with Python
 .. _ciao: http://cxc.harvard.edu/ciao/
 
 .. |sherpa| replace:: ``Sherpa``
-.. _sherpa: http://cxc.harvard.edu/sherpa4.4/
+.. _sherpa: http://cxc.harvard.edu/sherpa/
 
 .. |aplpy| replace:: ``APLpy``
 .. _aplpy: http://aplpy.github.io/
@@ -128,7 +128,7 @@ An important distinguishing feature of X-ray astronomy from that of studies at l
 
 Due to modeling uncertainties, projection effects, and contaminating backgrounds, combining the insights from observations and numerical simulations is not necessarily straightforward. In contrast to simulations, where all of the physical quantities in 3 dimensions are completely known to the precision of the simulation algorithm, astronomical observations are by definition 2-D projections of 3-D sources along a given sight line, and the observed spectrum of emission is a complicated function of the fundamental physical properties (e.g., density, temperature, composition) of the source. 
 
-Such difficulties in bridging these two worlds have given rise to efforts to bridge the gap in the direction of the creation of synthetic observations from simulated data. This involves the determination of the spectrum of the emission from the properties of the source, the projection of this emission along the chosen line of sight, and, in the case of X-ray (and :math:`\gamma`-ray) astronomy, the generation of synthetic photon samples. These photons are then convolved with the instrumental responses and (if necessary) background effects are added. One implementation of such a procedure, |phox|_, was described in [Biffi12]_ and [Biffi13]_, and used for the analysis of simulated galaxy clusters from smoothed-particle hydrodynamics (SPH) cosmological simulations. ``PHOX`` was originally implemented in C using outputs from the ``Gadget`` SPH code. ``PHOX`` takes the inputs of density, temperature, velocity, and metallicity from a 3D ``Gadget`` simulation, using them as inputs to create a synthetic spectra (using spectral models from the X-ray spectral fitting package |xspec|_). Finally, ``PHOX`` uses these synthetic spectra convolved with instrument response functions to simulate samples of observed photons.
+Such difficulties in bridging these two worlds have given rise to efforts to bridge the gap in the direction of the creation of synthetic observations from simulated data (see, e.g., [Gardini04]_, [Nagai06]_, [ZuHone09]_, and [Heinz11]_ for recent examples). This involves the determination of the spectrum of the emission from the properties of the source, the projection of this emission along the chosen line of sight, and, in the case of X-ray (and :math:`\gamma`-ray) astronomy, the generation of synthetic photon samples. These photons are then convolved with the instrumental responses and (if necessary) background effects are added. One implementation of such a procedure, |phox|_, was described in [Biffi12]_ and [Biffi13]_, and used for the analysis of simulated galaxy clusters from smoothed-particle hydrodynamics (SPH) cosmological simulations. ``PHOX`` was originally implemented in C using outputs from the ``Gadget`` SPH code. ``PHOX`` takes the inputs of density, temperature, velocity, and metallicity from a 3D ``Gadget`` simulation, using them as inputs to create a synthetic spectra (using spectral models from the X-ray spectral fitting package |xspec|_). Finally, ``PHOX`` uses these synthetic spectra convolved with instrument response functions to simulate samples of observed photons.
 
 In this work, we describe an extension of this algorithm to outputs from other simulation codes. We developed the module ``photon_simulator``, an implementation of ``PHOX`` within the Python-based |yt|_ simulation analysis package. We outline the design of the ``PHOX`` algorithm, the specific advantages to implementing it in Python and ``yt``, and provide a workable example of the generation of a synthetic X-ray observation from a simulation dataset. 
 
@@ -166,7 +166,7 @@ As a specific and highly relevant example, one of the most common sources of X-r
 
 where the superscript :math:`\gamma` refers to the fact that this is a photon count emissivity, :math:`E` is the photon energy in keV, :math:`n_e` and :math:`n_H` are the electron and proton number densities in :math:`{\rm cm^{-3}}`, and :math:`\Lambda_E(T,Z)` is the spectral model in units of :math:`{\rm photons~s^{-1}~cm^{3}~keV^{-1}}`. The dominant contributions to :math:`\Lambda_E` for an optically-thin, fully-ionized plasma are bremmstrahlung ("free-free") emission and collisional line excitation. A number of models for the emissivity of such a plasma have been developed, including Raymond-Smith [Raymond77]_, MeKaL [Mewe95]_, and APEC [Smith01]_. These models (and others) are all built into the ``XSPEC`` package, which includes a Python interface, |pyxspec|_, which is a package we will use to supply the input spectral models to generate the photon energies.
 
-The original ``PHOX`` algorithm only allowed for emission from variants of the APEC model for a thermal plasma. However, astrophysical X-ray emission arises from a variety of physical processes and sources, and in some cases multiple sources may be emitting from within the same volume. For example, cosmic-ray electrons in galaxy clusters produce a power-law spectrum of X-ray emission at high energies via inverse-Compton scattering of the cosmic microwave background. Recently, the detection of previously unidentified line emission, potentially from annihilating dark matter particles, was made in stacked spectra of galaxy clusters [Bulbul14]_. The flexibility of our approach allows us to implement one or several models for the X-ray emission arising from a variety of physical processes as the situation requires. 
+The original ``PHOX`` algorithm only allowed for emission from variants of the APEC model for a thermal plasma. However, astrophysical X-ray emission arises from a variety of physical processes and sources, and in some cases multiple sources may be emitting from within the same volume. For example, cosmic-ray electrons in galaxy clusters produce a power-law spectrum of X-ray emission at high energies via inverse-Compton scattering of the cosmic microwave background. Recently, the detection of previously unidentified line emission, potentially from decaying sterile neutrinos, was made in stacked spectra of galaxy clusters [Bulbul14]_. The flexibility of our approach allows us to implement one or several models for the X-ray emission arising from a variety of physical processes as the situation requires. 
 
 Given a spectral model, for a given volume element :math:`i` with volume :math:`\Delta{V}_i` (which may be grid cells or Lagrangian particles), a spectrum of photons may be generated. The *total number* of photons that are generated in our initial sample per volume element :math:`i` is determined by other factors. We determine the number of photons for each volume element by artificially inflating the parameters that determine the number of photons received by an observer to values that are large compared to more realistic values. The inflated Monte-Carlo sample should be large enough that realistic sized subsets from from it are statistically representative. In the description that follows, parameters with subscript "0" indicate those with "inflated" values, whereas we will drop the subscripts in the second step when choosing more realistic values. 
 
@@ -177,7 +177,7 @@ To begin with, the bolometric flux of photons received by the observer from the 
   
   F^{\gamma}_i = \frac{n_{e,i}n_{H,i}\Lambda(T_i,Z_i)\Delta{V}_i}{4\pi{D_A^2}(1+z_0)^2}~{\rm photons~s^{-1}~cm^{-2}}
 
-where :math:`z_0` is the cosmological redshift and :math:`D_{A,0}` is the angular diameter distance to the source (if the source is nearby, :math:`z_0 \approx 0` and :math:`D_{A,0}` is simply the distance to the source). The total number of photons associated with this flux for an instrument with a collecting area :math:`A_{\rm det,0}` and an observation with exposure time :math:`t_{\rm exp,0}` is given by
+where :math:`z_0` is the cosmological redshift and :math:`D_{A,0}` is the angular diameter distance to the source (if the source is nearby, :math:`z_0 \approx 0` and :math:`D_{A,0}` is simply the distance to the source). The physical quantities of interest are constant across the volume element. The total number of photons associated with this flux for an instrument with a collecting area :math:`A_{\rm det,0}` and an observation with exposure time :math:`t_{\rm exp,0}` is given by
 
 .. math::
   :label: n_phot
@@ -202,14 +202,6 @@ Next, we must take into account processes that affect on the photon energies. Th
 
 where :math:`E_1` and :math:`E_0` are the Doppler-shifted and rest-frame energies of the photon, respectively, and :math:`c` is the speed of light in vacuum. Second, since many X-ray sources are at cosmological distances, each photon is cosmologically redshifted, reducing its energy further by a factor of :math:`1/(1+z)` before being received in the observer's frame.
 
-.. figure:: sloshing.png
-   :align: center
-   :figclass: w
-   :width: 100%
-   
-   Slices of density (left) and temperature (right) of an ``Athena`` dataset of a 
-   galaxy cluster core. :label:`sloshing`
-
 Since we are now simulating an actual observation, we choose more realistic values for the exposure time :math:`t_{\rm exp}` and detector area :math:`A_{\rm det}` than we did in the first step to determine the number of photons to use from the original Monte-Carlo sample. Similarly, we may also specify alternative values for the angular diameter distance :math:`D_A` and the cosmological redshift :math:`z`, if desired. The fraction :math:`f` of the photons that will be used in the actual observation is then given by 
 
 .. math::
@@ -219,7 +211,7 @@ Since we are now simulating an actual observation, we choose more realistic valu
 
 where :math:`f \leq 1`.
 
-Before being received by the observer, a number of the photons, particularly on the softer end of the spectrum, are absorbed by foregrounds of hydrogen gas in the Milky Way Galaxy. The last operation that is applied in our implementation of the ``PHOX`` algorithm is to use a tabulated model for the absorption cross-section as a function of energy (examples include ``wabs``, ``phabs``, ``tbabs``, all included in ``XSPEC``) as an acceptance-rejection criterion for which photons will be retained in the final sample, e.g., which of them are actually received by the observer. 
+Before being received by the observer, a number of the photons, particularly on the softer end of the spectrum, are absorbed by foregrounds of hydrogen gas in the Milky Way Galaxy. The last operation that is applied in our implementation of the ``PHOX`` algorithm is to use a tabulated model for the absorption cross-section as a function of energy (examples include ``wabs`` [Morrison83]_, ``phabs`` [Balucinska-Church92]_, ``tbabs`` [Wilms00]_, all included in ``XSPEC``) as an acceptance-rejection criterion for which photons will be retained in the final sample, e.g., which of them are actually received by the observer. 
 
 The advantage of the ``PHOX`` algorithm is that the two steps of generating the photons in the source frame and projecting them along a given line of sight are separated, so that the first step, which is the most computationally expensive, need only be done once for a given source, whereas the typically cheaper second step may be repeated many times for many different lines of sight, different instruments, and different exposure times.  
 
@@ -232,16 +224,24 @@ In our framework, we provide two ways of convolving the detected photons with in
 
 However, some users may require a full simulation of a given telescope or may wish to compare observations of the same simulated system by multiple instruments. Several software packages exist for this purpose. The venerable |marx|_ software performs detailed ray-trace simulations of how `Chandra` responds to a variety of astrophysical sources, and produces standard event data files in the same FITS formats as standard `Chandra` data products. |simx|_ and |sixte|_ are similar packages that simulate most of the effects of the instrumental responses for a variety of current and planned X-ray missions. We provide convenient output formats for the synthetic photons in order that they may be easily imported into these packages. 
 
+.. figure:: sloshing.png
+   :align: center
+   :figclass: w
+   :width: 100%
+   
+   Slices of density (left) and temperature (right) of an ``Athena`` dataset of a 
+   galaxy cluster core. :label:`sloshing`
+
 Implementation
 --------------
 
 The model described here has been implemented as the analysis module ``photon_simulator`` in ``yt`` [Turk11]_, a Python-based visualization and analysis toolkit for volumetric data. ``yt`` has a number of strengths that make it an ideal package for implementing our algorithm.
 
-The first is that ``yt`` has support for analyzing data from a large number of astrophysical simulation codes (e.g., |flash|_, |enzo|_, |gadget|_, |athena|_), which simulate the formation and evolution of astrophysical systems using models for the relevant physics, including magnetohydrodynamics, gravity, dark matter, plasmas, etc. The simulation-specific code is contained within various "frontend" implementations, and the user-facing API to perform the analysis on the data is the same regardless of the type of simulation being analyzed. This enables the same function calls to easily generate photons from models produced by any of these simulation codes making it possible to use the ``PHOX`` algorithm beyond the original application to ``Gadget`` simulations only.
+The first is that ``yt`` has support for analyzing data from a large number of astrophysical simulation codes (e.g., |flash|_, |enzo|_, |gadget|_, |athena|_), which simulate the formation and evolution of astrophysical systems using models for the relevant physics, including magnetohydrodynamics, gravity, dark matter, plasmas, etc. The simulation-specific code is contained within various "frontend" implementations, and the user-facing API to perform the analysis on the data is the same regardless of the type of simulation being analyzed. This enables the same function calls to easily generate photons from models produced by any of these simulation codes making it possible to use the ``PHOX`` algorithm beyond the original application to ``Gadget`` simulations only. In fact, most previous approaches to simulating X-ray observations were limited to datasets from particular simulation codes. 
 
 The second strength is related, in that by largely abstracting out the simulation-specific concepts of "cells", "grids", "particles", "smoothing lengths", etc., ``yt`` provides a window on to the data defined primarily in terms of physically motivated volumetric region objects. These include spheres, disks, rectangular regions, regions defined on particular cuts on fields, etc. Arbitrary combinations of these region types are also possible. The original ``PHOX`` implementation was limited to considering entire datasets of particles, instead of selecting relevant, arbitrarily-shaped volumes. These volumetric region objects serve as natural starting points for generating X-ray photons from not only physically relevant regions within a complex hydrodynamical simulation, but also from simple "toy" models which have been constructed from scratch, when complex, expensive simulations are not necessary. 
 
-The third major strength is that implementing our model in ``yt`` makes it possible to easily make use of the wide variety of useful libraries available within the scientific Python ecosystem. Our implementation uses |scipy|_ for integration, |astropy|_ for handling celestial coordinate systems and FITS I/O, and ``PyXspec`` for generating X-ray spectral models. Tools for analyzing astrophysical X-ray data are also implemented in Python (e.g., |ciao|_'s |sherpa|_ package), enabling an easy comparison between models and observations.
+The third major strength is that implementing our model in ``yt`` makes it possible to easily make use of the wide variety of useful libraries available within the scientific Python ecosystem. Our implementation uses |scipy|_ for integration, |astropy|_ for handling celestial coordinate systems and FITS I/O, and ``PyXspec`` for generating X-ray spectral models. Tools for analyzing astrophysical X-ray data are also implemented in Python (e.g., |ciao|_'s |sherpa|_ package, [Refsdal09]_), enabling an easy comparison between models and observations.
 
 Example
 -------
@@ -272,7 +272,7 @@ Next, we load the dataset ``ds``, which comes from a set of simulations presente
    ds = yt.load("MHDSloshing/virgo_low_res.0054.vtk",
                 parameters=parameters)
    
-Slices through the density and temperature of the simulation dataset are shown in Figure :ref:`sloshing`. The photons will be created from a spherical region centered on the domain center, with a radius of 250 kpc:
+Slices through the density and temperature of the simulation dataset are shown in Figure :ref:`sloshing`. The luminosity and temperature of our model galaxy cluster roughly match that of Virgo. The photons will be created from a spherical region centered on the domain center, with a radius of 250 kpc:
 
 .. code-block:: python
 
@@ -353,7 +353,7 @@ To load these photons at a later time, we use the ``from_file`` method:
 Step 2: Projecting Photons to Create Specific Observations
 ==========================================================
 
-At this point the photons can be projected along a line of sight to create a specific synthetic observation. First, it is necessary to set up a spectral model for the Galactic absorption cross-section, similar to the spectral model for the emitted photons set up previously. Here again, there are multiple options, but for the current example we use ``TableAbsorbModel``, which allows one to use an absorption cross section vs. energy table written in HDF5 format (available in the xray_data.tar.gz file mentioned previously). This method also takes the column density ``N_H`` in units of :math:`10^{20}~{\rm cm}^{-2}` as an additional argument. 
+At this point the photons can be projected along a line of sight to create a specific synthetic observation. First, it is necessary to set up a spectral model for the Galactic absorption cross-section, similar to the spectral model for the emitted photons set up previously. Here again, there are multiple options, but for the current example we use ``TableAbsorbModel``, which allows one to use an absorption cross section vs. energy table written in HDF5 format (available in the `xray_data.tar.gz <http://yt-project.org/data/xray_data.tar.gz>`_ file mentioned previously). This method also takes the column density ``N_H`` in units of :math:`10^{22}~{\rm cm}^{-2}` as an additional argument. 
 
 .. code-block:: python
 
@@ -415,14 +415,6 @@ In this case, we would replace our previous call to ``project_photons`` with one
 
 Supplying instrumental responses is optional. If they are provided, ``project_photons`` performs 2 additional calculations. If an ARF is provided, the maximum value of the effective area curve will serve as the ``area_new`` parameter, and after the absorption step a number of events are further removed using the effective area curve as the acceptance/rejection criterion. If an RMF is provided, it will be convolved with the event energies to produce a new array with the resulting spectral channels. 
 
-However, if a more accurate simulation of a particular X-ray instrument is needed, or if one wishes to simulate multiple instruments, there are a couple of options for outputting our simulated events to be used by other software that performs such simulations. Since these external packages apply instrument response functions to the events list, the original ``events`` object generated from the ``project_photons`` method must not be convolved with instrument responses (e.g., the ARF and RMF) in that step. For input to ``MARX``, we provide an implementation of a ``MARX`` "user source" at http://bitbucket.org/jzuhone/yt_marx_source, which takes as input an HDF5 file. The events list can be written in the HDF5 file format with the following method:
-
-.. code-block:: python
-
-  events.write_h5_file("my_events.h5")
-  
-Input to ``SIMX`` and ``Sixte`` is handled via |simput|_, a file format designed specifically for the output of simulated X-ray data. The events list can be written in SIMPUT file format with the following method:
-
 .. figure:: spectrum.png
    :scale: 33 %
    
@@ -437,6 +429,14 @@ Input to ``SIMX`` and ``Sixte`` is handled via |simput|_, a file format designed
    different existing and planned X-ray detectors. The `Chandra` image
    was made with ``MARX``, while the others were made with ``SIMX``. All images have the
    same angular scale. :label:`comparison`
+
+However, if a more accurate simulation of a particular X-ray instrument is needed, or if one wishes to simulate multiple instruments, there are a couple of options for outputting our simulated events to be used by other software that performs such simulations. Since these external packages apply instrument response functions to the events list, the original ``events`` object generated from the ``project_photons`` method must not be convolved with instrument responses (e.g., the ARF and RMF) in that step. For input to ``MARX``, we provide an implementation of a ``MARX`` "user source" at http://bitbucket.org/jzuhone/yt_marx_source, which takes as input an HDF5 file. The events list can be written in the HDF5 file format with the following method:
+
+.. code-block:: python
+
+  events.write_h5_file("my_events.h5")
+  
+Input to ``SIMX`` and ``Sixte`` is handled via |simput|_, a file format designed specifically for the output of simulated X-ray data. The events list can be written in SIMPUT file format with the following method:
 
 .. code-block:: python
 
@@ -482,23 +482,39 @@ Our module provides a crucial link between observations of astronomical sources 
 References
 ----------
 
+.. [Balucinska-Church92] Balucinska-Church, M., & McCammon, D. 1992, ApJ, 400, 699 
+
 .. [Biffi12] Biffi, V., Dolag, K., Böhringer, H., & Lemson, G. 2012, MNRAS, 420, 3545
 
 .. [Biffi13] Biffi, V., Dolag, K., Böhringer, H. 2013, MNRAS, 428, 1395 
 
 .. [Bulbul14] Bulbul, E., Markevitch, M., Foster, A., et al. 2014, ApJ, 789, 13
 
+.. [Gardini04] Gardini, A., Rasia, E., Mazzotta, P., Tormen, G., De Grandi, S., & Moscardini, L. 2004, MNRAS, 351, 505
+
+.. [Heinz11] Heinz, S., Brüggen, M., & Friedman, S. 2011, ApJS, 194, 21
+
 .. [Komatsu11] Komatsu, E., Smith, K. M., Dunkley, J., et al. 2011, ApJS, 192, 18 
 
 .. [Mewe95] Mewe, R., Kaastra, J. S., & Liedahl, D. A. 1995, Legacy, 6, 16
+
+.. [Morrison83] Morrison, R. & McCammon, D. 1983, ApJ, 270, 119
+
+.. [Nagai06] Nagai, D., Vikhlinin, A., & Kravtsov, A. V. 2007, ApJ, 655, 98
 
 .. [Planck13] Planck Collaboration, Ade, P. A. R., Aghanim, N., et al. 2013, arXiv:1303.5076
 
 .. [Raymond77] Raymond, J. C., & Smith, B. W. 1977, ApJS, 35, 419
 
+.. [Refsdal09] B. Refsdal et al. *Sherpa: 1D/2D modeling and fitting in Python*. Proceedings of the 8th Python in Science conference (SciPy 2009), G Varoquaux, S van der Walt, J Millman (Eds.), pp. 51-57
+
 .. [Smith01] Smith, R. K., Brickhouse, N. S., Liedahl, D. A., & Raymond, J. C. 2001, ApJL, 556, L91
 
 .. [Turk11] Turk, M. J., Smith, B. D., Oishi, J. S., Skory, S., Skillman, S. W., Abel, T., & Norman, M. L. 2011, ApJS, 192, 9
+
+.. [Wilms00] Wilms, J., Allen, A., & McCray, R. 2000, ApJ, 542, 914 
+
+.. [ZuHone09] ZuHone, J. A., Ricker, P. M., Lamb, D. Q., & Karen Yang, H.-Y. 2009, ApJ, 699, 1004
 
 .. [ZuHone14] ZuHone, J. A., Kunz, M. W., Markevitch, M., Stone, J. M., & Biffi, V. 2014, arXiv:1406.4031 
 
