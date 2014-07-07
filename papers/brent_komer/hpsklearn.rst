@@ -37,21 +37,21 @@ Gaussian Processes [Moc78]_ [Sno12]_,
 and density-estimation techniques [Ber11]_
 have emerged as viable alternatives to hand-tuning by domain specialists.
 
-Hyperparameter optimization in machine learning systems was first applied to neural networks and convnets, where the number of parameters can be overwhelming:
-for example [Ber11]_ tuned Deep Belief Networks with up to 32 hyperparameters,
-and [Ber13a]_ showed that similar methods could be useful even in a convnet model with 238 hyperparameters.
-Relative to DBNs and convnets, algorithms such as RBF-SVMs and Random Forests (RFs) have a small-enough number of hyperparameters that manual tuning and grid or random search provides satisfactory results.
+Hyperparameter optimization of machine learning systems was first applied to neural networks, where the number of parameters can be overwhelming.
+For example, [Ber11]_ tuned Deep Belief Networks (DBNs) with up to 32 hyperparameters,
+and [Ber13a]_ showed that similar methods could search a 238-dimensional configuration space describing multi-layer convolutional networks (convnets) for image classification.
 
-Taking a step back though, there is often no particular reason to use either an RBF-SVM or an RF when they are both computationally viable.
+Relative to DBNs and convnets, algorithms such as Support Vector Machines (SVMs) and Random Forests (RFs) have a small-enough number of hyperparameters that manual tuning and grid or random search provides satisfactory results.  Taking a step back though, there is often no particular reason to use either an SVM or an RF when they are both computationally viable.
 A model-agnostic practitioner may simply prefer to go with the one that provides greater accuracy.
 In this light, *the choice of classifier can be seen as hyperparameter* alongside the :math:`C`-value in the SVM and the max-tree-depth of the RF.
 Indeed the choice and configuration of *pre-processing* components may likewise be seen as part of the model selection / hyperparameter optimization problem.
+
 The Auto-Weka project [Tho13]_ was the first to show that an entire library of machine learning approaches (Weka [Hal09]_ ) can be searched within the scope of a single run of hyperparameter tuning.
-However, Weka is a GPL-licensed Java library, and was not written with scalability in mind. These factors limit the utility of Auto-Weka.
-Scikit-learn [Ped11]_ is another library of machine learning algorithms that is written in Python with many modules in C for greater speed, and is BSD-licensed.
+However, Weka is a GPL-licensed Java library, and was not written with scalability in mind, so we feel there is a need for alternatives to Auto-Weka.
+Scikit-learn [Ped11]_ is another library of machine learning algorithms. Is written in Python (with many modules in C for greater speed), and is BSD-licensed.
 Scikit-learn is widely used in the scientific Python community and supports many machine learning application areas.
 
-With this paper we introduce Hyperopt-Sklearn -- a project that brings the benefits of automatic algorithm configuration to users of Python and scikit-learn.
+With this paper we introduce Hyperopt-Sklearn: a project that brings the benefits of automatic algorithm configuration to users of Python and scikit-learn.
 Hyperopt-Sklearn uses Hyperopt [Ber13b]_ to describe a search space over possible configurations of Scikit-Learn components, including pre-processing and classification modules.
 Section 2 describes our configuration space of 6 classifiers and 5 preprocessing modules that encompasses a strong set of classification systems for dense and sparse feature classification (of images and text).
 Section 3 presents experimental evidence that search over this space is viable, meaningful, and effective.
