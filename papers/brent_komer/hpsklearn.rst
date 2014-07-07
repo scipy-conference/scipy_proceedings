@@ -398,8 +398,36 @@ These will override the defaults defined within hyperopt-sklearn.
 
 
 
-All of the components available to the user can be found in the ``components.py`` file.
+All of the components available to the user can be found in the ``components.py`` file. A complete working example of using hyperopt-sklearn to find a model for the 20 newsgroups dataset is shown below.
 
+
+.. code-block:: python
+
+   from hpsklearn import HyperoptEstimator, tfidf, \
+                         any_sparse_classifier
+   from sklearn.datasets import fetch_20newsgroups
+   from hyperopt import tpe
+   import numpy as np
+
+   # Download the data and split into training and test sets
+
+   train = fetch_20newsgroups( subset='train' )
+   test = fetch_20newsgroups( subset='test' )
+   X_train = train.data
+   y_train = train.target
+   X_test = test.data
+   y_test = test.target
+
+   estim = HyperoptEstimator( 
+             classifier=any_sparse_classifier('clf'),
+             preprocessing=[tfidf('tfidf')],
+             algo=tpe.suggest,
+             trial_timeout=180) 
+
+   estim.fit( X_train, y_train )
+
+   print( estim.score( X_test, y_test ) )
+   print( estim.best_model() )
 
 
 Discussion and Future Work
