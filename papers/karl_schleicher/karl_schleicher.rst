@@ -48,7 +48,7 @@ The Teapot dome 3D survey from RMOTC [Atr06]_ provides the example of a typical 
 
 .. figure:: txfk.png 
 
-   A seismic model wih three events and random noise.  Linear events in TX become linear events in F.  The linear events in FK all originate from the (F,K) origin at (0,0). Figure reproduce from [Atr07]_ :label:`txfk`
+   A seismic model wih three events and random noise.  Linear events in TX become linear events in F.  The linear events in FK all originate from the (F,K) origin at (0,0). Figure reproduced from [Atr07]_ :label:`txfk`
 
 FX noise attenuation selects small rectangular regions of the seismic section (the two dimensional array) for processing and the output seismic section is created by ramping (tapering) the small regions and summing them to the full output section.  A typical subregion is about 400 meters by .4 seconds and only contains events with 2 or 3 different dips (dip is change in event time with distance).  A model subregion with 3 events and random noise is shown on the left in Figure :ref:`txfk`.  On the right of Figure :ref:`txfk` is the data after 2-D Fourier transform. After Fourier transfor the vertical axis is frequency, F, and the horizontal axis is wave number, K.  At each frequency (F) signal appears at three wave numbers (K) and noise appear random.  The idea of FX (frequency space) prediction filtering is (at each frequency) to estimate the coherent wave numbers and the amplitude at each of these wave numbers.  
 
@@ -56,28 +56,28 @@ The Prony method estimates these wavenumbers and amplitudes.  The method fits a 
 
 d[x] ~= :math:`\sum  a_i exp(k_i x)`
 
-The exponential rates, the k(i)’s, can be complex.  The real part is exponential increase or decrease with x and the imaginary part is the oscillatory rate (the wavenumber).  Simultaneously solving for the weights, the :math:`a_i`, and the complex exponents, the :math:`k_i`’s, is non-linear.  Prony proposed an efficient, two step approximation.  First estimate the complex exponents, then solve for the weights.  
+The exponential rates, the k(i)’s, can be complex.  The real part is exponential increase or decrease of amplitude with x and the imaginary part is the oscillatory rate (the wavenumber).  Simultaneously solving for the weights, the :math:`a_i`, and the complex exponents, the :math:`k_i`’s, is non-linear.  Prony proposed an efficient, two step approximation.  First estimate the complex exponents, then solve for the weights.  
 
-The first stage, estimating the complex exponentials, can be done using convolutional filters.  The next term in a complex exponential series (:math:`a_1, a_1*b_1, a_1*b_1^2, a_1*b_1^3`, ,...  ) can predicted from the last term by multiplication by b1.  Convolving this sequence with the filter (1, -b1) will output (:math:`a_1`, 0, 0, …).  Applying the filter (1,-:math:`b_2`) to the series (:math:`a_2, a_2*b_2, a_2*b_2^2, a_2*b_2^3`, ,...  ) will output (:math:`a_2`, 0, 0, …).  The sum of these sequence can be filtered with both of these filters to obtain (…, 0, 0, 0, …).  Applying both filters is the same as applying the filter (:math:`1, -(b_1+b_2), b_1*b_2`).  The algorithm to estimate N exponents is:
+The first stage, estimating the complex exponentials, can be done using convolutional filters.  The next term in a complex exponential series (:math:`a_1, a_1*b_1, a_1*b_1^2, a_1*b_1^3`, ,...  ) can predicted from the last term by multiplication by :math:`b_1`.  Convolving this sequence with the filter (1, -:math:`b_1`) will output (:math:`a_1`, 0, 0, …).  Applying the filter (1,-:math:`b_2`) to the series (:math:`a_2, a_2*b_2, a_2*b_2^2, a_2*b_2^3`, ,...  ) will output (:math:`a_2`, 0, 0, …).  The sum of these sequence can be filtered with both of these filters to obtain (…, 0, 0, 0, …).  Applying both filters is the same as applying the filter (:math:`1, -(b_1+b_2), b_1*b_2`).  The algorithm to estimate N exponents is:
 
 1 Compute the n+1 point filter, with first coefficient 1, that when applied to the series minimizes the output energy. 
 
 2 Consider the filter as a polynomial and compute the roots.  
 
-3 The roots are the factors b1, b2, ...
+3 The roots are the factors :math:`b_1, b_2`, ...
 
 Once the complex wavenumbers are known, estimating the amplitude for each wavenumber is a straight forward linear least squares problem.
 
 Spitz's Quote
 -------------
-The long paragraph in Spitz [Atr01]_ is repeated in this section.  It is a technical specification that exactly describes a function and a unit test is to verify the program.  The next section will break the paragraph into pieces,  provide the code, and verify the results.
+The long paragraph in Spitz [Atr01]_ is repeated in this section.  It is a technical specification that exactly describes a function and a unit test to verify the program.  The next section will break the paragraph into pieces,  provide the code, and verify the results.  The long quote is:
 
 .. figure:: modelandnoise.png
 
-  Spitz’ data model (left) consists of two events  at 200 ms on all traces.  One event has amplitude gradient 1.05. The other does not change laterally.   The noise model is constant amplitude at time 200 ms, with a changed wavelet.  Figure reproduced from [Atr01]_.
+  Spitz’s data model (left) consists of two events at 200 ms on all traces.  One event has amplitude gradient 1.05. The other does not change laterally.   The noise model is constant amplitude at time 200 ms, with a changed wavelet.  This figure is reproduced from [Atr01]_.  :label:`modelandnoise`
 
 
-"The model is made of a single linear event. The gather displayed in Figure 2b [this paper's Figure 3b] is laterally predictable in the [FX] domain, with a two-point spatial prediction-error filter (p.e.f.) a, of which the first term, :math:`a_0`, is 1. The unknown coefficient is found by minimizing the power of the prediction-error :math:`a_0m_k+ a_1m_{k-1}`, from k = 2 to N. The result is the frequency invariant p.e.f. a = (1, -1). The input data set d consists of two linear events. The gather displayed in Figure 2a [this paper's Figure 3a] is also laterally predictable in the [FX] domain but with a spatial p.e.f. b made of three coefficients, of which the first, :math:`b_0`, is 1. The two unknown coefficients are easily derived at each frequency in the band, by minimizing the power of the spatial prediction-error :math:`b_0d_k+b_1d_{k-1}+ b_2d_{k-2}`, from k = 3 to N. The result is the frequency invariant p.e.f. b = (1, –2.05, 1.05). To find p.e.f. c that concerns only the signal event, I deconvolve the p.e.f. b, obtained from the input gather, with p.e.f. a, obtained from the model gather, and obtained c = (1, –1.05). The structure of a implies that the noise event does not change from one trace to the next in the bandwidth. Its pattern is therefore the N-dimensional vector (1, ...,1). The structure of c implies that the pattern of the signal event in Figure 2a displays, in the bandwidth only, an amplitude that increases by 1.05 from trace to trace. The N-dimensional vector that characterizes this pattern is [1, 1.05 ,..., :math:`1.05^{(N–1)}`]. At this stage the input gather d can be seen as a linear combination of the two patterns. The coefficients of this linear combination, the waveforms of the two events, can be easily found using the least squares method. The result of this decomposition (Figure 4) [this paper's Figure 7] is perfect, despite the strong interference between the signal and the noise event."
+"The model is made of a single linear event. The gather displayed in Figure [:ref:`modelandnoise` b] .. is laterally predictable in the [FX] domain, with a two-point spatial prediction-error filter (p.e.f.) a, of which the first term, :math:`a_0`, is 1. The unknown coefficient is found by minimizing the power of the prediction-error :math:`a_0m_k+ a_1m_{k-1}`, from k = 2 to N. The result is the frequency invariant p.e.f. a = (1, -1). The input data set d consists of two linear events. The gather displayed in Figure [:ref:`modelandnoise` a] .. is also laterally predictable in the [FX] domain but with a spatial p.e.f. b made of three coefficients, of which the first, :math:`b_0`, is 1. The two unknown coefficients are easily derived at each frequency in the band, by minimizing the power of the spatial prediction-error :math:`b_0d_k+b_1d_{k-1}+ b_2d_{k-2}`, from k = 3 to N. The result is the frequency invariant p.e.f. b = (1, –2.05, 1.05). To find p.e.f. c that concerns only the signal event, I deconvolve the p.e.f. b, obtained from the input gather, with p.e.f. a, obtained from the model gather, and obtained c = (1, –1.05). The structure of a implies that the noise event does not change from one trace to the next in the bandwidth. Its pattern is therefore the N-dimensional vector (1, ...,1). The structure of c implies that the pattern of the signal event in Figure [:ref:`modelandnoise` a] .. displays, in the bandwidth only, an amplitude that increases by 1.05 from trace to trace. The N-dimensional vector that characterizes this pattern is [1, 1.05 ,..., :math:`1.05^{(N–1)}`]. At this stage the input gather d can be seen as a linear combination of the two patterns. The coefficients of this linear combination, the waveforms of the two events, can be easily found using the least squares method. The result of this decomposition (Figure [:ref:`separatedcomponents` ] ..) is perfect, despite the strong interference between the signal and the noise event."
 
 Algorithm and Code
 ------------------
@@ -91,7 +91,6 @@ Before getting started on the algorithm, we initialize and define a "next mixed 
   # this places the plots inline in the notebook
   %matplotlib inline  
   import numpy as np
-  import matplotlib.pyplot as plt
   from math import pi
   import scipy as sp
   import scipy.signal as sg
@@ -119,7 +118,7 @@ Before getting started on the algorithm, we initialize and define a "next mixed 
                     break
     return min_exceeding_n
 
-Spitz says the synthetic in Figure 3 consists of  “two horizontal events... One event (signal) displays an amplitude gradient of 1.05. The amplitude of the second event (noise) does not change laterally. These two events, superimposed at 200 ms, form the input” on the left of Figure 3.  On the right “is the original noise event but has a changed waveform.”.  I make these synthetics by ramping impulses in the frequency domain.  First the code to compute the ramp amd create Figure 4 (the matplotib plt) follows:
+Spitz says the synthetic in Figure :ref:`modelandnoise` consists of  “two horizontal events... One event (signal) displays an amplitude gradient of 1.05. The amplitude of the second event (noise) does not change laterally. These two events, superimposed at 200 ms, form the input” on the left of Figure :ref:`modelandnoise` .  On the right “is the original noise event but has a changed waveform.”  These synthetics are created by ramping impulses in the frequency domain.  First the code to compute the ramp and create Figure :ref:`ramp` (the matplotib plt) follows:
 
 .. code-block:: python
 
@@ -151,9 +150,9 @@ Spitz says the synthetic in Figure 3 consists of  “two horizontal events... On
 
 .. figure:: ramp.png
 
-  The ramp function used to bandlimit the models in the frequency domain. 
+  The ramp function used to bandlimit the models in the frequency domain. :label:`ramp`
 
-Now create the left side of Figure 3.  Create the signal, noise, and data.  Signal is spike at .2 seconds increasing by 5% per trace and the noise is spikes at .2 seconds with constant amplitude. Data is sum of the signal and the noise.  This code uses numpy array slicing, numpy fft, numpy vector multiplication with ramp, numpy ifft, and plots the results using matplotlib.  The code follows and the matplotlib plot is Figure 5.
+Now create the left side of Figure :ref:`modelandnoise`.  Create the signal, noise, and data.  Signal is spike at .2 seconds increasing by 5% per trace and the noise is spikes at .2 seconds with constant amplitude. Data is sum of the signal and the noise.  This code uses numpy array slicing, numpy fft, numpy vector multiplication with ramp, numpy ifft, and plots the results using matplotlib.  The code follows and the matplotlib plot is Figure :ref:`model`.
 
 .. code-block:: python
 
@@ -195,9 +194,9 @@ Now create the left side of Figure 3.  Create the signal, noise, and data.  Sign
 
 .. figure:: model.png
 
-   The third section is a recreation of the left side of Figure :ref:`txfk`.
+   The third section is a recreation of the left side of Figure 3 :label:`model`
 
-Create the right side of Figure 3 (the model of the noise) by applying a derivative filter on the noise.  Plot both the noise and the noise model.  The derivative filter, (-1,1), is applied using scipy.lfilter. The code follows and the resulting plot is Figure 6.
+Create the right side of Figure :ref:`modelandnoise` (the model of the noise) by applying a derivative filter on the noise.  Plot both the noise and the noise model.  The derivative filter, (-1,1), is applied using scipy.lfilter. The code follows and the resulting plot is Figure 6.
 
 .. code-block:: python
 
@@ -216,7 +215,7 @@ Create the right side of Figure 3 (the model of the noise) by applying a derivat
 
 .. figure:: noisemodel.png
    
-   The second section is a recreation of the right side of Figure :ref:`txfk`.
+   :label:`noisemodel` The second section is a recreation of the right side of Figure 3.
 
 Now we compute the prediction error filter for the noise model (right section on Figure 6). Spitz gives detailed instructions to estimate the prediction error filter in a way that is free from end effects.  Spitz observes the gather, Figure 6 right, "is laterally predictable in the [FX] domain, with a two-point spatial prediction-error filter (p.e.f.) a, of which the first term, a0, is 1. The unknown coefficient is found by minimizing the power of the prediction-error :math:`a_0m_k + a_1m_{k-1}`, from k = 2 to N."  I first compute the prediction filter, pfa.  Each point in M is predicted from the previous value scaled by :math:`pfa_0`.  We want the best fit to the equations:
 
@@ -258,7 +257,7 @@ I solve the prediction filter as a general matrix problem, overkill for a single
 
 This code produces the prediction error filter (pefa) listed in the paper, [1 -1], so this code appears to recreate the algorithm.  
 
-The next step is to design a prediction error filter on the data, the right section on Figure 5.  Once again this filter is must also be computed with care for the ends of the data arrays.  Spitz's observations are "The input data set d consists of two linear events. The gather ... is also laterally predictable in the [FX] domain but with a spatial p.e.f. b made of three coefficients, of which the first, b0, is 1. The two unknown coefficients are easily derived at each frequency in the band, by minimizing the power of the spatial prediction-error :math:`b_0d_k + b_1d_{k-1} + b_2d_{k-2}`, from k = 3 to N."   I compute the prediction filter, pfb.  Each point in D is predicted by the sum of the two previous value scaled by pfb0 and pfb1. We want to get to best fit to the equations: 
+The next step is to design a prediction error filter on the data, the right section on Figure 6.  Once again this filter is must also be computed with care for the ends of the data arrays.  Spitz's observations are "The input data set d consists of two linear events. The gather ... is also laterally predictable in the [FX] domain but with a spatial p.e.f. b made of three coefficients, of which the first, b0, is 1. The two unknown coefficients are easily derived at each frequency in the band, by minimizing the power of the spatial prediction-error :math:`b_0d_k + b_1d_{k-1} + b_2d_{k-2}`, from k = 3 to N."   I compute the prediction filter, pfb.  Each point in D is predicted by the sum of the two previous value scaled by pfb0 and pfb1. We want to get to best fit to the equations: 
 
 .. code-block:: python
 
@@ -272,8 +271,8 @@ This code is very similar to the previous code that computed pefa.  It uses nump
 
 .. code-block:: python
 
-  # Now do it with the 2 point pfb. The prediction filter 
-  # for the data.  The data has two events.
+  # Now do it with the 2 point pfb. The prediction 
+  # fiter for the data.  The data has two events.
   Ab=np.matrix([D[ifreq,1:-1],D[ifreq,0:-2]]).transpose()
   bb=np.matrix(D[ifreq,2:]).transpose()
   # multiply both sides by A.transpose.conj
@@ -367,7 +366,7 @@ The code presented up to this point processes one frequency through each stage. 
                     newpefa,
                     newpefb)[:2]
 
-Printing newpefa, newpefb, and newpefc shows they are the same as pefa and pefc, so this code will estimate 2 and 3 point prediction error filters.  This function can be used in a loop to process all frequencies.  This code along with inverse Fourier transform and display follows.  Figure 7 is the output from the code and it recreates Figure 3 from Spitz's paper.
+Printing newpefa, newpefb, and newpefc shows they are the same as pefa and pefc, so this code will estimate 2 and 3 point prediction error filters.  This function can be used in a loop to process all frequencies.  This code along with inverse Fourier transform and display follows.  Figure :ref:`separatedcomponents` is the output from the code.  The third section in Figure 6 has been separated into the two components - sections one and two in Figure 6.
 
 .. code-block:: python
 
@@ -430,7 +429,7 @@ I thank RMOTC and the U.S. Department of Energy for making data available for sc
 
 .. figure:: seperatedcomponents.png
     
-   The separated components.
+   The separated components. :label:`separatedcomponents`
 
 References
 ----------
