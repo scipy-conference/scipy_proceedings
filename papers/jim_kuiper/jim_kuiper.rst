@@ -606,8 +606,8 @@ Results:
      ]
    }
 
-Footprint Analysis of Population Density Stored as Raster Data
---------------------------------------------------------------
+Footprint Analysis of Raster Population Density Data
+----------------------------------------------------
 
 In this example, the input data consist of population density
 values in raster format, and we want to estimate the total
