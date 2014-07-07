@@ -6,7 +6,7 @@
 :email: biffi@sissa.it
 :institution: SISSA - Scuola Internazionale Superiore di Studi Avanzati, Via Bonomea 265, 34136 Trieste, Italy
 
-:author: Eric Hallman
+:author: Eric J. Hallman
 :email: hallman13@gmail.com
 :institution: Center for Astrophysics and Space Astronomy, Department of Astrophysical & Planetary Science, University of Colorado, Boulder, CO 80309
 
@@ -14,7 +14,7 @@
 :email: srandall@cfa.harvard.edu
 :institution: Harvard-Smithsonian Center for Astrophysics, 60 Garden Street, Cambridge, MA 02138
 
-:author: Adam Foster
+:author: Adam R. Foster
 :email: afoster@cfa.harvard.edu
 :institution: Harvard-Smithsonian Center for Astrophysics, 60 Garden Street, Cambridge, MA 02138
 
