@@ -473,129 +473,6 @@ Note however, that these outputs are the result of computations on a Postgres
 database.
 
 
-Experiment
-----------
-
-To demonstrate the capabilities and motivation for Blaze, we execute a simple
-split-apply-combine computation against a few backends.  We do this for a range
-of problem sizes and so compare scalability across backends across scales.
-
-
-Bitcoin
-~~~~~~~
-
-We consider financial transactions using the Bitcoin digital currency.  In
-particular we consider transactions between de-anonymized identities as
-computed by the process laid out in [Reid]_.  Each transaction consists of a
-transaction ID, sender, recipient, timestamp, and a number of bitcoins sent.
-Some example data
-
-::
-
-   # Transaction, Sender, Recipient, Timestamp, Value
-   4,39337,39337,20120617120202,0.31081764
-   4,39337,3,20120617120202,69.1
-   5,2071196,2070358,20130304143805,61.60235182
-   5,2071196,5,20130304143805,100.0
-
-Expression
-~~~~~~~~~~
-
-We load in this data using `blaze.data`
-
-.. code-block:: python
-
-   >>> from blaze.data.csv import CSV
-   >>> csv = CSV('user_edges.txt',
-   ...           columns=['transaction', 'sender',
-   ...              'recipient', 'timestamp', 'value'],
-   ...           typehints={'timestamp': 'datetime'})
-
-We then build an abstract table with this same schema
-
-.. code-block:: python
-
-   >>> t = TableSymbol('t', csv.schema)
-
-And describe a simple computation, finding the ten senders that have sent the most bitcoins
-
-.. code-block:: python
-
-   >>> big_spenders = (By(t,
-                          t['sender'],
-                          t['value'].sum())
-   ...                  .sort('value', ascending=False)
-   ...                  .head(10))
-
-
-Benchmark
-~~~~~~~~~
-
-We run this computation using streaming Python, Pandas, SQLite, Postgres, and Spark.  First we migrate the data to a variety of different data stores
-
-.. code-block:: python
-
-   >>> sqlite = into(SQL('sqlite:///btc.db', 'user_edges',
-                         schema=csv.schema), csv)
-   >>> postgres = into(SQL('postgresql:///user:pass',
-                           'user_edges', schema=csv.schema),
-                       csv)
-   >>> hdf5 = into(HDF5('btc.hdf5', 'user_edges',
-                        schema=csv.schema), csv)
-   >>> df = into(DataFrame, csv)
-   >>> rdd = into(SparkContext, csv)
-   >>> py = into([], csv)
-
-We then run our computation for a variety of sizes on the variety of backends
-
-.. code-block:: python
-
-   >>> from numpy import logspace
-   >>> sizes = list(map(int, logspace(1, 8, 16)))
-
-   >>> times = [[measure(lambda: compute(big_spenders.subs({t: t.head(size)}),
-   ...                                   dataset))
-   ...              for size in sizes]
-   ...              for dataset in [py, df, rdd, sqlite, postgres, hdf5]]
-
-TODO: Plot results
-
-We see roughly what we expect, that Pandas performs about an order of magnitude
-better than the others while in memory, but fails outside.  We get a good
-comparison of technologies like SQLite, Postgres, and Streaming Python.  We see
-that these technologies are able to span outside of single machine main memory.
-
-For variety we benchmark a slightly different computation.
-
-.. code-block:: python
-
-   >>> popular_senders = (By(t, t['sender'], t['recipient'].nunique())
-   ...                     .sort('value', ascending=False)
-   ...                     .head(10))
-
-TODO: Plot results
-
-Here we see surprising results.  Pandas does not perform as well as expected
-(though more performant alternatives to ``Series.nunique`` exist) and so we may
-wish to choose one of the other backends as we scale out.
-
-A quick survey of StackOverflow shows that ``df.nunique()`` is
-significantly slower than ``len(df.unique())``.  We alter the
-implementation for the ``nunique`` operation on a ``DataFrame``.
-
-.. code-block:: python
-
-   @dispatch(nunique, DataFrame)
-   def compute(expr, df):
-       parent = compute(expr.parent, df)  # Recurse up the tree
-       # return parent.nunique()
-       return len(parent.unique())
-
-With this quick change we can redefine how Blaze interprets abstract
-``nunique`` operations on Pandas DataFrames.  This change (if committed) can
-accelerate all future Blaze/Pandas computations.
-
-
 Discussion
 ~~~~~~~~~~
 
@@ -608,10 +485,6 @@ considerably) our implementation can transition easily.
 References
 ----------
 
-.. [iopro]      http://docs.continuum.io/iopro/index.html
-.. [Reid]       Reid, Fergal, and Martin Harrigan. "An analysis of anonymity in the
-                bitcoin system." Security and Privacy in Social Networks. Springer New York,
-                2013. 197-223.
 .. [Zah10]      Zaharia, Matei, et al. "Spark: cluster computing with working sets."
                 Proceedings of the 2nd USENIX conference on Hot topics in cloud
                 computing. 2010.
@@ -619,6 +492,7 @@ References
                 Python*, Proceedings of the 9th Python in Science Conference,
                 51-56 (2010)
 .. [sqlal]      http://www.sqlalchemy.org/
+.. [iopro]      http://docs.continuum.io/iopro/index.html
 .. [Roc13]      Rocklin, Matthew and Welch, Erik and Jacobsen, John.
                 *Toolz Documentation*, 2014 http://toolz.readthedocs.org/
 .. [Wie13]      Wiebe, Mark. *LibDyND* https://github.com/ContinuumIO/libdynd
@@ -628,7 +502,9 @@ References
                 Python." Proc. 9th Python in Science Conf. 2010.
 .. [Bor07]       Borthakur, Dhruba. "The hadoop distributed file system: Architecture
                 and design." Hadoop Project Website 11 (2007): 21.
-.. [Alt03]   Alted, Francesc, and Mercedes Fernández-Alonso. "PyTables: processing and analyzing extremely large amounts of data in Python." PyCon 2003 (2003).
+.. [Alt03]      Alted, Francesc, and Mercedes Fernández-Alonso.
+                "PyTables: processing and analyzing extremely large amounts of data in Python."
+                PyCon 2003 (2003).
 .. [Van11]      Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux. *The
                 NumPy Array: A Structure for Efficient Numerical Computation*,
                 Computing in Science & Engineering, 13, 22-30 (2011),
