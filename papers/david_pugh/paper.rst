@@ -16,7 +16,9 @@ Python for research and teaching economics
 
 Introduction
 ------------
-In this paper, I discuss the goals, objectives, and pedagogical choices that I made in designing and teaching a Python-based course on computational modeling and simulation to first-year graduate students in the Scottish Graduate Programme in Economics (SGPE) at the University of Edinburgh. [#]_   
+Together with theory and experimentation, computational modeling and simulation has become a “third pillar” of scientific inquiry. In this paper, I discuss the goals, objectives, and pedagogical choices that I made in designing and teaching a Python-based course on computational modeling and simulation to first-year graduate students in the Scottish Graduate Programme in Economics (SGPE) at the University of Edinburgh.  My course requires no prior knowledge or experience with computer programming or software development and all current and future course materials will be made freely available `on-line`_. [#]_   
+
+.. _`on-line`: https://github.com/davidrpugh/numerical-methods 
 
 .. [#] This course would not have been possible without generous funding and support from the Scottish Graduate Programme in Economics (SGPE), the Scottish Institute for Research in Economics (SIRE), the School of Economics at the University of Edinburgh, and the Challenge Investment Fund (CIF).
 
@@ -72,6 +74,8 @@ In order for the course to be well received by the median student, I felt that I
 
 Which text editor to use?
 ~~~~~~~~~~~~~~~~~~~~~~~~~
+Need to list some desirable qualities of a good text editor! List some text editors that have those qualities and allow students to self-select. Obviously there can be only one text editor to use for teaching.
+
 Many possibilities: Typical student is familiar with MS Word and notepad (maybe also Texit if a Mac user). This rules out high-performance editors like Vim and Emacs (learning curve is too high). I went with Sublime.  
 
 Version control: Git.
@@ -123,7 +127,7 @@ Assuming a Cobb-Douglas functional form for :math:`f` also makes the model analy
 A notable property of the Solow model with Cobb-Douglas production is that the model predicts that the shares of real income going to capital and labor should be constant. Denoting capital's share of income as :math:`\alpha_K(k)`, the model predicts that 
 
 .. math::
-   \alpha_K(k) \equiv \frac{\partial \ln\ f(k)}{\partial \ln\ k} = \alpha
+   \alpha_K(k) \equiv \frac{\partial \ln f(k)}{\partial \ln k} = \alpha
 
 Unfortunately, from figure :ref:`figure1` it is clear that the prediction of constant factor shares is strongly at odds with the empirical data for most countries. Fortunately, there is a simple generalization of the Cobb-Douglas production function, known as the constant elasticity of substitution (CES) function, that is capable of generating the variable factor shares observed in the data.
 
@@ -138,7 +142,7 @@ where :math:`-\infty < \rho < 1` is the elasticity of substitution between capit
 and thus the CES production function nests the Cobb-Douglas functional form as a special case. To see that the CES production function also generates variable factor shares note that 
 
 .. math::
-   \alpha_K(k) \equiv \frac{\partial \ln\ f(k)}{\partial \ln\ k} = \frac{\alpha k^{\rho}}{\alpha k^{\rho} + (1 - \alpha)}
+   \alpha_K(k) \equiv \frac{\partial \ln f(k)}{\partial \ln k} = \frac{\alpha k^{\rho}}{\alpha k^{\rho} + (1 - \alpha)}
 
 which varies with :math:`k`.
 
@@ -158,40 +162,40 @@ First and foremost, solving the model requires efficiently and accurately approx
 
 Much of the empirical work based on the Solow model focuses on the model's predictions concerning the long-run or steady state equilibrium of the model. Solving for the steady state of the Solow growth model requires solving for the roots of a non-linear equation. Root finding problems, which are equivalent to solving systems of typically non-linear equations, are one of the most widely encountered computational problems in economic applications. Typical input to root-finding algorithms is the Jacobian matrix of partial derivatives of the system of non-linear equations. Solving for the steady state of the Solow growth model allows me to demonstrate the use of various root finding algorithms as well as how to compute Jacobian matrices of non-linear systems of equations.
 
-Finally, given some data, estimation of the model's structural parameters (i.e., :math:`g,\ n,\ s,\ \alpha,\ \delta,\ \rho,`) using either as maximum likelihood or non-linear least squares requires solving a non-linear, constrained optimization problem. Typical inputs to algorithms for solving such non-linear programs are the Jacobian and Hessian of the objective function with respect to the parameters being estimated. [#]_ Thus structural estimation also allows me to demonstrate the symbolic and numerical differentiation techniques needed to compute the Jacobian and Hessian matrices.
+Finally, given some data, estimation of the model's structural parameters (i.e., :math:`g,\ n,\ s,\ \alpha,\ \delta,\ \rho`) using either as maximum likelihood or non-linear least squares requires solving a non-linear, constrained optimization problem. Typical inputs to algorithms for solving such non-linear programs are the Jacobian and Hessian of the objective function with respect to the parameters being estimated. [#]_ Thus structural estimation also allows me to demonstrate the symbolic and numerical differentiation techniques needed to compute the Jacobian and Hessian matrices.
 
 .. [#] The Hessian matrix is also used for computing standard errors of parameter estimates. 
 
 Course outline
 ----------------------
-Having motivated the need for computational methods in economics, in this section I outline the three major components of my computational methods course: laboratory sessions, an intensive week-long Python boot camp, and an advanced PhD training course. The first two components are already up and running (thanks to funding support from the SGPE, SIRE, and the CIF). I am still looking to secure funding to develop the advanced training course component.
+Having motivated the need for computational methods in economics, in this section I outline the three major components of my computational methods course: laboratory sessions, an intensive week-long Python boot camp, and an advanced PhD training course. The first two components are already up and running (thanks to funding support from the SGPE, SIRE, and the CIF). I am still looking to secure funding to develop the advanced PhD training course component.
 
 Laboratory sessions
 ~~~~~~~~~~~~~~~~~~~
 The first part of the course is a suite of Python-based laboratory sessions that run concurrently as part of the core macroeconomics sequence. There are 8 labs in total: two introductory sessions, three labs covering computational methods for solving models that students are taught in macroeconomics I (fall term), three labs covering computational methods for solving models taught in macroeconomics II (winter term). The overall objective of these laboratory sessions is to expose students to the basics of scientific computing using Python in a way that reinforces the economic models covered in the lectures. All of the laboratory sessions make use of the excellent IPython notebooks. 
 
-The material for the two introductory labs draws heavily from `part I`_ and `part II`_ of `Quantitative Economics`_ by Thomas Sargent and John Stachurski. In the first lab, I introduce and motivate the use of the Python programming language and cover the bare essentials of Python: data types, imports, file i/o, iteration, functions, comparisons and logical operators, conditional logic, and Python coding style. During the second lab, I attempt to provide a quick overview of the Python scientific computing stack (i.e., IPython, Matplotlib, NumPy, Pandas, and SymPy) with a particular focus on those pieces that students will encounter repeatedly in economic applications.
+The material for the two introductory labs draws heavily from `part I`_ and `part II`_ of `Quantitative Economics`_ by Thomas Sargent and John Stachurski. In the first lab, I introduce and motivate the use of the Python programming language and cover the bare essentials of Python: data types, imports, file I/O, iteration, functions, comparisons and logical operators, conditional logic, and Python coding style. During the second lab, I attempt to provide a quick overview of the Python scientific computing stack (i.e., IPython, Matplotlib, NumPy, Pandas, and SymPy) with a particular focus on those pieces that students will encounter repeatedly in economic applications.
 
 .. _`part I`: http://quant-econ.net/learning_python
 .. _`part II`: http://quant-econ.net/scientific_python
 .. _`Quantitative Economics`: http://quant-econ.net
 
-The material for the remaining 6 labs is designed to complement the core macroeconomic sequence of the Scottish Graduate Programme in Economics (SGPE) and thus varies a bit from year to year. During the 2013-2014 academic year I covered the following material:
+The material for the remaining 6 labs is designed to complement the core macroeconomic sequence of the SGPE and thus varies a bit from year to year. During the 2013-2014 academic year I covered the following material:
 
 * `Initial value problems <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-1/lab-1.ipynb>`_: Using the [solow1956]_ model of economic growth as the motivating example, I demonstrate finite-difference methods for efficiently and accurately solving initial value problems of the type typically encountered in economics.  
 * `Boundary value problems <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-2/lab-2.ipynb>`_: Using the neo-classical optimal growth model of [ramsey1928]_, [cass]_, and [koopmans]_ as the motivating example, I demonstrate basic techniques for efficiently and accurately solving two-point boundary value problems of the type typically encountered in economics using finite-difference methods (specifically forward, reverse, and multiple shooting).  
 * `Numerical dynamic programming <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-3/lab-3.ipynb)>`_: I demonstrate basic techniques for solving discrete-time, stochastic dynamic programming problems using a stochastic version of the neo-classical optimal growth model as the motivating example.
-* `Real business cycle (RBC) models using dynare++ <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-4/lab-4.ipynb)>`_: I extend the stochastic optimal growth model to incorporate a household labor supply decision and demonstrate how to approximate the model solution using perturbation methods (i.e., Taylor approximations around a point in the model's state-space).
+* `Real business cycle models <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-4/lab-4.ipynb)>`_: I extend the stochastic optimal growth model to incorporate a household labor supply decision and demonstrate how to approximate the model solution using `dynare++`, a C++ library specializing in computing *k*-order Taylor approximations of dynamic stochastic general equilibrium (DSGE) models. 
 
-In future versions of the course I hope to include laboratory sessions on Dynamic Stochastic General Equilibrium (DSGE) monetary policy models, DSGE models with financial frictions, and unemployment models with search frictions. These additional labs are likely to be based around dissertations being written by current MSc students.  
+In future versions of the course I hope to include laboratory sessions on DSGE monetary policy models, DSGE models with financial frictions, and models of unemployment with search frictions. These additional labs are likely to be based around dissertations being written by current MSc students.  
 
 Python boot camp
 ~~~~~~~~~~~~~~~~
 Whilst the laboratory sessions expose students to some of the basics of programming in Python as well as numerous applications of computational methods in economics, these lab sessions are inadequate preparation for those students wishing to apply such methods as part of their MSc dissertations or PhD theses. 
 
-In order to provide interested students with the skills needed to appy computational methods in their own research I have developed a week-long intensive computational methods “boot camp.” The boot camp requires no prior knowledge or experience with computer programming or software development and all current and future course materials are made freely available online.
+In order to provide interested students with the skills needed to apply computational methods in their own research I have developed a week-long intensive computational methods “boot camp.” The boot camp requires no prior knowledge or experience with computer programming or software development and all current and future course materials are made freely available on-line.
 
-.. PUT THIS IN SLIDE! This is the second year that I have run the boot camp. The first year I did not advertise the course outside of the SGPE. The boot camp was attended by a small, but enthusiastic,  group of students. [#]_ This year I decided to advertise the Python boot camp outside of the SGPE via the Scottish Insitite for Research in Economics (SIRE) and almost 50 students registered interest in attending including:
+.. PUT THIS IN SLIDE! This is the second year that I have run the boot camp. The first year I did not advertise the course outside of the SGPE. The boot camp was attended by a small, but enthusiastic,  group of students. [#]_ This year I decided to advertise the Python boot camp outside of the SGPE via the Scottish Institute for Research in Economics (SIRE) and almost 50 students registered interest in attending including:
 
 .. * undergraduate economics students from University of Edinburgh;
 .. * SGPE MSc students as well as MSc students from other University of Edinburgh schools (i.e., maths and physics);
@@ -202,9 +206,11 @@ In order to provide interested students with the skills needed to appy computati
 
 .. Of the 50 students that registered interest, close to 40 actually attended the boot camp. 40 students represents a 400% increase in attendance relative to last year's boot camp and suggests that there is significant demand amongst UK economists for the type of training that I am providing. 
 
-.. [#] Attendees were primarly SGPE MSc students, however there were also a few economics PhD students from the Universities of Edinburgh and Glasgow.
+.. Attendees were primarily SGPE MSc students, however there were also a few economics PhD students from the Universities of Edinburgh and Glasgow.
 
 Each day of the boot camp is split into morning and afternoon sessions. The morning sessions are designed to develop attendees Python programming skills while teaching important software design principles that are crucial for generating high-quality, reproducible scientific research using computational methods. The syllabus for the morning sessions closely follows `Think Python`_ by Allen Downey.
+
+.. _`Think Python`: http://www.greenteapress.com/thinkpython
 
 In teaching Python programming during the boot camp I subscribe to the principle of "learning by doing." As such my primary objective on day one of the Python boot camp is to get attendees up and coding as soon as possible. The goal for the first morning session is to cover the first four chapters of *Think Python*. 
 
@@ -213,7 +219,7 @@ In teaching Python programming during the boot camp I subscribe to the principle
 * `Chapter 3`_: Functions; 
 * `Chapter 4`_: Case study on interface design. 
 
-The material in these introductory chapters is clearly presented and historically students have generally had no trouble interactively working through the all four chapters before the lunch break.  Most attendees break for lunch on the first day feeling quite good about themselves. Not only have they covered a lot of material, they have managed to write some basic computer programs. Maintaining student confidence is crucially important. As long as student are confident and feel like they are progressing, they will remain focused on continuing to build their skills. If students get discouraged, perhaps because they are unable to solve a certain exercise or decipher a cryptic error traceback, they will lose their focus and fall behind. 
+The material in these introductory chapters is clearly presented and historically students have generally had no trouble interactively working through the all four chapters before the lunch break.  Most attendees break for lunch on the first day feeling quite good about themselves. Not only have they covered a lot of material, they have managed to write some basic computer programs. Maintaining student confidence is important: as long as students are confident and feel like they are progressing, they will remain focused on continuing to build their skills. If students get discouraged, perhaps because they are unable to solve a certain exercise or decipher a cryptic error traceback, they will lose their focus and fall behind. 
 
 The second morning session covers the next three chapters of `Think Python`:
 
@@ -229,7 +235,7 @@ The objective of for the third morning session is the morning session of day thr
 * `Chapter 9`_: A case study on word play; 
 * `Chapter 10`_: Lists.
 
-The material covered in `chapter 8`_ and `chapter 10`_ is patricularly important as these chapters cover two commonly used Python data types: strings and lists. As a way of drawing attention to the importance of chapters 8 and 10, I encourage students to work through both of these chapters before returning to `chapter 9`_. 
+The material covered in `chapter 8`_ and `chapter 10`_ is particularly important as these chapters cover two commonly used Python data types: strings and lists. As a way of drawing attention to the importance of chapters 8 and 10, I encourage students to work through both of these chapters before returning to `chapter 9`_. 
 
 The fourth morning session covers the next four chapters of `Think Python`:
 
@@ -238,9 +244,9 @@ The fourth morning session covers the next four chapters of `Think Python`:
 * `Chapter 13`_: Case study on data structure selection;
 * `Chapter 14`_: Files.
 
-The morning session of day four is probably the most demanding. Indeed many students take two full session to work through this material. Chapters 11 and 12 cover two more commonly encoutered and important Python data types: dictionaries and tuples. `Chapter 13`_ is an important case study that demonstrates the importance of thinking about data structures when writing library code. 
+The morning session of day four is probably the most demanding. Indeed many students take two full session to work through this material. Chapters 11 and 12 cover two more commonly encountered and important Python data types: dictionaries and tuples. `Chapter 13`_ is an important case study that demonstrates the importance of thinking about data structures when writing library code. 
 
-The final morning session is designe to cover the remaining five chapters of `Think Python`_ on object-oriented programming (OOP):
+The final morning session is designed to cover the remaining five chapters of `Think Python`_ on object-oriented programming (OOP):
 
 * `Chapter 15`_: Classes and Objects;
 * `Chapter 16`_: Classes and Functions;
@@ -248,7 +254,7 @@ The final morning session is designe to cover the remaining five chapters of `Th
 * `Chapter 18`_: Inheritance;
 * `Chapter 19`_: Case Study on Tkinter.
 
-While this year a few students managed to get through at least some of the OOP chapters, the majority of students managed only to get through chapter 13 over the course of the five, three-hour morning sessions. Those students who did manage to reach the OOP chapters in general failed to grasp the point of OOP and did not see how they might apply OOP ideas in their own research. I see this as a major failing of my teaching. I find OOP ideas extremely intutitive and make use of them to varying degrees in almost all code that I write. I need to find a way to better motivate/present OOP concepts!
+While this year a few students managed to get through at least some of the OOP chapters, the majority of students managed only to get through chapter 13 over the course of the five, three-hour morning sessions. Those students who did manage to reach the OOP chapters in general failed to grasp the point of OOP and did not see how they might apply OOP ideas in their own research. I see this as a major failing of my teaching.
 
 .. _`Chapter 1`: http://www.greenteapress.com/thinkpython/html/thinkpython002.html
 .. _`Chapter 2`: http://www.greenteapress.com/thinkpython/html/thinkpython003.html
@@ -270,32 +276,41 @@ While this year a few students managed to get through at least some of the OOP c
 .. _`Chapter 18`: http://www.greenteapress.com/thinkpython/html/thinkpython019.html
 .. _`Chapter 19`: http://www.greenteapress.com/thinkpython/html/thinkpython020.html
 
-While the morning sessions focus on building the foundations of the Python programming language, the afternoon sessions are devoted to exploring the Python scientific computing stack: IPython, Matplotlib, NumPy, Pandas, SciPy, and SymPy. The afternoon curriculum is built around the `Scientific Programming in Python`_ lecture series, parts I and II of `Quantitative Economics`_ by Thomas Sargent and John Stachurski, and supplemented with specific use cases from my own research.  
+While the morning sessions focus on building the foundations of the Python programming language, the afternoon sessions are devoted to demonstrating the use of Python in scientific computing by exploring in greater detail the Python scientific computing stack. During the afternoon session on day one I motivate the use of Python in scientific computing and spend considerable time getting students set up with a suitable Python environment and demonstrating the basic scientific work flow. 
 
-.. _`Think Python`: http://www.greenteapress.com/thinkpython
+I provide a quick tutorial of the Enthought Canopy distribution. I then discuss the importance of working with a high quality text editor, such as Sublime, and make sure that students have installed both Sublime as well as the relevant Sublime plug-ins (i.e., SublimeGit and LatexTools for Git and LaTex integration, respectively; SublimeLinter for code linting, etc). I make sure that students can install Git and stress the importance of using distributed version control software in scientific computing and collaboration. Finally I cover the various flavors of the IPython interpreter: the basic IPython terminal, IPython QTconsole, and the IPython notebook. 
+
+The afternoon curriculum for days two through five is built around the `Scientific Programming in Python`_ lecture series and supplemented with specific use cases from my own research.  My goal is to cover all of the material in lectures `1.3`_, `1.4`_, and `1.5`_ covering NumPy, Matplotlib and SciPy, respectively. In practice I am only able to cover a small subset of this material during the afternoon sessions.
+
 .. _`Scientific Programming in Python`: http://scipy-lectures.github.io
+.. _`1.3`: http://scipy-lectures.github.io/intro/numpy/index.html
+.. _`1.4`: http://scipy-lectures.github.io/intro/matplotlib/matplotlib.html
+.. _`1.5`: http://scipy-lectures.github.io/intro/scipy.html
 
-During the afternoon session on day one I motivate the use of Python in scientific computing and spend considerable time getting students set up with a suitable Python environment. This includes a quick tutorial on the Enthought Canopy distribution; discussing the importance of working with a high quality text editor and making sure that student have been able to install Sublime; discussing the importance of using version control in scientific computing and making sure that students have installed Git; making sure that students have installed relevant Sublime plug-ins (i.e., for Git and LaTeX integration, code linting and PEP 8 checking, etc); finally covering the various flavours of IPython interpreter: basic IPython terminal, IPython QTconsole, and the IPython notebook. Objective for the afternoon session is to set up a Python environment for scientific computing and to demonstrate basic scientific work flow. 
+Advanced PhD training course 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-I do not teach Git, but rather demonsrate the usefulness of Git to students first as a convenient file sharing technology (an alternative to DropBox). Whilst mentioning the importance of distributed version control. 
+The final part of the course (for which I am still seeking funding to develop!) is a six week PhD advanced training course that focuses on applying cutting edge computational science techniques to economic problems via a series of interactive lectures and tutorials. The curriculum for this part of the course will derive primarily from [judd1998]_, [stachurski2009]_, and [sargent2014]_. In particular, I would like to cover material from chapters 3-6 of [judd1998]_ on 
 
-Advanced course in numerical methods
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* Linear equations and iterative methods: Gaussian elimination, *LU* decomposition, sparse matrix methods, error analysis, iterative methods, matrix inverse, ergodic distributions over-identified systems.
+* Optimization: 1D minimization, multi-dimensional minimization using comparative methods, Newton's method for multi-dimensional minimization, directed set methods for multi-dimensional minimization, non-linear least squares, linear programming, constrained non-linear optimization. 
+* Non-linear equations: 1D root-finding, simple methods for multi-dimensional root-finding, Newton's method for multi-dimensional root-finding, homotopy continuation methods.
+* Approximation methods: local approximation methods, regression as approximation, orthogonal polynomials, least-squares orthogonal polynomial approximation, uniform approximation, interpolation, piece-wise polynomial interpolation, splines, shape-preserving approximation, multi-dimensional approximation, finite-element approximations. 
 
-The final part of the course (for which we are still looking for funding to develop!) is a six week course (with 3 lecture hours per week) that focuses on applying key computational science techniques to economic problems via a series of interactive lectures and tutorials. The curriculum for this part of the course will derive primarily from [judd1998]_, [stachurski2009]_, and [sargent2014]_.
+For economic applications I would cover parts `III`_ and `IV`_ of [sargent2014]_. Material covered from these sections would include more finite-state Markov chains, linear state space models, the Kalman filter, dynamic programming, linear-quadratic control problems, continuous-state Markov chains, robust control problems, linear stochastic models.   
 
-In particular, I would like to cover material from chapters 1-6 of [judd1998]_:
-* Elementary concepts in numerical analysis:
-* Linear equations and iterative methods:
-* Optimization:
-* Non-linear equations:
-* Approximation methods:
+.. _`III`: http://quant-econ.net/introductory_applications.html
+.. _`IV`: http://quant-econ.net/main_applications.html
 
-First pass at developing an advanced Python-based curriculum is to map methods used to Python packages. Obviously we will heavily use NumPy and SciPy, but there is a lot of really good software developed that can be leveraged for pushing enevelope of computation in economics using Python.
+The value-add of the advanced PhD training course is that, with more time, I can provide a bit of the theory behind the methods (in addition to demonstrating how to implement them).
+
+.. PUT IN SLIDES: First pass at developing an advanced Python-based curriculum is to map methods used to Python packages. Obviously we will heavily use NumPy and SciPy, but there is a lot of really good software developed that can be leveraged for pushing envelope of computation in economics using Python.
 
 Conclusion
 ----------
-There is an increasing demand for both applied and theoretical economists interested in inter-disciplinary collaboration. The key to developing and building the capacity for inter-disciplinary research is effective communication using a common language. Historically that common language has been mathematics. Increasingly however this language is becoming computation. Economists and other social sciences can greatly benefit from scientific collaboration and the use of the numerical techniques used across disciplines such as mathematics, physics, biology, computer science and informatics. 
+The key objective of this paper has been to provide an outline of a Python-based course in computational methods and simulation for economists. 
+
+I have been pleasantly surprised at how eager graduate economics students are to learn computational modeling and simulation methods and to apply these techniques to analytically intractable problems they are encountering in their own research. Their eagerness to learn is, perhaps, a direct response to market forces. Both within academia, industry, and the public sector there is an increasing demand for both applied and theoretical economists interested in inter-disciplinary collaboration. The key to developing and building the capacity for inter-disciplinary research is effective communication using a common language. Historically that common language has been mathematics. Increasingly, however, this language is becoming computation. 
 
 
 References
