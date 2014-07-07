@@ -246,7 +246,7 @@ The third major strength is that implementing our model in ``yt`` makes it possi
 Example
 -------
 
-Here we present a workable example of creating simulated X-ray events using ``yt``'s ``photon_simulator`` analysis module. We implemented the module in ``yt`` v. 3.0 as ``yt.analysis_modules.photon_simulator``. ``yt`` v. 3.0 can be downloaded from http://yt-project.org. The example code here is available as an IPython notebook at This is not meant to be an exhaustive explanation of all of the ``photon_simulator``'s features and options--for these the reader is encouraged to visit the `yt documentation <http://yt-project.org/doc/>`_. 
+Here we present a workable example of creating simulated X-ray events using ``yt``'s ``photon_simulator`` analysis module. We implemented the module in ``yt`` v. 3.0 as ``yt.analysis_modules.photon_simulator``. ``yt`` v. 3.0 can be downloaded from http://yt-project.org. The example code here is available `as an IPython notebook <http://nbviewer.ipython.org/url/www.jzuhone.com/files/photon_simulator_example.ipynb>`_. This is not meant to be an exhaustive explanation of all of the ``photon_simulator``'s features and options--for these the reader is encouraged to visit the `yt documentation <http://yt-project.org/doc/>`_. 
 
 As our input dataset, we will use an ``Athena`` simulation of a galaxy cluster core, which can be downloaded from the ``yt`` website at http://yt-project.org/data/MHDSloshing.tar.gz.
 You will also need to download a version of ``APEC`` from http://www.atomdb.org. Finally, the absorption cross section table used here and the *Chandra* response files may be downloaded from http://yt-project.org/data/xray_data.tar.gz. 
