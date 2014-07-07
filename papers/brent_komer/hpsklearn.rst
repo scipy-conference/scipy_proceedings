@@ -462,7 +462,7 @@ and automatic machine learning researchers with benchmarks for future work in al
 Acknowledgements
 ----------------
 
-This research was supported by the NSERC Banting Fellowship program, the NSERC Engage Program and by D-Wave Systems.
+This research was supported by the NSERC Banting Fellowship program, the NSERC Engage Program and by D-Wave Systems. Thanks also to Hristijan Bogoevski for early drafts of a hyperopt-to-scikit-learn bridge.
 
 References
 ----------
