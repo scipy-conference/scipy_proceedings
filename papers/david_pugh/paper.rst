@@ -28,65 +28,65 @@ Fortunately (or unfortunately?) I was rudely awakened to the reality of modern e
 
 The first part of my course is a suite of Python-based, interactive laboratory sessions designed to expose students to the basics of scientific programming in Python. The second part of the course is a week-long intensive computational methods “boot camp.”  The boot camp curriculum focuses on deepening students’ computer programming skills using the Python programming language and teaching important software design principles that are crucial for generating high-quality, reproducible scientific research using computational methods. The final part of the course, which is very much under development, will be an advanced training course targeted at PhD students and will focus on applying more cutting edge computational science techniques to economic problems via a series of interactive lectures and tutorials. 
 
-Software
---------
-In this section I discuss the software that I decided to use for the course. In particular, I discuss why I chose to use Python over the dominant platform used for scientific computing in economics, Matlab. I also discuss how I came to settle on the Canopy Python distribution and the IPython Notebook as my primary teaching platform. Finally, I briefly motivate my choice of Sublime as default text editor and my use of Git for version control.
-
 Why Python?
-~~~~~~~~~~~
-Python is a modern, object-oriented programming language widely used in academia and private industry, whose clean, yet expressive syntax, makes it an easy programming language to learn while still remaining powerful enough for serious scientific computing. Python's syntax was designed from the start with the human reader in mind and generates code that is easy to understand and debug which shortens development time relative to low-level, compiled languages such as Fortran and C++.  Among the high-level, general purpose languages, Python has the largest number of Matlab-style library modules (both installed in the standard library and through additional downloads) which meaning that one can quickly construct sophisticated programs.
+-----------
+.. In this section I discuss the software that I decided to use for the course. In particular, I discuss why I chose to use Python over the dominant platform used for scientific computing in economics, Matlab. I also discuss how I came to settle on the Canopy Python distribution and the IPython Notebook as my primary teaching platform. Finally, I briefly motivate my choice of Sublime as default text editor and my use of Git for version control.
+
+Python is a modern, object-oriented programming language widely used in academia and private industry, whose clean, yet expressive syntax, makes it an easy programming language to learn while still remaining powerful enough for serious scientific computing. [#]_ Python's syntax was designed from the start with the human reader in mind and generates code that is easy to understand and debug which shortens development time relative to low-level, compiled languages such as Fortran and C++.  Among the high-level, general purpose languages, Python has the largest number of Matlab-style library modules (both installed in the standard library and through additional downloads) which meaning that one can quickly construct sophisticated scientific applications. While the Python programming language has found widespread use in private industry and many fields within academia, the capabilities of Python as a research tool remain relatively unknown within the economics research community. Notable exceptions are [stachurski2009]_ and [sargent2014]_. 
+
+.. [#] A non-exhaustive list of organizations currently using Python for scientific research and teaching: MIT's legendary *Introduction to Computer Science and Programming*, CS 6.00, is taught using Python; Python is the in-house programming language at Google; NASA, CERN, Los Alamos National Labs (LANL), Lawrence Livermore National Labs (LLNL), and Industrial Light and Magic (ILM) all rely heavily on Python.
 
 Python is completely free and platform independent, making it a very attractive option as a teaching platform relative to other high-level scripting languages, particularly Matlab. Python is also open-source, making it equally attractive as a research tool for scientists interested in generating computational results that are more easily reproducible. [#]_ Finally, Python comes with a powerful interactive interpreter that allows real-time code development and live experimentation. The functionality of the basic Python interpreter can be greatly increased by using the Interactive Python (or IPython) interpreter.  Working via the Python or IPython interpreter eliminates the time-consuming (and productivity-destroying) compilation step required when working with low-level languages at the expense of slower execution speed. In many cases, it may be possible to achieve the best of both worlds using "mixed language" programming as Python can be easily extended by wrapping compiled code written in Fortran, C, or C++ using libraries such as f2Py, Cython, or swig. See [oliphant2007]_, [peterson2009]_, [behnel2011]_, [van2011]_ and references therein for more details.  
 
 .. [#] The Python Software Foundation License (PSFL) is a BSD-style license that allows a developer to sell, use, or distribute his Python-based application in anyway he sees fit.  In addition, the source code for the entire Python scientific computing stack is available on GitHub making it possible to directly examine the code for any specific algorithm in order to better understand exactly how a result has been obtained.    
 
-While the Python programming language has found widespread use in private industry and many fields within academia, [#]_ the capabilities of Python as a research tool remain relatively unknown within the economics research community. Notable exceptions are [stachurski2009]_ and [sargent2014]_. 
-
-.. [#] A non-exhaustive list of organizations currently using Python for scientific research and teaching: MIT's legendary *Introduction to Computer Science and Programming*, CS 6.00, is taught using Python; Python is the in-house programming language at Google; NASA, CERN, Los Alamos National Labs (LANL), Lawrence Livermore National Labs (LLNL), and Industrial Light and Magic (ILM) all rely heavily on Python.
 
 .. Miranda does not have a desire to turn his students into computer programmers. Probably explains why he uses Matlab! I on the other hand believe that it is important to teach good programming practices to students from the beginning. Too many papers using computational methods (typically Matlab code) are being published where the code used to generate the results is poorly written and insufficiently documented. This makes results difficult replicate, and even if they can be replicated it is often difficult to understand how the results are being obtained (i.e., what is the code really doing?). Python is an excellent programming langauge in this regard.
 
-Python designed as a general purpose programming language; Matlab designed as a domain specific language for matrix algebra. Both have extensive has extensive standard libraries: Python standard library is geared towards general purpose programming while Matlab standard library geared towards matrix algebra, data processing, and plotting.
+.. Python designed as a general purpose programming language; Matlab designed as a domain specific language for matrix algebra. Both have extensive has extensive standard libraries: Python standard library is geared towards general purpose programming while Matlab standard library geared towards matrix algebra, data processing, and plotting.
 
-Namespaces: namespaces give structure to a program and keeps it clean and clear. In Python everything is an object, so each object has a namespace itself. This is one of the reasons Python is so good at introspection.
+.. Namespaces: namespaces give structure to a program and keeps it clean and clear. In Python everything is an object, so each object has a namespace itself. This is one of the reasons Python is so good at introspection.
 
-Introspection:  This is what follows from the object oriented nature of Python. Because a program has a clear structure, introspection is easy. Private variables only exist by convention, so you can access any part of the application, including some of Python’s internals. Of course, in good programming practice you would not use private variables of other classes, but it’s great for debugging!
+.. Introspection:  This is what follows from the object oriented nature of Python. Because a program has a clear structure, introspection is easy. Private variables only exist by convention, so you can access any part of the application, including some of Python’s internals. Of course, in good programming practice you would not use private variables of other classes, but it’s great for debugging!
 
-Which Python distribution to use?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Having settled on Python over Matlab as my programming language for the course, I was then faced with a decision regarding which Python distribution to use. Like most universities the majority of computing labs at the University of Edinburgh are all stocked with Windows-based PCs. However, while a majority of students have Windows-based laptops, a substantial (and growing) minority are using UNIX-based machines (primarly running some flavor of Mac OSX, with an occasional Linux-user to spice things up). Thus I needed a Python distribution that was easy to install and would work "out of the box" on all computing platforms. 
+.. Which Python distribution to use?
+.. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. Having settled on Python as my programming language for the course, I was then faced with a decision regarding which Python distribution to use. I needed a Python distribution that was easy to install and would work "out of the box" on all computing platforms. While the majority of the computing labs at the University of Edinburgh are stocked with Windows-based PCs and most students have Windows-based laptops, a substantial (and growing) minority are using UNIX-based machines (primarily running some flavor of Mac OSX, with an occasional Linux-user to spice things up). 
 
-I also needed a Python distribution that came pre-installed with, at a minimum, the Python Scientific computing stack of Matplotlib, NumPy, Pandas, SciPy, and Sympy. Getting software installed on university computers is an incredibly tedious and bureaucratic process: it is simply not feasible to request both a base Python distribution as well as individual Python libraries (many of which need to be built and compiled prior to installation as they make heavy on compiled Fortran and C code). Additionally, given that students are used to using software that "just works", a complicated installation and build process for individual libraries would deter even the reasonably computer-savvy students. 
+.. I also needed a Python distribution that came pre-installed with, at a minimum, the Python scientific computing stack of Matplotlib, NumPy, Pandas, SciPy, and Sympy. Getting software installed on university computers is an incredibly tedious and bureaucratic process and it is simply not feasible to request both a base Python distribution as well as individual Python libraries (many of which need to be built and compiled prior to installation as they make heavy use of compiled Fortran or C code). 
 
-Finally, given that a major reason for not using Matlab was the fact that it is not free, I wanted some version of the Python distribution to be completely free. 
+.. Finally, in order for the course to be well received by the median MSc student, I wanted to avoid terminal-based versions of the Python interpreter. Thus I limited my search to Python implementations that could be run within a web browser.
 
-During the first year that I taught the course (i.e., 2012-2013) I used `Sage`_ as my primary teaching platform. My decision to use Sage was largely an artifact of Google: Sage was the top hit for a Google search for a web browser based implementation of Python.[#]_
+.. During the first year that I taught the course (i.e., 2012-2013) I used `Sage`_ as my primary teaching platform. My decision to use Sage was largely an artifact of Google: Sage was the top hit for a Google search for a web browser based implementation of Python.[#]_
 
-.. _`Sage`: www.sagemath.org
+.. .. _`Sage`: www.sagemath.org
 
-.. [#] Oddly, even though the IPython Notebook was first released in December of 2011, I only became aware of its existence in late fall of 2012 (roughly one month after the start of the course).
+.. .. [#] Oddly, even though the IPython Notebook was first released in December of 2011, I only became aware of its existence in late fall of 2012 (roughly one month after the start of the course).
 
-Sage worked OK. The html-based web notebooks were really useful, but what I originally thought would be a feature of Sage (i.e., its installation within a VM) turned out to be a bug. What really killed Sage for me was the creation and rapid development of the IPython notebook. 
+.. Sage worked OK. The html-based web notebooks were really useful, but what I originally thought would be a feature of Sage (i.e., its installation within a VM) turned out to be a bug. What really killed Sage for me was the creation and rapid development of the IPython notebook. 
 
-For IS reasons really only had a choice between Enthought Canopy and Continuum Analytics Anaconda distributions. I settled on Enthought Canopy for legacy reasons (I had used EPD heavily in my PhD research). I am actively considering switching to Anaconda in the near future in order to make use of the Accelerate add-ons for multi-core and GPU enabled computations.
+.. For IS reasons really only had a choice between Enthought Canopy and Continuum Analytics Anaconda distributions. I settled on Enthought Canopy for legacy reasons (I had used EPD heavily in my PhD research). I am actively considering switching to Anaconda in the near future in order to make use of the Accelerate add-ons for multi-core and GPU enabled computations.
 
-In order for the course to be well received by the median student, I felt that I had to avoid terminal-based versions of the Python interpreter. Thus I limited my search to Python implementations that could be run within a web browser.
 
-Which text editor to use?
-~~~~~~~~~~~~~~~~~~~~~~~~~
-Need to list some desirable qualities of a good text editor! List some text editors that have those qualities and allow students to self-select. Obviously there can be only one text editor to use for teaching.
 
-Many possibilities: Typical student is familiar with MS Word and notepad (maybe also Texit if a Mac user). This rules out high-performance editors like Vim and Emacs (learning curve is too high). I went with Sublime.  
+.. Which text editor to use?
+.. ~~~~~~~~~~~~~~~~~~~~~~~~~
+.. Need to list some desirable qualities of a good text editor! List some text editors that have those qualities and allow students to self-select. Obviously there can be only one text editor to use for teaching.
 
-Version control: Git.
-~~~~~~~~~~~~~~~~~~~~~
-Quick discussion of the importance of version control. Despite importance, simply no time to teach students how to use version control software: learning curve for is a bit too steep for the median student.
+.. Many possibilities: Typical student is familiar with MS Word and notepad (maybe also Texit if a Mac user). This rules out high-performance editors like Vim and Emacs (learning curve is too high). I went with Sublime.  
 
-`Git`_ is a free, open-source distributed version control system capable of handling everything from simple scripts to large-scale collaborative projects. 
+.. Version control: Git.
+.. ~~~~~~~~~~~~~~~~~~~~~
+.. Version control software is an important component of 
+.. Quick discussion of the importance of version control. 
 
-`GitHub`_ How to describe GitHub? 
+.. Despite importance, simply no time to teach students how to use version control software: learning curve for is a bit too steep for the median student.
 
-Never even considered using anything else. Existence of GitHub, particularly now that you can register an academic email and get free private repositories, makes Git the only real choice for version control software for academics. 
+.. `Git`_ is a free, open-source distributed version control system capable of handling everything from simple scripts to large-scale collaborative projects. 
+
+.. `GitHub`_ How to describe GitHub? 
+
+.. Never even considered using anything else. Existence of GitHub, particularly now that you can register an academic email and get free private repositories, makes Git the only real choice for version control software for academics. 
 
 .. _`Git`: http://git-scm.com/
 .. _`GitHub`: https://github.com/
@@ -122,7 +122,7 @@ Assuming a Cobb-Douglas functional form for :math:`f` also makes the model analy
    :type: eqnarray
 
    k(t) &=& \Bigg[\bigg(\frac{s}{n+g+\delta}\bigg)\bigg(1 - e^{-(n+g+\delta)(1-\alpha)t}\bigg)+ \notag \\
-   &&k_0e^{-(n+g+\delta)(1-\alpha)t}\Bigg]^{\frac{1}{1-\alpha}}.
+   &&k_0^{1-\alpha}e^{-(n+g+\delta)(1-\alpha)t}\Bigg]^{\frac{1}{1-\alpha}}.
 
 A notable property of the Solow model with Cobb-Douglas production is that the model predicts that the shares of real income going to capital and labor should be constant. Denoting capital's share of income as :math:`\alpha_K(k)`, the model predicts that 
 
@@ -183,7 +183,7 @@ The material for the two introductory labs draws heavily from `part I`_ and `par
 The material for the remaining 6 labs is designed to complement the core macroeconomic sequence of the SGPE and thus varies a bit from year to year. During the 2013-2014 academic year I covered the following material:
 
 * `Initial value problems <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-1/lab-1.ipynb>`_: Using the [solow1956]_ model of economic growth as the motivating example, I demonstrate finite-difference methods for efficiently and accurately solving initial value problems of the type typically encountered in economics.  
-* `Boundary value problems <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-2/lab-2.ipynb>`_: Using the neo-classical optimal growth model of [ramsey1928]_, [cass]_, and [koopmans]_ as the motivating example, I demonstrate basic techniques for efficiently and accurately solving two-point boundary value problems of the type typically encountered in economics using finite-difference methods (specifically forward, reverse, and multiple shooting).  
+* `Boundary value problems <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-2/lab-2.ipynb>`_: Using the neo-classical optimal growth model of [ramsey1928]_, [cass1965]_, and [koopmans1965]_ as the motivating example, I demonstrate basic techniques for efficiently and accurately solving two-point boundary value problems of the type typically encountered in economics using finite-difference methods (specifically forward, reverse, and multiple shooting).  
 * `Numerical dynamic programming <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-3/lab-3.ipynb)>`_: I demonstrate basic techniques for solving discrete-time, stochastic dynamic programming problems using a stochastic version of the neo-classical optimal growth model as the motivating example.
 * `Real business cycle models <http://nbviewer.ipython.org/urls/raw.github.com/davidrpugh/numerical-methods/master/labs/lab-4/lab-4.ipynb)>`_: I extend the stochastic optimal growth model to incorporate a household labor supply decision and demonstrate how to approximate the model solution using `dynare++`, a C++ library specializing in computing *k*-order Taylor approximations of dynamic stochastic general equilibrium (DSGE) models. 
 
@@ -193,7 +193,7 @@ Python boot camp
 ~~~~~~~~~~~~~~~~
 Whilst the laboratory sessions expose students to some of the basics of programming in Python as well as numerous applications of computational methods in economics, these lab sessions are inadequate preparation for those students wishing to apply such methods as part of their MSc dissertations or PhD theses. 
 
-In order to provide interested students with the skills needed to apply computational methods in their own research I have developed a week-long intensive computational methods “boot camp.” The boot camp requires no prior knowledge or experience with computer programming or software development and all current and future course materials are made freely available on-line.
+In order to provide interested students with the skills needed to apply computational methods in their own research I have developed a week-long intensive computational methods "boot camp." The boot camp requires no prior knowledge or experience with computer programming or software development and all current and future course materials are made freely available on-line.
 
 .. PUT THIS IN SLIDE! This is the second year that I have run the boot camp. The first year I did not advertise the course outside of the SGPE. The boot camp was attended by a small, but enthusiastic,  group of students. [#]_ This year I decided to advertise the Python boot camp outside of the SGPE via the Scottish Institute for Research in Economics (SIRE) and almost 50 students registered interest in attending including:
 
@@ -254,7 +254,7 @@ The final morning session is designed to cover the remaining five chapters of `T
 * `Chapter 18`_: Inheritance;
 * `Chapter 19`_: Case Study on Tkinter.
 
-While this year a few students managed to get through at least some of the OOP chapters, the majority of students managed only to get through chapter 13 over the course of the five, three-hour morning sessions. Those students who did manage to reach the OOP chapters in general failed to grasp the point of OOP and did not see how they might apply OOP ideas in their own research. I see this as a major failing of my teaching.
+While this year a few students managed to get through at least some of the OOP chapters, the majority of students managed only to get through chapter 13 over the course of the five, three-hour morning sessions. Those students who did manage to reach the OOP chapters in general failed to grasp the point of OOP and did not see how they might apply OOP ideas in their own research. I see this as a major failing of my teaching as I have found OOP concepts to be incredibly useful in my own research. [stachurski2009]_, and [sargent2014]_ also make heavy use of OOP techniques.  
 
 .. _`Chapter 1`: http://www.greenteapress.com/thinkpython/html/thinkpython002.html
 .. _`Chapter 2`: http://www.greenteapress.com/thinkpython/html/thinkpython003.html
@@ -290,41 +290,38 @@ The afternoon curriculum for days two through five is built around the `Scientif
 Advanced PhD training course 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The final part of the course (for which I am still seeking funding to develop!) is a six week PhD advanced training course that focuses on applying cutting edge computational science techniques to economic problems via a series of interactive lectures and tutorials. The curriculum for this part of the course will derive primarily from [judd1998]_, [stachurski2009]_, and [sargent2014]_. In particular, I would like to cover material from chapters 3-6 of [judd1998]_ on 
+The final part of the course (for which I am still seeking funding to develop!) is a six week PhD advanced training course that focuses on applying cutting edge computational science techniques to economic problems via a series of interactive lectures and tutorials. The curriculum for this part of the course will derive primarily from [judd1998]_, [stachurski2009]_, and parts `III`_ and `IV`_ of [sargent2014]_. In particular, I would like to cover the following material. 
 
 * Linear equations and iterative methods: Gaussian elimination, *LU* decomposition, sparse matrix methods, error analysis, iterative methods, matrix inverse, ergodic distributions over-identified systems.
 * Optimization: 1D minimization, multi-dimensional minimization using comparative methods, Newton's method for multi-dimensional minimization, directed set methods for multi-dimensional minimization, non-linear least squares, linear programming, constrained non-linear optimization. 
 * Non-linear equations: 1D root-finding, simple methods for multi-dimensional root-finding, Newton's method for multi-dimensional root-finding, homotopy continuation methods.
 * Approximation methods: local approximation methods, regression as approximation, orthogonal polynomials, least-squares orthogonal polynomial approximation, uniform approximation, interpolation, piece-wise polynomial interpolation, splines, shape-preserving approximation, multi-dimensional approximation, finite-element approximations. 
-
-For economic applications I would cover parts `III`_ and `IV`_ of [sargent2014]_. Material covered from these sections would include more finite-state Markov chains, linear state space models, the Kalman filter, dynamic programming, linear-quadratic control problems, continuous-state Markov chains, robust control problems, linear stochastic models.   
+* Economic applications: finite-state Markov chains, linear state space models, the Kalman filter, dynamic programming, linear-quadratic control problems, continuous-state Markov chains, robust control problems, linear stochastic models.   
 
 .. _`III`: http://quant-econ.net/introductory_applications.html
 .. _`IV`: http://quant-econ.net/main_applications.html
-
-The value-add of the advanced PhD training course is that, with more time, I can provide a bit of the theory behind the methods (in addition to demonstrating how to implement them).
 
 .. PUT IN SLIDES: First pass at developing an advanced Python-based curriculum is to map methods used to Python packages. Obviously we will heavily use NumPy and SciPy, but there is a lot of really good software developed that can be leveraged for pushing envelope of computation in economics using Python.
 
 Conclusion
 ----------
-The key objective of this paper has been to provide an outline of a Python-based course in computational methods and simulation for economists. 
+In this paper I have outlined the three major components of my computational methods course: laboratory sessions, an intensive week-long Python boot camp, and an advanced PhD training course.  The first two components are already up and running (thanks to funding support from the SGPE, SIRE, and the CIF). I am still looking to secure funding to develop the advanced PhD training course component.
 
-I have been pleasantly surprised at how eager graduate economics students are to learn computational modeling and simulation methods and to apply these techniques to analytically intractable problems they are encountering in their own research. Their eagerness to learn is, perhaps, a direct response to market forces. Both within academia, industry, and the public sector there is an increasing demand for both applied and theoretical economists interested in inter-disciplinary collaboration. The key to developing and building the capacity for inter-disciplinary research is effective communication using a common language. Historically that common language has been mathematics. Increasingly, however, this language is becoming computation. 
+I have been pleasantly surprised at the eagerness of economics graduate students both to learn computational modeling and simulation methods and to apply these techniques to the analytically intractable problems that they are encountering in their own research. Their eagerness to learn is, perhaps, a direct response to market forces. Both within academia, industry, and the public sector there is an increasing demand for both applied and theoretical economists interested in inter-disciplinary collaboration. The key to developing and building the capacity for inter-disciplinary research is effective communication using a common language. Historically that common language has been mathematics. Increasingly, however, this language is becoming computation. It is my hope that the course outlined in this paper might served as a prototype for other Python-based computational methods courses for economists and other social scientists.   
 
 
 References
 ----------
 
 .. [behnel2011] S. Behnel, et al. *Cython: The best of both worlds*, Computing in Science and Engineering, 13(2):31-39, 2011.
-.. [cass]
+.. [cass1965] D. Cass.  *Optimum growth in an aggregative model of capital accumulation,* Review of Economic Studies, 32, 233–240.
 .. [judd1998] K. Judd. *Numerical Methods for Economists*, MIT Press, 1998.
-.. [koopmans]
+.. [koopmans1965] T. Koopmans. *On the concept of optimal economic growth,* Econometric Approach to Development Planning, 225–87. North-Holland, 1965.
 .. [mankiw2010] N.G. Mankiw. *Intermediate Macroeconomics, 7th edition*, Worth Publishers, 2010. 
 .. [mas-colell1995] A.Mas-Colell,et al. *Microeconomic Theory, 7th ediition*, Oxford University Press, 1995.
 .. [oliphant2007] T. Oliphant. *Python for scientific computing*, Computing in Science and Engineering, 9(3):10-20, 2007.
 .. [peterson2009] P. Peterson. *F2PY: a tool for connecting Fortran and Python programs*, International Journal of Computational Science and Engineering, 4(4):296-305, 2009. 
-.. [ramsey1928] 
+.. [ramsey1928] F. Ramsey. *A mathematical theory of saving,* Economic Journal, 38(152), 543–559.
 .. [romer2011] D. Romer. *Advanced Macroeconomics, 4th edition*, MacGraw Hill, 2011.
 .. [sargent2014] T. Sargent and J. Stachurski. *Quantitative Economics*, 2014.
 .. [sato1963] R. Sato. *Fiscal policy in a neo-classical growth model: An analysis of time required for equilibrating adjustment*, Review of Economic Studies, 30(1):16-23, 1963.
