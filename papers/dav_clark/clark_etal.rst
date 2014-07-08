@@ -34,10 +34,12 @@ our strategy might increase accessibility, productivity, reuse, and reproducibil
 We then introduce available tools for the “recipe-based” creation of compute
 environments, attempting to demystify and provide a framework for thinking about
 *DevOps* (along with explaining what “DevOps” means!).
-We proceed to provide a brief review of existing projects, and how they are using these technologies.
-In particular, we examine the success of OSGeo-Live [OSGL]_ – a project that has
-managed to attract developers from many projects through the use of commonly
-known skills like shell scripting.
+As a counterpoint to novel DevOps tools, we'll also examine the success of
+OSGeo-Live [OSGL]_ – a project that has
+managed to obtain and manage developer contributions for a large number of geospatial projects.
+This is enabled through the use of commonly
+known skills like shell scripting, and is a model of complexity that can be
+managed *without* these more recent DevOps tools.
 Given our evaluation of a variety of technologies and
 use-cases, we present our current strategy for constructing the Berkeley Common Environment [BCE]_, along with general recommendations for building environments for your own use-cases.
 
