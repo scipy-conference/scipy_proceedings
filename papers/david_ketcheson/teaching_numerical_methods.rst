@@ -225,6 +225,7 @@ it combines in a single document
 
 .. figure:: ss5.png
    :align: center
+   :figclass: w
 
    An excerpt from `Notebook 2 of HyperPython <http://nbviewer.ipython.org/github/ketch/HyperPython/blob/master/Lesson_02_Traffic.ipynb>`_, showing the use of
    text, mathematics, code, and a code-generated plot in the IPython 
@@ -240,8 +241,6 @@ I will say about the IPython notebook applies also to the Sage worksheet.
 The notebook has some important advantages over Mathematica and Maple documents:
 
 - It can be viewed, edited, and executed using only **free** software;
-- It is stored as **text**, which allows it to be version controlled, diff'ed, merged, and
-  converted to other useful formats;
 - It allows the use of multiple programming languages;
 - It can be collaboratively edited by multiple users at the same time (currently only on SageMathCloud);
 - It is open source, so users can modify and extend it.
@@ -499,6 +498,7 @@ animation, shown in Figure :ref:`aliasing`, can be found in
 
 .. figure:: ss2.png
    :align: center
+   :figclass: w
 
    A short notebook on grid aliasing, including code, animation, and exercises.
    :label:`aliasing`
@@ -549,7 +549,7 @@ browser.
 It's worth noting that on SMC one can simply click on a notebook file to
 open it.
 
-Lengthy programs: editing and running
+Lengthy programs and code reuse
 -------------------------------------
 Programming in the browser means you don't have all the niceties of your
 favorite text editor.  This is no big deal for small bits of code, but can
@@ -560,6 +560,15 @@ Finally, running long programs from the browser is problematic since you can't d
 Usually, Python programs for a numerical methods course can be broken up into
 fairly short functions that each fit on a single screen and run in a reasonable
 amount of time.
+
+Placing code in notebooks also makes it harder to reuse code, since
+functions from one notebook cannot be used in another with copying.
+Furthermore, for the reasons already give, the notebook is poorly suited to
+development of library code.  Exclusive use of the notebook for coding
+may thus encourage poor software development practices.  This can be
+partially countered by teaching students to place reusable functions in files
+and then importing them in the notebook.
+
 
 Interactive plotting
 ---------------------
