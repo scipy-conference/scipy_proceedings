@@ -57,8 +57,44 @@ Section 2 describes our configuration space of 6 classifiers and 5 preprocessing
 Section 3 presents experimental evidence that search over this space is viable, meaningful, and effective.
 Section 4 presents a discussion of the results, and directions for future work.
 
-Searching Scikit-learn with Hyperopt
-------------------------------------
+
+Background: Hyperopt for Optimization
+-------------------------------------
+
+The Hyperopt library [Ber13b]_ offers optimization algorithms for search spaces that arise in algorithm configuration.
+These spaces are characterized by a variety of types of variables (continuous, ordinal,
+categorical), different sensitivity profiles (e.g. uniform vs. log scaling),
+and conditional structure (when there is a choice between two classifiers,
+the parameters of one classifier are irrelevant when the other classifier
+is chosen).
+To use Hyperopt, a user must define/choose three things:
+
+1. a search domain,
+
+2. an objective function,
+
+3. an optimization algorithm.
+
+The search domain is specified via random variables, whose distributions
+should be chosen so that the most promising combinations have high prior
+probability.
+The search domain can include Python operators and functions that combine
+random variables into more convenient data structures for the objective
+function.
+The objective function maps a joint sampling of these random variables to
+a scalar-valued score that the optimization algorithm will try to *minimize*.
+Having chosen a search domain, an objective function, and an optimization
+algorithm, Hyperopt's ``fmin`` function carries out the optimization,
+and stores results of the search to a database (e.g. either a simple
+Python list or a MongoDB instance).
+The `fmin` call carries out the simple analysis of finding the best-performing
+configuration, and returns that to the caller.
+The `fmin` call can use multiple workers when using the MongoDB backend,
+to implement parallel model selection on a compute cluster.
+
+
+Scikit-Learn Model Selection as a Search Problem
+------------------------------------------------
 
 .. figure:: space.pdf
    :align: center
