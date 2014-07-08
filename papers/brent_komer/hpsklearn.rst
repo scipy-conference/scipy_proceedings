@@ -399,36 +399,35 @@ Experiments
 
 We conducted experiments on three data sets to establish that hyperopt-sklearn can find accurate models on a range of data sets in a reasonable amount of time.
 Results were collected on three data sets: MNIST, 20-Newsgroups, and Convex Shapes.
-MNIST is a well-known data set of 70K :math:`28*28` greyscale images of hand-drawn digits [Lec98]_ .
+MNIST is a well-known data set of 70K :math:`28x28` greyscale images of hand-drawn digits [Lec98]_.
 20-Newsgroups is a 20-way classification data set of 20K newsgroup messages ( [Mit96]_ , we did not remove the headers for our experiments).
-Convex Shapes is a binary classification task of distinguishing pictures of convex white-colored regions in small (:math:`32*32`) black-and-white images [Lar07]_ .
+Convex Shapes is a binary classification task of distinguishing pictures of convex white-colored regions in small (:math:`32x32`) black-and-white images [Lar07]_.
 
-To establish that searching the full space is effective,
-we performed optimization runs of up to 300 function evaluations searching either the entire space, or else subspaces that corresponded to specific classifier types.
-We used three optimization algorithms in Hyperopt: random search, annealing, and TPE.
-Figure :ref:`avgtestscores` shows that the performance of the model found from throughout the entire search space was not statistically inferior to the best model pulled from each classifier subspace;
-there was no penalty for keeping all options open during search.
-Figure :ref:`npie` shows the proportions of which type of classifier was chosen to be the best for each dataset when the full space was searched. This figure was constructed by running hyperopt-sklearn with different initial conditions (number of evaluations, choice of optimization algorithm, and random number seed) and keeping track of what final model was chosen after each run.
-Although support vector machines were a popular choice for each dataset, the parameters of the SVM looked very different across datasets.
-For example, on the image datasets (MNIST and Convex) the SVMs chosen never had a sigmoid or linear kernel, while on 20 newsgroups the linear and sigmoid kernel were very popular.
+Figure :ref:`avgtestscores` shows that there was no penalty for searching broadly.
+We performed optimization runs of up to 300 function evaluations searching the entire space,
+and compared the quality of solution with specialized searches of specific classifier types (including best known classifiers).
+
+Figure :ref:`npie` shows that search could find different, good models. This figure was constructed by running hyperopt-sklearn with different initial conditions (number of evaluations, choice of optimization algorithm, and random number seed) and keeping track of what final model was chosen after each run.
+Although support vector machines were always among the best, the parameters of best SVMs looked very different across data sets.
+For example, on the image data sets (MNIST and Convex) the SVMs chosen never had a sigmoid or linear kernel, while on 20 newsgroups the linear and sigmoid kernel were often best.
 
 .. figure:: AverageTestScoresClassifiersTPE.png
 
    :label:`avgtestscores`
-   For each data set, searching the full configuration space (“Any Classifier”) delivered performance approximately on par with a search that was restricted to the best classifier type. 
+   For each data set, searching the full configuration space (“Any Classifier”) delivered performance approximately on par with a search that was restricted to the best classifier type.
    (Best viewed in color.)
 
 .. figure:: pie.png
 
    :label:`npie`
-   Looking at the best models from all optimization runs performed on the full search space (using different initial conditions, and different optimization algorithms) we see that different data sets are handled best by different classifiers. 
-   SVC was the only classifier ever chosen as the best model for Convex Shapes, and was often found to be best on MNIST and 20 Newsgroups.
+   Looking at the best models from all optimization runs performed on the full search space (using different initial conditions, and different optimization algorithms) we see that different data sets are handled best by different classifiers.
+   SVC was the only classifier ever chosen as the best model for Convex Shapes, and was often found to be best on MNIST and 20 Newsgroups, however the best SVC parameters were very different across data sets.
 
 
-.. table:: Hyperopt-sklearn scores relative to selections from literature on the three data sets used in our experiments. On MNIST, hyperopt-sklearn is one of the best-scoring methods that does not use image-specific domain knowledge (these scores and others may be found at http://yann.lecun.com/exdb/mnist/). On 20 Newsgroups, hyperopt-sklearn is competitive with similar approaches from the literature (scores taken from [Gua09]_ ). In the 20 Newsgroups dataset, the score reported for hyperopt-sklearn is the weighted-average F1 score provided by sklearn. The other approaches shown here use the macro-average F1 score. On Convex Shapes, hyperopt-sklearn outperforms previous automatic algorithm configuration approaches [Egg13]_ and manual tuning [Lar07]_ . 
-   :label:`tablecompare` 
+.. table:: Hyperopt-sklearn scores relative to selections from literature on the three data sets used in our experiments. On MNIST, hyperopt-sklearn is one of the best-scoring methods that does not use image-specific domain knowledge (these scores and others may be found at http://yann.lecun.com/exdb/mnist/). On 20 Newsgroups, hyperopt-sklearn is competitive with similar approaches from the literature (scores taken from [Gua09]_ ). In the 20 Newsgroups data set, the score reported for hyperopt-sklearn is the weighted-average F1 score provided by sklearn. The other approaches shown here use the macro-average F1 score. On Convex Shapes, hyperopt-sklearn outperforms previous automatic algorithm configuration approaches [Egg13]_ and manual tuning [Lar07]_ .
+   :label:`tablecompare`
    :class: w
-   
+
    +-----------------------------------+-----------------------------------+------------------------------------+
    | MNIST                             | 20 Newsgroups                     | Convex Shapes                      |
    +-----------------------+-----------+-----------------------+-----------+-----------------------+------------+
@@ -443,26 +442,11 @@ For example, on the image datasets (MNIST and Convex) the SVMs chosen never had 
    | Boosted trees         | 98.5%     | LibSVM                | 0.843     |                       |            |
    +-----------------------+-----------+-----------------------+-----------+-----------------------+------------+
 
-Table :ref:`tablecompare` lists the test set scores of the best models found by cross-validation, as well as some points of reference from previous work.
-Hyperopt-sklearn's scores are relatively good on each data set, indicating that with hyperopt-sklearn's parameterization, Hyperopt's optimization algorithms are competitive with human experts.
-
-The model with the best performance on the MNIST Digits dataset uses deep artificial neural networks. Small receptive fields of convolutional winner-take-all neurons build up the large network.
-Each neural column becomes an expert on inputs preprocessed in different ways.
-This model averages the predictions of 35 deep neural columns to come up with a single final prediction [Cir12]_.
-This model is much more advanced than those available in scikit-learn.
-
-The CFC model that performed quite well on the 20 newsgroups dataset is a Class-Feature-Centroid classifier.
-Centroid approaches are typically inferior to an SVM, due to the centroids found during training being far from the optimal location.
-The CFC method reported here uses a centroid built from the inter-class term index and the inner-class term index.
-It uses a novel combination of these indices along with a denormalized cosine measure to calculate the similarity score between the centroid and a text vector [Gua09]_. 
-This style of model is not currently implemented in hyperopt-sklearn, making it difficult to compete with it. It may be the case that once it is implemented, hyperopt may find a set of parameters that provides even greater classification accuracy.
-
-
 .. figure:: ScoresByEval.png
 
    :label:`perclf`
-   Using Hyperopt’s Anneal search algorithm, increasing the number of function evaluations from 150 to 2400 lead to a modest improvement in accuracy on 20 Newsgroups and MNIST, and a more dramatic improvement on Convex Shapes. 
-   We capped evaluations to 5 minutes each so 300 evaluations took between 12 and 24 hours of wall time. 
+   Using Hyperopt’s Anneal search algorithm, increasing the number of function evaluations from 150 to 2400 lead to a modest improvement in accuracy on 20 Newsgroups and MNIST, and a more dramatic improvement on Convex Shapes.
+   We capped evaluations to 5 minutes each so 300 evaluations took between 12 and 24 hours of wall time.
 
 .. figure:: AvgMinValidErrorTPE.png
 
@@ -474,21 +458,47 @@ This style of model is not currently implemented in hyperopt-sklearn, making it 
 Discussion and Future Work
 --------------------------
 
-Hyperopt-sklearn provides many opportunities for future work.
-Certainly, there are more classifiers and preprocessing modules that could be included in the search space,
+Table :ref:`tablecompare` lists the test set scores of the best models found by cross-validation, as well as some points of reference from previous work.
+Hyperopt-sklearn's scores are relatively good on each data set, indicating that with hyperopt-sklearn's parameterization, Hyperopt's optimization algorithms are competitive with human experts.
+
+
+The model with the best performance on the MNIST Digits data set uses deep artificial neural networks. Small receptive fields of convolutional winner-take-all neurons build up the large network.
+Each neural column becomes an expert on inputs preprocessed in different ways,
+and the average prediction of 35 deep neural columns to come up with a single final prediction [Cir12]_.
+This model is much more advanced than those available in scikit-learn.
+The previously best known model in the scikit-learn search space is
+a radial-basis SVM on centered data that scores 98.6%, and hyperopt-sklearn
+matches that performance [MNIST]_.
+
+The CFC model that performed quite well on the 20 newsgroups document classification
+data set is a Class-Feature-Centroid classifier.
+Centroid approaches are typically inferior to an SVM, due to the centroids found during training being far from the optimal location.
+The CFC method reported here uses a centroid built from the inter-class term index and the inner-class term index.
+It uses a novel combination of these indices along with a denormalized cosine measure to calculate the similarity score between the centroid and a text vector [Gua09]_.
+This style of model is not currently implemented in hyperopt-sklearn, and our experiments suggest that existing hyperopt-sklearn components cannot be assembled to match its level of performance. Perhaps when it is implemented, Hyperopt may find a set of parameters that provides even greater classification accuracy.
+
+On the Convex Shapes data set, our Hyperopt-sklearn experiments revealed
+a more accurate model than was previously believed to exist in any search
+space, let alone a search space of such standard components.
+This result underscores the difficulty and importance of hyperparameter
+search.
+
+Hyperopt-sklearn provides many opportunities for future work:
+more classifiers and preprocessing modules could be included in the search space,
 and there are more ways to combine even the existing components.
+Other types of data require different preprocessing, and other prediction
+problems exist beyond classification.
 In expanding the search space, care must be taken to ensure that the benefits of new models outweigh the greater difficulty of searching a larger space.
+
 
 We have shown here that Hyperopt's random search, annealing search, and TPE algorithms make Hyperopt-sklearn viable, but the slow convergence in e.g. Figure :ref:`perclf` and :ref:`validtpe` suggests
 that other optimization algorithms might be more call-efficient.
 The development of Bayesian optimization algorithms is an active research area, and  we look forward to looking at how other search algorithms interact with hyperopt-sklearn's search spaces.
+Hyperparameter optimization opens up a new art of matching the parameterization of search spaces to the strengths of search algorithms.
 
 Computational wall time spent on search is of great practical importance, and hyperopt-sklearn currently spends a significant amount of time evaluating points that are un-promising.
-Techniques for recognizing bad performers early could speed up search enormously.
+Techniques for recognizing bad performers early could speed up search enormously [Swe14]_, [Dom14]_.
 Relatedly, hyperopt-sklearn currently lacks support for K-fold cross-validation. In that setting, it will be crucial to follow SMAC in the use of racing algorithms to skip un-necessary folds.
-
-Another direction for future work is the extention of the techniques presented here in terms of classification to other types of machine learning problems (e.g. regression, density estimation, and ranking),
-and other types of input modalities (e.g. large images, sound, timeseries, preferences).
 
 
 Conclusions
@@ -515,8 +525,10 @@ References
            SciPy'13, 2013b.
 .. [Cir12] D. Ciresan, U. Meier, and J. Schmidhuber. *Multi-column Deep Neural Networks for Image Classification*,
            IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 3642-3649. 2012.
+.. [Dom14] T. Domhan, T. Springenberg, F. Hutter. *Extrapolating Learning Curves of Deep Neural Networks*,
+           ICML AutoML Workshop, 2014.
 .. [Egg13] K. Eggensperger, M. Feurer, F. Hutter, J. Bergstra, J. Snoek, H. Hoos, and K. Leyton-Brown. *Towards an empirical foundation for assessing bayesian optimization of hyperparameters*,
-           NIPS workshop on Bayesian Optimization in Theory and Practice, 10 December 2013.
+           NIPS workshop on Bayesian Optimization in Theory and Practice, 2013.
 .. [Gua09] H. Guan, J. Zhou, and M. Guo. *A class-feature-centroid classifier for text categorization*,
            Proceedings of the 18th international conference on World wide web, 201-210. ACM, 2009.
 .. [Hal09] M. Hall, E. Frank, G. Holmes, B. Pfahringer, P. Reutemann, and I. H. Witten. *The weka data mining software: an update*,
@@ -531,10 +543,13 @@ References
            http://qwone.com/jason/20Newsgroups/, 1996.
 .. [Moc78] J. Mockus, V. Tiesis, and A. Zilinskas. *The application of Bayesian methods for seeking the extremum*,
            L.C.W. Dixon and G.P. Szego, editors, Towards Global Optimization, volume 2, pages 117–129. North Holland, New York, 1978.
+.. [MNIST] The MNIST Database of handwritten digits: http://yann.lecun.com/exdb/mnist/
 .. [Ped11] F. Pedregosa, G. Varoquaux, A. Gramfort, V. Michel, B. Thirion, O. Grisel, M. Blondel, P. Prettenhofer, R. Weiss, V. Dubourg, J. Vanderplas, A. Passos, D. Cournapeau, M. Brucher, M. Perrot, and E. Duchesnay. *Scikit-learn: Machine Learning in Python*,
            Journal of Machine Learning Research, 12:2825–2830, 2011.
 .. [Sno12] J. Snoek, H. Larochelle, and R. P. Adams. *Practical Bayesian optimization of machine learning algorithms*,
            Neural Information Processing Systems, 2012.
+.. [Swe14] K. Swersky, J. Snoek, R.P. Adams. *Freeze-Thaw Bayesian Optimization*,
+           arXiv:1406.3896, 2014.
 .. [Tho13] C. Thornton, F. Hutter, H. H. Hoos, and K. Leyton-Brown. *Auto-WEKA: Automated selection and hyper-parameter optimization of classification algorithms*,
            KDD 847-855, 2013.
 
