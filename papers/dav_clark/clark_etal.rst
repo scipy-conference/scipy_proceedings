@@ -65,7 +65,7 @@ the software for a course. Researchers need to reproduce their collaborator’s
 workflows, or *anyone's* workflow in the name of reproducible research.
 Recently, a new crop of tools-for-managing-tools has emerged under the *DevOps* banner – a contraction of software *development* and systems *operation* – with a general philosophy that instead of merely documenting systems operation tasks (configuration, deployment, maintenance, etc.), that developers can and should be scripting these tasks as much as possible.
 
-In scientific computing (and elsewhere) this complexity was commonly managed via
+In scientific computing the environment was commonly managed via
 Makefiles & Unix-y hacks, or alternatively with monolithic software like Matlab.
 More recently, centralized package management has provided curated tools that
 work well together. But as more and more essential functionality is built out
@@ -82,7 +82,7 @@ and updating documentation, developers like to abstract over such details. A
 DevOps approach to
 “documenting” an application might consist of providing brief
 descriptions of various install paths, along with *scripts* or “recipes” that
-automate setup of your desired environment. This can be more *enjoyable* and certainly
+automate setup. This can be more *enjoyable* and certainly
 easily and robustly reproducible for end-users – even if your setup instructions are wrong, they
 will be reproducibly wrong!  As we’ll describe below, many readers will already
 have tools and skills to do this, in the form of package management and basic
@@ -114,12 +114,11 @@ Issues for Scientific Computing
 
 The users of computational tools (and their collaborators) are often equipped
 with a suite of informally learned foundational skills
-(command line usage, knowledge of specific applications, etc.). The tooling and
-technical skills employed by members of a discipline provide notable boundaries
+(command line usage, knowledge of specific applications, etc.). Newcomers to a
+field often lack these technical skills, which creates a boundary
 between those who do and do not (and perhaps cannot) participate in that
 discipline. However, we are entering an era where these boundaries are becoming
-barriers to the mission of our university (and presumably others).
-
+barriers to the research and educational mission of our university.
 Our primary concern at present for the Berkeley Common Environment [BCE]_ is educational, particularly introductory computational science and statistics. However, where possible, we wish to build an environment that supports the broader set of uses we outline here.
 
 For instruction
