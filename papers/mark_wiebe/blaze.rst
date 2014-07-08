@@ -41,7 +41,7 @@ Standard Interfaces
 ~~~~~~~~~~~~~~~~~~~
 
 Software and user communities around data analysis have changed remarkably in
-the last few years.  The growth in this ecosystem come both both from new
+the last few years.  The growth in this ecosystem come both from new
 computational systems and also from an increasing breadth of users.  On the
 software side we see activity in different languages like Python, R, and Julia,
 and also in distributed systems like the projects surrounding the Hadoop File
@@ -73,7 +73,7 @@ Analysis libraries like NumPy and Pandas demonstrate the value of interactive
 array and table objects.  Projects such as these connect a broad base of users
 to efficient low-level code through a high-level interface.  This approach has
 given rise to large and productive software ecosystems within numeric Python
-(e.g. SciPy, Scikits, ....)  However, both NumPy and Pandas are largely
+(e.g. SciPy, Scikits, etc.) However, both NumPy and Pandas are largely
 restricted to an in-memory computational model, limiting problem sizes to a
 certain scale.
 
@@ -85,7 +85,7 @@ computing community has produced projects like Elemental and SciDB for
 distributed array computing in various contexts.  Finally, traditional SQL
 databases such as MySQL and Postgres remain both popular and very powerful.
 
-As problem sizes increase and applications become more interdisciplinary ,
+As problem sizes increase and applications become more interdisciplinary,
 analysts increasingly require interaction with projects outside of the
 NumPy/Pandas ecosystem.  Unfortunately, these foreign projects rarely feel as
 comfortable or as usable as the Pandas DataFrame.
