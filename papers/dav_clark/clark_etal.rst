@@ -65,7 +65,14 @@ the software for a course. Researchers need to reproduce their collaborator’s
 workflows, or *anyone's* workflow in the name of reproducible research.
 Recently, a new crop of tools-for-managing-tools has emerged under the *DevOps* banner – a contraction of software *development* and systems *operation* – with a general philosophy that instead of merely documenting systems operation tasks (configuration, deployment, maintenance, etc.), that developers can and should be scripting these tasks as much as possible.
 
-In scientific computing (and elsewhere) this complexity was commonly managed via the use of monolithic software – if you were lucky, there’d be a one-click installer along with auto-update. More recently, centralized package management has provided curated tools that work well together. But as more and more essential functionality is built out across a variety of systems and languages, the value – and also the difficulty – of coordinating multiple tools continues to increase. Whether we are producing research results or web services, it is becoming increasingly essential to set up new languages, libraries, databases, and more.
+In scientific computing (and elsewhere) this complexity was commonly managed via
+Makefiles & Unix-y hacks, or alternatively with monolithic software like Matlab.
+More recently, centralized package management has provided curated tools that
+work well together. But as more and more essential functionality is built out
+across a variety of systems and languages, the value – and also the difficulty –
+of coordinating multiple tools continues to increase. Whether we are producing
+research results or web services, it is becoming increasingly essential to set
+up new languages, libraries, databases, and more.
 
 Documentation for complex software environments is stuck between two opposing
 demands. To make things easier on novice users, documentation must explain
