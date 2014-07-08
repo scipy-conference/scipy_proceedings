@@ -143,20 +143,21 @@ environment is provided, this task becomes much simpler. Written instructions
 need fewer special cases, and illustrations can be essentially pixel-identical
 to what students should be seeing on their screen.
 
-Considering what expectations we’ll place on our audience, the most accessible
+The most accessible
 instructions will only require skills possessed by the broadest number of
 people. In particular, many potential students are not yet fluent with notions
 of package management, scripting, or even the basic idea of command-line
 interfaces [SWC]_.
-Thus, an accessible solution should require only GUI operations.
-Once a common environment is installed, it becomes easier to scaffold students’
-use of more challenging tools, as they will look and operate in a uniform way.
+Thus, installing an accessible solution should require only GUI operations.
+The installed common environment, then, can look and operate in a uniform way.
+This uniformity can scaffold students’
+use of more challenging “developer” tools.
 This “uniformity of the environment in which the user is clicking” cannot
 be implemented without full control of the graphical environment, and systems
 that configure only a self-contained set of libraries or computational tools
 cannot do this. At the other end, it would be unreasonable to reconfigure
-students’ desktop on their laptop. Thus, we need to set up an isolated, uniform
-environment in it’s totality where instructions can provide essentially
+students’ desktop on their laptop. Thus, we wish to set up an isolated, uniform
+environment in its totality where instructions can provide essentially
 pixel-identical guides to what the student will see on their own screen.
 
 For scientific collaboration
@@ -439,17 +440,19 @@ Ansible and related tools
 Ansible is one of a number of recent DevOps tools for configuration management
 [Ansible]_.
 These tools enable automated management of customizations to the default status
-and configuration of software. This replaces editing configuration files
-directly by hand and provides checks and guarantees for applying changes that
-would be hard to write as shell scripts alone (somewhat akin to a makefile).
-This allows for a way to manage configuration complexity as an environment grows
+and configuration of software. They are purpose-built domain-specific tools
+that can replace the scripting approach described above. Such systems
+provide checks and guarantees for applying changes that
+would be hard to write as shell scripts alone – just as a makefile handles builds
+more gracefully than a shell script.
+This approach manages configuration complexity as an environment grows
 in feature complexity. It may also allow an end-user to manage and reliably
 apply personal customizations across multiple versions of an environment over
 time.  For BCE development, we felt Ansible added the least complexity amongst
 comparable tools. It may be used at build-time and also at run-time within the
 guest OS, *or from any other location with SSH access to the target being
 configured*.  The only requirements for the target are an SSH server and a
-Python interpreter (yes, Ansible is Python-based). Ansible execution is also
+Python interpreter (Ansible is Python-based). Ansible execution is also
 more linear than some systems, which is a limitation, but also a simplification.
 
 At this phase, however, the complexity of BCE doesn’t warrant contributors
@@ -467,7 +470,7 @@ guaranteed to be how you’ve requested it to be. Unfortunately, all DevOps tool
 call their recipes something different. While the process certainly seems more
 like baking than, say, coaching a football team, Ansible calls its scripts
 “playbooks.” Alternate tools with similar functionality are Chef (which,
-unsurprisingly *does* call it’s scripts “recipes”), Salt (also Python-based! and
+unsurprisingly *does* call its scripts “recipes”), Salt (also Python-based, and
 uses “states”), and Puppet (which uses “manifests”). With any of these, a great
 way to start learning would be to translate an existing configuration shell
 script into one of these tools.
@@ -658,7 +661,7 @@ Steps to Contribute
 
 All build scripts are organized in the open, in source control [6g]_. A new
 contributors FAQ is maintained via wiki [7g]_ for software projects, and for
-translation [8g]_. At it’s core, the OSGeo-Live project uses common skills
+translation [8g]_. At its core, the OSGeo-Live project uses common skills
 for system administration as opposed to more recent DevOps available, but it
 very much adopts a DevOps *philosophy*. Contributors pay particular attention to
 documenting each and every step, and standard approaches are encouraged across
