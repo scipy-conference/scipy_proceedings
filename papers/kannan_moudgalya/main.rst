@@ -346,7 +346,7 @@ computer systems that are meant to be used in a workshop.
 
    The automatic CD content creation facility, available through [Spoken]_, by
    clicking Software Training :math:`>` Download Tutorials :math:`>` Create
-   your own disk image. One can see that English and Tamil versions of Python
+   your own disk image. See that English and Tamil versions of Python
    tutorials are selected, with a size estimate of about 680 MB.
    :label:`fig:mk-image`
 
@@ -441,11 +441,6 @@ testimonials:
     mathematical formulation is quite good.
 
     -- Abhishek Bhargava - Institute of Engineering & Technology, Alwar
-
-    It is a very efficient way of learning new languages as the videos seem to
-    be practical and help the learning of the language along with examples.
-
-    -- Mahima - Jaypee University of Information Technology, Himachal Pradesh
 
 Our website [Spoken]_ is becoming popular. Fig. :ref:`fig:yr-stat`
 gives details of page views on our website. One can see that the
@@ -560,28 +555,22 @@ may see below testimonials from a few of the participants:
 
     I experienced that even an inexperienced person can do
     coding/programming. I gradually got to advance my skills in Python
-    as I approached further in it. I got the IIT-B certificate, plus i
+    as I approached further in it. I got the IIT-B certificate, plus I
     got paid a handsome amount of cheque after completion which was good
     enough for me at then.
     --  Amitesh Kumar
 
-    The FOSSEE-Textbook Companion Project has been a scintillating point in my
-    career. It has been instrumental in tuning my programming and presentation
-    skills. It provided an ideal forum for me to learn Python and contribute
-    to the open source community.
-    -- Abhiram Padu
-
     I learnt Python from Spoken-Tutorials available on the
-    website.The Python TBC team also helped me a lot in starting my
-    internship. Till now,I have completed 3 TBCs and now,I know pretty
+    website. The Python TBC team also helped me a lot in starting my
+    internship. Till now, I have completed 3 TBCs and now, I know pretty
     much about python. I plan to take this project forward and Python is
     really helping me shine my resume.
     -- Deepak Shakya
 
     This internship provided me a perfect platform and environment to learn
-    Python.It helped me to incorporate both my ideas and practical work skills
-    to the best.Especially,those concepts of C which are not present in Python
-    gave me an awesome experience.Moreover, experience gained from it will
+    Python. It helped me to incorporate both my ideas and practical work skills
+    to the best. Especially, those concepts of C which are not present in Python
+    gave me an awesome experience. Moreover, experience gained from it will
     make me capable of facing and overcoming the upcoming challenges under its
     applications.
     -- Ramgopal Pandey
