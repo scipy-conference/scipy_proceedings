@@ -504,14 +504,15 @@ Vagrant
 
 Vagrant is a run-time component that needs to be installed on the host OS of the
 end user’s laptop [Vagrant]_. Like Packer, it is a wrapper around
-virtualization software that automates the process of configuring and starting,
-e.g., running an image on VirtualBox (this image could be created with any of the
-above tools). It eliminates the need to configure the virtualization
-software using the GUI interface, and more easily and generically than
+virtualization software that automates the process of configuring and starting
+a VM from a special *Vagrant box* image (Vagrant boxes may be created with any of the
+above tools). It is an alternative to configuring the virtualization
+software using the GUI interface or the system-specific
 command line tools provided by systems like VirtualBox or Amazon. Instead,
 Vagrant looks for a *Vagrantfile* which defines the configuration, and also
 establishes the directory under which the ``vagrant`` command will connect to
-the relevant VM.
+the relevant VM. This directory is, by default, synced to the guest VM, allowing
+the developer to edit the files with tools on their host OS.
 From the
 command-line (under this directory), the user can start, stop, or ssh into the
 Vagrant-managed VM. It should be
