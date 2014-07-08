@@ -461,7 +461,7 @@ In practice, the frequentist approach often relies on many more statistal diagno
     >>> Sigma = result.cov_params()
     >>> print(result.summary2())
 
-.. code-block::
+.. code-block:: text
 
     ====================================================
     Model:              OLS  AIC:                147.773
