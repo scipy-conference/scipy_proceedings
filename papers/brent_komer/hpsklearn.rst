@@ -17,7 +17,7 @@ Hyperopt-Sklearn: Automatic Hyperparameter Configuration for Scikit-Learn
 .. class:: abstract
 
     Hyperopt-sklearn is a new software project that provides automatic algorithm configuration of the Scikit-learn machine learning library.
-    Following Auto-Weka, we take the view that the choice of classifier and even the choice of pre-processing module can be taken together to represent a *single large hyperparameter optimization problem*.
+    Following Auto-Weka, we take the view that the choice of classifier and even the choice of preprocessing module can be taken together to represent a *single large hyperparameter optimization problem*.
     We use Hyperopt to define a search space that encompasses many standard components (e.g. SVM, RF, KNN, PCA, TFIDF) and common patterns of composing them together.
     We demonstrate, using search algorithms in Hyperopt and standard benchmarking data sets (MNIST, 20-Newsgroups, Convex Shapes), that searching this space is practical and effective.
     In particular, we improve on best-known scores for the model space for both MNIST and Convex Shapes.
@@ -44,7 +44,7 @@ and [Ber13a]_ showed that similar methods could search a 238-dimensional configu
 Relative to DBNs and convnets, algorithms such as Support Vector Machines (SVMs) and Random Forests (RFs) have a small-enough number of hyperparameters that manual tuning and grid or random search provides satisfactory results.  Taking a step back though, there is often no particular reason to use either an SVM or an RF when they are both computationally viable.
 A model-agnostic practitioner may simply prefer to go with the one that provides greater accuracy.
 In this light, *the choice of classifier can be seen as hyperparameter* alongside the :math:`C`-value in the SVM and the max-tree-depth of the RF.
-Indeed the choice and configuration of *pre-processing* components may likewise be seen as part of the model selection / hyperparameter optimization problem.
+Indeed the choice and configuration of *preprocessing* components may likewise be seen as part of the model selection / hyperparameter optimization problem.
 
 The Auto-Weka project [Tho13]_ was the first to show that an entire library of machine learning approaches (Weka [Hal09]_ ) can be searched within the scope of a single run of hyperparameter tuning.
 However, Weka is a GPL-licensed Java library, and was not written with scalability in mind, so we feel there is a need for alternatives to Auto-Weka.
@@ -52,7 +52,7 @@ Scikit-learn [Ped11]_ is another library of machine learning algorithms. Is writ
 Scikit-learn is widely used in the scientific Python community and supports many machine learning application areas.
 
 With this paper we introduce Hyperopt-Sklearn: a project that brings the benefits of automatic algorithm configuration to users of Python and scikit-learn.
-Hyperopt-Sklearn uses Hyperopt [Ber13b]_ to describe a search space over possible configurations of Scikit-Learn components, including pre-processing and classification modules.
+Hyperopt-Sklearn uses Hyperopt [Ber13b]_ to describe a search space over possible configurations of Scikit-Learn components, including preprocessing and classification modules.
 Section 2 describes our configuration space of 6 classifiers and 5 preprocessing modules that encompasses a strong set of classification systems for dense and sparse feature classification (of images and text).
 Section 3 presents experimental evidence that search over this space is viable, meaningful, and effective.
 Section 4 presents a discussion of the results, and directions for future work.
@@ -124,20 +124,20 @@ that performs model training and model validation, and use Hyperopt to
 optimize the hyperparamters.
 
 Scikit-learn includes many algorithms for classification (classifiers), as well as many
-algorithms for pre-processing data into the vectors expected by classification
+algorithms for preprocessing data into the vectors expected by classification
 algorithms.
 Classifiers include for example, K-Neighbors, SVM, and RF algorithms.
-Pre-processing algorithms include things like component-wise Z-scaling
+Preprocessing algorithms include things like component-wise Z-scaling
 (Normalizer) and Principle Components Analysis (PCA).
 A full classification algorithm typically includes a series of
-pre-processing steps followed by a classifier.
+preprocessing steps followed by a classifier.
 For this reason, scikit-learn provides a *pipeline* data structure to
-represent and use a sequence of pre-processing steps and a classifier as if
+represent and use a sequence of preprocessing steps and a classifier as if
 they were just one component (typically with an API similar to the classifier).
 Although hyperopt-sklearn does not formally use scikit-learn's pipeline
 object, it provides related functionality.
 Hyperopt-sklearn provides a parameterization of a *search space*
-over pipelines, that is, of sequences of pre-processing steps and classifiers.
+over pipelines, that is, of sequences of preprocessing steps and classifiers.
 
 The configuration space we provide includes six preprocessing algorithms and seven classification algorithms.
 The full search space is illustrated in Figure :ref:`space`.
@@ -145,7 +145,7 @@ The preprocessing algorithms were (by class name, followed by n. hyperparameters
 The first four preprocessing algorithms were for dense features.
 PCA performed whitening or non-whitening principle components analysis.
 The ``StandardScaler``, ``MinMaxScaler``, and ``Normalizer`` did various feature-wise affine transforms to map numeric input features onto values near 0 and with roughly unit variance.
-The ``TF-IDF`` pre-processing module performed feature extraction from text data.
+The ``TF-IDF`` preprocessing module performed feature extraction from text data.
 The classification algorithms were (by class name (used + unused hyperparameters)): ``SVC(23)``, ``KNN(4+5)``, ``RandomForest(8)`` , ``ExtraTrees(8)`` , ``SGD(8+4)`` , and ``MultinomialNB(2)`` .
 The ``SVC`` module is a fork of LibSVM, and our wrapper has 23 hyperparameters because we treated each possible kernel as a different classifier, with its own set of hyperparameters: Linear(4), RBF(5), Polynomial(7), and Sigmoid(6).
 In total, our parameterization has 65 hyperparameters: 6 for preprocessing and 53 for classification.
@@ -202,7 +202,7 @@ Here is the simplest example of using this software.
    # preprocessing steps
    model = estim.best_model()
 
-The ``HyperoptEstimator`` object contains the information of what space to search as well as how to search it. 
+The ``HyperoptEstimator`` object contains the information of what space to search as well as how to search it.
 It can be configured to use a variety of hyperparameter search algorithms and also supports using a combination of algorithms.
 This is also where you, the user, can specify the maximum number of function evaluations you would like to be run as well as a timeout (in seconds) for each run.
 
