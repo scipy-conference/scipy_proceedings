@@ -278,7 +278,7 @@ resources. This is a critical enabler to allow us to serve less well-funded
 researchers. In addition, more recent technologies can avoid exclusively
 reserving system resources for a single environment.
 
-Enabling tools here are Packer, Docker (and LXC), and cloud-based virtual machines.
+Relevant tools discussed below are Packer, Docker (and LXC), and cloud-based virtual machines.
 
 Existing Tools
 --------------
@@ -691,7 +691,12 @@ Bash script.  It is currently common for individuals to *only* distribute
 scripts, which requires all potential users to install and configure the
 relevant stack of DevOps tools. There are, however, free services for
 distributing images for particular tools (e.g., the Docker index), and services
-like Amazon can host AMIs for pennies a month. We strongly recommend
+like Amazon can host AMIs for pennies a month. (For example, if starting from an
+existing – and thus free – EBS-backed AMI, one need only save a snapshot, with
+charges only for the differences from the base AMI. So, if one installs one GB
+of extra tools onto a standard EBS-backed Ubuntu server AMI, one needs to pay
+the (currently) <$0.1 / GB-month to store that snapshot.)
+We strongly recommend
 distributing a binary along with the recipe for any environment that includes
 novices in its audience.
 
