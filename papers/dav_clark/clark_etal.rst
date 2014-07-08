@@ -794,27 +794,28 @@ other targets, and we are not opposed to adopting other tooling.
 Conclusion
 ----------
 
-If you use these recent DevOps tools, then realize that *you* are now at the
+By merely using recent DevOps tools, *you* arrive at the
 cutting edge of DevOps for the scientific
-community. Your collaborators and students won't necessarily have needed
+community. Your collaborators and students likely won't have needed
 concepts, so extra care should be taken to make your tooling accessible. Where
 appropriate, use tools that your collaborators already know –
 shell, scripting, package management, etc.  That said, technologies that allow
-efficient usage of available hardware stand to provide substantial savings, and
-potential for re-use by researchers with less direct access to capital (e.g.,
-Docker, or demand aggregation of cloud VM providers).
+efficient usage of available hardware, like Docker, stand to provide substantial savings and
+potential for re-use by researchers with less direct access to capital.
 
 So, let’s be intentional about creating and using environments that are broadly
 accessible.  Let’s follow the DevOps philosophy of being transparent and
 explicit about our choices and assumptions.  That *doesn’t* have to mean “using
 the latest tools”
 – a simple text file or even a PDF can provide ample explanation that a human
-can understand along with a simple reference script (in shell or Python).  In
+can understand, along with a simple reference script (in shell or Python).  In
 this paper, we’ve made fairly strong recommendations based
-on what we are actually using (we are eating our own dogfood!).  Central to our
-process has been a willingness to adopt, adapt, change, and throw stuff out. As
-we’ve seen with OSGeo-Live, such a process can allow many projects to
-collaborate on a standard reference so we can focus on the interesting bits of
+on what we are actually using (we are eating our own dogfood!). A novice user
+can access BCE using only a few GUI operations on their laptop, or the Amazon
+Web Console. As
+we’ve seen with OSGeo-Live, the simple tools we've chosen make it easy for our
+collaborators (instructors or researchers) to understand. This standard reference
+allows us to return focus on the interesting bits of
 developing code and *doing science*.
 
 BCE currently provides a standard reference, built with an easily understood
