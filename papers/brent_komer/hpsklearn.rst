@@ -162,95 +162,23 @@ We also included a blacklist of (preprocessing, classifier) pairs that did not w
 compatible with the sparse features produced by the TF-IDF preprocessor.
 Allowing for a 10-way discretization of real-valued hyperparameters, and taking these conditional hyperparameters into account, a grid search of our search space would still require an infeasible number of evalutions (on the order of :math:`10^{12}`).
 
-Following Scikit-learn's convention, hyperopt-sklearn provides an ``Estimator`` class with a ``fit`` method and a ``predict`` method.
-The ``fit`` method of this class performs hyperparameter optimization, and after it has completed, the ``predict`` method applies the best model to test data.
-Hyperopt makes it possible to parallelize the model search over a cluster, with communication handled via a MongoDB instance.
-Each evaluation during optimization performs training on a large fraction of the training set, estimates test set accuracy on a validation set, and returns that validation set score to the optimizer.
-At the end of search, the best configuration is retrained on the whole data set to produce the classifier that handles subsequent ``predict`` calls.
 
-
-Experiments
------------
-
-We conducted experiments on three data sets to establish that hyperopt-sklearn can find accurate models on a range of data sets in a reasonable amount of time.
-Results were collected on three data sets: MNIST, 20-Newsgroups, and Convex Shapes.
-MNIST is a well-known data set of 70K :math:`28*28` greyscale images of hand-drawn digits [Lec98]_ .
-20-Newsgroups is a 20-way classification data set of 20K newsgroup messages ( [Mit96]_ , we did not remove the headers for our experiments).
-Convex Shapes is a binary classification task of distinguishing pictures of convex white-colored regions in small (:math:`32*32`) black-and-white images [Lar07]_ .
-
-To establish that searching the full space is effective,
-we performed optimization runs of up to 300 function evaluations searching either the entire space, or else subspaces that corresponded to specific classifier types.
-We used three optimization algorithms in Hyperopt: random search, annealing, and TPE.
-Figure :ref:`avgtestscores` shows that the performance of the model found from throughout the entire search space was not statistically inferior to the best model pulled from each classifier subspace;
-there was no penalty for keeping all options open during search.
-Figure :ref:`npie` shows the proportions of which type of classifier was chosen to be the best for each dataset when the full space was searched. This figure was constructed by running hyperopt-sklearn with different initial conditions (number of evaluations, choice of optimization algorithm, and random number seed) and keeping track of what final model was chosen after each run.
-Although support vector machines were a popular choice for each dataset, the parameters of the SVM looked very different across datasets.
-For example, on the image datasets (MNIST and Convex) the SVMs chosen never had a sigmoid or linear kernel, while on 20 newsgroups the linear and sigmoid kernel were very popular.
-
-.. figure:: AverageTestScoresClassifiersTPE.png
-
-   :label:`avgtestscores`
-   For each data set, searching the full configuration space (“Any Classifier”) delivered performance approximately on par with a search that was restricted to the best classifier type. 
-   (Best viewed in color.)
-
-.. figure:: pie.png
-
-   :label:`npie`
-   Looking at the best models from all optimization runs performed on the full search space (using different initial conditions, and different optimization algorithms) we see that different data sets are handled best by different classifiers. 
-   SVC was the only classifier ever chosen as the best model for Convex Shapes, and was often found to be best on MNIST and 20 Newsgroups.
-
-
-.. table:: Hyperopt-sklearn scores relative to selections from literature on the three data sets used in our experiments. On MNIST, hyperopt-sklearn is one of the best-scoring methods that does not use image-specific domain knowledge (these scores and others may be found at http://yann.lecun.com/exdb/mnist/). On 20 Newsgroups, hyperopt-sklearn is competitive with similar approaches from the literature (scores taken from [Gua09]_ ). In the 20 Newsgroups dataset, the score reported for hyperopt-sklearn is the weighted-average F1 score provided by sklearn. The other approaches shown here use the macro-average F1 score. On Convex Shapes, hyperopt-sklearn outperforms previous automatic algorithm configuration approaches [Egg13]_ and manual tuning [Lar07]_ . 
-   :label:`tablecompare` 
-   :class: w
-   
-   +-----------------------------------+-----------------------------------+-----------------------------------+
-   | MNIST                             | 20 Newsgroups                     | Convex Shapes                     |
-   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
-   | Approach              | Accuracy  | Approach              | F-Score   | Approach              | Accuracy  |
-   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
-   | Committee of convnets | 99.8%     | CFC                   | 0.928     | **hyperopt-sklearn**  | **88.7**  |
-   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
-   | **hyperopt-sklearn**  | **98.7%** | **hyperopt-sklearn**  | **0.856** | hp-dbnet              | 84.6%     |
-   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
-   | libSVM grid search    | 98.6%     | SVMTorch              | 0.848     | dbn-3                 | 81.4%     |
-   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
-   | Boosted trees         | 98.5%     | LibSVM                | 0.843     |                       |           |
-   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
-
-Table :ref:`tablecompare` lists the test set scores of the best models found by cross-validation, as well as some points of reference from previous work.
-Hyperopt-sklearn's scores are relatively good on each data set, indicating that with hyperopt-sklearn's parameterization, Hyperopt's optimization algorithms are competitive with human experts.
-
-The model with the best performance on the MNIST Digits dataset uses deep artificial neural networks. Small receptive fields of convolutional winner-take-all neurons build up the large network.
-Each neural column becomes an expert on inputs preprocessed in different ways.
-This model averages the predictions of 35 deep neural columns to come up with a single final prediction [Cir12]_.
-This model is much more advanced than those available in scikit-learn.
-
-The CFC model that performed quite well on the 20 newsgroups dataset is a Class-Feature-Centroid classifier.
-Centroid approaches are typically inferior to an SVM, due to the centroids found during training being far from the optimal location.
-The CFC method reported here uses a centroid built from the inter-class term index and the inner-class term index.
-It uses a novel combination of these indices along with a denormalized cosine measure to calculate the similarity score between the centroid and a text vector [Gua09]_. 
-This style of model is not currently implemented in hyperopt-sklearn, making it difficult to compete with it. It may be the case that once it is implemented, hyperopt may find a set of parameters that provides even greater classification accuracy.
-
-
-.. figure:: ScoresByEval.png
-
-   :label:`perclf`
-   Using Hyperopt’s Anneal search algorithm, increasing the number of function evaluations from 150 to 2400 lead to a modest improvement in accuracy on 20 Newsgroups and MNIST, and a more dramatic improvement on Convex Shapes. 
-   We capped evaluations to 5 minutes each so 300 evaluations took between 12 and 24 hours of wall time. 
-
-.. figure:: AvgMinValidErrorTPE.png
-
-   :label:`validtpe`
-   Right: TPE makes gradual progress on 20 Newsgroups over 300 iterations and gives no indication of convergence.
-
-
+Finally, the search space becomes an optimization problem when we also define a scalar-valued search *objective*.
+Hyperopt-sklearn uses scikit-learn's `score` method on *validation data* to define the search criterion.
+For classifiers, this is the so-called "Zero-One Loss": the number of correct label predictions among
+data that has been withheld from the data set used for training (and also from
+the data used for testing *after* the model selection search process).
 
 Example Usage
 -------------
 
 
-One of the important goals of hyperopt-sklearn is that it is easy to learn and to use. 
+Following Scikit-learn's convention, hyperopt-sklearn provides an ``Estimator`` class with a ``fit`` method and a ``predict`` method.
+The ``fit`` method of this class performs hyperparameter optimization, and after it has completed, the ``predict`` method applies the best model to test data.
+Each evaluation during optimization performs training on a large fraction of the training set, estimates test set accuracy on a validation set, and returns that validation set score to the optimizer.
+At the end of search, the best configuration is retrained on the whole data set to produce the classifier that handles subsequent ``predict`` calls.
+
+One of the important goals of hyperopt-sklearn is that it is easy to learn and to use.
 To facilitate this, the syntax for fitting a classifier to data and making predictions is very similar to scikit-learn.
 Here is the simplest example of using this software.
 
@@ -494,6 +422,84 @@ All of the components available to the user can be found in the ``components.py`
 
    print( estim.score( X_test, y_test ) )
    print( estim.best_model() )
+
+
+
+Experiments
+-----------
+
+We conducted experiments on three data sets to establish that hyperopt-sklearn can find accurate models on a range of data sets in a reasonable amount of time.
+Results were collected on three data sets: MNIST, 20-Newsgroups, and Convex Shapes.
+MNIST is a well-known data set of 70K :math:`28*28` greyscale images of hand-drawn digits [Lec98]_ .
+20-Newsgroups is a 20-way classification data set of 20K newsgroup messages ( [Mit96]_ , we did not remove the headers for our experiments).
+Convex Shapes is a binary classification task of distinguishing pictures of convex white-colored regions in small (:math:`32*32`) black-and-white images [Lar07]_ .
+
+To establish that searching the full space is effective,
+we performed optimization runs of up to 300 function evaluations searching either the entire space, or else subspaces that corresponded to specific classifier types.
+We used three optimization algorithms in Hyperopt: random search, annealing, and TPE.
+Figure :ref:`avgtestscores` shows that the performance of the model found from throughout the entire search space was not statistically inferior to the best model pulled from each classifier subspace;
+there was no penalty for keeping all options open during search.
+Figure :ref:`npie` shows the proportions of which type of classifier was chosen to be the best for each dataset when the full space was searched. This figure was constructed by running hyperopt-sklearn with different initial conditions (number of evaluations, choice of optimization algorithm, and random number seed) and keeping track of what final model was chosen after each run.
+Although support vector machines were a popular choice for each dataset, the parameters of the SVM looked very different across datasets.
+For example, on the image datasets (MNIST and Convex) the SVMs chosen never had a sigmoid or linear kernel, while on 20 newsgroups the linear and sigmoid kernel were very popular.
+
+.. figure:: AverageTestScoresClassifiersTPE.png
+
+   :label:`avgtestscores`
+   For each data set, searching the full configuration space (“Any Classifier”) delivered performance approximately on par with a search that was restricted to the best classifier type. 
+   (Best viewed in color.)
+
+.. figure:: pie.png
+
+   :label:`npie`
+   Looking at the best models from all optimization runs performed on the full search space (using different initial conditions, and different optimization algorithms) we see that different data sets are handled best by different classifiers. 
+   SVC was the only classifier ever chosen as the best model for Convex Shapes, and was often found to be best on MNIST and 20 Newsgroups.
+
+
+.. table:: Hyperopt-sklearn scores relative to selections from literature on the three data sets used in our experiments. On MNIST, hyperopt-sklearn is one of the best-scoring methods that does not use image-specific domain knowledge (these scores and others may be found at http://yann.lecun.com/exdb/mnist/). On 20 Newsgroups, hyperopt-sklearn is competitive with similar approaches from the literature (scores taken from [Gua09]_ ). In the 20 Newsgroups dataset, the score reported for hyperopt-sklearn is the weighted-average F1 score provided by sklearn. The other approaches shown here use the macro-average F1 score. On Convex Shapes, hyperopt-sklearn outperforms previous automatic algorithm configuration approaches [Egg13]_ and manual tuning [Lar07]_ . 
+   :label:`tablecompare` 
+   :class: w
+   
+   +-----------------------------------+-----------------------------------+-----------------------------------+
+   | MNIST                             | 20 Newsgroups                     | Convex Shapes                     |
+   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
+   | Approach              | Accuracy  | Approach              | F-Score   | Approach              | Accuracy  |
+   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
+   | Committee of convnets | 99.8%     | CFC                   | 0.928     | **hyperopt-sklearn**  | **88.7**  |
+   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
+   | **hyperopt-sklearn**  | **98.7%** | **hyperopt-sklearn**  | **0.856** | hp-dbnet              | 84.6%     |
+   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
+   | libSVM grid search    | 98.6%     | SVMTorch              | 0.848     | dbn-3                 | 81.4%     |
+   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
+   | Boosted trees         | 98.5%     | LibSVM                | 0.843     |                       |           |
+   +-----------------------+-----------+-----------------------+-----------+-----------------------+-----------+
+
+Table :ref:`tablecompare` lists the test set scores of the best models found by cross-validation, as well as some points of reference from previous work.
+Hyperopt-sklearn's scores are relatively good on each data set, indicating that with hyperopt-sklearn's parameterization, Hyperopt's optimization algorithms are competitive with human experts.
+
+The model with the best performance on the MNIST Digits dataset uses deep artificial neural networks. Small receptive fields of convolutional winner-take-all neurons build up the large network.
+Each neural column becomes an expert on inputs preprocessed in different ways.
+This model averages the predictions of 35 deep neural columns to come up with a single final prediction [Cir12]_.
+This model is much more advanced than those available in scikit-learn.
+
+The CFC model that performed quite well on the 20 newsgroups dataset is a Class-Feature-Centroid classifier.
+Centroid approaches are typically inferior to an SVM, due to the centroids found during training being far from the optimal location.
+The CFC method reported here uses a centroid built from the inter-class term index and the inner-class term index.
+It uses a novel combination of these indices along with a denormalized cosine measure to calculate the similarity score between the centroid and a text vector [Gua09]_. 
+This style of model is not currently implemented in hyperopt-sklearn, making it difficult to compete with it. It may be the case that once it is implemented, hyperopt may find a set of parameters that provides even greater classification accuracy.
+
+
+.. figure:: ScoresByEval.png
+
+   :label:`perclf`
+   Using Hyperopt’s Anneal search algorithm, increasing the number of function evaluations from 150 to 2400 lead to a modest improvement in accuracy on 20 Newsgroups and MNIST, and a more dramatic improvement on Convex Shapes. 
+   We capped evaluations to 5 minutes each so 300 evaluations took between 12 and 24 hours of wall time. 
+
+.. figure:: AvgMinValidErrorTPE.png
+
+   :label:`validtpe`
+   Right: TPE makes gradual progress on 20 Newsgroups over 300 iterations and gives no indication of convergence.
+
 
 
 Discussion and Future Work
