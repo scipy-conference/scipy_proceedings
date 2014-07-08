@@ -21,7 +21,10 @@ BCE: Berkeley's Common Scientific Compute Environment for Research and Education
 
 .. class:: abstract
 
-It is increasingly common for users of various levels of technical skill to run scientific codes from a variety of sources (most notably from different academic backgrounds) across a range of machines (e.g. laptop vs. cloud platform).
+There are numerous barriers to the use of scientific computing toolsets. These
+barriers are becoming more apparent as we
+increasingly see mixing of different academic backgrounds, and compute ranging
+from laptops to cloud platforms.
 Members of the UC
 Berkeley D-Lab, Statistical Computing Facility (SCF), and Berkeley Research
 Computing (BRC) support such use-cases, and have developed
