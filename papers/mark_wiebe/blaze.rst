@@ -482,6 +482,13 @@ backends.  It allows us to easily compare our options and choose the best for
 our particular setting.  As that setting changes (i.e. if our data grows
 considerably) our implementation can transition easily.
 
+This paper gave an introduction to the benefits of separating expression of a
+computation from its computation.  We expect future work to focus on
+integrating new backends, extending to array computations, and composing Blaze
+operations to transform existing in-memory backends like Pandas and DyND into
+an out-of-core and distributed setting.
+
+
 References
 ----------
 
