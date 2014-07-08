@@ -59,7 +59,7 @@ Some of the shortcomings of physical computer labs are:
 
 * Need to purchase and maintain hardware, ensuring security
 
-* Need to create user accounts, install course-specific software, and ensure security
+* Need to create user accounts and install course-specific software
 
 * Instructor may not want or may not have root access, leading to delays in fixing problems
 
