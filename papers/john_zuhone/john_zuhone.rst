@@ -175,7 +175,7 @@ To begin with, the bolometric flux of photons received by the observer from the 
 .. math::
   :label: flux
   
-  F^{\gamma}_i = \frac{n_{e,i}n_{H,i}\Lambda(T_i,Z_i)\Delta{V}_i}{4\pi{D_A^2}(1+z_0)^2}~{\rm photons~s^{-1}~cm^{-2}}
+  F^{\gamma}_i = \frac{n_{e,i}n_{H,i}\Lambda(T_i,Z_i)\Delta{V}_i}{4\pi{D_{A,0}^2}(1+z_0)^2}~{\rm photons~s^{-1}~cm^{-2}}
 
 where :math:`z_0` is the cosmological redshift and :math:`D_{A,0}` is the angular diameter distance to the source (if the source is nearby, :math:`z_0 \approx 0` and :math:`D_{A,0}` is simply the distance to the source). The physical quantities of interest are constant across the volume element. The total number of photons associated with this flux for an instrument with a collecting area :math:`A_{\rm det,0}` and an observation with exposure time :math:`t_{\rm exp,0}` is given by
 
