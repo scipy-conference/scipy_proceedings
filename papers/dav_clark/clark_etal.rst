@@ -782,9 +782,11 @@ other targets, and we are not opposed to adopting other tooling.
 Conclusion
 ----------
 
-Keep in mind that *you* are now at the cutting edge of DevOps for the scientific
-community. Extra care should be taken to make your tooling accessible to your
-collaborators. Where possible, use tools that your collaborators already know –
+If you use these recent DevOps tools, then realize that *you* are now at the
+cutting edge of DevOps for the scientific
+community. Your collaborators and students won't necessarily have needed conceptual
+frameworks, so extra care should be taken to make your tooling accessible. Where
+appropriate, use tools that your collaborators already know –
 shell, scripting, package management, etc.  That said, technologies that allow
 efficient usage of available hardware stand to provide substantial savings, and
 potential for re-use by researchers with less direct access to capital (e.g.,
@@ -792,9 +794,11 @@ Docker, or demand aggregation of cloud VM providers).
 
 So, let’s be intentional about creating and using environments that are broadly
 accessible.  Let’s follow the DevOps philosophy of being transparent and
-explicit about our choices and assumptions.  That *doesn’t* have to be technical
+explicit about our choices and assumptions.  That *doesn’t* have to mean “using
+the latest tools”
 – a simple text file or even a PDF can provide ample explanation that a human
-can understand.  In this paper, we’ve made fairly strong recommendations based
+can understand along with a simple reference script (in shell or Python).  In
+this paper, we’ve made fairly strong recommendations based
 on what we are actually using (we are eating our own dogfood!).  Central to our
 process has been a willingness to adopt, adapt, change, and throw stuff out. As
 we’ve seen with OSGeo-Live, such a process can allow many projects to
