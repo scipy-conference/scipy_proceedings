@@ -45,13 +45,15 @@ use-cases, we present our current strategy for constructing the Berkeley Common 
 Introduction
 ------------
 
-  btw- I have never setup for this LaTeX workflow, so the make_paper.sh
-  fails for me miserably. Therefore, no advanced formatting and very probably
-  more basic errors right now.. but, the prose is coming along
-
-  --One of the Authors
-
-As you can see in the quote above, even the “simple” task of compiling this paper required tooling that was not obvious to at least one author! Presumably, most *readers* of this paper will have dealt with far more complex demands in the course of instruction, collaboration, or shipping professional software. The process of introducing novices to new software is made unnecessarily complex due to the variety of potential end-user environments (e.g., Mac, Windows, \*nix), and even methods that authors might have used to set up Python on their machine (e.g., Anaconda, Canopy, python.org).
+Most readers of this paper will have dealt with the challenges of sharing
+or using complex compute stacks – be that in the course of instruction,
+collaboration, or shipping professional software. Here, we suggest an approach
+for introducing novices to new software that reduces complexity by providing a
+*standard reference* end-user environment. We'll discuss approaches to building
+and using a common environment from any major OS, including an overview of the
+tools available to make this easier. This approach can make it easier to provide
+complete and robust instructions, and make it easier for students to follow
+demos.
 
 At a university, students often need to reproduce an environment required to run
 the software for a course. Researchers need to reproduce their collaborator’s
@@ -423,7 +425,8 @@ Packer.
 Ansible and related tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Ansible is one of a number of recent DevOps tools for configuration management.
+Ansible is one of a number of recent DevOps tools for configuration management
+[Ansible]_.
 These tools enable automated management of customizations to the default status
 and configuration of software. This replaces editing configuration files
 directly by hand and provides checks and guarantees for applying changes that
@@ -516,7 +519,7 @@ Docker
 
 Docker is a platform to build, distribute, and run images built on top of Linux
 Containers (LXC) which provides a lightweight style of virtualization called
-containerization. An important distinction of LXC-based containerization is that
+containerization [Docker]_. An important distinction of LXC-based containerization is that
 the guest OS and the host OS both run the same underlying Linux kernel.
 
 At run-time Docker adds to this containerization a collection of tools to manage
@@ -807,6 +810,10 @@ References
 .. [BCEAMI] http://collaboratool.berkeley.edu/using-ec2.html
 .. [Ubuntu] https://help.ubuntu.com/14.04/serverguide/serverguide.pdf
 .. [images] http://docs.openstack.org/image-guide/content/ch_introduction.html
+.. [Ansible] http://www.ansible.com/about
+.. [Packer] http://www.packer.io/intro
+.. [Vagrant] http://www.vagrantup.com/about.html
+.. [Docker] http://www.docker.com/whatisdocker/
 .. [HPC] M. G. Xavier, M. V. Neves, F. D. Rossi, T. C. Ferreto, T. Lange, and C. A. De 
    Rose, “Performance evaluation of container-based virtualization for high performance 
    computing environments,” in *the 21st Euromicro International Conference on Parallel, 
@@ -823,6 +830,4 @@ References
 .. [8g]  http://wiki.osgeo.org/wiki/Live_GIS_Translate
 .. [10g] http://trac.osgeo.org/osgeo/report/10
 .. [boot] https://github.com/dlab-berkeley/collaboratool/blob/master/provisioning/bootstrap-bce.sh
-.. [Packer] http://www.packer.io/intro
-.. [Vagrant] http://www.vagrantup.com/about.html
 
