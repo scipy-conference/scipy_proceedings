@@ -610,7 +610,7 @@ Python. Scripts may call package managers, and generally have few constraints
 (apart from conventions like keeping recipes contained to a particular
 directory). The project also maintains packages that support broader *kinds* of
 packages, such as web-based applications. In this case, OSGeo-Live provides a
-standard configuration for apache, WSGI, and other components, along with a
+standard configuration for Apache, WSGI, and other components, along with a
 standard layout for projects that rely on this core. As a result, there is very
 little conflict among packages that share common resources. Some concerns, like
 port number usage, have to be explicitly managed at a global level. But the
@@ -645,7 +645,7 @@ group was added, making translation into a sort of competitive game. This
 translation has proven very successful.
 The project has facilitated collaboration across developer communities. For
 example, we have seen productive application of software developed by the U.S.
-military to environmental applications.
+military to environmental applications [Army]_.
 
 Steps to Contribute
 ^^^^^^^^^^^^^^^^^^^
@@ -829,9 +829,9 @@ References
 .. [Vagrant] http://www.vagrantup.com/about.html
 .. [Docker] http://www.docker.com/whatisdocker/
 .. [HPC] M. G. Xavier, M. V. Neves, F. D. Rossi, T. C. Ferreto, T. Lange, and C. A. De
-   Rose, “Performance evaluation of container-based virtualization for high performance
-   computing environments,” in *the 21st Euromicro International Conference on Parallel,
-   Distributed and Network-Based Processing (PDP)*, 2013, pp. 233–240.
+     Rose, “Performance evaluation of container-based virtualization for high performance
+     computing environments,” in *the 21st Euromicro International Conference on Parallel,
+     Distributed and Network-Based Processing (PDP)*, 2013, pp. 233–240.
 .. [SWC] G Wilson, “Software Carpentry: lessons learned,” *F1000Research*, 2014.
 .. [jl] http://github.com/ptone/jiffylab
 .. [DSTb] http://datasciencetoolbox.org/
@@ -843,5 +843,7 @@ References
 .. [7g]  http://wiki.osgeo.org/wiki/Live_GIS_Add_Project
 .. [8g]  http://wiki.osgeo.org/wiki/Live_GIS_Translate
 .. [10g] http://trac.osgeo.org/osgeo/report/10
+.. [Army] Army Corps of Engineers, “Army Corps of Engineers Wetlands Regulatory
+     program,” presented at the FOSS4G, 2007.
 .. [boot] https://github.com/dlab-berkeley/collaboratool/blob/master/provisioning/bootstrap-bce.sh
 
