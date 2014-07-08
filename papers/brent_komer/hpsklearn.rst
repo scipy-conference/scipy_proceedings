@@ -184,28 +184,21 @@ Here is the simplest example of using this software.
 
 
 .. code-block:: python
-   
-   from hpsklearn import HyperoptEstimator
 
-   # Load Data
-   # ...
- 
+   from hpsklearn import HyperoptEstimator
+   # Load data ({train,test}_{data,label})
    # Create the estimator object
    estim = HyperoptEstimator()
-
-   # Search the space of classifiers and preprocessing 
-   # steps and their respective hyperparameters in 
+   # Search the space of classifiers and preprocessing
+   # steps and their respective hyperparameters in
    # scikit-learn to fit a model to the data
-   estim.fit( train_data, train_label )
-
+   estim.fit(train_data, train_label)
    # Make a prediction using the optimized model
-   prediction = estim.predict( unknown_data )
-
-   # Report the accuracy of the classifier 
+   prediction = estim.predict(unknown_data)
+   # Report the accuracy of the classifier
    # on a given set of data
-   score = estim.score( test_data, test_label )
-
-   # Return instances of the classifier and 
+   score = estim.score(test_data, test_label)
+   # Return instances of the classifier and
    # preprocessing steps
    model = estim.best_model()
 
@@ -218,33 +211,30 @@ This is also where you, the user, can specify the maximum number of function eva
 
    from hpsklearn import HyperoptEstimator
    from hyperopt import tpe
-
-   estim = HyperoptEstimator( algo=tpe.suggest,
-                              max_evals=150,
-                              trial_timeout=60 )
+   estim = HyperoptEstimator(algo=tpe.suggest,
+                             max_evals=150,
+                             trial_timeout=60)
 
 Each search algorithm can bring its own bias to the search space, and it may not be clear that one particular strategy is the best in all cases.
-Sometimes it can be helpful to use a mixture of search algorithms. 
+Sometimes it can be helpful to use a mixture of search algorithms.
 
 
 .. code-block:: python
 
    from hpsklearn import HyperoptEstimator
    from hyperopt import anneal, rand, tpe, mix
-
-   # define an algorithm that searches randomly 5% of 
-   # the time, uses TPE 75% of the time, and uses 
+   # define an algorithm that searches randomly 5% of
+   # the time, uses TPE 75% of the time, and uses
    # annealing 20% of the time
-   mix_algo = partial( mix.suggest, p_suggest=[
-               (0.05, rand.suggest),
-               (0.75, tpe.suggest),
-               (0.20, anneal.suggest) ] )
+   mix_algo = partial(mix.suggest, p_suggest=[
+           (0.05, rand.suggest),
+           (0.75, tpe.suggest),
+           (0.20, anneal.suggest)])
+   estim = HyperoptEstimator(algo=mix_algo,
+                             max_evals=150,
+                             trial_timeout=60)
 
-   estim = HyperoptEstimator( algo=mix_algo,
-                              max_evals=150,
-                              trial_timeout=60 )
-
-Searching effectively over the entire space of classifiers available in scikit-learn can use a lot of time and computational resources. 
+Searching effectively over the entire space of classifiers available in scikit-learn can use a lot of time and computational resources.
 Sometimes you might have a particular subspace of models that they are more interested in.
 With hyperopt-sklearn it is possible to specify a more narrow search space to allow it to be be explored in greater depth.
 
@@ -252,9 +242,8 @@ With hyperopt-sklearn it is possible to specify a more narrow search space to al
 .. code-block:: python
 
    from hpsklearn import HyperoptEstimator, svc
-
    # limit the search to only models a SVC
-   estim = HyperoptEstimator( classifier=svc('my_svc') )
+   estim = HyperoptEstimator(classifier=svc('my_svc'))
 
 Combinations of different spaces can also be used.
 
@@ -262,17 +251,14 @@ Combinations of different spaces can also be used.
 .. code-block:: python
 
    from hpsklearn import HyperoptEstimator, svc, knn, \
-                         random_forest
    from hyperopt import hp
-
-   # restrict the space to contain only random forest, 
-   # k-nearest neighbors, and SVC models. 
-   clf = hp.choice( 'my_name', 
-        [ random_forest('my_name.random_forest'),
-          svc('my_name.svc'),
-          knn('my_name.knn') ] )
-
-   estim = HyperoptEstimator( classifier=clf )
+   # restrict the space to contain only random forest,
+   # k-nearest neighbors, and SVC models.
+   clf = hp.choice('my_name',
+        [random_forest('my_name.random_forest'),
+         svc('my_name.svc'),
+         knn('my_name.knn')])
+   estim = HyperoptEstimator(classifier=clf)
 
 The support vector machine provided by scikit-learn has a number of different kernels that can be used (linear, rbf, poly, sigmoid).
 Changing the kernel can have a large effect on the performance of the model, and each kernel has its own unique hyperparameters.
@@ -283,9 +269,8 @@ If you already know which kernel works best for your data, or you are just inter
 .. code-block:: python
 
    from hpsklearn import HyperoptEstimator, svc_rbf
-
-   estim = HyperoptEstimator( 
-             classifier=svc_rbf('my_svc') )
+   estim = HyperoptEstimator(
+             classifier=svc_rbf('my_svc'))
 
 
 It is also possible to specify which kernels you are interested in by passing a list to the ``svc``.
@@ -294,11 +279,10 @@ It is also possible to specify which kernels you are interested in by passing a 
 .. code-block:: python
 
    from hpsklearn import HyperoptEstimator, svc
-
-   estim = HyperoptEstimator( 
-             classifier=svc('my_svc', 
-                            kernels=['linear', 
-                                     'sigmoid']))
+   estim = HyperoptEstimator(
+         classifier=svc('my_svc',
+                        kernels=['linear',
+                                 'sigmoid']))
 
 
 In a similar manner to classifiers, the space of preprocessing modules can be fine tuned.
@@ -309,9 +293,8 @@ An empty list means that no preprocessing will be done on the data.
 .. code-block:: python
 
    from hpsklearn import HyperoptEstimator, pca
-
-   estim = HyperoptEstimator( 
-             preprocessing=[ pca('my_pca') ] )
+   estim = HyperoptEstimator(
+         preprocessing=[pca('my_pca')])
 
 Combinations of different spaces can be used here as well.
 
@@ -320,13 +303,11 @@ Combinations of different spaces can be used here as well.
 
    from hpsklearn import HyperoptEstimator, tfidf, pca
    from hyperopt import hp
-
-   preproc = hp.choice( 'my_name', 
-     [ [pca('my_name.pca')],
-       [pca('my_name.pca'), normalizer('my_name.norm')]
-       [standard_scaler('my_name.std_scaler')],
-       [] ] )
-
+   preproc = hp.choice('my_name',
+         [[pca('my_name.pca')],
+          [pca('my_name.pca'), normalizer('my_name.norm')]
+          [standard_scaler('my_name.std_scaler')],
+          []])
    estim = HyperoptEstimator( preprocessing=preproc )
 
 Some types of preprocessing will only work on specific types of data.
@@ -340,28 +321,24 @@ To address this, hyperopt-sklearn comes with a few pre-defined spaces of classif
                          any_sparse_classifier, \
                          any_text_preprocessing
    from hyperopt import tpe
-
-   estim = HyperoptEstimator( 
-             algo=tpe.suggest,
-             classifier=any_sparse_classifier('my_clf')
-             preprocessing=any_text_preprocessing('my_pp')
-             max_evals=200,
-             trial_timeout=60 )
+   estim = HyperoptEstimator(
+         algo=tpe.suggest,
+         classifier=any_sparse_classifier('my_clf')
+         preprocessing=any_text_preprocessing('my_pp')
+         max_evals=200,
+         trial_timeout=60 )
 
 So far in all of these examples, every hyperparameter available to the model is being searched over.
 It is also possible for you to specify the values of specific hyperparameters, and those parameters will remain constant during the search.
-This could be useful if you have some prior knowledge about what kinds of models will work best for your data.
+This could be useful, for example, if you knew you wanted to use whitened PCA data and a degree-3 polynomial kernel SVM.
 
 
 .. code-block:: python
 
    from hpsklearn import HyperoptEstimator, pca, svc_poly
-
-   # restrict the space to only PCA with whitening
-   # and SVMs with polynomial kernels of degree 3
-   estim = HyperoptEstimator( 
-             preprocessing=pca('my_pca', whiten=True),
-             classifier=svc_poly('my_poly', degree=3) )
+   estim = HyperoptEstimator(
+             preprocessing=[pca('my_pca', whiten=True)],
+             classifier=svc_poly('my_poly', degree=3))
 
 It is also possible to specify ranges of individual parameters.
 This is done using the standard hyperopt syntax.
@@ -373,26 +350,23 @@ These will override the defaults defined within hyperopt-sklearn.
    from hpsklearn import HyperoptEstimator, pca, sgd
    from hyperopt import hp
    import numpy as np
-
-   sgd_loss = hp.pchoice( 'loss', 
-                          [ (0.50, 'hinge'),
-                            (0.25, 'log'),
-                            (0.25, 'huber') ] )
-   sgd_penalty = hp.choice( 'penalty',
-                            [ 'l2', 'elasticnet' ] )
-   sgd_alpha = hp.loguniform( 'alpha', 
-                              low=np.log(1e-5), 
-                              high=np.log(1) )
-
-   estim = HyperoptEstimator( 
+   sgd_loss = hp.pchoice('loss',
+                         [(0.50, 'hinge'),
+                          (0.25, 'log'),
+                          (0.25, 'huber')])
+   sgd_penalty = hp.choice('penalty',
+                           ['l2', 'elasticnet'])
+   sgd_alpha = hp.loguniform('alpha',
+                             low=np.log(1e-5),
+                             high=np.log(1) )
+   estim = HyperoptEstimator(
              classifier=sgd('my_sgd',
                             loss=sgd_loss,
                             penalty=sgd_penalty,
                             alpha=sgd_alpha) )
 
 
-
-All of the components available to the user can be found in the ``components.py`` file. A complete working example of using hyperopt-sklearn to find a model for the 20 newsgroups dataset is shown below.
+All of the components available to the user can be found in the ``components.py`` file. A complete working example of using hyperopt-sklearn to find a model for the 20 newsgroups data set is shown below.
 
 
 .. code-block:: python
@@ -402,26 +376,21 @@ All of the components available to the user can be found in the ``components.py`
    from sklearn.datasets import fetch_20newsgroups
    from hyperopt import tpe
    import numpy as np
-
-   # Download the data and split into training and test sets
-
-   train = fetch_20newsgroups( subset='train' )
-   test = fetch_20newsgroups( subset='test' )
+   # Download data and split training and test sets
+   train = fetch_20newsgroups(subset='train')
+   test = fetch_20newsgroups(subset='test')
    X_train = train.data
    y_train = train.target
    X_test = test.data
    y_test = test.target
-
-   estim = HyperoptEstimator( 
+   estim = HyperoptEstimator(
              classifier=any_sparse_classifier('clf'),
              preprocessing=[tfidf('tfidf')],
              algo=tpe.suggest,
-             trial_timeout=180) 
-
-   estim.fit( X_train, y_train )
-
-   print( estim.score( X_test, y_test ) )
-   print( estim.best_model() )
+             trial_timeout=180)
+   estim.fit(X_train, y_train)
+   print(estim.score(X_test, y_test))
+   print(estim.best_model())
 
 
 
