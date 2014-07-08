@@ -136,7 +136,7 @@ time away from higher value instruction. Alternatively, students with divergent
 backgrounds often drop these classes with the sense that they simply can’t
 obtain these skills. This is not an equitable situation.
 
-It’s difficult, however, to write instructions that would work for any potential
+It’s difficult, however, to write instructions that work for any potential
 student. As mentioned above, students come to a course with many possible
 environments (i.e., on their laptop or a server). But if a standardized
 environment is provided, this task becomes much simpler. Written instructions
@@ -250,9 +250,9 @@ class materials and will discourage participation. All participants must be able
 to successfully complete the installation with a fixed number of well-known
 steps across all platforms within a fixed amount of time.
 
-An additional difficulty arises when users are using different versions of the “same” software. For example, Git Bash on Windows lacks a ``man`` command.
-We *cannot* control the base environment that users will have on their laptop or workstation, nor do we wish to! Thus, a useful environment should provide consistency and not depend on or interfere with users’ existing setup.
-
+Additional difficulties arises when users are using different versions of the
+“same” software. For example, Git Bash on Windows lacks a ``man`` command.
+We *can’t* control the base environment that users will have on their laptop or workstation, nor do we wish to! A useful environment should provide consistency and not depend on or interfere with users’ existing setup.
 Relevant tools discussed below include Linux, virtual machines, and configuration management.
 
 Going beyond the laptop
@@ -269,7 +269,6 @@ an environment should not be *restricted* to personal computers. Across systems,
 a user should be able to to replicate the data processing, transformations, and
 analysis steps they ran on their laptop in this new environment, but with better
 performance.
-
 Relevant tools discussed below include Packer and Docker.
 
 Managing cost / maximizing value
@@ -284,14 +283,13 @@ owned resources can also allow more researchers to get value out of those
 resources. This is a critical enabler to allow us to serve less well-funded
 researchers. In addition, more recent technologies can avoid exclusively
 reserving system resources for a single environment.
-
 Relevant tools discussed below are Packer, Docker (and LXC), and cloud-based virtual machines.
 
 Existing Tools
 --------------
 
-As previously discussed, the problems outlined above are not unique to
-scientific computing. Developers and administrators have produced a wide variety
+As discussed above, the problems outlined above are not unique to
+scientific computing. Developers and administrators have produced a variety
 of tools that make it easier to ensure consistent environments across all kinds
 of infrastructure, ranging from a slice of your personal laptop, to a
 dynamically provisioned slice of your hybrid public/private cloud. We cannot
@@ -299,7 +297,6 @@ cover the breadth of tooling available here, and so we will restrict ourselves
 to focusing on those tools that we've found useful to automate the steps that
 come before you start *doing science*. We’ll also discuss popular tools we’ve
 found to add more complexity for our use-cases than they eliminate.
-
 Table :ref:`tools` provides an overview from the perspective of the
 DevOps engineer (i.e., contributor, maintainer, *you*, etc.).
 
@@ -383,7 +380,7 @@ environment that matches BCE. For example, python requirements are installed
 with pip using a requirements file. This makes it easy to set up a virtualenv or
 conda environment with those packages.
 
-The easiest way to use a virtual machine is to use a pre-existing image – a file
+The easiest way to use a VM is to use a pre-existing image – a file
 that contains all relevant data and metadata about an environment (described
 more fully at [images]_). It’s very easy to make modifications to an environment
 and make a new image by taking a snapshot.  Note that while both local and
@@ -419,10 +416,10 @@ were also adequate for things like databases, and ideal for the desktop
 environment, where we could reap the benefit of the careful work that went into
 the LTS Ubuntu distribution.
 
-Steps like installing the base guest OS may be done manually. As we explored
+Some steps may even be done manually. As we explored
 managing the complexity and reducing the number of tools for the BCE development
-process, one of the steps in the recipe was manual VM creation from an Ubuntu
-installation ISO. It is straightforward to make a binary image from a snapshot
+process, one of the steps in the “recipe” was manual installation of Ubuntu from
+an ISO. It is straightforward to make a binary image from a snapshot
 immediately after creating a base image, so this initial step could be done once
 by a careful individual.
 
@@ -478,14 +475,15 @@ script into one of these tools.
 Packer
 ^^^^^^
 
-Packer is used at build-time and enables creating identical machine images from
-a single configuration targeting multiple machine image formats [Packer]_. It is
-a relatively lightweight wrapper around many of the tools described above and
-below. For example, from a single Ubuntu Linux installation configured using
-shell scripts, we generate a BCE machine image in multiple formats including OVF
-for VirtualBox and AMI for AWS EC2. The Packer script specifies the Ubuntu ISO
-to install, automatically serves the Debian Installer configuration file over
-HTTP, and configures the installed OS by copying files and running a shell
+Packer is used at build-time and enables creating identical machine images
+targeting multiple machine image formats
+[Packer]_.
+For example, we generate a (mostly) uniformly configured BCE machine image in
+multiple formats including OVF for VirtualBox and AMI for AWS EC2.
+Packer coordinates many of the tools described above and
+below based on a JSON configuration file. This file specifies the Ubuntu ISO
+to install, a Debian Installer configuration file (which gets served over
+HTTP), and configures the installed OS by copying files and running a shell
 script. Packer can also readily use Ansible, Puppet, Chef, or Salt (and has a
 plugin system if you want to use something more exotic). Images can be built for
 many popular platforms, including a variety of local and cloud-based providers.
@@ -505,19 +503,25 @@ Vagrant
 ^^^^^^^
 
 Vagrant is a run-time component that needs to be installed on the host OS of the
-end user’s laptop [Vagrant]_. It can be considered a wrapper around
+end user’s laptop [Vagrant]_. Like Packer, it is a wrapper around
 virtualization software that automates the process of configuring and starting,
-e.g., VirtualBox running an image created via one of the above processes (for
-example, with Packer). It eliminates the need to configure the virtualization
-software by hand using the GUI interface, and more easily and generically than
-command line tools provided by systems like VirtualBox or Amazon. It should be
-noted that (like Packer) Vagrant does no work directly, but rather calls out to
+e.g., running an image on VirtualBox (this image could be created with any of the
+above tools). It eliminates the need to configure the virtualization
+software using the GUI interface, and more easily and generically than
+command line tools provided by systems like VirtualBox or Amazon. Instead,
+Vagrant looks for a *Vagrantfile* which defines the configuration, and also
+establishes the directory under which the ``vagrant`` command will connect to
+the relevant VM.
+From the
+command-line (under this directory), the user can start, stop, or ssh into the
+Vagrant-managed VM. It should be
+noted that (again, like Packer) Vagrant does no work directly, but rather calls out to
 those other platform-specific command-line tools.
 
 The initial impetus for the BCE project came from a Vagrant-based
 project called “jiffylab” [jl]_. With a single command, this project launches a
-guest Linux OS in VirtualBox or on Amazon that provided both a shell and IPython
-notebook through your native host web browser.  But while Vagrant is
+VM in VirtualBox or on various cloud services. This VM provides isolated shell and IPython
+notebook through your web browser.  But while Vagrant is
 conceptually very elegant (and cool), we are not currently using it for BCE.
 In our evaluation, it introduced another piece of software, requiring
 command-line usage before students were comfortable with it. Should a use-case
