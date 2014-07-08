@@ -506,7 +506,7 @@ noted that (like Packer) Vagrant does no work directly, but rather calls out to
 those other platform-specific command-line tools.
 
 The initial impetus for the BCE project came from a Vagrant-based
-project called “jiffylab” [jl]_. With a single command, this project launched a
+project called “jiffylab” [jl]_. With a single command, this project launches a
 guest Linux OS in VirtualBox or on Amazon that provided both a shell and IPython
 notebook through your native host web browser.  But while Vagrant is
 conceptually very elegant (and cool), we are not currently using it for BCE.
@@ -515,8 +515,7 @@ command-line usage before students were comfortable with it. Should a use-case
 arise, however, it would be trivial to create a “vagrant box” (a Vagrant-tuned
 virtual image) with our current approach using Packer. That said, other
 “data-science” oriented VMs have chosen Vagrant as their method of distribution
-[DSTb]_ [DSTk]_. Clearly, our preference for avoiding complexity is not
-uniformly shared!  Currently, Vagrant is most useful for experienced developers
+[DSTb]_ [DSTk]_. Currently, Vagrant is most useful for experienced developers
 to share environments with each other.
 
 Docker
@@ -577,7 +576,7 @@ examples. Documentation is given high priority.
 The VM project began around the same time as, and ultimately joined the Open
 Source Geospatial Foundation (OSGeo), an international body modeled on the
 Apache Foundation [2g]_. It started as a smaller open project that sought to
-build an "easy to try and use" software environment for spatial data
+build an “easy to try and use” software environment for spatial data
 applications. Initial efforts consisted of shell scripts to install core
 geospatial packages. These examples provided guides to the projects that were
 invited and ultimately contributed packages to the project. Many of these later
@@ -590,7 +589,7 @@ improving their own install scripts, examples and documentation.
 Tool Sets
 ^^^^^^^^^
 
-OSGeo-Live itself is not a "linux distribution" per se, rather
+OSGeo-Live itself is not a “Linux distribution” per se, rather
 it relies on an apt-based ecosystem to handle
 the heavy-lifting of system updates and upgrades. This is a win, as updates
 are proven reliable over a very large Ubuntu community process, and
@@ -641,7 +640,7 @@ Several years into the project, with a grant from the Australian
 government, a professional-level documentation project was initiated for a
 single-page overview and quick-start instructions for each application. Language
 internationalization was rendered more efficient, specifically to support local
-field work. Much later, a "percentage complete" graph for each human language
+field work. Much later, a “percentage complete” graph for each human language
 group was added, making translation into a sort of competitive game. This
 translation has proven very successful.
 The project has facilitated collaboration across developer communities. For
@@ -667,7 +666,8 @@ BCE: The Berkeley Common Environment
 ------------------------------------
 
 The overarching, aspirational goal for the Berkeley Common Environment (BCE) is
-to make it *easy* to do the "right" thing (or hard to do "wrong" things), where
+to make it *easy* to do the “Clearly, our preference for avoiding complexity is not
+uniformly shared!  “right” thing (or hard to do “wrong” things), where
 “right” means you’ve managed to use someone else’s code in the manner that was
 intended. In particular, it allows for targeted instructions that can assume all
 features of BCE are present. BCE also aims to be stable, reliable, and reduce
@@ -684,7 +684,7 @@ resources. For example, the BCE desktop is a solid color to minimize network
 utilization for remote desktop sessions, and efficient numerics libraries are
 configured.
 
-BCE provides ready-made images for end-users, and the "recipe" for setting up
+BCE provides ready-made images for end-users, and the “recipe” for setting up
 the image using Packer is maintained on GitHub. Lists of Python packages are
 maintained in a separate requirements file, and all setup is done via a master
 Bash script.  It is currently common for individuals to *only* distribute
