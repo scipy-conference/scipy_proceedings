@@ -666,8 +666,7 @@ BCE: The Berkeley Common Environment
 ------------------------------------
 
 The overarching, aspirational goal for the Berkeley Common Environment (BCE) is
-to make it *easy* to do the “Clearly, our preference for avoiding complexity is not
-uniformly shared!  “right” thing (or hard to do “wrong” things), where
+to make it *easy* to do the “right” thing (or hard to do “wrong” things), where
 “right” means you’ve managed to use someone else’s code in the manner that was
 intended. In particular, it allows for targeted instructions that can assume all
 features of BCE are present. BCE also aims to be stable, reliable, and reduce
@@ -691,11 +690,10 @@ Bash script.  It is currently common for individuals to *only* distribute
 scripts, which requires all potential users to install and configure the
 relevant stack of DevOps tools. There are, however, free services for
 distributing images for particular tools (e.g., the Docker index), and services
-like Amazon can host AMIs for pennies a month. (For example, if starting from an
-existing – and thus free – EBS-backed AMI, one need only save a snapshot, with
-charges only for the differences from the base AMI. So, if one installs one GB
-of extra tools onto a standard EBS-backed Ubuntu server AMI, one needs to pay
-the (currently) <$0.1 / GB-month to store that snapshot.)
+like Amazon can host AMIs for pennies a month. (For example, building on a free,
+existing EBS-backed AMI, one need only save a snapshot, with charges only for
+*changes* from the base AMI. One GB of extra tools onto a standard EBS-backed
+Ubuntu server AMI, currently costs <$0.1 / GB-month to store.)
 We strongly recommend
 distributing a binary along with the recipe for any environment that includes
 novices in its audience.
@@ -784,8 +782,8 @@ Conclusion
 
 If you use these recent DevOps tools, then realize that *you* are now at the
 cutting edge of DevOps for the scientific
-community. Your collaborators and students won't necessarily have needed conceptual
-frameworks, so extra care should be taken to make your tooling accessible. Where
+community. Your collaborators and students won't necessarily have needed
+concepts, so extra care should be taken to make your tooling accessible. Where
 appropriate, use tools that your collaborators already know –
 shell, scripting, package management, etc.  That said, technologies that allow
 efficient usage of available hardware stand to provide substantial savings, and
