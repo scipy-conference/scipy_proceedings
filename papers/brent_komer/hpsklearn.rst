@@ -109,19 +109,49 @@ Scikit-Learn Model Selection as a Search Problem
    The number of active hyperparameters in a model is the sum of parenthetical numbers in the selected boxes. 
    For the PCA+KNN combination, 7 hyperparameters are activated. 
 
+*Model selection* is the process of estimating which machine learning model performs best from among a possibly
+infinite set of possibilities.
+As an optimization problem, the search domain is the
+set of valid assignments to the configuration parameters (hyperparameters) of the machine learning model,
+and the objective function is typically cross-validation, the negative degree of success on held-out
+examples.
+Practitioners usually address this optimization by hand, by grid search, or by random
+search.
+In this paper we discuss solving it with the Hyperopt optimization library.
+The basic approach is to set up a search space with random variable
+hyperparameters, use scikit-learn to implement the objective function
+that performs model training and model validation, and use Hyperopt to
+optimize the hyperparamters.
 
-The configuration space we experiment on below includes six preprocessing algorithms and seven classification algorithms.
+Scikit-learn includes many algorithms for classification (classifiers), as well as many
+algorithms for pre-processing data into the vectors expected by classification
+algorithms.
+Classifiers include for example, K-Neighbors, SVM, and RF algorithms.
+Pre-processing algorithms include things like component-wise Z-scaling
+(Normalizer) and Principle Components Analysis (PCA).
+A full classification algorithm typically includes a series of
+pre-processing steps followed by a classifier.
+For this reason, scikit-learn provides a *pipeline* data structure to
+represent and use a sequence of pre-processing steps and a classifier as if
+they were just one component (typically with an API similar to the classifier).
+Although hyperopt-sklearn does not formally use scikit-learn's pipeline
+object, it provides related functionality.
+Hyperopt-sklearn provides a parameterization of a *search space*
+over pipelines, that is, of sequences of pre-processing steps and classifiers.
+
+The configuration space we provide includes six preprocessing algorithms and seven classification algorithms.
 The full search space is illustrated in Figure :ref:`space`.
-The preprocessing algorithms were (by class name, followed by n. hyperparameters + n. unused hyperparameters): ``PCA(2)`` , ``StandardScaler(2)`` , ``MinMaxScaler(1)`` , ``Normalizer(1)`` , ``None`` , and ``TF-IDF(0+9)`` .
+The preprocessing algorithms were (by class name, followed by n. hyperparameters + n. unused hyperparameters): ``PCA(2)``, ``StandardScaler(2)``, ``MinMaxScaler(1)``, ``Normalizer(1)``, ``None``, and ``TF-IDF(0+9)``.
 The first four preprocessing algorithms were for dense features.
 PCA performed whitening or non-whitening principle components analysis.
-The ``StandardScaler``, ``MinMaxScaler`` , and ``Normalizer`` did various feature-wise affine transforms to map numeric input features onto values near 0 and with roughly unit variance.
+The ``StandardScaler``, ``MinMaxScaler``, and ``Normalizer`` did various feature-wise affine transforms to map numeric input features onto values near 0 and with roughly unit variance.
 The ``TF-IDF`` pre-processing module performed feature extraction from text data.
-The classification algorithms were (by class name (used + unused hyperparameters)): ``SVC(23)`` , ``KNN(4+5)`` , ``RandomForest(8)`` , ``ExtraTrees(8)`` , ``SGD(8+4)`` , and ``MultinomialNB(2)`` .
+The classification algorithms were (by class name (used + unused hyperparameters)): ``SVC(23)``, ``KNN(4+5)``, ``RandomForest(8)`` , ``ExtraTrees(8)`` , ``SGD(8+4)`` , and ``MultinomialNB(2)`` .
 The ``SVC`` module is a fork of LibSVM, and our wrapper has 23 hyperparameters because we treated each possible kernel as a different classifier, with its own set of hyperparameters: Linear(4), RBF(5), Polynomial(7), and Sigmoid(6).
-
-In total, our parameterization had 65 hyperparameters: 6 for preprocessing and 53 for classification.
+In total, our parameterization has 65 hyperparameters: 6 for preprocessing and 53 for classification.
 The search space includes 15 boolean variables, 14 categorical, 17 discrete, and 19 real-valued variables.
+
+
 Although the total number of hyperparameters is large, the number of *active* hyperparameters describing any one model is much smaller: a model consisting of ``PCA`` and a ``RandomForest`` for example,
 would have only 12 active hyperparameters (1 for the choice of preprocessing, 2 internal to PCA, 1 for the choice of classifier and 8 internal to the RF).
 Hyperopt description language allows us to differentiate between *conditional* hyperparameters (which must always be assigned) and *non-conditional* hyperparameters (which may remain unassigned when they would be unused).
