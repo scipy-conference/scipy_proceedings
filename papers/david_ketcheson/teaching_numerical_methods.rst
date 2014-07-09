@@ -563,7 +563,7 @@ amount of time.
 
 Placing code in notebooks also makes it harder to reuse code, since
 functions from one notebook cannot be used in another with copying.
-Furthermore, for the reasons already give, the notebook is poorly suited to
+Furthermore, for the reasons already given, the notebook is poorly suited to
 development of library code.  Exclusive use of the notebook for coding
 may thus encourage poor software development practices.  This can be
 partially countered by teaching students to place reusable functions in files
