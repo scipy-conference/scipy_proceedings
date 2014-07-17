@@ -204,6 +204,7 @@ Here is the simplest example of using this software.
 
 The ``HyperoptEstimator`` object contains the information of what space to search as well as how to search it.
 It can be configured to use a variety of hyperparameter search algorithms and also supports using a combination of algorithms.
+Any algorithm that supports the same interface as the algorithms in hyperopt can be used here.
 This is also where you, the user, can specify the maximum number of function evaluations you would like to be run as well as a timeout (in seconds) for each run.
 
 
@@ -489,7 +490,12 @@ and there are more ways to combine even the existing components.
 Other types of data require different preprocessing, and other prediction
 problems exist beyond classification.
 In expanding the search space, care must be taken to ensure that the benefits of new models outweigh the greater difficulty of searching a larger space.
+There are some parameters that scikit-learn exposes that are more implementation details than actual hyperparameters that affect the fit (such as ``algorithm`` and ``leaf_size`` in the KNN model).
+Care should be taken to identify these parameters in each model and they may need to be treated differently during exploration.
 
+It is possible for a user to add their own classifier to the search space as long as it fits the scikit-learn interface.
+This currently requires some understanding of how hyperopt-sklearn's code is structured and it would be nice to improve the support for this so minimal effort is required by the user.
+We also plan to allow the user to specify alternate scoring methods besides just accuracy and F-measure, as there can be cases where these are not best suited to the particular problem.
 
 We have shown here that Hyperopt's random search, annealing search, and TPE algorithms make Hyperopt-sklearn viable, but the slow convergence in e.g. Figure :ref:`perclf` and :ref:`validtpe` suggests
 that other optimization algorithms might be more call-efficient.
