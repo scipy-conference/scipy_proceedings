@@ -94,8 +94,7 @@ def rst2tex(in_path, out_path):
 def tex2pdf(out_path):
 
     import subprocess
-    command_line = 'cd "%s" ' % out_path + \
-                   ' ; pdflatex -halt-on-error paper.tex'
+    command_line = 'pdflatex -halt-on-error paper.tex'
 
     # -- dummy tempfile is a hacky way to prevent pdflatex
     #    from asking for any missing files via stdin prompts,
@@ -104,7 +103,9 @@ def tex2pdf(out_path):
     run = subprocess.Popen(command_line, shell=True,
             stdin=dummy,
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+            stderr=subprocess.PIPE,
+            cwd=out_path,
+            )
     out, err = run.communicate()
 
     # -- returncode always 0, have to check output for error
@@ -113,7 +114,9 @@ def tex2pdf(out_path):
         run = subprocess.Popen(command_line, shell=True,
                 stdin=dummy,
                 stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
+                stderr=subprocess.PIPE,
+                cwd=out_path,
+                )
         out, err = run.communicate()
 
     if "Fatal" in out or run.returncode:
