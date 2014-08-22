@@ -12,7 +12,7 @@ Creating a browser-based virtual computer lab for classroom instruction
    in the classroom, traditional computer labs with rows of expensive
    desktop computers are slowly beginning to lose their relevance. An
    alternative approach for teaching Python is to use a browser-based
-   virtual computer lab, with a notebook interface. The advantages of
+   virtual computer lab, with a notebook interface. The advantages
    of physical computer labs, such as face-to-face interaction, and
    the challenge of replicating them in a virtual environment are
    discussed. The need for collaborative features like
