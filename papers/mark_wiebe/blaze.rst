@@ -23,7 +23,7 @@ Blaze: Building A Foundation for Array-Oriented Computing in Python
 We present the motivation and architecture of Blaze, a library for
 cross-backend data-oriented computation.  Blaze provides a standard interface
 to connect users familiar with NumPy and Pandas to other data analytics
-libraries like SQLAlchemy, and Spark.  We motivate the use of these projects
+libraries like SQLAlchemy and Spark.  We motivate the use of these projects
 through Blaze and discuss the benefits of standard interfaces on top of an
 increasingly varied software ecosystem. We give an overview of the Blaze
 architecture and then demonstrate its use on a typical problem.  We use the
@@ -71,11 +71,11 @@ Interactive Arrays and Tables
 
 Analysis libraries like NumPy and Pandas demonstrate the value of interactive
 array and table objects.  Projects such as these connect a broad base of users
-to efficient low-level code through a high-level interface.  This approach has
-given rise to large and productive software ecosystems within numeric Python
-(e.g. SciPy, Scikits, etc.) However, both NumPy and Pandas are largely
-restricted to an in-memory computational model, limiting problem sizes to a
-certain scale.
+to efficient low-level operations through a high-level interface.  This
+approach has given rise to large and productive software ecosystems within
+numeric Python (e.g. SciPy, Scikits, etc.) However, both NumPy and Pandas
+are largely restricted to an in-memory computational model, limiting
+problem sizes to a certain scale.
 
 Concurrently developed data analytic ecosystems in other languages like R and
 Julia provide similar styles of functionality with different application foci.
@@ -93,10 +93,11 @@ comfortable or as usable as the Pandas DataFrame.
 What is Blaze
 ~~~~~~~~~~~~~
 
-Blaze provides a familiar interface around computation on other
-systems.  It provides extensible mechanisms to connect this interface to
-diverse computational backends.  The Blaze project explicitly provides hooks to
-Python, Pandas, SQLAlchemy, and Spark.
+Blaze provides a familiar interface around computation on a diverse set
+of computational systems, or backends.  It provides extensible mechanisms
+to connect this interface to new computational backends.  Backends which the
+Blaze project explicitly provides hooks to include Python, Pandas,
+SQLAlchemy, and Spark.
 
 This abstract connection to a variety of projects has the following virtues:
 
@@ -196,9 +197,9 @@ Over the course of this article we'll refer to the following simple
 Iteration
 `````````
 
-Data descriptors expose the ``__iter__`` method, which iterates over the
-outermost dimension of the data.  This iterator yields vanilla Python objects
-by default.
+Data descriptors expose the ``__iter__`` method, which provides an iterator
+over the outermost dimension of the data.  This iterator yields vanilla
+Python objects by default.
 
 .. code-block:: python
 
