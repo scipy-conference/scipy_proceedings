@@ -477,11 +477,12 @@ database.
 Discussion
 ~~~~~~~~~~
 
-Blaze provides both rapid ability to migrate data between data formats and the
-ability to rapidly prototype common computations against a wide variety of
-backends.  It allows us to easily compare our options and choose the best for
-our particular setting.  As that setting changes (i.e. if our data grows
-considerably) our implementation can transition easily.
+Blaze provides both the ability to migrate data between data formats and
+to rapidly prototype common analytics operations against a wide variety of
+computational backends.  It allows one to easily compare  options and
+choose the best for a particular setting.  As that setting changes, for
+example when data size grows considerably, our implementation can
+transition easily to a more suitable backend.
 
 This paper gave an introduction to the benefits of separating expression of a
 computation from its computation.  We expect future work to focus on
