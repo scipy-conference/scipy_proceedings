@@ -43,9 +43,9 @@ Standard Interfaces
 Software and user communities around data analysis have changed remarkably in
 the last few years.  The growth in this ecosystem come both from new
 computational systems and also from an increasing breadth of users.  On the
-software side we see activity in different languages like Python, R, and Julia,
+software side we see activity in different languages like Python [Pyt14]_, R [RLa14]_, and Julia [Jul12]_,
 and also in distributed systems like the projects surrounding the Hadoop File
-System (HDFS).  On the user side we see increased adoption both from physical
+System (HDFS) [Bor07]_.  On the user side we see increased adoption both from physical
 sciencists, with a strong tradition of computation, and also from
 social scientists and policy makers with less rigorous training. While these
 upward trends are encouraging, they also place significant strain on the
@@ -55,8 +55,8 @@ programming paradigms and operational systems is challenging.
 Standard interfaces facilitate interactions between layers of complex and
 changing systems.  For example, NumPy fancy indexing syntax has become a
 standard interface among array programming systems within the Python ecosystem.
-Projects with very different implementations (e.g. NumPy, SciPy.sparse, Theano,
-SciDB) all provide the same indexing interface despite operating very
+Projects with very different implementations (e.g. NumPy [Van11]_, SciPy.sparse [Jon01]_, Theano [Ber10]_),
+SciDB [Bro10]_) all provide the same indexing interface despite operating very
 differently.
 
 Standard interfaces help users to adapt to changing technologies without
@@ -518,3 +518,8 @@ References
                 NumPy Array: A Structure for Efficient Numerical Computation*,
                 Computing in Science & Engineering, 13, 22-30 (2011),
 .. [Oli06]      Oliphant, Travis and Banks, Carl. http://legacy.python.org/dev/peps/pep-3118/
+.. [Pyt14]      G. Van Rossum. The Python Language Reference Manual. Network Theory Ltd., September 2003. 
+.. [RLa14]      R Core Team (2014). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.  URL http://www.R-project.org/.
+.. [Jul12]      J. Bezanson, S. Karpinski, V. B. Shah, and A. Edelman. Julia: A fast dynamic language for technical computing. CoRR, abs/1209.5145, 2012.
+.. [Jon01]      Jones E, Oliphant E, Peterson P, et al. SciPy: Open Source Scientific Tools for Python, 2001-, http://www.scipy.org/ [Online; accessed 2014-09-25].
+.. [Bro10]      Paul G. Brown, Overview of sciDB: large scale array storage, processing and analysis, Proceedings of the 2010 ACM SIGMOD International Conference on Management of data, June 06-10, 2010, Indianapolis, Indiana, USA
