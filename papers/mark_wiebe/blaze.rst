@@ -23,7 +23,7 @@ Blaze: Building A Foundation for Array-Oriented Computing in Python
 We present the motivation and architecture of Blaze, a library for
 cross-backend data-oriented computation.  Blaze provides a standard interface
 to connect users familiar with NumPy and Pandas to other data analytics
-libraries like SQLAlchemy, and Spark.  We motivate the use of these projects
+libraries like SQLAlchemy and Spark.  We motivate the use of these projects
 through Blaze and discuss the benefits of standard interfaces on top of an
 increasingly varied software ecosystem. We give an overview of the Blaze
 architecture and then demonstrate its use on a typical problem.  We use the
@@ -43,9 +43,9 @@ Standard Interfaces
 Software and user communities around data analysis have changed remarkably in
 the last few years.  The growth in this ecosystem come both from new
 computational systems and also from an increasing breadth of users.  On the
-software side we see activity in different languages like Python, R, and Julia,
+software side we see activity in different languages like Python [Pyt14]_, R [RLa14]_, and Julia [Jul12]_,
 and also in distributed systems like the projects surrounding the Hadoop File
-System (HDFS).  On the user side we see increased adoption both from physical
+System (HDFS) [Bor07]_.  On the user side we see increased adoption both from physical
 sciencists, with a strong tradition of computation, and also from
 social scientists and policy makers with less rigorous training. While these
 upward trends are encouraging, they also place significant strain on the
@@ -55,8 +55,8 @@ programming paradigms and operational systems is challenging.
 Standard interfaces facilitate interactions between layers of complex and
 changing systems.  For example, NumPy fancy indexing syntax has become a
 standard interface among array programming systems within the Python ecosystem.
-Projects with very different implementations (e.g. NumPy, SciPy.sparse, Theano,
-SciDB) all provide the same indexing interface despite operating very
+Projects with very different implementations (e.g. NumPy [Van11]_, SciPy.sparse [Jon01]_, Theano [Ber10]_),
+SciDB [Bro10]_) all provide the same indexing interface despite operating very
 differently.
 
 Standard interfaces help users to adapt to changing technologies without
@@ -71,11 +71,11 @@ Interactive Arrays and Tables
 
 Analysis libraries like NumPy and Pandas demonstrate the value of interactive
 array and table objects.  Projects such as these connect a broad base of users
-to efficient low-level code through a high-level interface.  This approach has
-given rise to large and productive software ecosystems within numeric Python
-(e.g. SciPy, Scikits, etc.) However, both NumPy and Pandas are largely
-restricted to an in-memory computational model, limiting problem sizes to a
-certain scale.
+to efficient low-level operations through a high-level interface.  This
+approach has given rise to large and productive software ecosystems within
+numeric Python (e.g. SciPy, Scikits, etc.) However, both NumPy and Pandas
+are largely restricted to an in-memory computational model, limiting
+problem sizes to a certain scale.
 
 Concurrently developed data analytic ecosystems in other languages like R and
 Julia provide similar styles of functionality with different application foci.
@@ -93,10 +93,11 @@ comfortable or as usable as the Pandas DataFrame.
 What is Blaze
 ~~~~~~~~~~~~~
 
-Blaze provides a familiar interface around computation on other
-systems.  It provides extensible mechanisms to connect this interface to
-diverse computational backends.  The Blaze project explicitly provides hooks to
-Python, Pandas, SQLAlchemy, and Spark.
+Blaze provides a familiar interface around computation on a diverse set
+of computational systems, or backends.  It provides extensible mechanisms
+to connect this interface to new computational backends.  Backends which the
+Blaze project explicitly provides hooks to include Python, Pandas,
+SQLAlchemy, and Spark.
 
 This abstract connection to a variety of projects has the following virtues:
 
@@ -196,9 +197,9 @@ Over the course of this article we'll refer to the following simple
 Iteration
 `````````
 
-Data descriptors expose the ``__iter__`` method, which iterates over the
-outermost dimension of the data.  This iterator yields vanilla Python objects
-by default.
+Data descriptors expose the ``__iter__`` method, which provides an iterator
+over the outermost dimension of the data.  This iterator yields vanilla
+Python objects by default.
 
 .. code-block:: python
 
@@ -476,11 +477,12 @@ database.
 Discussion
 ~~~~~~~~~~
 
-Blaze provides both rapid ability to migrate data between data formats and the
-ability to rapidly prototype common computations against a wide variety of
-backends.  It allows us to easily compare our options and choose the best for
-our particular setting.  As that setting changes (i.e. if our data grows
-considerably) our implementation can transition easily.
+Blaze provides both the ability to migrate data between data formats and
+to rapidly prototype common analytics operations against a wide variety of
+computational backends.  It allows one to easily compare  options and
+choose the best for a particular setting.  As that setting changes, for
+example when data size grows considerably, our implementation can
+transition easily to a more suitable backend.
 
 This paper gave an introduction to the benefits of separating expression of a
 computation from its computation.  We expect future work to focus on
@@ -516,3 +518,8 @@ References
                 NumPy Array: A Structure for Efficient Numerical Computation*,
                 Computing in Science & Engineering, 13, 22-30 (2011),
 .. [Oli06]      Oliphant, Travis and Banks, Carl. http://legacy.python.org/dev/peps/pep-3118/
+.. [Pyt14]      G. Van Rossum. The Python Language Reference Manual. Network Theory Ltd., September 2003. 
+.. [RLa14]      R Core Team (2014). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.  URL http://www.R-project.org/.
+.. [Jul12]      J. Bezanson, S. Karpinski, V. B. Shah, and A. Edelman. Julia: A fast dynamic language for technical computing. CoRR, abs/1209.5145, 2012.
+.. [Jon01]      Jones E, Oliphant E, Peterson P, et al. SciPy: Open Source Scientific Tools for Python, 2001-, http://www.scipy.org/ [Online; accessed 2014-09-25].
+.. [Bro10]      Paul G. Brown, Overview of sciDB: large scale array storage, processing and analysis, Proceedings of the 2010 ACM SIGMOD International Conference on Management of data, June 06-10, 2010, Indianapolis, Indiana, USA
