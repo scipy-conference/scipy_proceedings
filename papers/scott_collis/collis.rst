@@ -484,8 +484,8 @@ and his home institution, CIMMS, is supported by NOAA/Office of Oceanic and
 Atmospheric Research under NOAA-University of Oklahoma Cooperative Agreement
 #NA11OAR4320072, U.S. Department of Commerce.   The authors wish to thank
 Dr. Alexander Ryzhkov for support on implementation of specific attenuation-based
-rainfall methods. We would also like to thank the reviews of this paper, James Bergstra
-and Terry Letsche. 
+rainfall methods. We would also like to thank the reviewers of this paper, James Bergstra
+and Terry Letsche.
 
 References
 ----------
