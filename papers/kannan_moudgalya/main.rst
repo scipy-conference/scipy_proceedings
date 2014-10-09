@@ -16,14 +16,16 @@ Campaign for IT literacy through FOSS and Spoken Tutorials
   this activity.
 
   A Spoken Tutorial is a ten minute audio video tutorial on open source
-  software, created to provide training on important IT topics. Spoken
-  Tutorials are created for self learning, using the pedagogical methods
-  developed at IIT Bombay. The spoken part of these tutorials is dubbed in all
-  Indian languages, to help children who are weak in English, while retaining
-  employment potential. The effectiveness of conducting workshops using spoken
-  tutorials is explained. A total of 400,000 students have been trained in the
-  past three years through one or more FOSS SELF workshops.
-
+  software, created to provide training on important IT topics.  Spoken
+  Tutorials are made suitable for self learning, through a novice check
+  of the underlying script. The spoken part of these tutorials is dubbed
+  in all Indian languages, to help children who are weak in English,
+  while retaining employment potential. The effectiveness of conducting
+  workshops using spoken tutorials is explained.  A total of 400,000
+  students have been trained in the past three years through one or more
+  Spoken Tutorial based Education and Learning through Free FOSS study
+  (SELF) workshops.
+  
   Students who undergo SELF workshops can create textbook companions, which
   contain code for the solved problems of given textbooks using a particular
   software. A Python Textbook Companion is a collection of Python code for a
@@ -207,13 +209,13 @@ explained in the next section.
 
 An expert who knows that their tutorial will be watched 10,000 times
 will not mind spending a lot of effort to create outstanding
-instructional material. Insistence on passing through a novice check
-provides respectability to the beginner. From the expert’s point of
-view, once it is created, all beginners can be directed to see the
-tutorial. Finally, as we discuss next, the novice check and pilot
-workshops make our tutorials suitable for self learning, which in turn
-has resulted in large scale training, as demonstrated in Table
-:ref:`tab:workshops`.
+instructional material. Insistence of passing through a novice check
+makes beginners important and also make them feel important.  From the
+expert’s point of view, once it is created, all beginners can be
+directed to see the tutorial. Finally, as we discuss next, the novice
+check and pilot workshops make our tutorials suitable for self learning,
+which in turn has resulted in large scale training, as demonstrated in
+Table :ref:`tab:workshops`.
 
 The fact that a large number of people have undergone our LibreOffice
 workshops demonstrates that we are reaching out to the clerical staff
@@ -663,11 +665,10 @@ Completing the Pyramid Structure
 
 In this section, we explain how our FOSS efforts help result in a
 pyramid structure of trained students.  We started with SELF workshop
-based training, progressed to TBC and then reached lab migration, each
-of increasing complexity than the previous one, as explained in the
-previous sections.  In this section, we explain how a few other higher
-level activities that we have undertaken help result in a pyramid
-structure.
+based training, progressed to TBC and then reached lab migration, with
+each stage having increased complexity, as explained in the previous
+sections.  In this section, we explain how a few other higher level
+activities that we have undertaken help result in a pyramid structure.
 
 The next complicated task we have recently undertaken is to help our
 students do full projects using the FOSS that we support. Here is a
