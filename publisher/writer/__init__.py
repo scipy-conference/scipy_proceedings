@@ -200,7 +200,8 @@ class Translator(LaTeXTranslator):
                                'author_institution': self.author_institutions,
                                'abstract': self.abstract_text,
                                'keywords': self.keywords,
-                               'copyright_holder': copyright_holder}
+                               'copyright_holder': copyright_holder,
+                               'video': self.video_url}
 
 
     def end_open_abstract(self, node):
@@ -409,6 +410,8 @@ class Translator(LaTeXTranslator):
                 self.requirements[package] = r'\usepackage{%s}' % package
         self.out.append("\n" + node['latex'] + "\n")
         raise nodes.SkipNode
+
+    
 
 
 writer = Writer()
