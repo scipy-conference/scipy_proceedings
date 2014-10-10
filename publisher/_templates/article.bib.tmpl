@@ -1,9 +1,14 @@
-@InProceedings{ {{'-'.join([article['paper_id'],
-                                  proceedings['citation_key']])}},
-  author    = { {{' and '.join(article['author'])}} },
-  title     = { {{article['title']}} },
-  booktitle = { {{proceedings['title']['full']}} },
+{{py:
+def bibtex_caps(words):
+    from string import ascii_uppercase
+    return ''.join(w if (w not in ascii_uppercase) else '{%s}' % w for w in words)
+}}
+
+@InProceedings{ {{'-'.join([article['paper_id'], proceedings['citation_key']])}},
+  author    = { {{bibtex_caps(' and '.join(article['author']))}} },
+  title     = { {{bibtex_caps(article['title'])}} },
+  booktitle = { {{bibtex_caps(proceedings['title']['full'])}} },
   pages     = { {{' - '.join([str(article['page']['start']), str(article['page']['stop'])])}} },
   year      = { {{proceedings['year']}} },
-  editor    = { {{' and '.join(proceedings['editor'])}} }
+  editor    = { {{bibtex_caps(' and '.join(proceedings['editor']))}} }
 }
