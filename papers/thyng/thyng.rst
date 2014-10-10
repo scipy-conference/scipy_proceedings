@@ -28,7 +28,7 @@ Introduction
 
 Drifters are used in oceanography and atmospherics *in situ* in order to demonstrate flow patterns created by individual fluid parcels. For example, in the ocean, drifters will often be released on the sea surface, and allowed to be passively transported with the flow, reporting their location via GPS at regular intervals. In this way, drifters are gathering data in a Lagrangian perspective. For example, [LaCasce2003]_ analyzes a set of over 700 surface drifters released in the northern Gulf of Mexico, using the tracks to better understand the dynamics of the underlying circulation fields.
 
-Lagrangian trajectory modeling is a method of moving parcels through a fluid based on numerically modeled circulation fields. This approach enables analysis of many different drifter experiments for a much lower cost than is required to gather one relatively small set of drifters. Additionally, the inherent limits to the number of drifters that can reasonably be used *in situ* can lead to biased statistics [LaCasce2008]_. In one study, numerical drifters were used to understand where radio-nuclides from a storage facility would travel if accidentally released [Doos2007]_. Drifters are also used in on-going response work by the Office of Response and Restoration in the National Oceanic and Atmospheric Administration (NOAA). Using model output made available by various groups, responders apply their tool (General NOAA Oil Modeling Environment, GNOME_) to simulate drifters and get best estimates of predicted oil transport [Beegle-Krause1999]_ [Beegle-Krause2001]_.
+Lagrangian trajectory modeling is a method of moving parcels through a fluid based on numerically modeled circulation fields. This approach enables analysis of many different drifter experiments for a much lower cost than is required to gather one relatively small set of drifters. Additionally, the inherent limits to the number of drifters that can reasonably be used *in situ* can lead to biased statistics [LaCasce2008]_. In one study, numerical drifters were used to understand where radio-nuclides from a storage facility would travel if accidentally released [Döös2007]_. Drifters are also used in on-going response work by the Office of Response and Restoration in the National Oceanic and Atmospheric Administration (NOAA). Using model output made available by various groups, responders apply their tool (General NOAA Oil Modeling Environment, GNOME_) to simulate drifters and get best estimates of predicted oil transport [Beegle-Krause1999]_ [Beegle-Krause2001]_.
 
 .. _GNOME: http://response.restoration.noaa.gov/oil-and-chemical-spills/oil-spills/response-tools/gnome.html
 
@@ -38,7 +38,7 @@ There are many sources of error in simulating offline Lagrangian trajectories. F
 
 .. introduce TRACMASS with links to places it has been used and introduce TracPy
 
-TRACMASS_ is a Lagrangian trajectory model that runs natively on velocity fields that have been calculated on a staggered Arakawa C grid. Originally written about 2 decades ago, it has been used in many applications (*e.g.*, [Doos2007]_). The core algorithm for TRACMASS is written in Fortran for speed, and has been wrapped in Python for increased usability. This code package together is called TracPy_ [Thyng2014b]_.
+TRACMASS_ is a Lagrangian trajectory model that runs natively on velocity fields that have been calculated on a staggered Arakawa C grid. Originally written about 2 decades ago, it has been used in many applications (*e.g.*, [Döös2007]_). The core algorithm for TRACMASS is written in Fortran for speed, and has been wrapped in Python for increased usability. This code package together is called TracPy_ [Thyng2014b]_.
 
 .. _TRACMASS: http://tracmass.org
 .. _TracPy:  https://github.com/kthyng/tracpy
@@ -56,7 +56,7 @@ The TRACMASS algorithm for stepping numerical drifters in space is distinct from
 
 .. figure:: tracmass1.pdf
 
-   A single rectangular grid cell is shown in the :math:`x`-:math:`y` plane. Zonal (meridional) :math:`u~(v)` velocities are calculated at the east/west (north/south) cell walls. In the vertical direction, :math:`w` velocities are calculated at the top and bottom cell walls. After [Doos2013]_. :label:`tracmass1`
+   A single rectangular grid cell is shown in the :math:`x`-:math:`y` plane. Zonal (meridional) :math:`u~(v)` velocities are calculated at the east/west (north/south) cell walls. In the vertical direction, :math:`w` velocities are calculated at the top and bottom cell walls. After [Döös2013]_. :label:`tracmass1`
 
 1. To calculate the time required for the drifter to exit the grid cell in the :math:`x` direction:
 
@@ -75,27 +75,27 @@ Drifters can be stepped forward or backward in time; this is accomplished essent
 
 .. Explain options like subgrid diffusion, time interpolation, and time-dependent algorithm
 
-Time is assumed to be steady while a drifter is being stepped through a grid cell |---| how much this will affect the resulting trajectory depends on the size of the grid cell relative to the speed of the drifter. When a drifter reaches another grid cell wall, the fields are re-interpolated. The user may choose to interpolate the velocity fields at shorter intervals if desired by setting a maximum time before reinterpolation. A time-dependent algorithm has been developed to extend the TRACMASS algorithm [deVries2001]_, but previous researchers have found that the steady approximation is adequate in many cases [Doos2013]_ and it is not implemented in TracPy. 
+Time is assumed to be steady while a drifter is being stepped through a grid cell |---| how much this will affect the resulting trajectory depends on the size of the grid cell relative to the speed of the drifter. When a drifter reaches another grid cell wall, the fields are re-interpolated. The user may choose to interpolate the velocity fields at shorter intervals if desired by setting a maximum time before reinterpolation. A time-dependent algorithm has been developed to extend the TRACMASS algorithm [DeVries2001]_, but previous researchers have found that the steady approximation is adequate in many cases [Döös2013]_ and it is not implemented in TracPy. 
 
-The capability of the TRACMASS algorithm has been demonstrated by creating synthetic model output, running numerical drifters, and comparing with known trajectory solutions (Figure :ref:`validation`). A damped inertial oscillation is used in the test, for which the analytic solutions for both the velocity fields and a particle's trajectory are known [Doos2013]_. Cases of a drifter trajectory calculated with different levels of interpolation between model outputs are shown along with the analytic solution and a trajectory calculated using the time-dependent TRACMASS algorithm. All trajectories generally following the analytic solution, but the case with no time interpolation of the fields clearly deviates. The case with 10 interpolation steps in times performs well, and with 1000 interpolation steps, the curves are indistinguishable. Note that in this test case, the size of the grid cell relative to the motion of the trajectory emphasizes the effect of time interpolation.
+The capability of the TRACMASS algorithm has been demonstrated by creating synthetic model output, running numerical drifters, and comparing with known trajectory solutions (Figure :ref:`validation`). A damped inertial oscillation is used in the test, for which the analytic solutions for both the velocity fields and a particle's trajectory are known [Döös2013]_. Cases of a drifter trajectory calculated with different levels of interpolation between model outputs are shown along with the analytic solution and a trajectory calculated using the time-dependent TRACMASS algorithm. All trajectories generally following the analytic solution, but the case with no time interpolation of the fields clearly deviates. The case with 10 interpolation steps in times performs well, and with 1000 interpolation steps, the curves are indistinguishable. Note that in this test case, the size of the grid cell relative to the motion of the trajectory emphasizes the effect of time interpolation.
 
 .. figure:: validation.png
 
-   A trajectory from a damped inertial oscillation is shown from several simulated cases with the analytic solution. Cases shown are trajectories calculated using TRACMASS with zero [red], 10 [blue], and 1000 [green] time interpolation steps between model outputs; the analytic solution [black]; and the time-dependent algorithm [purple]. The green, black, and purple curves are indistinguishable. From [Doos2013]_. :label:`validation`
+   A trajectory from a damped inertial oscillation is shown from several simulated cases with the analytic solution. Cases shown are trajectories calculated using TRACMASS with zero [red], 10 [blue], and 1000 [green] time interpolation steps between model outputs; the analytic solution [black]; and the time-dependent algorithm [purple]. The green, black, and purple curves are indistinguishable. From [Döös2013]_. :label:`validation`
 
-Options are available to complement the basic algorithm of TRACMASS. For example, it can be important to consider whether or not to add additional explicit subgrid diffusion to drifters. Energy at scales below a few spatial grid cells is not included in an ocean circulation model except through a turbulence closure scheme or other means. This energy is included in the numerical scheme and implemented in the simulation, and in this regard is implicitly included in the saved velocity fields from the circulation model. From this perspective, adding any additional subgrid energy is duplicating the energy that is already included in the simulation. However, without including some small-scale energy to drifter tracks, drifters starting at the same time and location will follow the same path, which is clearly not realistic |---| adding a small amount of energy to drifter tracks acts to stir drifters in a way that often looks more realistic than when explicit subgrid diffusion is not included. This added energy will also affect Lagrangian metrics that are calculated from drifter trajectories (*e.g.*, [Doos2011]_).
+Options are available to complement the basic algorithm of TRACMASS. For example, it can be important to consider whether or not to add additional explicit subgrid diffusion to drifters. Energy at scales below a few spatial grid cells is not included in an ocean circulation model except through a turbulence closure scheme or other means. This energy is included in the numerical scheme and implemented in the simulation, and in this regard is implicitly included in the saved velocity fields from the circulation model. From this perspective, adding any additional subgrid energy is duplicating the energy that is already included in the simulation. However, without including some small-scale energy to drifter tracks, drifters starting at the same time and location will follow the same path, which is clearly not realistic |---| adding a small amount of energy to drifter tracks acts to stir drifters in a way that often looks more realistic than when explicit subgrid diffusion is not included. This added energy will also affect Lagrangian metrics that are calculated from drifter trajectories (*e.g.*, [Döös2011]_).
 
 To address this issue, there are several optional means of including explicit subgrid diffusion in TRACMASS, all of which are low order schemes [LaCasce2008]_. Drifter trajectories may be stepped using not the basic velocity fields (:math:`u,v`) but with the velocity fields plus some small random velocity fluctuation (:math:`u'`, :math:`v'`) (Figure :ref:`turb`). Alternatively, drifter trajectory locations can be given an added random walk |---| randomly moved a small distance away from their location each step within a circle whose radius is controlled by an input parameter (Figure :ref:`diff`). Note that when using additional subgrid diffusion, drifter tracks will not be the same forward and backward in time. 
 
 .. figure:: tracmassTurb.pdf
    :scale: 52%
 
-   Instead of being stepped forward to new location :math:`(x_1,y_1)` by the base velocity field, a drifter can be instead stepped forward by the velocity field plus a random velocity fluctuation to include explicit subgrid diffusion, such that the drifter ends up instead at :math:`(x_1,y_1)'`. After [Doos2013]_. :label:`turb`
+   Instead of being stepped forward to new location :math:`(x_1,y_1)` by the base velocity field, a drifter can be instead stepped forward by the velocity field plus a random velocity fluctuation to include explicit subgrid diffusion, such that the drifter ends up instead at :math:`(x_1,y_1)'`. After [Döös2013]_. :label:`turb`
 
 .. figure:: tracmassDiff.pdf
    :scale: 52%
 
-   A drifter's location can be randomly pushed within a circle from its calculated position to add explicit subgrid diffusion. After [Doos2013]_. :label:`diff`
+   A drifter's location can be randomly pushed within a circle from its calculated position to add explicit subgrid diffusion. After [Döös2013]_. :label:`diff`
 
 TracPy
 ------
@@ -199,217 +199,64 @@ A Python wrapper, TracPy, to a Lagrangrian trajectory model, TRACMASS, combines 
 Acknowledgements
 ----------------
 
-Thanks to Chris Barker for help in improving TracPy modularity and unit tests, and for on-going work in integrating TracPy into NOAA's GNOME system. Thanks also to helpful review comments from @LetscheT.
+Thanks to Chris Barker for help in improving TracPy modularity and unit tests, and for on-going work in integrating TracPy into NOAA's GNOME system. Thanks also to helpful review comments from Terry Letsche.
 
 References
 ----------
 
-.. [Barker2000] C. H. Barker & J. A. Galt. *Analysis of methods used in spill response planning: Trajectory Analysis Planner TAP II*. Spill Science & Technology Bulletin, 6(2), 145-152, 2000.
-
-.. [Beegle-Krause1999] C. J. Beegle-Krause. *GNOME: NOAA’s next-generation spill trajectory model*, Oceans ’99 MTS/IEEE Proceedings. MTS/IEEE Conference Committee, Escondido, CA, vol. 3, pp. 1262–1266, 1999.
-
-.. [Beegle-Krause2001] C. J. Beegle-Krause. *General NOAA oil modeling environment (GNOME): a new spill trajectory model*, IOSC 2001 Proceedings, Tampa, FL, March 26–29, 2001. Mira Digital Publishing, Inc., St. Louis, MO, vol. 2, pp. 865–871, 2001.
-
-.. [deVries2001] P. de Vries, K. Döös. *Calculating Lagrangian trajectories using time-dependent velocity fields*, J Atmos Ocean Technol 18:1092–1101, 2001.
-
-.. [Doos2007] K. Döös, & A. Engqvist. *Assessment of water exchange between a discharge region and the open sea–A comparison of different methodological concepts*. Estuarine, Coastal and Shelf Science, 74(4), 709-721, 2007.
-
-.. [Doos2011] K. Döös, V. Rupolo, & L. Brodeau. *Dispersion of surface drifters and model-simulated trajectories*. Ocean Modelling, 39(3), 301-310, 2011.
-
-.. [Doos2013] K. Döös, J. Kjellsson, & B. Jönsson. *TRACMASS—A Lagrangian trajectory model*. In Preventive Methods for Coastal Protection (pp. 225-249). Springer International Publishing, 2013.
-
-.. [LaCasce2003] J. H. LaCasce & C. Ohlmann. *Relative dispersion at the surface of the Gulf of Mexico*, Journal of Marine Research, 61(3), 285-312, 2003.
-
-.. [LaCasce2008] J. H. LaCasce. *Statistics from Lagrangian observations*, Progress in Oceanography, 77(1), 1-29, 2008.
-
-.. [Thyng2014a] K. M. Thyng, R. D. Hetland, R. Montuoro, J. Kurian. *Lagrangian tracking errors due to temporal subsampling of numerical model output*. Submitted to Journal of Atmospheric and Oceanic Technology, 2014.
-
-.. [Thyng2014b] K. M. Thyng. TracPy. ZENODO. doi: 10.5281/zenodo.10433, 2014.
-
-.. .. [Atr03] P. Atreides. *How to catch a sandworm*,
-..            Transactions on Terraforming, 21(3):261-300, August 2003.
-
-
-.. Twelve hundred years ago  |---| in a galaxy just across the hill...
-
-.. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-.. tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-.. sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-.. tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-.. eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-.. adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-.. ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-.. purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-.. quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-.. nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-.. Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-.. justo vitae odio tincidunt tempus at vitae tortor.
-
-.. Of course, no paper would be complete without some source code.  Without
-.. highlighting, it would look like this::
-
-..    def sum(a, b):
-..        """Sum two numbers."""
-
-..        return a + b
-
-.. With code-highlighting:
-
-.. .. code-block:: python
-
-..    def sum(a, b):
-..        """Sum two numbers."""
-
-..        return a + b
-
-.. Maybe also in another language, and with line numbers:
-
-.. .. code-block:: c
-..    :linenos:
-
-..    int main() {
-..        for (int i = 0; i < 10; i++) {
-..            /* do something */
-..        }
-..        return 0;
-..    }
-
-.. Or a snippet from the above code, starting at the correct line number:
-
-.. .. code-block:: c
-..    :linenos:
-..    :linenostart: 2
-
-..    for (int i = 0; i < 10; i++) {
-..        /* do something */
-..    }
- 
-.. Important Part
-.. --------------
-
-.. It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
-.. some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-.. equation on a separate line:
-
-.. .. math::
-
-..    g(x) = \int_0^\infty f(x) dx
-
-.. or on multiple, aligned lines:
-
-.. .. math::
-..    :type: eqnarray
-
-..    g(x) &=& \int_0^\infty f(x) dx \\
-..         &=& \ldots
-
-
-.. The area of a circle and volume of a sphere are given as
-
-.. .. math::
-..    :label: circarea
-
-..    A(r) = \pi r^2.
-
-.. .. math::
-..    :label: spherevol
-
-..    V(r) = \frac{4}{3} \pi r^3
-
-.. We can then refer back to Equation (:ref:`circarea`) or
-.. (:ref:`spherevol`) later.
-
-.. Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-.. consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-.. lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-.. turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-.. adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-.. arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-.. faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-.. consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-.. orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-.. sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-.. lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-.. volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
-.. pulvinar id metus.
-
-.. .. figure:: figure1.png
-
-..    This is the caption. :label:`egfig`
-
-.. .. figure:: figure1.png
-..    :align: center
-..    :figclass: w
-
-..    This is a wide figure, specified by adding "w" to the figclass.  It is also
-..    center aligned, by setting the align keyword (can be left, right or center).
-
-.. .. figure:: figure1.png
-..    :scale: 20%
-..    :figclass: bht
-
-..    This is the caption on a smaller figure that will be placed by default at the
-..    bottom of the page, and failing that it will be placed inline or at the top.
-..    Note that for now, scale is relative to a completely arbitrary original
-..    reference size which might be the original size of your image - you probably
-..    have to play with it. :label:`egfig2`
-
-.. As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-.. figures.
-
-.. .. table:: This is the caption for the materials table. :label:`mtable`
-
-..    +------------+----------------+
-..    | Material   | Units          |
-..    +------------+----------------+
-..    | Stone      | 3              |
-..    +------------+----------------+
-..    | Water      | 12             |
-..    +------------+----------------+
-..    | Cement     | :math:`\alpha` |
-..    +------------+----------------+
-
-
-.. We show the different quantities of materials required in Table
-.. :ref:`mtable`.
-
-
-.. .. The statement below shows how to adjust the width of a table.
-
-.. .. raw:: latex
-
-..    \setlength{\tablewidth}{0.8\linewidth}
-
-
-.. .. table:: This is the caption for the wide table.
-..    :class: w
-
-..    +--------+----+------+------+------+------+--------+
-..    | This   | is |  a   | very | very | wide | table  |
-..    +--------+----+------+------+------+------+--------+
-
-
-.. Perhaps we want to end off with a quote by Lao Tse:
-
-..   *Muddy water, let stand, becomes clear.*
-
-
-.. .. Customised LaTeX packages
-.. .. -------------------------
-
-.. .. Please avoid using this feature, unless agreed upon with the
-.. .. proceedings editors.
-
-.. .. ::
-
-.. ..   .. latex::
-.. ..      :usepackage: somepackage
-
-.. ..      Some custom LaTeX source here.
-
-.. References
-.. ----------
-.. .. [Atr03] P. Atreides. *How to catch a sandworm*,
-..            Transactions on Terraforming, 21(3):261-300, August 2003.
-
-
+.. [Barker2000] C. H. Barker & J. A. Galt.
+                *Analysis of methods used in spill response planning:
+                Trajectory Analysis Planner TAP II*.
+                Spill Science & Technology Bulletin, 6(2),
+                145-152, 2000.
+
+.. [Beegle-Krause1999] C. J. Beegle-Krause.
+                       *GNOME: NOAA’s next-generation spill trajectory
+                       model*,
+                       Oceans ’99 MTS/IEEE Proceedings.
+                       MTS/IEEE Conference Committee, Escondido, CA,
+                       vol. 3, pp. 1262–1266, 1999.
+
+.. [Beegle-Krause2001] C. J. Beegle-Krause.
+                       *General NOAA oil modeling environment (GNOME):
+                       a new spill trajectory model*,
+                       IOSC 2001 Proceedings, Tampa, FL, March
+                       26–29, 2001. Mira Digital Publishing, Inc.,
+                       St. Louis, MO, vol. 2, pp. 865–871, 2001.
+
+.. [DeVries2001] P. de Vries, K. Döös.
+                 *Calculating Lagrangian trajectories using
+                 time-dependent velocity fields*, J Atmos Ocean
+                 Technol 18:1092–1101, 2001.
+
+.. [Döös2007] K. Döös, & A. Engqvist.
+              *Assessment of water exchange between a discharge region
+              and the open sea–A comparison of different
+              methodological concepts*. Estuarine, Coastal and Shelf
+              Science, 74(4), 709-721, 2007.
+
+.. [Döös2011] K. Döös, V. Rupolo, & L. Brodeau.
+              *Dispersion of surface drifters and model-simulated
+              trajectories*. Ocean Modelling, 39(3), 301-310, 2011.
+
+.. [Döös2013] K. Döös, J. Kjellsson, & B. Jönsson.
+              *TRACMASS—A Lagrangian trajectory model*. In Preventive
+              Methods for Coastal Protection (pp. 225-249). Springer
+              International Publishing, 2013.
+
+.. [LaCasce2003] J. H. LaCasce & C. Ohlmann.
+                 *Relative dispersion at the surface of the Gulf of
+                 Mexico*, Journal of Marine Research, 61(3),
+                 285-312, 2003.
+
+.. [LaCasce2008] J. H. LaCasce.
+                 *Statistics from Lagrangian observations*, Progress
+                 in Oceanography, 77(1), 1-29, 2008.
+
+.. [Thyng2014a] K. M. Thyng, R. D. Hetland, R. Montuoro, J. Kurian.
+                *Lagrangian tracking errors due to temporal
+                subsampling of numerical model output*. Submitted to
+                Journal of Atmospheric and Oceanic Technology, 2014.
+
+.. [Thyng2014b] K. M. Thyng.
+                TracPy. ZENODO. doi: ``10.5281/zenodo.10433``, 2014.

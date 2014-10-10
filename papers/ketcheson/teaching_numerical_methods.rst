@@ -76,8 +76,10 @@ course) that the hands-on mode of learning was particularly helpful to them.
 
 The notebooks used in my course for the past two years are available online:
 
-- `2012 course <https://github.com/ketch/finite-difference-course>`_
-- `2013 course <https://github.com/ketch/AMCS252>`_
+- 2013 course:
+
+  `https://github.com/ketch/finite-difference-course <https://github.com/ketch/finite-difference-course>`_
+- 2013 course: `https://github.com/ketch/AMCS252 <https://github.com/ketch/AMCS252>`_
 
 Please note that these materials are not nearly as polished as a typical course
 textbook, and some of them are not self-contained (they may rely strongly on
