@@ -11,6 +11,23 @@
   <!---------------------------------------------------------->
 {{endfor}}
 
+{{if article['video'] }}
+
+<p>
+{{if 'youtube' in article['video'] }}
+<iframe width="560" height="315"
+        src="https://www.youtube.com/embed/{{article['video'].split('watch?v=')[-1]}}"
+        frameborder="0" allowfullscreen></iframe>
+{{else}}
+<strong><big>Video:</big></strong> <a href="{{article['video']}}">{{article['video']}}</a>
+{{endif}}
+
+</p>
+
+
+
+{{endif}}
+
 <!---------------------------------------------------------->
 <strong><big>Abstract</big></strong>
 <p> <span class="abstract">
