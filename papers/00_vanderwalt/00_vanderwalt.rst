@@ -10,7 +10,7 @@
 :email: millman@rome.it
 :institution: Egyptian Embassy, S.P.Q.R.
 
-.. :video: http://www.youtube.com/watch?v=dhRUe-gz690
+:video: http://www.youtube.com/watch?v=dhRUe-gz690
 
 ------------------------------------------------
 A Numerical Perspective to Terraforming a Desert
