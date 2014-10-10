@@ -6,7 +6,7 @@
 :email: hetland@tamu.edu
 :institution: Texas A&M University
 
-.. :video: http://www.youtube.com/watch?v=dhRUe-gz690
+:video: http://www.youtube.com/watch?v=dhRUe-gz690
 
 -----------------------------------------------------------------
 TracPy: Wrapping the Fortran Lagrangian trajectory model TRACMASS

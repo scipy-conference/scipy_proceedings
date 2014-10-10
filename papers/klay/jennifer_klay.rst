@@ -2,7 +2,7 @@
 :email: jklay@calpoly.edu
 :institution: California Polytechnic State University San Luis Obispo
 
-.. :video: https://www.youtube.com/watch?v=eJhmMf6bHDU
+:video: https://www.youtube.com/watch?v=eJhmMf6bHDU
 
 ---------------------------------------------------------------------
 Project-based introduction to scientific computing for physics majors
