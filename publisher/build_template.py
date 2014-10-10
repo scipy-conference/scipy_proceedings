@@ -8,15 +8,27 @@ import tempita
 from conf import bib_dir, build_dir, template_dir, html_dir
 from options import get_config
 
-def _from_template(tmpl_basename, config):
+class TeXTemplate(tempita.Template):
+    def _repr(self, value, pos):
+        if isinstance(value, unicode):
+            value = value.replace('&', '\&')
+        else:
+            value = str(value)
+        return value.encode('utf-8')
+
+def _from_template(tmpl_basename, config, use_html=True):
     tmpl = os.path.join(template_dir, tmpl_basename + '.tmpl')
-    template = tempita.HTMLTemplate(open(tmpl, 'r').read())
+    if use_html:
+        template = tempita.HTMLTemplate(open(tmpl, 'r').read())
+    else:
+        template = TeXTemplate(open(tmpl, 'r').read())
     return template.substitute(config)
 
 def from_template(tmpl_basename, config, dest_fn):
-
-    outfile = _from_template(tmpl_basename, config)
     extension = os.path.splitext(dest_fn)[1][1:]
+
+    use_html = False if 'tex' in extension else True
+    outfile = _from_template(tmpl_basename, config, use_html=use_html)
     outname = os.path.join(build_dir, extension, dest_fn)
 
     with open(outname, mode='w') as f:
