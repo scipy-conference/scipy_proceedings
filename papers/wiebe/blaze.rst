@@ -14,6 +14,8 @@
 :email: aterrel@continuum.io
 :institution: Continuum Analytics
 
+.. :video: http://www.youtube.com/watch?v=9HPR-1PdZUk
+
 -------------------------------------------------------------------
 Blaze: Building A Foundation for Array-Oriented Computing in Python
 -------------------------------------------------------------------

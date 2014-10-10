@@ -2,6 +2,8 @@
 :email: pugh@maths.ox.ac.uk
 :institution: School of Economics, University of Edinburgh; Institute for New Economic Thinking at the Oxford Martin School and Oxford Mathematical Institute, University of Oxford
 
+.. :video: http://www.youtube.com/watch?v=xHkGW1l5X8k
+
 -------------------------------------------------------
 Python for research and teaching economics
 -------------------------------------------------------

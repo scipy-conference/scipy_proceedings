@@ -26,7 +26,7 @@
 :email: atheisen@ou.edu
 :institution: University of Oklahoma, Cooperative Institute for Mesoscale Meteorological Studies, ARM Climate Research Facility Data Quality Office.
 
-
+.. :video: http://www.youtube.com/watch?v=1D0aTToHrCY
 
 --------------------------------------------------------------------
 Measuring rainshafts: Bringing Python to bear on remote sensing data

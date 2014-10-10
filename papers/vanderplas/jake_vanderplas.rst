@@ -2,6 +2,8 @@
 :email: jakevdp@cs.washington.edu
 :institution: eScience Institute, University of Washington
 
+.. :video: http://www.youtube.com/watch?v=KhAUfqhLakw
+
 ---------------------------------------------------
 Frequentism and Bayesianism: A Python-driven Primer
 ---------------------------------------------------

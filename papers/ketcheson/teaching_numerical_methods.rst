@@ -10,6 +10,8 @@
 :email: david.ketcheson@kaust.edu.sa
 :institution: King Abdullah University of Science and Technology
 
+.. :video: http://www.youtube.com/watch?v=OaP6LiZuaFM
+
 ----------------------------------------------------------------------------
 Teaching numerical methods with IPython notebooks and inquiry-based learning
 ----------------------------------------------------------------------------

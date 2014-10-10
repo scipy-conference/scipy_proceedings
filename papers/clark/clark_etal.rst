@@ -14,6 +14,7 @@
 :email: rylo@berkeley.edu
 :institution: UC Berkeley
 
+.. :video: http://www.youtube.com/watch?v=e7jaZ5SFvFk
 
 --------------------------------------------------------------------------------
 BCE: Berkeley's Common Scientific Compute Environment for Research and Education

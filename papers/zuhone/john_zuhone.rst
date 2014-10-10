@@ -22,6 +22,8 @@
 :email: christian.schmid@sternwarte.uni-erlangen.de
 :institution: Dr. Karl Remeis-Sternwarte & ECAP, Sternwartstr. 7, 96049 Bamberg, Germany
 
+.. :video: http://www.youtube.com/watch?v=fUMq6rmNshc
+
 -----------------------------------------
 Simulating X-ray Observations with Python
 -----------------------------------------
