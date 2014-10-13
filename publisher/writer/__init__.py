@@ -72,7 +72,7 @@ class Translator(LaTeXTranslator):
         raise nodes.SkipNode
 
     def visit_field_body(self, node):
-        text = self.encode(node.astext())
+        text = node.astext()
 
         if self.current_field == 'email':
             self.author_emails.append(text)
@@ -96,7 +96,7 @@ class Translator(LaTeXTranslator):
         # build map: institution -> (author1, author2)
         institution_authors = OrderedDict()
         for auth, inst in zip(self.author_names, self.author_institutions):
-            institution_authors.setdefault(inst, []).append(auth)
+            institution_authors.setdefault(inst, []).append(self.encode(auth))
 
         def footmark(n):
             """Insert footmark #n.  Footmark 1 is reserved for
@@ -123,14 +123,14 @@ class Translator(LaTeXTranslator):
             # Corresponding author
             if n == 0:
                 authors += [r'%(author)s$^{%(footmark)s}$' % \
-                            {'author': auth,
+                            {'author': self.encode(auth),
                              'footmark': ''.join(footmark(1)) + ''.join(institute_footmark[inst])}]
 
                 fm_counter, fm = footmark(1)
                 authors[-1] += corresponding_auth_template % \
                                {'footmark_counter': fm_counter,
                                 'footmark': fm,
-                                'email': self.author_emails[0]}
+                                'email': self.encode(self.author_emails[0])}
 
             else:
                 authors += [r'%(author)s$^{%(footmark)s}$' %
@@ -142,7 +142,7 @@ class Translator(LaTeXTranslator):
                 authors[-1] += r'%(footmark_counter)s\thanks{%(footmark)s %(institution)s}' % \
                                {'footmark_counter': fm_counter,
                                 'footmark': fm,
-                                'institution': inst}
+                                'institution': self.encode(inst)}
 
             institutions_mentioned.add(inst)
 
@@ -163,7 +163,7 @@ class Translator(LaTeXTranslator):
           \noindent%%
           Copyright\,\copyright\,%(year)s %(copyright_holder)s %(copyright)s%%
         ''' % \
-        {'email': self.author_emails[0],
+        {'email': self.encode(self.author_emails[0]),
          'year': options['proceedings']['year'],
          'copyright_holder': copyright_holder,
          'copyright': options['proceedings']['copyright']['article']}
@@ -209,7 +209,7 @@ class Translator(LaTeXTranslator):
             self.out.append('\\end{abstract}')
             self.abstract_in_progress = False
         elif self.abstract_in_progress:
-            self.abstract_text.append(self.encode(node.astext()))
+            self.abstract_text.append(node.astext())
 
 
     def visit_title(self, node):
@@ -235,12 +235,12 @@ class Translator(LaTeXTranslator):
 
         if 'abstract' in node['classes'] and not self.abstract_in_progress:
             self.out.append('\\begin{abstract}')
-            self.abstract_text.append(self.encode(node.astext()))
+            self.abstract_text.append(node.astext())
             self.abstract_in_progress = True
 
         elif 'keywords' in node['classes']:
             self.out.append('\\begin{IEEEkeywords}')
-            self.keywords = self.encode(node.astext())
+            self.keywords = node.astext()
 
         elif self.non_breaking_paragraph:
             self.non_breaking_paragraph = False
