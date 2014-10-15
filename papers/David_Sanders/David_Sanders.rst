@@ -41,9 +41,9 @@ is represented as
 
 .. math:: a = \pm 2^e \times m.
 
-The standard double-precision (64-bit) representation is that of the
+The usual double-precision (64-bit) representation is that of the
 `IEEE 754 standard <http://en.wikipedia.org/wiki/IEEE_floating_point>`__
-[IEEE754]_. Here, one bit is used for the sign, 11 bits for the exponent
+[IEEE754]_: one bit is used for the sign, 11 bits for the exponent
 :math:`e`, which ranges from :math:`-1022` to :math:`+1023`, and the
 remaining 52 bits are used for the "mantissa" :math:`m`, a binary string
 of 53 bits, starting with a :math:`1` which is not explicitly stored.
@@ -109,24 +109,27 @@ they see the following kinds of outputs of elementary calculations
 
 
 
-Suppose that we now wish to do a scientific computation in which we have
-an initial condition :math:`x_0 = 0.1` and feed it into an algorithm.
-The result will be erroneous, since the actual initial condition used
+Suppose that we now apply an algorithm starting with
+an initial condition :math:`x_0 = 0.1`.
+The result will be erroneous, since the initial condition used
 differs slightly from the desired value. In chaotic systems, for
 example, such a tiny initial deviation may be quickly magnified and
 destroy all precision in the computation. Although there are methods to
-estimate the resulting errors [High96]_, there is no guarantee the the
-true result is captured.
+estimate the resulting errors [High96]_, there is no guarantee that the
+true result is captured. Another example is certain ill-conditioned
+matrix computations, where small changes to the matrix lead to
+unexpectedly large changes in the result.
 
 Interval arithmetic
 ===================
 
-A solution to this difficulty, developed over the last 50 years but
-still relatively unknown in the wider scientfic community, is *interval
-arithmetic*: all quantities in a computation are treated as closed
-intervals of the form :math:`[a, b]`, and if the initial data are
+Interval arithmetic is one solution for these difficulties.
+In this method, developed over the last 50 years but
+still relatively unknown in the wider scientfic community,
+all quantities in a computation are treated as closed
+intervals of the form :math:`[a, b]`. If the initial data are
 contained within the initial intervals, then the result of the
-calculation is *guaranteed* to contain the correct result. To accomplish
+calculation is *guaranteed* to contain the true result. To accomplish
 this, the intervals are propagated throughout the calculation, based on
 the following ideas:
 
@@ -136,21 +139,21 @@ the following ideas:
    :math:`+\infty`). [The availability of these rounding operations is
    standard on modern computing hardware.] In this way, the interval is
    guaranteed to contain the true result. If we do not apply rounding,
-   then this might not be the case; for example, the interval
-   :math:`I=[0.1, 0.2]` will not actually contain the true :math:`0.1`
-   if we use the standard floating-point representation for the lower
-   end-point, which rather gives
-   :math:`1.00000000000000005551115123\ldots`.
+   then this might not be the case; for example, the interval given by
+   :math:`I=Interval(0.1, 0.2)` does not actually contain the true :math:`0.1`
+   if the standard floating-point representation for the lower
+   end-point is used; instead, this lower bound corresponds to
+   :math:`0.10000000000000000555111\ldots`.
 
 2. Arithmetic operations are defined on intervals, such that the result
-   of an operation on a pair of intervals is the interval that is *the
-   result of performing the operation on **any** pair of numbers, one
-   from each interval*.
+   of an operation on a pair of intervals is the interval that is `the
+   result of performing the operation on any pair of numbers, one
+   from each interval`.
 
 3. Elementary functions are defined on intervals, such that the result
    of an elementary function :math:`f` applied to an interval :math:`I`
    is the *image* of the function over that interval,
-   :math:`f(I) := \{f(x): x \in I\}`
+   :math:`f(I) := \{f(x): x \in I\}`.
 
 For example, addition of two intervals is defined as
 
@@ -180,12 +183,12 @@ mathematical image :math:`f(I) := \{f(x): x \in I \}`.
 
 Unfortunately, :math:`\tilde{f}(I)` may be strictly larger than the true
 image :math:`f(I)`, due to the so-called *dependency problem*. For
-example, let :math:`I := [-1, 1]`. Suppose that :math:`f(x) := x^2`,
+example, let :math:`I := [-1, 1]`. Suppose that :math:`f(x) := x*x`,
 i.e. that we wish to square all elements of the interval. The true image
 of the interval :math:`I` is then :math:`f(I) = [0, 1]`.
 
-However, we could think of the squaring operation as repeated
-multiplication, and try to calculate instead
+However, thinking of the squaring operation as repeated
+multiplication, we may try to calculate
 
 .. math:: I * I := \{xy: x \in I, y \in I \}.
 
@@ -200,10 +203,12 @@ consider a more complicated function like :math:`f(x) = x + \sin(x)`,
 there does not seem to be a generic way to solve the dependency problem
 and hence find the exact range.
 
-This problem may, however, be solved by splitting the initial interval
-up into subintervals, and evaluating the interval extension over those
-subintervals instead. The union of the resulting intervals gives
-(provably) a better approximation to the exact range [Tuck11]_.
+This problem may, however, be solved to an arbitrarily good approximation
+by splitting up the initial interval into a union of subintervals.
+When the interval extension is instead evaluated over those
+subintervals, the union of the resulting intervals gives
+an enclosure of the exact range that is increasingly better as the
+size of the subintervals decreases [Tuck11]_.
 
 Validated numerics: the ``ValidiPy`` package
 ============================================
@@ -211,45 +216,47 @@ Validated numerics: the ``ValidiPy`` package
 The name "validated numerics" has been applied to the combination of
 interval arithmetic, automatic differentiation, Taylor methods and other
 techniques that allow the rigorous solution of problems using
-finite-precision floating point arithmetic.
+finite-precision floating point arithmetic [Tuck11]_.
 
 The ``ValidiPy`` package, a Python package for validated numerics, was
-begun during a Masters' course on validated numerics that the authors
+initiated during a Masters' course on validated numerics that the authors
 taught in the Postgraduate Programmes in Mathematics and Physics at the
 National Autonomous University of Mexico (UNAM) during the second half
 of 2013. It is based on the excellent textbook *Validated Numerics* by
 Warwick Tucker [Tuck11]_, one of the foremost proponents of interval
-arithmetic today. His most well-known work is [Tuck99]_, in which he
-proved the existence of the Lorenz attractor, a strange (fractal,
-chaotic) attractor of the Lorenz equations modelling convection in the
-atmosphere.
+arithmetic today. He is best known for [Tuck99]_, in which he
+gave a rigorous proof of the existence of the Lorenz attractor,
+a strange (fractal, chaotic) attractor of a set of
+three ordinary differential equations modelling convection in the atmosphere
+that were computationally observed to be chaotic in 1963 [Lorenz]_.
 
 Naturally, there has been previous work on implementing the different
-components involved in Validated Numerics in Python, such as
+components of Validated Numerics in Python, such as
 `pyinterval <https://code.google.com/p/pyinterval/>`__ and
 `mpmath <http://mpmath.org/>`__ for interval arithmetic, and
 `AlgoPy <https://pythonhosted.org/algopy/>`__ for automatic
 differentiation. Our project is designed to provide an understandable
-and modifiable code base for interval arithmetic, with ease of use,
-rather than speed, in mind.
+and modifiable code base, with a focus on ease of use,
+rather than speed.
 
-There is also an incomplete sequence of IPython notebooks produced
-during the course, currently available only in Spanish, providing an
-introduction to the theory and practice of interval arithmetic,
-available on
-`GitHub <https://github.com/computo-fc/metodos_rigurosos/tree/master/clases>`__
-and for online viewing at
-`NbViewer <http://nbviewer.ipython.org/github/computo-fc/metodos_rigurosos/tree/master/clases/>`__.
+An incomplete sequence of IPython notebooks from
+the course, currently in Spanish, provide an
+introduction to the theory and practice of interval arithmetic; they are
+available on `GitHub <https://github.com/computo-fc/metodos_rigurosos/tree/master/clases>`__
+and for online viewing at `NbViewer <http://nbviewer.ipython.org/github/computo-fc/metodos_rigurosos/tree/master/clases/>`__.
+
+Code in Julia is also available, in our package
+``ValidatedNumerics.jl`` [ValidatedNumerics]_.
+
 
 Implementation of interval arithmetic
 =====================================
 
 As with many other programming languages, Python allows us to define new
-types, as ``class``\ es, and to define operations on those types. The
+types, as ``class`` es, and to define operations on those types. The
 following working sketch of an ``Interval`` class may be extended to a
 full-blown implementation (which, in particular, must include directed
-rounding; see below), available at
-https://github.com/computo-fc/ValidiPy [ValidiPy]_.
+rounding; see below), available in the [ValidiPy]_ repository.
 
 .. code:: python
 
@@ -342,8 +349,8 @@ Examples of creation and manipulation of intervals:
 
 
 To attain multiple-precision arithmetic and directed rounding, we use
-the ```gmpy2`` <https://code.google.com/p/gmpy/>`__ package [gmpy2]_.
-This provides a wrapper around the ```MPFR`` <http://www.mpfr.org>`__
+the ``gmpy2`` package [gmpy2]_.
+This provides a wrapper around the ``MPFR``
 [MPFR]_ C package for correctly-rounded multiple-precision arithmetic
 [Fous07]_. For example, a simplified version of the ``Interval``
 constructor may be written as follows, showing how the precision and
@@ -397,14 +404,14 @@ multiplication and exponentiation of intervals are as follows:
 
         return Interval(lower, upper)
 
-The interval Newton method
+The Interval Newton method
 ==========================
 
 As applications of interval arithmetic and of ``ValidiPy``, we will
 discuss two classical problems in the area of dynamical systems. The
 first is the problem of locating all periodic orbits of the dynamics,
 with a certain period, of the well-known logistic map. To do so, we will
-apply the *interval Newton method*.
+apply the *Interval Newton method*.
 
 The Newton (or Newton--Raphson) method is a standard algorithm for
 finding zeros, or roots, of a nonlinear equation, i.e. :math:`x^*` such
@@ -424,7 +431,7 @@ to the function :math:`f` at the point :math:`x_n` with the
 :math:`x`-axis, and thus gives a new estimate of the root.
 
 If the initial guess is sufficiently close to a root, then this
-algorithm converges very fast ("quadratically") to the root: the number
+algorithm converges very quickly ("quadratically") to the root: the number
 of correct digits doubles at each step.
 
 However, the standard Newton method suffers from problems: it may not
@@ -451,7 +458,7 @@ the endpoints :math:`a` and :math:`b` of the interval :math:`I=[a,b]`
 and find that :math:`f(a) < 0 < f(b)` (or vice versa), then we can
 guarantee that there is *at least one root within the interval*.
 
-The interval Newton method does not just naively extend the standard
+The Interval Newton method does not just naively extend the standard
 Newton method. Rather, a new operator, the Newton operator, is defined,
 which takes an interval as input and returns as output either one or two
 intervals. The Newton operator for the function :math:`f` is defined as
@@ -487,19 +494,31 @@ Newton operator is sufficient to determine the presence (and uniqueness)
 or absence of roots in each subinterval.
 
 Starting from an initial interval :math:`I_0`, and iterating
-:math:`I_{n+1} := I_n \cap N(I_n)`, gives a sequence of lists of
+:math:`I_{n+1} := I_n \cap N_f(I_n)`, gives a sequence of lists of
 intervals that is guaranteed to contain the roots of the function, as
 well as a guarantee of uniqueness in many cases.
 
-The code to implement the interval Newton method completely is slightly
+The code to implement the Interval Newton method completely is slightly
 involved, and may be found in an IPython notebook in the
 `examples` directory at
 <https://github.com/computo-fc/ValidiPy/tree/master/examples>.
 
+An example of the Interval Newton method in action is shown in
+figure :ref:`roots-of-two`, where it was used to find the roots of
+:math:`f(x) = x^2 - 2` within the initial interval :math:`[-5, 5]`.
+Time proceeds vertically from bottom to top.
+
+
+.. figure:: roots-of-two.pdf
+
+    Convergence of the Interval Newton method to the roots of 2.
+    :label:`roots-of-two`
+
+
 Periodic points of the logistic map
 ===================================
 
-An interesting application of the interval Newton method is to dynamical
+An interesting application of the Interval Newton method is to dynamical
 systems. These may be given, for example, as the solution of systems of
 ordinary differential equations, as in the Lorenz equations [Lor63]_, or by
 iterating maps. The *logistic map* is a much-studied dynamical system,
@@ -531,7 +550,7 @@ part of studying almost any such system. However, standard methods
 usually do not guarantee that all periodic points of a given period have
 been found.
 
-On the contrary, the interval Newton method, applied to the function
+On the contrary, the Interval Newton method, applied to the function
 :math:`g_p(x) := f^p(x) - x`, guarantees to find all zeros of the
 function :math:`g_p`, i.e. all points with period at most :math:`p` (or
 to explicitly report where it has failed). Note that this will include
@@ -539,7 +558,7 @@ points of lower period too; thus, the periodic points should be
 enumerated in order of increasing period, starting from period
 :math:`1`, i.e. fixed points :math:`x` such that :math:`f(x)=x`.
 
-To verify the application of the interval Newton method to calculate
+To verify the application of the Interval Newton method to calculate
 periodic orbits, we use the fact that the particular case of :math:`f_4`
 the logistic map with :math:`r=4` is *conjugate* (related by an
 invertible nonlinear change of coordinates) to a simpler map, the tent
@@ -583,15 +602,22 @@ Thus the solution of :math:`T^n_i(x) = x` satisfies
 giving the :math:`2^n` points which are candidates for periodic points
 of period :math:`n`. (Some are actually periodic points with period
 :math:`p` that is a proper divisor of :math:`n`, satisfying also
-:math:`T^p(x) = x`.)  These points are shown in figure :ref:`tent-map-period-4`.
+:math:`T^p(x) = x`.)  These points are shown in figure
+:ref:`tent-map-period-4`.
+
 
 .. figure:: tent-map-period-4.pdf
 
-    Points with period dividing 4 of the tent map. :label:`tent-map-period-4`
+    Periodic points of the tent map with period dividing 4.
+    :label:`tent-map-period-4`
+
 
 .. figure:: logistic-period-4.pdf
 
-   Points with period dividing 4 of the logistic map. :label:`logistic-map-period-4`
+    Periodic points of the logistic map with period dividing 4.
+    :label:`logistic-map-period-4`
+
+
 
 It turns out [Ott]_ that the invertible change of variables
 
@@ -608,24 +634,27 @@ into the sequence :math:`(x_n)` given by iterating the logistic map
 
 Thus periodic points of the tent map, satisfying :math:`T^m(y) = y`, are
 mapped by :math:`h` into periodic points :math:`x` of the logistic map,
-satisfying :math:`T^m(x) = x`, shown in figure :ref:`logistic-map-period-4`
+satisfying :math:`T^m(x) = x`, shown in figure :ref:`logistic-map-period-4`.
 
 The following table (figure :ref:`period-4-data`) gives the midpoint of the intervals containing the
 fixed points :math:`x` such that :math:`f_4^4(x)=x` of the logistic map,
-using the interval Newton method with standard double precision, and the
+using the Interval Newton method with standard double precision, and the
 corresponding exact values using the correspondence with the tent map,
 together with the difference. We see that the method indeed works very
 well. However, to find periodic points of higher period, higher precision
 must be used.
 
+
 .. figure::  period-4.pdf
 
-    Period 4 points: calculated, exact, and the difference.  :label:`period-4-data`
+    Period 4 points: calculated, exact, and the difference.
+    :label:`period-4-data`
+
 
 Automatic differentiation
 =========================
 
-A difficulty in implementing the Newton method (including the standard
+A difficulty in implementing the Newton method (even for the standard
 version), is the calculation of the derivative :math:`f'` at a given
 point :math:`a`. This may be accomplished for any function :math:`f` by
 *automatic (or algorithmic) differentiation*, also easily implemented in
@@ -693,23 +722,40 @@ and extracting the derivative part.
             return "({}, {})".format(
                   self.value, self.deriv)
 
+
+As a simple example, let us differentiate the function
+:math:`f(x) = x^2 + x + 2` at :math:`x=3`. We define the function
+in the standard way:
+
 .. code:: python
 
     def f(x):
         return x*x + x + 2
 
+We now define a variable ``a`` where we wish to calculate the derivative
+and an object ``x`` representing the object that we will use in the automatic
+differentiation. Since it represents the function :math:`x \to x` evaluated
+at :math:`a`, it has derivative 1:
+
 .. code:: python
 
-    a = 3  # where want to calculate derivative
+    a = 3
     x = AutoDiff(a, 1)
+
+Finally, we simply apply the standard Python function to this new object,
+and the automatic differentiation takes care of the rest:
+
+.. code:: python
+
     result = f(x)
-    print("a={}, f(a)={}, f'(a)={}".format(
+    print("a={}; f(a)={}; f'(a)={}".format(
                 a, result.value, result.deriv))
 
+giving the result
 
 .. parsed-literal::
 
-    a=3, f(a)=14, f'(a)=7.0
+    a=3; f(a)=14; f'(a)=7.0
 
 
 The derivative :math:`f'(x) = 2x + 1`, so that :math:`f(a=3) = 14` and
@@ -738,8 +784,7 @@ Interval arithmetic provides a partial solution to this problem, since
 it automatically reports the number of significant figures in the result
 which are guaranteed correct. As an example, we show how to solve one of
 the well-known "Hundred-digit challenge problems" [Born04]_, which
-consists of calculating the position from the origin after time
-:math:`10` in a certain billiard problem.
+consists of calculating the position from the origin in a certain billiard problem.
 
 Billiard problems are a class of mathematical models in which pointlike
 particles (i.e. particles with radius :math:`0`) collide with fixed
@@ -748,12 +793,12 @@ spheres with elastic collisions, and are also paradigmatic examples of
 systems which can be proved to be chaotic, since the seminal work of
 Sinaï [Chern06]_.
 
-Intuitively, when two nearby rays of light hit a circular mirror, due to
-the curvature of the surface, the two rays will separate after they
-reflect from the mirror. **FIG**. At each such collision, the distance
-(in phase space) between the two rays is, on average, multiplied by a
+Intuitively, when two nearby rays of light hit a circular mirror,
+the curvature of the surface leads to the rays separating after they
+reflect from the mirror. At each such collision, the distance
+in phase space between the rays is, on average, multiplied by a
 factor at each collision, leading to exponential separation and hence
-chaos (also called *hyperbolicity*).
+chaos, or *hyperbolicity*.
 
 The trajectory of a single particle in such a system will hit a sequence
 of discs. However, a nearby initial condition may, after a few
@@ -794,21 +839,25 @@ standard double precision of 53 binary digits) in order to guarantee
 that the correct trajectory is calculated up to time :math:`t=10`. With
 fewer digits than this, a moment is always reached at which the
 intervals have grown so large that it is not guaranteed whether a given
-disc is hit or not. The trajectory is shown in :ref:`billard-traj`.
+disc is hit or not.
+The trajectory is shown in figure :ref:`billiard-traj`.
+
 
 .. figure:: billiard_trajectory.pdf
 
-    Trajectory of the billiard model up to time 10;
-    the black dot shows the initial position. :label:`billiard-traj`
+    Trajectory of the billiard model up to time 10; the black dot shows the initial position.
+    :label:`billiard-traj`
 
 
 With 96 digits, the uncertainty on the final distance, i.e. the diameter
 of the corresponding interval, is :math:`0.0788`. As the number of
 digits is increased, the corresponding uncertainty decreases
 exponentially fast, reaching :math:`4.7 \times 10^{-18}` with 150
-digits, i.e. at least 16 decimal digits are guaranteed correct. With
-1000 binary digits of precision, for example, the uncertainty reduces to
-:math:`5.9 \times 10^{-274}`, guaranteeing 272 correct decimal digits.
+digits, i.e. at least 16 decimal digits are guaranteed correct.
+
+.. With
+.. 1000 binary digits of precision, for example, the uncertainty reduces to
+.. :math:`5.9 \times 10^{-274}`, guaranteeing 272 correct decimal digits.
 
 Extensions
 ==========
@@ -826,10 +875,10 @@ the Cartesian product of one-dimensional intervals:
 We can immediately define, for example, functions like
 :math:`f(x,y) := x^2 + y^2` and apply them to obtain the corresponding
 interval extension :math:`\tilde{f}([a,b], [c,d]) := [a,b]^2 + [c,d]^2`,
-which will automatically contain the true image :math:`f(I)`. Similarly
-we may define functions :math:`f: \mathbb{R}^2 \to \mathbb{R}^2`, which
-will give an interval extension that produces a two-dimensional
-rectangular interval containing the true image. However, the result is
+which will automatically contain the true image :math:`f(I)`. Similarly,
+functions :math:`f: \mathbb{R}^2 \to \mathbb{R}^2`
+will give an interval extension producing a two-dimensional
+rectangular interval. However, the result is
 often much larger than the true image, so that the subdivision technique
 must be applied.
 
@@ -845,7 +894,7 @@ in particular, to implement arbitrary-precision solution of ordinary
 differential equations.
 
 An implementation in Python is available in ValidiPy, while an
-implementation in the new `Julia language <http://julialang.org>`__ is
+implementation in the Julia is
 available separately, including Taylor series in multiple variables
 [TaylorSeries]_.
 
@@ -857,6 +906,16 @@ under-appreciated in the wider scientific community. Our contribution is
 aimed at making these techniques more widely known, in particular at
 including them in courses at masters', or even undergraduate, level,
 with working, freely available code in Python and Julia.
+
+Acknowledgements
+================
+
+The authors thank Matthew Rocklin for helpful comments during the open
+refereeing process, which improved the exposition.
+Financial support is acknowledged from
+DGAPA-UNAM PAPIME grants PE-105911 and PE-107114,
+and DGAPA-UNAM PAPIIT grants IG-101113 and IN-117214.
+LB acknowledges support through a Cátedra Moshinsky (2013).
 
 References
 ==========
@@ -876,10 +935,13 @@ References
 .. [Tuck99] W. Tucker, 1999, The Lorenz attractor exists, *C. R. Acad. Sci.
     Paris Sér. I Math.* **328** (12), 1197-1202.
 
-.. [ValidiPy] D.P. Sanders and L. Benet, ``ValidiPy`` package
+.. [ValidiPy] D.P. Sanders and L. Benet, ``ValidiPy`` package for Python,
     <https://github.com/computo-fc/ValidiPy>
 
-.. [gmpy2] ``GMPY2`` package, <https://code.google.com/p/gmpy/>
+.. [ValidatedNumerics] D.P. Sanders and L. Benet, ``ValidatedNumerics.jl``
+    package for Julia, <https://github.com/dpsanders/ValidatedNumerics.jl>
+
+.. [gmpy2] ``GMPY2`` package, <https://code.google.com/p/gmpy>
 
 .. [MPFR] ``MPFR`` package, <http://www.mpfr.org>
 
@@ -918,3 +980,6 @@ References
 
 .. [Moo09] R.E. Moore, R.B. Kearfott and M.J. Cloud (2009), *Introduction to
     Interval Analysis*, SIAM.
+
+.. [Lorenz] E.N. Lorenz (1963), Deterministic nonperiodic flow, *J. Atmos. Sci*
+    **20** (2), 130-148.
