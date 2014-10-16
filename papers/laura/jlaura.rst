@@ -6,7 +6,7 @@
 :email: srey@asu.edu
 :institution: School of Geographical Sciences and Urban Planning, Arizona State University
 
-:video: http://www.youtube.com/watch?v=rCSoGLjqyyE
+:video: http://www.youtube.com/watch?v=kNcA-yE_iNI
 
 --------------------------------------------------------------------
 Scaling Polygon Adjacency Algorithms to Big Data Geospatial Analysis
