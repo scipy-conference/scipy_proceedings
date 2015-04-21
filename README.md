@@ -10,7 +10,7 @@ paper:
   [scipy_proceedings](https://github.com/scipy-conference/scipy_proceedings)
   repository on GitHub.
 
-- Check out the 2014 branch (``git checkout 2014``).
+- Check out the 2015 branch (``git checkout 2015``).
 
 - An example paper is provided in ``papers/00_vanderwalt``.  Create a new
   directory ``papers/firstname_surname``, copy the example paper into it, and
@@ -22,7 +22,7 @@ paper:
 
 - Once you are ready to submit your paper, file a pull request on GitHub.
   **Please ensure that you file against the correct branch**--your branch
-  should be named 2014, and the pull-request should be against our 2014
+  should be named 2015, and the pull-request should be against our 2015
   branch.
 
 - Please do not modify any files outside of your paper directory.
