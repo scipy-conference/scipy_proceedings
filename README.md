@@ -64,6 +64,9 @@ sudo apt-get install python-docutils texlive-latex-base texlive-publishers \
                      texlive-latex-extra texlive-fonts-recommended
 ```
 
+ - Due to a bug in the Debian packaging of ``pdfannotextractor``, you may have
+   to execute ``pdfannotextractor --install`` to fetch the PDFBox library.
+
 ## For organizers
 
 To build the whole proceedings, see the Makefile in the publisher directory.
