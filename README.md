@@ -30,6 +30,7 @@ paper:
 Pull requests are to be submitted by **June 15th**, but modifications are
 allowed during the open review period which ends July 5th.
 
+
 ## General Guidelines
 
 - All figures and tables should have captions.
@@ -71,6 +72,12 @@ On Debian-like distributions:
 sudo apt-get install python-docutils texlive-latex-base texlive-publishers \
                      texlive-latex-extra texlive-fonts-recommended
 ```
+
+## Build Server
+
+Thanks to the great and wonderful Stefan van der Walt, there is a server online 
+building the open pull requests [here](http://nipy.bic.berkeley.edu:5000/). You may be 
+able to pull a built PDF for review from there.
 
 ## For organizers
 
