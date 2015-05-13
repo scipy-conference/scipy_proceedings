@@ -78,7 +78,7 @@ sudo apt-get install python-docutils texlive-latex-base texlive-publishers \
 
 ## Build Server
 
-Thanks to the great and wonderful Stefan van der Walt, there is a server online 
+Thanks to the great and wonderful St$$\'{e}$$fan van der Walt, there is a server online 
 building the open pull requests [here](http://nipy.bic.berkeley.edu:5000/). You may be 
 able to pull a built PDF for review from there.
 
