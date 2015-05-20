@@ -3,7 +3,7 @@
 :institution: Department of Computational Social Science, George Mason University
 
 :author: Jacqueline Kazil
-:email: 
+:email: jackies@email.net
 :institution: Department of Computational Social Science, George Mason University
 
 ----------------------------------------
