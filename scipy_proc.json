@@ -48,88 +48,88 @@
         {
             "name": "Communications",
             "members": [
-                {"name":"Courtenay Godshall",
-                "org":" Enthought Inc."},
-                {"name":"Irma Kramer",
-                "org":" PyLadies Austin"}
+                {"name": "Courtenay Godshall",
+                "org": " Enthought Inc."},
+                {"name": "Irma Kramer",
+                "org": " PyLadies Austin"}
                 ]
         },
 
         {
             "name": "Birds of a Feather",
             "members": [
-                {"name":"Kyle Mandli",
-                "org":" University of Texas at Austin"},
-                {"name":"Matt McCormick",
-                "org":" Kitware Inc."}
+                {"name": "Kyle Mandli",
+                "org": " University of Texas at Austin"},
+                {"name": "Matt McCormick",
+                "org": " Kitware Inc."}
                 ]
         },
 
         {
             "name": "Proceedings",
             "members": [
-                {"name":"James Bergstra",
-                "org":" University of Waterloo"},
-                {"name":"Kathryn Huff",
-                "org":" University of California at Berkeley"}
+                {"name": "James Bergstra",
+                "org": " University of Waterloo"},
+                {"name": "Kathryn Huff",
+                "org": " University of California at Berkeley"}
                 ]
         },
 
         {
             "name": "Financial Aid",
             "members": [
-                {"name":"Ben Root",
-                "org":" University of Oklahoma"},
-                {"name":"John Wiggins",
-                "org":" XFEL"}
+                {"name": "Ben Root",
+                "org": " University of Oklahoma"},
+                {"name": "John Wiggins",
+                "org": " XFEL"}
                 ]
         },
 
         {
             "name": "Tutorials",
             "members": [
-                {"name":"Kristen Thyng",
-                "org":" Texas A&M University"},
-                {"name":"Justin Vincent",
-                "org":" Google Inc."}
+                {"name": "Kristen Thyng",
+                "org": " Texas A&M University"},
+                {"name": "Justin Vincent",
+                "org": " Google Inc."}
                 ]
         },
 
         {
             "name": "Sprints",
             "members": [
-                {"name":"Dharhas Pothina",
-                "org":" US Army Corps of Engineers, ERDC"},
-                {"name":"Jonathan Rocher",
-                "org":" Enthought Inc."}
+                {"name": "Dharhas Pothina",
+                "org": " US Army Corps of Engineers, ERDC"},
+                {"name": "Jonathan Rocher",
+                "org": " Enthought Inc."}
                 ]
         },
 
         {
             "name": "Sponsors",
             "members": [
-                {"name":"Jill Cowan",
-                "org":" Enthought Inc."}
+                {"name": "Jill Cowan",
+                "org": " Enthought Inc."}
                 ]
         },
 
         {
             "name": "Financial",
             "members": [
-                {"name":"Bill Cowan",
-                "org":" Enthought Inc."},
-                {"name":"Jodi Havranek",
-                "org":" Enthought Inc."}
+                {"name": "Bill Cowan",
+                "org": " Enthought Inc."},
+                {"name": "Jodi Havranek",
+                "org": " Enthought Inc."}
                 ]
         },
 
         {
             "name": "Logistics",
             "members": [
-                {"name":"Jill Cowan",
-                "org":" Enthought Inc."},
-                {"name":"Leah Jones",
-                "org":" Enthought Inc."}
+                {"name": "Jill Cowan",
+                "org": " Enthought Inc."},
+                {"name": "Leah Jones",
+                "org": " Enthought Inc."}
                 ]
         },
 
@@ -162,14 +162,14 @@
         {
             "name": "Tutorial Review Committee",
             "members": [
-                {"name":"Sara Safavi",
-                "org":" Rackspace Inc."},
-                {"name":"Jeremy Price",
-                "org":" Rackspace Inc."},
-                {"name":"Dharhas Pothina",
-                "org":" US Army Engineer Research and Development Center"},
-                {"name":"Aron Ahmadia",
-                "org":" Continuum Analytics"},
+                {"name": "Sara Safavi",
+                "org": " Rackspace Inc."},
+                {"name": "Jeremy Price",
+                "org": " Rackspace Inc."},
+                {"name": "Dharhas Pothina",
+                "org": " US Army Engineer Research and Development Center"},
+                {"name": "Aron Ahmadia",
+                "org": " Continuum Analytics"}
                 ]
         },
 
@@ -180,7 +180,7 @@
                  "org": "Location"}
                 ]
         }
-   ],
+  ],
 
   "sponsored_students": [
       {
@@ -190,7 +190,3 @@
       }
   ]
 }
-
-
-
-
