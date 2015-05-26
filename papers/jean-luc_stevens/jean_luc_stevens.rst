@@ -1,4 +1,4 @@
-:author: Jean-Luc Stevens
+:author: Jean-Luc R. Stevens
 :email: jlstevens@ed.ac.uk
 :institution: Institute for Adaptive and Neural Computation, University of Edinburgh
 
@@ -6,7 +6,7 @@
 :email: p.rudiger@ed.ac.uk
 :institution: Institute for Adaptive and Neural Computation, University of Edinburgh
 
-:author: James Bednar
+:author: James A. Bednar
 :email: jbednar@inf.ed.ac.uk
 :institution: Institute for Adaptive and Neural Computation, University of Edinburgh
 
