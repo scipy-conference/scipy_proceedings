@@ -46,6 +46,12 @@ Introduction
 
 ..      Some custom LaTeX source here.
 
+Acknoledgements
+---------------
+
+This research was partially suported by the Advanced Center for Electrical and
+Electronic Engineering, Basal Project FB0008, Conicyt.
+
 References
 ----------
 .. .. [Atr03] P. Atreides. *How to catch a sandworm*,
