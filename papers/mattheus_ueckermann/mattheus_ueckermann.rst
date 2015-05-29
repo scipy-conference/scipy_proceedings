@@ -43,6 +43,7 @@ pyDEM: Global Digital Elevation Model Analysis
    digital elevation model, upstream contributing area, topographic wetness index,
    hydrology, terrain analysis
    
+-------------
 
 Introduction
 -------------
@@ -71,7 +72,7 @@ pyDEM was developed to address these challenges. pyDEM is an open source Python/
 
    pyDEM can correctly follows the UCA calculation across tile boundaries. :label:`edges`
 
-
+-----------------
    
 Algorithm Design
 -----------------
@@ -138,6 +139,7 @@ To handle edges, the major modifications to the basic algorithm are: initializin
 
    To correctly calculate drainage over flat or no-data regions, the total area that drains into the flat (bottom red arrows) are collected at a single point within the flat (black arrows) and then redistributed to lower-lying regions (top green arrows). :label:`flats`   
 
+--------------------
 
 Parallel Processing
 --------------------
@@ -164,6 +166,8 @@ In the example illustrated in Figure :ref:`pedges`, the middle tile only needed 
 
 During each round of the second stage, we heuristically select the *best* tile to correct first. This *best* tile is selected by looking at what percentage of edge pixels on that tile will be done after the correction. In the case of ties, the tile with the higher maximum elevation is used. In case another process is already using that tile, the next best tile is selected. As such, the calculation proceeds in a semi-parallel fashion for large data-sets. 
 
+-------------
+
 Optimization
 -------------
 The first implementation of the UCA algorithm was much more vectorized than the code presented above. This pure-python vectorized version aimed to take advantage of the underlying libraries used by numpy and scipy. However, this earlier version of the algorithm was not efficient enough to analyze a large data-set using a single compute node. The analysis would have taken over a year using 32 processors.
@@ -185,6 +189,7 @@ In particular, looping over the rows for a specific column in :math:`\mathbf A` 
 
 Nested `for` loops in python are generally known to be inefficient and was not implemented. The cython implementation yielded excellent results, giving approximately a :math:`3 \times` speed-up for smaller problems, and a :math:`1000 \times` speedup for larger problems. These numbers are approximate because the actual values are highly dependent on the DEM data. 
 
+-------------
 
 Applications
 -------------
@@ -216,6 +221,8 @@ Finally, to verify that pyDEM is efficient, robust, and accurate for real data-s
    :figclass: w
    
    To verify pyDEM's performance over a large dataset, TWI was calculated for the 30m resolution US National Elevation Database. :label:`conus`
+
+--------   
    
 Summary
 --------
@@ -223,10 +230,13 @@ To solve our problem of analyzing the hydrology of large DEM data-sets, we desig
 
 pyDEM is capable of efficiently and robustly analyzing large data-sets, while correcting for edge effects. pyDEM has been tested and agrees well with tauDEM. 
 
+-------------
+
 Availability
 -------------
-The pyDEM package is available from the [python package index](https://pypi.python.org/) or through `pip install pydem`. Note this package is still in alpha and has not been tested on a wide range of operating systems. The source code is also hosted on [GitHub](https://github.com/creare-com/pydem), and is free to modify, change, and improve under the Apache 2.0 license. 
+The pyDEM package is available from the `python package index <https://pypi.python.org/>`_ or through `pip install pydem`. Note this package is still in alpha and has not been tested on a wide range of operating systems. The source code is also hosted on `GitHub <https://github.com/creare-com/pydem>`_, and is free to modify, change, and improve under the Apache 2.0 license. 
 
+-----------
 
 References
 -----------
