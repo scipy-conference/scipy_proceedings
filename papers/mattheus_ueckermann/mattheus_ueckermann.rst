@@ -29,7 +29,7 @@ pyDEM: Global Digital Elevation Model Analysis
    We solved this problem by implementing a new algorithm in python, which uses a 
    simple but robust file-based locking mechanism to coordinate the work flow
    between an arbitrary number of independent processes. We used this system to
-   analyze the entire earth's terrain at 90m resolution in under 3 days on a 
+   analyze the conterminous US's terrain at 30m resolution in under 3 days on a 
    single compute node. 
    
    Our solution is implemented in pyDEM, an open source Python/Cython library for 
@@ -48,14 +48,14 @@ Introduction
 -------------
 
 
-The aspect (or flow direction), magnitude of the slope, upstream contributing area (UCA), and topographic wetness index (TWI), shown in Figure :ref:`info`, are quantities needed in hydrology to determine, for example, the flow path of water, sediment, and pollutants which has applications in environmental resource, agricultural, and flood risk management. These quantities are calculated from gridded digital elevation models (DEM), which describe the topography of a region. DEMs are often stored as raster arrays, where the value of an element in the array gives the elevation of that point (usually in meters). Each element in the array is also associated with a (latitude, longitude) coordinate. The aspect, calculated from DEM data, gives the angle (in radians) at each element, while the slope (meters / meters) gives the change in elevation over the change in horizontal distance, quantifying the steepness of the topography. UCA is defined as the total horizontal area that is up-slope of a point or contour [moore91]_, and unlike aspect and slope, the UCA at each element depends on more than just the surrounding elements in the array. TWI (:math:`\kappa`) is derived from UCA (:math:`a`) and slope (:math:`\tan \beta`), where :math:`\kappa=\ln \frac{a}{tan \beta}`, and was developed by Beven and Kirkby [beven79]_ within the runoff model TOPMODEL (see [beven95]_ ). 
+The aspect (or flow direction), magnitude of the slope, upstream contributing area (UCA), and topographic wetness index (TWI), shown in Figure :ref:`info`, are quantities needed in hydrology. These quantities are used to determine, for example, the flow path of water, sediment, and pollutants which has applications in environmental resource, agricultural, and flood risk management. These quantities are calculated from gridded digital elevation models (DEM), which describe the topography of a region. DEMs are often stored as raster arrays, where the value of an element in the array gives the elevation of that point (usually in meters). Each element in the array is also associated with a (latitude, longitude) coordinate. The aspect is calculated from DEM data and gives the angle (in radians) at each element. The slope (meters / meters) can also be calculated, and gives the change in elevation over the change in horizontal distance, quantifying the steepness of the topography. UCA is defined as the total horizontal area that is up-slope of a point or contour [moore91]_, and unlike aspect and slope, the UCA at each element depends on more than just the surrounding elements in the array. TWI (:math:`\kappa`) is derived from UCA (:math:`a`) and slope (:math:`\tan \beta`), where :math:`\kappa=\ln \frac{a}{tan \beta}`, and was developed by Beven and Kirkby [beven79]_ within the runoff model TOPMODEL (see [beven95]_ ). 
 
 
-.. figure:: pydem_infographic.png
+.. figure:: pydem_flow.png
    :scale: 80%
    :figclass: w
 
-   pyDEM calculates the aspect, slope, upstream contributing area (UCA), and topographic wetness index (TWI) from digital elevation model data. :label:`info`
+   pyDEM calculates the aspect, slope, upstream contributing area (UCA), and topographic wetness index (TWI) from digital elevation model data. The aspect and slope are calculated directly from the elevation data, the UCA is calculated from the aspect, and the TWI is calculated from the UCA and the slope. :label:`info`
 
 With the increased availability of large, high quality DEM data, the hydrology of increasingly large regions can be analyzed. For example, in the US, the National Elevation Dataset provides nominally 30m :math:`\times` 30m resolution DEM data for the conterminous US. This data is available as over 3500 files spanning :math:`1^o\times1^o` latitude :math:`\times` longitude with over 3600 :math:`\times` 3600 pixels per file for 45 gigapixels of data. Analyzing such a large data-sets presents unique challenges including:
 
@@ -84,32 +84,32 @@ To calculate the aspect and slope, pyDEM uses the :math:`\mathrm{D}\infty` metho
    
    The UCA calculation takes a raster of elevation data (top) and constructs an adjacency (or connectivity) matrix. :label:`uca`   
 
-**Data Structures:** The main data-structure used by the UCA algorithm is an adjacency (or connectivity) matrix, :math:`\mathbf A`. For the example in Figure :ref:`uca` (top), we have a :math:`3\times3` elevation array with a total of 9 pixels. Each row of this matrix represents a pixel in the raster array that receives an area contribution from another pixel. The columns represents the pixels that drain into a pixel represented as a row. The value in row :math:`i` column :math:`j` represent the fraction of pixel :math:`j`'s area that drains into pixel :math:`i`. For example, pixel 6 drains completely into pixel 7, so :math:`\mathbf A_{7, 6} = 1.0`. On the other hand, only 30% of the area in pixel 0 drains into pixel 3, so :math:`\mathbf A_{3, 0} = 0.3`.
+**Data Structures:** The main data-structure used by the UCA algorithm is an adjacency (or connectivity) matrix, :math:`\mathbf A`. For the example in Figure :ref:`uca` (top), we have a :math:`3\times3` elevation array with a total of 9 pixels. Each row in matrix :math:`\mathbf A` (Figure :ref:`uca`, bottom) represents a pixel in the raster array that receives an area contribution from another pixel. The columns represents the pixels that drain into a pixel represented as a row. The value in row :math:`i` column :math:`j` represent the fraction of pixel :math:`j`'s area that drains into pixel :math:`i`. For example, pixel 6 drains completely into pixel 7, so :math:`\mathbf A_{7, 6} = 1.0`. On the other hand, only 30% of the area in pixel 0 drains into pixel 3, so :math:`\mathbf A_{3, 0} = 0.3`.
 
-The algorithm also requires a data structure: `I` to keep track of which pixels can be computed, `I\_old` which pixels were computed last round, `done` which pixels have finished their computations, and `uca` the UCA for each pixel. The `I` vector is initialized by summing over the columns of :math:`A` to select pixels that do not receive an area contribution from another pixel. This would happen for pixels at the top of mountains or hills, where the surrounding elevation is lower, and on pixels on the edges of tiles that do not receive contributions from the interior. The indices :math:`I` of these pixels are stored in a boolean array. 
+The algorithm also requires a data structure: `ac_pix` to keep track of the "active pixels" which can be computed, `ac_pix\_old` to record which pixels were computed last round, `done` to mark which pixels have finished their computations, and `uca` the UCA for each pixel. The `ac_pix` vector is initialized by summing over the columns of :math:`\mathbf A` to select pixels that do not receive an area contribution from another pixel. This would happen for pixels at the top of mountains or hills, where the surrounding elevation is lower, and on pixels on the edges of tiles that do not receive contributions from the interior. The indices `ac_pix` of these pixels are stored in a boolean array. 
 
 **Algorithm:** The pseudo-code for our algorithm is given below using Python syntax. Lines 1-5 initialize the working data-structures, and assumes that the adjacency matrix was constructed and `elevation_data` is an array with the shape of the raster DEM data. The UCA should be initialized with the geographic area of a tile, but for simplicity consider :math:`1m\times1m` pixels. The calculation is iterative and the exit condition on line 7 ensures that the loop will terminate, even if there are circular dependencies. Circular dependencies should not occur for usual DEM data, but for robustness (in the face of randomly distributed no-data values) this exit condition was chosen. 
 
-If a pixel is marked as active, its area will be distributed down-slope executing lines 15-25. The column of the active pixel is looped over, and the fraction of the area in each row is distributed to the pixel in that row of the adjacency matrix. For example, in Figure :ref:`uca`, pixel 0 will be marked as active in the first loop (sum of elements in the row is zero). Line 17 will then update `uca[3]` and `uca[4]` with `f=0.3` and `0.7` times the area in pixel 0, respectively.  
+If a pixel is marked as active, its area will be distributed down-slope, executing lines 15-25. The column of the active pixel is looped over, and the fraction of the area in each row is distributed to the pixel in that row of the adjacency matrix. For example, in Figure :ref:`uca`, pixel 0 will be marked as active in the first loop (sum of elements in the row is zero). Line 17 will then update `uca[3]` and `uca[4]` with `f=0.3` and `0.7` times the area in pixel 0, respectively.  
 
-Next, lines 21-25 will check to see if the pixel just drained into is ready to become active. A pixel is allowed to become active once it has received all of its upstream area contributions. Continuing the example, once `uca[3]` was updated with the contribution from pixel 0, we will loop through the entries of :math:`\mathbf A` in row 3. If the entry is non-zero and not marked as done, we know that pixel 3 will receive a contribution from an upstream pixel in a later round. In our example, pixel 0 is the only upstream pixel for pixel 3, and it is done. So, in the next round we can drain from pixel 3.
+Next, lines 21-25 will check to see if the pixel just drained into is ready to become active. A pixel is allowed to become active once it has received all of its upstream area contributions. This condition for becoming active is crucial for prevent double-accounting. Continuing the example, once `uca[3]` was updated with the contribution from pixel 0, we will loop through the entries of :math:`\mathbf A` in row 3. If the entry is non-zero and not marked as done, we know that pixel 3 will receive a contribution from an upstream pixel in a later round. In our example, pixel 0 is the only upstream pixel for pixel 3, and it is done. So, in the next round we can drain from pixel 3.
 
 .. code-block:: python
    :linenos:
    
    # Initialize
-   I = A.sum(1) == 0
-   I_old = zeros_like(I)
-   done = zeros_like(I)
+   ac_pix = A.sum(1) == 0
+   ac_pix_old = zeros_like(ac_pix)
+   done = zeros_like(ac_pix)
    uca = ones(elevation_data.shape)  # Approximately
 
-   while all(I != I_old):
-        done[I] = True
-        I_old = I
-        I[:] = False
+   while all(ac_pix != ac_pix_old):
+        done[ac_pix] = True
+        ac_pix_old = ac_pix
+        ac_pix[:] = False
 
-        for i in range(I.size):
-            if I[i] is False:
+        for i in range(ac_pix.size):
+            if ac_pix[i] is False:
                 continue  # to next i. Otherwise...
             for j, f in enumerate(A[:, i]):
                 # update area
@@ -121,14 +121,14 @@ Next, lines 21-25 will check to see if the pixel just drained into is ready to b
                         break
                 else:
                     # Drain this pixel next round
-                    I[j] = 1  
+                    ac_pix[j] = 1  
 
 
-**Modification for Edges Update:** A fortunate aspect of the UCA calculation is its linearity, which lends itself well to the principle of superposition. That is, the UCA within a tile can be calculated and later adjusted with new contributions from the edges. In our Figure :ref:`uca` example, we have a single DEM tile, but this tile might be one of many tiles. Considering only this one tile,  we can calculate pixel 0's area contribution to the other pixels within a tile, but we do not know if pixel 0 is on a ridge, or if there is another pixel that would drain into it from another tile in the data-set. Similarly, pixel 8 might need to drain its area downstream to pixels in a downstream tile in the data-set. Ultimately, there will be a tile that has the most up-slope pixel, which has no edge dependencies. Similarly, not every pixel within a tile's UCA depends on the edge. Consider Figure :ref:`edges`: the UCA calculation is relatively local. This means that the edge update can be efficient: we only have to update pixels near the edges, and rivers. Since rivers have a proportionally much smaller area, the edge update requires much fewer computations compared to the initial UCA calculation for a tile. 
+**Modification for Edges Update:** A fortunate aspect of the UCA calculation is its linearity, which lends itself well to the principle of superposition. That is, the UCA within a tile can be calculated and later adjusted with new contributions from the edges. In our Figure :ref:`uca` example, we have a single DEM tile, but this tile might be one of many tiles. Considering only this one tile,  we can calculate pixel 0's area contribution to the other pixels within a tile, but we do not know if pixel 0 is on a ridge, or if there is another pixel that would drain into it from another tile in the data-set. Similarly, pixel 8 might need to drain its area downstream to pixels in a downstream tile in the data-set. Ultimately, there will be a tile that has the most up-slope pixel, which has no edge dependencies. Similarly, not every pixel within a tile's UCA depends on the edge. Consider Figure :ref:`edges`: which shows that the difference in UCA between the tiles does not extend far past the edge, which indicates that the UCA calculation is relatively local. This means that the edge update can be efficient: we only have to update pixels near the edges, and rivers. Since rivers have a proportionally much smaller area, the edge update requires much fewer computations compared to the initial UCA calculation for a tile. 
 
 Our strategy of starting at the up-slope pixels and contributing area to down-slope pixels is a key algorithmic choice to allow for the edge correction. Edge pixels that receive area contributions from neighboring tiles always need to distribute that area down-slope. It may be possible for every interior pixel to calculate and store its edge dependencies using the recursive strategy that starts at down-slope pixels, but in the worst case, each of these pixels will need to store its dependency on every edge pixel. This results in a large storage structure, or a complex one that compresses the information. Alternatively, every pixel will need to be re-calculated for every edge correction. With our strategy of starting with up-slope pixels, only the interior pixels that are affected by information from the edge needs to be recalculated. 
 
-To handle edges, the major modifications to the basic algorithm are: initializing the active pixels (`I`) based on edge information/dependencies, initializing the `done` pixels, and adding data-structures to keep track of edge dependencies. The main challenge is careful bookkeeping to ensure that edge information is communicated to neighboring tiles. pyDEM does this bookkeeping both within a tile, which can be broken up into multiple chunks, and across tiles, which is described in greater detail under the *Parallel Processing* section.
+To handle edges, the major modifications to the basic algorithm are: initializing the active pixels (`ac_pix`) based on edge information/dependencies, initializing the `done` pixels, and adding data-structures to keep track of edge dependencies. The main challenge is careful bookkeeping to ensure that edge information is communicated to neighboring tiles. pyDEM does this bookkeeping both within a tile, which can be broken up into multiple chunks, and across tiles, which is described in greater detail under the *Parallel Processing* section.
 
 
 **Modification for Flats:** pyDEM considers no-data regions to also be flats. To handle flats, a small adjustment is made to the adjacency matrix. Without modification, the adjacency matrix will allow pixels next to flats to drain their area contributions into the flat, but these contributions never leave. The adjacency matrix is adjusted by adding the black and green arrows depicted in Figure :ref:`flats`. The total area contributes that drain into a flat are collected, for convenience, at a random point within the flat (black arrows). This total area contribution to the flat is then proportionally distributed to pixels at the edge of a flat. The proportions depend on the difference in elevation of the pixels around the flat. The pixel with the lowest elevation around the flat always receives a distribution. If a pixel's elevation satisfies :math:`e_{local} < \min(\vec e_{local}) + \sqrt(2) \Delta x`, where :math:`e_{local}` the pixel's elevation, :math:`\vec e_{local}` is the elevations of the pixels around the flat and :math:`\Delta x` is the approximate grid spacing, then it is also included in the area distribution. The proportion of the distribution is calculated as :math:`p = \frac{e_{flat} - \vec e_{local}} {\sum e_{flat} - \vec e_{local}}`, where :math:`e_{flat}` is the elevation of the flat, .
@@ -143,7 +143,7 @@ Parallel Processing
 --------------------
 The majority of the processing on a tile can be done independent of every other tile. This means it is simple to spawn multiple processes on a machine to churn through a large number of elevation tiles. There are various packages that automate this process. However, in our case, the edge correction step cannot be done efficiently on a tile-by-tile basis, so existing packages did not meet our needs. 
 
-The calculation proceeds in three stages. In the first stage, the tile-local quantities, aspect and slope, are calculated in parallel. Then the first pass UCA calculation is performed in parallel, where the initial edge data is written to files. Finally, the UCA is corrected in parallel to eliminate edge effects. This final stage does have an order-dependency, and the parallelism is not as efficient. In each of these stages, separate pyDEM processes can be launched. If a process terminates unexpectedly, it does not affect the remaining processors. 
+The calculation proceeds in three stages. In the first stage, the tile-local quantities, aspect and slope, are calculated in parallel. Then the first pass UCA calculation is performed in parallel, where the initial edge data is written to files. Finally, the UCA is corrected in parallel to eliminate edge effects. This final stage does have an order-dependency, and the parallelism is not as efficient. In each of these stages, separate pyDEM processes can be launched. If a process terminates unexpectedly, it does not affect the remaining processes. 
 
 In order to prevent multiple processes from working on the same file, a simple file locking mechanism is used. When a process claims a DEM tile, it creates an empty .lck file with the same name as the elevation file. Subsequent processes will then skip over this file and sequentially process the next available DEM tile. Once a process is finished with a DEM tile, the .lck file is removed. Subsequent processes also check to see if the outputs are already present, in which case it will also skip that DEM tile, moving on to the next available file. This works well for the first two stages of the processing. 
 
@@ -170,16 +170,16 @@ The first implementation of the UCA algorithm was much more vectorized than the 
 
 Initial attempts to re-write the algorithm in cython were not fruitful, only yielding minor speed improvements. The primary issue causing the poor performance was the adjacency matrix :math:`\mathbf A`. This matrix was stored as a sparse array, because it had very few entries. The initial python and cython implementations used scipy's underlying sparse matrix implementation, along with linear algebra operations to perform the calculations. These implementations failed to use the underlying sparse matrix storage structure to their advantage. 
 
-Instead, the adjacency matrix was stored in both the Compressed Sparse Column (CSC) and Compressed Sparse Row (CSR) formats. The CSC format stores three arrays: `data`, `row_ind`, and `col_ptr`. The `data` stores the actual floating point values of the elements in the array, while the `row_ind` stores the row number of the data in each column (same size as data), and `col_ptr` stores the locations in the data vector that start a new column (size is 1 + the number of columns, where the last entry in col_ptr is the total number of data elements). For example, the :math:`\mathbf A` in Figure :ref:`uca` is stored as:
+Instead, the adjacency matrix was stored in both the Compressed Sparse Column (CSC) and Compressed Sparse Row (CSR) formats. The CSC format stores three arrays: `data`, `row_ind`, and `col_ptr`. The `data` stores the actual floating point values of the elements in the array, while the `row_ind` stores the row number of the data in each column (same size as data), and `col_ptr` stores the locations in the data vector that start a new column (size is 1 + the number of columns, where the last entry in col_ptr is the total number of data elements). For example, the :math:`\mathbf A` in Figure :ref:`uca` is stored in CSC as:
  
 .. math::
    :type: align
    
-   data &= [0.3, 0.7, 1.0, 1.0, 1.0, 0.4, 1.0, 0.6, 1.0, 1.0]  \\
-   row\_ind &= [0,\;\;\;\, 0,\;\;\;\, 1,\;\;\;\, 3,\;\;\;\, 2,\;\;\;\, 4,\;\;\;\, 6,\;\;\;\, 4,\;\;\;\, 5,\;\;\;\, 7] \\
-   col\_ptr &= [0,\, 0,\, 0,\, 0,\, 1,\, 4,\, 6,\, 6,\, 7,\, 10]
+   data &= [0.3,  0.7,  1.0 ,  1.0 ,  1.0 ,  0.4,  0.6,  1.0 ,  1.0 ,  1.0]  \\
+   row\_ind &= [3,\;\;\;\, 4,\;\;\;\, 4,\;\;\;\, 5,\;\;\;\, 4,\;\;\;\, 5,\;\;\;\, 8,\;\;\;\, 8,\;\;\;\, 7,\;\;\;\, 8] \\
+   col\_ptr &= [0,\, 2,\, 3,\, 4,\, 5,\, 7,\, 8,\, 9,\, 10,\, 10]
 
-The CSC format, which stores col_ind, row_ptr, and a re-arranged data vector instead, is more computationally efficient for some aspects of the algorithm, which is why both formats are used. 
+The CSR format, which stores col_ind, row_ptr, and a re-arranged data vector instead, is more computationally efficient for some aspects of the algorithm, which is why both formats are used. 
 
 In particular, looping over the rows for a specific column in :math:`\mathbf A` to update the UCA (lines 15-17 of algorithm) can be efficiently done using the CSC format. Determining if a pixel is done, which loops over the columns for a specific row in :math:`\mathbf A` (lines 19-25) can be efficiently done using the CSR format. 
 
@@ -191,7 +191,7 @@ Applications
 
 .. figure:: test_cases.png
    
-   To verify that pyDEM's core algorithms work as expected, a collected of test elevations (top) were created to cover anticipated issues in calculating TWI (bottom). This shows that TWI is larger where the elevation is lower (as expected), that the TWI is evenly distributed around flats (2nd and 3rd rows, 3rd column), and that TWI is concentrated in rivers or outlets (4th column). :label:`tests`
+   To verify that pyDEM's core algorithms work as expected, a collected of test elevations (top) were created to cover anticipated issues in calculating TWI (bottom). This shows that TWI is correctly calculated. In particular, TWI is larger where the elevation is lower (as expected), it is evenly distributed around flats (2nd and 3rd rows, 3rd column), and it is concentrated in rivers or outlets (4th column). :label:`tests`
 
 .. figure:: spiral.png
    :scale: 30%
@@ -202,10 +202,10 @@ Applications
 
 To verify that pyDEM's core algorithms work as expected, a collection of test cases were created, and a subset is shown in Figure :ref:`tests`. pyDEM was also used to calculate TWI for the conterminous US. Next we will describe the purpose and results of the each of the test cases, and then we will present the results over the conterminous US. 
 
-To ensure that the [tarboton97]_ :math:`D\infty` method was correctly implemented, we created a number of linearly sloping elevations to test each quadrant of the 8-element stencil used for the slope and magnitude calculation (Figure :ref:`tests` a-1, b-1, b-2). All of the possible angles are tested in the a-3 case. Notice that the TWI is higher along the diagonals of this case, and this is an artifact of the :math:`D\infty` method which is expected to be small for real DEM data. The c-2 case is a trough that tests to make sure that water will drain along the diagonal, which would not happen in a central difference method was used instead of the :math:`D\infty` method.  The a-2 case tests if pyDEM correctly handles no-data values along the edge of a tile. Cases b-3, c-3, and those in column 4 all test pyDEM's handling of flat regions. In case b-3, notice that pyDEM correctly distributes the area that drains into the top of the flat to the pixels at the edge of the flat instead of draining all of the area to a single pixel, or a few pixels. However, when a pixel that has a much lower elevation is present at the edge of a flat (a-4 and b-4), pyDEM drains preferably along those pixels. 
+To ensure that the [tarboton97]_ :math:`D\infty` method was correctly implemented, we created a number of linearly sloping elevations to test each quadrant of the 8-element stencil used for the slope and magnitude calculation (Figure :ref:`tests` a-1, b-1, b-2). All of the possible angles are tested in the a-3 case. Notice that the TWI is higher along the diagonals of this case, and this is an artifact of the :math:`D\infty` method which is expected to be small for real DEM data. The c-2 case is a trough that tests to make sure that water will drain along the diagonal, which would not happen if a central difference method was used instead of the :math:`D\infty` method.  The a-2 case tests if pyDEM correctly handles no-data values along the edge of a tile. Cases b-3, c-3, and those in column 4 all test pyDEM's handling of flat regions. In case b-3, notice that pyDEM correctly distributes the area that drains into the top of the flat to the pixels at the edge of the flat instead of draining all of the area to a single pixel, or a few pixels. However, when a pixel that has a much lower elevation is present at the edge of a flat (a-4 and b-4), pyDEM drains preferably along those pixels. 
   
 
-The c-1 case was used to test the third stage of processing, the edge correction stage. This is a challenging case because the drainage pattern is a spiral that crosses a single tile boundary multiple times. Without the edge correction, the UCA builds up in channels along a tile, but never reach the full value required (see Figure :ref:`spiral` right). Figure :ref:`spiral` also shows that pyDEM's edge correction algorithms are working correctly. The left UCA calculation is performed on a single tile using tauDEM, and it does not need edge corrections from adjoining tiles. The middle UCA calculation is performed using pyDEM over chunks of elevation sections forming a 7 by 7 grid. For this middle calculation, 316 rounds of the stage 3 edge correction was performed in serial, which means that every tile required multiple corrections as new information became available on the edges. Except for the edge pixels, the tauDEM and pyDEM results agree to withing 0.02%, which is reasonable considering how different the algorithms ares. 
+The c-1 case was used to test the third stage of processing, the edge correction stage. This is a challenging case because the drainage pattern is a spiral that crosses a single tile boundary multiple times. Without the edge correction, the UCA builds up in channels along a tile, but never reach the full value required (see Figure :ref:`spiral` right). Figure :ref:`spiral` also shows that pyDEM's edge correction algorithms are working correctly. The left UCA calculation is performed on a single tile using tauDEM, and it does not need edge corrections from adjoining tiles. The middle UCA calculation is performed using pyDEM over chunks of elevation sections forming a 7 by 7 grid. For this middle calculation, 316 rounds of the stage 3 edge correction was performed in serial, which means that every tile required multiple corrections as new information became available on the edges. Except for the edge pixels, the tauDEM and pyDEM results agree to withing 0.02%, which is reasonable considering how different the algorithms are. 
 
 pyDEM was also verified against tauDEM using the all of the above test cases (not shown). In all cases without flats the results agreed as well as the spiral case. For the cases with flats, tauDEM and pyDEM do not agree because they treat flat regions differently. 
 
@@ -225,7 +225,7 @@ pyDEM is capable of efficiently and robustly analyzing large data-sets, while co
 
 Availability
 -------------
-The pyDEM package is available from the [python package index](https://pypi.python.org/) or through `pip install pydem`. Note this package is still in alpha and has not been tested on a wide range of operating systems. The source code is also hosted on [GitHub](https://github.com/creare-com/pydem), and is free to modify, change, and improve under the Apache 2.0 license. s
+The pyDEM package is available from the [python package index](https://pypi.python.org/) or through `pip install pydem`. Note this package is still in alpha and has not been tested on a wide range of operating systems. The source code is also hosted on [GitHub](https://github.com/creare-com/pydem), and is free to modify, change, and improve under the Apache 2.0 license. 
 
 
 References
