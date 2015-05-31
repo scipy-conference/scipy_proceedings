@@ -10,9 +10,7 @@ TrendVis: an Elegant Interface for dense, sparkline-like, quantitative visualiza
 
 .. class:: abstract
 
-   Many scientific disciplines depend on the visualization of multiple disparate data sets against a common variable- time series data, for example.  There are two choices in matplotlib for displaying this data:  separately in a grid of subplots or on top of each other with twinned axes.  This works for two or three traces, but does not scale well.  Instead of a clutter of separate plots or a mess of overlain curves, the ideal style is a single densely-plotted figure that permits direct comparison of curve features.  In such a plot, each dataset has its own y (or x) axis, and all data are arranged in one cohesive plot area in a vertical (or horizontal) stack against a single x (or y) axis.  This style is critical to some scientific discplines and well-suited to other realms of science and economics, but there are few options available to generate such plots and, until TrendVis, none within the scientific Python ecosystem.
-
-   Here we examine the rationale behind and the challenges associated with adapting matplotlib to this particular plot style.  We discuss the TrendVis API, plot generation, and various features available for users to customize and enhance the accessibility of their plots.
+   TrendVis is a plotting package that uses matplotlib to create information-dense, sparkline-like visualizations of multiple disparate data sets in a common plot area against a common variable.  This plot type is particularly well-suited for time-series data.  While working through an example, we discuss the rationale behind and the challenges associated with adapting matplotlib to this particular plot style, the TrendVis API and architecture, and various features available for users to customize and enhance the accessiblity of their figures.
 
 .. class:: keywords
 
@@ -21,7 +19,9 @@ TrendVis: an Elegant Interface for dense, sparkline-like, quantitative visualiza
 Introduction
 ------------
 
-Data visualization and presentation is a critical part of scientific communication.  Accessible figures can help or hinder the scientific message of its written
+Data visualization and presentation is a key part of scientific communication, and many disciplines depend on the visualization of multiple time-series or other series datasets.  The field of paleoclimatology (the study of past climate and climate change), for example, relies heavily on plots of multiple time-series or "depth series", where data are plotted against depth or height in a sediment or ice core or stalagmite. These plots are critical for placing new data in regional and global contexts and they facilitate interpretations of the nature, timing, and drivers of climate change.  A well done example of such a plot is given below:
+
+Creating such plots can
 
 Of course, no paper would be complete without some source code.  Without
 highlighting, it would look like this::
