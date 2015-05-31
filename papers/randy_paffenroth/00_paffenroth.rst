@@ -1,6 +1,6 @@
 :author: Randy Paffenroth
 :email: rcpaffenroth@wpi.edu
-:institution: Senate House, S.P.Q.R.
+:institution: Worecester Polytechnic Institute, Mathematical Sciences Department and Data Science Program
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
