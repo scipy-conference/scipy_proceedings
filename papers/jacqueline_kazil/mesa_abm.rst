@@ -24,9 +24,19 @@ Introduction
 
 *Talk a little about what ABMs are in general, who uses them, and why we should care*
 
-There are currently several tools and frameworks in wide use for agent-based modeling. NetLogo [Wilensky99] provides a complete environment for designing and running models, including its own programming language and a drag-and-drop user interface creator. NetLogo's key features are both strengths and weaknesses: since it is a self-contained environment, it makes it simple to load and run someone else's model or to begin designing a new one. However, the tool does not allow for detailed analysis of model outputs, and they must be exported for analysis elsewhere. NetLogo's custom scripting language is helpful for novices, but is sufficiently specialized as to make it difficult to transition between it and more common general-purpose languages. At the other end of the spectrum, MASON [Luke05] is a powerful Java library for modeling and visualizing multi-agent systems, which exhibits a steep learning curve and requires a large volume of boilerplate code to create even a simple simulation. As with NetLogo, MASON has no built-in facilities to collect and analyze model outputs, requiring developers to write their own data exporter and analyze the output in a different environment. This is also a weakness in RePast [North13], another modeling and simulation toolkit which falls somewhere between NetLogo and MASON in power and ease-of-use.
+There are currently several tools and frameworks in wide use for agent-based modeling. NetLogo [Wilensky99] provides a complete environment for designing and running models, including its own programming language and a drag-and-drop user interface creator. NetLogo's key features are both strengths and weaknesses: since it is a self-contained environment, it makes it simple to load and run someone else's model or to begin designing a new one. However, the tool does not allow for detailed analysis of model outputs, and they must be exported for analysis elsewhere. NetLogo's custom scripting language is helpful for novices, but is sufficiently specialized as to make it difficult to transition between it and more common general-purpose languages. At the other end of the spectrum, MASON [Luke05] is a powerful Java library for modeling and visualizing multi-agent systems, which has a steep learning curve and requires a large volume of boilerplate code to create even a simple simulation. As with NetLogo, MASON has no built-in facilities to collect and analyze model outputs, requiring developers to write their own data exporter and analyze the output in a different environment. This is also a weakness in RePast [North13], another modeling and simulation toolkit which falls somewhere between NetLogo and MASON in power and ease-of-use.
 
-Unlike Java, which most of the above frameworks are written in, Python is intended for interactive use. In fact, much of the growing scientific Python ecosystem is built around such interactive analysis. 
+Unlike Java, which most of the above frameworks are written in, Python is intended for interactive use. In fact, much of the growing scientific Python ecosystem is built around such interactive analysis, particularly using the IPython / Jupyter [CITE] Notebook system. Mesa was written from the ground up to interface with these tools, making it possible to build models, and particularly run and analyze them, interactively within a single environment. 
+
+.. figure:: ipython_screenshot.png
+
+    A Mesa model run and analyzed inside of an IPython Notebook. :label:`fig1`
+
+.. figure:: browser_screenshot.png
+
+    A Mesa model visualized in a browser window. :label:`fig2`
+
+Direct visualization is nevertheless an important part of agent-based modeling: both for debugging, and for developing an intuition of the dynamics that emerge from the model. Mesa facilitiates such live visualization as well. It avoids issues of system-specific GUI dependencies by using the browser as a front-end, giving framework and model developers access to the full range of modern JavaScript data visualization tools.
 
 Architecture
 -------------
@@ -39,7 +49,7 @@ We divide the modules into three overall categories: modeling, analysis and visu
 
 .. figure:: mesa_diagram.png
 
-   Simplified UML diagram of Mesa architecture. :label:`fig1`
+   Simplified UML diagram of Mesa architecture. :label:`fig3`
 
 **Scheduler**
 
@@ -53,7 +63,7 @@ The scheduler is a model component which deserves special attention. Unlike syst
 
 The activation regime can have a substantial effect on the behavior of a simulation [CITE], yet many ABM frameworks do not make it easy to change. For example, NetLogo defaults to a random activation system, while MASON's scheduler is uniform by default. By separating out the scheduler into a separate, extensible class, Mesa both requires modelers to specify their choice of activation regime, and makes it easy to change and observe the results. Additionally, the scheduler object serves as the model's storage struture for active agents.
 
-All scheduler classes share a few standard method conventions, in order to make them both simple to use and seamlessly interchangable. Schedulers are instantiated with the model object they belong to. Agents are added to the schedule using the **add_agent** method, and removed using **remove_agent**. Agents can be added at the very beginning of a simulation, or any time in the middle -- e.g. as they are born from other agents' reproduction. 
+All scheduler classes share a few standard method conventions, in order to make them both simple to use and seamlessly interchangable. Schedulers are instantiated with the model object they belong to. Agents are added to the schedule using the ``add_agent`` method, and removed using **remove_agent**. Agents can be added at the very beginning of a simulation, or any time in the middle -- e.g. as they are born from other agents' reproduction. 
 
 The **step** method runs one step of the *model*, activating agents accordingly. It is here that the schedulers primarily differ from one another. For example, the uniform **BaseScheduler** simply loops through the agents in the order they were added, while **RandomActivation** shuffles their order prior to looping.
 
@@ -79,6 +89,17 @@ The Batch Runner is instantiated with a model class, and a dictionary mapping na
 
 Visualization
 --------------
+
+Mesa uses a browser window to visualize its models. This avoids both the developers and the users needing to deal with cross-system GUI programming; more importantly, perhaps, it gives us access to the universe of advanced JavaScript-based data visualization tools. The entire visualization system is divided into two parts: the server side, and the client side. The server runs the model, and at each step extracts data from it to visualize, which it sends to the client as JSON via a WebSocket connection. The client receives the data, and uses JavaScript to actually draw the data onto the screen for the user.
+
+The actual visualization is done by the visualization modules. Conceptually, each module consists of a server-side and a client-side element. The server-side element is a Python object implementing a ``render`` method, which takes a model instance as an argument and returns a JSON object with the information needed to visualize some part of the model. This might be as simple as a single number representing some model-level statistic, or as complicated as a list of JSON objects, each encoding the position, shape, color and size of an agent on a grid. 
+
+The client-side element is a JavaScript class, which implements a ``render`` method of its own. This method receives the JSON data created by the Python element, and renders it in the browser. This can be as simple as updating the text in a particular HTML paragraph, or as complicated as drawing all the shapes described in the aforementioned list. The object also implements a ``reset`` method, used to reset the visualization element when the model is reset. Finally, the object creates the actual necessary HTML elements in its constructor, and does any other initial setup necessary.
+
+Obviously, the two sides of each visualization must be designed in tandem. They result in one Python class, and one JavaScript ``.js`` file. The path to the JavaScript file is a property of the Python class, meaning that a particular object does not need to include it separately. Mesa includes a variety of pre-built elements, and they are easy to extend or add to.
+
+The ``ModularServer`` class manages the various visualization modules, and is meant to be generic to most models and modules. A visualization is created by instantiating a ``ModularServer`` object with a model class, one or more ``VisualizationElement`` module objects, and model parameters (if necessary). The ``launch()`` method then launches a Tornado server, using templates to insert the JavaScript code specified by the modules to create the client page. The application uses Tornado's coroutines to run the model in parallel with the server itself, so that the model running does not block the serving of the page and the WebSocket data. For each step of the model, each module's ``render`` method extracts the visualization data and stores it in a list. That list item is then sent to the client via WebSocket when the request for that step number is received.
+
 
 Sample Application
 -------------------
