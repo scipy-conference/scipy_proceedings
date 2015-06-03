@@ -10,11 +10,11 @@ Automated Image Quality Monitoring with IQMon
 
 Automated telescopes are capable of generating images more quickly than they can be inspected by a human, but detailed information on the performance of the telescope is valuable for monitoring and tuning of their operation.  The IQMon (Image Quality Monitor) package[#]_ was developed to provide basic image quality metrics of automated telescopes in near real time. 
 
-.. [#] Source code available at https://github.com/joshwalawender/IQMon
-
 .. class:: keywords
 
    astronomy, automated telescopes, image quality
+
+.. [#] Source code at ``https://github.com/joshwalawender/IQMon``
 
 Introduction
 ------------
@@ -54,7 +54,8 @@ IQMon writes a log which is intended to provide useful information to the user (
 
 .. code-block:: python
 
-    im.make_logger(verbose=False) # create a new logger object
+    # create a new logger object
+    im.make_logger(verbose=False)
     print('Logging to file {}'.format(im.logfile))
     im.logger.info('This is a log entry')
 
@@ -62,8 +63,10 @@ The first step for any image analysis is likely to be to call the ``read_image``
 
 .. code-block:: python
 
-    im.read_image()   # Generate working file copy of the raw image
-    im.read_header()  # Read the fits header
+    # Generate working file copy of the raw image
+    im.read_image()
+    # Read the fits header
+    im.read_header()
 
 Once the image has been read in and a working file created, IQMon uses various third party tools to perform image analysis.  The following sections describe some of the analysis steps which are available.
 
@@ -77,18 +80,16 @@ The output file of SExtractor is read in and stored as an astropy table object. 
 
 Determining the PSF size from the SExtractor results is done with the ``determine_FWHM`` method.  The full width at half maximum (FWHM) and ellipticity values for the image are a weighted average of the FWHM and ellipticity values for the individual stars.
 
-..
-    with weights :math:`w_i = (F_i / \sigma_{F_i})^2`.  Where :math:`w_i` is the weight assigned to that star's FWHM value, :math:`F_i` is the flux the star, and :math:`\sigma_{F_i}` is the uncertainty in that flux.  These values correspond to the FLUX_AUTO and FLUXERR_AUTO values reported by SExtractor.  These weights are then used as input to the ``np.average`` weight keyword to determine the weighted average FWHM for the image.  
-
 These steps not only provide the typical FWHM (which can indicate if the image is in focus), they can also be used to guess at whether the image is "blank" (i.e. very few stars are visible either because of cloud cover or other system failure).  For example:
 
 .. code-block:: python
 
     im.run_SExtractor()
-    # Consider the image to be blank if <10 stars detected
+    # Consider the image to be blank if <10 stars
     if im.n_stars_SExtracted < 10:
-        im.logger.warning('Only {} stars found. Image may be blank.'\
-                             .format(im.n_stars_SExtracted))
+        im.logger.warning('Only {} stars found.\
+                         .format(im.n_stars_SExtracted))
+        im.logger.warning('Image may be blank.')
     else:
         im.determine_FWHM()
 
@@ -102,12 +103,12 @@ Once a world coordinate system (WCS) is present in the image header, then the ``
 
 .. code-block:: python
 
-    # If WCS is not present, analyze the image with astrometry.net,
+    # If WCS is not present, solve with astrometry.net,
     if not im.image_WCS:
         im.solve_astrometry()
         im.read_header()
-    # Solve for the pointing error by comparing the telescope
-    # pointing coordinates from the header with the WCS solution.
+    # Determine pointing error by comparing telescope
+    # pointing coordinates from the header with WCS.
     im.determine_pointing_error()
 
 Astrometric Distortion Correction
@@ -119,13 +120,15 @@ SCAMP is invoked with the ``run_SCAMP`` method.  Once a SCAMP solution has been 
 
 .. code-block:: python
 
-    # If the image has a WCS and a SExtractor catalog, run SCAMP to
-    # determine a WCS with distortions.
+    # If the image has a WCS and a SExtractor catalog,
+    # run SCAMP to determine a WCS with distortions.
     if im.image_WCS and im.SExtractor_results:
         im.run_SCAMP()
         if im.SCAMP_successful:
-            im.run_SWarp()   # Remap the pixels to a rectilinear grid
-            im.read_header() # Update the header
+            # Remap the pixels to a rectilinear grid
+            im.run_SWarp()
+            # Update the header
+            im.read_header()
 
 Estimating the Photometric Zero Point
 `````````````````````````````````````
@@ -136,7 +139,8 @@ The ``get_catalog`` method can be used to download a catalog of stars from Vizie
 
 .. code-block:: python
 
-    im.get_catalog()  # Retrieve catalog defined in config file
+    # Retrieve catalog defined in config file
+    im.get_catalog()
     im.run_SExtractor(assoc=True)
     im.determine_FWHM()
     im.measure_zero_point()
@@ -145,8 +149,27 @@ In the above example code, ``determine_FWHM`` is invoked again in order to use t
 
 The ``measure_zero_point`` method determines the zero point by taking the weighted average of the difference between the measured instrumental magnitude from SExtractor and the catalog magnitude in the same filter.  
 
-..
-    The weights for each measurement are assumed to be :math:`w_i = (\frac{ln(10)}{2.512} \, \frac{F_i}{\sigma_{F_i}})^2`.  Using these weights, the zero point for the image is calculated using the ``np.average`` method.
+Analysis Results and Mongo Database Integration
+```````````````````````````````````````````````
+
+Results of the IQMon measurements for each image are stored as properties of the ``Image`` object and are ``astropy.units.Quantities``.
+
+.. code-block:: python
+
+    ## Results are typically astropy.units quantities
+    ## and can be manipulated as such.  For example:
+    print('Image FWHM = {:.1f}'.format(im.FWHM))
+    print('Image FWHM = {:.1f}'.format(\
+          im.FWHM.to(u.arcsec, equivalencies=\
+          im.tel.pixel_scale_equivalency)))
+    print('Zero Point = {:.2f}'.format(im.zero_point))
+    print('Pointing Error = {:.1f}'.format(\
+          im.pointing_error.to(u.arcmin)))
+
+These results can also be stored for later use.  Methods exist to write them to an ``astropy.Table`` (the ``add_summary_entry`` method) and to a YAML document (the ``add_yaml_entry`` method), but the preferred storage solution is to use a mongo database.
+
+The address, port number, database name, and collection name to use with ``pyMongo`` to add the results to an existing mongo database are set by the Telescope configuration file.  The ``add_mongo_entry`` method adds a dictionary of values with the results of the IQMon analysis.
+
 
 Flags
 `````
@@ -156,36 +179,43 @@ For the four primary measurements (FWHM, ellipticity, pointing error, and zero p
 This can be useful when summarizing results.  The Tornado web page provided with IQMon, for example, lists images and will color code a field red if that field is flagged.  In this way, a user can easily see when and where problems might have occurred.
 
 JPEGs and Plots
-```````````````
+---------------
 
 In addition to generating single values for FWHM, ellipticity, and zero point to represent the image, IQMon can also generate more detailed plots with additional information.
 
-A plot with PSF quality information can be generated when ``determine_FWHM`` is called by setting the ``plot=True`` keyword.  This generates a .png file using matplotlib which shows detailed information about the point spread function (FWHM and ellipticity metrics) including histograms of individual values, a spatial map of FWHM and ellipticity over the image, and plots showing the ellipticity vs. radius within the image (which can be used to show whether off axis aberrations influence the ellipticity measure) and the correlation between the measured PSF position angle and the position angle of the star within the image (which can be used to differentiate between tracking error and off axis aberrations).
+A plot with PSF quality information can be generated when ``determine_FWHM`` is called by setting the ``plot=True`` keyword.  This generates a .png file (see Fig. :ref:`PSFplot`) using matplotlib which shows detailed information about the point spread function (FWHM and ellipticity metrics) including histograms of individual values, a spatial map of FWHM and ellipticity over the image, and plots showing the ellipticity vs. radius within the image (which can be used to show whether off axis aberrations influence the ellipticity measure) and the correlation between the measured PSF position angle and the position angle of the star within the image (which can be used to differentiate between tracking error and off axis aberrations).
 
-A plot with additional information on the zero point can be generated when calling ``measure_zero_point`` by setting the ``plot`` keyword to ``True``.  This generates a .png file using matplotlib which shows plots of instrumental magnitude vs. catalog magnitude, a histogram of zero point values, a plot of magnitude residuals vs. catalog magnitude, and a a spatial map of zero point over the image.
+.. figure:: PSFplot.png
+   :scale: 70%
+   :figclass: w
 
-JPEG versions of the image can be generated using the ``make_JPEG`` method.  The jpeg can be binned or cropped using the ``binning`` or ``crop`` keyword arguments and various overlays can be generated showing the pointing error and detected and catalog stars.
+   An example of the plot which can be produced by the ``determine_FWHM`` method.  The plot shows histograms of the FWHM and ellipticity values (upper left and upper right respectively), the spatial distribution of FWHM and ellipticity values (middle left and middle right), ellipticity vs. radius within the image (lower left), and the correlation between the measured PSF position angle and the position angle of the star within the image (lower right). :label:`PSFplot`
 
+In the example plot (Fig. :ref:`PSFplot`), the correlation between the measured PSF position angle and the position angle of the star within the image (in the lower right) suggests that there may be a preferential direction to the PSF elongation around :math:`PA \sim -90` indicating that the image may have suffered from tracking error or wind shake.  Severe tracking error resulting in stars elongated by a pixel or more shows up dramatically in this type of plot.  For wide field systems with significant off axis aberration, this plot will  instead show strong diagonal structures because the stellar elongation is correlated with position angle within the image.
 
-Storing Results and Mongo Database Integration
-``````````````````````````````````````````````
+A plot with additional information on the zero point can be generated when calling ``measure_zero_point`` by setting the ``plot`` keyword to ``True``.  This generates a .png file (see Fig. :ref:`ZPplot`) using matplotlib which shows plots of instrumental magnitude vs. catalog magnitude, a histogram of zero point values, a plot of magnitude residuals vs. catalog magnitude, and a a spatial map of zero point over the image.
 
-Results of the IQMon measurements for each image can be stored for later use.  Methods exist to write them to an ``astropy.Table`` (the ``add_summary_entry`` method) and to a YAML document (the ``add_yaml_entry`` method), but the preferred storage solution is to use a mongo database.
+.. figure:: ZPplot.png
+   :scale: 34%
+   :figclass: bht
 
-The address, port number, database name, and collection name to use with pyMongo to add the results to an existing mongo database are set by the Telescope configuration file.  The ``add_mongo_entry`` method adds a dictionary of values with the results of the IQMon analysis.
+   An example of the plot which can be produced by the ``measure_zero_point`` method.  The plot shows the correlation between instrumental magnitude and catalog magnitude (upper left), a histogram of zero point values (upper right), a plot of the residuals vs. catalog magnitude (lower left), and a spatial distribution of the residuals (loer left). :label:`ZPplot`
+
+JPEG versions of the image can be generated using the ``make_JPEG`` method.  The jpeg can be binned or cropped using the ``binning`` or ``crop`` keyword arguments and various overlays can be generated showing, for example, the pointing error and detected and catalog stars.
+
+.. figure:: image.jpg
+   :scale: 22%
+   :figclass: bht
+
+   An example jpeg generated by the ``make_JPEG`` method using the ``mark_detected_stars`` and ``mark_pointing`` options. In this example,  pointing error has placed the target (marked by the cyan crosshair) to the lower right (southwest) of the image center (marked by the yellow lines).  Stars from the UCAC4 catalog which were detected in the image are marked with green circles. :label:`ZPplot`
+
 
 Tornado Web Application
-```````````````````````
+-----------------------
 
 IQMon comes with a tornado web application which, while it can be run stand alone, is intended to be used as a template for adding IQMon results to a more customized web page.  The web application (``web_server.py``) contains two ``tornado`` web handlers: ``ListOfNights`` and ``ListOfImages``.  The first generates a page which lists UT dates and if there are image results associated with a date, then it provides a link to a page with the list of image results for that date.  The second handler produces the page which lists the images for a particular UT date (or target name) and provides a table formatted list of the IQMon measurement results for each image with flagged values color coded red, along with links to jpegs and plots generated for that image.
 
-..
-    Summary
-    ```````
-
-..
-    IQMon provides a simple toolkit for evaluating image quality.  While it could be used in other applications, it was intended to be a tool for evaluating the performance of robotic telescopes.
-
+This web application is intended to be the primary interface for users.  A custom plot of IQMon results over the course of a night is easy to generate from the mongo database entries and represents the highest level interaction.  Serious problems which affect many images can be detected at a glance.  Users can then drill down to see a list of images for that night and see system performance as a table of IQMon results with flagged values highlighted in red.  Finally an individual image can be examined as a jpeg with overlays or by using one of the detailed PSF quality plots or zero point plots to examine detailed performance on an image by image basis.
 
 References
 ----------
