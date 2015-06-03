@@ -1,5 +1,5 @@
 :author: Josh Walawender
-:email: joshw@naoj.org
+:email: joshwalawender@me.com
 :institution: Subaru Telescope, National Astronomical Observatory of Japan
 
 ---------------------------------------------
@@ -154,7 +154,7 @@ In the above example code, ``determine_FWHM`` is invoked again in order to use t
 
 The ``measure_zero_point`` method determines the zero point by taking the weighted average of the difference between the measured instrumental magnitude from SExtractor and the catalog magnitude in the same filter.
 
-It should be noted that unless custom code is added to handle typical reduction steps such as dark/bias subtraction and flat fielding, the zero point result will be influenced by systematics due to those effects.  In addition, the choice of catalog and the relative response curve of the filter in use and the filter defined by the catalog's photometric system will also introduce systematic offsets.  For many systems (especially typical visible light CCDs), these effects are small and the zero point result from IQMon can be used to compare throughput from image to image.
+It should be noted that unless custom code is added to handle reduction steps such as dark/bias subtraction and flat fielding, the zero point result will be influenced by systematics due to those effects.  In addition, the choice of catalog and the relative response curve of the filter in use and the filter defined by the catalog's photometric system will also introduce systematic offsets.  For many systems (especially typical visible light CCDs), the zero point value from IQMon can be used to compare throughput from image to image, but should not be used to compare different equipment configurations.
 
 Analysis Results and Mongo Database Integration
 -----------------------------------------------
@@ -193,7 +193,7 @@ In addition to generating single values for FWHM, ellipticity, and zero point to
 A plot with PSF quality information can be generated when ``determine_FWHM`` is called by setting the ``plot=True`` keyword.  This generates a .png file (see Fig. :ref:`PSFplot`) using matplotlib which shows detailed information about the point spread function (FWHM and ellipticity metrics) including histograms of individual values, a spatial map of FWHM and ellipticity over the image, and plots showing the ellipticity vs. radius within the image (which can be used to show whether off axis aberrations influence the ellipticity measure) and the correlation between the measured PSF position angle and the position angle of the star within the image (which can be used to differentiate between tracking error and off axis aberrations).
 
 .. figure:: PSFplot.png
-   :scale: 70%
+   :scale: 65%
    :figclass: w
 
    An example of the plot which can be produced by the ``determine_FWHM`` method.  The plot shows histograms of the FWHM and ellipticity values (upper left and upper right respectively), the spatial distribution of FWHM and ellipticity values (middle left and middle right), ellipticity vs. radius within the image (lower left), and the correlation between the measured PSF position angle and the position angle of the star within the image (lower right). :label:`PSFplot`
