@@ -81,7 +81,12 @@ After the axes are created, XGrid initializes the attributes that indicate the d
 
 Creating Axes Twins
 -------------------
-Overlaying curves using separate axes can improve data visualization.  TrendVis provides the means to easily and systematically create and manage twinned x axes (rows) in an XGrid instances.  In XGrid, self.make_twins() creates twin x axes, one per column, across the rows indicated.  Twinned axes are stored, one row os twins per list
+Overlaying curves using separate axes can improve data visualization.  TrendVis provides the means to easily and systematically create and manage twinned x axes (rows) in an XGrid instances.  In XGrid, self.make_twins() creates twin x axes, one per column, across the rows indicated.  An issue arose with twin rows in figures with a main_ax dimension > 1 (i.e., in XGrid, multiple columns).  The axes in the twinned row share x axes with the original axes, but do not share y axes with each other, as occurs in all original rows.  The twinned row were forced to share y axes via:
+
+..code-block:: python
+   twin_row[0].get_shared_y_axes().join(*twin_row)
+
+After creation, twinned axes are stored, one row of twins per list, at the end of the list of main rows.
 Many scientific disciplines depend on the visualization of multiple disparate data sets against a common variable- time series data, for example.  There are two choices in matplotlib for displaying this data:  separately in a grid of subplots or on top of each other with twinned axes.  This works for two or three traces, but does not scale well.  Instead of a clutter of separate plots or a mess of overlain curves, the ideal style is a single densely-plotted figure that permits direct comparison of curve features.  In such a plot, each dataset has its own y (or x) axis, and all data are arranged in one cohesive plot area in a vertical (or horizontal) stack against a single x (or y) axis.  This style is critical to some scientific discplines and well-suited to other realms of science and economics, but there are few options available to generate such plots and, until TrendVis, none within the scientific Python ecosystem.
 
    Here we examine the rationale behind and the challenges associated with adapting matplotlib to this particular plot style.  We discuss the TrendVis API, plot generation, and various features available for users to customize and enhance the accessibility of their plots.
