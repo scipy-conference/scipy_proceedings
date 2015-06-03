@@ -31,9 +31,7 @@ Python in Data Science Research and Education
   early in the educational process and the experience gained with such
   “black box” routines provides a firm foundation for the students own
   software development, analysis, and research later in their academic
-  experience.  This talk will be based upon the authors experience
-  teaching in the Worcester Polytechnic Institute Data Science
-  Program.
+  experience.  
 
 .. class:: keywords
 
@@ -42,27 +40,75 @@ Python in Data Science Research and Education
 Introduction
 ------------
 
-Python is widely used in education [Mye07]_ and [Sta00]_. 
+Data Science is a burgeoning field of study that lays at the
+intersection of statistics, computer science, and numerous applied
+scientific domains.  As is common within such *interdisciplinary*
+domains of study, Data Science education, mentoring, and research
+draws ideas from, and is inspired by, several other more classic
+areas.  Perhaps just as importantly, student who wish to pursue
+education and careers in Data Science common from similarly diverse
+backgrounds.  Accordingly, the challenges and opportunities of being
+an educator in such a domain requires one to reflect on appropriate
+tools and approaches that promote educational success.  In is the
+author's view, and experience, that the Python scripting language can
+be an effective part of the Data Science curriculum for several
+reasons including its ease of use, its open source license, and its
+access to a vast array of libraries covering many topics of interest
+to Data Science.
 
-Talk about DS program at WPI Talk about research Base on abstract
-Discussion focus on 2 classes with quite different flavor.  DS501
-Introduction to Data Science |--| a core data science course that gets
-students from a wide variety of backgrounds a baseline set of skills
-for the Data Science program.  MA542 Regression Analysis |--| a core
-graduate statistics course.
+Worcester Polytechnic Institute (WPI) has recently (Fall 2014) begun
+admitting students into its new Data Science Master's degree program.
+Already the program appears to be experiencing some preliminary
+success, with far more applications each semester than we can
+reasonably admit, and many students already having success finding
+internships and having bright prospects for future jobs.  Of course,
+it is much to early to make any comments on the sustained of the
+program, however, perhaps the gentle reader will find some value in
+the author's experiences, even at this early date.
 
-So many libraries that any homework question is probably trivially
-answerable if they look hard enough.  Need to be careful that the
-ground rules are set correctly.  For example, need to say that they
-need to solve the regression problem using the *normal equations*.  It
-is ok to debug their code using the black box routine, but they still
-need to write their own code.  For example, I insist that they hand in
-code.  *Not for grading* but to see how they did it.
+Of course, we are not the first to suggest Python's effectiveness in
+an education and research environment.  In fact, the Python
+programming language is quite popular in numerous problem domains and
+Python has seen wide used in education, see e.g., [Mye07]_ and
+[Sta00]_.  Accordingly, it is not our purpose here to focus on Python
+in the large, but rather to focus on its use in *Data Science*
+education and research.  With that in mind, herein we will focus on a
+small number of case studies that provide insights into how Python can 
+leveraged.   
 
-A nice side effect is that you can carefully control the difficulty
-and focus be saying which parts they do and which parts are ok to be a
-black box.  Nice segue into DS501, where we wanted to focus on specific
-ideas, but have the problem be interesting.
+In particular, herein we will discuss the use of Python at three
+different levels of Data Science education and research.  First, one
+of the courses that is offered as part of the Data Science curriculum,
+and in which the author and others have leveraged Python, is DS501
+|--| "Introduction to Data Science".  The idea of DS501 is to provide
+an introductory overview of the many fields that comprise Data Science
+and it is intended that DS501 be one of the first classes a new
+student takes when entering the program.  Second, the author has also
+used Python to support MA542 |--| "Regression Analysis".  MA542 is a
+somewhat more advanced class that is a (core) elective in the Data
+Science program as well as being a class taken by many students who
+are seeking degrees in the Mathematical Sciences department.  Finally,
+the author mentors a number of student's research projects both within
+the Data Science Program and the Mathematical Sciences Department.
+These research projects all leverage Python, in various ways,
+and having access to a common code base allows the various student
+projects to build off of one another.
+
+Two key themes will permeate our discussion in the following sections.
+First, Python provides easy access to a vast array of libraries.  Even
+though Data Science education and research draws from many other
+domains, Python was always there with a library ready to support our
+work.  Second, and perhaps more subtly, having access to a language
+which is easy to use, but provides access to many advanced libraries,
+allows one to carefully craft the difficulty and scope of homework
+assignments, class projects, and research problems.  In particular,
+Python allows students to tackle particular aspects of real world
+problems, without being overly burdened with details that are
+extraneous to their particular learning objectives.  Both properties make
+Python particularly advantageous.
+
+TODO Get rid of after references are done.
+TODO Put in references.
 
 Python [Lut13]_, IPython notebooks [Per07]_, scikit-learn [Ped11],
   NumPy [Wal11]_, SciPy [Oli01]_, and pandas [McK10]_
@@ -71,34 +117,82 @@ matplotlib [Hun07]_
 Cython [Beh11]_
 Mayavi [Ram11]_
 
-Python us extensively used in scientific computing [Mil11]_ and [Oli07]_
+TODO Compare to R?
+TODO More mention of learning objectives earlier in the introduction.
+
 
 DS501 Introduction to Data Science
 ----------------------------------
 
-Basic graduate course, big mix of students!  Strong students, but with
-varied backgrounds.  Some experts in mathematics, with more limited
-background in programming.  Some experts in programming, with more
-limited background in mathematics.
+DS501 |--| "Introduction to Data Science" is intended to be one of the
+first classes a new student takes when entering the Data Science
+program at WPI, and the goal is to provide a high level overview of a
+wide swath of the material that a burgeoning Data Scientist should know.
+In particular, the course is described as:
 
-Students needs to gether their hands dirty!
+.. raw:: latex  
+ 
+  \begin{quotation} 
 
-Discuss case studies with code examples.
-Look at comments from students!
+    This course provides an overview of Data Science, covering a broad
+    selection of key challenges in and methodologies for working with
+    big data. Topics to be covered include data collection,
+    integration, management, modeling, analysis, visualization,
+    prediction and informed decision making, as well as data security
+    and data privacy. This introductory course is integrative across
+    the core disciplines of Data Science, including databases, data
+    warehousing, statistics, data mining, data visualization, high
+    performance computing, cloud computing, and business
+    intelligence. Professional skills, such as communication,
+    presentation, and storytelling with data, will be
+    fostered. Students will acquire a working knowledge of data
+    science through hands-on projects and case studies in a variety of
+    business, engineering, social sciences, or life sciences
+    domains. Issues of ethics, leadership, and teamwork are
+    highlighted. --
+    {\footnotesize http://www.wpi.edu/academics/catalogs/grad/dscourses.html}
+
+  \end{quotation}
+
+As one might imagine for such a course, finding the right level of
+detail for the course can be quite challenging especially considering
+the fact that many of the students have quite varied backgrounds, with
+some being experts in mathematics, but with perhaps less training in
+computer science or software development, while others find themselves
+in the opposite situation.  
+
+In the author's view, an important feature of such a class is that the
+students should be able to *get "their hands dirty" playing with real
+data*.  Students can often find inspiration by seeing the ideas discussed
+in class put to use on problems of practical interest (TODO citation).
+
+With all of the above in mind, the author and the others involved in
+the design of DS501 decided to have as a focus of the class be an
+interconnected set of four *case studies*.  Each case study is
+intended to build upon the previous one until the students are able to
+solve some interesting and pertinent problems in Data Science.  And it
+is precisely here were Python had a substantial role to play.
 
 Case Study 1
 ~~~~~~~~~~~~
 
-Basic data cleaning.
-Problem 1: Sampling Twitter Data with Streaming API about a certain topic
+The idea of the first case study in DS501 is to perform basic data
+gathering, cleaning, and collection of statistics.  For this case
+study we choose our data source to be the Twitter Data Streaming API
+TODO cite.  Already, Python begins to demonstrate its usefulness,
+since it allows ready access to the Twitter API through python-twitter
+TODO CITE https://code.google.com/p/python-twitter/.
 
-* Select a topic that you are interested in, for example, "WPI" or
-  "Lady Gaga"
-* Use Twitter Streaming API to sample a collection of tweets about
-  this topic in real time. (It would be recommended that the number of
-  tweets should be larger than 200, but smaller than 1 million.
-* Store the tweets you downloaded into a local file (txt file or json
-  file)
+Another key feature of the case studies in DS501 is that we chose to
+use IPython notebooks [Per07]_ both to provide the assignments to the
+students and to have the students submit their results.  Using IPython
+notebooks for both of these tasks provided a number of advantages.
+First and foremost, it let the instructors to provide the students
+with skeleton implementations of their assignments and allowed the 
+students to focus on their learning objectives.  
+
+For example, in the IPython notebooks we provided code examples
+similar to the following:
 
 .. code-block:: python
 
@@ -133,35 +227,21 @@ Problem 1: Sampling Twitter Data with Streaming API about a certain topic
    #   Please feel free to add more cells below this cell 
    #   if necessary
 
-Problem 2: Analyzing Tweets and Tweet Entities with Frequency Analysis
-
-Word Count:
-
-* Use the tweets you collected in Problem 1, and compute the
-  frequencies of the words being used in these tweets.
-* Plot a table of the top 30 words with their counts
-
-Find the most popular tweets in your collection of tweets
-
-Please plot a table of the top 10 tweets that are the most popular
-among your collection, i.e., the tweets with the largest number of
-retweet counts.
-
-Find the most popular Tweet Entities in your collection of tweets
-
-Please plot a table of the top 10 hashtags, top 10 user mentions that
-are the most popular in your collection of tweets.
-
-Problem 3: Getting "All" friends and "All" followers of a popular user
-in twitter
-
-* choose a popular twitter user who has many followers, such as "ladygaga".
-* Get the list of all friends and all followers of the twitter user.
-* Plot 20 out of the followers, plot their ID numbers and screen names in a table.
-* Plot 20 out of the friends (if the user has more than 20 friends), plot their ID numbers and screen names in a table.
+In this example we provide a skeleton that allows the students to not
+have to struggle with the details of Twitter authentication, but
+rather focus on the objective of analyzing tweets and hashtags with
+frequency analysis.  Using Python, and the skeleton code provided by
+the instructors, the student where able to gather and analyze many
+thousands of tweets and learn important lessons about data gathering,
+data APIs, data storage, and basic analytics.
 
 Case Study 2
 ~~~~~~~~~~~~
+
+The next case built on the previous one by asking the students to analyze
+the MovieLens 1M Data Set (CITE)....  
+
+STOPPED HERE.
 
 Desired outcome of the case study.
 
@@ -472,23 +552,6 @@ Problem 2: MapRudce Data Analysis
   the MapReduce version should also remove these stop words. Otherwise
   the results of TfidVectorizer and MapReduce will be different.)
 
-
-MA542 Regression Analysis
--------------------------
-
-More advanced class, but perhaps with a greater concentration of
-students who are mathematically focused.  Also, may students were
-first time Python users, with the majority of the exceptions having 
-taken DS501.
-
-Numpy, matplotlib, and Pandas provided almost all of the functionality
-they needed for the bulk of the class.   Even though book was more focused
-on things like SAS and SPSS (double check book to make sure).
-
-Were able to focus on the mathematics and not have the language, get
-in the way.
-Look at comments from students!
-
 Problem 3: Finding Important Users through PageRank Algorithm
 
 * Convert the friendship information among the users into a graph,
@@ -511,8 +574,40 @@ Problem 4: Reweighting the review scores based upon user's PageRank scores
   PageRank scores.
 
 
-More advanced research
-----------------------
+MA542 Regression Analysis
+-------------------------
+
+A nice side effect is that you can carefully control the difficulty
+and focus be saying which parts they do and which parts are ok to be a
+black box.  Nice segue into DS501, where we wanted to focus on specific
+ideas, but have the problem be interesting.
+
+More advanced class, but perhaps with a greater concentration of
+students who are mathematically focused.  Also, may students were
+first time Python users, with the majority of the exceptions having 
+taken DS501.
+
+So many libraries that any homework question is probably trivially
+answerable if they look hard enough.  Need to be careful that the
+ground rules are set correctly.  For example, need to say that they
+need to solve the regression problem using the *normal equations*.  It
+is ok to debug their code using the black box routine, but they still
+need to write their own code.  For example, I insist that they hand in
+code.  *Not for grading* but to see how they did it.
+
+Numpy, matplotlib, and Pandas provided almost all of the functionality
+they needed for the bulk of the class.   Even though book was more focused
+on things like SAS and SPSS (double check book to make sure).
+
+Were able to focus on the mathematics and not have the language, get
+in the way.
+Look at comments from students!
+
+
+Student research projects
+-------------------------
+
+Python us extensively used in scientific computing [Mil11]_ and [Oli07]_
 
 Convex optimization, deep learning, large scale robust PCA (be careful to 
 describe just the right amount), graphical models, communitie analysis,
