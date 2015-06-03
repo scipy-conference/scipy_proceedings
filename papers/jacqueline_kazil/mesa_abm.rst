@@ -24,7 +24,7 @@ Introduction
 
 *Talk a little about what ABMs are in general, who uses them, and why we should care*
 
-There are currently several tools and frameworks in wide use for agent-based modeling: particularly NetLogo [Wilensky99]_, Repast [North13]_, and MASON [Luke05]_. From our perspective, all of these share a key weakness: none of them use Python. This is not just a matter of parochial preference (though it is certainly that as well). In recent years Python has become an increasingly popular language for scientific computing [Perez2011]_, supported by a mature and growing ecosystem of tools for analysis and modeling. Python is widely considered a more natural, easy-to-learn language than Java, which is used for Repast and MASON; and unlike NetLogo's custom scripting language, Python is a widely-used general purpose programming language. Furthermore, unlike the other frameworks, Python allows us to analyze model output data interactively without exporting them to a different tool. Despite these advantages, and despite several partial efforts (e.g. [Zvoleff2013]_,[Sayama2013]_), there is not yet a Python agent-based modeling framework. Mesa is intended to fill this gap. 
+There are currently several tools and frameworks in wide use for agent-based modeling: particularly NetLogo [Wilensky99]_, Repast [North13]_, and MASON [Luke05]_. From our perspective, all of these share a key weakness: none of them use Python. This is not just a matter of parochial preference (though it is certainly that as well). In recent years Python has become an increasingly popular language for scientific computing [Perez2011]_, supported by a mature and growing ecosystem of tools for analysis and modeling. Python is widely considered a more natural, easy-to-learn language than Java, which is used for Repast and MASON; and unlike NetLogo's custom scripting language, Python is a widely-used general purpose programming language. Furthermore, unlike the other frameworks, Python allows us to analyze model output data interactively without exporting them to a different tool. Despite these advantages, and despite several partial efforts (e.g. [Zvoleff2013]_, [Sayama2013]_), there is not yet a Python agent-based modeling framework. Mesa is intended to fill this gap. 
 
 Designing a new framework from the ground up also allowed us to implement features we found lacking in other frameworks. For example, as we explain in more detail below, other ABM frameworks tend to use a single agent activation regime by default; in Mesa, we implement several scheduler classes and require the user to specify which one is being used. We also implement several useful tools to facilitate model analysis: a data collector (present only in Repast) and a batch runner (available in Repast and NetLogo only via menu-driven systems), both of which can export their results directly to pandas [CITE] dataframes for immediate analysis. 
 
@@ -38,6 +38,8 @@ Designing a new framework from the ground up also allowed us to implement featur
 
 While interactive data analysis is important, direct visualization of every model step is also an important part of agent-based modeling, both for debugging, and for developing an intuition of the dynamics that emerge from the model. Mesa facilitiates such live visualization as well. It avoids issues of system-specific GUI dependencies by using the browser as a front-end, giving framework and model developers access to the full range of modern JavaScript data visualization tools.
 
+In the remainder of this paper, we will present Mesa's architecture and core features. To illustrate their use, we will describe and build a simple agent-based model. This model is drawn from econophysics, and its core is as follows: *The model consists of some number of agents, all of whom begin with 1 unit of money. At every step of the model, an agent gives 1 unit of money (if they have it) to some other agent.* Despite its simplicity, this model yields results that are often unexpected to those not familiar with it. For our purposes, it also easily demonstrates Mesa's core featurs.
+
 Architecture
 -------------
 
@@ -50,6 +52,8 @@ We divide the modules into three overall categories: modeling, analysis and visu
 .. figure:: mesa_diagram.png
 
    Simplified UML diagram of Mesa architecture. :label:`fig3`
+
+To begin building the model described above, let us first create two classes: one for the model object itself, and one for each model agent. The model's parameter is the number of agents, and each agent has a single variable: how much money it currently has. Each agent also has a single action: give a unit of money to another agent.
 
 **Scheduler**
 
