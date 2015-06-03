@@ -39,9 +39,12 @@ An ``Image`` object is instantiated with a path to a file with one of the suppor
 
 The IQMon philosophy is to never operate on the raw file itself, but instead to create a "working file" (using the ``read_image`` method) and store it in a temporary directory.  If the raw image file is a FITS file, then ``read_image``  simply copies the raw file to the temporary directory and records this file name and path in the ``working_file`` property.  If the file is a raw image file from a DSLR (e.g. ``.CR2`` or ``.dng`` format), then ``read_image`` will call ``dcraw`` using the subprocess32 module to convert the file to ``.ppm``.  The file is then converted to FITS format using either ``pamtofits`` or ``pnmtofits`` tools from the ``netpbm`` package.  To date IQMon has only been tested with FITS and ``.CR2`` files, but should in principle work with numerous DSLR raw format images.
 
-In the following sections, I will describe a simple example of evaluating image quality for a single image.  A more complex example which is updated in concert with IQMon can be found in the ``measure_image.py`` script at the git repository for the VYSOS project[#]_.
+In the following sections, I will describe a simple example of evaluating image quality for a single image.  A more complex example which is updated in concert with IQMon can be found in the ``measure_image.py`` script at the git repository for the VYSOS project[#]_.  That process can then be wrapped in a simple program to monitor a directory for images and analyze them as they are written to disk (see the ``watch_directory.py`` script in the same VYSOS repository for an example).  This enables automatic near real time analysis.
 
 .. [#] https://github.com/joshwalawender/VYSOStools
+
+Configuration and Reading the Image In
+``````````````````````````````````````
 
 After importing IQMon, the first step would be to instantiate the ``Telescope`` object which takes a configuration file as its input.  The next step is to instantiate an ``Image`` object with the path to the image file and the ``Telescope`` object representing the telescope which took that image.
 
@@ -135,7 +138,9 @@ Estimating the Photometric Zero Point
 
 With a full astrometric solution, SExtractor photometry, and a catalog of stellar magnitude values, we can estimate the zero point for the image and use that as an indicator of clouds or other aperture obscurations.
 
-The ``get_catalog`` method can be used to download a catalog of stars from VizieR using the astroquery module.  Alternatively, support for a local copy of the UCAC4 catalog is available using the ``get_local_UCAC4`` method.  Once a catalog is obtained, the ``run_SExtractor`` method is invoked again, this time with the ``assoc`` keyword set to ``True``.
+The ``get_catalog`` method can be used to download a catalog of stars from VizieR using the astroquery module.  Alternatively, support for a local copy of the UCAC4 catalog is available using the ``get_local_UCAC4`` method.
+
+Once a catalog is obtained, the ``run_SExtractor`` method is invoked again, this time with the ``assoc`` keyword set to ``True``.  This will limit the resulting catalog of detected stars to stars which **both** exist in the catalog and also are detected in the image.  This may significantly decrease the number of stars used for the FWHM and ellipticity calculation, but may also remove spurious detections of image artifacts as stars which would improve the reliability of the measured values.
 
 .. code-block:: python
 
@@ -147,12 +152,14 @@ The ``get_catalog`` method can be used to download a catalog of stars from Vizie
 
 In the above example code, ``determine_FWHM`` is invoked again in order to use the new SExtractor catalog for the calculation.
 
-The ``measure_zero_point`` method determines the zero point by taking the weighted average of the difference between the measured instrumental magnitude from SExtractor and the catalog magnitude in the same filter.  
+The ``measure_zero_point`` method determines the zero point by taking the weighted average of the difference between the measured instrumental magnitude from SExtractor and the catalog magnitude in the same filter.
+
+It should be noted that unless custom code is added to handle typical reduction steps such as dark/bias subtraction and flat fielding, the zero point result will be influenced by systematics due to those effects.  In addition, the choice of catalog and the relative response curve of the filter in use and the filter defined by the catalog's photometric system will also introduce systematic offsets.  For many systems (especially typical visible light CCDs), these effects are small and the zero point result from IQMon can be used to compare throughput from image to image.
 
 Analysis Results and Mongo Database Integration
-```````````````````````````````````````````````
+-----------------------------------------------
 
-Results of the IQMon measurements for each image are stored as properties of the ``Image`` object and are ``astropy.units.Quantities``.
+Results of the IQMon measurements for each image are stored as properties of the ``Image`` object as ``astropy.units.Quantities``.  For example, the ```FWHM`` value is in units of pixels, but can be converted to arcseconds using the equivalency which is automatically defined by the ``Telescope`` object (``tel.pixel_scale_equivalency``) for this purpose.
 
 .. code-block:: python
 
@@ -176,7 +183,7 @@ Flags
 
 For the four primary measurements (FWHM, ellipticity, pointing error, and zero point), the configuration file may contain a threshold value.  If the measured value exceeds the threshold (or is below the threshold in the case of zero point), then the image is "flagged" as an indication that there may be a potential problem with the data.  The flags property of an ``Image`` object stores a dictionary with the flag name and a boolean value as the dictionary elements.
 
-This can be useful when summarizing results.  The Tornado web page provided with IQMon, for example, lists images and will color code a field red if that field is flagged.  In this way, a user can easily see when and where problems might have occurred.
+This can be useful when summarizing results.  For example, the Tornado web application provided with IQMon (see the `Tornado Web Application`_ section) lists images and will color code a field red if that field is flagged.  In this way, a user can easily see when and where problems might have occurred.
 
 JPEGs and Plots
 ---------------
@@ -199,7 +206,7 @@ A plot with additional information on the zero point can be generated when calli
    :scale: 34%
    :figclass: bht
 
-   An example of the plot which can be produced by the ``measure_zero_point`` method.  The plot shows the correlation between instrumental magnitude and catalog magnitude (upper left), a histogram of zero point values (upper right), a plot of the residuals vs. catalog magnitude (lower left), and a spatial distribution of the residuals (loer left). :label:`ZPplot`
+   An example of the plot which can be produced by the ``measure_zero_point`` method.  The plot shows the correlation between instrumental magnitude and catalog magnitude (upper left), a histogram of zero point values (upper right), a plot of the residuals vs. catalog magnitude (lower left), and a spatial distribution of the residuals (lower left). :label:`ZPplot`
 
 JPEG versions of the image can be generated using the ``make_JPEG`` method.  The jpeg can be binned or cropped using the ``binning`` or ``crop`` keyword arguments and various overlays can be generated showing, for example, the pointing error and detected and catalog stars.
 
@@ -207,8 +214,9 @@ JPEG versions of the image can be generated using the ``make_JPEG`` method.  The
    :scale: 22%
    :figclass: bht
 
-   An example jpeg generated by the ``make_JPEG`` method using the ``mark_detected_stars`` and ``mark_pointing`` options. In this example,  pointing error has placed the target (marked by the cyan crosshair) to the lower right (southwest) of the image center (marked by the yellow lines).  Stars from the UCAC4 catalog which were detected in the image are marked with green circles. :label:`ZPplot`
+   An example jpeg generated by the ``make_JPEG`` method using the ``mark_detected_stars`` and ``mark_pointing`` options. In this example,  pointing error has placed the target (marked by the cyan crosshair) to the lower right (southwest) of the image center (marked by the yellow lines).  Stars from the UCAC4 catalog which were detected in the image are marked with green circles. :label:`image`
 
+The JPEG overlays can be useful in evaluating the performance of SExtractor and SCAMP.  In the example shown in Fig. :ref:`image`, the stars marked as detected by SExtractor (which was run with the ``assoc`` keyword set to true) show that there are no stars detected in the very corners of the image.  This indicates that the SCAMP distortion solution did not accurately fit the WCS in the corners and could be improved.  Poor SCAMP solutions can also show up even more dramatically when entire radial zones of the image have no matched stars.
 
 Tornado Web Application
 -----------------------
