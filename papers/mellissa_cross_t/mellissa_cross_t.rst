@@ -23,14 +23,65 @@ Data visualization and presentation is a key part of scientific communication, a
 
 Creating such plots can be difficult, however.  Many scientists depend on expensive software such as SigmaPlot and Adobe Illustrator.  In the scientific Python ecosystem, there is no option to create this specific plot type.  matplotlib offers two options:  display data separately in a grid of separate subplots or overlain with twin axes.  This works for two or three traces, but doesn't scale well and is unsatisfactory for larger datasets.  Instead of a clutter of smaller plots or a mess of overlain curves, the ideal style in cases with larger datsets is the style shown above:  one densely-plotted figure that permits direct comparison of curve features.  TrendVis was created to fulfill the need for an open-source, scientific Python plot type constructor.  Here we discuss how TrendVis uses the matplotlib library to construct figures, and how users can easily customize and improve the accessibility of their TrendVis plots, and discuss several challenges faced in creating this plot type with matplotlib.
 
-Under the Hood: Creating the Figure framework
+Initializing a TrendVis Figure
+------------------------------
+
+TrendVis plots come in two flavors:  XGrid and YGrid, which respectively have x and y as the main axis, and y and x as the data axes.  The base class for XGrid and YGrid, simply called Grid, contains the Figure initialization and basic attributes used by both subclasses, as well as functions and attributes that are completely or relatively orientation-agnostic.  Grid should never be directly initialized.  As most time-series data will be plotted such that x is the main axis, we will examine TrendVis from the perspective of XGrid.
+
+Building the plot framework
 ---------------------------------------------
-TrendVis plots come in two flavors:  XGrid and YGrid, which respectively have x and y as the main axis, and y and x as the data axes.  The base class for XGrid and YGrid, simply called Grid, contains basic attributes used by both subclasses, as well as functions and attributes that are completely or relatively orientation-agnostic.  As most time-series data will be plotted such that x is the main axis, we will examine TrendVis from the perspective of XGrid.
+Although TrendVis plots appear to have a single, common plot space, this is an illusion.  At work is a grid of Axes and systematically hidden Axes spines, ticks, and labels.
 
-After initializing as a Grid, the figure is initialized, then population by axes can begin.
+The dimensions of the figure are determined by ystack_ratios and xratios.  Each parameter is a list of the relative sizes of the rows and columns, respectively, with length equal to the desired numer of main rows and columns.  ystack_ratios and xratios are not directly comparable.  The sum of ystack_ratios and the sum of xratios form the number of rows and columns (self.gridrows, self.gridcols).  To populate the figure, plt.subplot2grid() is used to initialize axes, moving first across the main dimension and then across the stack dimension.  Axes are stored in a nested list, where the sublists are the axes in the same stack layer (rows in the case of XGrid).   Each Axes instance shares its x or y axis with the first Axes in its row and column to ensure identical responses to application of axes limits and other parameters.
 
-Although TrendVis plots appear to have a single, common plot space, this is an illusion.  After the plot is created, TrendVis XGrid, YGrid uses plt.subplot2grid() to populate the figure, first with axes across the main axis, and then down the stack.  Each Axes shares its x or y axis with the first Axes in its row and column, and are relatively sized according to ystack_ratios
+..code-block:: python
+   :linenos:
+   :linenostart: 49
 
+   # Set initial x and y grid positions (top left)
+       xpos = 0
+       ypos = 0
+
+   # Create axes row by row
+   for rowspan in self.yratios:
+       row = []
+
+       for c, colspan in enumerate(self.xratios):
+           sharex = None
+           sharey = None
+
+           # All axes in a row share y axis with first axis in row
+           if xpos > 0:
+               sharey = row[0]
+
+           # All axes in a column share x axis with first axis in column
+           if ypos > 0:
+               sharex = self.axes[0][c]
+
+           ax = plt.subplot2grid((self.gridrows, self.gridcols),
+                                 (ypos, xpos), rowspan=rowspan,
+                                 colspan=colspan, sharey=sharey,
+                                 sharex=sharex)
+
+           ax.patch.set_visible(False)
+
+           row.append(ax)
+           xpos += colspan
+
+       self.axes.append(row)
+
+       # Reset x position to left side, move to next y position
+       xpos = 0
+       ypos += rowspan
+
+At this point, an XGrid instance with ystack_ratios = [] and xratios = [] appears thus:
+
+Such a grid is unattractive and cluttered
+After the axes are created, XGrid initializes the attributes that indicate the distribution of visible axis spines and ticks: self.dataside_list, and self.stackpos_list, which respectively indicate the y (stacked) axis spine visibility and x (main) axis spine visibility.  Together with self.spine_begone and self.mainax_ticks, these four attributes make the systematic removal of all uncessary spines possible.  After calling self.cleanup_grid(), the figure framework is thus decluttered:
+
+Creating Axes Twins
+-------------------
+Overlaying curves using separate axes can improve data visualization.  TrendVis provides the means to easily and systematically create and manage twinned x axes (rows) in an XGrid instances.  In XGrid, self.make_twins() creates twin x axes, one per column, across the rows indicated.  Twinned axes are stored, one row os twins per list
 Many scientific disciplines depend on the visualization of multiple disparate data sets against a common variable- time series data, for example.  There are two choices in matplotlib for displaying this data:  separately in a grid of subplots or on top of each other with twinned axes.  This works for two or three traces, but does not scale well.  Instead of a clutter of separate plots or a mess of overlain curves, the ideal style is a single densely-plotted figure that permits direct comparison of curve features.  In such a plot, each dataset has its own y (or x) axis, and all data are arranged in one cohesive plot area in a vertical (or horizontal) stack against a single x (or y) axis.  This style is critical to some scientific discplines and well-suited to other realms of science and economics, but there are few options available to generate such plots and, until TrendVis, none within the scientific Python ecosystem.
 
    Here we examine the rationale behind and the challenges associated with adapting matplotlib to this particular plot style.  We discuss the TrendVis API, plot generation, and various features available for users to customize and enhance the accessibility of their plots.
