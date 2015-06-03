@@ -11,12 +11,12 @@ Mesa: An Agent-Based Modeling Framework
 ----------------------------------------
 
 .. class:: abstract
-    
-    Mesa is a new ABM framework for Python and it's gonna be the best. Some more words will go here. Words words words about what Mesa is and how cool it is. Seriously, pretty cool, even if it isn't really done yet.
+  
+  Mesa is a new ABM framework for Python and it's gonna be the best. Some more words will go here. Words words words about what Mesa is and how cool it is. Seriously, pretty cool, even if it isn't really done yet.
 
 .. class:: keywords
 
-        agent based modeling, complexity, simulation
+    agent based modeling, complexity, simulation
 
 
 Introduction
@@ -30,11 +30,11 @@ Designing a new framework from the ground up also allowed us to implement featur
 
 .. figure:: ipython_screenshot.png
 
-    A Mesa model run and analyzed inside of an IPython Notebook. :label:`fig1`
+  A Mesa model run and analyzed inside of an IPython Notebook. :label:`fig1`
 
 .. figure:: browser_screenshot.png
 
-    A Mesa model visualized in a browser window. :label:`fig2`
+  A Mesa model visualized in a browser window. :label:`fig2`
 
 While interactive data analysis is important, direct visualization of every model step is also an important part of agent-based modeling, both for debugging, and for developing an intuition of the dynamics that emerge from the model. Mesa facilitiates such live visualization as well. It avoids issues of system-specific GUI dependencies by using the browser as a front-end, giving framework and model developers access to the full range of modern JavaScript data visualization tools.
 
@@ -55,15 +55,39 @@ We divide the modules into three overall categories: modeling, analysis and visu
 
 To begin building the model described above, let us first create two classes: one for the model object itself, and one for each model agent. The model's parameter is the number of agents, and each agent has a single variable: how much money it currently has. Each agent also has a single action: give a unit of money to another agent.
 
+.. code-block:: python
+  
+  from mesa import Model, Agent
+
+  class MoneyAgent(Agent):
+    """ An agent with fixed initial wealth."""
+    def __init__(self, unique_id):
+      # Each agent should have a unique_id
+      self.unique_id = unique_id 
+      self.wealth = 1
+
+  class MoneyModel(Model):
+    """A model with some number of agents."""
+    def __init__(self, N):
+      self.num_agents = N
+      # The scheduler will be added here
+      self.create_agents()
+
+    def create_agents(self):
+      """Method to create all the agents."""
+      for i in range(self.num_agents):
+        a = MoneyAgent(i)
+        # Now what? See below.
+
 **Scheduler**
 
 The scheduler is a model component which deserves special attention. Unlike systems dynamics models, and dynamical systems more generally, time in agent-based models is almost never continuous; ABMs are, at bottom, discrete-event simulations. Thus, scheduling the agents' activation is particularly important. First, some terminology. Many models distinguish between a step or tick of the model, and an activation of a single agent, with multiple agent activations in each step of the model. There are numerous possible scheduling regimes used in agent-based modeling, including:
 
-    * Synchronious or simultaneous activation, where all agents act simultaneously. In practice, this is generally implemented by recording each agent's decision one at a time, but not altering the state of the model until all agents have decided.
-    * Uniform activation, where all agents are activated in the same order each step of the model. 
-    * Random activation, where each agent is activated each step of the model, but the order in which they are activated is randomized for each step.
-    * Random interval activation, where the interval between each activation is drawn from a random distribution (most often Poisson). In this regime, there is no set model step; instead, the model maintains an internal 'clock' and schedule which determines which agent will be activated at which time on the internal clock. 
-    * More exotic activation regimes may be used as well, such as agents needing to spend resources to activate more frequently.
+  * Synchronious or simultaneous activation, where all agents act simultaneously. In practice, this is generally implemented by recording each agent's decision one at a time, but not altering the state of the model until all agents have decided.
+  * Uniform activation, where all agents are activated in the same order each step of the model. 
+  * Random activation, where each agent is activated each step of the model, but the order in which they are activated is randomized for each step.
+  * Random interval activation, where the interval between each activation is drawn from a random distribution (most often Poisson). In this regime, there is no set model step; instead, the model maintains an internal 'clock' and schedule which determines which agent will be activated at which time on the internal clock. 
+  * More exotic activation regimes may be used as well, such as agents needing to spend resources to activate more frequently.
 
 The activation regime can have a substantial effect on the behavior of a simulation [CITE], yet many ABM frameworks do not make it easy to change. For example, NetLogo defaults to a random activation system, while MASON's scheduler is uniform by default. By separating out the scheduler into a separate, extensible class, Mesa both requires modelers to specify their choice of activation regime, and makes it easy to change and observe the results. Additionally, the scheduler object serves as the model's storage struture for active agents.
 
@@ -75,6 +99,49 @@ Each agent is assumed to have a **step()** method, which receives the model stat
 
 The scheduler maintains two variables determining the model clock. **steps** counts how many steps of the model have occured, while **time** tracks the model's simulated clock time. Many models will only utilize **steps**, but a model using Poisson activation, for example, will track both separately, with steps counting individual agent activations and **time** the scheduled model time of the most recent activation. Some models may implement particular schedules simulating real time: for example, **time** may attempt to simulate real-world time, where agent activations simulate them as they engage in different activities of different durations based on the time of day.
 
+Now, let's implement that in our example model. We add a ``RandomActivation`` scheduler to the model, and add each created agent to it. We also need to implement the agents' ``step`` method, which the scheduler calls by default. Finally,   The new code looks like this:
+
+.. code-block:: python
+
+  from mesa.time import RandomActivation
+
+  class MoneyAgent(Agent):
+    # ...
+
+    def step(self, model)
+      """Give money to another agent."""
+      if self.wealth > 0:
+        # Pick a random agent
+        other = random.choice(model.schedule.agents)
+        # Give them 1 unit money
+        other.wealth += 1
+        self.wealth -= 1
+
+  class MoneyModel(Model):
+
+    def __init__(self, N):
+      self.num_agents = N
+      # Adding the scheduler:
+      self.schedule = RandomActivation(self)
+      self.create_agents()
+
+    def create_agents(self):
+      """Method to create all the agents."""
+      for i in range(self.num_agents):
+        a = MoneyAgent(i)
+        # Now add the agent to the schedule:
+        self.schedule.add(a)
+
+    def step(self):
+      self.schedule.step()
+
+    def run_model(self, steps):
+      """The model has no end condition
+        so the user needs to specify how long to run"""
+      for _ in range(steps):
+        self.step()
+
+
 **Data Collection**
 
 An agent-based model is not particularly useful if there is no way to see the behaviors and outputs it produces. Generally speaking, there are two ways of extracting these: visualization, which allows for observation and qualitative examination (and which we will discuss below), and quantitative data collection. In order to facilitate the latter option, we provide a generic **Data Collector** class, which can store and export data from most models without needing to be subclassed.
@@ -84,6 +151,47 @@ The data collector stores three categories of data: *model-level* variables, *ag
 The third category, *tables*, is used for logging by the model or the agents rather than fixed collection by the data collector itself. Each table consists of a set of columns, stored as dictionaries of lists. The model or agents can then append records to a table according to their own internal logic. This can be used to log specific events (e.g. every time an agent is killed), and data associated with them (e.g. agent lifespan at destruction), particularly when these events do not necessarily occur every step. 
 
 Internally, the data collector stores all variables and tables in Python's standard dictionaries and lists. This reduces the need for external dependencies, and allows the data to be easily exported to JSON or CSV. However, one of the goals of Mesa is facilitating integration with Python's larger scientific and data-analysis ecosystems, and thus the data collector also includes methods for exporting the collected data to pandas [CITE] DataFrames. This allows rapid, interactive processing of the data, easy charting, and access to the full range of statistical and machine-learning tools that are compatible with pandas.
+
+To continue our example, we use a data collector to collect the wealth of each agent at the end of every step. The additional code this requires can look like this:
+
+.. code-block:: python
+  
+  from mesa.datacollector import DataCollector
+
+  class MoneyModel(Model):
+  
+    def __init__(self, N):
+      # ... everything above
+      agent_reporters = {"Wealth": lambda a: a.wealth}
+      self.dc = DataCollector(agent_reporters=agent_reporters)
+
+    def step(self):
+      self.dc.collect(self)
+      self.schedule.step()
+      
+
+We now have enough code to run the model, get some data out of it, and analyze it.
+
+.. code-block:: python
+
+  # Create a model with 100 agents
+  model = MoneyModel(100)
+  # Run it for 1,000 steps:
+  model.run_model(1000)
+  # Get the data as a DataFrame
+  wealth_history = model.dc.get_agent_vars_dataframe()
+  # wealth_history indexed on Step and AgentID, and...
+  # ...has Wealth as one data column
+  wealth_history.reset_index(inplace=True)
+  # Plot a histogram of final wealth
+  wealth_history[wealth_history.Step==999].\
+    Wealth.hist(bins=range(10))
+
+An example of the output of this code is shown in Figure :ref:`fig4`. Notice that this simple rule produces an extremely skewed wealth distribution -- in fact, this is approximate
+
+.. figure:: model_sample_hist.png
+
+  Example of model output histogram, with labels added. :label:`fig4`
 
 **Batch Runner**
 
