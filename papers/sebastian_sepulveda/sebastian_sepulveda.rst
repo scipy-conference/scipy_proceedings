@@ -53,11 +53,11 @@ Introduction
 
 A common task in biomedical research is to record and visualize in real time physiological signals. Although there are several options to do this, they are commonly based on  proprietary tools, associated to a particular signal acquisition device vendor. This work presents an open source software, written in Python, to visualize and record in real time physiological signals, such as electrocardiography, electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source [#]_  and extensible. It is easy to add new signal processing tasks and to use different signal sources (serial, Bluetooth, sockets, etc.), and customize the user interface for the applications needs.
 
-.. [#] A git repository is available at https://github.com/ssepulveda/RTGraph.
+.. [#] Available at https://github.com/ssepulveda/RTGraph.
 
 The main objective of the software is to display in real time multiple signals and to export them to a file. In the current implementation, The communication between the software and the acquisition device is through the serial port, and it is implemented using the PySerial library. Other communication protocols can be easily added. The real time display of the signals  is implemented using the PyQtGraph library [#]_. The software has a multi-process architecture, based on the multiprocessing Python standard library. This allows having concurrent processes for receiving, processing, and displaying the data. Signal processing tasks, such as spectral estimation, are based on the SciPy stack. This architecture assures that no data is loosed and a fast response of the user interface. 
 
-.. [#] The library page is available at http://www.pyqtgraph.orgs.
+.. [#] Available at http://www.pyqtgraph.org.
 
 The software is multi-platform and runs in any machine and OS where Python and the corresponding dependencies can be installed. The software has been tested on different Linux distributions, including conventional PC, Mac and the RaspberryPi (ARM architecture).
 
