@@ -220,7 +220,32 @@ Output from this code is shown in Figure :ref:`fig5`.
 Visualization
 --------------
 
-Mesa uses a browser window to visualize its models. This avoids both the developers and the users needing to deal with cross-system GUI programming; more importantly, perhaps, it gives us access to the universe of advanced JavaScript-based data visualization tools. The entire visualization system is divided into two parts: the server side, and the client side. The server runs the model, and at each step extracts data from it to visualize, which it sends to the client as JSON via a WebSocket connection. The client receives the data, and uses JavaScript to actually draw the data onto the screen for the user.
+Mesa uses a browser window to visualize its models. This avoids both the developers and the users needing to deal with cross-system GUI programming; more importantly, perhaps, it gives us access to the universe of advanced JavaScript-based data visualization tools. The in-browser visualization is inspire by AgentScript [Densmore2012], an in-browser agent-based modeling framework. The entire visualization system is divided into two parts: the server side, and the client side. The server runs the model, and at each step extracts data from it to visualize, which it sends to the client as JSON via a WebSocket connection. The client receives the data, and uses JavaScript to actually draw the data onto the screen for the user.
+
+Mesa already includes a set of pre-built visualization elements which can be deployed with minimal setup. For example, to create a visualization of the example model which displays a live chart of the Gini coefficient at each step, we can use the included ``ChartModule``.
+
+.. code-block:: python
+
+  from mesa.visualization.ModularVisualization \
+    import ModularServer
+  from mesa.visualization.modules import ChartModule
+
+  # The Chart Module gets a model-level variable 
+  # from the model's data collector
+  chart_element = ChartModule([{"Label": "Gini", 
+                              "Color": "Black"}], 
+                              data_collector_name='dc')
+  # Create a server to visualize MoneyModel
+  server = ModularServer(MoneyModel, 
+                        [chart_element], 
+                        "Money Model", 100)
+  server.launch()
+
+Running this code launches the server. To access the actual visualization, open your favorite browser (ideally Chrome) to http://127.0.0.1:8888/ . This shows the visualization, along with the controls used to reset the model, advance it by one step, or run it at the designated frame-rate. After several ticks, the browser window will look something like Figure :ref:`fig6`.
+
+.. figure:: browser_screenshot_2.png
+
+  Example of the browser visualization. :label:`fig6`
 
 The actual visualization is done by the visualization modules. Conceptually, each module consists of a server-side and a client-side element. The server-side element is a Python object implementing a ``render`` method, which takes a model instance as an argument and returns a JSON object with the information needed to visualize some part of the model. This might be as simple as a single number representing some model-level statistic, or as complicated as a list of JSON objects, each encoding the position, shape, color and size of an agent on a grid. 
 
@@ -230,9 +255,63 @@ Obviously, the two sides of each visualization must be designed in tandem. They 
 
 The ``ModularServer`` class manages the various visualization modules, and is meant to be generic to most models and modules. A visualization is created by instantiating a ``ModularServer`` object with a model class, one or more ``VisualizationElement`` module objects, and model parameters (if necessary). The ``launch()`` method then launches a Tornado server, using templates to insert the JavaScript code specified by the modules to create the client page. The application uses Tornado's coroutines to run the model in parallel with the server itself, so that the model running does not block the serving of the page and the WebSocket data. For each step of the model, each module's ``render`` method extracts the visualization data and stores it in a list. That list item is then sent to the client via WebSocket when the request for that step number is received.
 
+Let us create a simple histogram, with a fixed set of bins, for visualizing the distribution of wealth as the model runs. It requires JavaScript code, in `HistogramModule.js` and a Python class. Below is an abbreviated version of both.
 
-Sample Application
--------------------
+.. code-block:: javascript
+
+  var HistogramModule = function(bins) {
+    // Create the appropiate tag, stored in canvas
+    $("body").append(canvas);
+    // ... Chart.js boilerplate removed 
+    var chart = new Chart(context).Bar(data, options);
+
+    this.render = function(data) {
+      for (var i in data)
+        chart.datasets[0].bars[i].value = data[i];
+      chart.update();
+    };
+
+    this.reset = function() {
+      chart.destroy();
+      chart = new Chart(context).Bar(data, options);
+      };
+    };
+
+Next, the Python class uses ``Chart.min.js`` (included with the Mesa package) and the new ``HistogramModule.js`` file we created above, which is located in the same directory as the Python code. In this case, our module's ``render`` method ix extremely specific for this model alone. The code looks like this.
+
+.. code-block:: python
+
+  class HistogramModule(VisualizationElement):
+    package_includes = ["Chart.min.js"]
+    local_includes = ["HistogramModule.js"]
+
+    def __init__(self, bins):
+      self.bins = bins
+      new_element = "new HistogramModule({})"
+      new_element = new_element.format(bins)
+      self.js_code = "elements.push(" + new_element + ");"
+
+  def render(self, model):
+    wealth_vals = [a.wealth 
+                   for a in model.schedule.agents]
+    hist = np.histogram(wealth_vals, 
+                        bins=self.bins)[0]
+    return [int(x) for x in hist]
+
+Finally, we can add the element to our visualization server object:
+
+.. code-block:: python
+
+  histogram_element = HistogramModule(range(10))
+  server = ModularServer(MoneyModel, [histogram_element], 
+                         "MoneyModel", 100)
+  server.launch()
+
+Conclusions and Future Work
+----------------------------
+
+Mesa provides a versatile framework for building, analyzing and visualizing agent-based models. It seeks to fill the ABM-shaped hole in the scientific Python ecosystem, while bringing together powerful features found in disparate other modeling frameworks and introducing some of its own. Both Mesa's schedule architecture and in-browser visualization are, to the best of our knowledge, unique among major ABM frameworks.  
+
 
 References
 -----------

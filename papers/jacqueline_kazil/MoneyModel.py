@@ -5,6 +5,14 @@ from mesa.time import RandomActivation
 from mesa.datacollection import DataCollector
 
 
+def compute_gini(model):
+    agent_wealths = [agent.wealth for agent in model.schedule.agents]
+    x = sorted(agent_wealths)
+    N = model.num_agents
+    B = sum( xi * (N-i) for i,xi in enumerate(x) ) / (N*sum(x))
+    return (1 + (1/N) - 2*B)
+
+
 class MoneyAgent(Agent):
     """ An agent with fixed initial wealth."""
     def __init__(self, unique_id):
@@ -29,7 +37,9 @@ class MoneyModel(Model):
         self.schedule = RandomActivation(self)
         self.create_agents()
         agent_reporters = {"Wealth": lambda a: a.wealth}
-        self.dc = DataCollector(agent_reporters=agent_reporters)
+        model_reporters = {"Gini": compute_gini}
+        self.dc = DataCollector(model_reporters=model_reporters,
+                                agent_reporters=agent_reporters)
 
     def create_agents(self):
         """Method to create all the agents."""
