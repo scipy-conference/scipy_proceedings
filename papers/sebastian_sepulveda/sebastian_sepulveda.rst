@@ -20,11 +20,11 @@ Visualizing physiological signals in real time
 .. class:: abstract
 
  This work presents a software, written in Python, to visualize and record in
- real time physiological signals, such as electrocardiography and
- electromyography. The software is also capable of doing real time processing,
+ real time physiological signals, such as electrocardiography,
+ electromyography and human movement. The software is also capable of doing real time processing,
  such as filtering and spectral estimation. The software is open source,
  extensible, multi-platform and has been tested on different Linux
- distributions, including conventional PCs and the RaspberryPi (ARM
+ distributions, including conventional PC, Mac and the RaspberryPi (ARM
  architecture). It leverages the use of several libraries, including PyQtGraph
  and the SciPy/NumPy stack.
 
@@ -51,13 +51,15 @@ Introduction
 ------------
 
 
-A common task in biomedical research is to record and visualize in real time physiological signals. Although there are several options to do this, they are commonly based on  proprietary tools, associated to a particular signal acquisition device vendor. This work presents an open source software, written in Python, to visualize and record in real time physiological signals, such as electrocardiography and electromyography. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source [#]_  and extensible. It is easy to add new signal processing tasks and to use different signal sources (serial, Bluetooth, sockets, etc.). 
+A common task in biomedical research is to record and visualize in real time physiological signals. Although there are several options to do this, they are commonly based on  proprietary tools, associated to a particular signal acquisition device vendor. This work presents an open source software, written in Python, to visualize and record in real time physiological signals, such as electrocardiography, electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source [#]_  and extensible. It is easy to add new signal processing tasks and to use different signal sources (serial, Bluetooth, sockets, etc.), and customize the user interface for the applications needs.
 
 .. [#] A git repository is available at https://github.com/ssepulveda/RTGraph.
 
-The main objective of the software is to display in real time multiple signals and to export them to a file. In the current implementation, The communication between the software and the acquisition device is through the serial port, and it is implemented using the PySerial library. Other communication protocols cab be easily added. The real time display of the signals  is implemented using the PyQtGraph library. The software has a multi-process architecture, based on the multiprocessing Python standard library. This allows having concurrent processes for receiving, processing, and displaying the data. Signal processing tasks, such as spectral estimation, are based on the SciPy stack. This architecture assures that no data is loosed and a fast response of the user interface. 
+The main objective of the software is to display in real time multiple signals and to export them to a file. In the current implementation, The communication between the software and the acquisition device is through the serial port, and it is implemented using the PySerial library. Other communication protocols can be easily added. The real time display of the signals  is implemented using the PyQtGraph library [#]_. The software has a multi-process architecture, based on the multiprocessing Python standard library. This allows having concurrent processes for receiving, processing, and displaying the data. Signal processing tasks, such as spectral estimation, are based on the SciPy stack. This architecture assures that no data is loosed and a fast response of the user interface. 
 
-The software is multi-platform and runs in any machine and OS where Python and the corresponding dependencies can be installed. The software has been tested on different Linux distributions, including conventional PCs and the RaspberryPi (ARM architecture).
+.. [#] The library page is available at http://www.pyqtgraph.orgs.
+
+The software is multi-platform and runs in any machine and OS where Python and the corresponding dependencies can be installed. The software has been tested on different Linux distributions, including conventional PC, Mac and the RaspberryPi (ARM architecture).
 
 Software architecture
 ---------------------
@@ -66,12 +68,18 @@ The applications described in this work can be classified as a "data logger". A 
 
 When developing, evaluating, or validating a new hardware or software, it is important to have  control of the outcome of the algorithms and the fidelity and performance of the data acquisition process. In particular, in the field of Biomedical Engineering, the acquisition and signal processing of biological signals needs to be reliable and with a tight control over the sampling frequency. It is also fundamental to ensure that no data is lost during the acquisition and logging process. From a practical point of view, having to wait for the data to be stored before visualizing it (possibly in another program) is cumbersome and tedious, slowing down the development process. For these reasons, in this work we present a program able to: receive data from a variety of sources (serial port, Bluetooh, Zigbee, TCP/IP, etc.); process and visualize the data in real time; and to record the data in a file.
 
+
 The first version of this program was developed for a research on biomechanical engineering.  This research involves logging, processing, and real time displaying of the signals generated by a nine degrees of freedom inertial measurement unit (9DOF-IMU). This requires acquiring nine signals with a sampling rate of at least  100 Hz. Six additional signals are computed through a sensor fusion algorithm. A total of 15 signals are displayed and exported as a CSV file. We designed the architecture of the program with these requirements in mind.
+
+View what is being acquired is also important, to corroborate that the data being acquired is actually what is being expected. In that manner, a data logger capable of also plot the data, in real time is important tool. A simple, yet versatile application, capable of acquire data from sources a variety of sources and in different instances, over different platforms, and free, is a tool not easy to find.
+
 
 
 A plotting library selection
 ============================
-To start with, it was necessary to evaluate what plotting libraries where capable of...
+There are lots of tools and libraries capable of doing good plots. As Luke Campagnola [1]_ stated in the project's page, the main reasons for choosing PyQtGraph are Speed, portability and feature rich.
+
+The first attempts where done with the SciPy stack, using Matplotlib [2]_. This worked out of the box, with a not much complicated way to include the plot in an UI, and interact with other UI elements. For one data stream, the plot worked easily. But, after starting to use more data and signal processing, we ended noticing how matplotlib is not intended to handle more than 3 signals in real time (having an update of the plot at least 30 Hz). PyQwt was the next to test, which give 
 
 
 Threading vs Multiprocessing
@@ -117,7 +125,10 @@ Electronic Engineering, Basal Project FB0008, Conicyt.
 
 References
 ----------
-.. .. [Atr03] P. Atreides. *How to catch a sandworm*,
-..           Transactions on Terraforming, 21(3):261-300, August 2003.
+.. [1] L. Campagnola. *PyQtGraph. Scientific Graphics and GUI Library for Python*,
+           Transactions on Terraforming, 21(3):261-300, August 2003.
+
+.. [2] J. D. Hunter. *Matplotlib: A 2D graphics environment*,
+			Computing In Science \& Engineering, 9(3):90-95, IEEE COMPUTER SOC, 2007. http://dx.doi.org/10.5281/zenodo.15423
 
 
