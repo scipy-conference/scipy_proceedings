@@ -162,8 +162,8 @@ To continue our example, we use a data collector to collect the wealth of each a
   
     def __init__(self, N):
       # ... everything above
-      agent_reporters = {"Wealth": lambda a: a.wealth}
-      self.dc = DataCollector(agent_reporters=agent_reporters)
+      ar = {"Wealth": lambda a: a.wealth}
+      self.dc = DataCollector(agent_reporters=ar)
 
     def step(self):
       self.dc.collect(self)
@@ -198,6 +198,24 @@ An example of the output of this code is shown in Figure :ref:`fig4`. Notice tha
 Since most ABMs are stochastic, a single model run gives us only one particular realization of the process the model describes. Furthermore, the questions we want to use ABMs to answer are often about how a particular parameter drives the behavior of the entire system -- requiring multiple model runs with multiple parameter values. In order to facilitate this, Mesa provides the **BatchRunner** class. Like the DataCollector, it does not need to be subclassed in order to conduct parameter sweeps on most models.
 
 The Batch Runner is instantiated with a model class, and a dictionary mapping names of model parameters to either a single value, or a list or range of values. Like the Data Collector, it is also instantiated with dictionaries mapping model- and agent-level variable names to functions used to collect them. The Batch Runner uses the *product* combination generator included in Python's *itertools* library to generate all possible combinations of the parameter values provided. For each combination, the batch collector instantiates a model instance with those parameters, and runs the model until it terminates or a set number of steps has been reached. Once the model terminates, the batch collector runs the reporter functions, collecting data on the model run and storing it along with the relevant parameters. Like the Data Collector, the batch runner can then export the resulting datasets to pandas dataframes.
+
+Suppose we want to know whether the skewed wealth distribution in our example model is dependent on initial starting wealth. To do so, we modify the model code itself, and implement a ``get_gini`` method to compute the model's Gini coefficient. (In the interest of space, these modifications are left as an exercise to the reader, or are available in the full model code online). The following code sets up and runs a ``BatchRunner`` testing starting wealth values between 1 and 9, with 10 runs at each. Each run continues for 1,000 steps, as above.
+
+.. code-block:: python
+
+  param_values = {"N": 100, "starting_wealth": range(1,10)}
+  model_reporter={"Gini": compute_gini}
+  batch = BatchRunner(MoneyModel, param_values, 
+                      10, 1000, model_reporter)
+  batch.run_all()
+  out = batch.get_model_vars_dataframe()
+  plt.scatter(df.starting_wealth, df.Gini)
+
+Output from this code is shown in Figure :ref:`fig5`.
+
+.. figure:: model_sample_scatter.png
+
+  Example of batch run scatter-plot, with labels added. :label:`fig5`
 
 Visualization
 --------------
