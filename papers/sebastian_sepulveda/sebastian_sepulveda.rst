@@ -77,9 +77,9 @@ View what is being acquired is also important, to corroborate that the data bein
 
 A plotting library selection
 ============================
-There are lots of tools and libraries capable of doing good plots. As Luke Campagnola [1]_ stated in the project's page, the main reasons for choosing PyQtGraph are Speed, portability and feature rich.
+There are lots of tools and libraries capable of doing good plots. As Luke Campagnola [A]_ stated in the project's page, the main reasons for choosing PyQtGraph are Speed, portability and feature rich.
 
-The first attempts where done with the SciPy stack, using Matplotlib [2]_. This worked out of the box, with a not much complicated way to include the plot in an UI, and interact with other UI elements. For one data stream, the plot worked easily. But, after starting to use more data and signal processing, we ended noticing how matplotlib is not intended to handle more than 3 signals in real time (having an update of the plot at least 30 Hz). PyQwt was the next to test, which give 
+The first attempts where done with the SciPy stack, using Matplotlib [B]_. This worked out of the box, with a not much complicated way to include the plot in an UI, and interact with other UI elements. For one data stream, the plot worked easily. But, after starting to use more data and signal processing, we ended noticing how matplotlib is not intended to handle more than 3 signals in real time (having an update of the plot at least 30 Hz). PyQwt was the next to test, which give 
 
 
 Threading vs Multiprocessing
@@ -128,10 +128,10 @@ Electronic Engineering, Basal Project FB0008, Conicyt.
 
 References
 ----------
-.. [1] L. Campagnola. *PyQtGraph. Scientific Graphics and GUI Library for Python*,
+.. [A] L. Campagnola. *PyQtGraph. Scientific Graphics and GUI Library for Python*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
 
-.. [2] J. D. Hunter. *Matplotlib: A 2D graphics environment*,
+.. [B] J. D. Hunter. *Matplotlib: A 2D graphics environment*,
 			Computing In Science \& Engineering, 9(3):90-95, IEEE COMPUTER SOC, 2007. http://dx.doi.org/10.5281/zenodo.15423
 
 
