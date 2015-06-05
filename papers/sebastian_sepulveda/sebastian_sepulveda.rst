@@ -1,14 +1,14 @@
 :author: Sebastián Sepúlveda
 :email: ssepulveda.sm@gmail.com
-:institution: Escuela de Ingeniería Civil Biomédica, Facultad de Ingeniería, Universidad de Valparaiso
+:institution: Escuela de Ingeniería Civil Biomédica, Facultad de Ingeniería, Universidad de Valparaíso
 
 :author: Pablo Reyes
 :email: pablo.reyes@uv.cl
-:institution: Escuela de Ingeniería Civil Biomédica, Facultad de Ingeniería, Universidad de Valparaiso
+:institution: Escuela de Ingeniería Civil Biomédica, Facultad de Ingeniería, Universidad de Valparaíso 
 
 :author: Alejandro Weinstein
 :email: alejandro.weinstein@uv.cl
-:institution: Escuela de Ingeniería Civil Biomédica, Facultad de Ingeniería, Universidad de Valparaiso
+:institution: Escuela de Ingeniería Civil Biomédica, Facultad de Ingeniería, Universidad de Valparaíso
 
 :video: http://bit.ly/1BHObxL
 :video: http://bit.ly/1Ex0Ydy
@@ -55,11 +55,12 @@ A common task in biomedical research is to record and visualize in real time phy
 
 .. [#] Available at https://github.com/ssepulveda/RTGraph.
 
-The main objective of the software is to display in real time multiple signals and to export them to a file. In the current implementation, The communication between the software and the acquisition device is through the serial port, and it is implemented using the PySerial library. Other communication protocols can be easily added. The real time display of the signals  is implemented using the PyQtGraph library [#]_. The software has a multi-process architecture, based on the multiprocessing Python standard library. This allows having concurrent processes for receiving, processing, and displaying the data. Signal processing tasks, such as spectral estimation, are based on the SciPy stack. This architecture assures that no data is loosed and a fast response of the user interface. 
+The main objective of the software is to display in real time multiple signals and to export them to a file. In the current implementation, The communication between the software and the acquisition device is through the serial port, and it is implemented using the PySerial library. Other communication protocols can be easily added. The real time display of the signals  is implemented using the PyQtGraph library. [#]_ The software has a multi-process architecture, based on the multiprocessing Python standard library. This allows having concurrent processes for receiving, processing, and displaying the data. Signal processing tasks, such as spectral estimation, are based on the SciPy stack. This architecture assures that no data is loosed and a fast response of the user interface. 
 
 .. [#] Available at http://www.pyqtgraph.org.
 
 The software is multi-platform and runs in any machine and OS where Python and the corresponding dependencies can be installed. The software has been tested on different Linux distributions, including conventional PC, Mac and the RaspberryPi (ARM architecture).
+
 
 Software architecture
 ---------------------
