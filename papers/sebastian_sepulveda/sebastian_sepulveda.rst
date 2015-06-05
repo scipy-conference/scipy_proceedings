@@ -93,7 +93,8 @@ Figure :ref:`figSWarch` shows a diagram of the software architecture.
 
 .. figure:: sw_architecture.pdf
 
-   Diagram of the software architecture. :label:`figSWarch`
+   Diagram of the software architecture. There are two independent processes. The communication process reads the incoming data stream, parse it, add a timestamp (if necessary), and put the processed data into a queue. The main process reads the data from the queue, process the data, and then update the plot and log the data into a file. :label:`figSWarch` 
+
 
 Programming details
 -------------------
@@ -116,6 +117,8 @@ Conclusions
 We are awesome.
 
 It is easy to modify by other users. Mention Lobos' application (is that the case?). 
+
+Future work: do the signal processing in a different process, to take advantages of the multiple cores.
 
 Acknowledgments
 ---------------
