@@ -141,6 +141,15 @@ Now, let's implement that in our example model. We add a ``RandomActivation`` sc
       for _ in range(steps):
         self.step()
 
+**Space**
+
+Many agent-based models are spatial: agents may have fixed positions in space or move around, and interact with their immediate neighbors or with agents and other objects nearby. The space may be abstract (as in many cellular automata), or represent many possible scales, from a single building to a region to the entire world. While some models take place in three spatial dimensions as well, the majority represent space as two-dimensional, which is how Mesa's current space modules are implemented. Many abstract model spaces are toroidal, meaning that the edges 'wrap around' to the opposite edge. This prevents model artifacts from arising at the edges, which have fewer neighbors than other locations.
+
+Mesa currently implements two broad classes of space: grid, and continuous. Grids are discrete spaces, consisting of rectangular cells; agents and other objects may only be in a particular cell (or, with some additional coding, potentially span multiple cells), but not between cells. In continuous space, in contrast, agents can have any arbitrary coordinates.
+
+There are several specific grid classes, all of which inherit from a root `Grid` class. At its core, a grid is a two-dimensional array with methods for getting the neighbors of particular cells, adding and removing agents, etc. The default ``Grid`` class does not enforce what each cell may contain; ``SingleGrid`` ensures that each cell contains at most one object, while ``MultiGrid`` explicitly makes each cell be a set of 0 or more objects. There are two kinds of cell neighborhoods: a cell's *Moore* neighborhood is the 8 cells surrounding it, including the diagonals; the *Von Neumann* neighborhood is only the 4 cells immediately above, below, and to its left and right. Which neighborhood type to use will vary based on the specifics of each model, and are specified in Mesa by an argument to the various neighborhood methods.
+
+The ``ContinuousSpace`` class also inherits from ``Grid``, and uses the grid as a simple spatial database; the number of cells and the arbitrary limits of the space are provided when the space is created, and are used internally to map between spatial coordinates and grid cells. Neighbors here are defined as all agents within an arbitrary distance of a given point.
 
 **Data Collection**
 
