@@ -110,8 +110,8 @@ Python particularly advantageous.
 TODO Get rid of after references are done.
 TODO Put in references.
 
-Python [Lut13]_, IPython notebooks [Per07]_, scikit-learn [Ped11],
-  NumPy [Wal11]_, SciPy [Oli01]_, and pandas [McK10]_
+Python [Lut13]_, IPython notebooks [Per07]_, scikit-learn [Ped11]_,
+  NumPy [Wal11]_, SciPy [Oli01]_, and pandas [McK10]_ [McK10]_
 
 matplotlib [Hun07]_
 Cython [Beh11]_
@@ -238,303 +238,280 @@ data APIs, data storage, and basic analytics.
 Case Study 2
 ~~~~~~~~~~~~
 
-The next case built on the previous one by asking the students to analyze
-the MovieLens 1M Data Set (CITE)....  
-
-STOPPED HERE.
-
-Desired outcome of the case study.
-
-* In this case study we will look at the MovieLens 1M Data Set.
-* It contains data about users and how the rate movies.
-* The idea is to analyze the data set, make conjectures, support
-  or refute those conjectures with data, and tell a story about
-  the data!
+Building upon the skills gained in the first case study, the second
+case study asks the students to analyze the MovieLens 1M Data Set
+(CITE) FIXME Check MovieLens license, which contains data about users
+and how the rate movies.  The key learning objectives are to analyze
+the data set, make conjectures, support or refute those conjectures
+with data, and tell a story about the data.  In particular, the
+students are not only asked to perform several technical tasks, but
+they must also propose a business question that they think this data
+can answer.  In effect, the are expected to play the role of a Data
+Scientist at a movie company and they must convince "upper
+management", who are not presume to be technically minded, that their
+conjecture is correct.
     
-Required Readings:
+While a seemingly tall order for only the second case study, Python
+again shows it utility.  In particular, just as in case study 1, the 
+assignment is provided in an IPython notebook, and the student is required
+to submit their work in the same format, thereby leveraging the skills
+learned in the first case study.
 
-* Chapter 2 (only the section on the MovieLens 1M Data Set), Chapter
-  5, Chapter 6 Pg 171-172, and Chapter 8 of the book [Python for Data
-  Analysis](http://shop.oreilly.com/product/0636920023784.do)
-  (available from the WPI library as an e-book).
-* If you want your code to be really compact then you might want to
-  also look into the pivot_table method of Panda's DataFrame, though
-  there are many other ways to complete the case study!
+However, in this case study we introduce several important Python
+libraries that support Data Science including Numpy [Wal11]_,
+matplotlib [Hun07]_, and, perhaps most importantly, pandas [McK10]_.
+As is perhaps well known to the readers of this text, Numpy provides a
+vast selection of routines for numerical processing, including
+powerful array and matrix/vector classes, while matplotlib allows for
+plotting of data and generation of compelling figures.  Finally,
+pandas provides many tools for data processing, including a structure
+called a DataFrame (inspired by a data structure with the same name in
+the R language CITE), which facilities many data manipulations.  Note,
+we are certainly not the first to consider this collection of
+libraries to be important for Data Science, and this particular case
+study was inspired by the excellent book "Python for Data Analysis:
+Data Wrangling with Pandas, NumPy, and IPython", by Wes McKinney CITE
+(http://shop.oreilly.com/product/0636920023784.do) (which is required
+reading for this particular assignment).
 
-Required Python libraries:
-
-* Pandas (pandas.pydata.org)
-* Matplotlib (matplotlib.org)
-* If you need help installing them then you can refer to Chapter 1 of Python for Data Analysis book above.
-
-Problem 1: Importing the MovieLens data set and merging it into a
-single Pandas DataFrame
-
-* Download the 1 million ratings data set from
-  http://grouplens.org/datasets/movielens/ (though if you are feeling
-  adventerous you can download the 10 million ratings file instead)
-* Merge all of the data into a single Pandas DataFrame
-* Store the data into an HDF5 file.
-
-Report some basic details of the data you collected.  For example:
+Many of the tasks in this case study revolve around question like:
 
 * How many movies have an average rating over 4.5 overall?
 * How many movies have an average rating over 4.5 among men?  How
   about women?
 * How many movies have an *median* rating over 4.5 among men over age
   30?  How about women over age 30?
-* What are the ten most popular movies?
-* Choose what you consider to be a reasonable defintion of
-  "popular".
-* Be perpared to defend this choice.
-* Make some conjectures about how easy various groups are to please?
-  Support your answers with data!
-* For example, one might conjecture that people between the ages
-  of 1 and 10 are the easiest to please since they are all young
-  children.  This conjecture may or may not be true, but how
-  would you support or disprove either conclusion with with data?
-* Be sure to come up with your own conjectures and support them
-  with data!
+* What are the ten most popular movies given a reasonable, student 
+  derived definition of "popular"?
 
-Problem 2: Expand our investigation to histograms
-An obvious issue with any inferences drawn from Problem 1 is that we
-did not consider how many times a movie was rated.
+and the visualization of the data by way of:
 
-* Plot a histogram of the ratings of all movies.
-* Plot a histogram of the *number* of ratings each movie recieved.
-* Plot a histogram of the *average rating* for each movie.
-* Plot a histogram of the *average rating* for movies which are rated
+* Plotting a histogram of the ratings of all movies.
+* Plotting a histogram of the *number* of ratings each movie received.
+* Plotting a histogram of the *average rating* for each movie.
+* Plotting a histogram of the *average rating* for movies which are rated
   more than 100 times.
-* What do you observe about the tails of the histogram where you
-  use all the movies versus the one where you only use movies
-  rated more than 100 times?
-* Which highly rated movies would you trust are actually good?
-  Those rated more than 100 times or those rated less than 100
-  times?
-* Make some conjectures about the distribution of ratings? Support
-  your answers with data!
-* For example, what age range do you think has more extreme
-  ratings?  Do you think children are more or less likely to rate
-  a movie 1 or 5?
-* Be sure to come up with your own conjectures and support them
-  with data!
-
-Problem 3: Correlation:  Men versus women
-
-Let look more closely at the relationship between the pieces of data
-we have.
-
-* Make a scatter plot of men versus women and their mean rating for
+* Making a scatter plot of men versus women and their mean rating for
   every movie.
-* Make a scatter plot of men versus women and their mean rating for
+* Making a scatter plot of men versus women and their mean rating for
   movies rated more than 200 times.
-* Compute the *correlation coefficent* between the ratings of men and
-  women.
-* Are the ratings similiar or not? Support your answer with data!
-* Conjecture under what circumstances the rating given by one gender
-  can be used to predict the rating given by the other gender.
-* For example, are men and women more similar when they are
-  younger or older?
-* Be sure to come up with your own conjectures and support them
-  with data!
 
-Problem 4: Open Ended Question:  Business Intelligence
+among others.  Note, there are a number of important learning
+objectives that we wish to support.  First, several terms are,
+intentionally, only vaguely defined in the assignment.  For example,
+the precise definition of "popular" is left to the student to derive.
+Second, the student is expected to make hypotheses or conjectures
+based upon the definitions they come up with.  For example, perhaps
+the conjecture that men's and women's rating for certain genres are
+highly correlated.  Finally, the students must try to either prove, or
+just as interestingly, disprove their conjectures based upon the data.
 
-* Do any of your conjectures in Problems 1, 2, and 3 provide insights
-  that a movie company might be interested in?
-* Propose a business question that you think this data can answer.
-* Suppose you are a Data Sciencetist at a movie company.  Convince
-  your boss that your conjecture is correct!
+Diving a bit more deeply into some of the specific functionality that
+we leverage in Python, and pandas in particular.  To any Python
+aficionado, it is likely clear that there are many ways to process the
+data to answer the questions above, ranging from the brute force to
+the elegant.  
+
+To start, the MovieLens 1M Data Set itself is actually provided in
+three different files.  First is a file containing the information
+regarding individual users, indexed by a unique *user_id*.  Second is
+a file containing the information regarding each movie, indexed by a
+unique *movie_id*.  Finally, and perhaps most importantly, is a file
+which contains ratings (and time stamps) indexed by a pair of
+*user_id* and *movie_id*.
+
+Already we can perceive a thorny issue.  Clearly, the questions of
+interest can only be answered by appropriate cross referencing between
+these three files.  For example, all three files must be referenced to
+answer a question an seemingly straight forward as "how many action
+movies do men rate higher than 4?"  While perhaps not too troublesome
+for students who are adept programmers, the cross referencing between
+the files presents an unnecessary impediment to less proficient
+students that does not support the learning goals for this assignment.
+
+Of course, a straight forward answer would be for the instructors to
+preprocess the data appropriately.  However, using the power of Python 
+one can easily arm the students with a general tool, while at the same 
+time avoiding unnecessary hurdles.  In particular, the pandas provides
+a merge function CITE that provides exactly the required functionality
+in a quite general framework.  In particular, one can use the code
+below to easily merge the three data files into a single DataFrame.
+
+.. code-block:: python
+
+   import pandas as pd
+   #---------------------------------------------
+
+   # Read in the user data into a DataFrame
+   unames = ['user_id', 'gender', 'age', 'occupation', 'zip']
+   users = pd.read_table('ml-1m/users.dat', sep='::', header=None,
+   names=unames)
+
+   # Read in the rating data into a DataFrame
+   rnames = ['user_id', 'movie_id', 'rating', 'timestamp']
+   ratings = pd.read_table('ml-1m/ratings.dat', sep='::', header=None,
+   names=rnames)
+
+   # Read in the movie data into a Data Frame
+   mnames = ['movie_id', 'title', 'genres']
+   movies = pd.read_table('ml-1m/movies.dat', sep='::', header=None,
+   names=mnames)
+
+   # Merge all the data into one DataFrame
+   data = pd.merge(pd.merge(ratings, users), movies)
+
+Of course, even once the data files have been merged, there are many
+places where a student might be lead astray.  Fortunately, pandas
+provides another tool which allows for elegant and compact code,
+namely the *pivot-table*.  For example, one can imagine writing
+complicated loops and conditionals to perform the task of printing
+out all movies that have a median rating of 5 by men or women.
+However, using pivot-tables, such a question can be answered with
+just three lines of code.
+
+.. code-block:: python
+
+   # Create a pivot table to aggregate the data
+   mean_ratings = data[data['age'] > 30].pivot_table(values='rating', 
+                                                     rows='title', 
+                                                     cols='gender', 
+                                                     aggfunc='median')
+   # Only print out movies with at least one rating
+   print (mean_ratings[mean_ratings['M'].notnull()].sort('M',
+     ascending=False)['M'] > 4.5).nonzero()
+   print (mean_ratings[mean_ratings['F'].notnull()].sort('F',
+     ascending=False)['F'] > 4.5).nonzero()
+
+Of course, one might be tempted to argue that having students develop
+their own code, rather than leveraging such *black box* routines leads
+to a deeper learning experience.  While we certainly appreciate this
+point of view, we wish to emphasize that the class in question is a
+introductory Data Science class, and not a programming or data
+structure class.  Accordingly, using Python, and the powerful features
+of libraries such as Pandas, allows us to focus on the Data Science
+learning goals, while at the same time allowing the students to
+utilize large scale, real world, and sometimes messy data sources.
+This theme of using Python to allow for focused learning goals, using
+real world data, is a key message our this text.
+
 
 Case Study 3
 ~~~~~~~~~~~~
 
-Text processing to generate predictors.  Much harder, but made much
-easier with sklearn.
+The third case study is substantially more challenging than the second
+case study, but builds on the foundations already laid down.  While
+case study focused on analyzing *numerical* movie reviews, case study
+three focuses on detecting positive and negative reviews from raw text
+using natural language processing.
 
-Textual analysis of movie reviews
+In particular, is case study three the class turns it attention to the
+Movie Review Data v2.0 from the
+http://www.cs.cornell.edu/people/pabo/movie-review-data.  This data
+set contains written reviews of movies divided into positive and
+negative reviews, and the goal is to learn how to automatically detect
+which are which.
 
-Desired outcome of the case study.
+Of course, tackling such problems is well known to be difficult, and
+there are many open research problems in this domain.  On the other
+hand, such problems are clearly of importance in many domains, and it
+is not at all difficult to get students interested in solving them.
+The question remains, how can students in their very first Data
+Science class be expected to approach such difficult and important
+problems, and still be able to make meaningful progress?  Of course,
+the answer is, again, Python.
 
-* In this case study we will look at movie reviews from the v2.0
-  polarity dataset comes from the
-  http://www.cs.cornell.edu/people/pabo/movie-review-data.
-* It contains written reviews of movies divided into positive and
-  negative reviews.
-* As in Case Study 2 idea is to *analyze* the data set, make
-  *conjectures*, support or refute those conjectures with *data*, and
-  *tell a story* about the data!
-    
-Required Readings:
+In particular, we base this case study on the excellent scikit-learn
+scikit-learn [Ped11]_ Python library.  The scikit-learn provides easy
+to use and efficient tools for data analysis.  Most importantly, it
+provides routines for many important Data Science concepts such as
+machine learning and cross validation.  In fact, this case study is
+inspired by the scikit-learn tutorial "Working With Text Data" which
+can be found at
+http://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html.
 
-* This case study will be based upon the scikit-learn Python library
-* We will build upon the turtorial "Working With Text Data" which can
-  be found at
-  http://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html
+Following our theme of leveraging Python to quickly get to interesting
+Data Science, the students in case study 3 are encouraged to start their
+work based upon various examples provided in the scikit-learn library.
+In particular, the students leverage the files:
 
-Required Python libraries:
+* doc/tutorial/text_analytics/skeletons/exercise_02_sentiment.py
+* doc/tutorial/text_analytics/solutions/exercise_02_sentiment.py
 
-* Numpy (www.numpy.org) (should already be installed from Case
-  Study 2)
-* Matplotlib (matplotlib.org) (should already be installed from Case
-  Study 2)
-* Scikit-learn (scikit-learn.org) (installation instructions can be
-  found on the web page)
+For DS501 there are two key learning goals for this case study.
+First, the students need to derive *features* from the raw text that
+they feel would be useful in predicting positive and negative
+sentiments.  Second, they must make predictions by processing these
+features using a variety of supervised machine learning algorithms.
 
-Problem 1: Complete Exercise 2: Sentiment Analysis on movie reviews
-from
-http://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html
+Classically, rather than attempting to do machine learning on raw
+text, Data Science practitioners will first process the raw text to
+derive features for downstream processing.  A detailed description of
+text feature generation is beyond the scope of the current text (the
+interested reader may see CITE for more details).  However, Python and
+scikit learn provide the exact functionality required by the students
+by way of the TfidVectorizer class which implements the term
+frequency–inverse document frequency (TF-IDF) statistic (CITE
+http://en.wikipedia.org/wiki/Tf\%E2\%80\%93idf) .  The documentation
+for this class can be found at
+http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html,
+and for our purposes we merely observe that there are several
+parameters that the student can explore to get a fell for feature
+generation including *min_df* and *max_df* parameters (which control
+thresholds on document frequencies) and ngram_range (which controls
+how many words are conglomerated into a single token).  Experimenting
+with these parameters provide many important insights for the, not the
+least of which is that large values of ngram_range may take a long
+time to run.
 
-* Assuming that you have downloaded the scikit-learn source code:
-* The data cane be downloaded using
-  doc/tutorial/text_analytics/data/movie_reviews/fetch_data.py
-* A skeleton for the solution can be found in
-  doc/tutorial/text_analytics/skeletons/exercise_02_sentiment.py
-* A completed solution can be found in
-  doc/tutorial/text_analytics/solutions/exercise_02_sentiment.py
-* It is ok to use the solution provided in the scikit-learn
-  distribution as a starting place for your work.
+Now, given a collection of reviews, each represented by a set of
+features, sometimes called *predictors*, one can imagine many
+interesting problems.  For example, a classic problem in machine
+learning involves using a set of reviews which have appropriate labels
+(in this case positive or negative) to *predict* labels of other
+reviews which do not already have labels.  This process is called
+*supervised* machine learning.  The idea is that the labeled data is
+used to *supervise* the training of a algorithm which, after training,
+can effectively compute labels just from the raw features.  Again,
+supervised machine learning is a vast subject, and space does not
+allow use treat the subject even at the more superficial level here (the
+interested read may see CITE, and references therein, for more
+detail).  However, we will now that scikit-learn provides functions
+and classes for many standard algorithms, allowing the students to 
+become familiar with important machine learning and Data Science
+concepts, without being burdened with too many prerequisites.
+For example, sci-kit learn provides access to classic and power
+algorithms such as K-nearest neighbors CITE, support vector
+classifiers CITE, and principle component analysis CITE.
 
-Modify the solution to Exercise 2 so that it can run in this iPython
-notebook
-
-* This will likely involved moving around data files and/or small
-  modifications to the script.
-
-Problem 2: Explore the scikit-learn TfidVectorizer class
-
-Read the documentation for the TfidVectorizer class at
-http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html.
-
-* Define the term frequency–inverse document frequency (TF-IDF)
-  statistic (http://en.wikipedia.org/wiki/Tf\%E2\%80\%93idf will likely
-  help).
-* Run the TfidVectorizer class on the training data above
-  (docs_train).
-* Explore the min_df and max_df parameters of TfidVectorizer.  What do
-  they mean? How do they change the features you get?
-* Explore the ngram_range parameter of TfidVectorizer.  What does it
-  mean? How does it change the features you get? (Note, large values
-  of ngram_range may take a long time to run!)
-
-Problem 3: Machine learning algorithms
-
-* Based upon Problem 2 pick some parameters for TfidfVectorizer
-* "fit" your TfidfVectorizer using docs_train
-* Compute "Xtrain", a Tf-idf-weighted document-term matrix using
-  the transform function on docs_train
-* Compute "Xtest", a Tf-idf-weighted document-term matrix using
-  the transform function on docs_test
-* Note, be sure to use the same Tf-idf-weighted class ("fit"
-  using docs_train) to transform both docs_test and
-  docs_train
-* Examine two classifiers provided by scikit-learn
-* LinearSVC
-* KNeighborsClassifier
-* Try a number of different parameter settings for each and judge
-  your performance using a confusion matrix (see Problem 1 for an
-  example).
-* Does one classifier, or one set of parameters work better?
-* Why do you think it might be working better?
-* For a particular choice of parameters and classifier, look at 2
-  examples where the prediction was incorrect.
-* Can you conjecture on why the classifier made a mistake for this
-  prediction?
-
-Problem 4: Open Ended Question:  Finding the right plot
-
-* Can you find a two dimensional plot in which the positive and
-  negative reviews are separated?
-* This problem is hard since you will likely have thousands of
-  features for review, and you will need to transform these
-  thousands of features into just two numbers (so that you can
-  make a 2D plot).
-* Note, I was not able to find such a plot myself!
-* So, this problem is about trying but perhaps not
-  necessarily succeeding!
-* I tried two things, neither of which worked very well.
-* I first plotted the length of the review versus the number of
-  features we compute that are in that review
-* Second I used Principle Component Analysis on a subset of the
-  features.
-* Can you do better than I did!?
+Using such routines, several important learning objectives can be
+supported, such as error estimation, by way of techniques such as
+cross-validation and confusion matrices.  In fact, one particularly
+effective learning experience revolved around the following challenge.
+Using their favorite technique, can the student find a two dimensional
+plot of the data where the positive and negative reviews are
+separated.  While easy to state, actually solving the problem is
+exceptionally difficult, and the instructors admit that they are not
+in possession of an actual solution.  This is many students first 
+time attempting to tackle a problem for which the answer is not
+known FIXME Say better.
 
 Case Study 4
 ~~~~~~~~~~~~
 
-Yelp Dataset Challenge
+The final case study, and in some sense the capstone of the class
+revolves around the Yelp Dataset Challenge
+http://www.yelp.com/dataset_challenge.  This case study involves a
+large data set with approximately 42,153 business, 252,898 users, and
+1,125,458 reviews in Phoenix, Las Vegas, Madison, Waterloo and
+Edinburgh.
 
-Hadoop for large scale processing.
+Again, building off of the previous case studies, the students are
+expected to process the data, generate statistics, process
+reviews using TfidVectorizer, etc.  However, for this case study
+the students are expected to process the data using MapReduce CITE.
+MapReduce 
 
-Problem 1: Data Collection
-Download the Yelp Dataset from the
-http://www.yelp.com/dataset_challenge (Click "Get the Data", and
-register to get data) This data set contains information about 42,153
-business, 252,898 users, and 1,125,458 reviews in Phoenix, Las Vegas,
-Madison, Waterloo and Edinburgh.
-
-* Preprocessing can be time consuming but is critical for analyzing
-  big data.
-* Let's first take a look at the data by loading the json files into
-  IPython notebook
-* NOTE: the whole dataset can be too big for your computer. If the
-  following codes don't work in your computer, try changing the code
-  by loading only a few lines of each file.
-
-Question 1: Choose a business category
-
-* Select one business *category* that you are interested in, for
-  example, "Restaurants", "Bars", "Shopping", "Hotels" or "Auto
-  Repair". (Hint: check the categories field of each business
-  object.)
-* Collect all the business entities of the category you selected from
-  the whole dataset. (It would be recommended that the number of
-  business of the category should be larger than 500.) For example,
-  collect all the restaurants, i.e., all the business objects that
-  have "Restaurants" in their "categories" lists.
-* Store the business data you collected into a local file (txt file or
-  json file)
-
-Report some statistics about the business you collected 
-
-* The category of interest: 
-* The total number of business collected: 
-* Plot a histogram of different number of stars for the above business set.
-
-Question 2: Collect all the reviews for the business set in Question 1
-
-* Collect all the reviews for the business entities you collected in
-  Question 1. (Hint: Use *business_id* to filter the review data file;
-  the data file can be too large to be loaded into the main memory,
-  try to avoid using up all the memory in your computer.)
-* Store the review data you collected into a local file (txt file or
-  json file)
-
-Report some statistics about the reviews you collected 
-
-* The total number of reviews collected: 
-* Plot a histogram of different number of stars for the review set.
-* Collect all the text data in these reviews (Hint: check the *text* field of the review objects)
-* Use the TfidVectorizer class on the text data above, and convert each review into a feature vector.
-* Plot a table of the most frequent words (as least top 10, please
-  remove the stop words by setting max_df to some reasonable value)
-  for all the reviews with FIVE stars.
-* Plot a similar table for all reviews with FOUR stars.
-* Then three stars, two stars, and one stars.
-
-Question 3: Collect all the users for the review set in Question 2
-
-* Collect all the users for the reviews you collected in
-  Qustion 2. (Hint: Use *user_id* to filter the user data file)
-* Store the user data you collected into a local file (txt file or
-  json file)
-
-Report some statistics about the users you collected 
-
-* The total number of users collected: 
-* Plot a histogram of different review_count for the user set.
-* Plot a histogram of different average_stars for the user set.
-* Plot a histogram of different number of friends for the user set.
+STOPPED HERE
 
 Problem 2: MapRudce Data Analysis
 
