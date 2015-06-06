@@ -97,24 +97,27 @@ The remaining problematic, is to orchestrate the communication of the process, a
 The actual architecture
 =======================
 The architecture of the software is structured as shown in the figure :ref:`figSWarch`. The objective is to accomplish multi platform compatibility, a separation of the different data acquisition methods and the a proper way to plot and log the UI. They also should be encapsulated in their own class, to be able to reuse it in other applications.
- - Communication process: this process would be in charge of acquiring the data from the transmission source. The implementation considers to construct a class, that subclasses the Process class in multiprocessing. Therefore, the methods to initialize, run and stop the process are overwritten. This class would have common methods to be compatible with other sources, giving different classes to handle different connection types.
- - Main process: The main is in charge to initialize the the different process and coordinate the communication between them. As seen in the figure :ref:`figSWarch`, this process also has timers (QtTimers) to update the plot. This allows the graph to be updated in a controlled time.
- - Processing processes:  
- - Queue: 
+
+1. Communication process: this process would be in charge of acquiring the data from the transmission source. The implementation considers to construct a class, that subclasses the Process class in multiprocessing. Therefore, the methods to initialize, run and stop the process are overwritten. This class would have common methods to be compatible with other sources, giving different classes to handle different connection types. This process is also in charge of validating the data and adding the time stamp to the data, therefore, the data will have a time stamp at the time of arrival to the process.
+
+2. Main process: The main is in charge to initialize the the different process and coordinate the communication between them. As seen in the figure :ref:`figSWarch`, this process also has timers (QtTimers) to update the plot. This allows the graph to be updated in a controlled time. This process instantiates the the components that will allow communication between the processes
+
+ 2.1. Queue: A queue will be created in consideration of the sampling frequency and the update time of the plot. Each time the plot will be updated (30 times per second), triggered by the QtTimer, the queue will be processed, getting the data from the queue as an array of data, where the first value of the array will be the internal time stamp. The queue will be processed until is empty, and then the proper plotting drawing will occur. The data will be stored in a temporal buffer, until new data arrives to the process.
+
+3. Processing process: 
+
 
 .. figure:: sw_architecture.pdf
 
-   Diagram of the software architecture. There are two independent processes. The communication process reads the incoming data stream, parse it, add a timestamp (if necessary), and put the processed data into a queue. The main process reads the data from the queue, process the data, and then update the plot and log the data into a file. :label:`figSWarch` 
+   Diagram of the software architecture. There are two independent processes. The communication process reads the incoming data stream, parse it, add a time stamp (if necessary), and put the processed data into a queue. The main process reads the data from the queue, process the data, and then update the plot and log the data into a file. :label:`figSWarch` 
 
 
 Programming details
 -------------------
-
 Relevant code snippets goes here. Perhaps this is unnecessary.
 
 Results
 -------
-
 Figure xx shows a screenshot of the program showing an EMG signal.
 
 Figure yy shows a photo of the device connected through the serial port.
