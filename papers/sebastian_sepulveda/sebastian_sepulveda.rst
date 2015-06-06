@@ -88,7 +88,11 @@ After using this library, and pushing his limits, we still couldn't achieve a re
 
 Threading vs Multiprocessing
 ============================
-There are know limitations of python regarding to threads...
+The global interpreter lock (GIL) [C]_ prevents threads to take advantage of multiprocessor systems. In short, it means that a mutex controls the access from the threads to the memory. There ways to workaround this, in fact, using Numpy itself, witch doesn't run under GIL, will improve the performance. But, in this specific application, there is a necessity to get most of the platform, to ensure the best processing, plotting and logging of the data without any loss.
+
+The multiprocessing library workaround this problem by using subprocess instead of threads [D]_. This gives access to all the resources available on the platform, plus, letting the host OS to handle the subprocesses. With this library, the platform itself is the limit.
+
+The remaining problematic, is to orchestrate the communication of the process, and more important, the communication between them. There are problems of synchronization of the data and also, access to their memory space, a subprocess shouldn't be able to access a memory space of other process. For this, there is a specific wait to communicate the threads, through queues or pipes.
 
 The actual architecture
 =======================
@@ -137,5 +141,9 @@ References
 
 .. [B] J. D. Hunter. *Matplotlib: A 2D graphics environment*,
 			Computing In Science \& Engineering, 9(3):90-95, IEEE COMPUTER SOC, 2007. http://dx.doi.org/10.5281/zenodo.15423
+
+.. [C] http://en.wikipedia.org/wiki/Global_Interpreter_Lock
+
+.. [D] https://docs.python.org/2/library/multiprocessing.html
 
 
