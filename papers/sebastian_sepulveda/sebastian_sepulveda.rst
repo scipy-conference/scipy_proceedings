@@ -98,13 +98,9 @@ The actual architecture
 =======================
 The architecture of the software is structured as shown in the figure :ref:`figSWarch`. The objective is to accomplish multi platform compatibility, a separation of the different data acquisition methods and the a proper way to plot and log the UI. They also should be encapsulated in their own class, to be able to reuse it in other applications.
  - Communication process: this process would be in charge of acquiring the data from the transmission source. The implementation considers to construct a class, that subclasses the Process class in multiprocessing. Therefore, the methods to initialize, run and stop the process are overwritten. This class would have common methods to be compatible with other sources, giving different classes to handle different connection types.
- - Main process: The main process is in charge of the UI and instantiate 
+ - Main process: The main is in charge to initialize the the different process and coordinate the communication between them. As seen in the figure :ref:`figSWarch`, this process also has timers (QtTimers) to update the plot. This allows the graph to be updated in a controlled time.
  - Processing processes:  
- - Queue:
-
-
-
-Figure :ref:`figSWarch` shows a diagram of the software architecture.
+ - Queue: 
 
 .. figure:: sw_architecture.pdf
 
@@ -125,13 +121,15 @@ Figure yy shows a photo of the device connected through the serial port.
 
 See the following links for two examples where the software is used to acquire EMG signals from different devices: http://bit.ly/1BHObxL, http://bit.ly/1Ex0Ydy.
 
+Use cases
+=========
+It is easy to modify by other users. Mention Lobos' application (is that the case?). 
+
 
 Conclusions
 -----------
 
 We are awesome.
-
-It is easy to modify by other users. Mention Lobos' application (is that the case?). 
 
 Future work: do the signal processing in a different process, to take advantages of the multiple cores.
 
