@@ -70,7 +70,13 @@ Of course, we are not the first to suggest Python's effectiveness in
 an education and research environment.  In fact, the Python
 programming language is quite popular in numerous problem domains and
 Python has seen wide used in education, see e.g., [Mye07]_ and
-[Sta00]_.  Accordingly, it is not our purpose here to focus on Python
+[Sta00]_.  In fact, in ranks quite highly in many surveys of
+programming language popularity CITE
+http://redmonk.com/sogrady/2014/01/22/language-rankings-1-14/
+and it seeing substantial growth within the Data Science community
+CITE http://www.experfy.com/blog/python-data-science/.
+
+However, it is not our purpose here to focus on Python
 in the large, but rather to focus on its use in *Data Science*
 education and research.  With that in mind, herein we will focus on a
 small number of case studies that provide insights into how Python can 
@@ -506,299 +512,161 @@ large data set with approximately 42,153 business, 252,898 users, and
 Edinburgh.
 
 Again, building off of the previous case studies, the students are
-expected to process the data, generate statistics, process
-reviews using TfidVectorizer, etc.  However, for this case study
-the students are expected to process the data using MapReduce CITE.
-MapReduce 
+expected to process the data, generate statistics, process reviews
+using TfidVectorizer, etc.  However, for this case study the students
+are expected to process the data using MapReduce CITE.  As is well
+known in many circles, MapReduce is a programming model (with various
+implementations) for distributed processing of large scale data
+sets. Distributed processing models, and MapReduce in particular, are
+essentional elements of modern Data Science and we woul have felt remiss
+if students in a class such as DS501 were not able to experience,
+at least at some level, the beauty and power of such methods.
 
-STOPPED HERE
+Fortunately, and we fear that we are repeating ourselves, Python
+provides precisely the functionality we required.  In particular,
+there are several MapReduce interfaces for Python, and we choose to
+use the mrjob package CITE https://pythonhosted.org/mrjob/.  This
+package is especially useful in a classroom environment since it can
+be used locally on a single computer (for testing) and in a cluster
+environment.
 
-Problem 2: MapRudce Data Analysis
+Introductory Data Science: Final Thoughts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* Store the text data of all the collected reviews into a local txt
-  file, where each line of the file contains the text of one review.
-* Convert the above txt file into TFIDF format using MapReduce. (Hint:
-  use *mrjob* package) Please write your answers into the python file:
-  "mr_tfidf.py"
-* NOTE: you may need to work on this question by runing the python
-  file ("mr_tfidf.py") in the terminal (not in IPython notebook)
-* Hint: you could test the correctness of your code by comparing with
-  the result from TfidVectorizer in the Problem 1 with the result from
-  MapReduce. The two results should be the same.  Note that if the
-  stop words were removed in TfidVectorizer by setting some max_df,
-  the MapReduce version should also remove these stop words. Otherwise
-  the results of TfidVectorizer and MapReduce will be different.)
+Of course, Python is not the only choice for an Introductory Data
+Science course.  For example, the programming language R CITE is also
+a popoular choice which the author has also used it successfully in
+the Data Science curriculum.  In particular, R offers all of the
+functionality mentioned above, including interfaces to MapReduce
+http://www.milanor.net/blog/?p=853.  Accordingly, the choice of
+language for such a class may be considered a matter of taste
 
-Problem 3: Finding Important Users through PageRank Algorithm
+However, there is mounting evidence of Python's growing popularity
+within the Data Science community CITE
+http://www.experfy.com/blog/python-data-science/ and the development
+community at large CITE
+http://redmonk.com/sogrady/2014/01/22/language-rankings-1-14/.
+Perhaps, if we may be forgiven a small measure of Python bias, then
+perhaps we will merely emphasize that Python's popularity cuts across
+many problem domains.  For example, the authors are not aware of any
+web servers currently being developed in R [#]_, nor many other
+domains in which Python has made inroads.  The fact that Python is as
+generally applicable as it is, while still perhaps being just as
+popular as R for Data Science, it a testement to its advantages.
 
-* Convert the friendship information among the users into a graph,
-  where each node is a user, each edge represents the friendship
-  relationship between the two users.
-
-* Compute the PageRank scores of each user using PageRank algorithm
-  (Note: please implement the PageRank algorithm by yourself, but you
-  could read and learn from the following code:
-  https://code.google.com/p/python-graph/source/browse/trunk/core/pygraph/algorithms/pagerank.py?r=702)
-
-Problem 4: Reweighting the review scores based upon user's PageRank scores
-
-* In the current setting of Yelp, all users are considered as equally
-  important. So the average_star of a business is computed by giving
-  all reviews with equal importance. However, in many cases, the
-  reviews of important users are more influential than those of
-  unimportant users. In this problem, please re-compute the avearage
-  stars of each business through re-weighting each review by users's
-  PageRank scores.
-
+.. [#] We would be remiss not to at least mention the quite beautiful
+       R web application framework Shiny CITE.  However, we believe
+       our point still stands.
 
 MA542 Regression Analysis
 -------------------------
 
-A nice side effect is that you can carefully control the difficulty
-and focus be saying which parts they do and which parts are ok to be a
-black box.  Nice segue into DS501, where we wanted to focus on specific
-ideas, but have the problem be interesting.
+Leaving aside introductory classes, we now make brief mention of
+Python's usefulness in more advanced classes.  In particular, the
+author recently taught a Regression Analysis class for the first time
+with all of the development in the class being Python focused.
+Regression Analysis is a more advanced class with a greater
+concentration of students who take the class being mathematically
+focused.  In addition, many students were first time Python users,
+with the majority of the exceptions being Data Science students who 
+had taken Introduction to Data Science previously.
 
-More advanced class, but perhaps with a greater concentration of
-students who are mathematically focused.  Also, may students were
-first time Python users, with the majority of the exceptions having 
-taken DS501.
+Just as in Introduction to Data Science Numpy, matplotlib, and Pandas
+provided almost all of the functionality the students required for the
+learning objectives in the class.  In fact, one of the challenges in
+this class was that Python perhaps does *too good* of a job providing
+functionality to the students.  
 
-So many libraries that any homework question is probably trivially
-answerable if they look hard enough.  Need to be careful that the
-ground rules are set correctly.  For example, need to say that they
-need to solve the regression problem using the *normal equations*.  It
-is ok to debug their code using the black box routine, but they still
-need to write their own code.  For example, I insist that they hand in
-code.  *Not for grading* but to see how they did it.
+In partiuclar, Python provides so many libraries that, for example,
+many of the computationally oriented homework questions are trivially
+answerable if the students look hard enough.  Accordingly, as an
+instructore, one needs to be careful that the ground rules are set
+correctly so that the learning objectives are achieved.  For example,
+if the learning obective is for the student to understand the details
+of a particular mathematical concept, say the *normal equations*,
+rather than just a numerical procesdure, such as *linear regression*
+on a particular dataset, then the expectations for the assignment need
+to be carefully delinated.  
 
-Numpy, matplotlib, and Pandas provided almost all of the functionality
-they needed for the bulk of the class.   Even though book was more focused
-on things like SAS and SPSS (double check book to make sure).
-
-Were able to focus on the mathematics and not have the language, get
+Note, on the positive side, the instructor can use Python and its vast
+array of libraries to carefully control the difficulty and scope of
+assignements.  Even better, since Python is quite easy to learn CITE,
+we are able to focus on the mathematics and not have the language get
 in the way.
-Look at comments from students!
+
+Accordingly, to maintain the integrity of the learning objecitves, a
+tactic usde by the authors was to carefully delinate what parts of the
+assignement are allow to be Python "black boxes" and which parts must
+be hand coded.  In addition, we require the students to hand in their
+Python code, even though the code itself is *not* graded.  The
+learning objectives of the class are mathematical, and not
+programming.  Accordingly, the quality of the implementations is not a
+focus.  However, having access to the code allows the instructor to
+insure that the desired learning objectives are being met.
+
+As one final note, one tactic that was quite successful was to
+encourage the students to check their hand coded results against those
+provided any black box routine they find.  It was quite useful for the
+students in debugging their own implementations and understanding of
+the mathematical concepts.  It was quite empowering for the students
+when their answers would exactly match those of the black box.  They
+then appreciated that they understood, in a deep way, what the
+"professionals" were doing.
 
 
-Student research projects
--------------------------
+Student research projects and theses
+------------------------------------
 
-Python us extensively used in scientific computing [Mil11]_ and [Oli07]_
+The author is proud to report that they have been using Python for
+science research since 1997 [Paf99]_.  We perform research involving,
+and mentor students in, several topics revolving around
+semi-supervised and unsupervised machine learning applied to several
+different domains, with a focus on cyber defense (see, for example,
+CITE).  We will not burden the reader the details of our mathematical
+research directions, but just observe that our work, and the work of
+our students, draws from laundry list of ideas from mathematics,
+statistics, and Data Science, including convex optimization CITE,
+deep learning CITE, graphical models CITE, graph theory CITE, and
+scientific visalualization CITE.
 
-Convex optimization, deep learning, large scale robust PCA (be careful to 
-describe just the right amount), graphical models, communitie analysis,
-supervised learning in BGP data.
-Yes, they are all related at a deep mathematical level, but I won't bore you 
-with the details.
+For the current purpose, it is merely interesting to note that  
+Python libraries are available for *all of these subjects*:
 
-Libraries available for them all!
+* Convex optimization: CVXOPT CITE, CVXPY CITE
+* Deep learning: Theano CITE
+* Graphical models:  FIXME CITE
+* Graph theory:  networkx CITE
+* Scientific visualization: mayavi CITE
 
-Also discuss Turing with pycuda and mpi4py.
+Accordingly, students who are train in classes such as DS501 and MA542 can 
+everage that training to get a quick start on their research subjects.
 
-Finally, discuss manifold learning, and show 3D visualization using mayavi
-of the WPI logo embedded in a non-linear manifold.  Make it colorful.
-Brings all the pieces together.  Just looking for good Ph.D. student to
-work on.
+We use all of these libraries in our work, where we are especially
+interesed in large scale robust principle component analysis CITE and
+non-linear dimension reduction CITE problems, such as shown in figure
+FIXME.  FIXME Lead into figure better.
 
 .. figure:: WPI3D.png
    :align: center
-   :figclass: w
 
-   An example of a 3D visualization of a manifold using Mayavi .
+   An example of a 3D visualization of a manifold using Mayavi.  In
+   our work we attempt to detect the non-linear dependcies in such
+   data, even when the data is noisy and unevenly distributed.
 
+Beyond the mathematical research that Python supports, there are a
+vast array of computational resources that are at the fingertips of
+those well versed in Python.  For example, our research group is
+interested in developing algorithms for modern distributed
+supercomputers that leverage GPUs to accelerate computations.  Again,
+Python displays its usefullness with the pycuda CITE and mpi4py
+libraries.
 
 Conclusion
 ----------
-Python rocks!
 It can be used at all levels, and each level builds on the previous one.
 There is such a broad array of libraries available in Data Science (or 
 whatever you want to call it) that students can focus on what is important
 to them.
-
-Sample Stuff
-------------
-Twelve hundred years ago  |---| in a galaxy just across the hill...
-
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-With code-highlighting:
-
-.. code-block:: python
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-Maybe also in another language, and with line numbers:
-
-.. code-block:: c
-   :linenos:
-
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
-
-Or a snippet from the above code, starting at the correct line number:
-
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
-
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
- 
-Sample Stuff 2
---------------
-Test some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
-
-.. math::
-
-   g(x) = \int_0^\infty f(x) dx
-
-or on multiple, aligned lines:
-
-.. math::
-   :type: eqnarray
-
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
-
-The area of a circle and volume of a sphere are given as
-
-.. math::
-   :label: circarea
-
-   A(r) = \pi r^2.
-
-.. math::
-   :label: spherevol
-
-   V(r) = \frac{4}{3} \pi r^3
-
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
-
-In tellus metus, elementum vitae tincidunt ac, volutpat sit amet
-mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
-pulvinar id metus.
-
-.. [#] On the one hand, a footnote.
-.. [#] On the other hand, another footnote.
-
-.. figure:: figure1.png
-
-   This is the caption. :label:`egfig`
-
-.. figure:: figure1.png
-   :align: center
-   :figclass: w
-
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
-
-.. figure:: figure1.png
-   :scale: 20%
-   :figclass: bht
-
-   This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top.
-   Note that for now, scale is relative to a completely arbitrary original
-   reference size which might be the original size of your image - you probably
-   have to play with it. :label:`egfig2`
-
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
-
-.. table:: This is the caption for the materials table. :label:`mtable`
-
-   +------------+----------------+
-   | Material   | Units          |
-   +============+================+
-   | Stone      | 3              |
-   +------------+----------------+
-   | Water      | 12             |
-   +------------+----------------+
-   | Cement     | :math:`\alpha` |
-   +------------+----------------+
-
-
-We show the different quantities of materials required in Table
-:ref:`mtable`.
-
-
-.. The statement below shows how to adjust the width of a table.
-
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.8\linewidth}
-
-
-.. table:: This is the caption for the wide table.
-   :class: w
-
-   +--------+----+------+------+------+------+--------+
-   | This   | is |  a   | very | very | wide | table  |
-   +--------+----+------+------+------+------+--------+
-
-Unfortunately, restructuredtext can be picky about tables, so if it simply
-won't work try raw LaTeX:
-
-
-.. raw:: latex
-
-   \begin{table*}
-
-     \begin{longtable*}{|l|r|r|r|}
-     \hline
-     \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
-     \cline{2-4}
-      & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
-     \hline
-     Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
-     \hline
-     Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
-     \hline
-     Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
-     \hline
-     Percent Difference & 44\% & 41\% & 43\%\tabularnewline
-     \hline
-     \end{longtable*}
-
-     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
-
-   \end{table*}
-
-Perhaps we want to end off with a quote by Lao Tse [#]_:
-
-  *Muddy water, let stand, becomes clear.*
-
-.. [#] :math:`\mathrm{e^{-i\pi}}`
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
 
 References
 ----------
@@ -842,6 +710,12 @@ References
 .. [Oli07] Travis E. Oliphant. *Python for Scientific Computing*,
            Computing in Science & Engineering, 9, 10-20 (2007),
            DOI:10.1109/MCSE.2007.58
+
+.. [Paf99] Paffenroth, Randy C. *VBM and MCCC: Packages for objected 
+	   oriented visualization and computation of bifurcation 
+	   manifolds.* Object Oriented Methods for Interoperable 
+	   Scientific and Engineering Computing: Proceedings of the 
+	   1998 SIAM Workshop. Vol. 99. SIAM, 1999.
 
 .. sklearn
 .. [Ped11] Fabian Pedregosa, Gaël Varoquaux, Alexandre Gramfort,
