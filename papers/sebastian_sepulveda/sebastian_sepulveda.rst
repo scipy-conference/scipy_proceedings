@@ -96,6 +96,13 @@ The remaining problematic, is to orchestrate the communication of the process, a
 
 The actual architecture
 =======================
+The architecture of the software is structured as shown in the figure :ref:`figSWarch`. The objective is to accomplish multi platform compatibility, a separation of the different data acquisition methods and the a proper way to plot and log the UI. They also should be encapsulated in their own class, to be able to reuse it in other applications.
+ - Communication process: this process would be in charge of acquiring the data from the transmission source. The implementation considers to construct a class, that subclasses the Process class in multiprocessing. Therefore, the methods to initialize, run and stop the process are overwritten. This class would have common methods to be compatible with other sources, giving different classes to handle different connection types.
+ - Main process: The main process is in charge of the UI and instantiate 
+ - Processing processes:  
+ - Queue:
+
+
 
 Figure :ref:`figSWarch` shows a diagram of the software architecture.
 
