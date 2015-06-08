@@ -109,9 +109,6 @@ The architecture of the software is structured as shown in the figure :ref:`figS
 
  2.2. Queue: A queue will be created in consideration of the sampling frequency and the update time of the plot. Each time the plot will be updated (30 times per second), triggered by the QtTimer, the queue will be processed, getting the data from the queue as an array of data, where the first value of the array will be the internal time stamp. The queue will be processed until is empty, and then the proper plotting drawing will occur. The data will be stored in a temporal buffer, until new data arrives to the process.
 
-3. Processing process: 
-
-
 .. figure:: sw_architecture.pdf
 
    Diagram of the software architecture. There are two independent processes. The communication process reads the incoming data stream, parse it, add a time stamp (if necessary), and put the processed data into a queue. The main process reads the data from the queue, process the data, and then update the plot and log the data into a file. :label:`figSWarch` 
@@ -177,7 +174,11 @@ We are awesome.
 
 Future work
 ===========
-Do the signal processing in a different process, to take advantages of the multiple cores.
+This software could lead to good solution for rapid prototyping and for growing community based on the open source and DIY.
+
+A friendly UI, with customization of the plots trough UI instead of the code is a must to make a replacement for applications such as LabView or MATLAB solutions.
+Adding more tools for basic processing, like filters configurable on the UI, with application "on the fly" would lead to easier understanding both for investigation and education. Learning the applications of the signal processing with real signals and seeing the results in real time applied to a real signal could help in the learning of the signal processing and give more interest to the new learners.
+Optimizations to the processes are also in the scope. Including a separate process to do only the processing of the data, is a must to work with even more data and heavier data processing applications. An optimization of the Numpy stack, would increase the performance, stability and compatibility of the application.
 
 Acknowledgments
 ---------------
@@ -187,8 +188,7 @@ Electronic Engineering, Basal Project FB0008, Conicyt.
 
 References
 ----------
-.. [A] L. Campagnola. *PyQtGraph. Scientific Graphics and GUI Library for Python*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
+.. [A] L. Campagnola. *PyQtGraph. Scientific Graphics and GUI Library for Python*,         
 
 .. [B] J. D. Hunter. *Matplotlib: A 2D graphics environment*,
 			Computing In Science \& Engineering, 9(3):90-95, IEEE COMPUTER SOC, 2007. http://dx.doi.org/10.5281/zenodo.15423
