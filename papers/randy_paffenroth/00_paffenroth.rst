@@ -71,10 +71,9 @@ an education and research environment.  In fact, the Python
 programming language is quite popular in numerous problem domains and
 Python has seen wide used in education, see e.g., [Mye07]_ and
 [Sta00]_.  In fact, in ranks quite highly in many surveys of
-programming language popularity CITE
-http://redmonk.com/sogrady/2014/01/22/language-rankings-1-14/
+programming language popularity [OGr14]_
 and it seeing substantial growth within the Data Science community
-CITE http://www.experfy.com/blog/python-data-science/.
+[Sin14]_.
 
 However, it is not our purpose here to focus on Python
 in the large, but rather to focus on its use in *Data Science*
@@ -185,9 +184,9 @@ Case Study 1
 The idea of the first case study in DS501 is to perform basic data
 gathering, cleaning, and collection of statistics.  For this case
 study we choose our data source to be the Twitter Data Streaming API
-TODO cite.  Already, Python begins to demonstrate its usefulness,
+[Rus13]_ [Twi15]_.  Already, Python begins to demonstrate its usefulness,
 since it allows ready access to the Twitter API through python-twitter
-TODO CITE https://code.google.com/p/python-twitter/.
+[Ptw15]_.
 
 Another key feature of the case studies in DS501 is that we chose to
 use IPython notebooks [Per07]_ both to provide the assignments to the
@@ -198,7 +197,7 @@ with skeleton implementations of their assignments and allowed the
 students to focus on their learning objectives.  
 
 For example, in the IPython notebooks we provided code examples
-similar to the following:
+similar to the following FIXME find this code and cite:
 
 .. code-block:: python
 
@@ -246,7 +245,7 @@ Case Study 2
 
 Building upon the skills gained in the first case study, the second
 case study asks the students to analyze the MovieLens 1M Data Set
-(CITE) FIXME Check MovieLens license, which contains data about users
+[Mov15]_, which contains data about users
 and how the rate movies.  The key learning objectives are to analyze
 the data set, make conjectures, support or refute those conjectures
 with data, and tell a story about the data.  In particular, the
@@ -276,9 +275,8 @@ the R language CITE), which facilities many data manipulations.  Note,
 we are certainly not the first to consider this collection of
 libraries to be important for Data Science, and this particular case
 study was inspired by the excellent book "Python for Data Analysis:
-Data Wrangling with Pandas, NumPy, and IPython", by Wes McKinney CITE
-(http://shop.oreilly.com/product/0636920023784.do) (which is required
-reading for this particular assignment).
+Data Wrangling with Pandas, NumPy, and IPython", by Wes McKinney
+McK10_ (which is required reading for this particular assignment).
 
 Many of the tasks in this case study revolve around question like:
 
@@ -339,7 +337,7 @@ Of course, a straight forward answer would be for the instructors to
 preprocess the data appropriately.  However, using the power of Python 
 one can easily arm the students with a general tool, while at the same 
 time avoiding unnecessary hurdles.  In particular, the pandas provides
-a merge function CITE that provides exactly the required functionality
+a merge function [PMe15]_ that provides exactly the required functionality
 in a quite general framework.  In particular, one can use the code
 below to easily merge the three data files into a single DataFrame.
 
@@ -453,21 +451,18 @@ Classically, rather than attempting to do machine learning on raw
 text, Data Science practitioners will first process the raw text to
 derive features for downstream processing.  A detailed description of
 text feature generation is beyond the scope of the current text (the
-interested reader may see CITE for more details).  However, Python and
-scikit learn provide the exact functionality required by the students
-by way of the TfidVectorizer class which implements the term
-frequency–inverse document frequency (TF-IDF) statistic (CITE
-http://en.wikipedia.org/wiki/Tf\%E2\%80\%93idf) .  The documentation
-for this class can be found at
-http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html,
-and for our purposes we merely observe that there are several
-parameters that the student can explore to get a fell for feature
-generation including *min_df* and *max_df* parameters (which control
-thresholds on document frequencies) and ngram_range (which controls
-how many words are conglomerated into a single token).  Experimenting
-with these parameters provide many important insights for the, not the
-least of which is that large values of ngram_range may take a long
-time to run.
+interested reader may see [Raj11]_, and references therein, for more
+details).  However, Python and scikit-learn [Ped11]_ provide the exact
+functionality required by the students by way of the TfidVectorizer
+class which implements the term frequency–inverse document frequency
+(TF-IDF) statistic [Raj11]_.  For our purposes we merely observe that
+there are several parameters that the student can explore to get a
+fell for feature generation including *min_df* and *max_df* parameters
+(which control thresholds on document frequencies) and ngram_range
+(which controls how many words are conglomerated into a single token).
+Experimenting with these parameters provide many important insights
+for the, not the least of which is that large values of ngram_range
+may take a long time to run.
 
 Now, given a collection of reviews, each represented by a set of
 features, sometimes called *predictors*, one can imagine many
@@ -686,20 +681,35 @@ References
 .. [Lut13] Lutz, Mark. *Programming python*. 5th edition, O'Reilly
            Media, Inc., 2010.
 
+.. [McK12] McKinney, Wes. *Python for data analysis: Data wrangling 
+	   with Pandas, NumPy, and IPython* .O'Reilly Media, Inc., 2012.
+
 .. pandas
 .. [McK10] Wes McKinney. Data Structures for Statistical Computing in
            Python, Proceedings of the 9th Python in Science
            Conference, 51-56 (2010) (publisher link)
+
+.. [PMe15] *Merge, join, and concatenate* 
+	   (2015), http://pandas.pydata.org/pandas-docs/stable/merging.html
+	   [Online; accessed 2015-06-08].
 
 .. scientific computing in python
 .. [Mil11] K. Jarrod Millman and Michael Aivazis. Python for
            Scientists and Engineers, Computing in Science &
            Engineering, 13, 9-12 (2011), DOI:10.1109/MCSE.2011.36
 
+.. [Mov15] *MovieLens* 
+	   (2015), http://grouplens.org/datasets/movielens/
+	   [Online; accessed 2015-06-08].
+
 .. python for education
 .. [Mye07] Myers, Christopher R., and James P. Sethna. *Python for
 	   education: Computational methods for nonlinear systems.*
 	   Computing in Science & Engineering 9.3 (2007): 75-79.
+
+.. [OGr14] O'Grady, Stephen. *The RedMonk Programming Language Rankings: January 2014* 
+	   (2014), http://redmonk.com/sogrady/2014/01/22/language-rankings-1-14/
+	   [Online; accessed 2015-06-08].
 
 .. scipy
 .. [Oli01] Jones E, Oliphant E, Peterson P, et al. *SciPy: Open Source
@@ -725,27 +735,47 @@ References
            Matthieu Brucher, Matthieu Perrot, Édouard
            Duchesnay. Scikit-learn: Machine Learning in Python,
            Journal of Machine Learning Research, 12, 2825-2830 (2011)
-           (publisher link)
 
 .. ipython
 .. [Per07] Fernando Pérez and Brian E. Granger. IPython: A System for
            Interactive Scientific Computing, Computing in Science &
            Engineering, 9, 21-29 (2007), DOI:10.1109/MCSE.2007.53
-           (publisher link)
+
+.. [Ptw15] *Python Twitter* 
+	   (2015), https://code.google.com/p/python-twitter/
+	   [Online; accessed 2015-06-08].
+
+.. [Raj11]  Rajaraman, Anand and Jeffrey David Ullman. *Data Mining*, 
+	    Mining of Massive Datasets. 
+	    1st ed. Cambridge: Cambridge University Press, 2011. pp. 1-17. 
+	    Cambridge Books Online. 
+	    http://dx.doi.org/10.1017/CBO9781139058452.002
+	   [Online; accessed 2015-06-08].
 
 .. mayavi
-.. [Ram11] Ramachandran, P. and Varoquaux, G., `Mayavi: 3D
-           Visualization of Scientific Data` IEEE Computing in Science
+.. [Ram11] Ramachandran, P. and Varoquaux, G., *Mayavi: 3D
+           Visualization of Scientific Data* IEEE Computing in Science
            & Engineering, 13 (2), pp. 40-51 (2011)
+
+.. [Rus13] Russell, Matthew A. *Mining the Social Web: Data Mining Facebook, 
+	   Twitter, LinkedIn, Google+, GitHub, and More*. O'Reilly Media, Inc., 2013.
+
+.. [Sin14] Singh, Harpreet. *Is Python Becoming the King of the Data Science Forest?* 
+	   (2014), http://www.experfy.com/blog/python-data-science/
+	   [Online; accessed 2015-06-08].
 
 .. education
 .. [Sta00] Stajano, Frank. *Python in education: Raising a generation
 	   of native speakers.* Proceedings of 8th International
 	   Python Conference. 2000.
 
+.. [Twi15] *The Streaming APIs Overview* (2015), 
+	   https://dev.twitter.com/streaming/overview 
+	   [Online; accessed 2015-06-08].
+
 .. numpy and scipy
 .. [Wal11] Stéfan van der Walt, S. Chris Colbert and Gaël
            Varoquaux. The NumPy Array: A Structure for Efficient
            Numerical Computation, Computing in Science & Engineering,
-           13, 22-30 (2011), DOI:10.1109/MCSE.2011.37 (publisher link)
+           13, 22-30 (2011), DOI:10.1109/MCSE.2011.37
 
