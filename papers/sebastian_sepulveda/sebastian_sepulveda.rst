@@ -32,21 +32,6 @@ Visualizing physiological signals in real time
 
    real time processing, visualization, signal processing
 
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
-
-
 Introduction
 ------------
 
@@ -77,9 +62,9 @@ Real time graphics library
 
 Real time visualization is a key component of our program. To satisfy our requirements we needed a fast and portable graphics library. Since we implemented the GUI in PyQT, we also required that the graphics library should be embeddable in this framework.
 
-We used Matplotlib [B]_ in the first version of the program. This option worked out of the box. We were able to embedd a Matplotlib plot in the GUI and interact with it trough other elements of the UI without major complications. Although this aproach worked for displaying one signal with a sampling rate of 30 hertz, we started to notice a degradation on performance as we increased the number of signals. It is importante to notice that this is not a flaw of Matplotlib, since the main focus of the library is the production of publication of quality figures, and not the display of real time data.
+We used Matplotlib [B]_ in the first version of the program. This option worked out of the box. We were able to embedd a Matplotlib plot in the GUI and interact with it trough other elements of the UI without major complications. Although this aproach worked for displaying one signal with a sampling rate of 30 hertz, we started to notice a degradation on performance as we increased the number of signals. It is important to notice that this is not a flaw of Matplotlib, since the main focus of the library is the production of publication of quality figures, and not the display of real time data.
 
-We used PyQwt [?]_ in the second version of the program. This library provides a Python interface to the Qwt library (an extension of the QT framework with widgets related to science and engineering, http://qwt.sourceforge.net/). It is a light implementation with an easy QT integration.  Compared to Matplotlib design, PyQwt was left behind. NO ENTIENDO. MATPLOTLIB ES MEJOR. CUAL ES LA RAZON PARA NO USAR PyQwt? From there, we started a research to find others libraries that where Python compatible and could used with Qt Framework in an easier way.
+We used PyQwt [?]_ in the second version of the program. This library provides a Python interface to the Qwt library (an extension of the QT framework with widgets related to science and engineering, http://qwt.sourceforge.net/). It is a light implementation with an easy QT integration.  Compared to Matplotlib design, PyQwt was left behind, is not maintained and ugly.From there, we started a research to find others libraries that where Python compatible and could used with Qt Framework in an easier way.
 
 The last graphic library that we tried was PyQtGraph [?]_. It is a pure Python implementation, with a focus on speed, portability and a rich set of features. Unlike the previous libraries that we tried, PyQtGraph was designed to do real time plotting. It is also designed to do interactive image analysis. It is built on top of PyQt4/PySide, giving easy integration and full compatibility with the Qt framework. This allows the use of tools like Qt Designer to design the GUI. Using Qt Designer and the examples provides with the PyQtGraph library, it is easy to configure and customize the widgets. PyQtGraph is also built on top of Numpy, facilitating and improving the performance of the manipulation of numerical data. In addition, PyQtGraph wraps up some NumPy/SciPy signal processing functions such as the Fast Fourier Transform and some linear and non-linear filters.
 
