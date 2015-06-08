@@ -88,13 +88,20 @@ After creation, twinned axes are stored, one row of twins per list, at the end o
 
 Axes Accessibility
 ------------------
+Create a table of axes storage.
+Critical to successful plotting is being able to access the correct axis.  In TrendVis, axes are stored in nested lists.  The outer list contains one item per stack level, i.e., in XGrid, the y axes are stacked and the outer list of axes contains rows of axes.  Each inner list contains all the axes in that level.  An axis in the upper left corner is at [0][0] in the list; an axis in the lower right corner is at [self.stackdim-1][-1], which depending on whether twinned axes are present, may not be [-1][-1].
+
+As you can see, retrieving particular axes, especially twins, may be difficult.  To facilitate this process, XGrid and YGrid each come with a get_axis() function.  get_axis() may be used to get a twin axis in two ways:
+The ypos argument may be set to the actual storage position in self.axes. The row number can be found using self.get_twin_rownum().  get_twin_rownum() can list the row indices of all the twins in a particular physical row position.
+The ypos argument may be set to the physical location of the twin.  For example, if the second row were twinned, ypos=1.  In this case, is_twin must be set to True, and if there are multiple twins in that row, then twinstance can be used to pick out a particular twin.  These functions should help to overcome any axis accessibility problems that the creation of many twin axes, even haphazard creation, may create.
+
 get ax, how to acquire twin
 get index of twin row/col
 axes storage
 
 Plotting Data
 -------------
-acquiring axes
+Once the appropriate axes are acquired, then data plotting can begin.  Any data sharing one parameter may be plotted.  For simple and speedy grid creation and line plotting, then gridwrapper is provided.  YOU CAN DO ANYTHING
 gridwrapper- make grid, plot data
 
 Formatting Ticks and Spines
@@ -123,8 +130,6 @@ The figure coordinates are then used to determine the size and positioning of th
 
 Of course, a patch drawn in figure space is completely divorced from the data we would like the patch to highlight.  If axes limits are changed, or the vertical or horizontal spacing of the plot is adjusted, then the bar will no longer be in the correct position relative to the data:
 
-This is where the make_adjustable keyword comes in.  If make_adjustable is True, which is recommended, then the upper and lower horizontal and vertical limits, the upper right and lower left axes, and once the Rectangle patch is drawn, the index of the patch in XGrid.fig.patches will all be stored in XGrid attributes.  When any of TrendVis' wrappers around matplotlib's subplot spacing adjustment, x or y limit settings, etc are used, the user can stipulate that the bars automatically be adjusted to new figure coordinates.  The stored data coordinates and axes are converted to figure space, and the x, y, width, and height of the existing bars are adjusted.
+This is where the make_adjustable keyword comes in.  If make_adjustable is True, which is recommended, then the upper and lower horizontal and vertical limits, the upper right and lower left axes, and once the Rectangle patch is drawn, the index of the patch in XGrid.fig.patches will all be stored in XGrid attributes.  When any of TrendVis' wrappers around matplotlib's subplot spacing adjustment, x or y limit settings, etc are used, the user can stipulate that the bars automatically be adjusted to new figure coordinates.  The stored data coordinates and axes are converted to figure space, and the x, y, width, and height of the existing bars are adjusted.  Alternatively, the user can make changes to axes space relative to figure space without adjusting the bar positioning and dimensions each time, and simply perform an adjustment at the end using adjust_bar_frame().
 
-To tidy the plot space and clarify what users are seeing, TrendVis also enables frames to be drawn around each main axis stack, and cutouts to be placed on the main axes, signifying broken axes.
-Correlative bars, frames and cutouts, squishing plot space
-Challenges:  have to draw bars, frames in figure coordinates, need them to line up with data coordinates- appear to move if axes limits, plot spacing are adjusted
+To tidy the plot space and clarify what users are seeing, TrendVis also enables frames to be drawn around each main axis stack.  In the case of one main axis, the frame appears around the entire plot space.  For a softer division of main axes stacks, the user can signify broken axes via cut marks on the broken ends of the main axes.  Frames are similar to bars, in that they are drawn in figure space and that changing axes positions relative to figure space can move frames out of place.  Frames are handled in the same way that bars are.  Cutouts, however, are actual line plots on the axes that live in axes space (rather than data space) and will not be affected by adjustments in axes limits or subplot positioning.
