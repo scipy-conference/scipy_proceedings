@@ -75,29 +75,29 @@ The first version of this program was developed for a research on Biomechanical 
 Real time graphics library
 ==========================
 
-Real time visualization is a key component of our program. To satisfy our requirements we needed a graphic a fast and portable graphics library. Since we implemented the GUI in PyQT, we also required that the graphics library should be embeddable in this framework.
+Real time visualization is a key component of our program. To satisfy our requirements we needed a  fast and portable graphics library. Since we implemented the GUI in PyQT, we also required that the graphics library should be embeddable in this framework.
 
-We used Matplotlib [B]_ in our first attempt. This option worked out of the box, with a not much complicated way to include the plot in an UI, and interact with other UI elements. For one data stream, the plot worked easily. But, after starting to use more data and signal processing, we ended noticing how Matplotlib is not intended to handle signals in real time (having an update of the plot of at least 30 Hz). PyQwt was the next to test, which give an easier integration with QT using QT Designer. Compared to Matplotlib design, PyQwt was left behind. From there, we started a research to find others libraries that where Python compatible and could used with Qt Framework in an easier way.
+We used Matplotlib [B]_ in the first version of the program. This option worked out of the box. We were able to embedd a Matplotlib plot in the GUI and interacting with it trough other elements of the UI without major complications. For one data stream, the plot worked easily. But, after starting to use more data and signal processing, we ended noticing how Matplotlib is not intended to handle signals in real time (having an update of the plot of at least 30 Hz). PyQwt was the next to test, which give an easier integration with QT using QT Designer. Compared to Matplotlib design, PyQwt was left behind. From there, we started a research to find others libraries that where Python compatible and could used with Qt Framework in an easier way.
 
-
- Among the available options we chooses PyQtGraph. The maind features of this library are speed, portability and feature rich. First, we selected an UI framework to start working. We choose the Qt Framework, mainly because of the uniform look and feel that can be achieved cross platform, and the ability to import widgets.
-
+Among the available options we chooses PyQtGraph. The maind features of this library are speed, portability and feature rich. First, we selected an UI framework to start working. We choose the Qt Framework, mainly because of the uniform look and feel that can be achieved cross platform, and the ability to import widgets.
 
 PyQtGraph, in difference to the other used libraries, was developed to do tasks like real time plotting of signals and also image processing. It's deeply integrated with Qt, giving easy and full compatibility with the Qt Framework, including GUI design interfaces like Qt Designer. From there, configuring and customizing the plots could be easily achieved with the live examples included in the library. There is also a integration with Numpy, giving those big performance improvement in the processing of the data, and the management of the Numpy data types. The graphical interface gives, as matter of fact, simple signal processing tools, like Fast Fourier Transform or Median calculation on signals in real time. This library, itself is a big part of this work and resolves almost all the plotting problems. But, the data management is not completely clear, and not an easy task for initial users to implement.
 
 After using this library, and pushing his limits, we still couldn't achieve a reliable acquisition of data. Limitations of the threads (a good link to the 1 core thread of python here !), and the interaction between UI (main) threads and background threads, to acquire data, using Python's threads or QtThreads, wasn't giving the best results for heavy data transfers, both in speed and amount of data.
 
 
-Threading vs Multiprocessing
-============================
+Threading versus Multiprocessing
+================================
+
 The global interpreter lock (GIL) [C]_ prevents threads to take advantage of multiprocessor systems. In short, it means that a mutex controls the access from the threads to the memory. There ways to workaround this, in fact, using Numpy itself, witch doesn't run under GIL, will improve the performance. But, in this specific application, there is a necessity to get most of the platform, to ensure the best processing, plotting and logging of the data without any loss.
 
 The multiprocessing library workaround this problem by using subprocess instead of threads [D]_. This gives access to all the resources available on the platform, plus, letting the host OS to handle the subprocesses. With this library, the platform itself is the limit.
 
 The remaining problematic, is to orchestrate the communication of the process, and more important, the communication between them. There are problems of synchronization of the data and also, access to their memory space, a subprocess shouldn't be able to access a memory space of other process. For this, there is a specific wait to communicate the threads, through queues or pipes.
 
-The actual architecture
-=======================
+Putting all together
+====================
+
 The architecture of the software is structured as shown in the figure :ref:`figSWarch`. The objective is to accomplish multiplatform compatibility, a separation of the different data acquisition methods and the a proper way to plot and log. The structure should also allow encapsulation of the different methods of acquisition and processing in their own class, to be able to reuse it in other applications.
 
 1. Communication process: this process would be in charge of acquiring the data from the transmission source. The implementation considers to construct a class, that subclasses the Process class in multiprocessing. Therefore, the methods to initialize, run, start and stop the process are overwritten. This class would have common methods to be compatible with other sources of transmission, giving different classes to handle different connection types. This process is also in charge of validating the data and adding the time stamp to the data, therefore, the data will have a time stamp at the time of arrival to the process.
