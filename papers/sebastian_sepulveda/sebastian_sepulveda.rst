@@ -155,20 +155,23 @@ The importance on the structure of the acquisition process is to meet the class 
 
 Results
 -------
+The developed software has been tested under different conditions, operative systems and platforms. In development environments, the software has reaches up to 2KHz of sampling rate for a 32 bit data transmitted trough serial as it's ASCII represented integer. The sampling rate using ASCII transfers is limited to the amount of data to been transmitted, principally. In production environments, the software was used to transform a 1024 byte packed every 500 ms trough a socket connection, where up to 20 signal data where included, and plotted without problems at the same speed.
+
+Another important result for the software is how easy is to customize it to a specific application. We provide some use cases where some examples of usage and application are listed.
+
+Use cases
+=========
+It is easy to modify by other users. Mention Lobos' application (is that the case?).
+
 Figure xx shows a screenshot of the program showing an EMG signal.
 
 Figure yy shows a photo of the device connected through the serial port.
 
 See the following links for two examples where the software is used to acquire EMG signals from different devices: http://bit.ly/1BHObxL, http://bit.ly/1Ex0Ydy.
 
-Use cases
-=========
-It is easy to modify by other users. Mention Lobos' application (is that the case?). 
-
 
 Conclusions
 -----------
-
 We are awesome.
 
 Future work
