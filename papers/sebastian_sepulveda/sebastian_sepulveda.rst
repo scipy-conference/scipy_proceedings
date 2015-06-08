@@ -32,21 +32,6 @@ Visualizing physiological signals in real time
 
    real time processing, visualization, signal processing
 
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
-
-
 Introduction
 ------------
 
@@ -77,12 +62,11 @@ Real time graphics library
 
 Real time visualization is a key component of our program. To satisfy our requirements we needed a fast and portable graphics library. Since we implemented the GUI in PyQT, we also required that the graphics library should be embeddable in this framework.
 
-We used Matplotlib [B]_ in the first version of the program. This option worked out of the box. We were able to embedd a Matplotlib plot in the GUI and interact with it trough other elements of the UI without major complications. Although this aproach worked for displaying one signal with a sampling rate of 30 hertz, we started to notice a degradation on performance as we increased the number of signals. It is importante to notice that this is not a flaw of Matplotlib, since the main focus of the library is the production of publication of quality figures, and not the display of real time data.
+We used Matplotlib [B]_ in the first version of the program. This option worked out of the box. We were able to embedd a Matplotlib plot in the GUI and interact with it trough other elements of the UI without major complications. Although this aproach worked for displaying one signal with a sampling rate of 30 hertz, we started to notice a degradation on performance as we increased the number of signals. It is important to notice that this is not a flaw of Matplotlib, since the main focus of the library is the production of publication of quality figures, and not the display of real time data.
 
-The last graphic library that we tried was PyQtGraph [?]_. It is a pure Python implementation, with a focus on speed, portability and a rich set of features. Unlike the previous libraries that we tried, PyQtGraph was designed to do real time plotting. It is also designed to do interactive image analysis. It is built on top of PyQt4/PySide, giving easy integration and full compatibility with the Qt framework. This allows the use of tools like Qt Designer to design the GUI. Using Qt Designer and the examples provides with the PyQtGraph library, it is easy to configure and customize the widgets. PyQtGraph is also built on top of Numpy, facilitating and improving the performance of the manipulation of numerical data. In addition, PyQtGraph wraps up some NumPy/SciPy signal processing functions such as the Fast Fourier Transform and some linear and non-linear filters. [#]_
+Next, we tried was PyQtGraph [?]_. It is a pure Python implementation, with a focus on speed, portability and a rich set of features. Unlike the previous libraries that we tried, PyQtGraph was designed to do real time plotting. It is also designed to do interactive image analysis. It is built on top of PyQt4/PySide, giving easy integration and full compatibility with the Qt framework. This allows the use of tools like Qt Designer to design the GUI. Using Qt Designer and the examples provides with the PyQtGraph library, it is easy to configure and customize the widgets. PyQtGraph is also built on top of Numpy, facilitating and improving the performance of the manipulation of numerical data. In addition, PyQtGraph wraps up some NumPy/SciPy signal processing functions such as the Fast Fourier Transform and some linear and non-linear filters. [#]_
 
 .. [#] We also evaluated the PyQwt library (http://qwt.sourceforge.net/). This library provides a Python interface to the Qwt library. It is a light implementation with an easy QT integration. It is fast enough to support real time display of the data. However, this library is not currently maintened, and its author recommend using PyQtGraph (see http://comments.gmane.org/gmane.comp.graphics.qwt.python/506). 
-
 
 
 Threading versus Multiprocessing
@@ -108,9 +92,6 @@ The architecture of the software is structured as shown in the figure :ref:`figS
  2.1 Timer: using QtTimers, the timer is set to update plot. This allows the graph to be updated  at controlled frequency. This allows to control the performance of general application based on the usage of the different processes and subprocesses.
 
  2.2. Queue: A queue will be created in consideration of the sampling frequency and the update time of the plot. Each time the plot will be updated (30 times per second), triggered by the QtTimer, the queue will be processed, getting the data from the queue as an array of data, where the first value of the array will be the internal time stamp. The queue will be processed until is empty, and then the proper plotting drawing will occur. The data will be stored in a temporal buffer, until new data arrives to the process.
-
-3. Processing process: 
-
 
 .. figure:: sw_architecture.pdf
 
@@ -177,7 +158,11 @@ We are awesome.
 
 Future work
 ===========
-Do the signal processing in a different process, to take advantages of the multiple cores.
+This software could lead to good solution for rapid prototyping and for growing community based on the open source and DIY.
+
+A friendly UI, with customization of the plots trough UI instead of the code is a must to make a replacement for applications such as LabView or MATLAB solutions.
+Adding more tools for basic processing, like filters configurable on the UI, with application "on the fly" would lead to easier understanding both for investigation and education. Learning the applications of the signal processing with real signals and seeing the results in real time applied to a real signal could help in the learning of the signal processing and give more interest to the new learners.
+Optimizations to the processes are also in the scope. Including a separate process to do only the processing of the data, is a must to work with even more data and heavier data processing applications. An optimization of the Numpy stack, would increase the performance, stability and compatibility of the application.
 
 Acknowledgments
 ---------------
@@ -187,8 +172,7 @@ Electronic Engineering, Basal Project FB0008, Conicyt.
 
 References
 ----------
-.. [A] L. Campagnola. *PyQtGraph. Scientific Graphics and GUI Library for Python*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
+.. [A] L. Campagnola. *PyQtGraph. Scientific Graphics and GUI Library for Python*,         
 
 .. [B] J. D. Hunter. *Matplotlib: A 2D graphics environment*,
 			Computing In Science \& Engineering, 9(3):90-95, IEEE COMPUTER SOC, 2007. http://dx.doi.org/10.5281/zenodo.15423
