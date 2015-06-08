@@ -2,8 +2,6 @@
 :email: cros0324@umn.edu, mellissa.cross@gmail.com
 :institution: Department of Earth Sciences, University of Minnesota
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
-
 -------------------------------------------------------------------------------------------------------------------------
 TrendVis: an Elegant Interface for dense, sparkline-like, quantitative visualizations of multiple series using matplotlib
 -------------------------------------------------------------------------------------------------------------------------
@@ -76,21 +74,64 @@ The dimensions of the figure are determined by ystack_ratios and xratios.  Each 
 
 At this point, an XGrid instance with ystack_ratios = [] and xratios = [] appears thus:
 
-Such a grid is unattractive and cluttered
 After the axes are created, XGrid initializes the attributes that indicate the distribution of visible axis spines and ticks: self.dataside_list, and self.stackpos_list, which respectively indicate the y (stacked) axis spine visibility and x (main) axis spine visibility.  Together with self.spine_begone and self.mainax_ticks, these four attributes make the systematic removal of all uncessary spines possible.  After calling self.cleanup_grid(), the figure framework is thus decluttered:
 
 Creating Axes Twins
 -------------------
-Overlaying curves using separate axes can improve data visualization.  TrendVis provides the means to easily and systematically create and manage twinned x axes (rows) in an XGrid instances.  In XGrid, self.make_twins() creates twin x axes, one per column, across the rows indicated.  An issue arose with twin rows in figures with a main_ax dimension > 1 (i.e., in XGrid, multiple columns).  The axes in the twinned row share x axes with the original axes, but do not share y axes with each other, as occurs in all original rows.  The twinned row were forced to share y axes via:
+Overlaying curves on twinned axes can improve data visualization.  TrendVis provides the means to easily and systematically create and manage twinned x axes (rows) in XGrid instances.  In XGrid, self.make_twins() creates twin x axes, one per column, across the rows indicated.  An issue arose with twin rows in figures with a main_ax dimension > 1 (i.e., in XGrid, multiple columns).  The axes in the twinned row share x axes with the original axes, but do not share y axes with each other, as occurs in all original rows.  This is problematic when attempting to change the y axis limits, as only one axis will respond.  As a result, the twinned row are now forced to share y axes via:
 
 .. code-block:: python
 
    twin_row[0].get_shared_y_axes().join(*twin_row)
 
 After creation, twinned axes are stored, one row of twins per list, at the end of the list of main rows.
-Many scientific disciplines depend on the visualization of multiple disparate data sets against a common variable- time series data, for example.  There are two choices in matplotlib for displaying this data:  separately in a grid of subplots or on top of each other with twinned axes.  This works for two or three traces, but does not scale well.  Instead of a clutter of separate plots or a mess of overlain curves, the ideal style is a single densely-plotted figure that permits direct comparison of curve features.  In such a plot, each dataset has its own y (or x) axis, and all data are arranged in one cohesive plot area in a vertical (or horizontal) stack against a single x (or y) axis.  This style is critical to some scientific discplines and well-suited to other realms of science and economics, but there are few options available to generate such plots and, until TrendVis, none within the scientific Python ecosystem.
 
-Data visualization and presentation is a key part of scientific communication, and many disciplines depend on the visualization of multiple time-series or other series datasets.  However, many commonly available plotting tools are severely limited when it comes to adequately displaying this data.  In matplotlib, however, there are two possibilities.  One can plot all data sets separately in a grid of subplots, or on top of each other using twinned axes.  This works for two or three traces, but does not scale well.  Instead of a clutter of separate plots or a mess of overlain curves, the ideal style in cases with larger numbers of curves is a single densely-plotted figure that permits direct comparison of curve features.  In such a plot, each dataset has its own y (or x) axis, and all data are arranged in one cohesive plot area in a vertical (or horizontal) stack against a single x (or y) axis In response to this need, TrendVis was created as a open-source, highly customizable alternative that uses the only matplotlib plotting library to easily create publication-quality, information-dense plots
+Axes Accessibility
+------------------
+get ax, how to acquire twin
+get index of twin row/col
+axes storage
+
+Plotting Data
+-------------
+acquiring axes
+gridwrapper- make grid, plot data
+
+Formatting Ticks and Spines
+---------------------------
+set ticks, set ticknums, ticknum format, limits, labels, reverse ax, autocolor spines/ticks, shifting axes
+
+Visualizing Trends
+------------------
+Large stacks of curves are overwhelming and inpenetrable to viewers.  In complicated figures, it becomes especially important to  tidy the plot area and draw the viewer's eye to essential features.  TrendVis enables drawing horizontal and vertical bars across the entire plot area, allowing the user to highlight trends or demarcate particular spaces.  This is a simple call:
+
+.. code-block:: python
+
+    draw_bar(self, ll_axis, ur_axis, bar_limits, orientation='vertical',zorder=-1, make_adjustable=True, **kwargs)
+
+The user provides the axes (which of course can be obtained via get_axes()) containing the lower left corner of the bar, the upper right corner of the bar.  In the case of a vertical bar on an XGrid, the vertical limits consist of the upper limit of the upper right axis and the lower limit of the lower left axis.  the horizontal upper and lower limits are provided in data units via the argument bar limits.  The default zorder is -1 in order to place the bar behind the curves, preventing data from being obscured.  Formatting keywords can be provided.
+
+As these bars typically span multiple axes, they must be drawn in Figure space rather than on the Axes.  There are two main challenges associated with this need.  The first is converting data coordinates to figure coordinates.  In the private function _convert_coords(), we transform data coordinates into axes coordinates, and then into figure coordinates:
+
+.. code-block:: python
+
+    ax_coords = axis.transData.transform(coordinates)
+
+    fig_coords = self.fig.transFigure.inverted().transform(ax_coords)
+
+The figure coordinates are then used to determine the size and positioning of the Rectangle in figure space.
+
+Of course, a patch drawn in figure space is completely divorced from the data we would like the patch to highlight.  If axes limits are changed, or the vertical or horizontal spacing of the plot is adjusted, then the bar will no longer be in the correct position relative to the data:
+
+
+
+This is where the make_adjustable keyword comes in.  If make_adjustable is True, which is recommended, then the upper and lower horizontal and vertical limits, the upper right and lower left axes, and once the Rectangle patch is drawn, the index of the patch in XGrid.fig.patches will all be stored in XGrid attributes.  When any of TrendVis' wrappers around matplotlib's subplot spacing adjustment, x or y limit settings, etc are used, the user can stipulate that the bars automatically be adjusted to new figure coordinates.  The stored data coordinates and axes are converted to figure space, and the x, y, width, and height of the existing bars are adjusted.
+
+To tidy the plot space and clarify what users are seeing, TrendVis also enables frames to be drawn around each main axis stack, and cutouts to be placed on the main axes, signifying broken axes.
+Correlative bars, frames and cutouts, squishing plot space
+Challenges:  have to draw bars, frames in figure coordinates, need them to line up with data coordinates- appear to move if axes limits, plot spacing are adjusted
+
+
 
 Of course, no paper would be complete without some source code.  Without
 highlighting, it would look like this::
