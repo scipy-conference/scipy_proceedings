@@ -72,16 +72,17 @@ Next, we tried was PyQtGraph [?]_. It is a pure Python implementation, with a fo
 Threading versus Multiprocessing
 ================================
 
-After using this library, and pushing his limits, we still couldn't achieve a reliable acquisition of data. Limitations of the threads (a good link to the 1 core thread of python here !), and the interaction between UI (main) threads and background threads, to acquire data, using Python's threads or QtThreads, wasn't giving the best results for heavy data transfers, both in speed and amount of data.
+After using PyQtGraph to its limits in a multithreaded architecture, we could not reliably achieve the desired performance. The limitations of threads in Python [E]_ convined with the interaction between the UI (main) and communication thread, resulted in data losses when the data rate was too large. The Global Interpreter Lock (GIL) [E]_ prevents threads to take advantage of multicore systems. In short, it means that a mutex controls the access from threads to the memory. There are ways to work around this limitation. For instance, many of the NumyPy primitives take advantage of multiple cores. [#]_ However, in our case we need to parallelize the reception of the data, the visualization, the processing, and the logging.
 
-The Global Interpreter Lock (GIL) [C]_ prevents threads to take advantage of multiprocessor systems. In short, it means that a mutex controls the access from the threads to the memory. There ways to workaround this, in fact, using Numpy itself, witch doesn't run under GIL, will improve the performance. But, in this specific application, there is a necessity to get most of the platform, to ensure the best processing, plotting and logging of the data without any loss.
+.. [#] See http://wiki.scipy.org/ParallelProgramming for details. 
 
-The multiprocessing library workaround this problem by using subprocess instead of threads [D]_. This gives access to all the resources available on the platform, plus, letting the host OS to handle the subprocesses. With this library, the platform itself is the limit.
-
-The remaining problematic, is to orchestrate the communication of the process, and more important, the communication between them. There are problems of synchronization of the data and also, access to their memory space, a subprocess shouldn't be able to access a memory space of other process. For this, there is a specific wait to communicate the threads, through queues or pipes.
+To overcome the GIL limitations we used the multiprocessing module, belonging to the Python Standar Library. This module provides an API similar to the threading module, but it uses subprocesses instead of threads [D]_. By letting the OS to control of the subprocesses, this allows to take advantage of all the cores available on the platform.
 
 Putting all together
 ====================
+
+Once the key components of the program has been selected, the remaining problem is to orchestrate the communication among the processes. There are problems of synchronization of the data and also, access to their memory space, a subprocess shouldn't be able to access a memory space of other process. For this, there is a specific wait to communicate the threads, through queues or pipes.
+
 
 The architecture of the software is structured as shown in the figure :ref:`figSWarch`. The objective is to accomplish multiplatform compatibility, a separation of the different data acquisition methods and the a proper way to plot and log. The structure should also allow encapsulation of the different methods of acquisition and processing in their own class, to be able to reuse it in other applications.
 
@@ -175,10 +176,10 @@ References
 .. [A] L. Campagnola. *PyQtGraph. Scientific Graphics and GUI Library for Python*,         
 
 .. [B] J. D. Hunter. *Matplotlib: A 2D graphics environment*,
-			Computing In Science \& Engineering, 9(3):90-95, IEEE COMPUTER SOC, 2007. http://dx.doi.org/10.5281/zenodo.15423
-
-.. [C] http://en.wikipedia.org/wiki/Global_Interpreter_Lock
+			Computing In Science \& Engineering, 9(3):90-95, IEEE COMPUTER SOC, 2007.
 
 .. [D] https://docs.python.org/2/library/multiprocessing.html
+
+.. [E] Beazley, David. *Understanding the python gil*, In PyCON Python Conference. Atlanta, Georgia. 2010. 
 
 
