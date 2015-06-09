@@ -29,7 +29,7 @@ Introduction
 ------------
 
 
-A common task in biomedical research is to record and visualize in real time physiological signals. Although there are several options to do this, they are commonly based on  proprietary tools, associated to a particular signal acquisition device vendor. This work presents an open source software, written in Python, to visualize and record in real time physiological signals, such as electrocardiography, electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source [#]_  and extensible. It is easy to add new signal processing tasks and to use different signal sources (serial, Bluetooth, Sockets, etc.), and customize the user interface for the applications needs.
+A common task in biomedical research is to record and visualize in real time physiological signals. Although there are several options to do this, they are commonly based on  proprietary tools, associated to a particular signal acquisition device vendor (MATLAB, LabView, etc.). This work presents an open source software, written in Python, to visualize and record in real time physiological signals, such as electrocardiography, electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source [#]_  and extensible. It is easy to add new signal processing tasks and to use different signal sources (serial, Bluetooth, Sockets, etc.), and customize the user interface for the applications needs.
 
 .. [#] Available at https://github.com/ssepulveda/RTGraph.
 
@@ -80,7 +80,7 @@ Figure :ref:`figSWarch` shows the architecture of the software. The architecture
 
 1. Communication process: This process is responsible of receiving and parsing the data stream send by the device. The implementation considers an abstract class, that subclasses the ``Process`` class from the ``multiprocessing`` library. Therefore, the methods  ``__init__``, ``run``, ``start`` and ``stop`` are overwritten. The class also have methods common to different communication protocols (serial, sockets, etc.). The details of each protocol is implemented in each subclass. This process is also responsible of validating the data and adding the timestamp to the data, in case the device does not have it. This guarantee that the data is always timestamped.
 
-2. Main process: The main process is responsible of initialize the different subprocesses and of coordinate the communication between them. As shown in the figure :ref:`figSWarch`, this process instantiates the components that will allow communication between the subprocesses, and also manage the different UI elements. A ``QtTimer`` is set to update the real time plot. This allows the graph to be updated at a controlled frequency. This allows to control the performance of general application based on the usage of the different processes and subprocesses. A ``Queue``, as implemented by the ``multiprocessing`` module, is used to communicate the communication with the main process. Each time the ``QtTimer`` triggers a plot update (30 times per second), the ``queue`` is processed. The queue will be processed until is empty, and then the  plot is updated. The data will be stored in a temporal buffer, until new data arrives to the process. ESTO NO SE ENTIENDE BIEN!
+2. Main process: The main process is responsible of initialize the different subprocesses and of coordinate the communication between them. As shown in the figure :ref:`figSWarch`, this process instantiates the components that will allow communication between the subprocesses, and also manage the different UI elements. A ``QtTimer`` is set to update the real time plot. This allows the graph to be updated at a controlled frequency. This allows to control the performance of general application based on the usage of the different processes and subprocesses. A ``Queue``, as implemented by the ``multiprocessing`` module, is used to communicate the communication with the main process. Each time the ``QtTimer`` triggers a plot update (30 times per second), the ``queue`` is processed. The queue will be processed until is empty, and then the  plot is updated.
 
 .. figure:: sw_architecture.pdf
 
@@ -103,30 +103,34 @@ The importance on the structure of the acquisition process is to meet the class 
             Initialize the acquisition method.
             """
 
-        def run(self):
-            self.init_time = time()
-            try:
-                while not self.exit.is_set():
-                    """
-                    do acquisition and add time stamp
-                    """
-            except:
-                raise
-            finally:
-                self.closePort()
+            def run(self):
+                self.init_time = time()
+                try:
+                    while not self.exit.is_set():
+                        """
+                        do acquisition and add time stamp
+                        """
+                except:
+                    raise
+                finally:
+                    self.closePort()
 
-        def openPort(self, port):
-            """
-            Port configuration to open
+            def openPort(self, port):
+                """
+                Port configuration to open
             """
 
-        def closePort():
-            self.exit.set()
+            def closePort():
+                self.exit.set()
 
 
 Results
 -------
-The developed software has been tested under different conditions, operative systems and platforms. In development environments, the software has reaches up to 2KHz of sampling rate for a 32 bit data transmitted trough serial as it's ASCII represented integer. The sampling rate using ASCII transfers is limited to the amount of data to been transmitted, principally. In production environments, the software was used to transform a 1024 byte packed every 500 ms trough a socket connection, where up to 20 signal data where included, and plotted without problems at the same speed.
+The developed software has been tested under different acquisition methods, operative systems and platforms. The initial development was done and tested under Linux (x86, x64 and ARM), with Python 2.7 installations from the repositories and from the Anaconda installer. Under OSX, Python was installed with Anaconda installer. There where no problems running the application on this OS, and the applications behave in almost exactly the same, as the same Kernel is running behind both OS.
+Under Windows, there are know problems regarding the multiprocessing library. The multiprocessing uses the fork system call, creating child processes that shares the sames resources. On Windows, the child process can't access to the parent resources. In this context, the multiprocessing documentation offers some guidelines to use the library on Windows, in consideration that Windows lacks of the fork call. Even following those guidelines, the software can't be run properly on Windows. Some others workarounds where found, that could lead to an usable application.
+
+In development environments, the software has reaches up to 2KHz of sampling rate for a 32 bit data transmitted trough serial as it's ASCII represented integer. The sampling rate using ASCII transfers is limited to the amount of data to been transmitted, principally.
+In production environments, the software was used to transform a 1024 byte packed every 500 ms trough a socket connection, where up to 20 signal data where included, and plotted without problems at the same speed.
 
 Another important result for the software is how easy is to customize it to a specific application. We provide some use cases where some examples of usage and application are listed.
 
@@ -140,6 +144,7 @@ Figure yy shows a photo of the device connected through the serial port.
 
 See the following links for two examples where the software is used to acquire EMG signals from different devices: http://bit.ly/1BHObxL, http://bit.ly/1Ex0Ydy.
 
+The usage of the acquisition process for other application (not plotting) on raspberry pi
 
 Conclusions
 -----------
@@ -147,7 +152,7 @@ We are awesome.
 
 Future work
 ===========
-This software could lead to good solution for rapid prototyping and for growing community based on the open source and DIY.
+This software could lead to good solution for rapid prototyping and for the growing community based on the open source and DIY.
 
 A friendly UI, with customization of the plots trough UI instead of the code is a must to make a replacement for applications such as LabView or MATLAB solutions.
 Adding more tools for basic processing, like filters configurable on the UI, with application "on the fly" would lead to easier understanding both for investigation and education. Learning the applications of the signal processing with real signals and seeing the results in real time applied to a real signal could help in the learning of the signal processing and give more interest to the new learners.
