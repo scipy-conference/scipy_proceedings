@@ -197,7 +197,8 @@ with skeleton implementations of their assignments and allowed the
 students to focus on their learning objectives.  
 
 For example, in the IPython notebooks we provided code examples
-similar to the following FIXME find this code and cite:
+similar to the following (as provided by Prof. Xiangnan Kong,
+see [Twi15]_ for details):
 
 .. code-block:: python
 
@@ -271,7 +272,7 @@ powerful array and matrix/vector classes, while matplotlib allows for
 plotting of data and generation of compelling figures.  Finally,
 pandas provides many tools for data processing, including a structure
 called a DataFrame (inspired by a data structure with the same name in
-the R language CITE), which facilities many data manipulations.  Note,
+the R language [RCT13]_), which facilities many data manipulations.  Note,
 we are certainly not the first to consider this collection of
 libraries to be important for Data Science, and this particular case
 study was inspired by the excellent book "Python for Data Analysis:
@@ -474,15 +475,16 @@ reviews which do not already have labels.  This process is called
 used to *supervise* the training of a algorithm which, after training,
 can effectively compute labels just from the raw features.  Again,
 supervised machine learning is a vast subject, and space does not
-allow use treat the subject even at the more superficial level here (the
-interested read may see CITE, and references therein, for more
-detail).  However, we will now that scikit-learn provides functions
-and classes for many standard algorithms, allowing the students to 
-become familiar with important machine learning and Data Science
-concepts, without being burdened with too many prerequisites.
-For example, sci-kit learn provides access to classic and power
-algorithms such as K-nearest neighbors CITE, support vector
-classifiers CITE, and principle component analysis CITE.
+allow use treat the subject even at the more superficial level here
+(the interested read may see [Fri01]_ [Jam13]_ [Bis06]_, and
+references therein, for more details).  However, we will now that
+scikit-learn provides functions and classes for many standard
+algorithms, allowing the students to become familiar with important
+machine learning and Data Science concepts, without being burdened
+with too many prerequisites.  For example, sci-kit learn provides
+access to classic and powerful algorithms such as K-nearest neighbors,
+support vector classifiers, and principal component analysis [Fri01]_
+[Jam13]_ [Bis06]_.
 
 Using such routines, several important learning objectives can be
 supported, such as error estimation, by way of techniques such as
@@ -509,7 +511,7 @@ Edinburgh.
 Again, building off of the previous case studies, the students are
 expected to process the data, generate statistics, process reviews
 using TfidVectorizer, etc.  However, for this case study the students
-are expected to process the data using MapReduce CITE.  As is well
+are expected to process the data using MapReduce [Dea08]_.  As is well
 known in many circles, MapReduce is a programming model (with various
 implementations) for distributed processing of large scale data
 sets. Distributed processing models, and MapReduce in particular, are
@@ -520,7 +522,7 @@ at least at some level, the beauty and power of such methods.
 Fortunately, and we fear that we are repeating ourselves, Python
 provides precisely the functionality we required.  In particular,
 there are several MapReduce interfaces for Python, and we choose to
-use the mrjob package CITE https://pythonhosted.org/mrjob/.  This
+use the mrjob package [MrJ15]_.  This
 package is especially useful in a classroom environment since it can
 be used locally on a single computer (for testing) and in a cluster
 environment.
@@ -529,28 +531,26 @@ Introductory Data Science: Final Thoughts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Of course, Python is not the only choice for an Introductory Data
-Science course.  For example, the programming language R CITE is also
+Science course.  For example, the programming language R [RCT13]_ is also
 a popoular choice which the author has also used it successfully in
-the Data Science curriculum.  In particular, R offers all of the
-functionality mentioned above, including interfaces to MapReduce
-http://www.milanor.net/blog/?p=853.  Accordingly, the choice of
-language for such a class may be considered a matter of taste
+the Data Science curriculum.  In particular, R offers much, if not
+all, of the functionality mentioned above, including interfaces to
+MapReduce [Usu14]_.  Accordingly, the choice
+of language for such a class may be considered a matter of taste
 
 However, there is mounting evidence of Python's growing popularity
-within the Data Science community CITE
-http://www.experfy.com/blog/python-data-science/ and the development
-community at large CITE
-http://redmonk.com/sogrady/2014/01/22/language-rankings-1-14/.
-Perhaps, if we may be forgiven a small measure of Python bias, then
-perhaps we will merely emphasize that Python's popularity cuts across
-many problem domains.  For example, the authors are not aware of any
-web servers currently being developed in R [#]_, nor many other
-domains in which Python has made inroads.  The fact that Python is as
-generally applicable as it is, while still perhaps being just as
-popular as R for Data Science, it a testement to its advantages.
+within the Data Science community [Sin14]_ and the development
+community at large [OGr14]_.  Perhaps, if we may be forgiven a small
+measure of Python bias, then perhaps we will merely emphasize that
+Python's popularity cuts across many problem domains.  For example,
+the authors are not aware of any web servers currently being developed
+in R [#]_, nor many other domains in which Python has made inroads.
+The fact that Python is as generally applicable as it is, while still
+perhaps being just as popular as R for Data Science, it a testement to
+its advantages.
 
 .. [#] We would be remiss not to at least mention the quite beautiful
-       R web application framework Shiny CITE.  However, we believe
+       R web application framework Shiny [Shi14]_.  However, we believe
        our point still stands.
 
 MA542 Regression Analysis
@@ -558,7 +558,7 @@ MA542 Regression Analysis
 
 Leaving aside introductory classes, we now make brief mention of
 Python's usefulness in more advanced classes.  In particular, the
-author recently taught a Regression Analysis class for the first time
+author recently taught a Regression Analysis [Kut04]_ class for the first time
 with all of the development in the class being Python focused.
 Regression Analysis is a more advanced class with a greater
 concentration of students who take the class being mathematically
@@ -566,11 +566,11 @@ focused.  In addition, many students were first time Python users,
 with the majority of the exceptions being Data Science students who 
 had taken Introduction to Data Science previously.
 
-Just as in Introduction to Data Science Numpy, matplotlib, and Pandas
-provided almost all of the functionality the students required for the
-learning objectives in the class.  In fact, one of the challenges in
-this class was that Python perhaps does *too good* of a job providing
-functionality to the students.  
+Just as in Introduction to Data Science, Numpy [Wal11]_, matplotlib
+[Hun07]_, and pandas [McK10]_ provided almost all of the functionality
+the students required for the learning objectives in the class.  In
+fact, one of the challenges in this class was that Python perhaps does
+*too good* of a job providing functionality to the students.
 
 In partiuclar, Python provides so many libraries that, for example,
 many of the computationally oriented homework questions are trivially
@@ -585,7 +585,7 @@ to be carefully delinated.
 
 Note, on the positive side, the instructor can use Python and its vast
 array of libraries to carefully control the difficulty and scope of
-assignements.  Even better, since Python is quite easy to learn CITE,
+assignements.  Even better, since Python is quite easy to learn [Lut13]_
 we are able to focus on the mathematics and not have the language get
 in the way.
 
@@ -617,29 +617,28 @@ science research since 1997 [Paf99]_.  We perform research involving,
 and mentor students in, several topics revolving around
 semi-supervised and unsupervised machine learning applied to several
 different domains, with a focus on cyber defense (see, for example,
-CITE).  We will not burden the reader the details of our mathematical
+[Paf13]_).  We will not burden the reader the details of our mathematical
 research directions, but just observe that our work, and the work of
 our students, draws from laundry list of ideas from mathematics,
-statistics, and Data Science, including convex optimization CITE,
-deep learning CITE, graphical models CITE, graph theory CITE, and
-scientific visalualization CITE.
+statistics, and Data Science, including convex optimization [Boy04]_,
+deep learning [Den14]_, graphical models [Lau96]_, and
+scientific visalualization [War10]_.
 
 For the current purpose, it is merely interesting to note that  
 Python libraries are available for *all of these subjects*:
 
-* Convex optimization: CVXOPT CITE, CVXPY CITE
-* Deep learning: Theano CITE
-* Graphical models:  FIXME CITE
-* Graph theory:  networkx CITE
-* Scientific visualization: mayavi CITE
+* Convex optimization: cvxopt [Dah06]_ , CVXPY [Dia14]_
+* Deep learning: Theano [Ber11]_
+* Graphical models:  libpgm [Kar14]_
+* Scientific visualization: mayavi [Ram11]_
 
 Accordingly, students who are train in classes such as DS501 and MA542 can 
 everage that training to get a quick start on their research subjects.
 
 We use all of these libraries in our work, where we are especially
-interesed in large scale robust principle component analysis CITE and
-non-linear dimension reduction CITE problems, such as shown in figure
-FIXME.  FIXME Lead into figure better.
+interesed in large scale robust principle component analysis [Can11]_
+[Paf13]_ and non-linear dimension reduction problems [Lee07]_, such as
+shown in the figure below.  FIXME Lead into figure better.
 
 .. figure:: WPI3D.png
    :align: center
@@ -653,8 +652,8 @@ vast array of computational resources that are at the fingertips of
 those well versed in Python.  For example, our research group is
 interested in developing algorithms for modern distributed
 supercomputers that leverage GPUs to accelerate computations.  Again,
-Python displays its usefullness with the pycuda CITE and mpi4py
-libraries.
+Python displays its usefullness with the pycuda [Klo12]_ and mpi4py
+[Dal08]_ libraries.
 
 Conclusion
 ----------
@@ -663,19 +662,85 @@ There is such a broad array of libraries available in Data Science (or
 whatever you want to call it) that students can focus on what is important
 to them.
 
+Acknowledgements
+----------------
+Xiangnan Kong and the Data Science faculty at WPI.
+
 References
 ----------
 .. cython
 .. [Beh11] Stefan Behnel, Robert Bradshaw, Craig Citro, Lisandro
-           Dalcin, Dag Sverre Seljebotn and Kurt Smith. Cython: The
-           Best of Both Worlds, Computing in Science and Engineering,
+           Dalcin, Dag Sverre Seljebotn and Kurt Smith. *Cython: The
+           Best of Both Worlds*, Computing in Science and Engineering,
            13, 31-39 (2011), DOI:10.1109/MCSE.2010.118 (publisher
            link)
+
+.. [Ber11] Bergstra, James, et al. *Theano: Deep learning on gpus with python*. 
+	   NIPS 2011, BigLearning Workshop, Granada, Spain. 2011.
+	   http://deeplearning.net/software/theano/
+	   [Online; accessed 2015-06-08].
+
+.. [Bis06] Bishop, Christopher M. *Pattern recognition and machine learning*. 
+	   Springer, 2006.
+
+.. [Boy04] Boyd, Stephen, and Lieven Vandenberghe. *Convex optimization*. 
+	   Cambridge university press, 2004.
+
+.. [Can11] Candès, Emmanuel J., et al. *Robust principal component analysis?*. 
+	   Journal of the ACM (JACM) 58.3 (2011): 11.
+
+.. [Dah06] Dahl, Joachin, and Lieven Vandenberghe. 
+	   *Cvxopt: A python package for convex optimization.* 
+	   Proc. eur. conf. op. res. 2006.
+	   http://cvxopt.org
+	   [Online; accessed 2015-06-08].
+	   
+.. [Dal08] Dalcín, L., Paz, R., Storti, M., & D’Elía, J. (2008). *MPI
+           for Python: Performance improvements and MPI-2
+           extensions*. Journal of Parallel and Distributed Computing,
+           68(5), 655-662.
+
+.. [Dea08] Dean, Jeffrey, and Sanjay Ghemawat. *MapReduce: simplified 
+	   data processing on large clusters*.
+	   Communications of the ACM 51.1 (2008): 107-113.
+
+.. [Den14] Deng, Li, and Dong Yu. *Deep learning: methods and applications*. 
+	   Foundations and Trends in Signal Processing 7.3–4 (2014): 197-387.
+
+.. [Dia14] Diamond, Steven, Eric Chu, and Stephen Boyd. 
+	   *CVXPY: A Python-embedded modeling language for convex optimization*, 
+	   version 0.2." (2014).
+	   http://cvxpy.org
+	   [Online; accessed 2015-06-08].
+
+.. [Fri01] Friedman, Jerome, Trevor Hastie, and Robert Tibshirani. 
+	   *The elements of statistical learning*. Vol. 1. Springer, 
+	   Berlin: Springer series in statistics, 2001.
+
+.. [Jam13] James, Gareth, et al. *An introduction to statistical learning*. 
+	   New York: springer, 2013.
 
 .. matplotlib
 .. [Hun07] John D. Hunter. Matplotlib: A 2D Graphics Environment,
            Computing in Science & Engineering, 9, 90-95 (2007),
            DOI:10.1109/MCSE.2007.55 (publisher link)
+
+.. [Kar14] Karkera, Kiran R. *Building Probabilistic Graphical Models with Python*. 
+	   Packt Publishing Ltd, 2014.
+
+.. [Klo12] Andreas Klöckner, Nicolas Pinto, Yunsup Lee, Bryan
+	   Catanzaro, Paul Ivanov, Ahmed Fasih, *PyCUDA and PyOpenCL:
+	   A scripting-based approach to GPU run-time code
+	   generation*, Parallel Computing, Volume 38, Issue 3, March
+	   2012, Pages 157-174.
+
+.. [Kut04] Kutner, Michael H., Chris Nachtsheim, and John Neter. 
+           *Applied linear regression models*. McGraw-Hill/Irwin, 2004.
+
+.. [Lau96] Lauritzen, Steffen L. *Graphical models*. Oxford University Press, 1996.
+
+.. [Lee07] Lee, John A., and Michel Verleysen. *Nonlinear dimensionality reduction*. 
+	   Springer Science & Business Media, 2007.
 
 .. python
 .. [Lut13] Lutz, Mark. *Programming python*. 5th edition, O'Reilly
@@ -700,6 +765,10 @@ References
 
 .. [Mov15] *MovieLens* 
 	   (2015), http://grouplens.org/datasets/movielens/
+	   [Online; accessed 2015-06-08].
+
+.. [MrJ15] *mrjob* 
+	   (2015), https://pythonhosted.org/mrjob/
 	   [Online; accessed 2015-06-08].
 
 .. python for education
@@ -727,6 +796,12 @@ References
 	   Scientific and Engineering Computing: Proceedings of the 
 	   1998 SIAM Workshop. Vol. 99. SIAM, 1999.
 
+.. [Paf13] Paffenroth, R., Du Toit, P., Nong, R., Scharf, L.,
+	   Jayasumana, A. P., and Bandara, V. (2013). *Space-time
+	   signal processing for distributed pattern detection in
+	   sensor networks*. Selected Topics in Signal Processing,
+	   IEEE Journal of, 7(1), 38-49.  Chicago
+
 .. sklearn
 .. [Ped11] Fabian Pedregosa, Gaël Varoquaux, Alexandre Gramfort,
            Vincent Michel, Bertrand Thirion, Olivier Grisel, Mathieu
@@ -746,10 +821,10 @@ References
 	   [Online; accessed 2015-06-08].
 
 .. [Raj11]  Rajaraman, Anand and Jeffrey David Ullman. *Data Mining*, 
-	    Mining of Massive Datasets. 
-	    1st ed. Cambridge: Cambridge University Press, 2011. pp. 1-17. 
-	    Cambridge Books Online. 
-	    http://dx.doi.org/10.1017/CBO9781139058452.002
+	   Mining of Massive Datasets. 
+	   1st ed. Cambridge: Cambridge University Press, 2011. pp. 1-17. 
+	   Cambridge Books Online. 
+	   http://dx.doi.org/10.1017/CBO9781139058452.002
 	   [Online; accessed 2015-06-08].
 
 .. mayavi
@@ -757,8 +832,16 @@ References
            Visualization of Scientific Data* IEEE Computing in Science
            & Engineering, 13 (2), pp. 40-51 (2011)
 
+.. [RCT13] R Core Team (2013). R: A language and environment for statistical
+	   computing. R Foundation for Statistical Computing, Vienna, Austria.
+	   http://www.R-project.org/.
+
 .. [Rus13] Russell, Matthew A. *Mining the Social Web: Data Mining Facebook, 
 	   Twitter, LinkedIn, Google+, GitHub, and More*. O'Reilly Media, Inc., 2013.
+
+.. [Shi14] RStudio, Inc. *shiny:  Easy web applications in R* (2014), 
+	   http://shiny.rstudio.com
+	   [Online; accessed 2015-06-08].
 
 .. [Sin14] Singh, Harpreet. *Is Python Becoming the King of the Data Science Forest?* 
 	   (2014), http://www.experfy.com/blog/python-data-science/
@@ -773,9 +856,17 @@ References
 	   https://dev.twitter.com/streaming/overview 
 	   [Online; accessed 2015-06-08].
 
+.. [Usu14] Usuelli, Michele. *An Example of MapReduce with rmr2* (2014), 
+	   http://www.milanor.net/blog/?p=853
+	   [Online; accessed 2015-06-08].
+
 .. numpy and scipy
 .. [Wal11] Stéfan van der Walt, S. Chris Colbert and Gaël
            Varoquaux. The NumPy Array: A Structure for Efficient
            Numerical Computation, Computing in Science & Engineering,
            13, 22-30 (2011), DOI:10.1109/MCSE.2011.37
+
+.. [War10] Ward, Matthew, Georges Grinstein, and Daniel Keim. 
+	   *Interactive Data Visualization: Foundations, Techniques, and Applications*, 
+	   AK Peters, Ltd., Natick, MA (2010).
 
