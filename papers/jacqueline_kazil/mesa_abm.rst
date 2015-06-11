@@ -3,7 +3,7 @@
 :institution: Department of Computational Social Science, George Mason University
 
 :author: Jacqueline Kazil
-:email: jackies@email.net
+:email: jackiekazil@gmail.com
 :institution: Department of Computational Social Science, George Mason University
 
 ----------------------------------------
@@ -11,7 +11,7 @@ Mesa: An Agent-Based Modeling Framework
 ----------------------------------------
 
 .. class:: abstract
-  
+
   Mesa is a new ABM framework for Python and it's gonna be the best. Some more words will go here. Words words words about what Mesa is and how cool it is. Seriously, pretty cool, even if it isn't really done yet.
 
 .. class:: keywords
@@ -22,11 +22,17 @@ Mesa: An Agent-Based Modeling Framework
 Introduction
 ------------
 
-*Talk a little about what ABMs are in general, who uses them, and why we should care*
+Agent Based Modeling or ABM is computational social science approach to simulating autonomous agents and their interactions over a certain time period.  In agent based modeling, agents are objects that have rules and states and act accordingly with each passing moment of the simulation [Axtell2000]_. To understand the application of agent-based modeling, consider one of the earliest and most well known models created by Thomas Schelling. Schelling wanted to test the theory that segregated neighborhoods can arise not by individuals being racist and moving away from individuals of a different group, but by having a certain percentage of the population want to live near individuals like themselves [Schelling1971]_.  In this model, the each individual is an agent who is able to make a decision to move or not move with each passing time tick.
 
-There are currently several tools and frameworks in wide use for agent-based modeling: particularly NetLogo [Wilensky99]_, Repast [North13]_, and MASON [Luke05]_. From our perspective, all of these share a key weakness: they do not use Python. This is not just a matter of parochial preference (though it is certainly that as well). In recent years Python has become an increasingly popular language for scientific computing [Perez2011]_, supported by a mature and growing ecosystem of tools for analysis and modeling. Python is widely considered a more natural, easy-to-learn language than Java, which is used for Repast and MASON; and unlike NetLogo's custom scripting language, Python is a general purpose programming language. Furthermore, unlike the other frameworks, Python allows interactive analysis of model output data, without exporting it to a different tool. Despite these advantages, and despite several partial efforts (e.g. [Zvoleff2013]_, [Sayama2013]_), there is not yet a Python agent-based modeling framework. Mesa is intended to fill this gap. 
+Rob Axtell, one of the early champions of agent based mdoeling, identified the following advantages to agent based model [Axtell2000]_:
 
-Designing a new framework from the ground up also allowed us to implement features not found in existing frameworks. For example, as we explain in more detail below, other ABM frameworks tend to use a single agent activation regime by default; in Mesa, we implement several scheduler classes and require the modeler to specify which one is being used. We also implement several useful tools to accelerate common model analysis tasks: a data collector (present only in Repast) and a batch runner (available in Repast and NetLogo only via menu-driven systems), both of which can export their results directly to pandas [McKinney2011]_ dataframes for immediate analysis. 
+1. Unlike other modeling approaches, one can analyze dynamic history of system -- ABMs capture the path as well as the solution.
+2. Most social processes involve spatial or network attributes, ABMs allow for these attributes to be considered in analysis.
+3. When a model (A) produces a result (R), one has established a sufficiency theorem, meaning *R* if *A*.
+
+There are currently several tools and frameworks in wide use for agent-based modeling: particularly NetLogo [Wilensky99]_, Repast [North13]_, and MASON [Luke05]_. From our perspective, all of these share a key weakness: they do not use Python. This is not just a matter of parochial preference (though it is certainly that as well). In recent years Python has become an increasingly popular language for scientific computing [Perez2011]_, supported by a mature and growing ecosystem of tools for analysis and modeling. Python is widely considered a more natural, easy-to-learn language than Java, which is used for Repast and MASON; and unlike NetLogo's custom scripting language, Python is a general purpose programming language. Furthermore, unlike the other frameworks, Python allows interactive analysis of model output data, without exporting it to a different tool. Despite these advantages, and despite several partial efforts (e.g. [Zvoleff2013]_, [Sayama2013]_), there is not yet a Python agent-based modeling framework. Mesa is intended to fill this gap.
+
+Designing a new framework from the ground up also allowed us to implement features not found in existing frameworks. For example, as we explain in more detail below, other ABM frameworks tend to use a single agent activation regime by default; in Mesa, we implement several scheduler classes and require the modeler to specify which one is being used. We also implement several useful tools to accelerate common model analysis tasks: a data collector (present only in Repast) and a batch runner (available in Repast and NetLogo only via menu-driven systems), both of which can export their results directly to pandas [McKinney2011]_ dataframes for immediate analysis.
 
 .. figure:: ipython_screenshot.png
 
@@ -47,7 +53,7 @@ Architecture
 
 The guiding princinple of Mesa's architecture is modularity. Mesa makes minimal assumptions about the form a model will take. For example, while many models have spatial components, many others do not; while some models may involve multiple separate spaces. Similarly, visualizations which display each step of a model may be a critical component of some models and completely unneccessary for others. Thus Mesa aims to offer a set of components that can be easily combined and extended to build different kinds of models.
 
-We divide the modules into three overall categories: modeling, analysis and visualization. The modeling components are the core of what's needed to build a model: a **Model** class to store model-level parameters and serve as a container for the rest of the components; one or more **Agent** classes which describe the model agents; most likely a **scheduler** which controls the agent activation regime, and handles time in the model in general, and components describing the **space** and/or **network** the agents are situated in. The analysis components are the **data collectors** used to record data from each model run, and **batch runners** for automating multiple runs and parameter sweeps. Finally, the visualization components are used to map from a model object to one or more visual representations, either as plain-text or via a server interface to a browser window. Figure :ref:`fig3` shows a simple UML diagram of a typical Mesa model, 
+We divide the modules into three overall categories: modeling, analysis and visualization. The modeling components are the core of what's needed to build a model: a **Model** class to store model-level parameters and serve as a container for the rest of the components; one or more **Agent** classes which describe the model agents; most likely a **scheduler** which controls the agent activation regime, and handles time in the model in general, and components describing the **space** and/or **network** the agents are situated in. The analysis components are the **data collectors** used to record data from each model run, and **batch runners** for automating multiple runs and parameter sweeps. Finally, the visualization components are used to map from a model object to one or more visual representations, either as plain-text or via a server interface to a browser window. Figure :ref:`fig3` shows a simple UML diagram of a typical Mesa model,
 
 .. figure:: mesa_diagram.png
 
@@ -56,14 +62,14 @@ We divide the modules into three overall categories: modeling, analysis and visu
 To begin building the example model described above, we first create two classes: one for the model object itself, and one for each model agent. The model's one parameter is the number of agents, and each agent has a single variable: how much money it currently has. Each agent also has a single action: give a unit of money to another agent.
 
 .. code-block:: python
-  
+
   from mesa import Model, Agent
 
   class MoneyAgent(Agent):
     """ An agent with fixed initial wealth."""
     def __init__(self, unique_id):
       # Each agent should have a unique_id
-      self.unique_id = unique_id 
+      self.unique_id = unique_id
       self.wealth = 1
 
   class MoneyModel(Model):
@@ -86,12 +92,12 @@ The scheduler is a model component which deserves special attention. Unlike syst
 Many models distinguish between a step or tick of the model, and an activation of a single agent, with multiple agent activations in each step of the model. There are numerous possible scheduling regimes used in agent-based modeling, including:
 
   * Synchronious or simultaneous activation, where all agents act simultaneously. In practice, this is generally implemented by recording each agent's decision one at a time, but not altering the state of the model until all agents have decided.
-  * Uniform activation, where all agents are activated in the same order each step of the model. 
+  * Uniform activation, where all agents are activated in the same order each step of the model.
   * Random activation, where each agent is activated each step of the model, but the order in which they are activated is randomized for each step.
-  * Random interval activation, where the interval between each activation is drawn from a random distribution (most often Poisson). In this regime, there is no set model step; instead, the model maintains an internal 'clock' and schedule which determines which agent will be activated at which time on the internal clock. 
+  * Random interval activation, where the interval between each activation is drawn from a random distribution (most often Poisson). In this regime, there is no set model step; instead, the model maintains an internal 'clock' and schedule which determines which agent will be activated at which time on the internal clock.
   * More exotic activation regimes may be used as well, such as agents needing to spend resources to activate more frequently.
 
-All scheduler classes share a few standard method conventions, in order to make them both simple to use and seamlessly interchangable. Schedulers are instantiated with the model object they belong to. Agents are added to the schedule using the ``add_agent`` method, and removed using **remove_agent**. Agents can be added at the very beginning of a simulation, or any time in the middle -- e.g. as they are born from other agents' reproduction. 
+All scheduler classes share a few standard method conventions, in order to make them both simple to use and seamlessly interchangable. Schedulers are instantiated with the model object they belong to. Agents are added to the schedule using the ``add_agent`` method, and removed using **remove_agent**. Agents can be added at the very beginning of a simulation, or any time in the middle -- e.g. as they are born from other agents' reproduction.
 
 The ``step`` method runs one step of the *model*, activating agents accordingly. It is here that the schedulers primarily differ from one another. For example, the uniform ``BaseScheduler`` simply loops through the agents in the order they were added, while ``RandomActivation`` shuffles their order prior to looping.
 
@@ -155,20 +161,20 @@ The ``ContinuousSpace`` class also inherits from ``Grid``, and uses the grid as 
 
 An agent-based model is not particularly useful if there is no way to see the behaviors and outputs it produces. Generally speaking, there are two ways of extracting these: visualization, which allows for observation and qualitative examination (and which we will discuss below), and quantitative data collection. In order to facilitate the latter option, we provide a generic ``DataCollector`` class, which can store and export data from most models without needing to be subclassed.
 
-The data collector stores three categories of data: *model-level* variables, *agent-level variables*, and *tables* which are a catch-all for everything else. Model- and agent-level variables are added to the data collector along with a function for collecting them. Model-level collection functions take a model object as an input, while agent-level collection functions take an agent object as an input; both then return a value computed from the model or each agent at their current state. When the data collector's **collect** method is called, with a model object as its argument, it applies each model-level collection function to the model, and stores the results in a dictionary, associating the current value with the current step of the model. Similarly, the method applies each agent-level collection function to each agent currently in the schedule, associating the resulting value with the step of the model, and the agent's unique ID. The Data Collector may be placed within the model class itself, with the collect method running as part of the model step; or externally, with additional code calling it every step or every $N$ steps of the model. 
+The data collector stores three categories of data: *model-level* variables, *agent-level variables*, and *tables* which are a catch-all for everything else. Model- and agent-level variables are added to the data collector along with a function for collecting them. Model-level collection functions take a model object as an input, while agent-level collection functions take an agent object as an input; both then return a value computed from the model or each agent at their current state. When the data collector's **collect** method is called, with a model object as its argument, it applies each model-level collection function to the model, and stores the results in a dictionary, associating the current value with the current step of the model. Similarly, the method applies each agent-level collection function to each agent currently in the schedule, associating the resulting value with the step of the model, and the agent's unique ID. The Data Collector may be placed within the model class itself, with the collect method running as part of the model step; or externally, with additional code calling it every step or every $N$ steps of the model.
 
-The third category, *tables*, is used for logging by the model or the agents rather than fixed collection by the data collector itself. Each table consists of a set of columns, stored as dictionaries of lists. The model or agents can then append records to a table according to their own internal logic. This can be used to log specific events (e.g. every time an agent is killed), and data associated with them (e.g. agent lifespan at destruction), particularly when these events do not necessarily occur every step. 
+The third category, *tables*, is used for logging by the model or the agents rather than fixed collection by the data collector itself. Each table consists of a set of columns, stored as dictionaries of lists. The model or agents can then append records to a table according to their own internal logic. This can be used to log specific events (e.g. every time an agent is killed), and data associated with them (e.g. agent lifespan at destruction), particularly when these events do not necessarily occur every step.
 
 Internally, the data collector stores all variables and tables in Python's standard dictionaries and lists. This reduces the need for external dependencies, and allows the data to be easily exported to JSON or CSV. However, one of the goals of Mesa is facilitating integration with Python's larger scientific and data-analysis ecosystems, and thus the data collector also includes methods for exporting the collected data to pandas DataFrames. This allows rapid, interactive processing of the data, easy charting, and access to the full range of statistical and machine-learning tools that are compatible with pandas.
 
 To continue our example, we use a data collector to collect the wealth of each agent at the end of every step. The additional code this requires can look like this:
 
 .. code-block:: python
-  
+
   from mesa.datacollector import DataCollector
 
   class MoneyModel(Model):
-  
+
     def __init__(self, N):
       # ... everything above
       ar = {"Wealth": lambda a: a.wealth}
@@ -177,7 +183,7 @@ To continue our example, we use a data collector to collect the wealth of each a
     def step(self):
       self.dc.collect(self)
       self.schedule.step()
-      
+
 
 We now have enough code to run the model, get some data out of it, and analyze it.
 
@@ -212,10 +218,10 @@ Suppose we want to know whether the skewed wealth distribution in our example mo
 
 .. code-block:: python
 
-  param_values = {"N": 100, 
+  param_values = {"N": 100,
                   "starting_wealth": range(1,10)}
   model_reporter={"Gini": compute_gini}
-  batch = BatchRunner(MoneyModel, param_values, 
+  batch = BatchRunner(MoneyModel, param_values,
                       10, 1000, model_reporter)
   batch.run_all()
   out = batch.get_model_vars_dataframe()
@@ -240,14 +246,14 @@ Mesa already includes a set of pre-built visualization elements which can be dep
     import ModularServer
   from mesa.visualization.modules import ChartModule
 
-  # The Chart Module gets a model-level variable 
+  # The Chart Module gets a model-level variable
   # from the model's data collector
-  chart_element = ChartModule([{"Label": "Gini", 
-                              "Color": "Black"}], 
+  chart_element = ChartModule([{"Label": "Gini",
+                              "Color": "Black"}],
                               data_collector_name='dc')
   # Create a server to visualize MoneyModel
-  server = ModularServer(MoneyModel, 
-                        [chart_element], 
+  server = ModularServer(MoneyModel,
+                        [chart_element],
                         "Money Model", 100)
   server.launch()
 
@@ -257,7 +263,7 @@ Running this code launches the server. To access the actual visualization, open 
 
   Example of the browser visualization. :label:`fig6`
 
-The actual visualization is done by the visualization modules. Conceptually, each module consists of a server-side and a client-side element. The server-side element is a Python object implementing a ``render`` method, which takes a model instance as an argument and returns a JSON-ready object with the information needed to visualize some part of the model. This might be as simple as a single number representing some model-level statistic, or as complicated as a list of JSON objects, each encoding the position, shape, color and size of an agent on a grid. 
+The actual visualization is done by the visualization modules. Conceptually, each module consists of a server-side and a client-side element. The server-side element is a Python object implementing a ``render`` method, which takes a model instance as an argument and returns a JSON-ready object with the information needed to visualize some part of the model. This might be as simple as a single number representing some model-level statistic, or as complicated as a list of JSON objects, each encoding the position, shape, color and size of an agent on a grid.
 
 The client-side element is a JavaScript class, which implements a ``render`` method of its own. This method receives the JSON data created by the Python element, and renders it in the browser. This can be as simple as updating the text in a particular HTML paragraph, or as complicated as drawing all the shapes described in the aforementioned list. The object also implements a ``reset`` method, used to reset the visualization element when the model is reset. Finally, the object creates the actual necessary HTML elements in its constructor, and does any other initial setup necessary.
 
@@ -272,7 +278,7 @@ Let us create a simple histogram, with a fixed set of bins, for visualizing the 
   var HistogramModule = function(bins) {
     // Create the appropiate tag, stored in canvas
     $("body").append(canvas);
-    // ... Chart.js boilerplate removed 
+    // ... Chart.js boilerplate removed
     var chart = new Chart(context).Bar(data, options);
 
     this.render = function(data) {
@@ -302,9 +308,9 @@ Next, the Python class uses ``Chart.min.js`` (included with the Mesa package) an
       self.js_code = "elements.push("+new_element+");"
 
   def render(self, model):
-    wealth_vals = [a.wealth 
+    wealth_vals = [a.wealth
                    for a in model.schedule.agents]
-    hist = np.histogram(wealth_vals, 
+    hist = np.histogram(wealth_vals,
                         bins=self.bins)[0]
     return [int(x) for x in hist]
 
@@ -313,7 +319,7 @@ Finally, we can add the element to our visualization server object:
 .. code-block:: python
 
   histogram_element = HistogramModule(range(10))
-  server = ModularServer(MoneyModel, [histogram_element], 
+  server = ModularServer(MoneyModel, [histogram_element],
                          "MoneyModel", 100)
   server.launch()
 
@@ -330,11 +336,13 @@ We are happy to introduce Mesa to the world with this paper; it marks not the en
 
 References
 -----------
+.. [Axtell2000] Axtell, Robert. "Why agents?: on the varied motivations for agent computing in the social sciences." (2000).
+.. [Schelling1971] Schelling, Thomas C. "Dynamic models of segregation†." Journal of mathematical sociology 1.2 (1971): 143-186.
 .. [Wilensky99] Wilensky, Uri. NetLogo. Evanston, IL: Center for Connected Learning and Computer-Based Modeling, Northwestern University, 1999.
 .. [North13] North, Michael J., Nicholson T. Collier, Jonathan Ozik, Eric R. Tatara, Charles M. Macal, Mark Bragen, and Pam Sydelko. “Complex Adaptive Systems Modeling with Repast Simphony.” Complex Adaptive Systems Modeling 1, no. 1 (March 13, 2013): 3. doi:10.1186/2194-3206-1-3.
 .. [Luke05] Luke, Sean, Claudio Cioffi-Revilla, Liviu Panait, Keith Sullivan, and Gabriel Balan. “Mason: A Multiagent Simulation Environment.” Simulation 81, no. 7 (2005): 517–27.
 .. [Perez2011] Pérez, Fernando, Brian E. Granger, and John D. Hunter. “Python: An Ecosystem for Scientific Computing.” Computing in Science & Engineering 13, no. 2 (March 1, 2011): 13–21. doi:10.1109/MCSE.2010.119.
-.. [Zvoleff2013] Zvoleff, Alex. PyABM Toolkit. http://azvoleff.com/pyabm.html. 
+.. [Zvoleff2013] Zvoleff, Alex. PyABM Toolkit. http://azvoleff.com/pyabm.html.
 .. [Sayama2013] Sayama, Hiroki. “PyCX: A Python-Based Simulation Code Repository for Complex Systems Education.” Complex Adaptive Systems Modeling 1, no. 1 (March 13, 2013): 1–10. doi:10.1186/2194-3206-1-2.
 .. [McKinney2011] McKinney, Wes. “Pandas: A Foundational Python Library for Data Analysis and Statistics.” Python for High Performance and Scientific Computing, 2011, 1–9.
 .. [Dragulescu2001] Drăgulescu, Adrian, and Victor M. Yakovenko. “Exponential and Power-Law Probability Distributions of Wealth and Income in the United Kingdom and the United States.” Physica A: Statistical Mechanics and Its Applications 299, no. 1 (2001): 213–21.
