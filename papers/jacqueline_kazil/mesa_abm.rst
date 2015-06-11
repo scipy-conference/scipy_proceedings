@@ -12,7 +12,7 @@ Mesa: An Agent-Based Modeling Framework
 
 .. class:: abstract
 
-  Mesa is a new ABM framework for Python and it's gonna be the best. Some more words will go here. Words words words about what Mesa is and how cool it is. Seriously, pretty cool, even if it isn't really done yet.
+  Mesa is a new agent based modleing framework built using tornado as a server. This allows for a front-end browser based console display, while agents decisions occur on the serverside. The major components of the system include a model, agents, space, a scheduler, and visaulization. It's goal is to be the NetLogo, Repast, or MASON but for Python 3.0+. Since the framework is being built from scratch it is able to learn from the lesson of other tools. As a result, Mesa includes a data collector and batch runner which allow for easy analysis in Pandas.
 
 .. class:: keywords
 
