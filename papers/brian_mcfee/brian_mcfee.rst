@@ -45,11 +45,40 @@ LibROSA: Audio and Music Signal Analysis in Python
 Introduction
 ------------
 
+The emergent research field of music information retrieval (MIR) broadly covers topics at
+the intersection of musicology, digital signal processing, machine learning, information
+retrieval, and library science.  Although the field is relatively young |---| the first
+international symposium on music information retrieval (ISMIR) was held in October of
+2000 |---| it is rapidly developing, thanks in part to the proliferation and practical
+scientific needs of digital music services, such as iTunes, Pandora, and Spotify.
+While the preponderance of MIR research has been conducted with custom tools and scripts
+developed by researchers in a variety of languages such as MATLAB or C++, the stability, 
+scalability, and ease of use these tools has often left much to be desired.
+
+Within recent years, interest in (scientific) Python as a viable alternative has grown
+in the MIR community.
+This has been driven by a confluence of several factors, including the availability of
+high-quality machine learning libraries such as ``scikit-learn`` and tools based on
+``Theano``, as well as Python's vast catalog of packages for dealing with text data and
+web services.
+However, without a stable core library to provide the basic
+routines upon which many MIR applications are built, adoption of Python has been slow.
+To remedy this situation, we have developed ``librosa``: a python package for audio
+and music signal processing. [#]_
+In doing so, we hope to both ease the transition into Python (and modern software
+development practices) for MIR researchers, and 
+make core MIR techniques readily available to the broader community of scientists and 
+Python programmers.
+
+.. [#] The name `librosa` is borrowed from `LabROSA`: the LABoratory for the Recognition
+    and Organization of Speech and Audio at Columbia University.
+
+Beginnings
+==========
 
 
-
-Design goals
-============
+Design principles
+=================
 
 
 - Low barrier to entry for MATLAB users
@@ -87,9 +116,9 @@ monophonic signal to the default rate ``sr=22050`` Hz.
 Most audio analysis methods operate not at the native sampling rate of the signal, 
 but over small `frames` of the signal which are spaced by a `hop length` (in samples).
 Librosa uses default frame and hop lengths of 2048 and 512 samples, respectively.
-At the default sampling rate, this corresponds to overlapping frames of approximately 93ms 
-spaced by 23ms.
-Frames are centered by default, so frame ``t`` corresponds to the time interval::
+At the default sampling rate of 22050 Hz, this corresponds to overlapping frames of 
+approximately 93ms spaced by 23ms.
+Frames are centered by default, so frame index ``t`` corresponds to the time interval::
 
     [t - frame_length / 2, t + frame_length /2),
 
@@ -97,8 +126,13 @@ where the boundary conditions are handled by reflection-padding the input.
 For analyses that do not use fixed-width frames (such as the constant-Q transform), the
 default hop length of 512 is retained to facilitate alignment of results.
 
-
-
+The majority of feature analyses implemented by librosa produce two-dimensional outputs
+stored as ``numpy.ndarray``, e.g., ``S[f, t]`` might contain the energy within a particular 
+frequency band ``f`` at frame index ``t``.
+Librosa follows the convention that the final dimension provides the index over time,
+e.g., ``S[:,0], S[:,1]`` access features at the first and second frames.
+Feature arrays are organized column-major (Fortran style) in memory, so that common
+access patterns benefit from cache locality.
 
 
 Package organization
@@ -169,6 +203,12 @@ Utilities
 As you can see in Figure :ref:`fig:tour`, this is how you reference auto-numbered
 figures.
 
+
+Future directions
+-----------------
+
+Conclusion
+----------
 
 References
 ----------
