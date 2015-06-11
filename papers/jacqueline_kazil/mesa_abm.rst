@@ -153,17 +153,75 @@ Now, let's implement a schedule in our example model. We add a ``RandomActivatio
 
 Many agent-based models are spatial: agents may have fixed positions in space or move around, and interact with their immediate neighbors or with agents and other objects nearby. The space may be abstract (as in many cellular automata), or represent many possible scales, from a single building to a region to the entire world. While some models take place in three spatial dimensions as well, the majority represent space as two dimensional, which is how Mesa's current space modules are implemented. Many abstract model spaces are toroidal, meaning that the edges 'wrap around' to the opposite edge. This prevents model artifacts from arising at the edges, which have fewer neighbors than other locations.
 
-Mesa currently implements two broad classes of space: grid, and continuous. Grids are discrete spaces, consisting of rectangular cells; agents and other objects may only be in a particular cell (or, with some additional coding, potentially span multiple cells), but not between cells. In continuous space, in contrast, agents can have any arbitrary coordinates.
+Mesa currently implements two broad classes of space: grid, and continuous. Grids are discrete spaces, consisting of rectangular cells; agents and other objects may only be in a particular cell (or, with some additional coding, potentially span multiple cells), but not between cells. In continuous space, in contrast, agents can have any arbitrary coordinates. Both types of space assume by default that agents store their location as an (x, y) tuple named `pos`.
 
 There are several specific grid classes, all of which inherit from a root `Grid` class. At its core, a grid is a two-dimensional array with methods for getting the neighbors of particular cells, adding and removing agents, etc. The default ``Grid`` class does not enforce what each cell may contain; ``SingleGrid`` ensures that each cell contains at most one object, while ``MultiGrid`` explicitly makes each cell be a set of 0 or more objects. There are two kinds of cell neighborhoods: a cell's *Moore* neighborhood is the 8 cells surrounding it, including the diagonals; the *Von Neumann* neighborhood is only the 4 cells immediately above, below, and to its left and right. Which neighborhood type to use will vary based on the specifics of each model, and are specified in Mesa by an argument to the various neighborhood methods.
 
 The ``ContinuousSpace`` class also inherits from ``Grid``, and uses the grid as a simple spatial database; the number of cells and the arbitrary limits of the space are provided when the space is created, and are used internally to map between spatial coordinates and grid cells. Neighbors here are defined as all agents within an arbitrary distance of a given point.
 
+To add space to our example model, we can have the agents wander around a grid; instead of giving a unit of money to any random agent, they pick an agent in the same cell as themselves. This means that multiple agents are allowed in each cell, requiring a ``MultiGrid``. 
+
+.. code-block:: python
+
+  from mesa.space import MultiGrid
+
+  class MoneyModel(Model):
+    def __init__(self, N, width, height, torus):
+      self.grid = MultiGrid(height, width, torus)
+      # ... everything else
+
+    def create_agents(self):
+      for i in range(self.num_agents):
+        # ... everything above
+        x = random.randrange(self.grid.width)
+        y = random.randrange(self.grid.width)
+        self.grid.place_agent(a, (x, y))
+
+    class MoneyAgent(Agent):
+      # ...
+      def move(self, model):
+        """Take a random step."""
+        grid = model.grid
+        x, y = self.pos
+        possible_steps = grid.get_neighborhood(x, y, 
+          moore=True, include_center=True)
+        choice = random.choice(possible_steps)
+        grid.move_agent(self, choice)
+
+      def give_money(self, model):
+        grid = model.grid
+        this_pos = [self.pos]
+        others = grid.get_cell_list_contents(this_pos)
+        if len(others) > 1:
+          other = random.choice(other_agents)
+          other.wealth += 1
+          self.wealth -= 1
+
+      def step(self, model):
+        self.move(model)
+        if self.wealth > 0:
+          self.give_money(model)
+
+Once the model has been run, we can create a static visualization of the distribution of wealth across the grid using the ``coord_iter`` iterator, which allows us to loop over all cells in the grid.
+
+.. code-block:: python
+
+  wealth_grid = np.zeroes(model.width, model.height)
+  for cell in model.grid.coord_iter():
+    cell_content, x, y = cell
+    cell_wealth = sum(a.wealth for a in cell_content)
+    wealth_grid[y][x] = cell_wealth
+  plt.imshow(wealth_grid, interpolation='nearest')
+
+.. figure:: model_grid.png
+
+  Example of spatial wealth distribution across the grid. :label:`fig3.5`
+
 **Data Collection**
 
 An agent-based model is not particularly useful if there is no way to see the behaviors and outputs it produces. Generally speaking, there are two ways of extracting these: visualization, which allows for observation and qualitative examination (and which we will discuss below), and quantitative data collection. In order to facilitate the latter option, we provide a generic ``DataCollector`` class, which can store and export data from most models without needing to be subclassed.
 
-The data collector stores three categories of data: *model-level* variables, *agent-level variables*, and *tables* which are a catch-all for everything else. Model- and agent-level variables are added to the data collector along with a function for collecting them. Model-level collection functions take a model object as an input, while agent-level collection functions take an agent object as an input; both then return a value computed from the model or each agent at their current state. When the data collector's **collect** method is called, with a model object as its argument, it applies each model-level collection function to the model, and stores the results in a dictionary, associating the current value with the current step of the model. Similarly, the method applies each agent-level collection function to each agent currently in the schedule, associating the resulting value with the step of the model, and the agent's unique ID. The Data Collector may be placed within the model class itself, with the collect method running as part of the model step; or externally, with additional code calling it every step or every $N$ steps of the model.
+The data collector stores three categories of data: *model-level* variables, *agent-level variables*, and *tables* which are a catch-all for everything else. Model- and agent-level variables are added to the data collector along with a function for collecting them. Model-level collection functions take a model object as an input, while agent-level collection functions take an agent object as an input; both then return a value computed from the model or each agent at their current state. When the data collector's **collect** method is called, with a model object as its argument, it applies each model-level collection function to the model, and stores the results in a dictionary, associating the current value with the current step of the model. Similarly, the method applies each agent-level collection function to each agent currently in the schedule, associating the resulting value with the step of the model, and the agent's unique ID. The Data Collector may be placed within the model class itself, with the collect method running as part of the model step; or externally, with additional code calling it every step or every *N* steps of the model.
 
 The third category, *tables*, is used for logging by the model or the agents rather than fixed collection by the data collector itself. Each table consists of a set of columns, stored as dictionaries of lists. The model or agents can then append records to a table according to their own internal logic. This can be used to log specific events (e.g. every time an agent is killed), and data associated with them (e.g. agent lifespan at destruction), particularly when these events do not necessarily occur every step.
 
@@ -335,6 +393,11 @@ Despite this, Mesa is very much a work in progress. We intend to implement sever
 We also hope to continue to leverage Mesa's open-source nature. As more researchers utilize Mesa, they will identify opportunities for improvement and additional features, hopefully contribute them to the main repository. More models will generate reference code or additional stand-alone modules, which in turn will help provide a larger library of reusable modeling components that have been validated both in terms of their code and scientific assumptions.
 
 We are happy to introduce Mesa to the world with this paper; it marks not the end of a research effort, but the beginning of an open, collaborative process to develop and expand a new tool in Python's scientific ecosystem.
+
+Acknowledgements
+--------------------
+
+Mesa is an open-source project, and we are happy to acknowledge major code contributors Kim Furuya, Daniel Weitzenfeld, and Eugene Callahan.
 
 References
 -----------
