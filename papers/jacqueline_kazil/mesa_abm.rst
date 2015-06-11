@@ -22,25 +22,27 @@ Mesa: An Agent-Based Modeling Framework
 Introduction
 ------------
 
-Agent Based Modeling or ABM is computational social science approach to simulating autonomous agents and their interactions over a certain time period.  In agent based modeling, agents are objects that have rules and states and act accordingly with each passing moment of the simulation [Axtell2000]_. To understand the application of agent-based modeling, consider one of the earliest and most well known models created by Thomas Schelling. Schelling wanted to test the theory that segregated neighborhoods can arise not by individuals being racist and moving away from individuals of a different group, but by having a certain percentage of the population want to live near individuals like themselves [Schelling1971]_.  In this model, the each individual is an agent who is able to make a decision to move or not move with each passing time tick.
-
-Rob Axtell, one of the early champions of agent based mdoeling, identified the following advantages to agent based model [Axtell2000]_:
+Agent Based Modeling involves simulating the behavior and interaction of many autonomous entities, or agents, over time. Agents are objects that have rules and states, and act accordingly with each passing moment of the simulation [Axtell2000]_. These agents may represent individual organisms, humans, entire organizations, or abstract entities.  Robert Axtell, one of the early champions of agent based models (ABMs), identified the following advantages [Axtell2000]_:
 
 1. Unlike other modeling approaches, one can analyze dynamic history of system -- ABMs capture the path as well as the solution.
 2. Most social processes involve spatial or network attributes, ABMs allow for these attributes to be considered in analysis.
 3. When a model (A) produces a result (R), one has established a sufficiency theorem, meaning *R* if *A*.
 
-There are currently several tools and frameworks in wide use for agent-based modeling: particularly NetLogo [Wilensky99]_, Repast [North13]_, and MASON [Luke05]_. From our perspective, all of these share a key weakness: they do not use Python. This is not just a matter of parochial preference (though it is certainly that as well). In recent years Python has become an increasingly popular language for scientific computing [Perez2011]_, supported by a mature and growing ecosystem of tools for analysis and modeling. Python is widely considered a more natural, easy-to-learn language than Java, which is used for Repast and MASON; and unlike NetLogo's custom scripting language, Python is a general purpose programming language. Furthermore, unlike the other frameworks, Python allows interactive analysis of model output data, without exporting it to a different tool. Despite these advantages, and despite several partial efforts (e.g. [Zvoleff2013]_, [Sayama2013]_), there is not yet a Python agent-based modeling framework. Mesa is intended to fill this gap.
+To understand the application of agent based modeling, consider one of the earliest and best-known models created by Thomas Schelling. Schelling wanted to test the theory that segregated neighborhoods can arise not just by active racism, but due to only a mild preference for neighbors of the same ethnicity  [Schelling1971]_.  The model consisted of majority-group and minority-group agents living on a grid, both with a preference for some number of neighbors of the same group; when that preference was not met, they could move to a different grid cell. The model demonstrates that even a mild preference for same-group neighbors led to a much more dramatic degree of segregation. This is an example of the *emergence* of a higher-order phenomena from the interactions of lower-level entities, and demonstrates the link between agent-based modeling and complexity theory, and complex adaptive systems in particular [Miller2009]_.
+
+There are currently several tools and frameworks in wide use for agent-based modeling [#]_, particularly NetLogo [Wilensky99]_, Repast [North13]_, and MASON [Luke05]_. From our perspective, all of these share a key weakness: they do not use Python. This is not just a matter of parochial preference (though it is certainly that as well). In recent years Python has become an increasingly popular language for scientific computing [Perez2011]_, supported by a mature and growing ecosystem of tools for analysis and modeling. Python is widely considered a more natural, easy-to-learn language than Java, which is used for Repast and MASON; and unlike NetLogo's custom scripting language, Python is a general purpose programming language. Furthermore, unlike the other frameworks, Python allows interactive analysis of model output data, without exporting it to a different tool. Despite these advantages, and despite several partial efforts (e.g. [Zvoleff2013]_, [Sayama2013]_), there is not yet a Python agent-based modeling framework. Mesa is intended to fill this gap.
+
+.. [#] Throughout this paper, and in Mesa's documenation more broadly, we use the term 'agent based model' to encompass a wide range of related computational models as well, such as multi-agent systems and cellular automata.
 
 Designing a new framework from the ground up also allowed us to implement features not found in existing frameworks. For example, as we explain in more detail below, other ABM frameworks tend to use a single agent activation regime by default; in Mesa, we implement several scheduler classes and require the modeler to specify which one is being used. We also implement several useful tools to accelerate common model analysis tasks: a data collector (present only in Repast) and a batch runner (available in Repast and NetLogo only via menu-driven systems), both of which can export their results directly to pandas [McKinney2011]_ dataframes for immediate analysis.
 
-.. figure:: ipython_screenshot.png
-
-  A Mesa model run and analyzed inside of an IPython Notebook. :label:`fig1`
-
 .. figure:: browser_screenshot.png
 
-  A Mesa model visualized in a browser window. :label:`fig2`
+  A Mesa implementation of the Schelling segregation model visualized in a browser window. :label:`fig1`
+
+.. figure:: ipython_screenshot.png
+
+  Mesa implementation of the Schelling model analyzed inside of an IPython Notebook. :label:`fig2`
 
 While interactive data analysis is important, direct visualization of every model step is also an important part of agent-based modeling, both for debugging, and for developing an intuition of the dynamics that emerge from the model. Mesa facilitiates such live visualization as well. It avoids issues of system-specific GUI dependencies by using the browser as a front-end, giving framework and model developers access to the full range of modern JavaScript data visualization tools.
 
@@ -348,6 +350,7 @@ References
 .. [Dragulescu2001] Drăgulescu, Adrian, and Victor M. Yakovenko. “Exponential and Power-Law Probability Distributions of Wealth and Income in the United Kingdom and the United States.” Physica A: Statistical Mechanics and Its Applications 299, no. 1 (2001): 213–21.
 .. [Dragulescu2002] Dragulescu, Adrian A., and Victor M. Yakovenko. “Statistical Mechanics of Money, Income, and Wealth: A Short Survey.” arXiv Preprint Cond-mat/0211175, 2002. http://arxiv.org/abs/cond-mat/0211175.
 .. [Comer2014] Comer, Kenneth W. “Who Goes First? An Examination of the Impact of Activation on Outcome Behavior in Agent-Based Models.” George Mason University, 2014. http://gradworks.umi.com/36/23/3623940.html.
+.. [Miller2009] Miller, John H., and Scott E. Page. Complex Adaptive Systems: An Introduction to Computational Models of Social Life. Princeton University Press, 2009.
 
 
 
