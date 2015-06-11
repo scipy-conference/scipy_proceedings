@@ -41,215 +41,134 @@ LibROSA: Audio and Music Signal Analysis in Python
 
    audio, music, signal processing
 
+
 Introduction
 ------------
 
-Twelve hundred years ago  |---| in a galaxy just across the hill...
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
 
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
 
-   def sum(a, b):
-       """Sum two numbers."""
+Design goals
+============
 
-       return a + b
 
-With code-highlighting:
+- Low barrier to entry for MATLAB users
+    - no objects or class hierarchies
+    - make code readable, documented, and tested
+- Follow SciPy idioms
+- Don't reinvent wheels
+- Provide consistent interfaces, standardized parameter settings
+- Be modular and pluggable
+
+
+Conventions
+===========
+
+In general, librosa's functions tend to expose all relevant parameters to the caller.
+While this provides a great deal of flexibility to expert users, it can be overwhelming
+to novice users who simply need a consistent interface to process audio files.  
+To satisfy both needs, we define a set of general conventions and standardized default 
+parameter values shared across many functions.
+
+An audio signal is represented as a one-dimensional ``numpy`` array, denoted as ``y`` 
+throughout librosa.  Typically the signal ``y`` is accompanied by the `sampling rate` 
+(denoted ``sr``) which denotes the frequency (in Hz) at which values of ``y`` are
+sampled.  The duration of a signal can then be computed by dividing the number of samples
+by the sampling rate: 
 
 .. code-block:: python
 
-   def sum(a, b):
-       """Sum two numbers."""
+    >>> track_duration = float(len(y)) / sr
 
-       return a + b
+By default, when loading stereo audio files, the ``librosa.load()`` function 
+downmixes to mono by averaging left- and right-channels, and then resamples the
+monophonic signal to the default rate ``sr=22050`` Hz.
 
-Maybe also in another language, and with line numbers:
+Most audio analysis methods operate not at the native sampling rate of the signal, 
+but over small `frames` of the signal which are spaced by a `hop length` (in samples).
+Librosa uses default frame and hop lengths of 2048 and 512 samples, respectively.
+At the default sampling rate, this corresponds to overlapping frames of approximately 93ms 
+spaced by 23ms.
+Frames are centered by default, so frame ``t`` corresponds to the time interval::
 
-.. code-block:: c
-   :linenos:
+    [t - frame_length / 2, t + frame_length /2),
 
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
+where the boundary conditions are handled by reflection-padding the input.
+For analyses that do not use fixed-width frames (such as the constant-Q transform), the
+default hop length of 512 is retained to facilitate alignment of results.
 
-Or a snippet from the above code, starting at the correct line number:
 
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
 
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
- 
-Important Part
---------------
 
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
 
-.. math::
+Package organization
+--------------------
 
-   g(x) = \int_0^\infty f(x) dx
+In this section, we give a brief overview of the structure of the librosa software
+package.
 
-or on multiple, aligned lines:
 
-.. math::
-   :type: eqnarray
+Core
+====
 
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
+The ``librosa.core`` submodule implements a variety of commonly used functions.  Broadly,
+``core`` functionality falls into four categories: audio and time-series operations,
+spectrogram calculation, time and frequency conversion, and pitch operations.  For
+convenience, all functions within the ``core`` submodule are aliased at the top level of
+the package hierarchy, e.g., ``librosa.core.load`` is aliased to ``librosa.load``.
 
-The area of a circle and volume of a sphere are given as
 
-.. math::
-   :label: circarea
 
-   A(r) = \pi r^2.
+Display
+=======
 
-.. math::
-   :label: spherevol
+Spectral features
+=================
 
-   V(r) = \frac{4}{3} \pi r^3
+Decompositions
+==============
 
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
+Onsets, tempo, and beats
+========================
 
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
-pulvinar id metus.
+Structural analysis
+===================
 
-.. [#] On the one hand, a footnote.
-.. [#] On the other hand, another footnote.
+Effects
+=======
 
-.. .. figure:: figure1.png
 
-.. This is the caption. :label:`egfig`
 
-.. .. figure:: figure1.png
-..    :align: center
-..    :figclass: w
+Advanced functionality
+----------------------
 
-..    This is a wide figure, specified by adding "w" to the figclass.  It is also
-..    center aligned, by setting the align keyword (can be left, right or center).
+Caching
+=======
 
-.. .. figure:: figure1.png
-..    :scale: 20%
-..    :figclass: bht
+scikit-learn integration
+========================
 
-..    This is the caption on a smaller figure that will be placed by default at the
-..    bottom of the page, and failing that it will be placed inline or at the top.
-..    Note that for now, scale is relative to a completely arbitrary original
-..    reference size which might be the original size of your image - you probably
-..    have to play with it. :label:`egfig2`
+Filter bank construction
+========================
 
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
+Utilities
+=========
+
+
+.. figure:: tour.pdf
+    :scale: 60%
+    :figclass: wht
+
+    Top: a waveform plot for a 20-second audio clip ``y``, generated by ``librosa.display.waveplot``.
+    Middle: the log-power short-time Fourier transform (STFT) spectrum for ``y`` plotted on a logarithmic
+    frequency scale, generated by ``librosa.display.specshow``.
+    Bottom: the onset strength function (``librosa.onset.onset_strength``), detected onset events
+    (``librosa.onset.onset_detect``), and detected beat events (``librosa.beat.beat_track``) for ``y``.
+    :label:`fig:tour`
+
+As you can see in Figure :ref:`fig:tour`, this is how you reference auto-numbered
 figures.
 
-.. table:: This is the caption for the materials table. :label:`mtable`
-
-   +------------+----------------+
-   | Material   | Units          |
-   +============+================+
-   | Stone      | 3              |
-   +------------+----------------+
-   | Water      | 12             |
-   +------------+----------------+
-   | Cement     | :math:`\alpha` |
-   +------------+----------------+
-
-
-We show the different quantities of materials required in Table
-:ref:`mtable`.
-
-
-.. The statement below shows how to adjust the width of a table.
-
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.8\linewidth}
-
-
-.. table:: This is the caption for the wide table.
-   :class: w
-
-   +--------+----+------+------+------+------+--------+
-   | This   | is |  a   | very | very | wide | table  |
-   +--------+----+------+------+------+------+--------+
-
-Unfortunately, restructuredtext can be picky about tables, so if it simply
-won't work try raw LaTeX:
-
-
-.. raw:: latex
-
-   \begin{table*}
-
-     \begin{longtable*}{|l|r|r|r|}
-     \hline
-     \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
-     \cline{2-4}
-      & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
-     \hline
-     Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
-     \hline
-     Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
-     \hline
-     Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
-     \hline
-     Percent Difference & 44\% & 41\% & 43\%\tabularnewline
-     \hline
-     \end{longtable*}
-
-     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
-
-   \end{table*}
-
-Perhaps we want to end off with a quote by Lao Tse [#]_:
-
-  *Muddy water, let stand, becomes clear.*
-
-.. [#] :math:`\mathrm{e^{-i\pi}}`
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
 
 References
 ----------
