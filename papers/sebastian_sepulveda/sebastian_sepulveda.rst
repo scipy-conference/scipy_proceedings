@@ -4,7 +4,7 @@
 
 :author: Pablo Reyes
 :email: pablo.reyes@uv.cl
-:institution: Escuela de Ingeniería Civil Biomédica, Facultad de Ingeniería, Universidad de Valparaíso 
+:institution: Escuela de Ingeniería Civil Biomédica, Facultad de Ingeniería, Universidad de Valparaíso
 
 :author: Alejandro Weinstein
 :email: alejandro.weinstein@uv.cl
@@ -19,7 +19,7 @@ Visualizing physiological signals in real time
 
 .. class:: abstract
 
-This work presents a software, written in Python, to visualize and record in real time physiological signals, such as electrocardiography,  electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source, extensible, multi-platform and has been tested on different Linux distributions, including conventional PC, Mac and the RaspberryPi (ARM architecture). It leverages the use of several libraries, including PyQtGraph and the SciPy/NumPy stack.
+This work presents a software, written in Python, to visualize and record in real time physiological signals, such as electrocardiography,  electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source, extensible, multi-platform and has been tested on different Linux distributions, including the RaspberryPi (ARM architecture). It leverages the use of several libraries, including PyQtGraph and the SciPy/NumPy stack.
 
 .. class:: keywords
 
@@ -33,21 +33,21 @@ A common task in biomedical research is to record and visualize in real time phy
 
 .. [#] Available at https://github.com/ssepulveda/RTGraph.
 
-The main objective of the software is to display in real time multiple signals and to export them to a file. In the current implementation, The communication between the software and the acquisition device is through the serial port, and it is implemented using the PySerial library. Other communication protocols can be easily added. The real time display of the signals is implemented using the PyQtGraph library. [#]_ The software has a multiprocess architecture, based on the multiprocessing Python standard library. This allows having concurrent processes for receiving, processing, and displaying the data. Signal processing tasks, such as spectral estimation, are based on the SciPy stack. This architecture assures that no data is loosed and a fast response of the user interface. 
+The main objective of the software is to display in real time multiple signals and to export them to a file. In the current implementation, The communication between the software and the acquisition device is through the serial port, and it is implemented using the PySerial library. Other communication protocols can be easily added. The real time display of the signals is implemented using the PyQtGraph library. [#]_ The software has a multiprocess architecture, based on the multiprocessing Python standard library. This allows having concurrent processes for receiving, processing, and displaying the data. Signal processing tasks, such as spectral estimation, are based on the SciPy stack. This architecture assures that no data is loosed and a fast response of the user interface.
 
 .. [#] Available at http://www.pyqtgraph.org.
 
-The software is multi-platform and runs in any machine and OS where Python and the corresponding dependencies can be installed. The software has been tested on different Linux distributions, including conventional PC, Mac and the RaspberryPi (ARM architecture).
+The software is multi-platform and runs in any machine and OS where Python and the corresponding dependencies can be installed. The software has been tested on different Linux distributions, including the RaspberryPi (ARM architecture).
 
 
 Software architecture
 ---------------------
 
-The applications described in this work can be classified as a "data logger". A data logger needs to acquire a stream of data, add a time stamp to the data (if required), and export the time-stamped data to a file in a known file format, such as comma separated value (CSV) format. Optionally, the application can do some processing (filtering, spectral estimation, etc.) before saving the data. In addition, it is also useful to be able to visualize, in real time, the stream of data. 
+The applications described in this work can be classified as a "data logger". A data logger needs to acquire a stream of data, add a time stamp to the data (if required), and export the time-stamped data to a file in a known file format, such as comma separated value (CSV) format. Optionally, the application can do some processing (filtering, spectral estimation, etc.) before saving the data. In addition, it is also useful to be able to visualize, in real time, the stream of data.
 
 When developing, evaluating, or validating a new hardware or software, it is important to have  control of the outcome of the algorithms and the fidelity and performance of the data acquisition process. In particular, in the field of Biomedical Engineering, the acquisition and signal processing of biological signals needs to be reliable and with a tight control over the sampling frequency. It is also fundamental to ensure that no data is lost during the acquisition and logging process. From a practical point of view, having to wait for the data to be stored before visualizing it (possibly in another program) is cumbersome and tedious, slowing down the development process. For these reasons, in this work we present a program able of: receiving data from a variety of sources (serial port, Bluetooth, Zigbee, Sockets, etc.); processing and visualizing the data in real time; and recording the data in a file.
 
-The first version of this program was developed for a research on Biomechanical engineering. This research involves logging, processing, and real time displaying of the signals generated by a nine degrees of freedom inertial measurement unit (9DOF-IMU). This requires acquiring nine signals with a sampling rate of at least  100 Hz. Six additional signals are computed through a sensor fusion algorithm. A total of 15 signals are displayed and exported as a CSV file. We designed the architecture of the program with these requirements in mind.
+The first version of this program was developed for a research on Biomechanical engineering. This research involves logging, processing, and real time displaying of the signals generated by a nine degrees of freedom inertial measurement unit (9DOF-IMU). This requires acquiring nine signals with a sampling rate of at least 100 hertz. Six additional signals are computed through a sensor fusion algorithm. A total of 15 signals are displayed and exported as a CSV file. We designed the architecture of the program with these requirements in mind.
 
 
 Real time graphics library
@@ -59,15 +59,15 @@ We used Matplotlib [B]_ in the first version of the program. This option worked 
 
 Next, we tried was PyQtGraph [?]_. It is a pure Python implementation, with a focus on speed, portability and a rich set of features. Unlike the previous libraries that we tried, PyQtGraph was designed to do real time plotting. It is also designed to do interactive image analysis. It is built on top of PyQt4/PySide, giving easy integration and full compatibility with the Qt framework. This allows the use of tools like Qt Designer to design the GUI. Using Qt Designer and the examples provides with the PyQtGraph library, it is easy to configure and customize the widgets. PyQtGraph is also built on top of NumPy, facilitating and improving the performance of the manipulation of numerical data. In addition, PyQtGraph wraps up some NumPy/SciPy signal processing functions such as the Fast Fourier Transform and some linear and non-linear filters. [#]_
 
-.. [#] We also evaluated the PyQwt library (http://qwt.sourceforge.net/). This library provides a Python interface to the Qwt library. It is a light implementation with an easy QT integration. It is fast enough to support real time display of the data. However, this library is not currently maintained, and its author recommend using PyQtGraph (see http://comments.gmane.org/gmane.comp.graphics.qwt.python/506). 
+.. [#] We also evaluated the PyQwt library (http://qwt.sourceforge.net/). This library provides a Python interface to the Qwt library. It is a light implementation with an easy QT integration. It is fast enough to support real time display of the data. However, this library is not currently maintained, and its author recommend using PyQtGraph (see http://comments.gmane.org/gmane.comp.graphics.qwt.python/506).
 
 
 Threading versus Multiprocessing
 ================================
 
-After using PyQtGraph to its limits in a multithreaded architecture, we could not reliably achieve the desired performance. The limitations of threads in Python [E]_ combined with the interaction between the UI (main) and communication thread, resulted in data losses when the data rate was too large. The Global Interpreter Lock (GIL) [E]_ prevents threads to take advantage of multicore systems. In short, it means that a mutex controls the access from threads to the memory. There are ways to work around this limitation. For instance, many of the NumPy primitives take advantage of multiple cores. [#]_ However, in our case we need to parallelize the reception of the data, the visualization, the processing, and the logging.
+After using PyQtGraph to its limits in a multithreaded architecture, we could not reliably achieve the desired performance. The limitations of threads in Python [E]_ combined with the interaction between the UI (main thread) and communication thread, resulted in data losses when the data rate was too large. The Global Interpreter Lock (GIL) [E]_ prevents threads to take advantage of multicore systems. In short, it means that a mutex controls the access from threads to the memory. There are ways to work around this limitation. For instance, many of the NumPy primitives take advantage of multiple cores. [#]_ However, in our case we need to parallelize the reception of the data, the visualization, the processing, and the logging.
 
-.. [#] See http://wiki.scipy.org/ParallelProgramming for details. 
+.. [#] See http://wiki.scipy.org/ParallelProgramming for details.
 
 To overcome the GIL limitations we used the multiprocessing module, belonging to the Python Standard Library. This module provides an API similar to the threading module, but it uses subprocesses instead of threads [D]_. By letting the OS to control of the subprocesses, this allows to take advantage of all the cores available on the platform.
 
@@ -78,18 +78,18 @@ Once the key components of the program has been selected, the remaining problem 
 
 Figure :ref:`figSWarch` shows the architecture of the software. The architecture allow us to: (1) Have a multiplatform program. (2) Have a separation between the reception and parsing of input data stream and the plotting and logging tasks. The following is a description of each process.
 
-1. Communication process: This process is responsible of receiving and parsing the data stream send by the device. The implementation considers an abstract class, that subclasses the ``Process`` class from the ``multiprocessing`` library. Therefore, the methods  ``__init__``, ``run``, ``start`` and ``stop`` are overwritten. The class also have methods common to different communication protocols (serial, sockets, etc.). The details of each protocol is implemented in each subclass. This process is also responsible of validating the data and adding the timestamp to the data, in case the device does not have it. This guarantee that the data is always timestamped.
+1. Communication process: This process is responsible of receiving and parsing the data stream send by the device. The implementation considers an abstract class, that subclasses the ``Process`` class from the ``multiprocessing`` library. Therefore, the methods  ``__init__`` and ``run`` are overwritten. We also added methods ``start`` and ``stop`` to properly start and stop the subprocesses. The class also have methods common to different communication protocols (serial, sockets, etc.). The details of each protocol is implemented in each subclass. This process is also responsible of validating the data and adding the time-stamp to the data, in case the device does not have it. This guarantee that the data is always time-stamped.
 
-2. Main process: The main process is responsible of initializing the different subprocesses and of coordinating the communication between them. As shown in figure :ref:`figSWarch`, this process instantiates the components that will allow the communication between the subprocesses and also manage the different UI elements. A ``Queue``, as implemented by the ``multiprocessing`` module, is used to communicate the communication with the main process. A ``QtTimer`` is set to update the real time plot. By updating the plot at a known frequency we can control the responsiveness of the program under different conditions. Each time the ``QtTimer`` triggers a plot update (30 times per second), the ``queue`` is processed. The queue is read until is empty and then the plot is updated.
+2. Main process: The main process is responsible of initializing the different subprocesses and of coordinating the communication between them. As shown in figure :ref:`figSWarch`, this process instantiates the components that will allow the communication between the subprocesses and also manage the different UI elements. A ``Queue``, as implemented by the ``multiprocessing`` module, is used to communicate the communication with the main process. A ``QtTimer`` is set to update the real time plot. By updating the plot at a known frequency, we can control the responsiveness of the program under different conditions. Each time the ``QtTimer`` triggers a plot update (30 times per second), the ``queue`` is processed. The queue is read until is empty and then the plot is updated.
 
 .. figure:: sw_architecture.pdf
 
-   Diagram of the software architecture. There are two independent processes. The communication process reads the incoming data stream, parse it, add a time stamp (if necessary), and put the processed data into a queue. The main process reads the data from the queue, process the data, and then update the plot and log the data into a file. :label:`figSWarch` 
+   Diagram of the software architecture. There are two independent processes. The communication process reads the incoming data stream, parse it, add a time-stamp (if necessary), and put the processed data into a queue. The main process reads the data from the queue, process the data, and then update the plot and log the data into a file. :label:`figSWarch`
 
 
 Programming details
 -------------------
-The importance on the structure of the acquisition process is to meet the class structure. In this ways, different acquisition methods, such as serial, wireless or sockets, can be used with minimal modification, inclusive; could be selected while the application is running. Also, being a process by them self, it's possible to run different instances of the same acquisition method.
+The importance on the structure of the acquisition process is to meet the class structure. In this ways, different acquisition methods, such as serial, wireless or sockets, can be used with minimal modification, inclusive; could be selected and changed while the application is running. Also, being a process by them self, it's possible to run different instances of the same acquisition method. The code snippet shows how this basic structure is implemented.
 
 .. code-block:: python
 
@@ -127,17 +127,26 @@ The importance on the structure of the acquisition process is to meet the class 
 Results
 -------
 
-The developed software has been tested under different acquisition methods, operative systems and platforms. The initial development was done and tested under Linux (x86, x64 and ARM), with Python 2.7 installations from the repositories and from the Anaconda installer. Under OSX, Python was installed with Anaconda installer. There where no problems running the application on this OS, and the applications behave in almost exactly the same, as the same Kernel is running behind both OS.
-Under Windows, there are know problems regarding the multiprocessing library. The multiprocessing uses the fork system call, creating child processes that shares the sames resources. On Windows, the child process can't access to the parent resources. In this context, the multiprocessing documentation offers some guidelines to use the library on Windows, in consideration that Windows lacks of the fork call. Even following those guidelines, the software can't be run properly on Windows. Some others workarounds where found, that could lead to an usable application.
+The developed software has been tested under different acquisition methods, operative systems and platforms. The initial development was done and tested under Linux (x86, x64 and ARM), with Python 2.7 installations from the repositories and from the Anaconda installer.
 
-In development environments, the software has reaches up to 2KHz of sampling rate for a 32 bit data transmitted trough serial as it's ASCII represented integer. The sampling rate using ASCII transfers is limited to the amount of data to been transmitted, principally.
-In production environments, the software was used to transform a 1024 byte packed every 500 ms trough a socket connection, where up to 20 signal data where included, and plotted without problems at the same speed.
+At the initial development of software, it worked on all the platforms, and we tested it on OSX and in Windows. In the search for better performance, the software wouldn't work as expected on this OS, due to problems with the multiprocessing library. Despite that multiprocessing library is multiplatform, there are know problems using it in this OSes.
+
+ - OSX: Despite the architecture of the kernel is almost the same as Linux, there are methods not implemented under OSX, such as the method to request the current queue size, which doesn't allow the application to run under OSX.
+
+ - Windows: there are know problems regarding the multiprocessing library. The multiprocessing uses the fork system call, creating child processes that shares the sames resources. On Windows, the child process can't access to the parent resources. In this context, the multiprocessing documentation offers some guidelines to use the library on Windows, in consideration that Windows lacks of the fork call. Even following those guidelines, the software can't be run properly on Windows. Some others workarounds where found, that could lead to an usable application.
+
+In development, the software reached up to 2 KHz of sampling rate for a 32 bit data transmitted trough serial as it's ASCII represented integer. The sampling rate using ASCII transfers is limited to the amount of data to been transmitted, principally.
+In production, the software was used to transform a 1024 byte packet every 500 ms trough a socket connection, where up to 20 signal data where included, with sampling rates up to 500 Hz, and plotted without problems in real time.
 
 Another important result for the software is how easy is to customize it to a specific application. We provide some use cases where some examples of usage and application are listed.
 
 Use cases
 =========
-It is easy to modify by other users. Mention Lobos' application (is that the case?).
+In the field of biomedical engineering, Sebastian Lobos modified the software to monitor an acquisition system for his master thesis. He is developing a device capable of monitor and diagnose nutrition disorders in premature infants. He customized the software to (1) acquire two signals and (2) do specific signal processing to display the results of the monitoring.
+
+Figure ww
+
+In a study, a prototype of a device was used to acquire signals of EMG using wearable technology, to determinate the fatigue of muscles. The software was customized to acquire data of the volunteers and also record the data, processing in real time the information. The researchers found that, having the real time feedback of the signal allowed them to determine if the wearable device was correctly positioned, drastically reducing the amount of repetitions of the acquisition.
 
 Figure xx shows a screenshot of the program showing an EMG signal.
 
@@ -145,7 +154,6 @@ Figure yy shows a photo of the device connected through the serial port.
 
 See the following links for two examples where the software is used to acquire EMG signals from different devices: http://bit.ly/1BHObxL, http://bit.ly/1Ex0Ydy.
 
-The usage of the acquisition process for other application (not plotting) on raspberry pi
 
 Conclusions
 -----------
@@ -153,11 +161,13 @@ We are awesome.
 
 Future work
 ===========
-This software could lead to good solution for rapid prototyping and for the growing community based on the open source and DIY.
+This software could lead to good solution for rapid prototyping and for the growing community based on the open source and DIY. Has shown in the Use cases, most of the devices are prototyped with development platforms like Arduino. This software could help in the development of similar projects, even in more general engineering projects or others fields. A more general software could be developed to enable the DIY and electronics enthusiast to have simple tools to start in the electronics and programming world.
 
 A friendly UI, with customization of the plots trough UI instead of the code is a must to make a replacement for applications such as LabView or MATLAB solutions.
 Adding more tools for basic processing, like filters configurable on the UI, with application "on the fly" would lead to easier understanding both for investigation and education. Learning the applications of the signal processing with real signals and seeing the results in real time applied to a real signal could help in the learning of the signal processing and give more interest to the new learners.
 Optimizations to the processes are also in the scope. Including a separate process to do only the processing of the data, is a must to work with even more data and heavier data processing applications. An optimization of the Numpy stack, would increase the performance, stability and compatibility of the application.
+
+Finally, the multiplatform compatibility should be tested, fixed and ensured. With this, a basic software would be available to the entire Python community, and some of this work could benefit the core Python libraries.
 
 Acknowledgments
 ---------------
@@ -167,14 +177,14 @@ Electronic Engineering, Basal Project FB0008, Conicyt.
 
 References
 ----------
-.. [A] L. Campagnola. *PyQtGraph. Scientific Graphics and GUI Library for Python*,         
+.. [A] L. Campagnola. *PyQtGraph. Scientific Graphics and GUI Library for Python*,
 
 .. [B] J. D. Hunter. *Matplotlib: A 2D graphics environment*,
 			Computing In Science \& Engineering, 9(3):90-95, IEEE COMPUTER SOC, 2007.
 
 .. [D] https://docs.python.org/2/library/multiprocessing.html
 
-.. [E] Beazley, David. *Understanding the python gil*, In PyCON Python Conference. Atlanta, Georgia. 2010. 
+.. [E] Beazley, David. *Understanding the python gil*, In PyCON Python Conference. Atlanta, Georgia. 2010.
 
 
 
