@@ -40,6 +40,14 @@ allowed during the open review period which ends July 5th.
   overflow.
 - Avoid custom LaTeX markup where possible.
 
+## Review Criteria
+
+A small subcommittee of the SciPy 2015 organizing committee has created [this
+set of suggested review
+criteria](https://github.com/scipy-conference/scipy_proceedings/blob/master/review_criteria.md)
+to help guide authors and reviewers alike. Suggestions and amendments to these
+review criteria are enthusiastically welcomed via discussion or pull request.
+
 ## Other markup
 
 Please refer to the example paper in ``papers/00_vanderwalt`` for
