@@ -1,6 +1,7 @@
 :author: Gaius Caesar
 :email: jj@rome.it
 :institution: Senate House, S.P.Q.R.
+:institution: Egyptian Embassy, S.P.Q.R.
 
 :author: Mark Anthony
 :email: mark37@rome.it
@@ -9,6 +10,11 @@
 :author: Jarrod Millman
 :email: millman@rome.it
 :institution: Egyptian Embassy, S.P.Q.R.
+:institution: Yet another place, S.P.Q.R.
+
+:author: Brutus
+:email: brutus@rome.it
+:institution: Unaffiliated
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
