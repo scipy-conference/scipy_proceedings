@@ -85,13 +85,13 @@ Figure :ref:`figSWarch` shows the architecture of the software. The architecture
 
    Diagram of the software architecture. There are two independent processes. The communication process reads the incoming data stream, parse it, add a time-stamp (if necessary), and put the processed data into a queue. The main process reads the data from the queue, process the data, and then update the plot and log the data into a file. :label:`figSWarch`
 
-   Figure :ref:`usage` shows the processes viewed by ``htop`` during the execution of the program. The first process (PID XXXX) corresponds to the process initiated by the application. The second process is the communication process (PID XXXX). [#]_
+   Figure :ref:`usage` shows the processes viewed by ``htop`` during the execution of the program. The first process (PID 1082) corresponds to the process initiated by the application. The second process is the communication process (PID 1178). [#]_
 
-.. [#] By default ``htop`` ....
+.. [#] By default ``htop`` shows the processes and threads together. Pressing the H key while the program is running shows or hides the threads. In figure :ref:`usage`, the screen is configured to show both processes and threads.
 
 .. figure:: usage.png
 
-   Screenshot of ``htop`` showing the processes associated to the program. The first process (PID XXXX) corresponds to the process initiated by the application. The second process is the communication process (PID XXXX).  :label:`usage`
+   Screenshot of ``htop`` showing the processes associated to the program. The first process (PID 1082) corresponds to the process initiated by the application. The second process is the communication process (PID 1178).  :label:`usage`
 
 Programming details
 -------------------
@@ -107,6 +107,7 @@ The template for the communication process is implemented through the ``Communic
                 self.queue = queue
                 # Initialize the process ...
                 # Initialize the acquisition method ...
+
 
             def run(self):
                 self.init_time = time()
@@ -125,6 +126,43 @@ The template for the communication process is implemented through the ``Communic
             def closePort():
                 self.exit.set()
 
+The template for the main process is implemented through the ``MainWindow`` class. This template selects the proper acquisition method (serial, sockets, bluetooth, etc.), initializes the basic plot configuration, and also, configures the timers for updating the plots, triggering the ``update_plot`` method.The following code snippet shows the basic structure of the class. 
+
+.. code-block:: python
+
+    class MainWindow(QtGui.QMainWindow):
+        def __init__(self):
+            QtGui.QMainWindow.__init__(self)
+            self.ui = Ui_MainWindow()
+            self.ui.setupUi(self)
+            # initialize plots ...
+            self.ui.plt.setBackground(background=None)
+            self.plt1 = self.ui.plt.addPlot(row=1, col=1)
+
+            # initialize variables ...
+            # initialize timers ...
+            QtCore.QObject.connect(self.timer_plot_update,
+                               QtCore.SIGNAL('timeout()'), self.update_plot)
+
+        def start(self):
+            self.data = CommunicationProcess(self.queue)
+            self.data.openPort(...)
+
+            self.timer_plot_update.start(...)
+            self.timer_freq_update.start(...)
+
+        def update_plot(self):
+            while self.queue.qsize() != 0:
+                data = self.queue.get(True, 1)
+
+            # draw new data ...
+            self.plt1.clear()
+            self.plt1.plot(...)
+
+        def stop(self):
+            self.data.closePort()
+            self.data.join()
+            self.timer_plot_update.stop()
 
 Results
 -------
@@ -133,20 +171,20 @@ The software presented in this work is able to work with a serial port data stre
 
 In general, the sampling rate on serial communications would be limited to the baud rate of the transmission and how the data is transfered. In general, in a common 115200/8N1 serial configuration, a bit is transfered every 8.68055 microseconds. A transfer will be composed for 8 bits, plus an ending bit, giving 78.12495 microseconds per transfer. This gives a maximum sampling rate 12.8 KHz for a byte. This will be lowered every time another character is added to the transfer. As mentioned in the example, we reached a 2 KHz using 4 digits (4 bytes), plus to characters for the carriage return and new line (to match the CSV format), giving us 6 bytes transfered at 2 KHz (2333.33469 Hz, to be precise).
 
-In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. The software was customized to acquire and record data. We also added some steps of the fatigue estimation algorithm [CITE] to the processing pipeline. In this case we found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly positioned, drastically reducing the amount of time required by the experiments.
+In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. The software was customized to acquire and record data. We also added some steps of the fatigue estimation algorithm [Dim03]_ to the processing pipeline. In this case we found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly positioned, drastically reducing the amount of time required by the experiments.
 
-Figure :ref:`emg` shows a screen shot of the program while acquiring an EMG signal from a study using wearables devices to study fatigue in muscles. Figure :ref:`device` shows a photo of the device connected through the serial port.
+Figure :ref:`emg` shows a screen shot of the program while acquiring an EMG signal from a study using wearables devices to study fatigue in muscles.
 
 .. figure:: emg.png
     
     Screen shot of the software customized and modified to display 3 signals, an EMG signal, followed by the processed signal to calculate the fatigue indicator, and finally three signals of acceleration, corresponding for the three axis. :label:`emg`
 
-.. figure:: emg.png
+
+An important feature of our program is the easiness to customize it to a specific application. For instance, the software is being used to acquire a set of pressure signals from a device (as seen in figure :ref:`device`) used to monitor monitor nutrition disorders in premature infants. The customization included: (1) modifying the software to acquire two pressure signals using bluetooth; and (2) to perform some specific signal processing before displaying  to display the results of the monitoring. In this example it is important to emphasize that the changes to the program were made by a researcher different than the main developer of our program. We claim that this is possible because our program is written in Python. This makes it easier to understand and modify the code than a program written in a lower level language.
+
+.. figure:: device.jpg
     
     Photo of the prototype device used in the study. An Arduino development platform is used to acquire the signals, and transfered to a computer running the software. :label:`device`
-
-
-An important feature of our program is the easiness to customize it to a specific application. For instance, the software is being used to acquire a set of pressure signals from a device used to monitor monitor nutrition disorders in premature infants. The customization included: (1) modifying the software acquire two pressure signals from the serial port; and (2) to perform some specific signal processing before displaying  to display the results of the monitoring. In this example it is important to emphasize that the changes to the program were made by a researcher different than the main developer of our program. We claim that this is possible because our program is written in Python. This makes it easier to understand and modify the code than a program written in a lower level language.
 
 See the following links for two examples where the software is used to acquire EMG signals from different devices: http://bit.ly/1BHObxL, http://bit.ly/1Ex0Ydy.
 
@@ -189,9 +227,10 @@ References
 .. [Put15] Python Software Foundation, *16.6 multiprocessing - Process-based “threading” interface*,
         https://docs.python.org/2/library/multiprocessing.html
 
-.. [Roe06] D.Roetenberg, *Inertial and magnetic sensing of human motion*. 
+.. [Roe06] D. Roetenberg, *Inertial and magnetic sensing of human motion*. 
 	   University of Twente, 2006.
 
-
+.. [Dim03] N. Dimitrova  and G. Dimitrov. *Interpretation of EMG changes with fatigue: facts, pitfalls, and fallacies.*
+        Journal of Electromyography and Kinesiology 13.1 (2003): 13-36.
 
 ..  LocalWords:  electromyography SciPy NumPy biomedical RaspberryPi PySerial multiprocess
