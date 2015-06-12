@@ -48,7 +48,7 @@ Introduction
 The emergent research field of music information retrieval (MIR) broadly covers topics at
 the intersection of musicology, digital signal processing, machine learning, information
 retrieval, and library science.  Although the field is relatively young |---| the first
-international symposium on music information retrieval (ISMIR) was held in October of
+international symposium on music information retrieval (ISMIR) [#]_ was held in October of
 2000 |---| it is rapidly developing, thanks in part to the proliferation and practical
 scientific needs of digital music services, such as iTunes, Pandora, and Spotify.
 While the preponderance of MIR research has been conducted with custom tools and scripts
@@ -58,8 +58,8 @@ scalability, and ease of use these tools has often left much to be desired.
 Within recent years, interest in (scientific) Python as a viable alternative has grown
 in the MIR community.
 This has been driven by a confluence of several factors, including the availability of
-high-quality machine learning libraries such as ``scikit-learn`` and tools based on
-``Theano``, as well as Python's vast catalog of packages for dealing with text data and
+high-quality machine learning libraries such as ``scikit-learn`` [Pedregosa11]_ and tools based on
+``Theano`` [Bergstra11]_, as well as Python's vast catalog of packages for dealing with text data and
 web services.
 However, without a stable core library to provide the basic
 routines upon which many MIR applications are built, adoption of Python has been slow.
@@ -69,6 +69,8 @@ In doing so, we hope to both ease the transition into Python (and modern softwar
 development practices) for MIR researchers, and 
 make core MIR techniques readily available to the broader community of scientists and 
 Python programmers.
+
+.. [#] http://ismir.net
 
 .. [#] https://github.com/bmcfee/librosa
 
@@ -82,8 +84,8 @@ Design principles
 
 In designing librosa, we prioritized a few key concepts.
 First, we strive for a low barrier to entry for researchers familiar with MATLAB.
-In particular, we opted for a relatively flat package layout, and following ``scipy``, 
-rely upon ``numpy`` data types and functions, rather than abstract class hierarchies.
+In particular, we opted for a relatively flat package layout, and following ``scipy`` [Jones01]_ 
+rely upon ``numpy`` data types and functions [VanDerWalt11]_, rather than abstract class hierarchies.
 
 Second, we expended considerable effort in standardizing interfaces, variable names, 
 and (default) parameter settings across the various analysis functions.
@@ -94,7 +96,7 @@ as one-off scripts rather than proper library functions with well-defined interf
 Third, wherever possible, we retain backwards compatibility against existing reference
 implementations.
 This is achieved via regression testing for numerical equivalence of outputs.
-All tests are implemented in the ``nose`` framework.[#]_
+All tests are implemented in the ``nose`` framework. [#]_
 
 .. [#] https://nose.readthedocs.org/en/latest/
 
@@ -116,8 +118,8 @@ coverage (via Coveralls [#]_).
 All functions are thoroughly documented using Sphinx, and include example code demonstrating usage.
 Librosa mostly complies with PEP-8 recommendations, with a small set of exceptions for variable names 
 that make the code more concise without sacrificing clarity |---| 
-e.g., ``y`` and ``sr`` are preferred over ``audio_buffer`` and ``sampling_rate`` |---| 
-and limits on the number of function parameters in certain cases.
+e.g., ``y`` and ``sr`` are preferred over more verbose names such as ``audio_buffer`` and ``sampling_rate`` 
+|---| and limits on the number of function parameters in certain cases.
 
 .. [#] https://travis-ci.org
 .. [#] https://coveralls.io
@@ -187,11 +189,15 @@ the package hierarchy, e.g., ``librosa.core.load`` is aliased to ``librosa.load`
 
 
 
+
 Spectral features
 =================
 
+
 Display
 =======
+
+
 
 Decompositions
 ==============
@@ -249,7 +255,18 @@ Conclusion
 
 References
 ----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
+.. [Pedregosa11] Pedregosa, Fabian, Gaël Varoquaux, Alexandre Gramfort, Vincent Michel, Bertrand Thirion, Olivier
+                 Grisel, Mathieu Blondel et al. *Scikit-learn: Machine learning in Python.*
+                 The Journal of Machine Learning Research 12 (2011): 2825-2830.
 
+.. [Bergstra11] Bergstra, James, Frédéric Bastien, Olivier Breuleux, Pascal Lamblin, Razvan Pascanu, Olivier
+                Delalleau, Guillaume Desjardins et al. *Theano: Deep learning on gpus with python.*
+                In NIPS 2011, BigLearning Workshop, Granada, Spain. 2011.
 
+.. [Jones01] Jones, Eric, Travis Oliphant, and Pearu Peterson. 
+             *SciPy: Open source scientific tools for Python.* 
+             http://www.scipy.org/ (2001).
+
+.. [VanDerWalt11] Van Der Walt, Stefan, S. Chris Colbert, and Gael Varoquaux.
+                  *The NumPy array: a structure for efficient numerical computation.* 
+                  Computing in Science & Engineering 13, no. 2 (2011): 22-30.
