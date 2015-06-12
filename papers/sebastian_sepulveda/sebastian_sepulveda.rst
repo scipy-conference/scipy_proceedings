@@ -142,13 +142,15 @@ The software presented in this work has been tested with different devices, comm
 Conclusions
 -----------
 
+In this work we presented a program developed to record, process and visualize physiological signals in real time. Although many people consider Python as a "slow" language, this work shows that it is possible to use Python to write applications able to work in real time. At the same time, the clarity and simplicity of Python allowed us to end up in a program that it is easy to modify and extend, even by people who is not familiar with the base code.
+
+We also believe that our solution is a contribution to the open source and Do It Yourself (DIY) communities. Typically, programs to receive and manipulate data in real time are developed using proprietary tools such as LabView or MATLAB. The cost of these tools prevent users of these communities to have access to solutions like the described in this work.
+
+
 This software could lead to good solution for rapid prototyping and for the growing community based on the open source and DIY. Has shown in the Use cases, most of the devices are prototyped with development platforms like Arduino. This software could help in the development of similar projects, even in more general engineering projects or others fields. A more general software could be developed to enable the DIY and electronics enthusiast to have simple tools to start in the electronics and programming world.
 
-A friendly UI, with customization of the plots trough UI instead of the code is a must to make a replacement for applications such as LabView or MATLAB solutions.
-Adding more tools for basic processing, like filters configurable on the UI, with application "on the fly" would lead to easier understanding both for investigation and education. Learning the applications of the signal processing with real signals and seeing the results in real time applied to a real signal could help in the learning of the signal processing and give more interest to the new learners.
-Optimizations to the processes are also in the scope. Including a separate process to do only the processing of the data, is a must to work with even more data and heavier data processing applications. An optimization of the Numpy stack, would increase the performance, stability and compatibility of the application.
+In the future our first priority is to make our program work in platforms running OS X and Windows. We are currently investigating how to overcome the restriction imposed by the multiprocessing platform on these OSs. Next, we will focus on improving the UI. In particular, we will add the option to change the software behavior, in terms of plot and processing parameters, on the fly, instead of requiring a change in the source code. Finally, we will refactor the architecture of the program to improve the performance, so we can handle higher data rates. In this respect, the main change we plan to do is to move the signal processing computation to another process, leveraging the existence of multi-core machines. (PROBABLEMENTE MAL REDACTADO. REVISAR).
 
-Finally, the multiplatform compatibility should be tested, fixed and ensured. With this, a basic software would be available to the entire Python community, and some of this work could benefit the core Python libraries.
 
 Acknowledgments
 ---------------
