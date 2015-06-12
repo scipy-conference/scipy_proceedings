@@ -85,47 +85,45 @@ Figure :ref:`figSWarch` shows the architecture of the software. The architecture
 
    Diagram of the software architecture. There are two independent processes. The communication process reads the incoming data stream, parse it, add a time-stamp (if necessary), and put the processed data into a queue. The main process reads the data from the queue, process the data, and then update the plot and log the data into a file. :label:`figSWarch`
 
+   Figure :ref:`usage` shows the processes viewed by ``htop`` during the execution of the program. The first process (PID XXXX) corresponds to the process initiated by the application. The second process is the communication process (PID XXXX). [#]_
+
+.. [#] By default ``htop`` ....
+
+.. figure:: usage.png
+
+   Screenshot of ``htop`` showing the processes associated to the program. The first process (PID XXXX) corresponds to the process initiated by the application. The second process is the communication process (PID XXXX).  :label:`usage`
 
 Programming details
 -------------------
 
-The template for the communication process is implemented through the ``CommunicationProcess`` class. This template allows to process data streams coming from a variety of protocols (serial, sockets, bluetooth, etc.). The design of the class  also allows changing some of the communication parameters during run-time. In addition, since the class inherits from the ``Process`` class, it is trivial to run several instances of the class to receive from multiple devices simultaneously. For instance, it is possible to instantiate the class twice to receive data form two different serial ports at the same time. The following code snippet shows how the basic structure of the class. The figure :ref:`usage` shows how the architecture of the program would work as processes managed by the OS.
+The template for the communication process is implemented through the ``CommunicationProcess`` class. This template allows to process data streams coming from a variety of protocols (serial, sockets, bluetooth, etc.). The design of the class  also allows changing some of the communication parameters during run-time. In addition, since the class inherits from the ``Process`` class, it is trivial to run several instances of the class to receive from multiple devices simultaneously. For instance, it is possible to instantiate the class twice to receive data form two different serial ports at the same time. The following code snippet shows the basic structure of the class. 
 
 .. code-block:: python
 
 	class CommunicationProcess(Process):
 	    def __init__(self, queue):
 	        Process.__init__(self)
-            self.exit = Event()
-            self.queue = queue
-            """
-            Initialize the process
-            Initialize the acquisition method.
-            """
+                self.exit = Event()
+                self.queue = queue
+                # Initialize the process ...
+                # Initialize the acquisition method ...
 
             def run(self):
                 self.init_time = time()
                 try:
                     while not self.exit.is_set():
-                        """
-                        do acquisition and add time stamp
-                        """
+                        # do acquisition
+                        # and add time stamp ...
                 except:
                     raise
                 finally:
                     self.closePort()
 
             def openPort(self, port):
-                """
-                Port configuration to open
-                """
+                # Port configuration to open
 
             def closePort():
                 self.exit.set()
-
-.. figure:: usage.png
-
-   The screen shot shows the htop tool while running the software. This tools allows to see the processes running filtered by the software. In the screen shot, the process PID 1082 corresponds to the first process initiated by the application. The process PID 1178 corresponds to the acquisition process, child process of the PID 1082. The other child are threads in the corresponding processes, principally for the Qt elements. :label:`usage`
 
 
 Results
