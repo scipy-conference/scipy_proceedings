@@ -225,7 +225,6 @@ the global tuning offset of a particular audio signal.
 
 Spectral features
 =================
-
 Spectral representations |---| the distributions of energy over a set of frequencies |---| form the basis of
 many analysis techniques in MIR and digital signal processing in general.
 The ``librosa.feature`` module implements a variety of spectral representations, most of which are based
@@ -309,8 +308,28 @@ Examples of ``specshow`` output are displayed in Figures :ref:`fig:feature` and 
 .. [#] If the ``seaborn`` package [Waskom14]_ is available, its version of *cubehelix* is used for sequential
        data.
 
+
 Onsets, tempo, and beats
 ========================
+
+While the spectral feature representations described above capture frequency information, time information is
+equally important for many applications in MIR.  For instance, it can be beneficial to analyze signals
+indexed by note or beat events, rather than absolute time.  The ``onset`` and ``beat`` submodules implement
+functions to estimate various aspects of timing in music.
+
+More specifically, the ``onset`` module provides two functions: ``onset_strength`` and ``onset_detect``.
+The ``onset_strength`` function calculates a thresholded spectral flux operation over a spectrogram, and
+returns a one-dimensional array representing the amount of increasing spectral energy at each frame.  This
+is illustrated as the blue curve in the bottom panel of Figure :ref:`fig:tour`.  The ``onset_detect``
+function, on the other hand, selects peak positions from the onset strength curve following the heuristic
+described by Boeck et al. [Boeck12]_.  The output of ``onset_detect`` are depicted as the red circles in the
+bottom panel of Figure :ref:`fig:tour`.
+
+The ``beat`` module provides functions to estimate the global tempo and positions of beat events from the
+onset strength function, using the method of Ellis [Ellis07]_.
+More specifically, the beat tracker first estimates the tempo, which is then used to set the target spacing
+between peaks in onset strength function.
+The output of the beat tracker is displayed as the dashed green lines in Figure :ref:`fig:tour` (bottom).
 
 .. figure:: tour.pdf
     :scale: 60%
@@ -323,9 +342,73 @@ Onsets, tempo, and beats
     (``librosa.onset.onset_detect``), and detected beat events (``librosa.beat.beat_track``) for ``y``.
     :label:`fig:tour`
 
+Tying this all together, the tempo and beat positions for an input signal can be easily calculated by the
+following code fragment:
+
+.. code-block:: python
+
+    >>> y, sr = librosa.load(FILENAME)
+    >>> tempo, frames = librosa.beat.beat_track(y=y,
+    ...                                         sr=sr)
+    >>> beat_times = librosa.frames_to_time(frames,
+    ...                                     sr=sr)
+
+Any of the default parameters and analyses may be overridden.  For example, if the user
+has calculated an onset strength envelope by some other means, it can be provided to the
+beat tracker as follows:
+
+.. code-block:: python
+
+    >>> oenv = some_other_onset_function(y, sr)
+    >>> librosa.beat.beat_track(onset_envelope=oenv)
+
+
+All detection functions (beat and onset) return events as frame indices, rather than
+absolute timing.
+The downside of this is that it is left to the user to convert frame indices back to
+absolute time.
+However, in our opinion, this is outweighed by two practical benefits: it simplifies the 
+implementations, and it makes the results directly accessible to frame-indexed functions
+such as ``librosa.feature.sync``.
+
 
 Structural analysis
 ===================
+
+Onsets and beats provide relatively low-level timing cues for music signal processing.
+Higher-level analyses attempt to detect larger structure in music, e.g., at the level of
+bars or functional components such as *verse* and *chorus*.  While this is an active
+area of research that has seen rapid progress in recent years, there are some useful
+features common to many approaches.
+The ``segment`` submodule contains a few useful functions to facilitate structural analysis
+in music, falling broadly into two categories.
+
+First, there are functions to calculate and manipulate *recurrence* or *self-similarity* plots.
+The ``segment.recurrence_matrix`` constructs a binary *k*-nearest-neighbor similarity matrix from a given
+feature array and a user-specified distance function.  As displayed in Figure :ref:`fig:rec` (left),
+repeating sequences often appear as diagonal bands in the recurrence plot, which can be used to detect
+musical structure.  It is sometimes more convenient to operate in *time*-*lag* coordinates, rather than
+*time*-*time*, which transforms diagonal structures into more easily detectable horizontal structures (Figure
+:ref:`fig:rec`, right) [Serra12]_. 
+This is facilitated by the ``recurrence_to_lag`` (and ``lag_to_recurrence``) functions.
+
+.. figure:: recurrence.pdf
+    :scale: 50%
+    :figclass: wt
+
+    Left: the recurrence plot derived from the chroma features displayed in Figure :ref:`fig:feature`
+    (bottom).
+    Right: the time-lag plot derived from the recurrence plot.
+    :label:`fig:rec`
+
+
+Second, temporally constrained clustering to detect feature change-points without relying upon repetition.
+This is implemented in librosa by the ``segment.agglomerative`` function, which uses ``scikit-learn``'s 
+implementation of Ward's agglomerative clustering method [Ward63]_ to partition the input into a user-defined 
+number of contiguous components.  In practice, a user can override the default clustering parameters by
+providing an existing ``sklearn.cluster.AgglomerativeClustering`` object as an argument to
+``segment.agglomerative()``.
+
 
 Decompositions
 ==============
@@ -342,13 +425,6 @@ Caching
 
 scikit-learn integration
 ========================
-
-Filter bank construction
-========================
-
-Utilities
-=========
-
 
 
 
@@ -412,3 +488,19 @@ References
               Stephan Hoyer, Alistair Miles, et al. 
               *Seaborn: v0.5.0 (November 2014).*
               ZENODO, 2014. doi:10.5281/zenodo.12710.
+
+.. [Boeck12] Böck, Sebastian, Florian Krebs, and Markus Schedl.
+             *Evaluating the Online Capabilities of Onset Detection Methods.*
+             In ISMIR, pp. 49-54. 2012.
+
+.. [Ellis07] Ellis, Daniel P.W.
+             *Beat tracking by dynamic programming.*
+             Journal of New Music Research 36, no. 1 (2007): 51-60.
+
+.. [Serra12] Serra, Joan, Meinard Müller, Peter Grosche, and Josep Lluis Arcos. 
+             *Unsupervised detection of music boundaries by time series structure features.*
+             In Twenty-Sixth AAAI Conference on Artificial Intelligence. 2012.
+
+.. [Ward63] Ward Jr, Joe H. 
+            *Hierarchical grouping to optimize an objective function.*
+            Journal of the American statistical association 58, no. 301 (1963): 236-244.
