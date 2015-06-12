@@ -63,32 +63,60 @@ high-quality machine learning libraries such as ``scikit-learn`` and tools based
 web services.
 However, without a stable core library to provide the basic
 routines upon which many MIR applications are built, adoption of Python has been slow.
-To remedy this situation, we have developed ``librosa``: a python package for audio
+To remedy this situation, we have developed ``librosa``:[#]_ a python package for audio
 and music signal processing. [#]_
 In doing so, we hope to both ease the transition into Python (and modern software
 development practices) for MIR researchers, and 
 make core MIR techniques readily available to the broader community of scientists and 
 Python programmers.
 
-.. [#] The name `librosa` is borrowed from `LabROSA`: the LABoratory for the Recognition
-    and Organization of Speech and Audio at Columbia University.
+.. [#] https://github.com/bmcfee/librosa
 
-Beginnings
-==========
+.. [#] The name `librosa` is borrowed from `LabROSA`: the LABoratory for the Recognition
+    and Organization of Speech and Audio at Columbia University, where much of the development
+    of librosa took place.
 
 
 Design principles
 =================
 
+In designing librosa, we prioritized a few key concepts.
+First, we strive for a low barrier to entry for researchers familiar with MATLAB.
+In particular, we opted for a relatively flat package layout, and following ``scipy``, 
+rely upon ``numpy`` data types and functions, rather than abstract class hierarchies.
 
-- Low barrier to entry for MATLAB users
-    - no objects or class hierarchies
-    - make code readable, documented, and tested
-- Follow SciPy idioms
-- Don't reinvent wheels
-- Provide consistent interfaces, standardized parameter settings
-- Be modular and pluggable
+Second, we expended considerable effort in standardizing interfaces, variable names, 
+and (default) parameter settings across the various analysis functions.
+This task was complicated by the fact that reference implementations from which 
+our implementations are derived come from various authors, and are often designed 
+as one-off scripts rather than proper library functions with well-defined interfaces.
 
+Third, wherever possible, we retain backwards compatibility against existing reference
+implementations.
+This is achieved via regression testing for numerical equivalence of outputs.
+All tests are implemented in the ``nose`` framework.[#]_
+
+.. [#] https://nose.readthedocs.org/en/latest/
+
+Fourth, because MIR is a rapidly evolving field, we recognize that the
+exact implementations provided by librosa may not represent the state of the art
+for any particular task.  Consequently, functions are designed to be `modular`,
+allowing practitioners to provide their own functions when appropriate, e.g.,
+a custom onset strength estimate may be provided to the beat tracker as a function
+argument.
+This allows researchers to leverage existing library functions while experimenting with 
+improvements to specific components.  Although this seems simple and obvious, from a practical 
+standpoint, the monolithic designs and lack of interoperability between different research codebases
+has often made this difficult in the past.
+
+Finally, we strive for readable code, thorough documentation, and exhaustive testing.
+All development is conducted on GitHub.  
+We apply modern software development practices, such as continuous integration testing (via Travis [#]_) and
+coverage (via Coveralls [#]_).
+All functions are thoroughly documented using Sphinx, and include example code demonstrating usage.
+
+.. [#] https://travis-ci.org
+.. [#] https://coveralls.io
 
 Conventions
 ===========
@@ -135,11 +163,13 @@ Feature arrays are organized column-major (Fortran style) in memory, so that com
 access patterns benefit from cache locality.
 
 
+
 Package organization
 --------------------
 
 In this section, we give a brief overview of the structure of the librosa software
-package.
+package.  This overview is not intended as a complete API reference, which can be found at
+https://bmcfee.github.io/librosa.
 
 
 Core
@@ -153,11 +183,11 @@ the package hierarchy, e.g., ``librosa.core.load`` is aliased to ``librosa.load`
 
 
 
-Display
-=======
-
 Spectral features
 =================
+
+Display
+=======
 
 Decompositions
 ==============
@@ -203,6 +233,9 @@ Utilities
 As you can see in Figure :ref:`fig:tour`, this is how you reference auto-numbered
 figures.
 
+
+Parameter tuning
+----------------
 
 Future directions
 -----------------
