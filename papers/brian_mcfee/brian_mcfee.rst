@@ -302,10 +302,12 @@ depicted in Figure :ref:`fig:tour` (top).
 The second function, ``display.specshow`` wraps matplotlib's ``imshow`` function with default settings
 (``origin`` and ``aspect``) adapted to the expected defaults for visualizing spectrograms.  Additionally,
 ``specshow`` dynamically selects appropriate colormaps (binary, sequential, or diverging) from the data 
-type and range.
+type and range. [#]_
 Finally, ``specshow`` provides a variety of acoustically relevant axis labeling and scaling parameters.
 Examples of ``specshow`` output are displayed in Figures :ref:`fig:feature` and :ref:`fig:tour` (middle).
 
+.. [#] If the ``seaborn`` package [Waskom14]_ is available, its version of *cubehelix* is used for sequential
+       data.
 
 Onsets, tempo, and beats
 ========================
@@ -321,8 +323,6 @@ Onsets, tempo, and beats
     (``librosa.onset.onset_detect``), and detected beat events (``librosa.beat.beat_track``) for ``y``.
     :label:`fig:tour`
 
-As you can see in Figure :ref:`fig:tour`, this is how you reference auto-numbered
-figures.
 
 Structural analysis
 ===================
@@ -407,3 +407,8 @@ References
 
 .. [Hunter07] Hunter, John D. *Matplotlib: A 2D graphics environment.*
               Computing in science and engineering 9, no. 3 (2007): 90-95.
+
+.. [Waskom14] Michael Waskom, Olga Botvinnik, Paul Hobson, John B. Cole, Yaroslav Halchenko, 
+              Stephan Hoyer, Alistair Miles, et al. 
+              *Seaborn: v0.5.0 (November 2014).*
+              ZENODO, 2014. doi:10.5281/zenodo.12710.
