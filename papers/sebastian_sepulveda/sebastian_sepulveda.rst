@@ -135,7 +135,7 @@ The software presented in this work is able to work with a serial port data stre
 
 In general, the sampling rate on serial communications would be limited to the baud rate of the transmission and how the data is transfered. In general, in a common 115200/8N1 serial configuration, a bit is transfered every 8.68055 microseconds. A transfer will be composed for 8 bits, plus an ending bit, giving 78.12495 microseconds per transfer. This gives a maximum sampling rate 12.8 KHz for a byte. This will be lowered every time another character is added to the transfer. As mentioned in the example, we reached a 2 KHz using 4 digits (4 bytes), plus to characters for the carriage return and new line (to match the CSV format), giving us 6 bytes transfered at 2 KHz (2333.33469 Hz, to be precise).
 
-In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. The software was customized to acquire and record data. We also added some steps of the fatigue estimation algorithm [CITE] to the processing pipeline. In this case we found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly positioned, drastically reducing the amount of time required by the experiments.
+In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. The software was customized to acquire and record data. We also added some steps of the fatigue estimation algorithm [F]_ to the processing pipeline. In this case we found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly positioned, drastically reducing the amount of time required by the experiments.
 
 Figure :ref:`emg` shows a screen shot of the program while acquiring an EMG signal from a study using wearables devices to study fatigue in muscles. Figure :ref:`device` shows a photo of the device connected through the serial port.
 
@@ -176,14 +176,18 @@ Electronic Engineering, Basal Project FB0008, Conicyt.
 References
 ----------
 .. [A] L. Campagnola. *PyQtGraph. Scientific Graphics and GUI Library for Python*,
+        http://www.pyqtgraph.org/
 
 .. [B] J. D. Hunter. *Matplotlib: A 2D graphics environment*,
-			Computing In Science \& Engineering, 9(3):90-95, IEEE COMPUTER SOC, 2007.
+        Computing In Science & Engineering, 9(3):90-95, IEEE COMPUTER SOC, 2007.
 
-.. [D] https://docs.python.org/2/library/multiprocessing.html
+.. [D] Python Software Foundation, *16.6 multiprocessing - Process-based “threading” interface*,
+        https://docs.python.org/2/library/multiprocessing.html
 
-.. [E] Beazley, David. *Understanding the python gil*, In PyCON Python Conference. Atlanta, Georgia. 2010.
+.. [E] Beazley, David. *Understanding the python gil*,
+        In PyCON Python Conference. Atlanta, Georgia. 2010.
 
-
+.. [F] S. Madgwick, Andrew JL Harrison, and Ravi Vaidyanathan. *Estimation of IMU and MARG orientation using a gradient descent algorithm.*,
+        Rehabilitation Robotics (ICORR), 2011 IEEE International Conference on. IEEE, 2011.
 
 ..  LocalWords:  electromyography SciPy NumPy biomedical RaspberryPi PySerial multiprocess
