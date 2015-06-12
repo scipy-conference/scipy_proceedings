@@ -114,6 +114,10 @@ All development is conducted on GitHub.
 We apply modern software development practices, such as continuous integration testing (via Travis [#]_) and
 coverage (via Coveralls [#]_).
 All functions are thoroughly documented using Sphinx, and include example code demonstrating usage.
+Librosa mostly complies with PEP-8 recommendations, with a small set of exceptions for variable names 
+that make the code more concise without sacrificing clarity |---| 
+e.g., ``y`` and ``sr`` are preferred over ``audio_buffer`` and ``sampling_rate`` |---| 
+and limits on the number of function parameters in certain cases.
 
 .. [#] https://travis-ci.org
 .. [#] https://coveralls.io
@@ -146,7 +150,7 @@ but over small `frames` of the signal which are spaced by a `hop length` (in sam
 Librosa uses default frame and hop lengths of 2048 and 512 samples, respectively.
 At the default sampling rate of 22050 Hz, this corresponds to overlapping frames of 
 approximately 93ms spaced by 23ms.
-Frames are centered by default, so frame index ``t`` corresponds to the time interval::
+Frames are centered by default, so frame index ``t`` corresponds to the half-open time interval::
 
     [t - frame_length / 2, t + frame_length /2),
 
