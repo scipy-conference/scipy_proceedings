@@ -26,7 +26,7 @@ pyDEM: Global Digital Elevation Model Analysis
 
    Hydrological terrain analysis is important for applications such as environmental resource, agriculture, and flood risk management. It is based on processing of high-resolution, tiled digital elevation model (DEM) data for geographic regions of interest.  A major challenge in global hydrological terrain analysis is addressing cross-tile dependencies that arise from the tiled nature of the underlying DEM data, which is too large to hold in memory as a single array. We are not aware of existing tools that can accurately and efficiently perform global terrain analysis within current memory and computational constraints. We solved this problem by implementing a new algorithm in Python, which uses a simple but robust file-based locking mechanism to coordinate the work flow between an arbitrary number of independent processes operating on separate DEM tiles. 
 
-We used this system to analyze the conterminous US’s terrain at 30m resolution in under 3 days on a single compute node, and global terrain at 90m in under 4 days. Our solution is implemented and made available as pyDEM, an open source Python/Cython library that enables global geospatial terrain analysis. We will describe our algorithm for calculating various terrain analysis parameters of interest, our file-based locking mechanism to coordinate the work between processors, and optimization using Cython. We will demonstrate pyDEM on a few example test cases, as well as real DEM data. 
+We used this system to analyze the conterminous US’s terrain at 1 arc-second resolution in under 3 days on a single compute node, and global terrain at 3 arc-second resolution in under 4 days. Our solution is implemented and made available as pyDEM, an open source Python/Cython library that enables global geospatial terrain analysis. We will describe our algorithm for calculating various terrain analysis parameters of interest, our file-based locking mechanism to coordinate the work between processors, and optimization using Cython. We will demonstrate pyDEM on a few example test cases, as well as real DEM data. 
 
 
 .. class:: keywords
@@ -214,10 +214,10 @@ pyDEM was also verified against tauDEM using the all of the above test cases (no
 Finally, to verify that pyDEM is efficient, robust, and accurate for real data-sets, we calculated TWI over the conterminous US (Figure :ref:`conus`). In the figure, the spurious black areas are due to the interpolation of no data-values of our geoTiff viewer. The full calculation took approximately 3 days on a 32 core AWS compute node. Figure :ref:`edges` (left) shows the UCA for a small region in Austin, TX from this calculation.
   
 .. figure:: conus_twi.png
-   :scale: 80%
+   :scale: 70%
    :figclass: w
    
-   To verify pyDEM's performance over a large dataset, TWI was calculated for the 30m resolution US National Elevation Database. :label:`conus`
+   To verify pyDEM's performance over a large data set, TWI was calculated for the 1 arc-second resolution US National Elevation Database (shown with hill-shading overlay). :label:`conus`
 
 --------   
    
@@ -238,7 +238,7 @@ Acknowledgments
 The authors are grateful to the Cold Regions Research and Engineering Laboratory for support under the SBIR grant W913E5-14-C-0002.
 
 -----------
-
+ 
 References
 -----------
 .. [beven79] Beven, K.J.; Kirkby, M. J.; Seibert, J. (1979). "A physically based, variable contributing area model of basin hydrology". Hydrolological Science Bulletin 24: 43–69
