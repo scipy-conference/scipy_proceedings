@@ -127,40 +127,24 @@ The template for the communication process is implemented through the ``Communic
 Results
 -------
 
-The developed software has been tested under different acquisition methods, operative systems and platforms. The initial development was done and tested under Linux (x86, x64 and ARM), with Python 2.7 installations from the repositories and from the Anaconda installer.
-
-At the initial development of software, it worked on all the platforms, and we tested it on OSX and in Windows. In the search for better performance, the software wouldn't work as expected on this OS, due to problems with the multiprocessing library. Despite that multiprocessing library is multiplatform, there are know problems using it in this OSes.
-
- - OSX: Despite the architecture of the kernel is almost the same as Linux, there are methods not implemented under OSX, such as the method to request the current queue size, which doesn't allow the application to run under OSX.
-
- - Windows: there are know problems regarding the multiprocessing library. The multiprocessing uses the fork system call, creating child processes that shares the sames resources. On Windows, the child process can't access to the parent resources. In this context, the multiprocessing documentation offers some guidelines to use the library on Windows, in consideration that Windows lacks of the fork call. Even following those guidelines, the software can't be run properly on Windows. Some others workarounds where found, that could lead to an usable application.
-
-In development, the software reached up to 2 KHz of sampling rate for a 32 bit data transmitted trough serial as it's ASCII represented integer. The sampling rate using ASCII transfers is limited to the amount of data to been transmitted, principally.
-In production, the software was used to transform a 1024 byte packet every 500 ms trough a socket connection, where up to 20 signal data where included, with sampling rates up to 500 Hz, and plotted without problems in real time.
-
-Another important result for the software is how easy is to customize it to a specific application. We provide some use cases where some examples of usage and application are listed.
-
-Use cases
-=========
-In the field of biomedical engineering, Sebastian Lobos modified the software to monitor an acquisition system for his master thesis. He is developing a device capable of monitor and diagnose nutrition disorders in premature infants. He customized the software to (1) acquire two signals and (2) do specific signal processing to display the results of the monitoring.
-
-Figure ww
+The software presented in this work is able to work with a serial port data stream of ASCII data, representing 32 bit integers values, corresponding to a sampling frequency of 2 kilohertz (CUANTAS SEÑALES?????????). It is also able to work with a socket data stream consisting of 20 signals with a sampling rate of 500 hertz. 
 
 In a study, a prototype of a device was used to acquire signals of EMG using wearable technology, to determinate the fatigue of muscles. The software was customized to acquire data of the volunteers and also record the data, processing in real time the information. The researchers found that, having the real time feedback of the signal allowed them to determine if the wearable device was correctly positioned, drastically reducing the amount of repetitions of the acquisition.
 
-Figure xx shows a screenshot of the program showing an EMG signal.
+Figure xx shows a screenshot of the program while acquiring an EMG signal from a . Figure yy shows a photo of the device connected through the serial port.
 
-Figure yy shows a photo of the device connected through the serial port.
+An important feature of our program is the easiness to customize it to a specific application. For instance, the software is being used to acquire a set of pressure signals from a device used to monitor monitor nutrition disorders in premature infants. The customization included: (1) modifying the software acquire two pressure signals from the serial port; and (2) to perform some specific signal processing before displaying  to display the results of the monitoring.
+
+Figure ww
 
 See the following links for two examples where the software is used to acquire EMG signals from different devices: http://bit.ly/1BHObxL, http://bit.ly/1Ex0Ydy.
 
+The software presented in this work has been tested with different devices, communication protocols, platforms and operating systems (OSs). The initial development was done and tested on the platforms x86, x64 and ARM (RaspberryPy) running Linux. However, this version of the software did not worked as expected on OS X and Windows, due to some restrictions of the multiprocessing library in these OSs. Despite the fact that OS X is a Unix-like OS, there are some multiprocessing methods not implemented in the multiprocessing library. In particular, the method ``qsize``, used to get the approximated size of the queue, is not implemented in OS X. The lack of the ``os.fork()`` call in Windows add some extra limitation when running a program on this OS. Since in this case a child process can not access the parent resources, it is necessary that subclasses of the ``Process`` class must be picklable. Although the documentation of the library contains some suggestions to overcome this restrictions, currently we are not able to run our program on Windows.
 
 Conclusions
 -----------
 We are awesome.
 
-Future work
-===========
 This software could lead to good solution for rapid prototyping and for the growing community based on the open source and DIY. Has shown in the Use cases, most of the devices are prototyped with development platforms like Arduino. This software could help in the development of similar projects, even in more general engineering projects or others fields. A more general software could be developed to enable the DIY and electronics enthusiast to have simple tools to start in the electronics and programming world.
 
 A friendly UI, with customization of the plots trough UI instead of the code is a must to make a replacement for applications such as LabView or MATLAB solutions.
