@@ -129,13 +129,11 @@ Results
 
 The software presented in this work is able to work with a serial port data stream of ASCII data, representing 32 bit integers values, corresponding to a sampling frequency of 2 kilohertz (CUANTAS SEÑALES?????????). It is also able to work with a socket data stream consisting of 20 signals with a sampling rate of 500 hertz. 
 
-In a study, a prototype of a device was used to acquire signals of EMG using wearable technology, to determinate the fatigue of muscles. The software was customized to acquire data of the volunteers and also record the data, processing in real time the information. The researchers found that, having the real time feedback of the signal allowed them to determine if the wearable device was correctly positioned, drastically reducing the amount of repetitions of the acquisition.
+In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. The software was customized to acquire and record data. We also added some steps of the fatigue estimation algorithm [CITE] to the processing pipeline. In this case we found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly positioned, drastically reducing the amount of time required by the experiments.
 
 Figure xx shows a screenshot of the program while acquiring an EMG signal from a . Figure yy shows a photo of the device connected through the serial port.
 
-An important feature of our program is the easiness to customize it to a specific application. For instance, the software is being used to acquire a set of pressure signals from a device used to monitor monitor nutrition disorders in premature infants. The customization included: (1) modifying the software acquire two pressure signals from the serial port; and (2) to perform some specific signal processing before displaying  to display the results of the monitoring.
-
-Figure ww
+An important feature of our program is the easiness to customize it to a specific application. For instance, the software is being used to acquire a set of pressure signals from a device used to monitor monitor nutrition disorders in premature infants. The customization included: (1) modifying the software acquire two pressure signals from the serial port; and (2) to perform some specific signal processing before displaying  to display the results of the monitoring. In this example it is important to emphasize that the changes to the program were made by a researcher different than the main developer of our program. We claim that this is possible because our program is written in Python. This makes it easier to understand and modify the code than a program written in a lower level language.
 
 See the following links for two examples where the software is used to acquire EMG signals from different devices: http://bit.ly/1BHObxL, http://bit.ly/1Ex0Ydy.
 
@@ -143,7 +141,6 @@ The software presented in this work has been tested with different devices, comm
 
 Conclusions
 -----------
-We are awesome.
 
 This software could lead to good solution for rapid prototyping and for the growing community based on the open source and DIY. Has shown in the Use cases, most of the devices are prototyped with development platforms like Arduino. This software could help in the development of similar projects, even in more general engineering projects or others fields. A more general software could be developed to enable the DIY and electronics enthusiast to have simple tools to start in the electronics and programming world.
 
