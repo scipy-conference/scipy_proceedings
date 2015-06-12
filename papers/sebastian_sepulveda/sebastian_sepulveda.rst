@@ -56,7 +56,7 @@ Real time visualization is a key component of our program. To satisfy our requir
 
 We used Matplotlib [B]_ in the first version of the program. This option worked out of the box. We were able to embed a Matplotlib plot in the GUI and interact with it trough other elements of the UI without major complications. Although this approach worked for displaying one signal with a sampling rate of 30 hertz, we started to notice a degradation on performance as we increased the number of signals. It is important to notice that this is not a flaw of Matplotlib, since the main focus of the library is the production of publication of quality figures, and not the display of real time data.
 
-Next, we tried was PyQtGraph [?]_. It is a pure Python implementation, with a focus on speed, portability and a rich set of features. Unlike the previous libraries that we tried, PyQtGraph was designed to do real time plotting. It is also designed to do interactive image analysis. It is built on top of PyQt4/PySide, giving easy integration and full compatibility with the Qt framework. This allows the use of tools like Qt Designer to design the GUI. Using Qt Designer and the examples provides with the PyQtGraph library, it is easy to configure and customize the widgets. PyQtGraph is also built on top of NumPy, facilitating and improving the performance of the manipulation of numerical data. In addition, PyQtGraph wraps up some NumPy/SciPy signal processing functions such as the Fast Fourier Transform and some linear and non-linear filters. [#]_
+Next, we tried was PyQtGraph [A]_. It is a pure Python implementation, with a focus on speed, portability and a rich set of features. Unlike the previous libraries that we tried, PyQtGraph was designed to do real time plotting. It is also designed to do interactive image analysis. It is built on top of PyQt4/PySide, giving easy integration and full compatibility with the Qt framework. This allows the use of tools like Qt Designer to design the GUI. Using Qt Designer and the examples provides with the PyQtGraph library, it is easy to configure and customize the widgets. PyQtGraph is also built on top of NumPy, facilitating and improving the performance of the manipulation of numerical data. In addition, PyQtGraph wraps up some NumPy/SciPy signal processing functions such as the Fast Fourier Transform and some linear and non-linear filters. [#]_
 
 .. [#] We also evaluated the PyQwt library (http://qwt.sourceforge.net/). This library provides a Python interface to the Qwt library. It is a light implementation with an easy QT integration. It is fast enough to support real time display of the data. However, this library is not currently maintained, and its author recommend using PyQtGraph (see http://comments.gmane.org/gmane.comp.graphics.qwt.python/506).
 
@@ -89,7 +89,7 @@ Figure :ref:`figSWarch` shows the architecture of the software. The architecture
 Programming details
 -------------------
 
-The template for the communication process is implemented through the ``CommunicationProcess`` class. This template allows to process data streams coming from a variety of protocols (serial, sockets, bluetooth, etc.). The design of the class  also allows changing some of the communication parameters during run-time. In addition, since the class inherits from the ``Process`` class, it is trivial to run several instances of the class to receive from multiple devices simultaneously. For instance, it is possible to instantiate the class twice to receive data form two different serial ports at the same time. The following code snippet shows how the basic structure of the class. 
+The template for the communication process is implemented through the ``CommunicationProcess`` class. This template allows to process data streams coming from a variety of protocols (serial, sockets, bluetooth, etc.). The design of the class  also allows changing some of the communication parameters during run-time. In addition, since the class inherits from the ``Process`` class, it is trivial to run several instances of the class to receive from multiple devices simultaneously. For instance, it is possible to instantiate the class twice to receive data form two different serial ports at the same time. The following code snippet shows how the basic structure of the class. The figure :ref:`usage` shows how the architecture of the program would work as processes managed by the OS.
 
 .. code-block:: python
 
@@ -123,19 +123,25 @@ The template for the communication process is implemented through the ``Communic
             def closePort():
                 self.exit.set()
 
+.. figure:: usage.png
+
+   The screen shot shows the htop tool while running the software. This tools allows to see the processes running filtered by the software. In the screen shot, the process PID 1082 corresponds to the first process initiated by the application. The process PID 1178 corresponds to the acquisition process, child process of the PID 1082. The other child are threads in the corresponding processes, principally for the Qt elements. :label:`usage`
+
 
 Results
 -------
 
-The software presented in this work is able to work with a serial port data stream of ASCII data, representing one signal of 32 bit integers values, corresponding to a sampling frequency of 2 kilohertz. It is also able to work with a socket data stream consisting of 20 signals with a sampling rate of 500 hertz. 
+The software presented in this work is able to work with a serial port data stream of ASCII data, representing one signal with 4 digits, corresponding to a sampling frequency of 2 kilohertz. It is also able to work with a socket data stream consisting of 20 signals with a sampling rate of 500 hertz.
+
+In general, the sampling rate on serial communications would be limited to the baud rate of the transmission and how the data is transfered. In general, in a common 115200/8N1 serial configuration, a bit is transfered every 8.68055 microseconds. A transfer will be composed for 8 bits, plus an ending bit, giving 78.12495 microseconds per transfer. This gives a maximum sampling rate 12.8 KHz for a byte. This will be lowered every time another character is added to the transfer. As mentioned in the example, we reached a 2 KHz using 4 digits (4 bytes), plus to characters for the carriage return and new line (to match the CSV format), giving us 6 bytes transfered at 2 KHz (2333.33469 Hz, to be precise).
 
 In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. The software was customized to acquire and record data. We also added some steps of the fatigue estimation algorithm [CITE] to the processing pipeline. In this case we found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly positioned, drastically reducing the amount of time required by the experiments.
 
-Figure :ref:`emg` shows a screenshot of the program while acquiring an EMG signal from a study using wearables devices to study fatigue in muscles. Figure :ref:`device` shows a photo of the device connected through the serial port.
+Figure :ref:`emg` shows a screen shot of the program while acquiring an EMG signal from a study using wearables devices to study fatigue in muscles. Figure :ref:`device` shows a photo of the device connected through the serial port.
 
 .. figure:: emg.png
     
-    Screenshot of the software customized and modified to display 3 signals, an EMG signal, followed by the proccessed signal to calculate the fatigue indicator, and finally three signals of acceleration, corresponding for the three axis. :label:`emg`
+    Screen shot of the software customized and modified to display 3 signals, an EMG signal, followed by the processed signal to calculate the fatigue indicator, and finally three signals of acceleration, corresponding for the three axis. :label:`emg`
 
 .. figure:: emg.png
     
@@ -158,7 +164,7 @@ We also believe that our solution is a contribution to the open source and Do It
 
 This software could lead to good solution for rapid prototyping and for the growing community based on the open source and DIY. Has shown in the Use cases, most of the devices are prototyped with development platforms like Arduino. This software could help in the development of similar projects, even in more general engineering projects or others fields. A more general software could be developed to enable the DIY and electronics enthusiast to have simple tools to start in the electronics and programming world.
 
-In the future our first priority is to make our program work in platforms running OS X and Windows. We are currently investigating how to overcome the restriction imposed by the multiprocessing platform on these OSs. Next, we will focus on improving the UI. In particular, we will add the option to change the software behavior, in terms of plot and processing parameters, on the fly, instead of requiring a change in the source code. Finally, we will refactor the architecture of the program to improve the performance, so we can handle higher data rates. In this respect, the main change we plan to do is to move the signal processing computation to another process, leveraging the existence of multi-core machines. (PROBABLEMENTE MAL REDACTADO. REVISAR).
+In the future our first priority is to make our program work in platforms running OS X and Windows. We are currently investigating how to overcome the restriction imposed by the multiprocessing platform on these OSs. Next, we will focus on improving the UI. In particular, we will add the option to change the software behavior, in terms of plot and processing parameters, on the fly, instead of requiring a change in the source code. Finally, we will refactor the architecture of the program to improve the performance, so we can handle higher data rates. In this respect, the main change we plan to do is to move the signal processing computation to another process, leveraging the existence of multi-core machines.
 
 
 Acknowledgments
