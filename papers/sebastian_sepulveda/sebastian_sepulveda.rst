@@ -28,7 +28,6 @@ This work presents a software, written in Python, to visualize and record in rea
 Introduction
 ------------
 
-
 A common task in biomedical research is to record and visualize in real time physiological signals. Although there are several options to do this, they are commonly based on  proprietary tools, associated to a particular signal acquisition device vendor. This work presents an open source software, written in Python, to visualize and record in real time physiological signals, such as electrocardiography, electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source [#]_  and extensible. It is easy to add new signal processing tasks and to use different signal sources (serial, Bluetooth, Sockets, etc.), and customize the user interface for the applications needs.
 
 .. [#] Available at https://github.com/ssepulveda/RTGraph.
@@ -89,11 +88,12 @@ Figure :ref:`figSWarch` shows the architecture of the software. The architecture
 
 Programming details
 -------------------
-The importance on the structure of the acquisition process is to meet the class structure. In this ways, different acquisition methods, such as serial, wireless or sockets, can be used with minimal modification, inclusive; could be selected and changed while the application is running. Also, being a process by them self, it's possible to run different instances of the same acquisition method. The code snippet shows how this basic structure is implemented.
+
+The template for the communication process is implemented through the ``CommunicationProcess`` class. This template allows to process data streams coming from a variety of protocols (serial, sockets, bluetooth, etc.). The design of the class  also allows changing some of the communication parameters during run-time. In addition, since the class inherits from the ``Process`` class, it is trivial to run several instances of the class to receive from multiple devices simultaneously. For instance, it is possible to instantiate the class twice to receive data form two different serial ports at the same time. The following code snippet shows how the basic structure of the class. 
 
 .. code-block:: python
 
-	class AcquisitionProcess(Process):
+	class CommunicationProcess(Process):
 	    def __init__(self, queue):
 	        Process.__init__(self)
             self.exit = Event()
