@@ -485,6 +485,68 @@ scikit-learn integration
 
 Parameter tuning
 ----------------
+Some of librosa's functions have parameters that require some degree of tuning to
+optimize performance.  In particular, the performance of the beat tracker and 
+onset detection functions can vary substantially with small changes in certain key
+parameters.
+
+After standardizing certain default parameters |---| sampling rate, frame length, and 
+hop length |---| across all functions, we optimized the beat tracker settings using the
+parameter grid given in Table :ref:`tab:beat`.  To select the best-performing
+configuration, we evaluated the performance on a data set comprised of the Isophonics
+Beatles corpus [#]_ and the SMC Dataset2 [Holzapfel12]_ beat annotations.
+Each configuration was evaluated using ``mir_eval`` [Raffel14]_, and the configuration
+was chosen to maximize the Correct Metric Level (Total) metric [Davies14]_.
+
+.. [#] http://isophonics.net/content/reference-annotations
+
+Similarly, the onset detection parameters (listed in Table :ref:`tab:onset`) were optimized
+over the Johannes Kepler University onset database. [#]_
+
+.. [#] https://github.com/CPJKU/onset_db
+
+.. table:: The parameter grid for beat tracking optimization. The best configuration is indicated in bold. :label:`tab:beat`
+
+    +---------------+------------------------------------+-------------------+
+    | Parameter     | Description                        | Values            | 
+    +===============+====================================+===================+
+    | ``fmax``      | Maximum frequency value (Hz)       | 8000, **11025**   |
+    +---------------+------------------------------------+-------------------+
+    | ``n_mels``    | Number of Mel bands                | 32, 64, **128**   |
+    +---------------+------------------------------------+-------------------+
+    | ``aggregate`` | Spectral flux aggregation function | ``np.mean``,      |
+    |               |                                    | **np.median**     |
+    +---------------+------------------------------------+-------------------+
+    | ``ac_size``   | Maximum lag for onset              |                   |
+    |               | autocorrelation (s)                | 2, **4**, 8       |
+    +---------------+------------------------------------+-------------------+
+    | ``std_bpm``   | Deviation of tempo estimates       | 0.5, **1.0**, 2.0 |
+    |               | from 120.0 BPM                     |                   |
+    +---------------+------------------------------------+-------------------+
+    | ``tightness`` | Penalty for deviation from         |                   |
+    |               | estimated tempo                    | 50, **100**, 400  |
+    +---------------+------------------------------------+-------------------+
+
+.. table:: The parameter grid for onest detection optimization. The best configuration is indicated in bold. :label:`tab:onset`
+
+    +---------------+-----------------------------+----------------------+
+    | Parameter     | Description                 | Values               | 
+    +===============+=============================+======================+
+    | ``fmax``      | Maximum frequency value (Hz)| 8000, **11025**      |
+    +---------------+-----------------------------+----------------------+
+    | ``n_mels``    | Number of Mel bands         | 32, 64, **128**      |
+    +---------------+-----------------------------+----------------------+
+    | ``aggregate`` | Spectral flux aggregation   | **np.mean**,         |
+    |               | function                    | ``np.median``        |
+    +---------------+-----------------------------+----------------------+
+    | ``delta``     | Peak picking threshold      | 0.0--0.10 **(0.07)** |
+    +---------------+-----------------------------+----------------------+
+
+As the default parameter settings are subject to change as more annotated reference data becomes available,
+the parameter optimization routines have been factored out into a separate repository. [#]_
+
+.. [#] https://github.com/bmcfee/librosa_parameters
+
 
 Future directions
 -----------------
@@ -568,3 +630,15 @@ References
                   *Harmonic/percussive separation using median filtering.*
                   13th International Conference on Digital Audio Effects (DAFX10), Graz, Austria, 2010.
 
+
+.. [Holzapfel12] Holzapfel, Andre, Matthew E.P. Davies, José R. Zapata, João Lobato Oliveira, and Fabien Gouyon. 
+                 *Selective sampling for beat tracking evaluation.*
+                 Audio, Speech, and Language Processing, IEEE Transactions on 20, no. 9 (2012): 2539-2548.
+
+.. [Davies14] Davies, Matthew E.P., and Boeck, Sebastian.
+              *Evaluating the evaluation measures for beat tracking.*
+              In 15th International Society for Music Information Retrieval Conference (ISMIR 2014), 2014.
+
+.. [Raffel14] Raffel, Colin, Brian McFee, Eric J. Humphrey, Justin Salamon, Oriol Nieto, Dawen Liang, and Daniel PW Ellis.
+              *mir eval: A transparent implementation of common MIR metrics.*
+              In 15th International Society for Music Information Retrieval Conference (ISMIR 2014), pp. 367-372. 2014.
