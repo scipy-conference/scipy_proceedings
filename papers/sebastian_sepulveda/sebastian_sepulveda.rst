@@ -118,7 +118,7 @@ The template for the communication process is implemented through the ``Communic
             def openPort(self, port):
                 """
                 Port configuration to open
-            """
+                """
 
             def closePort():
                 self.exit.set()
@@ -131,7 +131,16 @@ The software presented in this work is able to work with a serial port data stre
 
 In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. The software was customized to acquire and record data. We also added some steps of the fatigue estimation algorithm [CITE] to the processing pipeline. In this case we found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly positioned, drastically reducing the amount of time required by the experiments.
 
-Figure xx shows a screenshot of the program while acquiring an EMG signal from a . Figure yy shows a photo of the device connected through the serial port.
+Figure :ref:`emg` shows a screenshot of the program while acquiring an EMG signal from a study using wearables devices to study fatigue in muscles. Figure :ref:`device` shows a photo of the device connected through the serial port.
+
+.. figure:: emg.png
+    
+    Screenshot of the software customized and modified to display 3 signals, an EMG signal, followed by the proccessed signal to calculate the fatigue indicator, and finally three signals of acceleration, corresponding for the three axis. :label:`emg`
+
+.. figure:: emg.png
+    
+    Photo of the prototype device used in the study. An Arduino development platform is used to acquire the signals, and transfered to a computer running the software. :label:`device`
+
 
 An important feature of our program is the easiness to customize it to a specific application. For instance, the software is being used to acquire a set of pressure signals from a device used to monitor monitor nutrition disorders in premature infants. The customization included: (1) modifying the software acquire two pressure signals from the serial port; and (2) to perform some specific signal processing before displaying  to display the results of the monitoring. In this example it is important to emphasize that the changes to the program were made by a researcher different than the main developer of our program. We claim that this is possible because our program is written in Python. This makes it easier to understand and modify the code than a program written in a lower level language.
 
