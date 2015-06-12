@@ -261,10 +261,17 @@ representations.
 
 In addition to Mel and chroma features, the ``feature`` submodule provides a number of spectral statistic
 representations, including ``spectral_centroid``, ``spectral_bandwidth``, ``spectral_rolloff`` [Klapuri07]_, and
-``spectral_contrast`` [Jiang02]_, which are derived from MATLAB implementations provided by the METLab [#]_ at
-Drexel University.
+``spectral_contrast`` [Jiang02]_. [#]_
 
-.. [#] http://music.ece.drexel.edu/
+.. [#] ``spectral_*`` functions are derived from MATLAB reference implementations provided by the METLab at Drexel University.  http://music.ece.drexel.edu/
+
+
+Finally, the ``feature`` module provides a few functions to implement common transformations of time-series
+features in MIR.  This includes ``delta``, which provides a smoothed estimate of the time derivative;
+``stack_memory``, which concatenates an input feature array with time-lagged copies of itself (effectively
+simulating feature *n*-grams); and ``sync``, which applies a user-supplied aggregation function (e.g., 
+``numpy.mean`` or ``median``) across specified column intervals.
+
 
 Display
 =======
