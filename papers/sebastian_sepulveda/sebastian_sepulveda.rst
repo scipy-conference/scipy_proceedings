@@ -127,7 +127,7 @@ The template for the communication process is implemented through the ``Communic
 Results
 -------
 
-The software presented in this work is able to work with a serial port data stream of ASCII data, representing 32 bit integers values, corresponding to a sampling frequency of 2 kilohertz (CUANTAS SEÑALES?????????). It is also able to work with a socket data stream consisting of 20 signals with a sampling rate of 500 hertz. 
+The software presented in this work is able to work with a serial port data stream of ASCII data, representing one signal of 32 bit integers values, corresponding to a sampling frequency of 2 kilohertz. It is also able to work with a socket data stream consisting of 20 signals with a sampling rate of 500 hertz. 
 
 In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. The software was customized to acquire and record data. We also added some steps of the fatigue estimation algorithm [CITE] to the processing pipeline. In this case we found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly positioned, drastically reducing the amount of time required by the experiments.
 
