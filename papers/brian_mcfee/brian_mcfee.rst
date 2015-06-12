@@ -413,8 +413,63 @@ providing an existing ``sklearn.cluster.AgglomerativeClustering`` object as an a
 Decompositions
 ==============
 
+Many applications in MIR operate upon latent factor representations, or other
+decompositions of spectrograms.  For example, it is common to apply non-negative matrix
+factorization (NMF) [Lee01] to magnitude spectra, and analyze the statistics of the 
+resulting time-varying activation functions, rather than the raw observations.
+
+The ``decompose`` module provides a simple interface to apply decomposition techniques to
+spectrograms (or general feature arrays)::
+
+    >>> comps, acts = librosa.decompose.decompose(S)
+
+By default, the ``decompose()`` function constructs a ``scikit-learn`` NMF object, and 
+applies its ``fit_transform()`` method to the transpose of ``S``.  The resulting
+basis components and activations are accordingly transposed, so that ``comps.dot(acts)``
+approximates ``S``.  If the user wishes to apply some other decomposition technique, any
+object fitting the ``sklearn.decomposition`` interface may be substituted::
+
+    >>> T = SomeDecomposer()
+    >>> librosa.decompose.decompose(S, transformer=T)
+
+In addition to general-purpose matrix decomposition techniques, librosa also implements
+the harmonic-percussive source separation (HPSS) method of Fitzgerald [Fitzgerald10]_
+as ``decompose.hpss``.
+This technique is commonly used in MIR to suppress transients when analyzing pitch
+content, or suppress stationary signals when detecting onsets or other rhythmic elements.
+An example application of HPSS is illustrated in Figure :ref:`fig:hpss`.
+
+
+.. figure:: hpss.pdf
+    :figclass: t
+
+    Top: the separated harmonic and percussive waveforms.
+    Middle: the Mel spectrogram of the harmonic component.
+    Bottom: the Mel spectrogram of the percussive component.
+    :label:`fig:hpss`
+
 Effects
 =======
+
+The ``effects`` module provides convenience functions for applying spectrogram-based
+transformations to time-domain signals.  For instance, rather than writing
+
+.. code-block:: python
+
+    >>> D = librosa.stft(y)
+    >>> Dh, Dp = librosa.decompose.hpss(D)
+    >>> y_harmonic = librosa.istft(Dh)
+
+one may simply write
+
+.. code-block:: python
+
+    >>> y_harmonic = librosa.effects.harmonic(y)
+
+Convenience functions are provided for HPSS (retaining the harmonic, percussive, or both
+components), time-stretching and pitch-shifting.  Although these functions provide no
+additional functionality to librosa, their inclusion often results in simpler, more
+readable application code.
 
 
 Advanced functionality
@@ -504,3 +559,12 @@ References
 .. [Ward63] Ward Jr, Joe H. 
             *Hierarchical grouping to optimize an objective function.*
             Journal of the American statistical association 58, no. 301 (1963): 236-244.
+
+.. [Lee01] Lee, Daniel D., and H. Sebastian Seung. 
+           *Algorithms for non-negative matrix factorization.*
+           In Advances in neural information processing systems, pp. 556-562. 2001.
+
+.. [Fitzgerald10] Fitzgerald, Derry. 
+                  *Harmonic/percussive separation using median filtering.*
+                  13th International Conference on Digital Audio Effects (DAFX10), Graz, Austria, 2010.
+
