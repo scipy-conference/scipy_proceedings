@@ -254,10 +254,25 @@ octave height, loudness, or timbre.  Librosa provides two flexible chroma implem
 fixed-window STFT analysis (``chroma_stft``) [#]_ and one using variable-window constant-Q transform analysis
 (``chroma_cqt``).
 Figure :ref:`fig:feature` illustrates the difference between STFT, Mel spectrogram, and chromagram
-representations.
+representations, as constructed by the following code fragment: [#]_
+
+.. code-block:: python
+
+    >>> filename = librosa.util.example_audio_file()
+    >>> y, sr = librosa.load(filename,
+    ...                      offset=25.0,
+    ...                      duration=20.0)
+    >>> spectrogram = np.abs(librosa.stft(y))
+    >>> melspec = librosa.feature.melspectrogram(y=y,
+    ...                                          sr=sr)
+    >>> chroma = librosa.feature.chroma_cqt(y=y,
+    ...                                     sr=sr)
 
 .. [#] ``chroma_stft`` is based upon the reference implementation provided at 
        http://labrosa.ee.columbia.edu/matlab/chroma-ansyn/
+
+.. [#] For display purposes, spectrograms are scaled by ``librosa.logamplitude``.  We refer readers to the
+       accompanying IPython notebook for the full source code to recontsruct figures.
 
 In addition to Mel and chroma features, the ``feature`` submodule provides a number of spectral statistic
 representations, including ``spectral_centroid``, ``spectral_bandwidth``, ``spectral_rolloff`` [Klapuri07]_, and
@@ -275,6 +290,7 @@ simulating feature *n*-grams); and ``sync``, which applies a user-supplied aggre
 
 Display
 =======
+
 
 
 
