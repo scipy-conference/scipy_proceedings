@@ -225,6 +225,12 @@ the global tuning offset of a particular audio signal.
 Spectral features
 =================
 
+.. figure:: feature.pdf
+    :figclass: ht
+
+    Top: the short-time Fourier transform of a 20-second audio clip (``librosa.stft``).
+    Middle: the corresponding Mel spectrogram, using 128 Mel bands (``librosa.feature.melspectrogram``).
+    Bottom: the corresponding chromagram (``librosa.feature.chroma_cqt``). 
 
 Display
 =======
