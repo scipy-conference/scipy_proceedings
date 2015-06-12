@@ -208,9 +208,9 @@ At the same time as text-based interpreters have failed to overcome the inherent
 limitations of working with rich data, the web browser has emerged as
 a ubiquitous means of interactively working with rich media
 documents. In addition to being universally available, web browsers
-have the benefit of being supported by open standards that remain
+have the benefit of being based on open standards that remain
 supported almost indefinitely. Although early versions of the HTML
-standard only supported passive page viewing, the widespread adoption
+standard only allowed passive page viewing, the widespread adoption
 of HTML5 (and websockets) has made it possible for anyone to engage
 with complex, dynamic documents in a bi-directional, interactive
 manner.
@@ -224,7 +224,7 @@ similar in design to the traditional text-only interpreters, these
 notebooks allow embedded graphics or other media (such as video) while
 maintaining a permanent record of useful commands in a rich document
 that supports the gradual development of a document with interleaved
-code and exposition. 
+code, results, and exposition. 
 
 Yet despite the greatly improved capabilities of these tools for
 computational interaction, the spirit of the interactive interpreter
@@ -233,7 +233,7 @@ its representation. This artificial distinction is a lingering
 consequence of a text-only world and has resulted in a strict split
 between how we conceptualize 'simple' and 'complex' data. Simple data
 returned from an operation is rendered directly in the interpreter (as
-strings, small arrays, etc.), but more complex data requires an
+strings, short lists, small arrays, etc.), but more complex data requires an
 extremely detailed set of explicit steps using external plotting
 packages such as Matplotlib [Mpl]_ before results can be revealed
 in a graphical representation.
@@ -341,7 +341,8 @@ following principles:
 * These atomic data objects (elements) should be almost trivially simple
   wrappers around your data, acting as proxies for the contained
   arrays along with a small amount of semantic metadata (such as whether
-  the user thinks of the data as a curve or as a set of points).
+  the user thinks of some particular set of data as a continuous curve
+  or as a discrete set of points).
 * Any metadata included in the element must address issues of *content*
   and not be concerned with *display* issues --  elements should
   hold essential information only.
@@ -357,16 +358,16 @@ following principles:
 
 The outcome of these principles is a set of compositional data
 structures that contain only the essential information underlying
-potentially complex, publication quality figures. These data
+potentially complex, publication-quality figures. These data
 structures have an understandable, default visualization that
 transparently reveals their contents, making them a useful proxy for
 the data itself, just as the text ``3.5`` is a proxy for the
 underlying floating-point value.  This default visualization may then
 be customized declaratively to achieve the desired aesthetics, without
-needing to store these customizations on the objects themselves. This
+complicating the objects themselves with such customizations. This
 separation of content and presentation is already a well established
 design principle outside of science, and is analogous to the
-relationship between HTML content and CSS.
+relationship between HTML content and CSS in web pages.
 
 
 Data Structures
@@ -387,7 +388,7 @@ Elements
 
 The atomic classes that wrap raw data are the ``Element``
 primitives. These classes are named by the natural representation they
-suggest for the supplied data, ``Image``, ``Curve`` and ``Scatter``
+suggest for the supplied data, ``Image``, ``Curve``, and ``Scatter``
 being some simple examples. These elements are easily constructed as
 they only require the raw data (such as a Numpy array) to display.
 
@@ -397,7 +398,7 @@ primitive containing a two-dimensional Numpy array. This ``Raster``
 was simply declared as ``Raster(data)`` and the corresponding,
 automatically generated visual representation of this object shows
 that the array is a part of the Mandelbrot set. Our object merely
-holds the supplied Numpy array which may be easily accessed via the
+holds the supplied Numpy array which remains easily accessed via the
 ``.data`` attribute. In part **B** of Figure :ref:`layout` we have an
 example of a ``Curve`` containing a cross section of the
 two-dimensional array.
@@ -420,11 +421,11 @@ contained data is in the form of a two-dimensional Numpy array.
 The particular ``Raster`` shown in Figure :ref:`layout` **A** is
 declared in the simplest possible fashion, allowing the two dimensions
 to default to *x* along the x-axis and *y* along the y-axis. This is
-fine for describing the visual space but if you wanted to make it
+fine for describing the visual space, but if you wanted to make it
 clear that the Mandelbrot is actually computed over the complex plane,
 you can associate this semantic information with the array using the
 declaration ``hv.Raster(data, kdims=['Re','Im'])``. Similarly, for the
-cross-section, we could supply ``kdims=['Re']`` and
+cross section, we could supply ``kdims=['Re']`` and
 ``vdims=['Intensity']`` to the ``Curve`` constructor.
 
 Although our dimension labels are used to update the visual output by
@@ -485,7 +486,7 @@ graphs, raster images or histogram, they are not sufficient to
 represent more complex figures.
 
 A typical figure does not present data using a single representation
-but allows comparison between data or order to illustrate similarities
+but allows comparison between data in order to illustrate similarities
 or differences between different aspects of the data. In other words,
 a typical figure is a single object composed of many visual
 representations combined together. HoloViews makes it trivial to
@@ -495,7 +496,7 @@ elements within the same set of axes.
 
 These types of composition are so common that both have already been
 used in Figure :ref:`layout` as our very first example. The ``+``
-operation implements the first type of composition of concatenation
+operation implements the first type of composition of concatenation,
 and ``*`` implements the act of overlaying elements together. When we
 refer to subfigures :ref:`layout` **A** and :ref:`layout` **B**, we
 are making use of labels generated by HoloViews when representing a
@@ -509,12 +510,12 @@ therefore a ``Layout`` which itself contains another composite
 collection in the form of an ``Overlay``. This object is in fact a
 highly flexible, compositional tree-based data structure: intermediate
 nodes correspond either to ``Layout`` nodes (``+``) or ``Overlay``
-nodes (``*``), with element primitives at the leaf nodes. All the raw
+nodes (``*``), with element primitives at the leaf nodes. Note that all the raw
 data corresponding to every visual element is conveniently accessible
 via key or attribute access on the tree by selecting a leaf element
 using its path through the tree, and then inspecting the ``.data``
 attribute, making it simple to decalare which part of a complex
-dataset you want to work with.
+dataset you want to work with for a particular visualization.
 
 ..
   jbednar: probably most people won't be able to figure out the
@@ -523,14 +524,15 @@ dataset you want to work with.
 As the elements of the tree may be of heterogeneous types there needs
 to be an automatic, easy and universal way to select either leaf
 elements or subtrees in a way that works across all allowable leaf
-nodes.  Such specification is achieved in HoloViews by semantic "group"
+nodes, e.g. for setting plot options.  Such specification is achieved
+in HoloViews by semantic "group" 
 and "label" strings that may be explicitly specified in the constructor
 to any primitives (otherwise appropriate defaults are used). Using
 these two identifiers, the ``+`` and ``*`` operators are able to
 generate trees with a useful two-level indexing system by default.
 
 With the ability to overlay or concatenate any element with any other,
-there is great flexibility to define complex relationships between
+there is great flexibility to declare complex relationships between
 elements. Whereas a single element primitive holds semantic
 information about a particular piece of data, trees encode semantic
 information between elements. The composition of visual elements into
@@ -556,7 +558,7 @@ dimensionality, we face a tradeoff between representing the full
 dimensionality of our data, and keeping the visual representation
 intelligible and therefore effective. In practice we are limited to
 two or at most three spatial axes, in addition to attributes such as
-the color, angle and size of the visual elements. To effectively
+the color, angle, and size of the visual elements. To effectively
 explore higher dimensional spaces we therefore have to find other
 solutions.
 
@@ -651,7 +653,7 @@ animation or using the default widgets. Visualizing individual curves
 in isolation is not very useful, of course; instead we probably want
 to see how the curves vary across ``Frequency`` and ``Amplitude`` in a
 single plot. A ``GridSpace`` provides such a representation and by
-using of the space conversion method ``.grid`` we can easily transform
+using the space conversion method ``.grid()`` we can easily transform
 our three-dimensional HoloMap into a two-dimensional GridSpace (which
 then allows the remaining dimension (the choice of trigonometric
 function) to be varied via the drop-down menu). Finally, after
@@ -730,7 +732,7 @@ easy to select a particular colormap that only applies to a specific
 object.
 
 A major benefit of separating data and customization options in this
-way is that all the options can be gathered in one place. There's no
+way is that all the options can be gathered in one place. There is no
 longer any need to dig deep into the documentation of a particular
 plotting package for a particular option as all the options are easily
 accessible via a tab-completable IPython magic and are documented via
@@ -797,10 +799,10 @@ curated over time, instantly and transparently visualizable without
 any custom code cluttering up the notebook.  Visualizations of data
 that are worth keeping can be customized through an interactive and
 iterative process, and the final set of plotting options can then be
-expressed as a single, separate data structure from the actual
+expressed as a single data structure separate from the actual
 displayed data, ready to be applied to the next batch of data from a
 subsequent measurement or experiment.  Throughout, the scientist
-curates the data of interest, revealed in associated visual
+curates the data of interest, as revealed in associated visual
 representations, along with the visualization options and a separate
 codebase of general-purpose plots (mostly included in HoloViews, but
 potentially extended locally for specific domains).  Each of these
