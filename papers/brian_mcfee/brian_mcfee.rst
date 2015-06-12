@@ -33,8 +33,8 @@ LibROSA: Audio and Music Signal Analysis in Python
 
 .. class:: abstract
 
-   This paper describes the design and implementation of librosa version 0.4.0, 
-   and provides an overview and historical background of the project.
+   This document describes the design and implementation of librosa version 0.4.0, 
+   and provides an overview and background of the project.
 
 
 .. class:: keywords
@@ -157,6 +157,7 @@ Frames are centered by default, so frame index ``t`` corresponds to the half-ope
     [t - frame_length / 2, t + frame_length /2),
 
 where the boundary conditions are handled by reflection-padding the input.
+Unless otherwise specified, all sliding-window analyses use Hann windows by default.
 For analyses that do not use fixed-width frames (such as the constant-Q transform), the
 default hop length of 512 is retained to facilitate alignment of results.
 
@@ -178,8 +179,8 @@ Package organization
 --------------------
 
 In this section, we give a brief overview of the structure of the librosa software
-package.  This overview is not intended as a complete API reference, which can be found at
-https://bmcfee.github.io/librosa.
+package.  This overview is intended to be superficial and cover only the most commonly used functionality.
+A complete API reference can be found at https://bmcfee.github.io/librosa.
 
 
 Core
@@ -202,8 +203,11 @@ Spectrogram operations include the short-time Fourier transform (``stft``), inve
 and instantaneous frequency spectrogram (``ifgram``) [Abe95]_, which provide much of the core functionality
 for down-stream feature analysis.
 Additionally, an efficient constant-Q transform (``cqt``) implementation based upon the recursive down-sampling
-method of Schoerkhuber and Klapuri [Schoerkhuber10]_ is provided, along with a fixed frame-length approximation
-(``pseudo_cqt``), and hybrid combination of the two (``hybrid_cqt``).
+method of Schoerkhuber and Klapuri [Schoerkhuber10]_ is provided, which produces logarithmically-spaced
+frequency representations suitable for pitch-based signal analysis.
+Finally, ``logamplitude`` provides a flexible and robust implementation of log-amplitude scaling, which 
+can be used to avoid numerical underflow and set an adaptive noise floor when converting from linear
+amplitude.
 
 
 Because data may be represented in a variety of time or frequency units, we provide a comprehensive set of
@@ -211,6 +215,12 @@ convenience functions to map between different time representations: seconds, fr
 and frequency representations: hertz, constant-Q basis index, Fourier basis index, Mel basis index, 
 MIDI note number, or note in scientific pitch notation.
 
+Finally, the core submodule provides functionality to estimate the dominant frequency of STFT bins via
+parabolic interpolation (``piptrack``) [#]_, and estimation of tuning deviation (in cents) from the reference
+``A440``.  These functions allow pitch-based analyses (e.g., cqt) to dynamically adapt filter banks to match
+the global tuning offset of a particular audio signal.
+
+.. [#] https://ccrma.stanford.edu/~jos/sasp/Sinusoidal_Peak_Interpolation.html
 
 Spectral features
 =================
