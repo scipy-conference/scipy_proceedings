@@ -116,7 +116,7 @@ Now, let's implement a schedule in our example model. We add a ``RandomActivatio
   class MoneyAgent(Agent):
     # ...
 
-    def step(self, model)
+    def step(self, model):
       """Give money to another agent."""
       if self.wealth > 0:
         # Pick a random agent
@@ -193,7 +193,7 @@ To add space to our example model, we can have the agents wander around a grid; 
         this_pos = [self.pos]
         others = grid.get_cell_list_contents(this_pos)
         if len(others) > 1:
-          other = random.choice(other_agents)
+          other = random.choice(others)
           other.wealth += 1
           self.wealth -= 1
 
@@ -206,7 +206,7 @@ Once the model has been run, we can create a static visualization of the distrib
 
 .. code-block:: python
 
-  wealth_grid = np.zeroes(model.width, model.height)
+  wealth_grid = np.zeroes(model.grid.width, model.grid.height)
   for cell in model.grid.coord_iter():
     cell_content, x, y = cell
     cell_wealth = sum(a.wealth for a in cell_content)
