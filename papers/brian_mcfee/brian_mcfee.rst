@@ -472,15 +472,59 @@ additional functionality to librosa, their inclusion often results in simpler, m
 readable application code.
 
 
-Advanced functionality
-----------------------
-
 Caching
-=======
+-------
 
-scikit-learn integration
-========================
+MIR applications typically require computing a variety of features (e.g., MFCCs, chroma, beat timings, etc) 
+from each audio signal in a collection.
+Assuming the application programmer is content with default parameters, the simplest way to achieve this is
+to call each function using audio time-series input, e.g.:
 
+.. code-block:: python
+
+    >>> mfcc = librosa.feature.mfcc(y=y, sr=sr)
+    >>> tempo, beats = librosa.beat.beat_track(y=y,
+    ...                                        sr=sr)
+
+However, because there are shared computations between the different functions |---| ``mfcc`` and ``beat_track`` both compute
+log-scaled Mel spectrograms, for example |---| this results in redundant (and inefficient) computation.
+A more efficient implementation of the above example would factor out the redundant features:
+
+.. code-block:: python
+
+    >>> lms = librosa.logamplitude(
+    ...         librosa.feature.melspectrogram(y=y,
+    ...                                        sr=sr))
+    >>> mfcc = librosa.feature.mfcc(S=lms)
+    >>> tempo, beats = librosa.beat.beat_track(S=lms,
+    ...                                        sr=sr)
+
+Although it is more computationally efficient, the above is example is both less concise,
+and requires more knowledge of the implementations on behalf of the application programmer.
+More generally, nearly all functions in librosa eventually depend upon STFT calculation,
+but it is rare that the application programmer will need the STFT matrix as an end-result.
+
+One approach to eliminate redundant computation is to decompose the various functions into blocks which can be arranged
+in a computation graph, as is done in Essentia [Bogdanov13]_.  However, this approach necessarily constrains the function 
+interfaces, and may become unwieldy for common, simple applications.
+
+Librosa takes an alternative, lazy approach to eliminating redundancy via output caching.
+Caching is implemented through an extension of the ``Memory`` class from the ``joblib`` package [#]_, 
+which provides disk-backed memoization of function outputs.
+Librosa's cache object (``librosa.cache``) operates as a decorator on all non-trivial computations.
+This way, a user can write simple application code (i.e., the first example above) while seamlessly
+eliminating redundancies and achieving speed comparable to the more advanced implementation (the second example).
+
+The cache object is disabled by default, but can be activated by setting the environment variable 
+``LIBROSA_CACHE_DIR`` prior to importing the package.
+Because (as of joblib version 0.8.4) the ``Memory`` object does not implement a cache eviction policy,
+it is recommended that users purge the cache after processing each audio file to prohibit the cache from
+filling all available disk space.
+We note that this can potentially introduce race conditions in multi-processing environments (i.e., parallel batch processing of a corpus),
+so care must be taken when scheduling cache purges.
+
+
+.. [#] https://github.com/joblib/joblib
 
 
 Parameter tuning
@@ -500,8 +544,8 @@ was chosen to maximize the Correct Metric Level (Total) metric [Davies14]_.
 
 .. [#] http://isophonics.net/content/reference-annotations
 
-Similarly, the onset detection parameters (listed in Table :ref:`tab:onset`) were optimized
-over the Johannes Kepler University onset database. [#]_
+Similarly, the onset detection parameters (listed in Table :ref:`tab:onset`) were selected
+to optimize the F1-score on the Johannes Kepler University onset database. [#]_
 
 .. [#] https://github.com/CPJKU/onset_db
 
@@ -542,17 +586,18 @@ over the Johannes Kepler University onset database. [#]_
     | ``delta``     | Peak picking threshold      | 0.0--0.10 **(0.07)** |
     +---------------+-----------------------------+----------------------+
 
-As the default parameter settings are subject to change as more annotated reference data becomes available,
-the parameter optimization routines have been factored out into a separate repository. [#]_
+The optimal default parameter settings are subject to change in the future 
+as larger reference collections become available.
+Consequently, the parameter optimization routines have been factored out into a separate repository. [#]_
 
 .. [#] https://github.com/bmcfee/librosa_parameters
 
 
-Future directions
------------------
-
 Conclusion
 ----------
+
+Acknowledgments
+===============
 
 References
 ----------
@@ -642,3 +687,8 @@ References
 .. [Raffel14] Raffel, Colin, Brian McFee, Eric J. Humphrey, Justin Salamon, Oriol Nieto, Dawen Liang, and Daniel PW Ellis.
               *mir eval: A transparent implementation of common MIR metrics.*
               In 15th International Society for Music Information Retrieval Conference (ISMIR 2014), pp. 367-372. 2014.
+
+.. [Bogdanov13] Bogdanov, Dmitry, Nicolas Wack, Emilia Gómez, Sankalp Gulati, Perfecto Herrera, Oscar Mayor, Gerard Roma,
+                Justin Salamon, José R. Zapata, and Xavier Serra.
+                *Essentia: An Audio Analysis Library for Music Information Retrieval.*
+                In ISMIR, pp. 493-498. 2013.
