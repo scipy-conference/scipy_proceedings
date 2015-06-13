@@ -70,8 +70,7 @@ To begin building the example model described above, we first create two classes
   class MoneyAgent(Agent):
     """ An agent with fixed initial wealth."""
     def __init__(self, unique_id):
-      # Each agent should have a unique_id
-      self.unique_id = unique_id
+      self.unique_id = unique_id # 1. (see below)
       self.wealth = 1
 
   class MoneyModel(Model):
@@ -86,6 +85,8 @@ To begin building the example model described above, we first create two classes
       for i in range(self.num_agents):
         a = MoneyAgent(i)
         # Now what? See below.
+
+1. Each agent should have a unique identifier, stored in the ``unique_id`` field.
 
 **Scheduler**
 
@@ -130,24 +131,26 @@ Now, let's implement a schedule in our example model. We add a ``RandomActivatio
     def __init__(self, N):
       self.num_agents = N
       # Adding the scheduler:
-      self.schedule = RandomActivation(self)
+      self.schedule = RandomActivation(self) # 1. 
       self.create_agents()
 
     def create_agents(self):
       """Method to create all the agents."""
       for i in range(self.num_agents):
         a = MoneyAgent(i)
-        # Now add the agent to the schedule:
-        self.schedule.add(a)
+        self.schedule.add(a) 
 
     def step(self):
-      self.schedule.step()
+      self.schedule.step() # 2.
 
     def run_model(self, steps):
       """The model has no end condition
         so the user needs to specify how long to run"""
       for _ in range(steps):
         self.step()
+
+1. Scheduler objects are instantiated with their Model object, which they then pass to the agents at each step.
+2. The scheduler's ``step`` method activates the ``step`` methods of all the agents that have been added to it, in this case in random order.
 
 **Space**
 
@@ -167,7 +170,7 @@ To add space to our example model, we can have the agents wander around a grid; 
 
   class MoneyModel(Model):
     def __init__(self, N, width, height, torus):
-      self.grid = MultiGrid(height, width, torus)
+      self.grid = MultiGrid(height, width, torus) # 1.
       # ... everything else
 
     def create_agents(self):
@@ -175,7 +178,7 @@ To add space to our example model, we can have the agents wander around a grid; 
         # ... everything above
         x = random.randrange(self.grid.width)
         y = random.randrange(self.grid.width)
-        self.grid.place_agent(a, (x, y))
+        self.grid.place_agent(a, (x, y)) # 2.
 
     class MoneyAgent(Agent):
       # ...
@@ -184,14 +187,15 @@ To add space to our example model, we can have the agents wander around a grid; 
         grid = model.grid
         x, y = self.pos
         possible_steps = grid.get_neighborhood(x, y, 
-          moore=True, include_center=True)
+          moore=True, include_center=True) # 3.
         choice = random.choice(possible_steps)
-        grid.move_agent(self, choice)
+        grid.move_agent(self, choice) # 4.
 
       def give_money(self, model):
         grid = model.grid
         this_pos = [self.pos]
-        others = grid.get_cell_list_contents(this_pos)
+        x, y = self.pos
+        others = grid.get_cell_list_contents(this_pos) # 5.
         if len(others) > 1:
           other = random.choice(others)
           other.wealth += 1
@@ -202,11 +206,18 @@ To add space to our example model, we can have the agents wander around a grid; 
         if self.wealth > 0:
           self.give_money(model)
 
+1. The arguments needed to create a new grid are its width, height, and a boolean for whether it is a torus or not.
+2. The ``place_agent`` method places the given object in the grid cell specified by the ``(x, y)`` tuple, and assigns that tuple to the agent's ``pos`` property.
+3. The ``get_neighborhood`` method returns a list of coordinate tuples for the appropriate neighbors of the given coordinates. In this case, it's getting the Moore neighborhood (including diagonals) and includes the center cell. The agent decides where to move by choosing one of those tuples at random. This is a good way of handling random moves, since it still works for agents on an edge of a non-toroidal grid, or if the grid itself is hexagonal.
+4. the ``move_agent`` method works like ``place_agent``, but removes the agent from its current location before placing it in its new one.
+5. This is a helper method which returns the contents of the entire list of cell tuples provided. It's not strictly necessary here; the alternative would be: ``x, y = self.pos; others = grid[y][x]`` (note that grids are indexed y-first).
+
 Once the model has been run, we can create a static visualization of the distribution of wealth across the grid using the ``coord_iter`` iterator, which allows us to loop over all cells in the grid.
 
 .. code-block:: python
 
-  wealth_grid = np.zeroes(model.grid.width, model.grid.height)
+  wealth_grid = np.zeroes(model.grid.width, 
+                          model.grid.height)
   for cell in model.grid.coord_iter():
     cell_content, x, y = cell
     cell_wealth = sum(a.wealth for a in cell_content)
@@ -310,12 +321,14 @@ Mesa already includes a set of pre-built visualization elements which can be dep
   # from the model's data collector
   chart_element = ChartModule([{"Label": "Gini",
                               "Color": "Black"}],
-                              data_collector_name='dc')
+                              data_collector_name='dc') # 1.
   # Create a server to visualize MoneyModel
   server = ModularServer(MoneyModel,
                         [chart_element],
                         "Money Model", 100)
   server.launch()
+
+1. ChartModule plots model-level variables being collected by the model's data collector, as specified by the "Labels" provided; ``data_collector_name`` is the name of the actual DataCollector variable, so the module knows where to find the values.
 
 Running this code launches the server. To access the actual visualization, open your favorite browser (ideally Chrome) to http://127.0.0.1:8888/ . This shows the visualization, along with the controls used to reset the model, advance it by one step, or run it at the designated frame-rate. After several ticks, the browser window will look something like Figure :ref:`fig6`.
 
