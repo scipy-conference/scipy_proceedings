@@ -10,6 +10,7 @@ import shutil
 
 from writer import writer
 from conf import papers_dir, output_dir
+from __future__ import print_function
 import options
 
 header = r'''
