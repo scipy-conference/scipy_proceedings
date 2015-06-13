@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 
 import docutils.core as dc
 import os.path
@@ -10,6 +11,7 @@ import shutil
 
 from writer import writer
 from conf import papers_dir, output_dir
+
 import options
 
 header = r'''
@@ -120,13 +122,13 @@ def tex2pdf(out_path):
         out, err = run.communicate()
 
     if "Fatal" in out or run.returncode:
-        print "PDFLaTeX error output:"
-        print "=" * 80
-        print out
-        print "=" * 80
+        print("PDFLaTeX error output:")
+        print("=" * 80)
+        print(out)
+        print("=" * 80)
         if err:
-            print err
-            print "=" * 80
+            print(err)
+            print("=" * 80)
 
     return out
 
@@ -136,7 +138,7 @@ def page_count(pdflatex_stdout, paper_dir):
     Parse pdflatex output for paper count, and store in a .ini file.
     """
     if pdflatex_stdout is None:
-        print "*** WARNING: PDFLaTeX failed to generate output."
+        print("*** WARNING: PDFLaTeX failed to generate output.")
         return
 
     regexp = re.compile('Output written on paper.pdf \((\d+) pages')
@@ -157,7 +159,7 @@ def page_count(pdflatex_stdout, paper_dir):
 def build_paper(paper_id):
     out_path = os.path.join(output_dir, paper_id)
     in_path = os.path.join(papers_dir, paper_id)
-    print "Building:", paper_id
+    print("Building:", paper_id)
 
     rst2tex(in_path, out_path)
     pdflatex_stdout = tex2pdf(out_path)
@@ -165,7 +167,7 @@ def build_paper(paper_id):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print "Usage: build_paper.py paper_directory"
+        print("Usage: build_paper.py paper_directory")
         sys.exit(-1)
 
     in_path = os.path.normpath(sys.argv[1])
