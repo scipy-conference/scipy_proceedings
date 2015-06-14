@@ -94,19 +94,18 @@ HoloViews: Building Complex Visualizations Easily for Reproducible Science
    storing a full record of the process for later reproduction.
 
    HoloViews provides a set of general-purpose data structures that
-   allow you to pair your data with a small amount of metadata that
-   acts as a declarative specification for how you want to view it.
-   These data structures are then used by a separate plotting system
-   to render your data interactively, e.g. within the IPython Notebook
+   allow you to pair your data with a small amount of metadata.  These
+   data structures are then used by a separate plotting system to
+   render your data interactively, e.g. within the IPython Notebook
    environment, revealing even complex data in publication-quality
    form without requiring custom plotting code for each figure.
 
-   HoloViews also provides powerful containers that allow you to organize
-   this data for analysis, embedding it whatever multidimensional
-   continuous or discrete space best characterizes it. The resulting
-   workflow allows you to focus on exploring, analyzing, and
-   understanding your data and results, while leading directly to an
-   exportable recipe for reproducible research.
+   HoloViews also provides powerful containers that allow you to
+   organize this data for analysis, embedding it whatever
+   multidimensional continuous or discrete space best characterizes
+   it. The resulting workflow allows you to focus on exploring,
+   analyzing, and understanding your data and results, while leading
+   directly to an exportable recipe for reproducible research.
 
 .. class:: keywords
 
@@ -118,46 +117,43 @@ Introduction
 Scientific research alternates between stretches of speculative,
 exploratory investigation and periods where crucial findings are
 distilled and disseminated as publications or reports. The exploratory
-phase typically involves interactive plotting and analysis tools, with
-many possible views and analyses tested as rapidly as possible before
-deciding on the specific aspects of the data that are most important.
-Once the data is understood, the results are then typically prepared
-as static, non-interactive figures for dissemination, often putting
+phase typically involves running many different analyses with
+interactive plotting tools before the important aspects of the data
+are established. Once the data is understood, the results are then
+typically prepared as static figures for dissemination, often putting
 together many subfigures into a complicated figure that reveals
 multiple interrelated aspects of the results.
 
 Current software tools provide relatively poor support for this dual
-exploring/reporting nature of scientific research, severely
-limiting scientific progress.  On the one hand, developing new
-exploratory visualizations typically requires large amounts of custom
-software coding, which is slow, error-prone, and distracts from the
-actual scientific analysis.  Moreover, this process typically involves
-a large amount of trial and error, generating voluminous logs of
-transitory code, analyses, and results, making it difficult to later
-reproduce the steps that led to any particular result [Repro]_.
-Switching to different tools for final, non-interactive,
-publication-quality figures exacerbates this problem, further
-disconnecting the reported results from the process by which they were
-created.  This lack of reproducibility is a serious handicap both for
-progress within a single lab and for the community as a whole, making
-it nearly impossible for researchers to build on each others' work
-even for purely computational projects [Repro]_.
+exploring/reporting nature of scientific research, severely limiting
+scientific progress.  On the one hand, developing new exploratory
+visualizations typically requires large amounts of custom software
+coding, which is slow, error-prone, and distracts from the actual
+scientific analysis.  Moreover, this process typically involves a
+large amount of trial and error, generating transitory code and
+analyses that make it difficult to later reproduce the steps that led
+to any particular result [Repro]_.  Switching to different tools for
+final, non-interactive, publication-quality figures exacerbates this
+problem, further disconnecting the reported results from the process
+by which they were created.  This lack of reproducibility is a serious
+handicap both for progress within a single lab and for the community
+as a whole, making it nearly impossible for researchers to build on
+each others' work even for purely computational projects [Repro]_.
 
-In this paper, we present a new Python software package built to address
-these problems directly and definitively, by providing simple tools
-for gradually building more elaborate visualizations and analyses
-interactively yet reproducibly.  HoloViews supports immediate
-exploration of data as it is obtained, without requiring custom
-coding, while allowing even complex relationships to be revealed
-between datasets in a smooth progression from initial exploration to
-final publication of fully reproducible scientific results.  As
-outlined in detail below, HoloViews achieves these goals by enforcing
-a strict separation between the semantic properties of the data
-(expressed declaratively and independently of any visualization),
-specification of plotting options (expressed declaratively and
-independently of the underlying code), and implementation of specific
-visualizations (expressed as general-purpose code reused and curated
-over time).
+In this paper, we present a new Python software package built to
+address these problems directly, by providing simple tools for
+gradually building elaborate visualizations and analyses interactively
+yet reproducibly.  HoloViews supports immediate exploration of data as
+it is obtained, without requiring custom coding, while allowing even
+complex relationships to be revealed between datasets in a smooth
+progression from initial exploration to final publication of fully
+reproducible scientific results.  As outlined in detail below,
+HoloViews achieves these goals by enforcing a strict separation
+between the semantic properties of the data (expressed declaratively
+and independently of any visualization), specification of plotting
+options (expressed declaratively and independently of the underlying
+code), and implementation of specific visualizations (expressed as
+general-purpose code reused and curated over time).
 
 
 The interactive interpreter
