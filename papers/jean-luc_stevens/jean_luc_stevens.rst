@@ -541,7 +541,7 @@ leaf elements. This is achieved with a semantic, two level labelling
 system using "group" and "label" strings supported throughout
 HoloViews. We have seen an example of a label string in Figure 1 where
 it is used to labelled the image as 'Mandelbrot Set'. The textual
-representation of the layout in Figure :ref:`layout` (see Out [6] of
+representation of the layout in Figure :ref:`layout` (see Out[6] of
 Figure :ref:`customization`) shows how the supplied label is used in
 the attribute based indexing scheme of the layout. The strings
 'Image', 'Overlay', 'Hline' and 'Curve' are default group names: by
@@ -724,6 +724,10 @@ without changing anything about the object that is being rendered.
    specified display options returning an HTML representation, which
    can be rendered in the notebook. :label:`schematic`
 
+
+..
+   Anticipate the tree datastructure a little earlier?
+
 Figure :ref:`schematic` provides an overall summary of how the
 different components in the display system interact. The declarative
 data structures define what will be plotted, specifying the
@@ -731,30 +735,31 @@ arrangements of the plots, i.e. via Layouts, Overlays and spaces. The
 connection between the data structure and the rendered representation
 is made according to the object type, the aforementioned ``id``
 integer, and optionally specified group and label strings. By
-associating display options with particular objects via these
-attributes, the visual representation of the content may be easily
-customized, e.g. to tweak aesthetic details such as tick marks, colors
-and normalization options. Once the user has specified both content
-and display options and has asked the object to be displayed, the
-rendering system looks up the appropriate plot type for the object in
-a global registry, which then processes the object in order to display
-it with the applicable options. This happens transparently without any
-input from the user. Once the plotting backend has rendered the plot
-in the appropriate format, it will be wrapped in HTML for display in
-the notebook.
+collecting the display options together and associating them with
+particular objects via these attributes, the visual representation of
+the content may be easily customized, e.g. to tweak aesthetic details
+such as tick marks, colors and normalization options. Once the user
+has specified both content and display options and has asked the
+object to be displayed, the rendering system looks up the appropriate
+plot type for the object in a global registry, which then processes
+the object and looks up the corresponding options in order to display
+it appropriately. This happens transparently without any input from
+the user. Once the plotting backend has rendered the plot in the
+appropriate format, it will be wrapped in HTML for display in the
+notebook.
 
 The default display options are held on a global tree structure
 similar in structure to the composite trees described in the previous
-section, but with nodes now holding custom display options in the form
-of arbitrary collections of keywords. In fact, these option trees also
-use labels and groups the same way as composite trees except they
-additionally support type-specific customization. For instance, you
-may specify colormap options on the ``Image`` node of the tree that
-will then be applied to all ``Images``. If this chosen colormap is not
-always suitable, you can ensure that all ``Image`` elements belonging
-to a group (e.g ``group='Fractal'``) make use of a different colormap
-by overriding it on the ``Image.Fractal`` node of the tree. This form
-of inheritance allow you to specify complex, yet succinct style
+section, but with nodes holding custom display options in the form of
+arbitrary keywords. In fact, these option trees also use labels and
+groups the same way as composite trees except they additionally
+support type-specific customization. For instance, you may specify
+colormap options on the ``Image`` node of the tree that will then be
+applied to all ``Images``. If this chosen colormap is not always
+suitable, you can ensure that all ``Image`` elements belonging to a
+group (e.g ``group='Fractal'``) use of a different colormap by
+overriding it on the ``Image.Fractal`` node of the tree. This form of
+inheritance allow you to specify complex, yet succinct style
 specifications, whether you want options that apply to all objects of
 a particular type or only specific subsets of them.
 
@@ -767,28 +772,28 @@ a particular type or only specific subsets of them.
    Figure :ref:`layout` with a number of options. The input of cell 5
    is color coded to show which part of the specification corresponds
    to the components in Figure :ref:`schematic`, where blue indicates
-   styling options, red is the actual specification of the content and
-   green is what exectures the actual rendering. The output of the
-   cell shows how the specified options have altered the output of the
-   plotting code. Finally, the In and Out cells 6 and 7 show the reprs
-   of the content and the style specification demonstrate the
-   analogous nature in the way the two are structured, enabling the
+   styling options, red is the specification of the content and green
+   is what executes the rendering. The output of the cell shows how
+   the supplied options have altered the output of the plotting
+   code. Finally, Out[6] and Out[7] show the textual representations
+   of the content and the style specification respectively.  This
+   demonstrate the parallel way the two are structured, enabling the
    separation between content and display
    options. :label:`customization`
 
-To explore what this looks like in practice we have altered the
-example from Figure :ref:`layout` with some basic display options, to
-customize the appearance of the plot shown in Figure
-:ref:`customization`. Using the ``%%opts`` magic we have specified
-various display attributes about the plot including aspects, line
-widths, the ``cmap`` and the ``sublabel_format``. By printing the
-string representation of the content (cell 6) and the options (cell 7)
-separately we can see immediately how there are two distinct objects,
-and also how they correspond, with each entry in the ``OptionsTree``
-matching an applicable object type. Finally, in the actual rendered
-output, we can see that all these display options have taken effect,
-even though the actual data structure is differs from the object
-rendered in Figure :ref:`layout` only in the ``id`` value.
+To explore what this looks like in practice we have adapted the
+example from Figure :ref:`layout` with some basic display options. The
+result of customizing the visual representation is shown in Figure
+:ref:`customization`. Using the ``%%opts`` cell magic we have
+specified various display attributes about the plot including aspects,
+line widths, the ``cmap`` and the ``sublabel_format``. By printing the
+string representation of the content (Out[6]) and the options (Out[7])
+we can see immediately that there are two distinct objects where each
+entry in the ``OptionsTree`` matches an applicable object
+type. Finally, in the actual rendered output, we can see that all
+these display options have taken effect, even though the actual data
+structure is differs from the object rendered in Figure :ref:`layout`
+only in the ``id`` value.
 
 A major benefit of separating data and customization options in this
 way is that all the options can be gathered in one place. There is no
