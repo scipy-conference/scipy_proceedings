@@ -541,13 +541,12 @@ leaf elements. This is achieved with a semantic, two level labelling
 system using "group" and "label" strings supported throughout
 HoloViews. We have seen an example of a label string in Figure 1 where
 it is used to labelled the image as 'Mandelbrot Set'. The textual
-representation of the layout in Figure :ref:`label` (see Out [6] of
+representation of the layout in Figure :ref:`layout` (see Out [6] of
 Figure :ref:`customization`) shows how the supplied label is used in
 the attribute based indexing scheme of the layout. The strings
 'Image', 'Overlay', 'Hline' and 'Curve' are default group names: by
 supplying label and group throughout, you can define a sensible,
-semantic scheme for accessing the components of your data.
-
+semantic scheme for accessing all the components of your data.
 
 With the ability to overlay or concatenate any element with any other,
 there is great flexibility to declare complex relationships between
