@@ -1,6 +1,6 @@
 :author: Randy Paffenroth
 :email: rcpaffenroth@wpi.edu
-:institution: Worecester Polytechnic Institute, Mathematical Sciences Department and Data Science Program
+:institution: Worcester Polytechnic Institute, Mathematical Sciences Department and Data Science Program
 
 ------------------------------------------------
 Python in Data Science Research and Education
@@ -66,7 +66,7 @@ courses on offer.  In addition, as a long time Python user (since 1997
 in fact [Paf99]_), the author was intrigued by the possibility of
 leveraging Python in the graduate Data Science curriculum and this
 monograph describes some of the experiences, both successes and
-challenges, gained from that effort.  Of course, it is much to early
+challenges, gained from that effort.  Of course, it is much too early
 to make any comments on the sustained effect of using Python for
 graduate Data Science education, however, perhaps the gentle reader
 will find some value in the author's experiences, even at this early
@@ -203,7 +203,7 @@ efforts.  As DS501 is not a programming class, per se, leveraging
 IPython notebooks made the introduction of Python to those students
 unfamiliar with it substantially easier.
 
-For example, in the IPython notebooks we are able to provided code
+For example, in the IPython notebooks we are able to provide code
 examples to get the students started with their development work.  For
 example, we could provide code similar to the following (as provided
 by Prof. Xiangnan Kong, see [Twi15]_ for details) as a launching pad
@@ -213,6 +213,7 @@ for their efforts:
 
    import twitter
    #---------------------------------------------
+   
    # Define a Function to Login Twitter API
    def oauth_login():
        # Go to http://twitter.com/apps/new to create an 
@@ -293,7 +294,7 @@ Many of the tasks in this case study revolve around question like:
 * How many movies have an average rating over 4.5 overall?
 * How many movies have an average rating over 4.5 among men?  How
   about women?
-* How many movies have an *median* rating over 4.5 among men over age
+* How many movies have a *median* rating over 4.5 among men over age
   30?  How about women over age 30?
 * What are the ten most popular movies given a reasonable, student 
   derived definition of "popular"?
@@ -341,7 +342,7 @@ indexed by a pair of *user_id* and *movie_id*.
 Already we can perceive a thorny issue.  Clearly, the questions of
 interest can only be answered by appropriate cross referencing between
 these three files.  For example, all three files must be referenced to
-answer a question an seemingly straight forward as "how many action
+answer a question as seemingly straight forward as "how many action
 movies do men rate higher than 4?"  While perhaps not too troublesome
 for students who are adept programmers, the cross referencing between
 the files presents an unnecessary impediment to less proficient
@@ -412,7 +413,7 @@ just three lines of code.
 Of course, one might be tempted to argue that having students develop
 their own code, rather than leveraging such *black box* routines leads
 to a deeper learning experience.  While we certainly appreciate this
-point of view, we wish to emphasize that the class in question is a
+point of view, we wish to emphasize that the class in question is an
 introductory Data Science class, and not a programming or data
 structure class.  Accordingly, using Python, and the powerful features
 of libraries such as Pandas, allows us to focus on the Data Science
@@ -431,7 +432,7 @@ case study two focused on analyzing *numerical* movie reviews, case study
 three focuses on detecting positive and negative reviews from raw text
 using natural language processing.
 
-In particular, is case study three, the class turns it attention to the
+In particular, is case study three, the class turns its attention to the
 Movie Review Data v2.0 from 
 http://www.cs.cornell.edu/people/pabo/movie-review-data.  This data
 set contains written reviews of movies divided into positive and
@@ -505,7 +506,7 @@ learning involves using a set of reviews which have appropriate labels
 (in this case positive or negative) to *predict* labels of other
 reviews which do not already have labels.  This process is called
 *supervised* machine learning.  The idea is that the labeled data is
-used to *supervise* the training of a algorithm which, after training,
+used to *supervise* the training of an algorithm which, after training,
 can attempt to compute labels just from the raw features.  Again,
 supervised machine learning is a vast subject, and space does not
 allow us treat the subject even at the more superficial level here
@@ -590,7 +591,7 @@ name just a handful of areas outside of statistical and data analysis,
 currently being developed in R, nor many other domains in which Python
 has made inroads.  The fact that Python is as generally applicable as
 it is, while perhaps still being just as popular as R for Data
-Science, it a testament to its advantages.
+Science, is a testament to its advantages.
 
 .. [#] We would be remiss not to at least mention the quite beautiful
        R web application framework Shiny [Shi14]_.  However, we believe
@@ -652,7 +653,7 @@ what the "professionals" were doing.
 Student research projects and theses
 ------------------------------------
 
-Python has had a important part to play in the author's research since
+Python has had an important part to play in the author's research since
 1997 [Paf99]_.  Currently, we perform research involving, and mentor
 students in, several topics revolving around semi-supervised and
 unsupervised machine learning applied to several different domains,
@@ -733,7 +734,7 @@ Having access to such libraries allow interesting problems to be
 addressed early in the educational process and the experience gained
 with such Python libraries provides for the students own software
 development, analysis, and research throughout their academic career and
-beyond..
+beyond.
 
 Acknowledgments 
 ---------------- 
