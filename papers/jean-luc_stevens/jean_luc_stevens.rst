@@ -710,82 +710,6 @@ format, change the output format (e.g switch from PNG to SVG) and even
 alter the plotting backend (currently defaulting to Matplotlib)
 without changing anything about the object that is being rendered.
 
-.. HoloViews is enabled by IPython display hooks automatically linking
-   the displayed object type to the code that generates its visual
-   representation.
-
-.. 
-   jbednar: I think people will have a hard time understanding what 
-   the trees, group, label, etc. are in this section; it deserves
-   some thought and rewriting.
-
-The connection between the data structure and the rendered
-representation is made according to the object type, the
-aforementioned ``id`` integer, and optionally specified group and
-label strings. The declarative data structures define what will be
-plotted, specifying the arrangements of the plots, e.g. grids, layouts
-and overlays, which can then be customized via the options system to
-tweak aesthetic details such as tick marks, colors and normalization
-options. Finally, the plotting and rendering process occurs
-automatically in the background so that the user never needs to worry
-about it.
-
-The default display options are held on a global tree structure
-similar in structure to the composite trees described in the previous
-section, but with nodes now holding custom display options in the
-form of arbitrary collections of keywords. In fact, these option trees
-also use labels and groups the same way as composite trees except they
-additionally support type-specific customization. For instance, you
-may specify colormap options on the ``Image`` node of the tree that
-will then be applied to all ``Images``. If this chosen colormap is not
-always suitable, you can ensure that all ``Image`` elements belonging
-to a group (e.g ``group='Fractal'``) make use of a different colormap
-by overriding it on the ``Image.Fractal`` node of the tree.
-
-This global default tree is held on the ``Store`` object which can
-also hold display settings per object instance via the integer ``id``
-attribute. This provides a highly flexible styling system, allowing
-the user to specify display options that apply to all objects of a
-particular type or only specific subsets of them. For instance, it is
-easy to select a particular colormap that only applies to a specific
-object.
-
-A major benefit of separating data and customization options in this
-way is that all the options can be gathered in one place. There is no
-longer any need to dig deep into the documentation of a particular
-plotting package for a particular option as all the options are easily
-accessible via a tab-completable IPython magic and are documented via
-the ``help`` function. This ease of discovery once again enables a
-workflow where the visualization details of a plot can be easily and
-quickly iteratively refined after the user has determined that some
-data is of interest.
-
-The options system is also inherently extendable.  New options may be
-added at any time, and will immediately become available for
-tab-completion. In fact, the plotting code for each Element and
-container type may be switched out completely and independently, and
-the options system will automatically reflect the changes in the
-available customization options. This approach lets the user work with
-a variety of plotting backends at the same time, without even having
-to worry about the different plotting APIs.
-
-Figure :ref:`schematic` provides an overall summary of how the
-different types of components interact. The user first defines the
-data as elements and containers. When the data needs to be displayed,
-the rendering system looks up the appropriate plot type for the object
-in a global registry, which then processes the object in order to
-display it with the applicable display options. Once the plotting
-backend has generated the plot instance (as e.g. a Matplotlib figure),
-it is converted to an appropriate format for embedding into HTML for
-display in the notebook.
-
-..
-  jbednar: This figure seems too crammed, with very tiny font size.  I
-  think the schematic at left needs to be in a different figure from
-  the stuff at right, so that we can understand them.  The figure at
-  the left should either be simplified or explained more fully, or
-  both.
-  
 .. figure:: display_system.pdf
    :scale: 30%
    :align: center
@@ -799,6 +723,40 @@ display in the notebook.
    happens automatically by combining the displayed content with the
    specified display options returning an HTML representation, which
    can be rendered in the notebook. :label:`schematic`
+
+Figure :ref:`schematic` provides an overall summary of how the
+different components in the display system interact. The declarative
+data structures define what will be plotted, specifying the
+arrangements of the plots, i.e. via Layouts, Overlays and spaces. The
+connection between the data structure and the rendered representation
+is made according to the object type, the aforementioned ``id``
+integer, and optionally specified group and label strings. By
+associating display options with particular objects via these
+attributes, the visual representation of the content may be easily
+customized, e.g. to tweak aesthetic details such as tick marks, colors
+and normalization options. Once the user has specified both content
+and display options and has asked the object to be displayed, the
+rendering system looks up the appropriate plot type for the object in
+a global registry, which then processes the object in order to display
+it with the applicable options. This happens transparently without any
+input from the user. Once the plotting backend has rendered the plot
+in the appropriate format, it will be wrapped in HTML for display in
+the notebook.
+
+The default display options are held on a global tree structure
+similar in structure to the composite trees described in the previous
+section, but with nodes now holding custom display options in the form
+of arbitrary collections of keywords. In fact, these option trees also
+use labels and groups the same way as composite trees except they
+additionally support type-specific customization. For instance, you
+may specify colormap options on the ``Image`` node of the tree that
+will then be applied to all ``Images``. If this chosen colormap is not
+always suitable, you can ensure that all ``Image`` elements belonging
+to a group (e.g ``group='Fractal'``) make use of a different colormap
+by overriding it on the ``Image.Fractal`` node of the tree. This form
+of inheritance allow you to specify complex, yet succinct style
+specifications, whether you want options that apply to all objects of
+a particular type or only specific subsets of them.
 
 .. figure:: customization_example.pdf
    :scale: 35%
@@ -818,21 +776,38 @@ display in the notebook.
    separation between content and display
    options. :label:`customization`
 
+To explore what this looks like in practice we have altered the
+example from Figure :ref:`layout` with some basic display options, to
+customize the appearance of the plot shown in Figure
+:ref:`customization`. Using the ``%%opts`` magic we have specified
+various display attributes about the plot including aspects, line
+widths, the ``cmap`` and the ``sublabel_format``. By printing the
+string representation of the content (cell 6) and the options (cell 7)
+separately we can see immediately how there are two distinct objects,
+and also how they correspond, with each entry in the ``OptionsTree``
+matching an applicable object type. Finally, in the actual rendered
+output, we can see that all these display options have taken effect,
+even though the actual data structure is differs from the object
+rendered in Figure :ref:`layout` only in the ``id`` value.
 
-At no point does the user have to worry about the intermediate
-rendering step. We can see this directly if we look at the example in
-Figure :ref:`schematic`, which is a customized version of Figure
-:ref:`layout`. Using the ``%%opts`` magic we have specified various
-display attributes about the plot including aspects, line widths, the
-``cmap`` and the ``sublabel_format``. By printing the string
-representation of the content and the options separately we can see
-immediately how there are two distinct objects, and also how they
-correspond, with each entry in the ``OptionsTree`` matching an
-applicable object type. Finally, in the output section of Figure
-:ref:`schematic` we can see how these options have resulted in the
-desired output. Despite all the changes, the data structure will be
-identical to the one generated in Figure :ref:`layout`, except the
-different ``id`` value.
+A major benefit of separating data and customization options in this
+way is that all the options can be gathered in one place. There is no
+longer any need to dig deep into the documentation of a particular
+plotting package for a particular option as all the options are easily
+accessible via a tab-completable IPython magic and are documented via
+the ``help`` function. This ease of discovery once again enables a
+workflow where the visualization details of a plot can be easily and
+quickly iteratively refined after the user has determined that some
+data is of interest.
+
+The options system is also inherently extendable.  New options may be
+added at any time, and will immediately become available for
+tab-completion. In fact, the plotting code for each Element and
+container type may be switched out completely and independently, and
+the options system will automatically reflect the changes in the
+available customization options. This approach lets the user work with
+a variety of plotting backends at the same time, without even having
+to worry about the different plotting APIs.
 
 This three-part design explicitly supports the workflows that are
 common in science, repeatedly switching between phases of exploration
