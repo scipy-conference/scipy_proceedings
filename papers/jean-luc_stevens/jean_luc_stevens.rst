@@ -656,15 +656,14 @@ multi-dimensional space.
    :figclass: w
 
    Example of a HoloViews Spaces object being visualized in two
-   different ways. On the left is a ``GridSpace`` providing a condensed
+   different ways. **A**. A ``GridSpace`` providing a condensed
    representation of Curve Elements across 'Frequency' and
-   'Amplitude', for the function selected at the right.  In the
-   middle (labelled **B**) is one frame of a HoloMap, selected using
-   the other sliders, which appear automatically because at least one
-   item being selected has more dimensions than can be shown on the 
-   screen at a given time.  In this way HoloViews can represent
-   arbitrarily high-dimensional data naturally and conveniently.
-   :label:`spaces`
+   'Amplitude', for the function selected at the right.  **B**. One
+   frame of a HoloMap, selected using all three widgets, which appear
+   automatically because at least one item being selected has more
+   dimensions than can be shown on the screen at a given time.  In
+   this way HoloViews can represent arbitrarily high-dimensional data
+   naturally and conveniently.  :label:`spaces`
 
 We can immediately go ahead and display this HoloMap either as an
 animation or using the default widgets. Visualizing individual curves
@@ -673,8 +672,8 @@ to see how the curves vary across ``Frequency`` and ``Amplitude`` in a
 single plot. A ``GridSpace`` provides such a representation and by
 using the space conversion method ``.grid()`` we can easily transform
 our three-dimensional HoloMap into a two-dimensional GridSpace (which
-then allows the remaining dimension (the choice of trigonometric
-function) to be varied via the drop-down menu). Finally, after
+then allows the remaining dimension, the choice of trigonometric
+function, to be varied via the drop-down menu). Finally, after
 composing a ``Layout`` together with the original ``HoloMap``, we let
 the display system handle the plotting and rendering.
 
@@ -701,8 +700,8 @@ presentation is easily controllable.
 The only connection between the above data structures and the custom
 display options is a single, automatically managed integer
 identification attribute stored with the data structure.  Using this
-``id`` as a key, we can make the data structures behave as if they were
-rich, stateful and customizable objects, without actually storing
+``id`` as a key, we can make the data structures behave as if they
+were rich, stateful and customizable objects, without actually storing
 anything to do with visualization on the objects. We will show how
 this separation is useful and extensible so that the user can quickly
 and easily customize almost every aspect of their plot. For instance,
@@ -756,21 +755,21 @@ plotting package for a particular option as all the options are easily
 accessible via a tab-completable IPython magic and are documented via
 the ``help`` function. This ease of discovery once again enables a
 workflow where the visualization details of a plot can be easily and
-quickly iteratively refined after they have determined that some data
-is of interest.
+quickly iteratively refined after the user has determined that some
+data is of interest.
 
-This options system is inherently extendable.  New options may be
+The options system is also inherently extendable.  New options may be
 added at any time, and will immediately become available for
 tab-completion. In fact, the plotting code for each Element and
 container type may be switched out completely and independently, and
 the options system will automatically reflect the changes in the
 available customization options. This approach lets the user work with
-a variety of plotting backends at the same time, without even having to
-worry about the different plotting APIs.
+a variety of plotting backends at the same time, without even having
+to worry about the different plotting APIs.
 
 Figure :ref:`schematic` provides an overall summary of how the
 different types of components interact. The user first defines the
-data as elements and containers.  When the data needs to be displayed,
+data as elements and containers. When the data needs to be displayed,
 the rendering system looks up the appropriate plot type for the object
 in a global registry, which then processes the object in order to
 display it with the applicable display options. Once the plotting
@@ -786,14 +785,37 @@ display in the notebook.
   both.
   
 .. figure:: display_system.pdf
-   :scale: 25%
+   :scale: 30%
    :align: center
-   :figclass: w
 
    Diagram of the HoloViews display and customization system,
    highlighting the complete separation between the actual displayed
    content, the customization options and the plotting and rendering
-   system. :label:`schematic`
+   system. The displayed data structure and options are specified
+   separately linked only by object type, optional ``group`` and
+   ``label`` strings and an integer ``id``. Plotting and rendering
+   happens automatically by combining the displayed content with the
+   specified display options returning an HTML representation, which
+   can be rendered in the notebook. :label:`schematic`
+
+.. figure:: customization_example.pdf
+   :scale: 35%
+   :align: center
+   :figclass: w
+
+   An example of customizing the representation of the contents from
+   Figure :ref:`layout` with a number of options. The input of cell 5
+   is color coded to show which part of the specification corresponds
+   to the components in Figure :ref:`schematic`, where blue indicates
+   styling options, red is the actual specification of the content and
+   green is what exectures the actual rendering. The output of the
+   cell shows how the specified options have altered the output of the
+   plotting code. Finally, the In and Out cells 6 and 7 show the reprs
+   of the content and the style specification demonstrate the
+   analogous nature in the way the two are structured, enabling the
+   separation between content and display
+   options. :label:`customization`
+
 
 At no point does the user have to worry about the intermediate
 rendering step. We can see this directly if we look at the example in
