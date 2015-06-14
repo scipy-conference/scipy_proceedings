@@ -61,7 +61,7 @@ We divide the modules into three overall categories: modeling, analysis and visu
 
    Simplified UML diagram of Mesa architecture. :label:`fig3`
 
-To begin building the example model described above, we first create two classes: one for the model object itself, and one for each model agent. The model's one parameter is the number of agents, and each agent has a single variable: how much money it currently has. Each agent also has a single action: give a unit of money to another agent.
+To begin building the example model described above, we first create two classes: one for the model object itself, and one for each model agent. The model's one parameter is the number of agents, and each agent has a single variable: how much money it currently has. Each agent also has a single action: give a unit of money to another agent. Numbers in comments correspond to notes below the code block.
 
 .. code-block:: python
 
@@ -70,7 +70,7 @@ To begin building the example model described above, we first create two classes
   class MoneyAgent(Agent):
     """ An agent with fixed initial wealth."""
     def __init__(self, unique_id):
-      self.unique_id = unique_id # 1. (see below)
+      self.unique_id = unique_id                   # 1.
       self.wealth = 1
 
   class MoneyModel(Model):
@@ -131,7 +131,7 @@ Now, let's implement a schedule in our example model. We add a ``RandomActivatio
     def __init__(self, N):
       self.num_agents = N
       # Adding the scheduler:
-      self.schedule = RandomActivation(self) # 1. 
+      self.schedule = RandomActivation(self)       # 1. 
       self.create_agents()
 
     def create_agents(self):
@@ -141,7 +141,7 @@ Now, let's implement a schedule in our example model. We add a ``RandomActivatio
         self.schedule.add(a) 
 
     def step(self):
-      self.schedule.step() # 2.
+      self.schedule.step()                         # 2.
 
     def run_model(self, steps):
       """The model has no end condition
@@ -170,7 +170,7 @@ To add space to our example model, we can have the agents wander around a grid; 
 
   class MoneyModel(Model):
     def __init__(self, N, width, height, torus):
-      self.grid = MultiGrid(height, width, torus) # 1.
+      self.grid = MultiGrid(height, width, torus)  # 1.
       # ... everything else
 
     def create_agents(self):
@@ -178,7 +178,7 @@ To add space to our example model, we can have the agents wander around a grid; 
         # ... everything above
         x = random.randrange(self.grid.width)
         y = random.randrange(self.grid.width)
-        self.grid.place_agent(a, (x, y)) # 2.
+        self.grid.place_agent(a, (x, y))           # 2.
 
     class MoneyAgent(Agent):
       # ...
@@ -189,13 +189,12 @@ To add space to our example model, we can have the agents wander around a grid; 
         possible_steps = grid.get_neighborhood(x, y, 
           moore=True, include_center=True) # 3.
         choice = random.choice(possible_steps)
-        grid.move_agent(self, choice) # 4.
+        grid.move_agent(self, choice)              # 4.
 
       def give_money(self, model):
         grid = model.grid
-        this_pos = [self.pos]
-        x, y = self.pos
-        others = grid.get_cell_list_contents(this_pos) # 5.
+        pos = [self.pos]
+        others = grid.get_cell_list_contents(pos)  # 5.
         if len(others) > 1:
           other = random.choice(others)
           other.wealth += 1
@@ -307,7 +306,7 @@ Output from this code is shown in Figure :ref:`fig5`.
 Visualization
 --------------
 
-Mesa uses a browser window to visualize its models. This avoids both the developers and the users needing to deal with cross-system GUI programming; more importantly, perhaps, it gives us access to the universe of advanced JavaScript-based data visualization tools. The in-browser visualization is inspire by AgentScript [Densmore2012], an in-browser agent-based modeling framework. The entire visualization system is divided into two parts: the server side, and the client side. The server runs the model, and at each step extracts data from it to visualize, which it sends to the client as JSON via a WebSocket connection. The client receives the data, and uses JavaScript to actually draw the data onto the screen for the user.
+Mesa uses a browser window to visualize its models. This avoids both the developers and the users needing to deal with cross-system GUI programming; more importantly, perhaps, it gives us access to the universe of advanced JavaScript-based data visualization tools. The in-browser visualization is inspire by AgentScript [Densmore2012], a JavaScript-based ABM framework. The entire visualization system is divided into two parts: the server side, and the client side. The server runs the model, and at each step extracts data from it to visualize, which it sends to the client as JSON via a WebSocket connection. The client receives the data, and uses JavaScript to actually draw the data onto the screen for the user.
 
 Mesa already includes a set of pre-built visualization elements which can be deployed with minimal setup. For example, to create a visualization of the example model which displays a live chart of the Gini coefficient at each step, we can use the included ``ChartModule``.
 
@@ -320,15 +319,16 @@ Mesa already includes a set of pre-built visualization elements which can be dep
   # The Chart Module gets a model-level variable
   # from the model's data collector
   chart_element = ChartModule([{"Label": "Gini",
-                              "Color": "Black"}],
-                              data_collector_name='dc') # 1.
+                        "Color": "Black"}],
+                        data_collector_name='dc')  # 1.
   # Create a server to visualize MoneyModel
-  server = ModularServer(MoneyModel,
-                        [chart_element],
+  server = ModularServer(MoneyModel,               # 2.
+                        [chart_element],           
                         "Money Model", 100)
   server.launch()
 
-1. ChartModule plots model-level variables being collected by the model's data collector, as specified by the "Labels" provided; ``data_collector_name`` is the name of the actual DataCollector variable, so the module knows where to find the values.
+1. We instantiate a visualization element object: ChartModule, which plots model-level variables being collected by the model's data collector as specified by the "Labels" provided. ``data_collector_name`` is the name of the actual DataCollector variable, so the module knows where to find the values.
+2. The server is instantiated with the model class; a list of visualization elements (in this case, there's only the one element), a model name, and model arguments (in this case, just the agent count).
 
 Running this code launches the server. To access the actual visualization, open your favorite browser (ideally Chrome) to http://127.0.0.1:8888/ . This shows the visualization, along with the controls used to reset the model, advance it by one step, or run it at the designated frame-rate. After several ticks, the browser window will look something like Figure :ref:`fig6`.
 
@@ -350,23 +350,27 @@ Let us create a simple histogram, with a fixed set of bins, for visualizing the 
 
   var HistogramModule = function(bins) {
     // Create the appropiate tag, stored in canvas
-    $("body").append(canvas);
+    $("body").append(canvas);                     // 1. 
     // ... Chart.js boilerplate removed
     var chart = new Chart(context).Bar(data, options);
 
-    this.render = function(data) {
+    this.render = function(data) {                // 2.
       for (var i in data)
         chart.datasets[0].bars[i].value = data[i];
       chart.update();
     };
 
-    this.reset = function() {
+    this.reset = function() {                     // 3.
       chart.destroy();
       chart = new Chart(context).Bar(data, options);
       };
     };
 
-Next, the Python class uses ``Chart.min.js`` (included with the Mesa package) and the new ``HistogramModule.js`` file we created above, which is located in the same directory as the Python code. In this case, our module's ``render`` method ix extremely specific for this model alone. The code looks like this.
+1. This block of code functions as the object's constructor. It adds and saves a ``canvas`` element to the HTML page body, and creates a *Chart.js* bar chart inside of it. 
+2. The ``render`` method takes a list of numbers as an input, and assigns each to the corresponding bar of the histogram.
+3. To ``reset`` the histogram, this code destroys the chart and creates a new one with the same parameters.
+
+Next, the Python class tells the front-end to include ``Chart.min.js`` (included with the Mesa package) and the new ``HistogramModule.js`` file we created above, which is located in the same directory as the Python code. In this case, our module's ``render`` method is extremely specific for this model alone. The code looks like this.
 
 .. code-block:: python
 
@@ -376,9 +380,10 @@ Next, the Python class uses ``Chart.min.js`` (included with the Mesa package) an
 
     def __init__(self, bins):
       self.bins = bins
-      new_element = "new HistogramModule({})"
+      new_element = "new HistogramModule({})"      # 1.
       new_element = new_element.format(bins)
-      self.js_code = "elements.push("+new_element+");"
+      self.js_code = "elements.push("              # 2.
+      self.js_code += new_element +");"
 
   def render(self, model):
     wealth_vals = [a.wealth
@@ -386,6 +391,9 @@ Next, the Python class uses ``Chart.min.js`` (included with the Mesa package) an
     hist = np.histogram(wealth_vals,
                         bins=self.bins)[0]
     return [int(x) for x in hist]
+
+1. This line, and the line below it, prepare the code for actually inserting the visualization element; creating a new element, with the bins as an argument.
+2. ``js_code`` is a string of JavaScript code to be run by the front-end. In this case, it takes the code for creating a visualization element and inserts it into the front-end's ``elements`` list of visualization elements. 
 
 Finally, we can add the element to our visualization server object:
 
