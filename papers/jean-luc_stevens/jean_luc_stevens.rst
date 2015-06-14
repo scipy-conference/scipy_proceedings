@@ -257,16 +257,15 @@ code (or, more precisely, a single line of declarative specification).
    :figclass: w
 
    Example of a composite HoloViews data structure and how it is
-   displayed in an IPython Notebook session. The array ``data`` is a
-   400x400 Numpy array corresponding to a rendering of part of the
-   Mandelbrot set. **A.** The ``Raster`` element displays the ``data``
-   overlaid via the ``*`` operator with a horizontal line (an
-   ``HLine`` element). The ``Histogram`` element constructed with
-   ``.hist()`` displays the distribution of values in the data
-   array. **B.** A ``Curve`` element showing the values across the
-   middle of the ``Raster`` image as indicated by the blue horizontal
-   line. The curve is concatenated with the ``Overlay`` in **A** via the
-   ``+`` operation. :label:`layout`
+   displayed in an IPython Notebook session. The ``imdata`` array
+   loaded using Numpy corresponds to the displayed portion of the
+   Mandelbrot set. **A.** The ``Image`` element displays ``imdata``
+   overlaid via the ``*`` operator with a horizontal line correspond
+   to the declared ``HLine`` element. **B.** A ``Curve`` element
+   generated via the sample method of the image, showing a
+   cross-section of the fractal as indicated by the blue horizontal
+   line. The curve is concatenated with the ``Overlay`` in **A** via
+   the ``+`` operation. :label:`layout`
 
 
 ..
