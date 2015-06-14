@@ -1,0 +1,73 @@
+%
+% Make an entry that will span multiple rows of a table.
+%
+% \multirow{nrows}[bigstruts]{width}[fixup]{text}
+%
+% nrows is the number of rows to span.  It's up to the user to leave the
+%	rows empty, or the stuff created by \multirow will over-write it.
+% bigstruts is the total number of uses of \bigstrut within the rows being
+%	spanned.  Count 2 uses for each \bigstrut, 1 for each \bigstrut[x]
+%	where x is either t or b.  The default is 0.
+% width is the width to which the text is to be set.
+% text is the actual text.  It will be set in LR mode.  You can use \\
+%	within text to force linebreaks where you like.  The text is centered
+%	vertically within the range spanned by nrows.
+% fixup is a length used for fine tuning:  The text will be raised (or
+%	lowered, if fixup is negative) by that length above (below) wherever
+%	it would otherwise have gone.
+%
+% For example:
+%
+% \begin{tabular}{|c|c|}
+% \hline
+% \multirow{4}{1in}{Common g text} & Column g2a\\
+% 	& Column g2b \\
+% 	& Column g2c \\
+% 	& Column g2d \\
+% \hline
+% \multirow{3}[6]{1in}{Common g text} & Column g2a\bigstrut\\\cline{2-2}
+% 	& Column g2b \bigstrut\\\cline{2-2}
+% 	& Column g2c \bigstrut\\
+% \hline
+% \multirow{4}[8]{1in}{Common g text} & Column g2a\bigstrut\\\cline{2-2}
+% 	& Column g2b \bigstrut\\\cline{2-2}
+% 	& Column g2c \bigstrut\\\cline{2-2}
+% 	& Column g2d \bigstrut\\
+% \hline
+% \end{tabular}
+%
+% If any of the spanned rows are unusually large, or if \bigstrut's are used
+% assymetrically about the centerline of the spanned rows, the vertical
+% centering may not come out right.  Use the fixup argument in this case.
+%
+% Just before "text" is expanded, the \multirowsetup macro is expanded to
+% set up any special environment.  Initially, \multirowsetup contains just
+% \raggedright.  It can be redefined with \renewcommand.
+%
+% Bugs:  It's just about impossible to deal correctly with descenders.  The
+% text will be set up centered, but it may then have a baseline that doesn't
+% match the baseline of the stuff beside it, in particular if the stuff
+% beside it has descenders and "text" does not.  This will result in a small
+% missalignment.  About all that can be done is to do a final touchup on
+% "text", using the fixup optional argument.
+%
+% \multirow probably isn't too useful in array, as opposed to table, environ-
+% ments.  It will not work well there since the lines have an extra \jot of
+% space between them which it won't account for.  Fixing this is difficult in
+% general, and doesn't seem worth it.  A semi-automatic fix is to set
+% \bigstrutjot to \jot and then pass a second argument to \multirow to which
+% is equal to half the number of rows spanned.
+%
+\def\multirowsetup{\raggedright}
+\def\multirow#1{\relax\@ifnextchar [{\@multirow{#1}}{\@multirow{#1}[0]}}
+\def\@multirow#1[#2]#3{\@ifnextchar [{\@xmultirow{#1}[#2]{#3}}%
+  {\@xmultirow{#1}[#2]{#3}[0pt]}}
+\def\@xmultirow#1[#2]#3[#4]#5{\@tempcnta=#1%
+  \@tempdima\@tempcnta\ht\@arstrutbox
+  \advance\@tempdima\@tempcnta\dp\@arstrutbox
+  \advance\@tempdima#2\bigstrutjot
+  \setbox0\hbox{\vtop to \@tempdima{\hsize#3\@parboxrestore
+		\vfill \multirowsetup #5\par\vfill}}%
+  \ht0\z@\dp0\z@
+  \@tempdima\ht\@arstrutbox \ifnum#2>0 \advance\@tempdima\bigstrutjot \fi
+  \advance\@tempdima#4 \raise\@tempdima\box0 }
