@@ -165,7 +165,7 @@ The the main process is implemented through the ``MainWindow`` class. It is a su
 Results
 -------
 
-We have used the software presented in this work with a data stream from the serial port corresponding to one signal with a sampling frequency of 2 kilohertz. We have also used it with a data stream from a TPC/IP socket corresponding to 20 signals with a sampling frequency of 500 hertz.p
+We have used the software presented in this work with a data stream from the serial port corresponding to one signal with a sampling frequency of 2 kilohertz. We have also used it with a data stream from a TPC/IP socket corresponding to 20 signals with a sampling frequency of 500 hertz.
 
 In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. The software was customized to acquire and record data. We also incorporated some steps of a fatigue estimation algorithm [Dim03]_ to the processing pipeline. In this case we found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly positioned, drastically reducing the amount of time required by the experiments. Figure :ref:`emg` shows a screen shot of the program while acquiring an EMG signal from a study using wearables devices to study fatigue in muscles. The figure shows an EMG signal (first panel), an real time estimation of the fatigue level (second panel) based on the acquired EMG signal, and three acceleration signals (third panel). See the following links for a video of the software being used to acquire EMG signals from different devices: http://bit.ly/1BHObxL, http://bit.ly/1Ex0Ydy.
 
