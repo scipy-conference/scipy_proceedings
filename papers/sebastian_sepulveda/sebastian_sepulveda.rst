@@ -83,7 +83,7 @@ Figure :ref:`figSWarch` shows the architecture of the software. The architecture
 
    Diagram of the software architecture. There are two independent processes. The communication process reads the incoming data stream, parse it, add a time-stamp (if necessary), and put the processed data into a queue. The main process reads the data from the queue, process the data, and then update the plot and log the data into a file. :label:`figSWarch`
 
-   Figure :ref:`usage` shows the processes viewed by ``htop`` during the execution of the program. The first process (PID 1082) corresponds to the process initiated by the application. The second one is the communication process (PID 1178). [#]_
+   Figure :ref:`usage` shows the processes viewed by ``htop`` during the execution of the program. The first process (PID 3095) corresponds to the process initiated by the application. The second one is the communication process (PID 3109). [#]_
 
 .. [#] By default ``htop`` shows the processes and threads together. Pressing the H key while the program is running shows or hides the threads. In figure :ref:`usage`, the screen is configured to show both processes and threads.
 
@@ -160,7 +160,7 @@ The the main process is implemented through the ``MainWindow`` class. It is a su
 
 .. figure:: usage.png
 
-   Screenshot of ``htop`` showing the processes associated to the program. The first process (PID 1082) corresponds to the process initiated by the application. The second one is the communication process (PID 1178).  :label:`usage`
+   Screenshot of ``htop`` showing the processes associated to the program. The first process (PID 3095) corresponds to the process initiated by the application. The second one is the communication process (PID 3109).  :label:`usage`
 
 Results
 -------
