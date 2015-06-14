@@ -858,7 +858,7 @@ eliminating the need to write plotting code entirely, this approach
 restores the quick and easy interaction typical when working with an
 interpreter. By keeping declarations of content separate from
 declarations regarding presentation, it is possible to first establish
-the content of interest before improving its visual
+what content is of interest before improving its visual
 representation. Furthermore, this approach helps keep the code written
 by the user clean and succinct by completely separating these two
 concerns.
@@ -866,11 +866,11 @@ concerns.
 This approach cuts across the entire workflow associated with research
 and is therefore not directly comparable in terms of user experience
 to standard third-party plotting packages. In fact, HoloViews is
-designed to abstract away the details of plotting process so that any
-plotting system may be used. In fact, a user does not even need to be
-aware of the underlying plotting library until there is a need to
-customize the visual output at which point the user will need to know
-about the display options appropriate for the backend.
+designed to abstract away the details of plotting process so that
+*any* plotting system may be used. In fact, a user does not even need
+to be aware of the underlying plotting library until there is a need
+to customize the visual output at which point the user will need to
+supply display options appropriate for the backend.
 
 The compositionality of HoloViews is superficially reminiscent of
 systems such as the Grammar of Graphics [] although this is fact the
@@ -885,13 +885,13 @@ The fact that content is kept separate from presentation is also key
 to reproducibility. The absolutely minimum requirement for a project
 to be considered reproducible is that the raw data can be
 replicated. The aesthetic aspects of a figure are always less
-important than the actual content represented and HoloViews reflects
-this important distinction. In fact, we offer advanced comparison
-utilities that can tell you exactly how two HoloViews objects
-differ. These utilities allow us to ensure the raw data in all our
-notebooks (e.g on our main website) remain constant over time. These
-tests are entirely separate from the tests of the visual
-representation.
+important than the details of how the content is displayed and
+HoloViews reflects this important distinction. In fact, we offer
+advanced comparison utilities that can tell you exactly how two
+HoloViews objects differ. These utilities allow us to ensure the raw
+data in all our notebooks (e.g on our main website) remain constant
+over time. These tests are entirely separate from the tests that check
+whether the visual representation has changed.
 
 
 .. References
