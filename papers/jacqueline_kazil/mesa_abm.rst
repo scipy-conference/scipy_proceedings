@@ -51,7 +51,8 @@ In the remainder of this paper, we will present Mesa's architecture and core fea
 Architecture
 -------------
 
-**Overview**
+Overview
+~~~~~~~~~~~~
 
 The guiding princinple of Mesa's architecture is modularity. Mesa makes minimal assumptions about the form a model will take. For example, while many models have spatial components, many others do not; while some models may involve multiple separate spaces. Similarly, visualizations which display each step of a model may be a critical component of some models and completely unneccessary for others. Thus Mesa aims to offer a set of components that can be easily combined and extended to build different kinds of models.
 
@@ -88,7 +89,8 @@ To begin building the example model described above, we first create two classes
 
 1. Each agent should have a unique identifier, stored in the ``unique_id`` field.
 
-**Scheduler**
+Scheduler
+~~~~~~~~~~~
 
 The scheduler is a model component which deserves special attention. Unlike systems dynamics models, and dynamical systems more generally, time in agent-based models is almost never continuous; ABMs are, at bottom, discrete-event simulations. Thus, scheduling the agents' activation is particularly important, and the activation regime can have a substantial effect on the behavior of a simulation [Comer2014]_. Many ABM frameworks do not make it easy to change. For example, NetLogo defaults to a random activation system, while MASON's scheduler is uniform by default. By separating out the scheduler into a separate, extensible class, Mesa both requires modelers to specify their choice of activation regime, and makes it easy to change and observe the results. Additionally, the scheduler object serves as the model's storage struture for active agents.
 
@@ -152,7 +154,8 @@ Now, let's implement a schedule in our example model. We add a ``RandomActivatio
 1. Scheduler objects are instantiated with their Model object, which they then pass to the agents at each step.
 2. The scheduler's ``step`` method activates the ``step`` methods of all the agents that have been added to it, in this case in random order.
 
-**Space**
+Space
+~~~~~~~~
 
 Many agent-based models are spatial: agents may have fixed positions in space or move around, and interact with their immediate neighbors or with agents and other objects nearby. The space may be abstract (as in many cellular automata), or represent many possible scales, from a single building to a region to the entire world. While some models take place in three spatial dimensions as well, the majority represent space as two dimensional, which is how Mesa's current space modules are implemented. Many abstract model spaces are toroidal, meaning that the edges 'wrap around' to the opposite edge. This prevents model artifacts from arising at the edges, which have fewer neighbors than other locations.
 
@@ -187,7 +190,7 @@ To add space to our example model, we can have the agents wander around a grid; 
         grid = model.grid
         x, y = self.pos
         possible_steps = grid.get_neighborhood(x, y, 
-          moore=True, include_center=True) # 3.
+          moore=True, include_center=True)         # 3.
         choice = random.choice(possible_steps)
         grid.move_agent(self, choice)              # 4.
 
@@ -227,7 +230,8 @@ Once the model has been run, we can create a static visualization of the distrib
 
   Example of spatial wealth distribution across the grid. :label:`fig3.5`
 
-**Data Collection**
+Data Collection
+~~~~~~~~~~~~~~~~~
 
 An agent-based model is not particularly useful if there is no way to see the behaviors and outputs it produces. Generally speaking, there are two ways of extracting these: visualization, which allows for observation and qualitative examination (and which we will discuss below), and quantitative data collection. In order to facilitate the latter option, we provide a generic ``DataCollector`` class, which can store and export data from most models without needing to be subclassed.
 
@@ -278,7 +282,8 @@ An example of the output of this code is shown in Figure :ref:`fig4`. Notice tha
 
   Example of model output histogram, with labels added. :label:`fig4`
 
-**Batch Runner**
+Batch Runner
+~~~~~~~~~~~~~
 
 Since most ABMs are stochastic, a single model run gives us only one particular realization of the process the model describes. Furthermore, the questions we want to use ABMs to answer are often about how a particular parameter drives the behavior of the entire system -- requiring multiple model runs with multiple parameter values. In order to facilitate this, Mesa provides the ``BatchRunner`` class. Like the DataCollector, it does not need to be subclassed in order to conduct parameter sweeps on most models.
 
