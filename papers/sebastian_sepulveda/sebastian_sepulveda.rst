@@ -85,7 +85,7 @@ Figure :ref:`figSWarch` shows the architecture of the software. The architecture
 
    Figure :ref:`usage` shows the processes viewed by ``htop`` during the execution of the program. The first process (PID 3095) corresponds to the process initiated by the application. The second one is the communication process (PID 3109). [#]_
 
-.. [#] By default ``htop`` shows the processes and threads together. Pressing the H key while the program is running shows or hides the threads. In figure :ref:`usage`, the screen is configured to show both processes and threads.
+.. [#] By default ``htop`` shows the processes and threads together. Pressing the H key while the program is running shows or hides the threads. In figure :ref:`usage`, the screen is configured to show only the processes.
 
 
 Programming details
