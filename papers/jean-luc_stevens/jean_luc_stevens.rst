@@ -200,16 +200,15 @@ exploration and reproducibility simultaneously.
 Fixing the disconnect between data and representation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-At the same time as text-based interpreters have failed to overcome the inherent
-limitations of working with rich data, the web browser has emerged as
-a ubiquitous means of interactively working with rich media
-documents. In addition to being universally available, web browsers
-have the benefit of being based on open standards that remain
+At the same time as text-based interpreters have failed to overcome
+the inherent limitations of working with rich data, the web browser
+has emerged as a ubiquitous means of interactively working with rich
+media documents. In addition to being universally available, web
+browsers have the benefit of being based on open standards that remain
 supported almost indefinitely. Although early versions of the HTML
-standard only allowed passive page viewing, the widespread adoption
-of HTML5 (and websockets) has made it possible for anyone to engage
-with complex, dynamic documents in a bi-directional, interactive
-manner.
+standard only allowed passive page viewing, the widespread adoption of
+HTML5 (and websockets) has made it possible for anyone to engage with
+complex, dynamic documents in a bi-directional, interactive manner.
 
 The emergence of the web browser as a platform has been exploited by
 the Python community and the scientific community at large with the
@@ -506,12 +505,12 @@ therefore a ``Layout`` which itself contains another composite
 collection in the form of an ``Overlay``. This object is in fact a
 highly flexible, compositional tree-based data structure: intermediate
 nodes correspond either to ``Layout`` nodes (``+``) or ``Overlay``
-nodes (``*``), with element primitives at the leaf nodes. Note that all the raw
-data corresponding to every visual element is conveniently accessible
-via key or attribute access on the tree by selecting a leaf element
-using its path through the tree, and then inspecting the ``.data``
-attribute, making it simple to decalare which part of a complex
-dataset you want to work with for a particular visualization.
+nodes (``*``), with element primitives at the leaf nodes. Note that
+all the raw data corresponding to every visual element is conveniently
+accessible via key or attribute access on the tree by selecting a leaf
+element using its path through the tree, and then inspecting the
+``.data`` attribute, making it simple to declare which part of a
+complex dataset you want to work with for a particular visualization.
 
 ..
   jbednar: probably most people won't be able to figure out the
@@ -561,9 +560,10 @@ solutions.
 One way of dealing with this problem is to lay out multiple plots
 spatially.  Some plotting packages [Was14]_ [Wic09]_ have shown how
 this can be done easily using various grid-based layouts. Another
-solution is to introduce a time dimension, animating values over
-time.  A third solution is to provide interactive control, allowing
-the user to reveal further dimensionality by interacting with the plots.
+solution is to present the data over time as an animation.  A third
+solution is to provide interactive control, allowing the user to
+reveal further dimensionality by interacting with the plots using
+various widgets.
 
 In HoloViews, we solve this problem with composable data structures
 that embed homogeneous collections of ``Element`` objects in any
@@ -679,7 +679,7 @@ presentation is easily controllable.
 The only connection between the above data structures and the custom
 display options is a single, automatically managed integer
 identification attribute stored with the data structure.  Using this
-ID as a key, we can make the data structures behave as if they were
+``id`` as a key, we can make the data structures behave as if they were
 rich, stateful and customizable objects, without actually storing
 anything to do with visualization on the objects. We will show how
 this separation is useful and extensible so that the user can quickly
@@ -698,11 +698,11 @@ without changing anything about the object that is being rendered.
 
 The connection between the data structure and the rendered
 representation is made according to the object type, the
-aforementioned ID integer, and optionally specified group and label
-strings. The declarative data structures define what will be plotted,
-specifying the arrangements of the plots, e.g. grids, layouts and
-overlays, which can then be customized via the options system to tweak
-aesthetic details such as tick marks, colors and normalization
+aforementioned ``id`` integer, and optionally specified group and
+label strings. The declarative data structures define what will be
+plotted, specifying the arrangements of the plots, e.g. grids, layouts
+and overlays, which can then be customized via the options system to
+tweak aesthetic details such as tick marks, colors and normalization
 options. Finally, the plotting and rendering process occurs
 automatically in the background so that the user never needs to worry
 about it.
@@ -720,7 +720,7 @@ to a group (e.g ``group='Fractal'``) make use of a different colormap
 by overriding it on the ``Image.Fractal`` node of the tree.
 
 This global default tree is held on the ``Store`` object which can
-also hold display settings per object instance via the integer ID
+also hold display settings per object instance via the integer ``id``
 attribute. This provides a highly flexible styling system, allowing
 the user to specify display options that apply to all objects of a
 particular type or only specific subsets of them. For instance, it is
