@@ -55,8 +55,10 @@ and a task is a Python tuple with a callable first element.
 Example
 ~~~~~~~
 
-.. image:: dask-simple.png
-   :alt: A simple dask dictionary
+.. figure:: dask-simple.png
+   :scale: 40%
+
+   A simple dask dictionary
 
 Consider the following simple program
 
@@ -224,8 +226,10 @@ all of the internal numpy blocks that make up the larger array.  These shapes
 can be concisely described by a tuple of tuples of integers, where each
 internal tuple corresponds to the lengths along a single dimension.
 
-.. image:: array.png
-   :alt: A dask array
+.. figure:: array.png
+   :scale: 40%
+
+   A dask array
 
 In the example above we have a 20 by 24 array cut into uniform blocks of size 5
 by 8.  The ``chunks`` attribute describing this array is the following:
@@ -281,22 +285,16 @@ The shape of this array depends on the number of positive elements in ``x``.
 This shape is not known given only metadata; it requires knowledge of the
 values underlying ``x``, which are not available at graph creation time.
 
-Example: Matrix Multiply
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-Example: Meteorology
-~~~~~~~~~~~~~~~~~~~~
-
 
 Dynamic Task Scheduling
 -----------------------
 
-We now execute task graphs.  How
-we execute these graphs strongly impacts performance.  Fortunately we can
-tackle this problem with a variety of approaches without touching the graph
-creation problem discussed above.  Graph creation and graph execution are
-separable problems.  The dask library contains schedulers for single-threaded,
-multi-threaded, multi-process, and distributed execution.
+We now execute task graphs.  How we execute these graphs strongly impacts
+performance.  Fortunately we can tackle this problem with a variety of
+approaches without touching the graph creation problem discussed above.  Graph
+creation and graph execution are separable problems.  The dask library contains
+schedulers for single-threaded, multi-threaded, multi-process, and distributed
+execution.
 
 Current dask schedulers all operate *dynamically*, meaning that execution order
 is determined during execution rather than ahead of time through static
@@ -331,9 +329,154 @@ tens or hundreds of thousands in common workloads and so in practice we must
 maintain enough state so that we can choose the right task in constant time (or
 at least far sub-linear time).
 
+
+Example: Matrix Multiply
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+We benchmark dask's blocked matrix multiply on an out-of-core dataset.  This
+demonstrates the following:
+
+1.  How to interact with on-disk data
+2.  The blocked algorithms in dask.array achieve similar performance to modern
+    BLAS implementations on compute-bound tasks
+
+We set up a trivial input dataset
+
+.. code-block:: python
+
+   import h5py
+   f = h5py.File('myfile.hdf5')
+   A = f.create_dataset(name='A', shape=(200000, 4000), dtype='f8',
+                                  chunks=(250, 250), fillvalue=1.0)
+   B = f.create_dataset(name='B', shape=(4000, 4000), dtype='f8',
+                                  chunks=(250, 250), fillvalue=1.0)
+   out = f.create_dataset(name='out', shape=(4000, 4000), dtype='f8',
+                          chunks=(250, 250))
+
+The Dask convenience method, ``da.from_array``, creates a graph that can pull
+data from any object that implements numpy slicing syntax.  The ``da.store``
+function can then store a large result in any object that implements numpy
+setitem syntax.
+
+.. code-block:: python
+
+   import dask.array as da
+   a = da.from_array(A, chunks=(1000, 1000))
+   b = da.from_array(B, chunks=(1000, 1000))
+
+   c = a.dot(b)  # another dask Array, not yet computed
+   c.store(out)  # Store result into output space
+
+**Results**: We do this same operation in different settings.
+
+We use either use NumPy or dask.array
+
+1.  Use NumPy on a big-memory machine
+2.  Use dask.array in a small amount of memory, pulling data from disk, using
+    four threads
+
+We different BLAS implementations
+
+1.  Reference BLAS, single threaded, unblocked
+2.  OpenBLAS, single threaded
+3.  OpenBLAS, multi-threaded
+
+For each configuration we compute the number of floating point operations per
+second.
+
+.. table:: Matrix Multiply GFLOPS
+
+   +-----------------------+--------+--------------+
+   | Performance (GFLOPS)  | NumPy  |  Dask.array  |
+   +=======================+========+==============+
+   | Reference BLAS        | 6      |  18          |
+   +-----------------------+--------+--------------+
+   | OpenBLAS one thread   | 11     |  23          |
+   +-----------------------+--------+--------------+
+   | OpenBLAS four threads | 22     |  11          |
+   +-----------------------+--------+--------------+
+
+We note the following
+
+1.  Compute-bound tasks are computationally bound by memory; we don't
+    experience a slowdown
+2.  Dask.array can effectively parallize and block reference BLAS for matrix
+    multiplies
+3.  Dask.array doesn't significantly improve when using an optimized BLAS,
+    presumably this is because we've already reaped most of the benefits of
+    blocking and multi-core
+4.  One should not mix multiple forms of multi-threading.  Four dask.array
+    threads each spawning multi-threaded OpenBLAS DGEMM calls results in worse
+    performance.
+
+
+Example: Meteorology
+~~~~~~~~~~~~~~~~~~~~
+
+Performance is secondary to capability.  In this example we use dask.array to
+manipulate climate datasets that are larger than memory.  This example shows
+the following:
+
+1.  Use ``concatenate`` and ``stack`` to manage large piles of HDF5 files (a
+    common case)
+2.  Using reductions and slicing to manipulate stacks of arrays
+3.  Interacting with other libraries in the ecosystem using the ``__array__``
+    protocol.
+
+We start with a typical setup, a large pile of NetCDF files.::
+
+   $ ls
+   2014-01-01.nc3  2014-03-18.nc3  2014-06-02.nc3  2014-08-17.nc3  2014-11-01.nc3
+   2014-01-02.nc3  2014-03-19.nc3  2014-06-03.nc3  2014-08-18.nc3  2014-11-02.nc3
+   2014-01-03.nc3  2014-03-20.nc3  2014-06-04.nc3  2014-08-19.nc3  2014-11-03.nc3
+   2014-01-04.nc3  2014-03-21.nc3  2014-06-05.nc3  2014-08-20.nc3  2014-11-04.nc3
+   ...             ...             ...             ...             ...
+
+Each of these files contains the temperature at two meters above ground over
+the earth at quarter degree resolution, every six hours.
+
+.. code-block:: python
+
+   >>> import netCDF4
+   >>> t = netCDF4.Dataset('2014-01-01.nc3').variables['t2m']
+   >>> t.shape
+   (4, 721, 1440)
+
+We can collect many of these files together using ``da.concatenate``, resulting
+in a single large array.
+
+.. code-block:: python
+
+   >>> from glob import glob
+   >>> filenames = sorted(glob('2014-*.nc3'))
+   >>> temps = [netCDF4.Dataset(fn).variables['t2m'] for fn in filenames]
+
+   >>> import dask.array as da
+   >>> arrays = [da.from_array(t, blockshape=(4, 200, 200)) for t in temps]
+   >>> x = da.concatenate(arrays, axis=0)
+
+   >>> x.shape
+   (1464, 721, 1440)
+
+We can now play with this array as though it were a numpy array.  Because
+dask.arrays implement the ``__array__`` protocol we can dump them directly into
+functions of other libraries.  These libraries will trigger computation when
+they call ``np.array(...)`` on their input.
+
+.. code-block:: python
+
+>>> from matplotlib import imshow
+>>> imshow(x[::4].mean(axis=0) - x[2::4].mean(axis=0), cmap='RdBu_r')
+
+.. figure:: day-vs-night.png
+
+   We use typical numpy slicing and reductions on a large volume of data to
+   show the average temperature difference between noon and midnight for year
+   2014
+
+This computation took about a minute on an old notebook computer.  The computation seemed to be bound by disk access.
+
 References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
-
-
