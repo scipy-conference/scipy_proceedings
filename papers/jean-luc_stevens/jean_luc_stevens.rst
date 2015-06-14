@@ -241,9 +241,9 @@ plotting package; instead, it offers a set of useful data structures
 paired with rich, customizable visual representations that display
 effortlessly in the IPython Notebook environment. The result is
 research that is more interactive, concise, declarative, and
-reproducible. Figure :ref:`layout` shows a self-contained example 
-of building a complex visualization using a single line of HoloViews
-code (or, more precisely, a single line of declarative specification).
+reproducible. Figure :ref:`layout` shows a self-contained example of
+building a complex visualization using a single line to declare a
+HoloViews object followed by a single line to compose and annotate it.
 
 ..
   jbednar: I strongly believe in showing the full code.  
