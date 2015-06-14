@@ -363,6 +363,14 @@ separation of content and presentation is already a well established
 design principle outside of science, and is analogous to the
 relationship between HTML content and CSS in web pages.
 
+In the next section we will discuss the data structures that hold the
+important content. Starting with the simple primitive elements, we
+examine how they can be composed into complex figures and embedded
+high-dimensional spaces for exploration. Along the way we will
+discover how our implementation realizes the design principles
+outlined and manages to keep the state of the data separate from its
+visual representation.
+
 
 Data Structures
 ---------------
@@ -371,7 +379,8 @@ In this section we discuss the data structures that hold the data and
 the essential semantic content of interest. The Elements section
 introduces each of the primitives, and the Collections section
 explains how they can be combined. Finally, we will discuss working
-with Elements embedded in high-dimensional continuous or discrete spaces.
+with Elements embedded in high-dimensional continuous or discrete
+spaces.
 
 
 Elements
