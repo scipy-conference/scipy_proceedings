@@ -66,7 +66,7 @@ After using PyQtGraph to its limits in a multithreaded architecture, we could no
 
 .. [#] See http://wiki.scipy.org/ParallelProgramming for details.
 
-To overcome the GIL limitations we used the multiprocessing module, belonging to the Python Standard Library. This module provides an API similar to the threading module, but it uses subprocesses instead of threads [Put15]_. By letting the OS to control of the subprocesses, this allows to take advantage of all the cores available on the platform.
+To overcome the GIL limitations we used the multiprocessing module, belonging to the Python Standard Library. This module provides an API similar to the threading module, but it uses subprocesses instead of threads [Pyt15]_. By letting the OS to control of the subprocesses, this allows to take advantage of all the cores available on the platform.
 
 Putting all together
 ====================
@@ -216,7 +216,7 @@ References
 .. [Mad11] S. Madgwick, Andrew JL Harrison, and Ravi Vaidyanathan. *Estimation of IMU and MARG orientation using a gradient descent algorithm.*,
            Rehabilitation Robotics (ICORR), 2011 IEEE International Conference on. IEEE, 2011.
 
-.. [Put15] Python Software Foundation, *16.6 multiprocessing - Process-based “threading” interface*,
+.. [Pyt15] Python Software Foundation, *16.6 multiprocessing - Process-based “threading” interface*,
         https://docs.python.org/2/library/multiprocessing.html
 
 .. [Roe06] D. Roetenberg, *Inertial and magnetic sensing of human motion*. 
