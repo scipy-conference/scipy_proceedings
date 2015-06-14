@@ -541,12 +541,12 @@ leaf elements. This is achieved with a semantic, two level labelling
 system using "group" and "label" strings supported throughout
 HoloViews. We have seen an example of a label string in Figure 1 where
 it is used to labelled the image as 'Mandelbrot Set'. The textual
-representation of the layout in Figure 1 (see Out [6] of Figure 4)
-shows how the supplied label is used in the attribute based indexing
-scheme of the layout. The strings 'Image', 'Overlay', 'Hline' and
-'Curve' are default group names: by supplying label and group
-throughout, you can define a sensible, semantic scheme for accessing
-the components of your data.
+representation of the layout in Figure :ref:`label` (see Out [6] of
+Figure :ref:`customization`) shows how the supplied label is used in
+the attribute based indexing scheme of the layout. The strings
+'Image', 'Overlay', 'Hline' and 'Curve' are default group names: by
+supplying label and group throughout, you can define a sensible,
+semantic scheme for accessing the components of your data.
 
 
 With the ability to overlay or concatenate any element with any other,
@@ -711,7 +711,9 @@ format, change the output format (e.g switch from PNG to SVG) and even
 alter the plotting backend (currently defaulting to Matplotlib)
 without changing anything about the object that is being rendered.
 
-.. HoloViews is enabled by IPython display hooks automatically linking the displayed object type to the code that generates its visual representation.
+.. HoloViews is enabled by IPython display hooks automatically linking
+   the displayed object type to the code that generates its visual
+   representation.
 
 .. 
    jbednar: I think people will have a hard time understanding what 
@@ -889,9 +891,6 @@ This paper has demonstrated a succinct, flexible and interactive approach for da
    up always requires additional effort and custom code, placing a
    barrier to their primary use case, the interactive exploration of
    data.
-
-
-.. include:: ./papers/jean-luc_stevens/Discussion.rst
 
 
 .. jbednar: shouldn't it mention normalization somewhere?  It's a big deal.
