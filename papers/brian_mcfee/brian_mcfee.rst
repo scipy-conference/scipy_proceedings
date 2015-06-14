@@ -45,7 +45,7 @@ LibROSA: Audio and Music Signal Analysis in Python
 Introduction
 ------------
 
-The emergent research field of music information retrieval (MIR) broadly covers topics at
+The emerging research field of music information retrieval (MIR) broadly covers topics at
 the intersection of musicology, digital signal processing, machine learning, information
 retrieval, and library science.  Although the field is relatively young |---| the first
 international symposium on music information retrieval (ISMIR) [#]_ was held in October of
@@ -55,18 +55,18 @@ While the preponderance of MIR research has been conducted with custom tools and
 developed by researchers in a variety of languages such as MATLAB or C++, the stability, 
 scalability, and ease of use these tools has often left much to be desired.
 
-Within recent years, interest in (scientific) Python as a viable alternative has grown
-in the MIR community.
+In recent years, interest has grown within the MIR community in using (scientific) Python 
+as a viable alternative.
 This has been driven by a confluence of several factors, including the availability of
 high-quality machine learning libraries such as ``scikit-learn`` [Pedregosa11]_ and tools based on
 ``Theano`` [Bergstra11]_, as well as Python's vast catalog of packages for dealing with text data and
 web services.
-However, without a stable core library to provide the basic
-routines upon which many MIR applications are built, adoption of Python has been slow.
-To remedy this situation, we have developed ``librosa``:[#]_ a python package for audio
+However, the adoption of Python has been slowed by the absence of a stable core library 
+that provides the basic routines upon which many MIR applications are built.
+To remedy this situation, we have developed ``librosa``:[#]_ a Python package for audio
 and music signal processing. [#]_
-In doing so, we hope to both ease the transition into Python (and modern software
-development practices) for MIR researchers, and 
+In doing so, we hope to both ease the transition of MIR researchers into Python (and modern software
+development practices), and also to 
 make core MIR techniques readily available to the broader community of scientists and 
 Python programmers.
 
@@ -75,14 +75,14 @@ Python programmers.
 .. [#] https://github.com/bmcfee/librosa
 
 .. [#] The name `librosa` is borrowed from `LabROSA`: the LABoratory for the Recognition
-    and Organization of Speech and Audio at Columbia University, where much of the development
+    and Organization of Speech and Audio at Columbia University, where the initial development
     of librosa took place.
 
 
 Design principles
 =================
 
-In designing librosa, we prioritized a few key concepts.
+In designing librosa, we have prioritized a few key concepts.
 First, we strive for a low barrier to entry for researchers familiar with MATLAB.
 In particular, we opted for a relatively flat package layout, and following ``scipy`` [Jones01]_ 
 rely upon ``numpy`` data types and functions [VanDerWalt11]_, rather than abstract class hierarchies.
@@ -108,10 +108,10 @@ a custom onset strength estimate may be provided to the beat tracker as a functi
 argument.
 This allows researchers to leverage existing library functions while experimenting with 
 improvements to specific components.  Although this seems simple and obvious, from a practical 
-standpoint, the monolithic designs and lack of interoperability between different research codebases
-has often made this difficult in the past.
+standpoint the monolithic designs and lack of interoperability between different research codebases
+has historically made this difficult.
 
-Finally, we strive for readable code, thorough documentation, and exhaustive testing.
+Finally, we strive for readable code, thorough documentation and exhaustive testing.
 All development is conducted on GitHub.  
 We apply modern software development practices, such as continuous integration testing (via Travis [#]_) and
 coverage (via Coveralls [#]_).
@@ -169,7 +169,7 @@ e.g., ``S[:,0], S[:,1]`` access features at the first and second frames.
 Feature arrays are organized column-major (Fortran style) in memory, so that common
 access patterns benefit from cache locality.
 
-By default, all pitch-based analyses are assumed to be relative to an 12-bin equal-tempered
+By default, all pitch-based analyses are assumed to be relative to a 12-bin equal-tempered
 chromatic scale with a reference tuning of ``A440 = 440.0 Hz``.  Pitch and pitch-class analyses
 are arranged such that the 0th bin corresponds to ``C`` (for pitch class) or ``C1`` (32.7 Hz),
 for absolute pitch measurements.
@@ -208,7 +208,6 @@ frequency representations suitable for pitch-based signal analysis.
 Finally, ``logamplitude`` provides a flexible and robust implementation of log-amplitude scaling, which 
 can be used to avoid numerical underflow and set an adaptive noise floor when converting from linear
 amplitude.
-
 
 Because data may be represented in a variety of time or frequency units, we provide a comprehensive set of
 convenience functions to map between different time representations: seconds, frames, or samples; 
