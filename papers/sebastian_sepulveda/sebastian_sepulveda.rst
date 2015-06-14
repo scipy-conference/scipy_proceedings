@@ -87,9 +87,6 @@ Figure :ref:`figSWarch` shows the architecture of the software. The architecture
 
 .. [#] By default ``htop`` shows the processes and threads together. Pressing the H key while the program is running shows or hides the threads. In figure :ref:`usage`, the screen is configured to show both processes and threads.
 
-.. figure:: usage.png
-
-   Screenshot of ``htop`` showing the processes associated to the program. The first process (PID 1082) corresponds to the process initiated by the application. The second one is the communication process (PID 1178).  :label:`usage`
 
 Programming details
 -------------------
@@ -161,12 +158,16 @@ The the main process is implemented through the ``MainWindow`` class. It is a su
             self.data.join()
             self.timer_plot_update.stop()
 
+.. figure:: usage.png
+
+   Screenshot of ``htop`` showing the processes associated to the program. The first process (PID 1082) corresponds to the process initiated by the application. The second one is the communication process (PID 1178).  :label:`usage`
+
 Results
 -------
 
 We have used the software presented in this work with a data stream from the serial port corresponding to one signal with a sampling frequency of 2 kilohertz. We have also used it with a data stream from a TPC/IP socket corresponding to 20 signals with a sampling frequency of 500 hertz.p
 
-In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. The software was customized to acquire and record data. We also incorporated some steps of a fatigue estimation algorithm [Dim03]_ to the processing pipeline. In this case we found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly positioned, drastically reducing the amount of time required by the experiments. Figure :ref:`emg` shows a screen shot of the program while acquiring an EMG signal from a study using wearables devices to study fatigue in muscles. The figure shows an EMG signal (first panel), an real time estimation of the fatigue level (second panel) based on the acquired EMG signal, and three acceleration signals (third panel).
+In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. The software was customized to acquire and record data. We also incorporated some steps of a fatigue estimation algorithm [Dim03]_ to the processing pipeline. In this case we found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly positioned, drastically reducing the amount of time required by the experiments. Figure :ref:`emg` shows a screen shot of the program while acquiring an EMG signal from a study using wearables devices to study fatigue in muscles. The figure shows an EMG signal (first panel), an real time estimation of the fatigue level (second panel) based on the acquired EMG signal, and three acceleration signals (third panel). See the following links for a video of the software being used to acquire EMG signals from different devices: http://bit.ly/1BHObxL, http://bit.ly/1Ex0Ydy.
 
 .. figure:: emg.png
     
@@ -174,13 +175,12 @@ In a biomechanical study we used our program to evaluate a prototype of a wearab
 
 An important feature of our program is the easiness to customize it to a specific application. For instance, the software is being used to acquire a set of pressure signals from a device (as seen in figure :ref:`device`) used to monitor nutrition disorders in premature infants. The customization included: (1) modifying the software to acquire two pressure signals using bluetooth; and (2) to perform some specific signal processing before displaying. In this example it is important to emphasize that the changes to the program were made by a researcher different than the main developer of our program. We claim that this is possible because our program is written in Python. This makes it easier to understand and modify the code compared to a program written in a lower level language.
 
+The software presented in this work has been tested with different devices, communication protocols, platforms and operating systems (OSs). The initial development was done and tested on the platforms x86, x64 and ARM (RaspberryPy) running Linux. However, this version of the software did not worked as expected on OS X and Windows, due to some restrictions of the multiprocessing library in these OSs. Despite the fact that OS X is a Unix-like OS, there are some multiprocessing methods not implemented in the multiprocessing library. In particular, the method ``qsize``, used to get the approximated size of the queue, is not implemented in OS X. The lack of the ``os.fork()`` call in Windows add some extra limitation when running a program on this OS. Since in this case a child process can not access the parent resources, it is necessary that subclasses of the ``Process`` class must be picklable. Although the documentation of the library contains some suggestions to overcome this restrictions, currently we are not able to run our program on Windows.
+
 .. figure:: device.jpg
     
     Photo of the prototype device used in the study. An Arduino development platform is used to acquire the signals (two pressure measurement). These signals are acquired by a computer running a modified version of our software. :label:`device`
 
-See the following links for two examples where the software is used to acquire EMG signals from different devices: http://bit.ly/1BHObxL, http://bit.ly/1Ex0Ydy.
-
-The software presented in this work has been tested with different devices, communication protocols, platforms and operating systems (OSs). The initial development was done and tested on the platforms x86, x64 and ARM (RaspberryPy) running Linux. However, this version of the software did not worked as expected on OS X and Windows, due to some restrictions of the multiprocessing library in these OSs. Despite the fact that OS X is a Unix-like OS, there are some multiprocessing methods not implemented in the multiprocessing library. In particular, the method ``qsize``, used to get the approximated size of the queue, is not implemented in OS X. The lack of the ``os.fork()`` call in Windows add some extra limitation when running a program on this OS. Since in this case a child process can not access the parent resources, it is necessary that subclasses of the ``Process`` class must be picklable. Although the documentation of the library contains some suggestions to overcome this restrictions, currently we are not able to run our program on Windows.
 
 Conclusions
 -----------
