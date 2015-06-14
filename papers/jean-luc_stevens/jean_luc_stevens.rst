@@ -894,6 +894,13 @@ tests are entirely separate from the tests of the visual
 representation.
 
 
+.. References
+
+   Crook paper - jim's webpages
+   Vistrails
+   Ones from Lancet paper.
+   Grammar of Graphics.
+
 ..
    Paragraph about succinctness being important here
 
