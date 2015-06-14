@@ -51,7 +51,8 @@ In the remainder of this paper, we will present Mesa's architecture and core fea
 Architecture
 -------------
 
-**Overview**
+Overview
+~~~~~~~~~~~~
 
 The guiding princinple of Mesa's architecture is modularity. Mesa makes minimal assumptions about the form a model will take. For example, while many models have spatial components, many others do not; while some models may involve multiple separate spaces. Similarly, visualizations which display each step of a model may be a critical component of some models and completely unneccessary for others. Thus Mesa aims to offer a set of components that can be easily combined and extended to build different kinds of models.
 
@@ -61,7 +62,7 @@ We divide the modules into three overall categories: modeling, analysis and visu
 
    Simplified UML diagram of Mesa architecture. :label:`fig3`
 
-To begin building the example model described above, we first create two classes: one for the model object itself, and one for each model agent. The model's one parameter is the number of agents, and each agent has a single variable: how much money it currently has. Each agent also has a single action: give a unit of money to another agent.
+To begin building the example model described above, we first create two classes: one for the model object itself, and one for each model agent. The model's one parameter is the number of agents, and each agent has a single variable: how much money it currently has. Each agent also has a single action: give a unit of money to another agent. Numbers in comments correspond to notes below the code block.
 
 .. code-block:: python
 
@@ -70,8 +71,7 @@ To begin building the example model described above, we first create two classes
   class MoneyAgent(Agent):
     """ An agent with fixed initial wealth."""
     def __init__(self, unique_id):
-      # Each agent should have a unique_id
-      self.unique_id = unique_id
+      self.unique_id = unique_id                   # 1.
       self.wealth = 1
 
   class MoneyModel(Model):
@@ -87,7 +87,10 @@ To begin building the example model described above, we first create two classes
         a = MoneyAgent(i)
         # Now what? See below.
 
-**Scheduler**
+1. Each agent should have a unique identifier, stored in the ``unique_id`` field.
+
+Scheduler
+~~~~~~~~~~~
 
 The scheduler is a model component which deserves special attention. Unlike systems dynamics models, and dynamical systems more generally, time in agent-based models is almost never continuous; ABMs are, at bottom, discrete-event simulations. Thus, scheduling the agents' activation is particularly important, and the activation regime can have a substantial effect on the behavior of a simulation [Comer2014]_. Many ABM frameworks do not make it easy to change. For example, NetLogo defaults to a random activation system, while MASON's scheduler is uniform by default. By separating out the scheduler into a separate, extensible class, Mesa both requires modelers to specify their choice of activation regime, and makes it easy to change and observe the results. Additionally, the scheduler object serves as the model's storage struture for active agents.
 
@@ -130,18 +133,17 @@ Now, let's implement a schedule in our example model. We add a ``RandomActivatio
     def __init__(self, N):
       self.num_agents = N
       # Adding the scheduler:
-      self.schedule = RandomActivation(self)
+      self.schedule = RandomActivation(self)       # 1. 
       self.create_agents()
 
     def create_agents(self):
       """Method to create all the agents."""
       for i in range(self.num_agents):
         a = MoneyAgent(i)
-        # Now add the agent to the schedule:
-        self.schedule.add(a)
+        self.schedule.add(a) 
 
     def step(self):
-      self.schedule.step()
+      self.schedule.step()                         # 2.
 
     def run_model(self, steps):
       """The model has no end condition
@@ -149,7 +151,11 @@ Now, let's implement a schedule in our example model. We add a ``RandomActivatio
       for _ in range(steps):
         self.step()
 
-**Space**
+1. Scheduler objects are instantiated with their Model object, which they then pass to the agents at each step.
+2. The scheduler's ``step`` method activates the ``step`` methods of all the agents that have been added to it, in this case in random order.
+
+Space
+~~~~~~~~
 
 Many agent-based models are spatial: agents may have fixed positions in space or move around, and interact with their immediate neighbors or with agents and other objects nearby. The space may be abstract (as in many cellular automata), or represent many possible scales, from a single building to a region to the entire world. While some models take place in three spatial dimensions as well, the majority represent space as two dimensional, which is how Mesa's current space modules are implemented. Many abstract model spaces are toroidal, meaning that the edges 'wrap around' to the opposite edge. This prevents model artifacts from arising at the edges, which have fewer neighbors than other locations.
 
@@ -167,7 +173,7 @@ To add space to our example model, we can have the agents wander around a grid; 
 
   class MoneyModel(Model):
     def __init__(self, N, width, height, torus):
-      self.grid = MultiGrid(height, width, torus)
+      self.grid = MultiGrid(height, width, torus)  # 1.
       # ... everything else
 
     def create_agents(self):
@@ -175,7 +181,7 @@ To add space to our example model, we can have the agents wander around a grid; 
         # ... everything above
         x = random.randrange(self.grid.width)
         y = random.randrange(self.grid.width)
-        self.grid.place_agent(a, (x, y))
+        self.grid.place_agent(a, (x, y))           # 2.
 
     class MoneyAgent(Agent):
       # ...
@@ -184,14 +190,14 @@ To add space to our example model, we can have the agents wander around a grid; 
         grid = model.grid
         x, y = self.pos
         possible_steps = grid.get_neighborhood(x, y, 
-          moore=True, include_center=True)
+          moore=True, include_center=True)         # 3.
         choice = random.choice(possible_steps)
-        grid.move_agent(self, choice)
+        grid.move_agent(self, choice)              # 4.
 
       def give_money(self, model):
         grid = model.grid
-        this_pos = [self.pos]
-        others = grid.get_cell_list_contents(this_pos)
+        pos = [self.pos]
+        others = grid.get_cell_list_contents(pos)  # 5.
         if len(others) > 1:
           other = random.choice(others)
           other.wealth += 1
@@ -202,11 +208,18 @@ To add space to our example model, we can have the agents wander around a grid; 
         if self.wealth > 0:
           self.give_money(model)
 
+1. The arguments needed to create a new grid are its width, height, and a boolean for whether it is a torus or not.
+2. The ``place_agent`` method places the given object in the grid cell specified by the ``(x, y)`` tuple, and assigns that tuple to the agent's ``pos`` property.
+3. The ``get_neighborhood`` method returns a list of coordinate tuples for the appropriate neighbors of the given coordinates. In this case, it's getting the Moore neighborhood (including diagonals) and includes the center cell. The agent decides where to move by choosing one of those tuples at random. This is a good way of handling random moves, since it still works for agents on an edge of a non-toroidal grid, or if the grid itself is hexagonal.
+4. the ``move_agent`` method works like ``place_agent``, but removes the agent from its current location before placing it in its new one.
+5. This is a helper method which returns the contents of the entire list of cell tuples provided. It's not strictly necessary here; the alternative would be: ``x, y = self.pos; others = grid[y][x]`` (note that grids are indexed y-first).
+
 Once the model has been run, we can create a static visualization of the distribution of wealth across the grid using the ``coord_iter`` iterator, which allows us to loop over all cells in the grid.
 
 .. code-block:: python
 
-  wealth_grid = np.zeroes(model.grid.width, model.grid.height)
+  wealth_grid = np.zeroes(model.grid.width, 
+                          model.grid.height)
   for cell in model.grid.coord_iter():
     cell_content, x, y = cell
     cell_wealth = sum(a.wealth for a in cell_content)
@@ -217,7 +230,8 @@ Once the model has been run, we can create a static visualization of the distrib
 
   Example of spatial wealth distribution across the grid. :label:`fig3.5`
 
-**Data Collection**
+Data Collection
+~~~~~~~~~~~~~~~~~
 
 An agent-based model is not particularly useful if there is no way to see the behaviors and outputs it produces. Generally speaking, there are two ways of extracting these: visualization, which allows for observation and qualitative examination (and which we will discuss below), and quantitative data collection. In order to facilitate the latter option, we provide a generic ``DataCollector`` class, which can store and export data from most models without needing to be subclassed.
 
@@ -268,7 +282,8 @@ An example of the output of this code is shown in Figure :ref:`fig4`. Notice tha
 
   Example of model output histogram, with labels added. :label:`fig4`
 
-**Batch Runner**
+Batch Runner
+~~~~~~~~~~~~~
 
 Since most ABMs are stochastic, a single model run gives us only one particular realization of the process the model describes. Furthermore, the questions we want to use ABMs to answer are often about how a particular parameter drives the behavior of the entire system -- requiring multiple model runs with multiple parameter values. In order to facilitate this, Mesa provides the ``BatchRunner`` class. Like the DataCollector, it does not need to be subclassed in order to conduct parameter sweeps on most models.
 
@@ -296,7 +311,7 @@ Output from this code is shown in Figure :ref:`fig5`.
 Visualization
 --------------
 
-Mesa uses a browser window to visualize its models. This avoids both the developers and the users needing to deal with cross-system GUI programming; more importantly, perhaps, it gives us access to the universe of advanced JavaScript-based data visualization tools. The in-browser visualization is inspire by AgentScript [Densmore2012], an in-browser agent-based modeling framework. The entire visualization system is divided into two parts: the server side, and the client side. The server runs the model, and at each step extracts data from it to visualize, which it sends to the client as JSON via a WebSocket connection. The client receives the data, and uses JavaScript to actually draw the data onto the screen for the user.
+Mesa uses a browser window to visualize its models. This avoids both the developers and the users needing to deal with cross-system GUI programming; more importantly, perhaps, it gives us access to the universe of advanced JavaScript-based data visualization tools. The in-browser visualization is inspire by AgentScript [Densmore2012], a JavaScript-based ABM framework. The entire visualization system is divided into two parts: the server side, and the client side. The server runs the model, and at each step extracts data from it to visualize, which it sends to the client as JSON via a WebSocket connection. The client receives the data, and uses JavaScript to actually draw the data onto the screen for the user.
 
 Mesa already includes a set of pre-built visualization elements which can be deployed with minimal setup. For example, to create a visualization of the example model which displays a live chart of the Gini coefficient at each step, we can use the included ``ChartModule``.
 
@@ -309,13 +324,16 @@ Mesa already includes a set of pre-built visualization elements which can be dep
   # The Chart Module gets a model-level variable
   # from the model's data collector
   chart_element = ChartModule([{"Label": "Gini",
-                              "Color": "Black"}],
-                              data_collector_name='dc')
+                        "Color": "Black"}],
+                        data_collector_name='dc')  # 1.
   # Create a server to visualize MoneyModel
-  server = ModularServer(MoneyModel,
-                        [chart_element],
+  server = ModularServer(MoneyModel,               # 2.
+                        [chart_element],           
                         "Money Model", 100)
   server.launch()
+
+1. We instantiate a visualization element object: ChartModule, which plots model-level variables being collected by the model's data collector as specified by the "Labels" provided. ``data_collector_name`` is the name of the actual DataCollector variable, so the module knows where to find the values.
+2. The server is instantiated with the model class; a list of visualization elements (in this case, there's only the one element), a model name, and model arguments (in this case, just the agent count).
 
 Running this code launches the server. To access the actual visualization, open your favorite browser (ideally Chrome) to http://127.0.0.1:8888/ . This shows the visualization, along with the controls used to reset the model, advance it by one step, or run it at the designated frame-rate. After several ticks, the browser window will look something like Figure :ref:`fig6`.
 
@@ -337,23 +355,27 @@ Let us create a simple histogram, with a fixed set of bins, for visualizing the 
 
   var HistogramModule = function(bins) {
     // Create the appropiate tag, stored in canvas
-    $("body").append(canvas);
+    $("body").append(canvas);                     // 1. 
     // ... Chart.js boilerplate removed
     var chart = new Chart(context).Bar(data, options);
 
-    this.render = function(data) {
+    this.render = function(data) {                // 2.
       for (var i in data)
         chart.datasets[0].bars[i].value = data[i];
       chart.update();
     };
 
-    this.reset = function() {
+    this.reset = function() {                     // 3.
       chart.destroy();
       chart = new Chart(context).Bar(data, options);
       };
     };
 
-Next, the Python class uses ``Chart.min.js`` (included with the Mesa package) and the new ``HistogramModule.js`` file we created above, which is located in the same directory as the Python code. In this case, our module's ``render`` method ix extremely specific for this model alone. The code looks like this.
+1. This block of code functions as the object's constructor. It adds and saves a ``canvas`` element to the HTML page body, and creates a *Chart.js* bar chart inside of it. 
+2. The ``render`` method takes a list of numbers as an input, and assigns each to the corresponding bar of the histogram.
+3. To ``reset`` the histogram, this code destroys the chart and creates a new one with the same parameters.
+
+Next, the Python class tells the front-end to include ``Chart.min.js`` (included with the Mesa package) and the new ``HistogramModule.js`` file we created above, which is located in the same directory as the Python code. In this case, our module's ``render`` method is extremely specific for this model alone. The code looks like this.
 
 .. code-block:: python
 
@@ -363,9 +385,10 @@ Next, the Python class uses ``Chart.min.js`` (included with the Mesa package) an
 
     def __init__(self, bins):
       self.bins = bins
-      new_element = "new HistogramModule({})"
+      new_element = "new HistogramModule({})"      # 1.
       new_element = new_element.format(bins)
-      self.js_code = "elements.push("+new_element+");"
+      self.js_code = "elements.push("              # 2.
+      self.js_code += new_element +");"
 
   def render(self, model):
     wealth_vals = [a.wealth
@@ -373,6 +396,9 @@ Next, the Python class uses ``Chart.min.js`` (included with the Mesa package) an
     hist = np.histogram(wealth_vals,
                         bins=self.bins)[0]
     return [int(x) for x in hist]
+
+1. This line, and the line below it, prepare the code for actually inserting the visualization element; creating a new element, with the bins as an argument.
+2. ``js_code`` is a string of JavaScript code to be run by the front-end. In this case, it takes the code for creating a visualization element and inserts it into the front-end's ``elements`` list of visualization elements. 
 
 Finally, we can add the element to our visualization server object:
 
