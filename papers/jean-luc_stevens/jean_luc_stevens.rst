@@ -836,18 +836,100 @@ dissemination common to all scientific disciplines.
 Discussion
 ----------
 
-This paper has demonstrated a succinct, flexible and interactive approach for data exploration, analysis and visualization.
+.. Originally from spaces?
 
-.. Points we would like Jim to mention
+   Various solutions exist to bring interactivity to scientific
+   visualization including IPython notebook widgets, Bokeh and the R
+   language's shiny [shiny]_ web application framework. While these tools
+   can provide extremely polished interactive graphics, getting them set
+   up always requires additional effort and custom code, placing a
+   barrier to their primary use case, the interactive exploration of
+   data.
+
+..
+   .. [shiny] RStudio, Inc, *shiny: Easy web applications in R.*,
+			  http://shiny.rstudio.com, 2014.
+
+
+
+This paper has demonstrated a succinct, flexible and interactive
+approach for data exploration, analysis and visualization. By
+eliminating the need to write plotting code entirely, this approach
+restores the quick and easy interaction typical when working with an
+interpreter. By keeping declarations of content separate from
+declarations regarding presentation, it is possible to first establish
+the content of interest before improving its visual
+representation. Furthermore, this approach helps keep the code written
+by the user clean and succinct by completely separating these two
+concerns.
+
+This approach cuts across the entire workflow associated with research
+and is therefore not directly comparable in terms of user experience
+to standard third-party plotting packages. In fact, HoloViews is
+designed to abstract away the details of plotting process so that any
+plotting system may be used. In fact, a user does not even need to be
+aware of the underlying plotting library until there is a need to
+customize the visual output at which point the user will need to know
+about the display options appropriate for the backend.
+
+The compositionality of HoloViews is superficially reminiscent of
+systems such as the Grammar of Graphics [] although this is fact the
+converse of what HoloViews aims to address. Instead, we intend to
+define a language for the *semantics* of complex research data in
+terms of how the researcher thinks *independent* of the exact details
+of plotting. The need for an automatic and useful visual
+representation is driven by the need to immediately present the data
+in interpretable form.
+
+The fact that content is kept separate from presentation is also key
+to reproducibility. The absolutely minimum requirement for a project
+to be considered reproducible is that the raw data can be
+replicated. The aesthetic aspects of a figure are always less
+important than the actual content represented and HoloViews reflects
+this important distinction. In fact, we offer advanced comparison
+utilities that can tell you exactly how two HoloViews objects
+differ. These utilities allow us to ensure the raw data in all our
+notebooks (e.g on our main website) remain constant over time. These
+tests are entirely separate from the tests of the visual
+representation.
+
+
+..
+   Paragraph about succinctness being important here
+
 
    * One of the most important factors for reproducibility is to get the whole workflow into a notebook in a readable, succinct format.
    * Layouts and overlays increase the density of information delivered in a single plot, which aids in analysis and understanding. This is in contrast to the default Matplotlib inline approach, which wastes a lot of vertical space unless you decide to waste vertical space writing subplot code instead!
+
+
+..
+   Compared and Contrast
+
+..
+   Long tail of visualization
+
+
+
+..
+   Reproducibility
+
+
+..
+   Extensibility and other features
+
+
+   Imagen/Topographica/Lancet.. 
+
+
+
+
+
+.. Points
+
    * Animations and interactivity are much, much easier in HoloViews than in any other package including R's shiny, IPython widgets, Matplotlib widgets, spyre and MoviePy etc.
    * Widgets are embeddable unlike IPython and Matplotlib widgets (but also support live mode).
-   * Notebook testing: Split between display and data tests. Made possible because data structures are content only.
    * Some mention that because we have data structures you can pickle them.
    * Entire styles can be switched out to rerender the same data (by replacing the OptionsTree)
-   * While HoloViews plotting is based on Matplotlib
 
 .. Comment from outline
 
