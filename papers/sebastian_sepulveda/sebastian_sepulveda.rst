@@ -19,7 +19,7 @@ Visualizing physiological signals in real time
 
 .. class:: abstract
 
-This work presents a software, written in Python, to visualize and record in real time physiological signals, such as electrocardiography,  electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source, extensible, multi-platform and has been tested on different Linux distributions, including the RaspberryPi (ARM architecture). It leverages the use of several libraries, including PyQtGraph and the SciPy/NumPy stack.
+This work presents a software, written in Python, to visualize and record in real time physiological signals, such as electrocardiography,  electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source, extensible, and has been tested on different Linux distributions, including the RaspberryPi (ARM architecture). It leverages the use of several libraries, including PyQtGraph and the SciPy/NumPy stack.
 
 .. class:: keywords
 
@@ -28,15 +28,13 @@ This work presents a software, written in Python, to visualize and record in rea
 Introduction
 ------------
 
-A common task in biomedical research is to record and visualize in real time physiological signals. Although there are several options to do this, they are commonly based on  proprietary tools, associated to a particular signal acquisition device vendor. This work presents an open source software, written in Python, to visualize and record in real time physiological signals, such as electrocardiography, electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source [#]_  and extensible. It is easy to add new signal processing tasks and to use different signal sources (serial, Bluetooth, Sockets, etc.), and customize the user interface for the applications needs.
+A common task in biomedical research is to record and visualize in real time physiological signals. Although there are several options to do this, they are commonly based on  proprietary tools, associated to a particular signal acquisition device vendor. This work presents an open source software (under MIT license), written in Python, to visualize and record in real time physiological signals, such as electrocardiography, electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source [#]_ , extensible, and  has been tested on different Linux distributions, including the RaspberryPi (ARM architecture). It is easy to add new signal processing tasks and to use different signal sources (serial, Bluetooth, Sockets, etc.), and customize the user interface for the applications needs.
 
 .. [#] Available at https://github.com/ssepulveda/RTGraph.
 
 The main objective of the software is to display in real time multiple signals and to export them to a file. In the current implementation, The communication between the software and the acquisition device is through the serial port, and it is implemented using the PySerial library. Other communication protocols can be easily added. The real time display of the signals is implemented using the PyQtGraph library. [#]_ The software has a multiprocess architecture, based on the multiprocessing Python standard library. This allows having concurrent processes for receiving, processing, and displaying the data. Signal processing tasks, such as spectral estimation, are based on the SciPy stack. This architecture assures that no data is loosed and a fast response of the user interface.
 
 .. [#] Available at http://www.pyqtgraph.org.
-
-The software is multi-platform and runs in any machine and OS where Python and the corresponding dependencies can be installed. The software has been tested on different Linux distributions, including the RaspberryPi (ARM architecture).
 
 
 Software architecture
@@ -85,13 +83,13 @@ Figure :ref:`figSWarch` shows the architecture of the software. The architecture
 
    Diagram of the software architecture. There are two independent processes. The communication process reads the incoming data stream, parse it, add a time-stamp (if necessary), and put the processed data into a queue. The main process reads the data from the queue, process the data, and then update the plot and log the data into a file. :label:`figSWarch`
 
-   Figure :ref:`usage` shows the processes viewed by ``htop`` during the execution of the program. The first process (PID 1082) corresponds to the process initiated by the application. The second process is the communication process (PID 1178). [#]_
+   Figure :ref:`usage` shows the processes viewed by ``htop`` during the execution of the program. The first process (PID 1082) corresponds to the process initiated by the application. The second one is the communication process (PID 1178). [#]_
 
 .. [#] By default ``htop`` shows the processes and threads together. Pressing the H key while the program is running shows or hides the threads. In figure :ref:`usage`, the screen is configured to show both processes and threads.
 
 .. figure:: usage.png
 
-   Screenshot of ``htop`` showing the processes associated to the program. The first process (PID 1082) corresponds to the process initiated by the application. The second process is the communication process (PID 1178).  :label:`usage`
+   Screenshot of ``htop`` showing the processes associated to the program. The first process (PID 1082) corresponds to the process initiated by the application. The second one is the communication process (PID 1178).  :label:`usage`
 
 Programming details
 -------------------
@@ -107,7 +105,6 @@ The template for the communication process is implemented through the ``Communic
                 self.queue = queue
                 # Initialize the process ...
                 # Initialize the acquisition method ...
-
 
             def run(self):
                 self.init_time = time()
@@ -126,7 +123,7 @@ The template for the communication process is implemented through the ``Communic
             def closePort():
                 self.exit.set()
 
-The template for the main process is implemented through the ``MainWindow`` class. This template selects the proper acquisition method (serial, sockets, bluetooth, etc.), initializes the basic plot configuration, and also, configures the timers for updating the plots, triggering the ``update_plot`` method.The following code snippet shows the basic structure of the class. 
+The the main process is implemented through the ``MainWindow`` class. It is a subclass of the ``QtGui.QMainWindow`` class, defined by the PyQtGraph library. Inside this class we define the proper acquisition method (serial, sockets, bluetooth, etc.) and the basic plot configurations, and we configure the timers used to update the plots, which  trigger the ``update_plot`` method. The following code snippet shows the basic structure of the class. 
 
 .. code-block:: python
 
@@ -142,7 +139,7 @@ The template for the main process is implemented through the ``MainWindow`` clas
             # initialize variables ...
             # initialize timers ...
             QtCore.QObject.connect(self.timer_plot_update,
-                               QtCore.SIGNAL('timeout()'), self.update_plot)
+                                   ...)
 
         def start(self):
             self.data = CommunicationProcess(self.queue)
@@ -167,24 +164,19 @@ The template for the main process is implemented through the ``MainWindow`` clas
 Results
 -------
 
-The software presented in this work is able to work with a serial port data stream of ASCII data, representing one signal with 4 digits, corresponding to a sampling frequency of 2 kilohertz. It is also able to work with a socket data stream consisting of 20 signals with a sampling rate of 500 hertz.
+We have used the software presented in this work with a data stream from the serial port corresponding to one signal with a sampling frequency of 2 kilohertz. We have also used it with a data stream from a TPC/IP socket corresponding to 20 signals with a sampling frequency of 500 hertz.p
 
-In general, the sampling rate on serial communications would be limited to the baud rate of the transmission and how the data is transfered. In general, in a common 115200/8N1 serial configuration, a bit is transfered every 8.68055 microseconds. A transfer will be composed for 8 bits, plus an ending bit, giving 78.12495 microseconds per transfer. This gives a maximum sampling rate 12.8 KHz for a byte. This will be lowered every time another character is added to the transfer. As mentioned in the example, we reached a 2 KHz using 4 digits (4 bytes), plus to characters for the carriage return and new line (to match the CSV format), giving us 6 bytes transfered at 2 KHz (2333.33469 Hz, to be precise).
-
-In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. The software was customized to acquire and record data. We also added some steps of the fatigue estimation algorithm [Dim03]_ to the processing pipeline. In this case we found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly positioned, drastically reducing the amount of time required by the experiments.
-
-Figure :ref:`emg` shows a screen shot of the program while acquiring an EMG signal from a study using wearables devices to study fatigue in muscles.
+In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. The software was customized to acquire and record data. We also incorporated some steps of a fatigue estimation algorithm [Dim03]_ to the processing pipeline. In this case we found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly positioned, drastically reducing the amount of time required by the experiments. Figure :ref:`emg` shows a screen shot of the program while acquiring an EMG signal from a study using wearables devices to study fatigue in muscles. The figure shows an EMG signal (first panel), an real time estimation of the fatigue level (second panel) based on the acquired EMG signal, and three acceleration signals (third panel).
 
 .. figure:: emg.png
     
-    Screen shot of the software customized and modified to display 3 signals, an EMG signal, followed by the processed signal to calculate the fatigue indicator, and finally three signals of acceleration, corresponding for the three axis. :label:`emg`
+    Screenshot of the software customized and modified to display 3 signals: an EMG signal (first panel), an estimation of the fatigue level (second panel) based on the acquired EMG signal, and three acceleration signals (third panel). :label:`emg`
 
-
-An important feature of our program is the easiness to customize it to a specific application. For instance, the software is being used to acquire a set of pressure signals from a device (as seen in figure :ref:`device`) used to monitor monitor nutrition disorders in premature infants. The customization included: (1) modifying the software to acquire two pressure signals using bluetooth; and (2) to perform some specific signal processing before displaying  to display the results of the monitoring. In this example it is important to emphasize that the changes to the program were made by a researcher different than the main developer of our program. We claim that this is possible because our program is written in Python. This makes it easier to understand and modify the code than a program written in a lower level language.
+An important feature of our program is the easiness to customize it to a specific application. For instance, the software is being used to acquire a set of pressure signals from a device (as seen in figure :ref:`device`) used to monitor nutrition disorders in premature infants. The customization included: (1) modifying the software to acquire two pressure signals using bluetooth; and (2) to perform some specific signal processing before displaying. In this example it is important to emphasize that the changes to the program were made by a researcher different than the main developer of our program. We claim that this is possible because our program is written in Python. This makes it easier to understand and modify the code compared to a program written in a lower level language.
 
 .. figure:: device.jpg
     
-    Photo of the prototype device used in the study. An Arduino development platform is used to acquire the signals, and transfered to a computer running the software. :label:`device`
+    Photo of the prototype device used in the study. An Arduino development platform is used to acquire the signals (two pressure measurement). These signals are acquired by a computer running a modified version of our software. :label:`device`
 
 See the following links for two examples where the software is used to acquire EMG signals from different devices: http://bit.ly/1BHObxL, http://bit.ly/1Ex0Ydy.
 
@@ -195,10 +187,7 @@ Conclusions
 
 In this work we presented a program developed to record, process and visualize physiological signals in real time. Although many people consider Python as a "slow" language, this work shows that it is possible to use Python to write applications able to work in real time. At the same time, the clarity and simplicity of Python allowed us to end up in a program that it is easy to modify and extend, even by people who is not familiar with the base code.
 
-We also believe that our solution is a contribution to the open source and Do It Yourself (DIY) communities. Typically, programs to receive and manipulate data in real time are developed using proprietary tools such as LabView or MATLAB. The cost of these tools prevent users of these communities to have access to solutions like the described in this work.
-
-
-This software could lead to good solution for rapid prototyping and for the growing community based on the open source and DIY. Has shown in the Use cases, most of the devices are prototyped with development platforms like Arduino. This software could help in the development of similar projects, even in more general engineering projects or others fields. A more general software could be developed to enable the DIY and electronics enthusiast to have simple tools to start in the electronics and programming world.
+We also believe that our solution is a contribution to the open source and Do It Yourself (DIY) communities. Typically, programs to receive and manipulate data in real time are developed using proprietary tools such as LabView or MATLAB. The cost of these tools prevent users of these communities to have access to solutions like the described in this work. As we showed in the result section, in many cases we have used the program with an Arduino acting as an acquisition device. This is a common situation, and also believe that our program can be extended to be used in other fields in need of similar tools.
 
 In the future our first priority is to make our program work in platforms running OS X and Windows. We are currently investigating how to overcome the restriction imposed by the multiprocessing platform on these OSs. Next, we will focus on improving the UI. In particular, we will add the option to change the software behavior, in terms of plot and processing parameters, on the fly, instead of requiring a change in the source code. Finally, we will refactor the architecture of the program to improve the performance, so we can handle higher data rates. In this respect, the main change we plan to do is to move the signal processing computation to another process, leveraging the existence of multi-core machines.
 
@@ -218,6 +207,9 @@ References
 .. [Cam15] L. Campagnola. *PyQtGraph. Scientific Graphics and GUI Library for Python*,
            http://www.pyqtgraph.org/
 
+.. [Dim03] N. Dimitrova  and G. Dimitrov. *Interpretation of EMG changes with fatigue: facts, pitfalls, and fallacies.*
+        Journal of Electromyography and Kinesiology 13.1 (2003): 13-36.
+
 .. [Hun20] J. D. Hunter. *Matplotlib: A 2D graphics environment*,
            Computing In Science & Engineering, 9(3):90-95, IEEE COMPUTER SOC, 2007.
 
@@ -230,7 +222,5 @@ References
 .. [Roe06] D. Roetenberg, *Inertial and magnetic sensing of human motion*. 
 	   University of Twente, 2006.
 
-.. [Dim03] N. Dimitrova  and G. Dimitrov. *Interpretation of EMG changes with fatigue: facts, pitfalls, and fallacies.*
-        Journal of Electromyography and Kinesiology 13.1 (2003): 13-36.
 
 ..  LocalWords:  electromyography SciPy NumPy biomedical RaspberryPi PySerial multiprocess
