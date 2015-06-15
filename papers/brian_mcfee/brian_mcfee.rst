@@ -586,7 +586,8 @@ to optimize the F1-score on the Johannes Kepler University onset database. [#]_
 We note that the "optimal" default parameter settings are merely estimates, and depend upon the datasets
 over which they are selected.  The parameter settings are therefore subject to change in the future 
 as larger reference collections become available.
-The parameter optimization routines have been factored out into a separate repository. [#]_
+The optimization framework has been factored out into a separate repository,
+which may in subsequent versions grow to include additional parameters. [#]_
 
 .. [#] https://github.com/bmcfee/librosa_parameters
 
@@ -708,6 +709,7 @@ References
                 Justin Salamon, José R. Zapata, and Xavier Serra.
                 *Essentia: An Audio Analysis Library for Music Information Retrieval.*
                 In 12th International Society for Music Information Retrieval Conference (ISMIR 2013), pp. 493-498. 2013.
+
 
 .. [McFee15] Brian McFee, Matt McVicar, Colin Raffel, Dawen Liang, Oriol Nieto, Josh Moore, Dan Ellis, et al.
              *Librosa: v0.4.0.*
