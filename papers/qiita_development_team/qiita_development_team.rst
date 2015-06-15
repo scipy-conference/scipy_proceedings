@@ -87,7 +87,7 @@ is a cellular component that translates transcripts into proteins that is
 shared across the tree of life. Because it believed to be under neutral
 evolution, mutations accrue at a relatively consistent rate, allowing it to be
 thought of as a “molecular clock” that provides phylogenetic information about
-the organism it came from ([Atr15]). This technique is called amplicon
+the organism it came from ([Atr15]_). This technique is called amplicon
 sequencing. In bacteria and archaea, the 16S small subunit ribosomal gene is
 the most commonly used, while in eukaryotes the analogous 18S small subunit
 ribosomal gene is used (although for fungi, often parts of the internal
