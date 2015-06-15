@@ -36,7 +36,7 @@ There are currently several tools and frameworks in wide use for agent-based mod
 
 Designing a new framework from the ground up also allows us to implement features not found in existing frameworks. For example, as we explain in more detail below, other ABM frameworks tend to use a single agent activation regime by default; in Mesa, we implement several agent schedulers and require the modeler to specify which one is being used. We also implement several useful tools to accelerate common model analysis tasks: a data collector (present only in Repast) and a batch runner (available in Repast and NetLogo only via menu-driven systems), both of which can export their results directly to *pandas* [McKinney2011]_ data frame format for immediate analysis.
 
-.. figure:: screenshots.png
+.. figure:: Screenshots.png
 
   A Mesa implementation of the Schelling segregation model, being visualized in a browser window and analyzed in an IPython notebook. :label:`fig1`
 
@@ -129,14 +129,14 @@ Now, let's implement a schedule in our example model. We add a ``RandomActivatio
     def __init__(self, N):
       self.num_agents = N
       # Adding the scheduler:
-      self.schedule = RandomActivation(self)       # 1. 
+      self.schedule = RandomActivation(self)       # 1.
       self.create_agents()
 
     def create_agents(self):
       """Method to create all the agents."""
       for i in range(self.num_agents):
         a = MoneyAgent(i)
-        self.schedule.add(a) 
+        self.schedule.add(a)
 
     def step(self):
       self.schedule.step()                         # 2.
@@ -164,7 +164,7 @@ There are several specific grid classes, all of which inherit from a root `Grid`
 
 The ``ContinuousSpace`` class also inherits from ``Grid``, and uses the grid as a way of speeding up neighborhood lookups; the number of cells and the arbitrary limits of the space are provided when the space is created, and are used internally to map between spatial coordinates and grid cells. Neighbors here are defined as all agents within an arbitrary distance of a given point. To find the neighbors of a given point, ``ContinuousSpace`` only measures the distance for agents in cells intersecting with a circle of the given radius.
 
-To add space to our example model, we can have the agents wander around a grid; instead of giving a unit of money to any random agent, they pick an agent in the same cell as themselves. This means that multiple agents are allowed in each cell, requiring a ``MultiGrid``. 
+To add space to our example model, we can have the agents wander around a grid; instead of giving a unit of money to any random agent, they pick an agent in the same cell as themselves. This means that multiple agents are allowed in each cell, requiring a ``MultiGrid``.
 
 .. code-block:: python
 
@@ -188,7 +188,7 @@ To add space to our example model, we can have the agents wander around a grid; 
         """Take a random step."""
         grid = model.grid
         x, y = self.pos
-        possible_steps = grid.get_neighborhood(x, y, 
+        possible_steps = grid.get_neighborhood(x, y,
           moore=True, include_center=True)         # 3.
         choice = random.choice(possible_steps)
         grid.move_agent(self, choice)              # 4.
@@ -217,7 +217,7 @@ Once the model has been run, we can create a static visualization of the distrib
 
 .. code-block:: python
 
-  wealth_grid = np.zeroes(model.grid.width, 
+  wealth_grid = np.zeroes(model.grid.width,
                           model.grid.height)
   for cell in model.grid.coord_iter():
     cell_content, x, y = cell
@@ -328,7 +328,7 @@ Mesa already includes a set of pre-built visualization elements which can be dep
                         data_collector_name='dc')  # 1.
   # Create a server to visualize MoneyModel
   server = ModularServer(MoneyModel,               # 2.
-                        [chart_element],           
+                        [chart_element],
                         "Money Model", 100)
   server.launch()
 
@@ -355,7 +355,7 @@ Let us create a simple histogram, with a fixed set of bins, for visualizing the 
 
   var HistogramModule = function(bins) {
     // Create the appropriate tag, stored in canvas
-    $("body").append(canvas);                     // 1. 
+    $("body").append(canvas);                     // 1.
     // ... Chart.js boilerplate removed
     var chart = new Chart(context).Bar(data, options);
 
@@ -371,13 +371,13 @@ Let us create a simple histogram, with a fixed set of bins, for visualizing the 
       };
     };
 
-1. This block of code functions as the object's constructor. It adds and saves a ``canvas`` element to the HTML page body, and creates a *Chart.js* bar chart inside of it. 
+1. This block of code functions as the object's constructor. It adds and saves a ``canvas`` element to the HTML page body, and creates a *Chart.js* bar chart inside of it.
 2. The ``render`` method takes a list of numbers as an input, and assigns each to the corresponding bar of the histogram.
 3. To ``reset`` the histogram, this code destroys the chart and creates a new one with the same parameters.
 
 Next, the Python class tells the front-end to include ``Chart.min.js`` (included with the Mesa package) and the new ``HistogramModule.js`` file we created above, which is located in the same directory as the Python code [#]_. In this case, our module's ``render`` method is extremely specific for this model alone. The code looks like this.
 
-.. [#] While the best practice in web development is to host static files (e.g. JavaScript) separately, Mesa is not set up to this way, as the models are currently small and run only locally. As we scale the Mesa framework, we expect that the ability to pull in external javascript files to be part of the optimization process. 
+.. [#] While the best practice in web development is to host static files (e.g. JavaScript) separately, Mesa is not set up to this way, as the models are currently small and run only locally. As we scale the Mesa framework, we expect that the ability to pull in external javascript files to be part of the optimization process.
 
 
 .. code-block:: python
@@ -401,14 +401,14 @@ Next, the Python class tells the front-end to include ``Chart.min.js`` (included
     return [int(x) for x in hist]
 
 1. This line, and the line below it, prepare the code for actually inserting the visualization element; creating a new element, with the bins as an argument.
-2. ``js_code`` is a string of JavaScript code to be run by the front-end. In this case, it takes the code for creating a visualization element and inserts it into the front-end's ``elements`` list of visualization elements. 
+2. ``js_code`` is a string of JavaScript code to be run by the front-end. In this case, it takes the code for creating a visualization element and inserts it into the front-end's ``elements`` list of visualization elements.
 
 Finally, we can add the element to our visualization server object:
 
 .. code-block:: python
 
   histogram_element = HistogramModule(range(10))
-  server = ModularServer(MoneyModel, 
+  server = ModularServer(MoneyModel,
                          [histogram_element],
                          "MoneyModel", 100)
   server.launch()
