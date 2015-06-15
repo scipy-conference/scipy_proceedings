@@ -3,7 +3,7 @@
 ## Paper Format
 
 Papers are formatted using reStructuredText and the compiled version should be
-no longer than 7 pages, including figures.  Here are the steps to produce a
+no longer than 8 pages, including figures.  Here are the steps to produce a
 paper:
 
 - Fork the
@@ -30,6 +30,7 @@ paper:
 Pull requests are to be submitted by **June 15th**, but modifications are
 allowed during the open review period which ends July 5th.
 
+
 ## General Guidelines
 
 - All figures and tables should have captions.
@@ -38,6 +39,14 @@ allowed during the open review period which ends July 5th.
 - Code snippets should be formatted to fit inside a single column without
   overflow.
 - Avoid custom LaTeX markup where possible.
+
+## Review Criteria
+
+A small subcommittee of the SciPy 2015 organizing committee has created [this
+set of suggested review
+criteria](https://github.com/scipy-conference/scipy_proceedings/blob/master/review_criteria.md)
+to help guide authors and reviewers alike. Suggestions and amendments to these
+review criteria are enthusiastically welcomed via discussion or pull request.
 
 ## Other markup
 
@@ -63,6 +72,12 @@ On Debian-like distributions:
 sudo apt-get install python-docutils texlive-latex-base texlive-publishers \
                      texlive-latex-extra texlive-fonts-recommended
 ```
+
+## Build Server
+
+Thanks to the great and wonderful Stefan van der Walt, there is a server online 
+building the open pull requests [here](http://nipy.bic.berkeley.edu:5000/). You may be 
+able to pull a built PDF for review from there.
 
 ## For organizers
 
