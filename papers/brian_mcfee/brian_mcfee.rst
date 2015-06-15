@@ -165,13 +165,13 @@ The majority of feature analyses implemented by librosa produce two-dimensional 
 stored as ``numpy.ndarray``, e.g., ``S[f, t]`` might contain the energy within a particular 
 frequency band ``f`` at frame index ``t``.
 Librosa follows the convention that the final dimension provides the index over time,
-e.g., ``S[:,0], S[:,1]`` access features at the first and second frames.
+e.g., ``S[:, 0], S[:, 1]`` access features at the first and second frames.
 Feature arrays are organized column-major (Fortran style) in memory, so that common
 access patterns benefit from cache locality.
 
 By default, all pitch-based analyses are assumed to be relative to a 12-bin equal-tempered
 chromatic scale with a reference tuning of ``A440 = 440.0 Hz``.  Pitch and pitch-class analyses
-are arranged such that the 0th bin corresponds to ``C`` (for pitch class) or ``C1`` (32.7 Hz),
+are arranged such that the 0th bin corresponds to ``C`` for pitch class or ``C1`` (32.7 Hz)
 for absolute pitch measurements.
 
 
@@ -279,7 +279,7 @@ representations, including ``spectral_centroid``, ``spectral_bandwidth``, ``spec
 .. [#] ``spectral_*`` functions are derived from MATLAB reference implementations provided by the METLab at Drexel University.  http://music.ece.drexel.edu/
 
 
-Finally, the ``feature`` module provides a few functions to implement common transformations of time-series
+Finally, the ``feature`` submodule provides a few functions to implement common transformations of time-series
 features in MIR.  This includes ``delta``, which provides a smoothed estimate of the time derivative;
 ``stack_memory``, which concatenates an input feature array with time-lagged copies of itself (effectively
 simulating feature *n*-grams); and ``sync``, which applies a user-supplied aggregation function (e.g., 
@@ -327,7 +327,7 @@ bottom panel of Figure :ref:`fig:tour`.
 The ``beat`` module provides functions to estimate the global tempo and positions of beat events from the
 onset strength function, using the method of Ellis [Ellis07]_.
 More specifically, the beat tracker first estimates the tempo, which is then used to set the target spacing
-between peaks in onset strength function.
+between peaks in an onset strength function.
 The output of the beat tracker is displayed as the dashed green lines in Figure :ref:`fig:tour` (bottom).
 
 .. figure:: tour.pdf
@@ -656,7 +656,7 @@ References
 
 .. [Boeck12] Böck, Sebastian, Florian Krebs, and Markus Schedl.
              *Evaluating the Online Capabilities of Onset Detection Methods.*
-             In ISMIR, pp. 49-54. 2012.
+             In 11th International Society for Music Information Retrieval Conference (ISMIR 2012), pp. 49-54. 2012.
 
 .. [Ellis07] Ellis, Daniel P.W.
              *Beat tracking by dynamic programming.*
@@ -694,4 +694,4 @@ References
 .. [Bogdanov13] Bogdanov, Dmitry, Nicolas Wack, Emilia Gómez, Sankalp Gulati, Perfecto Herrera, Oscar Mayor, Gerard Roma,
                 Justin Salamon, José R. Zapata, and Xavier Serra.
                 *Essentia: An Audio Analysis Library for Music Information Retrieval.*
-                In ISMIR, pp. 493-498. 2013.
+                In 12th International Society for Music Information Retrieval Conference (ISMIR 2013), pp. 493-498. 2013.
