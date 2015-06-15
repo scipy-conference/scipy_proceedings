@@ -17,17 +17,24 @@ Dask: Parallel Computation with Blocked algorithms and Task Scheduling
 Introduction
 ------------
 
+The Scientific Python stack rarely leverages parallel computation.  Code built
+off of NumPy and Pandas generally runs in a single thread on data that fits
+comfortably in memory.  Advances in hardware in the last decade in multi-core
+processors and solid state drives provide significant and yet largely untapped
+performance advantages.
 
+However the Scientific Python stack consists of hundreds of software packages,
+papers, PhD theses, and developer-years.  This stack is a significant
+intellectual and financial investment that, for the most part, does not align
+well with modern hardware.  We seek software solutions to parallelize this
+software stack without triggering a full rewrite.
 
-Background
-----------
-
-Task Scheduling
-~~~~~~~~~~~~~~~
-
-Parallel Arrays
-~~~~~~~~~~~~~~~
-
+This paper introduces ``dask``, a specification to encode parallel algorithms,
+using primitive Python dictionaries, tuples, and callables.  We use ``dask`` to
+create ``dask.array`` a parallel out-of-core NumPy clone using blocked
+algorithms.  This serves both as a general library for parallel out-of-core
+ndarrays but also as a demonstration that we can parallelize complex codebases
+like NumPy in a straightforward manner.
 
 Dask Graphs
 -----------
@@ -146,13 +153,19 @@ To encode keyword arguments we recommend the use of ``functools.partial`` or
 ``toolz.curry``.
 
 
-
 Dask Arrays
 -----------
 
 The ``dask.array`` submodule uses dask graphs to create a numpy clone that uses
 all of your cores and operates on datasets that do not fit in memory.  It does
 this by building up a dask graph of blocked array algorithms.
+
+Several other large NumPy implementations exist, including Biggus_ an
+out-of-core ndarray specialized for climate science, Spartan_ a
+distributed memory ndarray, and Distarray_ a distributed memory ndarray
+that interacts well with other distributed array libraries like Trillinos.
+There have also been numerous projects in traditional high performance
+computing space including Elemental [Pou13]_, High Performance Fortran, etc..
 
 Blocked Array Algorithms
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -162,6 +175,16 @@ numbers" with many small computations like "break up the trillion numbers into
 one million chunks of size one million, sum each chunk, then sum all of the
 intermediate sums."  Through tricks like this we can evaluate one large problem
 by solving very many small problems.
+
+Blocked algorithms have proven useful in modern numerical linear algebra
+libraries like Flame and Plasma and more recently in data parallel systems like
+Dryad [Isa07]_ and Spark [Zah10]_.  These compute macroscopic operations with a
+collection of related in-memory operations.
+
+Dask.array takes a similar approach to linear algebra libraries but focuses
+instead on the more pedestrian ndarray operations, like arithmetic, reductions,
+and slicing common in interactive use.
+
 
 Example: ``arange``
 ~~~~~~~~~~~~~~~~~~~
@@ -302,14 +325,24 @@ analysis.  This is good when runtimes are not known ahead of time or when the
 execution environment contains uncertainty.  However dynamic scheduling does
 preclude certain clever optimizations.
 
-The logic behind dask schedulers reduces to the following situation:  A worker
+Dynamic task scheduling has a rich literature and numerous projects, both
+within the Python ecosystem with projects like Spotify's Luigi_ for bulk data
+processing and projects without like DAGuE [Bos12]_ for more high performance
+task scheduling.  Additionally, data parallel systems like Dryad or Spark
+contain their own custom dynamic task schedulers.
+
+Traditional task scheduling with data dependencies scheduling literature
+usually focuses on policies to expose parallelism or chip away at the critical
+path.  We find that for bulk data analytics these are not very relevant as
+parallelism is abundant and critical paths are comparatively short relative to
+the depth of the graph.
+
+The logic behind dask's schedulers reduces to the following situation:  A worker
 reports that it has completed a task and that it is ready for another.  We
 update runtime state to record the finished task, mark which new tasks can be
 run, which data can be released, etc..  We then choose a task to give to this
 worker from among the set of ready-to-run tasks.  This small choice governs the
 macro-scale performance of the scheduler.
-
-Traditional task scheduling with data dependencies scheduling literature usually focues on policies to expose parallelism or chip away at the critical path.  We find that for bulk data analytics these are not very relevant as parallelism is abundant and critical paths are comparatively short relative to the depth of the graph.
 
 Instead for out-of-core coputation we find value in choosing tasks that allow
 us to release intermediate results and keep a small memory footprint.
@@ -474,9 +507,35 @@ they call ``np.array(...)`` on their input.
    show the average temperature difference between noon and midnight for year
    2014
 
-This computation took about a minute on an old notebook computer.  The computation seemed to be bound by disk access.
+This computation took about a minute on an old notebook computer.  The
+computation seemed to be bound by disk access.
+
+Final Thoughts
+--------------
+
 
 References
 ----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
+.. [Isa07] Isard, Michael, et al. "Dryad: distributed data-parallel programs
+           from sequential building blocks."
+           ACM SIGOPS Operating Systems Review. Vol. 41. No. 3. ACM, 2007.
+.. [Zah10] Zaharia, Matei, et al. "Spark: cluster computing with working sets."
+           Proceedings of the 2nd USENIX conference on Hot topics in cloud computing.
+           Vol.  10. 2010. APA
+.. [But09] Buttari, Alfredo, et al. "A class of parallel tiled linear algebra
+           algorithms for multicore architectures."
+           Parallel Computing 35.1 (2009): 38-53. APA
+.. [Bos12] Bosilca, George, et al. "DAGuE: A generic distributed DAG engine for
+           high performance computing."
+           Parallel Computing 38.1 (2012): 37-51. APA
+.. [Van08] Van De Geijn, Robert A., and Enrique S. Quintana-Ortí. "The science
+           of programming matrix computations." (2008). APA
+.. [Pou13] Poulson, Jack, et al. "Elemental: A new framework for distributed
+           memory dense matrix computations."
+           ACM Transactions on Mathematical  Software (TOMS) 39.2 (2013): 13. APA
+
+.. _Biggus: http://biggus.readthedocs.org/en/latest/
+.. _Spartan: https://github.com/spartan-array/spartan
+.. _DistArray: http://docs.enthought.com/distarray/
+.. _Luigi: https://github.com/spotify/luigi
+
