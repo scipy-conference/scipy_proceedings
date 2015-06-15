@@ -33,8 +33,7 @@ LibROSA: Audio and Music Signal Analysis in Python
 
 .. class:: abstract
 
-   This document describes the design and implementation of librosa version 0.4.0, 
-   and provides an overview and background of the project.
+   This document describes the design and implementation of librosa version 0.4.0.
 
 
 .. class:: keywords
@@ -215,11 +214,9 @@ and frequency representations: hertz, constant-Q basis index, Fourier basis inde
 MIDI note number, or note in scientific pitch notation.
 
 Finally, the core submodule provides functionality to estimate the dominant frequency of STFT bins via
-parabolic interpolation (``piptrack``) [#]_, and estimation of tuning deviation (in cents) from the reference
+parabolic interpolation (``piptrack``) [Smith11]_, and estimation of tuning deviation (in cents) from the reference
 ``A440``.  These functions allow pitch-based analyses (e.g., ``cqt``) to dynamically adapt filter banks to match
 the global tuning offset of a particular audio signal.
-
-.. [#] https://ccrma.stanford.edu/~jos/sasp/Sinusoidal_Peak_Interpolation.html
 
 
 Spectral features
@@ -585,9 +582,10 @@ to optimize the F1-score on the Johannes Kepler University onset database. [#]_
     | ``delta``     | Peak picking threshold      | 0.0--0.10 **(0.07)** |
     +---------------+-----------------------------+----------------------+
 
-The optimal default parameter settings are subject to change in the future 
+We note that the "optimal" default parameter settings are merely estimates, and depend upon the datasets
+over which they are selected.  The parameter settings are therefore subject to change in the future 
 as larger reference collections become available.
-Consequently, the parameter optimization routines have been factored out into a separate repository. [#]_
+The parameter optimization routines have been factored out into a separate repository. [#]_
 
 .. [#] https://github.com/bmcfee/librosa_parameters
 
@@ -595,8 +593,12 @@ Consequently, the parameter optimization routines have been factored out into a 
 Conclusion
 ----------
 
+
+
+
 Acknowledgments
 ===============
+
 
 References
 ----------
@@ -624,6 +626,11 @@ References
 .. [Schoerkhuber10] Schoerkhuber, Christian, and Anssi Klapuri.
                     *Constant-Q transform toolbox for music processing.*
                     7th Sound and Music Computing Conference, Barcelona, Spain. 2010.
+
+.. [Smith11] Smith, J.O. "Sinusoidal Peak Interpolation", in 
+            Spectral Audio Signal Processing,
+            https://ccrma.stanford.edu/~jos/sasp/Sinusoidal_Peak_Interpolation.html
+            , online book, 2011 edition, accessed 2015-06-15.
 
 .. [Stevens37] Stevens, Stanley Smith, John Volkmann, and Edwin B. Newman. 
                *A scale for the measurement of the psychological magnitude pitch.*
