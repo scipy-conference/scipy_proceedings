@@ -856,7 +856,7 @@ representation, indepedent of the plotting backend, thereby
 abstracting away the details of the plotting process.
 
 The compositionality of HoloViews is superficially reminiscent of
-systems such as the Grammar of Graphics [Gog]_ although this is fact
+systems such as the Grammar of Graphics [GoG]_ although this is fact
 the converse of what HoloViews aims to address. Instead of expressing
 the complexities of graphics, the declarative data structures
 HoloViews provides, define a language for the semantics of the actual
