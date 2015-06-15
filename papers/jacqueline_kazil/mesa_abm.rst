@@ -36,13 +36,9 @@ There are currently several tools and frameworks in wide use for agent-based mod
 
 Designing a new framework from the ground up also allows us to implement features not found in existing frameworks. For example, as we explain in more detail below, other ABM frameworks tend to use a single agent activation regime by default; in Mesa, we implement several agent schedulers and require the modeler to specify which one is being used. We also implement several useful tools to accelerate common model analysis tasks: a data collector (present only in Repast) and a batch runner (available in Repast and NetLogo only via menu-driven systems), both of which can export their results directly to *pandas* [McKinney2011]_ data frame format for immediate analysis.
 
-.. figure:: browser_screenshot.png
+.. figure:: screenshots.png
 
-  A Mesa implementation of the Schelling segregation model visualized in a browser window. :label:`fig1`
-
-.. figure:: ipython_screenshot.png
-
-  Mesa implementation of the Schelling model analyzed inside of an IPython Notebook. :label:`fig2`
+  A Mesa implementation of the Schelling segregation model, being visualized in a browser window and analyzed in an IPython notebook. :label:`fig1`
 
 While interactive data analysis is important, direct visualization of every model step is also a key part of agent-based modeling, both for debugging, and for developing an intuition of the dynamics that emerge from the model. Mesa facilitates such live visualization as well. It avoids issues of system-specific GUI dependencies by using the browser as a front-end, giving framework and model developers access to the full range of modern JavaScript data visualization tools.
 
@@ -56,11 +52,11 @@ Overview
 
 The guiding principle of Mesa's architecture is modularity. Mesa makes minimal assumptions about the form a model will take. For example, while many models have spatial components, many others do not, while some may involve multiple separate spaces. Similarly, visualizations which display each step of a model may be a critical component of some models and completely unnecessary for others. Thus Mesa aims to offer a set of components that can be easily combined and extended to build different kinds of models.
 
-We divide the modules into three overall categories: modeling, analysis and visualization. The modeling components are the core of what's needed to build a model: a **Model** class to store model-level parameters and serve as a container for the rest of the components; one or more **Agent** classes which describe the model agents; most likely a **scheduler** which controls the agent activation regime, and handles time in the model in general, and components describing the **space** and/or **network** the agents are situated in. The analysis components are the **data collectors** used to record data from each model run, and **batch runners** for automating multiple runs and parameter sweeps. Finally, the visualization components are used to map from a model object to one or more visual representations via a server interface to a browser window. Figure :ref:`fig3` shows a simple UML diagram of a typical Mesa model,
+We divide the modules into three overall categories: modeling, analysis and visualization. The modeling components are the core of what's needed to build a model: a **Model** class to store model-level parameters and serve as a container for the rest of the components; one or more **Agent** classes which describe the model agents; most likely a **scheduler** which controls the agent activation regime, and handles time in the model in general, and components describing the **space** and/or **network** the agents are situated in. The analysis components are the **data collectors** used to record data from each model run, and **batch runners** for automating multiple runs and parameter sweeps. Finally, the visualization components are used to map from a model object to one or more visual representations via a server interface to a browser window. Figure :ref:`fig2` shows a simple UML diagram of a typical Mesa model.
 
 .. figure:: mesa_diagram.png
 
-   Simplified UML diagram of Mesa architecture. :label:`fig3`
+   Simplified UML diagram of Mesa architecture. :label:`fig2`
 
 To begin building the example model described above, we first create two classes: one for the model object itself, and one the model agents. The model's one parameter is the number of agents, and each agent has a single variable: how much money it currently has. Each agent also has only a single action: give a unit of money to another agent. (The numbers in comments of the code below correspond to notes under the code block).
 
@@ -71,7 +67,7 @@ To begin building the example model described above, we first create two classes
   class MoneyAgent(Agent):
     """ An agent with fixed initial wealth."""
     def __init__(self, unique_id):
-      self.unique_id = unique_id               # 1.
+      self.unique_id = unique_id                   # 1.
       self.wealth = 1
 
   class MoneyModel(Model):
@@ -143,10 +139,10 @@ Now, let's implement a schedule in our example model. We add a ``RandomActivatio
         self.schedule.add(a) 
 
     def step(self):
-      self.schedule.step()                     # 2.
+      self.schedule.step()                         # 2.
 
     def run_model(self, steps):
-      for _ in range(steps):                   # 3.
+      for _ in range(steps):                       # 3.
         self.step()
 
 1. Scheduler objects are instantiated with their Model object, which they then pass to the agents at each step.
@@ -162,9 +158,9 @@ Mesa currently implements two broad classes of space: grid, and continuous. Grid
 
 There are several specific grid classes, all of which inherit from a root `Grid` class. At its core, a grid is a two-dimensional array with methods for getting the neighbors of particular cells, adding and removing agents, etc. The default ``Grid`` class does not enforce what each cell may contain. However, ``SingleGrid`` ensures that each cell contains at most one object, while ``MultiGrid`` explicitly makes each cell be a set of 0 or more objects. There are two kinds of cell neighborhoods: The first is a cell's *Moore* neighborhood that is the 8 cells surrounding it, including the diagonals; the second is the *Von Neumann* neighborhood which is only the 4 cells immediately above, below, and to its left and right. Which neighborhood type to use will vary based on the specifics of each model, and are specified in Mesa by an argument to the various neighborhood methods.
 
-.. figure:: neighborhoods2.png
+.. figure:: neighborhoods3.png
 
-   Moore and Von Neumann neighborhoods, of radius 1. :label:`fig31`
+   Grid topology. Moore and Von Neumann neighborhoods of radius 1; lettered edges connect to one another. :label:`fig3`
 
 The ``ContinuousSpace`` class also inherits from ``Grid``, and uses the grid as a way of speeding up neighborhood lookups; the number of cells and the arbitrary limits of the space are provided when the space is created, and are used internally to map between spatial coordinates and grid cells. Neighbors here are defined as all agents within an arbitrary distance of a given point. To find the neighbors of a given point, ``ContinuousSpace`` only measures the distance for agents in cells intersecting with a circle of the given radius.
 
@@ -217,7 +213,7 @@ To add space to our example model, we can have the agents wander around a grid; 
 4. the ``move_agent`` method works like ``place_agent``, but removes the agent from its current location before placing it in its new one.
 5. This is a helper method which returns the contents of the entire list of cell tuples provided. It's not strictly necessary here; the alternative would be: ``x, y = self.pos; others = grid[y][x]`` (note that grids are indexed y-first).
 
-Once the model has been run, we can create a static visualization of the distribution of wealth across the grid using the ``coord_iter`` iterator, which allows us to loop over the contents and coordinates of all cells in the grid.
+Once the model has been run, we can create a static visualization of the distribution of wealth across the grid using the ``coord_iter`` iterator, which allows us to loop over the contents and coordinates of all cells in the grid, with output shown in figure :ref:`fig4`.
 
 .. code-block:: python
 
@@ -231,7 +227,7 @@ Once the model has been run, we can create a static visualization of the distrib
 
 .. figure:: model_grid.png
 
-  Example of spatial wealth distribution across the grid. :label:`fig3.5`
+  Example of spatial wealth distribution across the grid. :label:`fig4`
 
 Data Collection
 ~~~~~~~~~~~~~~~~~
@@ -279,11 +275,11 @@ We now have enough code to run the model, get some data out of it, and analyze i
   wealth_history[wealth_history.Step==999].\
     Wealth.hist(bins=range(10))
 
-An example of the output of this code is shown in Figure :ref:`fig4`. Notice that this simple rule, where agents give one another 1 unit of money at random, produces an extremely skewed wealth distribution -- in fact, this is approximately a Boltzmann distribution, which characterizes at least some real-world wealth distributions [Dragulescu2001]_.
+An example of the output of this code is shown in Figure :ref:`fig5`. Notice that this simple rule, where agents give one another 1 unit of money at random, produces an extremely skewed wealth distribution -- in fact, this is approximately a Boltzmann distribution, which characterizes at least some real-world wealth distributions [Dragulescu2001]_.
 
 .. figure:: model_sample_hist.png
 
-  Example of model output histogram, with labels added. :label:`fig4`
+  Example of model output histogram, with labels added. :label:`fig5`
 
 Batch Runner
 ~~~~~~~~~~~~~
@@ -305,11 +301,11 @@ Suppose we want to know whether the skewed wealth distribution in our example mo
   out = batch.get_model_vars_dataframe()
   plt.scatter(df.starting_wealth, df.Gini)
 
-Output from this code is shown in Figure :ref:`fig5`.
+Output from this code is shown in Figure :ref:`fig6`.
 
 .. figure:: model_sample_scatter.png
 
-  Example of batch run scatter-plot, with labels added. :label:`fig5`
+  Example of batch run scatter-plot, with labels added. :label:`fig6`
 
 Visualization
 --------------
@@ -339,11 +335,11 @@ Mesa already includes a set of pre-built visualization elements which can be dep
 1. We instantiate a visualization element object: ChartModule, which plots model-level variables being collected by the model's data collector as specified by the "Labels" provided. ``data_collector_name`` is the name of the actual DataCollector variable, so the module knows where to find the values.
 2. The server is instantiated with the model class; a list of visualization elements (in this case, there's only the one element), a model name, and model arguments (in this case, just the agent count).
 
-Running this code launches the server. To access the actual visualization, open your favorite browser (ideally Chrome) to http://127.0.0.1:8888/ . This displays the visualization, along with the controls used to reset the model, advance it by one step, or run it at the designated frame-rate. After several ticks, the browser window will look something like Figure :ref:`fig6`.
+Running this code launches the server. To access the actual visualization, open your favorite browser (ideally Chrome) to http://127.0.0.1:8888/ . This displays the visualization, along with the controls used to reset the model, advance it by one step, or run it at the designated frame-rate. After several ticks, the browser window will look something like Figure :ref:`fig7`.
 
 .. figure:: browser_screenshot_2.png
 
-  Example of the browser visualization. :label:`fig6`
+  Example of the browser visualization. :label:`fig7`
 
 The actual visualization is done by the visualization modules. Conceptually, each module consists of a server-side and a client-side element. The server-side element is a Python object implementing a ``render`` method, which takes a model instance as an argument and returns a JSON-ready object with the information needed to visualize some part of the model. This might be as simple as a single number representing some model-level statistic, or as complicated as a list of JSON objects, each encoding the position, shape, color and size of an agent on a grid.
 
@@ -392,9 +388,9 @@ Next, the Python class tells the front-end to include ``Chart.min.js`` (included
 
     def __init__(self, bins):
       self.bins = bins
-      new_element = "new HistogramModule({})"  # 1.
+      new_element = "new HistogramModule({})"      # 1.
       new_element = new_element.format(bins)
-      self.js_code = "elements.push("          # 2.
+      self.js_code = "elements.push("              # 2.
       self.js_code += new_element +");"
 
   def render(self, model):
