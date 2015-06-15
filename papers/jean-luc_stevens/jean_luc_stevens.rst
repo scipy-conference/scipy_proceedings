@@ -881,6 +881,17 @@ of plotting. The need for an automatic and useful visual
 representation is driven by the need to immediately present the data
 in interpretable form.
 
+.. Compare/Contrast and maybe integrate this here?
+
+   Various solutions exist to bring interactivity to scientific
+   visualization including IPython notebook widgets, Bokeh and the R
+   language's shiny [shiny]_ web application framework. While these tools
+   can provide extremely polished interactive graphics, getting them set
+   up always requires additional effort and custom code, placing a
+   barrier to their primary use case, the interactive exploration of
+   data.
+
+
 The fact that content is kept separate from presentation is also key
 to reproducibility. The absolutely minimum requirement for a project
 to be considered reproducible is that the raw data can be
@@ -893,6 +904,81 @@ data in all our notebooks (e.g on our main website) remain constant
 over time. These tests are entirely separate from the tests that check
 whether the visual representation has changed.
 
+..
+   Mention the saving of vertical space versus the matplotlib approach?
+
+Another crucial way HoloViews helps with reproducibility is simply by
+being more succinct than other approaches. By eliminating the need for
+plotting code written by the user and expressing intent as succinctly
+as possible, more research steps can be tracked in a single IPython
+Notebook without needing to worry about tracking external code. A
+notebook is not only able to contain more of the necessary steps to
+reproduce the results also greatly increases the density of
+information delivered in a single plot improving readability and
+comprehension.
+
+
+..
+   Extensibility section / Long tail of visualization
+
+In this paper, we have focused on how the user can quickly build the
+datastructures containing content of interest. This ignores the power
+of HoloViews in the hands of a developer who can properly integrate it
+into a library, analysis tool or simulator. By returning HoloViews
+objects, any Python package can immediately have access to a flexible,
+compositional datastructures that automatically doubles as a
+visualization system. This is exactly the approach taken by the Imagen
+image generation library and the Topographica neural simulator, two
+very different projects that both output data wrapped in HoloViews
+data structures.
+
+As the number of projects using HoloViews grows, the easier it will
+become for researchers to express their work succinctly without
+worrying about plotting issues. That said, the scope of the base
+HoloViews project is not unlimited and there will be scientific
+representations that are not directly included with HoloViews. For
+this reason, we have made it easy to define new element types and
+write new plotting classes to extend this functionality to new
+domains.
+
+In particular, HoloViews includes an interface to the visualizations
+supported by the seaborn library and we have working examples of
+elements being defined to view geographical data (via
+matplotlib.basemap), network topologies (via NetworkX) and to
+visualize Bloch Spheres in quantum physics (??). We have found the
+basic design general and extensible, making it possible to wrap third
+party libraries without requiring too much effort.
+
+The ease with which HoloViews is extended to express new domains while
+remaining succinct demonstrates that HoloViews has taken a very
+general problem and partitioned it along natural lines. Firstly, data
+and its representation must always follow one another without becoming
+conflated. Everywhere a visualization appears, the content
+underpinning it must be easily available. In addition, the
+specification of content is always of prime importance throughout a
+research project whereas the details regarding display gain importance
+later on when the emphasis switches from exploration to
+presentation. By not conflating content with presentation, HoloViews
+allows a natural, incremental progression from the exploration to
+presentation.
+
+
+..
+   Lancet paper has several paragraphs along the same lines. This could
+   be similar and use the same citations.
+
+
+This approach to reproducibility is fairly unique although the core
+ideas stem from the well-established principle of transparently
+converting some data into its corresponding representation. There are
+many systems that aim to help achieve researchers achieve
+reproducibility but these tend to be prescriptive in nature and tend
+to be seen as an unwanted overhead instead of as a way of increasing
+research productivity. HoloViews improves reproducibility by
+minimising the code and therefore the effort involved in a project
+without sacrificing flexibility.
+
+
 
 .. References
 
@@ -901,41 +987,20 @@ whether the visual representation has changed.
    Ones from Lancet paper.
    Grammar of Graphics.
 
-..
-   Paragraph about succinctness being important here
-
-
-   * One of the most important factors for reproducibility is to get the whole workflow into a notebook in a readable, succinct format.
-   * Layouts and overlays increase the density of information delivered in a single plot, which aids in analysis and understanding. This is in contrast to the default Matplotlib inline approach, which wastes a lot of vertical space unless you decide to waste vertical space writing subplot code instead!
-
 
 ..
-   Compared and Contrast
-
-..
-   Long tail of visualization
-
+   * Long tail of visualization
+   * Extensibility and other feature
+   * Imagen/Topographica/Lancet..
 
 
-..
-   Reproducibility
-
-
-..
-   Extensibility and other features
-
-
-   Imagen/Topographica/Lancet.. 
-
-
-
-
-
-.. Points
-
-   * Animations and interactivity are much, much easier in HoloViews than in any other package including R's shiny, IPython widgets, Matplotlib widgets, spyre and MoviePy etc.
-   * Widgets are embeddable unlike IPython and Matplotlib widgets (but also support live mode).
+.. Features
    * Some mention that because we have data structures you can pickle them.
+   * Widgets are embeddable unlike IPython and Matplotlib widgets (but also support live mode).
+
+
+.. Features
+   * Animations and interactivity are much, much easier in HoloViews than in any other package including R's shiny, IPython widgets, Matplotlib widgets, spyre and MoviePy etc.
    * Entire styles can be switched out to rerender the same data (by replacing the OptionsTree)
 
 .. Comment from outline
@@ -950,15 +1015,6 @@ whether the visual representation has changed.
      and holding onto data is always available. Declarative is related to succinct.
      Best practice, random numbers, version control, restart and re-run.
 
-.. Originally from spaces
-
-   Various solutions exist to bring interactivity to scientific
-   visualization including IPython notebook widgets, Bokeh and the R
-   language's shiny [shiny]_ web application framework. While these tools
-   can provide extremely polished interactive graphics, getting them set
-   up always requires additional effort and custom code, placing a
-   barrier to their primary use case, the interactive exploration of
-   data.
 
 
 .. jbednar: shouldn't it mention normalization somewhere?  It's a big deal.
