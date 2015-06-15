@@ -2,9 +2,9 @@
 
 :email: mpacer@berkeley.edu
 
-:institution: UC Berkeley
+:institution: University of California at Berkeley
 
-:bibliography: uber
+:bibliography: myBibliography
 
 .. :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
@@ -22,28 +22,6 @@ Causal Bayesian NetworkX
 
 .. class:: abstract
 
-    Humans are the existence proofs of the solubility of computational causal inference.
-
-    I will motivate the desire to study causal Bayesian networks as rational, computational models of causal knowledge. Describing this as it has been used in the context …
-
-    Bayesian networks are a framework for expressing probabilistic relationships between random variables using directed acyclic graphs. 
-
-    *Causal* Bayesian networks are an extension of these probabilsitic graphical models that additionally include notions of intervening on a node.
-
-
-    I will introduce the mathematical/formal concepts needed to understand what Bayesian networks and their *causal* extension. 
-
-    I will discuss how to generate valid networks as subgraphs of a bi-directionally complete directed graph for a given variable set. I will discuss an interpretation of interventions as constraints on this set of subgraphs.
-
-    I will then discuss the semantic interpretation of these graphical structures in terms of the constraints they place on the distribution of the variables contained within the network. I will show how to obtain samples from the conditional distributions defined over the graphs variables.
-
-    Finally, I will summarize recent work extending the formal reach of these tools, applying them to problems of 
-
-.. class:: keywords
-
-   probabilistic graphical models, causality, intervention
-
-.. class:: long-abstract
 
     Humans are existence proofs for the solubility of computational causal inference.
 
@@ -53,10 +31,15 @@ Causal Bayesian NetworkX
 
     One of the frameworks successfully used in this way are causal Bayesian networks. Bayesian networks fall within the more general class of probabilistic graphical models, specifically, directed acyclic graphs with associated conditional probability distributions. Directed arrows encode direct dependency relationships going from parents to their children, whose conditional probability distribution is defined in terms of the parents' values. *Causal* Bayesian networks are endowed with an intervention operation that allows "graph surgery" in which one cuts variables off from their parents (usually setting it to a particular value). 
 
+
+.. class:: keywords
+
+   probabilistic graphical models, causality, intervention
+
 Introduction
 ------------
 
-This group of utilities is a simplified version of a 
+
 
 My goal is primarily to introduce aspects of the formal/mathematical tools that are needed understand the purpose and implementation of Causal Bayesian NetworkX (the current version can be found at `Causal Bayesian NetworkX`_ on Github). 
 
@@ -427,7 +410,7 @@ Outline v. 1.1
 References
 ----------
 
-:biblio:`uber`
+:biblio:`myBibliography`
 
 
 
