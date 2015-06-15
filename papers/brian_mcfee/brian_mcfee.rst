@@ -109,17 +109,16 @@ argument.
 This allows researchers to leverage existing library functions while experimenting with 
 improvements to specific components.  Although this seems simple and obvious, from a practical 
 standpoint the monolithic designs and lack of interoperability between different research codebases
-has historically made this difficult.
+have historically made this difficult.
 
 Finally, we strive for readable code, thorough documentation and exhaustive testing.
 All development is conducted on GitHub.  
 We apply modern software development practices, such as continuous integration testing (via Travis [#]_) and
 coverage (via Coveralls [#]_).
-All functions are thoroughly documented using Sphinx, and include example code demonstrating usage.
+All functions are implemented in pure Python, thoroughly documented using Sphinx, and include example code demonstrating usage.
 Librosa mostly complies with PEP-8 recommendations, with a small set of exceptions for variable names 
-that make the code more concise without sacrificing clarity |---| 
-e.g., ``y`` and ``sr`` are preferred over more verbose names such as ``audio_buffer`` and ``sampling_rate`` 
-|---| and limits on the number of function parameters in certain cases.
+that make the code more concise without sacrificing clarity:
+e.g., ``y`` and ``sr`` are preferred over more verbose names such as ``audio_buffer`` and ``sampling_rate``.
 
 .. [#] https://travis-ci.org
 .. [#] https://coveralls.io
@@ -141,7 +140,7 @@ by the sampling rate:
 
 .. code-block:: python
 
-    >>> track_duration = float(len(y)) / sr
+    >>> duration_seconds = float(len(y)) / sr
 
 By default, when loading stereo audio files, the ``librosa.load()`` function 
 downmixes to mono by averaging left- and right-channels, and then resamples the
@@ -154,7 +153,8 @@ At the default sampling rate of 22050 Hz, this corresponds to overlapping frames
 approximately 93ms spaced by 23ms.
 Frames are centered by default, so frame index ``t`` corresponds to the half-open time interval::
 
-    [t - frame_length / 2, t + frame_length /2),
+    [t * hop_length - frame_length / 2, 
+     t * hop_length + frame_length / 2),
 
 where the boundary conditions are handled by reflection-padding the input.
 Unless otherwise specified, all sliding-window analyses use Hann windows by default.
@@ -216,7 +216,7 @@ MIDI note number, or note in scientific pitch notation.
 
 Finally, the core submodule provides functionality to estimate the dominant frequency of STFT bins via
 parabolic interpolation (``piptrack``) [#]_, and estimation of tuning deviation (in cents) from the reference
-``A440``.  These functions allow pitch-based analyses (e.g., cqt) to dynamically adapt filter banks to match
+``A440``.  These functions allow pitch-based analyses (e.g., ``cqt``) to dynamically adapt filter banks to match
 the global tuning offset of a particular audio signal.
 
 .. [#] https://ccrma.stanford.edu/~jos/sasp/Sinusoidal_Peak_Interpolation.html
@@ -230,8 +230,8 @@ The ``librosa.feature`` module implements a variety of spectral representations,
 upon the short-time Fourier transform.
 
 The Mel frequency scale is commonly used to represent audio signals, as it provides a rough model of
-human frequency perception.  Librosa implements both a Mel-scale spectrogram
-(``librosa.feature.melspectrogram``) and the commonly used Mel-frequency Cepstral Coefficient (MFCC)
+human frequency perception [Stevens37]_.  Librosa implements both a Mel-scale spectrogram
+(``librosa.feature.melspectrogram``) and the commonly used Mel-frequency Cepstral Coefficients (MFCC)
 (``librosa.feature.mfcc``).  By default, Mel scales are defined to match the implementation provided 
 by Slaney's auditory toolbox [Slaney98]_, but they can be made to match the Hidden Markov Model Toolkit (HTK) 
 by setting the flag ``htk=True`` [Young97]_.
@@ -321,7 +321,7 @@ The ``onset_strength`` function calculates a thresholded spectral flux operation
 returns a one-dimensional array representing the amount of increasing spectral energy at each frame.  This
 is illustrated as the blue curve in the bottom panel of Figure :ref:`fig:tour`.  The ``onset_detect``
 function, on the other hand, selects peak positions from the onset strength curve following the heuristic
-described by Boeck et al. [Boeck12]_.  The output of ``onset_detect`` are depicted as the red circles in the
+described by Boeck et al. [Boeck12]_.  The output of ``onset_detect`` is depicted as red circles in the
 bottom panel of Figure :ref:`fig:tour`.
 
 The ``beat`` module provides functions to estimate the global tempo and positions of beat events from the
@@ -401,7 +401,7 @@ This is facilitated by the ``recurrence_to_lag`` (and ``lag_to_recurrence``) fun
     :label:`fig:rec`
 
 
-Second, temporally constrained clustering to detect feature change-points without relying upon repetition.
+Second, temporally constrained clustering can be used to detect feature change-points without relying upon repetition.
 This is implemented in librosa by the ``segment.agglomerative`` function, which uses ``scikit-learn``'s 
 implementation of Ward's agglomerative clustering method [Ward63]_ to partition the input into a user-defined 
 number of contiguous components.  In practice, a user can override the default clustering parameters by
@@ -414,11 +414,11 @@ Decompositions
 
 Many applications in MIR operate upon latent factor representations, or other
 decompositions of spectrograms.  For example, it is common to apply non-negative matrix
-factorization (NMF) [Lee01] to magnitude spectra, and analyze the statistics of the 
+factorization (NMF) [Lee99]_ to magnitude spectra, and analyze the statistics of the 
 resulting time-varying activation functions, rather than the raw observations.
 
-The ``decompose`` module provides a simple interface to apply decomposition techniques to
-spectrograms (or general feature arrays)::
+The ``decompose`` module provides a simple interface to factor
+spectrograms (or general feature arrays) into *components* and *activations*::
 
     >>> comps, acts = librosa.decompose.decompose(S)
 
@@ -430,6 +430,7 @@ object fitting the ``sklearn.decomposition`` interface may be substituted::
 
     >>> T = SomeDecomposer()
     >>> librosa.decompose.decompose(S, transformer=T)
+
 
 In addition to general-purpose matrix decomposition techniques, librosa also implements
 the harmonic-percussive source separation (HPSS) method of Fitzgerald [Fitzgerald10]_
@@ -467,8 +468,7 @@ one may simply write
 
 Convenience functions are provided for HPSS (retaining the harmonic, percussive, or both
 components), time-stretching and pitch-shifting.  Although these functions provide no
-additional functionality to librosa, their inclusion often results in simpler, more
-readable application code.
+additional functionality, their inclusion results in simpler, more readable application code.
 
 
 Caching
@@ -507,17 +507,17 @@ One approach to eliminate redundant computation is to decompose the various func
 in a computation graph, as is done in Essentia [Bogdanov13]_.  However, this approach necessarily constrains the function 
 interfaces, and may become unwieldy for common, simple applications.
 
-Librosa takes an alternative, lazy approach to eliminating redundancy via output caching.
+Librosa takes an alternative, lazy approach to eliminating redundancy via *output caching*.
 Caching is implemented through an extension of the ``Memory`` class from the ``joblib`` package [#]_, 
 which provides disk-backed memoization of function outputs.
 Librosa's cache object (``librosa.cache``) operates as a decorator on all non-trivial computations.
-This way, a user can write simple application code (i.e., the first example above) while seamlessly
+This way, a user can write simple application code (i.e., the first example above) while transparently 
 eliminating redundancies and achieving speed comparable to the more advanced implementation (the second example).
 
 The cache object is disabled by default, but can be activated by setting the environment variable 
 ``LIBROSA_CACHE_DIR`` prior to importing the package.
-Because (as of joblib version 0.8.4) the ``Memory`` object does not implement a cache eviction policy,
-it is recommended that users purge the cache after processing each audio file to prohibit the cache from
+Because the ``Memory`` object does not implement a cache eviction policy (as of version 0.8.4),
+it is recommended that users purge the cache after processing each audio file to prevent the cache from
 filling all available disk space.
 We note that this can potentially introduce race conditions in multi-processing environments (i.e., parallel batch processing of a corpus),
 so care must be taken when scheduling cache purges.
@@ -625,6 +625,10 @@ References
                     *Constant-Q transform toolbox for music processing.*
                     7th Sound and Music Computing Conference, Barcelona, Spain. 2010.
 
+.. [Stevens37] Stevens, Stanley Smith, John Volkmann, and Edwin B. Newman. 
+               *A scale for the measurement of the psychological magnitude pitch.*
+               The Journal of the Acoustical Society of America 8, no. 3 (1937): 185-190.
+
 .. [Slaney98] Slaney, Malcolm. *Auditory toolbox.*
               Interval Research Corporation, Tech. Rep 10 (1998): 1998.
 
@@ -666,9 +670,9 @@ References
             *Hierarchical grouping to optimize an objective function.*
             Journal of the American statistical association 58, no. 301 (1963): 236-244.
 
-.. [Lee01] Lee, Daniel D., and H. Sebastian Seung. 
-           *Algorithms for non-negative matrix factorization.*
-           In Advances in neural information processing systems, pp. 556-562. 2001.
+.. [Lee99] Lee, Daniel D., and H. Sebastian Seung. 
+           *Learning the parts of objects by non-negative matrix factorization.*
+           Nature 401, no. 6755 (1999): 788-791.
 
 .. [Fitzgerald10] Fitzgerald, Derry. 
                   *Harmonic/percussive separation using median filtering.*
