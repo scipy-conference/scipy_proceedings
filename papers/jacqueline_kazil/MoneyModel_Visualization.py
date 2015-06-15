@@ -28,7 +28,7 @@ class HistogramModule(VisualizationElement):
 chart_element = ChartModule([{"Label": "Gini", "Color": "Black"}], 
                             data_collector_name='dc')
 
-histogram_element = HistogramModule(range(10), 200, 500)
+histogram_element = HistogramModule(list(range(10)), 200, 500)
 server = ModularServer(MoneyModel, [histogram_element], "MoneyModel", 100)
 #server = ModularServer(MoneyModel, [chart_element], "Money Model", 100)
 server.launch()

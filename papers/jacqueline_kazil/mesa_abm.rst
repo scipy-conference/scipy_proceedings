@@ -158,9 +158,9 @@ Mesa currently implements two broad classes of space: grid, and continuous. Grid
 
 There are several specific grid classes, all of which inherit from a root `Grid` class. At its core, a grid is a two-dimensional array with methods for getting the neighbors of particular cells, adding and removing agents, etc. The default ``Grid`` class does not enforce what each cell may contain. However, ``SingleGrid`` ensures that each cell contains at most one object, while ``MultiGrid`` explicitly makes each cell be a set of 0 or more objects. There are two kinds of cell neighborhoods: The first is a cell's *Moore* neighborhood that is the 8 cells surrounding it, including the diagonals; the second is the *Von Neumann* neighborhood which is only the 4 cells immediately above, below, and to its left and right. Which neighborhood type to use will vary based on the specifics of each model, and are specified in Mesa by an argument to the various neighborhood methods.
 
-.. figure:: neighborhoods3.png
+.. figure:: grid_topology.png
 
-   Grid topology. Moore and Von Neumann neighborhoods of radius 1; lettered edges connect to one another. :label:`fig3`
+   Grid topology. Moore and Von Neumann neighborhoods of radius 1; in a torus, lettered edges connect to one another. :label:`fig3`
 
 The ``ContinuousSpace`` class also inherits from ``Grid``, and uses the grid as a way of speeding up neighborhood lookups; the number of cells and the arbitrary limits of the space are provided when the space is created, and are used internally to map between spatial coordinates and grid cells. Neighbors here are defined as all agents within an arbitrary distance of a given point. To find the neighbors of a given point, ``ContinuousSpace`` only measures the distance for agents in cells intersecting with a circle of the given radius.
 
@@ -337,7 +337,7 @@ Mesa already includes a set of pre-built visualization elements which can be dep
 
 Running this code launches the server. To access the actual visualization, open your favorite browser (ideally Chrome) to http://127.0.0.1:8888/ . This displays the visualization, along with the controls used to reset the model, advance it by one step, or run it at the designated frame-rate. After several ticks, the browser window will look something like Figure :ref:`fig7`.
 
-.. figure:: browser_screenshot_2.png
+.. figure:: browser_screenshot.png
 
   Example of the browser visualization. :label:`fig7`
 
