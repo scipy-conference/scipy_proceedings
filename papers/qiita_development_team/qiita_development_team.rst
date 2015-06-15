@@ -45,7 +45,7 @@ Qiita: report of progress towards an open access microbiome data analysis and vi
 
 .. class:: keywords
 
-   Microbiome, multi-omics.
+   Microbiome, multi-omics, open science.
 
 Introduction
 ------------
