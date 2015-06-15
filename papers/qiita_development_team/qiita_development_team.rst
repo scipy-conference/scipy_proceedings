@@ -1,5 +1,5 @@
 :author: The Qiita Development Team
-:email: qiita.help@gmail.com
+:email: rob.knight@ucsd.edu
 :institution: University of California, San Diego
 
 ----------------------------------------------------------------------------------------------------
