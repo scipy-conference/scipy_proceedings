@@ -313,7 +313,7 @@ pulvinar id metus.
 .. [#] On the one hand, a footnote.
 .. [#] On the other hand, another footnote.
 
-.. figure:: figure1.png
+.. figure:: reactivity_insertion.png
 
    This is the caption. :label:`egfig`
 
