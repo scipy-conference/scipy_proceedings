@@ -16,7 +16,7 @@
 :institution: LabROSA, Columbia University
 
 :author: Matt McVicar
-:email: mm4819@bristol.ac.uk
+:email: mattjamesmcvicar@gmail.com
 :institution: Department of Engineering Mathematics, University of Bristol
 
 :author: Eric Battenberg
@@ -33,7 +33,8 @@ LibROSA: Audio and Music Signal Analysis in Python
 
 .. class:: abstract
 
-   This document describes the design and implementation of librosa version 0.4.0.
+   This document describes the design and implementation of version 0.4.0 of
+   librosa: a Python package for audio and music signal processing.
 
 
 .. class:: keywords
@@ -592,12 +593,14 @@ The parameter optimization routines have been factored out into a separate repos
 
 Conclusion
 ----------
+This document provides a brief summary of the design considerations and functionality of librosa.
 
 
+Citing librosa
+==============
 
-
-Acknowledgments
-===============
+We request that when using librosa in academic work, authors cite the Zenodo reference [McFee15]_.
+For references to the *design* of the library, citation of the present document is appropriate.
 
 
 References
@@ -702,3 +705,7 @@ References
                 Justin Salamon, José R. Zapata, and Xavier Serra.
                 *Essentia: An Audio Analysis Library for Music Information Retrieval.*
                 In 12th International Society for Music Information Retrieval Conference (ISMIR 2013), pp. 493-498. 2013.
+
+.. [McFee15] Brian McFee, Matt McVicar, Colin Raffel, Dawen Liang, Oriol Nieto, Josh Moore, Dan Ellis, et al.
+             *Librosa: v0.4.0.*
+             Zenodo, 2015. doi:10.5281/zenodo.18369.
