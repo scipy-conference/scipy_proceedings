@@ -798,9 +798,9 @@ in a meaningful format.
 
 HoloViews is one of many packages designed for working with large,
 multidimensional datasets, but it differs from each of these in
-important ways.  For instance, Python's ``seaborn`` and R's ``ggplot``
-library [Was14]_ support laying out high-dimensional data into
-subplots and grids, while Python's Bokeh library and R's shiny
+important ways.  For instance, Python's ``seaborn`` [Was14]_ and R's
+``ggplot2`` [Wic09]_ library support laying out high-dimensional data
+into subplots and grids, while Python's Bokeh library and R's shiny
 [shiny]_ web application framework provide widgets for interactive
 data exploration.  While each of these packages can provide extremely
 polished interactive graphics, getting them set up for specific sets
