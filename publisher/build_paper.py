@@ -112,7 +112,6 @@ def tex2pdf(out_path):
     bib_file = os.path.join(out_path,d["bibliography"]+'.bib')
     if os.path.exists(bib_file):
         command_line += ' && bibtex paper && pdflatex -halt-on-error paper.tex && pdflatex -halt-on-error paper.tex' 
-        print("got here")
 
 
     # -- dummy tempfile is a hacky way to prevent pdflatex

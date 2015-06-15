@@ -97,6 +97,8 @@ The number of directed graphs that can be obtained from a set of nodes of size :
 Directed Acyclic Graphs
 ^^^^^^^^^^^^^^^^^^^^^^^
 
+A cycle in a directed graph can be understood as the existance of 
+
 The number of directed acyclic graphs (:smallcaps:`dag`\s) that can be obtained from a set of nodes of size :math:`n` can be defined recursively as follows:
 
 .. math::
@@ -105,8 +107,18 @@ The number of directed acyclic graphs (:smallcaps:`dag`\s) that can be obtained 
 
 Note, because :smallcaps:`dag`\s do not allow any cycles, this means that there can be no self loops. As a result, every value on the diagonal of a  :smallcaps:`dag`\'s adjacency matrix will be 0. 
 
+
+Conditional Probability Distributions
+-------------------------------------
+
+A random variable defined by a conditional probability distribution has a distribution indexed by the realization of some other variable (which itself is often a random variable, especially in the context of Bayesian networks).
+
+
+
 Bayesian Networks
 -----------------
+
+Bayesian networks are a class of graphical models that have particular probabilistic semantics attached to the 
 
 Assumptions for Bayesian networks
 ========================================
@@ -116,11 +128,12 @@ There is a fixed set of known nodes with finite cardinality :math:`N`. All event
 Causal Bayesian Networks
 ------------------------
 
-Conditional Probability Distributions
--------------------------------------
 
-Sampling from Conditional Probability distributions
-===================================================
+
+
+Sampling from Conditional Probability distributions in Bayes Nets
+=================================================================
+
 
 
 
