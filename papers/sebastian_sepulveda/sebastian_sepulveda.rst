@@ -120,7 +120,7 @@ The template for the communication process is implemented through the ``Communic
             def closePort():
                 self.exit.set()
 
-The the main process is implemented through the ``MainWindow`` class. It is a subclass of the ``QtGui.QMainWindow`` class, defined by the PyQtGraph library. Inside this class we define the proper acquisition method (serial, sockets, bluetooth, etc.) and the basic plot configurations, and we configure the timers used to update the plots, which  trigger the ``update_plot`` method. The following code snippet shows the basic structure of the class. 
+The the main process is implemented through the ``MainWindow`` class. It is a subclass of the ``QtGui.QMainWindow`` class. Inside this class we define the proper acquisition method (serial, sockets, bluetooth, etc.) and the basic plot configurations, and we configure the timers used to update the plots, which  trigger the ``update_plot`` method. The following code snippet shows the basic structure of the class. 
 
 .. code-block:: python
 
