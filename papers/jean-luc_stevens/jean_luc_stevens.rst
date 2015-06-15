@@ -773,9 +773,6 @@ exact details of plotting. The need for an automatic and useful visual
 representation is driven by the need to immediately present the data
 in a meaningful format.
 
-..
-  jbednar: what does facet mean here?  Seems obscure.
-
 HoloViews is one of many packages designed for working with large,
 multidimensional datasets, but it differs from each of these in
 important ways.  For instance, Python's ``seaborn`` [Was14]_ and R's
@@ -805,17 +802,13 @@ is much easier within HoloViews than outside of it.  Second, because
 the options can easily be shared across groups of plots, it is simple
 to build up new, highly customized plot types, without necessarily
 requiring custom code.  Third, HoloViews makes it trivial to add
-completely novel types of plots (or to override specific code in
-existing plots) using custom code when needed, and these custom plots
-will then combine seamlessly with other HoloViews objects to make
-composite figures.  Thus in HoloViews, default plots are simple and
-straightforward, but it can handle even the most complex figures
-possible with other packages, and should offer important benefits at
-every level of complexity.
-
-.. 
-  Reproducibility
-  ~~~~~~~~~~~~~~~
+completely novel types of Elements with corresponding plots (or to
+override specific code in existing plots) using custom code when
+needed, and these custom plots will then combine seamlessly with other
+HoloViews objects to make composite figures.  Thus in HoloViews,
+default plots are simple and straightforward, but it can handle even
+the most complex figures possible with other packages, and should
+offer important benefits at every level of complexity.
 
 Although HoloViews is a general purpose library for working with data
 at every stage, it actually represents a significant advance over
@@ -834,10 +827,6 @@ HoloViews makes it possible to reproduce results from every step of
 the project, up to and including the final published figures, in a way
 that has not previously been practical.
 
-.. 
-   Extensibility
-   ~~~~~~~~~~~~~
-
 In this paper, we have focused on how a user can quickly build data
 structures for their content of interest.  An even more powerful
 approach is for a developer to integrate HoloViews directly into a
@@ -849,30 +838,15 @@ the approach taken by the ImaGen image generation library and the
 Topographica neural simulator, two very different projects that both
 output data wrapped in HoloViews data structures.
 
-.. 
-  jbednar: commented out -- seems to be said already above.
-
-  As the number of projects using HoloViews grows, the easier it will
-  become for researchers to express their work succinctly without
-  worrying about plotting issues. That said, the scope of the base
-  HoloViews project is not unlimited and there will be scientific
-  representations that are not directly included with HoloViews. For
-  this reason, we have made it easy to define new element types and
-  write new plotting classes to extend this functionality to new
-  domains.
-
-.. 
-  jbednar: Worth mentioning, but seems a bit arbitrary, and we don't
-  seem to have the space:
-
-  HoloViews also includes an interface to the visualizations
-  supported by pandas [pandas]_ and seaborn [Was14]_ libraries, and we
-  have working examples of elements being defined to view geographical
-  data (via matplotlib.basemap), network topologies (via NetworkX), and
-  various other domain specific applications such as the visualization
-  of Bloch Spheres in quantum physics. We have found the basic design
-  general and extensible, making it possible to wrap third party
-  libraries with little effort.
+..
+   HoloViews also includes an interface to the visualizations supported
+   by pandas [pandas]_ and seaborn [Was14]_ libraries, and we have
+   working examples of elements being defined to view geographical data
+   (via matplotlib.basemap), network topologies (via NetworkX), and
+   various other domain specific applications such as the visualization
+   of Bloch Spheres in quantum physics. We have found the basic design
+   general and extensible, making it possible to wrap third party
+   libraries with little effort.
   
 Conclusion
 ----------
