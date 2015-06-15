@@ -594,6 +594,9 @@ The parameter optimization routines have been factored out into a separate repos
 Conclusion
 ----------
 This document provides a brief summary of the design considerations and functionality of librosa.
+More detailed examples, notebooks, and documentation can be found in our development repository and project website.
+Librosa is under active development, and our roadmap for future work includes efficiency improvements and
+enhanced functionality of audio coding and file system interactions.
 
 
 Citing librosa
