@@ -517,8 +517,8 @@ A more efficient implementation of the above example would factor out the redund
     >>> tempo, beats = librosa.beat.beat_track(S=lms,
     ...                                        sr=sr)
 
-Although it is more computationally efficient, the above is example is both less concise,
-and requires more knowledge of the implementations on behalf of the application programmer.
+Although it is more computationally efficient, the above example is less concise,
+and it requires more knowledge of the implementations on behalf of the application programmer.
 More generally, nearly all functions in librosa eventually depend upon STFT calculation,
 but it is rare that the application programmer will need the STFT matrix as an end-result.
 
