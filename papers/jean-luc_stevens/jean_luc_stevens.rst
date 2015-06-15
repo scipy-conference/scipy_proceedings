@@ -132,13 +132,13 @@ coding, which is slow, error-prone, and distracts from the actual
 scientific analysis.  Moreover, this process typically involves a
 large amount of trial and error, generating transitory code and
 analyses that make it difficult to later reproduce the steps that led
-to any particular result [Repro]_.  Switching to different tools for
+to any particular result [Crook]_.  Switching to different tools for
 final, non-interactive, publication-quality figures exacerbates this
 problem, further disconnecting the reported results from the process
 by which they were created.  This lack of reproducibility is a serious
 handicap both for progress within a single lab and for the community
 as a whole, making it nearly impossible for researchers to build on
-each others' work even for purely computational projects [Repro]_.
+each others' work even for purely computational projects [Crook]_.
 
 In this paper, we present a new Python software package built to
 address these problems directly, by providing simple tools for
@@ -836,76 +836,90 @@ dissemination common to all scientific disciplines.
 Discussion
 ----------
 
-.. Originally from spaces?
-
-   Various solutions exist to bring interactivity to scientific
-   visualization including IPython notebook widgets, Bokeh and the R
-   language's shiny [shiny]_ web application framework. While these tools
-   can provide extremely polished interactive graphics, getting them set
-   up always requires additional effort and custom code, placing a
-   barrier to their primary use case, the interactive exploration of
-   data.
-
-..
-   .. [shiny] RStudio, Inc, *shiny: Easy web applications in R.*,
-			  http://shiny.rstudio.com, 2014.
-
-
-
 This paper has demonstrated a succinct, flexible and interactive
 approach for data exploration, analysis and visualization. By
-eliminating the need to write plotting code entirely, this approach
-restores the quick and easy interaction typical when working with an
-interpreter. By keeping declarations of content separate from
-declarations regarding presentation, it is possible to first establish
-what content is of interest before improving its visual
-representation. Furthermore, this approach helps keep the code written
-by the user clean and succinct by completely separating these two
-concerns.
+eliminating the need to write plotting code, this approach restores
+the quick and easy interaction typical when working with an
+interpreter, even when working with complex data. At the same time it
+allows the user to keep a concise and reproducable recipe of their
+work from early exploration to the final publication. In this way
+HoloViews captures the entire workflow involved in a scientific
+research project.
 
-This approach cuts across the entire workflow associated with research
-and is therefore not directly comparable in terms of user experience
-to standard third-party plotting packages. In fact, HoloViews is
-designed to abstract away the details of plotting process so that
-*any* plotting system may be used. In fact, a user does not even need
-to be aware of the underlying plotting library until there is a need
-to customize the visual output at which point the user will need to
-supply display options appropriate for the backend.
+In the early stages of a research project the workflow involves
+iterative process of pre-processing and analysing the data, then
+visualizing the data with a specific plotting package. This two-step
+process disconnects the user from immediate feedback that is required
+to quickly improve analyses and explore the data. HoloViews on the
+other hand establishes a tight link between the data and its visual
+representation, indepedent of the plotting backend, thereby
+abstracting away the details of the plotting process.
 
 The compositionality of HoloViews is superficially reminiscent of
-systems such as the Grammar of Graphics [] although this is fact the
-converse of what HoloViews aims to address. Instead, we intend to
-define a language for the *semantics* of complex research data in
-terms of how the researcher thinks *independent* of the exact details
-of plotting. The need for an automatic and useful visual
-representation is driven by the need to immediately present the data
-in interpretable form.
+systems such as the Grammar of Graphics [Gog]_ although this is fact
+the converse of what HoloViews aims to address. Instead of expressing
+the complexities of graphics, the declarative data structures
+HoloViews provides, define a language for the semantics of the actual
+data in terms of how the researcher conceptualizes it *independent* of
+the exact details of plotting. The need for an automatic and useful
+visual representation is driven by the need to immediately present the
+data in interpretable form.
 
-.. Compare/Contrast and maybe integrate this here?
+Real-world data often has many variables and a wide range of plotting
+packages have attempted to address that fact. Libraries such as R's
+ggplot and the seaborn library [Was14]_ provide simple ways to lay out
+and facet high-dimensional into subplots and grids. On the other end,
+various solutions exist to bring interactivity to scientific
+visualization including IPython notebook widgets, Bokeh and the R
+language's shiny [shiny]_ web application framework. While these tools
+can provide extremely polished interactive graphics, getting them set
+up always requires additional effort and custom code, placing a
+barrier to their primary use case, the interactive exploration of
+data. HoloViews extends these concepts by providing versatile data
+structures, which can represent the dimensionality as a unified space,
+which can be revealed as grids, layers, animations and widgets. The
+semantic information associated with the data allows HoloViews to
+automatically visualize high-dimensional data using traditional grid
+and facet layouts, interactive widgets and various video formats.
 
-   Various solutions exist to bring interactivity to scientific
-   visualization including IPython notebook widgets, Bokeh and the R
-   language's shiny [shiny]_ web application framework. While these tools
-   can provide extremely polished interactive graphics, getting them set
-   up always requires additional effort and custom code, placing a
-   barrier to their primary use case, the interactive exploration of
-   data.
+Since HoloViews automatically handles so much of the default plotting
+behavior, from basic style defaults, to easy ways to normalize data
+and axes across plots, one might be forgiven in thinking that it does
+not deal well with the long tail of visualization. However once again
+the opposite is true, HoloViews aims to expose as many plotting and
+styling options as possible in an easily accessable manner, and
+provides a powerful, inheritance based options system. Initial
+attempts at plotting can therefore quickly be customized, leading to
+publication quality figures. At the same time a list of default
+plotting options can be curated to provide style templates for often
+reused plots and analyses. If that isn't sufficient it is extremely
+easy to extend HoloViews to generate custom plots. Therefore even
+the most complex figures may be prepared for publication within the
+HoloViews framework.
 
+Reproducibility
+~~~~~~~~~~~~~~~
 
-The fact that content is kept separate from presentation is also key
-to reproducibility. The absolutely minimum requirement for a project
-to be considered reproducible is that the raw data can be
-replicated. The aesthetic aspects of a figure are always less
-important than the details of how the content is displayed and
-HoloViews reflects this important distinction. In fact, we offer
-advanced comparison utilities that can tell you exactly how two
-HoloViews objects differ. These utilities allow us to ensure the raw
-data in all our notebooks (e.g on our main website) remain constant
-over time. These tests are entirely separate from the tests that check
-whether the visual representation has changed.
+The scientific process does not end with the final publication
+however, scientific reproducibility is central to producing solid
+science [Crook]_. HoloViews improves the reproducibility of results in
+a number of ways. It directly supports reproducibility by providing
+archiving utilities to store the notebook containing notes and figures
+alongside HoloViews datastructures containing the raw data. It is
+therefore always possible to go back to the source of a plot, to
+replot it, extract the data and even replot it in different ways.
 
-..
-   Mention the saving of vertical space versus the matplotlib approach?
+The fact that the content is kept separate from presentation is
+central key to keeping the final research output reproducible. The
+absolutely minimum requirement for a project to be considered
+reproducible is that the raw data can be replicated. The aesthetic
+aspects of a figure are always less important than the actual content
+represented and HoloViews reflects this important distinction. In
+addition to the archival utilities we offer advanced comparisons that
+can tell you exactly how two HoloViews objects differ. These utilities
+allow us to ensure the raw data in all our notebooks (e.g on our main
+website) remain constant over time. These tests are entirely separate
+from the tests of the visual representation.
 
 Another crucial way HoloViews helps with reproducibility is simply by
 being more succinct than other approaches. By eliminating the need for
@@ -917,9 +931,8 @@ reproduce the results also greatly increases the density of
 information delivered in a single plot improving readability and
 comprehension.
 
-
-..
-   Extensibility section / Long tail of visualization
+Extensibility
+~~~~~~~~~~~~~
 
 In this paper, we have focused on how the user can quickly build the
 datastructures containing content of interest. This ignores the power
@@ -942,12 +955,16 @@ write new plotting classes to extend this functionality to new
 domains.
 
 In particular, HoloViews includes an interface to the visualizations
-supported by the seaborn library and we have working examples of
-elements being defined to view geographical data (via
-matplotlib.basemap), network topologies (via NetworkX) and to
-visualize Bloch Spheres in quantum physics (??). We have found the
-basic design general and extensible, making it possible to wrap third
-party libraries without requiring too much effort.
+supported by pandas [pandas]_ and seaborn [Was14]_ libraries and we
+have working examples of elements being defined to view geographical
+data (via matplotlib.basemap), network topologies (via NetworkX) and
+various other domain specific applications such as the visualization
+Bloch Spheres in quantum physics. We have found the basic design
+general and extensible, making it possible to wrap third party
+libraries with little effort.
+
+Conclusion
+----------
 
 The ease with which HoloViews is extended to express new domains while
 remaining succinct demonstrates that HoloViews has taken a very
@@ -962,12 +979,6 @@ presentation. By not conflating content with presentation, HoloViews
 allows a natural, incremental progression from the exploration to
 presentation.
 
-
-..
-   Lancet paper has several paragraphs along the same lines. This could
-   be similar and use the same citations.
-
-
 This approach to reproducibility is fairly unique although the core
 ideas stem from the well-established principle of transparently
 converting some data into its corresponding representation. There are
@@ -978,57 +989,18 @@ research productivity. HoloViews improves reproducibility by
 minimising the code and therefore the effort involved in a project
 without sacrificing flexibility.
 
-
-
 .. References
 
    Crook paper - jim's webpages
    Vistrails
    Ones from Lancet paper.
-   Grammar of Graphics.
-
-
-..
-   * Long tail of visualization
-   * Extensibility and other feature
-   * Imagen/Topographica/Lancet..
-
-
-.. Features
-   * Some mention that because we have data structures you can pickle them.
-   * Widgets are embeddable unlike IPython and Matplotlib widgets (but also support live mode).
-
-
-.. Features
-   * Animations and interactivity are much, much easier in HoloViews than in any other package including R's shiny, IPython widgets, Matplotlib widgets, spyre and MoviePy etc.
-   * Entire styles can be switched out to rerender the same data (by replacing the OptionsTree)
-
-.. Comment from outline
-
-   * Pandas dataframes have a convenient plot method. This means if you always process your data as   
-     dataframes and if the capabilities of the pandas plotting are sufficient with little/no     
-     customization, then this has many of the same benefits of HoloViews. The difference is that typical 
-     visualizations are complex and compositional which HoloViews handles but the output of pandas plot 
-     will not. You can write custom plotting code for pandas but this defeats the point.
-
-   * Reproducibility: Makes notebook format works by capturing all the steps by being compact succinct 
-     and holding onto data is always available. Declarative is related to succinct.
-     Best practice, random numbers, version control, restart and re-run.
-
-
-
-.. jbednar: shouldn't it mention normalization somewhere?  It's a big deal.
-
-.. jbednar: shouldn't it mention exporting, too?
 
 .. jbednar: Need to cite Topographica and acknowledge NIH support
    (which paid for Param and for the continuous coordinate support).
 
+
 References
 ----------
-
-.. jbednar: Some of these citations are just placeholders (with
-   XXXXX); they need to be filled out.
 
 .. [Per07] Fernando Perez and Brian E. Granger, 
        IPython: a System for Interactive Scientific Computing, 
@@ -1043,18 +1015,24 @@ References
 
 .. [Wic09] Hadley Wickham, *ggplot2: elegant graphics for data analysis*,
        Springer New York, 2009.
-		   
+
 .. [shiny] RStudio, Inc, *shiny: Easy web applications in R.*,
-       http://shiny.rstudio.com, 2014.
+	   http://shiny.rstudio.com, 2014.
 
 .. [knitr] Foundation for Open Access Statistics, *knitr*,
-       http://yihui.name/knitr, 2015.
+	   http://yihui.name/knitr, 2015.
 
-.. [Repro] XXXXX Crook or some other citation about reproducibility.
+.. [Crook] Crook et al., *Learning from the Past: Approaches for Reproducibility in Computational Neuroscience*,
+	   20 Years of Computational Neuroscience Springer Series in Computational Neuroscience, 9:73-102, 2013.
 
-.. [Wol03] Stephen Wolfram,
-       *The Mathematica Book*, Fifth Edition. Wolfram Media/Cambridge University Press, 2003.
+.. [Wol03] Stephen Wolfram, *The Mathematica Book*, Fifth Edition,
+	   Wolfram Media/Cambridge University Press, 2003.
 
-.. [Mpl] Matplotlib XXXXX.
+.. [Mpl] John D. Hunter, *Matplotlib: A 2D graphics environment*,
+	 Computing In Science \& Engineering, 9(3):90-95, 2007.
 
-.. [pandas] Pandas XXXXX.
+.. [pandas] Wes McKinney, *Data Structures for Statistical Computing in Python*,
+	    Proceedings of the 9th Python in Science Conference, 51-56, 2010.
+
+.. [GoG] Leland Wilkinson, *The Grammar of Graphics*,
+	 Springer-Verlag New York, 2005.
