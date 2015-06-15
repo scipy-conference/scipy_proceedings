@@ -45,13 +45,13 @@ domains of study, Data Science education, mentoring, and research
 draws ideas from, and is inspired by, several other domains such as
 the mathematical sciences, computer science, and various business and
 application domains.  Perhaps just as importantly, student who wish to
-pursue education and careers in Data Science common from similarly
+pursue education and careers in Data Science come from similarly
 diverse backgrounds.  Accordingly, the challenges and opportunities of
 being an educator in such a domain requires one to reflect on
-appropriate tools and approaches that promote educational success.  In
+appropriate tools and approaches that promote educational success.  It
 is the author's view, and experience, that the Python scripting
 language can be an effective part of the Data Science curriculum for
-several reasons such its ease of use, its open source license,
+several reasons such as its ease of use, its open source license,
 and its access to a vast array of libraries covering many topics of
 interest to Data Science.
 
@@ -76,7 +76,7 @@ Of course, we are not the first to suggest Python's effectiveness in
 an education and research environment.  In fact, the Python
 programming language is quite popular in numerous problem domains and
 Python has seen wide used in education, see e.g., [Mye07]_ and
-[Sta00]_.  In fact, in ranks quite highly in many surveys of
+[Sta00]_.  In fact, it ranks quite highly in many surveys of
 programming language popularity [OGr14]_, it is seeing substantial
 growth within the Data Science community [Sin14]_, and is generally
 speaking quite easy to learn [Lut13]_.
@@ -159,27 +159,27 @@ In particular, the course is described as:
   \end{quotation}
 
 As one might imagine from such an ambitious description, finding the
-right level of detail for the course can be quite challenging
-especially considering the fact that many of the students have quite
-varied backgrounds, with some being experts in mathematics, but with
-perhaps less training in computer science or software development,
-with others finding themselves in the opposite situation.
+right level of detail for the course can be quite challenging.  One
+must consider the fact that many of the students have quite varied
+backgrounds.  Some students are experts in mathematics and have less
+training in computer science or software development, while others
+find themselves in the opposite situation.
 
 Space does not allow for a fulsome description of the class content
 and, in any event, such a discussion would distract us from our focus
 on Python.  However, in the author's view, one important feature of
 such a class is that the students should be able to *get "their hands
 dirty" playing with real data* both early and often.  Students can
-often find inspiration by seeing the ideas developed as parts the
-lectures be  put to use on problems of practical interest.
+often find inspiration by seeing the ideas developed as part of the
+lectures being  put to use on problems of practical interest.
 
-With all of the above in mind, the author and the others involved in
-the design of DS501 decided to have as one of the major learning
-activities for the class an interconnected set of four *case studies*.
-Each case study is intended to build upon the previous one with the
-students solving interesting and pertinent problems in Data Science at
-every step.  Accordingly, our focus here will be on these case studies
-and the substantial role that Python had to play in their development.
+With all of the above in mind, it was decided to have four
+interconnected *case studies* as one of the major learning activities
+for the class.  Each case study is intended to build upon the previous
+one with the students solving interesting and pertinent problems in
+Data Science at every step.  Accordingly, our focus here will be on
+these case studies and the substantial role that Python had to play in
+their development.
 
 Case Study One
 ~~~~~~~~~~~~~~
@@ -188,14 +188,14 @@ The idea of the first case study in DS501 is to perform basic data
 gathering, cleaning, and collection of statistics.  For this case
 study we choose our data source to be the Twitter Data Streaming API
 [Rus13]_ [Twi15]_.  Already, Python begins to demonstrate its
-usefulness, since it allows ready access to the Twitter API through,
-in particular, the python-twitter library [Ptw15]_.
+usefulness, since it allows ready access to the Twitter API through
+the python-twitter library [Ptw15]_.
 
 Another key feature of the case studies in DS501 is that we chose to
 use IPython notebooks [Per07]_ both to provide the assignments to the
 students and to have the students submit their results.  Using IPython
 notebooks for both of these tasks provided a number of advantages.
-First and foremost, it let the instructors to provide the students
+First and foremost, it let the instructors provide the students
 with skeleton implementations of their assignments and allowed the
 students to focus on their learning objectives.  Second, it provide a
 uniform and easy to use development environment for the student's
@@ -244,11 +244,11 @@ for their efforts:
    # code.  Please feel free to add more cells below 
    # this cell if necessary.
 
-In this example we provide a skeleton that allows the students to not
-have to struggle with the details of Twitter authentication, but
-rather focus on the objective of analyzing tweets and hashtags with
-frequency analysis.  Using Python, and the skeleton code provided by
-the instructors, the student where able to gather and analyze many
+In this example we provide a skeleton that allows the students to
+focus on the objective of analyzing tweets and hashtags with frequency
+analysis and not have to struggle with the details of Twitter
+authentication.  Using Python, and the skeleton code provided by the
+instructors, the student were able to gather and analyze many
 thousands of tweets and learn important lessons about data gathering,
 data APIs, data storage, and basic analytics.
 
@@ -259,8 +259,8 @@ Building upon the skills gained in the first case study, the second
 case study asks the students to analyze the MovieLens 1M Data Set
 [Mov15]_, which contains data about how users rate movies.  The key
 learning objectives are to analyze the data set, make conjectures,
-support or refute those conjectures with data, and tell a story using
-and about the data.  In particular, the students are not only asked to
+support or refute those conjectures with data, and use the data to
+tell a compelling story.  In particular, the students are not only asked to
 perform several technical tasks, but they must also propose a business
 question that they think this data can answer.  In effect, they are
 expected to play the role of a Data Scientist at a movie company and
@@ -268,7 +268,7 @@ they must convince "upper management", who are not presumed to be
 technically minded, that their conjecture is correct.
     
 While a seemingly tall order for only the second case study, Python
-again shows it utility.  In particular, just as in case study 1, the
+again shows its utility.  In particular, just as in case study 1, the
 assignment is provided in an IPython notebook, and the student is
 required to submit their work in the same format, thereby leveraging
 the skills learned in the first case study.
@@ -282,7 +282,7 @@ powerful array and matrix/vector classes, while matplotlib allows for
 plotting of data and generation of compelling figures.  Finally,
 pandas provides many tools for data processing, including a structure
 called a DataFrame (inspired by a data structure with the same name in
-the R language [RCT13]_), which facilities many data manipulations.  Note,
+the R language [RCT13]_), which facilitates many data manipulations.  Note,
 we are certainly not the first to consider this collection of
 libraries to be important for Data Science, and this particular case
 study was inspired by the excellent book "Python for Data Analysis:
@@ -297,7 +297,7 @@ Many of the tasks in this case study revolve around question like:
 * How many movies have a *median* rating over 4.5 among men over age
   30?  How about women over age 30?
 * What are the ten most popular movies given a reasonable, student 
-  derived definition of "popular"?
+  derived, definition of "popular"?
 
 and the visualization of the data by way of:
 
@@ -318,18 +318,18 @@ defined in the assignment.  For example, the precise definition of
 real world Data Science, one of the key first steps of analysis is to
 decide precisely what the question of interest is. Second, the student
 is expected to make hypotheses or conjectures based upon the
-definitions they come up with.  For example, perhaps the student might
+definitions they come up with.  For example, the student might
 conjecture that men's and women's rating for certain genres are highly
-correlated, which for other genres their ratings more independent.
+correlated, while for other genres their ratings more independent.
 Finally, the students must try to either prove, or just as
 interestingly, disprove their conjectures based upon the data.  
 
 Diving a bit more deeply into some of the specific functionality that
 we leverage in Python, we note that pandas [McK10]_ is particular
 useful for these kinds of data analysis questions.  In particular, to
-any Python aficionado, it is likely clear that there are many ways to
-process the data to answer the questions above, ranging from the brute
-force to the elegant.
+any Python aficionado, it is likely to be clear that there are many
+ways to process the data to answer the questions above, ranging from
+the brute force to the elegant.
 
 To begin, we note that the MovieLens 1M Data Set itself is actually
 provided in three different files.  First is a file containing the
@@ -436,8 +436,8 @@ In particular, is case study three, the class turns its attention to the
 Movie Review Data v2.0 from 
 http://www.cs.cornell.edu/people/pabo/movie-review-data.  This data
 set contains written reviews of movies divided into positive and
-negative reviews, and the goal is to learn how to automatically detect
-distinguish the two cases.
+negative reviews, and the goal is to learn how to automatically
+distinguish between the two cases.
 
 Of course, tackling such problems is well known to be difficult, and
 there are many open research problems in this domain.  On the other
@@ -458,7 +458,7 @@ found at
 http://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html.
 
 Following our theme of leveraging Python to quickly get to interesting
-Data Science problems , the students in case study three are
+Data Science problems, the students in case study three are
 encouraged to start their work based upon various examples provided in
 the scikit-learn library.  In particular, the students leverage the
 exercise_02_sentiment.py files from the directories:
@@ -509,13 +509,13 @@ reviews which do not already have labels.  This process is called
 used to *supervise* the training of an algorithm which, after training,
 can attempt to compute labels just from the raw features.  Again,
 supervised machine learning is a vast subject, and space does not
-allow us treat the subject even at the more superficial level here
+allow us to treat the subject even at the more superficial level here
 (the interested read may see [Fri01]_ [Jam13]_ [Bis06]_, and
 references therein, for more details).  However, we will note that
 scikit-learn provides functions and classes for many standard
 algorithms, allowing the students to become familiar with important
 machine learning and Data Science concepts, without being expected to
-have too many prerequisites.  For example, sci-kit learn provides
+have too many prerequisites.  For example, scikit-learn provides
 access to classic and powerful algorithms such as K-nearest neighbors,
 support vector classifiers, and principal component analysis [Fri01]_
 [Jam13]_ [Bis06]_.
@@ -524,9 +524,9 @@ Using such routines, several important learning objectives can be
 supported, such as error estimation, by way of techniques such as
 cross-validation and confusion matrices.  In fact, one particularly
 effective learning experience revolved around the following challenge.
-Using their favorite technique, can the student find a two dimensional
-plot of the data where the positive and negative reviews are
-separated.  While easy to state, practitioners of natural language
+Using their favorite technique the student is asked to find a two
+dimensional plot of the data where the positive and negative reviews
+are separated.  While easy to state, practitioners of natural language
 processing will recognize that actually solving the problem is
 exceptionally difficult, and the instructors admit that they are not
 in possession of an actual solution.  For some students this may be
@@ -561,13 +561,13 @@ methods.
 
 Fortunately, and we fear that we are repeating ourselves, Python
 provides precisely the functionality we required.  In particular,
-there are several MapReduce interfaces for Python, and we choose to
-leverage the mrjob package [MrJ15]_ to support the students learning
-objectives.  This package is especially useful in a classroom
-environment since it can be used locally on a single computer (for
-testing) and in a cluster environment.  Accordingly, the students can
-learn about MapReduce with the need for access to large scale
-computing resources.
+there are several MapReduce interfaces for Python, and the mrjob
+package [MrJ15]_ was chosen (thanks to Prof. Xiangnan Kong at WPI) to
+support the students learning objectives.  This package is especially
+useful in a classroom environment since it can be used locally on a
+single computer (for testing) and in a cluster environment.
+Accordingly, the students can learn about MapReduce with the need for
+access to large scale computing resources.
 
 Introductory Data Science: Final Thoughts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -578,7 +578,7 @@ also a popular choice which the author has also used successfully in
 the Data Science curriculum.  In particular, R offers much, if not
 all, of the functionality mentioned above, including interfaces to
 MapReduce [Usu14]_.  Accordingly, the choice of language for such a
-class may be considered a matter of taste
+class may be considered a matter of taste.
 
 However, there is mounting evidence of Python's growing popularity
 within the Data Science community [Sin14]_ and the software
@@ -633,7 +633,7 @@ to be carefully delineated.
 
 Accordingly, to maintain the integrity of the learning objectives, a
 tactic used by the authors was to carefully delineate what parts of
-the assignment are allow to be Python "black boxes" and which parts
+the assignment are allowed to be Python "black boxes" and which parts
 must be hand coded.  In addition, we require the students to hand in
 their Python code, even though the code itself is *not* graded.  The
 learning objectives of the class are mathematical, and not
@@ -643,7 +643,7 @@ verify that the desired learning objectives are being met.
 
 As one final note, one tactic that was quite successful was to
 encourage the students to check their hand coded results against those
-provided any black box routine they are able to find.  It was quite
+provided by any black box routine they are able to use.  It was quite
 useful for the students in debugging their own implementations and
 understanding of the mathematical concepts.  It was quite empowering
 for the students when their answers would exactly match those of the
@@ -660,8 +660,8 @@ unsupervised machine learning applied to several different domains,
 with a focus on cyber-defense (see, for example, [Paf13]_).
 Accordingly, one of our key goals is to support the training of the
 next generation of researchers in these domains.  We will not burden
-the reader the mathematical details of our research directions, but
-just observe that our work, and the work of our students, draws from
+the reader with the mathematical details of our research directions, but
+just observe that our work, and the work of our students, draws from a
 laundry list of ideas from mathematics, statistics, and Data Science,
 including convex optimization [Boy04]_, deep learning [Den14]_,
 graphical models [Lau96]_, and scientific visualization [War10]_.
@@ -722,19 +722,18 @@ provides.
 Conclusion
 ----------
 
-In this paper we have demonstrated how Python can be used throughout
-the entire life cycle of a graduate program in Data Science.  Python
-is easy to learn and use, but it also provides access to a vast array
-of libraries for cutting edge Data Science research.  In particular,
-IPython notebooks, scikit-learn, NumPy, SciPy, and pandas can be used
-to support many aspects of the Data Science education.  These
-libraries allow instructors to focus on desired learning objectives,
-while leaving many of the less important details to the libraries.
-Having access to such libraries allow interesting problems to be
-addressed early in the educational process and the experience gained
-with such Python libraries provides for the students own software
-development, analysis, and research throughout their academic career and
-beyond.
+We have discussed how Python can be used throughout the entire life
+cycle of a graduate program in Data Science.  Python is easy to learn
+and use, but it also provides access to a vast array of libraries for
+cutting edge Data Science research.  In particular, IPython notebooks,
+scikit-learn, NumPy, SciPy, and pandas can be used to support many
+aspects of the Data Science education.  These libraries allow
+instructors to focus on desired learning objectives, while leaving
+many of the less important details to the libraries.  Having access to
+such libraries allow interesting problems to be addressed early in the
+educational process and the experience gained with such Python
+libraries supports the student's own software development,
+analysis, and research throughout their academic career and beyond.
 
 Acknowledgments 
 ---------------- 
@@ -742,10 +741,10 @@ Acknowledgments
 We wish to gratefully acknowledge several people without whom this
 monograph would not have been possible.  First and foremost, we would
 like to thank Prof. Xiangnan Kong in the Computer Science Department
-at WPI.  The DS501 class was jointly developed Prof. Kong and the
-author, and Prof. Kong's hard work and great ideas were essential to
-the success of the course.  The author is also deeply grateful to the
-Data Science Steering Committee at WPI:
+at WPI.  The DS501 class was jointly developed with Prof. Kong, and
+Prof. Kong's hard work and wonderful ideas were essential to the
+success of the course.  The author is also deeply grateful to the
+other members of Data Science Steering Committee at WPI:
 
 * Prof. Elke Angelika Rundensteiner (Director of Data Science)
 * Prof. Mohamed Eltabakh
@@ -767,8 +766,7 @@ References
 .. [Beh11] Stefan Behnel, Robert Bradshaw, Craig Citro, Lisandro
            Dalcin, Dag Sverre Seljebotn and Kurt Smith. *Cython: The
            Best of Both Worlds*, Computing in Science and Engineering,
-           13, 31-39 (2011), DOI:10.1109/MCSE.2010.118 (publisher
-           link)
+           13, 31-39 (2011), DOI:10.1109/MCSE.2010.118
 
 .. [Ber11] Bergstra, James, et al. *Theano: Deep learning on gpus with python*. 
 	   NIPS 2011, BigLearning Workshop, Granada, Spain. 2011.
@@ -781,7 +779,8 @@ References
 .. [Boy04] Boyd, Stephen, and Lieven Vandenberghe. *Convex optimization*. 
 	   Cambridge university press, 2004.
 
-.. [Can11] Candès, Emmanuel J., et al. *Robust principal component analysis?*. 
+.. [Can11] Candès, Emmanuel J., Li, Xiaodong, Ma, Yi, and Wright, John.
+	   *Robust principal component analysis?*. 
 	   Journal of the ACM (JACM) 58.3 (2011): 11.
 
 .. [Dah06] Dahl, Joachin, and Lieven Vandenberghe. 
@@ -790,7 +789,7 @@ References
 	   http://cvxopt.org
 	   [Online; accessed 2015-06-08].
 	   
-.. [Dal08] Dalcín, L., Paz, R., Storti, M., & D’Elía, J. (2008). *MPI
+.. [Dal08] Dalcín, Lisandro, Paz, Rodrigo, Storti, Mario, and D’Elía, Jorge (2008). *MPI
            for Python: Performance improvements and MPI-2
            extensions*. Journal of Parallel and Distributed Computing,
            68(5), 655-662.
@@ -816,9 +815,9 @@ References
 	   New York: springer, 2013.
 
 .. matplotlib
-.. [Hun07] John D. Hunter. Matplotlib: A 2D Graphics Environment,
+.. [Hun07] John D. Hunter. *Matplotlib: A 2D Graphics Environment*,
            Computing in Science & Engineering, 9, 90-95 (2007),
-           DOI:10.1109/MCSE.2007.55 (publisher link)
+           DOI:10.1109/MCSE.2007.55
 
 .. [Kar14] Karkera, Kiran R. *Building Probabilistic Graphical Models with Python*. 
 	   Packt Publishing Ltd, 2014.
@@ -845,18 +844,18 @@ References
 	   with Pandas, NumPy, and IPython* .O'Reilly Media, Inc., 2012.
 
 .. pandas
-.. [McK10] Wes McKinney. Data Structures for Statistical Computing in
-           Python, Proceedings of the 9th Python in Science
-           Conference, 51-56 (2010) (publisher link)
+.. [McK10] Wes McKinney. *Data Structures for Statistical Computing in
+           Python*, Proceedings of the 9th Python in Science
+           Conference, 51-56 (2010) 
 
 .. [PMe15] *Merge, join, and concatenate* 
 	   (2015), http://pandas.pydata.org/pandas-docs/stable/merging.html
 	   [Online; accessed 2015-06-08].
 
 .. scientific computing in python
-.. [Mil11] K. Jarrod Millman and Michael Aivazis. Python for
+.. [Mil11] K. Jarrod Millman and Michael Aivazis. *Python for
            Scientists and Engineers, Computing in Science &
-           Engineering, 13, 9-12 (2011), DOI:10.1109/MCSE.2011.36
+           Engineering*, 13, 9-12 (2011), DOI:10.1109/MCSE.2011.36
 
 .. [Mov15] *MovieLens* 
 	   (2015), http://grouplens.org/datasets/movielens/
@@ -876,7 +875,7 @@ References
 	   [Online; accessed 2015-06-08].
 
 .. scipy
-.. [Oli01] Jones E, Oliphant E, Peterson P, et al. *SciPy: Open Source
+.. [Oli01] Jones, Erid, Oliphant, Travis, Peterson, Pearu, et al. *SciPy: Open Source
            Scientific Tools for Python*, 2001-, http://www.scipy.org/
            [Online; accessed 2015-05-31].
 
@@ -891,8 +890,8 @@ References
 	   Scientific and Engineering Computing: Proceedings of the 
 	   1998 SIAM Workshop. Vol. 99. SIAM, 1999.
 
-.. [Paf13] Paffenroth, R., Du Toit, P., Nong, R., Scharf, L.,
-	   Jayasumana, A. P., and Bandara, V. (2013). *Space-time
+.. [Paf13] Paffenroth, Randy, Du Toit, Philip, Nong, Ryan, Scharf, Louis,
+	   Jayasumana, Anura. P., and Bandara, Vidarshana. (2013). *Space-time
 	   signal processing for distributed pattern detection in
 	   sensor networks*. Selected Topics in Signal Processing,
 	   IEEE Journal of, 7(1), 38-49.  Chicago
@@ -923,7 +922,7 @@ References
 	   [Online; accessed 2015-06-08].
 
 .. mayavi
-.. [Ram11] Ramachandran, P. and Varoquaux, G., *Mayavi: 3D
+.. [Ram11] Ramachandran, Prabhu and Varoquaux, Gael, *Mayavi: 3D
            Visualization of Scientific Data* IEEE Computing in Science
            & Engineering, 13 (2), pp. 40-51 (2011)
 
@@ -957,8 +956,8 @@ References
 
 .. numpy and scipy
 .. [Wal11] Stéfan van der Walt, S. Chris Colbert and Gaël
-           Varoquaux. The NumPy Array: A Structure for Efficient
-           Numerical Computation, Computing in Science & Engineering,
+           Varoquaux. *The NumPy Array: A Structure for Efficient
+           Numerical Computation*, Computing in Science & Engineering,
            13, 22-30 (2011), DOI:10.1109/MCSE.2011.37
 
 .. [War10] Ward, Matthew, Georges Grinstein, and Daniel Keim. 
