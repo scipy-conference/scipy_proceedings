@@ -469,6 +469,23 @@ components), time-stretching and pitch-shifting.  Although these functions provi
 additional functionality, their inclusion results in simpler, more readable application code.
 
 
+Output
+======
+
+The ``output`` module includes utility functions to save the results of audio analysis to disk.
+Most often, this takes the form of annotated instantaneous event timings or time intervals, which are 
+saved in plain text (comma- or tab-separated values) via ``output.times_csv`` and ``output.annotation``, 
+respectively.
+These functions are somewhat redundant with alternative functions for text output (e.g., ``numpy.savetxt``),
+but provide sanity checks for length agreement and semantic validation of time intervals.  The resulting
+outputs are designed to work with other common MIR tools, such as ``mir_eval`` [Raffel14]_ and
+``sonic-visualiser`` [Cannam10]_.
+
+The ``output`` module also provides the ``write_wav`` function for saving audio in ``.wav`` format.
+The ``write_wav`` simply wraps the built-in ``scipy`` wav-file writer (``scipy.io.wavfile.write``) 
+with validation and optional normalization, thus ensuring that the resulting audio files are well-formed.
+
+
 Caching
 -------
 
@@ -692,6 +709,10 @@ References
                   *Harmonic/percussive separation using median filtering.*
                   13th International Conference on Digital Audio Effects (DAFX10), Graz, Austria, 2010.
 
+.. [Cannam10] Cannam, Chris, Christian Landone, and Mark Sandler. 
+              *Sonic visualiser: An open source application for viewing, analysing, and annotating music
+              audio files.* 
+              In Proceedings of the international conference on Multimedia, pp. 1467-1468. ACM, 2010.
 
 .. [Holzapfel12] Holzapfel, Andre, Matthew E.P. Davies, José R. Zapata, João Lobato Oliveira, and Fabien Gouyon. 
                  *Selective sampling for beat tracking evaluation.*
