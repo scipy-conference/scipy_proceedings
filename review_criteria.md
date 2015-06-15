@@ -50,7 +50,7 @@ review criteria are enthusiastically welcomed via discussion or pull request.
 
 ### Length
 
-- The compiled version should be no longer than 7 pages, including figures.  
+- The compiled version should be no longer than 8 pages, including figures.  
 
 ### Figures
 
