@@ -237,9 +237,10 @@ by setting the flag ``htk=True`` [Young97]_.
 .. figure:: feature.pdf
     :figclass: t
 
-    Top: the short-time Fourier transform of a 20-second audio clip (``librosa.stft``).
-    Middle: the corresponding Mel spectrogram, using 128 Mel bands (``librosa.feature.melspectrogram``).
-    Bottom: the corresponding chromagram (``librosa.feature.chroma_cqt``). 
+    First: the short-time Fourier transform of a 20-second audio clip (``librosa.stft``).
+    Second: the corresponding Mel spectrogram, using 128 Mel bands (``librosa.feature.melspectrogram``).
+    Third: the corresponding chromagram (``librosa.feature.chroma_cqt``). 
+    Fourth: the Tonnetz features (``librosa.feature.tonnetz``).
     :label:`fig:feature`
 
 
@@ -249,7 +250,10 @@ Pitch class (or *chroma*) representations are often used to encode harmony while
 octave height, loudness, or timbre.  Librosa provides two flexible chroma implementations: one using
 fixed-window STFT analysis (``chroma_stft``) [#]_ and one using variable-window constant-Q transform analysis
 (``chroma_cqt``).
-Figure :ref:`fig:feature` illustrates the difference between STFT, Mel spectrogram, and chromagram
+An alternative representation of pitch and harmony can be obtained by the ``tonnetz`` function, which
+estimates tonal centroids as coordinates in a six-dimensional interval space using the method of Harte et al.
+[Harte06]_.
+Figure :ref:`fig:feature` illustrates the difference between STFT, Mel spectrogram, chromagram, and Tonnetz
 representations, as constructed by the following code fragment: [#]_
 
 .. code-block:: python
@@ -263,6 +267,7 @@ representations, as constructed by the following code fragment: [#]_
     ...                                          sr=sr)
     >>> chroma = librosa.feature.chroma_cqt(y=y,
     ...                                     sr=sr)
+    >>> tonnetz = librosa.feature.tonnetz(y=y, sr=sr)
 
 .. [#] ``chroma_stft`` is based upon the reference implementation provided at 
        http://labrosa.ee.columbia.edu/matlab/chroma-ansyn/
@@ -393,8 +398,7 @@ This is facilitated by the ``recurrence_to_lag`` (and ``lag_to_recurrence``) fun
     :scale: 50%
     :figclass: wt
 
-    Left: the recurrence plot derived from the chroma features displayed in Figure :ref:`fig:feature`
-    (bottom).
+    Left: the recurrence plot derived from the chroma features displayed in Figure :ref:`fig:feature`.
     Right: the time-lag plot derived from the recurrence plot.
     :label:`fig:rec`
 
@@ -668,6 +672,11 @@ References
          Povey, Dan, Valtchev, Valtcho, and Woodland, Phil.
          *The HTK book.* 
          Vol. 2. Cambridge: Entropic Cambridge Research Laboratory, 1997.
+
+.. [Harte06] Harte, C., Sandler, M., & Gasser, M. (2006). 
+             *Detecting Harmonic Change in Musical Audio.*
+             In Proceedings of the 1st ACM Workshop on Audio and Music Computing Multimedia (pp. 21-26).
+             Santa Barbara, CA, USA: ACM Press. doi:10.1145/1178723.1178727.
 
 .. [Jiang02] Jiang, Dan-Ning, Lie Lu, Hong-Jiang Zhang, Jian-Hua Tao, and Lian-Hong Cai.
              *Music type classification by spectral contrast feature.*
