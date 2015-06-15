@@ -296,8 +296,8 @@ visual representation.
 Data Structures
 ---------------
 
-In this section we discuss the data structures that hold the data and
-the essential semantic content of interest. The Elements section
+In this section we discuss the data structures that hold the raw data
+and the essential semantic content of interest. The Elements section
 introduces each of the primitives, and the Collections section
 explains how they can be combined. Finally, we will discuss working
 with Elements embedded in high-dimensional continuous or discrete
@@ -448,7 +448,7 @@ example of a label string in Figure 1, where it was used to title the
 image 'Mandelbrot Set'. The textual representation of the layout in
 Figure :ref:`layout` (see Out[6] of Figure :ref:`customization`) shows
 how the supplied label is used in the attribute-based indexing scheme
-of the layout. The strings 'Image', 'Overlay', 'Hline' and 'Curve' are
+of the layout. The strings 'Image', 'Overlay', 'HLine' and 'Curve' are
 default group names, but you can supply your own names to define
 semantic groupings for your data.
 
@@ -486,10 +486,10 @@ solutions.
 One way of dealing with this problem is to lay out multiple plots
 spatially.  Some plotting packages [Was14]_ [Wic09]_ have shown how
 this can be done easily using various grid-based layouts. Another
-solution is to present the data sequentially over time as an animation.  A third
-solution is to provide interactive control, allowing the user to
-reveal further dimensionality by interacting with the plots using
-various widgets.
+solution is to present the data sequentially over time as an
+animation.  A third solution is to provide interactive control,
+allowing the user to reveal further dimensionality by interacting with
+the plots using various widgets.
 
 In HoloViews, we solve this problem with composable data structures
 that embed homogeneous collections of ``Element`` objects in any
@@ -503,11 +503,6 @@ position. In addition to regular Python dictionary indexing semantics,
 these data structures also support slicing semantics to select
 precisely the subregion of the continuous multi-dimensional space that
 the user wants to explore.
-
-..
-   Explain what key dimensions mean for spaces and what it means to be
-   'dimensioned'.
-
 
 The full list of currently supported ``NdMapping`` classes includes:
 
@@ -539,7 +534,6 @@ addition, they can all be tabularized into a HoloViews ``Table``
 element or a pandas ``DataFrame`` [pandas]_, a feature that is also supported by
 the ``Element`` primitives.
 
-
 To get a sense of how composing data and generating complex figures
 works within this framework, we explore some artificial data in Figure
 :ref:`spaces`. Here we vary the frequency and amplitude of sine
@@ -558,23 +552,23 @@ multi-dimensional space.
    first in the main text.
 
 .. figure:: spaces_example.png
-   :scale: 30%
+   :scale: 29%
    :align: center
    :figclass: w
 
-   Example of a HoloViews spaces object ``holomap`` being visualized
-   in two different ways. This HoloMap contains Curve objects embedded
-   in three dimensions (``Frequency``, ``Amplitude``, ``Function``),
-   but not all of these dimensions can be visualized at once.  In
-   **A**, two of the dimensions are mapped onto the rows and columns
-   of a grid, and the remaining ``Function`` dimension can be selected
-   using the widget at the right.  In **B**, only a single curve is
-   shown, with the three sliders at the right together selecting the
-   appropriate curve from the 3D HoloMap space.  HoloMaps allow
-   users to explore arbitrarily high-dimensional data naturally and
-   conveniently, with sliders appearing automatically whenever there
-   is more data than can fit into the available display dimensions.
-   :label:`spaces`
+   Example of a Layout object containing two different representations
+   of a multi-dimensional space. Both representations contain Curve
+   objects embedded in three dimensions (``Frequency``, ``Amplitude``,
+   ``Function``), but not all of these dimensions can be visualized at
+   once.  In **A**, two of the dimensions are mapped onto the rows and
+   columns of a grid, and the remaining ``Function`` dimension can be
+   selected using the widget at the right.  In **B**, only a single
+   curve is shown, with the three sliders at the right together
+   selecting the appropriate curve from the 3D HoloMap space.
+   HoloMaps allow users to explore arbitrarily high-dimensional data
+   naturally and conveniently, with sliders appearing automatically
+   whenever there is more data than can fit into the available display
+   dimensions.  :label:`spaces`
 
 We can immediately go ahead and display this HoloMap either as an
 animation or using the default widgets, as in Figure
@@ -609,18 +603,19 @@ presentation in markup languages such as HTML and CSS, and provides
 the same benefits of making the content easily maintainable while the
 presentation is easily controllable.
 
-The only required connection between the above data structures and the custom
-display options is a single, automatically managed integer
+The only required connection between the above data structures and the
+custom display options is a single, automatically managed integer
 identification attribute stored with the data structure.  Using this
 ``id`` as a key, we can make the data structures behave as if they
-were rich, stateful, and customizable objects, without actually storing
-anything to do with visualization on the objects. We will show how
-this separation is useful and extensible so that the user can quickly
-and easily customize almost every aspect of their plot. For instance,
-it is easy to change the font size of text, change the subfigure label
-format, change the output format (e.g. switch from PNG to SVG) and even
-alter the plotting backend (currently defaulting to Matplotlib)
-without changing any part of the underlying object being rendered.
+were rich, stateful, and customizable objects, without actually
+storing anything to do with visualization on the objects. We will show
+how this separation is useful and extensible so that the user can
+quickly and easily customize almost every aspect of their plot. For
+instance, it is easy to change the font size of text, change the
+subfigure label format, change the output format (e.g. switch from PNG
+to SVG) and even alter the plotting backend (currently defaulting to
+Matplotlib) without changing any part of the underlying object being
+rendered.
 
 .. 
    jbednar: Nice!  I'm not sure which part Input is meant to
@@ -628,7 +623,7 @@ without changing any part of the underlying object being rendered.
    (which would indicate that Content and Options are both Input)?
 
 .. figure:: display_system.pdf
-   :scale: 30%
+   :scale: 35%
    :align: center
 
    This view of the HoloViews display and customization systems
@@ -645,9 +640,6 @@ without changing any part of the underlying object being rendered.
    calling an external plotting library, returning an HTML
    representation that can then be rendered in the
    notebook. :label:`schematic`
-
-..
-   Anticipate the tree data structure a little earlier?
 
 Figure :ref:`schematic` provides an overall summary of how the
 different components in the display system interact. The declarative
@@ -684,20 +676,8 @@ inheritance allow you to specify complex yet succinct style
 specifications, applying to all objects of a particular type or just
 to specific subsets of them.
 
-.. jbednar: there were a lot of different adjectives being thrown
-   around for the options, e.g. visualization options, display
-   options, customization options, plotting options.  As far as I
-   could tell, these weren't normally being used to refer to specific
-   classes of options (as in plotting, normalization, etc.), but just
-   loosely describing all options.  I've changed each such instance
-   that I noticed to "display options" (since it's short), but it's
-   worth thinking about whether that's the right choice.  Plus there
-   are various others I missed, especially customization options.  It
-   would be worth making a pass through and making those all
-   consistent (whatever term you want to use).
-
 .. figure:: customization_example.pdf
-   :scale: 35%
+   :scale: 38%
    :align: center
    :figclass: w
 
@@ -712,18 +692,18 @@ to specific subsets of them.
    content and the style specification respectively, demonstrating how
    the two are separate yet linked.  :label:`customization`
 
-To explore how option setting works in practice, Figure :ref:`customization` 
-shows an example of customizing Figure :ref:`layout` with some basic
-display options.  Here we use an optional but highly succinct method
-for setting the options, an IPython cell magic ``%%opts``, to specify
-aspect ratios, line widths, colormaps, and sublabel formats. By printing the
-string representation of the content (``Out[6]``) and the options (``Out[7]``),
-we can see immediately that there are two distinct objects, where each
-entry in the ``OptionsTree`` matches an applicable object
-type. Finally, in the actual rendered output, we can see that all
-these display options have taken effect, even though the actual data
-structure differs from the object rendered in Figure :ref:`layout`
-only in the ``id`` value.
+To explore how option setting works in practice, Figure
+:ref:`customization` shows an example of customizing Figure
+:ref:`layout` with some basic display options.  Here we use an
+optional but highly succinct method for setting the options, an
+IPython cell magic ``%%opts``, to specify aspect ratios, line widths,
+colormaps, and sublabel formats. By printing the string representation
+of the content (``Out[6]``) and the options (``Out[7]``), we can see
+immediately that there are two distinct objects, where each entry in
+the options tree matches an applicable object type. Finally, in the
+actual rendered output, we can see that all these display options have
+taken effect, even though the actual data structure differs from the
+object rendered in Figure :ref:`layout` only in the ``id`` value.
 
 A major benefit of separating data and customization options in this
 way is that all the options can be gathered in one place. There is no
@@ -810,10 +790,6 @@ exploration of data.  HoloViews instead tries to avoid custom coding
 altogether as far as possible, with users instead supplying metadata
 to declare the properties of the data and option settings to control
 its visual appearance.
-
-..
-  jbednar: removed 'long tail' because that's a very informal 
-  word usage, clear to many people but completely obscure to others.
 
 Because much of the actual work in creating scientific visualizations
 is consumed by small but important details about plot appearance,
