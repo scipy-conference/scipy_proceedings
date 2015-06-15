@@ -10,80 +10,11 @@
 :email: jbednar@inf.ed.ac.uk
 :institution: Institute for Adaptive and Neural Computation, University of Edinburgh
 
-.. 
-   Was "Effective and reproducible research with HoloViews", but I
-   don't think they would want us to change the title so much from the
-   one in the conference schedule (otherwise how will people know this
-   is the paper corresponding to the talk?), and I think the original
-   title is better anyway.  It's not perfect, because it doesn't get
-   across how HoloViews makes everyday research better, but neither
-   does the other title (since "effective" doesn't mean anything).
-
 --------------------------------------------------------------------------
 HoloViews: Building Complex Visualizations Easily for Reproducible Science
 --------------------------------------------------------------------------
 
-
-..
-      * Researchers in prefer interactivity over the edit-compile-run cycle when exploring their data. By nature, research involves exploring hypotheses and different ideas not all of which will work or be worth keeping. Rapid interactivity and feedback allows researchers to quickly explore ideas by trying out different approaches, keeping the ones that work and discarding the ones that don't.
-
-      * REPLs have downside too: capturing a history of interactive commands has typically been very fragile and error-prone and often needs lots of post-editing, causing problems for reproducibility. In addition, REPLs have typically been text-based making them easy to work with simple literals (short strings, integers, floats) but nothing more complicated.
-
-      * Together with IPython Notebook, HoloViews extends the idea of interactive exploration in a REPL to the common data-structures used to do research and publish papers. The notebook format improves the idea of a REPL by making it easy to build a sequence of commands while also supporting rich-display not traditionally supported by REPLs. Until now, complex visualizations have not integrated well with the REPL mode of exploration.
-
-      * In addition to making regular research work more productive and more succinct, HoloViews adopts a declarative style whenever possible and separates concerns: data and semantic information is never mixed with options relating to the display of data. By being far more expressive and concise than traditional approaches, HoloViews makes it far easier to build truly reproducible scientific documents in IPython Notebook.
-
-
-..
-
-
 .. class:: abstract
-
-   ..
-      OLD ABSTRACT (full)
-
-      Scientific visualization typically requires large amounts of custom
-      coding that obscures the underlying principles of the work and makes
-      it more difficult to reproduce the results.  Here we describe how the
-      new HoloViews Python package, combined with the IPython Notebook,
-      provides a rich interface for flexible and nearly code-free
-      visualization of your results while storing a full record of the
-      process for later reproduction.
-
-      Visualization is one of the most serious bottlenecks in science and
-      engineering research.  Highly specialized plotting code often
-      outweighs the code implementing the underlying algorithms and data
-      structures.  Over time, this inflexible, non-reusable visualization
-      code accumulates, making it much more difficult to try new analyses
-      and to document the procedure by which results have been turned
-      into publication figures.  The result is that very few research
-      projects are currently reproducible, even under a very loose
-      definition of the term.
-
-      The new HoloViews Python package is designed to make reproducible
-      research happen almost as a byproduct of having a much more
-      efficient workflow, with flexible visualization of your data at
-      every stage of a project from initial exploration to final
-      publication.  HoloViews provides a set of general-purpose data
-      structures that allow you to pair your data with a small but
-      crucial amount of metadata that indicates roughly how you want to
-      view the data (e.g. as images, 3D surfaces, curves, etc.).  It
-      also provides powerful containers that allow you to organize this
-      data for analysis, embedding it whatever multidimensional
-      continuous or discrete space best characterizes it.  For each of
-      these data structures, there is corresponding (but completely
-      separate) highly customizable visualization code that provides
-      publication-quality plotting of the data, in any combination
-      (alone, sampled, sliced, concatenated as subfigures in a
-      complicated final figure, animated over time, etc.).  You can then
-      easily and interactively explore your data, letting it display
-      itself without providing further instructions except when you wish
-      to change plotting options.
-
-      Combined with the optional IPython Notebook interface, HoloViews
-      lets you do nearly code-free exploration, analysis, and
-      visualization of your data and results, which leads directly to an
-      exportable recipe for reproducible research.  Try it!
 
    Scientific visualization typically requires large amounts of custom
    coding that obscures the underlying principles of the work and
@@ -119,10 +50,10 @@ exploratory investigation and periods where crucial findings are
 distilled and disseminated as publications or reports. The exploratory
 phase typically involves running many different analyses with
 interactive plotting tools before the important aspects of the data
-are established. Once the data is understood, the results are then
-typically prepared as static figures for dissemination, often putting
-together many subfigures into a complicated figure that reveals
-multiple interrelated aspects of the results.
+are determined. The final results are then typically prepared as
+static figures for dissemination, often putting together many
+subfigures into a complicated figure that reveals multiple
+interrelated aspects of the results.
 
 Current software tools provide relatively poor support for this dual
 exploring/reporting nature of scientific research, severely limiting
@@ -132,28 +63,28 @@ coding, which is slow, error-prone, and distracts from the actual
 scientific analysis.  Moreover, this process typically involves a
 large amount of trial and error, generating transitory code and
 analyses that make it difficult to later reproduce the steps that led
-to any particular result [Crook]_.  Switching to different tools for
+to any particular result [Cro13]_.  Switching to different tools for
 final, non-interactive, publication-quality figures exacerbates this
 problem, further disconnecting the reported results from the process
 by which they were created.  This lack of reproducibility is a serious
 handicap both for progress within a single lab and for the community
 as a whole, making it nearly impossible for researchers to build on
-each others' work even for purely computational projects [Crook]_.
+each others' work even for purely computational projects [Cro13]_.
 
-In this paper, we present a new Python software package built to
+In this paper, we will describe a new Python software package built to
 address these problems directly, by providing simple tools for
 gradually building elaborate visualizations and analyses interactively
 yet reproducibly.  HoloViews supports immediate exploration of data as
-it is obtained, without requiring custom coding, while allowing even
-complex relationships to be revealed between datasets in a smooth
-progression from initial exploration to final publication of fully
-reproducible scientific results.  As outlined in detail below,
-HoloViews achieves these goals by enforcing a strict separation
-between the semantic properties of the data (expressed declaratively
-and independently of any visualization), specification of plotting
-options (expressed declaratively and independently of the underlying
-code), and implementation of specific visualizations (expressed as
-general-purpose code reused and curated over time).
+it is obtained, without requiring custom coding, and then supports
+incrementally revealing more complex relationships between datasets,
+culminating in the final publication of fully reproducible scientific
+results.  As outlined in
+detail below, HoloViews achieves these goals by enforcing a strict
+separation between the semantic properties of the data (expressed
+declaratively and independently of any visualization), specification
+of plotting options (expressed declaratively and independently of the
+underlying code), and implementation of specific visualizations
+(expressed as general-purpose code reused and curated over time).
 
 
 The interactive interpreter
@@ -181,13 +112,12 @@ the results outside the environment of the interpreter, controlled
 either by custom computer code or through an interactive graphical
 user interface (GUI).
 
-This disjointed approach is a reflection of history: text-only
-environments, where interactive interpreters were first employed,
-appeared long before any rich graphical interfaces and GUI
-environments. To this day, text-only interpreters are standard due to
-the relative simplicity of working with text. Proprietary
-attempts to overcome these limitations, such as the Mathematica
-Notebook [Wol03]_, have remained constrained by limited
+This disjointed approach reflects history: text-only environments,
+where interactive interpreters were first employed, appeared long
+before any graphical interfaces. To this day, text-only interpreters
+are standard due to the relative simplicity of working with
+text. Proprietary attempts to overcome these limitations, such as the
+Mathematica Notebook [Wol03]_, have remained constrained by limited
 interoperability and a lack of standardized open formats.  Other
 approaches focusing explicitly on reproducibility involve building a
 recipe for reproducing results only at the end of the scientific
@@ -211,8 +141,8 @@ HTML5 (and websockets) has made it possible for anyone to engage with
 complex, dynamic documents in a bi-directional, interactive manner.
 
 The emergence of the web browser as a platform has been exploited by
-the Python community and the scientific community at large with the
-development of tools such as the IPython Notebook [Per07]_ and SAGE
+the Python community and the scientific community at large with
+tools such as the IPython Notebook [Per07]_ and SAGE
 MathCloud [Ste05]_. These projects offer interactive computation sessions
 in a notebook format instead of a traditional text prompt. Although
 similar in design to the traditional text-only interpreters, these
@@ -221,17 +151,17 @@ maintaining a permanent record of useful commands in a rich document
 that supports the gradual development of a document with interleaved
 code, results, and exposition. 
 
-Yet despite the greatly improved capabilities of these tools for
-computational interaction, the spirit of the interactive interpreter
-has not been restored: there is an ongoing disconnect between data and
-its representation. This artificial distinction is a lingering
-consequence of a text-only world and has resulted in a strict split
-between how we conceptualize 'simple' and 'complex' data. Simple data
-returned from an operation is rendered directly in the interpreter (as
-strings, short lists, small arrays, etc.), but more complex data requires an
-extremely detailed set of explicit steps using external plotting
-packages such as Matplotlib [Mpl]_ before results can be revealed
-in a graphical representation.
+Yet despite the greatly improved interactive capabilities of these
+tools, the spirit of the original interpreter has not been restored:
+there is an ongoing disconnect between data and its
+representation. This artificial distinction is a lingering consequence
+of a text-only world and has resulted in a strict split between how we
+conceptualize 'simple' and 'complex' data. Simple data returned from
+an operation is rendered directly in the interpreter (as strings,
+short lists, etc.), but more complex data requires an extremely
+detailed set of explicit steps using external plotting packages such
+as Matplotlib [Mpl]_ before results can be revealed in a graphical
+representation.
 
 Here we introduce HoloViews, a library of simple classes designed to
 provide an immediately available representation for even complex data
@@ -243,13 +173,15 @@ effortlessly in the IPython Notebook environment. The result is
 research that is more interactive, concise, declarative, and
 reproducible. Figure :ref:`layout` shows a self-contained example of
 building a complex visualization using a single line to declare a
-HoloViews object followed by a single line to compose and annotate it.
+HoloViews object followed by a single line to compose and annotate
+two different views of the data in it.
 
 ..
-  jbednar: I strongly believe in showing the full code.  
-  Where does "data" come from in cell 1 of a notebook otherwise?  
-  Please add a line "data = np.load('mandelbrot.npy')", 
-  and consider adding "load_ext holoviews.ipython"
+   jbednar: is it necessary to have the bounds= argument?  Can it and
+   any of the other arguments be omitted?  The one on the web page is
+   simpler and I think that's better for a first figure. Such
+   complications are fine for later figures, but make it far less
+   likely that anyone will actually read this figure...
 
 .. figure:: introductory_layout_example.png
    :scale: 25%
@@ -260,10 +192,10 @@ HoloViews object followed by a single line to compose and annotate it.
    displayed in an IPython Notebook session. The ``imdata`` array
    loaded using Numpy corresponds to the displayed portion of the
    Mandelbrot set. **A.** The ``Image`` element displays ``imdata``
-   overlaid via the ``*`` operator with a horizontal line correspond
-   to the declared ``HLine`` element. **B.** A ``Curve`` element
-   generated via the sample method of the image, showing a
-   cross-section of the fractal as indicated by the blue horizontal
+   overlaid via the ``*`` operator with a horizontal line element
+   (``HLine``). **B.** A ``Curve`` element
+   generated via the ``.sample()`` method of the image, showing a
+   cross-section of the fractal along the indicated blue horizontal
    line. The curve is concatenated with the ``Overlay`` in **A** via
    the ``+`` operation. :label:`layout`
 
@@ -277,22 +209,10 @@ HoloViews object followed by a single line to compose and annotate it.
    problem, making it clear that there is still much scope for
    improving the ways in which we use computers to do research.
 
-..
-   Principles:
+   Work in the natural dimensions of your data i.e the real-world
+   continuous space instead of directly worrying about samples. 
 
-   * Declarative (user API, param for developers)
-
-   * Separating visualization/elements
-
-   * Composable semantics (as a DB or as visualization).
-
-   *  Associating sufficient semantic metadata to the element that sensible, immediate plotting is possible by default.
-
-   *  Declare semantic relationships between elements, e.g shared dimensions across different element. 
-
-   * Work in the natural dimensions of your data i.e the real-world continuous space instead of directly worrying about samples.
-
-   *  Raw data must always be accessible no matter how nested the data is.
+   Raw data must always be accessible no matter how nested the data is.
 
 
 Design principles
@@ -313,19 +233,20 @@ prompt, the expression is parsed, converted into bytecode, and then
 executed, resulting in the float value ``3.5``. This floating-point
 value is immediately returned to the user in the appropriate
 displayable representation, giving the user immediate feedback. Of
-course, the string representation is not the float itself, but a
-sequence of characters ``'3.5'``. Such strings are automatically
+course, the string representation is not the float itself, but the
+sequence of characters ``3``, ``.``, and ``5``. Such strings are automatically
 generated by the interpreter, via the display object's ``__repr__``
 method.
 
-This automatic, immediate feedback also exists in the interpreter for
-more complex data types such as large Numpy arrays, but the displayed
-string has very little utility because it is either incomplete
+The Python interpreter also provides such automatic, immediate
+feedback for more complex data types like large Numpy arrays, but for
+such data the displayed string has very little utility because it is
+either incomplete
 (presenting only a few values of the array) or impractical (presenting
 an impossible-to-interpret dump of all the values).  In a terminal,
 this restriction is a result of the ``__repr__`` method only
 supporting a text-based display value. Using HoloViews in the IPython
-Notebook, you can give your array a more useful, interpretable visual
+Notebook, you can give your array a more useful, interpretable default visual
 representation as an image, curve, or similar plot according to the
 following principles:
 
@@ -342,7 +263,7 @@ following principles:
   hold essential information only.
 * There are always numerous aesthetic alternatives associated with
   rich visual representations, but such option settings should be
-  stored and implemented entirely separately from the elements, so
+  stored and implemented entirely separately from the content elements, so
   that elements can be generated, archived, and distributed without
   any dependencies on the visualization code.
 * As the principles above force the atomic elements to be simple, they
@@ -386,26 +307,23 @@ spaces.
 Elements
 ~~~~~~~~
 
-..
-   Call these the Element primitives?
-
 The atomic classes that wrap raw data are the ``Element``
 primitives. These classes are named by the natural representation they
-suggest for the supplied data, ``Image``, ``Curve``, and ``Scatter``
+suggest for the supplied data, with ``Image``, ``Curve``, and ``Scatter``
 being some simple examples. These elements are easily constructed as
 they only require the raw data (such as a Numpy array) to display.
 
 In Figure :ref:`layout`, we have some examples of the Element
 primitives. On the left, in subfigure **A**, we see the ``Image``
 primitive containing a two-dimensional Numpy array. This ``Image`` is
-declared by supplying the numpy array ``imdata`` along with the
+declared by supplying the Numpy array ``imdata`` along with the
 optional metadata, including a suitable label and a declaration of the
 bounding region in the complex plane. The visual output is
 automatically generated and shows that the array is a part of the
-Mandelbrot set. Our object merely holds the supplied Numpy array which
+Mandelbrot set. Our object merely holds the supplied Numpy array, which
 remains easily accessed via the ``.data`` attribute. In part **B** of
 Figure :ref:`layout` we have an example of a ``Curve`` containing a
-horizontal cross section of the image, as computed using the
+horizontal cross section of the image, as computed by the
 ``sample`` method.
 
 ..
@@ -424,31 +342,31 @@ of an appropriate visual representation. For instance, in Figure
 contained data is in the form of a two-dimensional Numpy array that
 can be meaningfully displayed as an image.
 
-The particular ``Image`` shown in Figure :ref:`layout` **A** is
-declared to reflect the appropriate semantics of the Mandlebrot Set,
+The particular ``Image`` shown in Figure :ref:`layout` **A** was 
+constructed as a visualization of the Mandelbrot Set,
 defined in the complex plane. In particular, the ``kdims`` argument
 declares that the *x*-axis is along the real axis and that the
 *y*-axis is along the imaginary axis. This information is then
-represented appropriately in the visual output by correctly assigning
+reflected in the visual output by assigning
 the appropriate axis labels. This semantic information is also passed
 to the ``Curve`` object generated by sampling the image using
 ``im.sample(Im=1)``.
 
 This ``Curve`` object is also able to pass on this semantic
-information to other Elements with other visual representations so
+information to other Elements with different visual representations so
 that they faithfully reflect the space in which the Mandelbrot Set is
 defined. For instance, you can pass the curve directly to the
 constructor of the ``Scatter`` or ``Histogram`` elements and a new
-visual representation will of the resulting object will retain the
+visual representation of the resulting object will retain the
 original semantic dimension labels. This type of operation merely
-changes the default representation associated with the supplied data.
+changes the representation associated with the supplied data.
 
-Note that in the declarations of ``Image``, the dimensions of theaxes
+Note that in the declarations of ``Image``, the dimensions of the axes
 are declared as key dimensions (``kdims``). Key dimensions correspond
-to the independent dimensions used to index or slice the element
-whereas the dependent dimension is refered to as the value dimensions
+to the independent dimensions used to index or slice the element,
+with the remaining dimensions called value dimensions
 (``vdims``). In the case of this image, there is a single value
-dimension that refers to the values in the supplied numpy array which
+dimension, for the values in the supplied Numpy array, which
 are then visualized using the default colormap of the ``Image``
 elements (the 'hot' color map).
 
@@ -467,46 +385,36 @@ selects the second key dimension (the imaginary axis ``'Im'``) from
 select a portion of the curve object shown in Figure :ref:`layout`
 **B**.
 
-..
-  Add something about providing an extensible library of Elements as
-  primitives to compose complex plots.
-
-In summary, there are many available element classes as there are many
+There are many additional element classes, one for each of the 
 common visual representations for data. These elements form an
 extensible library of primitives that allow the composition of data
 structures with complex, meaningful visualizations. Within the set of
 all elements, there are subsets forming equivalence classes according
 to the allowed number of key and value dimensions. Within these
 groups, you can cast your data between representations so long as the
-number each dimension type is consistent. You can then index and slice
+number of each dimension type is consistent. You can then index and slice
 your elements along their respective key dimensions to get new
-elements holding the appropriately sliced data.
-
-..
-   From a Curve object, only conversion to Scatter works!!  Should be
-   able to also do Histogram(curve) or Bars(curve) as the number of
-   key/value dimensions match.
-
+elements holding the appropriately sliced data of interest.
 
 Collections
 ~~~~~~~~~~~
 
-The elements are simple wrappers that hold the supplied data with a
-rich, meaningful representation. An individual element is therefore a
+The elements are simple wrappers that hold the supplied data and allow a 
+rich, meaningful default representation. An individual element is therefore a
 data structure holding the semantic contents corresponding to a simple
 visual element of the sort you may see in a publication. Although the
 elements are sufficient to cover simple cases such as individual
-graphs, raster images or histogram, they are not sufficient to
+graphs, raster images, or histogram, they are not sufficient to
 represent more complex figures.
 
-A typical figure does not present data using a single representation
-but allows comparison between data in order to illustrate similarities
-or differences between different aspects of the data. In other words,
-a typical figure is a single object composed of many visual
-representations combined together. HoloViews makes it trivial to
-compose elements in the two most common ways: concatenating
-representations side-by-side into a single figure or overlaying visual
-elements within the same set of axes.
+A typical published figure does not present data using a single
+representation, but allows comparison between related data items in
+order to illustrate similarities or differences. In other words, a
+typical figure is an object composed of many visual representations
+combined together. HoloViews makes it trivial to compose elements in
+the two most common ways: concatenating representations side-by-side
+into a single figure, or overlaying visual elements within the same
+set of axes.
 
 These types of composition are so common that both have already been
 used in Figure :ref:`layout` as our very first example. The ``+``
@@ -521,32 +429,28 @@ element overlaid by the ``HLine`` element.
 
 The overall data structure that corresponds to Figure :ref:`layout` is
 therefore a ``Layout`` which itself contains another composite
-collection in the form of an ``Overlay``. This object is in fact a
+collection in the form of an ``Overlay``. The object in Figure :ref:`layout` is in fact a
 highly flexible, compositional tree-based data structure: intermediate
 nodes correspond either to ``Layout`` nodes (``+``) or ``Overlay``
-nodes (``*``), with element primitives at the leaf nodes. Note that
-all the raw data corresponding to every visual element is conveniently
-accessible via key or attribute access on the tree by selecting a leaf
+nodes (``*``), with element primitives at the leaf nodes. Even in this
+potentially complex tree, all the raw data corresponding to every
+visual element is conveniently accessible via key or attribute access
+by selecting a leaf
 element using its path through the tree, and then inspecting the
 ``.data`` attribute, making it simple to declare which part of a
-complex dataset you want to work with for a particular visualization.
-
-..
-  jbednar: probably most people won't be able to figure out the
-  following description; can we improve it and make it concrete?
+complex dataset you want to work with at a given time.
 
 As any element may be a leaf of such a tree, there needs to be an
-automatic and easy way that always allows the selection of subtrees or
-leaf elements. This is achieved with a semantic, two level labelling
-system using "group" and "label" strings supported throughout
-HoloViews. We have seen an example of a label string in Figure 1 where
-it is used to labelled the image as 'Mandelbrot Set'. The textual
-representation of the layout in Figure :ref:`layout` (see Out[6] of
-Figure :ref:`customization`) shows how the supplied label is used in
-the attribute based indexing scheme of the layout. The strings
-'Image', 'Overlay', 'Hline' and 'Curve' are default group names: by
-supplying label and group throughout, you can define a sensible,
-semantic scheme for accessing all the components of your data.
+automatic and easy way to select subtrees or leaf elements. This is
+achieved with a semantic, two-level labeling system using "group" and
+"label" strings supported throughout HoloViews. We have seen an
+example of a label string in Figure 1, where it was used to title the
+image 'Mandelbrot Set'. The textual representation of the layout in
+Figure :ref:`layout` (see Out[6] of Figure :ref:`customization`) shows
+how the supplied label is used in the attribute-based indexing scheme
+of the layout. The strings 'Image', 'Overlay', 'Hline' and 'Curve' are
+default group names, but you can supply your own names to define
+semantic groupings for your data.
 
 With the ability to overlay or concatenate any element with any other,
 there is great flexibility to declare complex relationships between
@@ -582,7 +486,7 @@ solutions.
 One way of dealing with this problem is to lay out multiple plots
 spatially.  Some plotting packages [Was14]_ [Wic09]_ have shown how
 this can be done easily using various grid-based layouts. Another
-solution is to present the data over time as an animation.  A third
+solution is to present the data sequentially over time as an animation.  A third
 solution is to provide interactive control, allowing the user to
 reveal further dimensionality by interacting with the plots using
 various widgets.
@@ -594,7 +498,7 @@ structures (subclasses of ``NdMapping``) are multi-dimensional
 dictionaries that allow the user to declare the dimensionality of the
 space via a list of key dimensions (``kdims``). The multi-dimensional
 location of the items held by the dictionary are defined by tuples,
-where the values in the tuple matches the declared key dimension by
+where the values in the tuple match the declared key dimensions by
 position. In addition to regular Python dictionary indexing semantics,
 these data structures also support slicing semantics to select
 precisely the subregion of the continuous multi-dimensional space that
@@ -617,10 +521,15 @@ The full list of currently supported ``NdMapping`` classes includes:
   with either a single row (1D) or a two-dimensional grid. Each
   overall grid axis corresponds to a key dimension.
 
-* ``NdLayouts``/``NdOverlays``: Unlike ``Layout`` or ``Overlay``
-  objects, these spaces only support homogeneous sets of elements, but
-  allow you to define the various dimensions over which these items
-  vary.
+* ``NdLayouts``/``NdOverlays``: Similar to ``Layout`` or ``Overlay``
+  objects, but allowing only homogeneous types of elements, which lets
+  you define explicit dimensions over which these items vary.
+
+..
+   jbednar: is it necessary to mention that GridSpace is restricted to
+   two dimensions?  If you cast a 3d HoloMap into a GridSpace, won't
+   it just end up being a 2D grid of 1D HoloMaps?  If so you don't
+   need to mention anything here about such a restriction.
 
 All of the above classes are simply different ways to package and view a
 high-dimensional dataset. Just as with ``Elements``, it is possible to
@@ -633,40 +542,43 @@ the ``Element`` primitives.
 
 To get a sense of how composing data and generating complex figures
 works within this framework, we explore some artificial data in Figure
-:ref:`spaces`. Here we will vary the frequency and amplitude of sine
+:ref:`spaces`. Here we vary the frequency and amplitude of sine
 and cosine waves, demonstrating how we can quickly embed this data
-into a high-dimensional space. The first thing we have to do is to
+into a high-dimensional space. First, we
 declare the dimensions of the space we want to explore as the key
-dimensions (``kdims``) of the HoloMap. Next we populate the space
+dimensions (``kdims``) of the HoloMap. Next, we populate the space
 iterating over the frequencies, amplitudes, and the two trigonometric
 functions, generating each ``Curve`` element individually and
 assigning to the HoloMap at the correct position in the declared
 multi-dimensional space.
 
-..
-  jbednar: it's embarrassing that the subfigure label is missing in A.  
-  Maybe suppress both such labels to avoid the problem?  But then
-  it's hard to refer to A and B in the caption.
-  Should 'xs' be 'ps' or even 'phases', for clarity?
-  Isn't even A a HoloMap, covering cos and sin?
+.. 
+   jbednar: should you swap A and B in figure 2?  The single-curve
+   HoloMap view is arguably easier to describe, and it's mentioned
+   first in the main text.
 
 .. figure:: spaces_example.png
    :scale: 30%
    :align: center
    :figclass: w
 
-   Example of a HoloViews Spaces object being visualized in two
-   different ways. **A**. A ``GridSpace`` providing a condensed
-   representation of Curve Elements across 'Frequency' and
-   'Amplitude', for the function selected at the right.  **B**. One
-   frame of a HoloMap, selected using all three widgets, which appear
-   automatically because at least one item being selected has more
-   dimensions than can be shown on the screen at a given time.  In
-   this way HoloViews can represent arbitrarily high-dimensional data
-   naturally and conveniently.  :label:`spaces`
+   Example of a HoloViews spaces object ``holomap`` being visualized
+   in two different ways. This HoloMap contains Curve objects embedded
+   in three dimensions (``Frequency``, ``Amplitude``, ``Function``),
+   but not all of these dimensions can be visualized at once.  In
+   **A**, two of the dimensions are mapped onto the rows and columns
+   of a grid, and the remaining ``Function`` dimension can be selected
+   using the widget at the right.  In **B**, only a single curve is
+   shown, with the three sliders at the right together selecting the
+   appropriate curve from the 3D HoloMap space.  HoloMaps allow
+   users to explore arbitrarily high-dimensional data naturally and
+   conveniently, with sliders appearing automatically whenever there
+   is more data than can fit into the available display dimensions.
+   :label:`spaces`
 
 We can immediately go ahead and display this HoloMap either as an
-animation or using the default widgets. Visualizing individual curves
+animation or using the default widgets, as in Figure
+:ref:`spaces` **B**. Visualizing individual curves
 in isolation is not very useful, of course; instead we probably want
 to see how the curves vary across ``Frequency`` and ``Amplitude`` in a
 single plot. A ``GridSpace`` provides such a representation and by
@@ -697,41 +609,50 @@ presentation in markup languages such as HTML and CSS, and provides
 the same benefits of making the content easily maintainable while the
 presentation is easily controllable.
 
-The only connection between the above data structures and the custom
+The only required connection between the above data structures and the custom
 display options is a single, automatically managed integer
 identification attribute stored with the data structure.  Using this
 ``id`` as a key, we can make the data structures behave as if they
-were rich, stateful and customizable objects, without actually storing
+were rich, stateful, and customizable objects, without actually storing
 anything to do with visualization on the objects. We will show how
 this separation is useful and extensible so that the user can quickly
 and easily customize almost every aspect of their plot. For instance,
 it is easy to change the font size of text, change the subfigure label
-format, change the output format (e.g switch from PNG to SVG) and even
+format, change the output format (e.g. switch from PNG to SVG) and even
 alter the plotting backend (currently defaulting to Matplotlib)
-without changing anything about the object that is being rendered.
+without changing any part of the underlying object being rendered.
+
+.. 
+   jbednar: Nice!  I'm not sure which part Input is meant to
+   correspond to, though.  Should the line below it be erased
+   (which would indicate that Content and Options are both Input)?
 
 .. figure:: display_system.pdf
    :scale: 30%
    :align: center
 
-   Diagram of the HoloViews display and customization system,
-   highlighting the complete separation between the actual displayed
-   content, the customization options and the plotting and rendering
-   system. The displayed data structure and options are specified
-   separately linked only by object type, optional ``group`` and
-   ``label`` strings and an integer ``id``. Plotting and rendering
-   happens automatically by combining the displayed content with the
-   specified display options returning an HTML representation, which
-   can be rendered in the notebook. :label:`schematic`
-
+   This view of the HoloViews display and customization systems
+   illustrates the complete separation between the content (data) to
+   be displayed, the display options, and the rendering/plotting
+   system. The display options are stored entirely separately from the
+   content, with the appropriate options being selected with
+   user-controllable levels of specificity: general options for all
+   objects of a given type, more specific options controlled by
+   user-definable ``group`` and ``label`` strings, or arbitrarily
+   specific options based on a unique integer ``id`` assigned to each
+   content object. Plotting and rendering happens automatically by
+   combining the content with the specified display options and
+   calling an external plotting library, returning an HTML
+   representation that can then be rendered in the
+   notebook. :label:`schematic`
 
 ..
-   Anticipate the tree datastructure a little earlier?
+   Anticipate the tree data structure a little earlier?
 
 Figure :ref:`schematic` provides an overall summary of how the
 different components in the display system interact. The declarative
 data structures define what will be plotted, specifying the
-arrangements of the plots, i.e. via Layouts, Overlays and spaces. The
+arrangements of the plots, via Layouts, Overlays, and spaces. The
 connection between the data structure and the rendered representation
 is made according to the object type, the aforementioned ``id``
 integer, and optionally specified group and label strings. By
@@ -756,58 +677,66 @@ groups the same way as composite trees except they additionally
 support type-specific customization. For instance, you may specify
 colormap options on the ``Image`` node of the tree that will then be
 applied to all ``Images``. If this chosen colormap is not always
-suitable, you can ensure that all ``Image`` elements belonging to a
-group (e.g ``group='Fractal'``) use of a different colormap by
+suitable, you can declare that all ``Image`` elements belonging to a
+group (e.g. ``group='Fractal'``) should use a different colormap by
 overriding it on the ``Image.Fractal`` node of the tree. This form of
-inheritance allow you to specify complex, yet succinct style
-specifications, whether you want options that apply to all objects of
-a particular type or only specific subsets of them.
+inheritance allow you to specify complex yet succinct style
+specifications, applying to all objects of a particular type or just
+to specific subsets of them.
+
+.. jbednar: there were a lot of different adjectives being thrown
+   around for the options, e.g. visualization options, display
+   options, customization options, plotting options.  As far as I
+   could tell, these weren't normally being used to refer to specific
+   classes of options (as in plotting, normalization, etc.), but just
+   loosely describing all options.  I've changed each such instance
+   that I noticed to "display options" (since it's short), but it's
+   worth thinking about whether that's the right choice.  Plus there
+   are various others I missed, especially customization options.  It
+   would be worth making a pass through and making those all
+   consistent (whatever term you want to use).
 
 .. figure:: customization_example.pdf
    :scale: 35%
    :align: center
    :figclass: w
 
-   An example of customizing the representation of the contents from
-   Figure :ref:`layout` with a number of options. The input of cell 5
-   is color coded to show which part of the specification corresponds
-   to the components in Figure :ref:`schematic`, where blue indicates
-   styling options, red is the specification of the content and green
-   is what executes the rendering. The output of the cell shows how
-   the supplied options have altered the output of the plotting
-   code. Finally, Out[6] and Out[7] show the textual representations
-   of the content and the style specification respectively.  This
-   demonstrate the parallel way the two are structured, enabling the
-   separation between content and display
-   options. :label:`customization`
+   An example of customizing the display of Figure :ref:`layout`'s
+   data. ``In [5]`` is color coded according to the components in
+   Figure :ref:`schematic`, where red is the content, blue is the
+   display options (here listed using an optional IPython-specific
+   succinct syntax), and green is what triggers the the
+   rendering. ``Out[5]`` shows how the supplied options have affected
+   the final plots, compared to Figure :ref:`layout`. Finally,
+   ``Out[6]`` and ``Out[7]`` show the textual representations of the
+   content and the style specification respectively, demonstrating how
+   the two are separate yet linked.  :label:`customization`
 
-To explore what this looks like in practice we have adapted the
-example from Figure :ref:`layout` with some basic display options. The
-result of customizing the visual representation is shown in Figure
-:ref:`customization`. Using the ``%%opts`` cell magic we have
-specified various display attributes about the plot including aspects,
-line widths, the ``cmap`` and the ``sublabel_format``. By printing the
-string representation of the content (Out[6]) and the options (Out[7])
-we can see immediately that there are two distinct objects where each
+To explore how option setting works in practice, Figure :ref:`customization` 
+shows an example of customizing Figure :ref:`layout` with some basic
+display options.  Here we use an optional but highly succinct method
+for setting the options, an IPython cell magic ``%%opts``, to specify
+aspect ratios, line widths, colormaps, and sublabel formats. By printing the
+string representation of the content (``Out[6]``) and the options (``Out[7]``),
+we can see immediately that there are two distinct objects, where each
 entry in the ``OptionsTree`` matches an applicable object
 type. Finally, in the actual rendered output, we can see that all
 these display options have taken effect, even though the actual data
-structure is differs from the object rendered in Figure :ref:`layout`
+structure differs from the object rendered in Figure :ref:`layout`
 only in the ``id`` value.
 
 A major benefit of separating data and customization options in this
 way is that all the options can be gathered in one place. There is no
 longer any need to dig deep into the documentation of a particular
-plotting package for a particular option as all the options are easily
+plotting package for a particular option, as all the options are easily
 accessible via a tab-completable IPython magic and are documented via
-the ``help`` function. This ease of discovery once again enables a
+the ``help`` function. This ease of discovery enables a
 workflow where the visualization details of a plot can be easily and
-quickly iteratively refined after the user has determined that some
-data is of interest.
+quickly iteratively refined once the user has found data of interest.
 
 The options system is also inherently extendable.  New options may be
 added at any time, and will immediately become available for
-tab-completion. In fact, the plotting code for each Element and
+tab-completion. In fact, the plotting code for each element and
 container type may be switched out completely and independently, and
 the options system will automatically reflect the changes in the
 available customization options. This approach lets the user work with
@@ -836,168 +765,175 @@ dissemination common to all scientific disciplines.
 Discussion
 ----------
 
-This paper has demonstrated a succinct, flexible and interactive
-approach for data exploration, analysis and visualization. By
-eliminating the need to write plotting code, this approach restores
-the quick and easy interaction typical when working with an
-interpreter, even when working with complex data. At the same time it
-allows the user to keep a concise and reproducable recipe of their
-work from early exploration to the final publication. In this way
-HoloViews captures the entire workflow involved in a scientific
-research project.
+This paper demonstrates a succinct, flexible, and interactive approach
+for data exploration, analysis, and visualization.  By eliminating the
+need to write plotting code for individual plots, this approach
+extends the quick and easy interaction typical when working with an
+interpreter to include even complex data. At the same time, it allows
+the user to keep a concise and reproducible recipe of their work, from
+exploration to the final publication. HoloViews thus allows scientists
+to capture the entire workflow involved in a research project.
 
-In the early stages of a research project the workflow involves
-iterative process of pre-processing and analysing the data, then
-visualizing the data with a specific plotting package. This two-step
-process disconnects the user from immediate feedback that is required
-to quickly improve analyses and explore the data. HoloViews on the
-other hand establishes a tight link between the data and its visual
-representation, indepedent of the plotting backend, thereby
-abstracting away the details of the plotting process.
+Previous workflows for producing figures from data required an
+artificial and harmful distinction between processing data at a
+command prompt and then visualizing it in an external plotting
+package. This two-step process disconnects the user from immediate
+feedback that is required to quickly improve analyses and explore the
+data. HoloViews instead establishes a tight link between the data and
+its visual representation, independent of the plotting backend, while
+hiding the details of the plotting process whenever possible.
 
 The compositionality of HoloViews is superficially reminiscent of
-systems such as the Grammar of Graphics [GoG]_ although this is fact
-the converse of what HoloViews aims to address. Instead of expressing
-the complexities of graphics, the declarative data structures
-HoloViews provides, define a language for the semantics of the actual
-data in terms of how the researcher conceptualizes it *independent* of
-the exact details of plotting. The need for an automatic and useful
-visual representation is driven by the need to immediately present the
-data in interpretable form.
+systems such as the Grammar of Graphics [GoG]_ for the R language, but
+the aim of HoloViews is quite different. Instead of expressing all the
+complexities of graphics, the declarative data structures in HoloViews
+define a language for the semantics of the actual data.  This language
+focuses on how the researcher conceptualizes it, *independent* of the
+exact details of plotting. The need for an automatic and useful visual
+representation is driven by the need to immediately present the data
+in a meaningful format.
 
-Real-world data often has many variables and a wide range of plotting
-packages have attempted to address that fact. Libraries such as R's
-ggplot and the seaborn library [Was14]_ provide simple ways to lay out
-and facet high-dimensional into subplots and grids. On the other end,
-various solutions exist to bring interactivity to scientific
-visualization including IPython notebook widgets, Bokeh and the R
-language's shiny [shiny]_ web application framework. While these tools
-can provide extremely polished interactive graphics, getting them set
-up always requires additional effort and custom code, placing a
-barrier to their primary use case, the interactive exploration of
-data. HoloViews extends these concepts by providing versatile data
-structures, which can represent the dimensionality as a unified space,
-which can be revealed as grids, layers, animations and widgets. The
-semantic information associated with the data allows HoloViews to
-automatically visualize high-dimensional data using traditional grid
-and facet layouts, interactive widgets and various video formats.
+..
+  jbednar: what does facet mean here?  Seems obscure.
 
-Since HoloViews automatically handles so much of the default plotting
-behavior, from basic style defaults, to easy ways to normalize data
-and axes across plots, one might be forgiven in thinking that it does
-not deal well with the long tail of visualization. However once again
-the opposite is true, HoloViews aims to expose as many plotting and
-styling options as possible in an easily accessable manner, and
-provides a powerful, inheritance based options system. Initial
-attempts at plotting can therefore quickly be customized, leading to
-publication quality figures. At the same time a list of default
-plotting options can be curated to provide style templates for often
-reused plots and analyses. If that isn't sufficient it is extremely
-easy to extend HoloViews to generate custom plots. Therefore even
-the most complex figures may be prepared for publication within the
-HoloViews framework.
+HoloViews is one of many packages designed for working with large,
+multidimensional datasets, but it differs from each of these in
+important ways.  For instance, Python's ``seaborn`` and R's ``ggplot``
+library [Was14]_ support laying out high-dimensional data into
+subplots and grids, while Python's Bokeh library and R's shiny
+[shiny]_ web application framework provide widgets for interactive
+data exploration.  While each of these packages can provide extremely
+polished interactive graphics, getting them set up for specific sets
+of data requires significant additional effort and custom code,
+placing a barrier to their primary use case, the interactive
+exploration of data.  HoloViews instead tries to avoid custom coding
+altogether as far as possible, with users instead supplying metadata
+to declare the properties of the data and option settings to control
+its visual appearance.
 
-Reproducibility
-~~~~~~~~~~~~~~~
+..
+  jbednar: removed 'long tail' because that's a very informal 
+  word usage, clear to many people but completely obscure to others.
 
-The scientific process does not end with the final publication
-however, scientific reproducibility is central to producing solid
-science [Crook]_. HoloViews improves the reproducibility of results in
-a number of ways. It directly supports reproducibility by providing
-archiving utilities to store the notebook containing notes and figures
-alongside HoloViews datastructures containing the raw data. It is
-therefore always possible to go back to the source of a plot, to
-replot it, extract the data and even replot it in different ways.
+Because much of the actual work in creating scientific visualizations
+is consumed by small but important details about plot appearance,
+users may be concerned that HoloViews's extensive default settings and
+immediate visualization capability make it able to handle only the
+most common types of plots.  This concern is well placed, but we do
+not believe it actually applies to HoloViews.  First, HoloViews
+explicitly aims to expose as many plotting and styling options as
+possible in an easily accessible manner, and provides a powerful,
+inheritance-based system for changing these options when required.
+For this large body of commonly required options, making these changes
+is much easier within HoloViews than outside of it.  Second, because
+the options can easily be shared across groups of plots, it is simple
+to build up new, highly customized plot types, without necessarily
+requiring custom code.  Third, HoloViews makes it trivial to add
+completely novel types of plots (or to override specific code in
+existing plots) using custom code when needed, and these custom plots
+will then combine seamlessly with other HoloViews objects to make
+composite figures.  Thus in HoloViews, default plots are simple and
+straightforward, but it can handle even the most complex figures
+possible with other packages, and should offer important benefits at
+every level of complexity.
 
-The fact that the content is kept separate from presentation is
-central key to keeping the final research output reproducible. The
-absolutely minimum requirement for a project to be considered
-reproducible is that the raw data can be replicated. The aesthetic
-aspects of a figure are always less important than the actual content
-represented and HoloViews reflects this important distinction. In
-addition to the archival utilities we offer advanced comparisons that
-can tell you exactly how two HoloViews objects differ. These utilities
-allow us to ensure the raw data in all our notebooks (e.g on our main
-website) remain constant over time. These tests are entirely separate
-from the tests of the visual representation.
+.. 
+  Reproducibility
+  ~~~~~~~~~~~~~~~
 
-Another crucial way HoloViews helps with reproducibility is simply by
-being more succinct than other approaches. By eliminating the need for
-plotting code written by the user and expressing intent as succinctly
-as possible, more research steps can be tracked in a single IPython
-Notebook without needing to worry about tracking external code. A
-notebook is not only able to contain more of the necessary steps to
-reproduce the results also greatly increases the density of
-information delivered in a single plot improving readability and
-comprehension.
+Although HoloViews is a general purpose library for working with data
+at every stage, it actually represents a significant advance over
+previous approaches focused only on achieving reproducibility of the
+final result. (1) Simply by keeping specifications for figures
+succinct, HoloViews allows the entire recipe to be preserved in the
+notebook, not scattered over separately imported plotting code
+files.  (2) Because HoloViews can directly express the complex
+relationships between different bits of data as subfigures, it can
+capture entire figures within notebooks that would previously have
+required unreproducible work in external drawing programs. (3)
+HoloViews exports the actual data alongside published figures,
+allowing it to be tested automatically (as is done for the HoloViews
+web site) without conflating it with arbitrary display choices.
+HoloViews makes it possible to reproduce results from every step of
+the project, up to and including the final published figures, in a way
+that has not previously been practical.
 
-Extensibility
-~~~~~~~~~~~~~
+.. 
+   Extensibility
+   ~~~~~~~~~~~~~
 
-In this paper, we have focused on how the user can quickly build the
-datastructures containing content of interest. This ignores the power
-of HoloViews in the hands of a developer who can properly integrate it
-into a library, analysis tool or simulator. By returning HoloViews
-objects, any Python package can immediately have access to a flexible,
-compositional datastructures that automatically doubles as a
-visualization system. This is exactly the approach taken by the Imagen
-image generation library and the Topographica neural simulator, two
-very different projects that both output data wrapped in HoloViews
-data structures.
+In this paper, we have focused on how a user can quickly build data
+structures for their content of interest.  An even more powerful
+approach is for a developer to integrate HoloViews directly into a
+library, analysis tool, or simulator. By returning HoloViews objects
+(which do not depend on any plotting library), any Python package can
+immediately have access to flexible, compositional data structures
+that automatically double as a visualization system. This is exactly
+the approach taken by the ImaGen image generation library and the
+Topographica neural simulator, two very different projects that both
+output data wrapped in HoloViews data structures.
 
-As the number of projects using HoloViews grows, the easier it will
-become for researchers to express their work succinctly without
-worrying about plotting issues. That said, the scope of the base
-HoloViews project is not unlimited and there will be scientific
-representations that are not directly included with HoloViews. For
-this reason, we have made it easy to define new element types and
-write new plotting classes to extend this functionality to new
-domains.
+.. 
+  jbednar: commented out -- seems to be said already above.
 
-In particular, HoloViews includes an interface to the visualizations
-supported by pandas [pandas]_ and seaborn [Was14]_ libraries and we
-have working examples of elements being defined to view geographical
-data (via matplotlib.basemap), network topologies (via NetworkX) and
-various other domain specific applications such as the visualization
-Bloch Spheres in quantum physics. We have found the basic design
-general and extensible, making it possible to wrap third party
-libraries with little effort.
+  As the number of projects using HoloViews grows, the easier it will
+  become for researchers to express their work succinctly without
+  worrying about plotting issues. That said, the scope of the base
+  HoloViews project is not unlimited and there will be scientific
+  representations that are not directly included with HoloViews. For
+  this reason, we have made it easy to define new element types and
+  write new plotting classes to extend this functionality to new
+  domains.
 
+.. 
+  jbednar: Worth mentioning, but seems a bit arbitrary, and we don't
+  seem to have the space:
+
+  HoloViews also includes an interface to the visualizations
+  supported by pandas [pandas]_ and seaborn [Was14]_ libraries, and we
+  have working examples of elements being defined to view geographical
+  data (via matplotlib.basemap), network topologies (via NetworkX), and
+  various other domain specific applications such as the visualization
+  of Bloch Spheres in quantum physics. We have found the basic design
+  general and extensible, making it possible to wrap third party
+  libraries with little effort.
+  
 Conclusion
 ----------
 
-The ease with which HoloViews is extended to express new domains while
-remaining succinct demonstrates that HoloViews has taken a very
-general problem and partitioned it along natural lines. Firstly, data
-and its representation must always follow one another without becoming
-conflated. Everywhere a visualization appears, the content
-underpinning it must be easily available. In addition, the
-specification of content is always of prime importance throughout a
-research project whereas the details regarding display gain importance
-later on when the emphasis switches from exploration to
-presentation. By not conflating content with presentation, HoloViews
-allows a natural, incremental progression from the exploration to
-presentation.
+Based on the key principles of:
+(1) making data immediately and transparently visualizable,
+(2) associating data directly with its semantic description,
+(3) keeping display option settings separate from the data, 
+(4) keeping display code separate from both data and display options, 
+(5) explicitly expressing the relationships between data elements compositionally, and 
+(6) keeping the original data accessible even in complex
+visualizations, Holoviews supports the entire life cycle of scientific
+research, from initial exploration, to dissemination and publication,
+to eventual reproduction of the work and new extensions.  Existing
+approaches for achieving some of these goals individually have been
+very limiting and only partially successful, each adding significant
+new costs along with the benefits they offer.  HoloViews instead
+addresses the underlying problems fundamental to current methods for
+scientific research, solving seemingly intractable issues like
+reproducibility almost as a side effect of properly supporting the
+basic process of doing science.
 
-This approach to reproducibility is fairly unique although the core
-ideas stem from the well-established principle of transparently
-converting some data into its corresponding representation. There are
-many systems that aim to help achieve researchers achieve
-reproducibility but these tend to be prescriptive in nature and tend
-to be seen as an unwanted overhead instead of as a way of increasing
-research productivity. HoloViews improves reproducibility by
-minimising the code and therefore the effort involved in a project
-without sacrificing flexibility.
+Acknowledgments
+----------------
 
-.. References
+This work was funded in part by grant 1R01-MH66991 to the University
+of Texas at Austin from the USA National Institute of Mental Health,
+by grant EP/F500385/1 from the UK EPSRC and MRC research councils, and
+by the Institute for Adaptive and Neural Computation at the University
+of Edinburgh.
 
-   Crook paper - jim's webpages
-   Vistrails
-   Ones from Lancet paper.
 
-.. jbednar: Need to cite Topographica and acknowledge NIH support
-   (which paid for Param and for the continuous coordinate support).
-
+.. Add references:
+   Vistrails?
+   Ones from Lancet paper?
+ 
+   Shouldn't we mention and cite Lancet?
 
 References
 ----------
@@ -1017,22 +953,22 @@ References
        Springer New York, 2009.
 
 .. [shiny] RStudio, Inc, *shiny: Easy web applications in R.*,
-	   http://shiny.rstudio.com, 2014.
+       http://shiny.rstudio.com, 2014.
 
 .. [knitr] Foundation for Open Access Statistics, *knitr*,
-	   http://yihui.name/knitr, 2015.
+       http://yihui.name/knitr, 2015.
 
-.. [Crook] Crook et al., *Learning from the Past: Approaches for Reproducibility in Computational Neuroscience*,
-	   20 Years of Computational Neuroscience Springer Series in Computational Neuroscience, 9:73-102, 2013.
+.. [Cro13] Crook et al., "Learning from the Past: Approaches for Reproducibility in Computational Neuroscience",
+       *20 Years of Computational Neuroscience*, J.M. Bower, ed., Springer, 9:73-102, 2013.
 
 .. [Wol03] Stephen Wolfram, *The Mathematica Book*, Fifth Edition,
-	   Wolfram Media/Cambridge University Press, 2003.
+       Wolfram Media/Cambridge University Press, 2003.
 
 .. [Mpl] John D. Hunter, *Matplotlib: A 2D graphics environment*,
-	 Computing In Science \& Engineering, 9(3):90-95, 2007.
+       Computing In Science \& Engineering, 9(3):90-95, 2007.
 
 .. [pandas] Wes McKinney, *Data Structures for Statistical Computing in Python*,
-	    Proceedings of the 9th Python in Science Conference, 51-56, 2010.
+       Proceedings of the 9th Python in Science Conference, 51-56, 2010.
 
 .. [GoG] Leland Wilkinson, *The Grammar of Graphics*,
-	 Springer-Verlag New York, 2005.
+       Springer-Verlag New York, 2005.
