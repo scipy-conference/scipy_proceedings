@@ -39,6 +39,7 @@ class Translator(LaTeXTranslator):
         self.keywords = ''
         self.table_caption = []
         self.video_url = ''
+        self.bibliography = ''
 
         self.abstract_in_progress = False
         self.non_breaking_paragraph = False
@@ -83,6 +84,8 @@ class Translator(LaTeXTranslator):
             self.author_institution_map[self.author_names[-1]].append(text)
         elif self.current_field == 'video':
             self.video_url = text
+        elif self.current_field == 'bibliography':
+            self.bibliography = text
 
         self.current_field = ''
 
@@ -205,7 +208,8 @@ class Translator(LaTeXTranslator):
                                'abstract': self.abstract_text,
                                'keywords': self.keywords,
                                'copyright_holder': copyright_holder,
-                               'video': self.video_url}
+                               'video': self.video_url,
+                               'bibliography': self.bibliography}
 
 
     def end_open_abstract(self, node):

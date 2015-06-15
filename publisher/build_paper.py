@@ -19,17 +19,23 @@ header = r'''
 
 .. role:: label
 
+.. role:: bibliography
+
+
 .. raw::  latex
 
-  \InputIfFileExists{page_numbers.tex}{}{}
-  \newcommand*{\docutilsroleref}{\ref}
-  \newcommand*{\docutilsrolelabel}{\label}
+    \InputIfFileExists{page_numbers.tex}{}{}
+    \newcommand*{\docutilsroleref}{\ref}
+    \newcommand*{\docutilsrolelabel}{\label}
+    \bibliographystyle{IEEEtran}
+    \providecommand*\DUrolebibliography[1]{\bibliography{#1}}
 
 .. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
-   :trim:
+    :trim:
 
 .. |--| unicode:: U+2013   .. en dash
-   :trim:
+    :trim:
+
 
 '''
 
