@@ -20,8 +20,8 @@
 :institution: Department of Engineering Mathematics, University of Bristol
 
 :author: Eric Battenberg
-:email: eric@ericbattenberg.com
-:institution: Baidu, Inc.
+:email: ericbattenberg@baidu.com
+:institution: Silicon Valley AI Lab, Baidu, Inc.
 
 :author: Oriol Nieto
 :email: oriol@nyu.edu
