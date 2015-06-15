@@ -332,6 +332,7 @@ class Translator(LaTeXTranslator):
 
         self.out.append(r'\end{%s}' % self.table_type)
         self.active_table.set('preamble written', 1)
+        self.active_table.set_table_style('booktabs')
 
     def visit_thead(self, node):
         # Store table caption locally and then remove it
