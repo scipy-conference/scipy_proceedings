@@ -19,8 +19,9 @@ header = r'''
 
 .. role:: label
 
-.. role:: bibliography
+.. role:: biblio
 
+.. role:: cite
 
 .. raw::  latex
 
@@ -28,7 +29,9 @@ header = r'''
     \newcommand*{\docutilsroleref}{\ref}
     \newcommand*{\docutilsrolelabel}{\label}
     \bibliographystyle{IEEEtran}
-    \providecommand*\DUrolebibliography[1]{\bibliography{#1}}
+    \providecommand*\DUrolebiblio[1]{\bibliography{#1}}
+
+    \providecommand*\DUrolecite[1]{\cite{#1}}
 
 .. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
     :trim:
@@ -103,6 +106,14 @@ def tex2pdf(out_path):
 
     import subprocess
     command_line = 'pdflatex -halt-on-error paper.tex'
+
+    stats_file = os.path.join(out_path, 'paper_stats.json')
+    d = options.cfg2dict(stats_file)
+    bib_file = os.path.join(out_path,d["bibliography"]+'.bib')
+    if os.path.exists(bib_file):
+        command_line += ' && bibtex paper && pdflatex -halt-on-error paper.tex && pdflatex -halt-on-error paper.tex' 
+        print("got here")
+
 
     # -- dummy tempfile is a hacky way to prevent pdflatex
     #    from asking for any missing files via stdin prompts,

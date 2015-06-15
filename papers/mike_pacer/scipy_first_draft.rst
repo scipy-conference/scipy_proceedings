@@ -1,6 +1,10 @@
 :author: Mike Pacer
+
 :email: mpacer@berkeley.edu
+
 :institution: UC Berkeley
+
+:bibliography: uber
 
 .. :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
@@ -8,10 +12,7 @@
 .. raw:: latex
 
     \newcommand{\DUrolesmallcaps}{\textsc}
-    \providecommand*\DUrolecite[1]{\cite{#1}}
 
-
-.. role:: cite
 
 .. role:: smallcaps
 
@@ -316,7 +317,6 @@ figures.
 .. Perhaps we want to end off with a quote by Lao Tse [#]_:
 
 ..     *Muddy water, let stand, becomes clear.*
-..     :cite:`mckay2003acyclic,winn2012causality`
 
 .. .. [#] :math:`\mathrm{e^{-i\pi}}`
 
@@ -333,6 +333,9 @@ figures.
 
 Outlines
 ========
+
+:cite:`mckay2003acyclic,winn2012causality`
+
 
 Outline v. 1.1
 ==============
@@ -399,7 +402,6 @@ Outline v. 1.1
 
 1. NetworkX
     
-    2. 
 
 6. Causal Bayesian NetworkX
 
@@ -412,7 +414,8 @@ Outline v. 1.1
 References
 ----------
 
-:bibliography:`uber`
+:biblio:`uber`
+
 
 
 .. .. raw:: latex
