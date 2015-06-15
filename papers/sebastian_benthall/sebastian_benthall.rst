@@ -215,22 +215,61 @@ Discussion network formation
 Background
 ----------
 
-* Barabasi points out power laws in degree distributions.
-* Degree assortativity of social and technical networks [Newman2002]_
+- Barabasi points out power laws in degree distributions of networks and proposes preferential
+attachment model. [BarabasiAlbert]_
+- Degree assortativity of social and technical networks [Newman2002]_ [Alstott2014]_
+
+and so
 
 Methods
 -------
 
-- get mailing lists
 - build interaction graph
-- compute goodness of fit of power law distribution to degree distribution (cite Clauset et al)
+  - In-Reply-To header
+- compute goodness of fit of power law distribution to degree distribution [Clauset2007] (cite Alstott)
 - compare degree assortativity 
+
 
 Results
 -------
 
-- Degree distribution has no evidence of power law. Probably log normal.
-- Degree assortativity looks more like technical than social network (dissortative)
+- Table of Degree distribution has no evidence of power law. Probably log normal.
+- Table of Degree assortativity looks more like technical than social network (dissortative)
+
+
+.. table:: Results of analysis. For each mailing list archive, number of participants :math:`n`,
+           computed degree assortativity of the interaction graph, and loglikelihood ratio R and
+           statistical significance :math:`p` of comparison of fit between power law and log normal
+           distributions. In all cases the interaction graph is disassortative with significantly
+           more log normal degree distribution. :label:`mtable`
+
+   +---------------+----------------+-----------+-----------------------+---------+------------+
+   | list name     | Source         | :math:`n` |  Degree Assorativity  | R value | :math:`p`  |
+   +===============+================+===========+=======================+=========+============+
+   | ipython-dev   | SciPy          | 689       | -0.246441169106       | -0.518  |  0.080     |
+   +---------------+----------------+-----------+-----------------------+---------+------------+
+   | potlatch-dev  | OpenStreetMap  | 75        | -0.0568958403876      | -0.001  |  0.969     |
+   +---------------+----------------+-----------+-----------------------+---------+------------+
+   | scipy-dev     | SciPy          | 1056      | -0.276991197113       | -0.331  |  0.578     |
+   +---------------+----------------+-----------+-----------------------+---------+------------+
+   | ipython-user  | SciPy          | 1085      | -0.267104106913       | -0.334  |  0.227     |
+   +---------------+----------------+-----------+-----------------------+---------+------------+
+   | scipy-user    | SciPy          | 2735      | -0.111360803079       | -0.024  |  0.307     |
+   +---------------+----------------+-----------+-----------------------+---------+------------+
+   | design        | WikiMedia      | 111       | -0.17722303449        | -3.618  |  0.095     |
+   +---------------+----------------+-----------+-----------------------+---------+------------+
+   | gendergap     | WikiMedia      | 301       | -0.172107714006       | -0.858  |  0.399     |
+   +---------------+----------------+-----------+-----------------------+---------+------------+
+   | maps-l        | WikiMedia      | 118       | -0.186099913331       | -0.003  |  0.945     |
+   +---------------+----------------+-----------+-----------------------+---------+------------+
+   | wikimedia-l   | WikiMedia      | 1729      | -0.155694746786       | -3.645  |  0.074     |
+   +---------------+----------------+-----------+-----------------------+---------+------------+
+   | hot           | OpenStreetMap  | 524       | -0.199048173004       | -0.851  |  0.403     |
+   +---------------+----------------+-----------+-----------------------+---------+------------+
+
+
+
+
 
 Discussion
 ----------
@@ -242,6 +281,18 @@ grow and form over time.
 
 References
 ----------
+
+.. [Alstott2014] Alstott J, Bullmore E, Plenz D (2014) powerlaw: A Python Package 
+                 for Analysis of Heavy-Tailed Distributions. PLoS ONE 9(1): e85777. 
+                 doi:10.1371/journal.pone.0085777
+
+.. [BarabasiAlbert] Albert-László Barabási & Reka Albert. Emergence of Scaling 
+                    in Random Networks, Science, Vol 286, Issue 5439, 15 October 
+                    1999, pages 509-512.
+
+.. [Clauset2007]  A. Clauset, C.R. Shalizi, and M.E.J. Newman. Power-law distributions 
+                  in empirical data. arXiv:0706.1062, June 2007.
+
 .. [Newman2002] Newman, 2002.
 
 .. [SocWik] Howard T. Welser, Dan Cosley, Gueorgi Kossinets, Austin Lin, Fedor Dokshin, 
