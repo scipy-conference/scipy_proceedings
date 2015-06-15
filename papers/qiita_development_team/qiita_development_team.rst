@@ -402,17 +402,16 @@ demonstrate the feasibility of this approach, the current 16S analysis pipeline
 will be migrated to be the first plug-in.
 
 Another important change will affect data processing. Right now, in order to
-ensure consistent processing workflows, users can currently upload only raw
-data and process it on the system using standardized methods. However, the
-ability to enter the data processing workflows at downstream steps is a
-frequently requested feature that we plan to support. For the 16S analysis
-pipeline, users will be able to upload files that have already been
-demultiplexed and/or quality filtered (e.g., by the sequencing center) or even
-processed through OTU picking. The downside to entering processing pipelines at
-steps other than the raw data stage is that the standardized processing applied
-to other studies in the system cannot be guaranteed. For this reason,
-processing results that do not originate from raw data cannot be made available
-for public use like other results.
+ensure consistent processing workflows, users can upload only raw data for
+processing on the system using standardized methods. However, the ability to
+enter the data processing workflows at downstream steps is a frequently
+requested feature that we plan to support. For the 16S analysis pipeline, users
+will be able to upload sequence files that have already been demultiplexed
+and/or quality filtered (e.g., by the sequencing center) or even BIOM tables of
+OTU picking results. The downside to these alternative pipeline entry points is
+that the standardized processing that is applied to other studies in the system
+cannot be guaranteed. For this reason, processing results that do not originate
+from raw data cannot be made available for public use like other results.
 
 Due to the size and complexity of this nascent project, Qiita’s documentation
 for users and developers is continuously evolving. For developers, the
