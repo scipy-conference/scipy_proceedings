@@ -19,8 +19,6 @@ header = r'''
 
 .. role:: label
 
-.. role:: biblio
-
 .. role:: cite
 
 .. raw::  latex
@@ -28,9 +26,6 @@ header = r'''
     \InputIfFileExists{page_numbers.tex}{}{}
     \newcommand*{\docutilsroleref}{\ref}
     \newcommand*{\docutilsrolelabel}{\label}
-    \bibliographystyle{IEEEtran}
-    \providecommand*\DUrolebiblio[1]{\bibliography{#1}}
-
     \providecommand*\DUrolecite[1]{\cite{#1}}
 
 .. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
@@ -92,31 +87,14 @@ def rst2tex(in_path, out_path):
     tex = dc.publish_string(source=content, writer=writer,
                             settings_overrides=settings)
 
-    
+
     stats_file = os.path.join(out_path, 'paper_stats.json')
     d = options.cfg2dict(stats_file)
-    d.update(writer.document.stats)
-    options.dict2cfg(d, stats_file)
-    bib_file = os.path.join(out_path,d["bibliography"]+'.bib')
-    if os.path.exists(bib_file):
-        footer = "\n" +  r":biblio:`"+d['bibliography']+r"`"+ "\n"
-        # print(footer)
-        
-        try:
-            rst, = glob.glob(os.path.join(in_path, '*.rst'))
-        except ValueError:
-            raise RuntimeError("Found more than one input .rst--not sure which "
-                           "one to use.")
-        import codecs
-        with codecs.open(rst,'r',encoding='utf8') as f:
-            content = header + f.read() + footer
-        
-        tex = dc.publish_string(source=content, writer=writer,settings_overrides=settings)
-    
-
-
-
-
+    try:
+        d.update(writer.document.stats)
+        options.dict2cfg(d, stats_file)
+    except AttributeError:
+        print("Error: no paper configuration found")
 
     tex_file = os.path.join(out_path, 'paper.tex')
     with open(tex_file, 'w') as f:
@@ -127,13 +105,6 @@ def tex2pdf(out_path):
 
     import subprocess
     command_line = 'pdflatex -halt-on-error paper.tex'
-
-    stats_file = os.path.join(out_path, 'paper_stats.json')
-    d = options.cfg2dict(stats_file)
-    bib_file = os.path.join(out_path,d["bibliography"]+'.bib')
-    if os.path.exists(bib_file):
-        command_line += ' && bibtex paper && pdflatex -halt-on-error paper.tex && pdflatex -halt-on-error paper.tex' 
-
 
     # -- dummy tempfile is a hacky way to prevent pdflatex
     #    from asking for any missing files via stdin prompts,
@@ -147,17 +118,6 @@ def tex2pdf(out_path):
             )
     out, err = run.communicate()
 
-    # -- returncode always 0, have to check output for error
-    if "Fatal" not in out:
-        # -- pdflatex has to run twice to actually work
-        run = subprocess.Popen(command_line, shell=True,
-                stdin=dummy,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                cwd=out_path,
-                )
-        out, err = run.communicate()
-
     if "Fatal" in out or run.returncode:
         print("PDFLaTeX error output:")
         print("=" * 80)
@@ -166,6 +126,41 @@ def tex2pdf(out_path):
         if err:
             print(err)
             print("=" * 80)
+
+        # Errors, exit early
+        return out
+
+
+    # Compile BiBTeX if available
+    stats_file = os.path.join(out_path, 'paper_stats.json')
+    d = options.cfg2dict(stats_file)
+    bib_file = os.path.join(out_path, d["bibliography"] + '.bib')
+
+    if os.path.exists(bib_file):
+        bibtex_cmd = 'bibtex paper && ' + command_line
+        run = subprocess.Popen(bibtex_cmd, shell=True,
+                stdin=dummy,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                cwd=out_path,
+                )
+        out, err = run.communicate()
+
+        if err:
+            print("Error compiling BiBTeX")
+            return out
+
+
+    # -- returncode always 0, have to check output for error
+    if not run.returncode:
+        # -- pdflatex has to run twice to actually work
+        run = subprocess.Popen(command_line, shell=True,
+                stdin=dummy,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                cwd=out_path,
+                )
+        out, err = run.communicate()
 
     return out
 
