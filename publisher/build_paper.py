@@ -42,7 +42,6 @@ header = r'''
 
 '''
 
-
 def rst2tex(in_path, out_path):
 
     options.mkdir_p(out_path)
@@ -87,15 +86,37 @@ def rst2tex(in_path, out_path):
         raise RuntimeError("Found more than one input .rst--not sure which "
                            "one to use.")
 
+
     content = header + open(rst, 'r').read()
 
     tex = dc.publish_string(source=content, writer=writer,
                             settings_overrides=settings)
 
+    
     stats_file = os.path.join(out_path, 'paper_stats.json')
     d = options.cfg2dict(stats_file)
     d.update(writer.document.stats)
     options.dict2cfg(d, stats_file)
+    bib_file = os.path.join(out_path,d["bibliography"]+'.bib')
+    if os.path.exists(bib_file):
+        footer = "\n" +  r":biblio:`"+d['bibliography']+r"`"+ "\n"
+        # print(footer)
+        
+        try:
+            rst, = glob.glob(os.path.join(in_path, '*.rst'))
+        except ValueError:
+            raise RuntimeError("Found more than one input .rst--not sure which "
+                           "one to use.")
+        import codecs
+        with codecs.open(rst,'r',encoding='utf8') as f:
+            content = header + f.read() + footer
+        
+        tex = dc.publish_string(source=content, writer=writer,settings_overrides=settings)
+    
+
+
+
+
 
     tex_file = os.path.join(out_path, 'paper.tex')
     with open(tex_file, 'w') as f:

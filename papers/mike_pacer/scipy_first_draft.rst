@@ -408,15 +408,15 @@ Outline v. 1.1
 
    5. Iterator over graphs
    6. Closures for constraints
-       7. over graphs
-       8. tuples of nodes
-       9. individual nodes
-   10. Zipping iterators and avoiding early consumption
+      
+       8. over graphs
+       9. tuples of nodes
+       10. individual nodes
+   
+   11. Zipping iterators and avoiding early consumption
 
 6. Causal Bayesian NetworkX: Probabilistic Sampling
     
-    7. 
-   
 7. Gates and causal networks
 8. Causal theories
     
@@ -430,7 +430,7 @@ Outline v. 1.1
 References
 ----------
 
-:biblio:`myBibliography`
+.. :biblio:`myBibliography`
 
 
 
