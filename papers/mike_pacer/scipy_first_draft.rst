@@ -8,10 +8,10 @@
 
 .. raw:: latex
 
-    \newcommand{\DUrolesmallcaps}{\textsc}
+    \newcommand{\DUrolesc}{\textsc}
 
 
-.. role:: smallcaps
+.. role:: sc
 
 ------------------------
 Causal Bayesian NetworkX
@@ -82,13 +82,13 @@ Directed Acyclic Graphs
 
 A cycle in a directed graph can be understood as the existance of 
 
-The number of directed acyclic graphs (:smallcaps:`dag`\s) that can be obtained from a set of nodes of size :math:`n` can be defined recursively as follows :cite:`mckay2003acyclic` :
+The number of directed acyclic graphs (:sc:`dag`\s) that can be obtained from a set of nodes of size :math:`n` can be defined recursively as follows :cite:`mckay2003acyclic` :
 
 .. math::
 
     R_n = \sum_{k=1}^{n} (-1)^{k+1} {\binom{n}{k}} 2^{k(n-k)} R_{n-k}
 
-Note, because :smallcaps:`dag`\s do not allow any cycles, this means that there can be no self loops. As a result, every value on the diagonal of a  :smallcaps:`dag`\'s adjacency matrix will be 0. 
+Note, because :sc:`dag`\s do not allow any cycles, this means that there can be no self loops. As a result, every value on the diagonal of a  :sc:`dag`\'s adjacency matrix will be 0. 
 
 
 Conditional Probability Distributions
@@ -106,7 +106,7 @@ Bayesian networks are a class of graphical models that have particular probabili
 Assumptions for Bayesian networks
 ========================================
 
-There is a fixed set of known nodes with finite cardinality :math:`N`. All events are presumed to occur simultaneously within a single discrete trial. Graph forms a :smallcaps:`dag`\. 
+There is a fixed set of known nodes with finite cardinality :math:`N`. All events are presumed to occur simultaneously within a single discrete trial. Graph forms a :sc:`dag`\. 
 
 Causal Bayesian Networks
 ------------------------
