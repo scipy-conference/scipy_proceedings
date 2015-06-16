@@ -8,7 +8,11 @@ Dask: Parallel Computation with Blocked algorithms and Task Scheduling
 
 .. class:: abstract
 
-    Dask parallel variants of foundational Python data structures through blocked algorithms and dynamic task scheduling.
+    Dask enables parallel and out-of-core computation.  We couple blocked
+    algorithms with dynamic and memory aware task scheduling to achieve a
+    parallel and out-of-core numpy clone.  We show how this extends the
+    effective scale of modern hardware to larger datasets and discuss how these
+    ideas can be more broadly applied to other parallel collections.
 
 .. class:: keywords
 
@@ -35,6 +39,14 @@ create ``dask.array`` a parallel out-of-core NumPy clone using blocked
 algorithms.  This serves both as a general library for parallel out-of-core
 ndarrays but also as a demonstration that we can parallelize complex codebases
 like NumPy in a straightforward manner.
+
+We first define ``dask`` graphs and give a trivial example of their use.  We then
+share the design of ``dask.array`` a parallel ndarray.  Then we discuss dynamic
+task scheduling and policies to minimize memory footprint.  We then give two
+examples using ``dask.array`` on compuatational problems.  We then briefly
+discuss ``dask.bag`` and ``dask.dataframe``, two other collections in the
+``dask``` library.  We finish with thoughts about extension of this approach
+into the broader Scientific Python ecosystem.
 
 Dask Graphs
 -----------
@@ -199,7 +211,7 @@ calls to ``np.arange``
    >>> import dask.array as da
    >>> x = da.arange(15, chunks=(5,))
    >>> x       # Array object metadata
-   dask.array<arange-1, shape=(15,), chunks=((5, 5, 5)), dtype=int64>
+   dask.array<x-1, shape=(15,), chunks=((5, 5, 5)), dtype=int64>
    >>> x.dask  # Every dask array holds a dask graph
    {('x', 0): (np.arange, 0, 5),
     ('x', 1): (np.arange, 5, 10),
@@ -379,12 +391,15 @@ We set up a trivial input dataset
 
    import h5py
    f = h5py.File('myfile.hdf5')
-   A = f.create_dataset(name='A', shape=(200000, 4000), dtype='f8',
-                                  chunks=(250, 250), fillvalue=1.0)
-   B = f.create_dataset(name='B', shape=(4000, 4000), dtype='f8',
-                                  chunks=(250, 250), fillvalue=1.0)
-   out = f.create_dataset(name='out', shape=(4000, 4000), dtype='f8',
-                          chunks=(250, 250))
+   A = f.create_dataset(name='/A',
+            shape=(200000, 4000), dtype='f8',
+            chunks=(250, 250), fillvalue=1.0)
+   B = f.create_dataset(name='/B',
+            shape=(4000, 4000), dtype='f8',
+            chunks=(250, 250), fillvalue=1.0)
+   out = f.create_dataset(name='/out',
+            shape=(4000, 4000), dtype='f8',
+            chunks=(250, 250))
 
 The Dask convenience method, ``da.from_array``, creates a graph that can pull
 data from any object that implements numpy slicing syntax.  The ``da.store``
@@ -459,19 +474,19 @@ the following:
 We start with a typical setup, a large pile of NetCDF files.::
 
    $ ls
-   2014-01-01.nc3  2014-03-18.nc3  2014-06-02.nc3  2014-08-17.nc3  2014-11-01.nc3
-   2014-01-02.nc3  2014-03-19.nc3  2014-06-03.nc3  2014-08-18.nc3  2014-11-02.nc3
-   2014-01-03.nc3  2014-03-20.nc3  2014-06-04.nc3  2014-08-19.nc3  2014-11-03.nc3
-   2014-01-04.nc3  2014-03-21.nc3  2014-06-05.nc3  2014-08-20.nc3  2014-11-04.nc3
-   ...             ...             ...             ...             ...
+   2014-01-01.nc3  2014-03-18.nc3  2014-06-02.nc3
+   2014-01-02.nc3  2014-03-19.nc3  2014-06-03.nc3
+   2014-01-03.nc3  2014-03-20.nc3  2014-06-04.nc3
+   2014-01-04.nc3  2014-03-21.nc3  2014-06-05.nc3
+   ...             ...             ...
 
 Each of these files contains the temperature at two meters above ground over
 the earth at quarter degree resolution, every six hours.
 
 .. code-block:: python
 
-   >>> import netCDF4
-   >>> t = netCDF4.Dataset('2014-01-01.nc3').variables['t2m']
+   >>> from netCDF4 import netCDF4
+   >>> t = Dataset('2014-01-01.nc3').variables['t2m']
    >>> t.shape
    (4, 721, 1440)
 
@@ -482,10 +497,12 @@ in a single large array.
 
    >>> from glob import glob
    >>> filenames = sorted(glob('2014-*.nc3'))
-   >>> temps = [netCDF4.Dataset(fn).variables['t2m'] for fn in filenames]
+   >>> temps = [Dataset(fn).variables['t2m']
+   ...          for fn in filenames]
 
    >>> import dask.array as da
-   >>> arrays = [da.from_array(t, blockshape=(4, 200, 200)) for t in temps]
+   >>> arrays = [da.from_array(t, blockshape=(4, 200, 200))
+   ...           for t in temps]
    >>> x = da.concatenate(arrays, axis=0)
 
    >>> x.shape
@@ -499,7 +516,8 @@ they call ``np.array(...)`` on their input.
 .. code-block:: python
 
 >>> from matplotlib import imshow
->>> imshow(x[::4].mean(axis=0) - x[2::4].mean(axis=0), cmap='RdBu_r')
+>>> imshow(x[::4].mean(axis=0) - x[2::4].mean(axis=0)
+...        , cmap='RdBu_r')
 
 .. figure:: day-vs-night.png
 
@@ -510,9 +528,93 @@ they call ``np.array(...)`` on their input.
 This computation took about a minute on an old notebook computer.  The
 computation seemed to be bound by disk access.
 
+Other Collections
+-----------------
+
+The dask library contains parallel collections other than ``dask.array``.  We
+briefly describe ``dask.bag`` and ``dask.dataframe``
+
+* ``dask.array`` = ``numpy`` + ``threading``
+* ``dask.bag = ``toolz`` + ``multiprocessing``
+* ``dask.dataframe`` = ``pandas`` + ``threading``
+
+Bag
+~~~
+
+A *bag* is an unordered collection with repeats.  It is like a Python list but
+does not guarantee the order of elements.  Because we typicaly compute on
+Python objects in dask.bag we are bound by the Global Interpreter Lock and so
+switch from using a multi-threaded scheduler to a multi-processing one.
+
+The ``dask.bag`` API contains functions like ``map`` and ``filter`` and
+generally follows the PyToolz_ API.  We find that it is particularly useful
+on the front lines of data analysis, particularly in parsing and cleaning up
+initial data dumps like JSON or log files.
+
+.. code-block:: python
+
+   >>> import dask.bag as db
+   >>> import json
+   >>> b = db.from_filenames('2014-*.json.gz')
+   ...       .map(json.loads)
+
+   >>> alices = b.filter(lambda d: d['name'] == 'Alice')
+   >>> alices.take(3)
+   ({'name': 'Alice', 'city': 'LA',  'balance': 100},
+    {'name': 'Alice', 'city': 'LA',  'balance': 200},
+    {'name': 'Alice', 'city': 'NYC', 'balance': 300},
+
+   >>> dict(alices.pluck('city').frequencies())
+   {'LA': 10000, 'NYC': 20000, ...}
+
+
+DataFrame
+~~~~~~~~~
+
+The ``dask.dataframe`` module implements a large dataframe out of
+many Pandas DataFrames.
+
+Currently ``dask.dataframe`` also uses the threaded
+scheduler but does not achieve the same parallel performance as ``dask.array``
+due to the GIL.  We are enthusiastic about ongoing work in Pandas itself to
+release the GIL.
+
+The dask dataframe can compute efficiently on *partitioned* datasets where the
+different blocks are well separated along an index.  For example in time series
+data we may know that all of January is in one block while all of February is
+in another.  Join, groupby, and range queries along this index are
+significantly faster when working on partitioned datasets.
+
+.. code-block:: python
+
+   >>> import dask.dataframe as dd
+   >>> df = dd.read_csv('nyc-taxi-*.csv.gz')
+
+   >>> g = df.groupby('medallion')
+   >>> g.trip_time_in_secs.mean().topk(5)
+   TODO
+
+
 Final Thoughts
 --------------
 
+**Extend the Scale of Convenient Data:**  The dask collections (``array``,
+``bag``, ``dataframe``) provide reasonable access to parallelism and
+out-of-core execution.  These significantly extend the scale of data that is
+convenient to manipulate.
+
+**Low Barrier to Entry:** More importantly these collections demonstrate the
+feasibility of dask graphs to describe parallel algorithms and of the dask
+schedulers to execute those algorithms efficiently in a small space.
+
+The dask standard is simple and low-tech and, in anecdotal experience,
+developers come to understand it in less than an hour.  The lack of a more
+baroque framework drastically reduces the barrier to entry and the ability of
+developers to use dask within their own libraries.
+
+The core functions to manipulate dask graphs and the single machine schedulers
+depend only on the standard library.  Dask is available on PyPI and is
+distributed with the Anaconda installation.
 
 References
 ----------
@@ -538,4 +640,5 @@ References
 .. _Spartan: https://github.com/spartan-array/spartan
 .. _DistArray: http://docs.enthought.com/distarray/
 .. _Luigi: https://github.com/spotify/luigi
+.. _PyToolz: https://toolz.readthedocs.org/en/latest/
 
