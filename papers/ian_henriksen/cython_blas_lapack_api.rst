@@ -241,14 +241,11 @@ The interoperability between NumPy's distutils package and Cython is limited, bu
    def configuration():
        config = Configuration()
        config.add_library('myffunc',
-                          sources=['myffunc.f'],
-                          libraries=[])
-       config.add_library('myffuncwrap',
-                          sources=['myffuncwrap.f'],
-                          libraries=['myffunc'])
+                          sources=['myffunc.f',
+                                   'myffuncwrap.f'])
        config.add_extension('cyffunc',
                             sources=['cyffunc.c'],
-                            libraries=['myffuncwrap'])
+                            libraries=['myffunc'])
        return config
    # Run Cython to get the needed C files.
    # Doing this separately from the setup process
