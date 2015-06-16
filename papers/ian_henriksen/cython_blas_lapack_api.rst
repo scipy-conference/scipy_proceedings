@@ -164,7 +164,7 @@ The simplest way to work around this would be to use Fortran 2003's ISO C bindin
 Since, for the sake of platform/compiler independence, such a recent version of Fortran cannot be used in SciPy, an existing header with a small macro was used to imitate the name mangling scheme used by the various Fortran compilers.
 In addition, for this approach to work properly, all the Fortran functions in BLAS and LAPACK were first wrapped as subroutines (functions without return values) at the Fortran level.
 
-.. code-block:: Fortran
+.. code-block:: fortran
 
    c     myffunc.f
    c     The function to be exported.
@@ -173,7 +173,7 @@ In addition, for this approach to work properly, all the Fortran functions in BL
            f = x * x - x * y + 3 * y
          end function f
 
-.. code-block:: Fortran
+.. code-block:: fortran
 
    c     myffuncwrap.f
    c     A subroutine wrapper for the function.
