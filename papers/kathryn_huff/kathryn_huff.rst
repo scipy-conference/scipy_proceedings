@@ -9,7 +9,7 @@ PyRK: A Python Package For Nuclear Reactor Kinetics
 .. class:: abstract
 
    In this work, a new python package, PyRK (Python for Reactor Kinetics), is
-   introduced and demonstrated.  PyRK has been designed to simulate, in zero
+   introduced.  PyRK has been designed to simulate, in zero
    dimensions, the transient, coupled, thermal-hydraulics and neutronics of
    time-dependent behavior in nuclear reactors. PyRK is intended for analysis
    of many commonly studied transient scenarios including normal reactor
@@ -19,8 +19,7 @@ PyRK: A Python Package For Nuclear Reactor Kinetics
    ecosystem. For additional ease of use, it employes an object-oriented data
    model, allowing nuclear engineers to rapidly prototype nuclear reactor
    control and safety systems in the context of their novel nuclear reactor
-   designs. An application of PyRK, capturing the evolution of an accident
-   scenario in a novel reactor design, is demonstrated.
+   designs.
 
 
 .. class:: keywords
@@ -55,10 +54,7 @@ coupled physics at hand. Next, the implementation of the data model, simulation
 framework, and numerical solution will be described. This discussion will
 include the use, in PyRK, of many parts of the scientific python software
 ecosystem: NumPy for array manipulation, SciPy for ODE and PDE solvers, nose
-for testing, distutils for packaging, Pint for unit-checking, and Sphinx for
-documentation. Finally, this paper conclude with a demonstration of accident
-simulations conducted in the context of the Pebble-Bed, Fluoride-Salt-Cooled,
-High-Temperature Reactor \cite{andreades_technical_2014}.
+for testing, Pint for unit-checking, Sphinx for documentation, and matplolib for plotting.
 
 
 Background
@@ -135,7 +131,21 @@ The two physics are coupled by the notion of reactivity, which is related to
 the probility of fission due to material properties. The temperature and
 density of materials can increase or decrease this probability, which directly
 impacts the neutron production and destruction rates and therefore, the reactor
-power. TODO, this bit is badly writ.
+power. The simplest form of the equations dictating this feedback are:
+
+
+.. math::
+   :align:
+
+   \rho(t) &= \rho_0 + \rho_f(t) + \rho_{ext}
+   \intertext{where}
+   \rho(t) &= \mbox{total reactivity}\\
+   \rho_f(t) &= \mbox{reactivity from feedback}\\
+   \rho_{ext}(t) &= \mbox{external reactivity insertion}
+   \intertext{and where}
+   \rho_f(t) &= \alpha_i\frac{\delta T_i}{\delta t}\\
+   T_i &= \mbox{temperature of component i}\\
+   \alpha_i &= \mbox{temperature reactivity coefficient of i}.
 
 
 The PRKE
