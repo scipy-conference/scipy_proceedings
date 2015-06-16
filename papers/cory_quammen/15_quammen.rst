@@ -451,19 +451,35 @@ in ``paraview.simple`` functions is reduced to
 Python State Files
 ~~~~~~~~~~~~~~~~~~
 
-While Python traces record a series of events, another concept
-ParaView supports is saving the current state of data, filters, and
+ParaView is able to  supports saving the current state of data, filters, and
 rendering parameters to a Python source file that, when executed,
 recreates the currrent state in ParaView. The Python state file is
-defined in terms of ``paraview.simple`` module functions.
+generated in terms of ``paraview.simple`` module functions.
 
 Python Tracing
 ~~~~~~~~~~~~~~
 
-* Live tracing of work
-* ParaView application is instrumented to record events to Python trace
-* Useful to generate scripts of repetitive actions
-* Useful for training
+In addition to saving a snapshot of ParaView's state, live tracing of
+user interactions with the ParaView user interface is also supported.
+Each time a user performs an interaction that modifies ParaView's
+state, Python code is generated that captures the event. This is
+implemented via instrumenting the ParaView application at event
+handlers. The tracing mechanism can record either the entire state of
+proxies or just modifications of state to non-default values to reduce
+the trace size. It is also possible to show the trace code as it is
+being generating, which can be a useful way to learn Python scripting
+in ParaView.
+
+One of ParaView's strenghts is the ability to connect data sources and
+filters together into a workflow to perform some action. For example,
+in scientific computing it is not uncommon to convert one file format
+to another. If ParaView can read the source file format and write the
+desitnation file format, it is easy to perform the conversion manually
+with the ParaView user interface. For a large list of files, though, a
+more automated approach is useful. The Python tracing mechanism
+provides a way to generate a conversion script by performing actions in
+the user interface, generating a trace, and then modifying the trace to
+apply to a series of files.
 
 Python Programmable Source
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
