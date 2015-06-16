@@ -381,7 +381,7 @@ Real-Time Signal Processing
 In the real-time signal processing course C-code is written for an embedded processor. In this case the processor
 is an ARM Cortex-M4. The objective of this case study is to implement an equal-ripple lowpass filter of prescribed
 amplitude response specifications. Python (`scipy.signal`) is used to design the filter and obtain the filter
-coefficients in `float64` precision. The processor is working with `int16` precision so once the filter is design
+coefficients in `float64` precision. The processor is working with `int16` precision so once the filter is designed
 the coefficients are scaled and rounded to 16 bit signed integers as shown in Fig. :ref:`fig5`. The fixed-point filter
 coefficients are written to a C header file using a custom function defined in the notebook (not shown here however).
 
@@ -392,8 +392,10 @@ coefficients are written to a C header file using a custom function defined in t
 
    Designing an equal-ripple lowpass filter using `scipy.signal.remez` for real-time operation. :label:`fig5`
 
+
+
 The filter frequency response magnitude is obtained using a noise source to drive the filter input (first passing
-through an analog-to-digital converter) and then filter output (following digital-to-analog conversion) is processed
+through an analog-to-digital converter) and then the filter output (following digital-to-analog conversion) is processed
 by instrumentation to obtain a spectral estimate. The spectrum estimate corresponds to the filter frequency response.
 The measured frequency reesponse is imported into the notebook using `loadtxt`. Fig. :ref:`fig6` compares the
 theoretical frequency response, including quantization errors, with the measured. The results are impressive, and the
