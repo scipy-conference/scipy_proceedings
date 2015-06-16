@@ -63,7 +63,7 @@ VisPy is a scientific visualization library based on OpenGL. Its primary purpose
 VisPy's Architecture
 --------------------
 
-VisPy's functionality is divided into a layered architecture, with each new layer providing higher-level primitives. The top layers provide a and powerful system for quickly and easily visualizing data, while the lower layers provide greater flexibility and control over OpenGL's features.
+VisPy's functionality is divided into a layered architecture, with each new layer providing higher-level primitives. The top layers provide a powerful system for quickly and easily visualizing data, whereas the lower layers provide greater flexibility and control over OpenGL's features.
 
 
 Layer 1: Object-Oriented GL
