@@ -283,27 +283,22 @@ Each of these classes will be discussed in detail in this section.
 SimInfo
 ********
 
-PyRK uses a context pattern, by passing around the simulation information
-encapsulated in a SimInfo object. This class keeps track of the neutronics
-system, the thermal hydraulics system (THSystem, comprised of THComponents)
+PyRK has implemented a casual context manager pattern by encapsulating
+simulation information in a SimInfo object. This class keeps track of the neutronics
+system and its data, the thermal hydraulics system (THSystem) and its
+components (THComponents), as well as timing and other simulation-wide
+parameters.
 
-A simulation is started from the command line, using argparse for argument
-parsing.
-
-
-The input file is a python file holding parameters describing the
-SimulationInfo singleton.
-
-However, a more robust solution is anticipated for future versions of the code,
-relying on a json input file rather than python, for more robust validation
-options.
-
+In particular, the SimInfo object is responsible for capturing the information
+conveyed in the input file.  The input file is a python file holding parameters
+specific to the reactor design and transient scenario. However, a more robust
+solution is anticipated for future versions of the code, relying on a json
+input file rather than python, for more robust validation options.
 
 The current output is a plain text log of the input, runtime messages, and the
 solution matrix. The driver automatically generates a number of plots.  However,
 a more robust solution is anticipated for v0.2, relying on an output database
 backend in hdf5, via the pytables package.
-
 
 
 Neutronics Class
@@ -338,6 +333,11 @@ THComponent
 The THSystem class is made up of THComponent objects, linked together at
 runtime by interfaces defined in the input class.
 
+Object-Oriented Simulation Model
+---------------------------------
+
+The world is made of objects, so an object-oriented data model provides the
+most intuitive user experience in a simulation environment [citationneeded]_.
 
 Quality Assurance
 -----------------
@@ -398,12 +398,10 @@ those member variables, the input values are converted to SI using Pint.
 
 The above code employs a validation utility written for PyRK and used
 throughout the code to confirm (at runtime) types, units, and valid ranges for
-parameters of questionable validity.
-
-
-Those validators are simple, but versatile, and in combination with the Pint
-package, provide a robust environment for users to experiment with parameters
-in the safe confines of dimensional accuracy.
+parameters of questionable validity.  Those validators are simple, but
+versatile, and in combination with the Pint package, provide a robust
+environment for users to experiment with parameters in the safe confines of
+dimensional accuracy.
 
 
 Conclusions and Future Work
@@ -441,3 +439,5 @@ References
 .. [github]
 
 .. [sphinx]
+
+.. [citationneeded]
