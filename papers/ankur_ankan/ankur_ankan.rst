@@ -1,4 +1,4 @@
-:author: Ankur Ankan
+﻿:author: Ankur Ankan
 :email: ankurankan@gmail.com
 
 :author: Abinash Panda
@@ -10,31 +10,64 @@ pgmpy: Probabilistic Graphical Models using Python
 
 .. class:: abstract
 
-   Probabilistic Graphical Models is a probabilistic technique in machine learning which 
-   allows us to represent the joint distribution over the random variables in a compactly 
-   and do inference over the model keeping the computational costs low.
+   Probabilistic Graphical Models (PGM) is a technique of compactly representing   
+   a joint distribution by exploiting dependencies between the random variables.     
+   It also allows us to do inference on joint distributions in a computationally 
+   cheaper way than the traditional methods. PGMs are widely used in the field 
+   of speech recognition, information extraction, image segmentation, modelling 
+   gene regulatory networks. 
+   
+   pgmpy is a python library for working with graphical models. It allows the 
+   user to create their own models and answer inference or map queries over 
+   them. pgmpy has implementation of many inference algorithms like 
+   VariableElimination, Belief Propagation etc.
 
-   pgmpy is a Python library for working with Graphical Models.
+   This paper first gives a short introduction to PGMs and various other python
+   packages available for working with PGMs. Then we discuss about creating and
+   doing inference over Bayesian Networks and Markov Networks using pgmpy.
 
 .. class:: keywords
 
-   Graphical Models, Bayesian Networks, Markov Networks
+   Graphical Models, Bayesian Networks, Markov Networks, Variable Elimination
 
 Introduction
 ------------
 
-pgmpy is a Python library for working with Probabilistic Graphical Models. It gives the 
-user complete flexibility in building models which other packages do not provide. 
+Probabilistic Graphical Models is a technique of representing Joint
+Distributions over random variables in a compact way by exploiting the 
+dependencies between the random variables. PGMs use a network structure and some 
+parameters to represent the joint distribution. The network structure is used to
+encode the relationships between the random variables. There are mainly two 
+types of Graphical Models: Bayesian Networks and Markov Networks.
+
+Bayesian Network: A Bayesian Network consists of a directed graph and a 
+conditional distribution associated with each of the random variables. A 
+Bayesian network is used mostly when there is a causal relationship between the
+random variables. An example of a Bayesian Network representing a student taking some course is shown in Fig :ref:'bayesian'.
+
+Markov Network: A Markov Network consists of an undirected graph and a few 
+factors are associated with it. Unlike in the case of Bayesian network, a factor
+does not represent the probabilities of variables in the network. Rather it represents how much is a state of a random variable likely to agree to the state 
+of the other random variable. An example of 4 friends A, B, C, D agreeing to
+some concept is shown in Fig :ref:'markov'.
+
+There are numerous packages available in Python for working with graphical 
+models but most of them are focused towards some special case and doesn't 
+give complete freedom to the user. ** Give some examples of some packages **.
+pgmpy tries to be a complete package for working with graphical models and gives 
+the user full control on designing the model. Also pgmpy provides easy extensibility and the user can write his own inference algorithms or elimination 
+orders without actually looking at the source code.
+
 
 Getting Source Code and Installing
 ----------------------------------
-pgmpy is hosted on github. So, it can be simply cloned and installed::
+pgmpy is released under MIT Licence and is hosted on github. We can simply clone the repository and install it::
 
     git clone https://github.com/pgmpy/pgmpy
     cd pgmpy
     [sudo] python3 setup.py install
 
-Dependencies: pgmpy runs only on python3 and needs networkx, numpy.
+Dependencies: pgmpy runs only on python3 and is dependent on networkx, numpy and scipy.
 
 Creating Bayesian Models using pgmpy
 ------------------------------------
@@ -59,6 +92,7 @@ We also see that the network is parameterized using Conditional Probability Tabl
 Let's take a simple example of a table to show how to represent CPTs using pgmpy.
 
 .. table:: Conditional Probability Table. :label:'CPT'
+   
    +-------------------+--------------------------+---------------------+
    | Intelligence (I)  |           i0             |          i1         |
    +-------------------+------------+-------------+-----------+---------+
@@ -147,5 +181,5 @@ and predict:
 Conclusion
 ----------
 
-Refernces
----------
+References
+----------
