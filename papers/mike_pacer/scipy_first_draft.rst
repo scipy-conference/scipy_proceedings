@@ -1,8 +1,6 @@
 :author: Mike Pacer
 :email: mpacer@berkeley.edu
-
 :institution: University of California at Berkeley
-
 :bibliography: myBibliography
 
 .. :video: http://www.youtube.com/watch?v=dhRUe-gz690
