@@ -157,8 +157,23 @@ decision depth. This gives students insight into the operation of the Viterbi al
     'trellis_branches', 'trellis_nodes',
     'trellis_paths']
 
+Besides the class ``fec_conv``, this module also contains functions for computing coding error probability bounds using
+the *weight structure* of the code under both *hard* and *soft* branch metric distance calculations [Zie2015]_.
+The key methods found in the class ``fec_conv`` are:
+
+..  code-block:: python
+
+     Class: fec_conv
+     Method: viterbi_decoder
+     Method: depuncture
+     Method: conv_encoder
+     Method: bm_calc
+     Method: traceback_plot
+     Method: puncture
+     Method: trellis_plot
+
 Both the encoder and the decoder are in need of speed enhancements, perhaps using *Cython*. An example of using the
-class ``fec_conv`` will be presented in the Case Studies section.
+class ``fec_conv`` can be found in the Case Studies section.
 
 A fourth module, ``synchronization.py``, was developed while teaching a phase-locked loops course summer 2014. This
 module supplies simulation functions for a basic phase-locked loop and both carrier and symbol synchronization
@@ -497,11 +512,11 @@ Perhaps we want to end off with a quote by Lao Tse [#]_:
 
 References
 ----------
-.. [Wic2013] M. Wickert. *Signals and Systems for Dummies*,
+.. [Wic2013] M.A. Wickert. *Signals and Systems for Dummies*,
            Wiley, 2013.
 .. [Octave] ``https://en.wikipedia.org/wiki/GNU_Octave``.
+.. [Zie2015] R.E. Ziemer and W.H. Tranter *Principles of Communications*, seventh edition, Wiley, 2015.
 .. [Camtasia] ``https://en.wikipedia.org/wiki/Camtasia_ Studio``.
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
+
 
 
