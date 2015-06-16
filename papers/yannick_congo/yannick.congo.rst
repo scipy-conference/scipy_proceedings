@@ -1,5 +1,5 @@
 :author: Faical Yannick Palingwende Congo
-:email: faical.congo@nist.gov
+:email: yannick.congo@gmail.com
 :institution: Blaise Pascal University
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
@@ -11,17 +11,17 @@ Building a Cloud Service for Reproducible Simulation Management
 .. class:: abstract
 
    The notion of capturing each execution of a script and workflow and its
-   associated meta-data is enormously appealing and should be at the heart of any
+   associated metadata is enormously appealing and should be at the heart of any
    attempt to make scientific simulations repeatable and reproducible.
 
-   Most of the work in the litterature focus on the reproducibility requirements and the tools to acquire those meta-data. Yet, it is a great need to support the discoverabiliy of the meta-data produced and also to investigate on the content of what a reproducible simulation execution context is.
+   Most of the work in the litterature focus on the reproducibility requirements and the tools to acquire those metadata. Yet, it is a great need to support the discoverabiliy of the metadata produced and also to investigate on the content of what a reproducible simulation execution context is.
 
    In this paper we propose our investigation results into defining a reproducibility
-   assessable record and the cloud infrastructure to support it. A use case example with sumata and docker is provided.
+   assessable record and the cloud infrastructure to support it. A use case example with sumatra and docker is provided.
 
 .. class:: keywords
 
-   meta-data, simulations, repeatable, reproducible, sumatra, cloud.
+   metadata, simulations, repeatable, reproducible, sumatra, cloud.
 
 Introduction
 ------------
@@ -31,9 +31,9 @@ advancement. Either done manually or automatically; reusability, refutability
 and discovery are the key proprieties that make research results repeatable
 and reproducible.
 
-While most of the litterature focus on the terms [SlezakWaczulikova]_ (repeatable,
+While most of the litterature focus on the terms [SlezakWaczulikova2010]_ (repeatable,
 reproducible and replicable) and the technics of recording the simulation
-meta-data [Oinn2000]_ (workflow, library, event control) [GuoCDE2011]_, there are less
+metadata [Oinn2000]_ (workflow, library, event control) [GuoCDE2011]_, there are less
 contributions into cloud infrastructures to support these data. We think that
 reproducibility at its current state is lacking a data driven presence in the
 cloud. Version control is the proper example that we can refer to. Github [MacDonnell2012]_ and
@@ -43,7 +43,7 @@ because of their exposure on github.
 
 In this paper we are proposing a cloud platform to support data driven
 simulation managment tools. We will discuss on the structure of a 
-reproducibility assessable record structure. Then we will present the propose
+reproducibility assessable record structure. Then we will present the proposed
 Data driven cloud service. And finally show an integration use case with the
 Data driven simulation management tool Sumatra [DavidsonSumatra2010]_.
 
@@ -70,11 +70,11 @@ repeat a simulation, the obvious variable components are: the dependencies and
 the hosting system. We think of them as a cause of uncertainty in altering the
 output file when the source code and inputs are still the same. To asses a
 reproducibility property on a simulation as repeated, reproduced,
-irrepeatable, irreproducible and unknown we classified scenarios in Table
+non-repeatable, non-reproducible and unknown we classified scenarios in Table
 :ref:`assesstable`. It consists of taking The source code, inputs and outputs
 values of records and assessing the reproducibility case on the reference
-record. We mean in this table by Same that the content is identical and by
-Different that the content varied.
+record. We mean in this table by same that the content is identical and by
+different that the content varied.
 
 .. raw:: latex
 
@@ -88,7 +88,7 @@ Different that the content varied.
      \hline
      Same  & Repeatable & Reproducible & Reproducible & Reproducible\tabularnewline
      \hline
-     Different & Irrepeatable & Unknown & Unknown & Unknown\tabularnewline
+     Different & non-repeatable & Unknown & Unknown & Unknown\tabularnewline
      \hline
      \end{longtable*}
 
@@ -111,7 +111,7 @@ necessary to deliver a reproducible simulation record storage. We show here a
 project model in Table :ref:`projecttable` which most interesting field is
 *history*.
 
-.. table:: Simulation Meta-Data Project Model. :label:`projecttable`
+.. table:: Simulation metadata Project Model. :label:`projecttable`
 
    +--------------+-------------------------------------------+
    | Fields       | Descriptions                              |
@@ -136,7 +136,7 @@ project model in Table :ref:`projecttable` which most interesting field is
    +--------------+-------------------------------------------+
    | repeadegree  | double: degree of repeatability.          |
    +--------------+-------------------------------------------+
-   | irreprodegree| double: degree of irreproducibility       |
+   | non-reprodegree| double: degree of non-reproducibility   |
    +--------------+-------------------------------------------+
    | irrepeadegree| double: container images list.            |
    +--------------+-------------------------------------------+
@@ -148,15 +148,15 @@ In the first case, the container can be setup directly from the source code of
 the simulation. In the second case, the container can be built from an empty
 directory from which, the source code of the simulation will be pulled into.
 In the second case, pulling down the source code will be considered as a step
-in the image building process. This paper will provide examples of the first
-case and we recommand as a remote source code pull can induce some
-uncertanties. The last four properties are the degree of reproducibility
-features. They are computed from all the records done in the project. We will
-explain later what they mean, how we compute them and why they are important.
-We also propose a container model that is as simple as shown in the Table
-:ref:`containertable`.
+in the image building process. This paper will provide an example of the first
+case and we recommand this case because using a remote source code pull can
+create some uncertanties regarding untracted changes on the source code. The
+last four properties are the degree of reproducibility features. They are
+computed from all the records done in the project. We will explain later what
+they mean, how we compute them and why they are important. We also propose a
+container model that is as simple as shown in the Table :ref:`containertable`.
 
-.. table:: Simulation Meta-Data Container Model. :label:`containertable`
+.. table:: Simulation metadata Container Model. :label:`containertable`
 
    +--------------+-------------------------------------------+
    | Fields       | Descriptions                              |
@@ -171,10 +171,10 @@ We also propose a container model that is as simple as shown in the Table
 Based on the project's model in Table :ref:`assesstable`, we came up with a
 record model shown in Table :ref:`recordtable`. A record is related to a
 project but also has to reference the image that it has been executed from.
-Thus the latest records from the same project source code e are done from the
+Thus the latest records from the same project source code are done from the
 latest project history image.
 
-.. table:: Simulation Meta-Data Record Model. :label:`recordtable`
+.. table:: Simulation metadata Record Model. :label:`recordtable`
 
    +--------------+-------------------------------------------+
    | Fields       | Descriptions                              |
@@ -198,39 +198,42 @@ latest project history image.
    | image        | container: reference to the container.    |
    +--------------+-------------------------------------------+
 
-Differently from the project reproducibilty features assessments based on its four
-properties (reprod, repeat, irreprod, irrepeat), a record reproducibility
-assesment is done through a differenciation process. A differentiation process
-is a procedure that allows the resolution of a record reproducibilty feature
-compared to another. In this case, the two records are considered being from
-simulations that try to achieve the same goals. It is quite hard to assess at
-a high level standpoint if two records are the same because it will most
-likely be a domain related decision that prooves that both records support the
-same claims. We can list three ways of tackling this problem. In the first
-one, the records needs to be compared on a specific known metric. This metric
-can either be propose by the targeted record owner or the requesting record
-owner. If it is comming from the targeted record owner it can be automated as
-it will give a precise answer to the differenciation with the requesting
-record. If it is comming from the other side then the targeted request owner
-need to validate the differenciation and give a final status. In the second
-one, the records need to follow a standard structure depending on the domain
-of simulation. Thus, based on standard differenciation methods in that domain
-(error scalling, rounding, ...), the  differenciation can be done
-automatically. These previous approaches are still to investigate into. We focus here in another, practical  and not optimal approach that is a manual and visual differenciation based on different methods that will be added
-progressively. Thus, the differenciation will most likely be based on the
-targeted record owner domain knowledge and visual assessment. 
+Differently from the project reproducibilty features assessments based on its
+four properties (reprod, repeat, non-reprod, non-repeat), a record
+reproducibility assesment is done through a differenciation process. A
+differentiation process is a procedure that allows the resolution of a record
+reproducibilty feature compared to another. In this case, the two records are
+considered being from simulations that try to achieve the same goals. It is
+quite hard to assess at a high level standpoint if two records are the same
+because it will most likely be a domain related decision that prooves that
+both records support the same claims. We can list three ways of tackling this
+problem. In the first one, the records needs to be compared on a specific
+known metric. This metric can either be proposed by the targeted record owner
+or the requesting record owner. If it is coming from the targeted record
+owner it can be automated as it will give a precise answer to the
+differenciation with the requesting record. If it is comming from the other
+side then the targeted request owner needs to validate the differenciation and
+gives a final status. In the second one, the records need to follow a standard
+structure depending on the domain of simulation. Thus, based on standard
+differenciation methods in that domain (error scalling, rounding, ...), the
+differenciation can be done automatically. These previous approaches are still
+to investigate into. We focus here in another, practical  and not optimal
+approach that is a manual and visual differenciation based on different
+methods that will be added progressively. Thus, the differenciation will most
+likely be based on the targeted record owner domain knowledge and visual
+assessment.
 
 
 A differenciation request or shortly 'diff request' is the 'contract' on which
-the mechanism described before runs. A requesting record owner ask a targeted
+the mechanism described before runs. A requesting record owner asks a targeted
 record owner to validate a record reproducibility proposal from him. In this
-mechanism, the requesting party has to define on what the assessement is base:
-repeated, reproduced, irreproduced and irrepeated. This party also has to
-define the base differenciation methode on which the assessement has been
-made: default, visual, custom. These methodes are based on the third approach cited
+mechanism, the requesting party has to define on what the assessement is based:
+repeated, reproduced, non-reproduced and non-repeated. This party also has to
+define the base differenciation method on which the assessement has been
+made: default, visual, custom. These methods are based on the third approach cited
 before. A default diff is a leveinstein based diff on the text  data. A visual
 one is a knowledge based assessment and custom is left to the requester to
-define and propse to the targeted. The targeted record owner has then to
+define and propose to the targeted. The targeted record owner has then to
 answer to the request by setting after verification, the status of the request
 to agreed or denied. By default the status is at proposed. The table
 :ref:`requesttable` represents the fields that a diff request should contain.
@@ -252,7 +255,7 @@ relationship of reproducibility assessment between two records.
    +--------------+-------------------------------------------+
    | diff         | dictionary: method of differenciation.    |
    +--------------+-------------------------------------------+
-   | proposition  | string: repeated,reproduced,irrepeated,...|
+   | proposition  | string: repeated,reproduced,non-repeated,.|
    +--------------+-------------------------------------------+
    | status       | string: agreed,denied,proposed.           |
    +--------------+-------------------------------------------+
@@ -260,9 +263,9 @@ relationship of reproducibility assessment between two records.
 
 In a database of records, the graph of reproduciblity assessment relationships
 can give interesting information about a record like: the number of repeated,
-reproduced, irreproduced, irrepeated records. Then an extraction from the
-variables can allow the determination of source of irrepeatability and
-irreproducibility. It is also interesting to see at a project level that all
+reproduced, non-reproduced, non-repeated records. Then an extraction from the
+variables can allow the determination of source of non-repeatability and
+non-reproducibility. It is also interesting to see at a project level that all
 the records refering to it will allow the determination of the four type of
 reproducibility features assessment  degrees:
 
@@ -279,12 +282,12 @@ reproducibility features assessment  degrees:
 .. math::
    :label: irrepeadegree
    
-   Irrepeatability(Project) = \frac{sum_{i=1}^{i=NIrrepeat} isRecord_i(Project)}{sum_{i=1}^{i=NTotal} isRecord_i(Project)}
+   non-repeatability(Project) = \frac{sum_{i=1}^{i=Nnon-repeat} isRecord_i(Project)}{sum_{i=1}^{i=NTotal} isRecord_i(Project)}
 
 .. math::
-   :label: irreprodegree
+   :label: non-reprodegree
    
-   Irreproducibility(Project) = \frac{sum_{i=1}^{i=NIrreprod} isRecord_i(Project)}{sum_{i=1}^{i=NTotal} isRecord_i(Project)}
+   non-reproducibility(Project) = \frac{sum_{i=1}^{i=Nnon-reprod} isRecord_i(Project)}{sum_{i=1}^{i=NTotal} isRecord_i(Project)}
 
 Where:
 
@@ -294,8 +297,8 @@ Where:
       \item $NRepeat$ is the number of repeated records.
       \item $isRecord_i$ tests if the record $i$ belongs to Project.
       \item $NReprod$ is the number to total records.
-      \item $NIrrepeat$ the number of reproduced records.
-      \item $NIrreprod$ the number of irrepeatable records.
+      \item $Nnon-repeat$ the number of reproduced records.
+      \item $Nnon-reprod$ the number of non-repeatable records.
     \end{itemize}
 
 
@@ -309,9 +312,9 @@ Data Driven Cloud Service Platform
 
    Platform Architecture. :label:`paltformfig`
 
-To support simulation management tools meta-data, we are proposing a cloud
+To support simulation management tools metadata, we are proposing a cloud
 platform that implements the reproducible assessable record described
-previously. This platform that has two sides. As shown in the Figure
+previously. This platform has two sides. As shown in the Figure
 :ref:`paltformfig`, a REST API access and a Web Frontend access. All those two
 accesses communicate at the most end with a MongoDB database [#]_ that
 contains: the user accounts, the projects, the records, the containers and the
@@ -323,8 +326,8 @@ Simulation management tool from the executing machine. It is a token based
 credential access that can be activated and renewed only from the Web Frontend
 access. The REST API allows the Simulation Management tools to push, pull and
 search for projects and records. The REST API documentation will be available
-publically and will present the endpoints, HTTP methods and the mendatory fields
-in the structured JSON[#]_ format envelope.
+publically and will present the endpoints, HTTP methods and the mandatory fields
+in the structured JSON[#]_ format request content.
 
 The Web Frontend service on the other end is controlled by the Cloud service.
 The Cloud service is accessible only by the Web Frontend. Thus when the user
@@ -341,7 +344,7 @@ are automatically created. On the Web side this is still possible but it is
 a manual process. Differenciation requests on the other end can only be created
 and resolved from the Web Frontend access.
 
-A Simulation tool that needs to interact with our platform has to follow the 
+A Simulation tool that need to interact with our platform has to follow the 
 endpoints descriptions in Tables :ref:`projendtable` and :ref:`recoendtable`.
 Since the differenciation request handling is not accessible from the API,
 there is no endpoint for that.
@@ -354,7 +357,7 @@ there is no endpoint for that.
      \hline
      \multirow{2}{*}{Endpoint} & \multicolumn{2}{c|}{Content}\tabularnewline
      \cline{2-3}
-      & Methode & Envelope\tabularnewline
+      & Method & Envelope\tabularnewline
      \hline
      $/api/v1/<api-token>/project/pull/<project-name>$  & GET & null\tabularnewline
      \hline
@@ -375,7 +378,7 @@ there is no endpoint for that.
      \hline
      \multirow{2}{*}{Endpoint} & \multicolumn{2}{c|}{Content}\tabularnewline
      \cline{2-3}
-      & Methode & Envelope\tabularnewline
+      & Method & Envelope\tabularnewline
      \hline
      \hline
      $/api/v1/<api-token>/record/push/<project-name>$ & POST & program, inputs, outputs, dependencies, system and custom\tabularnewline
@@ -399,7 +402,7 @@ Integration with Sumatra and Use Case
 
 Sumatra is an open source event based simulation management tool.
 To integrate our cloud API into sumatra we have to briefly investigate
-how Sumatra store the meta-data that it records.
+how Sumatra stores the metadata that it records.
 
 To store records about simulations, Sumatra implements record stores. It also
 has data stores that allows the storage of the simulation results. As of today,
@@ -413,7 +416,7 @@ Sumatra provides three data storage options:
       \item MirroredFileSystemDataStore: It provides methods for accessing files written to a local file system then mirrored to a web server.
     \end{itemize}
 
-Sumatra also provides three ways of recording the simulation meta-data:
+Sumatra also provides three ways of recording the simulation metadata:
 
 .. raw:: latex
 
@@ -423,7 +426,7 @@ Sumatra also provides three ways of recording the simulation meta-data:
       \item HttpRecordStore: It provides the Http based record storage.
     \end{itemize}
 
-Regarding the visualization of the meta-data from a simulation, Sumatra
+Regarding the visualization of the metadata from a simulation, Sumatra
 provides a tool namely smtweb. It is a django local web app that provides a
 web view to the project folder that it has been run from within.
 For a simulation management tool like Sumatra there are many advantages in
@@ -442,7 +445,7 @@ As presented, Sumatra already has a http based record store available. Yet it
 does not suite the requirements of our cloud platform. Firstly because there
 is no automatic mechanism to push the data in the cloud. The
 MirroredFileSystemDataStore has to be fully done by user. Secondly we think
-there is need for more atomicity. In fact, Sumatra gather the meta-data about
+there is need for more atomicity. In fact, Sumatra gather the metadata about
 the execution and store it at the end of the execution, which can have many
 disavantages generaly when the simulation process dies or the sumatra instance
 dies.
@@ -522,7 +525,7 @@ Conclusion and Perspective
 --------------------------
 
 Scientfic computational experiments through simulation is getting more support
-to ehnance the reproducibility of research results. Execution meta-data
+to ehnance the reproducibility of research results. Execution metadata
 recording systems through event control, workflows and libraries are the
 approaches that are investigated and quite a good number of software and tools
 implement them. Yet the aspect of  discoverability of these results that are
@@ -534,7 +537,7 @@ case with Sumatra and explained how beneficial and useful it is for a Sumatra
 user to link our cloud api account to the  Sumatra tool. This platform main
 focus is to provide standard and generic ways for scientists to make some
 differenciation procedures that will allow them to assess if a simulation is
-repeatable, reproducible, irrepeatable, irreproducible or if its an ungoing
+repeatable, reproducible, non-repeatable, non-reproducible or if its an ungoing
 research. Some metrics have been provided to determine the degree of those
 features from the atomic records during the executions of the simulation. A
 differenciation request as been provided and is a sort of hand shake between
@@ -558,7 +561,7 @@ environment.
 References
 ----------
 
-.. [SlezakWaczulikova] P. Slezák and I. Waczulíková. *Reproducibility and Repeatability*,
+.. [SlezakWaczulikova2010] P. Slezák and I. Waczulíková. *Reproducibility and Repeatability*,
         Comenius University, July 2010.
 
 .. [Oinn2000] Tom Oinn et al. *Taverna: Lessons in creating a workflow environment for the life sciences*, 
