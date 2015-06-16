@@ -8,15 +8,19 @@ PyRK: A Python Package For Nuclear Reactor Kinetics
 
 .. class:: abstract
 
-   In this work, a new python package, PyRK (Python for Reactor Kinetics), is introduced and demonstrated.  PyRK has been
-   designed to simulate, in zero dimensions, the transient, coupled, thermal-hydraulics and neutronics of time-dependent behavior in nuclear reactors. PyRK is intended for analysis of many commonly studied transient scenarios including normal reactor startup and
-   shutdown as well as abnormal scenarios including Beyond Design Basis Events
-   (BDBEs) such as Accident Transients Without Scram (ATWS). This package employs various toolsallows
-   nuclear engineers to rapidly prototype nuclear reactor control and safety
-   systems in the context of their novel nuclear reactor designs. One application
-   of this package presented here captures the evolution of accident scenarios in
-   a novel reactor design, the Pebble-Bed, Fluoride-Salt-Cooled, High- Temperature
-   Reactor.
+   In this work, a new python package, PyRK (Python for Reactor Kinetics), is
+   introduced and demonstrated.  PyRK has been designed to simulate, in zero
+   dimensions, the transient, coupled, thermal-hydraulics and neutronics of
+   time-dependent behavior in nuclear reactors. PyRK is intended for analysis
+   of many commonly studied transient scenarios including normal reactor
+   startup and shutdown as well as abnormal scenarios including Beyond Design
+   Basis Events (BDBEs) such as Accident Transients Without Scram (ATWS). For
+   robustness, this package employs various tools within the scientific python
+   ecosystem. For additional ease of use, it employes an object-oriented data
+   model, allowing nuclear engineers to rapidly prototype nuclear reactor
+   control and safety systems in the context of their novel nuclear reactor
+   designs. An application of PyRK, capturing the evolution of an accident
+   scenario in a novel reactor design, is demonstrated.
 
 
 .. class:: keywords
@@ -25,37 +29,25 @@ PyRK: A Python Package For Nuclear Reactor Kinetics
 
 Introduction
 ------------
-In this work, PyRK, a new python package for nuclear reactor kinetics, is
-introduced and demonstrated. PyRK (Python for Reactor Kinetics,
-\cite{huff_pyrk:_2015}) has been designed for coupled thermal-hydraulics and
-neutronics for 0-dimensional, transient, nuclear reactor analysis.
-PyRK is intended for analysis of many commonly studied transient scenarios
-including normal reactor startup and shutdown as well as abnormal scenarios
+
+Transient analysis is fundamental to nuclear reactor design. That is,
+time-dependent fluctuations in neutron population, fluid flow, and heat transfer are
+essential to understanding the performance and safety of a reactor. Such
+_transients_ include normal reactor startup and shutdown as well as abnormal scenarios
 including Beyond Design Basis Events (BDBEs) such as Accident Transients
-Without Scram (ATWS). This package allows nuclear engineers to rapidly
-prototype nuclear reactor control and safety systems in the context of their
-novel nuclear reactor designs. The demonstration of this package presented here
-captures the evolution of accident scenarios in a novel reactor design, the
-Pebble-Bed, Fluoride-Salt-Cooled, High-Temperature Reactor
-\cite{andreades_technical_2014}.
+Without Scram (ATWS). However, no open source tool currently exists for
+reactor transient analysis. To fill this gap, PyRK (Python for Reactor
+Kinetics)[Huff2015]_, a new python package for nuclear reactor kinetics was
+created.  No other open source tool exists for this application, so PyRK is the
+first to offer an open source tool designed to conduct:
 
-Fundamentally, such transient nuclear reactor analyses must characterize the
-relationship between neutron population and temperature, which are coupled
-together by reactivity. That is, any change in power of a reactor can be
-related to a quantity known as the reactivity, :math:`\rho` , which characterizes the
-offset of the nuclear reactor from criticality; In all power reactors, the
-scalar flux of neutrons determines the reactor’s power. The reactor power, in
-turn, affects the temperature. Reactivity feedback then results, due the
-temperature dependence of geometry, material densities, the neutron spectrum,
-and microscopic cross sections \cite{bell_nuclear_1970}.
+- time-dependent,
+- lumped parameter thermal-hydraulics,
+- coupled with neutron kinetics,
+- in 0-dimensions,
+- for nuclear reactor analysis,
+- in an object-oriented context.
 
-One common method for approaching these transient simulations is a
-zero-dimensional approximation which results in differential equations called
-the Point Reactor Kinetics Equations (PRKE). PyRK provides a simulation
-interface that drives the solution of these equations in a modular, reactor
-design agnostic manner. In particular, PyRK provides an object oriented data
-model for generically representing a nuclear reactor system provides
-interchangeable solution methods to these equations.
 
 For background, this paper will introduce necessary concepts for understanding
 the PyRK model and will describe the differential equations representing the
@@ -72,9 +64,39 @@ High-Temperature Reactor \cite{andreades_technical_2014}.
 Background
 ----------
 
+Fundamentally, nuclear reactor transient analyses must characterize the
+relationship between neutron population and temperature. These two parameters are coupled
+together by reactivity, :math:`\rho` , which characterizes the departure of the
+nuclear reactor from criticality:
+
+.. math::
+   :type: align
+   :label: reactivity
+
+   \rho &= \frac{k-1}{k}
+   \intertext{where}
+   \rho &= \mbox{reactivity}\\
+   k &= \mbox{multiplication factor}
+
+
+
+In all power reactors, the scalar flux of neutrons determines the reactor's power. The reactor power, in
+turn, affects the temperature. Reactivity feedback then results, due the
+temperature dependence of geometry, material densities, the neutron spectrum,
+and microscopic cross sections [Bell1970]_.
+
+One common method for approaching these transient simulations is a
+zero-dimensional approximation which results in differential equations called
+the Point Reactor Kinetics Equations (PRKE). PyRK provides a simulation
+interface that drives the solution of these equations in a modular, reactor
+design agnostic manner. In particular, PyRK provides an object oriented data
+model for generically representing a nuclear reactor system and provides the
+capability to exchange solution methods from one simulation to another.
+
+
 The Point Reactor Kinetics Equations can only be understood in the context of
 neutronics, thermal-hydraulics, reactivity, delayed neutrons, and reactor
-control. 
+control.
 
 Neutronics
 ************
@@ -121,11 +143,11 @@ The PRKE
 The Point Reactor Kinetics Equations (PRKE) are the set of equations that
 capture neutronics and thermal hydraulics when geometry is neglected. The two
 physics are coupled primarily by reactivity, but have very different
-characteristic time scales, so the equations are quite stiff. 
+characteristic time scales, so the equations are quite stiff.
 
 .. math::
    :type: equation
-   :label: full_prke
+   :label: fullprke
 
    \frac{d}{dt}\left[
     \begin{array}{c}
@@ -193,15 +215,32 @@ characteristic time scales, so the equations are quite stiff.
       \right]
 
 
-The PRKE can be solved in numerous ways, using either loose or tight coupling.
-Operator splitting, loosely coupled in time, is a stable technique that
-neglects higher order nonlinear terms in exchange for solution stability.
-Under this approach, the system can be split clearly into a neutronics
-sub-block and a thermal-hydraulics sub-block which can be solved independently
-at each time step, combined, and solved again for the next time step.
+In the above matrix equation, the following variable definitions are used:
 
 .. math::
-   :type: eqnarray
+   :type: align
+   :label: n_data
+
+    \rho(t,&T_{fuel},T_{cool},T_{mod}, T_{refl}) = \mbox{ reactivity, [pcm]}\\
+    \beta &= \mbox{ fraction of neutrons that are delayed}\\
+    \beta_j &= \mbox{ fraction of delayed neutrons from precursor group j}\\
+    \zeta_j &= \mbox{ concentration of precursors of group j}\\
+    \lambda^{d}_j &= \mbox{ decay constant of precursor group j}\\
+    \Lambda &= \mbox{ mean generation time }\\
+    \omega_k &= \mbox{ decay heat from FP group k}\\
+    \kappa_k &= \mbox{ heat per fission for decay FP group k}\\
+    \lambda^{FP}_k &= \mbox{ decay constant for decay FP group k}
+
+The PRKE in equation :ref:`fullprke` can be solved in numerous ways, using
+either loose or tight coupling.  Operator splitting, loosely coupled in time,
+is a stable technique that neglects higher order nonlinear terms in exchange
+for solution stability.  Under this approach, the system can be split clearly
+into a neutronics sub-block and a thermal-hydraulics sub-block which can be
+solved independently at each time step, combined, and solved again for the next
+time step.
+
+.. math::
+   :type: align
    :label: os
 
    U^n &= \left[
@@ -221,203 +260,163 @@ at each time step, combined, and solved again for the next time step.
    T^{n+1} &= T^n + kf(U^*)
 
 
+PyRK Implementation
+--------------------
 
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
-Heat rransfer} focuses on the heat generation in the reactor fuel and the removal of that heat by the moderator.
+Now that the premise of the problem is clear, the implementation of the package
+can be discussed. Fundamentally,  PyRK is object oriented and modular. The
+important object classes in PyRK are:
 
-   def sum(a, b):
-       """Sum two numbers."""
+- SimInfo: Reads the input file, manages the solution matrix, Timer, and
+  communication between neutronics and thermal hydraulics.
+- Neutronics : calculates dP=dt, d!j=dt, based on dTi=dt and the external
+  reactivity insertion.
+- THSystem : manages various THComponents, facilitates their communication.
+- THComponent : Conducts lumped parameter calculation. Other thermal models can
+  inherit from it and replace it in the simulation.
+- Material : A class for defining the intensive properties of a material
+  (:math:`c_p`, :math:`\rho`, :math:`k_{th}`). Currently, subclasses include
+  Flibe, Graphite, and Kernel.
 
-       return a + b
+Each of these classes will be discussed in detail in this section.
 
-With code-highlighting:
+SimInfo
+********
+
+PyRK uses a context pattern, by passing around the simulation information
+encapsulated in a SimInfo object. This class keeps track of the neutronics
+system, the thermal hydraulics system (THSystem, comprised of THComponents)
+
+A simulation is started from the command line, using argparse for argument
+parsing.
+
+
+The input file is a python file holding parameters describing the
+SimulationInfo singleton.
+
+However, a more robust solution is anticipated for future versions of the code,
+relying on a json input file rather than python, for more robust validation
+options.
+
+
+The current output is a plain text log of the input, runtime messages, and the
+solution matrix. The driver automatically generates a number of plots.  However,
+a more robust solution is anticipated for v0.2, relying on an output database
+backend in hdf5, via the pytables package.
+
+
+
+Neutronics Class
+******************
+The neutronics class holds the first 1+j+k equations in the right hand side of
+the matrix equation in :ref:`fullprke`.
+
+Additionally, the accident scenario can be driven by an insertion of reactvity
+(e.g. due to the removal of a control rod). In PyRK, this reactivity insertion
+capability is captured in the ReactivityInsertion class, from which reactivity
+insertions can be selected and customized as in figure :ref:`figri`.
+
+.. figure:: ri.png
+
+   The reactivity insertion that can drives the PyRK simulator can be selected
+   and customized from three models. :label:`figri`
+
+
+Nuclear data encapsulating the fractions of delayed neutron precursors and
+their precursor group halflives are stored in the PrecursorData class.
+
+THSystem
+**********
+
+Each neutronic object needs a temperature. To determine that temperature,
+The neutronics class holds the first 1+j+k equations in the right hand side of
+the matrix equation in :ref:`fullprke`.
+
+THComponent
+***********
+
+The THSystem class is made up of THComponent objects, linked together at
+runtime by interfaces defined in the input class.
+
+
+Quality Assurance
+-----------------
+
+For robustness, a number of tools were used to improve robustness and
+reproducibility in this package. These include:
+
+- [github]_ : for versio control
+- [matplotlib]_ : for plotting
+- [nose]_ : for unit testing
+- [numpy]_ : for holding and manipulating arrays of floats
+- [pint]_ : for dimensional analysis and unit conversions
+- [scipy]_ : for ode solvers
+- [sphinx]_ : for automated documentation
+- [travis-ci]_ : for continuous integration
+
+Together, these tools create a functional framework for distribution and reuse.
+
+Of particular note, the Pint package (pint.readthedocs.org/en/0.6/) is
+used keeping track of units, converting between them, and throwing
+errors when unit conversions are not sane. For example, in the code below,
+the user is able to initialize the material object with :math:`k_{th}` and
+:math:`c_p` in any valid unit for those quantities. Upon initialization of
+those member variables, the input values are converted to SI using Pint.
 
 .. code-block:: python
 
-   def sum(a, b):
-       """Sum two numbers."""
+    class Material(object):
+        """This class represents a material. Its attributes
+        are material properties and behaviors."""
 
-       return a + b
+        def __init__(self, name=None,
+                     k=0*units.watt/units.meter/units.kelvin,
+                     cp=0*units.joule/units.kg/units.kelvin,
+                     dm=DensityModel()):
+            """Initalizes a material
 
-Maybe also in another language, and with line numbers:
-
-.. code-block:: c
-   :linenos:
-
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
-
-Or a snippet from the above code, starting at the correct line number:
-
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
-
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
- 
-Important Part
---------------
-
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
-
-.. math::
-
-   g(x) = \int_0^\infty f(x) dx
-
-or on multiple, aligned lines:
-
-.. math::
-   :type: eqnarray
-
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
-
-The area of a circle and volume of a sphere are given as
-
-.. math::
-   :label: circarea
-
-   A(r) = \pi r^2.
-
-.. math::
-   :label: spherevol
-
-   V(r) = \frac{4}{3} \pi r^3
-
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
-pulvinar id metus.
-
-.. [#] On the one hand, a footnote.
-.. [#] On the other hand, another footnote.
-
-.. figure:: reactivity_insertion.png
-
-   This is the caption. :label:`egfig`
-
-.. figure:: figure1.png
-   :align: center
-   :figclass: w
-
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
-
-.. figure:: figure1.png
-   :scale: 20%
-   :figclass: bht
-
-   This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top.
-   Note that for now, scale is relative to a completely arbitrary original
-   reference size which might be the original size of your image - you probably
-   have to play with it. :label:`egfig2`
-
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
-
-.. table:: This is the caption for the materials table. :label:`mtable`
-
-   +------------+----------------+
-   | Material   | Units          |
-   +============+================+
-   | Stone      | 3              |
-   +------------+----------------+
-   | Water      | 12             |
-   +------------+----------------+
-   | Cement     | :math:`\alpha` |
-   +------------+----------------+
+            :param name: The name of the component...
+            :type name: str.
+            :param k: thermal conductivity, :math:`k_{th}`
+            :type k: float, pint.unit.Quantity
+            :param cp: specific heat capacity, :math:`c_p`
+            :type cp: float, pint.unit.Quantity
+            :param dm: The density of the material
+            :type dm: DensityModel object
+            """
+            self.name = name
+            self.k = k.to('watt/meter/kelvin')
+            validation.validate_ge("k", k,
+                0*units.watt/units.meter/units.kelvin)
+            self.cp = cp.to('joule/kg/kelvin')
+            validation.validate_ge("cp", cp,
+                0*units.joule/units.kg/units.kelvin)
+            self.dm = dm
 
 
-We show the different quantities of materials required in Table
-:ref:`mtable`.
 
-
-.. The statement below shows how to adjust the width of a table.
-
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.8\linewidth}
-
-
-.. table:: This is the caption for the wide table.
-   :class: w
-
-   +--------+----+------+------+------+------+--------+
-   | This   | is |  a   | very | very | wide | table  |
-   +--------+----+------+------+------+------+--------+
-
-Unfortunately, restructuredtext can be picky about tables, so if it simply
-won't work try raw LaTeX:
-
-
-.. raw:: latex
-
-   \begin{table*}
-
-     \begin{longtable*}{|l|r|r|r|}
-     \hline
-     \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
-     \cline{2-4}
-      & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
-     \hline
-     Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
-     \hline
-     Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
-     \hline
-     Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
-     \hline
-     Percent Difference & 44\% & 41\% & 43\%\tabularnewline
-     \hline
-     \end{longtable*}
-
-     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
-
-   \end{table*}
-
-Perhaps we want to end off with a quote by Lao Tse [#]_:
-
-  *Muddy water, let stand, becomes clear.*
-
-.. [#] :math:`\mathrm{e^{-i\pi}}`
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
 
 References
 ----------
 
-.. [And14] Andreades, etc.
+.. [Andreades2014] Andreades, etc.
 
-.. [Atr03] Andreades, etc.
+.. [Huff2015] Huff
+
+.. [Bell1970] Bell and Glasstone
+
+.. [matplotlib]
+
+.. [nose]
+
+.. [numpy]
+
+.. [pint]
+
+.. [scipy]
+
+.. [travis-ci]
+
+.. [github]
+
+.. [sphinx]
