@@ -10,7 +10,7 @@ Circumventing The Linker: Using SciPy's BLAS and LAPACK Within Cython
 
    In Python, it is often said that you can code your scientific algorithms in a high level language and then optimize any performance-intensive parts with minimal modification in Cython or some other code accelerator.
    For simple algorithms that center entirely on looping and item-by-item access, this is true, but this simple idea starts to break down when optimizing code that relies heavily on calls to other libraries.
-   When code like this isn't fast enough, users may be forced to rewrite larger portions of their existing codebase in another language, change the libraries they are using, and write new interfaces between Python and their low-level language of choice.
+   When code like this isn't fast enough, users may be forced to rewrite larger portions of their existing codebase in another language, change the libraries they are using, or write new interfaces between Python and their low-level language of choice.
    To help alleviate these problems, I introduced a Cython API for BLAS and LAPACK.
 
    BLAS, LAPACK, and other libraries like them have formed the underpinnings of much of the scientific stack in Python.
@@ -33,9 +33,9 @@ Introduction
 
 Many of the primary underpinnings of the scientific Python stack rely on interfacing with lower-level languages, rather than working with code that is exclusively written in Python.
 There is a longstanding tradition of libraries and API's that mix Python, C, C++, and Fortran code in order to provide well-optimized algorithms together with simple APIs.
-SciPy, for example, is a collection of algorithms and libraries implemented in a variety of languages that have all been wrapped to provide convenient and usable APIs within Python.
+SciPy [SciPy]_, for example, is a collection of algorithms and libraries implemented in a variety of languages that have all been wrapped to provide convenient and usable APIs within Python.
 Because the need to create such extension modules is so prevalent, a variety of wrapping mechanisms have been introduced that aid in the creation of Python bindings for a given package.
-F2PY, Fwrap, Cython, SWIG, CFFI, ctypes, and several other packages have all seen extensive use in recent years.
+F2PY [F2PY]_, Fwrap, Cython [Cython]_, SWIG [SWIG]_, CFFI, ctypes, and several other packages have all seen extensive use in recent years.
 
 It is often said that, if Python isn't fast enough for a particular piece of code, getting more speed is simply a matter of writing a little extra code in a different language, exposing it to Python, and adapting the existing code to use the new external piece.
 In practice, however, moving even small parts of a larger algorithm from Python to C can prove far more challenging that we often admit.
@@ -70,16 +70,20 @@ In providing these low-level wrappers, it was simplest to follow the calling con
 
 Here's a minimal example
 
-.. code-block:: python
+.. code-block:: cython
 
    # cython: boundscheck = False
    # cython: wraparound = False
+   
    import numpy as np
    from scipy.linalg.cython_blas cimport dgemm
+   
    def test_dgemm():
        cdef:
-           double[:,:] a = np.array([[2, 3], [2, 1]], 'd', order='F')
-           double[:,:] b = np.array([[1, 4], [6, 4]], 'd', order='F')
+           double[:,:] a = np.array([[2, 3], [2, 1]],
+                                    'd', order='F')
+           double[:,:] b = np.array([[1, 4], [6, 4]],
+                                    'd', order='F')
            double[:,:] c = np.empty((2,2), order='F')
            int n = 2
            char trans = 'n'
@@ -114,30 +118,33 @@ with the corresponding header file
 
    // myfunc.h
    double f(double x, double y);
-   \end{lstlisting}
 
 This library can be compiled by running `clang -c myfunc.c -o myfunc.o`.
 
 This can be exposed at the Cython level and exported as a part of the resulting Python module by including the header in the pyx file, using the function from the C file to create either a Cython shim or a function pointer with the proper signature, and then declaring the function or function pointer in the corresponding pxd file without including the header file.
 Here's a minimal example of how to do that:
 
-.. code-block:: python
+.. code-block:: cython
 
    # cy_myfunc.pyx
-   # Use a file-level directive to link against the compiled object.
+   # Use a file-level directive to link
+   # against the compiled object.
    # distutils: extra_link_args = ['myfunc.o']
    cdef extern from 'myfunc.h':
        double f(double x, double y) nogil
-   # Declare both the external function and the Cython function as nogil so they can be
-   # without any Python operations (other than loading the module).
+   # Declare both the external function and
+   # the Cython function as nogil so they can be
+   # without any Python operations
+   # (other than loading the module).
    cdef double cy_f(double x, double y) nogil:
        return f(x, y)
 
-.. code-block:: python
+.. code-block:: cython
 
    # cy_myfunc.pxd
    # Don't include the header here.
-   # Only give the signature for the Cython-exposed version of the function.
+   # Only give the signature for the
+   # Cython-exposed version of the function.
    cdef double cy_f(double x, double y) nogil
 
 .. code-block:: python
@@ -180,7 +187,8 @@ In addition, for this approach to work properly, all the Fortran functions in BL
 .. code-block:: c
 
    // fortran_defs.h
-   // Define a macro to handle different Fortran naming conventions.
+   // Define a macro to handle different
+   // Fortran naming conventions.
    // Copied verbatim from SciPy.
    #if defined(NO_APPEND_FORTRAN)
    #if defined(UPPERCASE_FORTRAN)
@@ -200,19 +208,23 @@ In addition, for this approach to work properly, all the Fortran functions in BL
 
    // myffuncwrap.h
    #include "fortran_defs.h"
-   void F_FUNC(fwrp, FWRP)(double *out, double *x, double *y);
+   void F_FUNC(fwrp, FWRP)(double *out, double *x,
+                           double *y);
 
-.. code-block:: python
+.. code-block:: cython
 
    # cyffunc.pyx
    cdef extern from 'myffuncwrap.h':
-       void fort_f "F_FUNC(fwrp, FWRP)"(double *out, double *x, double *y) nogil
+       void fort_f "F_FUNC(fwrp, FWRP)"(double *out,
+                                        double *x,
+                                        double *y) nogil
+   
    cdef double f(double *x, double *y) nogil:
        cdef double out
        fort_f(&out, x, y)
        return out
 
-.. code-block:: python
+.. code-block:: cython
 
    # cyffunc.pxd
    cdef double f(double *x, double *y) nogil
@@ -228,16 +240,20 @@ The interoperability between NumPy's distutils package and Cython is limited, bu
    from Cython.Build import cythonize
    def configuration():
        config = Configuration()
-       config.add_library('myffunc', sources=['myffunc.f'], libraries=[])
-       config.add_library('myffuncwrap', sources=['myffuncwrap.f'],
+       config.add_library('myffunc',
+                          sources=['myffunc.f'],
+                          libraries=[])
+       config.add_library('myffuncwrap',
+                          sources=['myffuncwrap.f'],
                           libraries=['myffunc'])
-       config.add_extension('cyffunc', sources=['cyffunc.c'],
-                         libraries=['myffuncwrap'])
+       config.add_extension('cyffunc',
+                            sources=['cyffunc.c'],
+                            libraries=['myffuncwrap'])
        return config
    # Run Cython to get the needed C files.
    # Doing this separately from the setup process
-   # causes any Cython file-specific distutils directives
-   # to be ignored.
+   # causes any Cython file-specific distutils
+   # directives to be ignored.
    cythonize('cyffunc.pyx')
    setup(configuration=configuration)
 
@@ -261,7 +277,11 @@ Possible future directions for this work include using Cython's fused types to e
 
 References
 ----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
+.. [SciPy] Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux. The NumPy Array: A Structure for Efficient Numerical Computation, Computing in Science & Engineering, 13, 22-30 (2011), DOI:10.1109/MCSE.2011.37
 
+.. [Cython] Stefan Behnel, Robert Bradshaw, Craig Citro, Lisandro Dalcin, Dag Sverre Seljebotn and Kurt Smith. Cython: The Best of Both Worlds, Computing in Science and Engineering, 13, 31-39 (2011), DOI:10.1109/MCSE.2010.118
+
+.. [F2PY] Pearu Peterson. F2PY: a tool for connecting Fortran and Python programs, International Journal of Computational Science and Engineering, 4 (4), 296-305 (2009), DOI:10.1504/IJCSE.2009.029165
+
+.. [SWIG] D. M. Beazley. Automated scientific software scripting with SWIG. Future Gener. Comput. Syst. 19, 5 (July 2003), 599-609. DOI=10.1016/S0167-739X(02)00171-1
 
