@@ -442,9 +442,11 @@ Conclusions
 Scientific Python and the IPython notebook without a doubt has proven its usefulness in a variety of signals and
 systems courses and in a real-world R&D work environment. The enthusiasm of the scientific Python developer
 community has a lot to do with making Python truly viable as a *first class* engineering problem solving tool.
+
 Communications and signal processing, as a discipline that sits inside electrical computer engineering, is build on
 a strong mathematical modeling foundation. When theoretical expressions need to be evaluated and real-time algorithms
-need to be tested, we turn to
+need to be tested, we turn to tools with the power to get the job done. Open source community driven alternatives
+should not be overlooked.
 
 References
 ----------
