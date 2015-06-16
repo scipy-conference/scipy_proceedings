@@ -40,10 +40,23 @@ parameters to represent the joint distribution. The network structure is used to
 encode the relationships between the random variables. There are mainly two 
 types of Graphical Models: Bayesian Networks and Markov Networks.
 
+
+.. figure:: figure1.png
+   :align: center
+   :figclass: w
+   
+   Student Model: A simple Bayesian Network :label:'bayesian'
+
 Bayesian Network: A Bayesian Network consists of a directed graph and a 
 conditional distribution associated with each of the random variables. A 
 Bayesian network is used mostly when there is a causal relationship between the
 random variables. An example of a Bayesian Network representing a student taking some course is shown in Fig :ref:'bayesian'.
+
+.. figure:: figure2.png
+   :align: center
+   :figclass: w
+
+   A simple Markov Model :label:'markov'
 
 Markov Network: A Markov Network consists of an undirected graph and a few 
 factors are associated with it. Unlike in the case of Bayesian network, a factor
@@ -71,22 +84,11 @@ Dependencies: pgmpy runs only on python3 and is dependent on networkx, numpy and
 
 Creating Bayesian Models using pgmpy
 ------------------------------------
-Short Intro to Bayesian Models
 
-.. figure:: figure1.png
-   :align: center
-   :figclass: w
-   
-   A Bayesian Network :label:'student'
-
-Let's take the example of a simple Bayesian Network as shown in the figure :ref:'student'.
-The base structure representing the connections between the different variables in the model
-is a Directed Acyclic Graph. In pgmpy we can define such a network structure as:
-
-.. code-block:: python
-
-   from pgmpy.models import BayesianNetwork
-   student_model = BayesianNetwork([('D', 'G'), ('I', 'G'), ('G', 'L'), ('I', 'S')])
+** Should we go into details of Bayesian Networks here ?? **
+In general creating a model in pgmpy works as first defining the network structure and then associating the parameters to the network.
+Let's take the example of the student model as shown in the figure
+ :ref:'student'. The base structure representing the connections between the different variables in the model is a Directed Acyclic Graph. In pgmpy we can define such a network structure as:
 
 We also see that the network is parameterized using Conditional Probability Tables (CPT).
 Let's take a simple example of a table to show how to represent CPTs using pgmpy.
@@ -109,31 +111,47 @@ We can represent the CPT :ref:'CPT' in pgmpy as follows:
 
 .. code-block:: python
 
+   from pgmpy.models import BayesianModel
    from pgmpy.factors import TabularCPD
-   grade_cpt = TabularCPD(variable='G', 
-			  variable_card=3, 
+   student_model = BayesianNetwork([('D', 'G'), ('I', 'G'), ('G', 'L'),
+                                    ('I', 'S')])
+   grade_cpd = TabularCPD(variable='G',
+			        variable_card=3,
                           values=[[0.3, 0.05, 0.9, 0.5],
                                   [0.4, 0.25, 0.08, 0.3],
                                   [0.3, 0.7, 0.02, 0.2]],
                           evidence=['I', 'D'],
                           evidence_card=[2, 2])
+   difficulty_cpd = TabularCPD(variable='D',
+                               variable_card=2,
+                               values=[[0.6, 0.4]])
+   intel_cpd = TabularCPD(variable='I',
+                          variable_card=2,
+                          values=[[0.7, 0.3]])
+   letter_cpd = TabularCPD(variable='L',
+                           variable_card=2,
+                           values=[[0.1, 0.4, 0.99],
+                                   [0.9, 0.6, 0.01]],
+                           evidence=['G'],
+                           evidence_card=[3])
+   sat_cpd = TabularCPD(variable='S',
+                        variable_card=2,
+                        values=[[0.95, 0.2],
+                                [0.05, 0.8]],
+                        evidence=['I'],
+                        evidence_card=[2])
+   student_model.add_cpds(grade_cpd, difficulty_cpd, intel_cpd, letter_cpd,
+                          sat_cpd)
 
-We can similarly define CPTs for all the variables in the model. For associating the CPTs to
-a model structure we can do:
-
-.. code-block:: python
-
-   student_model.add_cpds(grade_cpt, diff_cpt, intel_cpt, letter_cpt, sat_cpt)
-
-In this way we have created a complete Bayesian Network.
+Various methods are available in pgmpy for checking the D-separation and independencies in the network.
 
 Creating Markov Models in pgmpy
 -------------------------------
+
+** Should we go into the details of Markov Network here? **
 Short Intro to Markov Models.
 
-Again taking an example of simple Markov model. It's all the same except the Markov
-models are parameterized using Factors instead of CPTs. So, we can define a Markov 
-Model as:
+Again taking an example of simple Markov model. It's all the same except the Markov models are parameterized using Factors instead of CPTs. So, we can define a Markov Model as:
 
 .. code-block:: python
 
@@ -141,7 +159,9 @@ Model as:
    from pgmpy.factors import Factor
    model = MarkovModel([('A', 'B'), ('B', 'C'), ('C', 'D'), ('D', 'A')])
    factor_a_b = Factor(['A', 'B'], [2, 2], [100, 5, 5, 100])
-   ...
+   factor_b_c = Factor(['B', 'C'], [2, 2], [])
+   factor_c_d = Factor(['C', 'D'], [2, 2], [])
+   factor_d_a = Factor(['D', 'A'], [2, 2], [])
    model.add_factors(factor_a_b, factor_b_c, factor_c_d, factor_d_a)
 
 Doing Inference over models
