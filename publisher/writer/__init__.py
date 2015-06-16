@@ -40,6 +40,11 @@ class Translator(LaTeXTranslator):
         self.table_caption = []
         self.video_url = ''
 
+        # This gets read by the underlying docutils implementation.
+        # If present, it is a list with the first entry the style name
+        # and the second entry the BiBTeX file (see `visit_field_body`)
+        self.bibtex = None
+
         self.abstract_in_progress = False
         self.non_breaking_paragraph = False
 
@@ -53,6 +58,14 @@ class Translator(LaTeXTranslator):
         pass
 
     def depart_docinfo(self, node):
+        pass
+
+    def visit_author(self, node):
+        self.author_names.append(self.encode(node.astext()))
+        self.author_institution_map[self.author_names[-1]] = []
+        raise nodes.SkipNode
+
+    def depart_author(self, node):
         pass
 
     def visit_author(self, node):
@@ -83,6 +96,10 @@ class Translator(LaTeXTranslator):
             self.author_institution_map[self.author_names[-1]].append(text)
         elif self.current_field == 'video':
             self.video_url = text
+        elif self.current_field == 'bibliography':
+            self.bibtex = ['alpha', text]
+            self._use_latex_citations = True
+            self._bibitems = ['', '']
 
         self.current_field = ''
 
@@ -207,6 +224,8 @@ class Translator(LaTeXTranslator):
                                'copyright_holder': copyright_holder,
                                'video': self.video_url}
 
+        if hasattr(self, 'bibtex') and self.bibtex:
+            self.document.stats.update({'bibliography': self.bibtex[1]})
 
     def end_open_abstract(self, node):
         if 'abstract' not in node['classes'] and self.abstract_in_progress:
@@ -332,7 +351,6 @@ class Translator(LaTeXTranslator):
 
         self.out.append(r'\end{%s}' % self.table_type)
         self.active_table.set('preamble written', 1)
-        self.active_table.set_table_style('booktabs')
 
     def visit_thead(self, node):
         # Store table caption locally and then remove it
@@ -415,8 +433,6 @@ class Translator(LaTeXTranslator):
                 self.requirements[package] = r'\usepackage{%s}' % package
         self.out.append("\n" + node['latex'] + "\n")
         raise nodes.SkipNode
-
-    
 
 
 writer = Writer()
