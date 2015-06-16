@@ -14,14 +14,14 @@ Building a Cloud Service for Reproducible Simulation Management
    associated metadata is enormously appealing and should be at the heart of any
    attempt to make scientific simulations repeatable and reproducible.
 
-   Most of the work in the litterature focus on the reproducibility requirements and the tools to acquire those metadata. Yet, it is a great need to support the discoverabiliy of the metadata produced and also to investigate on the content of what a reproducible simulation execution context is.
+   Most of the work in the literature focus on the reproducibility requirements and the tools to acquire those metadata. Yet, it is a great need to support the discoverabiliy of the metadata produced and also to investigate on the content of what a reproducible simulation execution context is.
 
    In this paper we propose our investigation results into defining a reproducibility
-   assessable record and the cloud infrastructure to support it. A use case example with sumatra and docker is provided.
+   assessable record and the cloud infrastructure to support it. A use case example with Sumatra and docker is provided.
 
 .. class:: keywords
 
-   metadata, simulations, repeatable, reproducible, sumatra, cloud.
+   metadata, simulations, repeatable, reproducible, Sumatra, cloud.
 
 Introduction
 ------------
@@ -31,18 +31,18 @@ advancement. Either done manually or automatically; reusability, refutability
 and discovery are the key proprieties that make research results repeatable
 and reproducible.
 
-While most of the litterature focus on the terms [SlezakWaczulikova2010]_ (repeatable,
-reproducible and replicable) and the technics of recording the simulation
+While most of the literature focus on the terms [SlezakWaczulikova2010]_ (repeatable,
+reproducible and replicable) and the techniques of recording the simulation
 metadata [Oinn2000]_ (workflow, library, event control) [GuoCDE2011]_, there are less
 contributions into cloud infrastructures to support these data. We think that
 reproducibility at its current state is lacking a data driven presence in the
 cloud. Version control is the proper example that we can refer to. Github [MacDonnell2012]_ and
 Bitbucket [Delorenzo2015]_ are certainly the big names in the cloud arena for version control.
 Many scientific project like SciPy [Oliver2013]_ got some interest and contribution
-because of their exposure on github.
+because of their exposure on Github.
 
 In this paper we are proposing a cloud platform to support data driven
-simulation managment tools. We will discuss on the structure of a 
+simulation management tools. We will discuss on the structure of a 
 reproducibility assessable record structure. Then we will present the proposed
 Data driven cloud service. And finally show an integration use case with the
 Data driven simulation management tool Sumatra [DavidsonSumatra2010]_.
@@ -64,7 +64,7 @@ input files represent all the files being loaded by the simulation during its
 execution. The output files represent all the files that the simulation
 produced during its execution. The dependencies are all the libraries and
 tools that are needed by the simulation to run. The hosting system is the
-system in which the simulation is being runned. These components can be
+system in which the simulation is being ran. These components can be
 classified in two groups regarding repeatability as a goal. When trying to
 repeat a simulation, the obvious variable components are: the dependencies and
 the hosting system. We think of them as a cause of uncertainty in altering the
@@ -103,7 +103,7 @@ can have terrible and not easy to determine consequences. We think that
 containers based systems [Bottomley2014]_ are a possible solution to ensure the
 consistency of the operating system and dependencies on which the simulation
 runs [Melia2014]_. Building a container that will deliver a runnable image in which the
-simulation execution is well scoped and known will ensure that accross
+simulation execution is well scoped and known will ensure that across
 machines and platforms we get closer to a consistent execution environment.
 
 We propose as following, a set of four models that combined together should be
@@ -149,8 +149,8 @@ the simulation. In the second case, the container can be built from an empty
 directory from which, the source code of the simulation will be pulled into.
 In the second case, pulling down the source code will be considered as a step
 in the image building process. This paper will provide an example of the first
-case and we recommand this case because using a remote source code pull can
-create some uncertanties regarding untracted changes on the source code. The
+case and we recommend this case because using a remote source code pull can
+create some uncertainties regarding untracked changes on the source code. The
 last four properties are the degree of reproducibility features. They are
 computed from all the records done in the project. We will explain later what
 they mean, how we compute them and why they are important. We also propose a
@@ -183,7 +183,7 @@ latest project history image.
    +--------------+-------------------------------------------+
    | ended        | string: execution last update timestamp.  |
    +--------------+-------------------------------------------+
-   | program      | dictionary: command, verison control,...  |
+   | program      | dictionary: command, version control,...  |
    +--------------+-------------------------------------------+
    | inputs       | list: input files.                        |
    +--------------+-------------------------------------------+
@@ -198,40 +198,40 @@ latest project history image.
    | image        | container: reference to the container.    |
    +--------------+-------------------------------------------+
 
-Differently from the project reproducibilty features assessments based on its
+Differently from the project reproducibility features assessments based on its
 four properties (reprod, repeat, non-reprod, non-repeat), a record
-reproducibility assesment is done through a differenciation process. A
+reproducibility assessment is done through a differentiation process. A
 differentiation process is a procedure that allows the resolution of a record
-reproducibilty feature compared to another. In this case, the two records are
+reproducibility feature compared to another. In this case, the two records are
 considered being from simulations that try to achieve the same goals. It is
 quite hard to assess at a high level standpoint if two records are the same
-because it will most likely be a domain related decision that prooves that
+because it will most likely be a domain related decision that proves that
 both records support the same claims. We can list three ways of tackling this
 problem. In the first one, the records needs to be compared on a specific
 known metric. This metric can either be proposed by the targeted record owner
 or the requesting record owner. If it is coming from the targeted record
 owner it can be automated as it will give a precise answer to the
-differenciation with the requesting record. If it is comming from the other
-side then the targeted request owner needs to validate the differenciation and
+differentiation with the requesting record. If it is coming from the other
+side then the targeted request owner needs to validate the differentiation and
 gives a final status. In the second one, the records need to follow a standard
 structure depending on the domain of simulation. Thus, based on standard
-differenciation methods in that domain (error scalling, rounding, ...), the
-differenciation can be done automatically. These previous approaches are still
+differentiation methods in that domain (error scaling, rounding, ...), the
+differentiation can be done automatically. These previous approaches are still
 to investigate into. We focus here in another, practical  and not optimal
-approach that is a manual and visual differenciation based on different
-methods that will be added progressively. Thus, the differenciation will most
+approach that is a manual and visual differentiation based on different
+methods that will be added progressively. Thus, the differentiation will most
 likely be based on the targeted record owner domain knowledge and visual
 assessment.
 
 
-A differenciation request or shortly 'diff request' is the 'contract' on which
+A differentiation request or shortly 'diff request' is the 'contract' on which
 the mechanism described before runs. A requesting record owner asks a targeted
 record owner to validate a record reproducibility proposal from him. In this
-mechanism, the requesting party has to define on what the assessement is based:
+mechanism, the requesting party has to define on what the assessment is based:
 repeated, reproduced, non-reproduced and non-repeated. This party also has to
-define the base differenciation method on which the assessement has been
+define the base differentiation method on which the assessment has been
 made: default, visual, custom. These methods are based on the third approach cited
-before. A default diff is a leveinstein based diff on the text  data. A visual
+before. A default diff is a Leveinstein based diff on the text  data. A visual
 one is a knowledge based assessment and custom is left to the requester to
 define and propose to the targeted. The targeted record owner has then to
 answer to the request by setting after verification, the status of the request
@@ -240,7 +240,7 @@ to agreed or denied. By default the status is at proposed. The table
 In fact one may say that in a model level a solved diff request is a
 relationship of reproducibility assessment between two records.
 
-.. table:: Simulation Record Differenciation Request Model. :label:`requesttable`
+.. table:: Simulation Record Differentiation Request Model. :label:`requesttable`
 
    +--------------+-------------------------------------------+
    | Fields       | Descriptions                              |
@@ -253,7 +253,7 @@ relationship of reproducibility assessment between two records.
    +--------------+-------------------------------------------+
    | from         | record: requesting record.                |
    +--------------+-------------------------------------------+
-   | diff         | dictionary: method of differenciation.    |
+   | diff         | dictionary: method of differentiation.    |
    +--------------+-------------------------------------------+
    | proposition  | string: repeated,reproduced,non-repeated,.|
    +--------------+-------------------------------------------+
@@ -261,12 +261,12 @@ relationship of reproducibility assessment between two records.
    +--------------+-------------------------------------------+
 
 
-In a database of records, the graph of reproduciblity assessment relationships
+In a database of records, the graph of reproducibility assessment relationships
 can give interesting information about a record like: the number of repeated,
 reproduced, non-reproduced, non-repeated records. Then an extraction from the
 variables can allow the determination of source of non-repeatability and
 non-reproducibility. It is also interesting to see at a project level that all
-the records refering to it will allow the determination of the four type of
+the records referring to it will allow the determination of the four type of
 reproducibility features assessment  degrees:
 
 .. math::
@@ -318,7 +318,7 @@ previously. This platform has two sides. As shown in the Figure
 :ref:`paltformfig`, a REST API access and a Web Frontend access. All those two
 accesses communicate at the most end with a MongoDB database [#]_ that
 contains: the user accounts, the projects, the records, the containers and the
-differenciation requests. Depending on the type of access, the user has  a
+differentiation requests. Depending on the type of access, the user has  a
 specific set of actions he can do.
 
 The REST API service exposes endpoints that are accessible with the
@@ -326,7 +326,7 @@ Simulation management tool from the executing machine. It is a token based
 credential access that can be activated and renewed only from the Web Frontend
 access. The REST API allows the Simulation Management tools to push, pull and
 search for projects and records. The REST API documentation will be available
-publically and will present the endpoints, HTTP methods and the mandatory fields
+publicly and will present the endpoints, HTTP methods and the mandatory fields
 in the structured JSON[#]_ format request content.
 
 The Web Frontend service on the other end is controlled by the Cloud service.
@@ -341,12 +341,12 @@ the only place where the user can update some content.
 
 On the platform, the REST API is the only place where projects and records
 are automatically created. On the Web side this is still possible but it is 
-a manual process. Differenciation requests on the other end can only be created
+a manual process. Differentiation requests on the other end can only be created
 and resolved from the Web Frontend access.
 
 A Simulation tool that need to interact with our platform has to follow the 
 endpoints descriptions in Tables :ref:`projendtable` and :ref:`recoendtable`.
-Since the differenciation request handling is not accessible from the API,
+Since the differentiation request handling is not accessible from the API,
 there is no endpoint for that.
 
 .. raw:: latex
@@ -401,7 +401,7 @@ Integration with Sumatra and Use Case
 *Sumatra Integration*
 
 Sumatra is an open source event based simulation management tool.
-To integrate our cloud API into sumatra we have to briefly investigate
+To integrate our cloud API into Sumatra we have to briefly investigate
 how Sumatra stores the metadata that it records.
 
 To store records about simulations, Sumatra implements record stores. It also
@@ -423,7 +423,7 @@ Sumatra also provides three ways of recording the simulation metadata:
     \begin{itemize}
       \item ShelveRecordStore: It provides the Shelve based record storage.
       \item DjangoRecordStore: It provides the Django based record storage (if Django is installed).
-      \item HttpRecordStore: It provides the Http based record storage.
+      \item HttpRecordStore: It provides the HTTP based record storage.
     \end{itemize}
 
 Regarding the visualization of the metadata from a simulation, Sumatra
@@ -441,13 +441,13 @@ integrating a cloud platform into its record storage options. We can cite:
       \item Better scope: The team can fully focus on improving the event control based recording process.
     \end{itemize}
 
-As presented, Sumatra already has a http based record store available. Yet it
+As presented, Sumatra already has a HTTP based record store available. Yet it
 does not suite the requirements of our cloud platform. Firstly because there
 is no automatic mechanism to push the data in the cloud. The
 MirroredFileSystemDataStore has to be fully done by user. Secondly we think
 there is need for more atomicity. In fact, Sumatra gather the metadata about
 the execution and store it at the end of the execution, which can have many
-disavantages generaly when the simulation process dies or the sumatra instance
+disadvantages generally when the simulation process dies or the Sumatra instance
 dies.
 
 To integrate the cloud API and fully comply to the simple requirement just
@@ -460,16 +460,16 @@ cited we had to implement and update some parts of the Sumatra source code:
       already implemented data and record store paradigm. The both are being tested
       right now.
       \item RecordStore: We make the point that the simulation management tool is the one that should comply to as many API interfaces as possible to give the user as many interoperability as possible with cloud platform like cited here. Thus, we intend to provide a total new DdsmStore that will fully integrate our rest API to Sumatra.
-      \item Recording Mechanism: In Sumatra the knowledge of the final result of the execution combines with atomic state monitoring of the process will allow us to have a live state of the execution. We modified the source code so that this information allong with any information that is available be pushed. An update endpoint on a record will be available to allow this. We want to make Sumatra record
+      \item Recording Mechanism: In Sumatra the knowledge of the final result of the execution combines with atomic state monitoring of the process will allow us to have a live state of the execution. We modified the source code so that this information along with any information that is available be pushed. An update endpoint on a record will be available to allow this. We want to make Sumatra record
       creation a dynamic 'on the time available data' recorder. In addition to a live monitoring, this case allows the scientist to have a basic information about its runs may they crash or not. 
     \end{itemize}
 
 *Reproducibility instrumentation with Sumatra*
 
-The sumatra repository [#]_ provides three test example projects. Our instrumentation
+The Sumatra repository [#]_ provides three test example projects. Our instrumentation
 demo is based on the python one. This is the demo skeleton model that we propose
 as a base line to make your simulation comply with the principles described here.
-This one is for sumatra users and we are working on providing alternatives.
+This one is for Sumatra users and we are working on providing alternatives.
 
 .. [#] https://github.com/open-research/sumatra.git
 
@@ -482,7 +482,7 @@ with some parameter files. The instrumented project is organized as following:
       \item Python main: It is the simulation main source code.
       \item Git ignore: It contains the files that will not be versioned.
       \item Requirements: It contains all the python requirements needed by the simulation.
-      \item Dockerfile: It contains the sumatra docker container setup.
+      \item Dockerfile: It contains the Sumatra docker container setup.
       \item Manage files: It allows the researcher to manage the container builds and
       the simulation executions.
     \end{itemize}
@@ -494,28 +494,28 @@ To instrument a simulation, the researcher has to follow some few steps:
     \begin{itemize}
       \item Source code: The scientist may remove the script main.py and include his source code.
       \item Requirements: The scientist may provide the python libraries used by the simulation there.
-      \item Dockerfile: This file contains sections that needs to be updated by the scienits such as: the git global paramaters and the simulation name at smt init.
+      \item Dockerfile: This file contains sections that needs to be updated by the scientists such as: the git global parameters and the simulation name at smt init.
       \item Management: In the manage files the researcher has to probably update the mapping data folder with docker. For example in the default case we are mapping the default.param file that is needed by the simulation.
     \end{itemize}
 
 The scientist has to build the container every time that the source changes.
-In this case a newly exported image will be available to be used by sumatra.
-As described before, the changes that we are going to provide to sumatra will
+In this case a newly exported image will be available to be used by Sumatra.
+As described before, the changes that we are going to provide to Sumatra will
 require that the container image be pushed when there is a code change. After
 a build a run will execute the simulation and create the associated record
 that will be pushed to our cloud API. We will be providing more automated
 process soon. The interesting part of such a design is that the record image
-can be runned by any other scientist with the possibility to change the input
+can be ran by any other scientist with the possibility to change the input
 data. This allow reproducibility at an input data level. For source level
 modification, the other scientist has to recreate an instrumented project. In
 the manage script an API token mechanism is provided and will contain the
-credentials required by sumatra to tap into our cloud API. The researcher will
+credentials required by Sumatra to tap into our cloud API. The researcher will
 have to put his own. In the case of a research that want to use the image, he
-will have to manually provide the api key allong with running sumatra. A
+will have to manually provide the API key along with running Sumatra. A
 further detailed documentation will be provided as soon as Sumatra is
 integrated to our cloud infrastructure. The source code of the demo can be
-found in my github SciPy proceeding repository [#]_ under the 2015 branch. It
-has been tested on an ubuntu 15.04 machine and is supposed on any Linux or Osx
+found in my Github SciPy proceeding repository [#]_ under the 2015 branch. It
+has been tested on an Ubuntu 15.04 machine and is supposed on any Linux or OsX
 machine that has docker installed.
 
 .. [#] https://github.com/faical-yannick-congo/scipy_proceedings.git
@@ -524,25 +524,25 @@ machine that has docker installed.
 Conclusion and Perspective
 --------------------------
 
-Scientfic computational experiments through simulation is getting more support
-to ehnance the reproducibility of research results. Execution metadata
+Scientific computational experiments through simulation is getting more support
+to enhance the reproducibility of research results. Execution metadata
 recording systems through event control, workflows and libraries are the
 approaches that are investigated and quite a good number of software and tools
 implement them. Yet the aspect of  discoverability of these results that are
-experessed in a reproducible manner is still an unfulfilled need. This paper
+expressed in a reproducible manner is still an unfulfilled need. This paper
 proposes a cloud structure that can be easily integrated to the existing Data
-Driven Simulation Management tools and allow: reproducibility assessements,
+Driven Simulation Management tools and allow: reproducibility assessments,
 world wide web discoverability and sharing. We provided an integration use
 case with Sumatra and explained how beneficial and useful it is for a Sumatra
-user to link our cloud api account to the  Sumatra tool. This platform main
+user to link our cloud API account to the  Sumatra tool. This platform main
 focus is to provide standard and generic ways for scientists to make some
-differenciation procedures that will allow them to assess if a simulation is
-repeatable, reproducible, non-repeatable, non-reproducible or if its an ungoing
+differentiation procedures that will allow them to assess if a simulation is
+repeatable, reproducible, non-repeatable, non-reproducible or if its an ongoing
 research. Some metrics have been provided to determine the degree of those
 features from the atomic records during the executions of the simulation. A
-differenciation request as been provided and is a sort of hand shake between
+differentiation request as been provided and is a sort of hand shake between
 researchers regarding the result of two runs. One can request a
-reproducibility accessement feature validation from a record against another
+reproducibility assessment feature validation from a record against another
 one. This allows another mode of collaboration.
 
 We are under integration investigation for the most used tools in the
@@ -550,7 +550,7 @@ community. In the short term this platform will hopefully be where researchers
 could clone the entire execution environment that another researcher did. And
 from there be able to very the claims of the project and investigate other
 execution on different data. The container based record described, we hope,
-will allow a better standard environment control accross repeats and
+will allow a better standard environment control across repeats and
 reproductions, which is a very hard battle currently for all simulation
 management tools. Operating System, Compilers and Dependencies variations are
 the nightmare of reproducibility tools because the information is not fully
@@ -594,5 +594,5 @@ References
 .. [Bottomley2014] James Bottomley. *What is All the Container Hype?*,
         Linux Foundation, April 2014.
 
-.. [Melia2014] Ivan Melia et al. *Linux Containers: Why They'are in Your Future and What Has to Happen First*,
+.. [Melia2014] Ivan Melia et al. *Linux Containers: Why They are in Your Future and What Has to Happen First*,
        Cisco and RedHat, C11-732571-00, September 2014
