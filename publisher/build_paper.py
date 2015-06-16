@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 
 import docutils.core as dc
 import os.path
@@ -10,6 +11,7 @@ import shutil
 
 from writer import writer
 from conf import papers_dir, output_dir
+
 import options
 
 header = r'''
@@ -17,20 +19,23 @@ header = r'''
 
 .. role:: label
 
+.. role:: cite
+
 .. raw::  latex
 
-  \InputIfFileExists{page_numbers.tex}{}{}
-  \newcommand*{\docutilsroleref}{\ref}
-  \newcommand*{\docutilsrolelabel}{\label}
+    \InputIfFileExists{page_numbers.tex}{}{}
+    \newcommand*{\docutilsroleref}{\ref}
+    \newcommand*{\docutilsrolelabel}{\label}
+    \providecommand*\DUrolecite[1]{\cite{#1}}
 
 .. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
-   :trim:
+    :trim:
 
 .. |--| unicode:: U+2013   .. en dash
-   :trim:
+    :trim:
+
 
 '''
-
 
 def rst2tex(in_path, out_path):
 
@@ -76,15 +81,20 @@ def rst2tex(in_path, out_path):
         raise RuntimeError("Found more than one input .rst--not sure which "
                            "one to use.")
 
+
     content = header + open(rst, 'r').read()
 
     tex = dc.publish_string(source=content, writer=writer,
                             settings_overrides=settings)
 
+
     stats_file = os.path.join(out_path, 'paper_stats.json')
     d = options.cfg2dict(stats_file)
-    d.update(writer.document.stats)
-    options.dict2cfg(d, stats_file)
+    try:
+        d.update(writer.document.stats)
+        options.dict2cfg(d, stats_file)
+    except AttributeError:
+        print("Error: no paper configuration found")
 
     tex_file = os.path.join(out_path, 'paper.tex')
     with open(tex_file, 'w') as f:
@@ -108,8 +118,41 @@ def tex2pdf(out_path):
             )
     out, err = run.communicate()
 
+    if "Fatal" in out or run.returncode:
+        print("PDFLaTeX error output:")
+        print("=" * 80)
+        print(out)
+        print("=" * 80)
+        if err:
+            print(err)
+            print("=" * 80)
+
+        # Errors, exit early
+        return out
+
+
+    # Compile BiBTeX if available
+    stats_file = os.path.join(out_path, 'paper_stats.json')
+    d = options.cfg2dict(stats_file)
+    bib_file = os.path.join(out_path, d["bibliography"] + '.bib')
+
+    if os.path.exists(bib_file):
+        bibtex_cmd = 'bibtex paper && ' + command_line
+        run = subprocess.Popen(bibtex_cmd, shell=True,
+                stdin=dummy,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                cwd=out_path,
+                )
+        out, err = run.communicate()
+
+        if err:
+            print("Error compiling BiBTeX")
+            return out
+
+
     # -- returncode always 0, have to check output for error
-    if "Fatal" not in out:
+    if not run.returncode:
         # -- pdflatex has to run twice to actually work
         run = subprocess.Popen(command_line, shell=True,
                 stdin=dummy,
@@ -119,15 +162,6 @@ def tex2pdf(out_path):
                 )
         out, err = run.communicate()
 
-    if "Fatal" in out or run.returncode:
-        print "PDFLaTeX error output:"
-        print "=" * 80
-        print out
-        print "=" * 80
-        if err:
-            print err
-            print "=" * 80
-
     return out
 
 
@@ -136,7 +170,7 @@ def page_count(pdflatex_stdout, paper_dir):
     Parse pdflatex output for paper count, and store in a .ini file.
     """
     if pdflatex_stdout is None:
-        print "*** WARNING: PDFLaTeX failed to generate output."
+        print("*** WARNING: PDFLaTeX failed to generate output.")
         return
 
     regexp = re.compile('Output written on paper.pdf \((\d+) pages')
@@ -157,7 +191,7 @@ def page_count(pdflatex_stdout, paper_dir):
 def build_paper(paper_id):
     out_path = os.path.join(output_dir, paper_id)
     in_path = os.path.join(papers_dir, paper_id)
-    print "Building:", paper_id
+    print("Building:", paper_id)
 
     rst2tex(in_path, out_path)
     pdflatex_stdout = tex2pdf(out_path)
@@ -165,7 +199,7 @@ def build_paper(paper_id):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print "Usage: build_paper.py paper_directory"
+        print("Usage: build_paper.py paper_directory")
         sys.exit(-1)
 
     in_path = os.path.normpath(sys.argv[1])
