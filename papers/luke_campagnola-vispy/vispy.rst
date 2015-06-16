@@ -2,6 +2,22 @@
 :email: luke.campagnola@gmail.com
 :institution: University of North Carolina at Chapel Hill
 
+:author: Almar Klein
+:email: 
+:institution: 
+
+:author: Eric Larson
+:email: 
+:institution: 
+
+:author: Cyrille Rossant
+:email: 
+:institution: 
+
+:author: Nicolas Rougier
+:email: 
+:institution: 
+
 ------------------------------------------------------------
 VisPy: Harnessing The GPU For Fast, High-Level Visualization
 ------------------------------------------------------------
@@ -22,7 +38,7 @@ VisPy: Harnessing The GPU For Fast, High-Level Visualization
 Motivation
 ----------
 
-Despite the rapid growth of the scientific python stack, one conspicuously absent element is a standard package for high-performance visualization. The de-facto standard for plotting is Matplotlib; however, this package is designed for publication graphics and is not optimized for visualizations that require realtime, interactive performance, or that incorporate very large data volumes. Several smaller packages have apeared in the python ecosystem to fill this gap (vtk, chaco, pyqtgraph, visvis, galry, glumpy, etc.), but none has yet emerged as a serious candidate standard package. Consequently, these projects have expended much effort re-solving the same problems, and the ecosystem as a whole suffers from the lack of a focused, collaborative effort.
+Despite the rapid growth of the scientific Python stack, one conspicuously absent element is a standard package for high-performance visualization. The de-facto standard for plotting is Matplotlib; however, this package is designed for publication graphics and is not optimized for visualizations that require realtime, interactive performance, or that incorporate very large data volumes. Several packages have apeared in the Python ecosystem to fill this gap (vtk, chaco, pyqtgraph, visvis, galry, glumpy, etc.), but none has yet emerged as a serious candidate standard package. Consequently, these projects have spent much of their effort re-solving the same problems, and the ecosystem as a whole suffers from the lack of a focused, collaborative effort.
 
 In recognition of this problem and the potential benefit to the Python community, VisPy was created as a collaborative effort to succeed several of these projects (visvis, galry, glumpy, and the visualization components of pyqtgraph). VisPy has quickly grown an active community of developers and is approaching beta status.
 
@@ -30,8 +46,17 @@ In recognition of this problem and the potential benefit to the Python community
 What is VisPy
 -------------
 
-VisPy is a pure-Python graphics library for scientific visualization based on OpenGL. VisPy aims to provide publication-quality graphics, a high-level 2D and 3D plotting API, and web publishing capabilities. By making use of the modern, shader-based OpenGL pipeline, most of the graphical rendering cost is offloaded to the graphics processor (GPU), thereby allowing both interactive framerates and high data throughput. This also relieves VisPy of the need for CPU-optimized code or numerous external dependencies; VisPy depends only on NumPy and a suitable GUI library. 
+VisPy is a scientific visualization library based on OpenGL. Its primary purpose is to deliver high-performance rendering under heavy load, but at the same time we aim to provide publication-quality graphics, a high-level 2D and 3D plotting API, and portability across many platforms. VisPy's main design criteria are:
+    
+* *High-performance for large data sets.* By making use of the modern, shader-based OpenGL pipeline, most of the graphical rendering cost is offloaded to the graphics processor (GPU). This allows realtime interactivity even for data on the order of millions of samples, and at the same time minimizes CPU overhead.
+  
+* *High-level visualization tools.* Most Python developers are not graphics experts. Getting from raw data to interactive visualization should require as little code as possible, and should require no knowledge of OpenGL or the underlying graphics hardware.
+  
+* *Publication quality output.* Commodity graphics hardware and the modern OpenGL shader pipeline have made it possible to render moderately large data sets without sacrificing quality. 
 
+* *Flexibility.* VisPy strives to make common tasks easy, but it also makes complex and niche tasks possible through a flexible and extensibile architecture. VisPy's library of graphical components can be reconfigured and recombined to build complex scenes.
+
+* *Portability.* VisPy's reliance on commodity graphics hardware for optimization reduces its reliance on CPU-optimized code or numerous external dependencies; VisPy is pure-Python and depends only on NumPy and a suitable GUI library. This makes VisPy easy to distribute and install across many platforms, including WebGL-enabled browsers.
 
 
 VisPy's Architecture
@@ -43,9 +68,9 @@ VisPy's functionality is divided into a layered architecture, with each new laye
 Layer 1: Object-Oriented GL
 '''''''''''''''''''''''''''
 
-The OpenGL API, although very powerful, is also somewhat verbose and unwieldy. VisPy's lowest-level layer, ``vispy.gloo``, provides an object-oriented wrapper that provides a clean, compact, and Pythonic alternative to traditional OpenGL programming. Objects such as textures, vertex buffers, frame buffers, and shader programs that typically require several GL calls to instantiate are instead encapsulated in simple Python classes (e.g. Table 1).
+The OpenGL API, although very powerful, is also somewhat verbose and unwieldy. VisPy's lowest-level layer, ``vispy.gloo``, provides an object-oriented OpenGL wrapper with a clean, compact, and Pythonic alternative to traditional OpenGL programming (however, developers unfamiliar with OpenGL are encouraged to work from the scenegraph and plotting layers instead). Objects that typically require several GL calls to instantiate, such as textures, vertex buffers, frame buffers, and shader programs, are instead encapsulated in simple Python classes (e.g. Table 1).
 
-.. table:: Example comparing ``vispy.gloo`` API to OpenGL API. Using ``vispy.gloo`` is compact, clean, and Pythonic.
+.. table:: The ``vispy.gloo`` API is compact, clean, and Pythonic compared to native OpenGL.
    :class: w
 
    +-----------------------------------------------+------------------------------------------------------------------+
@@ -81,7 +106,7 @@ OpenGL commands cannot be invoked until a context (usually provided by the GUI t
 
 The command queues used by ``vispy.gloo`` are also designed to be serializable such that commands generated in one process or thread can be executed in another. In this way, a stream of GL commands could be sent to a web browser (as in the case of IPython notebook), recorded to disk and replayed later, or shared between processes to take advantage of multi-core systems.
 
-Another purpose of ``vispy.gloo`` is to hide many of the differences between various versions and implementations of OpenGL. We currently target OpenGL versions 2.1 (desktop) and ES2.0 (embedded and WebGL), which is available on virtually all commodity hardware today. A closely related system, ``vispy.app``, also abstracts the differences between the various supported GUI backends, which include PyQt4/5, PySide, IPython, SDL, GLFW, and several others. This support, combined with VisPy's pure-python and low-dependency approach, helps to ensure that VisPy will run on most platforms with minimal effort from users and developers alike.
+Another purpose of ``vispy.gloo`` is to hide many of the differences between various versions and implementations of OpenGL. We currently target OpenGL versions 2.1 (desktop) and ES2.0 (embedded and WebGL), which is available on virtually all commodity hardware today. A closely related system, ``vispy.app``, abstracts the differences between the various supported GUI backends, which include PyQt4/5, PySide, IPython, SDL, GLFW, and several others. This support, combined with VisPy's pure-python and low-dependency approach, helps to ensure that VisPy will run on most platforms with minimal effort from users and developers alike.
 
 
 Layer 2: Visuals
@@ -89,29 +114,48 @@ Layer 2: Visuals
 
 The core of VisPy is its library of ``Visual`` classes that provide the primitive graphical objects used to build more complex visualizations. These objects range from very simple primitives (lines, points, triangles) to more powerful primitives (text, volumes, images), to high-level visualization tools (histograms, surface plots, spectrograms, isosurfaces). 
 
-Internally, visuals upload their data to graphics memory and implement a shader program [ref GLSL] that is executed on the GPU. This allows the most computationally intensive operations to run in compiled, parallelized code without adding any build dependencies (because all OpenGL implementations since 2.1 include a GLSL compiler). Visuals can be reconfigured and updated in real time by simply uploading new data or shaders to the GPU.
+Internally, visuals upload their data to graphics memory and implement a shader program (see https://www.opengl.org/documentation/glsl/) that is executed on the GPU. This allows the most computationally intensive operations to run in compiled, parallelized code without adding any build dependencies (because all OpenGL implementations since 2.0 include a GLSL compiler). Visuals can be reconfigured and updated in real time by simply uploading new data or shaders to the GPU.
 
-Visuals may also be modified by applying arbitrary filters (such as opacity, clipping, and lighting) and coordinate transformations. To support this flexibility, it is necessary to be able to recombine smaller chunks of shader code. VisPy implements a shader management system that allows independent GLSL functions to be attached together in a single shader program. This allows [reword] the insertion of arbitrary coordinate transformations and color modification into each visual's shader program.
+Visuals may also be modified by applying arbitrary filters (such as opacity, clipping, and lighting) and coordinate transformations. To support this flexibility, it is necessary to be able to recombine smaller chunks of shader code. VisPy implements a shader management system that allows independent GLSL functions to be attached together in a single shader program, which enables the insertion of arbitrary coordinate transformations and color modification into each visual's shader program.
 
-VisPy implements a collection of coordinate transformation classes that are used to map between a visual's raw data and its output coordinate system (screen, image, svg, etc.). By offloading coordinate transformations to the GPU alon with drawing operations, VisPy makes it possible to stream data directly from its source to the GPU without any modification in Python. Most transforms affect the location, orientation, and scaling of visuals and can be chained together to produce more complex adjustments. Transforms may also be nonlinear, as in logarithmic, polar, and mercator projections, and custom transforms can be implemented easily given the forward and inverse mapping functions in both Python and GLSL.
+VisPy implements a collection of coordinate transformation classes that are used to map between a visual's raw data and its output coordinate system (screen, image, svg, etc.). By offloading coordinate transformations to the GPU along with drawing operations, VisPy makes it possible to stream data directly from its source to the GPU without any modification in Python. Most transforms affect the location, orientation, and scaling of visuals and can be chained together to produce more complex adjustments. Transforms may also be nonlinear, as in logarithmic, polar, and mercator projections, and custom transforms can be implemented easily given the forward and inverse mapping functions in both Python and GLSL.
 
 .. figure:: image_transforms.png
 
    One image viewed using four different coordinate transformations. VisPy supports linear transformations such as scaling, translation, and affine matrix multiplication (bottom left) as well as nonlinear transformations such as logarithmic (top left) and polar (top right). Custom transform classes are also easy to construct (bottom right).
 
+The following example summarizes the code that produces the logarithmically-scaled image in Figure XX. 
+
+.. code-block:: python
+
+   from vispy import visuals
+   from vispy.visuals.transforms import STTransform, LogTransform
+   
+   # Create an image from a (h, w, 4) array
+   image = vispy.visuals.ImageVisual(image_data)
+   
+   # Assign a chain of transforms to stretch the image logarithmically and set
+   # its placement in the window 
+   image.transform = (STTransform(scale=(3, -150), translate=(200, 100)) *
+                      LogTransform((0, 2, 0)) *
+                      STTransform(scale=(1, -0.01), translate=(-50, 1.3)))
+
+
 
 Layer 3: Scenegraph
 '''''''''''''''''''
 
-The majority of VisPy's graphical features can be accessed by working directly with its Visual classes. However, managing the visuals, coordinate transforms, and filters for a complex scene can be confusing and tedious. To automate this process, VisPy implements a scenegraph |---| a standard data structure used in computer graphics that organizes visuals into a hierarchy. Each node in the hierarchy inherits coordinate transformations and filters from its parent. VisPy's scenegraph allows visuals to be easily arranged in a scene and, in automating control of the system of transformations, it is able to handle some common interactive visualization requirements:
+The scenegraph layer is the first that requires no knowledge of OpenGL and implements most features required for interactive visualization. This is the main entry point for users that want to build visualization applications. Although the majority of VisPy's graphical features can be accessed by working directly with its Visual classes (layer 2), it can be confusing and tedious to manage the visuals, coordinate transforms, and filters for a complex scene. To automate this process, VisPy implements a scenegraph |---| a standard data structure used in computer graphics that organizes visuals into a hierarchy. Each node in the hierarchy inherits coordinate transformations and filters from its parent. VisPy's scenegraph allows visuals to be easily arranged in a scene and, in automating control of the system of transformations, it is able to handle some common interactive visualization requirements:
 
-* Picking: mouse and touch events are delivered to the objects in the scene that are clicked on. This works by rendering the scene using unique colors for each visual; thus the otherwise expensive ray casting computation is carried out on the GPU.
-* Interactive viewports: allow the user to interactively pan, scale, and rotate data within the view
-* Cameras: library of camera classes, each implementing a different mode of user interaction. For example, `PanZoomCamera` allows panning and scaling for 2D plot data, whereas `ArcballCamera` allows data to be rotated in 3D like a trackball.
-* Lighting: user may add lights to the scene and shaded objects will react automatically.
-* Export: any portion of the scene may be rendered to an image at any resolution. In the future, the scenegraph will also support exporting to SVG.
-* Layouts: automatically partition window space into grids.
-* High-resolution displays -- the scenegraph automatically corrects for high-resolution displays to ensure visuals are scaled correctly on all devices.
+* *Picking.* User input from the mouse and touch devices are delivered to the objects in the scene that are clicked on. This works by rendering the scene using unique colors for each visual; thus the otherwise expensive ray casting computation is carried out on the GPU.
+* *Interactive viewports.* These allow the user to interactively pan, scale, and rotate data within the view, and the visuals inside the view are clipped to its borders.
+* *Cameras.* VisPy contains a library of camera classes, each implementing a different mode of visual perspective or user interaction. For example, ``PanZoomCamera`` allows panning and scaling for 2D plot data, whereas ``ArcballCamera`` allows data to be rotated in 3D like a trackball.
+* *Lighting.* The user may add lights to the scene and shaded objects will react automatically.
+* *Export.* Any portion of the scene may be rendered to an image at any resolution. In the future, the scenegraph will also support exporting to SVG.
+* *Layouts.* These automatically partition window space into grids allowing multiple visualizations to be combined in a single window.
+* *High-resolution displays.* The scenegraph automatically corrects for high-resolution displays to ensure visuals are scaled correctly on all devices.
+
+The example below is a simple demonstration of creating a scenegraph window and adding visuals to its scene:
 
 .. code-block:: python
 
@@ -121,13 +165,18 @@ The majority of VisPy's graphical features can be accessed by working directly w
    window = vs.SceneCanvas()
    grid = window.central_widget.add_grid()
    
-   # Create a view with a 2D line plot
+   # Create a view with a 2D line plot inside
    view1 = grid.add_view(row=0, col=0, camera='panzoom')
    plot = vs.PlotLine(data1, parent=view1.scene)
    
    # Create a second view with a 3D surface plot
    view2 = grid.add_view(row=0, col=1, camera='turntable')
    axes = vs.SurfacePlot(data2, parent=view2.scene)
+   
+   # Move the axes a bit
+   axes.transform = vs.AffineTransform()
+   axes.transform.translate(2, 1, 0)
+   axes.transform.rotate(30, 0, 1, 0)
    
    # start UI event loop
    window.app.run()
@@ -137,15 +186,41 @@ The majority of VisPy's graphical features can be accessed by working directly w
 Layer 4: Plotting
 '''''''''''''''''
 
-VisPy's highest level API allows quick and easy access to data visualization, similar to `matplotlib.pyplot` [ref]
-Intended for simple analysis scripts and command line / ipython use, but generates scenegraph structures allowing lower level control over the visual output. 
+VisPy's plotting layer allows quick and easy access to data visualization, such as plotting, image display, volume rendering, histograms, and spectrograms. This layer is intended for use in simple analysis scripts and on the interactive prompt (or IPython notebook), and is similar in principle to Matplotlib's ``pyplot`` API [ref]. The following example creates a window displaying a plot line and a spectrogram of the same data:    
 
-[code example]
+.. code-block:: python
 
-Also includes `mpl_plot`, which uses `mplexporter` [ref mpld3] to convert any matplotlib visualization to vispy (however this approach is not expected to have the same performance benefits as using the native vispy.plot API).
+   import numpy as np
+   import vispy.plot as vp
+
+   # Generate large array to plot
+   data = np.random.normal(size=100000)
+   # Add some spectral structure
+   data[20000:80000] += data[::6./5.]
+
+   # Create a figure with grid layout
+   fig = vp.Fig()
+
+   # Plot data in the first grid cell
+   fig[0, 0].plot(data, symbol=None)
+
+   # Add a spectrogram of the same data below that
+   fig[1, 0].spectrogram(data)
+
+Despite the large volume of data, the resulting views can be immediately panned and zoomed in realtime. As a rough performance comparison, the same plot data can be redrawn at about 0.2 Hz by Matplotlib, 2 Hz by PyQtGraph, and over 100 Hz by VisPy (on the author's machine). Each call generates scenegraph (layer 3) objects that allowing lower level control over the visual output This makes it possible to begin development with the simplest ``vispy.plot`` calls and iteratively refine the output as needed. VisPy also includes an experimental wrapper around ``mplexporter`` (from https://github.com/mpld3/mplexporter) that allows ``vispy.mpl_plot`` to act as a drop-in replacement for Matplotlib in existing projects (however this approach is not always expected to have the same performance benefits as using the native ``vispy.plot`` API).
+
+The ``vispy.plot`` interface is currently the highest-level and easiest layer VisPy offers. Consequently, it is also the least mature. We expect this layer to grow quickly in the coming months as we add more plot types and settle the API.
+
+
+Roadmap
+-------
 
 
 
-Conclusion
-----------
+
+* Stabilization of scenegraph / visuals / plot APIs
+* Introduction of collections to scenegraph, which will allow multiple visuals to be drawn simultaneously with a single GL call
+* More plot types
+* SVG export
+
 
