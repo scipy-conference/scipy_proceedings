@@ -356,6 +356,9 @@ reproducibility in this package. These include:
 
 Together, these tools create a functional framework for distribution and reuse.
 
+Unit Validation
+*****************
+
 Of particular note, the Pint package (pint.readthedocs.org/en/0.6/) is
 used keeping track of units, converting between them, and throwing
 errors when unit conversions are not sane. For example, in the code below,
@@ -393,8 +396,26 @@ those member variables, the input values are converted to SI using Pint.
                 0*units.joule/units.kg/units.kelvin)
             self.dm = dm
 
+The above code employs a validation utility written for PyRK and used
+throughout the code to confirm (at runtime) types, units, and valid ranges for
+parameters of questionable validity.
 
 
+Those validators are simple, but versatile, and in combination with the Pint
+package, provide a robust environment for users to experiment with parameters
+in the safe confines of dimensional accuracy.
+
+
+Conclusions and Future Work
+----------------------------
+
+The PyRK library provides a modular simulation environment for a common and
+essential calculation in nuclear engineering. PyRK is the first freely
+distributed tool for neutron kinetics. By supplying a library of ANSI standard
+precursor data, a modular material definition framework, and coupled lumped
+parameter thermal hydraulics with zero-dimensional neutron kinetics in an
+object-oriented modeling paradigm, PyRK provides design-agnostic toolkit for
+accident analysis potentially useful to all nuclear reactor designers and analysts.
 
 References
 ----------
