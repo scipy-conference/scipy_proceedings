@@ -1,23 +1,23 @@
 {
   "proceedings": {
-     "citation_key": "proc-scipy-2010", 
+     "citation_key": "proc-scipy-2015",
      "title": {
        "acronym": "SciPy",
        "conference": "Python in Science Conference",
-       "ordinal": "9th",
-       "short": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2010)",
-       "full": "Proceedings of the 9th Python in Science Conference"
+       "ordinal": "14th",
+       "short": "PROC. OF THE 14th PYTHON IN SCIENCE CONF. (SCIPY 2015)",
+       "full": "Proceedings of the 14th Python in Science Conference"
      },
-     "year": "2010",
+     "year": "2015",
      "editor": [
-        "Stéfan van der Walt",
-        "Jarrod Millman"
+        "Kathryn Huff",
+        "James Bergstra"
      ],
-     "volume": 3,
+     "volume": 8,
      "number": 1,
      "isbn": "value",
      "location": "Austin, Texas",
-     "dates": "June 28 - July 3",
+     "dates": "July 6 - 12",
      "copyright": {
        "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
        "proceedings": ["The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
@@ -28,25 +28,159 @@
   "organization": [
 
         {
-            "name": "Conference Chairs",
+            "name": "Conference Chair",
             "members": [
-                {"name": "Jarrod Millman",
-                 "org": "UC Berkeley"},
-                {"name": "Travis Oliphant",
+                {"name": "Kelsey Jordahl",
                  "org": "Enthought, Inc."}
                 ]
         },
-  
+
         {
-            "name": "Program Chairs",
+            "name": "Program",
             "members": [
-                {"name": "Stéfan van der Walt",
-                 "org": "Applied Mathematics, Stellenbosch University"},
-                {"name": "Someone else",
-                 "org": "Some company"}
+                {"name": "Nelle Varoquaux",
+                 "org": "Nelle Varoquaux, Mines ParisTech, Institut Curie, INSERM"},
+                {"name": "Serge Ray",
+                 "org": "Arizona State University"}
+                ]
+        },
+
+        {
+            "name": "Communications",
+            "members": [
+                {"name": "Courtenay Godshall",
+                "org": " Enthought Inc."},
+                {"name": "Irma Kramer",
+                "org": " PyLadies Austin"}
+                ]
+        },
+
+        {
+            "name": "Birds of a Feather",
+            "members": [
+                {"name": "Kyle Mandli",
+                "org": " University of Texas at Austin"},
+                {"name": "Matt McCormick",
+                "org": " Kitware Inc."}
+                ]
+        },
+
+        {
+            "name": "Proceedings",
+            "members": [
+                {"name": "James Bergstra",
+                "org": " University of Waterloo"},
+                {"name": "Kathryn Huff",
+                "org": " University of California at Berkeley"}
+                ]
+        },
+
+        {
+            "name": "Financial Aid",
+            "members": [
+                {"name": "Ben Root",
+                "org": " University of Oklahoma"},
+                {"name": "John Wiggins",
+                "org": " XFEL"}
+                ]
+        },
+
+        {
+            "name": "Tutorials",
+            "members": [
+                {"name": "Kristen Thyng",
+                "org": " Texas A&M University"},
+                {"name": "Justin Vincent",
+                "org": " Google Inc."}
+                ]
+        },
+
+        {
+            "name": "Sprints",
+            "members": [
+                {"name": "Dharhas Pothina",
+                "org": " US Army Corps of Engineers, ERDC"},
+                {"name": "Jonathan Rocher",
+                "org": " Enthought Inc."}
+                ]
+        },
+
+        {
+            "name": "Sponsors",
+            "members": [
+                {"name": "Jill Cowan",
+                "org": " Enthought Inc."}
+                ]
+        },
+
+        {
+            "name": "Financial",
+            "members": [
+                {"name": "Bill Cowan",
+                "org": " Enthought Inc."},
+                {"name": "Jodi Havranek",
+                "org": " Enthought Inc."}
+                ]
+        },
+
+        {
+            "name": "Logistics",
+            "members": [
+                {"name": "Jill Cowan",
+                "org": " Enthought Inc."},
+                {"name": "Leah Jones",
+                "org": " Enthought Inc."}
+                ]
+        },
+
+        {
+            "name": "Program Committee",
+            "members": [
+                {"name": "Jane Doe"},
+                {"name": "Jane Doe"}
+                ]
+        },
+
+        {
+            "name": "Proceedings Reviewers",
+            "members": [
+                {"name": "Jane Doe"},
+                {"name": "Jane Doe"}
+                ]
+        },
+
+        {
+            "name": "Mini Symposium Committee",
+            "members": [
+                {"name": "Jane Doe",
+                 "org": "Symposium"},
+                {"name": "Jane Doe",
+                 "org": "Symposium"}
+                ]
+        },
+
+        {
+            "name": "Tutorial Review Committee",
+            "members": [
+                {"name": "Sara Safavi",
+                "org": " Rackspace Inc."},
+                {"name": "Jeremy Price",
+                "org": " Rackspace Inc."},
+                {"name": "Dharhas Pothina",
+                "org": " US Army Engineer Research and Development Center"},
+                {"name": "Aron Ahmadia",
+                "org": " Continuum Analytics"}
+                ]
+        },
+
+        {
+            "name": "Diversity Committee",
+            "members": [
+                {"name": "Jane Doe",
+                 "org": "Location"}
                 ]
         }
-    ],
+  ],
 
   "sponsored_students": [
       {
@@ -56,5 +190,3 @@
       }
   ]
 }
-
-
