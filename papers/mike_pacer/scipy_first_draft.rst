@@ -22,7 +22,6 @@ Causal Bayesian NetworkX
 
 .. class:: abstract
 
-
     Humans are existence proofs for the solubility of computational causal inference.
 
     Computational problems are sometimes thought to be the exclusive domain of computer science, though the solutions found prove vital for many other sciences. But computational cognitive science can also contribute to the solution of computational problems, particularly inductive problems. Causal inference (and inductive problems more generally) have proven resilient to traditional analysis, and the recent progress on these problems observed in machine learning (e.g., neural networks and their extensions) originate in models formulated by cognitive scientists.
@@ -30,6 +29,8 @@ Causal Bayesian NetworkX
     As a computational cognitive scientist, I use a technique called rational analysis, which roughly consists of developing formal models of how *any* cognitive agent might optimally solve a computational problem and comparing that to how people actually solve analogous problems. In the course of doing so we find that people turn out to make much more sense than popular psychology might lead you to believe. At the same time, we create formal frameworks that represent entities and relations in the world as well as reasoning processes over those representations. 
 
     One of the frameworks successfully used in this way are causal Bayesian networks. Bayesian networks fall within the more general class of probabilistic graphical models, specifically, directed acyclic graphs with associated conditional probability distributions. Directed arrows encode direct dependency relationships going from parents to their children, whose conditional probability distribution is defined in terms of the parents' values. *Causal* Bayesian networks are endowed with an intervention operation that allows "graph surgery" in which one cuts variables off from their parents (usually setting it to a particular value). 
+
+    I have developed tools on top of the :code:`NetworkX` package that allow me to implement some aspects of these models. By treating graph definition as one of enumeration and filtering rather than investigating invidual graphs, we are able to more conveniently state constraints on the graph structures under question. Indeed this gives an alternative view of intervention not as the modification of an single graph, but as a constraint on the total set of graphs. This allows us to treat the graphical aspects of the problem separately from the probabilistic semantics that define particular models on those graphs. I call this set of tools `Causal Bayesian NetworkX`.
 
 
 .. class:: keywords
@@ -39,15 +40,17 @@ Causal Bayesian NetworkX
 Introduction
 ------------
 
+My first goal in this paper is to provide enough of an introduction tothe formal/mathematical tools that those familiar with :code:`python` and programming more generally will be able to appreciate both why and how one might implement causal Bayesian networks. In particular, I have developed parts of a toolkit that allows the creation of these models on top of :code:`NetworkX`. Given the coincidence of the names, it seemed most apt to refer to this toolkit as :code:`Causal Bayesian NetworkX` (the current implementation of which can be found at `Causal Bayesian NetworkX`_). 
 
+In these tools I focus first on establishing a means of building iterators over sets of directed graphs and apply operations to those sets. Beginning with the complete directed graph, we enumarte over the subgraphs of that complete graph and enforce graph theoretic conditions such as acyclicity over the entire graph, guarantees on paths between nodes that are known to be able to communicate with one another, or orphan-hood for individual nodes known to have no parents. We accomplish this by using closures that take graphs as their input along with any explicitly defined arguments needed to define the exact desired conditions. 
 
-My goal is primarily to introduce aspects of the formal/mathematical tools that are needed understand the purpose and implementation of Causal Bayesian NetworkX (the current version can be found at `Causal Bayesian NetworkX`_ on Github). 
+I then shift focus to a case where there is a known graph over a set of nodes that are imbued with a simple probabilistic semantics, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics.
 
-Page limits ensure that this can only be a cursory introduction, 
+Then, I will briefly discuss **gates**, an extension to graphical modeling frameworks that allow one to define context-specific dependence relations (which includes context-specific *independence* relations). This extension is of particular interest as it allows us to subsume the classical :code:`do`-calculus :cite:`pearl2000` into the more general semantics of the probabilistic network. This work was a key influence in the development of thinking about interventions not as operations on individual nodes, or even individual graphs, but as a particular constraint placed on sets of graphs by some generative process.
+
+I conclude with a discussion of some of the problems that have been addressed in Cognitive Science through the use of graphical models like those described. In particular, I will discuss a framework called **causal theories** :cite:`griffithst09` which allows for defining problems of causal induction. It is out of this framework the perspective expressed in this paper, the associated talk, and the the Causal Bayesian NetworkX toolkit developed. 
 
 .. _Causal Bayesian NetworkX: https://github.com/michaelpacer/Causal-Bayesian-NetworkX
-
-
 
 Graphical Models
 ----------------
@@ -82,7 +85,7 @@ Directed Acyclic Graphs
 
 A cycle in a directed graph can be understood as the existance of 
 
-The number of directed acyclic graphs (:smallcaps:`dag`\s) that can be obtained from a set of nodes of size :math:`n` can be defined recursively as follows:
+The number of directed acyclic graphs (:smallcaps:`dag`\s) that can be obtained from a set of nodes of size :math:`n` can be defined recursively as follows :cite:`mckay2003acyclic` :
 
 .. math::
 
@@ -330,7 +333,7 @@ figures.
 Outlines
 ========
 
-:cite:`mckay2003acyclic,winn2012causality`
+:cite:`winn2012causality`
 
 
 Outline v. 1.1
@@ -398,13 +401,30 @@ Outline v. 1.1
 
 1. NetworkX
     
+    2. graph package in python
+    
 
-6. Causal Bayesian NetworkX
+6. Causal Bayesian NetworkX: Graphs
 
    5. Iterator over graphs
    6. Closures for constraints
-   
+       7. over graphs
+       8. tuples of nodes
+       9. individual nodes
+   10. Zipping iterators and avoiding early consumption
 
+6. Causal Bayesian NetworkX: Probabilistic Sampling
+    
+    7. 
+   
+7. Gates and causal networks
+8. Causal theories
+    
+    9. Rational analysis and computational level explanations of human cognition
+    10. First order logic for probabilistic graphical models 
+    11. ontology, plausible relations, functional form
+    12. generalizations to other kinds of logical/graphical conditions
+    13. uses in understanding human cognition
 
 
 References
