@@ -1,5 +1,4 @@
 :author: Mike Pacer
-
 :email: mpacer@berkeley.edu
 
 :institution: University of California at Berkeley
@@ -333,7 +332,7 @@ figures.
 Outlines
 ========
 
-:cite:`winn2012causality`
+Test :cite:`mckay2003acyclic,winn2012causality`
 
 
 Outline v. 1.1
@@ -427,13 +426,6 @@ Outline v. 1.1
     13. uses in understanding human cognition
 
 
-References
-----------
-
-.. :biblio:`myBibliography`
-
-
-
 .. .. raw:: latex
 
 ..     \bibliographystyle{IEEEtran}
@@ -451,10 +443,5 @@ References
 
 .. .. role:: bibliography
 
-
-
 .. .. [Atr03] P. Atreides. *How to catch a sandworm*,
-..             Transactions on Terraforming, 21(3):261-300, August 2003.
-
-
-
+           Transactions on Terraforming, 21(3):261-300, August 2003.
