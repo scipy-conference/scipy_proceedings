@@ -135,7 +135,7 @@ power. The simplest form of the equations dictating this feedback are:
 
 
 .. math::
-   :align:
+   :type: align
 
    \rho(t) &= \rho_0 + \rho_f(t) + \rho_{ext}
    \intertext{where}
@@ -146,6 +146,16 @@ power. The simplest form of the equations dictating this feedback are:
    \rho_f(t) &= \alpha_i\frac{\delta T_i}{\delta t}\\
    T_i &= \mbox{temperature of component i}\\
    \alpha_i &= \mbox{temperature reactivity coefficient of i}.
+
+These equations are captured in the feedback diagram in figure
+:ref:`figfeedback`.
+
+.. figure:: feedback.png
+
+   Reactivity couples neutron kinetics and thermal hydraulics. That is, changes
+   in reactivity result in neutron population (power) fluctuations,
+   corresponding temperature fluctuations, and, ultimately, reactivity
+   feedback.  :label:`figfeedback`
 
 
 The PRKE
