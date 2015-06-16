@@ -392,8 +392,8 @@ coefficients are written to a C header file using a custom function defined in t
 
    Designing an equal-ripple lowpass filter using `scipy.signal.remez` for real-time operation. :label:`fig5`
 
-The filter frequency response magnitude is obtained using a noise source to drive the filter the input (first passing
-through an analog-to-digital converter) and the filter output (following digital-to-analog conversion) is processed
+The filter frequency response magnitude is obtained using a noise source to drive the filter input (first passing
+through an analog-to-digital converter) and then filter output (following digital-to-analog conversion) is processed
 by instrumentation to obtain a spectral estimate. The spectrum estimate corresponds to the filter frequency response.
 The measured frequency reesponse is imported into the notebook using `loadtxt`. Fig. :ref:`fig6` compares the
 theoretical frequency response, including quantization errors, with the measured. The results are impressive, and the
