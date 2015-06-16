@@ -3,20 +3,21 @@
 :institution: University of North Carolina at Chapel Hill
 
 :author: Almar Klein
-:email: 
-:institution: 
+:email: almar.klein@gmail.com 
+:institution: Continuum Analytics
 
 :author: Eric Larson
-:email: 
-:institution: 
+:email: eric.larson.d@gmail.com
+:institution: University of Washington
 
 :author: Cyrille Rossant
-:email: 
-:institution: 
+:email: cyrille.rossant@gmail.com
+:institution: University College London
 
 :author: Nicolas Rougier
-:email: 
-:institution: 
+:email: Nicolas.Rougier@inria.fr
+:institution: French National Institute for Research in Computer Science and Control
+
 
 ------------------------------------------------------------
 VisPy: Harnessing The GPU For Fast, High-Level Visualization
@@ -124,28 +125,32 @@ VisPy implements a collection of coordinate transformation classes that are used
 
    One image viewed using four different coordinate transformations. VisPy supports linear transformations such as scaling, translation, and affine matrix multiplication (bottom left) as well as nonlinear transformations such as logarithmic (top left) and polar (top right). Custom transform classes are also easy to construct (bottom right).
 
-The following example summarizes the code that produces the logarithmically-scaled image in Figure XX. 
+The following example summarizes the code that produces the logarithmically-scaled image in Figure XX. It combines a scale/translation, followed by log base 2 along the y axis, followed by a second scale/translation to set the final position on screen. The resulting chained transformation maps from image coordinates (origin in upper left, 1 unit = 1 image pixel) to window coordinates (origin in upper left, 1 unit = 1 window pixel):
 
 .. code-block:: python
 
    from vispy import visuals
-   from vispy.visuals.transforms import STTransform, LogTransform
+   from vispy.visuals.transforms import (STTransform, 
+                                         LogTransform)
    
    # Create an image from a (h, w, 4) array
    image = vispy.visuals.ImageVisual(image_data)
    
-   # Assign a chain of transforms to stretch the image logarithmically and set
-   # its placement in the window 
-   image.transform = (STTransform(scale=(3, -150), translate=(200, 100)) *
-                      LogTransform((0, 2, 0)) *
-                      STTransform(scale=(1, -0.01), translate=(-50, 1.3)))
+   # Assign a chain of transforms to stretch the image 
+   # logarithmically and set its placement in the window 
+   tr1 = STTransform(scale=(1, -0.01), 
+                     translate=(-50, 1.3))
+   tr2 = LogTransform((0, 2, 0))
+   tr3 = STTransform(scale=(3, -150), 
+                     translate=(200, 100))
+   image.transform = tr3 * tr2 * tr1
 
 
 
 Layer 3: Scenegraph
 '''''''''''''''''''
 
-The scenegraph layer is the first that requires no knowledge of OpenGL and implements most features required for interactive visualization. This is the main entry point for users that want to build visualization applications. Although the majority of VisPy's graphical features can be accessed by working directly with its Visual classes (layer 2), it can be confusing and tedious to manage the visuals, coordinate transforms, and filters for a complex scene. To automate this process, VisPy implements a scenegraph |---| a standard data structure used in computer graphics that organizes visuals into a hierarchy. Each node in the hierarchy inherits coordinate transformations and filters from its parent. VisPy's scenegraph allows visuals to be easily arranged in a scene and, in automating control of the system of transformations, it is able to handle some common interactive visualization requirements:
+Layer 3 is the first that requires no knowledge of OpenGL to use, and implements common features required for interactive visualization. This is the main entry point for most users that want to build visualization applications. Although the majority of VisPy's graphical features can be accessed by working directly with its Visual classes (layer 2), it can be confusing and tedious to manage the visuals, coordinate transforms, and filters for a complex scene. To automate this process, VisPy implements a scenegraph |---| a standard data structure used in computer graphics that organizes visuals into a hierarchy. Each node in the hierarchy inherits coordinate transformations and filters from its parent. VisPy's scenegraph allows visuals to be easily arranged in a scene and, in automating control of the system of transformations, it is able to handle some common interactive visualization requirements:
 
 * *Picking.* User input from the mouse and touch devices are delivered to the objects in the scene that are clicked on. This works by rendering the scene using unique colors for each visual; thus the otherwise expensive ray casting computation is carried out on the GPU.
 * *Interactive viewports.* These allow the user to interactively pan, scale, and rotate data within the view, and the visuals inside the view are clipped to its borders.
@@ -186,7 +191,7 @@ The example below is a simple demonstration of creating a scenegraph window and 
 Layer 4: Plotting
 '''''''''''''''''
 
-VisPy's plotting layer allows quick and easy access to data visualization, such as plotting, image display, volume rendering, histograms, and spectrograms. This layer is intended for use in simple analysis scripts and on the interactive prompt (or IPython notebook), and is similar in principle to Matplotlib's ``pyplot`` API [ref]. The following example creates a window displaying a plot line and a spectrogram of the same data:    
+VisPy's plotting layer allows quick and easy access to advanced data visualization, such as plotting, image display, volume rendering, histograms, and spectrograms. This layer is intended for use in simple analysis scripts or in an interactive session, and is similar in principle to Matplotlib's ``pyplot`` API. The following example creates a window displaying a plot line and a spectrogram of the same data:    
 
 .. code-block:: python
 
@@ -204,23 +209,22 @@ VisPy's plotting layer allows quick and easy access to data visualization, such 
    # Plot data in the first grid cell
    fig[0, 0].plot(data, symbol=None)
 
-   # Add a spectrogram of the same data below that
+   # Add a spectrogram of the same data in the next row
    fig[1, 0].spectrogram(data)
 
-Despite the large volume of data, the resulting views can be immediately panned and zoomed in realtime. As a rough performance comparison, the same plot data can be redrawn at about 0.2 Hz by Matplotlib, 2 Hz by PyQtGraph, and over 100 Hz by VisPy (on the author's machine). Each call generates scenegraph (layer 3) objects that allowing lower level control over the visual output This makes it possible to begin development with the simplest ``vispy.plot`` calls and iteratively refine the output as needed. VisPy also includes an experimental wrapper around ``mplexporter`` (from https://github.com/mpld3/mplexporter) that allows ``vispy.mpl_plot`` to act as a drop-in replacement for Matplotlib in existing projects (however this approach is not always expected to have the same performance benefits as using the native ``vispy.plot`` API).
+Despite the large volume of data, the resulting views can be immediately panned and zoomed in realtime. As a rough performance comparison, the same plot data can be redrawn at about 0.2 Hz by Matplotlib, 2 Hz by PyQtGraph, and over 100 Hz by VisPy (on the author's machine). Each call generates scenegraph (layer 3) objects to allow lower level control over the visual output. This makes it possible to begin development with the simplest ``vispy.plot`` calls and iteratively refine the output as needed. VisPy also includes an experimental wrapper around ``mplexporter`` (from https://github.com/mpld3/mplexporter) that allows it to act as a drop-in replacement for Matplotlib in existing projects (however this approach is not always expected to have the same performance benefits as using the native ``vispy.plot`` API).
 
-The ``vispy.plot`` interface is currently the highest-level and easiest layer VisPy offers. Consequently, it is also the least mature. We expect this layer to grow quickly in the coming months as we add more plot types and settle the API.
+The ``vispy.plot`` interface is currently the highest-level and easiest layer VisPy offers. Consequently, it is also the least mature. We expect this layer to grow quickly in the coming months as we add more plot types and allow the API to settle.
 
 
 Roadmap
 -------
 
+Our immediate goal for vispy is to stabilize the visual, scenegraph, and plotting APIs, and implement the most pressing basic features. We are continuallly testing for performance under different use cases and ensuring that behavior is consistent across all platforms. In the long term, we will implement more advanced features:
 
-
-
-* Stabilization of scenegraph / visuals / plot APIs
-* Introduction of collections to scenegraph, which will allow multiple visuals to be drawn simultaneously with a single GL call
-* More plot types
-* SVG export
+* *SVG export.* This is a must-have feature for any visualization library that targets publication graphics, and a high priority for VisPy.
+* *Add more plot types.* The scope of ``vispy.plot`` includes a very broad range of high-level visualizations such as vector fields, flow charts. Building this library of visualizations will be an ongoing process.
+* *Collections.* This system will allow many visuals to be joined together and drawn with a single call to OpenGL. This is expected to greatly improve performance when many visuals are displayed in the scene.
+* *Order-independent blending*. This technique will allow translucent visuals to be correctly blended without the need to sort the visuals by depth first. This will greatly improve the rendering quality of many 3D scenes. 
 
 
