@@ -166,8 +166,8 @@ In addition, for this approach to work properly, all the Fortran functions in BL
 
 .. code-block:: fortran
 
-   c     myffunc.f
-   c     The function to be exported.
+   !     myffunc.f
+   !     The function to be exported.
          double precision function f(x, y)
            double precision x, y
            f = x * x - x * y + 3 * y
@@ -175,8 +175,8 @@ In addition, for this approach to work properly, all the Fortran functions in BL
 
 .. code-block:: fortran
 
-   c     myffuncwrap.f
-   c     A subroutine wrapper for the function.
+   !     myffuncwrap.f
+   !     A subroutine wrapper for the function.
          subroutine fwrp(out, x, y)
            external f
            double precision f
