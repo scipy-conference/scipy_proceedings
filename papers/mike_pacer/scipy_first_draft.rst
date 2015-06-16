@@ -430,9 +430,6 @@ Outline v. 1.1
 References
 ----------
 
-.. :biblio:`myBibliography`
-
-
 
 .. .. raw:: latex
 
