@@ -2,7 +2,7 @@
 :email: ankurankan@gmail.com
 
 :author: Abinash Panda
-:email: 
+:email: mailme.abinashpanda@gmail.com
 
 --------------------------------------------------
 pgmpy: Probabilistic Graphical Models using Python
@@ -85,20 +85,18 @@ Dependencies: pgmpy runs only on python3 and is dependent on networkx, numpy and
 Creating Bayesian Models using pgmpy
 ------------------------------------
 
-** Should we go into details of Bayesian Networks here ?? **
-In general creating a model in pgmpy works as first defining the network structure and then associating the parameters to the network.
-Let's take the example of the student model as shown in the figure
- :ref:'student'. The base structure representing the connections between the different variables in the model is a Directed Acyclic Graph. In pgmpy we can define such a network structure as:
+The general workflow for creating any model in pgmpy is to first define the 
+network structure and then add the parameters to it.
 
-We also see that the network is parameterized using Conditional Probability Tables (CPT).
-Let's take a simple example of a table to show how to represent CPTs using pgmpy.
+A Bayesian Netowrk is parameterized using Conditional Probability Distributions.
+
 
 .. table:: Conditional Probability Table. :label:'CPT'
    
-   +-------------------+--------------------------+---------------------+
-   | Intelligence (I)  |           i0             |          i1         |
    +-------------------+------------+-------------+-----------+---------+
-   | Difficulty (D)    |   d0       |    d1       |   d0      |   d1    |
+   | Intelligence (I)  |    i0      |     i0      |   i1      |   i1    |
+   +-------------------+------------+-------------+-----------+---------+
+   | Difficulty (D)    |    d0      |     d1      |   d0      |   d1    |
    +-------------------+------------+-------------+-----------+---------+
    | g0                |    0.3     |    0.05     |   0.9     |   0.5   |
    +-------------------+------------+-------------+-----------+---------+
