@@ -16,10 +16,10 @@ PyRK: A Python Package For Nuclear Reactor Kinetics
    startup and shutdown as well as abnormal scenarios including Beyond Design
    Basis Events (BDBEs) such as Accident Transients Without Scram (ATWS). For
    robustness, this package employs various tools within the scientific python
-   ecosystem. For additional ease of use, it employes an object-oriented data
-   model, allowing nuclear engineers to rapidly prototype nuclear reactor
-   control and safety systems in the context of their novel nuclear reactor
-   designs.
+   ecosystem. For additional ease of use, it employes a reactor-agnostic,
+   object-oriented data model, allowing nuclear engineers to rapidly prototype
+   nuclear reactor control and safety systems in the context of their novel
+   nuclear reactor designs.
 
 
 .. class:: keywords
@@ -29,32 +29,32 @@ PyRK: A Python Package For Nuclear Reactor Kinetics
 Introduction
 ------------
 
-Transient analysis is fundamental to nuclear reactor design. That is,
-time-dependent fluctuations in neutron population, fluid flow, and heat transfer are
+Time-dependent fluctuations in neutron population, fluid flow, and heat transfer are
 essential to understanding the performance and safety of a reactor. Such
-_transients_ include normal reactor startup and shutdown as well as abnormal scenarios
+*transients* include normal reactor startup and shutdown as well as abnormal scenarios
 including Beyond Design Basis Events (BDBEs) such as Accident Transients
 Without Scram (ATWS). However, no open source tool currently exists for
 reactor transient analysis. To fill this gap, PyRK (Python for Reactor
-Kinetics)[Huff2015]_, a new python package for nuclear reactor kinetics was
-created.  No other open source tool exists for this application, so PyRK is the
-first to offer an open source tool designed to conduct:
+Kinetics) [Huff2015]_, a new python package for nuclear reactor kinetics, was
+created. PyRK is the first to offer an open source tool designed to conduct:
 
 - time-dependent,
 - lumped parameter thermal-hydraulics,
 - coupled with neutron kinetics,
 - in 0-dimensions,
 - for nuclear reactor analysis,
+- of any reactor design,
 - in an object-oriented context.
 
 
-For background, this paper will introduce necessary concepts for understanding
+As background, this paper will introduce necessary concepts for understanding
 the PyRK model and will describe the differential equations representing the
 coupled physics at hand. Next, the implementation of the data model, simulation
 framework, and numerical solution will be described. This discussion will
 include the use, in PyRK, of many parts of the scientific python software
-ecosystem: NumPy for array manipulation, SciPy for ODE and PDE solvers, nose
-for testing, Pint for unit-checking, Sphinx for documentation, and matplolib for plotting.
+ecosystem such as NumPy for array manipulation, SciPy for ODE and PDE solvers,
+nose for testing, Pint for unit-checking, Sphinx for documentation, and
+matplolib for plotting.
 
 
 Background
@@ -365,7 +365,7 @@ Quality Assurance
 For robustness, a number of tools were used to improve robustness and
 reproducibility in this package. These include:
 
-- [github]_ : for versio control
+- [github]_ : for version control
 - [matplotlib]_ : for plotting
 - [nose]_ : for unit testing
 - [numpy]_ : for holding and manipulating arrays of floats
@@ -434,6 +434,19 @@ precursor data, a modular material definition framework, and coupled lumped
 parameter thermal hydraulics with zero-dimensional neutron kinetics in an
 object-oriented modeling paradigm, PyRK provides design-agnostic toolkit for
 accident analysis potentially useful to all nuclear reactor designers and analysts.
+
+
+Acknowledgements
+-----------------
+
+The author would like to thank the contributions of collaborators Xin Wang, Per
+Peterson, Ehud Greenspan, and Massimiliano Fratoni at the University of
+California Berkeley. This research was performed using funding received from
+the U.S. Department of Energy Office of Nuclear Energy's Nuclear Energy
+University Programs through the FHR IRP. Additionally, this material is based
+upon work supported by the Department of Energy National Nuclear Security
+Administration under Award Number: DE-NA0000979 through the Nuclear Science and
+Security Consortium.
 
 References
 ----------
