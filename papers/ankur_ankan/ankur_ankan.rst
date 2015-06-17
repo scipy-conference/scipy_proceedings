@@ -221,9 +221,22 @@ and predict:
 
 Extending pgmpy
 ---------------
+One of the main features of pgmpy is its extensibility. pgmpy has been built in a way so that 
+new algorithms can be directly written without needing to know the base code. For writing 
+any new inference algorithm we can simply inherit the Inference class. Inheriting it gives 
+us access to the varibles, cardinalities and factors of any model. An example is shown:
+
+.. code-block:: python
+
+   # add code here
+
+Similarly for adding any new variable elimination order algorithm we can simply inherit from
+EliminationOrder.
+
 
 Conclusion
 ----------
+
 
 References
 ----------
