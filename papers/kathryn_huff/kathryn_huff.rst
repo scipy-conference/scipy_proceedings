@@ -72,14 +72,23 @@ nuclear reactor from criticality:
    \rho &= \frac{k-1}{k}
    \intertext{where}
    \rho &= \mbox{reactivity}\\
-   k &= \mbox{multiplication factor}
+   k &= \mbox{neutron multiplication factor}\\
+     &= \frac{\mbox{neutrons causing fission}}{\mbox{neutrons produced by fission}}.
 
+The reactor power is stable (*critical*) when the effective multiplication
+factor, :math:`k`, equals 1. For this reason, in all power reactors, the scalar
+flux of neutrons determines the reactor's power. The reactor power, in turn,
+affects the temperature. Reactivity feedback then results, due the temperature
+dependence of geometry, material densities, the neutron spectrum, and
+microscopic cross sections [Bell1970]_.  This concept is captured in the
+feedback diagram in Figure :ref:`figfeedback`.
 
+.. figure:: feedback.png
 
-In all power reactors, the scalar flux of neutrons determines the reactor's power. The reactor power, in
-turn, affects the temperature. Reactivity feedback then results, due the
-temperature dependence of geometry, material densities, the neutron spectrum,
-and microscopic cross sections [Bell1970]_.
+   Reactivity couples neutron kinetics and thermal hydraulics. That is, changes
+   in reactivity result in neutron population (power) fluctuations,
+   corresponding temperature fluctuations, and, ultimately, reactivity
+   feedback.  :label:`figfeedback`
 
 One common method for approaching these transient simulations is a
 zero-dimensional approximation which results in differential equations called
@@ -147,15 +156,6 @@ power. The simplest form of the equations dictating this feedback are:
    T_i &= \mbox{temperature of component i}\\
    \alpha_i &= \mbox{temperature reactivity coefficient of i}.
 
-These equations are captured in the feedback diagram in figure
-:ref:`figfeedback`.
-
-.. figure:: feedback.png
-
-   Reactivity couples neutron kinetics and thermal hydraulics. That is, changes
-   in reactivity result in neutron population (power) fluctuations,
-   corresponding temperature fluctuations, and, ultimately, reactivity
-   feedback.  :label:`figfeedback`
 
 
 The PRKE
