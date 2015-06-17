@@ -101,6 +101,7 @@ class Translator(LaTeXTranslator):
             self.bibtex = ['alpha', text]
             self._use_latex_citations = True
             self._bibitems = ['', '']
+            self.bibliography = text
 
         self.current_field = ''
 
@@ -223,7 +224,8 @@ class Translator(LaTeXTranslator):
                                'abstract': self.abstract_text,
                                'keywords': self.keywords,
                                'copyright_holder': copyright_holder,
-                               'video': self.video_url}
+                               'video': self.video_url,
+                               'bibliography':self.bibliography}
 
         if hasattr(self, 'bibtex') and self.bibtex:
             self.document.stats.update({'bibliography': self.bibtex[1]})
