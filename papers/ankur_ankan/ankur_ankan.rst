@@ -74,162 +74,133 @@ the user full control on designing the model. Also pgmpy provides easy extensibi
 the user can write his own inference algorithms or elimination orders without actually 
 looking at the source code.
  
-Important Part
---------------
+Getting Source Code and Installing
+----------------------------------
+pgmpy is released under MIT Licence and is hosted on github. We can simply clone the repository and install it::
 
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
+    git clone https://github.com/pgmpy/pgmpy
+    cd pgmpy
+    [sudo] python3 setup.py install
 
-.. math::
+Dependencies: pgmpy runs only on python3 and is dependent on networkx, numpy and scipy.
 
-   g(x) = \int_0^\infty f(x) dx
+Creating Bayesian Models using pgmpy
+------------------------------------
 
-or on multiple, aligned lines:
+The general workflow for creating any model in pgmpy is to first define the 
+network structure and then add the parameters to it.
 
-.. math::
-   :type: eqnarray
-
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
-
-The area of a circle and volume of a sphere are given as
-
-.. math::
-   :label: circarea
-
-   A(r) = \pi r^2.
-
-.. math::
-   :label: spherevol
-
-   V(r) = \frac{4}{3} \pi r^3
-
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
-pulvinar id metus.
-
-.. [#] On the one hand, a footnote.
-.. [#] On the other hand, another footnote.
-
-.. figure:: figure1.png
-
-   This is the caption. :label:`egfig`
-
-.. figure:: figure1.png
-   :align: center
-   :figclass: w
-
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
-
-.. figure:: figure1.png
-   :scale: 20%
-   :figclass: bht
-
-   This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top.
-   Note that for now, scale is relative to a completely arbitrary original
-   reference size which might be the original size of your image - you probably
-   have to play with it. :label:`egfig2`
-
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
-
-.. table:: This is the caption for the materials table. :label:`mtable`
-
-   +------------+----------------+
-   | Material   | Units          |
-   +============+================+
-   | Stone      | 3              |
-   +------------+----------------+
-   | Water      | 12             |
-   +------------+----------------+
-   | Cement     | :math:`\alpha` |
-   +------------+----------------+
+A Bayesian Netowrk is parameterized using Conditional Probability Distributions.
 
 
-We show the different quantities of materials required in Table
-:ref:`mtable`.
+.. table:: Conditional Probability Table. :label:'CPT'
+   
+   +-------------------+------------+-------------+-----------+---------+
+   | Intelligence (I)  |    i0      |     i0      |   i1      |   i1    |
+   +-------------------+------------+-------------+-----------+---------+
+   | Difficulty (D)    |    d0      |     d1      |   d0      |   d1    |
+   +-------------------+------------+-------------+-----------+---------+
+   | g0                |    0.3     |    0.05     |   0.9     |   0.5   |
+   +-------------------+------------+-------------+-----------+---------+
+   | g1                |    0.4     |    0.25     |   0.08    |   0.3   |
+   +-------------------+------------+-------------+-----------+---------+
+   | g2                |    0.3     |    0.7      |   0.02    |   0.2   |
+   +-------------------+------------+-------------+-----------+---------+
+
+We can represent the CPT :ref:'CPT' in pgmpy as follows:
+
+.. code-block:: python
+
+   from pgmpy.models import BayesianModel
+   from pgmpy.factors import TabularCPD
+   student_model = BayesianNetwork([('D', 'G'), ('I', 'G'), ('G', 'L'),
+                                    ('I', 'S')])
+   grade_cpd = TabularCPD(variable='G',
+			        variable_card=3,
+                          values=[[0.3, 0.05, 0.9, 0.5],
+                                  [0.4, 0.25, 0.08, 0.3],
+                                  [0.3, 0.7, 0.02, 0.2]],
+                          evidence=['I', 'D'],
+                          evidence_card=[2, 2])
+   difficulty_cpd = TabularCPD(variable='D',
+                               variable_card=2,
+                               values=[[0.6, 0.4]])
+   intel_cpd = TabularCPD(variable='I',
+                          variable_card=2,
+                          values=[[0.7, 0.3]])
+   letter_cpd = TabularCPD(variable='L',
+                           variable_card=2,
+                           values=[[0.1, 0.4, 0.99],
+                                   [0.9, 0.6, 0.01]],
+                           evidence=['G'],
+                           evidence_card=[3])
+   sat_cpd = TabularCPD(variable='S',
+                        variable_card=2,
+                        values=[[0.95, 0.2],
+                                [0.05, 0.8]],
+                        evidence=['I'],
+                        evidence_card=[2])
+   student_model.add_cpds(grade_cpd, difficulty_cpd, intel_cpd, letter_cpd,
+                          sat_cpd)
+
+Various methods are available in pgmpy for checking the D-separation and independencies in the network.
+
+Creating Markov Models in pgmpy
+-------------------------------
+
+ Should we go into the details of Markov Network here?
+Short Intro to Markov Models.
+
+Again taking an example of simple Markov model. It's all the same except the Markov models are parameterized using Factors instead of CPTs. So, we can define a Markov Model as:
+
+.. code-block:: python
+
+   from pgmpy.models import MarkovModel
+   from pgmpy.factors import Factor
+   model = MarkovModel([('A', 'B'), ('B', 'C'), ('C', 'D'), ('D', 'A')])
+   factor_a_b = Factor(['A', 'B'], [2, 2], [100, 5, 5, 100])
+   factor_b_c = Factor(['B', 'C'], [2, 2], [])
+   factor_c_d = Factor(['C', 'D'], [2, 2], [])
+   factor_d_a = Factor(['D', 'A'], [2, 2], [])
+   model.add_factors(factor_a_b, factor_b_c, factor_c_d, factor_d_a)
+
+Doing Inference over models
+---------------------------
+pgmpy support various Exact and Approximate inference algorithms. The general API to run 
+inference over models is to first create an inference object by passing the model to the
+inference algorithm class. Then we can simply call the query method of the inference object
+to query for the probability of some state of some variable given observations of other 
+variables. Let's take an example of doing Variable elimination on the student model above:
+
+.. code-block:: python
+
+   from pgmpy.inference import VariableElimination
+   student_infer = VariableElimination(student_model)
+   student_infer.query('G')
+   
+   student_infer.query('G', evidence=[('I', 1), ('D', 0)])
+
+   student_infer.map_query('G')
+
+   student_infer.map_query('G', evidence=[('I', 1), ('D', 0)])
+
+Fit and Predict Methods
+-----------------------
+While working with data it's difficult to compute the distributions by hand and is too
+much work to create each of the factor/CPT by hand. So, pgmpy gives the option of fit 
+and predict:
+
+.. code-block:: python
+
+   import numpy as np
+   # Generate some random data
+   student_model.fit(data)
+   student_model.get_cpds()
+   student_model.predict()
 
 
-.. The statement below shows how to adjust the width of a table.
-
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.8\linewidth}
-
-
-.. table:: This is the caption for the wide table.
-   :class: w
-
-   +--------+----+------+------+------+------+--------+
-   | This   | is |  a   | very | very | wide | table  |
-   +--------+----+------+------+------+------+--------+
-
-Unfortunately, restructuredtext can be picky about tables, so if it simply
-won't work try raw LaTeX:
-
-
-.. raw:: latex
-
-   \begin{table*}
-
-     \begin{longtable*}{|l|r|r|r|}
-     \hline
-     \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
-     \cline{2-4}
-      & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
-     \hline
-     Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
-     \hline
-     Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
-     \hline
-     Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
-     \hline
-     Percent Difference & 44\% & 41\% & 43\%\tabularnewline
-     \hline
-     \end{longtable*}
-
-     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
-
-   \end{table*}
-
-Perhaps we want to end off with a quote by Lao Tse [#]_:
-
-  *Muddy water, let stand, becomes clear.*
-
-.. [#] :math:`\mathrm{e^{-i\pi}}`
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
+Conclusion
+----------
 
 References
 ----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
-
