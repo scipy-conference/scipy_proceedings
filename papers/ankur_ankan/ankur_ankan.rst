@@ -17,7 +17,7 @@ pgmpy: Probabilistic Graphical Models using Python
    of speech recognition, information extraction, image segmentation, modelling 
    gene regulatory networks. 
    
-   pgmpy is a python library for working with graphical models. It allows the 
+   pgmpy [pgmpy] is a python library for working with graphical models. It allows the 
    user to create their own models and answer inference or map queries over 
    them. pgmpy has implementation of many inference algorithms like 
    VariableElimination, Belief Propagation etc.
@@ -92,13 +92,10 @@ the relation between them. It is parameterized using Conditional Probability Dis
 Each random variable in a Bayesian Network has a CPD associated with it. If the random varible 
 has parents in the network then the CPD represents :math:`P(var| Par_var)` i.e. the probability
 of that variable given its parents. In the case when the random variable has no parents it 
-simply represents :math:`P(var)` i.e. the probability of that variable. 
+simply represents :math:`P(var)` i.e. the probability of that variable.
 
-The general workflow for creating any model in pgmpy is to first define the 
-network structure and then add the parameters to it.
-
-A Bayesian Netowrk is parameterized using Conditional Probability Distributions.
-
+We can take the example of the CPD for the random variable grade in the student model :ref:'bayesian'.
+A possible CPD for the grade variable is shown in the table :ref:'CPT'.
 
 .. table:: Conditional Probability Table. :label:'CPT'
    
@@ -115,6 +112,20 @@ A Bayesian Netowrk is parameterized using Conditional Probability Distributions.
    +-------------------+------------+-------------+-----------+---------+
 
 We can represent the CPT :ref:'CPT' in pgmpy as follows:
+
+.. code-block:: python
+   from pgmpy.factors import TabularCPD
+   grade_cpd = TabularCPD(variable='G',
+			        variable_card=3,
+                          values=[[0.3, 0.05, 0.9, 0.5],
+                                  [0.4, 0.25, 0.08, 0.3],
+                                  [0.3, 0.7, 0.02, 0.2]],
+                          evidence=['I', 'D'],
+                          evidence_card=[2, 2])
+
+Now, coming back to defining a model using pgmpy. The general workflow for defining a
+model in pgmpy is to first define the network structure and then add the parameters 
+to it. We can create the student model :ref:'bayesian' in pgmpy as follows:
 
 .. code-block:: python
 
@@ -147,10 +158,16 @@ We can represent the CPT :ref:'CPT' in pgmpy as follows:
                                 [0.05, 0.8]],
                         evidence=['I'],
                         evidence_card=[2])
-   student_model.add_cpds(grade_cpd, difficulty_cpd, intel_cpd, letter_cpd,
-                          sat_cpd)
+   student_model.add_cpds(grade_cpd, difficulty_cpd, intel_cpd, 
+			  letter_cpd, sat_cpd)
 
-Various methods are available in pgmpy for checking the D-separation and independencies in the network.
+The network structure of a Graphical Model encodes the independence conditions between the 
+random variables. pgmpy also has methods to determine the local independencies, D-Separation,
+converting to a markov model etc. A few example are shown below:
+
+.. code-blocks:: python
+   # show code for different methods.
+
 
 Creating Markov Models in pgmpy
 -------------------------------
@@ -205,6 +222,8 @@ and predict:
    student_model.get_cpds()
    student_model.predict()
 
+Extending pgmpy
+---------------
 
 Conclusion
 ----------
