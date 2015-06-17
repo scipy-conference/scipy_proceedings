@@ -114,6 +114,7 @@ A possible CPD for the grade variable is shown in the table :ref:'CPT'.
 We can represent the CPT :ref:'CPT' in pgmpy as follows:
 
 .. code-block:: python
+
    from pgmpy.factors import TabularCPD
    grade_cpd = TabularCPD(variable='G',
 			        variable_card=3,
@@ -164,11 +165,6 @@ to it. We can create the student model :ref:'bayesian' in pgmpy as follows:
 The network structure of a Graphical Model encodes the independence conditions between the 
 random variables. pgmpy also has methods to determine the local independencies, D-Separation,
 converting to a markov model etc. A few example are shown below:
-
-.. code-blocks:: python
-
-   # show code for different methods.
-
 
 Creating Markov Models in pgmpy
 -------------------------------
