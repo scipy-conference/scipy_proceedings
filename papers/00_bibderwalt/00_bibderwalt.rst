@@ -59,12 +59,14 @@ Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
 justo vitae odio tincidunt tempus at vitae tortor.
 
 
-Bibliographies and block quotes
--------------------------------
+Bibliographies, citations and block quotes
+------------------------------------------
 
 If you want to include a ``.bib`` file, do so above by placing  :code:`:bibliography: yourFilenameWithoutExtension` as above (replacing ``mybib``) for a file named :code:`yourFilenameWithoutExtension.bib` after removing the ``.bib`` extension. 
 
-To then reference citations contained in that bibliography use the :code:`:cite:`citation-key`` role, as in :cite:`hume48` (which literally is :code:`:cite:`hume48`` in accordance with the ``hume48`` cite-key in the associated ``mybib.bib`` file).
+**Do not include any special characters that need to be escaped or any spaces in the bib-file's name**. Doing so makes bibTeX cranky, & the rst to LaTeX+bibTeX transform won't work. 
+
+To reference citations contained in that bibliography use the :code:`:cite:`citation-key`` role, as in :cite:`hume48` (which literally is :code:`:cite:`hume48`` in accordance with the ``hume48`` cite-key in the associated ``mybib.bib`` file).
 
 However, if you use a bibtex file, this will overwrite any manually written references. 
 
