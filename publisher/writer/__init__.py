@@ -39,6 +39,7 @@ class Translator(LaTeXTranslator):
         self.keywords = ''
         self.table_caption = []
         self.video_url = ''
+        self.bibliography = ''
 
         # This gets read by the underlying docutils implementation.
         # If present, it is a list with the first entry the style name
