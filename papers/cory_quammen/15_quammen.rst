@@ -75,7 +75,7 @@ Each Python-wrapped source file is likewise compiled into a shared
 library corresponding to the C++ module. All VTK C++ modules are
 provided in a single ``vtk`` Python module.
 
-Importing VTK in Python
+VTK Usage in Python
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 VTK is provided as a single ``vtk`` module that can be imported like
@@ -86,9 +86,6 @@ variables set to make it simple to import the ``vtk`` module. It is
 also possible to use the same ``python`` executable from the Python
 installation by setting the PYTHONPATH to the location of VTK's shared
 libraries.
-
-VTK Usage
-~~~~~~~~~
 
 To access VTK classes, you simply import ``vtk``:
 
@@ -129,8 +126,7 @@ returned.
 .. code-block:: python
 
    center = sphere.GetCenter()
-   print center
-   (0, 1, 0)
+   # center has the value (0, 1, 0)
 
 For VTK classes that have operators ``<``, ``<=``, ``==``, ``>=``, ``>``
 defined, equivalent Python operators are provided.
@@ -157,7 +153,7 @@ mechanism.
 
 .. code-block:: python
 
-   help(vtk.vtkSphereSource)
+   >>> help(vtk.vtkSphereSource)
 
 The above shows the full documentation of the ``vtkSphereSource``
 class (too extensive to list here), while the code below produces help
@@ -165,7 +161,7 @@ for only the ``SetCenter`` method.
 
 .. code-block:: python
 
-   help(vtk.vtkSphereSource.SetCenter)
+   >>> help(vtk.vtkSphereSource.SetCenter)
 
    Help on built-in function SetCenter:
 
@@ -183,7 +179,7 @@ Integration with NumPy
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Since 2008, a low-level interface layer between VTK and NumPy has been
-added to VTK. In VTK, data associated with points or cells in a data
+available in VTK. In VTK, data associated with points or cells in a data
 structure (EXPLAIN THIS SOMEWHERE) is stored in an instance of a
 subclass of a ``vtkAbstractArray``. There are limited functions within
 VTK itself to process or analyze these arrays. This interface layer
@@ -191,7 +187,7 @@ can be used to map VTK arrays to NumPy arrays, enabling the full power
 of NumPy operations on those arrays to be used. Suppose we have a data
 set from a computation fluid dynamics simulation that we can load with
 a VTK reader class that has a point-associated array representing
-pressure. We can find several properties of this array using NumPY,
+pressure. We can find several properties of this array using NumPy,
 e.g.
 
 .. code-block:: python
@@ -211,7 +207,7 @@ e.g.
    max_pressure = np.max(np_pressure)
 
 This interface can also be used to add data arrays to loaded data
-sets that can be handed of to VTK for visualization:
+sets that can be handed off to VTK for visualization:
 
 .. code-block:: python
 
@@ -261,10 +257,10 @@ VTK arrays.
 
 .. code-block:: python
 
-   ds.PointData.keys()
+   >>> ds.PointData.keys()
    ['pressure']
 
-   pressure = ds.PointData['pressure']
+   >>> pressure = ds.PointData['pressure']
 
 Note the the ``pressure`` array here is an instance of ``VTKArray``
 rather than a ``vtkAbstractArray``. ``VTKArray`` is a wrapper around
@@ -276,14 +272,14 @@ standard ``ndarray`` operations on this wrapped array, e.g.,
    >>> pressure[0]
    0.112
 
-   >>> pressure[1:3]
+   >>> pressure[1:4]
    VTKArray([34.2432, 47.2342, 38.1211], dtype=float32)
 
-   >>> pressure[1:3] + 1
+   >>> pressure[1:4] + 1
    VTKArray([35.2432, 48.2342, 39.1211], dtype=float32)
 
    >>> pressure[pressure > 40]
-   VTKArray([48.2342], dtype=float32)
+   VTKArray([47.2342], dtype=float32)
 
 The ``numpy_interface.algorithms`` module provides additional
 functionality beyond the array interface.
@@ -295,20 +291,21 @@ functionality beyond the array interface.
    >>> algs.min(pressure)
    VTKArray(0.1213)
 
-   >>> algs.where(pressure > 40)
-   (array(1))
+   >>> algs.where(pressure > 38)
+   (array([2, 3]),)
 
 In addition to most of the ufuncs provided by NumPy, the
 ``algorithms`` interface provides some functions to access quantities
 that VTK can compute in the wide variety of data set types (e.g.,
-surface meshes, unstructured grids, uniform grids) available in
+surface meshes, unstructured grids, uniform grids, etc.) available in
 VTK. This can be used to compute the total volume of cells in an
 unstructured grid, for instance,
 
 .. code-block:: python
 
-   cell_volumes = algs.volume(ds)
-   algs.sum(cell_volumes)
+   >>> cell_volumes = algs.volume(ds)
+   >>> algs.sum(cell_volumes)
+   VTKArray(847.02)
 
 This example illustrates nicely the power of combining a NumPy-like
 interface with VTK's uniform API for computing various quantities on
@@ -353,10 +350,11 @@ subclassed to create new sources or filters because the virtual
 function table defined in C++ do not know about methods defined in
 Python. Instead, one can subclass from a special ``VTKAlgorithm``
 class defined in ``vtk.util.vtkAlgorithm``. This class specifies the
-interface for classes that interact with ``vtkPythonAlgorithm``, a
-C++ class that delegates the primary VTK data update methods to
-the Python class. By doing this, it is possible to implement complex
-new sources and filters using Python alone.
+interface for classes that interact with ``vtkPythonAlgorithm``, a C++
+class that delegates the primary VTK data update methods to the Python
+class. By doing this, it is possible to implement complex new sources
+and filters using Python alone. For more details on this algorithm,
+see [Gev2014].
 
 Python integration in VTK tests
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -613,53 +611,88 @@ processes that are executed to change the state of local proxies.
 Python View
 ~~~~~~~~~~~
 
+While ParaView's roots are in the loading and display of traditional
+3D scientific visualizations, it has grown over the years to support
+more data set types and different displays of those data set types.
+These different displays, or "Views" in ParaView parlance, include a
+3D interactive rendering view, a histogram view, a parallel
+coordinates view, and a large number of others.
 
+One such view is the Python View. This view is similar to the
+programmable filter in that the user supplies a Python script that
+generates some data. In the case of the Python View, the data that is
+generated is an image to display in the ParaView window. This makes it
+possible to use Python plotting packages, such as matplotlib, to
+generate plots that can be displayed directly in ParaView.
 
-With code-highlighting:
+Scripts used in the Python view are required to define two functions,
+a ``setup_data`` function and a ``render`` function. Because rendering
+in the Python view is done on the local client, data that resides on
+remote server processes must first be brought over to the client.
+Because data sets may be larger than the client's RAM, only a subset
+of the data arrays in a data set are copied to the client. By default,
+no arrays are copied. Arrays can be requested using methods available
+in the ``vtkPythonView`` class instance that is passed in as an
+argument to the ``setup_data`` function, e.g.,
 
 .. code-block:: python
 
-   def sum(a, b):
-       """Sum two numbers."""
+   def setup_data(view):
+       view.SetAttributeArrayStatus(0, \
+           vtkDataObject.POINT, "Density", 1)
 
-       return a + b
+The actual generation of the plot image is expected to be done in the
+``render`` function. This function is expected to take the same
+``view`` object as is passed to the ``setup_data`` function. It also
+takes a width and height parameter that tells how large the plotted
+image should be in terms of pixels. This function is expected to
+return an instance of ``vtkImageData`` containing the plot image. A
+few utilities are included in the ``paraview.python_view`` module to
+convert Python arrays and images to ``vtkImageData``. An example that
+creates a histogram of an array named "Density" is provided here:
 
-Maybe also in another language, and with line numbers:
+.. code-block:: python
 
-.. code-block:: c
-   :linenos:
+   def render(view, width, height):
+       from paraview \
+           import python_view.matplotlib_figure
+       figure = matplotlib_figure(width, height)
 
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
+       ax = figure.add_subplot(1,1,1)
+       ax.minorticks_on()
+       ax.set_title('Plot title')
+       ax.set_xlabel('X label')
+       ax.set_ylabel('Y label')
 
-Or a snippet from the above code, starting at the correct line number:
+       # Process only the first visible object in the
+       # pipeline browser
+       do = view.GetVisibleDataObjectForRendering(0)
 
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
+       dens = do.GetPointData().GetArray('Density')
 
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
- 
-The area of a circle and volume of a sphere are given as
+       # Convert VTK data array to numpy array
+       from paraview.numpy_support import vtk_to_numpy
 
-.. math::
-   :label: circarea
+       ax.hist(vtk_to_numpy(dens), bins=10)
 
-   A(r) = \pi r^2.
+       return python_view.figure_to_image(figure)
 
-.. math::
-   :label: spherevol
+Future Python Integration
+-------------------------
 
-   V(r) = \frac{4}{3} \pi r^3
+VTK and ParaView currently support up to Python version 2.7. The VTK
+and ParaView user bases have significant code written in 2.7.
+Conversion from Python 2 to 3 will require significant work, but
+support for it is expected within the next year.
 
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
+Acknowledgements
+----------------
+
+* David Gobbi
+* Ken Martin
+* Berk Geveci
+* Utkarsh Ayachit
+* Ben Boeckel
 
 
 .. Customised LaTeX packages
@@ -682,6 +715,9 @@ References
 
 .. [Aya15] U. Ayachit, *The ParaView Guide: A Parallel Visualization Application*,
            Kitware, Inc. 2015, ISBN 978-1930934306.
+
+.. [Gev14] B. Geveci, *vtkPythonAlgorithm is great*,
+           Kitware Blog, September 10, 2014. http://www.kitware.com/blog/home/post/737
 
 .. [Sch04] W. Schroeder, K. Martin, and B. Lorensen, *The Visualization Toolkit: An Object-Oriented Approach to 3D Graphics*,
            4th ed. Kitware, Inc., 2004, ISBN 1-930934-19-X.
