@@ -166,13 +166,14 @@ random variables. pgmpy also has methods to determine the local independencies, 
 converting to a markov model etc. A few example are shown below:
 
 .. code-blocks:: python
+
    # show code for different methods.
 
 
 Creating Markov Models in pgmpy
 -------------------------------
 
- Should we go into the details of Markov Network here?
+Should we go into the details of Markov Network here?
 Short Intro to Markov Models.
 
 Again taking an example of simple Markov model. It's all the same except the Markov models are parameterized using Factors instead of CPTs. So, we can define a Markov Model as:
