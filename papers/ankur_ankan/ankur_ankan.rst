@@ -45,12 +45,13 @@ types of Graphical Models: Bayesian Networks and Markov Networks.
    :align: center
    :figclass: w
    
-   Student Model: A simple Bayesian Network :label:'bayesian'
+   A simple Bayesian Network. :label:'bayesian'
 
 Bayesian Network: A Bayesian Network consists of a directed graph and a 
 conditional distribution associated with each of the random variables. A 
 Bayesian network is used mostly when there is a causal relationship between the
-random variables. An example of a Bayesian Network representing a student taking some course is shown in Fig :ref:'bayesian'.
+random variables. An example of a Bayesian Network representing a student taking 
+some course is shown in Fig :ref:'bayesian'.
 
 .. figure:: figure2.png
    :align: center
@@ -60,16 +61,18 @@ random variables. An example of a Bayesian Network representing a student taking
 
 Markov Network: A Markov Network consists of an undirected graph and a few 
 factors are associated with it. Unlike in the case of Bayesian network, a factor
-does not represent the probabilities of variables in the network. Rather it represents how much is a state of a random variable likely to agree to the state 
+does not represent the probabilities of variables in the network. Rather it represents 
+how much is a state of a random variable likely to agree to the state 
 of the other random variable. An example of 4 friends A, B, C, D agreeing to
 some concept is shown in Fig :ref:'markov'.
 
 There are numerous packages available in Python for working with graphical 
 models but most of them are focused towards some special case and doesn't 
-give complete freedom to the user. ** Give some examples of some packages **.
+give complete freedom to the user. Give some examples of some packages.
 pgmpy tries to be a complete package for working with graphical models and gives 
-the user full control on designing the model. Also pgmpy provides easy extensibility and the user can write his own inference algorithms or elimination 
-orders without actually looking at the source code.
+the user full control on designing the model. Also pgmpy provides easy extensibility and 
+the user can write his own inference algorithms or elimination orders without actually 
+looking at the source code.
  
 Important Part
 --------------
