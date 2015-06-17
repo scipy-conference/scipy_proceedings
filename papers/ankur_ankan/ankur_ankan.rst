@@ -204,3 +204,4 @@ Conclusion
 
 References
 ----------
+[pgmpy] pgmpy github page https://github.com/pgmpy/pgmpy
