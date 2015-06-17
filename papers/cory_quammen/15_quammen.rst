@@ -587,13 +587,32 @@ wrapping becomes
    output.Points = ipts + normals
 
 
-
 Unified Server Bindings
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-* In client-server configuration, send Python commands rather than
-  using custom message protocols. Reduces size of executables/shared
-  libraries.
+To support communication among ParaView processes, ParaView generates
+a special communication class for each of a subset of VTK classes
+automatically during build time. These class are used to communicate
+proxy state between different ParaView processes, to ensure, for
+example, that each proxy for an instance of a file reader on each
+process has the same file name. As we have described, a similar
+wrapping process is also performed, when Python support is enabled.
+
+Each wrapping adds to the size of the executable files and shared
+libraries. On very large scale parallel computing resources, the
+amount of RAM available per node is relatively limited. As a result,
+when running ParaView on such a resource, it is important to reduce
+the size of the executables as much as possible to leave room for the
+data that we want to visualize. One way to do this is to use the
+Python wrapping to communicate among processes instead of using the
+custom communication class. When this is enabled, the process of
+creating the special communication classes is not run. Instead,
+communication is performed by sending Python strings to destination
+processes that are executed to change the state of local proxies.
+
+Python View
+~~~~~~~~~~~
+
 
 
 With code-highlighting:
