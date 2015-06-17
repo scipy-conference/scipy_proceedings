@@ -16,7 +16,7 @@ PyRK: A Python Package For Nuclear Reactor Kinetics
    startup and shutdown as well as abnormal scenarios including Beyond Design
    Basis Events (BDBEs) such as Accident Transients Without Scram (ATWS). For
    robustness, this package employs various tools within the scientific python
-   ecosystem. For additional ease of use, it employes a reactor-agnostic,
+   ecosystem. For additional ease of use, it employs a reactor-agnostic,
    object-oriented data model, allowing nuclear engineers to rapidly prototype
    nuclear reactor control and safety systems in the context of their novel
    nuclear reactor designs.
@@ -54,16 +54,16 @@ framework, and numerical solution will be described. This discussion will
 include the use, in PyRK, of many parts of the scientific python software
 ecosystem such as NumPy for array manipulation, SciPy for ODE and PDE solvers,
 nose for testing, Pint for unit-checking, Sphinx for documentation, and
-matplolib for plotting.
+matplotlib for plotting.
 
 
 Background
 ----------
 
 Fundamentally, nuclear reactor transient analyses must characterize the
-relationship between neutron population and temperature. These two parameters are coupled
-together by reactivity, :math:`\rho` , which characterizes the departure of the
-nuclear reactor from criticality:
+relationship between neutron population and temperature. These two
+characteristics are coupled together by reactivity, :math:`\rho` , which
+characterizes the departure of the nuclear reactor from *criticality*:
 
 .. math::
    :type: align
@@ -77,18 +77,16 @@ nuclear reactor from criticality:
 
 The reactor power is stable (*critical*) when the effective multiplication
 factor, :math:`k`, equals 1. For this reason, in all power reactors, the scalar
-flux of neutrons determines the reactor's power. The reactor power, in turn,
-affects the temperature. Reactivity feedback then results, due the temperature
-dependence of geometry, material densities, the neutron spectrum, and
-microscopic cross sections [Bell1970]_.  This concept is captured in the
-feedback diagram in Figure :ref:`figfeedback`.
+flux of neutrons determines the power. The reactor power, in turn, affects the
+temperature. Reactivity feedback then results, due the temperature dependence
+of geometry, material densities, the neutron spectrum, and reaction
+probabilities [Bell1970]_.  This concept is captured in the feedback diagram in
+Figure :ref:`figfeedback`.
 
 .. figure:: feedback.png
 
-   Reactivity couples neutron kinetics and thermal hydraulics. That is, changes
-   in reactivity result in neutron population (power) fluctuations,
-   corresponding temperature fluctuations, and, ultimately, reactivity
-   feedback.  :label:`figfeedback`
+   Reactivity feedback couples neutron kinetics and thermal hydraulics
+   :label:`figfeedback`
 
 One common method for approaching these transient simulations is a
 zero-dimensional approximation which results in differential equations called
@@ -107,7 +105,7 @@ Neutronics
 ************
 
 The heat produced in a nuclear reactor is due to nuclear fission reactions. In
-a fission reaction, a neutron collides inellastically with a 'fissionable'
+a fission reaction, a neutron collides inelastically with a 'fissionable'
 isotope, which subsequently splits. This reaction emits both heat and neutrons.
 When the emitted neutrons go on to collide with another isotope, this is called
 a nuclear chain reaction and is the basis of power production in a nuclear
@@ -115,7 +113,7 @@ reactor. The study of the population, speed, direction, and energy spectrum of
 neutrons in a reactor as well as the related rate of fission at a particular
 moment is called neutronics or neutron transport. Neutronics simulations
 characterize the production and destruction of neutrons in a reactor and
-dependend on many reactor material properties and design choices (e.g.,
+dependent on many reactor material properties and design choices (e.g.,
 atomic densities and material configurations).
 
 Thermal-Hydraulics
@@ -128,7 +126,7 @@ parameters of the system respond accordingly.  The fluid of interest in a
 nuclear reactor is typically the coolant.  The hydraulic properties of this
 fluid depend primarily on its intrinsic properties and the characteristics of
 the cooling system. Thermal hydraulics is also concerned with the heat transfer
-between thevarious components of the reactor (e.g., heat generation in the
+between the various components of the reactor (e.g., heat generation in the
 reactor fuel heat removal by the coolant). Heat transfer behavior depends on
 everything from the moderator density and temperature to the neutron-driven
 power production in the fuel.
@@ -137,7 +135,7 @@ power production in the fuel.
 Reactivity
 ****************
 The two physics are coupled by the notion of reactivity, which is related to
-the probility of fission due to material properties. The temperature and
+the probability of fission due to material properties. The temperature and
 density of materials can increase or decrease this probability, which directly
 impacts the neutron production and destruction rates and therefore, the reactor
 power. The simplest form of the equations dictating this feedback are:
@@ -161,9 +159,11 @@ power. The simplest form of the equations dictating this feedback are:
 The PRKE
 *********
 The Point Reactor Kinetics Equations (PRKE) are the set of equations that
-capture neutronics and thermal hydraulics when geometry is neglected. The two
-physics are coupled primarily by reactivity, but have very different
-characteristic time scales, so the equations are quite stiff.
+capture neutronics and thermal hydraulics when the time-dependent variation of
+the neutron flux shape is neglected. That is, neutron population is captured
+as a scalar magnitude (a *point*) rather than a geometric distribution. In the PRKE,
+neutronics and thermal hydraulics are coupled primarily by reactivity, but have
+very different characteristic time scales, so the equations are quite stiff.
 
 .. math::
    :type: equation
@@ -289,11 +289,13 @@ important object classes in PyRK are:
 
 - SimInfo: Reads the input file, manages the solution matrix, Timer, and
   communication between neutronics and thermal hydraulics.
-- Neutronics : calculates dP=dt, d!j=dt, based on dTi=dt and the external
-  reactivity insertion.
-- THSystem : manages various THComponents, facilitates their communication.
-- THComponent : Conducts lumped parameter calculation. Other thermal models can
-  inherit from it and replace it in the simulation.
+- Neutronics : Calculates :math:`\frac{dP}{dt}`, :math:`\frac{d\zeta_j}{dt}`,
+  and :math:`\frac{d\omega_j}{dt}`, based on :math:`\frac{dT_i}{dt}` and the
+  external reactivity insertion.
+- THSystem : Manages various THComponents, facilitates their communication during the lumped parameter heat transfer calculation.
+- THComponent : Represents a single thermal volume, made of a single material,
+  (usually a volume like "fuel" or "coolant" or "reflector" with thermal or reactivity
+  feedback behavior distinct from other components in the system.
 - Material : A class for defining the intensive properties of a material
   (:math:`c_p`, :math:`\rho`, :math:`k_{th}`). Currently, subclasses include
   Flibe, Graphite, and Kernel.
@@ -321,9 +323,10 @@ a more robust solution is anticipated for v0.2, relying on an output database
 backend in hdf5, via the pytables package.
 
 
-Neutronics Class
-******************
-The neutronics class holds the first 1+j+k equations in the right hand side of
+Neutronics
+***********
+
+The neutronics object holds the first 1+j+k equations in the right hand side of
 the matrix equation in :ref:`fullprke`.
 
 Additionally, the accident scenario can be driven by an insertion of reactvity
@@ -340,18 +343,144 @@ insertions can be selected and customized as in figure :ref:`figri`.
 Nuclear data encapsulating the fractions of delayed neutron precursors and
 their precursor group halflives are stored in the PrecursorData class.
 
+The neutronics class implements the first :math:`1+j+k` equations in the right hand
+side of the matrix equation in :ref:`fullprke`. In particular, it takes
+ownership of the vector of :math:`1+i+k` independent variables and their
+solution.
+
+
 THSystem
 **********
 
-Each neutronic object needs a temperature. To determine that temperature,
-The neutronics class holds the first 1+j+k equations in the right hand side of
-the matrix equation in :ref:`fullprke`.
+Any reactor is made up of a handful of neutronic object needs a temperature. To
+first order, the thermal hydraulics can be modeled with lumped capacitance,
+which approximates heat transfer into discrete components, approximating the
+effects of geometry.
+
+Fundamentally, heat transfer through a system of components is modeled
+analogously to current through a resistive circuit. Table :ref:`tablumpedcap`
+describes the various canonical forms of lumped capacitance heat transfer
+modes.
+
+.. raw:: latex
+
+    \begin{table}
+    \centering
+    \begin{tabular}{|l|c|c|}
+    \hline
+    Mode & Heat Transfer Rate & Thermal Resistance \\
+    \hline
+    Conduction
+    & $\dot{Q}= \frac{T_1-T_2}{\left ( \frac{L}{kA} \right )}$
+    & $\frac{L}{kA}$\\
+    \hline
+    Convection
+    &$\dot{Q}=\frac{T_{surf}-T_{envr}}{\left ( \frac{1}{h_{conv}A_{surf}} \right )}$
+    &$\frac{1}{h_{conv}A_{surf}}$\\
+    \hline
+    Radiation
+    &$\dot{Q}=\frac{T_{surf}-T_{surr}}{\left ( \frac{1}{h_rA_{surf}} \right )}$
+    &$\frac{1}{h_rA}$\\
+    & & $h_r= \epsilon \sigma (T_{surf}^{2}+T_{surr}^{2})(T_{surf}+T_{surr})$\\
+    \hline
+    \end{tabular}
+    \end{table}
+
+.. table:: Lumped Capacitance for various heat transfer modes :label:`tablumpedcap` [wiki2014]_
+
+   +--------+
+   |        |
+   +--------+
+
+
+Based on the modes in Table :ref:`tablumpedcap`, we can formulate a model for
+the \gls{PBFHR} component temperatures in the low density graphite core of the
+pebble, the graphite matrix in the fuel annulus of the fuel pebble, the high
+density graphite pebble shell, the fuel (\gls{TRISO} particles pebble fuel
+annulus), coolant, and reflectors. A diagram of the components is found in
+\ref{fig:pebble_components}.
+
+\input{./pebble/pebble_components}
+
+Fundamentally, to determine the temperature
+change in the body, we rely on relations between temperature, heat capacity,
+and thermal resistance. As in Table \ref{tab:lumpedcap}, the heat flow out of
+body $i$ is the sum of surface heat flow by conduction, convection, radiaion,
+and other mechanisms to each adjacent body, $j$ \cite{lienhard_v_heat_2011}:
+
+.. math::
+   :type: align
+
+   Q &= Q_i + \sum_j Q_{ij}\\
+      &=Q_i +  \sum_j\frac{T_{i} - T_{j}}{R_{th,ij}}
+    \intertext{where}
+    \dot{Q} &= \mbox{total heat flow out of body i }[J\cdot s^{-1}]\\
+    Q_i &= \mbox{other heat transfer, a constant }[J\cdot s^{-1}]\\
+    T_i &= \mbox{temperature of body i }[K]\\
+    T_j &= \mbox{temperature of body j }[K]\\
+    j &= \mbox{adjacent bodies }[-]\\
+    R_{th} &= \mbox{thermal resistence of the component }[K \cdot s \cdot J^{-1}].
+
+Note also that the thermal energy storage and release in the body is
+accordingly related to the heat flow via capacitance:
+
+.. math::
+   :type: align
+
+    \frac{dT_{i}}{dt} &= \frac{-Q + \dot{S_i}}{C_i}
+    \intertext{where}
+    C &= \mbox{heat capacity of the object }[J\cdot K^{-1}]\\
+      &= \left(\rho c_pV\right)_i\\
+    \dot{S_i} &= \mbox{source term, thermal energy conversion }[J \cdot s^{-1}]
+
+Together, these form the equation:
+
+.. math::
+   :type: align
+
+    \frac{dT_{i}}{dt} &= \frac{-\left[Q_i +  \sum_j\frac{T_{i} - T_{j}}{R_{th,ij}}\right] + \dot{S_i}}{\left(\rho c_pV\right)_i}
+
 
 THComponent
 ***********
 
 The THSystem class is made up of THComponent objects, linked together at
-runtime by interfaces defined in the input class.
+runtime by heat transfer interfaces selected by the user in the input file:
+
+.. code-block:: python
+
+    fuel = th.THComponent(name="fuel",
+                          mat=Kernel(name="fuelkernel"),
+                          vol=vol_fuel,
+                          T0=t_fuel,
+                          alpha_temp=alpha_f,
+                          timer=ti,
+                          heatgen=True,
+                          power_tot=power_tot)
+
+    cool = th.THComponent(name="cool",
+                          mat=Flibe(name="flibe"),
+                          vol=vol_cool,
+                          T0=t_cool,
+                          alpha_temp=alpha_c,
+                          timer=ti)
+
+    clad = th.THComponent(name="clad",
+                          mat=Zirconium(name="zirc"),
+                          vol=vol_clad,
+                          T0=t_clad,
+                          alpha_temp=alpha_clad,
+                          timer=ti)
+
+    components = [fuel, clad, cool]
+
+    # The fuel conducts to the cladding
+    fuel.add_conduction('clad', area=a_fuel)
+    clad.add_conduction('fuel', area=a_fuel)
+
+    # The clad convects to the coolant
+    clad.add_convection('cool', h=h_clad, area=a_clad)
+    cool.add_convection('clad', h=h_clad, area=a_clad)
 
 Object-Oriented Simulation Model
 ---------------------------------
@@ -388,33 +517,29 @@ those member variables, the input values are converted to SI using Pint.
 
 .. code-block:: python
 
-    class Material(object):
-        """This class represents a material. Its attributes
-        are material properties and behaviors."""
+   def __init__(self, name=None,
+                k=0*units.watt/units.meter/units.kelvin,
+                cp=0*units.joule/units.kg/units.kelvin,
+                dm=DensityModel()):
+       """Initalizes a material
 
-        def __init__(self, name=None,
-                     k=0*units.watt/units.meter/units.kelvin,
-                     cp=0*units.joule/units.kg/units.kelvin,
-                     dm=DensityModel()):
-            """Initalizes a material
-
-            :param name: The name of the component...
-            :type name: str.
-            :param k: thermal conductivity, :math:`k_{th}`
-            :type k: float, pint.unit.Quantity
-            :param cp: specific heat capacity, :math:`c_p`
-            :type cp: float, pint.unit.Quantity
-            :param dm: The density of the material
-            :type dm: DensityModel object
-            """
-            self.name = name
-            self.k = k.to('watt/meter/kelvin')
-            validation.validate_ge("k", k,
-                0*units.watt/units.meter/units.kelvin)
-            self.cp = cp.to('joule/kg/kelvin')
-            validation.validate_ge("cp", cp,
-                0*units.joule/units.kg/units.kelvin)
-            self.dm = dm
+       :param name: The name of the component
+       :type name: str.
+       :param k: thermal conductivity, :math:`k_{th}`
+       :type k: float, pint.unit.Quantity
+       :param cp: specific heat capacity, :math:`c_p`
+       :type cp: float, pint.unit.Quantity
+       :param dm: The density of the material
+       :type dm: DensityModel object
+       """
+       self.name = name
+       self.k = k.to('watt/meter/kelvin')
+       validation.validate_ge("k", k,
+           0*units.watt/units.meter/units.kelvin)
+       self.cp = cp.to('joule/kg/kelvin')
+       validation.validate_ge("cp", cp,
+           0*units.joule/units.kg/units.kelvin)
+       self.dm = dm
 
 The above code employs a validation utility written for PyRK and used
 throughout the code to confirm (at runtime) types, units, and valid ranges for
@@ -474,3 +599,5 @@ References
 .. [sphinx]
 
 .. [citationneeded]
+
+.. [wiki2014]
