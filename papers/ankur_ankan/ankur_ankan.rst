@@ -33,7 +33,7 @@ pgmpy: Probabilistic Graphical Models using Python
 Introduction
 ------------
 
-Probabilistic Graphical Models is a technique of representing Joint
+Probabilistic Graphical Model is a technique of representing Joint
 Distributions over random variables in a compact way by exploiting the 
 dependencies between the random variables. PGMs use a network structure and some 
 parameters to represent the joint distribution. The network structure is used to
@@ -86,6 +86,13 @@ Dependencies: pgmpy runs only on python3 and is dependent on networkx, numpy and
 
 Creating Bayesian Models using pgmpy
 ------------------------------------
+
+A Bayesian Network consists of a directed graph which connect the random variables based on
+the relation between them. It is parameterized using Conditional Probability Distributions(CPD).
+Each random variable in a Bayesian Network has a CPD associated with it. If the random varible 
+has parents in the network then the CPD represents :math:`P(var| Par_var)` i.e. the probability
+of that variable given its parents. In the case when the random variable has no parents it 
+simply represents :math:`P(var)` i.e. the probability of that variable. 
 
 The general workflow for creating any model in pgmpy is to first define the 
 network structure and then add the parameters to it.
