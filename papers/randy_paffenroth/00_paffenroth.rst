@@ -2,6 +2,11 @@
 :email: rcpaffenroth@wpi.edu
 :institution: Worcester Polytechnic Institute, Mathematical Sciences Department and Data Science Program
 
+:author: Xiangnan Kong
+:email: xkong@wpi.edu
+:institution: Worcester Polytechnic Institute, Computer Science Department and Data Science Program
+
+
 ------------------------------------------------
 Python in Data Science Research and Education
 ------------------------------------------------
@@ -49,7 +54,7 @@ pursue education and careers in Data Science come from similarly
 diverse backgrounds.  Accordingly, the challenges and opportunities of
 being an educator in such a domain requires one to reflect on
 appropriate tools and approaches that promote educational success.  It
-is the author's view, and experience, that the Python scripting
+is the authors' view, and experience, that the Python scripting
 language can be an effective part of the Data Science curriculum for
 several reasons such as its ease of use, its open source license,
 and its access to a vast array of libraries covering many topics of
@@ -60,17 +65,17 @@ admitting students into its new Data Science Master's degree program
 and, as of spring 2015, has also initiated a Data Science
 Ph.D. program.  Even at this early stage, the program has been quite
 fortunate to receive many more applications from students then it can
-reasonably admit.  The author has the pleasure of being a faculty
-member in the program and the honor of teaching a number of the
-courses on offer.  In addition, as a long time Python user (since 1997
-in fact [Paf99]_), the author was intrigued by the possibility of
-leveraging Python in the graduate Data Science curriculum and this
-monograph describes some of the experiences, both successes and
-challenges, gained from that effort.  Of course, it is much too early
-to make any comments on the sustained effect of using Python for
-graduate Data Science education, however, perhaps the gentle reader
-will find some value in the author's experiences, even at this early
-date.
+reasonably admit.  The authors have the pleasure of being faculty
+members in the program and have the honor of teaching a number of the
+courses on offer.  In addition, as a long time Python users (for one
+of them since 1997 in fact [Paf99]_), the authors were intrigued by
+the possibility of leveraging Python in the graduate Data Science
+curriculum and this monograph describes some of the experiences, both
+successes and challenges, gained from that effort.  Of course, it is
+much too early to make any comments on the sustained effect of using
+Python for graduate Data Science education, however, perhaps the
+gentle reader will find some value in the authors' experiences, even
+at this early date.
 
 Of course, we are not the first to suggest Python's effectiveness in
 an education and research environment.  In fact, the Python
@@ -90,18 +95,19 @@ Python in that domain.
 In particular, herein we will discuss the use of Python at three
 different levels of Data Science education and research.  First, one
 of the courses that is offered as part of our Data Science curriculum,
-and in which the author and others have leveraged Python, is DS501
+and in which the authors and others have leveraged Python, is DS501
 |--| "Introduction to Data Science".  The idea of DS501 is to provide
 an introductory overview of the many fields that comprise Data Science
 and it is intended that DS501 be one of the first classes a new
-student takes when entering the program.  Second, the author has also
-used Python to support MA542 |--| "Regression Analysis".  MA542 is a
-somewhat more advanced class that is a (core) elective in the Data
-Science program as well as being a class taken by many students who
-are seeking degrees in the Mathematical Sciences department.  Finally,
-the author mentors a number of student's research projects both within
-the Data Science Program and the Mathematical Sciences Department.
-These research projects all leverage Python, in various ways, and
+student takes when entering the program.  Second, one of the
+authors has also used Python to support MA542 |--| "Regression
+Analysis".  MA542 is a somewhat more advanced class that is a (core)
+elective in the Data Science program as well as being a class taken by
+many students who are seeking degrees in the Mathematical Sciences
+department.  Finally, the authors mentor a number of student's
+research projects both within the Data Science Program, the
+Mathematical Sciences Department, and the Computer Science Department.
+Many of these research projects leverage Python, in various ways, and
 having access to a common code base allows the various student
 projects to build off of one another.
 
@@ -167,7 +173,7 @@ find themselves in the opposite situation.
 
 Space does not allow for a fulsome description of the class content
 and, in any event, such a discussion would distract us from our focus
-on Python.  However, in the author's view, one important feature of
+on Python.  However, in the authors' view, one important feature of
 such a class is that the students should be able to *get "their hands
 dirty" playing with real data* both early and often.  Students can
 often find inspiration by seeing the ideas developed as part of the
@@ -205,9 +211,9 @@ unfamiliar with it substantially easier.
 
 For example, in the IPython notebooks we are able to provide code
 examples to get the students started with their development work.  For
-example, we could provide code similar to the following (as provided
-by Prof. Xiangnan Kong, see [Twi15]_ for details) as a launching pad
-for their efforts:
+example, we could provide code similar to the following as a launching
+pad for their efforts (see [Twi15]_ for details and code example is
+based upon [Rus13]_):
 
 .. code-block:: python
 
@@ -562,23 +568,23 @@ methods.
 Fortunately, and we fear that we are repeating ourselves, Python
 provides precisely the functionality we required.  In particular,
 there are several MapReduce interfaces for Python, and the mrjob
-package [MrJ15]_ was chosen (thanks to Prof. Xiangnan Kong at WPI) to
-support the students learning objectives.  This package is especially
-useful in a classroom environment since it can be used locally on a
-single computer (for testing) and in a cluster environment.
-Accordingly, the students can learn about MapReduce with the need for
-access to large scale computing resources.
+package [MrJ15]_ was chosen to support the students learning
+objectives.  This package is especially useful in a classroom
+environment since it can be used locally on a single computer (for
+testing) and in a cluster environment.  Accordingly, the students can
+learn about MapReduce with the need for access to large scale
+computing resources.
 
 Introductory Data Science: Final Thoughts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Of course, Python is not the only choice for an Introductory Data
 Science course.  For example, the programming language R [RCT13]_ is
-also a popular choice which the author has also used successfully in
-the Data Science curriculum.  In particular, R offers much, if not
-all, of the functionality mentioned above, including interfaces to
-MapReduce [Usu14]_.  Accordingly, the choice of language for such a
-class may be considered a matter of taste.
+also a popular choice which has also used successfully in the Data
+Science curriculum.  In particular, R offers much, if not all, of the
+functionality mentioned above, including interfaces to MapReduce
+[Usu14]_.  Accordingly, the choice of language for such a class may be
+considered a matter of taste.
 
 However, there is mounting evidence of Python's growing popularity
 within the Data Science community [Sin14]_ and the software
@@ -601,8 +607,8 @@ MA542 Regression Analysis
 -------------------------
 
 Leaving aside introductory classes, we now make brief mention of
-Python's usefulness in more advanced classes.  In particular, the
-author recently taught a Regression Analysis class (using the text
+Python's usefulness in more advanced classes.  In particular, one of
+the authors recently taught a Regression Analysis class (using the text
 *Applied linear regression models* [Kut04]_), for the first time, with
 all of the development in the class being Python focused.  Regression
 Analysis is a more advanced class with a greater concentration of
@@ -653,7 +659,7 @@ what the "professionals" were doing.
 Student research projects and theses
 ------------------------------------
 
-Python has had an important part to play in the author's research since
+Python has had an important part to play in the authors' research since
 1997 [Paf99]_.  Currently, we perform research involving, and mentor
 students in, several topics revolving around semi-supervised and
 unsupervised machine learning applied to several different domains,
@@ -670,10 +676,11 @@ For the current purpose, it is merely important to note that Python
 libraries are available that support *all of these subject areas*.  For
 example, we have:
 
-* Convex optimization: cvxopt [Dah06]_ , CVXPY [Dia14]_
-* Deep learning: Theano [Ber11]_
+* Statistical modeling:  Statsmodels [StM15]_
+* Convex optimization:  cvxopt [Dah06]_, CVXPY [Dia14]_
+* Deep learning:  Theano [Ber11]_
 * Graphical models:  libpgm [Kar14]_
-* Scientific visualization: Mayavi [Ram11]_
+* Scientific visualization:  Mayavi [Ram11]_, Matplotlib [Hun07]_, Bokeh [Bok15]_, Seaborn [Was14]_
 
 Accordingly, students who are trained in classes such as DS501 and
 MA542 can leverage that training to get a running start on their
@@ -688,7 +695,7 @@ We use all of these libraries in our work, where we are especially
 interested in large scale robust principle component analysis [Can11]_
 [Paf13]_ and non-linear dimension reduction problems [Lee07]_.  These
 problem domains are mathematically subtle, computationally intensive,
-and lead to, in the author's opinion, rather intriguing visualization
+and lead to, in the authors' opinion, rather intriguing visualization
 problems, which are also supported by Python through libraries such as
 Mayavi, as shown in the figure below.
 
@@ -739,16 +746,12 @@ Acknowledgments
 ---------------- 
 
 We wish to gratefully acknowledge several people without whom this
-monograph would not have been possible.  First and foremost, we would
-like to thank Prof. Xiangnan Kong in the Computer Science Department
-at WPI.  The DS501 class was jointly developed with Prof. Kong, and
-Prof. Kong's hard work and wonderful ideas were essential to the
-success of the course.  The author is also deeply grateful to the
-other members of Data Science Steering Committee at WPI:
+monograph would not have been possible. In particular, the authors are
+deeply grateful to the other members of Data Science Steering
+Committee at WPI:
 
 * Prof. Elke Angelika Rundensteiner (Director of Data Science)
 * Prof. Mohamed Eltabakh
-* Prof. Xiangnan Kong
 * Prof. Eleanor T. Loiacono
 * Prof. Joseph D. Petruccelli
 * Prof. Carolina Ruiz
@@ -775,6 +778,10 @@ References
 
 .. [Bis06] Bishop, Christopher M. *Pattern recognition and machine learning*. 
 	   Springer, 2006.
+
+.. [Bok15] *Bokeh* (2015), 
+	   http://bokeh.pydata.org/en/latest/
+	   [Online; accessed 2015-06-17].
 
 .. [Boy04] Boyd, Stephen, and Lieven Vandenberghe. *Convex optimization*. 
 	   Cambridge university press, 2004.
@@ -946,6 +953,10 @@ References
 	   of native speakers.* Proceedings of 8th International
 	   Python Conference. 2000.
 
+.. [StM15] *Statsmodels* 
+	   (2015), http://statsmodels.sourceforge.net/
+	   [Online; accessed 2015-06-17].
+
 .. [Twi15] *The Streaming APIs Overview* (2015), 
 	   https://dev.twitter.com/streaming/overview 
 	   [Online; accessed 2015-06-08].
@@ -963,4 +974,7 @@ References
 .. [War10] Ward, Matthew, Georges Grinstein, and Daniel Keim. 
 	   *Interactive Data Visualization: Foundations, Techniques, and Applications*, 
 	   AK Peters, Ltd., Natick, MA (2010).
+
+.. [Was14] Waskom, Michael et al.. (2014). *seaborn: v0.5.0* (November
+           2014). Zenodo. 10.5281/zenodo.12710
 
