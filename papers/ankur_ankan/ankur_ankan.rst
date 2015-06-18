@@ -446,11 +446,12 @@ generated data:
 
 Extending pgmpy
 ---------------
-One of the main features of pgmpy is its extensibility. pgmpy has been built in a way so that 
+One of the main features of pgmpy is its extensibility. It has been built in a way so that 
 new algorithms can be directly written without needing to get familiar with the code base. 
-For writing any new inference algorithm we can simply inherit the Inference class. 
+
+For example, for writing any new inference algorithm we can simply inherit the Inference class. 
 Inheriting this base inference class exposes three variables to the class: self.variables,
-self.cardinalities and self.factors and using these variables we can write our own 
+self.cardinalities and self.factors; using these variables we can write our own 
 inference algorithm. An example is shown:
 
 .. code-block:: python
@@ -489,8 +490,8 @@ inference algorithm. An example is shown:
 
 Similarly for adding any new variable elimination order algorithm we can simply inherit from
 BaseEliminationOrder and define a method named cost(self, variable) which returns the cost of eliminating 
-that variable. Inheriting also exposes two variables: self.bayesian_model and self.moralized_graph. 
-Then we can call the get_elimination_order method to get the order. Below is an example 
+that variable. Inheriting this class also exposes two variables: self.bayesian_model and self.moralized_graph. 
+We can then call the get_elimination_order method to get the elimination order. Below is an example 
 for returning an elimination order in which the variables are sorted alphabetically.
 
 .. code-block:: python
@@ -505,10 +506,10 @@ for returning an elimination order in which the variables are sorted alphabetica
 
 Conclusion and future work
 --------------------------
-The pgmpy library provides an easy to use API for working with Graphical Models. pgmpy also provides
-separate classes for the most commonly used graphical models like Naive Bayes, Hidden Markov Model etc
+The pgmpy library provides an easy to use API for working with Graphical Models. It is also modular enough to provide
+separate classes for most commonly used graphical models like Naive Bayes, Hidden Markov Model etc.
 so that the user can directly use these special cases instead of contructing them from the base models.
-For machine learning problems the fit and predict method can be used to quickly learn parameters and 
+For machine learning problems the fit method can be used to learn parameters and predict can be used to 
 predict values for newer data points. pgmpy's easy extensibility allows users to quickly prototype
 and test their ideas. 
 
