@@ -62,7 +62,7 @@ some course is shown in Fig :ref:`bayesian`.
 Markov Network: A Markov Network consists of an undirected graph and a few 
 Factors are associated with it. Unlike Conditional Probability Distributions, a Factor
 does not represent the probabilities of variables in the network. Rather it represents 
-how much is a state of a random variable is likely to agree to the state 
+how much is a state of a random variable likely to agree to the state 
 of the other random variable. An example of markov [markov]_ network over four friends A, B, C, D agreeing to
 some concept is shown in Fig :ref:`markov`.
 
