@@ -10,10 +10,14 @@ Scientific Data Analysis and Visualization with VTK and ParaView
 
 .. class:: abstract
 
-   In this paper, we provide an overview of Python integration in VTK
-   and ParaView and give some concrete examples of usage. We also
-   provide a roadmap for additional Python integration in VTK and
-   ParaView in the future.
+   VTK and ParaView are leading software packages for data analysis
+   and visualization. Since their early years, Python has played an
+   important role in each package. In many use cases, VTK is a module
+   used by Python applications. In other use cases, Python modules are
+   used as clients within VTK. In this paper, we provide an overview
+   of Python integration in VTK and ParaView and give some concrete
+   examples of usage.  We also provide a roadmap for additional Python
+   integration in VTK and ParaView in the future.
 
 .. class:: keywords
 
@@ -51,17 +55,22 @@ scripts that are either written by hand or generated as a trace of
 events during an interactive visualization session is available for
 offline visualization generation.
 
-Python Language Bindings for VTK
---------------------------------
+Python and VTK
+--------------
 
 Since 1997, VTK has provided language bindings for Python. Over the
-years, the Python binding support has evolved so that today nearly
-every semantic feature of C++ used by VTK has a direct semantic analog
-in Python. C++ classes from VTK are wrapped into Python equivalents
-and provided in a single module named ``vtk``. The few classes that
-are not wrapped are typically limited to abstract base classes that
-cannot be instantiated or classes that are meant for internal use in
-VTK.
+years, Python has become increasingly important to VTK, both as a
+route to using VTK, as well as to the development of VTK itself.
+
+Python Language Bindings for VTK
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Python binding support in VTK has evolved so that today nearly every
+semantic feature of C++ used by VTK has a direct semantic analog in
+Python. C++ classes from VTK are wrapped into Python equivalents and
+provided in a single module named ``vtk``. The few classes that are
+not wrapped are typically limited to abstract base classes that cannot
+be instantiated or classes that are meant for internal use in VTK.
 
 Python Wrapping Infrastructure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -148,8 +157,7 @@ In Python, the equivalent is
    plane.IntersectWithLine(point1, point2, t, x)
 
 Class and method documentation is processed by the wrapping
-infrastructure to make it available via the standard ``docstring``
-mechanism.
+infrastructure to make it available via Python's built-in help system.
 
 .. code-block:: python
 
@@ -323,17 +331,19 @@ VTK excels at interactive 3D rendering of scientific data. Matplotlib
 excels at producing publication-quality plots. VTK leverages each
 toolkit's strengths in two ways.
 
-As we described earlier, convenience functions for exposing VTK data
-arrays as NumPy arrays are provided in the ``vtk.util.numpy_support``
-and ``numpy_interface.algorithms`` modules. These arrays can be passed
-to matplotlib plotting functions to produce publication-quality plots.
+First, as we described earlier, convenience functions for exposing VTK
+data arrays as NumPy arrays are provided in the
+``vtk.util.numpy_support`` and ``numpy_interface.algorithms``
+modules. These arrays can be passed to matplotlib plotting functions
+to produce publication-quality plots.
 
-VTK itself incorporates some of matplotlib's rendering capabilities
-directly in some cases. When VTK Python wrapping is enabled and
-matplotlib is available, VTK use's the ``matplotlib.mathtext`` module
-to render LaTeX math expressions to either ``vtkImageData`` objects
-that can be displayed as images or to paths that may be rendered to a
-``vtkContextView`` object, VTK's version of a canvas.
+Second, VTK itself incorporates some of matplotlib's rendering
+capabilities directly in some cases. When VTK Python wrapping is
+enabled and matplotlib is available, VTK use's the
+``matplotlib.mathtext`` module to render LaTeX math expressions to
+either ``vtkImageData`` objects that can be displayed as images or to
+paths that may be rendered to a ``vtkContextView`` object, VTK's
+version of a canvas.
 
 Qt applications with Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -341,6 +351,52 @@ Qt applications with Python
 Python support in VTK is robust enough to create full-featured
 applications without writing a single line of C++ code. PySide (or
 PyQt) provide Python bindings for Qt. A simple example is provided below:
+
+.. code-block:: python
+
+  import sys
+  import vtk
+  from PyQt4 import QtCore, QtGui
+  from vtk.qt4.QVTKRenderWindowInteractor \
+      import QVTKRenderWindowInteractor
+
+  class MainWindow(QtGui.QMainWindow):
+
+      def __init__(self, parent = None):
+          QtGui.QMainWindow.__init__(self, parent)
+
+          self.frame = QtGui.QFrame()
+
+          layout = QtGui.QVBoxLayout()
+          self.vtkWidget = \
+              QVTKRenderWindowInteractor(self.frame)
+          layout.addWidget(self.vtkWidget)
+
+          self.renderer = vtk.vtkRenderer()
+          rw = self.vtkWidget.GetRenderWindow()
+          rw.AddRenderer(self.renderer)
+          self.interactor = rw.GetInteractor()
+
+          cylinder = vtk.vtkCylinderSource()
+          mapper = vtk.vtkPolyDataMapper()
+          mapper.SetInputConnection( \
+              cylinder.GetOutputPort())
+          actor = vtk.vtkActor()
+          actor.SetMapper(mapper)
+
+          self.renderer.AddActor(actor)
+          self.renderer.ResetCamera()
+
+          self.frame.setLayout(layout)
+          self.setCentralWidget(self.frame)
+
+          self.show()
+          self.interactor.Initialize()
+        
+  if __name__ == "__main__":
+      app = QtGui.QApplication(sys.argv)
+      window = MainWindow()
+      sys.exit(app.exec_())
 
 VTK filters defined in Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -353,15 +409,16 @@ class defined in ``vtk.util.vtkAlgorithm``. This class specifies the
 interface for classes that interact with ``vtkPythonAlgorithm``, a C++
 class that delegates the primary VTK data update methods to the Python
 class. By doing this, it is possible to implement complex new sources
-and filters using Python alone. For more details on this algorithm,
+and filters using Python alone. For more details on this Python class,
 see [Gev2014].
 
 Python integration in VTK tests
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Python has become so integral to VTK development that 26% of tests
-(544 out of 2046) are written in Python. This outnumbers the number of
-Tcl-based tests that were actively added in VTK's early history.
+As a project that follows a quality-software process, VTK has many
+regression tests. Fully 26% of tests (544 out of 2046) are written in
+Python. This integration of Python in VTK's testing infrastructure
+shows how important Python is in VTK's development.
 
 
 Python and ParaView
@@ -374,8 +431,8 @@ overview on this integration.
 Python Console
 ~~~~~~~~~~~~~~
 
-ParaView includes a Python console available under the Tools -> Python
-Console menu item. This console is a fully-featured Python console with
+ParaView includes a Python console available under the ``Tools -> Python
+Console`` menu item. This console is a fully-featured Python console with
 the environment set up so that the ``vtk`` module is available as well as
 a number of modules from ParaView itself. When first started, the command
 
@@ -397,11 +454,9 @@ matplotlib plots.
 
 Another way to interact with the Python console is by loading a Python
 script with ParaView commands to be executed. This feature is ideal
-for Python script development for ParaView. It is also possible to
-execute Python scripts from command-line invocations of ParaView by
-supplying the Python script as an argument::
-
-   paraview MyScript.py
+for Python script development for ParaView. A button within the Python
+console brings up a file dialog used to select the Python script to
+run.
 
 
 Simple Layer
@@ -423,16 +478,25 @@ proxy manager class. It can be used to create sources and filters
 
 .. code-block:: python
 
-   pm = paraview.servermanager.ProxyManager()
-   ss = pm.NewProxy('sources', 'SphereSource')
-   pm.RegisterProxy('sources', 'SphereSource1', ss)
-   radius = ss.GetProperty('Radius')
-   radius.SetElement(0, 2.0)
+  from paraview import sm
 
-   rv = pm.GetProxy('views', 'RenderView1')
-   rep = rv.SMProxy.CreateDefaultRepresentation(np, 0)
+  pm = sm.vtkSMProxyManager.GetProxyManager()
+  controller = \
+      sm.vtkSMParaViewPipelineControllerWithRendering()
 
-   # FINISH THIS EXAMPLE
+  ss = pm.NewProxy('sources', 'SphereSource')
+  ss.GetProperty('Radius').SetElement(0, 2.0)
+  controller.RegisterPipelineProxy(ss)
+
+  view = pm.GetProxy('views', 'RenderView1')
+  rep = view.CreateDefaultRepresentation(ss, 0)
+  controller.RegisterRepresentationProxy(rep)
+  rep.GetProperty('Input').SetInputConnection(0, ss, 0)
+  rep.GetProperty('Visibility').SetElement(0, 1)
+
+  controller.Show(ss, 0, view)
+  view.ResetCamera()
+  view.StillRender()
 
 Creating a new data source, a representation for it (how it is
 rendered), and adding the representation to the view (where it is
@@ -490,13 +554,12 @@ if the system does not have Qt available. Two utility programs in the
 ParaView application suite are provided for this
 scenario. ``pvpython`` is a Python executable that can be used to run
 Python scripts. It also serves as an interactive Python shell if not
-supplied with a Python script argument. 
+supplied with a Python script argument. ``pvbatch`` is a
+non-interactive executable that executes a Python script and is
+intended to perform offline data processing and visualization
+generation. Both ``pvpython`` and ``pvbatch`` can connect to remote
+servers for parallel visualization.
 
-Python Programmable Source
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* Create new sources of data with Python scripts
-* Consider skipping this section
 
 Python Calculator
 ~~~~~~~~~~~~~~~~~
@@ -584,6 +647,13 @@ wrapping becomes
 
    output.Points = ipts + normals
 
+Python Programmable Source
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Within ParaView it is also possible to define Python script that
+defines data sources using the Python Programmable Source. This source
+functions much like the Python Programmable Filter, but without
+requiring any input data sets.
 
 Unified Server Bindings
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -677,22 +747,23 @@ creates a histogram of an array named "Density" is provided here:
 
        return python_view.figure_to_image(figure)
 
-Future Python Integration
--------------------------
+Future Work
+-----------
 
 VTK and ParaView currently support up to Python version 2.7. The VTK
 and ParaView user bases have significant code written in 2.7.
 Conversion from Python 2 to 3 will require significant work, but
-support for it is expected within the next year.
+support for it is targeted within the next year.
 
 Acknowledgements
 ----------------
 
-* David Gobbi
-* Ken Martin
-* Berk Geveci
-* Utkarsh Ayachit
-* Ben Boeckel
+Contributions to Python support in VTK and ParaView have come from a
+number of VTK community members. Deserving special recognition are the
+following key contributors: David Gobbi, Prabhu Ramachandran, Ken
+Martin, Berk Geveci, Utkarsh Ayachit, Ben Boeckel, Andy Cedilnik, Brad
+King, David Partyka, George Zagaris, Marcus Hanwell, and Mathieu
+Malaterre.
 
 
 .. Customised LaTeX packages
