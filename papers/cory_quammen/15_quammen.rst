@@ -12,12 +12,12 @@ Scientific Data Analysis and Visualization with VTK and ParaView
 
    VTK and ParaView are leading software packages for data analysis
    and visualization. Since their early years, Python has played an
-   important role in each package. In many use cases, VTK is a module
-   used by Python applications. In other use cases, Python modules are
-   used as clients within VTK. In this paper, we provide an overview
-   of Python integration in VTK and ParaView and give some concrete
-   examples of usage.  We also provide a roadmap for additional Python
-   integration in VTK and ParaView in the future.
+   important role in each package. In many use cases, VTK and ParaView
+   serve as modules used by Python applications. In other use cases,
+   Python modules are used as clients within VTK. In this paper, we
+   provide an overview of Python integration in VTK and ParaView and
+   give some concrete examples of usage. We also provide a roadmap for
+   additional Python integration in VTK and ParaView in the future.
 
 .. class:: keywords
 
@@ -54,6 +54,12 @@ commands in an integrated Python shell. Batch processing via Python
 scripts that are either written by hand or generated as a trace of
 events during an interactive visualization session is available for
 offline visualization generation.
+
+This paper is organized into two main sections. In the first section,
+I describe the relationship between VTK and Python and describe some
+interfaces between the two. In the second section, I detail the
+relationship between ParaView and Python. Examplesof Python usage in
+both packages are provided throughout.
 
 Python and VTK
 --------------
