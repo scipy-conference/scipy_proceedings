@@ -192,17 +192,26 @@ VTK source code repository in versions 4.2 and above.
 Integration with NumPy
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Since 2008, a low-level interface layer between VTK and NumPy has been
-available in VTK. In VTK, data associated with points or cells in a data
-structure (EXPLAIN THIS SOMEWHERE) is stored in an instance of a
-subclass of a ``vtkAbstractArray``. There are limited functions within
-VTK itself to process or analyze these arrays. This interface layer
-can be used to map VTK arrays to NumPy arrays, enabling the full power
-of NumPy operations on those arrays to be used. Suppose we have a data
-set from a computation fluid dynamics simulation that we can load with
-a VTK reader class that has a point-associated array representing
-pressure. We can find several properties of this array using NumPy,
-e.g.
+In VTK, data set attributes are stored in instances of a subclass of a
+``vtkAbstractArray``. For data sets with points and cells such as
+``vtkPolyData`` and ``vtkUnstructuredGrid``, attributes can be
+associated with points or cells, or the data set itself. For point-
+and cell-associated arrays, each array element is the attribute value
+associated with the point or cell at the same index. Attribute arrays
+not associated with points or cells can contain arrays of arbitrary
+size and no such mapping between array elements and topological
+elements of the data set exists.
+
+There are limited functions within VTK itself to process or analyze
+these arrays. Since 2008, a low-level interface layer between VTK
+arrays and NumPy array has been available in VTK. This interface layer
+can be used to map VTK arrays to NumPy arrays and vice versa, enabling
+the full power of NumPy operations to be used on VTK data. For
+example, suppose that we have a data set from a computational fluid
+dynamics simulation that we can load with a VTK reader class, and
+suppose further that the data set has a point-associated array
+representing pressure. We can find several properties of this array
+using NumPy, e.g.,
 
 .. code-block:: python
 
@@ -217,8 +226,8 @@ e.g.
    pressure = pd.GetArray('pressure')
    np_pressure = nps.vtk_to_numpy(pressure)
 
-   min_pressure = np.min(np_pressure)
-   max_pressure = np.max(np_pressure)
+   min_p = np.min(np_pressure)
+   max_p = np.max(np_pressure)
 
 This interface can also be used to add data arrays to loaded data
 sets that can be handed off to VTK for visualization:
@@ -226,7 +235,7 @@ sets that can be handed off to VTK for visualization:
 .. code-block:: python
 
    norm_pressure = (np_pressure - min_pressure) / \
-      (max_pressure - min_pressure)
+       (max_pressure - min_pressure)
    vtk_norm_pressure = np.numpy_to_vtk(norm_pressure, 1)
    vtk_norm_pressure.SetName('normalized pressure')
    pd.AddArray(vtk_norm_pressure)
@@ -236,7 +245,7 @@ array should be deep copied to the VTK array. This is necessary if no
 reference to the NumPy array will otherwise be kept. If a reference to
 the numpy array will be kept, then the second argument can be omitted
 and the NumPy array will be shallow copied instead, saving memory and
-time for copying.
+time because the array data does not need to be copied.
 
 More recently, a higher-level NumPy-like interface layer has been
 added to VTK. This ``numpy_interface`` was designed to combine the
@@ -245,13 +254,14 @@ capabilities and broad data set type support of VTK. The
 straightforward interface between VTK data set arrays and NumPy
 described above works only when the entire data set is available on
 one node. However, data sets in VTK may be distributed across
-different computational nodes in a parallel computer using MPI
-[Sni99]. In this scenario, global reduction operations using NumPy are
-not possible. For this reason, a NumPy-like interface has been added
-to VTK that properly handles distributed data sets [Aya14].
+different computational nodes in a parallel computer using the Message
+Passing Interface [Sni99]. In this scenario, global reduction
+operations using NumPy are not possible. For this reason, a NumPy-like
+interface has been added to VTK that properly handles distributed data
+sets [Aya14].
 
-A key feature in VTK's ``numpy_interface`` is a set of classes that
-wrap VTK data set objects.
+A key building block in VTK's ``numpy_interface`` is a set of classes
+that wrap VTK data set objects.
 
 .. code-block:: python
 
@@ -267,7 +277,8 @@ In this code, ``ds`` is an instance of a ``dataset_adapter.PolyData``
 class returned by the ``WrapDataObject`` function because the
 ``vtkXMLPolyDataReader`` produces a ``vtkPolyData`` data set.  The
 wrapper class provides a more Pythonic way of accessing data stored in
-VTK arrays.
+VTK arrays. Point- and cell-associated arrays are available in member
+variables that provide the dictionary interface.
 
 .. code-block:: python
 
@@ -276,10 +287,11 @@ VTK arrays.
 
    >>> pressure = ds.PointData['pressure']
 
-Note the the ``pressure`` array here is an instance of ``VTKArray``
+Note that the ``pressure`` array here is an instance of ``VTKArray``
 rather than a ``vtkAbstractArray``. ``VTKArray`` is a wrapper around
-the VTK array object that inherits from ``numpy.ndarray``. All the
-standard ``ndarray`` operations on this wrapped array, e.g.,
+the VTK array object that inherits from ``numpy.ndarray``. Hence, all
+the standard ``ndarray`` operations are available on this wrapped
+array, e.g.,
 
 .. code-block:: python
 
@@ -312,8 +324,8 @@ In addition to most of the ufuncs provided by NumPy, the
 ``algorithms`` interface provides some functions to access quantities
 that VTK can compute in the wide variety of data set types (e.g.,
 surface meshes, unstructured grids, uniform grids, etc.) available in
-VTK. This can be used to compute the total volume of cells in an
-unstructured grid, for instance,
+VTK. This can be used to compute, for instance, the total volume of
+cells in an unstructured grid:
 
 .. code-block:: python
 
@@ -345,7 +357,7 @@ to produce publication-quality plots.
 
 Second, VTK itself incorporates some of matplotlib's rendering
 capabilities directly in some cases. When VTK Python wrapping is
-enabled and matplotlib is available, VTK use's the
+enabled and matplotlib is available, VTK uses the
 ``matplotlib.mathtext`` module to render LaTeX math expressions to
 either ``vtkImageData`` objects that can be displayed as images or to
 paths that may be rendered to a ``vtkContextView`` object, VTK's
@@ -355,8 +367,9 @@ Qt applications with Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Python support in VTK is robust enough to create full-featured
-applications without writing a single line of C++ code. PySide (or
-PyQt) provide Python bindings for Qt. A simple example is provided below:
+applications without writing a single line of C++ code. PyQt [PyQt15] (or
+PySide [PyS15]) provide Python bindings for Qt. A simple example is provided
+below:
 
 .. code-block:: python
 
@@ -403,6 +416,11 @@ PyQt) provide Python bindings for Qt. A simple example is provided below:
       app = QtGui.QApplication(sys.argv)
       window = MainWindow()
       sys.exit(app.exec_())
+
+This simple application does little besides what is possible with pure
+VTK code alone. However, this example can easily be expanded to
+provide interaction through UI elements such as a menu bar, buttons,
+text entries, sliders, etc.
 
 VTK filters defined in Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -795,6 +813,12 @@ References
 
 .. [Gev14] B. Geveci, *vtkPythonAlgorithm is great*,
            Kitware Blog, September 10, 2014. http://www.kitware.com/blog/home/post/737
+
+.. [PyQt15] *PyQt4 Reference Guide*,
+            http://pyqt.sourceforge.net/Docs/PyQt4/
+
+.. [PyS15] *PySide 1.2.2*,
+           https://pypi.python.org/pypi/PySide
 
 .. [Sch04] W. Schroeder, K. Martin, and B. Lorensen, *The Visualization Toolkit: An Object-Oriented Approach to 3D Graphics*,
            4th ed. Kitware, Inc., 2004, ISBN 1-930934-19-X.
