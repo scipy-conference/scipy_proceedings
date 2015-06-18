@@ -23,13 +23,14 @@ Overview
 A mathematical relation [1]_ when directly integrated into software can
 perform a variety of common tasks:
 
-Inversion : quickly find the values(range) associated with a key(domain)
+-  **Inversion**: quickly find the values(range) associated with a
+   key(domain)
 
-Aliasing : maintain a unique relationship between keys and values
+-  **Aliasing**: maintain a unique relationship between keys and values
 
-Partitioning : categorize values into unique groups
+-  **Partitioning**: categorize values into unique groups
 
-Tagging : associate two sets in an arbitrary(bipartite) manner
+-  **Tagging**: associate two sets in an arbitrary(bipartite) manner
 
 When computational data is:
 
@@ -189,16 +190,16 @@ Tags are also exactly an M:N relationship:
 
     files = Relation()
 
-    files['vacation-yellowstone.png'] = 'image'
-    files['vacation-yellowstone.png'] = 'family'
+    files['vacation-moab.png'] = 'image'
+    files['vacation-moab.png'] = 'family'
     files['obnoxious-cat.jpeg'] = 'image'
-    files['vacation-planning.doc'] = 'family'
-    files['vacation-planning.doc'] = 2015
+    files['vacation-plan.doc'] = 'family'
+    files['vacation-plan.doc'] = 2015
 
     (~files)['family']
-    > {'vacation-yellowstone.png','vacation-planning.doc'}
+    > {'vacation-moab.png','vacation-plan.doc'}
 
-    files['vacation-planning.doc']
+    files['vacation-plan.doc']
     > {2015,'family'}
 
 Taxonomies (One-to-Many)
