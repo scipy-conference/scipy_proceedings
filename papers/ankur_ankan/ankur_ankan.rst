@@ -501,7 +501,8 @@ for returning an elimination order in which the variables are sorted alphabetica
        def cost(self, variable):
            return variable
 
-   order = MyEliminationAlgo(student_model).get_elimination_order()
+   order = MyEliminationAlgo(
+	      student_model).get_elimination_order()
    ['D', 'G', 'I', 'L', 'S']
 
 Conclusion and future work
