@@ -50,7 +50,7 @@ types of Graphical Models: Bayesian Networks and Markov Networks.
 Bayesian Network: A Bayesian Network consists of a directed graph and a 
 conditional probability distribution associated with each of the random variables. A 
 Bayesian network is used mostly when there is a causal relationship between the
-random variables. An example of a Bayesian Network representing a student taking 
+random variables. An example of a Bayesian Network representing a student [student]_ taking 
 some course is shown in Fig :ref:`bayesian`.
 
 .. figure:: figure2.png
@@ -63,7 +63,7 @@ Markov Network: A Markov Network consists of an undirected graph and a few
 Factors are associated with it. Unlike Conditional Probability Distributions, a Factor
 does not represent the probabilities of variables in the network. Rather it represents 
 how much is a state of a random variable is likely to agree to the state 
-of the other random variable. An example of four friends A, B, C, D agreeing to
+of the other random variable. An example of markov [markov]_ network over four friends A, B, C, D agreeing to
 some concept is shown in Fig :ref:`markov`.
 
 There are numerous open source packages available in Python for working with graphical 
@@ -237,13 +237,13 @@ A possible Factor over variables A and B is shown in Table :ref:`FactorAB`.
    +-----------+-----------+-------------------+
    |  A        |  B        | :math:`\phi(A, B)`|
    +===========+===========+===================+
-   |:math:`a^0`|:math:`b^0`| 100               |
+   |:math:`a^0`|:math:`b^0`| 30                |
    +-----------+-----------+-------------------+
    |:math:`a^0`|:math:`b^1`| 5                 |
    +-----------+-----------+-------------------+
-   |:math:`a^1`|:math:`b^0`| 5                 |
+   |:math:`a^1`|:math:`b^0`| 1                 |
    +-----------+-----------+-------------------+
-   |:math:`a^1`|:math:`b^1`| 100               |
+   |:math:`a^1`|:math:`b^1`| 10                |
    +-----------+-----------+-------------------+
 
 We can represent this Factor in pgmpy as follows:
@@ -262,9 +262,9 @@ We can represent this Factor in pgmpy as follows:
    +===========+===========+===================+
    |:math:`b^0`|:math:`c^0`| 100               |
    +-----------+-----------+-------------------+
-   |:math:`b^0`|:math:`c^1`| 5                 |
+   |:math:`b^0`|:math:`c^1`| 1                 |
    +-----------+-----------+-------------------+
-   |:math:`b^1`|:math:`c^0`| 5                 |
+   |:math:`b^1`|:math:`c^0`| 1                 |
    +-----------+-----------+-------------------+
    |:math:`b^1`|:math:`c^1`| 100               |
    +-----------+-----------+-------------------+
@@ -274,13 +274,13 @@ We can represent this Factor in pgmpy as follows:
    +-----------+-----------+-------------------+
    |  C        |  D        | :math:`\phi(C, D)`|
    +===========+===========+===================+
-   |:math:`c^0`|:math:`d^0`| 100               |
+   |:math:`c^0`|:math:`d^0`| 1                 |
    +-----------+-----------+-------------------+
-   |:math:`c^0`|:math:`d^1`| 5                 |
+   |:math:`c^0`|:math:`d^1`| 100               |
    +-----------+-----------+-------------------+
-   |:math:`c^1`|:math:`d^0`| 5                 |
+   |:math:`c^1`|:math:`d^0`| 100               |
    +-----------+-----------+-------------------+
-   |:math:`c^1`|:math:`d^1`| 100               |
+   |:math:`c^1`|:math:`d^1`| 1                 |
    +-----------+-----------+-------------------+
 
 .. table:: Factor over variables D and A. :label:`FactorDA`
@@ -290,9 +290,9 @@ We can represent this Factor in pgmpy as follows:
    +===========+===========+===================+
    |:math:`d^0`|:math:`a^0`| 100               |
    +-----------+-----------+-------------------+
-   |:math:`d^0`|:math:`a^1`| 5                 |
+   |:math:`d^0`|:math:`a^1`| 1                 |
    +-----------+-----------+-------------------+
-   |:math:`d^1`|:math:`a^0`| 5                 |
+   |:math:`d^1`|:math:`a^0`| 1                 |
    +-----------+-----------+-------------------+
    |:math:`d^1`|:math:`a^1`| 100               |
    +-----------+-----------+-------------------+		
@@ -331,9 +331,11 @@ converting to Bayesian Network etc in the case of Markov Networks.
    (C _|_ A | D, B)
    (A _|_ C | D, B)
    (B _|_ D | C, A)
+
    model.to_bayesian_model()
    <pgmpy.models.BayesianModel.BayesianModel 
                                 at 0x7f196c084320>
+
    model.get_partition_function()
    10000
 
@@ -367,7 +369,8 @@ Variable elimination on the student model of Fig :ref:`bayesian`:
    G_2     0.7000
 
    student_infer.map_query(variables='G')
-   {'G': 0}   
+   {'G': 0}
+
    student_infer.map_query(
                     variables='G', 
                     evidence=[('I', 1), ('D', 0)])
@@ -474,17 +477,20 @@ inference algorithm. An example is shown:
                         at 0x7f195ed61e48>]})
 
 Similarly for adding any new variable elimination order algorithm we can simply inherit from
-EliminationOrder and define a method named get_order in it. Below is an example for returning 
-an elimination order in which the variables are sorted alphabetically.
+BaseEliminationOrder and define a method named cost(self, variable) which returns the cost of eliminating 
+that variable. Inheriting also exposes two variables: self.bayesian_model and self.moralized_graph. 
+Then we can call the get_elimination_order method to get the order. Below is an example 
+for returning an elimination order in which the variables are sorted alphabetically.
 
 .. code-block:: python
 
-   from pgmpy.inference import EliminationOrder
+   from pgmpy.inference import BaseEliminationOrder
    class MyEliminationAlgo(EliminationOrder):
-       def get_order(self, variables):
-           return sorted(variables)
+       def cost(self, variable):
+           return variable
 
-   # finish this
+   order = MyEliminationAlgo(student_model).get_elimination_order()
+   ['D', 'G', 'I', 'L', 'S']
 
 Conclusion and future work
 --------------------------
@@ -506,7 +512,8 @@ pgmpy is in a state of rapid development and some soon to come features are:
 References
 ----------
 .. [pgmpy] pgmpy github page https://github.com/pgmpy/pgmpy
-.. [student] Koller, D.; Friedman, N. (2009). Probabilistic Graphical Models. Massachusetts: MIT Press. p. 1208. ISBN 0-262-01319-3.
+.. [student] Koller, D.; Friedman, N. Probabilistic Graphical Models. Massachusetts: MIT Press, 2009, pp. 103-106.
+.. [markov] Koller, D.; Friedman, N. Probabilistic Graphical Models. Massachusetts: MIT Press, 2009, pp. 53-54.
 .. [bbn] bayesian-belief-networks github page https://github.com/eBay/bayesian-belief-networks
 .. [pymc] pymc home page https://pymc-devs.github.io/pymc/
 .. [libpgm] libpgm github page https://github.com/CyberPoint/libpgm
