@@ -396,8 +396,7 @@ inference algorithm. An example is shown:
 
    from pgmpy.inference import Inference
    class MyNewInferenceAlgo(Inference):
-       def __init__(self, model):
-           super().__init__(model)
+       def print_variables(self):
            print(self.variables)
            print(self.cardinalities)
            print(self.factors)
@@ -408,8 +407,17 @@ inference algorithm. An example is shown:
    defaultdict(<class 'list'>, {'D': [<Factor representing phi(D:2) at 0x7f195ed61c18>, <Factor representing phi(G:3, D:2, I:2) at 0x7f195ed61cf8>], 'I': [<Factor representing phi(S:2, I:2) at 0x7f195ed61a58>, <Factor representing phi(G:3, D:2, I:2) at 0x7f195ed61cf8>, <Factor representing phi(I:2) at 0x7f195ed61e10>], 'G': [<Factor representing phi(G:3, D:2, I:2) at 0x7f195ed61cf8>, <Factor representing phi(L:2, G:3) at 0x7f195ed61e48>], 'S': [<Factor representing phi(S:2, I:2) at 0x7f195ed61a58>], 'L': [<Factor representing phi(L:2, G:3) at 0x7f195ed61e48>]})
 
 Similarly for adding any new variable elimination order algorithm we can simply inherit from
-EliminationOrder.
+EliminationOrder and define a method named get_order in it. Below is an example for returning 
+an elimination order in which the variables are sorted alphabetically.
 
+.. code-block:: python
+
+   from pgmpy.inference import EliminationOrder
+   class MyEliminationAlgo(EliminationOrder):
+       def get_order(self, variables):
+           return sorted(variables)
+
+   # finish this
 
 Conclusion
 ----------
