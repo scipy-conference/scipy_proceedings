@@ -29,6 +29,19 @@ Also should add tool that allows you to change the meteorological variables with
 
 The API
 -------
+The PySPLIT API comprises five classes
+PySPLIT
+
+The PySPLIT API is based on four object classes:
+Trajectory: The basic unit of all subsequent classes.  Each object represents one air parcel trajectory output by HYSPLIT and contains its X, Y, Z coordinates, along-path data, path information, start information, and summary data.  Most calculations live in Trajectory methods.  Along-path data are stored as 1-D NumPy arrays of floats
+
+TrajectoryGroup: This class is a container for Trajectory instances, initialized simply by giving pysplit.TrajectoryGroup() a list of Trajectory objects.  This object type is iterable, returning either a single Trajectory or a new TrajectoryGroup containing a slice of the list of Trajectory instances.  A typical workflow includes cycling through the Trajectory instances in a TrajectoryGroup for a particular attribute, placing them in a list, and creating a new TrajectoryGroup from that list of all Trajectory instances that share the desired attribute.  Additional attributes of the TrajectoryGroup, like self.trajcount, are included, and TrajectoryGroup instances also contain methods to summarize (self.grid_data()) and plot the paths and/or the along-path data of all member Trajectory instances.  TrajectoryGroup instances can also be created from the addition of other TrajectoryGroup instances.  During this process, two identical Trajectory instances representing the same trajectory are treated such that only one is included in the new TrajectoryGroup.
+
+Cluster: This is a specialized subclass of TrajectoryGroup
+
+ClusterGroup:  The ClusterGroup class is to Cluster what TrajectoryGroup is to Trajectory.  An object of this type is also fully iterable, able to cycle through Clusters.
+
+MapDesign
 Object-oriented
 Trajectory objects
 TrajectoryGroup objects
