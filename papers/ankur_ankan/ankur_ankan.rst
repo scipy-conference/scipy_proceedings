@@ -33,12 +33,13 @@ pgmpy: Probabilistic Graphical Models using Python
 Introduction
 ------------
 
-Probabilistic Graphical Model is a technique of representing Joint
+Probabilistic Graphical Model (PGM) is a technique of representing Joint
 Distributions over random variables in a compact way by exploiting the 
-dependencies between the random variables. PGMs use a network structure and some 
-parameters to represent the joint distribution. The network structure is used to
-encode the relationships between the random variables. There are mainly two 
-types of Graphical Models: Bayesian Networks and Markov Networks.
+dependencies between them. PGMs use a network structure to encode the
+relationships between the random variables and some parameters to represent
+the joint distribution.
+
+There are two major types of Graphical Models: Bayesian Networks and Markov Networks.
 
 .. figure:: figure1.png
    :scale: 100%
@@ -61,9 +62,10 @@ some course is shown in Fig :ref:`bayesian`.
 
 Markov Network: A Markov Network consists of an undirected graph and a few 
 Factors are associated with it. Unlike Conditional Probability Distributions, a Factor
-does not represent the probabilities of variables in the network. Rather it represents 
-how much is a state of a random variable likely to agree to the state 
-of the other random variable. An example of markov [markov]_ network over four friends A, B, C, D agreeing to
+does not represent the probabilities of variables in the network; instead it represents 
+the compatibility between random variables that is how much a particular state
+of a random variable likely to agree with the another state of some other random
+variable. An example of markov [markov]_ network over four friends A, B, C, D agreeing to
 some concept is shown in Fig :ref:`markov`.
 
 There are numerous open source packages available in Python for working with graphical 
@@ -87,7 +89,15 @@ and install it::
     cd pgmpy
     [sudo] python3 setup.py install
 
-Dependencies: pgmpy runs only on python3 and is dependent on networkx, numpy, pandas and scipy.
+Dependencies: pgmpy runs only on python3 and is dependent on networkx, numpy, pandas and scipy
+which can be installed using pip or conda as::
+
+    pip install -r requirements.txt
+
+or::
+
+    conda install --file requirements.txt
+
 
 Creating Bayesian Models using pgmpy
 ------------------------------------
@@ -341,12 +351,13 @@ converting to Bayesian Network etc in the case of Markov Networks.
 
 Doing Inference over models
 ---------------------------
-pgmpy support various Exact and Approximate inference algorithms. The general API to run 
-inference over models is to first create an inference object by passing the model to the
-inference algorithm class. Then we can call the query method to find the probability of 
-some variable given some evidence. Or else if we want to know the state of the variable 
-having maximum probability we can call map_query method. Let's take an example of doing 
-Variable elimination on the student model of Fig :ref:`bayesian`:
+pgmpy support various Exact and Approximate inference algorithms. Generally, to perform 
+inference over models we need to first create an inference object by passing the model to the
+inference class. Once an inference object is instantiated, we can call either query method
+to find the probability of some variable given evidence, or else map_query
+method to know the state of the variable having maximum probability.
+Let's perform inference on the student model (Fig :ref:`bayesian`)
+using variable elimination :
 
 .. code-block:: python
 
