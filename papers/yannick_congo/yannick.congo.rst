@@ -132,7 +132,7 @@ reproducible simulation record storage. We show here a project model in Table
    +==============+===========================================+
    | created      | string: simulation creation timestamp.    |
    +--------------+-------------------------------------------+
-   | scope        | string: privacy choice (public or private)|
+   | private      | boolean: false if project is public.      |
    +--------------+-------------------------------------------+
    | name         | string: project name.                     |
    +--------------+-------------------------------------------+
@@ -140,28 +140,15 @@ reproducible simulation record storage. We show here a project model in Table
    +--------------+-------------------------------------------+
    | goals        | string: project goals.                    |
    +--------------+-------------------------------------------+
-   | status       | string: open, close, terminate, pause.    |
-   +--------------+-------------------------------------------+
    | owner        | user: the creator of the project.         |
    +--------------+-------------------------------------------+
    | history      | list: container images list.              |
-   +--------------+-------------------------------------------+
-   | reprodegree  | double: degree of reproducibility.        |
-   +--------------+-------------------------------------------+
-   | repeadegree  | double: degree of repeatability.          |
-   +--------------+-------------------------------------------+
-   | n-reprodegree| double: degree of non-reproducibility     |
-   +--------------+-------------------------------------------+
-   | n-repeadegree| double: degree of non repeatability       |
    +--------------+-------------------------------------------+
 
 It's the structure that describes the simulation project and its *history*
 field is the list of container images that have been built each time that the
 project source code changed. The container is setup directly from the source
-code of the simulation. The last four properties are the degree of
-reproducibility properties. They are computed from all the records associated
-to the project. We will explain later what they mean, they are computed and
-their importance. We also propose a container model that is as simple as
+code of the simulation. We also propose a container model that is as simple as
 shown in the Table :ref:`containertable`.
 
 .. table:: Simulation metadata Container Model. :label:`containertable`
@@ -172,6 +159,8 @@ shown in the Table :ref:`containertable`.
    | created      | string: simulation creation timestamp.    |
    +--------------+-------------------------------------------+
    | system       | string: docker, rocket, ...               |
+   +--------------+-------------------------------------------+
+   | version      | dict: version control source code's tag . |
    +--------------+-------------------------------------------+
    | image        | string: path to the image in the cloud.   |
    +--------------+-------------------------------------------+
@@ -193,7 +182,7 @@ with the same containers are from the same source code.
    +==============+===========================================+
    | created      | string: execution creation timestamp.     |
    +--------------+-------------------------------------------+
-   | ended        | string: execution last update timestamp.  |
+   | updated      | string: execution update timestamp.       |
    +--------------+-------------------------------------------+
    | program      | dictionary: command, version control,...  |
    +--------------+-------------------------------------------+
@@ -202,6 +191,8 @@ with the same containers are from the same source code.
    | outputs      | list: output files.                       |
    +--------------+-------------------------------------------+
    | dependencies | list: dependencies.                       |
+   +--------------+-------------------------------------------+
+   | status       | string: unknown, started, paused, ...     |
    +--------------+-------------------------------------------+
    | system       | dictionary: machine and os information.   |
    +--------------+-------------------------------------------+
@@ -254,51 +245,18 @@ assessment between two records.
    +--------------+-------------------------------------------+
    | diff         | dictionary: method of differentiation.    |
    +--------------+-------------------------------------------+
-   | proposition  | string: repeated,reproduced,non-repeated,.|
+   | proposition  | string: repeated,reproduced,...           |
    +--------------+-------------------------------------------+
    | status       | string: agreed,denied,proposed.           |
    +--------------+-------------------------------------------+
 
+Differention requests on a project's records allow queries 
 
-In a database of records, the graph of reproducibility assessment relationships
-can give interesting information about a project like: the number of repeated,
-reproduced, non-reproduced, non-repeated records. Then an extraction from the
-variables can allow the determination of source of non-repeatability and
-non-reproducibility. It is also interesting to see at a project level that all
-the records referring to it will allow the determination of the four type of
-reproducibility property assessment degrees:
 
-.. math::
-   :label: repeadegree
-
-   Repeatability(Project) = \frac{sum_{i=1}^{i=NRepeat} isRecord_i(Project)}{sum_{i=1}^{i=NTotal} isRecord_i(Project)}
-
-.. math::
-   :label: reprodegree
-   
-   Reproducibility(Project) = \frac{sum_{i=1}^{i=NReprod} isRecord_i(Project)}{sum_{i=1}^{i=NTotal} isRecord_i(Project)}
-
-.. math::
-   :label: n-repeadegree
-   
-   N-Repeatability(Project) = \frac{sum_{i=1}^{i=NNRrepeat} isRecord_i(Project)}{sum_{i=1}^{i=NTotal} isRecord_i(Project)}
-
-.. math::
-   :label: n-reprodegree
-   
-   N-Reproducibility(Project) = \frac{sum_{i=1}^{i=NN-Reprod} isRecord_i(Project)}{sum_{i=1}^{i=NTotal} isRecord_i(Project)}
-
-Where:
-
-.. raw:: latex
-
-    \begin{itemize}
-      \item $NRepeat$ is the number of repeated records.
-      \item $isRecord_i$ tests if the record $i$ belongs to Project.
-      \item $NReprod$ is the number to total records.
-      \item $NN-Repeat$ the number of non-repeated records.
-      \item $NN-Reprod$ the number of non-reproduced records.
-    \end{itemize}
+A project reproducibility properties can be assessed from the differentiation requests
+on its records. All the request that have a status to agreed concern an accepted
+couple of records that have been resolved as: repeated, reproduced, non-repeated and
+non-reproduced.
 
 
 Data Driven Cloud Service Platform
