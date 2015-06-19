@@ -2,11 +2,9 @@
 :email: cory.quammen@kitware.com
 :institution: Kitware, Inc.
 
-.. :video: http://www.youtube.com/watch?v=dhRUe-gz690
-
-----------------------------------------------------------------
-Scientific Data Analysis and Visualization with VTK and ParaView
-----------------------------------------------------------------
+-------------------------------------------------------------------------
+Scientific Data Analysis and Visualization with Python, VTK, and ParaView
+-------------------------------------------------------------------------
 
 .. class:: abstract
 
@@ -58,7 +56,7 @@ offline visualization generation.
 This paper is organized into two main sections. In the first section,
 I describe the relationship between VTK and Python and describe some
 interfaces between the two. In the second section, I detail the
-relationship between ParaView and Python. Examplesof Python usage in
+relationship between ParaView and Python. Examples of Python usage in
 both packages are provided throughout.
 
 Python and VTK
@@ -99,8 +97,9 @@ enabled, the build process will produce an executable named
 ``vtkpython``. This is the standard Python executable with environment
 variables set to make it simple to import the ``vtk`` module. It is
 also possible to use the same ``python`` executable from the Python
-installation by setting the PYTHONPATH to the location of VTK's shared
-libraries.
+installation by prepending the location of VTK's shared libraries and
+the location of VTK's ``__init__.py`` file to the PYTHONPATH
+environment variable.
 
 To access VTK classes, you simply import ``vtk``:
 
@@ -678,6 +677,24 @@ Within ParaView it is also possible to define Python script that
 defines data sources using the Python Programmable Source. This source
 functions much like the Python Programmable Filter, but without
 requiring any input data sets.
+
+Python Annotation
+~~~~~~~~~~~~~~~~~
+
+.. figure:: PythonAnnotations.png
+   :align: center
+   :figclass: bhtw
+
+   Three annotation filters in the scene show the minimum, mean, and
+   maximum value of the ``DISP`` array at the current time step. :label:`annotationfig`
+
+It is often desirable to annotate visualizations with numerical values
+either taken directly from the data set or computed from the data. The
+Python Annotation filter in ParaView provides this capability in a
+convenient way. The filter takes a Python expression that is evaluated
+when the filter is executed and the result is displayed in the render
+view. Figure :ref:`annotationfig` shows an example using the Python
+Annotation filter.
 
 Unified Server Bindings
 ~~~~~~~~~~~~~~~~~~~~~~~
