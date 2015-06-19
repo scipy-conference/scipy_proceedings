@@ -19,25 +19,33 @@ Automated telescopes are capable of generating images more quickly than they can
 Introduction
 ------------
 
-Using existing tools such as astropy [astropy]_, astrometry.net, source extractor, SCAMP, and SWARP, IQMon analyzes images and provides the user a quick way to determine whether the telescope is performing at the required level.
+Using existing tools such as astropy [astropy]_, astrometry.net [Lang2010]_, source extractor [Bertin1996]_[Bertin2010_SExtractor]_, SCAMP [Bertin2006]_ [Bertin2010_SCAMP]_, and SWARP [Bertin2010_SWARP]_, IQMon analyzes images and provides the user with a quick way to determine whether the telescope is performing at the required level.
 
-IQMon can provide provide a determination of whether the telescope is focused (from the typical FWHM of stars in the image), whether it is pointing accurately (obtained from a comparison of the target coordinates with the astrometrically solved coordinates), whether the tracking or guiding is adequate (from the typical ellipticity of stars in the image), and whether the night is photometric (obtained from the typical photometric zero point of stars in the image).  For wide field systems which detect many stars in each image, these metrics can be spatially resolved allowing for more detailed analysis such as differentiating between tracking error, focus error, and optical aberration or determining if the dome is partially obscuring the telescope aperture.
+IQMon can provide a determination of whether the telescope is focused (from the typical Full Width at Half Maximum, or FWHM, of stars in the image), whether it is pointing accurately (obtained from a comparison of the target coordinates with the astrometrically solved coordinates), whether the tracking or guiding is adequate (from the typical ellipticity of stars in the image), and whether the night is photometric (obtained from the typical photometric zero point of stars in the image).  For wide field systems which detect many stars in each image, these metrics can be spatially resolved allowing for more detailed analysis such as differentiating between tracking error, focus error, and optical aberration or determining if the dome is partially obscuring the telescope aperture.
 
 Because the system is designed to do quick evaluations of image quality, the primary concept is an object representing a **single** image.  IQMon does not do any image stacking or other processing which would be applied to more than one image at a time nor is it built around other organizational concepts such as targets or visits.  It is not intended to supplant a full data reduction and analysis package.  The output of IQMon, however, can be stored in a MongoDB[#]_ database making it potentially useful for collecting information on observing concepts which span multiple images such as targets, nights, or visits.  It might also be useful as a preprocessing step for a more complex data pipeline.
 
 .. [#] http://www.mongodb.org
 
-To date, IQMon has been deployed on three disparate systems: a 735mm focal length wide field imager with a monochrome CCD camera which undersamples the PSF, an 0.5 meter f/8 telescope with a monochrome CCD camera with well sampled PSF, and an 85mm focal length camera lens and DSLR camera (with Bayer color array) designed for very wide field photometry.  IQMon has provided valuable diagnostic information about system performance in all cases.
+To date, IQMon has been deployed on three disparate systems: a 735mm focal length wide field imager with a monochrome CCD camera which undersamples the point spread function (PSF), an 0.5 meter f/8 telescope with a monochrome CCD camera with well sampled PSF, and an 85mm focal length camera lens and DSLR camera (with Bayer color array) designed for very wide field photometry.  IQMon has provided valuable diagnostic information about system performance in all cases.
 
 
 Structure and Example Use
 -------------------------
 
-IQMon operates by using ``Telescope`` and ``Image`` classes.  The ``Telescope`` object contains basic information about the telescope which took the data.  When a ``Telescope`` object is instantiated, a configuration file is read which  contains information on the telescope and controls various user configurable parameters and preferences for IQMon.  The configuration file is a YAML document and is read using the ``yaml`` module.
+IQMon operates by using ``Telescope`` and ``Image`` classes.  The ``Telescope`` object contains basic information about the telescope which took the data.  When a ``Telescope`` object is instantiated, a configuration file is read which  contains information on the telescope and controls various user-configurable parameters and preferences for IQMon.  The configuration file is a YAML document and is read using the ``pyyaml``[#]_ module.
+
+.. [#] http://pyyaml.org
 
 An ``Image`` object is instantiated with a path to a file with one of the supported image formats and with a reference to a ``Telescope`` object.  The image analysis process is simply a series of calls to methods on the ``Image`` object.
 
-The IQMon philosophy is to never operate on the raw file itself, but instead to create a "working file" (using the ``read_image`` method) and store it in a temporary directory.  If the raw image file is a FITS file, then ``read_image``  simply copies the raw file to the temporary directory and records this file name and path in the ``working_file`` property.  If the file is a raw image file from a DSLR (e.g. ``.CR2`` or ``.dng`` format), then ``read_image`` will call ``dcraw`` using the subprocess32 module to convert the file to ``.ppm``.  The file is then converted to FITS format using either ``pamtofits`` or ``pnmtofits`` tools from the ``netpbm`` package.  To date IQMon has only been tested with FITS and ``.CR2`` files, but should in principle work with numerous DSLR raw format images.
+The IQMon philosophy is to never operate on the raw file itself, but instead to create a "working file" (using the ``read_image`` method) and store it in a temporary directory.  If the raw image file is a FITS file, then ``read_image``  simply copies the raw file to the temporary directory and records this file name and path in the ``working_file`` property.  If the file is a raw image file from a DSLR (e.g. ``.CR2`` or ``.dng`` format), then ``read_image`` will call ``dcraw``[#]_ using the subprocess32 module[#]_ to convert the file to ``.ppm``.  The file is then converted to FITS format using either ``pamtofits`` or ``pnmtofits`` tools from the ``netpbm``[#]_ package.  To date, IQMon has only been tested with FITS and ``.CR2`` files, but should in principle work with numerous DSLR raw format images.
+
+.. [#] http://www.cybercom.net/~dcoffin/dcraw/
+
+.. [#] The ``subprocess32`` module "is a backport of the subprocess standard library module from Python 3.2 & 3.3 for use on Python 2.4, 2.5, 2.6 and 2.7" (from https://pypi.python.org/pypi/subprocess32).  It is used instead of the standard ``subprocess`` module because of support for timeout functionality.
+
+.. [#] http://netpbm.sourceforge.net
 
 In the following sections, I will describe a simple example of evaluating image quality for a single image.  A more complex example which is updated in concert with IQMon can be found in the ``measure_image.py`` script at the git repository for the VYSOS project[#]_.  That process can then be wrapped in a simple program to monitor a directory for images and analyze them as they are written to disk (see the ``watch_directory.py`` script in the same VYSOS repository for an example).  This enables automatic near real time analysis.
 
@@ -77,7 +85,7 @@ Once the image has been read in and a working file created, IQMon uses various t
 PSF Size Measurements with Source Extractor
 ```````````````````````````````````````````
 
-Source Extractor (SExtractor; [Bertin1996]_[Bertin2010_SExtractor]_) is called using the ``run_SExtractor`` method which invokes the command using the subprocess32 module.  Customization parameters can be passed to Source Extractor using the telescope configuration file.
+Source Extractor (SExtractor) is called using the ``run_SExtractor`` method which invokes the command using the subprocess32 module.  Customization parameters can be passed to Source Extractor using the telescope configuration file.
 
 The output file of SExtractor is read in and stored as an astropy table object.  Stars with SExtractor generated flags are removed from the table and the table is stored as a property of the image object.
 
@@ -100,7 +108,7 @@ These steps not only provide the typical FWHM (which can indicate if the image i
 Pointing Determination and Pointing Error
 `````````````````````````````````````````
 
-IQMon also contains a ``solve_astrometry`` method to invoke the ``solve-field`` command which is part of the astrometry.net [Lang2010]_ software.  The call to ``solve-field`` is only intended to determine basic pointing and orientation and so IQMon does not use the SIP polynomial fit of distortion in the image.
+IQMon also contains a ``solve_astrometry`` method to invoke the ``solve-field`` command which is part of the astrometry.net software.  The call to ``solve-field`` is only intended to determine basic pointing and orientation and so IQMon does not use the SIP polynomial fit of distortion in the image.
 
 Once a world coordinate system (WCS) is present in the image header, then the ``determine_pointing_error`` method can be called which compares the right ascension (RA) and declination (DEC) values read from the RA and DEC keywords in the header (which are presumed to be the telescope's intended pointing) to the RA and DEC values calculated for the center pixel using the WCS.  The separation between the two coordinates is reported as the pointing error.
 
@@ -116,9 +124,9 @@ Once a world coordinate system (WCS) is present in the image header, then the ``
 Astrometric Distortion Correction
 `````````````````````````````````
 
-In order to make an accurate comparison of the photometry of stars detected in the image and stars present in a chosen stellar catalog, many optical systems require distortion coefficients to be fitted as part of the astrometric solution.  IQMon uses the SCAMP [Bertin2006]_ [Bertin2010_SCAMP]_ software to fit distortions.
+In order to make an accurate comparison of the photometry of stars detected in the image and stars present in a chosen stellar catalog, many optical systems require distortion coefficients to be fitted as part of the astrometric solution.  IQMon uses the SCAMP software to fit distortions.
 
-SCAMP is invoked with the ``run_SCAMP`` method.  Once a SCAMP solution has been determined, the image can be remapped to new pixels without distortions using the SWARP [Bertin2010_SWARP]_ tool with the ``run_SWARP`` method.
+SCAMP is invoked with the ``run_SCAMP`` method.  Once a SCAMP solution has been determined, the image can be remapped to new pixels without distortions using the SWARP tool with the ``run_SWARP`` method.
 
 .. code-block:: python
 
@@ -170,7 +178,7 @@ Results of the IQMon measurements for each image are stored as properties of the
     print('Pointing Error = {:.1f}'.format(\
           im.pointing_error.to(u.arcmin)))
 
-These results can also be stored for later use.  Methods exist to write them to an ``astropy.Table`` (the ``add_summary_entry`` method) and to a YAML document (the ``add_yaml_entry`` method), but the preferred storage solution is to use a mongo database.
+These results can also be stored for later use.  Methods exist to write them to an ``astropy.Table`` (the ``add_summary_entry`` method) and to a YAML document (the ``add_yaml_entry`` method), but the preferred storage solution is to use a mongo database as that is compatible with the ``tornado`` web application included with IQMon (see below).
 
 The address, port number, database name, and collection name to use with ``pyMongo`` to add the results to an existing mongo database are set by the Telescope configuration file.  The ``add_mongo_entry`` method adds a dictionary of values with the results of the IQMon analysis.
 
@@ -182,8 +190,8 @@ For the four primary measurements (FWHM, ellipticity, pointing error, and zero p
 
 This can be useful when summarizing results.  For example, the Tornado web application provided with IQMon (see the `Tornado Web Application`_ section) lists images and will color code a field red if that field is flagged.  In this way, a user can easily see when and where problems might have occurred.
 
-JPEGs and Plots
----------------
+Images and Plots
+----------------
 
 In addition to generating single values for FWHM, ellipticity, and zero point to represent the image, IQMon can also generate more detailed plots with additional information.
 
@@ -193,9 +201,9 @@ A plot with PSF quality information can be generated when ``determine_FWHM`` is 
    :scale: 65%
    :figclass: w
 
-   An example of the plot which can be produced by the ``determine_FWHM`` method.  The plot shows histograms of the FWHM and ellipticity values (upper left and upper right respectively), the spatial distribution of FWHM and ellipticity values (middle left and middle right), ellipticity vs. radius within the image (lower left), and the correlation between the measured PSF position angle and the position angle of the star within the image (lower right). :label:`PSFplot`
+   An example of the plot which can be produced using the ``determine_FWHM`` method.  The plot shows histograms of the FWHM and ellipticity values (upper left and upper right respectively), the spatial distribution of FWHM and ellipticity values (middle left and middle right), ellipticity vs. radius within the image (lower left), and the correlation between the measured PSF position angle and the position angle of the star within the image (lower right). :label:`PSFplot`
 
-In the example plot (Fig. :ref:`PSFplot`), we can see several different effects.  First, from the spatial distribution of FWHM and ellipticity, as well as the ellipticity vs. radius plot, we see that image quality is falling off at large radius.  This image is from a wide field imaging system and we are seeing the signature of off axis aberrations.  This is also suggested in the plot of the correlation between the measured PSF position angle and the position angle of the star within the image which shows strong diagonal components indicating that position within the image influences the PSF.  There is also, however, a vertical component in that plot at :math:`PA \sim 0` which is suggestive of image drift perhaps due to slight polar misalignment or flexure.
+In the example plot (Fig. :ref:`PSFplot`), we can see several different effects.  First, from the spatial distribution of FWHM and ellipticity, as well as the ellipticity vs. radius plot, we see that image quality is falling off at large radii.  This image is from a wide field imaging system and we are seeing the signature of off axis aberrations.  This is also suggested in the plot of the correlation between the measured PSF position angle and the position angle of the star within the image which shows strong diagonal components indicating that position within the image influences the PSF.  There is also, however, a vertical component in that plot at :math:`PA \sim 0` which is suggestive of image drift perhaps due to slight polar misalignment or flexure.
 
 A plot with additional information on the zero point can be generated when calling ``measure_zero_point`` by setting the ``plot`` keyword to ``True``.  This generates a .png file (see Fig. :ref:`ZPplot`) using matplotlib which shows plots of instrumental magnitude vs. catalog magnitude, a histogram of zero point values, a plot of magnitude residuals vs. catalog magnitude, and a a spatial map of zero point over the image.
 
@@ -203,7 +211,7 @@ A plot with additional information on the zero point can be generated when calli
    :scale: 34%
    :figclass: bht
 
-   An example of the plot which can be produced by the ``measure_zero_point`` method.  The plot shows the correlation between instrumental magnitude and catalog magnitude (upper left), a histogram of zero point values (upper right), a plot of the residuals vs. catalog magnitude (lower left), and a spatial distribution of the residuals (lower left). :label:`ZPplot`
+   An example of the plot which can be produced using the ``measure_zero_point`` method.  The plot shows the correlation between instrumental magnitude and catalog magnitude (upper left), a histogram of zero point values (upper right), a plot of the residuals vs. catalog magnitude (lower left), and a spatial distribution of the residuals (lower left). :label:`ZPplot`
 
 JPEG versions of the image can be generated using the ``make_JPEG`` method.  The jpeg can be binned or cropped using the ``binning`` or ``crop`` keyword arguments and various overlays can be generated showing, for example, the pointing error and detected and catalog stars.
 
@@ -221,6 +229,14 @@ Tornado Web Application
 IQMon comes with a tornado web application which, while it can be run stand alone, is intended to be used as a template for adding IQMon results to a more customized web page.  The web application (``web_server.py``) contains two ``tornado`` web handlers: ``ListOfNights`` and ``ListOfImages``.  The first generates a page which lists UT dates and if there are image results associated with a date, then it provides a link to a page with the list of image results for that date.  The second handler produces the page which lists the images for a particular UT date (or target name) and provides a table formatted list of the IQMon measurement results for each image with flagged values color coded red, along with links to jpegs and plots generated for that image.
 
 This web application is intended to be the primary interface for users.  It provides three levels of interaction to the user.  First, a custom plot of IQMon results over the course of a night is easy to generate from the mongo database entries and represents the highest level of interaction.  Using such a plot, serious problems which affect many images can be detected at a glance.  Users can then drill down to see a list of images for that UT date and see system performance as a table of IQMon results with flagged values highlighted in red.  Finally an individual image can be examined as a jpeg with overlays or by using the PSF quality plots or zero point plots to examine detailed performance.
+
+Conclusions
+-----------
+
+IQMon provides a way to evaluate the performance of automated telescopes.  Using the included tornado web application, a user can quickly and easily determine whether the observatory is performing acceptably or if it needs attention.
+
+Over roughly two years of routine operation with two telescopes, it has enabled quick alerting of problems including stuck focus drives, poorly aligned dome rotation, and poor tracking model correction.  Previously, some of these problems would have gone unnoticed until a spot check of the data downloaded from the site revealed them or they would have required a time consuming reading of the nightly system logs to reveal.  Use of IQMon has resulted in greater uptime and improved data quality for both telescopes.
+
 
 References
 ----------
