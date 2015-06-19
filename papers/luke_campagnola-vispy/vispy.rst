@@ -197,18 +197,18 @@ VisPy's plotting layer allows quick and easy access to advanced data visualizati
 
    import numpy as np
    import vispy.plot as vp
-
+   
    # Generate large array to plot
-   data = np.random.normal(size=100000)
+   data = np.random.normal(size=1000000)
    # Add some spectral structure
-   data[20000:80000] += data[::6./5.]
-
+   data[200000:800000] += data[200010:800010]
+   
    # Create a figure with grid layout
    fig = vp.Fig()
-
+   
    # Plot data in the first grid cell
-   fig[0, 0].plot(data, symbol=None)
-
+   fig[0, 0].plot(data)
+   
    # Add a spectrogram of the same data in the next row
    fig[1, 0].spectrogram(data)
 
