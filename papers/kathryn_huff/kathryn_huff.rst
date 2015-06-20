@@ -300,7 +300,13 @@ important object classes in PyRK are:
   (:math:`c_p`, :math:`\rho`, :math:`k_{th}`). Currently, subclasses include
   Flibe, Graphite, and Kernel.
 
-Each of these classes will be discussed in detail in this section.
+A reactor is made of objects, so an object-oriented data model provides the
+most intuitive user experience for describing a reactor system, its materials,
+thermal bodies, neutron populations, and their attributes. In PyRK, the system,
+comprised by those objects is built up by the user in the input file in an
+intuitive fashion. Each of the classes that enable this object oriented model
+will be discussed in detail in this section.
+
 
 SimInfo
 ********
@@ -482,11 +488,24 @@ runtime by heat transfer interfaces selected by the user in the input file:
     clad.add_convection('cool', h=h_clad, area=a_clad)
     cool.add_convection('clad', h=h_clad, area=a_clad)
 
-Object-Oriented Simulation Model
----------------------------------
+In the above example, the `mat` argument must include a Material object.
 
-The world is made of objects, so an object-oriented data model provides the
-most intuitive user experience in a simulation environment [citationneeded]_.
+Material
+*********
+The PyRK Material class allows for materials of any kind to be defined within
+the system. This class represents a generic material and daughter classes
+inheriting from the Material class describe specific types of material (water,
+graphite, uranium oxide, etc.). The attributes of a material object are
+intrinsic material properties (such as thermal conductivity, :math:`k_th`) as
+well as material-specific behaviors.
+
+Given these object classes, the burden of the user is then confined to:
+
+- defining the simulation information (such as duration or preferred solver)
+- defining the neutronic parameters associated with each thermal component
+- defining the materials of each component
+- identifying the thermal components
+- and connecting those components together by their dominant heat transfer mode.
 
 Quality Assurance
 -----------------
