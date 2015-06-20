@@ -494,14 +494,14 @@ Quality Assurance
 For robustness, a number of tools were used to improve robustness and
 reproducibility in this package. These include:
 
-- [github]_ : for version control
-- [matplotlib]_ : for plotting
-- [nose]_ : for unit testing
-- [numpy]_ : for holding and manipulating arrays of floats
-- [pint]_ : for dimensional analysis and unit conversions
-- [scipy]_ : for ode solvers
-- [sphinx]_ : for automated documentation
-- [travis-ci]_ : for continuous integration
+- github : for version control hosting [GitHub2015]_
+- matplotlib : for plotting [Hunter2007]_
+- nose : for unit testing [Pellerin2015]_
+- numpy : for holding and manipulating arrays of floats [Walt2011]_
+- pint : for dimensional analysis and unit conversions [Grecco2014]_
+- scipy : for ode solvers [Oliphant2007]_ [Milman2011]_
+- sphinx : for automated documentation [Sphinx2015]_
+- travis-ci : for continuous integration [Travis2015]_
 
 Together, these tools create a functional framework for distribution and reuse.
 
@@ -576,28 +576,31 @@ Security Consortium.
 References
 ----------
 
-.. [Andreades2014] Andreades, etc.
+.. [GitHub2015] GitHub, "GitHub: Build software better, together," GitHub, 2015. [Online]. Available: https://github.com. [Accessed: 17-Jun-2015].
 
-.. [Huff2015] Huff
+.. [Hunter2007] J. D. Hunter, "Matplotlib: A 2D Graphics Environment," Computing in Science & Engineering, vol. 9, no. 3, pp. 90–95, 2007.
 
-.. [Bell1970] Bell and Glasstone
+.. [Pellerin2015] J. Pellerin, nose. https://pypi.python.org/pypi/nose/1.3.7. 2015.
 
-.. [matplotlib]
+.. [Bell1970] G. I. Bell and S. Glasstone, Nuclear Reactor Theory. New York: Van Nostrand Reinhold Company, 1970.
 
-.. [nose]
+.. [Grecco2014] H. E. Grecco, Pint: a Python Units Library.  https://github.com/hgrecco/pint.  2014.
 
-.. [numpy]
+.. [Huff2015] K. Huff, PyRK: Python for Reactor Kinetics. https://pyrk.github.io. 2015.
 
-.. [pint]
+.. [Oliphant2007] T. E. Oliphant, "Python for Scientific Computing," Computing in Science & Engineering, vol. 9, no. 3, pp. 10–20, 2007.
 
-.. [scipy]
+.. [Milman2011] K. J. Millman and M. Aivazis, "Python for Scientists and Engineers," Computing in Science & Engineering, vol. 13, no. 2, pp. 9–12, Mar. 2011.
 
-.. [travis-ci]
+.. [Andreades2014] C. Andreades, A. T. Cisneros, J. K. Choi, A. Y. . Chong, D. L. Krumwiede, L. Huddar, K. D. Huff, M. D. Laufer, M. Munk, R. O. Scarlat, J. E. Seifried, N. Zwiebaum, E. Greenspan, and P. F. Peterson, "Technical Description of the 'Mark 1' Pebble-Bed, Fluoride-Salt-Cooled, High-Temperature Reactor Power Plant," University of California, Berkeley, Department of Nuclear Engineering, Berkeley, CA, Thermal Hydraulics Group UCBTH-14-002, Sep. 2014.
 
-.. [github]
+.. [Walt2011] S. van der Walt, S. C. Colbert, and G. Varoquaux, "The NumPy Array: A Structure for Efficient Numerical Computation," Computing in Science & Engineering, vol. 13, no. 2, pp. 22–30, Mar. 2011.
 
-.. [sphinx]
+.. [Travis2015]
+
+.. [Sphinx2015]
 
 .. [citationneeded]
 
 .. [wiki2014]
+
