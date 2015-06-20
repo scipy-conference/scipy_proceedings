@@ -23,7 +23,7 @@ Introduction
 ------------
 
 The Astropy project [Astropy2013]_ is a community-driven effort to develop
-high-quality, open source tools for python in astronomy. It, and project
+high-quality, open source tools for Python in astronomy. It, and project
 like it, in principle make research-grade software available for non-experts.
 In practice, despite extensive documentation, the barrier to entry is high.
 
@@ -38,12 +38,12 @@ substantial programming knowledge. About half of the students use Windows; the
 remainder use Mac OSX.
 
 IPython [Pérez2007]_ notebooks introduced widgets in version 2, providing an
-easy, python-only way to program user interface elements in the IPython
+easy, Python-only way to program user interface elements in the IPython
 notebook. A browser-based graphical interface is familiar to all students, and
-because the widgets can be written in python, it is easy to couple them to
+because the widgets can be written in Python, it is easy to couple them to
 software like astropy.
 
-This paper describes a framework for coupling action-based widgets to python
+This paper describes a framework for coupling action-based widgets to Python
 code, in the context of ``reducer``, a notebook for calibrating astronomical
 images. In addition to coupling research-grade, open source software with a
 straightforward graphical interface, the notebook itself is a record of the
@@ -55,11 +55,11 @@ Aside: Bootstrapping a computing environment for students
 ---------------------------------------------------------
 
 While the goal of this work is to minimize the amount of programming new users
-need to do, there are a few things that cannot be avoided: installing python
+need to do, there are a few things that cannot be avoided: installing Python
 and the SciPy [scipy2001]_ stack, and learning a little about how to use a
 terminal.
 
-Students find the Anaconda python distribution [#]_ easy to install and it is
+Students find the Anaconda Python distribution [#]_ easy to install and it is
 available for all platforms. From a developer point of view, it also provides
 a platform for distributing binary packages, particularly useful to the
 students on Windows.
@@ -142,7 +142,7 @@ from the image.
 The ``reducer`` package and notebook
 ------------------------------------
 
-``reducer`` is a pure python package available on PyPI and as a conda  package
+``reducer`` is a pure Python package available on PyPI and as a conda  package
 [#]_. The user-facing part of the package is a single script, also called
 ``reducer``. When invoked, it creates an IPython notebook,
 called ``reduction.ipynb``, in the directory in which it is invoked.
