@@ -22,34 +22,60 @@ Widgets and Astropy: Accomplishing Productive Research with Undergraduates
 Introduction
 ------------
 
-The Astropy project [Astropy2013]_ is a community-driven effort to develop
-high-quality, open source tools for Python in astronomy. It, and project
-like it, in principle make research-grade software available for non-experts.
-In practice, despite extensive documentation, the barrier to entry is high.
+Incoming students interested in majoring in Physics at Minnesota State
+University Moorhead are often interested in doing astronomical research. The
+department encourages students to become involved in research as early as
+possible to foster their interest in science and because early research
+experiences are correlated with successful completion of a degree
+[ref_needed]_.
 
-The specific target population for the tools described here is beginning
-undergraduates at a non-selective state university. The students have little
-or no programming experience in any language and are only beginning to learn
-astronomy. This population is often drawn to astronomy by the prospect of
-doing their own observational astronomy research but the available tools for
-analyzing observational data are either commercial, closed-sourced with
-limited documentation of what algorithms are being used, and/or require
-substantial programming knowledge. About half of the students use Windows; the
-remainder use Mac OSX.
+The students typically have no programming experience, but even the smallest
+project requires calibrating and taking measurements from a couple of hundred
+images. To the extent possible, analysis needs to be automated. Roughly half
+of the students use Windows, the rest Mac OSX.
 
-IPython [Pérez2007]_ notebooks introduced widgets in version 2, providing an
-easy, Python-only way to program user interface elements in the IPython
-notebook. A browser-based graphical interface is familiar to all students, and
-because the widgets can be written in Python, it is easy to couple them to
-software like astropy.
+The problem, described in more detail below, is that the GUI-based software
+most accessible to these students is expensive, often available only on
+Windows, and not clearly documented. The free options largely require
+programming. The software must also leave a record of the choices made in
+calibrating the images so that future researchers can use the images with
+confidence.
 
-This paper describes a framework for coupling action-based widgets to Python
-code, in the context of ``reducer``, a notebook for calibrating astronomical
-images. In addition to coupling research-grade, open source software with a
-straightforward graphical interface, the notebook itself is a record of the
-choices the student made in calibrating the data.
+The proposed solution is a widget-based IPython notebook [Pérez2007]_ for
+calibrating astronomical images, called ``reducer``. A widget-based interface
+was chosen because students at this level are more comfortable with a GUI than
+with programming. An IPython notebook was chosen because of its rich display
+format, the ability to save both code and text, and the persistence of output
+in the notebook, which provides a record of the work done.
+
+The back end of ``reducer`` is built on the Astropy project [Astropy2013]_, a
+community-driven effort to develop high-quality, open source tools for Python
+in astronomy, and on Astropy affiliated projects. [#]_
+
+Section W provides background on the science of image calibration. In section
+X the problem is discussed more completely, including a review of some of the
+available options for astronomical image processing. The section Y discusses
+the use of ``reducer``, while section Z presents its implementation. The
+widget classes in ``reducer`` are potentially useful in other applications.
 
 .. [#] http://www.astropy.org/affiliated/
+
+The problem
+-----------
+
+*Need to establish, before this, student characteristics, like cross-platform,
+and scope of the science.*
+
+Ideally, such software would:
+
+1. Be easily usable by an undergraduate with limited or no programming
+   experience.
+2. Have its operation well tested in published articles and/or be open
+   source so that the details of its implementation can be examined.
+3. Leave behind a record of the settings used by the software in
+   calibrating the images and measuring star brightness.
+4. Be maintained by a large, thriving community of developers.
+
 
 Aside: Bootstrapping a computing environment for students
 ---------------------------------------------------------
@@ -193,3 +219,5 @@ References
                Computing in Science and Engineering, 9(3):21-29, May/June 2007
 
 .. [ccdproc] Crawford, S and Craig, M., https://github.com/ccdproc
+
+.. [ref_needed] *FILL ME IN*
