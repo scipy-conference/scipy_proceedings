@@ -616,6 +616,25 @@ The core functions to manipulate dask graphs and the single machine schedulers
 depend only on the standard library.  Dask is available on PyPI and is
 distributed with the Anaconda installation.
 
+Acknowledgements
+----------------
+
+Dask has had several contributors, both in terms of code and in terms of active
+use and reporting.  Some notable contributions follow (roughly ordered by
+chronological involvement):
+
+*   Stephan Hoyer - Patiently used and bug-fixed ``dask.array``
+*   Erik Welch - Implemented many of the graph optimizations
+*   Mariano Tepper - Implemented the ``dask.array.linalg`` module
+*   Wesley Emeneker - Worked on some of slicing
+*   Peter Steinberg - Worked on some of rechunking
+*   Jim Crist - Implemented rewrite rule optimizations
+*   Blake Griffith - Integrated ``dask.array`` with ``scikit-image`` and has
+    done a variety of bug-fixing, particularly around ``dask.distributed``
+*   Min Regan-Kelley - Provided guidance around ``ZeroMQ`` during the
+    construction of ``dask.distributed``
+*   Phillip Cloud - Improved ``dask.dataframe``
+
 References
 ----------
 .. [Isa07] Isard, Michael, et al. "Dryad: distributed data-parallel programs
