@@ -43,7 +43,7 @@ like NumPy in a straightforward manner.
 We first define ``dask`` graphs and give a trivial example of their use.  We then
 share the design of ``dask.array`` a parallel ndarray.  Then we discuss dynamic
 task scheduling and policies to minimize memory footprint.  We then give two
-examples using ``dask.array`` on compuatational problems.  We then briefly
+examples using ``dask.array`` on computational problems.  We then briefly
 discuss ``dask.bag`` and ``dask.dataframe``, two other collections in the
 ``dask``` library.  We finish with thoughts about extension of this approach
 into the broader Scientific Python ecosystem.
@@ -356,7 +356,7 @@ run, which data can be released, etc..  We then choose a task to give to this
 worker from among the set of ready-to-run tasks.  This small choice governs the
 macro-scale performance of the scheduler.
 
-Instead for out-of-core coputation we find value in choosing tasks that allow
+Instead for out-of-core computation we find value in choosing tasks that allow
 us to release intermediate results and keep a small memory footprint.
 This lets us avoid spilling intermediate values to disk which hampers
 performance significantly.
@@ -367,7 +367,7 @@ available.  We implement this with a simple stack, which can operate in
 constant time.  This is very important.
 
 We endeavor to keep scheduling overhead low at around 1ms per task.  Updating
-executino state and deciding which task to run must be made very quickly.  To
+executing state and deciding which task to run must be made very quickly.  To
 do this we maintain a great deal of state about the currently executing
 computation.  The set of ready-to-run tasks is commonly quite large, in the
 tens or hundreds of thousands in common workloads and so in practice we must
@@ -448,7 +448,7 @@ We note the following
 
 1.  Compute-bound tasks are computationally bound by memory; we don't
     experience a slowdown
-2.  Dask.array can effectively parallize and block reference BLAS for matrix
+2.  Dask.array can effectively parallelize and block reference BLAS for matrix
     multiplies
 3.  Dask.array doesn't significantly improve when using an optimized BLAS,
     presumably this is because we've already reaped most of the benefits of
@@ -542,7 +542,7 @@ Bag
 ~~~
 
 A *bag* is an unordered collection with repeats.  It is like a Python list but
-does not guarantee the order of elements.  Because we typicaly compute on
+does not guarantee the order of elements.  Because we typically compute on
 Python objects in dask.bag we are bound by the Global Interpreter Lock and so
 switch from using a multi-threaded scheduler to a multi-processing one.
 
@@ -660,4 +660,3 @@ References
 .. _DistArray: http://docs.enthought.com/distarray/
 .. _Luigi: https://github.com/spotify/luigi
 .. _PyToolz: https://toolz.readthedocs.org/en/latest/
-
