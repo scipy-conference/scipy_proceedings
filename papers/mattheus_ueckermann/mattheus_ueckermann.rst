@@ -231,7 +231,7 @@ Finally, to verify that pyDEM is efficient, robust, and accurate for real data-s
    :scale: 70%
    :figclass: w
    
-   To verify pyDEM's performance over a large data set, TWI was calculated for the 1 arc-second resolution US National Elevation Database (shown with hill-shading overlay). :label:`conus`
+   To verify pyDEM's performance over a large data set, TWI was calculated for the 1 arc-second resolution US National Elevation Database (shown with hill-shading overlay) and 3 arc-second SRTM globally (shown in inset). :label:`conus`
 
 --------   
    
