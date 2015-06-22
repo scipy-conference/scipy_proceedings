@@ -8,22 +8,22 @@ Automated Image Quality Monitoring with IQMon
 
 .. class:: abstract
 
-Automated telescopes are capable of generating images more quickly than they can be inspected by a human, but detailed information on the performance of the telescope is valuable for monitoring and tuning of their operation.  The IQMon (Image Quality Monitor) package[#]_ was developed to provide basic image quality metrics of automated telescopes in near real time. 
+Automated telescopes are capable of generating images more quickly than they can be inspected by a human, but detailed information on the performance of the telescope is valuable for monitoring and tuning of their operation.  The IQMon (Image Quality Monitor) package [#]_ was developed to provide basic image quality metrics of automated telescopes in near real time. 
 
 .. class:: keywords
 
    astronomy, automated telescopes, image quality
 
-.. [#] Source code at ``https://github.com/joshwalawender/IQMon``
+.. [#] Source code at https://github.com/joshwalawender/IQMon
 
 Introduction
 ------------
 
-Using existing tools such as astropy [astropy]_, astrometry.net [Lang2010]_, source extractor [Bertin1996]_[Bertin2010_SExtractor]_, SCAMP [Bertin2006]_ [Bertin2010_SCAMP]_, and SWARP [Bertin2010_SWARP]_, IQMon analyzes images and provides the user with a quick way to determine whether the telescope is performing at the required level.
+Using existing tools such as astropy [astropy]_, astrometry.net [Lang2010]_, source extractor [Bertin1996]_ [Bertin2010_SExtractor]_, SCAMP [Bertin2006]_ [Bertin2010_SCAMP]_, and SWARP [Bertin2010_SWARP]_, IQMon analyzes images and provides the user with a quick way to determine whether the telescope is performing at the required level.
 
 IQMon can provide a determination of whether the telescope is focused (from the typical Full Width at Half Maximum, or FWHM, of stars in the image), whether it is pointing accurately (obtained from a comparison of the target coordinates with the astrometrically solved coordinates), whether the tracking or guiding is adequate (from the typical ellipticity of stars in the image), and whether the night is photometric (obtained from the typical photometric zero point of stars in the image).  For wide field systems which detect many stars in each image, these metrics can be spatially resolved allowing for more detailed analysis such as differentiating between tracking error, focus error, and optical aberration or determining if the dome is partially obscuring the telescope aperture.
 
-Because the system is designed to do quick evaluations of image quality, the primary concept is an object representing a **single** image.  IQMon does not do any image stacking or other processing which would be applied to more than one image at a time nor is it built around other organizational concepts such as targets or visits.  It is not intended to supplant a full data reduction and analysis package.  The output of IQMon, however, can be stored in a MongoDB[#]_ database making it potentially useful for collecting information on observing concepts which span multiple images such as targets, nights, or visits.  It might also be useful as a preprocessing step for a more complex data pipeline.
+Because the system is designed to do quick evaluations of image quality, the primary concept is an object representing a **single** image.  IQMon does not do any image stacking or other processing which would be applied to more than one image at a time nor is it built around other organizational concepts such as targets or visits.  It is not intended to supplant a full data reduction and analysis package.  The output of IQMon, however, can be stored in a MongoDB [#]_ database making it potentially useful for collecting information on observing concepts which span multiple images such as targets, nights, or visits.  It might also be useful as a preprocessing step for a more complex data pipeline.
 
 .. [#] http://www.mongodb.org
 
@@ -33,23 +33,24 @@ To date, IQMon has been deployed on three disparate systems: a 735mm focal lengt
 Structure and Example Use
 -------------------------
 
-IQMon operates by using ``Telescope`` and ``Image`` classes.  The ``Telescope`` object contains basic information about the telescope which took the data.  When a ``Telescope`` object is instantiated, a configuration file is read which  contains information on the telescope and controls various user-configurable parameters and preferences for IQMon.  The configuration file is a YAML document and is read using the ``pyyaml``[#]_ module.
+IQMon operates by using ``Telescope`` and ``Image`` classes.  The ``Telescope`` object contains basic information about the telescope which took the data.  When a ``Telescope`` object is instantiated, a configuration file is read which  contains information on the telescope and controls various user-configurable parameters and preferences for IQMon.  The configuration file is a YAML document and is read using the pyyaml [#]_ module.
 
 .. [#] http://pyyaml.org
 
 An ``Image`` object is instantiated with a path to a file with one of the supported image formats and with a reference to a ``Telescope`` object.  The image analysis process is simply a series of calls to methods on the ``Image`` object.
 
-The IQMon philosophy is to never operate on the raw file itself, but instead to create a "working file" (using the ``read_image`` method) and store it in a temporary directory.  If the raw image file is a FITS file, then ``read_image``  simply copies the raw file to the temporary directory and records this file name and path in the ``working_file`` property.  If the file is a raw image file from a DSLR (e.g. ``.CR2`` or ``.dng`` format), then ``read_image`` will call ``dcraw``[#]_ using the subprocess32 module[#]_ to convert the file to ``.ppm``.  The file is then converted to FITS format using either ``pamtofits`` or ``pnmtofits`` tools from the ``netpbm``[#]_ package.  To date, IQMon has only been tested with FITS and ``.CR2`` files, but should in principle work with numerous DSLR raw format images.
+The IQMon philosophy is to never operate on the raw file itself, but instead to create a "working file" (using the ``read_image`` method) and store it in a temporary directory.  If the raw image file is a FITS file, then ``read_image``  simply copies the raw file to the temporary directory and records this file name and path in the ``working_file`` property.  If the file is a raw image file from a DSLR (e.g. ``.CR2`` or ``.dng`` format), then ``read_image`` will call ``dcraw`` [#]_ using the subprocess32 module [#]_ to convert the file to ``.ppm``.  The file is then converted to FITS format using either ``pamtofits`` or ``pnmtofits`` tools from the ``netpbm`` [#]_ package.  To date, IQMon has only been tested with FITS and ``.CR2`` files, but should in principle work with numerous DSLR raw format images.
 
 .. [#] http://www.cybercom.net/~dcoffin/dcraw/
 
-.. [#] The ``subprocess32`` module "is a backport of the subprocess standard library module from Python 3.2 & 3.3 for use on Python 2.4, 2.5, 2.6 and 2.7" (from https://pypi.python.org/pypi/subprocess32).  It is used instead of the standard ``subprocess`` module because of support for timeout functionality.
+.. [#] The subprocess32 module "is a backport of the subprocess standard library module from Python 3.2 & 3.3 for use on Python 2.4, 2.5, 2.6 and 2.7" (from https://pypi.python.org/pypi/subprocess32).  It is used instead of the standard subprocess module due to its support for timeout functionality.
 
 .. [#] http://netpbm.sourceforge.net
 
-In the following sections, I will describe a simple example of evaluating image quality for a single image.  A more complex example which is updated in concert with IQMon can be found in the ``measure_image.py`` script at the git repository for the VYSOS project[#]_.  That process can then be wrapped in a simple program to monitor a directory for images and analyze them as they are written to disk (see the ``watch_directory.py`` script in the same VYSOS repository for an example).  This enables automatic near real time analysis.
+In the following sections, I will describe a simple example of evaluating image quality for a single image.  A more complex example which is updated in concert with IQMon can be found in the ``measure_image.py`` script at the git repository for the VYSOS project [#]_.  That process can then be wrapped in a simple program to monitor a directory for images and analyze them as they are written to disk (see the ``watch_directory.py`` script in the same VYSOS repository for an example).  This enables automatic near real time analysis.
 
 .. [#] https://github.com/joshwalawender/VYSOStools
+
 
 Configuration and Reading the Image In
 ``````````````````````````````````````
@@ -143,7 +144,7 @@ Estimating the Photometric Zero Point
 
 With a full astrometric solution, SExtractor photometry, and a catalog of stellar magnitude values, we can estimate the zero point for the image and use that as an indicator of clouds or other aperture obscurations.
 
-The ``get_catalog`` method can be used to download a catalog of stars from VizieR using the ``astroquery`` module.  Alternatively, support for a local copy of the UCAC4 catalog is available using the ``get_local_UCAC4`` method.
+The ``get_catalog`` method can be used to download a catalog of stars from VizieR using the astroquery module.  Alternatively, support for a local copy of the UCAC4 catalog is available using the ``get_local_UCAC4`` method.
 
 Once a catalog is obtained, the ``run_SExtractor`` method is invoked again, this time with the ``assoc`` keyword set to ``True``.  This will limit the resulting catalog of detected stars to stars which **both** exist in the catalog and also are detected in the image.  This may significantly decrease the number of stars used for the FWHM and ellipticity calculation, but may also remove spurious detections of image artifacts which would improve the reliability of the measured values.
 
@@ -240,6 +241,7 @@ Over roughly two years of routine operation with two telescopes, it has enabled 
 
 References
 ----------
+
 .. [astropy] Astropy Collaboration, Robitaille, T.~P., Tollerud, E.~J., et al.
              *Astropy: A community Python package for astronomy* 2013, A&A, 558,
              A33
