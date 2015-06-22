@@ -303,6 +303,7 @@ from a notebook used during a lecture. A step function
 sequence :math:`u[n]` is defined as
 
 .. math::
+   :label: step_fctn
 
    u[n] = \begin{cases} 1, & n \geq 0 \\ 0, & \text{otherwise} \end{cases}
 
@@ -310,6 +311,7 @@ Here I consider the difference between two step sequences starting at :math:`n=0
 I thus construct in Python
 
 .. math::
+   :label: pulse_sig
 
    x_3[n] = x_1[n] - x_2[n] = u[n] - u[n-5],
 
@@ -331,8 +333,64 @@ code that generates and plots :math:`x_3[n]` is simply:
 
    stem(n,x1 - x2)
 
-Digital Communications
-======================
+Convolution Integral and LTI Systems
+====================================
+
+A fundamental signals and systems result states that the signal output from a *linear* and *time invariant* (LTI)
+system is the *convolution* of the input signal with the system *impulse response*. The impulse response of a
+continuous-time LTI system is defined as the system output :math:`h(t)` in response to the input :math:`\delta(t)`,
+where :math:`\delta(t)` is the *dirac delta function*. A block diagram of the system model is shown in
+Fig. :ref:`fig13`.
+
+.. figure:: scipy_2015_fig13.pdf
+   :scale: 80%
+   :align: center
+   :figclass: htb
+
+   Simple one input one output LTI system block diagram. :label:`fig13`
+
+In mathematical terms the output :math:`y(t)` is
+
+.. math::
+   :label: conv_int
+
+   y(t) = \int_{-\infty}^\infty x(\lambda)h(t-\lambda)\, d\lambda =
+   \int_{-\infty}^\infty h(\lambda)x(t-\lambda)\, d\lambda
+
+Students frequently have problems setting up and evaluating the convolution integral. The waveforms of interest are
+typically piecewise continuous, so the integral must be evaluated over one or more contiguous intervals. Consider the
+case of :math:`x(t) = u(t) - u(t-T)`, where :math:`u(t)` is the unit step function, and :math:`h(t) = a e^{-at}u(t)`,
+where :math:`a > 0`. To be effective in solving this problem it is best to sketch, as shown in Fig. :ref:`fig12`,
+the integrand :math:`h(\lambda)x(t-\lambda)` and then discover the support intervals or *cases* for :math:`y(t)`.
+
+.. figure:: scipy_2015_fig12.pdf
+   :scale: 60%
+   :align: center
+   :figclass: htb
+
+   Sketches of :math:`x(t)`, :math:`h(t)`, and :math:`h(\lambda)x(t-\lambda)`. :label:`fig12`
+
+A screen capture of a notebook that details the steps of solving the convolution integral is given in Fig. :ref:`fig10`.
+
+.. figure:: scipy_2015_fig10.pdf
+   :scale: 55%
+   :align: center
+   :figclass: htb
+
+   Solving the convolution integral in the notebook. :label:`fig10`
+
+What to say here
+
+.. figure:: scipy_2015_fig11.pdf
+   :scale: 55%
+   :align: center
+   :figclass: htb
+
+   Plotting :math:`y(t)` for :math:`a=1, 5`, and :math:`10`. :label:`fig11`
+
+
+Convolutional Coding for Digital Communications
+===============================================
 
 In this case study the coding theory class contained in ``fec_conv.py`` is exercised. The specific case is taken from
 the final exam. Fig. :ref:`fig2` shows the construction of the ``fec_conv`` object and a plot of one stage of the
@@ -375,13 +433,26 @@ numerical example which includes a PSD plot. The function ``ssd.line_spectra`` p
    Formulating the power spectrum of a pulse train signal and then plotting the line spectrum for a particular
    parameter set. :label:`fig4`
 
-Real-Time Signal Processing
-===========================
 
-In the real-time signal processing course C-code is written for an embedded processor. In this case the processor
-is an ARM Cortex-M4. The objective of this case study is to implement an equal-ripple lowpass filter of prescribed
-amplitude response specifications. Python (`scipy.signal`) is used to design the filter and obtain the filter
-coefficients in `float64` precision. The processor is working with `int16` precision so once the filter is designed
+Real-Time Digital Signal Processing
+===================================
+
+In the real-time digital signal processing (DSP) course C-code is written for an embedded processor. In this case the processor
+is an ARM Cortex-M4. The objective of this case study is to implement an equal-ripple *finite impulse response* (FIR)
+lowpass filter of prescribed amplitude response specifications. The filter is also LTI. Python (`scipy.signal`) is used
+to design the filter and obtain
+the filter coefficients, :math:`b_1[n],\ n=0,\ldots,M`, in ``float64`` precision. Here the filter order turns out to be
+:math:`M=77`. As in the case of continuous-time LTI systems, the relation between the filter input and output
+involves a convolution. Since a digital filter is a discrete-time system, the convolution sum now appears. Furthermore,
+for the LTI system of interest here, the convolution sum can be replaced by a *difference equation* representation:
+
+.. math::
+   :label: LCCDE
+
+   y[n] = \sum_{k=0}^{M} x[n] b[n-k],\ -\infty < n < \infty
+
+In real-time DSP (:ref:`LCCDE`) becomes an algorithm running in real-time according to the system sampling rate clock.
+The processor is working with ``int16`` precision, so once the filter is designed
 the coefficients are scaled and rounded to 16 bit signed integers as shown in Fig. :ref:`fig5`. The fixed-point filter
 coefficients are written to a C header file using a custom function defined in the notebook (not shown here however).
 
@@ -392,14 +463,12 @@ coefficients are written to a C header file using a custom function defined in t
 
    Designing an equal-ripple lowpass filter using `scipy.signal.remez` for real-time operation. :label:`fig5`
 
-
-
 The filter frequency response magnitude is obtained using a noise source to drive the filter input (first passing
 through an analog-to-digital converter) and then the filter output (following digital-to-analog conversion) is processed
 by instrumentation to obtain a spectral estimate. The spectrum estimate corresponds to the filter frequency response.
-The measured frequency reesponse is imported into the notebook using `loadtxt`. Fig. :ref:`fig6` compares the
+The measured frequency response is imported into the notebook using `loadtxt`. Fig. :ref:`fig6` compares the
 theoretical frequency response, including quantization errors, with the measured. The results are impressive, and the
-IPython notebook has made this a breeze.
+IPython notebook makes this a breeze.
 
 .. figure:: scipy_2015_fig6.pdf
    :scale: 55%
@@ -407,6 +476,29 @@ IPython notebook has made this a breeze.
    :figclass: htb
 
    Comparing the theoretical fixed-point frequency response with the measured. :label:`fig6`
+
+An important property of the equal-ripple lowpass is that the filter coefficients, :math:`b[n]`,
+have even symmetry. This means that :math:`b_1[M-n] = b_1[n]` for :math:`0\leq n \leq M`. Taking the
+:math:`z`-transform of both sides of (:ref:`LCCDE`) using the convolution theorem [Opp2010]_ results in
+
+.. math::
+   :label: sys_func
+   :type: eqnarray
+
+   Y(z) &=& H(z) X(z) = \underbrace{\sum_{n=0}^M b_n z^{n}}_{H(z)} \cdot X(z) \\
+   &=& \prod_{n=1}^M \big(1-z_n z^{-1}\big)\cdot X(z)
+
+where :math:`Y(z)` is the :math:`z`-transform of :math:`y[n]`, :math:`X(z)` is the :math:`z`-transform of
+:math:`x[n]`, and :math:`H(z)`, known as the *system function*, is the :math:`z`-transform of the system impulse response.
+
+
+.. figure:: scipy_2015_fig9.pdf
+   :scale: 55%
+   :align: center
+   :figclass: htb
+
+   Pole-zero plot of the equal-ripple lowpass which confirms that :math:`H(z)` is linear phase. :label:`fig9`
+
 
 Statistical Signal Processing
 =============================
@@ -460,6 +552,7 @@ References
 .. [Octave] ``https://en.wikipedia.org/wiki/GNU_Octave``.
 .. [Zie2015] R.E. Ziemer and W.H. Tranter *Principles of Communications*, seventh edition, Wiley, 2015.
 .. [Camtasia] ``https://en.wikipedia.org/wiki/Camtasia_ Studio``.
+.. [Opp2010] Alan V. Oppenheim and Ronald W. Schafer, *Discrete-Time Signal Processing* (3rd ed.), Prentice Hall, 2010.
 
 
 
