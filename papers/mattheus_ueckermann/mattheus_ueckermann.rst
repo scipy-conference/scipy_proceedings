@@ -42,7 +42,7 @@ Introduction
 The aspect (or flow direction), magnitude of the slope, upstream contributing area (UCA), and topographic wetness index (TWI), shown in Figure :ref:`info`, are important quantities in hydrological terrain analysis. These quantities are used to determine, for example, the flow path of water, sediment, and pollutants for applications in environmental resource, agricultural, and flood risk management. These quantities are calculated from gridded digital elevation models (DEM), which describe the topography of a region. DEMs are often stored as raster arrays, where the value of an element in the array gives the elevation of that point (usually in meters). The (i, j) coordinates of the array are also related to (latitude, longitude) coordinates through a geotransform. The aspect is calculated from DEM data and gives the angle (in radians) at each element. 
 The aspect is important for determining the direction that water will flow, and is also important for solar radiation (for example, a north-facing slope is more shaded than a south-facing slope in the northern hemisphere).  
 The slope (meters / meters) can also be calculated, and gives the change in elevation over the change in horizontal distance, quantifying the steepness of the topography. UCA captures the effect of water draining down a slope along particular routes by keeping track of the amount of runoff that is funneled through a point. UCA is defined as the total horizontal area that is up-slope of a point or contour [moore91]_, and unlike aspect and slope, the UCA at each element depends on more than just the immediately surrounding, or adjacent elements in the array. TWI (:math:`\kappa`) is derived from UCA (:math:`a`) and slope (:math:`\tan \beta`), where :math:`\kappa=\ln \frac{a}{tan \beta}`, and was developed by Beven and Kirkby [beven79]_ within the runoff model TOPMODEL (see [beven95]_ ).
- TWI represents the steady-state soil moisture due to topographic effects. Regions with large TWI (flat slopes with large UCA) are generally wetter than regions with small TWI (steep slopes and small UCA). 
+TWI represents the steady-state soil moisture due to topographic effects. Regions with large TWI (flat slopes with large UCA) are generally wetter than regions with small TWI (steep slopes and small UCA). 
 
 .. figure:: pydem_flow.png
    :scale: 80%
@@ -211,7 +211,19 @@ To ensure that the [tarboton97]_ :math:`D\infty` method was correctly implemente
 
 The c-1 case was used to test the third stage of processing, the edge correction stage. This is a challenging case because the drainage pattern is a spiral that crosses a single tile boundary multiple times. Without the edge correction, the UCA builds up in channels along a tile, but never reach the full value required (see Figure :ref:`spiral` right). Figure :ref:`spiral` also shows that pyDEM's edge correction algorithms are working correctly. The left UCA calculation is performed on a single tile using tauDEM, and it does not need edge corrections from adjoining tiles. The middle UCA calculation is performed using pyDEM over chunks of elevation sections forming a 7 by 7 grid. For this middle calculation, 316 rounds of the stage 3 edge correction was performed in serial, which means that every tile required multiple corrections as new information became available on the edges. Except for the edge pixels, the tauDEM and pyDEM results agree to withing 0.02%, which is reasonable considering how different the algorithms are. 
 
-pyDEM was also verified against tauDEM using the all of the above test cases (not shown). In all cases without flats the results agreed as well as in the spiral case. For the cases with flats, tauDEM and pyDEM do not agree because they treat flat regions differently. 
+pyDEM was also verified against tauDEM using all of the above test cases (not shown). In all cases without flats the results agreed as well as in the spiral case. For the cases with flats, tauDEM and pyDEM do not agree because they treat flat regions differently. Also, for cases with non-uniform grids, tauDEM and pyDEM do not agree. To illustrate the difference, consider the case of a conical topography with some added noise. On a uniform grid, the tauDEM and pyDEM solutions agree very well (Figure :ref:`pytau`): the difference between the two UCA calculations is on the order of :math:`10^{-7}`, which is excellent given the vast differences between the UCA algorithms. However, Figure :ref:`pytaunu` shows that on a non-uniform grid only pyDEM correctly captures the shape of the geometry (note that the diagonal artifacts are from the :math:`D\infty` method). This is because pyDEM does not assume that the DEM data is uniformly gridded, but takes into account the geospatial coordinates when calculating the Aspect using the :math:`D\infty` method. 
+
+.. figure:: py-tau.png
+   :scale: 70%
+   :figclass: w
+   
+   For a noisy cone (left), the UCA calculated using pyDEM (middle) and tauDEM (right) agree well when the DEM data is on a uniform grid. :label:`pytau`
+
+.. figure:: py-tau-nu.png
+   :scale: 70%
+   :figclass: w
+   
+   For a noisy cone (left), the UCA calculated using pyDEM (middle) and tauDEM (right) do not agree well when the DEM data is on a non-uniform grid. pyDEM correctly captures the shape of the geometry. :label:`pytaunu`
 
 Finally, to verify that pyDEM is efficient, robust, and accurate for real data-sets, we calculated TWI over the conterminous US (Figure :ref:`conus`). In the figure, the spurious black areas are due to the interpolation of no data-values of our geoTiff viewer. The full calculation took approximately 3 days on a 32 core AWS compute node. Figure :ref:`edges` (left) shows the UCA for a small region in Austin, TX from this calculation.
   
