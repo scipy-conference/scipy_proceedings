@@ -12,10 +12,11 @@ Scientific Data Analysis and Visualization with Python, VTK, and ParaView
    and visualization. Since their early years, Python has played an
    important role in each package. In many use cases, VTK and ParaView
    serve as modules used by Python applications. In other use cases,
-   Python modules are used as clients within VTK. In this paper, we
-   provide an overview of Python integration in VTK and ParaView and
-   give some concrete examples of usage. We also provide a roadmap for
-   additional Python integration in VTK and ParaView in the future.
+   Python modules are used to generate visualization components within
+   VTK. In this paper, we provide an overview of Python integration in
+   VTK and ParaView and give some concrete examples of usage. We also
+   provide a roadmap for additional Python integration in VTK and
+   ParaView in the future.
 
 .. class:: keywords
 
@@ -57,7 +58,8 @@ This paper is organized into two main sections. In the first section,
 I describe the relationship between VTK and Python and describe some
 interfaces between the two. In the second section, I detail the
 relationship between ParaView and Python. Examples of Python usage in
-both packages are provided throughout.
+both packages are provided throughout. I also provide a roadmap for
+additional Python support in VTK and ParaView.
 
 Python and VTK
 --------------
@@ -69,24 +71,25 @@ route to using VTK, as well as to the development of VTK itself.
 Python Language Bindings for VTK
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Python binding support in VTK has evolved so that today nearly every
-semantic feature of C++ used by VTK has a direct semantic analog in
-Python. C++ classes from VTK are wrapped into Python equivalents and
-provided in a single module named ``vtk``. The few classes that are
-not wrapped are typically limited to abstract base classes that cannot
-be instantiated or classes that are meant for internal use in VTK.
+The Python binding support in VTK has evolved so that today nearly
+every semantic feature of C++ used by VTK has a direct semantic analog
+in Python. C++ classes from VTK are wrapped into Python
+equivalents. The few classes that are not wrapped are typically
+limited to abstract base classes that cannot be instantiated or
+classes that are meant for internal use in VTK.
 
 Python Wrapping Infrastructure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Python classes for VTK classes and special types are generated using a
-shared lex/yacc-based parser and code generation utilities tailored
-for VTK programming conventions. VTK is organized into a number of C++
-modules. When built with shared libraries enabled, a library
-containing C++ classes is generated at build time for each module.
-Each Python-wrapped source file is likewise compiled into a shared
-library corresponding to the C++ module. All VTK C++ modules are
-provided in a single ``vtk`` Python module.
+shared lex/yacc-based parser tailored for VTK programming conventions
+and custom code generation utilities for Python wrapping. VTK is
+organized into a number of C++ modules. When built with shared
+libraries enabled, a library containing C++ classes is generated at
+build time for each module.  Each Python-wrapped source file is
+likewise compiled into a shared library corresponding to the C++
+module. All VTK C++ modules are provided in a single ``vtk`` Python
+module.
 
 VTK Usage in Python
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,9 +100,9 @@ enabled, the build process will produce an executable named
 ``vtkpython``. This is the standard Python executable with environment
 variables set to make it simple to import the ``vtk`` module. It is
 also possible to use the same ``python`` executable from the Python
-installation by prepending the location of VTK's shared libraries and
-the location of VTK's ``__init__.py`` file to the PYTHONPATH
-environment variable.
+installation against which VTK was built by prepending the location of
+VTK's shared libraries and the location of VTK's ``__init__.py`` file
+to the PYTHONPATH environment variable.
 
 To access VTK classes, you simply import ``vtk``:
 
@@ -117,19 +120,24 @@ Each Python object references an underlying VTK object.  Objects in
 VTK are reference counted and automatically deleted when no longer
 used. The wrapping interface updates the underlying VTK object's
 reference count and alleviates the need for explicit memory
-management.
+management within Python.
 
 One particularly nice semantic equivalence between VTK's C++ and
 Python interfaces involves methods that accept a pointer to a C++
-array. Such methods are common in VTK to, for instance, set 3D
-Cartesian coordinates as properties of classes. In Python, the
-corresponding method accepts a tuple or list object. This works well
-as long as the list or tuple has the expected number of elements.
+array representing a small tuple of elements. Such methods are common
+in VTK to, for instance, set a 3D Cartesian coordinate as a property
+of a class. In Python, the corresponding method accepts a tuple or
+list object. This works well as long as the list or tuple has the
+expected number of elements.
 
 .. code-block:: python
 
    sphere = vtk.vtkSphereSource()
+
+   # Express point as list
    sphere.SetCenter([0, 1, 0])
+
+   # Express point as tuple
    sphere.SetCenter((0, 1, 0))
 
 Methods that return pointers to arrays with a fixed number of elements
@@ -139,8 +147,9 @@ returned.
 
 .. code-block:: python
 
-   center = sphere.GetCenter()
-   # center has the value (0, 1, 0)
+   >>> center = sphere.GetCenter()
+   >>> print center
+   (0, 1, 0)
 
 For VTK classes that have operators ``<``, ``<=``, ``==``, ``>=``, ``>``
 defined, equivalent Python operators are provided.
@@ -184,22 +193,23 @@ for only the ``SetCenter`` method.
        V.SetCenter((float, float, float))
        C++: void SetCenter(double a[3])
 
-Some additional mappings between C++ and Python semantics are
-described in the file ``VTK/Wrapping/Python/README_WRAP.txt`` in the
-VTK source code repository in versions 4.2 and above.
+Some less often used mappings between C++ and Python semantics, as
+well as limitations, are described in the file
+``VTK/Wrapping/Python/README_WRAP.txt`` in the VTK source code
+repository in versions 4.2 and above.
 
 Integration with NumPy
 ~~~~~~~~~~~~~~~~~~~~~~
 
-In VTK, data set attributes are stored in instances of a subclass of a
+In VTK, data set attributes are stored in instances of a subclass of
 ``vtkAbstractArray``. For data sets with points and cells such as
 ``vtkPolyData`` and ``vtkUnstructuredGrid``, attributes can be
 associated with points or cells, or the data set itself. For point-
 and cell-associated arrays, each array element is the attribute value
 associated with the point or cell at the same index. Attribute arrays
-not associated with points or cells can contain arrays of arbitrary
-size and no such mapping between array elements and topological
-elements of the data set exists.
+associated only with the data set can contain arrays of arbitrary size
+and no mapping between array elements and topological elements of the
+data set is assumed.
 
 There are limited functions within VTK itself to process or analyze
 these arrays. Since 2008, a low-level interface layer between VTK
@@ -260,7 +270,7 @@ interface has been added to VTK that properly handles distributed data
 sets [Aya14].
 
 A key building block in VTK's ``numpy_interface`` is a set of classes
-that wrap VTK data set objects.
+that wrap VTK data set objects to have a more Pythonic interface.
 
 .. code-block:: python
 
@@ -273,11 +283,10 @@ that wrap VTK data set objects.
    ds = dsa.WrapDataObject(reader.GetOutput())
    
 In this code, ``ds`` is an instance of a ``dataset_adapter.PolyData``
-class returned by the ``WrapDataObject`` function because the
-``vtkXMLPolyDataReader`` produces a ``vtkPolyData`` data set.  The
-wrapper class provides a more Pythonic way of accessing data stored in
-VTK arrays. Point- and cell-associated arrays are available in member
-variables that provide the dictionary interface.
+class returned by the ``WrapDataObject`` function to handle the
+``vtkPolyData`` output of the ``vtkXMLPolyDataReader``. Point- and
+cell-associated arrays are available in member variables that provide
+the dictionary interface.
 
 .. code-block:: python
 
@@ -348,14 +357,14 @@ VTK excels at interactive 3D rendering of scientific data. Matplotlib
 excels at producing publication-quality plots. VTK leverages each
 toolkit's strengths in two ways.
 
-First, as we described earlier, convenience functions for exposing VTK
+First, as described earlier, convenience functions for exposing VTK
 data arrays as NumPy arrays are provided in the
 ``vtk.util.numpy_support`` and ``numpy_interface.algorithms``
 modules. These arrays can be passed to matplotlib plotting functions
 to produce publication-quality plots.
 
 Second, VTK itself incorporates some of matplotlib's rendering
-capabilities directly in some cases. When VTK Python wrapping is
+capabilities directly when possible. When VTK Python wrapping is
 enabled and matplotlib is available, VTK uses the
 ``matplotlib.mathtext`` module to render LaTeX math expressions to
 either ``vtkImageData`` objects that can be displayed as images or to
@@ -366,9 +375,9 @@ Qt applications with Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Python support in VTK is robust enough to create full-featured
-applications without writing a single line of C++ code. PyQt [PyQt15] (or
-PySide [PyS15]) provide Python bindings for Qt. A simple example is provided
-below:
+applications without writing a single line of C++ code. PyQt [PyQt15]
+(or PySide [PyS15]) provide Python bindings for Qt. A simple PyQt
+example adapted from an example by Michka Popoff is provided below:
 
 .. code-block:: python
 
@@ -426,22 +435,24 @@ VTK filters defined in Python
 
 While VTK sources and filters are available in Python, they cannot be
 subclassed to create new sources or filters because the virtual
-function table defined in C++ do not know about methods defined in
+function table defined in C++ does not know about methods defined in
 Python. Instead, one can subclass from a special ``VTKAlgorithm``
 class defined in ``vtk.util.vtkAlgorithm``. This class specifies the
 interface for classes that interact with ``vtkPythonAlgorithm``, a C++
-class that delegates the primary VTK data update methods to the Python
-class. By doing this, it is possible to implement complex new sources
-and filters using Python alone. For more details on this Python class,
-see [Gev2014].
+class that delegates the primary VTK pipeline update methods to
+equivalent pipeline update methods in the Python ``VTKAlgorithm``
+class. Subclasses of ``VTKAlgorithm`` can (and usually should)
+override these methods. By doing this, it is possible to implement
+complex new sources and filters using Python alone. For more details
+on the ``VTKAlgorithm`` class, see [Gev2014].
 
 Python integration in VTK tests
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As a project that follows a quality-software process, VTK has many
-regression tests. Fully 26% of tests (544 out of 2046) are written in
-Python. This integration of Python in VTK's testing infrastructure
-shows how important Python is in VTK's development.
+regression tests. At present, 26% of tests (544 out of 2046) are
+written in Python. This integration of Python in VTK's testing
+infrastructure shows how important Python is in VTK's development.
 
 
 Python and ParaView
@@ -449,7 +460,7 @@ Python and ParaView
 
 While ParaView may be built without supporting it, Python is
 integrated into ParaView in a number of ways. This section provides an
-overview on this integration.
+overview of this integration.
 
 Python Console
 ~~~~~~~~~~~~~~
@@ -463,11 +474,12 @@ a number of modules from ParaView itself. When first started, the command
 
    from paraview.simple import *
 
-is executed to import the ``paraview.simple`` module. This module
-provides a simplified layer of Python functions to execute common
-commands in ParaView such as file reading, filter creation, and
-chaining filters together to produce data transformations and
-visualizations. This layer is described in more detail later.
+is automatically executed to import the ``paraview.simple``
+module. This module provides a simplified layer of Python functions to
+execute common commands in ParaView such as file reading, filter
+creation, and chaining filters together to produce data
+transformations and visualizations. This layer is described in more
+detail later.
 
 Running commands in ParaView's Python console is identical to running
 commands in other Python consoles. The key difference is that commands
@@ -485,19 +497,19 @@ run.
 Simple Layer
 ~~~~~~~~~~~~
 
-ParaView can be run on several distinct computing resources in a
-number of configurations. In a number of configurations, the client
-software running on a local workstation connects to a remote process
-running on a high-performance computing resource. In most cases, VTK
-objects of the same type, such as a filter, exist on all processes in
-the overall ParaView application. Because VTK classes for the most
-part do not know how to communicate among themselves, ParaView wraps
-designated VTK classes in proxy classes that are able to communicate
-with each other among distributed processes. This proxy layer is
-exposed in the ``paraview.servermanager`` Python module.
+ParaView can be run in several difference client/server
+configurations. In a number of configurations, the client software
+running on a local workstation connects to a remote process running on
+a high-performance computing resource. In most cases, VTK objects of
+the same type, such as a filter, exist on all processes in the overall
+ParaView application. Because most VTK classes do not know how to
+communicate among themselves, ParaView wraps designated VTK classes in
+proxy classes that are able to communicate with each other among
+distributed processes.
 
-The ``paraview.servermanager`` module provides direct access to a
-proxy manager class. It can be used to create sources and filters
+The proxy layer is exposed in the ``paraview.servermanager`` Python
+module. This module provides direct access to a proxy manager
+class. It can be used to create sources and filters
 
 .. code-block:: python
 
@@ -536,7 +548,7 @@ in ``paraview.simple`` functions is reduced to
 Python State Files
 ~~~~~~~~~~~~~~~~~~
 
-ParaView is able to  supports saving the current state of data, filters, and
+ParaView is able to save the current state of data, filters, and
 rendering parameters to a Python source file that, when executed,
 recreates the currrent state in ParaView. The Python state file is
 generated in terms of ``paraview.simple`` module functions.
@@ -548,12 +560,12 @@ In addition to saving a snapshot of ParaView's state, live tracing of
 user interactions with the ParaView user interface is also supported.
 Each time a user performs an interaction that modifies ParaView's
 state, Python code is generated that captures the event. This is
-implemented via instrumenting the ParaView application at event
-handlers. The tracing mechanism can record either the entire state of
-proxies or just modifications of state to non-default values to reduce
-the trace size. It is also possible to show the trace code as it is
-being generating, which can be a useful way to learn Python scripting
-in ParaView.
+implemented via instrumenting the ParaView application with Python
+generation code at various event handlers. The tracing mechanism can
+record either the entire state of proxies or just modifications of
+state to non-default values to reduce the trace size. It is also
+possible to show the trace code as it is being generating, which can
+be a useful way to learn Python scripting in ParaView.
 
 One of ParaView's strenghts is the ability to connect data sources and
 filters together into a workflow to perform some action. For example,
@@ -564,7 +576,7 @@ with the ParaView user interface. For a large list of files, though, a
 more automated approach is useful. The Python tracing mechanism
 provides a way to generate a conversion script by performing actions in
 the user interface, generating a trace, and then modifying the trace to
-apply to a series of files.
+apply to a series of files that need to be converted.
 
 pvpython and pvbatch
 ~~~~~~~~~~~~~~~~~~~~
@@ -599,9 +611,9 @@ compute the norm of the Normal array associated with points:
 
 Under the covers, the Python Calculator uses the
 ``vtk.numpy_interface.dataset_adapter`` module to wrap the inputs to
-the filter. This provides the compatibility between VTK arrays and
+the filter. This provides compatibility between VTK arrays and
 NumPy. All the wrapped input data sets are appended to a list named
-``input`` that is available in the environment in which the Python
+``inputs`` that is available in the environment in which the Python
 expression is executed.
 
 
@@ -615,7 +627,7 @@ for custom filters, ParaView supports a rich plugin architecture that
 makes it possible to create additional filters in C++. Unfortunately,
 creating a plugin this way is a relatively involved process.
 
-Aside from the C++ plugin architecture, ParaView also provides a
+Aside from the C++ plugin architecture, ParaView provides a
 Programmable Filter that enables a potentially faster plugin
 development path. This filter is more versatile than the Python
 Calculator because it enables manipulation of the entire output data
@@ -661,7 +673,7 @@ with the name "Normals" is defined.
 
 Like the Python Calculator, the inputs are wrapped by the
 ``dataset_adapter`` module. The filter above expressed with the
-wrapping becomes
+wrapping becomes simply
 
 .. code-block:: python
 
@@ -693,31 +705,10 @@ either taken directly from the data set or computed from the data. The
 Python Annotation filter in ParaView provides this capability in a
 convenient way. The filter takes a Python expression that is evaluated
 when the filter is executed and the result is displayed in the render
-view. Figure :ref:`annotationfig` shows an example using the Python
-Annotation filter.
-
-Unified Server Bindings
-~~~~~~~~~~~~~~~~~~~~~~~
-
-To support communication among ParaView processes, ParaView generates
-a special communication class for each of a subset of VTK classes
-automatically during build time. These class are used to communicate
-proxy state between different ParaView processes, to ensure, for
-example, that each proxy for an instance of a file reader on each
-process has the same file name. As we have described, a similar
-wrapping process is also performed, when Python support is enabled.
-
-Each wrapping adds to the size of the executable files and shared
-libraries. On very large scale parallel computing resources, the
-amount of RAM available per node is relatively limited. As a result,
-when running ParaView on such a resource, it is important to reduce
-the size of the executables as much as possible to leave room for the
-data that we want to visualize. One way to do this is to use the
-Python wrapping to communicate among processes instead of using the
-custom communication class. When this is enabled, the process of
-creating the special communication classes is not run. Instead,
-communication is performed by sending Python strings to destination
-processes that are executed to change the state of local proxies.
+view. Importantly, these annotations can come from data analysis
+results from NumPy or ``numpy_interface.algorithms``. Figure
+:ref:`annotationfig` shows an example using the Python Annotation
+filter.
 
 Python View
 ~~~~~~~~~~~
@@ -787,6 +778,42 @@ creates a histogram of an array named "Density" is provided here:
        ax.hist(vtk_to_numpy(dens), bins=10)
 
        return python_view.figure_to_image(figure)
+
+Unified Server Bindings
+~~~~~~~~~~~~~~~~~~~~~~~
+
+To support communication among ParaView processes, ParaView generates
+a special communication class for each of a subset of VTK classes
+automatically during build time. These class are used to communicate
+proxy state between different ParaView processes, to ensure, for
+example, that each proxy for an instance of a file reader on each
+process has the same file name. As we have described, a similar
+wrapping process is also performed for Python when Python wrapping is
+enabled.
+
+Each wrapping adds to the size of the executable files and shared
+libraries. On very large scale parallel computing resources, the
+amount of RAM available per node is relatively limited. As a result,
+when running ParaView on such a resource, it is important to reduce
+the size of the executables as much as possible to leave room for the
+data that we want to visualize. One way to do this is to use the
+Python wrapping to communicate among processes instead of using the
+custom communication class. When this is enabled, the process of
+creating the special communication classes is not run. Instead,
+communication is performed by sending strings with Python commands to
+destination processes to change the state of local proxies.
+
+Conclusions
+-----------
+
+Python has been integrated into VTK and ParaView since almost their
+respective beginnings. The integration continues to expand as Python
+is used in an increasing number of ways in both software packages. As
+Python continues to grow in popularity among the scientific community,
+so, too, does the need for providing easy-to-use Pythonic interfaces
+to scientific visualization tools. As demonstrated in this paper, VTK
+and ParaView are well-positioned to continue adapting to the future
+needs of scientific Python programmers.
 
 Future Work
 -----------
