@@ -14,14 +14,23 @@ Abstract
 
 The humble mathematical relation, a fundamental (if implicit) component
 in computational algorithms, is conspicuously absent in most standard
-container sets, including Python's. We present the many uses of the
-relation and how you can use it to simplify your own coding.
+container collections, including Python's. We present the many uses of
+the relation and how you can use it to simplify your own coding.
 
 Overview
 --------
 
-A mathematical relation [1]_ when directly integrated into software can
-perform a variety of common tasks:
+A mathematical *relation*\  [1]_ is simply a pairing of elements of one
+set, the *domain*, with another, the *range*. Rephrasing more formally:
+a relation is a collection of tuples (*x*,\ *y*) where *x* is in the
+domain and *y* is in the range. A function is a an example of a
+restricted relation, a one-to-many mapping from the domain to the range,
+or rephrased: a collection of tuples (*x,*\ y) where *x* appears exactly
+once in the collection. Examples of functions in Python parlance are the
+dictionary and the function (**def**).
+
+A relation, implemented as a code, can perform a variety of common
+tasks:
 
 -  **Inversion**: quickly find the values(range) associated with a
    key(domain)
@@ -261,13 +270,6 @@ crucial:
 | multiple, variant attributes per element   | relation           |
 +--------------------------------------------+--------------------+
 
-Implementing the Relation Container
------------------------------------
-
-One of the best things about the relation data container is its ease of
-implementation within Python. See https://pypi.python.org/pypi/relate
-for an simple, yet complete, implementation as well as more information.
-
 Conclusion
 ----------
 
@@ -276,11 +278,15 @@ supporting all four relationship cardinalities. Using a relation can
 simplify your code and eliminate the need for repeated, ad hoc patterns
 when managing your working data structures.
 
+One of the best things about the relation data container is its ease of
+implementation within Python. For a simple, yet complete example, see
+our implementation at https://pypi.python.org/pypi/relate.
+
 References
 ----------
 
 .. [1]
-   http://simple.wikipedia.org/wiki/Relation_(mathematics)
+   http://www.purplemath.com/modules/fcns.htm
 
 .. [2]
    numpy, pandas, etc...
