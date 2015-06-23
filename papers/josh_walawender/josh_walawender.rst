@@ -19,7 +19,7 @@ Automated telescopes are capable of generating images more quickly than they can
 Introduction
 ------------
 
-Using existing tools such as astropy [astropy]_, astrometry.net [Lang2010]_, source extractor [Bertin1996]_ [Bertin2010_SExtractor]_, SCAMP [Bertin2006]_ [Bertin2010_SCAMP]_, and SWARP [Bertin2010_SWARP]_, IQMon analyzes images and provides the user with a quick way to determine whether the telescope is performing at the required level.
+Using existing tools such as astropy [Astropy2013]_, astrometry.net [Lang2010]_, source extractor [Bertin1996]_ [Bertin2010a]_, SCAMP [Bertin2006]_ [Bertin2010b]_, and SWARP [Bertin2010c]_, IQMon analyzes images and provides the user with a quick way to determine whether the telescope is performing at the required level.
 
 IQMon can provide a determination of whether the telescope is focused (from the typical Full Width at Half Maximum, or FWHM, of stars in the image), whether it is pointing accurately (obtained from a comparison of the target coordinates with the astrometrically solved coordinates), whether the tracking or guiding is adequate (from the typical ellipticity of stars in the image), and whether the night is photometric (obtained from the typical photometric zero point of stars in the image).  For wide field systems which detect many stars in each image, these metrics can be spatially resolved allowing for more detailed analysis such as differentiating between tracking error, focus error, and optical aberration or determining if the dome is partially obscuring the telescope aperture.
 
@@ -27,7 +27,7 @@ Because the system is designed to do quick evaluations of image quality, the pri
 
 .. [#] http://www.mongodb.org
 
-To date, IQMon has been deployed on three disparate systems: a 735mm focal length wide field imager with a monochrome CCD camera which undersamples the point spread function (PSF), an 0.5 meter f/8 telescope with a monochrome CCD camera with well sampled PSF, and an 85mm focal length camera lens and DSLR camera (with Bayer color array) designed for very wide field photometry.  IQMon has provided valuable diagnostic information about system performance in all cases.
+To date, IQMon has been deployed on three disparate optical systems: a 735mm focal length wide field imager with a monochrome CCD camera which undersamples the point spread function (PSF), an 0.5 meter f/8 telescope with a monochrome CCD camera with well sampled PSF, and an 85mm focal length camera lens and DSLR camera (with Bayer color array) designed for very wide field photometry.  IQMon has provided valuable diagnostic information about system performance in all cases.
 
 
 Structure and Example Use
@@ -242,9 +242,9 @@ Over roughly two years of routine operation with two telescopes, it has enabled 
 References
 ----------
 
-.. [astropy] Astropy Collaboration, Robitaille, T.~P., Tollerud, E.~J., et al.
-             *Astropy: A community Python package for astronomy* 2013, A&A, 558,
-             A33
+.. [Astropy2013] Astropy Collaboration, Robitaille, T.~P., Tollerud, 
+             E.~J., et al. *Astropy: A community Python package for
+             astronomy* 2013, A&A, 558, A33
 
 .. [Bertin1996] Bertin, E., & Arnouts, S. *SExtractor: Software for source
                 extraction*, 1996, A&AS, 117, 393
@@ -253,16 +253,16 @@ References
                 with SCAMP*, 2006, Astronomical Data Analysis Software and
                 Systems XV, 351, 112
 
-.. [Bertin2010_SCAMP] Bertin, E. *SCAMP: Automatic Astrometric and Photometric
-                      Calibration*, 2010, Astrophysics Source Code Library,
-                      1010.063
+.. [Bertin2010b] Bertin, E. *SCAMP: Automatic Astrometric and Photometric
+                 Calibration*, 2010, Astrophysics Source Code Library,
+                 1010.063
 
-.. [Bertin2010_SExtractor] Bertin, E., & Arnouts, S. *SExtractor: Source
-                           Extractor*, 2010, Astrophysics Source Code Library,
-                           1010.064
+.. [Bertin2010a] Bertin, E., & Arnouts, S. *SExtractor: Source
+                 Extractor*, 2010, Astrophysics Source Code Library,
+                 1010.064
 
-.. [Bertin2010_SWARP] Bertin, E. *SWarp: Resampling and Co-adding FITS Images
-                      Together* 2010, Astrophysics Source Code Library, 1010.068
+.. [Bertin2010c] Bertin, E. *SWarp: Resampling and Co-adding FITS Images
+                 Together* 2010, Astrophysics Source Code Library, 1010.068
 
 .. [Lang2010] Lang, D., Hogg, D. W., Mierle, K., Blanton, M., & Roweis, S.,
               *Astrometry.net: Blind astrometric calibration of arbitrary
