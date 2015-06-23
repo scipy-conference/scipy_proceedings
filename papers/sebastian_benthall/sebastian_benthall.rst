@@ -119,13 +119,6 @@ BigBang supports collection of email data.
 It can do this either by scraping the archival pages of a Mailman instance,
 or by importing an `.mbox` formatted file. On email data, BigBang includes functionality for the following operations:
 
-*Entity resolution.* Empirically, over the extent of a mailing list's archival
-data it is common for the *From* fields of emails to vary even when the
-email is coming from the same person. Not only do people sometimes change their
-email address or use multiple addresses to interact with the same list, but
-also different email clients may represent the same email address in the *From*
-header in different ways. BigBang includes automated techniques for resolving
-these entities, cleaning the data for downstream processing.
 
 *Cohort clustering*.
 - by quintile
@@ -149,6 +142,18 @@ found in nature.
 As these interaction graphs are anomalous with respect to the existing
 literature on complex systems (to the best of my knowledge), modeling these
 networks presents a challenge that will be undertaken in future work.
+
+Entity Resolution
+-----------------
+
+*Entity resolution.* Empirically, over the extent of a mailing list's archival
+data it is common for the *From* fields of emails to vary even when the
+email is coming from the same person. Not only do people sometimes change their
+email address or use multiple addresses to interact with the same list, but
+also different email clients may represent the same email address in the *From*
+header in different ways. BigBang includes automated techniques for resolving
+these entities, cleaning the data for downstream processing.
+
 
 
 Discussion network formation
