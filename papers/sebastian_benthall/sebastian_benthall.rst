@@ -31,12 +31,6 @@ Generative Modeling of Online Collaboration with BigBang
    mailing lists, clustering
 
 
-Background/Motivation
----------------------
-
-This talk will discuss the lessons learned in a year of developing BigBang, a toolkit built using scientific Python for analyzing the dynamics of open source communities. 
-
-
 Introduction
 ------------
 
