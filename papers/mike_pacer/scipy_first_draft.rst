@@ -62,12 +62,20 @@ Nodes
 
 In the examples in `Causal Bayesian NetworkX`_, nodes are given explicit labels individuating them such as :math:`\{A,B,C,\ldots\}` or {'rain','sprinkler','grass_wet'}. Oftentimes, for the purposes of mathematical notation, it will be helpful to index nodes by the integers over a common variable label, e.g., using  :math:`\{X_1,X_2,X_3,\ldots\}`. [#]_ 
 
-.. [#] Despite pythonic counting beginning with 0, I chose not to begin this series with 0 because when dealing with variables that might be used in statistical regressions, the 0 subscript will have a specific meaning that separates it from the rest of the notation. For example when expression multivariate regession as :math:`Y = \beta X + \epsilon, \epsilon \sim \mathcal{N}(0,\Sigma)`, :math:`\beta_0` refers to the parameter associated with a constant variable :math:`x_0 = 1` and :math:`X` is normally defined as :math:`x_1, x_2, x_3, \ldots`. This allows a simple additive constant to be estimated, which usually(but not always) is not of interest to statistical tests, acting as a scaling constant more than anything else. This also makes for simpler notation than saying :math:`Y = \beta_0 + \beta X + \epsilon`, since that is equivalent to the previous notation (:math:`Y = \beta X + \epsilon`) if :math:`x_0 = 1`. In other cases :cite:`griffithst05,pacerg12`, the 0 index will be used to indicate background sources for events in a system.
+.. [#] Despite pythonic counting beginning with 0, I chose not to begin this series with 0 because when dealing with variables that might be used in statistical regressions, the 0 subscript will have a specific meaning that separates it from the rest of the notation. For example when expressing multivariate regession as :math:`Y = \beta X + \epsilon, \epsilon \sim \mathcal{N}(0,\Sigma)`, :math:`\beta_0` refers to the parameter associated with a constant variable :math:`x_0 = 1` and :math:`X` is normally defined as :math:`x_1, x_2, x_3, \ldots`. This allows a simple additive constant to be estimated, which usually(but not always) is not of interest to statistical tests, acting as a scaling constant more than anything else. This also makes for simpler notation than saying :math:`Y = \beta_0 + \beta X + \epsilon`, since that is equivalent to the previous notation (:math:`Y = \beta X + \epsilon`) if :math:`x_0 = 1`. In other cases :cite:`griffithst05,pacerg12`, the 0 index will be used to indicate background sources for events in a system.
 
 Edges
 ^^^^^
 
 Defined in this way, edges are all *directed* in the sense that an edge from :math:`X_1 \textrm{to} X_2`is not the same as the edge from :math:`X_2 \textrm{to} X_1`, or :math:`(X_1,X_2) \neq (X_2,X_1)`. An edge :math:`(X_1,X_2)` will sometimes be written as :math:`X_1 \rightarrow X_2`, and the relation may be described using language like ":math:`X_1` is the parent of :math:`X_2`" or ":math:`X_2` is the child of :math:`X_1`".
+
+Directed paths
+^^^^^^^^^^^^^^
+
+Paths are a useful way to understand sequences of edges and the structure of a graph. Informally, to say there is a path between :math:`X_i` and :math:`X_j` is to say that one can start at :math:`X_i` and by traveling from parent to child along the edges leading out from the node that you are currently at, you can eventually reach :math:`X_j`.
+
+To define it recursively and more precisely, if the edge :math:`(X_i,X_j)` is in the edge set or if the edges :math:`(X_i,X_k)` and :math:`(X_k,X_j)` are in the edge set there is a path from :math:`X_i` to :math:`X_j`. If a graph has a path from node :math:`X_i` to :math:`X_j`, that means that there is a subset of its set of edges such that the set contains edges :math:`(X_i,X_k)` and :math:`(X_l,X_j)` and if :math:`\big(X_k\neq X_j` and :math: `X_l\neq X_i` and :math:`X_k \neq X_l\big)`, there is a path from :math:`X_k` to :math:`X_l`. 
+
 
 Adjacency Matrix Perspective
 ============================
@@ -75,6 +83,13 @@ Adjacency Matrix Perspective
 For a fixed set of nodes :math:`X` of size :math:`N`, each graph is uniquely defined by its edge set, which can be seen as a binary :math:`N \times N` matrix, where each index :math:`(i,j)` in the matrix is :math:`1` if the graph contains an edge from :math:`X_i \rightarrow X_j`, and :math:`0` if it does not contain such an edge. We will refer to this matrix as :math:`A(G)`.
 
 This means that any values of :math:`1` found on the diagonal of the adjacency matrix (i.e., where :math:`X_i \rightarrow X_j, i=j`) indicate a self-loop on the respective node.
+
+.. Finding paths using adjacency matrices
+.. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. It is straightforward to interpret questions of the existence of paths between :math:`X_i` and :math:`X_j` using the adjacency matrix perspective and matrix multiplication. The key step is to recognize that you can think of multiplying the adjacency matrix from the right by a binary vector as taking a step in the graph from the nodes whose values in the vector were 1 to the set of children of those nodes. To continue to have a binary vector then requires resetting values in the vector 0 and 1 by taking (for every element of the resulting vector) the minimum of the value of the vector and 1 (which addresses the case where more than one edge leads into the same node). 
+
+.. To use this technique to test whether a matrix has an edge between, if you have a value of 1 at index *i*, and 0's elsewhere, if you multiply this vector from the left by the adjacency matrix, then if there is a path between 
 
 Undirected Graphs
 =================
@@ -97,7 +112,7 @@ The number of directed graphs that can be obtained from a set of nodes of size :
 Directed Acyclic Graphs
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-A cycle in a directed graph can be understood as the existance of 
+A cycle in a directed graph can be understood as the existance of a set of edges 
 
 The number of directed acyclic graphs (:sc:`dag`\s) that can be obtained from a set of nodes of size :math:`n` can be defined recursively as follows :cite:`mckay2003acyclic` :
 
@@ -107,24 +122,48 @@ The number of directed acyclic graphs (:sc:`dag`\s) that can be obtained from a 
 
 Note, because :sc:`dag`\s do not allow any cycles, this means that there can be no self loops. As a result, every value on the diagonal of a  :sc:`dag`\'s adjacency matrix will be 0. 
 
+.. Topological ordering in :sc:`dag`\s
+.. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. It is possible to reorder 
+
 
 Conditional Probability Distributions
 -------------------------------------
 
 A random variable defined by a conditional probability distribution has a distribution indexed by the realization of some other variable (which itself is often a random variable, especially in the context of Bayesian networks).
 
+Notation
+========
+
+The probability of a discrete random variable(:math:`X`) will be designated with :math:`P(X)` 
+
+
 Example - Coins and dice
 ========================
 
 Imagine the following game: 
 
-You have a coin[#]_ (*C*, :sc:`Heads, Tails`), a 6-sided die(:math:`D_6, \{1,2,\ldots,6\}`), and a 20-sided die(:math:`D_20, \{1,2,\ldots,20\}`). Your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. 
+You have a coin [#]_ (*C*, :sc:`Heads, Tails`), a 6-sided die(:math:`D_6, \{1,2,\ldots,6\}`), and a 20-sided die(:math:`D_20, \{1,2,\ldots,20\}`). If for simplicity, you prefer to think of these as fair dice and a fair coin, you are welcome to do so, but my notation will not require that.
 
-.. [#] A coin is effectively 2-sided die, but for clarity of exposition I chose to use treat the conditioned-on variable as a different kind of object than the variables relying on that conditioning. 
+.. [#] A coin is effectively 2-sided die, but for clarity of exposition I chose to use treat the conditioned-on variable as a different kind of object than the variables relying on that conditioning.
 
-The rules of the game are as follows flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die.
+The rules of the game are as follows: flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die. Your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. 
 
+Suppose we wanted to know your expected score on a single round, but we do not know whether the coin will land on :sc:`Heads` or :sc:`Tails`. We cannot directly compute the probabilities of each 
 
+But this discussion hides an important complexity by having the event set of the :math:`D_6` embedded within the event set of the :math:`D_20`. Moreover, we assumed that we could treat each event in these sets as belonging to the integers and as a result, that with little interpretation, they can be easily summed and divided into.
+
+Example - Coins and dice with labeled ids
+=========================================
+
+Imagine the following game: 
+
+You have a coin [#]_ (*C*, :sc:`Heads, Tails`), a *new* 6-sided die(:math:`D_6, \{\clubsuit,\diamondsuit,\heartsuit,\spadesuit,\odot,\dagger\}`), and a 20-sided die(:math:`D_20, \{X_1,X_2,\ldots,X_20\}`). 
+
+The rules are the same as before: your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. You flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die.
+
+But note that now we cannot sum over these in the same way. Indeed, our event sets for the two dice are actually only partially 
 
 
 Bayesian Networks
