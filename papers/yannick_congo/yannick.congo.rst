@@ -14,15 +14,23 @@ Building a Cloud Service for Reproducible Simulation Management
    associated metadata is enormously appealing and should be at the heart of
    any attempt to make scientific simulations repeatable and reproducible.
 
-   Most of the work in the literature focus on the reproducibility
-   requirements and the tools to acquire those metadata. Those are critical
-   but there is also a great need to support the discoverabiliy of the
-   metadata produced and also to investigate on the content of what a
-   reproducible simulation execution context is.
+   Most of the work in the literature focus in the terminology and the
+   approaches to acquire those metadata. Those are critical but not enough.
+   Since the purpose of capturing the execution is to be able to recreate the
+   same execution environment as in the original run, there is great need to
+   investigate ways to recreate a similar environment from those metadata and
+   also to be able to make them accessible to the community for collaboration.
+   The so popular social collaborative *pull request* mechanism in Github is a
+   great example of how cloud infrastructures can bring another layer of public
+   collaboration. We think reproducibility could benefit from a cloud social
+   collaborative presence because capturing the metadata about a simulation
+   is far from being the end game of making it reproducible, repeatable or of
+   any use to another scientist that has difficulties to easily have access to
+   them.
 
-   In this paper we propose our investigation results into defining a
-   reproducibility assessable record and the cloud infrastructure to support
-   it. A use case example with Sumatra and Docker is provided.
+   In this paper we define a reproducibility assessable record and the cloud
+   infrastructure to support it. We also provide a use case example with the event
+   based simulation management tool *Sumatra* and the container system *Docker*.
 
 .. class:: keywords
 
@@ -36,23 +44,30 @@ scientific advancement. Either done manually or automatically; reusability,
 refutability and discovery are the key proprieties that make research results
 repeatable and reproducible.
 
-One will find that in the litterature many research have been done on defining
+One will find that in the literature many researchs have been done in defining
 the terminology (repeatability, reproducibility and replicability)
-[SlezakWaczulikova2010]_ and investigating on approaches regarding the
-recording of simulation metadata using workflows [Oinn2000]_, libraries
-[StephenLanger2010]_ or event control systems [GuoCDE2011]_).
-
-Reproducibility at its current state is lacking a data driven presence in the
-cloud. There is a great need for online infrastructures to support any
-collaborative centric metadata.  The same concern arose in version control.
-Github [MacDonnell2012]_ and Bitbucket [Delorenzo2015]_ are certainly the big
-names in the cloud arena of version control and many scientific project like
-SciPy [Oliver2013]_ got some interest and contribution because of their
-exposure on Github.
+[SlezakWaczulikova2010]_ and investigating approaches regarding the recording
+of simulations metadata using workflows [Oinn2000]_, libraries
+[StephenLanger2010]_ or event control systems [GuoCDE2011]_). These researchs
+are critical because they focus on getting to the point where the metadata
+about a simulation execution has been captured in a qualitative and reliable
+way. Yet the use of this metadata to recreate the proper execution environment
+is challenging and is not only extremely valuable to the scientist that ran
+the simulation. It is more valuable to other scientists that share the same
+interest and need access to this metadata and an easy way to at least get the
+same results consistently. This is why we think that reproducibility can
+benefit from a more active presence in the cloud through infrastructures that
+bring an easy access and collaboration around those captured metadata. The
+social collaborative *pull request* mechanism from Github [MacDonnell2012]_ is
+a great example about the importance of cloud infrastructures in enhancing
+collaboration. In fact many scientific projects like SciPy [Oliver2013]_ got
+some interest and contribution because of their exposure on Github and its
+ease for collaboration.
 
 In this paper we discuss on the structure of a reproducibility assessable
-record structure. Then we propose a cloud platform to support these records
-through data driven simulation management tools. And finally we present an
+record model that will allow an easy reconstruction of the execution
+environment. Then we propose a cloud platform to deliver an online
+collaborative access around these records. And finally we present an
 integration use case with the data driven simulation management tool Sumatra
 [DavidsonSumatra2010]_.
 
@@ -60,29 +75,28 @@ A reproducible assessable record
 --------------------------------
 
 Defining what are the requirements that have to be recorded to better enforce
-the reproducibility of a simulation is of good interest in the community.
-From more general approaches like defining rules that has to be
-fulfilled [Sandve2013]_, to more specific approaches [Heroux2011]_, we can
-define a set of data that are important to assess the reproducibility of a
-simulation.
-
-The execution of a simulation involves five different components: The source
-code or executable, the input files, the output files, the dependencies and
-the hosting system. The source code or executable gives all the information
-about what the simulation is, where it can be found (repository) and how it
-was run. The input files represent all the files being loaded by the
-simulation during its execution. The output files represent all the files that
-the simulation produced during its execution. The dependencies are all the
-libraries and tools that are needed by the simulation to run. The hosting
-system is the system in which the simulation is being ran. These components
-can be classified into two groups regarding repeatability as a goal. When trying
-to repeat a simulation, the obvious variable components are: the dependencies
-and the hosting system. We think of them as a cause of uncertainty that lead to
-variations in the output files when the source code and inputs are still the
-same. To assess a reproducibility property on a simulation, we provide the
-Table :ref:`assesstable`. It defines the reproducibility properties
-involved (repeatable, reproducible, non-repeatable, non-reproducible or
-unknown) when comparing the source code, inputs and outputs of two simulations.
+the reproducibility of a simulation is of good interest in the community. From
+more general approaches like defining rules that have to be fulfilled
+[Sandve2013]_, to more specific approaches [Heroux2011]_, we can define a set
+of metadata that are useful to determine the reproducibility of a simulation. To
+do so, we have to go from the fact that the execution of a simulation
+involves mostly five different components: the source code or executable, the
+input files, the output files, the dependencies and the hosting system. The
+source code or executable gives all the information about what the simulation
+is, where it can be found (repository) and how it was run. The input files
+represent all the files being loaded by the simulation during its execution.
+The output files represent all the files that the simulation produced during
+its execution. The dependencies are all the libraries and tools that are
+needed by the simulation to run. The hosting system is the system in which the
+simulation is being ran. These components can be classified into two groups
+regarding repeatability as a goal. When trying to repeat a simulation, the
+obvious variable components are: the dependencies and the hosting system. We
+think of them as a cause of uncertainty that lead to variations in the outputs
+when the source code and inputs are still the same. To assess a
+reproducibility property on a simulation, we provide the Table
+:ref:`assesstable`. It defines the reproducibility properties involved
+(repeatable, reproducible, non-repeatable, non-reproducible or unknown) when
+comparing the source code, inputs and outputs of two simulations.
 
 .. raw:: latex
 
@@ -106,11 +120,11 @@ unknown) when comparing the source code, inputs and outputs of two simulations.
 
 One thing is to be able to gather crutial information about a simulation yet
 another challenging one is to be able to recreate the same execution context
-as when the simulation was done the first time. Sometimes an action as simple as upgrading a
-library can have terrible and not easy to determine consequences on the outputs. It is
-impossible to consistently reproduce a simulation accross platforms and
-machines if we do not have an uniform and portable way of constraining the
-whole simulation execution.
+as when the simulation was done the first time. Sometimes an action as simple
+as upgrading a library can have terrible and not easy to determine
+consequences on the outputs. It is impossible to consistently reproduce a
+simulation accross platforms and machines if we do not have an uniform and
+portable way to bundle the whole simulation execution environment. 
 
 We think that containers based systems [Bottomley2014]_ are a possible
 solution to ensure the consistency of the operating system and dependencies on
@@ -119,10 +133,10 @@ will deliver a runnable image in which the simulation execution is well scoped
 and controlled will ensure that across machines and platforms we get closer to
 a consistent execution environment [Melia2014]_.
 
-Thus we propose here a container based record allong with some metadata as a
-set of four models that combined together should be enough to deliver a
-reproducible simulation record storage. We show here the project model in Table
-:ref:`projecttable`.
+Thus we propose here a container based recording system allong with some
+metadata as a set of four models that combined together should be enough to
+deliver a reproducible simulation record storage. We show here the project
+model in Table :ref:`projecttable`.
 
 .. table:: Simulation metadata Project Model. :label:`projecttable`
 
@@ -146,7 +160,7 @@ reproducible simulation record storage. We show here the project model in Table
 
 It describes the simulation and its *history*
 field is the list of container images that have been built each time that the
-project source code changed. The container is setup directly from the source
+project source code changes. The container is setup directly from the source
 code of the simulation. We also propose a container model that is as simple as
 shown in the Table :ref:`containertable`.
 
@@ -168,7 +182,7 @@ Based on the project's model in Table :ref:`assesstable`, we came up with a
 record model shown in Table :ref:`recordtable`. A record is related to a
 project and a container in the history of the project containers. When a
 record is created, its container is the last container in the the project's
-history at that time. Thus a record that will be done on a modified project source code has
+history at that time. Thus, a record that will be done on a modified project source code has
 to be performed after the new container for this modified version of the
 project get pushed to the history field. This way we ensure that two records
 with different containers are from two different sources codes and also two records
@@ -200,17 +214,16 @@ with the same containers are from the same source code.
    | image        | container: reference to the container.    |
    +--------------+-------------------------------------------+
 
-Compared to a project, a record reproducibility property assessment is done through a
-differentiation process. A differentiation process is a process that allows
-the resolution of a record reproducibility property compared to another. In
-this case, the two records are considered being from simulations that try to
-achieve the same goals. It is quite hard to assess at a high level standpoint
-if two records are the same because it will most likely be a domain related
-decision that proves that both records support the same claims. We focus here
-in an approach that provides some basic differentiation methods and allow the
-definition of new ones. Thus, the differentiation will most likely be based
-on the targeted record owner domain knowledge and understanding on the method
-used.
+A record reproducibility property assessment is done through a differentiation
+process. A differentiation process is a process that allows the resolution of
+a record reproducibility property compared to another. In this situation, the two
+records are considered being from simulations that try to achieve the same
+goals. It is quite hard to know at a high level standpoint if two records
+are the same because it will most likely be a domain related decision that
+proves that both records support the same claims. We focus here in an approach
+that provides some basic differentiation methods and allow the definition of
+new ones. Thus, the differentiation will most likely be based on the targeted
+record owner domain knowledge and understanding on the method used.
 
 
 A differentiation request or shortly *diff request* is the *contract* on which
@@ -526,9 +539,6 @@ References
 
 .. [MacDonnell2012] John MacDonnell. *Git for Scientists: A Tutorial*,
        July 2012.
-
-.. [Delorenzo2015] Ike DeLorenzo. *Coding in the cloud with Bitbucket*,
-       Frebruary 2015.
 
 .. [Oliver2013] Marc Oliver. *Introduction to the Scipy Stack – Scientific Computing Tools for Python*,
        Jacobs University, November 2013.
