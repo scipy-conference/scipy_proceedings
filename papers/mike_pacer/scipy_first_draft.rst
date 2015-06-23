@@ -112,15 +112,17 @@ The number of directed graphs that can be obtained from a set of nodes of size :
 Directed Acyclic Graphs
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-A cycle in a directed graph can be understood as the existance of a set of edges 
+A cycle in a directed graph can be understood as the existence of a path from a node to itself. This can be as simple as a self-loop (i.e., if there is an edge :math:`(X_i,X_i)` for any node :math:`X_i`). 
 
-The number of directed acyclic graphs (:sc:`dag`\s) that can be obtained from a set of nodes of size :math:`n` can be defined recursively as follows :cite:`mckay2003acyclic` :
+Directed acyclic graphs(:sc:`dag`\s) are directed graphs that contain no cycles.
+
+The number of :sc:`dag`\s that can be obtained from a set of nodes of size :math:`n` can be defined recursively as follows :cite:`mckay2003acyclic` :
 
 .. math::
 
     R_n = \sum_{k=1}^{n} (-1)^{k+1} {\binom{n}{k}} 2^{k(n-k)} R_{n-k}
 
-Note, because :sc:`dag`\s do not allow any cycles, this means that there can be no self loops. As a result, every value on the diagonal of a  :sc:`dag`\'s adjacency matrix will be 0. 
+Note, because :sc:`dag`\s do not allow any cycles, this means that there can be no self-loops. As a result, every value on the diagonal of a  :sc:`dag`\'s adjacency matrix will be 0. 
 
 .. Topological ordering in :sc:`dag`\s
 .. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -144,26 +146,26 @@ Example - Coins and dice
 
 Imagine the following game: 
 
-You have a coin [#]_ (*C*, :sc:`Heads, Tails`), a 6-sided die(:math:`D_6, \{1,2,\ldots,6\}`), and a 20-sided die(:math:`D_20, \{1,2,\ldots,20\}`). If for simplicity, you prefer to think of these as fair dice and a fair coin, you are welcome to do so, but my notation will not require that.
+You have a coin [#]_ (*C*, :sc:`Heads, Tails`), a 6-sided die(:math:`D_6, \{1,2,\ldots,6\}`), and a 20-sided die(:math:`D_{20}, \{1,2,\ldots,20\}`). If for simplicity, you prefer to think of these as fair dice and a fair coin, you are welcome to do so, but my notation will not require that.
 
 .. [#] A coin is effectively 2-sided die, but for clarity of exposition I chose to use treat the conditioned-on variable as a different kind of object than the variables relying on that conditioning.
 
 The rules of the game are as follows: flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die. Your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. 
 
-Suppose we wanted to know your expected score on a single round, but we do not know whether the coin will land on :sc:`Heads` or :sc:`Tails`. We cannot directly compute the probabilities of each 
+Suppose we wanted to know your expected score on a single round, but we do not know whether the coin will land on :sc:`Heads` or :sc:`Tails`. We cannot directly compute the probabilities for each die without first considering the probability that the coin will land on :sc:`Heads` or :sc:`Tails`.
 
-But this discussion hides an important complexity by having the event set of the :math:`D_6` embedded within the event set of the :math:`D_20`. Moreover, we assumed that we could treat each event in these sets as belonging to the integers and as a result, that with little interpretation, they can be easily summed and divided into.
+But this discussion hides an important complexity by having the event set of the :math:`D_6` embedded within the event set of the :math:`D_{20}`. Moreover, we assumed that we could treat each event in these sets as belonging to the integers and as a result, that with little interpretation, they can be easily summed and divided into.
 
 Example - Coins and dice with labeled ids
 =========================================
 
 Imagine the following game: 
 
-You have a coin [#]_ (*C*, :sc:`Heads, Tails`), a *new* 6-sided die(:math:`D_6, \{\clubsuit,\diamondsuit,\heartsuit,\spadesuit,\odot,\dagger\}`), and a 20-sided die(:math:`D_20, \{X_1,X_2,\ldots,X_20\}`). 
+You have a coin (*C*, :sc:`Heads, Tails`), a *new* 6-sided die(:math:`D_6, \{\clubsuit,\diamondsuit,\heartsuit,\spadesuit,\odot,\dagger\}`), and a 20-sided die(:math:`D_{20}, \{X_1,X_2,\ldots,X_{20}\}`). 
 
 The rules are the same as before: your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. You flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die.
 
-But note that now we cannot sum over these in the same way. Indeed, our event sets for the two dice are actually only partially 
+But note that now we cannot sum over these in the same way that we did before. Indeed, our event sets for the two dice are actually only partially 
 
 
 Bayesian Networks
@@ -285,12 +287,7 @@ faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
 consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
 orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
 sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
-pulvinar id metus.
-
-.. [#] On the one hand, a footnote.
-.. [#] On the other hand, another footnote.
+lacinia. 
 
 .. figure:: figure0.png
 
