@@ -146,6 +146,68 @@ these entities, cleaning the data for downstream processing.
 Deriving interaction graphs
 ---------------------------
 
+Email is archived in the same text format that email is sent in, as specified in
+RFCXYZ (cite).
+Every email is comprised of a message body and a number of metadata headers
+that are essential for email processing and presentation.
+
+For our study, we have been interested in extracting the implied social
+network from an email archive of a public mailing list. To construct this
+network, we have used the `From`, `Message-ID`, and `In-Reply-To` headers
+of the email.
+
+The `From` field of an email contains data about the sender of the message.
+This often includes both a full name and an email address of the sender.
+As this is set by the email client (note: or is it the mailing list server?)
+a single person is often represented differently in the `From` field
+across many emails. See *Entity Resolution* for our strategies for
+resolving entities from divergent email headers.
+
+The `Message-ID` header provides a globally unique identification string
+for every email.
+This is accomplished by (how?).
+The `In-Reply-To` header is set when an email is sent as a reply to
+another email.
+The reply's `In-Reply-To` header will match the `Message-ID` of the
+original email.
+
+We construct the directed *interaction graph* :math:`G` for a set of emails as follows:
+
+* For every email :math:`e`, add a node :math:`v_{f(e)}` to :math:`G` corresponding 
+  to its `From` header :math:`f(e)`  and set its `sent` attribute :math:`v_{f(e)}` 
+  (notation is sloppy here -- can we write a pseudocode algorithm?)
+* If :math:`e_1` is a reply to another email :math:`e_2`, create an edge between
+  their corresponding nodes or, if it already exists, increment its weight by 1
+
+BigBang implements this interaction graph creation using Python's native
+email processing libraries, `pandas`, and `networkx`.
+
+The motivation for constructing interaction graphs in this way is to build a
+concise representation of the social network implied by email data.
+We posit that building a social network representation based on actual messages
+sent between people provides a more granular and faithful description of
+social relationships than one based on higher-level descriptions of social
+relationships or ties from web services such as Facebook 'friends' and
+Twitter 'followers'
+
+It may be objected that since the data we are considering comes from public
+mailing lists where every message has a potentially large audience, it may be
+misleading to build a network representation on the assumption that a reply
+is directed primarily at the person who was replied to and not more broadly
+to other participants in a thread or, even more broadly, to the mailing list
+as a whole.
+
+While this is a valid objection, it points to the heart of what is distinctive
+about this research.
+While there have been many studies of social network formation in conventional
+settings, the conditions of open collaboration are potentially quite different.
+Theoretically, we expect them to be explicitly and collectively goal-directed,
+are self-organized for efficient action as opposed to positional 
+social advantage, and designed around an archiving system for the sake of
+efficiency.
+Understanding the statistical properties of this particular form of social
+organization, as opposed to others, is the very purpose of this empirical work.
+
 *Interaction graph study*.
 By looking at the *Reply-To* header of the emails, we
 are able to construct a graph of who replies to who in the email list. (How?)
@@ -157,6 +219,12 @@ these graphs is log normally distributed. Moreover, whereas [Newman2002]_
 hypothesizes that socially generated graphs will be characterized by high
 degree assortativity, we find empirically that these interaction graphs
 have degree assortativity comparable with biological and technical networks.
+
+Preferential attachment model
+-----------------------------
+
+Discuss Barabasi-Alpert here.
+
 
 
 Discussion network formation
