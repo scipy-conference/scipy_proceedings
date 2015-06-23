@@ -35,8 +35,7 @@ Introduction
 ------------
 
 Open source software communites such as those that produce many scientific 
-Python packages
-are a critical part of contemporary scientific organization.
+Python packages are a critical part of contemporary scientific organization.
 A distinguishing feature of these communities is their heavy use of
 Internet-based infrastructure, such as mailing lists, version control systems, and
 issue trackers, for managing communications and organizing work on distributed teams.
@@ -48,26 +47,28 @@ within science.
 
 This paper introduces BigBang, a Python project whose purpose is the collection,
 preprocessing, and analysis of data from open collaborative communities.
-Section I will provide an introduction to the project's goals and technical 
-organization.
-Section II will outline some of the features available in the present version 
-of the software.
-Section III will illustrated with an example how BigBang has been used to explore
-a novel clustering algorithm based on.
+Built for the use case of studying the Scientific Python communities in particular,
+it generalizes to other communities and supports fruitful comparisons between them.
+
+To demonstrate the potential of this approach, this paper will explore the
+structure of mailing list discussions in the context of open collaborative projects.
+We extract social network data from the archives of public mailing lists and test
+the plausibility that these graphs were generation by Barabasi-Alpert network model.
+We find that of the mailing lists we've analyzed, none exhibit two features of
+Barabasi-Alpert networks: power law degree distribution and zero degree assortativity.
+This result suggests the possibility of future work of scientifically developing a
+generative model of collaboration.
 
 BigBang Overview
 ----------------
 
-BigBang is a software project that aims to provide researchers a complete
-toolkit for the scientific analysis of open online collaborative communities.
-Launched last year and presented at SciPy 2014, our team has made progress in 
-building BigBang as a platform for computational social science and reflexive data science. 
-We will present results gained from using BigBang to study scientific Python communities in 
-comparison to other open source projects and social data.
-The study of online collaboration is a subdomain of the social sciences that
-is of critical importance to the practice of scientific computing as so many
-of the tools used in scientific computing are developed largely through
-online collaboration.
+Launched last year and presented at SciPy 2014, BigBang is a software project 
+that aims to provide researchers a complete toolkit for the scientific analysis
+of open online collaborative communities.
+Though applicable to many domains, research into online collaboration has
+special relevance to practicioners of computationally intensive open science.
+Through it scientific programming communities such as Scientific Python can
+achieve a quantitative understanding of their own work and innovation process.
 
 Thorough study of these kinds of communities requires the collection and
 rationalization of many heterogenous and high-dimensional data sources,
@@ -77,54 +78,64 @@ including but not limited to:
 - version control systems such as Git
 - issue trackers such as GitHub and Bugzilla
 
-These are complex data sources in that they have the following dimensions:
+This data is complex in it has many dimensions that afford very different
+kinds of analysis:
 
-- time. data are timestamped
-- text. email message bodies, issue contents, and commit messages in version
-  control are all text suitable for natural language processing techniques
-- social network. participants in the project are individuals linked by relational
+- **Time.** All data from online collaboration infrastructure is timestamped,
+  affording use of time series methods.
+- **Text.** Email message bodies, issue contents, and commit messages in version
+  control are all text data suitable for study with natural language processing 
+  techniques.
+- **Social network.** Participants in the project are individuals linked by relational
   ties of communication. Hence these data afford study through social
   network analysis techniques.
+- **Software static analysis.** Source code in version control is complex data containing
+  the definition of many interelated variables, functions, classes, and modules. Static
+  analysis and compilation techniques from computer science can be used to study these
+  entities within the software itself.
 
-In order to facilitate study of collaborative dynamics (which I should totally cite
-prior work on eg. Thomas's syllabus...) a variety of techniques may be brought to bear
-on this data.
-Since these techniques are widely available in various scientific open source packages,
-BigBang's role is to import and apply these packages to the available data and demonstrate
-the success of various approaches.
-These demonstrations are available in the project's ``examples`` directory, which contains
-many Jupyter notebooks that illustrate BigBang's functionality.
+The richness and granularity of the data from open source software communities and other
+open on-line collaborative projects promise the answers to many research questions about
+software engineering, innovation, social organization, and more.
+The catch is that with data that is so multifaceted, preprocessing the data is an
+engineering-intensive endeavor.
+
+The versatility and scope of open source Scientific Python packages makes building
+a generic research infrastructure for analyzing these communities a possibility within 
+reach. Architecturally, BigBang is a Python package that includes Scientific Python
+libraries for time series analysis, natural language processing, network analysis,
+and software analysis as dependencies.
+
+BigBang includes methods for collecting research data from source on the web about
+the activity of open collaborative communities. At the time of this writing,
+BigBang supports data collection from Mailman, the mailing list service, as well
+as other `.mbox` formatted email archives. It also supports data collection
+from Git repositories. Future versions will have methods for collecting data
+from issue trackers.
+
+The BigBang repository contains an `examples` directory with Jupyter notebooks
+demonstrating its functionality and exploring lines of research inquiry.
+Researchers can contribute to the project by submitting Jupyter notebooks to the
+repository for review through the GitHub Pull Request system.
+Source code that performs preprocessing that is usable by multiple computational
+experiments is in a separate source code directory that can be imported as a
+Python module.
 
 In the context of Scientific Python, BigBang is deliberately recursive.
-It is a scientific Python project that depends on many other scientific Python projects
-that can study they dependencies and interactions between the scientific Python
-technologies and communities.
-We envision BigBang in providing a new means for these communities, among others,
-to engage in scientific self-management, thus bringing into being a harmonious
-sociotechnical superintelligence that takes over the world.
+It is a Python project that depends on many other scientific Python projects.
+It is designed to study, among other things, dependencies and interactions between 
+the Scientific Python technologies and communities.
+Our goal is for BigBang to providing a new means for these communities to engage i
+in scientific self-management.
+We speculate that this sociotechnical singularity could result in an emergent harmonious
+superintelligence that takes over the world.
 
-Features
---------
-
-BigBang currently supports many kinds of analysis on data from open source
-communities.
+Email data collection
+---------------------
 
 BigBang supports collection of email data.
 It can do this either by scraping the archival pages of a Mailman instance,
-or by importing an `.mbox` formatted file. On email data, BigBang includes functionality for the following operations:
-
-
-*Cohort clustering*.
-- by quintile
-- by spectral analysis, see below
-
-
-The conundrum in network science is how to define generative processes for
-networks that create networks with the empirical properties of networks
-found in nature.
-As these interaction graphs are anomalous with respect to the existing
-literature on complex systems (to the best of my knowledge), modeling these
-networks presents a challenge that will be undertaken in future work.
+or by importing an `.mbox` formatted file.
 
 
 Deriving interaction graphs
@@ -339,6 +350,9 @@ References
 .. [BarabasiAlbert] Albert-László Barabási & Reka Albert. Emergence of Scaling 
                     in Random Networks, Science, Vol 286, Issue 5439, 15 October 
                     1999, pages 509-512.
+
+.. [Benthall2013] Benthall, S. 2013. "Reflexive Data Science: An Overview". 
+                  http://dlab.berkeley.edu/blog/reflexive-data-science-overview
 
 .. [Clauset2007]  A. Clauset, C.R. Shalizi, and M.E.J. Newman. Power-law distributions 
                   in empirical data. arXiv:0706.1062, June 2007.
