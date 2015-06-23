@@ -32,10 +32,10 @@ This call, ``pysplit.generate_trajectories()``, currently just supports gdas1 da
 
 .. code-block:: python
 
-    generate_trajectories(basename, hysplit_working, output_dir, meteo_path,
-                          years, months, hours, altitudes, coordinates, run,
-                          isbackward, meteo_type='gdas1', get_forward=True,
-                          get_clippedtraj=True)
+   generate_trajectories(basename, hysplit_working, output_dir, meteo_path,
+                         years, months, hours, altitudes, coordinates, run,
+                         isbackward, meteo_type='gdas1', get_forward=True,
+                         get_clippedtraj=True)
 
 If back trajectories are run, then PySPLIT can automatically open the new back trajectory file, read in the altitude, longitude, and latitude of the last time point, and initialize a forward-moving parcel at that location (or at the given coordinates below the 10000 m ceiling, if necessary).  In the Trajectory class, a method is included for inspecting the distance between the endpoint of the forward trajectory and the starting point of the back trajectory, allowing the user to make a judgement about the trajectory integration error.
 
@@ -51,39 +51,39 @@ Most Trajectory analysis methods live in the Trajectory class.  These include ca
 TrajectoryGroup
 The TrajectoryGroup is the basic container for PySPLIT Trajectory objects, and is initialized simply by providing a list of Trajectory objects.  This class is also fully iterable, yielding a Trajectory when indexed and a new TrajectoryGroup when sliced.  A typical workflow begins by loading trjectory data into Trajectory objects and creating a new Trajectory group:
 
-..code-block:: python
+.. code-block:: python
 
-  #Load trajectories as Trajectory objects from file
-  # Create TrajectoryGroup umn
-  umn, _ = pysplit.make_trajectorygroup(r'C:/traj/minn*')
+   #Load trajectories as Trajectory objects from file
+   # Create TrajectoryGroup umn
+   umn, _ = pysplit.make_trajectorygroup(r'C:/traj/minn*')
 
 Then if necessary sort out the trajectories with desirable characteristics into a new TrajectoryGroup:
 
-..code-block:: python
+.. code-block:: python
 
-  # Sort out rain-bearing trajectories starting at 1700 UTC and 1500 m
-  # 1700 UTC is noon at parcel launch site, the University of Minnesota, Twin # Cities
-  umn_trajlist=[]
+   # Sort out rain-bearing trajectories starting at 1700 UTC and 1500 m
+   # 1700 UTC is noon at parcel launch site, the University of Minnesota, Twin # Cities
+   umn_trajlist=[]
 
-  for traj in umn:
-    traj.set_rainstatus()
-    if traj.rainstatus and traj.hour[0] == 17 and traj.altitude[0] == 1500:
-      umn_trajlist.append(traj)
+   for traj in umn:
+     traj.set_rainstatus()
+     if traj.rainstatus and traj.hour[0] == 17 and traj.altitude[0] == 1500:
+       umn_trajlist.append(traj)
 
-  # Create new TrajectoryGroup containing trajectories meeting above criteria:
-  umn_rainy1500noon = pysplit.TrajectoryGroup(umn_trajlist)
+   # Create new TrajectoryGroup containing trajectories meeting above criteria:
+   umn_rainy1500noon = pysplit.TrajectoryGroup(umn_trajlist)
 
 And perform analyses:
 
-..code-block:: python
+.. code-block:: python
 
-  # Set attributes of Trajectory objects in new TrajectoryGroup
-  for traj in umn_rainy1500noon:
-    traj.set_vector()
-    traj.set_specifichumidity()
-    traj.set_distance()
-    traj.dq_dw_dh()
-    traj.calculate_moistureflux()
+   # Set attributes of Trajectory objects in new TrajectoryGroup
+   for traj in umn_rainy1500noon:
+     traj.set_vector()
+     traj.set_specifichumidity()
+     traj.set_distance()
+     traj.dq_dw_dh()
+     traj.calculate_moistureflux()
 
 Repeating sorting and analysis as necessary.
 
@@ -94,20 +94,3 @@ Cluster: This is a specialized subclass of TrajectoryGroup
 ClusterGroup:  The ClusterGroup class is to Cluster what TrajectoryGroup is to Trajectory.  An object of this type is also fully iterable, able to cycle through Clusters.
 
 MapDesign
-
-Working with Trajectory Data
-----------------------------
-This is where shp file conversion would be nice
-Step through trajectory group, sort into new trajectory groups
-(probably merge section in with above)
-Error Analysis
-
-Map Making
-----------
-MapDesign class
-Any basemap is accepted
-plotting trajectories
-plotting scatter data
-plotting gridded data
-Norms available
-GribReader
