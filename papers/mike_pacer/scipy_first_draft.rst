@@ -122,9 +122,9 @@ You have a coin[#]_ (*C*, :sc:`Heads, Tails`), a 6-sided die(:math:`D_6, \{1,2,\
 
 .. [#] A coin is effectively 2-sided die, but for clarity of exposition I chose to use treat the conditioned-on variable as a different kind of object than the variables relying on that conditioning. 
 
-The rules of the game are as follows flip the coin, and it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die.
+The rules of the game are as follows flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die.
 
- 
+
 
 
 Bayesian Networks
