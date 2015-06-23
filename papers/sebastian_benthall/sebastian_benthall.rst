@@ -41,7 +41,7 @@ A distinguishing feature of these communities is their heavy use of
 Internet-based infrastructure, such as mailing lists, version control systems, and
 issue trackers, for managing communications and organizing work on distributed teams.
 This data is often deliberately publicly accessible as open source best practices
-include the "conspicuous use of archives" (cite Fogel).
+include the "conspicuous use of archives" [Fogel]_.
 The availability of these digital records are also an excellent resource for
 the researcher interested in sociotechnical organization and collaboration
 within science.
@@ -342,6 +342,8 @@ References
 
 .. [Clauset2007]  A. Clauset, C.R. Shalizi, and M.E.J. Newman. Power-law distributions 
                   in empirical data. arXiv:0706.1062, June 2007.
+
+.. [Fogel] Fogel, K. 2013 *Producing Open Source Software.* http://producingoss.com/
 
 .. [Newman2002] Newman, 2002.
 
