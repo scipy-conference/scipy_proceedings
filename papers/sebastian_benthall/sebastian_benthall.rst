@@ -132,16 +132,6 @@ As these interaction graphs are anomalous with respect to the existing
 literature on complex systems (to the best of my knowledge), modeling these
 networks presents a challenge that will be undertaken in future work.
 
-Entity Resolution
------------------
-
-*Entity resolution.* Empirically, over the extent of a mailing list's archival
-data it is common for the *From* fields of emails to vary even when the
-email is coming from the same person. Not only do people sometimes change their
-email address or use multiple addresses to interact with the same list, but
-also different email clients may represent the same email address in the *From*
-header in different ways. BigBang includes automated techniques for resolving
-these entities, cleaning the data for downstream processing.
 
 Deriving interaction graphs
 ---------------------------
@@ -219,6 +209,55 @@ these graphs is log normally distributed. Moreover, whereas [Newman2002]_
 hypothesizes that socially generated graphs will be characterized by high
 degree assortativity, we find empirically that these interaction graphs
 have degree assortativity comparable with biological and technical networks.
+
+Entity Resolution
+-----------------
+
+Empirically, over the extent of a mailing list's archival
+data it is common for the *From* fields of emails to vary even when the
+email is coming from the same person. Not only do people sometimes change their
+email address or use multiple addresses to interact with the same list, but
+also different email clients may represent the same email address in the *From*
+header in different ways. BigBang includes automated techniques for resolving
+these entities, cleaning the data for downstream processing.
+
+Data from the `From` header of messages stored by Mailman is most often represented
+in a form that includes both a full name representation and an email representation.
+Unfortunately these fields can vary widely for one person. The following list
+shows some of the variability that might appear for a single prolific sender.
+
+* tyrion.lannister at gmail.com (Tyrion Lannister)
+* Tyrion.Lannister at gmail.com (Tyrion Lannister)
+* Tyrion.Lannister at gmail.com (Tyrion.Lannister@gmail.com)
+* Tyrion.Lannister at gmail.com (Tyrion.Lannister at gmail.com)
+* Tyrion.Lannister@gmail.com (Tyrion Lannister)
+* Tyrion.Lannister@gmail.... (Tyrion Lannister)
+* Tyrion.Lannister@gmail.com
+* Tyrion.Lannister at gmail.com (Tyrion)
+* tyrion at lanister.net (Tyrion Lannister)
+* halfman@council.kings-landing.gov (Tyrion Lannister)
+* halfman@council.kings-landing.gov (Tyrion Lannister, Hand of the King)
+* halfman@council.kings-landing.gov (halfman@council.kings-landing.gov)
+* tyrion+hand at lanister.net (Tyrion Lannister)
+* tyrion.lannister at gmail.com (=?UTF-8?B?RGF2aWQgQWJpw6Fu?=)
+* "Tyrion Lannister" <Tyrion.Lannister@gmail.com>
+
+Variation in entity representation is a source of noise in our research and an
+ongoing area of development for BigBang.
+For the study in this paper, we have implemented a heuristic system for
+entity matching.
+First we standardize the data by converting it to lower case and normalizing
+" at " and "@". Then we parse out the email and full name subfields of the
+data and look for exact matches.
+Under this procedure, all of the above email addresses would be collapsed into a single
+entity.
+
+In our interaction graph study, this has the effect of combining several nodes into a single one
+in a way that's similar to the (cite) blockmodel technique.
+The edges to and from the derived node are weighted by the sum of the edges of the original
+nodes.
+The `sent` attribute of the new node is also set as the sum of the `sent` attribute of the
+original nodes.
 
 Preferential attachment model
 -----------------------------
