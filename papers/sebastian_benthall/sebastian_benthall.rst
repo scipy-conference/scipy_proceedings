@@ -124,17 +124,6 @@ or by importing an `.mbox` formatted file. On email data, BigBang includes funct
 - by quintile
 - by spectral analysis, see below
 
-*Interaction graph study*.
-By looking at the *Reply-To* header of the emails, we
-are able to construct a graph of who replies to who in the email list. (How?)
-Drawing on (x,y, and z) we are studying the empirical properties of these
-networks in order to come up with a generative model of community graph.
-Whereas (Barabasi reference) models graphs with power-law degree distribution,
-we find (verify using Clauset et al. method) that degree distribution in
-these graphs is log normally distributed. Moreover, whereas [Newman2002]_
-hypothesizes that socially generated graphs will be characterized by high
-degree assortativity, we find empirically that these interaction graphs
-have degree assortativity comparable with biological and technical networks.
 
 The conundrum in network science is how to define generative processes for
 networks that create networks with the empirical properties of networks
@@ -154,6 +143,20 @@ also different email clients may represent the same email address in the *From*
 header in different ways. BigBang includes automated techniques for resolving
 these entities, cleaning the data for downstream processing.
 
+Deriving interaction graphs
+---------------------------
+
+*Interaction graph study*.
+By looking at the *Reply-To* header of the emails, we
+are able to construct a graph of who replies to who in the email list. (How?)
+Drawing on (x,y, and z) we are studying the empirical properties of these
+networks in order to come up with a generative model of community graph.
+Whereas (Barabasi reference) models graphs with power-law degree distribution,
+we find (verify using Clauset et al. method) that degree distribution in
+these graphs is log normally distributed. Moreover, whereas [Newman2002]_
+hypothesizes that socially generated graphs will be characterized by high
+degree assortativity, we find empirically that these interaction graphs
+have degree assortativity comparable with biological and technical networks.
 
 
 Discussion network formation
