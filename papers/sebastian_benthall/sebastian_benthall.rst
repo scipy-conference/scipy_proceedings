@@ -243,9 +243,8 @@ Methods
 Results
 -------
 
-- Table of Degree distribution has no evidence of power law. Probably log normal.
-- Table of Degree assortativity looks more like technical than social network (dissortative)
-
+Every mailing list of the 10 we analyzed exhibits degree disassortivity and a significantly
+(:math:`p` > .05) better fit to log normal instead of power law distribution.
 
 .. table:: Results of analysis. For each mailing list archive, number of participants :math:`n`,
            computed degree assortativity of the interaction graph, and loglikelihood ratio R and
