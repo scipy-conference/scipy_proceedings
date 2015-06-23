@@ -3,7 +3,7 @@
 ## Paper Format
 
 Papers are formatted using reStructuredText and the compiled version should be
-no longer than 7 pages, including figures.  Here are the steps to produce a
+no longer than 8 pages, including figures.  Here are the steps to produce a
 paper:
 
 - Fork the

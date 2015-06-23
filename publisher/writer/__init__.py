@@ -39,6 +39,12 @@ class Translator(LaTeXTranslator):
         self.keywords = ''
         self.table_caption = []
         self.video_url = ''
+        self.bibliography = ''
+
+        # This gets read by the underlying docutils implementation.
+        # If present, it is a list with the first entry the style name
+        # and the second entry the BiBTeX file (see `visit_field_body`)
+        self.bibtex = None
 
         # This gets read by the underlying docutils implementation.
         # If present, it is a list with the first entry the style name
@@ -100,6 +106,7 @@ class Translator(LaTeXTranslator):
             self.bibtex = ['alpha', text]
             self._use_latex_citations = True
             self._bibitems = ['', '']
+            self.bibliography = ''
 
         self.current_field = ''
 
@@ -222,7 +229,8 @@ class Translator(LaTeXTranslator):
                                'abstract': self.abstract_text,
                                'keywords': self.keywords,
                                'copyright_holder': copyright_holder,
-                               'video': self.video_url}
+                               'video': self.video_url,
+                               'bibliography':self.bibliography}
 
         if hasattr(self, 'bibtex') and self.bibtex:
             self.document.stats.update({'bibliography': self.bibtex[1]})
@@ -351,6 +359,7 @@ class Translator(LaTeXTranslator):
 
         self.out.append(r'\end{%s}' % self.table_type)
         self.active_table.set('preamble written', 1)
+        self.active_table.set_table_style('booktabs')
 
     def visit_thead(self, node):
         # Store table caption locally and then remove it
