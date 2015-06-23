@@ -106,7 +106,7 @@ class Translator(LaTeXTranslator):
             self.bibtex = ['alpha', text]
             self._use_latex_citations = True
             self._bibitems = ['', '']
-            self.bibliography = ''
+            self.bibliography = text
 
         self.current_field = ''
 
