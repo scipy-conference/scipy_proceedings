@@ -34,12 +34,12 @@ Causal Bayesian NetworkX
 
    probabilistic graphical models, causality, intervention
 
-Introduction
-------------
+Introduction and Aims
+---------------------
 
-My first goal in this paper is to provide enough of an introduction tothe formal/mathematical tools that those familiar with :code:`python` and programming more generally will be able to appreciate both why and how one might implement causal Bayesian networks. In particular, I have developed parts of a toolkit that allows the creation of these models on top of :code:`NetworkX`. Given the coincidence of the names, it seemed most apt to refer to this toolkit as :code:`Causal Bayesian NetworkX` (the current implementation of which can be found at `Causal Bayesian NetworkX`_). 
+My first goal in this paper is to provide enough of an introduction to some formal/mathematical tools such that those familiar with :code:`python` and programming more generally will be able to appreciate both why and how one might implement causal Bayesian networks. In particular, I have developed parts of a toolkit that allows the creation of these models on top of the :code:`NetworkX` python package. Given the coincidence of the names, it seemed most apt to refer to this toolkit as :code:`Causal Bayesian NetworkX` (the current implementation of which can be found at `Causal Bayesian NetworkX`_). 
 
-In these tools I focus first on establishing a means of building iterators over sets of directed graphs and apply operations to those sets. Beginning with the complete directed graph, we enumarte over the subgraphs of that complete graph and enforce graph theoretic conditions such as acyclicity over the entire graph, guarantees on paths between nodes that are known to be able to communicate with one another, or orphan-hood for individual nodes known to have no parents. We accomplish this by using closures that take graphs as their input along with any explicitly defined arguments needed to define the exact desired conditions. 
+In these tools, I focus first on establishing a means of building iterators over sets of directed graphs. I then apply operations to those sets. Beginning with the complete directed graph, we enumarte over the subgraphs of that complete graph and enforce graph theoretic conditions such as acyclicity over the entire graph, guarantees on paths between nodes that are known to be able to communicate with one another, or orphan-hood for individual nodes known to have no parents. We accomplish this by using closures that take graphs as their input along with any explicitly defined arguments needed to define the exact desired conditions. 
 
 I then shift focus to a case where there is a known graph over a set of nodes that are imbued with a simple probabilistic semantics, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics.
 
@@ -52,26 +52,34 @@ I conclude with a discussion of some of the problems that have been addressed in
 Graphical Models
 ----------------
 
-Graphs are formal models defined by a set of nodes (*N*) and edges between those nodes (:math:`e \in E \equiv e \in (N \times N)`, where *E* is the set of edges). 
+Graphs are formal models defined by a set of nodes (:math:`X, |X| = N`) and edges between those nodes (:math:`e \in E \equiv e \in (X \times X)`, where *E* is the set of edges). 
 
 Notes on notation
-^^^^^^^^^^^^^^^^^
+=================
 
-In `Causal Bayesian NetworkX`_, nodes are given explicit labels individuating them such as :math:`\{A,B,C,\ldots\}`. Oftentimes, for the purposes of mathematical notation, it will be helpful to index nodes by the integers over a common variable label, e.g., :math:`\{X_1,X_2,X_3,\ldots\}`
+Nodes
+^^^^^
 
-Defined in this way, edges are all directed in the sense that an edge from :math:`X_1 \textrm{to} X_2`is not the same as the edge from :math:`X_2 \textrm{to} X_1`  :math:`(X_1,X_2) \neq (X_2,X_1)`. For some additional notation, an edge :math:`(X_1,X_2)` will sometimes be written as :math:`X_1 \rightarrow X_2`, and the relation may be described using language like ":math:`X_1` is the parent of :math:`X_2`" or ":math:`X_2` is the child of :math:`X_1`".
+In the examples in `Causal Bayesian NetworkX`_, nodes are given explicit labels individuating them such as :math:`\{A,B,C,\ldots\}` or {'rain','sprinkler','grass_wet'}. Oftentimes, for the purposes of mathematical notation, it will be helpful to index nodes by the integers over a common variable label, e.g., using  :math:`\{X_1,X_2,X_3,\ldots\}`. [#]_ 
+
+.. [#] Despite pythonic counting beginning with 0, I chose not to begin this series with 0 because when dealing with variables that might be used in statistical regressions, the 0 subscript will have a specific meaning that separates it from the rest of the notation. For example when expression multivariate regession as :math:`Y = \beta X + \epsilon, \epsilon \sim \mathcal{N}(0,\Sigma)`, :math:`\beta_0` refers to the parameter associated with a constant variable :math:`x_0 = 1` and :math:`X` is normally defined as :math:`x_1, x_2, x_3, \ldots`. This allows a simple additive constant to be estimated, which usually(but not always) is not of interest to statistical tests, acting as a scaling constant more than anything else. This also makes for simpler notation than saying :math:`Y = \beta_0 + \beta X + \epsilon`, since that is equivalent to the previous notation (:math:`Y = \beta X + \epsilon`) if :math:`x_0 = 1`. In other cases :cite:`griffithst05,pacerg12`, the 0 index will be used to indicate background sources for events in a system.
+
+Edges
+^^^^^
+
+Defined in this way, edges are all *directed* in the sense that an edge from :math:`X_1 \textrm{to} X_2`is not the same as the edge from :math:`X_2 \textrm{to} X_1`, or :math:`(X_1,X_2) \neq (X_2,X_1)`. An edge :math:`(X_1,X_2)` will sometimes be written as :math:`X_1 \rightarrow X_2`, and the relation may be described using language like ":math:`X_1` is the parent of :math:`X_2`" or ":math:`X_2` is the child of :math:`X_1`".
 
 Adjacency Matrix Perspective
 ============================
 
-For a fixed set of nodes *N*, each graph is uniquely defined by its edge set, which can be seen as a binary :math:`n \times n` matrix, where each index :math:`(i,j)` in the matrix is :math:`1` if the graph contains an edge from :math:`N_i \rightarrow N_j`, and :math:`0` if it does not contain such an edge. We will refer to this matrix as :math:`A(G)`.
+For a fixed set of nodes :math:`X` of size :math:`N`, each graph is uniquely defined by its edge set, which can be seen as a binary :math:`N \times N` matrix, where each index :math:`(i,j)` in the matrix is :math:`1` if the graph contains an edge from :math:`X_i \rightarrow X_j`, and :math:`0` if it does not contain such an edge. We will refer to this matrix as :math:`A(G)`.
 
-This means that any values of :math:`1` found on the diagonal of the adjacency matrix (i.e., where :math:`N_i \rightarrow N_j, i=j`) is a self-loop on the respective node.
+This means that any values of :math:`1` found on the diagonal of the adjacency matrix (i.e., where :math:`X_i \rightarrow X_j, i=j`) indicate a self-loop on the respective node.
 
 Undirected Graphs
 =================
 
-If a graph is undirected, then if it has an edge from :math:`N_i \rightarrow N_j` then it has an edge from :math:`N_j \rightarrow N_i`. Equivalently, this means that the graph is symmetric, or :math:`A(G)=A(G)^\top`.
+We can still have a coherent view of *undirected* graphs, despite the fact that our primitive notion of an edge is that of a *directed* edge. If a graph is undirected, then if it has an edge from :math:`X_i \rightarrow X_j` then it has an edge from :math:`X_j \rightarrow X_i`. Equivalently, this means that the adjacency matrix of the graph is symmetric, or :math:`A(G)=A(G)^\top`.
 
 
 Directed Graphs
@@ -105,6 +113,18 @@ Conditional Probability Distributions
 
 A random variable defined by a conditional probability distribution has a distribution indexed by the realization of some other variable (which itself is often a random variable, especially in the context of Bayesian networks).
 
+Example - Coins and dice
+========================
+
+Imagine the following game: 
+
+You have a coin[#]_ (*C*, :sc:`Heads, Tails`), a 6-sided die(:math:`D_6, \{1,2,\ldots,6\}`), and a 20-sided die(:math:`D_20, \{1,2,\ldots,20\}`). Your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. 
+
+.. [#] A coin is effectively 2-sided die, but for clarity of exposition I chose to use treat the conditioned-on variable as a different kind of object than the variables relying on that conditioning. 
+
+The rules of the game are as follows flip the coin, and it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die.
+
+ 
 
 
 Bayesian Networks
@@ -352,34 +372,37 @@ Outline v. 1.1
 
          6. Sum of prob of exclusive events = 1
 
-      6. Basic graph theory
+      6. Basic graph theory ✓
 
          7.  Nodes (N) and Edges (V = (N × N))✓
-         8.  Adjacency Matrix view of graphs✓
-         9.  Directed and Undirected graphs✓
-         10. Directed Acyclic Graphs✓
+             8.  notation notes ✓
+             9.  Parents and children
+
+         10.  Adjacency Matrix view of graphs✓
+         11.  Directed and Undirected graphs✓
+         12.  Directed Acyclic Graphs✓
 
 2. Assumptions
 
    2. Fixed set of nodes ✓
-   3. Discrete trials ✓
-   4. Synchronous activation ✓
-   5. cross trial independence ✓
+   3. Discrete trials 
+   4. Synchronous activation 
+   5. cross trial independence 
 
 3. Graphs: Structure
 
    1. Complexity of graph enumeration
 
-      2. General directed graphs,
+      2. General directed graphs, ✓
 
-         .. math:: 2^{n^2}
+         .. math:: 2^{n^2} 
 
    2. Reducing complexity:
 
       3. Enumeration filters
       4. Directed Acyclic Graphs
 
-         4. No trace (no self-loops)
+         4. No trace (no self-loops) ✓
          5. number of graphs
 
    3. Parents and children
