@@ -47,6 +47,8 @@ The IQMon philosophy is to never operate on the raw file itself, but instead to 
 
 .. [#] http://netpbm.sourceforge.net
 
+IQMon has been tested with Python 2.7.X, testing with Python 3.X is pending.  Python 3.X compatibility notes will be posted to the readme file on the git repository.
+
 In the following sections, I will describe a simple example of evaluating image quality for a single image.  A more complex example which is updated in concert with IQMon can be found in the ``measure_image.py`` script at the git repository for the VYSOS project [#]_.  That process can then be wrapped in a simple program to monitor a directory for images and analyze them as they are written to disk (see the ``watch_directory.py`` script in the same VYSOS repository for an example).  This enables automatic near real time analysis.
 
 .. [#] https://github.com/joshwalawender/VYSOStools
