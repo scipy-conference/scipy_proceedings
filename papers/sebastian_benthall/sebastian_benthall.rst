@@ -8,13 +8,23 @@ Clustering Mailing List Activity
 
 .. class:: abstract
 
-   Mailing lists serve as critical communications infrastructure for
-   many communities, including several of the open source software 
-   development communities that build scientific Python packages.
-
    We introduce BigBang, a new Python toolkit for analyzing 
    online collaborative communities such as those that 
    build open source software.
+   Mailing lists serve as critical communications infrastructure for
+   many communities, including several of the open source software 
+   development communities that build scientific Python packages.
+   BigBang provides tools for analyzing mailing lists.
+   In this paper, we present results from testing a generative
+   model of online collaboration in mailing lists.
+   We derive a social network fro archival mailing list history
+   and test the Barabasi-Alpert model of network formation
+   against this data.
+   We find the model does not fit the data, but that mailist list
+   social networks share statistical regularities not explained in
+   existing complex systems literature.
+   This suggests room for a new generative model of network formation
+   in the open collaborative setting.
 
 .. class:: keywords
 
