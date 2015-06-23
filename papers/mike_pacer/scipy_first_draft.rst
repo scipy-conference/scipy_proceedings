@@ -52,7 +52,14 @@ I conclude with a discussion of some of the problems that have been addressed in
 Graphical Models
 ----------------
 
-Graphs are formal models defined by a set of nodes (*N*) and edges between those nodes (:math:`E = (N \times N)`).
+Graphs are formal models defined by a set of nodes (*N*) and edges between those nodes (:math:`e \in E \equiv e \in (N \times N)`, where *E* is the set of edges). 
+
+Notes on notation
+^^^^^^^^^^^^^^^^^
+
+In `Causal Bayesian NetworkX`_, nodes are given explicit labels individuating them such as :math:`\{A,B,C,\ldots\}`. Oftentimes, for the purposes of mathematical notation, it will be helpful to index nodes by the integers over a common variable label, e.g., :math:`\{X_1,X_2,X_3,\ldots\}`
+
+Defined in this way, edges are all directed in the sense that an edge from :math:`X_1 \textrm{to} X_2`is not the same as the edge from :math:`X_2 \textrm{to} X_1`  :math:`(X_1,X_2) \neq (X_2,X_1)`. For some additional notation, an edge :math:`(X_1,X_2)` will sometimes be written as :math:`X_1 \rightarrow X_2`, and the relation may be described using language like ":math:`X_1` is the parent of :math:`X_2`" or ":math:`X_2` is the child of :math:`X_1`".
 
 Adjacency Matrix Perspective
 ============================
@@ -70,7 +77,7 @@ If a graph is undirected, then if it has an edge from :math:`N_i \rightarrow N_j
 Directed Graphs
 ===============
 
-From the perspective we've been considering, all graphs are technically directed, and undirected graphs are a special case where both edges are symmetric.
+From the adjacency matrix perspective we've been considering, all graphs are technically directed, and undirected graphs are a special case where both edges are symmetric.
 
 The number of directed graphs that can be obtained from a set of nodes of size :math:`n` can be defined explicitly using the fact that they can be encoded as a unique :math:`n \times n` matrix:
 
@@ -110,16 +117,13 @@ Assumptions for Bayesian networks
 
 There is a fixed set of known nodes with finite cardinality :math:`N`. All events are presumed to occur simultaneously within a single discrete trial. Graph forms a :sc:`dag`\. 
 
-Causal Bayesian Networks
-------------------------
-
-
-
 
 Sampling from Conditional Probability distributions in Bayes Nets
 =================================================================
 
 
+Causal Bayesian Networks
+------------------------
 
 
 Twelve hundred years ago  — – -- in a galaxy just across the hill...
