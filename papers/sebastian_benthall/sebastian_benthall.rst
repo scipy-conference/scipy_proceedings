@@ -2,9 +2,9 @@
 :email: sb@ischool.berkeley.edu
 :institution: UC Berkeley School of Information
 
-------------------------------------------------
-Clustering Mailing List Activity
-------------------------------------------------
+--------------------------------------------------------
+Generative Modeling of Online Collaboration with BigBang
+--------------------------------------------------------
 
 .. class:: abstract
 
