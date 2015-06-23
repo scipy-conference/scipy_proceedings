@@ -329,6 +329,8 @@ model that results in disassortative graphs with log normal degree distribution.
 Building this graph generation model may help us understand better how collaborative communities
 grow and form over time.
 
+Possible models include nonlinear Barabasi-Alpert: http://arxiv.org/pdf/cond-mat/0402315.pdf
+
 References
 ----------
 
