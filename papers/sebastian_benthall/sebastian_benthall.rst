@@ -267,30 +267,19 @@ original nodes.
 Preferential attachment model
 -----------------------------
 
-Discuss Barabasi-Alpert here.
-
-
-
-Discussion network formation
-----------------------------
-
-Background
-----------
-
-- Barabasi points out power laws in degree distributions of networks and proposes preferential
+[Discuss Barabasi-Alpert here.]
+Barabasi points out power laws in degree distributions of networks and proposes preferential
 attachment model. [BarabasiAlbert]_
-- Degree assortativity of social and technical networks [Newman2002]_ [Alstott2014]_
-
-and so
+Degree assortativity of social and technical networks [Newman2002]_ [Alstott2014]_
 
 Methods
 -------
 
-- build interaction graph
-  - In-Reply-To header
-- compute goodness of fit of power law distribution to degree distribution [Clauset2007] (cite Alstott)
-- compare degree assortativity 
-
+We built interaction graphs according to the above procedure for 10 mailing lists from open
+collaborative communities.
+We then computed the degree assortativity of these networks.
+We also used the Alstott package to test the degree distribution of these networks using
+the Clauset method.
 
 Results
 -------
