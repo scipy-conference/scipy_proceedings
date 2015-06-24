@@ -263,26 +263,14 @@ repository in versions 4.2 and above.
 Integration with NumPy
 ~~~~~~~~~~~~~~~~~~~~~~
 
-[INSERT DISCUSSION ABOUT VTK DATA MODEL]
-
-In VTK, data set attributes are stored in instances of a subclass of
-``vtkAbstractArray``. For data sets with points and cells such as
-``vtkPolyData`` and ``vtkUnstructuredGrid``, attributes can be
-associated with points or cells, or the data set itself. For point-
-and cell-associated arrays, each array element is the attribute value
-associated with the point or cell at the same index. Attribute arrays
-associated only with the data set can contain arrays of arbitrary size
-and no mapping between array elements and topological elements of the
-data set is assumed.
-
 There are limited functions within VTK itself to process or analyze
-these arrays. Since 2008, a low-level interface layer between VTK
-arrays and NumPy array has been available in VTK. This interface layer
-can be used to map VTK arrays to NumPy arrays and vice versa, enabling
-the full power of NumPy operations to be used on VTK data. For
-example, suppose that we have a data set from a computational fluid
-dynamics simulation that we can load with a VTK reader class, and
-suppose further that the data set has a point-associated array
+point and cell arrays. Since 2008, a low-level interface layer between
+VTK arrays and NumPy array has been available in VTK. This interface
+layer can be used to map VTK arrays to NumPy arrays and vice versa,
+enabling the full power of NumPy operations to be used on VTK
+data. For example, suppose that we have a data set from a
+computational fluid dynamics simulation that we can load with a VTK
+reader class, and suppose further that the data set has a point array
 representing pressure. We can find several properties of this array
 using NumPy, e.g.,
 
@@ -348,9 +336,9 @@ that wrap VTK data set objects to have a more Pythonic interface.
    
 In this code, ``ds`` is an instance of a ``dataset_adapter.PolyData``
 class returned by the ``WrapDataObject`` function to handle the
-``vtkPolyData`` output of the ``vtkXMLPolyDataReader``. Point- and
-cell-associated arrays are available in member variables that provide
-the dictionary interface.
+``vtkPolyData`` output of the ``vtkXMLPolyDataReader``. Point and cell
+arrays are available in member variables that provide the dictionary
+interface.
 
 .. code-block:: python
 
@@ -417,9 +405,9 @@ functionality in more detail.
 Integration with matplotlib
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-VTK excels at interactive 3D rendering of scientific data. Matplotlib
-excels at producing publication-quality plots. VTK leverages each
-toolkit's strengths in two ways.
+While VTK excels at interactive 3D rendering of scientific data,
+matplotlib excels at producing publication-quality plots. VTK
+leverages each toolkit's strengths in two ways.
 
 First, as described earlier, convenience functions for exposing VTK
 data arrays as NumPy arrays are provided in the
@@ -691,8 +679,8 @@ outputs to the filter via:
 
 Arbitrarily complex Python scripts can be executed to generate the
 filter's output. The following example moves points in an input
-``vtkPointSet`` along the surface normal if a point-associated array
-with the name "Normals" is defined.
+``vtkPointSet`` along the surface normal if a point array with the
+name "Normals" is defined.
 
 .. code-block:: python
 
