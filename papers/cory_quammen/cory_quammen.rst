@@ -68,6 +68,69 @@ Since 1997, VTK has provided language bindings for Python. Over the
 years, Python has become increasingly important to VTK, both as a
 route to using VTK, as well as to the development of VTK itself.
 
+VTK Data Model
+~~~~~~~~~~~~~~
+
+To understand Python usage in VTK, it is important to understand the
+VTK data and processing models. At the most basic level, data in VTK
+is stored in a data object. Different types of data objects are
+available including graphs, trees, or grids/meshes representing
+spatially embedded data from sensors or simulations. Types of
+spatially embedded data sets include uniform rectilinear grids,
+structured/unstructured grids, and Adaptive Mesh Refinement (AMR) data
+sets. In this paper, I focus on the spatially embedded data sets.
+
+Each spatially embedded data set has a set of *cells*, each of which
+defines a geometric entity that defines a volume of space, and a set
+of *points* that are used to define the vertices of the cells. Data
+values that represent a quantity, e.g. pressure, temperature,
+velocity, etc., may be associated with both cells and points. Each
+quantity might be a scalar, vector, tensor, or string value. Vectors
+and tensors typically have more than one numerical *component*, and
+the quantity as a whole is known as a *tuple*.
+
+The full collection of a quantity associated with points or cells is
+known by a number of names including attribute, field, variable, and
+array. VTK stores attributes in individual data arrays. For a
+point-associated array, also known as a point array, the number of
+tuples is expected to match the number of points. Likewise, for
+cell-associated arrays (cell array) the number of tuples is expected
+to match the number of cells.
+
+VTK Pipeline
+~~~~~~~~~~~~
+
+Data processing in VTK follows the data-flow paradigm. In this
+paradigm, data flows through a sequence of processing
+algorithms. These algorithms are chained together in a *pipeline*. At
+the beginning of a pipeline, a *source* generates a VTK data set. For
+example, an STL file reader source reads an STL file and produces a
+polygonal VTK data set as an output. A *filter* can be connected to
+the file reader to process the raw data from the file. For example, a
+smoothing filter may be used to smooth the data read by the
+reader. The output of the smoothing filter can be further processed
+with a clipping filter to cut away part of the smoothed data
+set. Results from this operation can then be saved to a file with a
+file writer.
+
+An algorithm in a pipeline produces one or more data sets (described
+in the previous section) that are passed to the next algorithm in the
+pipeline. Algorithms need only update when one of their properties
+changes (e.g., smoothing amount) or when the algorithm upstream of it
+has produced a new data set. These updates are handled automatically
+by an internal VTK pipeline executive whenever an algorithm is
+updated.
+
+Because the Visualization Toolkit is intended to produce 3D
+interactive visualizations, output from the final algorithm in a
+pipeline is typically connected to a *mapper* object. A mapper is
+responsible for converting a data set into a set rendering
+instructions. An *actor* represents the mapper in a scene, and has
+some properties that can modify the appearance of a mapped data
+set. One or more actors can be added to a *renderer* which executes
+the rendering instructions to generate an image.
+
+
 Python Language Bindings for VTK
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -199,6 +262,8 @@ repository in versions 4.2 and above.
 
 Integration with NumPy
 ~~~~~~~~~~~~~~~~~~~~~~
+
+[INSERT DISCUSSION ABOUT VTK DATA MODEL]
 
 In VTK, data set attributes are stored in instances of a subclass of
 ``vtkAbstractArray``. For data sets with points and cells such as
