@@ -28,7 +28,7 @@ Testing Generative Models of Online Collaboration with BigBang
 
 .. class:: keywords
 
-   mailing lists, clustering
+   mailing lists, network analysis
 
 
 Introduction
