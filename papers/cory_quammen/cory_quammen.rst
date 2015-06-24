@@ -75,8 +75,7 @@ The Python binding support in VTK has evolved so that today nearly
 every semantic feature of C++ used by VTK has a direct semantic analog
 in Python. C++ classes from VTK are wrapped into Python
 equivalents. The few classes that are not wrapped are typically
-limited to abstract base classes that cannot be instantiated or
-classes that are meant for internal use in VTK.
+limited to classes that are meant only for internal use in VTK.
 
 Python Wrapping Infrastructure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
