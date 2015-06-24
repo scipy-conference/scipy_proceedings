@@ -290,10 +290,40 @@ original nodes.
 Preferential attachment model
 -----------------------------
 
-[Discuss Barabasi-Alpert here.]
-Barabasi points out power laws in degree distributions of networks and proposes preferential
-attachment model. [BarabasiAlbert]_
-Degree assortativity of social and technical networks [Newman2002]_ [Alstott2014]_
+A early result in the study of complex networks was the observation that many networks
+existing in nature exhibit a scale-free degree distribution.
+This means that the distribution of the number of edges of each node in the network (the
+node's *degree*) is a power law distribution, characterized by the formula: 
+
+.. math::
+
+   formula here
+
+The other most widely known random graph model, the Erdos-Renri model, produces
+networks with normal(?) degree distribution.
+Barabasi and Alpert [BarabasiAlbert]_ have proposed a model of network generation
+that produces graphs with scale-free degree distribution.
+The Barabasi-Alpert model is now widely known in the literature.
+
+The attractiveness of the Barabasi-Alpert model is due in part to its being a
+generative model, meaning that it describes a process for creating data of an
+observed distribution, as opposed to being simply a description of the distribution
+itself.
+This gives the Barabasi-Alpert model explanatory power.
+
+In particular, the Barabasi-Alpert model attributes the scale-free distribution of
+node degree to a *preferential attachment* mechanism. 
+The network is formed by adding new nodes to the network one by one.
+Each newly added node is attached to the existing nodes with probability
+
+.. math::
+
+   formula
+
+The Barabasi-Alpert model is favored for its simplicity, its intuitively clear mechanism 
+of preferential attachment, and for its analytic tractability.
+As said above, the degree distribution of Barabasi-Alpert networks is power law.
+
 
 Methods
 -------
