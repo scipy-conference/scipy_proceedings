@@ -64,10 +64,6 @@ additional Python support in VTK and ParaView.
 Python and VTK
 --------------
 
-Since 1997, VTK has provided language bindings for Python. Over the
-years, Python has become increasingly important to VTK, both as a
-route to using VTK, as well as to the development of VTK itself.
-
 VTK Data Model
 ~~~~~~~~~~~~~~
 
@@ -133,6 +129,10 @@ the rendering instructions to generate an image.
 
 Python Language Bindings for VTK
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Since 1997, VTK has provided language bindings for Python. Over the
+years, Python has become increasingly important to VTK, both as a
+route to using VTK, as well as to the development of VTK itself.
 
 The Python binding support in VTK has evolved so that today nearly
 every semantic feature of C++ used by VTK has a direct semantic analog
