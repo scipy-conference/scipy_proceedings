@@ -293,7 +293,7 @@ we are certainly not the first to consider this collection of
 libraries to be important for Data Science, and this particular case
 study was inspired by the excellent book "Python for Data Analysis:
 Data Wrangling with Pandas, NumPy, and IPython", by Wes McKinney
-McK10_ (which is required reading for this particular assignment).
+[McK12]_ (which is required reading for this particular assignment).
 
 Many of the tasks in this case study revolve around question like:
 
@@ -400,7 +400,8 @@ namely the *pivot-table*.  For example, one can imagine writing
 complicated loops and conditionals to perform the task of printing
 out all movies that have a median rating of 5 by men or women.
 However, using pivot-tables, such a question can be answered with
-just three lines of code.
+just three lines of code (using the Python 2 "print" statement versus
+the Python 3 "print()" function):
 
 .. code-block:: python
 
@@ -679,7 +680,7 @@ example, we have:
 * Statistical modeling:  Statsmodels [StM15]_
 * Convex optimization:  cvxopt [Dah06]_, CVXPY [Dia14]_
 * Deep learning:  Theano [Ber11]_
-* Graphical models:  libpgm [Kar14]_
+* Graphical models:  libpgm [Kar14]_, pgmpy [Pgm15]_
 * Scientific visualization:  Mayavi [Ram11]_, Matplotlib [Hun07]_, Bokeh [Bok15]_, Seaborn [Was14]_
 
 Accordingly, students who are trained in classes such as DS501 and
@@ -847,13 +848,13 @@ References
 .. [Lut13] Lutz, Mark. *Programming python*. 5th edition, O'Reilly
            Media, Inc., 2010.
 
-.. [McK12] McKinney, Wes. *Python for data analysis: Data wrangling 
-	   with Pandas, NumPy, and IPython* .O'Reilly Media, Inc., 2012.
-
 .. pandas
-.. [McK10] Wes McKinney. *Data Structures for Statistical Computing in
+.. [McK10] McKinney, Wes. *Data Structures for Statistical Computing in
            Python*, Proceedings of the 9th Python in Science
            Conference, 51-56 (2010) 
+
+.. [McK12] McKinney, Wes. *Python for data analysis: Data wrangling 
+	   with Pandas, NumPy, and IPython* .O'Reilly Media, Inc., 2012.
 
 .. [PMe15] *Merge, join, and concatenate* 
 	   (2015), http://pandas.pydata.org/pandas-docs/stable/merging.html
@@ -916,6 +917,10 @@ References
 .. [Per07] Fernando Pérez and Brian E. Granger. IPython: A System for
            Interactive Scientific Computing, Computing in Science &
            Engineering, 9, 21-29 (2007), DOI:10.1109/MCSE.2007.53
+
+.. [Pgm15] *Python Library for Probabilistic Graphical Models (pgmpy)* 
+	   (2015), https://github.com/pgmpy/pgmpy
+	   [Online; accessed 2015-06-24].
 
 .. [Ptw15] *Python Twitter* 
 	   (2015), https://code.google.com/p/python-twitter/
