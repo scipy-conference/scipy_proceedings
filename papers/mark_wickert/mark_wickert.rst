@@ -468,7 +468,9 @@ through an analog-to-digital converter) and then the filter output (following di
 by instrumentation to obtain a spectral estimate. The spectrum estimate corresponds to the filter frequency response.
 The measured frequency response is imported into the notebook using `loadtxt`. Fig. :ref:`fig6` compares the
 theoretical frequency response, including quantization errors, with the measured. The results are impressive, and the
-IPython notebook makes this a breeze.
+IPython notebook makes this a breeze. The fact that the stopband ripple is not quite equal-ripple is due to coefficient
+quantization. This easy to show right in the notebook by overlaying a frequency response using the ``float64``
+coefficients ``b1`` as obtained in Fig. :ref:`fig5`.
 
 .. figure:: scipy_2015_fig6.pdf
    :scale: 55%
