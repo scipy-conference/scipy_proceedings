@@ -485,11 +485,18 @@ have even symmetry. This means that :math:`b_1[M-n] = b_1[n]` for :math:`0\leq n
    :label: sys_func
    :type: eqnarray
 
-   Y(z) &=& H(z) X(z) = \underbrace{\sum_{n=0}^M b_n z^{n}}_{H(z)} \cdot X(z) \\
-   &=& \prod_{n=1}^M \big(1-z_n z^{-1}\big)\cdot X(z)
+   Y(z) &=& H(z) X(z) = \underbrace{\sum_{n=0}^M b_n z^{-n}}_{H(z)} \cdot X(z) \\
+   &=& \frac{1}{z^M}\prod_{n=1}^M \big(z-z_n\big)\cdot X(z)
 
 where :math:`Y(z)` is the :math:`z`-transform of :math:`y[n]`, :math:`X(z)` is the :math:`z`-transform of
 :math:`x[n]`, and :math:`H(z)`, known as the *system function*, is the :math:`z`-transform of the system impulse response.
+In general :math:`H(z) = N(z)/D(z)` is rational function of :math:`z` or :math:`z^{-1}`. The roots of :math:`N(z)` are
+the system zeros and roots of :math:`D(z)` are the system poles. For an FIR filter all :math:`M` poles reside at :math:`z=0`,
+while the :math:`M` zeros lie somewhere other than zero in the :math:`z`-plane. Students are taught that a *pole-zero*
+plot gives much insight into the frequency response of a system, in particular a filter. The module ``ssd.py`` provides
+the function ``ssd.zplane(b,a)`` where ``b`` contains the coefficients of :math:`N(z)` and ``a`` contains the
+coefficients of :math:`D(z)`, here simply ``[1]``. The even symmetry condition constrains the system zeros to lie at conjugate
+reciprocol locations as seen in Fig. :ref:`fig9`.
 
 
 .. figure:: scipy_2015_fig9.pdf
@@ -499,6 +506,11 @@ where :math:`Y(z)` is the :math:`z`-transform of :math:`y[n]`, :math:`X(z)` is t
 
    Pole-zero plot of the equal-ripple lowpass which confirms that :math:`H(z)` is linear phase. :label:`fig9`
 
+With real filter coefficients the zeros must also occur in conjugate pairs or on the real axis. When the student sees
+the pole-zero plot of Fig. :ref:`fig9` whats jumps off the page is (1) all of the zeros on the unit circle for the filter
+stopband and (2) the conjugate reciprocal zeros at angles somewhat less then :math:`\pi/4`, define the filter passband.
+Note zeros not on the unit circle or real axis **must** occur as quadruplets, and that is indeed what is seen in Fig. :ref:`fig9`.
+Note also there are 77 poles at :math:`z=0`, which is expected.
 
 Statistical Signal Processing
 =============================
