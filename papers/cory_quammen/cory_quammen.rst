@@ -510,8 +510,32 @@ infrastructure shows how important Python is in VTK's development.
 Python and ParaView
 -------------------
 
-Python is integrated into ParaView in a number of ways. This section
-provides an overview of this integration.
+ParaView is a suite of scalable parallel visualization executables
+that use VTK to read data, process it, and create visualizations. One
+of the executables includes a graphical user interface (GUI) to make
+it possible to create visualizations without programming (when
+ParaView is mentioned in this section, it is the executable with a GUI
+unless otherwise specified). Data processing in ParaView follows the
+same data-flow paradigm as VTK. In ParaView, sources and filters are
+chained together in a Pipeline Browser as shown in Figure
+:ref:`paraviewscreenshotfig`. Visualization controls can be modified
+with user interaction widgets provided by Qt.
+
+.. figure:: ParaViewExampleScreenshot.png
+   :align: center
+   :figclass: bhtw
+
+   The ParaView GUI with an example visualization of a simulation of
+   airflow past a blunt fin. The Pipeline Browser (upper left) shows
+   the sources and filters used to create the visualization. Filter
+   and visualization parameters are shown in the Property window
+   (lower left). :label:`paraviewscreenshotfig`
+
+While ParaView can be used to make visualizations without programming,
+it is also possible to use Python scripting to automate certain
+operations or even create entire visualizations. Python scripting is
+integrated into ParaView in a number of ways. This section provides an
+overview of this integration.
 
 Python Console
 ~~~~~~~~~~~~~~
@@ -744,10 +768,11 @@ Python Annotation
 
 .. figure:: PythonAnnotations.png
    :align: center
-   :figclass: bhtw
+   :figclass: bht
 
    Three annotation filters in the scene show the minimum, mean, and
-   maximum value of the ``DISP`` array at the current time step. :label:`annotationfig`
+   maximum value of the ``DISP`` array at the current time
+   step. :label:`annotationfig`
 
 It is often desirable to annotate visualizations with numerical values
 either taken directly from the data set or computed from the data. The
