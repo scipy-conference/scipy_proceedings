@@ -8,21 +8,13 @@ Circumventing The Linker: Using SciPy's BLAS and LAPACK Within Cython
 
 .. class:: abstract
 
-   In Python, it is often said that you can code your scientific algorithms in a high level language and then optimize any performance-intensive parts with minimal modification in Cython or some other code accelerator.
-   For simple algorithms that center entirely on looping and item-by-item access, this is true, but this simple idea starts to break down when optimizing code that relies heavily on calls to other libraries.
-   When code like this isn't fast enough, users may be forced to rewrite larger portions of their existing codebase in another language, change the libraries they are using, or write new interfaces between Python and their low-level language of choice.
-   To help alleviate these problems, I introduced a Cython API for BLAS and LAPACK.
-
    BLAS, LAPACK, and other libraries like them have formed the underpinnings of much of the scientific stack in Python.
    Up until now the standard practice in many packages for using BLAS and LAPACK has been to link each Python extension directly against the libraries needed.
    Each module that calls these low-level libraries directly has had to link against them independently.
 
    Cython has existing machinery that allows C-level declarations to be shared between Cython-compiled extension modules without linking against the original libraries.
-   If used carefully, this functionality can be used to export Cython-level APIs exactly mirroring existing C and Fortran interfaces that can be used without any additional linking.
-   The Cython BLAS and LAPACK API in SciPy makes it so that the same BLAS and LAPACK libraries that were used to compile SciPy can be used in Python extension modules via Cython.
-
-   In this talk I will demonstrate how to create and use these APIs for both Fortran and C libraries in a platform-independent manner.
-   I will also discuss how using these techniques mitigate the effects of dependency creep both within and between Python packages.
+   The Cython BLAS and LAPACK API in SciPy uses this functionality to make it so that the same BLAS and LAPACK libraries that were used to compile SciPy can be used in Python extension modules via Cython.
+   Here I will demonstrate how to create and use these APIs for both Fortran and C libraries in a platform-independent manner.
 
 .. class:: keywords
 
@@ -53,15 +45,14 @@ The Cython API for BLAS and LAPACK
 ----------------------------------
 
 Over the last year, a significant amount of work has been devoted to exposing the BLAS and LAPACK libraries within SciPy at the Cython level.
-The primary goals of providing such an interface are twofold:
-* Making the low-level routines in BLAS and LAPACK more readily available to users.
-* Reducing the dependency burden on third party packages.
+The primary goals of providing such an interface are twofold: first, making the low-level routines in BLAS and LAPACK more readily available to users, and, second, reducing the dependency burden on third party packages.
 
 Using the new Cython API, users can now dynamically load the BLAS and LAPACK libraries used to compile SciPy without having to actually link against the original BLAS and LAPACK libraries or include the corresponding headers.
 Modules that use the new API also no longer need to worry about which BLAS or LAPACK library is used.
 If the correct versions of BLAS and LAPACK were used to compile SciPy, the correct versions will be used by the extension module.
 
 BLAS and LAPACK proved to be particularly good candidates for a Cython API, resulting in several additional benefits:
+
 * Python modules that use the Cython BLAS/LAPACK API no longer need to link statically to provide binary installers.
 * The custom ABI wrappers and patches used in SciPy to provide a more stable and uniform interface across different BLAS/LAPACK libraries and  Fortran compilers are no longer needed for third party extensions.
 * The naming schemes used within BLAS and LAPACK make it easy to write type-dispatching versions of BLAS and LAPACK routines using Cython's fused types.
@@ -97,7 +88,7 @@ Here's a minimal example
        print np.dot(a, b)
 
 If these wrappers are needed in an extension module written in C, C++, or another low-level language, a small Cython shim can be used to export the needed functions.
-Since Cython uses Python's capsule objects internally for the cimport mechanism, it is also possible to extract function pointers directly from the module's `__pyx_capi__` dictionary and cast them to the needed type without writing the extra shim.
+Since Cython uses Python's capsule objects internally for the cimport mechanism, it is also possible to extract function pointers directly from the module's ``__pyx_capi__`` dictionary and cast them to the needed type without writing the extra shim.
 
 Exporting Cython APIs for Existing C Libraries
 ----------------------------------------------
@@ -109,7 +100,7 @@ First, as an example, consider the simple C file
 
    // myfunc.c
    double f(double x, double y){
-   return x * x - x * y + 3 * y;
+       return x * x - x * y + 3 * y;
    }
 
 with the corresponding header file
@@ -119,7 +110,7 @@ with the corresponding header file
    // myfunc.h
    double f(double x, double y);
 
-This library can be compiled by running `clang -c myfunc.c -o myfunc.o`.
+This library can be compiled by running ``clang -c myfunc.c -o myfunc.o``.
 
 This can be exposed at the Cython level and exported as a part of the resulting Python module by including the header in the pyx file, using the function from the C file to create either a Cython shim or a function pointer with the proper signature, and then declaring the function or function pointer in the corresponding pxd file without including the header file.
 Here's a minimal example of how to do that:
@@ -134,7 +125,7 @@ Here's a minimal example of how to do that:
        double f(double x, double y) nogil
    # Declare both the external function and
    # the Cython function as nogil so they can be
-   # without any Python operations
+   # used without any Python operations
    # (other than loading the module).
    cdef double cy_f(double x, double y) nogil:
        return f(x, y)
