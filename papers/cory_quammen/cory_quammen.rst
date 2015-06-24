@@ -38,13 +38,13 @@ widgets. The toolkit supports parallel processing and integrates with
 various GUI toolkits such as Qt and Tk. Python bindings expose nearly
 all VTK classes and class methods, making it possible to write full
 VTK-based applications in Python. VTK also includes interfaces to
-popular Python modules such as NumPy and matplotlib. Support for
+popular Python packages such as NumPy and matplotlib. Support for
 writing custom VTK algorithms in Python is also available.
 
-Based on VTK, ParaView is a scalable visualization tool that runs on a
+ParaView is a scalable visualization tool based on VTK that runs on a
 variety of platforms ranging from PCs to some of the largest
-supercomputers in the world. ParaView consists of a suite of
-executables for generating data visualizations using the techniques
+supercomputers in the world. The ParaView package consists of a suite
+of executables for generating data visualizations using the techniques
 available in VTK. ParaView executables interface with Python in a
 number of ways: data sources, filters, and integrated plots can be
 defined via Python code, data can be queried with Python expressions,
@@ -93,12 +93,12 @@ module.
 VTK Usage in Python
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-VTK is provided as a single ``vtk`` module that can be imported like
-any other module. When building VTK from source, if Python support is
-enabled, the build process will produce an executable named
-``vtkpython``. This is the standard Python executable with environment
-variables set to make it simple to import the ``vtk`` module. It is
-also possible to use the same ``python`` executable from the Python
+VTK is provided as a single ``vtk`` package in both the binaries
+available on the VTK download page [VTK15] and in the VTK build. For
+convenience, an executable named ``vtkpython`` is provided with
+VTK. This is the standard Python executable with environment variables
+set to make it simple to import modules from the ``vtk`` package. It
+is also possible to use the same ``python`` executable from the Python
 installation against which VTK was built by prepending the location of
 VTK's shared libraries and the location of VTK's ``__init__.py`` file
 to the PYTHONPATH environment variable.
@@ -457,17 +457,16 @@ infrastructure shows how important Python is in VTK's development.
 Python and ParaView
 -------------------
 
-While ParaView may be built without supporting it, Python is
-integrated into ParaView in a number of ways. This section provides an
-overview of this integration.
+Python is integrated into ParaView in a number of ways. This section
+provides an overview of this integration.
 
 Python Console
 ~~~~~~~~~~~~~~
 
-ParaView includes a Python console available under the ``Tools -> Python
-Console`` menu item. This console is a fully-featured Python console with
-the environment set up so that the ``vtk`` module is available as well as
-a number of modules from ParaView itself. When first started, the command
+ParaView includes a Python console available under the ``Tools ->
+Python Console`` menu item. This console is a fully-featured Python
+console with the environment set up so that the ``vtk``and a
+``paraview`` package is available. When first started, the command
 
 .. code-block:: python
 
@@ -594,28 +593,6 @@ intended to perform offline data processing and visualization
 generation. Both ``pvpython`` and ``pvbatch`` can connect to remote
 servers for parallel visualization.
 
-
-Python Calculator
-~~~~~~~~~~~~~~~~~
-
-ParaView's Python Calculator filter provides a way to compute
-additional point-based or cell-based data set attributes using NumPy
-or the ``numpy_interface.algorithms`` module. This expression will
-compute the norm of the Normal array associated with points:
-
-.. code-block:: python
-
-   numpy.linalg.norm(inputs[0].PointData['Normals'], \
-                     axis=1)
-
-Under the covers, the Python Calculator uses the
-``vtk.numpy_interface.dataset_adapter`` module to wrap the inputs to
-the filter. This provides compatibility between VTK arrays and
-NumPy. All the wrapped input data sets are appended to a list named
-``inputs`` that is available in the environment in which the Python
-expression is executed.
-
-
 Python Programmable Filter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -688,6 +665,26 @@ Within ParaView it is also possible to define Python script that
 defines data sources using the Python Programmable Source. This source
 functions much like the Python Programmable Filter, but without
 requiring any input data sets.
+
+Python Calculator
+~~~~~~~~~~~~~~~~~
+
+ParaView's Python Calculator filter provides a way to compute
+additional point-based or cell-based data set attributes using NumPy
+or the ``numpy_interface.algorithms`` module. This expression will
+compute the norm of the Normal array associated with points:
+
+.. code-block:: python
+
+   numpy.linalg.norm(inputs[0].PointData['Normals'], \
+                     axis=1)
+
+Under the covers, the Python Calculator uses the
+``vtk.numpy_interface.dataset_adapter`` module to wrap the inputs to
+the filter. This provides compatibility between VTK arrays and
+NumPy. All the wrapped input data sets are appended to a list named
+``inputs`` that is available in the environment in which the Python
+expression is executed.
 
 Python Annotation
 ~~~~~~~~~~~~~~~~~
@@ -868,3 +865,6 @@ References
 
 .. [Sni99] M. Snir, S. Otto, S. Huss-Lederman, D. Walker, and J. Dongarra, *MPI - The Complete Reference: Volume 1, The MPI Core*,
            2nd ed., MIT Press, 1999, ISBN 0-262-69215-5.
+
+.. [VTK15] *VTK- The Visualization Toolkit*,
+           http://www.vtk.org/
