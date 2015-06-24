@@ -523,7 +523,7 @@ with user interaction widgets provided by Qt.
 
 .. figure:: ParaViewExampleScreenshot.png
    :align: center
-   :figclass: bhtw
+   :figclass: bht
 
    The ParaView GUI with an example visualization of a simulation of
    airflow past a blunt fin. The Pipeline Browser (upper left) shows
