@@ -37,9 +37,13 @@ Causal Bayesian NetworkX
 Introduction and Aims
 ---------------------
 
-My first goal in this paper is to provide enough of an introduction to some formal/mathematical tools such that those familiar with :code:`python` and programming more generally will be able to appreciate both why and how one might implement causal Bayesian networks. Especially to exhibit *how*, I have developed parts of a toolkit that allows the creation of these models on top of the :code:`NetworkX` python package. Given the coincidence of the names, it seemed most apt to refer to this toolkit as :code:`Causal Bayesian NetworkX` (the current implementation of which can be found at `Causal Bayesian NetworkX`_). 
+My first goal in this paper is to provide enough of an introduction to some formal/mathematical tools such that those familiar with :code:`python` and programming more generally will be able to appreciate both why and how one might implement causal Bayesian networks. Especially to exhibit *how*, I have developed parts of a toolkit that allows the creation of these models on top of the :code:`NetworkX` python package. Given the coincidence of the names, it seemed most apt to refer to this toolkit as :code:`Causal Bayesian NetworkX` (the current implementation of which can be found at `Causal Bayesian NetworkX`_).
 
-In these tools, I focus first on establishing a means of building iterators over sets of directed graphs. I then apply operations to those sets. Beginning with the complete directed graph, we enumarte over the subgraphs of that complete graph and enforce graph theoretic conditions such as acyclicity over the entire graph, guarantees on paths between nodes that are known to be able to communicate with one another, or orphan-hood for individual nodes known to have no parents. We accomplish this by using closures that take graphs as their input along with any explicitly defined arguments needed to define the exact desired conditions. 
+In order to understand the toolset requires the basics of probabilsitic graphical models, which requires understanding some degree of graph theory and some degree of probability theory. The first few pages are devoted to providing necessary background and illustrative cases for conveying that understanding.
+
+The Causal Bayesian NetowrkX toolkit can be seen as consisting of two main parts: graph enumeration/filtering and the storage and use of probabilistic graphical models in a NetworkX compatible format. 
+
+I focus first on establishing a means of building iterators over sets of directed graphs. I then apply operations to those sets. Beginning with the complete directed graph, we enumarte over the subgraphs of that complete graph and enforce graph theoretic conditions such as acyclicity over the entire graph, guarantees on paths between nodes that are known to be able to communicate with one another, or orphan-hood for individual nodes known to have no parents. We accomplish this by using closures that take graphs as their input along with any explicitly defined arguments needed to define the exact desired conditions. 
 
 I then shift focus to a case where there is a known graph over a set of nodes that are imbued with a simple probabilistic semantics, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics.
 
@@ -159,14 +163,30 @@ Conditional probabilities are related to joint probabilities using the following
 
     P(X|Y=y) = \frac{P(X,Y=y)}{P(Y=y)} = \frac{P(X,Y=y)}{\sum_{x \in X}P(X=x,Y=y)}
 
+Equivalently:
+
+.. math::
+
+    P(X,Y=y) = P(X|Y=y)P(X)
 
 
 Bayes' Theorem
 ==============
 
-Bayes' Theorem is a result that is a consequence of 
+Bayes' Theorem can be seen as a result of how to relate conditional and joint probabilities. Or more importantly, how to compute the probability of a variable once you know something about some other variable.
 
-One of the cental tools needed for thinking about complicated sets of events, such as those that might be defined over nodes in networks, is Bayes' Theorem. Most importantly for our purposes is that it gives us a straightforward way to relate conditional
+Namely, if we want to know :math:`P(X|Y)` we can transform it into :math:`\frac{P(X,Y)}{\sum_{x \in X}P(X=x,Y)}`, but then can also transform joint probabilities (:math:`P(X,Y)`) into statements about conditional and marginal probabilities (:math:`P(X|Y)P(X)`).
+
+This leaves us with
+
+.. math::
+
+    P(X|Y) = \frac{P(X|Y)P(X)}{\sum_{x \in X}P(X=x|Y)P(X=x)}
+
+Probabilistic Independence
+==========================
+
+To say that two variables are independent of each other means that 
 
 
 Sampling from Conditional Probability distributions
@@ -179,7 +199,7 @@ Imagine the following game:
 
 You have a coin [#]_ (*C*, :sc:`Heads, Tails`), a 6-sided die (:math:`D_6, \{1,2,\ldots,6\}`), and a 20-sided die (:math:`D_{20}, \{1,2,\ldots,20\}`). If for simplicity, you prefer to think of these as fair dice and a fair coin, you are welcome to do so, but my notation will not require that.
 
-.. [#] A coin is effectively 2-sided die, but for clarity of exposition I chose to use treat the conditioned-on variable as a different kind of object than the variables relying on that conditioning.
+.. [#] A coin is effectively 2-sided die, but for clarity of exposition I chose to treat the conditioned-on variable as a different kind of object than the variables relying on that conditioning.
 
 The rules of the game are as follows: flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die. Your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. 
 
@@ -212,17 +232,15 @@ The rules are the same as before: your score for one round of the game is the va
 
 But note that now we cannot sum over these in the same way that we did before. Indeed, our event sets for the two dice are mutually disjoint, making the event set for the scores that one can receive on a single round :math:`\{\clubsuit,\diamondsuit,\heartsuit,\spadesuit,\odot,\dagger,X_1,X_2,\ldots,X_{20}\}`. Without additional information about how to map these different labels onto values, there's no way to describe the "score". Rather, the best we can do is to determine the probability with which each individual case occurs.
 
-
-
 Bayesian Networks
 -----------------
 
-Bayesian networks are a class of graphical models that have particular probabilistic semantics attached to the 
+Bayesian networks are a class of graphical models that have particular probabilistic semantics attached to their nodes and edges.
 
 Assumptions for Bayesian networks
 ========================================
 
-There is a fixed set of known nodes with finite cardinality :math:`N`. All events are presumed to occur simultaneously within a single discrete trial. Graph forms a :sc:`dag`\. 
+There is a fixed set of known nodes with finite cardinality :math:`N`. Within a trial, all events are presumed to occur and to do so simultaneously. Graph forms a :sc:`dag`\. 
 
 
 Sampling from Conditional Probability distributions in Bayes Nets
@@ -232,21 +250,35 @@ Sampling from Conditional Probability distributions in Bayes Nets
 Causal Bayesian Networks
 ------------------------
 
+NetworkX
+--------
 
-Twelve hundred years ago  — – -- in a galaxy just across the hill...
+Causal Bayesian NetworkX: Graphs
+--------------------------------
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
+Graph enumeration
+=================
+
+Start with the max graph. Build an iterator that returns graphs by removing edge sets. 
+
+One challenge that arises is the sheer number of graphs that are possible given a node-set, as discussed earlier. 
+
+Operations on sets of graphs
+============================
+
+Preëmptive Filters
+^^^^^^^^^^^^^^^^^^
+
+In order to reduce the set of edges that we need to iterate over, it helps to determine which individual edges are known to always be present and which ones are known to never be present.
+
+This allows for us to the include more variables/nodes without seeing the accompanying growth in the set of the  for example nodes representing interventions,  as nodes without  on the preëxisting variables that 
+
+Conditions
+^^^^^^^^^^
+
+
+
+
 
 Of course, no paper would be complete without some source code.  Without
 highlighting, it would look like this::
@@ -509,7 +541,7 @@ Outline v. 1.1
 
 1. NetworkX
     
-    2. graph package in python
+    2. graph/network package in python
     
 
 6. Causal Bayesian NetworkX: Graphs
