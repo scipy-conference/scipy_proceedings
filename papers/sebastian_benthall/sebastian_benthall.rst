@@ -324,6 +324,30 @@ The Barabasi-Alpert model is favored for its simplicity, its intuitively clear m
 of preferential attachment, and for its analytic tractability.
 As said above, the degree distribution of Barabasi-Alpert networks is power law.
 
+Degree assortativity
+--------------------
+
+Degree assortativity is the correlation between degrees of adjacent nodes in the network.
+
+.. math::
+
+   formula here
+
+Degree assortativity in complex networks is studied by [Newman2002]_, who makes the intriguing 
+claim that observed social networks, such as coauthorship networks, exhibit positive degree
+assortativity, while technical and biological networks exhibit negative degree assortativity.
+
+Newman also notes that the degree assortativity of Barabasi-Alpert networks is zero.
+Variations on the Barabasi-Alpert model do have other properties.
+(cite: http://arxiv.org/pdf/cond-mat/0402315.pdf)
+
+Studies have supported the role of a preferential attachment mechanism in social network
+formation (cite, cite).
+However, these studies do not take degree assortativity into account.
+This leaves open the question of whether the Barabasi-Alpert model is sufficient to
+characterize these networks.
+
+
 
 Methods
 -------
