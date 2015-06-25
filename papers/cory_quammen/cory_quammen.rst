@@ -684,13 +684,8 @@ functions is reduced to
 
    from paraview import simple
 
-   # Create the sphere source
    Sphere(Radius=2.0)
-
-   # Set the visibility of the sphere
    Show()
-
-   # Render the sphere
    Render()
 
 ParaView traces and Python state files are expressed in terms of
@@ -709,20 +704,21 @@ makes it possible to create additional filters in C++. Unfortunately,
 creating a plugin this way is a relatively involved process.
 
 Aside from the C++ plugin architecture, ParaView provides a
-Programmable Filter that enables a potentially faster plugin
-development path. This filter is more versatile than the Python
-Calculator because it enables manipulation of the entire output data
-set including the output data type, data set toplogy (i.e., type and
-number of cells), as well as array manipulation.
+Programmable Filter that enables a potentially faster development
+path. The Programmable Filter has a text property that stores a Python
+script to execute when the filter is updated. Inputs to the
+Programmable Filter as set up in the ParaView pipeline are available
+within this script. Complete specification of the output data set is
+possible within this script, including setting the output data type,
+the data set toplogy (i.e., type and number of cells), as well as
+point and cell arrays.
 
-The programmable filter is a VTK-derived class named
-``vtkPythonProgrammableFilter`` that provides this functionality. The
-class has a string property that holds a Python script executed when
-the programmable filter is updated. The class
+At its core, the Programmable Filter is defined by VTK-derived class
+named ``vtkPythonProgrammableFilter``. Using the Python C API, the
 ``vtkPythonProgrammableFilter`` passes a reference to itself to the
-environment in which the script executes, making it available within
-the script itself. This makes it possible to access the inputs and
-outputs to the filter via:
+Python environment in which the script executes so that it is
+available within the script itself. This makes it possible to access
+the inputs and outputs to the filter via:
 
 .. code-block:: python
 
@@ -752,9 +748,12 @@ name "Normals" is defined.
            newPt = (pt[0]+n[0], pt[1]+n[1], pt[2]+n[2])
            opd.GetPoints().SetPoint(i, newPt)
 
-Like the Python Calculator, the inputs are wrapped by the
-``dataset_adapter`` module. The filter above expressed with the
-wrapping becomes simply
+The Programmable Filter also uses uses the
+``vtk.numpy_interface.dataset_adapter`` module to wrap the inputs to
+the filter. All of the wrapped inputs are added to a list named
+``inputs``, and the single output is wrapped in an object named
+``output``. By using the wrapped inputs and outputs, the filter above
+becomes simply
 
 .. code-block:: python
 
@@ -774,22 +773,26 @@ requiring any input data sets.
 Python Calculator
 ~~~~~~~~~~~~~~~~~
 
-ParaView's Python Calculator filter provides a way to compute
-additional point-based or cell-based data set attributes using NumPy
-or the ``numpy_interface.algorithms`` module. This expression will
-compute the norm of the Normal array associated with points:
+ParaView's Python Calculator filter is a light-weight alternative to
+the Programmable Filter that can be used to compute additional point
+or cell arrays using NumPy or the ``numpy_interface.algorithms``
+module. This expression will compute the norm of the Normal array
+associated with points:
 
 .. code-block:: python
 
    numpy.linalg.norm(inputs[0].PointData['Normals'], \
                      axis=1)
 
-Under the covers, the Python Calculator uses the
-``vtk.numpy_interface.dataset_adapter`` module to wrap the inputs to
-the filter. This provides compatibility between VTK arrays and
-NumPy. All the wrapped input data sets are appended to a list named
-``inputs`` that is available in the environment in which the Python
-expression is executed.
+Note that like the Programmable Filter, the inputs are wrapped with
+the ``vtk.numpy_interface.dataset_adapter`` module functions. For
+additional convenience, Python variables with the names of the arrays
+are defined in the environment in which the Python expression is
+evaluated. With the feature, the example above can be written
+
+.. code-block:: python
+
+   numpy.linalg.norm(Normals, axis=1)
 
 Python Annotation
 ~~~~~~~~~~~~~~~~~
@@ -958,8 +961,8 @@ References
 .. [Gev14] B. Geveci, *vtkPythonAlgorithm is great*,
            Kitware Blog, September 10, 2014. http://www.kitware.com/blog/home/post/737
 
-.. [Kit15] *ParaView's Python documentation!*,
-           http://www.paraview.org/ParaView/Doc/Nightly/www/py-doc/index.html
+.. [Kit15] *``simple`` Module*,
+           http://www.paraview.org/ParaView/Doc/Nightly/www/py-doc/paraview.simple.html
 
 .. [PyQt15] *PyQt4 Reference Guide*,
             http://pyqt.sourceforge.net/Docs/PyQt4/
