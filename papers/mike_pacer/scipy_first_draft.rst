@@ -3,7 +3,7 @@
 :institution: University of California at Berkeley
 :bibliography: myBibliography
 
-.. :video: http://www.youtube.com/watch?v=dhRUe-gz690
+:video: youtube_link_to_come
 
 
 .. raw:: latex
@@ -39,15 +39,17 @@ Introduction and Aims
 
 My first goal in this paper is to provide enough of an introduction to some formal/mathematical tools such that those familiar with :code:`python` and programming more generally will be able to appreciate both why and how one might implement causal Bayesian networks. Especially to exhibit *how*, I have developed parts of a toolkit that allows the creation of these models on top of the :code:`NetworkX` python package. Given the coincidence of the names, it seemed most apt to refer to this toolkit as :code:`Causal Bayesian NetworkX` (the current implementation of which can be found at `Causal Bayesian NetworkX`_).
 
-In order to understand the toolset requires the basics of probabilsitic graphical models, which requires understanding some degree of graph theory and some degree of probability theory. The first few pages are devoted to providing necessary background and illustrative cases for conveying that understanding.
+In order to understand the toolset requires the basics of probabilsitic graphical models, which requires understanding some degree of graph theory and some degree of probability theory. The first few pages are devoted to providing necessary background and illustrative cases for conveying that understanding. 
 
-The Causal Bayesian NetowrkX toolkit can be seen as consisting of two main parts: graph enumeration/filtering and the storage and use of probabilistic graphical models in a NetworkX compatible format. 
+Notably, contrary to how Bayesian networks are commonly introduced, I remain silent on inference from observed data. This is intentional, as is this discussion of it. Many of the most trenchant problems with Bayesian networks are found in critiques of their use to infer these networks from observed data. But, many of the aspects of Bayesian networks (especially causal Bayesian networks) that are most useful for thinking about problems of structure and probabilistic relations do not rely on inference from observed data. In fact, I think the immediate focus on inference has greatly hampered widespread understanding of the power and representative capacity of this class of models. Equally – if not more – importantly, I aim to discuss generalizations of Bayesian networks such as those that appear :cite:`griffithst09,winn2012causality`, and inference in these cases requires a much longer treatement (if a comprehensive treatment can be provided at all). If you are dissatisfied with this approach and wish to read a more conventional introduction to (causal) Bayesian networks I suggest consulting :cite:`pearl2000`.
+
+The Causal Bayesian NetworkX toolkit can be seen as consisting of two main parts: graph enumeration/filtering and the storage and use of probabilistic graphical models in a NetworkX compatible format. Because this topic will more be the focus of my talk which can be viewed at the youtube link above and the source code of the most basic implementation is available at `Causal Bayesian NetworkX`_, in this paper I focus more on the other aspects of the problem. Nonetheless, appreciating these other aspects is made easier by also appreciating the problems of implementation/representation and the early solutions that I propose.
 
 I focus first on establishing a means of building iterators over sets of directed graphs. I then apply operations to those sets. Beginning with the complete directed graph, we enumarte over the subgraphs of that complete graph and enforce graph theoretic conditions such as acyclicity over the entire graph, guarantees on paths between nodes that are known to be able to communicate with one another, or orphan-hood for individual nodes known to have no parents. We accomplish this by using closures that take graphs as their input along with any explicitly defined arguments needed to define the exact desired conditions. 
 
-I then shift focus to a case where there is a known graph over a set of nodes that are imbued with a simple probabilistic semantics, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics.
+I then shift focus to a case where there is a specific known graph over a set of nodes that are imbued with a simple probabilistic semantics, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics.
 
-Then, I will briefly discuss **gates**:cite:`winn2012causality`, an extension to graphical modeling frameworks that allow one to define context-specific dependence relations (which includes context-specific *independence* relations). This extension is of particular interest as it allows us to subsume the classical :code:`do`-calculus :cite:`pearl2000` into the more general semantics of the probabilistic network. This work was a key influence in the development of thinking about interventions not as operations on individual nodes, or even individual graphs, but as a particular constraint placed on sets of graphs by some generative process. This interpretation of intervention, however, more difficult to relate to the semantics of probabilistic networks. I expect that **gates** will aid in bridging between this 
+Then, I will briefly discuss **gates**:cite:`winn2012causality`, an extension to graphical modeling frameworks that allow one to define context-specific dependence relations (which includes context-specific *independence* relations). This extension is of particular interest as it allows us to subsume the classical :code:`do`-calculus :cite:`pearl2000` into the more general semantics of the probabilistic network(though not a Bayesian network since that only expresses context-free independence relations). This work was a key influence in the development of thinking about interventions not as operations on individual nodes, or even individual graphs, but as a particular constraint placed on sets of graphs by some generative process. This interpretation of intervention, however, more difficult to relate to the semantics of probabilistic networks. I expect that **gates** will aid in bridging between this 
 
 I conclude with a discussion of some of the problems that have been addressed in Cognitive Science through the use of graphical models like those described. In particular, I will discuss a framework called **causal theories** :cite:`griffithst09` which allows for defining problems of causal induction. It is out of this framework the perspective expressed in this paper, the associated talk, and the the Causal Bayesian NetworkX toolkit developed. 
 
@@ -237,10 +239,7 @@ Bayesian Networks
 
 Bayesian networks are a class of graphical models that have particular probabilistic semantics attached to their nodes and edges.
 
-Assumptions for Bayesian networks
-========================================
-
-There is a fixed set of known nodes with finite cardinality :math:`N`. Within a trial, all events are presumed to occur and to do so simultaneously. Graph forms a :sc:`dag`\. 
+While there are extensions to these models, a number of assumptions commonly hold. For example, the network is considered to be comprehensive in the sense that there is a fixed set of known nodes with finite cardinality :math:`N`. This rules out the possibility of hidden/latent variables as being part of the network. Within a trial, all events are presumed to occur and to do so simultaneously. Graph forms a :sc:`dag`\. 
 
 
 Sampling from Conditional Probability distributions in Bayes Nets
@@ -250,8 +249,25 @@ Sampling from Conditional Probability distributions in Bayes Nets
 Causal Bayesian Networks
 ------------------------
 
+
+
 NetworkX
 --------
+
+This is a framework for graphs that stores graphs as "a dict of dicts of dicts".
+
+Basic NetworkX operations
+=========================
+
+NetworkX is usually 
+
+G = nx
+
+G.edges(): returns a list of edges
+G.edges(data=True): returns a list of edges
+
+G.nodes(): 
+G.nodes(data=True): 
 
 Causal Bayesian NetworkX: Graphs
 --------------------------------
@@ -269,13 +285,22 @@ Operations on sets of graphs
 Preëmptive Filters
 ^^^^^^^^^^^^^^^^^^
 
-In order to reduce the set of edges that we need to iterate over, it helps to determine which individual edges are known to always be present and which ones are known to never be present.
+In order to reduce the set of edges that we need to iterate over, it helps to determine which individual edges are known to always be present and which ones are known to never be present. In this way we can reduce the size of the max-graph's edgeset. 
 
-This allows for us to the include more variables/nodes without seeing the accompanying growth in the set of the  for example nodes representing interventions,  as nodes without  on the preëxisting variables that 
+This allows for us to the include more variables/nodes without seeing the expected growth in the set of the edges that accompanies additional nodes without preëmptive filters. 
+
+One of the most powerful uses I have found for this is the ability to modify a graph set to include interventional nodes without seeing a corresponding explosion in the number of graphs. On the assumption that interventions apply only to a single node () example nodes representing interventions, as nodes without on the preëxisting variables that 
 
 Conditions
 ^^^^^^^^^^
 
+
+Gates: Context-sensitive causal Bayesian graphs
+--------------------------------------------------------------
+
+
+Causal Theories
+---------------
 
 
 
