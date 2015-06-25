@@ -285,12 +285,15 @@ notebooks is that they are user- editable applications. If there is a
 particular calibration step that is not needed, the cells that create those
 widgets can simply be deleted.
 
-.. figure:: reducer-light-with-settings.png
+.. figure:: reducer-light-with-settings-borders.png
     :align: center
 
     Widget that applies calibrations to a set of images. Display of some of the
     individual steps (e.g. subtracting bias) can be suppressed with optional
-    arguments when the widget object is created. :label:`light-settings`
+    arguments when the widget object is created. Red borders are drawn around each
+    instance of the base widget class described in the section "``reducer`` widget
+    structure".
+    :label:`light-settings`
 
 .. [#] In IPython 2.x it is impossible to easily save the widget state, and the
        widget is not part of the DOM, so it is not stored when the notebook is
@@ -303,7 +306,7 @@ Image browser
 Reducer also contains a basic image browser, which organizes the images based
 on a table of metadata, and displays, when an image is selected, the image and
 all of the metadata in that image in separate tabs in the widget. An example
-is shown in Fig.
+is shown in Fig. :ref:`image-display-example`.
 
 .. figure:: image-display-example.png
 
@@ -313,15 +316,18 @@ is shown in Fig.
     can be displayed.
     :label:`image-display-example`
 
-The ``reducer`` widget structure
---------------------------------
+``reducer`` widget structure
+----------------------------
+
 
 At the base of the reducer widget structure is an extension of a container
 widget from IPython. This class, ``ToggleContainerWidget``, adds a toggle to
 control display the contents of the container, and a list of child widgets
 displayed in the container. [#]_  Since a ``ToggleContainerWidget`` can have
 another ``ToggleContainerWidget`` as a child, this immediately provides an
-interface for presenting a user with a nested list of options.
+interface for presenting a user with a nested list of options. Fig. `light-
+settings` has a thin red border drawn around each element that is a subclass
+of``ToggleContainerWidget``
 
 In IPython 2 it is not possible to preserve the state of widgets between
 sessions, and in IPython 3 it remains difficult, so the
@@ -346,12 +352,12 @@ toggle as a button instead of a checkbox, and adds a "Start" button that is
 displayed only when the settings of the widget and all of its children is
 "sane" as defined by the ``is_sane`` method. What the "Start" button is pushed
 it invokes the ``action`` method of the ``ToggleGoWidget`` and displays a
-progress bar while working.
+progress bar while working. In Fig. :ref:`light-settings`, the outermost
+container is a ``ToggleGoWidget``.
 
-**TODO:** Add screenshots of sample widgets,
 
 .. [#] Classes in the current version of ``reducer`` use IPython 2-style class
-       names ending in "WidgetW. Part of upgrading the package to IPython 3
+       names ending in "Widget". Part of upgrading the package to IPython 3
        widgets will be removing that ending.
 
 
@@ -366,10 +372,10 @@ tool used in the course took considerably longer for the students to set up
 and left no record the steps and settings the students followed in calibrating
 the data.
 
-Conclusion and future directions
---------------------------------
+Conclusion
+----------
 
-**TODO**
+IPython widgets provide a convenient glue for connecting novice users with expert-developed software. The notebook interface preserves a bare-bones record of the actions taken by the user, sufficient for another user to reproduce the calibration steps taken.
 
 Appendix: Bootstrapping a computing environment for students
 ------------------------------------------------------------
