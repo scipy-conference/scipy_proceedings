@@ -367,12 +367,17 @@ This gives the Barabasi-Alpert model explanatory power.
 
 In particular, the Barabasi-Alpert model attributes the scale-free distribution of
 node degree to a *preferential attachment* mechanism. 
-The network is formed by adding new nodes to the network one by one.
-Each newly added node is attached to the existing nodes with probability
+The network is formed by beginning with a small number :math:`m_0` of nodes and adding
+new nodes, connecting each new node to :math:`m < m_0` nodes, where the probability
+of connecting to node :math:`i` is relative to the prior degree of that node,
+:math:`k_i`:  adding new nodes to the network one by one. 
 
 .. math::
 
-   formula
+   \Pi(k_i) = \frac{k_i}{\sum_{j} k_j}
+
+
+[AlbertBarabasi]_
 
 The Barabasi-Alpert model is favored for its simplicity, its intuitively clear mechanism 
 of preferential attachment, and for its analytic tractability.
@@ -520,6 +525,10 @@ References
 .. [Alstott2014] Alstott J, Bullmore E, Plenz D (2014) powerlaw: A Python Package 
                  for Analysis of Heavy-Tailed Distributions. PLoS ONE 9(1): e85777. 
                  doi:10.1371/journal.pone.0085777
+
+.. [AlbertBarabasi] Reka Albert and Albert-László Barabási. 2002
+                    Statistical mechanics of complex networks.
+                    Reviews of Modern Physics, vol 74
 
 .. [BarabasiAlbert] Albert-László Barabási & Reka Albert. Emergence of Scaling 
                     in Random Networks, Science, Vol 286, Issue 5439, 15 October 
