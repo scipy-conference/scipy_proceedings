@@ -236,39 +236,39 @@ shows some of the variability that might appear for a single prolific sender.
            of email address. Others are artifacts of the users' email clients and
            the mailing list software. :label:`mtable`
 
-   +---------------------------------------------------------------------------+
-   | Variations                                                                |
-   +===========================================================================+
-   | tyrion.lannister at gmail.com (Tyrion Lannister)                          |
-   +---------------------------------------------------------------------------+
-   | Tyrion.Lannister at gmail.com (Tyrion Lannister)                          |
-   +---------------------------------------------------------------------------+
-   | Tyrion.Lannister at gmail.com (Tyrion.Lannister@gmail.com)                |
-   +---------------------------------------------------------------------------+
-   | Tyrion.Lannister at gmail.com (Tyrion.Lannister at gmail.com)             |
-   +---------------------------------------------------------------------------+
-   | Tyrion.Lannister@gmail.com (Tyrion Lannister)                             |
-   +---------------------------------------------------------------------------+
-   | Tyrion.Lannister@gmail.... (Tyrion Lannister)                             |
-   +---------------------------------------------------------------------------+
-   | Tyrion.Lannister@gmail.com                                                |
-   +---------------------------------------------------------------------------+
-   | Tyrion.Lannister at gmail.com (Tyrion)                                    |
-   +---------------------------------------------------------------------------+
-   | tyrion at lanister.net (Tyrion Lannister)                                 |
-   +---------------------------------------------------------------------------+
-   | halfman@council.kings-landing.gov (Tyrion Lannister)                      |
-   +---------------------------------------------------------------------------+
-   | halfman@council.kings-landing.gov (Tyrion Lannister, Hand of the King)    |
-   +---------------------------------------------------------------------------+
-   | halfman@council.kings-landing.gov (halfman@council.kings-landing.gov)     |
-   +---------------------------------------------------------------------------+
-   | tyrion+hand at lanister.net (Tyrion Lannister)                            |
-   +---------------------------------------------------------------------------+
-   | tyrion.lannister at gmail.com (=?UTF-8?B?RGF2aWQgQWJpw6Fu?=)              |
-   +---------------------------------------------------------------------------+
-   | "Tyrion Lannister" <Tyrion.Lannister@gmail.com>                           |
-   +---------------------------------------------------------------------------+
+   +----------------------------------------------------------------------------+
+   | Variations                                                                 |
+   +============================================================================+
+   | ``tyrion.lannister at gmail.com (Tyrion Lannister)``                       |
+   +----------------------------------------------------------------------------+
+   | ``Tyrion.Lannister at gmail.com (Tyrion Lannister)``                       |
+   +----------------------------------------------------------------------------+
+   | ``Tyrion.Lannister at gmail.com (Tyrion.Lannister@gmail.com)``             |
+   +----------------------------------------------------------------------------+
+   | ``Tyrion.Lannister at gmail.com (Tyrion.Lannister at gmail.com)``          |
+   +----------------------------------------------------------------------------+
+   | ``Tyrion.Lannister@gmail.com (Tyrion Lannister)``                          |
+   +----------------------------------------------------------------------------+
+   | ``Tyrion.Lannister@gmail.... (Tyrion Lannister)``                          |
+   +----------------------------------------------------------------------------+
+   | ``Tyrion.Lannister@gmail.com``                                             |
+   +----------------------------------------------------------------------------+
+   | ``Tyrion.Lannister at gmail.com (Tyrion)``                                 |
+   +----------------------------------------------------------------------------+
+   | ``tyrion at lanister.net (Tyrion Lannister)``                              |
+   +----------------------------------------------------------------------------+
+   | ``halfman@council.kings-landing.gov (Tyrion Lannister)``                   |
+   +----------------------------------------------------------------------------+
+   | ``halfman@council.kings-landing.gov (Tyrion Lannister, Hand of the King)`` |
+   +----------------------------------------------------------------------------+
+   | ``halfman@council.kings-landing.gov (halfman@council.kings-landing.gov)``  |
+   +----------------------------------------------------------------------------+
+   | ``tyrion+hand at lanister.net (Tyrion Lannister)``                         |
+   +----------------------------------------------------------------------------+
+   | ``tyrion.lannister at gmail.com (=?UTF-8?B?RGF2aWQgQWJpw6Fu?=)``           |
+   +----------------------------------------------------------------------------+
+   | ``"Tyrion Lannister" <Tyrion.Lannister@gmail.com>``                        |
+   +----------------------------------------------------------------------------+
 
 Variation in entity representation is a source of noise in our research and an
 ongoing area of development for BigBang.
