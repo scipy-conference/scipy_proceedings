@@ -551,10 +551,8 @@ console with the environment set up so that the ``vtk``and a
 
 is automatically executed to import the ``paraview.simple``
 module. This module provides a simplified layer of Python functions to
-execute common commands in ParaView such as file reading, filter
-creation, and chaining filters together to produce data
-transformations and visualizations. This layer is described in more
-detail later.
+create pipelines and modify filter and visualization properties. This
+layer is described in more detail later.
 
 Running commands in ParaView's Python console is identical to running
 commands in other Python consoles. The key difference is that commands
@@ -562,15 +560,12 @@ can be used to change the state of the ParaView application. This
 gives a similar experience to using a Python console to change
 matplotlib plots.
 
-Another way to interact with the Python console is by loading a Python
-script with ParaView commands to be executed. This feature is ideal
-for Python script development for ParaView. A button within the Python
-console brings up a file dialog used to select the Python script to
-run.
+The Python console also provides a button to load and execute a Python
+script with ParaView commands from a file. This feature is ideal for
+Python script development for ParaView.
 
-
-Simple Layer
-~~~~~~~~~~~~
+Simple Python Interface
+~~~~~~~~~~~~~~~~~~~~~~~
 
 ParaView can be run in several difference client/server
 configurations. In a number of configurations, the client software
@@ -944,5 +939,5 @@ References
 .. [Sni99] M. Snir, S. Otto, S. Huss-Lederman, D. Walker, and J. Dongarra, *MPI - The Complete Reference: Volume 1, The MPI Core*,
            2nd ed., MIT Press, 1999, ISBN 0-262-69215-5.
 
-.. [VTK15] *VTK- The Visualization Toolkit*,
+.. [VTK15] *VTK - The Visualization Toolkit*,
            http://www.vtk.org/
