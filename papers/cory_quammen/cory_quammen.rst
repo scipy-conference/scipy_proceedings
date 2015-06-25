@@ -56,13 +56,24 @@ offline visualization generation.
 
 This paper is organized into two main sections. In the first section,
 I describe the relationship between VTK and Python and describe some
-interfaces between the two. In the second section, I detail the
+interfaces between the two. The focus of this paper is VTK 6.2 and
+later and ParaView 4.3 and later. In the second section, I detail the
 relationship between ParaView and Python. Examples of Python usage in
 both packages are provided throughout. I also provide a roadmap for
 additional Python support in VTK and ParaView.
 
 Python and VTK
 --------------
+
+Obtaining VTK
+~~~~~~~~~~~~~
+
+VTK and its Python bindings are available on a number of Linux
+distributions including Ubuntu, Debian, OpenSUSE. It is also available
+in Anaconda and Enthought Canopy. Binary installers and source code
+for the most recent versions are available on the VTK web site [VTK15]
+for Windows, Mac, and Linux.
+
 
 VTK Data Model
 ~~~~~~~~~~~~~~
@@ -151,26 +162,29 @@ libraries enabled, a library containing C++ classes is generated at
 build time for each module.  Each Python-wrapped source file is
 likewise compiled into a shared library corresponding to the C++
 module. All VTK C++ modules are provided in a single ``vtk`` Python
-module.
+package.
 
 VTK Usage in Python
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-VTK is provided as a single ``vtk`` package in both the binaries
-available on the VTK download page [VTK15] and in the VTK build. For
-convenience, an executable named ``vtkpython`` is provided with
-VTK. This is the standard Python executable with environment variables
-set to make it simple to import modules from the ``vtk`` package. It
-is also possible to use the same ``python`` executable from the Python
-installation against which VTK was built by prepending the location of
-VTK's shared libraries and the location of VTK's ``__init__.py`` file
-to the PYTHONPATH environment variable.
+VTK is provided as a single ``vtk`` package in both binary
+distributions and in the VTK build. For convenience, an executable
+named ``vtkpython`` is provided with VTK. This is the standard Python
+executable with environment variables set to make it simple to import
+modules from the ``vtk`` package. It is also possible to use the same
+``python`` executable from the Python installation against which VTK
+was built by prepending the location of VTK's shared libraries and the
+location of the parent directory of the file ``vtk/__init__.py`` to
+the ``PYTHONPATH`` environment variable.
 
 To access VTK classes, you simply import ``vtk``:
 
 .. code-block:: python
 
    import vtk
+
+VTK is somewhat unusual for a Python package in that all modules are
+loaded by this import statement.
 
 Creation of VTK objects is straightforward:
 
@@ -306,7 +320,9 @@ array should be deep copied to the VTK array. This is necessary if no
 reference to the NumPy array will otherwise be kept. If a reference to
 the numpy array will be kept, then the second argument can be omitted
 and the NumPy array will be shallow copied instead, saving memory and
-time because the array data does not need to be copied.
+time because the array data does not need to be copied. Note that the
+Python interpretter might crash if a NumPy array reference is not held
+and the data is shallow copied.
 
 More recently, a higher-level NumPy-like interface layer has been
 added to VTK. This ``numpy_interface`` was designed to combine the
@@ -422,6 +438,8 @@ enabled and matplotlib is available, VTK uses the
 either ``vtkImageData`` objects that can be displayed as images or to
 paths that may be rendered to a ``vtkContextView`` object, VTK's
 version of a canvas.
+
+[[Example]]
 
 Qt applications with Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -882,6 +900,9 @@ creates a histogram of an array named "Density" is provided here:
 
        return python_view.figure_to_image(figure)
 
+For more information on the Python View, see Section 4.11 in [Aya15]
+or [Qua13].
+
 Unified Server Bindings
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -974,6 +995,9 @@ References
 
 .. [PyS15] *PySide 1.2.2*,
            https://pypi.python.org/pypi/PySide
+
+.. [Qua13] C. Quammen. *ParaView: Python View is now more versatile*,
+           http://www.kitware.com/blog/home/post/704
 
 .. [Sch04] W. Schroeder, K. Martin, and B. Lorensen, *The Visualization Toolkit: An Object-Oriented Approach to 3D Graphics*,
            4th ed. Kitware, Inc., 2004, ISBN 1-930934-19-X.
