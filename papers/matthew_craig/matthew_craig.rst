@@ -183,15 +183,48 @@ The ``reducer`` package and notebook
 ``reducer``. When invoked, it creates an IPython notebook,
 called ``reduction.ipynb``, in the directory in which it is invoked.
 
+The intent is that the raw, uncalibrated images are stored in a different
+directory and that the calibrated images are in the same directory as the
+notebook, leaving a *human-readable* record with the images describing the
+choices made in calibration. The notebook does not provide an easy way to re-
+do the calibration in a particular directory. In discussions with students
+while developing ``reducer`` it became clear that it would be impossible to
+ensure that the record in the notebook matched the files in the directory
+unless it was difficult to re-run the notebook.
+
+That design decision simplified the package, allowed the notebook to refuse to
+overwrite files in the directory in which it is stored, and led to a focus on
+making sure a human could read the record of what was done. The package itself
+makes it easy to re-run the calibration with different settings should a later
+researcher choose to do so.
+
 Image calibration
 +++++++++++++++++
 
-Most of the widgets in ``reduction.ipynb`` are geared towards image calibration. There are two broad types, one for applying calibrations to a set of images, the other for combining calibration images.
+All of the calibration steps in reducer are performed by ``ccdproc``, an
+Astropy-affiliated package for astronomical image reduction [ccdproc]_. Some
+of the  ``reducer`` widgets contain some logic for automatically grouping and
+selecting images based on metadata in the image headers, described in more
+detail below.
 
-All of the image operations in reducer are performed by ``ccdproc``, an
-Astropy-affiliated package for astronomical image reduction [ccdproc]_.
+This section begins with examples of the individual widgets that appear and
+the notebook, followed by an outline of the structure of the notebook as a
+whole.
 
-The ``CombinerWidget`` is shown in :ref:`reducer-combiner-before-correct-setting`.
+Most of the widgets in ``reduction.ipynb`` are geared towards image
+calibration. There are two broad types, one for applying calibrations to a set
+of images, the other for combining calibration images.
+
+Each widget has four states:
+
++ Unselected; the widget is a simple button.
++ Activated, but with incorrect or incomplete settings, shown in Fig.
+  :ref:`reducer-combiner-before-correct-setting` for a ``CombinerWidget``.
++ Activated and ready for action, with settings that enable the action to be
+  completed, shown in Fig. :ref:`reducer-combiner-after-correct-setting`.
++ Locked, after execution of calibration step in the widget, shown in
+  Fig. :ref:`reducer-combiner-after-running`.
+
 
 .. figure:: reducer-combiner-before-correct-setting.png
     :figclass: htb
@@ -211,10 +244,46 @@ The ``CombinerWidget`` is shown in :ref:`reducer-combiner-before-correct-setting
     additional options under "Combine images" are presented when the checkbox
     is selected. :label:`reducer-combiner-after-correct-setting`
 
+.. figure:: reducer-combiner-after-running.png
+    :figclass: htb
+
+    Same widget as Fig. :ref:`reducer-combiner-after-correct-setting`, after
+    executing the calibration step. Note that a record of the settings is
+    printed into the notebook cell below the widget to ensure a record remains
+    in the notebook after reopening it.
+    :label:`reducer-combiner-after-running`
+
+A few features of the ``CombinerWidget`` illustrate the logic used in
+``reducer`` to semi-automatically select the images on which it should act. An
+``apply_to`` argument to the initializer controls which calibrated images the
+widget will act on; in this case its value is ``{'imagetyp': 'flat'}``, which
+selects the calibration images used to correct non-uniform illumination. A
+``group_by`` argument to the widget initializer controls controls how the
+images selected by ``apply_to`` are combined. In the example shown, all images
+with the same filter and exposure time will be combined by averaging, after
+each image has been scaled to the same median value.
+
+Each image, including the images used in the calibration itself, is processed
+by a ``ReductionWdiget``, like that shown in Fig. :ref:`light-settings`. That
+examples is for a "light" image, an image that contains the objects of
+interest. Each of the calibration images has some of these steps applied also,
+though some of the calibration steps are not displayed for some of the
+calibration images.
+
+As with the ``CombinerWidget``, an ``apply_to`` argument to the widget
+constructor determines which images are processed by the widget.
+
+The calibration part of the notebook is composed of four pairs of widgets, one
+pair for calibrating and combining bias images, and additional pairs for
+darks, flats, and science images.  One of the strengths of widget-based
+notebooks is that they are user- editable applications. If there is a
+particular calibration step that is not needed, the cells that create those
+widgets can simply be deleted.
+
 .. figure:: reducer-light-with-settings.png
     :align: center
 
-    Widget that applies calibration to a set of images. Display of some of the
+    Widget that applies calibrations to a set of images. Display of some of the
     individual steps (e.g. subtracting bias) can be suppressed with optional
     arguments when the widget object is created. :label:`light-settings`
 
