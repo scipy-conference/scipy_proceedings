@@ -83,6 +83,12 @@ image. The second stage is to correct for imperfections in the optical system
 that affect how much light gets to each pixel in the camera. An example of
 this sort of imperfection is dust on the camera itself.
 
+A series of images is taken and then combined to perform each type of
+calibration. *Bias* images corrects for the DC offset, *dark* images correct
+for thermal noise and *flats* correct for non-uniform illumination. One
+combines several frames of each type to reduce the electronic read noise
+present in the calibration images.
+
 After calibration, the brightness of a pixel in the image is directly
 proportional to the amount of light that arrived at that pixel through the
 telescope. Note that light includes both starlight and light from the
@@ -148,6 +154,79 @@ person.
        http://iraf.noao.edu
 .. [#] http://www.astro.louisville.edu/software/astroimagej/
 
+The solution, broadly
+---------------------
+
+Two relatively recent developments suggest the broad outlines of a solution that is sustainable in the long run:
+
++ Initiation of the Astropy project in 2011, which unified what had previously
+  been several independent effort to develop python software for astronomy. In
+  addition to developing the core Astropy package, the Astropy organization
+  gives "affiliate" status to packages that request it meet its documentation,
+  testing and coding standards [#]_
++ Addition of widgets to IPython notebooks in IPython, version 2. From the
+  developer perspective, widgets are helpful because the Python API for widgets
+  is rich enough to allow construction of complicated interfaces. There is no need
+  to learn JavaScript to use the widgets effectively.
+
+It is the combination of high-quality python packages for both the back-end
+and front-end that made development of ``reducer`` relatively straightforward.
+
+.. [#] See http://www.astropy.org/affiliated for a list of affiliated packages
+       and criteria.
+
+The ``reducer`` package and notebook
+------------------------------------
+
+``reducer`` is a pure Python package available on PyPI and as a conda  package
+[#]_. The user-facing part of the package is a single script, also called
+``reducer``. When invoked, it creates an IPython notebook,
+called ``reduction.ipynb``, in the directory in which it is invoked.
+
+Image calibration
++++++++++++++++++
+
+Most of the widgets in ``reduction.ipynb`` are geared towards image calibration. There are two broad types, one for applying calibrations to a set of images, the other for combining calibration images.
+
+All of the image operations in reducer are performed by ``ccdproc``, an
+Astropy-affiliated package for astronomical image reduction [ccdproc]_.
+
+The ``CombinerWidget`` is shown in :ref:`reducer-combiner-before-correct-setting`.
+
+.. figure:: reducer-combiner-before-correct-setting.png
+    :figclass: htb
+
+    Example widget for combining images before settings have been set in a
+    self-consistent way. Compare to
+    Fig. :ref:`reducer-combiner-after-correct-setting`
+    :label:`reducer-combiner-before-correct-setting`
+
+.. figure:: reducer-combiner-after-correct-setting.png
+    :figclass: htb
+
+    Same widget as Fig. :ref:`reducer-combiner-before-correct-setting` after
+    consistent settings have been chosen. Note that the style of the top
+    button changes and a "Go" button appears when settings are sensible; in
+    this case the user needs to at least select a combination method. The
+    additional options under "Combine images" are presented when the checkbox
+    is selected. :label:`reducer-combiner-after-correct-setting`
+
+.. figure:: reducer-light-with-settings.png
+    :align: center
+
+    Widget that applies calibration to a set of images. Display of some of the
+    individual steps (e.g. subtracting bias) can be suppressed with optional
+    arguments when the widget object is created. :label:`light-settings`
+
+.. [#] Use channel ``mwcraig`` to get the conda package.
+
+Image browser
+-------------
+
+Reducer also contains a basic image browser, which organizes the images based
+on a table of metadata, and displays, when an image is selected, both the
+image and all of the metadata in that image.
+
 The ``reducer`` widget structure
 --------------------------------
 
@@ -189,28 +268,6 @@ progress bar while working.
        names ending in "WidgetW. Part of upgrading the package to IPython 3
        widgets will be removing that ending.
 
-The ``reducer`` package and notebook
-------------------------------------
-
-``reducer`` is a pure Python package available on PyPI and as a conda  package
-[#]_. The user-facing part of the package is a single script, also called
-``reducer``. When invoked, it creates an IPython notebook,
-called ``reduction.ipynb``, in the directory in which it is invoked.
-
-Screen shots of the reduction notebook, showing a sample of the widgets, is
-below (**TODO:** screenshot).
-
-All of the image operations in reducer are performed by ``ccdproc``, an
-Astropy-affiliated package for astronomical image reduction [ccdproc]_.
-
-.. [#] Use channel ``mwcraig`` to get the conda package.
-
-Image browser
--------------
-
-Reducer also contains a basic image browser, which organizes the images based
-on a table of metadata, and displays, when an image is selected, both the
-image and all of the metadata in that image.
 
 Use with students
 -----------------
