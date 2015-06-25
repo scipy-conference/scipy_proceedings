@@ -198,6 +198,8 @@ making sure a human could read the record of what was done. The package itself
 makes it easy to re-run the calibration with different settings should a later
 researcher choose to do so.
 
+.. [#] Use channel ``mwcraig`` to get the conda package.
+
 Image calibration
 +++++++++++++++++
 
@@ -223,7 +225,10 @@ Each widget has four states:
 + Activated and ready for action, with settings that enable the action to be
   completed, shown in Fig. :ref:`reducer-combiner-after-correct-setting`.
 + Locked, after execution of calibration step in the widget, shown in
-  Fig. :ref:`reducer-combiner-after-running`.
+  Fig. :ref:`reducer-combiner-after-running`. *Note that the IPython notebook
+  does not store the widget state in the notebook.* [#]_ When a ``reducer``
+  notebook is re-opened the only record guaranteed to be preserved is the
+  printed text below the widget.
 
 
 .. figure:: reducer-combiner-before-correct-setting.png
@@ -287,14 +292,26 @@ widgets can simply be deleted.
     individual steps (e.g. subtracting bias) can be suppressed with optional
     arguments when the widget object is created. :label:`light-settings`
 
-.. [#] Use channel ``mwcraig`` to get the conda package.
+.. [#] In IPython 2.x it is impossible to easily save the widget state, and the
+       widget is not part of the DOM, so it is not stored when the notebook is
+       saved. In 3.x the widget is preserved, but saving the state takes
+       additional developer work.
 
 Image browser
 -------------
 
 Reducer also contains a basic image browser, which organizes the images based
-on a table of metadata, and displays, when an image is selected, both the
-image and all of the metadata in that image.
+on a table of metadata, and displays, when an image is selected, the image and
+all of the metadata in that image in separate tabs in the widget. An example
+is shown in Fig.
+
+.. figure:: image-display-example.png
+
+    The image display widget arranges images nested by image metadata values. In
+    this case the two keywords used for grouping the images were ``imagetyp`` and
+    ``exposure``. When an file name is selected, either the image or its metadata
+    can be displayed.
+    :label:`image-display-example`
 
 The ``reducer`` widget structure
 --------------------------------
