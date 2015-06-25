@@ -177,6 +177,60 @@ We construct the directed *interaction graph* :math:`G` for a set of emails as f
 BigBang implements this interaction graph creation using Python's native
 email processing libraries, `pandas`, and `networkx`.
 
+.. code-block:: python
+
+   import networkx as nx
+
+   def messages_to_interaction_graph(messages):
+       """
+       *messages* is a Pandas DataFrame, each row
+       containing the body and header metadata for
+       an email from the archive.
+       Messages should be in chronological order.
+
+       Returns a NetworkX DiGraph (directed graph),
+       the nodes of which are mailing list participants.
+
+       Nodes have a 'sent' attribute indicating number
+       of emails they have sent within the archive.
+
+       Edges from i to j indicate that i has sent at least
+       one reply to j. The weight of the edge is equal
+       to the number of replies sent from i to j.
+       """
+
+       IG = nx.DiGraph()
+
+       from_dict = {}
+
+       sender_counts = {}
+       reply_counts = {}
+
+       for m in df.iterrows():
+           m_from = m[1]['From']
+
+           from_dict[m[0]] = m_from
+           sender_counts[m_from] = \\
+               sender_counts.get(m_from, 0) + 1
+           IG.add_node(m_from)
+
+           if m[1]['In-Reply-To'] is not None:
+               reply_to_mid = m[1]['In-Reply-To']
+
+               if reply_to_mid in from_dict:
+                   m_to = from_dict[reply_to_mid]
+                   reply_counts[m_from][m_to] = \\
+                       reply_counts[m_from].get(m_to, 0) + 1
+
+       for sender, count in sender_counts.items():
+           IG.node[sender]['sent'] = count
+
+       for m_from, edges in reply_counts.items():
+           for m_to, count in edges.items():
+               IG.add_edge(m_from, m_to, weight=count)
+
+       return IG
+
 The motivation for constructing interaction graphs in this way is to build a
 concise representation of the social network implied by email data.
 We posit that building a social network representation based on actual messages
