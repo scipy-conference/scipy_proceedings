@@ -446,7 +446,8 @@ Every mailing list of the 10 we analyzed exhibits degree disassortivity and a si
    +---------------+----------------+-----------+-----------------------+---------+------------+
 
 
-
+[for some of the smaller networks here, the results are a bit sketchy. it would be better
+to include the \math:`x_{min}` values and include data sets above a certain size threshold ]
 
 
 Discussion
