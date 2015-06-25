@@ -142,7 +142,7 @@ Deriving interaction graphs
 ---------------------------
 
 Email is archived in the same text format that email is sent in, as specified in
-RFCXYZ (cite).
+RFC2822 [RFC2822]_.
 Every email is comprised of a message body and a number of metadata headers
 that are essential for email processing and presentation.
 
@@ -484,6 +484,8 @@ References
 .. [Newman2003] Newman, M. E. J. 2003. "Mixing patterns in networks."
                 Phys. Rev. E 67, 026126
  
+.. [RFC2822] Resnick, P. 2001. "Internet Message Format". Network Working Group, IETF.
+
 .. [SocWik] Howard T. Welser, Dan Cosley, Gueorgi Kossinets, Austin Lin, Fedor Dokshin, 
             Geri Gay, and Marc Smith. 2011. *Finding social roles in Wikipedia.* 
             In Proceedings of the 2011 iConference (iConference '11). ACM, New York, NY, USA, 122-129.  
