@@ -776,44 +776,42 @@ Python Calculator
 ParaView's Python Calculator filter is a light-weight alternative to
 the Programmable Filter that can be used to compute additional point
 or cell arrays using NumPy or the ``numpy_interface.algorithms``
-module. This expression will compute the norm of the Normal array
-associated with points:
+module. The following expression will compute the areas of polygons
+in a surface mesh:
 
 .. code-block:: python
 
-   numpy.linalg.norm(inputs[0].PointData['Normals'], \
-                     axis=1)
+   algs.area(inputs[0])
+
+Note that the ``numpy_interface.algorithms`` is imported with the name
+``algs`` in the Python environment in which the expression is
+evaluated. In the Python Calculator, the property 'Array Association',
+which indicates whether the output array should be a point or cell
+array, must be set to 'Cell Data' because one area value is produced
+per cell.
 
 Note that like the Programmable Filter, the inputs are wrapped with
-the ``vtk.numpy_interface.dataset_adapter`` module functions. For
-additional convenience, Python variables with the names of the arrays
-are defined in the environment in which the Python expression is
-evaluated. With the feature, the example above can be written
-
-.. code-block:: python
-
-   numpy.linalg.norm(Normals, axis=1)
+the ``vtk.numpy_interface.dataset_adapter`` module functions.
 
 Python Annotation
 ~~~~~~~~~~~~~~~~~
 
-.. figure:: PythonAnnotations.png
+.. figure:: SphereAreaAnnotations.png
    :align: center
    :figclass: bht
 
-   Three annotation filters in the scene show the minimum, mean, and
-   maximum value of the ``DISP`` array at the current time
-   step. :label:`annotationfig`
+   Three annotations filters in the scene show the minimum, maximum,
+   and total areas of polygons in the sphere source. :label:`annotationfig`
 
 It is often desirable to annotate visualizations with numerical values
-either taken directly from the data set or computed from the data. The
+taken either directly from the data set or computed from the data. The
 Python Annotation filter in ParaView provides this capability in a
 convenient way. The filter takes a Python expression that is evaluated
-when the filter is executed and the result is displayed in the render
-view. Importantly, these annotations can come from data analysis
-results from NumPy or ``numpy_interface.algorithms``. Figure
-:ref:`annotationfig` shows an example using the Python Annotation
-filter.
+when the filter is executed and the value returned by the expression is
+displayed in the render view. Importantly, these annotations can come
+from data analysis results from NumPy or
+``numpy_interface.algorithms``. Figure :ref:`annotationfig` shows an
+example using the Python Annotation filter.
 
 Python View
 ~~~~~~~~~~~
@@ -825,16 +823,16 @@ These different displays, or "Views" in ParaView parlance, include a
 3D interactive rendering view, a histogram view, a parallel
 coordinates view, and a large number of others.
 
-One such view is the Python View. This view is similar to the
-programmable filter in that the user supplies a Python script that
-generates some data. In the case of the Python View, the data that is
-generated is an image to display in the ParaView window. This makes it
-possible to use Python plotting packages, such as matplotlib, to
-generate plots that can be displayed directly in ParaView.
+One of these other view types is the Python View. This view is similar
+to the programmable filter in that the user supplies a Python script
+that generates some data. In the case of the Python View, the data
+that is generated is an image to display in the ParaView window. This
+makes it possible to use Python plotting packages, such as matplotlib,
+to generate plots to be displayed directly in ParaView.
 
 Scripts used in the Python view are required to define two functions,
-a ``setup_data`` function and a ``render`` function. Because rendering
-in the Python view is done on the local client, data that resides on
+a ``setup_data`` function and a ``render`` function. Rendering in the
+Python view is done on the local client, so data that resides on
 remote server processes must first be brought over to the client.
 Because data sets may be larger than the client's RAM, only a subset
 of the data arrays in a data set are copied to the client. By default,
@@ -887,26 +885,33 @@ creates a histogram of an array named "Density" is provided here:
 Unified Server Bindings
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-To support communication among ParaView processes, ParaView generates
-a special communication class for each of a subset of VTK classes
-automatically during build time. These class are used to communicate
-proxy state between different ParaView processes, to ensure, for
-example, that each proxy for an instance of a file reader on each
-process has the same file name. As we have described, a similar
-wrapping process is also performed for Python when Python wrapping is
-enabled.
+As previously discussed, ParaView uses proxies to manage state among
+VTK class instances associated with pipeline objects on distributed
+process. For example, ParaView updates proxies for a file reader so
+that that the underlying VTK file reader on each process has the same
+file name. These proxies are updated via a client/server communication
+layer that is generated automatically during build time using a
+wrapping mechanism. The client/server layer consists of one
+communication class per VTK class that serializes and deserializes
+state in the VTK class.
 
-Each wrapping adds to the size of the executable files and shared
+As discussed, a similar wrapping process is also performed to generate
+Python bindings for VTK classes and ParaView proxy classes. Each of
+these wrappings adds to the size of the executable files and shared
 libraries. On very large scale parallel computing resources, the
-amount of RAM available per node is relatively limited. As a result,
-when running ParaView on such a resource, it is important to reduce
-the size of the executables as much as possible to leave room for the
-data that we want to visualize. One way to do this is to use the
-Python wrapping to communicate among processes instead of using the
-custom communication class. When this is enabled, the process of
-creating the special communication classes is not run. Instead,
-communication is performed by sending strings with Python commands to
-destination processes to change the state of local proxies.
+amount of RAM available per node can be relatively limited. As a
+result, when running ParaView on such a resource, it is important to
+reduce the size of the executables as much as possible to leave room
+for the data to analyze and visualize. One way to do this is to use
+the Python wrapping to communicate among processes instead of using
+the client/server class. Indeed, when this option is enabled, the
+process of creating the special communication classes is
+skipped. Instead, communication is performed by sending strings with
+Python expressions to destination processes. These expressions are
+then evaluated on each process to change the state of local
+proxies. In this approach, we get the same functionality as the
+custom client/server communication layer wrapping, but with 
+smaller executables.
 
 Conclusions
 -----------
@@ -961,7 +966,7 @@ References
 .. [Gev14] B. Geveci, *vtkPythonAlgorithm is great*,
            Kitware Blog, September 10, 2014. http://www.kitware.com/blog/home/post/737
 
-.. [Kit15] *``simple`` Module*,
+.. [Kit15] *simple Module*,
            http://www.paraview.org/ParaView/Doc/Nightly/www/py-doc/paraview.simple.html
 
 .. [PyQt15] *PyQt4 Reference Guide*,
