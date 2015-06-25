@@ -328,10 +328,23 @@ Degree assortativity
 --------------------
 
 Degree assortativity is the correlation between degrees of adjacent nodes in the network.
+Following the definitions of [Newman2003]_, the degree assorativity coefficient is
 
 .. math::
 
-   formula here
+   r = \frac{\sum_{jk}jk(e_{jk} - q_{j}q_{k}))}{\sigma_{q}^{2}}
+
+In the above formula, :math:`e_{jk}` is the fraction of edges the connect vertices
+of degree :math:`j + 1` and :math:`k + 1`, i.e. the degrees of the connected vertices
+not including the connecting edge itself. [Newman2003] calls this *excess degree*.
+The value :math:`q_k` is the distribution of excess degree.
+
+.. math::
+
+   \sum_{j} e_{jk} = q_{k}
+
+The value :math:`\sigma_{q}` is the standard deviation of :math:`q_k`. [TODO: I'm using directed
+assortativity here, yes? And what about weighted degrees?]
 
 Degree assortativity in complex networks is studied by [Newman2002]_, who makes the intriguing 
 claim that observed social networks, such as coauthorship networks, exhibit positive degree
@@ -465,8 +478,11 @@ References
 
 .. [Fogel] Fogel, K. 2013 *Producing Open Source Software.* http://producingoss.com/
 
-.. [Newman2002] Newman, 2002.
+.. [Newman2002] Newman, M. E. J. 2002. "Assortative mixing in networks."
 
+.. [Newman2003] Newman, M. E. J. 2003. "Mixing patterns in networks."
+                Phys. Rev. E 67, 026126
+ 
 .. [SocWik] Howard T. Welser, Dan Cosley, Gueorgi Kossinets, Austin Lin, Fedor Dokshin, 
             Geri Gay, and Marc Smith. 2011. *Finding social roles in Wikipedia.* 
             In Proceedings of the 2011 iConference (iConference '11). ACM, New York, NY, USA, 122-129.  
