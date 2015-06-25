@@ -9,9 +9,12 @@
 .. raw:: latex
 
     \newcommand{\DUrolesc}{\textsc}
-
+.. \providecommand*\DUrolecitep[1]{\citep{#1}}
+..    \newcommand\DUrolecitep[1]{\citeA{#1}}
 
 .. role:: sc
+
+
 
 ------------------------
 Causal Bayesian NetworkX
@@ -47,7 +50,7 @@ The Causal Bayesian NetworkX toolkit can be seen as consisting of two main parts
 
 I focus first on establishing a means of building iterators over sets of directed graphs. I then apply operations to those sets. Beginning with the complete directed graph, we enumarte over the subgraphs of that complete graph and enforce graph theoretic conditions such as acyclicity over the entire graph, guarantees on paths between nodes that are known to be able to communicate with one another, or orphan-hood for individual nodes known to have no parents. We accomplish this by using closures that take graphs as their input along with any explicitly defined arguments needed to define the exact desired conditions. 
 
-I then shift focus to a case where there is a specific known graph over a set of nodes that are imbued with a simple probabilistic semantics, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics.
+I then shift focus to a case where there is a specific known directed acyclic graph that is imbued with a simple probabilistic semantics over its nodes and edges, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics. I discuss briefly some of the challenges of encoding these semantics in dictionaries as afforded by NetworkX without resorting to :code:`eval` statements and while maintaining compatibility with JSON storage formats. 
 
 Then, I will briefly discuss **gates**:cite:`winn2012causality`, an extension to graphical modeling frameworks that allow one to define context-specific dependence relations (which includes context-specific *independence* relations). This extension is of particular interest as it allows us to subsume the classical :code:`do`-calculus :cite:`pearl2000` into the more general semantics of the probabilistic network(though not a Bayesian network since that only expresses context-free independence relations). This work was a key influence in the development of thinking about interventions not as operations on individual nodes, or even individual graphs, but as a particular constraint placed on sets of graphs by some generative process. This interpretation of intervention, however, more difficult to relate to the semantics of probabilistic networks. I expect that **gates** will aid in bridging between this 
 
@@ -237,19 +240,50 @@ But note that now we cannot sum over these in the same way that we did before. I
 Bayesian Networks
 -----------------
 
-Bayesian networks are a class of graphical models that have particular probabilistic semantics attached to their nodes and edges.
+Bayesian networks are a class of graphical models that have particular probabilistic semantics attached to their nodes and edges. This makes them probabilsitic graphical models. 
 
-While there are extensions to these models, a number of assumptions commonly hold. For example, the network is considered to be comprehensive in the sense that there is a fixed set of known nodes with finite cardinality :math:`N`. This rules out the possibility of hidden/latent variables as being part of the network. Within a trial, all events are presumed to occur and to do so simultaneously. Graph forms a :sc:`dag`\. 
+The most important property of Bayesian networks is that a variable when conditioned on the total set of its parents and children, is conditionally independent of any other variables in the graph. This is known as the "Markov blanket" of that node[#]_.
+
+.. [#] The word "Markov" refers to Andrei Markov and appears as a prefix to many other terms. It most often indicates that some kind of independence property holds. For example, a Markov chain is a sequence (chain) of variables in which each variable depends only dependent on the value of the immediate preceding (and by implication) postceding variables in the chain. 
+
+Common assumptions in Bayesian networks
+=======================================
+
+While there are extensions to these models, a number of assumptions commonly hold. 
+
+Fixed node set
+^^^^^^^^^^^^^^
+
+The network is considered to be comprehensive in the sense that there is a fixed set of known nodes with finite cardinality :math:`N`. This rules out the possibility of hidden/latent variables as being part of the network. From this perspective inducing hidden nodes requires postulating a new graph that is potentially unrelated to the previous graph. 
+
+Trial-based events, complete activation and :sc:`dag`\-hood
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Within a trial, all events are presumed to occur simultaneously. This means two things. First, there is no notion of temporal asynchrony, where one node/variable is takes on value before its children take on a value (even if in reality – i.e., outside the model – that variable is known to occur before its child). Secondly, the probabilistic semantics will be defined over the entirety of the graph meaning that one cannot sample a proper subset of the nodes of a graph unless they have no effects or are marginalized out with their effects being incorporated into their children.
+
+This property also explains why Bayesian networks need to be acyclic. Most of the time when we consider causal cycles in the world the cycle relies on a temporal delay between the causes and their effects to take place. If the cause and its effect is simultaneous, it becomes difficult (if not nonsensical) to determine which is the cause and which is the effect — they seem instead to be mutually definitional. But, as noted above, when sampling in Bayesian networks simultenaity is presumed for *all* of the nodes.
 
 
-Sampling from Conditional Probability distributions in Bayes Nets
-=================================================================
+Generating samples from Bayes Nets
+==================================
+
+This procedure for sampling a trial from Bayesian networks relies heavily on using what I call the *active sample set*. This is the set of nodes for which we have well-defined distributions at the time of sampling.
+
+There will always be at least one node in a Bayesian network that has no parents (for a given trial). We will call these nodes **orphans**. To sample a trial from the Bayesian network we begin with the orphans. 
+
+Because orphans have no parents – in order for the Bayes net to be well-defined – each orphan will have a well-defined marginal probability distribution that we can directly sample from. Thus we start with the set of orphans as the *active sample set*. 
+
+After sampling from all of the orphans, we will take the union of the sets of children of the orphans, and at least one of these nodes will have values sampled for all of its parents. We take the set of orphans whose entire parent-set has sampled values, and sample from the conditional distributions defined relative to their parents' sampled values and make this the *active sample set*.
+
+After each sample from the *active sample set* we will either have new variables whose distributions are well-defined or will have sampled all of the variables in question. 
 
 
 Causal Bayesian Networks
 ------------------------
 
+Causal Bayesian networks are Bayesian networks that are given an interventional operation that allows for "graph surgery" by cutting nodes off from their parents.[#]_ The central idea is that interventions 
 
+.. [#] This is technically a more general definition than that given in :cite:`pearl2000` as in that case there is a specific semantics given to interventions as they affect the probabilistic semantics of the variables within the network. Because here we are considering a version of intervention primarily in terms of how they affect the structure of a set of graphs rather than an interventions results on a specific parameterized graph, this greater specificity is unnecessary. 
 
 NetworkX
 --------
@@ -259,15 +293,17 @@ This is a framework for graphs that stores graphs as "a dict of dicts of dicts".
 Basic NetworkX operations
 =========================
 
-NetworkX is usually 
+NetworkX is usually imported using the :code:`nx` abbreviation
 
-G = nx
+    import networkx as nx
 
-G.edges(): returns a list of edges
-G.edges(data=True): returns a list of edges
+    G = nx.DiGraph() # 
 
-G.nodes(): 
-G.nodes(data=True): 
+    G.edges() # returns a list of edges
+    G.edges(data=True) # returns a list of edges with their data
+
+    G.nodes() #
+    G.nodes(data=True) #
 
 Causal Bayesian NetworkX: Graphs
 --------------------------------
@@ -296,7 +332,7 @@ Conditions
 
 
 Gates: Context-sensitive causal Bayesian graphs
---------------------------------------------------------------
+-----------------------------------------------
 
 
 Causal Theories
