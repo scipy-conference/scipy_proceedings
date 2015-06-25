@@ -355,7 +355,7 @@ Variations on the Barabasi-Alpert model do have other properties.
 (cite: http://arxiv.org/pdf/cond-mat/0402315.pdf)
 
 Studies have supported the role of a preferential attachment mechanism in social network
-formation (cite, cite).
+formation [Zhou2011]_ [Tinatti2012]_.
 However, these studies do not take degree assortativity into account.
 This leaves open the question of whether the Barabasi-Alpert model is sufficient to
 characterize these networks.
@@ -497,6 +497,14 @@ References
            System Sciences, 2009. HICSS '09. 42nd Hawaii International Conference on , 
            vol., no., pp.1,11, 5-8 Jan. 2009
 
+.. [Tinatti2012] Tinati, R., Carr, L., Hall, W. and Bentwood, J.  (2012)  
+                 Scale Free: Twitter’s Retweet Network Structure. 
+                 At Network Science 2012, Evanston, US.
+
 .. [Zanetti2012] Zanetti, M. and Schweitzer, F. 2012.
                  "A Network Perspective on Software Modularity"
                  ARCS Workshops 2012, pp. 175-186.
+
+.. [Zhou2011] Zhou T, Medo M, Cimini G, Zhang Z-K, Zhang Y-C (2011) 
+              Emergence of Scale-Free Leadership Structure in Social 
+              Recommender Systems. PLoS ONE 6(7): e20648.
