@@ -1,10 +1,12 @@
 :author: David Lippa
 :email: david.lippa@realmassive.com
-:institution: RealMassive, Inc
+:institution: RealMassive, Inc.
 
 :author: Jason Vertrees
 :email: jason.vertrees@realmassive.com
-:institution: RealMassive, Inc
+:institution: RealMassive, Inc.
+
+:copyright_holder: RealMassive, Inc.
 
 .. |nbsp| unicode:: 0xA0
    :trim:
