@@ -380,6 +380,9 @@ References
                 Network structure and distance in bipartite graphs. Computational & Mathematical
                 Organization Theory 10(1), 69–94.
 
+.. [simon1962] Simon, H. A. (1962). The architecture of complexity. Proceedings of the American
+               philosophical society 106(6), 467–482.
+
 .. [tarjan1972] Tarjan, R. (1972). Depth-first search and linear graph algorithms. In Switching and
                 Automata Theory, 1971., 12th Annual Symposium on, pp. 114–121. IEEE. 
  
