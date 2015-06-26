@@ -227,7 +227,8 @@ So let's start with the tree representation of the cohesive blocks structure. As
 
 .. figure:: cohesive_blocks_nucl_th.pdf
    :align: center
-   :figclass: h
+   :figclass: wp
+   :scale: 95%
 
    Cohesive blocks for two-mode and one-mode Nuclear Theory collaboration networks, and for their random counterparts. Random networks were generated using a bipartite configuration model. We built 1000 random networks and chose one randomly, see text for details. For lower connectivity levels we have removed some small k-components to improve the readability: we do not show 1-components with less than 20 nodes, 2-components with less than 15 nodes, or tricomponents with less than 10 nodes. :label:`fig1`
 
@@ -243,7 +244,8 @@ This novel graphic representation of cohesion structure is inspired by the appro
 
 .. figure:: scatter3d_connectivity.pdf
    :align: center
-   :figclass: h
+   :figclass: wp
+   :scale: 80%
 
    Average connectivity three-dimensional scatter plots. X and Y are the positions determined by the Kamada-Kawai layout algorithm. The vertical dimension is average connectivity. Each dot is a node of the network and two-mode networks contain both papers/programs and scientists/developers. :label:`fig2`
 
