@@ -71,16 +71,19 @@ circles = [([  47.66838863, -122.1718339 ], 11389.144550559206, 3),
  ([ 44.9300485, -93.385583 ], 111319.9, 1),
  ([ 32.9287661, -97.0196609], 111319.9, 1)]
 circles = [((lon, lat), rad / 111319.9, count) for (lat, lon), rad, count in circles]
-
+from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
-fig = plt.gcf()
-ax = plt.gca()
-ax.cla() # clear things for fresh plot
-x, y = zip(*pts)
-ax.plot(x, y,'o',color='black')
+
+
+m = Basemap(projection='merc',llcrnrlat=25,urcrnrlat=50,
+            llcrnrlon=-125,urcrnrlon=-67)
+m.drawcoastlines()
+m.drawcountries()
+m.drawstates()
 for center, radius, count in circles:
-    c = plt.Circle(center, radius, color='b', fill=False)
-    fig.gca().add_artist(c)
-plt.xlabel('Longitude')
-plt.ylabel('Latitude')
-plt.savefig('/tmp/figure1.png')
+    m.plot(center[0], center[1], 'bo', latlon=True, markersize=radius * 15,
+           color='b', fillstyle='none')
+for p in pts:
+    m.plot(p[0], p[1], 'bo', latlon=True, markersize=3, color='c')
+#plt.show()
+plt.savefig('/tmp/figure1.svg', frameon=True, dpi=1000, bbox_inches='tight', pad_inches=0.05)
