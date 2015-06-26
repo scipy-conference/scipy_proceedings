@@ -33,6 +33,8 @@ In this paper we extend the structural cohesion model by using the concept of av
 
 We used our implementation of the heuristics proposed in this paper to analyze three large collaboration networks: the co-maintenance network of Debian packages, and the co-authorship networks in Nuclear Theory and High-Energy Theory. We ran our analysis in both one-mode and two-mode networks, and compare the networks in terms of their connectivity structure. Consistent with the literature on two-mode networks, we show that the complex hierarchy of collaboration captured in the two-mode analysis is a better representation of the connectivity structure of empirical networks than their one-mode counterparts.
 
+The rest of the paper is organized as follows: we start by discussing the main features which a cohesive subgroup formalization should have from a sociological perspective, and then dicuss in depth the structural cohesion model. We then describe the exact algorithm to compute the connectivity hierarchy of a given network. After that, we introduce our proposed heuristics, and describe their implementation. We go on to report our findings from applying the structural cohesion analysis to three large collaboration networks, as well as proposing a novel graphical representation of the connectivity structure using a three-dimensional scatter plot. Finally we conclude with some implications for future research.
+
 Cohesion in social networks
 ---------------------------
 
@@ -57,7 +59,7 @@ Note that the bicomponent structure of a graph is an exact partition of its edge
 
 However, one shortcoming of classifying cohesive subgroups only in terms of node connectivity is that :math:`k`-components of the same :math:`k` are always considered equally cohesive despite the fact that one of them might be very close to the next connectivity level, while the other might barely qualify as a component of level :math:`k` (i.e. removing a few edges could reduce the connectivity level to :math:`k - 1`). [white2001]_ propose to complement node connectivity with the measure of conditional density. If a subgroup has node connectivity k, then its internal density can only vary within a limited range if the subgroup maintains that same level of connectivity. Thus, they propose to combine node connectivity and conditional density to have a continuous measure of cohesion.  But connectivity is a better measure than density for measuring cohesion because there is no guarantee that a denser subgroup is more robust to node removal than a sparser one, given that both have the same node connectivity k.
 
-Building on this insight, we propose using another connectivity-based metric to obtain a continuous and more granular measure of cohesion: the average node connectivity. Node connectivity is a measure based on a worst-case scenario in the sense that to actually break apart a :math:`k` connected graph by only removing :math:`k` nodes we have to carefully choose which nodes to remove. Recent work on network robustness and reliability ([albert2000]_ , [dodds2003]_) use as the main benchmark for robustness the tolerance to the random or targeted removal of nodes by degree; it is unlikely that by using either of these attack tactics we could disconnect a :math:`k` connected graph by only removing :math:`k` nodes. Thus node connectivity does not reflect the typical impact of removing nodes in the global connectivity of a graph G. [beineke2002]_ propose the measure of *average node connectivity* of G, denoted :math:`\bar{\kappa}(G)`, defined as the sum of local node connectivity between all pairs of different nodes of G divided by the number of distinct pairs of nodes. Or put more formally:
+Building on this insight, we propose using another connectivity-based metric to obtain a continuous and more granular measure of cohesion: the average node connectivity. Node connectivity is a measure based on a worst-case scenario in the sense that to actually break apart a :math:`k`-connected graph by only removing :math:`k` nodes we have to carefully choose which nodes to remove. Recent work on network robustness and reliability ([albert2000]_ , [dodds2003]_) use as the main benchmark for robustness the tolerance to the random or targeted removal of nodes by degree; it is unlikely that by using either of these attack tactics we could disconnect a :math:`k`-connected graph by only removing :math:`k` nodes. Thus node connectivity does not reflect the typical impact of removing nodes in the global connectivity of a graph G. [beineke2002]_ propose the measure of *average node connectivity* of G, denoted :math:`\bar{\kappa}(G)`, defined as the sum of local node connectivity between all pairs of different nodes of G divided by the number of distinct pairs of nodes. Or put more formally:
 
 .. math::
 
@@ -187,8 +189,8 @@ Our tests reveal that the use of [white2001b]_ approximation does indeed underes
 
 This algorithm can be easily generalized so as to be applicable to directed networks provided that the implementation of White and Newman's approximation for pairwise node independent paths supports directed paths (which is the case in our implementation of this algorithm on top of NetworkX library). The only change needed then is to use strongly connected components instead of bicomponents. And, in step 3, to start with core number 2 instead of 3.
 
-Structural cohesion in collaboration networks
----------------------------------------------
+Case study: Structural cohesion in collaboration networks
+---------------------------------------------------------
 
 The structural cohesion model can be used to explain cooperation in different kinds of collaboration networks; for instance, coauthorship networks ([moody2004]_ , [white2004]_) and collaboration among biotech firms [powell2005]_. Most collaboration networks are bipartite because the collaboration of individuals has as a result ---or, at least, as a relevant byproduct--- some kind of object or event to which its authors are related. All these papers follow the usual practice to deal with two-mode networks: focus the analysis only on one-mode projections. As such, we don't know how much information about their cohesive structure we lose by ignoring the underlying bipartite networks. Recent literature on two-mode networks strongly suggests that it is necessary to analyze two-mode networks directly to get an accurate picture of their structure. For instance, in small world networks, we do know that focusing only on projections overestimates the smallworldiness of the network [uzzi2007]_.  We also know that generalizing clustering coefficients to bipartite networks can offer key information that is lost in the projection  ([robins2004]_ , [lind2005]_, [opsahl2011]_).  Finally,  the loss of information is also critical in many other common network measures: degree distributions, density, and assortativity [latapy2008]_. We show that this is also the case for the :math:`k`-component structure of collaboration networks.
 
@@ -248,36 +250,6 @@ This novel graphic representation of cohesion structure is inspired by the appro
    :scale: 80%
 
    Average connectivity three-dimensional scatter plots. X and Y are the positions determined by the Kamada-Kawai layout algorithm. The vertical dimension is average connectivity. Each dot is a node of the network and two-mode networks contain both papers/programs and scientists/developers. :label:`fig2`
-
-.. .. figure:: scatter_3d_kk_lenny_1mode.png
-..   :align: center
-..  :figclass: w
-
-..   Debian Lenny 1 mode. :label:`fig:s3dlenny1m`
-
-.. .. figure:: scatter_3d_kk_nucl_th_2mode.png
-..   :align: center
-..   :figclass: w
-
-..   Nuclear Theory 2 mode. :label:`fig:s3dnucl2m`
-
-.. .. figure:: scatter_3d_kk_nucl_th_1mode.png
-..   :align: center
-..   :figclass: w
-
-..   Nuclear Theory 1 mode. :label:`fig:s3dnucl1m`
-
-.. .. figure:: scatter_3d_kk_hep_th_2mode.png
-..   :align: center
-..   :figclass: w
-
-..   High Energy Theory 2 mode. :label:`fig:s3dhep2m`
-
-.. .. figure:: scatter_3d_kk_hep_th_1mode.png
-..   :align: center
-..   :figclass: w
-
-..   High Energy Theory 1 mode. :label:`fig:s3dhep1m`
 
 Our synthetic representation of their cohesive structures can help researchers visualize the presence of different organizational mechanisms in different kinds of collaboration networks. The difference between the Debian and the scientific collaboration networks is striking. In figure :ref:`fig2` (a) we can see the scatter plot for a Debian bipartite network. We can observe a clear vertical separation among nodes in different connectivity levels. This is because almost all nodes in each connectivity level are in a giant :math:`k`-component and thus they have the same average connectivity. In other words, developers in Debian show different levels of engagement and contribution, with a core group of developers deeply nested at the core of the community.  This pattern is the result of formal and informal rules of collaboration that evolved over the years [ferraro2007]_ into a homogeneous hierarchical structure, where there is only one core of highly productive individuals at the center. Not surprisingly, perhaps, the Debian project has been particularly resilient to developers' turnover and splintering factions.
 
