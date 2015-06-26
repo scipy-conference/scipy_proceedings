@@ -343,9 +343,9 @@ endpoints descriptions in Tables :ref:`projendtable` and :ref:`recoendtable`.
      \cline{2-3}
       & Method & Envelope\tabularnewline
      \hline
-     $/api/v1/<api-token>/project/pull/<project-name>$  & GET & null\tabularnewline
+     $/api/v1/<api-token>/project/pull/<project-name>$  & GET & null. Note: pull metadata about the project.\tabularnewline
      \hline
-     $/api/v1/<api-token>/project/push/<project-name>$ & POST & name, description, goal and custom\tabularnewline
+     $/api/v1/<api-token>/project/push/<project-name>$ & POST & name, description, goal... custom. Note: push project metadata.\tabularnewline
      \hline
      \end{longtable*}
 
@@ -365,7 +365,11 @@ endpoints descriptions in Tables :ref:`projendtable` and :ref:`recoendtable`.
       & Method & Envelope\tabularnewline
      \hline
      \hline
-     $/api/v1/<api-token>/record/push/<project-name>$ & POST & program, inputs, outputs, dependencies, system and custom\tabularnewline
+     $/api/v1/<api-token>/record/push/<project-name>$ & POST & program, inputs, outputs... Note: push metadata about the record.\tabularnewline
+     \hline
+     $/api/v1/<api-token>/record/pull/<project-name>$ & GET & null. Note: pull the container.\tabularnewline
+     \hline
+     $/api/v1/<api-token>/record/display/<project-name>$ & GET & null. Note: metadata of the record.\tabularnewline
      \hline
      \end{longtable*}
 
