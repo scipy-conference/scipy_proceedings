@@ -249,7 +249,9 @@ The most important property of Bayesian networks is that a variable when conditi
 Common assumptions in Bayesian networks
 =======================================
 
-While there are extensions to these models, a number of assumptions commonly hold. 
+While there are extensions to these models, a number of assumptions commonly hold. [#]_
+
+.. [#] Some additional extensions that I will not discuss at greater length include, Hierarichal Bayesian Models (:sc:`HBM`\s), Dynamic Bayesian Networks []
 
 Fixed node set
 ^^^^^^^^^^^^^^
