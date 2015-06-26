@@ -30,6 +30,7 @@ class Translator(LaTeXTranslator):
 
         self.current_field = ''
 
+        self.copyright_holder = None
         self.author_names = []
         self.author_institutions = []
         self.author_institution_map = dict()
@@ -100,6 +101,8 @@ class Translator(LaTeXTranslator):
         elif self.current_field == 'institution':
             self.author_institutions.append(text)
             self.author_institution_map[self.author_names[-1]].append(text)
+        elif self.current_field == 'copyright_holder':
+            self.copyright_holder = text
         elif self.current_field == 'video':
             self.video_url = text
         elif self.current_field == 'bibliography':
@@ -185,7 +188,7 @@ class Translator(LaTeXTranslator):
             self.author_emails = ['john@doe.com']
             authors = ['']
 
-        copyright_holder = self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.')
+        copyright_holder = self.copyright_holder or (self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.'))
         author_notes = r'''%%
 
           \noindent%%
