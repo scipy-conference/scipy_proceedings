@@ -191,7 +191,23 @@ This leaves us with
 Probabilistic Independence
 ==========================
 
-To say that two variables are independent of each other means that 
+To say that two variables are independent of each other means that knowing/conditioning on the realization of one variable is irrelevant to the distribution of the other variable. This is equivalent to saying that the joint probability is equal to the multiplication of the probabilities of the two events. 
+
+If two variables are conditionally independent, that means that conditional on some set of variables, condition
+
+
+
+Example: Marginal Independence :math:`\neq` Conditional Independence
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Consider the following example:
+
+.. math::
+
+    X \sim \textrm{Bernoulli}(.5)
+    Y \sim \textrm{Bernoulli}(.5)
+    Z = X \oplus Y, \oplus \equiv :sc:`xor`
+
 
 
 Sampling from Conditional Probability distributions
@@ -242,16 +258,16 @@ Bayesian Networks
 
 Bayesian networks are a class of graphical models that have particular probabilistic semantics attached to their nodes and edges. This makes them probabilsitic graphical models. 
 
-The most important property of Bayesian networks is that a variable when conditioned on the total set of its parents and children, is conditionally independent of any other variables in the graph. This is known as the "Markov blanket" of that node[#]_.
+The most important property of Bayesian networks is that a variable when conditioned on the total set of its parents and children, is conditionally independent of any other variables in the graph. This is known as the "Markov blanket" of that node[#]_. 
 
 .. [#] The word "Markov" refers to Andrei Markov and appears as a prefix to many other terms. It most often indicates that some kind of independence property holds. For example, a Markov chain is a sequence (chain) of variables in which each variable depends only dependent on the value of the immediate preceding (and by implication) postceding variables in the chain. 
 
 Common assumptions in Bayesian networks
 =======================================
 
-While there are extensions to these models, a number of assumptions commonly hold. [#]_
+While there are extensions to these models[#]_, a number of assumptions commonly hold. 
 
-.. [#] Some additional extensions that I will not discuss at greater length include, Hierarichal Bayesian Models (:sc:`HBM`\s), Dynamic Bayesian Networks []
+.. [#] An important class of extensions to Bayesian networks that I will not have time to discuss at length includes those that consider temporal dependencies: Dynamic Bayesian Networks (:sc:`dbn`\s) :cite:`deank1989time,ghahramani1998learning`, continuous-time dependencies with Continuous Time Bayesian Networks (:sc:`ctbn`\s) :cite:`nodelman02`, Poisson Cascades :cite:`simma10`, Continuous Time Causal Theories (:sc:`ct`:math:`^2`) :cite:`pacerg12, pacerg15`, Reciprocal Hawkes Processes :cite:`blundell2012modelling` and the Network Hawkes Model :cite:`lindermana2014`.
 
 Fixed node set
 ^^^^^^^^^^^^^^
@@ -265,6 +281,36 @@ Within a trial, all events are presumed to occur simultaneously. This means two 
 
 This property also explains why Bayesian networks need to be acyclic. Most of the time when we consider causal cycles in the world the cycle relies on a temporal delay between the causes and their effects to take place. If the cause and its effect is simultaneous, it becomes difficult (if not nonsensical) to determine which is the cause and which is the effect — they seem instead to be mutually definitional. But, as noted above, when sampling in Bayesian networks simultenaity is presumed for *all* of the nodes.
 
+Independence in Bayes Nets
+==========================
+
+One of the standard ways of describing the relation between the semantics (probability values) and syntax (graphical structure) of Bayesian networks is in terms of the graph encoding particular conditional independence assumptions between the nodes of the graph. Indeed, in many cases Bayesian networks are *defined as* a convenient representation by which one can encode the conditional and marginal independence relationships between different variables. 
+
+It is the perspective of the graphs as *merely* representing the independence relationships and the focus on inference that leads to the focus on equivalence classes of Bayes nets. It is from this perspective that the graphs :math:`A \rightarrow B \rightarrow C, A \rightarrow B \leftarrow C, \textrm{and} A \leftarrow B \leftarrow C` are considered to be indistinguishable (because they represent the same conditional independence relationships).
+
+It is 
+
+
+Misplaced Emphasis on Independence in :sc:`dag`\s
+=============================================================
+
+I do not agree with the interpretation of Bayes nets as merely representing independence properties, though, not because it is incorrect (it is technically accurate). Rather, I think it has two unfortunate results. First, it encourages poor statistical practices when it comes to inferring independence from observed data using null hypothesis testing. Second, it deëmphasizes an important assymetry that appears in the semantics of how nodes in Bayes nets relate to one another when they are not exclusively discrete nodes.
+
+Null hypothesis testing and inference
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+One of the standard ways of 
+
+Directional semantics between different types of nodes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The conditional distributions of child nodes are usually defined with parameter functions that take as arguments their parents' realizations for that trial. Bayes nets often are used to exclusively represent discrete (usually, binary) nodes the distribution is usually defined as an arbitrary probability distribution associated with the label of it's parent's realization. 
+
+If we allow (for example) positive continuous valued nodes to exist in relation to discrete nodes the kind of distributions available to describe relations between these nodes changes depending upon the direction of the arrow. A continuous node taking on positive real values mapping to an arbitrarily labeled binary node taking on values :math:`\{a,b\}` will require a function that maps from :math:`\mathbb{R} \rightarrow [0,1]`, where it maps to the probability that the child node takes on (for instance) the value :math:`a` [#]_. However, if the relationship goes the other direction, one would need to have a function that maps from :math:`\{a,b\} \rightarrow \mathbb{R}`.
+
+.. [#] If the function maps directly to one of the labeled binary values this can be represented as having probabilty 1 of mapping to either :math:`a` or :math:`b`.
+
+
 
 Generating samples from Bayes Nets
 ==================================
@@ -277,15 +323,16 @@ Because orphans have no parents – in order for the Bayes net to be well-define
 
 After sampling from all of the orphans, we will take the union of the sets of children of the orphans, and at least one of these nodes will have values sampled for all of its parents. We take the set of orphans whose entire parent-set has sampled values, and sample from the conditional distributions defined relative to their parents' sampled values and make this the *active sample set*.
 
-After each sample from the *active sample set* we will either have new variables whose distributions are well-defined or will have sampled all of the variables in question. 
+After each set of samples from the *active sample set* we will either have new variables whose distributions are well-defined or will have sampled all of the variables in the graph for that trial. [#]_ If we have multiple trials, we repeat this procedure for each trial. 
 
+.. [#] One potential worry is the case of disconnected graphs (i.e., graphs that can be divided into at least 2 disjoint sets of nodes where there will be no edges between nodes of different sets). However, because disconnected subgraphs of a :sc:`dag` will also be :sc:`dag`\s, we can count on at least one orphan existing for each of those graphs, and thus we will be able to sample from all disconnected subgraph by following the same algorithm above (they will just be sampled in parallel).
 
 Causal Bayesian Networks
 ------------------------
 
-Causal Bayesian networks are Bayesian networks that are given an interventional operation that allows for "graph surgery" by cutting nodes off from their parents.[#]_ The central idea is that interventions 
+Causal Bayesian networks are Bayesian networks that are given an interventional operation that allows for "graph surgery" by cutting nodes off from their parents.[#]_ The central idea is that interventions are cases where some external causal force is able to "reach in" and set the values of individual nodes, rendering intervened on independent of their parent nodes.  
 
-.. [#] This is technically a more general definition than that given in :cite:`pearl2000` as in that case there is a specific semantics given to interventions as they affect the probabilistic semantics of the variables within the network. Because here we are considering a version of intervention primarily in terms of how they affect the structure of a set of graphs rather than an interventions results on a specific parameterized graph, this greater specificity is unnecessary. 
+.. [#] This is technically a more general definition than that given in :cite:`pearl2000` as in that case there is a specific semantic flavor given to interventions as they affect the probabilistic semantics of the variables within the network. Because here we are considering a version of intervention that affects the *structure* of a set of graphs rather than an intervention's results on a specific parameterized graph, this greater specificity is unnecessary.
 
 NetworkX
 --------
@@ -297,15 +344,17 @@ Basic NetworkX operations
 
 NetworkX is usually imported using the :code:`nx` abbreviation
 
-    import networkx as nx
+.. code-block:: python
+    
+    import networkx as nx # imports 
 
-    G = nx.DiGraph() # 
+    G = nx.DiGraph() # initialize a directed graph
 
     G.edges() # returns a list of edges
     G.edges(data=True) # returns a list of edges with their data
 
-    G.nodes() #
-    G.nodes(data=True) #
+    G.nodes() # returns a list of nodes
+    G.nodes(data=True) # returns a list of nodes with their data
 
 Causal Bayesian NetworkX: Graphs
 --------------------------------
@@ -313,9 +362,7 @@ Causal Bayesian NetworkX: Graphs
 Graph enumeration
 =================
 
-Start with the max graph. Build an iterator that returns graphs by removing edge sets. 
-
-One challenge that arises is the sheer number of graphs that are possible given a node-set, as discussed earlier. 
+Starting with the max graph for a set of nodes (i.e., the graph with :math:`N^2` edges), we build an iterator that returns graphs by successively removing subsets of edges. Because we start with the max graph, this procedure will visit all possible subgraphs. One challenge that arises when visiting *all* possible subgraphs is the sheer magnitude of that search space (:math:`2^{N^2}`).
 
 Operations on sets of graphs
 ============================
@@ -323,9 +370,9 @@ Operations on sets of graphs
 Preëmptive Filters
 ^^^^^^^^^^^^^^^^^^
 
-In order to reduce the set of edges that we need to iterate over, it helps to determine which individual edges are known to always be present and which ones are known to never be present. In this way we can reduce the size of the max-graph's edgeset. 
+In order to reduce the set of edges that we need to iterate over, rather than working over the max-graph for *any* of nodes, it helps to determine which individual edges are known to always be present and which ones are known to never be present. In this way we can reduce the size of the edgeset over which we will be iterating. 
 
-This allows for us to the include more variables/nodes without seeing the expected growth in the set of the edges that accompanies additional nodes without preëmptive filters. 
+Interestingly, this allows us to include more variables/nodes  without an explosion the  edges that accompanies additional nodes without preëmptive filters. 
 
 One of the most powerful uses I have found for this is the ability to modify a graph set to include interventional nodes without seeing a corresponding explosion in the number of graphs. On the assumption that interventions apply only to a single node () example nodes representing interventions, as nodes without on the preëxisting variables that 
 
@@ -588,7 +635,11 @@ Outline v. 1.1
 
    4. Conditional probability distributions
    5. Conditional independence properties
-   6. Graphical interpretation of conditional independence
+
+5. Bayesian Networks.
+    
+    1. Graphical interpretation of conditional independence
+
 
 5. Causal Graphs: Interventions
 
