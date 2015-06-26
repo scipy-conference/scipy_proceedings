@@ -131,12 +131,43 @@ updated.
 Because the Visualization Toolkit is intended to produce 3D
 interactive visualizations, output from the final algorithm in a
 pipeline is typically connected to a *mapper* object. A mapper is
-responsible for converting a data set into a set rendering
+responsible for converting a data set into a set of rendering
 instructions. An *actor* represents the mapper in a scene, and has
 some properties that can modify the appearance of a mapped data
 set. One or more actors can be added to a *renderer* which executes
 the rendering instructions to generate an image.
 
+The following example shows how to create a VTK pipeline that loads an
+STL file and displays it in a 3D render window.
+
+.. code-block:: python
+
+   import vtk
+
+   reader = vtk.vtkSTLReader()
+   reader.SetFileName('somefile.stl')
+
+   mapper = vtk.vtkPolyDataMapper()
+   mapper.SetInputConnection(reader.GetOutputPort())
+
+   actor = vtk.vtkActor()
+   actor.SetMapper(mapper)
+
+   renderer = vtk.vtkRenderer()
+   renderer.AddActor(actor)
+
+   renWin = vtk.vtkRenderWindow
+   renWin.AddRenderer(renderer)
+
+   interactor = vtk.vtkRenderWindowInteractor()
+   interactor.SetRenderWindow(renWin)
+
+   interactor.Initialize()
+   renWin.Render()
+   iren.Start()
+
+Many additional examples of VTK usage in Python are available in the
+VTK/Examples/Python wiki page [Wik15].
 
 Python Language Bindings for VTK
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -364,7 +395,7 @@ interface.
    >>> pressure = ds.PointData['pressure']
 
 Note that the ``pressure`` array here is an instance of ``VTKArray``
-rather than a ``vtkAbstractArray``. ``VTKArray`` is a wrapper around
+rather than a wrapped VTK data array. ``VTKArray`` is a wrapper around
 the VTK array object that inherits from ``numpy.ndarray``. Hence, all
 the standard ``ndarray`` operations are available on this wrapped
 array, e.g.,
@@ -617,7 +648,7 @@ application with Python generation code at various user event
 handlers. The tracing mechanism can record either the entire state of
 proxies or just modifications of state to non-default values to reduce
 the trace size. It is also possible to show the trace code as it is
-being generating, which can be a useful way to learn Python scripting
+being generated, which can be a useful way to learn Python scripting
 in ParaView.
 
 An application where tracing is useful is in the batch conversion of
@@ -625,9 +656,9 @@ data files. If ParaView can read the source file format and write the
 destination file format, it is easy to perform the conversion manually
 one time with the ParaView GUI. For a large list of files, though, a
 more automated approach is useful. Creating a trace of the actions
-needed to perform the conversion produces most of the script that
-would be needed to convert a list of files. The trace script can then
-be changed to apply to a list of files.
+needed to perform the conversion of a single file produces most of the
+script that would be needed to convert a list of files. The trace
+script can then be changed to apply to a list of files.
 
 [[EXAMPLE HERE?]]
 
@@ -677,7 +708,7 @@ running on a local workstation connects to a remote server running one
 or more processes on different nodes of a high-performance computing
 resource.
 
-Proxies for a pipeline objects typically exist on all processes in the
+Proxies for a pipeline object typically exist on all processes in the
 ParaView client and servers. They provide the interface for
 communicating state to all the VTK objects in each process. In the
 example above, a new proxy for a ``vtkSphereSource`` object is
@@ -766,7 +797,7 @@ name "Normals" is defined.
            newPt = (pt[0]+n[0], pt[1]+n[1], pt[2]+n[2])
            opd.GetPoints().SetPoint(i, newPt)
 
-The Programmable Filter also uses uses the
+The Programmable Filter also uses the
 ``vtk.numpy_interface.dataset_adapter`` module to wrap the inputs to
 the filter. All of the wrapped inputs are added to a list named
 ``inputs``, and the single output is wrapped in an object named
@@ -779,6 +810,11 @@ becomes simply
    normals = inputs[0].PointData['Normals']
 
    output.Points = ipts + normals
+
+It is important to note that Python scripts in the Programmable Filter
+may use only VTK classes and other Python modules, but not any of the
+modules in the ``paraview`` package. If those modules are imported,
+the behavior is undefined.
 
 Python Programmable Source
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -903,14 +939,55 @@ creates a histogram of an array named "Density" is provided here:
 For more information on the Python View, see Section 4.11 in [Aya15]
 or [Qua13].
 
+ParaViewWeb
+~~~~~~~~~~~
+
+ParaViewWeb is a framework that makes remove VTK and ParaView
+processing and visualization possible via a web browser. The framework
+on the server side is based on the Autobahn, Twisted, Six, and
+ZopeInterface Python libraries. On the client side, ParaViewWeb
+provides a set of JavaScript libraries that use WebGL, JQuery, and
+Autobahn.js. Images are typically generated on the server and sent to
+the client for display, but if the visualized geometry is small
+enough, geometry can be sent to the client and rendered with WebGL.
+
+A nice feature of ParaViewWeb is that the server component can be
+launched with ``pvpython``. No separate web server is needed. For
+example, on Linux, the following commange launches the ParaViewWeb
+server from the ParaView installation directory
+
+.. code-block:: bash
+
+   ./bin/pvpython                              \
+      lib/paraview-4.1/site-packages/paraview/\
+      web/pv_web_visualizer.py                 \
+            --content ./share/paraview-4.1/www \
+            --data-dir /path-to-share/         \
+            --port 8080 &
+
+Once the server is running, it can be accessed through a web browser
+at the URL http://localhost:8080/apps/Visualizer. This is an example
+application that comes with the framework that has much of the same
+functionality as the ParaView desktop application. Other applications
+also exist. For example, ParaViewWeb can be configured to display
+images within an iPython notebook. For additional information about
+using and extending the ParaViewWeb framework, see [Pvw15].
+
+.. figure:: ParaViewWeb.png
+   :align: center
+   :figclass: bht
+
+   The ParaViewWeb Visualizer application web
+   interface. :label:`paraviewwebfig`
+
 Unified Server Bindings
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 As previously discussed, ParaView uses proxies to manage state among
 VTK class instances associated with pipeline objects on distributed
 process. For example, ParaView updates proxies for a file reader so
-that that the underlying VTK file reader on each process has the same
-file name. These proxies are updated via a client/server communication
+that the underlying VTK file reader on each process has the same file
+name. These proxies are updated via a client/server communication
 layer that is generated automatically during build time using a
 wrapping mechanism. The client/server layer consists of one
 communication class per VTK class that serializes and deserializes
@@ -937,11 +1014,11 @@ smaller executables.
 Conclusions
 -----------
 
-Python has been integrated into VTK and ParaView many years. The
+Python has been integrated into VTK and ParaView for many years. The
 integration continues to mature and expand as Python is used in an
 increasing number of ways in both software packages. As Python
-continues to grow in popularity among the scientific community, so,
-too, does the need for providing easy-to-use Pythonic interfaces to
+continues to grow in popularity among the scientific community, so too
+does the need for providing easy-to-use Pythonic interfaces to
 scientific visualization tools. As demonstrated in this paper, VTK and
 ParaView are well-positioned to continue adapting to the future needs
 of scientific Python programmers.
@@ -990,6 +1067,9 @@ References
 .. [Kit15] *simple Module*,
            http://www.paraview.org/ParaView/Doc/Nightly/www/py-doc/paraview.simple.html
 
+.. [Pvw15] *ParaViewWeb*,
+           http://paraviewweb.kitware.com/#!/guide
+
 .. [PyQt15] *PyQt4 Reference Guide*,
             http://pyqt.sourceforge.net/Docs/PyQt4/
 
@@ -1007,3 +1087,6 @@ References
 
 .. [VTK15] *VTK - The Visualization Toolkit*,
            http://www.vtk.org/
+
+.. [Wik15] *VTK/Examples/Python*,
+           http://www.vtk.org/Wiki/VTK/Examples/Python
