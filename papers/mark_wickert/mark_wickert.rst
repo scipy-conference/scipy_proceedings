@@ -22,7 +22,7 @@ Signal Processing and Communications: Teaching and Research Using IPython Notebo
    augment ``scipy.signal`` in a very positive way and enable rapid prototyping of
    communications and signal processing algorithms. Both student and industry team
    members in subcontract work, have responded favorably to the use of Python as an
-   engineering problem solving platform. In teaching IPython notebooks are used to augment
+   engineering problem solving platform. In teaching, IPython notebooks are used to augment
    lecture material with live calculations and simulations. These same notebooks are then
    placed on the course Web Site so students can download and *tinker* on their own. This
    activity also encourages learning more about the language core and Numpy, relative to
@@ -52,7 +52,7 @@ created using Python, specifically ``matplotlib``.
 
 The next phase of the journey, focuses on the research and development
 side of signals and systems work. During a sabbatical working for a small engineering firm, academic year
-2013--2014, Python and IPython notebook (IPython kernel for Jupyter) served as the primary digital signal
+2013-2014, Python and IPython notebook (IPython kernel for Jupyter) served as the primary digital signal
 processing modeling tools on three different projects. Initially it was not clear which tool whould be best, but
 following discussions with co-workers Python seemed to be the right choice. Note for the most part the signals and
 systems analysis team was new to Python, all of us having spent many years using MATLAB/Octave. A nice motivating
@@ -215,7 +215,7 @@ Teaching
 The present lecturing style for all courses I teach
 involves the use of a tablet PC, a data projector, a microphone, and audio/video screen capture software, e.g.
 Camtasia Studio [Camtasia]_. Live Python demos are run in the notebook, and in many cases all the code is developed in
-real-time as questions come from the class. The notebook is more that just a visual experience.
+real-time as questions come from the class. The notebook is more than just a visual experience.
 A case in point is the notebook audio control which adds sound playback capability. A 1D ``ndarray`` can be saved as a
 *wave file* for playback. Simply put signals do make sounds and the
 action of systems changes what can be heard. Students enjoy hearing as well as seeing results.
@@ -281,9 +281,9 @@ Live From the Classroom
 Here live from the classroom means responding to questions using on-the-fly IPython notebook demos. This is an excellent
 way to show off the power of Python. Sometimes questions come and you feel like building a quick model right then and
 there during a lecture. When successful, this hopefully locks in a solid understanding of the concepts involved for
-the whole class. The fact that the lecture in being recorded means that students can recreate a same demo at their
+the whole class. The fact that the lecture in being recorded means that students can recreate the same demo at their
 leisure when they watch the lecture video. The notebook goes further than a commandline interface live demo. The
-notebook can be saved and posted as a supplement/companion to the lecture. As mentioned earlier, I started a new
+notebook can be saved and posted as a supplement/companion to the lecture. As mentioned earlier, I start a new
 notebook for each chapter of lecture material. The goal was to re-post the chapter IPython notebook each time a new
 leture video was posted. This way the students would have something to play with as they started to work on their
 next homework assignment.
@@ -294,6 +294,11 @@ Case Studies
 In this section several case studies are presented. Each case study details one or more of the IPython notebook
 use cases described in the previous sections of this paper. Case studies from industry R&D are not included here due
 to the propriety nature of the work.
+
+In all of the case studies you will see that graphical results are produced using the ``pylab`` interface to ``matplotlib``.
+This is done purposefully for two reasons. The first stems from the fact that currently all students have received
+exposure to MATLAB in a prior course, and secondly to help insure that returning to MATLAB from Python is easier. Why
+would anyone want to return you might ask? Job requirements may require this and presently MATLAB is still heavily used.
 
 Digital Signal Processing
 =========================
@@ -392,29 +397,42 @@ What to say here
 Convolutional Coding for Digital Communications
 ===============================================
 
-In this case study the coding theory class contained in ``fec_conv.py`` is exercised. The specific case is taken from
-the final exam. Fig. :ref:`fig2` shows the construction of the ``fec_conv`` object and a plot of one stage of the
-Viterbi algorithm (dynamic programming) trellis.
+In this case study the coding theory class contained in ``fec_conv.py`` is exercised. In digital communications digital
+information in the form of *bits* are sent from the transmitter to the receiver. The transmission channel might be a
+wired or wireless and the signal carrying the bits may be at *baseband*, as in say Ethernet, or *bandpass* on a *carrier
+frequency*, as in WiFi. To error protect bits sent over the channel forward error correction (FEC) coding, such as
+*convolutional codes*, can be employed. Encoding is applied before the source bits are modulated onto the carrier to form
+the transmitted signal.
 
 .. figure:: scipy_2015_fig2.pdf
    :scale: 55%
    :align: center
    :figclass: htb
 
-   Construction of a `fec_conv` object and the corresponding trellis structure. :label:`fig2`
+   Construction of a ``fec_conv`` object and the corresponding trellis structure for the
+   transmission of one code symbol. :label:`fig2`
 
-Fig. :ref:`fig3` shows the survivor traceback paths in the 16-state
-trellis while sending 1000 random bits through the encoding/decoding processes.
-The channel signal-to-noise ratio (SNR) (in the code cell denoted :math:`E_b/N_0`) is 7 dB, but at *decision depth* of 25
-code symbols all 16 paths merge to a common path, making it very likely that the probability of a bit error is very
-very small. At lower SNR merging take longer and errors bit errors are more likely.
+With a rate 1/2 convolutional code each source bit is encoded into two channel bits. Here the specific case is taken from
+a final exam using a rate 1/2 :math:`K=5` code. A *Viterbi decoder* (a form of dynamic programming)recovers the source
+bits by finding the most likely path through a *trellis*. Fig. :ref:`fig2` shows the construction of a ``fec_conv`` object
+and a plot of one code symbol of the trellis.
 
 .. figure:: scipy_2015_fig3.pdf
    :scale: 55%
    :align: center
-   :figclass: htb
+   :figclass: hbt
 
    Passing random bits through the encoder/decoder and plotting an instance of the survivor paths. :label:`fig3`
+
+At the digital communications receiver the received signal is demodulated into *soft decision* channel bits. The soft
+values are used to calculate *branch metrics*, which then are used to update cumulative metrics held in each of the 16
+states of the trellis. There are two passible paths arriving at each state, but the *surviving* path is the one
+producing the minimum cumulative metric. Fig. :ref:`fig3` shows the survivor traceback paths in the 16-state
+trellis while sending 1000 random bits through the encoding/decoding processes.
+The channel signal-to-noise ratio (SNR) (in the code cell denoted :math:`E_b/N_0`) is 7 dB, but at *decision depth* of 25
+code symbols all 16 paths merge to a common path, making it very likely that the probability of a bit error is very
+very small. At lower SNR it takes longer to see a traceback merge and errors bit errors are more likely.
+
 
 Pulse Train Power Spectral Density
 ==================================
@@ -493,25 +511,25 @@ have even symmetry. This means that :math:`b_1[M-n] = b_1[n]` for :math:`0\leq n
 where :math:`Y(z)` is the :math:`z`-transform of :math:`y[n]`, :math:`X(z)` is the :math:`z`-transform of
 :math:`x[n]`, and :math:`H(z)`, known as the *system function*, is the :math:`z`-transform of the system impulse response.
 In general :math:`H(z) = N(z)/D(z)` is rational function of :math:`z` or :math:`z^{-1}`. The roots of :math:`N(z)` are
-the system zeros and roots of :math:`D(z)` are the system poles. For an FIR filter all :math:`M` poles reside at :math:`z=0`,
+the system zeros and roots of :math:`D(z)` are the system poles. For a *causal* FIR filter all :math:`M` poles reside at :math:`z=0`,
 while the :math:`M` zeros lie somewhere other than zero in the :math:`z`-plane. Students are taught that a *pole-zero*
 plot gives much insight into the frequency response of a system, in particular a filter. The module ``ssd.py`` provides
 the function ``ssd.zplane(b,a)`` where ``b`` contains the coefficients of :math:`N(z)` and ``a`` contains the
 coefficients of :math:`D(z)`, here simply ``[1]``. The even symmetry condition constrains the system zeros to lie at conjugate
-reciprocol locations as seen in Fig. :ref:`fig9`.
+reciprocol locations as seen in Fig. :ref:`fig7`.
 
 
-.. figure:: scipy_2015_fig9.pdf
+.. figure:: scipy_2015_fig7.pdf
    :scale: 55%
    :align: center
    :figclass: htb
 
-   Pole-zero plot of the equal-ripple lowpass which confirms that :math:`H(z)` is linear phase. :label:`fig9`
+   Pole-zero plot of the equal-ripple lowpass which confirms that :math:`H(z)` is linear phase. :label:`fig7`
 
 With real filter coefficients the zeros must also occur in conjugate pairs or on the real axis. When the student sees
-the pole-zero plot of Fig. :ref:`fig9` whats jumps off the page is (1) all of the zeros on the unit circle for the filter
+the pole-zero plot of Fig. :ref:`fig7` whats jumps off the page is (1) all of the zeros on the unit circle for the filter
 stopband and (2) the conjugate reciprocal zeros at angles somewhat less then :math:`\pi/4`, define the filter passband.
-Note zeros not on the unit circle or real axis **must** occur as quadruplets, and that is indeed what is seen in Fig. :ref:`fig9`.
+Note zeros not on the unit circle or real axis **must** occur as quadruplets, and that is indeed what is seen in Fig. :ref:`fig7`.
 Note also there are 77 poles at :math:`z=0`, which is expected.
 
 Statistical Signal Processing
@@ -524,25 +542,25 @@ involves the theoretical calculation of the probability density function of a ra
 
    \mathbf{w} = \mathbf{xy}+\mathbf{z}
 
-The screenshot of Fig. :ref:`fig7` explains the problem details, including the theoretical results written out as the
+The screenshot of Fig. :ref:`fig8` explains the problem details, including the theoretical results written out as the
 piecewise function ``pdf_proj1_w(w)``.
-
-.. figure:: scipy_2015_fig7.pdf
-   :scale: 55%
-   :align: center
-   :figclass: htb
-
-   One function of three random variables simulation problem. :label:`fig7`
-
-A simulation is constructed and the results are compared with theory in Fig. :ref:`fig8`.
 
 .. figure:: scipy_2015_fig8.pdf
    :scale: 55%
    :align: center
    :figclass: htb
 
+   One function of three random variables simulation problem. :label:`fig8`
+
+A simulation is constructed and the results are compared with theory in Fig. :ref:`fig9`.
+
+.. figure:: scipy_2015_fig9.pdf
+   :scale: 55%
+   :align: center
+   :figclass: htb
+
    The simulation of random variable :math:`\mathbf{w}` and the a comparison plot of theory versus a scaled
-   histogram. :label:`fig8`
+   histogram. :label:`fig9`
 
 Conclusions
 -----------
