@@ -26,54 +26,44 @@ Introduction
 ------------
 
 The Visualization Toolkit (VTK) is an open-source, freely available
-software system for 3D computer graphics and visualization. It
-consists of a set of C++ class libraries and bindings for Python along
-with several other languages. VTK supports a wide variety of
-visualization algorithms for 2D and 3D scalar, vector, tensor,
-texture, and volumetric data, as well as advanced modeling techniques
-such as implicit modeling, polygon reduction, mesh smoothing, cutting,
-contouring, and Delaunay triangulation. VTK has an extensive
-information visualization framework and a suite of 3D interaction
-widgets. The toolkit supports parallel processing and integrates with
-various GUI toolkits such as Qt and Tk. Python bindings expose nearly
-all VTK classes and class methods, making it possible to write full
-VTK-based applications in Python. VTK also includes interfaces to
-popular Python packages such as NumPy and matplotlib. Support for
-writing custom VTK algorithms in Python is also available.
+software system for 3D visualization. It consists of a set of C++
+class libraries and bindings for Python and several other
+languages. VTK supports a wide variety of visualization algorithms for
+2D and 3D scalar, vector, tensor, and volumetric data, as well as
+advanced algorithms such as implicit modeling, polygon reduction, mesh
+smoothing, cutting, contouring, and Delaunay triangulation. VTK has an
+extensive information visualization framework and a suite of 3D
+interaction widgets. The toolkit supports parallel processing and
+integrates with various GUI toolkits such as Qt. Python bindings
+expose nearly all VTK classes and class methods, making it possible to
+write full VTK-based applications exclusively in Python. VTK also
+includes interfaces to popular Python packages such as NumPy and
+matplotlib. Support for writing custom VTK algorithms in Python is
+also available.
 
 ParaView is a scalable visualization tool based on VTK that runs on a
 variety of platforms ranging from PCs to some of the largest
 supercomputers in the world. The ParaView package consists of a suite
 of executables for generating data visualizations using the techniques
 available in VTK. ParaView executables interface with Python in a
-number of ways: data sources, filters, and integrated plots can be
-defined via Python code, data can be queried with Python expressions,
-and several executables can be controlled interactively with Python
-commands in an integrated Python shell. Batch processing via Python
-scripts that are either written by hand or generated as a trace of
-events during an interactive visualization session is available for
-offline visualization generation.
+number of ways: data sources, filters, and plots can be defined via
+Python code, data can be queried with Python expressions, and several
+executables can be controlled interactively with Python
+commands. Batch processing via Python scripts that are written either
+by hand or generated as a trace of events during an interactive
+visualization session is available for offline visualization
+generation.
 
 This paper is organized into two main sections. In the first section,
-I describe the relationship between VTK and Python and describe some
-interfaces between the two. The focus of this paper is VTK 6.2 and
-later and ParaView 4.3 and later. In the second section, I detail the
-relationship between ParaView and Python. Examples of Python usage in
-both packages are provided throughout. I also provide a roadmap for
-additional Python support in VTK and ParaView.
+I introduce basic VTK usage, describe the relationship between VTK and
+Python, and describe interfaces between the two. In the second
+section, I detail the relationship between ParaView and
+Python. Examples of Python usage in VTK 6.2 and ParaView 4.3 are
+provided throughout. I also provide a roadmap for additional Python
+support in VTK and ParaView.
 
 Python and VTK
 --------------
-
-Obtaining VTK
-~~~~~~~~~~~~~
-
-VTK and its Python bindings are available on a number of Linux
-distributions including Ubuntu, Debian, OpenSUSE. It is also available
-in Anaconda and Enthought Canopy. Binary installers and source code
-for the most recent versions are available on the VTK web site [VTK15]
-for Windows, Mac, and Linux.
-
 
 VTK Data Model
 ~~~~~~~~~~~~~~
@@ -81,28 +71,29 @@ VTK Data Model
 To understand Python usage in VTK, it is important to understand the
 VTK data and processing models. At the most basic level, data in VTK
 is stored in a data object. Different types of data objects are
-available including graphs, trees, or grids/meshes representing
+available including graphs, trees, grids, and meshes representing
 spatially embedded data from sensors or simulations. Types of
 spatially embedded data sets include uniform rectilinear grids,
 structured/unstructured grids, and Adaptive Mesh Refinement (AMR) data
-sets. In this paper, I focus on the spatially embedded data sets.
+sets. While VTK supports other types of data sets, this paper focuses
+on the spatially embedded data sets.
 
-Each spatially embedded data set has a set of *cells*, each of which
-defines a geometric entity that defines a volume of space, and a set
-of *points* that are used to define the vertices of the cells. Data
-values that represent a quantity, e.g. pressure, temperature,
-velocity, etc., may be associated with both cells and points. Each
-quantity might be a scalar, vector, tensor, or string value. Vectors
-and tensors typically have more than one numerical *component*, and
-the quantity as a whole is known as a *tuple*.
+Each data set consists of *cells*, each of which defines a geometric
+entity that defines a volume of space, and *points* that are used to
+define the vertices of the cells. Data values that represent a
+quantity, e.g. pressure, temperature, velocity, may be associated with
+both cells and points. Each quantity might be a scalar, vector,
+tensor, or string value. Vectors and tensors typically have more than
+one numerical *component*, and the quantity as a whole is known as a
+*tuple*.
 
 The full collection of a quantity associated with points or cells is
-known by a number of names including attribute, field, variable, and
-array. VTK stores attributes in individual data arrays. For a
-point-associated array, also known as a point array, the number of
-tuples is expected to match the number of points. Likewise, for
-cell-associated arrays (cell array) the number of tuples is expected
-to match the number of cells.
+known by a number of names including "attribute", "field", "variable",
+and "array". VTK stores each attribute in a separate data array. For a
+point-associated array (point array), the number of tuples is expected
+to match the number of points. Likewise, for cell-associated arrays
+(cell array) the number of tuples is expected to match the number of
+cells.
 
 VTK Pipeline
 ~~~~~~~~~~~~
@@ -114,60 +105,27 @@ the beginning of a pipeline, a *source* generates a VTK data set. For
 example, an STL file reader source reads an STL file and produces a
 polygonal VTK data set as an output. A *filter* can be connected to
 the file reader to process the raw data from the file. For example, a
-smoothing filter may be used to smooth the data read by the
-reader. The output of the smoothing filter can be further processed
-with a clipping filter to cut away part of the smoothed data
+smoothing filter may be used to smooth the polygonal data read by the
+STL reader. The output of the smoothing filter can be further
+processed with a clipping filter to cut away part of the smoothed data
 set. Results from this operation can then be saved to a file with a
 file writer.
 
-An algorithm in a pipeline produces one or more data sets (described
-in the previous section) that are passed to the next algorithm in the
-pipeline. Algorithms need only update when one of their properties
-changes (e.g., smoothing amount) or when the algorithm upstream of it
-has produced a new data set. These updates are handled automatically
-by an internal VTK pipeline executive whenever an algorithm is
-updated.
+An algorithm in a pipeline produces one or more VTK data sets that are
+passed to the next algorithm in the pipeline. Algorithms need only
+update when one of their properties changes (e.g., smoothing amount)
+or when the algorithm upstream of it has produced a new data
+set. These updates are handled automatically by an internal VTK
+pipeline executive whenever an algorithm is updated.
 
-Because the Visualization Toolkit is intended to produce 3D
-interactive visualizations, output from the final algorithm in a
-pipeline is typically connected to a *mapper* object. A mapper is
-responsible for converting a data set into a set of rendering
-instructions. An *actor* represents the mapper in a scene, and has
-some properties that can modify the appearance of a mapped data
-set. One or more actors can be added to a *renderer* which executes
-the rendering instructions to generate an image.
-
-The following example shows how to create a VTK pipeline that loads an
-STL file and displays it in a 3D render window.
-
-.. code-block:: python
-
-   import vtk
-
-   reader = vtk.vtkSTLReader()
-   reader.SetFileName('somefile.stl')
-
-   mapper = vtk.vtkPolyDataMapper()
-   mapper.SetInputConnection(reader.GetOutputPort())
-
-   actor = vtk.vtkActor()
-   actor.SetMapper(mapper)
-
-   renderer = vtk.vtkRenderer()
-   renderer.AddActor(actor)
-
-   renWin = vtk.vtkRenderWindow
-   renWin.AddRenderer(renderer)
-
-   interactor = vtk.vtkRenderWindowInteractor()
-   interactor.SetRenderWindow(renWin)
-
-   interactor.Initialize()
-   renWin.Render()
-   iren.Start()
-
-Many additional examples of VTK usage in Python are available in the
-VTK/Examples/Python wiki page [Wik15].
+Because VTK is intended to produce 3D interactive visualizations,
+output from the final algorithm in a pipeline is typically connected
+to a *mapper* object. A mapper is responsible for converting a data
+set into a set of rendering instructions. An *actor* represents the
+mapper in a scene, and has some properties that can modify the
+appearance of a rendered data set. One or more actors can be added to
+a *renderer* which executes the rendering instructions to generate an
+image.
 
 Python Language Bindings for VTK
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -180,7 +138,7 @@ The Python binding support in VTK has evolved so that today nearly
 every semantic feature of C++ used by VTK has a direct semantic analog
 in Python. C++ classes from VTK are wrapped into Python
 equivalents. The few classes that are not wrapped are typically
-limited to classes that are meant only for internal use in VTK.
+limited to classes that are meant for internal use in VTK.
 
 Python Wrapping Infrastructure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -190,23 +148,23 @@ shared lex/yacc-based parser tailored for VTK programming conventions
 and custom code generation utilities for Python wrapping. VTK is
 organized into a number of C++ modules. When built with shared
 libraries enabled, a library containing C++ classes is generated at
-build time for each module.  Each Python-wrapped source file is
+build time for each C++ module. Each Python-wrapped source file is
 likewise compiled into a shared library corresponding to the C++
-module. All VTK C++ modules are provided in a single ``vtk`` Python
-package.
+module. All wrapped VTK C++ modules are provided in a single ``vtk``
+Python package.
 
 VTK Usage in Python
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-VTK is provided as a single ``vtk`` package in both binary
-distributions and in the VTK build. For convenience, an executable
-named ``vtkpython`` is provided with VTK. This is the standard Python
-executable with environment variables set to make it simple to import
-modules from the ``vtk`` package. It is also possible to use the same
-``python`` executable from the Python installation against which VTK
-was built by prepending the location of VTK's shared libraries and the
-location of the parent directory of the file ``vtk/__init__.py`` to
-the ``PYTHONPATH`` environment variable.
+For convenience, an executable named ``vtkpython`` is provided in VTK
+binaries. This is the standard Python executable with environment
+variables set to make it simple to import the ``vtk`` package. It is
+also possible to use VTK in the same ``python`` executable from the
+Python installation against which VTK was built by prepending the
+location of VTK's shared libraries and the location of the parent
+directory of the file ``vtk/__init__.py`` to the ``PYTHONPATH``
+environment variable, but using ``vtkpython`` avoids the need to do
+this.
 
 To access VTK classes, you simply import ``vtk``:
 
@@ -304,6 +262,41 @@ Some less often used mappings between C++ and Python semantics, as
 well as limitations, are described in the file
 ``VTK/Wrapping/Python/README_WRAP.txt`` in the VTK source code
 repository in versions 4.2 and above.
+
+A full example below shows how to create a VTK pipeline in Python
+that loads an STL file, smooths it, and displays the smoothed result
+in a 3D render window.
+
+.. code-block:: python
+
+   import vtk
+
+   reader = vtk.vtkSTLReader()
+   reader.SetFileName('somefile.stl')
+
+   smoother = vtk.vtkLoopSubdivisionFilter()
+   smoother.SetInputConnection(reader.GetOutputPort())
+
+   mapper = vtk.vtkPolyDataMapper()
+   mapper.SetInputConnection(smoother.GetOutputPort())
+
+   actor = vtk.vtkActor()
+   actor.SetMapper(mapper)
+
+   renderer = vtk.vtkRenderer()
+   renderer.AddActor(actor)
+
+   renWin = vtk.vtkRenderWindow
+   renWin.AddRenderer(renderer)
+
+   interactor = vtk.vtkRenderWindowInteractor()
+   interactor.SetRenderWindow(renWin)
+   interactor.Initialize()
+   renWin.Render()
+   iren.Start()
+
+Many additional examples of VTK usage in Python are available in the
+VTK/Examples/Python wiki page [Wik15].
 
 Integration with NumPy
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -468,9 +461,9 @@ enabled and matplotlib is available, VTK uses the
 ``matplotlib.mathtext`` module to render LaTeX math expressions to
 either ``vtkImageData`` objects that can be displayed as images or to
 paths that may be rendered to a ``vtkContextView`` object, VTK's
-version of a canvas.
-
-[[Example]]
+version of a canvas. The ``vtkTextActor``, a class for adding text to
+visualizations, uses this mechanism to support rendering complex LaTeX
+math expressions.
 
 Qt applications with Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -550,11 +543,19 @@ on the ``VTKAlgorithm`` class, see [Gev2014].
 Python integration in VTK tests
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As a project that follows a quality-software process, VTK has many
+As a project that follows a quality software process, VTK has many
 regression tests. At present, 26% of tests (544 out of 2046) are
 written in Python. This integration of Python in VTK's testing
 infrastructure shows how important Python is in VTK's development.
 
+Obtaining VTK
+~~~~~~~~~~~~~
+
+VTK and its Python bindings are available on many Linux distributions
+including Ubuntu, Debian, OpenSUSE. It is also available in Anaconda
+and Enthought Canopy. Binary installers and source code for the most
+recent versions are available on the VTK web site [VTK15] for Windows,
+Mac, and Linux.
 
 Python and ParaView
 -------------------
@@ -629,8 +630,6 @@ state. ``pvbatch`` is a non-interactive executable that runs a Python
 script and is intended to perform offline data processing and
 visualization generation. 
 
-[[EXAMPLE HERE?]]
-
 Python Tracing and State Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -659,8 +658,6 @@ more automated approach is useful. Creating a trace of the actions
 needed to perform the conversion of a single file produces most of the
 script that would be needed to convert a list of files. The trace
 script can then be changed to apply to a list of files.
-
-[[EXAMPLE HERE?]]
 
 In addition to saving a trace of user interaction sequences, a Python
 *state file* may also be produced. Like a Python trace, the state file
