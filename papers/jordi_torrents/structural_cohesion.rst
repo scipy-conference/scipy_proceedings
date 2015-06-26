@@ -185,6 +185,30 @@ Notice that because our approach is based on computing node independent paths be
 
 The output of these heuristics is an approximation to :math:`k`-components based on extra-cohesive blocks. We find extra-cohesive blocks and not :math:`k`-components because we only build the auxiliary graph H one time on each bicoennected component of a core subgraph of level :math:`k` from the input graph G. Local node connectivity is computed in a subgraph that might be larger than the final :math:`G_{candidate}` and thus some node independent paths that shouldn't could end up being counted. 
 
+.. raw:: latex
+
+    \begin{table*}
+    \begin{center}
+    \begin{small}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    &\multicolumn{4}{|c|}{Bipartite}&\multicolumn{4}{|c|}{Unipartite}\\
+    Network&\# nodes&\# edges&Av. degree&Time(s)&\# nodes&\# edges&Av. degree&Time(s)\\
+    \hline
+    %&&&&&&&&\\
+    %Debian Etch&11,583&17,522&3.03&522.0&1,317&7,528&11.43&148.4\\
+    Debian Lenny&13,121&20,220&3.08&1,105.2&1,383&5,216&7.54&204.7\\
+    High Energy (theory)&26,590&37,566&2.81&3,105.7&9,767&19,331&3.97&7,136.0\\
+    Nuclear Theory&10,371&15,969&3.08&1,205.2&4,827&14,488&6.00&3,934.1\\
+    \hline
+    \end{tabular}
+    \end{small}
+    \caption{Collaboration networks analyzed from science and from software development. See text for details on their content. Time refers to the execution of our heuristics on each network expressed in seconds.}
+    \label{desc}
+    \end{center}
+    \end{table*}
+
+
 Accuracy can be improved by rebuilding H from the pairwise node connectivity in :math:`G_{candidate}` and following the remaining steps of the heuristics at the cost of slowing down the computation. There is a trade-off between speed and accuracy. After some tests we decided to compute H only once and lean towards the speed pole of the trade-off. Our goal is to have an usable procedure for analyzing networks of thousands of nodes and edges in which we have substantive interests. Following this goal, the use of [white2001b]_ approximation algorithm for local node connectivity in step 3.b is key. It is almost on order of magnitude faster than the exact flow-based algorithms. As usual, speed comes with a cost in accuracy: [white2001b]_ algorithm provides a strict lower bound for the local node connectivity. Thus, by using it we can miss an edge in H that should be there. Therefore, a node belonging to a :math:`k`-component could be excluded by the algorithm if we use [white2001b]_ approximation in step 3.b . This is a source of false negatives in the process of approximating the :math:`k`-component structure of a network. However, as we discussed above, the inaccuracy of this algorithm for sparse networks in reduced because in those networks the probability that a short node independent path uses nodes that could belong to two or more longer node independent paths is low.
 
 Our tests reveal that the use of [white2001b]_ approximation does indeed underestimate the order of some :math:`k`-components, particularly in not very sparse networks. One approach to mitigate this problem is to relax the strict cohesion requirement of :math:`H_{candidate}` being a clique. Following the network literature on cliques, we can relax its cohesion requirements in terms of degree, coreness and density. We did some experiments and found that a good relaxation criteria is to set a density threshold of 0.95 for :math:`H_{candidate}`; it doesn't increase false positives and does decrease the false negatives derived from the underestimation of local node connectivity of White & Newman (2003) algorithm.  Other possible criteria that has given good results in our tests is permitting a variation in degree of 2 in :math:`H_{candidate}` --that is, that the absolute difference of the maximum an the minimum degree in :math:`H_{candidate}` is at most 2. The former relaxation criteria is used for all analysis presented below and in the appendix.
@@ -196,45 +220,23 @@ Case study: Structural cohesion in collaboration networks
 
 The structural cohesion model can be used to explain cooperation in different kinds of collaboration networks; for instance, coauthorship networks ([moody2004]_ , [white2004]_) and collaboration among biotech firms [powell2005]_. Most collaboration networks are bipartite because the collaboration of individuals has as a result ---or, at least, as a relevant byproduct--- some kind of object or event to which its authors are related. All these papers follow the usual practice to deal with two-mode networks: focus the analysis only on one-mode projections. As such, we don't know how much information about their cohesive structure we lose by ignoring the underlying bipartite networks. Recent literature on two-mode networks strongly suggests that it is necessary to analyze two-mode networks directly to get an accurate picture of their structure. For instance, in small world networks, we do know that focusing only on projections overestimates the smallworldiness of the network [uzzi2007]_.  We also know that generalizing clustering coefficients to bipartite networks can offer key information that is lost in the projection  ([robins2004]_ , [lind2005]_, [opsahl2011]_).  Finally,  the loss of information is also critical in many other common network measures: degree distributions, density, and assortativity [latapy2008]_. We show that this is also the case for the :math:`k`-component structure of collaboration networks.
 
-Structural cohesion analysis based on the :math:`k`-component structure of bipartite networks has been conducted very rarely and only on very small networks [white2004]_. The limited diffusion of these studies can be readily explained by the fact that bipartite networks are usually quite a lot bigger than their one-mode counterparts, and the computational requirements, once again, stifled empirical research in this direction. Other measures have been developed to deal with cohesion in large bipartite networks, such as :math:`(p, q)`-cores or 4-ring islands [ahmed2007]_. However, the former is a bipartite version of :math:`k`-cores and thus it has the same limitations for subgroup identification; while the latter is very useful to determine subgraphs in large networks that are more strongly connected internally than with the rest of the network, but also lacks some of the key elements of the definition for groups in the sociological literature, such as being hierarchical and allowing for overlaps.
-
-.. raw:: latex
-
-    \begin{table}
-    \begin{center}
-    \begin{small}
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
-    \hline
-    &\multicolumn{4}{|c|}{Bipartite}&\multicolumn{4}{|c|}{Unipartite}\\
-    Network&\# nodes&\# edges&Av. degree&Time(s)&\# nodes&\# edges&Av. degree&Time(s)\\
-    \hline
-    %&&&&&&&&\\
-    %Debian Etch&11583&17522&3.03&522.0&1317&7528&11.43&148.4\\
-    Debian Lenny&13121&20220&3.08&1105.2&1383&5216&7.54&204.7\\
-    High Energy (theory)&26590&37566&2.81&3105.7&9767&19331&3.97&7136.0\\
-    Nuclear Theory&10371&15969&3.08&1205.2&4827&14488&6.00&3934.1\\
-    \hline
-    \end{tabular}
-    \end{small}
-    \caption{Collaboration networks analyzed from science and from software development. See text for details on their content. Time refers to the execution of our heuristics on each network expressed in seconds.}
-    \label{desc}
-    \end{center}
-    \end{table}
-
-The heuristics for structural cohesion presented here allows us to compute connectivity-based measures on large networks (up to tens of thousands of nodes and edges) quickly enough to be able to build suitable null models.  Furthermore we will be able to compare the results for bipartite networks with their one-mode projections. To illustrate those points we use data on collaboration among software developers in one organization (the Debian project) and scientists publishing papers in the arXiv.org electronic repository in two different scientific fields: High Energy Theory and Nuclear Theory. We built the Debian collaboration network by linking each software developer with the packages (i.e. programs) that she uploaded to the package repository of the Debian Operating System during a complete release cycle. We analyze the Debian Operating System version 5.0, codenamed *Lenny*, which was developed from April 8, 2007, to February 1, 2009. Scientific networks are built using all the papers uploaded to the arXiv.org preprint repository from January 1, 2006, to December 31, 2010, for two well established scientific fields: High Energy Physics Theory and Nuclear Theory. In these networks each author is linked to the papers that she has authored during the time period analyzed. One-mode projections are always on the human side: scientists linked together if they have coauthored a paper, and developers linked together if they have worked on the same program. Table \ref{desc} presents some details on those networks.
-
-In the remaining part of this section we perform two kinds of analysis to illustrate how the structural cohesion model can help us understand the structure and dynamics of collaboration networks. First, we present a tree representation of the :math:`k`-component structure ---the cohesive blocks structure ([white2001]_, [moody2003]_, [white2004]_, [mani2014]_)--- for our bipartite networks and their one-mode projections, both for actual networks and for their random counterparts. Finally, we present a novel graphic representation of the structural cohesion of a network, based on three-dimensional scatter plot, using average node connectivity as a synthetic and more informative measure of cohesion of each :math:`k`-component.
-
-For the first analysis we do need to generate null models in order to discount the possibility that the observed structure of actual networks is just the result of randomly mixing papers and scientists or packages and developers. The null models used in this paper are based on a bipartite configuration model [newman2003]_, which consists of generating networks by randomly assigning papers/programs to scientists/developers but maintaining constant the distribution of papers per scientists and scientists by paper observed in the actual networks, that is the bipartite degree distribution. For one-mode projections, we generated bipartite random networks based on their original bipartite degree distribution, and then performed the one-mode projection. This is a common technique for avoiding overestimating the local clustering of one-mode projections [uzzi2007]_. As the configuration model can generate some multiple edges and self-loops, we followed the usual practice of deleting them before the analysis in order to guarantee that random networks are simple, like actual networks.
-
-So let's start with the tree representation of the cohesive blocks structure. As proposed by [white2004]_, we can represent the :math:`k`-component structure of a network by drawing a tree whose nodes are :math:`k`-components; two nodes are linked if the :math:`k`-component of higher level is nested inside the :math:`k`-component of lower level (see pp. 1643, 1651 from [mani2014]_ for this kind of analysis on the Indian interorganizational ownership network). This representation of the connectivity structure can be built during the run time of the exact algorithm. However, because our heuristics are based on finding node independent paths, we have to compute first the :math:`k`-components hierarchy, and then construct the tree that represents the connectivity structure of the network.
-
 .. figure:: cohesive_blocks_nucl_th.pdf
    :align: center
    :figclass: wp
    :scale: 95%
 
    Cohesive blocks for two-mode and one-mode Nuclear Theory collaboration networks, and for their random counterparts. Random networks were generated using a bipartite configuration model. We built 1000 random networks and chose one randomly, see text for details. For lower connectivity levels we have removed some small :math:`k`-components to improve the readability: we do not show 1-components with less than 20 nodes, 2-components with less than 15 nodes, or tricomponents with less than 10 nodes. :label:`fig1`
+
+
+Structural cohesion analysis based on the :math:`k`-component structure of bipartite networks has been conducted very rarely and only on very small networks [white2004]_. The limited diffusion of these studies can be readily explained by the fact that bipartite networks are usually quite a lot bigger than their one-mode counterparts, and the computational requirements, once again, stifled empirical research in this direction. Other measures have been developed to deal with cohesion in large bipartite networks, such as :math:`(p, q)`-cores or 4-ring islands [ahmed2007]_. However, the former is a bipartite version of :math:`k`-cores and thus it has the same limitations for subgroup identification; while the latter is very useful to determine subgraphs in large networks that are more strongly connected internally than with the rest of the network, but also lacks some of the key elements of the definition for groups in the sociological literature, such as being hierarchical and allowing for overlaps.
+
+The heuristics for structural cohesion presented here allows us to compute connectivity-based measures on large networks (up to tens of thousands of nodes and edges) quickly enough to be able to build suitable null models.  Furthermore we will be able to compare the results for bipartite networks with their one-mode projections. To illustrate those points we use data on collaboration among software developers in one organization (the Debian project) and scientists publishing papers in the arXiv.org electronic repository in two different scientific fields: High Energy Theory and Nuclear Theory. We built the Debian collaboration network by linking each software developer with the packages (i.e. programs) that she uploaded to the package repository of the Debian Operating System during a complete release cycle. We analyze the Debian Operating System version 5.0, codenamed *Lenny*, which was developed from April 8, 2007, to February 1, 2009. Scientific networks are built using all the papers uploaded to the arXiv.org preprint repository from January 1, 2006, to December 31, 2010, for two well established scientific fields: High Energy Physics Theory and Nuclear Theory. In these networks each author is linked to the papers that she has authored during the time period analyzed. One-mode projections are always on the human side: scientists linked together if they have coauthored a paper, and developers linked together if they have worked on the same program. Table 1 presents some details on those networks.
+
+In the remaining part of this section we perform two kinds of analysis to illustrate how the structural cohesion model can help us understand the structure and dynamics of collaboration networks. First, we present a tree representation of the :math:`k`-component structure ---the cohesive blocks structure ([white2001]_, [moody2003]_, [white2004]_, [mani2014]_)--- for our bipartite networks and their one-mode projections, both for actual networks and for their random counterparts. Finally, we present a novel graphic representation of the structural cohesion of a network, based on three-dimensional scatter plot, using average node connectivity as a synthetic and more informative measure of cohesion of each :math:`k`-component.
+
+For the first analysis we do need to generate null models in order to discount the possibility that the observed structure of actual networks is just the result of randomly mixing papers and scientists or packages and developers. The null models used in this paper are based on a bipartite configuration model [newman2003]_, which consists of generating networks by randomly assigning papers/programs to scientists/developers but maintaining constant the distribution of papers per scientists and scientists by paper observed in the actual networks, that is the bipartite degree distribution. For one-mode projections, we generated bipartite random networks based on their original bipartite degree distribution, and then performed the one-mode projection. This is a common technique for avoiding overestimating the local clustering of one-mode projections [uzzi2007]_. As the configuration model can generate some multiple edges and self-loops, we followed the usual practice of deleting them before the analysis in order to guarantee that random networks are simple, like actual networks.
+
+So let's start with the tree representation of the cohesive blocks structure. As proposed by [white2004]_, we can represent the :math:`k`-component structure of a network by drawing a tree whose nodes are :math:`k`-components; two nodes are linked if the :math:`k`-component of higher level is nested inside the :math:`k`-component of lower level (see pp. 1643, 1651 from [mani2014]_ for this kind of analysis on the Indian interorganizational ownership network). This representation of the connectivity structure can be built during the run time of the exact algorithm. However, because our heuristics are based on finding node independent paths, we have to compute first the :math:`k`-components hierarchy, and then construct the tree that represents the connectivity structure of the network.
 
 Figures :ref:`fig1` (a) and :ref:`fig1` (c) show the connectivity structure of Nuclear Theory collaboration networks represented as a tree, the former for the two-mode network and the latter for one-mode ones. As we can see, both networks display non-trivial structure. The two-mode network has up to an 8-component, but most nodes are in :math:`k`-components with :math:`k < 6`. Up to `k = 3` most nodes are in giant :math:`k`-components, but for :math:`k = \{4,5\}` there are many :math:`k`-components of similar order. Figure :ref:`fig1` (c), which corresponds to the one-mode projection, has a lot more connectivity levels --a byproduct of the mathematical transformation from two-mode to one-mode. In this network, the maximum connectivity level is 46; the four long legs of the plot correspond to 4 cliques with 47, 31, 27 and 25 nodes. Notice that each one of these 4 cliques are already a separated :math:`k`-component at :math:`k=7` It is at this level of connectivity (:math:`k=\{7,8\}`) where the giant :math:`k`-components start to dissolve and many smaller :math:`k`-components emerge.
 
@@ -274,25 +276,10 @@ Second, we developed heuristics to compute the :math:`k`-components structure, a
 
 Finally, we used the heuristics proposed here to analyze three large collaboration networks. With this analysis, we showed that the heuristics and the novel visualization technique for cohesive network structure help us capture important differences in the way collaboration is structured. Obviously a detailed analysis of the institutional and organizational structures in which the collaborative activity took place is well beyond the scope and aims of this paper. But future research could leverage the tools we provide to systematically measure those structures. For instance, sociologists of science often compare scientific disciplines in terms of their collaborative structures [moody2004]_ and their level of controversies [bearman2010]_. The measures and the visualization technique we proposed could nicely capture these features and compare them across scientific disciplines. This would make it possible to further our understanding of the social structure of science, and its impact in terms of productivity, novelty and impact. Social network researchers interested in organizational robustness would also benefit from leveraging the structural cohesion measures to detect sub-groups that are more critical to the organization's resilience, and thus prevent factionalization. Exploring the consequences of different forms of cohesive structures will eventually help us further our theoretical understanding of collaboration and the role that cohesive groups play in linking micro-level dynamics with macro-level social structures.
 
-.. The statement below shows how to adjust the width of a table.
-
 .. raw:: latex
 
-   \setlength{\tablewidth}{0.8\linewidth}
+   \vspace{1cm}
 
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
 
 References
 ----------
