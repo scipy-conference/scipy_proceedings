@@ -364,7 +364,7 @@ This is due to the fact that distribution of :math:`M` ``Or`` clauses over
    >>> Or(And(a, b), And(c, d)).to_cnf()
    And(Or(a, c), Or(b, c), Or(a, d), Or(b, d))
 
-Logic expression support the ``tseitin`` method,
+Logic expressions support the ``tseitin`` method,
 which perform's Tseitin's transformation on the input expression.
 For more information about this transformation, see [Tse68]_.
 
