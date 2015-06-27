@@ -122,7 +122,7 @@ Since release ``0.27``,
 they have been implemented using a high performance C library.
 
 Expressions are fast, and reasonably compact.
-One the other hand, they are generally not canonical,
+On the other hand, they are generally not canonical,
 and determining expression equivalence is NP-complete.
 Conversion to a canonical expression form can result in exponential size.
 
