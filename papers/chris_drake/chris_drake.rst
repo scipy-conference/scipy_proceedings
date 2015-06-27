@@ -370,9 +370,9 @@ For more information about this transformation, see [Tse68]_.
 
 The Tseitin transformation does not produce an equivalent expression,
 but rather an *equisatisfiable* CNF,
-with the additional of auxiliary variables.
-The important feature is that it can be used to convert any expression
-into a CNF that can be solved using PicoSAT.
+with the addition of auxiliary variables.
+The important feature is that it can convert any expression into a CNF,
+which can be solved using PicoSAT.
 
 .. code-block:: pycon
 
