@@ -572,12 +572,26 @@ DataFrame
 ~~~~~~~~~
 
 The ``dask.dataframe`` module implements a large dataframe out of
-many Pandas DataFrames.
+many Pandas DataFrames.  The interface should be familiar to users of Pandas.
 
-Currently ``dask.dataframe`` also uses the threaded
-scheduler but does not achieve the same parallel performance as ``dask.array``
-due to the GIL.  We are enthusiastic about ongoing work in Pandas itself to
-release the GIL.
+.. code-block:: python
+
+   >>> import dask.dataframe as dd
+   >>> df = dd.read_csv('nyc-taxi-*.csv.gz')
+
+   >>> g = df.groupby('medallion')
+   >>> g.trip_time_in_secs.mean().head(5)
+   medallion
+   0531373C01FD1416769E34F5525B54C8     795.875026
+   867D18559D9D2941173AD7A0F3B33E77     924.187954
+   BD34A40EDD5DC5368B0501F704E952E7     717.966875
+   5A47679B2C90EA16E47F772B9823CE51     763.005149
+   89CE71B8514E7674F1C662296809DDF6     869.274052
+   Name: trip_time_in_secs, dtype: float64
+
+Currently ``dask.dataframe`` uses the threaded scheduler but does not achieve
+the same parallel performance as ``dask.array`` due to the GIL.  We are
+enthusiastic about ongoing work in Pandas itself to release the GIL.
 
 The dask dataframe can compute efficiently on *partitioned* datasets where the
 different blocks are well separated along an index.  For example in time series
