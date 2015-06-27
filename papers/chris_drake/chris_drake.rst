@@ -39,7 +39,7 @@ Flows are patched together from several proprietary tools with incompatible
 data representations.
 Even with Python's strength in scientific computing,
 it has largely failed to penetrate this space.
-In short, to paraphrase the immortal words of *the* Bruce Dickinson,
+In short, to paraphrase the immortal words of Bruce Dickinson,
 EDA needs more Python!
 
 This paper surveys some of the features and applications of
