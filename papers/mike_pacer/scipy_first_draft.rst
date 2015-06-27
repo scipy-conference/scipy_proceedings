@@ -368,7 +368,7 @@ Graph enumeration
 
 Starting with the max graph for a set of nodes (i.e., the graph with :math:`N^2` edges), we build an iterator that returns graphs by successively removing subsets of edges. Because we start with the max graph, this procedure will visit all possible subgraphs. One challenge that arises when visiting *all* possible subgraphs is the sheer magnitude of that search space (:math:`2^{N^2}`).
 
-.. code-block:: python
+..  code-block:: python
 
     def completeDiGraph(nodes):
         """
@@ -397,14 +397,16 @@ Interestingly, this allows us to include more variables/nodes without the explos
 
 One of the most powerful uses I have found for this is the ability to modify a graph set to include interventional nodes without seeing a corresponding explosion in the number of graphs. On the assumption that interventions apply only to a single node () example nodes representing interventions, as nodes without on the preëxisting variables that.
 
-def filter_maxGraph(G,filter_set):
-    """
-    This allows us to apply a set of filters encoded as closures/first-order functions that take a graph as input and return a graph as output.
-    """
-    graph = G.copy() 
-    for f in filter_set:
-        graph = f(graph)
-    return graph
+..  code-block:: python
+
+    def filter_maxGraph(G,filter_set):
+        """
+        This allows us to apply a set of filters encoded as closures/first-order functions that take a graph as input and return a graph as output.
+        """
+        graph = G.copy() 
+        for f in filter_set:
+            graph = f(graph)
+        return graph
 
 
 Conditions
