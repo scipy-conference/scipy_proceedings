@@ -42,9 +42,9 @@ Introduction and Aims
 
 My first goal in this paper is to provide enough of an introduction to some formal/mathematical tools such that those familiar with :code:`python` and programming more generally will be able to appreciate both why and how one might implement causal Bayesian networks. Especially to exhibit *how*, I have developed parts of a toolkit that allows the creation of these models on top of the :code:`NetworkX` python package. Given the coincidence of the names, it seemed most apt to refer to this toolkit as :code:`Causal Bayesian NetworkX` (the current implementation of which can be found at `Causal Bayesian NetworkX`_).
 
-In order to understand the toolset requires the basics of probabilsitic graphical models, which requires understanding some degree of graph theory and some degree of probability theory. The first few pages are devoted to providing necessary background and illustrative cases for conveying that understanding. 
+In order to understand the toolset requires the basics of probabilsitic graphical models, which requires understanding some graph theory and some probability theory. The first few pages are devoted to providing necessary background and illustrative cases for conveying that understanding. 
 
-Notably, contrary to how Bayesian networks are commonly introduced, I remain silent on inference from observed data. This is intentional, as is this discussion of it. Many of the most trenchant problems with Bayesian networks are found in critiques of their use to infer these networks from observed data. But, many of the aspects of Bayesian networks (especially causal Bayesian networks) that are most useful for thinking about problems of structure and probabilistic relations do not rely on inference from observed data. In fact, I think the immediate focus on inference has greatly hampered widespread understanding of the power and representative capacity of this class of models. Equally – if not more – importantly, I aim to discuss generalizations of Bayesian networks such as those that appear :cite:`griffithst09,winn2012causality`, and inference in these cases requires a much longer treatement (if a comprehensive treatment can be provided at all). If you are dissatisfied with this approach and wish to read a more conventional introduction to (causal) Bayesian networks I suggest consulting :cite:`pearl2000`.
+Notably, contrary to how Bayesian networks are commonly introduced, I say relatively little about inference from observed data. This is intentional, as is this discussion of it. Many of the most trenchant problems with Bayesian networks are found in critiques of their use to infer these networks from observed data. But, many of the aspects of Bayesian networks (especially causal Bayesian networks) that are most useful for thinking about problems of structure and probabilistic relations do not rely on inference from observed data. In fact, I think the immediate focus on inference has greatly hampered widespread understanding of the power and representative capacity of this class of models. Equally – if not more – importantly, I aim to discuss generalizations of Bayesian networks such as those that appear in :cite:`griffithst09,winn2012causality`, and inference in these cases requires a much longer treatement (if a comprehensive treatment can be provided at all). If you are dissatisfied with this approach and wish to read a more conventional introduction to (causal) Bayesian networks I suggest consulting :cite:`pearl2000`.
 
 The Causal Bayesian NetworkX toolkit can be seen as consisting of two main parts: graph enumeration/filtering and the storage and use of probabilistic graphical models in a NetworkX compatible format. Because this topic will more be the focus of my talk which can be viewed at the youtube link above and the source code of the most basic implementation is available at `Causal Bayesian NetworkX`_, in this paper I focus more on the other aspects of the problem. Nonetheless, appreciating these other aspects is made easier by also appreciating the problems of implementation/representation and the early solutions that I propose.
 
@@ -208,7 +208,7 @@ Consider the following example:
     Y \sim \textrm{Bernoulli}(.5)
     Z = X \oplus Y, \oplus \equiv :sc:`xor`
 
-
+Note that, :math:`X`
 
 Sampling from Conditional Probability distributions
 ---------------------------------------------------
@@ -284,29 +284,33 @@ This property also explains why Bayesian networks need to be acyclic. Most of th
 Independence in Bayes Nets
 ==========================
 
-One of the standard ways of describing the relation between the semantics (probability values) and syntax (graphical structure) of Bayesian networks is in terms of the graph encoding particular conditional independence assumptions between the nodes of the graph. Indeed, in many cases Bayesian networks are *defined as* a convenient representation by which one can encode the conditional and marginal independence relationships between different variables. 
+One of the standard ways of describing the relation between the semantics (probability values) and syntax (graphical structure) of Bayesian networks is in terms of the graph encoding particular conditional independence assumptions between the nodes of the graph. Indeed, in some cases Bayesian networks are *defined as* a convenient representation for the conditional and marginal independence relationships between different variables. 
 
-It is the perspective of the graphs as *merely* representing the independence relationships and the focus on inference that leads to the focus on equivalence classes of Bayes nets. It is from this perspective that the graphs :math:`A \rightarrow B \rightarrow C, A \rightarrow B \leftarrow C, \textrm{and} A \leftarrow B \leftarrow C` are considered to be indistinguishable (because they represent the same conditional independence relationships).
+It is the perspective of the graphs as *merely* representing the independence relationships and the focus on inference that leads to the focus on equivalence classes of Bayes nets. The set of graphs :math:`\{A \rightarrow B \rightarrow C,~ A \leftarrow B \rightarrow C, \textrm{ and } A \leftarrow B \leftarrow C\}` represent the same conditional independence relationships, and thus cannot be distinguished on the basis of observational evidence alone. This also leads to the emphasis on finding *v-structures* or common-cause structures where (at least) two arrows are directed into the same child with no direct link between those parents(e.g.,:math:`\{A \rightarrow B \leftarrow C). V-structures are observationally distinguishable because any reversing the direction of any of the arrows will alter the conditional independence relations that are guaranteed by the graphical structure. [#]_
 
-It is 
+.. [#] A more thorough analysis of this relation between graph structures and implied conditional independence relations invokes the discussion of *d-separation*. However, d-separation (despite claims that "[t]he intuition behind [it] is simple") is a more subtle concept than it at first appears as it involves both which nodes are obeserved
 
+While this is accurate, it eschews some important aspects of the semantics that distinguish arrows with different directions
 
-Misplaced Emphasis on Independence in :sc:`dag`\s
-=============================================================
+.. Issues surrounding independence in Bayesian networks
+.. ====================================================
 
-I do not agree with the interpretation of Bayes nets as merely representing independence properties, though, not because it is incorrect (it is technically accurate). Rather, I think it has two unfortunate results. First, it encourages poor statistical practices when it comes to inferring independence from observed data using null hypothesis testing. Second, it deëmphasizes an important assymetry that appears in the semantics of how nodes in Bayes nets relate to one another when they are not exclusively discrete nodes.
+.. Misplaced Emphasis on Independence in :sc:`dag`\s
+.. =================================================
 
-Null hypothesis testing and inference
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. I do not agree with the interpretation of Bayes nets as merely representing independence properties, though, not because it is incorrect. Rather, I think it has two unfortunate results. First, it encourages poor statistical practices when it comes to inferring independence from observed data using null hypothesis testing. Second, it deëmphasizes an important assymetry that appears in the semantics of how nodes in Bayes nets relate to one another when they are not exclusively discrete nodes.
 
-One of the standard ways of 
+.. Null hypothesis testing and inference
+.. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. The assumptions embedded in Bayesian networks are assumptions about the independence of different nodes. But most of the measn 
 
 Directional semantics between different types of nodes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The conditional distributions of child nodes are usually defined with parameter functions that take as arguments their parents' realizations for that trial. Bayes nets often are used to exclusively represent discrete (usually, binary) nodes the distribution is usually defined as an arbitrary probability distribution associated with the label of it's parent's realization. 
 
-If we allow (for example) positive continuous valued nodes to exist in relation to discrete nodes the kind of distributions available to describe relations between these nodes changes depending upon the direction of the arrow. A continuous node taking on positive real values mapping to an arbitrarily labeled binary node taking on values :math:`\{a,b\}` will require a function that maps from :math:`\mathbb{R} \rightarrow [0,1]`, where it maps to the probability that the child node takes on (for instance) the value :math:`a` [#]_. However, if the relationship goes the other direction, one would need to have a function that maps from :math:`\{a,b\} \rightarrow \mathbb{R}`.
+If we allow (for example) positive continuous valued nodes to exist in relation to discrete nodes the kind of distributions available to describe relations between these nodes changes depending upon the direction of the arrow. A continuous node taking on positive real values mapping to an arbitrarily labeled binary node taking on values :math:`\{a,b\}` will require a function that maps from :math:`\mathbb{R} \rightarrow [0,1]`, where it maps to the probability that the child node takes on (for instance) the value :math:`a` [#]_. However, if the relationship goes the other direction, one would need to have a function that maps from :math:`\{a,b\} \rightarrow \mathbb{R}`. For example, this might be a gaussian distributions for *a* and *b* (:math:`(\mu_a,\sigma_a),(\mu_b,\sigma_b)`). Regardless of the particular distributions, the key is that the functional form of the distributions are radically different 
 
 .. [#] If the function maps directly to one of the labeled binary values this can be represented as having probabilty 1 of mapping to either :math:`a` or :math:`b`.
 
