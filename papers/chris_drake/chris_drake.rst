@@ -475,7 +475,7 @@ Two-Level Logic Minimization
 When choosing a physical implementation for a Boolean function,
 the size of the logic network is proportional to its cost,
 in terms of area and power.
-Therefore it is desireable to reduce the size of that network.
+Therefore it is desirable to reduce the size of that network.
 
 Logic minimization of two-level forms is an NP-complete problem.
 It is equivalent to finding a minimal-cost set of subsets of a
