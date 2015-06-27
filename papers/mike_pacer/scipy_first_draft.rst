@@ -5,12 +5,23 @@
 
 :video: youtube_link_to_come
 
+..  latex::
+    
+    :usepackage: mathpalette, graphicx
+    \newcommand{\bigCI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+    \newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+    \def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
 
-.. raw:: latex
+
+.. raw::latex
 
     \newcommand{\DUrolesc}{\textsc}
-.. \providecommand*\DUrolecitep[1]{\citep{#1}}
-..    \newcommand\DUrolecitep[1]{\citeA{#1}}
+..  \providecommand*\DUrolecitep[1]{\citep{#1}}
+..  \newcommand\DUrolecitep[1]{\citeA{#1}}
+    \newcommand{\DUroleindep}{\mathrel{\text{\scalebox{1}{$\perp\mkern-9mu\perp$}}}}
+
+
+.. role:: indep
 
 .. role:: sc
 
@@ -202,13 +213,13 @@ Example: Marginal Independence :math:`\neq` Conditional Independence
 
 Consider the following example:
 
-.. math::
+..  math::
 
     X \sim \textrm{Bernoulli}(.5)
     Y \sim \textrm{Bernoulli}(.5)
     Z = X \oplus Y, \oplus \equiv :sc:`xor`
 
-Note that, :math:`X`
+Note that, :math:`X \independent Y|Z`.
 
 Sampling from Conditional Probability distributions
 ---------------------------------------------------
