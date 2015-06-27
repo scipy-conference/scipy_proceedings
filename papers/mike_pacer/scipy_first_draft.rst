@@ -8,6 +8,7 @@
 ..  latex::
     
     %:usepackage: mathpalette, graphicx
+    :usepackage: booktabs
     \newcommand{\bigCI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
     \newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
     \def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
@@ -166,7 +167,7 @@ The conditional probability of a variable :math:`X` taking on value :math:`x` on
 
 You *can* view :math:`P(X|Y)` as a function over the space defined by :math:`X\times Y`. However, if you do so, do not interpret this as a probability function (of any kind). Rather, this defines a probability function for :math:`X` relative to each value of :math:`Y`. Without conditioning on :math:`Y` we have many potential functions of X. Thus, you can think of that as denoting a *family* of probability functions indexed by the various values :math:`Y=y`.
 
-The *joint probability* of :math:`X` and :math:`Y` is the probability that both :math:`X` and  :math:`Y` occur in the event set in question. This is noted as :math:`P(X,Y)` or :math:`P(X \cap Y)`(using the set theoretic intersection operation). Similar to :math:`P(X|Y)`, you *can* view :math:`P(X,Y)` as a function over the space defined by :math:`X\times Y`. However, :math:`P(X,Y)` is a probability function in the sense that the sum of :math:`P(X=x,Y=y)` over all the possible events in the space defined by :math:`(x,y)\in X\times Y` equals 1.
+The *joint probability* of :math:`X` and :math:`Y` is the probability that both :math:`X` and  :math:`Y` occur in the event set in question. This is noted as :math:`P(X,Y)` or :math:`P(X \cap Y)` (using the set theoretic intersection operation). Similar to :math:`P(X|Y)`, you *can* view :math:`P(X,Y)` as a function over the space defined by :math:`X\times Y`. However, :math:`P(X,Y)` is a probability function in the sense that the sum of :math:`P(X=x,Y=y)` over all the possible events in the space defined by :math:`(x,y)\in X\times Y` equals 1.
 
 The *marginal probability* of :math:`X` is the same :math:`P(X)` that we have seen before. However, the term refers to the notion of summing over values of :math:`Y` in the joint probability, and these summed probabilities were recorded in the *margins* of a probability table. Formally, this can be stated as :math:`P(X) = \sum_{y\in Y}P(X,Y)`.
 
@@ -239,8 +240,8 @@ Suppose we wanted to know your expected score on a single round, but we do not k
 
 But this discussion hides an important complexity by having the event set of the :math:`D_6` embedded within the event set of the :math:`D_{20}`. Moreover, we assumed that we could treat each event in these sets as belonging to the integers and as a result, that with little interpretation, they can be easily summed.
 
-Example - Coins and dice with labeled entities
-==============================================
+Coins and dice with hierarchically labeled entities, Example
+============================================================
 
 Imagine the following game: 
 
@@ -248,13 +249,54 @@ You have a coin (*C*, :sc:`Heads, Tails`), a *new* 6-sided die (:math:`D_6, \{X_
 
 The rules are the same as before: your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. You flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die.
 
-But note that now we cannot sum over these in the same way that we did before. Nonetheless, we can 
+But note that now we cannot sum over these in the same way that we did before. Without additional information about how to map these different labels onto values, there's no way to describe the "score". Rather, the best we can do is to determine the probability with which each individual case occurs, so that once we know more about the utility curve we can efficiently use the probability distribution regardless of the particular value that is assigned.
 
-Indeed, our event sets for the two dice are mutually disjoint, making the event set for the scores that one can receive on a single round :math:`\{\clubsuit,\diamondsuit,\heartsuit,\spadesuit,\odot,\dagger,X_1,X_2,\ldots,X_{20}\}`. Without additional information about how to map these different labels onto values, there's no way to describe the "score". Rather, the best we can do is to determine the probability with which each individual case occurs.
+Thus we can establish the following statements
 
 
-Example - Coins and dice with disjoint sets of labeled entities
-===============================================================
+
+..  latex::
+    :usepackage: booktabs
+
+..  latex::
+
+    \begin{center}
+    \begin{tabular}{lll}  
+        \toprule
+        & \multicolumn{2}{c}{Parent values} \\
+        \cmidrule(r){2-3}
+        Probs    & $P(\cdot|D_6)$ & $P(\cdot|D_{20})$\\
+        \midrule
+        $P(X_1|\cdot)$      &  $P(X_1|D_6)*P(D_6)$     & $P(X_1|D_{20})*P(D_{20})$ \\
+        \vdots     &    \vdots     & \vdots       \\
+        $P(X_6|\cdot)$       &  $P(X_6|D_6)*P(D_6)$     & $P(X_6|D_{20})*P(D_{20})$      \\
+        \vdots       & \vdots     & \vdots      \\
+        $P(X_{20}|\cdot)$ & 0      & $P(X_{20}|D_{20})*P(D_{20})$   \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+
+
+
+.. ..  latex::
+
+..     \begin{tabular}{llr}  
+..         \toprule
+..         \multicolumn{2}{c}{Item} \\
+..         \cmidrule(r){1-2}
+..         Animal    & Description & Price (\$) \\
+..         \midrule
+..         Gnat      & per gram    & 13.65      \\
+..              &    each     & 0.01       \\
+..         Gnu       & stuffed     & 92.50      \\
+..         Emu       & stuffed     & 33.33      \\
+..         Armadillo & frozen      & 8.99       \\
+..         \bottomrule
+..     \end{tabular}
+
+
+Coins and dice with disjoint sets of labeled entities, Example
+==============================================================
 
 Imagine the following game: 
 
@@ -614,11 +656,8 @@ Or a snippet from the above code, starting at the correct line number:
 
 .. Please avoid using this feature, unless agreed upon with the
 .. proceedings editors.
-..     .. raw:: latex
 
-..      :usepackage: somepackage
 
-..      Some custom LaTeX source here.
 
 Outlines
 ========
@@ -742,3 +781,7 @@ Outline v. 1.1
 .. .. role:: bibliography
 
 .. .. [Atr03] P. Atreides. *How to catch a sandworm*,           Transactions on Terraforming, 21(3):261-300, August 2003.
+::
+
+
+
