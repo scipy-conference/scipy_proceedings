@@ -4,10 +4,6 @@
 :email: cjdrake@gmail.com
 :institution: Drake Enterprises
 
-:author: Robert Paulsen
-:email: bigbob@pssc.com
-:institution: Paper Street Soap Company
-
 **************************************************************************
   PyEDA: Data Structures and Algorithms for Electronic Design Automation
 **************************************************************************
