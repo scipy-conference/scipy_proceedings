@@ -306,7 +306,7 @@ for a complete list of supported operators accepted by the ``expr`` function.
 Boolean Satisfiability
 ----------------------
 
-One of the most interesting questions in compute science is whether a given
+One of the most interesting questions in computer science is whether a given
 Boolean function is satisfiable, or SAT.
 That is, for a given function :math:`F`,
 is there a set of input assignments that will produce an output of :math:`1`?
