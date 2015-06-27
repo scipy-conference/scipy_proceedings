@@ -235,7 +235,7 @@ For example,
 in addition to the primary operators ``Not``, ``Or``, and ``And``,
 expressions also natively support the secondary ``Xor``, ``Equal``,
 ``Implies``, and ``ITE`` (if-then-else) operators.
-By transforming all secondary operators operators into primary operators,
+By transforming all secondary operators into primary operators,
 and pushing all ``Not`` operators down towards the leaf nodes,
 you arrive at what is known as "negation normal form".
 
