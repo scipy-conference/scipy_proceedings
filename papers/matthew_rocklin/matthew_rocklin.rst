@@ -599,14 +599,33 @@ data we may know that all of January is in one block while all of February is
 in another.  Join, groupby, and range queries along this index are
 significantly faster when working on partitioned datasets.
 
+
+Dask for General Computing
+--------------------------
+
+The higher level collections ``dask.array/bag/dataframe`` demonstrate the
+flexibility of the dask graph specification to encode sophisticated parallel
+algorithms and the capability of the dask schedulers to execute those graphs
+intelligently on a multi-core machine.  Opportunities for parallel execution
+extend beyond beyond ndarrays and dataframes.
+
+In the beginning of this document we gave the following toy example to help
+define dask graphs.
+
 .. code-block:: python
 
-   >>> import dask.dataframe as dd
-   >>> df = dd.read_csv('nyc-taxi-*.csv.gz')
+   d = {'x': 1,
+        'y': (inc, 'x'),
+        'z': (add, 'y', 10)}
 
-   >>> g = df.groupby('medallion')
-   >>> g.trip_time_in_secs.mean().topk(5)
-   TODO
+While this example of dask graphs is trivial it represents a broader class of
+free-form computations that don't fit neatly into a single
+high-level abstraction like arrays or dataframes but are instead just a bunch
+of related Python functions with data dependencies.  In this context Dask offers
+a lightweight spec and range of schedulers as well as excellent error reporting
+and diagnostic facilities.  In private projects we have seen great utility and
+performance from using the dask threaded scheduler to refactor and execute
+existing processing pipelines on large multi-core computers.
 
 
 Final Thoughts
