@@ -480,7 +480,7 @@ This is sometimes called the "paving problem",
 because it is conceptually similar to finding the cheapest configuration of
 tiles that cover a floor.
 Due to the complexity of this operation,
-PyEDA uses a C extension to the famous Berkeley Espresso library [Bra84]_.
+PyEDA uses a C extension to the Berkeley Espresso library [Bra84]_.
 
 After calling the ``espresso_tts`` function on the ``F1`` and ``F2``
 truth tables from above,
@@ -641,7 +641,7 @@ Therefore, it's API is more low-level.
 
 Univ of CA Santa Barbara has implemented
 `PyCUDD <http://bears.ece.ucsb.edu/pycudd.html>`_,
-a Python binding to the famous [CUDD]_ library.
+a Python binding to the well-known [CUDD]_ library.
 
 The `Sage Math <http://doc.sagemath.org>`_ project implements
 logic and sat modules with very similar features to PyEDA's.
