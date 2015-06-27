@@ -258,14 +258,14 @@ Bayesian Networks
 
 Bayesian networks are a class of graphical models that have particular probabilistic semantics attached to their nodes and edges. This makes them probabilsitic graphical models. 
 
-The most important property of Bayesian networks is that a variable when conditioned on the total set of its parents and children, is conditionally independent of any other variables in the graph. This is known as the "Markov blanket" of that node[#]_. 
+The most important property of Bayesian networks is that a variable when conditioned on the total set of its parents and children, is conditionally independent of any other variables in the graph. This is known as the "Markov blanket" of that node. [#]_
 
 .. [#] The word "Markov" refers to Andrei Markov and appears as a prefix to many other terms. It most often indicates that some kind of independence property holds. For example, a Markov chain is a sequence (chain) of variables in which each variable depends only dependent on the value of the immediate preceding (and by implication) postceding variables in the chain. 
 
 Common assumptions in Bayesian networks
 =======================================
 
-While there are extensions to these models[#]_, a number of assumptions commonly hold. 
+While there are extensions to these models [#]_ , a number of assumptions commonly hold. 
 
 .. [#] An important class of extensions to Bayesian networks that I will not have time to discuss at length includes those that consider temporal dependencies: Dynamic Bayesian Networks (:sc:`dbn`\s) :cite:`deank1989time,ghahramani1998learning`, continuous-time dependencies with Continuous Time Bayesian Networks (:sc:`ctbn`\s) :cite:`nodelman02`, Poisson Cascades :cite:`simma10`, Continuous Time Causal Theories (:sc:`ct`:math:`^2`) :cite:`pacerg12, pacerg15`, Reciprocal Hawkes Processes :cite:`blundell2012modelling` and the Network Hawkes Model :cite:`lindermana2014`.
 
@@ -286,11 +286,11 @@ Independence in Bayes Nets
 
 One of the standard ways of describing the relation between the semantics (probability values) and syntax (graphical structure) of Bayesian networks is in terms of the graph encoding particular conditional independence assumptions between the nodes of the graph. Indeed, in some cases Bayesian networks are *defined as* a convenient representation for the conditional and marginal independence relationships between different variables. 
 
-It is the perspective of the graphs as *merely* representing the independence relationships and the focus on inference that leads to the focus on equivalence classes of Bayes nets. The set of graphs :math:`\{A \rightarrow B \rightarrow C,~ A \leftarrow B \rightarrow C, \textrm{ and } A \leftarrow B \leftarrow C\}` represent the same conditional independence relationships, and thus cannot be distinguished on the basis of observational evidence alone. This also leads to the emphasis on finding *v-structures* or common-cause structures where (at least) two arrows are directed into the same child with no direct link between those parents(e.g.,:math:`\{A \rightarrow B \leftarrow C). V-structures are observationally distinguishable because any reversing the direction of any of the arrows will alter the conditional independence relations that are guaranteed by the graphical structure. [#]_
+It is the perspective of the graphs as *merely* representing the independence relationships and the focus on inference that leads to the focus on equivalence classes of Bayes nets. The set of graphs :math:`\{A \rightarrow B \rightarrow C,~ A \leftarrow B \rightarrow C, \textrm{ and } A \leftarrow B \leftarrow C\}` represent the same conditional independence relationships, and thus cannot be distinguished on the basis of observational evidence alone. This also leads to the emphasis on finding *v-structures* or common-cause structures where (at least) two arrows are directed into the same child with no direct link between those parents(e.g.,:math:`\{A \rightarrow B \leftarrow C`). V-structures are observationally distinguishable because any reversing the direction of any of the arrows will alter the conditional independence relations that are guaranteed by the graphical structure. [#]_
 
-.. [#] A more thorough analysis of this relation between graph structures and implied conditional independence relations invokes the discussion of *d-separation*. However, d-separation (despite claims that "[t]he intuition behind [it] is simple") is a more subtle concept than it at first appears as it involves both which nodes are obeserved
+.. [#] A more thorough analysis of this relation between graph structures and implied conditional independence relations invokes the discussion of *d-separation*. However, d-separation (despite claims that "[t]he intuition behind [it] is simple") is a more subtle concept than it at first appears as it involves both which nodes are obeserved and the underlying structure.
 
-While this is accurate, it eschews some important aspects of the semantics that distinguish arrows with different directions
+While this is accurate, it eschews some important aspects of the semantics that distinguish arrows with different directions when you consider the particular kinds of values that the variables take on.
 
 .. Issues surrounding independence in Bayesian networks
 .. ====================================================
@@ -310,10 +310,9 @@ Directional semantics between different types of nodes
 
 The conditional distributions of child nodes are usually defined with parameter functions that take as arguments their parents' realizations for that trial. Bayes nets often are used to exclusively represent discrete (usually, binary) nodes the distribution is usually defined as an arbitrary probability distribution associated with the label of it's parent's realization. 
 
-If we allow (for example) positive continuous valued nodes to exist in relation to discrete nodes the kind of distributions available to describe relations between these nodes changes depending upon the direction of the arrow. A continuous node taking on positive real values mapping to an arbitrarily labeled binary node taking on values :math:`\{a,b\}` will require a function that maps from :math:`\mathbb{R} \rightarrow [0,1]`, where it maps to the probability that the child node takes on (for instance) the value :math:`a` [#]_. However, if the relationship goes the other direction, one would need to have a function that maps from :math:`\{a,b\} \rightarrow \mathbb{R}`. For example, this might be a gaussian distributions for *a* and *b* (:math:`(\mu_a,\sigma_a),(\mu_b,\sigma_b)`). Regardless of the particular distributions, the key is that the functional form of the distributions are radically different 
+If we allow (for example) positive continuous valued nodes to exist in relation to discrete nodes the kind of distributions available to describe relations between these nodes changes depending upon the direction of the arrow. A continuous node taking on positive real values mapping to an arbitrarily labeled binary node taking on values :math:`\{a,b\}` will require a function that maps from :math:`\mathbb{R} \rightarrow [0,1]`, where it maps to the probability that the child node takes on (for instance) the value :math:`a` . [#]_However, if the relationship goes the other direction, one would need to have a function that maps from :math:`\{a,b\} \rightarrow \mathbb{R}`. For example, this might be a gaussian distributions for *a* and *b* (:math:`(\mu_a,\sigma_a),(\mu_b,\sigma_b)`). Regardless of the particular distributions, the key is that the functional form of the distributions are radically different 
 
 .. [#] If the function maps directly to one of the labeled binary values this can be represented as having probabilty 1 of mapping to either :math:`a` or :math:`b`.
-
 
 
 Generating samples from Bayes Nets
@@ -334,7 +333,7 @@ After each set of samples from the *active sample set* we will either have new v
 Causal Bayesian Networks
 ------------------------
 
-Causal Bayesian networks are Bayesian networks that are given an interventional operation that allows for "graph surgery" by cutting nodes off from their parents.[#]_ The central idea is that interventions are cases where some external causal force is able to "reach in" and set the values of individual nodes, rendering intervened on independent of their parent nodes.  
+Causal Bayesian networks are Bayesian networks that are given an interventional operation that allows for "graph surgery" by cutting nodes off from their parents. [#]_ The central idea is that interventions are cases where some external causal force is able to "reach in" and set the values of individual nodes, rendering intervened on independent of their parent nodes. 
 
 .. [#] This is technically a more general definition than that given in :cite:`pearl2000` as in that case there is a specific semantic flavor given to interventions as they affect the probabilistic semantics of the variables within the network. Because here we are considering a version of intervention that affects the *structure* of a set of graphs rather than an intervention's results on a specific parameterized graph, this greater specificity is unnecessary.
 
@@ -376,9 +375,9 @@ Preëmptive Filters
 
 In order to reduce the set of edges that we need to iterate over, rather than working over the max-graph for *any* of nodes, it helps to determine which individual edges are known to always be present and which ones are known to never be present. In this way we can reduce the size of the edgeset over which we will be iterating. 
 
-Interestingly, this allows us to include more variables/nodes  without an explosion the  edges that accompanies additional nodes without preëmptive filters. 
+Interestingly, this allows us to include more variables/nodes  without an explosion the edges that accompanies additional nodes without preëmptive filters. 
 
-One of the most powerful uses I have found for this is the ability to modify a graph set to include interventional nodes without seeing a corresponding explosion in the number of graphs. On the assumption that interventions apply only to a single node () example nodes representing interventions, as nodes without on the preëxisting variables that 
+One of the most powerful uses I have found for this is the ability to modify a graph set to include interventional nodes without seeing a corresponding explosion in the number of graphs. On the assumption that interventions apply only to a single node () example nodes representing interventions, as nodes without on the preëxisting variables that.
 
 Conditions
 ^^^^^^^^^^
@@ -434,76 +433,75 @@ Or a snippet from the above code, starting at the correct line number:
     }
 
 
-Important Part
---------------
+.. Important Part
+.. --------------
 
-.. It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
+.. .. It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
 
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
+.. some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
+.. equation on a separate line:
 
-.. math::
+.. .. math::
 
-    g(x) = \int_0^\infty f(x) dx
+..     g(x) = \int_0^\infty f(x) dx
 
-or on multiple, aligned lines:
+.. or on multiple, aligned lines:
 
-.. math::
-    :type: eqnarray
+.. .. math::
+..     :type: eqnarray
 
-    g(x) &=& \int_0^\infty f(x) dx \\
-         &=& \ldots
+..     g(x) &=& \int_0^\infty f(x) dx \\
+..          &=& \ldots
 
-The area of a circle and volume of a sphere are given as
+.. The area of a circle and volume of a sphere are given as
 
-.. math::
-    :label: circarea
+.. .. math::
+..     :label: circarea
 
-    A(r) = \pi r^2.
+..     A(r) = \pi r^2.
 
-.. math::
-    :label: spherevol
+.. .. math::
+..     :label: spherevol
 
-    V(r) = \frac{4}{3} \pi r^3
+..     V(r) = \frac{4}{3} \pi r^3
 
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
+.. We can then refer back to Equation (:ref:`circarea`) or
+.. (:ref:`spherevol`) later.
 
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. 
+.. Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
+.. consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
+.. lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
+.. turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
+.. adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
+.. arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
+.. faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
+.. consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
+.. orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
+.. sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
+.. lacinia. 
 
-.. figure:: figure0.png
+.. .. figure:: figure0.png
 
-    This is the caption. :label:`egfig`
+..     This is the caption. :label:`egfig`
 
-.. figure:: figure0.png
-    :align: center
-    :figclass: w
+.. .. figure:: figure0.png
+..     :align: center
+..     :figclass: w
 
-    This is a wide figure, specified by adding "w" to the figclass.  It is also
-    center aligned, by setting the align keyword (can be left, right or center).
+..     This is a wide figure, specified by adding "w" to the figclass.  It is also
+..     center aligned, by setting the align keyword (can be left, right or center).
 
-.. figure:: figure0.png
-    :scale: 20%
-    :figclass: bht
+.. .. figure:: figure0.png
+..     :scale: 20%
+..     :figclass: bht
 
-    This is the caption on a smaller figure that will be placed by default at the
-    bottom of the page, and failing that it will be placed inline or at the top.
-    Note that for now, scale is relative to a completely arbitrary original
-    reference size which might be the original size of your image - you probably
-    have to play with it. :label:`egfig2`
+..     This is the caption on a smaller figure that will be placed by default at the
+..     bottom of the page, and failing that it will be placed inline or at the top.
+..     Note that for now, scale is relative to a completely arbitrary original
+..     reference size which might be the original size of your image - you probably
+..     have to play with it. :label:`egfig2`
 
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
+.. As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered figures.
 
 .. .. table:: This is the caption for the materials table. :label:`mtable`
 
