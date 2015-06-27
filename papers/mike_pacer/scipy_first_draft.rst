@@ -195,7 +195,7 @@ Namely, if we want to know :math:`P(X|Y)` we can transform it into :math:`\frac{
 
 This leaves us with
 
-.. math::
+..  math::
 
     P(X|Y) = \frac{P(X|Y)P(X)}{\sum_{x \in X}P(X=x|Y)P(X=x)}
 
@@ -214,10 +214,10 @@ Example: Marginal Independence :math:`\neq` Conditional Independence
 Consider the following example:
 
 ..  math::
+    :type: eqnarray
 
-    X \sim \textrm{Bernoulli}(.5)
-    Y \sim \textrm{Bernoulli}(.5)
-    Z = X \oplus Y, \oplus \equiv :sc:`xor`
+    X &\sim& \textrm{Bernoulli}_{\{0,1\}}(.5), Y \sim \textrm{Bernoulli}_{\{0,1\}}(.5)\\
+    Z &=& X \oplus Y, \oplus \equiv \textsc{xor}\\
 
 Note that, :math:`X \independent Y|Z`.
 
