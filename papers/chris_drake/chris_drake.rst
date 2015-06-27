@@ -21,7 +21,7 @@
    and blazingly-fast C extensions for fundamental algorithms where
    performance is essential.
    PyEDA is a hobby project which has the simple but audacious goal of
-   improving the state of digital design, because Python.
+   improving the state of digital design by using Python.
 
 Introduction
 ============
