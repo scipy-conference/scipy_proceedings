@@ -628,6 +628,38 @@ performance from using the dask threaded scheduler to refactor and execute
 existing processing pipelines on large multi-core computers.
 
 
+Low Barrier to Entry
+--------------------
+
+The simplicity of dask graphs (no classes or frameworks) presents a very low
+barrier to entry.  Users only need to understand basic concepts common to
+Python (or indeed most modern languages) like dictionaries, tuples, and
+functions as variables.  As an example consider the work in [Tep15] in which
+the authors implement out-of-core parallel non-negative matrix factorizations
+on top of dask.array without significant input from dask core developers.  This
+demonstrates that algorithmic domain experts can implement complex algorithms
+with dask and achieve good results with a minimum of framework investment.
+
+To demonstrate complexity we present the graph of an out-of-core singular value
+decomposition contributed by those authors to the ``dask.array.linalg``
+library.
+
+.. code-block:: python
+
+   >>> import dask.array as da
+   >>> x = da.ones((5000, 1000), chunks=(1000, 1000))
+   >>> u, s, v = da.svd(x)
+
+.. figure:: dask-svd.png
+   :scale: 10%
+
+   Out-of-core parallel SVD
+
+This algorithm is complex enough without having to worry about software
+frameworks.  Mathematical experts were able to implement this without having to
+simultaneously develop expertise in a complex parallel programming framework.
+
+
 Final Thoughts
 --------------
 
@@ -687,6 +719,9 @@ References
 .. [Pou13] Poulson, Jack, et al. "Elemental: A new framework for distributed
            memory dense matrix computations."
            ACM Transactions on Mathematical  Software (TOMS) 39.2 (2013): 13. APA
+.. [Tep15] Mariano Tepper and Guillermo Sapiro, "Compressed Nonnegative
+           Matrix Factorization is Fast and Accurate", 2015.
+
 
 .. _Biggus: http://biggus.readthedocs.org/en/latest/
 .. _Spartan: https://github.com/spartan-array/spartan
