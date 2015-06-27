@@ -353,11 +353,12 @@ NetworkX is usually imported using the :code:`nx` abbreviation
 
     G = nx.DiGraph() # initialize a directed graph
 
-    G.edges() # returns a list of edges
-    G.edges(data=True) # returns a list of edges with their data
+    edge_list = G.edges() # returns a list of edges
+    edge_data_list = G.edges(data=True) # returns list(edges[data])
 
-    G.nodes() # returns a list of nodes
-    G.nodes(data=True) # returns a list of nodes with their data
+    node_list = G.nodes() # returns a list of nodes
+    node_data_list = G.nodes(data=True) # returns list(nodes[data])
+
 
 Causal Bayesian NetworkX: Graphs
 --------------------------------
@@ -366,6 +367,23 @@ Graph enumeration
 =================
 
 Starting with the max graph for a set of nodes (i.e., the graph with :math:`N^2` edges), we build an iterator that returns graphs by successively removing subsets of edges. Because we start with the max graph, this procedure will visit all possible subgraphs. One challenge that arises when visiting *all* possible subgraphs is the sheer magnitude of that search space (:math:`2^{N^2}`).
+
+.. code-block:: python
+
+    def completeDiGraph(nodes):
+        """
+        Building a max-graph from a set of nodes. This graph has :math:`n^2` edges in terms of len(nodes).
+        Variables:
+        nodes are a list of strings that specify the node names
+        """
+        G = nx.DiGraph() # Creates new graph
+        G.add_nodes_from(nodes) # adds nodes to graph
+        edgelist = list(combinations(nodes,2)) # list of directed edges
+        edgelist.extend([(y,x) for x,y in list(combinations(nodes,2))]) #add symmetric edges
+        edgelist.extend([(x,x) for x in nodes]) # add self-loops
+        G.add_edges_from(edgelist) # add edges to graph
+        return G
+
 
 Operations on sets of graphs
 ============================
@@ -378,6 +396,16 @@ In order to reduce the set of edges that we need to iterate over, rather than wo
 Interestingly, this allows us to include more variables/nodes without the explosion of edges that would be the consequence of adding additional nodes were we not to include preëmptive filters.
 
 One of the most powerful uses I have found for this is the ability to modify a graph set to include interventional nodes without seeing a corresponding explosion in the number of graphs. On the assumption that interventions apply only to a single node () example nodes representing interventions, as nodes without on the preëxisting variables that.
+
+def filter_maxGraph(G,filter_set):
+    """
+    This allows us to apply a set of filters encoded as closures/first-order functions that take a graph as input and return a graph as output.
+    """
+    graph = G.copy() 
+    for f in filter_set:
+        graph = f(graph)
+    return graph
+
 
 Conditions
 ^^^^^^^^^^
