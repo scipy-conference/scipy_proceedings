@@ -17,9 +17,9 @@
 Visualizing physiological signals in real time
 ------------------------------------------------
 
-.. class:: abstract
+.. class:: abstract 
 
-This work presents a software, written in Python, to visualize and record in real time physiological signals, such as electrocardiography,  electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source, extensible, and has been tested on different platforms, including the RaspberryPi (ARM architecture). It leverages the use of several libraries, including PyQtGraph and the SciPy/NumPy stack.
+This work presents a software package, written in Python, to visualize and record physiological signals in real time, such as electrocardiography,  electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source, extensible, and has been tested on different platforms, including the RaspberryPi (ARM architecture). It leverages the use of several libraries, including PyQtGraph and the SciPy/NumPy stack.
 
 .. class:: keywords
 
@@ -28,11 +28,11 @@ This work presents a software, written in Python, to visualize and record in rea
 Introduction
 ------------
 
-A common task in biomedical research is to record and visualize in real time physiological signals. Although there are several options to do this, they are commonly based on  proprietary tools, associated to a particular signal acquisition device vendor. This work presents an open source software (under MIT license), written in Python, to visualize and record in real time physiological signals, such as electrocardiography, electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source, [#]_  extensible, and  has been tested on different Linux distributions, including the RaspberryPi (ARM architecture). It is easy to add new signal processing tasks, to use different communication protocols (serial, Bluetooth, Sockets, etc.), and customize the user interface for the specific needs of the application.
+A common task in biomedical research is to record and visualize physiological signals in real time. Although there are several options to do this, they are commonly based on  proprietary tools, associated to a particular signal acquisition device vendor. This work presents an open source software (under MIT license), written in Python, to visualize and record in physiological signals in real time, such as electrocardiography, electromyography and human movement. The software is also capable of doing real time processing, such as filtering and spectral estimation. The software is open source, [#]_  extensible, and  has been tested on different Linux distributions, including the RaspberryPi (ARM architecture). It is easy to add new signal processing tasks, to use different communication protocols (serial, Bluetooth, Sockets, etc.), and customize the user interface for the specific needs of the application.
 
 .. [#] Available at https://github.com/ssepulveda/RTGraph.
 
-The main aim of the software is to display in real time multiple signals and to export them to a file. In the current implementation, the communication between the software and the acquisition device is through the serial port, and it is implemented using the PySerial library. Other communication protocols can be easily added. The real time display of the signals is implemented using the PyQtGraph library. [#]_ The software has a multiprocess architecture, based on the multiprocessing Python standard library. This allows having concurrent processes for receiving, processing, and displaying the data. Signal processing tasks, such as spectral estimation, are based on the SciPy/NumPy stack [Ste11]_. This architecture assures that no data is lost and a fast user interface response.
+The main aim of the software is to display multiple signals in real time and to export them to a file. In the current implementation, the communication between the software and the acquisition device is through the serial port, and it is implemented using the PySerial library. Other communication protocols can be easily added. The real time display of the signals is implemented using the PyQtGraph library. [#]_ The software has a multiprocess architecture, based on the multiprocessing Python standard library. This allows having concurrent processes for receiving, processing, and displaying the data. Signal processing tasks, such as spectral estimation, are based on the SciPy/NumPy stack [Ste11]_. This architecture assures that no data is lost and a fast user interface response.
 
 .. [#] Available at http://www.pyqtgraph.org.
 
