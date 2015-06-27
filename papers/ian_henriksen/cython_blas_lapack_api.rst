@@ -9,12 +9,12 @@ Circumventing The Linker: Using SciPy's BLAS and LAPACK Within Cython
 .. class:: abstract
 
    BLAS, LAPACK, and other libraries like them have formed the underpinnings of much of the scientific stack in Python.
-   Up until now the standard practice in many packages for using BLAS and LAPACK has been to link each Python extension directly against the libraries needed.
+   Until now the standard practice in many packages for using BLAS and LAPACK has been to link each Python extension directly against the libraries needed.
    Each module that calls these low-level libraries directly has had to link against them independently.
 
    Cython has existing machinery that allows C-level declarations to be shared between Cython-compiled extension modules without linking against the original libraries.
    The Cython BLAS and LAPACK API in SciPy uses this functionality to make it so that the same BLAS and LAPACK libraries that were used to compile SciPy can be used in Python extension modules via Cython.
-   Here I will demonstrate how to create and use these APIs for both Fortran and C libraries in a platform-independent manner.
+   This paper will demonstrate how to create and use these APIs for both Fortran and C libraries in a platform-independent manner.
 
 .. class:: keywords
 
@@ -24,22 +24,63 @@ Introduction
 ------------
 
 Many of the primary underpinnings of the scientific Python stack rely on interfacing with lower-level languages, rather than working with code that is exclusively written in Python.
-There is a longstanding tradition of libraries and API's that mix Python, C, C++, and Fortran code in order to provide well-optimized algorithms together with simple APIs.
-SciPy [SciPy]_, for example, is a collection of algorithms and libraries implemented in a variety of languages that have all been wrapped to provide convenient and usable APIs within Python.
-Because the need to create such extension modules is so prevalent, a variety of wrapping mechanisms have been introduced that aid in the creation of Python bindings for a given package.
-F2PY [F2PY]_, Fwrap, Cython [Cython]_, SWIG [SWIG]_, CFFI, ctypes, and several other packages have all seen extensive use in recent years.
+SciPy [SciPy]_, for example, is a collection of algorithms and libraries implemented in a variety of languages that are wrapped to provide convenient and usable APIs within Python.
+Because programmers often need to call low-level libraries, F2PY [F2PY]_, Cython [Cython]_, CFFI, and others have been introduced to simplify that process.
 
-It is often said that, if Python isn't fast enough for a particular piece of code, getting more speed is simply a matter of writing a little extra code in a different language, exposing it to Python, and adapting the existing code to use the new external piece.
-In practice, however, moving even small parts of a larger algorithm from Python to C can prove far more challenging that we often admit.
-The fundamental problem is that, in order to use code within a different language, a programmer must either remove calls to existing libraries entirely, or call an existing package within the lower-level language.
-Changing the language of a piece of code may involve changing the stack of libraries used.
-Writing a few lines of code in a different language already adds a significant dependency and presents a significant burden in terms of packaging and reproducibility.
-On the other hand, when using additional libraries from the other language, properly packaging the module can suddenly become very difficult.
+In spite of the large number of tools for automatically wrapping low-level libraries, interfacing with low-level languages can still present a significant challenge.
+If the poorly-performing code requires any third party algorithms, developers are faced with the daunting task of rewriting their algorithms to interface with completely different packages and adding large dependencies on existing low-level libraries.
+Adding additional low-level dependencies to an existing project can complicate the build process and expose the project to a much wider variety of bugs.
+When distributing code meant to work reliably with a variety of compilers in a variety of environments, low-level dependencies can become a never-ending source of trouble for developers.
+The situation is further complicated by the fact that, currently, each Python module must shoulder the burden of distributing the low-level libraries it uses.
 
-A possible solution to this unusually painful problem is to make it so that existing Python packages that already export algorithms from a library written in in a lower-level language can provide ways to interface with the lower-level library directly without having to rebuild or search for the low-level library.
+For example, consider the case of a simple tridiagonal solve.
+This can be done easily within Python.
+
+.. code-block:: python
+
+   import numpy as np
+   def pytridiag(a, b, c, x):
+       """ Solve the system A y = x for y
+       where A is the square matrix with subdiagonal
+       'a', diagonal 'b', and superdiagonal 'c'. """
+       A = np.zeros((b.shape[0], b.shape[0]))
+       np.fill_diagonal(A[1:], a)
+       np.fill_diagonal(A, b)
+       np.fill_diagonal(A[:,1:], c)
+       return np.linalg.solve(A, x)
+
+This code works fine for small things, but, if it needs to be called frequently, a more specialized algorithm could provide major improvements in both speed and accuracy.
+An ideal candidate for this sort of optimization is LAPACK's routine ``dgtsv``.
+This same problem can be solved easily in Cython.
+
+.. code-block:: cython
+
+   # cython: wraparound = False
+   # cython: boundscheck = False
+
+   cdef extern from "lapacke.h" nogil:
+       void dgtsv "LAPACK_dgtsv"(int *n, int *nrhs,
+                                 double *dl, double *d,
+                                 double *du, double *b,
+                                 int *ldb, int *info)
+
+   cpdef tridiag(double[::1] a, double[::1] b,
+                 double[::1] c, double[::1] x):
+       cdef int n=b.shape[0], nrhs=1, info
+       # Solution is written over the values in x.
+       dgtsv(&n, &nrhs, &a[0], &b[0], &c[0], &x[0],
+             &n, &info)
+
+Though this process for calling an external function from a library isn't particularly difficult, the setup file for the Python module now must find a proper LAPACK installation.
+If there are several different versions of LAPACK present, a suitable one must be chosen.
+The proper headers and libraries must be found, and, if at all possible binary incompatibilities between compilers must be avoided.
+If the desired routine isn't a part of one of the existing C interfaces, then it must be called via the Fortran ABI and the name mangling schemes used by different Fortran compilers must be taken into account.
+All of the code needed to do this must also be maintained so that it continues to work with new versions of the different operating systems, compilers, and BLAS and LAPACK libraries.
+
+A possible solution to this unusually painful problem is to have existing packages allow access to the low-level libraries that they use.
 NumPy has provided some of this sort of functionality for BLAS and LAPACK by making it so that the locations of the system's BLAS and LAPACK libraries can be found using NumPy's distutils module.
 Cython has also provided a similar sort of functionality by allowing C-level APIs to be exported between Cython modules.
-
+In fact, the existing machinery in Cython can be used to expose functions and variables from existing libraries.
 
 The Cython API for BLAS and LAPACK
 ----------------------------------
@@ -50,6 +91,7 @@ The primary goals of providing such an interface are twofold: first, making the 
 Using the new Cython API, users can now dynamically load the BLAS and LAPACK libraries used to compile SciPy without having to actually link against the original BLAS and LAPACK libraries or include the corresponding headers.
 Modules that use the new API also no longer need to worry about which BLAS or LAPACK library is used.
 If the correct versions of BLAS and LAPACK were used to compile SciPy, the correct versions will be used by the extension module.
+Furthermore, since Cython uses Python capsule objects internally, the needed function pointers can also be extracted by C and C++ modules.
 
 BLAS and LAPACK proved to be particularly good candidates for a Cython API, resulting in several additional benefits:
 
@@ -58,36 +100,22 @@ BLAS and LAPACK proved to be particularly good candidates for a Cython API, resu
 * The naming schemes used within BLAS and LAPACK make it easy to write type-dispatching versions of BLAS and LAPACK routines using Cython's fused types.
 
 In providing these low-level wrappers, it was simplest to follow the calling conventions of BLAS and LAPACK as closely as possible, so all arguments are passed as pointers.
-
-Here's a minimal example
+Using the new Cython wrappers, the tridiagonal solve example shown above can be implemented in Cython in nearly the same way as before, except that all the needed library dependencies have already been resolved within SciPy.
 
 .. code-block:: cython
 
-   # cython: boundscheck = False
    # cython: wraparound = False
-   
-   import numpy as np
-   from scipy.linalg.cython_blas cimport dgemm
-   
-   def test_dgemm():
-       cdef:
-           double[:,:] a = np.array([[2, 3], [2, 1]],
-                                    'd', order='F')
-           double[:,:] b = np.array([[1, 4], [6, 4]],
-                                    'd', order='F')
-           double[:,:] c = np.empty((2,2), order='F')
-           int n = 2
-           char trans = 'n'
-           double al = 1., be = 0.
-       # Axes lengths are all equal, so n can be reused.
-       # Note that all arguments are passed as pointers.
-       dgemm(&trans, &trans, &n, &n, &n, &al, &a[0,0],
-             &n, &b[0,0], &n, &be, &c[0,0], &n)
-       # Print the results to show they match np.dot.
-       print np.array(c)
-       print np.dot(a, b)
+   # cython: boundscheck = False
 
-If these wrappers are needed in an extension module written in C, C++, or another low-level language, a small Cython shim can be used to export the needed functions.
+   from scipy.linalg.cython_lapack cimport dgtsv
+
+   cpdef tridiag(double[::1] a, double[::1] b,
+                 double[::1] c, double[::1] x):
+       cdef int n=b.shape[0], nrhs=1, info
+       # Solution is written over the values in x.
+       dgtsv(&n, &nrhs, &a[0], &b[0], &c[0], &x[0],
+             &n, &info)
+
 Since Cython uses Python's capsule objects internally for the cimport mechanism, it is also possible to extract function pointers directly from the module's ``__pyx_capi__`` dictionary and cast them to the needed type without writing the extra shim.
 
 Exporting Cython APIs for Existing C Libraries
