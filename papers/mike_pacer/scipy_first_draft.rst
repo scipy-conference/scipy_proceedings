@@ -7,7 +7,7 @@
 
 ..  latex::
     
-    :usepackage: mathpalette, graphicx
+    %:usepackage: mathpalette, graphicx
     \newcommand{\bigCI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
     \newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
     \def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
@@ -219,7 +219,7 @@ Consider the following example:
     X &\sim& \textrm{Bernoulli}_{\{0,1\}}(.5), Y \sim \textrm{Bernoulli}_{\{0,1\}}(.5)\\
     Z &=& X \oplus Y, \oplus \equiv \textsc{xor}\\
 
-Note that, :math:`X \independent Y|Z`.
+Note that, :math:`X \independent Y` but :math:`X \not\independent Y|Z`.
 
 Sampling from Conditional Probability distributions
 ---------------------------------------------------
