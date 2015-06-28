@@ -28,14 +28,14 @@
 :institution: Music and Audio Research Laboratory, New York University
 
 --------------------------------------------------
-LibROSA: Audio and Music Signal Analysis in Python
+librosa: Audio and Music Signal Analysis in Python
 --------------------------------------------------
 
 .. class:: abstract
 
    This document describes the design and implementation of version 0.4.0 of
-   librosa: a Python package for audio and music signal processing.
-
+   ``librosa``: a Python package for audio and music signal processing.
+   
 
 .. class:: keywords
 
@@ -116,7 +116,7 @@ All development is conducted on GitHub.
 We apply modern software development practices, such as continuous integration testing (via Travis [#]_) and
 coverage (via Coveralls [#]_).
 All functions are implemented in pure Python, thoroughly documented using Sphinx, and include example code demonstrating usage.
-Librosa mostly complies with PEP-8 recommendations, with a small set of exceptions for variable names 
+The implementation mostly complies with PEP-8 recommendations, with a small set of exceptions for variable names 
 that make the code more concise without sacrificing clarity:
 e.g., ``y`` and ``sr`` are preferred over more verbose names such as ``audio_buffer`` and ``sampling_rate``.
 
@@ -148,7 +148,7 @@ monophonic signal to the default rate ``sr=22050`` Hz.
 
 Most audio analysis methods operate not at the native sampling rate of the signal, 
 but over small `frames` of the signal which are spaced by a `hop length` (in samples).
-Librosa uses default frame and hop lengths of 2048 and 512 samples, respectively.
+The default frame and hop lengths are set to 2048 and 512 samples, respectively.
 At the default sampling rate of 22050 Hz, this corresponds to overlapping frames of 
 approximately 93ms spaced by 23ms.
 Frames are centered by default, so frame index ``t`` corresponds to the half-open time interval::
@@ -164,7 +164,7 @@ default hop length of 512 is retained to facilitate alignment of results.
 The majority of feature analyses implemented by librosa produce two-dimensional outputs
 stored as ``numpy.ndarray``, e.g., ``S[f, t]`` might contain the energy within a particular 
 frequency band ``f`` at frame index ``t``.
-Librosa follows the convention that the final dimension provides the index over time,
+We follow the convention that the final dimension provides the index over time,
 e.g., ``S[:, 0], S[:, 1]`` access features at the first and second frames.
 Feature arrays are organized column-major (Fortran style) in memory, so that common
 access patterns benefit from cache locality.
@@ -228,9 +228,9 @@ The ``librosa.feature`` module implements a variety of spectral representations,
 upon the short-time Fourier transform.
 
 The Mel frequency scale is commonly used to represent audio signals, as it provides a rough model of
-human frequency perception [Stevens37]_.  Librosa implements both a Mel-scale spectrogram
+human frequency perception [Stevens37]_.  Both a Mel-scale spectrogram
 (``librosa.feature.melspectrogram``) and the commonly used Mel-frequency Cepstral Coefficients (MFCC)
-(``librosa.feature.mfcc``).  By default, Mel scales are defined to match the implementation provided 
+(``librosa.feature.mfcc``) are provided.  By default, Mel scales are defined to match the implementation provided 
 by Slaney's auditory toolbox [Slaney98]_, but they can be made to match the Hidden Markov Model Toolkit (HTK) 
 by setting the flag ``htk=True`` [Young97]_.
 
@@ -247,8 +247,8 @@ by setting the flag ``htk=True`` [Young97]_.
 While Mel-scaled representations are commonly used to capture timbral aspects of music, they provide poor
 resolution of pitches and pitch classes.
 Pitch class (or *chroma*) representations are often used to encode harmony while suppressing variations in
-octave height, loudness, or timbre.  Librosa provides two flexible chroma implementations: one using
-fixed-window STFT analysis (``chroma_stft``) [#]_ and one using variable-window constant-Q transform analysis
+octave height, loudness, or timbre.  Two flexible chroma implementations are provided: one uses a
+fixed-window STFT analysis (``chroma_stft``) [#]_ and the other uses variable-window constant-Q transform analysis
 (``chroma_cqt``).
 An alternative representation of pitch and harmony can be obtained by the ``tonnetz`` function, which
 estimates tonal centroids as coordinates in a six-dimensional interval space using the method of Harte et al.
@@ -526,10 +526,10 @@ One approach to eliminate redundant computation is to decompose the various func
 in a computation graph, as is done in Essentia [Bogdanov13]_.  However, this approach necessarily constrains the function 
 interfaces, and may become unwieldy for common, simple applications.
 
-Librosa takes an alternative, lazy approach to eliminating redundancy via *output caching*.
+``librosa`` takes an alternative, lazy approach to eliminating redundancy via *output caching*.
 Caching is implemented through an extension of the ``Memory`` class from the ``joblib`` package [#]_, 
 which provides disk-backed memoization of function outputs.
-Librosa's cache object (``librosa.cache``) operates as a decorator on all non-trivial computations.
+The cache object (``librosa.cache``) operates as a decorator on all non-trivial computations.
 This way, a user can write simple application code (i.e., the first example above) while transparently 
 eliminating redundancies and achieving speed comparable to the more advanced implementation (the second example).
 
@@ -537,13 +537,14 @@ The cache object is disabled by default, but can be activated by setting the env
 ``LIBROSA_CACHE_DIR`` prior to importing the package.
 Because the ``Memory`` object does not implement a cache eviction policy (as of version 0.8.4),
 it is recommended that users purge the cache after processing each audio file to prevent the cache from
-filling all available disk space.
+filling all available disk space [#]_.  
 We note that this can potentially introduce race conditions in multi-processing environments (i.e., parallel batch processing of a corpus),
 so care must be taken when scheduling cache purges.
 
 
 .. [#] https://github.com/joblib/joblib
 
+.. [#] The cache can be purged by calling ``librosa.cache.clear()``.
 
 Parameter tuning
 ----------------
@@ -617,7 +618,7 @@ Conclusion
 ----------
 This document provides a brief summary of the design considerations and functionality of librosa.
 More detailed examples, notebooks, and documentation can be found in our development repository and project website.
-Librosa is under active development, and our roadmap for future work includes efficiency improvements and
+``librosa`` is under active development, and our roadmap for future work includes efficiency improvements and
 enhanced functionality of audio coding and file system interactions.
 
 
