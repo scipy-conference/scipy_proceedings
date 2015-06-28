@@ -6,9 +6,11 @@
 :video: youtube_link_to_come
 
 ..  latex::
-    
-    %:usepackage: mathpalette, graphicx
     :usepackage: booktabs
+
+..  latex::
+
+    %:usepackage: mathpalette, graphicx
     \newcommand{\bigCI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
     \newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
     \def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
@@ -253,46 +255,25 @@ But note that now we cannot sum over these in the same way that we did before. W
 
 Thus we can establish the following statements
 
-
-
-..  latex::
-    :usepackage: booktabs
-
 ..  latex::
 
     \begin{center}
-    \begin{tabular}{lll}  
+    \begin{tabular}{lll}
         \toprule
         & \multicolumn{2}{c}{Parent values} \\
         \cmidrule(r){2-3}
-        Probs    & $P(\cdot|D_6)$ & $P(\cdot|D_{20})$\\
+        Probs    & $P(\cdot|D_6,\textsc{h})$ & $P(\cdot|D_{20})$\\
         \midrule
-        $P(X_1|\cdot)$      &  $P(X_1|D_6)*P(D_6)$     & $P(X_1|D_{20})*P(D_{20})$ \\
+        $P(X_1|\cdot)$      &  $P(X_1|D_6)*P(\textsc{h})$     & $P(X_1|D_{20})*P(\textsc{t})$ \\
         \vdots     &    \vdots     & \vdots       \\
-        $P(X_6|\cdot)$       &  $P(X_6|D_6)*P(D_6)$     & $P(X_6|D_{20})*P(D_{20})$      \\
+        $P(X_6|\cdot)$       &  $P(X_6|D_6)*P(\textsc{h})$     & $P(X_6|D_{20})*P(\textsc{t})$      \\
         \vdots       & \vdots     & \vdots      \\
-        $P(X_{20}|\cdot)$ & 0      & $P(X_{20}|D_{20})*P(D_{20})$   \\
+        $P(X_{20}|\cdot)$ & 0      & $P(X_{20}|D_{20})*P(\textsc{t})$   \\
         \bottomrule
     \end{tabular}
     \end{center}
 
 
-
-.. ..  latex::
-
-..     \begin{tabular}{llr}  
-..         \toprule
-..         \multicolumn{2}{c}{Item} \\
-..         \cmidrule(r){1-2}
-..         Animal    & Description & Price (\$) \\
-..         \midrule
-..         Gnat      & per gram    & 13.65      \\
-..              &    each     & 0.01       \\
-..         Gnu       & stuffed     & 92.50      \\
-..         Emu       & stuffed     & 33.33      \\
-..         Armadillo & frozen      & 8.99       \\
-..         \bottomrule
-..     \end{tabular}
 
 
 Coins and dice with disjoint sets of labeled entities, Example
