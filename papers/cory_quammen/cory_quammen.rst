@@ -20,7 +20,7 @@ Scientific Data Analysis and Visualization with Python, VTK, and ParaView
 
 .. class:: keywords
 
-   visualization, VTK, ParaView
+   data analysis, scientific visualization, VTK, ParaView
 
 Introduction
 ------------
@@ -1022,12 +1022,11 @@ Python 3 is targeted for sometime in 2016.
 Acknowledgements
 ----------------
 
-Contributions to Python support in VTK and ParaView have come from a
-number of VTK community members. Deserving special recognition are the
-following key contributors: David Gobbi, Prabhu Ramachandran, Ken
-Martin, Berk Geveci, Utkarsh Ayachit, Ben Boeckel, Andy Cedilnik, Brad
-King, David Partyka, George Zagaris, Marcus Hanwell, and Mathieu
-Malaterre.
+Contributions to Python support in VTK and ParaView have come from
+many VTK community members. Deserving special recognition are key
+contributors David Gobbi, Prabhu Ramachandran, Ken Martin, Berk
+Geveci, Utkarsh Ayachit, Ben Boeckel, Andy Cedilnik, Brad King, David
+Partyka, George Zagaris, Marcus Hanwell, and Mathieu Malaterre.
 
 
 .. Customised LaTeX packages
