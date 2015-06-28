@@ -644,9 +644,9 @@ user interactions with the GUI.
 Python tracing is implemented by instrumenting the ParaView
 application with Python generation code at various user event
 handlers. The tracing mechanism can record either the entire state of
-proxies or just modifications of state to non-default values to reduce
-the trace size. Traces can be started and stopped at any time - they
-do not need to record the full user interaction history.
+ParaView objects or just modifications of state to non-default values
+to reduce the trace size. Traces can be started and stopped at any
+time - they do not need to record the full user interaction history.
 
 An application where tracing is useful is the batch conversion of data
 files. If ParaView can read the source file format and write the
@@ -697,17 +697,16 @@ ParaView API to create a sphere source with radius 2.
 
 Note in this example the various references to proxies. A *proxy* here
 refers to the proxy programming design pattern where one object
-provides an interface to another object. Proxies are central within
-ParaView. ParaView can be run in several different client/server
-configurations. In a number of configurations, the client software
+provides an interface to another object. Proxies are central to
+ParaView's design. In a number of the various client/server
+configuration in which ParaView can be run, the client software
 running on a local workstation connects to a remote server running one
 or more processes on different nodes of a high-performance computing
-resource.
+resource. Proxies for each pipeline object exist on the ParaView
+client, and they provide the interface for communicating state to all
+the VTK objects in each client and server process.
 
-Proxies for a pipeline object typically exist on all processes in the
-ParaView client and servers. They provide the interface for
-communicating state to all the VTK objects in each process. In the
-example above, a new proxy for a ``vtkSphereSource`` object is
+In the example above, a new proxy for a ``vtkSphereSource`` object is
 created. This proxy has a property named 'Radius' that is modified to
 the value 2.0. Changes to the 'Radius' property are forwarded to the
 'Radius' property of the underlying ``vtkSphereSource``.
@@ -977,29 +976,30 @@ Unified Server Bindings
 
 As previously discussed, ParaView uses proxies to manage state among
 VTK class instances associated with pipeline objects on distributed
-process. For example, ParaView updates proxies for a file reader so
-that the underlying VTK reader on each process has the same file
-name. These proxies are updated via a client/server communication
-layer that is generated automatically using a wrapping mechanism. The
-client/server layer consists of one communication class per VTK class
-that serializes and deserializes state in the VTK class.
+process. For example, when the proxy for a cross-section filter has
+its cutting plane property changed, the underlying VTK filter on each
+process is updated so that is has the same cutting plane. These
+instances are updated via a client/server communication layer that is
+generated automatically using a wrapping mechanism. The client/server
+layer consists of one communication class per VTK class that
+serializes and deserializes state in the VTK class.
 
 As discussed, a similar wrapping process is also performed to generate
-Python bindings for VTK classes and ParaView proxy classes. Each of
-these wrappings adds to the size of the executable files and shared
+Python bindings for VTK classes and ParaView classes. Each of these
+wrappings adds to the size of the executable files and shared
 libraries. On very large scale parallel computing resources, the
 amount of RAM available per node can be relatively limited. As a
 result, when running ParaView on such a resource, it is important to
 reduce the size of the executables as much as possible to leave room
 for the data. One way to do this is to use the Python wrapping to
 communicate among processes instead of using the client/server
-class. Indeed, when this option is enabled, the process of creating
-the special communication classes is skipped. Instead, communication
-is performed by sending strings with Python expressions to destination
-processes. These expressions are then evaluated on each process to
-change the state of local proxies. In this approach, we get the same
-functionality as the custom client/server communication layer
-wrapping, but with smaller executables.
+communication class. Indeed, when this option is enabled, the process
+of creating the special communication classes is skipped. Instead,
+communication is performed by sending strings with Python expressions
+to destination processes. These expressions are then evaluated on each
+process to change the state of local VTK classes. In this approach, we
+get the same functionality as the custom client/server communication
+layer wrapping, but with smaller executables.
 
 Conclusions
 -----------
