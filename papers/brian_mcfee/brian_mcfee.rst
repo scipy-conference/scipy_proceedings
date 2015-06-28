@@ -33,8 +33,13 @@ librosa: Audio and Music Signal Analysis in Python
 
 .. class:: abstract
 
-   This document describes the design and implementation of version 0.4.0 of
-   ``librosa``: a Python package for audio and music signal processing.
+   This document describes version 0.4.0 of ``librosa``: a Python
+   package for audio and music signal processing.
+   At a high level, ``librosa`` provides implementations of a variety 
+   of common functions used throughout the field of music information retrieval.
+   In this document, a brief overview of the library's functionality is provided,
+   along with explanations of the design goals, software development
+   practices, and notational conventions.
    
 
 .. class:: keywords
@@ -399,7 +404,7 @@ This is facilitated by the ``recurrence_to_lag`` (and ``lag_to_recurrence``) fun
     :figclass: wt
 
     Left: the recurrence plot derived from the chroma features displayed in Figure :ref:`fig:feature`.
-    Right: the time-lag plot derived from the recurrence plot.
+    Right: the corresponding time-lag plot.
     :label:`fig:rec`
 
 
@@ -628,6 +633,10 @@ Citing librosa
 We request that when using librosa in academic work, authors cite the Zenodo reference [McFee15]_.
 For references to the *design* of the library, citation of the present document is appropriate.
 
+
+Acknowledgements
+================
+BM acknowledges support from the Moore-Sloan Data Science Environment at NYU.
 
 References
 ----------
