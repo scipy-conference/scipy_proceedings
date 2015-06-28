@@ -22,7 +22,7 @@ Introduction
 ------------
 
 The Scientific Python stack rarely leverages parallel computation.  Code built
-off of NumPy and Pandas generally runs in a single thread on data that fits
+off of NumPy or Pandas generally runs in a single thread on data that fits
 comfortably in memory.  Advances in hardware in the last decade in multi-core
 processors and solid state drives provide significant and yet largely untapped
 performance advantages.
@@ -37,15 +37,15 @@ This paper introduces ``dask``, a specification to encode parallel algorithms,
 using primitive Python dictionaries, tuples, and callables.  We use ``dask`` to
 create ``dask.array`` a parallel out-of-core NumPy clone using blocked
 algorithms.  This serves both as a general library for parallel out-of-core
-ndarrays but also as a demonstration that we can parallelize complex codebases
-like NumPy in a straightforward manner.
+``ndarrays`` but also as a demonstration that we can parallelize complex
+codebases like NumPy in a straightforward manner.
 
 We first define ``dask`` graphs and give a trivial example of their use.  We then
-share the design of ``dask.array`` a parallel ndarray.  Then we discuss dynamic
+share the design of ``dask.array`` a parallel ``ndarray``.  Then we discuss dynamic
 task scheduling and policies to minimize memory footprint.  We then give two
 examples using ``dask.array`` on computational problems.  We then briefly
 discuss ``dask.bag`` and ``dask.dataframe``, two other collections in the
-``dask``` library.  We finish with thoughts about extension of this approach
+``dask`` library.  We finish with thoughts about extension of this approach
 into the broader Scientific Python ecosystem.
 
 Dask Graphs
@@ -116,7 +116,8 @@ dependencies.  Dask is a specification to encode such a graph using ordinary
 Python data structures, namely dicts, tuples, functions, and arbitrary Python
 values.
 
-A **dask graph** is a dictionary mapping data-keys to values or tasks.
+A **dask graph** is a dictionary mapping identifying keys to values or tasks.
+We explain these terms after showing a complete example:
 
 .. code-block:: python
 
@@ -161,23 +162,30 @@ So all of the following are valid tasks
    (sum, ['x', (inc, 'x')])
    (np.dot, np.array([...]), np.array([...]))
 
-To encode keyword arguments we recommend the use of ``functools.partial`` or
-``toolz.curry``.
+The dask spec provides no explicit support for keyword arguments.  In
+practice we combine these into the callable function with
+``functools.partial`` or ``toolz.curry``.
 
 
 Dask Arrays
 -----------
 
-The ``dask.array`` submodule uses dask graphs to create a numpy clone that uses
-all of your cores and operates on datasets that do not fit in memory.  It does
-this by building up a dask graph of blocked array algorithms.
+The ``dask.array`` submodule uses dask graphs to create a numpy clone that
+uses all of your cores and operates on datasets that do not fit in memory.
+It does this by building up a dask graph of blocked array algorithms.
 
-Several other large NumPy implementations exist, including Biggus_ an
-out-of-core ndarray specialized for climate science, Spartan_ a
-distributed memory ndarray, and Distarray_ a distributed memory ndarray
-that interacts well with other distributed array libraries like Trillinos.
-There have also been numerous projects in traditional high performance
-computing space including Elemental [Pou13]_, High Performance Fortran, etc..
+The ``dask.array`` submodule is not the first library to implement a
+"Big NumPy Clone".  Other partial implementations exist including Biggus_ an
+out-of-core ``ndarray`` specialized for climate science, Spartan_ a
+distributed memory ``ndarray``, and Distarray_ a distributed memory
+``ndarray`` that interacts well with other distributed array libraries like
+Trillinos.  There have also been numerous projects in traditional high
+performance computing space including Elemental [Pou13]_, High Performance
+Fortran, etc..  Each implementation focuses on a particular application or
+problem domain.  Dask.array distinguishes itself in that it focuses on a
+very general class of numpy operations and streaming execution through
+dynamic task scheduling.
+
 
 Blocked Array Algorithms
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -194,8 +202,8 @@ Dryad [Isa07]_ and Spark [Zah10]_.  These compute macroscopic operations with a
 collection of related in-memory operations.
 
 Dask.array takes a similar approach to linear algebra libraries but focuses
-instead on the more pedestrian ndarray operations, like arithmetic, reductions,
-and slicing common in interactive use.
+instead on the more pedestrian ``ndarray`` operations, like arithmetic,
+reductions, and slicing common in interactive use.
 
 
 Example: ``arange``
@@ -308,28 +316,34 @@ used operations including the following:
 *  Fancy indexing along single axes with lists or numpy arrays, ``x[:, [10, 1, 5]]``
 *  A variety of utility functions, ``bincount, where, ...``
 
-However dask.array is unable to handle any operation whose shape can not be
-determined ahead of time.  Consider for example the following common numpy
-operation
+However ``dask.array`` is unable to handle any operation whose shape can not
+be determined ahead of time.  Consider for example the following common
+numpy operation
 
 .. code-block:: python
 
-   x[x > 0]
+   x[x > 0]  # can not determine shape of output
 
 The shape of this array depends on the number of positive elements in ``x``.
 This shape is not known given only metadata; it requires knowledge of the
-values underlying ``x``, which are not available at graph creation time.
+values underlying ``x``, which are not available at graph creation time.  Note
+however that this case is fairly rare; for example it is possible to determine
+the shape of the output in all other cases of slicing and indexing, e.g.
+
+.. code:: python
+
+   x[10::3, [1, 2, 5]]  # can determine the shape of the output
 
 
 Dynamic Task Scheduling
 -----------------------
 
-We now execute task graphs.  How we execute these graphs strongly impacts
-performance.  Fortunately we can tackle this problem with a variety of
-approaches without touching the graph creation problem discussed above.  Graph
-creation and graph execution are separable problems.  The dask library contains
-schedulers for single-threaded, multi-threaded, multi-process, and distributed
-execution.
+We now discuss how ``dask`` executes execute task graphs.  How we execute
+these graphs strongly impacts performance.  Fortunately we can tackle this
+problem with a variety of approaches without touching the graph creation
+problem discussed above.  Graph creation and graph execution are separable
+problems.  The dask library contains schedulers for single-threaded,
+multi-threaded, multi-process, and distributed execution.
 
 Current dask schedulers all operate *dynamically*, meaning that execution order
 is determined during execution rather than ahead of time through static
@@ -343,11 +357,14 @@ processing and projects without like DAGuE [Bos12]_ for more high performance
 task scheduling.  Additionally, data parallel systems like Dryad or Spark
 contain their own custom dynamic task schedulers.
 
-Traditional task scheduling with data dependencies scheduling literature
-usually focuses on policies to expose parallelism or chip away at the critical
-path.  We find that for bulk data analytics these are not very relevant as
-parallelism is abundant and critical paths are comparatively short relative to
-the depth of the graph.
+None of these solutions, nor much of the literature in dynamic task scheduling,
+suited the needs of blocked algorithms for shared memory computation.  We
+needed a lightwight, easily installable Python solution that had latencies in
+the millisecond range and was mindful of memory use.  Traditional task
+scheduling with data dependencies scheduling literature usually focuses on
+policies to expose parallelism or chip away at the critical path.  We find that
+for bulk data analytics these are not very relevant as parallelism is abundant
+and critical paths are comparatively short relative to the depth of the graph.
 
 The logic behind dask's schedulers reduces to the following situation:  A worker
 reports that it has completed a task and that it is ready for another.  We
@@ -356,15 +373,16 @@ run, which data can be released, etc..  We then choose a task to give to this
 worker from among the set of ready-to-run tasks.  This small choice governs the
 macro-scale performance of the scheduler.
 
-Instead for out-of-core computation we find value in choosing tasks that allow
-us to release intermediate results and keep a small memory footprint.
-This lets us avoid spilling intermediate values to disk which hampers
-performance significantly.
-
+Instead of these metrics commonly found in the literature we find that for
+out-of-core computation we need to choose tasks that allow us to release
+intermediate results and keep a small memory footprint.  This lets us avoid
+spilling intermediate values to disk which hampers performance significantly.
 After several other policies we find that the policy of *last in, first out* is
-surprisingly effective.  We select tasks that were most recently made
-available.  We implement this with a simple stack, which can operate in
-constant time.  This is very important.
+surprisingly effective.  That is we select tasks whose data dependencies were
+most recently made available.  This causes a behavior where long chains of
+related tasks trigger each other, forcing the scheduler to finish related tasks
+before starting new ones.  We implement this with a simple stack, which can
+operate in constant time.
 
 We endeavor to keep scheduling overhead low at around 1ms per task.  Updating
 executing state and deciding which task to run must be made very quickly.  To
@@ -373,6 +391,12 @@ computation.  The set of ready-to-run tasks is commonly quite large, in the
 tens or hundreds of thousands in common workloads and so in practice we must
 maintain enough state so that we can choose the right task in constant time (or
 at least far sub-linear time).
+
+Finally, power users can disregard the dask schedulers and create their own.
+Dask graphs are completely separate from the choice of scheduler and users may
+select the right scheduler for their class of problem or, if no ideal scheduler
+exists, build one anew.  The default single-machine scheduler is about three
+hundred significant lines of code.
 
 
 Example: Matrix Multiply
@@ -467,8 +491,8 @@ the following:
 
 1.  Use ``concatenate`` and ``stack`` to manage large piles of HDF5 files (a
     common case)
-2.  Using reductions and slicing to manipulate stacks of arrays
-3.  Interacting with other libraries in the ecosystem using the ``__array__``
+2.  Use reductions and slicing to manipulate stacks of arrays
+3.  Interact with other libraries in the ecosystem using the ``__array__``
     protocol.
 
 We start with a typical setup, a large pile of NetCDF files.::
@@ -525,8 +549,12 @@ they call ``np.array(...)`` on their input.
    show the average temperature difference between noon and midnight for year
    2014
 
-This computation took about a minute on an old notebook computer.  The
-computation seemed to be bound by disk access.
+This computation took about a minute on an old notebook computer.  It was bound
+by disk access.  Meteorological cases tend to be I/O bound rather than compute
+bound, taking more advantage of ``dask``'s memory-aware schedulers rather than
+parallel computation.  In other cases, such as parallel image processing, this
+trend is reversed.
+
 
 Other Collections
 -----------------
@@ -549,7 +577,9 @@ switch from using a multi-threaded scheduler to a multi-processing one.
 The ``dask.bag`` API contains functions like ``map`` and ``filter`` and
 generally follows the PyToolz_ API.  We find that it is particularly useful
 on the front lines of data analysis, particularly in parsing and cleaning up
-initial data dumps like JSON or log files.
+initial data dumps like JSON or log files because it combines the streaming
+properties and solid performance of projects like ``cytoolz`` with the
+parallelism of multiple processes.
 
 .. code-block:: python
 
@@ -599,6 +629,9 @@ data we may know that all of January is in one block while all of February is
 in another.  Join, groupby, and range queries along this index are
 significantly faster when working on partitioned datasets.
 
+Dask.dataframe benefits users by providing trivial access to larger-than-memory
+datasets and, where Pandas does release the GIL, parallel computation.
+
 
 Dask for General Computing
 --------------------------
@@ -607,7 +640,7 @@ The higher level collections ``dask.array/bag/dataframe`` demonstrate the
 flexibility of the dask graph specification to encode sophisticated parallel
 algorithms and the capability of the dask schedulers to execute those graphs
 intelligently on a multi-core machine.  Opportunities for parallel execution
-extend beyond beyond ndarrays and dataframes.
+extend beyond beyond ``ndarrays`` and dataframes.
 
 In the beginning of this document we gave the following toy example to help
 define dask graphs.
@@ -670,16 +703,30 @@ convenient to manipulate.
 
 **Low Barrier to Entry:** More importantly these collections demonstrate the
 feasibility of dask graphs to describe parallel algorithms and of the dask
-schedulers to execute those algorithms efficiently in a small space.
+schedulers to execute those algorithms efficiently in a small space.  The lack
+of a more baroque framework drastically reduces the barrier to entry and the
+ability of developers to use dask within their own libraries.
 
-The dask standard is simple and low-tech and, in anecdotal experience,
-developers come to understand it in less than an hour.  The lack of a more
-baroque framework drastically reduces the barrier to entry and the ability of
-developers to use dask within their own libraries.
+Administratriva and Links
+-------------------------
 
-The core functions to manipulate dask graphs and the single machine schedulers
-depend only on the standard library.  Dask is available on PyPI and is
-distributed with the Anaconda installation.
+Dask is available on github, PyPI, and is now included in the Anaconda
+distribution.  It is BSD licensed, runs on Python 2.6 to 3.4 and is tested
+against Linux, OSX, and Windows.
+
+This document was compiled from numerous blogposts that chronicle dask's
+development and go more deeply into the computational concerns encountered
+during dask's construction.
+
+Dask is used on a daily basis, both as a dependency in other projects in the
+SciPy ecosystem (xray, scikit-image, ...) and also in production in in private
+business.
+
+*   http://dask.pydata.org/en/latest
+*   http://github.com/ContinuumIO/dask
+*   http://matthewrocklin.com/blog
+*   http://pypi.python.org/pypi/dask/
+
 
 Acknowledgements
 ----------------
