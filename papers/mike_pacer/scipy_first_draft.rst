@@ -34,7 +34,7 @@
 Causal Bayesian NetworkX
 ------------------------
 
-.. class:: abstract
+..  class:: abstract
 
     Humans are existence proofs for the solubility of computational causal inference.
 
@@ -47,9 +47,9 @@ Causal Bayesian NetworkX
     I have developed tools on top of the :code:`NetworkX` package that allow me to implement some aspects of these models. By treating graph definition as one of enumeration and filtering rather than investigating invidual graphs, we are able to more conveniently state constraints on the graph structures under question. Indeed this gives an alternative view of intervention not as the modification of an single graph, but as a constraint on the total set of graphs. This allows us to treat the graphical aspects of the problem separately from the probabilistic semantics that define particular models on those graphs. I call this set of tools `Causal Bayesian NetworkX`.
 
 
-.. class:: keywords
+..  class:: keywords
 
-   probabilistic graphical models, causality, intervention
+    probabilistic graphical models, causality, intervention
 
 Introduction and Aims
 ---------------------
@@ -262,9 +262,9 @@ Thus we can establish the following statements
         \toprule
         & \multicolumn{2}{c}{Parent values} \\
         \cmidrule(r){2-3}
-        Probs    & $P(\cdot|D_6,\textsc{h})$ & $P(\cdot|D_{20})$\\
+        Probs & $P(\cdot|D_6,\textsc{h})$ & $P(\cdot|D_{20})$\\
         \midrule
-        $P(X_1|\cdot)$      &  $P(X_1|D_6)*P(\textsc{h})$     & $P(X_1|D_{20})*P(\textsc{t})$ \\
+        $P(X_1|\cdot)$ &$P(X_1|D_6)*P(\textsc{h})$ & $P(X_1|D_{20})*P(\textsc{t})$ \\
         \vdots     &    \vdots     & \vdots       \\
         $P(X_6|\cdot)$       &  $P(X_6|D_6)*P(\textsc{h})$     & $P(X_6|D_{20})*P(\textsc{t})$      \\
         \vdots       & \vdots     & \vdots      \\
@@ -272,9 +272,6 @@ Thus we can establish the following statements
         \bottomrule
     \end{tabular}
     \end{center}
-
-
-
 
 Coins and dice with disjoint sets of labeled entities, Example
 ==============================================================
@@ -762,7 +759,3 @@ Outline v. 1.1
 .. .. role:: bibliography
 
 .. .. [Atr03] P. Atreides. *How to catch a sandworm*,           Transactions on Terraforming, 21(3):261-300, August 2003.
-::
-
-
-
