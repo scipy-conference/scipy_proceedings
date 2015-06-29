@@ -25,9 +25,9 @@ Introduction
 Incoming students interested in majoring in Physics at Minnesota State
 University Moorhead are often interested in doing astronomical research. The
 department encourages students to become involved in research as early as
-possible to foster their interest in science and because early research
+possible to foster their interest in science and because research
 experiences are correlated with successful completion of a degree
-[ref_needed]_.
+[Lopatto2004]_.
 
 The students typically have no programming experience, but even the smallest
 project requires calibrating and taking measurements from a couple of hundred
@@ -415,7 +415,9 @@ References
 
 .. [ccdproc] Crawford, S and Craig, M., https://github.com/ccdproc
 
-.. [ref_needed] *FILL ME IN*
+.. [Lopatto2004] Lopatto, D.
+                *Survey of undergraduate research experiences (SURE): First
+                findings.* Cell biology education 3.4 (2004).
 
 .. [IRAF1993] Tody, D., *IRAF in the Nineties*, Astronomical Data Analysis
               Software and Systems II, A.S.P. Conference Series, Vol. 52, 1993
