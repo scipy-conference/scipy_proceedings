@@ -43,13 +43,13 @@ Python in Data Science Research and Education
 Introduction
 ------------
 
-Data Science is a burgeoning field of study that lays at the
+Data Science is a burgeoning field of study that lies at the
 intersection of statistics, computer science, and numerous applied
 scientific domains.  As is common within such *interdisciplinary*
 domains of study, Data Science education, mentoring, and research
 draws ideas from, and is inspired by, several other domains such as
-the mathematical sciences, computer science, and various business and
-application domains.  Perhaps just as importantly, student who wish to
+the mathematical sciences, computer science, and various businesses and
+application domains.  Perhaps just as importantly, students who wish to
 pursue education and careers in Data Science come from similarly
 diverse backgrounds.  Accordingly, the challenges and opportunities of
 being an educator in such a domain requires one to reflect on
@@ -67,26 +67,26 @@ Ph.D. program.  Even at this early stage, the program has been quite
 fortunate to receive many more applications from students then it can
 reasonably admit.  The authors have the pleasure of being faculty
 members in the program and have the honor of teaching a number of the
-courses on offer.  In addition, as a long time Python users (for one
+courses on offer.  In addition, as long time Python users (for one
 of them since 1997 in fact [Paf99]_), the authors were intrigued by
 the possibility of leveraging Python in the graduate Data Science
 curriculum and this monograph describes some of the experiences, both
 successes and challenges, gained from that effort.  Of course, it is
 much too early to make any comments on the sustained effect of using
 Python for graduate Data Science education, however, perhaps the
-gentle reader will find some value in the authors' experiences, even
+reader will find some value in the authors' experiences, even
 at this early date.
 
 Of course, we are not the first to suggest Python's effectiveness in
 an education and research environment.  In fact, the Python
-programming language is quite popular in numerous problem domains and
+scripting language is quite popular in numerous problem domains and
 Python has seen wide used in education, see e.g., [Mye07]_ and
 [Sta00]_.  In fact, it ranks quite highly in many surveys of
 programming language popularity [OGr14]_, it is seeing substantial
 growth within the Data Science community [Sin14]_, and is generally
 speaking quite easy to learn [Lut13]_.
 
-However, it is not our purpose here to focus on Python in the large,
+However, it is not our purpose here to focus on Python in general,
 but rather to focus on its use in *Data Science* education and
 research.  With that in mind, herein we will focus on a small number
 of case studies that provide insights into how we have leveraged
@@ -104,25 +104,25 @@ authors has also used Python to support MA542 |--| "Regression
 Analysis".  MA542 is a somewhat more advanced class that is a (core)
 elective in the Data Science program as well as being a class taken by
 many students who are seeking degrees in the Mathematical Sciences
-department.  Finally, the authors mentor a number of student's
-research projects both within the Data Science Program, the
+department.  Finally, the authors mentor a number of students'
+research projects within the Data Science Program, the
 Mathematical Sciences Department, and the Computer Science Department.
-Many of these research projects leverage Python, in various ways, and
+Many of these research projects leverage Python in various ways, and
 having access to a common code base allows the various student
 projects to build off of one another.
 
 Two key themes will permeate our discussion in the following sections.
-First, Python provides easy access to a vast array of libraries.  Even
-though Data Science education and research draws from many other
-domains, Python was always there with a library ready to support our
-work.  Second, and perhaps more subtly, having access to a language
-which is easy to use, but provides access to many advanced libraries,
-allows one to carefully craft the difficulty and scope of homework
-assignments, class projects, and research problems.  In particular,
-Python allows students to tackle specific aspects of real world
-problems, without being overly burdened with details that are
-extraneous to their particular learning objectives.  Both properties make
-Python particularly advantageous.
+First, the Python community provides easy access to a vast
+array of libraries.  Even though Data Science education and research
+draws from many other domains, Python was always there with a library
+ready to support our work.  Second, and perhaps more subtly, having
+access to a language which is easy to use, but provides access to many
+advanced libraries, allows one to carefully craft the difficulty and
+scope of homework assignments, class projects, and research problems.
+In particular, Python allows students to tackle specific aspects of
+real world problems, without being overly burdened with details that
+are extraneous to their particular learning objectives.  Both
+properties make Python particularly advantageous.
 
 Finally, in an effort to assist the reader who is not steeped in
 Python, we will attempt to provide a range of references so that the
@@ -180,7 +180,7 @@ often find inspiration by seeing the ideas developed as part of the
 lectures being  put to use on problems of practical interest.
 
 With all of the above in mind, it was decided to have four
-interconnected *case studies* as one of the major learning activities
+interconnected *case studies* as major learning activities
 for the class.  Each case study is intended to build upon the previous
 one with the students solving interesting and pertinent problems in
 Data Science at every step.  Accordingly, our focus here will be on
@@ -204,7 +204,7 @@ notebooks for both of these tasks provided a number of advantages.
 First and foremost, it let the instructors provide the students
 with skeleton implementations of their assignments and allowed the
 students to focus on their learning objectives.  Second, it provide a
-uniform and easy to use development environment for the student's
+uniform and easy to use development environment for the students'
 efforts.  As DS501 is not a programming class, per se, leveraging
 IPython notebooks made the introduction of Python to those students
 unfamiliar with it substantially easier.
@@ -331,7 +331,7 @@ Finally, the students must try to either prove, or just as
 interestingly, disprove their conjectures based upon the data.  
 
 Diving a bit more deeply into some of the specific functionality that
-we leverage in Python, we note that pandas [McK10]_ is particular
+we leverage in Python, we note that pandas [McK10]_ is particularly
 useful for these kinds of data analysis questions.  In particular, to
 any Python aficionado, it is likely to be clear that there are many
 ways to process the data to answer the questions above, ranging from
@@ -355,7 +355,7 @@ the files presents an unnecessary impediment to less proficient
 students and overcoming this sort of impediment does not support the
 learning goals for this assignment.
 
-Of course, a straight forward answer would be for the instructors to
+Of course, a straightforward answer would be for the instructors to
 preprocess the data appropriately.  However, using the power of Python
 one can easily arm the students with a general tool, while at the same
 time avoiding unnecessary hurdles.  In particular, pandas has a merge
@@ -439,7 +439,7 @@ case study two focused on analyzing *numerical* movie reviews, case study
 three focuses on detecting positive and negative reviews from raw text
 using natural language processing.
 
-In particular, is case study three, the class turns its attention to the
+In particular, in case study three, the class turns its attention to the
 Movie Review Data v2.0 from 
 http://www.cs.cornell.edu/people/pabo/movie-review-data.  This data
 set contains written reviews of movies divided into positive and
@@ -456,7 +456,7 @@ problems, and still be able to make meaningful progress?  Of course,
 the answer is, again, Python.
 
 In particular, we base this case study on the excellent scikit-learn
-[Ped11]_ Python library.  The scikit-learn provides easy to use and
+[Ped11]_ Python library.  Scikit-learn provides easy to use and
 efficient tools for data analysis.  Most importantly, it provides
 routines for many important Data Science concepts such as machine
 learning, cross validation, etc.  In fact, this case study is inspired
@@ -580,7 +580,7 @@ Introductory Data Science: Final Thoughts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Of course, Python is not the only choice for an Introductory Data
-Science course.  For example, the programming language R [RCT13]_ is
+Science course.  For example, the scripting language R [RCT13]_ is
 also a popular choice which has also used successfully in the Data
 Science curriculum.  In particular, R offers much, if not all, of the
 functionality mentioned above, including interfaces to MapReduce
@@ -685,7 +685,7 @@ example, we have:
 
 Accordingly, students who are trained in classes such as DS501 and
 MA542 can leverage that training to get a running start on their
-research subjects.  Perhaps, this is the single biggest advantage of
+research subjects.  Perhaps this is the single biggest advantage of
 using a language such as Python from the earliest stages of Data
 Science education.  In addition to being easy to learn [Lut13]_, and
 providing access to many libraries that support Data Science
