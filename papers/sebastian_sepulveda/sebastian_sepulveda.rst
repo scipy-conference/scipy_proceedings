@@ -10,8 +10,8 @@
 :email: alejandro.weinstein@uv.cl
 :institution: Escuela de Ingeniería Civil Biomédica, Facultad de Ingeniería, Universidad de Valparaíso
 
-:video: http://bit.ly/1BHObxL
-:video: http://bit.ly/1Ex0Ydy
+:video: https://www.youtube.com/watch?v=sdVygxpljII
+:video: https://www.youtube.com/watch?v=6WxkOeTuX7w
 
 ------------------------------------------------
 Visualizing physiological signals in real time
@@ -167,7 +167,7 @@ Results
 
 We have used RTGraph with a serial port data stream corresponding to a signal with a sampling frequency of 2 kHz. We have also used it with a data stream from a TPC/IP socket corresponding to 20 signals with a sampling frequency of 500 Hz.
 
-In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. RTGraph was customized to acquire and record these data. We also incorporated some steps of a fatigue estimation algorithm [Dim03]_ to the processing pipeline. We found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly, drastically reducing the amount of time required by the experiments. Figure :ref:`emg` shows a screenshot of the program while acquiring an EMG signal using a wearable device to study muscle fatigue. The figure shows an EMG signal (first panel), a real time estimation of the fatigue level (second panel) based on the acquired EMG signal, and three acceleration signals (third panel). See the following links for a video of RTGraph being used to acquire these signals: http://bit.ly/1BHObxL, http://bit.ly/1Ex0Ydy.
+In a biomechanical study we used our program to evaluate a prototype of a wearable device used to estimate muscle fatigue through the EMG signal. RTGraph was customized to acquire and record these data. We also incorporated some steps of a fatigue estimation algorithm [Dim03]_ to the processing pipeline. We found that having real time feedback of the signal simplified  the procedure to position the wearable device correctly, drastically reducing the amount of time required by the experiments. Figure :ref:`emg` shows a screenshot of the program while acquiring an EMG signal using a wearable device to study muscle fatigue. The figure shows an EMG signal (first panel), a real time estimation of the fatigue level (second panel) based on the acquired EMG signal, and three acceleration signals (third panel). See the following links for a video of RTGraph being used to acquire these signals: https://www.youtube.com/watch?v=sdVygxpljII, https://www.youtube.com/watch?v=6WxkOeTuX7w.
 
 .. figure:: emg.png
     
