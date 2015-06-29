@@ -349,7 +349,7 @@ their precursor group half-lives are stored in the PrecursorData class.
 
 The neutronics class implements the first :math:`1+j+k` equations in the right hand
 side of the matrix equation in :ref:`fullprke`. In particular, it takes
-ownership of the vector of :math:`1+i+k` independent variables and their
+ownership of the vector of :math:`1+j+k` independent variables and their
 solution.
 
 
