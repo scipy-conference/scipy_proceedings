@@ -64,9 +64,9 @@ The Causal Bayesian NetworkX toolkit can be seen as consisting of two main parts
 
 I focus first on establishing a means of building iterators over sets of directed graphs. I then apply operations to those sets. Beginning with the complete directed graph, we enumarte over the subgraphs of that complete graph and enforce graph theoretic conditions such as acyclicity over the entire graph, guarantees on paths between nodes that are known to be able to communicate with one another, or orphan-hood for individual nodes known to have no parents. We accomplish this by using closures that take graphs as their input along with any explicitly defined arguments needed to define the exact desired conditions. 
 
-I then shift focus to a case where there is a specific known directed acyclic graph that is imbued with a simple probabilistic semantics over its nodes and edges, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics. I discuss briefly some of the challenges of encoding these semantics in dictionaries as afforded by NetworkX without resorting to :code:`eval` statements and while maintaining compatibility with JSON storage formats. 
+I then shift focus to a case where there is a specific known directed acyclic graph that is imbued with a simple probabilistic semantics over its nodes and edges, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics. I discuss briefly some of the challenges of encoding these semantics in dictionaries as afforded by NetworkX without resorting to :code:`eval` statements and discuss compatibility issues I have found with JSON storage formats. 
 
-Then, I will briefly discuss **gates**:cite:`winn2012causality`, an extension to graphical modeling frameworks that allow one to define context-specific dependence relations (which includes context-specific *independence* relations). This extension is of particular interest as it allows us to subsume the classical :code:`do`-calculus :cite:`pearl2000` into the more general semantics of the probabilistic network(though not a Bayesian network since that only expresses context-free independence relations). This work was a key influence in the development of thinking about interventions not as operations on individual nodes, or even individual graphs, but as a particular constraint placed on sets of graphs by some generative process. This interpretation of intervention, however, more difficult to relate to the semantics of probabilistic networks. I expect that **gates** will aid in bridging between this 
+.. Then, I will briefly discuss **gates**:cite:`winn2012causality`, an extension to graphical modeling frameworks that allow one to define context-specific dependence relations (which includes context-specific *independence* relations). This extension is of particular interest as it allows us to subsume the classical :code:`do`-calculus :cite:`pearl2000` into the more general semantics of the probabilistic network(though not a Bayesian network since that only expresses context-free independence relations). This work was a key influence in the development of thinking about interventions not as operations on individual nodes, or even individual graphs, but as a particular constraint placed on sets of graphs by some generative process. This interpretation of intervention, however, more difficult to relate to the semantics of probabilistic networks. I expect that **gates** will aid in bridging between this 
 
 I conclude with a discussion of some of the problems that have been addressed in Cognitive Science through the use of graphical models like those described. In particular, I will discuss a framework called **causal theories** :cite:`griffithst09` which allows for defining problems of causal induction. It is out of this framework the perspective expressed in this paper, the associated talk, and the the Causal Bayesian NetworkX toolkit developed. 
 
@@ -571,8 +571,8 @@ The convention I have been following for distinguishing filter and condition fun
 ..         return remove_self_loops_filter
 
 
-Gates: Context-sensitive causal Bayesian networks
--------------------------------------------------
+.. Gates: Context-sensitive causal Bayesian networks
+.. -------------------------------------------------
 
 
 
@@ -870,7 +870,8 @@ Outline v. 1.1
 
 6. Causal Bayesian NetworkX: Probabilistic Sampling
     
-7. Gates and causal networks
+.. 7. Gates and causal networks
+
 8. Causal theories
     
     9. Rational analysis and computational level explanations of human cognition
