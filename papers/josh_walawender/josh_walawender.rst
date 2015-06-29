@@ -88,7 +88,7 @@ Once the image has been read in and a working file created, IQMon uses various t
 PSF Size Measurements with Source Extractor
 ```````````````````````````````````````````
 
-Source Extractor (SExtractor) is called using the ``run_SExtractor`` method which invokes the command using the subprocess32 module.  Customization parameters can be passed to Source Extractor using the telescope configuration file.
+Source Extractor (SExtractor)  [Bertin1996]_ [Bertin2010a]_ is a program which builds a catalog of sources (stars, galaxies, etc.) detected in an image.  SExtractor is called using the ``run_SExtractor`` method which invokes the command using the subprocess32 module.  Customization parameters can be passed to Source Extractor using the telescope configuration file.
 
 The output file of SExtractor is read in and stored as an astropy table object.  Stars with SExtractor generated flags are removed from the table and the table is stored as a property of the image object.
 
