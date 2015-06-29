@@ -182,14 +182,20 @@ The ``reducer`` package and notebook
 ``reducer``. When invoked, it creates an IPython notebook,
 called ``reduction.ipynb``, in the directory in which it is invoked.
 
-The intent is that the raw, uncalibrated images are stored in a different
-directory and that the calibrated images are in the same directory as the
-notebook, leaving a *human-readable* record with the images describing the
-choices made in calibration. The notebook does not provide an easy way to re-
-do the calibration in a particular directory. In discussions with students
-while developing ``reducer`` it became clear that it would be impossible to
-ensure that the record in the notebook matched the files in the directory
-unless it was difficult to re-run the notebook.
+The notebook will not overwrite images. The intent is that the raw,
+uncalibrated images are stored in a  directory separate than the one
+containing the notebook. The calibrated images are saved, by default, in the
+same directory as the notebook, leaving a *human-readable* record with the
+images describing the choices made in calibration.
+
+
+The notebook also does not provide an easy way to re- run the calibration
+short of deleting any calibrated files in the directory with the notebook and
+starting fresh. In discussions with students while developing ``reducer`` it
+became clear that it would be difficult or  impossible to ensure that the
+state of the notebook reflected the state of the calibrated files, since it is
+possible for some notebook cells to be re-executed without all cells being re-
+executed.
 
 That design decision simplified the package, allowed the notebook to refuse to
 overwrite files in the directory in which it is stored, and led to a focus on
