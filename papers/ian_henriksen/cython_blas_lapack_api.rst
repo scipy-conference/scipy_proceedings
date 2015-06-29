@@ -29,12 +29,12 @@ Because programmers often need to call low-level libraries, F2PY [F2PY]_, Cython
 
 In spite of the large number of tools for automatically wrapping low-level libraries, interfacing with low-level languages can still present a significant challenge.
 If the poorly-performing code requires any third party algorithms, developers are faced with the daunting task of rewriting their algorithms to interface with completely different packages and adding large dependencies on existing low-level libraries.
-Adding additional low-level dependencies to an existing project can complicate the build process and expose the project to a much wider variety of bugs.
+Adding these dependencies to an existing project can complicate the build process and expose the project to a much wider variety of bugs.
 When distributing code meant to work reliably with a variety of compilers in a variety of environments, low-level dependencies can become a never-ending source of trouble for developers.
-The situation is further complicated by the fact that, currently, each Python module must shoulder the burden of distributing the low-level libraries it uses.
+These problems are only made worse by the fact that, currently, each Python module must shoulder the burden of distributing or finding the libraries it uses.
 
-For example, consider the case of a simple tridiagonal solve.
-This can be done easily within Python.
+For example, consider the case of a simple tridiagonal matrix solve.
+This sort of solve can be done easily within Python.
 
 .. code-block:: python
 
@@ -49,9 +49,9 @@ This can be done easily within Python.
        np.fill_diagonal(A[:,1:], c)
        return np.linalg.solve(A, x)
 
-This code works fine for small things, but, if it needs to be called frequently, a more specialized algorithm could provide major improvements in both speed and accuracy.
+This function works fine for small things, but, if it needs to be called frequently, a more specialized algorithm could provide major improvements in both speed and accuracy.
 An ideal candidate for this sort of optimization is LAPACK's routine ``dgtsv``.
-This same problem can be solved easily in Cython.
+That routine can be used within Cython to solve the same problem more quickly and with fewer numerical errors.
 
 .. code-block:: cython
 
@@ -77,7 +77,7 @@ The proper headers and libraries must be found, and, if at all possible binary i
 If the desired routine isn't a part of one of the existing C interfaces, then it must be called via the Fortran ABI and the name mangling schemes used by different Fortran compilers must be taken into account.
 All of the code needed to do this must also be maintained so that it continues to work with new versions of the different operating systems, compilers, and BLAS and LAPACK libraries.
 
-A possible solution to this unusually painful problem is to have existing packages allow access to the low-level libraries that they use.
+A possible solution to this unusually painful problem is to have existing Python modules provide access to the low-level libraries that they use.
 NumPy has provided some of this sort of functionality for BLAS and LAPACK by making it so that the locations of the system's BLAS and LAPACK libraries can be found using NumPy's distutils module.
 Cython has also provided a similar sort of functionality by allowing C-level APIs to be exported between Cython modules.
 In fact, the existing machinery in Cython can be used to expose functions and variables from existing libraries.
