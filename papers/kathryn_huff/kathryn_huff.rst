@@ -296,7 +296,7 @@ important object classes in PyRK are:
   feedback behavior distinct from other components in the system.
 - Material : A class for defining the intensive properties of a material
   (:math:`c_p`, :math:`\rho`, :math:`k_{th}`). Currently, subclasses include
-  Flibe, Graphite, and Kernel.
+  FLiBe, Graphite, Sodium, SFRMetal, and Kernel.
 
 A reactor is made of objects, so an object-oriented data model provides the
 most intuitive user experience for describing a reactor system, its materials,
@@ -333,7 +333,7 @@ Neutronics
 The neutronics object holds the first 1+j+k equations in the right hand side of
 the matrix equation in :ref:`fullprke`.
 
-Additionally, the accident scenario can be driven by an insertion of reactvity
+Additionally, the accident scenario can be driven by an insertion of reactivity
 (e.g. due to the removal of a control rod). In PyRK, this reactivity insertion
 capability is captured in the ReactivityInsertion class, from which reactivity
 insertions can be selected and customized as in figure :ref:`figri`.
@@ -345,7 +345,7 @@ insertions can be selected and customized as in figure :ref:`figri`.
 
 
 Nuclear data encapsulating the fractions of delayed neutron precursors and
-their precursor group halflives are stored in the PrecursorData class.
+their precursor group half-lives are stored in the PrecursorData class.
 
 The neutronics class implements the first :math:`1+j+k` equations in the right hand
 side of the matrix equation in :ref:`fullprke`. In particular, it takes
@@ -404,8 +404,8 @@ coolant, reflectors or other structures in the design.
 
 Fundamentally, to determine the temperature change in a thermal body of the
 reactor, we rely on relations between temperature, heat capacity, and thermal
-resistance. As in Table \ref{tab:lumpedcap}, the heat flow out of body :math:`i` is
-the sum of surface heat flow by conduction, convection, radiaion, and other
+resistance. As in Table :ref:`tab:lumpedcap`, the heat flow out of body :math:`i` is
+the sum of surface heat flow by conduction, convection, radiation, and other
 mechanisms to each adjacent body, :math:`j` [lienhard_v_heat_2011]_:
 
 .. math::
