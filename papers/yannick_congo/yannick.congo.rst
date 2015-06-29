@@ -542,16 +542,35 @@ simulation management tools. Operating systems, compilers and dependencies
 variations are the nightmare of reproducibility tools because the information
 is usually not fully accessible and recreating the appropriate environment is
 not an easy straight forward task.
+
+
+Acknowledgments
+---------------
+
+This research paper is made possible through the help of my thesis supervisors
+and colleagues.
+
+First and foremost, I would like to thank Dr. David Hill and
+Dr. Jonathan Guyer for their most support, encouragements and critics. 
+
+Second, I would also like to thank Dr. Daniel Wheeler for his ideas and
+brainstorms at the early stage of this investigation and his continuous
+research for better technologies.
+
+Finally, I would like to thank Dr. Andrew Reid for his exceptional willingness
+to help me reshape and bring more lights in this paper. He kindly read my
+paper and offered invaluable detailed  advices on grammar, organization of the
+paper.
  
 
 References
 ----------
 
 .. [SlezakWaczulikova2010] P. Slezák and I. Waczulíková. *Reproducibility and Repeatability*,
-        Comenius University, July 2010.
+        Physiological Research, Volume 60, Issue 1, pp. 203-205, 2011.
 
-.. [Oinn2000] Tom Oinn et al. *Taverna: Lessons in creating a workflow environment for the life sciences*, 
-       Concurrency Computation, p. 2, September 2002
+.. [Oinn2000] Tom Oinn et al. *Taverna: lessons in creating a workflow environment for the life sciences*,
+        Concurrency and Computation: Practice and Experience, Special Issue: Workflow in Grid Systems*, Volume 18, Issue 10, pages 1067–1100, 25 August 2006.
 
 .. [StephenLanger2010] Stephen Langer et al. *gtklogger: A Tool For Systematically Testing Graphical User Interfaces*,
         NIST Internal Publication, pp. 2-3, October 2014.
@@ -560,25 +579,23 @@ References
        Reproducible Research For Scientific Computing, pp. 2-3, October 2012.
 
 .. [MacDonnell2012] John MacDonnell. *Git for Scientists: A Tutorial*,
-       July 2012.
+       http://nyuccl.org/pages/gittutorial/, July 2012.
 
 .. [Oliver2013] Marc Oliver. *Introduction to the Scipy Stack – Scientific Computing Tools for Python*,
-       Jacobs University, November 2013.
+       Jacobs University, http://math.jacobs-university.de/oliver/teaching/scipy-intro/scipy-intro.pdf, November 2013.
 
 .. [DavidsonSumatra2010] Andrew Davidson. *Automated tracking of computational experiments using Sumatra*,
-       EuroSciPy 2010, Paris.
+       EuroSciPy 2010, http://www.andrewdavison.info/media/slides/sumatra_euroscipy2010.pdf, 2010.
 
-.. .. [Goodman2013] Alyssa Goodman. *10 Simple Rules for the Care and Feeding of Scientific Data*,
-..         Harvard University Seminar – What to Keep and How to Analyze It: Data Curation and Data Analysis with Multiple Phases, May 2013.
-
-.. [Sandve2013] Sandve GK et al. *Ten Simple Rules for Reproducible Computational Research.*,
-        PLoS Comput Biol, October 2013.
+.. [Sandve2013] Sandve GK, Nekrutenko A, Taylor J, Hovig E (2013). *Ten Simple Rules for Reproducible Computational Research.*,
+       PLoS Comput Biol 9(10): e1003285. doi:10.1371/journal.pcbi.1003285, October 2013.
 
 .. [Heroux2011] Michael A. Heroux. *Improving CSE Software through Reproducibility Requirements*,
-       Sandia National Laboratories, revised May 2011.
+       SECSE '11 Proceedings of the 4th International Workshop on Software Engineering for Computational Science and Engineering,
+       pp. 28-31, ISBN: 978-1-4503-0598-3 do:10.1145/1985782.1985787, May 2011.
 
 .. [Bottomley2014] James Bottomley. *What is All the Container Hype?*,
-        Linux Foundation, p. 2, April 2014.
+        Linux Foundation, p. 2, http://www.odin.com/fileadmin/media/hcap/pcs/documents/ParCloudStorage_Mini_WP_EN_042014.pdf, April 2014. 
 
 .. [Melia2014] Ivan Melia et al. *Linux Containers: Why They are in Your Future and What Has to Happen First*,
-       Cisco and RedHat, p.7, September 2014
+       Cisco and RedHat, p.7, https://www.cisco.com/c/dam/en/us/solutions/collateral/data-center-virtualization/openstack-at-cisco/linux-containers-white-paper-cisco-red-hat.pdf, September 2014.
