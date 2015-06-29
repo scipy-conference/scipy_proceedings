@@ -51,11 +51,13 @@ The back end of ``reducer`` is built on the Astropy project [Astropy2013]_, a
 community-driven effort to develop high-quality, open source tools for Python
 in astronomy, and on Astropy affiliated projects. [#]_ Astropy was chosen because it has a large developer community of professional astronomers.
 
-Section W provides background on the science of image calibration. In section
-X the problem is discussed more completely, including a review of some of the
-available options for astronomical image processing. The section Y discusses
-the use of ``reducer``, while section Z presents its implementation. The
-widget classes in ``reducer`` are potentially useful in other applications.
+Section *Background: Image analysis in optical stellar astronomy* provides
+background on the science of image calibration. In the following section the
+problem is discussed more completely, including a review of some of the
+available options for astronomical image processing. The section *``reducer
+package and notebook* discusses the use of ``reducer``, while *``reducer``
+widget structure* presents its implementation. The widget classes in
+``reducer`` are potentially useful in other applications.
 
 .. [#] http://www.astropy.org/affiliated/
 
