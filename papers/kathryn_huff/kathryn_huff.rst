@@ -132,11 +132,13 @@ power production in the fuel.
 
 Reactivity
 ****************
-The two physics are coupled by the notion of reactivity, which is related to
-the probability of fission due to material properties. The temperature and
-density of materials can increase or decrease this probability, which directly
-impacts the neutron production and destruction rates and therefore, the reactor
-power. The simplest form of the equations dictating this feedback are:
+
+The two physics (neutronics and thermal-hydraulics) are coupled by the notion
+of reactivity, which is related to the probability of fission.  The temperature
+and density of materials can increase or decrease this probability. Fission
+probability directly impacts the neutron production and destruction rates and
+therefore, the reactor power. The simplest form of the equations dictating this
+feedback are:
 
 
 .. math::
@@ -148,10 +150,9 @@ power. The simplest form of the equations dictating this feedback are:
    \rho_f(t) &= \mbox{reactivity from feedback}\\
    \rho_{ext}(t) &= \mbox{external reactivity insertion}
    \intertext{and where}
-   \rho_f(t) &= \alpha_i\frac{\delta T_i}{\delta t}\\
+   \rho_f(t) &= \sum_i \alpha_i\frac{\delta T_i}{\delta t}\\
    T_i &= \mbox{temperature of component i}\\
    \alpha_i &= \mbox{temperature reactivity coefficient of i}.
-
 
 
 The PRKE
@@ -202,25 +203,25 @@ very different characteristic time scales, so the equations are quite stiff.
     \left[
       \begin{array}{ c }
         \frac{\rho(t,T^{fuel},T_{cool},\cdots)-\beta}{\Lambda}p +
-        \displaystyle\sum^{j=J}_{j=1}\lambda_j\zeta_j\\
-        \frac{\beta_1}{\Lambda} p - \lambda_1\zeta_1\\
+        \displaystyle\sum^{j=J}_{j=1}\lambda_{d,j}\zeta_j\\
+        \frac{\beta_1}{\Lambda} p - \lambda_{d,1}\zeta_1\\
         .\\
         .\\
         .\\
-        \frac{\beta_j}{\Lambda}p-\lambda_j\zeta_j\\
+        \frac{\beta_j}{\Lambda}p-\lambda_{d,j}\zeta_j\\
         .\\
         .\\
         .\\
-        \frac{\beta_J}{\Lambda}p-\lambda_J\zeta_J\\
-        \kappa_1p - \lambda_1\omega_1\\
+        \frac{\beta_J}{\Lambda}p-\lambda_{d,J}\zeta_J\\
+        \kappa_1p - \lambda_{FP,1}\omega_1\\
         .\\
         .\\
         .\\
-        \kappa_kp - \lambda_k\omega_k\\
+        \kappa_kp - \lambda_{FP,k}\omega_k\\
         .\\
         .\\
         .\\
-        \kappa_{k p} - \lambda_k\omega_{k}\\
+        \kappa_{k p} - \lambda_{FP,k}\omega_{k}\\
         f_{fuel}(p, C_p^{fuel}, T_{fuel}, T_{cool},\cdots)\\
         f_{cool}(C_p^{cool}, T_{fuel}, T_{cool},\cdots)\\
         f_{refl}(C_p^{refl}, T_{fuel}, T_{refl},\cdots)\\
@@ -239,16 +240,16 @@ In the above matrix equation, the following variable definitions are used:
    :type: align
    :label: n_data
 
-    \p = \mbox{ normalized reactor power [reactivity, [pcm]}\\
+    \p = \mbox{ reactor powe}\\
     \rho(t,&T_{fuel},T_{cool},T_{mod}, T_{refl}) = \mbox{ reactivity, [pcm]}\\
     \beta &= \mbox{ fraction of neutrons that are delayed}\\
     \beta_j &= \mbox{ fraction of delayed neutrons from precursor group j}\\
     \zeta_j &= \mbox{ concentration of precursors of group j}\\
-    \lambda^{d}_j &= \mbox{ decay constant of precursor group j}\\
+    \lambda_{d,j} &= \mbox{ decay constant of precursor group j}\\
     \Lambda &= \mbox{ mean generation time }\\
     \omega_k &= \mbox{ decay heat from FP group k}\\
     \kappa_k &= \mbox{ heat per fission for decay FP group k}\\
-    \lambda^{FP}_k &= \mbox{ decay constant for decay FP group k}
+    \lambda_{FP,k} &= \mbox{ decay constant for decay FP group k}
 
 The PRKE in equation :ref:`fullprke` can be solved in numerous ways, using
 either loose or tight coupling.  Operator splitting, loosely coupled in time,
