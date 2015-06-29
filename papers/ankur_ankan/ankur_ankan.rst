@@ -83,14 +83,14 @@ get familiar with the source code.
  
 Getting Source Code and Installing
 ----------------------------------
-pgmpy is released under MIT Licence and is hosted on github. It can be installed by
-simply cloning the repository and install it::
+pgmpy is released under MIT Licence and is hosted on github. We can simply clone the repository
+and install it::
 
     git clone https://github.com/pgmpy/pgmpy
     cd pgmpy
     [sudo] python3 setup.py install
 
-Dependencies: It runs only on python3 and is dependent on networkx, numpy, pandas and scipy
+Dependencies: pgmpy runs only on python3 and is dependent on networkx, numpy, pandas and scipy
 which can be installed using pip or conda as::
 
     pip install -r requirements.txt
@@ -111,7 +111,7 @@ of that variable given its parents. In the case, when the random variable has no
 simply represents :math:`P(var)` i.e. the probability of that variable.
 
 For example, we can take the case of student model represented in Fig :ref:`bayesian`.
-A possible CPD for the random variable grade variable is shown in Table :ref:`CPT`.
+A possible CPD for the random variable grade is shown in Table :ref:`CPT`.
 
 .. table:: Conditional Probability Table. :label:`CPT`
 
@@ -516,7 +516,7 @@ logic to return the value when the states are passed as arguments [example_bbn]_
 we have the option to read the data from files defined in a specific format [example_libpgm]_ but doesn't provide any
 methods for making changes to the network. For changing the structure we will need to modify the internal variables
 storing the network information. 
-We have tried to keep pgmpy as modular as possible. It is clearly evident from the above discussed model creation task. We 
+We have tried to keep pgmpy as modular as possible. We can take the example of creating a model. We 
 define a network structure and separately define different CPDs and then simply associate the CPDs to the structure.
 At any time we can modify these CPDs, unassociate or associate another CPD to the network.
 
