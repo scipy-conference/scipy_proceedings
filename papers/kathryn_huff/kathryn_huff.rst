@@ -111,8 +111,8 @@ reactor. The study of the population, speed, direction, and energy spectrum of
 neutrons in a reactor as well as the related rate of fission at a particular
 moment is called neutronics or neutron transport. Neutronics simulations
 characterize the production and destruction of neutrons in a reactor and
-dependent on many reactor material properties and design choices (e.g.,
-atomic densities and material configurations).
+depend on many reactor material properties and component geometries (e.g.,
+atomic densities and design configurations).
 
 Thermal-Hydraulics
 ********************
@@ -239,6 +239,7 @@ In the above matrix equation, the following variable definitions are used:
    :type: align
    :label: n_data
 
+    \p = \mbox{ normalized reactor power [reactivity, [pcm]}\\
     \rho(t,&T_{fuel},T_{cool},T_{mod}, T_{refl}) = \mbox{ reactivity, [pcm]}\\
     \beta &= \mbox{ fraction of neutrons that are delayed}\\
     \beta_j &= \mbox{ fraction of delayed neutrons from precursor group j}\\
@@ -290,7 +291,8 @@ important object classes in PyRK are:
 - Neutronics : Calculates :math:`\frac{dP}{dt}`, :math:`\frac{d\zeta_j}{dt}`,
   and :math:`\frac{d\omega_j}{dt}`, based on :math:`\frac{dT_i}{dt}` and the
   external reactivity insertion.
-- THSystem : Manages various THComponents, facilitates their communication during the lumped parameter heat transfer calculation.
+- THSystem : Manages various THComponents and facilitates their communication
+  during the lumped parameter heat transfer calculation.
 - THComponent : Represents a single thermal volume, made of a single material,
   (usually a volume like "fuel" or "coolant" or "reflector" with thermal or reactivity
   feedback behavior distinct from other components in the system.
@@ -356,12 +358,15 @@ solution.
 THSystem
 **********
 
-Any reactor is made up of a handful of neutronic object needs a temperature. To
-first order, the thermal hydraulics can be modeled with lumped capacitance,
-which approximates heat transfer into discrete components, approximating the
-effects of geometry.
+A reactor is made up of many material structures which, in addition to their
+neutronic response, vary in their temperature response. These structures may
+include fuel, cladding, coolant, reflectors, or other components.
+In PyRK, a heat transfer model of the changing temperatures and material
+properties of those components has been implemented as a lumped capacitance
+model. This model approximates heat transfer into discrete components,
+approximating the effects of geometry for "lumps" of material.
 
-Fundamentally, heat transfer through a system of components is modeled
+In this model, heat transfer through a system of components is modeled
 analogously to current through a resistive circuit. Table :ref:`tablumpedcap`
 describes the various canonical forms of lumped capacitance heat transfer
 modes.
@@ -390,7 +395,7 @@ modes.
     \end{tabular}
     \end{table}
 
-.. table:: Lumped Capacitance for various heat transfer modes :label:`tablumpedcap` [wiki2014]_
+.. table:: Lumped Capacitance for various heat transfer modes [Lienhard2011]_ :label:`tablumpedcap`
 
    +--------+
    |        |
@@ -617,4 +622,4 @@ References
 
 .. [wiki2014]
 
-.. [lienhard_v_heat_2011] Leinhard
+.. [Lienhard2011] Leinhard
