@@ -2,8 +2,6 @@
 :email: cros0324@umn.edu, mellissa.cross@gmail.com
 :institution: Department of Earth Sciences, University of Minnesota
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
-
 -----------------------------------------------------------------------------------------------------
 PySPLIT: a Package for the Generation, Analysis, and Visualization of HYSPLIT Air Parcel Trajectories
 -----------------------------------------------------------------------------------------------------
@@ -18,7 +16,7 @@ PySPLIT: a Package for the Generation, Analysis, and Visualization of HYSPLIT Ai
 
 Introduction
 ------------
-The NOAA Air Resources Laboratory's HYSPLIT (HYbrid Single Particle Lagrangian Transport) model uses a hybrid Langrangian and Eulerian calculation method to compute air parcel trajectories and particle dispersion and deposition simulations.  It is publicly available via the web READY interface- and has been since the late 1990s- or downloadable versions compatible with PC or Mac.  NOAA uses the HYSPLIT system, particularly the particle dispersion simulations, for research and emergency response.  In the scientific community, the trajectory simulations are applied to a variety of tasks, including visualizing regional atmospheric circulation patterns, investigating meteorological controls on the isotopic composition of precipitation, and calculating moisture uptake and transport.  A key component of these research problems is the along-trajectory data that HYSPLIT outputs.  Although the PC and Mac versions allow for greater batch processing than is available via the online READY interface, neither interface provides users with a means to inspect, sort or analyze trajectories on the basis of along-trajectory data.  Users are left with limited options: write their own scripts for performing the desired data analysis, or manage trajectory data by hand via spreadsheet and GIS programs.  Both options are time consuming, the latter limits the number of trajectories that can be inspected and is prone to error, and the former is typically not distributed for use to other labs.  Additionally, HYSPLIT ships with limited inbuilt options for trajectory visualization, though it does provide a shapefile/KML output tool.  PySPLIT's key aims are to provide a free, open source, replicable system inside the scientific Python ecosystem for a Python-based workflow: bulk trajectory generation and for trajectory path and data analysis and visualization.
+The NOAA Air Resources Laboratory's HYSPLIT (HYbrid Single Particle Lagrangian Transport) model [Hes98]_ uses a hybrid Langrangian and Eulerian calculation method to compute air parcel trajectories and particle dispersion and deposition simulations.  It is publicly available via the web READY interface- and has been since the late 1990s- or downloadable versions compatible with PC or Mac.  NOAA uses the HYSPLIT system, particularly the particle dispersion simulations, for research and emergency response.  In the scientific community, the trajectory simulations are applied to a variety of tasks, including visualizing regional atmospheric circulation patterns, investigating meteorological controls on the isotopic composition of precipitation, and calculating moisture uptake and transport.  A key component of these research problems is the along-trajectory data that HYSPLIT outputs.  Although the PC and Mac versions allow for greater batch processing than is available via the online READY interface, neither interface provides users with a means to inspect, sort or analyze trajectories on the basis of along-trajectory data.  Users are left with limited options: write their own scripts for performing the desired data analysis, or manage trajectory data by hand via spreadsheet and GIS programs.  Both options are time consuming, the latter limits the number of trajectories that can be inspected and is prone to error, and the former is typically not distributed for use to other labs.  Additionally, HYSPLIT ships with limited inbuilt options for trajectory visualization, though it does provide a shapefile/KML output tool.  PySPLIT's key aims are to provide a free, open source, replicable system inside the scientific Python ecosystem for a Python-based workflow: bulk trajectory generation and for trajectory path and data analysis and visualization.
 PySPLIT depends on python's core scientific packages, such as numpy and matplotlib, and comprises five classes and a trajectory generation toolkit.  The scope of this package is currently bulk trajectory generation, trajectory data analysis and management, and path and data visualizations.  Due to the research interests of the author, PySPLIT has a particular focus on rainfall, moisture flux, and moisture uptake using trajectories run backwards in time.
 
 The API
@@ -27,7 +25,7 @@ An early version of PySPLIT was procedurally based.  The morass of helper functi
 
 Trajectory Generation
 ~~~~~~~~~~~~~~~~~~~~~
-Typically the first step in a HYSPLIT workflow is trajectory generation.  This can be accomplished via the online READY interface or the HYSPLIT GUI or commandline, but bulk generation is annoying and time-consuming.  PySPLIT includes a script for generating large numbers of trajectories of a particular number of hours (``run``) at various times of day and at several different altitudes in a single call, allowing the user to set up a comprehesive batch to run overnight without constant user monitoring or action:
+Typically the first step in a HYSPLIT workflow is trajectory generation.  This can be accomplished via the online READY interface or the HYSPLIT GUI or commandline, but bulk generation is annoying and time-consuming.  Additionally, users of the online READY system are limited to 500 trajectories per day.  PySPLIT includes a script for generating large numbers of trajectories of a particular number of hours (``run``) at various times of day and at several different altitudes in a single call, allowing the user to set up a comprehesive batch to run overnight without constant user monitoring or action:
 
 .. code-block:: python
 
@@ -42,7 +40,7 @@ Typically the first step in a HYSPLIT workflow is trajectory generation.  This c
 
 All HYSPLIT trajectory files created with this method have the same basename, follow by the altitude, season, and year, month, day, and hour in the format: YYMMDDHH.  The files are extensionless and live in ``output_dir``.
 
-``pysplit.generate_trajectories()`` currently just supports ``gdas1`` data, which refers to the 1 x 1 degree Global Data Assimilation System 3-hour meteorology product from the National Weather Service's National Centers for Environmental Prediction (NCEP) archived in a packed format appropriate for HYSPLIT (referred to as ARL-packed).  Archived ``gdas1`` data is available from 2005 onwards; registered HYSPLIT users may also access forecast data.  Future versions of PySPLIT will support other datasets, for example ARL-packed ERA-interim data, for which decades of data are available; and other user-defined ARL-packed data sources.
+``pysplit.generate_trajectories()`` currently just supports ``gdas1`` data, which refers to the 1 x 1 degree Global Data Assimilation System 3-hour meteorology product from the National Weather Service's National Centers for Environmental Prediction (NCEP) archived in a packed format appropriate for HYSPLIT (referred to as ARL-packed).  Archived ``gdas1`` data is available from 2005 onwards; registered HYSPLIT users may also access forecast data (see HYSPLIT use agreement for more information concerning publishing and redistributing HYSPLIT model results using forecast data).  Future versions of PySPLIT will support other datasets, for example ARL-packed ERA-interim data, for which decades of data are available; and other user-defined ARL-packed data sources.
 
 Despite this temporary limitation, PySPLIT comes with two additional features not available in the READY interface or directly through HYSPLIT.  The first is triggered by the ``get_foward`` keyword argument.  One source of error in trajectory calculation is the integration error.  This error is estimated by comparing the distance between where an original trajectory begins and where a trajectory run in the opposite direction from the endpoint of the original trajectory ends.  We expect that both trajectories will follow the same path, so low integration error is indicated by a distance  between start and points that is short relative to the total distance covered by the trajectory pair.  If back trajectories are run and ``get_forward`` is ``True``, then PySPLIT will automatically open the new back trajectory file, read in the altitude, longitude, and latitude of the last time point, and initialize a forward-moving parcel at that location or at the given coordinates below the 10000 m model ceiling, if necessary.  In the Trajectory class, discussed below, a method is included for estimating integration error.
 
@@ -62,7 +60,7 @@ The 2D ``data`` array of a Trajectory is parsed into separate attributes as 1-D 
 
 Most Trajectory analysis methods live in or are accessed directly by the Trajectory class.  These include calculations of along-trajectory and overall great-circle distance, mean trajectory vector, humidity data conversions, and along-trajectory moisture flux. The results of most of these calculations are stored as new attributes in 1D ndarrays of floats of identical size.  Additionally, the Trajectory class contains the methods for loading forward trajectories and estimating trajectory integration error in both horizontal and vertical dimensions
 
-The Trajectory class also includes a flexible implementation of Sodeberg's moisture uptake calculation from back trajectories:
+The Trajectory class also includes a flexible implementation of the moisture uptake calculation from back trajectories from Sodeman et al. [Sod08]_:
 
 .. code-block:: python
 
@@ -130,13 +128,19 @@ And perform more calculations:
 
 Repeating sorting and analysis as necessary.
 
+Using the visualization defaults as described in the Data Plotting and MapDesign section below, we can quickly look at the Trajectory paths:
+
+.. figure:: fig_pathexample.png
+
+   Simple visualization of trajectory paths.  :label:`pathfig`
+
 The TrajectoryGroup class also has additional capabilities for organizing Trajectory instances and trajectory data.  TrajectoryGroup instances are additive: two instances are checked for duplicte trajectories (determined by examining the filename and pathcan be combined into a new group of unique trajectories.  The TrajectoryGroup also comes with methods for assembling particular member Trajectory attributes and moisture uptake arrays into a single array to facilitate scatter plotting and for interpolating along-path and moisture uptake data to a grid.  These are discussed below in the Data Plotting and MapDesign section.
 
 Cluster and ClusterGroup
 ~~~~~~~~~~~~~~~~~~~~~~~~
 To investigate the dominant flow patterns in a set of trajectories, HYSPLIT includes a clustering procedure.  PySPLIT includes several methods to expedite this process.
 
-The first step is to generate a list of trajectories to be clustered.  Once the user has created a TrajectoryGroup with trajectories that meet their specifications, then they can use the TrajectoryGroup method ``make_infile()`` to write member Trajectory full paths to an extensionless file called 'INFILE' that HYSPLIT needs to perform clustering.  PySPLIT will attempt to write the full paths of the 'clipped' versions of the trajectories to INFILE, if available, otherwise the full paths of the regular trajectories will be used.  Clipped trajectories are usually generated during trajectory generation.  However, as clipping does not actually require generation of a new trajectory, just the copying of path data, this can be performed after trajectory generation:
+The first step is to generate a list of trajectories to be clustered.  Once the user has created a TrajectoryGroup with trajectories that meet their specifications, then they can use the TrajectoryGroup method ``make_infile()`` to write member Trajectory full paths to an extensionless file called 'INFILE' that HYSPLIT needs to perform clustering.  PySPLIT will attempt to write the full paths of the 'clipped' versions of the trajectories to INFILE, if available, otherwise the full paths of the regular trajectories will be used.  Clipped trajectories are usually generated during trajectory generation.  However, as clipping does not require actually calculating a new trajectory, just the copying of path data, this can be performed after trajectory generation:
 
 .. code-block:: python
 
@@ -145,7 +149,7 @@ The first step is to generate a list of trajectories to be clustered.  Once the 
 
 However, the TrajectoryGroup (``trajgroup``) and its member Trajectories must be reloaded for the clipped trajectory files to become available for clustering.
 
-Once the INFILE is created, the user must open HYSPLIT to run the cluster analysis and assign trajectories to clusters.  Advice concerning the determination of the nubmer of clusters (along with all other HYSPLIT aspects) is available in the HYSPLIT manual.  Assigning trajectories to clusters will create a file called 'CLUSLIST_3' or some other number corresponding to the number of clusters created.  This file indicates the distribution of Trajectories in the TrajectoryGroup among clusters, and is used to create Cluster instances contained in a ClusterGroup:
+Once the INFILE is created, the user must open HYSPLIT to run the cluster analysis and assign trajectories to clusters.  Advice concerning the determination of the nubmer of clusters (along with all other HYSPLIT aspects) is available in the HYSPLIT manual [Hes99]_.  Assigning trajectories to clusters will create a file called 'CLUSLIST_3' or some other number corresponding to the number of clusters specified by the user.  This file indicates the distribution of Trajectories in the TrajectoryGroup among clusters, and is used to create Cluster instances contained in a ClusterGroup:
 
 .. code-block:: python
 
@@ -166,19 +170,29 @@ Figure showing color schemes, no other defaults changed.
 
 MapDesigns also encompass more complex formatting, like labelling.  During the initialization of MapDesign, or later using ``MapDesign.edit_labels()``, the user can generate a text file with example labels in defined label categories at a given file location.  The user can then edit the example labels for their needs, and select which groups are placed on the basemap, once ``MapDesign.make_basemap()`` is called and a Basemap is generated.
 
-Although MapDesign was created to expedite the process of creating an attractive Basemap and let users focus on the trajectory analysis rather than figure-tweaking, PySPLIT plotting functions accept any Basemap instance, allowing users to incorporate PySPLIT into their existing workflow.
+Although MapDesign was created to expedite the process of creating an attractive Basemap and let users focus on the trajectory analysis rather than figure-tweaking, PySPLIT plotting functions accept any Basemap instance, allowing users to incorporate PySPLIT into their existing workflow.  Additionally, as all Trajectory, Cluster, TrajectoryGroup, and ClusterGroup attributes are intuitively exposed, users are free to create their own visualization routines beyond what is provided in PySPLIT.
 
 Among the Trajectory attributes are linewidth and path color.  A user can incorporate these into their workflow, setting linewidth and path color to correspond to Trajectory instances with particular characteristics.  Plotting the paths of a TrajectoryGroup's member Trajectories is performed one-by-one on the given Basemap instance.  To facilitate scatter plotting, the TrajectoryGroup assembles Trajectory latitude, longtitude, the variable plotted as a color change, and, if selected, the variable plotted as a size change each into single arrays.  Trajectory data, as well as moisture uptake data, can also be interpolated onto a grid and plotted as follows:
 
-As a Cluster is a specialized TrajectoryGroup, member Trajectories can be plotted in the same ways.  Additionally, Cluster mean paths can also be plotted, either individually or all together in the ClusterGroup.  Cluster linewdiths can either be determined by an absolute Trajectory count or fractional Trajectory membership
+As a Cluster is a specialized TrajectoryGroup, member Trajectories can be plotted in the same ways.  Additionally, Cluster mean paths can also be plotted, either individually or all together in the ClusterGroup.  Cluster linewdiths can either be determined by an absolute Trajectory count or the fraction of total Trajectories in the ClusterGroup belonging to the Cluster.
 
 Prior to being passed to ``Basemap.plot()`` and ``Basemap.scatter()``, scatter plot data passes through ``traj_scatter()``.  This exposes Normalize instances and other methods of normalization (square root, natural log), allowing users to normalize both color and size data.  Square root and natural log normalizations require the user to edit tick labels on colorbars.  After plotting, wrappers around matplotlib's colorbar creation methods with attractive default options are available to initialize colorbars.
 
 The Future of PySPLIT
 ---------------------
-Made publicly available on github
-Clustering process without opening HYSPLIT
-Trajectory generation parameter setting methods
-Trajectory generation on pressure levels, condensation levels
-Statistical methods
+PySPLIT provides an intuitive API for processing and analyzing HYSPLIT trajectory data and creating visualizations using matplotlib and the matplotlib Basemap toolkit.  The goal of PySPLIT is to provide users with a powerful, flexible python-oriented HYSPLIT trajectory analysis workflow, and in the long-term to become the toolkit of choice for research using HYSPLIT.  Of course, PySPLIT will not achieve this aim without the support and contributions of the scientific Python communitiy, and so this package will be made publicly available on github- pull requests welcome!  Features in the pipeline include HYSPLIT clustering process entirely accessible via the PySPLIT interface, and a greater variety of statistical, moisture uptake, and other methods available for trajectory analysis.  Additionally, there are several areas for improvement within the trajectory generation portion of PySPLIT, notably support for meteorologies besides ``gdas1``, more granular trajectory generation, and generation on pressure and condensation levels.
 
+References
+----------
+.. [Sod08] H. Sodeman, C. Schwierz, and H. Wernli.  *Interannual Variability of Greenland winter precipitation sources: Lagrangian moisture diagnostic and North Atlantic Oscillation influence*,
+           Journal of Geophysical Research, 113:D03107, February 2008.
+
+.. [Hes98] R.R. Draxler and G.D. Hess. *An overview of the HYSPLIT_4 modeling system of trajectories, dispersion, and deposition*,
+           Aust. Meteor. Mag., 47:295-308, 1998.
+
+.. [Hes99] R.R. Draxler and G.D Hess. *HYSPLIT4 user's guide*,
+           NOAA Tech. Memo. ERL ARL-230, NOAA Air Resources Laboratory, Silver Spring, MD, 1999.
+
+Acknowledgments
+---------------
+I gratefully thank the reviewers for their patience, comments and suggestions; and the NOAA ARL for the provision of the HYSPLIT transport and dispersion model.
