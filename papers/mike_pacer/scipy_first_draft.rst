@@ -887,109 +887,109 @@ What is important is that they successfully modeled humans using this framework 
 
 
 
-Outlines
-========
+.. Outlines
+.. ========
 
-Test :cite:`mckay2003acyclic,winn2012causality`
+.. Test :cite:`mckay2003acyclic,winn2012causality`
 
 
-Outline v. 1.1
-==============
+.. Outline v. 1.1
+.. ==============
 
-1. Introduction
+.. 1. Introduction
 
-   2. Why?
-   3. What?
-   4. Background recommended
+..    2. Why?
+..    3. What?
+..    4. Background recommended
 
-      5. Basic probability
+..       5. Basic probability
 
-         6. Sum of prob of exclusive events = 1
+..          6. Sum of prob of exclusive events = 1
 
-      6. Basic graph theory ✓
+..       6. Basic graph theory ✓
 
-         7.  Nodes (N) and Edges (V = (N × N))✓
-             8.  notation notes ✓
-             9.  Parents and children
+..          7.  Nodes (N) and Edges (V = (N × N))✓
+..              8.  notation notes ✓
+..              9.  Parents and children
 
-         10.  Adjacency Matrix view of graphs✓
-         11.  Directed and Undirected graphs✓
-         12.  Directed Acyclic Graphs✓
+..          10.  Adjacency Matrix view of graphs✓
+..          11.  Directed and Undirected graphs✓
+..          12.  Directed Acyclic Graphs✓
 
-2. Assumptions
+.. 2. Assumptions
 
-   2. Fixed set of nodes ✓
-   3. Discrete trials 
-   4. Synchronous activation 
-   5. cross trial independence 
+..    2. Fixed set of nodes ✓
+..    3. Discrete trials 
+..    4. Synchronous activation 
+..    5. cross trial independence 
 
-3. Graphs: Structure
+.. 3. Graphs: Structure
 
-   1. Complexity of graph enumeration
+..    1. Complexity of graph enumeration
 
-      2. General directed graphs, ✓
+..       2. General directed graphs, ✓
 
-         .. math:: 2^{n^2} 
+..          .. math:: 2^{n^2} 
 
-   2. Reducing complexity:
+..    2. Reducing complexity:
 
-      3. Enumeration filters
-      4. Directed Acyclic Graphs
+..       3. Enumeration filters
+..       4. Directed Acyclic Graphs
 
-         4. No trace (no self-loops) ✓
-         5. number of graphs
+..          4. No trace (no self-loops) ✓
+..          5. number of graphs
 
-   3. Parents and children
+..    3. Parents and children
 
-4. Random Variables: Semantics, sampling and graphs
+.. 4. Random Variables: Semantics, sampling and graphs
 
-   4. Conditional probability distributions
-   5. Conditional independence properties
+..    4. Conditional probability distributions
+..    5. Conditional independence properties
 
-5. Bayesian Networks.
+.. 5. Bayesian Networks.
     
-    1. Graphical interpretation of conditional independence ✓
+..     1. Graphical interpretation of conditional independence ✓
 
 
-5. Causal Graphs: Interventions
+.. 5. Causal Graphs: Interventions
 
-   1. Graph Surgery
-   2. Causal graphs as extensions of directed graphs ---
+..    1. Graph Surgery
+..    2. Causal graphs as extensions of directed graphs ---
 
-      1. incorporating intervention into the node set
+..       1. incorporating intervention into the node set
 
-   3. Interventions as constraints on the graph set
+..    3. Interventions as constraints on the graph set
 
-      4. Node has no parents = node is intervened on with prior
-         distribution equal to the
+..       4. Node has no parents = node is intervened on with prior
+..          distribution equal to the
 
-1. NetworkX
+.. 1. NetworkX
     
-    2. graph/network package in python
+..     2. graph/network package in python
     
 
-6. Causal Bayesian NetworkX: Graphs
+.. 6. Causal Bayesian NetworkX: Graphs
 
-   5. Iterator over graphs
-   6. Closures for constraints
+..    5. Iterator over graphs
+..    6. Closures for constraints
       
-       8. over graphs
-       9. tuples of nodes
-       10. individual nodes?
+..        8. over graphs
+..        9. tuples of nodes
+..        10. individual nodes?
    
-   11. Zipping iterators and avoiding early consumption
+..    11. Zipping iterators and avoiding early consumption
 
-6. Causal Bayesian NetworkX: Probabilistic Sampling
+.. 6. Causal Bayesian NetworkX: Probabilistic Sampling
     
-.. 7. Gates and causal networks
+.. .. 7. Gates and causal networks
 
-8. Causal theories
+.. 8. Causal theories
     
-    9. Rational analysis and computational level explanations of human cognition✓
-    10. First order logic for probabilistic graphical models ✓
-    11. ontology, plausible relations, functional form✓
-    12. generalizations to other kinds of logical/graphical conditions✓
-    13. uses in understanding human cognition
+..     9. Rational analysis and computational level explanations of human cognition✓
+..     10. First order logic for probabilistic graphical models ✓
+..     11. ontology, plausible relations, functional form✓
+..     12. generalizations to other kinds of logical/graphical conditions✓
+..     13. uses in understanding human cognition
 
 
 .. .. raw:: latex
