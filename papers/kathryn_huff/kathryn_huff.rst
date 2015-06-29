@@ -189,20 +189,17 @@ very different characteristic time scales, so the equations are quite stiff.
       .\\
       .\\
       \omega_K\\
-      T_{fuel}\\
-      T_{cool}\\
-      T_{refl}\\
-      T_{matr}\\
-      T_{grph}\\
+      T_{i}\\
       .\\
       .\\
       .\\
+      T_{I}\\
     \end{array}
     \right]
     =
     \left[
       \begin{array}{ c }
-        \frac{\rho(t,T^{fuel},T_{cool},\cdots)-\beta}{\Lambda}p +
+        \frac{\rho(t,T_{i},\cdots)-\beta}{\Lambda}p +
         \displaystyle\sum^{j=J}_{j=1}\lambda_{d,j}\zeta_j\\
         \frac{\beta_1}{\Lambda} p - \lambda_{d,1}\zeta_1\\
         .\\
@@ -222,14 +219,11 @@ very different characteristic time scales, so the equations are quite stiff.
         .\\
         .\\
         \kappa_{k p} - \lambda_{FP,k}\omega_{k}\\
-        f_{fuel}(p, C_p^{fuel}, T_{fuel}, T_{cool},\cdots)\\
-        f_{cool}(C_p^{cool}, T_{fuel}, T_{cool},\cdots)\\
-        f_{refl}(C_p^{refl}, T_{fuel}, T_{refl},\cdots)\\
-        f_{matr}(C_p^{matr}, T_{fuel}, T_{matr},\cdots)\\
-        f_{grph}(C_p^{grph}, T_{fuel}, T_{grph},\cdots)\\
+        f_{i}(p, C_{p,i}, T_{i}, \cdots)\\
         .\\
         .\\
         .\\
+        f_{I}(p, C_{p,I}, T_{I}, \cdots)\\
       \end{array}
       \right]
 
@@ -241,7 +235,7 @@ In the above matrix equation, the following variable definitions are used:
    :label: n_data
 
     \p = \mbox{ reactor powe}\\
-    \rho(t,&T_{fuel},T_{cool},T_{mod}, T_{refl}) = \mbox{ reactivity, [pcm]}\\
+    \rho(t,&T_{fuel},T_{cool},T_{mod}, T_{refl}) = \mbox{ reactivity}\\
     \beta &= \mbox{ fraction of neutrons that are delayed}\\
     \beta_j &= \mbox{ fraction of delayed neutrons from precursor group j}\\
     \zeta_j &= \mbox{ concentration of precursors of group j}\\
@@ -250,6 +244,7 @@ In the above matrix equation, the following variable definitions are used:
     \omega_k &= \mbox{ decay heat from FP group k}\\
     \kappa_k &= \mbox{ heat per fission for decay FP group k}\\
     \lambda_{FP,k} &= \mbox{ decay constant for decay FP group k}
+    T_i &= \mbox{ temperature of component i}
 
 The PRKE in equation :ref:`fullprke` can be solved in numerous ways, using
 either loose or tight coupling.  Operator splitting, loosely coupled in time,
