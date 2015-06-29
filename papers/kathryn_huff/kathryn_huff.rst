@@ -78,7 +78,7 @@ characterizes the departure of the nuclear reactor from *criticality*:
 The reactor power is stable (*critical*) when the effective multiplication
 factor, :math:`k`, equals 1. For this reason, in all power reactors, the scalar
 flux of neutrons determines the power. The reactor power, in turn, affects the
-temperature. Reactivity feedback then results, due the temperature dependence
+temperature. Reactivity feedback then results due to the temperature dependence
 of geometry, material densities, the neutron spectrum, and reaction
 probabilities [Bell1970]_.  This concept is captured in the feedback diagram in
 Figure :ref:`figfeedback`.
