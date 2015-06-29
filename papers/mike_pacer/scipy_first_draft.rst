@@ -19,8 +19,6 @@
 .. raw::latex
 
     \newcommand{\DUrolesc}{\textsc}
-..  \providecommand*\DUrolecitep[1]{\citep{#1}}
-..  \newcommand\DUrolecitep[1]{\citeA{#1}}
     \newcommand{\DUroleindep}{\mathrel{\text{\scalebox{1}{$\perp\mkern-9mu\perp$}}}}
 
 
@@ -65,8 +63,6 @@ The Causal Bayesian NetworkX toolkit can be seen as consisting of two main parts
 I focus first on establishing a means of building iterators over sets of directed graphs. I then apply operations to those sets. Beginning with the complete directed graph, we enumarte over the subgraphs of that complete graph and enforce graph theoretic conditions such as acyclicity over the entire graph, guarantees on paths between nodes that are known to be able to communicate with one another, or orphan-hood for individual nodes known to have no parents. We accomplish this by using closures that take graphs as their input along with any explicitly defined arguments needed to define the exact desired conditions. 
 
 I then shift focus to a case where there is a specific known directed acyclic graph that is imbued with a simple probabilistic semantics over its nodes and edges, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics. I discuss briefly some of the challenges of encoding these semantics in dictionaries as afforded by NetworkX without resorting to :code:`eval` statements and discuss compatibility issues I have found with JSON storage formats. 
-
-.. Then, I will briefly discuss **gates**:cite:`winn2012causality`, an extension to graphical modeling frameworks that allow one to define context-specific dependence relations (which includes context-specific *independence* relations). This extension is of particular interest as it allows us to subsume the classical :code:`do`-calculus :cite:`pearl2000` into the more general semantics of the probabilistic network(though not a Bayesian network since that only expresses context-free independence relations). This work was a key influence in the development of thinking about interventions not as operations on individual nodes, or even individual graphs, but as a particular constraint placed on sets of graphs by some generative process. This interpretation of intervention, however, more difficult to relate to the semantics of probabilistic networks. I expect that **gates** will aid in bridging between this 
 
 I conclude with a discussion of some of the problems that have been addressed in Cognitive Science through the use of graphical models like those described. In particular, I will discuss a framework called **causal theories** :cite:`griffithst09` which allows for defining problems of causal induction. It is out of this framework the perspective expressed in this paper, the associated talk, and the the Causal Bayesian NetworkX toolkit developed. 
 
@@ -273,16 +269,16 @@ Thus we can establish the following statements
     \end{tabular}
     \end{center}
 
-Coins and dice with disjoint sets of labeled entities, Example
-==============================================================
+.. Coins and dice with disjoint sets of labeled entities, Example
+.. ==============================================================
 
-Imagine the following game: 
+.. Imagine the following game: 
 
-You have a coin (*C*, :sc:`Heads, Tails`), a *new* 6-sided die (:math:`D_6, \{\clubsuit,\diamondsuit,\heartsuit,\spadesuit,\odot,\dagger\}`), and a 20-sided die (:math:`D_{20}, \{X_1,X_2,\ldots,X_{20}\}`). 
+.. You have a coin (*C*, :sc:`Heads, Tails`), a *new* 6-sided die (:math:`D_6, \{\clubsuit,\diamondsuit,\heartsuit,\spadesuit,\odot,\dagger\}`), and a 20-sided die (:math:`D_{20}, \{X_1,X_2,\ldots,X_{20}\}`). 
 
-The rules are the same as before: your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. You flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die.
+.. The rules are the same as before: your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. You flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die.
 
-But note that now we cannot sum over these in the same way that we did before. Indeed, our event sets for the two dice are mutually disjoint, making the event set for the scores that one can receive on a single round :math:`\{\clubsuit,\diamondsuit,\heartsuit,\spadesuit,\odot,\dagger,X_1,X_2,\ldots,X_{20}\}`. Without additional information about how to map these different labels onto values, there's no way to describe the "score". Rather, the best we can do is to determine the probability with which each individual case occurs.
+.. But note that now we cannot sum over these in the same way that we did before. Indeed, our event sets for the two dice are mutually disjoint, making the event set for the scores that one can receive on a single round :math:`\{\clubsuit,\diamondsuit,\heartsuit,\spadesuit,\odot,\dagger,X_1,X_2,\ldots,X_{20}\}`. Without additional information about how to map these different labels onto values, there's no way to describe the "score". Rather, the best we can do is to determine the probability with which each individual case occurs.
 
 Bayesian Networks
 -----------------
@@ -396,6 +392,8 @@ NetworkX is usually imported using the :code:`nx` abbreviation
 
 Causal Bayesian NetworkX: Graphs
 --------------------------------
+
+Here we will look at some of the basic operations described in the `ipython notebook` :cite:`perezG2007` found at `Causal Bayesian NetworkX`_.
 
 Other packages
 ==============
@@ -555,8 +553,10 @@ Because the :code:`conditionalSubgraph` generator produces an iterable, if we wa
         x,y = new_conditional_graph_set(a,c)
         
         Variables: 
-        graph_set is a graph-set generator
-        condition_list is a list of first order functions returning boolean values when passed a graph.
+        graph_set: graph-set iterator generator
+        condition_list: list conditions
+            input: a graph.
+            output: boolean value
         """
         
         graph_set_newer, graph_set_test = tee(graph_set,2)
@@ -646,6 +646,16 @@ The convention I have been following for distinguishing filter and condition fun
 Causal Bayesian NetworkX: Sampling
 ----------------------------------
 
+It is possible to identify first those nodes with no parents, and then sample them. Then (and this is the part that is iterated), sample those in the children set whose parent set has a full sample, removing children from the children set when they are sampled from and adding them to the parent set. This is continued until there are no children in the children set. 
+
+This is the algorithm that sampling follows as can be observed in `Causal Bayesian NetworkX`_. This approach only works for :sc:`dag`\s and is formally equivalent to identifying a *topological ordering* for the nodes and then sampling accordingly. A graph having a topological ordering is biconditionally equivalent to being a :sc:`dag`. This critrion can roughly be seen as assigning each node an integer such that every child will always have an integer greater than any of its parent nodes (and by recursion any of its ancestor nodes). This provides an order in which to visit the nodes for sampling purposes that will ensure that any nodes in a child's parent set will always be visited first. This also results in choosing those nodes with an empty set as a parent set (i.e., orphans) to have the lowest integers, and therefore to be sampled first.
+
+Most of the difficult parts of encoding a sampling procedure though have nothing to do with the algorithm(it is standard for :sc:`dag`\s). Rather, they arise from attempting to store the relevant information within the NetworkX data nodes, so that a self-contained graphical object can be imported and exported. There is a general problem of a lack of standard storage format for Bayesian networks (and probabilistic graphical models in general). This is just one flavor of that problem. 
+
+Lack of JSON compatibility
+==========================
+
+When submitting the abstract for this paper and talk, I believed I had created a JSON compatible format for storing the underlying data. I discovered that my method of storing groups of parent-variable realizations as tuple-keys with distribution arguments broke the JSON compatiblity that I was able to maintain in other circumstances. This was useful for being able to call the distributions of variables who have more than one parent nodes. I have not yet fixed this problem. 
 
 Causal Theories and Computational Cognitive Science
 ---------------------------------------------------
@@ -708,7 +718,7 @@ Uses in modeling human cognition
 
 Using this framework, Griffiths and Tenenbaum were able to provide comprehensive coverage for a number of human psychology experiments. To avoid further overpopulation of the references section, I direct the interested reader to the `original paper`_ (which is well worth reading in its own right).
 
-What is important is that they successfully modeled humans using this framework by treating people as optimal performers[#]_ within the problem defined by their framework. Furthermore, by examining different but related experiments, they were able to demonstrate the different ways in which specific kinds of prior knowledge are called upon differentially to inform human causal induction resulting in quite different inferences on a rational statistical basis.
+What is important is that they successfully modeled humans using this framework by treating people as optimal performers [#]_ within the problem defined by their framework. Furthermore, by examining different but related experiments, they were able to demonstrate the different ways in which specific kinds of prior knowledge are called upon differentially to inform human causal induction resulting in quite different inferences on a rational statistical basis.
 
 .. [#] Optimality in these cases is taken to mean on average approximating the posterior distribution of some inference problem defined by the authors in each case.
 
