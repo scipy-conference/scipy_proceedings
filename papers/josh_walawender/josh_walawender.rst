@@ -167,7 +167,7 @@ It should be noted that unless custom code is added to handle reduction steps su
 Analysis Results and Mongo Database Integration
 -----------------------------------------------
 
-Results of the IQMon measurements for each image are stored as properties of the ``Image`` object as ``astropy.units.Quantities``.  For example, the ```FWHM`` value is in units of pixels, but can be converted to arcseconds using the equivalency which is automatically defined by the ``Telescope`` object (``tel.pixel_scale_equivalency``) for this purpose.
+Results of the IQMon measurements for each image are stored as properties of the ``Image`` object as ``astropy.units.Quantity``.  For example, the ``FWHM`` value is in units of pixels, but can be converted to arcseconds using the equivalency which is automatically defined by the ``Telescope`` object (``tel.pixel_scale_equivalency``) for this purpose.
 
 .. code-block:: python
 
