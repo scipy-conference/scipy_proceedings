@@ -531,6 +531,41 @@ If we wanted to have examples of all dags that are subgraphs of a passed in grap
             return nx.is_directed_acyclic_graph(G)
         return is_dag_condition
 
+Non-destructive conditional subgraph generators
+===============================================
+
+Because the :code:`conditionalSubgraph` generator produces an iterable, if we want to apply a conditional after that intiial set is generated, we need to split it into two copies of the iterable. This involves the :code:`tee` function from the :code:`itertools` core package.
+
+.. code-block:: python
+
+    def new_conditional_graph_set(graph_set,condition_list):
+        """
+        This returns the old graph_set and a new iterator
+        which has with conditions in condition_list applied to it.
+        
+        Warning: This function will devour the iterator 
+        you include as the `graph_set` input, 
+        you need to redeclare the variable as 
+        one of the return values of the function.
+        
+        Thus a correct use would be:    
+        a,b = new_conditional_graph_set(a,c)
+        
+        The following would not be a correct use:
+        x,y = new_conditional_graph_set(a,c)
+        
+        Variables: 
+        graph_set is a graph-set generator
+        condition_list is a list of first order functions returning boolean values when passed a graph.
+        """
+        
+        graph_set_newer, graph_set_test = tee(graph_set,2)
+        def gen():
+            for G in graph_set_test:
+                G_test = G.copy()
+                if all([c(G_test) for c in condition_list]):
+                    yield G_test
+        return graph_set_newer, gen()
 
 Filters versus Conditions: which to use
 =======================================
@@ -608,34 +643,76 @@ The convention I have been following for distinguishing filter and condition fun
 .. Gates: Context-sensitive causal Bayesian networks
 .. -------------------------------------------------
 
-
+Causal Bayesian NetworkX: Sampling
+----------------------------------
 
 
 Causal Theories and Computational Cognitive Science
 ---------------------------------------------------
 
+**Causal theories** is a formal framework that arose out of the tradition in computational cognitive science to approach problems with rational, comptuational-level analyses :cite:`griffithst09`. In particular, causal theories form generative models for defining classes of parameterized probabilistic graphical models. They rely on defining a set of classes of entities (ontology), potential relationships between those classes of entities and particular entities (plausible relations), and particular parameterizations of how those relations manifest in observable data (or in how other relations eventually ground out into observable data). This allows Griffiths and Tenenbaum to subsume the prediction of a wide array of human causal inductive, learning and reasoning behavior using this framework for generating graphical models and doing inference over the structures they generate.
 
 Rational analysis
 =================
 
-Computational Level Explanations of Human Cognition
-===================================================
+A technique used that allows us to model not cognition per se, but the situation into which cognitive capacities are to be placed. If we assume that we know the inputs, the outputs and the goal state of the arbtirary cognitive agent, we can iteratively predict the agent's behavior[#]_.
 
-First order logic for probabilistic graphical models
-====================================================
+This is often coupled with comptuational-level analysis inspired by Marr's :cite:`marr82` level's of analysis.  
 
-ontology, plausible relations, functional form
-==============================================
+.. [#] This is not a well-sourced definition. I need to go back to :cite:`andersons91` to spruce it up.
 
-generalizations to other kinds of logical/graphical conditions
+Computational-Level Analysis of Human Cognition
+===============================================
+
+A computational-level analysis is one in which we model a system in terms of its functional role(s) and how they would be optimally solved. This is distinguished from algorithmic-level analysis by not caring how this goal achievement state is implemented in terms of the formal structure of the underlying system and from mechanistic-level analysis by not caring about the physical structure of how these systems are implemented (which may vary widely while still meeting the structure of the algorithmic-level which itself accomplishes the goals of the computational level).
+
+A classic example of the three-levels of analysis are different ways of studying flying with the example of bird-flight. The mechanistic-level analysis would be to study feathers, cells and so on to understand the component subparts of individual birds. The algorithmic-level analysis would look at how these subparts fit together to form an active whole that is capable of flying often by flapping its wings in a particular way. The computational-level analysis would be a theory of aerodynamics with specific accounts for the way forces interact to produce flight through the particular motions of flying observed in the birds.
+
+Causal theories: ontology, plausible relations, functional form
+===============================================================
+
+Griffiths and Tenenbaum :cite:`griffithst09` point out their framework generalizes the notion of specifying a Bayesian network in the same way first order logic generalizes propositional logic. It does so by requiring the elements necessary to populate a graph with nodes, those nodes with properties, and relations between the nodes, stating which of those relations are plausible(and how plausible), and a specific, precise formulation for how those relations manifest in terms of the semantics. In the terms of :cite:`griffithst09`'s theory-based causal induction, this requires specifying an ontology, plausible relations over those ontologies, and functional forms for parameterizing those relations.
+
+Ontology
+^^^^^^^^
+
+This specifies the full space of potential kinds of entities, properties and relations that exist. This is the basis around which everything else will be defined. 
+
+Note that it is easy enough to populate nodes with features using the data field in NetworkX.
+
+Plausible Relations
+^^^^^^^^^^^^^^^^^^^
+
+This specifies which of the total set of relations allowed by the ontology are plausible. For example, we know that in most situations a fan is more likely than a tuning fork to blow out a candle. 
+
+As mentioned above, once you have a well-populated world if you do not dramatically restrict the sets of relations you consider, there will be an explosion of possibilities. People, even young children:cite:`griffithst09`, have many expectations about what sorts of things can can feasibly be causally related to one another. This sometimes has been interpreted as the plausible existence of a 
+
+Functional form
+^^^^^^^^^^^^^^^
+
+> Even in the most basic cases of causal induction we draw on expectations as to whether the effects of one variable on another are positive or negative, whether multiple causes interact or are independent, and what type of events (binary, continuous, or rates) are relevant to evaluating causal relationships.
+:cite:`griffithst09`
+
+
+Generalizations to other kinds of logical/graphical conditions
 ==============================================================
 
-uses in understanding human cognition
-=====================================
+The Griffiths and Tenenbaum framework is richer than the examples they develop in :cite:`griffithst09`. We can express conditions of graphical connectivity, alternative functional forms, substructures of constrained plausible relations, among many others.
 
+Because the plausible relations are in general described as sufficiency statements, the idea is that most relations are not plausible. However, we can also make necessary statements about the kinds of relations that must be there. And in general one can see this as selecting a subset of all the possible graphs implementable by the set of nodes defined by the ontology.
 
+Part of the aim of developing `Causal Bayesian NetworkX`_ is to provide a programming framework in which the richness of causal theories are able to be expressed. Because of the utilities in :code:`networkX`, with the enumerating, filtring and conditioning functions described above, it becomes much easier to implement higher-order graphical conditions (e.g., a directed path necessarily existing between two nodes) than in the original notation described in the framework. These ideas were entirely expressable in the original mathematical framework, but would have required a good deal more notational infrastructure to represent. Here, we not only provide a notation, but a computational infrastructure for applying these kinds of conditions.
 
+Uses in modeling human cognition
+================================
 
+Using this framework, Griffiths and Tenenbaum were able to provide comprehensive coverage for a number of human psychology experiments. To avoid further overpopulation of the references section, I direct the interested reader to the `original paper`_ (which is well worth reading in its own right).
+
+What is important is that they successfully modeled humans using this framework by treating people as optimal performers[#]_ within the problem defined by their framework. Furthermore, by examining different but related experiments, they were able to demonstrate the different ways in which specific kinds of prior knowledge are called upon differentially to inform human causal induction resulting in quite different inferences on a rational statistical basis.
+
+.. [#] Optimality in these cases is taken to mean on average approximating the posterior distribution of some inference problem defined by the authors in each case.
+
+.. _original paper: https://cocosci.berkeley.edu/tom/papers/tbci.pdf
 
 
 .. Of course, no paper would be complete without some source code.  Without
@@ -898,7 +975,7 @@ Outline v. 1.1
       
        8. over graphs
        9. tuples of nodes
-       10. individual nodes
+       10. individual nodes?
    
    11. Zipping iterators and avoiding early consumption
 
@@ -908,10 +985,10 @@ Outline v. 1.1
 
 8. Causal theories
     
-    9. Rational analysis and computational level explanations of human cognition
-    10. First order logic for probabilistic graphical models 
-    11. ontology, plausible relations, functional form
-    12. generalizations to other kinds of logical/graphical conditions
+    9. Rational analysis and computational level explanations of human cognition✓
+    10. First order logic for probabilistic graphical models ✓
+    11. ontology, plausible relations, functional form✓
+    12. generalizations to other kinds of logical/graphical conditions✓
     13. uses in understanding human cognition
 
 
