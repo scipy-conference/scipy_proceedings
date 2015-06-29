@@ -36,7 +36,7 @@ including Beyond Design Basis Events (BDBEs) such as Accident Transients
 Without Scram (ATWS). However, no open source tool currently exists for
 reactor transient analysis. To fill this gap, PyRK (Python for Reactor
 Kinetics) [Huff2015]_, a new python package for nuclear reactor kinetics, was
-created. PyRK is the first to offer an open source tool designed to conduct:
+created. PyRK is the first open source tool designed to conduct:
 
 - time-dependent,
 - lumped parameter thermal-hydraulics,
@@ -45,7 +45,6 @@ created. PyRK is the first to offer an open source tool designed to conduct:
 - for nuclear reactor analysis,
 - of any reactor design,
 - in an object-oriented context.
-
 
 As background, this paper will introduce necessary concepts for understanding
 the PyRK model and will describe the differential equations representing the
