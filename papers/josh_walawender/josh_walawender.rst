@@ -198,7 +198,7 @@ Images and Plots
 
 In addition to generating single values for FWHM, ellipticity, and zero point to represent the image, IQMon can also generate more detailed plots with additional information.
 
-A plot with PSF quality information can be generated when ``determine_FWHM`` is called by setting the ``plot=True`` keyword.  This generates a .png file (see Fig. :ref:`PSFplot`) using matplotlib which shows detailed information about the point spread function (FWHM and ellipticity metrics) including histograms of individual values, a spatial map of FWHM and ellipticity over the image, and plots showing the ellipticity vs. radius within the image (which can be used to show whether off axis aberrations influence the ellipticity measure) and the correlation between the measured PSF position angle and the position angle of the star within the image (which can be used to differentiate between tracking error and off axis aberrations).
+A plot with PSF quality information can be generated when ``determine_FWHM`` is called by setting the ``plot=True`` keyword.  This generates a .png file (see Fig. :ref:`PSFplot`) using matplotlib [matplotlib] which shows detailed information about the point spread function (FWHM and ellipticity metrics) including histograms of individual values, a spatial map of FWHM and ellipticity over the image, and plots showing the ellipticity vs. radius within the image (which can be used to show whether off axis aberrations influence the ellipticity measure) and the correlation between the measured PSF position angle and the position angle of the star within the image (which can be used to differentiate between tracking error and off axis aberrations).
 
 .. figure:: PSFplot.png
    :scale: 65%
@@ -268,4 +268,7 @@ References
 
 .. [Lang2010] Lang, D., Hogg, D. W., Mierle, K., Blanton, M., & Roweis, S.,
               *Astrometry.net: Blind astrometric calibration of arbitrary
-              astronomical images* 2010, AJ 137, 1782–1800
+              astronomical images* 2010, AJ, 137, 1782–1800
+
+.. [matplotlib] Hunter, J. D., *Matplotlib: A 2D graphics environment* 2007,
+                Computing In Science & Engineering, 9, 90-95
