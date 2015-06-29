@@ -10,10 +10,10 @@ Widgets and Astropy: Accomplishing Productive Research with Undergraduates
 
     A set of IPython notebooks with a widget interface that are based on
     Astropy, a community-developed package of fundamental tools for astronomy,
-    and Astropy affiliated packages. The widget interface makes astropy a much
-    more useful tool to undergraduates or other non-experts doing research in
-    astronomy, filling a niche for software that connects beginners to
-    research-grade code.
+    and on Astropy affiliated packages is described. The widget interface
+    makes astropy a much more useful tool to undergraduates or other non-
+    experts doing research in astronomy, filling a niche for software that
+    connects beginners to research-grade code.
 
 .. class:: keywords
 
