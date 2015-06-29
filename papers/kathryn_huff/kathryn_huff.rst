@@ -329,26 +329,44 @@ Neutronics
 ***********
 
 The neutronics object holds the first 1+j+k equations in the right hand side of
-the matrix equation in :ref:`fullprke`.
+the matrix equation in :ref:`fullprke`.  In particular, it takes ownership of
+the vector of :math:`1+j+k` independent variables and their solution. It also
+customizes the equations based on paramters noted in the user input file. The
+parameters customizing these equations for a particular reactor include
+:math:`\alpha_i` for each component, :math:`j`, :math:`\Lambda`, :math:`k`, and
+the fissionable nuclide.
 
-Additionally, the accident scenario can be driven by an insertion of reactivity
-(e.g. due to the removal of a control rod). In PyRK, this reactivity insertion
-capability is captured in the ReactivityInsertion class, from which reactivity
-insertions can be selected and customized as in figure :ref:`figri`.
+The Neutronics class has three attributes that are sufficiently complex as to
+warrant their own classes: PrecursorData, DecayHeat, and ReactivityInsertion.
+
+A Neutronics object can own one PrecursorData object. In this class, the input
+parameters :math:`J` and the fissionable nuclide are used to select, from a
+database supplied by PyRK, standardized data representing delayed neutron
+precursor concentrations and the effective decay constants of those precursors
+(:math:`\lambda_{d,j}, \beta_j, \zeta_j`. That nuclear data is stored in the
+PrecursorData class, and is made available to the Neutronics class through a
+simple API.
+
+A Neutronics object can also own one DecayHeat object. In this class, the input
+parameters :math:`K`, and the fissionable nuclide are used to select, the
+fission product decay data (:math:`\lambda_{FP,k}, \omega_k, \kappa_k`. The
+DecayHeat class provides a simple API for accessing those decay constants,
+fission product fractions, and weighting factors.
+
+Finally, a Neutronics object can own one ReactivityInsertion object. This
+defines the external reactivity, :math:`rho_ext`, resulting from control rods,
+external neutron sources, etc. With this ReactivityInsertion object, the
+Neutronics class is equipped to drive a reactivity insertion accident scenario.
+That is, an accident scenario can be driven by an insertion of reactivity (e.g.
+the removal of a control rod). In PyRK, this reactivity insertion capability is
+captured in the ReactivityInsertion class, from which reactivity insertions can
+be selected and customized as in figure :ref:`figri`.
 
 .. figure:: ri.png
 
    The reactivity insertion that can drives the PyRK simulator can be selected
    and customized from three models. :label:`figri`
 
-
-Nuclear data encapsulating the fractions of delayed neutron precursors and
-their precursor group half-lives are stored in the PrecursorData class.
-
-The neutronics class implements the first :math:`1+j+k` equations in the right hand
-side of the matrix equation in :ref:`fullprke`. In particular, it takes
-ownership of the vector of :math:`1+j+k` independent variables and their
-solution.
 
 
 THSystem
