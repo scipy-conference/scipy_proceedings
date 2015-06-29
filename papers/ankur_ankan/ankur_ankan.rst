@@ -505,6 +505,46 @@ for returning an elimination order in which the variables are sorted alphabetica
 	      student_model).get_elimination_order()
    ['D', 'G', 'I', 'L', 'S']
 
+Comparing pgmpy to other libraries
+----------------------------------
+Starting with defining the model pgmpy provides a very simple to use API. You can simply instantiate a model
+by using the __init__ mehtod and modify the structure using add_node, add_edge etc methods. After creating
+the model we can simply add the CPDs using the add_cpds method. In the case of ebay's bayesian belief network,
+we have to create a separate function for each CPD. And each of these function has a dict of CPD values and 
+logic to return the value when the states are passed as arguments [example_bbn]_. Similarly in case of libpgm 
+we have the option to read the data from files defined in a specific format [example_libpgm]_ but doesn't provide any
+methods for making changes to the network. For changing the structure we will need to modify the internal variables
+storing the network information. 
+We have tried to keep pgmpy as modular as possible. A simple example for this is the model creation part. We 
+define a network structure and separately define different CPDs and then simply associate the CPDs to the structure.
+At any time we can modify these CPDs, unassociate or associate another CPD to the network.
+
+Other than providing the features to easily create models, pgmpy also supports 4 standard 
+file formats: pomdpX [pomdpX]_, ProbModelXML [ProbModel]_, XMLBeliefNetwork [XMLBelief]_ and XMLBIF [XMLBIF]_. Using
+pgmpy we can read as well as write networks in these formats. Also there's an ongoing GSoC project
+for adding support for more file formats so hopefully we will be having support for many more formats soon. 
+
+There are many more benefits of using networkx to represent the graph structure. For example we can directly run various 
+graph related algorihtms implemented in networkX on our networks. Also we can use networkX's plotting functionality to 
+visualize our networks.
+
+pgmpy also implements methods for getting independencies, D-Separation etc which would help a lot
+to people who are still new to Graphical Models. These features are not available in most of the other libraries. 
+
+We have tried to keep pgmpy as uniform as possible. For example we have fit and predict methods with each of the
+models which can automatically learn the parameters and structure and you can control the learning by simply passing
+arguments to these methods. Whereas in the case of libpgm, it has multiple methods for learning like lg_mle_estimateparams,
+lg_constraint_estimatesstruct, discrete_estimatebn etc. Similarly for each inference algorithm pgmpy prodives query and 
+map_query methods.
+
+Another area in which pgmpy excels is its extensibility. As we have discussed earlier, we can easily add new algorithms
+to pgmpy without even getting familiar with the code base. We have to tried to build pgmpy in such a way that new components
+can be easily added which will really help researchers working on new ideas to quickly prototype. Also, since pgmpy is 
+documented very well it is very easy to understand the code base.
+
+Performance wise pgmpy is a bit slower than a few libraries but we are currently actively working on improving the performance 
+so hopefully we will be seeing a major improvement in the coming months.
+
 Conclusion and future work
 --------------------------
 The pgmpy library provides an easy to use API for working with Graphical Models. It is also modular enough to provide
@@ -530,3 +570,9 @@ References
 .. [bbn] bayesian-belief-networks github page https://github.com/eBay/bayesian-belief-networks
 .. [pymc] pymc home page https://pymc-devs.github.io/pymc/
 .. [libpgm] libpgm github page https://github.com/CyberPoint/libpgm
+.. [pomdpX] http://bigbird.comp.nus.edu.sg/pmwiki/farm/appl/index.php?n=Main.PomdpXDocumentation
+.. [ProbModel] http://www.probmodelxml.org/
+.. [XMLBelief] http://xml.coverpages.org/xbn-MSdefault19990414.html
+.. [XMLBIF] http://www.cs.cmu.edu/~fgcozman/Research/InterchangeFormat/
+.. [example_bbn] bayesian belief network examples for creating models https://github.com/eBay/bayesian-belief-networks/tree/master/bayesian/examples/bbns
+.. [example_libpgm] https://github.com/CyberPoint/libpgm/tree/master/examples
