@@ -385,18 +385,31 @@ NetworkX is usually imported using the :code:`nx` abbreviation
     G = nx.DiGraph() # initialize a directed graph
 
     edge_list = G.edges() # returns a list of edges
-    edge_data_list = G.edges(data=True) # returns list(edges[data])
+    edge_data_list = G.edges(data=True) 
+    # returns list of edges as tuples with data dictionary 
 
     node_list = G.nodes() # returns a list of nodes
-    node_data_list = G.nodes(data=True) # returns list(nodes[data])
+    node_data_list = G.nodes(data=True) 
+    # returns list of nodes as tuples with data dictionary
 
-We will also need to import 
+
 
 Causal Bayesian NetworkX: Graphs
 --------------------------------
 
-Graph enumeration
-=================
+Other packages
+==============
+
+In addition to networkX, we need to import numpy and itertools.
+
+..  code-block::python
+
+    import numpy as np
+    from itertools import chain, combinations, tee
+
+
+Beginning with a max-graph
+==========================
 
 Starting with the max graph for a set of nodes (i.e., the graph with :math:`N^2` edges), we build an iterator that returns graphs by successively removing subsets of edges. Because we start with the max graph, this procedure will visit all possible subgraphs. One challenge that arises when visiting *all* possible subgraphs is the sheer magnitude of that search space (:math:`2^{N^2}`).
 
@@ -404,19 +417,20 @@ Starting with the max graph for a set of nodes (i.e., the graph with :math:`N^2`
 
     def completeDiGraph(nodes):
         """
-        Building a max-graph from a set of nodes. This graph has
-        :math:`n^2` edges in terms of len(nodes).
+        Building a max-graph from a set of n nodes.
+        This graph has :math:`n^2` edges.
         Variables:
-        nodes are a list of strings that specify the node names
+        nodes are a list of strings comprising node names
         """
 
         G = nx.DiGraph() # Creates new graph
         G.add_nodes_from(nodes) # adds nodes to graph
         edgelist = list(combinations(nodes,2)) 
         # list of directed edges
-        edgelist.extend([(y,x) for x,y in list(combinations(nodes,2))]) 
+        edgelist.extend([(y,x) for x,y in edgelist)
         #add symmetric edges
-        edgelist.extend([(x,x) for x in nodes]) # add self-loops
+        edgelist.extend([(x,x) for x in nodes]) 
+        # add self-loops
         G.add_edges_from(edgelist) # add edges to graph
         return G
 
@@ -433,8 +447,8 @@ One of the most powerful uses I have found for this is the ability to modify a g
 
     def filter_Graph(G,filter_set):
         """
-        This allows us to apply a set of filters encoded as 
-        closures functions that take a graph as input
+        This allows us to apply a set of filters encoded 
+        as closures that take a graph as input
         and return a graph as output.
         """
         graph = G.copy()
@@ -443,7 +457,7 @@ One of the most powerful uses I have found for this is the ability to modify a g
         return graph
 
 Example filter: remove self-loops
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+=================================
 
 By default the graph completed by :code:`completeDiGraph()` will have self-loops, often we will not want this (e.g., :sc:`dag`\s cannot contain self-loops).
 
@@ -456,10 +470,28 @@ By default the graph completed by :code:`completeDiGraph()` will have self-loops
             return graph
         return remove_self_loops_filter
 
+.. Example filter use-case: add intervening nodes to a existing graph
+.. ==================================================================
+
+.. By default the graph completed by :code:`completeDiGraph()` will have self-loops, often we will not want this (e.g., :sc:`dag`\s cannot contain self-loops).
+
+.. .. code-block:: python
+
+..     def extract_remove_self_loops_filter():
+..         def remove_self_loops_filter(G):
+..             graph = G.copy()
+..             graph.remove_edges_from(graph.selfloop_edges())
+..             return graph
+..         return remove_self_loops_filter
+
 
 
 Conditions
 ==========
+
+The enumeration portion of this approach is defined in this :code:`conditionalSubgraphs` function.[#]_ This allows you to pass in a graph from which you will want to sample subgraphs that meet the conditions that you also pass in. 
+
+.. [#] Note that powerset will need to be built (see `Causal Bayesian NetworkX`_ for details).
 
 ..  code-block:: python
 
@@ -486,13 +518,15 @@ Conditions
 
 
 Example condition: detecting :sc:`dag`\s
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+========================================
+
+If we wanted to have examples of all dags that are subgraphs of a passed in graph, we can use a convenient networkX utility.
 
 ..  code-block:: python
 
     def create_is_dag_condition(node_list):
         """ Returns a function that returns true 
-        if graph is dag."""
+        if graph is a dag."""
         def is_dag_condition(G):
             return nx.is_directed_acyclic_graph(G)
         return is_dag_condition
@@ -510,7 +544,7 @@ Conditions are intended to be applied to a series of graphs generated by an iter
 Naming conventions for filters and conditions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The convention I have been following for distinguishing filter and condition functions is that the higher-order function in the case of filters beginning with the word `extract_`, and then both the returned function and the higher-order function ending with the word `filter`. Similarly, conditions have begun with `create_` and finished with `condition`.
+The convention I have been following for distinguishing filter and condition functions is that the higher-order function in the case of filters beginning with the word :code:`extract_`, and then both the returned function and the higher-order function ending with the word :code:`filter`. Similarly, conditions have begun with :code:`create_` and finished with :code:`condition`.
 
 ..  code-block:: python
 
@@ -520,7 +554,7 @@ The convention I have been following for distinguishing filter and condition fun
         def name_filter(G):
             graph = G.copy()
             # operations removing edges
-            return # graph
+            return graph
         return name_filter
 
 
