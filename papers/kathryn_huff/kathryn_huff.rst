@@ -400,19 +400,15 @@ modes.
 
 
 Based on the modes in Table :ref:`tablumpedcap`, we can formulate a model for
-the \gls{PBFHR} component temperatures in the low density graphite core of the
-pebble, the graphite matrix in the fuel annulus of the fuel pebble, the high
-density graphite pebble shell, the fuel (\gls{TRISO} particles pebble fuel
-annulus), coolant, and reflectors. A diagram of the components is found in
-\ref{fig:pebble_components}.
+component temperatures specific to to the geometry of a particular reactor
+design. This might include fuel pellets, particles, or pebbles, cladding,
+coolant, reflectors or other structures in the design.
 
-\input{./pebble/pebble_components}
-
-Fundamentally, to determine the temperature
-change in the body, we rely on relations between temperature, heat capacity,
-and thermal resistance. As in Table \ref{tab:lumpedcap}, the heat flow out of
-body $i$ is the sum of surface heat flow by conduction, convection, radiaion,
-and other mechanisms to each adjacent body, $j$ \cite{lienhard_v_heat_2011}:
+Fundamentally, to determine the temperature change in a thermal body of the
+reactor, we rely on relations between temperature, heat capacity, and thermal
+resistance. As in Table \ref{tab:lumpedcap}, the heat flow out of body :math:`i` is
+the sum of surface heat flow by conduction, convection, radiaion, and other
+mechanisms to each adjacent body, :math:`j` [lienhard_v_heat_2011]_:
 
 .. math::
    :type: align
@@ -623,3 +619,4 @@ References
 
 .. [wiki2014]
 
+.. [lienhard_v_heat_2011] Leinhard
