@@ -69,7 +69,7 @@ variable. An example of markov [markov]_ network over four friends A, B, C, D ag
 some concept is shown in Fig :ref:`markov`.
 
 There are numerous open source packages available in Python for working with graphical 
-models. ebay's  bayesian-belief-networks [bbn]_ mostly focuses on Bayesian Models and 
+models. eBay's  bayesian-belief-networks [bbn]_ mostly focuses on Bayesian Models and 
 has implementation of a limited number of inference algorithms. Another package pymc [pymc]_
 focuses mainly on Markov Chain Monte Carlo (MCMC) method. libpgm [libpgm]_ also mainly focuses
 on Bayesian Networks.
@@ -77,19 +77,20 @@ on Bayesian Networks.
 pgmpy tries to be a complete package for working with graphical models and gives 
 the user full control on designing the model. The source code is very well documented
 with proper docstrings and doctests for each method so that users can quickly get upto speed. 
-Also pgmpy provides easy extensibility and the user can write his own inference algorithms or 
-elimination order algorithms without actually needing to get familiar with the source code.
+Furthermore, pgmpy also provides easy extensibility allowing users to write their own 
+inference algorithms or elimination order algorithms without any additional effort to
+get familiar with the source code.
  
 Getting Source Code and Installing
 ----------------------------------
-pgmpy is released under MIT Licence and is hosted on github. We can simply clone the repository 
-and install it::
+pgmpy is released under MIT Licence and is hosted on github. It can be installed by
+simply cloning the repository and install it::
 
     git clone https://github.com/pgmpy/pgmpy
     cd pgmpy
     [sudo] python3 setup.py install
 
-Dependencies: pgmpy runs only on python3 and is dependent on networkx, numpy, pandas and scipy
+Dependencies: It runs only on python3 and is dependent on networkx, numpy, pandas and scipy
 which can be installed using pip or conda as::
 
     pip install -r requirements.txt
@@ -102,15 +103,15 @@ or::
 Creating Bayesian Models using pgmpy
 ------------------------------------
 
-A Bayesian Network consists of a directed graph which connect the random variables based on
+A Bayesian Network consists of a directed graph where nodes represents random variables and edges represent the
 the relation between them. It is parameterized using Conditional Probability Distributions(CPD).
-Each random variable in a Bayesian Network has a CPD associated with it. If the random varible 
+Each random variable in a Bayesian Network has a CPD associated with it. If a random varible 
 has parents in the network then the CPD represents :math:`P(var| Par_{var})` i.e. the probability
-of that variable given its parents. In the case when the random variable has no parents it 
+of that variable given its parents. In the case, when the random variable has no parents it 
 simply represents :math:`P(var)` i.e. the probability of that variable.
 
-We can take the example of the CPD for the random variable grade in the student model of Fig :ref:`bayesian`.
-A possible CPD for the grade variable is shown in Table :ref:`CPT`.
+For example, we can take the case of student model represented in Fig :ref:`bayesian`.
+A possible CPD for the random variable grade variable is shown in Table :ref:`CPT`.
 
 .. table:: Conditional Probability Table. :label:`CPT`
 
@@ -352,7 +353,7 @@ converting to Bayesian Network etc in the case of Markov Networks.
 Doing Inference over models
 ---------------------------
 pgmpy support various Exact and Approximate inference algorithms. Generally, to perform 
-inference over models we need to first create an inference object by passing the model to the
+inference over models, we need to first create an inference object by passing the model to the
 inference class. Once an inference object is instantiated, we can call either query method
 to find the probability of some variable given evidence, or else map_query
 method to know the state of the variable having maximum probability.
@@ -488,7 +489,7 @@ inference algorithm. An example is shown:
     'L': [<Factor representing phi(L:2, G:3) 
                         at 0x7f195ed61e48>]})
 
-Similarly for adding any new variable elimination order algorithm we can simply inherit from
+Similarly, for adding any new variable elimination order algorithm we can simply inherit from
 BaseEliminationOrder and define a method named cost(self, variable) which returns the cost of eliminating 
 that variable. Inheriting this class also exposes two variables: self.bayesian_model and self.moralized_graph. 
 We can then call the get_elimination_order method to get the elimination order. Below is an example 
@@ -507,15 +508,15 @@ for returning an elimination order in which the variables are sorted alphabetica
 
 Comparing pgmpy to other libraries
 ----------------------------------
-Starting with defining the model pgmpy provides a very simple to use API. You can simply instantiate a model
-by using the __init__ mehtod and modify the structure using add_node, add_edge etc methods. After creating
-the model we can simply add the CPDs using the add_cpds method. In the case of ebay's bayesian belief network,
+Starting with defining the model, pgmpy provides a very simple to use API. A model can be instantiated simply
+by using the __init__ method and the structure can be modified using add_node, add_edge etc methods. After the model
+is created, we can simply add the CPDs using the add_cpds method. In the case of eBay's bayesian belief network,
 we have to create a separate function for each CPD. And each of these function has a dict of CPD values and 
 logic to return the value when the states are passed as arguments [example_bbn]_. Similarly in case of libpgm 
 we have the option to read the data from files defined in a specific format [example_libpgm]_ but doesn't provide any
 methods for making changes to the network. For changing the structure we will need to modify the internal variables
 storing the network information. 
-We have tried to keep pgmpy as modular as possible. A simple example for this is the model creation part. We 
+We have tried to keep pgmpy as modular as possible. It is clearly evident from the above discussed model creation task. We 
 define a network structure and separately define different CPDs and then simply associate the CPDs to the structure.
 At any time we can modify these CPDs, unassociate or associate another CPD to the network.
 
