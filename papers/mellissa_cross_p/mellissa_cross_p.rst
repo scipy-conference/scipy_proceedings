@@ -58,7 +58,7 @@ where ``data`` is the 2D array of along-trajectory data read from the HYSPLIT ou
 
 The 2D ``data`` array of a Trajectory is parsed into separate attributes as 1-D NumPy arrays of floats, readily exposing the data. The ``data`` and ``header`` are also kept as attributes, and can be reloaded into the corresponding 1D attributes at any time, wiping out changes.
 
-Most Trajectory analysis methods live in or are accessed directly by the Trajectory class.  These include calculations of along-trajectory and overall great-circle distance, mean trajectory vector, humidity data conversions, and along-trajectory moisture flux. The results of most of these calculations are stored as new attributes in 1D ndarrays of floats of identical size.  Additionally, the Trajectory class contains the methods for loading forward trajectories and estimating trajectory integration error in both horizontal and vertical dimensions
+Most Trajectory analysis methods live in or are accessed directly by the Trajectory class.  These include calculations of along-trajectory and overall great-circle distance, mean trajectory vector, humidity data conversions, and along-trajectory moisture flux. The results of most of these calculations are stored as new attributes in 1D ndarrays of floats of identical size.  Additionally, the Trajectory class contains the methods for loading forward trajectories and estimating trajectory integration error in both horizontal and vertical dimensions.
 
 The Trajectory class also includes a flexible implementation of the moisture uptake calculation from back trajectories from Sodeman et al. [Sod08]_:
 
