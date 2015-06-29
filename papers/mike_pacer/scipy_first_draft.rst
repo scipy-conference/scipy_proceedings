@@ -378,9 +378,9 @@ Basic NetworkX operations
 
 NetworkX is usually imported using the :code:`nx` abbreviation
 
-.. code-block:: python
+..  code-block:: python
     
-    import networkx as nx # imports 
+    import networkx as nx  
 
     G = nx.DiGraph() # initialize a directed graph
 
@@ -390,6 +390,7 @@ NetworkX is usually imported using the :code:`nx` abbreviation
     node_list = G.nodes() # returns a list of nodes
     node_data_list = G.nodes(data=True) # returns list(nodes[data])
 
+We will also need to import 
 
 Causal Bayesian NetworkX: Graphs
 --------------------------------
@@ -403,24 +404,24 @@ Starting with the max graph for a set of nodes (i.e., the graph with :math:`N^2`
 
     def completeDiGraph(nodes):
         """
-        Building a max-graph from a set of nodes. This graph has :math:`n^2` edges in terms of len(nodes).
+        Building a max-graph from a set of nodes. This graph has
+        :math:`n^2` edges in terms of len(nodes).
         Variables:
         nodes are a list of strings that specify the node names
         """
+
         G = nx.DiGraph() # Creates new graph
         G.add_nodes_from(nodes) # adds nodes to graph
-        edgelist = list(combinations(nodes,2)) # list of directed edges
-        edgelist.extend([(y,x) for x,y in list(combinations(nodes,2))]) #add symmetric edges
+        edgelist = list(combinations(nodes,2)) 
+        # list of directed edges
+        edgelist.extend([(y,x) for x,y in list(combinations(nodes,2))]) 
+        #add symmetric edges
         edgelist.extend([(x,x) for x in nodes]) # add self-loops
         G.add_edges_from(edgelist) # add edges to graph
         return G
 
-
-Operations on sets of graphs
-============================
-
 Preëmptive Filters
-^^^^^^^^^^^^^^^^^^
+==================
 
 In order to reduce the set of edges that we need to iterate over, rather than working over the max-graph for *any* of nodes, it helps to determine which individual edges are known to always be present and which ones are known to never be present. In this way we can reduce the size of the edgeset over which we will be iterating. 
 
@@ -430,68 +431,217 @@ One of the most powerful uses I have found for this is the ability to modify a g
 
 ..  code-block:: python
 
-    def filter_maxGraph(G,filter_set):
+    def filter_Graph(G,filter_set):
         """
-        This allows us to apply a set of filters encoded as closures/first-order functions that take a graph as input and return a graph as output.
+        This allows us to apply a set of filters encoded as 
+        closures functions that take a graph as input
+        and return a graph as output.
         """
-        graph = G.copy() 
+        graph = G.copy()
         for f in filter_set:
             graph = f(graph)
         return graph
 
+Example filter: remove self-loops
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Conditions
-^^^^^^^^^^
-
-
-Gates: Context-sensitive causal Bayesian graphs
------------------------------------------------
-
-
-Causal Theories
----------------
-
-
-
-
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
-
-    def sum(a, b):
-        """Sum two numbers."""
-
-        return a + b
-
-With code-highlighting:
+By default the graph completed by :code:`completeDiGraph()` will have self-loops, often we will not want this (e.g., :sc:`dag`\s cannot contain self-loops).
 
 .. code-block:: python
 
-    def sum(a, b):
-        """Sum two numbers."""
+    def extract_remove_self_loops_filter():
+        def remove_self_loops_filter(G):
+            graph = G.copy()
+            graph.remove_edges_from(graph.selfloop_edges())
+            return graph
+        return remove_self_loops_filter
 
-        return a + b
 
-Maybe also in another language, and with line numbers:
 
-.. code-block:: c
-    :linenos:
+Conditions
+==========
 
-    int main() {
-        for (int i = 0; i < 10; i++) {
-            /* do something */
-        }
-        return 0;
-    }
+..  code-block:: python
 
-Or a snippet from the above code, starting at the correct line number:
+    def conditionalSubgraphs(G,condition_list):
+        """
+        Returns a graph iterator of subgraphs of G 
+        meeting conditions in condition_list.
 
-.. code-block:: c
-    :linenos:
-    :linenostart: 2
+        Variables: 
+        G: a graph from which subgraphs will be taken.
+        condition_list: a list of condition functions.
+        
+        Functions in condition_list have i/o defined as
+        input: graph, generated as a subgraph of G
+        output: Bool, whether graph passes condition
+        """
 
-    for (int i = 0; i < 10; i++) {
-        /* do something */
-    }
+        for edges in powerset(G.edges()):
+            G_test = G.copy()
+            G_test.remove_edges_from(edges)
+            if all([c(G_test) for c in condition_list]):
+                
+                yield G_test
+
+
+Example condition: detecting :sc:`dag`\s
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+..  code-block:: python
+
+    def create_is_dag_condition(node_list):
+        """ Returns a function that returns true 
+        if graph is dag."""
+        def is_dag_condition(G):
+            return nx.is_directed_acyclic_graph(G)
+        return is_dag_condition
+
+
+Filters versus Conditions: which to use
+=======================================
+
+The most obvious structural differences between filters and conditions give insight to how they are to be used. 
+
+Filters are intended to apply to the max graph to reduce the edge set. They take (at least) a graph as an argument and return a graph. This is meant to be a transformation of the graph, or a way to change the value of a graph in place. It does not have any notion of producing both copies of the graph (though that could be done as well).
+
+Conditions are intended to be applied to a series of graphs generated by an iterator taking subgraphs of some other graph
+
+Naming conventions for filters and conditions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The convention I have been following for distinguishing filter and condition functions is that the higher-order function in the case of filters beginning with the word `extract_`, and then both the returned function and the higher-order function ending with the word `filter`. Similarly, conditions have begun with `create_` and finished with `condition`.
+
+..  code-block:: python
+
+    def extract_name_filter(node_list):
+        """
+        """
+        def name_filter(G):
+            graph = G.copy()
+            # operations removing edges
+            return # graph
+        return name_filter
+
+
+..  code-block:: python
+
+    def create_name_condition(node_list):
+        """
+        """
+        def name_condition(G):
+            # operations checking for whether conditions hold
+            return # truth value
+        return name_condition
+
+.. Complex example: adding interventional nodes
+.. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. ..  code-block:: python
+
+..     def add_interventions(G):
+..         node_list = G.nodes()
+..         edge_list = G.edges()
+
+..         int_node_list = [str(x)+"_int" for x in node_list]
+
+..     def completeDiGraph(nodes):
+..         """
+..         Building a max-graph from a set of nodes. This graph has
+..         :math:`n^2` edges in terms of len(nodes).
+..         Variables:
+..         nodes are a list of strings that specify the node names
+..         """
+
+..         G = nx.DiGraph() # Creates new graph
+..         G.add_nodes_from(nodes) # adds nodes to graph
+..         edgelist = list(combinations(nodes,2)) 
+..         # list of directed edges
+..         edgelist.extend([(y,x) for x,y in list(combinations(nodes,2))]) 
+..         #add symmetric edges
+..         edgelist.extend([(x,x) for x in nodes]) # add self-loops
+..         G.add_edges_from(edgelist) # add edges to graph
+..         return G
+
+..     def extract_remove_self_loops_filter():
+..         def remove_self_loops_filter(G):
+..             graph = G.copy()
+..             graph.remove_edges_from(graph.selfloop_edges())
+..             return graph
+..         return remove_self_loops_filter
+
+
+Gates: Context-sensitive causal Bayesian networks
+-------------------------------------------------
+
+
+
+
+Causal Theories and Computational Cognitive Science
+---------------------------------------------------
+
+
+Rational analysis
+=================
+
+Computational Level Explanations of Human Cognition
+===================================================
+
+First order logic for probabilistic graphical models
+====================================================
+
+ontology, plausible relations, functional form
+==============================================
+
+generalizations to other kinds of logical/graphical conditions
+==============================================================
+
+uses in understanding human cognition
+=====================================
+
+
+
+
+
+
+.. Of course, no paper would be complete without some source code.  Without
+.. highlighting, it would look like this::
+
+..     def sum(a, b):
+..         """Sum two numbers."""
+
+..         return a + b
+
+.. With code-highlighting:
+
+.. .. code-block:: python
+
+..     def sum(a, b):
+..         """Sum two numbers."""
+
+..         return a + b
+
+.. Maybe also in another language, and with line numbers:
+
+.. .. code-block:: c
+..     :linenos:
+
+..     int main() {
+..         for (int i = 0; i < 10; i++) {
+..             /* do something */
+..         }
+..         return 0;
+..     }
+
+.. Or a snippet from the above code, starting at the correct line number:
+
+.. .. code-block:: c
+..     :linenos:
+..     :linenostart: 2
+
+..     for (int i = 0; i < 10; i++) {
+..         /* do something */
+..     }
 
 
 .. Important Part
@@ -529,17 +679,6 @@ Or a snippet from the above code, starting at the correct line number:
 .. We can then refer back to Equation (:ref:`circarea`) or
 .. (:ref:`spherevol`) later.
 
-.. Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-.. consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-.. lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-.. turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-.. adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-.. arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-.. faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-.. consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-.. orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-.. sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-.. lacinia. 
 
 .. .. figure:: figure0.png
 
@@ -698,7 +837,7 @@ Outline v. 1.1
 
 5. Bayesian Networks.
     
-    1. Graphical interpretation of conditional independence
+    1. Graphical interpretation of conditional independence ✓
 
 
 5. Causal Graphs: Interventions
