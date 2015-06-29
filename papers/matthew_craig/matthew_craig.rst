@@ -36,10 +36,9 @@ of the students use Windows, the rest Mac OSX.
 
 The problem, described in more detail below, is that the GUI-based software
 most accessible to these students is expensive, often available only on
-Windows, and not clearly documented. The free options largely require
-programming. The software must also leave a record of the choices made in
-calibrating the images so that future researchers can use the images with
-confidence.
+Windows, not clearly documented and does not leave a record of the choices
+made in calibrating the images so that future researchers can use the images
+with confidence. The free options largely require programming.
 
 The proposed solution is a widget-based IPython notebook [Pérez2007]_ for
 calibrating astronomical images, called ``reducer``. A widget-based interface
@@ -84,7 +83,7 @@ that affect how much light gets to each pixel in the camera. An example of
 this sort of imperfection is dust on the camera itself.
 
 A series of images is taken and then combined to perform each type of
-calibration. *Bias* images corrects for the DC offset, *dark* images correct
+calibration. *Bias* images correct for the DC offset, *dark* images correct
 for thermal noise and *flats* correct for non-uniform illumination. One
 combines several frames of each type to reduce the electronic read noise
 present in the calibration images.
@@ -102,7 +101,7 @@ The problem
 -----------
 
 Several software packages can calibrate astronomical images and perform
-photometry, which begs the question "Why write another one?"
+photometry, so why write another one?
 
 Ideally, such software would:
 
@@ -162,7 +161,7 @@ Two relatively recent developments suggest the broad outlines of a solution that
 + Initiation of the Astropy project in 2011, which unified what had previously
   been several independent effort to develop python software for astronomy. In
   addition to developing the core Astropy package, the Astropy organization
-  gives "affiliate" status to packages that request it meet its documentation,
+  gives affiliate status to packages that request it meet its documentation,
   testing and coding standards [#]_
 + Addition of widgets to IPython notebooks in IPython, version 2. From the
   developer perspective, widgets are helpful because the Python API for widgets
@@ -204,7 +203,7 @@ Image calibration
 +++++++++++++++++
 
 All of the calibration steps in reducer are performed by ``ccdproc``, an
-Astropy-affiliated package for astronomical image reduction [ccdproc]_. Some
+Astropy affiliated package for astronomical image reduction [ccdproc]_. Some
 of the  ``reducer`` widgets contain some logic for automatically grouping and
 selecting images based on metadata in the image headers, described in more
 detail below.
@@ -269,7 +268,7 @@ with the same filter and exposure time will be combined by averaging, after
 each image has been scaled to the same median value.
 
 Each image, including the images used in the calibration itself, is processed
-by a ``ReductionWdiget``, like that shown in Fig. :ref:`light-settings`. That
+by a ``ReductionWidget``, like that shown in Fig. :ref:`light-settings`. That
 examples is for a "light" image, an image that contains the objects of
 interest. Each of the calibration images has some of these steps applied also,
 though some of the calibration steps are not displayed for some of the
