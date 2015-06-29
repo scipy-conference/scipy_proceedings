@@ -127,8 +127,6 @@ It is designed to study, among other things, dependencies and interactions betwe
 the Scientific Python technologies and communities.
 Our goal is for BigBang to providing a new means for these communities to engage i
 in scientific self-management.
-We speculate that this sociotechnical singularity could result in an emergent harmonious
-superintelligence that takes over the world.
 
 Email data collection
 ---------------------
