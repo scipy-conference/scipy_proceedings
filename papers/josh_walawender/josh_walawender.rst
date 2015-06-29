@@ -101,7 +101,7 @@ These steps not only provide the typical FWHM (which can indicate if the image i
     im.run_SExtractor()
     # Consider the image to be blank if <10 stars
     if im.n_stars_SExtracted < 10:
-        im.logger.warning('Only {} stars found.\
+        im.logger.warning('Only {} stars found.'
                          .format(im.n_stars_SExtracted))
         im.logger.warning('Image may be blank.')
     else:
@@ -113,7 +113,7 @@ Pointing Determination and Pointing Error
 
 IQMon also contains a ``solve_astrometry`` method to invoke the ``solve-field`` command which is part of the astrometry.net software.  The call to ``solve-field`` is only intended to determine basic pointing and orientation and so IQMon does not use the SIP polynomial fit of distortion in the image.
 
-Once a world coordinate system (WCS) is present in the image header, then the ``determine_pointing_error`` method can be called which compares the right ascension (RA) and declination (DEC) values read from the RA and DEC keywords in the header (which are presumed to be the telescope's intended pointing) to the RA and DEC values calculated for the center pixel using the WCS.  The separation between the two coordinates is reported as the pointing error.
+Once a world coordinate system (WCS) is present in the image header, then the ``determine_pointing_error`` method can be called which compares the right ascension (RA) and declination (DEC) values read from the RA and DEC keywords in the header (which are presumed to be the telescope's intended pointing) to the RA and DEC values of the center pixel which are calculated using the ``astropy.wcs`` module.  The separation between the two coordinates is determined using the ``separation`` method available in the ``SkyCoord`` object of the ``astropy.coordinates`` module.  The magnitude of the separation between the two is reported as the pointing error.
 
 .. code-block:: python
 
