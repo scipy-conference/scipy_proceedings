@@ -536,10 +536,10 @@ Because the :code:`conditionalSubgraph` generator produces an iterable, if we wa
 
 .. code-block:: python
 
-    def new_conditional_graph_set(graph_set,condition_list):
+    def new_conditional_graph_set(graph_set,cond_list):
         """
-        This returns the old graph_set and a new iterator
-        which has with conditions in condition_list applied to it.
+        Returns graph_set & a new iterator which has 
+        conditions in cond_list applied to it.
         
         Warning: This function will devour the iterator 
         you include as the `graph_set` input, 
@@ -554,7 +554,7 @@ Because the :code:`conditionalSubgraph` generator produces an iterable, if we wa
         
         Variables: 
         graph_set: graph-set iterator generator
-        condition_list: list conditions
+        cond_list: list conditions
             input: a graph.
             output: boolean value
         """
