@@ -263,7 +263,7 @@ This web application is intended to be the primary interface for users.  It prov
 Conclusions
 -----------
 
-IQMon provides a way to evaluate the performance of automated telescopes.  Using the included tornado web application, a user can quickly and easily determine whether the observatory is performing acceptably or if it needs attention.
+IQMon provides a way to evaluate the performance of automated telescopes.  It allows the user to build a customized analysis for their particular application by assembling a script which includes only those steps which are required.  Using the included tornado web application, a user can quickly and easily view the results and determine whether the observatory is performing acceptably or if it needs attention.
 
 Over roughly two years of routine operation with two telescopes, it has enabled quick alerting of problems including stuck focus drives, poorly aligned dome rotation, and poor tracking model correction.  Previously, some of these problems would have gone unnoticed until a spot check of the data downloaded from the site revealed them or they would have required a time consuming reading of the nightly system logs to reveal.  Use of IQMon has resulted in greater uptime and improved data quality for both telescopes.
 
