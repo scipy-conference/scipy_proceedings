@@ -33,9 +33,9 @@ librosa: Audio and Music Signal Analysis in Python
 
 .. class:: abstract
 
-   This document describes version 0.4.0 of ``librosa``: a Python
+   This document describes version 0.4.0 of librosa: a Python
    package for audio and music signal processing.
-   At a high level, ``librosa`` provides implementations of a variety 
+   At a high level, librosa provides implementations of a variety 
    of common functions used throughout the field of music information retrieval.
    In this document, a brief overview of the library's functionality is provided,
    along with explanations of the design goals, software development
@@ -68,7 +68,7 @@ high-quality machine learning libraries such as ``scikit-learn`` [Pedregosa11]_ 
 web services.
 However, the adoption of Python has been slowed by the absence of a stable core library 
 that provides the basic routines upon which many MIR applications are built.
-To remedy this situation, we have developed ``librosa``:[#]_ a Python package for audio
+To remedy this situation, we have developed librosa:[#]_ a Python package for audio
 and music signal processing. [#]_
 In doing so, we hope to both ease the transition of MIR researchers into Python (and modern software
 development practices), and also to 
@@ -531,7 +531,7 @@ One approach to eliminate redundant computation is to decompose the various func
 in a computation graph, as is done in Essentia [Bogdanov13]_.  However, this approach necessarily constrains the function 
 interfaces, and may become unwieldy for common, simple applications.
 
-``librosa`` takes an alternative, lazy approach to eliminating redundancy via *output caching*.
+Instead, librosa takes a lazy approach to eliminating redundancy via *output caching*.
 Caching is implemented through an extension of the ``Memory`` class from the ``joblib`` package [#]_, 
 which provides disk-backed memoization of function outputs.
 The cache object (``librosa.cache``) operates as a decorator on all non-trivial computations.
@@ -623,7 +623,7 @@ Conclusion
 ----------
 This document provides a brief summary of the design considerations and functionality of librosa.
 More detailed examples, notebooks, and documentation can be found in our development repository and project website.
-``librosa`` is under active development, and our roadmap for future work includes efficiency improvements and
+The project is under active development, and our roadmap for future work includes efficiency improvements and
 enhanced functionality of audio coding and file system interactions.
 
 
