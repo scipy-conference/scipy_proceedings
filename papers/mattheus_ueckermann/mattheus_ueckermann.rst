@@ -59,7 +59,7 @@ With the improving availability of large, high quality DEM data, the hydrology o
 
 DEM datasets can be supplied in various coordinate frames where the data is not uniformly spaced. Over large regions and higher latitudes, assuming that the data is uniformly spaced can result in large errors, and accurate algorithms need to take into account this grid anisotropy. Additionally, DEM data often contains no-data values where the elevation could not be determined because of noise in the raw data or other effects. DEM data can also contain regions where the elevation appears to be flat, that is, there is no change in elevation from one pixel to the next. In that case, the aspect is not defined, and the slope is zero, which leads to an undefined TWI. These situations need to be dealt with robustly in order to successfully and automatically process large data-sets. The size of these data-sets can also make analysis intractable because of limited computational resources and slow algorithms. Finally, the discrete nature of the tiles can result in edge effects. Figure :ref:`edges` shows an example of UCA calculated with and without edge correction, where the edge artifact is visible as a vertical line. 
 
-pyDEM was developed to address these challenges. pyDEM is an open source Python/Cython library that has been used to calculate TWI for the conterminuous US at 30m resolution, and the globe at 90m resolution. In the following sections we will describe our new algorithm for calculating UCA, our file-based locking mechanism to coordinate work between processors, and optimization using Cython. We will then demonstrate pyDEM on a few test cases, and some real data. 
+pyDEM was developed to address these challenges. pyDEM is an open source Python/Cython library that has been used to calculate TWI for the conterminuous US at 30m resolution, and the globe at 90m resolution. In the following sections we will describe our new algorithm for calculating UCA, our file-based locking mechanism to coordinate work between processors, and optimization using Cython. Using pyDEM, we will then show TWI calculated using test elevations, and realistic elevations from the National Elevation Dataset. 
 
 .. figure:: pydem_compare4.png
 
@@ -74,7 +74,8 @@ To calculate the aspect and slope, pyDEM uses the :math:`\mathrm{D}\infty` metho
 
 .. figure:: pydem_ucaalgo.png
    :align: center
-   :scale: 50%
+   :figclass: w
+   :scale: 60%
    
    The UCA calculation takes a raster of elevation data (top) and constructs an adjacency (or connectivity) matrix. :label:`uca`   
 
@@ -153,7 +154,7 @@ In the second and third stages, numpy's `.npz` format is used to save files whic
 
 
 .. figure:: pydem_edges.png
-   :scale: 60%
+   :scale: 48%
 
    To correct edges across DEM tiles, the edge information is communicated to neighboring tiles, which can then update UCA internally to its edges and communicate that information to the next tile. :label:`pedges`
 
