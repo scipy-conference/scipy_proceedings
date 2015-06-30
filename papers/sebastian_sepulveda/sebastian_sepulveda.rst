@@ -19,7 +19,7 @@ Visualizing physiological signals in real time
 
 .. class:: abstract 
 
-This article presents a software package, written in Python, to visualize and record physiological signals in real time, such as electrocardiography,  electromyography and human movement. The software package, called RTGraph, is also capable of doing real time processing, such as filtering and spectral estimation. RTGraph is open source, extensible, and has been tested on different platforms, including the RaspberryPi (ARM architecture). It leverages the use of several libraries, including PyQtGraph and the SciPy/NumPy stack.
+This article presents a software package, dubbed RTGRaph, to visualize, process and record physiological signals (electrocardiography, electromyography, etc.) in real time. RTGraph is written in Python; it is open source and easy to extend; and it has been tested on differente platforms, including the RaspberryPi (ARM architecture). The program leverages the use of the PyQtGraph library and the SciPy/NumPy stack. A key feature of RTGraph is its multi-process architecture. This allows RTGRaph to take advantage of multiple cores and to have a clean separation between the communication and visualization code.
 
 .. class:: keywords
 
