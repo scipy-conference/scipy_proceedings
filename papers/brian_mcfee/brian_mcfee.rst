@@ -637,6 +637,7 @@ For references to the *design* of the library, citation of the present document 
 Acknowledgements
 ================
 BM acknowledges support from the Moore-Sloan Data Science Environment at NYU.
+Additional support was provided by NSF grant IIS-1117015.
 
 References
 ----------
