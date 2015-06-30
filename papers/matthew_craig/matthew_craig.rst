@@ -357,6 +357,52 @@ printing the contents of the widget. The purpose of this is not to provide a
 way to progammatically rebuild the widget; it is to provide a human reader of
 the notebook a history of what was done in the notebook.
 
+The code below implements a basic ``ToggleContainerWidget`` called ``MyControl``. The widget it produces is shown in Fig. :ref:`toy-widget`.
+
+.. code-block:: python
+
+    from reducer.gui import ToggleContainerWidget
+    from reducer.astro_gui import override_str_factory
+    from IPython.html.widgets import CheckboxWidget
+
+    class MyControl(ToggleContainerWidget):
+        """
+        Straightforward reducer-widget subclass.
+        """
+        def __init__(self, *arg, **kwd):
+            super(MyControl, self).__init__(*arg, **kwd)
+
+            # b_box is a plain IPython checkbox with a more
+            # meaningful string representation.
+            b_box = override_str_factory(\
+                CheckboxWidget(description='Check me'))
+
+            # Another plain check box, but with the default
+            # string representation.
+            c_box = CheckboxWidget(description="Don't check me")
+
+            # These children are contained in the
+            # MyControl widget
+            self.add_child(b_box)
+            self.add_child(c_box)
+
+
+An ``is_sane`` property that can be overridden by subclasses to indicate that
+the settings in the widget are sensible. This can provide some minimal
+validation of user input. The code below implements ``is_sane`` for
+``MyControl``.
+
+.. code-block:: python
+
+        @property
+        def is_sane(self):
+            """
+            Settings are correct when the "Check me" box is
+            checked and the "Don't check me" box is unchecked.
+            """
+            return (self.container.children[0].value and
+                    not self.container.children[1].value)
+
 The widget also has an ``action`` method. This method must be overridden by
 subclasses to do anything useful. It is used in some cases to set up an
 environment for acting on data files and to invoke the action of each child
@@ -364,9 +410,18 @@ widget on each data file, in the order the children are listed in the widget.
 In other cases, the action simply invokes a function that acts on the data
 file.
 
-An ``is_sane`` method that can be overridden by subclasses to indicate that
-the settings in the widget are sensible. This can provide some minimal
-validation of user input.
+The action method for this example is below.
+
+.. code-block:: python
+
+        def action(self):
+            """
+            A simple action, one for each child.
+            """
+            import time
+
+            for child in self.container.children:
+                time.sleep(0.5)
 
 One subclass of ``ToggleContainerWidget``, a ``ToggleGoWidget``, styles the
 toggle as a button instead of a checkbox, and adds a "Start" button that is
@@ -376,10 +431,28 @@ it invokes the ``action`` method of the ``ToggleGoWidget`` and displays a
 progress bar while working. In Fig. :ref:`light-settings`, the outermost
 container is a ``ToggleGoWidget``.
 
+The code below creates a ``ToggleGoWidget``, adds an instance of ``MyControl`` to it, and displays it, creating the widget in Fig. :ref:`toy-widget`.
+
+.. code-block:: python
+
+    from reducer.gui import ToggleGoWidget
+    go_widget = ToggleGoWidget(description='Sample widget',
+                               toggle_type='button')
+    control = MyControl(description='Activate me')
+    go_widget.add_child(control)
+    go_widget.display()
+
+.. figure:: reducer-sample-widget.png
+
+    The widget produced by the sample code in the section *``reducer`` widget
+    structure*. Note the string output of the checkbox "Don't check me", whose
+    ``__str__`` method has not been overridden.
+    :label:`toy-widget`
 
 .. [#] Classes in the current version of ``reducer`` use IPython 2-style class
        names ending in "Widget". Part of upgrading the package to IPython 3
        widgets will be removing that ending.
+
 
 
 Use with students
