@@ -156,12 +156,12 @@ but over small `frames` of the signal which are spaced by a `hop length` (in sam
 The default frame and hop lengths are set to 2048 and 512 samples, respectively.
 At the default sampling rate of 22050 Hz, this corresponds to overlapping frames of 
 approximately 93ms spaced by 23ms.
-Frames are centered by default, so frame index ``t`` corresponds to the half-open time interval::
+Frames are centered by default, so frame index ``t`` corresponds to the slice::
 
-    [t * hop_length - frame_length / 2, 
-     t * hop_length + frame_length / 2),
+    y[(t * hop_length - frame_length / 2):
+      (t * hop_length + frame_length / 2)],
 
-where the boundary conditions are handled by reflection-padding the input.
+where boundary conditions are handled by reflection-padding the input signal ``y``.
 Unless otherwise specified, all sliding-window analyses use Hann windows by default.
 For analyses that do not use fixed-width frames (such as the constant-Q transform), the
 default hop length of 512 is retained to facilitate alignment of results.
