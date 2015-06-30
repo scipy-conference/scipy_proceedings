@@ -121,22 +121,25 @@ The template for the communication process is implemented through the ``Communic
             def closePort():
                 self.exit.set()
 
-The main process is implemented through the ``MainWindow`` class. It is a subclass of the ``QtGui.QMainWindow`` class. Inside this class we define the proper acquisition method (serial, sockets, bluetooth, etc.) and the basic plot configurations, and we configure the timers used to update the plots, which  trigger the ``update_plot`` method. The following code snippet shows the basic structure of the class. 
+One of the key methods of the ``CommunicationProccess`` class is ``run``. The following code snippets is an  example of how to write a serial port interface. 
 
 .. code-block:: python
 
-	class SerialProcess(Process):
-		# ...
-		def run(self):
-	        self.init_time = time()
-	        try:
-	            while self.ser.isOpen() and not self.exit.is_set():
-	                data = self.ser.readline().strip()
-	                try:
-	                    data = map(float, data.split(','))
-	                    self.queue.put([time() - self.init_time] + data)
-	                except:
-	                    pass
+
+    class SerialProcess(Process):
+        # ...
+        def run(self):
+            self.init_time = time()
+            try:
+                while self.ser.isOpen() and \
+                      not self.exit.is_set()
+                data = self.ser.readline().strip()
+                try:
+                    data = map(float, data.split(','))
+	            self.queue.put([time() - 
+                                   self.init_time] + data)
+	        except:
+	            pass
 	            return
 	        except:
 	            raise
@@ -144,7 +147,9 @@ The main process is implemented through the ``MainWindow`` class. It is a subcla
 	            self.closePort()
 	    # ...
 
-One of the most important methods in a ``CommunicationProccess`` class is the ``run`` method. Following the example from the serial acquisition method, in the ``SerialProcess`` class the method ``run`` make the time stamp and then checks if the serial port is open and also, if the process is not exiting. If both statements are true, a line is read from the serial port. Then, the data is converted to the expected formant, and if the data is valid, is putted in the queue. In this case, the data is expected to be a float type, and received as CSV format.
+In this case, ``run`` computes the time stamp. Then checks if the serial port is open and if the process is not exiting. If both statements are true, a line is read from the serial port. Then, the data is parsed (in this example, the data stream consists of CSV floats). Finally, if the data is valid it is placed in the queue.
+
+The main process is implemented through the ``MainWindow`` class. It is a subclass of the ``QtGui.QMainWindow`` class. Inside this class we define the proper acquisition method (serial, sockets, bluetooth, etc.) and the basic plot configurations, and we configure the timers used to update the plots, which  trigger the ``update_plot`` method. The following code snippet shows the basic structure of the class. 
 
 .. code-block:: python
 
