@@ -125,6 +125,29 @@ The main process is implemented through the ``MainWindow`` class. It is a subcla
 
 .. code-block:: python
 
+	class SerialProcess(Process):
+		# ...
+		def run(self):
+	        self.init_time = time()
+	        try:
+	            while self.ser.isOpen() and not self.exit.is_set():
+	                data = self.ser.readline().strip()
+	                try:
+	                    data = map(float, data.split(','))
+	                    self.queue.put([time() - self.init_time] + data)
+	                except:
+	                    pass
+	            return
+	        except:
+	            raise
+	        finally:
+	            self.closePort()
+	    # ...
+
+One of the most important methods in a ``CommunicationProccess`` class is the ``run`` method. Following the example from the serial acquisition method, in the ``SerialProcess`` class the method ``run`` make the time stamp and then checks if the serial port is open and also, if the process is not exiting. If both statements are true, a line is read from the serial port. Then, the data is converted to the expected formant, and if the data is valid, is putted in the queue. In this case, the data is expected to be a float type, and received as CSV format.
+
+.. code-block:: python
+
     class MainWindow(QtGui.QMainWindow):
         def __init__(self):
             QtGui.QMainWindow.__init__(self)
@@ -162,6 +185,8 @@ The main process is implemented through the ``MainWindow`` class. It is a subcla
 .. figure:: usage.png
 
    Screenshot of ``htop`` showing the processes associated with the program. The first process (PID 3095) corresponds to the process initiated by the application. The second one is the communication process (PID 3109).  :label:`usage`
+
+Modifying the function ``self.start``, allows to change the communication method to be used. This function is triggered every time the Start button is pressed, therefore, a new instance is generated in every trigger, allowing to modify on the fly the different acquisitions methods, if needed. the line ``self.data = CommunicationProcess(self.queue)`` must be modified to the proper acquisition class, and then, following the structure for the class defined in the ``CommunicationProcess(Process)`` snippet, the application should run without problems.
 
 For further customization, the plot details can be modified. They reside on the MainWindow class, where some embedded functions can be used to access simple PyQtGraph options; titles, labels, colors of the lines.
 
