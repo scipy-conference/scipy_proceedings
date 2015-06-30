@@ -21,7 +21,7 @@ Introduction
 
 Using existing tools such as astropy [Astropy2013]_, astrometry.net [Lang2010]_, source extractor [Bertin1996]_ [Bertin2010a]_, SCAMP [Bertin2006]_ [Bertin2010b]_, and SWARP [Bertin2010c]_, IQMon analyzes images and provides the user with a quick way to determine whether the telescope is performing at the required level.
 
-For projects which need to monitor the operation of an imaging telescope, IQMon is meant to provide a middle ground solution between simply examining the operational logs (e.g. those output by the control system) and a full data analysis pipeline.  IQMon provides more information than typical operations logs while also giving a "ground truth" analysis since it looks at the actual data and not just what the system intended to do.  While not as powerful as a full data pipeline, it is designed to provide operational information instead of scientific data products and thus its output is tuned to the task of examining the quality of the data and evaluating it for common problems.
+For projects which need to monitor the operation of an imaging telescope, IQMon is meant to provide a middle ground solution between simply examining the operations logs (e.g. those output by the control system) and a full data analysis pipeline.  IQMon provides more information than typical operations logs while also giving a "ground truth" analysis since it looks at the actual data and not just what the system intended to do.  While not as powerful as a full data pipeline, it is designed to provide operational information instead of scientific data products and thus its output is tuned to the task of examining the quality of the data and evaluating it for common problems.
 
 IQMon can provide a determination of whether the telescope is focused (from the typical Full Width at Half Maximum, or FWHM, of stars in the image), whether it is pointing accurately (obtained from a comparison of the target coordinates with the astrometrically solved coordinates), whether the tracking or guiding is adequate (from the typical ellipticity of stars in the image), and whether the night is photometric (obtained from the typical photometric zero point of stars in the image).  For wide field systems which detect many stars in each image, these metrics can be spatially resolved allowing for more detailed analysis such as differentiating between tracking error, focus error, and optical aberration or determining if the dome is partially obscuring the telescope aperture.
 
@@ -36,6 +36,8 @@ IQMon operates by using ``Telescope`` and ``Image`` classes.  The ``Telescope`` 
 
 An ``Image`` object is instantiated with a path to a file with one of the supported image formats and with a reference to a ``Telescope`` object.  The image analysis process is simply a series of calls to methods on the ``Image`` object.
 
+At the most basic level, IQMon is a sequencing tool which calls other programs (e.g. SExtractor, Astronometry.net) and tracks their output.  These calls are all made using the ``subprocess32`` module, so all of these dependencies need to be installed and visible in the path for IQMon to function properly.
+
 The IQMon philosophy is to never operate on the raw file itself, but instead to create a "working file" (using the ``read_image`` method) and store it in a temporary directory.  If the raw image file is a FITS file, then ``read_image``  simply copies the raw file to the temporary directory and records this file name and path in the ``working_file`` property.  If the file is a raw image file from a DSLR (e.g. ``.CR2`` or ``.dng`` format), then ``read_image`` will call ``dcraw`` [#]_ using the subprocess32 module [#]_ to convert the file to ``.ppm``.  The file is then converted to FITS format using either ``pamtofits`` or ``pnmtofits`` tools from the ``netpbm`` [#]_ package.  IQMon then operates on the green channel of that resulting FITS file.  For full functionality, the user should populate the header of this FITS file with appropriate FITS keywords (e.g. ``RA``, ``DEC``, ``EXPTIME``, ``DATE-OBS``, etc.).  To date, IQMon has only been tested with FITS and ``.CR2`` files, but should in principle work with numerous DSLR raw format images.
 
 .. [#] http://www.cybercom.net/~dcoffin/dcraw/
@@ -44,21 +46,19 @@ The IQMon philosophy is to never operate on the raw file itself, but instead to 
 
 .. [#] http://netpbm.sourceforge.net
 
-IQMon has been tested with Python 2.7.X, testing with Python 3.X is pending.  Python 3.X compatibility notes will be posted to the readme file on the git repository.  IQMon runs successfully on both Mac OS X and linux.  Windows compatibility is untested, but will be limited by the availability of some dependencies (e.g. astrometry.net, SExtractor, etc.).
-
-At the most basic level, IQMon is a sequencing tool which calls other programs (e.g. SExtractor, Astronometry.net) and tracks their output.  These calls are all made using the ``subprocess32`` module, so all of these dependencies need to be installed and visible in the path for IQMon to function properly.
+IQMon has been tested with Python 2.7.X, testing with Python 3.X is pending.  Python 3.X compatibility notes will be posted to the readme file on the git repository.  IQMon runs successfully on both Mac OS X and linux.  Windows compatibility is untested, but will be limited by the availability of dependencies (astrometry.net, SExtractor, etc.).
 
 Because the system is designed to do quick evaluations of image quality, the primary concept is an object representing a **single** image.  IQMon does not do any image stacking or other processing which would be applied to more than one image at a time nor is it built around other organizational concepts such as targets or visits.  It is not intended to supplant a full data reduction and analysis package.  The output of IQMon, however, can be stored in a MongoDB [#]_ database making it potentially useful for collecting information on observing concepts which span multiple images such as targets, nights, or visits.  It might also be useful as a preprocessing step for a more complex data pipeline.
 
 .. [#] http://www.mongodb.org
 
-In the following sections, I will describe a simple example of evaluating image quality for a single image.  A more complex example which is updated in concert with IQMon can be found in the ``measure_image.py`` script at the git repository for the VYSOS project [#]_.  That process can then be wrapped in a simple program to monitor a directory for images and analyze them as they are written to disk (see the ``watch_directory.py`` script in the same VYSOS repository for an example).  This enables automatic near real time analysis.
-
-.. [#] https://github.com/joshwalawender/VYSOStools
-
 The time to process an image varies depending on many factors.  It has been well studied for two of the systems mentioned in the Introduction.  Both of these systems are analyzed by the same computer (a 2.3GHz Quad-Core Intel Core i7 with 8GB of RAM), so they share the system resources during the night.
 
 In both cases the full image analysis takes tens of seconds per image, but depends on the number of stars in the image.  The total analysis time for these systems is dominated by the SCAMP solve (roughly one third of the total time) and the generation of two JPEG images (also roughly one third of the total time).  IQMon itself is single threaded, but many of the programs it calls, such as SCAMP, are multi threaded and so will take advantage of multiple cores.
+
+In the following sections, I will describe a simple example of evaluating image quality for a single image.  A more complex example which is updated in concert with IQMon can be found in the ``measure_image.py`` script at the git repository for the VYSOS project [#]_.  That process can then be wrapped in a simple program to monitor a directory for images and analyze them as they are written to disk (see the ``watch_directory.py`` script in the same VYSOS repository for an example).  This enables automatic near real time analysis.
+
+.. [#] https://github.com/joshwalawender/VYSOStools
 
 Configuration and Reading the Image In
 ``````````````````````````````````````
@@ -235,7 +235,13 @@ The JPEG overlays can be useful in evaluating the performance of SExtractor and 
 Tornado Web Application
 -----------------------
 
-IQMon comes with a tornado web application which, while it can be run stand alone, is intended to be used as a template for adding IQMon results to a more customized web page.  The web application (``web_server.py``) contains two ``tornado`` web handlers: ``ListOfNights`` and ``ListOfImages``.  The first generates a page which lists UT dates and if there are image results associated with a date, then it provides a link to a page with the list of image results for that date.  The second handler produces the page which lists the images for a particular UT date (or target name) and provides a table formatted list of the IQMon measurement results for each image with flagged values color coded red, along with links to jpegs and plots generated for that image.
+IQMon comes with a tornado web application which, while it can be run stand alone, is intended to be used as a template for adding IQMon results to a more customized web page.  The web application (``web_server.py``) contains two ``tornado`` web handlers: ``ListOfNights`` and ``ListOfImages``.  The first generates a page which lists UT dates and if there are image results associated with a date, then it provides a link to a page with the list of image results for that date.  The second handler (see Fig. :ref:`ListOfImages`) produces the page which lists the images for a particular UT date (or target name) and provides a table formatted list of the IQMon measurement results for each image with flagged values color coded red, along with links to jpegs and plots generated for that image.
+
+.. figure:: IQMon_Results_V5_20150523UT.png
+   :scale: 37%
+   :figclass: w
+
+   An example of the ``ListOfImages`` handler of the tornado web application.  In this example, a user can easily determine that the first few images of the night had a problem (indicated by the red flagged values).  Based on examination of the JPEGs, this turns out to have been due to the dome rotation being misaligned and partially blocking the telescope aperture leading to large FWHM and ellipticity values (image elongation due to "glints" of the dome edge) and low zero point values (due to aperture obscuration).  The problem resolved itself without human intervention as can be seen by the green, un-flagged images which follow and which continued for the rest of the night. :label:`ListOfImages`
 
 This web application is intended to be the primary interface for users.  It provides three levels of interaction to the user.  First, a custom plot of IQMon results over the course of a night is easy to generate from the mongo database entries and represents the highest level of interaction.  Using such a plot, serious problems which affect many images can be detected at a glance.  Users can then drill down to see a list of images for that UT date and see system performance as a table of IQMon results with flagged values highlighted in red.  Finally an individual image can be examined as a jpeg with overlays or by using the PSF quality plots or zero point plots to examine detailed performance.
 
