@@ -65,7 +65,7 @@ Background: Image analysis in optical stellar astronomy
 -------------------------------------------------------
 
 While a detailed description of astronomical data analysis is beyond the scope
-of this talk, some appreciation of the steps involved is useful for
+of this paper, some appreciation of the steps involved is useful for
 understanding its motivation.
 
 An image from a CCD camera on a telescope is simply an array of pixel values.
@@ -182,7 +182,7 @@ that exposure to programming broadly is useful to both the few students who
 become professional astronomers and the ones who do not. Though no programming
 is required to use ``reducer``, there is code in several of the notebook
 cells. It represents something intermediate between a fully GUI application
-and script-only interface. Another is that exposure to Python nprogramming is
+and script-only interface. Another is that exposure to Python programming is
 useful to both students who work immediately after graduation and those who go
 on to become scientists.
 
