@@ -142,10 +142,13 @@ One option that comes close to meeting all of the criteria is AstroImageJ
 [#]_, a set of astronomy plug-ins for the Java-based ImageJ [ImageJ2012]_. It
 has a nice graphical interface that students in both an introductory astronomy
 course for non-majors and an upper-level course for majors found easy to use,
-is open source,  free, and available on all platforms. Its two weaknesses are
-that it leaves an incomplete record of the settings used in calibrating data
-and measuring brightness and that it is maintained almost exclusively by one
-person.
+is open source,  free, and available on all platforms.  It has a rich set of
+features, including both image calibrating and aperture photometry, and very
+flexible configuration. Its two weaknesses are that it leaves an incomplete
+record of the settings used in calibrating data and measuring brightness and
+it does not have an extensive support community.
+
+
 
 .. [#] http://www.cyanogen.com/
 .. [#] The bias offset and dark current were subtracted and the result
@@ -163,7 +166,7 @@ Two relatively recent developments suggest the broad outlines of a solution that
 + Initiation of the Astropy project in 2011, which unified what had previously
   been several independent effort to develop python software for astronomy. In
   addition to developing the core Astropy package, the Astropy organization
-  gives affiliate status to packages that request it meet its documentation,
+  gives affiliate status to packages that request it and meet its documentation,
   testing and coding standards [#]_
 + Addition of widgets to IPython notebooks in IPython, version 2. From the
   developer perspective, widgets are helpful because the Python API for widgets
@@ -172,6 +175,16 @@ Two relatively recent developments suggest the broad outlines of a solution that
 
 It is the combination of high-quality python packages for both the back-end
 and front-end that made development of ``reducer`` relatively straightforward.
+
+A notebook-based solution offers a couple of other advantages over even the
+strongest of the GUI tools discussed in the previous section. The first is
+that exposure to programming broadly is useful to both the few students who
+become professional astronomers and the ones who do not. Though no programming
+is required to use ``reducer``, there is code in several of the notebook
+cells. It represents something intermediate between a fully GUI application
+and script-only interface. Another is that exposure to Python nprogramming is
+useful to both students who work immediately after graduation and those who go
+on to become scientists.
 
 .. [#] See http://www.astropy.org/affiliated for a list of affiliated packages
        and criteria.
