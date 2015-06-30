@@ -163,6 +163,42 @@ The main process is implemented through the ``MainWindow`` class. It is a subcla
 
    Screenshot of ``htop`` showing the processes associated with the program. The first process (PID 3095) corresponds to the process initiated by the application. The second one is the communication process (PID 3109).  :label:`usage`
 
+For further customization, the plot details can be modified. They reside on the MainWindow class, where some embedded functions can be used to access simple PyQtGraph options; titles, labels, colors of the lines.
+
+.. code-block:: python
+
+	class MainWindow(QtGui.QMainWindow):
+		def __init__(self):
+			# ...
+			# Initializes plots
+    		self.ui.plt.setBackground(background=None)
+    		self.plt1 = self.ui.plt.addPlot(row=1, col=1)
+    		self.plt2 = self.ui.plt.addPlot(row=2, col=1)
+    		# ...
+    		self.configure_plot(self.plt1, "title1", "unit1")
+    		self.configure_plot(self.plt2, "title2", "unit2")
+
+	    @staticmethod
+	    def configure_plot(plot,title, unit, 
+	                       y_min=0, y_max=0,
+	                       label_color='#2196F3',
+	                       label_size='11pt'):
+	        label_style = {'color': label_color,
+	                       'font-size': label_size}
+	        plot.setLabel('left', title,
+	                      unit, **label_style)
+	        plot.setLabel('bottom', 'Time',
+	                      's', **label_style)
+	        plot.showGrid(x=False, y=True)
+	        if y_min != y_max:
+	            plot.setYRange(y_min, y_max)
+	        else:
+	            plot.enableAutoRange(axis=None, enable=True)
+	        plot.setMouseEnabled(x=False, y=False)
+
+As the snippet of code shows, the basic customizations can be done with the normal PyQtGraph methods instantiated from ``self.ui.plt``. This inherits the ``GraphicsLayoutWidget``, giving the possibility of making arrangements of subplots, as shown with the lines ``self.plt1 = self.ui.plt.addPlot(row=1, col=1)``. Using the view, is easy to modify on the fly the arrangements of the plots and subplots. The function ``configure_plot()`` also gives the ability to define the title of the plot, unit of the Y axis, maximum and minimum values for the Y axis (if they are not set, the functions assumes auto range for the Y axis). Optionally, the color of the plot could be customized, and the size of the fonts.
+Customization of the proper UI, and the look and feel, can be done trough Qt Designer. The proper files are provided, and also a simple makefile to rebuild the UI export from Qt Designer to PyQt.
+
 Results
 -------
 
