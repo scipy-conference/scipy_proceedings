@@ -191,22 +191,24 @@ The main process is implemented through the ``MainWindow`` class. It is a subcla
 
    Screenshot of ``htop`` showing the processes associated with the program. The first process (PID 3095) corresponds to the process initiated by the application. The second one is the communication process (PID 3109).  :label:`usage`
 
-Modifying the function ``self.start``, allows to change the communication method to be used. This function is triggered every time the Start button is pressed, therefore, a new instance is generated in every trigger, allowing to modify on the fly the different acquisitions methods, if needed. the line ``self.data = CommunicationProcess(self.queue)`` must be modified to the proper acquisition class, and then, following the structure for the class defined in the ``CommunicationProcess(Process)`` snippet, the application should run without problems.
+The ``start`` method initializes the communication process. This method is triggered every time the *Start* button is pressed. This allows to change the communication parameters (port name, bauds, etc.) during execution time.
 
-For further customization, the plot details can be modified. They reside on the MainWindow class, where some embedded functions can be used to access simple PyQtGraph options; titles, labels, colors of the lines.
+The plot details are also defined in the ``MainWindow`` class. The following code snippets shows how to customize some PyQtGraph options, such as titles, labels, and line colors.
 
 .. code-block:: python
 
 	class MainWindow(QtGui.QMainWindow):
-		def __init__(self):
-			# ...
-			# Initializes plots
+	    def __init__(self):
+	        # ...
+		# Initializes plots
     		self.ui.plt.setBackground(background=None)
     		self.plt1 = self.ui.plt.addPlot(row=1, col=1)
     		self.plt2 = self.ui.plt.addPlot(row=2, col=1)
     		# ...
-    		self.configure_plot(self.plt1, "title1", "unit1")
-    		self.configure_plot(self.plt2, "title2", "unit2")
+    		self.configure_plot(self.plt1, "title1",
+                                    "unit1")
+    		self.configure_plot(self.plt2, "title2", 
+                                    "unit2")
 
 	    @staticmethod
 	    def configure_plot(plot,title, unit, 
@@ -223,11 +225,11 @@ For further customization, the plot details can be modified. They reside on the 
 	        if y_min != y_max:
 	            plot.setYRange(y_min, y_max)
 	        else:
-	            plot.enableAutoRange(axis=None, enable=True)
+	            plot.enableAutoRange(axis=None, 
+                                         enable=True)
 	        plot.setMouseEnabled(x=False, y=False)
 
-As the snippet of code shows, the basic customizations can be done with the normal PyQtGraph methods instantiated from ``self.ui.plt``. This inherits the ``GraphicsLayoutWidget``, giving the possibility of making arrangements of subplots, as shown with the lines ``self.plt1 = self.ui.plt.addPlot(row=1, col=1)``. Using the view, is easy to modify on the fly the arrangements of the plots and subplots. The function ``configure_plot()`` also gives the ability to define the title of the plot, unit of the Y axis, maximum and minimum values for the Y axis (if they are not set, the functions assumes auto range for the Y axis). Optionally, the color of the plot could be customized, and the size of the fonts.
-Customization of the proper UI, and the look and feel, can be done trough Qt Designer. The proper files are provided, and also a simple makefile to rebuild the UI export from Qt Designer to PyQt.
+The class sets the layout of the plots through calls to ``self.ui.plt.addPlot`` methods. Then, each plot is configured by the ``configure_plot`` method, where details such as title,  range, color, and font sizes are set. 
 
 Results
 -------
