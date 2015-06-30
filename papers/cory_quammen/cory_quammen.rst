@@ -233,7 +233,7 @@ In Python, the equivalent is
 
 .. code-block:: python
 
-   t = mutable(0.0)
+   t = vtk.mutable(0.0)
    plane.IntersectWithLine(point1, point2, t, x)
 
 Class and function documentation is processed by the wrapping
