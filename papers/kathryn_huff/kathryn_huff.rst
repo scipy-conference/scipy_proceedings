@@ -425,7 +425,7 @@ Fundamentally, to determine the temperature change in a thermal body of the
 reactor, we rely on relations between temperature, heat capacity, and thermal
 resistance. As in Table :ref:`tab:lumpedcap`, the heat flow out of body :math:`i` is
 the sum of surface heat flow by conduction, convection, radiation, and other
-mechanisms to each adjacent body, :math:`j` [lienhard_v_heat_2011]_:
+mechanisms to each adjacent body, :math:`j` [Lienhard2011]_:
 
 .. math::
    :type: align
@@ -636,4 +636,4 @@ References
 
 .. [wiki2014]
 
-.. [Lienhard2011] Leinhard
+.. [Lienhard2011] Lienhard
