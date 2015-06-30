@@ -234,7 +234,7 @@ In the above matrix equation, the following variable definitions are used:
    :type: align
    :label: n_data
 
-    \p = \mbox{ reactor powe}\\
+    \p &= \mbox{ reactor power }\\
     \rho(t,&T_{fuel},T_{cool},T_{mod}, T_{refl}) = \mbox{ reactivity}\\
     \beta &= \mbox{ fraction of neutrons that are delayed}\\
     \beta_j &= \mbox{ fraction of delayed neutrons from precursor group j}\\
