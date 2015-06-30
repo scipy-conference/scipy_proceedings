@@ -25,7 +25,9 @@ For projects which need to monitor the operation of an imaging telescope, IQMon 
 
 IQMon can provide a determination of whether the telescope is focused (from the typical Full Width at Half Maximum, or FWHM, of stars in the image), whether it is pointing accurately (obtained from a comparison of the target coordinates with the astrometrically solved coordinates), whether the tracking or guiding is adequate (from the typical ellipticity of stars in the image), and whether the night is photometric (obtained from the typical photometric zero point of stars in the image).  For wide field systems which detect many stars in each image, these metrics can be spatially resolved allowing for more detailed analysis such as differentiating between tracking error, focus error, and optical aberration or determining if the dome is partially obscuring the telescope aperture.
 
-To date, IQMon has been deployed on three disparate optical systems: 1) a 735mm focal length wide field imager with a monochrome CCD camera which undersamples the point spread function (PSF), 2) an 0.5 meter f/8 telescope with a monochrome CCD camera with well sampled PSF, and 3) an 85mm focal length camera lens and DSLR camera (with Bayer color array) designed for very wide field photometry.  IQMon has provided valuable diagnostic information about system performance in all cases.
+To date, IQMon has been deployed on three disparate optical systems.  Two for the VYSOS Project which performs photometric monitoring of young stars: a 735mm focal length wide field imager with a monochrome CCD camera which undersamples the point spread function (PSF) and an 0.5 meter f/8 telescope with a monochrome CCD camera with well sampled PSF.  It has also been deployed on the prototype unit for the PANOPTES [#]_ Project:  an 85mm focal length camera lens and DSLR camera (with Bayer color array) designed for very wide field photometry.  PANOPTES aims to create a global network of low-cost, robotic observatories for citizen science projects.  IQMon has provided valuable diagnostic information about system performance in all cases.
+
+.. [#] http://projectpanoptes.org/v1/
 
 Structure and Example Use
 -------------------------
@@ -148,15 +150,15 @@ SCAMP is invoked with the ``run_SCAMP`` method.  Once a SCAMP solution has been 
             im.run_SWarp()
 
 A Note on Astrometry.net and SCAMP
-..................................
+``````````````````````````````````
 
 In principle, Astrometry.net can solve for distortions.  The ``-t`` option on ``solve-field`` allows the user to specify the order of the SIP polynomial which the program should fit.  This is available in IQMon by calling the ``solve_astrometry`` method with the ``SIP`` keyword set to the polynomial order to pass to ``solve-field``.  
 
 In my experience working with the first two systems IQMon was used on, I found that high order solves were not necessarily reliable or timely.  The ``solve-field`` operation would sometimes fail to solve or would process for a very long time which would cause the analysis system to fail to keep up with the data rate from the two telescopes.
 
-This is why SCAMP is also available in IQMon and is the recommended astrometric solution if you want full distortion correction.  By defining a SCAMP "ahead" file, you can incorporate previous knowledge of the optical system's distortion characteristics.  With a proper ahead file, SCAMP was a more reliable solution.
+This is why SCAMP is also available in IQMon and is the recommended astrometric solution if you want full distortion correction.  By defining a SCAMP "ahead" file, you can incorporate previous knowledge of the optical system's distortion characteristics rather then solving blindly.  With a proper ahead file, SCAMP was a more reliable solution.
 
-SWarp is used because (at the time) ``astropy.wcs`` did not handle the distortion coefficients as written by SCAMP.  To solve this, SWarp remaps the picles to de-distort the image which means that the WCS is properly described by a very basic set of header keywords (``CRPIXn``, ``CRVALn``, ``PCn_m``, etc.) which almost every analysis program supports.
+SWarp is used because (at the time) ``astropy.wcs`` did not handle the distortion coefficients as written by SCAMP.  To solve this, SWarp remaps the pixels to de-distort the image which means that the WCS is properly described by a very basic set of header keywords (``CRPIXn``, ``CRVALn``, ``PCn_m``, etc.) which almost every analysis program supports.
 
 Estimating the Photometric Zero Point
 `````````````````````````````````````
