@@ -147,6 +147,17 @@ SCAMP is invoked with the ``run_SCAMP`` method.  Once a SCAMP solution has been 
             # Remap the pixels to a rectilinear grid
             im.run_SWarp()
 
+A Note on Astrometry.net and SCAMP
+..................................
+
+In principle, Astrometry.net can solve for distortions.  The ``-t`` option on ``solve-field`` allows the user to specify the order of the SIP polynomial which the program should fit.  This is available in IQMon by calling the ``solve_astrometry`` method with the ``SIP`` keyword set to the polynomial order to pass to ``solve-field``.  
+
+In my experience working with the first two systems IQMon was used on, I found that high order solves were not necessarily reliable or timely.  The ``solve-field`` operation would sometimes fail to solve or would process for a very long time which would cause the analysis system to fail to keep up with the data rate from the two telescopes.
+
+This is why SCAMP is also available in IQMon and is the recommended astrometric solution if you want full distortion correction.  By defining a SCAMP "ahead" file, you can incorporate previous knowledge of the optical system's distortion characteristics.  With a proper ahead file, SCAMP was a more reliable solution.
+
+SWarp is used because (at the time) ``astropy.wcs`` did not handle the distortion coefficients as written by SCAMP.  To solve this, SWarp remaps the picles to de-distort the image which means that the WCS is properly described by a very basic set of header keywords (``CRPIXn``, ``CRVALn``, ``PCn_m``, etc.) which almost every analysis program supports.
+
 Estimating the Photometric Zero Point
 `````````````````````````````````````
 
