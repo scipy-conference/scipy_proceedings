@@ -137,8 +137,6 @@ The extended models implement the Scikit-learn interface defined in ``UDLModel``
 
 The extended model keeps the same signature of the parent model, which means that it can be easily used the same way the parent is used.
 Any extra initialization arguments are added as optional parameters. In particular two extra parameters are needed to enable the model to train itself, ``Trainer`` and ``dataset_adapter``.
-The base ``UDLModel`` has a ``get_param`` function; however, the Pylearn2 model defines a function with the same name.
-The Pylearn2 function is meant to return the current state of the model, while the ``UDLModel`` function is used to return just the configurable parameters of the model. As a workaround, we changed the name of the Pylearn2 function to avoid interference.
 
 Putting things together
 -----------------------
