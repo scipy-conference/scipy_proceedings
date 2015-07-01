@@ -237,7 +237,23 @@ a 16S amplicon analysis of those samples would differ from preparation
 metadata for a proteomic analysis of the same samples. Note that the set of
 samples in two different preparation metadata might not overlap (or might
 overlap only partially) since not all samples are analyzed using all available
-techniques.
+techniques. For example, the database currently contains a public study of
+about 100 samples taken from the site of the Deepwater Horizon oil spill in
+2011 (study ID 1197; [Atr09]_) where both 16S data and metagenomic data were
+collected. Some of the metadata collected (including the amounts of dissolved
+inorganic nitrogen, dissolved phosphate, amount of toluene, etc.) is specific
+to the samples themselves and will not vary with preparation; this is the
+sample metadata. On the other hand, some of the metadata is specific to a
+particular preparation of the samples for 16S analysis (including the region
+that was amplified, the primers that were used, the date the sequencing was
+performed, etc.); this is one set of preparation metadata. The subset of the
+full ~100 samples that were prepared for 16S analysis would be represented in
+this preparation metadata. For the metagenomic preparation, a smaller subset of
+the full ~100 samples were analyzed, so the metadata for that preparation would
+only contain information on those samples, and the data tracked would differ
+from the preparation metadata for the 16S analysis (for example, the
+preparation metadata for the metagenomic analysis would not contain a column
+for the 16S region).
 
 Qiita (and the administrator(s) in a multi-user system) attempts to standardize
 as many fields of the metadata as possible using controlled vocabularies and
