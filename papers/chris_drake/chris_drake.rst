@@ -817,7 +817,7 @@ It implements a very similar Python interface to the PicoSAT SAT solver [Bie08]_
 but does not delve into the area of symbolic Boolean algebra.
 Therefore, it's API is more low-level.
 
-Univ of CA Santa Barbara has implemented
+Steve Haynal and others at the University of California Santa Barbara have implemented
 `PyCUDD <http://bears.ece.ucsb.edu/pycudd.html>`_,
 a Python binding to the well-known [CUDD]_ library.
 
