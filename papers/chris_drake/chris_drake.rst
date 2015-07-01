@@ -620,6 +620,184 @@ or the majority-inverter-graph (MIG).
 Function Arrays
 ===============
 
+When dealing with several related Boolean functions,
+it is usually convenient to index the inputs and outputs.
+For this purpose, PyEDA includes a multi-dimensional array (MDA) data type,
+called an ``farray`` (function array).
+
+The most pervasive example is computation involving any numeric data type.
+For example, let’s say you want to add two numbers ``A``, and ``B``.
+If these numbers are 32-bit integers, there are 64 total inputs,
+not including a carry-in.
+The conventional way of labeling the input variables is
+:math:`a_0, a_1, a_2, \ldots`, and :math:`b_0, b_1, b_2, \ldots`.
+
+Furthermore, you can extend the symbolic algebra of Boolean functions to arrays.
+For example, the element-wise XOR of ``A`` and ``B`` is also an array.
+
+In this section, we will briefly discuss ``farray`` construction,
+slicing operations, and algebraic operators.
+Function arrays can be constructed using any ``Function`` implementation,
+but for simplicity we will restrict the discussion to logic expressions.
+
+Construction
+------------
+
+The ``farray`` constructor can be used to create an array of arbitrary
+expressions.
+
+.. code-block:: pycon
+
+   >>> a, b, c, d = map(exprvar, 'abcd')
+   >>> F = farray([a, b, And(a, c), Or(b, d)])
+   >>> F.ndim
+   1
+   >>> F.size
+   4
+   >>> F.shape
+   ((0, 4), )
+
+As you can see, this produces a one-dimensional array of size 4.
+
+The shape of the previous array uses Python's conventional,
+exclusive indexing scheme in one dimension.
+The ``farray`` constructor also supports multi-dimensional arrays:
+
+.. code-block:: pycon
+
+   >>> G = farray([ [a, b],
+                    [And(a, c), Or(b, d)],
+                    [Xor(b, c), Equal(c, d)] ])
+   >>> G.ndim
+   2
+   >>> G.size
+   6
+   >>> G.shape
+   ((0, 3), (0, 2))
+
+Though arrays can be constructed from arbitrary functions in arbitrary shapes,
+it is far more useful to start with arrays of variables and constants,
+and build more complex arrays from them using operators.
+
+To construct arrays of expression variables,
+use the ``exprvars`` factory function:
+
+.. code-block:: pycon
+
+   >>> xs = exprvars('x', 8)
+   >>> xs
+   farray([x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]])
+   >>> ys = exprvars('y', 4, 4)
+   farray([[y[0,0], y[0,1], y[0,2], y[0,3]],
+           [y[1,0], y[1,1], y[1,2], y[1,3]],
+           [y[2,0], y[2,1], y[2,2], y[2,3]],
+           [y[3,0], y[3,1], y[3,2], y[3,3]]])
+
+Use the ``uint2exprs`` and ``int2exprs`` function to convert integers to their
+binary encoding in unsigned, and twos-complement, respectively.
+
+.. code-block:: pycon
+
+   >>> uint2exprs(42, 8)
+   farray([0, 1, 0, 1, 0, 1, 0, 0])
+   >>> int2exprs(-42, 8)
+   farray([0, 1, 1, 0, 1, 0, 1, 1])
+
+Note that the bits are in order from LSB to MSB,
+so the conventional bitstring representation of ``-42`` in eight bits
+would be "11010110".
+
+Slicing
+-------
+
+PyEDA's function arrays support numpy-style slicing operators:
+
+.. code-block:: pycon
+
+   >>> xs = exprvars('x', 4, 4, 4)
+   >>> xs[1,2,3]
+   xs[1,2,3]
+   >>> xs[2,:,2]
+   farray([x[2,0,2], x[2,1,2], x[2,2,2], x[2,3,2]])
+   >>> xs[...,1]
+   farray([[x[0,0,1], x[0,1,1], x[0,2,1], x[0,3,1]],
+           [x[1,0,1], x[1,1,1], x[1,2,1], x[1,3,1]],
+           [x[2,0,1], x[2,1,1], x[2,2,1], x[2,3,1]],
+           [x[3,0,1], x[3,1,1], x[3,2,1], x[3,3,1]]])
+
+A special feature of PyEDA ``farray`` slicing that is useful for digital logic
+is the ability to multiplex (mux) array items over a select input.
+For example, to create a simple, 4:1 mux:
+
+.. code-block:: pycon
+
+   >>> X = exprvars('x', 4)
+   >>> S = exprvars('s', 2)
+   >>> X[S]
+   Or(And(x[0], ~s[0], ~s[1]),
+      And(x[1],  s[0], ~s[1]),
+      And(x[2], ~s[0],  s[1]),
+      And(x[3],  s[0],  s[1]))
+
+Algebraic Operations
+--------------------
+
+Function arrays are algebraic data types,
+which support the following symbolic operators:
+
+* unary reductions (``uor, uand, uxor, ...``)
+* bitwise logic (``~ | & ^``)
+* shifts (``<< >>``)
+* concatenation (``+``)
+* repetition (``*``)
+
+Combining function and array operators allows us to implement a reasonably
+complete domain-specific language (DSL) for symbolic Boolean algebra in Python.
+
+Consider, for example, the implementation of the ``xtime`` function,
+which is an integral part of the AES algorithm.
+
+The Verilog implementation, as a ``function``:
+
+.. code-block:: verilog
+
+   function automatic logic [7:0]
+   xtime(logic [7:0] b, int n);
+       xtime = b;
+       for (int i = 0; i < n; i++)
+           xtime = {xtime[6:0], 1'b0}       // concatenation
+                 ^ (8'h1b & {8{xtime[7]}}); // repetition
+   endfunction
+
+And the PyEDA implementation:
+
+.. code-block:: python
+
+   def xtime(b, n):
+       """Return b^n using polynomial multiplication in GF(2^8)."""
+       for _ in range(n):
+           b = (exprzeros(1) + b[:7]
+             ^  uint2exprs(0x1b, 8) & b[7]*8)
+       return b
+
+Practical Applications
+----------------------
+
+Arrays of functions have many practical applications.
+For example,
+the ``pyeda.logic.addition`` module contains implementations of
+ripple-carry, brent-kung, and kogge-stone addition logic.
+Here is the digital logic implementation of :math:`2 + 2 = 4`:
+
+.. code-block:: pycon
+
+   >>> from pyeda.logic.addition import kogge_stone_add
+   >>> A = exprvars('a', 8)
+   >>> B = exprvars('b', 8)
+   >>> S, C = kogge_stone_add(A, B)
+   >>> S.vrestrict({A: "01000000", B: "01000000"})
+   farray([0, 0, 1, 0, 0, 0, 0, 0])
+
 Related Work
 ============
 
