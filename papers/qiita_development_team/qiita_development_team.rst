@@ -155,10 +155,6 @@ that are streamlined using Qiita:
 - Perform a microbiome analysis without any required knowledge of command line
   tools.
 
-- Analyze and organize different data types (16S, 18S, WGS, etc) into a single
-  location where the sample metadata is enforced to be consistent across
-  representations.
-
 - Deposition of biological sequences into a public data repository, in specific
   the European Bioinformatics Institute's European Nucleotide Archive (ENA).
 
@@ -171,6 +167,10 @@ that are streamlined using Qiita:
 
 - Combine one or more studies into a single dataset to perform further
   specialized analyses.
+
+- Analyze and organize different data types (16S, 18S, WGS, etc) into a single
+  location where the sample metadata is enforced to be consistent across
+  representations.
 
 The list of tasks above, while not comprehensive, exemplifies some commonly
 encountered scenarios where Qiita is a powerful tool. Although other platforms
