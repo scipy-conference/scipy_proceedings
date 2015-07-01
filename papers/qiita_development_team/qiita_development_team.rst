@@ -172,13 +172,15 @@ of the users and use-cases that the system aims to accommodate:
 - Type 5: a researcher is interested in performing a tiered study design in
   which multiple levels of data are generated from the same samples.
 
-
 The list of anecdotes above, while not comprehensive, exemplifies some commonly
-encountered scenarios where Qiita would be a suitable tool. Although other
-platforms and individual tools exist that are capable achieving one or more of
-these goals independently, such ad hoc pipelines are often troublesome, time
-consuming, and error prone.
- 
+encountered scenarios where Qiita would be a suitable tool. Please also note
+that the last point regarding integration of multiple data types is a work in
+progress at this point. Currently, only portions of the 16S workflow are
+implemented, but there are plans for adding additional workflows (see future
+directions). Although other platforms and individual tools exist that are
+capable achieving one or more of these goals independently, such ad
+hoc pipelines are often troublesome, time consuming, and error prone.
+
 Structure and Operation
 -----------------------
 
@@ -399,7 +401,11 @@ processing capabilities while maintaining a common user interface. We intend
 the plug-in system to support extensions to both the database schema and the
 Python framework by providing common interfaces to the main system. To
 demonstrate the feasibility of this approach, the current 16S analysis pipeline
-will be migrated to be the first plug-in.
+will be migrated to be the first plug-in. New users should note that right
+now, only portions of the 16S workflow are implemented. However, the data model
+and modularity that we have designed and built into the system will facilitate
+the addition of additional pipelines (including metagenomics, metaboloomics,
+and proteomics) through this upcoming plug-in system.
 
 Another important change will affect data processing. Right now, in order to
 ensure consistent processing workflows, users can upload only raw data for
