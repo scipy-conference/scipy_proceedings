@@ -1,6 +1,6 @@
 :author: Mark Wickert
 :email: mwickert@uccs.edu
-:institution: University of Colorado
+:institution: University of Colorado Colorado Springs
 
 
 ----------------------------------------------------------------------------------
@@ -15,8 +15,8 @@ Signal Processing and Communications: Teaching and Research Using IPython Notebo
    as an analysis and simulation tool for both teaching and research in signal processing
    and communications. Legacy tools such as MATLAB are well established (entrenched) in
    this discipline, but engineers need to be aware of alternatives, especially in the case
-   of Python where there is such a vibrant community of developers and a seemingly well
-   designed language. In this paper case studies will also be used to describe domain
+   of Python where there is such a vibrant community of developers.
+   In this paper case studies will also be used to describe domain
    specific code modules that are being developed to support both lecture and lab oriented
    courses going through the conversion from MATLAB to Python. These modules in particular
    augment ``scipy.signal`` in a very positive way and enable rapid prototyping of
@@ -28,10 +28,8 @@ Signal Processing and Communications: Teaching and Research Using IPython Notebo
    activity also encourages learning more about the language core and Numpy, relative to
    MATLAB. The students quickly mature and are able to turn in homework solutions and
    complete computer simulation projects, all in the notebook. Rendering notebooks to
-   PDF via LaTeX is also quite popular. As a side note, students are also learning how
-   to typeset mathematics using LaTeX, as this need follows naturally when writing text
-   in markdown cells. The next step in the transformation process is to get other faculty
-   involved. Going forward the plan is to teach some tutorial sessions to faculty and their graduate students.
+   PDF via LaTeX is also quite popular. The next step is to get other signals and systems faculty
+   involved.
 
 .. class:: keywords
 
@@ -53,14 +51,14 @@ created using Python, specifically ``matplotlib``.
 The next phase of the journey, focuses on the research and development
 side of signals and systems work. During a sabbatical working for a small engineering firm, academic year
 2013-2014, Python and IPython notebook (IPython kernel for Jupyter) served as the primary digital signal
-processing modeling tools on three different projects. Initially it was not clear which tool whould be best, but
-following discussions with co-workers Python seemed to be the right choice. Note for the most part the signals and
-systems analysis team was new to Python, all of us having spent many years using MATLAB/Octave. A nice motivating
+processing modeling tools on three different projects. Initially it was not clear which tool would be best, but
+following discussions with co-workers Python seemed to be the right choice. Note, for the most part, the signals and
+systems analysis team was new to Python, all of us having spent many years using MATLAB/Octave [MATLAB]_/[Octave]_. A nice motivating
 factor is that Python was already in the workflow with one of the real-time DSP products used by the company, so
 prototyping algorithms in Python using ``numpy`` was a already proven.
 
 The third and current phase of the Python
-transformation began at the start of the 2014-2015 academic year. The big move was made to push out Python to the
+transformation began at the start of the 2014-2015 academic year. The move was made to push out Python to the
 students, via the IPython Notebook, in five courses: digital signal processing, digital communications, analog
 communications, statistical signal processing, and real-time signal processing. Four of the courses are traditional
 lecture format, while the fifth is very hands-on lab oriented, involving embedded systems programming and hardware
@@ -68,15 +66,12 @@ interfacing. IPython Notebook works very well for writing lab reports, and easil
 results to be integrated. A notebook interface is not a new concept in scientific computing tool sets, see for example
 *Mathematica* [Mathematica]_ (commercial) and *wxMaxima* [Maxima]_ (open source). Both of these tools are very
 powerful and are a joy to use for specific problem classes.
-In my view Python with ``pylab`` and ``sympy`` provides a more comprehensive set of capabilities. By
-comprehensive I mean Python a one stop language with the ability to satisfy modeling, analysis, simulation, and in some
-cases an implementation means.
 
 Getting other faculty on-board is the next step. I am optimistic and
 look forward to this challenge as tutorial sessions are planned over summer 2015.
 
 The remainder of this paper is organized into the following sections: arriving at Python for communications and signal
-processing modeling, Python for , classroom use, case studies, and conclusions.
+processing modeling, describing IPython notebook usage, case studies, and conclusions.
 
 Arriving at Python for Communications and Signal Processing Modeling
 --------------------------------------------------------------------
@@ -101,12 +96,13 @@ systems banner.
 Modules Developed or Under Development
 ======================================
 
-As already briefly mentioned, the first code module developed was ``ssd.py``, which was written to support
-[Wic2013]_. The function listing via ``dir()`` is given below:
+As already briefly mentioned, the first code module developed was `ssd.py`_.
+The function listing via ``dir()`` is given below:
+
+.. _ssd.py: http://www.eas.uccs.edu/wickert/SSD/docs/python/
 
 .. code-block:: python
 
-   In[13]: dir(ssd)
    Out[13]:
    ['BPSK_tx', 'CIC', 'NRZ_bits', 'NRZ_bits2',
     'OA_filter', 'OS_filter', 'PN_gen', 'am_rx',
@@ -126,7 +122,7 @@ As already briefly mentioned, the first code module developed was ``ssd.py``, wh
     'ten_band_eq_resp', 'to_wav', 'tri', 'upsample',
     'zplane']
 
-This collection of functions provides general support for both continuous and discrete-time signals and systems as
+This collection of functions provides general support for both continuous and discrete-time signals and systems, as
 well as specific support for examples found in [Wic2013]_. More modules have followed since then.
 
 The second module developed, ``digitalcom.py``, focuses on the special needs of digital communications, both modulation
@@ -134,7 +130,6 @@ and demodulation. At present this module contains the following functions:
 
 .. code-block:: python
 
-   In[17]: dir(digitalcom)
    Out[17]:
    ['BPSK_BEP', 'BPSK_tx', 'CIC', 'GMSK_bb', 'MPSK_bb',
     'NRZ_bits', 'NRZ_bits2', 'PN_gen', 'QAM_SEP',
@@ -146,18 +141,17 @@ and demodulation. At present this module contains the following functions:
     'time_delay', 'upsample', 'xcorr']
 
 More functions are under development for this module, particularly in the area of orthogonal frequency division
-multiplexing (OFDM), the key modulation type found in the wireless telephony standard long term evolution (LTE).
+multiplexing (OFDM), the key modulation type found in the wireless telephony standard, long term evolution (LTE).
 
 A third module, ``fec_conv.py``, implements a rate one-half convolutional encoding and decoding class.
 Arbitrary constraint length codes can be employed as well as puncturing and depuncturing patterns. For decoding the
-soft decision Viterbi algorithm is used. A feature of this
-class is a graphical display function which shows the survivor traceback paths through the trellis back to the
+Viterbi algorithm with soft decision metrics is used. A feature of this
+class is a graphical display function which shows the survivor traceback paths through the trellis, back to the
 decision depth. This gives students insight into the operation of the Viterbi algorithm, which at a high level is a
 *dynamic programming* algorithm.
 
 .. code-block:: python
 
-   In[19]: dir(fec_conv)
    Out[19]:
    ['Q_fctn', 'binary', 'conv_Pb_bound',
     'fec_conv', 'hard_Pk', 'soft_Pk',
@@ -180,33 +174,32 @@ The key methods found in the class ``fec_conv`` are:
      Method: trellis_plot
 
 Both the encoder and especially the Viterbi decoder are numerically intensive. Speed enhancements, perhaps using
-*Cython* are the list of things to do. An example of using the class ``fec_conv`` can be found in the Case
+*Cython*, are on the list of things to do. An example of using the class ``fec_conv`` can be found in the Case
 Studies section.
 
-A fourth module, ``synchronization.py``, was developed while teaching a phase-locked loops course Summer 2014. This
+A fourth module, ``synchronization.py``, was developed while teaching a phase-locked loops course, Summer 2014. This
 module supplies simulation functions for a basic phase-locked loop and both carrier and symbol synchronization
-functions for digital communications waveforms. This module was utilized in an analog communications course taught
+functions for digital communications waveforms. This module was also utilized in an analog communications course taught
 Spring 2015.
 
 .. code-block:: python
 
-   In[21]: dir(synchronization)
    Out[21]:
    ['DD_carrier_sync', 'MPSK_bb', 'NDA_symb_sync',
     'PLL1', 'PLL_cbb', 'phase_step', 'signal',
     'time_step']
 
-More modules are planned as well enhancements to the existing modules. A great side benefit of using IPython
+More modules are planned as well as enhancements to the existing modules. A great side benefit of using IPython
 notebook is algorithms can be prototyped in a notebook and later moved to an existing module or perhaps be the start
-of a new module. During the fall of spring semesters many new functions and few classes were developed in notebooks.
+of a new module. During the fall and spring semesters many new functions and a few classes were developed in notebooks.
 Where it makes sense, some of this code can now be migrated into modules. On the flip side, modules are neat and
 tidy, but when introducing new concepts to students, placing algorithms inside notebooks has the advantage of making
 the code visible, and invites tinkering.
 
-Describing IPython Notebook Use Cases
--------------------------------------
+Describing IPython Notebook Use Scenarios
+-----------------------------------------
 
-In this section I describe how Python and in particular the IPython notebook has been integrated into teaching,
+In this section I describe how Python, and in particular the IPython notebook, has been integrated into teaching,
 graduate student research, and industry research and development.
 
 Teaching
@@ -233,7 +226,7 @@ lecture, so the students can get a feel for how the math model relates to real-w
 Computer projects benefit greatly from the use of the notebook, as sample notebooks with starter code can easily be
 posted to the course Web Site. The sample notebook serves as a template for the project report document that the
 student will work with and ultimately turn in for grading.  The ability to convert the notebook to a LaTeX PDF
-document has proven to work well in practice. It is work noting that setting up Pandoc and a LaTeX install takes
+document has proven to work well in practice. It is worth noting that setting up Pandoc and a LaTeX install takes
 some effort on the student's part. From my recent experiences, not all students went to this extreme.
 An easy alternative is to take *screenshots* of selected notebook cells and paste them into a word processor document.
 
@@ -255,7 +248,7 @@ simulation results. Since the notebook is live, the inevitable *what if* questio
 answered.
 
 Industry Research and Development
----------------------------------
+=================================
 
 With the notebook engineers working on the same team are able to share analytical models and  development approaches
 using markdown cells. The ability to include equations using LaTeX markup is fantastic, as mathematical developments,
@@ -268,20 +261,20 @@ hardware can be used as a source of test vectors to verify that performance metr
 can again be passed around to team members for further algorithm testing. Soon code cell functions can be moved to
 code modules and the code modules distributed to team members via GIT or some other distributed revision control
 system. At every step of the way ``matplotlib`` graphics are used to visualize performance of a particular
-algorithm versus say a performance bound.
+algorithm, versus say a performance bound.
 
 Complete subsystem testing at the Python level may be sufficient in some cases. In a more typical case code will
 have to moved to a production environment and recoding may be required. It might also be that the model is simply
-an abstraction of real electronic hardware, in which case a hardware implementer uses the notebook (may just a PDF
+an abstraction of real electronic hardware, in which case a hardware implementer uses the notebook (maybe just a PDF
 version) to create a hardware prototype.
 
 Live From the Classroom
------------------------
+=======================
 
 Here live from the classroom means responding to questions using on-the-fly IPython notebook demos. This is an excellent
 way to show off the power of Python. Sometimes questions come and you feel like building a quick model right then and
 there during a lecture. When successful, this hopefully locks in a solid understanding of the concepts involved for
-the whole class. The fact that the lecture in being recorded means that students can recreate the same demo at their
+the whole class. The fact that the lecture is being recorded means that students can recreate the same demo at their
 leisure when they watch the lecture video. The notebook goes further than a commandline interface live demo. The
 notebook can be saved and posted as a supplement/companion to the lecture. As mentioned earlier, I start a new
 notebook for each chapter of lecture material. The goal was to re-post the chapter IPython notebook each time a new
@@ -297,7 +290,7 @@ to the propriety nature of the work.
 
 In all of the case studies you will see that graphical results are produced using the ``pylab`` interface to ``matplotlib``.
 This is done purposefully for two reasons. The first stems from the fact that currently all students have received
-exposure to MATLAB in a prior course, and secondly to help insure that returning to MATLAB from Python is easier. Why
+exposure to MATLAB in a prior course, and secondly, to help insure that returning to MATLAB from Python is easier. Why
 would anyone want to return you might ask? Job requirements may require this and presently MATLAB is still heavily used.
 
 Digital Signal Processing
@@ -320,7 +313,7 @@ I thus construct in Python
 
    x_3[n] = x_1[n] - x_2[n] = u[n] - u[n-5],
 
-which forms a pulse sequence which *turns on* at :math:`n=0` and *turns off* at :math:`n=5`. A screen capture from
+which forms a pulse sequence that *turns on* at :math:`n=0` and *turns off* at :math:`n=5`. A screen capture from
 the IPython notebook is shown in Fig. :ref:`fig1`.
 
 .. figure:: scipy_2015_fig1.pdf
@@ -365,8 +358,9 @@ In mathematical terms the output :math:`y(t)` is
 Students frequently have problems setting up and evaluating the convolution integral. The waveforms of interest are
 typically piecewise continuous, so the integral must be evaluated over one or more contiguous intervals. Consider the
 case of :math:`x(t) = u(t) - u(t-T)`, where :math:`u(t)` is the unit step function, and :math:`h(t) = a e^{-at}u(t)`,
-where :math:`a > 0`. To be effective in solving this problem it is best to sketch, as shown in Fig. :ref:`fig12`,
-the integrand :math:`h(\lambda)x(t-\lambda)` and then discover the support intervals or *cases* for :math:`y(t)`.
+where :math:`a > 0`. To be effective in solving this problem I start with a sketch of the
+integrand :math:`h(\lambda)x(t-\lambda)`, as shown in Fig. :ref:`fig12`.
+From there you can discover the support intervals or *cases* for evaluating the integral.
 
 .. figure:: scipy_2015_fig12.pdf
    :scale: 60%
@@ -376,15 +370,20 @@ the integrand :math:`h(\lambda)x(t-\lambda)` and then discover the support inter
    Sketches of :math:`x(t)`, :math:`h(t)`, and :math:`h(\lambda)x(t-\lambda)`. :label:`fig12`
 
 A screen capture of a notebook that details the steps of solving the convolution integral is given in Fig. :ref:`fig10`.
+In this same figure the analytical solution is easily plotted for the case of :math:`T=1`s and :math:`a=5`.
 
 .. figure:: scipy_2015_fig10.pdf
    :scale: 55%
    :align: center
    :figclass: htb
 
-   Solving the convolution integral in the notebook. :label:`fig10`
+   Solving the convolution integral in the notebook :label:`fig10`.
 
-What to say here
+To bring closure to the tedious analytical solution development, it is nice to be able to check your work. The function
+``ssd.conv_integral()`` provides numerical evaluation of the convolution integral for both finite and semi-infinite extent
+limits. The student simply needs to provide an array of signal/impulse response sample values over the complete
+support interval. The screen capture of :ref:`fig11` shows how this is done in a notebook. Parameter variation is also
+explored. This is also an opportunity for incorporating notebook controls/widgets.
 
 .. figure:: scipy_2015_fig11.pdf
    :scale: 55%
@@ -413,7 +412,7 @@ the transmitted signal.
    transmission of one code symbol. :label:`fig2`
 
 With a rate 1/2 convolutional code each source bit is encoded into two channel bits. Here the specific case is taken from
-a final exam using a rate 1/2 :math:`K=5` code. A *Viterbi decoder* (a form of dynamic programming)recovers the source
+a final exam using a rate 1/2, :math:`K=5` code. A *Viterbi decoder* (a form of dynamic programming) recovers the source
 bits by finding the most likely path through a *trellis*. Fig. :ref:`fig2` shows the construction of a ``fec_conv`` object
 and a plot of one code symbol of the trellis.
 
@@ -429,8 +428,8 @@ values are used to calculate *branch metrics*, which then are used to update cum
 states of the trellis. There are two passible paths arriving at each state, but the *surviving* path is the one
 producing the minimum cumulative metric. Fig. :ref:`fig3` shows the survivor traceback paths in the 16-state
 trellis while sending 1000 random bits through the encoding/decoding processes.
-The channel signal-to-noise ratio (SNR) (in the code cell denoted :math:`E_b/N_0`) is 7 dB, but at *decision depth* of 25
-code symbols all 16 paths merge to a common path, making it very likely that the probability of a bit error is very
+The channel signal-to-noise ratio (SNR) (in the code cell denoted :math:`E_b/N_0`) is 7 dB, but at a *decision depth* of 25
+code symbols, all 16 paths merge to a common path, making it very likely that the probability of a bit error, is very
 very small. At lower SNR it takes longer to see a traceback merge and errors bit errors are more likely.
 
 
@@ -484,10 +483,10 @@ coefficients are written to a C header file using a custom function defined in t
 The filter frequency response magnitude is obtained using a noise source to drive the filter input (first passing
 through an analog-to-digital converter) and then the filter output (following digital-to-analog conversion) is processed
 by instrumentation to obtain a spectral estimate. The spectrum estimate corresponds to the filter frequency response.
-The measured frequency response is imported into the notebook using `loadtxt`. Fig. :ref:`fig6` compares the
+The measured frequency response is imported into the notebook using `loadtxt()`. Fig. :ref:`fig6` compares the
 theoretical frequency response, including quantization errors, with the measured. The results are impressive, and the
-IPython notebook makes this a breeze. The fact that the stopband ripple is not quite equal-ripple is due to coefficient
-quantization. This easy to show right in the notebook by overlaying a frequency response using the ``float64``
+IPython notebook makes this a breeze. The fact that the stopband response is not quite equal-ripple is due to coefficient
+quantization. This is easy to show right in the notebook by overlaying the frequency response using the ``float64``
 coefficients ``b1`` as obtained in Fig. :ref:`fig5`.
 
 .. figure:: scipy_2015_fig6.pdf
@@ -515,8 +514,8 @@ the system zeros and roots of :math:`D(z)` are the system poles. For a *causal* 
 while the :math:`M` zeros lie somewhere other than zero in the :math:`z`-plane. Students are taught that a *pole-zero*
 plot gives much insight into the frequency response of a system, in particular a filter. The module ``ssd.py`` provides
 the function ``ssd.zplane(b,a)`` where ``b`` contains the coefficients of :math:`N(z)` and ``a`` contains the
-coefficients of :math:`D(z)`, here simply ``[1]``. The even symmetry condition constrains the system zeros to lie at conjugate
-reciprocol locations as seen in Fig. :ref:`fig7`.
+coefficients of :math:`D(z)` (here ``a = [1]``). The even symmetry condition constrains the system zeros to lie at conjugate
+reciprocal locations [Opp2010]_ as seen in Fig. :ref:`fig7`.
 
 
 .. figure:: scipy_2015_fig7.pdf
@@ -526,9 +525,9 @@ reciprocol locations as seen in Fig. :ref:`fig7`.
 
    Pole-zero plot of the equal-ripple lowpass which confirms that :math:`H(z)` is linear phase. :label:`fig7`
 
-With real filter coefficients the zeros must also occur in conjugate pairs or on the real axis. When the student sees
+With real filter coefficients the zeros must also occur in conjugate pairs, or on the real axis. When the student sees
 the pole-zero plot of Fig. :ref:`fig7` whats jumps off the page is (1) all of the zeros on the unit circle for the filter
-stopband and (2) the conjugate reciprocal zeros at angles somewhat less then :math:`\pi/4`, define the filter passband.
+stopband and (2) the conjugate reciprocal zeros at angles somewhat less than :math:`\pi/4`, define the filter passband.
 Note zeros not on the unit circle or real axis **must** occur as quadruplets, and that is indeed what is seen in Fig. :ref:`fig7`.
 Note also there are 77 poles at :math:`z=0`, which is expected.
 
@@ -565,13 +564,14 @@ A simulation is constructed and the results are compared with theory in Fig. :re
 Conclusions
 -----------
 
-Scientific Python and the IPython notebook without a doubt has proven its usefulness in a variety of signals and
+The case studies show that scientific Python and the IPython notebook without a doubt prove their usefulness in a
+variety of signals and
 systems courses and in a real-world R&D work environment. The enthusiasm of the scientific Python developer
 community has a lot to do with making Python truly viable as a *first class* engineering problem solving tool.
 
-Communications and signal processing, as a discipline that sits inside electrical computer engineering, is build on
+Communications and signal processing, as a discipline that sits inside electrical computer engineering, is built on
 a strong mathematical modeling foundation. When theoretical expressions need to be evaluated and real-time algorithms
-need to be tested, we turn to tools with the power to get the job done. Open source community driven alternatives
+need to be tested, you turn to tools with the power to get the job done. Open source community driven alternatives
 should not be overlooked.
 
 References
@@ -579,9 +579,10 @@ References
 .. [Wic2013] M.A. Wickert. *Signals and Systems for Dummies*,
            Wiley, 2013.
 .. [ssd] ``http://www.eas.uccs.edu/wickert/SSD/``.
+.. [MATLAB] ``http://www.mathworks.com/``.
+.. [Octave] ``https://en.wikipedia.org/wiki/GNU_Octave``.
 .. [Mathematica] ``https://en.wikipedia.org/wiki/Mathematica``.
 .. [Maxima] ``http://andrejv.github.io/wxmaxima/``.
-.. [Octave] ``https://en.wikipedia.org/wiki/GNU_Octave``.
 .. [Zie2015] R.E. Ziemer and W.H. Tranter *Principles of Communications*, seventh edition, Wiley, 2015.
 .. [Camtasia] ``https://en.wikipedia.org/wiki/Camtasia_ Studio``.
 .. [Opp2010] Alan V. Oppenheim and Ronald W. Schafer, *Discrete-Time Signal Processing* (3rd ed.), Prentice Hall, 2010.
