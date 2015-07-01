@@ -44,7 +44,8 @@ Qiita: report of progress towards an open access microbiome data analysis and vi
 
 .. class:: keywords
 
-   Microbiome, multi-omics, open science.
+   Microbiome, multi-omics, open science, metagenomics, metatranscriptomics,
+   metaproteomics, metabolomics
 
 Introduction
 ------------
@@ -53,60 +54,61 @@ In recent years, the importance of microbes, including bacteria, archaea,
 fungi, and unicellular eukaryotes, in ecological communities has been
 extensively studied ([Atr11]_, [Atr06]_).
 As the costs of analytical techniques such as DNA sequencing have continued
-their dramatic decline and samples become relatively easy to collect, deeper
-and broader analyses have begun to characterize the potent effects that
-microbial communities can impart on both host-associated ([Atr07]_,
-[Atr03]_) and environmental ([Atr09]_) health. The myriad
-techniques that can be used to characterize each individual sample allow
-researchers to understand these communities in previously unattainable detail,
-but also pose new challenges for integrating the results from multiple levels
-of observational data into a coherent picture. These techniques are
-colloquially called “omics” techniques and allow researchers to study the
-entire collections of genes (genomics), gene transcripts (transcriptomics),
-proteins (proteomics), and metabolites (metabolomics) represented in samples.
+their dramatic decline and samples become relatively easy to collect, large
+volumes of data and new data types have allowed for the characterization of the
+potent effects that microbial communities can impart on both host-associated
+([Atr07]_, [Atr03]_) and environmental ([Atr09]_) health. The myriad techniques
+that can be used to characterize each individual sample allow researchers to
+understand these communities in previously unattainable detail, but also pose
+new challenges for integrating the results from multiple levels of
+observational data into a coherent picture. These techniques are colloquially
+called “omics” techniques and allow researchers to study the entire collections
+of genes (genomics), gene transcripts (transcriptomics), proteins (proteomics),
+and metabolites (metabolomics) represented in samples.
 
-The genome of an organism is the set of genes that the organism possesses; the
-“metagenome” of a group of organisms is the union of the genomes in the group.
-Since the genome of an organism defines the organism’s biological capabilities,
-metagenomic analysis allows researchers to approach the question of what are
-the organisms in a sample capable of doing, collectively? When a metagenomic
-analysis is performed, the metagenome is fragmented into small pieces,
-sequenced in a massively parallel fashion, and genes are identified by
-comparison to references containing known genes. This technique results in a
-highly detailed view, but is relatively expensive due to the amount of
-sequencing that must be performed and the computational effort required
-([Atr13]_). A less detailed (but much cheaper and still very useful)
-characterization of a microbial community can be attained merely by performing
+The genome of an organism is all of its genetic material; the “metagenome” of
+an environmental sample is the union of all of the genomes present in the
+sample. Since the genome of an organism defines the organism’s biological
+capabilities, metagenomic analysis allows researchers to approach the question
+of what are the organisms in a sample capable of doing, collectively? Current
+techniques for performing metagenomic analysis fragment the metagenome into
+small pieces, which are then sequenced in massively parallel fashion, and genes
+are identified by comparison to references containing known genes. This
+technique results in a highly detailed view, but is relatively expensive due to
+the amount of sequencing that must be performed and the computational effort
+required ([Atr13]_). A less detailed (but much cheaper and still very useful)
+characterization of a microbial community can be attained by performing
 targeted sequencing of marker genes. Sequences from marker genes are commonly
 grouped by similarity into operational taxonomic units (OTUs), groupings that
 might correspond to species, or genera, or classes, etc. A powerful way to
-identify the OTUs present in a sample is to amplify and sequence components of
-the ribosomal operon in a sample (rather than all of the genes). The ribosome
-is a cellular component that translates transcripts into proteins that is
-shared across the tree of life. Because it believed to be under neutral
-evolution, mutations accrue at a relatively consistent rate, allowing it to be
-thought of as a “molecular clock” that provides phylogenetic information about
-the organism it came from ([Atr15]_). This technique is called amplicon
-sequencing. In bacteria and archaea, the 16S small subunit ribosomal gene is
-the most commonly used, while in eukaryotes the analogous 18S small subunit
-ribosomal gene is used (although for fungi, often parts of the internal
-transcribed spacer region are included for additional phylogenetic signal).
+identify the OTUs present in a sample is to amplify and sequence genes encoding
+components of the ribosome (rather than all of the genes). The ribosome is a
+cellular component that translates transcripts into proteins that is shared
+across the tree of life. Because it is believed to be under neutral evolution,
+mutations accrue at a relatively consistent rate, allowing it to be thought of
+as a “molecular clock” that provides phylogenetic information about the
+organism it came from ([Atr15]_). In bacteria and archaea, amplicons of the
+16S small subunit ribosomal gene are the most commonly used, while in
+eukaryotes the analogous 18S small subunit ribosomal gene is used (although for
+fungi, often parts of the internal transcribed spacer region are included for
+additional phylogenetic signal).
 
 The central dogma of biology is that genes are transcribed into messenger RNAs
 (mRNAs), which are then translated into specific proteins. Tight regulation at
 each level is required for proper cellular function. If amplicon sequencing and
 metagenomics help answer the questions of who's there, and what are they
-capable of doing, transcriptomics help answer the question what are they
-actually doing right now? Genes that are “on” can be recognized by the presence
-of mRNA transcripts that identifiably correspond to the gene.  Sequencing these
-transcripts elucidates which genes are actually being expressed ([Atr04]_).
+capable of doing, transcriptomics help answer the question what genes are
+actually being expressed right now? Genes that are “on” can be recognized by
+the presence of mRNA transcripts that identifiably correspond to the gene.
+Sequencing these transcripts elucidates which genes are actually being
+expressed ([Atr04]_).
 
 However, even the added depth provided by transcriptomic analyses does not
 paint the full picture. First, because transcripts are continuously being
 generated and degraded by cellular processes, only a snapshot of the
-transcriptome can be obtained from a single sample.  Second, the regulatory
+transcriptome can be obtained from a single sample. Second, the regulatory
 mechanisms that govern the translation of transcripts into proteins do not
-treat all transcripts uniformly.  Indeed, the abundances of proteins in a cell
+treat all transcripts uniformly. Indeed, the abundances of proteins in a cell
 correlate only weakly with the abundances of their respective transcripts, as
 reviewed in [Atr08]_. Therefore, protein levels must be measured
 directly using proteomics techniques to answer the question of how actively are
@@ -140,13 +142,12 @@ wherein the original data are augmented with data from other new or existing
 studies. Meta-analysis has already been shown to be a powerful approach (Mason
 et al. 2014), and the potency of the approach increases as individual studies
 provide more and more detailed characterizations of their samples, enabling
-unanticipated reuse of the data. The power of this approach underscores the
-scientific community’s need for centralized resources for standardized, open
-access data.
+reuse of the data. The power of this approach underscores the scientific
+community’s need for centralized resources for standardized, open access data.
 
 Here, we present a progress report of Qiita, a multi-omic platform for
 meta-analysis that stresses standardization of data formats, open access to
-data and results, and methods for integrating samples across studies.  As we
+data and results, and methods for integrating samples across studies. As we
 design Qiita, we intend to account for the most common use-cases that a modern
 microbiome researcher will face. The following list briefly describes a pairing
 of the users and use-cases that the system aims to accommodate:
@@ -199,7 +200,7 @@ The qiita\_db module defines a database schema in PostgreSQL
 (http://www.postgresql.org/) that serves to store and relate study metadata as
 well as system data. The schema was designed in DBSchema
 (http://www.dbschema.com/), which provides a convenient GUI for defining the
-table structure, setting constraints, and generating documentation.  Although
+table structure, setting constraints, and generating documentation. Although
 the project is under heavy development, there are active deployments of Qiita
 (e.g., http://qiita.microbio.me and http://qiita.ibdmdb.org). As development
 progresses and modifications to the database schema are required, they must be
@@ -257,7 +258,7 @@ object-relational mapper (ORM). Uploaded metadata files and raw data files
 (e.g., sequence data from a sequencing instrument) are stored in a directory
 structure with indirection to support horizontal scaling of file systems.
 Unlike the information in metadata files, the contents of raw data files are
-not stored in the database.  Instead, the filepaths are recorded. This design
+not stored in the database. Instead, the filepaths are recorded. This design
 facilitates processing the raw data files using external programs (e.g.,
 programs that are implemented or wrapped in qiita\_ware; see below) that need
 filehandles.
@@ -267,7 +268,7 @@ Qiita-pet
 
 The qiita\_pet module defines components supporting a browser-based user
 interface. In a single-user deployment, tornado
-(http://www.tornadoweb.org/) handles all requests and serves all pages.  In a
+(http://www.tornadoweb.org/) handles all requests and serves all pages. In a
 multi-user deployment, nginx (http://nginx.org/) is required to serve
 downloads. While tornado is proficient at serving small or moderate files in
 small chunks, serving very large files can bog down the single-threaded server.
@@ -339,7 +340,7 @@ Data that is sandboxed or private is visible only to its owner and other users
 with whom the owner explicitly chooses to share the data; data that is
 public is visible to all users of the system. Any user is free to upload,
 process, and explore his or her own sandboxed data using the full suite of
-tools provided, but the data is only minimally validated.  The purpose of the
+tools provided, but the data is only minimally validated. The purpose of the
 sandboxed status is to allow users to get a quick look at their data -- and
 even rapidly compare it to other data in the system -- before expending a
 potentially large amount of time and effort detailing and correcting
@@ -363,7 +364,7 @@ Once data is private, it is up to the user to decide if and when to make the
 data public at his or her discretion. At this stage, all users of the system
 are permitted to download and analyze the data, and the owner of the data can
 submit the data and metadata to a public repository such as the European
-Bioinformatics Institute (EBI; https://www.ebi.ac.uk).  Reverting data from
+Bioinformatics Institute (EBI; https://www.ebi.ac.uk). Reverting data from
 public to private has limited efficacy (since other users might have downloaded
 and/or performed analyses on the data) and requires administrator action.
 
@@ -372,7 +373,7 @@ Configuration
 
 By default, Qiita will look for a configuration file in a default location
 where an example configuration file is supplied. This behavior can be
-overridden by setting the QIITA\_CONFIG\_FP environment variable.  This
+overridden by setting the QIITA\_CONFIG\_FP environment variable. This
 configuration file controls the behavior of various aspects of Qiita and its
 dependencies, including Postgres, IPython (http://ipython.org; [Atr12]_), Redis
 (http://redis.io/), and MOI.
@@ -389,7 +390,7 @@ deployment looks identical. In addition to supporting cosmetic changes, for
 example to logos or graphics, we will support the specification of multiple
 “portals” that coexist on one system and access a common database, but provide
 access to only desired subsets of the data. For example, we plan to introduce
-an Earth Microbiome Project ([Atr06]_; EMP) portal that  provides
+an Earth Microbiome Project ([Atr06]_; EMP) portal that provides
 access to only EMP studies.
 
 The most significant change currently planned will be the implementation of a
@@ -425,7 +426,7 @@ Interactive Visualizations
 --------------------------
 
 Allowing users to share, process, and combine their datasets easily does not
-ensure that interesting conclusions or insights will be generated.  Only by
+ensure that interesting conclusions or insights will be generated. Only by
 carefully cross-examining results with sample metadata can correlations be
 observed and hypotheses developed. When working with large datasets (or
 combinations of datasets), effective visualizations are indispensable for
@@ -453,7 +454,7 @@ release.
 
 Since 2010, QIIME has provided the tools that utilize a sample’s metadata to
 visualize taxonomic summaries, rarefaction curves, ordination plots, and even
-histograms of beta diversity distances.  However these tools are usually
+histograms of beta diversity distances. However these tools are usually
 limited, either because they are not extensible, lacking an interface that
 other web applications might use, or because they do not effectively provide
 both interactive and publication-quality static plots. The need for
@@ -470,7 +471,7 @@ Qiita provides a centralized resource where researchers can add their
 multi-omic datasets and process them in a standardized manner that maximizes
 their utility in meta-analyses. Organizing data and results, managing
 computational work, and interacting with all of the available tools poses a
-significant technical burden for researchers to surmount.  Single-user
+significant technical burden for researchers to surmount. Single-user
 deployments of Qiita help ameliorate this burden for individuals. Meanwhile,
 multi-user deployments serve as hubs that coordinate research efforts by
 facilitating the sharing of data and communication between users. Furthermore,
