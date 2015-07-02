@@ -192,7 +192,7 @@ Spring 2015.
 More modules are planned as well as enhancements to the existing modules. A great side benefit of using IPython
 notebook is algorithms can be prototyped in a notebook and later moved to an existing module or perhaps be the start
 of a new module. During the fall and spring semesters many new functions and a few classes were developed in notebooks.
-Where it makes sense, some of this code can now be migrated into modules. On the flip side, modules are neat and
+Where it makes sense, some of this code is ready to be migrated into modules. On the flip side, modules are neat and
 tidy, but when introducing new concepts to students, placing algorithms inside notebooks has the advantage of making
 the code visible, and invites tinkering.
 
@@ -216,18 +216,21 @@ By interfacing the tablet *lineout* or *headphone* output to the podium
 interface to the classroom speakers, everyone can hear the impact of algorithm tweaks on what is being heard. This
 is where the fun starts! Core modules such as ``ssd.py`` described earlier, are imported at the top of each notebook.
 
-For each new chapter of material from the course text, a new notebook is created. Starter content is added to
-say the *Chapter x* notebook before the lecture to provide relevant theory right in the notebook. Specifically
-text and mathematics are placed in *markdown cells*. The theory is very brief as the course lecture notes, written
-using LaTeX, form the core lecture material. Back in the notebook, numerical examples follow the brief mathematical
-development. Here some plots will be generated in advance, but the intent is to make parameter changes during the
-lecture, so the students can get a feel for how the math model relates to real-word signals and systems.
+For each new chapter of lecture material I present on the tablet PC,  a new IPython notebook is created to hold
+corresponding numerical analysis and simulation demos. When appropriate, starter content is added to
+say the *Chapter x* notebook before the lecture, to provide relevant theory right in the notebook and provide
+continuity between the lecture notes mathematics and the notebook demos. Specifically,
+text and mathematics are placed in *markdown cells*. The theory is very brief compared to that of the course
+lecture notes. Since the lecture notes are written in LaTeX, I drop the selected equations right
+in mark down cells will minimal rework. Sample calculations and simulations, with corresponding plots, are often generated
+in advance, but the intent is to make parameter changes during the lecture, so the students can get a feel for how a
+particular math model relates to real-word communications and signal processing systems.
 
-Computer projects benefit greatly from the use of the notebook, as sample notebooks with starter code can easily be
+Computer projects benefit greatly from the use of the notebook, as sample notebooks with starter code are easily
 posted to the course Web Site. The sample notebook serves as a template for the project report document that the
-student will work with and ultimately turn in for grading.  The ability to convert the notebook to a LaTeX PDF
+student works with, and ultimately turn in for grading.  The ability to convert the notebook to a LaTeX PDF
 document has proven to work well in practice. It is worth noting that setting up Pandoc and a LaTeX install takes
-some effort on the student's part. From my recent experiences, not all students went to this extreme.
+some effort on the student's part, but there is a good payback. Not all students went to this extreme.
 An easy alternative is to take *screenshots* of selected notebook cells and paste them into a word processor document.
 
 Graduate Student Research
@@ -237,14 +240,12 @@ In working with graduate students on their research, it is normal to exchange co
 students working on related problems. Explaining how code works with worked examples is a perfect use case for
 IPython notebook. The same approach holds for faculty interaction with their graduate students. In this scenario the
 faculty member, who is typically short on free time, gains a powerful advantage in that more than one student may need
-to brought up to speed on the same code base. Once the notebook is developed it can be shared with many students and
-can be demoed in front of students on a lab or office computer. More fundamentally, the markdown cells of the notebook
-can be used to refresh your memory as to the mathematical model implemented in code and explain the code interface
-beyond what is found in the *docstring*. The ability to include figures means that system block diagrams can also be
+to brought up to speed on the same code base. Once the notebook is developed it is shared with one or more students and
+often demoed in front the student(s) on a lab or office computer. The ability to include figures means that system block diagrams can also be
 placed in the notebook.
 
-As the student makes progress on research tasks the faculty member(s) can be easily briefed on the math models and
-simulation results. Since the notebook is live, the inevitable *what if* questions can be asked and hopefully quickly
+As the student makes progress on research tasks the faculty member(s) are briefed on the math models and
+simulation results. Since the notebook is live, the inevitable *what if* questions are asked and hopefully quickly
 answered.
 
 Industry Research and Development
@@ -255,16 +256,16 @@ using markdown cells. The ability to include equations using LaTeX markup is fan
 including the establishment of notational conventions, is the first step in the development of signal processing
 algorithms.
 
-Later, prototype algorithm development can be started using code cells. Initially synthesized signals (waveforms)
-can be used to validated the core functionality of an algorithm. Next, signal captures from the actual real-time
-hardware can be used as a source of test vectors to verify that performance metrics are being achieved. Notebooks
+Later, prototype algorithm development is started using code cells. Initially synthesized signals (waveforms)
+are used to validated the core functionality of an algorithm. Next, signal captures from the actual real-time
+hardware are used as a source of test vectors to verify that performance metrics are being achieved. Notebooks
 can again be passed around to team members for further algorithm testing. Soon code cell functions can be moved to
 code modules and the code modules distributed to team members via GIT or some other distributed revision control
 system. At every step of the way ``matplotlib`` graphics are used to visualize performance of a particular
 algorithm, versus say a performance bound.
 
 Complete subsystem testing at the Python level may be sufficient in some cases. In a more typical case code will
-have to moved to a production environment and recoding may be required. It might also be that the model is simply
+be moved to a production environment and recoding may be required. It might also be that the model is simply
 an abstraction of real electronic hardware, in which case a hardware implementer uses the notebook (maybe just a PDF
 version) to create a hardware prototype.
 
@@ -276,10 +277,10 @@ way to show off the power of Python. Sometimes questions come and you feel like 
 there during a lecture. When successful, this hopefully locks in a solid understanding of the concepts involved for
 the whole class. The fact that the lecture is being recorded means that students can recreate the same demo at their
 leisure when they watch the lecture video. The notebook goes further than a commandline interface live demo. The
-notebook can be saved and posted as a supplement/companion to the lecture. As mentioned earlier, I start a new
-notebook for each chapter of lecture material. The goal was to re-post the chapter IPython notebook each time a new
-leture video was posted. This way the students would have something to play with as they started to work on their
-next homework assignment.
+notebook is saved and posted as a supplement/companion to the lecture. As mentioned earlier, there is a corresponding
+notebook for each chapter of lecture material. I set the goal of re-post the chapter IPython notebook each time a new
+leture video was posted. This way the students have something to play with as they work on their
+current homework assignment.
 
 Case Studies
 ------------
@@ -437,10 +438,11 @@ Pulse Train Power Spectral Density
 ==================================
 
 Fourier analysis is common place in both communications and signal processing problems. This case study considers the
-power spectral density (PSD) of a continuous-time *pulse train*. The screenshot of Fig. :ref:`fig4` is taken from a
-notebook used during
-an analog communications theory course lecture. The mathematical model is contained in the notebook followed by a
-numerical example which includes a PSD plot. The function ``ssd.line_spectra`` plots the theoretical spectrum.
+power spectral density (PSD) of a continuous-time *pulse train*. Here the notebook is used to calculate and then plot
+the analytical results. The screenshot of Fig. :ref:`fig4` is taken from a notebook used during
+a communications theory course lecture. A brief mathematical model is contained in the notebook followed by a
+numerical example which includes the PSD plot. The function ``ssd.line_spectra`` plots the theoretical spectrum.
+Simulation results using the fast Fourier transform, not shown here, closely match Fig. :ref:`fig4`.
 
 .. figure:: scipy_2015_fig4.pdf
    :scale: 55%
@@ -505,7 +507,7 @@ have even symmetry. This means that :math:`b_1[M-n] = b_1[n]` for :math:`0\leq n
    :type: eqnarray
 
    Y(z) &=& H(z) X(z) = \underbrace{\sum_{n=0}^M b_n z^{-n}}_{H(z)} \cdot X(z) \\
-   &=& \frac{1}{z^M}\prod_{n=1}^M \big(z-z_n\big)\cdot X(z)
+   &=& \frac{1}{z^M}\prod_{n=1}^M \big(z-z_n\big)\cdot X(z),
 
 where :math:`Y(z)` is the :math:`z`-transform of :math:`y[n]`, :math:`X(z)` is the :math:`z`-transform of
 :math:`x[n]`, and :math:`H(z)`, known as the *system function*, is the :math:`z`-transform of the system impulse response.
