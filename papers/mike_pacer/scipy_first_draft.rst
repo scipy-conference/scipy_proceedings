@@ -6,7 +6,7 @@
 :video: youtube_link_to_come
 
 ..  latex::
-    :usepackage: booktabs, url
+    :usepackage: booktabs
 
 ..  latex::
 
