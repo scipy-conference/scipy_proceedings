@@ -149,38 +149,38 @@ Here, we present a progress report of Qiita, a multi-omic platform for
 meta-analysis that stresses standardization of data formats, open access to
 data and results, and methods for integrating samples across studies. As we
 design Qiita, we intend to account for the most common use-cases that a modern
-microbiome researcher will face. The following list briefly describes a pairing
-of the users and use-cases that the system aims to accommodate:
+microbiome researcher will face. The following list briefly describes tasks
+that are streamlined using Qiita:
 
-- Type 1: This user is interested in performing a microbiome analysis but
-  lacks expert knowledge of command line interfaces. The use of 16S amplicons
-  is incidental to a project that the user is planning to submit to a peer
-  reviewed journal that requires data deposition in a public repository.
-- Type 2: this user collaboratively works with many researchers and needs a
-  centralized and organized location to access the sample and processing
-  metadata, sequences, and processed tables from their shared studies. This
-  user might not be the owner of the study or the provider of the data on
-  which the study is based.
-- Type 3: a private research group works on several studies funded by a
-  private institution, and the data for these studies cannot leave the
-  datacenters of the university/company. However they still need a way to
-  share the data associated with the surveys internally and analyze it
-  collaboratively.
-- Type 4: two researchers from different fields are both working on microbiome
-  data and would like to use the combination of their datasets as the basis
-  for a grant proposal to conduct a more comprehensive analysis. 
-- Type 5: a researcher is interested in performing a tiered study design in
-  which multiple levels of data are generated from the same samples.
+- Perform a microbiome analysis without any required knowledge of command line
+  tools.
 
-The list of anecdotes above, while not comprehensive, exemplifies some commonly
-encountered scenarios where Qiita would be a suitable tool. Please also note
+- Deposition of biological sequences into a public data repository, in specific
+  the European Bioinformatics Institute's European Nucleotide Archive (ENA).
+
+- Searching for studies based on sample and study metadata.
+
+- Hosting of sequence data, sample metadata and processed files like BIOM
+  tables.
+
+- Provide a platform to collaboratively work on a dataset.
+
+- Combine one or more studies into a single dataset to perform further
+  specialized analyses.
+
+- Analyze and organize different data types (16S, 18S, WGS, etc) into a single
+  location where the sample metadata is enforced to be consistent across
+  representations.
+
+The list of tasks above, while not comprehensive, exemplifies some commonly
+encountered scenarios where Qiita is a powerful tool. Please also note
 that the last point regarding integration of multiple data types is a work in
 progress at this point. Currently, only portions of the 16S workflow are
 implemented, but there are plans for adding additional workflows (see future
 directions). Although other platforms and individual tools exist that are
 capable achieving one or more of these goals independently, such ad
 hoc pipelines are often troublesome, time consuming, and error prone.
-
+ 
 Structure and Operation
 -----------------------
 
