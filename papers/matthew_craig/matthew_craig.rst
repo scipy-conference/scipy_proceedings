@@ -42,7 +42,7 @@ made in calibrating the images so that future researchers can use the images
 with confidence. The free options largely require programming.
 
 The proposed solution is a widget-based IPython notebook [Pérez2007]_ for
-calibrating astronomical images, called ``reducer``. A widget-based interface
+calibrating astronomical images, called ``reducer``. [#]_ A widget-based interface
 was chosen because students at this level are more comfortable with a GUI than
 with programming. An IPython notebook was chosen because of its rich display
 format, the ability to save both code and text, and the persistence of output
@@ -60,6 +60,7 @@ package and notebook* discusses the use of ``reducer``, while *``reducer``
 widget structure* presents its implementation. The widget classes in
 ``reducer`` are potentially useful in other applications.
 
+.. [#] Source code is at: https://github.com/mwcraig/reducer
 .. [#] http://www.astropy.org/affiliated/
 
 Background: Image analysis in optical stellar astronomy
@@ -343,10 +344,10 @@ is shown in Fig. :ref:`image-display-example`.
 
 At the base of the reducer widget structure is an extension of a container
 widget from IPython. This class, ``ToggleContainerWidget``, adds a toggle to
-control display the contents of the container, and a list of child widgets
+control display of the contents of the container, and a list of child widgets
 displayed in the container. [#]_  Since a ``ToggleContainerWidget`` can have
 another ``ToggleContainerWidget`` as a child, this immediately provides an
-interface for presenting a user with a nested list of options. Fig. `light-
+interface for presenting a user with a nested list of options. Fig. :ref:`light-
 settings` has a thin red border drawn around each element that is a subclass
 of``ToggleContainerWidget``
 
@@ -387,10 +388,10 @@ The code below implements a basic ``ToggleContainerWidget`` called ``MyControl``
             self.add_child(c_box)
 
 
-An ``is_sane`` property that can be overridden by subclasses to indicate that
-the settings in the widget are sensible. This can provide some minimal
-validation of user input. The code below implements ``is_sane`` for
-``MyControl``.
+The ``is_sane`` property of a ``ToggleContainerWidget`` can be overridden by
+subclasses to indicate that the settings in the widget are sensible. This
+provides some minimal validation of user input. The code below implements
+``is_sane`` for ``MyControl``.
 
 .. code-block:: python
 
