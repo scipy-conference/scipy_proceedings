@@ -52,7 +52,7 @@ The implementation of our recommendation engine transforms a domain-specific pro
 
    Clustering of 50 Spaces from across the US [Rea15]_. :label:`clusters-with-radii`
 
-The first phase starts with *k*-means clustering: the process of breaking up *n* data points into *k* discrete clusters. Traditionally, one divides the *n* data points into an initial set of clusters, whose new center points are calculated as an unweighted average, causing the clusters to shift in response to the distribution of their contents. Iteratively, clusters are merged and center points are re-calculated until no cluster intersects any other [Vat11]_. We chose not to use an iterative approach which has a worst-case complexity of :math:`2^{\Omega(n)}` even in 2 dimensions [Vat11]_. Though the worst case scenario doesn't seem to arise in practice, we use a quick guess-and-check method that has good asymptotic complexity and converges quickly, even though another algorithm may produce better results. The algorithm takes advantage of a few known attributes of the data: there is a limited amount of overlap between data points because they represent physical objects in 3-dimensional space; the data points have a limited range since they are latitude and longitude coordinates; and since we use the clusters as a geofence in our search parameters, using a global KDTree of all building coordinates in our datastore allows us to make a good estimation of the initial cluster sizes. The algorithm executes as follows:
+The first phase starts with *k*-means clustering: the process of breaking up *n* data points into *k* discrete clusters. Traditionally, one divides the *n* data points into an initial set of clusters, whose new center points are calculated as an unweighted average, causing the clusters to shift in response to the distribution of their contents. Iteratively, clusters are merged and center points are re-calculated until no cluster intersects any other [Vat11]_. We chose not to use an iterative approach which has a worst-case complexity of :math:`2^{\Omega(n)}` even in 2 dimensions [Vat11]_. Though the worst case scenario doesn't seem to arise in practice, we use a quick guess-and-check method that has good asymptotic complexity and converges quickly, even though other algorithms may produce better results. The algorithm takes advantage of a few known attributes of the data: there is a limited amount of overlap between data points because they represent physical objects in 3-dimensional space; the data points have a limited range since they are latitude and longitude coordinates; and since we use the clusters as a geofence in our search parameters, using a global KDTree of all building coordinates in our datastore allows us to make a good estimation of the initial cluster sizes. The algorithm executes as follows:
 
 1. Create a set *P* of points :math:`p_1, p_2, \ldots, p_n`, each representing an office space.
 2. Create a KDTree *K* using the set *P*.
@@ -83,8 +83,8 @@ Executing the SAM algorithm on a reduced dataset of 10,000 items is comparable t
     for r in range(len(img)):
       for c in range(len(img[r])):
         pix = img[r][c]
-        cos_theta = pix.dot(sig_norm)/np.linalg.norm(pix)
-        theta = acos(round(cos_theta, 7))
+        cos_t = pix.dot(sig_norm)/np.linalg.norm(pix)
+        theta = acos(round(cos_t, 7))
         if theta < .1745329:  # 10 degrees, in radians
           matches.append((r, c, theta))
     return sorted(
