@@ -6,11 +6,10 @@
 :video: youtube_link_to_come
 
 ..  latex::
-    :usepackage: booktabs
+    :usepackage: booktabs, url
 
 ..  latex::
 
-    %:usepackage: mathpalette, graphicx
     \newcommand{\bigCI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
     \newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
     \def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
@@ -34,15 +33,21 @@ Causal Bayesian NetworkX
 
 ..  class:: abstract
 
+    Probabilistic graphical models are useful tools for modeling systems governed by probabilistic structure. Bayesian networks are one class of probabilistic graphical model. 
+
+
+    break
+
+    
     Humans are existence proofs for the solubility of computational causal inference.
 
-    Computational problems are sometimes thought to be the exclusive domain of computer science, though the solutions found prove vital for many other sciences. But computational cognitive science can also contribute to the solution of computational problems, particularly inductive problems. Causal inference (and inductive problems more generally) have proven resilient to traditional analysis, and the recent progress on these problems observed in machine learning (e.g., neural networks and their extensions) originate in models formulated by cognitive scientists.
+    Computational problems are sometimes thought to be the exclusive domain of computer science, though the solutions found prove vital for many other sciences. But computational cognitive science can also contribute to the solution of computational problems, particularly inductive problems. Causal inference (and inductive problems more generally) have proven resilient to traditional analysis, and the recent progress on these problems observed in machine learning (e.g., neural networks and their extensions) originate in models formulated by cognitive scientists. 
 
     As a computational cognitive scientist, I use a technique called rational analysis, which roughly consists of developing formal models of how *any* cognitive agent might optimally solve a computational problem and comparing that to how people actually solve analogous problems. In the course of doing so we find that people turn out to make much more sense than popular psychology might lead you to believe. At the same time, we create formal frameworks that represent entities and relations in the world as well as reasoning processes over those representations. 
 
     One of the frameworks successfully used in this way are causal Bayesian networks. Bayesian networks fall within the more general class of probabilistic graphical models, specifically, directed acyclic graphs with associated conditional probability distributions. Directed arrows encode direct dependency relationships going from parents to their children, whose conditional probability distribution is defined in terms of the parents' values. *Causal* Bayesian networks are endowed with an intervention operation that allows "graph surgery" in which one cuts variables off from their parents (usually setting it to a particular value). 
 
-    I have developed tools on top of the :code:`NetworkX` package that allow me to implement some aspects of these models. By treating graph definition as one of enumeration and filtering rather than investigating invidual graphs, we are able to more conveniently state constraints on the graph structures under question. Indeed this gives an alternative view of intervention not as the modification of an single graph, but as a constraint on the total set of graphs. This allows us to treat the graphical aspects of the problem separately from the probabilistic semantics that define particular models on those graphs. I call this set of tools `Causal Bayesian NetworkX`.
+    I have developed tools on top of the :code:`NetworkX` package that allow me to implement some aspects of these models. By treating graph definition as one of enumeration and filtering rather than investigating individual graphs, we are able to more conveniently state constraints on the graph structures under question. Indeed this gives an alternative view of intervention not as the modification of an single graph, but as a constraint on the total set of graphs. This allows us to treat the graphical aspects of the problem separately from the probabilistic semantics that define particular models on those graphs. I call this set of tools `Causal Bayesian NetworkX`.
 
 
 ..  class:: keywords
@@ -54,11 +59,11 @@ Introduction and Aims
 
 My first goal in this paper is to provide enough of an introduction to some formal/mathematical tools such that those familiar with :code:`python` and programming more generally will be able to appreciate both why and how one might implement causal Bayesian networks. Especially to exhibit *how*, I have developed parts of a toolkit that allows the creation of these models on top of the :code:`NetworkX` python package. Given the coincidence of the names, it seemed most apt to refer to this toolkit as :code:`Causal Bayesian NetworkX` (the current implementation of which can be found at `Causal Bayesian NetworkX`_).
 
-In order to understand the toolset requires the basics of probabilsitic graphical models, which requires understanding some graph theory and some probability theory. The first few pages are devoted to providing necessary background and illustrative cases for conveying that understanding. 
+In order to understand the tool-set requires the basics of probabilistic graphical models, which requires understanding some graph theory and some probability theory. The first few pages are devoted to providing necessary background and illustrative cases for conveying that understanding. 
 
-Notably, contrary to how Bayesian networks are commonly introduced, I say relatively little about inference from observed data. This is intentional, as is this discussion of it. Many of the most trenchant problems with Bayesian networks are found in critiques of their use to infer these networks from observed data. But, many of the aspects of Bayesian networks (especially causal Bayesian networks) that are most useful for thinking about problems of structure and probabilistic relations do not rely on inference from observed data. In fact, I think the immediate focus on inference has greatly hampered widespread understanding of the power and representative capacity of this class of models. Equally – if not more – importantly, I aim to discuss generalizations of Bayesian networks such as those that appear in :cite:`griffithst09`, and inference in these cases requires a much longer treatement (if a comprehensive treatment can be provided at all). If you are dissatisfied with this approach and wish to read a more conventional introduction to (causal) Bayesian networks I suggest consulting :cite:`pearl2000`.
+Notably, contrary to how Bayesian networks are commonly introduced, I say relatively little about inference from observed data. This is intentional, as is this discussion of it. Many of the most trenchant problems with Bayesian networks are found in critiques of their use to infer these networks from observed data. But, many of the aspects of Bayesian networks (especially causal Bayesian networks) that are most useful for thinking about problems of structure and probabilistic relations do not rely on inference from observed data. In fact, I think the immediate focus on inference has greatly hampered widespread understanding of the power and representative capacity of this class of models. Equally – if not more – importantly, I aim to discuss generalizations of Bayesian networks such as those that appear in :cite:`griffithst09`, and inference in these cases requires a much longer treatment (if a comprehensive treatment can be provided at all). If you are dissatisfied with this approach and wish to read a more conventional introduction to (causal) Bayesian networks I suggest consulting :cite:`pearl2000`.
 
-The Causal Bayesian NetworkX toolkit can be seen as consisting of two main parts: graph enumeration/filtering and the storage and use of probabilistic graphical models in a NetworkX compatible format. Because this topic will more be the focus of my talk which can be viewed at the youtube link above and the source code of the most basic implementation is available at `Causal Bayesian NetworkX`_, in this paper I focus more on the other aspects of the problem. Nonetheless, appreciating these other aspects is made easier by also appreciating the problems of implementation/representation and the early solutions that I propose.
+The Causal Bayesian NetworkX toolkit can be seen as consisting of two main parts: graph enumeration/filtering and the storage and use of probabilistic graphical models in a NetworkX compatible format:cite:`networkx`. Because this topic will more be the focus of my talk which can be viewed at the youtube link above and the source code of the most basic implementation is available at `Causal Bayesian NetworkX`_:cite:`Pacer2015CNetworkX`, in this paper I focus more on the other aspects of the problem. Nonetheless, appreciating these other aspects is made easier by also appreciating the problems of implementation/representation and the early solutions that I propose.
 
 I focus first on establishing a means of building iterators over sets of directed graphs. I then apply operations to those sets. Beginning with the complete directed graph, we enumerate over the subgraphs of that complete graph and enforce graph theoretic conditions such as acyclicity over the entire graph, guarantees on paths between nodes that are known to be able to communicate with one another, or orphan-hood for individual nodes known to have no parents. We accomplish this by using closures that take graphs as their input along with any explicitly defined arguments needed to define the exact desired conditions. 
 
@@ -81,7 +86,7 @@ Nodes
 
 In the examples in `Causal Bayesian NetworkX`_, nodes are given explicit labels individuating them such as :math:`\{A,B,C,\ldots\}` or {'rain','sprinkler','grass_wet'}. Oftentimes, for the purposes of mathematical notation, it will be helpful to index nodes by the integers over a common variable label, e.g., using  :math:`\{X_1,X_2,X_3,\ldots\}`. [#]_ 
 
-.. [#] Despite pythonic counting beginning with 0, I chose not to begin this series with 0 because when dealing with variables that might be used in statistical regressions, the 0 subscript will have a specific meaning that separates it from the rest of the notation. For example when expressing multivariate regession as :math:`Y = \beta X + \epsilon, \epsilon \sim \mathcal{N}(0,\Sigma)`, :math:`\beta_0` refers to the parameter associated with a constant variable :math:`x_0 = 1` and :math:`X` is normally defined as :math:`x_1, x_2, x_3, \ldots`. This allows a simple additive constant to be estimated, which usually(but not always) is not of interest to statistical tests, acting as a scaling constant more than anything else. This also makes for simpler notation than saying :math:`Y = \beta_0 + \beta X + \epsilon`, since that is equivalent to the previous notation (:math:`Y = \beta X + \epsilon`) if :math:`x_0 = 1`. In other cases :cite:`griffithst05,pacerg12`, the 0 index will be used to indicate background sources for events in a system.
+.. [#] Despite pythonic counting beginning with 0, I chose not to begin this series with 0 because when dealing with variables that might be used in statistical regressions, the 0 subscript will have a specific meaning that separates it from the rest of the notation. For example when expressing multivariate regression as :math:`Y = \beta X + \epsilon, \epsilon \sim \mathcal{N}(0,\Sigma)`, :math:`\beta_0` refers to the parameter associated with a constant variable :math:`x_0 = 1` and :math:`X` is normally defined as :math:`x_1, x_2, x_3, \ldots`. This allows a simple additive constant to be estimated, which usually(but not always) is not of interest to statistical tests, acting as a scaling constant more than anything else. This also makes for simpler notation than saying :math:`Y = \beta_0 + \beta X + \epsilon`, since that is equivalent to the previous notation (:math:`Y = \beta X + \epsilon`) if :math:`x_0 = 1`. In other cases :cite:`griffithst05,pacerg12`, the 0 index will be used to indicate background sources for events in a system.
 
 Edges
 ^^^^^
@@ -159,7 +164,7 @@ A random variable defined by a conditional probability distribution [#]_ has a d
 The probability mass function (pmf) of a discrete random variable(:math:`X`) taking on value :math:`x` will be designated with :math:`P(X=x)`. Oftentimes, when one is discussing the full set of potential values (and not just a single value), one leaves out the :math:`=x` and just indicates :math:`P(X)`. [#]_ 
 .. This interpretation works most easily when considering mutually exclusive values, and if one is instead considering the possibility of a more complex event such as a variable taking on one of a set of values, the notation will often need adjusting. 
 
-.. [#] If one is dealing with continuous quantities rather than discrete quantities one will have to use a probability density function (pdf) which does not have as straightforward an interpretation as a probability mass function. This difficult stems from the fact that (under most cases) the probability of any particular event occuring is "measure zero", or "almost surely" impossible. Without getting into measure theory and the foundation of calculus and continuity we can simply note that it is not that any individual event has non-zero probability, but that sets of events have non-zero probability.As a result, continuous random variables are more easily understood in terms a cummulative density function (cdf), which states not how likely any individual event is, but how likely it is that the event in question is less than a value :math:`x`. The notation usually given for a cdf of this sort is :math:`F(X\leq x) = \int_{-\infty}^{x}f(u)du`, where :math:`f(u)` is the associated probability density function.
+.. [#] If one is dealing with continuous quantities rather than discrete quantities one will have to use a probability density function (pdf) which does not have as straightforward an interpretation as a probability mass function. This difficult stems from the fact that (under most cases) the probability of any particular event occurring is "measure zero", or "almost surely" impossible. Without getting into measure theory and the foundation of calculus and continuity we can simply note that it is not that any individual event has non-zero probability, but that sets of events have non-zero probability.As a result, continuous random variables are more easily understood in terms a cumulative density function (cdf), which states not how likely any individual event is, but how likely it is that the event in question is less than a value :math:`x`. The notation usually given for a cdf of this sort is :math:`F(X\leq x) = \int_{-\infty}^{x}f(u)du`, where :math:`f(u)` is the associated probability density function.
 
 The conditional probability of a variable :math:`X` taking on value :math:`x` once it is known that another variable :math:`Y` takes on value :math:`y` is :math:`P(X=x|Y=y)`. Much like above, if we want to consider the probability of each possible event without specifying one, sometimes this will be written as :math:`P(X|Y=y)`. If we are considering conditioning on any of the possible values of the known variable, we might use the notation :math:`P(X|Y)`, but that is a slight abuse of the notation. 
 
@@ -283,7 +288,7 @@ Thus we can establish the following statements
 Bayesian Networks
 -----------------
 
-Bayesian networks are a class of graphical models that have particular probabilistic semantics attached to their nodes and edges. This makes them probabilsitic graphical models. 
+Bayesian networks are a class of graphical models that have particular probabilistic semantics attached to their nodes and edges. This makes them probabilistic graphical models. 
 
 The most important property of Bayesian networks is that a variable when conditioned on the total set of its parents and children, is conditionally independent of any other variables in the graph. This is known as the "Markov blanket" of that node. [#]_
 
@@ -306,7 +311,7 @@ Trial-based events, complete activation and :sc:`dag`\-hood
 
 Within a trial, all events are presumed to occur simultaneously. This means two things. First, there is no notion of temporal asynchrony, where one node/variable takes on a value before its children take on a value (even if in reality – i.e., outside the model – that variable is known to occur before its child). Secondly, the probabilistic semantics will be defined over the entirety of the graph meaning that one cannot sample a proper subset of the nodes of a graph unless they have no effects or are marginalized out with their effects being incorporated into their children.
 
-This property also explains why Bayesian networks need to be acyclic. Most of the time when we consider causal cycles in the world the cycle relies on a temporal delay between the causes and their effects to take place. If the cause and its effect is simultaneous, it becomes difficult (if not nonsensical) to determine which is the cause and which is the effect — they seem instead to be mutually definitional. But, as noted above, when sampling in Bayesian networks simultenaity is presumed for *all* of the nodes.
+This property also explains why Bayesian networks need to be acyclic. Most of the time when we consider causal cycles in the world the cycle relies on a temporal delay between the causes and their effects to take place. If the cause and its effect is simultaneous, it becomes difficult (if not nonsensical) to determine which is the cause and which is the effect — they seem instead to be mutually definitional. But, as noted above, when sampling in Bayesian networks simultaneity is presumed for *all* of the nodes.
 
 Independence in Bayes Nets
 ==========================
@@ -315,7 +320,7 @@ One of the standard ways of describing the relation between the semantics (proba
 
 It is the perspective of the graphs as *merely* representing the independence relationships and the focus on inference that leads to the focus on equivalence classes of Bayes nets. The set of graphs :math:`\{A \rightarrow B \rightarrow C,~ A \leftarrow B \rightarrow C, \textrm{ and } A \leftarrow B \leftarrow C\}` represent the same conditional independence relationships, and thus cannot be distinguished on the basis of observational evidence alone. This also leads to the emphasis on finding *v-structures* or common-cause structures where (at least) two arrows are directed into the same child with no direct link between those parents(e.g., :math:`A \rightarrow B \leftarrow C`). V-structures are observationally distinguishable because any reversing the direction of any of the arrows will alter the conditional independence relations that are guaranteed by the graphical structure. [#]_
 
-.. [#] A more thorough analysis of this relation between graph structures and implied conditional independence relations invokes the discussion of *d-separation*. However, d-separation (despite claims that "[t]he intuition behind [it] is simple") is a more subtle concept than it at first appears as it involves both which nodes are obeserved and the underlying structure.
+.. [#] A more thorough analysis of this relation between graph structures and implied conditional independence relations invokes the discussion of *d-separation*. However, d-separation (despite claims that "[t]he intuition behind [it] is simple") is a more subtle concept than it at first appears as it involves both which nodes are observed and the underlying structure.
 
 While this is accurate, it eschews some important aspects of the semantics that distinguish arrows with different directions when you consider the particular kinds of values that the variables take on.
 
@@ -325,7 +330,7 @@ While this is accurate, it eschews some important aspects of the semantics that 
 .. Misplaced Emphasis on Independence in :sc:`dag`\s
 .. =================================================
 
-.. I do not agree with the interpretation of Bayes nets as merely representing independence properties, though, not because it is incorrect. Rather, I think it has two unfortunate results. First, it encourages poor statistical practices when it comes to inferring independence from observed data using null hypothesis testing. Second, it deëmphasizes an important assymetry that appears in the semantics of how nodes in Bayes nets relate to one another when they are not exclusively discrete nodes.
+.. I do not agree with the interpretation of Bayes nets as merely representing independence properties, though, not because it is incorrect. Rather, I think it has two unfortunate results. First, it encourages poor statistical practices when it comes to inferring independence from observed data using null hypothesis testing. Second, it deëmphasizes an important asymmetry that appears in the semantics of how nodes in Bayes nets relate to one another when they are not exclusively discrete nodes.
 
 .. Null hypothesis testing and inference
 .. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -337,9 +342,9 @@ Directional semantics between different types of nodes
 
 The conditional distributions of child nodes are usually defined with parameter functions that take as arguments their parents' realizations for that trial. Bayes nets often are used to exclusively represent discrete (usually, binary) nodes the distribution is usually defined as an arbitrary probability distribution associated with the label of it's parent's realization. 
 
-If we allow (for example) positive continuous valued nodes to exist in relation to discrete nodes the kind of distributions available to describe relations between these nodes changes depending upon the direction of the arrow. A continuous node taking on positive real values mapping to an arbitrarily labeled binary node taking on values :math:`\{a,b\}` will require a function that maps from :math:`\mathbb{R} \rightarrow [0,1]`, where it maps to the probability that the child node takes on (for instance) the value :math:`a` . [#]_However, if the relationship goes the other direction, one would need to have a function that maps from :math:`\{a,b\} \rightarrow \mathbb{R}`. For example, this might be a gaussian distributions for *a* and *b* (:math:`(\mu_a,\sigma_a),(\mu_b,\sigma_b)`). Regardless of the particular distributions, the key is that the functional form of the distributions are radically different 
+If we allow (for example) positive continuous valued nodes to exist in relation to discrete nodes the kind of distributions available to describe relations between these nodes changes depending upon the direction of the arrow. A continuous node taking on positive real values mapping to an arbitrarily labeled binary node taking on values :math:`\{a,b\}` will require a function that maps from :math:`\mathbb{R} \rightarrow [0,1]`, where it maps to the probability that the child node takes on (for instance) the value :math:`a` . [#]_However, if the relationship goes the other direction, one would need to have a function that maps from :math:`\{a,b\} \rightarrow \mathbb{R}`. For example, this might be a Gaussian distributions for *a* and *b* (:math:`(\mu_a,\sigma_a),(\mu_b,\sigma_b)`). Regardless of the particular distributions, the key is that the functional form of the distributions are radically different 
 
-.. [#] If the function maps directly to one of the labeled binary values this can be represented as having probabilty 1 of mapping to either :math:`a` or :math:`b`.
+.. [#] If the function maps directly to one of the labeled binary values this can be represented as having probability 1 of mapping to either :math:`a` or :math:`b`.
 
 
 Generating samples from Bayes Nets
@@ -532,7 +537,7 @@ If we wanted to have examples of all dags that are subgraphs of a passed in grap
 Non-destructive conditional subgraph generators
 ===============================================
 
-Because the :code:`conditionalSubgraph` generator produces an iterable, if we want to apply a conditional after that intiial set is generated, we need to split it into two copies of the iterable. This involves the :code:`tee` function from the :code:`itertools` core package.
+Because the :code:`conditionalSubgraph` generator produces an iterable, if we want to apply a conditional after that initial set is generated, we need to split it into two copies of the iterable. This involves the :code:`tee` function from the :code:`itertools` core package.
 
 .. code-block:: python
 
@@ -648,26 +653,26 @@ Causal Bayesian NetworkX: Sampling
 
 It is possible to identify first those nodes with no parents, and then sample them. Then (and this is the part that is iterated), sample those in the children set whose parent set has a full sample, removing children from the children set when they are sampled from and adding them to the parent set. This is continued until there are no children in the children set. 
 
-This is the algorithm that sampling follows as can be observed in `Causal Bayesian NetworkX`_. This approach only works for :sc:`dag`\s and is formally equivalent to identifying a *topological ordering* for the nodes and then sampling accordingly. A graph having a topological ordering is biconditionally equivalent to being a :sc:`dag`. This critrion can roughly be seen as assigning each node an integer such that every child will always have an integer greater than any of its parent nodes (and by recursion any of its ancestor nodes). This provides an order in which to visit the nodes for sampling purposes that will ensure that any nodes in a child's parent set will always be visited first. This also results in choosing those nodes with an empty set as a parent set (i.e., orphans) to have the lowest integers, and therefore to be sampled first.
+This is the algorithm that sampling follows as can be observed in `Causal Bayesian NetworkX`_. This approach only works for :sc:`dag`\s and is formally equivalent to identifying a *topological ordering* for the nodes and then sampling accordingly. A graph having a topological ordering is biconditionally equivalent to being a :sc:`dag`. This criterion can roughly be seen as assigning each node an integer such that every child will always have an integer greater than any of its parent nodes (and by recursion any of its ancestor nodes). This provides an order in which to visit the nodes for sampling purposes that will ensure that any nodes in a child's parent set will always be visited first. This also results in choosing those nodes with an empty set as a parent set (i.e., orphans) to have the lowest integers, and therefore to be sampled first.
 
 Most of the difficult parts of encoding a sampling procedure though have nothing to do with the algorithm(it is standard for :sc:`dag`\s). Rather, they arise from attempting to store the relevant information within the NetworkX data nodes, so that a self-contained graphical object can be imported and exported. There is a general problem of a lack of standard storage format for Bayesian networks (and probabilistic graphical models in general). This is just one flavor of that problem. 
 
 Lack of JSON compatibility
 ==========================
 
-When submitting the abstract for this paper and talk, I believed I had created a JSON compatible format for storing the underlying data. I discovered that my method of storing groups of parent-variable realizations as tuple-keys with distribution arguments broke the JSON compatiblity that I was able to maintain in other circumstances. This was useful for being able to call the distributions of variables who have more than one parent nodes. I have not yet fixed this problem. 
+When submitting the abstract for this paper and talk, I believed I had created a JSON compatible format for storing the underlying data. I discovered that my method of storing groups of parent-variable realizations as tuple-keys with distribution arguments broke the JSON compatibility that I was able to maintain in other circumstances. This was useful for being able to call the distributions of variables who have more than one parent nodes. I have not yet fixed this problem. 
 
 Causal Theories and Computational Cognitive Science
 ---------------------------------------------------
 
-**Theory based causal induction** is a formal framework that arose out of the tradition in computational cognitive science to approach problems of human cogntiion with rational, comptuational-level analyses :cite:`griffithst09`. In particular, causal theories form generative models for defining classes of parameterized probabilistic graphical models. They rely on defining a set of classes of entities (ontology), potential relationships between those classes of entities and particular entities (plausible relations), and particular parameterizations of how those relations manifest in observable data (or in how other relations eventually ground out into observable data). This allows Griffiths and Tenenbaum to subsume the prediction of a wide array of human causal inductive, learning and reasoning behavior using this framework for generating graphical models and doing inference over the structures they generate.
+**Theory based causal induction** is a formal framework that arose out of the tradition in computational cognitive science to approach problems of human cognition with rational, computational-level analyses :cite:`griffithst09`. In particular, causal theories form generative models for defining classes of parameterized probabilistic graphical models. They rely on defining a set of classes of entities (ontology), potential relationships between those classes of entities and particular entities (plausible relations), and particular parameterizations of how those relations manifest in observable data (or in how other relations eventually ground out into observable data). This allows Griffiths and Tenenbaum to subsume the prediction of a wide array of human causal inductive, learning and reasoning behavior using this framework for generating graphical models and doing inference over the structures they generate.
 
 Rational analysis
 =================
 
-A technique used that allows us to model not cognition per se, but the situation into which cognitive capacities are to be placed. If we assume that we know the inputs, the outputs and the goal state of the arbtirary cognitive agent, we can iteratively predict the agent's behavior[#]_.
+A technique used that allows us to model not cognition per se, but the situation into which cognitive capacities are to be placed. If we assume that we know the inputs, the outputs and the goal state of the arbitrary cognitive agent, we can iteratively predict the agent's behavior[#]_.
 
-This is often coupled with comptuational-level analysis inspired by Marr's :cite:`marr82` level's of analysis.  
+This is often coupled with computational-level analysis inspired by Marr's :cite:`marr82` levels of analysis.  
 
 .. [#] This is not a well-sourced definition. I need to go back to :cite:`andersons91` to spruce it up.
 
@@ -711,7 +716,7 @@ The Griffiths and Tenenbaum framework is richer than the examples they develop i
 
 Because the plausible relations are in general described as sufficiency statements, the idea is that most relations are not plausible. However, we can also make necessary statements about the kinds of relations that must be there. And in general one can see this as selecting a subset of all the possible graphs implementable by the set of nodes defined by the ontology.
 
-Part of the aim of developing `Causal Bayesian NetworkX`_ is to provide a programming framework in which the richness of causal theories are able to be expressed. Because of the utilities in :code:`networkX`, with the enumerating, filtring and conditioning functions described above, it becomes much easier to implement higher-order graphical conditions (e.g., a directed path necessarily existing between two nodes) than in the original notation described in the framework. These ideas were entirely expressable in the original mathematical framework, but would have required a good deal more notational infrastructure to represent. Here, we not only provide a notation, but a computational infrastructure for applying these kinds of conditions.
+Part of the aim of developing `Causal Bayesian NetworkX`_ is to provide a programming framework in which the richness of causal theories are able to be expressed. Because of the utilities in :code:`networkX`, with the enumerating, filtering and conditioning functions described above, it becomes much easier to implement higher-order graphical conditions (e.g., a directed path necessarily existing between two nodes) than in the original notation described in the framework. These ideas were entirely expressible in the original mathematical framework, but would have required a good deal more notational infrastructure to represent. Here, we not only provide a notation, but a computational infrastructure for applying these kinds of conditions.
 
 Uses in modeling human cognition
 ================================
@@ -724,299 +729,3 @@ What is important is that they successfully modeled humans using this framework 
 
 .. _original paper: https://cocosci.berkeley.edu/tom/papers/tbci.pdf
 
-
-.. Of course, no paper would be complete without some source code.  Without
-.. highlighting, it would look like this::
-
-..     def sum(a, b):
-..         """Sum two numbers."""
-
-..         return a + b
-
-.. With code-highlighting:
-
-.. .. code-block:: python
-
-..     def sum(a, b):
-..         """Sum two numbers."""
-
-..         return a + b
-
-.. Maybe also in another language, and with line numbers:
-
-.. .. code-block:: c
-..     :linenos:
-
-..     int main() {
-..         for (int i = 0; i < 10; i++) {
-..             /* do something */
-..         }
-..         return 0;
-..     }
-
-.. Or a snippet from the above code, starting at the correct line number:
-
-.. .. code-block:: c
-..     :linenos:
-..     :linenostart: 2
-
-..     for (int i = 0; i < 10; i++) {
-..         /* do something */
-..     }
-
-
-.. Important Part
-.. --------------
-
-.. .. It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
-
-.. some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-.. equation on a separate line:
-
-.. .. math::
-
-..     g(x) = \int_0^\infty f(x) dx
-
-.. or on multiple, aligned lines:
-
-.. .. math::
-..     :type: eqnarray
-
-..     g(x) &=& \int_0^\infty f(x) dx \\
-..          &=& \ldots
-
-.. The area of a circle and volume of a sphere are given as
-
-.. .. math::
-..     :label: circarea
-
-..     A(r) = \pi r^2.
-
-.. .. math::
-..     :label: spherevol
-
-..     V(r) = \frac{4}{3} \pi r^3
-
-.. We can then refer back to Equation (:ref:`circarea`) or
-.. (:ref:`spherevol`) later.
-
-
-.. .. figure:: figure0.png
-
-..     This is the caption. :label:`egfig`
-
-.. .. figure:: figure0.png
-..     :align: center
-..     :figclass: w
-
-..     This is a wide figure, specified by adding "w" to the figclass.  It is also
-..     center aligned, by setting the align keyword (can be left, right or center).
-
-.. .. figure:: figure0.png
-..     :scale: 20%
-..     :figclass: bht
-
-..     This is the caption on a smaller figure that will be placed by default at the
-..     bottom of the page, and failing that it will be placed inline or at the top.
-..     Note that for now, scale is relative to a completely arbitrary original
-..     reference size which might be the original size of your image - you probably
-..     have to play with it. :label:`egfig2`
-
-.. As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered figures.
-
-.. .. table:: This is the caption for the materials table. :label:`mtable`
-
-..     +------------+----------------+
-..     | Material   | Units          |
-..     +============+================+
-..     | Stone      | 3              |
-..     +------------+----------------+
-..     | Water      | 12             |
-..     +------------+----------------+
-..     | Cement     | :math:`\alpha` |
-..     +------------+----------------+
-
-
-.. We show the different quantities of materials required in Table
-.. :ref:`mtable`.
-
-
-.. .. The statement below shows how to adjust the width of a table.
-
-.. .. raw:: latex
-
-..     \setlength{\tablewidth}{0.8\linewidth}
-
-
-.. .. table:: This is the caption for the wide table.
-..     :class: w
-
-..     +--------+----+------+------+------+------+--------+
-..     | This   | is |  a   | very | very | wide | table  |
-..     +--------+----+------+------+------+------+--------+
-
-.. Unfortunately, restructuredtext can be picky about tables, so if it simply
-.. won't work try raw LaTeX:
-
-
-.. .. raw:: latex
-
-..     \begin{table*}
-
-..       \begin{longtable*}{|l|r|r|r|}
-..       \hline
-..       \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
-..       \cline{2-4}
-..        & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
-..       \hline
-..       Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
-..       \hline
-..       Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
-..       \hline
-..       Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
-..       \hline
-..       Percent Difference & 44\% & 41\% & 43\%\tabularnewline
-..       \hline
-..       \end{longtable*}
-
-..       \caption{Area Comparisons \DUrole{label}{quanitities-table}}
-
-..     \end{table*}
-
-.. Perhaps we want to end off with a quote by Lao Tse [#]_:
-
-..     *Muddy water, let stand, becomes clear.*
-
-.. .. [#] :math:`\mathrm{e^{-i\pi}}`
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-
-
-.. Outlines
-.. ========
-
-.. Test :cite:`mckay2003acyclic,winn2012causality`
-
-
-.. Outline v. 1.1
-.. ==============
-
-.. 1. Introduction
-
-..    2. Why?
-..    3. What?
-..    4. Background recommended
-
-..       5. Basic probability
-
-..          6. Sum of prob of exclusive events = 1
-
-..       6. Basic graph theory ✓
-
-..          7.  Nodes (N) and Edges (V = (N × N))✓
-..              8.  notation notes ✓
-..              9.  Parents and children
-
-..          10.  Adjacency Matrix view of graphs✓
-..          11.  Directed and Undirected graphs✓
-..          12.  Directed Acyclic Graphs✓
-
-.. 2. Assumptions
-
-..    2. Fixed set of nodes ✓
-..    3. Discrete trials 
-..    4. Synchronous activation 
-..    5. cross trial independence 
-
-.. 3. Graphs: Structure
-
-..    1. Complexity of graph enumeration
-
-..       2. General directed graphs, ✓
-
-..          .. math:: 2^{n^2} 
-
-..    2. Reducing complexity:
-
-..       3. Enumeration filters
-..       4. Directed Acyclic Graphs
-
-..          4. No trace (no self-loops) ✓
-..          5. number of graphs
-
-..    3. Parents and children
-
-.. 4. Random Variables: Semantics, sampling and graphs
-
-..    4. Conditional probability distributions
-..    5. Conditional independence properties
-
-.. 5. Bayesian Networks.
-    
-..     1. Graphical interpretation of conditional independence ✓
-
-
-.. 5. Causal Graphs: Interventions
-
-..    1. Graph Surgery
-..    2. Causal graphs as extensions of directed graphs ---
-
-..       1. incorporating intervention into the node set
-
-..    3. Interventions as constraints on the graph set
-
-..       4. Node has no parents = node is intervened on with prior
-..          distribution equal to the
-
-.. 1. NetworkX
-    
-..     2. graph/network package in python
-    
-
-.. 6. Causal Bayesian NetworkX: Graphs
-
-..    5. Iterator over graphs
-..    6. Closures for constraints
-      
-..        8. over graphs
-..        9. tuples of nodes
-..        10. individual nodes?
-   
-..    11. Zipping iterators and avoiding early consumption
-
-.. 6. Causal Bayesian NetworkX: Probabilistic Sampling
-    
-.. .. 7. Gates and causal networks
-
-.. 8. Causal theories
-    
-..     9. Rational analysis and computational level explanations of human cognition✓
-..     10. First order logic for probabilistic graphical models ✓
-..     11. ontology, plausible relations, functional form✓
-..     12. generalizations to other kinds of logical/graphical conditions✓
-..     13. uses in understanding human cognition
-
-
-.. .. raw:: latex
-
-..     \bibliographystyle{IEEEtran}
-..     \begingroup
-..     \renewcommand{\section}[2]{}%
-..     %\renewcommand{\chapter}[2]{}% for other classes
-..     \bibliography{uber}
-..     \endgroup
-
-
-.. .. raw:: latex
-
-..     \bibliographystyle{IEEEtran}
-..     \providecommand*\DUrolebibliography[1]{\bibliography{#1}}
-
-.. .. role:: bibliography
-
-.. .. [Atr03] P. Atreides. *How to catch a sandworm*,           Transactions on Terraforming, 21(3):261-300, August 2003.

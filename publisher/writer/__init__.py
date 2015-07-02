@@ -47,11 +47,6 @@ class Translator(LaTeXTranslator):
         # and the second entry the BiBTeX file (see `visit_field_body`)
         self.bibtex = None
 
-        # This gets read by the underlying docutils implementation.
-        # If present, it is a list with the first entry the style name
-        # and the second entry the BiBTeX file (see `visit_field_body`)
-        self.bibtex = None
-
         self.abstract_in_progress = False
         self.non_breaking_paragraph = False
 
