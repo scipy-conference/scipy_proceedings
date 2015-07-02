@@ -292,9 +292,10 @@ total number of respondents.
 ``lams`` is a Pandas Series that maps from each observation time to the
 estimated hazard rate.
 
-For each value of ``t`` we look up ``ended``, which is the number of people
-married at ``t``, and ``censored``, which is the number of people interviewed at
-t. The hazard function at ``t`` is the ratio of ``ended`` and ``at_risk``.
+For each value of ``t`` we look up ``ended``, which is the number of
+people married for the first time at ``t``, and ``censored``, which is
+the number of never married people interviewed at ``t``. The estimated
+hazard function at ``t`` is the ratio of ``ended`` and ``at_risk``.
 
 At the end of each time step, we update ``at_risk`` by
 subtracting off ``ended`` and ``censored``.
