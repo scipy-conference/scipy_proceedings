@@ -125,7 +125,7 @@ In the context of Scientific Python, BigBang is deliberately recursive.
 It is a Python project that depends on many other scientific Python projects.
 It is designed to study, among other things, dependencies and interactions between 
 the Scientific Python technologies and communities.
-Our goal is for BigBang to providing a new means for these communities to engage
+Our goal is for BigBang to provide a new means for these communities to engage
 in scientific self-management.
 
 Email data collection
