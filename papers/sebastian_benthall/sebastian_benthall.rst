@@ -171,12 +171,14 @@ Preferential attachment model
 
 A early result in the study of complex networks was the observation that many networks
 existing in nature exhibit a scale-free degree distribution.
-This means that the distribution of the number of edges of each node in the network (the
-node's *degree*) is a power law distribution, characterized by the formula: 
+This means that the tail of the distribution of the number of edges of each node in the network (the
+node's *degree*) converges to a power law function: 
 
 .. math::
 
-   formula here
+   y = ax^k
+
+(Scale-free referes to the scale invariance of the power law distribution.)
 
 The other most widely known random graph model, the Erdős-Rénri model, produces
 networks with normal(?) degree distribution.
