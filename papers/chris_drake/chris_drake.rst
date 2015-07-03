@@ -50,8 +50,7 @@ but in the past year it has seen some interesting adoption from
 University students.
 For example,
 students at Vanderbilt University used it to model system reliability [Nan14]_,
-and students at Saarland University used as part of a fast DQBF Refutation tool
-for a SAT competition [Fin14]_.
+and students at Saarland University used as part of a fast DQBF Refutation tool [Fin14]_.
 
 Even though the name "PyEDA" implies that the library is specific to EDA,
 it is actually very general in nature.
