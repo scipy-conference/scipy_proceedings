@@ -111,7 +111,7 @@ We can still have a coherent view of *undirected* graphs, despite the fact that 
 Directed Graphs
 ===============
 
-From the adjacency matrix perspective we've been considering, all graphs are technically directed, and undirected graphs are a special case where both edges are symmetric.
+From the adjacency matrix perspective we've been considering, all graphs are technically directed, and undirected graphs are a special case where one (undirected) edge would be represented as two symmetric edges.
 
 The number of directed graphs that can be obtained from a set of nodes of size :math:`n` can be defined explicitly using the fact that they can be encoded as a unique :math:`n \times n` matrix:
 
