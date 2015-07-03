@@ -140,7 +140,6 @@ One of the key methods of the ``CommunicationProccess`` class is ``run``. The fo
                                    self.init_time] + data)
                 except:
                     pass
-                    return
             except:
                 raise
             finally:
