@@ -350,7 +350,7 @@ node's *degree*) is a power law distribution, characterized by the formula:
 
    formula here
 
-The other most widely known random graph model, the Erdos-Renri model, produces
+The other most widely known random graph model, the Erdős-Rénri model, produces
 networks with normal(?) degree distribution.
 Barabási and Alpert [BarabásiAlbert]_ have proposed a model of network generation
 that produces graphs with scale-free degree distribution.
