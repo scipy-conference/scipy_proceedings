@@ -1,5 +1,5 @@
 :author: David Masad
-:email: david.masad@gmail.com
+:email: david.masad@gmail.com, jackiekazil@gmail.com
 :institution: Department of Computational Social Science, George Mason University
 
 :author: Jacqueline Kazil
@@ -12,7 +12,7 @@ Mesa: An Agent-Based Modeling Framework
 
 .. class:: abstract
 
-  Agent-based modeling is a computational methodology used in social science, biology, and other fields, which involves simulating the behavior and interaction of many autonomous entities, or agents, over time. There is currently a hole in this area in  Python’s robust and growing scientific ecosystem. Mesa is a new open-source package meant to fill that gap. It allows users to quickly create agent-based models using built-in core components (such as agent schedulers and spatial grids) or customized implementations; visualize them using a browser-based interface; and analyze their results using Python’s data analysis tools. Its goal is to be a Python 3-based alternative to other popular frameworks based in other languages such as NetLogo, Repast, or MASON. Since the framework is being built from scratch it is able to incorporate lessons from other tools. In this paper, we present Mesa's core features and demonstrate them with a simple example model.
+  Agent-based modeling is a computational methodology used in social science, biology, and other fields, which involves simulating the behavior and interaction of many autonomous entities, or agents, over time. There is currently a hole in this area in  Python’s robust and growing scientific ecosystem. Mesa is a new open-source package meant to fill that gap. It allows users to quickly create agent-based models using built-in core components (such as agent schedulers and spatial grids) or customized implementations; visualize them using a browser-based interface; and analyze their results using Python’s data analysis tools. Its goal is to be a Python 3-based alternative to other popular frameworks based in other languages such as NetLogo, Repast, or MASON. Since the framework is being built from scratch it is able to incorporate lessons from other tools. In this paper, we present Mesa's core features and demonstrate them with a simple example model. [#]_
 
 .. class:: keywords
 
@@ -27,6 +27,8 @@ Agent-based modeling involves simulating the behavior and interaction of many au
 1. Unlike other modeling approaches, ABMs capture the path as well as the solution, so one can analyze the system's dynamic history.
 2. Most social processes involve spatial or network attributes, which ABMs can incorporate explicitly.
 3. When a model (A) produces a result (R), one has established a sufficiency theorem, meaning *R* if *A*.
+
+.. [#] Mesa is available on GitHub at https://github.com/projectmesa/mesa
 
 To understand the utility of agent-based modeling, consider one of the earliest and best-known models, created by Thomas Schelling. Schelling wanted to test the theory that segregated neighborhoods can arise not just by active racism, but due to only a mild preference for neighbors of the same ethnicity  [Schelling1971]_. The model consists of majority-group and minority-group agents living on a grid, who have a preference for only several neighbors of the same group. When that preference is not met, they move to a different grid cell. The model demonstrates that even a mild preference for same-group neighbors leads to a dramatic degree of segregation. This is an example of the *emergence* of a higher-order phenomena from the interactions of lower-level entities, and demonstrates the link between agent-based modeling and complexity theory, and complex adaptive systems in particular [Miller2009]_.
 
