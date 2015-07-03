@@ -638,7 +638,7 @@ For example, let’s say you want to add two numbers ``A``, and ``B``.
 If these numbers are 32-bit integers, there are 64 total inputs,
 not including a carry-in.
 The conventional way of labeling the input variables is
-:math:`a_0, a_1, a_2, \ldots`, and :math:`b_0, b_1, b_2, \ldots`.
+:math:`a_0, a_1, \ldots, a_{31}`, and :math:`b_0, b_1, \ldots, b_{31}`.
 
 Furthermore, you can extend the symbolic algebra of Boolean functions to arrays.
 For example, the element-wise XOR of ``A`` and ``B`` is also an array.
