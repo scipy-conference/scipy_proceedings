@@ -8,23 +8,16 @@
 ..  latex::
     :usepackage: booktabs
 
-..  latex::
-
     \newcommand{\bigCI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
     \newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
     \def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
 
 
-.. raw::latex
+.. raw:: latex
 
     \newcommand{\DUrolesc}{\textsc}
-    \newcommand{\DUroleindep}{\mathrel{\text{\scalebox{1}{$\perp\mkern-9mu\perp$}}}}
-
-
-.. role:: indep
 
 .. role:: sc
-
 
 
 ------------------------
@@ -127,7 +120,7 @@ A cycle in a directed graph can be understood as the existence of a path from a 
 
 Directed acyclic graphs(:sc:`dag`\s) are directed graphs that contain no cycles.
 
-The number of :sc:`dag`\s that can be obtained from a set of nodes of size :math:`n` can be defined recursively as follows :cite:`mckay2003acyclic` :
+The number of :sc:`dag`\s that can be obtained from a set of nodes of size :math:`n` can be defined recursively as follows :cite:`mckay2003acyclic`:
 
 .. math::
 
