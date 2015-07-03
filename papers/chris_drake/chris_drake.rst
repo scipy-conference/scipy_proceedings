@@ -183,26 +183,28 @@ Simplification
 --------------
 
 The laws of Boolean Algebra can be used to simplify expressions.
-For example, the following are true of the ``Or`` operator
-(not a complete list):
+For example, Table :ref:`boolident` enumerates a partial list of Boolean identities
+for the ``Or`` and ``And`` operators.
 
-.. table:: Boolean OR Identities
+.. table:: Boolean OR/AND Identities :label:`boolident`
 
-   +---------------+---------------------------------------+
-   | Law           | Description                           |
-   +===============+=======================================+
-   | Commutativity | :math:`x + y = y + x`                 |
-   +---------------+---------------------------------------+
-   | Associativity | :math:`x + (y + z) = (x + y) + z`     |
-   +---------------+---------------------------------------+
-   | Identity      | :math:`x + 0 = x`                     |
-   +---------------+---------------------------------------+
-   | Domination    | :math:`x + 1 = 1`                     |
-   +---------------+---------------------------------------+
-   | Idempotence   | :math:`x + x = x`                     |
-   +---------------+---------------------------------------+
+   +---------------+-----------------------------------+---------------------------------------------------+
+   | Name          | OR                                | AND                                               |
+   +===============+===================================+===================================================+
+   | Commutativity | :math:`x + y = y + x`             | :math:`x \cdot y = y \cdot x`                     |
+   +---------------+-----------------------------------+---------------------------------------------------+
+   | Associativity | :math:`x + (y + z) = (x + y) + z` | :math:`x \cdot (y \cdot z) = (x \cdot y) \cdot z` |
+   +---------------+-----------------------------------+---------------------------------------------------+
+   | Identity      | :math:`x + 0 = x`                 | :math:`x \cdot 1 = x`                             |
+   +---------------+-----------------------------------+---------------------------------------------------+
+   | Domination    | :math:`x + 1 = 1`                 | :math:`x \cdot 0 = 0`                             |
+   +---------------+-----------------------------------+---------------------------------------------------+
+   | Idempotence   | :math:`x + x = x`                 | :math:`x \cdot x = x`                             |
+   +---------------+-----------------------------------+---------------------------------------------------+
+   | Inverse       | :math:`x + x' = 1`                | :math:`x \cdot x' = 0`                            |
+   +---------------+-----------------------------------+---------------------------------------------------+
 
-Most of these laws are computationally easy to apply.
+Most laws are computationally easy to apply.
 PyEDA allows you to construct unsimplified Boolean expressions,
 and provides the ``simplify`` method to perform such inexpensive
 transformations.
