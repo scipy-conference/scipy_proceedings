@@ -327,7 +327,7 @@ SAT has all kinds of applications in both digital design and verification.
 In digital design, it can be used in equivalence checking,
 test pattern generation, model checking, formal verification,
 and constrained-random verification, among others.
-SAT finds its ways into other areas as well.
+SAT finds its way into other areas as well.
 For example, modern package management systems such as apt and yum
 might use SAT to guarantee that certain dependencies are satisfied
 for a given configuration.
