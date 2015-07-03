@@ -765,8 +765,8 @@ The Verilog implementation, as a ``function``:
    xtime(logic [7:0] b, int n);
        xtime = b;
        for (int i = 0; i < n; i++)
-           xtime = {xtime[6:0], 1'b0}       // concatenation
-                 ^ (8'h1b & {8{xtime[7]}}); // repetition
+           xtime = {xtime[6:0], 1'b0}
+                 ^ (8'h1b & {8{xtime[7]}});
    endfunction
 
 And the PyEDA implementation:
@@ -774,7 +774,6 @@ And the PyEDA implementation:
 .. code-block:: python
 
    def xtime(b, n):
-       """Return b^n using polynomial multiplication in GF(2^8)."""
        for _ in range(n):
            b = (exprzeros(1) + b[:7]
              ^  uint2exprs(0x1b, 8) & b[7]*8)
