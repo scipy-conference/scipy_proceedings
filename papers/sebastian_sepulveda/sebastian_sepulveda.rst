@@ -96,9 +96,9 @@ The template for the communication process is implemented through the ``Communic
 
 .. code-block:: python
 
-	class CommunicationProcess(Process):
-	    def __init__(self, queue):
-	        Process.__init__(self)
+        class CommunicationProcess(Process):
+            def __init__(self, queue):
+                Process.__init__(self)
                 self.exit = Event()
                 self.queue = queue
                 # Initialize the process ...
@@ -136,16 +136,16 @@ One of the key methods of the ``CommunicationProccess`` class is ``run``. The fo
                 data = self.ser.readline().strip()
                 try:
                     data = map(float, data.split(','))
-	            self.queue.put([time() - 
+                    self.queue.put([time() - 
                                    self.init_time] + data)
-	        except:
-	            pass
-	            return
+                except:
+                    pass
+                    return
             except:
                 raise
-	    finally:
-	        self.closePort()
-	    # ...
+            finally:
+                self.closePort()
+            # ...
 
 In this case, ``run`` computes the time stamp, then checks if the serial port is open and if the process is not exiting. If both statements are true, a line is read from the serial port. Then, the data is parsed (in this example, the data stream consists of CSV floats). Finally, if the data is valid it is placed in the queue.
 
