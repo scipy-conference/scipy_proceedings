@@ -17,8 +17,8 @@ Testing Generative Models of Online Collaboration with BigBang
    BigBang provides tools for analyzing mailing lists.
    In this paper, we present results from testing a generative
    model of online collaboration in mailing lists.
-   We derive a social network fro archival mailing list history
-   and test the Barabasi-Alpert model of network formation
+   We derive a social network from archival mailing list history
+   and test the Barabási-Alpert model of network formation
    against this data.
    We find the model does not fit the data, but that mailing list
    social networks share statistical regularities not explained in
