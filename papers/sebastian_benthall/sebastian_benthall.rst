@@ -250,7 +250,8 @@ assortativity here, yes? And what about weighted degrees?]
 
 Degree assortativity in complex networks is studied by [Newman2002]_, who makes the intriguing 
 claim that observed social networks, such as coauthorship networks, exhibit positive degree
-assortativity, while technical and biological networks exhibit negative degree assortativity.
+assortativity, while technical and biological networks exhibit negative degree assortativity,
+or *disassortivity*.
 
 Newman also notes that the degree assortativity of Barabási-Alpert networks is zero.
 Variations on the Barabási-Alpert model do have other properties.
