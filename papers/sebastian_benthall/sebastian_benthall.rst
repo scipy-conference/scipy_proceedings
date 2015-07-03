@@ -207,9 +207,7 @@ of connecting to node :math:`i` is proportional to the prior degree of that node
    P(k_i) = \frac{k_i}{\sum_{j} k_j}
 
 Here, :math:`\sum_{j} k_j` is the sum of all degrees of all nodes in the graph.
-The parameter :math:`m` is fixed at each iteration for model simplicity.
-
-[AlbertBarabási]_
+The parameter :math:`m` is fixed at each iteration for model simplicity. [AlbertBarabási]_
 
 Intuitively, a social process driven by preferential attachment is one in which
 "the rich get richer".
