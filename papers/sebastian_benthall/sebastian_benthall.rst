@@ -237,19 +237,18 @@ social relationships than one based on higher-level descriptions of social
 relationships or ties from web services such as Facebook 'friends' and
 Twitter 'followers'
 
-It may be objected that since the data we are considering comes from public
+One potential objection to this approach is that since the data we are considering comes from public
 mailing lists where every message has a potentially large audience, it may be
 misleading to build a network representation on the assumption that a reply
 is directed primarily at the person who was replied to and not more broadly
 to other participants in a thread or, even more broadly, to the mailing list
 as a whole.
-
 While this is a valid objection, it points to the heart of what is distinctive
 about this research.
 While there have been many studies of social network formation in conventional
 settings, the conditions of open collaboration are potentially quite different.
 Theoretically, we expect them to be explicitly and collectively goal-directed,
-are self-organized for efficient action as opposed to positional 
+self-organized for efficient action as opposed to positional 
 social advantage, and designed around an archiving system for the sake of
 efficiency.
 Understanding the statistical properties of this particular form of social
