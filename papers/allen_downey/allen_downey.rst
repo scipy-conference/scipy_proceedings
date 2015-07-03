@@ -28,7 +28,7 @@ Will Millennials Ever Get Married?
 Introduction
 ============
 
-A recent study from the Pew Research Center [wang14]_ reports that the
+A recent study from the Pew Research Center [1]_ reports that the
 fraction of adults in the U.S. who have never married is
 increasing. Between 1960 and 2012, the fraction of men 25 and older
 who had never married increased from 10% to 23%.  The corresponding
@@ -171,7 +171,7 @@ In Python we can compute the survival function like this:
 each unique value to the number of times it appears, which we split into
 a sorted sequence of times, ``ts``, and their frequencies, ``fs``.
 
-We convert ts to a NumPy array (see `<http://www.numpy.org>`_). Then ``ps`` is
+We convert ts to a NumPy array [2]_. Then ``ps`` is
 the cumulative sum of the frequencies, normalized to go from 0 to 1, so
 it represents the CDF of the observed values. ``ss``, which is the
 complement of ``ps``, is the survival function.
@@ -212,9 +212,9 @@ compute the hazard function like this:
         return HazardFunction(lams)
 
 ``MakeHazardFunction`` is a method of ``SurvivalFunction``, which provides
-attributes ``ts`` and ``ss``. The result, ``lams``, is a Pandas Series object
+attributes ``ts`` and ``ss``. The result, ``lams``, is a Pandas Series [3]_ object
 that maps from the same set of ``ts`` to the estimated hazard function,
-:math:`\lambda(t)` (see `<http://pandas.pydata.org>`_).
+:math:`\lambda(t)`.
 
 .. figure:: marriage1
 
@@ -326,8 +326,7 @@ We wrote our own implementation of these methods in order to demonstrate
 the methodology, and also to make them work efficiently with the
 resampling methods described in the next section. But Kaplan-Meier
 estimation and other survival analysis algorithms are also available
-in a Python package called Lifelines (see
-`<http://lifelines.readthedocs.org>`_).
+in a Python package called Lifelines [4]_.
 
 Resampling
 ----------
@@ -392,7 +391,7 @@ a column that contains sampling weights, called ``finalwgt``.
 ``cdf`` represents a cumulative distribution function that maps from each
 index to its cumulative probability. The Cdf class is provided by
 ``thinkstats2.py``, a module that accompanies the second edition of
-*Think Stats* [downey14]_.  We use it here because it provides an
+*Think Stats* [5]_.  We use it here because it provides an
 efficient implementation of random sampling from an arbitrary
 distribution.
 
@@ -528,10 +527,6 @@ by age 42. This projection assumes that this cohort will also go on a
 repeated.
 
 
-.. raw:: latex
-
-    \newpage
-
 
 Discussion
 ==========
@@ -551,6 +546,7 @@ Among Millennials (women born in the 80s and 90s),
 the fraction of people marrying young is continuing to fall, but
 we also see indications that the fraction of people who never
 marry is increasing more quickly.
+
 
 
 Future work
@@ -580,13 +576,25 @@ preparation, and analysis.  And thanks to the SciPy reviewers who
 made many helpful suggestions.
 
 
-
 References
 ----------
 
-.. [downey14] Allen Downey, *Think Stats: Exploratory Data Analysis*,
-	      2nd edition, O’Reilly Media, October 2014. `<http://thinkstats2.com>`_
+.. [1] Wendy Wang and Kim Parker, “Record Share of Americans Have Never
+       Married”, Washington D.C.: Pew Research Center’s Social and Demographic
+       Trends project, September 2014. `<http://tinyurl.com/wang14pew>`_
 
-.. [wang14] Wendy Wang and Kim Parker, “Record Share of Americans Have Never
-	    Married”, Washington D.C.: Pew Research Center’s Social and Demographic
-	    Trends project, September 2014. `<http://tinyurl.com/wang14pew>`_
+.. [2] Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux. 
+       "The NumPy Array: A Structure for Efficient Numerical Computation", 
+       *Computing in Science & Engineering*, 13, 22-30 (2011)  
+       `<http://www.numpy.org>`_
+
+.. [3] Wes McKinney. "Data Structures for Statistical Computing in Python", 
+       *Proceedings of the 9th Python in Science Conference*, 51-56 (2010)
+       `<http://pandas.pydata.org>`_.
+
+.. [4] Cameron Davidson-Pilon, Lifelines, (2015), Github repository,
+       `<https://github.com/CamDavidsonPilon/lifelines>`_
+
+.. [5] Allen Downey, *Think Stats: Exploratory Data Analysis*,
+       2nd edition, O’Reilly Media, October 2014. `<http://thinkstats2.com>`_
+
