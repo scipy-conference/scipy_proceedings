@@ -180,31 +180,49 @@ node's *degree*) converges to a power law function:
 
 (Scale-free referes to the scale invariance of the power law distribution.)
 
-The other most widely known random graph model, the Erdős-Rénri model, produces
-networks with normal(?) degree distribution.
+The prevalence of scale-free networks in nature has raised the question of what
+generative processes produce networks with this property.
+What was at one point the most well-known random graph model, the Erdős-Rénri model,
+produces networks with binomial degree distribution.
 Barabási and Alpert [BarabásiAlbert]_ have proposed a model of network generation
 that produces graphs with scale-free degree distribution.
 The Barabási-Alpert model is now widely known in the literature.
 
 The attractiveness of the Barabási-Alpert model is due in part to its being a
-generative model, meaning that it describes a process for creating data of an
+generative model that describes a process for creating data of an
 observed distribution, as opposed to being simply a description of the distribution
 itself.
 This gives the Barabási-Alpert model explanatory power.
 
 In particular, the Barabási-Alpert model attributes the scale-free distribution of
-node degree to a *preferential attachment* mechanism. 
+node degree to a *preferential attachment* mechanism, parameterized by :math:`m_0` and
+:math:`m`.
 The network is formed by beginning with a small number :math:`m_0` of nodes and adding
 new nodes, connecting each new node to :math:`m < m_0` nodes, where the probability
-of connecting to node :math:`i` is relative to the prior degree of that node,
+of connecting to node :math:`i` is proportional to the prior degree of that node,
 :math:`k_i`:  adding new nodes to the network one by one. 
 
 .. math::
 
-   \Pi(k_i) = \frac{k_i}{\sum_{j} k_j}
+   P(k_i) = \frac{k_i}{\sum_{j} k_j}
 
+Here, :math:`\sum_{j} k_j` is the sum of all degrees of all nodes in the graph.
+The parameter :math:`m` is fixed at each iteration for model simplicity.
 
 [AlbertBarabási]_
+
+Intuitively, a social process driven by preferential attachment is one in which
+"the rich get richer".
+Consider the social graph from an on-line social network such as Facebook or
+Twitter.
+New entrants to the network will 'friend' or 'follow' existing nodes.
+If they preferentially attach, the will be much more likely to connect to
+celebrities who already dominate the network than to new entrants such
+as themselves.
+The most highly connected participants will likely owe their position in
+the network to their seniority.
+There is no mechanism for intentional balancing of participation or onboarding
+of new participants.
 
 The Barabási-Alpert model is favored for its simplicity, its intuitively clear mechanism 
 of preferential attachment, and for its analytic tractability.
