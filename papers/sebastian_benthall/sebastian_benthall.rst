@@ -128,6 +128,175 @@ the Scientific Python technologies and communities.
 Our goal is for BigBang to provide a new means for these communities to engage
 in scientific self-management.
 
+Testing Generative Models of Online Collaboration
+-------------------------------------------------
+
+As a demonstration of BigBang's capabilities, in this paper
+we will test a well known generative model of network formation
+against social network data derived from public mailing list discussions.
+A generative model is a formal model that describes a process
+through which data is generated.
+A principle benefit of a formal generative model is that the statistical
+properties of data it generates can be compared with the statistical
+properties of empirical data.
+Such comparisons are one way to get empirical purchase on the mechanism
+behind even purely observational data.
+Discovering a concise generative model that fits data from on-line collaboration
+would give us insight into the mechanism of collaboration itself.
+
+In this paper, we will test one well known generative model of network data,
+the Barabási-Alpert model.
+This model describes a process by which new nodes, as they join a network,
+form edges with other nodes with probability proportional to their degree.
+This process is called *preferential attachment*.
+In social networks, it is suggestive of a network dominated by one or two luminaries.
+In its basic form, this model generates networks with two notable statistical properties:
+
+- The degree distributions of Barabási-Alpert networks is *scale-free*, meaning that
+  the fraction of nodes of degree :math:`k` falls asymptotically according to a power law distribution.
+  :math:`P(k) \sim k^{-\gamma}` for some positive :math:`\gamma`.
+- The correlation between the degrees of adjacent nodes is zero.
+
+We discover in our empirical data that neither of these properties hold for the social
+networks fo public mailing list discussions.
+This suggests that preferential attachment is not a mechanism that dominates
+the social interactions on the collaborative projects represented in our data.
+On the contrary, the statistical properties of public mailing list discussions
+suggest that participation is more widely distributed than in many other social
+networks, and that interaction with new participations is a priority.
+
+
+Preferential attachment model
+-----------------------------
+
+A early result in the study of complex networks was the observation that many networks
+existing in nature exhibit a scale-free degree distribution.
+This means that the distribution of the number of edges of each node in the network (the
+node's *degree*) is a power law distribution, characterized by the formula: 
+
+.. math::
+
+   formula here
+
+The other most widely known random graph model, the Erdős-Rénri model, produces
+networks with normal(?) degree distribution.
+Barabási and Alpert [BarabásiAlbert]_ have proposed a model of network generation
+that produces graphs with scale-free degree distribution.
+The Barabási-Alpert model is now widely known in the literature.
+
+The attractiveness of the Barabási-Alpert model is due in part to its being a
+generative model, meaning that it describes a process for creating data of an
+observed distribution, as opposed to being simply a description of the distribution
+itself.
+This gives the Barabási-Alpert model explanatory power.
+
+In particular, the Barabási-Alpert model attributes the scale-free distribution of
+node degree to a *preferential attachment* mechanism. 
+The network is formed by beginning with a small number :math:`m_0` of nodes and adding
+new nodes, connecting each new node to :math:`m < m_0` nodes, where the probability
+of connecting to node :math:`i` is relative to the prior degree of that node,
+:math:`k_i`:  adding new nodes to the network one by one. 
+
+.. math::
+
+   \Pi(k_i) = \frac{k_i}{\sum_{j} k_j}
+
+
+[AlbertBarabási]_
+
+The Barabási-Alpert model is favored for its simplicity, its intuitively clear mechanism 
+of preferential attachment, and for its analytic tractability.
+As said above, the degree distribution of Barabási-Alpert networks is power law.
+
+Degree assortativity
+--------------------
+
+Degree assortativity is the correlation between degrees of adjacent nodes in the network.
+Following the definitions of [Newman2003]_, the degree assorativity coefficient is
+
+.. math::
+
+   r = \frac{\sum_{jk}jk(e_{jk} - q_{j}q_{k}))}{\sigma_{q}^{2}}
+
+In the above formula, :math:`e_{jk}` is the fraction of edges the connect vertices
+of degree :math:`j + 1` and :math:`k + 1`, i.e. the degrees of the connected vertices
+not including the connecting edge itself. [Newman2003] calls this *excess degree*.
+The value :math:`q_k` is the distribution of excess degree.
+
+.. math::
+
+   \sum_{j} e_{jk} = q_{k}
+
+The value :math:`\sigma_{q}` is the standard deviation of :math:`q_k`. [TODO: I'm using directed
+assortativity here, yes? And what about weighted degrees?]
+
+Degree assortativity in complex networks is studied by [Newman2002]_, who makes the intriguing 
+claim that observed social networks, such as coauthorship networks, exhibit positive degree
+assortativity, while technical and biological networks exhibit negative degree assortativity.
+
+Newman also notes that the degree assortativity of Barabási-Alpert networks is zero.
+Variations on the Barabási-Alpert model do have other properties.
+(cite: http://arxiv.org/pdf/cond-mat/0402315.pdf)
+
+Studies have supported the role of a preferential attachment mechanism in social network
+formation [Zhou2011]_ [Tinatti2012]_.
+However, these studies do not take degree assortativity into account.
+This leaves open the question of whether the Barabási-Alpert model is sufficient to
+characterize these networks.
+
+Power law or log normal?
+------------------------
+
+A further challenge to the Barabási-Alpert model comes from [Clauset2007]_, who argue that
+many conventionally accepted techniques for fitting power law distributions to empirical data 
+are biased and unsound.
+They propose a Bayesian technique for testing power law distributions.
+By computing the likelihood of the data being generated by a power law distribution and
+comparing it with the likelihood of it being generated by other heavy-tail distributions,
+such as the log normal distribution, they provide a statistically sound basis for model
+comparison.
+The Clauset et al. method also carefully considers only the tail of the data, picking a
+cutoff value below which data are ignored.
+This method of testing power law distributions is implemented in Python in the `powerlaw`
+package by [Alstott2014]_
+
+From a Bayesian perspective, the ratio of likelihoods represents how much one should
+update ones beliefs based on observation of data.
+In this case, the computed likelihood ratio of the data being generated by a power law
+over a log normal distribution would be interpreted as how much one should be
+persuaded that the data came from a power law distribution based on ones prior
+belief in the originary distribution of data in general.
+
+While this may be a perplexingly abstract way of considering the problem for a
+non-Bayesian, there is an argument that log normal distributions should be
+given a higher prior probability than power law distributions.
+This is because of the Central Limit Theorem, from which it follows that
+a log normal distribution would result from the multiplication of many
+other otherwise distributed factors.
+
+There are two consequences of these considerations.
+First, it makes sense to consider log normal distributions as a kind of null hypotheses
+against which empirical claims to power law generation must be proven.
+Second, it suggest that where a log normal is discovered, the generative mechanism that
+produced it is not the same as the generative mechanism that produces a power law.
+In particular, we would not expect a network that exhibits a log normal power law
+distribution to be generated by preferential attachment, at least as formalized
+specifically by Barabási and Alpert.
+
+
+
+
+
+
+Methods
+-------
+
+We built interaction graphs according to the above procedure for 10 mailing lists from open
+collaborative communities.
+We then computed the degree assortativity of these networks.
+We also used the Alstott package to test the degree distribution of these networks using
+the Clauset method.
+
 Email data collection
 ---------------------
 
@@ -338,132 +507,6 @@ nodes.
 The `sent` attribute of the new node is also set as the sum of the `sent` attribute of the
 original nodes.
 
-Preferential attachment model
------------------------------
-
-A early result in the study of complex networks was the observation that many networks
-existing in nature exhibit a scale-free degree distribution.
-This means that the distribution of the number of edges of each node in the network (the
-node's *degree*) is a power law distribution, characterized by the formula: 
-
-.. math::
-
-   formula here
-
-The other most widely known random graph model, the Erdős-Rénri model, produces
-networks with normal(?) degree distribution.
-Barabási and Alpert [BarabásiAlbert]_ have proposed a model of network generation
-that produces graphs with scale-free degree distribution.
-The Barabási-Alpert model is now widely known in the literature.
-
-The attractiveness of the Barabási-Alpert model is due in part to its being a
-generative model, meaning that it describes a process for creating data of an
-observed distribution, as opposed to being simply a description of the distribution
-itself.
-This gives the Barabási-Alpert model explanatory power.
-
-In particular, the Barabási-Alpert model attributes the scale-free distribution of
-node degree to a *preferential attachment* mechanism. 
-The network is formed by beginning with a small number :math:`m_0` of nodes and adding
-new nodes, connecting each new node to :math:`m < m_0` nodes, where the probability
-of connecting to node :math:`i` is relative to the prior degree of that node,
-:math:`k_i`:  adding new nodes to the network one by one. 
-
-.. math::
-
-   \Pi(k_i) = \frac{k_i}{\sum_{j} k_j}
-
-
-[AlbertBarabási]_
-
-The Barabási-Alpert model is favored for its simplicity, its intuitively clear mechanism 
-of preferential attachment, and for its analytic tractability.
-As said above, the degree distribution of Barabási-Alpert networks is power law.
-
-Degree assortativity
---------------------
-
-Degree assortativity is the correlation between degrees of adjacent nodes in the network.
-Following the definitions of [Newman2003]_, the degree assorativity coefficient is
-
-.. math::
-
-   r = \frac{\sum_{jk}jk(e_{jk} - q_{j}q_{k}))}{\sigma_{q}^{2}}
-
-In the above formula, :math:`e_{jk}` is the fraction of edges the connect vertices
-of degree :math:`j + 1` and :math:`k + 1`, i.e. the degrees of the connected vertices
-not including the connecting edge itself. [Newman2003] calls this *excess degree*.
-The value :math:`q_k` is the distribution of excess degree.
-
-.. math::
-
-   \sum_{j} e_{jk} = q_{k}
-
-The value :math:`\sigma_{q}` is the standard deviation of :math:`q_k`. [TODO: I'm using directed
-assortativity here, yes? And what about weighted degrees?]
-
-Degree assortativity in complex networks is studied by [Newman2002]_, who makes the intriguing 
-claim that observed social networks, such as coauthorship networks, exhibit positive degree
-assortativity, while technical and biological networks exhibit negative degree assortativity.
-
-Newman also notes that the degree assortativity of Barabási-Alpert networks is zero.
-Variations on the Barabási-Alpert model do have other properties.
-(cite: http://arxiv.org/pdf/cond-mat/0402315.pdf)
-
-Studies have supported the role of a preferential attachment mechanism in social network
-formation [Zhou2011]_ [Tinatti2012]_.
-However, these studies do not take degree assortativity into account.
-This leaves open the question of whether the Barabási-Alpert model is sufficient to
-characterize these networks.
-
-Power law or log normal?
-------------------------
-
-A further challenge to the Barabási-Alpert model comes from [Clauset2007]_, who argue that
-many conventionally accepted techniques for fitting power law distributions to empirical data 
-are biased and unsound.
-They propose a Bayesian technique for testing power law distributions.
-By computing the likelihood of the data being generated by a power law distribution and
-comparing it with the likelihood of it being generated by other heavy-tail distributions,
-such as the log normal distribution, they provide a statistically sound basis for model
-comparison.
-The Clauset et al. method also carefully considers only the tail of the data, picking a
-cutoff value below which data are ignored.
-This method of testing power law distributions is implemented in Python in the `powerlaw`
-package by [Alstott2014]_
-
-From a Bayesian perspective, the ratio of likelihoods represents how much one should
-update ones beliefs based on observation of data.
-In this case, the computed likelihood ratio of the data being generated by a power law
-over a log normal distribution would be interpreted as how much one should be
-persuaded that the data came from a power law distribution based on ones prior
-belief in the originary distribution of data in general.
-
-While this may be a perplexingly abstract way of considering the problem for a
-non-Bayesian, there is an argument that log normal distributions should be
-given a higher prior probability than power law distributions.
-This is because of the Central Limit Theorem, from which it follows that
-a log normal distribution would result from the multiplication of many
-other otherwise distributed factors.
-
-There are two consequences of these considerations.
-First, it makes sense to consider log normal distributions as a kind of null hypotheses
-against which empirical claims to power law generation must be proven.
-Second, it suggest that where a log normal is discovered, the generative mechanism that
-produced it is not the same as the generative mechanism that produces a power law.
-In particular, we would not expect a network that exhibits a log normal power law
-distribution to be generated by preferential attachment, at least as formalized
-specifically by Barabási and Alpert.
-
-
-Methods
--------
-
-We built interaction graphs according to the above procedure for 10 mailing lists from open
-collaborative communities.
-We then computed the degree assortativity of these networks.
-We also used the Alstott package to test the degree distribution of these networks using
-the Clauset method.
 
 Results
 -------
