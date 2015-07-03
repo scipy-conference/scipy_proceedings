@@ -78,7 +78,7 @@ including but not limited to:
 - version control systems such as Git
 - issue trackers such as GitHub and Bugzilla
 
-This data is complex in it has many dimensions that afford very different
+This data is complex in that it has many dimensions that afford very different
 kinds of analysis:
 
 - **Time.** All data from online collaboration infrastructure is timestamped,
