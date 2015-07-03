@@ -253,6 +253,14 @@ Currently, expressions also support conversion to the following forms:
 * Disjunctive Normal Form (DNF)
 * Conjunctive Normal Form (CNF)
 
+DNF and CNF expressions are "two-level" forms.
+That is, the entire expression is either an ``Or`` of ``And`` clauses (DNF),
+or an ``And`` of ``Or`` clauses (CNF).
+DNF expressions are also called "covers",
+and are important in both two-level and multi-level logic minimization.
+CNF expressions play a very important role in satisfiability.
+We will briefly cover both of these topics in subsequent sections.
+
 Visualization
 -------------
 
