@@ -311,7 +311,7 @@ In mathematical terms the output :math:`y(t)` is the integral
 Students frequently have problems setting up and evaluating the convolution integral. The waveforms of interest are
 typically piecewise continuous, so the integral must be evaluated over one or more contiguous intervals. Consider the
 case of :math:`x(t) = u(t) - u(t-T)`, where :math:`u(t)` is the unit step function, and :math:`h(t) = a e^{-at}u(t)`,
-where :math:`a > 0`. To be effective in solving this problem I start with a sketch of the
+where :math:`a > 0`. To be effective in solving this problem I have students start with a sketch of the
 integrand :math:`h(\lambda)x(t-\lambda)`, as shown in Fig. :ref:`fig12`.
 From there you can discover the support intervals or *cases* for evaluating the integral.
 
@@ -336,7 +336,9 @@ To bring closure to the tedious analytical solution development, I encourage stu
 ``ssd.conv_integral()`` performs numerical evaluation of the convolution integral for both finite and semi-infinite extent
 limits. The student simply needs to provide an array of signal/impulse response sample values over the complete
 support interval. The screen capture of Fig. :ref:`fig11` shows how this is done in a notebook. Parameter variation is also
-explored. This is also an opportunity for incorporating notebook controls/widgets.
+explored. Seeing the two approaches agree is a very powerful testimony to how the IPython notebook improves
+learning and understanding.
+This is also an opportunity for incorporating notebook controls/widgets.
 
 .. figure:: scipy_2015_fig11.pdf
    :scale: 55%
