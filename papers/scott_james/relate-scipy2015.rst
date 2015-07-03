@@ -35,28 +35,28 @@ despite this wealth of machinery, we would get caught up on the little
 things.
 
 There may be thousands of flights in the air at any one time, but there
-are fewer types of aircraft. There may be millions of vehicles on the
-road, but only a handful of vehicle categories. Whereas we could place
-these mini-databases into our data crunching tools as auxiliary tables,
-we didn't. It didn't make sense to do a table merge on streaming data
-when we could do a quick lookup, on-the-fly, when we needed to. We
-didn't want to create a table with ten rows and two columns when we
-could easily put that information into a dictionary, or a list. We
-didn't want to implement our transient, sparse table with a graph
-database or create tables with an 'other' column which would then have
-to parse anyhow. And besides the traffic specific information, there
-were all those other pesky details: file tags, user aliases, color maps.
+are far fewer *types* of aircraft. There may be millions of vehicles on
+the road, but only a handful of vehicle categories. Whereas we could
+place these mini-databases into our data crunching tools as auxiliary
+tables, we didn't. It didn't make sense to perform a table merge with
+streaming data when we could do a quick lookup, on-the-fly, when we
+needed to. We didn't want to create a table with ten rows and two
+columns when we could easily put that information into a dictionary, or
+a list. We didn't want to implement our transient, sparse table with a
+graph database or create tables with an 'other' column which we would
+then have to parse anyhow. And besides the traffic specific information,
+there were all those other pesky details: file tags, user aliases, color
+maps.
 
-So instead we cobbled together our mini-databases with what we had
-within easy mental reach: lists, sets and dictionaries. And then when
-we'd need to do a search, or invert keys/values, or assure uniqueness of
-mappings, and so we'd create a loop, a list comprehension, a helper
-class, or we'd make it back into a table.
+Instead we cobbled together our mini-databases with what we had within
+easy mental reach: lists, sets and dictionaries. And when we needed to
+do a search, or invert keys/values, or assure uniqueness of mappings, we
+would create a loop, a list comprehension or a helper class.
 
 After some time it occurred to us that what we were really doing with
 our less-than-big data was reinventing a mathematical relation, ... over
 and over again. Once we realized that, we replaced the bookkeeping code
-managing our mini-databases with a relation instance. This resulted in a
+managing our mini-databases with relation instances. This resulted in a
 variety of good things: reduced coding overhead, increased clarity of
 purpose and, oddly, improved computational efficiency.
 
@@ -78,12 +78,12 @@ common tasks:
 
 -  **Tagging**: associate two sets in an arbitrary manner
 
-These correspond to the four *cardinalities* of a relation:
+These roughly correspond to the four *cardinalities* of a relation:
 
--  **Many-to-one (M:1)**: a function, each value range having possibly
+-  **Many-to-one (M:1)**: a function, each range value having possibly
    multiple values in the domain
--  **Many-to-one (1:M)**: a categorization, where each element in the
-   domain provides a unique group for multiple values in the range
+-  **One-to-many (1:M)**: a categorization, where each element in the
+   domain is associated with a unique group of values in the range
 -  **One-to-one (1:1)**: an isomorphism, where each element in the
    domain is uniquely identified with a single range value
 -  **Many-to-many (M:N)**: an unrestricted pairing of domain and range
@@ -103,30 +103,29 @@ The API
 -------
 
 Using a relation should be easy, as easy as using any fundamental
-container. As it is intended for smaller, ad hoc structures it should
-involve as little programming friction as possible. It should feel
-natural and familiar. To accomplish these goals, we created our Relation
-class by inheriting and extending *MutableMapping*:
+container. It should involve as little programming friction as possible.
+It should feel natural and familiar. To accomplish these goals, we
+created our Relation class by inheriting and extending *MutableMapping*:
 
-+-------------------+---------------------------------------------------------------------------------------------------------------------+
-| Method            | Comment                                                                                                             |
-+===================+=====================================================================================================================+
-| ``__init__``      | establish the cardinality and ordering of a Relation                                                                |
-+-------------------+---------------------------------------------------------------------------------------------------------------------+
-| ``__setitem__``   | assign a range element to a domain element                                                                          |
-+-------------------+---------------------------------------------------------------------------------------------------------------------+
-| ``__getitem__``   | retrieve range element(s) for a domain element                                                                      |
-+-------------------+---------------------------------------------------------------------------------------------------------------------+
-| ``__delitem__``   | remove a domain element and all associated range pairings. If range element has no remaining pairings, delete it.   |
-+-------------------+---------------------------------------------------------------------------------------------------------------------+
-| ``extend``        | combine two Relation objects                                                                                        |
-+-------------------+---------------------------------------------------------------------------------------------------------------------+
-| ``values``        | return the domain                                                                                                   |
-+-------------------+---------------------------------------------------------------------------------------------------------------------+
-| ``keys``          | returns list of domains                                                                                             |
-+-------------------+---------------------------------------------------------------------------------------------------------------------+
-| ``__invert__``    | swap domain and range                                                                                               |
-+-------------------+---------------------------------------------------------------------------------------------------------------------+
++-------------------+-------------------------------------------------------------------------------------------------------------------------+
+| Method            | Comment                                                                                                                 |
++===================+=========================================================================================================================+
+| ``__init__``      | establish the cardinality and ordering of a Relation                                                                    |
++-------------------+-------------------------------------------------------------------------------------------------------------------------+
+| ``__setitem__``   | assign a range element to a domain element                                                                              |
++-------------------+-------------------------------------------------------------------------------------------------------------------------+
+| ``__getitem__``   | retrieve range element(s) for a domain element                                                                          |
++-------------------+-------------------------------------------------------------------------------------------------------------------------+
+| ``__delitem__``   | remove a domain element and all associated range pairings. If the range element has no remaining pairings, delete it.   |
++-------------------+-------------------------------------------------------------------------------------------------------------------------+
+| ``extend``        | combine two Relation objects                                                                                            |
++-------------------+-------------------------------------------------------------------------------------------------------------------------+
+| ``values``        | return the domain                                                                                                       |
++-------------------+-------------------------------------------------------------------------------------------------------------------------+
+| ``keys``          | returns list of domains                                                                                                 |
++-------------------+-------------------------------------------------------------------------------------------------------------------------+
+| ``__invert__``    | swap domain and range                                                                                                   |
++-------------------+-------------------------------------------------------------------------------------------------------------------------+
 
 In essence, it will look and feel like a dictionary, but with some
 twists.
@@ -158,7 +157,7 @@ Produces a *set* of values:
 
     {'low-rain','low-wind'}
 
-Relation also provides an inverse, for range-domain queries:
+Relation also provides an inverse:
 
 ::
 
@@ -168,11 +167,11 @@ Also producing a set of values:
 
 ::
 
-    {'2014-7-25','2014-7-24'}    
+    {'2014-7-25','2014-7-24'} 
 
 For our work, other many-to-many relations include:
 
--  Flight numbers and airports for a specific hour of analysis
+-  Flight numbers and airports
 -  Auto makers and vehicle classes
 -  Neighboring planes (or autos) at an instant of time
 
@@ -232,8 +231,8 @@ And assignments overwrite *both* the domain and the range:
 
 Note that, similar to a dictionary silently overwriting a key-value
 pair, a 1:1 relation silently overwrites a value-key pair, and in this
-case removes stranded key. Also worth nothing, for cardinalities M:1 and
-1:1, a dictionary literal can also serve as syntactic sugar for an
+case, removes the stranded key. Also worth noting, for cardinalities M:1
+and 1:1, a dictionary literal can also serve as syntactic sugar for an
 initializer:
 
 ::
@@ -251,51 +250,104 @@ For our work, other 1:1 mappings include:
 -  Color codes and their representations in various simulation tools
    (using a chain of 1:1 containers)
 
-Relation Performance
---------------------
+Comparing Relation Implementations
+----------------------------------
 
-A relation is fast, as fast as a dictionary. It should be; it is
-implemented by two dictionaries: one for each mapping direction. For
-comparison, implement a many-to-many relation using a data frame:
+The relation container is fast, as fast as a dictionary. It should be;
+it is implemented by two dictionaries: one for each mapping direction.
+However, there are other ways to implement many-to-many relations. In
+this section we compare the relation against two other implementations:
+a Pandas data frame and a NetworkX graph.
 
-+-------------+------------------+
-| Day         | Condition        |
-+=============+==================+
-| 2014-7-11   | rainy            |
-+-------------+------------------+
-| 2014-7-11   | windy            |
-+-------------+------------------+
-| 2014-7-12   | sunny            |
-+-------------+------------------+
-| 2014-7-13   | rainy            |
-+-------------+------------------+
-| 2014-7-13   | low-visibility   |
-+-------------+------------------+
-| 2014-7-13   | windy            |
-+-------------+------------------+
-| ...         |                  |
-+-------------+------------------+
+Our test data will consist of 200 two-digit alphanumeric values (domain)
+and 1 million numeric values (range) for a total of approximately 10
+million unique entries. We describe the implementations of the lookups
+and then compare speeds.
 
-Now compare the speeds for a data frame lookup:
+Data Frame
+~~~~~~~~~~
+
+To implement a M:N relationship using a data frame, we create a
+two-column table:
+
++----------+----------+
+| Domain   | Range    |
++==========+==========+
+| UF       | 423423   |
++----------+----------+
+| OP       | 3242     |
++----------+----------+
+| FD       | 887267   |
++----------+----------+
+| YR       | 343      |
++----------+----------+
+| ...      | ...      |
++----------+----------+
+
+A forward search can performed as follows:
+
+``df['range']==887267]['domain']``
+
+And a reverse search as:
+
+``df[df['domain']=='YR']['range']``
+
+Each of these searches can be accelerated by indexing.
+
+NetworkX
+~~~~~~~~
+
+To implement an M:N relation using a NetworkX Graph we use a bipartite
+graph, that is, a graph connecting two disjoint sets, creating the
+relations by linking the nodes from one set (domain) to another set
+(range)
+
+Both forward and reverse searches are performed in the same manner:
 
 ::
 
-    weather[weather['condition'] == 'rainy']
+    # forward, using domain nodes
+    G.neighbors('YR')
+    # reverse, using range nodes
+    G.neighbors(887267)
 
-With an inverse:
+Timings
+~~~~~~~
 
-::
+We collect timings using the Python's ``timeit`` function:
 
-    (~weather)['rainy']
++--------------------+----------------+----------------+
+| Method             | Forward (ms)   | Reverse (ms)   |
++====================+================+================+
+| Pandas             | 7.34e2         | 7.94e1         |
++--------------------+----------------+----------------+
+| Pandas (indexed)   | 1.97e2         | 7.81e-2        |
++--------------------+----------------+----------------+
+| Graph              | 9.47e0         | 6.84e-4        |
++--------------------+----------------+----------------+
+| Relate             | 3.76e-4        | 4.58e-4        |
++--------------------+----------------+----------------+
 
-You'll see a difference, over three magnitudes of difference for tables
-of 1 million rows or less. Of course, the relation is cheating: it
-precomputed the inverse ahead of time, indexing the two searches it was
-built to handle. Moreover, it did so at a cost of doubling the storage.
+In all cases, Relate is faster, most significantly when searching on
+strings as opposed to numeric values. Of course, data frames and graphs
+have many more features than a relation. Also, the two-dictionary
+Relation implementation is cheating: it precomputed the only two
+searches it was built to handle; moreover, it did so at a cost of
+doubling the memory footprint. But this is precisely the use-case for
+which the relation was created: space at non-critical levels but economy
+of code and code performance crucial.
 
-But this is precisely the use-case for which the relation was created:
-space at non-critical levels but economy of code and performance
-crucial.
+Sparse Matrix
+~~~~~~~~~~~~~
+
+One other implementation worth mentioning is a sparse matrix. Viewing
+the nonzero elements of a sparse matrix as a connection between the row
+(domain) and column (range) indices also produces an M:N relationship.
+The power of the sparse matrix is in its suitability to large-scale
+numerical computations. The relation container proposed, however, is
+designed to match general datatypes, including non-numerical. Providing
+a direct comparison between the two is thus somewhat difficult as the
+two are used for different purposes.
 
 More Examples
 -------------
@@ -306,7 +358,7 @@ contexts. A few more examples are worth mentioning.
 Tags (Many-to-Many)
 ~~~~~~~~~~~~~~~~~~~
 
-Over the last decade we've seen *tags* invade our previously
+Over the last decade, we've seen *tags* invade our previously
 hierarchical organized data. Tags are now ubiquitous, attached to our:
 photos, files, URL bookmarks, to-do items etc ...
 
@@ -329,17 +381,17 @@ Tags are also exactly a many-to-many relationship:
     files['departure-procedures.doc']
     > {2015,'KATL'}
 
-We tag our simulation products to allow us to access them later in a
-variety of ways. With an in-code tagging scheme we can automatically
-attach tags at the file system level and then be able to query these
-tags with both in-code and operating system level tools.
+We tag our simulation products to allow flexible retrieval and
+searching. With an in-code tagging scheme we can automatically attach
+tags at the file system level and then query these tags with both
+in-code and operating system level tools.
 
 Taxonomies (One-to-Many)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 We mentioned earlier that the 1:M relation is a partition, a way to
 categorize objects into groups. Nesting 1:M relations creates a
-backward-searchable taxonomy. An example in our work are en route air
+backward-searchable taxonomy. An example in our work are en-route air
 traffic sectors, the nested polyhedrons through which aircraft fly:
 
 ::
@@ -365,11 +417,11 @@ progresses.
 When to Use What for What
 -------------------------
 
-Modern high-level computing languages provide us with a wealth of
+Modern high-level computing languages provide us with a robust set of
 containers. We feel, of course, that a relation container is a valuable
 addition but, we also feel one should use the most economical container
 for the task. Asking questions about the type of data being stored and
-the relationship between an element and its attributes is crucial even
+the relationship between an element and its attributes is crucial, even
 for the less-than-big data:
 
 +------------------------------------------+--------------------+
