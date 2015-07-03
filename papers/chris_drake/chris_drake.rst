@@ -53,7 +53,7 @@ students at Vanderbilt University used it to model system reliability [Nan14]_,
 and students at Saarland University used as part of a fast DQBF Refutation tool [Fin14]_.
 
 Even though the name "PyEDA" implies that the library is specific to EDA,
-it is actually very general in nature.
+it is actually general in nature.
 Some of the techniques used for designing and verifying digital logic are
 fundamental to computer science.
 For example, we will discuss applications of Boolean satisfiability (SAT),
@@ -257,7 +257,7 @@ That is, the entire expression is either an ``Or`` of ``And`` clauses (DNF),
 or an ``And`` of ``Or`` clauses (CNF).
 DNF expressions are also called "covers",
 and are important in both two-level and multi-level logic minimization.
-CNF expressions play a very important role in satisfiability.
+CNF expressions play an important role in satisfiability.
 We will briefly cover both of these topics in subsequent sections.
 
 Visualization
@@ -353,7 +353,7 @@ For example:
 
 When an expression is not a CNF,
 PyEDA will resort to a standard, backtracking algorithm.
-The worst-case performance of this implementation is very bad,
+The worst-case performance of this implementation is exponential,
 but is acceptable for many real-world scenarios.
 
 Tseitin Transformation
@@ -512,7 +512,7 @@ In 1986, Randal Bryant introduced the reduced, ordered BDD (ROBDD).
 The ROBDD is a canonical form,
 which means that given an identical ordering of input variables,
 equivalent Boolean functions will always reduce to the same ROBDD.
-This is a very desirable property for determining formal equivalence.
+This is a desirable property for determining formal equivalence.
 Also, it means that unsatisfiable functions will be reduced to zero,
 making SAT/UNSAT calculations trivial.
 Due to these auspicious properties,
@@ -526,8 +526,8 @@ will result in an exponentially-sized graph data structure.
 Construction
 ------------
 
-PyEDA's BDD API is very similar to logic expression.
-You can construct a BDD by starting with symbolic BDD variables
+Like logic expressions,
+you can construct a BDD by starting with symbolic variables
 and combining them with operators.
 
 For example:
@@ -820,16 +820,15 @@ and therefore will have some trouble competing with the raw performance
 of PyEDA's C extensions.
 
 Another tremendous influence was Ilan Schnell's ``pycosat`` module [Pycosat]_.
-It implements a very similar Python interface to the PicoSAT SAT solver [Bie08]_,
+It implements a similar Python interface to the PicoSAT SAT solver [Bie08]_,
 but does not delve into the area of symbolic Boolean algebra.
-Therefore, it's API is more low-level.
 
 Steve Haynal and others at the University of California Santa Barbara have implemented
 `PyCUDD <http://bears.ece.ucsb.edu/pycudd.html>`_,
 a Python binding to the well-known [CUDD]_ library.
 
 The `Sage Math <http://doc.sagemath.org>`_ project implements
-logic and sat modules with very similar features to PyEDA's.
+logic and sat modules with similar features to PyEDA's.
 
 Lastly, there are a few notable Python bindings to other SAT libries.
 `python-minisat <https://github.com/tfukushima/python-minisat>`_,
