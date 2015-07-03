@@ -666,7 +666,7 @@ A classic example of the three-levels of analysis are different ways of studying
 Causal theories: ontology, plausible relations, functional form
 ===============================================================
 
-Griffiths and Tenenbaum :cite:`griffithst09` point out their framework generalizes the notion of specifying a Bayesian network in the same way first order logic generalizes propositional logic. It does so by requiring the elements necessary to populate a graph with nodes, those nodes with properties, and relations between the nodes, stating which of those relations are plausible(and how plausible), and a specific, precise formulation for how those relations manifest in terms of the semantics. In the terms of :cite:`griffithst09`'s theory-based causal induction, this requires specifying an ontology, plausible relations over those ontologies, and functional forms for parameterizing those relations.
+Griffiths and Tenenbaum :cite:`griffithst09` identify that their framework generalizes specifying Bayesian network in the same way first-order logic generalizes specifying propositions in propositional logic. It requires the elements necessary to populate a graph with nodes, those nodes with properties, and relations between the nodes, stating which of those relations are plausible(and how plausible), and a specific, precise formulation for how those relations manifest in terms of the semantics. In the terms of :cite:`griffithst09`'s theory-based causal induction, this requires specifying an ontology, plausible relations over those ontologies, and functional forms for parameterizing those relations.
 
 Ontology
 ^^^^^^^^
@@ -692,18 +692,25 @@ Functional form
 Generalizations to other kinds of logical/graphical conditions
 ==============================================================
 
-The Griffiths and Tenenbaum framework is richer than the examples they develop in :cite:`griffithst09`. We can express conditions of graphical connectivity, alternative functional forms, substructures of constrained plausible relations, among many others.
+The Griffiths and Tenenbaum framework is richer than the set of examples developed in :cite:`griffithst09`. It can also express conditions of graphical connectivity, context-sensitive functional forms, substructures of constrained plausible relations, among many others.
 
-Because the plausible relations are in general described as sufficiency statements, the idea is that most relations are not plausible. However, we can also make necessary statements about the kinds of relations that must be there. And in general one can see this as selecting a subset of all the possible graphs implementable by the set of nodes defined by the ontology.
+In :cite:`griffithst09`, plausible relations are described in terms of sufficient conditions, implicitly suggesting that most relations are not plausible. However, we can also make necessary statements about the kinds of relations that *must* be there. And one can see this as selecting a subset of all the possible graphs implementable by the set of nodes defined by the ontology. It is for this purpose that I first arrived at the node enumeration.
 
 Part of the aim of developing `Causal Bayesian NetworkX`_ is to provide a programming framework in which the richness of causal theories are able to be expressed. Because of the utilities in :code:`networkX`, with the enumerating, filtering and conditioning functions described above, it becomes much easier to implement higher-order graphical conditions (e.g., a directed path necessarily existing between two nodes) than in the original notation described in the framework. These ideas were entirely expressible in the original mathematical framework, but would have required a good deal more notational infrastructure to represent. Here, we not only provide a notation, but a computational infrastructure for applying these kinds of conditions.
 
 Uses in modeling human cognition
 ================================
 
-Using this framework, Griffiths and Tenenbaum were able to provide comprehensive coverage for a number of human psychology experiments. To avoid further overpopulation of the references section, I direct the interested reader to the `original paper`_ (which is well worth reading in its own right).
+Using this framework, Griffiths and Tenenbaum were able to provide comprehensive coverage for a number of human psychology experiments. This allows them to model people's inferences in causal induction and learning regarding different functional forms, at different points in development, with different amounts of data, with and without interventions, and in continuous time and space (to name only a few of the different conditions covered).
 
-What is important is that they successfully modeled humans using this framework by treating people as optimal performers [#]_ within the problem defined by their framework. Furthermore, by examining different but related experiments, they were able to demonstrate the different ways in which specific kinds of prior knowledge are called upon differentially to inform human causal induction resulting in quite different inferences on a rational statistical basis.
+What is important is that they successfully modeled human behavior using this framework by treating people as optimal solvers of this computational problem [#]_ (at least as defined by their framework). Furthermore, by examining different but related experiments, they were able to demonstrate the different ways in which specific kinds of prior knowledge are called upon differentially to inform human causal induction resulting in quite different inferences on a rational statistical basis.
+
+Cognition as Standard, Cognition as Map
+=======================================
+
+People have always been able to make judgments that are beyond machine learning's state-of-the-art. They have been used as a standard against which to test machine learning systems. Ideally, the system reaches a Turing point, the point at which which machine performance and human performance are indistinguishable.
+
+But that is not the only way human behavior can guide machine learning. Rather, rational models like that in :cite:`griffithst09` show that in characterizing a large set of traditionally separate cognitive problems with a single framework we can do more than just set standards. In these cases of causal inference, it is not human skill is interesting, but that we have formulated these problems *at all*. By studying human behavior with formally unified accounts, it allows us to map out and extend the problems and problem sets that are even "up for grabs" for solution by machine learning systems. In this sense, it is not that humanity has a better state-of-the-art for solving these problems, but that we have a more comprehensive state-of-the-problem that challenges machine learning research to invent new formalizations so that these tests too shall pass. 
 
 .. [#] Optimality in these cases is taken to mean on average approximating the posterior distribution of some inference problem defined by the authors in each case.
 
