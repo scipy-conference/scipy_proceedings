@@ -106,14 +106,14 @@ reach. Architecturally, BigBang is a Python package that includes Scientific Pyt
 libraries for time series analysis, natural language processing, network analysis,
 and software analysis as dependencies.
 
-BigBang includes methods for collecting research data from source on the web about
+BigBang includes methods for collecting research data from sources on the web about
 the activity of open collaborative communities. At the time of this writing,
 BigBang supports data collection from Mailman, the mailing list service, as well
 as other `.mbox` formatted email archives. It also supports data collection
 from Git repositories. Future versions will have methods for collecting data
 from issue trackers.
 
-The BigBang repository contains an `examples` directory with Jupyter notebooks
+The BigBang repository contains an `examples` directory of Jupyter notebooks
 demonstrating its functionality and exploring lines of research inquiry.
 Researchers can contribute to the project by submitting Jupyter notebooks to the
 repository for review through the GitHub Pull Request system.
