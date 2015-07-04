@@ -16,26 +16,30 @@ TrendVis: an Elegant Interface for dense, sparkline-like, quantitative visualiza
 
 Introduction
 ------------
+Data visualization and presentation is a key part of scientific communication, and many disciplines depend on the visualization of multiple time-series or other series datasets.  The field of paleoclimatology (the study of past climate and climate change), for example, relies heavily on plots of multiple time-series or "depth series", where data are plotted against depth in a sediment or ice core or stalagmite. These plots are critical for placing new data in regional and global contexts and they facilitate interpretations of the nature, timing, and drivers of climate change. Figure :ref:`finishedproduct`, created using TrendVis, compares the climate and hydrological changes that occurred during the last two deglaciations, called "Terminations", as recorded by paleoclimate records from around the world, and against climate parameters like carbon dioxide (black), methane (pink), and Northern Hemisphere summer insolation (the amount of solar energy received on an area, gray).
 
-Data visualization and presentation is a key part of scientific communication, and many disciplines depend on the visualization of multiple time-series or other series datasets.  The field of paleoclimatology (the study of past climate and climate change), for example, relies heavily on plots of multiple time-series or "depth series", where data are plotted against depth in a sediment or ice core or stalagmite. These plots are critical for placing new data in regional and global contexts and they facilitate interpretations of the nature, timing, and drivers of climate change.
+.. figure:: barredplot.png
 
-Creating such plots can be difficult, however.  Many scientists depend on expensive software such as SigmaPlot and Adobe Illustrator.  With matplotlib, users have two options: display data in a grid of separate subplots or on top of each other using twinned axes. This works for two or three traces, but does not scale well and is unsatisfactory for larger datasets.  Instead of a clutter of smaller plots or a mess of overlain curves, the ideal style in cases with larger datsets is the style shown above:  one densely-plotted figure that permits direct comparison of curve features.  The key aim of TrendVis is to facilitate the creation and accessibility of these plots in the scientific Python ecosystem using a matplotlib-based workflow.  Here we discuss how TrendVis interfaces with the matplotlib library to construct this complicated plot type and how users can easily customize and improve the accessibility of their TrendVis plots, and discuss several challenges faced in creating this plot type with matplotlib.
+   A TrendVis figure illustrating the similarities and differences among climate records between the last deglaciation (Termination I) and the penultimate deglaciation (Termination II). :label:`finishedproduct`
+
+Creating such plots can be difficult, however.  Many scientists depend on expensive software such as SigmaPlot and Adobe Illustrator.  With matplotlib, users have two options: display data in a grid of separate subplots or on top of each other using twinned axes. This works for two or three traces, but does not scale well and is unsatisfactory for larger datasets.  Instead of a clutter of smaller plots or a mess of overlain curves, the ideal style in cases with larger datsets is the style shown in Figure :ref:'finishedproduct'  one densely-plotted figure that permits direct comparison of curve features.  The key aim of TrendVis is to facilitate the creation and accessibility of these plots in the scientific Python ecosystem using a matplotlib-based workflow.  Here we discuss how TrendVis interfaces with the matplotlib library to construct this complicated plot type and how users can easily customize and improve the accessibility of their TrendVis plots, and discuss several challenges faced in creating this plot type with matplotlib.  Additionally, an example workflow is given, showing how Figure :ref:`finishedproduct` was created.
 
 The TrendVis Figure Framework
 -----------------------------
-The backbone of TrendVis is the ``Grid`` class, in which the figure, basic attributes, and relatively orientation-agnostic methods are initialized.  The two subclasses of ``Grid``, ``XGrid`` and ``YGrid``, respectively have x and y as the main (common) axis and have y and x as the stacked (data) axes, thus determining the orientation and overall look of the figure.  A graphical representation of YGrid and XGrid are shown in Figures :ref:`ygridex` and :ref:`xgridex`.  As a common application of these types of plots is time-series data, we will examine TrendVis from the perspective of ``XGrid``.
-
-.. figure:: ygrid_demo.png
-
-   In a ``YGrid``, the x axes (columns) are the stacked dimension or ``stackdim``, and y axes (rows) are the main dimension or ``maindim``.  Both dimension labels begin in ``YGrid.axes[0][0]``. :label:`ygridex`
+The backbone of TrendVis is the ``Grid`` class, in which the figure, basic attributes, and relatively orientation-agnostic methods are initialized.  The two subclasses of ``Grid``, ``XGrid`` and ``YGrid``, respectively have x and y as the main (common) axis and have y and x as the stacked (data) axes, thus determining the orientation and overall look of the figure.  As a common application of these types of plots is time-series data, we will examine TrendVis from the perspective of ``XGrid``.  A graphical representation of ``XGrid`` is shown in Figure :ref:`xgridex`.
 
 .. figure:: xgrid_demo.png
 
-   This ``XGrid`` has the same stacked and main dimensions as the ``YGrid`` above.  In XGrid, however, ``stackdim`` refers to y axes (rows) and ``maindim`` indicates x axes (columns).  Both dimension labels begin in ``XGrid.axes[0][0]``. :label:`xgridex`
+   In ``XGrid``, ``stackdim`` refers to y axes (rows) and ``maindim`` indicates x axes (columns).  This is reversed in ``YGrid``. Both dimension labels begin in ``XGrid.axes[0][0]``. :label:`xgridex`
 
-TrendVis figures appear to consist of a common plot space.  This, however, is an illusion carefully crafted via a framework of axes and a mechanism for  systematically hiding extra axes spines, ticks, and labels.  The dimensions of the ``XGrid`` framework are determined by two arguments, ``ystack_ratios`` and ``xratios``.  Respectively, these are lists of the relative sizes of the desired stack dimension rows and main dimension columns.  In Figure :ref:`xgridex`, ``ystack_ratios == [7, 8, 8, 6, 4, 8]``, and ``xratios == [1, 1]``. The sum of ``ystack_ratios`` (``XGrid.gridrows``) is the height of the plot grid, and the sum of xratios (``XGrid.gridcols``) is the width of the plot grid.  Each item in ``ystack_ratios`` and ``xratios`` therefore becomes the heighth and width of each Axes.
+TrendVis figures appear to consist of a common plot space.  This, however, is an illusion carefully crafted via a framework of axes and a mechanism for  systematically hiding extra axes spines, ticks, and labels.  This framework and the lists that dictate spine, tick, and label visibility are created when the figure is initialized:
 
-To populate the figure, ``plt.subplot2grid()`` is used to initialize axes, moving first across the main dimension and then down the stack dimension.  Axes are stored in a nested list, where the sublists contains axes in the same row (column in ``YGrid``). All axes in a row share a y axis, and all axes in a column share an x axis.
+.. code-block:: python
+
+   paleofig = XGrid([7, 8, 8, 6, 4, 8], xratios=[1, 1],
+                    figsize=(6,10))
+
+First, we examine the construction of this framework.  The overall area of the figure is determined by ``figsize``.  The relative sizes of the rows (``ystack_ratios``, the first argument), however, is determined by the contents of ``ystack_ratios`` and the sum of ``ystack_ratios`` (``self.gridrows``), which in this case is 41.  Similarly, the contents and sum of ``xratios`` (``self.gridcols``)determine the relative sizes of the columns.  So, all axes in ``paleofig`` are initialized on a 41 row, 2 column grid within the 6 x 10 inch space set by ``figsize``.  The Axes in position 0,0, (:ref:'xgridex') spans 7/41 unit rows (0 through 6) and the first unit column; the next Axes created spans the same unit rows and the second unit column, finishing the first row of ``paleofig``.  The next row spans 8 unit rows, numbers 7 through 15.  This Axes creation process, shown in the code below, is repeated for all the values in ``ystack_ratios`` and ``xratios``, yielding a figure with 6 rows and 2 columns of Axes.  All Axes in the same row share a y axis, and all Axes in the same column share an x axis.
 
 .. code-block:: python
 
@@ -77,9 +81,20 @@ To populate the figure, ``plt.subplot2grid()`` is used to initialize axes, movin
        xpos = 0
        ypos += rowspan
 
-After the axes framework is created, ``XGrid`` calls two ``Grid`` methods to intialize lists that indicate for each row: 1. where the y axis spine and ticks are visible (``XGrid.dataside_list``) and 2. where the x axis spine and ticks are visible (``XGrid.stackpos_list``), if at all, based on the physical location of the axis in the plot.  Each list is exposed and can be user-modified, if desired, to meet the demands of the particular figure.
+Axes are stored in ``paleofig.axes`` as a nested list, where the sublists contain Axes in the same rows.  Next, two parameters that dictate spine visibility are initialized:
 
-These two lists serve as keys to TrendVis formatting dictionaries and as arguments to Axes (and Axes child) methods in ``XGrid.cleanup_grid()``.  When this method is called, ``XGrid`` systematically hides all unnecessary axis spines and ticks, and forces tick labelling to the indicated sides, transforming the mess in Figure :ref:`preclean` to a far clearer and more accessible format in Figure :ref:`xgridex`.
+``paleofig.dataside_list``
+  This list indicates where each row's y axis spine, ticks, and label are visible.  This by default alternates sides from left to right (top to bottom in ``YGrid``), starting at left, unless indicated otherwise during the initialization of  ``paleofig``, or changed later on by the user.
+``paleofig.stackpos_list``
+  This list controls the x (main) axis visibility.  Each row's entry is based on the physical location of the axis in the plot; by default only the x axes at the top and bottom of the figure are shown and the x axes of middle rows are invisible.  Each list is exposed and can be user-modified, if desired, to meet the demands of the particular figure.
+
+These two lists serve as keys to TrendVis formatting dictionaries and as arguments to Axes (and Axes child) methods.  At any point, the user may call:
+
+.. code-block:: python
+
+   paleofig.cleanup_grid()
+
+and this method will systematically adjust labelling and limit axis spine and tick visibility to the positions indicated by ``paleofig.dataside_list`` and ``paleofig.stackpos_list``, transforming the mess in Figure :ref:`preclean` to a far clearer and more accessible format in Figure :ref:`xgridex`.
 
 .. figure:: xgrid_preclean.png
 
@@ -89,33 +104,59 @@ Creating and Accessing Axes Twins
 ---------------------------------
 Although for large datasets, using twinned axes as the sole plotting tool is unadvisable, select usage of twinned axes can improve data visualization.  TrendVis provides the means to easily and systematically create and manage twinned rows (``XGrid``) or columns (``YGrid``) of axes.
 
-The method ``XGrid.make_twins()`` creates twin x axes, one per column, across the rows indicated.  An issue arose with twin rows in figures with a main dimension greater than one (i.e., in ``XGrid``, multiple columns).  The axes in the twinned row share x axes with the original axes, but do not share y axes with each other, as occurs in all original rows.  This is problematic when attempting to change the y axis limits, as only one axis will respond.  As a result, the axes in the twinned row are now forced to share y axes via:
+
+In our ``paleofig``, we need four new rows:
+
+.. code-block:: python
+
+   paleofig.make_twins([1, 2, 3, 3])
+   paleofig.cleanup_grid()
+
+This creates twin x axes, one per column, across the four rows indicated and hides extraneous spines and ticks.  In figures like ``paleofig`` that have a main dimension greater than one (i.e., multiple columns), an issue arose in an earlier version of TrendVis with twin rows not sharing y axes as required and as occurs in all original rows.  This is problematic when attempting to change the y axis limits, as only one axis will respond.  The axes in the twinned row are now forced to share y axes via:
 
 .. code-block:: python
 
    twin_row[0].get_shared_y_axes().join(*twin_row)
 
-After creation, the twin row information is appended to ``XGrid.dataside_list`` and ``XGrid.stackpos_list`` and twinned axes are stored at the end of the list of axes, which previously contained only original rows.  If the user decides to get rid of twin rows (``XGrid.remove_twins()``), ``XGrid.axes``, ``XGrid.dataside_list``, and ``XGrid.stackpos_list`` are returned to their state prior to adding twins.
+After creation, the twin row information is appended to ``paleofig.dataside_list`` and ``paleofig.stackpos_list`` and twinned axes are stored at the end of the list of axes, which previously contained only original rows.  If the user decides to get rid of twin rows (``paleofig.remove_twins()``), ``paleofig.axes``, ``paleofig.dataside_list``, and ``paleofig.stackpos_list`` are returned to their state prior to adding twins.
 
 .. figure:: twin.png
 
-   The results of ``XGrid.make_twins([1, 2, 3, 3])``, performing another grid cleanup and some minor tick/axis formatting.  :label:`twin`
+   The results of making twins, performing another grid cleanup and some minor tick/axis formatting.  :label:`twin`
 
 Retrieving axes, especially when dealing with twin axes in a figure with many hapazardly created twins, can sometimes be non-straightforward.  The following means are available to return individual axes from a TrendVis figure:
 
-``XGrid.fig.axes[axes index]``
-  matplotlib stores axes in a 1D list in ``Figure`` in the order of creation.  This method is easiest to use when ``XGrid`` is only one column.
-``XGrid.axes[row][column]``
-  ``XGrid`` stores axes in a nested list in the order of creation, no matter the dimensions of ``XGrid``.  Each sublist contains all axes that share the same y axis- a row.  The row index corresponds to the storage position in the list, not the actual physical position on the grid, but in original axes (created when ``XGrid`` was initialized) are these the same.
-``XGrid.get_axis()``
-  Any axis can be retrieved by providing its physical row number (and if necessary, column position) to ``XGrid.get_axis()``.  Twins can be parsed with the keyword argument ``is_twin``, which directs ``XGrid.twin_rownum()`` to find the index of the sublist containing the twin row.
+``paleofig.fig.axes[axes index]``
+  matplotlib stores axes in a 1D list in ``Figure`` in the order of creation.  This method is easiest to use when dealing with an ``XGrid`` of only one column.
+``paleofig.axes[row][column]``
+  An ``XGrid`` stores axes in a nested list in the order of creation, no matter its dimensions.  Each sublist contains all axes that share the same y axis- a row.  The row index corresponds to the storage position in the list, not the actual physical position on the grid, but in original axes (those created when ``paleofig`` was initialized) these are the same.
+``paleofig.get_axis()``
+  Any axis can be retrieved from ``paleofig`` by providing its physical row number (and if necessary, column position) to ``paleofig.get_axis()``.  Twins can be parsed with the keyword argument ``is_twin``, which directs ``paleofig.twin_rownum()`` to find the index of the sublist containing the twin row.
 
 In the case of ``YGrid``, the row, column indices are flipped: ``YGrid.axes[column][row]``.  Sublists correspond to columns rather than rows.
 
 Plotting and Formatting
 -----------------------
-The original TrendVis procedurally generated a simple, 1-column version of ``XGrid``.  Since the figure was made in a single function call, all data had to be provided at once in order, and it all had to be line/point data, as only ``Axes.plot()`` was called.  The new, object-oriented TrendVis does provide ``make_grid()`` and ``plot_data()`` to enable easy figure initialization and quick line plotting on all axes.  However, fewer options are available via this interface.  The regular API is designed to be a highly flexible wrapper around matplotlib.  Axes are readily exposed via the matplotlib and TrendVis methods described above, and so the user can determine the most appropriate plotting functions for their figure.  The author has personally used ``Axes.errorbar()``, ``Axes.fill_betweenx()``, and ``Axes.plot()`` on a single TrendVis figure, which would not have been possible in the old procedural format.
+The original TrendVis procedurally generated a simple, 1-column version of ``XGrid``.  Since the figure was made in a single function call, all data had to be provided at once in order, and it all had to be line/point data, as only ``Axes.plot()`` was called.  The new, object-oriented TrendVis does provide ``make_grid()`` and ``plot_data()`` to enable easy figure initialization and quick line plotting on all axes.  However, fewer options are available via this interface.  The regular API is designed to be a highly flexible wrapper around matplotlib.  Axes are readily exposed via the matplotlib and TrendVis methods described above, and so the user can determine the most appropriate plotting functions for their figure.  The author has personally used ``Axes.errorbar()``, ``Axes.fill_betweenx()``, and ``Axes.plot()`` on two individual published TrendVis figures (see figures 3 and 4 in ADD REFERENCE), which would not have been possible in the old procedural format.  As we only require line data for ``paleofig``, rather than make individual calls to each Axes to plt, we will use relatively shorter ``plot_data``:
 
+.. code-block:: python
+
+   plot_data(paleofig, [[(soreq_age, soreq, '#008080')],
+                        [(hulu_age, hulu, '#00FF00',[0]),
+                         (don_age, don, '#00CD00', [0]),
+                         (sanb_age, sanb, 'green', [1])],
+                        [(co2age, co2, 'black')],
+                        [(cor_age, cor, 'maroon', [1])],
+                        [(dh_age, dh, '#FF6103')],
+                        [(gb_age, gb, '#AB82FF'),
+                         (leh_age, leh, 'red', [1])],
+                        [(insol_age, insol, '0.75')],
+                        [(ch4_age, ch4, 'orchid')],
+                        [(fs_age, fs, 'blue')],
+                        [(cob_age, cob, 'deepskyblue')]],
+             marker=None, lw=2, auto_spinecolor=False)
+
+Here, plotting datasets only requires a tuple of the x and y values and the color in a sublist in the appropriate row order.  Some tuples have a fourth element that indicates which column the dataset should be plotted on.  Without this element, the dataset will be plotted on all, or in this case both columns.
 
 Although plots individualized on a per axis basis may be important to a user, most aspects of axis formatting should generally be uniform.  In deference to that need and to potentially the sheer number of axes in play, TrendVis contains wrappers designed to expedite these repetitive axis formatting tasks, including setting major and minor tick locators and dimensions, axis labels, and axis limits.
 
@@ -159,10 +200,11 @@ This is where the make_adjustable keyword in the original call comes in.  If mak
 
 TrendVis also enables a special kind of bar, a frame.  The frame is designed to anchor data axis spines, and appears around an entire column of data axes- which in the case of one column is the entire plot space.  For a softer division of main axes stacks, the user can signify broken axes via cut marks on the broken ends of the main axes.  This is performed simply by calling ``XGrid.draw_cutouts()``.  Similar to bars, frames are drawn in figure space and can sometimes be moved out of place when axes positions are changed relative to figure space, thus they are handled in the same way.  Cutouts, however, are actual line plots on the axes that live in axes space and will not be affected by adjustments in axes limits or subplot positioning.
 
-.. figure:: barredplot.png
-
-   The addition of broken axes marks and labeled figure-spanning highlighting rectangles effectively draws the eye to the similarities and differences among the climate records between the last deglaciation (Termination I) and the penultimate deglaciation (Termination II).
 
 Conclusions and the Way Forward
 -------------------------------
 TrendVis is a package that expedites the process of creating figures with multiple x or y axes against a common y or x axis.  It is largely order-agnostic and exposes most of its attributes and methods in order to promote intuitive, highly-customizable plot creation in this particular style.  IN the long-term, TrendVis aims to become a widely-used supplement to the matplotlib plotting library and alternative to expensive software such as SigmaPlot and MatLab, and to time-consuming, error-prone practices like assembling Excel plots in vector graphics editing software.  This package is young and has a lot of room for growth and new features, so pull requests are welcome!
+
+References
+----------
+
