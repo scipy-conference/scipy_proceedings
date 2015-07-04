@@ -160,12 +160,13 @@ tools, the spirit of the original interpreter has not been restored:
 there is an ongoing disconnect between data and its
 representation. This artificial distinction is a lingering consequence
 of a text-only world and has resulted in a strict split between how we
-conceptualize 'simple' and 'complex' data. Simple data returned from
-an operation is rendered directly in the interpreter (as strings,
-short lists, etc.), but more complex data requires an extremely
-detailed set of explicit steps using external plotting packages such
-as Matplotlib [Mpl]_ before results can be revealed in a graphical
-representation.
+conceptualize 'simple' and 'complex' data. Although the IPython
+notebook has offered the means give objects rich media
+representations, until now few packages have embraced this approach
+and none have done so in a compositional manner. As a result the most
+common way to visualize complex data remains for the user to specify a
+detailed list of steps using an external plotting package such as
+Matplotlib [Mpl]_.
 
 Here we introduce HoloViews, a library of simple classes designed to
 provide an immediately available representation for even complex data
