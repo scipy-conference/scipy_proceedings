@@ -27,7 +27,7 @@ thread on data that fits comfortably in memory.  Advances in hardware in the
 last decade in multi-core processors and solid state drives provide significant
 and yet largely untapped performance advantages.
 
-However the Scientific Python stack consists of hundreds of software packages,
+However, the Scientific Python stack consists of hundreds of software packages,
 papers, PhD theses, and developer-years.  This stack is a significant
 intellectual and financial investment that, for the most part, does not align
 well with modern hardware.  We seek software solutions to parallelize this
@@ -54,8 +54,8 @@ Modern Hardware
 ---------------
 
 Hardware has changed significantly in recent years.  The average personal
-notebook computer (the bulwark of most scientific development) generally has
-four physical cores and a solid state drive (SSD).  The four physical cores present
+notebook computer (the bulwark of most scientific development) has roughly four
+physical cores and a solid state drive (SSD).  The four physical cores present
 opportunities for linear speedup of computationally bound code.  We refer to
 algorithms that use multiple cores simultaneously as *parallel*.  The solid
 state drives have high read bandwidths and low seek times which enables them to
@@ -83,7 +83,6 @@ Commonly a desire for parallel execution causes this shift of responsibility
 from compiler to human developer.  In these cases we often represent the
 structure of our program explicitly as data within the program itself.
 
-
 Dask is a specification that encodes task schedules with minimal incidental
 complexity using terms common to all Python projects, namely dicts, tuples,
 and callables.  Ideally this minimum solution is easy to adopt and understand
@@ -100,6 +99,7 @@ Example
    :scale: 40%
 
    A simple dask dictionary
+   :label:`fig-simple`
 
 Consider the following simple program
 
@@ -115,7 +115,7 @@ Consider the following simple program
    y = inc(x)
    z = add(y, 10)
 
-We encode this as a dictionary in the following way
+We encode this as a dictionary below:
 
 .. code-block:: python
 
@@ -811,7 +811,7 @@ References
            of programming matrix computations." (2008). APA
 .. [Ber10] Bergstra, James, et al. "Theano: A CPU and GPU math compiler in
            Python." Proc. 9th Python in Science Conf. 2010.  APA
-.. [Pow10] Power, Russell. Abstractions for In-memory Distributed Computation.
+.. [Pow14] Power, Russell. Abstractions for In-memory Distributed Computation.
            Diss. New York University, 2014.  APA
 
 
