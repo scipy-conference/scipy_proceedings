@@ -519,16 +519,26 @@ shows some of the variability that might appear for a single prolific sender.
 
 Variation in entity representation is a source of noise in our research and an
 ongoing area of development for BigBang.
+
 For the study in this paper, we have implemented a heuristic system for
 entity matching.
-First we standardize the data by converting it to lower case and normalizing
-" at " and "@". Then we parse out the email and full name subfields of the
-data and look for exact matches.
+
+- First we standardize the data by converting it to lower case and normalizing
+ " at " and "@".
+- Then we construct a similarity matrix between each entry.
+  Each entry is parsed into email and full name subfields.
+  The value of the similarity matrix at cell :math:`(i,j)` is 1 if there
+  is an exact match of *either* the email address or the full name, and 0
+  otherwise.
+- We then construct a graph from the similarity matrix and treat each
+  *connected component* (group of nodes that are connected to each other by
+  at least one path) as an entity.
+
 Under this procedure, all of the above email addresses would be collapsed into a single
 entity.
 
 In our interaction graph study, this has the effect of combining several nodes into a single one
-in a way that's similar to the (cite) blockmodel technique.
+in a way that's similar to the *blockmodel* technique.
 The edges to and from the derived node are weighted by the sum of the edges of the original
 nodes.
 The `sent` attribute of the new node is also set as the sum of the `sent` attribute of the
