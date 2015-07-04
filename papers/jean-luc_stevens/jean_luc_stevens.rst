@@ -71,46 +71,50 @@ handicap both for progress within a single lab and for the community
 as a whole, making it nearly impossible for researchers to build on
 each others' work even for purely computational projects [Cro13]_.
 
-In this paper, we will describe a new Python software package built to
-address these problems directly, by providing simple tools for
-gradually building elaborate visualizations and analyses interactively
-yet reproducibly.  HoloViews supports immediate exploration of data as
-it is obtained, without requiring custom coding, and then supports
+Here we will describe a new Python software package built to address
+these problems directly, by providing simple tools for gradually
+building elaborate visualizations and analyses interactively yet
+reproducibly. HoloViews supports immediate exploration of data as it
+is obtained, without requiring custom coding, and then supports
 incrementally revealing more complex relationships between datasets,
 culminating in the final publication of fully reproducible scientific
-results.  As outlined in
-detail below, HoloViews achieves these goals by enforcing a strict
-separation between the semantic properties of the data (expressed
-declaratively and independently of any visualization), specification
-of plotting options (expressed declaratively and independently of the
-underlying code), and implementation of specific visualizations
-(expressed as general-purpose code reused and curated over time).
+results.
 
+In this paper we will focus on the high-level design principles that
+allow HoloViews to achieve these goals and we encourage the reader to
+visit `holoviews.org <http://holoviews.org>`_ for concrete example. As
+detailed below we show how this is achieved by enforcing a strict
+separation in the declaration of the semantic properties of the data
+and the specification of plotting options, allowing the user to
+declaratively specify their intent and let HoloViews handle the
+visualization.
 
 The interactive interpreter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To understand this approach, we need to briefly consider the history
-of how we interact with computational data. The idea of an interactive
+To understand this approach, we need to consider the history of how we
+interact with computational data. The idea of an interactive
 programming session originates with the earliest LISP interpreters in
-the late 1950s. Since then, high-level programming languages have
-become even more dynamic in nature. In recent years, the Python
-language has been widely adopted by researchers due to its concise,
-readable syntax. Python is well suited to dynamic interaction and
-offers an interactive, textual interpreter.
+the late 1950s and remains a popular way to interact with dynamic
+languages such as Python.
+
+..
+   Since then, high-level programming languages have become even more
+   dynamic in nature. In recent years, the Python language has been
+   widely adopted by researchers due to its concise, readable
+   syntax. Python is well suited to dynamic interaction and offers an
+   interactive, textual interpreter.
 
 However, like most such command prompts, the standard Python prompt is
 a text-only environment. Commands are entered by the user, parsed, and
-executed, with results returned back to the user as text.  This
-approach offers immediate feedback and works well for data that is
-naturally expressed in a concise textual form. Unfortunately, this
-approach begins to fail when the data cannot be usefully visualized as
-text, as is typical for the large datasets now commonplace.  In such
-instances, a separate plotting package 
-offering a rich graphical display would normally be used to present
-the results outside the environment of the interpreter, controlled
-either by custom computer code or through an interactive graphical
-user interface (GUI).
+executed, with results displayed as text.  This approach offers
+immediate feedback and works well for data that is naturally expressed
+in a concise textual form. Unfortunately, this approach begins to fail
+when the data cannot be usefully visualized as text, as is typical for
+the large datasets now commonplace.  In such instances, a separate
+plotting package offering a rich graphical display would normally be
+used to present the results outside the environment of the interpreter
+via a graphical user interface.
 
 This disjointed approach reflects history: text-only environments,
 where interactive interpreters were first employed, appeared long
@@ -137,19 +141,19 @@ media documents. In addition to being universally available, web
 browsers have the benefit of being based on open standards that remain
 supported almost indefinitely. Although early versions of the HTML
 standard only allowed passive page viewing, the widespread adoption of
-HTML5 (and websockets) has made it possible for anyone to engage with
-complex, dynamic documents in a bi-directional, interactive manner.
+HTML5 has made it possible for anyone to interact with complex, dynamic
+documents in a bi-directional manner.
 
 The emergence of the web browser as a platform has been exploited by
-the Python community and the scientific community at large with
-tools such as the IPython Notebook [Per07]_ and SAGE
-MathCloud [Ste05]_. These projects offer interactive computation sessions
-in a notebook format instead of a traditional text prompt. Although
-similar in design to the traditional text-only interpreters, these
-notebooks allow embedded graphics or other media (such as video) while
-maintaining a permanent record of useful commands in a rich document
-that supports the gradual development of a document with interleaved
-code, results, and exposition. 
+the Python community and the scientific community at large with tools
+such as the IPython Notebook [Per07]_ and SAGE MathCloud
+[Ste05]_. These projects offer interactive computation sessions in a
+notebook format instead of a traditional text prompt. Although similar
+in design to the traditional text-only interpreters, these notebooks
+allow embedded graphics or other media (such as video) while
+maintaining a record of useful commands in a rich document that
+supports the gradual development of a document with interleaved code,
+results, and exposition.
 
 Yet despite the greatly improved interactive capabilities of these
 tools, the spirit of the original interpreter has not been restored:
@@ -165,16 +169,15 @@ representation.
 
 Here we introduce HoloViews, a library of simple classes designed to
 provide an immediately available representation for even complex data
-in notebooks, making such data be as easy to work with as simple
-data always has been in interactive sessions.  HoloViews is not a
-plotting package; instead, it offers a set of useful data structures
-paired with rich, customizable visual representations that display
-effortlessly in the IPython Notebook environment. The result is
-research that is more interactive, concise, declarative, and
-reproducible. Figure :ref:`layout` shows a self-contained example of
-building a complex visualization using a single line to declare a
-HoloViews object followed by a single line to compose and annotate
-two different views of the data in it.
+in notebooks, analogous to the way interactive sessions are used with
+simple data types. HoloViews is not a plotting package; instead, it
+offers a set of useful data structures paired with rich, customizable
+visual representations that display effortlessly in the IPython
+Notebook environment. The result is research that is more interactive,
+concise, declarative, and reproducible. Figure :ref:`layout` shows a
+self-contained example of building a complex visualization showing the
+declaration of an ``Image`` object followed by an example of how to
+compose HoloViews objects together.
 
 ..
    jbednar: is it necessary to have the bounds= argument?  Can it and
@@ -218,37 +221,32 @@ two different views of the data in it.
 Design principles
 -----------------
 
-The design principles of HoloViews are an extension of the basic
-principles underlying all interactive interpreters, generalized to
-handle the more complex data structures commonly used in research. The
-goal is to *automatically* and *transparently* return and display
-declarative data structures to the user for immediate feedback without
-requiring additional code. Although this concept is familiar and
-intuitive when interactively working with simple data types, it is
-worth reviewing explicitly what is going on so that the appropriate
-graphical extension of these ideas is clear.
+The core design principle of HoloViews is to *automatically* and
+*transparently* return and display declarative data structures to the
+user for immediate feedback without requiring additional
+code. Although this concept is familiar and intuitive when
+interactively working with simple data types, it is worth reviewing
+explicitly what is going on so that the appropriate graphical
+extension of these ideas is clear.
 
 When executing an addition operation like ``1 + 2.5`` at a Python
 prompt, the expression is parsed, converted into bytecode, and then
 executed, resulting in the float value ``3.5``. This floating-point
 value is immediately returned to the user in the appropriate
 displayable representation, giving the user immediate feedback. Of
-course, the string representation is not the float itself, but the
-sequence of characters ``3``, ``.``, and ``5``. Such strings are automatically
-generated by the interpreter, via the display object's ``__repr__``
-method.
+course, this representation is not the float itself, but the string
+``"3.5"``. Such strings are automatically generated by the
+interpreter, via the displayed object's ``__repr__`` method.
 
 The Python interpreter also provides such automatic, immediate
-feedback for more complex data types like large Numpy arrays, but for
+feedback for more complex data types like large NumPy arrays, but for
 such data the displayed string has very little utility because it is
-either incomplete
-(presenting only a few values of the array) or impractical (presenting
-an impossible-to-interpret dump of all the values).  In a terminal,
-this restriction is a result of the ``__repr__`` method only
-supporting a text-based display value. Using HoloViews in the IPython
-Notebook, you can give your array a more useful, interpretable default visual
-representation as an image, curve, or similar plot according to the
-following principles:
+either incomplete or impractical.  In a terminal, this restriction is
+a result of the ``__repr__`` method only supporting a text-based
+display value. Using HoloViews in the IPython Notebook, you can give
+your array a more useful, interpretable default visual representation
+as an image, curve, or similar plot according to the following
+principles:
 
 * It must be easy to assign a useful and understandable default
   representation to your data. The goal is to keep the initial barrier
@@ -279,19 +277,15 @@ transparently reveals their contents, making them a useful proxy for
 the data itself, just as the text ``3.5`` is a proxy for the
 underlying floating-point value.  This default visualization may then
 be customized declaratively to achieve the desired aesthetics, without
-complicating the objects themselves with such customizations. This
-separation of content and presentation is already a well established
-design principle outside of science, and is analogous to the
-relationship between HTML content and CSS in web pages.
+complicating the objects themselves.
 
 In the next section we will discuss the data structures that hold the
 important content. Starting with the simple primitive elements, we
-examine how they can be composed into complex figures and embedded
+examine how they can be composed into complex figures and embedded in
 high-dimensional spaces for exploration. Along the way we will
 discover how our implementation realizes the design principles
 outlined and manages to keep the state of the data separate from its
 visual representation.
-
 
 Data Structures
 ---------------
@@ -303,7 +297,6 @@ explains how they can be combined. Finally, we will discuss working
 with Elements embedded in high-dimensional continuous or discrete
 spaces.
 
-
 Elements
 ~~~~~~~~
 
@@ -311,16 +304,16 @@ The atomic classes that wrap raw data are the ``Element``
 primitives. These classes are named by the natural representation they
 suggest for the supplied data, with ``Image``, ``Curve``, and ``Scatter``
 being some simple examples. These elements are easily constructed as
-they only require the raw data (such as a Numpy array) to display.
+they only require the raw data (such as a NumPy array) to display.
 
 In Figure :ref:`layout`, we have some examples of the Element
 primitives. On the left, in subfigure **A**, we see the ``Image``
-primitive containing a two-dimensional Numpy array. This ``Image`` is
-declared by supplying the Numpy array ``imdata`` along with the
+primitive containing a two-dimensional NumPy array. This ``Image`` is
+declared by supplying the NumPy array ``imdata`` along with the
 optional metadata, including a suitable label and a declaration of the
 bounding region in the complex plane. The visual output is
 automatically generated and shows that the array is a part of the
-Mandelbrot set. Our object merely holds the supplied Numpy array, which
+Mandelbrot set. Our object merely holds the supplied NumPy array, which
 remains easily accessed via the ``.data`` attribute. In part **B** of
 Figure :ref:`layout` we have an example of a ``Curve`` containing a
 horizontal cross section of the image, as computed by the
@@ -339,7 +332,7 @@ about visualization, they are primarily concerned with content and
 way to intuitively understand the dimensionality of the data in terms
 of an appropriate visual representation. For instance, in Figure
 :ref:`layout` **A**, the name ``Image`` conveys the notion that the
-contained data is in the form of a two-dimensional Numpy array that
+contained data is in the form of a two-dimensional NumPy array that
 can be meaningfully displayed as an image.
 
 The particular ``Image`` shown in Figure :ref:`layout` **A** was 
@@ -366,7 +359,7 @@ are declared as key dimensions (``kdims``). Key dimensions correspond
 to the independent dimensions used to index or slice the element,
 with the remaining dimensions called value dimensions
 (``vdims``). In the case of this image, there is a single value
-dimension, for the values in the supplied Numpy array, which
+dimension, for the values in the supplied NumPy array, which
 are then visualized using the default colormap of the ``Image``
 elements (the 'hot' color map).
 
@@ -374,7 +367,7 @@ As key dimensions are indexable and sliceable, we can slice the
 ``Image`` to select a different subregion of the Mandelbrot
 Set. Continuous values are supported when slicing an ``Image`` and the
 result is then a new ``Image`` containing the portion of the original
-Numpy array appropriate to the specified slice.  The mapping between
+NumPy array appropriate to the specified slice.  The mapping between
 continuous space and the discrete array samples is specified by the
 bounds, allowing us to apply the slice ``[-0.2:0,0.85:1.05]`` to
 select the corresponding part of the complex plane.  The first
@@ -429,26 +422,26 @@ element overlaid by the ``HLine`` element.
 
 The overall data structure that corresponds to Figure :ref:`layout` is
 therefore a ``Layout`` which itself contains another composite
-collection in the form of an ``Overlay``. The object in Figure :ref:`layout` is in fact a
-highly flexible, compositional tree-based data structure: intermediate
-nodes correspond either to ``Layout`` nodes (``+``) or ``Overlay``
-nodes (``*``), with element primitives at the leaf nodes. Even in this
-potentially complex tree, all the raw data corresponding to every
-visual element is conveniently accessible via key or attribute access
-by selecting a leaf
-element using its path through the tree, and then inspecting the
-``.data`` attribute, making it simple to declare which part of a
-complex dataset you want to work with at a given time.
+collection in the form of an ``Overlay``. The object in Figure
+:ref:`layout` is in fact a highly flexible, compositional tree-based
+data structure: intermediate nodes correspond either to ``Layout``
+nodes (``+``) or ``Overlay`` nodes (``*``), with element primitives at
+the leaf nodes. Even in this potentially complex tree, all the raw
+data corresponding to every visual element is conveniently accessible
+via key or attribute access by selecting a leaf element using its path
+through the tree, and then inspecting the ``.data`` attribute, making
+it simple to declare which part of a complex dataset you want to work
+with at a given time.
 
-As any element may be a leaf of such a tree, there needs to be an
-automatic and easy way to select subtrees or leaf elements. This is
-achieved with a semantic, two-level labeling system using "group" and
-"label" strings supported throughout HoloViews. We have seen an
-example of a label string in Figure 1, where it was used to title the
-image 'Mandelbrot Set'. The textual representation of the layout in
-Figure :ref:`layout` (see Out[6] of Figure :ref:`customization`) shows
-how the supplied label is used in the attribute-based indexing scheme
-of the layout. The strings 'Image', 'Overlay', 'HLine' and 'Curve' are
+As any element may be a leaf of such a tree, there needs to be an easy
+way to select subtrees or leaf elements. This is achieved with a
+semantic, two-level labeling system using "group" and "label" strings
+supported throughout HoloViews. We have seen an example of a label
+string in Figure 1, where it was used to title the image 'Mandelbrot
+Set'. The textual representation of the layout in Figure :ref:`layout`
+(see Out[6] of Figure :ref:`customization`) shows how the supplied
+label is used in the attribute-based indexing scheme of the
+layout. The strings 'Image', 'Overlay', 'HLine' and 'Curve' are
 default group names, but you can supply your own names to define
 semantic groupings for your data.
 
@@ -526,13 +519,12 @@ The full list of currently supported ``NdMapping`` classes includes:
    it just end up being a 2D grid of 1D HoloMaps?  If so you don't
    need to mention anything here about such a restriction.
 
-All of the above classes are simply different ways to package and view a
-high-dimensional dataset. Just as with ``Elements``, it is possible to
-cast between these different spaces via the constructor (although
-``GridSpace`` is restricted to a maximum of two dimensions). In
+All of the above classes are simply different ways to package and view
+a high-dimensional dataset. Just as with ``Elements``, it is possible
+to cast between these different spaces via the constructor. In
 addition, they can all be tabularized into a HoloViews ``Table``
-element or a pandas ``DataFrame`` [pandas]_, a feature that is also supported by
-the ``Element`` primitives.
+element or a pandas ``DataFrame`` [pandas]_, a feature that is also
+supported by the ``Element`` primitives.
 
 To get a sense of how composing data and generating complex figures
 works within this framework, we explore some artificial data in Figure
@@ -714,7 +706,7 @@ the ``help`` function. This ease of discovery enables a
 workflow where the visualization details of a plot can be easily and
 quickly iteratively refined once the user has found data of interest.
 
-The options system is also inherently extendable.  New options may be
+The options system is also inherently extendable. New options may be
 added at any time, and will immediately become available for
 tab-completion. In fact, the plotting code for each element and
 container type may be switched out completely and independently, and
