@@ -50,11 +50,11 @@ As background, this paper will introduce necessary concepts for understanding
 the PyRK model and will describe the differential equations representing the
 coupled physics at hand. Next, the implementation of the data model, simulation
 framework, and numerical solution will be described. This discussion will
-include the use, in PyRK, of many parts of the scientific python software
-ecosystem such as NumPy for array manipulation, SciPy for ODE and PDE solvers,
-nose for testing, Pint for unit-checking, Sphinx for documentation, and
-matplotlib for plotting.
-
+include the use, in PyRK [Huff2015]_, of many parts of the scientific python
+software ecosystem such as NumPy [vanderWalt2011]_ for array manipulation, SciPy
+[Milman2011]_ for ODE and PDE solvers, nose [Pellerin2015]_ for testing,
+Pint [Grecco2014]_ for unit-checking, Sphinx [Brandl2009]_ for documentation, and
+matplotlib [Hunter2007]_ for plotting.
 
 Background
 ----------
@@ -243,7 +243,7 @@ In the above matrix equation, the following variable definitions are used:
     \Lambda &= \mbox{ mean generation time }\\
     \omega_k &= \mbox{ decay heat from FP group k}\\
     \kappa_k &= \mbox{ heat per fission for decay FP group k}\\
-    \lambda_{FP,k} &= \mbox{ decay constant for decay FP group k}
+    \lambda_{FP,k} &= \mbox{ decay constant for decay FP group k}\\
     T_i &= \mbox{ temperature of component i}
 
 The PRKE in equation :ref:`fullprke` can be solved in numerous ways, using
@@ -360,7 +360,8 @@ Neutronics class is equipped to drive a reactivity insertion accident scenario.
 That is, an accident scenario can be driven by an insertion of reactivity (e.g.
 the removal of a control rod). In PyRK, this reactivity insertion capability is
 captured in the ReactivityInsertion class, from which reactivity insertions can
-be selected and customized as in figure :ref:`figri`.
+be selected and customized as in Figure :ref:`figri`.
+
 
 .. figure:: ri.png
 
@@ -423,7 +424,7 @@ coolant, reflectors or other structures in the design.
 
 Fundamentally, to determine the temperature change in a thermal body of the
 reactor, we rely on relations between temperature, heat capacity, and thermal
-resistance. As in Table :ref:`tab:lumpedcap`, the heat flow out of body :math:`i` is
+resistance. As in Table :ref:`tablumpedcap`, the heat flow out of body :math:`i` is
 the sum of surface heat flow by conduction, convection, radiation, and other
 mechanisms to each adjacent body, :math:`j` [Lienhard2011]_:
 
@@ -526,26 +527,26 @@ Quality Assurance
 For robustness, a number of tools were used to improve robustness and
 reproducibility in this package. These include:
 
-- github : for version control hosting [GitHub2015]_
-- matplotlib : for plotting [Hunter2007]_
-- nose : for unit testing [Pellerin2015]_
-- numpy : for holding and manipulating arrays of floats [Walt2011]_
-- pint : for dimensional analysis and unit conversions [Grecco2014]_
-- scipy : for ode solvers [Oliphant2007]_ [Milman2011]_
-- sphinx : for automated documentation [Sphinx2015]_
-- travis-ci : for continuous integration [Travis2015]_
+- GitHub : for version control hosting [GitHub2015]_
+- Matplotlib : for plotting [Hunter2007]_
+- Nose : for unit testing [Pellerin2015]_
+- NumPy : for holding and manipulating arrays of floats [vanderWalt2011]_
+- Pint : for dimensional analysis and unit conversions [Grecco2014]_
+- SciPy : for ode solvers [Oliphant2007]_ [Milman2011]_
+- Sphinx : for automated documentation [Brandl2009]_
+- Travis-CI : for continuous integration [Travis2015]_
 
 Together, these tools create a functional framework for distribution and reuse.
 
 Unit Validation
 *****************
 
-Of particular note, the Pint package (pint.readthedocs.org/en/0.6/) is
-used keeping track of units, converting between them, and throwing
-errors when unit conversions are not sane. For example, in the code below,
-the user is able to initialize the material object with :math:`k_{th}` and
-:math:`c_p` in any valid unit for those quantities. Upon initialization of
-those member variables, the input values are converted to SI using Pint.
+Of particular note, the Pint package[Grecco2014]_ is used for keeping track of
+units, converting between them, and throwing errors when unit conversions are
+not sane. For example, in the code below, the user is able to initialize the
+material object with :math:`k_{th}` and :math:`c_p` in any valid unit for those
+quantities. Upon initialization of those member variables, the input values are
+converted to SI using Pint.
 
 .. code-block:: python
 
@@ -580,6 +581,76 @@ versatile, and in combination with the Pint package, provide a robust
 environment for users to experiment with parameters in the safe confines of
 dimensional accuracy.
 
+Minimal Example : SFR Reactivity Insertion
+------------------------------------------
+
+To demonstrate the use of this simulation framework, we give a minimal example.
+This example approximates a 10-second step-reactivity insertion in a sodium
+cooled fast reactor. This type of simulation is common, as it represents the
+instantaneous removal of a control rod. The change in reactivity results in a
+slightly delayed change in power and corresponding increases in temperatures
+throughout the system. For simplicity, the heat exchanger outside of the
+reactor core is assumed to be perfectly efficient and the inlet coolant
+temperature is held constant throughout the transient.
+
+Minimal Example: Input Parameters
+*********************************
+
+The parameters used to configure the simulation were
+retrieved from :ref:`Ragusa2011`, :ref:`Sofu200?`, and :ref:`asm2015`. The
+detailed input is listed in the full input file with illuminating comments as
+follows:
+
+.. include:: ./papers/kathryn_huff/min_ex.txt
+
+Minimal Example Results
+***********************
+
+The results of this simulation are a set of plots, the creation and labelling
+of which are enabled by matplotlib. In the first of these plots, the transient,
+beginning at time :math:`t=1s`, is driven by a step reactivity insertion of 0.5
+"dollars" of reactivity as in Figure :ref:`figinsertion`.
+
+.. figure:: insertion.png
+   :figclass: h
+   :figwidth: 40%
+
+   A prompt reactivity insertion, with a duration of 1
+   second and a magnitude of :math:`0.05\delta k/k`
+   drives the simulation. It represents the prompt partial removal and
+   reinsertion of a control rod.
+   :label:`figinsertion`
+
+
+The power responsds accordingly as in Figure :ref:`figpower`.
+
+
+.. figure:: power.png
+   :figclass: h
+   :figwidth: 40%
+
+   The power in the reactor closely follows the reactivity insertion, but is
+   magnified as expected. :label:`figpower`
+
+Finally, the temperatures in the key components of the system follow the trends
+in Figure :ref:`figtemps`.
+
+.. figure:: temps.png
+   :figclass: h
+   :figwidth: 40%
+
+   While the inlet temperature remains constant as a boundary condition, the
+   temperatures of fuel and coolant respond to the reactivity insertion event.
+   :label:`figtemps`
+
+These are typical of the kinds of results nuclear engineers seek from this kind
+of analysis and can be quickly reparameterized in the process of protoyping
+nuclear reactor designs. This particular simulation is not sufficiently
+detailed to represent a benchmark, as the effect of the cladding on heat
+transfer is neglected, as is the Doppler model controlling fuel temperature
+feedback. However, it presents a sufficiently interesting case to demonstrate
+the use of the PyRK tool.
+
 
 Conclusions and Future Work
 ----------------------------
@@ -608,32 +679,28 @@ Security Consortium.
 References
 ----------
 
-.. [GitHub2015] GitHub, "GitHub: Build software better, together," GitHub, 2015. [Online]. Available: https://github.com. [Accessed: 17-Jun-2015].
-
-.. [Hunter2007] J. D. Hunter, "Matplotlib: A 2D Graphics Environment," Computing in Science & Engineering, vol. 9, no. 3, pp. 90–95, 2007.
-
-.. [Pellerin2015] J. Pellerin, nose. https://pypi.python.org/pypi/nose/1.3.7. 2015.
+.. [Andreades2014] C. Andreades, A. T. Cisneros, J. K. Choi, A. Y. . Chong, D. L. Krumwiede, L. Huddar, K. D. Huff, M. D. Laufer, M. Munk, R. O. Scarlat, J. E. Seifried, N. Zwiebaum, E. Greenspan, and P. F. Peterson, "Technical Description of the 'Mark 1' Pebble-Bed, Fluoride-Salt-Cooled, High-Temperature Reactor Power Plant," University of California, Berkeley, Department of Nuclear Engineering, Berkeley, CA, Thermal Hydraulics Group UCBTH-14-002, Sep. 2014.
 
 .. [Bell1970] G. I. Bell and S. Glasstone, Nuclear Reactor Theory. New York: Van Nostrand Reinhold Company, 1970.
+
+.. [Brandl2009] G. Brandl, Sphinx: Python Documentation Generator. URL: http://sphinx.  pocoo. org/index. html (13.8. 2012), 2009.
+
+.. [GitHub2015] GitHub, "GitHub: Build software better, together," GitHub, 2015. [Online]. Available: https://github.com. [Accessed: 17-Jun-2015].
 
 .. [Grecco2014] H. E. Grecco, Pint: a Python Units Library.  https://github.com/hgrecco/pint.  2014.
 
 .. [Huff2015] K. Huff, PyRK: Python for Reactor Kinetics. https://pyrk.github.io. 2015.
 
-.. [Oliphant2007] T. E. Oliphant, "Python for Scientific Computing," Computing in Science & Engineering, vol. 9, no. 3, pp. 10–20, 2007.
+.. [Hunter2007] J. D. Hunter, "Matplotlib: A 2D Graphics Environment," Computing in Science & Engineering, vol. 9, no. 3, pp. 90–95, 2007.
+
+.. [Lienhard2011] Lienhard V and J. H. Lienhard IV, A Heat Transfer Textbook: Fourth Edition, Fourth Edition edition. Mineola, N.Y: Dover Publications, 2011.
 
 .. [Milman2011] K. J. Millman and M. Aivazis, "Python for Scientists and Engineers," Computing in Science & Engineering, vol. 13, no. 2, pp. 9–12, Mar. 2011.
 
-.. [Andreades2014] C. Andreades, A. T. Cisneros, J. K. Choi, A. Y. . Chong, D. L. Krumwiede, L. Huddar, K. D. Huff, M. D. Laufer, M. Munk, R. O. Scarlat, J. E. Seifried, N. Zwiebaum, E. Greenspan, and P. F. Peterson, "Technical Description of the 'Mark 1' Pebble-Bed, Fluoride-Salt-Cooled, High-Temperature Reactor Power Plant," University of California, Berkeley, Department of Nuclear Engineering, Berkeley, CA, Thermal Hydraulics Group UCBTH-14-002, Sep. 2014.
+.. [Oliphant2007] T. E. Oliphant, "Python for Scientific Computing," Computing in Science & Engineering, vol. 9, no. 3, pp. 10–20, 2007.
 
-.. [Walt2011] S. van der Walt, S. C. Colbert, and G. Varoquaux, "The NumPy Array: A Structure for Efficient Numerical Computation," Computing in Science & Engineering, vol. 13, no. 2, pp. 22–30, Mar. 2011.
+.. [Pellerin2015] J. Pellerin, nose. https://pypi.python.org/pypi/nose/1.3.7. 2015.
 
-.. [Travis2015]
+.. [Travis2015] Travis, “travis-ci/travis-api,” GitHub repository. Available: https://github.com/travis-ci/travis-api. Accessed: 04-Jul-2015.
 
-.. [Sphinx2015]
-
-.. [citationneeded]
-
-.. [wiki2014]
-
-.. [Lienhard2011] Lienhard
+.. [vanderWalt2011] S. van der Walt, S. C. Colbert, and G. Varoquaux, "The NumPy Array: A Structure for Efficient Numerical Computation," Computing in Science & Engineering, vol. 13, no. 2, pp. 22–30, Mar. 2011.
