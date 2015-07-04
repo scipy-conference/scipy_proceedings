@@ -442,17 +442,6 @@ efficiency.
 Understanding the statistical properties of this particular form of social
 organization, as opposed to others, is the very purpose of this empirical work.
 
-*Interaction graph study*.
-By looking at the *Reply-To* header of the emails, we
-are able to construct a graph of who replies to who in the email list. (How?)
-Drawing on (x,y, and z) we are studying the empirical properties of these
-networks in order to come up with a generative model of community graph.
-Whereas (Barabási reference) models graphs with power-law degree distribution,
-we find (verify using Clauset et al. method) that degree distribution in
-these graphs is log normally distributed. Moreover, whereas [Newman2002]_
-hypothesizes that socially generated graphs will be characterized by high
-degree assortativity, we find empirically that these interaction graphs
-have degree assortativity comparable with biological and technical networks.
 
 Entity Resolution
 -----------------
