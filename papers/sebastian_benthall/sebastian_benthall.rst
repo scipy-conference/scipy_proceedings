@@ -378,6 +378,14 @@ We construct the directed *interaction graph* :math:`G` for a set of emails as f
 * If :math:`e_1` is a reply to another email :math:`e_2`, create an edge between
   their corresponding nodes or, if it already exists, increment its weight by 1
 
+The motivation for constructing interaction graphs in this way is to build a
+concise representation of the social network implied by email data.
+We posit that building a social network representation based on actual messages
+sent between people provides a more granular and faithful description of
+social relationships than one based on higher-level descriptions of social
+relationships or ties from web services such as Facebook 'friends' and
+Twitter 'followers'
+
 BigBang implements this interaction graph creation using Python's native
 email processing libraries, `pandas`, and `networkx`.
 
@@ -435,13 +443,6 @@ email processing libraries, `pandas`, and `networkx`.
 
        return IG
 
-The motivation for constructing interaction graphs in this way is to build a
-concise representation of the social network implied by email data.
-We posit that building a social network representation based on actual messages
-sent between people provides a more granular and faithful description of
-social relationships than one based on higher-level descriptions of social
-relationships or ties from web services such as Facebook 'friends' and
-Twitter 'followers'
 
 One potential objection to this approach is that since the data we are considering comes from public
 mailing lists where every message has a potentially large audience, it may be
