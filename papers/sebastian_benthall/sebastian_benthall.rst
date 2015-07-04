@@ -536,6 +536,10 @@ entity matching.
 
 Under this procedure, all of the above email addresses would be collapsed into a single
 entity.
+These heuristics were developed through informal but thorough investigation of mailing list
+data we have analyzed for this paper.
+We leave it to future work to formally test and improve this method with respect to a
+sufficiently large and labeled test data set.
 
 In our interaction graph study, this has the effect of combining several nodes into a single one
 in a way that's similar to the *blockmodel* technique.
