@@ -35,19 +35,19 @@ software stack without triggering a full rewrite.
 
 This paper introduces ``dask``, a specification to encode parallel algorithms,
 using primitive Python dictionaries, tuples, and callables.  We use ``dask`` to
-create ``dask.array`` a parallel NumPy clone that uses all of the cores in a
-modern processor and operates out-of-core intelligently, meaning that it
-streams data well from disk.  Dask.array serves both as a general library for
-parallel out-of-core ``ndarrays`` and also as a demonstration that we can
-parallelize complex codebases like NumPy in a straightforward manner using
-blocked algorithms and task scheduling.
+create ``dask.array`` a parallel N-dimensional array library that copies the
+NumPy interface, uses all of the cores in a modern processor, and manages data
+well from disk.  Dask.array serves both as a general library for parallel
+out-of-core ``ndarrays`` and also as a demonstration that we can parallelize
+complex codebases like NumPy in a straightforward manner using blocked
+algorithms and task scheduling.
 
-We first define ``dask`` graphs and give a trivial example of their use.  We then
-share the design of ``dask.array`` a parallel ``ndarray``.  Then we discuss dynamic
-task scheduling and policies to minimize memory footprint.  We then give two
-examples using ``dask.array`` on computational problems.  We then briefly
-discuss ``dask.bag`` and ``dask.dataframe``, two other collections in the
-``dask`` library.  We finish with thoughts about extension of this approach
+We first define ``dask`` graphs and give a trivial example of their use.  We
+then share the design of ``dask.array`` a parallel ``ndarray``.  Then we
+discuss dynamic task scheduling and policies to minimize memory footprint.  We
+then give two examples using ``dask.array`` on computational problems.  We then
+briefly discuss ``dask.bag`` and ``dask.dataframe``, two other collections in
+the ``dask`` library.  We finish with thoughts about extension of this approach
 into the broader Scientific Python ecosystem.
 
 Modern Hardware
