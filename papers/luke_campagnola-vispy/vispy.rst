@@ -36,24 +36,30 @@ VisPy: Harnessing The GPU For Fast, High-Level Visualization
    graphics, visualization, plotting, performance, interactive, opengl 
 
 
+
+
 Motivation
 ----------
 
-Despite the rapid growth of the scientific Python stack, one conspicuously absent element is a standard package for high-performance visualization. The de-facto standard for plotting is Matplotlib; however, this package is designed for publication graphics and is not optimized for visualizations that require realtime, interactive performance, or that incorporate large data volumes. Several packages have apeared in the Python ecosystem to fill this gap (vtk, chaco, pyqtgraph, visvis, galry, glumpy, etc.), but none has yet emerged as a serious candidate standard package. Consequently, these projects have spent much of their effort re-solving the same problems, and the ecosystem as a whole suffers from the lack of a focused, collaborative effort.
+Despite the rapid growth of the scientific Python stack, one conspicuously absent element is a standard package for high-performance visualization. The de-facto standard for plotting is Matplotlib; however, this package is designed for publication graphics and is not optimized for visualizations that require realtime, interactive performance, or that incorporate large data volumes. Several packages exist in the Python ecosystem that are capable of high-performance visualization: VTK provides an extensive set of 3D visualization tools with Python bindings, Chaco  offers efficient 2D plotting, PyQtGraph is a scientific GUI library with fast ploting, Glumpy implements high-quality plotting primitives in OpenGL, and VisVis and Galry both provide high-performance 2D/3D OpenGL visualization. Each of these packages has its particular strengths and weaknesses and, although the Python community benefits from such a rich ecosystem, at the same time it suffers from the lack of a focused, collaborative effort.
 
 In recognition of this problem and the potential benefit to the Python community, VisPy was created as a collaborative effort to succeed several of these projects (visvis, galry, glumpy, and the visualization components of pyqtgraph). VisPy has quickly grown an active community of developers and is approaching beta status.
 
+.. figure:: demos.png
+   :scale: 30%
+   :align: center
+   :figclass: w
 
 What is VisPy
 -------------
 
-VisPy is a scientific visualization library based on OpenGL. Its primary purpose is to deliver high-performance rendering under heavy load, but at the same time we aim to provide publication-quality graphics, a high-level 2D and 3D plotting API, and portability across many platforms. VisPy's main design criteria are:
+VisPy is a scientific visualization library based on OpenGL and NumPy. Its primary purpose is to deliver high-performance rendering under heavy load, but at the same time we aim to provide publication-quality graphics, a high-level 2D and 3D plotting API, and portability across many platforms. VisPy's main design criteria are:
     
-* *High-performance for large data sets.* By making use of the modern, shader-based OpenGL pipeline, most of the graphical rendering cost is offloaded to the graphics processor (GPU). This allows realtime interactivity even for data on the order of millions of samples, and at the same time minimizes CPU overhead.
+* *High-performance for large data sets.* By making use of the modern, shader-based OpenGL pipeline, most of the graphical rendering cost is offloaded to the graphics processor (GPU). This allows realtime interactivity even for data on the order of tens of millions of samples, and at the same time minimizes CPU overhead.
   
 * *High-level visualization tools.* Most Python developers are not graphics experts. Getting from raw data to interactive visualization should require as little code as possible, and should require no knowledge of OpenGL or the underlying graphics hardware.
   
-* *Publication quality output.* Commodity graphics hardware and the modern OpenGL shader pipeline have made it possible to render moderately large data sets without sacrificing quality. 
+* *Publication quality output.* Commodity graphics hardware and the modern OpenGL shader pipeline have made it possible to render moderately large data sets without sacrificing quality in primitive shapes or antialiasing. VisPy is also designed to enable vector graphics output, although this feature is not yet implemented.
 
 * *Flexibility.* VisPy strives to make common tasks easy, but it also makes complex and niche tasks possible through a flexible and extensibile architecture. VisPy's library of graphical components can be reconfigured and recombined to build complex scenes.
 
@@ -123,7 +129,7 @@ VisPy implements a collection of coordinate transformation classes that are used
 
 .. figure:: image_transforms.png
 
-   One image viewed using four different coordinate transformations. VisPy supports linear transformations such as scaling, translation, and affine matrix multiplication (bottom left) as well as nonlinear transformations such as logarithmic (top left) and polar (top right). Custom transform classes are also easy to construct (bottom right).
+   One image viewed using four different coordinate transformations. VisPy supports linear transformations such as scaling, translation, and matrix multiplication (bottom left) as well as nonlinear transformations such as logarithmic (top left) and polar (top right). Custom transform classes are also easy to construct (bottom right).
 
 The following example summarizes the code that produces the logarithmically-scaled image in Figure XX. It combines a scale/translation, followed by log base 2 along the y axis, followed by a second scale/translation to set the final position on screen. The resulting chained transformation maps from image coordinates (origin in upper left, 1 unit = 1 image pixel) to window coordinates (origin in upper left, 1 unit = 1 window pixel):
 
@@ -151,6 +157,11 @@ Layer 3: Scenegraph
 '''''''''''''''''''
 
 Layer 3 implements common features required for interactive visualization, and is the first layer that requires no knowledge of OpenGL. This is the main entry point for most users who build visualization applications. Although the majority of VisPy's graphical features can be accessed by working directly with its Visual classes (layer 2), it can be confusing and tedious to manage the visuals, coordinate transforms, and filters for a complex scene. To automate this process, VisPy implements a scenegraph |---| a standard data structure used in computer graphics that organizes visuals into a hierarchy. Each node in the hierarchy inherits coordinate transformations and filters from its parent. VisPy's scenegraph allows visuals to be easily arranged in a scene and, in automating control of the system of transformations, it is able to handle some common interactive visualization requirements:
+    
+.. figure:: scrolling_plots_sm.png
+
+   One image viewed using four different coordinate transformations. VisPy supports linear transformations such as scaling, translation, and matrix multiplication (bottom left) as well as nonlinear transformations such as logarithmic (top left) and polar (top right). Custom transform classes are also easy to construct (bottom right).
+
 
 * *Picking.* User input from the mouse and touch devices are delivered to the objects in the scene that are clicked on. This works by rendering the scene to an invisible framebuffer, using unique colors for each visual; thus the otherwise expensive ray casting computation is carried out on the GPU.
 * *Interactive viewports.* These allow the user to interactively pan, scale, and rotate data within the view, and the visuals inside the view are clipped to its borders.
