@@ -387,7 +387,7 @@ relationships or ties from web services such as Facebook 'friends' and
 Twitter 'followers'
 
 BigBang implements this interaction graph creation using Python's native
-email processing libraries, `pandas`, and `networkx`.
+email processing libraries, `pandas`, and `networkx`. [Networkx]_
 
 .. code-block:: python
 
@@ -611,6 +611,12 @@ References
 
 .. [McKinney] Wes McKinney. Data Structures for Statistical Computing in Python, 
               Proceedings of the 9th Python in Science Conference, 51-56 (2010)
+
+.. [Networkx] Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, 
+              “Exploring network structure, dynamics, and function using NetworkX”, 
+              in Proceedings of the 7th Python in Science Conference (SciPy2008), 
+              Gäel Varoquaux, Travis Vaught, and Jarrod Millman (Eds), (Pasadena, CA USA), 
+              pp. 11–15, Aug 2008
 
 .. [Newman2002] Newman, M. E. J. 2002. "Assortative mixing in networks."
 
