@@ -354,7 +354,7 @@ the shape of the output in all other cases of slicing and indexing, e.g.
 
 .. code:: python
 
-   x[10::3, [1, 2, 5]]  # can determine the shape of the output
+   x[10::3, [1, 2, 5]]  # can determine shape of output
 
 
 Dynamic Task Scheduling
@@ -549,7 +549,7 @@ in a single large array.
    ...          for fn in filenames]
 
    >>> import dask.array as da
-   >>> arrays = [da.from_array(t, blockshape=(4, 200, 200))
+   >>> arrays = [da.from_array(t, blockshape=(4,200,200))
    ...           for t in temps]
    >>> x = da.concatenate(arrays, axis=0)
 
@@ -563,9 +563,9 @@ they call ``np.array(...)`` on their input.
 
 .. code-block:: python
 
->>> from matplotlib import imshow
->>> imshow(x[::4].mean(axis=0) - x[2::4].mean(axis=0)
-...        , cmap='RdBu_r')
+   >>> from matplotlib import imshow
+   >>> imshow(x[::4].mean(axis=0) - x[2::4].mean(axis=0)
+   ...        , cmap='RdBu_r')
 
 .. figure:: day-vs-night.png
 
