@@ -318,11 +318,16 @@ for a functional purpose facilitated better by having highly connect hubs distri
 many social networks are organized more according to the self-interest or homophilic tendencies
 of the participants.
 
-Newman also notes that the degree assortativity of Barabási-Alpert networks is zero.
-Variations on the Barabási-Alpert model do have other properties.
-(cite: http://arxiv.org/pdf/cond-mat/0402315.pdf)
-
-
+[Noldus2015]_ reviews the extensive scholarship on assortativity in networks since Newman's work in 2002.
+They note that Barabási-Alpert are only slightly disassortive, converging on zero assortativity as the number
+of nodes increases.
+[Noldus2015]_ also surveys work such as [Newman2003]_ and [Foster2009]_ that define and analyze directed
+degree assortativity.
+In directed variations, degree assortativity is computed as above except using either the in-degree
+or out-degree of the source and targets nodes.
+In our empirical work below, we compute directed assortativity for every variation (in/in, out/in, in/out,
+and out/out) and find little difference between the computed values for our data,
+though there are graph structures for which these values can vary greatly.
 
 
 Methods
@@ -662,6 +667,12 @@ grow and form over time.
 
 Possible models include nonlinear Barabási-Alpert: http://arxiv.org/pdf/cond-mat/0402315.pdf
 
+Newman also notes that the degree assortativity of Barabási-Alpert networks is zero.
+Variations on the Barabási-Alpert model do have other properties.
+(cite: http://arxiv.org/pdf/cond-mat/0402315.pdf)
+
+
+
 We have built BigBang and conducted this preliminary analysis with a number of applications
 in mind.
 One is anomaly detection in the open source ecosystem as a method of supply chain risk management.
@@ -703,6 +714,11 @@ References
 
 .. [Fogel] Fogel, K. 2013 *Producing Open Source Software.* http://producingoss.com/
 
+.. [Foster2009] Foster, J, Foster, D, Grassberger, P, and Paczuski, M. 2010
+                "Edge direction and the structure of networks"
+                PNAS 2010 107 (24) 10815-10820; published ahead of print 
+                May 26, 2010, doi:10.1073/pnas.0912671107 
+
 .. [McKinney] Wes McKinney. Data Structures for Statistical Computing in Python, 
               Proceedings of the 9th Python in Science Conference, 51-56 (2010)
 
@@ -716,6 +732,9 @@ References
 
 .. [Newman2003] Newman, M. E. J. 2003. "Mixing patterns in networks."
                 Phys. Rev. E 67, 026126
+
+.. [Noldus2015] Noldus, R and Mieghem, P. 2015. "Assortativity in Complex Networks"
+                Journal of Complex Networks. doi: 10.1093/comnet/cnv005
  
 .. [RFC2822] Resnick, P. 2001. "Internet Message Format". Network Working Group, IETF.
 
