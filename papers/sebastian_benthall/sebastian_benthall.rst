@@ -366,13 +366,26 @@ another email.
 The reply's `In-Reply-To` header will match the `Message-ID` of the
 original email.
 
-We construct the directed *interaction graph* :math:`G` for a set of emails as follows:
+Formally, we construct the directed *interaction graph* :math:`G` from a set of emails
+indexed by :math:`i \in I`. 
+Each email consists of a tuple :math:`(f_i,r_i)`, where :math:`f_i` identifies the mailbox
+of the sender (corresponding to the `From` header) and :math:`r_i \in I \cup \{\epsilon\}`
+(corresponding to the `In-Reply-To` header) may be a null value :math:`\epsilon` or be 
+the index of another email.
 
-* For every email :math:`e`, add a node :math:`v_{f(e)}` to :math:`G` corresponding 
-  to its `From` header :math:`f(e)`  and set its `sent` attribute :math:`v_{f(e)}` 
-  (notation is sloppy here -- can we write a pseudocode algorithm?)
-* If :math:`e_1` is a reply to another email :math:`e_2`, create an edge between
-  their corresponding nodes or, if it already exists, increment its weight by 1
+* For every email :math:`i`, if there is not one already add a node with label 
+  :math:`f_i` to :math:`G` corresponding and set its `sent` attribute :math:`1`.
+  If such a node already exists, increment its `sent` attribute by 1. 
+* Iterating again through every email :math:`i`, if :math:`r_i \neq \epsilon`, 
+  and if there is not one already, then create a directed edge between nodes :math:`f_i`
+  and :math:`f_{r_i}` with a `weight` attribute set to 1. If the edge already exists,
+  increment the `weight` attribute by 1.
+
+In sum, the final graph :math:`G` has a node for every email author annotated by the
+number of emails from that sender in the data set.
+There is an edge from :math:`f_i` to :math:`f_j` if author :math:`f_i` ever wrote
+a reply to an email authored by :math:`f_j`.
+The weight of an edge corresponds to the number of these replies in the data set.
 
 The motivation for constructing interaction graphs in this way is to build a
 concise representation of the social network implied by email data.
@@ -384,6 +397,7 @@ Twitter 'followers'
 
 BigBang implements this interaction graph creation using Python's native
 email processing libraries, `pandas`, and `networkx`. [Networkx]_
+The following code builds the interaction graph representations.
 
 .. code-block:: python
 
