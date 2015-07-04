@@ -379,16 +379,14 @@ selects the second key dimension (the imaginary axis ``'Im'``) from
 select a portion of the curve object shown in Figure :ref:`layout`
 **B**.
 
-There are many additional element classes, one for each of the 
-common visual representations for data. These elements form an
-extensible library of primitives that allow the composition of data
-structures with complex, meaningful visualizations. Within the set of
-all elements, there are subsets forming equivalence classes according
-to the allowed number of key and value dimensions. Within these
-groups, you can cast your data between representations so long as the
-number of each dimension type is consistent. You can then index and slice
-your elements along their respective key dimensions to get new
-elements holding the appropriately sliced data of interest.
+There are many additional element classes, one for each of the common
+visual representations for data. These elements form an extensible
+library of primitives that allow the composition of data structures
+with complex, meaningful visualizations. Within the set of all
+elements, you can cast your data between representations so long as
+the number of key and value dimensions is consistent. You can then
+index and slice your elements along their respective key dimensions to
+get new elements holding the appropriately sliced data of interest.
 
 Collections
 ~~~~~~~~~~~
