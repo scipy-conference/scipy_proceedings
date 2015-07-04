@@ -338,7 +338,7 @@ the shape of the output in all other cases of slicing and indexing, e.g.
 Dynamic Task Scheduling
 -----------------------
 
-We now discuss how ``dask`` executes execute task graphs.  How we execute
+We now discuss how ``dask`` executes task graphs.  How we execute
 these graphs strongly impacts performance.  Fortunately we can tackle this
 problem with a variety of approaches without touching the graph creation
 problem discussed above.  Graph creation and graph execution are separable
@@ -353,18 +353,18 @@ preclude certain clever optimizations.
 
 Dynamic task scheduling has a rich literature and numerous projects, both
 within the Python ecosystem with projects like Spotify's Luigi_ for bulk data
-processing and projects without like DAGuE [Bos12]_ for more high performance
-task scheduling.  Additionally, data parallel systems like Dryad or Spark
-contain their own custom dynamic task schedulers.
+processing and projects without the ecosystem like DAGuE [Bos12]_ for more high
+performance task scheduling.  Additionally, data parallel systems like Dryad or
+Spark contain their own custom dynamic task schedulers.
 
 None of these solutions, nor much of the literature in dynamic task scheduling,
 suited the needs of blocked algorithms for shared memory computation.  We
 needed a lightwight, easily installable Python solution that had latencies in
 the millisecond range and was mindful of memory use.  Traditional task
-scheduling with data dependencies scheduling literature usually focuses on
-policies to expose parallelism or chip away at the critical path.  We find that
-for bulk data analytics these are not very relevant as parallelism is abundant
-and critical paths are comparatively short relative to the depth of the graph.
+scheduling literature usually focuses on policies to expose parallelism or chip
+away at the critical path.  We find that for bulk data analytics these are not
+very relevant as parallelism is abundant and critical paths are comparatively
+short relative to the depth of the graph.
 
 The logic behind dask's schedulers reduces to the following situation:  A worker
 reports that it has completed a task and that it is ready for another.  We
@@ -373,7 +373,7 @@ run, which data can be released, etc..  We then choose a task to give to this
 worker from among the set of ready-to-run tasks.  This small choice governs the
 macro-scale performance of the scheduler.
 
-Instead of these metrics commonly found in the literature we find that for
+Instead of these metrics found in the literature we find that for
 out-of-core computation we need to choose tasks that allow us to release
 intermediate results and keep a small memory footprint.  This lets us avoid
 spilling intermediate values to disk which hampers performance significantly.
@@ -396,7 +396,8 @@ Finally, power users can disregard the dask schedulers and create their own.
 Dask graphs are completely separate from the choice of scheduler and users may
 select the right scheduler for their class of problem or, if no ideal scheduler
 exists, build one anew.  The default single-machine scheduler is about three
-hundred significant lines of code.
+hundred significant lines of code and has been adapated to single-threaded,
+multi-threaded, multi-processing, and distributed computing variants.
 
 
 Example: Matrix Multiply
@@ -441,13 +442,13 @@ setitem syntax.
 
 **Results**: We do this same operation in different settings.
 
-We use either use NumPy or dask.array
+We use either use NumPy or ``dask.array``:
 
 1.  Use NumPy on a big-memory machine
 2.  Use dask.array in a small amount of memory, pulling data from disk, using
     four threads
 
-We different BLAS implementations
+We compare different BLAS implementations:
 
 1.  Reference BLAS, single threaded, unblocked
 2.  OpenBLAS, single threaded
@@ -485,8 +486,8 @@ We note the following
 Example: Meteorology
 ~~~~~~~~~~~~~~~~~~~~
 
-Performance is secondary to capability.  In this example we use dask.array to
-manipulate climate datasets that are larger than memory.  This example shows
+Performance is secondary to capability.  In this example we use ``dask.array``
+to manipulate climate datasets that are larger than memory.  This example shows
 the following:
 
 1.  Use ``concatenate`` and ``stack`` to manage large piles of HDF5 files (a
@@ -563,7 +564,7 @@ The dask library contains parallel collections other than ``dask.array``.  We
 briefly describe ``dask.bag`` and ``dask.dataframe``
 
 * ``dask.array`` = ``numpy`` + ``threading``
-* ``dask.bag = ``toolz`` + ``multiprocessing``
+* ``dask.bag`` = ``toolz`` + ``multiprocessing``
 * ``dask.dataframe`` = ``pandas`` + ``threading``
 
 Bag
@@ -571,8 +572,8 @@ Bag
 
 A *bag* is an unordered collection with repeats.  It is like a Python list but
 does not guarantee the order of elements.  Because we typically compute on
-Python objects in dask.bag we are bound by the Global Interpreter Lock and so
-switch from using a multi-threaded scheduler to a multi-processing one.
+Python objects in ``dask.bag`` we are bound by the Global Interpreter Lock and
+so switch from using a multi-threaded scheduler to a multi-processing one.
 
 The ``dask.bag`` API contains functions like ``map`` and ``filter`` and
 generally follows the PyToolz_ API.  We find that it is particularly useful
@@ -667,7 +668,7 @@ Low Barrier to Entry
 The simplicity of dask graphs (no classes or frameworks) presents a very low
 barrier to entry.  Users only need to understand basic concepts common to
 Python (or indeed most modern languages) like dictionaries, tuples, and
-functions as variables.  As an example consider the work in [Tep15] in which
+functions as variables.  As an example consider the work in [Tep15]_ in which
 the authors implement out-of-core parallel non-negative matrix factorizations
 on top of dask.array without significant input from dask core developers.  This
 demonstrates that algorithmic domain experts can implement complex algorithms
@@ -719,7 +720,7 @@ development and go more deeply into the computational concerns encountered
 during dask's construction.
 
 Dask is used on a daily basis, both as a dependency in other projects in the
-SciPy ecosystem (xray, scikit-image, ...) and also in production in in private
+SciPy ecosystem (xray, scikit-image, ...) and also in production in private
 business.
 
 *   http://dask.pydata.org/en/latest
