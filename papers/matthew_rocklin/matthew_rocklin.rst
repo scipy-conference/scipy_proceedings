@@ -219,7 +219,7 @@ intermediate sums."  Through tricks like this we can evaluate one large problem
 by solving very many small problems.
 
 Blocked algorithms have proven useful in modern numerical linear algebra
-libraries like Flame and Plasma and more recently in data parallel systems like
+libraries like Flame [Gei08]_ and Plasma [Agu09]_ and more recently in data parallel systems like
 Dryad [Isa07]_ and Spark [Zah10]_.  These compute macroscopic operations with a
 collection of related in-memory operations.
 
@@ -799,6 +799,13 @@ References
            ACM Transactions on Mathematical  Software (TOMS) 39.2 (2013): 13. APA
 .. [Tep15] Mariano Tepper and Guillermo Sapiro, "Compressed Nonnegative
            Matrix Factorization is Fast and Accurate", 2015.
+.. [Agu09] Agullo, Emmanuel, et al. "Numerical linear algebra on emerging
+           architectures: The PLASMA and MAGMA projects." Journal of Physics:
+           Conference Series. Vol. 180. No. 1. IOP Publishing, 2009.  APA
+.. [Gei08] Van De Geijn, Robert A., and Enrique S. Quintana-Ortí. "The science
+           of programming matrix computations." (2008). APA
+
+
 
 
 .. _Biggus: http://biggus.readthedocs.org/en/latest/
