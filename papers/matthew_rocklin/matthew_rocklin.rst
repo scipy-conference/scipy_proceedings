@@ -479,16 +479,17 @@ We compare different BLAS implementations:
 For each configuration we compute the number of floating point operations per
 second.
 
-.. table:: Matrix Multiply GFLOPS
+.. table:: Matrix Multiply GigaFLOPS for NumPy/Dask.array and for Reference
+   BLAS, and OpenBLAS with one and four threads
 
    +-----------------------+--------+--------------+
    | Performance (GFLOPS)  | NumPy  |  Dask.array  |
    +=======================+========+==============+
    | Reference BLAS        | 6      |  18          |
    +-----------------------+--------+--------------+
-   | OpenBLAS one thread   | 11     |  23          |
+   | OpenBLAS (one)        | 11     |  23          |
    +-----------------------+--------+--------------+
-   | OpenBLAS four threads | 22     |  11          |
+   | OpenBLAS (four)       | 22     |  11          |
    +-----------------------+--------+--------------+
 
 We note the following
