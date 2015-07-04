@@ -62,7 +62,7 @@ generative model of collaboration.
 BigBang Overview
 ================
 
-Launched last year and presented at SciPy 2014, BigBang is a software project 
+Launched in 2014, BigBang is a software project 
 that aims to provide researchers a complete toolkit for the scientific analysis
 of open online collaborative communities.
 Though applicable to many domains, research into online collaboration has
