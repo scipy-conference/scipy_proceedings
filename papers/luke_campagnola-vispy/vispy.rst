@@ -225,7 +225,7 @@ VisPy's plotting layer allows quick and easy access to advanced data visualizati
 
 Despite the large volume of data, the resulting views can be immediately panned and zoomed in realtime. As a rough performance comparison, the same plot data can be redrawn at about 0.2 Hz by Matplotlib, 2 Hz by PyQtGraph, and over 100 Hz by VisPy (on the author's machine). 
 
-Each function in ``vispy.ploy`` generates scenegraph (layer 3) objects to allow lower level control over the visual output. This makes it possible to begin development with the simplest ``vispy.plot`` calls and iteratively refine the output as needed. VisPy also includes an experimental wrapper around ``mplexporter`` (from https://github.com/mpld3/mplexporter) that allows it to act as a drop-in replacement for Matplotlib in existing projects (however this approach is not always expected to have the same performance benefits as using the native ``vispy.plot`` API).
+Each function in ``vispy.plot`` generates scenegraph (layer 3) objects to allow lower level control over the visual output. This makes it possible to begin development with the simplest ``vispy.plot`` calls and iteratively refine the output as needed. VisPy also includes an experimental wrapper around ``mplexporter`` (from https://github.com/mpld3/mplexporter) that allows it to act as a drop-in replacement for Matplotlib in existing projects (however this approach is not always expected to have the same performance benefits as using the native ``vispy.plot`` API).
 
 The ``vispy.plot`` interface is currently the highest-level and easiest layer VisPy offers. Consequently, it is also the least mature. We expect this layer to grow quickly in the coming months as we add more plot types and allow the API to settle.
 
