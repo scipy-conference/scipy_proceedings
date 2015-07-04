@@ -708,7 +708,7 @@ library.
    >>> u, s, v = da.svd(x)
 
 .. figure:: dask-svd.png
-   :scale: 10%
+   :scale: 14%
 
    Out-of-core parallel SVD
 
