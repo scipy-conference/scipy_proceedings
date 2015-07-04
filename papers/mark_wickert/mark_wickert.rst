@@ -125,7 +125,7 @@ wired or wireless, and the signal carrying the bits may be at *baseband*, as in 
 frequency*, as in WiFi. To error protect bits sent over the channel *forward error correction* (FEC) coding, such as
 *convolutional codes*, may be employed. Encoding is applied before the source bits are modulated onto the carrier to form
 the transmitted signal. With a rate 1/2 convolutional code each source bit is encoded into two channel bits using a
-*shift register* of length :math:`K` (termed *constaint length*) with *excusive or* logic gate connections.
+*shift register* of length :math:`K` (termed *constraint length*) with *excusive or* logic gate connections.
 The class allows arbitrary constraint length codes and allows *puncturing* and *depuncturing* patterns.
 With pucturing/depuncturing certain code bits are *erased*, that is not sent, so as to increase the code rate from
 1/2 to say 3/4 (4 channel bits for every three source bits).
@@ -175,8 +175,8 @@ corresponding numerical analysis and simulation demos. When appropriate, starter
 the notebook before the lecture. For example I can provide relevant theory right in the notebook to transition
 between the lecture notes mathematics and the notebook demos. Specifically,
 text and mathematics are placed in *markdown cells*. The notebook theory is however very brief compared to that of the
-course lecture notes. Since the lecture notes are written in LaTeX, I drop the selected equations right
-in mark down cells will minimal rework. Sample calculations and simulations, with corresponding plots, are often generated
+course lecture notes. Preparing this content is easy, since the lecture notes are written in LaTeX I drop the
+selected equations right into mark down cells will minimal rework. Sample calculations and simulations, with corresponding plots, are often generated
 in advance, but the intent is to make parameter changes during the lecture, so the students can get a feel for how a
 particular math model relates to real-word communications and signal processing systems.
 
@@ -243,8 +243,8 @@ current homework assignment.
 Case Studies
 ------------
 
-In this section case studies present the details one or more of the IPython notebook
-use cases described in the previous sections of this paper. Case studies from industry R&D are not included here due
+In this section I present case studies that present the details on one or more of the IPython notebook
+use cases described in the previous section of this paper. Case studies from industry R&D are not included here due
 to the propriety nature of the work.
 
 In all of the case studies you see that graphical results are produced using the ``pylab`` interface to
@@ -317,9 +317,9 @@ Students frequently have problems setting up and evaluating the convolution inte
 to learn. The waveforms of interest are
 typically piecewise continuous, so the integral must be evaluated over one or more contiguous intervals. Consider the
 case of :math:`x(t) = u(t) - u(t-T)`, where :math:`u(t)` is the unit step function, and :math:`h(t) = a e^{-at}u(t)`,
-where :math:`a > 0`. To avoid careless errors you start with a sketch of the
+where :math:`a > 0`. To avoid careless errors I start with a sketch of the
 integrand :math:`h(\lambda)x(t-\lambda)`, as shown in Fig. :ref:`fig12`.
-From there you can discover the support intervals or *cases* for evaluating the integral.
+From there I can discover the support intervals or *cases* for evaluating the integral.
 
 .. figure:: scipy_2015_fig12.pdf
    :scale: 60%
@@ -329,7 +329,7 @@ From there you can discover the support intervals or *cases* for evaluating the 
    Sketches of :math:`x(t)`, :math:`h(t)`, and :math:`h(\lambda)x(t-\lambda)`. :label:`fig12`
 
 A screen capture of a notebook that details the steps of solving the convolution integral is given in Fig. :ref:`fig10`.
-In this same figure you see the analytical solution is easily plotted for the case of :math:`T=1` and :math:`a=5`.
+In this same figure we see the analytical solution is easily plotted for the case of :math:`T=1` and :math:`a=5`.
 
 .. figure:: scipy_2015_fig10.pdf
    :scale: 55%
@@ -341,9 +341,9 @@ In this same figure you see the analytical solution is easily plotted for the ca
 To bring closure to the tedious analytical solution development, I encourage students check their work using computer
 simulation. The function
 ``ssd.conv_integral()`` performs numerical evaluation of the convolution integral for both finite and semi-infinite extent
-limits. You simply need to provide an array of signal/impulse response sample values over the complete
+limits. I simply need to provide an array of signal/impulse response sample values over the complete
 support interval. The screen capture of Fig. :ref:`fig11` shows how this is done in a notebook. Parameter variation is also
-explored. Seeing the two approaches agree is rewarding and a powerful testimony to how the IPython notebook improves
+explored. Seeing the two approaches provide the same numerical values is rewarding and a powerful testimony to how the IPython notebook improves
 learning and understanding.
 
 
@@ -386,7 +386,8 @@ trellis while sending random bits through the encoding/decoding process.
 The channel *signal-to-noise ratio* (SNR), also denoted :math:`E_b/N_0`) is 7 dB. Note SNR is the ratio of received
 signal power to background noise power. At a  *decision depth* of 25
 code symbols, all 16 paths merge to a common path, making it very likely that the probability of a bit error, is very
-very small. At lower a SNR it takes longer to see a traceback merge and errors bit errors are more likely.
+very small. At lower a SNR, not shown here, the increased noise level makes it take longer to see a traceback merge
+and this is indicative of an increase in the probability of making a bit error.
 
 ..
     Pulse Train Power Spectral Density
@@ -537,14 +538,14 @@ Communications and signal processing, as a discipline that sits inside electrica
 a strong mathematical modeling foundation. Undergraduate engineering students, despite having taken many mathematics
 courses, are often intimidated by the math they find in communications and signals processing course work.
 I cannot make the math go away, but good maodeling tools make learning and problem solving fun and exciting.
-I have found, and hopefully this paper shows you that Python/IPython, and the notebook are examples of good
-mathematical modeling tools. The case studies show that IPython notebook offers a means for students of all
+I have found, and hopefully this paper shows, that IPython notebooks are valuable mathematical modeling tools.
+The case studies show that IPython notebook offers a means for students of all
 levels to explore and gain understanding of difficult engineering concepts.
 
 The use of open-source software is increasing and cannot be overlooked in higher education. Python is readily
 accessible by anyone. It is easy to share libraries and notebooks to foster improved communication between students
 and faculty members; between researchers, engineers, and collaborators.
-IPython and the IPython notebook standout in large part due to the enthusiasm of the scientific Python developer
+IPython and the IPython notebook stand out in large part due to the enthusiasm of the scientific Python developer
 community.
 
 What lies ahead is exciting. What comes to mind immediately is getting other faculty on-board. I am optimistic and
