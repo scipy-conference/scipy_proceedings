@@ -236,7 +236,7 @@ Following the definitions of [Newman2003]_, the degree assorativity coefficient 
 
    r = \frac{\sum_{jk}jk(e_{jk} - q_{j}q_{k}))}{\sigma_{q}^{2}}
 
-In the above formula, :math:`e_{jk}` is the fraction of edges the connect vertices
+In the above formula, :math:`e_{jk}` is the fraction of edges that connect vertices
 of degree :math:`j + 1` and :math:`k + 1`, i.e. the degrees of the connected vertices
 not including the connecting edge itself. [Newman2003] calls this *excess degree*.
 The value :math:`q_k` is the distribution of excess degree.
