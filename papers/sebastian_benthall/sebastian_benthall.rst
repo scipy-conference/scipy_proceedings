@@ -332,8 +332,10 @@ Email data collection
 ---------------------
 
 BigBang supports collection of email data.
-It can do this either by scraping the archival pages of a Mailman instance,
+It can do this either by scraping the archival pages of a Mailman 2 instance,
 or by importing an `.mbox` formatted file.
+Internally, BigBang parses this data into a Pandas DataFrame [McKinney]_
+and stores parsed and normalized email data in `.csv` format.
 
 
 Deriving interaction graphs
@@ -601,6 +603,9 @@ References
                   in empirical data. arXiv:0706.1062, June 2007.
 
 .. [Fogel] Fogel, K. 2013 *Producing Open Source Software.* http://producingoss.com/
+
+.. [McKinney] Wes McKinney. Data Structures for Statistical Computing in Python, 
+              Proceedings of the 9th Python in Science Conference, 51-56 (2010)
 
 .. [Newman2002] Newman, M. E. J. 2002. "Assortative mixing in networks."
 
