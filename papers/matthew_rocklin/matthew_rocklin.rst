@@ -198,7 +198,7 @@ It does this by building up a dask graph of blocked array algorithms.
 
 The ``dask.array`` submodule is not the first library to implement a
 "Big NumPy Clone".  Other partial implementations exist including Biggus_ an
-out-of-core ``ndarray`` specialized for climate science, Spartan_ a
+out-of-core ``ndarray`` specialized for climate science, Spartan_ [Pow14]_  a
 distributed memory ``ndarray``, and Distarray_ a distributed memory
 ``ndarray`` that interacts well with other distributed array libraries like
 Trillinos.  There have also been numerous projects in traditional high
@@ -811,6 +811,8 @@ References
            of programming matrix computations." (2008). APA
 .. [Ber10] Bergstra, James, et al. "Theano: A CPU and GPU math compiler in
            Python." Proc. 9th Python in Science Conf. 2010.  APA
+.. [Pow10] Power, Russell. Abstractions for In-memory Distributed Computation.
+           Diss. New York University, 2014.  APA
 
 
 .. _Biggus: http://biggus.readthedocs.org/en/latest/
