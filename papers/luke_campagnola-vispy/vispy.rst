@@ -119,7 +119,7 @@ Another purpose of ``vispy.gloo`` is to hide many of the differences between var
 Layer 2: Visuals
 ''''''''''''''''
 
-The core of VisPy is its library of ``Visual`` classes that provide the primitive graphical objects used to build more complex visualizations. These objects range from very simple primitives (lines, points, triangles) to more powerful primitives (text, volumes, images), to high-level visualization tools (histograms, surface plots, spectrograms, isosurfaces). 
+The core of VisPy is its library of ``Visual`` classes that provide the primitive graphical objects used to build more complex visualizations. These objects range from very simple primitives (lines, points, triangles) to more powerful primitives (text, volumes, images), to high-level visualization tools (histograms, surface plots, spectrograms, isosurfaces).
 
 Internally, visuals upload their data to graphics memory and implement a shader program (see https://www.opengl.org/documentation/glsl/) that is executed on the GPU. This allows the most computationally intensive operations to run in compiled, parallelized code without adding any build dependencies (because all OpenGL implementations since 2.0 include a GLSL compiler). Visuals can be reconfigured and updated in real time by simply uploading new data or shaders to the GPU.
 
@@ -152,16 +152,46 @@ The following example summarizes the code that produces the logarithmically-scal
    image.transform = tr3 * tr2 * tr1
 
 
+Quality and Optimization in Visuals
+'''''''''''''''''''''''''''''''''''
+
+One of VisPy's main challenges is to implement visuals that simulaneously satisfy the major design constraints: high performance, high quality, flexibility, and portability. In reality, no single visualization algorithm can cover all of the possible use cases for a single visual. For example, algorithms that provide the highest quality may impact performance, techniques that improve performance may not be available on all platforms, and some combinations of techniques naturally require an inflexible implelentation.
+
+VisPy's approach is for each visual to implement multiple rendering algorithms that otherwise share the same API, thereby allowing the user to select for different performance and quality targets while also gracefully falling back to safer techniques if the platform requires it. For example, drawing a surface plot with lighting requires a normal vector to be calculated for each location on the surface. If the surface vertex positions are specified in a floating point texture, then the normal calculation can be performed on the GPU. However, older OpenGL versions (and current WebGL implementations) lack the necessary texture support. For these cases, extra effort is required to either encode the vertex positions in a different type of texture, or to perform the normal calculation on the CPU. Alternatively, the surface can be rendered with a lower quality method that does not require normal vector calculation.
+
+More generally, optimizing for performance often requires consideration for two different targets: data *volume* and data *throughput*. In the former case, a large but static data set is uploaded to the GPU once but subsequently viewed or modified interactively. This case is typically limited by the efficiency of the shader programs, and thus it may help to pre-process the data once on the CPU to lighten the load on the GPU. In the latter case, data is being rapidly streamed to the GPU and is typically displayed only once before being discarded. This case tends to be limited by the per-update CPU overhead, and thus may be optimized by offloading more effort to the GPU. Intertwined with these optimization targets are considerations--often performance can be improved by sacrificing rendering quality, but the true performance gain of each sacrifice can be unpredictable.
+
+By wrapping multiple rendering techniques within a single API, the user is freed from the burden of restructuring their application for each technique. Some cases, however, are too unique to fit comfortably in a generic API. For example, Figure XX uses a specialized visual to draw a 100x100 grid of scrolling plots, each containing 2,000 data points. This example could be implemented using the basic line visual techniques, but independently updating each of the 10,000 lines as they scroll would be prohibitively slow. The example is able to run over 30 fps by organizing the data in memory as a 2D circular buffer, which allows all plots to be updated in a single operation. The essential lines of this example are summarized below:
+
+
+.. figure:: scrolling_plots_sm.png
+
+   A large collection of scrolling plots rendered with a specialized visual (`examples/demo/scene/scrolling_plots.py`). There are 10,000 plots, each containing 2,000 data points (20 million points are drawn for every frame). The plots are scrolled continuously as new data is streamed to the GPU, and still render at 35 fps on the author's laptop. A region of the plot is enlarged using a nonlinear transform. 
+
+
+
+.. code-block:: python
+
+    lines = ScrollingLines(n_lines=10e3, line_size=2e3,
+                           columns=100, dt=4e-4,
+                           cell_size=(1, 8))
+
+    def update(ev):
+        # add 10 samples to each plot
+        data = np.random.normal(size=(N, 10), scale=0.3)
+        data[data > 1] += 4  # random spikes
+        lines.roll_data(data)
+
+    timer = app.Timer(connect=update, interval=0)
+    timer.start()
+
+
+
 
 Layer 3: Scenegraph
 '''''''''''''''''''
 
 Layer 3 implements common features required for interactive visualization, and is the first layer that requires no knowledge of OpenGL. This is the main entry point for most users who build visualization applications. Although the majority of VisPy's graphical features can be accessed by working directly with its Visual classes (layer 2), it can be confusing and tedious to manage the visuals, coordinate transforms, and filters for a complex scene. To automate this process, VisPy implements a scenegraph |---| a standard data structure used in computer graphics that organizes visuals into a hierarchy. Each node in the hierarchy inherits coordinate transformations and filters from its parent. VisPy's scenegraph allows visuals to be easily arranged in a scene and, in automating control of the system of transformations, it is able to handle some common interactive visualization requirements:
-    
-.. figure:: scrolling_plots_sm.png
-
-   One image viewed using four different coordinate transformations. VisPy supports linear transformations such as scaling, translation, and matrix multiplication (bottom left) as well as nonlinear transformations such as logarithmic (top left) and polar (top right). Custom transform classes are also easy to construct (bottom right).
-
 
 * *Picking.* User input from the mouse and touch devices are delivered to the objects in the scene that are clicked on. This works by rendering the scene to an invisible framebuffer, using unique colors for each visual; thus the otherwise expensive ray casting computation is carried out on the GPU.
 * *Interactive viewports.* These allow the user to interactively pan, scale, and rotate data within the view, and the visuals inside the view are clipped to its borders.
