@@ -380,11 +380,15 @@ of a ``fec_conv`` object and a plot of one code symbol of the trellis.
 At the digital communications receiver the received signal is demodulated into *soft decision* channel bits. The soft
 values are used to calculate *branch metrics*, which then are used to update cumulative metrics held in each of the 16
 states of the trellis. There are two possible paths arriving at each state, but the *surviving* path is the one
-producing the minimum cumulative metric. Fig. :ref:`fig3` shows the survivor traceback paths in the 16-state
-trellis while sending random bits through the encoding/decoding process.
+producing the minimum cumulative metric.
 
-The channel *signal-to-noise ratio* (SNR), also denoted :math:`E_b/N_0`) is 7 dB. Note SNR is the ratio of received
-signal power to background noise power. At a  *decision depth* of 25
+Fig. :ref:`fig3` shows the survivor traceback paths in the 16-state
+trellis while sending random bits through the encoding/decoding process.
+Additive noise in the communications channel
+introduces confusion in the formation of the traceback paths. The channel *signal-to-noise ratio* (SNR), defined as the
+ratio of received signal power to background noise power, sets the operating condition for the system.
+In Fig. :ref:`fig3` the
+SNR, equivalently denoted by :math:`E_b/N_0`), is set at 7 dB. At a  *decision depth* of 25
 code symbols, all 16 paths merge to a common path, making it very likely that the probability of a bit error, is very
 very small. At lower a SNR, not shown here, the increased noise level makes it take longer to see a traceback merge
 and this is indicative of an increase in the probability of making a bit error.
