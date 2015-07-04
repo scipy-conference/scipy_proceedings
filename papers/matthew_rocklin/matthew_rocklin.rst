@@ -192,8 +192,8 @@ practice we combine these into the callable function with
 Dask Arrays
 -----------
 
-The ``dask.array`` submodule uses dask graphs to create a NumPy clone that
-uses all of your cores and operates on datasets that do not fit in memory.
+The ``dask.array`` submodule uses dask graphs to create a NumPy-like library
+that uses all of your cores and operates on datasets that do not fit in memory.
 It does this by building up a dask graph of blocked array algorithms.
 
 The ``dask.array`` submodule is not the first library to implement a
@@ -203,10 +203,15 @@ distributed memory ``ndarray``, and Distarray_ a distributed memory
 ``ndarray`` that interacts well with other distributed array libraries like
 Trillinos.  There have also been numerous projects in traditional high
 performance computing space including Elemental [Pou13]_, High Performance
-Fortran, etc..  Each implementation focuses on a particular application or
-problem domain.  Dask.array distinguishes itself in that it focuses on a
-very general class of NumPy operations and streaming execution through
-dynamic task scheduling.
+Fortran, etc..  Finally Theano [Ber10]_, an array compiler in Python with
+powerful optimizations and GPU support, statically schedules and reasons about
+array computations and has proven particularly valuable in machine learning
+applications.
+
+Each of these implementations focuses on a particular application or problem
+domain.  Dask.array distinguishes itself in that it focuses on a very general
+class of NumPy operations and streaming execution through dynamic task
+scheduling.
 
 
 Blocked Array Algorithms
@@ -804,8 +809,8 @@ References
            Conference Series. Vol. 180. No. 1. IOP Publishing, 2009.  APA
 .. [Gei08] Van De Geijn, Robert A., and Enrique S. Quintana-Ortí. "The science
            of programming matrix computations." (2008). APA
-
-
+.. [Ber10] Bergstra, James, et al. "Theano: A CPU and GPU math compiler in
+           Python." Proc. 9th Python in Science Conf. 2010.  APA
 
 
 .. _Biggus: http://biggus.readthedocs.org/en/latest/
