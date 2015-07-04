@@ -524,7 +524,7 @@ For the study in this paper, we have implemented a heuristic system for
 entity matching.
 
 - First we standardize the data by converting it to lower case and normalizing
- " at " and "@".
+  " at " and "@".
 - Then we construct a similarity matrix between each entry.
   Each entry is parsed into email and full name subfields.
   The value of the similarity matrix at cell :math:`(i,j)` is 1 if there
