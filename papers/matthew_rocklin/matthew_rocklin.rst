@@ -10,13 +10,13 @@ Dask: Parallel Computation with Blocked algorithms and Task Scheduling
 
     Dask enables parallel and out-of-core computation.  We couple blocked
     algorithms with dynamic and memory aware task scheduling to achieve a
-    parallel and out-of-core numpy clone.  We show how this extends the
+    parallel and out-of-core NumPy clone.  We show how this extends the
     effective scale of modern hardware to larger datasets and discuss how these
     ideas can be more broadly applied to other parallel collections.
 
 .. class:: keywords
 
-   parallelism, numpy, scheduling
+   parallelism, NumPy, scheduling
 
 Introduction
 ------------
@@ -90,7 +90,7 @@ and callables.  Ideally this minimum solution is easy to adopt and understand
 by a broad community.
 
 We define a dask graph as a Python dictionary mapping keys to tasks or values.
-A key is any python hashable, a value is any Python object that is not a task,
+A key is any Python hashable, a value is any Python object that is not a task,
 and a task is a Python tuple with a callable first element.
 
 Example
@@ -192,7 +192,7 @@ practice we combine these into the callable function with
 Dask Arrays
 -----------
 
-The ``dask.array`` submodule uses dask graphs to create a numpy clone that
+The ``dask.array`` submodule uses dask graphs to create a NumPy clone that
 uses all of your cores and operates on datasets that do not fit in memory.
 It does this by building up a dask graph of blocked array algorithms.
 
@@ -205,7 +205,7 @@ Trillinos.  There have also been numerous projects in traditional high
 performance computing space including Elemental [Pou13]_, High Performance
 Fortran, etc..  Each implementation focuses on a particular application or
 problem domain.  Dask.array distinguishes itself in that it focuses on a
-very general class of numpy operations and streaming execution through
+very general class of NumPy operations and streaming execution through
 dynamic task scheduling.
 
 
@@ -265,7 +265,7 @@ Further operations on ``x`` create more complex graphs
     ('z',): (sum, [('z', 0), ('z', 1), ('z', 2)])}
 
 Dask.array also holds convenience functions to execute this graph, completing
-the illusion of a numpy clone
+the illusion of a NumPy clone
 
 .. code-block:: python
 
@@ -285,9 +285,9 @@ These objects contain the following data
     ``.name``
 4.  A dtype
 
-The second item here, ``chunks``, deserves further explanation.  A normal numpy
+The second item here, ``chunks``, deserves further explanation.  A normal NumPy
 array knows its ``shape``, a dask array must know its shape and the shape of
-all of the internal numpy blocks that make up the larger array.  These shapes
+all of the internal NumPy blocks that make up the larger array.  These shapes
 can be concisely described by a tuple of tuples of integers, where each
 internal tuple corresponds to the lengths along a single dimension.
 
@@ -325,7 +325,7 @@ values for each piece of metadata.
 Capabilities and Limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Adding subgraphs and managing metadata for most of numpy is difficult but
+Adding subgraphs and managing metadata for most of NumPy is difficult but
 straightforward.  At present ``dask.array`` is around 5000 lines of code
 (including about half comments and docstrings).  It encompasses most commonly
 used operations including the following:
@@ -335,12 +335,12 @@ used operations including the following:
 *  Tensor contractions / dot products / matrix multiply, ``tensordot``
 *  Axis reordering / transpose, ``transpose``
 *  Slicing, ``x[:100, 500:100:-2]``
-*  Fancy indexing along single axes with lists or numpy arrays, ``x[:, [10, 1, 5]]``
+*  Fancy indexing along single axes with lists or NumPy arrays, ``x[:, [10, 1, 5]]``
 *  A variety of utility functions, ``bincount, where, ...``
 
 However ``dask.array`` is unable to handle any operation whose shape can not
 be determined ahead of time.  Consider for example the following common
-numpy operation
+NumPy operation
 
 .. code-block:: python
 
@@ -449,8 +449,8 @@ We set up a trivial input dataset
             chunks=(250, 250))
 
 The Dask convenience method, ``da.from_array``, creates a graph that can pull
-data from any object that implements numpy slicing syntax.  The ``da.store``
-function can then store a large result in any object that implements numpy
+data from any object that implements NumPy slicing syntax.  The ``da.store``
+function can then store a large result in any object that implements NumPy
 setitem syntax.
 
 .. code-block:: python
@@ -556,7 +556,7 @@ in a single large array.
    >>> x.shape
    (1464, 721, 1440)
 
-We can now play with this array as though it were a numpy array.  Because
+We can now play with this array as though it were a NumPy array.  Because
 dask.arrays implement the ``__array__`` protocol we can dump them directly into
 functions of other libraries.  These libraries will trigger computation when
 they call ``np.array(...)`` on their input.
@@ -569,7 +569,7 @@ they call ``np.array(...)`` on their input.
 
 .. figure:: day-vs-night.png
 
-   We use typical numpy slicing and reductions on a large volume of data to
+   We use typical NumPy slicing and reductions on a large volume of data to
    show the average temperature difference between noon and midnight for year
    2014
 
