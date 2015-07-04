@@ -549,9 +549,7 @@ Results
 =======
 
 Every mailing list of the 10 we analyzed exhibits degree disassortivity better fit to 
-log-normal instead of power law distribution.
-
-**address p-value issue!!!**
+log-normal instead of power law distribution. **address p-value issue!!!**
 
 .. table:: Results of analysis. For each mailing list archive, number of participants :math:`n`,
            computed degree assortativity of the interaction graph, and loglikelihood ratio R and
