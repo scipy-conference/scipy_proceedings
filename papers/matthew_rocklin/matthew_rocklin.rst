@@ -381,7 +381,7 @@ Spark contain their own custom dynamic task schedulers.
 
 None of these solutions, nor much of the literature in dynamic task scheduling,
 suited the needs of blocked algorithms for shared memory computation.  We
-needed a lightwight, easily installable Python solution that had latencies in
+needed a lightweight, easily installable Python solution that had latencies in
 the millisecond range and was mindful of memory use.  Traditional task
 scheduling literature usually focuses on policies to expose parallelism or chip
 away at the critical path.  We find that for bulk data analytics these are not
@@ -418,7 +418,7 @@ Finally, power users can disregard the dask schedulers and create their own.
 Dask graphs are completely separate from the choice of scheduler and users may
 select the right scheduler for their class of problem or, if no ideal scheduler
 exists, build one anew.  The default single-machine scheduler is about three
-hundred significant lines of code and has been adapated to single-threaded,
+hundred significant lines of code and has been adapted to single-threaded,
 multi-threaded, multi-processing, and distributed computing variants.
 
 
