@@ -690,7 +690,12 @@ Newman also notes that the degree assortativity of Barabási-Alpert networks is 
 Variations on the Barabási-Alpert model do have other properties.
 (cite: http://arxiv.org/pdf/cond-mat/0402315.pdf)
 
-
+Though anecdotally there is a difference between typical behavior on an open source project's
+developer list (e.g. `ipython-dev` and `scipy-dev` in our data set) and a projects
+user list (e.g. `ipython-user` and `scipy-user`), these behavior differences do
+not surface as a clear statistical pattern in our study.
+A direction for future work is to more carefully operationalize and test for these
+behavioral differences.
 
 We have built BigBang and conducted this preliminary analysis with a number of applications
 in mind.
