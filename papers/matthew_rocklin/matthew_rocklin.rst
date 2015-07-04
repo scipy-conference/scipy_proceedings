@@ -472,20 +472,20 @@ We use either use NumPy or ``dask.array``:
 
 We compare different BLAS implementations:
 
-1.  Reference BLAS, single threaded, unblocked
+1.  ATLAS BLAS, single threaded, unblocked
 2.  OpenBLAS, single threaded
 3.  OpenBLAS, multi-threaded
 
 For each configuration we compute the number of floating point operations per
 second.
 
-.. table:: Matrix Multiply GigaFLOPS for NumPy/Dask.array and for Reference
-   BLAS, and OpenBLAS with one and four threads
+.. table:: Matrix Multiply GigaFLOPS for NumPy/Dask.array and for ATLAS
+   and OpenBLAS with one and four threads
 
    +-----------------------+--------+--------------+
    | Performance (GFLOPS)  | NumPy  |  Dask.array  |
    +=======================+========+==============+
-   | Reference BLAS        | 6      |  18          |
+   | ATLAS BLAS            | 6      |  18          |
    +-----------------------+--------+--------------+
    | OpenBLAS (one)        | 11     |  23          |
    +-----------------------+--------+--------------+
@@ -496,7 +496,7 @@ We note the following
 
 1.  Compute-bound tasks are computationally bound by memory; we don't
     experience a slowdown
-2.  Dask.array can effectively parallelize and block reference BLAS for matrix
+2.  Dask.array can effectively parallelize and block ATLAS BLAS for matrix
     multiplies
 3.  Dask.array doesn't significantly improve when using an optimized BLAS,
     presumably this is because we've already reaped most of the benefits of
