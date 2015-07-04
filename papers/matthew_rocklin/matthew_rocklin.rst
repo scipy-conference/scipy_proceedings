@@ -21,11 +21,11 @@ Dask: Parallel Computation with Blocked algorithms and Task Scheduling
 Introduction
 ------------
 
-The Scientific Python stack rarely leverages parallel computation.  Code built
-off of NumPy or Pandas generally runs in a single thread on data that fits
-comfortably in memory.  Advances in hardware in the last decade in multi-core
-processors and solid state drives provide significant and yet largely untapped
-performance advantages.
+The Scientific Python stack [Oli07]_ rarely leverages parallel computation.
+Code built off of NumPy [vdW11]_ or Pandas [McK10]_ generally runs in a single
+thread on data that fits comfortably in memory.  Advances in hardware in the
+last decade in multi-core processors and solid state drives provide significant
+and yet largely untapped performance advantages.
 
 However the Scientific Python stack consists of hundreds of software packages,
 papers, PhD theses, and developer-years.  This stack is a significant
@@ -773,6 +773,13 @@ chronological involvement):
 
 References
 ----------
+.. [Oli07] Travis E. Oliphant. Python for Scientific Computing, Computing in
+           Science & Engineering, 9, 10-20 (2007), DOI:10.1109/MCSE.2007.58
+.. [vdW11] Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux. The NumPy
+           Array: A Structure for Efficient Numerical Computation, Computing in
+           Science & Engineering, 13, 22-30 (2011)
+.. [McK10] Wes McKinney. Data Structures for Statistical Computing in Python,
+           Proceedings of the 9th Python in Science Conference, 51-56 (2010)
 .. [Isa07] Isard, Michael, et al. "Dryad: distributed data-parallel programs
            from sequential building blocks."
            ACM SIGOPS Operating Systems Review. Vol. 41. No. 3. ACM, 2007.
