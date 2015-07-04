@@ -35,10 +35,12 @@ software stack without triggering a full rewrite.
 
 This paper introduces ``dask``, a specification to encode parallel algorithms,
 using primitive Python dictionaries, tuples, and callables.  We use ``dask`` to
-create ``dask.array`` a parallel out-of-core NumPy clone using blocked
-algorithms.  This serves both as a general library for parallel out-of-core
-``ndarrays`` but also as a demonstration that we can parallelize complex
-codebases like NumPy in a straightforward manner.
+create ``dask.array`` a parallel NumPy clone that uses all of the cores in a
+modern processor and operates out-of-core intelligently, meaning that it
+streams data well from disk.  Dask.array serves both as a general library for
+parallel out-of-core ``ndarrays`` and also as a demonstration that we can
+parallelize complex codebases like NumPy in a straightforward manner using
+blocked algorithms and task scheduling.
 
 We first define ``dask`` graphs and give a trivial example of their use.  We then
 share the design of ``dask.array`` a parallel ``ndarray``.  Then we discuss dynamic
@@ -47,6 +49,26 @@ examples using ``dask.array`` on computational problems.  We then briefly
 discuss ``dask.bag`` and ``dask.dataframe``, two other collections in the
 ``dask`` library.  We finish with thoughts about extension of this approach
 into the broader Scientific Python ecosystem.
+
+Modern Hardware
+---------------
+
+Hardware has changed significantly in recent years.  The average personal
+notebook computer (the bulwark of most scientific development) generally has
+four physical cores and a solid state drive (SSD).  The four physical cores present
+opportunities for linear speedup of computationally bound code.  We refer to
+algorithms that use multiple cores simultaneously as *parallel*.  The solid
+state drives have high read bandwidths and low seek times which enables them to
+serve as large and cheap extensions of physical memory.  We refer to systems
+that efficiently use disk as extensions of memory as *out-of-core*.
+
+Modern workstations extend these trends to include sixteen to sixty-four cores,
+hundreds of gigabytes of RAM, and RAID arrays of SSDs offering 2GB/s read
+bandwidths.  These systems rival small clusters in scale but continue to offer
+the convenience of single-machine administration and shared-memory computing.
+This system rivals the performance of massively parallel distributed systems up
+to a surprisingly large scale while maintaining a low maintenance and
+programming cost.
 
 Dask Graphs
 -----------
