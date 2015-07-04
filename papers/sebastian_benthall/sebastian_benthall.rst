@@ -659,6 +659,24 @@ grow and form over time.
 
 Possible models include nonlinear Barabási-Alpert: http://arxiv.org/pdf/cond-mat/0402315.pdf
 
+We have built BigBang and conducted this preliminary analysis with a number of applications
+in mind.
+One is anomaly detection in the open source ecosystem as a method of supply chain risk management.
+An statistical understanding of the typical patterns of collaborative behavior in open source
+software development could form the foundation for techniques that detect deviations from
+those patterns.
+If non-adherence to these patterns were correlated with propensity for software to be
+buggy or brittle, then detecting non-adherence could play a useful role in community
+self-management.
+
+Another potential application of this research is in the appropriate incentivization
+of participation in open source development.
+Supposing, as seems likely, that open source software development is truly a collective effort
+and not merely the sum of many individual efforts, the question of how to best
+incentivize contributions to open source software is not an easy one.
+An understanding of how the network structure of collaboration relates to collective productivity
+could inform incentive plans that are sensitive to participants unique role within the network.
+
 References
 ==========
 
