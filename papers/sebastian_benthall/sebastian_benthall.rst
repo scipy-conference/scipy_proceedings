@@ -351,16 +351,20 @@ network from an email archive of a public mailing list. To construct this
 network, we have used the `From`, `Message-ID`, and `In-Reply-To` headers
 of the email.
 
-The `From` field of an email contains data about the sender of the message.
+The `From` field of an email contains data identifying the mailbox of the message author.
 This often includes both a full name and an email address of the sender.
-As this is set by the email client (note: or is it the mailing list server?)
+As this is set by the email client and a single person may use many different mailbozes,
 a single person is often represented differently in the `From` field
 across many emails. See *Entity Resolution* for our strategies for
 resolving entities from divergent email headers.
 
 The `Message-ID` header provides a globally unique identification string
 for every email.
-This is accomplished by (how?).
+The uniqueness of the identifier must be guaranteed by the host that generates
+the message.
+It is recommended in [RFC2822]_ that email hosts accomplish this by including their domain
+name and combination of the exact date and time, as well as some other unique
+identifier (such as a process ID number) from the host system.
 The `In-Reply-To` header is set when an email is sent as a reply to
 another email.
 The reply's `In-Reply-To` header will match the `Message-ID` of the
