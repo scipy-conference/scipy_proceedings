@@ -348,6 +348,25 @@ or by importing an `.mbox` formatted file.
 Internally, BigBang parses this data into a Pandas DataFrame [McKinney]_
 and stores parsed and normalized email data in `.csv` format.
 
+For the purpose of this study, we scraped data from public Mailman 2 instances
+associated with the following projects:
+
+- SciPy: http://mail.scipy.org/mailman/listinfo/
+- WikiMedia: http://lists.wikimedia.org/mailman/listinfo
+- OpenStreetMap: http://lists.openstreetmap.org/listinfo
+
+We selected mailing lists from the SciPy Mailman instance primarily for their
+relevance to the SciPy community.
+We also selected some mailing lists from other projects for comparison.
+
+A limiting factor for our analysis is that every new data set introduces new
+edges cases BigBang's processing logic must take into account.
+For example, misformatted timestamps cause errors in many archival email
+data sets.
+In future work we hope to sample data more systematically in order to
+establish general principles of collaboration.
+This preliminery study is merely descriptive.
+
 
 Deriving interaction graphs
 ===========================
