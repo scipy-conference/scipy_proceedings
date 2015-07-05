@@ -481,9 +481,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="1071.5318"
-     inkscape:cy="594.24955"
+     inkscape:zoom="1.979899"
+     inkscape:cx="347.43071"
+     inkscape:cy="386.07961"
      inkscape:document-units="px"
      inkscape:current-layer="g26949"
      showgrid="false"
@@ -555,28 +555,31 @@
          style="color:#000000;fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#666666;stroke-width:0.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
       <rect
          ry="1.4909371"
-         y="450.77249"
+         y="450.28769"
          x="1221.1349"
          height="27.436918"
          width="1499"
          id="rect12528-9-4-0"
-         style="color:#000000;fill:#d7f4d7;fill-opacity:1;fill-rule:nonzero;stroke:#008000;stroke-width:0.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         style="color:#000000;fill:#d7f4d7;fill-opacity:1;fill-rule:nonzero;stroke:#008000;stroke-width:0.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="1.4909371" />
       <rect
          ry="3.4704857"
-         y="383.43115"
+         y="381.43115"
          x="1221.1349"
          height="63.86549"
          width="1499"
          id="rect12528-9-4"
-         style="color:#000000;fill:#f4d7d7;fill-opacity:1;fill-rule:nonzero;stroke:#d40000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         style="color:#000000;fill:#f4d7d7;fill-opacity:1;fill-rule:nonzero;stroke:#d40000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="3.4704857" />
       <rect
          ry="1.4943652"
-         y="349.96429"
+         y="350.46936"
          x="1221.1349"
          height="27.5"
          width="1499"
          id="rect12528-8-9-9"
-         style="color:#000000;fill:#d5e5ff;fill-opacity:1;fill-rule:nonzero;stroke:#003380;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         style="color:#000000;fill:#d5e5ff;fill-opacity:1;fill-rule:nonzero;stroke:#003380;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="1.4943652" />
       <text
          sodipodi:linespacing="150%"
          id="text12412"
@@ -701,9 +704,9 @@
            id="tspan15672"
            sodipodi:role="line"><tspan
    id="tspan15674"
-   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#008000;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono Bold">print</tspan><tspan
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#008000;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono Bold">print(</tspan><tspan
    id="tspan15682"
-   style="fill:#008000"> repr</tspan>(content)</tspan></text>
+   style="fill:#008000">repr</tspan>(content))</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text15149-4-7"
@@ -750,9 +753,9 @@
            x="2045.0647"
            sodipodi:role="line"><tspan
    id="tspan15734"
-   style="font-size:24px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:0;word-spacing:0;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#008000;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono Bold">print</tspan><tspan
+   style="font-size:24px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:0;word-spacing:0;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#008000;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono Bold">print(</tspan><tspan
    id="tspan15742"
-   style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:0;word-spacing:0;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#008000;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono"> repr</tspan>(options)</tspan></text>
+   style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:0;word-spacing:0;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#008000;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono">repr</tspan>(options))</tspan></text>
       <rect
          ry="9.6182766"
          y="1004.7083"
@@ -770,36 +773,36 @@
          x="1184.3711"
          style="font-size:24.64170837px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
          xml:space="preserve"><tspan
-           id="tspan12782"
+           id="tspan13022"
            style="font-size:20.53475761px;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
            y="1034.7515"
            x="1184.3711"
            sodipodi:role="line" /><tspan
-           id="tspan13014"
            style="font-size:20.53475761px;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
            y="1060.4199"
            x="1184.3711"
-           sodipodi:role="line">:Layout</tspan><tspan
-           id="tspan13016"
+           sodipodi:role="line"
+           id="tspan3547">:Layout</tspan><tspan
            style="font-size:20.53475761px;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
            y="1086.0884"
            x="1184.3711"
-           sodipodi:role="line">   .Overlay.Mandelbrot_Set :Overlay</tspan><tspan
-           id="tspan13018"
+           sodipodi:role="line"
+           id="tspan3549">   .Overlay.Mandelbrot_Set :Overlay</tspan><tspan
            style="font-size:20.53475761px;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
            y="1111.7568"
            x="1184.3711"
-           sodipodi:role="line">      .Image.Mandelbrot_Set :Image   [Re,Im]   (z)</tspan><tspan
-           id="tspan13020"
+           sodipodi:role="line"
+           id="tspan3551">      .Image.Mandelbrot_Set :Image   [Re,Im]   (z)</tspan><tspan
            style="font-size:20.53475761px;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
-           y="1137.4252"
+           y="1137.4253"
            x="1184.3711"
-           sodipodi:role="line">      .HLine.I              :HLine   [x,y]</tspan><tspan
-           id="tspan13022"
+           sodipodi:role="line"
+           id="tspan3553">      .HLine.I              :HLine   [x,y]</tspan><tspan
            style="font-size:20.53475761px;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
-           y="1163.0936"
+           y="1163.0938"
            x="1184.3711"
-           sodipodi:role="line">   .Sample.Curve           :Curve   [Re]   (z)</tspan></text>
+           sodipodi:role="line"
+           id="tspan3555">   .Curve.Cross_section    :Curve   [Re]   (z)</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text15149-7-6"
