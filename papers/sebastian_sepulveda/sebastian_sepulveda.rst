@@ -19,7 +19,7 @@ Visualizing physiological signals in real time
 
 .. class:: abstract 
 
-This article presents a software package, dubbed RTGraph, to visualize, process and record physiological signals (electrocardiography, electromyography, etc.) in real time. RTGraph is written in Python; it is open-source and easy to extend; and it has been tested on different platforms, including the RaspberryPi (ARM architecture). The program leverages the use of the PyQtGraph library and the SciPy/NumPy stack. A key feature of RTGraph is its multiprocess architecture. This allows RTGRaph to take advantage of multiple cores and to have a clean separation between the communication and visualization code.
+This article presents an open-source Python software package, dubbed RTGraph, to visualize, process and record physiological signals (electrocardiography, electromyography, etc.) in real time. RTGraph has a multiprocess architecture. This allows RTGraph to take advantage of multiple cores and to be able to handle data rates typically encountered during the acquisition and processing of biomedical signals. It also allows RTGraph to have a clean separation between the communication and visualization code. The paper presents the architecture and some programming details of RTGraph. It also includes three examples where RTGraph was adapted to work with (i) signals from a Inertial Measurement Unit (IMU) in the context of a biomechanical experiment; (ii) electromiography signals to estimate muscle fatigue; and (iii) pressure signals from a device used to monitor nutrition disorders in premature infants.
 
 .. class:: keywords
 
@@ -247,7 +247,7 @@ The software package presented in this article has been tested with different de
 
 .. figure:: device.jpg
     
-    Photo of the prototype device used in the study. An Arduino development platform is used to acquire the signals (two pressure measurements). These signals are acquired by a computer running a modified version of RTGraph. :label:`device`
+    Photo of the prototype device used to monitor nutrition disorders in premature infants. An Arduino development platform is used to acquire the signals (two pressure measurements). These signals are acquired by a computer running a modified version of RTGraph. :label:`device`
 
 
 Conclusions
