@@ -323,8 +323,8 @@ assortativity here, yes? And what about weighted degrees?]
 [Newman2002]_ studied degree assortativity in complex networks and introduced an intriguing 
 hypothesis. Observed social networks, such as those of academic coauthorship networks and business
 director associations, exhibit positive degree assortativity.
-Technical and biological networks, such as connections between autonomous systems on the Internet
-and neural networks, exhibit negative degree assortativity, or *disassortivity*.
+Technical and biological networks, such as connections between autonomous systems on the Internet,
+ protein interactions, and neural networks, exhibit negative degree assortativity, or *disassortivity*.
 Our own speculative interpretation is that the organization of technical and biological networks evolves
 for a functional purpose facilitated better by having highly connect hubs distributed widely, whereas 
 many social networks are organized more according to the self-interest or homophilic tendencies
