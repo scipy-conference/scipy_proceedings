@@ -622,41 +622,44 @@ Results
 
    \begin{table*}
 
-     \begin{longtable*}{|l|l|r|r|r|}
+     \begin{longtable*}{|l|l|r|r|r|r|r|r|r|}
      \hline
-     \bf{List name} & \bf{List Source} & $n$ & R value & $p$ \tabularnewline
+     \bf{List name} & \bf{List Source} & $n$ & R value & $p$   & in,in & out,in & in,out & out,out \tabularnewline
      \hline
-     numpy-discussion & SciPy          & 2973 & -0.76  &  0.40 \tabularnewline
+     numpy-discussion & SciPy          & 2973 & -0.76  &  0.40 & -0.22 & -0.21  & -0.21  & -0.20   \tabularnewline
      \hline
-     scipy-user       & SciPy          & 2735 & -0.02  &  0.31 \tabularnewline
+     scipy-user       & SciPy          & 2735 & -0.02  &  0.31 & -0.11 & -0.11  & -0.11  & -0.11   \tabularnewline
      \hline
-     wikimedia-l      & WikiMedia      & 1729 & -3.65  &  0.07 \tabularnewline
+     wikimedia-l      & WikiMedia      & 1729 & -3.65  &  0.07 & -0.15 & -0.16  & -0.15  & -0.15   \tabularnewline
      \hline
-     ipython-user     & SciPy          & 1085 & -0.33  &  0.23 \tabularnewline
+     ipython-user     & SciPy          & 1085 & -0.33  &  0.23 & -0.27 & -0.27  & -0.27  & -0.26   \tabularnewline
      \hline
-     scipy-dev        & SciPy          & 1056 & -0.33  &  0.58 \tabularnewline
+     scipy-dev        & SciPy          & 1056 & -0.33  &  0.58 & -0.28 & -0.28  & -0.27  & -0.26   \tabularnewline
      \hline
-     ipython-dev      & SciPy          & 689  & -0.52  &  0.08 \tabularnewline
+     ipython-dev      & SciPy          & 689  & -0.52  &  0.08 & -0.25 & -0.25  & -0.25  & -0.24 \tabularnewline
      \hline
-     hot              & OpenStreetMap  & 524  & -0.85  &  0.40 \tabularnewline
+     hot              & OpenStreetMap  & 524  & -0.85  &  0.40 & -0.19 & -0.20  & -0.19  & -0.20 \tabularnewline
      \hline
-     astropy          & SciPy          & 404  & -0.08  &  0.77 \tabularnewline
+     astropy          & SciPy          & 404  & -0.08  &  0.77 & -0.16 & -0.20  & -0.19  & -0.20 \tabularnewline
      \hline
-     gendergap        & WikiMedia      & 301  & -0.86  &  0.40 \tabularnewline
+     gendergap        & WikiMedia      & 301  & -0.86  &  0.40 & -0.15 & -0.17  & -0.16  & -0.18 \tabularnewline
      \hline
-     apug             & SciPy          & 121  & -0.01  &  0.52 \tabularnewline
+     apug             & SciPy          & 121  & -0.01  &  0.52 & -0.20 & -0.21  & -0.19  & -0.20 \tabularnewline
      \hline
-     maps-l           & WikiMedia      & 118  & -0.00  &  0.95 \tabularnewline
+     maps-l           & WikiMedia      & 118  & -0.00  &  0.95 & -0.19 & -0.19  & -0.18  & -0.18 \tabularnewline
      \hline
-     design           & WikiMedia      & 111  & -3.62  &  0.10 \tabularnewline
+     design           & WikiMedia      & 111  & -3.62  &  0.10 & -0.18 & -0.18  & -0.16  & -0.17 \tabularnewline
      \hline
-     potlatch-dev     & OpenStreetMap  & 75   & -0.00  &  0.97 \tabularnewline
+     potlatch-dev     & OpenStreetMap  & 75   & -0.00  &  0.97 & -0.01 & -0.06  & -0.03  & -0.08 \tabularnewline
      \hline
      \end{longtable*}
 
      \caption{Results of analysis. For each mailing list archive, number of participants $n$,
            loglikelihood ratio R and statistical significance $p$ in the direction of the best fit (which is all cases
-           is log-normal). \DUrole{label}{quanitities-table}}
+           is log-normal). Also, table includescomputed degree assortativity of the interaction graph. Every variation of
+           the directed assortativity metric (using the in-degree of both source and target nodes;
+           using the out-degree of the source node and in-degree of the target node, etc.)
+           is computed\DUrole{label}{quanitities-table}}
 
    \end{table*}
 
@@ -666,49 +669,6 @@ log-normal instead of power law distribution. **address p-value issue!!!**
 
 [for some of the smaller networks here, the results are a bit sketchy. it would be better
 to include the \math:`x_{min}` values and include data sets above a certain size threshold ]
-
-Unfortunately, restructuredtext can be picky about tables, so if it simply
-won't work try raw LaTeX:
-
-
-
-
-.. table:: Results of analysis. For each mailing list archive, number of participants :math:`n`,
-           computed degree assortativity of the interaction graph. Every variation of
-           the directed assortativity metric (using the in-degree of both source and target nodes;
-           using the out-degree of the source node and in-degree of the target node, etc.)
-           is computed. :label:`mtable`
-
-   +------------------+---------+----------+---------+----------+
-   | list name        |  in,in  |  out,in  |  in,out | out,out  |
-   +==================+=========+==========+=========+==========+
-   | numpy-discussion | -0.22   | -0.21    | -0.21   | -0.20    |
-   +------------------+---------+----------+---------+----------+
-   | scipy-user       | -0.11   | -0.11    | -0.11   | -0.11    |
-   +------------------+---------+----------+---------+----------+
-   | wikimedia-l      | -0.15   | -0.16    | -0.15   | -0.15    |
-   +------------------+---------+----------+---------+----------+
-   | ipython-user     | -0.27   | -0.27    | -0.27   | -0.26    |
-   +------------------+---------+----------+---------+----------+
-   | scipy-dev        | -0.28   | -0.28    | -0.27   | -0.26    |
-   +------------------+---------+----------+---------+----------+
-   | ipython-dev      | -0.25   | -0.25    | -0.25   | -0.24    |
-   +------------------+---------+----------+---------+----------+
-   | hot              | -0.19   | -0.20    | -0.19   | -0.20    |
-   +------------------+---------+----------+---------+----------+
-   | astropy          | -0.16   | -0.20    | -0.19   | -0.20    |
-   +------------------+---------+----------+---------+----------+
-   | gendergap        | -0.15   | -0.17    | -0.16   | -0.18    |
-   +------------------+---------+----------+---------+----------+
-   | apug             | -0.20   | -0.21    | -0.19   | -0.20    |
-   +------------------+---------+----------+---------+----------+
-   | maps-l           | -0.19   | -0.19    | -0.18   | -0.18    |
-   +------------------+---------+----------+---------+----------+
-   | design           | -0.18   | -0.18    | -0.16   | -0.17    |
-   +------------------+---------+----------+---------+----------+
-   | potlatch-dev     | -0.01   | -0.06    | -0.03   | -0.08    |
-   +------------------+---------+----------+---------+----------+
-
 
 
 Discussion
