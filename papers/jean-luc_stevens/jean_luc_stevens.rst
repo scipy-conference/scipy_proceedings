@@ -447,7 +447,9 @@ Set'. The textual representation of the layout in Figure :ref:`layout`
 label is used in the attribute-based indexing scheme of the
 layout. The strings 'Image', 'Overlay', 'HLine' and 'Curve' are
 default group names, but you can supply your own names to define
-semantic groupings for your data.
+semantic groupings for your data. To illustrate this system, you can
+access the sampled data (a NumPy array) in Figure :ref:`customization`
+using ``content.Curve.Cross_Section.data``.
 
 With the ability to overlay or concatenate any element with any other,
 there is great flexibility to declare complex relationships between
