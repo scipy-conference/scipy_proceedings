@@ -706,14 +706,16 @@ Uses in modeling human cognition
 
 Using this framework, Griffiths and Tenenbaum were able to provide comprehensive coverage for a number of human psychology experiments. This allows them to model people's inferences in causal induction and learning regarding different functional forms, at different points in development, with different amounts of data, with and without interventions, and in continuous time and space (to name only a few of the different conditions covered).
 
-What is important is that they successfully modeled human behavior using this framework by treating people as optimal solvers of this computational problem [#]_ (at least as defined by their framework). Furthermore, by examining different but related experiments, they were able to demonstrate the different ways in which specific kinds of prior knowledge are called upon differentially to inform human causal induction resulting in quite different inferences on a rational statistical basis.
+They successfully modeled human behavior using this framework by treating people as optimal solvers of this computational problem [#]_ (at least as defined by their framework). Furthermore, by examining different but related experiments, they were able to demonstrate the different ways in which specific kinds of prior knowledge are called upon differentially to inform human causal induction resulting in quite different inferences on a rational statistical basis.
 
-Cognition as Standard, Cognition as Map
-=======================================
+Cognition as Standard, Compass and Map
+--------------------------------------
 
 People have always been able to make judgments that are beyond machine learning's state-of-the-art. In domains like object recognition, we are generally confident in people's judgments as veridical, and – as such – they have been used as a standard against which to test and train machine learning systems. The eventual goal is that the system reaches a Turing point — the point at which machine performance and human performance are indistinguishable.
 
-But that is not the only way human behavior can guide machine learning. In domains like causal induction, people's judgments *cannot* form a standard in traditional senses because we cannot trust people to be "correct". Nonetheless, people make these judgments and, more importantly, people's judgments are systematic within and across individuals. This systematicity allows the judgments to be modeled using formal, computational frameworks. In some cases, we can go further and formally characterize the input to cognition and  as optimal in some sense defined by the model. 
+But that is not the only way human behavior can guide machine learning. In domains like causal induction, people's judgments *cannot* form a standard in traditional senses because we cannot trust people to be "correct". Nonetheless, people *do* make these judgments and, more importantly, people's judgments have systematic patterns. This systematicity allows the judgments to be modeled using formal, computational frameworks. In some cases, we can go further and formally characterize the input to cognition and even define judgments as optimal in some sense specified by the model. Formal models of individual human cognition then can act as a compass for machine learning, providing direction for how problems can be formalized and at least approach to solving them. Causal Bayesian networks have proven useful in this sense.
+
+Formal frameworks which generalize the creation of individual models (e.g., causal theories) can be even more powerful. Rather than just providing a direction for machine learning research, they lay out a set of possible directions. Data can be interpreted in multiple ways, without 
 
 
 
