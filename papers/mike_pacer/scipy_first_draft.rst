@@ -9,7 +9,9 @@
     :usepackage: booktabs
 
     \newcommand{\bigCI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
     \newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+
     \def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
 
 
@@ -43,7 +45,7 @@ In order to understand the tool-set requires the basics of probabilistic graphic
 
 Notably, contrary to how Bayesian networks are commonly introduced, I say relatively little about inference from observed data. This is intentional, as is this discussion of it. Many of the most trenchant problems with Bayesian networks are found in critiques of their use to infer these networks from observed data. But, many of the aspects of Bayesian networks (especially causal Bayesian networks) that are most useful for thinking about problems of structure and probabilistic relations do not rely on inference from observed data. In fact, I think the immediate focus on inference has greatly hampered widespread understanding of the power and representative capacity of this class of models. Equally – if not more – importantly, I aim to discuss generalizations of Bayesian networks such as those that appear in :cite:`griffithst09`, and inference in these cases requires a much longer treatment (if a comprehensive treatment can be provided at all). If you are dissatisfied with this approach and wish to read a more conventional introduction to (causal) Bayesian networks I suggest consulting :cite:`pearl2000`.
 
-The Causal Bayesian NetworkX toolkit can be seen as consisting of two main parts: graph enumeration/filtering and the storage and use of probabilistic graphical models in a NetworkX compatible format:cite:`networkx`. Because this topic will more be the focus of my talk which can be viewed at the youtube link above and the source code of the most basic implementation is available at `Causal Bayesian NetworkX`_:cite:`pacer2015cbnx`[#]_, in this paper I focus more on the other aspects of the problem. Nonetheless, appreciating these other aspects is made easier by also appreciating the problems of implementation/representation and the early solutions that I propose.
+The Causal Bayesian NetworkX toolkit can be seen as consisting of two main parts: graph enumeration/filtering and the storage and use of probabilistic graphical models in a NetworkX compatible format:cite:`networkx`. Because this topic will more be the focus of my talk which can be viewed at the youtube link above and the source code of the most basic implementation is available at `Causal Bayesian NetworkX`_:cite:`pacer2015cbnx` [#]_, in this paper I focus more on the other aspects of the problem. Nonetheless, appreciating these other aspects is made easier by also appreciating the problems of implementation/representation and the early solutions that I propose.
 
 .. [#] This code is licensed with the standard BSD 3-clause license.
 
@@ -228,7 +230,8 @@ But this discussion hides an important complexity by having the event set of the
 Coins and dice with hierarchically labeled entities, Example
 ============================================================
 
-Imagine the following game: 
+
+Imagine the following game:
 
 You have a coin (*C*, :sc:`Heads, Tails`), a *new* 6-sided die (:math:`D_6, \{X_1,X_2,\ldots,X_6\}`), and a 20-sided die (:math:`D_{20}, \{X_1,X_2,\ldots,X_{20}\}`). 
 
