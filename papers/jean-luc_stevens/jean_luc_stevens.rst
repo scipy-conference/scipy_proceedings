@@ -484,19 +484,13 @@ provide interactive control, allowing the user to reveal further
 dimensionality by interacting with the plots using various widgets.
 
 In HoloViews, we solve this problem with composable data structures
-that embed homogeneous collections of ``Element`` objects in any
-arbitrarily dimensioned space. Fundamentally, this set of data
-structures (subclasses of ``NdMapping``) are multi-dimensional
-dictionaries that allow the user to declare the dimensionality of the
-space via a list of key dimensions (``kdims``). The multi-dimensional
-location of the items held by the dictionary are defined by tuples,
-where the values in the tuple match the declared key dimensions by
-position. In addition to regular Python dictionary indexing semantics,
-these data structures also support slicing semantics to select
-precisely the subregion of the continuous multi-dimensional space that
-the user wants to explore.
+that embed collections of ``Element`` objects in any arbitrarily
+dimensioned space. Fundamentally, this set of data structures
+(subclasses of ``NdMapping``) are multi-dimensional dictionaries that
+allow the user to declare the dimensionality of the space via a list
+of key dimensions (``kdims``).
 
-The full list of currently supported ``NdMapping`` classes includes:
+The list of supported ``NdMapping`` classes includes:
 
 * ``HoloMaps``: The most flexible high-dimensional data structure in
   HoloViews, allowing ``Element`` instances to be embedded in an
@@ -509,8 +503,18 @@ The full list of currently supported ``NdMapping`` classes includes:
   overall grid axis corresponds to a key dimension.
 
 * ``NdLayouts``/``NdOverlays``: Similar to ``Layout`` or ``Overlay``
-  objects, but allowing only homogeneous types of elements, which lets
-  you define explicit dimensions over which these items vary.
+  objects, where the contained objects vary over one or more
+  dimensions.
+
+To explore a high-dimensional space of height as a function of age
+across different countries and years, you could declare ``space =
+HoloMap(kdims=['Country', 'Year'])``. Now we can treat ``space`` as a
+dictionary and insert instances of classes such as ``Curve`` or
+``Scatter`` with the appropriate ``(country, year)`` keys. For
+instance, the age and height ``Curve`` for the USA in 1988 (``usa``)
+can be inserted using ``space['USA', 1988] = usa``. Note that the
+order of the indexing corresponds to the order of the declared key
+dimensions.
 
 ..
    jbednar: is it necessary to mention that GridSpace is restricted to
