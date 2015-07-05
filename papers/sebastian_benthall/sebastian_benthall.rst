@@ -679,10 +679,20 @@ to include the \math:`x_{min}` values and include data sets above a certain size
 Discussion
 ==========
 
-The regularity in these data sets suggests that there is a need for a new network generation
-model that results in disassortative graphs with log-normal degree distribution.
-Building this graph generation model may help us understand better how collaborative communities
-grow and form over time.
+Empirically we have found no empirical support for email interaction networks having
+power law degree distribution, as opposed to a log-normal degree distribution.
+Interpretation of this result will vary depending on the "prior" probability
+on assigns to finding power law and log-normal distributions in social processes like this.
+As similar processes may generate both kinds of heavy-tail distributions, we can say only that
+our study suggests we should not be tethered to models that guarantee scale-free distributions
+such as Barabási-Alpert when explaining the interaction network data.
+We consider the development of a network generation model whose degree is determined
+by a multiplicative process as a direction for future work.
+
+It is our good fortune that the network data we study is granularly time-stamped.
+Since the total network structure is derived from an archive in which every email
+is annotated with a particular time, we see an opportunity to test generative models
+for there predictions during the whole duration of network growth.
 
 Possible models include nonlinear Barabási-Alpert: http://arxiv.org/pdf/cond-mat/0402315.pdf
 
