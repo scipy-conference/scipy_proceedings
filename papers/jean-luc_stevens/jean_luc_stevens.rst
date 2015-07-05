@@ -712,21 +712,21 @@ to worry about the different plotting APIs.
 This three-part design explicitly supports the workflows that are
 common in science, repeatedly switching between phases of exploration
 and periods of writing up.  Interesting data can be collected and
-curated over time, instantly and transparently visualizable without
-any custom code cluttering up the notebook.  Visualizations of data
-that are worth keeping can be customized through an interactive and
-iterative process, and the final set of plotting options can then be
-expressed as a single data structure separate from the actual
-displayed data, ready to be applied to the next batch of data from a
-subsequent measurement or experiment.  Throughout, the scientist
-curates the data of interest, as revealed in associated visual
-representations, along with the visualization options and a separate
-codebase of general-purpose plots (mostly included in HoloViews, but
-potentially extended locally for specific domains).  Each of these
-three aspects of the process (data, options, and code) can be
-developed, maintained, archived, and improved independently, providing
-comprehensive support for the natural process of exploration and
-dissemination common to all scientific disciplines.
+curated over time, where each step is instantly and transparently
+visualizable without any custom code cluttering up the notebook.
+Visualizations of data that are worth keeping can be customized
+through an interactive and iterative process, and the final set of
+plotting options can then be expressed as a single data structure
+separate from the actual displayed data, ready to be applied to the
+next batch of data from a subsequent measurement or experiment.
+Throughout, the scientist curates the data of interest, as revealed in
+associated visual representations, along with the visualization
+options and a separate codebase of general-purpose plots (mostly
+included in HoloViews, but potentially extended locally for specific
+domains).  Each of these three aspects of the process (data, options,
+and code) can be developed, maintained, archived, and improved
+independently, providing comprehensive support for the natural process
+of exploration and dissemination common to all scientific disciplines.
 
 Discussion
 ----------
