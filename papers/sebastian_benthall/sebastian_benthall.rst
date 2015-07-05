@@ -355,7 +355,7 @@ below.
 Methods
 =======
 
-We built interaction graphs according to the above procedure for 10 mailing lists from open
+We built interaction graphs according to the above procedure for 13 mailing lists from open
 collaborative communities.
 We then computed the degree assortativity of these networks.
 We also used the Alstott package to test the degree distribution of these networks using
@@ -664,8 +664,22 @@ Results
    \end{table*}
 
 
-Every mailing list of the 10 we analyzed exhibits degree disassortivity better fit to 
-log-normal instead of power law distribution. **address p-value issue!!!**
+Every mailing list of the 13 we analyzed exhibits degree disassortivity better fit to 
+log-normal instead of power law distribution.
+This is the meaning of the negative R value given in Table 2.
+
+The $p$ values require special explanation. The value given is computed by the [Alstott2014]_ package 
+*in the direction of the best fitting distribution*.
+Since the best fitting distribution is log-normal, the null hypothesis used for computing
+the $p$-values is that the data was generated from a power law distribution.
+That the $p$-value for no individual mailing list is beneath a threshold of statistical
+significance (such as :math:`p < .05` speaks to the similarity between these two distributions
+that is the source of such confusion and debate, as outlined previously.
+Especially for lists with low :math:`n`, the [Clauset2007]_ test can be entirely
+inconclusive as to which distribution is more likely.
+
+When the interaction graphs of the mailing lists are combined into the `total` mailing list,
+the overall pattern of the data is more decisively clear.
 
 [for some of the smaller networks here, the results are a bit sketchy. it would be better
 to include the \math:`x_{min}` values and include data sets above a certain size threshold ]
