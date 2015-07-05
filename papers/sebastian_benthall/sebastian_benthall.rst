@@ -618,47 +618,60 @@ original nodes.
 Results
 =======
 
+.. raw:: latex
+
+   \begin{table*}
+
+     \begin{longtable*}{|l|l|r|r|r|}
+     \hline
+     \bf{List name} & \bf{List Source} & $n$ & R value & $p$ \tabularnewline
+     \hline
+     numpy-discussion & SciPy          & 2973 & -0.76  &  0.40 \tabularnewline
+     \hline
+     scipy-user       & SciPy          & 2735 & -0.02  &  0.31 \tabularnewline
+     \hline
+     wikimedia-l      & WikiMedia      & 1729 & -3.65  &  0.07 \tabularnewline
+     \hline
+     ipython-user     & SciPy          & 1085 & -0.33  &  0.23 \tabularnewline
+     \hline
+     scipy-dev        & SciPy          & 1056 & -0.33  &  0.58 \tabularnewline
+     \hline
+     ipython-dev      & SciPy          & 689  & -0.52  &  0.08 \tabularnewline
+     \hline
+     hot              & OpenStreetMap  & 524  & -0.85  &  0.40 \tabularnewline
+     \hline
+     astropy          & SciPy          & 404  & -0.08  &  0.77 \tabularnewline
+     \hline
+     gendergap        & WikiMedia      & 301  & -0.86  &  0.40 \tabularnewline
+     \hline
+     apug             & SciPy          & 121  & -0.01  &  0.52 \tabularnewline
+     \hline
+     maps-l           & WikiMedia      & 118  & -0.00  &  0.95 \tabularnewline
+     \hline
+     design           & WikiMedia      & 111  & -3.62  &  0.10 \tabularnewline
+     \hline
+     potlatch-dev     & OpenStreetMap  & 75   & -0.00  &  0.97 \tabularnewline
+     \hline
+     \end{longtable*}
+
+     \caption{Results of analysis. For each mailing list archive, number of participants $n$,
+           loglikelihood ratio R and statistical significance $p$ in the direction of the best fit (which is all cases
+           is log-normal). \DUrole{label}{quanitities-table}}
+
+   \end{table*}
+
+
 Every mailing list of the 10 we analyzed exhibits degree disassortivity better fit to 
 log-normal instead of power law distribution. **address p-value issue!!!**
 
-.. table:: Results of analysis. For each mailing list archive, number of participants :math:`n`,
-           loglikelihood ratio R and
-           statistical significance :math:`p` of comparison of fit between power law and log-normal
-           distributions. :label:`mtable`
-
-   +------------------+----------------+------+---------+-------+
-   | list name        | Source         | *n*  | R value | *p*   |
-   +==================+================+======+=========+=======+
-   | numpy-discussion | SciPy          | 2973 | -0.76   |  0.40 |
-   +------------------+----------------+------+---------+-------+
-   | scipy-user       | SciPy          | 2735 | -0.02   |  0.31 |
-   +------------------+----------------+------+---------+-------+
-   | wikimedia-l      | WikiMedia      | 1729 | -3.65   |  0.07 |
-   +------------------+----------------+------+---------+-------+
-   | ipython-user     | SciPy          | 1085 | -0.33   |  0.23 |
-   +------------------+----------------+------+---------+-------+
-   | scipy-dev        | SciPy          | 1056 | -0.33   |  0.58 |
-   +------------------+----------------+------+---------+-------+
-   | ipython-dev      | SciPy          | 689  | -0.52   |  0.08 |
-   +------------------+----------------+------+---------+-------+
-   | hot              | OpenStreetMap  | 524  | -0.85   |  0.40 |
-   +------------------+----------------+------+---------+-------+
-   | astropy          | SciPy          | 404  | -0.08   |  0.77 |
-   +------------------+----------------+------+---------+-------+
-   | gendergap        | WikiMedia      | 301  | -0.86   |  0.40 |
-   +------------------+----------------+------+---------+-------+
-   | apug             | SciPy          | 121  | -0.01   |  0.52 |
-   +------------------+----------------+------+---------+-------+
-   | maps-l           | WikiMedia      | 118  | -0.00   |  0.95 |
-   +------------------+----------------+------+---------+-------+
-   | design           | WikiMedia      | 111  | -3.62   |  0.10 |
-   +------------------+----------------+------+---------+-------+
-   | potlatch-dev     | OpenStreetMap  | 75   | -0.00   |  0.97 |
-   +------------------+----------------+------+---------+-------+
-
-
 [for some of the smaller networks here, the results are a bit sketchy. it would be better
 to include the \math:`x_{min}` values and include data sets above a certain size threshold ]
+
+Unfortunately, restructuredtext can be picky about tables, so if it simply
+won't work try raw LaTeX:
+
+
+
 
 .. table:: Results of analysis. For each mailing list archive, number of participants :math:`n`,
            computed degree assortativity of the interaction graph. Every variation of
