@@ -534,8 +534,7 @@ The list of supported ``NdMapping`` classes includes:
   dimensions.
 
 To explore a high-dimensional space of height as a function of age
-across different countries and years, you could declare ``space =
-HoloMap(kdims=['Country', 'Year'])``. Now we can treat ``space`` as a
+across different countries and years, you could declare ``space=HoloMap(kdims=['Country', 'Year'])``. Now we can treat ``space`` as a
 dictionary and insert instances of classes such as ``Curve`` or
 ``Scatter`` with the appropriate ``(country, year)`` keys. For
 instance, the age and height ``Curve`` for the USA in 1988 (``usa``)
