@@ -11,6 +11,7 @@ Circumventing The Linker: Using SciPy's BLAS and LAPACK Within Cython
    BLAS, LAPACK, and other libraries like them have formed the underpinnings of much of the scientific stack in Python.
    Until now, the standard practice in many packages for using BLAS and LAPACK has been to link each Python extension directly against the libraries needed.
    Each module that calls these low-level libraries directly has had to link against them independently.
+   The task of finding and linking properly against the correct libraries has, in the past, been a substantial obstacle in the development and distribution of Python extension modules.
 
    Cython has existing machinery that allows C-level declarations to be shared between Cython-compiled extension modules without linking against the original libraries.
    The Cython BLAS and LAPACK API in SciPy uses this functionality to make it so that the same BLAS and LAPACK libraries that were used to compile SciPy can be used in Python extension modules via Cython.
@@ -79,8 +80,13 @@ All of the code needed to do this must also be maintained so that it continues t
 
 An effective solution to this unusually painful problem is to have existing Python modules provide access to the low-level libraries that they use.
 NumPy has provided some of this sort of functionality for BLAS and LAPACK by making it so that the locations of the system's BLAS and LAPACK libraries can be found using NumPy's distutils module.
-Cython has also provided a similar sort of functionality by allowing C-level APIs to be exported between Cython modules.
-In fact, the existing machinery in Cython can be used to expose functions and variables from existing libraries.
+Unfortunately, the existing functionality is only usable at build time, and does little to help users that do not compile NumPy and SciPy from source.
+It also does not include the various patches used by SciPy to account for bugs in different BLAS and LAPACK versions and incompatibilities between compilers.
+
+Cython has provided similar functionality that allows C-level APIs to be exported between Cython modules without linking.
+In the past, these importing systems have been used primarily to share Cython-defined variables, functions and classes between Cython modules.
+If used carefully, however, the existing machinery in Cython can be used to expose functions and variables from existing libraries to other extension modules.
+This makes it so that other Python extension modules can use the functions it wraps without having to build, find, or link against the original library.
 
 The Cython API for BLAS and LAPACK
 ----------------------------------
@@ -140,7 +146,7 @@ This library can be compiled by running ``clang -c myfunc.c -o myfunc.o``.
 
 This can be exposed at the Cython level and exported as a part of the resulting Python module by including the header in the pyx file, using the function from the C file to create a Cython shim with the proper signature, and then declaring the function in the corresponding pxd file without including the header file.
 A similar approach using function pointers is also possible.
-Here's a minimal example that demostrates this process:
+Here's a minimal example that demonstrates this process:
 
 .. code-block:: cython
 
@@ -177,7 +183,7 @@ From here, once the module is built, the Cython wrapper for the C-level function
 Exporting a Cython API for an existing Fortran library
 ------------------------------------------------------
 
-When working with a Fortran library, the name mangling scheme used by the compiler must be taken in to account.
+When working with a Fortran library, the name mangling scheme used by the compiler must be taken into account.
 The simplest way to work around this would be to use Fortran 2003's ISO C binding module.
 Since, for the sake of platform/compiler independence, such a recent version of Fortran cannot be used in SciPy, an existing header with a small macro was used to imitate the name mangling scheme used by the various Fortran compilers.
 In addition, for this approach to work properly, all the Fortran functions in BLAS and LAPACK were first wrapped as subroutines (functions without return values) at the Fortran level.
@@ -272,7 +278,7 @@ The interoperability between NumPy's distutils package and Cython is limited, bu
    cythonize('cyffunc.pyx')
    setup(configuration=configuration)
 
-There are many routines in BLAS and LAPACK, and creating these wrappers currently still requires a large amount of boiler plate code.
+There are many routines in BLAS and LAPACK, and creating these wrappers currently still requires a large amount of boilerplate code.
 When creating these wrappers, it was easiest to write Python scripts that used f2py's existing functionality for parsing Fortran files to generate a set of function signatures that could, in turn, be used to generate the needed code.
 
 Since SciPy supports several versions of LAPACK, it was also necessary to determine which routines should be included as a part of the new Cython API.
