@@ -150,7 +150,7 @@ The probability mass function (pmf) of a discrete random variable(:math:`X`) tak
 
 .. [#] If one is dealing with continuous quantities rather than discrete quantities one will have to use a probability density function (pdf) which does not have as straightforward an interpretation as a probability mass function. This difficult stems from the fact that (under most cases) the probability of any particular event occurring is "measure zero", or "almost surely" impossible. Without getting into measure theory and the foundation of calculus and continuity we can simply note that it is not that any individual event has non-zero probability, but that sets of events have non-zero probability.As a result, continuous random variables are more easily understood in terms a cumulative density function (cdf), which states not how likely any individual event is, but how likely it is that the event in question is less than a value :math:`x`. The notation usually given for a cdf of this sort is :math:`F(X\leq x) = \int_{-\infty}^{x}f(u)du`, where :math:`f(u)` is the associated probability density function.
 
-The conditional probability of a variable :math:`X` taking on value :math:`x` once it is known that another variable :math:`Y` takes on value :math:`y` is :math:`P(X=x|Y=y)`. Much like above, if we want to consider the probability of each possible event without specifying one, sometimes this will be written as :math:`P(X|Y=y)`. If we are considering conditioning on any of the possible values of the known variable, we might use the notation :math:`P(X|Y)`, but that is a slight abuse of the notation. 
+The conditional probability of :math:`X` with value :math:`x` given another variable :math:`Y` with value :math:`y` is :math:`P(X=x~|Y=y)`. Much like above, if we want to consider the probability of each possible event without specifying one, sometimes this will be written as :math:`P(X|Y=y)`. If we are considering conditioning on any of the possible values of the known variable, we might use the notation :math:`P(X|Y)`, but that is a slight abuse of the notation. 
 
 You *can* view :math:`P(X|Y)` as a function over the space defined by :math:`X\times Y`. However, if you do so, do not interpret this as a probability function (of any kind). Rather, this defines a probability function for :math:`X` relative to each value of :math:`Y`. Without conditioning on :math:`Y` we have many potential functions of X. Thus, you can think of that as denoting a *family* of probability functions indexed by the various values :math:`Y=y`.
 
@@ -197,15 +197,15 @@ If two variables are conditionally independent, that means that conditional on s
 
 
 Example: Marginal Independence :math:`\neq` Conditional Independence
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+====================================================================
 
 Consider the following example:
 
 ..  math::
     :type: eqnarray
 
-    X &\sim& \textrm{Bernoulli}_{\{0,1\}}(.5), Y \sim \textrm{Bernoulli}_{\{0,1\}}(.5)\\
-    Z &=& X \oplus Y, \oplus \equiv \textsc{xor}\\
+    X &\sim& \textrm{Bernoulli}_{\{0,1\}}(.5),~ Y \sim \textrm{Bernoulli}_{\{0,1\}}(.5)\\
+    Z &=& X \oplus Y , \oplus \equiv \textsc{xor}
 
 Note that, :math:`X \independent Y` but :math:`X \not\independent Y|Z`.
 
