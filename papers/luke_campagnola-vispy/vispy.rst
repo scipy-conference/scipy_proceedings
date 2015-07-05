@@ -70,7 +70,8 @@ VisPy's functionality is divided into a layered architecture, with each new laye
 Layer 1: Object-Oriented GL
 '''''''''''''''''''''''''''
 
-The OpenGL API, although very powerful, is also somewhat verbose and unwieldy. VisPy's lowest-level layer, ``vispy.gloo``, provides an object-oriented OpenGL wrapper with a clean, compact, and Pythonic alternative to traditional OpenGL programming. Developers unfamiliar with OpenGL are encouraged to work from the scenegraph and plotting layers instead. Objects that typically require several GL calls to instantiate, such as textures, vertex buffers, frame buffers, and shader programs, are instead encapsulated in simple Python classes (e.g. Table 1).
+The OpenGL API, although very powerful, is also somewhat verbose and unwieldy. VisPy's lowest-level layer, ``vispy.gloo``, provides an object-oriented OpenGL wrapper with a clean, compact, and Pythonic alternative to traditional OpenGL programming (Figure  :ref:`gloofig`). Developers unfamiliar with OpenGL are encouraged to work from the scenegraph and plotting layers instead. Objects that typically require several GL calls to instantiate, such as textures, vertex buffers, frame buffers, and shader programs, are instead encapsulated in simple Python classes (e.g. Table 1).
+
 
 .. table:: The ``vispy.gloo`` API is compact, clean, and Pythonic compared to native OpenGL.
    :class: w
@@ -102,9 +103,10 @@ The OpenGL API, although very powerful, is also somewhat verbose and unwieldy. V
    |                                               |   glUniform4fv(uniforms['color'], 1, (1.0, 0.5, 0.0, 1.0))       |
    +-----------------------------------------------+------------------------------------------------------------------+
 
+
 .. figure:: gloo.png
 
-   A selection of demos written with ``vispy.gloo``. 
+   A selection of demos written with ``vispy.gloo``. This layer provides low-level access to OpenGL with a simple and Pythonic API. It is primarily used to implement visual classes; however, developers who are familiar with OpenGL may find this a suitable starting point for some visualization tasks. :label:`gloofig`
 
 OpenGL commands cannot be invoked until a context, provided by the GUI toolkit, has been created and activated. This requirement imposes design limitations that can make OpenGL programs more awkward. To circumvent this restriction, ``vispy.gloo`` uses a context management system that queues all OpenGL commands until the appropriate context has become active. The direct benefit is that the end user is free to interact with ``vispy.gloo`` however makes sense for their program. Most notably, ``vispy.gloo`` objects can be instantiated when the program starts up, before any context is available.
 
@@ -118,11 +120,11 @@ A closely related system, ``vispy.app``, abstracts the differences between the v
 Layer 2: Visuals
 ''''''''''''''''
 
-The core of VisPy is its library of ``Visual`` classes that provide the primitive graphical objects used to build more complex visualizations. These objects range from very simple primitives (lines, points, triangles) to more powerful primitives (text, volumes, images), to high-level visualization tools (histograms, surface plots, spectrograms, isosurfaces).
+The core of VisPy is its library of ``Visual`` classes that provide the primitive graphical objects used to build more complex visualizations. These objects range from very simple primitives (lines, points, triangles) to more powerful primitives (text, volumes, images), to high-level visualization tools (histograms, surface plots, spectrograms, isosurfaces). Figure :ref:`visualfig` shows several examples of visuals implemented in VisPy. 
 
 .. figure:: visuals.png
 
-   A selection of VisPy's visuals. These span the range from simple 2D and 3D primitives to more advanced visualization tools like contour plots, surface plots, and volume renderings. More complex visualizations can be built from combinations of these visuals.
+   A selection of VisPy's visuals. These span the range from simple 2D and 3D primitives to more advanced visualization tools like contour plots, surface plots, and volume renderings. More complex visualizations can be built from combinations of these visuals. :label:`visualfig`
 
 Internally, visuals upload their data to graphics memory and implement a shader program [glsl]_ that is executed on the GPU. Because all OpenGL implementations since 2.0 include a GLSL compiler, this allows the most computationally intensive operations to run in compiled, parallelized code without adding any build dependencies. Visuals can be reconfigured and updated in real time by simply uploading new data or shaders to the GPU. Before drawing, each visual also configures the necessary OpenGL global state such as blending and depth testing. These state parameters may be reconfigured for each visual to select different compositing modes.
 
@@ -132,9 +134,9 @@ VisPy implements a collection of coordinate transformation classes that are used
 
 .. figure:: image_transforms.png
 
-   One image viewed using four different coordinate transformations. VisPy supports linear transformations such as scaling, translation, and matrix multiplication (bottom left) as well as nonlinear transformations such as logarithmic (top left) and polar (top right). Custom transform classes are also easy to construct (bottom right).
+   One image viewed using four different coordinate transformations. VisPy supports linear transformations such as scaling, translation, and matrix multiplication (bottom left) as well as nonlinear transformations such as logarithmic (top left) and polar (top right). Custom transform classes are also easy to construct (bottom right).  :label:`imagetrfig`
 
-The following example summarizes the code that produces the logarithmically-scaled image in Figure XX. It combines a scale/translation, followed by log base 2 along the y axis, followed by a second scale/translation to set the final position on screen. The resulting chained transformation maps from the image's pixel coordinates to the window's pixel coordinates:
+The following example summarizes the code that produces the logarithmically-scaled image in Figure :ref:`imagetrfig`. It combines a scale/translation, followed by log base 2 along the y axis, followed by a second scale/translation to set the final position on screen. The resulting chained transformation maps from the image's pixel coordinates to the window's pixel coordinates:
 
 .. code-block:: python
 
@@ -164,12 +166,12 @@ VisPy's approach is for each visual to implement multiple rendering algorithms t
 
 More generally, optimizing for performance often requires consideration for two different targets: data *volume* and data *throughput*. In the former case, a large but static data set is uploaded to the GPU once but subsequently viewed or modified interactively. This case is typically limited by the efficiency of the shader programs, and thus it may help to pre-process the data once on the CPU to lighten the load on the GPU. In the latter case, data is being rapidly streamed to the GPU and is typically displayed only once before being discarded. This case tends to be limited by the per-update CPU overhead, and thus may be optimized by offloading more effort to the GPU. Intertwined with these optimization targets are considerations |---| often performance can be improved by sacrificing rendering quality, but the true performance gain of each sacrifice can be unpredictable.
 
-By wrapping multiple rendering techniques within a single API, the user is freed from the burden of restructuring their application for each technique. Some cases, however, are too unique to fit comfortably in a generic API. For example, Figure XX uses a specialized visual to draw a 100x100 grid of scrolling plots, each containing 2,000 data points. This example could be implemented using the basic line visual techniques, but independently updating each of the 10,000 lines as they scroll would be prohibitively slow. The example is able to run over 30 fps by organizing the data in memory as a 2D circular buffer, which allows all plots to be updated in a single operation. The essential lines of this example are summarized below:
+By wrapping multiple rendering techniques within a single API, the user is freed from the burden of restructuring their application for each technique. Some cases, however, are too unique to fit comfortably in a generic API. For example, Figure :ref:`scrollfig` uses a specialized visual to draw a 100x100 grid of scrolling plots, each containing 2,000 data points. This example could be implemented using the basic line visual techniques, but independently updating each of the 10,000 lines as they scroll would be prohibitively slow. The example is able to run over 30 fps by organizing the data in memory as a 2D circular buffer, which allows all plots to be updated in a single operation. The essential lines of this example are summarized below:
 
 
 .. figure:: scrolling_plots_sm.png
 
-   A large collection of scrolling plots rendered with a specialized visual (``examples/demo/scene/scrolling_plots.py``). There are 10,000 plots, each containing 2,000 data points for a total of 20 million points drawn per frame. The plots are scrolled continuously as new data is streamed to the GPU, and still render at 35 fps on the author's laptop. A region of the plot is enlarged using a nonlinear transform. 
+   A large collection of scrolling plots rendered with a specialized visual (``examples/demo/scene/scrolling_plots.py``). There are 10,000 plots, each containing 2,000 data points for a total of 20 million points drawn per frame. The plots are scrolled continuously as new data is streamed to the GPU, and still render at 35 fps on the author's laptop. A region of the plot is enlarged using a nonlinear transform.  :label:`scrollfig`
 
 
 
@@ -246,11 +248,11 @@ Adding mouse interaction requires the ability to determine which visuals are und
         
         print("Clicked on %s at %s" % (vis, pos)) 
 
-A more complete mouse interaction example is described in Figure XX.
+A more complete mouse interaction example is described in Figure :ref:`pickingfig`.
 
 .. figure:: picking.png
 
-   Mouse interaction example (``examples/demos/scene/picking.py``). In this example, mouse press events are captured and a list of visuals near the mouse is generated using `canvas.visuals_at(pos, radius=10)`. The list of visuals is returned in order of proximity to the mouse, allowing the nearest line to be selected. Mouse movement events are captured in a separate callback and used to update the plot cursor. The location along the plot line and the cursor placement are all determined by mapping the mouse position into the local coordinate system of the selected visual.
+   Mouse interaction example (``examples/demos/scene/picking.py``). In this example, mouse press events are captured and a list of visuals near the mouse is generated using `canvas.visuals_at(pos, radius=10)`. The list of visuals is returned in order of proximity to the mouse, allowing the nearest line to be selected. Mouse movement events are captured in a separate callback and used to update the plot cursor. The location along the plot line and the cursor placement are all determined by mapping the mouse position into the local coordinate system of the selected visual. :label:`pickingfig`
 
 
 
@@ -281,11 +283,11 @@ VisPy's plotting layer allows quick and easy access to advanced data visualizati
     fig[0:2, 0].spectrogram(data, fs=fs, clim=(-100, -20))
     fig[2, 0].plot(np.array((t, data)).T, marker_size=0)
 
-The output of this code is shown in figure XX.
+The output of this code is shown in Figure :ref:`plotfig`.
 
 .. figure:: plot.png
 
-   Example ``vispy.plot`` output (from ``examples/basics/plotting/spectrogram.py``). 
+   Example ``vispy.plot`` output (from ``examples/basics/plotting/spectrogram.py``).  :label:`plotfig`
 
 
 
