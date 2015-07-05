@@ -120,7 +120,7 @@ A cycle in a directed graph can be understood as the existence of a path from a 
 
 Directed acyclic graphs(:sc:`dag`\s) are directed graphs that contain no cycles.
 
-The number of :sc:`dag`\s that can be obtained from a set of nodes of size :math:`n` can be defined recursively as follows :cite:`mckay2003acyclic`:
+The number of :sc:`dag`\s that can be obtained from a set of nodes of size :math:`n` can be defined recursively as follows :cite:`mckay2004acyclic`:
 
 .. math::
 
@@ -378,16 +378,17 @@ NetworkX is usually imported using the :code:`nx` abbreviation
 Causal Bayesian NetworkX: Graphs
 --------------------------------
 
-Here we will look at some of the basic operations described in the `ipython notebook` :cite:`perezG2007` found at `Causal Bayesian NetworkX`_.
+Here we will look at some of the basic operations described in the `ipython notebook` :cite:`scipy` found at `Causal Bayesian NetworkX`_.
 
 Other packages
 ==============
 
-In addition to networkX, we need to import numpy and itertools.
+In addition to networkX, we need to import numpy, scipy :cite:`scipy` and itertools.
 
 ..  code-block::python
 
     import numpy as np
+    import scipy
     from itertools import chain, combinations, tee
 
 
@@ -708,9 +709,15 @@ What is important is that they successfully modeled human behavior using this fr
 Cognition as Standard, Cognition as Map
 =======================================
 
-People have always been able to make judgments that are beyond machine learning's state-of-the-art. They have been used as a standard against which to test machine learning systems. Ideally, the system reaches a Turing point, the point at which machine performance and human performance are indistinguishable.
+People have always been able to make judgments that are beyond machine learning's state-of-the-art. In domains like object recognition, we are generally confident in people's judgments as veridical, and – as such – they have been used as a standard against which to test and train machine learning systems. The eventual goal is that the system reaches a Turing point — the point at which machine performance and human performance are indistinguishable.
 
-But that is not the only way human behavior can guide machine learning. Rather, rational models like that in :cite:`griffithst09` show that in characterizing a large set of traditionally separate cognitive problems with a single framework we can do more than just set standards. We can find new classes of problems that we know people can solve(in some sense) and establish formal frameworks for describing those problems, even if we have no concept of a standard way to solve that problem. 
+But that is not the only way human behavior can guide machine learning. In domains like causal induction, people's judgments *cannot* form a standard in traditional senses because we cannot trust people to be "correct". Nonetheless, people make these judgments and, more importantly, people's judgments are systematic within and across individuals. This systematicity allows the judgments to be modeled using formal, computational frameworks. In some cases, we can go further and formally characterize the input to cognition and  as optimal in some sense defined by the model. 
+
+
+
+Causal explanation such as inferring underlying cause of a set of symptoms, or identification of causal responsibility  or individual Misdiagnosis occurs in medical practice, legal trials are notoriously Nonetheless, people are exceptionally good at causal induction and causal inference in general.
+
+ a large set of traditionally separate cognitive problems with a single framework we can do more than just set standards. We can find new classes of problems that we know people can solve(in some sense) and establish formal frameworks for describing those problems, even if we have no concept of a standard way to solve that problem. 
 
 In these cases of causal inference, it is not human skill is interesting, but that we have formulated these problems *at all*. By studying human behavior with formally unified accounts, it allows us to map out and extend the problems and problem sets that are even "up for grabs" for solution by machine learning systems. In this sense, it is not that humanity has a better state-of-the-art for solving these problems, but that we have a more comprehensive state-of-the-problem that challenges machine learning research to invent new formalizations so that these tests too shall pass. 
 
