@@ -28,7 +28,8 @@
 
 .. class:: keywords
 
-   mailing lists, network analysis
+   mailing lists, network analysis, assortativity, power law distributions,
+   collaboration
 
 
 Introduction
