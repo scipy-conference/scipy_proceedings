@@ -622,33 +622,33 @@ Results
 
      \begin{longtable*}{|l|l|r|r|r|r|r|r|r|}
      \hline
-     \bf{List name} & \bf{List Source} & $n$ & R value & $p$   & in,in & out,in & in,out & out,out \tabularnewline
+     \bf{List name} & \bf{List Source} & $n$ & R value & $p$   & in,in,weighted & out,out,weighted & in,in,unweighted & out,out,unweighted \tabularnewline
      \hline
-     numpy-discussion & SciPy          & 2973 & -0.76  &  0.40 & -0.22 & -0.21  & -0.21  & -0.20   \tabularnewline
+     numpy-discussion & SciPy          & 2973 & -0.76  &  0.40 & -0.22          & -0.20            & -.29             & -.26 \tabularnewline
      \hline
-     scipy-user       & SciPy          & 2735 & -0.02  &  0.31 & -0.11 & -0.11  & -0.11  & -0.11   \tabularnewline
+     scipy-user       & SciPy          & 2735 & -0.02  &  0.31 & -0.11          & -0.11            & -.19             & -.18 \tabularnewline
      \hline
-     wikimedia-l      & WikiMedia      & 1729 & -3.65  &  0.07 & -0.15 & -0.16  & -0.15  & -0.15   \tabularnewline
+     wikimedia-l      & WikiMedia      & 1729 & -3.65  &  0.07 & -0.15          & -0.15            & -.21             & -.20 \tabularnewline
      \hline
-     ipython-user     & SciPy          & 1085 & -0.33  &  0.23 & -0.27 & -0.27  & -0.27  & -0.26   \tabularnewline
+     ipython-user     & SciPy          & 1085 & -0.33  &  0.23 & -0.27          & -0.26            & -.29             & -.26 \tabularnewline
      \hline
-     scipy-dev        & SciPy          & 1056 & -0.33  &  0.58 & -0.28 & -0.28  & -0.27  & -0.26   \tabularnewline
+     scipy-dev        & SciPy          & 1056 & -0.33  &  0.58 & -0.28          & -0.26            & -.31             & -.29 \tabularnewline
      \hline
-     ipython-dev      & SciPy          & 689  & -0.52  &  0.08 & -0.25 & -0.25  & -0.25  & -0.24 \tabularnewline
+     ipython-dev      & SciPy          & 689  & -0.52  &  0.08 & -0.25          & -0.24            & -.36             & -.36 \tabularnewline
      \hline
-     hot              & OpenStreetMap  & 524  & -0.85  &  0.40 & -0.19 & -0.20  & -0.19  & -0.20 \tabularnewline
+     hot              & OpenStreetMap  & 524  & -0.85  &  0.40 & -0.19          & -0.20            & -.24             & -.24 \tabularnewline
      \hline
-     astropy          & SciPy          & 404  & -0.08  &  0.77 & -0.16 & -0.20  & -0.19  & -0.20 \tabularnewline
+     astropy          & SciPy          & 404  & -0.08  &  0.77 & -0.16          & -0.20            & -.16             & -.16 \tabularnewline
      \hline
-     gendergap        & WikiMedia      & 301  & -0.86  &  0.40 & -0.15 & -0.17  & -0.16  & -0.18 \tabularnewline
+     gendergap        & WikiMedia      & 301  & -0.86  &  0.40 & -0.15          & -0.18            & -.20             & -.21 \tabularnewline
      \hline
-     apug             & SciPy          & 121  & -0.01  &  0.52 & -0.20 & -0.21  & -0.19  & -0.20 \tabularnewline
+     apug             & SciPy          & 121  & -0.01  &  0.52 & -0.20          & -0.20            & -.21             & -.22 \tabularnewline
      \hline
-     maps-l           & WikiMedia      & 118  & -0.00  &  0.95 & -0.19 & -0.19  & -0.18  & -0.18 \tabularnewline
+     maps-l           & WikiMedia      & 118  & -0.00  &  0.95 & -0.19          & -0.18            & -.27             & -.26 \tabularnewline
      \hline
-     design           & WikiMedia      & 111  & -3.62  &  0.10 & -0.18 & -0.18  & -0.16  & -0.17 \tabularnewline
+     design           & WikiMedia      & 111  & -3.62  &  0.10 & -0.18          & -0.17            & -.21             & -.21 \tabularnewline
      \hline
-     potlatch-dev     & OpenStreetMap  & 75   & -0.00  &  0.97 & -0.01 & -0.06  & -0.03  & -0.08 \tabularnewline
+     potlatch-dev     & OpenStreetMap  & 75   & -0.00  &  0.97 & -0.01          & -0.08            & -.45             & -.34 \tabularnewline
      \hline
      \end{longtable*}
 
