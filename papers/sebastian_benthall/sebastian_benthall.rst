@@ -343,6 +343,14 @@ In our empirical work below, we compute directed assortativity for every variati
 and out/out) and find little difference between the computed values for our data,
 though there are graph structures for which these values can vary greatly.
 
+According to the survey by [Noldus2015]_, assortivity in weighted networks is not well explored 
+either theoretically or empirically.
+The weighted assortativity of a a network is the correlation between the weighted degree of its adjacent nodes,
+where weighted degree is the sum of the weights of all edges of a node.
+Directed weighted assortativity is computed from weighted in- and out-degrees.
+[Networkx]_ provides functions for computing these values on networks.
+We will compare weighted and unweighted directed assortivity in empirical networks
+below.
 
 Methods
 =======
