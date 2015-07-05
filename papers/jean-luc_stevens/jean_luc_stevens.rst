@@ -613,19 +613,19 @@ rendered.
    :align: center
 
    This view of the HoloViews display and customization systems
-   illustrates the complete separation between the content (data) to
-   be displayed, the display options, and the rendering/plotting
+   illustrates the complete separation between the content (data)
+   to be displayed, the display options, and the rendering/plotting
    system. The display options are stored entirely separately from the
-   content, with the appropriate options being selected with
-   user-controllable levels of specificity: general options for all
-   objects of a given type, more specific options controlled by
-   user-definable ``group`` and ``label`` strings, or arbitrarily
-   specific options based on the integer ``id`` assigned to each
-   content object. Plotting and rendering happens automatically
-   through the use of IPython display formatters. These combine the
-   content with the specified display options, call an external
-   plotting library, which returns an HTML representation that can
-   then be rendered in the notebook. :label:`schematic`
+   content as a tree structure, with the appropriate options being
+   selected with user-controllable levels of specificity: general
+   options for all objects of a given type, more specific options
+   controlled by user-definable ``group`` and ``label`` strings, or
+   arbitrarily specific options based on the integer ``id`` assigned
+   to each content object. Plotting and rendering happens
+   automatically through the use of IPython display formatters. These
+   combine the content with the specified display options, call an
+   external plotting library, which returns an HTML representation
+   that can then be rendered in the notebook. :label:`schematic`
 
 Figure :ref:`schematic` provides an overall summary of how the
 different components in the display system interact. The declarative
