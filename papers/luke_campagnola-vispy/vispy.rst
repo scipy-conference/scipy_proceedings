@@ -109,11 +109,13 @@ The OpenGL API, although very powerful, is also somewhat verbose and unwieldy. V
 
    
 
-OpenGL commands cannot be invoked until a context (usually provided by the GUI toolkit) has been created and activated. This requirement imposes program design limitations that can make OpenGL programs more awkward. To circumvent this restriction, ``vispy.gloo`` uses a context management system that queues all OpenGL commands until the appropriate context has become active. The direct benefit is that the end user is free to interact with ``vispy.gloo`` however makes sense for their program. Most notably, ``vispy.gloo`` objects can be instantiated as the program starts up, before any context is available.
+OpenGL commands cannot be invoked until a context (usually provided by the GUI toolkit) has been created and activated. This requirement imposes design limitations that can make OpenGL programs more awkward. To circumvent this restriction, ``vispy.gloo`` uses a context management system that queues all OpenGL commands until the appropriate context has become active. The direct benefit is that the end user is free to interact with ``vispy.gloo`` however makes sense for their program. Most notably, ``vispy.gloo`` objects can be instantiated when the program starts up, before any context is available.
 
 The command queues used by ``vispy.gloo`` are also designed to be serializable such that commands generated in one process or thread can be executed in another. In this way, a stream of GL commands could be sent to a web browser (such as the IPython notebook), recorded to disk to be replayed later, or shared between processes to take advantage of multi-core systems.
 
-Another purpose of ``vispy.gloo`` is to hide many of the differences between various versions and implementations of OpenGL. We currently target OpenGL versions 2.1 (desktop) and ES2.0 (embedded and WebGL), which is available on virtually all commodity hardware today. A closely related system, ``vispy.app``, abstracts the differences between the various supported GUI backends, which include PyQt4/5, PySide, IPython, SDL, GLFW, and several others. This support, combined with VisPy's pure-python and low-dependency approach, helps to ensure that VisPy will run on most platforms with minimal effort from users and developers alike.
+Another purpose of ``vispy.gloo`` is to hide many of the differences between various versions and implementations of OpenGL. We currently target OpenGL versions 2.1 (desktop) and ES2.0 (embedded and WebGL), which are available on virtually all commodity hardware today. Systems that lack a modern GPU may still run VisPy code using a software OpenGL implementation such as Mesa [http://www.mesa3d.org/] (notably, this is used by Travis CI [travis-ci.org] to run our unit tests). However, OpenGL versions older than 2.1 are not supported. VisPy also supports some features from OpenGL 3+ but these currently depend on pyopengl [http://pyopengl.sourceforge.net/].
+
+A closely related system, ``vispy.app``, abstracts the differences between the various supported GUI backends, which include PyQt4/5, PySide, IPython, SDL, GLFW, and several others. This system provides uniform access to user input, timers, and window features across all backends, and allows VisPy to be incorporated into most existing applications. VisPy can be used as a Qt widget, embedded in IPython notebook, or run on a headless server with almost no code differences. This support, combined with VisPy's pure-python and low-dependency approach, helps to ensure that VisPy will run on most platforms with minimal effort from users and developers alike. 
 
 
 Layer 2: Visuals
@@ -253,6 +255,8 @@ VisPy's plotting layer allows quick and easy access to advanced data visualizati
    # Add a spectrogram of the same data in the next row
    fig[1, 0].spectrogram(data)
 
+[add figure!]
+
 Despite the large volume of data, the resulting views can be immediately panned and zoomed in realtime. As a rough performance comparison, the same plot data can be redrawn at about 0.2 Hz by Matplotlib, 2 Hz by PyQtGraph, and over 100 Hz by VisPy (on the author's machine). 
 
 Each function in ``vispy.plot`` generates scenegraph (layer 3) objects to allow lower level control over the visual output. This makes it possible to begin development with the simplest ``vispy.plot`` calls and iteratively refine the output as needed. VisPy also includes an experimental wrapper around ``mplexporter`` (from https://github.com/mpld3/mplexporter) that allows it to act as a drop-in replacement for Matplotlib in existing projects (however this approach is not always expected to have the same performance benefits as using the native ``vispy.plot`` API).
@@ -265,9 +269,11 @@ Roadmap
 
 Our immediate goal for vispy is to stabilize the visual, scenegraph, and plotting APIs, and implement the most pressing basic features. We are continuallly testing for performance under different use cases and ensuring that behavior is consistent across all platforms. In the long term, we will implement more advanced features:
 
+* *Add more plot types.* The scope of ``vispy.plot`` encompasses a very broad range of high-level visualizations such as vector fields, flow charts. Building this library of visualizations will be an ongoing process.
 * *SVG export.* This is a must-have feature for any visualization library that targets publication graphics, and a high priority for VisPy.
-* *Add more plot types.* The scope of ``vispy.plot`` includes a very broad range of high-level visualizations such as vector fields, flow charts. Building this library of visualizations will be an ongoing process.
 * *Collections.* This system will allow many visuals to be joined together and drawn with a single call to OpenGL. This is expected to greatly improve performance when many visuals are displayed in the scene.
 * *Order-independent blending*. This technique will allow translucent visuals to be correctly blended without the need to sort the visuals by depth first. This will greatly improve the rendering quality of many 3D scenes. 
+* stylesheets
+
 
 
