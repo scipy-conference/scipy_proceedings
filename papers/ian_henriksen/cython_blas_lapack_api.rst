@@ -26,7 +26,7 @@ Introduction
 
 Many of the primary underpinnings of the scientific Python stack rely on interfacing with lower-level languages, rather than working with code that is exclusively written in Python.
 SciPy [SciPy]_, for example, is a collection of algorithms and libraries implemented in a variety of languages that are wrapped to provide convenient and usable APIs within Python.
-Because programmers often need to call low-level libraries, tools like F2PY [F2PY]_, Cython [Cython]_, and CFFI have been introduced to simplify that process.
+Because programmers often need to call low-level libraries, F2PY [F2PY]_, Cython [Cython]_, and a variety of similar tools have been introduced to simplify that process.
 
 In spite of the large number of tools for automatically wrapping low-level libraries, interfacing with low-level languages can still present a significant challenge.
 If performance bottlenecks depend on any third party algorithms, developers are faced with the daunting task of rewriting their algorithms to interface with completely different packages and adding large dependencies on existing low-level libraries.
@@ -51,7 +51,7 @@ This sort of solve can be done easily within Python.
        return np.linalg.solve(A, x)
 
 This function works fine for small things, but, if it needs to be called frequently, a more specialized algorithm could provide major improvements in both speed and accuracy.
-An ideal candidate for this sort of optimization is LAPACK's routine ``dgtsv``.
+An ideal candidate for this sort of optimization is LAPACK's [LAPACK]_ routine ``dgtsv``.
 That routine can be used within Cython to solve the same problem more quickly and with fewer numerical errors.
 
 .. code-block:: cython
@@ -279,7 +279,7 @@ The interoperability between NumPy's distutils package and Cython is limited, bu
    setup(configuration=configuration)
 
 There are many routines in BLAS and LAPACK, and creating these wrappers currently still requires a large amount of boilerplate code.
-When creating these wrappers, it was easiest to write Python scripts that used f2py's existing functionality for parsing Fortran files to generate a set of function signatures that could, in turn, be used to generate the needed code.
+When creating these wrappers, it was easiest to write Python scripts that used F2PY's existing functionality for parsing Fortran files to generate a set of function signatures that could, in turn, be used to generate the needed code.
 
 Since SciPy supports several versions of LAPACK, it was also necessary to determine which routines should be included as a part of the new Cython API.
 In order to support all currently used versions of LAPACK, we limited the functions in the Cython API to include only those that had a uniform interface from version 3.1 through version 3.5.
@@ -307,5 +307,4 @@ References
 
 .. [F2PY] Pearu Peterson. F2PY: a tool for connecting Fortran and Python programs, International Journal of Computational Science and Engineering, 4 (4), 296-305 (2009), DOI:10.1504/IJCSE.2009.029165
 
-.. [SWIG] D. M. Beazley. Automated scientific software scripting with SWIG. Future Gener. Comput. Syst. 19, 5 (July 2003), 599-609. DOI=10.1016/S0167-739X(02)00171-1
-
+.. [LAPACK] E. Anderson, Z. Bai, C. Bischof, S. Blackford, J. Demmel, J. Dongarra, J. Du Croz, A. Greenbaum, S. Hammarling, A. McKenney, D. Sorensen. LAPACK Users' Guide Third Edition, Society for Industrial and Applied Mathematics, 1999.
