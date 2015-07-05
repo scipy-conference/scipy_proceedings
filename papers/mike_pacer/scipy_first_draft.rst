@@ -209,55 +209,55 @@ Consider the following example:
 
 Note that, :math:`X \independent Y` but :math:`X \not\independent Y|Z`.
 
-Sampling from Conditional Probability distributions
----------------------------------------------------
+.. Sampling from Conditional Probability distributions
+.. ---------------------------------------------------
 
-Example - Coins and dice
-========================
+.. Example - Coins and dice
+.. ========================
 
-Imagine the following game: 
+.. Imagine the following game: 
 
-You have a coin [#]_ (*C*, :sc:`Heads, Tails`), a 6-sided die (:math:`D_6, \{1,2,\ldots,6\}`), and a 20-sided die (:math:`D_{20}, \{1,2,\ldots,20\}`). If for simplicity, you prefer to think of these as fair dice and a fair coin, you are welcome to do so, but my notation will not require that.
+.. You have a coin [#]_ (*C*, :sc:`Heads, Tails`), a 6-sided die (:math:`D_6, \{1,2,\ldots,6\}`), and a 20-sided die (:math:`D_{20}, \{1,2,\ldots,20\}`). If for simplicity, you prefer to think of these as fair dice and a fair coin, you are welcome to do so, but my notation will not require that.
 
-.. [#] A coin is effectively 2-sided die, but for clarity of exposition I chose to treat the conditioned-on variable as a different kind of object than the variables relying on that conditioning.
+.. .. [#] A coin is effectively 2-sided die, but for clarity of exposition I chose to treat the conditioned-on variable as a different kind of object than the variables relying on that conditioning.
 
-The rules of the game are as follows: flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die. Your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. 
+.. The rules of the game are as follows: flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die. Your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. 
 
-Suppose we wanted to know your expected score on a single round, but we do not know whether the coin will land on :sc:`Heads` or :sc:`Tails`. We cannot directly compute the probabilities for each die without first considering the probability that the coin will land on :sc:`Heads` or :sc:`Tails`. This is the 
+.. Suppose we wanted to know your expected score on a single round, but we do not know whether the coin will land on :sc:`Heads` or :sc:`Tails`. We cannot directly compute the probabilities for each die without first considering the probability that the coin will land on :sc:`Heads` or :sc:`Tails`. This is the 
 
-But this discussion hides an important complexity by having the event set of the :math:`D_6` embedded within the event set of the :math:`D_{20}`. Moreover, we assumed that we could treat each event in these sets as belonging to the integers and as a result, that with little interpretation, they can be easily summed.
+.. But this discussion hides an important complexity by having the event set of the :math:`D_6` embedded within the event set of the :math:`D_{20}`. Moreover, we assumed that we could treat each event in these sets as belonging to the integers and as a result, that with little interpretation, they can be easily summed.
 
-Coins and dice with hierarchically labeled entities, Example
-============================================================
+.. Coins and dice with hierarchically labeled entities, Example
+.. ============================================================
 
 
-Imagine the following game:
+.. Imagine the following game:
 
-You have a coin (*C*, :sc:`Heads, Tails`), a *new* 6-sided die (:math:`D_6, \{X_1,X_2,\ldots,X_6\}`), and a 20-sided die (:math:`D_{20}, \{X_1,X_2,\ldots,X_{20}\}`). 
+.. You have a coin (*C*, :sc:`Heads, Tails`), a *new* 6-sided die (:math:`D_6, \{X_1,X_2,\ldots,X_6\}`), and a 20-sided die (:math:`D_{20}, \{X_1,X_2,\ldots,X_{20}\}`). 
 
-The rules are the same as before: your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. You flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die.
+.. The rules are the same as before: your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. You flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die.
 
-But note that now we cannot sum over these in the same way that we did before. Without additional information about how to map these different labels onto values, there's no way to describe the "score". Rather, the best we can do is to determine the probability with which each individual case occurs, so that once we know more about the utility curve we can efficiently use the probability distribution regardless of the particular value that is assigned.
+.. But note that now we cannot sum over these in the same way that we did before. Without additional information about how to map these different labels onto values, there's no way to describe the "score". Rather, the best we can do is to determine the probability with which each individual case occurs, so that once we know more about the utility curve we can efficiently use the probability distribution regardless of the particular value that is assigned.
 
-Thus we can establish the following statements
+.. Thus we can establish the following statements
 
-..  latex::
+.. ..  latex::
 
-    \begin{center}
-    \begin{tabular}{lll}
-        \toprule
-        & \multicolumn{2}{c}{Parent values} \\
-        \cmidrule(r){2-3}
-        Probs & $P(\cdot|D_6,\textsc{h})$ & $P(\cdot|D_{20},\textsc{t})$\\
-        \midrule
-        $P(X_1|\cdot)$ &$P(X_1|D_6)*P(\textsc{h})$ & $P(X_1|D_{20})*P(\textsc{t})$ \\
-        \vdots     &    \vdots     & \vdots       \\
-        $P(X_6|\cdot)$       &  $P(X_6|D_6)*P(\textsc{h})$     & $P(X_6|D_{20})*P(\textsc{t})$      \\
-        \vdots       & \vdots     & \vdots      \\
-        $P(X_{20}|\cdot)$ & 0      & $P(X_{20}|D_{20})*P(\textsc{t})$   \\
-        \bottomrule
-    \end{tabular}
-    \end{center}
+..     \begin{center}
+..     \begin{tabular}{lll}
+..         \toprule
+..         & \multicolumn{2}{c}{Parent values} \\
+..         \cmidrule(r){2-3}
+..         Probs & $P(\cdot|D_6,\textsc{h})$ & $P(\cdot|D_{20},\textsc{t})$\\
+..         \midrule
+..         $P(X_1|\cdot)$ &$P(X_1|D_6)*P(\textsc{h})$ & $P(X_1|D_{20})*P(\textsc{t})$ \\
+..         \vdots     &    \vdots     & \vdots       \\
+..         $P(X_6|\cdot)$       &  $P(X_6|D_6)*P(\textsc{h})$     & $P(X_6|D_{20})*P(\textsc{t})$      \\
+..         \vdots       & \vdots     & \vdots      \\
+..         $P(X_{20}|\cdot)$ & 0      & $P(X_{20}|D_{20})*P(\textsc{t})$   \\
+..         \bottomrule
+..     \end{tabular}
+..     \end{center}
 
 .. Coins and dice with disjoint sets of labeled entities, Example
 .. ==============================================================
@@ -346,6 +346,11 @@ After sampling from all of the orphans, we will take the union of the sets of ch
 After each set of samples from the *active sample set* we will either have new variables whose distributions are well-defined or will have sampled all of the variables in the graph for that trial. [#]_ If we have multiple trials, we repeat this procedure for each trial. 
 
 .. [#] One potential worry is the case of disconnected graphs (i.e., graphs that can be divided into at least 2 disjoint sets of nodes where there will be no edges between nodes of different sets). However, because disconnected subgraphs of a :sc:`dag` will also be :sc:`dag`\s, we can count on at least one orphan existing for each of those graphs, and thus we will be able to sample from all disconnected subgraph by following the same algorithm above (they will just be sampled in parallel).
+
+Example: Rain, Sprinkler & Ground
+=================================
+
+
 
 Causal Bayesian Networks
 ------------------------
