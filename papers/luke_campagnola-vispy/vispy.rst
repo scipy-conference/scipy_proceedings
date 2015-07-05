@@ -41,14 +41,14 @@ VisPy: Harnessing The GPU For Fast, High-Level Visualization
 Motivation
 ----------
 
-Despite the rapid growth of the scientific Python stack, one conspicuously absent element is a standard package for high-performance visualization. The de-facto standard for plotting is Matplotlib; however, this package is designed for publication graphics and is not optimized for visualizations that require realtime, interactive performance, or that incorporate large data volumes. Several packages exist in the Python ecosystem that are capable of high-performance visualization: VTK provides an extensive set of 3D visualization tools with Python bindings, Chaco  offers efficient 2D plotting, PyQtGraph is a scientific GUI library with fast ploting, Glumpy implements high-quality plotting primitives in OpenGL, and VisVis and Galry both provide high-performance 2D/3D OpenGL visualization. Each of these packages has its particular strengths and weaknesses and, although the Python community benefits from such a rich ecosystem, at the same time it suffers from the lack of a focused, collaborative effort.
+Despite the rapid growth of the scientific Python stack, one conspicuously absent element is a standard package for high-performance visualization. The de-facto standard for plotting is Matplotlib [matplotlib]_; however, this package is designed for publication graphics and is not optimized for visualizations that require realtime, interactive performance, or that incorporate large data volumes. Several packages exist in the Python ecosystem that are capable of high-performance visualization: VTK [vtk]_ provides an extensive set of 3D visualization tools with Python bindings, Chaco [chaco]_ offers efficient 2D plotting, PyQtGraph [pyqtgraph]_ is a scientific GUI library with fast ploting, Glumpy [glumpy]_ implements high-quality plotting primitives in OpenGL, and VisVis [visvis]_ and Galry [galry]_ both provide high-performance 2D/3D OpenGL visualization. Each of these packages has its particular strengths and weaknesses and, although the Python community benefits from such a rich ecosystem, at the same time it suffers from the lack of a focused, collaborative effort.
 
-In recognition of this problem and the potential benefit to the Python community, VisPy was created as a collaborative effort to succeed several of these projects--visvis, galry, glumpy, and the visualization components of pyqtgraph. VisPy has quickly grown an active community of developers and is approaching beta status.
+In recognition of this problem and the potential benefit to the Python community, VisPy [vispy]_ was created as a collaborative effort to succeed several of these projects |---| visvis, galry, glumpy, and the visualization components of pyqtgraph. VisPy has quickly grown an active community of developers and is approaching beta status.
 
 What is VisPy
 -------------
 
-VisPy is a scientific visualization library based on OpenGL and NumPy. Its primary purpose is to deliver high-performance rendering under heavy load, but at the same time we aim to provide publication-quality graphics, a high-level 2D and 3D plotting API, and portability across many platforms. VisPy's main design criteria are:
+VisPy is a scientific visualization library based on OpenGL and NumPy [numpy]_. Its primary purpose is to deliver high-performance rendering under heavy load, but at the same time we aim to provide publication-quality graphics, a high-level 2D and 3D plotting API, and portability across many platforms. VisPy's main design criteria are:
     
 * *High-performance for large data sets.* By making use of the modern, shader-based OpenGL pipeline, most of the graphical rendering cost is offloaded to the graphics processor (GPU). This allows realtime interactivity even for data on the order of tens of millions of samples, and at the same time minimizes CPU overhead.
   
@@ -56,7 +56,7 @@ VisPy is a scientific visualization library based on OpenGL and NumPy. Its prima
   
 * *Publication quality output.* Commodity graphics hardware and the modern OpenGL shader pipeline have made it possible to render moderately large data sets without sacrificing quality in primitive shapes or antialiasing. VisPy is also designed to enable vector graphics output, although this feature is not yet implemented.
 
-* *Flexibility.* VisPy strives to make common tasks easy--most basic plot types can be generated with just a few lines of code. At the same time, VisPy makes complex and niche tasks possible through a flexible and extensibile architecture. VisPy's library of graphical components can be reconfigured and recombined to build complex, interactive scenes.
+* *Flexibility.* VisPy strives to make common tasks easy |---| most basic plot types can be generated with just a few lines of code. At the same time, VisPy makes complex and niche tasks possible through a flexible and extensibile architecture. VisPy's library of graphical components can be reconfigured and recombined to build complex, interactive scenes.
 
 * *Portability.* VisPy's reliance on commodity graphics hardware for optimization reduces its reliance on CPU-optimized code or numerous external dependencies; VisPy is pure-Python and depends only on NumPy and a suitable GUI library. This makes VisPy easy to distribute and install across many platforms, including WebGL-enabled browsers.
 
@@ -110,7 +110,7 @@ OpenGL commands cannot be invoked until a context, provided by the GUI toolkit, 
 
 The command queues used by ``vispy.gloo`` are also designed to be serializable such that commands generated in one process or thread can be executed in another. In this way, a stream of GL commands could be sent to a web browser such as the IPython notebook, recorded to disk to be replayed later, or shared between processes to take advantage of multi-core systems.
 
-Another purpose of ``vispy.gloo`` is to hide many of the differences between various versions and implementations of OpenGL. We currently target OpenGL versions 2.1 for desktop systems and ES2.0 for embedded and WebGL systems, which are available on virtually all commodity hardware today. Systems that lack a modern GPU may still run VisPy code using a software OpenGL implementation such as Mesa [http://www.mesa3d.org/]. Notably, this is used by Travis CI [travis-ci.org] to run our unit tests. However, OpenGL versions older than 2.1 are not supported. VisPy also supports some features from OpenGL 3+ but these currently depend on pyopengl [http://pyopengl.sourceforge.net/].
+Another purpose of ``vispy.gloo`` is to hide many of the differences between various versions and implementations of OpenGL. We currently target OpenGL versions 2.1 for desktop systems and ES2.0 for embedded and WebGL systems, which are available on virtually all commodity hardware today. Systems that lack a modern GPU may still run VisPy code using a software OpenGL implementation such as Mesa [mesa3d]_. Notably, this is used by Travis CI [travisci]_ to run our unit tests. However, OpenGL versions older than 2.1 are not supported. VisPy also supports some features from OpenGL 3+ but these currently depend on pyopengl [pyopengl]_.
 
 A closely related system, ``vispy.app``, abstracts the differences between the various supported GUI backends, which include PyQt4/5, PySide, IPython, SDL, GLFW, and several others. This system provides uniform access to user input, timers, and window features across all backends, and allows VisPy to be incorporated into most existing applications. VisPy can be used as a Qt widget, embedded in IPython notebook, or run on a headless server with almost no code differences. This support, combined with VisPy's pure-python and low-dependency approach, helps to ensure that VisPy will run on most platforms with minimal effort from users and developers alike. 
 
@@ -124,9 +124,9 @@ The core of VisPy is its library of ``Visual`` classes that provide the primitiv
 
    A selection of VisPy's visuals. These span the range from simple 2D and 3D primitives to more advanced visualization tools like contour plots, surface plots, and volume renderings. More complex visualizations can be built from combinations of these visuals.
 
-Internally, visuals upload their data to graphics memory and implement a shader program [https://www.opengl.org/documentation/glsl/] that is executed on the GPU. Because all OpenGL implementations since 2.0 include a GLSL compiler, this allows the most computationally intensive operations to run in compiled, parallelized code without adding any build dependencies. Visuals can be reconfigured and updated in real time by simply uploading new data or shaders to the GPU.
+Internally, visuals upload their data to graphics memory and implement a shader program [glsl]_ that is executed on the GPU. Because all OpenGL implementations since 2.0 include a GLSL compiler, this allows the most computationally intensive operations to run in compiled, parallelized code without adding any build dependencies. Visuals can be reconfigured and updated in real time by simply uploading new data or shaders to the GPU. Before drawing, each visual also configures the necessary OpenGL global state such as blending and depth testing. These state parameters may be reconfigured for each visual to select different compositing modes.
 
-Visuals may also be modified by applying arbitrary coordinate transformations and filters such as opacity, clipping, and lighting. To support this flexibility, it is necessary to be able to recombine smaller chunks of shader code. VisPy implements a shader management system that allows independent GLSL functions to be attached together in a single shader program, which enables the insertion of arbitrary coordinate transformations and color modification into each visual's shader program.
+Visuals may also be modified by applying arbitrary coordinate transformations and filters such as opacity, clipping, and lighting. To support this flexibility, it is necessary to be able to recombine smaller chunks of shader code. VisPy implements a shader management system that allows independent GLSL functions to be attached together in a single shader program. This enables the insertion of arbitrary coordinate transformations and color modification into each visual's shader program.
 
 VisPy implements a collection of coordinate transformation classes that are used to map between a visual's raw data and its output coordinate system (screen, image, svg, etc.). By offloading coordinate transformations to the GPU along with drawing operations, VisPy makes it possible to stream data directly from its source to the GPU without any modification in Python. Most transforms affect the location, orientation, and scaling of visuals and can be chained together to produce more complex adjustments. Transforms may also be nonlinear, as in logarithmic, polar, and mercator projections, and custom transforms can be implemented easily by defining the forward and inverse mapping functions in both Python and GLSL.
 
@@ -162,7 +162,7 @@ One of VisPy's main challenges is to implement visuals that simulaneously satisf
 
 VisPy's approach is for each visual to implement multiple rendering algorithms that otherwise share the same API, thereby allowing the user to select for different performance and quality targets while also gracefully falling back to safer techniques if the platform requires it. For example, drawing a surface plot with lighting requires a normal vector to be calculated for each location on the surface. If the surface vertex positions are specified in a floating point texture, then the normal calculation can be performed on the GPU. However, older OpenGL versions (and current WebGL implementations) lack the necessary texture support. For these cases, extra effort is required to either encode the vertex positions in a different type of texture, or to perform the normal calculation on the CPU. Alternatively, the surface can be rendered with a lower quality method that does not require normal vector calculation.
 
-More generally, optimizing for performance often requires consideration for two different targets: data *volume* and data *throughput*. In the former case, a large but static data set is uploaded to the GPU once but subsequently viewed or modified interactively. This case is typically limited by the efficiency of the shader programs, and thus it may help to pre-process the data once on the CPU to lighten the load on the GPU. In the latter case, data is being rapidly streamed to the GPU and is typically displayed only once before being discarded. This case tends to be limited by the per-update CPU overhead, and thus may be optimized by offloading more effort to the GPU. Intertwined with these optimization targets are considerations--often performance can be improved by sacrificing rendering quality, but the true performance gain of each sacrifice can be unpredictable.
+More generally, optimizing for performance often requires consideration for two different targets: data *volume* and data *throughput*. In the former case, a large but static data set is uploaded to the GPU once but subsequently viewed or modified interactively. This case is typically limited by the efficiency of the shader programs, and thus it may help to pre-process the data once on the CPU to lighten the load on the GPU. In the latter case, data is being rapidly streamed to the GPU and is typically displayed only once before being discarded. This case tends to be limited by the per-update CPU overhead, and thus may be optimized by offloading more effort to the GPU. Intertwined with these optimization targets are considerations |---| often performance can be improved by sacrificing rendering quality, but the true performance gain of each sacrifice can be unpredictable.
 
 By wrapping multiple rendering techniques within a single API, the user is freed from the burden of restructuring their application for each technique. Some cases, however, are too unique to fit comfortably in a generic API. For example, Figure XX uses a specialized visual to draw a 100x100 grid of scrolling plots, each containing 2,000 data points. This example could be implemented using the basic line visual techniques, but independently updating each of the 10,000 lines as they scroll would be prohibitively slow. The example is able to run over 30 fps by organizing the data in memory as a 2D circular buffer, which allows all plots to be updated in a single operation. The essential lines of this example are summarized below:
 
@@ -296,16 +296,69 @@ Each function in ``vispy.plot`` generates scenegraph (layer 3) objects to allow 
 The ``vispy.plot`` interface is currently the highest-level and easiest layer VisPy offers. Consequently, it is also the least mature. We expect this layer to grow quickly in the coming months as we add more plot types and allow the API to settle.
 
 
-Roadmap
--------
+Future Work
+-----------
 
-Our immediate goal for vispy is to stabilize the visual, scenegraph, and plotting APIs, and implement the most pressing basic features. We are continuallly testing for performance under different use cases and ensuring that behavior is consistent across all platforms. In the long term, we will implement more advanced features:
+Our immediate goal for vispy is to stabilize the visual, scenegraph, and plotting APIs, and implement the most pressing basic features. We are continuallly testing for performance under different use cases and ensuring that behavior is consistent across all platforms. In the long term, we plan to implement more advanced features:
 
-* *Add more plot types.* The scope of ``vispy.plot`` encompasses a very broad range of high-level visualizations such as vector fields, flow charts. Building this library of visualizations will be an ongoing process.
+* *Add more plot types.* The scope of ``vispy.plot`` encompasses a very broad range of high-level visualizations such as vector fields, flow charts, parametric surfaces, and many more. Expanding this library of visualizations will be an ongoing process.
 * *SVG export.* This is a must-have feature for any visualization library that targets publication graphics, and a high priority for VisPy.
-* *Collections.* This system will allow many visuals to be joined together and drawn with a single call to OpenGL. This is expected to greatly improve performance when many visuals are displayed in the scene.
+* *Collections.* This system will allow many visuals to be joined together and drawn with a single call to OpenGL. This is expected to greatly improve performance when many static visuals are displayed in the scene.
 * *Order-independent blending*. This technique will allow translucent visuals to be correctly blended without the need to sort the visuals by depth first. This will greatly improve the rendering quality of many 3D scenes. 
-* stylesheets
 
 
+
+
+
+References
+----------
+
+
+.. [vispy] *VisPy: OpenGL-based interactive visualization in Python*
+        http://vispy.org
+
+.. [matplotlib] J. D. Hunter. *Matplotlib: A 2D graphics environment*,
+        Computing In Science & Engineering, 9(3):90-95, IEEE COMPUTER SOC, 2007.
+
+.. [vtk] Kitware. *VTK - The Visualization Toolkit*,
+        http://www.vtk.org/
+
+.. [chaco] Enthought, Inc. *Chaco*,
+        http://code.enthought.com/projects/chaco/
+
+.. [pyqtgraph] L. Campagnola. *PyQtGraph. Scientific Graphics and GUI Library for Python*,
+        http://www.pyqtgraph.org/
+
+.. [glumpy] N. Rougier. *Glumpy: fast, scalable and beautiful scientific visualization*,
+        https://glumpy.github.io/
+
+.. [visvis] A. Klein. *visvis - The object oriented approach to visualization.*
+        https://code.google.com/p/visvis/
+
+.. [galry] C. Rossant. *Galry: high performance interactive visualization package in Python*,
+        https://github.com/rossant/galry
+            
+.. [numpy] S. van der Walt, S.C. Colbert and G. Varoquaux, *The NumPy Array: A
+        Structure for Efficient Numerical Computation*, Computing in Science
+        & Engineering, 13, 22-30, 2011.
+
+.. [mesa3d] *The Mesa 3D Graphics Library*
+        http://www.mesa3d.org/
+
+.. [travisci] *Travis CI*
+        https://travis-ci.org/
+
+.. [pyopengl] *PyOpenGL*
+        http://pyopengl.sourceforge.net/
+
+.. [glsl] *OpenGL Shading Language*
+        https://www.opengl.org/documentation/glsl/
+        
+.. [rougier2013a] Nicolas P. Rougier, Higher Quality 2D Text Rendering, 
+        Journal of Computer Graphics Techniques (JCGT), vol. 2, no. 1, 50-64, 2013.
+        Available online http://jcgt.org/published/0002/01/04/
+        
+.. [rougier2013b]  Nicolas P. Rougier, Shader-Based Antialiased, Dashed, Stroked Polylines, 
+        Journal of Computer Graphics Techniques (JCGT), vol. 2, no. 2, 105--121, 2013 
+        Available online http://jcgt.org/published/0002/02/08/
 
