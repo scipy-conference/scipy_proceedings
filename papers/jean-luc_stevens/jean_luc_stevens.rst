@@ -732,13 +732,15 @@ Discussion
 ----------
 
 This paper demonstrates a succinct, flexible, and interactive approach
-for data exploration, analysis, and visualization.  By eliminating the
-need to write plotting code for individual plots, this approach
-extends the quick and easy interaction typical when working with an
-interpreter to include even complex data. At the same time, it allows
-the user to keep a concise and reproducible recipe of their work, from
-exploration to the final publication. HoloViews thus allows scientists
-to capture the entire workflow involved in a research project.
+for data exploration, analysis, and visualization. HoloViews restores
+the immediate feedback cycle that is characteristic of working with
+simple data in an interpreter. This is achieved by having declarative
+objects display themselves with good defaults allowing the user to
+immediately understand their data. In the majority of cases this
+eliminates the need to write plotting code and allows the user to keep
+a concise and reproducible recipe of their work, from exploration to
+the final publication. HoloViews thus allows scientists to capture the
+entire workflow involved in a research project.
 
 Previous workflows for producing figures from data required an
 artificial and harmful distinction between processing data at a
