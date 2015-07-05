@@ -49,7 +49,7 @@ ARIMA modeling has been implemented in Python with the *Statsmodels* package [Mc
 
 .. code-block:: python
 	
-	import statsmodels as sm
+	import statsmodels.api as sm
 	import numpy as np
 
 After the model orders have been selected, the model parameter values can be estimated with the ``sm.tsa.arima_model.ARIMA.fit()`` function to maximize the likelihood that these parameter values (i.e., coefficients) describe the data, as follows. First, initial estimates of the parameter values are used to get close to the desired parameter values. Second, optimization functions are applied to adjust the parameter values to maximize the likelihood by minimizing the negative log-likelihood function. If adequate initial parameter value estimates were selected, a local optimization algorithm will find the local log-likelihood minimum near the parameter value estimates, which will be the global minimum.
