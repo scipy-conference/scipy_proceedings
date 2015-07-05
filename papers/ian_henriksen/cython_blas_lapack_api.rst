@@ -50,7 +50,7 @@ This sort of solve can be done easily within Python.
        np.fill_diagonal(A[:,1:], c)
        return np.linalg.solve(A, x)
 
-This function works fine for small things, but, if it needs to be called frequently, a more specialized algorithm could provide major improvements in both speed and accuracy.
+This function works fine for small problems, but, if it needs to be called frequently, a more specialized algorithm could provide major improvements in both speed and accuracy.
 An ideal candidate for this sort of optimization is LAPACK's [LAPACK]_ routine ``dgtsv``.
 That routine can be used within Cython to solve the same problem more quickly and with fewer numerical errors.
 
@@ -72,10 +72,10 @@ That routine can be used within Cython to solve the same problem more quickly an
        dgtsv(&n, &nrhs, &a[0], &b[0], &c[0], &x[0],
              &n, &info)
 
-Though this process for calling an external function from a library isn't particularly difficult, the setup file for the Python module now must find a proper LAPACK installation.
+Though this process for calling an external function from a library is not particularly difficult, the setup file for the Python module now must find a proper LAPACK installation.
 If there are several different versions of LAPACK present, a suitable one must be chosen.
 The proper headers and libraries must be found, and, if at all possible, binary incompatibilities between compilers must be avoided.
-If the desired routine isn't a part of one of the existing C interfaces, then it must be called via the Fortran ABI and the name mangling schemes used by different Fortran compilers must be taken into account.
+If the desired routine is not a part of one of the existing C interfaces, then it must be called via the Fortran ABI and the name mangling schemes used by different Fortran compilers must be taken into account.
 All of the code needed to do this must also be maintained so that it continues to work with new versions of the different operating systems, compilers, and BLAS and LAPACK libraries.
 
 An effective solution to this unusually painful problem is to have existing Python modules provide access to the low-level libraries that they use.
