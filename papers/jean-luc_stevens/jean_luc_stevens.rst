@@ -476,12 +476,12 @@ explore higher dimensional spaces we therefore have to find other
 solutions.
 
 One way of dealing with this problem is to lay out multiple plots
-spatially.  Some plotting packages [Was14]_ [Wic09]_ have shown how
-this can be done easily using various grid-based layouts. Another
-solution is to present the data sequentially over time as an
-animation.  A third solution is to provide interactive control,
-allowing the user to reveal further dimensionality by interacting with
-the plots using various widgets.
+spatially.  Plotting packages like ggplot [Wic09]_ and seaborn
+[Was14]_ have shown how this can be done easily using various
+grid-based layouts. Another solution is to present the data
+sequentially over time as an animation.  A third solution is to
+provide interactive control, allowing the user to reveal further
+dimensionality by interacting with the plots using various widgets.
 
 In HoloViews, we solve this problem with composable data structures
 that embed homogeneous collections of ``Element`` objects in any
