@@ -365,7 +365,7 @@ be selected and customized as in Figure :ref:`figri`.
 
 .. figure:: ri.png
 
-   The reactivity insertion that can drives the PyRK simulator can be selected
+   The reactivity insertion that can drive the PyRK simulator can be selected
    and customized from three models. :label:`figri`
 
 
@@ -657,7 +657,7 @@ Conclusions and Future Work
 
 The PyRK library provides a modular simulation environment for a common and
 essential calculation in nuclear engineering. PyRK is the first freely
-distributed tool for neutron kinetics. By supplying a library of ANSI standard
+distributed tool for neutron kinetics. By supplying and API for ANSI standard
 precursor data, a modular material definition framework, and coupled lumped
 parameter thermal hydraulics with zero-dimensional neutron kinetics in an
 object-oriented modeling paradigm, PyRK provides design-agnostic toolkit for
