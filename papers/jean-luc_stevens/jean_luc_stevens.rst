@@ -774,27 +774,20 @@ altogether as far as possible, with users instead supplying metadata
 to declare the properties of the data and option settings to control
 its visual appearance.
 
-Because much of the actual work in creating scientific visualizations
-is consumed by small but important details about plot appearance,
-users may be concerned that HoloViews's extensive default settings and
-immediate visualization capability make it able to handle only the
-most common types of plots.  This concern is well placed, but we do
-not believe it actually applies to HoloViews.  First, HoloViews
-explicitly aims to expose as many plotting and styling options as
-possible in an easily accessible manner, and provides a powerful,
-inheritance-based system for changing these options when required.
-For this large body of commonly required options, making these changes
-is much easier within HoloViews than outside of it.  Second, because
-the options can easily be shared across groups of plots, it is simple
-to build up new, highly customized plot types, without necessarily
-requiring custom code.  Third, HoloViews makes it trivial to add
-completely novel types of Elements with corresponding plots (or to
-override specific code in existing plots) using custom code when
-needed, and these custom plots will then combine seamlessly with other
-HoloViews objects to make composite figures.  Thus in HoloViews,
-default plots are simple and straightforward, but it can handle even
-the most complex figures possible with other packages, and should
-offer important benefits at every level of complexity.
+Although HoloViews aims to provide good default behavior, scientific
+work often requires highly specialized visualizations. For that reason
+we have made it easy to extend the defaults and integrate new
+visualizations. Firstly, as many plotting and styling options as
+possible are exposed in an easily accessible manner, while providing a
+powerful, inheritance-based system for changing these options when
+required. Secondly, the options system has been designed to work well
+with the compositional data structures provided by HoloViews. Thirdly,
+HoloViews makes it trivial to add completely novel types of Elements
+with corresponding plots (or to override specific code in existing
+plots) using custom code when needed, and these custom plots will then
+combine seamlessly with other HoloViews objects to make composite
+figures. Thus default plots are simple and straightforward, but even
+complex figures are easily achievable.
 
 Although HoloViews is a general purpose library for working with data
 at every stage, it actually represents a significant advance over
