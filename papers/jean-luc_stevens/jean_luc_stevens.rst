@@ -621,11 +621,11 @@ rendered.
    objects of a given type, more specific options controlled by
    user-definable ``group`` and ``label`` strings, or arbitrarily
    specific options based on the integer ``id`` assigned to each
-   content object. Plotting and rendering happens automatically by
-   combining the content with the specified display options and
-   calling an external plotting library, returning an HTML
-   representation that can then be rendered in the
-   notebook. :label:`schematic`
+   content object. Plotting and rendering happens automatically
+   through the use of IPython display formatters. These combine the
+   content with the specified display options, call an external
+   plotting library, which returns an HTML representation that can
+   then be rendered in the notebook. :label:`schematic`
 
 Figure :ref:`schematic` provides an overall summary of how the
 different components in the display system interact. The declarative
