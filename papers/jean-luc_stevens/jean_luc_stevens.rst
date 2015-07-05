@@ -544,12 +544,6 @@ can be inserted using ``space['USA', 1988] = usa``. Note that the
 order of the indexing corresponds to the order of the declared key
 dimensions.
 
-..
-   jbednar: is it necessary to mention that GridSpace is restricted to
-   two dimensions?  If you cast a 3d HoloMap into a GridSpace, won't
-   it just end up being a 2D grid of 1D HoloMaps?  If so you don't
-   need to mention anything here about such a restriction.
-
 All of the above classes are simply different ways to package and view
 a high-dimensional dataset. Just as with ``Elements``, it is possible
 to cast between these different spaces via the constructor. In
@@ -567,12 +561,6 @@ HoloMap. Next, we populate the space iterating over the frequencies,
 amplitudes, and the two trigonometric functions, generating each
 ``Curve`` element individually and assigning to the HoloMap at the
 correct position in the space.
-
-.. 
-   jbednar: should you swap A and B in figure 2?  The single-curve
-   HoloMap view is arguably easier to describe, and it's mentioned
-   first in the main text.
-
 
 We can immediately go ahead and display this HoloMap either as an
 animation or using the default widgets, as in Figure :ref:`spaces`
@@ -620,11 +608,6 @@ subfigure label format, change the output format (e.g. switch from PNG
 to SVG) and even alter the plotting backend (currently defaulting to
 Matplotlib) without changing any part of the underlying object being
 rendered.
-
-.. 
-   jbednar: Nice!  I'm not sure which part Input is meant to
-   correspond to, though.  Should the line below it be erased
-   (which would indicate that Content and Options are both Input)?
 
 .. figure:: display_system.pdf
    :scale: 35%
