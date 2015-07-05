@@ -735,6 +735,11 @@ incentivize contributions to open source software is not an easy one.
 An understanding of how the network structure of collaboration relates to collective productivity
 could inform incentive plans that are sensitive to participants unique role within the network.
 
+
+
+*I gratefully acknowledge the helpful comments of Allen Downey, Thomas Kluyver, Skipper Seabold,
+etc.*
+
 References
 ==========
 
