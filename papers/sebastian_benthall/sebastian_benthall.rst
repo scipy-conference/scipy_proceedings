@@ -670,8 +670,8 @@ The :math:`p` values require special explanation.
 The value given is computed by the [Alstott2014]_ package 
 *in the direction of the best fitting distribution*.
 Since the best fitting distribution is log-normal, the null hypothesis used for computing
-the $p$-values is that the data was generated from a power law distribution.
-That the $p$-value for no individual mailing list is beneath a threshold of statistical
+the :math:`p`-values is that the data was generated from a power law distribution.
+That the :math:`p`-value for no individual mailing list is beneath a threshold of statistical
 significance (such as :math:`p < .05` speaks to the similarity between these two distributions
 that is the source of such confusion and debate, as outlined previously.
 Especially for lists with low :math:`n`, the [Clauset2007]_ test can be entirely
