@@ -73,11 +73,8 @@ achieve a quantitative understanding of their own work and innovation process.
 
 Thorough study of these kinds of communities requires the collection and
 rationalization of many heterogenous and high-dimensional data sources,
-including but not limited to:
-
-- mailing lists
-- version control systems such as Git
-- issue trackers such as GitHub and Bugzilla
+including but not limited to mailing lists, version control systems such as Git,
+and issue trackers such as GitHub and Bugzilla.
 
 This data is complex in that it has many dimensions that afford very different
 kinds of analysis:
