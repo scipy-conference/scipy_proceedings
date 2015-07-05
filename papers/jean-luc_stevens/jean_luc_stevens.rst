@@ -596,9 +596,8 @@ the same benefits of making the content easily maintainable while the
 presentation is easily controllable.
 
 The only required connection between the above data structures and the
-custom display options is a single, automatically managed integer
-identification attribute stored with the data structure.  Using this
-``id`` as a key, we can make the data structures behave as if they
+custom display options is a single, automatically managed integer.
+Using this integer we can make the data structures behave as if they
 were rich, stateful, and customizable objects, without actually
 storing anything to do with visualization on the objects. We will show
 how this separation is useful and extensible so that the user can
@@ -621,7 +620,7 @@ rendered.
    user-controllable levels of specificity: general options for all
    objects of a given type, more specific options controlled by
    user-definable ``group`` and ``label`` strings, or arbitrarily
-   specific options based on a unique integer ``id`` assigned to each
+   specific options based on the integer ``id`` assigned to each
    content object. Plotting and rendering happens automatically by
    combining the content with the specified display options and
    calling an external plotting library, returning an HTML
@@ -681,23 +680,23 @@ to specific subsets of them.
 
 To explore how option setting works in practice, Figure
 :ref:`customization` shows an example of customizing Figure
-:ref:`layout` with some basic display options.  Here we use an
-optional but highly succinct method for setting the options, an
-IPython cell magic ``%%opts``, to specify aspect ratios, line widths,
-colormaps, and sublabel formats. By printing the string representation
-of the content (``Out[6]``) and the options (``Out[7]``), we can see
-immediately that there are two distinct objects, where each entry in
-the options tree matches an applicable object type. Finally, in the
-actual rendered output, we can see that all these display options have
-taken effect, even though the actual data structure differs from the
-object rendered in Figure :ref:`layout` only in the ``id`` value.
+:ref:`layout` with some basic display options. Here we use an optional
+but highly succinct method for setting the options, an IPython cell
+magic ``%%opts``, to specify aspect ratios, line widths, colormaps,
+and sublabel formats. By printing the string representation of the
+content (``Out[6]``) and the options (``Out[7]``), we can see
+immediately that each entry in the options tree matches a
+corresponding object type. Finally, in the actual rendered output, we
+can see that all these display options have taken effect, even though
+the actual data structure differs from the object rendered in Figure
+:ref:`layout` only by a single integer attribute.
 
 A major benefit of separating data and customization options in this
 way is that all the options can be gathered in one place. There is no
 longer any need to dig deep into the documentation of a particular
-plotting package for a particular option, as all the options are easily
-accessible via a tab-completable IPython magic and are documented via
-the ``help`` function. This ease of discovery enables a
+plotting package for a particular option, as all the options are
+easily accessible via a tab-completable IPython magic and are
+documented via the ``help`` function. This ease of discovery enables a
 workflow where the visualization details of a plot can be easily and
 quickly iteratively refined once the user has found data of interest.
 
