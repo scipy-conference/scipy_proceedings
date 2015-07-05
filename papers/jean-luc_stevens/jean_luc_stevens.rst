@@ -465,6 +465,28 @@ interactive analysis and reproduction.
 Spaces
 ~~~~~~
 
+
+.. figure:: spaces_example.png
+   :scale: 29%
+   :align: center
+   :figclass: w
+
+   Example of a Layout object containing two different representations
+   of a multi-dimensional space. Both representations contain
+   ``Curve`` objects embedded in three dimensions (``Frequency``,
+   ``Amplitude``, ``Function``), but not all of these dimensions can
+   be visualized at once. In **A**, two of the dimensions are mapped
+   onto the rows and columns of a grid, and the remaining ``Function``
+   dimension can be selected using the widget at the right. In **B**,
+   only a single curve is shown, with the three sliders at the right
+   together selecting the appropriate curve from the 3D HoloMap
+   space. When two ``HoloMaps`` are joined in a ``Layout`` like this,
+   it will automatically find the joint set of dimensions the HoloMaps
+   can be varied over. In this way HoloMaps allow users to explore
+   data naturally and conveniently even when its dimensionality
+   exceeds what can be sensibly displayed on the screen at
+   once. :label:`spaces`
+
 ..
    The visual representation of data faces two main bottlenecks, (1) our
    perceptual limitations and (2) the limits forced on us by the flat 2D
@@ -550,26 +572,6 @@ correct position in the space.
    HoloMap view is arguably easier to describe, and it's mentioned
    first in the main text.
 
-.. figure:: spaces_example.png
-   :scale: 29%
-   :align: center
-   :figclass: w
-
-   Example of a Layout object containing two different representations
-   of a multi-dimensional space. Both representations contain
-   ``Curve`` objects embedded in three dimensions (``Frequency``,
-   ``Amplitude``, ``Function``), but not all of these dimensions can
-   be visualized at once. In **A**, two of the dimensions are mapped
-   onto the rows and columns of a grid, and the remaining ``Function``
-   dimension can be selected using the widget at the right. In **B**,
-   only a single curve is shown, with the three sliders at the right
-   together selecting the appropriate curve from the 3D HoloMap
-   space. When two ``HoloMaps`` are joined in a ``Layout`` like this,
-   it will automatically find the joint set of dimensions the HoloMaps
-   can be varied over. In this way HoloMaps allow users to explore
-   data naturally and conveniently even when its dimensionality
-   exceeds what can be sensibly displayed on the screen at
-   once. :label:`spaces`
 
 We can immediately go ahead and display this HoloMap either as an
 animation or using the default widgets, as in Figure :ref:`spaces`
