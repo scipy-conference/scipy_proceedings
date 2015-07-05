@@ -708,24 +708,16 @@ Using this framework, Griffiths and Tenenbaum were able to provide comprehensive
 
 They successfully modeled human behavior using this framework by treating people as optimal solvers of this computational problem [#]_ (at least as defined by their framework). Furthermore, by examining different but related experiments, they were able to demonstrate the different ways in which specific kinds of prior knowledge are called upon differentially to inform human causal induction resulting in quite different inferences on a rational statistical basis.
 
-Cognition as Standard, Compass and Map
---------------------------------------
+Cognition as Standard, Compass, Map, and Globe
+---------------------------------------------
 
 People have always been able to make judgments that are beyond machine learning's state-of-the-art. In domains like object recognition, we are generally confident in people's judgments as veridical, and – as such – they have been used as a standard against which to test and train machine learning systems. The eventual goal is that the system reaches a Turing point — the point at which machine performance and human performance are indistinguishable.
 
 But that is not the only way human behavior can guide machine learning. In domains like causal induction, people's judgments *cannot* form a standard in traditional senses because we cannot trust people to be "correct". Nonetheless, people *do* make these judgments and, more importantly, people's judgments have systematic patterns. This systematicity allows the judgments to be modeled using formal, computational frameworks. In some cases, we can go further and formally characterize the input to cognition and even define judgments as optimal in some sense specified by the model. Formal models of individual human cognition then can act as a compass for machine learning, providing direction for how problems can be formalized and at least approach to solving them. Causal Bayesian networks have proven useful in this sense.
 
-Formal frameworks which generalize the creation of individual models (e.g., causal theories) can be even more powerful. Rather than just providing a direction for machine learning research, they lay out a set of possible directions. Data can be interpreted in multiple ways, without 
+Formal frameworks which generalize the creation of individual models (e.g., causal theories) can be even more powerful. Data can often be interpreted in multiple ways, with each way requiring a model to generate solutions. Holding the data constant, different goals can merit different kinds of solutions. Rather than just providing a direction for machine learning, frameworks that generate models, optimality criteria and solutions for meeting these lay out sets of possible directions. Generalized methods for solving many different kinds of problems using a single system provide the ability to relate these different directions to each other. As such, formalizing the inputs, processes and outputs of human cognition produces a map of where machine learning could go, even if it never goes there. 
 
+The ultimate version of such a map would be a globe in which all possible problems that humans can solve can be formalized and related to one another. Such a globe is far away, so far away that some may even deem it an impossible goal. But even in a more modest map, many of the routes the map lays out may prove horribly inefficient if followed directly — e.g., the graph enumeration described above would be horribly inefficient in practice. But that is not the goal of even a non-global map. Once a route is demonstrated, the map has provided a starting place, an end-place and some general path that could be taken were resources not a problem. From this, better navigators with more details about the particular terrain can find better routes. 
 
-
-Causal explanation such as inferring underlying cause of a set of symptoms, or identification of causal responsibility  or individual Misdiagnosis occurs in medical practice, legal trials are notoriously Nonetheless, people are exceptionally good at causal induction and causal inference in general.
-
- a large set of traditionally separate cognitive problems with a single framework we can do more than just set standards. We can find new classes of problems that we know people can solve(in some sense) and establish formal frameworks for describing those problems, even if we have no concept of a standard way to solve that problem. 
-
-In these cases of causal inference, it is not human skill is interesting, but that we have formulated these problems *at all*. By studying human behavior with formally unified accounts, it allows us to map out and extend the problems and problem sets that are even "up for grabs" for solution by machine learning systems. In this sense, it is not that humanity has a better state-of-the-art for solving these problems, but that we have a more comprehensive state-of-the-problem that challenges machine learning research to invent new formalizations so that these tests too shall pass. 
 
 .. [#] Optimality in these cases is taken to mean on average approximating the posterior distribution of some inference problem defined by the authors in each case.
-
-.. _original paper: https://cocosci.berkeley.edu/tom/papers/tbci.pdf
-
