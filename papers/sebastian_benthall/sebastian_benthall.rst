@@ -666,7 +666,8 @@ Every mailing list of the 13 we analyzed exhibits degree disassortivity better f
 log-normal instead of power law distribution.
 This is the meaning of the negative R value given in Table 2.
 
-The $p$ values require special explanation. The value given is computed by the [Alstott2014]_ package 
+The :math:`p` values require special explanation.
+The value given is computed by the [Alstott2014]_ package 
 *in the direction of the best fitting distribution*.
 Since the best fitting distribution is log-normal, the null hypothesis used for computing
 the $p$-values is that the data was generated from a power law distribution.
