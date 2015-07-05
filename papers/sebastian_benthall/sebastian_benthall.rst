@@ -624,6 +624,8 @@ Results
      \hline
      \bf{List name} & \bf{List Source} & $n$ & R value & $p$   & in,in,weighted & out,out,weighted & in,in,unweighted & out,out,unweighted \tabularnewline
      \hline
+     \bf{total}       & All sources    & 9576 & -7.62  & \bf{0.01} & -0.13    & -0.12       & -0.21  & -0.17  \tabularnewline
+     \hline
      numpy-discussion & SciPy          & 2973 & -0.76  &  0.40 & -0.22          & -0.20            & -.29             & -.26 \tabularnewline
      \hline
      scipy-user       & SciPy          & 2735 & -0.02  &  0.31 & -0.11          & -0.11            & -.19             & -.18 \tabularnewline
