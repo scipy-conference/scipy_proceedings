@@ -765,8 +765,7 @@ could inform incentive plans that are sensitive to participants unique role with
 
 
 
-*I gratefully acknowledge the helpful comments of Allen Downey, Thomas Kluyver, Skipper Seabold,
-etc.*
+*I gratefully acknowledge the helpful comments of Christine Choirat, Allen Downey, Thomas Kluyver, and Skipper Seabold.*
 
 References
 ==========
