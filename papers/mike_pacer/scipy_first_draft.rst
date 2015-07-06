@@ -40,21 +40,20 @@ Causal Bayesian NetworkX
 
 ..  class:: keywords
 
-    probabilistic graphical models, causal theories, Bayesian networks
+    probabilistic graphical models, causal theories, Bayesian networks, computational cognitive science
 
 Introduction and Aims
 ---------------------
 
 My first goal in this paper is to provide enough of an introduction to some formal/mathematical tools such that those familiar with :code:`python` and programming more generally will be able to appreciate both why and how one might implement causal Bayesian networks. Especially to exhibit *how*, I have developed parts of a toolkit that allows the creation of these models on top of the :code:`NetworkX` python package:cite:`networkx`. Given the coincidence of the names, it seemed most apt to refer to this toolkit as :code:`Causal Bayesian NetworkX` abbreviated as |cbnx| [#]_.
 
-.. [#] A link to a static version of the code can be found at :cite:`pacer2015cbnx`, and recent work can be found at |cbnx|_. |cbnx| is licensed with the BSD 3-clause license.
+.. [#] Static code can be found at :cite:`pacer2015cbnx`, and the most recent version can be found at |cbnx|_. |cbnx| is licensed with the BSD 3-clause license.
 
 In order to understand the tool-set requires the basics of probabilistic graphical models, which requires understanding some graph theory and some probability theory. The first few pages are devoted to providing necessary background and illustrative cases for conveying that understanding. 
 
 Notably, contrary to how Bayesian networks are commonly introduced, I say relatively little about inference from observed data. This is intentional, as is this discussion of it. Many of the most trenchant problems with Bayesian networks are found in critiques of their use to infer these networks from observed data. But, many of the aspects of Bayesian networks (especially causal Bayesian networks) that are most useful for thinking about problems of structure and probabilistic relations do not rely on inference from observed data. In fact, I think the immediate focus on inference has greatly hampered widespread understanding of the power and representative capacity of this class of models. Equally – if not more – importantly, I aim to discuss generalizations of Bayesian networks such as those that appear in :cite:`griffithst09`, and inference in these cases requires a much longer treatment (if a comprehensive treatment can be provided at all). If you are dissatisfied with this approach and wish to read a more conventional introduction to (causal) Bayesian networks I suggest consulting :cite:`pearl2000`.
 
-The |cbnx| toolkit can be seen as consisting of two main parts: graph enumeration/filtering and the storage and use of probabilistic graphical models in a NetworkX compatible format:cite:`networkx`.Nonetheless, appreciating these other aspects is made easier by also appreciating the problems of implementation/representation and the early solutions that I propose.
-
+The current instantiation of the |cbnx| toolkit can be seen as consisting of two main parts: graph enumeration/filtering and the storage and use of probabilistic graphical models in a NetworkX compatible format :cite:`networkx`.
 
 I focus first on establishing a means of building iterators over sets of directed graphs. I then apply operations to those sets. Beginning with the complete directed graph, we enumerate over the subgraphs of that complete graph and enforce graph theoretic conditions such as acyclicity over the entire graph, guarantees on paths between nodes that are known to be able to communicate with one another, or orphan-hood for individual nodes known to have no parents. We accomplish this by using closures that take graphs as their input along with any explicitly defined arguments needed to define the exact desired conditions. 
 
