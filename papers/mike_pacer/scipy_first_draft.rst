@@ -122,7 +122,7 @@ A cycle in a directed graph can be understood as the existence of a path from a 
 
 Directed acyclic graphs(:sc:`dag`\s) are directed graphs that contain no cycles.
 
-The number of :sc:`dag`\s that can be obtained from a set of nodes of size :math:`n` can be defined recursively as follows :cite:`mckay2004acyclic`:
+The number of :sc:`dag`\s that obtainable from a set of :math:`n` noddes can be defined recursively as follows :cite:`mckay2004acyclic`:
 
 .. math::
 
@@ -150,11 +150,11 @@ The probability mass function (pmf) of a discrete random variable(:math:`X`) tak
 
 The conditional probability of :math:`X` with value :math:`x` given another variable :math:`Y` with value :math:`y` is :math:`P(X=x~|Y=y)`. Much like above, if we want to consider the probability of each possible event without specifying one, sometimes this will be written as :math:`P(X|Y=y)`. If we are considering conditioning on any of the possible values of the known variable, we might use the notation :math:`P(X|Y)`, but that is a slight abuse of the notation. 
 
-You *can* view :math:`P(X|Y)` as a function over the :math:`X\times Y` space. But do not interpret that as a probability function (of any kind). Rather, this defines a probability function for :math:`X` relative to each value of :math:`Y`. Without conditioning on :math:`Y` we have many potential probability functions of X. Equivalently, it denotes a *family* of probability functions on X indexed by the values :math:`Y=y`.
+You *can* view :math:`P(X|Y)` as a function over the :math:`X\times Y` space. But do not interpret that as a probability function. Rather, this defines a probability function for :math:`X` relative to each value of :math:`Y`. Without conditioning on :math:`Y` we have many potential probability functions for X. Equivalently, it denotes a *family* of probability functions on X indexed by the values :math:`Y=y`.
 
 The *joint probability* of :math:`X` and :math:`Y` is the probability that both :math:`X` and  :math:`Y` occur in the event set in question. This is noted as :math:`P(X,Y)` or :math:`P(X \cap Y)` (using the set theoretic intersection operation). Similar to :math:`P(X|Y)`, you *can* view :math:`P(X,Y)` as a function over the space defined by :math:`X\times Y`. However, :math:`P(X,Y)` is a probability function in the sense that the sum of :math:`P(X=x,Y=y)` over all the possible events in the space defined by :math:`(x,y)\in X\times Y` equals 1.
 
-The *marginal probability* of :math:`X` is the same :math:`P(X)` that we have seen before. However, the term refers to the notion of summing over values of :math:`Y` in the joint probability, and these summed probabilities were recorded in the *margins* of a probability table. Formally, this can be stated as :math:`P(X) = \sum_{y\in Y}P(X,Y)`.
+The *marginal probability* of :math:`X` is just :math:`P(X)`. The term "marginalization" refers to the notion of summing over values of :math:`Y` in their joint probability. When probabilities were recorded in probability tables, the sum would be recorded in the *margins*. Formally, this can be stated as :math:`P(X) = \sum_{y\in Y}P(X,Y)`.
 
 Relating conditional and joint probabilities
 ============================================
@@ -224,12 +224,12 @@ While there are extensions to these models, a number of assumptions commonly hol
 Fixed node set
 ^^^^^^^^^^^^^^
 
-The network is considered to be comprehensive in the sense that there is a fixed set of known nodes with finite cardinality :math:`N`. This rules out the possibility of hidden/latent variables as being part of the network. From this perspective inducing hidden nodes requires postulating a new graph that is potentially unrelated to the previous graph. 
+The network is considered to be comprehensive in the sense that there is a fixed set of :math:`n` known nodes. This rules out the possibility of hidden/latent variables as being part of the network. From this perspective inducing hidden nodes requires postulating a new graph that is potentially unrelated to the previous graph. 
 
 Trial-based events, complete activation and :sc:`dag`\-hood
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Within a trial, all events are presumed to occur simultaneously. This means two things. First, there is no notion of temporal asynchrony, where one node/variable takes on a value before its children take on a value (even if in reality – i.e., outside the model – that variable is known to occur before its child). Secondly, the probabilistic semantics will be defined over the entirety of the graph meaning that one cannot sample a proper subset of the nodes of a graph unless they have no effects or are marginalized out with their effects being incorporated into their children.
+Within a trial, all events are presumed to occur simultaneously.There is no notion of temporal asynchrony, where one node/variable takes on a value before its children take on a value (even if in reality – i.e., outside the model – that variable is known to occur before its child). Additionally, the probabilistic semantics will be defined over the entirety of the graph which means that one cannot sample a proper subset of the nodes of a graph without marginalizing out and incorporating information from the ignored nodes into the subset in question.
 
 This property also explains why Bayesian networks need to be acyclic. Most of the time when we consider causal cycles in the world the cycle relies on a temporal delay between the causes and their effects to take place. If the cause and its effect is simultaneous, it becomes difficult (if not nonsensical) to determine which is the cause and which is the effect — they seem instead to be mutually definitional. But, as noted above, when sampling in Bayesian networks simultaneity is presumed for *all* of the nodes.
 
@@ -242,7 +242,7 @@ It is the perspective of the graphs as *merely* representing the independence re
 
 .. [#] A more thorough analysis of this relation between graph structures and implied conditional independence relations invokes the discussion of *d-separation*. However, d-separation (despite claims that "[t]he intuition behind [it] is simple") is a more subtle concept than it at first appears as it involves both which nodes are observed and the underlying structure.
 
-Though accurate, this eschews some important aspects of the semantics that distinguish arrows with different directions when you consider the kinds of values that the variables take on.
+Though accurate, this eschews important aspects of the semantics that distinguish arrows with different directions when you consider the kinds of values that the variables take on.
 
 Directional semantics between different types of nodes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -267,7 +267,7 @@ After sampling from all of the orphans, we will take the union of the sets of ch
 
 .. After each set of samples from the *active sample set* we will either have new variables whose distributions are well-defined or will have sampled all of the variables in the graph for that trial [#]_.
 
-After each set of samples from the active sample set, we will either have new variables whose distributions are well-defined or will have sampled all of the variables in the graph for that trial.
+After sampling the active sample set, we will either have new variables whose distributions are well-defined or will have sampled all of the variables in the graph for that trial.
 
 .. .. [#] One potential worry is the case of disconnected graphs (i.e., graphs that can be divided into at least 2 disjoint sets of nodes where there will be no edges between nodes of different sets). However, because disconnected subgraphs of a :sc:`dag` will also be :sc:`dag`\s, we can count on at least one orphan existing for each of those graphs, and thus we will be able to sample from all disconnected subgraph by following the same algorithm above (they will just be sampled in parallel).
 
@@ -278,12 +278,11 @@ Example: Rain, Sprinkler & Ground
 ..  figure:: sprinkler.pdf
     :scale: 40 %
 
+    An Bayesian network describing the sprinkler example. Including both conditional and marginal distributions. :label:`sprinkler`
 
-    An Bayesian network describing the sprinkler example. :label:`sprinkler`
+In the sprinkler Bayesian network in Figure :ref:`sprinkler` [#]_, there three discrete nodes that represent whether it *Rains* (yes or no), whether the *Sprinkler* is on (on or off) and whether the *Ground* is wet (wet or dry). The edges encode the fact that the rain listens to no one, that the rain can alter the probability of whether the sprinkler is on, and the rain and the sprinkler together determine how likely it is that the ground is wet.
 
-In the sprinkler Bayesian network in Figure :ref:`sprinkler` [#]_, there three discrete nodes that represent whether it *Rains* (yes or no), whether the *Sprinkler* is on (on or off) and whether the *Ground* is wet (wet or dry). The edges encode the fact that the rain listens to no one, that the rain can alter the probability of whether the sprinkler is on, and the rain and the sprinkler together determine whether the ground is wet.
-
-.. [#] This technically is not a well specified example of a Bayesian network, because while I have specified the states and their relations, I left open the potential interpretation of the parameters and how they relate to one another. I did so because it shows the limits of what is encoded knowing only the Bayes net structure and its 
+.. [#] This technically is not a well specified example of a Bayesian network, because while I have specified the states and their relations, I left open the potential interpretation of the parameters and how they relate to one another. I did so because it shows the limits of what is encoded knowing only the Bayes net structure while also showing the power of what is encoded knowing only the structure by computing both the conditional and marginal distributions. 
 
 
 Causal Bayesian Networks
@@ -325,12 +324,11 @@ Other packages
 
 In addition to networkX, we need to import numpy :cite:`numpy`, scipy :cite:`scipy`, and functions from itertools.
 
-..  code-block::python
+..  code-block:: python
 
     import numpy as np
     import scipy
     from itertools import chain, combinations, tee
-
 
 Beginning with a max-graph
 ==========================
@@ -353,7 +351,7 @@ Preëmptive Filters
 
 In order to reduce the set of edges that we need to iterate over, rather than working over the max-graph for *any* of nodes, it helps to determine which individual edges are known to always be present and which ones are known to never be present. In this way we can reduce the size of the edgeset over which we will be iterating. 
 
-Interestingly, this allows us to include more variables/nodes without the explosion of edges that would be the consequence of adding additional nodes were we not to include preëmptive filters.
+This allows us to include more variables/nodes without the explosion of edges that would be the consequence of adding additional nodes were we not to include preëmptive filters.
 
 One of the most powerful uses I have found for this is the ability to modify a graph set to include interventional nodes without seeing a corresponding explosion in the number of graphs. On the assumption that interventions apply only to a single node () example nodes representing interventions, as nodes without on the preëxisting variables that.
 
@@ -399,7 +397,7 @@ The enumeration portion of this approach is defined in this :code:`conditionalSu
 Example condition: requiring complete paths
 ===========================================
 
-This condition returns true only if a graph has paths from the first node to the second node for each 2-tuple in the node-pair list.
+This condition holds only if a graph has paths from the first node to the second node for each 2-tuple in the node-pair list.
 
 ..  code-block:: python
 
