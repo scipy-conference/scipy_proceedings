@@ -297,7 +297,9 @@ Causal Bayesian networks are Bayesian networks that are given an interventional 
 NetworkX :cite:`networkx`
 -------------------------
 
-This is a package for representing, manipulating and analyzing graphs and complex networks. It stores different kinds of graphs as variations on a "dict of dicts of dicts" structure. For example, directed graphs are stored as two dict-of-dicts-of-dicts structures. It can also represent multi-graphs (graphs where multiple versions of "the same" edge from the adjacency matrix perspective can exist and will (usually) carry different semantics). We will not be using the multigraph feature of NetworkX, as multigraphs are not traditionally used in the context of Bayesian networks.
+This is a package for representing, manipulating and analyzing graphs and complex networks. It stores different kinds of graphs as variations on a "dict of dicts of dicts" structure. For example, directed graphs are stored as two dict-of-dicts-of-dicts structures [#]_. 
+
+.. [#] It can also represent multi-graphs (graphs where multiple versions of "the same" edge from the adjacency matrix perspective can exist and will (usually) carry different semantics). We will not be using the multigraph feature of NetworkX, as multigraphs are not traditionally used in the context of Bayesian networks.
 
 Basic NetworkX operations
 =========================
@@ -636,7 +638,7 @@ The causal theory framework is richer than the set of examples developed in :cit
 
 In :cite:`griffithst09`, plausible relations are described in terms of sufficient conditions, implicitly suggesting that most relations are not plausible. However, we can also make necessary statements about the kinds of relations that *must* be there. And one can see this as selecting a subset of all the possible graphs implementable by the set of nodes defined by the ontology. It is for this purpose that I first arrived at the node enumeration.
 
-One ultimate aim for |cbnx|_ is to be able to program instances of causal theories. The utilities in :code:`networkX`, plus the enumerating, filtering and conditioning functions in |cbnx|, make it easier to implement higher-order graphical conditions (e.g., a directed path necessarily existing between two nodes) than in the original notation described in the framework. These ideas were expressible in the original mathematical framework, but would have required a good deal more notational infrastructure to represent. |cbnx| not only provides a notation, but a programming infrastructure for expressing and using these kinds of conditions.
+One goal for |cbnx|_ is to allow the programming of causal theories. The utilities in :code:`networkX`, plus the enumerating, filtering and conditioning functions in |cbnx|, make it easier to implement higher-order graphical conditions (e.g., a directed path necessarily existing between two nodes) than in the original notation described in the framework. These ideas were expressible in the original mathematical framework, but would have required a good deal more notational infrastructure to represent. |cbnx| not only provides a notation, but a programming infrastructure for expressing and using these kinds of conditions.
 
 Uses in modeling human cognition
 ================================
