@@ -40,7 +40,7 @@ Causal Bayesian NetworkX
 
 ..  class:: keywords
 
-    probabilistic graphical models, causal theories, Bayesian networks, computational cognitive science
+    probabilistic graphical models, causal theories, Bayesian networks, computational cognitive science, networkx
 
 Introduction and Aims
 ---------------------
@@ -348,11 +348,11 @@ Starting with the max graph for a set of nodes (i.e., the graph with :math:`N^2`
 Preëmptive Filters
 ==================
 
-In order to reduce the set of edges that we need to iterate over, rather than working over the max-graph for *any* of nodes, it helps to determine which individual edges are known to always be present and which ones are known to never be present. In this way we can reduce the size of the edgeset over which we will be iterating. 
+Rather than working over the max-graph for all nodes, it helps to determine which individual edges are known to always be present and which ones are known to never be present. In this way we can reduce the size of the edgeset over which we will be iterating. 
 
-This allows us to include more variables/nodes without the explosion of edges that would be the consequence of adding additional nodes were we not to include preëmptive filters.
+.. This allows us to include more variables/nodes without the explosion of edges that would be the consequence of adding additional nodes were we not to include preëmptive filters. One of the most powerful uses I have found for this is the ability to modify a graph set to include interventional nodes without seeing a corresponding explosion in the number of graphs. This utility is not yet general enough to be worth reporting here.
 
-One of the most powerful uses I have found for this is the ability to modify a graph set to include interventional nodes without seeing a corresponding explosion in the number of graphs. On the assumption that interventions apply only to a single node () example nodes representing interventions, as nodes without on the preëxisting variables that.
+Filters can be applied by using the following function, which takes a graph and a filter_set as its arguments and returns a graph. A filter_set is a set of functions that take each take (at least) a graph as an argument and return a graph with a reduced edgeset according to the semantics of the filter. 
 
 ..  code-block:: python
 
