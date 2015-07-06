@@ -67,7 +67,7 @@ I conclude by discussing Computational Cognitive Science as it relates to graphi
 Graphical Models
 ----------------
 
-Graphs are formal models defined by a set of nodes (:math:`X, |X| = N`) and edges between those nodes (:math:`e \in E \equiv e \in (X \times X)`, where *E* is the set of edges). 
+Graphs are defined by a set of nodes (:math:`X, |X| = N`) and edges between those nodes (:math:`e \in E \equiv e \in (X \times X)`, *E* is the set of edges). 
 
 Notes on notation
 =================
@@ -75,7 +75,7 @@ Notes on notation
 Nodes
 ^^^^^
 
-In the examples in |cbnx|_, nodes are given explicit labels individuating them such as :math:`\{A,B,C,\ldots\}` or {'rain','sprinkler','grass_wet'}. Oftentimes, for the purposes of mathematical notation, it will be helpful to index nodes by the integers over a common variable label, e.g., using  :math:`\{X_1,X_2,X_3,\ldots\}`. [#]_ 
+In the examples in |cbnx|_, nodes are given explicit labels individuating them such as :math:`\{A,B,C,\ldots\}` or {'rain','sprinkler','ground'}. Often, for the purposes of mathematical notation, it is better to index nodes with integers over a common variable label, e.g., using  :math:`\{X_1,X_2,\ldots\}`. [#]_ 
 
 .. [#] Despite pythonic counting beginning with 0, I chose not to begin this series with 0 because when dealing with variables that might be used in statistical regressions, the 0 subscript will have a specific meaning that separates it from the rest of the notation. For example when expressing multivariate regression as :math:`Y = \beta X + \epsilon, \epsilon \sim \mathcal{N}(0,\Sigma)`, :math:`\beta_0` refers to the parameter associated with a constant variable :math:`x_0 = 1` and :math:`X` is normally defined as :math:`x_1, x_2, x_3, \ldots`. This allows a simple additive constant to be estimated, which often is not of interest to statistical tests, acting as a scaling constant. This makes for a simpler notation than :math:`Y = \beta_0 + \beta X + \epsilon`, because that is equivalent to :math:`Y = \beta X + \epsilon` if :math:`x_0 = 1`. But, in other cases (e.g., :cite:`pacerg12`) 0 index will be used to indicate background sources for events in a system.
 
