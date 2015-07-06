@@ -742,14 +742,17 @@ a concise and reproducible recipe of their work, from exploration to
 the final publication. HoloViews thus allows scientists to capture the
 entire workflow involved in a research project.
 
-Previous workflows for producing figures from data required an
-artificial and harmful distinction between processing data at a
-command prompt and then visualizing it in an external plotting
-package. This two-step process disconnects the user from immediate
-feedback that is required to quickly improve analyses and explore the
-data. HoloViews instead establishes a tight link between the data and
-its visual representation, independent of the plotting backend, while
-hiding the details of the plotting process whenever possible.
+Without a strictly enforced separation of concerns, workflow stages
+often end up mixing both data processing and visualization. Although a
+displayed representation is always necessary for understanding this is
+a dead end for further data processing. Because HoloViews objects
+represent themselves visually but also contain the raw data, the
+ability to continue processing is never terminated and exploration can
+continue. Furthermore, the chosen representation can easily be
+changed, turning what used to be a highly disjointed workflow into a
+open-ended process concerned with the semantics of the data. Only once
+results worth disseminating are attained does it become necessary to
+consider the details of visualization.
 
 The compositionality of HoloViews is superficially reminiscent of
 systems such as the Grammar of Graphics [GoG]_ for the R language, but
