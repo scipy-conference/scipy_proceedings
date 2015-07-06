@@ -167,7 +167,7 @@ representations, few packages have so far embraced this and none have
 supported easy composition of related figures. As a result the most
 common way to visualize complex data remains for the user to specify a
 detailed list of steps to get subfigures using an external plotting
-package such as Matplotlib [Mpl]_, then often combining subfigures
+package such as Matplotlib [Hun07]_, then often combining subfigures
 using a GUI-based image editor.
 
 Here we introduce HoloViews, a library of simple classes designed to
@@ -550,7 +550,7 @@ All of the above classes are simply different ways to package and view
 a high-dimensional dataset. Just as with ``Elements``, it is possible
 to cast between these different spaces via the constructor. In
 addition, they can all be tabularized into a HoloViews ``Table``
-element or a pandas ``DataFrame`` [pandas]_, a feature that is also
+element or a pandas ``DataFrame`` [McK10]_, a feature that is also
 supported by the ``Element`` primitives.
 
 To get a sense of how composing data and generating complex figures
@@ -758,7 +758,7 @@ results worth disseminating are attained does it become necessary to
 consider the details of visualization.
 
 The compositionality of HoloViews is superficially reminiscent of
-systems such as the Grammar of Graphics [GoG]_ for the R language, but
+systems such as the Grammar of Graphics [Wil05]_ for the R language, but
 the aim of HoloViews is quite different. Instead of expressing all the
 complexities of graphics, the declarative data structures in HoloViews
 define a language for the semantics of the actual data.  This language
@@ -881,6 +881,15 @@ of Edinburgh.
 References
 ----------
 
+.. [Cro13] Crook et al., "Learning from the Past: Approaches for Reproducibility in Computational Neuroscience",
+       *20 Years of Computational Neuroscience*, J.M. Bower, ed., Springer, 9:73-102, 2013.
+
+.. [Wol03] Stephen Wolfram, *The Mathematica Book*, Fifth Edition,
+       Wolfram Media/Cambridge University Press, 2003.
+
+.. [knitr] Foundation for Open Access Statistics, *knitr*,
+       http://yihui.name/knitr, 2015.
+
 .. [Per07] Fernando Perez and Brian E. Granger, 
        IPython: a System for Interactive Scientific Computing, 
        *Computing in Science and Engineering*, 9:21-19, 2007.
@@ -889,29 +898,20 @@ References
        SAGE: System for Algebra and Geometry Experimentation. 
        *ACM SIGSAM Bulletin*, 39:61-64, 2005.
 
-.. [Was14] Michael Waskom et al.. *seaborn: v0.5.0*,
-       Zenodo. 10.5281/zenodo.12710, November 2014.
+.. [Hun07] John D. Hunter, *Matplotlib: A 2D graphics environment*,
+       Computing In Science \& Engineering, 9(3):90-95, 2007.
 
 .. [Wic09] Hadley Wickham, *ggplot2: elegant graphics for data analysis*,
        Springer New York, 2009.
 
-.. [shiny] RStudio, Inc, *shiny: Easy web applications in R.*,
-       http://shiny.rstudio.com, 2014.
+.. [Was14] Michael Waskom et al.. *seaborn: v0.5.0*,
+       Zenodo. 10.5281/zenodo.12710, November 2014.
 
-.. [knitr] Foundation for Open Access Statistics, *knitr*,
-       http://yihui.name/knitr, 2015.
-
-.. [Cro13] Crook et al., "Learning from the Past: Approaches for Reproducibility in Computational Neuroscience",
-       *20 Years of Computational Neuroscience*, J.M. Bower, ed., Springer, 9:73-102, 2013.
-
-.. [Wol03] Stephen Wolfram, *The Mathematica Book*, Fifth Edition,
-       Wolfram Media/Cambridge University Press, 2003.
-
-.. [Mpl] John D. Hunter, *Matplotlib: A 2D graphics environment*,
-       Computing In Science \& Engineering, 9(3):90-95, 2007.
-
-.. [pandas] Wes McKinney, *Data Structures for Statistical Computing in Python*,
+.. [McK10] Wes McKinney, *Data Structures for Statistical Computing in Python*,
        Proceedings of the 9th Python in Science Conference, 51-56, 2010.
 
-.. [GoG] Leland Wilkinson, *The Grammar of Graphics*,
+.. [Wil05] Leland Wilkinson, *The Grammar of Graphics*,
        Springer-Verlag New York, 2005.
+
+.. [shiny] RStudio, Inc, *shiny: Easy web applications in R.*,
+       http://shiny.rstudio.com, 2014.
