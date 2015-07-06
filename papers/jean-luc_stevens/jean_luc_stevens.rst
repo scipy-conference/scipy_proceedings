@@ -469,7 +469,7 @@ Spaces
 
 
 .. figure:: spaces_example.png
-   :scale: 29%
+   :scale: 26%
    :align: center
    :figclass: w
 
@@ -609,7 +609,7 @@ Matplotlib) without changing any part of the underlying object being
 rendered.
 
 .. figure:: display_system.pdf
-   :scale: 35%
+   :scale: 30%
    :align: center
 
    This view of the HoloViews display and customization systems
@@ -663,7 +663,7 @@ specifications, applying to all objects of a particular type or just
 to specific subsets of them.
 
 .. figure:: customization_example.pdf
-   :scale: 38%
+   :scale: 36%
    :align: center
    :figclass: w
 
