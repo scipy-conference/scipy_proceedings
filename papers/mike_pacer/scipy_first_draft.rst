@@ -57,7 +57,7 @@ The current instantiation of the |cbnx| toolkit can be seen as consisting of two
 
 I focus first on establishing a means of building iterators over sets of directed graphs. I then apply operations to those sets. Beginning with the complete directed graph, we enumerate over the subgraphs of that complete graph and enforce graph theoretic conditions such as acyclicity over the entire graph, guarantees on paths between nodes that are known to be able to communicate with one another, or orphan-hood for individual nodes known to have no parents. We accomplish this by using closures that take graphs as their input along with any explicitly defined arguments needed to define the exact desired conditions. 
 
-I then shift focus to a case where there is a specific known directed acyclic graph that is imbued with a simple probabilistic semantics over its nodes and edges, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics. I discuss some of the challenges of encoding these semantics in dictionaries as afforded by NetworkX without resorting to :code:`eval`.
+I then shift focus to a case where there is a specific known directed acyclic graph that is imbued with a simple probabilistic semantics over its nodes and edges, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics. I discuss some of the challenges of encoding these semantics in dictionaries as afforded by NetworkX without resorting to :code:`eval` statements.
 
 I conclude by discussing Computational Cognitive Science as it relates to graphical models, as well as machine learning in general. In particular, I will discuss a framework called **theory based causal induction** :cite:`griffithst09`, or my preferred term: **causal theories**, which allows for defining problems of causal induction. It is out of this framework the perspective expressed in this paper, the associated talk, and the |cbnx| toolkit developed.
 
@@ -287,9 +287,9 @@ In the sprinkler Bayesian network in Figure :ref:`sprinkler` [#]_, there three d
 Causal Bayesian Networks
 ------------------------
 
-Causal Bayesian networks are Bayesian networks that are given an interventional operation that allows for "graph surgery" by cutting nodes off from their parents. [#]_ The central idea is that interventions are cases where some external causal force is able to "reach in" and set the values of individual nodes, rendering intervened on independent of their parent nodes. 
+Causal Bayesian networks are Bayesian networks that are given an interventional operation allowing for "graph surgery" by cutting nodes off from their parents[#]_. Interventions are cases where a causal force is able to exogenously set the values of individual nodes, rendering intervened on nodes independent of their parents. 
 
-.. [#] This is technically a more general definition than that given in :cite:`pearl2000` as in that case there is a specific semantic flavor given to interventions as they affect the probabilistic semantics of the variables within the network. Because here we are considering a version of intervention that affects the *structure* of a set of graphs rather than an intervention's results on a specific parameterized graph, this greater specificity is unnecessary.
+.. [#] This is technically a more general definition than that given in :cite:`pearl2000` as in that case there is a specific semantic flavor given to interventions as they affect the probabilistic semantics of the variables within the network. This is related to his notion of a :code:`do`-operator which deterministically sets a node to a particular value. Because here we are considering a version of intervention that affects the *structure* of a set of graphs rather than an intervention's results on a specific parameterized graph, this greater specificity is unnecessary.
 
 NetworkX :cite:`networkx`
 -------------------------
@@ -348,11 +348,11 @@ Starting with the max graph for a set of nodes (i.e., the graph with :math:`N^2`
 Preëmptive Filters
 ==================
 
-Rather than working over the max-graph for all nodes, it helps to determine which individual edges are known to always be present and which ones are known to never be present. In this way we can reduce the size of the edgeset over which we will be iterating. 
+Rather than working over the raw max-graph, it helps to determine which individual edges are known to always be present and which ones are known to never be present. In this way we can reduce the size of the edgeset over which we will be iterating. 
 
 .. This allows us to include more variables/nodes without the explosion of edges that would be the consequence of adding additional nodes were we not to include preëmptive filters. One of the most powerful uses I have found for this is the ability to modify a graph set to include interventional nodes without seeing a corresponding explosion in the number of graphs. This utility is not yet general enough to be worth reporting here.
 
-Filters can be applied by using the following function, which takes a graph and a filter_set as its arguments and returns a graph. A filter_set is a set of functions that take each take (at least) a graph as an argument and return a graph with a reduced edgeset according to the semantics of the filter. 
+Filters can be applied by using :code:`filter_Graph()`, which takes a graph and a filter_set as its arguments and returns a graph. A filter_set is a set of functions that take each take (at least) a graph as an argument and return a graph with a reduced edgeset according to the semantics of the filter. 
 
 ..  code-block:: python
 
@@ -408,7 +408,7 @@ This condition holds only if a graph has paths from the first node to the second
 Non-destructive conditional subgraph generators
 ===============================================
 
-Because the :code:`conditionalSubgraph` generator produces an iterable, if we want to apply a conditional after that initial set is generated, we need to split it into two copies of the iterable. This involves the :code:`tee` function from the :code:`itertools` core package.
+Because the :code:`conditionalSubgraph` generator produces an iterator, applying a condition after that initial set is generated, requires splitting it into two copies of the iterator. This involves the :code:`tee` function from the :code:`itertools` core package.
 
 .. code-block:: python
 
@@ -424,7 +424,7 @@ Because the :code:`conditionalSubgraph` generator produces an iterable, if we wa
 Filters versus Conditions: which to use
 =======================================
 
-The most obvious structural differences between filters and conditions give insight to how they are to be used. Filters are intended to apply to the max graph to reduce the edge set; they return a graph. This is meant to be a a way to reduce a graph's edgeset in place. Conditions are intended to be applied to a series of graphs generated by an iterator taking subgraphs of some other graph
+The structural differences between filters and conditions give insight to how they are to be used. Filters are intended to apply to the max graph to reduce the edge set; they return a graph. This is meant to be a a way to reduce a graph's edgeset in place. Conditions are intended to be applied to a series of graphs generated by an iterator returning a subset of those graphs.
 
 
 |cbnx|: Representing probabilistic relations and sampling
@@ -435,7 +435,7 @@ The most obvious structural differences between filters and conditions give insi
 We discuss an algorithm for sampling from Bayesian networks above (sampling_). But, most of the difficult parts of encoding a sampling procedure prove (in this case) to do with the algorithm. Rather, the most pressing difficulties arise from attempting to store the relevant information within the NetworkX data dictionaries, so that a self-contained graphical object can be imported and exported. There is a general problem of a lack of standard storage format for Bayesian networks (and probabilistic graphical models in general). This is just one flavor of that problem. 
 
 A |cbnx| implementation for sprinkler graph
--------------------------------------------
+===========================================
 
 Below I will illustrate how to use NetworkX :cite:`networkx` and node-associated attributes to define and sample from a parameterized version of the sprinkler Bayesian network represented in abstract, graphical form in Figure :ref:`sprinkler`.  for space reasons comments and formatting were reduced, if you wish to see the original code it can be found at sampling-code_. 
 
