@@ -82,8 +82,8 @@ results.
 
 In this paper we will focus on the high-level design principles that
 allow HoloViews to achieve these goals and we encourage the reader to
-visit `holoviews.org <http://holoviews.org>`_ for concrete example. As
-detailed below we show how this is achieved by enforcing a strict
+visit `holoviews.org <http://holoviews.org>`_ for concrete examples. As
+detailed below, we show how this is achieved by enforcing a strict
 separation in the declaration of the semantic properties of the data
 and the specification of plotting options, allowing the user to
 declaratively specify their intent and let HoloViews handle the
@@ -92,12 +92,6 @@ visualization.
 The interactive interpreter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To understand this approach, we need to consider the history of how we
-interact with computational data. The idea of an interactive
-programming session originates with the earliest LISP interpreters in
-the late 1950s and remains a popular way to interact with dynamic
-languages such as Python.
-
 ..
    Since then, high-level programming languages have become even more
    dynamic in nature. In recent years, the Python language has been
@@ -105,6 +99,11 @@ languages such as Python.
    syntax. Python is well suited to dynamic interaction and offers an
    interactive, textual interpreter.
 
+To understand this approach, we need to consider the history of how we
+interact with computational data. The idea of an interactive
+programming session originated with the earliest LISP interpreters in
+the late 1950s and remains a popular way to interact with dynamic
+languages such as Python.
 However, like most such command prompts, the standard Python prompt is
 a text-only environment. Commands are entered by the user, parsed, and
 executed, with results displayed as text.  This approach offers
@@ -113,7 +112,7 @@ in a concise textual form. Unfortunately, this approach begins to fail
 when the data cannot be usefully visualized as text, as is typical for
 the large datasets now commonplace.  In such instances, a separate
 plotting package offering a rich graphical display would normally be
-used to present the results outside the environment of the interpreter
+used to present the results outside the environment of the interpreter,
 via a graphical user interface.
 
 This disjointed approach reflects history: text-only environments,
@@ -156,22 +155,22 @@ supports the gradual development of a document with interleaved code,
 results, and exposition.
 
 Yet despite the greatly improved interactive capabilities of these
-tools, the spirit of the original interpreter has not been restored:
-there is an ongoing disconnect between data and its
+tools, the spirit of the original interpreter has not yet been restored:
+there is still an ongoing disconnect between data and its
 representation. This artificial distinction is a lingering consequence
-of a text-only world and has resulted in a strict split between how we
-conceptualize 'simple' and 'complex' data. Although the IPython
-notebook has offered the means give objects rich media
-representations, until now few packages have embraced this approach
-and none have done so in a compositional manner. As a result the most
+of text-only displays, forcing a strict split between how we
+conceptualize "simple" and "complex" data. Although the IPython
+notebook now offers the means to give objects rich media
+representations, few packages have so far embraced this approach
+and none have supported easy composition of related figures. As a result the most
 common way to visualize complex data remains for the user to specify a
-detailed list of steps using an external plotting package such as
-Matplotlib [Mpl]_.
+detailed list of steps to get subfigures using an external plotting package such as
+Matplotlib [Mpl]_, then often combining subfigures using a GUI-based image editor.
 
 Here we introduce HoloViews, a library of simple classes designed to
 provide an immediately available representation for even complex data
-in notebooks, analogous to the way interactive sessions are used with
-simple data types. HoloViews is not a plotting package; instead, it
+in notebooks, analogous to the way simple datatypes are displayed 
+in interactive sessions. HoloViews is not a plotting package; instead, it
 offers a set of useful data structures paired with rich, customizable
 visual representations that display effortlessly in the IPython
 Notebook environment. The result is research that is more interactive,
@@ -179,13 +178,6 @@ concise, declarative, and reproducible. Figure :ref:`layout` shows a
 self-contained example of building a complex visualization showing the
 declaration of an ``Image`` object followed by an example of how to
 compose HoloViews objects together.
-
-..
-   jbednar: is it necessary to have the bounds= argument?  Can it and
-   any of the other arguments be omitted?  The one on the web page is
-   simpler and I think that's better for a first figure. Such
-   complications are fine for later figures, but make it far less
-   likely that anyone will actually read this figure...
 
 .. figure:: introductory_layout_example.pdf
    :scale: 35%
@@ -349,11 +341,16 @@ to the ``Curve`` object generated by sampling the image using
 This ``Curve`` object is also able to pass on this semantic
 information to other Elements with different visual representations so
 that they faithfully reflect the space in which the Mandelbrot Set is
-defined. For instance, you can pass the curve directly to the
+defined. For instance, you can pass the curve directly to the 
 constructor of the ``Scatter`` or ``Histogram`` elements and a new
 visual representation of the resulting object will retain the
 original semantic dimension labels. This type of operation merely
 changes the representation associated with the supplied data.
+
+..
+  Yes, but it also changes the semantics -- a set of disconnected 
+  points means something different from samples of a continuous curve,
+  or a Histogram.  It would be nice to make that clearer.
 
 Note that in the declarations of ``Image``, the dimensions of the axes
 are declared as key dimensions (``kdims``). Key dimensions correspond
@@ -409,8 +406,8 @@ figure, or overlaying visual elements within the same set of axes.
 
 These types of composition are so common that both have already been
 used in Figure :ref:`layout` as our very first example. The ``+``
-operation implements the first type of composition and ``*``
-implements the act of overlaying elements together. When you compose
+operation implements concatenation, and ``*``
+implements overlaying elements together. When you compose
 an object using the ``+`` operator, a default four-column layout is
 used but you can specify the desired number of columns using the
 ``.cols`` method.  Layouts are easily specified but also support
@@ -441,11 +438,11 @@ As any element may be a leaf of such a tree, there needs to be an easy
 way to select subtrees or leaf elements. This is achieved with a
 semantic, two-level labeling system using "group" and "label" strings
 supported throughout HoloViews. We have seen an example of a label
-string in Figure 1, where it was used to title the image 'Mandelbrot
-Set'. The textual representation of the layout in Figure :ref:`layout`
+string in Figure 1, where it was used to title the image "Mandelbrot
+Set". The textual representation of the layout in Figure :ref:`layout`
 (see Out[6] of Figure :ref:`customization`) shows how the supplied
 label is used in the attribute-based indexing scheme of the
-layout. The strings 'Image', 'Overlay', 'HLine' and 'Curve' are
+layout. The strings "Image", "Overlay", "HLine" and "Curve" are
 default group names, but you can supply your own names to define
 semantic groupings for your data. To illustrate this system, you can
 access the sampled data (a NumPy array) in Figure :ref:`customization`
@@ -512,7 +509,8 @@ sequentially over time as an animation.  A third solution is to
 provide interactive control, allowing the user to reveal further
 dimensionality by interacting with the plots using various widgets.
 
-In HoloViews, we solve this problem with composable data structures
+HoloViews provides support for all three of these approaches, 
+via composable data structures
 that embed collections of ``Element`` objects in any arbitrarily
 dimensioned space. Fundamentally, this set of data structures
 (subclasses of ``NdMapping``) are multi-dimensional dictionaries that
@@ -536,7 +534,8 @@ The list of supported ``NdMapping`` classes includes:
   dimensions.
 
 To explore a high-dimensional space of height as a function of age
-across different countries and years, you could declare ``space=HoloMap(kdims=['Country', 'Year'])``. Now we can treat ``space`` as a
+across different countries and years, you could declare 
+``space=HoloMap(kdims=['Country', 'Year'])``. Now we can treat ``space`` as a
 dictionary and insert instances of classes such as ``Curve`` or
 ``Scatter`` with the appropriate ``(country, year)`` keys. For
 instance, the age and height ``Curve`` for the USA in 1988 (``usa``)
@@ -555,7 +554,7 @@ To get a sense of how composing data and generating complex figures
 works within this framework, we explore some artificial data in Figure
 :ref:`spaces`. Here we vary the frequency and amplitude of sine and
 cosine waves, demonstrating how we can quickly embed this data into a
-high-dimensional space. First, we declare the dimensions of the space
+multi-dimensional space. First, we declare the dimensions of the space
 we want to explore as the key dimensions (``kdims``) of the
 HoloMap. Next, we populate the space iterating over the frequencies,
 amplitudes, and the two trigonometric functions, generating each
@@ -598,7 +597,7 @@ presentation is easily controllable.
 The only required connection between the above data structures and the
 custom display options is a single, automatically managed integer.
 Using this integer we can make the data structures behave as if they
-were rich, stateful, and customizable objects, without actually
+were rich, stateful, and individually customizable objects, without actually
 storing anything to do with visualization on the objects. We will show
 how this separation is useful and extensible so that the user can
 quickly and easily customize almost every aspect of their plot. For
@@ -744,7 +743,7 @@ entire workflow involved in a research project.
 
 Without a strictly enforced separation of concerns, workflow stages
 often end up mixing both data processing and visualization. Although a
-displayed representation is always necessary for understanding this is
+displayed representation is always necessary for understanding, it has been
 a dead end for further data processing. Because HoloViews objects
 represent themselves visually but also contain the raw data, the
 ability to continue processing is never terminated and exploration can
