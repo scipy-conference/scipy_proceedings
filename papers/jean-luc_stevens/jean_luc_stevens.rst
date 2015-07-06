@@ -20,7 +20,7 @@ HoloViews: Building Complex Visualizations Easily for Reproducible Science
    coding that obscures the underlying principles of the work and
    makes it difficult to reproduce the results.  Here we describe how
    the new HoloViews Python package, when combined with the IPython
-   Notebook and Matplotlib, provides a rich, interactive interface for
+   Notebook and a plotting library, provides a rich, interactive interface for
    flexible and nearly code-free visualization of your results while
    storing a full record of the process for later reproduction.
 
@@ -777,6 +777,9 @@ exploration of data. HoloViews instead tries to avoid custom coding
 altogether as far as possible, with users instead supplying metadata
 to declare the properties of the data and option settings to control
 its visual appearance.
+
+..
+   jbednar: Should clarify that Bokeh makes a good backend.
 
 Although HoloViews is a general purpose library for working with data
 at every stage, it actually represents a significant advance over
