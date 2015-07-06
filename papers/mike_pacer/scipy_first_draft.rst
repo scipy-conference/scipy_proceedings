@@ -19,10 +19,13 @@
 
     \newcommand{\DUrolesc}{\textsc}
     \newcommand{\DUrolesf}{\textsf}
+    \newcommand{\DUrolenoindent}{\noindent}
 
 .. role:: sc
 
 .. role:: sf
+
+.. role:: noindent
 
 .. |cbnx| replace:: :sc:`cbnx`
 .. _cbnx: https://github.com/michaelpacer/Causal-Bayesian-NetworkX
@@ -621,19 +624,19 @@ This specifies which of the total set of relations allowed by the ontology are p
 Functional form
 ^^^^^^^^^^^^^^^
 
-    Even in the most basic cases of causal induction we draw on expectations as to whether the effects of one variable on another are positive or negative, whether multiple causes interact or are independent, and what type of events (binary, continuous, or rates) are relevant to evaluating causal relationships. 
-    — :cite:`griffithst09`
+  Even in the most basic cases of causal induction we draw on expectations as to whether the effects of one variable on another are positive or negative, whether multiple causes interact or are independent, and what type of events (binary, continuous, or rates) are relevant to evaluating causal relationships. 
+  — :cite:`griffithst09`
 
-Of course, this allows for uncertainty about these functional forms and indeed, quite different judgments can be warranted depending on treats the underlying relation a nd structure of the data (e.g., continuous vs. binary data :cite:`pacerg2011`).
+Of course, this allows for uncertainty about these functional forms and indeed, quite different judgments can be warranted depending on treats the underlying relation and structure of the data (e.g., continuous vs. binary data :cite:`pacerg2011`).
 
 Generalizations to other kinds of logical/graphical conditions
 ==============================================================
 
-The causal theory framework is richer than the set of examples developed in :cite:`griffithst09`. It can also express conditions of graphical connectivity, context-sensitive functional forms, substructures of constrained plausible relations, among many others.
+The causal theory framework is richer than the set of examples developed in :cite:`griffithst09`. It can express conditions of graphical connectivity, context-sensitive functional forms, substructures of constrained plausible relations, among others.
 
 In :cite:`griffithst09`, plausible relations are described in terms of sufficient conditions, implicitly suggesting that most relations are not plausible. However, we can also make necessary statements about the kinds of relations that *must* be there. And one can see this as selecting a subset of all the possible graphs implementable by the set of nodes defined by the ontology. It is for this purpose that I first arrived at the node enumeration.
 
-Part of the aim of developing |cbnx|_ is to be able to program instances of causal theories. The utilities in :code:`networkX`, plus the enumerating, filtering and conditioning functions in |cbnx|, make it easier to implement higher-order graphical conditions (e.g., a directed path necessarily existing between two nodes) than in the original notation described in the framework. These ideas were expressible in the original mathematical framework, but would have required a good deal more notational infrastructure to represent. Here, we not only provide a notation, but a programming infrastructure for expressing and using these kinds of conditions.
+One ultimate aim for |cbnx|_ is to be able to program instances of causal theories. The utilities in :code:`networkX`, plus the enumerating, filtering and conditioning functions in |cbnx|, make it easier to implement higher-order graphical conditions (e.g., a directed path necessarily existing between two nodes) than in the original notation described in the framework. These ideas were expressible in the original mathematical framework, but would have required a good deal more notational infrastructure to represent. |cbnx| not only provides a notation, but a programming infrastructure for expressing and using these kinds of conditions.
 
 Uses in modeling human cognition
 ================================
