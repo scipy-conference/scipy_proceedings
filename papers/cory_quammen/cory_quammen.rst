@@ -71,21 +71,20 @@ VTK Data Model
 To understand Python usage in VTK, it is important to understand the
 VTK data and processing models. At the most basic level, data in VTK
 is stored in a data object. Different types of data objects are
-available including graphs, trees, grids, and meshes representing
-spatially embedded data from sensors or simulations. Types of
-spatially embedded data sets include uniform rectilinear grids,
-structured/unstructured grids, and Adaptive Mesh Refinement (AMR) data
-sets. While VTK supports other types of data sets, this paper focuses
-on the spatially embedded data sets.
+available including graphs, trees, and data sets representing
+spatially embedded data from sensors or simulations such as uniform
+rectilinear grids, structured/unstructured grids, and Adaptive Mesh
+Refinement (AMR) data sets. This paper focuses on spatially embedded
+data sets.
 
-Each data set consists of *cells*, each of which defines a geometric
-entity that defines a volume of space, and *points* that are used to
-define the vertices of the cells. Data values that represent a
-quantity, e.g. pressure, temperature, velocity, may be associated with
-both cells and points. Each quantity might be a scalar, vector,
-tensor, or string value. Vectors and tensors typically have more than
-one numerical *component*, and the quantity as a whole is known as a
-*tuple*.
+Each spatially embedded data set consists of *cells*, each of which
+defines a geometric entity that defines a volume of space, and
+*points* that are used to define the vertices of the cells. Data
+values that represent a quantity, e.g. pressure, temperature,
+velocity, may be associated with both cells and points. Each quantity
+might be a scalar, vector, tensor, or string value. Vectors and
+tensors typically have more than one numerical *component*, and the
+quantity as a whole is known as a *tuple*.
 
 The full collection of a quantity associated with points or cells is
 known by a number of names including "attribute", "field", "variable",
