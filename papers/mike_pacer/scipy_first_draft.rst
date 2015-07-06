@@ -47,21 +47,20 @@ Introduction and Aims
 
 My first goal in this paper is to provide enough of an introduction to some formal/mathematical tools such that those familiar with :code:`python` and programming more generally will be able to appreciate both why and how one might implement causal Bayesian networks. Especially to exhibit *how*, I have developed parts of a toolkit that allows the creation of these models on top of the :code:`NetworkX` python package:cite:`networkx`. Given the coincidence of the names, it seemed most apt to refer to this toolkit as :code:`Causal Bayesian NetworkX` abbreviated as |cbnx| [#]_.
 
-.. [#] in addition to the frozen version which you can find in the citations :cite:`pacer2015cbnx`, the most up to date version can be found at |cbnx|_.
+.. [#] A link to a static version of the code can be found at :cite:`pacer2015cbnx`, and recent work can be found at |cbnx|_. |cbnx| is licensed with the BSD 3-clause license.
 
 In order to understand the tool-set requires the basics of probabilistic graphical models, which requires understanding some graph theory and some probability theory. The first few pages are devoted to providing necessary background and illustrative cases for conveying that understanding. 
 
 Notably, contrary to how Bayesian networks are commonly introduced, I say relatively little about inference from observed data. This is intentional, as is this discussion of it. Many of the most trenchant problems with Bayesian networks are found in critiques of their use to infer these networks from observed data. But, many of the aspects of Bayesian networks (especially causal Bayesian networks) that are most useful for thinking about problems of structure and probabilistic relations do not rely on inference from observed data. In fact, I think the immediate focus on inference has greatly hampered widespread understanding of the power and representative capacity of this class of models. Equally – if not more – importantly, I aim to discuss generalizations of Bayesian networks such as those that appear in :cite:`griffithst09`, and inference in these cases requires a much longer treatment (if a comprehensive treatment can be provided at all). If you are dissatisfied with this approach and wish to read a more conventional introduction to (causal) Bayesian networks I suggest consulting :cite:`pearl2000`.
 
-The Causal Bayesian NetworkX toolkit can be seen as consisting of two main parts: graph enumeration/filtering and the storage and use of probabilistic graphical models in a NetworkX compatible format:cite:`networkx`. Because this topic will more be the focus of my talk which can be viewed at the youtube link above and the source code of the most basic implementation is available at |cbnx|_:cite:`pacer2015cbnx` [#]_, in this paper I focus more on the other aspects of the problem. Nonetheless, appreciating these other aspects is made easier by also appreciating the problems of implementation/representation and the early solutions that I propose.
+The |cbnx| toolkit can be seen as consisting of two main parts: graph enumeration/filtering and the storage and use of probabilistic graphical models in a NetworkX compatible format:cite:`networkx`.Nonetheless, appreciating these other aspects is made easier by also appreciating the problems of implementation/representation and the early solutions that I propose.
 
-.. [#] This code is licensed with the standard BSD 3-clause license.
 
 I focus first on establishing a means of building iterators over sets of directed graphs. I then apply operations to those sets. Beginning with the complete directed graph, we enumerate over the subgraphs of that complete graph and enforce graph theoretic conditions such as acyclicity over the entire graph, guarantees on paths between nodes that are known to be able to communicate with one another, or orphan-hood for individual nodes known to have no parents. We accomplish this by using closures that take graphs as their input along with any explicitly defined arguments needed to define the exact desired conditions. 
 
-I then shift focus to a case where there is a specific known directed acyclic graph that is imbued with a simple probabilistic semantics over its nodes and edges, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics. I discuss briefly some of the challenges of encoding these semantics in dictionaries as afforded by NetworkX without resorting to :code:`eval` statements and discuss compatibility issues I have found with JSON storage formats. 
+I then shift focus to a case where there is a specific known directed acyclic graph that is imbued with a simple probabilistic semantics over its nodes and edges, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics. I discuss some of the challenges of encoding these semantics in dictionaries as afforded by NetworkX without resorting to :code:`eval`.
 
-I conclude with a discussion of some of the problems that have been addressed in Cognitive Science through the use of graphical models like those described. In particular, I will discuss a framework called **theory based causal induction** :cite:`griffithst09`, or my preferred term: **causal theories**, which allows for defining problems of causal induction. It is out of this framework the perspective expressed in this paper, the associated talk, and the Causal Bayesian NetworkX toolkit developed. 
+I conclude by discussing Computational Cognitive Science as it relates to graphical models, as well as machine learning in general. In particular, I will discuss a framework called **theory based causal induction** :cite:`griffithst09`, or my preferred term: **causal theories**, which allows for defining problems of causal induction. It is out of this framework the perspective expressed in this paper, the associated talk, and the |cbnx| toolkit developed.
 
 Graphical Models
 ----------------
@@ -177,9 +176,7 @@ Bayes' Theorem
 
 Bayes' Theorem can be seen as a result of how to relate conditional and joint probabilities. Or more importantly, how to compute the probability of a variable once you know something about some other variable.
 
-Namely, if we want to know :math:`P(X|Y)` we can transform it into :math:`\frac{P(X,Y)}{\sum_{x \in X}P(X=x,Y)}`, but then can also transform joint probabilities (:math:`P(X,Y)`) into statements about conditional and marginal probabilities (:math:`P(X|Y)P(X)`).
-
-This leaves us with
+Namely, if we want to know :math:`P(X|Y)` we can transform it into :math:`\frac{P(X,Y)}{\sum_{x \in X}P(X=x,Y)}`, but then can also transform joint probabilities (:math:`P(X,Y)`) into statements about conditional and marginal probabilities (:math:`P(X|Y)P(X)`). This leaves us with
 
 ..  math::
 
@@ -217,9 +214,12 @@ In Bayesian networks when a variable is conditioned on the total set of its pare
 Common assumptions in Bayesian networks
 =======================================
 
-While there are extensions to these models [#]_ , a number of assumptions commonly hold. 
+.. While there are extensions to these models [#]_ , a number of assumptions commonly hold. 
 
-.. [#] An important class of extensions to Bayesian networks that I will not have time to discuss at length includes those that consider temporal dependencies: Dynamic Bayesian Networks (:sc:`dbn`\s) :cite:`deank1989time,ghahramani1998learning`, continuous-time dependencies with Continuous Time Bayesian Networks (:sc:`ctbn`\s) :cite:`nodelman02`, Poisson Cascades :cite:`simma10`, Continuous Time Causal Theories (:sc:`ct`:math:`^2`) :cite:`pacerg12, pacerg15`, Reciprocal Hawkes Processes :cite:`blundell2012modelling` and the Network Hawkes Model :cite:`lindermana2014`.
+While there are extensions to these models, a number of assumptions commonly hold. 
+
+
+.. .. [#] An important class of extensions to Bayesian networks that I will not have time to discuss at length includes those that consider temporal dependencies: Dynamic Bayesian Networks (:sc:`dbn`\s) :cite:`deank1989time,ghahramani1998learning`, continuous-time dependencies with Continuous Time Bayesian Networks (:sc:`ctbn`\s) :cite:`nodelman02`, Poisson Cascades :cite:`simma10`, Continuous Time Causal Theories (:sc:`ct`:math:`^2`) :cite:`pacerg12, pacerg15`, Reciprocal Hawkes Processes :cite:`blundell2012modelling` and the Network Hawkes Model :cite:`lindermana2014`.
 
 Fixed node set
 ^^^^^^^^^^^^^^
@@ -249,10 +249,12 @@ Directional semantics between different types of nodes
 
 The conditional distributions of child nodes are usually defined with parameter functions that take as arguments their parents' realizations for that trial. Bayes nets often are used to exclusively represent discrete (usually, binary) nodes the distribution is usually defined as an arbitrary probability distribution associated with the label of it's parent's realization. 
 
-If we allow (for example) positive continuous valued nodes to exist in relation to discrete nodes the kind of distributions available to describe relations between these nodes changes depending upon the direction of the arrow. A continuous node taking on positive real values mapping to an arbitrarily labeled binary node taking on values :math:`\{a,b\}` will require a function that maps from :math:`\mathbb{R} \rightarrow [0,1]`, where it maps to the probability that the child node takes on (for instance) the value :math:`a` [#]_.However, if the relationship goes the other direction, one would need to have a function that maps from :math:`\{a,b\} \rightarrow \mathbb{R}`. For example, this might be a Gaussian distributions for *a* and *b* (:math:`(\mu_a,\sigma_a),(\mu_b,\sigma_b)`). Regardless of the particular distributions, the key is that the functional form of the distributions are radically different 
+If we allow (for example) positive continuous valued nodes to exist in relation to discrete nodes the kind of distributions available to describe relations between these nodes changes depending upon the direction of the arrow. A continuous node taking on positive real values mapping to an arbitrarily labeled binary node taking on values :math:`\{a,b\}` will require a function that maps from :math:`\mathbb{R} \rightarrow [0,1]`, where it maps to the probability that the child node takes on (for instance) the value :math:`a` [#]_.However, if the relationship goes the other direction, one would need to have a function that maps from :math:`\{a,b\} \rightarrow \mathbb{R}`. For example, this might be a Gaussian distributions for *a* and *b* (:math:`(\mu_a,\sigma_a),(\mu_b,\sigma_b)`). Regardless of the particular distributions, the key is that the functional form of the distributions are radically different.
 
 .. [#] If the function maps directly to one of the labeled binary values this can be represented as having probability 1 of mapping to either :math:`a` or :math:`b`.
 
+
+.. _sampling:
 
 Sampling and semantics in Bayes Nets
 ====================================
@@ -265,16 +267,18 @@ Because orphans have no parents – in order for the Bayes net to be well-define
 
 After sampling from all of the orphans, we will take the union of the sets of children of the orphans, and at least one of these nodes will have values sampled for all of its parents. We take the set of orphans whose entire parent-set has sampled values, and sample from the conditional distributions defined relative to their parents' sampled values and make this the *active sample set*.
 
-After each set of samples from the *active sample set* we will either have new variables whose distributions are well-defined or will have sampled all of the variables in the graph for that trial. [#]_ If we have multiple trials, we repeat this procedure for each trial. 
+.. After each set of samples from the *active sample set* we will either have new variables whose distributions are well-defined or will have sampled all of the variables in the graph for that trial [#]_.
 
-.. [#] One potential worry is the case of disconnected graphs (i.e., graphs that can be divided into at least 2 disjoint sets of nodes where there will be no edges between nodes of different sets). However, because disconnected subgraphs of a :sc:`dag` will also be :sc:`dag`\s, we can count on at least one orphan existing for each of those graphs, and thus we will be able to sample from all disconnected subgraph by following the same algorithm above (they will just be sampled in parallel).
+After each set of samples from the *active sample set* we will either have new variables whose distributions are well-defined or will have sampled all of the variables in the graph for that trial.
+
+.. .. [#] One potential worry is the case of disconnected graphs (i.e., graphs that can be divided into at least 2 disjoint sets of nodes where there will be no edges between nodes of different sets). However, because disconnected subgraphs of a :sc:`dag` will also be :sc:`dag`\s, we can count on at least one orphan existing for each of those graphs, and thus we will be able to sample from all disconnected subgraph by following the same algorithm above (they will just be sampled in parallel).
 
 Example: Rain, Sprinkler & Ground
 =================================
 
 
 ..  figure:: sprinkler.pdf
-    :figclass: bht
+    :scale: 40 %
 
 
     An Bayesian network describing the sprinkler example. :label:`sprinkler`
@@ -311,10 +315,12 @@ NetworkX is usually imported using the :code:`nx` abbreviation, and you input no
     edge_list = G.edges(data=True) # output edges
     node_list = G.nodes(data=True) # output nodes
 
-Causal Bayesian NetworkX: Graphs
+|cbnx|: Graphs
 --------------------------------
 
-Here we will look at some of the basic operations described in the `ipython notebook` :cite:`scipy` found at |cbnx|_.
+Here we will look at some of the basic operations described in the `ipython notebook` :cite:`scipy` found at |cbnx|_. For space and formatting reasons this code may differ slightly from that either in the variable names or comments, for the original version of these code snippets see graph-builder-code_.
+
+..  _graph-builder-code: https://github.com/michaelpacer/Causal-Bayesian-NetworkX/blob/master/graph_building_code_with_comments.py
 
 Other packages
 ==============
@@ -336,22 +342,12 @@ Starting with the max graph for a set of nodes (i.e., the graph with :math:`N^2`
 ..  code-block:: python
 
     def completeDiGraph(nodes):
-        """
-        Building a max-graph from a set of n nodes.
-        This graph has :math:`n^2` edges.
-        Variables:
-        nodes are a list of strings comprising node names
-        """
-
-        G = nx.DiGraph() # Creates new graph
-        G.add_nodes_from(nodes) # adds nodes to graph
+        G = nx.DiGraph() 
+        G.add_nodes_from(nodes)
         edgelist = list(combinations(nodes,2)) 
-        # list of directed edges
         edgelist.extend([(y,x) for x,y in edgelist)
-        #add symmetric edges
-        edgelist.extend([(x,x) for x in nodes]) 
-        # add self-loops
-        G.add_edges_from(edgelist) # add edges to graph
+        edgelist.extend([(x,x) for x in nodes])
+        G.add_edges_from(edgelist)
         return G
 
 Preëmptive Filters
@@ -366,11 +362,6 @@ One of the most powerful uses I have found for this is the ability to modify a g
 ..  code-block:: python
 
     def filter_Graph(G,filter_set):
-        """
-        This allows us to apply a set of filters encoded 
-        as closures that take a graph as input
-        and return a graph as output.
-        """
         graph = G.copy()
         for f in filter_set:
             graph = f(graph)
@@ -385,26 +376,10 @@ By default the graph completed by :code:`completeDiGraph()` will have self-loops
 
     def extract_remove_self_loops_filter():
         def remove_self_loops_filter(G):
-            graph = G.copy()
-            graph.remove_edges_from(graph.selfloop_edges())
-            return graph
+            g2 = G.copy()
+            g2.remove_edges_from(g2.selfloop_edges())
+            return g2
         return remove_self_loops_filter
-
-.. Example filter use-case: add intervening nodes to a existing graph
-.. ==================================================================
-
-.. By default the graph completed by :code:`completeDiGraph()` will have self-loops, often we will not want this (e.g., :sc:`dag`\s cannot contain self-loops).
-
-.. .. code-block:: python
-
-..     def extract_remove_self_loops_filter():
-..         def remove_self_loops_filter(G):
-..             graph = G.copy()
-..             graph.remove_edges_from(graph.selfloop_edges())
-..             return graph
-..         return remove_self_loops_filter
-
-
 
 Conditions
 ==========
@@ -416,37 +391,23 @@ The enumeration portion of this approach is defined in this :code:`conditionalSu
 ..  code-block:: python
 
     def conditionalSubgraphs(G,condition_list):
-        """
-        Returns a graph iterator of subgraphs of G 
-        meeting conditions in condition_list.
-
-        Variables: 
-        G: a graph from which subgraphs will be taken.
-        condition_list: a list of condition functions.
-        
-        Functions in condition_list have i/o defined as
-        input: graph, generated as a subgraph of G
-        output: Bool, whether graph passes condition
-        """
-
         for edges in powerset(G.edges()):
             G_test = G.copy()
             G_test.remove_edges_from(edges)
             if all([c(G_test) for c in condition_list]):
-                
                 yield G_test
 
 
-Example condition: detecting :sc:`dag`\s
-========================================
+Example condition: requiring complete paths
+===========================================
 
-If we wanted to have examples of all dags that are subgraphs of a passed in graph, we can use a convenient networkX utility.
+This condition returns true only if a graph has paths from the first node to the second node for each 2-tuple in the node-pair list.
 
 ..  code-block:: python
 
-    def create_path_complete_condition(node_pairs):
+    def create_path_complete_condition(n_p):
         def path_complete_condition(G):
-            return all([nx.has_path(G,x,y) for x,y in node_pairs])
+            return all([nx.has_path(G,x,y) for x,y in n_p])
         return path_complete_condition
 
 Non-destructive conditional subgraph generators
@@ -457,28 +418,6 @@ Because the :code:`conditionalSubgraph` generator produces an iterable, if we wa
 .. code-block:: python
 
     def new_conditional_graph_set(graph_set,cond_list):
-        """
-        Returns graph_set & a new iterator which has 
-        conditions in cond_list applied to it.
-        
-        Warning: This function will devour the iterator 
-        you include as the `graph_set` input, 
-        you need to redeclare the variable as 
-        one of the return values of the function.
-        
-        Thus a correct use would be:    
-        a,b = new_conditional_graph_set(a,c)
-        
-        The following would not be a correct use:
-        x,y = new_conditional_graph_set(a,c)
-        
-        Variables: 
-        graph_set: graph-set iterator generator
-        cond_list: list conditions
-            input: a graph.
-            output: boolean value
-        """
-        
         graph_set_newer, graph_set_test = tee(graph_set,2)
         def gen():
             for G in graph_set_test:
@@ -490,91 +429,26 @@ Because the :code:`conditionalSubgraph` generator produces an iterable, if we wa
 Filters versus Conditions: which to use
 =======================================
 
-The most obvious structural differences between filters and conditions give insight to how they are to be used. 
+The most obvious structural differences between filters and conditions give insight to how they are to be used. Filters are intended to apply to the max graph to reduce the edge set; they return a graph. This is meant to be a a way to reduce a graph's edgeset in place. Conditions are intended to be applied to a series of graphs generated by an iterator taking subgraphs of some other graph
 
-Filters are intended to apply to the max graph to reduce the edge set. They take (at least) a graph as an argument and return a graph. This is meant to be a transformation of the graph, or a way to change the value of a graph in place. It does not have any notion of producing both copies of the graph (though that could be done as well).
-
-Conditions are intended to be applied to a series of graphs generated by an iterator taking subgraphs of some other graph
-
-.. Naming conventions for filters and conditions
-.. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. The convention I have been following for distinguishing filter and condition functions is that the higher-order function in the case of filters beginning with the word :code:`extract_`, and then both the returned function and the higher-order function ending with the word :code:`filter`. Similarly, conditions have begun with :code:`create_` and finished with :code:`condition`.
-
-.. ..  code-block:: python
-
-..     def extract_name_filter(node_list):
-..         def name_filter(G):
-..             graph = G.copy()
-..             # operations removing edges
-..             return graph
-..         return name_filter
-
-
-.. ..  code-block:: python
-
-..     def create_name_condition(node_list):
-..         def name_condition(G):
-..             # operations checking for whether conditions hold
-..             return # truth value
-..         return name_condition
-
-.. Complex example: adding interventional nodes
-.. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. ..  code-block:: python
-
-..     def add_interventions(G):
-..         node_list = G.nodes()
-..         edge_list = G.edges()
-
-..         int_node_list = [str(x)+"_int" for x in node_list]
-
-..     def completeDiGraph(nodes):
-..         """
-..         Building a max-graph from a set of nodes. This graph has
-..         :math:`n^2` edges in terms of len(nodes).
-..         Variables:
-..         nodes are a list of strings that specify the node names
-..         """
-
-..         G = nx.DiGraph() # Creates new graph
-..         G.add_nodes_from(nodes) # adds nodes to graph
-..         edgelist = list(combinations(nodes,2)) 
-..         # list of directed edges
-..         edgelist.extend([(y,x) for x,y in list(combinations(nodes,2))]) 
-..         #add symmetric edges
-..         edgelist.extend([(x,x) for x in nodes]) # add self-loops
-..         G.add_edges_from(edgelist) # add edges to graph
-..         return G
-
-..     def extract_remove_self_loops_filter():
-..         def remove_self_loops_filter(G):
-..             graph = G.copy()
-..             graph.remove_edges_from(graph.selfloop_edges())
-..             return graph
-..         return remove_self_loops_filter
-
-
-.. Gates: Context-sensitive causal Bayesian networks
-.. -------------------------------------------------
 
 |cbnx|: Representing probabilistic relations and sampling
 ---------------------------------------------------------
 
-It is possible to identify first those nodes with no parents, and then sample them. Then (and this is the part that is iterated), sample those in the children set whose parent set has a full sample, removing children from the children set when they are sampled from and adding them to the parent set. This is continued until there are no children in the children set. 
+.. This is the algorithm that sampling follows as can be observed in |cbnx|_. This approach only works for :sc:`dag`\s and is formally equivalent to identifying a *topological ordering* for the nodes and then sampling accordingly. A graph having a topological ordering is biconditionally equivalent to being a :sc:`dag`. This criterion can roughly be seen as assigning each node an integer such that every child will always have an integer greater than any of its parent nodes (and by recursion any of its ancestor nodes). This provides an order in which to visit the nodes for sampling purposes that will ensure that any nodes in a child's parent set will always be visited first. This also results in choosing those nodes with an empty set as a parent set (i.e., orphans) to have the lowest integers, and therefore to be sampled first.
 
-This is the algorithm that sampling follows as can be observed in |cbnx|_. This approach only works for :sc:`dag`\s and is formally equivalent to identifying a *topological ordering* for the nodes and then sampling accordingly. A graph having a topological ordering is biconditionally equivalent to being a :sc:`dag`. This criterion can roughly be seen as assigning each node an integer such that every child will always have an integer greater than any of its parent nodes (and by recursion any of its ancestor nodes). This provides an order in which to visit the nodes for sampling purposes that will ensure that any nodes in a child's parent set will always be visited first. This also results in choosing those nodes with an empty set as a parent set (i.e., orphans) to have the lowest integers, and therefore to be sampled first.
+We discuss an algorithm for sampling from Bayesian networks above (sampling_). But, most of the difficult parts of encoding a sampling procedure prove (in this case) to do with the algorithm. Rather, the most pressing difficulties arise from attempting to store the relevant information within the NetworkX data dictionaries, so that a self-contained graphical object can be imported and exported. There is a general problem of a lack of standard storage format for Bayesian networks (and probabilistic graphical models in general). This is just one flavor of that problem. 
 
-Most of the difficult parts of encoding a sampling procedure though have nothing to do with the algorithm(it is standard for :sc:`dag`\s). Rather, they arise from attempting to store the relevant information within the NetworkX data nodes, so that a self-contained graphical object can be imported and exported. There is a general problem of a lack of standard storage format for Bayesian networks (and probabilistic graphical models in general). This is just one flavor of that problem. 
+A |cbnx| implementation for sprinkler graph
+-------------------------------------------
 
-Example: |cbnx| implementation for sprinkler graph
-==================================================
+Below I will illustrate how to use NetworkX :cite:`networkx` and node-associated attributes to define and sample from a parameterized version of the sprinkler Bayesian network represented in abstract, graphical form in Figure :ref:`sprinkler`.  for space reasons comments and formatting were reduced, if you wish to see the original code it can be found at sampling-code_. 
 
-Below I will illustrate how to use networkX and node-associated attributes to define and sample from a parameterized version of the sprinkler Bayesian network represented in abstract, graphical form in Figure :ref:`sprinkler`.
+..  _sampling-code: https://github.com/michaelpacer/Causal-Bayesian-NetworkX/blob/master/graph_building_code_with_comments.py
+
 
 Sampling infrastructure
-^^^^^^^^^^^^^^^^^^^^^^^
+=======================
 
 .. code:: python
 
@@ -660,7 +534,7 @@ Sampling infrastructure
         return f_dict[f_name]
 
 Sampling from the sprinkler Bayes net with |cbnx|
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+=================================================
 
 The following encodes the sprinkler network from Figure :ref:`sprinkler` with parameters :math:`p=.2, q_{\textrm{yes}}=.01, q_\textrm{no}=.4,w_{\textrm{yes,on}}=.99,w_{\textrm{yes,off}}=.8,w_{\textrm{no,on}}=.9 \textrm{and} w_{\textrm{no,off}=0}.` This distribution is meant to accord with our intuitions that rain and sprinklers increase the probability of the ground being wet, and that we are less likely to use the sprinkler when it has rained.
 
@@ -705,12 +579,12 @@ Causal Theories and Computational Cognitive Science
 
 **Theory based causal induction** is a formal framework that arose out of the tradition in computational cognitive science to approach problems of human cognition with rational, computational-level analyses :cite:`griffithst09`. In particular, causal theories form generative models for defining classes of parameterized probabilistic graphical models. They rely on defining a set of classes of entities (ontology), potential relationships between those classes of entities and particular entities (plausible relations), and particular parameterizations of how those relations manifest in observable data (or in how other relations eventually ground out into observable data). This allows Griffiths and Tenenbaum to subsume the prediction of a wide array of human causal inductive, learning and reasoning behavior using this framework for generating graphical models and doing inference over the structures they generate.
 
-Rational analysis :cite:`anderson90`
-===================================
+Rational analysis
+=================
 
 Rational analysis is a technique that frees us from some of the problems inherent in mechanistic modeling in cognition. We specify the goals of the cognitive system, the environment in which it exists and minimal constraints on the computations available to the agent. We translate this into mathematically precise accounts of "mechanism-free casting[s] of psychological [theories]" for optimal behavior. These formal models provide empirical predictions that can be evaluated by studying human cognitive behavior under different observable environmental conditions :cite:`anderson90` [#]_. If the model disagrees with the empirical data, we iterate — reëvaluating each component of the theory until we match a wide variety [#]_ of empirical data. 
 
-.. [#] To my knowledge the variety constraint is not present in the original work by Anderson, though the generality of the phenomena encompassed by his analyses suggests he was well aware of the concern. I add the variety constraint in order to combat overfitting of any one data-set, because over-fitting is a problem of generalization. To the extent that a single framework is expected to model more of data-sets that it could feasibly be generalized to cover, it will be less and less possible to overfit the data, as generalization problem becomes and less feasible.
+.. .. [#] To my knowledge the variety constraint is not present in the original work by Anderson, though the generality of the phenomena encompassed by his analyses suggests he was well aware of the concern. I add the variety constraint in order to combat overfitting of any one data-set, because over-fitting is a problem of generalization. To the extent that a single framework is expected to model more of data-sets that it could feasibly be generalized to cover, it will be less and less possible to overfit the data, as generalization problem becomes and less feasible.
 
 
 .. [#] As Anderson notes, it is often the mathematization that proves to be the most difficult aspect of this procedure :cite:`anderson90`. 
@@ -725,40 +599,37 @@ Rational analysis is a technique that frees us from some of the problems inheren
 
 .. Predictions flow from 1–3. Framing of the information processing problems A mechanistic-free casting of a psychological theory. Most of the interesting assumptions come ins tep 2 because the structure of the environment is what is easiest to verify.
 
-This is often coupled with computational-level analysis inspired by Marr's :cite:`marr82` levels of analysis.  
+.. This is often coupled with computational-level analysis inspired by Marr's :cite:`marr82` levels of analysis.  
 
 Computational-Level Analysis of Human Cognition
 ===============================================
 
-A computational-level analysis is one in which we model a system in terms of its functional role(s) and how they would be optimally solved. This is distinguished from algorithmic-level analysis by not caring how this goal achievement state is implemented in terms of the formal structure of the underlying system and from mechanistic-level analysis by not caring about the physical structure of how these systems are implemented (which may vary widely while still meeting the structure of the algorithmic-level which itself accomplishes the goals of the computational level).
+A computational-level analysis :cite:`marr82` is one in which we model a system in terms of its functional role(s) and how they would be optimally solved. This is distinguished from algorithmic-level analysis by not caring how this goal achievement state is implemented in terms of the formal structure of the underlying system and from mechanistic-level analysis by not caring about the physical structure of how these systems are implemented (which may vary widely while still meeting the structure of the algorithmic-level which itself accomplishes the goals of the computational level).
 
-A classic example of the three-levels of analysis are different ways of studying flying with the example of bird-flight. The mechanistic-level analysis would be to study feathers, cells and so on to understand the component subparts of individual birds. The algorithmic-level analysis would look at how these subparts fit together to form an active whole that is capable of flying often by flapping its wings in a particular way. The computational-level analysis would be a theory of aerodynamics with specific accounts for the way forces interact to produce flight through the particular motions of flying observed in the birds.
+A classic example :cite:`marr82` of the three-levels of analysis are different ways of studying flying with the example of bird-flight. The mechanistic-level analysis would be to study feathers, cells and so on to understand the component subparts of individual birds. The algorithmic-level analysis would look at how these subparts fit together to form an active whole that is capable of flying often by flapping its wings in a particular way. The computational-level analysis would be a theory of aerodynamics with specific accounts for the way forces interact to produce flight through the particular motions of flying observed in the birds.
 
 Causal theories: ontology, plausible relations, functional form
 ===============================================================
 
-Griffiths and Tenenbaum :cite:`griffithst09` identify that their framework generalizes specifying Bayesian network in the same way first-order logic generalizes specifying propositions in propositional logic. It requires the elements necessary to populate a graph with nodes, those nodes with properties, and relations between the nodes, stating which of those relations are plausible(and how plausible), and a specific, precise formulation for how those relations manifest in terms of the semantics. In the terms of :cite:`griffithst09`'s theory-based causal induction, this requires specifying an ontology, plausible relations over those ontologies, and functional forms for parameterizing those relations.
+The causal theory framework generalizes specifying Bayesian network in the same way first-order logic generalizes specifying propositions in propositional logic. A causal theory requires elements necessary to populate nodes, those nodes with properties, and relations between the nodes, stating which of those relations are plausible (and how plausible), and a specific, precise formulation for how those relations manifest in terms of a probabilistic semantics. In the terms of :cite:`griffithst09`'s theory-based causal induction, this requires specifying an ontology, plausible relations over those ontologies, and functional forms for parameterizing those relations.
 
 Ontology
 ^^^^^^^^
 
-This specifies the full space of potential kinds of entities, properties and relations that exist. This is the basis around which everything else will be defined. 
-
-Note that it is easy enough to populate nodes with features using the data field in NetworkX.
+This specifies the full space of potential kinds of entities, properties and relations that exist. This is the basis around which everything else will be defined. It is straightforward populate nodes with features using the data dictionary in NetworkX.
 
 Plausible Relations
 ^^^^^^^^^^^^^^^^^^^
 
-This specifies which of the total set of relations allowed by the ontology are plausible. For example, we know that in most situations a fan is more likely than a tuning fork to blow out a candle. 
-
-As mentioned above, once you have a well-populated world if you do not dramatically restrict the sets of relations you consider, there will be an explosion of possibilities. People, even young children :cite:`griffithst09`, have many expectations about what sorts of things can can feasibly be causally related to one another. This sometimes has been interpreted as the plausible existence of a 
+This specifies which of the total set of relations allowed by the ontology are plausible. As mentioned above, once you have a well-populated world if you do not dramatically restrict the sets of relations you consider, there will be an explosion of possibilities. People, even young children, have many expectations about what sorts of things can can feasibly be causally related to one another. This sometimes has been interpreted as the plausible existence of a mechanism linking cause and effect. For example, we know that in most situations a fan is more likely than a tuning fork to blow out a candle. 
 
 Functional form
 ^^^^^^^^^^^^^^^
 
-> Even in the most basic cases of causal induction we draw on expectations as to whether the effects of one variable on another are positive or negative, whether multiple causes interact or are independent, and what type of events (binary, continuous, or rates) are relevant to evaluating causal relationships.
-:cite:`griffithst09`
+    Even in the most basic cases of causal induction we draw on expectations as to whether the effects of one variable on another are positive or negative, whether multiple causes interact or are independent, and what type of events (binary, continuous, or rates) are relevant to evaluating causal relationships. 
+    — :cite:`griffithst09`
 
+Of course, this allows for uncertainty about these functional forms and indeed, quite different judgments can be warranted depending on treats the underlying relation a nd structure of the data (e.g., continuous vs. binary data :cite:`pacerg2011`).
 
 Generalizations to other kinds of logical/graphical conditions
 ==============================================================
@@ -767,7 +638,7 @@ The Griffiths and Tenenbaum framework is richer than the set of examples develop
 
 In :cite:`griffithst09`, plausible relations are described in terms of sufficient conditions, implicitly suggesting that most relations are not plausible. However, we can also make necessary statements about the kinds of relations that *must* be there. And one can see this as selecting a subset of all the possible graphs implementable by the set of nodes defined by the ontology. It is for this purpose that I first arrived at the node enumeration.
 
-Part of the aim of developing |cbnx|_ is to provide a programming framework in which the richness of causal theories are able to be expressed. Because of the utilities in :code:`networkX`, with the enumerating, filtering and conditioning functions described above, it becomes much easier to implement higher-order graphical conditions (e.g., a directed path necessarily existing between two nodes) than in the original notation described in the framework. These ideas were entirely expressible in the original mathematical framework, but would have required a good deal more notational infrastructure to represent. Here, we not only provide a notation, but a computational infrastructure for applying these kinds of conditions.
+Part of the aim of developing |cbnx|_ is to be able to program instances of frameworks like causal theories. Because of the utilities in :code:`networkX`, with the enumerating, filtering and conditioning functions in |cbnx|, it becomes much easier to implement higher-order graphical conditions (e.g., a directed path necessarily existing between two nodes) than in the original notation described in the framework. These ideas were entirely expressible in the original mathematical framework, but would have required a good deal more notational infrastructure to represent. Here, we not only provide a notation, but a programming infrastructure for expressing and using these kinds of conditions.
 
 
 Uses in modeling human cognition
@@ -776,6 +647,8 @@ Uses in modeling human cognition
 Using this framework, Griffiths and Tenenbaum were able to provide comprehensive coverage for a number of human psychology experiments. This allows them to model people's inferences in causal induction and learning regarding different functional forms, at different points in development, with different amounts of data, with and without interventions, and in continuous time and space (to name only a few of the different conditions covered).
 
 They successfully modeled human behavior using this framework by treating people as optimal solvers of this computational problem [#]_ (at least as defined by their framework). Furthermore, by examining different but related experiments, they were able to demonstrate the different ways in which specific kinds of prior knowledge are called upon differentially to inform human causal induction resulting in quite different inferences on a rational statistical basis.
+
+.. [#] Optimality in these cases is taken to mean on average approximating the posterior distribution of some inference problem defined by the authors in each case.
 
 Cognition as Benchmark, Compass, and Map
 ========================================
@@ -786,5 +659,3 @@ But that is not the only way human behavior can guide machine learning. In domai
 
 Formal frameworks for generating models (e.g., causal theories) can be even more powerful. Data can often be interpreted in multiple ways, with each way requiring a model to generate solutions. Holding the data constant, different goals can merit different kinds of solutions. Frameworks that generate models, optimality criteria and solutions not only provide a direction for machine learning, but lay out *sets* of possible directions. Generalized methods using a single system for solving many different kinds of problems provide the ability to relate these different directions to each other. As such, formalizing the inputs, processes and outputs of human cognition produces a map of where machine learning could go, even if it never goes to any particular destination. From this, better navigators with more details about the particular terrain can find better routes. 
 
-
-.. [#] Optimality in these cases is taken to mean on average approximating the posterior distribution of some inference problem defined by the authors in each case.
