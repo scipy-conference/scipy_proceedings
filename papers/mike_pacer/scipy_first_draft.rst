@@ -275,7 +275,7 @@ Example: Rain, Sprinkler & Ground
 
 
 ..  figure:: sprinkler.pdf
-    :scale: 40 %
+    :scale: 35 %
 
     An Bayesian network describing the sprinkler example. Including both conditional and marginal distributions. :label:`sprinkler`
 
@@ -348,7 +348,7 @@ Starting with the max graph for a set of nodes (i.e., the graph with :math:`N^2`
 Preëmptive Filters
 ==================
 
-Rather than working over the raw max-graph, it helps to determine which individual edges are known to always be present and which ones are known to never be present. In this way we can reduce the size of the edgeset over which we will be iterating. 
+The graph explosion problem is helped by determining which individual edges are known to always be present and which ones are known to never be present. In this way we can reduce the size of the edgeset over which we will be iterating. 
 
 .. This allows us to include more variables/nodes without the explosion of edges that would be the consequence of adding additional nodes were we not to include preëmptive filters. One of the most powerful uses I have found for this is the ability to modify a graph set to include interventional nodes without seeing a corresponding explosion in the number of graphs. This utility is not yet general enough to be worth reporting here.
 
@@ -629,7 +629,7 @@ Of course, this allows for uncertainty about these functional forms and indeed, 
 Generalizations to other kinds of logical/graphical conditions
 ==============================================================
 
-The Griffiths and Tenenbaum framework is richer than the set of examples developed in :cite:`griffithst09`. It can also express conditions of graphical connectivity, context-sensitive functional forms, substructures of constrained plausible relations, among many others.
+The causal theory framework is richer than the set of examples developed in :cite:`griffithst09`. It can also express conditions of graphical connectivity, context-sensitive functional forms, substructures of constrained plausible relations, among many others.
 
 In :cite:`griffithst09`, plausible relations are described in terms of sufficient conditions, implicitly suggesting that most relations are not plausible. However, we can also make necessary statements about the kinds of relations that *must* be there. And one can see this as selecting a subset of all the possible graphs implementable by the set of nodes defined by the ontology. It is for this purpose that I first arrived at the node enumeration.
 
@@ -651,5 +651,5 @@ People have always been able to make judgments that are beyond machine learning'
 
 But that is not the only way human behavior can guide machine learning. In domains like causal induction, people's judgments cannot form a benchmark in the traditional sense because we cannot trust people to be "correct". Nonetheless, people *do* make these judgments and, more importantly, these judgments exhibit systematic patterns. This systematicity allows the judgments output by cognition to be modeled using formal, computational frameworks. Further, if we formally characterize both the inputs to *and* outputs from cognition, we can define judgments as optimal according to some model. Formal models of individual cognitive processes can then act as a compass for machine learning, providing a direction for how problems and some solutions can be computed.
 
-Formal frameworks for generating models (e.g., causal theories) can be even more powerful. Data can often be interpreted in multiple ways, with each way requiring a model to generate solutions. Holding the data constant, different goals can merit different kinds of solutions. Frameworks that generate models, optimality criteria and solutions not only provide a direction for machine learning, but lay out *sets* of possible directions. Generalized methods using a single system for solving many different kinds of problems provide the ability to relate these different directions to each other. As such, formalizing the inputs, processes and outputs of human cognition produces a map of where machine learning could go, even if it never goes to any particular destination. From this, better navigators with more details about the particular terrain can find better routes. 
+Formal frameworks for generating models (e.g., causal theories) can be even more powerful. Data can often be interpreted in multiple ways, with each way requiring a model to generate solutions. Holding the data constant, different goals merit different kinds of solutions. Frameworks that generate models, optimality criteria and solutions not only provide a direction for machine learning, but lay out *sets* of possible directions. Generalized methods that use one system for solving many kinds of problems provide the ability to relate these different directions to each other. Formalizing the inputs, processes and outputs of human cognition produces a map of where machine learning could go, even if it never goes to any particular destination. From this, navigators with more details about the particular terrain can find newer and better routes. 
 
