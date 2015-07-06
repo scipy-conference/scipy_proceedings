@@ -168,7 +168,7 @@ Preferential attachment model
 =============================
 
 An early result in the study of complex networks was the observation that many networks
-existing in nature exhibit a scale-free degree distribution.
+existing in nature exhibit a scale-free degree distribution. [BarabásiAlbert]_
 This means that the tail of the distribution of the number of edges of each node in the network (the
 node's *degree*) converges to a power law function: 
 
