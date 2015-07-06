@@ -75,7 +75,7 @@ Nodes
 
 In the examples in |cbnx|_, nodes are given explicit labels individuating them such as :math:`\{A,B,C,\ldots\}` or {'rain','sprinkler','grass_wet'}. Oftentimes, for the purposes of mathematical notation, it will be helpful to index nodes by the integers over a common variable label, e.g., using  :math:`\{X_1,X_2,X_3,\ldots\}`. [#]_ 
 
-.. [#] Despite pythonic counting beginning with 0, I chose not to begin this series with 0 because when dealing with variables that might be used in statistical regressions, the 0 subscript will have a specific meaning that separates it from the rest of the notation. For example when expressing multivariate regression as :math:`Y = \beta X + \epsilon, \epsilon \sim \mathcal{N}(0,\Sigma)`, :math:`\beta_0` refers to the parameter associated with a constant variable :math:`x_0 = 1` and :math:`X` is normally defined as :math:`x_1, x_2, x_3, \ldots`. This allows a simple additive constant to be estimated, which usually(but not always) is not of interest to statistical tests, acting as a scaling constant more than anything else. This also makes for simpler notation than saying :math:`Y = \beta_0 + \beta X + \epsilon`, since that is equivalent to the previous notation (:math:`Y = \beta X + \epsilon`) if :math:`x_0 = 1`. In other cases :cite:`griffithst05,pacerg12`, the 0 index will be used to indicate background sources for events in a system.
+.. [#] Despite pythonic counting beginning with 0, I chose not to begin this series with 0 because when dealing with variables that might be used in statistical regressions, the 0 subscript will have a specific meaning that separates it from the rest of the notation. For example when expressing multivariate regression as :math:`Y = \beta X + \epsilon, \epsilon \sim \mathcal{N}(0,\Sigma)`, :math:`\beta_0` refers to the parameter associated with a constant variable :math:`x_0 = 1` and :math:`X` is normally defined as :math:`x_1, x_2, x_3, \ldots`. This allows a simple additive constant to be estimated, which often is not of interest to statistical tests, acting as a scaling constant. This makes for a simpler notation than :math:`Y = \beta_0 + \beta X + \epsilon`, because that is equivalent to :math:`Y = \beta X + \epsilon` if :math:`x_0 = 1`. But, in other cases (e.g., :cite:`pacerg12`) 0 index will be used to indicate background sources for events in a system.
 
 Edges
 ^^^^^
@@ -150,7 +150,7 @@ The probability mass function (pmf) of a discrete random variable(:math:`X`) tak
 
 The conditional probability of :math:`X` with value :math:`x` given another variable :math:`Y` with value :math:`y` is :math:`P(X=x~|Y=y)`. Much like above, if we want to consider the probability of each possible event without specifying one, sometimes this will be written as :math:`P(X|Y=y)`. If we are considering conditioning on any of the possible values of the known variable, we might use the notation :math:`P(X|Y)`, but that is a slight abuse of the notation. 
 
-You *can* view :math:`P(X|Y)` as a function over the space defined by :math:`X\times Y`. However, if you do so, do not interpret this as a probability function (of any kind). Rather, this defines a probability function for :math:`X` relative to each value of :math:`Y`. Without conditioning on :math:`Y` we have many potential probability functions of X. Equivalently, it denotes a *family* of probability functions on X indexed by the values :math:`Y=y`.
+You *can* view :math:`P(X|Y)` as a function over the :math:`X\times Y` space. But do not interpret that as a probability function (of any kind). Rather, this defines a probability function for :math:`X` relative to each value of :math:`Y`. Without conditioning on :math:`Y` we have many potential probability functions of X. Equivalently, it denotes a *family* of probability functions on X indexed by the values :math:`Y=y`.
 
 The *joint probability* of :math:`X` and :math:`Y` is the probability that both :math:`X` and  :math:`Y` occur in the event set in question. This is noted as :math:`P(X,Y)` or :math:`P(X \cap Y)` (using the set theoretic intersection operation). Similar to :math:`P(X|Y)`, you *can* view :math:`P(X,Y)` as a function over the space defined by :math:`X\times Y`. However, :math:`P(X,Y)` is a probability function in the sense that the sum of :math:`P(X=x,Y=y)` over all the possible events in the space defined by :math:`(x,y)\in X\times Y` equals 1.
 
@@ -259,17 +259,15 @@ If we allow (for example) positive continuous valued nodes to exist in relation 
 Sampling and semantics in Bayes Nets
 ====================================
 
-This procedure for sampling a trial from Bayesian networks relies heavily on using what I call the *active sample set*. This is the set of nodes for which we have well-defined distributions at the time of sampling.
+One procedure for sampling a trial from Bayesian networks relies heavily on using an *active sample set*. This is the set of nodes for which we have well-defined distributions at the time of sampling.
 
-There will always be at least one node in a Bayesian network that has no parents (for a given trial). We will call these nodes **orphans**. To sample a trial from the Bayesian network we begin with the orphans. 
-
-Because orphans have no parents – in order for the Bayes net to be well-defined – each orphan will have a well-defined marginal probability distribution that we can directly sample from. Thus we start with the set of orphans as the *active sample set*. 
+There will always be at least one node in a Bayesian network that has no parents (for a given trial). We will call these nodes *orphans*. To sample a trial from the Bayesian network we begin with the orphans. Because orphans have no parents – in order for the Bayes net to be well-defined – each orphan will have a well-defined probability distribution available for direct sampling. The set of orphans is our first active sample set. 
 
 After sampling from all of the orphans, we will take the union of the sets of children of the orphans, and at least one of these nodes will have values sampled for all of its parents. We take the set of orphans whose entire parent-set has sampled values, and sample from the conditional distributions defined relative to their parents' sampled values and make this the *active sample set*.
 
 .. After each set of samples from the *active sample set* we will either have new variables whose distributions are well-defined or will have sampled all of the variables in the graph for that trial [#]_.
 
-After each set of samples from the *active sample set* we will either have new variables whose distributions are well-defined or will have sampled all of the variables in the graph for that trial.
+After each set of samples from the active sample set, we will either have new variables whose distributions are well-defined or will have sampled all of the variables in the graph for that trial.
 
 .. .. [#] One potential worry is the case of disconnected graphs (i.e., graphs that can be divided into at least 2 disjoint sets of nodes where there will be no edges between nodes of different sets). However, because disconnected subgraphs of a :sc:`dag` will also be :sc:`dag`\s, we can count on at least one orphan existing for each of those graphs, and thus we will be able to sample from all disconnected subgraph by following the same algorithm above (they will just be sampled in parallel).
 
