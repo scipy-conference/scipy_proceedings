@@ -732,12 +732,6 @@ Since the total network structure is derived from an archive in which every emai
 is annotated with a particular time, we see an opportunity to test generative models
 for there predictions during the whole duration of network growth.
 
-Possible models include nonlinear Barabási-Alpert: http://arxiv.org/pdf/cond-mat/0402315.pdf
-
-Newman also notes that the degree assortativity of Barabási-Alpert networks is zero.
-Variations on the Barabási-Alpert model do have other properties.
-(cite: http://arxiv.org/pdf/cond-mat/0402315.pdf)
-
 Though anecdotally there is a difference between typical behavior on an open source project's
 developer list (e.g. `ipython-dev` and `scipy-dev` in our data set) and a projects
 user list (e.g. `ipython-user` and `scipy-user`), these behavior differences do
@@ -762,7 +756,6 @@ and not merely the sum of many individual efforts, the question of how to best
 incentivize contributions to open source software is not an easy one.
 An understanding of how the network structure of collaboration relates to collective productivity
 could inform incentive plans that are sensitive to participants unique role within the network.
-
 
 
 *I gratefully acknowledge the helpful comments of Christine Choirat, Allen Downey, Thomas Kluyver, and Skipper Seabold.*
