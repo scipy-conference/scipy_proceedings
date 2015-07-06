@@ -667,7 +667,7 @@ to specific subsets of them.
    :figclass: w
 
    An example of customizing the display of Figure :ref:`layout`'s
-   data. ``In [5]`` is color coded according to the components in
+   data. ``In[5]`` is color coded according to the components in
    Figure :ref:`schematic`, where red is the content, blue is the
    display options (here listed using an optional IPython-specific
    succinct syntax), and green is what triggers the the
