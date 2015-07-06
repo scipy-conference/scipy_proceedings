@@ -62,7 +62,7 @@ I focus first on establishing a means of building iterators over sets of directe
 
 I then shift focus to a case where there is a specific known directed acyclic graph that is imbued with a simple probabilistic semantics over its nodes and edges, also known as a Bayesian network. I demonstrate how to sample independent trials from these variables in a way consistent with these semantics. I discuss some of the challenges of encoding these semantics in dictionaries as afforded by NetworkX without resorting to :code:`eval` statements.
 
-I conclude by discussing Computational Cognitive Science as it relates to graphical models, as well as machine learning in general. In particular, I will discuss a framework called **theory based causal induction** :cite:`griffithst09`, or my preferred term: **causal theories**, which allows for defining problems of causal induction. It is out of this framework the perspective expressed in this paper, the associated talk, and the |cbnx| toolkit developed.
+I conclude by discussing Computational Cognitive Science as it relates to graphical models and machine learning in general. In particular, I will discuss a framework called **theory based causal induction** :cite:`griffithst09`, or my preferred term: **causal theories**, which allows for defining problems of causal induction. The perspective expressed in this paper, the associated talk, and the |cbnx| toolkit developed out of this framework.
 
 Graphical Models
 ----------------
