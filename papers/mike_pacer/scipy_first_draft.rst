@@ -244,7 +244,7 @@ It is the perspective of the graphs as *merely* representing the independence re
 
 .. [#] A more thorough analysis of this relation between graph structures and implied conditional independence relations invokes the discussion of *d-separation*. However, d-separation (despite claims that "[t]he intuition behind [it] is simple") is a more subtle concept than it at first appears as it involves both which nodes are observed and the underlying structure.
 
-Though accurate, this eschews important aspects of the semantics that distinguish arrows with different directions when you consider the kinds of values that the variables take on.
+Though accurate, this eschews important aspects of the semantics distinguishing arrows with different directions when you consider the kinds of values variables take on.
 
 Directional semantics between different types of nodes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
