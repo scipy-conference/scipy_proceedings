@@ -468,8 +468,8 @@ Spaces
 ~~~~~~
 
 
-.. figure:: spaces_example.png
-   :scale: 26%
+.. figure:: spaces_example.pdf
+   :scale: 32%
    :align: center
    :figclass: w
 
