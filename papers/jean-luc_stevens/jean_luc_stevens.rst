@@ -187,8 +187,8 @@ compose HoloViews objects together.
    complications are fine for later figures, but make it far less
    likely that anyone will actually read this figure...
 
-.. figure:: introductory_layout_example.png
-   :scale: 25%
+.. figure:: introductory_layout_example.pdf
+   :scale: 35%
    :align: center
    :figclass: w
 

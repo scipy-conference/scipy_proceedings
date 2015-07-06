@@ -481,9 +481,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="347.43071"
-     inkscape:cy="386.07961"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="557.00181"
+     inkscape:cy="547.70402"
      inkscape:document-units="px"
      inkscape:current-layer="g26949"
      showgrid="false"
@@ -606,7 +606,7 @@
            id="tspan12416"
            y="404.06393"
            x="1225.8918"
-           sodipodi:role="line">im = hv.Image(imdata, kdims=[<tspan
+           sodipodi:role="line">image = hv.Image(imdata, kdims=[<tspan
    id="tspan15074"
    style="fill:#d40000">'Re'</tspan>, <tspan
    id="tspan15076"
@@ -625,13 +625,13 @@
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:150%;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono"
            y="437.26007"
            x="1225.8918"
-           sodipodi:role="line">content = im <tspan
+           sodipodi:role="line">content = image <tspan
    id="tspan15092"
    style="fill:#800080">*</tspan> hv.HLine(y=<tspan
    id="tspan15090"
    style="fill:#008000">1</tspan>) <tspan
    id="tspan15094"
-   style="fill:#800080">+</tspan> im.sample(Im=<tspan
+   style="fill:#800080">+</tspan> image.sample(Im=<tspan
    id="tspan15088"
    style="fill:#008000">1</tspan>).relabel(<tspan
    id="tspan15096"
