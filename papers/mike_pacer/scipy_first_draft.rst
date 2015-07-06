@@ -18,16 +18,14 @@
 .. raw:: latex
 
     \newcommand{\DUrolesc}{\textsc}
+    \newcommand{\DUrolesf}{\textsf}
 
 .. role:: sc
 
+.. role:: sf
+
 .. |cbnx| replace:: :sc:`cbnx`
 .. _cbnx: https://github.com/michaelpacer/Causal-Bayesian-NetworkX
-
-I recommend you try |Python|_.
-
-.. |Python| replace:: Python, *the* best language around
-.. _Python: http://www.python.org/
 
 
 ------------------------
@@ -99,13 +97,6 @@ Adjacency Matrix Perspective
 For a fixed set of nodes :math:`X` of size :math:`N`, each graph is uniquely defined by its edge set, which can be seen as a binary :math:`N \times N` matrix, where each index :math:`(i,j)` in the matrix is :math:`1` if the graph contains an edge from :math:`X_i \rightarrow X_j`, and :math:`0` if it does not contain such an edge. We will refer to this matrix as :math:`A(G)`.
 
 This means that any values of :math:`1` found on the diagonal of the adjacency matrix (i.e., where :math:`X_i \rightarrow X_j, i=j`) indicate a self-loop on the respective node.
-
-.. Finding paths using adjacency matrices
-.. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. It is straightforward to interpret questions of the existence of paths between :math:`X_i` and :math:`X_j` using the adjacency matrix perspective and matrix multiplication. The key step is to recognize that you can think of multiplying the adjacency matrix from the right by a binary vector as taking a step in the graph from the nodes whose values in the vector were 1 to the set of children of those nodes. To continue to have a binary vector then requires resetting values in the vector 0 and 1 by taking (for every element of the resulting vector) the minimum of the value of the vector and 1 (which addresses the case where more than one edge leads into the same node). 
-
-.. To use this technique to test whether a matrix has an edge between, if you have a value of 1 at index *i*, and 0's elsewhere, if you multiply this vector from the left by the adjacency matrix, then if there is a path between 
 
 Undirected Graphs
 =================
@@ -181,7 +172,6 @@ Equivalently:
 
     P(X,Y=y) = P(X|Y=y)P(X)
 
-
 Bayes' Theorem
 ==============
 
@@ -202,8 +192,6 @@ To say that two variables are independent of each other means that knowing/condi
 
 If two variables are conditionally independent, that means that conditional on some set of variables, condition
 
-
-
 Example: Marginal Independence :math:`\neq` Conditional Independence
 ====================================================================
 
@@ -216,67 +204,6 @@ Consider the following example:
     Z &=& X \oplus Y , \oplus \equiv \textsc{xor}
 
 Note that, :math:`X \independent Y` but :math:`X \not\independent Y|Z`.
-
-.. Sampling from Conditional Probability distributions
-.. ---------------------------------------------------
-
-.. Example - Coins and dice
-.. ========================
-
-.. Imagine the following game: 
-
-.. You have a coin [#]_ (*C*, :sc:`Heads, Tails`), a 6-sided die (:math:`D_6, \{1,2,\ldots,6\}`), and a 20-sided die (:math:`D_{20}, \{1,2,\ldots,20\}`). If for simplicity, you prefer to think of these as fair dice and a fair coin, you are welcome to do so, but my notation will not require that.
-
-.. .. [#] A coin is effectively 2-sided die, but for clarity of exposition I chose to treat the conditioned-on variable as a different kind of object than the variables relying on that conditioning.
-
-.. The rules of the game are as follows: flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die. Your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. 
-
-.. Suppose we wanted to know your expected score on a single round, but we do not know whether the coin will land on :sc:`Heads` or :sc:`Tails`. We cannot directly compute the probabilities for each die without first considering the probability that the coin will land on :sc:`Heads` or :sc:`Tails`. This is the 
-
-.. But this discussion hides an important complexity by having the event set of the :math:`D_6` embedded within the event set of the :math:`D_{20}`. Moreover, we assumed that we could treat each event in these sets as belonging to the integers and as a result, that with little interpretation, they can be easily summed.
-
-.. Coins and dice with hierarchically labeled entities, Example
-.. ============================================================
-
-
-.. Imagine the following game:
-
-.. You have a coin (*C*, :sc:`Heads, Tails`), a *new* 6-sided die (:math:`D_6, \{X_1,X_2,\ldots,X_6\}`), and a 20-sided die (:math:`D_{20}, \{X_1,X_2,\ldots,X_{20}\}`). 
-
-.. The rules are the same as before: your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. You flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die.
-
-.. But note that now we cannot sum over these in the same way that we did before. Without additional information about how to map these different labels onto values, there's no way to describe the "score". Rather, the best we can do is to determine the probability with which each individual case occurs, so that once we know more about the utility curve we can efficiently use the probability distribution regardless of the particular value that is assigned.
-
-.. Thus we can establish the following statements
-
-.. ..  latex::
-
-..     \begin{center}
-..     \begin{tabular}{lll}
-..         \toprule
-..         & \multicolumn{2}{c}{Parent values} \\
-..         \cmidrule(r){2-3}
-..         Probs & $P(\cdot|D_6,\textsc{h})$ & $P(\cdot|D_{20},\textsc{t})$\\
-..         \midrule
-..         $P(X_1|\cdot)$ &$P(X_1|D_6)*P(\textsc{h})$ & $P(X_1|D_{20})*P(\textsc{t})$ \\
-..         \vdots     &    \vdots     & \vdots       \\
-..         $P(X_6|\cdot)$       &  $P(X_6|D_6)*P(\textsc{h})$     & $P(X_6|D_{20})*P(\textsc{t})$      \\
-..         \vdots       & \vdots     & \vdots      \\
-..         $P(X_{20}|\cdot)$ & 0      & $P(X_{20}|D_{20})*P(\textsc{t})$   \\
-..         \bottomrule
-..     \end{tabular}
-..     \end{center}
-
-.. Coins and dice with disjoint sets of labeled entities, Example
-.. ==============================================================
-
-.. Imagine the following game: 
-
-.. You have a coin (*C*, :sc:`Heads, Tails`), a *new* 6-sided die (:math:`D_6, \{\clubsuit,\diamondsuit,\heartsuit,\spadesuit,\odot,\dagger\}`), and a 20-sided die (:math:`D_{20}, \{X_1,X_2,\ldots,X_{20}\}`). 
-
-.. The rules are the same as before: your score for one round of the game is the value of the die that you roll, and you will only roll one die in each round. You flip the coin, and if it lands on :sc:`Heads`, then you roll the 6-sided die to find your score for the round. If instead your coin lands on :sc:`Tails` your score comes from a roll of the 20-sided die.
-
-.. But note that now we cannot sum over these in the same way that we did before. Indeed, our event sets for the two dice are mutually disjoint, making the event set for the scores that one can receive on a single round :math:`\{\clubsuit,\diamondsuit,\heartsuit,\spadesuit,\odot,\dagger,X_1,X_2,\ldots,X_{20}\}`. Without additional information about how to map these different labels onto values, there's no way to describe the "score". Rather, the best we can do is to determine the probability with which each individual case occurs.
 
 Bayesian Networks
 -----------------
@@ -311,31 +238,18 @@ Independence in Bayes Nets
 
 One of the standard ways of describing the relation between the semantics (probability values) and syntax (graphical structure) of Bayesian networks is in terms of the graph encoding particular conditional independence assumptions between the nodes of the graph. Indeed, in some cases Bayesian networks are *defined as* a convenient representation for the conditional and marginal independence relationships between different variables. 
 
-It is the perspective of the graphs as *merely* representing the independence relationships and the focus on inference that leads to the focus on equivalence classes of Bayes nets. The set of graphs :math:`\{A \rightarrow B \rightarrow C,~ A \leftarrow B \rightarrow C, \textrm{ and } A \leftarrow B \leftarrow C\}` represent the same conditional independence relationships, and thus cannot be distinguished on the basis of observational evidence alone. This also leads to the emphasis on finding *v-structures* or common-cause structures where (at least) two arrows are directed into the same child with no direct link between those parents(e.g., :math:`A \rightarrow B \leftarrow C`). V-structures are observationally distinguishable because any reversing the direction of any of the arrows will alter the conditional independence relations that are guaranteed by the graphical structure. [#]_
+It is the perspective of the graphs as *merely* representing the independence relationships and the focus on inference that leads to the focus on equivalence classes of Bayes nets. The set of graphs :math:`\{A \rightarrow B \rightarrow C,~ A \leftarrow B \rightarrow C, \textrm{ and } A \leftarrow B \leftarrow C\}` represent the same conditional independence relationships, and thus cannot be distinguished on the basis of observational evidence alone. This also leads to the emphasis on finding :sf:`V`\-structures or common-cause structures where (at least) two arrows are directed into the same child with no direct link between those parents(e.g., :math:`A \rightarrow B \leftarrow C`). :sf:`V`\-structures are observationally distinguishable because any reversing the direction of any of the arrows will alter the conditional independence relations that are guaranteed by the graphical structure. [#]_
 
 .. [#] A more thorough analysis of this relation between graph structures and implied conditional independence relations invokes the discussion of *d-separation*. However, d-separation (despite claims that "[t]he intuition behind [it] is simple") is a more subtle concept than it at first appears as it involves both which nodes are observed and the underlying structure.
 
-While this is accurate, it eschews some important aspects of the semantics that distinguish arrows with different directions when you consider the particular kinds of values that the variables take on.
-
-.. Issues surrounding independence in Bayesian networks
-.. ====================================================
-
-.. Misplaced Emphasis on Independence in :sc:`dag`\s
-.. =================================================
-
-.. I do not agree with the interpretation of Bayes nets as merely representing independence properties, though, not because it is incorrect. Rather, I think it has two unfortunate results. First, it encourages poor statistical practices when it comes to inferring independence from observed data using null hypothesis testing. Second, it deëmphasizes an important asymmetry that appears in the semantics of how nodes in Bayes nets relate to one another when they are not exclusively discrete nodes.
-
-.. Null hypothesis testing and inference
-.. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. The assumptions embedded in Bayesian networks are assumptions about the independence of different nodes. But most of the measn 
+Though accurate, this eschews some important aspects of the semantics that distinguish arrows with different directions when you consider the kinds of values that the variables take on.
 
 Directional semantics between different types of nodes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The conditional distributions of child nodes are usually defined with parameter functions that take as arguments their parents' realizations for that trial. Bayes nets often are used to exclusively represent discrete (usually, binary) nodes the distribution is usually defined as an arbitrary probability distribution associated with the label of it's parent's realization. 
 
-If we allow (for example) positive continuous valued nodes to exist in relation to discrete nodes the kind of distributions available to describe relations between these nodes changes depending upon the direction of the arrow. A continuous node taking on positive real values mapping to an arbitrarily labeled binary node taking on values :math:`\{a,b\}` will require a function that maps from :math:`\mathbb{R} \rightarrow [0,1]`, where it maps to the probability that the child node takes on (for instance) the value :math:`a` . [#]_However, if the relationship goes the other direction, one would need to have a function that maps from :math:`\{a,b\} \rightarrow \mathbb{R}`. For example, this might be a Gaussian distributions for *a* and *b* (:math:`(\mu_a,\sigma_a),(\mu_b,\sigma_b)`). Regardless of the particular distributions, the key is that the functional form of the distributions are radically different 
+If we allow (for example) positive continuous valued nodes to exist in relation to discrete nodes the kind of distributions available to describe relations between these nodes changes depending upon the direction of the arrow. A continuous node taking on positive real values mapping to an arbitrarily labeled binary node taking on values :math:`\{a,b\}` will require a function that maps from :math:`\mathbb{R} \rightarrow [0,1]`, where it maps to the probability that the child node takes on (for instance) the value :math:`a` [#]_.However, if the relationship goes the other direction, one would need to have a function that maps from :math:`\{a,b\} \rightarrow \mathbb{R}`. For example, this might be a Gaussian distributions for *a* and *b* (:math:`(\mu_a,\sigma_a),(\mu_b,\sigma_b)`). Regardless of the particular distributions, the key is that the functional form of the distributions are radically different 
 
 .. [#] If the function maps directly to one of the labeled binary values this can be represented as having probability 1 of mapping to either :math:`a` or :math:`b`.
 
@@ -363,7 +277,7 @@ Example: Rain, Sprinkler & Ground
     :figclass: bht
 
 
-    An Bayesian network for the sprinkler case. :label:`sprinkler`
+    An Bayesian network describing the sprinkler example. :label:`sprinkler`
 
 In the sprinkler Bayesian network in Figure :ref:`sprinkler` [#]_, there three discrete nodes that represent whether it *Rains* (yes or no), whether the *Sprinkler* is on (on or off) and whether the *Ground* is wet (wet or dry). The edges encode the fact that the rain listens to no one, that the rain can alter the probability of whether the sprinkler is on, and the rain and the sprinkler together determine whether the ground is wet.
 
@@ -695,39 +609,40 @@ Example: |cbnx| implementation for sprinkler graph
         n_ids = np.array(G.nodes())
         n_states = [(n[0],n[1]["state_space"]) for n in n_dict]
         orphans = [n for n in n_dict if n[1]["parents"]==[]]
-        sample_values = np.empty([len(n_states),k],dtype='U20')
-        sampled_nodes = []
+        s_values = np.empty([len(n_states),k],dtype='U20')
+        s_nodes = []
 
         for n in orphans:
-            samp_func = str_to_f(n[1]["sample_function"],f_dict)
-            samp_states = n[1]["state_space"]
-            samp_distribution = n[1]["dist"]
-            samp_index = G.nodes().index(n[0])
-            sample_values[samp_index,:]  = samp_func(samp_states,
-                size=[1,k],p=samp_distribution)
-            sampled_nodes.append(n[0])
+            samp_f = str_to_f(n[1]["sample_function"],
+                f_dict)
+            s_states = n[1]["state_space"]
+            s_dist = n[1]["dist"]
+            s_idx = G.nodes().index(n[0])
+            s_values[s_idx,:]  = samp_f(s_states,
+                size=[1,k],p=s_dist)
+            s_nodes.append(n[0])
             
-        while set(sampled_nodes) < set(G.nodes()):
-            nodes_to_sample = has_full_parents(G,sampled_nodes)
+        while set(s_nodes) < set(G.nodes()):
+            nodes_to_sample = has_full_parents(G,s_nodes)
             for n in nodes_to_sample:
                 par_indices = [(par,G.nodes().index(par)) 
                     for par in G.node[n]["parents"]]
-                par_vals = [(par[0],sample_values[par[1],:]) 
+                par_vals = [(par[0],s_values[par[1],:]) 
                     for par in par_indices]
                 samp_index = G.nodes().index(n)
-                sample_values[samp_index,:] = cond_samp(G,n,
+                s_values[samp_index,:] = cond_samp(G,n,
                     par_vals,f_dict,k)
-                sampled_nodes.append(n)
-        return sample_values
+                s_nodes.append(n)
+        return s_values
     
-    def has_full_parents(G,samp_n):
-        check_n = [x for x in G.nodes() if x not in samp_n]
+    def has_full_parents(G,s_n):
+        check_n = [x for x in G.nodes() if x not in s_n]
         nodes_to_be_sampled = []
         for n in G.nodes(data = True):
-            if (n[0] in check_n) & (n[1]["parents"]<=samp_n):
+            if (n[0] in check_n) & (n[1]["parents"]<=s_n):
                 nodes_to_be_sampled.append(n[0])
         if len(nodes_to_be_sampled)==0: 
-            raise RuntimeError("There's always nodes to sample")
+            raise RuntimeError("A node must be sampled")
         return nodes_to_be_sampled
 
     def nodeset_query(G,n_set,n_atr=[]):
