@@ -41,7 +41,7 @@ Typically the first step in a HYSPLIT workflow is trajectory generation.  This c
 
    generate_trajectories(
       'example', r'C:/hysplit4/working',
-      r'C:/traj_dir', r'E:/meteorology'
+      r'C:/traj_dir', r'E:/meteorology',
       [2007, 2008, 2009], [6, 7], [5, 11, 17, 23],
       [500, 1500], (32.29, 119.05), -120,
       meteo_type='gdas1')
@@ -69,7 +69,7 @@ The 2D ``data`` array of a ``Trajectory`` is parsed into separate attributes as 
 
 Most ``Trajectory`` analysis methods live in or are accessed directly by the ``Trajectory`` class.  These include calculations of along-trajectory and overall great-circle distance, mean trajectory vector, humidity data conversions, and along-trajectory moisture flux. The results of most of these calculations are stored as new attributes in 1D NumPy arrays of floats of identical size.  Additionally, the ``Trajectory`` class contains the methods for loading forward trajectories and estimating trajectory integration error in both horizontal and vertical dimensions.
 
-The ``Trajectory`` class also includes a flexible implementation of the moisture uptake calculation from back trajectories from Sodeman et al. [Sod08]_:
+The ``Trajectory`` class also includes a flexible implementation of the moisture uptake calculation from back trajectories from Sodeman et al. [Sod08]_.
 
 .. code-block:: python
 
@@ -95,9 +95,9 @@ The ``TrajectoryGroup`` is the basic container for PySPLIT ``Trajectory`` object
 
     trajgroup, _ = make_trajectorygroup(signature)
 
-In this method, HYSPLIT output files sharing a Bash-style signature (with wildcards supported) are read, initialized as ``Trajectory`` s and appended to a list, which is then used to initialize a ``TrajectoryGroup``.  These containers are fully iterable, returning a ``Trajectory`` when indexed and a new ``TrajectoryGroup`` when sliced.
+In this method, HYSPLIT output files sharing a Bash-style signature (with wildcards supported) are read, initialized as ``Trajectory``\ s and appended to a list, which is then used to initialize a ``TrajectoryGroup``.  These containers are fully iterable, returning a ``Trajectory`` when indexed and a new ``TrajectoryGroup`` when sliced.
 
-Once the initial ``TrajectoryGroup`` is created, a typical PySPLIT workflow involves cycling through the ``TrajectoryGroup`` (``umn`` in the example workflow below), initializing and inspecting attributes of the member ``Trajectory`` instances.  ``Trajectory``s that meet certain criteria are then sorted into new ``TrajectoryGroup``s.
+Once the initial ``TrajectoryGroup`` is created, a typical PySPLIT workflow involves cycling through the ``TrajectoryGroup`` (``umn`` in the example workflow below), initializing and inspecting attributes of the member ``Trajectory`` instances.  ``Trajectory``\ s that meet certain criteria are then sorted into new ``TrajectoryGroup``\ s.
 
 .. code-block:: python
 
@@ -161,7 +161,7 @@ The ``TrajectoryGroup`` class also has additional capabilities for organizing ``
 
 .. figure:: scatter_ex.png
 
-   Visualization of seasonal moisture flux.  Place labels are generated with MapDesign's labeller, discussed in Data Plotting and MapDesign section.  :label:`scatterex`
+   Visualization of seasonal moisture flux.  Place labels are generated with the labeller in ``MapDesign`` , discussed in Data Plotting and MapDesign section.  :label:`scatterex`
 
 Cluster and ClusterGroup
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -176,23 +176,23 @@ The first step is to generate a list of trajectories to be clustered.  Once the 
 
 However, the ``TrajectoryGroup`` (``trajgroup``) and its member ``Trajectories`` must be reloaded for the clipped trajectory files to become available for clustering.
 
-Once the INFILE is created, the user must open HYSPLIT to run the cluster analysis and assign trajectories to clusters.  Advice concerning the determination of the number of clusters (along with all other HYSPLIT aspects) is available in the HYSPLIT manual [Drax97]_.  Assigning trajectories to clusters will create a file called 'CLUSLIST_3' or some other number corresponding to the number of clusters specified by the user.  This file indicates the distribution of ``Trajectory`` in the ``TrajectoryGroup`` among clusters, and is used to create ``Cluster`` instances contained in a ``ClusterGroup``:
+Once the INFILE is created, the user must open HYSPLIT to run the cluster analysis and assign trajectories to clusters.  Advice concerning the determination of the number of clusters (along with all other HYSPLIT aspects) is available in the HYSPLIT manual [Drax97]_.  Assigning trajectories to clusters will create a file called 'CLUSLIST_3' or some other number corresponding to the number of clusters specified by the user.  This file indicates the distribution of ``Trajectory`` in the ``TrajectoryGroup`` among clusters, and is used to create ``Cluster`` instances contained in a ``ClusterGroup``\ :
 
 .. code-block:: python
 
    clusgroup = spawn_clusters(trajgroup, traj_distrib,
                               clusterpath_dir)
 
-The ``Cluster`` class is a specialized subclass of ``TrajectoryGroup``.  In addition to a list of member ``Trajectory``s (indicated by the distribution file), initialization requires the cluster mean path data and cluster index.  Like ``TrajectoryGroup``s, ``Cluster``s are additive, but adding Clusters  creates a regular ``TrajectoryGroup``, not a new ``Cluster``.  As a ``Cluster`` has an associated path, some ``Trajectory``-like methods (distance, vector calculations) are available.
+The ``Cluster`` class is a specialized subclass of ``TrajectoryGroup``.  In addition to a list of member ``Trajectory``\ s (indicated by the distribution file), initialization requires the cluster mean path data and cluster index.  Like ``TrajectoryGroup``\ s, ``Cluster``\ s are additive, but adding Clusters  creates a regular ``TrajectoryGroup``, not a new ``Cluster``.  As a ``Cluster`` has an associated path, some ``Trajectory``\ -like methods (distance, vector calculations) are available.
 
-A ``ClusterGroup`` is a container of ``Cluster``s produced in a *single *clustering procedure.  Iterating over a ``ClusterGroup`` returns member ``Cluster``s.
+A ``ClusterGroup`` is a container of ``Cluster``\ s produced in a *single* clustering procedure.  Iterating over a ``ClusterGroup`` returns member ``Cluster``\ s.
 
 .. figure:: cluster_ex.png
    :align: center
    :scale: 30%
    :figclass: w
 
-   Left: Winter back trajectories arriving at Nanjing, colored to match the cluster they belong to.  Right: Plot of ``ClusterGroup`` in which member ``Cluster``s have randomly-chosen colors and linewidths corresponding to their ``Trajectory`` counts.  :label:`clusterex`
+   Left: Winter back trajectories arriving at Nanjing, colored to match the cluster they belong to.  Right: Plot of ``ClusterGroup`` in which member ``Cluster``\ s have randomly-chosen colors and linewidths corresponding to their ``Trajectory`` counts.  :label:`clusterex`
 
 Data Plotting and MapDesign
 ---------------------------
@@ -204,11 +204,11 @@ One part of this equation is the ``MapDesign`` class.  A ``MapDesign`` instance 
 
 Although ``MapDesign`` was created to expedite the process of creating an attractive Basemap and let users focus on the trajectory analysis rather than figure-tweaking, PySPLIT plotting functions accept any Basemap instance, allowing users to incorporate PySPLIT into their existing workflow.  Additionally, as all ``Trajectory``, ``Cluster``, ``TrajectoryGroup``, and ``ClusterGroup`` attributes are exposed, users are free to create their own visualization routines beyond what is provided in PySPLIT.
 
-Among the ``Trajectory`` attributes are linewidth and path color.  A user can incorporate these into their plotting workflow, setting linewidth and path color to correspond to ``Trajectory`` instances with particular characteristics, as shown in Figure :ref:`pathfig`.  Plotting the paths of a ``TrajectoryGroup``'s member ``Trajectory``s is performed one-by-one on the given map.  To facilitate scatter plotting, the ``TrajectoryGroup`` assembles ``Trajectory`` latitude, longtitude, the variable plotted as a color change, and, if selected, the variable plotted as a size change each into single arrays.  ``Trajectory`` data, as well as moisture uptake data, can also be interpolated onto a grid and plotted.
+Among the ``Trajectory`` attributes are linewidth and path color.  A user can incorporate these into their plotting workflow, setting linewidth and path color to correspond to ``Trajectory`` instances with particular characteristics, as shown in Figure :ref:`pathfig`.  Plotting the paths of a ``TrajectoryGroup``'s member ``Trajectory``\ s is performed one-by-one on the given map.  To facilitate scatter plotting, the ``TrajectoryGroup`` assembles ``Trajectory`` latitude, longtitude, the variable plotted as a color change, and, if selected, the variable plotted as a size change each into single arrays.  ``Trajectory`` data, as well as moisture uptake data, can also be interpolated onto a grid and plotted.
 
 Prior to being passed to ``Basemap.plot()`` and ``Basemap.scatter()``, scatter plot data passes through ``traj_scatter()``.  This exposes Normalize instances and other methods of normalization (square root, natural log), allowing users to normalize both color and size data.  Square root and natural log normalizations require the user to edit tick labels on colorbars (or incorporate into the colorbar label itself, as in Figure :ref:`scatterex`).  After plotting, wrappers around matplotlib's colorbar creation methods with attractive default options are available to initialize colorbars.
 
-As a ``Cluster`` is a specialized ``TrajectoryGroup``, member ``Trajectory``s can be plotted similarly.  Additionally, ``Cluster`` mean paths can also be plotted, either individually or all together in the ``ClusterGroup``.  ``Cluster`` linewdiths can either be determined by an absolute ``Trajectory`` count or the fraction of total ``Trajectory``s in the ``ClusterGroup`` belonging to the ``Cluster``.  Both ``Cluster`` and ``Trajectory`` paths shown in Figure :ref:`clusterex`.
+As a ``Cluster`` is a specialized ``TrajectoryGroup``, member ``Trajectory``\ s can be plotted similarly.  Additionally, ``Cluster`` mean paths can also be plotted, either individually or all together in the ``ClusterGroup``.  ``Cluster`` linewdiths can either be determined by an absolute ``Trajectory`` count or the fraction of total ``Trajectory``\ s in the ``ClusterGroup`` belonging to the ``Cluster``.  Both ``Cluster`` and ``Trajectory`` paths shown in Figure :ref:`clusterex`.
 
 The Future of PySPLIT
 ---------------------
