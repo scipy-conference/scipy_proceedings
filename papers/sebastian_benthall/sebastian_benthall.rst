@@ -182,9 +182,9 @@ The prevalence of scale-free networks in nature has raised the question of what
 generative processes produce networks with this property.
 What was at one point the most well-known random graph model, the Erdős-Rénri model,
 produces networks with binomial degree distribution.
-Barabási and Alpert [BarabásiAlbert]_ have proposed a model of network generation
+Barabási and Alpert [BarabásiAlbert]_ have proposed a widely cited and studied 
+model of network generation
 that produces graphs with scale-free degree distribution.
-The Barabási-Alpert model is now widely known in the literature.
 
 The attractiveness of the Barabási-Alpert model is due in part to its being a
 generative model that describes a process for creating data of an
