@@ -261,9 +261,9 @@ If we allow (for example) positive continuous valued nodes to exist in relation 
 Sampling and semantics in Bayes Nets
 ====================================
 
-One procedure for sampling a trial from Bayesian networks relies heavily on using an *active sample set*. This is the set of nodes for which we have well-defined distributions at the time of sampling.
+The procedure we will use to sample from Bayesian networks uses an *active sample set*. This is the set of nodes for which we have well-defined distributions at the time of sampling.
 
-There will always be at least one node in a Bayesian network that has no parents (for a given trial). We will call these nodes *orphans*. To sample a trial from the Bayesian network we begin with the orphans. Because orphans have no parents – in order for the Bayes net to be well-defined – each orphan will have a well-defined probability distribution available for direct sampling. The set of orphans is our first active sample set. 
+There will always be at least one node in a Bayesian network that has no parents. We will call these nodes *orphans*. To sample a trial from the Bayesian network we begin with the orphans. Because orphans have no parents – in order for the Bayes net to be well-defined – each orphan will have a well-defined probability distribution available for direct sampling. The set of orphans is our first active sample set. 
 
 After sampling from all of the orphans, we will take the union of the sets of children of the orphans, and at least one of these nodes will have values sampled for all of its parents. We take the set of orphans whose entire parent-set has sampled values, and sample from the conditional distributions defined relative to their parents' sampled values and make this the *active sample set*.
 
@@ -284,7 +284,7 @@ Example: Rain, Sprinkler & Ground
 
 In the sprinkler Bayesian network in Figure :ref:`sprinkler` [#]_, there three discrete nodes that represent whether it *Rains* (yes or no), whether the *Sprinkler* is on (on or off) and whether the *Ground* is wet (wet or dry). The edges encode the fact that the rain listens to no one, that the rain can alter the probability of whether the sprinkler is on, and the rain and the sprinkler together determine how likely it is that the ground is wet.
 
-.. [#] This is not a well specified example of a Bayesian network, because while I have specified the states and their relations, I left open the potential interpretation of the parameters and how they relate to one another. I did so because it shows the limits and strengths of what is encoded knowing only the structure, computing both conditional and marginal distributions for all variables. 
+.. [#] This is an ill-specified Bayesian network, because while I have specified the states and their relations, I left open the potential interpretation of the parameters and how they relate to one another. I did so because it shows both the limits and strengths of what is encoded knowing only the structure, computing both conditional and marginal distributions for all variables. 
 
 
 Causal Bayesian Networks
@@ -297,7 +297,7 @@ Causal Bayesian networks are Bayesian networks that are given an interventional 
 NetworkX :cite:`networkx`
 -------------------------
 
-This is a package for representing, manipulating and analyzing graphs and complex networks. It stores different kinds of graphs as variations on a "dict of dicts of dicts" structure. For example, directed graphs are stored as two dict-of-dicts-of-dicts structures [#]_. 
+NetworkX is a package for using and analyzing graphs and complex networks. It stores different kinds of graphs as variations on a "dict of dicts of dicts" structure. For example, directed graphs are stored as two dict-of-dicts-of-dicts structures [#]_. 
 
 .. [#] It can also represent multi-graphs (graphs where multiple versions of "the same" edge from the adjacency matrix perspective can exist and will (usually) carry different semantics). We will not be using the multigraph feature of NetworkX, as multigraphs are not traditionally used in the context of Bayesian networks.
 
