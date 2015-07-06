@@ -10,8 +10,8 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="1568.3438"
-   height="667.3125"
+   width="1568.3473"
+   height="647.11615"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
@@ -506,9 +506,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70000001"
-     inkscape:cx="516.61373"
-     inkscape:cy="441.59571"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="262.38046"
+     inkscape:cy="396.65398"
      inkscape:document-units="px"
      inkscape:current-layer="g26949"
      showgrid="false"
@@ -539,7 +539,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(401.991,-858.66518)"
+     transform="translate(402.00144,-858.65548)"
      style="stroke-linecap:butt;stroke-linejoin:round">
     <g
        id="g26949"
@@ -547,21 +547,21 @@
        style="stroke-linecap:butt;stroke-linejoin:round">
       <rect
          ry="13.823773"
-         y="330.60425"
-         x="1029.9473"
-         height="666.27881"
-         width="1567.3069"
+         y="330.59631"
+         x="1029.9393"
+         height="646.09161"
+         width="1567.3228"
          id="rect13050-3"
-         style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#666666;stroke-width:1.0404098;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#666666;stroke-width:1.02453244;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          rx="13.823773" />
       <rect
          ry="3.5675118"
-         y="338.69061"
-         x="1212.8958"
-         height="150.10907"
-         width="1372.2814"
+         y="338.64319"
+         x="1212.8483"
+         height="121.6325"
+         width="1372.3762"
          id="rect13050"
-         style="color:#000000;fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#666666;stroke-width:0.95041293;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="color:#000000;fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#666666;stroke-width:0.85555649;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          rx="3.5675118" />
       <text
          sodipodi:linespacing="150%"
@@ -596,11 +596,11 @@
    style="fill:#008000">0.03</tspan>, <tspan
    id="tspan15084"
    style="fill:#008000">0.84</tspan>))</tspan><tspan
-           id="tspan15072"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:150%;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono"
            y="438.27023"
            x="1220.8411"
-           sodipodi:role="line">image <tspan
+           sodipodi:role="line"
+           id="tspan3617">image <tspan
    id="tspan15092"
    style="fill:#800080">*</tspan> hv.HLine(y=<tspan
    id="tspan15090"
@@ -610,12 +610,7 @@
    id="tspan15088"
    style="fill:#008000">1</tspan>).relabel(<tspan
    id="tspan15096"
-   style="fill:#d40000">'Cross section'</tspan>)</tspan><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:150%;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono"
-           y="471.46634"
-           x="1220.8411"
-           sodipodi:role="line"
-           id="tspan3617">content</tspan></text>
+   style="fill:#d40000">'Cross section'</tspan>)</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text15149"
@@ -642,7 +637,7 @@
            sodipodi:role="line">Out[2]:</tspan></text>
       <g
          id="g5431"
-         transform="matrix(1.2606425,0,0,1.2606425,-442.74779,-142.59673)"
+         transform="matrix(1.2606425,0,0,1.2606425,-442.74779,-166.59673)"
          style="stroke-linecap:butt;stroke-linejoin:round">
         <g
            transform="matrix(1.25,0,0,1.25,1379.7159,504.45864)"
