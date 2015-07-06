@@ -67,7 +67,7 @@ I conclude by discussing Computational Cognitive Science as it relates to graphi
 Graphical Models
 ----------------
 
-Graphs are defined by a set of nodes (:math:`X, |X| = N`) and edges between those nodes (:math:`e \in E \equiv e \in (X \times X)`, *E* is the set of edges). 
+Graphs are defined by a set of nodes (:math:`X, |X| = N`) and a set of edges between those nodes (:math:`E| e \in E \equiv e \in (X \times X)`). 
 
 Notes on notation
 =================
@@ -145,7 +145,8 @@ A random variable defined by a conditional probability distribution [#]_ has a d
 
 .. [#] Rather than choose a particular interpretation of probability over event sets (e.g., Bayesian or  frequentist), I will attempt to remain neutral, as those concerns are not central to the issues of graphs and simple sampling.
 
-The probability mass function (pmf) of a discrete random variable(:math:`X`) taking on value :math:`x` will be designated with :math:`P(X=x)`. Oftentimes, when one is discussing the full set of potential values (and not just a single value), one leaves out the :math:`=x` and just indicates :math:`P(X)`. [#]_ 
+The probability mass function (pmf) for discrete random variable :math:`X` with value :math:`x` will be noted as :math:`P(X=x)`. Often, when discussing the full set of potential values (and not just a single value), we leave out the :math:`=x` and just indicate :math:`P(X)`. [#]_ 
+
 .. This interpretation works most easily when considering mutually exclusive values, and if one is instead considering the possibility of a more complex event such as a variable taking on one of a set of values, the notation will often need adjusting. 
 
 .. [#] If one is dealing with continuous quantities rather than discrete quantities one will have to use a probability density function (pdf) which does not have as straightforward an interpretation as a probability mass function. This difficult stems from the fact that (under most cases) the probability of any particular event occurring is "measure zero", or "almost surely" impossible. Without getting into measure theory and the foundation of calculus and continuity we can simply note that it is not that any individual event has non-zero probability, but that sets of events have non-zero probability.As a result, continuous random variables are more easily understood in terms a cumulative density function (cdf), which states not how likely any individual event is, but how likely it is that the event in question is less than a value :math:`x`. The notation usually given for a cdf of this sort is :math:`F(X\leq x) = \int_{-\infty}^{x}f(u)du`, where :math:`f(u)` is the associated probability density function.
