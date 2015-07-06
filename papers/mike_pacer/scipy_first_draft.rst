@@ -299,23 +299,17 @@ This is a package for representing, manipulating and analyzing graphs and comple
 Basic NetworkX operations
 =========================
 
-NetworkX is usually imported using the :code:`nx` abbreviation
+NetworkX is usually imported using the :code:`nx` abbreviation, and you input nodes and edges as lists of tuples, which can be assigned dictionaries as their last argument, which stores the dictionary as the nodes' or edges' data.
 
 ..  code-block:: python
     
     import networkx as nx  
 
-    G = nx.DiGraph() # initialize a directed graph
-
-    edge_list = G.edges() # returns a list of edges
-    edge_data_list = G.edges(data=True) 
-    # returns list of edges as tuples with data dictionary 
-
-    node_list = G.nodes() # returns a list of nodes
-    node_data_list = G.nodes(data=True) 
-    # returns list of nodes as tuples with data dictionary
-
-
+    G = nx.DiGraph() # init directed graph
+    G.add_edges_from(edge_list) # input edges 
+    G.add_nodes_from(node_list) # input nodes
+    edge_list = G.edges(data=True) # output edges
+    node_list = G.nodes(data=True) # output nodes
 
 Causal Bayesian NetworkX: Graphs
 --------------------------------
@@ -325,7 +319,7 @@ Here we will look at some of the basic operations described in the `ipython note
 Other packages
 ==============
 
-In addition to networkX, we need to import numpy :cite:`numpy`, scipy :cite:`scipy`, and itertools.
+In addition to networkX, we need to import numpy :cite:`numpy`, scipy :cite:`scipy`, and functions from itertools.
 
 ..  code-block::python
 
@@ -579,8 +573,7 @@ Example: |cbnx| implementation for sprinkler graph
 
 .. code:: python
 
-    node_prop_list = [
-        ("rain",{
+    node_prop_list = [("rain",{
         "state_space":("yes","no"), 
         "sample_function": "choice",
         "parents":[], 
@@ -601,17 +594,20 @@ Example: |cbnx| implementation for sprinkler graph
             (("rain","no"),("sprinkler","on")):[.9,.1],
             (("rain","no"),("sprinkler","off")):[0,1]}})]
 
+
+    edge_list = [("sprinkler","grass_wet"),
+        ("rain","sprinkler"),
+        ("rain","grass_wet")]
+
     def sample_from_graph(G,f_dict=None,k = 1):
         if f_dict == None:
             f_dict = {"choice": np.random.choice}
-
         n_dict = G.nodes(data = True)
         n_ids = np.array(G.nodes())
         n_states = [(n[0],n[1]["state_space"]) for n in n_dict]
         orphans = [n for n in n_dict if n[1]["parents"]==[]]
         s_values = np.empty([len(n_states),k],dtype='U20')
         s_nodes = []
-
         for n in orphans:
             samp_f = str_to_f(n[1]["sample_function"],
                 f_dict)
@@ -621,7 +617,6 @@ Example: |cbnx| implementation for sprinkler graph
             s_values[s_idx,:]  = samp_f(s_states,
                 size=[1,k],p=s_dist)
             s_nodes.append(n[0])
-            
         while set(s_nodes) < set(G.nodes()):
             nodes_to_sample = has_full_parents(G,s_nodes)
             for n in nodes_to_sample:
@@ -682,7 +677,6 @@ Example: |cbnx| implementation for sprinkler graph
         try: f_dict[f_name]
         except KeyError:
             print("{} is not defined.".format(f_name))
-        
         return f_dict[f_name]
 
 
@@ -690,7 +684,7 @@ Example: |cbnx| implementation for sprinkler graph
 Lack of JSON compatibility
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When submitting the abstract for this paper and talk, I believed I had created a JSON compatible format for storing the underlying data. I discovered that my method of storing groups of parent-variable realizations as tuple-keys with distribution arguments broke the JSON compatibility that I was able to maintain in other circumstances. This was useful for being able to call the distributions of variables who have more than one parent nodes. I have not yet fixed this problem. 
+The data-structures described above, notably the node_prop_listI discovered that my method of storing groups of parent-variable realizations as tuple-keys with distribution arguments broke the JSON compatibility that I was able to maintain in other circumstances. This was useful for being able to call the distributions of variables who have more than one parent nodes. I have not yet fixed this problem. 
 
 Causal Theories and Computational Cognitive Science
 ---------------------------------------------------
