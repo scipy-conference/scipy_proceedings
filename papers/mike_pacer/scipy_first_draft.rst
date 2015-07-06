@@ -279,7 +279,7 @@ Example: Rain, Sprinkler & Ground
 
 
 ..  figure:: sprinkler.pdf
-    :scale: 32 %
+    :scale: 40 %
 
     An Bayesian network describing the sprinkler example. Including both conditional and marginal distributions. :label:`sprinkler`
 
@@ -628,7 +628,7 @@ Functional form
 ^^^^^^^^^^^^^^^
 
  Even in the most basic cases of causal induction we draw on expectations as to whether the effects of one variable on another are positive or negative, whether multiple causes interact or are independent, and what type of events (binary, continuous, or rates) are relevant to evaluating causal relationships.
- 
+
  — :cite:`griffithst09`
 
 Of course, this allows for uncertainty about these functional forms and indeed, quite different judgments can be warranted depending on treats the underlying relation and structure of the data (e.g., continuous vs. binary data :cite:`pacerg2011`).
