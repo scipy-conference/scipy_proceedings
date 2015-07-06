@@ -278,7 +278,7 @@ Example: Rain, Sprinkler & Ground
 
 
 ..  figure:: sprinkler.pdf
-    :scale: 35 %
+    :scale: 32 %
 
     An Bayesian network describing the sprinkler example. Including both conditional and marginal distributions. :label:`sprinkler`
 
