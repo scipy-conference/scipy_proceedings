@@ -353,9 +353,9 @@ below.
 Methods
 =======
 
-We built interaction graphs according to the above procedure for 13 mailing lists from open
-collaborative communities.
-We then computed the degree assortativity of these networks.
+We collected archival data of 13 mailing lists from open collaborative communities.
+From these data we derived an *interaction graph* of who replied to whom.
+We then computed the weighted and unweighted degree assortativity of these networks.
 We also used the Alstott package to test the degree distribution of these networks using
 the Clauset method.
 
@@ -616,6 +616,24 @@ original nodes.
 Results
 =======
 
+We computed the (unweighted) degre distribution and the weighted and unweighted degree
+assortativities of each of the mailing lists for which we collected data.
+We also aggregated the interaction graphs of each list into a single graph that
+we have called `total` and ran the same analysis.
+
+.. figure:: total.png
+   :scale: 20%
+
+   Interaction graph of all participants across all mailing lists, rendered with [Gephi]_.
+   The large blue module is roughly the SciPy community.
+   The green module is the Wikimedia community.
+   The purple module is the OpenStreetMap community.
+   Notably, these communities are not completely disjoint.
+   There are several bridge nodes, meaning there are some mailboxes
+   that have participated in two or more of the communities represented.
+   Singleton points on either side of the central component indicate email authors
+   to whom nobody ever replied. :label:`egfig2`
+
 .. raw:: latex
 
    \begin{table*}
@@ -684,6 +702,16 @@ the overall pattern of the data is more decisively clear.
 
 [for some of the smaller networks here, the results are a bit sketchy. it would be better
 to include the \math:`x_{min}` values and include data sets above a certain size threshold ]
+
+.. figure:: total_pdf.png
+
+   A common technique for testing whether a distribution fits a log-normal or
+   power law distribution is to plot its density function on log-log axes and
+   observe whether the tail of the distribution drops below the line of best fit.
+   As an illustration, this is the log-log plot of the probability density function
+   for the unweighted degrees of the aggregated `total` interaction graph.
+   In this paper, we eschew this technique on the grounds that it is biased
+   for reasons discussed in depth in [Clauset2007]_. :label:`egfig`
 
 
 Discussion
@@ -767,6 +795,10 @@ References
                 "Edge direction and the structure of networks"
                 PNAS 2010 107 (24) 10815-10820; published ahead of print 
                 May 26, 2010, doi:10.1073/pnas.0912671107 
+
+.. [Gephi] Bastian M., Heymann S., Jacomy M. (2009). 
+           Gephi: an open source software for exploring and manipulating networks. 
+           International AAAI Conference on Weblogs and Social Media.
 
 .. [McKinney] Wes McKinney. Data Structures for Statistical Computing in Python, 
               Proceedings of the 9th Python in Science Conference, 51-56 (2010)
