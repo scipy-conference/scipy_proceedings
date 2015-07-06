@@ -663,7 +663,7 @@ specifications, applying to all objects of a particular type or just
 to specific subsets of them.
 
 .. figure:: customization_example.pdf
-   :scale: 36%
+   :scale: 35%
    :align: center
    :figclass: w
 
@@ -779,9 +779,6 @@ altogether as far as possible, with users instead supplying metadata
 to declare the properties of the data and option settings to control
 its visual appearance.
 
-..
-   jbednar: Should clarify that Bokeh makes a good backend.
-
 Although HoloViews is a general purpose library for working with data
 at every stage, it actually represents a significant advance over
 previous approaches focused only on achieving reproducibility of the
@@ -813,10 +810,12 @@ plots) using custom code when needed, and these custom plots will then
 combine seamlessly with other HoloViews objects to make composite
 figures. Finally, not only is it possibly to implement new plot
 classes but entire plotting backends may be added and exposed to the
-user. Thus default plots are simple and straightforward, but even
-complex figures are easily achievable. Many such examples, ranging
-from simple to complex, can be found in the Tutorials and Examples
-sections of `holoviews.org <http://holoviews.org>`_.
+used, such as the prototype Bokeh backend, which is well suited to
+live interaction and large datasets. Thus default plots are simple and
+straightforward, but even complex figures are easily achievable. Many
+such examples, ranging from simple to complex, can be found in the
+Tutorials and Examples sections of `holoviews.org
+<http://holoviews.org>`_.
 
 In this paper, we have focused on how a user can quickly build data
 structures for their content of interest.  An even more powerful
