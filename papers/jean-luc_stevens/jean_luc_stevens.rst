@@ -766,18 +766,35 @@ in a meaningful format.
 
 HoloViews is one of many packages designed for working with large,
 multidimensional datasets, but it differs from each of these in
-important ways.  For instance, Python's ``seaborn`` [Was14]_ and R's
+important ways. For instance, Python's ``seaborn`` [Was14]_ and R's
 ``ggplot2`` [Wic09]_ library support laying out high-dimensional data
 into subplots and grids, while Python's Bokeh library and R's shiny
 [shiny]_ web application framework provide widgets for interactive
-data exploration.  While each of these packages can provide extremely
+data exploration. While each of these packages can provide extremely
 polished interactive graphics, getting them set up for specific sets
 of data requires significant additional effort and custom code,
 placing a barrier to their primary use case, the interactive
-exploration of data.  HoloViews instead tries to avoid custom coding
+exploration of data. HoloViews instead tries to avoid custom coding
 altogether as far as possible, with users instead supplying metadata
 to declare the properties of the data and option settings to control
 its visual appearance.
+
+Although HoloViews is a general purpose library for working with data
+at every stage, it actually represents a significant advance over
+previous approaches focused only on achieving reproducibility of the
+final result. Simply by keeping specifications for figures succinct,
+HoloViews allows the entire recipe to be preserved in the notebook,
+not scattered over separately imported plotting code files. Secondly,
+because HoloViews can directly express the complex relationships
+between different bits of data as subfigures, it can capture entire
+figures within notebooks that would previously have required
+unreproducible work in external drawing programs. Lastly, HoloViews
+exports the actual data alongside published figures, allowing it to be
+tested automatically (as is done for the project web site) without
+conflating it with arbitrary display choices. HoloViews makes it
+possible to reproduce results from every step of the project, up to
+and including the final published figures, in a way that has not
+previously been practical.
 
 Although HoloViews aims to provide good default behavior, scientific
 work often requires highly specialized visualizations. For that reason
@@ -791,25 +808,12 @@ HoloViews makes it trivial to add completely novel types of Elements
 with corresponding plots (or to override specific code in existing
 plots) using custom code when needed, and these custom plots will then
 combine seamlessly with other HoloViews objects to make composite
-figures. Thus default plots are simple and straightforward, but even
-complex figures are easily achievable.
-
-Although HoloViews is a general purpose library for working with data
-at every stage, it actually represents a significant advance over
-previous approaches focused only on achieving reproducibility of the
-final result. (1) Simply by keeping specifications for figures
-succinct, HoloViews allows the entire recipe to be preserved in the
-notebook, not scattered over separately imported plotting code
-files.  (2) Because HoloViews can directly express the complex
-relationships between different bits of data as subfigures, it can
-capture entire figures within notebooks that would previously have
-required unreproducible work in external drawing programs. (3)
-HoloViews exports the actual data alongside published figures,
-allowing it to be tested automatically (as is done for the HoloViews
-web site) without conflating it with arbitrary display choices.
-HoloViews makes it possible to reproduce results from every step of
-the project, up to and including the final published figures, in a way
-that has not previously been practical.
+figures. Finally, not only is it possibly to implement new plot
+classes but entire plotting backends may be added and exposed to the
+user. Thus default plots are simple and straightforward, but even
+complex figures are easily achievable. Many such examples, ranging
+from simple to complex, can be found in the Tutorials and Examples
+sections of `holoviews.org <http://holoviews.org>`_.
 
 In this paper, we have focused on how a user can quickly build data
 structures for their content of interest.  An even more powerful
