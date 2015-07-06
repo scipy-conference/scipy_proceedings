@@ -668,15 +668,16 @@ to specific subsets of them.
    :figclass: w
 
    An example of customizing the display of Figure :ref:`layout`'s
-   data. ``In[5]`` is color coded according to the components in
-   Figure :ref:`schematic`, where red is the content, blue is the
-   display options (here listed using an optional IPython-specific
-   succinct syntax), and green is what triggers the the
-   rendering. ``Out[5]`` shows how the supplied options have affected
-   the final plots, compared to Figure :ref:`layout`. Finally,
-   ``Out[6]`` and ``Out[7]`` show the textual representations of the
-   content and the style specification respectively, demonstrating how
-   the two are separate yet linked.  :label:`customization`
+   data using the default Matplotlib backend. ``In[5]`` is color coded
+   according to the components in Figure :ref:`schematic`, where red
+   is the content, blue is the display options (using an optional
+   IPython-specific succinct syntax), and green is what triggers the
+   the rendering. ``Out[5]`` shows how the supplied options have
+   affected the final plots, compared to Figure
+   :ref:`layout`. Finally, ``Out[6]`` and ``Out[7]`` show the textual
+   representations of the content and the style specification
+   respectively, demonstrating how the two are separate yet linked.
+   :label:`customization`
 
 To explore how option setting works in practice, Figure
 :ref:`customization` shows an example of customizing Figure
