@@ -35,6 +35,8 @@ class Translator(LaTeXTranslator):
         self.author_institutions = []
         self.author_institution_map = dict()
         self.author_emails = []
+        self.author_corresponding_map = dict()
+        self.author_equal_map = dict()
         self.paper_title = ''
         self.abstract_text = []
         self.keywords = ''
@@ -93,6 +95,10 @@ class Translator(LaTeXTranslator):
 
         if self.current_field == 'email':
             self.author_emails.append(text)
+        elif self.current_field == 'corresponding':
+            self.author_corresponding_map[self.author_names[-1]].append(bool(text))
+        elif self.current_field == 'corresponding':
+            self.author_equal_map[self.author_names[-1]].append(bool(text))
         elif self.current_field == 'institution':
             self.author_institutions.append(text)
             self.author_institution_map[self.author_names[-1]].append(text)
@@ -126,41 +132,54 @@ class Translator(LaTeXTranslator):
 
         def footmark(n):
             """Insert footmark #n.  Footmark 1 is reserved for
-            the corresponding author.\
+            the corresponding author. Footmark 2 is reserved for
+            the equal authors.\
             """
             return ('\\setcounter{footnotecounter}{%d}' % n,
                     '\\fnsymbol{footnotecounter}')
 
+        # Build a footmark for the corresponding author
+        corresponding_footmark = footmark(1)
+
+        # Build a footmark for equal authors
+        equal_footmark = footmark(2)
+
         # Build one footmark for each institution
         institute_footmark = {}
         for i, inst in enumerate(institution_authors):
-            institute_footmark[inst] = footmark(i + 2)
+            institute_footmark[inst] = footmark(i + 3)
 
         footmark_template = r'\thanks{%(footmark)s %(instutions)}'
         corresponding_auth_template = r'''%%
           %(footmark_counter)s\thanks{%(footmark)s %%
           Corresponding author: \protect\href{mailto:%(email)s}{%(email)s}}'''
 
+        equal_auth_template = r'''%%
+          %(footmark_counter)s\thanks{%(footmark)s %%
+          These authors contributed equally.'''
+
         title = self.paper_title
         authors = []
         institutions_mentioned = set()
         for n, auth in enumerate(self.author_names):
-            # Corresponding author
-            if n == 0:
-                authors += [r'%(author)s$^{%(footmark)s}$' % \
-                            {'author': auth,
-                             'footmark': ''.join(footmark(1)) + ''.join([''.join(institute_footmark[inst]) for inst in self.author_institution_map[auth]])}]
+            # get footmarks
+            footmarks = ''
+            if auth in self.author_corresponding:
+                footmarks.join(corresponding_footmark)
+            if auth in self.author_equal_map:
+                footmarks.join(equal_footmark)
+            for inst in self.author_institution_map[auth]:
+                footmarks.join(institute_footmark[inst]
 
-                fm_counter, fm = footmark(1)
+
+                fm_counter, fm = corresponding_footmark
                 authors[-1] += corresponding_auth_template % \
                                {'footmark_counter': fm_counter,
                                 'footmark': fm,
-                                'email': self.author_emails[0]}
-
-            else:
-                authors += [r'%(author)s$^{%(footmark)s}$' %
+                                'email': self.author_emails[n]}
+                authors += [r'%(author)s$^{%(footmark)s}$' % \
                             {'author': auth,
-                             'footmark': ''.join([''.join(institute_footmark[inst]) for inst in self.author_institution_map[auth]])}]
+                             'footmark': footmarks}]
 
             for inst in self.author_institution_map[auth]:
                 if not inst in institutions_mentioned:
