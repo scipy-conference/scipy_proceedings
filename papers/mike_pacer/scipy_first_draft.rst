@@ -571,41 +571,22 @@ Most of the difficult parts of encoding a sampling procedure though have nothing
 Example: |cbnx| implementation for sprinkler graph
 ==================================================
 
+Below I will illustrate how to use networkX and node-associated attributes to define and sample from a parameterized version of the sprinkler Bayesian network represented in abstract, graphical form in Figure :ref:`sprinkler`.
+
+Sampling infrastructure
+^^^^^^^^^^^^^^^^^^^^^^^
+
 .. code:: python
-
-    node_prop_list = [("rain",{
-        "state_space":("yes","no"), 
-        "sample_function": "choice",
-        "parents":[], 
-        "dist":[.2,.8]}),
-        ("sprinkler",{
-        "state_space":("on","off"),
-        "sample_function": "choice",
-        "parents":["rain"], 
-        "dist":{(("rain","yes"),):[.01,.99],
-                (("rain","no"),):[.4,.6]}}),
-        ("grass_wet",{
-        "state_space":("wet","dry"),
-        "sample_function": "choice",
-        "parents":["rain","sprinkler"],
-        "dist":{
-            (("rain","yes"),("sprinkler","on")):[.99,.01],
-            (("rain","yes"),("sprinkler","off")):[.8,.2],
-            (("rain","no"),("sprinkler","on")):[.9,.1],
-            (("rain","no"),("sprinkler","off")):[0,1]}})]
-
-
-    edge_list = [("sprinkler","grass_wet"),
-        ("rain","sprinkler"),
-        ("rain","grass_wet")]
 
     def sample_from_graph(G,f_dict=None,k = 1):
         if f_dict == None:
             f_dict = {"choice": np.random.choice}
         n_dict = G.nodes(data = True)
         n_ids = np.array(G.nodes())
-        n_states = [(n[0],n[1]["state_space"]) for n in n_dict]
-        orphans = [n for n in n_dict if n[1]["parents"]==[]]
+        n_states = [(n[0],n[1]["state_space"]) 
+            for n in n_dict]
+        orphans = [n for n in n_dict 
+            if n[1]["parents"]==[]]
         s_values = np.empty([len(n_states),k],dtype='U20')
         s_nodes = []
         for n in orphans:
@@ -652,7 +633,6 @@ Example: |cbnx| implementation for sprinkler graph
                     {attr:n[1][attr] for attr in n_atr}))
             return return_val
         
-        
     def cond_samp(G,n,par_vals,f_dict, k = 1):
         try: n in G
         except KeyError:
@@ -679,35 +659,73 @@ Example: |cbnx| implementation for sprinkler graph
             print("{} is not defined.".format(f_name))
         return f_dict[f_name]
 
+Sampling from the sprinkler Bayes net with |cbnx|
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following encodes the sprinkler network from Figure :ref:`sprinkler` with parameters :math:`p=.2, q_{\textrm{yes}}=.01, q_\textrm{no}=.4,w_{\textrm{yes,on}}=.99,w_{\textrm{yes,off}}=.8,w_{\textrm{no,on}}=.9 \textrm{and} w_{\textrm{no,off}=0}.` This distribution is meant to accord with our intuitions that rain and sprinklers increase the probability of the ground being wet, and that we are less likely to use the sprinkler when it has rained.
+
+.. code:: python
+
+    node_prop_list = [("rain",{
+        "state_space":("yes","no"), 
+        "sample_function": "choice",
+        "parents":[], 
+        "dist":[.2,.8]}),
+        ("sprinkler",{
+        "state_space":("on","off"),
+        "sample_function": "choice",
+        "parents":["rain"], 
+        "dist":{(("rain","yes"),):[.01,.99],
+                (("rain","no"),):[.4,.6]}}),
+        ("grass_wet",{
+        "state_space":("wet","dry"),
+        "sample_function": "choice",
+        "parents":["rain","sprinkler"],
+        "dist":{
+            (("rain","yes"),("sprinkler","on")):[.99,.01],
+            (("rain","yes"),("sprinkler","off")):[.8,.2],
+            (("rain","no"),("sprinkler","on")):[.9,.1],
+            (("rain","no"),("sprinkler","off")):[0,1]}})]
 
 
-Lack of JSON compatibility
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+    edge_list = [("sprinkler","grass_wet"),
+        ("rain","sprinkler"),
+        ("rain","grass_wet")]
 
-The data-structures described above, notably the node_prop_listI discovered that my method of storing groups of parent-variable realizations as tuple-keys with distribution arguments broke the JSON compatibility that I was able to maintain in other circumstances. This was useful for being able to call the distributions of variables who have more than one parent nodes. I have not yet fixed this problem. 
+    G = nx.DiGraph()
+    G.clear()
+    G.add_edges_from(edge_list)
+    G.add_nodes_from(node_prop_list)
+    test = sample_from_graph(G,k=10)
+
+
 
 Causal Theories and Computational Cognitive Science
 ---------------------------------------------------
 
 **Theory based causal induction** is a formal framework that arose out of the tradition in computational cognitive science to approach problems of human cognition with rational, computational-level analyses :cite:`griffithst09`. In particular, causal theories form generative models for defining classes of parameterized probabilistic graphical models. They rely on defining a set of classes of entities (ontology), potential relationships between those classes of entities and particular entities (plausible relations), and particular parameterizations of how those relations manifest in observable data (or in how other relations eventually ground out into observable data). This allows Griffiths and Tenenbaum to subsume the prediction of a wide array of human causal inductive, learning and reasoning behavior using this framework for generating graphical models and doing inference over the structures they generate.
 
-Rational analysis
-=================
+Rational analysis :cite:`anderson90`
+===================================
 
-A technique used that allows us to model not cognition per se, but the situation into which cognitive capacities are to be placed. If we assume that we know the inputs, the outputs and the goal state of the arbitrary cognitive agent, we can iteratively predict the agent's behavior [#]_.
+Rational analysis is a technique that frees us from some of the problems inherent in mechanistic modeling in cognition. We specify the goals of the cognitive system, the environment in which it exists and minimal constraints on the computations available to the agent. We translate this into mathematically precise accounts of "mechanism-free casting[s] of psychological [theories]" for optimal behavior. These formal models provide empirical predictions that can be evaluated by studying human cognitive behavior under different observable environmental conditions :cite:`anderson90` [#]_. If the model disagrees with the empirical data, we iterate — reëvaluating each component of the theory until we match a wide variety [#]_ of empirical data. 
 
-Precisely Specify what are the goals of the cognitive system.
-Develop a formal model of the environment to which the system is adapted(almost certainly less structured than the standard experimental situation)
-make the minimal assumption about computational limitations. This is where one speifies the constraints of evolutionary history. To the extent that these assumptions are minimal, the analysis is powerful.
-Derive the optimal behavioral functiong iven 1–3
-examine empirical literature to see if the predictions of the behaviorl function are confirmed.
-If the predictions are off, iterate. In my own experience my problems have been with the mathematical analysis required in step 4, which can often be quite complex.
+.. [#] To my knowledge the variety constraint is not present in the original work by Anderson, though the generality of the phenomena encompassed by his analyses suggests he was well aware of the concern. I add the variety constraint in order to combat overfitting of any one data-set, because over-fitting is a problem of generalization. To the extent that a single framework is expected to model more of data-sets that it could feasibly be generalized to cover, it will be less and less possible to overfit the data, as generalization problem becomes and less feasible.
 
-Predictions flow from 1–3. Framing of the information processing problems A mechanistic-free casting of a psychological theory. Most of the interesting assumptions come ins tep 2 because the structure of the environment is what is easiest to verify.
+
+.. [#] As Anderson notes, it is often the mathematization that proves to be the most difficult aspect of this procedure :cite:`anderson90`. 
+
+
+.. Precisely Specify what are the goals of the cognitive system.
+.. Develop a formal model of the environment to which the system is adapted(almost certainly less structured than the standard experimental situation)
+.. make the minimal assumption about computational limitations. This is where one speifies the constraints of evolutionary history. To the extent that these assumptions are minimal, the analysis is powerful.
+.. Derive the optimal behavioral functiong iven 1–3
+.. examine empirical literature to see if the predictions of the behaviorl function are confirmed.
+.. If the predictions are off, iterate. In my own experience my problems have been with the mathematical analysis required in step 4, which can often be quite complex.
+
+.. Predictions flow from 1–3. Framing of the information processing problems A mechanistic-free casting of a psychological theory. Most of the interesting assumptions come ins tep 2 because the structure of the environment is what is easiest to verify.
 
 This is often coupled with computational-level analysis inspired by Marr's :cite:`marr82` levels of analysis.  
-
-.. [#] This is not a well-sourced definition. I need to go back to :cite:`andersons91` to spruce it up.
 
 Computational-Level Analysis of Human Cognition
 ===============================================
