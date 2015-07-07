@@ -36,7 +36,7 @@ class Translator(LaTeXTranslator):
         self.author_institution_map = dict()
         self.author_emails = []
         self.corresponding = []
-        self.equal_authors = []
+        self.equal_contributors = []
         self.paper_title = ''
         self.abstract_text = []
         self.keywords = ''
@@ -100,8 +100,8 @@ class Translator(LaTeXTranslator):
             self.author_emails.append(text)
         elif self.current_field == 'corresponding':
             self.corresponding.append(self.author_names[-1])
-        elif self.current_field == 'equal':
-            self.equal_authors.append(self.author_names[-1])
+        elif self.current_field == 'equal-contributor':
+            self.equal_contributors.append(self.author_names[-1])
         elif self.current_field == 'institution':
             self.author_institutions.append(text)
             self.author_institution_map[self.author_names[-1]].append(text)
@@ -136,7 +136,7 @@ class Translator(LaTeXTranslator):
         def footmark(n):
             """Insert footmark #n.  Footmark 1 is reserved for
             the corresponding author. Footmark 2 is reserved for
-            the equal authors.\
+            the equal contributors.\
             """
             return ('\\setcounter{footnotecounter}{%d}' % n,
                     '\\fnsymbol{footnotecounter}')
@@ -144,7 +144,7 @@ class Translator(LaTeXTranslator):
         # Build a footmark for the corresponding author
         corresponding_footmark = footmark(1)
 
-        # Build a footmark for equal authors
+        # Build a footmark for equal contributors
         equal_footmark = footmark(2)
 
         # Build one footmark for each institution
@@ -157,7 +157,7 @@ class Translator(LaTeXTranslator):
           %(footmark_counter)s\thanks{%(footmark)s %%
           Corresponding author: \protect\href{mailto:%(email)s}{%(email)s}}'''
 
-        equal_auth_template = r'''%%
+        equal_contrib_template = r'''%%
           %(footmark_counter)s\thanks{%(footmark)s %%
           These authors contributed equally.}'''
 
@@ -174,7 +174,7 @@ class Translator(LaTeXTranslator):
         for n, auth in enumerate(self.author_names):
             # get footmarks
             footmarks = ''.join([''.join(institute_footmark[inst]) for inst in self.author_institution_map[auth]])
-            if auth in self.equal_authors:
+            if auth in self.equal_contributors:
                 footmarks += ''.join(equal_footmark)
             if auth in self.corresponding:
                 footmarks += ''.join(corresponding_footmark)
@@ -182,9 +182,9 @@ class Translator(LaTeXTranslator):
                         {'author': auth,
                         'footmark': footmarks}]
 
-            if auth in self.equal_authors:
+            if auth in self.equal_contributors:
                 fm_counter, fm = equal_footmark
-                authors[-1] += equal_auth_template % \
+                authors[-1] += equal_contrib_template % \
                     {'footmark_counter': fm_counter,
                      'footmark': fm}
 
