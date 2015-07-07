@@ -2,6 +2,7 @@
 :email: jj@rome.it
 :institution: Senate House, S.P.Q.R.
 :institution: Egyptian Embassy, S.P.Q.R.
+:corresponding:
 
 :author: Mark Anthony
 :email: mark37@rome.it
@@ -11,10 +12,12 @@
 :email: millman@rome.it
 :institution: Egyptian Embassy, S.P.Q.R.
 :institution: Yet another place, S.P.Q.R.
+:equal-contributor:
 
 :author: Brutus
 :email: brutus@rome.it
 :institution: Unaffiliated
+:equal-contributor:
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
@@ -94,7 +97,7 @@ Or a snippet from the above code, starting at the correct line number:
    for (int i = 0; i < 10; i++) {
        /* do something */
    }
- 
+
 Important Part
 --------------
 
