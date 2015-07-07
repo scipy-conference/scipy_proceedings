@@ -2,7 +2,7 @@
 :email: jj@rome.it
 :institution: Senate House, S.P.Q.R.
 :institution: Egyptian Embassy, S.P.Q.R.
-:corresponding: True
+:corresponding:
 
 :author: Mark Anthony
 :email: mark37@rome.it
