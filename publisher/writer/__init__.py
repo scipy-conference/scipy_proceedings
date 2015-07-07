@@ -157,7 +157,7 @@ class Translator(LaTeXTranslator):
 
         equal_auth_template = r'''%%
           %(footmark_counter)s\thanks{%(footmark)s %%
-          These authors contributed equally.'''
+          These authors contributed equally.}'''
 
         title = self.paper_title
         authors = []
@@ -179,6 +179,13 @@ class Translator(LaTeXTranslator):
             authors += [r'%(author)s$^{%(footmark)s}$' %
                         {'author': auth,
                         'footmark': footmarks}]
+
+            if auth in self.equal_authors:
+                fm_counter, fm = equal_footmark
+                authors[-1] += equal_auth_template % \
+                    {'footmark_counter': fm_counter,
+                     'footmark': fm}
+
             if auth in self.corresponding:
                 fm_counter, fm = corresponding_footmark
                 authors[-1] += corresponding_auth_template % \
