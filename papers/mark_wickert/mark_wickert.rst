@@ -541,7 +541,7 @@ Conclusions and Future Work
 Communications and signal processing, as a discipline that sits inside electrical computer engineering, is built on
 a strong mathematical modeling foundation. Undergraduate engineering students, despite having taken many mathematics
 courses, are often intimidated by the math they find in communications and signals processing course work.
-I cannot make the math go away, but good maodeling tools make learning and problem solving fun and exciting.
+I cannot make the math go away, but good modeling tools make learning and problem solving fun and exciting.
 I have found, and hopefully this paper shows, that IPython notebooks are valuable mathematical modeling tools.
 The case studies show that IPython notebook offers a means for students of all
 levels to explore and gain understanding of difficult engineering concepts.
