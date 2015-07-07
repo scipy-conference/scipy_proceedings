@@ -303,7 +303,7 @@ Integration with NumPy
 
 There are limited functions within VTK itself to process or analyze
 point and cell arrays. Since 2008, a low-level interface layer between
-VTK arrays and NumPy arrayS has been available in VTK. This interface
+VTK arrays and NumPy arrays has been available in VTK. This interface
 layer can be used to map VTK arrays to NumPy arrays and vice versa,
 enabling the full power of NumPy operations to be used on VTK
 data. For example, suppose that we have a data set from a
