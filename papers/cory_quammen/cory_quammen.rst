@@ -189,7 +189,7 @@ management within Python.
 One particularly nice semantic equivalence between VTK's C++ and
 Python interfaces involves member functions that accept a pointer to a
 C++ array representing a small tuple of elements. Such functions are
-common in VTK to, for instance, set a 3D Cartesian coordinate as a
+common in VTK to do things like set a 3D Cartesian coordinate as a
 property of a class. In Python, the corresponding function accepts a
 tuple or list object. This works well as long as the list or tuple has
 the expected number of elements.
@@ -718,10 +718,10 @@ directly. Fortunately, ParaView provides a simplified Python interface
 that hides most of these details, making Python scripting much more
 accessible.
 
-The ``paraview.simple`` layer provides a simplified layer of Python
-functions to create pipelines and modify filter and visualization
-properties. The same example above expressed with``paraview.simple``
-functions is reduced to
+The ``paraview.simple`` layer provides simpler Python functions to
+create pipelines and modify filter and visualization properties. The
+same example above expressed with ``paraview.simple`` functions is
+reduced to
 
 .. code-block:: python
 
@@ -755,10 +755,10 @@ specification of the output data set is possible within the script,
 including setting the output data type, the data set toplogy (i.e.,
 type and number of cells), as well as point and cell arrays.
 
-At its core, the Programmable Filter is defined by VTK-derived class
-named ``vtkPythonProgrammableFilter``. Using the Python C API, the
-``vtkPythonProgrammableFilter`` passes a reference to itself to the
-Python environment in which the script executes so that it is
+At its core, the Programmable Filter is defined by the VTK-derived C++
+class named ``vtkPythonProgrammableFilter``. Using the Python C API,
+the ``vtkPythonProgrammableFilter`` passes a reference to itself to
+the Python environment in which the script executes so that it is
 available within the script itself. This makes it possible to access
 the inputs and outputs to the filter via:
 
@@ -813,8 +813,8 @@ Python Programmable Source
 
 Within ParaView it is also possible to define Python script that
 defines data sources using the Python Programmable Source. This source
-functions much like the Python Programmable Filter, but without
-requiring any input data sets.
+functions much like the Python Programmable Filter, but does not
+require any input data sets.
 
 Python Calculator
 ~~~~~~~~~~~~~~~~~
