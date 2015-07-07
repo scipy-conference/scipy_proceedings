@@ -1,4 +1,4 @@
-_
+
 all__ = ['writer']
 
 import docutils.core as dc
@@ -36,8 +36,8 @@ class Translator(LaTeXTranslator):
         self.author_institutions = []
         self.author_institution_map = dict()
         self.author_emails = []
-        self.author_corresponding_map = dict()
-        self.author_equal_map = dict()
+        self.corresponding = []
+        self.equal_authors = []
         self.paper_title = ''
         self.abstract_text = []
         self.keywords = ''
@@ -97,9 +97,9 @@ class Translator(LaTeXTranslator):
         if self.current_field == 'email':
             self.author_emails.append(text)
         elif self.current_field == 'corresponding':
-            self.author_corresponding.append(self.author_names[-1])
+            self.corresponding.append(self.author_names[-1])
         elif self.current_field == 'equal':
-            self.author_equal.append(self.author_names[-1])
+            self.equal_authors.append(self.author_names[-1])
         elif self.current_field == 'institution':
             self.author_institutions.append(text)
             self.author_institution_map[self.author_names[-1]].append(text)
@@ -161,29 +161,30 @@ class Translator(LaTeXTranslator):
 
         title = self.paper_title
         authors = []
-        corr_emails = []
-        if len(authors_corresponding) == 0:
-            authors_corresponding = [self.author_names[0]]
         institutions_mentioned = set()
+        corr_emails = []
+        if len(self.corresponding) == 0:
+            self.corresponding = [self.author_names[0]]
+        for n, auth in enumerate(self.author_names):
+            if auth in self.corresponding:
+                corr_emails.append(self.author_emails[n])
+
         for n, auth in enumerate(self.author_names):
             # get footmarks
-            footmarks = ''
-            if auth in self.author_corresponding:
-                footmarks.join(corresponding_footmark)
-                corr_emails.append(self.emails[n])
-            if auth in self.author_equal:
-                footmarks.join(equal_footmark)
-            for inst in self.author_institution_map[auth]:
-                footmarks.join(institute_footmark[inst]
-
-            fm_counter, fm = corresponding_footmark
-            authors[-1] += corresponding_auth_template % \
-                            {'footmark_counter': fm_counter,
-                            'footmark': fm,
-                            'email': ', '.join(corr_emails)}
-            authors += [r'%(author)s$^{%(footmark)s}$' % \
+            footmarks = ''.join([''.join(institute_footmark[inst]) for inst in self.author_institution_map[auth]])
+            if auth in self.equal_authors:
+                footmarks += ''.join(equal_footmark)
+            if auth in self.corresponding:
+                footmarks += ''.join(corresponding_footmark)
+            authors += [r'%(author)s$^{%(footmark)s}$' %
                         {'author': auth,
-                         'footmark': footmarks}]
+                        'footmark': footmarks}]
+            if auth in self.corresponding:
+                fm_counter, fm = corresponding_footmark
+                authors[-1] += corresponding_auth_template % \
+                    {'footmark_counter': fm_counter,
+                     'footmark': fm,
+                     'email': ', '.join(corr_emails)}
 
             for inst in self.author_institution_map[auth]:
                 if not inst in institutions_mentioned:
@@ -195,7 +196,6 @@ class Translator(LaTeXTranslator):
 
                 institutions_mentioned.add(inst)
 
-        if len(corresponding_auth
         ## Add copyright
 
         # If things went spectacularly wrong, we could not even parse author
