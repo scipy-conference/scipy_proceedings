@@ -1,10 +1,12 @@
 :author: Jean-Luc R. Stevens
 :email: jlstevens@ed.ac.uk
 :institution: Institute for Adaptive and Neural Computation, University of Edinburgh
+:equal: True
 
 :author: Philipp Rudiger
 :email: p.rudiger@ed.ac.uk
 :institution: Institute for Adaptive and Neural Computation, University of Edinburgh
+:equal: True
 
 :author: James A. Bednar
 :email: jbednar@inf.ed.ac.uk
