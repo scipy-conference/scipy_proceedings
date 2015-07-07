@@ -12,12 +12,12 @@
 :email: millman@rome.it
 :institution: Egyptian Embassy, S.P.Q.R.
 :institution: Yet another place, S.P.Q.R.
-:equal: True
+:equal-contributor:
 
 :author: Brutus
 :email: brutus@rome.it
 :institution: Unaffiliated
-:equal: True
+:equal-contributor:
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
