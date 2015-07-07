@@ -406,8 +406,8 @@ array, e.g.,
    >>> pressure[pressure > 40]
    VTKArray([47.2342], dtype=float32)
 
-The ``numpy_interface.algorithms`` module provides additional
-functionality beyond the array interface.
+The ``numpy_interface.algorithms`` module also provides
+NumPy-like functionality:
 
 .. code-block:: python
 
@@ -417,9 +417,9 @@ functionality beyond the array interface.
    VTKArray(0.1213)
 
    >>> algs.where(pressure > 38)
-   (array([2, 3]),)
+   (array([2, 3], dtype=int64),)
 
-In addition to most of the ufuncs provided by NumPy, the
+In addition to providing most of the ufuncs provided by NumPy, the
 ``algorithms`` interface provides some functions to access quantities
 that VTK can compute in the wide variety of data set types available
 in VTK. This can be used to compute, for instance, the total volume of
