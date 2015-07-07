@@ -69,45 +69,40 @@ VisPy's functionality is divided into a layered architecture, with each new laye
 Layer 1: Object-Oriented GL
 '''''''''''''''''''''''''''
 
-The OpenGL API, although very powerful, is also somewhat verbose and unwieldy. VisPy's lowest-level layer, ``vispy.gloo``, provides an object-oriented OpenGL wrapper with a clean, compact, and Pythonic alternative to traditional OpenGL programming (Figure  :ref:`gloofig`). Developers unfamiliar with OpenGL are encouraged to work from the scenegraph and plotting layers instead. Objects that typically require several GL calls to instantiate, such as textures, vertex buffers, frame buffers, and shader programs, are instead encapsulated in simple Python classes (e.g. Table 1).
+The OpenGL API, although very powerful, is also somewhat verbose and unwieldy. VisPy's lowest-level layer, ``vispy.gloo``, provides an object-oriented OpenGL wrapper with a clean, compact, and Pythonic alternative to traditional OpenGL programming (Figure  :ref:`gloofig`). Developers unfamiliar with OpenGL are encouraged to work from the scenegraph and plotting layers instead. Objects that typically require several GL calls to instantiate, such as textures, vertex buffers, frame buffers, and shader programs, are instead encapsulated in simple Python classes. The following example demonstrates creating a shader program and assigning a value to one of its uniform variables:
 
-.. note: this comment is required here because the table otherwise causes 
-.. paragraphs to be joined together.
+.. code-block:: python                     
+   
+   program = Program(vert_code, frag_code)
+   program['color'] = (1, 0.5, 0, 1)
 
+The equivalent code using the OpenGL API is somewhat more verbose:
 
-.. table:: The ``vispy.gloo`` API is compact, clean, and Pythonic compared to native OpenGL.
-   :class: w
+.. code-block:: python
 
-   +-----------------------------------------------+------------------------------------------------------------------+
-   |            ``vispy.gloo``                     |            ``pyopengl``                                          |
-   +===============================================+==================================================================+
-   |                                               |                                                                  |
-   |.. code-block:: python                         |.. code-block:: python                                            |
-   |                                               |                                                                  |
-   |   # create a shader program and assign        |   prg = glCreateProgram()                                        |
-   |   # a value to the 'color' variable           |   vsh = glCreateShader(GL_VERTEX_SHADER)                         |
-   |   program = Program(vert_code, frag_code)     |   glShaderSource(vsh, vert_code)                                 |
-   |   program['color'] = (1, 0.5, 0, 1)           |   fsh = glCreateShader(GL_FRAGMENT_SHADER)                       |
-   |                                               |   glShaderSource(fsh, vert_code)                                 |
-   |                                               |   for shader in (vsh, fsh):                                      |
-   |                                               |       glCompileShader(shader)                                    |
-   |                                               |       assert glGetShaderParameter(shader, GL_COMPILE_STATUS) = 1 |
-   |                                               |       glAttachShader(prg, shader)                                |
-   |                                               |                                                                  |
-   |                                               |   glLinkProgram(prg)                                             |
-   |                                               |   assert glGetProgramParameter(prg, GL_LINK_STATUS) == 1         |
-   |                                               |   nunif = glGetProgramParameter(prg, GL_ACTIVE_UNIFORMS)         |
-   |                                               |   uniforms = {}                                                  |
-   |                                               |   for i in range(nunif):                                         |
-   |                                               |       name, id, typ = glGetActiveAttrib(prg, i)                  |
-   |                                               |       uniforms[name] = id                                        |
-   |                                               |   glUseProgram(prg)                                              |
-   |                                               |   glUniform4fv(uniforms['color'], 1, (1.0, 0.5, 0.0, 1.0))       |
-   +-----------------------------------------------+------------------------------------------------------------------+
+    prg = glCreateProgram()
+    vsh = glCreateShader(GL_VERTEX_SHADER)
+    glShaderSource(vsh, vert_code)
+    fsh = glCreateShader(GL_FRAGMENT_SHADER)
+    glShaderSource(fsh, vert_code)
+    for shader in (vsh, fsh):
+        glCompileShader(shader)
+        assert glGetShaderParameter(shader,
+                                  GL_COMPILE_STATUS) == 1
+        glAttachShader(prg, shader)
+    glLinkProgram(prg)
+    assert glGetProgramParameter(prg,GL_LINK_STATUS) == 1
+    nunif = glGetProgramParameter(prg,GL_ACTIVE_UNIFORMS)
+    uniforms = {}
+    for i in range(nunif):
+        name, id, typ = glGetActiveAttrib(prg, i)
+        uniforms[name] = id
+    glUseProgram(prg)
+    glUniform4fv(uniforms['color'], 1, (1, 0.5, 0, 1))
 
+..
 
-
-OpenGL commands cannot be invoked until a context, provided by the GUI toolkit, has been created and activated. This requirement imposes design limitations that can make OpenGL programs more awkward. To circumvent this restriction, ``vispy.gloo`` uses a context management system that queues all OpenGL commands until the appropriate context has become active. The direct benefit is that the end user is free to interact with ``vispy.gloo`` however makes sense for their program. Most notably, ``vispy.gloo`` objects can be instantiated when the program starts up, before any context is available.
+Most OpenGL commands cannot be invoked until a context, provided by the GUI toolkit, has been created and activated. This requirement imposes design limitations that can make OpenGL programs more awkward. To circumvent this restriction, ``vispy.gloo`` uses a context management system that queues all OpenGL commands until the appropriate context has become active. The direct benefit is that the end user is free to interact with ``vispy.gloo`` however makes sense for their program. Most notably, ``vispy.gloo`` objects can be instantiated when the program starts up, before any context is available.
 
 .. figure:: gloo.png
 
@@ -376,3 +371,4 @@ References
         
 .. [cuda]  nVidia, *CUDA - Paallel Programming and Computing Platform*,
         http://www.nvidia.com/object/cuda_home_new.html
+        
