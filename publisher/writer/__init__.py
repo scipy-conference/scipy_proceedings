@@ -1,5 +1,4 @@
-
-all__ = ['writer']
+__all__ = ['writer']
 
 import docutils.core as dc
 import docutils.writers
@@ -92,7 +91,10 @@ class Translator(LaTeXTranslator):
         raise nodes.SkipNode
 
     def visit_field_body(self, node):
-        text = self.encode(node.astext())
+        try:
+            text = self.encode(node.astext())
+        except TypeError:
+            text = ''
 
         if self.current_field == 'email':
             self.author_emails.append(text)
