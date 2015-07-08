@@ -54,7 +54,7 @@ include the use, in PyRK [Huff2015]_, of many parts of the scientific python
 software ecosystem such as NumPy [vanderWalt2011]_ for array manipulation, SciPy
 [Milman2011]_ for ODE and PDE solvers, nose [Pellerin2015]_ for testing,
 Pint [Grecco2014]_ for unit-checking, Sphinx [Brandl2009]_ for documentation, and
-matplotlib [Hunter2007]_ for plotting.
+Matplotlib [Hunter2007]_ for plotting.
 
 Background
 ----------
@@ -644,7 +644,7 @@ in Figure :ref:`figtemps`.
    :label:`figtemps`
 
 These are typical of the kinds of results nuclear engineers seek from this kind
-of analysis and can be quickly reparameterized in the process of protoyping
+of analysis and can be quickly re-parameterized in the process of prototyping
 nuclear reactor designs. This particular simulation is not sufficiently
 detailed to represent a benchmark, as the effect of the cladding on heat
 transfer is neglected, as is the Doppler model controlling fuel temperature
