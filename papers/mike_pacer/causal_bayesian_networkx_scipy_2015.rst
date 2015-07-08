@@ -662,4 +662,4 @@ Formal frameworks for generating models (e.g., causal theories) can be even more
 
 Acknowledgements
 ================
-Thank you to Jess Hamrick for aiding in the design of the underlying code, Katy Huff and Stéfan van der Walt for aiding in getting the bibliography working and helping me navigate the github and the submission and review processes, Seb Benthall and Ankur Ankan for helping reviews, and Elizabeth Seiver for comments and support throughout the writing process.
+Thank you to Jess Hamrick for aiding in the design of the underlying code, Katy Huff and Stéfan van der Walt for aiding in getting the bibliography working and helping me navigate github and the submission and review processes, Seb Benthall and Ankur Ankan for helping reviews, and Elizabeth Seiver for comments and support throughout the writing process.
