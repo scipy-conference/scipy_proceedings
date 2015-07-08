@@ -585,13 +585,13 @@ Minimal Example : SFR Reactivity Insertion
 ------------------------------------------
 
 To demonstrate the use of this simulation framework, we give a minimal example.
-This example approximates a 10-second step-reactivity insertion in a sodium
+This example approximates a 1-second impulse-reactivity insertion in a sodium
 cooled fast reactor. This type of simulation is common, as it represents the
-instantaneous removal of a control rod. The change in reactivity results in a
-slightly delayed change in power and corresponding increases in temperatures
-throughout the system. For simplicity, the heat exchanger outside of the
-reactor core is assumed to be perfectly efficient and the inlet coolant
-temperature is held constant throughout the transient.
+instantaneous removal and reinsertion of a control rod. The change in
+reactivity results in a slightly delayed change in power and corresponding
+increases in temperatures throughout the system. For simplicity, the heat
+exchanger outside of the reactor core is assumed to be perfectly efficient and
+the inlet coolant temperature is accordingly held constant throughout the transient.
 
 Minimal Example: Input Parameters
 *********************************
