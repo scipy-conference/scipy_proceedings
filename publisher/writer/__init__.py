@@ -164,6 +164,7 @@ class Translator(LaTeXTranslator):
         title = self.paper_title
         authors = []
         institutions_mentioned = set()
+        equal_authors_mentioned = False
         corr_emails = []
         if len(self.corresponding) == 0:
             self.corresponding = [self.author_names[0]]
@@ -182,11 +183,12 @@ class Translator(LaTeXTranslator):
                         {'author': auth,
                         'footmark': footmarks}]
 
-            if auth in self.equal_contributors:
+            if auth in self.equal_contributors and equal_authors_mentioned==False:
                 fm_counter, fm = equal_footmark
                 authors[-1] += equal_contrib_template % \
                     {'footmark_counter': fm_counter,
                      'footmark': fm}
+                equal_authors_mentioned = True
 
             if auth in self.corresponding:
                 fm_counter, fm = corresponding_footmark
