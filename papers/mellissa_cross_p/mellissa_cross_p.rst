@@ -3,7 +3,7 @@
 :institution: Department of Earth Sciences, University of Minnesota
 
 -----------------------------------------------------------------------------------------------------
-PySPLIT: a Package for the Generation, Analysis, and Visualization of HYSPLIT Air Parcel Trajectory
+PySPLIT: a Package for the Generation, Analysis, and Visualization of HYSPLIT Air Parcel Trajectories
 -----------------------------------------------------------------------------------------------------
 
 .. class:: abstract
