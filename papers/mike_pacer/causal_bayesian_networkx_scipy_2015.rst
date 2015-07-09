@@ -183,7 +183,7 @@ Namely, if we want to know :math:`P(X|Y)` we can transform it into :math:`\frac{
 
 ..  math::
 
-    P(X|Y) = \frac{P(X|Y)P(X)}{\sum_{x \in X}P(X=x|Y)P(X=x)}
+    P(X|Y) = \frac{P(Y|X)P(X)}{\sum_{x \in X}P(Y|X=x)P(X=x)}
 
 Probabilistic Independence
 ==========================
@@ -212,7 +212,7 @@ Bayesian networks are a class of graphical models that have particular probabili
 
 In Bayesian networks when a variable is conditioned on the total set of its parents and children, it is conditionally independent of any other variables in the graph. This is known as the "Markov blanket" of that node. [#]_
 
-.. [#] The word "Markov" refers to Andrei Markov and appears as a prefix to many other terms. It most often indicates that some kind of independence property holds. For example, a Markov chain is a sequence (chain) of variables in which each variable depends only dependent on the value of the immediate preceding (and by implication) postceding variables in the chain. 
+.. [#] The word "Markov" refers to Andrei Markov and appears as a prefix to many other terms. It most often indicates that some kind of independence property holds. For example, a Markov chain is a sequence (chain) of variables in which each variable depends only on the value of the immediately preceding and postceding variables in the chain. Properties like this make computation easier.
 
 Common assumptions in Bayesian networks
 =======================================
