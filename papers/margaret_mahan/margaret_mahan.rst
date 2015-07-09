@@ -30,13 +30,23 @@ In time series analysis, there are two main investigative methods: frequency-dom
 Prewhitening
 ------------
 
-A white noise process is a continuous time series of random values, with a constant mean and variance, normally and independently distributed, and nonautocorrelated. If after modeling a time series the residuals are practically white noise, then we say the series has been prewhitened. An established method for prewhitening time series is to apply an Autoregressive (AR) Integrative (I) Moving Average (MA) model (ARIMA) and retain the residuals [Box]. The full specification of an ARIMA model comprises the orders of each component, (*p*, *d*, *q*), where *p* is the number of preceding values in the autoregressive component, *d* is the number of differencing, and *q* is the number of preceding values in the moving average component. In ARIMA modeling, the I component is addressed first, followed by jointly addressing the ARMA components. Most importantly, the ARIMA method requires the input time series to be: (1) equally spaced over time, (2) of sufficient length, (3) continuous (i.e., no missing values), and, specifically for the ARMA portion, (4) stationary in the second or weak sense, meaning the mean and variance remain constant over time and the autocovariance is only lag-dependent.
+A white noise process is a continuous time series of random values, with a constant mean and variance, normally and independently distributed, and nonautocorrelated. If after modeling a time series the residuals are practically white noise, then we say the series has been prewhitened. An established method for prewhitening time series is to apply an Autoregressive (AR) Integrative (I) Moving Average (MA) model (ARIMA) and retain the residuals [Box]. The full specification of an ARIMA model comprises the orders of each component, (*p*, *d*, *q*), where *p* is the number of preceding values in the autoregressive component, *d* is the number of differencing, and *q* is the number of preceding values in the moving average component. An ARIMA model with orders *p*, *d*, and *q*, is a discrete time linear equations with noise of the form:
+
+.. math::
+
+   (1 - \sum^{p}_{k=1}\phi_{k}L^{k})(1 - L)^{d}X_{t} = (1 + \sum^{q}_{k=1}\theta_{k}L^{k})\epsilon_{t}
+
+where :math:`L` is the time lag operator, :math:`Lx_{t} = x_{t-1}`.
+
+In ARIMA modeling, the I component is addressed first, followed by jointly addressing the AR and MA components. Most importantly, the ARIMA method requires the input time series to be: (1) equally spaced over time, (2) of sufficient length, (3) continuous (i.e., no missing values), and, specifically for the ARMA portion, (4) stationary in the second or weak sense, meaning the mean and variance remain constant over time and the autocovariance is only lag-dependent.
 
 Prewhitening using ARIMA modeling takes three main steps. First, identify and select the model, by detecting factors that influence the time series, such as nonstationarities or periodicities, and identifying the AR and MA components (i.e., model orders). Second, estimate parameter values, by using an estimation function to optimize the parameter values for the desired model. Third, evaluate the model, by checking the model’s adequacy through establishing that the series has been rendered stationary and nonautocorrelated. This time series modeling is iterative, successively refining the model until stationary and nonautocorrelated residuals are obtained. Overall, a good model serves three purposes: providing the background information for further research on the process that generated the time series; enabling accurate forecasting of future values in the series; and yielding the stationary and nonautocorrelated residuals necessary to evaluate accurately associations between time series, since they are devoid of any dependencies stemming from within the series themselves.
 
+Here, we implement two complementary tests to establish stationarity, which determines the value of the I(*d*) order. Using these stationary series, we use median correlation values at each lag of the autocorrelation (ACF) and partial autocorrelation (PACF) functions to identify a range of AR(*p*) and MA(*q*) orders to implement combinatorially. Then we utilize the *Statsmodels* package to find the method-solver combination that provides good metrics for long time series. Finally, we present a novel approach (White Noise Test) to diagnostic checking of ARIMA modeling for long time series, which evaluates residual series based on stationarity and nonautocorrelation. Using our approach, an investigator can perform ARIMA modeling and evaluate candidate models with ease for large datasets and datasets containing long time series.
+
 Model Identification and Selection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-There are several factors that can influence a value in a time series, which arise from previous values in the series, variability in these values, or nonstationarities (trend, drift, changing variance, or random walk). It is important to properly remove the effects of these factors by modeling the time series and taking the residuals. To identify the model orders for an ARIMA(*p*, *d*, *q*), the autocorrelation (ACF) and partial autocorrelation (PACF) functions are used.
+There are several factors that can influence a value in a time series, which arise from previous values in the series, variability in these values, or nonstationarities (trend, drift, changing variance, or random walk). It is important to properly remove the effects of these factors by modeling the time series and taking the residuals. To identify the model orders for an ARIMA(*p*, *d*, *q*), the ACF and PACF are used.
 
 First, nonstationarities need to be removed before ARMA modeling. A nonstationary process is identified by an ACF that does not tail away to zero quickly or cut-off after a finite number of steps. If the time series is nonstationary, then a first differencing of the series is computed. This process is repeated until the time series is stationary, which determines the value of *d* (i.e., the value of d is the number of times the derivative of the series is taken to achieve stationarity). Two of the most frequently used tests for detecting nonstationarities are the augmented Dickey-Fuller (ADF) test [Said] and the Kwiatkowski–Phillips–Schmidt–Shin (KPSS) test [Kwiatkowski]. The ADF is a unit root test for the null hypothesis that a time series is I(1) while the KPSS is a stationarity test for the null hypothesis that a time series is I(0). Since these tests are complementary, we use them together to determine whether a series is stationary. In our case, a series taken to be nonstationary, if the ADF null hypothesis is accepted and the KPSS null is rejected. We implement the ADF test using *Statsmodels* and the KPSS test using the *Arch* Python package.
 
@@ -76,13 +86,13 @@ There are two components in evaluating an ARIMA model, namely, model stability a
 
 .. math::
 
-   1 - \phi_{1}B - \cdots - \phi_{p}B^{p} = 0
+   1 - \phi_{1}L - \cdots - \phi_{p}L^{p} = 0
 
-where :math:`\phi_{i}` are the estimated AR parameter values, B is the backshift operator, and
+where :math:`\phi_{i}` are the estimated AR parameter values, L is the time lag operator, and
 
 .. math::
 
-   1 + \theta_{1}B + \cdots + \theta_{q}B^{q} = 0 
+   1 + \theta_{1}L + \cdots + \theta_{q}L^{q} = 0 
 
 where :math:`\theta_{i}` are the estimated MA parameter values, should lie outside the unit circle, i.e., within bounds of stationarity (for the *p* parameter values) and invertibility (for the *q* parameter values) [Pankratz]. For the model to be adequate, the residual time series should not be significantly different from white noise; in other words, the series should have constant mean and variance, and each value in the series should be uncorrelated with other realizations up to *k* lags. If either model stability or adequacy have not been established, then model identification and selection should be revised, and the diagnostic cycle continued, iteratively, until established.
 
@@ -287,7 +297,7 @@ We compare our ACF thresholding to two autocorrelation tests, the Ljung-Box and 
 
    ACF and Ljung-Box Attributes Compared :label:`ljungACF`
 
-.. table:: Breusch-Godfrey versus Ljung-Box :label:`breuschLjung`
+.. table:: Breusch-Godfrey test compared to Ljung-Box test :label:`breuschLjung`
 
    +--------------+------+--------------+--------------+
    |df            | % =  |% :math:`\neq`|% :math:`\neq`|
