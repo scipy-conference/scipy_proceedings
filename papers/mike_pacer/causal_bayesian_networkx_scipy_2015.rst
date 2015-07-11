@@ -3,7 +3,7 @@
 :institution: University of California at Berkeley
 :bibliography: myBibliography
 
-:video: youtube_link_to_come
+:video: https://www.youtube.com/watch?v=qWAQgWOD_nA
 
 ..  latex::
     :usepackage: booktabs
