@@ -601,7 +601,7 @@ retrieved from :ref:`Ragusa2011`, :ref:`Sofu200?`, and :ref:`asm2015`. The
 detailed input is listed in the full input file with illuminating comments as
 follows:
 
-.. include:: ./papers/kathryn_huff/min_ex.txt
+.. include:: ../papers/kathryn_huff/min_ex.txt
 
 Minimal Example Results
 ***********************
