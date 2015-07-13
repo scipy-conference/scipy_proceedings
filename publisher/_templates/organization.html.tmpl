@@ -9,7 +9,7 @@
   <ul>
 
     {{for member in committee['members'] }}
-      <li>{{html_quote(member['name']) | html}} {{ if 'org' in member }} ({{html_quote(member['org']) | html}}) {{ endif }}</li>
+      <li>{{html_quote(member['name']) | html}} {{if 'org' in member}} ({{html_quote(member['org']) | html}}) {{endif}}</li>
     {{endfor}}
   </ul>
 
