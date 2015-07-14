@@ -1,4 +1,4 @@
-:author: Mike Pacer
+:author: Michael D. Pacer
 :email: mpacer@berkeley.edu
 :institution: University of California at Berkeley
 :bibliography: myBibliography
