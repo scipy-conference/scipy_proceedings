@@ -317,8 +317,7 @@ The value :math:`q_k` is the distribution of excess degree.
 
    \sum_{j} e_{jk} = q_{k}
 
-The value :math:`\sigma_{q}` is the standard deviation of :math:`q_k`. [TODO: I'm using directed
-assortativity here, yes? And what about weighted degrees?]
+The value :math:`\sigma_{q}` is the standard deviation of :math:`q_k`.
 
 [Newman2002]_ studied degree assortativity in complex networks and introduced an intriguing 
 hypothesis. Observed social networks, such as those of academic coauthorship networks and business
@@ -737,7 +736,7 @@ we find this notable.
 Discussion
 ==========
 
-Empirically we have found no empirical support for email interaction networks having
+We have found no empirical support for email interaction networks having
 power law degree distribution, as opposed to a log-normal degree distribution.
 Interpretation of this result will vary depending on the "prior" probability
 on assigns to finding power law and log-normal distributions in social processes like this.
