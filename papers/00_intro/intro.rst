@@ -68,18 +68,18 @@ the interface between science and data.
 The conference continues to grow with over **500?550?** international participants,
 **newfrac** percent of whom were attending SciPy for the first time.  More than half
 of attendees are now from industry, the rest split between government
-laboratories and the academy.  This year's record conference attendance as well
-as record participation in the sprints are indicative of the increasing global
-interest surrounding scientific python. Tool development, which now moves at a
-blinding pace in this community, is accordingly converging on remarkable
-advances in visualization, data analysis, domain science, and quantitative
-social sciences - all represented at this conference.  The organizing committee
-is dedicated to increasing representation from underrepresented groups. In
-addition to organizing a luncheon focused on diversity, the Diversity Committee
-awarded 5 scholarships, sponsored by NumFOCUS, which were focused on improving
-the representation of women, minorities, and disabled populations in our
-community. Including those, our many sponsors awarded funding to help 31 people
-attend the conference.
+laboratories and the academy.  This year's record conference attendance  as
+well as record participation in the sprints (**howmany**) are indicative of the
+increasing global interest surrounding scientific python. Tool development,
+which now moves at a blinding pace in this community, is accordingly converging
+on remarkable advances in visualization, data analysis, domain science, and
+quantitative social sciences - all represented at this conference.  The
+organizing committee is dedicated to increasing representation from
+underrepresented groups. In addition to organizing a luncheon focused on
+diversity, the Diversity Committee awarded 5 scholarships, sponsored by
+NumFOCUS, which were focused on improving the representation of women,
+minorities, and disabled populations in our community. Including those, our
+many sponsors awarded funding to help 31 people attend the conference.
 
 |noindent|
 Birds of a Feather sessions were organized around various topics, providing an
