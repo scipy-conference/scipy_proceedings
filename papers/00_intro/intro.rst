@@ -87,6 +87,7 @@ effective platform for discussing issues relevant to the community.  New open
 space activities, sponsor-funded social events and tutorials effectively
 exposed newcomers to the welcoming and inclusive scientific Python community.
 
+|noindent|
 These proceedings contain 30 peer-reviewed contributions, based on talks and
 posters presented at the conference.  This cross-section of the talks and
 posters presented at the conference represents a detailed window into the
