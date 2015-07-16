@@ -41,8 +41,9 @@ projects of interest to attendees. The topics covered in those days spanned a
 wide array of domains and attracted attendees from across the globe. In
 particular, the two central themes this year emphasized Python use within
 Quantitative Finance and Computational Social Sciences as well as the emergent
-area of Data Science. It also attracted exceptional representation from the
-scientific disciplines highlighted in the additional minisymposia :
+area of Data Science. The conference minisymposia also attracted exceptional
+representation from the scientific disciplines highlighted in those additional
+domain-specific tracks :
 
 - Astronomy and Astrophysics
 - Geospatial Information Sciences
