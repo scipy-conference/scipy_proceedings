@@ -1,0 +1,4 @@
+EGG-INFO/
+*.param
+.smt/
+*docker_image.tar

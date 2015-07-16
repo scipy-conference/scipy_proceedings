@@ -1,0 +1,3 @@
+seed = 34326       # seed for random number generator
+distr = "normal"   # statistical distribution to draw values from 
+n = 50             # number of values to draw
