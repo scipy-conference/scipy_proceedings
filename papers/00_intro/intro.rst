@@ -27,11 +27,11 @@ SciPy 2015, the fourteenth annual Scientific Computing with Python
 conference, was held July 6 |--| 12th in Austin, Texas. This community, focused
 on the use and development of open source scientific software in Python, has
 grown enormously since its origins at the first SciPy conference in 2002 at the
-California Institute of Technology. This growth is owed in no small part to the
+California Institute of Technology. This growth is due in no small part to the
 enormous growth in support from industrial, government, and academic partners.
-However, the success of this community is a testament, first and foremost to
-the individual attendees, whether returning for their 14th year or attending
-for the first time, who provide the science, enthusiasm, and inspiration on
+The success of this community is a testament to the individual
+attendees, whether returning for their 14th year or attending for the
+first time, who provide the science, enthusiasm, and inspiration on
 which the community thrives.
 
 |noindent|
@@ -40,7 +40,7 @@ three days of presentations and concluded with two days of developer sprints on
 projects of interest to attendees. The topics covered in those days spanned a
 wide array of domains and attracted attendees from across the globe. In
 particular, the two central themes this year emphasized Python use within
-Quantitative Finance and Computational Social Sciences as well as the emergent
+Quantitative Finance and Computational Social Sciences and the emergent
 area of Data Science. The conference minisymposia also attracted exceptional
 representation from the scientific disciplines highlighted in those additional
 domain-specific tracks :
@@ -56,7 +56,7 @@ domain-specific tracks :
 |noindent|
 This year, we were privileged to have three prominent community members present
 keynote talks. Chris Wiggins, a professor at Columbia University and the Chief
-Data Scientist at the New York Times gave a unique perspective on the data
+Data Scientist at the New York Times, gave a unique perspective on the data
 science behind the business of the newspaper industry. Pandas developer and
 author, Wes McKinney, then told his story of a career path through mathematics,
 finance and tech startups. Finally, the director of research at the University
