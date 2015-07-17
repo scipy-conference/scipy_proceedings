@@ -84,7 +84,7 @@ minorities, and disabled populations in our community. Including those, our
 many sponsors awarded funding to help 31 people attend the conference.
 
 |noindent|
-Birds of a Feather sessions were organized around various topics, providing an
+Fourteen Birds of a Feather sessions were organized around various topics, providing an
 effective platform for discussing issues relevant to the community.  New open
 space activities, sponsor-funded social events and tutorials effectively
 exposed newcomers to the welcoming and inclusive scientific Python community.
