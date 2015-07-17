@@ -65,12 +65,14 @@ scientific Python libraries, Jake Vanderplas, gave a motivating perspective on
 the interface between science and data.
 
 |noindent|
-The conference continues to grow with over **500?550?** international participants,
-**newfrac** percent of whom were attending SciPy for the first time.  More than half
-of attendees are now from industry, the rest split between government
-laboratories and the academy.  This year's record conference attendance  as
-well as record participation in the sprints (**howmany**) are indicative of the
-increasing global interest surrounding scientific python. Tool development,
+The conference continues to grow with over 600 participants from
+**howmany** countries, **newfrac** percent of whom were attending
+SciPy for the first time. More than half of attendees are now from
+industry, the rest split between government laboratories and the
+academy.  This year's record conference attendance as well as record
+participation in the tutorials (over 300 people) and in the sprints
+(over 200) are indicative of the increasing global interest
+surrounding scientific python. Tool development,
 which now moves at a blinding pace in this community, is accordingly converging
 on remarkable advances in visualization, data analysis, domain science, and
 quantitative social sciences - all represented at this conference.  The
