@@ -18,6 +18,8 @@
 :email: jyb@creare.com
 :institution: Creare LLC, Hanover, NH
 
+:video: https://www.youtube.com/watch?v=bGulPZh_-Mo
+
 ------------------------------------------------
 pyDEM: Global Digital Elevation Model Analysis
 ------------------------------------------------

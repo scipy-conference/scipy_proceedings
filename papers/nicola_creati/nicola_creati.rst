@@ -10,6 +10,7 @@
 :email: psterzai@inogs.it
 :institution: Istituto Nazionale di Oceanografia e di Geofisica Sperimentale, OGS
 
+:video: https://www.youtube.com/watch?v=PTEgs7salEc
 
 ------------------------------------------------
 Geodynamic simulations in HPC with Python

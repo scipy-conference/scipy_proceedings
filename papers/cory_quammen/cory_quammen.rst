@@ -2,6 +2,8 @@
 :email: cory.quammen@kitware.com
 :institution: Kitware, Inc.
 
+:video: https://www.youtube.com/watch?v=8ugmkKaYKxM
+
 -------------------------------------------------------------------------
 Scientific Data Analysis and Visualization with Python, VTK, and ParaView
 -------------------------------------------------------------------------

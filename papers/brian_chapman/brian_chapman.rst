@@ -6,6 +6,7 @@
 :email: jeannieirwin@gmail.com
 :institution: Unaffiliated
 
+:video: https://www.youtube.com/watch?v=kP_glnbesJ4
 
 ----------------------------------------------------------------
 Python as a First Programming Language for Biomedical Scientists

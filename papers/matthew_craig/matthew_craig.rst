@@ -2,6 +2,8 @@
 :email: mcraig@mnstate.edu
 :institution: Department of Physics and Astronomy, Minnesota State University Moorhead
 
+:video: https://www.youtube.com/watch?v=hyxCDdBH1Mg
+
 --------------------------------------------------------------------------
 Widgets and Astropy: Accomplishing Productive Research with Undergraduates
 --------------------------------------------------------------------------

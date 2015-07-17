@@ -2,6 +2,8 @@
 :email: katyhuff@gmail.com
 :institution: University of California, Berkeley
 
+:video: https://www.youtube.com/watch?v=2HToG61wMWI
+
 -----------------------------------------------------
 PyRK: A Python Package For Nuclear Reactor Kinetics
 -----------------------------------------------------

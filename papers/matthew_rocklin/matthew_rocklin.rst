@@ -2,6 +2,8 @@
 :email: mrocklin@gmail.com
 :institution: Continuum Analytics
 
+:video: https://www.youtube.com/watch?v=1kkFZ4P-XHg
+
 ----------------------------------------------------------------------
 Dask: Parallel Computation with Blocked algorithms and Task Scheduling
 ----------------------------------------------------------------------

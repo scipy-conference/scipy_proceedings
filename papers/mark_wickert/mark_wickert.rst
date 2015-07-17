@@ -2,6 +2,7 @@
 :email: mwickert@uccs.edu
 :institution: University of Colorado Colorado Springs
 
+:video: https://www.youtube.com/watch?v=xWREmn7EajM
 
 ----------------------------------------------------------------------------------
 Signal Processing and Communications: Teaching and Research Using IPython Notebook

@@ -18,6 +18,8 @@
 :email: Nicolas.Rougier@inria.fr
 :institution: French National Institute for Research in Computer Science and Control
 
+:video: https://www.youtube.com/watch?v=_3YoaeoiIFI
+
 
 ------------------------------------------------------------
 VisPy: Harnessing The GPU For Fast, High-Level Visualization

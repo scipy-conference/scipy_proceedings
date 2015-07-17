@@ -4,6 +4,8 @@
 :author: Abinash Panda
 :email: mailme.abinashpanda@gmail.com
 
+:video: https://www.youtube.com/watch?v=Vcmjqx7lht0
+
 --------------------------------------------------
 pgmpy: Probabilistic Graphical Models using Python
 --------------------------------------------------

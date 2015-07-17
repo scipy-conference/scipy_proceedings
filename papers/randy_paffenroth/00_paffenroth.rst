@@ -6,6 +6,7 @@
 :email: xkong@wpi.edu
 :institution: Worcester Polytechnic Institute, Computer Science Department and Data Science Program
 
+:video: https://www.youtube.com/watch?v=EUEHOYl0mRg
 
 ------------------------------------------------
 Python in Data Science Research and Education

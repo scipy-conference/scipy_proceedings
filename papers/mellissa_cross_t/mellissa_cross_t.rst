@@ -2,6 +2,8 @@
 :email: cros0324@umn.edu, mellissa.cross@gmail.com
 :institution: Department of Earth Sciences, University of Minnesota
 
+:video: https://www.youtube.com/watch?v=tklAFsce7eg
+
 -------------------------------------------------------------------------------------------------------------------------
 TrendVis: an Elegant Interface for dense, sparkline-like, quantitative visualizations of multiple series using matplotlib
 -------------------------------------------------------------------------------------------------------------------------

@@ -4,6 +4,8 @@
 :email: cjdrake@gmail.com
 :institution: Drake Enterprises
 
+:video: https://www.youtube.com/watch?v=cljDuK0ouRs
+
 **************************************************************************
   PyEDA: Data Structures and Algorithms for Electronic Design Automation
 **************************************************************************

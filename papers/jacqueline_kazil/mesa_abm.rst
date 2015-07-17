@@ -6,6 +6,8 @@
 :email: jackiekazil@gmail.com
 :institution: Department of Computational Social Science, George Mason University
 
+:video: https://www.youtube.com/watch?v=lcySLoprPMc
+
 ----------------------------------------
 Mesa: An Agent-Based Modeling Framework
 ----------------------------------------

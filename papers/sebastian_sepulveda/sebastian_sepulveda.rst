@@ -10,6 +10,7 @@
 :email: alejandro.weinstein@uv.cl
 :institution: Escuela de Ingeniería Civil Biomédica, Facultad de Ingeniería, Universidad de Valparaíso
 
+:video: https://www.youtube.com/watch?v=yNOJ_NfzI64
 :video: https://www.youtube.com/watch?v=sdVygxpljII
 :video: https://www.youtube.com/watch?v=6WxkOeTuX7w
 

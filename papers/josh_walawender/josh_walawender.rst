@@ -2,6 +2,8 @@
 :email: joshwalawender@me.com
 :institution: Subaru Telescope, National Astronomical Observatory of Japan
 
+:video: https://www.youtube.com/watch?v=dGLkDOvYOHA
+
 ---------------------------------------------
 Automated Image Quality Monitoring with IQMon
 ---------------------------------------------

@@ -2,6 +2,8 @@
 :email: iandh@byu.edu
 :institution: Brigham Young University Math Department
 
+:video: https://www.youtube.com/watch?v=R4yB-8tB0J0
+
 ---------------------------------------------------------------------
 Circumventing The Linker: Using SciPy's BLAS and LAPACK Within Cython
 ---------------------------------------------------------------------

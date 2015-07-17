@@ -2,6 +2,8 @@
 :email: robknight@ucsd.edu
 :institution: University of California, San Diego
 
+:video: https://www.youtube.com/watch?v=TQzXwQ9Vx08
+
 ----------------------------------------------------------------------------------------------------
 Qiita: report of progress towards an open access microbiome data analysis and visualization platform
 ----------------------------------------------------------------------------------------------------

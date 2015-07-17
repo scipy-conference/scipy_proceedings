@@ -10,6 +10,8 @@
 :email: perry@stsci.edu
 :institution: Space Telescope Science Institute
 
+:video: https://www.youtube.com/watch?v=o-D4TpRFza4
+
 --------------------------------------------------------
 The James Webb Space Telescope Data Calibration Pipeline
 --------------------------------------------------------

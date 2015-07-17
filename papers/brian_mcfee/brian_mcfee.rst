@@ -27,6 +27,8 @@
 :email: oriol@nyu.edu
 :institution: Music and Audio Research Laboratory, New York University
 
+:video: https://www.youtube.com/watch?v=MhOdbtPhbLU
+
 --------------------------------------------------
 librosa: Audio and Music Signal Analysis in Python
 --------------------------------------------------

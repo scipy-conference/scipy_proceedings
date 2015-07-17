@@ -2,6 +2,7 @@
 :email: allen.downey@olin.edu
 :institution: Olin College of Engineering
 
+:video: https://www.youtube.com/watch?v=XHYFNraQEEo
 ------------------------------------------------
 Will Millennials Ever Get Married?
 ------------------------------------------------

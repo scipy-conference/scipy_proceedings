@@ -2,6 +2,8 @@
 :email: cros0324@umn.edu, mellissa.cross@gmail.com
 :institution: Department of Earth Sciences, University of Minnesota
 
+:video: https://www.youtube.com/watch?v=2mzhTC4Kp-Y
+
 -----------------------------------------------------------------------------------------------------
 PySPLIT: a Package for the Generation, Analysis, and Visualization of HYSPLIT Air Parcel Trajectories
 -----------------------------------------------------------------------------------------------------

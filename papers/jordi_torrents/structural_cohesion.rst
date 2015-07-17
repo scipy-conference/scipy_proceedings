@@ -6,6 +6,8 @@
 :email: fferraro@iese.edu
 :institution: IESE Business School
 
+:video: https://www.youtube.com/watch?v=K8RFIdG3g9Y
+
 ---------------------------------------------------------------------------------------------------
 Structural Cohesion: Visualization and Heuristics for Fast Computation with NetworkX and matplotlib
 ---------------------------------------------------------------------------------------------------

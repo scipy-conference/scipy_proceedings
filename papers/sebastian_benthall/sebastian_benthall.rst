@@ -2,6 +2,8 @@
 :email: sb@ischool.berkeley.edu
 :institution: UC Berkeley School of Information
 
+:video: https://www.youtube.com/watch?v=AQFS_ES7rT0
+
 ================================================================
  Testing Generative Models of Online Collaboration with BigBang
 ================================================================

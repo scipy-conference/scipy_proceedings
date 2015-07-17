@@ -12,6 +12,8 @@
 :email: jbednar@inf.ed.ac.uk
 :institution: Institute for Adaptive and Neural Computation, University of Edinburgh
 
+:video: https://www.youtube.com/watch?v=hNsR2H7Lrg0
+
 --------------------------------------------------------------------------
 HoloViews: Building Complex Visualizations Easily for Reproducible Science
 --------------------------------------------------------------------------

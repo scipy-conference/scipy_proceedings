@@ -2,6 +2,8 @@
 :email: yannick.congo@gmail.com
 :institution: LIMOS - UMR CNRS 6158, Blaise Pascal Univerity, Campus Universitaire des Cezeaux, 2 Rue de la Chebarde, TSA 60125 - CS, 60026, 63178 Aubière CEDEX FRANCE
 
+:video: https://www.youtube.com/watch?v=euMLYw7SNdk
+
 .. :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
 ---------------------------------------------------------------
