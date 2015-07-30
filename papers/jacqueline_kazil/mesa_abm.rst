@@ -268,8 +268,8 @@ We now have enough code to run the model, get some data out of it, and analyze i
 
 .. code-block:: python
 
-  # Create a model with 100 agents
-  model = MoneyModel(100)
+  # Create a model with 100 agents on a torus 10x10 grid
+  model = MoneyModel(100, 10, 10, True)
   # Run it for 1,000 steps:
   model.run_model(1000)
   # Get the data as a DataFrame
@@ -451,8 +451,3 @@ References
 .. [Schelling1971] Schelling, Thomas C. “Dynamic models of segregation.” Journal of Mathematical Sociology 1.2 (1971): 143-186.
 .. [Wilensky1999] Wilensky, Uri. “NetLogo.” Evanston, IL: Center for Connected Learning and Computer-Based Modeling, Northwestern University, 1999.
 .. [Zvoleff2013] Zvoleff, Alex. “PyABM Toolkit." http://azvoleff.com/pyabm.html.
-
-
-
-
-
