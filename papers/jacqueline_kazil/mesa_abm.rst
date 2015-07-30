@@ -250,7 +250,7 @@ To continue our example, we use a data collector to collect the wealth of each a
 
 .. code-block:: python
 
-  from mesa.datacollector import DataCollector
+  from mesa.datacollection import DataCollector
 
   class MoneyModel(Model):
 
