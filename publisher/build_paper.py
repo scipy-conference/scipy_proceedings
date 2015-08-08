@@ -20,7 +20,8 @@ header = r'''
 
 .. role:: label
 
-.. role:: cite
+.. role:: cite(raw)
+   :format: latex
 
 .. raw::  latex
 
