@@ -599,8 +599,8 @@ Minimal Example: Input Parameters
 *********************************
 
 The parameters used to configure the simulation were
-retrieved from :ref:`Ragusa2011`, :ref:`Sofu200?`, and :ref:`asm2015`. The
-detailed input is listed in the full input file with illuminating comments as
+retrieved from :ref:`Ragusa2009` and :ref:`Sofu2015`.  The detailed input is 
+listed in the full input file with illuminating comments as
 follows:
 
 .. include:: ../papers/kathryn_huff/min_ex.txt
@@ -702,6 +702,10 @@ References
 .. [Oliphant2007] T. E. Oliphant, "Python for Scientific Computing," Computing in Science & Engineering, vol. 9, no. 3, pp. 10–20, 2007.
 
 .. [Pellerin2015] J. Pellerin, nose. https://pypi.python.org/pypi/nose/1.3.7. 2015.
+
+.. [Ragusa2009] J. C. Ragusa and V. S. Mahadevan, "Consistent and accurate schemes for coupled neutronics thermal-hydraulics reactor analysis," Nuclear Engineering and Design, vol. 239, no. 3, pp. 566–579, Mar. 2009.
+
+.. [Sofu2011] T. Sofu, "A review of inherent safety characteristics of metal alloy sodium-cooled fast reactor fuel against postulated accidents," Nuclear Engineering and Technology, vol. 47, no. 3, pp. 227–239, Apr. 2015.
 
 .. [Travis2015] Travis, “travis-ci/travis-api,” GitHub repository. Available: https://github.com/travis-ci/travis-api. Accessed: 04-Jul-2015.
 

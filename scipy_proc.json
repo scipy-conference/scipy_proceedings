@@ -249,10 +249,27 @@
         {
             "name": "Mini Symposium Committee",
             "members": [
-                {"name": "Jane Doe",
-                 "org": "Symposium"},
-                {"name": "Jane Doe",
-                 "org": "Symposium"}
+                {"name": "Jake Vanderplas",
+                "org": "Astronomy and Astrophysics"
+                },
+                {"name": "Greg Caporaso",
+                "org": "Computational Life and Medical Sciences"
+                },
+                {"name": "Lorena Barba",
+                "org": "Engineering"
+                },
+                {"name": "Matt Hall",
+                "org": "Geophysics"
+                },
+                {"name": "Carson Farmer",
+                "org": "GIS"
+                },
+                {"name": "Chris Barker",
+                "org": "Oceanography and Meteorology"
+                },
+                {"name": "Damon McDougall",
+                 "org": "Vision, Visualization, and Imaging"
+                }
                 ]
         },
 
@@ -273,17 +290,170 @@
         {
             "name": "Diversity Committee",
             "members": [
-                {"name": "Jane Doe",
-                 "org": "Location"}
+                {"name": "Patricia Francis-Lyon",
+                "org": "University of San Francisco"
+                },
+                {"name": "Leah Silen",
+                "org": "NumFOCUS"
+                },
+                {"name": "Cindy Sridharan",
+                "org": ""
+                },
+                {"name": "Matt Davis",
+                "org": "Autodesk "
+                },
+                {"name": "April Wright",
+                "org": "University of Texas at Austin"
+                }
                 ]
         }
   ],
 
   "sponsored_students": [
       {
-          "name": "First name",
-          "org": "University",
-          "location": "Where from"
+          "name": "Azalee Bostroem",
+          "org": "University of California - Davis",
+          "location": ""
+      },
+      {
+          "name": "Pilar Brist",
+          "org": "University of Texas - Tyler",
+          "location": ""
+      },
+      {
+          "name": "Luke Campagnola",
+          "org": "VisPy",
+          "location": ""
+      },
+      {
+          "name": "Lesley Chapman",
+          "org": "University of Rochester Medical Center",
+          "location": ""
+      },
+      {
+          "name": "Roberto Colistete Junior",
+          "org": "Federal University of Espirito Santo",
+          "location": ""
+      },
+      {
+          "name": "Yannick Congo",
+          "org": "EDSPI France",
+          "location": ""
+      },
+      {
+          "name": "Mellissa Cross",
+          "org": "University of Minnesota",
+          "location": ""
+      },
+      {
+          "name": "Filipe Fernandes",
+          "org": "SECOORA",
+          "location": ""
+      },
+      {
+          "name": "Gabriel Grant",
+          "org": "RepsWith.us",
+          "location": ""
+      },
+      {
+          "name": "Harsh Gupta",
+          "org": "SymPy",
+          "location": ""
+      },
+      {
+          "name": "Ian Henriksen",
+          "org": "Brigham Young University",
+          "location": ""
+      },
+      {
+          "name": "Jaime Huerta-Cepas",
+          "org": "European Molecular Biology Laboratory",
+          "location": ""
+      },
+      {
+          "name": "Kyle Kastner",
+          "org": "Universite de Montreal",
+          "location": ""
+      },
+      {
+          "name": "Juliana Leonel",
+          "org": "Universidade Federal de Bahia",
+          "location": ""
+      },
+      {
+          "name": "Eric Ma",
+          "org": "Massachusetts Institute of Technology",
+          "location": ""
+      },
+      {
+          "name": "Shaylyn Scott",
+          "org": "George Mason University",
+          "location": ""
+      },
+      {
+          "name": "Liz Streckert",
+          "org": "PyLadies",
+          "location": ""
+      },
+      {
+          "name": "Jordi Torrents",
+          "org": "NetworkX",
+          "location": ""
+      },
+      {
+          "name": "David Urbina",
+          "org": "University of Texas at Dallas",
+          "location": ""
+      },
+      {
+          "name": "Alexander Vostrikov",
+          "org": "University of Chicago",
+          "location": ""
+      },
+      {
+          "name": "David Warde-Farley",
+          "org": "Universite de Montreal",
+          "location": ""
+      },
+      {
+          "name": "Joshua Warner",
+          "org": "Mayo Clinic",
+          "location": ""
+      },
+      {
+          "name": "Avani Wildani",
+          "org": "The Salk Institute for Biological Studies",
+          "location": ""
+      },
+      {
+          "name": "Levi Wolf",
+          "org": "Arizona State University",
+          "location": ""
+      },
+      {
+          "name": "Chuan Yang",
+          "org": "Shengjing Hospital of China Medical University",
+          "location": ""
+      },
+      {
+          "name": "Amy Prager",
+          "org": "Girl Scouts of Eastern Mass.",
+          "location": ""
+      },
+      {
+          "name": "Dana Engebretson",
+          "org": "University of Minnesota",
+          "location": ""
+      },
+      {
+          "name": "Leena P",
+          "org": "PyLadies",
+          "location": ""
+      },
+      {
+          "name": "Nikhil Haas",
+          "org": "University of San Francisco",
+          "location": ""
       }
   ]
 }

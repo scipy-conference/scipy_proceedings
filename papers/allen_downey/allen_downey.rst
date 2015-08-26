@@ -3,6 +3,7 @@
 :institution: Olin College of Engineering
 
 :video: https://www.youtube.com/watch?v=XHYFNraQEEo
+
 ------------------------------------------------
 Will Millennials Ever Get Married?
 ------------------------------------------------
@@ -24,6 +25,7 @@ Will Millennials Ever Get Married?
    in Python.
 
 .. class:: keywords
+
    Survival analysis, marriage patterns, Python.
 
 Introduction
