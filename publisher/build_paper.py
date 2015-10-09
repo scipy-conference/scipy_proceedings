@@ -8,6 +8,7 @@ import re
 import tempfile
 import glob
 import shutil
+from distutils import dir_util
 
 from writer import writer
 from conf import papers_dir, output_dir
@@ -19,7 +20,8 @@ header = r'''
 
 .. role:: label
 
-.. role:: cite
+.. role:: cite(raw)
+   :format: latex
 
 .. raw::  latex
 
@@ -39,9 +41,7 @@ header = r'''
 
 def rst2tex(in_path, out_path):
 
-    options.mkdir_p(out_path)
-    for file in glob.glob(os.path.join(in_path, '*')):
-        shutil.copy(file, out_path)
+    dir_util.copy_tree(in_path, out_path)
 
     base_dir = os.path.dirname(__file__)
     scipy_status = os.path.join(base_dir, '_static/status.sty')
