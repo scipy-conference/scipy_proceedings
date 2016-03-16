@@ -10,7 +10,7 @@ paper:
   [scipy_proceedings](https://github.com/scipy-conference/scipy_proceedings)
   repository on GitHub.
 
-- Check out the 2015 branch (``git checkout 2015``).
+- Check out the 2016 branch (``git checkout 2016``).
 
 - An example paper is provided in ``papers/00_vanderwalt``.  Create a new
   directory ``papers/firstname_surname``, copy the example paper into it, and
@@ -22,7 +22,7 @@ paper:
 
 - Once you are ready to submit your paper, file a pull request on GitHub.
   **Please ensure that you file against the correct branch**--your branch
-  should be named 2015, and the pull-request should be against our 2015
+  should be named 2016, and the pull-request should be against our 2016
   branch.
 
 - Please do not modify any files outside of your paper directory.
@@ -42,7 +42,7 @@ allowed during the open review period which ends July 5th.
 
 ## Review Criteria
 
-A small subcommittee of the SciPy 2015 organizing committee has created [this
+A small subcommittee of the SciPy 2016 organizing committee has created [this
 set of suggested review
 criteria](https://github.com/scipy-conference/scipy_proceedings/blob/master/review_criteria.md)
 to help guide authors and reviewers alike. Suggestions and amendments to these
