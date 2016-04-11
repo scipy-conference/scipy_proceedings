@@ -27,8 +27,8 @@ paper:
 
 - Please do not modify any files outside of your paper directory.
 
-Pull requests are to be submitted by **June 15th**, but modifications are
-allowed during the open review period which ends July 5th.
+Pull requests are to be submitted by **May 16th**, but modifications are
+allowed during the open review period which ends July 4th.
 
 
 ## General Guidelines
@@ -78,8 +78,8 @@ sudo apt-get install python-docutils texlive-latex-base texlive-publishers \
 
 ## Build Server
 
-Thanks to the great and wonderful Stefan van der Walt, there is a server online 
-building the open pull requests [here](http://nipy.bic.berkeley.edu:5000/). You may be 
+Thanks to the great and wonderful Katy Huff, there is a server online 
+building the open pull requests [here](http://zibi.bids.berkeley.edu:5000). You may be 
 able to pull a built PDF for review from there.
 
 ## For organizers
