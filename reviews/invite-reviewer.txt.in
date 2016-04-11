@@ -1,16 +1,23 @@
 Hello {{ reviewer }}!
 
-The SciPy 2016 Conference on Python in Science is
-fast approaching, and so too is the deadline for 
-Proceedings submissions (May 16th) and consequently 
-the start of the review process.
+The SciPy 2016 Conference on Python in Science is fast approaching, and so too
+is the deadline for Proceedings submissions (May 16th) and consequently the
+start of the review process.
 
-We welcome you to be a member of the Proceedings review Committee this year.  This should require a little of your time spread out over the review period (May 16th to July 4th) to read, comment, and ultimately decide on three submissions that line up with your area of expertise.
+We welcome you to be a member of the Proceedings review Committee this year.
+This should require a little of your time spread out over the review period
+(May 16th to July 4th) to read, comment, and ultimately decide on three
+submissions that line up with your area of expertise.
 
-In the spirit of Open Source software, the SciPy conference uses a fully open and collaborative review process to make proceedings acceptance decisions.  To learn more about this, you can read about it on the proceedings github page, https://github.com/scipy-conference/scipy_proceedings.   
+In the spirit of Open Source software, the SciPy conference uses a fully open
+and collaborative review process to make proceedings acceptance decisions.  
+To learn more about this, you can read about it on the proceedings github page,
+https://github.com/scipy-conference/scipy_proceedings.   
 
-Please let us know if you would like to participate this year and we will include you in subsequent communications.  Also, feel free to pass this message along to anyone else who may be interested in reviewing.  
+Please let us know if you would like to participate this year and we will
+include you in subsequent communications.  Also, feel free to pass this message
+along to anyone else who may be interested in reviewing.  
 
 Yours Truly, 
-Your friendly SciPy 2016 Proceedings co-chairs,
+Your SciPy 2016 Proceedings co-chairs,
 Scott Rostrup and Sebastian Benthall
