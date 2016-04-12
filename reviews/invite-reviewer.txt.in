@@ -1,22 +1,24 @@
 Hello {{ reviewer }}!
 
-The SciPy 2016 Conference on Python in Science is fast approaching, and so too
-is the deadline for Proceedings submissions (May 16th) and consequently the
-start of the review process.
+The 2016 Scientific Computing with Python Conference
+(http://scipy2016.scipy.org) is fast approaching, and so too is the deadline
+for proceedings submissions (May 16th) and consequently the start of the
+review process.  
 
-We welcome you to be a member of the Proceedings review Committee this year.
+We welcome you to be a member of the Proceedings Review Committee this year.
 This should require a little of your time spread out over the review period
-(May 16th to July 4th) to read, comment, and ultimately decide on three
-submissions that line up with your area of expertise.
+(May 16th to July 4th) to evaluate three assigned submissions aligned with your
+areas of expertise.
 
-In the spirit of Open Source software, the SciPy conference uses a fully open
+In the spirit of open source software, the SciPy conference uses a fully open
 and collaborative review process to make proceedings acceptance decisions.  
 To learn more about this, you can read about it on the proceedings github page,
 https://github.com/scipy-conference/scipy_proceedings.   
 
-Please let us know if you would like to participate this year and we will
-include you in subsequent communications.  Also, feel free to pass this message
-along to anyone else who may be interested in reviewing.  
+Please let us know if you wish to participate this year and we will include 
+you in subsequent communications.  Also, please don't hesitate to connect us
+with any other community members who you think we should consider inviting to
+review.  
 
 Yours Truly, 
 Your SciPy 2016 Proceedings co-chairs,
