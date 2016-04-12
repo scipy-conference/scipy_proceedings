@@ -2,8 +2,7 @@
 
 ## Instructions for Reviewers
 
-- Click on the Pull Requests Tab and browse to find the papers you want to review 
- - Papers with 'needs-review' or 'needs-more-review' tags should take precedence 
+- Click on the Pull Requests Tab and browse to find the papers assigned to you
 - After reading the paper, you can start the review conversation by simply commenting
   on the paper, taking into consideration
   [this set of suggested review criteria](https://github.com/scipy-conference/scipy_proceedings/blob/master/review_criteria.md).
