@@ -1,6 +1,6 @@
 # Suggested Review Criteria for SciPy Proceedings
 
-A small subcommittee of the SciPy 2015 organizing committee has created this 
+A small subcommittee of the SciPy 2016 organizing committee has created this 
 set of suggested review criteria
 to help guide authors and reviewers alike. Suggestions and amendments to these 
 review criteria are enthusiastically welcomed via discussion or pull request.
