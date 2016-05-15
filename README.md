@@ -18,7 +18,7 @@
 
 ## Instructions for Authors
 
-Submissions must be received by **May 16th** at 23:59 PST, but modifications are
+Submissions must be received by **May 30th** at 23:59 PST, but modifications are
 allowed during the open review period which ends July 4th at 18:00 PST.  Submissions are
 considered received once a Pull Request has been opened following the procedure
 outlines below.
