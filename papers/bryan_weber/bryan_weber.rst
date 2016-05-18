@@ -80,27 +80,5 @@ implementation of UConnRCMPy will be described, including the use of many packag
 scientific Python software ecosystem. Finally, a brief demonstration of the use of UConnRCMPy and
 its extensibility will be given.
 
-.. First, using new sources of fuel for transportation can reduce the economic
-.. impact of swings in the price of current fuels and potentially reduce emissions. Second, using new
-.. engine technologies can simultaneously reduce emissions and increase fuel efficiency.
-..
-.. Many new sources of fuels have been investigated recently. The most promising of these in the long
-.. term are renewable biological sources, which are used to produce fuels known as biofuels. In the
-.. ideal case, biofuels could be used as drop-in replacements for traditional fuels, requiring few
-.. changes in engine design. However, the combustion properties of biofuels may be substantially
-.. different from the fuels they are intended to replace, and thus may require extensive modifications
-.. to engine designs.
-..
-.. In addition to new fuel sources, new advanced engines, known as Low-Temperature Combustion (LTC)
-.. engines, are being developed. These engines operate at conditions that optimize efficiency avoid the
-.. generation of emissions. However, the combustion timing in these devices is largely controlled by
-.. the chemical kinetics of the ignition of the fuel being used.
-..
-.. Neither of these approaches---new fuels and new engine technologies---is able to mitigate all of the
-.. negative impacts of combustion by itself. By switching to biofuels but retaining the same engines,
-.. the efficiency and emissions targets may not be met; by only developing new engines, our sources of
-.. fuel will continue to cause economic distress, turmoil, and negative effects on the environment. It
-.. will take a concerted effort to bring these two pathways of innovation together.
-
 Background
 ==========
