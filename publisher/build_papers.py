@@ -29,7 +29,7 @@ def paper_stats(paper_id, start):
 
     stop = start + pages - 1
 
-    print '"%s" from p. %s to %s' % (paper_id, start, stop)
+    print('"%s" from p. %s to %s' % (paper_id, start, stop))
 
     with open(os.path.join(output_dir, paper_id, 'page_numbers.tex'), 'w') as f:
         f.write('\setcounter{page}{%s}' % start)
