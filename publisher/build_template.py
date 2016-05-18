@@ -10,7 +10,9 @@ from options import get_config
 
 class TeXTemplate(tempita.Template):
     def _repr(self, value, pos):
-        if isinstance(value, unicode):
+        if sys.version_info[0] < 3 and isinstance(value, unicode):
+            value = value.replace('&', '\&')
+        elif sys.version_info[0] >= 3 and isinstance(value, str):
             value = value.replace('&', '\&')
         else:
             value = str(value)
@@ -63,14 +65,14 @@ def html_from_tmpl(src, config, target):
 if __name__ == "__main__":
 
     if not len(sys.argv) == 2:
-        print "Usage: build_template.py destination_name"
+        print("Usage: build_template.py destination_name")
         sys.exit(-1)
 
     dest_fn = sys.argv[1]
     template_fn = os.path.join(template_dir, dest_fn+'.tmpl')
 
     if not os.path.exists(template_fn):
-        print "Cannot find template."
+        print("Cannot find template.")
         sys.exit(-1)
 
     config = get_config()
