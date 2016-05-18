@@ -82,3 +82,9 @@ its extensibility will be given.
 
 Background
 ==========
+
+Acknowledgements
+================
+
+This material is based on work supported by the National Science Foundation under Grant No.
+CBET-1402231.
