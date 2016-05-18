@@ -33,11 +33,11 @@ for reviewer_info in config['reviewers']:
         d.append(reviewer_info['name'])
 
 for paper in paper_reviewers:
-    print "%s:" % paper
+    print("%s:" % paper)
     for reviewer in paper_reviewers[paper]:
-        print "->", reviewer
+        print("->", reviewer)
     print
 
-print "Papers:", len(paper_reviewers)
-print "Reviewers:", len(config['reviewers'])
+print("Papers:", len(paper_reviewers))
+print("Reviewers:", len(config['reviewers']))
 print

@@ -22,7 +22,7 @@ def cfg2dict(filename):
 
     """
     if not os.path.exists(filename):
-        print '*** Warning: %s does not exist.' % filename
+        print('*** Warning: %s does not exist.' % filename)
         return {}
 
     return json.loads(codecs.open(filename, 'r', 'utf-8').read())
