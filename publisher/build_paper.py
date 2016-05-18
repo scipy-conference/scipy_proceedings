@@ -97,7 +97,11 @@ def rst2tex(in_path, out_path):
         print("Error: no paper configuration found")
 
     tex_file = os.path.join(out_path, 'paper.tex')
-    with open(tex_file, 'w') as f:
+    with open(tex_file, 'wb') as f:
+        try:
+            tex = tex.encode('utf-8')
+        except (AttributeError, UnicodeDecodeError):
+            pass
         f.write(tex)
 
 
@@ -118,13 +122,13 @@ def tex2pdf(out_path):
             )
     out, err = run.communicate()
 
-    if "Fatal" in out or run.returncode:
+    if "Fatal" in out.decode() or run.returncode:
         print("PDFLaTeX error output:")
         print("=" * 80)
-        print(out)
+        print(out.decode())
         print("=" * 80)
         if err:
-            print(err)
+            print(err.decode())
             print("=" * 80)
 
         # Errors, exit early
@@ -179,7 +183,7 @@ def page_count(pdflatex_stdout, paper_dir):
     d = options.cfg2dict(cfgname)
 
     for line in pdflatex_stdout.splitlines():
-        m = regexp.match(line)
+        m = regexp.match(line.decode())
         if m:
             pages = m.groups()[0]
             d.update({'pages': int(pages)})
