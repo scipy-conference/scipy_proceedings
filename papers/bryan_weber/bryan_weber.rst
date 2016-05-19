@@ -87,11 +87,11 @@ The RCMs at the University of Connecticut have been described extensively elsewh
 :cite:`Das2012,Mittal2007a`, and will be summarized here for reference. The RCMs use a single piston
 that is pneumatically accelerated and hydraulically decelerated. The total time for compression is
 near 30 ms. The EOC conditions in the reaction chamber are typically the ones of interest, and are
-represented by :math:`P_C` and :math:`T_C` for the EOC pressure and temperature respectively.
-:math:`P_C` and :math:`T_C` can be varied independently by varying the geometric compression ratio,
-initial pressure, and initial temperature. The piston in the reaction chamber is machined with
-crevices that contain the roll-up vortex that would be created by the piston motion and promote
-homogeneous conditions in the reactor after the EOC :cite:`Mittal2006`.
+represented by |PC| and |TC| for the EOC pressure and temperature respectively. |PC| and |TC| can be
+varied independently by varying the geometric compression ratio, initial pressure, and initial
+temperature. The piston in the reaction chamber is machined with crevices that contain the roll-up
+vortex that would be created by the piston motion and promote homogeneous conditions in the reactor
+after the EOC :cite:`Mittal2006`.
 
 As mentioned previously, the primary diagnostic on the RCM is the reaction chamber pressure,
 measured on the UConn RCMs by a Kistler 6125C dynamic transducer coupled with a Kistler 5010B charge
@@ -101,7 +101,7 @@ Instrument. The voltage is sampled from the DAQ at rate chosen by the machine op
 between 50 kHz and 100 kHz.
 
 The compression stroke of the RCM brings the homogeneous fuel/oxidizer mixture to the EOC
-conditions, and for suitable values of :math:`T_C` and :math:`P_C`, the mixture will ignite. For
+conditions, and for suitable values of |TC| and |PC|, the mixture will ignite. For
 some conditions, the mixture undergoes two stages of ignition. In general, the ignition delay is
 defined as the time from the EOC until a peak in the time derivative of the pressure occurs; for two
 stage ignition, two peaks will occur, while for a single stage only a single peak is present.
@@ -111,3 +111,8 @@ Acknowledgements
 
 This material is based on work supported by the National Science Foundation under Grant No.
 CBET-1402231.
+
+.. |TC| replace:: :math:`T_C`
+.. |PC| replace:: :math:`P_C`
+.. |O2| replace:: O\ :sub:`2`
+.. |N2| replace:: N\ :sub:`2`
