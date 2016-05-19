@@ -119,16 +119,15 @@ between pressure and temperature during the compression stroke:
 
     \ln{\left(\frac{P_C}{P_0}\right)} = \int_{T_0}^{T_C} \frac{\gamma}{\gamma - 1}\frac{dT}{T}
 
-where :math:`P_0` is the initial pressure, :math:`T_0` is the initial temperature, and
-:math:`\gamma` is the temperature-dependent ratio of specific heats. Since :math:`\gamma` is
-temperature-dependent, the value reached for |TC| for a given :math:`P_0`, :math:`T_0`, |PC| set
-depends on the path taken during the compression. Under the adiabatic core hypothesis, it is assumed
-that the core gases in the reaction chamber (away from the boundary layer near the wall) undergo an
-adiabatic compression process, so that the equation can be integrated to give |TC|. In reality, the
-gases in the reaction chamber do not undergo an adiabatic process; nonetheless, experimental
-measurements of the temperature during and after compression have shown that the adiabatic core
-hypothesis is adequate to determine the temperature evolution of the reactants
-:cite:`Das2012a,Uddi2011`.
+where |P0| is the initial pressure, |T0| is the initial temperature, and |gamma| is the
+temperature-dependent ratio of specific heats. Since |gamma| is temperature-dependent, the value
+reached for |TC| for a given |P0|, |T0|, |PC| set depends on the path taken during the compression.
+Under the adiabatic core hypothesis, it is assumed that the core gases in the reaction chamber (away
+from the boundary layer near the wall) undergo an adiabatic compression process, so that the
+equation can be integrated to give |TC|. In reality, the gases in the reaction chamber do not
+undergo an adiabatic process; nonetheless, experimental measurements of the temperature during and
+after compression have shown that the adiabatic core hypothesis is adequate to determine the
+temperature evolution of the reactants :cite:`Das2012a,Uddi2011`.
 
 Acknowledgements
 ================
@@ -140,3 +139,6 @@ CBET-1402231.
 .. |PC| replace:: :math:`P_C`
 .. |O2| replace:: O\ :sub:`2`
 .. |N2| replace:: N\ :sub:`2`
+.. |P0| replace:: :math:`P_0`
+.. |T0| replace:: :math:`T_0`
+.. |gamma| replace:: :math:`\gamma`
