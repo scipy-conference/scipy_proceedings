@@ -31,7 +31,7 @@ UConnRCMPy: Python-based data analysis for Rapid Compression Machines
     rapid compression machine, engineering, kinetic models
 
 Introduction
-============
+------------
 
 The world relies heavily on combustion to provide energy in useful forms for human consumption; in
 particular, the transportation sector accounts for nearly 30% of the energy use in the United States
@@ -81,7 +81,7 @@ scientific Python software ecosystem. Finally, a brief demonstration of the use 
 its extensibility will be given.
 
 Background
-==========
+----------
 
 The RCMs at the University of Connecticut have been described extensively elsewhere
 :cite:`Das2012,Mittal2007a`, and will be summarized here for reference. The RCMs use a single piston
@@ -139,7 +139,7 @@ along with a typical pressure trace acquired from the experiment. The time of EO
 maximum of the pressure prior to ignition, and this is arbitrarily chosen to be :math:`t = 0`.
 
 Acknowledgements
-================
+----------------
 
 This material is based on work supported by the National Science Foundation under Grant No.
 CBET-1402231.
