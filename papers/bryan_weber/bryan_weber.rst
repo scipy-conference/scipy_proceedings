@@ -47,7 +47,7 @@ new engine technologies.
 Unfortunately, it is not straightforward to combine new fuels with newly designed engines. For
 instance, the design process of a new engine may become circular: the "best" alternative fuel should
 be tested in the "best" engine, but the "best" engine depends on which is selected as the "best"
-alternative fuel. One way to shortcircuit this process is by employing computer-aided design and
+alternative fuel. One way to short circuit this process is by employing computer-aided design and
 modeling of new engines with new fuels to design engines to be able to utilize several fuels. The
 key to this process is the development of accurate and predictive combustion models.
 
@@ -73,7 +73,7 @@ In this work, the design and operation of a software package to process the pres
 from RCMs is described. This package, called UConnRCMPy :cite:`Weber2016`, is designed to enable
 reproducible analysis of the data acquired from the RCM at the University of Connecticut. Despite
 the initial focus on data from the UConn RCM, the package is designed to be extensible so that it
-can be used for data in different formats while providing a consitent interface to the user.
+can be used for data in different formats while providing a consistent interface to the user.
 
 First, this paper will introduce the fundamentals of RCM operation and data processing. Then, the
 implementation of UConnRCMPy will be described, including the use of many packages from the
