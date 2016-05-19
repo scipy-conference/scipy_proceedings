@@ -129,6 +129,15 @@ undergo an adiabatic process; nonetheless, experimental measurements of the temp
 after compression have shown that the adiabatic core hypothesis is adequate to determine the
 temperature evolution of the reactants :cite:`Das2012a,Uddi2011`.
 
+.. figure:: figure1.png
+
+    Graph of a typical pressure trace from an RCM experiment showing the definition of the ignition
+    delay. :label:`ign-delay-def`
+
+Figure :ref:`ign-delay-def` shows the definition of the ignition delay typically used in RCM studies
+along with a typical pressure trace acquired from the experiment. The time of EOC is chosen as the
+maximum of the pressure prior to ignition, and this is arbitrarily chosen to be :math:`t = 0`.
+
 Acknowledgements
 ================
 
