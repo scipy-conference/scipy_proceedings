@@ -85,26 +85,161 @@ Background
 
 The RCMs at the University of Connecticut have been described extensively elsewhere
 :cite:`Das2012,Mittal2007a`, and will be summarized here for reference. The RCMs use a single piston
-that is pneumatically accelerated and hydraulically decelerated. The total time for compression is
-near 30 ms. The EOC conditions in the reaction chamber are typically the ones of interest, and are
-represented by |PC| and |TC| for the EOC pressure and temperature respectively. |PC| and |TC| can be
-varied independently by varying the geometric compression ratio, initial pressure, and initial
-temperature. The piston in the reaction chamber is machined with crevices that contain the roll-up
-vortex that would be created by the piston motion and promote homogeneous conditions in the reactor
-after the EOC :cite:`Mittal2006`.
+that is pneumatically accelerated and hydraulically decelerated. In a typical experiment, the
+reaction chamber is first evacuated to an absolute pressure near 1 Torr, measured by a high-accuracy
+static pressure transducer. Next, the reactants are filled in to the desired initial pressure
+(|P0|), and a low dead volume valve on the reaction chamber is closed. Compression is triggered by a
+digital control circuit. After compression, the piston is held in place to create a constant volume
+chamber in which reactions proceed. For appropriate combinations of pressure, temperature, and
+mixture composition, ignition will occur after some delay period. A single
+compression-delay-ignition sequence is referred to as an experiment or a run. Each experiment is
+repeated approximately 5 times at the same nominal initial conditions to ensure repeatability of the
+data, and this set of experiments is referred to in the following as a condition.
+
+During and after the compression, the pressure is monitored using a dynamic pressure transducer.
+The pressure trace is processed to determine the quantities of interest, including
+the pressure and temperature at the EOC, |PC| and |TC| respectively, and the ignition delay. The
+ignition delay (|tau|) is typically measured at several values of |TC| for a given value of |PC| and
+mixture composition; this is referred to in the following as a data set.
+
+RCM Signal Processing Procedure
+-------------------------------
+Signal measurement
+==================
 
 As mentioned previously, the primary diagnostic on the RCM is the reaction chamber pressure,
-measured on the UConn RCMs by a Kistler 6125C dynamic transducer coupled with a Kistler 5010B charge
-amplifier. The voltage output from the charge amplifier is digitized by a National Instruments DAQ
-(two are used, depending on the RCM), and recorded into a plain text file by a LabView Virtual
-Instrument. The voltage is sampled from the DAQ at rate chosen by the machine operator, typically
-between 50 kHz and 100 kHz.
+measured by a dynamic pressure transducer (separate from the static transducer used to measure
+|P0|). The dynamic transducer outputs a charge signal that is converted to a voltage signal by a
+charge amplifier. This system measures changes in pressure in the reaction chamber (as opposed to
+the absolute pressure measured by the static transducer) and as such, has a nominal output of 0 V
+prior to the start of compression. In addition, the output range of 0 V to 10 V is set by the
+operator to correspond to a particular pressure range by setting a "scale factor". Typical values
+for the scale factor range between 10 bar/V and 100 bar/V.
 
-The compression stroke of the RCM brings the homogeneous fuel/oxidizer mixture to the EOC
-conditions, and for suitable values of |TC| and |PC|, the mixture will ignite. For
-some conditions, the mixture undergoes two stages of ignition. In general, the ignition delay is
-defined as the time from the EOC until a peak in the time derivative of the pressure occurs; for two
-stage ignition, two peaks will occur, while for a single stage only a single peak is present.
+The voltage output from the charge amplifier is digitized by a hardware DAQ and recorded into a
+plain text file by a LabView Virtual Instrument. The voltage is sampled at rate chosen by the
+operator, typically between 50 kHz and 100 kHz. This provides sufficient resolution for events on
+the order of milliseconds; the typical ignition delay measured in this system approximately ranges
+from 5 ms to 100 ms.
+
+.. figure:: figure1.png
+
+    Raw voltage trace and the voltage trace after filtering and smoothing from a typical RCM
+    experiment. :label:`raw-voltage`
+
+Figure :ref:`raw-voltage` shows a typical voltage trace measured from the RCM at UConn. Several
+features are apparent from this figure. First, the compression stroke takes approximately 30 ms to
+40 ms, with the EOC used to set the reference time of :math:`t = 0` (the determination of the time
+of the EOC will be discussed in due course). Approximately 50% of the pressure rise occurs in the
+last 5 ms of compression. Second, there is a slow pressure decrease after the EOC due to heat
+transfer from the reactants to the relatively colder chamber walls. Third, after some delay period
+there is a spike in the pressure corresponding to rapid heat release due to combustion. Finally, the
+signal is somewhat noisy, and the measured initial voltage may offset from the nominal 0 V by a few
+millivolts.
+
+Filtering and Smoothing
+=======================
+
+To produce a useful pressure trace, the voltage signal must be filtered and/or smoothed. Several
+algorithms have been considered to smooth the voltage trace, including a simple moving average, a
+low-pass filter, and some combination of these two methods. In the current version of UConnRCMPy
+:cite:`Weber2016`, the voltage is first filtered using a low-pass filter with a cutoff frequency of
+10 kHz. The filter is constructed using the ``firwin`` function from the ``signals`` module of SciPy
+:cite:`Jones2001` with the Blackman window :cite:`Blackman1958,Oppenheim1999` and a filter order of
+:math:`2^{14}-1`. The cutoff frequency, window type, and filter order were determined empirically.
+Methods to select a cutoff frequency that optimizes the signal-to-noise ratio are currently being
+investigated.
+
+After filtering, the signal is smoothed by a moving average filter with a width of 21 points. It is
+desired that the signal remain the same length through this operation, but the convolution operation
+used to apply the moving average zero-pads the first and last 10 points. To avoid a bias in the
+initial voltage, the first 10 points are set equal to the value of the 11th point; the final 10
+points are not important in the rest of the analysis and are ignored. The result of the filtering
+and smoothing operations is shown on Fig. :ref:`raw-voltage`.
+
+Offset Correction and Pressure Calculation
+==========================================
+
+In general, the voltage trace can be converted to a pressure trace by
+
+.. math::
+
+    P(t) = \overline{V}(t) + F \cdot P_0
+
+where :math:`\overline{V}(t)` is the filtered and smoothed voltage trace and :math:`F` is the scale
+factor from the charge amplifier. However, as can be seen in Fig. :ref:`raw-voltage` there is a
+small offset in the initial voltage relative to the nominal value of 0 V. To correct for this
+offset, it can be subtracted from the voltage trace
+
+.. math::
+
+    P(t) = \left[\overline{V}(t) - \overline{V}(0)\right] + F \cdot P_0
+
+where :math:`\overline{V}(0)` is the initial voltage. The result is a vector of pressure values that
+must be further processed to determine the time of the EOC and the ignition delay.
+
+Finding the EOC
+===============
+
+There are several methods to determine the EOC of a particular experiment. Since the piston is held
+in place at the end of its stroke, the pressure will be a maximum (in the absence of ignition) at
+the EOC. Therefore, the EOC can be found either by searching for this maximum value or by
+calculating the first derivative of the pressure with respect to time and finding the zero crossing.
+As the signal is noisy, even after smoothing, the derivative will tend to increase the noise in the
+signal :cite:`Chapra2010` leading to difficulty in specifying the correct zero crossing. On the
+other hand, finding the maximum of the pressure in the time prior to ignition is not straightforward
+either. In general, the pressure after ignition has occured will be higher than the pressure at the
+EOC and the width of the ignition peak is unknown. However, we can take advantage of the fact
+that there is some pressure drop after the EOC to eliminate the ignition from consideration.
+
+In the current version of UConnRCMPy :cite:`Weber2016`, this is done by searching backwards in time
+from the maximum pressure in the pressure trace (typically, the global maximum pressure is after
+ignition has occured) until a minimum in the pressure is reached. Since the precise time of the
+minimum is not important for this method, the search is done by comparing the pressure at a given
+index :math:`i` to the pressure at point :math:`i-50`, starting with the index of the global maximum
+pressure. This offset is used to avoid the influence of noise. If :math:`P(i) \geq P(i-50)`, the
+index is decremented and the process is repeated until :math:`P(i) < P(i-50)`. This value of
+:math:`i` is approximately the minimum of pressure prior to ignition, so the maximum of the pressure
+in points to the left of the minimum will be the EOC.
+
+This method is generally robust, but it fails when there is no minimum in the pressure between the
+EOC and ignition, or the minimum is very close to the EOC. This may be the case for short ignition
+delays, on the order of 5 ms or less. In these cases, the comparison offset can be reduced to
+improve the granularity of the search; if that method fails, manual intervention is necessary to
+determine the EOC. In either case, the value of the pressure at the EOC, |PC|, is recorded and the
+time at the EOC is taken to be :math:`t=0`.
+
+Calculating Ignition Delay
+==========================
+
+The ignition delay is determined as the time difference between the EOC and the point of ignition.
+There are several definitions of the point of ignition; the most commonly used in RCM experiments is
+the inflection point in the pressure trace due to ignition. As before, finding zero crossings of the
+second time derivative of the pressure to define the inflection point is difficult due to noise;
+however, finding the maximum of the first derivative is trivial, particularly since the time before
+and shortly after the EOC can be excluded to avoid the peak in the derivative around the EOC.
+
+In the current version of UConnRCMPy :cite:`Weber2016`, the first derivative of the experimental
+pressure trace is computed by a second-order forward differencing method. The derivative is then
+smoothed by the moving average algorithm with a width of 151 points. This value for the moving
+average window was chosen empirically.
+
+For some conditions, the reactants may undergo two distinct stages of ignition. These cases can be
+distinguished by a pair of peaks in the first time derivative of the pressure. For some two-stage
+ignition cases, the pressure rise (and consequently the peak in the derivative) are relatively weak,
+making it hard to distinguish the peak due to ignition from the background noise. This is currently
+the the area requiring the most manual intervention, and one area where significant improvements
+can be made by improving the differentiation and filtering/smoothing algorithms. An experiment that
+shows two clear peaks in the derivative is shown in Fig. :ref:`ign-delay-def` to demonstrate the
+definition of the ignition delays.
+
+.. figure:: figure1.png
+
+    Illustration of the definition of the ignition delay in a two-stage ignition case.
+    :label:`ign-delay-def`
+
+Calculating the EOC Temperature
+===============================
 
 In addition to reactive experiments, non-reactive experiments are carried out to determine the
 influence of machine specific operating parameters on the experiment. In these experiments, |O2| in
@@ -129,15 +264,6 @@ undergo an adiabatic process; nonetheless, experimental measurements of the temp
 after compression have shown that the adiabatic core hypothesis is adequate to determine the
 temperature evolution of the reactants :cite:`Das2012a,Uddi2011`.
 
-.. figure:: figure1.png
-
-    Graph of a typical pressure trace from an RCM experiment showing the definition of the ignition
-    delay. :label:`ign-delay-def`
-
-Figure :ref:`ign-delay-def` shows the definition of the ignition delay typically used in RCM studies
-along with a typical pressure trace acquired from the experiment. The time of EOC is chosen as the
-maximum of the pressure prior to ignition, and this is arbitrarily chosen to be :math:`t = 0`.
-
 Acknowledgements
 ----------------
 
@@ -151,3 +277,4 @@ CBET-1402231.
 .. |P0| replace:: :math:`P_0`
 .. |T0| replace:: :math:`T_0`
 .. |gamma| replace:: :math:`\gamma`
+.. |tau| replace:: :math:`\tau`
