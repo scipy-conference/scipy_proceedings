@@ -106,6 +106,30 @@ some conditions, the mixture undergoes two stages of ignition. In general, the i
 defined as the time from the EOC until a peak in the time derivative of the pressure occurs; for two
 stage ignition, two peaks will occur, while for a single stage only a single peak is present.
 
+In addition to reactive experiments, non-reactive experiments are carried out to determine the
+influence of machine specific operating parameters on the experiment. In these experiments, |O2| in
+the oxidizer is replaced with |N2| to maintain a similar specific heat ratio but suppress the
+oxidation reactions that lead to ignition. If the pressure at the EOC of the non-reactive
+experiments matches that at the EOC of the reactive experiments, it is assumed that no substantial
+heat release has occurred during the compression stroke, and the temperature at the EOC can be
+estimated by applying the adiabatic core hypothesis :cite:`Lee1998` and the isentropic relations
+between pressure and temperature during the compression stroke:
+
+.. math::
+
+    \ln{\left(\frac{P_C}{P_0}\right)} = \int_{T_0}^{T_C} \frac{\gamma}{\gamma - 1}\frac{dT}{T}
+
+where :math:`P_0` is the initial pressure, :math:`T_0` is the initial temperature, and
+:math:`\gamma` is the temperature-dependent ratio of specific heats. Since :math:`\gamma` is
+temperature-dependent, the value reached for |TC| for a given :math:`P_0`, :math:`T_0`, |PC| set
+depends on the path taken during the compression. Under the adiabatic core hypothesis, it is assumed
+that the core gases in the reaction chamber (away from the boundary layer near the wall) undergo an
+adiabatic compression process, so that the equation can be integrated to give |TC|. In reality, the
+gases in the reaction chamber do not undergo an adiabatic process; nonetheless, experimental
+measurements of the temperature during and after compression have shown that the adiabatic core
+hypothesis is adequate to determine the temperature evolution of the reactants
+:cite:`Das2012a,Uddi2011`.
+
 Acknowledgements
 ================
 
