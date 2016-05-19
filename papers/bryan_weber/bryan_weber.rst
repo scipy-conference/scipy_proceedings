@@ -83,6 +83,29 @@ its extensibility will be given.
 Background
 ==========
 
+The RCMs at the University of Connecticut have been described extensively elsewhere
+:cite:`Das2012,Mittal2007a`, and will be summarized here for reference. The RCMs use a single piston
+that is pneumatically accelerated and hydraulically decelerated. The total time for compression is
+near 30 ms. The EOC conditions in the reaction chamber are typically the ones of interest, and are
+represented by :math:`P_C` and :math:`T_C` for the EOC pressure and temperature respectively.
+:math:`P_C` and :math:`T_C` can be varied independently by varying the geometric compression ratio,
+initial pressure, and initial temperature. The piston in the reaction chamber is machined with
+crevices that contain the roll-up vortex that would be created by the piston motion and promote
+homogeneous conditions in the reactor after the EOC :cite:`Mittal2006`.
+
+As mentioned previously, the primary diagnostic on the RCM is the reaction chamber pressure,
+measured on the UConn RCMs by a Kistler 6125C dynamic transducer coupled with a Kistler 5010B charge
+amplifier. The voltage output from the charge amplifier is digitized by a National Instruments DAQ
+(two are used, depending on the RCM), and recorded into a plain text file by a LabView Virtual
+Instrument. The voltage is sampled from the DAQ at rate chosen by the machine operator, typically
+between 50 kHz and 100 kHz.
+
+The compression stroke of the RCM brings the homogeneous fuel/oxidizer mixture to the EOC
+conditions, and for suitable values of :math:`T_C` and :math:`P_C`, the mixture will ignite. For
+some conditions, the mixture undergoes two stages of ignition. In general, the ignition delay is
+defined as the time from the EOC until a peak in the time derivative of the pressure occurs; for two
+stage ignition, two peaks will occur, while for a single stage only a single peak is present.
+
 Acknowledgements
 ================
 
