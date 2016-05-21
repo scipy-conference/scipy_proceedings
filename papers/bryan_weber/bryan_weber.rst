@@ -70,7 +70,7 @@ RCM experiments is the pressure measured as a function of time in the reaction c
 pressure trace is then processed to extract the ignition delay.
 
 In this work, the design and operation of a software package to process the pressure data collected
-from RCMs is described. This package, called UConnRCMPy :cite:`Weber2016`, is designed to enable
+from RCMs is described. This package, called UConnRCMPy :cite:`uconnrcmpy`, is designed to enable
 reproducible analysis of the data acquired from the RCM at the University of Connecticut. Despite
 the initial focus on data from the UConn RCM, the package is designed to be extensible so that it
 can be used for data in different formats while providing a consistent interface to the user.
@@ -143,7 +143,7 @@ Filtering and Smoothing
 To produce a useful pressure trace, the voltage signal must be filtered and/or smoothed. Several
 algorithms have been considered to smooth the voltage trace, including a simple moving average, a
 low-pass filter, and some combination of these two methods. In the current version of UConnRCMPy
-:cite:`Weber2016`, the voltage is first filtered using a low-pass filter with a cutoff frequency of
+:cite:`uconnrcmpy`, the voltage is first filtered using a low-pass filter with a cutoff frequency of
 10 kHz. The filter is constructed using the ``firwin`` function from the ``signals`` module of SciPy
 :cite:`Jones2001` with the Blackman window :cite:`Blackman1958,Oppenheim1999` and a filter order of
 :math:`2^{14}-1`. The cutoff frequency, window type, and filter order were determined empirically.
@@ -194,7 +194,7 @@ either. In general, the pressure after ignition has occured will be higher than 
 EOC and the width of the ignition peak is unknown. However, we can take advantage of the fact
 that there is some pressure drop after the EOC to eliminate the ignition from consideration.
 
-In the current version of UConnRCMPy :cite:`Weber2016`, this is done by searching backwards in time
+In the current version of UConnRCMPy :cite:`uconnrcmpy`, this is done by searching backwards in time
 from the maximum pressure in the pressure trace (typically, the global maximum pressure is after
 ignition has occured) until a minimum in the pressure is reached. Since the precise time of the
 minimum is not important for this method, the search is done by comparing the pressure at a given
@@ -221,7 +221,7 @@ second time derivative of the pressure to define the inflection point is difficu
 however, finding the maximum of the first derivative is trivial, particularly since the time before
 and shortly after the EOC can be excluded to avoid the peak in the derivative around the EOC.
 
-In the current version of UConnRCMPy :cite:`Weber2016`, the first derivative of the experimental
+In the current version of UConnRCMPy :cite:`uconnrcmpy`, the first derivative of the experimental
 pressure trace is computed by a second-order forward differencing method. The derivative is then
 smoothed by the moving average algorithm with a width of 151 points. This value for the moving
 average window was chosen empirically.
