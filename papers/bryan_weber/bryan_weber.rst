@@ -163,6 +163,7 @@ Offset Correction and Pressure Calculation
 In general, the voltage trace can be converted to a pressure trace by
 
 .. math::
+    :label: pressure-trace
 
     P(t) = \overline{V}(t) + F \cdot P_0
 
@@ -172,6 +173,7 @@ small offset in the initial voltage relative to the nominal value of 0 V. To cor
 offset, it can be subtracted from the voltage trace
 
 .. math::
+    :label: corrected-pressure-trace
 
     P(t) = \left[\overline{V}(t) - \overline{V}(0)\right] + F \cdot P_0
 
@@ -203,11 +205,11 @@ index is decremented and the process is repeated until :math:`P(i) < P(i-50)`. T
 in points to the left of the minimum will be the EOC.
 
 This method is generally robust, but it fails when there is no minimum in the pressure between the
-EOC and ignition, or the minimum is very close to the EOC. This may be the case for short ignition
-delays, on the order of 5 ms or less. In these cases, the comparison offset can be reduced to
-improve the granularity of the search; if that method fails, manual intervention is necessary to
-determine the EOC. In either case, the value of the pressure at the EOC, |PC|, is recorded and the
-time at the EOC is taken to be :math:`t=0`.
+EOC and ignition, or the minimum pressure is very close to the EOC pressure. This may be the case
+for short ignition delays, on the order of 5 ms or less. In these cases, the comparison offset can
+be reduced to improve the granularity of the search; if that method fails, manual intervention is
+necessary to determine the EOC. In either case, the value of the pressure at the EOC, |PC|, is
+recorded and the time at the EOC is taken to be :math:`t=0`.
 
 Calculating Ignition Delay
 ==========================
