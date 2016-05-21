@@ -19,9 +19,9 @@ UConnRCMPy: Python-based data analysis for Rapid Compression Machines
     One of the typical experimental devices used to measure the ignition delay is called a Rapid
     Compression Machine (RCM). This work presents UConnRCMPy, an open-source Python package to
     process experimental data from the RCM at the University of Connecticut. Given an experimental
-    measurement, UConnRCMPy computes the thermodynamic conditions in the reactor of the RCM during
-    an experiment along with the ignition delay. UConnRCMPy relies on several packages from the
-    SciPy stack and the broader scientific Python community. UConnRCMPy implements an extensible
+    measurement, UConnRCMPy computes the thermodynamic conditions in the reaction chamber of the RCM
+    during an experiment along with the ignition delay. UConnRCMPy relies on several packages from
+    the SciPy stack and the broader scientific Python community. UConnRCMPy implements an extensible
     framework, so that alternative experimental data formats can be incorporated easily. In this
     way, UConnRCMPy improves the consistency of RCM data processing and enables reproducible
     analysis of the data.
@@ -64,10 +64,10 @@ the pathways present in the model. There are several methods to measure the igni
 engine-relevant conditions, including shock tubes and rapid compression machines (RCMs).
 
 An RCM is typically designed with one or two pistons that rapidly compress a homogeneous fuel and
-oxidizer mixture inside a reactor. After the end of compression (EOC), the piston(s) is (are) locked
-in place, creating a constant volume reactor. The primary diagnostic in most RCM experiments is the
-pressure measured as a function of time in the reaction chamber. This pressure trace is then
-processed to extract the ignition delay.
+oxidizer mixture inside a reaction chamber. After the end of compression (EOC), the piston(s) is
+(are) locked in place, creating a constant volume reaction chamber. The primary diagnostic in most
+RCM experiments is the pressure measured as a function of time in the reaction chamber. This
+pressure trace is then processed to extract the ignition delay.
 
 In this work, the design and operation of a software package to process the pressure data collected
 from RCMs is described. This package, called UConnRCMPy :cite:`Weber2016`, is designed to enable
