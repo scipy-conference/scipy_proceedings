@@ -243,28 +243,90 @@ definition of the ignition delays.
 Calculating the EOC Temperature
 ===============================
 
-In addition to reactive experiments, non-reactive experiments are carried out to determine the
-influence of machine specific operating parameters on the experiment. In these experiments, |O2| in
-the oxidizer is replaced with |N2| to maintain a similar specific heat ratio but suppress the
-oxidation reactions that lead to ignition. If the pressure at the EOC of the non-reactive
-experiments matches that at the EOC of the reactive experiments, it is assumed that no substantial
-heat release has occurred during the compression stroke, and the temperature at the EOC can be
-estimated by applying the adiabatic core hypothesis :cite:`Lee1998` and the isentropic relations
-between pressure and temperature during the compression stroke:
+The final parameter of interest presently is the EOC temperature, |TC|. This temperature is often
+used as the reference temperature when reporting ignition delays. In general, it is difficult to
+measure the temperature as a function of time in the reaction chamber of the RCM, so methods to
+estimate the temperature from the pressure trace are generally used.
+
+The law of conservation of energy written for the ideal gases in the reaction chamber is:
 
 .. math::
+    :label: first-law
 
-    \ln{\left(\frac{P_C}{P_0}\right)} = \int_{T_0}^{T_C} \frac{\gamma}{\gamma - 1}\frac{dT}{T}
+    c_v \frac{dT}{dt} = -P \frac{dv}{dt} - \sum_k u_k \frac{d Y_k}{dt}
 
-where |P0| is the initial pressure, |T0| is the initial temperature, and |gamma| is the
-temperature-dependent ratio of specific heats. Since |gamma| is temperature-dependent, the value
-reached for |TC| for a given |P0|, |T0|, |PC| set depends on the path taken during the compression.
-Under the adiabatic core hypothesis, it is assumed that the core gases in the reaction chamber (away
-from the boundary layer near the wall) undergo an adiabatic compression process, so that the
-equation can be integrated to give |TC|. In reality, the gases in the reaction chamber do not
-undergo an adiabatic process; nonetheless, experimental measurements of the temperature during and
-after compression have shown that the adiabatic core hypothesis is adequate to determine the
-temperature evolution of the reactants :cite:`Das2012a,Uddi2011`.
+where :math:`c_v` is the specific heat at constant volume of the mixture, :math:`v` is the specific
+volume, :math:`u_k` and :math:`Y_k` are the specific internal energy and mass fraction of the
+species :math:`k`, and :math:`t` is time. For a constant-area piston, the rate of change of the
+volume is equal to the piston velocity. In UConnRCMPy, Eq. :ref:`first-law` is integrated by the
+software Cantera :cite:`cantera`.
+
+In Cantera, intensive thermodynamic information about the system is stored in an instance of the
+``Solution`` class. The ``Solution`` classes used in this study model simple, compressible systems
+and require two independent intensive properties, plus the composition, to fix the state. In
+addition to evaluating thermodynamic data, Cantera :cite:`cantera` contains several objects used to
+model homogeneous reacting systems; the two used in this paper are a ``Reservoir`` and an
+``IdealGasReactor``, which are subclasses of the generic ``Reactor`` class. The specific
+``IdealGasReactor`` class is preferred over the generic ``Reactor`` class in this study because the
+energy equation is directly solved in terms of the temperature (i.e., Eq. :ref:`first-law`) in an
+``IdealGasReactor``. A ``Solution`` object is installed in each ``Reactor`` subclass to manage the
+state information and evaluate thermodynamic properties. The difference between the ``Reservoir``
+and the ``IdealGasReactor`` is simply that the state (i.e., the pressure, temperature, and chemical
+composition) of the ``Solution`` in a ``Reservoir`` is fixed.
+
+Integrating Eq. :ref:`first-law` requires knowledge of the volume of the reaction chamber as a
+function of time. To calculate the volume as a function of time, it is assumed that there is a core
+of gas in the reaction chamber that undergoes an isentropic compression and the effects of the
+boundary layer can be ignored :cite:`Lee1998`. Furthermore, it is assumed that there is negligible
+reactant consumption during the compression stroke. Then, a Cantera ``Solution`` object is
+initialized at the initial temperature, pressure, and composition of the reaction chamber.
+
+After initialization the initial mass-specific entropy (|s0|) and density (|rho0|) are recorded. The
+initial volume is arbitrarily taken to be :math:`V_0=1.0\,\text{m}^3`. The initial volume used in
+constructing the volume trace is arbitrary provided that the same value for the volume is used for
+the initial volume in the ``Reactor``-based simulations described below. However, extensive
+quantities such as the total heat release during ignition cannot be compared to experimental values.
+
+The measured pressure at each point in the pressure trace (:math:`P_i`) is used with the previously
+recorded initial entropy (|s0|) to set the state of the ``Solution`` object sequentially. At each
+point, the volume is computed by applying the ideal gas law:
+
+.. math::
+    :label: ideal-gas-law
+
+    V_i = V_0 \frac{\rho_0}{\rho_i}
+
+where :math:`\rho_i` is the density at each point computed by the Cantera ``Solution``. This
+procedure effects a constant composition isentropic compression process.
+
+Once the volume trace has been generated, it can be utilized in the ``IdealGasReactor`` and the
+solution of Eq. :ref:`first-law` by installing an instance of the ``Wall`` class. In Cantera
+:cite:`cantera`, ``Wall``\ s have several uses, including allowing heat transfer into or out of the
+``Reactor``, allowing heterogeneous reactions on the surface of the ``Wall``, or causing the volume
+of the ``Reactor`` to vary. In this study, only the last function is used (i.e., the reaction
+chamber is adiabatic and homogeneous). ``Wall``\ s must be installed between instances of
+``Reactor``\ s, so in UConnRCMPy a ``Wall`` is installed between the ``IdealGasReactor`` that
+represents the reaction chamber and an instance of the ``Reservoir`` class. By specifying the
+velocity of the ``Wall`` using the volume trace computed previously, the ``IdealGasReactor`` will
+proceed through the same states as the reaction chamber in the experiment.
+
+The velocity of the ``Wall`` is specified by using an instance of the ``VolumeProfile`` class from
+the CanSen software :cite:`cansen`. Then, the ``IdealGasReactor`` is installed into an instance of
+``ReactorNet`` from Cantera :cite:`cantera`. The ``ReactorNet`` implements the interface to the
+solver CVODES. CVODES is an adaptive-time-stepping solver, distributed as part of the SUNDIALS suite
+:cite:`Hindmarsh2005`. As the solver steps towards the end time of the simulation, the state of the
+system is stored on each integrator time step, producing simulated pressure, volume, and temperature
+traces. Finally, the EOC temperature is recorded as the simulated temperature at the EOC.
+
+Two simulations are conducted using this procedure. In the first, the multiplier for all the
+reaction rates is set to zero, to simulate a constant composition (non-reactive) process. In the
+second, the reactions are allowed to proceed as normal. The temperature traces from the two
+simulations are compared to each other and the inclusion of the reactions does not change |TC|,
+validating the assumption of adiabatic, constant composition compression. Nonetheless, when
+conducting simulations to compare a kinetic model to experimental results, it is important to
+include the species equations in the solution of Eq. :ref:`first-law` due to the buildup of a pool
+of radicals that affects the processes after the EOC :cite:`Mittal2008`, although it does not affect
+the computation of |TC|.
 
 Acknowledgements
 ----------------
@@ -280,3 +342,5 @@ CBET-1402231.
 .. |T0| replace:: :math:`T_0`
 .. |gamma| replace:: :math:`\gamma`
 .. |tau| replace:: :math:`\tau`
+.. |s0| replace:: :math:`s_0`
+.. |rho0| replace:: :math:`\rho_0`
