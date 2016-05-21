@@ -134,8 +134,8 @@ of the EOC will be discussed in due course). Approximately 50% of the pressure r
 last 5 ms of compression. Second, there is a slow pressure decrease after the EOC due to heat
 transfer from the reactants to the relatively colder chamber walls. Third, after some delay period
 there is a spike in the pressure corresponding to rapid heat release due to combustion. Finally, the
-signal is somewhat noisy, and the measured initial voltage may offset from the nominal 0 V by a few
-millivolts.
+signal is somewhat noisy, and the measured initial voltage may be offset from the nominal 0 V by a
+few millivolts.
 
 Filtering and Smoothing
 =======================
