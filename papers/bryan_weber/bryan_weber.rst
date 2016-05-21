@@ -328,6 +328,38 @@ include the species equations in the solution of Eq. :ref:`first-law` due to the
 of radicals that affects the processes after the EOC :cite:`Mittal2008`, although it does not affect
 the computation of |TC|.
 
+Simulating Post-EOC Processes
+-----------------------------
+
+As can be seen in Fig. :ref:`ign-delay-def`, the pressure decreases after the EOC due to heat
+transfer from the higher temperature reactants to the reaction chamber walls. This process is
+specific to the machine that carried out the experiments, and to the conditions under which the
+experiment was conducted. Therefore, the rate of pressure decrease should be modeled and included
+in simulations that compare predicted ignition delay to the experimental values.
+
+To conduct this modeling, a non-reactive experiment is conducted, where |O2| in the oxidizer is
+replaced with |N2| to maintain a similar specific heat ratio but suppress the oxidation reactions
+that lead to ignition. The pressure trace from this non-reactive experiment closely matches that
+from the reactive experiment during the compression stroke, further validating the assumption of
+adiabatic, constant composition compression. Furthermore, the non-reactive pressure trace closely
+matches the reactive pressure trace after the EOC until exothermic reactions cause the pressure in
+the reactive experiment to begin to increase.
+
+For consistency, the ignition delay in a reactive simulation should be defined in the same manner as
+in the reactive experiments, as the maxima of the time derivative of the pressure trace. If the
+simulated reactive pressure is forced to follow the experimental non-reactive pressure (to account
+for the machine specific effects), there will never be a maximum in the derivative of the pressure
+due to ignition. To avoid this pitfall, the reaction chamber is modeled as undergoing an adiabatic
+expansion that gives the equivalent pressure drop, although the reaction chamber is not actually
+adiabatic.
+
+Since the post compression time is modeled as an isentropic expansion, the same procedure is used as
+in the computation of |TC| to compute a volume trace for the post-EOC time. The only difference is
+that the non-reactive pressure trace is used after the EOC instead of the reactive pressure trace.
+Once the volume trace is generated, it can be applied to a simulation by concatenating the volume
+trace of the compression stroke and the post-EOC volume trace together and following the procedure
+outlined previously.
+
 Acknowledgements
 ----------------
 
