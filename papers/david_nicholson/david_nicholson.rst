@@ -43,27 +43,89 @@ Like humans, songbirds learn to vocalize during a critical period in development
 Machine-learning methods for labeling elements of song
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Each bird’s song consists of repeated elements referred to as “syllables”:
+Each bird’s song consists of repeated elements referred to as “syllables”, as shown in :ref:`fig1`.
 
-.. figure:: spectrogram.png
+.. figure:: spect_birdsong.png
     :align: center
     :figclass: w
 
-    Figure 1. Spectrogram of Bengalese finch song. 
-    Letters below the time axis, e..g, "i","a","b",..., are labels for syllables,
-    discrete elements of song separated by brief silent intervals.
-    Frequency (kHz) on the y axis and time on the x axis. :label: fig1
+    **Figure 1. Spectrogram of Bengalese finch song.** *Letters below the time axis, e..g, "i","a","b",..., are labels for syllables, discrete elements of song separated by brief silent intervals. Frequency (kHz) on the y axis and time on the x axis.* :label:`fig1`
 
 Each individual has a unique song which usually bears some similarity to the song of the bird that tutored it, but is not a direct copy. To analyze song, experimenters label syllables by hand. However, songbirds produce thousands of songs a day, more than can be labeled.
 
 In order to deal with this mountain of data, some labs have developed automated analyses of birdsong. One popular approach scores songs based on similarity of spectrograms, without labeling syllables [TCHER2000]. Another method uses semi-automated clustering to label syllables, and then measures changes in acoustic and temporal structure of song over days using a distance metric [WU2008]. Other approaches make use of standard supervised learning algorithms to classify syllables, such as hidden Markov Models [KOGAN2008]. While code for some of these automated analyses is freely available, and there are some repositories of song on-line, to my knowledge almost no work has been done to compare the different methods.
 
-I set out to compare methods using one species, the Bengalese finch. This species is of interest for several reasons. For example, Bengalese finches depend heavily on auditory feedback throughout life to maintain their vocalizations, much like humans ([SOBER2009] and references therein). In addition, their song tends to have relatively easy-to-quantify acoustic features (e.g., many of the syllables are "low entropy", having a pitchy, whistle-like timbre). Several previously-published studies or open-sourced libraries have applied various machine learning techniques to Bengalese finch song, including: support vector machines (SVMs) [TACH2014], and k-Nearest Neighbors (kNNs) (http://www.utsa.edu/troyerlab/software.html). Again, no study has compared these methods with open-source code and freely shared data.
+I set out to compare methods using one species, the Bengalese finch. This species is of interest for several reasons. For example, Bengalese finches depend heavily on auditory feedback throughout life to maintain their vocalizations, much like humans ([SOBER2009] and references therein). In addition, their song tends to have relatively easy-to-quantify acoustic features (e.g., many of the syllables are "low entropy", having a pitchy, whistle-like timbre). Several previously-published studies or open-sourced libraries have applied various machine learning techniques to Bengalese finch song, including: support vector machines (SVMs) [TACH2014], and k-Nearest Neighbors (kNNs) [TROYER2012]. Again, no study has compared these methods with open-source code and freely shared data.
+
+### Rationale
+Here I compare the accuracy and amount of training data required for SVMs and kNNs. My criteria for the "best" algorithm is one which yields the highest accuracy across syllables, i.e., labels, and does so with the smallest amount of training data. To machine learning researchers, it might seem like a foregone conclusion that SVMs would perform better than kNNs, so let me explain why. My initial experiments sought to reproduce the results of Tachibana et al. 2014, using a linear SVM. I found impaired accuracy for some individual birds' songs. This led me to test methods that can yield non-linear decision boundaries, such as kNN, inspired by the Troyer lab's approach [TROYER2012]. Ultimately, as I show below, I find that SVMs yield the highest accuracy with the least amount of training data, if a non-linear kernel is used, along with the features I found that improved accuracy.
 
 Results
 ----------
 
+Note that all results can be reproduced with the Jupyter Notebook at https://github.com/NickleDave/ML-comparison-birdsong/blob/master/figure_code/ML_comparison_birdsong.ipynb. 
 
+
+Intro syllables impair the accuracy of linear SVMs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In initial experiments, I applied the method of Tachibana et al. 2014 to song recorded from Bengalese Finches in our lab. As shown in :ref:`fig2` I show that I was not able to reproduce their reported results, in spite of the fact that I used the exact same features and hyperparameters as Tachibana et al., 2014., and the same library for SVMs [FAN2008]. The black horizontal dashed line on the plots indicates their estimate of accuracy for a "large" data set, and the black vertical line indicates the average number of training samples they used to achieve this accuracy. An important difference between their experiments and mine is that I used actual hand-labeled data sets of the size typically needed for songbird studies, instead of using a smaller hand-labeled set and estimating the accuracy based on how well the smaller set was classified.
+
+Note that in all figures, the exact same training samples--originally drawn randomly from the training set--are used to train all classifiers.
+
+.. image:: linsvm_rand_acc_by_sample.png
+
+    **Figure 2. Accuracy vs. number of songs used to train linear SVM.** *Y axis: Overall accuracy, x axis: number of samples in training set. Dashed horizontal line: average number of training samples used by Tachibana et al 2014. Vertical horizontal line: estimated accuracy using that number of samples.* Note that in no case is the red line near the vertical dashed line. :label:`fig2`
+
+In ref:`fig3` I show the same data in the way I will present results from now on, where the y axis is accuracy averaged across labels (i.e., syllable types), and the x axis is number of hand-labeled songs used to train the algorithm. I chose accuracy averaged across labels as a metric because the ideal case would be to have all syllables classified well, and the metric should take that into account. I chose the number of songs because typically researchers will label a number of songs instead of labeling e.g., "two minutes worth of syllables".
+
+.. image:: linsvm_avg_acc_by_song.png
+
+    **Figure 3. Accuracy vs. number of songs used to train linear SVM.** *Y axis: average accuracy across labels, x axis: number of songs used to train the linear SVM.* Note that accuracy is plotted as average accuracy across labels, and that this accuracy is unweighted, i.e., a syllable labeled with low accuracy drops the overall accuracy and does so proportional to the number of times it apears in the test set. :label:`fig3`
+
+One possible reason for this impaired accuracy is the presence of “introductory notes”, low-amplitude noisy syllables that often occur at the start of song (as shown in ref:`fig4`).
+.. image:: spect_birdsong_intro_notes.png
+
+    **Figure 4. Introductory notes are low-amplitude noisy syllables that often occur at the start of song** *Red boxes indicate introductory notes.* :label:`fig4`
+
+For that reason I tested whether removing intro syllables (as I will refer to them from now on) from the training and test sets would rescue the accuracy of the linear SVM. In their initial experiments, Tachibana et al. 2014 removed intro syllables from song. Removing the intro syllables greatly increased accuracy as shown in :ref:`fig5`.
+
+.. image:: linsvm_avg_acc_without_intro.png
+
+    **Figure 5. Accuracy vs. number of songs used to train linear SVM, with intro syllables removed from training and test sets.** *Y axis: average accuracy across labels, x axis: number of songs used to train the linear SVM.* Removing intro syllables greatly increased accuracy for three of four birds. :label:`fig5`
+
+k-Nearest Neighbors using domain-specific features produces high accuracy syllable classifcation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Because I could not achieve a high enough accuracy using linear SVM, I looked for other candidate algorithms, and found that the Troyer lab had previously described the use of k-nearest neighbors (k-NN) as I described above. The feature vectors I fed the k-NN algorithm contained acoustic parameters commonly measured for birdsong analyses, e.g., entropy, amplitude, pitch. My preliminary results using this approach did not yield the accuracy required. I improved accuracy by including in each feature vector the durations of preceding and following syllables and silent gaps that separate syllables (illustrated in :ref:`fig6`). 
+
+.. image::features.png
+
+    **Figure 6. Duration features of preceding and following syllables and silent gaps that were added to the vector of features representing each syllable.** :label:`fig6`
+
+As shown in :ref:`fig7`, addition of these features was sufficient to achieve classification accuracy better than the linear SVM with less training samples for three of the four birds.
+
+.. image:: linsvm_v_knn_avg_acc_by_song
+
+    **Figure 7. Accuracy v. number of songs used to train linear SVM and k-NN algorithms** *Y axis: average accuracy across labels, x axis: number of songs used to train.* In three out of four cases, k-NN yields higher accuracy than linear SVM, and in every case, k-NN yielded higher accuracy with less training data, although linear SVM outperformed k-NN for bird 4 given 15 songs or more. :label:`fig7`
+
+Use of a radial basis function (RBF) rescues SVM accuracy
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Results of the previous experiments suggest that accurate syllable classification requires a non-linear decision boundary, like those provided by k-NN, probably because of the variability in intro syllables. Commonly, the radial basis function (RBF) is used as a non-linear kernel with SVMs to deal with such situations. I again used the same features that Tachibana et al. 2014 used, but replaced the linear SVM with an SVM using an RBF. Hyperparameters for the RBF ('C' and 'gamma') were found for each subset of training samples using grid search. The RBF rescued SVM accuracy.
+
+.. image:: svmrbf_v_knn_avg_acc_by_song
+
+    **Figure 8. Accuracy v. number of songs used to train k-NN and SVM-RBF algorithms** *Y axis: average accuracy across labels, x axis: number of songs used to train.* SVM-RBF performs better than k-NN for two of the four birds, and for three of the four birds achieves higher than 99% accuracy. :label:`fig8`
+
+Addition of duration features from preceding and following syllables and silent gaps further improves SVM-RBF accuracy
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If features from preceding and following syllables improve k-NN performance, they might improve the SVM-RBF performance as well. I also tested this. Adding the durations yielded a small (on the order of 0.1%) improvement in average accuracy, but it did improve accuracy in every case (results shown in :ref:`fig9`).
+
+.. image:: svmrbf_plus_dur_avg_acc_by_song.png
+
+    **Figure 9. Accuracy v. number of songs used to train SVM-RBF and SVM-RBF with duration features added** *Y axis: average accuracy across labels, x axis: number of songs used to train.* In all cases, the added duration features yielded a higher accuracy. :label:`fig9`
 
 Conclusion
 ----------
@@ -73,7 +135,8 @@ The results suggest SVM-RBF provides the highest accuracy across different birds
 
 Methods
 ----------
-
+Song was recorded from four birds, and two to four days worth of songs from each bird were labeled by hand, using custom software written in Labview and Matlab (the Labview program EvTAF, and associated Matlab code for analysis [TUMER2007]). In some cases more than one person labeled song from a given bird, but using an agreed upon rubric for the labels given to syllables. Raw audio files were segmented into syllables with the following algorithm: (1) log transform the raw signal, (2) threshold at a level chosen for all songs from a given bird, (3) pick onsets and offsets such that all syllables have a minimum duration and minimum interval between each other that was again consistent for all songs from a given bird. 
+Once syllables were segmented, features were extracted from them to be used by the machine learning algorithms. Feature extraction was also done with Matlab scripts. See https://github.com/NickleDave/ML-comparison-birdsong/master/feature_extraction_code/ for this code and for equivalents written in Python using the Matplotlib [HUNTER2007] and Numpy [VANDERWALT2011] packages. Experiments based on [TACH2014] used the features in that paper, provided by R.O. Tachibana. As described in that paper, the Liblinear package was used [FAN2008]. My results were obtained using the Python API (https://github.com/ninjin/liblinear/tree/master/python). I used the exact same hyperparameters for training models that were used in [TACH2014]. Comparison of other machine learning algorithms was facilitated by Scikit-learn [PEDREGOSA2011].
 
 References
 ----------
@@ -86,3 +149,15 @@ References
 [SOBER2009] Sober, Samuel J., and Michael S. Brainard. "Adult birdsong is actively maintained by error correction." Nature neuroscience 12.7 (2009): 927-931.
 
 [TACH2014] Tachibana, Ryosuke O., Naoya Oosugi, and Kazuo Okanoya. "Semi-automatic classification of birdsong elements using a linear support vector machine." PloS one 9.3 (2014): e92584.
+
+[TROYER2012] http://www.utsa.edu/troyerlab/software.html
+
+[FAN2008] Fan, Rong-En, et al. "LIBLINEAR: A library for large linear classification." The Journal of Machine Learning Research 9 (2008): 1871-1874.
+
+[TUMER2007] Tumer, Evren C., and Michael S. Brainard. "Performance variability enables adaptive plasticity of ‘crystallized’adult birdsong." Nature 450.7173 (2007): 1240-1244.
+
+[VANDERWALT2011] Van Der Walt, Stefan, S. Chris Colbert, and Gael Varoquaux. "The NumPy array: a structure for efficient numerical computation." Computing in Science & Engineering 13.2 (2011): 22-30.
+
+[HUNTER2007] Hunter, John D. "Matplotlib: A 2D graphics environment." Computing in science and engineering 9.3 (2007): 90-95.
+
+[PEDREGOSA2011] Pedregosa, Fabian, et al. "Scikit-learn: Machine learning in Python." The Journal of Machine Learning Research 12 (2011): 2825-2830.
