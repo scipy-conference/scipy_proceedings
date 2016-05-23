@@ -53,19 +53,19 @@ Modern super-computers support dynamic linking and shared libraries, and thus,
 are capable of running the interpreters of a scripting programming language.
 Modern interpreters of scripting languages are equipped with the Just-In-Time
 (JIT) compilation technique that compiles the script in-time to achieve
-performances close to C or Fortran (:cite:`numba,julia,v8`). The Python
+performances close to C or Fortran :cite:`numba,julia,v8`. The Python
 programming language is of particular interest due to its large number of
 libraries and its wide user base. There are several Python bindings of the
-Message Passing Interface (MPI) (:cite:`mpi4py2011,miller2002pympi`). Bindings for
-higher level abstractions (e.g :cite:`pytrilinos`) also exist, allowing one to
+Message Passing Interface (MPI) :cite:`mpi4py2011,miller2002pympi`. Bindings for
+higher level abstractions, e.g. :cite:`pytrilinos` also exist, allowing one to
 write complex parallel applications with MPI for simulations and data analysis. 
 
 However, it is still traditionally believed that Python does not coexist with
 large scale high performance computing. The major barrier is due to the slow
 and unpredictable time to launch Python applications on such systems. For
 example, it has been shown that the start-up time sometimes increases to hours
-for jobs with a relative small scale (a hundred ranks) (See some discussion on this from
-:cite:`slither`).
+for jobs with a relative small scale (a hundred ranks). :cite:`slither` discussed 
+some of these issues quantitatively.
 
 The issue is an interplay between the current file system architecture on
 Peta-scale systems and the behavior of the Python interpreter.  Peta-scale
@@ -73,22 +73,34 @@ systems are typically equipped with a shared file system that is suitable for
 large band-width operations. The meta-data requests are handled by the
 so-called metadata servers, and usually, at most one master meta-data server
 serves all requests to a large branch of the file system; then the data files
-are replicated to several data storage nodes (:cite:`lustre`). As an example, the
+are replicated to several data storage nodes :cite:`lustre`. As an example, the
 Phase-I Cray XC 40 system Cori at NERSC is connected to 5 metadata servers
-(MDT) (:cite:`cori`). Because the file system is a limited resource, it is
+(MDT) :cite:`cori`. Because the file system is a limited resource, it is
 relatively easy for an application to flood the file systems with requests and
 nearly bring an entire file system to a halt. 
 
-Unfortunately, the Python interpreter is such an application (e.g.
-:cite:`asher2012,mpiimport,slither,Enkovaara201117`). During start-up, a python
+.. figure:: python-file-ops.pdf
+
+    Number of file system requests during python start-up.
+    Solid lines: Python 2.
+    Dashed lines: Python 3.
+    We increase the number of entries in ``PYTHONPATH`` to simulate the
+    number of packages installed in user directory or loaded via ``modules``
+    command commonly used on HPC systems.
+    :label:`fig-filereq`
+
+Unfortunately, the Python interpreter is such an application, as have been repeatedly
+demonstrated in previous studies
+:cite:`asher2012,mpiimport,slither,Enkovaara201117`. During start-up, a python
 application will generate thousands of file system requests to locate and
 import files for scripts and compiled extension modules. We demonstrate the
 extent of the problematic behavior in Figure :ref:`fig-filereq`, where we
 measure the number of file system requests associated with several fairly
-commonly used python packages [strace]_
-on a typical system (Anaconda 2 and 3 in this case).  For either Python 2 or
+commonly used python packages 
+on a typical system (Anaconda 2 and 3 in this case). The measurement is performed
+with ``strace -ff -e file``. For either Python 2 or
 Python 3, the number of file system operations increase linearly with the
-number of entries in `sys.path` (controlled by the `PYTHONPATH` environment
+number of entries in ``sys.path`` (controlled by the ``PYTHONPATH`` environment
 variable). Importing the scipy package with 10 additional paths requires 5,000+
 operations on Python 2 and 2,000 operations on Python 3. Extrapolating to 1,000
 instances or MPI ranks, the number of requests reaches 2 ~ 5 million. On a
@@ -98,30 +110,15 @@ Furthermore, the application becomes extremely sensitive to the load on the
 shared file system: when the file system is heavily loaded, the application
 will start extremely slowly.
 
-.. [strace] footnote:`measured via \`strace -ff -e file\``
-
 It is worth pointing out that although the number of requests per rank can be
 significantly reduced, the total number of requests still increases linearly
 with number of MPI ranks, and will become a burden at sufficiently large scale:
 for example, due to the improvement in the importing system in Python 3 reduces
-the number of requests per rank by 50\% (seen in Figure :ref:`fig-filereq`),
+the number of requests per rank by 50% (seen in Figure :ref:`fig-filereq`),
 therefore a plain Python 3 application will handle twice as many ranks as
 Python 2 does.
 
-\begin{figure}
-
-.. figure:: python-file-ops.pdf
-
-    :label:fig-filereq
-
-    Number of file system requests during python start-up.
-    Solid lines: Python 2.
-    Dashed lines: Python 3.
-    We increase the number of entries in `PYTHONPATH` to simulate the
-    number of packages installed in user directory or loaded via `modules`
-    command commonly used on HPC systems.  
-
-In this paper, we present a solution (we will name `python-mpi-bcast`) that
+In this paper, we present a solution (we will name ``python-mpi-bcast``) that
 addresses the start-up speed without introducing a burden on the users. We have
 been using this method to launch data analysis applications in computational
 cosmology (e.g. :cite:`nbodykit`).
@@ -143,56 +140,66 @@ the problem, or introduce a burden on the users to maintain the dependency
 packages.
 
 The application delivery mechanism on a super-computer can deliver the full
-binary executable to the computing nodes. Therefore, if the entire support
-system of the python application is statically compiled into one giant
-executable, one can take advantage of the standard delivery mechanism and
-launch a Python application at an optimal speed. :cite:`slither,scalablepython`
-both fall into this category. We also note that the yt-project has adopted some
-similar approaches for their applications :cite:`yt`. The heritage of this
-approach traces back to the limited support of dynamic libraries on Cray XT
-systems :cite:`zhaoshared`. 
+binary executable to the computing nodes. 
+In fact, older systems can only deliver one staticly linked executable
+file to the computing nodes during the job launch.
+The support of dynamic libraries on Cray systems used to be very limited :cite:`zhaoshared`.
+A significant amount of work has been previously invested to solve this limitation.
+For example, collfs :cite:`collfs` intercepts the file-system calls at ``libc``
+level to speed up the loading of dynamic libraries.
+
+On these systems, If the entire support system of the python application is
+statically compiled into one giant executable, one can take advantage of the
+standard delivery mechanism and launch a Python application at an optimal
+speed. :cite:`slither,scalablepython,nofilesystem` both fall into this category. We also
+note that the yt-project has adopted some similar approaches for their
+applications :cite:`yt`.
 
 While being a plausible solution, the technical barrier of this approach is
 very high. Statically compiled Python is not widely used in the mainstream
 python community, and special expertise is required to patch and incorporate
 every dependency package for individual applications. Although the steps are
 documented very well, the effort is beyond the knowledge of a typical Python
-developer. 
+developer.
 
-The approaches used by :cite:`nofilesystem` completely eliminates access to the
-file system via the Python's standard package freeze feature.
-
-:cite:`collfs` intercepts the file-system calls at \textsf{libc} level.
+Fortunately, in recent years the support to dynamic libraries on high performance
+computing systems has significantly improved, as super-computing vendors realign
+towards embracing a wider user base in general data-intensive analysis. On these
+platforms, the main bottleneck has shifted from the lack of suppot on
+dynamic libaries to the vast number of meta-data requests.
 
 A particularly interesting approach is to eliminate the meta-data requests
-altogether, based on the assumption that the limited number of meta-data server
-is the major bottleneck during launching of a Python application. For example,
-:cite:`mpiimport` attempts to cache the meta-data requests with an import hook.
-This approach is more flexible since it requires a minimal change to the script
+altogether via caching. Caching can happen at user level or operation system level.
+For example, mpiimport :cite:`mpiimport` attempts to cache the meta-data
+requests with an import hook.  This approach is more flexible since it requires
+a minimal change to the script
 to enable the hooks, which can be implemented as a wrapper to the standard
 python interpreter. After the hooks are enabled the user application can run as
-is.
-
-However, the method is not as fully opaque as it appears to be. Because the
-meta-data requests are cached, they have to be calculated by the root rank
-first. Therefore, an implicit synchronization constraint is imposed, in order
-to ensure the cache is evaluated before the requests from the non-root ranks.
-All of the import operations must be made either collective or un-collective at
-the same time. The collective importing scheme breaks site.py in the Python
-standard library. The un-collective importing scheme breaks most MPI-enabled
-extension modules.
-
-Alternatively, one can locally mount a full application image on the computing
+is. On some systems, users can file a ticked to mark a branch of file system
+as immutable, allowing the computing nodes to cache the requests locally, albeit
+requiring special arrangements from the administrators.
+Finally, one can locally mount a full application image on the computing
 node via a container-based solution :cite:`shifter`. The loopback mount adds a
 layer of caching to reduce the number of requests to the global file system.
 
-The only drawback of this method is due to the requirement that the entire
+
+Unfortunately, these methods are not as fully opaque as it appears to be.
+With ``mpiimport``, because the meta-data requests are cached, they have to be
+calculated by the root rank first. Therefore, an implicit synchronization
+constraint is imposed, in order to ensure the cache is evaluated before the
+requests from the non-root ranks.
+All of the import operations must be made either collective or un-collective at
+the same time. The collective importing scheme breaks site.py in the Python
+standard library. The un-collective importing scheme breaks most MPI-enabled
+marked read-only, any updates must involve special arrangements with the site
+administrators.
+
+The drawback of the container-based solution is due to the requirement that the entire
 application is built as one image. Each time the application code is modified,
 the entire image needs to be re-generated before the job is ready to run. It
 takes a long (and fluctuating) time to build a container image. This waiting
 time can become a burden during code development.
-
-A potential concern is that the user may need a privilege on computing nodes
+Furthermore, the user may need a privilege on computing nodes
 for the mounts, requiring changes in the system security policy that can be
 challenging to implement due to administration reasons.
 
@@ -222,28 +229,17 @@ of a single rank, regardless of the number of ranks used.
 The only additional cost in our approach is to deliver the packages to the
 local file systems. In order to efficiently deliver the packages, we bundle the
 packages into tar files. The MPI broadcast function is used for the delivery.
-The tar files are uncompressed automatically with the tool \url{bcast.c} that
+The tar files are uncompressed automatically with the tool ``bcast.c`` that
 could be linked into a static executable.
 
-.. raw:: latex
+We will describe the steps in the following subsections:
 
-    \begin{algorithm}
-    \begin{enumerate}
-    \item
-    Create bundles for dependencies and the application.
-    \item
-    Deliver the bundles via broadcasting. The destination shall be a local file
-    system on the computing nodes. (e.g. /dev/shm or /tmp).  \item
-    Reroute python search path (including shared library search path) to the
-    delivery destination, bypassing the shared file system.  \item
-    Start the python application the usual way.
-    \end{enumerate}
-    \caption{Steps of python-mpi-bcast.}
-    \label{fig:overview}
-    \end{algorithm}
-
-We provide an overview of our solution in \ref{fig:overview} and will describe
-the steps in the following subsections.
+1. Create bundles for dependencies and the application.
+2. Deliver the bundles via broadcasting. The destination shall be a local file
+   system on the computing nodes. (e.g. /dev/shm or /tmp)
+3. Reroute python search path (including shared library search path) to the
+   delivery destination, bypassing the shared file system.
+4. Start the python application the usual way.
 
 Creating bundles
 ++++++++++++++++
@@ -255,15 +251,15 @@ directory. Two examples are
 1) The bundle file of a conda environment consists of all files in the bin,
 lib, include, and share directories of the environment. We provide a script
 (tar-anaconda.sh) for generating such bundle from a conda environment. The size
-of a bundle for a typical conda environment is close to 300 MB. 
+of a bundle for a typical conda environment is close to 300 MB.
 
-2) The bundle file of a PIP installed package consists all files installed with
-the option at \$DIR --install-option="--prefix=\$DIR". We provide a wrapper
-script (tar-pip.sh) for generating a bundle from a list of PIP packages.
+2) The bundle file of a PIP installed package consists all files installed by
+the ``pip`` command.  We provide a wrapper
+command ``bundle-pip`` for generating a single bundle from a list of PIP packages.
 
 3) The bundle file of basic system libraries includes those shared library
 files that are loaded by the dynamic linker for the python interpreter. We
-provide two sample job scripts to generate these bundles for three Cray
+provide three sample job scripts to generate these bundles for three Cray
 systems: XC30, XC40, and XT. The system bundle addresses the shared library
 bottleneck investigated in :cite:`zhaoshared` (DLFM) but without requiring an
 additional wrapper of the system dynamic linker.
@@ -277,13 +273,12 @@ Delivery via broadcasting
 Before launching the user application, the bundles built in the previous step
 shall be delivered to the computing nodes. We provide a tool that broadcasts
 bundles to the computing nodes. On Cray systems, we make use of the memory file
-system mounted at \url{/dev/shm}. On a system with local scratch, \url{/tmp}
+system mounted at ``/dev/shm``. On a system with local scratch, ``/tmp``
 may be used as well, although this has not been tested.
 
 We use the broadcast function of MPI for the delivery. The tool first elects
 one rank per node to receive and deploy the bundles to a local storage space.
-The bundle is then uncompressed with the standard \url{tar} command by the
-elected rank per computing node.
+The bundle is then uncompressed by the elected rank per computing node.
 
 The new files are marked globally writable. Therefore, even if some of the
 files are not properly purged from a node, they can be overwritten by a
@@ -301,45 +296,40 @@ is completed.
 Rerouting file system requests
 ++++++++++++++++++++++++++++++
 
-.. raw:: latex
+.. table:: Environment Variable used in ``python-mpi-bcast`` :label:`tab-variables`
 
-    \begin{table}
-    \centering\begin{tabular}{ccc}
-    \hline
-    Variable & & Action \\
-    \hline
-    PYTHONHOME & 
-    & set to broadcast destination \\
-    PYTHONPATH & 
-    & Purge \\
-    PYTHONUSERBASE &  &Purge \\
-    LD\_LIBRARY\_PATH & 
-    & prepended by \url{/lib} of the broadcast destination \\
-    \hline
-    \end{tabular}
-    \caption{Environment Variable used in python-mpi-bcast}
-    \label{tab:variables}
-    \end{table}
+    +---------------------+----------------------------------------------------+
+    | Variable            | Action                                             |
+    +=====================+====================================================+
+    | ``PYTHONHOME``      | Set to broadcast destination                       |
+    +---------------------+----------------------------------------------------+
+    | ``PYTHONPATH``      | Purge                                              |
+    +---------------------+----------------------------------------------------+
+    | ``PYTHONUSERBASE``  | Purge                                              |
+    +---------------------+----------------------------------------------------+
+    | ``LD_LIBRARY_PATH`` | Prepended by ``/lib`` of the broadcast destination |
+    +---------------------+----------------------------------------------------+
 
 We list the environment variables that are relevant to the relocation in Table
-\ref{tab:variables}. After the relocation, all of the file system requests
+:ref:`tab-variables`. After the relocation, all of the file system requests
 (meta-data and data) are rerouted to the packages in the local file system. As
 a result, the start-up time of the interpreter drops to that of a single rank.
 
 We note that the variable PYTHONUSERBASE is less known, documented only in the
 site package, but not in the python command-line help or man pages. If the
 variable is not set, Python will search for packages from the user's home
-directory (\$HOME/.local/). Unfortunately, the home file-system is typically
+directory ``$HOME/.local/``. Unfortunately, the home file-system is typically
 the slowest one in a peta-scale system. This directory is not part of the
 application, therefore we purge this variable by setting it to an invalid
-location on the local file system. \footnote{We simply use the root of the
-broadcast destination.} We also purge PYTHONPATH the same way, as now that all
-packages are located at the same place. We note that the variable PYTHONPATH
-can be very long on systems where each python package is provided as an
-individual module of the 'modules' system, and we have shown in Figure
-\ref{fig:filereq} that the length of PYTHONPATH has a huge impact on the number
-of file system operations that occur during the startup of a python
-application.
+location on the local file system by setting it to the root of the
+broadcast destination. We also purge PYTHONPATH the same way, as now that all
+packages are located at the same place.
+We note that the variable PYTHONPATH can be very long on systems where each
+python package is provided as an individual module of the ``modules`` system. This
+negtively impact the performance of launching python applications, as
+we have shown in Figure :ref:`fig-filereq` that the length of PYTHONPATH has a
+huge impact on the number of file system operations that occur during the
+startup.
 
 Launching the python application
 ++++++++++++++++++++++++++++++++
@@ -356,7 +346,7 @@ also be bundled and delivered via python-mpi-bcast before the launch. This is
 demonstrated in the example in Section 5, and we will discuss these in more
 details in the next section on bundling.
 
-On a Cray system, the python interpreter (usually `python-mpi`) must reside in
+On a Cray system, the python interpreter (usually ``python-mpi``) must reside in
 a location that is accessible by the job manager node, because it will be
 delivered via the standard application launch process.
 
@@ -369,13 +359,13 @@ Three-tiers of bundles
     The most stable component (bottom of the pyramid, Tier 1) takes the most effort to build.
     The least stable component (top of the pyramid, Tier 3), takes the least effort to bundle.
     The split into three tiers allows the developers to save time in maintaining the bundles.
-    :label:fig-tiers
+    :label:`fig-tiers`
 
 Building bundles takes time and shifts the focus of the developer from
 application development to interfacing with the system. We therefore choose to
 organize the components of an application into a three tier system to minimize
 the redundant efforts in creating the bundles. The three tier system is
-illustrated in Figure \ref{fig:tiers}, and we describe the rationale and
+illustrated in Figure :ref:`fig-tiers`, and we describe the rationale and
 definitions in the following sections.
 
 Tier 1 components
@@ -387,7 +377,7 @@ On a conda based Python distribution, the Tier 1 components map to the packages
 included in a conda environment. These components provide a basic python
 computing environment, take the most time to install, yet barely change during
 the life-cycle of a project. Most super-computing facilities already maintain
-some form of these packages with the `modules` system, e.g. NCSA has a
+some form of these packages with the ``modules`` system, e.g. NCSA has a
 comprehensive set of python packages :cite:`bwp`, and NERSC has the conda based
 python distribution. 
 
@@ -438,72 +428,92 @@ script shall be modified to reflect this change. Because the Tier 3 components
 are the most light weight, typically consisting of only a few files, a good
 practice is to create the bundle automatically in the job script, without
 requiring the developer to manually create a bundle every time before job
-submission. This strategy is demonstrated in the next section.
+submission. This strategy is demonstrated in the next section with examples.
 
-Example and Performance
------------------------
+Example Scripts
+---------------
+
+Generic Cray Systems
+++++++++++++++++++++
 
 In this section we show an example PBS/Torque job script on a Cray XC 30
 system. The script demonstrates the non-invasive nature of our method. After
 the bundles are built, a few extra lines are added to the job script to enable
 python-mpi-bcast, and deliver the three tiers of components. The user
-application does not need to be specifically modified for python-mpi-bcast. The
-job script runs in the user's security context.
+application does not need to be specifically modified for python-mpi-bcast.
+We emphasize that the job script runs in the user's security context, without
+any special arrangements by the facility.
 
 .. code:: bash
 
+    # Script without NERSC integration
+    # Modify and adapt to use on a general
+    # HPC system
+
     #! /bin/bash
-    #SBATCH -N 64
+    #SBATCH -n 2048
     #SBATCH -p debug
 
-    set -x
-    export OMP_NUM_THREADS=1
     export PBCAST=/project/projectdirs/m779/python-mpi
 
-    source $PBCAST/activate.sh /dev/shm/local "srun -n 1024"
+    source $PBCAST/activate.sh \
+        /dev/shm/local "srun -n 1024"
 
-    # send the anaconda packages (Tier 1)
+    # Tier 1 : anaconda
+    # Tier 2 : commonly used packages
     bcast -v $PBCAST/2.7-anaconda.tar.gz \
              $HOME/fitsio-0.9.8.tar.gz
 
-    # create a bundle for the bin directory of the application
-    # and deliver it to /dev/shm/local
-    mirror testapp bin
+    # Tier 3 : User application
+    mirror /home/mytestapp/ \
+        testapp bin
 
-    # launch the application from /dev/shm/local
-    time srun -n 1024 python-mpi /dev/shm/local/bin/main.py
+    # Launch
+    time srun -n 1024 python-mpi
+        /dev/shm/local/bin/main.py
 
-On the NERSC systems we also provide a default installation of python-mpi-bcast
-that is integrated with the \textsf{modules} system and the anaconda based
-Python installation. 
-The following script is an example on using python-mpi-bcast in a pre-configured system. 
+Integration with NERSC Facilities
++++++++++++++++++++++++++++++++++
+
+On the NERSC systems where python-mpi-bcast was originally developed,
+we also provide a default installation of ``python-mpi-bcast``
+that is integrated with the ``modules`` system and the anaconda based
+Python installations. The full integration source code is hosted together
+in the main python-mpi-bcast repository, and can be easily adapted to
+other systems.
+
+The following script is an example on using ``python-mpi-bcast`` in a
+pre-configured system.
 Notice that the python runtime environment (along with shared libraries from
-the Cray Linux Environment) are automatically delivered. The impact on the user
-application is limited 
-two lines in the job script: 1 for enabling python-mpi-bcast, and the other is
-to mirror the application to \url{/dev/shm/local}.
+the Cray Linux Environment) are automatically delivered. 
+The impact on the user application is limited
+two lines in the job script: one line for enabling python-mpi-bcast, 
+and the other line is to mirror the application to a local file system with the
+``mirror`` command.
 
 .. code:: bash
 
     #! /bin/bash
-    #SBATCH -N 64
+    #SBATCH -N 2048
     #SBATCH -p debug
 
-    set -x
-    export OMP_NUM_THREADS=1
-
+    # select the Python environment
     module load python/3.4-anaconda
 
-    PBCAST=/project/projectdirs/m779/python-mpi/
+    # NERSC integration
+    PBCAST=/project/projectdirs/m779/python-mpi
     source $PBCAST/nersc/activate.sh
 
-    # create a bundle for the bin directory of the application
-    # and deliver it to /dev/shm/local
-    mirror testapp bin
+    # Directly deliver the user application
+    mirror /home/mytestapp/ \
+        testapp bin
 
-    # launch the application from /dev/shm/local
-    time srun -n 1024 python-mpi /dev/shm/local/bin/main.py
+    # launch the mirrored application
+    time srun -n 1024 python-mpi \
+        /dev/shm/local/bin/main.py
 
+Benchmark and Performance
+-------------------------
 
 .. figure:: cray-xc30-startup-time-hires
 
@@ -511,12 +521,13 @@ to mirror the application to \url{/dev/shm/local}.
     NERSC. We perform tests launching a dummy Python 2 application (that imports
     scipy) with up to 127,440 MPI ranks. The total time in the bcast job step is
     shown in circles. Two major time consuming component of bcast, the call to
-    MPI\_Bcast ('x') , and the call to the 'tar' command is also shown ('+'). Note
+    ``MPI_Bcast`` ('x') , and the call to the 'tar' command is also shown ('+'). Note
     that large jobs incurs a large overhead in the job step such that the sum of
     latter differ from the job step times. The total time of the job step that
     launches the dummy application is shown in squares. The total time of both job
     steps is shown in diamonds.
-    :label:fig-bench-edison
+    :label:`fig-bench-edison`
+
 
 .. figure:: cray-xt-startup-time-hires
 
@@ -524,12 +535,13 @@ to mirror the application to \url{/dev/shm/local}.
     NCSA. We perform tests launching a dummy Python 2 application (that imports
     scipy) with up to 127,440 MPI ranks. The total time in the bcast job step is
     shown in circles. Two major time consuming component of bcast, the call to
-    MPI\_Bcast ('x') , and the call to the 'tar' command is also shown ('+'). Note
+    ``MPI_Bcast`` ('x') , and the call to the 'tar' command is also shown ('+'). Note
     that large jobs incurs a large overhead in the job step such that the sum of
     latter differ from the job step times. The total time of the job step that
     launches the dummy application is shown in squares. The total time of both job
     steps is shown in diamonds. 
-    :label:fig-bench-bluewaters
+    :label:`fig-bench-bluewaters`
+
 
 In Figure :ref:`fig-bench-edison` and :ref:`fig-bench-bluewaters`, we show the
 measurement of wall clock time of python-mpi-bcast for a dummy Python 2
@@ -548,9 +560,10 @@ The job includes two steps: the first involves the statically linked bcast
 program that delivers the bundles to the computing nodes (which does not
 involve python), and the second launches the python application. 
 
-The bcast step consists of two major components, a call to MPI\_Bcast and a
-call to libarchive to inflate the tar ball. We observe that the scaling in the
-MPI\_Bcast function is consistent with the expected $O[\log N]$ scaling of a
+The bcast step consists of two major components, a call to ``MPI_Bcast`` and a
+call to ``libarchive``:cite:`libarchive` to inflate the tar ball. 
+We observe that the scaling in the
+``MPI_Bcast`` function is consistent with the expected :math:`O[\log N]` scaling of a
 broadcast algorithm. The call to inflate the tar ball remains roughly constant,
 but shows fluctuation for larger runs on the XC30 system. This is likely
 because the job has hit a few nodes that are in a non-optimal state, which is a
@@ -577,14 +590,14 @@ minutes in total.
 Conclusions
 -----------
 
-We introduce python-mpi-bcast, a solution to start native python applications
-on large high performance computing systems. 
+We introduce ``python-mpi-bcast``, a solution to start native python applications
+on large high performance computing systems.
 
 We summarize and review a set of previous solutions developed over the years
 and scattered around in mail-lists and the internet. Their limitations in terms
-of practical usability and efficiency are discussed.  
+of practical usability and efficiency are discussed.
 
-Our solution python-mpi-bcast does not suffer from any of the drawbacks of
+Our solution ``python-mpi-bcast`` does not suffer from any of the drawbacks of
 previous solutions. Using our tool, the runtime environment of the Python
 application on Peta-scale systems is fully compatible with the the mainstream
 python environment. The entire solution can be added as a preamble to a user
@@ -606,33 +619,34 @@ We introduce a three-tier bundling system that reflects the evolutionary nature
 of an application. Different components of an application are bundled
 separately, reducing the preparation overhead for launching an application
 during the development stage.  The three-tier system is an improvement from the
-all-in-one approaches :cite:`slither` or :cite:`shifter`; we in fact advocate
+all-in-one approaches such as :cite:`slither` or :cite:`shifter`. We in fact advocate
 adopting a similar system in general purpose images based application
 deployment infrastructure (e.g. in cloud computing). We note that a large
 burden from the users can be further removed if the computing facilities
-maintain the Tier 1 bundle(s) in parallel with their existing `modules` system.
+maintain the Tier 1 bundle(s) in parallel with their existing ``modules`` system.
 Further integration into the job system is also possible to provide a fully
-opaque user experience. 
+opaque user experience.
 
-We believe that with few modifications, python-mpi-bcast can be easily
+Finally, we believe that with few modifications, ``python-mpi-bcast`` can be easily
 generalized to support applications written in other interpretive languages
 such as Julia and R. Given that large scale Python applications can be launch
 extremely efficiently on state of art super-computing systems, it is the time
 for the high performance computing community to seriously consider building
-complicated computational applications at large scale with Python.
+complicated computational applications at large scale with Python. The full source code
+of ``python-mpi-bcast`` is hosted at https://github.com/rainwoodman/python-mpi-bcast.
 
 **Acknowledgment**
 
 The original purpose of this work was to improve the data analysis flow of
 cosmological simulations. The work is developed on the Edison system and Cori
 Phase I system at National Energy Research Super-computing Center (NERSC),
-under allocations for the Baryon Oscillation Spectroscopic Survey
-(BOSS)\footnote{\url{https://www.sdss3.org/surveys/boss.php}} program and the
-Berkeley Institute for Data Science
-(BIDS)\footnote{\url{http://bids.berkeley.edu}} program. We also performed
+under allocations for the `Baryon Oscillation Spectroscopic Survey
+(BOSS) <https://www.sdss3.org/surveys/boss.php>`_ program and the
+`Berkeley Institute for Data Science
+(BIDS) <http://bids.berkeley.edu>`_ program. We also performed
 benchmark on the Blue Waters system at National Center for Super-computing
 Applications (NCSA) as part of the NSF Peta-apps program (NSF OCI-0749212) for
-the BlueTides\footnote{\url{http://bluetides-project.org}} simulation.
+the `BlueTides simulation <http://bluetides-project.org>`_.
 
 The authors thank Zhao Zhang of Berkeley Institute of Data Science,
 Fernando Perez of Berkeley Institute of Data Science,
@@ -640,13 +654,5 @@ Martin White of Berkeley Center for Cosmology,
 Rollin Thomas of Lawrence Berkeley National Lab,
 Aron Ahmadia of Continuum Analysis Inc., for insightful discussions over the
 topic.
-
-.. References
-.. ----------
-.. .. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
-.. latex::
-    :usepackage: algorithmicx, algorithm
 
 
