@@ -177,8 +177,9 @@ offset, it can be subtracted from the voltage trace
 
     P(t) = \left[\overline{V}(t) - \overline{V}(0)\right] + F \cdot P_0
 
-where :math:`\overline{V}(0)` is the initial voltage. The result is a vector of pressure values that
-must be further processed to determine the time of the EOC and the ignition delay.
+where :math:`\overline{V}(0)` is the initial voltage of the filtered and smoothed signal. The result
+is a vector of pressure values that must be further processed to determine the time of the EOC and
+the ignition delay.
 
 Finding the EOC
 ===============
@@ -199,16 +200,16 @@ from the maximum pressure in the pressure trace (typically, the global maximum p
 ignition has occured) until a minimum in the pressure is reached. Since the precise time of the
 minimum is not important for this method, the search is done by comparing the pressure at a given
 index :math:`i` to the pressure at point :math:`i-50`, starting with the index of the global maximum
-pressure. This offset is used to avoid the influence of noise. If :math:`P(i) \geq P(i-50)`, the
-index is decremented and the process is repeated until :math:`P(i) < P(i-50)`. This value of
-:math:`i` is approximately the minimum of pressure prior to ignition, so the maximum of the pressure
-in points to the left of the minimum will be the EOC.
+pressure. The comparison is not made to the adjacent point to avoid the influence of noise. If
+:math:`P(i) \geq P(i-50)`, the index is decremented and the process is repeated until :math:`P(i) <
+P(i-50)`. This value of :math:`i` is approximately the minimum of pressure prior to ignition, so the
+maximum of the pressure in points to the left of the minimum will be the EOC.
 
 This method is generally robust, but it fails when there is no minimum in the pressure between the
 EOC and ignition, or the minimum pressure is very close to the EOC pressure. This may be the case
 for short ignition delays, on the order of 5 ms or less. In these cases, the comparison offset can
-be reduced to improve the granularity of the search; if that method fails, manual intervention is
-necessary to determine the EOC. In either case, the value of the pressure at the EOC, |PC|, is
+be reduced to improve the granularity of the search; if the method still fails, manual intervention
+is necessary to determine the EOC. In either case, the value of the pressure at the EOC, |PC|, is
 recorded and the time at the EOC is taken to be :math:`t=0`.
 
 Calculating Ignition Delay
