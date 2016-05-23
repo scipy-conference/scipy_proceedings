@@ -82,6 +82,8 @@ examples of how to:
  - AMSmath LaTeX classes (included in most LaTeX distributions)
  - `docutils` 0.8 or later (``easy_install docutils``)
  - `pygments` for code highlighting (``easy_install pygments``)
+ - Due to a bug in the Debian packaging of ``pdfannotextractor``, you may have
+   to execute ``pdfannotextractor --install`` to fetch the PDFBox library.
 
 On Debian-like distributions:
 
@@ -90,8 +92,7 @@ sudo apt-get install python-docutils texlive-latex-base texlive-publishers \
                      texlive-latex-extra texlive-fonts-recommended
 ```
 
- - Due to a bug in the Debian packaging of ``pdfannotextractor``, you may have
-   to execute ``pdfannotextractor --install`` to fetch the PDFBox library.
+Note you will still need to install `docutils` with `easy-install` or `pip` even on a Debian system.
 
 ## Build Server
 
