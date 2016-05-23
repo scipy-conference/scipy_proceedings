@@ -103,6 +103,23 @@ def rst2tex(in_path, out_path):
 
 def tex2pdf(out_path):
 
+    # Sometimes Latex want us to rebuild, because labels have changed.
+    # but we will only try at most 5 times.
+    for i in range(5):
+        out, success = tex2pdf_singlepass(out_path)
+        if not success:
+            # building failed, bail.
+            break
+        if "Latex Warning: Label(s) may have changed. Rerun" in out:
+            # Latex tells us to rebuild.
+            continue
+        else:
+            # Latex has reached to an equilibrium, we are done
+            break
+    return out
+
+def tex2pdf_singlepass(out_path):
+
     import subprocess
     command_line = 'pdflatex -halt-on-error paper.tex'
 
@@ -110,6 +127,7 @@ def tex2pdf(out_path):
     #    from asking for any missing files via stdin prompts,
     #    which mess up our build process.
     dummy = tempfile.TemporaryFile()
+
     run = subprocess.Popen(command_line, shell=True,
             stdin=dummy,
             stdout=subprocess.PIPE,
@@ -128,7 +146,7 @@ def tex2pdf(out_path):
             print("=" * 80)
 
         # Errors, exit early
-        return out
+        return out, False
 
 
     # Compile BiBTeX if available
@@ -148,8 +166,7 @@ def tex2pdf(out_path):
 
         if err:
             print("Error compiling BiBTeX")
-            return out
-
+            return out, False
 
     # -- returncode always 0, have to check output for error
     if not run.returncode:
@@ -162,7 +179,7 @@ def tex2pdf(out_path):
                 )
         out, err = run.communicate()
 
-    return out
+    return out, True
 
 
 def page_count(pdflatex_stdout, paper_dir):
