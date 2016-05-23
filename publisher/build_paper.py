@@ -110,12 +110,6 @@ def tex2pdf(out_path):
         if not success:
             # building failed, bail.
             break
-        if "Latex Warning: Label(s) may have changed. Rerun" in out:
-            # Latex tells us to rebuild.
-            continue
-        else:
-            # Latex has reached to an equilibrium, we are done
-            break
     return out
 
 def tex2pdf_singlepass(out_path):
@@ -148,7 +142,6 @@ def tex2pdf_singlepass(out_path):
         # Errors, exit early
         return out, False
 
-
     # Compile BiBTeX if available
     stats_file = os.path.join(out_path, 'paper_stats.json')
     d = options.cfg2dict(stats_file)
@@ -162,24 +155,16 @@ def tex2pdf_singlepass(out_path):
                 stderr=subprocess.PIPE,
                 cwd=out_path,
                 )
-        out, err = run.communicate()
+        out1, err = run.communicate()
 
         if err:
             print("Error compiling BiBTeX")
-            return out, False
+            return out1, False
 
-    # -- returncode always 0, have to check output for error
-    if not run.returncode:
-        # -- pdflatex has to run twice to actually work
-        run = subprocess.Popen(command_line, shell=True,
-                stdin=dummy,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                cwd=out_path,
-                )
-        out, err = run.communicate()
+    if "Label(s) may have changed." in out:
+        return out, True
 
-    return out, True
+    return out, False
 
 
 def page_count(pdflatex_stdout, paper_dir):
