@@ -107,16 +107,25 @@ def rst2tex(in_path, out_path):
 
 def tex2pdf(out_path):
 
-    # Sometimes Latex want us to rebuild, because labels have changed.
-    # but we will only try at most 5 times.
+    # Sometimes Latex want us to rebuild because labels have changed.
+    # We will try at most 5 times.
     for i in range(5):
         out, retry = tex2pdf_singlepass(out_path)
         if not retry:
-            # building failed, bail.
+            # Building succeeded or failed outright
             break
     return out
 
+
 def tex2pdf_singlepass(out_path):
+    """
+    Returns
+    -------
+    out : str
+        LaTeX output.
+    retry : bool
+        Whether another round of building is needed.
+    """
 
     import subprocess
     command_line = 'pdflatex -halt-on-error paper.tex'
@@ -159,13 +168,13 @@ def tex2pdf_singlepass(out_path):
                 stderr=subprocess.PIPE,
                 cwd=out_path,
                 )
-        out1, err = run.communicate()
+        out_bib, err = run.communicate()
 
         if err:
             print("Error compiling BiBTeX")
-            return out1, False
+            return out_bib, False
 
-    if "Label(s) may have changed." in out:
+    if "Label(s) may have changed." in out.decode():
         return out, True
 
     return out, False
