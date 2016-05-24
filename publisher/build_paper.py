@@ -106,8 +106,8 @@ def tex2pdf(out_path):
     # Sometimes Latex want us to rebuild, because labels have changed.
     # but we will only try at most 5 times.
     for i in range(5):
-        out, success = tex2pdf_singlepass(out_path)
-        if not success:
+        out, retry = tex2pdf_singlepass(out_path)
+        if not retry:
             # building failed, bail.
             break
     return out
