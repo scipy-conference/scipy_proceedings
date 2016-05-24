@@ -122,7 +122,7 @@ operator, typically between 50 kHz and 100 kHz. This provides sufficient resolut
 the order of milliseconds; the typical ignition delay measured in this system approximately ranges
 from 5 ms to 100 ms.
 
-.. figure:: figure1.png
+.. figure:: figures/raw-voltage.png
 
     Raw voltage trace and the voltage trace after filtering and smoothing from a typical RCM
     experiment. :label:`raw-voltage`
@@ -146,9 +146,14 @@ low-pass filter, and some combination of these two methods. In the current versi
 :cite:`uconnrcmpy`, the voltage is first filtered using a low-pass filter with a cutoff frequency of
 10 kHz. The filter is constructed using the ``firwin`` function from the ``signals`` module of SciPy
 :cite:`Jones2001` with the Blackman window :cite:`Blackman1958,Oppenheim1999` and a filter order of
-:math:`2^{14}-1`. The cutoff frequency, window type, and filter order were determined empirically.
-Methods to select a cutoff frequency that optimizes the signal-to-noise ratio are currently being
-investigated.
+:math:`2^{14}-1`. The cutoff frequency, window type, and filter order were determined empirically,
+based on the Fig. :ref:`frequency`. Methods to select a cutoff frequency that optimizes the
+signal-to-noise ratio are currently being investigated.
+
+.. figure:: figures/frequency.png
+
+    Power spectral density of the original, filtered, and filtered and smoothed signal, showing
+    the peaks of noise above 10 kHz. :label:`frequency`
 
 After filtering, the signal is smoothed by a moving average filter with a width of 21 points. It is
 desired that the signal remain the same length through this operation, but the convolution operation
@@ -236,7 +241,7 @@ can be made by improving the differentiation and filtering/smoothing algorithms.
 shows two clear peaks in the derivative is shown in Fig. :ref:`ign-delay-def` to demonstrate the
 definition of the ignition delays.
 
-.. figure:: figure1.png
+.. figure:: figures/ign-delay-def.png
 
     Illustration of the definition of the ignition delay in a two-stage ignition case.
     :label:`ign-delay-def`
@@ -259,8 +264,8 @@ The law of conservation of energy written for the ideal gases in the reaction ch
 where :math:`c_v` is the specific heat at constant volume of the mixture, :math:`v` is the specific
 volume, :math:`u_k` and :math:`Y_k` are the specific internal energy and mass fraction of the
 species :math:`k`, and :math:`t` is time. For a constant-area piston, the rate of change of the
-volume is equal to the piston velocity. In UConnRCMPy, Eq. :ref:`first-law` is integrated by the
-software Cantera :cite:`cantera`.
+volume is equal to the piston velocity. In UConnRCMPy, Eq. :ref:`first-law` is integrated by Cantera
+:cite:`cantera`.
 
 In Cantera, intensive thermodynamic information about the system is stored in an instance of the
 ``Solution`` class. The ``Solution`` classes used in this study model simple, compressible systems
