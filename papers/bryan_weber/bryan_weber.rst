@@ -400,8 +400,8 @@ prefers the Jupyter Notebook with an IPython kernel :cite:`Perez2007`). Due to t
 
 To begin, the user creates an instance of the ``Condition`` class and adds experiments to the
 instance using the ``add_experiment`` method. This method creates an instance of class
-``Experiment`` for each experiment passed in. As each experiment is run and processed by UConnRCMPy,
-the information from that run is added to the system clipboard for pasting into some spreadsheet
+``Experiment`` for each experiment passed in. As each experiment is processed by UConnRCMPy, the
+information from that run is added to the system clipboard for pasting into some spreadsheet
 software. In the current version, the information copied is the time of day of the experiment, the
 initial pressure, the initial temperature, the pressure at the EOC, the overall and first stage
 ignition delays, an estimate of the EOC temperature, and some information about the compression
@@ -500,6 +500,106 @@ perform any other processing (volume trace, etc.).
 UConnRCMPy is documented using standard Python docstrings for functions and classes. The format of
 the docstrings conforms to the NumPy docstring format so that the autodoc module can be used. The
 documentation is available on the web at http://bryanwweber.github.io/UConnRCMPy/.
+
+Usage Example
+-------------
+
+In the following, two examples of using UConnRCMPy are given, first with the standard interface and
+second utilizing a slightly modified interface corresponding to a different data format. Both
+examples assume the user is running in a Jupyter Notebook with an IPython kernel.
+
+Standard Interface
+==================
+
+These experiments were conducted with mixtures of propane, oxygen, and nitrogen :cite:`Dames2016`.
+The CTI file necessary to run this example can be found in the Supplementary Material of the work by
+Dames et al. :cite:`Dames2016`. The condition in this example is for a fuel rich mixture, with a
+target |PC| of 30 bar. First, the ``Condition`` is created and the experiments are added
+
+.. code:: python
+
+    from uconnrcmpy import Condition
+    from pathlib import Path
+    %matplotlib
+
+    cond_00_in_02_mm = Condition()
+    cond_00_in_02_mm.add_experiment(Path(
+        '00_in_02_mm_373K-1285t-100x-19-Jul-15-1620.txt'))
+    cond_00_in_02_mm.add_experiment(Path(
+        '00_in_02_mm_373K-1282t-100x-19-Jul-15-1626.txt'))
+    cond_00_in_02_mm.add_experiment(Path(
+        '00_in_02_mm_373K-1282t-100x-19-Jul-15-1633.txt'))
+    cond_00_in_02_mm.add_experiment(Path(
+        '00_in_02_mm_373K-1282t-100x-19-Jul-15-1640.txt'))
+    cond_00_in_02_mm.add_experiment(Path(
+        '00_in_02_mm_373K-1282t-100x-19-Jul-15-1646.txt'))
+
+This generates a figure showing all of the experiments together (the axis limits have been adjusted
+from the default), as shown in Fig. :ref:`all-runs`. It also generates one figure per experiment.
+The figures showing each experiment look similar to Fig. :ref:`ign-delay-def`, but the non-reactive
+trace is not plotted and the EOC and ignition delays are not labeled.
+
+.. figure:: figures/all-runs.png
+
+    All of the runs at the example experimental condition. The legend shows the date and time the
+    experiment was conducted. :label:`all-runs`
+
+From the runs at this condition, it is determined that the reference experiment is the run that took
+place at 16:33. The filename of this run is added to the ``volume-trace.yaml`` file:
+
+.. code:: yaml
+
+    reacfile: >
+      00_in_02_mm_373K-1282t-100x-19-Jul-15-1633.txt
+
+and the first non-reactive experiment is added to the ``Condition``:
+
+.. code:: python
+
+    cond_00_in_02_mm.add_experiment(Path(
+        'NR_00_in_02_mm_373K-1278t-100x-19-Jul-15-1652.txt'))
+
+.. .. figure:: figures/nonreactive-run.png
+..
+..     Comparison of the non-reactive pressure trace to the reference reactive pressure trace. Also
+..     plotted is a linear fit to the initial pressure to assist in determining the compression time.
+..     :label:`nonreactive-run`
+
+UConnRCMPy determines that this is a non-reactive experiment and generates a new figure. This figure
+compares the current non-reactive case with the reference reactive case as specified in
+``volume-trace.yaml``. For this particular example, the pressure traces are shown in Fig.
+:ref:`ign-delay-def`. In this case, the non-reactive pressure agrees very well with the reactive
+pressure and no further experiments are necessary; in principle, any number of non-reactive
+experiments can be conducted and added to the figure for comparison. Since there is good agreement
+between the non-reactive and reactive pressure traces, we can move on to generating the volume
+trace. First, the rest of the parameters in ``volume-trace.yaml`` must be specified. ``comptime`` is
+usually specified by guess-and-check after comparison with the figure, ``reacend`` is typically
+chosen to be shortly after the main pressure peak due to ignition, and ``nonrend`` is typically
+chosen to be 400 ms.
+
+.. code:: yaml
+
+    reacfile: >
+      00_in_02_mm_373K-1282t-100x-19-Jul-15-1633.txt
+    nonrfile: >
+      NR_00_in_02_mm_373K-1278t-100x-19-Jul-15-1652.txt
+    comptime: 33
+    nonrend: 400
+    reacend: 80
+
+It is often convenient to use a YAML library to dump the ``volume-trace.yaml`` file from the
+interpreter, instead of having a text editor open. In either case, once ``volume-trace.yaml`` is
+created, ``create_volume_trace`` can be run. As mentioned previously, ``comptime`` is determined by
+comparison with the fit to the initial pressure, as shown in Fig. :ref:`pressure-comparison`. In
+this case, the compression has clearly started at approximately :math:`t > -0.028\,\text{s}`. The
+time prior to that where the pressure appears to stabilize around the initial pressure is
+approximately :math:`t = -0.033\,\text{s}`, giving a compression time of 33 ms.
+
+.. figure:: figures/pressure-comparison.png
+
+    Comparison of the reactive pressure trace, the pressure trace output to the text file, the
+    pressure trace computed from the volume trace, and the linear fit to the initial pressure
+    demonstrating the choice of compression time. :label:`pressure-comparison`
 
 Acknowledgements
 ----------------
