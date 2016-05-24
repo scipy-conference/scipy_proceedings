@@ -371,6 +371,108 @@ Once the volume trace is generated, it can be applied to a simulation by concate
 trace of the compression stroke and the post-EOC volume trace together and following the procedure
 outlined previously.
 
+Implementation of UConnRCMPy
+----------------------------
+
+UConnRCMPy is constructed in a heirarchical manner, with different classes representing different
+levels of the data. The lowest level representation is the ``VoltageTrace`` that contains the raw
+voltage signal and timing recorded by the DAQ, as well as the filtered and smoothed voltage traces.
+The filtering and smoothing algorithms are implemented as separate methods so they can be reused
+in other situations.
+
+One step up from the ``VoltageTrace`` is the ``ExperimentalPressureTrace`` class. This class takes
+a ``VoltageTrace`` in the ``__init__`` method and processes it into a pressure trace, given the
+multiplication factor and the initial pressure. This class also contains methods to compute the
+derivative of the experimental pressure trace, as discussed previously.
+
+All of the information about a particular experiment is stored in the ``Experiment`` class. This
+class is the main unit of information stored in UConnRCMPy (although it is not necessarily intended
+to be used by end-users). When initialized, the ``Experiment`` expects an instance of the
+``pathlib.Path`` class; if none is provided, it prompts the user to enter a file name that is
+expected to be in the current working directory. Then a ``VoltageTrace`` is created, followed by an
+``ExperimentalPressureTrace``. The pressure trace from the latter is processed to extract the
+ignition delay(s).
+
+The main user interface to UConnRCMPy is through the ``Condition`` class. The intended use is that
+the user creates an instance of the ``Condition`` class and adds the experiments at that condition
+to the class using the ``add_experiment`` method. This method creates an instance of class
+``Experiment``. As each experiment is run and processed by UConnRCMPy, the information from that run
+is added to the system clipboard for pasting into some spreadsheet software. In the current version,
+the information copied is the time of day of the experiment, the initial pressure, the initial
+temperature, the pressure at the EOC, the overall and first stage ignition delays, an estimate of
+the EOC temperature, and some information about the compression ratio of the reactor. Finally,
+each experiment is added to a dictionary keyed by the file name storing the experiment.
+
+Two plots are optionally created each time an experiment is added to the ``Condition`` (plotting is
+controlled by passing a boolean argument ``plotting`` to the ``Condition`` when it is initialized).
+The plots use Matplotlib :cite:`Hunter2007`
+
+In general for a set of experiments at a given condition, all of the reactive cases are run first.
+The experiment chosen as the reference experiment (i.e., the one whose ignition delay and |TC| are
+reported) for a given condition is the one whose overall ignition delay is closest to the mean
+overall ignition delay among the experiments at a given condition. Once the reference experiment is
+selected, non-reactive experiments are run at the same initial conditions as the reference
+experiment. Non-reactive experiments are added to the ``Condition`` by the same ``add_experiment``
+method and UConnRCMPy automatically determines whether the experiment is reactive or non-reactive.
+
+When the user is satisfied with the agreement of the reactive and non-reactive traces, the creation
+of the volume trace is triggered by running the ``create_volume_trace`` method of the ``Condition``.
+This function goes through the process of converting the reactive pressure trace (before the EOC)
+and the non-reactive pressure trace (after the EOC) to a volume trace. In addition, it write the
+volume trace out to a CSV file so that the volume trace can be used in other software. The reactive
+pressure trace is written to a tab-separated file. Before writing, the volume and pressure trace are
+both downsampled by a factor of 5. This reduces the computational time of a simulation and does not
+have any effect on the simulated results.
+
+The ``create_volume_trace`` function relies on a YAML file located in the current working directory
+called ``volume-trace.yaml``. This file must contain several parameters necessary to reproduce the
+analysis. These parameters must be specified by the user, and include the compression time, the file
+names of the reference reactive and non-reactive experiments, and the end times for the reactive and
+non-reactive experiments. The reactive end time determines the length of the output pressure trace,
+while the non-reactive end time determines the length of the volume trace. The length of the volume
+trace is also determined by the compression time, which should be set to a time such that the
+starting point is before the beginning of the compression. All three times should be specified in
+ms.
+
+Two optional parameters can also be specified in ``volume-trace.yaml``. These are offset parameters
+used to control the precise point where the switch from the reactive pressure trace to the
+non-reactive pressure trace occurs in the volume trace. These parameters may be necessary if the
+determination of the EOC does not result in aligned compression strokes for the reactive and
+non-reactive experiments, but they are not generally necessary.
+
+The final step is to use the volume trace in a simulation to determine |TC|. This is accomplished
+with the ``compare_to_sim`` method. This function takes two optional arguments, ``run_reactive`` and
+``run_nonreactive``, both of which are booleans. These determine which type of simulation should be
+run; by default ``run_reactive`` is ``False`` and ``run_nonreactive`` is ``True`` because the
+reactive simulations may take substantial time. There is no restriction on combinations of values
+for the arguments; either or both may be ``True`` or ``False``. The ``compare_to_sim`` method relies
+on the ``run_simulation`` method, which in turn adds instances of the class ``Simulation`` to the
+``Condition`` instance. If either type of simulation has already been added to the ``Condition``
+instance, the user is asked whether they would like to overwrite the existing simulation.
+
+The ``Simulation`` class sets up the simulation in Cantera and controls the running simulation.
+Importantly, the maximum time step is set to be the time step used in the volume trace, so that the
+simulation does not take steps larger than the resolution of the velocity. Larger time steps may
+result in incorrect calculation of the state if the velocity is not properly applied to the reactor.
+As the simulation runs, the solution time, temperature, pressure, and simulated volume are appended
+to lists that are converted to NumPy arrays :cite:`vanderWalt2011` when the simulation finishes.
+Once the simulation finishes, the derivative is computed using second order Lagrange polynomials, as
+suggested by Chapra and Canale :cite:`Chapra2010` because the time step is not constant in the
+simulation. Finally, |TC| and the ignition delay (if a reactive simulation was run) are sent to the
+system clipboard to be pasted into a spreadsheet.
+
+UConnRCMPy also offers a convenience function that processes a folder of experimental data files.
+This function, called ``process_folder``, takes two arguments, the ``Path`` to process and a
+boolean determining whether plots should be drawn. This function skips the machinery of a
+``Condition`` instance, instead directly creating ``Experiment`` instances for each data file it
+finds. The purpose of this function is to automatically calculate the ignition delay and |PC| for
+a group of experiments; after this processing, the user should create a separate ``Condition`` to
+perform any other processing (volume trace, etc.).
+
+UConnRCMPy is documented using standard Python docstrings for functions and classes. The format of
+the docstrings conforms to the NumPy docstring format so that the autodoc module can be used. The
+documentation is available on the web at http://bryanwweber.github.io/UConnRCMPy/.
+
 Acknowledgements
 ----------------
 
