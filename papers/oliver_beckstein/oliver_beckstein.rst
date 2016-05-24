@@ -93,6 +93,32 @@ The user interface and modular design work equally well in complex scripted work
 MDAnalysis is available in source form under the GNU General Public License v2 from GitHub https://github.com/MDAnalysis/mdanalysis and PyPi;  conda packages are also available. The documentation is extensive http://docs.mdanalysis.org including an introductory tutorial http://www.mdanalysis.org/MDAnalysisTutorial/ and a very friendly and welcoming user and developer community. 
 
 
+New data Structures
+-------------------
+
+Originally MDAnalysis followed a strict object oriented approach with a separate instance of an Atom object for each particle in the simulation data.
+The AtomGroup then simply stored its contents as a list of these Atom instances.
+With simulation data commonly containing 10\ :sup:`6` particles
+this solution did not scale well and so
+recently this design was overhauled to improve the scalability of MDAnalysis.
+
+With all Atoms having the same property fields it was possible to store this information as a series of NumPy arrays,
+with a single array for each property.
+The AtomGroup can then store its contents as an array of integers
+which represent the address in the property arrays which correspond to the data for the stored Atoms.
+
+Overall this approach means that the same number of Python objects are created for each Universe,
+with the data size only changing the size of the arrays.
+This translated into a much smaller memory footprint (BENCHMARK HERE)
+highlighting the memory cost of millions of simple Python objects.
+
+This transformation of the data structures from an Array of Structs to a Struct of Arrays
+also better suits thet ypical access patterns within MDAnalysis.
+It is quite common to compare a single property across many Atoms,
+but rarely are different properties within a single Atom compared.
+Additionally, it was possible to utilise NumPy's faster indexing rather than using a list comprehension.
+Overall this meant that accessing the data from a subset of Atoms was much faster (BENCHMARK HERE)
+
 
 Conclusions
 -----------
