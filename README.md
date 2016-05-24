@@ -94,6 +94,12 @@ sudo apt-get install python-docutils texlive-latex-base texlive-publishers \
 
 Note you will still need to install `docutils` with `easy-install` or `pip` even on a Debian system.
 
+On Fedora, the package names are slightly different
+
+```
+su -c `dnf install python-docutils texlive-collection-basic texlive-collection-fontsrecommended texlive-collection-latex texlive-collection-latexrecommended texlive-collection-latexextra texlive-collection-publishers`
+```
+
 ## Build Server
 
 Thanks to the great and wonderful Katy Huff, there is a server online 
