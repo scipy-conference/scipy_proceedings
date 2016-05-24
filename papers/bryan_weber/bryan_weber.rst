@@ -317,12 +317,17 @@ velocity of the ``Wall`` using the volume trace computed previously, the ``Ideal
 proceed through the same states as the reaction chamber in the experiment.
 
 The velocity of the ``Wall`` is specified by using an instance of the ``VolumeProfile`` class from
-the CanSen software :cite:`cansen`. Then, the ``IdealGasReactor`` is installed into an instance of
-``ReactorNet`` from Cantera :cite:`cantera`. The ``ReactorNet`` implements the interface to the
-solver CVODES. CVODES is an adaptive-time-stepping solver, distributed as part of the SUNDIALS suite
-:cite:`Hindmarsh2005`. As the solver steps towards the end time of the simulation, the state of the
-system is stored on each integrator time step, producing simulated pressure, volume, and temperature
-traces. Finally, the EOC temperature is recorded as the simulated temperature at the EOC.
+the CanSen software :cite:`cansen`. This instance is passed to the ``Func1`` class in Cantera, which
+wraps the ``VolumeProfile`` in a way that the C++ solvers in Cantera can use. The ``VolumeProfile``
+class computes the first forward difference of the volume as a function of time and returns the
+appropriate velocity when passed a time.
+
+The ``IdealGasReactor`` is installed into an instance of ``ReactorNet`` from Cantera
+:cite:`cantera`. The ``ReactorNet`` implements the interface to the solver CVODES. CVODES is an
+adaptive-time-stepping solver, distributed as part of the SUNDIALS suite :cite:`Hindmarsh2005`. As
+the solver steps towards the end time of the simulation, the state of the system is stored on each
+integrator time step, producing simulated pressure, volume, and temperature traces. Finally, the EOC
+temperature is recorded as the simulated temperature at the EOC.
 
 Two simulations are conducted using this procedure. In the first, the multiplier for all the
 reaction rates is set to zero, to simulate a constant composition (non-reactive) process. In the
