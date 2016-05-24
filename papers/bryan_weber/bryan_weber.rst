@@ -393,19 +393,27 @@ expected to be in the current working directory. Then a ``VoltageTrace`` is crea
 ``ExperimentalPressureTrace``. The pressure trace from the latter is processed to extract the
 ignition delay(s).
 
-The main user interface to UConnRCMPy is through the ``Condition`` class. The intended use is that
-the user creates an instance of the ``Condition`` class and adds the experiments at that condition
-to the class using the ``add_experiment`` method. This method creates an instance of class
-``Experiment``. As each experiment is run and processed by UConnRCMPy, the information from that run
-is added to the system clipboard for pasting into some spreadsheet software. In the current version,
-the information copied is the time of day of the experiment, the initial pressure, the initial
-temperature, the pressure at the EOC, the overall and first stage ignition delays, an estimate of
-the EOC temperature, and some information about the compression ratio of the reactor. Finally,
-each experiment is added to a dictionary keyed by the file name storing the experiment.
+The main user interface to UConnRCMPy is through the ``Condition`` class, the highest level of data
+representation. The intended use of this class is in an interactive Python interpreter (the author
+prefers the Jupyter Notebook with an IPython kernel :cite:`Perez2007`). Due to the dependence on the
+``pathlib`` library, UConnRCMPy must be used with Python 3.4 or greater.
 
-Two plots are optionally created each time an experiment is added to the ``Condition`` (plotting is
-controlled by passing a boolean argument ``plotting`` to the ``Condition`` when it is initialized).
-The plots use Matplotlib :cite:`Hunter2007`
+To begin, the user creates an instance of the ``Condition`` class and adds experiments to the
+instance using the ``add_experiment`` method. This method creates an instance of class
+``Experiment`` for each experiment passed in. As each experiment is run and processed by UConnRCMPy,
+the information from that run is added to the system clipboard for pasting into some spreadsheet
+software. In the current version, the information copied is the time of day of the experiment, the
+initial pressure, the initial temperature, the pressure at the EOC, the overall and first stage
+ignition delays, an estimate of the EOC temperature, and some information about the compression
+ratio of the reactor. Finally, each experiment is added to a dictionary keyed by the file name
+storing the experiment.
+
+Two plots are optionally created each time a reactive experiment is added to the ``Condition``
+(plotting is controlled by passing a boolean argument ``plotting`` to the ``Condition`` when it is
+initialized). The plots use Matplotlib :cite:`Hunter2007`. The first plot is a cumulative plot of
+the pressure traces of each of the experiments that are added to the ``Condition``. The second plot
+is an individual plot for each experiment showing the pressure trace and the time derivative of the
+pressure trace.
 
 In general for a set of experiments at a given condition, all of the reactive cases are run first.
 The experiment chosen as the reference experiment (i.e., the one whose ignition delay and |TC| are
@@ -414,15 +422,35 @@ overall ignition delay among the experiments at a given condition. Once the refe
 selected, non-reactive experiments are run at the same initial conditions as the reference
 experiment. Non-reactive experiments are added to the ``Condition`` by the same ``add_experiment``
 method and UConnRCMPy automatically determines whether the experiment is reactive or non-reactive.
+Adding a non-reactive experiment creates a figure comparing the pressure trace of the non-reactive
+experiment with the reference reactive experiment.
 
 When the user is satisfied with the agreement of the reactive and non-reactive traces, the creation
 of the volume trace is triggered by running the ``create_volume_trace`` method of the ``Condition``.
 This function goes through the process of converting the reactive pressure trace (before the EOC)
-and the non-reactive pressure trace (after the EOC) to a volume trace. In addition, it write the
-volume trace out to a CSV file so that the volume trace can be used in other software. The reactive
-pressure trace is written to a tab-separated file. Before writing, the volume and pressure trace are
-both downsampled by a factor of 5. This reduces the computational time of a simulation and does not
-have any effect on the simulated results.
+and the non-reactive pressure trace (after the EOC) to a volume trace. The actual computation of the
+volume trace (as described previously) is done by the ``VolumeFromPressure`` class. This class
+expects a pressure trace, initial temperature, and initial volume. First, the volume trace of the
+reactive (pre-EOC) portion is generated using the pre-EOC pressure trace, the experimental initial
+temperature, and an initial volume of :math:`V_0 = 1.0`, as discussed previously.A temperature
+trace is also constructed for the pre-EOC pressure trace using the ``TemperatureFromPressure``
+class. The last value of this temperature trace provides an estimate for |TC|; although this value
+is not the reported value, it typically differs by :math:`\pm`\ 2 K from the reported value due to
+slight differences in the choice of the compression time (see below).
+
+For the non-reactive (post-EOC) volume trace, the initial temperature is estimated as the final
+value of the temperature trace constructed for the pre-EOC period. Furthermore, the initial volume
+of the non-reactive (post-EOC) volume trace is taken to be the final value of the pre-EOC volume
+trace, so that although there may be small mismatches in |PC|, the volume trace will be consistent.
+
+After generation, ``create_volume_trace`` writes the volume trace out to a CSV file so that the
+volume trace can be used in other software. The reactive pressure trace is also written to a
+tab-separated file. Before writing, the volume and pressure trace are both downsampled by a factor
+of 5. This reduces the computational time of a simulation and does not have any effect on the
+simulated results. ``create_volume_trace`` also generates a figure that plots the complete reactive
+pressure trace, a non-reactive pressure trace generated from the volume trace using the
+``PressureFromVolume`` class, and a linear fit to the constant pressure period prior to the start of
+compression. This linear fit aids in determining a suitable compression time.
 
 The ``create_volume_trace`` function relies on a YAML file located in the current working directory
 called ``volume-trace.yaml``. This file must contain several parameters necessary to reproduce the
