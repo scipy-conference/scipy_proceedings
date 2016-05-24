@@ -117,7 +117,7 @@ operator to correspond to a particular pressure range by setting a "scale factor
 for the scale factor range between 10 bar/V and 100 bar/V.
 
 The voltage output from the charge amplifier is digitized by a hardware DAQ and recorded into a
-plain text file by a LabView Virtual Instrument. The voltage is sampled at rate chosen by the
+plain text file by a LabView Virtual Instrument. The voltage is sampled at a rate chosen by the
 operator, typically between 50 kHz and 100 kHz. This provides sufficient resolution for events on
 the order of milliseconds; the typical ignition delay measured in this system approximately ranges
 from 5 ms to 100 ms.
@@ -147,7 +147,7 @@ low-pass filter, and some combination of these two methods. In the current versi
 10 kHz. The filter is constructed using the ``firwin`` function from the ``signals`` module of SciPy
 :cite:`Jones2001` with the Blackman window :cite:`Blackman1958,Oppenheim1999` and a filter order of
 :math:`2^{14}-1`. The cutoff frequency, window type, and filter order were determined empirically,
-based on the Fig. :ref:`frequency`. Methods to select a cutoff frequency that optimizes the
+based on Fig. :ref:`frequency`. Methods to select a cutoff frequency that optimizes the
 signal-to-noise ratio are currently being investigated.
 
 .. figure:: figures/frequency.png
@@ -335,7 +335,7 @@ of radicals that affects the processes after the EOC :cite:`Mittal2008`, althoug
 the computation of |TC|.
 
 Simulating Post-EOC Processes
------------------------------
+=============================
 
 As can be seen in Fig. :ref:`ign-delay-def`, the pressure decreases after the EOC due to heat
 transfer from the higher temperature reactants to the reaction chamber walls. This process is
