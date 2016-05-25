@@ -119,6 +119,35 @@ If you like to use MDAnalysis for your project please join our community_ board.
 .. _ENCORE: https://github.com/encore-similarity/encore
 .. _ProtoMD: https://github.com/CTCNano/proto_md
 
+Analysis Module
+---------------
+
+In the MDAnalysis.analysis module we provide a large variety of standard analysis algorithms, like RMSD, alignment, native contacts, as well as unique algorithms, like the LeaftleftFinder and Path Similarty Analysis.
+We have recently started to unify the interface to the different algorithms with an `AnalysisBase` class.
+Currently PersistenceLength, InterRDF, LinearDensity and Contacts analysis have been ported.
+If applicable we also strive to make the API's to the algorithms generic.
+Most other tools hand the user analysis algorithms as black boxes, we want to avoid that and give the users all he needs to adapt an analysis to his/her needs.
+
+The new Contacts class is a good example a generic API that allows easy adaptations of algorithms while still offering an easy setup for standard analysis types.
+For contact analysis it is possible to have different metrics based on coordinates alone :cite:`Best2013,Franklin2007`.
+We have designed the API to choose between common metrics and pass user defined functions to develop new metrics.
+This generic interface allowed us to implement a q1q2 analysis ontop of the Contacts class.
+Below is incomplete code example that shows how to implement a q1q2 analysis, a more detailed explanatain can be found in the docs. **how to generate a link/should I generate a link**
+
+.. code-block:: python
+
+   def radius_cut_q(r, r0, radius):
+       y = r <= radius
+       return y.sum() / r.size
+
+   contacts = Contacts(u, selection,
+                       (first_frame_refs, last_frame_refs),
+                       radius=radius, method=radius_cut_q,
+                       start=start, stop=stop, step=step,
+                       kwargs={'radius': radius})
+
+This type of flexible analysis algorithms paired with a collection of base classes allow quick and easy analysis of simulations as well as development of new algorithms.
+
 
 Conclusions
 -----------
