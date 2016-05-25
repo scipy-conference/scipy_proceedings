@@ -72,7 +72,6 @@ where :math:`\beta > 0` is a parameter of the agent known as *inverse temperatur
 
 In this work we consider the case were the probabilities associated to the reward, in addition to being conditioned by the action, are also conditioned by a context of the environment. This context change at each time step and is observed by the agent. This means that the action-value function, the softmax rule, :math:`\alpha`, and :math:`\beta` also depend on the current context of the environment. In this scenario, the update action-value and softmax rules become
 
-
 .. math::
    :label: EqUpdate
 	   
@@ -112,18 +111,33 @@ Once one have access to the likelihood function, the parameters are found by fin
 
     \widehat{\alpha}_c, \widehat{\beta}_c =\underset{0\leq\alpha \leq 1, \beta \geq 0}{\operatorname{argmin}} \mathcal{L}(\alpha_c, \beta_c).
 
-Details about the calculation of the likelihood function and its optimization  are given in the next section.
+Details about the calculation of the likelihood function and its optimization  are given in the *Implementation and Results* section.
 
 
-Implementation and results
---------------------------
+Experimental Data
+-----------------
 
-See [Mas12]_ for more details about the experimental design.
+The data used in this work consists on the record of a computarised card game played by the participants of the experiment. The game consists of 360 trials. Each trial begins with the presentation of a cue during one second. This cue can be a circle, a square or a triangle. The cue indicates the probability of winning on that trial. These probabilities are 20%, 50% and 80%, and are unknown to the participants. The trial continues with the presentation of four cards with values 23, 14, 8 and 3. The participant select one of these cards and wins or lose the amount of points selected in the card, according to the probabilities defined by the clue. The outcome of the trial is indicated by a stimulus that last one second. The trial finalize with a blank inter-trial stimulus that also last one second. Figure :ref:`FigStimulus` shows a schematic of the stimulus presentation. Participants were instructed to maximize their winnings. See [Mas12]_ for more details about the experimental design.
+
+The study was approved by the University of Manchester research ethics committee. Informed written consent was obtained from all participants.
 
 .. figure:: stimulus.pdf
    :align: center
 
-   Schematic of the stimulus presentation. :label:`egfig`
+   Schematic of the stimulus presentation. A trial begins with the presentation
+   of a cue. This cue can be a circle, a square or a triangle and is associated
+   with the probability of winning in that trial. These probabilities are 20%,
+   50% and 80%, and are unknown to the participants. The trial continues with
+   the presentation of four cards with values 23, 14, 8 and 3. After selecting
+   a card, the participant wins or lose the amount of points indicated in the
+   card, according to the probabilities associated with the cue. The outcome of
+   the trial is indicated by a stimulus and finalize with a blank inter-trial
+   stimulus. :label:`FigStimulus`
+
+Implementation and results
+--------------------------
+
+
 
 .. code-block:: python
 
@@ -159,8 +173,8 @@ We can then refer back to Equation (:ref:`circarea`) or
    This is the caption. :label:`egfig`
 
 
-Discussions
------------
+Discussion
+----------
 
 
 Acknowledgments
