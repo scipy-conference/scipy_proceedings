@@ -90,8 +90,11 @@ The MDAnalysis library :cite:`Michaud-Agrawal:2011fu` addresses this problem by 
 
 The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages :cite:`Seyler:2015fk,Tiberti:2015fk,Somogyi:2016aa`, and for interactive and rapid prototyping work in IPython/Jupyter notebooks, especially together with molecular visualization provided by nglview_ and time series analysis with pandas_. Since the original publication :cite:`Michaud-Agrawal:2011fu`, improvements in speed and data structures make it now possible to work with terabyte-sized trajectories containing up to ~10 million particles. MDAnalysis also comes with specialized analysis classes in the MDAnalysis.analysis module that are unique to MDAnalysis such as the LeafletFinder graph-based algorithm for the analysis of lipid bilayers :cite:`Michaud-Agrawal:2011fu` or the Path Similarity Analysis for the quantitative comparison of macromolecular conformational changes :cite:`Seyler:2015fk`.
 
-MDAnalysis is available in source form under the GNU General Public License v2 from GitHub https://github.com/MDAnalysis/mdanalysis and PyPi;  conda packages are also available. The documentation is extensive http://docs.mdanalysis.org including an introductory tutorial http://www.mdanalysis.org/MDAnalysisTutorial/ and a very friendly and welcoming user and developer community. 
+MDAnalysis is available in source form under the GNU General Public License v2 from GitHub https://github.com/MDAnalysis/mdanalysis, PyPi_ and as conda_ packages. The documentation is extensive http://docs.mdanalysis.org including an introductory tutorial http://www.mdanalysis.org/MDAnalysisTutorial/. Our develoment community is very active with over 5 active core developers and lots of community contributions every release. We use modern software development practices with continous integration and an extensive testsuite, >3500 tests and >92% for our core modules. If you like to use MDAnalysis for your project please join our community_ board.
 
+.. _PyPi: https://pypi.python.org/pypi/MDAnalysis
+.. _conda: https://anaconda.org/mdanalysis/dashboard
+.. _community: https://groups.google.com/forum/#!forum/mdnalysis-discussion
 
 
 Conclusions
@@ -103,9 +106,8 @@ MDAnalysis provides a uniform interface to simulation data, which comes in a bew
 
 References
 ----------
-.. We use a bibtex file ``mdanalysis.bib`` and use 
+.. We use a bibtex file ``mdanalysis.bib`` and use
 .. :cite:`Michaud-Agrawal:2011fu` for citations; do not use manual
 .. citations
 
 .. _`SPIDAL library`: http://spidal.org
-
