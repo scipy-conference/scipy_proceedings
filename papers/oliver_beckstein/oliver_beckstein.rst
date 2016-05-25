@@ -102,7 +102,7 @@ It currently supports more than 25 different file formats and covers the vast ma
 The user interface provides "physics-based" abstractions (e.g. "atoms", "bonds", "molecules") of the data that can be easily manipulated by the user.
 It hides the complexity of accessing data and frees the user from having to implement the details of different trajectory and topology file formats (which by themselves are often only poorly documented and just adhere to certain "community expectations" that can be difficult to understand for outsiders).
 
-The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages :cite:`Seyler:2015fk,Tiberti:2015fk,Somogyi:2016aa`, and for interactive and rapid prototyping work in IPython/Jupyter notebooks, especially together with molecular visualization provided by nglview_ and time series analysis with pandas_.
+The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages like ENCORE_ :cite:`Tiberti:2015fk` and ProtoMD_ `Somogyi:2016aa`, and for interactive and rapid prototyping work in IPython/Jupyter notebooks, especially together with molecular visualization provided by nglview_ and time series analysis with pandas_.
 Since the original publication :cite:`Michaud-Agrawal:2011fu`, improvements in speed and data structures make it now possible to work with terabyte-sized trajectories containing up to ~10 million particles.
 MDAnalysis also comes with specialized analysis classes in the MDAnalysis.analysis module that are unique to MDAnalysis such as the LeafletFinder graph-based algorithm for the analysis of lipid bilayers :cite:`Michaud-Agrawal:2011fu` or the Path Similarity Analysis for the quantitative comparison of macromolecular conformational changes :cite:`Seyler:2015fk`.
 
@@ -115,6 +115,8 @@ If you like to use MDAnalysis for your project please join our community_ board.
 .. _PyPi: https://pypi.python.org/pypi/MDAnalysis
 .. _conda: https://anaconda.org/mdanalysis/dashboard
 .. _community: https://groups.google.com/forum/#!forum/mdnalysis-discussion
+.. _ENCORE: https://github.com/encore-similarity/encore
+.. _ProtoMD: https://github.com/CTCNano/proto_md
 
 
 Conclusions
