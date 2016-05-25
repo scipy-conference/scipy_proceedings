@@ -60,7 +60,7 @@ According to the Q-learning paradigm [Sut98]_, the agent keeps track of its perc
 
 .. math::
 
-   Q_{t+1}(a_t) = Q_t(a_t) + \alpha (r - Q_t(a_t)),
+   Q_{t+1}(a_t) = Q_t(a_t) + \alpha (r_t - Q_t(a_t)),
 
 where :math:`0 \leq \alpha \leq 1` is a parameter of the agent known as *learning rate*. To make a decision, the agent selects an action at random from the set :math:`\mathcal{A}` with probabilities for each action given by the softmax rule
 
@@ -70,18 +70,53 @@ where :math:`0 \leq \alpha \leq 1` is a parameter of the agent known as *learnin
 
 where :math:`\beta > 0` is a parameter of the agent known as *inverse temperature*.
 
-In this work we consider the case were the probabilities associated to the reward, in addition to being conditioned by the action, are also conditioned by a context of the environment. This context change at each time step and is observed by the agent. This means that the action-value function and the softmax rule also depend on the current context of the environment. In the literature, this setup is known as *associative search* [Sut98]_ or *contextual bandit* [Lan08]_.
-
-In summary, each interaction, or trial, between the agent and the environment starts by the agent observing the environment context, or cue. Based on that observed cue and on what the agent has learn so far from previous interactions, the agent makes a decision about what action to execute. It then gets a reward, and based on the value of that reward it updates the action-value function accordingly.
-
-Fitting the  Model Using Maximum Likelihood
--------------------------------------------
-
-Cite [Daw11]_
+In this work we consider the case were the probabilities associated to the reward, in addition to being conditioned by the action, are also conditioned by a context of the environment. This context change at each time step and is observed by the agent. This means that the action-value function, the softmax rule, :math:`\alpha`, and :math:`\beta` also depend on the current context of the environment. In this scenario, the update action-value and softmax rules become
 
 
-Materials and Methods
----------------------
+.. math::
+   :label: EqUpdate
+	   
+   Q_{t+1}(a_t, c_t) = Q_t(a_t, c_t) + \alpha_{c_t} (r_t - Q_t(a_t, c_t))
+
+.. math::
+   :label: EqSoftmax
+
+   P(a_t = a, c_t) = \frac{e^{\beta_{c_t} Q_t(a, c_t)}}{\sum_{i=1}^n e^{ \beta_{c_t} Q_t(a_i, c_t)}},
+
+where :math:`c_t` is the cue observed at time :math:`t`. In the literature, this setup is known as *associative search* [Sut98]_ or *contextual bandit* [Lan08]_.
+
+In summary, each interaction, or trial, between the agent and the environment starts by the agent observing the environment context, or cue. Based on that observed cue and on what the agent have learned so far from previous interactions, the agent makes a decision about what action to execute next. It then gets a reward, and based on the value of that reward it updates the action-value function accordingly.
+
+Fitting the Model Using Maximum Likelihood
+------------------------------------------
+
+In cognitive neuroscience and experimental psychology one is interested in fitting a decision making model, as the one described in the previous section, to experimental data [Daw11]_.
+
+In our case, this means to find, given the sequences of cues, actions and rewards
+
+.. math::
+
+   (c_1, a_1, r_1), (c_2, a_2, r_2) \ldots, (c_T, a_T, r_T)
+   
+the corresponding :math:`\alpha_c` and :math:`\beta_c`. The model is fit by maximizing the likelihood of the parameters :math:`\alpha_c` and :math:`\beta_c` given the experiment data. The likelihood function of the parameters is given by
+
+.. math::
+
+   \mathcal{L}(\alpha_t, \beta_t) = \prod_{t=1}^T P(a_t, c_t),
+
+where the probability :math:`P(a_t, c_t)` is calculated using equations :ref:`EqUpdate` and :ref:`EqSoftmax`. 
+
+Once one have access to the likelihood function, the parameters are found by finding the :math:`\alpha_c` and :math:`\beta_c` that maximize the function. In practice, this is done by minimizing the negative of the logarithm of the likelihood function [Daw11]_. In other words, the estimate of the model parameters are given by
+
+.. math::
+
+    \widehat{\alpha}_c, \widehat{\beta}_c =\underset{0\leq\alpha \leq 1, \beta \geq 0}{\operatorname{argmin}} \mathcal{L}(\alpha_c, \beta_c).
+
+Details about the calculation of the likelihood function and its optimization  are given in the next section.
+
+
+Implementation and results
+--------------------------
 
 See [Mas12]_ for more details about the experimental design.
 
@@ -123,9 +158,6 @@ We can then refer back to Equation (:ref:`circarea`) or
 
    This is the caption. :label:`egfig`
 
-
-Results
--------
 
 Discussions
 -----------
@@ -169,3 +201,5 @@ References
            vol. 12. Berlin, Heidelberg: Springer Berlin Heidelberg, 2012.
 
 
+
+..  LocalWords:  neuroscience
