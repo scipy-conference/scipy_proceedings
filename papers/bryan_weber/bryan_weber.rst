@@ -6,8 +6,6 @@
 :email: chih-jen.sung@uconn.edu
 :institution: Mechanical Engineering Department, University of Connecticut, Storrs, CT 06269
 
-:bibliography: SciPy-2016
-
 ---------------------------------------------------------------------
 UConnRCMPy: Python-based data analysis for Rapid Compression Machines
 ---------------------------------------------------------------------
@@ -35,10 +33,10 @@ Introduction
 
 The world relies heavily on combustion to provide energy in useful forms for human consumption; in
 particular, the transportation sector accounts for nearly 30% of the energy use in the United States
-and of that, more than 90% is supplied by combustion of fossil fuels :cite:`MER2016`. Unfortunately,
+and of that, more than 90% is supplied by combustion of fossil fuels [MER2016]_. Unfortunately,
 emissions from the combustion of traditional fossil fuels have been implicated in a host of
-deleterious effects on human health and the environment :cite:`Avakian2002` and fluctuations in the
-price of fossil fuels can have a negative impact on the economy :cite:`Owen2010`.
+deleterious effects on human health and the environment [Avakian2002]_ and fluctuations in the
+price of fossil fuels can have a negative impact on the economy [Owen2010]_.
 
 Two methods are being considered to reduce the impact of fossil fuel combustion in transportation on
 the environment and the economy, namely: 1) development of new fuel sources and 2) development of
@@ -70,7 +68,7 @@ RCM experiments is the pressure measured as a function of time in the reaction c
 pressure trace is then processed to extract the ignition delay.
 
 In this work, the design and operation of a software package to process the pressure data collected
-from RCMs is described. This package, called UConnRCMPy :cite:`uconnrcmpy`, is designed to enable
+from RCMs is described. This package, called UConnRCMPy [Weber2016]_, is designed to enable
 reproducible analysis of the data acquired from the RCM at the University of Connecticut. Despite
 the initial focus on data from the UConn RCM, the package is designed to be extensible so that it
 can be used for data in different formats while providing a consistent interface to the user.
@@ -84,7 +82,7 @@ Background
 ----------
 
 The RCMs at the University of Connecticut have been described extensively elsewhere
-:cite:`Das2012,Mittal2007a`, and will be summarized here for reference. The RCMs use a single piston
+[Das2012]_,[Mittal2007]_, and will be summarized here for reference. The RCMs use a single piston
 that is pneumatically accelerated and hydraulically decelerated. In a typical experiment, the
 reaction chamber is first evacuated to an absolute pressure near 1 Torr, measured by a high-accuracy
 static pressure transducer. Next, the reactants are filled in to the desired initial pressure
@@ -143,9 +141,9 @@ Filtering and Smoothing
 To produce a useful pressure trace, the voltage signal must be filtered and/or smoothed. Several
 algorithms have been considered to smooth the voltage trace, including a simple moving average, a
 low-pass filter, and some combination of these two methods. In the current version of UConnRCMPy
-:cite:`uconnrcmpy`, the voltage is first filtered using a low-pass filter with a cutoff frequency of
+[Weber2016]_, the voltage is first filtered using a low-pass filter with a cutoff frequency of
 10 kHz. The filter is constructed using the ``firwin`` function from the ``signals`` module of SciPy
-:cite:`Jones2001` with the Blackman window :cite:`Blackman1958,Oppenheim1999` and a filter order of
+[Jones2001]_ with the Blackman window [Blackman1958]_,[Oppenheim1999]_ and a filter order of
 :math:`2^{14}-1`. The cutoff frequency, window type, and filter order were determined empirically,
 based on Fig. :ref:`frequency`. Methods to select a cutoff frequency that optimizes the
 signal-to-noise ratio are currently being investigated.
@@ -194,13 +192,13 @@ in place at the end of its stroke, the pressure will be a maximum (in the absenc
 the EOC. Therefore, the EOC can be found either by searching for this maximum value or by
 calculating the first derivative of the pressure with respect to time and finding the zero crossing.
 As the signal is noisy, even after smoothing, the derivative will tend to increase the noise in the
-signal :cite:`Chapra2010` leading to difficulty in specifying the correct zero crossing. On the
+signal [Chapra2010]_ leading to difficulty in specifying the correct zero crossing. On the
 other hand, finding the maximum of the pressure in the time prior to ignition is not straightforward
 either. In general, the pressure after ignition has occured will be higher than the pressure at the
 EOC and the width of the ignition peak is unknown. However, we can take advantage of the fact
 that there is some pressure drop after the EOC to eliminate the ignition from consideration.
 
-In the current version of UConnRCMPy :cite:`uconnrcmpy`, this is done by searching backwards in time
+In the current version of UConnRCMPy [Weber2016]_, this is done by searching backwards in time
 from the maximum pressure in the pressure trace (typically, the global maximum pressure is after
 ignition has occured) until a minimum in the pressure is reached. Since the precise time of the
 minimum is not important for this method, the search is done by comparing the pressure at a given
@@ -227,7 +225,7 @@ second time derivative of the pressure to define the inflection point is difficu
 however, finding the maximum of the first derivative is trivial, particularly since the time before
 and shortly after the EOC can be excluded to avoid the peak in the derivative around the EOC.
 
-In the current version of UConnRCMPy :cite:`uconnrcmpy`, the first derivative of the experimental
+In the current version of UConnRCMPy [Weber2016]_, the first derivative of the experimental
 pressure trace is computed by a second-order forward differencing method. The derivative is then
 smoothed by the moving average algorithm with a width of 151 points. This value for the moving
 average window was chosen empirically.
@@ -265,12 +263,12 @@ where :math:`c_v` is the specific heat at constant volume of the mixture, :math:
 volume, :math:`u_k` and :math:`Y_k` are the specific internal energy and mass fraction of the
 species :math:`k`, and :math:`t` is time. For a constant-area piston, the rate of change of the
 volume is equal to the piston velocity. In UConnRCMPy, Eq. :ref:`first-law` is integrated by Cantera
-:cite:`cantera`.
+[Goodwin2016]_.
 
 In Cantera, intensive thermodynamic information about the system is stored in an instance of the
 ``Solution`` class. The ``Solution`` classes used in this study model simple, compressible systems
 and require two independent intensive properties, plus the composition, to fix the state. In
-addition to evaluating thermodynamic data, Cantera :cite:`cantera` contains several objects used to
+addition to evaluating thermodynamic data, Cantera [Goodwin2016]_ contains several objects used to
 model homogeneous reacting systems; the two used in this paper are a ``Reservoir`` and an
 ``IdealGasReactor``, which are subclasses of the generic ``Reactor`` class. The specific
 ``IdealGasReactor`` class is preferred over the generic ``Reactor`` class in this study because the
@@ -283,7 +281,7 @@ composition) of the ``Solution`` in a ``Reservoir`` is fixed.
 Integrating Eq. :ref:`first-law` requires knowledge of the volume of the reaction chamber as a
 function of time. To calculate the volume as a function of time, it is assumed that there is a core
 of gas in the reaction chamber that undergoes an isentropic compression and the effects of the
-boundary layer can be ignored :cite:`Lee1998`. Furthermore, it is assumed that there is negligible
+boundary layer can be ignored [Lee1998]_. Furthermore, it is assumed that there is negligible
 reactant consumption during the compression stroke. Then, a Cantera ``Solution`` object is
 initialized at the initial temperature, pressure, and composition of the reaction chamber.
 
@@ -307,7 +305,7 @@ procedure effects a constant composition isentropic compression process.
 
 Once the volume trace has been generated, it can be utilized in the ``IdealGasReactor`` and the
 solution of Eq. :ref:`first-law` by installing an instance of the ``Wall`` class. In Cantera
-:cite:`cantera`, ``Wall``\ s have several uses, including allowing heat transfer into or out of the
+[Goodwin2016]_, ``Wall``\ s have several uses, including allowing heat transfer into or out of the
 ``Reactor``, allowing heterogeneous reactions on the surface of the ``Wall``, or causing the volume
 of the ``Reactor`` to vary. In this study, only the last function is used (i.e., the reaction
 chamber is adiabatic and homogeneous). ``Wall``\ s must be installed between instances of
@@ -317,14 +315,14 @@ velocity of the ``Wall`` using the volume trace computed previously, the ``Ideal
 proceed through the same states as the reaction chamber in the experiment.
 
 The velocity of the ``Wall`` is specified by using an instance of the ``VolumeProfile`` class from
-the CanSen software :cite:`cansen`. This instance is passed to the ``Func1`` class in Cantera, which
+the CanSen software [Weber2015]_. This instance is passed to the ``Func1`` class in Cantera, which
 wraps the ``VolumeProfile`` in a way that the C++ solvers in Cantera can use. The ``VolumeProfile``
 class computes the first forward difference of the volume as a function of time and returns the
 appropriate velocity when passed a time.
 
 The ``IdealGasReactor`` is installed into an instance of ``ReactorNet`` from Cantera
-:cite:`cantera`. The ``ReactorNet`` implements the interface to the solver CVODES. CVODES is an
-adaptive-time-stepping solver, distributed as part of the SUNDIALS suite :cite:`Hindmarsh2005`. As
+[Goodwin2016]_. The ``ReactorNet`` implements the interface to the solver CVODES. CVODES is an
+adaptive-time-stepping solver, distributed as part of the SUNDIALS suite [Hindmarsh2005]_. As
 the solver steps towards the end time of the simulation, the state of the system is stored on each
 integrator time step, producing simulated pressure, volume, and temperature traces. Finally, the EOC
 temperature is recorded as the simulated temperature at the EOC.
@@ -336,7 +334,7 @@ simulations are compared to each other and the inclusion of the reactions does n
 validating the assumption of adiabatic, constant composition compression. Nonetheless, when
 conducting simulations to compare a kinetic model to experimental results, it is important to
 include the species equations in the solution of Eq. :ref:`first-law` due to the buildup of a pool
-of radicals that affects the processes after the EOC :cite:`Mittal2008`, although it does not affect
+of radicals that affects the processes after the EOC [Mittal2008]_, although it does not affect
 the computation of |TC|.
 
 Simulating Post-EOC Processes
@@ -395,7 +393,7 @@ ignition delay(s).
 
 The main user interface to UConnRCMPy is through the ``Condition`` class, the highest level of data
 representation. The intended use of this class is in an interactive Python interpreter (the author
-prefers the Jupyter Notebook with an IPython kernel :cite:`Perez2007`). Due to the dependence on the
+prefers the Jupyter Notebook with an IPython kernel [Perez2007]_). Due to the dependence on the
 ``pathlib`` library, UConnRCMPy must be used with Python 3.4 or greater.
 
 To begin, the user creates an instance of the ``Condition`` class and adds experiments to the
@@ -410,7 +408,7 @@ storing the experiment.
 
 Two plots are optionally created each time a reactive experiment is added to the ``Condition``
 (plotting is controlled by passing a boolean argument ``plotting`` to the ``Condition`` when it is
-initialized). The plots use Matplotlib :cite:`Hunter2007`. The first plot is a cumulative plot of
+initialized). The plots use Matplotlib [Hunter2007]_. The first plot is a cumulative plot of
 the pressure traces of each of the experiments that are added to the ``Condition``. The second plot
 is an individual plot for each experiment showing the pressure trace and the time derivative of the
 pressure trace.
@@ -483,9 +481,9 @@ Importantly, the maximum time step is set to be the time step used in the volume
 simulation does not take steps larger than the resolution of the velocity. Larger time steps may
 result in incorrect calculation of the state if the velocity is not properly applied to the reactor.
 As the simulation runs, the solution time, temperature, pressure, and simulated volume are appended
-to lists that are converted to NumPy arrays :cite:`vanderWalt2011` when the simulation finishes.
+to lists that are converted to NumPy arrays [vanderWalt2011]_ when the simulation finishes.
 Once the simulation finishes, the derivative is computed using second order Lagrange polynomials, as
-suggested by Chapra and Canale :cite:`Chapra2010` because the time step is not constant in the
+suggested by Chapra and Canale [Chapra2010]_ because the time step is not constant in the
 simulation. Finally, |TC| and the ignition delay (if a reactive simulation was run) are sent to the
 system clipboard to be pasted into a spreadsheet.
 
@@ -516,9 +514,9 @@ examples assume the user is running in a Jupyter Notebook with an IPython kernel
 Standard Interface
 ==================
 
-These experiments were conducted with mixtures of propane, oxygen, and nitrogen :cite:`Dames2016`.
+These experiments were conducted with mixtures of propane, oxygen, and nitrogen [Dames2016]_.
 The CTI file necessary to run this example can be found in the Supplementary Material of the work by
-Dames et al. :cite:`Dames2016`. The condition in this example is for a fuel rich mixture, with a
+Dames et al. [Dames2016]_. The condition in this example is for a fuel rich mixture, with a
 target |PC| of 30 bar. First, the ``Condition`` is created and the experiments are added
 
 .. code:: python
@@ -675,6 +673,26 @@ Acknowledgements
 
 This material is based on work supported by the National Science Foundation under Grant No.
 CBET-1402231.
+
+.. [Avakian2002] Avakian, Maureen D, Barry Dellinger, Heidelore Fiedler, Brian Gullet, Catherine Koshland, Stellan Marklund, Günter Oberdörster, et al. “The Origin, Fate, and Health Effects of Combustion by-Products: A Research Framework.” Environmental Health Perspectives 110, no. 11 (November 2002): 1155–62.
+.. [Blackman1958] Blackman, Ralph Beebe, and John Wilder Tukey. The Measurement of Power Spectra. Dover, 1958. https://archive.org/details/TheMeasurementOfPowerSpectra.
+.. [Chapra2010] Chapra, Steven C., and Raymond P. Canale. Numerical Methods for Engineers. 6th ed. Boston: McGraw-Hill Higher Education, 2010.
+.. [Dames2016] Dames, Enoch E., Andrew S. Rosen, Bryan W. Weber, Connie W. Gao, Chih-Jen Sung, and William H. Green. “A Detailed Combined Experimental and Theoretical Study on Dimethyl Ether/propane Blended Oxidation.” Combustion and Flame 168 (June 2016): 310–30. https://dx.doi.org/10.1016/j.combustflame.2016.02.021.
+.. [Das2012] Das, Apurba Kumar, Chih-Jen Sung, Yu Zhang, and Gaurav Mittal. “Ignition Delay Study of Moist Hydrogen/oxidizer Mixtures Using a Rapid Compression Machine.” International Journal of Hydrogen Energy 37, no. 8 (April 2012): 6901–11. https://dx.doi.org/10.1016/j.ijhydene.2012.01.111.
+.. [Goodwin2016] Goodwin, David G., Harry K. Moffat, and Raymond L. Speth. Cantera: An Object-Oriented Software Toolkit for Chemical Kinetics, Thermodynamics, and Transport Processes (version 2.2.1), 2016. http://www.cantera.org.
+.. [Hindmarsh2005] Hindmarsh, Alan C., Peter N. Brown, Keith E. Grant, Steven L. Lee, Radu Serban, Dan E. Shumaker, and Carol S. Woodward. “SUNDIALS: Suite of Nonlinear and Differential/algebraic Equation Solvers.” ACM Transactions on Mathematical Software 31, no. 3 (September 1, 2005): 363–96. https://dx.doi.org/10.1145/1089014.1089020.
+.. [Hunter2007] Hunter, John D. “Matplotlib: A 2D Graphics Environment.” Computing in Science & Engineering 9, no. 3 (2007): 90–95. https://dx.doi.org/10.1109/MCSE.2007.55.
+.. [Jones2001] Jones, Eric, Travis Oliphant, Pearu Peterson, and others. SciPy: Open Source Scientific Tools for Python, 2001. http://www.scipy.org/.
+.. [Lee1998] Lee, Daeyup, and Simone Hochgreb. “Rapid Compression Machines: Heat Transfer and Suppression of Corner Vortex.” Combustion and Flame 114, no. 3–4 (August 1998): 531–45. https://dx.doi.org/10.1016/S0010-2180(97)00327-1.
+.. [Mittal2007] Mittal, Gaurav, and Chih-Jen Sung. “A Rapid Compression Machine for Chemical Kinetics Studies at Elevated Pressures and Temperatures.” Combustion Science and Technology 179, no. 3 (2007): 497–530. https://dx.doi.org/10.1080/00102200600671898.
+.. [Mittal2008] Mittal, Gaurav, Marcos Chaos, Chih-Jen Sung, and Frederick L. Dryer. “Dimethyl Ether Autoignition in a Rapid Compression Machine: Experiments and Chemical Kinetic Modeling.” Fuel Processing Technology 89, no. 12 (December 2008): 1244–54. https://dx.doi.org/10.1016/j.fuproc.2008.05.021.
+.. [Oppenheim1999] Oppenheim, Alan V., Ronald W. Schafer, and John R. Buck. Discrete-Time Signal Processing. 2nd ed. Upper Saddle River, N.J: Prentice Hall, 1999.
+.. [Owen2010] Owen, Nick A., Oliver R. Inderwildi, and David A. King. “The Status of Conventional World Oil reserves—Hype or Cause for Concern?” Energy Policy 38, no. 8 (August 2010): 4743–49. https://dx.doi.org/10.1016/j.enpol.2010.02.026.
+.. [Perez2007] Pérez, Fernando, and Brian E. Granger. “IPython: A System for Interactive Scientific Computing.” Computing in Science and Engineering 9, no. 3 (May 2007): 21–29. https://dx.doi.org/10.1109/MCSE.2007.53.
+.. [MER2016] US Energy Information Administration. “EIA Monthly Energy Review,” April 2016. http://www.eia.gov/totalenergy/data/monthly/archive/00351604.pdf.
+.. [vanderWalt2011] van der Walt, Stéfan, S Chris Colbert, and Gaël Varoquaux. “The NumPy Array: A Structure for Efficient Numerical Computation.” Computing in Science & Engineering 13, no. 2 (March 2011): 22–30. https://dx.doi.org/10.1109/MCSE.2011.37.
+.. [Weber2015] Weber, Bryan William. CanSen (version 1.2.0), 2015. https://github.com/bryanwweber/CanSen.
+.. [Weber2016] Weber, Bryan William. UConnRCMPy (version 2.0.2), 2016. https://github.com/bryanwweber/UConnRCMPy.
 
 .. |TC| replace:: :math:`T_C`
 .. |PC| replace:: :math:`P_C`
