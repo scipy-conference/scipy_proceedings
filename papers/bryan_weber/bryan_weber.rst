@@ -194,13 +194,13 @@ calculating the first derivative of the pressure with respect to time and findin
 As the signal is noisy, even after smoothing, the derivative will tend to increase the noise in the
 signal [Chapra2010]_ leading to difficulty in specifying the correct zero crossing. On the
 other hand, finding the maximum of the pressure in the time prior to ignition is not straightforward
-either. In general, the pressure after ignition has occured will be higher than the pressure at the
+either. In general, the pressure after ignition has occurred will be higher than the pressure at the
 EOC and the width of the ignition peak is unknown. However, we can take advantage of the fact
 that there is some pressure drop after the EOC to eliminate the ignition from consideration.
 
 In the current version of UConnRCMPy [Weber2016]_, this is done by searching backwards in time
 from the maximum pressure in the pressure trace (typically, the global maximum pressure is after
-ignition has occured) until a minimum in the pressure is reached. Since the precise time of the
+ignition has occurred) until a minimum in the pressure is reached. Since the precise time of the
 minimum is not important for this method, the search is done by comparing the pressure at a given
 index :math:`i` to the pressure at point :math:`i-50`, starting with the index of the global maximum
 pressure. The comparison is not made to the adjacent point to avoid the influence of noise. If
@@ -413,7 +413,7 @@ the pressure traces of each of the experiments that are added to the ``Condition
 is an individual plot for each experiment showing the pressure trace and the time derivative of the
 pressure trace.
 
-In general for a set of experiments at a given condition, all of the reactive cases are run first.
+In general, for a set of experiments at a given condition, all of the reactive cases are run first.
 The experiment chosen as the reference experiment (i.e., the one whose ignition delay and |TC| are
 reported) for a given condition is the one whose overall ignition delay is closest to the mean
 overall ignition delay among the experiments at a given condition. Once the reference experiment is
@@ -469,7 +469,7 @@ non-reactive experiments, but they are not generally necessary.
 The final step is to use the volume trace in a simulation to determine |TC|. This is accomplished
 with the ``compare_to_sim`` method. This function takes two optional arguments, ``run_reactive`` and
 ``run_nonreactive``, both of which are booleans. These determine which type of simulation should be
-run; by default ``run_reactive`` is ``False`` and ``run_nonreactive`` is ``True`` because the
+run; by default, ``run_reactive`` is ``False`` and ``run_nonreactive`` is ``True`` because the
 reactive simulations may take substantial time. There is no restriction on combinations of values
 for the arguments; either or both may be ``True`` or ``False``. The ``compare_to_sim`` method relies
 on the ``run_simulation`` method, which in turn adds instances of the class ``Simulation`` to the
