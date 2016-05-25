@@ -64,8 +64,8 @@ MD simulations of biological molecules have become an important tool to elucidat
 Simulations are performed with highly optimized software packages on HPC resources but most codes generate output trajectories in their own formats so that the development of new trajectory analysis algorithms is confined to specific user communities and widespread adoption and further development is delayed.
 The MDAnalysis library addresses this problem by abstracting access to the raw simulation data and presenting a uniform object-oriented Python interface to the user.
 It thus enables users to rapidly write code that is portable and immediately usable in virtually all biomolecular simulation communities.
-The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages, and for interactive and rapid prototyping work in IPython_ / Jupyter_ notebooks, especially together with molecular visualization provided by nglview_ and time series analysis with pandas_.
-MDAnalysis is written in Python and Cython and uses NumPy arrays for easy interoperability with the wider scientific Python ecosystem.
+The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages, and for interactive and rapid prototyping work in IPython_ :cite:`Perez2007` / Jupyter_ notebooks, especially together with molecular visualization provided by nglview_ and time series analysis with pandas_ :cite:`McKinney2010`.
+MDAnalysis is written in Python and Cython and uses NumPy_ :cite:`Vanderwalt2011` arrays for easy interoperability with the wider scientific Python ecosystem.
 It is widely used and forms the foundation for more specialized biomolecular simulation tools.
 MDAnalysis is available under the GNU General Public License v2.
 
@@ -73,6 +73,7 @@ MDAnalysis is available under the GNU General Public License v2.
 .. _Jupyter: http://jupyter.org/
 .. _nglview: https://github.com/arose/nglview
 .. _pandas: http://pandas.pydata.org/
+.. _NumPy: http://www.numpy.org
 
 .. class:: keywords
 
