@@ -98,9 +98,11 @@ examples of how to:
 ## Requirements
 
  - IEEETran (often packaged as ``texlive-publishers``, or download from
-   [CTAN](http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/) LaTeX
+   [CTAN](http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/)) LaTeX
    class
  - AMSmath LaTeX classes (included in most LaTeX distributions)
+ - alphaurl (often packaged as ``texlive-bibtex-extra``, or download from
+   [CTAN](https://www.ctan.org/pkg/urlbst)) urlbst BibTeX style
  - `docutils` 0.8 or later (``easy_install docutils``)
  - `pygments` for code highlighting (``easy_install pygments``)
  - Due to a bug in the Debian packaging of ``pdfannotextractor``, you may have
@@ -110,7 +112,8 @@ On Debian-like distributions:
 
 ```
 sudo apt-get install python-docutils texlive-latex-base texlive-publishers \
-                     texlive-latex-extra texlive-fonts-recommended
+                     texlive-latex-extra texlive-fonts-recommended \
+                     texlive-bibtex-extra
 ```
 
 Note you will still need to install `docutils` with `easy-install` or `pip` even on a Debian system.
@@ -118,7 +121,7 @@ Note you will still need to install `docutils` with `easy-install` or `pip` even
 On Fedora, the package names are slightly different
 
 ```
-su -c `dnf install python-docutils texlive-collection-basic texlive-collection-fontsrecommended texlive-collection-latex texlive-collection-latexrecommended texlive-collection-latexextra texlive-collection-publishers`
+su -c `dnf install python-docutils texlive-collection-basic texlive-collection-fontsrecommended texlive-collection-latex texlive-collection-latexrecommended texlive-collection-latexextra texlive-collection-publishers texlive-collection-bibtexextra`
 ```
 
 ## Build Server
