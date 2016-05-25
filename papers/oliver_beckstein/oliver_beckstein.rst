@@ -122,7 +122,7 @@ If you like to use MDAnalysis for your project please join our community_ board.
 Analysis Module
 ---------------
 
-In the MDAnalysis.analysis module we provide a large variety of standard analysis algorithms, like RMSD, alignment, native contacts, as well as unique algorithms, like the LeaftleftFinder and Path Similarty Analysis.
+In the MDAnalysis.analysis module we provide a large variety of standard analysis algorithms, like RMSD, alignment, native contacts, as well as unique algorithms, like the LeaftleftFinder :cite:`Michaud-Agrawal:2011fu` and Path Similarty Analysis :cite:`Seyler:2015fk`.
 We have recently started to unify the interface to the different algorithms with an `AnalysisBase` class.
 Currently PersistenceLength, InterRDF, LinearDensity and Contacts analysis have been ported.
 If applicable we also strive to make the API's to the algorithms generic.
@@ -132,7 +132,7 @@ The new Contacts class is a good example a generic API that allows easy adaptati
 For contact analysis it is possible to have different metrics based on coordinates alone :cite:`Best2013,Franklin2007`.
 We have designed the API to choose between common metrics and pass user defined functions to develop new metrics.
 This generic interface allowed us to implement a q1q2 analysis ontop of the Contacts class.
-Below is incomplete code example that shows how to implement a q1q2 analysis, a more detailed explanatain can be found in the docs. **how to generate a link/should I generate a link**
+Below is incomplete code example that shows how to implement a q1q2 analysis, a more detailed explanatain can be found in the docs.
 
 .. code-block:: python
 
