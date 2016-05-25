@@ -13,8 +13,7 @@
   'unready' to flag the current state of the review process.
 - Only once a reviewer is satisfied that the review process is complete and the submission should
   be accepted to the proceedings, should they affix the 'ready' label. 
-- Reviewers should come to a final 'ready', 'unready' decision before July 4th at 18:00 PST.
-
+- Reviewers should come to a final 'ready', 'unready' decision before **July 10th** at 18:00 PST.
 
 ## Instructions for Authors
 
@@ -47,6 +46,28 @@ paper:
   branch.
 
 - Please do not modify any files outside of your paper directory.
+
+## Schedule Summary
+
+Authors may make changes to their submisions throughout the review process.
+
+There are many different styles of review (some do paragrpah comments, others
+do 'code review' style line edits) and the process is open.
+
+We encourage authors and reviewers to work together iteratively to make each 
+others papers the best they can be.
+Combine the best principles of open source development and academic publication.
+
+These dates are the 
+
+- May 30th - Initial submissions
+- June 7th - Reviewers assigned
+- June 30th - Reviews due
+- June 30th- July 10th: Authors revised papers based on reviews
+- July 10th - Acceptance/rejection of papers.
+- July 11-18th - Conference
+- July 30th - Final submissions due
+- August 8th - Publication.
 
 ## General Guidelines
 
