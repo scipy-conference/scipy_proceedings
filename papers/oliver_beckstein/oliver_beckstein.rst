@@ -130,10 +130,14 @@ If applicable we also strive to make the API's to the algorithms generic.
 Most other tools hand the user analysis algorithms as black boxes, we want to avoid that and give the users all he needs to adapt an analysis to his/her needs.
 
 The new Contacts class is a good example a generic API that allows easy adaptations of algorithms while still offering an easy setup for standard analysis types.
-For contact analysis it is possible to have different metrics based on coordinates alone :cite:`Best2013,Franklin2007`.
-We have designed the API to choose between common metrics and pass user defined functions to develop new metrics.
-This generic interface allowed us to implement a q1q2 analysis ontop of the Contacts class.
-Below is incomplete code example that shows how to implement a q1q2 analysis, a more detailed explanatain can be found in the docs.
+The Contacts class is calculating a contact map for atoms in a frame and compares it with a reference map using different metrics.
+The used metric then decides which quantity is measued.
+A common quantity of interest is the fraction of native contacts, native contacts are all atoms that are nearby in the reference.
+For native contacts there exists two metrics :cite:`Best2013,Franklin2007` and we default to the later.
+We have designed the API to choose between the two metrics and pass user defined functions to develop new metrics or measure other quantities.
+This generic interface allowed us to implement a q1q2 analysis :cite:`Franklin2007` ontop of the Contacts class.
+Below is incomplete code example that shows how to implement a q1q2 analysis, the default value for the *method* kwarg is overwriten with a user defined method *radius_cut_q*.
+A more detailed explanatain can be found in the docs.
 
 .. code-block:: python
 
