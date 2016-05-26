@@ -103,7 +103,7 @@ the corresponding :math:`\alpha_c` and :math:`\beta_c`. The model is fit by maxi
 
    \mathcal{L}(\alpha_t, \beta_t) = \prod_{t=1}^T P(a_t, c_t),
 
-where the probability :math:`P(a_t, c_t)` is calculated using equations :ref:`EqUpdate` and :ref:`EqSoftmax`. 
+where the probability :math:`P(a_t, c_t)` is calculated using equations (:ref:`EqUpdate`) and (:ref:`EqSoftmax`). 
 
 Once one have access to the likelihood function, the parameters are found by finding the :math:`\alpha_c` and :math:`\beta_c` that maximize the function. In practice, this is done by minimizing the negative of the logarithm of the likelihood function [Daw11]_. In other words, the estimate of the model parameters are given by
 
@@ -132,38 +132,98 @@ The study was approved by the University of Manchester research ethics committee
    a card, the participant wins or lose the amount of points indicated in the
    card, according to the probabilities associated with the cue. The outcome of
    the trial is indicated by a stimulus and finalize with a blank inter-trial
-   stimulus. :label:`FigStimulus`
+   stimulus [Mas12]_. :label:`FigStimulus`
 
-Implementation and results
+Implementation and Results
 --------------------------
 
+Before looking into the experimental data, we present an implementation of an artificial agent that makes decisions according to the model presented before. This artificial agent allows us to generate simulated data for different parameters, and then use the data to evaluate the estimation algorithm. 
 
+The code for the artificial agent is organized around two classes. The class ``ContextualBandit`` provides a simulation of the environment. The key two methods of the class are ``get_context`` and ``reward``. The ``get_context`` method set the context, or clue, for the trial uniformly at random and return its value. The ``reward`` method return the reward, given the selected action. The value of the reward is selected at random with the probability of winning determined by the current context. The following code snippet shows the class implementation.
 
 .. code-block:: python
 
-   def sum(a, b):
-       """Sum two numbers."""
+    class ContextualBandit(object):
+	def __init__(self):
+	    # Contexts and their probabilities of winning
+	    self.contexts = {'punishment': 0.2,
+			     'neutral': 0.5,
+			     'reward': 0.8}
+	    self.actions = (23, 14, 8, 3)
+	    self.n = len(self.actions)
+	    self.get_context()
 
-       return a + b
+	def get_context_list(self):
+	    return list(self.contexts.keys())
 
+	def get_context(self):
+            k = list(self.contexts.keys())
+	    self.context = np.random.choice(k)
+	    return self.context
 
-or on multiple, aligned lines:
+	def reward(self, action):
+	    p = self.contexts[self.context]
+	    if np.random.rand() < p:
+		r = action
+	    else:
+		r = -action
+	    return r
 
-.. math::
-   :type: eqnarray
+The behavior of the artificial agent is implemented in the ``ContextualAgent`` class. The class is initialized with parameters learning rate ``alpha`` and inverse temperature ``beta``. Then, the ``run`` method is called for each trial, which in turn calls the ``choose_action`` and ``update_action_value`` methods. These methods implement equations (:ref:`EqSoftmax`) and (:ref:`EqUpdate`), respectively. The action-value function is stored in a dictionary of NumPy arrays, where the key is the context of the environment. The following code snippet shows the class implementation.
 
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
+.. code-block:: python
+		
+    class ContextualAgent(object):
+        def __init__(self, bandit, beta, alpha):
+            # ...
 
-The area of a circle and volume of a sphere are given as
+        def run(self):
+            context = self.bandit.get_context()
+            action = self.choose_action(context)
+            reward = self.bandit.reward(self.actions[action])
+            # Update action-value
+            self.update_action_value(context, action, reward)
 
-.. math::
-   :label: circarea
+        def choose_action(self, context):
+            p = softmax(self.Q[context], self.beta)
+            actions = range(self.n)
+            action = np.random.choice(actions, p=p)
+            return action
 
-   A(r) = \pi r^2.
+        def update_action_value(self, context, action, reward):
+            error = reward - self.Q[context][action]
+            self.Q[context][action] += self.alpha * error
 
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
+The function ``run_single_softmax_experiment`` shows how these two classes interact:
+
+.. code-block:: python
+
+    def run_single_softmax_experiment(beta, alpha):
+        cb = ContextualBandit()
+        ca = ContextualAgent(cb, beta=beta, alpha=alpha)
+        trials = 360
+        for _ in range(steps):
+            ca.run()
+
+In this function, after the classes are initialized, the ``run`` method is run once per trial. The results of the simulation are stored in a pandas dataframe (code not shown). Figure :ref:`FigSim` shows an example of a simulation for :math:`\alpha=0.1` and :math:`\beta=0.5` (same value for all contexts). The top and bottom plots show the actions made by the agent when it observes the context with a probability of winning of 80% and 20%, respectively. The plots also show a blue and red vertical bar for each trial where the agent won and lose, respectively. We observe that the agent learned to made actions close to the optimal ones.
+
+.. figure:: softmax_experiment.pdf
+   :align: center
+   :scale: 50%
+
+   Simulation results for an experiment with :math:`\alpha=0.1` and
+   :math:`\beta=0.5`. Actions made by the agent when the context has a
+   probability of winning of 80% (top) and 20% (bottom). The plots also show a
+   blue and red vertical bar for each trial where the agent won and lose,
+   respectively. :label:`FigSim`
+
+Computation of the likelihood 
+
+Parameter estimation by minimizing the log ML. Show likelihood function with real and estimated alpha, beta.
+
+Visualization of the experimental data
+
+Result of estimated alpha and beta. Show scatter plot with alpha beta.
 
 .. figure:: actions_0.pdf
    :align: center
