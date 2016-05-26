@@ -82,7 +82,7 @@ In :ref:`fig3` I show the same data in the way I will present results from now o
 
 .. figure:: linsvm_avg_acc_by_song.png
 
-    **Accuracy vs. number of songs used to train linear SVM.** *Y axis: average accuracy across labels, x axis: number of songs used to train the linear SVM.* Note that accuracy is plotted as average accuracy across labels, and that this accuracy is unweighted, i.e., a syllable labeled with low accuracy drops the overall accuracy and does so proportional to the number of times it apears in the test set. :label:`fig3`
+    **Accuracy vs. number of songs used to train linear SVM.** *Y axis: average accuracy across labels, x axis: number of songs used to train the linear SVM. Error bars: standard deviation across five replicates.* Note that accuracy is plotted as average accuracy across labels, and that this accuracy is unweighted, i.e., a syllable labeled with low accuracy drops the overall accuracy and does so proportional to the number of times it apears in the test set. :label:`fig3`
 
 One possible reason for this impaired accuracy is the presence of “introductory notes”, low-amplitude noisy syllables that often occur at the start of song (as shown in :ref:`fig4`).
 
@@ -137,14 +137,37 @@ The results suggest SVM-RBF provides the highest accuracy across different birds
 
 Methods
 ----------
-Song was recorded from four birds, and two to four days worth of songs from each bird were labeled by hand, using custom software written in Labview and Matlab (the Labview program EvTAF, and associated Matlab code for analysis [TUMER2007]). In some cases more than one person labeled song from a given bird, but using an agreed upon rubric for the labels given to syllables. Raw audio files were bandpass filtered to keep signal between 500 hz and 10 kHz, and smoothed with a Hanning filter. Then raw signal was segmented into syllables by finding where its amplitude crossed a threshold and where the resulting segments were a minimum duration with a minimum interval between them. The threshold, minimum segment duration, and minimum interval between segments were kept constant for all songs from a given bird except in occassional cases where this method segmented the syllable incorrectly (e.g. because of background noise in the recording). 
+
+Data acquisition
+~~~~~~~~~~~~~~~~
+
+Song was recorded from four birds, and two to four days worth of songs from each bird were labeled by hand, using custom software written in Labview and Matlab (the Labview program EvTAF for recording, and associated Matlab code for labeling and analysis [TUMER2007]). In some cases more than one person labeled song from a given bird, but using an agreed upon rubric for the labels given to syllables. Extraordinary attention was given to the labels because the song was used in behavioral experiments that could have potentially changed syllable acoustics and sequence. All the song used in this study, however, was "baseline" song recorded before the behavioral experiments. Hence I am very confident in this ground truth set.
+
+Raw audio files were bandpass filtered to retain signal between 500 hz and 10 kHz, then smoothed with a Hanning filter. The smoothed signal was segmented into syllables by finding where its amplitude crossed a threshold and where the resulting segments were a minimum duration with a minimum interval between them. The threshold, minimum segment duration, and minimum interval between segments were kept constant for all songs from a given bird except in occassional cases where this method segmented the syllable incorrectly (e.g. because of background noise in the recording). 
+
+Feature extraction for use with machine learning algorithms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Once syllables were segmented, features were extracted from them to be used by the machine learning algorithms. Feature extraction was also done with Matlab scripts. See https://github.com/NickleDave/ML-comparison-birdsong/master/feature_extraction_code/ for this code and for equivalents written in Python using the Matplotlib [HUNTER2007] and Numpy [VANDERWALT2011] packages. The Python versions of the code return slightly different values because of floating point error. I do not expect that using the Python code would qualitatively change the results, but I did not test this and mainly include this code to make the Matlab code easier to understand for programmers accustomed to Python. Duration and amplitude features were based on the raw signal; all other features were extracted from spectrograms.
-Experiments based on [TACH2014] used the features in that paper, provided by R.O. Tachibana. As described in that paper, the Liblinear package was used [FAN2008]. My results were obtained using the Python API (https://github.com/ninjin/liblinear/tree/master/python) compiled for a 64-bit system. I used the exact same hyperparameters for training models that were used in [TACH2014]. 
-For the k-Nearest Neighbor experiments, I used a feature set consisting of: the syllable duration, as well as the duration of the preceding and following syllables, and the preceding and following 'silent gaps' separating the syllables; the Root-Mean-Square amplitude; the spectral entropy; the 'high-low ratio' (power in the 5-10 kHz range / power in the 0-5 kHz range); delta entropy (entropy at 80% of the syllable's duration - entropy at 20% of the syllable's duration); delta high-low ratio.
-Comparison of other machine learning algorithms was facilitated by Scikit-learn [PEDREGOSA2011].
+
+Experiments based on [TACH2014] used the features in that paper, extracted via the code kindly provided by R.O. Tachibana.
+
+For the k-Nearest Neighbor experiments, I used a feature set consisting of: the syllable duration, as well as the duration of the preceding and following syllables, and the preceding and following 'silent gaps' separating the syllables; the Root-Mean-Square amplitude; the spectral entropy; the 'high-low ratio' (power in the 5-10 kHz range / power in the 0-5 kHz range); delta entropy (entropy at 80% of the syllable's duration - entropy at 20% of the syllable's duration); delta high-low ratio (again the difference at 80% and 20% of the syllable's duration).
+
+
+Comparison of machine learning algorithms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In general, the comparison consisted of an overall script that drew a random sample from a training set, and then used that sample to train all of the machine learning algorithms. The goal was to determine which algorithm could achieve the highest accuracy with the smallest amount of hand-labeled training data. By amount of data, I mean the number of songs used to train the models. I chose "number of songs" as a metric becuase it is most natural for an experiment to hand-label a set number of songs. This also guaranteed that the representative number of samples for each syllable in the training set approximated their frequency in the population. Typically less common syllables apparead ~10^3 times in the training set vs. 10^4 examples for the more common syllables. Preliminary experiments where the same number of samples for each syllable did not produce evidence that this difference in training samples would affect the results. I trained each type of model with (3,6,9,...15,21,27,33,39) songs, and generated 5 replicates for each number of songs. There were three types of models I tested: the linear support vector machine as described in [TACH2014], the k-Nearest Neighbors algorithm, and a support vector machine with a radial basis function as the kernel. Comparison of all machine learning algorithms was greatly facilitated by Scikit-learn [PEDREGOSA2011]. Hence, for the 3-song condition, I picked 3 different songs 5 times, and each time I trained all 3 models with the syllables from those songs, then calculated the accuracy. All feature sets were z-standardized before training.
+
+To ensure that I made every effort to replicate the results from [TACH2014], I used the Liblinear package [FAN2008] directly (as those authors did) instead of the implementation in Scikit-learn (see http://scikit-learn.org/stable/modules/linear_model.html#liblinear-differences). My results were obtained using the Python API (https://github.com/ninjin/liblinear/tree/master/python) compiled for a 64-bit system. I used the exact same hyperparameters for training models that were used in [TACH2014]: L2-regularized L2-loss support vector classification with the cost parameter fixed at 1.
+
+
+
 
 References
 ----------
+
 [TCHER2000] Tchernichovski, Ofer, et al. "A procedure for an automated measurement of song similarity." Animal Behaviour 59.6 (2000): 1167-1176.
 
 [WU2008] Wu, Wei, et al. "A statistical method for quantifying songbird phonology and syntax." Journal of neuroscience methods 174.1 (2008): 147-154.
