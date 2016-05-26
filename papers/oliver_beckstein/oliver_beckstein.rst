@@ -122,7 +122,7 @@ If you like to use MDAnalysis for your project please join our community_ board.
 Analysis Module
 ---------------
 
-In the MDAnalysis.analysis module we provide a large variety of standard analysis algorithms, like RMSD, alignment, native contacts, as well as unique algorithms, like the LeaftleftFinder :cite:`Michaud-Agrawal:2011fu` and Path Similarty Analysis :cite:`Seyler:2015fk`.
+In the MDAnalysis.analysis module we provide a large variety of standard analysis algorithms, like RMSD, alignment :cite:`PuLiu_FastRMSD_2010`, native contacts :cite:`Best2013,Franklin2007`, as well as unique algorithms, like the LeaftleftFinder :cite:`Michaud-Agrawal:2011fu` and Path Similarty Analysis :cite:`Seyler:2015fk`.
 We have recently started to unify the interface to the different algorithms with an `AnalysisBase` class.
 Currently PersistenceLength, InterRDF, LinearDensity and Contacts analysis have been ported.
 If applicable we also strive to make the API's to the algorithms generic.
