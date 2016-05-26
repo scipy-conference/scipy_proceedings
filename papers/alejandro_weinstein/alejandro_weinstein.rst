@@ -100,6 +100,7 @@ In our case, this means to find, given the sequences of cues, actions and reward
 the corresponding :math:`\alpha_c` and :math:`\beta_c`. The model is fit by maximizing the likelihood of the parameters :math:`\alpha_c` and :math:`\beta_c` given the experiment data. The likelihood function of the parameters is given by
 
 .. math::
+   :label: EqLikelihood
 
    \mathcal{L}(\alpha_t, \beta_t) = \prod_{t=1}^T P(a_t, c_t),
 
@@ -108,8 +109,9 @@ where the probability :math:`P(a_t, c_t)` is calculated using equations (:ref:`E
 Once one have access to the likelihood function, the parameters are found by finding the :math:`\alpha_c` and :math:`\beta_c` that maximize the function. In practice, this is done by minimizing the negative of the logarithm of the likelihood function [Daw11]_. In other words, the estimate of the model parameters are given by
 
 .. math::
+   :label: EqOptimize
 
-    \widehat{\alpha}_c, \widehat{\beta}_c =\underset{0\leq\alpha \leq 1, \beta \geq 0}{\operatorname{argmin}} \mathcal{L}(\alpha_c, \beta_c).
+    \widehat{\alpha}_c, \widehat{\beta}_c =\underset{0\leq\alpha \leq 1, \beta \geq 0}{\operatorname{argmin}} -\log(\mathcal{L}(\alpha_c, \beta_c)).
 
 Details about the calculation of the likelihood function and its optimization  are given in the *Implementation and Results* section.
 
@@ -180,9 +182,11 @@ The behavior of the artificial agent is implemented in the ``ContextualAgent`` c
         def run(self):
             context = self.bandit.get_context()
             action = self.choose_action(context)
-            reward = self.bandit.reward(self.actions[action])
+	    action_i = self.actions[action]
+            reward = self.bandit.reward(action_i)
             # Update action-value
-            self.update_action_value(context, action, reward)
+            self.update_action_value(context, action, 
+                                     reward)
 
         def choose_action(self, context):
             p = softmax(self.Q[context], self.beta)
@@ -190,7 +194,8 @@ The behavior of the artificial agent is implemented in the ``ContextualAgent`` c
             action = np.random.choice(actions, p=p)
             return action
 
-        def update_action_value(self, context, action, reward):
+        def update_action_value(self, context, action, 
+                                reward):
             error = reward - self.Q[context][action]
             self.Q[context][action] += self.alpha * error
 
@@ -217,9 +222,31 @@ In this function, after the classes are initialized, the ``run`` method is run o
    blue and red vertical bar for each trial where the agent won and lose,
    respectively. :label:`FigSim`
 
-Computation of the likelihood 
+The key step in the estimation of the parameters is the computation of the likelihood function described by equation (:ref:`EqLikelihood`). As explained before, for numerical reasons one works with the negative of the likelihood function of the parameters :math:`-\log(\mathcal{L}(\alpha_c, \beta_c))`. The following code snippet describes the steps used to compute the negative log likelihood function.
 
-Parameter estimation by minimizing the log ML. Show likelihood function with real and estimated alpha, beta.
+.. code:: python
+
+	prob_log = 0
+	Q = dict([[cue, np.zeros(self.n_actions)] 
+                 for cue in self.cues])
+        for action, reward, cue in zip(actions, rewards, cues):
+            Q[cue][action] += alpha * (reward - Q[cue][action])
+            prob_log += np.log(softmax(Q[cue], beta)[action])
+        prob_log *= -1
+
+After applying the logarithmic function to the likelihood function, the product of probabilities becomes a sum of probabilities. We initialize the variable ``prob_log`` to zero, and then we iterate over the sequence :math:`(c_t, a_t, r_t)` of cues, actions, and rewards. These values are stored as lists in the variables ``actions``, ``rewards``, and ``cues``, respectively. The action value function :math:`Q(a_t, c_t)` is represented as a dictionary of NumPy arrays, where the cues are the keys of the dictionary. The arrays in this dictionary are initialized to zero. To compute each term of the sum of logarithms, we first compute the corresponding value of the action-value function according to equation (:ref:`EqUpdate`). After updating the action-value function, we can compute the probability of choosing the action according to equation (:ref:`EqSoftmax`). Finally we multiply the sum of probabilities by negative one.
+
+Once we are able to compute the negative log-likelihood function, to find the model parameter we just need to minimize this function, according to equation (:ref:`EqLikelihood`). Since this is a constrained minimization problem, we use the L-BFGS-B algorithm [Byr95]_, available as an option of the ``minimize`` function of the ``scipy.optimize`` module. The following code snippet shows the details.
+
+.. code:: python
+
+    r = minimize(self.neg_log_likelihood, [0.1,0.1],
+                 method='L-BFGS-B',
+                 bounds=(0,1), (0,2))
+
+Before using our implementation of the model estimation method with real data, it is important, as a sanity check, to test the code with the data generated by the artificial agent. Since in this case we know the actual values of the parameters, we can compare the estimated values with the real ones. To run this test we generate 360 trials (same number of trials as in the experimental data) with an agent using parameters :math:`\alpha=0.1` and :math:`\beta=0.5`.
+
+Show likelihood function with real and estimated alpha, beta.
 
 Visualization of the experimental data
 
@@ -247,6 +274,9 @@ Electronic Engineering, Basal Project FB0008, Conicyt.
 References
 ----------
 
+.. [Byr95] R.Byrd, P. Lu and J. Nocedal. *A Limited Memory Algorithm for Bound
+           Constrained Optimization*, SIAM Journal on Scientific and
+           Statistical Computing 16 (5): 1190-1208, 1995.
 
 .. [Cas02] G. Casella and R. L. Berger, Statistical Inference. Thomson
            Learning, 2002.
