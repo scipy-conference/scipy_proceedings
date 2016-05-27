@@ -36,7 +36,7 @@ But it can be tedious and error prone to work directly with the filesystem to re
 **datreant** makes working with directory structures and files Pythonic with **Treants**: specially marked directories with distinguishing characteristics that can be discovered, queried, and filtered.
 Treants can be manipulated individually and in aggregate, with mechanisms for granular access to the directories and files in their trees.
 Disparate datasets stored in any format (CSV, HDF5, NetCDF, Feater, etc.) scattered throughout a filesystem can thus be manipulated as meta-datasets of Treants.
-**datreant** is modular and extensible by design to allow specialized applications to be built on top of it, with **MDSynthesis** as an example for working with molecular dynamics simulation data.  `http://datreant.org/`_
+**datreant** is modular and extensible by design to allow specialized applications to be built on top of it, with **MDSynthesis** as an example for working with molecular dynamics simulation data. http://datreant.org/
 
 
 .. class:: keywords
@@ -61,9 +61,11 @@ In many fields of science, especially those analyzing experimental or simulation
 Often this makes the filesystem serve as a *de facto* database, with directory trees the zeroth-order data structure for scientific data.
 But it can be tedious and error prone to work with these directory trees to retrieve and store heterogeneous datasets, especially over projects spanning years with no strict organizational scheme.
 
-To address this pain point, we present [**datreant**](http://datreant.org/).
+To address this pain point, we present `**datreant** <http://datreant.org/`_.
 At the core of datreant are **Treants**: specially marked directories with distinguishing characteristics that can be discovered, queried, and filtered.
 Treants map the filesystem as it is into a Pythonic interface, making heterogeneous data easier to leverage while enhancing scientific reproducibility.
+
+
 
 
 Treants as filesystem manipulators
