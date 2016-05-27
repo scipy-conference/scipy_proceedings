@@ -46,7 +46,7 @@ The original intent of this project was to analyze demographic trends in
 self-presentation in online profiles. Specifically, we were interested in
 whether demographic groups are distinct in the ways in which they present
 themselves online, and specifically whether people from different demographic groups would
-self-present in distinct ways. We extended the previous natural language processing analyses of online dating (Nagarajan & Hearst, 2009) by combining natural language processing with machine learning on a larger scale. We leveraged multiple approaches including clustering and topic modeling, as well as feature selection and modeling strategies. By exploring the relationship between free text self-descriptions and demographics, we find that we can predict a user's demographic makeup based on their user essays, and we discover some unexpected insights into deception.
+self-present in distinct ways. We extended the previous natural language processing analyses of online dating [Nag09]_ by combining natural language processing with machine learning on a larger scale. We leveraged multiple approaches including clustering and topic modeling, as well as feature selection and modeling strategies. By exploring the relationship between free text self-descriptions and demographics, we find that we can predict a user's demographic makeup based on their user essays, and we discover some unexpected insights into deception.
 
 Data
 ----
@@ -276,6 +276,8 @@ References
 .. [McP01] Birds of a feather: Homophily in social networks.
 
 .. [Fio05] Homophily in Online Dating: When Do You Like Someone Like Yourself?.
+
+.. [Nag09] Nagarajan & Hearst, 2009
 
 .. [Wet15] Everett Wetchler, okcupid, (2015), GitHub repository,
            `<https://github.com/everett-wetchler/okcupid.git>`_
