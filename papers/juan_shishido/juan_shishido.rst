@@ -277,7 +277,7 @@ References
 
 .. [Fio05] Homophily in Online Dating: When Do You Like Someone Like Yourself?.
 
-.. [Nag09] Nagarajan & Hearst, 2009
+.. [Nag09] Nagarajan and Hearst, An Examination of Language Use in Online Dating Profiles, 2009
 
 .. [Wet15] Everett Wetchler, okcupid, (2015), GitHub repository,
            `<https://github.com/everett-wetchler/okcupid.git>`_
@@ -285,8 +285,6 @@ References
 .. [Xu_03] Document clustering based on non-negative matrix factorization.
 
 .. [Lin07] Projected gradient methods for non-negative matrix factorization.
-
-.. [Nag09] An Examination of Language Use in Online Dating Profiles.
 
 .. [Tom12] What lies beneath: The linguistic traces of deception in online
            dating profiles.
