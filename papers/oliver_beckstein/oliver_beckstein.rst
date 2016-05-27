@@ -122,12 +122,14 @@ If you like to use MDAnalysis for your project please join our community_ board.
 Analysis Module
 ---------------
 
-In the MDAnalysis.analysis module we provide a large variety of standard analysis algorithms, like RMSD, alignment :cite:`PuLiu_FastRMSD_2010`, native contacts :cite:`Best2013,Franklin2007`, as well as unique algorithms, like the LeaftleftFinder :cite:`Michaud-Agrawal:2011fu` and Path Similarty Analysis :cite:`Seyler:2015fk`.
-Historically the algorithms have been contributed by various researchers to satisfy their own needs, this lead to some fragmentation in the interface of different algorithms.
+In the MDAnalysis.analysis module we provide a large variety of standard analysis algorithms, like RMSD, alignment :cite:`PuLiu_FastRMSD_2010`, native contacts :cite:`Best2013,Franklin2007`, as well as unique algorithms, like the LeaftleftFinder :cite:`Michaud-Agrawal:2011fu` and Path Similarity Analysis :cite:`Seyler:2015fk`.
+Historically these algorithms were contributed by various researchers as individual moduldes to satisfy their own needs but this lead to some fragmentation in the user interface of these modules.
 We have recently started to unify the interface to the different algorithms with an `AnalysisBase` class.
 Currently PersistenceLength, InterRDF, LinearDensity and Contacts analysis have been ported.
+PersistenceLength calculates the persistence length of a polymer, InterRDF calculates the pairwise radial distribution function inside of a molecule, LinearDensity generates a density along a given exis and Contacts analysis native contacts, as desribed in more detail below.
 If applicable we also strive to make the API's to the algorithms generic.
-Most other tools hand the user analysis algorithms as black boxes, we want to avoid that and give the users all he needs to adapt an analysis to his/her needs.
+Most other tools hand the user analysis algorithms as black boxes.
+We want to avoid that and give the users all he needs to adapt an analysis to his/her needs.
 
 The new Contacts class is a good example a generic API that allows easy adaptations of algorithms while still offering an easy setup for standard analysis types.
 The Contacts class is calculating a contact map for atoms in a frame and compares it with a reference map using different metrics.
@@ -135,7 +137,7 @@ The used metric then decides which quantity is measued.
 A common quantity of interest is the fraction of native contacts, native contacts are all atoms that are nearby in the reference.
 For native contacts there exists two metrics :cite:`Best2013,Franklin2007` and we default to the later.
 We have designed the API to choose between the two metrics and pass user defined functions to develop new metrics or measure other quantities.
-This generic interface allowed us to implement a q1q2 analysis :cite:`Franklin2007` ontop of the Contacts class.
+This generic interface allowed us to implement a q1q2 analysis :cite:`Franklin2007` on top of the Contacts class.
 Below is incomplete code example that shows how to implement a q1q2 analysis, the default value for the *method* kwarg is overwriten with a user defined method *radius_cut_q*.
 A more detailed explanatain can be found in the docs.
 
