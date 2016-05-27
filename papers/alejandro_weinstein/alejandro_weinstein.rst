@@ -256,20 +256,33 @@ Before using our implementation of the model estimation method with real data, i
    maximum likelihood are :math:`\widehat{\alpha}=0.11` and
    :math:`\widehat{\beta}=0.49` (red plus sign). :label:`FigLikelihood`
 
-Before using our program to fit a model for the experimental data, it is useful to visualize the raw data. In this case, this means showing the actions taken by each subject for each trial. Ideally, we wish to show the behaviors of all the subject for a given context in a single plot, to get an overview of the whole experiment. Fortunately, the Seaborn library allows us to do this with very little effort. Figure :ref:`FigAllActions` shows the result for the context with a probability of winning of 80%. We also add vertical lines (blue for winning and red for losing) for each trial.
+It is good practice to visualize the raw experimental data before doing any further analisys. In this case, this means showing the actions taken by each subject for each trial. Ideally, we wish to show the behaviors of all the subject for a given context in a single figure, to get an overview of the whole experiment. Fortunately, the Seaborn library [Was16]_ allows us to do this with very little effort. Figure :ref:`FigAllActions` shows the result for the context with a probability of winning of 80%. We also add vertical lines (blue for winning and red for losing) for each trial.
 
-Result of estimated alpha and beta. Show scatter plot with alpha beta.
+Finally, we can fit a model for each subject. For this we perform the maximum likelihood estimation of the parameters using the experimental data. Figure :ref:`FigFitExperimental` shows the estimated :math:`\widehat{\alpha}` and :math:`\widehat{\beta}` for each subject, and for the context with probability of winning 80% (in blue) and 20% (in red).
+
+.. figure:: experimental_fit.pdf
+   :align: center
+   :scale: 50%
+
+   Estimated model parameters. Each point shows the estimated
+   :math:`\widehat{\alpha}` and :math:`\widehat{\beta}` for a subject. In blue
+   estimates for the context with probability of winning 80%, and in red for
+   the context with probability of winning 20%. :label:`FigFitExperimental`
 
 .. figure:: actions_0.pdf
    :align: center
    :figclass: w
    :scale: 50%
 
-   This is the caption. :label:`FigAllActions`
+   Actions taken by all the subjects for trials with context associated to the
+   80% probability of winning. The vertical bars show if the subject won (blue)
+   or lost (red) in that particular trial. :label:`FigAllActions`
 
 
 Discussion
 ----------
+
+We have shown a Python program able to fit a decision making model from experimental data, using the maximum likelihood principle. Thanks to Python and the SciPy stack, it was possible to implement this program in a way that we believe is easy to understand and that has a clear correspondence to the theoretical development of the model. We think that the structure of the code allows to easily extend the implementation to test variations in the decision making model presented in this work.
 
 
 Acknowledgments
@@ -312,6 +325,8 @@ References
 .. [Wie12] M. Wiering and M. van Otterlo, Eds., Reinforcement Learning,
            vol. 12. Berlin, Heidelberg: Springer Berlin Heidelberg, 2012.
 
-
+.. [Was16] M. Waskom et al.  seaborn: v0.7.0 (January 2016). ; DOI:
+           10.5281/zenodo.45133. Available at:
+           http://dx.doi.org/10.5281/zenodo.45133.
 
 ..  LocalWords:  neuroscience
