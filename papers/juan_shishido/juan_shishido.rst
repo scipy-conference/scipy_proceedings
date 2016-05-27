@@ -1,15 +1,15 @@
 :author: Matar Haller
 :email: matar@berkeley.edu
-:institution: University of California, Berkeley
+:institution: Helen Wills Neuroscience Institute, University of California, Berkeley
 :corresponding:
 
 :author: Jaya Narasimhan
 :email: jnaras@berkeley.edu
-:institution: University of California, Berkeley
+:institution: Department of Electrical Engineering and Computer Science, University of California, Berkeley
 
 :author: Juan Shishido
 :email: juanshishido@berkeley.edu
-:institution: University of California, Berkeley
+:institution: School of Information, University of California, Berkeley
 
 ----------------------------------------------------------
 Tell Me Something I Don't Know: Analyzing OkCupid Profiles
@@ -17,11 +17,15 @@ Tell Me Something I Don't Know: Analyzing OkCupid Profiles
 
 .. class:: abstract
 
-   This is where the abstract goes.
+The way that people self-present online while dating has broad implications for the relationships they pursue. Here we present an analysis of 59,000+ OkCupid user profiles that examines word usage patterns across sexual orientations, drug usage status, and ethnicities. We find that individuals in particular demographic groups self-present in consistent ways. Our results also suggest that users may unintentionally reveal demographic attributes in their online profiles.
+
+In this paper we analyze online self-presentation by combining natural language processing (NLP) with machine learning. We use this approach to motivate a discussion of how to successfully mine text data. We describe our initial approach, explain why it was problematic, and discuss modifications that made it successful. In doing so, we review standard NLP techniques, challenge accepted "norms," and cover several ways to represent text data. We explain clustering and topic modeling, including k-means and nonnegative matrix factorization, and discuss why we chose the latter.  We then present unexpected similarities between self-identified drug users and those who declined to reveal their drug status. Finally, we discuss utilizing permutation testing for identifying deceit in online self-presentation and discuss how we're working to extend this analysis.
+
+This work was completed using SciPy, NumPy, pandas, Scikit-Learn, and NLTK.
 
 .. class:: keywords
 
-   natural language processing, machine learning, okcupid
+   natural language processing, machine learning, okcupid, online dating
 
 Introduction
 ------------
@@ -41,10 +45,8 @@ when searching for a mate online.
 The original intent of this project was to analyze demographic trends in
 self-presentation in online profiles. Specifically, we were interested in
 whether demographic groups are distinct in the ways in which they present
-themselves online, such that people from different demographic groups would
-self-present in distinct ways when searching for a mate online. This project
-was initially intended to extend Nagarajan & Hearst (2009) by using a broader
-and more diverse data set and analyzing demographics beyond gender.
+themselves online, and specifically whether people from different demographic groups would
+self-present in distinct ways. We extended the previous natural language processing analyses of online dating (Nagarajan & Hearst, 2009) by combining natural language processing with machine learning on a larger scale. We leveraged multiple approaches including clustering and topic modeling, as well as feature selection and modeling strategies. By exploring the relationship between free text self-descriptions and demographics, we find that we can predict a user's demographic makeup based on their user essays, and we discover some unexpected insights into deception.
 
 Data
 ----
@@ -64,12 +66,12 @@ Processing
 
 First, we identified essays that we wanted to run analysis on. The essay text
 was cleaned by removing line break characters, urls, and stripping white
-spaces. If a user wrote less than 5 words for the given essay, s/he was removed 
+spaces. If a user wrote less than 5 words for the given essay, s/he was removed
 from the analysis. Finally, stopwords and punctuation were removed.
 
 The essay was tokenized using the happyfuntokenizer
 (http://sentiment.christopherpotts.net/tokenizing.html), which is well suited
-for online communication as it maintains emoticons as discrete tokens. Finally, 
+for online communication as it maintains emoticons as discrete tokens. Finally,
 a tfidf matrix was created with unigrams, bigrams and trigrams, dropping words
 with <0.01 document frequency.
 
@@ -98,7 +100,7 @@ case. NMF, on the other hand, because the derived latent semantic space is not
 required to be orthogonal, can find directions for related or overlapping
 topics.
 
-We applied NMF to each essay of interest using Scikit-Learn version 0.16, which 
+We applied NMF to each essay of interest using Scikit-Learn version 0.16, which
 uses the projected gradient solver [Lin07]_. NMF utilizes document frequency
 counts, so we calculated the tfidf matrix for unigrams, bigrams, and trigrams.
 We limited the tokens to those that appeared in at least 1% of the documents.
@@ -106,7 +108,7 @@ We calculated NMF with k = 25, which factorized the tfidf matrix into two
 matrices, W and H. The dimensions are n_samples x 25 and 25 x n_features for W
 and H, respectively. Group descriptions were given by top-ranked terms (the
 most distinctive) in the columns of H. Document membership weights were given
-by the rows of W. We calculated the maximum value in each row of W to determine 
+by the rows of W. We calculated the maximum value in each row of W to determine
 essay group membership. We chose to have 25 groupings somewhat arbitrarily,
 though we did try using cosine similarity measures to determine when the
 groupings were the most dissimilar.
@@ -173,13 +175,13 @@ attempt non-negative matrix factorization (NMF). We instead decided to cluster
 first and then examine the distribution of demographic information across
 clusters.
 
-After running NMF to cluster users, we ran a keyword analysis on the essays for 
+After running NMF to cluster users, we ran a keyword analysis on the essays for
 each resulting group. The keyword algorithm takes the 1000 most frequent
 unigrams and extracts hypernyms from them using WordNet. After the hypernyms
-are calculated, it uses examples of these hypernyms as seeds to find contextual 
-4-grams. It then filters the 4-grams to keep only those that occur more than 20 
+are calculated, it uses examples of these hypernyms as seeds to find contextual
+4-grams. It then filters the 4-grams to keep only those that occur more than 20
 times. While the keywords adequately summarized and described the terms in a
-given cluster, they were not sufficiently distinct between clusters because the 
+given cluster, they were not sufficiently distinct between clusters because the
 most frequent words were used across many groups. Instead we focused our next
 analyses and visualizations on words which defined differences between groups
 (that would characterize one cluster relative to the others).
@@ -187,7 +189,7 @@ analyses and visualizations on words which defined differences between groups
 Results
 -------
 
-Our first attempt at visualizing tokens that make the groupings distinctive was 
+Our first attempt at visualizing tokens that make the groupings distinctive was
 to plot a histogram of the difference in relative frequency between tokens for
 a given group versus other groups (Fig 3). This can be done between clusters
 (comparing a single cluster to all of the other clusters) or within clusters
@@ -195,7 +197,7 @@ a given group versus other groups (Fig 3). This can be done between clusters
 doesn’t penalize infrequent tokens like word clouds do, but it was more
 difficult to view the individual words.
 
-In order to determine if there were demographic differences in the distribution 
+In order to determine if there were demographic differences in the distribution
 of users across groups, we calculated the percentage of each demographic
 represented in each cluster (or NMF group), normalized by the total number of
 people in that particular demographic group. We visually examined the clusters
