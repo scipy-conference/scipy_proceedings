@@ -53,6 +53,22 @@
 :bibliography: ``mdanalysis``
 
 
+.. STYLE GUIDE
+.. ===========
+.. see https://github.com/MDAnalysis/scipy_proceedings/wiki
+.. .
+.. Writing
+..  - use present tense
+.. .
+.. Formatting
+..  - restructured text
+..  - hard line breaks after complete sentences (after period)
+..  - paragraphs: empty line (two hard line breaks)
+.. .
+.. Workflow
+..  - use PRs (keep them small and manageable)
+
+
 -------------------------------------------------------------------------------------
 MDAnalysis: A Python Package for the Rapid Analysis of Molecular Dynamics Simulations
 -------------------------------------------------------------------------------------
