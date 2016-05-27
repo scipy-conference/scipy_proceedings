@@ -1,4 +1,4 @@
-.. -*- mode: rst; fill-column: 9999; coding: utf-8 -*-
+.. -*- mode: rst; mode: visual-line; fill-column: 9999; coding: utf-8 -*-
 
 :author: Richard J. Gowers
 :email: richardjgowers@gmail.com
