@@ -502,9 +502,11 @@ finds. The purpose of this function is to automatically calculate the ignition d
 a group of experiments; after this processing, the user should create a separate ``Condition`` to
 perform any other processing (volume trace, etc.).
 
-UConnRCMPy is documented using standard Python docstrings for functions and classes. The format of
-the docstrings conforms to the NumPy docstring format so that the autodoc module can be used. The
-documentation is available on the web at http://bryanwweber.github.io/UConnRCMPy/.
+UConnRCMPy is documented using standard Python docstrings for functions and classes. The
+documentation is converted to HTML files by the Sphinx documentation generator :cite:`Brandl2016`.
+The format of the docstrings conforms to the NumPy docstring format so that the autodoc module of
+Sphinx can be used. The documentation is available on the web at
+http://bryanwweber.github.io/UConnRCMPy/.
 
 Usage Example
 -------------
