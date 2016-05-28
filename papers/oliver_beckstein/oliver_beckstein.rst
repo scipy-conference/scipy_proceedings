@@ -102,22 +102,21 @@ With simulation data commonly containing 10\ :sup:`6` particles
 this solution did not scale well and so
 recently this design was overhauled to improve the scalability of MDAnalysis.
 
-With all Atoms having the same property fields it was possible to store this information as a series of NumPy arrays,
-with a single array for each property.
-The AtomGroup can then store its contents as an array of integers
-which represent the address in the property arrays which correspond to the data for the stored Atoms.
+Because all Atoms have the same property fields (i.e. mass, position) it is possible to store this information as a single NumPy array for each property.
+Now an AtomGroup can keep track of its contents as a simple integer array,
+which can be used to slice to property arrays to yield the relevant data.
 
 Overall this approach means that the same number of Python objects are created for each Universe,
-with the data size only changing the size of the arrays.
-This translated into a much smaller memory footprint (BENCHMARK HERE)
+with the number of particles only changing the size of the arrays.
+This translates into a much smaller memory footprint (BENCHMARK HERE)
 highlighting the memory cost of millions of simple Python objects.
 
 This transformation of the data structures from an Array of Structs to a Struct of Arrays
-also better suits thet ypical access patterns within MDAnalysis.
+also better suits the typical access patterns within MDAnalysis.
 It is quite common to compare a single property across many Atoms,
 but rarely are different properties within a single Atom compared.
-Additionally, it was possible to utilise NumPy's faster indexing rather than using a list comprehension.
-Overall this meant that accessing the data from a subset of Atoms was much faster (BENCHMARK HERE)
+Additionally, it is possible to utilise NumPy's faster indexing rather than using a list comprehension.
+Overall this meant that accessing the data from a subset of Atoms is much faster than previously. (BENCHMARK HERE)
 
 
 Conclusions
