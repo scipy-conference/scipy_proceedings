@@ -172,13 +172,14 @@ The topology acts as a description of all the particles in the system while the 
 .. show loading a Universe and creating basic selections
 .. check that this selection makes chemical sense!
 .. code-block:: python
-  import MDAnalysis as mda
 
-  # Create a Universe based on simulation results
-  u = mda.Universe('topol.top', 'traj.trr')
+   import MDAnalysis as mda
 
-  # Create a selection of atoms to work with
-  ag = u.atoms.select_atoms('name CA and not resname MET LYS')
+   # Create a Universe based on simulation results
+   u = mda.Universe('topol.top', 'traj.trr')
+
+   # Create a selection of atoms to work with
+   ag = u.atoms.select_atoms('name CA and not resname MET LYS')
 
 The select_atoms method allows for AtomGroups to be created using
 a human readable syntax which
@@ -190,19 +191,20 @@ allows queries according to properties, logical statements and geometric criteri
 .. other group based (GROUP)
 .. TODO (maybe): brackets, OR, cylinder/sphere?
 .. code-block:: python
-  # Select all solvent within a set distance from protein atoms
-  ag = u.select_atoms('resname SOL and around 5.0 protein')
 
-  # Select all heavy atoms in the first 20 residues
-  ag = u.select_atoms('resid 1:20 and not prop mass < 10.0')
+   # Select all solvent within a set distance from protein atoms
+   ag = u.select_atoms('resname SOL and around 5.0 protein')
 
-  # Use a preexisting AtomGroup as part of another selection
-  sel1 = u.select_atoms('name N and not resname MET')
-  sel2 = u.select_atoms('around 2.5 group Nsel', Nsel=sel1)
+   # Select all heavy atoms in the first 20 residues
+   ag = u.select_atoms('resid 1:20 and not prop mass < 10.0')
 
-  # Perform a selection on another AtomGroup
-  sel1 = u.select_atoms('around 5.0 protein')
-  sel2 = sel1.select_atoms('type O')
+   # Use a preexisting AtomGroup as part of another selection
+   sel1 = u.select_atoms('name N and not resname MET')
+   sel2 = u.select_atoms('around 2.5 group Nsel', Nsel=sel1)
+
+   # Perform a selection on another AtomGroup
+   sel1 = u.select_atoms('around 5.0 protein')
+   sel2 = sel1.select_atoms('type O')
 
 The AtomGroup acts as a representation of a group of particles,
 with the properties of these particles made available as NumPy arrays.
@@ -211,11 +213,12 @@ with the properties of these particles made available as NumPy arrays.
 .. topology data
 .. trajectory data
 .. code-block:: python
-  ag.names
-  ag.charges
-  ag.positions
-  ag.velocities
-  ag.forces
+
+   ag.names
+   ag.charges
+   ag.positions
+   ag.velocities
+   ag.forces
 
 The data from MD simulations comes in the form of a trajectory which is a frame by frame description of the motion of particles in the simulation.
 Today trajectory data can often reach reach sizes of 10s of GB.
@@ -229,14 +232,15 @@ Through this approach only a single frame of data is present in memory at any ti
 
 .. show working with the trajectory object to access the time data
 .. code-block:: python
-  # the trajectory is an iterable object
-  len(u.trajectory)
 
-  # seek to a given frame
-  u.trajectory[72]
-  # iterate through every 10th frame
-  for ts in u.trajectory[::10]:
-      ag.positions
+   # the trajectory is an iterable object
+   len(u.trajectory)
+
+   # seek to a given frame
+   u.trajectory[72]
+   # iterate through every 10th frame
+   for ts in u.trajectory[::10]:
+       ag.positions
 
 
 Analysis Module
