@@ -165,8 +165,7 @@ Basic Usage
 -----------
 
 The core object in MDAnalysis is the Universe which acts as a nexus for accessing all data contained within the simulation.
-It is initialised by passing the filenames of the topology and trajectory files,
-with a multitude of different formats supported in these roles.
+It is initialised by passing the filenames of the topology and trajectory files, with a multitude of different formats supported in these roles.
 The topology acts as a description of all the particles in the system while the trajectory describes their behavior over time.
 
 .. show loading a Universe and creating basic selections
@@ -181,9 +180,7 @@ The topology acts as a description of all the particles in the system while the 
    # Create a selection of atoms to work with
    ag = u.atoms.select_atoms('name CA and not resname MET LYS')
 
-The select_atoms method allows for AtomGroups to be created using
-a human readable syntax which
-allows queries according to properties, logical statements and geometric criteria.
+The select_atoms method allows for AtomGroups to be created using a human readable syntax which allows queries according to properties, logical statements and geometric criteria.
 
 .. more selection examples, these include
 .. logic operations (NOT AND)
@@ -206,8 +203,7 @@ allows queries according to properties, logical statements and geometric criteri
    sel1 = u.select_atoms('around 5.0 protein')
    sel2 = sel1.select_atoms('type O')
 
-The AtomGroup acts as a representation of a group of particles,
-with the properties of these particles made available as NumPy arrays.
+The AtomGroup acts as a representation of a group of particles, with the properties of these particles made available as NumPy arrays.
 
 .. accessing data from an atomgroup
 .. topology data
