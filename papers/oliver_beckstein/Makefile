@@ -17,6 +17,7 @@ all: pdf
 pdf: $(PDF)
 
 $(PDF): $(RST) $(BIB)
+	-rm -r "$(TOPDIR)/$(OUTPUTDIR)"
 	cd $(TOPDIR) && \
 	./make_paper.sh $(PAPERDIR) && \
         ./make_paper.sh $(PAPERDIR) && \
