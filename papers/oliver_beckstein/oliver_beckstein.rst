@@ -166,8 +166,8 @@ Basic Usage
 
 The core object in MDAnalysis is the Universe which acts as a nexus for accessing all data contained within the simulation.
 It is initialised by passing the filenames of the topology and trajectory files,
-with a multitude of different formats are supported in these roles.
-The topology acts as a description of all the particles in the system while the trajectory describes their behaviour over time.
+with a multitude of different formats supported in these roles.
+The topology acts as a description of all the particles in the system while the trajectory describes their behavior over time.
 
 .. show loading a Universe and creating basic selections
 .. check that this selection makes chemical sense!
