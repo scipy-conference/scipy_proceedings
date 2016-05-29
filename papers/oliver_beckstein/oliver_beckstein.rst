@@ -156,10 +156,87 @@ When backwards-incompatible changes are inevitable, we provide tools (based on t
 
 .. _introductory tutorial: http://www.mdanalysis.org/MDAnalysisTutorial/
 .. _documentation: http://docs.mdanalysis.org
-
 .. _`MDAnalysis/mdanalysis`: https://github.com/MDAnalysis/mdanalysis
 
 .. _semantic versioning: http://semver.org
+
+
+Basic Usage
+-----------
+
+The core object in MDAnalysis is the Universe which acts as a nexus for accessing all data contained within the simulation.
+It is initialised by passing the filenames of the topology and trajectory files, with a multitude of different formats supported in these roles.
+The topology acts as a description of all the particles in the system while the trajectory describes their behavior over time.
+
+.. show loading a Universe and creating basic selections
+.. check that this selection makes chemical sense!
+.. code-block:: python
+
+   import MDAnalysis as mda
+
+   # Create a Universe based on simulation results
+   u = mda.Universe('topol.top', 'traj.trr')
+
+   # Create a selection of atoms to work with
+   ag = u.atoms.select_atoms('name CA and not resname MET LYS')
+
+The select_atoms method allows for AtomGroups to be created using a human readable syntax which allows queries according to properties, logical statements and geometric criteria.
+
+.. more selection examples, these include
+.. logic operations (NOT AND)
+.. geometry based (AROUND)
+.. other group based (GROUP)
+.. TODO (maybe): brackets, OR, cylinder/sphere?
+.. code-block:: python
+
+   # Select all solvent within a set distance from protein atoms
+   ag = u.select_atoms('resname SOL and around 5.0 protein')
+
+   # Select all heavy atoms in the first 20 residues
+   ag = u.select_atoms('resid 1:20 and not prop mass < 10.0')
+
+   # Use a preexisting AtomGroup as part of another selection
+   sel1 = u.select_atoms('name N and not resname MET')
+   sel2 = u.select_atoms('around 2.5 group Nsel', Nsel=sel1)
+
+   # Perform a selection on another AtomGroup
+   sel1 = u.select_atoms('around 5.0 protein')
+   sel2 = sel1.select_atoms('type O')
+
+The AtomGroup acts as a representation of a group of particles, with the properties of these particles made available as NumPy arrays.
+
+.. accessing data from an atomgroup
+.. topology data
+.. trajectory data
+.. code-block:: python
+
+   ag.names
+   ag.charges
+   ag.positions
+   ag.velocities
+   ag.forces
+
+The data from MD simulations comes in the form of a trajectory which is a frame by frame description of the motion of particles in the simulation.
+Today trajectory data can often reach reach sizes of 10s of GB.
+Reading this amount of data into memory is slow and impractical.
+To allow the analysis of such large simulations on an average workstation MDAnalysis will only load a single frame of a trajectory into memory at any time.
+
+The trajectory data can be accessed thought the trajectory attribute of a Universe.
+Changing the frame of the trajectory object updates the underlying arrays that AtomGroups point to.
+In this way the positions attribute of an AtomGroup within the iteration over a trajectory will give access to the positions at each frame.
+Through this approach only a single frame of data is present in memory at any time, allowing for large datasets, up to half a million particles :cite:`Ingolfsson2014`, to be dissected with minimal resources.
+
+.. show working with the trajectory object to access the time data
+.. code-block:: python
+
+   # the trajectory is an iterable object
+   len(u.trajectory)
+
+   # seek to a given frame
+   u.trajectory[72]
+   # iterate through every 10th frame
+   for ts in u.trajectory[::10]:
+       ag.positions
 
 
 Analysis Module
