@@ -110,12 +110,26 @@ Molecular dynamics (MD) simulations of biological molecules have become an impor
 Simulations are performed with highly optimized software packages on HPC resources but most codes generate output trajectories in their own formats so that the development of new trajectory analysis algorithms is confined to specific user communities and widespread adoption and further development is delayed.
 Typical trajectory sizes range from gigabytes to terabytes so it is typically not feasible to convert trajectories into a range of different formats just to use a tool that requires this specific form.
 Instead, a framework is required that provides a common interface to raw simulation data.
+The MDAnalysis library :cite:`Michaud-Agrawal:2011fu` addresses this problem by abstracting access to the raw simulation data and presenting a uniform object-oriented Python interface to the user.
+Here we report on the general philosophy of MDAnalysis, its capabilities, and recent improvements.
 
-Results
--------
 
-The MDAnalysis library :cite:`Michaud-Agrawal:2011fu` addresses this problem by abstracting access to the raw simulation data and presenting a uniform object-oriented Python interface to the user. MDAnalysis is written in Python and Cython and uses NumPy arrays for easy interoperability with the wider scientific Python ecosystem.
-It currently supports more than 25 different file formats and covers the vast majority of data formats that are used in the biomolecular simulation community, including the formats required and produced by the most popular packages NAMD, Amber, Gromacs, CHARMM, LAMMPS, DL_POLY, HOOMD.
+
+Overview
+--------
+
+MDAnalysis is written in Python and Cython and uses NumPy arrays :cite:`Vanderwalt2011` for easy interoperability with the wider scientific Python ecosystem.
+Although the primary dependency is NumPy, other Python packages such as netcdf and BioPython also provide specialized functionality to the core of the library (Figure :ref:`fig:structure`).
+
+.. figure:: figs/mdanalysis_structure.pdf
+
+   :label:`fig:structure`
+   Structure of the MDAnalysis package.
+   MDAnalysis consists of the "core" with the *Universe* class as the primary entry point for users.
+   The *MDAnalysis.analysis* package contains independent modules that make use of the core to implement a wide range of algorithms to analyze MD simulations.
+   The *MDAnalysis.visualization* package contains a growing number of tools that are specifically geared towards calculating visual representations such as, for instance, streamlines of molecules.
+
+MDAnalysis currently supports more than 25 different file formats and covers the vast majority of data formats that are used in the biomolecular simulation community, including the formats required and produced by the most popular packages NAMD, Amber, Gromacs, CHARMM, LAMMPS, DL_POLY, HOOMD.
 The user interface provides "physics-based" abstractions (e.g. "atoms", "bonds", "molecules") of the data that can be easily manipulated by the user.
 It hides the complexity of accessing data and frees the user from having to implement the details of different trajectory and topology file formats (which by themselves are often only poorly documented and just adhere to certain "community expectations" that can be difficult to understand for outsiders).
 
@@ -126,15 +140,16 @@ MDAnalysis also comes with specialized analysis classes in the MDAnalysis.analys
 MDAnalysis is available in source form under the GNU General Public License v2 from GitHub https://github.com/MDAnalysis/mdanalysis, PyPi_ and as conda_ packages.
 The documentation is extensive http://docs.mdanalysis.org and includes an introductory tutorial http://www.mdanalysis.org/MDAnalysisTutorial/.
 The develoment community is very active with more than five active core developers and many community contributions in every release.
-We use modern software development practices :cite:`Wilson:2014aa,Stodden:2014tg` with continous integration (provided by Travis CI) and an extensive automated testsuite (containing over 3500 tests with >92% coverage for our core modules).
-Development occurs on GitHub through pull requests that are reviewed by core developers and other contributors, supported by the results from the automated tests, test coverage reports provided by Coveralls, and QuantifiedCode code quality reports.
-Users and developers communicate extensively on the `community mailing list`_ (Google groups) and the GitHub issue tracker; new users and developers are very welcome.
+We use modern software development practices :cite:`Wilson:2014aa,Stodden:2014tg` with continous integration (provided by *Travis CI*) and an extensive automated testsuite (containing over 3500 tests with >92% coverage for our core modules).
+Development occurs on *GitHub* through pull requests that are reviewed by core developers and other contributors, supported by the results from the automated tests, test coverage reports provided by *Coveralls*, and *QuantifiedCode* code quality reports.
+Users and developers communicate extensively on the `community mailing list`_ (*Google* groups) and the GitHub issue tracker; new users and developers are very welcome.
 
 .. _PyPi: https://pypi.python.org/pypi/MDAnalysis
 .. _conda: https://anaconda.org/mdanalysis/dashboard
 .. _community mailing list: https://groups.google.com/forum/#!forum/mdnalysis-discussion
 .. _ENCORE: https://github.com/encore-similarity/encore
 .. _ProtoMD: https://github.com/CTCNano/proto_md
+
 
 Analysis Module
 ---------------
