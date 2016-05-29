@@ -295,9 +295,9 @@ This transformation of the data structures from an Array of Structs to a Struct 
 It is quite common to compare a single property across many Atoms, but rarely are different properties within a single Atom compared.
 Additionally, it is possible to utilise NumPy's faster indexing rather than using a list comprehension.
 This new data structure has lead to performance improvements in our whole codebase.
-The largest improvement is in accessing subsets of Atoms which is now over 40 times faster, see tab :ref:`performance-accessing-gro`.
+The largest improvement is in accessing subsets of Atoms which is now over 40 times faster, see tab :ref:`tab:performance-accessing-gro`.
 
-.. table:: Performance comparison of your new AtomGroup data structures compared with the old Atom classes. times are given in seconds, the test systems are vesicles using repeats from the `vesicle library`_. :label:`tab:performance-accessing-gro`
+.. table:: Performance comparison of your new AtomGroup data structures compared with the old Atom classes. Times are given in seconds, the test systems are vesicles using repeats from the `vesicle library`_. :label:`tab:performance-accessing-gro`
 
       +----------+----------+----------+
       | # atoms  | Old IMPL | new IMPL |
