@@ -78,10 +78,10 @@ MDAnalysis: A Python Package for the Rapid Analysis of Molecular Dynamics Simula
 MDAnalysis (http://mdanalysis.org) is an library for structural and temporal analysis of molecular dynamics (MD) simulation trajectories and individual protein structures.
 MD simulations of biological molecules have become an important tool to elucidate the relationship between molecular structure and physiological function.
 Simulations are performed with highly optimized software packages on HPC resources but most codes generate output trajectories in their own formats so that the development of new trajectory analysis algorithms is confined to specific user communities and widespread adoption and further development is delayed.
-The MDAnalysis library addresses this problem by abstracting access to the raw simulation data and presenting a uniform object-oriented Python interface to the user.
+MDAnalysis addresses this problem by abstracting access to the raw simulation data and presenting a uniform object-oriented Python interface to the user.
 It thus enables users to rapidly write code that is portable and immediately usable in virtually all biomolecular simulation communities.
 The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages, and for interactive and rapid prototyping work in IPython_  / Jupyter_ notebooks, especially together with molecular visualization provided by nglview_ and time series analysis with pandas_.
-MDAnalysis is written in Python and Cython and uses NumPy_ arrays for easy interoperability with the wider scientific Python ecosystem.
+MDAnalysis is written in Python and Cython_ and uses NumPy_ arrays for easy interoperability with the wider scientific Python ecosystem.
 It is widely used and forms the foundation for more specialized biomolecular simulation tools.
 MDAnalysis is available under the GNU General Public License v2.
 
@@ -120,7 +120,7 @@ Overview
 --------
 
 MDAnalysis is written in Python and Cython and uses NumPy arrays :cite:`Vanderwalt2011` for easy interoperability with the wider scientific Python ecosystem.
-Although the primary dependency is NumPy, other Python packages such as netcdf4 (http://unidata.github.io/netcdf4-python/) and BioPython :cite:`Hamelryck:2003fv` also provide specialized functionality to the core of the library (Figure :ref:`fig:structure`).
+Although the primary dependency is NumPy, other Python packages such as netcdf4_  and BioPython_ :cite:`Hamelryck:2003fv` also provide specialized functionality to the core of the library (Figure :ref:`fig:structure`).
 
 .. figure:: figs/mdanalysis_structure.pdf
 
@@ -154,13 +154,12 @@ When backwards-incompatible changes are inevitable, we provide tools (based on t
 .. _community mailing list: https://groups.google.com/forum/#!forum/mdnalysis-discussion
 .. _ENCORE: https://github.com/encore-similarity/encore
 .. _ProtoMD: https://github.com/CTCNano/proto_md
-
 .. _introductory tutorial: http://www.mdanalysis.org/MDAnalysisTutorial/
 .. _documentation: http://docs.mdanalysis.org
 .. _`MDAnalysis/mdanalysis`: https://github.com/MDAnalysis/mdanalysis
-
 .. _semantic versioning: http://semver.org
-
+.. _netcdf4: http://unidata.github.io/netcdf4-python/
+.. _BioPython: http://biopython.org/wiki/Biopython
 
 Basic Usage
 -----------
