@@ -242,24 +242,25 @@ Through this approach only a single frame of data is present in memory at any ti
 Analysis Module
 ---------------
 
-In the MDAnalysis.analysis module we provide a large variety of standard analysis algorithms, like RMSD, alignment :cite:`PuLiu_FastRMSD_2010`, native contacts :cite:`Best2013,Franklin2007`, as well as unique algorithms, like the LeaftleftFinder :cite:`Michaud-Agrawal:2011fu` and Path Similarity Analysis :cite:`Seyler:2015fk`.
-Historically these algorithms were contributed by various researchers as individual moduldes to satisfy their own needs but this lead to some fragmentation in the user interface of these modules.
+In the MDAnalysis.analysis module we provide a large variety of standard analysis algorithms, like RMSD, alignment :cite:`PuLiu_FastRMSD_2010`, native contacts :cite:`Best2013,Franklin2007`, as well as unique algorithms, like LeaftleftFinder :cite:`Michaud-Agrawal:2011fu` and Path Similarity Analysis :cite:`Seyler:2015fk`.
+Historically these algorithms were contributed by various researchers as individual modules to satisfy their own needs but this lead to some fragmentation in the user interface of these modules.
 We have recently started to unify the interface to the different algorithms with an `AnalysisBase` class.
 Currently PersistenceLength, InterRDF, LinearDensity and Contacts analysis have been ported.
-PersistenceLength calculates the persistence length of a polymer, InterRDF calculates the pairwise radial distribution function inside of a molecule, LinearDensity generates a density along a given exis and Contacts analysis native contacts, as desribed in more detail below.
+PersistenceLength calculates the persistence length of a polymer, InterRDF calculates the pairwise radial distribution function inside of a molecule, LinearDensity generates a density along a given axis and Contacts analysis native contacts, as desribed in more detail below.
 If applicable we also strive to make the API's to the algorithms generic.
 Most other tools hand the user analysis algorithms as black boxes.
-We want to avoid that and give the users all he needs to adapt an analysis to his/her needs.
+We want to avoid that and allow the user to adapt an analysis to his/her needs.
 
-The new Contacts class is a good example a generic API that allows easy adaptations of algorithms while still offering an easy setup for standard analysis types.
+The new Contacts class is a good example of a generic API that allows easy adaptations of algorithms while still offering an intuitive interface for the standard analysis.
 The Contacts class is calculating a contact map for atoms in a frame and compares it with a reference map using different metrics.
-The used metric then decides which quantity is measued.
-A common quantity of interest is the fraction of native contacts, native contacts are all atoms that are nearby in the reference.
-For native contacts there exists two metrics :cite:`Best2013,Franklin2007` and we default to the later.
+The used metric then decides which quantity is measured.
+A common quantity is the fraction of native contacts, native contacts are all atompairs that are close to each other in a reference frame.
+The fraction of native contacts is often used in protein folding to determine when a protein is folded.
+For the fraction of native contacts there exists two metrics :cite:`Best2013` and :cite:`Franklin2007`, we default to the later.
 We have designed the API to choose between the two metrics and pass user defined functions to develop new metrics or measure other quantities.
 This generic interface allowed us to implement a q1q2 analysis :cite:`Franklin2007` on top of the Contacts class.
-Below is incomplete code example that shows how to implement a q1q2 analysis, the default value for the *method* kwarg is overwriten with a user defined method *radius_cut_q*.
-A more detailed explanatain can be found in the docs.
+Below is incomplete code example that shows how to implement a q1q2 analysis, the default value for the *method* kwarg is overwritten with a user defined method *radius_cut_q*.
+A more detailed explanation can be found in the docs.
 
 .. code-block:: python
 
@@ -268,9 +269,11 @@ A more detailed explanatain can be found in the docs.
        return y.sum() / r.size
 
    contacts = Contacts(u, selection,
-                       (first_frame_refs, last_frame_refs),
-                       radius=radius, method=radius_cut_q,
-                       start=start, stop=stop, step=step,
+                       (first_frame, last_frame),
+                       radius=radius,
+                       method=radius_cut_q,
+                       start=start, stop=stop,
+                       step=step,
                        kwargs={'radius': radius})
 
 This type of flexible analysis algorithms paired with a collection of base classes allow quick and easy analysis of simulations as well as development of new algorithms.
