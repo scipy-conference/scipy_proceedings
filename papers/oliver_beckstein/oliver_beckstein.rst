@@ -119,15 +119,14 @@ Overview
 --------
 
 MDAnalysis is written in Python and Cython and uses NumPy arrays :cite:`Vanderwalt2011` for easy interoperability with the wider scientific Python ecosystem.
-Although the primary dependency is NumPy, other Python packages such as netcdf and BioPython also provide specialized functionality to the core of the library (Figure :ref:`fig:structure`).
+Although the primary dependency is NumPy, other Python packages such as netcdf4 (http://unidata.github.io/netcdf4-python/) and BioPython :cite:`Hamelryck:2003fv` also provide specialized functionality to the core of the library (Figure :ref:`fig:structure`).
 
 .. figure:: figs/mdanalysis_structure.pdf
 
-   :label:`fig:structure`
    Structure of the MDAnalysis package.
    MDAnalysis consists of the "core" with the *Universe* class as the primary entry point for users.
    The *MDAnalysis.analysis* package contains independent modules that make use of the core to implement a wide range of algorithms to analyze MD simulations.
-   The *MDAnalysis.visualization* package contains a growing number of tools that are specifically geared towards calculating visual representations such as, for instance, streamlines of molecules.
+   The *MDAnalysis.visualization* package contains a growing number of tools that are specifically geared towards calculating visual representations such as, for instance, streamlines of molecules. :label:`fig:structure`
 
 MDAnalysis currently supports more than 25 different file formats and covers the vast majority of data formats that are used in the biomolecular simulation community, including the formats required and produced by the most popular packages NAMD, Amber, Gromacs, CHARMM, LAMMPS, DL_POLY, HOOMD.
 The user interface provides "physics-based" abstractions (e.g. "atoms", "bonds", "molecules") of the data that can be easily manipulated by the user.
