@@ -182,6 +182,11 @@ MDAnalysis is widely used (the original paper :cite:`Michaud-Agrawal:2011fu` has
 Ongoing and future developments will improve performance further, introduce transparent parallelisation schemes to utilize multi-core systems efficiently, and interface with the `SPIDAL library`_ for high performance data analytics algorithms.
 
 
+Acknowledgements
+----------------
+
+This work was in part supported by grant ACI-1443054 from the National Science Foundation.
+
 
 References
 ----------
