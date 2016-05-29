@@ -119,8 +119,8 @@ Here we report on the general philosophy of MDAnalysis, its capabilities, and re
 Overview
 --------
 
-MDAnalysis is written in Python and Cython and uses NumPy arrays :cite:`Vanderwalt2011` for easy interoperability with the wider scientific Python ecosystem.
-Although the primary dependency is NumPy, other Python packages such as netcdf4_  and BioPython_ :cite:`Hamelryck:2003fv` also provide specialized functionality to the core of the library (Figure :ref:`fig:structure`).
+MDAnalysis is written in Python and Cython_ and uses NumPy_ arrays :cite:`Vanderwalt2011` for easy interoperability with the wider scientific Python ecosystem.
+Although the primary dependency is NumPy_, other Python packages such as netcdf4_  and BioPython_ :cite:`Hamelryck:2003fv` also provide specialized functionality to the core of the library (Figure :ref:`fig:structure`).
 
 .. figure:: figs/mdanalysis_structure.pdf
 
@@ -135,7 +135,7 @@ It hides the complexity of accessing data and frees the user from having to impl
 
 The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages like ENCORE_ :cite:`Tiberti:2015fk` and ProtoMD_ :cite:`Somogyi:2016aa`, and for interactive and rapid prototyping work in IPython_ :cite:`Perez2007` / Jupyter_ notebooks, especially together with molecular visualization provided by nglview_ and time series analysis with pandas_ :cite:`McKinney2010`.
 Since the original publication :cite:`Michaud-Agrawal:2011fu`, improvements in speed and data structures make it now possible to work with terabyte-sized trajectories containing up to ~10 million particles.
-MDAnalysis also comes with specialized analysis classes in the MDAnalysis.analysis module that are unique to MDAnalysis such as the LeafletFinder graph-based algorithm for the analysis of lipid bilayers :cite:`Michaud-Agrawal:2011fu` or the Path Similarity Analysis for the quantitative comparison of macromolecular conformational changes :cite:`Seyler:2015fk`.
+MDAnalysis also comes with specialized analysis classes in the MDAnalysis.analysis module that are unique to MDAnalysis such as LeafletFinder a graph-based algorithm for the analysis of lipid bilayers :cite:`Michaud-Agrawal:2011fu` or Path Similarity Analysis for the quantitative comparison of macromolecular conformational changes :cite:`Seyler:2015fk`.
 
 MDAnalysis is available in source form under the GNU General Public License v2 from GitHub as `MDAnalysis/mdanalysis`_, and as PyPi_ and conda_ packages.
 The documentation_ is extensive and includes an `introductory tutorial`_.
