@@ -211,7 +211,7 @@ Ongoing and future developments will improve performance further, introduce tran
 Acknowledgements
 ----------------
 
-This work was in part supported by grant ACI-1443054 from the National Science Foundation.
+OB was supported in part by grant ACI-1443054 from the National Science Foundation.
 
 
 References
