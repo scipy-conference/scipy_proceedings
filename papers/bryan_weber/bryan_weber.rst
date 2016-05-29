@@ -33,30 +33,32 @@ UConnRCMPy: Python-based data analysis for Rapid Compression Machines
 Introduction
 ------------
 
-The world relies heavily on combustion to provide energy in useful forms for human consumption; in
-particular, the transportation sector accounts for nearly 30% of the energy use in the United States
-and of that, more than 90% is supplied by combustion of fossil fuels :cite:`MER2016`. Unfortunately,
-emissions from the combustion of traditional fossil fuels have been implicated in a host of
-deleterious effects on human health and the environment :cite:`Avakian2002` and fluctuations in the
-price of fossil fuels can have a negative impact on the economy :cite:`Owen2010`.
+The world relies heavily on combustion to provide energy in useful and clean forms for human
+consumption; in particular, the transportation sector accounts for nearly 30% of the energy use in
+the United States and of that, more than 90% is supplied by combustion of fossil fuels
+:cite:`MER2016`. Unfortunately, emissions from the combustion of traditional fossil fuels have been
+implicated in a host of deleterious effects on human health and the environment :cite:`Avakian2002`
+and fluctuations in the price of fossil fuels can have a negative impact on the economy
+:cite:`Owen2010`.
 
 Two methods are being considered to reduce the impact of fossil fuel combustion in transportation on
 the environment and the economy, namely: 1) development of new fuel sources and 2) development of
 new engine technologies.
 
-Unfortunately, it is not straightforward to combine new fuels with newly designed engines. For
-instance, the design process of a new engine may become circular: the "best" alternative fuel should
-be tested in the "best" engine, but the "best" engine depends on which is selected as the "best"
-alternative fuel. One way to short circuit this process is by employing computer-aided design and
-modeling of new engines with new fuels to design engines to be able to utilize several fuels. The
-key to this process is the development of accurate and predictive combustion models.
+The challenge for engineers is that it is not straightforward to combine new fuels with newly
+designed engines. For instance, the design process of a new engine may become circular: the "best"
+alternative fuel should be tested in the "best" engine, but the "best" engine depends on which is
+selected as the "best" alternative fuel. One way to short circuit this process is by employing
+computer-aided design and modeling of new engines with new fuels to develop advanced engines to be
+able to utilize multiple conventional and alternative fuels. The key to this process is the
+development of accurate and predictive combustion models.
 
-These models of combustion are typically descriptions of the chemical kinetic pathways the fuel and
-oxidizer undergo as they break down into carbon dioxide and water. There may be as many as several
-tens of thousands of pathways in the model for combustion of a particular fuel, with each pathway
-requiring several parameters to describe its rate. Therefore, it is important to thoroughly validate
-the operation of the model by comparison to experimental data collected over a wide range of
-conditions.
+These models of combustion are typically descriptions of the chemical kinetic pathways the
+hydrocarbon fuel and oxidizer undergo as they break down into carbon dioxide and water. There may be
+as many as several tens of thousands of pathways in the model for combustion of a particular fuel,
+with each pathway requiring several parameters to describe its rate. Therefore, it is important to
+thoroughly validate the operation of the model by comparison to experimental data collected over a
+wide range of conditions.
 
 One type of data that is particularly relevant for transportation applications is the ignition
 delay. The ignition delay is a global combustion property depending on the interaction of many of
@@ -71,9 +73,10 @@ pressure trace is then processed to extract the ignition delay.
 
 In this work, the design and operation of a software package to process the pressure data collected
 from RCMs is described. This package, called UConnRCMPy :cite:`uconnrcmpy`, is designed to enable
-reproducible analysis of the data acquired from the RCM at the University of Connecticut. Despite
-the initial focus on data from the UConn RCM, the package is designed to be extensible so that it
-can be used for data in different formats while providing a consistent interface to the user.
+reproducible analysis of the data acquired from the RCM at the University of Connecticut (UConn).
+Despite the initial focus on data from the UConn RCM, the package is designed to be extensible so
+that it can be used for data in different formats while providing a consistent interface to the
+user.
 
 First, this paper will introduce the fundamentals of RCM operation and data processing. Then, the
 implementation of UConnRCMPy will be described, including the use of many packages from the
@@ -125,7 +128,11 @@ from 5 ms to 100 ms.
 .. figure:: figures/raw-voltage.png
 
     Raw voltage trace and the voltage trace after filtering and smoothing from a typical RCM
-    experiment. :label:`raw-voltage`
+    experiment. Note that the voltage in the figure varies from 0 V to 1 V because the scale factor
+    is 100 bar/V and the maximum pressure for this case is near 100 bar. (a): Close up of the time
+    around the EOC, demonstrating the fidelity of the smoothed and filtered signal with the original
+    signal. (b): Close up of the time before the start of compression, demonstrating the offset of
+    the initial voltage slightly below 0 V. :label:`raw-voltage`
 
 Figure :ref:`raw-voltage` shows a typical voltage trace measured from the RCM at UConn. Several
 features are apparent from this figure. First, the compression stroke takes approximately 30 ms to
@@ -134,8 +141,8 @@ of the EOC will be discussed in due course). Approximately 50% of the pressure r
 last 5 ms of compression. Second, there is a slow pressure decrease after the EOC due to heat
 transfer from the reactants to the relatively colder chamber walls. Third, after some delay period
 there is a spike in the pressure corresponding to rapid heat release due to combustion. Finally, the
-signal is somewhat noisy, and the measured initial voltage may be offset from the nominal 0 V by a
-few millivolts.
+signal can be somewhat noisy, and the measured initial voltage may be offset from the nominal 0 V by
+a few millivolts.
 
 Filtering and Smoothing
 =======================
@@ -152,8 +159,8 @@ signal-to-noise ratio are currently being investigated.
 
 .. figure:: figures/frequency.png
 
-    Power spectral density of the original, filtered, and filtered and smoothed signal, showing
-    the peaks of noise above 10 kHz. :label:`frequency`
+    Power spectral density profiles of the original, filtered, and filtered and smoothed signals,
+    showing the peaks of noise above 10 kHz. :label:`frequency`
 
 After filtering, the signal is smoothed by a moving average filter with a width of 21 points. It is
 desired that the signal remain the same length through this operation, but the convolution operation
@@ -170,17 +177,17 @@ In general, the voltage trace can be converted to a pressure trace by
 .. math::
     :label: pressure-trace
 
-    P(t) = \overline{V}(t) + F \cdot P_0
+    P(t) = F \cdot \overline{V}(t) + P_0
 
 where :math:`\overline{V}(t)` is the filtered and smoothed voltage trace and :math:`F` is the scale
-factor from the charge amplifier. However, as can be seen in Fig. :ref:`raw-voltage` there is a
+factor from the charge amplifier. However, as can be seen in Fig. :ref:`raw-voltage`\ b there is a
 small offset in the initial voltage relative to the nominal value of 0 V. To correct for this
 offset, it can be subtracted from the voltage trace
 
 .. math::
     :label: corrected-pressure-trace
 
-    P(t) = \left[\overline{V}(t) - \overline{V}(0)\right] + F \cdot P_0
+    P(t) = F \cdot \left[\overline{V}(t) - \overline{V}(0)\right] + P_0
 
 where :math:`\overline{V}(0)` is the initial voltage of the filtered and smoothed signal. The result
 is a vector of pressure values that must be further processed to determine the time of the EOC and
@@ -197,18 +204,18 @@ As the signal is noisy, even after smoothing, the derivative will tend to increa
 signal :cite:`Chapra2010` leading to difficulty in specifying the correct zero crossing. On the
 other hand, finding the maximum of the pressure in the time prior to ignition is not straightforward
 either. In general, the pressure after ignition has occurred will be higher than the pressure at the
-EOC and the width of the ignition peak is unknown. However, we can take advantage of the fact
-that there is some pressure drop after the EOC to eliminate the ignition from consideration.
+EOC. However, we can take advantage of the fact that there is some pressure drop after the EOC to
+eliminate the ignition from consideration.
 
 In the current version of UConnRCMPy :cite:`uconnrcmpy`, this is done by searching backwards in time
-from the maximum pressure in the pressure trace (typically, the global maximum pressure is after
-ignition has occurred) until a minimum in the pressure is reached. Since the precise time of the
-minimum is not important for this method, the search is done by comparing the pressure at a given
-index :math:`i` to the pressure at point :math:`i-50`, starting with the index of the global maximum
+from the global maximum pressure in the pressure trace (typically, the global maximum pressure due
+to ignition) until a minimum in the pressure is reached. Since the precise time of the minimum is
+not important for this method, the search is done by comparing the pressure at a given index
+:math:`i` to the pressure at point :math:`i-50`, starting with the index of the global maximum
 pressure. The comparison is not made to the adjacent point to avoid the influence of noise. If
 :math:`P(i) \geq P(i-50)`, the index is decremented and the process is repeated until :math:`P(i) <
-P(i-50)`. This value of :math:`i` is approximately the minimum of pressure prior to ignition, so the
-maximum of the pressure in points to the left of the minimum will be the EOC.
+P(i-50)`. This value of :math:`i` is approximately at the minimum of pressure prior to ignition, so
+the maximum of the pressure in points to the left of the minimum will be the EOC.
 
 This method is generally robust, but it fails when there is no minimum in the pressure between the
 EOC and ignition, or the minimum pressure is very close to the EOC pressure. This may be the case
@@ -234,12 +241,12 @@ average window was chosen empirically.
 
 For some conditions, the reactants may undergo two distinct stages of ignition. These cases can be
 distinguished by a pair of peaks in the first time derivative of the pressure. For some two-stage
-ignition cases, the pressure rise (and consequently the peak in the derivative) are relatively weak,
-making it hard to distinguish the peak due to ignition from the background noise. This is currently
-the the area requiring the most manual intervention, and one area where significant improvements
-can be made by improving the differentiation and filtering/smoothing algorithms. An experiment that
-shows two clear peaks in the derivative is shown in Fig. :ref:`ign-delay-def` to demonstrate the
-definition of the ignition delays.
+ignition cases, the first-stage pressure rise (and consequently the peak in the derivative) are
+relatively weak, making it hard to distinguish the peak due to ignition from the background noise.
+This is currently the area requiring the most manual intervention, and one area where significant
+improvements can be made by refining the differentiation and filtering/smoothing algorithms. An
+experiment that shows two clear peaks in the derivative is shown in Fig. :ref:`ign-delay-def` to
+demonstrate the definition of the ignition delays.
 
 .. figure:: figures/ign-delay-def.png
 
@@ -282,10 +289,10 @@ composition) of the ``Solution`` in a ``Reservoir`` is fixed.
 
 Integrating Eq. :ref:`first-law` requires knowledge of the volume of the reaction chamber as a
 function of time. To calculate the volume as a function of time, it is assumed that there is a core
-of gas in the reaction chamber that undergoes an isentropic compression and the effects of the
-boundary layer can be ignored :cite:`Lee1998`. Furthermore, it is assumed that there is negligible
-reactant consumption during the compression stroke. Then, a Cantera ``Solution`` object is
-initialized at the initial temperature, pressure, and composition of the reaction chamber.
+of gas in the reaction chamber that undergoes an isentropic compression :cite:`Lee1998`.
+Furthermore, it is assumed that there is negligible reactant consumption during the compression
+stroke. Then, a Cantera ``Solution`` object is initialized at the initial temperature, pressure, and
+composition of the reaction chamber.
 
 After initialization the initial mass-specific entropy (|s0|) and density (|rho0|) are recorded. The
 initial volume is arbitrarily taken to be :math:`V_0=1.0\,\text{m}^3`. The initial volume used in
@@ -346,7 +353,7 @@ As can be seen in Fig. :ref:`ign-delay-def`, the pressure decreases after the EO
 transfer from the higher temperature reactants to the reaction chamber walls. This process is
 specific to the machine that carried out the experiments, and to the conditions under which the
 experiment was conducted. Therefore, the rate of pressure decrease should be modeled and included
-in simulations that compare predicted ignition delay to the experimental values.
+in simulations that compare predicted ignition delays to the experimental values.
 
 To conduct this modeling, a non-reactive experiment is conducted, where |O2| in the oxidizer is
 replaced with |N2| to maintain a similar specific heat ratio but suppress the oxidation reactions
@@ -356,20 +363,18 @@ adiabatic, constant composition compression. Furthermore, the non-reactive press
 matches the reactive pressure trace after the EOC until exothermic reactions cause the pressure in
 the reactive experiment to begin to increase.
 
-For consistency, the ignition delay in a reactive simulation should be defined in the same manner as
-in the reactive experiments, as the maxima of the time derivative of the pressure trace. If the
-simulated reactive pressure is forced to follow the experimental non-reactive pressure (to account
-for the machine specific effects), there will never be a maximum in the derivative of the pressure
-due to ignition. To avoid this pitfall, the reaction chamber is modeled as undergoing an adiabatic
-expansion that gives the equivalent pressure drop, although the reaction chamber is not actually
-adiabatic.
-
-Since the post compression time is modeled as an isentropic expansion, the same procedure is used as
-in the computation of |TC| to compute a volume trace for the post-EOC time. The only difference is
-that the non-reactive pressure trace is used after the EOC instead of the reactive pressure trace.
-Once the volume trace is generated, it can be applied to a simulation by concatenating the volume
-trace of the compression stroke and the post-EOC volume trace together and following the procedure
-outlined previously.
+To apply the effect of the post-compression heat loss into the simulations, the reaction chamber is
+modeled as undergoing an adiabatic volume expansion. Since the post compression time is modeled as
+an isentropic expansion, the same procedure is used as in the computation of |TC| to compute a
+volume trace for the post-EOC time. The only difference is that the non-reactive pressure trace is
+used after the EOC instead of the reactive pressure trace. Once the volume trace is generated, it
+can be applied to a simulation by concatenating the volume trace of the compression stroke and the
+post-EOC volume trace together and following the procedure outlined previously. For consistency, the
+ignition delay in a reactive simulation is defined in the same manner as in the reactive
+experiments, as the maxima of the time derivative of the pressure trace. This procedure has been
+validated experimentally by measuring the temperature in the reaction chamber during and after the
+compression stroke. The temperature of the reactants was found to be within :math:`\pm`\ 5 K of the
+simulated temperature :cite:`Das2012a,Uddi2012`.
 
 Implementation of UConnRCMPy
 ----------------------------
@@ -385,13 +390,11 @@ a ``VoltageTrace`` in the ``__init__`` method and processes it into a pressure t
 multiplication factor and the initial pressure. This class also contains methods to compute the
 derivative of the experimental pressure trace, as discussed previously.
 
-All of the information about a particular experiment is stored in the ``Experiment`` class. This
-class is the main unit of information stored in UConnRCMPy (although it is not necessarily intended
-to be used by end-users). When initialized, the ``Experiment`` expects an instance of the
-``pathlib.Path`` class; if none is provided, it prompts the user to enter a file name that is
-expected to be in the current working directory. Then a ``VoltageTrace`` is created, followed by an
-``ExperimentalPressureTrace``. The pressure trace from the latter is processed to extract the
-ignition delay(s).
+All of the information about a particular experiment is stored in the ``Experiment`` class. When
+initialized, the ``Experiment`` expects an instance of the ``pathlib.Path`` class; if none is
+provided, it prompts the user to enter a file name that is expected to be in the current working
+directory. Then a ``VoltageTrace`` is created, followed by an ``ExperimentalPressureTrace``. The
+pressure trace from the latter is processed to extract the ignition delay(s).
 
 The main user interface to UConnRCMPy is through the ``Condition`` class, the highest level of data
 representation. The intended use of this class is in an interactive Python interpreter (the author
@@ -425,18 +428,18 @@ method and UConnRCMPy automatically determines whether the experiment is reactiv
 Adding a non-reactive experiment creates a figure comparing the pressure trace of the non-reactive
 experiment with the reference reactive experiment.
 
-When the user is satisfied with the agreement of the reactive and non-reactive traces, the creation
-of the volume trace is triggered by running the ``create_volume_trace`` method of the ``Condition``.
-This function goes through the process of converting the reactive pressure trace (before the EOC)
-and the non-reactive pressure trace (after the EOC) to a volume trace. The actual computation of the
-volume trace (as described previously) is done by the ``VolumeFromPressure`` class. This class
-expects a pressure trace, initial temperature, and initial volume. First, the volume trace of the
-reactive (pre-EOC) portion is generated using the pre-EOC pressure trace, the experimental initial
-temperature, and an initial volume of :math:`V_0 = 1.0`, as discussed previously.A temperature
-trace is also constructed for the pre-EOC pressure trace using the ``TemperatureFromPressure``
-class. The last value of this temperature trace provides an estimate for |TC|; although this value
-is not the reported value, it typically differs by :math:`\pm`\ 2 K from the reported value due to
-slight differences in the choice of the compression time (see below).
+When the user is satisfied with the agreement of the reactive and non-reactive pressure traces, the
+creation of the volume trace is triggered by running the ``create_volume_trace`` method of the
+``Condition``. This function goes through the process of converting the reactive pressure trace
+(before the EOC) and the non-reactive pressure trace (after the EOC) to a volume trace. The actual
+computation of the volume trace (as described previously) is done by the ``VolumeFromPressure``
+class. This class expects a pressure trace, initial temperature, and initial volume. First, the
+volume trace of the reactive (pre-EOC) portion is generated using the pre-EOC pressure trace, the
+experimental initial temperature, and an initial volume of :math:`V_0 = 1.0\,\text{m}^3`, as discussed
+previously.A temperature trace is also constructed for the pre-EOC pressure trace using the
+``TemperatureFromPressure`` class. The last value of this temperature trace provides an estimate for
+|TC|; although this value is not the reported value, it typically differs by :math:`\pm`\ 2 K from
+the reported value due to slight differences in the choice of the compression time (see below).
 
 For the non-reactive (post-EOC) volume trace, the initial temperature is estimated as the final
 value of the temperature trace constructed for the pre-EOC period. Furthermore, the initial volume
@@ -445,12 +448,15 @@ trace, so that although there may be small mismatches in |PC|, the volume trace 
 
 After generation, ``create_volume_trace`` writes the volume trace out to a CSV file so that the
 volume trace can be used in other software. The reactive pressure trace is also written to a
-tab-separated file. Before writing, the volume and pressure trace are both downsampled by a factor
+tab-separated file. Before writing, the volume and pressure traces are both downsampled by a factor
 of 5. This reduces the computational time of a simulation and does not have any effect on the
 simulated results. ``create_volume_trace`` also generates a figure that plots the complete reactive
 pressure trace, a non-reactive pressure trace generated from the volume trace using the
 ``PressureFromVolume`` class, and a linear fit to the constant pressure period prior to the start of
-compression. This linear fit aids in determining a suitable compression time.
+compression. This linear fit aids in determining a suitable compression time. Finally, the value of
+the pressure at the beginning of compression is put on the system clipboard to be pasted into a
+spreadsheet to record the |P0| used for simulations. This may differ slightly from the |P0| read
+from the static transducer due to noise in the signal.
 
 The ``create_volume_trace`` function relies on a YAML file located in the current working directory
 called ``volume-trace.yaml``. This file must contain several parameters necessary to reproduce the
@@ -486,19 +492,29 @@ As the simulation runs, the solution time, temperature, pressure, and simulated 
 to lists that are converted to NumPy arrays :cite:`vanderWalt2011` when the simulation finishes.
 Once the simulation finishes, the derivative is computed using second order Lagrange polynomials, as
 suggested by Chapra and Canale :cite:`Chapra2010` because the time step is not constant in the
-simulation. Finally, |TC| and the ignition delay (if a reactive simulation was run) are sent to the
-system clipboard to be pasted into a spreadsheet.
+simulation. Finally, |TC| and the overall ignition delay (if a reactive simulation was run) are sent
+to the system clipboard to be pasted into a spreadsheet. The first stage ignition delay must be
+found manually because determining peaks in the derivative is currently unreliable, as mentioned
+previously for experiments.
 
 The ``compare_to_sim`` method also plots the experimental pressure trace and any of the simulated
 pressure traces that have been generated. If the simulated reactive pressure trace is generated,
 the time derivative of the pressure is also plotted, where the derivative is scaled by the maximum
 pressure in the reactive simulation.
 
+.. figure:: figures/flowchart.png
+
+    Flowchart of information in UConnRCMPy. :label:`flowchart`
+
+The general flow of the user interaction with UConnRCMPy is shown in Fig. :ref:`flowchart`. The
+Inputs are required input from the user, while the User Interface are classes and functions called
+by the user during processing.
+
 UConnRCMPy also offers a convenience function that processes a folder of experimental data files.
 This function, called ``process_folder``, takes two arguments, the ``Path`` to process and a
 boolean determining whether plots should be drawn. This function skips the machinery of a
 ``Condition`` instance, instead directly creating ``Experiment`` instances for each data file it
-finds. The purpose of this function is to automatically calculate the ignition delay and |PC| for
+finds. The purpose of this function is to automatically calculate the ignition delays and |PC| for
 a group of experiments; after this processing, the user should create a separate ``Condition`` to
 perform any other processing (volume trace, etc.).
 
@@ -606,7 +622,9 @@ approximately :math:`t = -0.033\,\text{s}`, giving a compression time of 33 ms.
 
     Comparison of the reactive pressure trace, the pressure trace output to the text file, the
     pressure trace computed from the volume trace, and the linear fit to the initial pressure
-    demonstrating the choice of compression time. :label:`pressure-comparison`
+    demonstrating the choice of compression time. The green line for Output Pressure follows the red
+    line for Computed Pressure exactly, as expected, and so is not shown.
+    :label:`pressure-comparison`
 
 The final step is to run the simulations to calculate |TC| and the simulated ignition delay. This is
 done through the ``compare_to_sim`` function, which places the calculated values of |TC| and the
@@ -667,8 +685,8 @@ Conclusions and Future Work
 UConnRCMPy provides a framework to enable consistent analysis of RCM data. Because it is open source
 and extensible, UConnRCMPy can help to ensure that RCM data in the community can be analyzed in a
 reproducible manner; in addition, it can be easily modified and used for data in any format. In this
-sense, UConnRCMPy can be used more generally to process any experiments where the ignition delay is
-the primary output. Future plans for UConnRCMPy include the development of a robust test suite to
+sense, UConnRCMPy can be used more generally to process any RCM experiments where the ignition delay
+is the primary output. Future plans for UConnRCMPy include the development of a robust test suite to
 prevent regressions and document correct usage of the framework, as well as the development of a
 method to determine the optimal cutoff frequency in the filtering algorithm.
 
