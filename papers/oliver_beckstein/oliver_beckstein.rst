@@ -178,7 +178,7 @@ The topology acts as a description of all the particles in the system while the 
   u = mda.Universe('topol.top', 'traj.trr')
 
   # Create a selection of atoms to work with
-  ag = u.atoms.select_atoms('name Ca and not resname MET LYS')
+  ag = u.atoms.select_atoms('name CA and not resname MET LYS')
 
 The select_atoms method allows for AtomGroups to be created using
 a human readable syntax which
@@ -194,7 +194,7 @@ allows queries according to properties, logical statements and geometric criteri
   ag = u.select_atoms('resname SOL and around 5.0 protein')
 
   # Select all heavy atoms in the first 20 residues
-  ag = u.select_atoms('resid 1:20 not prop mass < 10.0')
+  ag = u.select_atoms('resid 1:20 and not prop mass < 10.0')
 
   # Use a preexisting AtomGroup as part of another selection
   sel1 = u.select_atoms('name N and not resname MET')
