@@ -203,26 +203,46 @@ New data Structures
 
 Originally MDAnalysis followed a strict object oriented approach with a separate instance of an Atom object for each particle in the simulation data.
 The AtomGroup then simply stored its contents as a list of these Atom instances.
-With simulation data commonly containing 10\ :sup:`6` particles
-this solution did not scale well and so
-recently this design was overhauled to improve the scalability of MDAnalysis.
+With simulation data commonly containing 10\ :sup:`6` particles this solution did not scale well and so recently this design was overhauled to improve the scalability of MDAnalysis.
 
 Because all Atoms have the same property fields (i.e. mass, position) it is possible to store this information as a single NumPy array for each property.
-Now an AtomGroup can keep track of its contents as a simple integer array,
-which can be used to slice to property arrays to yield the relevant data.
+Now an AtomGroup can keep track of its contents as a simple integer array, which can be used to slice to property arrays to yield the relevant data.
 
-Overall this approach means that the same number of Python objects are created for each Universe,
-with the number of particles only changing the size of the arrays.
-This translates into a much smaller memory footprint (BENCHMARK HERE)
-highlighting the memory cost of millions of simple Python objects.
+Overall this approach means that the same number of Python objects are created for each Universe, with the number of particles only changing the size of the arrays.
+This translates into a much smaller memory footprint (BENCHMARK HERE) highlighting the memory cost of millions of simple Python objects.
 
-This transformation of the data structures from an Array of Structs to a Struct of Arrays
-also better suits the typical access patterns within MDAnalysis.
-It is quite common to compare a single property across many Atoms,
-but rarely are different properties within a single Atom compared.
+This transformation of the data structures from an Array of Structs to a Struct of Arrays also better suits the typical access patterns within MDAnalysis.
+It is quite common to compare a single property across many Atoms, but rarely are different properties within a single Atom compared.
 Additionally, it is possible to utilise NumPy's faster indexing rather than using a list comprehension.
-Overall this meant that accessing the data from a subset of Atoms is much faster than previously. (BENCHMARK HERE)
+This new data structure has lead to performance improvements in our whole codebase.
+The largest improvement is in accessing subsets of Atoms which is now over 40 times faster, see tab :ref:`performance-accessing-gro`.
 
+.. table:: Performance comparison of your new AtomGroup data structures compared with the old Atom classes. times are given in seconds, the test systems are vesicles using repeats from the `vesicle library`_. :label:`tab:performance-accessing-gro`
+
+      +----------+----------+----------+
+      | # atoms  | Old IMPL | new IMPL |
+      +==========+==========+==========+
+      | 1.5 M    | 0.018    | 0.0005   |
+      +----------+----------+----------+
+      | 3.5 M    | 0.018    | 0.0005   |
+      +----------+----------+----------+
+      | 10  M    | 0.018    | 0.0005   |
+      +----------+----------+----------+
+
+..
+   .. table:: Performance comparison of loading a topology file with 1.5 to 10 million atoms. Loading times are given in seconds, the test systems are vesicles using repeats from the `vesicle library`. :label:`tab:performance-loading-gro`
+
+      +----------+----------------+----------+
+      |          | Old IMPL       | new IMPL |
+      +==========+================+==========+
+      | 1.5 M    | 17             | 5        |
+      +----------+----------------+----------+
+      | 3.5 M    | 35             | 10       |
+      +----------+----------------+----------+
+      | 10  M    | 105            | 28       |
+      +----------+----------------+----------+
+
+.. _`vesicle library`: https://github.com/Becksteinlab/vesicle_library
 
 Conclusions
 -----------
