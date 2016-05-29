@@ -223,7 +223,7 @@ Instead, it is made accessible through the trajectory attribute of the Universe.
 
 Changing the frame of the trajectory object updates the underlying arrays that AtomGroups point to.
 In this way the positions attribute of an AtomGroup within the iteration over u.trajectory will give access to the positions at each frame.
-Through this approach only a single frame of data is present in memory at any time, allowing for large datasets to be dissected with minimal resources.
+Through this approach only a single frame of data is present in memory at any time, allowing for large datasets, up to half a million particles :cite:`Ingolfsson2014`, to be dissected with minimal resources.
 
 .. show working with the trajectory object to access the time data
 .. code-block:: python
