@@ -19,4 +19,5 @@ pdf: $(PDF)
 $(PDF): $(RST) $(BIB)
 	cd $(TOPDIR) && \
 	./make_paper.sh $(PAPERDIR) && \
+        ./make_paper.sh $(PAPERDIR) && \
 	cp -v $(OUTPUTDIR)/$(PDF) $(PAPERDIR)/
