@@ -164,7 +164,7 @@ When backwards-incompatible changes are inevitable, we provide tools (based on t
 Basic Usage
 -----------
 
-The core object in MDAnalysis is the Universe which acts as a nexus for accessing all data contained within the simulation.
+The core object in MDAnalysis is the Universe which acts as a nexus for accessing all data contained within a simulation.
 It is initialised by passing the filenames of the topology and trajectory files, with a multitude of different formats supported in these roles.
 The topology acts as a description of all the particles in the system while the trajectory describes their behavior over time.
 
@@ -178,7 +178,7 @@ The topology acts as a description of all the particles in the system while the 
    u = mda.Universe('topol.top', 'traj.trr')
 
    # Create a selection of atoms to work with
-   ag = u.atoms.select_atoms('name CA and not resname MET LYS')
+   ag = u.atoms.select_atoms('backbone')
 
 The select_atoms method allows for AtomGroups to be created using a human readable syntax which allows queries according to properties, logical statements and geometric criteria.
 
