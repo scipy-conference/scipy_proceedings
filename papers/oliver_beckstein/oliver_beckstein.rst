@@ -124,14 +124,15 @@ Since the original publication :cite:`Michaud-Agrawal:2011fu`, improvements in s
 MDAnalysis also comes with specialized analysis classes in the MDAnalysis.analysis module that are unique to MDAnalysis such as the LeafletFinder graph-based algorithm for the analysis of lipid bilayers :cite:`Michaud-Agrawal:2011fu` or the Path Similarity Analysis for the quantitative comparison of macromolecular conformational changes :cite:`Seyler:2015fk`.
 
 MDAnalysis is available in source form under the GNU General Public License v2 from GitHub https://github.com/MDAnalysis/mdanalysis, PyPi_ and as conda_ packages.
-The documentation is extensive http://docs.mdanalysis.org including an introductory tutorial http://www.mdanalysis.org/MDAnalysisTutorial/.
-Our develoment community is very active with over 5 active core developers and lots of community contributions every release.
-We use modern software development practices with continous integration and an extensive testsuite, >3500 tests and >92% for our core modules.
-If you like to use MDAnalysis for your project please join our community_ board.
+The documentation is extensive http://docs.mdanalysis.org and includes an introductory tutorial http://www.mdanalysis.org/MDAnalysisTutorial/.
+The develoment community is very active with more than five active core developers and many community contributions in every release.
+We use modern software development practices :cite:`Wilson:2014aa,Stodden:2014tg` with continous integration (provided by Travis CI) and an extensive automated testsuite (containing over 3500 tests with >92% coverage for our core modules).
+Development occurs on GitHub through pull requests that are reviewed by core developers and other contributors, supported by the results from the automated tests, test coverage reports provided by Coveralls, and QuantifiedCode code quality reports.
+Users and developers communicate extensively on the `community mailing list`_ (Google groups) and the GitHub issue tracker; new users and developers are very welcome.
 
 .. _PyPi: https://pypi.python.org/pypi/MDAnalysis
 .. _conda: https://anaconda.org/mdanalysis/dashboard
-.. _community: https://groups.google.com/forum/#!forum/mdnalysis-discussion
+.. _community mailing list: https://groups.google.com/forum/#!forum/mdnalysis-discussion
 .. _ENCORE: https://github.com/encore-similarity/encore
 .. _ProtoMD: https://github.com/CTCNano/proto_md
 
