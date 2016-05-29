@@ -142,6 +142,11 @@ The develoment community is very active with more than five active core develope
 We use modern software development practices :cite:`Wilson:2014aa,Stodden:2014tg` with continous integration (provided by *Travis CI*) and an extensive automated testsuite (containing over 3500 tests with >92% coverage for our core modules).
 Development occurs on *GitHub* through pull requests that are reviewed by core developers and other contributors, supported by the results from the automated tests, test coverage reports provided by *Coveralls*, and *QuantifiedCode* code quality reports.
 Users and developers communicate extensively on the `community mailing list`_ (*Google* groups) and the GitHub issue tracker; new users and developers are very welcome.
+The development and release process is transparent to users.
+Releases are numbered according to the `semantic versioning`_ convention so that users can immediately judge the impact of a new release on their existing code base, even without having to consult the CHANGELOG documentation.
+Old code is slowly deprecated so that users have ample opportunity to update the code although we generally attempt to break as little code as possible.
+When backwards-incompatible changes are inevitable, we provide tools (based on the Python standard library's *lib2to3*) to automatically refactor code or warn users of possible problems with their existing code.
+
 
 .. _PyPi: https://pypi.python.org/pypi/MDAnalysis
 .. _conda: https://anaconda.org/mdanalysis/dashboard
@@ -153,6 +158,8 @@ Users and developers communicate extensively on the `community mailing list`_ (*
 .. _documentation: http://docs.mdanalysis.org
 
 .. _`MDAnalysis/mdanalysis`: https://github.com/MDAnalysis/mdanalysis
+
+.. _semantic versioning: http://semver.org
 
 
 Analysis Module
