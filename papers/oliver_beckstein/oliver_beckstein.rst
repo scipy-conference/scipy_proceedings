@@ -340,6 +340,7 @@ Acknowledgements
 ----------------
 
 ML was supported by the Max Planck Society.
+TR was supported by the Canadian Institutes of Health Research, the Wellcome Trust, the Leverhulme Trust, and Somerville College. Computational resources were provided by PRACE, HPC-Europa2, CINES (France), and the SBCB unit (Oxford).
 SLS was supported in part by a Wally Stoelzel Fellowship from the Department of Physics at Arizona State University.
 DLD was in part supported by a Molecular Imaging Fellowship from the Department of Physics at Arizona State University
 IMK was supported by a REU supplement to grant ACI-1443054 from the National Science Foundation.
