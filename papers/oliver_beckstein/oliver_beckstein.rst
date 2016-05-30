@@ -69,6 +69,11 @@
 ..  - use PRs (keep them small and manageable)
 
 
+.. definitions (like \newcommand)
+
+.. |Calpha| replace:: :math:`\mathrm{C}_\alpha`
+
+
 -------------------------------------------------------------------------------------
 MDAnalysis: A Python Package for the Rapid Analysis of Molecular Dynamics Simulations
 -------------------------------------------------------------------------------------
@@ -239,6 +244,35 @@ Through this approach only a single frame of data is present in memory at any ti
    # iterate through every 10th frame
    for ts in u.trajectory[::10]:
        ag.positions
+
+Example: Per-residue RMSF
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As a complete example consider the calculation of the |Calpha| root mean square fluctuation (RMSF) :math:`\rho_i` that characterizes the mobility of a residue math:`i` in a protein:
+
+.. math::
+   :label: eq:RMSF
+   
+   \rho_i = \sqrt{\left\langle\left(\mathbf{x}_i(t) - \langle\mathbf{x}_i\rangle\right)\right\rangle}
+
+The code in Figure :ref:`fig:rmsf-example` A shows how MDAnalysis in combination with NumPy can be used to implement Eq. :ref:`eq:RMSF`.
+The topology information and the trajectory are loaded into a ``Universe`` instance; |Calpha| atoms are selected with the MDAnalysis selection syntax and stored as the ``AtomGroup`` instance ``ca``.
+The main loop iterates through the trajectory using the MDAnalysis trajectory iterator.
+The coordinates of all selected atoms become available in a NumPy array ``ca.positions`` that updates for each new time step in the trajectory.
+Fast operations on this array are then used to calculate variance over the whole trajectory.
+The final result is plotted with matplotlib as the RMSF over the residue numbers, which are conveniently provided as an attribute of the ``AtomGroup`` (Figure :ref:`fig:rmsf-example` B).
+
+
+.. figure:: figs/rmsf_Example.pdf
+
+   Example for how to calculate the root mean square fluctuation (RMSF) for each residue in a protein with MDAnalysis and NumPy. **A**: Based on the input simulation data (topology and trajectory in the Gromacs format (TPR and XTC), MDAnalysis makes coordinates of the selected |Calpha| atoms available as NumPy arrays. From these coordinates, the RMSF is calculated by averaging over all frames in the trajectory. The RMSF is then plotted with ``matplotlib``. The algorithm to calculate the variance in a single pass is due to Welford :cite:`Welford:1962aa`. **B**: |Calpha| RMSF for each residue. :label:`fig:rmsf-example`
+
+The example demonstrates how the abstractions that MDAnalysis provides enable users to write very concise code where the computations on data are cleanly separated from the task of extracting the data from the simulation trajectories.
+These characteristics make it easy to rapidly prototype new algorithms.
+In our experience, most new analysis algorithms are developed by first prototyping a simple script (like the one in :ref:`fig:rmsf-example`), often inside a Jupyter_ notebook.
+Then the code is cleaned up, tested and packaged into a module.
+In the next section, we describe the analysis code that is included as modules with MDAnalysis.
+
 
 
 Analysis Module
