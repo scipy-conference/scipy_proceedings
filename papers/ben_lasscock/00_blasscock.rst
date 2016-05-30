@@ -187,15 +187,14 @@ Theory
    (3) & $Y_{02} - \frac{i}{2}(Y_{22} + Y_{-22})$\ .
    \end{tabular}
 
-   \caption{Describes angular variation of the displacement due to
-   created by three types of earthquakes in terms of a basis of
-   spherical harmonic functions.  The source templates summarized are
-   double couple (D.C.), tensile dislocation (Tensile) and tangential
-   dislocation (Tangential).  The brackets $(\cdot,\cdot)$ define the
-   template direction of the fault normal and direction of slip in
-   rectangular coordinates.  The constant $\alpha = 2 +
+   \caption{Describes the angular variation of the displacement due to
+   three types of earthquake sources in terms of a basis of spherical
+   harmonic functions.  The source templates summarized are shear,
+   tensile and tangential dislocation.  The brackets $(\cdot,\cdot)$
+   define the template direction of the fault normal and the direction of
+   slip in rectangular coordinates.  The constant $\alpha = 2 +
    3\frac{\lambda}{\mu}$, where $\lambda$ and $\mu$ are the first Lame
-   parameter and the shear modulus respectively.} 
+   parameter and the shear modulus respectively.}
    
    \end{table}
 
