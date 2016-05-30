@@ -297,7 +297,7 @@ This transformation of the data structures from an Array of Structs to a Struct 
 It is quite common to compare a single property across many Atoms, but rarely are different properties within a single Atom compared.
 Additionally, it is possible to utilise NumPy's faster indexing rather than using a list comprehension.
 This new data structure has lead to performance improvements in our whole codebase.
-The largest improvement is in accessing subsets of Atoms which is now over 40 times faster, see Table :ref:`tab:performance-slicing-atomgroup`.
+The largest improvement is in accessing subsets of Atoms which is now over 40 times faster, see Tables :ref:`tab:performance-slicing-atomgroup`, :ref:`tab:performance-accessing-attributes` and :ref:`tab:performance-loading-gro`.
 
 .. table:: Performance comparison of subselecting an AtomGroup from an existing one using the  new system (upcoming release v0.16.0) against the old (v0.15.0). Subselections were slices of the same size (82,056 atoms). Times are given in milliseconds, with shorter times being better. The benchmarks systems were taken from the `vesicle library`_. :cite:`Kenney:2015aa` and are listed with their approximate number of particles ("# atoms"). :label:`tab:performance-slicing-atomgroup`
 
@@ -316,11 +316,11 @@ The largest improvement is in accessing subsets of Atoms which is now over 40 ti
       +----------+----------+----------+----------+
       | # atoms  | v0.15.0  | v0.16.0  | speed up |
       +==========+==========+==========+==========+
-      | 1.75 M   | 250      | 35       |   7.1    |  
+      | 1.75 M   | 250      | 35       |   7.1    |
       +----------+----------+----------+----------+
       | 3.50 M   | 490      | 72       |   6.8    |
       +----------+----------+----------+----------+
-      | 10.1 M   | 1500     | 300      |   5.0    |  
+      | 10.1 M   | 1500     | 300      |   5.0    |
       +----------+----------+----------+----------+
 
 .. table:: Performance comparison of loading a topology file with 1.75 to 10 million atoms with new AtomGroup data structures (upcoming release v0.16.0) compared with the old Atom classes (v0.15.0). Loading times are given in seconds, with shorter times being better. The same benchmark systems as in Table :ref:`tab:performance-slicing-atomgroup` were used. :label:`tab:performance-loading-gro`
@@ -357,7 +357,7 @@ SLS was supported in part by a Wally Stoelzel Fellowship from the Department of 
 DLD was in part supported by a Molecular Imaging Fellowship from the Department of Physics at Arizona State University
 IMK was supported by a REU supplement to grant ACI-1443054 from the National Science Foundation.
 OB was supported in part by grant ACI-1443054 from the National Science Foundation.
-JD was in part supported by a Wellcome Trust grant 092970/Z/10/Z. 
+JD was in part supported by a Wellcome Trust grant 092970/Z/10/Z.
 
 References
 ----------
