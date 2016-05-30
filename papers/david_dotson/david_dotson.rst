@@ -113,6 +113,7 @@ And in the other Python session, we see the same ``Treant``:
 
 Internally, advisory locking is done to avoid race conditions, making a ``Treant`` multiprocessing safe.
 
+
 Introspecting a Treant's Tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 A ``Treant`` can be used to introspect and manipulate its filesystem tree.
@@ -147,7 +148,8 @@ We can, for example, easily store a ``pandas`` DataFrame somewhere in the tree f
 .. code-block:: python
 
    >>> import pandas as pd
-   >>> df = pd.DataFrame(pd.np.random.randn(10, 3), columns=['A', 'B', 'C'])
+   >>> df = pd.DataFrame(pd.np.random.randn(3, 2),
+                         columns=['A', 'B'])
    >>> data = s['a/place/for/data/']
    >>> data
    <Tree: 'sprout/a/place/for/data/'>
@@ -164,20 +166,14 @@ and we can introspect the file directly:
    >>> csv
    <Leaf: 'sprout/a/place/for/data/random_dataframe.csv'>
    >>> print(csv.read())
-   ,A,B,C
-   0,-0.573730932177663,-0.08857033924376226,-1.5217885284931023
-   1,0.03157276797041359,-0.10977921690694506,0.7352049490768677
-   2,-0.2080757315892524,0.6825003213837373,2.4287549444405534
-   3,0.24384248258374155,1.5500844388779393,-1.2055335937850564
-   4,0.4775160853277072,-0.5171911250677093,-0.7060994831807865
-   5,1.1667219505149122,0.6853566107964083,0.8907628900594483
-   6,-0.04780879620117516,0.46380208128764916,0.18896832921836013
-   7,-0.9602135578067672,1.1455495671353324,-0.6492857585272271
-   8,0.4375285197298905,0.7725833477975118,-0.5321635278258459
-   9,-0.24309412997865673,-0.04109901866284795,1.8452297139705818
+   ,A,B
+   0,-0.573730932177663,-0.08857033924376226
+   1,0.03157276797041359,-0.10977921690694506
+   2,-0.2080757315892524,0.6825003213837373
     
 Using ``Treant``, ``Tree``, and ``Leaf`` objects, we can work with the filesystem Pythonically without giving much attention to *where* these objects live within that filesystem.
 This becomes especially powerful when we have many directories/files we want to work with, possibly in many different places.
+
 
 Aggregation and splitting on Treant metadata
 --------------------------------------------
@@ -192,19 +188,72 @@ If we have many Treants, perhaps scattered about the filesystem:
    >>> for path in ('an/elm/', 'the/oldest/oak'):
    ...     dtr.Treant(path)
 
-we can gather them up:
+we can gather them up with ``datreant.core.discover``:
 
 .. code-block:: python
 
    >>> b = dtr.discover('.')
    >>> b
-   <Bundle([<Treant: 'oak'>, <Treant: 'sprout'>, <Treant: 'elm'>])>
+   <Bundle([<Treant: 'oak'>, <Treant: 'sprout'>,
+            <Treant: 'elm'>])>
 
 A ``Bundle`` is an ordered set of ``Treant`` objects.
 This collection gives convenient mechanisms for working with Treants as a single logical unit.
+For example, it exposes a few basic properties for directly accessing its member data:
+
+.. code-block:: python
+
+   >>> b.relpaths
+   ['the/oldest/oak/', 'sprout/', 'an/elm/']
+   >>> b.names
+   ['oak', 'sprout', 'elm']
+
 A ``Bundle`` can be constructed in a variety of ways, most commonly using existing ``Treant`` instances or paths to Treants in the filesystem.
 
+We can use a ``Bundle`` to subselect Treants in typical ways, including integer indexing and slicing, fancy indexing, boolean indexing, and indexing by name.
+But in addition to these, we can use metadata features such as **tags** and **categories** to filter and group Treants as desired.
 
+Filtering Treants with tags
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Adding some tags to each of our Treants separately:
+
+.. code-block:: python
+
+   >>> b['sprout'].tags.add('plant')
+   >>> b['oak'].tags.add('for building', 'plant', 'building')
+   >>> b['elm'].tags.add('firewood', 'shady', 'paper', 'plant', 'building')
+
+we can now work with these tags in aggregate:
+
+.. code-block:: python
+
+   # will only show tags present in *all* members
+   >>> b.tags
+   <AggTags(['plant'])>
+
+   # will show tags present among *any* member
+   >>> b.tags.any
+   {'building',
+    'cork',
+    'firewood',
+    'for building',
+    'green',
+    'paper',
+    'plant',
+    'shady'}
+
+and we can filter on them. For example, getting all Treants that are good
+for construction work:
+
+.. code-block:: python
+
+   # gives a boolean index for members with this tag
+   >>> b.tags['building']
+   [True, False, True]
+
+   # we can use this to index the Bundle itself
+   >>> b[b.tags['building']]
+   <Bundle([<Treant: 'oak'>, <Treant: 'elm'>])>
 
 Treant modularity with attachable Limbs
 ---------------------------------------
@@ -221,6 +270,9 @@ Building domain-specific applications on datreant
 -------------------------------------------------
 .. not only can applications *use* Treants, they can define their own Treant subclasses that work in special ways
 
+Making molecular dynamics great again with MDSynthesis
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 Acknowledgements
 ----------------
@@ -235,5 +287,3 @@ References
 .. We use a bibtex file ``mdanalysis.bib`` and use 
 .. :cite:`Michaud-Agrawal:2011fu` for citations; do not use manual
 .. citations
-
-
