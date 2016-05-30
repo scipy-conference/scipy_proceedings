@@ -96,6 +96,9 @@ MDAnalysis is available under the GNU General Public License v2.
 .. _pandas: http://pandas.pydata.org/
 .. _NumPy: http://www.numpy.org
 .. _Cython: http://cython.org/
+.. _distributed: https://github.com/dask/distributed
+.. _fireworks: https://github.com/materialsproject/fireworks
+.. _MDSynthesis: https://github.com/datreant/MDSynthesis
 
 .. class:: keywords
 
@@ -140,7 +143,6 @@ MDAnalysis currently supports more than 25 different file formats and covers the
 The user interface provides "physics-based" abstractions (e.g. "atoms", "bonds", "molecules") of the data that can be easily manipulated by the user.
 It hides the complexity of accessing data and frees the user from having to implement the details of different trajectory and topology file formats (which by themselves are often only poorly documented and just adhere to certain "community expectations" that can be difficult to understand for outsiders).
 
-The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages like ENCORE_ :cite:`Tiberti:2015fk` and ProtoMD_ :cite:`Somogyi:2016aa`, and for interactive and rapid prototyping work in IPython_ :cite:`Perez2007`/Jupyter_ notebooks, especially together with molecular visualization provided by nglview_ and time series analysis with pandas_ :cite:`McKinney2010`.
 Since the original publication :cite:`Michaud-Agrawal:2011fu`, improvements in speed and data structures make it now possible to work with terabyte-sized trajectories containing up to ~10 million particles.
 MDAnalysis also comes with specialized analysis classes in the ``MDAnalysis.analysis`` module that are unique to MDAnalysis such as *LeafletFinder*, a graph-based algorithm for the analysis of lipid bilayers :cite:`Michaud-Agrawal:2011fu`, or *Path Similarity Analysis* for the quantitative comparison of macromolecular conformational changes :cite:`Seyler:2015fk`.
 
@@ -151,7 +153,7 @@ We use modern software development practices :cite:`Wilson:2014aa,Stodden:2014tg
 Development occurs on *GitHub* through pull requests that are reviewed by core developers and other contributors, supported by the results from the automated tests, test coverage reports provided by *Coveralls*, and *QuantifiedCode* code quality reports.
 Users and developers communicate extensively on the `community mailing list`_ (*Google* groups) and the GitHub issue tracker; new users and developers are very welcome.
 The development and release process is transparent to users.
-Releases are numbered according to the `semantic versioning`_ convention so that users can immediately judge the impact of a new release on their existing code base, even without having to consult the CHANGELOG documentation.
+Releases are numbered according to the `semantic versioning`_ convention so that users can immediately judge the impact of a new release on their existing code base, even without having to consult the ``CHANGELOG`` documentation.
 Old code is slowly deprecated so that users have ample opportunity to update the code although we generally attempt to break as little code as possible.
 When backwards-incompatible changes are inevitable, we provide tools (based on the Python standard library's *lib2to3*) to automatically refactor code or warn users of possible problems with their existing code.
 
@@ -269,46 +271,28 @@ The final result is plotted with matplotlib as the RMSF over the residue numbers
 
 The example demonstrates how the abstractions that MDAnalysis provides enable users to write very concise code where the computations on data are cleanly separated from the task of extracting the data from the simulation trajectories.
 These characteristics make it easy to rapidly prototype new algorithms.
-In our experience, most new analysis algorithms are developed by first prototyping a simple script (like the one in :ref:`fig:rmsf-example`), often inside a Jupyter_ notebook.
+In our experience, most new analysis algorithms are developed by first prototyping a simple script (like the one in Figure :ref:`fig:rmsf-example`), often inside a Jupyter_ notebook (see section `Interactive Use and Visualization`_).
 Then the code is cleaned up, tested and packaged into a module.
-In the next section, we describe the analysis code that is included as modules with MDAnalysis.
+In section `Analysis Module`_, we describe the analysis code that is included as modules with MDAnalysis.
 
 
+.. _`Interactive Use and Visualization`:
 
 Interactive Use and Visualization
----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-MDAnalysis works equally well as an interactive tool as it does in scripted workflows.
-In particular, Universes and AtomGroups can be visualized in Jupyter_ notebooks using nglview_, which gives a convenience function for parsing these objects (Figure :ref:`fig:nglview`).
+The high level of abstraction and the pythonic API, together with comprehensive Python doc strings, make MDAnalysis well suited for interactive and rapid prototyping work in IPython_ :cite:`Perez2007` and Jupyter_ notebooks.
+It works equally well as an interactive analysis tool, especially with Jupyter notebooks, which then contain an executable and well-documented analysis protocol that can be easily shared and even accessed remotely.
+Universes and AtomGroups can be visualized in Jupyter notebooks using nglview_, which interacts natively with the MDAnalysis API (Figure :ref:`fig:nglview`).
 
 .. figure:: figs/nglview.png
 
-   MDAnalysis can be used with nglview_ to directly visualize molecules and trajectories in Jupyter_ notebooks. :label:`fig:nglview`.
+   MDAnalysis can be used with nglview_ to directly visualize molecules and trajectories in Jupyter_ notebooks. The adenylate kinase (AdK) protein from one of the included test trajectories is shown. :label:`fig:nglview`.
 
-As an example for calculating various observables we will demonstrate how to quantify the zipper motion of Adenylate Kinase, as reported by :cite:`Beckstein2009`.
-We are using the select_atoms method to select the :math:`\text{C}_\alpha` of residue 157 and 54.
-When we iterate over the trajectory with :code:`enumerate(u.trajectory)` the positions of the selected atoms are updated inplace and we record the distance between them.
+Other Python packages that have become extremely useful in notebook-based analysis workflows are pandas_  :cite:`McKinney2010` for rapid analysis of time series analysis, distributed_ for simple parallelization, FireWorks_ :cite:`Jain:2015aa` for complex workflows, and MDSynthesis_ for organizing, bundling and querying many simulations.
 
-.. code-block:: python
 
-   ca = u.atoms.select_atoms('protein and name CA')
-   atoms = ca.select_atoms('resid 157 or resid 54')
-   dists = np.empty(u.trajectory.n_frames)
-
-   for i, ts in enumerate(u.trajectory):
-       dists[i] = np.linalg.norm(atoms.positions[0]-
-                                 atoms.positions[1])
-
-In Figure :ref:`fig:zipper-motion` the calculate distance this atom pair and others are shown.
-The complete example can be found as a gist_ online.
-
-.. figure:: figs/zipper-motion.png
-
-   MDAnalysis is also ideal to quickly analyze the relative motion of atom pairs.
-   Here we show the distances between :math:`\text{C}_\alpha` atoms of selected residue pairs from a Adenylate Kinase simulation.
-   The code to calculate the distances is shown in this chapter.
-
-.. _gist: https://gist.github.com/kain88-de/edc3e17e9ee8d8dc6c3a1d8c8af9fa34
+.. _`Analysis Module`:
 
 Analysis Module
 ---------------
@@ -405,6 +389,19 @@ The largest improvement is in accessing subsets of Atoms which is now over 40 ti
       +----------+-----------+----------+----------+
 
 .. _`vesicle library`: https://github.com/Becksteinlab/vesicle_library
+
+
+Other packages that use MDAnalysis
+----------------------------------
+
+TODO
+
+The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages like ENCORE_ :cite:`Tiberti:2015fk` and ProtoMD_ :cite:`Somogyi:2016aa`.
+
+- MDSynthesis_ (zenodo REFERENCE), datreant reference
+
+
+
 
 Conclusions
 -----------
