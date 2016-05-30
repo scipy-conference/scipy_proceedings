@@ -286,7 +286,7 @@ Because all Atoms have the same property fields (i.e. mass, position) it is poss
 Now an AtomGroup can keep track of its contents as a simple integer array, which can be used to slice to property arrays to yield the relevant data.
 
 Overall this approach means that the same number of Python objects are created for each Universe, with the number of particles only changing the size of the arrays.
-This translates into a much smaller memory footprint (BENCHMARK HERE) highlighting the memory cost of millions of simple Python objects.
+This translates into a much smaller memory footprint (1.3 GB vs. 3.6 GB for a 10.1 M atom system) highlighting the memory cost of millions of simple Python objects.
 
 This transformation of the data structures from an Array of Structs to a Struct of Arrays also better suits the typical access patterns within MDAnalysis.
 It is quite common to compare a single property across many Atoms, but rarely are different properties within a single Atom compared.
@@ -294,29 +294,40 @@ Additionally, it is possible to utilise NumPy's faster indexing rather than usin
 This new data structure has lead to performance improvements in our whole codebase.
 The largest improvement is in accessing subsets of Atoms which is now over 40 times faster, see tab :ref:`performance-accessing-gro`.
 
-.. table:: Performance comparison of your new AtomGroup data structures compared with the old Atom classes. times are given in seconds, the test systems are vesicles using repeats from the `vesicle library`_. :label:`tab:performance-accessing-gro`
+.. table:: Performance comparison of subselecting an AtomGroup from an existing one using the new system against the old. Subselections were slices of the same size (82,056 atoms). Times are given in seconds, the test systems are vesicles using repeats from the `vesicle library`_. :label:`tab:performance-accessing-gro`
 
       +----------+----------+----------+
       | # atoms  | Old IMPL | new IMPL |
       +==========+==========+==========+
-      | 1.5 M    | 0.018    | 0.0005   |
+      | 1.75 M   | 0.019    | 0.00045  |
       +----------+----------+----------+
-      | 3.5 M    | 0.018    | 0.0005   |
+      | 3.50 M   | 0.018    | 0.00054  |
       +----------+----------+----------+
-      | 10  M    | 0.018    | 0.0005   |
+      | 10.1 M   | 0.017    | 0.00045  |
       +----------+----------+----------+
 
-..
-   .. table:: Performance comparison of loading a topology file with 1.5 to 10 million atoms. Loading times are given in seconds, the test systems are vesicles using repeats from the `vesicle library`. :label:`tab:performance-loading-gro`
+.. table:: Performance comparison of accessing attributes with new AtomGroup data structures compared with the old Atom classes. Times are given in seconds, the test systems are vesicles using repeats from the `vesicle library`_. :label:`tab:performance-accessing-gro`
+
+      +----------+----------+----------+
+      | # atoms  | Old IMPL | new IMPL |
+      +==========+==========+==========+
+      | 1.75 M   | 0.25     | 0.035    |
+      +----------+----------+----------+
+      | 3.50 M   | 0.49     | 0.072    |
+      +----------+----------+----------+
+      | 10.1 M   | 1.50     | 0.30     |
+      +----------+----------+----------+
+
+.. table:: Performance comparison of loading a topology file with 1.75 to 10 million atoms. Loading times are given in seconds, the test systems are vesicles using repeats from the `vesicle library`. :label:`tab:performance-loading-gro`
 
       +----------+----------------+----------+
       |          | Old IMPL       | new IMPL |
       +==========+================+==========+
-      | 1.5 M    | 17             | 5        |
+      | 1.75 M   | 18             | 5        |
       +----------+----------------+----------+
-      | 3.5 M    | 35             | 10       |
+      | 3.50 M   | 36             | 11       |
       +----------+----------------+----------+
-      | 10  M    | 105            | 28       |
+      | 10.1 M   | 105            | 31       |
       +----------+----------------+----------+
 
 .. _`vesicle library`: https://github.com/Becksteinlab/vesicle_library
