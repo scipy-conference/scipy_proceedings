@@ -64,7 +64,7 @@ It solves a boring problem, so we can focus on interesting ones.
 Treants as filesystem manipulators
 ----------------------------------
 The central object of ``datreant`` is the ``Treant``.
-A ``Treant`` is a directory in the filesystem that has been specially marked with **state file**.
+A Treant is a directory in the filesystem that has been specially marked with **state file**.
 A ``Treant`` is also a Python object.
 We can create a ``Treant`` with:
 
@@ -75,15 +75,15 @@ We can create a ``Treant`` with:
    >>> t
    <Treant: 'sprout'>
 
-This creates a directory ``sprout/`` in the filesystem if it didn't already exist, and places a special file inside which both stores the ``Treant``'s state.
-This file also serves as a flagpost indicating that this is not just a directory, but a ``Treant``::
+This creates a directory ``sprout/`` in the filesystem if it didn't already exist, and places a special file inside which stores the Treant's state.
+This file also serves as a flagpost indicating that this is more than just a directory::
 
     > ls sprout
     Treant.1dcbb3b1-c396-4bc6-975d-3ae1e4c2983a.json
 
-The name of this file includes the type of ``Treant`` it corresponds to, as well as the ``uuid`` of the ``Treant``, which is its unique identifier.
-This is the state file containing all the information needed to regenerate an identical instance of this ``Treant``.
-We can start a separate Python session and use this ``Treant`` immediately there:
+The name of this file includes the type of Treant it corresponds to, as well as the ``uuid`` of the Treant, its unique identifier.
+This is the state file containing all the information needed to generate an identical instance of this ``Treant``.
+We can start a separate Python session and use this Treant immediately there:
 
 .. code-block:: python
 
@@ -164,7 +164,6 @@ and we can introspect the file directly:
    >>> csv
    <Leaf: 'sprout/a/place/for/data/random_dataframe.csv'>
    >>> print(csv.read())
-
    ,A,B,C
    0,-0.573730932177663,-0.08857033924376226,-1.5217885284931023
    1,0.03157276797041359,-0.10977921690694506,0.7352049490768677
@@ -184,6 +183,27 @@ Aggregation and splitting on Treant metadata
 --------------------------------------------
 What makes a ``Treant`` distinct from a ``Tree`` is its **state file**.
 This file stores metadata that can be used to filter and split ``Treant`` objects when treated in aggregate.
+It also serves as a flagpost, making Treant directories discoverable.
+
+If we have many Treants, perhaps scattered about the filesystem:
+
+.. code-block:: python
+
+   >>> for path in ('an/elm/', 'the/oldest/oak'):
+   ...     dtr.Treant(path)
+
+we can gather them up:
+
+.. code-block:: python
+
+   >>> b = dtr.discover('.')
+   >>> b
+   <Bundle([<Treant: 'oak'>, <Treant: 'sprout'>, <Treant: 'elm'>])>
+
+A ``Bundle`` is an ordered set of ``Treant`` objects.
+This collection gives convenient mechanisms for working with Treants as a single logical unit.
+A ``Bundle`` can be constructed in a variety of ways, most commonly using existing ``Treant`` instances or paths to Treants in the filesystem.
+
 
 
 Treant modularity with attachable Limbs
