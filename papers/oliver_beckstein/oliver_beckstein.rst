@@ -327,15 +327,18 @@ Conclusions
 MDAnalysis provides a uniform interface to simulation data, which comes in a bewildering array of formats.
 It enables users to rapidly write code that is portable and immediately usable in virtually all biomolecular simulation communities.
 It has a very active international developer community with researchers that are expert developers and users of a wide range of simulation codes.
-MDAnalysis is widely used (the original paper :cite:`Michaud-Agrawal:2011fu` has been cited more than 180 times) and forms the foundation for more specialized biomolecular simulation tools.
+MDAnalysis is widely used (the original paper :cite:`Michaud-Agrawal:2011fu` has been cited more than 195 times) and forms the foundation for more specialized biomolecular simulation tools.
 Ongoing and future developments will improve performance further, introduce transparent parallelisation schemes to utilize multi-core systems efficiently, and interface with the `SPIDAL library`_ for high performance data analytics algorithms.
 
 
 Acknowledgements
 ----------------
 
-OB was supported in part by grant ACI-1443054 from the National Science Foundation.
 ML was supported by the Max Planck Society.
+SLS was supported in part by a Wally Stoelzel Fellowship from the Department of Physics at Arizona State University.
+DLD was in part supported by a Molecular Imaging Fellowship from the Department of Physics at Arizona State University
+IMK was supported by a REU supplement to grant ACI-1443054 from the National Science Foundation.
+OB was supported in part by grant ACI-1443054 from the National Science Foundation.
 
 
 References
