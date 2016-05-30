@@ -1,4 +1,4 @@
-.. -*- mode: rst; fill-column: 9999; coding: utf-8 -*-
+.. -*- mode: rst; mode: visual-line; fill-column: 9999; coding: utf-8 -*-
 
 :author: David L. Dotson
 :email: dldotson@asu.edu
@@ -139,6 +139,10 @@ Building domain-specific applications on datreant
 .. not only can applications *use* Treants, they can define their own Treant subclasses that work in special ways
 
 
+Acknowledgements
+----------------
+
+This work was in part supported by grant ACI-1443054 from the National Science Foundation.
 
 
 
