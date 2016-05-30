@@ -1,0 +1,43 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\newlabel{goals}{{}{1}{1. Goals}{section*.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\relax 1. Goals.}{1}{section*.1}}
+\newlabel{object-oriented-goals}{{}{1}{1.1. Object-Oriented Goals}{section*.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\relax 1.1. Object-Oriented Goals.}{1}{section*.2}}
+\newlabel{numpy-goals}{{}{2}{1.2. NumPy Goals}{section*.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\relax 1.2. NumPy Goals.}{2}{section*.3}}
+\newlabel{existing-ways-of-integrating-python-oop-with-numpy}{{}{2}{2. Existing ways of integrating Python OOP with NumPy}{section*.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\relax 2. Existing ways of integrating Python OOP with NumPy.}{2}{section*.4}}
+\newlabel{numpy-s-record-arrays}{{}{2}{2.1. NumPy's Record Arrays}{section*.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\relax 2.1. NumPy's Record Arrays.}{2}{section*.5}}
+\newlabel{numpy-arrays-with-dtype-object}{{}{2}{2.2. NumPy arrays with dtype=object}{section*.6}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\relax 2.2. NumPy arrays with dtype=object.}{2}{section*.6}}
+\newlabel{ad-hoc-transfers-and-method-calling}{{}{3}{3. Ad Hoc Transfers and Method Calling}{section*.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\relax 3. Ad Hoc Transfers and Method Calling.}{3}{section*.7}}
+\newlabel{ad-hoc-reading}{{}{3}{3.1. Ad Hoc reading}{section*.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\relax 3.1. Ad Hoc reading.}{3}{section*.8}}
+\newlabel{ad-hoc-writing}{{}{3}{3.2. Ad hoc writing}{section*.9}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\relax 3.2. Ad hoc writing.}{3}{section*.9}}
+\newlabel{ad-hoc-method-calling}{{}{4}{3.3. Ad hoc method calling}{section*.10}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\relax 3.3. Ad hoc method calling.}{4}{section*.10}}
+\newlabel{coupled-buffers}{{}{4}{4. Coupled Buffers}{section*.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\relax 4. Coupled Buffers.}{4}{section*.11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textbf  {Depiction of an ObjArray OA whose .x attribute is coupled to buffer B.} Like any ndarray, OA stores its indexed data in a contiguous block of memory: OA{[}0{]}...OA{[}N{]}. Since OA has dtype=object, this data consists of pointers to the Python objects arrayed \textquotedbl {}within\textquotedbl {} OA: Obj0, Obj1, ... ObjN. OA also has its own attribute OA.x, which is a view of the entire buffer B. During coupling, each arrayed object's .x attribute is made to be a property that provides a view of the corresponding portion of the buffer. When an object's .x property is read, the corresponding buffer content is returned, and when that .x property is set to a new value, the new value is stored in the buffer. Hence any changes to the buffer automatically appear as changes to object attributes and vice versa.\relax }}{5}{figure.caption.12}}
+\newlabel{the-perils-of-dark-magic-and-a-vision-of-the-future}{{}{5}{5. The perils of dark magic and a vision of the future}{section*.13}{}}
+\@writefile{toc}{\contentsline {subsection}{\relax 5. The perils of dark magic and a vision of the future.}{5}{section*.13}}
