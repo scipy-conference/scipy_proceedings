@@ -275,6 +275,41 @@ In the next section, we describe the analysis code that is included as modules w
 
 
 
+Interactive Use and Visualization
+---------------------------------
+
+MDAnalysis works equally well as an interactive tool as it does in scripted workflows.
+In particular, Universes and AtomGroups can be visualized in Jupyter_ notebooks using nglview_, which gives a convenience function for parsing these objects (Figure :ref:`fig:nglview`).
+
+.. figure:: figs/nglview.png
+
+   MDAnalysis can be used with nglview_ to directly visualize molecules and trajectories in Jupyter_ notebooks. :label:`fig:nglview`.
+
+As an example for calculating various observables we will demonstrate how to quantify the zipper motion of Adenylate Kinase, as reported by :cite:`Beckstein2009`.
+We are using the select_atoms method to select the :math:`\text{C}_\alpha` of residue 157 and 54.
+When we iterate over the trajectory with :code:`enumerate(u.trajectory)` the positions of the selected atoms are updated inplace and we record the distance between them.
+
+.. code-block:: python
+
+   ca = u.atoms.select_atoms('protein and name CA')
+   atoms = ca.select_atoms('resid 157 or resid 54')
+   dists = np.empty(u.trajectory.n_frames)
+
+   for i, ts in enumerate(u.trajectory):
+       dists[i] = np.linalg.norm(atoms.positions[0]-
+                                 atoms.positions[1])
+
+In Figure :ref:`fig:zipper-motion` the calculate distance this atom pair and others are shown.
+The complete example can be found as a gist_ online.
+
+.. figure:: figs/zipper-motion.png
+
+   MDAnalysis is also ideal to quickly analyze the relative motion of atom pairs.
+   Here we show the distances between :math:`\text{C}_\alpha` atoms of selected residue pairs from a Adenylate Kinase simulation.
+   The code to calculate the distances is shown in this chapter.
+
+.. _gist: https://gist.github.com/kain88-de/edc3e17e9ee8d8dc6c3a1d8c8af9fa34
+
 Analysis Module
 ---------------
 
