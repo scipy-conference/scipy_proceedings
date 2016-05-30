@@ -10,8 +10,8 @@ Generalized earthquake classification
 
 	   
    The problem we tackle in the is paper is one of characterizing the
-   source of an earthquake based on identitfying the nodal lines of
-   the radiation pattern it produces. These charateristics are the
+   source of an earthquake based on identifying the nodal lines of
+   the radiation pattern it produces. These characteristics are the
    mode of failure of the rock (shear or tensile), the orientation of
    the fault plane and direction of slip. We will also extend the
    derive a correlation coefficient that can be used to compare the
@@ -20,12 +20,12 @@ Generalized earthquake classification
    formulate this problem in terms of a simple binary classification
    on the surface of the sphere, where the classes are the polarity of
    the first motion at observed various seismic stations, and the
-   seperating hyperplane is the solution for nodal lines of the
+   separating hyper-plane is the solution for nodal lines of the
    radiation pattern. Our design goal was to derive an algorithm that
    would be both robust to misclassification of the polarity data and
-   suitble for online processing. We will then go on to derive a
-   mapping which translates the learned solution for the seperating
-   hyperplane back to the physics of the problem, that is, the
+   suitable for online processing. We will then go on to derive a
+   mapping which translates the learned solution for the separating
+   hyper-plane back to the physics of the problem, that is, the
    probable source type and orientation. For reproducibility, we will
    demonstrate our algorithm using the example data provided with the
    HASH earthquake classification software, which is available online.
@@ -50,7 +50,7 @@ Much of the discussion will center around deriving a mapping from the
 solution of the SVC to the spectral content of the earthquake source
 mechanism. The key concept we will be elaborating on is understanding
 the relationship between what we call input and feature spaces of the
-SVC. The results of the classification are curves seperating points on
+SVC. The results of the classification are curves separating points on
 the surface of the focal sphere (the input space), which is the domain
 of the input data.  However, the physics and understanding of the
 result lies in the representation of the solution in the feature
@@ -60,7 +60,7 @@ solves the classification problem.
 For the sake of reproducibility, the demonstration will use the same
 dataset provided with the the US Geological Survey (USGS) HASH
 software [#]_. HASH [HASH]_ is an earthquake classification code
-provided by the USGS, it is built apon an earlier package called
+provided by the USGS, it is built upon an earlier package called
 FPFIT, which implements a least squares classifier. For each case we
 will be comparing, and contrasting our solutions with those generated
 by HASH which we generally expect to be very similar.  This will also
@@ -90,7 +90,7 @@ presented in this paper. In Fig. :ref:`seismogram`, we show a
 seismogram (recording) of an earthquake that was located in Solomon
 Islands.  The recording shown was made by the WR1 node of the
 Warramunga seismic array, which is part of the Australian seismic
-network, shown paritally in Fig. :ref:`WR1.png`. The goal of hazard
+network, shown partially in Fig. :ref:`WR1.png`. The goal of hazard
 monitoring in this case would be to characterize the deformation of
 the earth (focal mechanism) that caused this earthquake. The analysis
 would involve first locating the source spatially and then classifying
@@ -100,11 +100,11 @@ displacement of the sea-floor can cause Tsunami. The algorithm
 discussed in this paper provides the analysis of the focal mechanism,
 with the extension that we can also compare the spectrum of the
 solution with a past events located in this area. This additional
-information maybe useful for descision making regarding what action
+information maybe useful for decision making regarding what action
 should be taken given the risk of a historical (or perhaps modeled)
 scenario repeating.
 
-Our discussion will include annoted software explaining important
+Our discussion will include annotated software explaining important
 steps in the computation.  And will be contributing software [#]_ to
 estimate solutions for fault plane orientation, and a correlation
 coefficients.
@@ -115,7 +115,7 @@ Problem statement
 -----------------
 
 We proceed by detailing exactly the parameters of the problem at hand.
-The raw data are observations the inital arrival of energy from this
+The raw data are observations the initial arrival of energy from this
 earthquake, which is a compressional "P-wave". The first motion
 (initial displacement) recorded at this station is identified (or
 picked) as shown by a red dot in Fig. :ref:`WR1.png`. Consider this is
@@ -125,8 +125,8 @@ inform the shape of the radiation pattern created by the
 event. However, a radiation pattern measured far from the event
 becomes distorted because of the refraction of the seismic wave as it
 propagates through the earth.  To remove this distortion, this energy
-must migrated back to the neighbourhood of the estimated source
-location. We call this neighbourhood the focal sphere. The process of
+must migrated back to the neighborhood of the estimated source
+location. We call this neighborhood the focal sphere. The process of
 picking and locating seismic events is beyond the scope of this
 paper. However, seismograms can be requested from the IRIS database
 [#]_ and a suit of Python tools for processing this data is made
@@ -137,9 +137,9 @@ available by the Obspy [#]_ Python project.
 .. [#] See scipy.special.sph_harm
 
 The input data to our analysis is the polarity (signed amplitude) of
-the pick, and the azimuth and colatitude of the observation migrated
-onto the focal shere.The design goal is to provide an online tool for
-characterizing the source mechansim. The emphysis is on robustness of
+the pick, and the azimuth and co-latitude of the observation migrated
+onto the focal sphere.The design goal is to provide an online tool for
+characterizing the source mechanism. The emphasis is on robustness of
 the algorithm, without the need for post facto processing of the
 data. We also need a system that provides natural metrics of
 similarity between seismic events. 
@@ -203,7 +203,7 @@ The observed displacement created by the collective motion of
 particles along a fault plane is described by the theory of seismic
 sources. We will not go into all the details here, but the reference
 on seismic source theory we follow is Ben-Menahem and Singh
-[Ben81]_. The key result we will draw apon is a formula for the
+[Ben81]_. The key result we will draw upon is a formula for the
 displacement for various types of seismic sources summarized in Table
 4.4 of [Ben81]_, which is presented in terms of Hansen vectors.
 Physically, a shear type failure would represent the slip of rock
@@ -233,16 +233,16 @@ particular orientation.
 
 .. figure:: beachball.png
 	    	   
-   Rendered in 3-dimensions, (left) the signed radiation pattern for a possible
-   double couple (shear) type source. (right) Similarly for the case of
-   tensile failure (compensated linear vector dipole CLVD) type source. Figures
-   are generated using Scipy sph_harm  and Mayavi. :label:`beachballs`
+   Rendered in 3-dimensions, (left) the signed radiation pattern for
+   a possible tensile type source. (right) Similarly for the case of
+   shear type source. Figures are generated using Scipy sph_harm and
+   Mayavi. :label:`beachballs`
 
 The black areas of this beachball diagram represents the region where
 the displacement at the source is radially outward (vice versa for the
-white regions). The nodal lines represent the seperating margin
+white regions). The nodal lines represent the separating margin
 between classes of data (outward and inward displacement). For the
-shear source, the nodal lines represent the fault and auxillary planes
+shear source, the nodal lines represent the fault and auxiliary planes
 respectively.
 
 One observation we can immediately take away from Fig
@@ -267,7 +267,7 @@ Currently, a common method (called FPFIT [FPFIT]_) for earthquake
 classification is to assume that shear failure is the source
 mechanism, and then, through a least squares optimization, find the
 fault plane orientation that minimizes the rate of misclassification
-to the data. A modern code built apon FPFIT is the HASH algorithm
+to the data. A modern code built upon FPFIT is the HASH algorithm
 [HASH]_. The HASH software is available for download from the USGS
 [#]_ website. The HASH software comes with an example "NorthRidge"
 dataset which we will use to demonstrate our method. We compare the
@@ -288,7 +288,7 @@ least squares method, however the function it is optimizing need not be
 particularly convex. As such, there are many solutions that have a
 similar goodness of fit.  Using a grid search method, FPFIT draws a
 ensemble of these possible solutions for the fault orientation. The
-red lines are the fault (and auxillary) planes for each solution. The
+red lines are the fault (and auxiliary) planes for each solution. The
 blue line preferred or most likely solution. In some cases the cost
 function optimized by FPFIT can become multi-modal, which leads to
 instability in the solution. An example of this kind of instability is
@@ -304,22 +304,22 @@ Earthquake - Learning with Kernels
 .. figure:: svm_schematic.png
 	    	   
    A schematic of the optimization strategy of the SVC.
-   The dashed lines represent the edges of the seperating margin. The blue open and
+   The dashed lines represent the edges of the separating margin. The blue open and
    red closed dots are the polarity data represented in a feature space.
-   The dashed lines represent a seperating margin between the two classes, the solid
-   line represents the optimal seperating hyperplane. :label:`svc`
+   The dashed lines represent a separating margin between the two classes, the solid
+   line represents the optimal separating hyper-plane. :label:`svc`
 
 In this section we discuss the classification algorithm used, and the application
 of the Python scikits-learn. Whilst our interest was classification of earthquakes,
-the algorithm is applicible for any classifcation problem defined on a sphere.
+the algorithm is applicable for any classification problem defined on a sphere.
 
 Define the input space of the problem as the surface of the focal sphere, represented
-for example by the stereonet in Fig. :ref:`yarn`. The data is not linearly seperable
+for example by the stereonet in Fig. :ref:`yarn`. The data is not linearly separable
 on this space. The strategy of the SVC is to project the problem
 into a higher dimensional feature space. And in this feature space, determine the
-best hyper-plane to seperate the two classes of data by maximising the width of the
-seperating margin, subject to the constraint that the classes are either side of the
-seperating margin, Fig. :ref:`svc` shows a schematic of the algorithm.
+best hyper-plane to separate the two classes of data by maximizing the width of the
+separating margin, subject to the constraint that the classes are either side of the
+separating margin, Fig. :ref:`svc` shows a schematic of the algorithm.
 
 .. code-block:: python
 
@@ -346,7 +346,7 @@ seperating margin, Fig. :ref:`svc` shows a schematic of the algorithm.
        # Angle [0,2*pi] measured as azimuth
        azim = arctan2(poly_svc.support_vectors_[:,1],
 		      poly_svc.support_vectors_[:,0])
-       # Basically the lagrange multipliers * class
+       # The lagrange multipliers * class,
        # classes are labeled -1 or 1.
        dual_coeff = poly_svc.dual_coef_[0,:]
        # Remember which points where mis-classified 
@@ -373,7 +373,7 @@ for some misclassification; the default value is usually sufficient.
 .. raw:: latex
 
    Given a set of data $y_{i}$, which is either 1 or -1, the support
-   vector machine learns a corrsponding set of coefficients
+   vector machine learns a corresponding set of coefficients
    $\alpha_{i}$ and intercept $\beta_{0}$, which determines a classifying function
    in the input space,
    \begin{equation}
@@ -382,11 +382,11 @@ for some misclassification; the default value is usually sufficient.
    In our application, the zero of this function is the nodal line, and the sign
    of the function is a prediction for the the direction of the displacement
    radial to the focal sphere, given the observed data.
-   Not all of the data is relevant for determing the best seperating
-   margin, many of the coeffieicents $\alpha_{i}$ maybe zero. The
+   Not all of the data is relevant for determining the best separating
+   margin, many of the coefficients $\alpha_{i}$ maybe zero. The
    support vectors are the locations of the data where $\alpha_{i}$
    are non-zero. The product $\alpha_{i}y_{i}$ associated with each of the
-   support vectors is called the dual coeffients (see the code snippet).
+   support vectors is called the dual coefficients (see the code snippet).
 	 
 .. figure:: class_3146815_example.png
 
@@ -396,7 +396,7 @@ for some misclassification; the default value is usually sufficient.
 In Fig. :ref:`class-example` we demonstrate the SVC classifier applied
 to an event from the Northridge dataset. The red line represents zeros
 of the classifying function f(x), the green line is the solution for the fault
-(and auxillary) planes determined by HASH. Note that the auxillary
+(and auxiliary) planes determined by HASH. Note that the auxiliary
 plane is computed using the aux_plane function provided by the Obspy
 library. The learned nodal line is simply connected, the zeros of the
 classifying function f(x) have been determined using matplotlib's contour
@@ -404,13 +404,13 @@ function.
 
 Both the HASH solution and the learned solution have a similar rate of
 misclassification.  However the learned solution is still
-unstatisfactory to us because we cannot make physical sense of the
+unsatisfactory to us because we cannot make physical sense of the
 result. What we want is an explanation of the type of source mechanism
 and its orientation.  To be physically meaningful, we need an
 expression for the nodal lines in terms of its spectrum in the basis of
-spherical harmonic funtions. In this basis we can then use the seismic
+spherical harmonic functions. In this basis we can then use the seismic
 source theory of [Ben81]_ to relate the result to a physical process.
-What we what is to determine the sprectral content of f(x), 
+What we what is to determine the spectral content of f(x), 
 
 .. math::
    :type: equation
@@ -435,8 +435,8 @@ product kernel in terms of the Legendre polynomials [Scholkopf]_,
    \end{cases}\ .
    \end{align*}
 
-When we do this, we see that the degree parameter provides a natual truncation on the complexity of the
-function we are learning. This gives us the intermediate result which expresses the seperating margin
+When we do this, we see that the degree parameter provides a natural truncation on the complexity of the
+function we are learning. This gives us the intermediate result which expresses the separating margin
 in terms of Legendre polynomials of the inner product
 
 .. math::
@@ -445,7 +445,7 @@ in terms of Legendre polynomials of the inner product
    f(\vec{x}) = \sum_{i=1}^{N}\alpha_{i}y_{i}\sum_{l=1}^{\infty}a_{l}P_{l}(\langle \vec{x}, \vec{x}_{i} \rangle)\ .
 	 
 
-The next step is to apply the addition thereom to express this interms of the spherical harmonics,
+The next step is to apply the addition theorem to express this in terms of the spherical harmonics,
 
 .. math::
    :type: equation
@@ -486,7 +486,7 @@ here the integral is over the surface of the focal sphere and the
 star-notation means complex conjugation.  In the context of hazard
 monitoring, we could use the as a metric of risk, without having to
 propose a source mechanism or fault plane orientation, provided of
-course we have a catalogue of earthquakes that are of interest to us.
+course we have a catalog of earthquakes that are of interest to us.
 
 Physical Interpretation
 -----------------------
@@ -498,7 +498,7 @@ how would we estimate the most likely orientation of the fault plane
 in this model?
 
 First of all, in Table 1, we have a template for the spectral content
-of the shear source for a particular directon of fault normal and slip
+of the shear source for a particular direction of fault normal and slip
 direction. Using this template we might compute a function g(x), and
 then generate a rotation in the input space to realign the fault
 plane. Note we will define rotations in terms of the Euler angles
@@ -514,7 +514,7 @@ SVC, with respect to the Euler angles,
 
 Here, R represents are rotation matrix.  This would be a relatively
 complicated procedure because we would need to re-evaluate the
-function g(x) at each iteration of the optimzation. It is far more
+function g(x) at each iteration of the optimization. It is far more
 efficient to instead generate the rotations in the feature space. To
 do this we borrow from quantum theory, and present Wigner's D-matrices,
 
@@ -533,7 +533,8 @@ do this we borrow from quantum theory, and present Wigner's D-matrices,
        # Wigner is ZYZ Euler rotation, \gamma = -rake
        D = WignerD2(strike, dip, -rake).conjugate()
        # Template (13)/(31) : glm = (0, -1j, 0, -1j, 0)
-       prop = (inner(D[:,3], alm) + inner(D[:,1], alm))*1j
+       prop = (inner(D[:,3], alm) +
+                      inner(D[:,1], alm))*1j
        # Maximize, not minimize.
        return -norm(prop)
        
@@ -578,23 +579,25 @@ algorithm and try to gain some insight into the correlation functions.
 
 .. figure:: class_3145744_norev.png
 
-   For event 3145744 from north1 dataset. Dashed lines computed without the station
-   reversal applied. (green) nodal line estimated by HASH, (red) nodal line estimated
-   by SVC. The black arrow points to datum for which the polarity is flipped. :label:`flipped`
+	    
+   For event 3145744 from north1 dataset. The color scheme for each
+   subplot as in Fig. :ref:`class-dc`, the dashed lines are solutions
+   without the station reversal being applied. The black arrow points to
+   datum for which the polarity is flipped. :label:`flipped`
 
 The HASH program has an input (scsn.reverse) which identifies stations
 whose polarity was found to be erroneous in the past. These reversals
-are appllied post facto to correct the input polarity data.  We will
-use this feature to demontrate and example where the support vector
+are applied post facto to correct the input polarity data.  We will
+use this feature to demonstrate and example where the support vector
 and least squares classifiers behaves very differently. In Fig
 :ref:`flipped` we give an example comparing the results with (solid
 lines) and without (dashed lines) the benefit of the polarity
 correction. In this example, the polarity of a single station is
 changed (highlighted by the black arrow). This point is very close to
 the nodal line estimated by the SVC, which, given the soft
-thresholding, is forgiving of misclassification along its seperating
+thresholding, is forgiving of misclassification along its separating
 margin. The solution for the nodal line is largely unchanged. On the
-otherhand, the strategy of FPFIT is to minimize the overall rate of
+other hand, the strategy of FPFIT is to minimize the overall rate of
 misclassification. And indeed, in each case, it finds the optimal
 solution on this basis. In fact, in terms of misclassified point,
 FPFIT outperforms the SVC classifier. But we would question whether
@@ -603,11 +606,11 @@ applied perspective.  Consider that since the nodal line represents a
 point where the radiation pattern is changing sign, we expect that the
 signal to noise level will be smaller in this region.  Conversely,
 from the point of view of the SVC, these are also the points that are
-most informative to the proper location of its seperating
+most informative to the proper location of its separating
 margin. Indeed, many of the best quality picks far from the nodal
-lines will not influence the solution for the seperating plane (recall
+lines will not influence the solution for the separating plane (recall
 dual coefficients can be zero). And it is reasonable that data of the
-correct class located far from the seperating margin should not
+correct class located far from the separating margin should not
 influence the solution. Looking at the problem from this perspective
 the solution of the SVC is more reasonable.
 
@@ -636,12 +639,12 @@ expect.
 .. figure:: highlo.png
 
    The color scheme for each subplot as in Fig. :ref:`class-dc`.
-   (top left) The solution for event 3146815, (top) right the solution for
-   event 3158361 and (bottom right) 3153955. Events 3158361 and 3153955
+   (top left) The solution for event 3146815, (top right) the solution for
+   events 3158361 and (bottom right) 3153955. Events 3158361 and 3153955
    represent the maximum and minimum correlation score
-   with event 3146815.: :label:`highlo`
+   with event 3146815. :label:`highlo`
 	    
-In :ref:`highlo` we provide a visulaization of the events with the
+In :ref:`highlo` we provide a visualization of the events with the
 highest (top right) and lowest (bottom right) correlation score
 comparing with event 3146815 (top left).  The orientation of the nodal
 lines for event 3153955, which has the lowest correlation score,
@@ -660,7 +663,7 @@ source mechanisms using Python. The important steps were to define the
 problem in terms of classification, which is solved robustly by the
 sklearn [sklearn]_ support vector classifier. We then used results
 from seismic source theory [Ben81]_ to derive a mapping between the
-input and feaure spaces of the classification problem. Using the
+input and feature spaces of the classification problem. Using the
 representation of the solution in the feature space, we derived a
 correlation coefficient.
 
@@ -719,7 +722,7 @@ which introduces a relative phase when collecting terms of different
 degree.  We also note that the normalization of the spherical harmonics
 used in [Ben81]_ does not include the Cordon Shortley phase
 convention. Since we are applying the Wigner-D matrices to generate
-rotations, it is conventient to use that convention,
+rotations, it is convenient to use that convention,
 
 .. math:: 
    :type: equation
