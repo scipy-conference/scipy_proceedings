@@ -141,6 +141,9 @@ These paths may not point to directories or files that actually exist, but they 
 
 We can, for example, easily store a ``pandas`` DataFrame somewhere in the tree for reference later:
 
+.. todo: change to an example where we store a dataframe with arboreal data;
+.. more fun, less space, fits theme
+
 .. code-block:: python
 
    >>> import pandas as pd
@@ -158,6 +161,8 @@ and we can access it again directly:
 .. code-block:: python
 
    >>> csv = data['random_dataframe.csv']
+   >>> csv
+   <Leaf: 'sprout/a/place/for/data/random_dataframe.csv'>
    >>> print(csv.read())
 
    ,A,B,C
@@ -172,6 +177,7 @@ and we can access it again directly:
    8,0.4375285197298905,0.7725833477975118,-0.5321635278258459
    9,-0.24309412997865673,-0.04109901866284795,1.8452297139705818
     
+
 
 .. note somehow that it is not necessary to use Treants to manipulate the filesystem, but they serve as flagposts for places of interest
 
