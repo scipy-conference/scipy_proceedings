@@ -156,7 +156,7 @@ We can, for example, easily store a ``pandas`` DataFrame somewhere in the tree f
    data/
    +-- random_dataframe.csv
 
-and we can access it again directly:
+and we can introspect the file directly:
 
 .. code-block:: python
 
@@ -177,12 +177,13 @@ and we can access it again directly:
    8,0.4375285197298905,0.7725833477975118,-0.5321635278258459
    9,-0.24309412997865673,-0.04109901866284795,1.8452297139705818
     
-
-
-.. note somehow that it is not necessary to use Treants to manipulate the filesystem, but they serve as flagposts for places of interest
+Using ``Treant``, ``Tree``, and ``Leaf`` objects, we can work with the filesystem Pythonically without giving much attention to *where* these objects live within that filesystem.
+This becomes especially powerful when we have many directories/files we want to work with, possibly in many different places.
 
 Aggregation and splitting on Treant metadata
 --------------------------------------------
+What makes a ``Treant`` distinct from a ``Tree`` is its **state file**.
+This file stores metadata that can be used to filter and split ``Treant`` objects when treated in aggregate.
 
 
 Treant modularity with attachable Limbs
