@@ -89,8 +89,8 @@ We can start a separate Python session and use this ``Treant`` immediately there
 
    # python session 2
    >>> import datreant.core as dtr
-   >>> t = dtr.Treant('sprout')
-   >>> t
+   >>> s = dtr.Treant('sprout')
+   >>> s
    <Treant: 'sprout'>
 
 Making a modification to the ``Treant`` in one session is immediately reflected by the same ``Treant`` in any other session.
@@ -99,8 +99,8 @@ For example, a ``Treant`` can store any number of descriptive tags that are usef
 .. code-block:: python
 
    # python session 1
-   >>> t.tags.add('green', 'cork')
-   >>> t.tags
+   >>> s.tags.add('green', 'cork')
+   >>> s.tags
    <Tags(['cork', 'green'])>
 
 And in the other Python session, we see the same ``Treant``:
@@ -108,13 +108,37 @@ And in the other Python session, we see the same ``Treant``:
 .. code-block:: python
 
    # python session 2
-   >>> t.tags
+   >>> s.tags
    <Tags(['cork', 'green'])>
 
 Internally, advisory locking is done to avoid race conditions, making a ``Treant`` multiprocessing safe.
 
 Introspecting a Treant's Tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A ``Treant`` can be used to introspect and manipulate its filesystem tree.
+We can, for example, create directory structures rather easily:
+
+.. code-block:: python
+
+   >>> s['a/place/for/data/'].makedirs()
+   <Tree: 'sprout/a/place/for/data/'>
+   >>> s['a/place/for/text/'].makedirs()
+   <Tree: 'sprout/a/place/for/text/'>
+
+and so we now have::
+
+   >>> s.draw()
+   sprout/
+    +-- Treant.1dcbb3b1-c396-4bc6-975d-3ae1e4c2983a.json
+    +-- a/
+        +-- place/
+            +-- for/
+                +-- data/
+                +-- text/
+
+Accessing paths in this way returns ``Tree`` and ``Leaf`` objects, referring to directories and files, respectively.
+These paths may not point to directories or files that actually exist, but they can be used to create and work with these elements.
+Perhaps we want to store some details about what we 
     
 
 .. note somehow that it is not necessary to use Treants to manipulate the filesystem, but they serve as flagposts for places of interest
