@@ -243,7 +243,7 @@ Analysis Module
 ---------------
 
 In the MDAnalysis.analysis module we provide a large variety of standard analysis algorithms, like RMSD, alignment :cite:`PuLiu_FastRMSD_2010`, native contacts :cite:`Best2013,Franklin2007`, as well as unique algorithms, like the LeaftleftFinder :cite:`Michaud-Agrawal:2011fu` and Path Similarity Analysis :cite:`Seyler:2015fk`.
-Historically these algorithms were contributed by various researchers as individual moduldes to satisfy their own needs but this lead to some fragmentation in the user interface of these modules.
+Historically these algorithms were contributed by various researchers as individual modules to satisfy their own needs but this lead to some fragmentation in the user interface of these modules.
 We have recently started to unify the interface to the different algorithms with an `AnalysisBase` class.
 Currently PersistenceLength, InterRDF, LinearDensity and Contacts analysis have been ported.
 PersistenceLength calculates the persistence length of a polymer, InterRDF calculates the pairwise radial distribution function inside of a molecule, LinearDensity generates a density along a given exis and Contacts analysis native contacts, as desribed in more detail below.
@@ -294,7 +294,7 @@ Additionally, it is possible to utilise NumPy's faster indexing rather than usin
 This new data structure has lead to performance improvements in our whole codebase.
 The largest improvement is in accessing subsets of Atoms which is now over 40 times faster, see tab :ref:`performance-accessing-gro`.
 
-.. table:: Performance comparison of your new AtomGroup data structures compared with the old Atom classes. times are given in seconds, the test systems are vesicles using repeats from the `vesicle library`_. :label:`tab:performance-accessing-gro`
+.. table:: Performance comparison of your new AtomGroup data structures compared with the old Atom classes. Times are given in seconds, the test systems are vesicles using repeats from the `vesicle library`_ :cite:`Kenney:2015aa`. :label:`tab:performance-accessing-gro`
 
       +----------+----------+----------+
       | # atoms  | Old IMPL | new IMPL |
