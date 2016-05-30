@@ -78,10 +78,10 @@ MDAnalysis: A Python Package for the Rapid Analysis of Molecular Dynamics Simula
 MDAnalysis (http://mdanalysis.org) is a library for structural and temporal analysis of molecular dynamics (MD) simulation trajectories and individual protein structures.
 MD simulations of biological molecules have become an important tool to elucidate the relationship between molecular structure and physiological function.
 Simulations are performed with highly optimized software packages on HPC resources but most codes generate output trajectories in their own formats so that the development of new trajectory analysis algorithms is confined to specific user communities and widespread adoption and further development is delayed.
-The MDAnalysis library addresses this problem by abstracting access to the raw simulation data and presenting a uniform object-oriented Python interface to the user.
+MDAnalysis addresses this problem by abstracting access to the raw simulation data and presenting a uniform object-oriented Python interface to the user.
 It thus enables users to rapidly write code that is portable and immediately usable in virtually all biomolecular simulation communities.
-The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages, and for interactive and rapid prototyping work in IPython_ :cite:`Perez2007` / Jupyter_ notebooks, especially together with molecular visualization provided by nglview_ and time series analysis with pandas_ :cite:`McKinney2010`.
-MDAnalysis is written in Python and Cython and uses NumPy_ :cite:`Vanderwalt2011` arrays for easy interoperability with the wider scientific Python ecosystem.
+The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages, and for interactive and rapid prototyping work in IPython_  / Jupyter_ notebooks, especially together with molecular visualization provided by nglview_ and time series analysis with pandas_.
+MDAnalysis is written in Python and Cython_ and uses NumPy_ arrays for easy interoperability with the wider scientific Python ecosystem.
 It is widely used and forms the foundation for more specialized biomolecular simulation tools.
 MDAnalysis is available under the GNU General Public License v2.
 
@@ -90,6 +90,7 @@ MDAnalysis is available under the GNU General Public License v2.
 .. _nglview: https://github.com/arose/nglview
 .. _pandas: http://pandas.pydata.org/
 .. _NumPy: http://www.numpy.org
+.. _Cython: http://cython.org/
 
 .. class:: keywords
 
@@ -118,8 +119,8 @@ Here we report on the general philosophy of MDAnalysis, its capabilities, and re
 Overview
 --------
 
-MDAnalysis is written in Python and Cython and uses NumPy arrays :cite:`Vanderwalt2011` for easy interoperability with the wider scientific Python ecosystem.
-Although the primary dependency is NumPy, other Python packages such as netcdf4 (http://unidata.github.io/netcdf4-python/) and BioPython :cite:`Hamelryck:2003fv` also provide specialized functionality to the core of the library (Figure :ref:`fig:structure`).
+MDAnalysis is written in Python and Cython_ and uses NumPy_ arrays :cite:`Vanderwalt2011` for easy interoperability with the wider scientific Python ecosystem.
+Although the primary dependency is NumPy_, other Python packages such as netcdf4_  and BioPython_ :cite:`Hamelryck:2003fv` also provide specialized functionality to the core of the library (Figure :ref:`fig:structure`).
 
 .. figure:: figs/mdanalysis_structure.pdf
 
@@ -132,9 +133,9 @@ MDAnalysis currently supports more than 25 different file formats and covers the
 The user interface provides "physics-based" abstractions (e.g. "atoms", "bonds", "molecules") of the data that can be easily manipulated by the user.
 It hides the complexity of accessing data and frees the user from having to implement the details of different trajectory and topology file formats (which by themselves are often only poorly documented and just adhere to certain "community expectations" that can be difficult to understand for outsiders).
 
-The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages like ENCORE_ :cite:`Tiberti:2015fk` and ProtoMD_ :cite:`Somogyi:2016aa`, and for interactive and rapid prototyping work in IPython/Jupyter notebooks, especially together with molecular visualization provided by nglview_ and time series analysis with pandas_.
+The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages like ENCORE_ :cite:`Tiberti:2015fk` and ProtoMD_ :cite:`Somogyi:2016aa`, and for interactive and rapid prototyping work in IPython_ :cite:`Perez2007`/Jupyter_ notebooks, especially together with molecular visualization provided by nglview_ and time series analysis with pandas_ :cite:`McKinney2010`.
 Since the original publication :cite:`Michaud-Agrawal:2011fu`, improvements in speed and data structures make it now possible to work with terabyte-sized trajectories containing up to ~10 million particles.
-MDAnalysis also comes with specialized analysis classes in the MDAnalysis.analysis module that are unique to MDAnalysis such as the LeafletFinder graph-based algorithm for the analysis of lipid bilayers :cite:`Michaud-Agrawal:2011fu` or the Path Similarity Analysis for the quantitative comparison of macromolecular conformational changes :cite:`Seyler:2015fk`.
+MDAnalysis also comes with specialized analysis classes in the MDAnalysis.analysis module that are unique to MDAnalysis such as LeafletFinder a graph-based algorithm for the analysis of lipid bilayers :cite:`Michaud-Agrawal:2011fu` or Path Similarity Analysis for the quantitative comparison of macromolecular conformational changes :cite:`Seyler:2015fk`.
 
 MDAnalysis is available in source form under the GNU General Public License v2 from GitHub as `MDAnalysis/mdanalysis`_, and as PyPi_ and conda_ packages.
 The documentation_ is extensive and includes an `introductory tutorial`_.
@@ -153,18 +154,17 @@ When backwards-incompatible changes are inevitable, we provide tools (based on t
 .. _community mailing list: https://groups.google.com/forum/#!forum/mdnalysis-discussion
 .. _ENCORE: https://github.com/encore-similarity/encore
 .. _ProtoMD: https://github.com/CTCNano/proto_md
-
 .. _introductory tutorial: http://www.mdanalysis.org/MDAnalysisTutorial/
 .. _documentation: http://docs.mdanalysis.org
 .. _`MDAnalysis/mdanalysis`: https://github.com/MDAnalysis/mdanalysis
-
 .. _semantic versioning: http://semver.org
-
+.. _netcdf4: http://unidata.github.io/netcdf4-python/
+.. _BioPython: http://biopython.org/wiki/Biopython
 
 Basic Usage
 -----------
 
-The core object in MDAnalysis is the Universe which acts as a nexus for accessing all data contained within the simulation.
+The core object in MDAnalysis is the Universe which acts as a nexus for accessing all data contained within a simulation.
 It is initialised by passing the filenames of the topology and trajectory files, with a multitude of different formats supported in these roles.
 The topology acts as a description of all the particles in the system while the trajectory describes their behavior over time.
 
@@ -178,7 +178,7 @@ The topology acts as a description of all the particles in the system while the 
    u = mda.Universe('topol.tpr', 'traj.trr')
 
    # Create a selection of atoms to work with
-   ag = u.atoms.select_atoms('name CA and not resname MET LYS')
+   ag = u.atoms.select_atoms('backbone')
 
 The select_atoms method allows for AtomGroups to be created using a human readable syntax which allows queries according to properties, logical statements and geometric criteria.
 
@@ -242,22 +242,23 @@ Through this approach only a single frame of data is present in memory at any ti
 Analysis Module
 ---------------
 
-In the MDAnalysis.analysis module we provide a large variety of standard analysis algorithms, like RMSD, alignment :cite:`PuLiu_FastRMSD_2010`, native contacts :cite:`Best2013,Franklin2007`, as well as unique algorithms, like the LeaftleftFinder :cite:`Michaud-Agrawal:2011fu` and Path Similarity Analysis :cite:`Seyler:2015fk`.
+In the ``MDAnalysis.analysis`` module we provide a large variety of standard analysis algorithms, like RMSD, alignment :cite:`PuLiu_FastRMSD_2010`, native contacts :cite:`Best2013,Franklin2007`, as well as unique algorithms, like the ``LeaftleftFinder`` :cite:`Michaud-Agrawal:2011fu` and Path Similarity Analysis (``PSA``) :cite:`Seyler:2015fk`.
 Historically these algorithms were contributed by various researchers as individual modules to satisfy their own needs but this lead to some fragmentation in the user interface.
 We have recently started to unify the interface to the different algorithms with an `AnalysisBase` class.
 Currently ``PersistenceLength``, ``InterRDF``, ``LinearDensity`` and ``Contacts`` analysis have been ported.
-``PersistenceLength`` calculates the persistence length of a polymer, ``InterRDF`` calculates the pairwise radial distribution function inside of a molecule, ``LinearDensity`` generates a density along a given exis and ``Contacts`` analysis native contacts, as desribed in more detail below.
-If applicable we also strive to make the API's to the algorithms generic.
+``PersistenceLength`` calculates the persistence length of a polymer, ``InterRDF`` calculates the pairwise radial distribution function inside of a molecule, ``LinearDensity`` generates a density along a given exis and ``Contacts`` analysis native contacts, as described in more detail below.
+The API to these different algorithms is being unified with a common ``AnalysisBase`` class, with an emphasis on keeping it as generic and universal as possible so that it becomes easy to, for instance, parallelize analysis.
 Most other tools hand the user analysis algorithms as black boxes.
-We want to avoid that and give the users all he needs to adapt an analysis to his/her needs.
+We want to avoid that and allow the user to adapt an analysis to their needs.
 
 The new ``Contacts`` class is a good example a generic API that allows easy adaptations of algorithms while still offering an easy setup for standard analysis types.
 The ``Contacts`` class is calculating a contact map for atoms in a frame and compares it with a reference map using different metrics.
 The used metric then decides which quantity is measued.
-A common quantity of interest is the fraction of native contacts, native contacts are all atoms that are nearby in the reference.
-For native contacts there exists two metrics :cite:`Best2013,Franklin2007` and we default to the later.
+A common quantity is the fraction of native contacts, where native contacts are all atompairs that are close to each other in a reference structure.
+The fraction of native contacts is often used in protein folding to determine when a protein is folded.
+For native contacts two major types of metrics are considered: ones based on differentiable functions :cite:`Best2013` and ones based on hard cut-offs  :cite:`Franklin2007` (which we set as the default implementation).
 We have designed the API to choose between the two metrics and pass user defined functions to develop new metrics or measure other quantities.
-This generic interface allowed us to implement a q1q2 analysis :cite:`Franklin2007` on top of the ``Contacts`` class.
+This generic interface allowed us to implement a "q1q2" analysis :cite:`Franklin2007` on top of the ``Contacts`` class.
 Below is incomplete code example that shows how to implement a q1q2 analysis, the default value for the *method* kwarg is overwriten with a user defined method *radius_cut_q*.
 A more detailed explanatain can be found in the docs.
 
@@ -268,9 +269,11 @@ A more detailed explanatain can be found in the docs.
        return y.sum() / r.size
 
    contacts = Contacts(u, selection,
-                       (first_frame_refs, last_frame_refs),
-                       radius=radius, method=radius_cut_q,
-                       start=start, stop=stop, step=step,
+                       (first_frame, last_frame),
+                       radius=radius,
+                       method=radius_cut_q,
+                       start=start, stop=stop,
+                       step=step,
                        kwargs={'radius': radius})
 
 This type of flexible analysis algorithm paired with a collection of base classes allow quick and easy analysis of simulations as well as development of new ones.
@@ -292,12 +295,12 @@ This transformation of the data structures from an Array of Structs to a Struct 
 It is quite common to compare a single property across many Atoms, but rarely are different properties within a single Atom compared.
 Additionally, it is possible to utilise NumPy's faster indexing rather than using a list comprehension.
 This new data structure has lead to performance improvements in our whole codebase.
-The largest improvement is in accessing subsets of Atoms which is now over 40 times faster, see tab :ref:`performance-accessing-gro`.
+The largest improvement is in accessing subsets of Atoms which is now over 40 times faster, see tab :ref:`tab:performance-accessing-gro`.
 
 .. table:: Performance comparison of new AtomGroup data structures compared with the old Atom classes. Times are given in seconds, the test systems are vesicles using repeats from the `vesicle library`_ :cite:`Kenney:2015aa`. :label:`tab:performance-accessing-gro`
 
       +----------+----------+----------+
-      | # atoms  | Old IMPL | new IMPL |
+      | # atoms  | v0.15.0  | v0.16.0  |
       +==========+==========+==========+
       | 1.75 M   | 0.018    | 0.0005   |
       +----------+----------+----------+
@@ -310,7 +313,7 @@ The largest improvement is in accessing subsets of Atoms which is now over 40 ti
    .. table:: Performance comparison of loading a topology file with 1.5 to 10 million atoms. Times are given in seconds, the test systems are vesicles using repeats from the `vesicle library`. :label:`tab:performance-loading-gro`
 
       +----------+----------------+----------+
-      |          | Old IMPL       | new IMPL |
+      |          | v0.15.0        | v0.16.0  |
       +==========+================+==========+
       | 1.75 M   | 17             | 5        |
       +----------+----------------+----------+
