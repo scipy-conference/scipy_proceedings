@@ -23,12 +23,13 @@ Fitting Human Decision Making Models using Python
 
 .. class:: abstract
 
-A topic of interest in experimental psychology and cognitive neuroscience is to understand how humans make decisions. A common approach involves using computational models to represent the decision making process, and use the model parameters to analyze brain imaging data. These computational models are based on the Reinforcement Learning (RL) paradigm, where an agent learns to make decisions based on the difference between what it expects and what it gets each time it interacts with the environment. In the typical experimental setup, subjects are presented with a set of options, each one associated to different numerical rewards. The task for each subject is to learn, by taking a series of sequential actions, which option maximizes their total reward. The sequence of actions made by the subject and the obtained rewards are used to fit a parametric RL model. The model is fit by maximizing the likelihood of the parameters given the experiment data. In this work we present a Python implementation of this model fitting procedure. We extend the implementation to fit a model of the experimental setup known as the "contextual bandit", where the probabilities for each trial of the experiment depend on the context associated to that trial. We also developed an artificial agent that can simulate the behavior of a human making decisions under the RL paradigm. We use this artificial agent to validate the model fitting by comparing the parameters estimated from the data with the known agent parameters. We also present the results of a model fitted with experimental data. We use the standard scientific Python stack (NumPy/SciPy) to compute the likelihood function and to find its maximum. The code organization allows to easily change the RL model. We also use the Seaborn library to create a visualization with the behavior of all the subjects. The simulation results validate the correctness of the implementation. The experimental results shows the usefulness and simplicity of the program when working with experimental data. The source code of the program is available at https://github.com/aweinstein/FHDMM.
+A topic of interest in experimental psychology and cognitive neuroscience is to understand how humans make decisions. A common approach involves using computational models to represent the decision making process, and use the model parameters to analyze brain imaging data. These computational models are based on the Reinforcement Learning (RL) paradigm, where an agent learns to make decisions based on the difference between what it expects and what it gets each time it interacts with the environment. In the typical experimental setup, subjects are presented with a set of options, each one associated to different numerical rewards. The task for each subject is to learn, by taking a series of sequential actions, which option maximizes their total reward. The sequence of actions made by the subject and the obtained rewards are used to fit a parametric RL model. The model is fit by maximizing the likelihood of the parameters given the experiment data. In this work we present a Python implementation of this model fitting procedure. We extend the implementation to fit a model of the experimental setup known as the "contextual bandit", where the probabilities of the outcome change from trial to trial depending on a predictive cue. We also developed an artificial agent that can simulate the behavior of a human making decisions under the RL paradigm. We use this artificial agent to validate the model fitting by comparing the parameters estimated from the data with the known agent parameters. We also present the results of a model fitted with experimental data. We use the standard scientific Python stack (NumPy/SciPy) to compute the likelihood function and to find its maximum. The code organization allows to easily change the RL model. We also use the Seaborn library to create a visualization with the behavior of all the subjects. The simulation results validate the correctness of the implementation. The experimental results shows the usefulness and simplicity of the program when working with experimental data. The source code of the program is available at https://github.com/aweinstein/FHDMM.
+
 
 
 .. class:: keywords
 
-   decision making, reinforcement learning
+   decision making modeling, reinforcement learning
 
 Introduction
 ------------
@@ -41,7 +42,7 @@ As stated by the classic work of Rescorla and Wagner [Res72]_
   only modified when consequent events disagree with the composite
   expectation."*
 
-This paradigm allows to use the framework of Reinforcement Learning (RL) to model the process of human decision making. In the fields of experimental psycology and cognitive neuroscience these models are used to fit experimental data. Once such a model is fitted, one can use the model parameters to draw conclusions about the subjects that participated in the experiments, and in more general terms, to improve the understanding of how certain areas of the brain work. For an in-depth discussion about the connections between cognitive neuroscience and RL see chapter 16 of [Wie12]_. 
+This paradigm allows to use the framework of Reinforcement Learning (RL) to model the process of human decision making. In the fields of experimental psychology and cognitive neuroscience these models are used to fit experimental data. Once such a model is fitted, one can use the model parameters to draw conclusions about  individual difference between the participants. The model parameters can be co-varied with imaging data to make observations about the neural mechanisms underpinning the learning process. For an in-depth discussion about the connections between cognitive neuroscience and RL see chapter 16 of [Wie12]_. 
 
 In this work we present a Python program able to fit experimental data to a RL model. The fitting is based on a maximum likelihood approach [Cas02]_. We present simulation and experimental data results. 
 
@@ -84,7 +85,7 @@ In this work we consider the case were the probabilities associated to the rewar
 
 where :math:`c_t` is the cue observed at time :math:`t`. In the literature, this setup is known as *associative search* [Sut98]_ or *contextual bandit* [Lan08]_.
 
-In summary, each interaction, or trial, between the agent and the environment starts by the agent observing the environment context, or cue. Based on that observed cue and on what the agent have learned so far from previous interactions, the agent makes a decision about what action to execute next. It then gets a reward, and based on the value of that reward it updates the action-value function accordingly.
+In summary, each interaction, or trial, between the agent and the environment starts by the agent observing the environment context, or cue. Based on that observed cue and on what the agent has learned so far from previous interactions, the agent makes a decision about what action to execute next. It then gets a reward (or penalty), and based on the value of that reward (or penalty) it updates the action-value function accordingly.
 
 Fitting the Model Using Maximum Likelihood
 ------------------------------------------
@@ -119,7 +120,7 @@ Details about the calculation of the likelihood function and its optimization  a
 Experimental Data
 -----------------
 
-The data used in this work consists on the record of a computarised card game played by the participants of the experiment. The game consists of 360 trials. Each trial begins with the presentation of a cue during one second. This cue can be a circle, a square or a triangle. The cue indicates the probability of winning on that trial. These probabilities are 20%, 50% and 80%, and are unknown to the participants. The trial continues with the presentation of four cards with values 23, 14, 8 and 3. The participant select one of these cards and wins or lose the amount of points selected in the card, according to the probabilities defined by the cue. The outcome of the trial is indicated by a stimulus that last one second. The trial finalize with a blank inter-trial stimulus that also last one second. Figure :ref:`FigStimulus` shows a schematic of the stimulus presentation. Participants were instructed to maximize their winnings and minimize their losses. See [Mas12]_ for more details about the experimental design.
+The data used in this work consists on the record of a computerized card game played by 46 participants of the experiment. The game consists of 360 trials. Each trial begins with the presentation of a cue during one second. This cue can be a circle, a square or a triangle. The cue indicates the probability of winning on that trial. These probabilities are 20%, 50% and 80%, and are unknown to the participants. The trial continues with the presentation of four cards with values 23, 14, 8 and 3. The participant select one of these cards and wins or loses the amount of points indicated on the selected card, according to the probabilities defined by the cue. The outcome of the trial is indicated by a stimulus that lasts one second. The trial ends with a blank inter-trial stimulus that also last one second. Figure :ref:`FigStimulus` shows a schematic of the stimulus presentation. Participants were instructed to maximize their winnings and minimize their losses. See [Mas12]_ for more details about the experimental design.
 
 The study was approved by the University of Manchester research ethics committee. Informed written consent was obtained from all participants.
 
@@ -131,17 +132,18 @@ The study was approved by the University of Manchester research ethics committee
    with the probability of winning in that trial. These probabilities are 20%,
    50% and 80%, and are unknown to the participants. The trial continues with
    the presentation of four cards with values 23, 14, 8 and 3. After selecting
-   a card, the participant wins or lose the amount of points indicated in the
+   a card, the participant wins or lose the amount of points indicated on the
    card, according to the probabilities associated with the cue. The outcome of
-   the trial is indicated by a stimulus and finalize with a blank inter-trial
-   stimulus [Mas12]_. :label:`FigStimulus`
+   the trial is indicated by a stimulus, where the win or lose outcome is
+   indicated by an arrow up or down, respectively.
+   [Mas12]_. :label:`FigStimulus`
 
 Implementation and Results
 --------------------------
 
-Before looking into the experimental data, we present an implementation of an artificial agent that makes decisions according to the model presented before. This artificial agent allows us to generate simulated data for different parameters, and then use the data to evaluate the estimation algorithm. 
+Before testing the experimental data, we present an implementation of an artificial agent that makes decisions according to the decision model presented above. This artificial agent allows us to generate simulated data for different parameters, and then use the data to evaluate the estimation algorithm. 
 
-The code for the artificial agent is organized around two classes. The class ``ContextualBandit`` provides a simulation of the environment. The key two methods of the class are ``get_context`` and ``reward``. The ``get_context`` method set the context, or cue, for the trial uniformly at random and return its value. The ``reward`` method return the reward, given the selected action. The value of the reward is selected at random with the probability of winning determined by the current context. The following code snippet shows the class implementation.
+The code for the artificial agent is organized around two classes. The class ``ContextualBandit`` provides a simulation of the environment. The key two methods of the class are ``get_context`` and ``reward``. The ``get_context`` method sets the context, or cue, for the trial uniformly at random and returns its value. The ``reward`` method returns the reward, given the selected action. The value of the reward is selected at random with the probability of winning determined by the current context. The following code snippet shows the class implementation.
 
 .. code-block:: python
 
@@ -210,7 +212,7 @@ The function ``run_single_softmax_experiment`` shows how these two classes inter
         for _ in range(steps):
             ca.run()
 
-In this function, after the classes are initialized, the ``run`` method is run once per trial. The results of the simulation are stored in a pandas dataframe (code not shown). Figure :ref:`FigSim` shows an example of a simulation for :math:`\alpha=0.1` and :math:`\beta=0.5` (same value for all contexts). The top and bottom plots show the actions made by the agent when it observes the context with a probability of winning of 80% and 20%, respectively. The plots also show a blue and red vertical bar for each trial where the agent won and lose, respectively. We observe that the agent learned to made actions close to the optimal ones.
+In this function, after the classes are initialized, the ``run`` method is run once per trial. The results of the simulation are stored in a pandas dataframe (code not shown). Figure :ref:`FigSim` shows an example of a simulation for :math:`\alpha=0.1` and :math:`\beta=0.5` (same value for all contexts). The top and bottom plots show the actions made by the agent when it observes the context with a probability of winning of 80% and 20%, respectively. The plots also show a blue and red vertical bar for each trial where the agent won or lost, respectively. We observe that the agent learned to made actions close to the optimal ones.
 
 .. figure:: softmax_experiment.pdf
    :align: center
@@ -256,7 +258,7 @@ Before using our implementation of the model estimation method with real data, i
    maximum likelihood are :math:`\widehat{\alpha}=0.11` and
    :math:`\widehat{\beta}=0.49` (red plus sign). :label:`FigLikelihood`
 
-It is good practice to visualize the raw experimental data before doing any further analisys. In this case, this means showing the actions taken by each subject for each trial. Ideally, we wish to show the behaviors of all the subject for a given context in a single figure, to get an overview of the whole experiment. Fortunately, the Seaborn library [Was16]_ allows us to do this with very little effort. Figure :ref:`FigAllActions` shows the result for the context with a probability of winning of 80%. We also add vertical lines (blue for winning and red for losing) for each trial.
+It is good practice to visualize the raw experimental data before doing any further analysis. In this case, this means showing the actions taken by each subject for each trial. Ideally, we wish to show the behaviors of all the subject for a given context in a single figure, to get an overview of the whole experiment. Fortunately, the Seaborn library [Was16]_ allows us to do this with very little effort. Figure :ref:`FigAllActions` shows the result for the context with a probability of winning of 80%. We also add vertical lines (blue for winning and red for losing) for each trial.
 
 Finally, we can fit a model for each subject. To do this we perform the maximum likelihood estimation of the parameters using the experimental data. Figure :ref:`FigFitExperimental` shows the estimated :math:`\widehat{\alpha}` and :math:`\widehat{\beta}` for each subject, and for the context with probability of winning 80% (in blue) and 20% (in red).
 
@@ -288,8 +290,7 @@ We have shown a Python program able to fit a decision making model from experime
 Acknowledgments
 ---------------
 
-We thanks Liam Mason for sharing the experimental data used in this work. This research was partially supported by the Advanced Center for Electrical and
-Electronic Engineering, Basal Project FB0008, Conicyt.
+We thanks Liam Mason for sharing the experimental data used in this work. This work was supported by the Advanced Center for Electrical and Electronic Engineering, AC3E, Basal Project FB0008, CONICYT.
 
 
 References
