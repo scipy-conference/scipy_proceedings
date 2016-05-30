@@ -138,7 +138,39 @@ and so we now have::
 
 Accessing paths in this way returns ``Tree`` and ``Leaf`` objects, referring to directories and files, respectively.
 These paths may not point to directories or files that actually exist, but they can be used to create and work with these elements.
-Perhaps we want to store some details about what we 
+
+We can, for example, easily store a ``pandas`` DataFrame somewhere in the tree for reference later:
+
+.. code-block:: python
+
+   >>> import pandas as pd
+   >>> df = pd.DataFrame(pd.np.random.randn(10, 3), columns=['A', 'B', 'C'])
+   >>> data = s['a/place/for/data/']
+   >>> data
+   <Tree: 'sprout/a/place/for/data/'>
+   >>> df.to_csv(data['random_dataframe.csv'].abspath)
+   >>> data.draw()
+   data/
+   +-- random_dataframe.csv
+
+and we can access it again directly:
+
+.. code-block:: python
+
+   >>> csv = data['random_dataframe.csv']
+   >>> print(csv.read())
+
+   ,A,B,C
+   0,-0.573730932177663,-0.08857033924376226,-1.5217885284931023
+   1,0.03157276797041359,-0.10977921690694506,0.7352049490768677
+   2,-0.2080757315892524,0.6825003213837373,2.4287549444405534
+   3,0.24384248258374155,1.5500844388779393,-1.2055335937850564
+   4,0.4775160853277072,-0.5171911250677093,-0.7060994831807865
+   5,1.1667219505149122,0.6853566107964083,0.8907628900594483
+   6,-0.04780879620117516,0.46380208128764916,0.18896832921836013
+   7,-0.9602135578067672,1.1455495671353324,-0.6492857585272271
+   8,0.4375285197298905,0.7725833477975118,-0.5321635278258459
+   9,-0.24309412997865673,-0.04109901866284795,1.8452297139705818
     
 
 .. note somehow that it is not necessary to use Treants to manipulate the filesystem, but they serve as flagposts for places of interest
