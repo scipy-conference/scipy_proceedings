@@ -175,7 +175,7 @@ The topology acts as a description of all the particles in the system while the 
    import MDAnalysis as mda
 
    # Create a Universe based on simulation results
-   u = mda.Universe('topol.top', 'traj.trr')
+   u = mda.Universe('topol.tpr', 'traj.trr')
 
    # Create a selection of atoms to work with
    ag = u.atoms.select_atoms('name CA and not resname MET LYS')
@@ -218,8 +218,8 @@ The AtomGroup acts as a representation of a group of particles, with the propert
 
 The data from MD simulations comes in the form of a trajectory which is a frame by frame description of the motion of particles in the simulation.
 Today trajectory data can often reach sizes of hundreds of GB.
-Reading this amount of data into memory is slow and impractical.
-To allow the analysis of such large simulations on an average workstation MDAnalysis will only load a single frame of a trajectory into memory at any time.
+Reading all these data into memory is slow and impractical.
+To allow the analysis of such large simulations on an average workstation (or even laptop) MDAnalysis will only load a single frame of a trajectory into memory at any time.
 
 The trajectory data can be accessed through the trajectory attribute of a Universe.
 Changing the frame of the trajectory object updates the underlying arrays that AtomGroups point to.
