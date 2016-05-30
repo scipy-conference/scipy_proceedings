@@ -10,7 +10,7 @@ PDF  := paper.pdf
 
 TOPDIR  := $(shell git rev-parse --show-toplevel)
 
-.phony: all pdf
+.phony: all pdf see
 
 all: pdf
 
@@ -22,3 +22,6 @@ $(PDF): $(RST) $(BIB)
 	./make_paper.sh $(PAPERDIR) && \
         ./make_paper.sh $(PAPERDIR) && \
 	cp -v $(OUTPUTDIR)/$(PDF) $(PAPERDIR)/
+
+see: $(PDF)
+	open $^
