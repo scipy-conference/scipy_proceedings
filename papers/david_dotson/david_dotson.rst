@@ -346,7 +346,7 @@ The *aggregated* categories for all members in a Bundle are accessible via `datr
                               'tree', 'tree']})>
 
 Each element of the list associated with a given key corresponds to the value for each member, in member order.
-We can also access categories present among *any* member:
+Using `b.categories` is equivalent to `b.categories.all`; we can also access categories present among *any* member:
 
 .. code-block:: python
 
@@ -389,7 +389,7 @@ Say we would like to get members grouped by both their 'bark' and 'home':
 
 .. code-block:: python
 
-    b.categories.groupby({'bark', 'home'})
+    >>> b.categories.groupby({'bark', 'home'})
     {('fibrous', 'california'): <Bundle([<Treant: 'sequoia'>])>}
 
 We get only a single member for the pair of keys `('fibrous', 'california')` since 'sequoia' is the only Treant having the 'home' category.
