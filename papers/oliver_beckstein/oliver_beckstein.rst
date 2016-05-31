@@ -143,8 +143,8 @@ Overview
 
 MDAnalysis currently supports more than 25 different file formats and covers the vast majority of data formats that are used in the biomolecular simulation community, including the formats required and produced by the most popular packages NAMD, Amber, Gromacs, CHARMM, LAMMPS, DL_POLY, HOOMD.
 MDAnalysis is specifically tailored to the domain of molecular simulations, in particularly in biophysics, chemistry, and biotechnology.
-The user interface provides "physics-based" abstractions (e.g. "atoms", "bonds", "molecules") of the data that can be easily manipulated by the user.
-It hides the complexity of accessing data and frees the user from having to implement the details of different trajectory and topology file formats (which by themselves are often only poorly documented and just adhere to certain "community expectations" that can be difficult to understand for outsiders).
+The user interface provides physics-based abstractions (e.g., atoms, bonds, molecules) of the data that can be easily manipulated by the user.
+It hides the complexity of accessing data and frees the user from having to implement the details of different trajectory and topology file formats (which by themselves are often only poorly documented and just adhere to certain community expectations that can be difficult to understand for outsiders).
 
 Since the original publication :cite:`Michaud-Agrawal:2011fu`, improvements in speed and data structures make it now possible to work with terabyte-sized trajectories containing up to ~10 million particles.
 MDAnalysis also comes with specialized analysis classes in the ``MDAnalysis.analysis`` module that are unique to MDAnalysis such as *LeafletFinder*, a graph-based algorithm for the analysis of lipid bilayers :cite:`Michaud-Agrawal:2011fu`, or *Path Similarity Analysis* for the quantitative comparison of macromolecular conformational changes :cite:`Seyler:2015fk`.
@@ -160,9 +160,9 @@ Although the primary dependency is NumPy_, other Python packages such as netcdf4
 .. figure:: figs/mdanalysis_structure.pdf
 
    Structure of the MDAnalysis package.
-   MDAnalysis consists of the "core" with the *Universe* class as the primary entry point for users.
-   The *MDAnalysis.analysis* package contains independent modules that make use of the core to implement a wide range of algorithms to analyze MD simulations.
-   The *MDAnalysis.visualization* package contains a growing number of tools that are specifically geared towards calculating visual representations such as, for instance, streamlines of molecules. :label:`fig:structure`
+   MDAnalysis consists of the *core* with the *Universe* class as the primary entry point for users.
+   The ``MDAnalysis.analysis`` package contains independent modules that make use of the core to implement a wide range of algorithms to analyze MD simulations.
+   The ``MDAnalysis.visualization`` package contains a growing number of tools that are specifically geared towards calculating visual representations such as, for instance, streamlines of molecules. :label:`fig:structure`
 
 
 Availability
@@ -502,7 +502,7 @@ JD was in part supported by a Wellcome Trust grant 092970/Z/10/Z.
 DLD was in part supported by a Molecular Imaging Fellowship from the Department of Physics at Arizona State University
 IMK was supported by a REU supplement to grant ACI-1443054 from the National Science Foundation.
 OB was supported in part by grant ACI-1443054 from the National Science Foundation; computational resources for OB's work were in part provided by the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1053575 (allocation MCB130177 to OB).
-The MDAnalysis 'Atom' logo was designed by Christian Beckstein.
+The MDAnalysis *Atom* logo was designed by Christian Beckstein.
 
 
 References
