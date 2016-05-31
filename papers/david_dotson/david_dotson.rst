@@ -61,7 +61,7 @@ Furthermore, with ever-increasing computational power, it is often necessary to 
 
 Managing the volume and complexity of these data is becoming increasingly difficult problem in and of itself; data management is a challenge to scientific reproducibility and ultimately presents a substantial barrier to answering scientific questions.
 One approach to this problem is ``datreant``, a namespace package that provides a Pythonic interface to the filesystem and the data that lives within it.
-By consolidating Python-based post-processing and analysis with the accessing, generation, and storage of raw and intermediate data, ``datrent`` is designed to solve a boring problem so we can focus more attention on interesting ones.
+By consolidating Python-based post-processing and analysis with the accessing, generation, and storage of raw and intermediate data, ``datreant`` is designed to solve a boring problem so we can focus more attention on interesting ones.
 
 
 Treants as filesystem manipulators
@@ -81,7 +81,7 @@ We can create a ``Treant`` with:
 This creates a directory ``maple/`` in the filesystem (if it did not already exist), and places a special state file inside which stores the Treant's state.
 This file also serves as a flagpost indicating that this is more than just a directory::
 
-    > ls maple 
+    > ls maple
     Treant.1dcbb3b1-c396-4bc6-975d-3ae1e4c2983a.json
 
 The name of this file includes the type of Treant to which it corresponds, as well as the ``uuid`` of the Treant, its unique identifier.
@@ -172,7 +172,7 @@ and we can introspect the file directly:
    0,-0.573730932177663,-0.08857033924376226
    1,0.03157276797041359,-0.10977921690694506
    2,-0.2080757315892524,0.6825003213837373
-    
+
 Using ``Treant``, ``Tree``, and ``Leaf`` objects, we can work with the filesystem Pythonically without giving much attention to *where* these objects live within that filesystem.
 This becomes especially powerful when we have many directories/files we want to work with, possibly in many different places.
 
@@ -188,7 +188,7 @@ If we have many more Treants, perhaps scattered about the filesystem:
 
 .. code-block:: python
 
-   >>> for path in ('an/elm/', 'the/oldest/oak', 
+   >>> for path in ('an/elm/', 'the/oldest/oak',
    ...              'the/oldest/tallest/sequoia'):
    ...     dtr.Treant(path)
 
@@ -306,7 +306,7 @@ We can add categories to individual Treants:
 .. code-block:: python
 
     # add categories to individual members
-    >>> b['oak'].categories = {'age': 'adult', 
+    >>> b['oak'].categories = {'age': 'adult',
                                'type': 'deciduous',
                                'bark': 'mossy'}
     >>> b['elm'].categories = {'age': 'young',
@@ -319,12 +319,12 @@ We can add categories to individual Treants:
                                    'type': 'evergreen',
                                    'bark': 'fibrous',
                                    'home': 'california'}
-    
+
     # add value 'north america' to category 'continent'
     # for all members
     >>> b.categories.add({'plant': 'tree'})
 
-We can access categories for an individual member:    
+We can access categories for an individual member:
 
 .. code-block:: python
 
@@ -443,7 +443,7 @@ and we can get it back just as easily:
    dtype: float64
 
 What's more, ``datreant.data`` also includes a corresponding ``AggLimb`` for ``Bundle`` objects, allowing for automatic aggregation of datasets by name across all member ``Treant`` objects.
-If we collect and store a similar datasets for each member in our ``Bundle``: 
+If we collect and store a similar datasets for each member in our ``Bundle``:
 
 .. code-block:: python
 
@@ -547,7 +547,7 @@ We can use the MDAnalysis ``HydrogenBondAnalysis`` class to collect the data for
     import MDAnalysis.analysis.hbonds as hbonds
     import pandas as pd
     import seaborn as sns
-    
+
     b = mds.discover('NhaA_i2o_transitions')
 
     def get_hbonds(sim):
