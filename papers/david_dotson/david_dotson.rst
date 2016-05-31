@@ -281,6 +281,8 @@ and sets (for *not and*):
 Using tag expressions, we can filter to Treants of interest from a ``Bundle`` counting many, perhaps hundreds, of Treants as members.
 A common workflow is to use ``datreant.core.discover`` to gather up many Treants from a section of the filesystem, then use tags to extract only those Treants one actually needs.
 
+.. todo: add a note on fuzzy matching (with a reference) if there's space
+
 Splitting Treants on categories
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
