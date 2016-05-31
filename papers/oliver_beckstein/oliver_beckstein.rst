@@ -115,9 +115,6 @@ MDAnalysis is available under the GNU General Public License v2.
 Introduction
 ------------
 
-.. initial copy and paste
-
-
 Molecular dynamics (MD) simulations of biological molecules have become an important tool to elucidate the relationship between molecular structure and physiological function.
 Simulations are performed with highly optimized software packages on HPC resources but most codes generate output trajectories in their own formats so that the development of new trajectory analysis algorithms is confined to specific user communities and widespread adoption and further development is delayed.
 Typical trajectory sizes range from gigabytes to terabytes so it is typically not feasible to convert trajectories into a range of different formats just to use a tool that requires this specific format.
@@ -129,7 +126,7 @@ Here we provide a short introduction to MDAnalysis and its capabilities and prov
 
 MDAnalysis was initially inspired by MDTools_ for Python (J.C. Phillips, unpublished) and MMTK_ :cite:`Hinsen:2000kx`.
 MDAnalysis has been publicly available since January 2008 and is one of the longest actively maintained Python packages for the analysis of molecular simulations.
-Since then many other packages have appeared, such as LOOS_/PyLOOS :cite:`Romo:2014bh`, mdtraj_ :cite:`McGibbon:2015aa` or pytraj_ :cite:`Nguyen:2016aa` (a versatile Python frontend to the popular ``cpptraj`` tool :cite:`Roe:2013zr`), to name only a few.
+Since then many other packages have appeared, such as LOOS_/PyLOOS :cite:`Romo:2009zr,Romo:2014bh`, mdtraj_ :cite:`McGibbon:2015aa` or pytraj_ :cite:`Nguyen:2016aa` (a versatile Python frontend to the popular ``cpptraj`` tool :cite:`Roe:2013zr`), to name only a few.
 
 .. _MDAnalysis: http://mdanalysis.org
 .. _MDTools: http://www.ks.uiuc.edu/Development/MDTools/Python/
@@ -204,7 +201,7 @@ When backwards-incompatible changes are inevitable, we provide tools (based on t
 .. _QuantifiedCode: https://www.quantifiedcode.com
 
 
-Basic Usage
+Basic usage
 -----------
 
 The core object in MDAnalysis is the Universe which acts as a nexus for accessing all data contained within a simulation.
@@ -267,7 +264,7 @@ To allow the analysis of such large simulations on an average workstation (or ev
 The trajectory data can be accessed through the trajectory attribute of a Universe.
 Changing the frame of the trajectory object updates the underlying arrays that AtomGroups point to.
 In this way the positions attribute of an AtomGroup within the iteration over a trajectory will give access to the positions at each frame.
-Through this approach only a single frame of data is present in memory at any time, allowing for large data sets, from half a million particles to tens of millions (see also section `Application to Large Systems`_), to be dissected with minimal resources.
+Through this approach only a single frame of data is present in memory at any time, allowing for large data sets, from half a million particles to tens of millions (see also section `Analysis of large systems`_), to be dissected with minimal resources.
 
 .. show working with the trajectory object to access the time data
 .. code-block:: python
@@ -283,10 +280,10 @@ Through this approach only a single frame of data is present in memory at any ti
 
 In some cases, such as selecting a specific frames (as in the calculation of time correlation functions), skipping of frames (as in the iterator ``u.trajectory[5000::1000]``), or parallelization over trajectory blocks in a map/reduce pattern :cite:`Tu:2008dq`, sequential reading of trajectories is highly inefficient when the underlying trajectory reader does not implement random access to time frames on disk.
 Many trajectory formats suffer from this shortcoming, including the popular Gromacs XTC and TRR formats, but also commonly used multi-frame PDB files and other text-based formats such as XYZ.
-Earlier versions of LOOS :cite:`Romo:2009zr` had implemented a mechanism by which the trajectory was read once on loading and frame offsets on disk were computed that could be used to directly seek to individual frames.
+LOOS :cite:`Romo:2009zr` implemented a mechanism by which the trajectory was read once on loading and frame offsets on disk were computed that could be used to directly seek to individual frames.
 MDAnalysis implements the same algorithm for TRR and XTC files but additionally also saves the offsets to disk (as a compressed NumPy array).
-When a trajectory is loaded again then instead of reading the whole trajectory, only the persistent offsets are read (provided they have not become stale as checked by very conservative criteria such as modification time and size of the original file, which are saved with the offsets).
-In cases of terabyte-sized trajectories, the persistent offset approach can save  hundreds of seconds for the initial loading of the ``Universe``.
+When a trajectory is loaded again then instead of reading the whole trajectory, only the persistent offsets are read (provided they have not become stale as checked by  conservative criteria such as changes in file name, modification time, and size of the original file, which are all saved with the offsets).
+In cases of terabyte-sized trajectories, the persistent offset approach can save  hundreds of seconds for the initial loading of the ``Universe`` (after an initial one-time cost of scanning the trajectory).
 Current development work is extending the persistent offset scheme to all trajectory readers, which will provide random access for all trajectories in a completely automatic and transparent manner to the user.
 
 
@@ -294,7 +291,7 @@ Current development work is extending the persistent offset scheme to all trajec
 Example: Per-residue RMSF
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As a complete example consider the calculation of the |Calpha| root mean square fluctuation (RMSF) :math:`\rho_i` that characterizes the mobility of a residue math:`i` in a protein:
+As a complete example consider the calculation of the |Calpha| root mean square fluctuation (RMSF) :math:`\rho_i` that characterizes the mobility of a residue :math:`i` in a protein:
 
 .. math::
    :label: eq:RMSF
@@ -322,7 +319,7 @@ In section `Analysis Module`_, we describe the analysis code that is included as
 
 .. _`Interactive Use and Visualization`:
 
-Interactive Use and Visualization
+Interactive use and visualization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The high level of abstraction and the pythonic API, together with comprehensive Python doc strings, make MDAnalysis well suited for interactive and rapid prototyping work in IPython_ :cite:`Perez2007` and Jupyter_ notebooks.
@@ -338,7 +335,7 @@ Other Python packages that have become extremely useful in notebook-based analys
 
 .. _`Analysis Module`:
 
-Analysis Module
+Analysis module
 ---------------
 
 In the ``MDAnalysis.analysis`` module we provide a large variety of standard analysis algorithms, like RMSD (root mean square distance) and RMSF (root mean square fluctuation) calculations, RMSD-optimized structural superposition :cite:`PuLiu_FastRMSD_2010`, native contacts :cite:`Best2013,Franklin2007`, or analysis of hydrogen bonds as well as unique algorithms, such as the *LeafletFinder* in ``MDAnalysis.analysis.leaflet`` :cite:`Michaud-Agrawal:2011fu` and *Path Similarity Analysis* (``MDAnalysis.analysis.psa``) :cite:`Seyler:2015fk`.
@@ -378,7 +375,7 @@ A more detailed explanation can be found in the docs.
 This type of flexible analysis algorithm paired with a collection of base classes allow quick and easy analysis of simulations as well as development of new ones.
 
 
-Visualization Module
+Visualization module
 --------------------
 
 The new ``MDAnalysis.visualization`` name space contains modules that primarily produce visualizations of molecular systems.
@@ -456,9 +453,9 @@ Given that for systems with 10 M atoms this process used to take over 100 s, the
 .. _`vesicle library`: https://github.com/Becksteinlab/vesicle_library
 
 
-.. _`Application to Large Systems`:
+.. _`Analysis of large systems`:
 
-Analysis of Large Systems
+Analysis of large systems
 -------------------------
 
 MDAnalysis has been used extensively to study extremely large simulation systems for long simulation times.
