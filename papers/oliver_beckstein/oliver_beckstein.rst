@@ -333,59 +333,64 @@ A more detailed explantion can be found in the docs.
 
 This type of flexible analysis algorithm paired with a collection of base classes allow quick and easy analysis of simulations as well as development of new ones.
 
+
 New data Structures
 -------------------
 
 Originally MDAnalysis followed a strict object-oriented approach with a separate instance of an Atom object for each particle in the simulation data.
 The AtomGroup then simply stored its contents as a list of these Atom instances.
-With simulation data commonly containing 10\ :sup:`6` particles this solution did not scale well and so recently this design was overhauled to improve the scalability of MDAnalysis.
+With simulation data now commonly exceeding :math:`10^6` particles this solution did not scale well and so recently this design was overhauled to improve the scalability of MDAnalysis.
 
 Because all Atoms have the same property fields (i.e. mass, position) it is possible to store this information as a single NumPy array for each property.
 Now an AtomGroup can keep track of its contents as a simple integer array, which can be used to slice these property arrays to yield the relevant data.
 
 Overall this approach means that the same number of Python objects are created for each Universe, with the number of particles only changing the size of the arrays.
-This translates into a much smaller memory footprint (1.3 GB vs. 3.6 GB for a 10.1 M atom system) highlighting the memory cost of millions of simple Python objects.
+This translates into a much smaller memory footprint (1.3 GB vs. 3.6 GB for a 10.1 M atom system), highlighting the memory cost of millions of simple Python objects.
 
 This transformation of the data structures from an Array of Structs to a Struct of Arrays also better suits the typical access patterns within MDAnalysis.
 It is quite common to compare a single property across many Atoms, but rarely are different properties within a single Atom compared.
-Additionally, it is possible to utilise NumPy's faster indexing rather than using a list comprehension.
+Additionally, it is possible to utilise NumPy's faster indexing capabilities rather than using a list comprehension.
 This new data structure has lead to performance improvements in our whole codebase.
-The largest improvement is in accessing subsets of Atoms which is now over 40 times faster, see Tables :ref:`tab:performance-slicing-atomgroup`, :ref:`tab:performance-accessing-attributes` and :ref:`tab:performance-loading-gro`.
+The largest improvement is in accessing subsets of Atoms which is now over 40 times faster (Table :ref:`tab:performance-slicing-atomgroup`), an operation that is used everywhere in MDAnalysis.
+Speed-ups of a factor of around five to seven were realized for accessing Atom attributes for whole AtomGroup instances (Table :ref:`tab:performance-accessing-attributes`).
+The improved topology data structures are also much faster to initialize, which translates into speed-ups of about three for the task of loading a system from a file (for instance, in the Gromacs GRO format or the Protein Databank PDB format) into a `Universe` instance (Table :ref:`tab:performance-loading-gro`).
+Given that for systems with 10 M atoms this process used to take over 100 s, the reduction in load time down to a third is very valuable --- and it came essentially "for free" as a by-product of improving the underlying topology data structures.
 
-.. table:: Performance comparison of subselecting an AtomGroup from an existing one using the  new system (upcoming release v0.16.0) against the old (v0.15.0). Subselections were slices of the same size (82,056 atoms). Times are given in milliseconds, with shorter times being better. The benchmarks systems were taken from the `vesicle library`_. :cite:`Kenney:2015aa` and are listed with their approximate number of particles ("# atoms"). :label:`tab:performance-slicing-atomgroup`
 
-      +----------+----------+----------+----------+
-      | # atoms  | v0.15.0  | v0.16.0  | speed up |
-      +==========+==========+==========+==========+
-      | 1.75 M   |    19    |    0.45  |  42      |
-      +----------+----------+----------+----------+
-      | 3.50 M   |    18    |    0.54  |  33      |
-      +----------+----------+----------+----------+
-      | 10.1 M   |    17    |    0.45  |  38      |
-      +----------+----------+----------+----------+
-
-.. table:: Performance comparison of accessing attributes with new AtomGroup data structures (upcoming release v0.16.0) compared with the old Atom classes (v0.15.0). Times are given in milliseconds, with shorter times being better. The same benchmark systems as in Table :ref:`tab:performance-slicing-atomgroup` were used. :label:`tab:performance-accessing-attributes`
+.. table:: Performance comparison of subselecting an AtomGroup from an existing one using the  new system (upcoming release v0.16.0) against the old (v0.15.0). Subselections were slices of the same size (82,056 atoms). Shorter processing times are better. The benchmarks systems were taken from the `vesicle library`_. :cite:`Kenney:2015aa` and are listed with their approximate number of particles ("# atoms"). Benchmarks were performed on a laptop with an Intel Core i5 2540M 2.6 GHz processor, 8 GB of RAM and a SSD drive. :label:`tab:performance-slicing-atomgroup`
 
       +----------+----------+----------+----------+
       | # atoms  | v0.15.0  | v0.16.0  | speed up |
       +==========+==========+==========+==========+
-      | 1.75 M   | 250      | 35       |   7.1    |
+      | 1.75 M   |    19 ms | 0.45 ms  |  42      |
       +----------+----------+----------+----------+
-      | 3.50 M   | 490      | 72       |   6.8    |
+      | 3.50 M   |    18 ms | 0.54 ms  |  33      |
       +----------+----------+----------+----------+
-      | 10.1 M   | 1500     | 300      |   5.0    |
+      | 10.1 M   |    17 ms | 0.45 ms  |  38      |
       +----------+----------+----------+----------+
 
-.. table:: Performance comparison of loading a topology file with 1.75 to 10 million atoms with new AtomGroup data structures (upcoming release v0.16.0) compared with the old Atom classes (v0.15.0). Loading times are given in seconds, with shorter times being better. The same benchmark systems as in Table :ref:`tab:performance-slicing-atomgroup` were used. :label:`tab:performance-loading-gro`
+.. table:: Performance comparison of accessing attributes with new AtomGroup data structures (upcoming release v0.16.0) compared with the old Atom classes (v0.15.0). Shorter access times are better. The same benchmark systems as in Table :ref:`tab:performance-slicing-atomgroup` were used. :label:`tab:performance-accessing-attributes`
+
+      +----------+----------+----------+----------+
+      | # atoms  | v0.15.0  | v0.16.0  | speed up |
+      +==========+==========+==========+==========+
+      | 1.75 M   | 250 ms   | 35 ms    |   7.1    |
+      +----------+----------+----------+----------+
+      | 3.50 M   | 490 ms   | 72 ms    |   6.8    |
+      +----------+----------+----------+----------+
+      | 10.1 M   | 1500 ms  | 300 ms   |   5.0    |
+      +----------+----------+----------+----------+
+
+.. table:: Performance comparison of loading a topology file with 1.75 to 10 million atoms with new AtomGroup data structures (upcoming release v0.16.0) compared with the old Atom classes (v0.15.0). Shorter loading times are better. The same benchmark systems as in Table :ref:`tab:performance-slicing-atomgroup` were used. :label:`tab:performance-loading-gro`
 
       +----------+-----------+----------+----------+
       | # atoms  | v0.15.0   | v0.16.0  | speed up |
       +==========+===========+==========+==========+
-      | 1.75 M   | 18        | 5        |  3.6     |
+      | 1.75 M   | 18 s      | 5 s      |  3.6     |
       +----------+-----------+----------+----------+
-      | 3.50 M   | 36        | 11       |  3.3     |
+      | 3.50 M   | 36 s      | 11 s     |  3.3     |
       +----------+-----------+----------+----------+
-      | 10.1 M   | 105       | 31       |  3.4     |
+      | 10.1 M   | 105 s     | 31 s     |  3.4     |
       +----------+-----------+----------+----------+
 
 .. _`vesicle library`: https://github.com/Becksteinlab/vesicle_library
