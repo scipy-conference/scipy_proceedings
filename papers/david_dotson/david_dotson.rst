@@ -379,7 +379,7 @@ or a set of keys:
      'home': [None, None, None, 'california']}
 
 returns, respectively, a list or dictionary (corresponding to the inputted keys) of lists of values, where the list for a given key is in member order.
-Perhaps the most powerful feature of categories is the `groupby()` method, which, given an inputted key, can be used to group specific members in a Bundle by their corresonding category values.
+Perhaps the most powerful feature of categories is the `groupby()` method, which, given a key, can be used to group specific members in a Bundle by their corresonding category values.
 If we want to group members by their 'bark', we can use `groupby()` to obtain a dictionary of members for each value of 'bark':
 
 .. code-block:: python
@@ -397,7 +397,7 @@ Say we would like to get members grouped by both their 'bark' and 'home':
     {('fibrous', 'california'): <Bundle([<Treant: 'sequoia'>])>}
 
 We get only a single member for the pair of keys `('fibrous', 'california')` since 'sequoia' is the only Treant having the 'home' category.
-It is clear that categories are useful by themselves as a means of labeling a Treant to, for instance, denote the types of data that it may contain or the manner in which the data were obtained.
+It is clear that categories are useful by themselves as a means of labeling a Treant to denote the types of data that it may contain or the manner in which the data were obtained.
 By leveraging the `groupby()` method, one can then extract the Treants (and the data they contain) corresponding to selected categories without having to explicitly access each member (and its data).
 This feature can be particularly powerful in cases where, say, many Treants have been created and categorized to handle incoming data over an extended period of time; one may then quickly gather the data one needs from a bird's-eye view using category selection mechanisms.
 
