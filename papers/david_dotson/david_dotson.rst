@@ -586,16 +586,16 @@ and visualize the result:
 
    The number of hydrogen bonds between the core and dimerization domain during a conformational transition between the inward-open and outward-open state of EcNhaA :label:`fig:hbonds`
 
-By making it relatively easy to work with 
+By making it relatively easy to work with what can often be many terabytes of simulation data spread over tens or hundreds of trajectories, MDSynthesis_ has greatly improved the time it takes to iterate on new ideas toward answering real biological questions.
 
-Conclusions
------------
+Final thoughts
+--------------
+``datreant`` is a young project that started as a domain-specific package for working with molecular dynamics data, but has quickly morphed into a powerful, general-purpose tool for managing and manipulating filesystems and the data spread about them.
+The dependency-light ``datreant.core`` package is pure Python, BSD-licensed, and openly developed, and the ``datreant`` namespace is designed to support useful extensions to the core objects.
+It is the hope of the authors that ``datreant`` continues to grow in a way that benefits the wider scientific community, smoothing the common pain point of data glut and filesystem management.
 
 Acknowledgements
 ----------------
-
-.. grab from MDAnalysis set 
-
 This work was in part supported by grant ACI-1443054 from the National Science Foundation.
 DLD was in part supported by a Molecular Imaging Fellowship from the Department of Physics at Arizona State University.
 SLS was supported in part by a Wally Stoelzel Fellowship from the Department of Physics at Arizona State University.
