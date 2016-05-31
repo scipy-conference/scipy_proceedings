@@ -127,8 +127,6 @@ If features from preceding and following syllables improve k-NN performance, the
 
     **Accuracy v. number of songs used to train SVM-RBF and SVM-RBF with duration features added** *Y axis: average accuracy across labels, x axis: number of songs used to train.* In all cases, the added duration features yielded a higher accuracy. :label:`fig9`
 
- To provide a more thorough comparison of the previously developed methods, I repeated the tests while holding the set of features constant. I did this with two sets of acoustic features: ], and the other being the set I used for k-NN.  As I understand it, it cannot be said that any method yields the best classifier across all possible problems. So this is really a test of whether these methods, provided with "typical" 
-
 Conclusion
 ----------
 
