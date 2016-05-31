@@ -139,8 +139,8 @@ and so we now have::
                 +-- data/
                 +-- text/
 
-Accessing paths in this way returns ``Tree`` and ``Leaf`` objects, referring to directories and files, respectively.
-These paths may not point to directories or files that actually exist, but they can be used to create and work with these elements.
+Accessing paths in this way returns ``Tree`` and ``Leaf`` objects, which refer to directories and files, respectively.
+These paths may not point to directories or files that actually exist, but they can be used to create and work with ``Tree`` and ``Leaf`` elements.
 
 We can, for example, easily store a Pandas_ [McK10]_ DataFrame somewhere in the tree for reference later:
 
