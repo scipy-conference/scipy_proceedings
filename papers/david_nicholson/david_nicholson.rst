@@ -143,6 +143,8 @@ Taken together, the results here demonstrate the importance of comparing how dif
 Methods
 ----------
 
+All code used can be found at https://github.com/NickleDave/ML-comparison-birdsong/. Instructions to repeat the experiments are in https://github.com/NickleDave/ML-comparison-birdsong/tree/master/experiment_code. Results and data can be downloaded from http://www.nicholdav.info/data. That page includes files of features used with machine learning algorithms to train classifiers, and an example day of song from one bird presented in this paper. Instructions for how to use the feature extraction scripts to reproduce the related file of features from that day of song are in https://github.com/NickleDave/ML-comparison-birdsong/tree/master/feature_extraction_code.
+
 Data acquisition
 ~~~~~~~~~~~~~~~~
 
