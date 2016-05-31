@@ -67,7 +67,7 @@ By consolidating Python-based post-processing and analysis with the accessing, g
 Treants as filesystem manipulators
 ----------------------------------
 The central object of ``datreant`` is the ``Treant``.
-A Treant is a directory in the filesystem that has been specially marked with **state file**.
+A Treant is a directory in the filesystem that has been specially marked with a **state file**.
 A ``Treant`` is also a Python object.
 We can create a ``Treant`` with:
 
@@ -78,15 +78,14 @@ We can create a ``Treant`` with:
    >>> t
    <Treant: 'maple'>
 
-This creates a directory ``maple/`` in the filesystem if it didn't already exist, and places a special file inside which stores the Treant's state.
+This creates a directory ``maple/`` in the filesystem (if it did not already exist), and places a special state file inside which stores the Treant's state.
 This file also serves as a flagpost indicating that this is more than just a directory::
 
     > ls maple 
     Treant.1dcbb3b1-c396-4bc6-975d-3ae1e4c2983a.json
 
-The name of this file includes the type of Treant it corresponds to, as well as the ``uuid`` of the Treant, its unique identifier.
-This is the state file containing all the information needed to generate an identical instance of this ``Treant``.
-We can start a separate Python session and use this Treant immediately there:
+The name of this file includes the type of Treant to which it corresponds, as well as the ``uuid`` of the Treant, its unique identifier.
+The state file contains all the information needed to generate an identical instance of this ``Treant``, so that we can start a separate Python session and use immediately use the same Treant there:
 
 .. code-block:: python
 
