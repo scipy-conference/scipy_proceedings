@@ -71,14 +71,14 @@ We can create a ``Treant`` with:
 .. code-block:: python
 
    >>> import datreant.core as dtr
-   >>> t = dtr.Treant('sprout')
+   >>> t = dtr.Treant('maple')
    >>> t
-   <Treant: 'sprout'>
+   <Treant: 'maple'>
 
-This creates a directory ``sprout/`` in the filesystem if it didn't already exist, and places a special file inside which stores the Treant's state.
+This creates a directory ``maple/`` in the filesystem if it didn't already exist, and places a special file inside which stores the Treant's state.
 This file also serves as a flagpost indicating that this is more than just a directory::
 
-    > ls sprout
+    > ls maple 
     Treant.1dcbb3b1-c396-4bc6-975d-3ae1e4c2983a.json
 
 The name of this file includes the type of Treant it corresponds to, as well as the ``uuid`` of the Treant, its unique identifier.
@@ -89,9 +89,9 @@ We can start a separate Python session and use this Treant immediately there:
 
    # python session 2
    >>> import datreant.core as dtr
-   >>> s = dtr.Treant('sprout')
-   >>> s
-   <Treant: 'sprout'>
+   >>> t = dtr.Treant('maple')
+   >>> t
+   <Treant: 'maple'>
 
 Making a modification to the ``Treant`` in one session is immediately reflected by the same ``Treant`` in any other session.
 For example, a ``Treant`` can store any number of descriptive tags that are useful for differentiating it from others:
@@ -99,17 +99,17 @@ For example, a ``Treant`` can store any number of descriptive tags that are usef
 .. code-block:: python
 
    # python session 1
-   >>> s.tags.add('green', 'cork')
-   >>> s.tags
-   <Tags(['cork', 'green'])>
+   >>> t.tags.add('syrup', 'plant')
+   >>> t.tags
+   <Tags(['plant', 'syrup'])>
 
 And in the other Python session, we see the same ``Treant``:
 
 .. code-block:: python
 
    # python session 2
-   >>> s.tags
-   <Tags(['cork', 'green'])>
+   >>> t.tags
+   <Tags(['plant', 'syrup'])>
 
 Internally, advisory locking is done to avoid race conditions, making a ``Treant`` multiprocessing safe.
 
@@ -121,15 +121,15 @@ We can, for example, create directory structures rather easily:
 
 .. code-block:: python
 
-   >>> s['a/place/for/data/'].makedirs()
-   <Tree: 'sprout/a/place/for/data/'>
-   >>> s['a/place/for/text/'].makedirs()
-   <Tree: 'sprout/a/place/for/text/'>
+   >>> t['a/place/for/data/'].makedirs()
+   <Tree: 'maple/a/place/for/data/'>
+   >>> t['a/place/for/text/'].makedirs()
+   <Tree: 'maple/a/place/for/text/'>
 
 and so we now have::
 
-   >>> s.draw()
-   sprout/
+   >>> t.draw()
+   maple/
     +-- Treant.1dcbb3b1-c396-4bc6-975d-3ae1e4c2983a.json
     +-- a/
         +-- place/
@@ -150,9 +150,9 @@ We can, for example, easily store a ``pandas`` DataFrame somewhere in the tree f
    >>> import pandas as pd
    >>> df = pd.DataFrame(pd.np.random.randn(3, 2),
                          columns=['A', 'B'])
-   >>> data = s['a/place/for/data/']
+   >>> data = t['a/place/for/data/']
    >>> data
-   <Tree: 'sprout/a/place/for/data/'>
+   <Tree: 'maple/a/place/for/data/'>
    >>> df.to_csv(data['random_dataframe.csv'].abspath)
    >>> data.draw()
    data/
@@ -164,7 +164,7 @@ and we can introspect the file directly:
 
    >>> csv = data['random_dataframe.csv']
    >>> csv
-   <Leaf: 'sprout/a/place/for/data/random_dataframe.csv'>
+   <Leaf: 'maple/a/place/for/data/random_dataframe.csv'>
    >>> print(csv.read())
    ,A,B
    0,-0.573730932177663,-0.08857033924376226
@@ -181,11 +181,12 @@ What makes a ``Treant`` distinct from a ``Tree`` is its **state file**.
 This file stores metadata that can be used to filter and split ``Treant`` objects when treated in aggregate.
 It also serves as a flagpost, making Treant directories discoverable.
 
-If we have many Treants, perhaps scattered about the filesystem:
+If we have many more Treants, perhaps scattered about the filesystem:
 
 .. code-block:: python
 
-   >>> for path in ('an/elm/', 'the/oldest/oak'):
+   >>> for path in ('an/elm/', 'the/oldest/oak', 
+   ...              'the/oldest/tallest/sequoia'):
    ...     dtr.Treant(path)
 
 we can gather them up with ``datreant.core.discover``:
@@ -194,8 +195,8 @@ we can gather them up with ``datreant.core.discover``:
 
    >>> b = dtr.discover('.')
    >>> b
-   <Bundle([<Treant: 'oak'>, <Treant: 'sprout'>,
-            <Treant: 'elm'>])>
+   <Bundle([<Treant: 'oak'>, <Treant: 'sequoia'>,
+            <Treant: 'maple'>, <Treant: 'elm'>])>
 
 A ``Bundle`` is an ordered set of ``Treant`` objects.
 This collection gives convenient mechanisms for working with Treants as a single logical unit.
@@ -204,9 +205,13 @@ For example, it exposes a few basic properties for directly accessing its member
 .. code-block:: python
 
    >>> b.relpaths
-   ['the/oldest/oak/', 'sprout/', 'an/elm/']
+   ['the/oldest/oak/',
+    'the/oldest/tallest/sequoia/',
+    'maple/',
+    'an/elm/']
+
    >>> b.names
-   ['oak', 'sprout', 'elm']
+   ['oak', 'sequoia', 'maple', 'elm']
 
 A ``Bundle`` can be constructed in a variety of ways, most commonly using existing ``Treant`` instances or paths to Treants in the filesystem.
 
@@ -221,9 +226,11 @@ Adding some tags to each of our Treants separately:
 
 .. code-block:: python
 
-   >>> b['sprout'].tags.add('plant')
+   >>> b['maple'].tags.add('syrup', 'furniture', 'plant')
+   >>> b['sequoia'].tags.add('huge', 'plant')
    >>> b['oak'].tags.add('for building', 'plant', 'building')
-   >>> b['elm'].tags.add('firewood', 'shady', 'paper', 'plant', 'building')
+   >>> b['elm'].tags.add('firewood', 'shady', 'paper',
+                         'plant', 'building')
 
 we can now work with these tags in aggregate:
 
@@ -236,13 +243,14 @@ we can now work with these tags in aggregate:
    # will show tags present among *any* member
    >>> b.tags.any
    {'building',
-    'cork',
     'firewood',
     'for building',
-    'green',
+    'furniture',
+    'huge',
     'paper',
     'plant',
-    'shady'}
+    'shady',
+    'syrup'}
 
 and we can filter on them. For example, getting all Treants that are good
 for construction work:
@@ -251,33 +259,36 @@ for construction work:
 
    # gives a boolean index for members with this tag
    >>> b.tags['building']
-   [True, False, True]
+   [False, False, True, True]
 
    # we can use this to index the Bundle itself
    >>> b[b.tags['building']]
    <Bundle([<Treant: 'oak'>, <Treant: 'elm'>])>
 
 or getting back Treants that are both good for construction *and* used for
-making paper by giving tags as a list:
+making furniture by giving tags as a list:
 
 .. code-block:: python
 
    # a list of tags serves as an *and* query
-   >>> b[b.tags[['building', 'paper']]]
-   <Bundle([<Treant: 'elm'>])>
+   >>> b[b.tags[['building', 'furniture']]]
+   <Bundle([])>
 
-And other tag expressions can be constructed using tuples (for *or* operations)
-and sets (for *not and*):
+which in this case none of them are.
+
+Other tag expressions can be constructed using tuples (for *or* operations) and sets (for *not and*), and nesting of any of these works as expected:
 
 .. code-block:: python
 
    # we can get *or* by using a tuple instead of a list
-   >>> b[b.tags['firewood', 'green']]
-   <Bundle([<Treant: 'sprout'>, <Treant: 'elm'>])>
+   >>> b[b.tags['building', 'furniture']]
+   <Bundle([<Treant: 'maple'>, <Treant: 'oak'>,
+            <Treant: 'elm'>])>
 
    # and we can get *not and* by using a set
-   >>> b[b.tags[{'building', 'paper'}]]
-   <Bundle([<Treant: 'oak'>, <Treant: 'sprout'>])>
+   >>> b[b.tags[{'building', 'furniture'}]]
+   <Bundle([<Treant: 'sequoia'>, <Treant: 'maple'>,
+            <Treant: 'oak'>, <Treant: 'elm'>])>
 
 Using tag expressions, we can filter to Treants of interest from a ``Bundle`` counting many, perhaps hundreds, of Treants as members.
 A common workflow is to use ``datreant.core.discover`` to gather up many Treants from a section of the filesystem, then use tags to extract only those Treants one actually needs.
@@ -302,8 +313,9 @@ We can attach a ``Data`` ``Limb`` to a ``Treant`` with:
 .. code-block:: python
 
    >>> import datreant.data
-   >>> s.attach('data')
-   >>> s.data
+   >>> t = dtr.Treant('maple')
+   >>> t.attach('data')
+   >>> t.data
    <Data([])>
 
 and we can immediately start using it to store e.g. a ``pandas`` Series:
@@ -313,13 +325,13 @@ and we can immediately start using it to store e.g. a ``pandas`` Series:
    >>> import numpy as np
    >>> sn = pd.Series(np.sin(
    ...     np.linspace(0, 8*np.pi, num=200))
-   >>> s.data['sinusoid'] = sn
+   >>> t.data['sinusoid'] = sn
 
 and we can get it back just as easily:
 
 .. code-block:: python
 
-   >>> s.data['sinusoid'].head()
+   >>> t.data['sinusoid'].head()
              A         B
    0  0.609263 -1.451863
    1  0.240316 -0.836541
