@@ -255,6 +255,30 @@ for construction work:
    >>> b[b.tags['building']]
    <Bundle([<Treant: 'oak'>, <Treant: 'elm'>])>
 
+or getting back Treants that are both good for construction *and* used for
+making paper by giving tags as a list:
+
+.. code-block:: python
+
+   # a list of tags serves as an *and* query
+   >>> b[b.tags[['building', 'paper']]]
+   <Bundle([<Treant: 'elm'>])>
+
+And other tag selections can be constructed using tuples (for *or* operations)
+and sets (for *not and*):
+
+.. code-block:: python
+
+   # we can get *or* by using a tuple instead of a list
+   >>> b[b.tags['firewood', 'green']]
+   <Bundle([<Treant: 'sprout'>, <Treant: 'elm'>])>
+
+   # and we can get *not and* by using a set
+   >>> b[b.tags[{'building', 'paper'}]]
+   <Bundle([<Treant: 'oak'>, <Treant: 'sprout'>])>
+
+
+
 Treant modularity with attachable Limbs
 ---------------------------------------
 
