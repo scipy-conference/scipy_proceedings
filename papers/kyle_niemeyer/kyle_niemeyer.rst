@@ -736,7 +736,7 @@ References
 
 .. [Huff2015b] K. Huff.
                "PyRK: A Python Package For Nuclear Reactor Kinetics,"
-               *Proceedings of the 14th Python in Science Conference*, 87--93,
+               *Proceedings of the 14th Python in Science Conference*, 87–93,
                2015. Editors: K. Huff and J. Bergstra.
 
 .. [Jones2001] E. Jones, T. Oliphant, P. Peterson, et al.
@@ -769,7 +769,7 @@ References
              mechanisms," *Combust. Flame* 162:1793–812, 2015.
              http://dx.doi.org/10.1016/j.combustflame.2014.12.001
 
-.. [PrIMe2016] "Process Informatics Model"
+.. [PrIMe2016] "Process Informatics Model,"
                http://primekinetics.org. Accessed: 29-05-2016.
 
 .. [Sung2014] C. J. Sung, H. J. Curran,
@@ -778,7 +778,7 @@ References
               http://dx.doi.org/10.1016/j.pecs.2014.04.001
 
 .. [Travis2016] Travis-CI.
-                "travis-ci/travis-api,"" GitHub repository. Accessed: 30-May-2016.
+                "travis-ci/travis-api," GitHub repository. Accessed: 30-May-2016.
                 https://github.com/travis-ci/travis-api
 
 .. [vanderWalt2011] S. van der Walt, S. C. Colbert, and G. Varoquaux.
