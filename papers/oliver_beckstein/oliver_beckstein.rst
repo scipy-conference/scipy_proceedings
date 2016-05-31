@@ -139,10 +139,10 @@ Since then many other packages have appeared, such as LOOS_/PyLOOS :cite:`Romo:2
 Overview
 --------
 
-MDAnalysis currently supports more than 25 different file formats and covers the vast majority of data formats that are used in the biomolecular simulation community, including the formats required and produced by the most popular packages NAMD, Amber, Gromacs, CHARMM, LAMMPS, DL_POLY, HOOMD.
-MDAnalysis is specifically tailored to the domain of molecular simulations, in particularly in biophysics, chemistry, and biotechnology.
+MDAnalysis is specifically tailored to the domain of molecular simulations, in particularly in biophysics, chemistry, and biotechnology as well as materials science.
 The user interface provides physics-based abstractions (e.g., atoms, bonds, molecules) of the data that can be easily manipulated by the user.
 It hides the complexity of accessing data and frees the user from having to implement the details of different trajectory and topology file formats (which by themselves are often only poorly documented and just adhere to certain community expectations that can be difficult to understand for outsiders).
+MDAnalysis currently supports more than 25 different file formats and covers the vast majority of data formats that are used in the biomolecular simulation community, including the formats required and produced by the most popular packages such as NAMD :cite:`Phillips:2005ek`, Amber :cite:`Case:2005uq`, Gromacs :cite:`Abraham:2015aa`, CHARMM :cite:`Brooks:2009pt`, LAMMPS :cite:`Plimpton:1995rw`, DL_POLY :cite:`Todorov:2006kx`, HOOMD :cite:`Glaser:2015ys` as well as the Protein Data Bank PDB format :cite:`Berman:2000aa` and various other specialized formats.
 
 Since the original publication :cite:`Michaud-Agrawal:2011fu`, improvements in speed and data structures make it now possible to work with terabyte-sized trajectories containing up to ~10 million particles.
 MDAnalysis also comes with specialized analysis classes in the ``MDAnalysis.analysis`` module that are unique to MDAnalysis such as *LeafletFinder*, a graph-based algorithm for the analysis of lipid bilayers :cite:`Michaud-Agrawal:2011fu`, or *Path Similarity Analysis* for the quantitative comparison of macromolecular conformational changes :cite:`Seyler:2015fk`.
