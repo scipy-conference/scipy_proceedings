@@ -40,7 +40,7 @@ Disparate datasets stored in any format (CSV_, HDF5_, NetCDF_, Feather_, etc.) s
 .. _HDF5: https://www.hdfgroup.org/HDF5/
 .. _NetCDF: http://www.unidata.ucar.edu/software/netcdf/
 .. _Feather: https://github.com/wesm/feather
-.. _MDSynthesis: https://github.com/datreant/MDSynthesis
+.. _MDSynthesis: http://mdsynthesis.readthedocs.io/
 
 .. class:: keywords
 
@@ -501,13 +501,10 @@ which we can use for aggregated analysis, or perhaps just pretty plots (Figure :
    Plot of sinusoidal toy datasets aggregated and plotted by source Treant. :label:`fig:sines`
 
 The ``Data`` limb stores Pandas and NumPy objects in HDF5_ within a Treant's own tree.
-
-
 It can also store arbitrary (but pickleable) Python objects as pickles, making it a flexible interface for quick data storage and retrieval.
 However, it ultimately serves as an example for how ``Treant`` and ``Bundle`` objects can be extended to do complex but convenient things.
 
 .. _NumPy: http://www.numpy.org/
-.. _HDF5: https://www.hdfgroup.org/about/
 
 
 Using Treants as the basis for dataset access and manipulation with the PyData stack
@@ -525,10 +522,47 @@ Treant metadata features such as tags and categories can be used for automated w
 
 Building domain-specific applications on datreant
 -------------------------------------------------
-.. not only can applications *use* Treants, they can define their own Treant subclasses that work in special ways
+Built-in ``datreant.core`` objects are general-purpose, while packages like ``datreant.data`` provide extensions to these objects that are more specific.
+But it is possible, and very useful, for domain-specific applications to define their own domain-specific ``Treant`` subclasses, with tightly-coupled limbs for domain-specific needs.
+Not only do objects such as ``Bundle`` work just fine with ``Treant`` subclasses and custom ``Limb`` classes; they are designed explicitly with this need in mind.
+
+The first example of a domain-specific package built around ``datreant`` is MDSynthesis_, a module that enables high-level management and exploration of molecular dynamics simulation data.
+MDSynthesis gives a Pythonic interface to molecular dynamics trajectories using MDAnalysis, giving the ability to work with the data from many simulations scattered throughout the filesystem with ease.
+It makes it possible to write analysis code that can work across many varieties of simulation, but even more importantly, MDSynthesis allows interactive work with the results from hundreds of simulations at once without much effort.
 
 Leveraging molecular dynamics data with MDSynthesis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    import mdsynthesis as mds
+    from MDAnalysis.analysis.hbonds import HydrogenBondAnalysis
+    import pandas as pd
+    import seaborn as sns
+    
+    b = mds.discover('NhaA_i2o_transitions')
+
+    def get_hbonds(sim):
+        dimerization = sim.atomselections.define('dimerization')
+        core = sim.atomselections.define('core')
+
+        hb = HydrogenBondAnalysis(sim.universe, dimerization, core)
+        hb.run()
+        hb.generate_table()
+
+        sim.data['hbonds'] = pd.DataFrame(hb.table)
+
+    b.map(get_hbonds, processes=16)
+
+.. code-block:: python
+
+    df = b.data.retrieve('hbonds', by='name')
+
+    counts = df['distance'].groupby(df.index).count()
+    counts.index = pd.MultiIndex.from_tuples(counts.index)
+    counts.index = counts.index.droplevel(0)
+
+    sns.jointplot(counts.index, counts, kind='hexbin')
 
 
 Conclusions
