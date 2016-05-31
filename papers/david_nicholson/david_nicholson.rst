@@ -127,15 +127,20 @@ If features from preceding and following syllables improve k-NN performance, the
 
     **Accuracy v. number of songs used to train SVM-RBF and SVM-RBF with duration features added** *Y axis: average accuracy across labels, x axis: number of songs used to train.* In all cases, the added duration features yielded a higher accuracy. :label:`fig9`
 
-Direct comparison of algorithms using a common set of features
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-It is not clear from the experiments above whether the differences in accuracy are due to the different features used or due to the methods themselves.
+ To provide a more thorough comparison of the previously developed methods, I repeated the tests while holding the set of features constant. I did this with two sets of acoustic features: ], and the other being the set I used for k-NN.  As I understand it, it cannot be said that any method yields the best classifier across all possible problems. So this is really a test of whether these methods, provided with "typical" 
 
 Conclusion
 ----------
 
-The results suggest SVM-RBF provides the highest accuracy across different birds' songs. For three of four birds, labeling as few as fifteen songs by hand provides enough training data to achieve greater than 99.2% average accuracy with SVM-RBF. This is approximately 40 seconds of song (assuming 50 milliseconds per syllable and 50 syllables per song), in comparison to previous papers that reported using a minute of song to achieve such accuracies. The success of SVM-RBF is likely because the kernel allows for non-linear decision boundaries that can separate more variable types of syllables, such as the low-amplitude, high entropy *intro* syllables. Further experiments should determine how well these algorithms deal with the presence of sounds that are not part of song, e.g., calls, movement of the bird on its perch, etc. Such experiments are necessary to further reduce the amount of work required on the part of the experimenter. I expect that the SVM-RBF will succeed in the face of these non-songbird elements as well. As the results above demonstrate, it is important to actually test how the algorithms compare with each other on varied data sets, and to present the results and code used to obtain those results in as accessible a manner as possible.
+There are two clear results from these experiments. First, the linear SVM method proposed in [TACH2014] is impaired by syllables in some birds songs, most likely intro syllables. Second, use of the radial basis function as a kernel can improve SVM performance when applied to the features in [TACH2014].
+
+I can not say from these results how often the method of [TACH2014] will be impaired by any given bird's song. What I can say is that for 2 of the 3 birds tested, average accuracy did not approach 99% until at least 33 songs were used to train the classifier (birds 2 and 3, :ref:`fig3`), and for one bird, average accuracy never went above 97% (bird 1, :ref:`fig3`). By comparison, 6 songs was enough to achieve >99% average accuracy for 3 of the 4 birds when using SVM-RBF with the same feature set. 
+
+Similarly, I can not say from the results whether the differences in accuracy between SVM and k-NN are due to the different features used or due to the methods themselves. Experiments in progress will repeat the tests while holding the set of features constant. If I find any difference in the accuracy that different methods achieve with a given set of features, that would indicate how well the methods can use that feature set to estimate class membership. Such a result will be helpful for practical application of these methods to birdsong syllables.
+
+Practical applications of these methods also raises other questions. One is how well each can provide an estimate that a given classifcation is correct. The libSVM library, for example, can provide estimates using a computationally expensive 5-fold cross-validation. But, because the soft margin in the libSVM training algorithm allows some misclassifications, it's likely that some samples will actually be misclassified yet still appear to have a high probability of being correct. Further experiments should also determine how well these algorithms deal with the presence of sounds that are not part of song, e.g., calls, movement of the bird on its perch, etc. Such events are rare enough that they may be difficult to detect without changes to the training algorithm. At the same time, these types of sounds happen frequently enough that they could be mis-classified as syllables.
+
+Taken together, the results here demonstrate the importance of comparing how different classifiers perform in a given problem domain. 
 
 
 Methods
