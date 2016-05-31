@@ -535,13 +535,133 @@ using the ``detect_peaks.detect_peaks`` function [Duarte2015]_.
 Evaluation of model performance
 -------------------------------
 
+The approach used by PyTeCK to report performance of a chemical kinetic model
+is adapted from the work of Olm et al. [Olm2014]_ [Olm2015]_, and briefly
+discussed by Niemeyer [Niemeyer2016]_.
+
+The function ``eval_model.evaluate_model`` controls the overall evaluation
+procedure, given various required and optional parameters:
+
+ * ``model_name``: a string with the chemical kinetic model filename
+
+ * ``spec_keys_file``: a string with the name of a JSON file identifying
+   important species
+
+ * ``dataset_file``: a string with the name of a file listing the ChemKED files
+   to be used
+
+ * ``model_path``: a string with the local path containing ``model_name``.
+   This is optional; the default is ``'models'``
+
+ * ``results_path``: a string with the local path for placing results files.
+   This is optional; the defalut is ``'results'``
+
+ * ``model_variant_file``: a string with the name of a JSON file identifying
+   ranges of conditions for variants of the kinetic model. This is optional;
+   the default is ``None``
+
+ * ``num_threads``: an integer with the number of CPU threads to use to perform
+   simulations in parallel. This is optional; the default is the maximum number
+   of available threads minus one
+
+A few of these parameters require greater explanation. The species key JSON
+file ``spec_keys_file`` is needed because different chemical kinetic models
+internally use different names for species. PyTeCK needs to interpret these
+names in order to set the initial mixture composition, and potentially identify
+a species target to detect ignition. This file contains entries (for multiple
+model files, if desired) of the form:
+
+.. code-block:: json
+
+    {
+        "model_name": {
+            "O2": "O2",
+            "N2": "N2",
+            "nC7H16": "C7H16",
+            "CO2": "CO2"
+        },
+    }
+
+In this case, most of the necessary species names are consistent with the
+names used internally by PyTeCK, other than *n*\ -heptane (``nC7H16``).
+
+The ``model_variant_file`` JSON file is only needed in certain cases where
+the chemical kinetic model needs internal, manual changes for different ranges
+of conditions (such as pressure or bath gas). This file may contain entries of
+the form:
+
+.. code-block:: json
+
+    {
+        "model_name": {
+            "bath gases": {
+                "N2": "_N2",
+                "Ar": "_Ar"
+            },
+            "pressures": {
+                "1": "_1atm.cti",
+                "9": "_9atm.cti",
+                "15": "_15atm.cti",
+                "50": "_50atm.cti",
+                "100": "_100atm.cti"
+            }
+        },
+    }
+
+where the keys indicate extensions to be added to ``model_name``, in order of
+``bath gases`` and then ``pressures``. For models that need such variants, all
+combinations need to be present in the ``model_path`` directory.
+
+In order to determine the performance of a given model, ``evaluate_model``
+parses the ChemKED file(s), then sets up and runs simulations as described
+previously. A ``multiprocessing.Pool`` is used to perform simulations in
+parallel, creating ``simulation_worker`` objects for each case. Then,
+``process_results`` calculates the simulated ignition delays.
+
 The overall performance of a model is given by the average error function over
-all of the datasets. The error function of a dataset is given as the average
-squared difference of the ignition delay times divided by the variance of the
-experimental data (see Equation 2 in an earlier conference paper [Niemeyer2016]_).
-This serves as a weight for datasets based on the estimated uncertainty of
-results—datasets with lower variability in experimental data will contribute
-more to the overall metric.
+all of the experimental datasets:
+
+.. math::
+    :label: overallerror
+
+    E = \frac{1}{N} \sum_{i=1}^N E_i
+
+where :math:`N` is the number of datasets and :math:`E_i` is the error function
+for a particular dataset. This is given as the average squared difference of the
+ignition delay times divided by the variance of the experimental data:
+
+.. math::
+    :label: errorfunc
+
+    E_i = \frac{1}{N_i} \sum_{j=1}^{N_i} \left(
+    \frac{\log \tau_{ij}^{\text{exp}} - \log \tau_{ij}^{\text{sim}} }
+    { \sigma (\tau_{ij}^{\text{exp}}) }  \right)^2 \;,
+
+where :math:`N_i` is the number of datapoints in dataset :math:`i`,
+:math:`\tau_{ij}` is the :math:`j`\ th ignition delay value in the
+:math:`i`\ th dataset, :math:`\sigma` is the standard
+deviation, :math:`\log` indicates the natural logarithm (rather than base-10),
+and the superscripts "exp" and "sim" represent experimental
+and simulated results, respectively.
+
+The standard deviation :math:`\sigma` serves as a weighting factor for datasets
+based on the estimated uncertainty of results—datasets with lower variability
+in experimental data will contribute more to the overall metric. (Ideally,
+publications describing experimental results would provide uncertainty values
+for ignition delay results, but these are difficult to estimate for shock tube
+and rapid compression machines and therefore not usually given.)
+PyTeCK estimates the standard deviation by first fitting a
+``scipy.interpolate.UnivariateSpline`` of order three (or less, if the fit
+fails) to the natural logarithm of ignition delay values for a given dataset
+(where results mainly vary with a single variable, such as temperature), and
+then taking the standard deviation via ``numpy.std`` of the difference between
+the fit and experimental data. PyTeCK sets 0.1 as a lower bound for the
+uncertainty.
+
+After calculating the error associated with a dataset using Equation
+(:ref:`errorfunc`), and then the overall error metric for a model using Equation
+(:ref:`overallerror`), the performance results are printed to screen and saved
+to a JSON file.
 
 =============
 Usage example
@@ -549,17 +669,18 @@ Usage example
 
 Earlier results for the PyTeCK-based evaluation of nine n-heptane models were
 presented in a conference paper [Niemeyer2016]_.
-This talk will describe the evaluation of a more comprehensive set of 13
+In addition, This talk will describe the evaluation of a more comprehensive set of 13
 available n-heptane models, as shown in
-`this figure <https://dx.doi.org/10.6084/m9.figshare.3145705>`_. In addition,
-model evaluation for isooctane experiments will be also be shown.
+`this figure <https://dx.doi.org/10.6084/m9.figshare.3145705>`_.
 
 ===========================
 Conclusions and Future Work
 ===========================
 
+PyTeCK provides
+
 Longer term plans for PyTeCK include extending support for other experimental
-types, including laminar flame speed calculations.
+types, including laminar flames and flow reactors.
 
 Acknowledgements
 ----------------
@@ -636,6 +757,17 @@ References
 .. [Niemeyer2016b] K. E. Niemeyer.
                    PyTeCK version 0.1.0, GitHub repository, 2016.
                    https://GitHub.com/kyleniemeyer/PyTeCK
+
+.. [Olm2014] C. Olm, I. G. Zsély, R. Pálvölgyi, T. Varga, T. Nagy, H. J, Curran,
+             and T. Turányi.
+             "Comparison of the performance of several recent hydrogen
+             combustion mechanisms," *Combust. Flame* 161:2219–34, 2014.
+             http://dx.doi.org/10.1016/j.combustflame.2014.03.006
+
+.. [Olm2015] C. Olm, I. G. Zsély, T. Varga, H. J. Curran, and T. Turányi.
+             "Comparison of the performance of several recent syngas combustion
+             mechanisms," *Combust. Flame* 162:1793–812, 2015.
+             http://dx.doi.org/10.1016/j.combustflame.2014.12.001
 
 .. [PrIMe2016] "Process Informatics Model"
                http://primekinetics.org. Accessed: 29-05-2016.
