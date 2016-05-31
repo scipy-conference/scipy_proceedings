@@ -57,7 +57,7 @@ This is particularly the case for fields centered around simulation: simulation 
 And with increases in computational power, it is often necessary to store intermediate results from large amounts of simulation data so it can be accessed and explored interactively.
 
 These problems make data management difficult, and serve as a barrier to answering scientific questions.
-To make things easier, ``datreant`` is a collection of packages that provide a Pythonic interface to the filesystem and the data that lives within it.
+To make things easier, ``datreant`` is a namespace package that provides a Pythonic interface to the filesystem and the data that lives within it.
 It solves a boring problem, so we can focus on interesting ones.
 
 
@@ -71,14 +71,14 @@ We can create a ``Treant`` with:
 .. code-block:: python
 
    >>> import datreant.core as dtr
-   >>> t = dtr.Treant('sprout')
+   >>> t = dtr.Treant('maple')
    >>> t
-   <Treant: 'sprout'>
+   <Treant: 'maple'>
 
-This creates a directory ``sprout/`` in the filesystem if it didn't already exist, and places a special file inside which stores the Treant's state.
+This creates a directory ``maple/`` in the filesystem if it didn't already exist, and places a special file inside which stores the Treant's state.
 This file also serves as a flagpost indicating that this is more than just a directory::
 
-    > ls sprout
+    > ls maple 
     Treant.1dcbb3b1-c396-4bc6-975d-3ae1e4c2983a.json
 
 The name of this file includes the type of Treant it corresponds to, as well as the ``uuid`` of the Treant, its unique identifier.
@@ -89,9 +89,9 @@ We can start a separate Python session and use this Treant immediately there:
 
    # python session 2
    >>> import datreant.core as dtr
-   >>> s = dtr.Treant('sprout')
-   >>> s
-   <Treant: 'sprout'>
+   >>> t = dtr.Treant('maple')
+   >>> t
+   <Treant: 'maple'>
 
 Making a modification to the ``Treant`` in one session is immediately reflected by the same ``Treant`` in any other session.
 For example, a ``Treant`` can store any number of descriptive tags that are useful for differentiating it from others:
@@ -99,17 +99,17 @@ For example, a ``Treant`` can store any number of descriptive tags that are usef
 .. code-block:: python
 
    # python session 1
-   >>> s.tags.add('green', 'cork')
-   >>> s.tags
-   <Tags(['cork', 'green'])>
+   >>> t.tags.add('syrup', 'plant')
+   >>> t.tags
+   <Tags(['plant', 'syrup'])>
 
 And in the other Python session, we see the same ``Treant``:
 
 .. code-block:: python
 
    # python session 2
-   >>> s.tags
-   <Tags(['cork', 'green'])>
+   >>> t.tags
+   <Tags(['plant', 'syrup'])>
 
 Internally, advisory locking is done to avoid race conditions, making a ``Treant`` multiprocessing safe.
 
@@ -121,15 +121,15 @@ We can, for example, create directory structures rather easily:
 
 .. code-block:: python
 
-   >>> s['a/place/for/data/'].makedirs()
-   <Tree: 'sprout/a/place/for/data/'>
-   >>> s['a/place/for/text/'].makedirs()
-   <Tree: 'sprout/a/place/for/text/'>
+   >>> t['a/place/for/data/'].makedirs()
+   <Tree: 'maple/a/place/for/data/'>
+   >>> t['a/place/for/text/'].makedirs()
+   <Tree: 'maple/a/place/for/text/'>
 
 and so we now have::
 
-   >>> s.draw()
-   sprout/
+   >>> t.draw()
+   maple/
     +-- Treant.1dcbb3b1-c396-4bc6-975d-3ae1e4c2983a.json
     +-- a/
         +-- place/
@@ -150,9 +150,9 @@ We can, for example, easily store a ``pandas`` DataFrame somewhere in the tree f
    >>> import pandas as pd
    >>> df = pd.DataFrame(pd.np.random.randn(3, 2),
                          columns=['A', 'B'])
-   >>> data = s['a/place/for/data/']
+   >>> data = t['a/place/for/data/']
    >>> data
-   <Tree: 'sprout/a/place/for/data/'>
+   <Tree: 'maple/a/place/for/data/'>
    >>> df.to_csv(data['random_dataframe.csv'].abspath)
    >>> data.draw()
    data/
@@ -164,7 +164,7 @@ and we can introspect the file directly:
 
    >>> csv = data['random_dataframe.csv']
    >>> csv
-   <Leaf: 'sprout/a/place/for/data/random_dataframe.csv'>
+   <Leaf: 'maple/a/place/for/data/random_dataframe.csv'>
    >>> print(csv.read())
    ,A,B
    0,-0.573730932177663,-0.08857033924376226
@@ -181,11 +181,12 @@ What makes a ``Treant`` distinct from a ``Tree`` is its **state file**.
 This file stores metadata that can be used to filter and split ``Treant`` objects when treated in aggregate.
 It also serves as a flagpost, making Treant directories discoverable.
 
-If we have many Treants, perhaps scattered about the filesystem:
+If we have many more Treants, perhaps scattered about the filesystem:
 
 .. code-block:: python
 
-   >>> for path in ('an/elm/', 'the/oldest/oak'):
+   >>> for path in ('an/elm/', 'the/oldest/oak', 
+   ...              'the/oldest/tallest/sequoia'):
    ...     dtr.Treant(path)
 
 we can gather them up with ``datreant.core.discover``:
@@ -194,8 +195,8 @@ we can gather them up with ``datreant.core.discover``:
 
    >>> b = dtr.discover('.')
    >>> b
-   <Bundle([<Treant: 'oak'>, <Treant: 'sprout'>,
-            <Treant: 'elm'>])>
+   <Bundle([<Treant: 'oak'>, <Treant: 'sequoia'>,
+            <Treant: 'maple'>, <Treant: 'elm'>])>
 
 A ``Bundle`` is an ordered set of ``Treant`` objects.
 This collection gives convenient mechanisms for working with Treants as a single logical unit.
@@ -204,14 +205,19 @@ For example, it exposes a few basic properties for directly accessing its member
 .. code-block:: python
 
    >>> b.relpaths
-   ['the/oldest/oak/', 'sprout/', 'an/elm/']
+   ['the/oldest/oak/',
+    'the/oldest/tallest/sequoia/',
+    'maple/',
+    'an/elm/']
+
    >>> b.names
-   ['oak', 'sprout', 'elm']
+   ['oak', 'sequoia', 'maple', 'elm']
 
 A ``Bundle`` can be constructed in a variety of ways, most commonly using existing ``Treant`` instances or paths to Treants in the filesystem.
 
 We can use a ``Bundle`` to subselect Treants in typical ways, including integer indexing and slicing, fancy indexing, boolean indexing, and indexing by name.
 But in addition to these, we can use metadata features such as **tags** and **categories** to filter and group Treants as desired.
+
 
 Filtering Treants with tags
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -220,9 +226,11 @@ Adding some tags to each of our Treants separately:
 
 .. code-block:: python
 
-   >>> b['sprout'].tags.add('plant')
+   >>> b['maple'].tags.add('syrup', 'furniture', 'plant')
+   >>> b['sequoia'].tags.add('huge', 'plant')
    >>> b['oak'].tags.add('for building', 'plant', 'building')
-   >>> b['elm'].tags.add('firewood', 'shady', 'paper', 'plant', 'building')
+   >>> b['elm'].tags.add('firewood', 'shady', 'paper',
+                         'plant', 'building')
 
 we can now work with these tags in aggregate:
 
@@ -235,13 +243,14 @@ we can now work with these tags in aggregate:
    # will show tags present among *any* member
    >>> b.tags.any
    {'building',
-    'cork',
     'firewood',
     'for building',
-    'green',
+    'furniture',
+    'huge',
     'paper',
     'plant',
-    'shady'}
+    'shady',
+    'syrup'}
 
 and we can filter on them. For example, getting all Treants that are good
 for construction work:
@@ -250,33 +259,36 @@ for construction work:
 
    # gives a boolean index for members with this tag
    >>> b.tags['building']
-   [True, False, True]
+   [False, False, True, True]
 
    # we can use this to index the Bundle itself
    >>> b[b.tags['building']]
    <Bundle([<Treant: 'oak'>, <Treant: 'elm'>])>
 
 or getting back Treants that are both good for construction *and* used for
-making paper by giving tags as a list:
+making furniture by giving tags as a list:
 
 .. code-block:: python
 
    # a list of tags serves as an *and* query
-   >>> b[b.tags[['building', 'paper']]]
-   <Bundle([<Treant: 'elm'>])>
+   >>> b[b.tags[['building', 'furniture']]]
+   <Bundle([])>
 
-And other tag expressions can be constructed using tuples (for *or* operations)
-and sets (for *not and*):
+which in this case none of them are.
+
+Other tag expressions can be constructed using tuples (for *or* operations) and sets (for *not and*), and nesting of any of these works as expected:
 
 .. code-block:: python
 
    # we can get *or* by using a tuple instead of a list
-   >>> b[b.tags['firewood', 'green']]
-   <Bundle([<Treant: 'sprout'>, <Treant: 'elm'>])>
+   >>> b[b.tags['building', 'furniture']]
+   <Bundle([<Treant: 'maple'>, <Treant: 'oak'>,
+            <Treant: 'elm'>])>
 
    # and we can get *not and* by using a set
-   >>> b[b.tags[{'building', 'paper'}]]
-   <Bundle([<Treant: 'oak'>, <Treant: 'sprout'>])>
+   >>> b[b.tags[{'building', 'furniture'}]]
+   <Bundle([<Treant: 'sequoia'>, <Treant: 'maple'>,
+            <Treant: 'oak'>, <Treant: 'elm'>])>
 
 Using tag expressions, we can filter to Treants of interest from a ``Bundle`` counting many, perhaps hundreds, of Treants as members.
 A common workflow is to use ``datreant.core.discover`` to gather up many Treants from a section of the filesystem, then use tags to extract only those Treants one actually needs.
@@ -363,9 +375,98 @@ By leveraging the `groupby()` method, one can then extract the Treants (and the 
 This feature can be particularly powerful in cases where, say, many Treants have been created and categorized to handle incoming data over an extended period of time; one may then quickly gather the data one needs from a bird's-eye view using category selection mechanisms.
 
 
+
 Treant modularity with attachable Limbs
 ---------------------------------------
+``Treant`` objects manipulate their tags and categories using ``Tags`` and ``Categories`` objects, respectively.
+These are examples of ``Limb`` objects: attachable components which serve to extend the capabilities of a ``Treant``.
+While ``Tags`` and ``Categories`` are attached by default to all ``Treant`` objects, custom ``Limb`` subclasses can be defined to doconvenient things.
 
+``datreant`` is a namespace package, with the dependency-light core components included in ``datreant.core``.
+Another package currently in the ``datreant`` namespace is ``datreant.data``, which includes a set of convenience ``Limb`` objects for storing and retrieving ``pandas`` and ``numpy`` datasets.
+We can attach a ``Data`` ``Limb`` to a ``Treant`` with:
+
+.. code-block:: python
+
+   >>> import datreant.data
+   >>> t = dtr.Treant('maple')
+   >>> t.attach('data')
+   >>> t.data
+   <Data([])>
+
+and we can immediately start using it to store e.g. a ``pandas`` Series:
+
+.. code-block:: python
+
+   >>> import numpy as np
+   >>> sn = pd.Series(np.sin(
+   ...     np.linspace(0, 8*np.pi, num=200)))
+   >>> t.data['sinusoid'] = sn
+
+and we can get it back just as easily:
+
+.. code-block:: python
+
+   >>> t.data['sinusoid'].head()
+   0    0.000000
+   1    0.125960
+   2    0.249913
+   3    0.369885
+   4    0.483966
+   dtype: float64
+
+What's more, ``datreant.data`` also includes a corresponding ``AggLimb`` for ``Bundle`` objects, allowing for automatic aggregation of datasets by name across all member ``Treant`` objects.
+If we collect and store a similar datasets for each member in our ``Bundle``: 
+
+.. code-block:: python
+
+   >>> b = dtr.discover('.')
+   >>> b
+   <Bundle([<Treant: 'oak'>, <Treant: 'sequoia'>,
+            <Treant: 'maple'>, <Treant: 'elm'>])>
+
+   # we want to make each dataset a bit different
+   >>> b.categories['frequency'] = [1, 2, 3, 4]
+   >>> for mem in b:
+   ...     freq = mem.categories['frequency']
+   ...     mem.data['sinusoid'] = np.sin(
+   ...         freq * np.linspace(0, 8*np.pi, num=200))
+
+then we can retrieve all of them into a single, multi-index ``pandas`` Series:
+
+.. code-block:: python
+
+   >>> sines = b.data.retrieve('sinusoid', by='name')
+   >>> sines.groupby(level=0).head()
+   sequoia  0    0.000000
+            1    0.125960
+            2    0.249913
+            3    0.369885
+            4    0.483966
+   oak      0    0.000000
+            1    0.369885
+            2    0.687304
+            3    0.907232
+            4    0.998474
+   maple    0    0.000000
+            1    0.249913
+            2    0.483966
+            3    0.687304
+            4    0.847024
+   elm      0    0.000000
+            1    0.483966
+            2    0.847024
+            3    0.998474
+            4    0.900479
+   dtype: float64
+
+ 
+   
+   (Figure :ref:`fig:sines`).
+
+.. figure:: figs/sines.png
+
+   Plot of sinusoidal toy datasets aggregated and plotted by Treant :label:`fig:sines`
 
 Using Treants as the basis for dataset access and manipulation with the PyData stack
 ------------------------------------------------------------------------------------
@@ -374,16 +475,21 @@ Using Treants as the basis for dataset access and manipulation with the PyData s
 
 .. would love to give Fireworks a shout-out here, since building workflows that operate on Treants works *really* well
 
+
+
 Building domain-specific applications on datreant
 -------------------------------------------------
 .. not only can applications *use* Treants, they can define their own Treant subclasses that work in special ways
 
-Making molecular dynamics great again with MDSynthesis
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Leveraging molecular dynamics data with MDSynthesis
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Conclusions
+-----------
 
 Acknowledgements
 ----------------
+.. grab from MDAnalysis set 
 
 This work was in part supported by grant ACI-1443054 from the National Science Foundation.
 
