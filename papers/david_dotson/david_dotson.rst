@@ -213,6 +213,7 @@ A ``Bundle`` can be constructed in a variety of ways, most commonly using existi
 We can use a ``Bundle`` to subselect Treants in typical ways, including integer indexing and slicing, fancy indexing, boolean indexing, and indexing by name.
 But in addition to these, we can use metadata features such as **tags** and **categories** to filter and group Treants as desired.
 
+
 Filtering Treants with tags
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Tags are individual strings that describe a Treant.
@@ -287,6 +288,7 @@ Splitting Treants on categories
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+
 Treant modularity with attachable Limbs
 ---------------------------------------
 
@@ -298,16 +300,23 @@ Using Treants as the basis for dataset access and manipulation with the PyData s
 
 .. would love to give Fireworks a shout-out here, since building workflows that operate on Treants works *really* well
 
+
+Other packages in the datreant namespace
+----------------------------------------
+
 Building domain-specific applications on datreant
 -------------------------------------------------
 .. not only can applications *use* Treants, they can define their own Treant subclasses that work in special ways
 
-Making molecular dynamics great again with MDSynthesis
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Leveraging molecular dynamics data with MDSynthesis
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Conclusions
+-----------
 
 Acknowledgements
 ----------------
+.. grab from MDAnalysis set 
 
 This work was in part supported by grant ACI-1443054 from the National Science Foundation.
 
