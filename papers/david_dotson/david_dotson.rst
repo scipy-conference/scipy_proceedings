@@ -36,12 +36,13 @@ But it can be tedious and error prone to work directly with the filesystem to re
 **datreant** makes working with directory structures and files Pythonic with **Treants**: specially marked directories with distinguishing characteristics that can be discovered, queried, and filtered.
 Treants can be manipulated individually and in aggregate, with mechanisms for granular access to the directories and files in their trees.
 Disparate datasets stored in any format (CSV_, HDF5_, NetCDF_, Feather_, etc.) scattered throughout a filesystem can thus be manipulated as meta-datasets of Treants.
-**datreant** is modular and extensible by design to allow specialized applications to be built on top of it, with **MDSynthesis** as an example for working with molecular dynamics simulation data. http://datreant.org/
+**datreant** is modular and extensible by design to allow specialized applications to be built on top of it, with **MDSynthesis_** as an example for working with molecular dynamics simulation data. http://datreant.org/
 
 .. _CSV: https://docs.python.org/2/library/csv.html
 .. _HDF5: https://www.hdfgroup.org/HDF5/
 .. _NetCDF: http://www.unidata.ucar.edu/software/netcdf/
 .. _Feather: https://github.com/wesm/feather
+.. _MDSynthesis: https://github.com/datreant/MDSynthesis
 
 .. class:: keywords
 
