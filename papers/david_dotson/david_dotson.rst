@@ -23,8 +23,6 @@
 :email: oliver.beckstein@asu.edu
 :institution: Arizona State University, Tempe, Arizona, USA
 
-:bibliography: ``datreant``
-
 -----------------------------------------------------------
 datreant: persistent, Pythonic trees for heterogeneous data
 -----------------------------------------------------------
@@ -316,13 +314,21 @@ We can access categories for an individual member:
 .. code-block:: python
 
     >>> b['sequoia'].categories
-    <AggCategories({u'home': [u'california'], u'age': [u'old'], u'type': [u'evergreen'], u'bark': [u'fibrous'], u'continent': [u'north america']})>
+    <AggCategories({u'home': [u'california'], 
+                    u'age': [u'old'], 
+                    u'type': [u'evergreen'], 
+                    u'bark': [u'fibrous'], 
+                    u'continent': [u'north america']})>
 
 The *aggregated* categories for all members in a Bundle are accessible via `datreant.core.Bundle.categories`, which gives a view of the categories with keys present in (common to) *every* member Treant:
 
 .. code-block:: python
+
     >>> b.categories
-    <AggCategories({u'age': [u'adult', u'young', u'young', u'old'], u'type': [u'deciduous', u'deciduous', u'deciduous', u'evergreen'], u'bark': [u'mossy', u'smooth', u'mossy', u'fibrous'], u'continent': [u'north america', u'north america', u'north america', u'north america']})>
+    <AggCategories({u'age': [u'adult', u'young', u'young', u'old'],
+                    u'type': [u'deciduous', u'deciduous', u'deciduous', u'evergreen'],
+                    u'bark': [u'mossy', u'smooth', u'mossy', u'fibrous'], 
+                    u'continent': [u'north america', u'north america', u'north america', u'north america']})>
 
 Each element of the list associated with a given key corresponds to the value for each member, in member order.
 We can also access categories present among *any* member:
@@ -380,11 +386,11 @@ Treant modularity with attachable Limbs
 ---------------------------------------
 ``Treant`` objects manipulate their tags and categories using ``Tags`` and ``Categories`` objects, respectively.
 These are examples of ``Limb`` objects: attachable components which serve to extend the capabilities of a ``Treant``.
-While ``Tags`` and ``Categories`` are attached by default to all ``Treant`` objects, custom ``Limb`` subclasses can be defined to doconvenient things.
+While ``Tags`` and ``Categories`` are attached by default to all ``Treant`` objects, custom ``Limb`` subclasses can be defined to for additional functionality.
 
 ``datreant`` is a namespace package, with the dependency-light core components included in ``datreant.core``.
 Another package currently in the ``datreant`` namespace is ``datreant.data``, which includes a set of convenience ``Limb`` objects for storing and retrieving ``pandas`` and ``numpy`` datasets.
-We can attach a ``Data`` ``Limb`` to a ``Treant`` with:
+We can attach a ``Data`` limb to a ``Treant`` with:
 
 .. code-block:: python
 
@@ -460,21 +466,38 @@ then we can retrieve all of them into a single, multi-index ``pandas`` Series:
             4    0.900479
    dtype: float64
 
- 
-   
-   (Figure :ref:`fig:sines`).
+which we can use for aggregated analysis, or perhaps just pretty plots (Figure :ref:`fig:sines`).
+
+.. code-block:: python
+
+   >>> for name, group in sines.groupby(level=0):
+   ...     df = group.reset_index(level=0, drop=True)
+   ...     df.plot(legend=True, label=name)
 
 .. figure:: figs/sines.png
 
-   Plot of sinusoidal toy datasets aggregated and plotted by Treant :label:`fig:sines`
+   Plot of sinusoidal toy datasets aggregated and plotted by source Treant. :label:`fig:sines`
+
+The ``Data`` limb stores ``pandas`` and ``numpy`` objects in HDF5_ within a Treant's own tree.
+
+
+It can also store arbitrary (but pickleable) Python objects as pickles, making it a flexible interface for quick data storage and retrieval.
+However, it ultimately serves as an example for how ``Treant`` and ``Bundle`` objects can be extended to do complex but convenient things.
+
+.. _HDF5: https://www.hdfgroup.org/about/
+
 
 Using Treants as the basis for dataset access and manipulation with the PyData stack
 ------------------------------------------------------------------------------------
-.. should emphasize that we don't need specific limbs per se to work with different datasets or to use other libraries
-.. since Treants are filesystem manipulators, can use them as the access points for things like blaze, dask, distributed, etc.
+Although it is possible to extend ``datreant`` objects with limbs to do complex operations on a Treant's tree, it isn't necessary to build specialized interfaces such as these to make use of the extensive PyData stack.
+``datreant`` fundamentally serves as a Pythonic interface to the filesystem, bringing value to datasets and analysis results by making them easily accessible now and later.
+As data structures and file formats change, ``datreant`` objects can always be used in the same way to supplement the way these tools are used.
 
-.. would love to give Fireworks a shout-out here, since building workflows that operate on Treants works *really* well
+Because a ``Treant`` is both a Python object and a filesystem object, they work remarkably well with distributed computation libraries such as dask.distributed_ [Roc15]_ and workflow execution frameworks such as Fireworks_ [Jai15]_.
+Treant metadata features such as tags and categories can be used for automated workflows, including backups and remote copies to external compute resources, making work on datasets less imperative and more declarative when desired.
 
+.. _dask.distributed: http://distributed.readthedocs.io
+.. _Fireworks: https://pythonhosted.org/FireWorks/
 
 
 Building domain-specific applications on datreant
@@ -483,6 +506,7 @@ Building domain-specific applications on datreant
 
 Leveraging molecular dynamics data with MDSynthesis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 Conclusions
 -----------
@@ -497,7 +521,12 @@ This work was in part supported by grant ACI-1443054 from the National Science F
 
 References
 ----------
+.. [vdW11] Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux. The NumPy
+           Array: A Structure for Efficient Numerical Computation, Computing in
+           Science & Engineering, 13, 22-30 (2011)
+.. [Roc15] Matthew Rocklin. Dask: Parallel Computation with Blocked algorithms
+           and Task Scheduling, Proceedings of the 14th Python in Science Conference, 130-131 (2010)
+.. [Jai15] Anubhav Jain, et. al. FireWorks: a dynamic workflow system designed
+           for high-throughput applications. Concurrency Computat.: Pract.
+           Exper., 27: 5037–5059. doi: 10.1002/cpe.3505 (2015)
 
-.. We use a bibtex file ``mdanalysis.bib`` and use 
-.. :cite:`Michaud-Agrawal:2011fu` for citations; do not use manual
-.. citations
