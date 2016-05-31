@@ -402,20 +402,15 @@ A coarse-grained model of the influenza A virion outer lipid envelope (5 M parti
 For example, the open source `lipid diffusion analysis code`_ (for spherical structures and planar bilayers) used to assess the diffusion constants of the influenza A proteins and lipids-- is built on MDAnalysis.
 The construction of the CG dengue virion envelope (1 M particles) was largely dependent on MDAnalysis :cite:`pmid26833387`.
 The symmetry operators in the deposited dengue protein shell PDB file were applied to a simulated asymmetic unit in a bilayer, effectively tiling both proteins and lipids into the appropriate positions on the virion surface :cite:`pmid26833387`.
-More recently, a 12.7 M CG particle system combining the influenza A envelope and a model of a plasma membrane :cite:`doi:10.1021/jacs.5b08048` were simulated together (Figure :ref:`fig:flu-visualization`).
 
-.. figure:: figs/assess_bulge.png
+.. figure:: figs/flu_simulations.pdf
 
-   Preliminary simulations of a simulated influenza A virus envelope (red and purple) with a plasma membrane (tan) :cite:`doi:10.1021/jacs.5b08048`. The images were rendered with VMD :cite:`Humphrey:1996aa`. :label:`fig:flu-visualization`
+   Simulation of a coarse-grained model of the influenza A virion membrane (purple/red) close to a model of the human plasma membrane (brown). **A**: Left: initial frame. Right: system after 40 ns . A horizontal black guide line is used to emphasize the rising plasma membrane position. The images were produced with VMD :cite:`Humphrey:1996aa`. **B**   Maximum :math:`Z` (vertical) coordinate values for the influenza A virus envelope and the plasma membrane are tracked over the course of the simulation, indicating that the membrane rises to rapidly.  :label:`fig:virion`
 
-
-MDAnalysis was used to assess the stability of this enormous system by tracking, for example, the changes in :math:`Z` coordinate values for different system components (Figure :ref:`fig:flu-observables`).
+More recently, a 12.7 M CG particle system combining the influenza A envelope and a model of a plasma membrane :cite:`doi:10.1021/jacs.5b08048` were simulated together (Figure :ref:`fig:virion` A).
+MDAnalysis was used to assess the stability of this enormous system by tracking, for example, the changes in :math:`Z` coordinate values for different system components (Figure :ref:`fig:virion` B).
 In this case, the membrane appeared to rise too rapidly over the course of 50 ns, which suggests that the simulation system will likely have to be redesigned.
-
-.. figure:: figs/Z_tracking_flu_membrane_system.png
-
-   Analysis of parameters in the simulation of whole flu virion. :label:`fig:flu-observables`
-
+Such large systems are challenging to work with, including their visualization, and analysis of quantitites based on particle coordinates is essential to assess the correct behavior of the simulations.
 
 .. _lipid diffusion analysis code: https://github.com/tylerjereddy/diffusion_analysis_MD_simulations
 
