@@ -54,14 +54,14 @@ Introduction
 ------------
 .. must motivate datreant, and make a good sell as to why it is a useful and general-purpose tool
 
-In many fields of science, especially those analyzing experimental or simulation data, there is an existing ecosystem of specialized tools and file formats which new tools must work around.
-Often this makes the filesystem serve as a *de facto* database, with directory trees the zeroth-order data structure for scientific data.
-This is particularly the case for fields centered around simulation: simulation systems can vary widely in size, composition, rules, parameters, and starting conditions.
-And with increases in computational power, it is often necessary to store intermediate results from large amounts of simulation data so it can be accessed and explored interactively.
+In many scientific fields, especially those analyzing experimental or numerical simulation data, there is an existing ecosystem of specialized tools and file formats which new tools must work around.
+Consequently, the filesystem ends up serving as a *de facto* database, with directory trees the zeroth-order data structure for scientific data.
+This is particularly true for fields centered around numerical simulation: simulation systems can vary widely in size, composition, rules, parameters, and starting conditions.
+Furthermore, with ever-increasing computational power, it is often necessary to store intermediate results from large amounts of simulation data such that they may be accessed and explored interactively.
 
-These problems make data management difficult, and serve as a barrier to answering scientific questions.
-To make things easier, ``datreant`` is a namespace package that provides a Pythonic interface to the filesystem and the data that lives within it.
-It solves a boring problem, so we can focus on interesting ones.
+Managing the volume and complexity of these data is becoming increasingly difficult problem in and of itself; data management is a challenge to scientific reproducibility and ultimately presents a substantial barrier to answering scientific questions.
+One approach to this problem is ``datreant``, a namespace package that provides a Pythonic interface to the filesystem and the data that lives within it.
+By consolidating Python-based post-processing and analysis with the accessing, generation, and storage of raw and intermediate data, ``datrent`` is designed to solve a boring problem so we can focus more attention on interesting ones.
 
 
 Treants as filesystem manipulators
