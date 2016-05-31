@@ -143,7 +143,7 @@ and so we now have::
 Accessing paths in this way returns ``Tree`` and ``Leaf`` objects, referring to directories and files, respectively.
 These paths may not point to directories or files that actually exist, but they can be used to create and work with these elements.
 
-We can, for example, easily store a ``pandas`` DataFrame somewhere in the tree for reference later:
+We can, for example, easily store a Pandas_ [McK10]_ DataFrame somewhere in the tree for reference later:
 
 .. todo: change to an example where we store a dataframe with arboreal data;
 .. more fun, less space, fits theme
@@ -177,6 +177,7 @@ and we can introspect the file directly:
 Using ``Treant``, ``Tree``, and ``Leaf`` objects, we can work with the filesystem Pythonically without giving much attention to *where* these objects live within that filesystem.
 This becomes especially powerful when we have many directories/files we want to work with, possibly in many different places.
 
+.. _Pandas: http://pandas.pydata.org/
 
 Aggregation and splitting on Treant metadata
 --------------------------------------------
@@ -410,7 +411,7 @@ These are examples of ``Limb`` objects: attachable components which serve to ext
 While ``Tags`` and ``Categories`` are attached by default to all ``Treant`` objects, custom ``Limb`` subclasses can be defined to for additional functionality.
 
 ``datreant`` is a namespace package, with the dependency-light core components included in ``datreant.core``.
-Another package currently in the ``datreant`` namespace is ``datreant.data``, which includes a set of convenience ``Limb`` objects for storing and retrieving ``pandas`` and ``numpy`` datasets.
+Another package currently in the ``datreant`` namespace is ``datreant.data``, which includes a set of convenience ``Limb`` objects for storing and retrieving Pandas and NumPy_ [vdW11]_ datasets.
 We can attach a ``Data`` limb to a ``Treant`` with:
 
 .. code-block:: python
@@ -421,7 +422,7 @@ We can attach a ``Data`` limb to a ``Treant`` with:
    >>> t.data
    <Data([])>
 
-and we can immediately start using it to store e.g. a ``pandas`` Series:
+and we can immediately start using it to store e.g. a Pandas ``Series``:
 
 .. code-block:: python
 
@@ -459,7 +460,7 @@ If we collect and store a similar datasets for each member in our ``Bundle``:
    ...     mem.data['sinusoid'] = np.sin(
    ...         freq * np.linspace(0, 8*np.pi, num=200))
 
-then we can retrieve all of them into a single, multi-index ``pandas`` Series:
+then we can retrieve all of them into a single, multi-index Pandas ``Series``:
 
 .. code-block:: python
 
@@ -499,12 +500,13 @@ which we can use for aggregated analysis, or perhaps just pretty plots (Figure :
 
    Plot of sinusoidal toy datasets aggregated and plotted by source Treant. :label:`fig:sines`
 
-The ``Data`` limb stores ``pandas`` and ``numpy`` objects in HDF5_ within a Treant's own tree.
+The ``Data`` limb stores Pandas and NumPy objects in HDF5_ within a Treant's own tree.
 
 
 It can also store arbitrary (but pickleable) Python objects as pickles, making it a flexible interface for quick data storage and retrieval.
 However, it ultimately serves as an example for how ``Treant`` and ``Bundle`` objects can be extended to do complex but convenient things.
 
+.. _NumPy: http://www.numpy.org/
 .. _HDF5: https://www.hdfgroup.org/about/
 
 
@@ -550,4 +552,7 @@ References
 .. [Jai15] Anubhav Jain, et. al. FireWorks: a dynamic workflow system designed
            for high-throughput applications. Concurrency Computat.: Pract.
            Exper., 27: 5037–5059. doi: 10.1002/cpe.3505 (2015)
+
+.. [McK10] Wes McKinney. Data Structures for Statistical Computing in Python,
+           Proceedings of the 9th Python in Science Conference, 51-56 (2010)
 
