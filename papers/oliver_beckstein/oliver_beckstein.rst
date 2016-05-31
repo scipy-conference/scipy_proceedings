@@ -101,6 +101,7 @@ MDAnalysis is available under the GNU General Public License v2.
 .. _distributed: https://github.com/dask/distributed
 .. _fireworks: https://github.com/materialsproject/fireworks
 .. _MDSynthesis: https://github.com/datreant/MDSynthesis
+.. _datreant: http://datreant.org
 
 .. class:: keywords
 
@@ -483,12 +484,11 @@ Such large systems are challenging to work with, including their visualization, 
 Other packages that use MDAnalysis
 ----------------------------------
 
-TODO
-
-The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages like ENCORE_ :cite:`Tiberti:2015fk` and ProtoMD_ :cite:`Somogyi:2016aa`.
-
-- MDSynthesis_ (zenodo REFERENCE), datreant reference
-
+The user interface and modular design work well in complex scripted workflows and for interactive work, as discussed in section `Interactive Use and Visualization`_.
+MDAnalysis also serves as foundation for other packages.
+For example, ProtoMD_ :cite:`Somogyi:2016aa`  is a toolkit that facilitates the development of algorithms for multiscale (MD) simulations and uses MDAnalysis for on-the-fly calculations of the collective variables that drive the coarse-grained degrees of freedom.
+The ENCORE_ package :cite:`Tiberti:2015fk` enables users to compare conformational ensembles generated either from simulations alone or synergistically with experiments. 
+MDSynthesis_ :cite:`Dotson:2016aa` (which is based on  datreant_ (Dotson et al, this issue)) gives a Pythonic interface to molecular dynamics trajectories using MDAnalysis, giving the ability to work with the data from many simulations scattered throughout the filesystem with ease. It makes it possible to write analysis code that can work across many varieties of simulation, but even more importantly, MDSynthesis allows interactive work with the results from hundreds of simulations at once without much effort.
 
 
 
@@ -499,7 +499,7 @@ MDAnalysis provides a uniform interface to simulation data, which comes in a bew
 It enables users to rapidly write code that is portable and immediately usable in virtually all biomolecular simulation communities.
 It has a very active international developer community with researchers that are expert developers and users of a wide range of simulation codes.
 MDAnalysis is widely used (the original paper :cite:`Michaud-Agrawal:2011fu` has been cited more than 195 times) and forms the foundation for more specialized biomolecular simulation tools.
-Ongoing and future developments will improve performance further, introduce transparent parallelisation schemes to utilize multi-core systems efficiently, and interface with the `SPIDAL library`_ for high performance data analytics algorithms.
+Ongoing and future developments will improve performance further, introduce transparent parallelisation schemes to utilize multi-core and GPU systems efficiently, and interface with the `SPIDAL library`_ for high performance data analytics algorithms.
 
 
 Acknowledgements
