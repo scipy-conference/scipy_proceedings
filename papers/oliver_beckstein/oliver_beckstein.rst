@@ -495,6 +495,7 @@ JD was in part supported by a Wellcome Trust grant 092970/Z/10/Z.
 DLD was in part supported by a Molecular Imaging Fellowship from the Department of Physics at Arizona State University
 IMK was supported by a REU supplement to grant ACI-1443054 from the National Science Foundation.
 OB was supported in part by grant ACI-1443054 from the National Science Foundation; computational resources for OB's work were in part provided by the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1053575 (allocation MCB130177 to OB).
+The MDAnalysis 'Atom' logo was designed by Christian Beckstein.
 
 
 References
