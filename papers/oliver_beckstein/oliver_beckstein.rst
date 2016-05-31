@@ -121,14 +121,21 @@ Molecular dynamics (MD) simulations of biological molecules have become an impor
 Simulations are performed with highly optimized software packages on HPC resources but most codes generate output trajectories in their own formats so that the development of new trajectory analysis algorithms is confined to specific user communities and widespread adoption and further development is delayed.
 Typical trajectory sizes range from gigabytes to terabytes so it is typically not feasible to convert trajectories into a range of different formats just to use a tool that requires this specific format.
 Instead, a framework is required that provides a common interface to raw simulation data.
-Here we describe the MDAnalysis library :cite:`Michaud-Agrawal:2011fu` that addresses this problem by abstracting access to the raw simulation data.
+Here we describe the MDAnalysis_ library :cite:`Michaud-Agrawal:2011fu` that addresses this problem by abstracting access to the raw simulation data.
 MDAnalysis presents a uniform object-oriented Python interface to the user.
 Since its original publication in 2011 :cite:`Michaud-Agrawal:2011fu`, MDAnalysis has been widely adopted and has undergone substantial changes.
 Here we provide a short introduction to MDAnalysis and its capabilities and provide and overview over recent improvements.
 
-.. other python packages
-.. MDTools, MMTK, LOOS/pyLOOS,  mdtraj, pytraj/cpptraj
+MDAnalysis was initially inspired by MDTools_ for Python (J.C. Phillips, unpublished) and MMTK_ :cite:`Hinsen:2000kx`.
+MDAnalysis has been publically available since January 2008 and is one of the longest actively maintained Python packages for the analysis of molecular simulations.
+Since then many other packages have appeared, such as LOOS_/PyLOOS :cite:`Romo:2014bh`, mdtraj_ :cite:`McGibbon:2015aa` or pytraj_ :cite:`Nguyen:2016aa` (a versatile Python frontend to the popular ``cpptraj`` tool :cite:`Roe:2013zr`), to name only a few.
 
+.. _MDAnalysis: http://mdanalysis.org
+.. _MDTools: http://www.ks.uiuc.edu/Development/MDTools/Python/
+.. _MMTK: http://dirac.cnrs-orleans.fr/MMTK/
+.. _LOOS: http://loos.sourceforge.net/
+.. _mdtraj: http://mdtraj.org/
+.. _pytraj: https://github.com/Amber-MD/pytraj
 
 
 Overview
