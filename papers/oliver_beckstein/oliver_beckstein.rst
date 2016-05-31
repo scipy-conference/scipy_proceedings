@@ -85,7 +85,7 @@ MD simulations of biological molecules have become an important tool to elucidat
 Simulations are performed with highly optimized software packages on HPC resources but most codes generate output trajectories in their own formats so that the development of new trajectory analysis algorithms is confined to specific user communities and widespread adoption and further development is delayed.
 MDAnalysis addresses this problem by abstracting access to the raw simulation data and presenting a uniform object-oriented Python interface to the user.
 It thus enables users to rapidly write code that is portable and immediately usable in virtually all biomolecular simulation communities.
-The user interface and modular design work equally well in complex scripted workflows, as foundations for other packages, and for interactive and rapid prototyping work in IPython_  / Jupyter_ notebooks, especially together with molecular visualization provided by nglview_ and time series analysis with pandas_.
+The user interface and modular design work equally well in complex scripted work flows, as foundations for other packages, and for interactive and rapid prototyping work in IPython_  / Jupyter_ notebooks, especially together with molecular visualization provided by nglview_ and time series analysis with pandas_.
 MDAnalysis is written in Python and Cython_ and uses NumPy_ arrays for easy interoperability with the wider scientific Python ecosystem.
 It is widely used and forms the foundation for more specialized biomolecular simulation tools.
 MDAnalysis is available under the GNU General Public License v2.
@@ -128,7 +128,7 @@ Since its original publication in 2011 :cite:`Michaud-Agrawal:2011fu`, MDAnalysi
 Here we provide a short introduction to MDAnalysis and its capabilities and provide and overview over recent improvements.
 
 MDAnalysis was initially inspired by MDTools_ for Python (J.C. Phillips, unpublished) and MMTK_ :cite:`Hinsen:2000kx`.
-MDAnalysis has been publically available since January 2008 and is one of the longest actively maintained Python packages for the analysis of molecular simulations.
+MDAnalysis has been publicly available since January 2008 and is one of the longest actively maintained Python packages for the analysis of molecular simulations.
 Since then many other packages have appeared, such as LOOS_/PyLOOS :cite:`Romo:2014bh`, mdtraj_ :cite:`McGibbon:2015aa` or pytraj_ :cite:`Nguyen:2016aa` (a versatile Python frontend to the popular ``cpptraj`` tool :cite:`Roe:2013zr`), to name only a few.
 
 .. _MDAnalysis: http://mdanalysis.org
@@ -176,8 +176,8 @@ The documentation_ is extensive and includes an `introductory tutorial`_.
 Development process
 ~~~~~~~~~~~~~~~~~~~
 
-The develoment community is very active with more than five active core developers and many community contributions in every release.
-We use modern software development practices :cite:`Wilson:2014aa,Stodden:2014tg` with continous integration (provided by `Travis CI`_) and an extensive automated testsuite (containing over 3500 tests with >92% coverage for our core modules).
+The development community is very active with more than five active core developers and many community contributions in every release.
+We use modern software development practices :cite:`Wilson:2014aa,Stodden:2014tg` with continuous integration (provided by `Travis CI`_) and an extensive automated test suite (containing over 3500 tests with >92% coverage for our core modules).
 Development occurs on GitHub_ through pull requests that are reviewed by core developers and other contributors, supported by the results from the automated tests, test coverage reports provided by Coveralls_, and QuantifiedCode_ code quality reports.
 Users and developers communicate extensively on the `community mailing list`_ (*Google* groups) and the GitHub issue tracker; new users and developers are very welcome and most user contributions are eventually integrated into the code base.
 The development and release process is transparent to users through open discussions and announcements and a full published commit history and changes.
@@ -208,7 +208,7 @@ Basic Usage
 -----------
 
 The core object in MDAnalysis is the Universe which acts as a nexus for accessing all data contained within a simulation.
-It is initialised by passing the filenames of the topology and trajectory files, with a multitude of different formats supported in these roles.
+It is initialized by passing the file names of the topology and trajectory files, with a multitude of different formats supported in these roles.
 The topology acts as a description of all the particles in the system while the trajectory describes their behavior over time.
 
 .. show loading a Universe and creating basic selections
@@ -267,7 +267,7 @@ To allow the analysis of such large simulations on an average workstation (or ev
 The trajectory data can be accessed through the trajectory attribute of a Universe.
 Changing the frame of the trajectory object updates the underlying arrays that AtomGroups point to.
 In this way the positions attribute of an AtomGroup within the iteration over a trajectory will give access to the positions at each frame.
-Through this approach only a single frame of data is present in memory at any time, allowing for large datasets, from half a million particles to tens of millions (see also section `Application to Large Systems`_), to be dissected with minimal resources.
+Through this approach only a single frame of data is present in memory at any time, allowing for large data sets, from half a million particles to tens of millions (see also section `Application to Large Systems`_), to be dissected with minimal resources.
 
 .. show working with the trajectory object to access the time data
 .. code-block:: python
@@ -284,7 +284,7 @@ Through this approach only a single frame of data is present in memory at any ti
 In some cases, such as selecting a specific frames (as in the calculation of time correlation functions), skipping of frames (as in the iterator ``u.trajectory[5000::1000]``), or parallelization over trajectory blocks in a map/reduce pattern :cite:`Tu:2008dq`, sequential reading of trajectories is highly inefficient when the underlying trajectory reader does not implement random access to time frames on disk.
 Many trajectory formats suffer from this shortcoming, including the popular Gromacs XTC and TRR formats, but also commonly used multi-frame PDB files and other text-based formats such as XYZ.
 Earlier versions of LOOS :cite:`Romo:2009zr` had implemented a mechanism by which the trajectory was read once on loading and frame offsets on disk were computed that could be used to directly seek to individual frames.
-MDAnalysis implements the same algorithm for TRR and XTC files but additionaly also saves the offsets to disk (as a compressed NumPy array).
+MDAnalysis implements the same algorithm for TRR and XTC files but additionally also saves the offsets to disk (as a compressed NumPy array).
 When a trajectory is loaded again then instead of reading the whole trajectory, only the persistent offsets are read (provided they have not become stale as checked by very conservative criteria such as modification time and size of the original file, which are saved with the offsets).
 In cases of terabyte-sized trajectories, the persistent offset approach can save  hundreds of seconds for the initial loading of the ``Universe``.
 Current development work is extending the persistent offset scheme to all trajectory readers, which will provide random access for all trajectories in a completely automatic and transparent manner to the user.
@@ -333,7 +333,7 @@ Universes and AtomGroups can be visualized in Jupyter notebooks using nglview_, 
 
    MDAnalysis can be used with nglview_ to directly visualize molecules and trajectories in Jupyter_ notebooks. The adenylate kinase (AdK) protein from one of the included test trajectories is shown. :label:`fig:nglview`.
 
-Other Python packages that have become extremely useful in notebook-based analysis workflows are pandas_  :cite:`McKinney2010` for rapid analysis of time series analysis, distributed_ for simple parallelization, FireWorks_ :cite:`Jain:2015aa` for complex workflows, and MDSynthesis_ for organizing, bundling and querying many simulations.
+Other Python packages that have become extremely useful in notebook-based analysis work flows are pandas_  :cite:`McKinney2010` for rapid analysis of time series analysis, distributed_ for simple parallelization, FireWorks_ :cite:`Jain:2015aa` for complex work flows, and MDSynthesis_ for organizing, bundling and querying many simulations.
 
 
 .. _`Analysis Module`:
@@ -341,25 +341,25 @@ Other Python packages that have become extremely useful in notebook-based analys
 Analysis Module
 ---------------
 
-In the ``MDAnalysis.analysis`` module we provide a large variety of standard analysis algorithms, like RMSD (root mean square distance) and RMSF (root mean square fluctuation) calculations, RMSD-optimized structural superposition :cite:`PuLiu_FastRMSD_2010`, native contacts :cite:`Best2013,Franklin2007`, or analysis of hydrogen bonds as well as unique algorithms, such as the *LeaftleftFinder* in ``MDAnalysis.analysis.leaflet`` :cite:`Michaud-Agrawal:2011fu` and *Path Similarity Analysis* (``MDAnalysis.analysis.psa``) :cite:`Seyler:2015fk`.
+In the ``MDAnalysis.analysis`` module we provide a large variety of standard analysis algorithms, like RMSD (root mean square distance) and RMSF (root mean square fluctuation) calculations, RMSD-optimized structural superposition :cite:`PuLiu_FastRMSD_2010`, native contacts :cite:`Best2013,Franklin2007`, or analysis of hydrogen bonds as well as unique algorithms, such as the *LeafletFinder* in ``MDAnalysis.analysis.leaflet`` :cite:`Michaud-Agrawal:2011fu` and *Path Similarity Analysis* (``MDAnalysis.analysis.psa``) :cite:`Seyler:2015fk`.
 Historically these algorithms were contributed by various researchers as individual modules to satisfy their own needs but this lead to some fragmentation in the user interface.
 We have recently started to unify the interface to the different algorithms with an `AnalysisBase` class.
 Currently ``PersistenceLength``, ``InterRDF``, ``LinearDensity`` and ``Contacts`` analysis have been ported.
-``PersistenceLength`` calculates the persistence length of a polymer, ``InterRDF`` calculates the pairwise radial distribution function inside of a molecule, ``LinearDensity`` generates a density along a given exis and ``Contacts`` analysis native contacts, as described in more detail below.
+``PersistenceLength`` calculates the persistence length of a polymer, ``InterRDF`` calculates the pairwise radial distribution function inside of a molecule, ``LinearDensity`` generates a density along a given axis and ``Contacts`` analysis native contacts, as described in more detail below.
 The API to these different algorithms is being unified with a common ``AnalysisBase`` class, with an emphasis on keeping it as generic and universal as possible so that it becomes easy to, for instance, parallelize analysis.
 Most other tools hand the user analysis algorithms as black boxes.
 We want to avoid that and allow the user to adapt an analysis to their needs.
 
 The new ``Contacts`` class is a good example a generic API that allows easy adaptations of algorithms while still offering an easy setup for standard analysis types.
 The ``Contacts`` class is calculating a contact map for atoms in a frame and compares it with a reference map using different metrics.
-The used metric then decides which quantity is measued.
-A common quantity is the fraction of native contacts, where native contacts are all atompairs that are close to each other in a reference structure.
+The used metric then decides which quantity is measured.
+A common quantity is the fraction of native contacts, where native contacts are all atom pairs that are close to each other in a reference structure.
 The fraction of native contacts is often used in protein folding to determine when a protein is folded.
 For native contacts two major types of metrics are considered: ones based on differentiable functions :cite:`Best2013` and ones based on hard cut-offs  :cite:`Franklin2007` (which we set as the default implementation).
 We have designed the API to choose between the two metrics and pass user defined functions to develop new metrics or measure other quantities.
 This generic interface allowed us to implement a "q1q2" analysis :cite:`Franklin2007` on top of the ``Contacts`` class.
 Below is incomplete code example that shows how to implement a q1q2 analysis, the default value for the *method* kwarg is overwritten with a user defined method *radius_cut_q*.
-A more detailed explantion can be found in the docs.
+A more detailed explanation can be found in the docs.
 
 .. code-block:: python
 
@@ -409,8 +409,8 @@ This translates into a much smaller memory footprint (1.3 GB vs. 3.6 GB for a 10
 
 This transformation of the data structures from an Array of Structs to a Struct of Arrays also better suits the typical access patterns within MDAnalysis.
 It is quite common to compare a single property across many Atoms, but rarely are different properties within a single Atom compared.
-Additionally, it is possible to utilise NumPy's faster indexing capabilities rather than using a list comprehension.
-This new data structure has lead to performance improvements in our whole codebase.
+Additionally, it is possible to utilize NumPy's faster indexing capabilities rather than using a list comprehension.
+This new data structure has lead to performance improvements in our whole code base.
 The largest improvement is in accessing subsets of Atoms which is now over 40 times faster (Table :ref:`tab:performance-slicing-atomgroup`), an operation that is used everywhere in MDAnalysis.
 Speed-ups of a factor of around five to seven were realized for accessing Atom attributes for whole AtomGroup instances (Table :ref:`tab:performance-accessing-attributes`).
 The improved topology data structures are also much faster to initialize, which translates into speed-ups of about three for the task of loading a system from a file (for instance, in the Gromacs GRO format or the Protein Databank PDB format) into a `Universe` instance (Table :ref:`tab:performance-loading-gro`).
@@ -466,7 +466,7 @@ Marrink and co-workers :cite:`Ingolfsson2014` used MDAnalysis to analyze a reali
 A coarse-grained model of the influenza A virion outer lipid envelope (5 M particles) was simulated for 5 microseconds and the resulting trajectory was analyzed using MDAnalysis :cite:`pmid25703376`.
 For example, the open source `lipid diffusion analysis code`_ (for spherical structures and planar bilayers) used to assess the diffusion constants of the influenza A proteins and lipids-- is built on MDAnalysis.
 The construction of the CG dengue virion envelope (1 M particles) was largely dependent on MDAnalysis :cite:`pmid26833387`.
-The symmetry operators in the deposited dengue protein shell PDB file were applied to a simulated asymmetic unit in a bilayer, effectively tiling both proteins and lipids into the appropriate positions on the virion surface :cite:`pmid26833387`.
+The symmetry operators in the deposited dengue protein shell PDB file were applied to a simulated asymmetric unit in a bilayer, effectively tiling both proteins and lipids into the appropriate positions on the virion surface :cite:`pmid26833387`.
 
 .. figure:: figs/flu_simulations.pdf
 
@@ -475,7 +475,7 @@ The symmetry operators in the deposited dengue protein shell PDB file were appli
 More recently, a 12.7 M CG particle system combining the influenza A envelope and a model of a plasma membrane :cite:`doi:10.1021/jacs.5b08048` were simulated together (Figure :ref:`fig:virion` A).
 MDAnalysis was used to assess the stability of this enormous system by tracking, for example, the changes in :math:`Z` coordinate values for different system components (Figure :ref:`fig:virion` B).
 In this case, the membrane appeared to rise too rapidly over the course of 50 ns, which suggests that the simulation system will likely have to be redesigned.
-Such large systems are challenging to work with, including their visualization, and analysis of quantitites based on particle coordinates is essential to assess the correct behavior of the simulations.
+Such large systems are challenging to work with, including their visualization, and analysis of quantities based on particle coordinates is essential to assess the correct behavior of the simulations.
 
 .. _lipid diffusion analysis code: https://github.com/tylerjereddy/diffusion_analysis_MD_simulations
 
@@ -484,11 +484,11 @@ Such large systems are challenging to work with, including their visualization, 
 Other packages that use MDAnalysis
 ----------------------------------
 
-The user interface and modular design work well in complex scripted workflows and for interactive work, as discussed in section `Interactive Use and Visualization`_.
+The user interface and modular design work well in complex scripted work flows and for interactive work, as discussed in section `Interactive Use and Visualization`_.
 MDAnalysis also serves as foundation for other packages.
 For example, ProtoMD_ :cite:`Somogyi:2016aa`  is a toolkit that facilitates the development of algorithms for multiscale (MD) simulations and uses MDAnalysis for on-the-fly calculations of the collective variables that drive the coarse-grained degrees of freedom.
 The ENCORE_ package :cite:`Tiberti:2015fk` enables users to compare conformational ensembles generated either from simulations alone or synergistically with experiments. 
-MDSynthesis_ :cite:`Dotson:2016aa` (which is based on  datreant_ (Dotson et al, this issue)) gives a Pythonic interface to molecular dynamics trajectories using MDAnalysis, giving the ability to work with the data from many simulations scattered throughout the filesystem with ease. It makes it possible to write analysis code that can work across many varieties of simulation, but even more importantly, MDSynthesis allows interactive work with the results from hundreds of simulations at once without much effort.
+MDSynthesis_ :cite:`Dotson:2016aa` (which is based on  datreant_ (Dotson et al, this issue)) gives a Pythonic interface to molecular dynamics trajectories using MDAnalysis, giving the ability to work with the data from many simulations scattered throughout the file system with ease. It makes it possible to write analysis code that can work across many varieties of simulation, but even more importantly, MDSynthesis allows interactive work with the results from hundreds of simulations at once without much effort.
 
 
 
@@ -499,11 +499,11 @@ MDAnalysis provides a uniform interface to simulation data, which comes in a bew
 It enables users to rapidly write code that is portable and immediately usable in virtually all biomolecular simulation communities.
 It has a very active international developer community with researchers that are expert developers and users of a wide range of simulation codes.
 MDAnalysis is widely used (the original paper :cite:`Michaud-Agrawal:2011fu` has been cited more than 195 times) and forms the foundation for more specialized biomolecular simulation tools.
-Ongoing and future developments will improve performance further, introduce transparent parallelisation schemes to utilize multi-core and GPU systems efficiently, and interface with the `SPIDAL library`_ for high performance data analytics algorithms.
+Ongoing and future developments will improve performance further, introduce transparent parallelization schemes to utilize multi-core and GPU systems efficiently, and interface with the `SPIDAL library`_ for high performance data analytics algorithms.
 
 
-Acknowledgements
-----------------
+Acknowledgments
+---------------
 
 RG was supported by BBSRC grant BB/J014478/1.
 ML was supported by the Max Planck Society.
