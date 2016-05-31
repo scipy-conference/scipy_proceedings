@@ -663,16 +663,6 @@ After calculating the error associated with a dataset using Equation
 (:ref:`overallerror`), the performance results are printed to screen and saved
 to a JSON file.
 
-=============
-Usage example
-=============
-
-Earlier results for the PyTeCK-based evaluation of nine n-heptane models were
-presented in a conference paper [Niemeyer2016]_.
-In addition, This talk will describe the evaluation of a more comprehensive set of 13
-available n-heptane models, as shown in
-`this figure <https://dx.doi.org/10.6084/m9.figshare.3145705>`_.
-
 ===========================
 Conclusions and Future Work
 ===========================
