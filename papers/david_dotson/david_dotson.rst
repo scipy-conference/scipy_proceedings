@@ -57,7 +57,7 @@ Introduction
 In many scientific fields, especially those analyzing experimental or numerical simulation data, there is an existing ecosystem of specialized tools and file formats which new tools must work around.
 Consequently, the filesystem ends up serving as a *de facto* database, with directory trees the zeroth-order data structure for scientific data.
 This is particularly true for fields centered around numerical simulation: simulation systems can vary widely in size, composition, rules, parameters, and starting conditions.
-Furthermore, with ever-increasing computational power, it is often necessary to store intermediate results from large amounts of simulation data such that it may be accessed and explored interactively.
+Furthermore, with ever-increasing computational power, it is often necessary to store intermediate results from large amounts of simulation data such that they may be accessed and explored interactively.
 
 Managing the volume and complexity of these data is becoming increasingly difficult problem in and of itself; data management is a challenge to scientific reproducibility and ultimately presents a substantial barrier to answering scientific questions.
 One approach to this problem is ``datreant``, a namespace package that provides a Pythonic interface to the filesystem and the data that lives within it.
