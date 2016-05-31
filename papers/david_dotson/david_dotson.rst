@@ -215,6 +215,7 @@ But in addition to these, we can use metadata features such as **tags** and **ca
 
 Filtering Treants with tags
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Tags are individual strings that describe a Treant.
 Adding some tags to each of our Treants separately:
 
 .. code-block:: python
@@ -264,7 +265,7 @@ making paper by giving tags as a list:
    >>> b[b.tags[['building', 'paper']]]
    <Bundle([<Treant: 'elm'>])>
 
-And other tag selections can be constructed using tuples (for *or* operations)
+And other tag expressions can be constructed using tuples (for *or* operations)
 and sets (for *not and*):
 
 .. code-block:: python
@@ -277,6 +278,11 @@ and sets (for *not and*):
    >>> b[b.tags[{'building', 'paper'}]]
    <Bundle([<Treant: 'oak'>, <Treant: 'sprout'>])>
 
+Using tag expressions, we can filter to Treants of interest from a ``Bundle`` counting many, perhaps hundreds, of Treants as members.
+A common workflow is to use ``datreant.core.discover`` to gather up many Treants from a section of the filesystem, then use tags to extract only those Treants one actually needs.
+
+Splitting Treants on categories
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 Treant modularity with attachable Limbs
