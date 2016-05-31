@@ -324,7 +324,7 @@ and we can immediately start using it to store e.g. a ``pandas`` Series:
 
    >>> import numpy as np
    >>> sn = pd.Series(np.sin(
-   ...     np.linspace(0, 8*np.pi, num=200))
+   ...     np.linspace(0, 8*np.pi, num=200)))
    >>> t.data['sinusoid'] = sn
 
 and we can get it back just as easily:
@@ -332,13 +332,65 @@ and we can get it back just as easily:
 .. code-block:: python
 
    >>> t.data['sinusoid'].head()
-             A         B
-   0  0.609263 -1.451863
-   1  0.240316 -0.836541
-   2 -0.091984 -0.211093
+   0    0.000000
+   1    0.125960
+   2    0.249913
+   3    0.369885
+   4    0.483966
+   dtype: float64
 
 What's more, ``datreant.data`` also includes a corresponding ``AggLimb`` for ``Bundle`` objects, allowing for automatic aggregation of datasets by name across all member ``Treant`` objects.
-If we collect and store datasets for each member in our ``Bundle``, we can 
+If we collect and store a similar datasets for each member in our ``Bundle``: 
+
+.. code-block:: python
+
+   >>> b = dtr.discover('.')
+   >>> b
+   <Bundle([<Treant: 'oak'>, <Treant: 'sequoia'>,
+            <Treant: 'maple'>, <Treant: 'elm'>])>
+
+   # we want to make each dataset a bit different
+   >>> b.categories['frequency'] = [1, 2, 3, 4]
+   >>> for mem in b:
+   ...     freq = mem.categories['frequency']
+   ...     mem.data['sinusoid'] = np.sin(
+   ...         freq * np.linspace(0, 8*np.pi, num=200))
+
+then we can retrieve all of them into a single, multi-index ``pandas`` Series:
+
+.. code-block:: python
+
+   >>> sines = b.data.retrieve('sinusoid', by='name')
+   >>> sines.groupby(level=0).head()
+   sequoia  0    0.000000
+            1    0.125960
+            2    0.249913
+            3    0.369885
+            4    0.483966
+   oak      0    0.000000
+            1    0.369885
+            2    0.687304
+            3    0.907232
+            4    0.998474
+   maple    0    0.000000
+            1    0.249913
+            2    0.483966
+            3    0.687304
+            4    0.847024
+   elm      0    0.000000
+            1    0.483966
+            2    0.847024
+            3    0.998474
+            4    0.900479
+   dtype: float64
+
+ 
+   
+   (Figure :ref:`fig:sines`).
+
+.. figure:: figs/sines.png
+
+   Plot of sinusoidal toy datasets aggregated and plotted by Treant :label:`fig:sines`
 
 Using Treants as the basis for dataset access and manipulation with the PyData stack
 ------------------------------------------------------------------------------------
