@@ -21,8 +21,7 @@ Comparison of machine learning methods applied to birdsong element classificatio
     [https://youtu.be/ghgniK4X_Js]). I propose that the best method is the one that yields the highest accuracy
     from the smallest amount of hand-labeled data. My results show that the previously published SVM method is 
     impaired by syllables in some individuals’ songs, but I can get it to outperform k-NN by using a non-
-    linear kernel. I then show domain-specific features can be used to further increase accuracy, and that 
-    this increase is large enough to affect analysis for data sets of the size used in actual experiments. 
+    linear kernel. I then show domain-specific features can be used to further increase accuracy. 
     Testing of machine learning algorithms was carried out using Scikit-learn and Numpy/Scipy via Anaconda. 
     This paper in Jupyter notebook form, as well as code and links to data, are here: 
     https://github.com/NickleDave/ML-comparison-birdsong
@@ -55,7 +54,7 @@ Each individual has a unique song which usually bears some similarity to the son
 
 In order to deal with this mountain of data, some labs have developed automated analyses of birdsong. One popular approach scores songs based on similarity of spectrograms, without labeling syllables [TCHER2000]. Another method uses semi-automated clustering to label syllables, and then measures changes in acoustic and temporal structure of song over days using a distance metric [WU2008]. Other approaches make use of standard supervised learning algorithms to classify syllables, such as hidden Markov Models [KOGAN2008]. While code for some of these automated analyses is freely available, and there are some repositories of song on-line, to my knowledge almost no work has been done to compare the different methods.
 
-I set out to compare methods using one species, the Bengalese finch. This species is of interest for several reasons. For example, Bengalese finches depend heavily on auditory feedback throughout life to maintain their vocalizations, much like humans ([SOBER2009] and references therein). In addition, their song tends to have relatively easy-to-quantify acoustic features (e.g., many of the syllables are *low entropy*, having a pitchy, whistle-like timbre). Several previously-published studies or open-sourced libraries have applied various machine learning techniques to Bengalese finch song, including: support vector machines (SVMs) [TACH2014], and k-Nearest Neighbors (k-NNs) [TROYER2012]. Again, no study has compared these methods with open-source code and freely shared data.
+I set out to compare methods using one species, the Bengalese finch. This species is of interest for several reasons. For example, Bengalese finches depend heavily on auditory feedback throughout life to maintain their vocalizations, much like humans ([SOBER2009] and references therein). In addition, their song tends to have relatively easy-to-quantify acoustic features (e.g., many of the syllables are *low entropy*, having a pitchy, whistle-like timbre). Several previously-published studies or open-sourced libraries have applied various machine learning techniques to Bengalese finch song, including: support vector machines (SVMs) [TACH2014]_, and k-Nearest Neighbors (k-NNs) [TROYER2012]_. Again, no study has compared these methods with open-source code and freely shared data.
 
 Rationale
 ~~~~~~~~~
