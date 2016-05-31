@@ -499,7 +499,7 @@ which we can use for aggregated analysis, or perhaps just pretty plots (Figure :
 
    Plot of sinusoidal toy datasets aggregated and plotted by source Treant. :label:`fig:sines`
 
-The ``Data`` limb stores Pandas and NumPy objects in HDF5_ within a Treant's own tree.
+The ``Data`` limb stores Pandas and NumPy objects in the HDF5_ format within a Treant's own tree.
 It can also store arbitrary (but pickleable) Python objects as pickles, making it a flexible interface for quick data storage and retrieval.
 However, it ultimately serves as an example for how ``Treant`` and ``Bundle`` objects can be extended to do complex but convenient things.
 
