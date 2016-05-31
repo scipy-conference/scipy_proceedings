@@ -126,12 +126,28 @@ MDAnalysis presents a uniform object-oriented Python interface to the user.
 Since its original publication in 2011 :cite:`Michaud-Agrawal:2011fu`, MDAnalysis has been widely adopted and has undergone substantial changes.
 Here we provide a short introduction to MDAnalysis and its capabilities and provide and overview over recent improvements.
 
+.. other python packages
+.. MDTools, MMTK, LOOS/pyLOOS,  mdtraj, pytraj/cpptraj
+
 
 
 Overview
 --------
 
-MDAnalysis is written in Python and Cython_ and uses NumPy_ arrays :cite:`Vanderwalt2011` for easy interoperability with the wider scientific Python ecosystem.
+MDAnalysis currently supports more than 25 different file formats and covers the vast majority of data formats that are used in the biomolecular simulation community, including the formats required and produced by the most popular packages NAMD, Amber, Gromacs, CHARMM, LAMMPS, DL_POLY, HOOMD.
+MDAnalysis is specifically tailored to the domain of molecular simulations, in particularly in biophysics, chemistry, and biotechnology.
+The user interface provides "physics-based" abstractions (e.g. "atoms", "bonds", "molecules") of the data that can be easily manipulated by the user.
+It hides the complexity of accessing data and frees the user from having to implement the details of different trajectory and topology file formats (which by themselves are often only poorly documented and just adhere to certain "community expectations" that can be difficult to understand for outsiders).
+
+Since the original publication :cite:`Michaud-Agrawal:2011fu`, improvements in speed and data structures make it now possible to work with terabyte-sized trajectories containing up to ~10 million particles.
+MDAnalysis also comes with specialized analysis classes in the ``MDAnalysis.analysis`` module that are unique to MDAnalysis such as *LeafletFinder*, a graph-based algorithm for the analysis of lipid bilayers :cite:`Michaud-Agrawal:2011fu`, or *Path Similarity Analysis* for the quantitative comparison of macromolecular conformational changes :cite:`Seyler:2015fk`.
+
+
+Code base
+~~~~~~~~~
+
+MDAnalysis is written in Python and Cython_ with about 42k lines of code and 24k lines of comments and documentation.
+It uses NumPy_ arrays :cite:`Vanderwalt2011` for easy interoperability with the wider scientific Python ecosystem.
 Although the primary dependency is NumPy_, other Python packages such as netcdf4_  and BioPython_ :cite:`Hamelryck:2003fv` also provide specialized functionality to the core of the library (Figure :ref:`fig:structure`).
 
 .. figure:: figs/mdanalysis_structure.pdf
@@ -141,20 +157,22 @@ Although the primary dependency is NumPy_, other Python packages such as netcdf4
    The *MDAnalysis.analysis* package contains independent modules that make use of the core to implement a wide range of algorithms to analyze MD simulations.
    The *MDAnalysis.visualization* package contains a growing number of tools that are specifically geared towards calculating visual representations such as, for instance, streamlines of molecules. :label:`fig:structure`
 
-MDAnalysis currently supports more than 25 different file formats and covers the vast majority of data formats that are used in the biomolecular simulation community, including the formats required and produced by the most popular packages NAMD, Amber, Gromacs, CHARMM, LAMMPS, DL_POLY, HOOMD.
-The user interface provides "physics-based" abstractions (e.g. "atoms", "bonds", "molecules") of the data that can be easily manipulated by the user.
-It hides the complexity of accessing data and frees the user from having to implement the details of different trajectory and topology file formats (which by themselves are often only poorly documented and just adhere to certain "community expectations" that can be difficult to understand for outsiders).
 
-Since the original publication :cite:`Michaud-Agrawal:2011fu`, improvements in speed and data structures make it now possible to work with terabyte-sized trajectories containing up to ~10 million particles.
-MDAnalysis also comes with specialized analysis classes in the ``MDAnalysis.analysis`` module that are unique to MDAnalysis such as *LeafletFinder*, a graph-based algorithm for the analysis of lipid bilayers :cite:`Michaud-Agrawal:2011fu`, or *Path Similarity Analysis* for the quantitative comparison of macromolecular conformational changes :cite:`Seyler:2015fk`.
+Availability
+~~~~~~~~~~~~
 
 MDAnalysis is available in source form under the GNU General Public License v2 from GitHub as `MDAnalysis/mdanalysis`_, and as PyPi_ and conda_ packages.
 The documentation_ is extensive and includes an `introductory tutorial`_.
+
+
+Development process
+~~~~~~~~~~~~~~~~~~~
+
 The develoment community is very active with more than five active core developers and many community contributions in every release.
-We use modern software development practices :cite:`Wilson:2014aa,Stodden:2014tg` with continous integration (provided by *Travis CI*) and an extensive automated testsuite (containing over 3500 tests with >92% coverage for our core modules).
-Development occurs on *GitHub* through pull requests that are reviewed by core developers and other contributors, supported by the results from the automated tests, test coverage reports provided by *Coveralls*, and *QuantifiedCode* code quality reports.
-Users and developers communicate extensively on the `community mailing list`_ (*Google* groups) and the GitHub issue tracker; new users and developers are very welcome.
-The development and release process is transparent to users.
+We use modern software development practices :cite:`Wilson:2014aa,Stodden:2014tg` with continous integration (provided by `Travis CI`_) and an extensive automated testsuite (containing over 3500 tests with >92% coverage for our core modules).
+Development occurs on GitHub_ through pull requests that are reviewed by core developers and other contributors, supported by the results from the automated tests, test coverage reports provided by Coveralls_, and QuantifiedCode_ code quality reports.
+Users and developers communicate extensively on the `community mailing list`_ (*Google* groups) and the GitHub issue tracker; new users and developers are very welcome and most user contributions are eventually integrated into the code base.
+The development and release process is transparent to users through open discussions and announcements and a full published commit history and changes.
 Releases are numbered according to the `semantic versioning`_ convention so that users can immediately judge the impact of a new release on their existing code base, even without having to consult the ``CHANGELOG`` documentation.
 Old code is slowly deprecated so that users have ample opportunity to update the code although we generally attempt to break as little code as possible.
 When backwards-incompatible changes are inevitable, we provide tools (based on the Python standard library's *lib2to3*) to automatically refactor code or warn users of possible problems with their existing code.
@@ -171,6 +189,12 @@ When backwards-incompatible changes are inevitable, we provide tools (based on t
 .. _semantic versioning: http://semver.org
 .. _netcdf4: http://unidata.github.io/netcdf4-python/
 .. _BioPython: http://biopython.org/wiki/Biopython
+
+.. _Travis CI: http://travis-ci.org/
+.. _GitHub: http://github.com
+.. _Coveralls: https://coveralls.io/
+.. _QuantifiedCode: https://www.quantifiedcode.com
+
 
 Basic Usage
 -----------
@@ -339,7 +363,7 @@ This type of flexible analysis algorithm paired with a collection of base classe
 Visualization Module
 --------------------
 
-The ``MDAnalysis.visualization`` name space contains modules that primarily produce visualizations of molecular systems.
+The new ``MDAnalysis.visualization`` name space contains modules that primarily produce visualizations of molecular systems.
 Currently it contains functions that generate specialized streamline visualizations of lipid diffusion in membrane bilayers :cite:`C3FD00145H`.
 In short, the algorithm decomposes any given membrane into a grid and tracks the displacement of lipids between different grid elements, emphasizing collective lipid motions.
 Both 2D (``MDAnalysis.visualization.streamlines``) and 3D (``MDAnalysis.visualization.streamlines_3D``) implementations are available in MDAnalysis, with output shown in Figure :ref:`fig:streamlines`.
@@ -352,8 +376,8 @@ Sample input data files are available online from the Flows_ website along with 
 .. _Flows: http://sbcb.bioch.ox.ac.uk/flows/MDAnalysis.html
 
 
-New data Structures
--------------------
+Improvements in the internal topology data structures
+-----------------------------------------------------
 
 Originally MDAnalysis followed a strict object-oriented approach with a separate instance of an Atom object for each particle in the simulation data.
 The AtomGroup then simply stored its contents as a list of these Atom instances.
