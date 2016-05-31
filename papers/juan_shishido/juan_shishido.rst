@@ -17,9 +17,26 @@ Tell Me Something I Don't Know: Analyzing OkCupid Profiles
 
 .. class:: abstract
 
-The way that people self-present online while dating has broad implications for the relationships they pursue. Here we present an analysis of 59,000+ OkCupid user profiles that examines word usage patterns across sexual orientations, drug usage status, and ethnicities. We find that individuals in particular demographic groups self-present in consistent ways. Our results also suggest that users may unintentionally reveal demographic attributes in their online profiles.
+The way that people self-present online while dating has broad implications for
+the relationships they pursue. Here we present an analysis of 59,000+ OkCupid
+user profiles that examines word usage patterns across sexual orientations,
+drug usage status, and ethnicities. We find that individuals in particular
+demographic groups self-present in consistent ways. Our results also suggest
+that users may unintentionally reveal demographic attributes in their online
+profiles.
 
-In this paper we analyze online self-presentation by combining natural language processing (NLP) with machine learning. We use this approach to motivate a discussion of how to successfully mine text data. We describe our initial approach, explain why it was problematic, and discuss modifications that made it successful. In doing so, we review standard NLP techniques, challenge accepted "norms," and cover several ways to represent text data. We explain clustering and topic modeling, including k-means and nonnegative matrix factorization, and discuss why we chose the latter.  We then present unexpected similarities between self-identified drug users and those who declined to reveal their drug status. Finally, we discuss utilizing permutation testing for identifying deceit in online self-presentation and discuss how we're working to extend this analysis.
+In this paper we analyze online self-presentation by combining natural language
+processing (NLP) with machine learning. We use this approach to motivate a
+discussion of how to successfully mine text data. We describe our initial
+approach, explain why it was problematic, and discuss modifications that made
+it successful. In doing so, we review standard NLP techniques, challenge
+accepted "norms," and cover several ways to represent text data. We explain
+clustering and topic modeling, including k-means and nonnegative matrix
+factorization, and discuss why we chose the latter. We then present unexpected
+similarities between self-identified drug users and those who declined to
+reveal their drug status. Finally, we discuss utilizing permutation testing for
+identifying deceit in online self-presentation and discuss how we're working to
+extend this analysis.
 
 This work was completed using SciPy, NumPy, pandas, Scikit-Learn, and NLTK.
 
@@ -45,8 +62,15 @@ when searching for a mate online.
 The original intent of this project was to analyze demographic trends in
 self-presentation in online profiles. Specifically, we were interested in
 whether demographic groups are distinct in the ways in which they present
-themselves online, and specifically whether people from different demographic groups would
-self-present in distinct ways. We extended the previous natural language processing analyses of online dating [Nag09]_ by combining natural language processing with machine learning on a larger scale. We leveraged multiple approaches including clustering and topic modeling, as well as feature selection and modeling strategies. By exploring the relationship between free text self-descriptions and demographics, we find that we can predict a user's demographic makeup based on their user essays, and we discover some unexpected insights into deception.
+themselves online, and specifically whether people from different demographic
+groups would self-present in distinct ways. We extended the previous natural
+language processing analyses of online dating [Nag09]_ by combining natural
+language processing with machine learning on a larger scale. We leveraged
+multiple approaches including clustering and topic modeling, as well as feature
+selection and modeling strategies. By exploring the relationship between free
+text self-descriptions and demographics, we find that we can predict a user's
+demographic makeup based on their user essays, and we discover some unexpected
+insights into deception.
 
 Data
 ----
