@@ -586,7 +586,8 @@ References
 .. [Jai15] Anubhav Jain, et. al. FireWorks: a dynamic workflow system designed
            for high-throughput applications. Concurrency Computat.: Pract.
            Exper., 27: 5037–5059. doi: 10.1002/cpe.3505 (2015)
-
 .. [McK10] Wes McKinney. Data Structures for Statistical Computing in Python,
            Proceedings of the 9th Python in Science Conference, 51-56 (2010)
-
+.. [MiA11] N. Michaud-Agrawal, E. J. Denning, T. B. Woolf and O. Beckstein.
+           MDAnalysis: A toolkit for the analysis of molecular dynamics simulations.
+           J Comp Chem, 32: 2319-2327. doi: 10.1002/jcc.21787 (2011)
