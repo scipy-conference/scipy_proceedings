@@ -596,7 +596,6 @@ It is the hope of the authors that ``datreant`` continues to grow in a way that 
 
 Acknowledgements
 ----------------
-This work was in part supported by grant ACI-1443054 from the National Science Foundation.
 DLD was in part supported by a Molecular Imaging Fellowship from the Department of Physics at Arizona State University.
 SLS was supported in part by a Wally Stoelzel Fellowship from the Department of Physics at Arizona State University.
 ML was supported by the Max Planck Society.
