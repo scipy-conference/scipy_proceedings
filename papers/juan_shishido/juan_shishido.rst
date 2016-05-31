@@ -85,6 +85,32 @@ Methodology
 Algorithms
 ~~~~~~~~~~
 
+K-means
+*******
+
+K-means clustering.
+
+The goal of any clustering approach is to find subgroups of observations in a
+data set. Typically, we wish to find groups, or clusters, whose members are
+similar to each other.
+
+K-means splits a data set into k non-overlapping clusters. Each cluster is
+described by its "centroid," which corresponds to the mean value of the
+observations in the cluster.
+
+The first step with K-means is to choose the initial centroids. One way to do
+this is to randomly select k data set observations. However, centroids do not
+need to correspond to actual data points. The next step is to assign every
+observation to its nearest centroid. The groups of observations associated with
+each centroid constitute a cluster. Cluster centroids are then updated by
+finding the new mean value of each cluster. Finally, observations are
+reassigned to the nearest cluster centroid. This continues until cluster
+assignments no longer change or until the change is below some specified
+threshold.
+
+Choosing k and defining a similarity metric&mdash;recall that the goal with
+clustering is to find *similar* groups&mdash;are important considerations.
+
 NMF
 ***
 
