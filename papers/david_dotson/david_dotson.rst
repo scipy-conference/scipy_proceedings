@@ -527,26 +527,36 @@ But it is possible, and very useful, for domain-specific applications to define 
 Not only do objects such as ``Bundle`` work just fine with ``Treant`` subclasses and custom ``Limb`` classes; they are designed explicitly with this need in mind.
 
 The first example of a domain-specific package built around ``datreant`` is MDSynthesis_, a module that enables high-level management and exploration of molecular dynamics simulation data.
-MDSynthesis gives a Pythonic interface to molecular dynamics trajectories using MDAnalysis, giving the ability to work with the data from many simulations scattered throughout the filesystem with ease.
+MDSynthesis gives a Pythonic interface to molecular dynamics trajectories using MDAnalysis_ [MiA11]_, giving the ability to work with the data from many simulations scattered throughout the filesystem with ease.
 It makes it possible to write analysis code that can work across many varieties of simulation, but even more importantly, MDSynthesis allows interactive work with the results from hundreds of simulations at once without much effort.
+
+.. _MDAnalysis: http://www.mdanalysis.org/
 
 Leveraging molecular dynamics data with MDSynthesis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+MDSynthesis_ defines a ``Treant`` subclass called a ``Sim``.
+A ``Sim`` featues special limbs for storing an MDAnalysis_ ``Universe`` definition and custom atom selections within its state file, allowing for painless recall of raw simulation data and atoms of interest.
+
+As an example of effective use of Sims in practice, say we have 50 biased molecular dynamics simulations sampling the conformational change of the ion transport protein NhaA from inward-open to outward-open.
+We want to know how many hydrogen bonds exist at any given time between the two domains as they move past each other.
+
+We can use the MDAnalysis ``HydrogenBondAnalysis`` class to collect the data for each ``Sim`` using ``Bundle.map`` for process parallelism, and store it using the ``datreant.data`` limb:
 
 .. code-block:: python
 
     import mdsynthesis as mds
-    from MDAnalysis.analysis.hbonds import HydrogenBondAnalysis
+    import MDAnalysis.analysis.hbonds as hbonds
     import pandas as pd
     import seaborn as sns
     
     b = mds.discover('NhaA_i2o_transitions')
 
     def get_hbonds(sim):
-        dimerization = sim.atomselections.define('dimerization')
-        core = sim.atomselections.define('core')
+        dimerization = sim.atomselections['dimer']
+        core = sim.atomselections['core']
 
-        hb = HydrogenBondAnalysis(sim.universe, dimerization, core)
+        hb = hbonds.HydrogenBondAnalysis(
+                sim.universe, dimerization, core)
         hb.run()
         hb.generate_table()
 
@@ -554,16 +564,29 @@ Leveraging molecular dynamics data with MDSynthesis
 
     b.map(get_hbonds, processes=16)
 
+Then we can retrieve the datasets in aggregate using the ``Bundle`` ``datreant.data`` limb
+and visualize the result:
+
 .. code-block:: python
 
     df = b.data.retrieve('hbonds', by='name')
 
     counts = df['distance'].groupby(df.index).count()
-    counts.index = pd.MultiIndex.from_tuples(counts.index)
+    counts.index = pd.MultiIndex.from_tuples(
+                            counts.index)
     counts.index = counts.index.droplevel(0)
 
     sns.jointplot(counts.index, counts, kind='hexbin')
 
+.. figure:: figs/nhaa.png
+
+   A cartoon rendering of an outward-open model (top) and an inward-open crystallographic structure (PDB ID: 4AU5) (bottom) of *Escherichia coli NhaA*. :label:`fig:nhaa`
+
+.. figure:: figs/hbonds.pdf
+
+   The number of hydrogen bonds between the core and dimerization domain during a conformational transition between the inward-open and outward-open state of EcNhaA :label:`fig:hbonds`
+
+By making it relatively easy to work with 
 
 Conclusions
 -----------
