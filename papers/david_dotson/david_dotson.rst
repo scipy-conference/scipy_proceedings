@@ -320,7 +320,7 @@ We can add categories to individual Treants:
                                    'bark': 'fibrous',
                                    'home': 'california'}
 
-    # add value 'north america' to category 'continent'
+    # add value 'tree' to category 'plant'
     # for all members
     >>> b.categories.add({'plant': 'tree'})
 
