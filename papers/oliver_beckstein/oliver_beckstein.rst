@@ -266,7 +266,7 @@ To allow the analysis of such large simulations on an average workstation (or ev
 The trajectory data can be accessed through the trajectory attribute of a Universe.
 Changing the frame of the trajectory object updates the underlying arrays that AtomGroups point to.
 In this way the positions attribute of an AtomGroup within the iteration over a trajectory will give access to the positions at each frame.
-Through this approach only a single frame of data is present in memory at any time, allowing for large datasets, from half a million particles :cite:`Ingolfsson2014` to tens of millions (see also section `Application to Large Systems`_), to be dissected with minimal resources.
+Through this approach only a single frame of data is present in memory at any time, allowing for large datasets, from half a million particles to tens of millions (see also section `Application to Large Systems`_), to be dissected with minimal resources.
 
 .. show working with the trajectory object to access the time data
 .. code-block:: python
@@ -447,10 +447,11 @@ Given that for systems with 10 M atoms this process used to take over 100 s, the
 
 .. _`Application to Large Systems`:
 
-Application to Large Systems
-----------------------------
+Analysis of Large Systems
+-------------------------
 
-MDAnalysis has been used extensively to study extremely large simulation systems.
+MDAnalysis has been used extensively to study extremely large simulation systems for long simulation times.
+Marrink and co-workers :cite:`Ingolfsson2014` used MDAnalysis to analyze a realistic model of the plasma membrane with 63 different lipid species and over half a million particles for 40 µs. They discovered that transient domains with liquid-ordered character formed and disappeared on the microsecond time scale, with different lipid species clustering in a lipid-specific manner.
 A coarse-grained model of the influenza A virion outer lipid envelope (5 M particles) was simulated for 5 microseconds and the resulting trajectory was analyzed using MDAnalysis :cite:`pmid25703376`.
 For example, the open source `lipid diffusion analysis code`_ (for spherical structures and planar bilayers) used to assess the diffusion constants of the influenza A proteins and lipids-- is built on MDAnalysis.
 The construction of the CG dengue virion envelope (1 M particles) was largely dependent on MDAnalysis :cite:`pmid26833387`.
