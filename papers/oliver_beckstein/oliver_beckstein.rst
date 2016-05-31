@@ -28,7 +28,7 @@
 :email: slseyler@asu.edu
 :institution: Arizona State University, Tempe, Arizona, USA
 
-:author: Jan Domanski
+:author: Jan Domański
 :email: jan.domanski@bioch.ox.ac.uk
 :institution: University of Oxford, Oxford, UK
 
