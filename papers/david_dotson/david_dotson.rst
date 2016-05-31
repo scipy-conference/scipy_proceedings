@@ -535,10 +535,10 @@ It makes it possible to write analysis code that can work across many varieties 
 Leveraging molecular dynamics data with MDSynthesis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 MDSynthesis_ defines a ``Treant`` subclass called a ``Sim``.
-A ``Sim`` featues special limbs for storing an MDAnalysis_ ``Universe`` definition and custom atom selections within its state file, allowing for painless recall of raw simulation data and atoms of interest.
+A ``Sim`` featues special limbs for storing an MDAnalysis_ ``Universe`` definition and custom atom selections within its state file, allowing for painless recall of raw simulation data and groups of atoms of interest.
 
-As an example of effective use of Sims in practice, say we have 50 biased molecular dynamics simulations sampling the conformational change of the ion transport protein NhaA from inward-open to outward-open.
-We want to know how many hydrogen bonds exist at any given time between the two domains as they move past each other.
+As an example of effectively using ``Sims``, say we have 50 biased molecular dynamics simulations that sample the conformational change of the ion transport protein NhaA from the inward-open to outward-open state.
+Let's also say that we are interested in how many hydrogen bonds exist at any given time between the two domains as they move past each other.
 
 We can use the MDAnalysis ``HydrogenBondAnalysis`` class to collect the data for each ``Sim`` using ``Bundle.map`` for process parallelism, and store it using the ``datreant.data`` limb:
 
