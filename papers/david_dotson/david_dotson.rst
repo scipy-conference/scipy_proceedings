@@ -596,10 +596,15 @@ It is the hope of the authors that ``datreant`` continues to grow in a way that 
 
 Acknowledgements
 ----------------
+
 .. grab from MDAnalysis set 
 
 This work was in part supported by grant ACI-1443054 from the National Science Foundation.
-
+DLD was in part supported by a Molecular Imaging Fellowship from the Department of Physics at Arizona State University.
+SLS was supported in part by a Wally Stoelzel Fellowship from the Department of Physics at Arizona State University.
+ML was supported by the Max Planck Society.
+RG was supported by BBSRC grant BB/J014478/1.
+OB was supported in part by grant ACI-1443054 from the National Science Foundation; computational resources for OB's work were in part provided by the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1053575 (allocation MCB130177 to OB).
 
 
 References
