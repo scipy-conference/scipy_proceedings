@@ -96,6 +96,8 @@ MDAnalysis is available under the GNU General Public License v2.
 .. _pandas: http://pandas.pydata.org/
 .. _NumPy: http://www.numpy.org
 .. _Cython: http://cython.org/
+.. _matplotlib: http://matplotlib.org
+.. _MayaVi: http://code.enthought.com/projects/mayavi/
 .. _distributed: https://github.com/dask/distributed
 .. _fireworks: https://github.com/materialsproject/fireworks
 .. _MDSynthesis: https://github.com/datreant/MDSynthesis
@@ -262,12 +264,12 @@ The topology information and the trajectory are loaded into a ``Universe`` insta
 The main loop iterates through the trajectory using the MDAnalysis trajectory iterator.
 The coordinates of all selected atoms become available in a NumPy array ``ca.positions`` that updates for each new time step in the trajectory.
 Fast operations on this array are then used to calculate variance over the whole trajectory.
-The final result is plotted with matplotlib as the RMSF over the residue numbers, which are conveniently provided as an attribute of the ``AtomGroup`` (Figure :ref:`fig:rmsf-example` B).
+The final result is plotted with matplotlib_ :cite:`Hunter:2007aa` as the RMSF over the residue numbers, which are conveniently provided as an attribute of the ``AtomGroup`` (Figure :ref:`fig:rmsf-example` B).
 
 
 .. figure:: figs/rmsf_Example.pdf
 
-   Example for how to calculate the root mean square fluctuation (RMSF) for each residue in a protein with MDAnalysis and NumPy. **A**: Based on the input simulation data (topology and trajectory in the Gromacs format (TPR and XTC), MDAnalysis makes coordinates of the selected |Calpha| atoms available as NumPy arrays. From these coordinates, the RMSF is calculated by averaging over all frames in the trajectory. The RMSF is then plotted with ``matplotlib``. The algorithm to calculate the variance in a single pass is due to Welford :cite:`Welford:1962aa`. **B**: |Calpha| RMSF for each residue. :label:`fig:rmsf-example`
+   Example for how to calculate the root mean square fluctuation (RMSF) for each residue in a protein with MDAnalysis and NumPy. **A**: Based on the input simulation data (topology and trajectory in the Gromacs format (TPR and XTC), MDAnalysis makes coordinates of the selected |Calpha| atoms available as NumPy arrays. From these coordinates, the RMSF is calculated by averaging over all frames in the trajectory. The RMSF is then plotted with matplotlib_. The algorithm to calculate the variance in a single pass is due to Welford :cite:`Welford:1962aa`. **B**: |Calpha| RMSF for each residue. :label:`fig:rmsf-example`
 
 The example demonstrates how the abstractions that MDAnalysis provides enable users to write very concise code where the computations on data are cleanly separated from the task of extracting the data from the simulation trajectories.
 These characteristics make it easy to rapidly prototype new algorithms.
@@ -332,6 +334,22 @@ A more detailed explantion can be found in the docs.
                        kwargs={'radius': radius})
 
 This type of flexible analysis algorithm paired with a collection of base classes allow quick and easy analysis of simulations as well as development of new ones.
+
+
+Visualization Module
+--------------------
+
+The ``MDAnalysis.visualization`` name space contains modules that primarily produce visualizations of molecular systems.
+Currently it contains functions that generate specialized streamline visualizations of lipid diffusion in membrane bilayers :cite:`C3FD00145H`.
+In short, the algorithm decomposes any given membrane into a grid and tracks the displacement of lipids between different grid elements, emphasizing collective lipid motions.
+Both 2D (``MDAnalysis.visualization.streamlines``) and 3D (``MDAnalysis.visualization.streamlines_3D``) implementations are available in MDAnalysis, with output shown in Figure :ref:`fig:streamlines`.
+Sample input data files are available online from the Flows_ website along with the expected output visualizations.
+
+.. figure:: figs/streamlines.pdf
+
+   Visualization of the flow of lipids in a large bilayer membrane patch. **A**: 2D stream plot (produced with ``MDAnalysis.visualization.streamlines`` and plotted with matplotlib_ :cite:`Hunter:2007aa`). **B**: 3D stream plot, viewed down the :math:`z` axis onto the membrane (produced with ``MDAnalysis.visualization.streamlines_3D`` and plotted with MayaVi_ :cite:`Ramachandran:2011aa`). :label:`fig:streamlines`
+
+.. _Flows: http://sbcb.bioch.ox.ac.uk/flows/MDAnalysis.html
 
 
 New data Structures
@@ -419,6 +437,7 @@ Such large systems are challenging to work with, including their visualization, 
 .. _lipid diffusion analysis code: https://github.com/tylerjereddy/diffusion_analysis_MD_simulations
 
 
+
 Other packages that use MDAnalysis
 ----------------------------------
 
@@ -446,12 +465,13 @@ Acknowledgements
 
 RG was supported by BBSRC grant BB/J014478/1.
 ML was supported by the Max Planck Society.
-TR was supported by the Canadian Institutes of Health Research, the Wellcome Trust, the Leverhulme Trust, and Somerville College. Computational resources were provided by PRACE, HPC-Europa2, CINES (France), and the SBCB unit (Oxford).
+TR was supported by the Canadian Institutes of Health Research, the Wellcome Trust, the Leverhulme Trust, and Somerville College; computational resources for TR's work were provided by PRACE, HPC-Europa2, CINES (France), and the SBCB unit (Oxford).
 SLS was supported in part by a Wally Stoelzel Fellowship from the Department of Physics at Arizona State University.
+JD was in part supported by a Wellcome Trust grant 092970/Z/10/Z.
 DLD was in part supported by a Molecular Imaging Fellowship from the Department of Physics at Arizona State University
 IMK was supported by a REU supplement to grant ACI-1443054 from the National Science Foundation.
-OB was supported in part by grant ACI-1443054 from the National Science Foundation.
-JD was in part supported by a Wellcome Trust grant 092970/Z/10/Z.
+OB was supported in part by grant ACI-1443054 from the National Science Foundation; computational resources for OB's work were in part provided by the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1053575 (allocation MCB130177 to OB).
+
 
 References
 ----------
