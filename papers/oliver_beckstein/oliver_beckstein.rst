@@ -411,10 +411,10 @@ This new data structure has lead to performance improvements in our whole code b
 The largest improvement is in accessing subsets of Atoms which is now over 40 times faster (Table :ref:`tab:performance-slicing-atomgroup`), an operation that is used everywhere in MDAnalysis.
 Speed-ups of a factor of around five to seven were realized for accessing Atom attributes for whole AtomGroup instances (Table :ref:`tab:performance-accessing-attributes`).
 The improved topology data structures are also much faster to initialize, which translates into speed-ups of about three for the task of loading a system from a file (for instance, in the Gromacs GRO format or the Protein Databank PDB format) into a `Universe` instance (Table :ref:`tab:performance-loading-gro`).
-Given that for systems with 10 M atoms this process used to take over 100 s, the reduction in load time down to a third is very valuable --- and it came essentially "for free" as a by-product of improving the underlying topology data structures.
+Given that for systems with 10 M atoms this process used to take over 100 s, the reduction in load time down to a third is very valuable — and it came essentially "for free" as a by-product of improving the underlying topology data structures.
 
 
-.. table:: Performance comparison of subselecting an AtomGroup from an existing one using the  new system (upcoming release v0.16.0) against the old (v0.15.0). Subselections were slices of the same size (82,056 atoms). Shorter processing times are better. The benchmarks systems were taken from the `vesicle library`_. :cite:`Kenney:2015aa` and are listed with their approximate number of particles ("# atoms"). Benchmarks were performed on a laptop with an Intel Core i5 2540M 2.6 GHz processor, 8 GB of RAM and a SSD drive. :label:`tab:performance-slicing-atomgroup`
+.. table:: Performance comparison of subselecting an AtomGroup from an existing one using the  new system (upcoming release v0.16.0) against the old (v0.15.0). Subselections were slices of the same size (82,056 atoms). Shorter processing times are better. The benchmarks systems were taken from the `vesicle library`_ :cite:`Kenney:2015aa` and are listed with their approximate number of particles ("# atoms"). Benchmarks were performed on a laptop with an Intel Core i5 2540M 2.6 GHz processor, 8 GB of RAM and a SSD drive. :label:`tab:performance-slicing-atomgroup`
 
       +----------+----------+----------+----------+
       | # atoms  | v0.15.0  | v0.16.0  | speed up |
@@ -460,10 +460,9 @@ Analysis of large systems
 
 MDAnalysis has been used extensively to study extremely large simulation systems for long simulation times.
 Marrink and co-workers :cite:`Ingolfsson2014` used MDAnalysis to analyze a realistic model of the plasma membrane with 63 different lipid species and over half a million particles for 40 µs. They discovered that transient domains with liquid-ordered character formed and disappeared on the microsecond time scale, with different lipid species clustering in a lipid-specific manner.
-A coarse-grained model of the influenza A virion outer lipid envelope (5 M particles) was simulated for 5 microseconds and the resulting trajectory was analyzed using MDAnalysis :cite:`pmid25703376`.
-For example, the open source `lipid diffusion analysis code`_ (for spherical structures and planar bilayers) used to assess the diffusion constants of the influenza A proteins and lipids-- is built on MDAnalysis.
+A coarse-grained model of the influenza A virion outer lipid envelope (5 M particles) was simulated for 5 microseconds and the resulting trajectory was analyzed using MDAnalysis :cite:`pmid25703376` and the open source MDAnalysis-based `lipid diffusion analysis code`_,  which calculates the diffusion constants of lipids for spherical structures and planar bilayers :cite:`Reddy:2014aa`.
 The construction of the CG dengue virion envelope (1 M particles) was largely dependent on MDAnalysis :cite:`pmid26833387`.
-The symmetry operators in the deposited dengue protein shell PDB file were applied to a simulated asymmetric unit in a bilayer, effectively tiling both proteins and lipids into the appropriate positions on the virion surface :cite:`pmid26833387`.
+The symmetry operators in the deposited dengue protein shell PDB file were applied to a simulated asymmetric unit in a bilayer, effectively tiling both proteins and lipids into the appropriate positions on the virion surface.
 
 .. figure:: figs/flu_simulations.pdf
 
@@ -474,7 +473,8 @@ MDAnalysis was used to assess the stability of this enormous system by tracking,
 In this case, the membrane appeared to rise too rapidly over the course of 50 ns, which suggests that the simulation system will likely have to be redesigned.
 Such large systems are challenging to work with, including their visualization, and analysis of quantities based on particle coordinates is essential to assess the correct behavior of the simulations.
 
-.. _lipid diffusion analysis code: https://github.com/tylerjereddy/diffusion_analysis_MD_simulations
+.. _lipid diffusion analysis code:
+   https://github.com/tylerjereddy/diffusion_analysis_MD_simulations
 
 
 
