@@ -85,7 +85,7 @@ This file also serves as a flagpost indicating that this is more than just a dir
     Treant.1dcbb3b1-c396-4bc6-975d-3ae1e4c2983a.json
 
 The name of this file includes the type of Treant to which it corresponds, as well as the ``uuid`` of the Treant, its unique identifier.
-The state file contains all the information needed to generate an identical instance of this ``Treant``, so that we can start a separate Python session and use immediately use the same Treant there:
+The state file contains all the information needed to generate an identical instance of this ``Treant``, so that we can start a separate Python session and immediately use the same Treant there:
 
 .. code-block:: python
 
