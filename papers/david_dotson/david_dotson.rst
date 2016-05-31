@@ -332,7 +332,7 @@ We can access categories for an individual member:
     <AggCategories({'home': ['california'],
                     'age': ['old'],
                     'type': ['evergreen'],
-                    'bark': [u'fibrous'],
+                    'bark': ['fibrous'],
                     'plant': ['tree']})>
 
 The *aggregated* categories for all members in a Bundle are accessible via `datreant.core.Bundle.categories`, which gives a view of the categories with keys present in (common to) *every* member Treant:
