@@ -211,6 +211,8 @@ References
 
 .. [Cordona2012] Cardona, Omar-Daria, et al. "Determinants of risk: exposure and vulnerability." (2012).
 
+.. [Girardot2013] O. Girardot. STATE OF THE PYTHON/PYPI DEPENDENCY GRAPH. 2013
+
 .. [Schweik2012] C. Schweik and R. English. *Internet Success: A Study of Open-Source Software Commons*,
       The MIT Press. 2012
 
