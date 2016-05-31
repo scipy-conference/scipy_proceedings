@@ -2,12 +2,42 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for Oliver Beckstein at 2016-05-30 22:35:06 -0700 
+%% Created for Oliver Beckstein at 2016-05-30 23:28:04 -0700 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@conference{Tu:2008dq,
+	Address = {Austin, TX},
+	Author = {Tu, T. and Rendleman, C.A. and Borhani, D.W. and Dror, R.O. and Gullingsrud, J. and Jensen, MO and Klepeis, J. L. and Maragakis, P. and Miller, P. and Stafford, K.A. and Shaw, David E.},
+	Booktitle = {International Conference for High Performance Computing, Networking, Storage and Analysis, 2008. SC 2008.},
+	Date-Added = {2016-05-31 06:27:56 +0000},
+	Date-Modified = {2016-05-31 06:27:56 +0000},
+	Doi = {10.1109/SC.2008.5214715},
+	Keywords = {MapReduce, HiMach, analysis, molecular dynamics, trajectories},
+	Organization = {IEEE},
+	Pages = {1--12},
+	Title = {A scalable parallel framework for analyzing terascale molecular dynamics simulation trajectories},
+	Year = {2008},
+	Abstract = {As parallel algorithms and architectures drive the longest molecular dynamics (MD) simulations towards the millisecond scale, traditional sequential post-simulation data analysis methods are becoming increasingly untenable. Inspired by the programming interface of Google's MapReduce, we have built a new parallel analysis framework called HiMach, which allows users to write trajectory analysis programs sequentially, and carries out the parallel execution of the programs automatically. We introduce (1) a new MD trajectory data analysis model that is amenable to parallel processing, (2) a new interface for defining trajectories to be analyzed, (3) a novel method to make use of an existing sequential analysis tool called VMD, and (4) an extension to the original MapReduce model to support multiple rounds of analysis. Performance evaluations on up to 512 cores demonstrate the efficiency and scalability of the HiMach framework on a Linux cluster.},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QRi4uLy4uLy4uLy4uLy4uLy4uL0RvY3VtZW50cy9QdWJsaWNhdGlvbnMvcGRmL0JpYkRlc2svSUVFRV9UdV8yMDA4YS5wZGbSFwsYGVdOUy5kYXRhTxEBqAAAAAABqAACAAAERGF0YQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0yQMDEgrAAAAFjJAEUlFRUVfVHVfMjAwOGEucGRmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWTP/JXw5XAAAAAAAAAAAABgAFAAAJAAAAAAAAAAAAAAAAAAAAAAdCaWJEZXNrAAAQAAgAANMkbnwAAAARAAgAAMlfcMcAAAABABQAFjJAABYyPgAWL1gAFT4MAAAZ4QACAEVEYXRhOm9saXZlcjoARG9jdW1lbnRzOgBQdWJsaWNhdGlvbnM6AHBkZjoAQmliRGVzazoASUVFRV9UdV8yMDA4YS5wZGYAAA4AJAARAEkARQBFAEUAXwBUAHUAXwAyADAAMAA4AGEALgBwAGQAZgAPAAoABABEAGEAdABhABIAPC9vbGl2ZXIvRG9jdW1lbnRzL1B1YmxpY2F0aW9ucy9wZGYvQmliRGVzay9JRUVFX1R1XzIwMDhhLnBkZgATAA0vVm9sdW1lcy9EYXRhAP//AACABtIbHB0eWiRjbGFzc25hbWVYJGNsYXNzZXNdTlNNdXRhYmxlRGF0YaMdHyBWTlNEYXRhWE5TT2JqZWN00hscIiNcTlNEaWN0aW9uYXJ5oiIgXxAPTlNLZXllZEFyY2hpdmVy0SYnVHJvb3SAAQAIABEAGgAjAC0AMgA3AEAARgBNAFUAYABnAGoAbABuAHEAcwB1AHcAhACOANcA3ADkApACkgKXAqICqwK5Ar0CxALNAtIC3wLiAvQC9wL8AAAAAAAAAgEAAAAAAAAAKAAAAAAAAAAAAAAAAAAAAv4=},
+	Bdsk-File-2 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QSC4uLy4uLy4uLy4uLy4uLy4uL0RvY3VtZW50cy9QdWJsaWNhdGlvbnMvcGRmL0JpYkRlc2svSGlNYWNoX1R1XzIwMDhiLnBkZtIXCxgZV05TLmRhdGFPEQGwAAAAAAGwAAIAAAREYXRhAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADTJAwMSCsAAAAWMkATSGlNYWNoX1R1XzIwMDhiLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABZMxslfI1MAAAAAAAAAAAAGAAUAAAkAAAAAAAAAAAAAAAAAAAAAB0JpYkRlc2sAABAACAAA0yRufAAAABEACAAAyV+FwwAAAAEAFAAWMkAAFjI+ABYvWAAVPgwAABnhAAIAR0RhdGE6b2xpdmVyOgBEb2N1bWVudHM6AFB1YmxpY2F0aW9uczoAcGRmOgBCaWJEZXNrOgBIaU1hY2hfVHVfMjAwOGIucGRmAAAOACgAEwBIAGkATQBhAGMAaABfAFQAdQBfADIAMAAwADgAYgAuAHAAZABmAA8ACgAEAEQAYQB0AGEAEgA+L29saXZlci9Eb2N1bWVudHMvUHVibGljYXRpb25zL3BkZi9CaWJEZXNrL0hpTWFjaF9UdV8yMDA4Yi5wZGYAEwANL1ZvbHVtZXMvRGF0YQD//wAAgAbSGxwdHlokY2xhc3NuYW1lWCRjbGFzc2VzXU5TTXV0YWJsZURhdGGjHR8gVk5TRGF0YVhOU09iamVjdNIbHCIjXE5TRGljdGlvbmFyeaIiIF8QD05TS2V5ZWRBcmNoaXZlctEmJ1Ryb290gAEACAARABoAIwAtADIANwBAAEYATQBVAGAAZwBqAGwAbgBxAHMAdQB3AIQAjgDZAN4A5gKaApwCoQKsArUCwwLHAs4C1wLcAukC7AL+AwEDBgAAAAAAAAIBAAAAAAAAACgAAAAAAAAAAAAAAAAAAAMI},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1109/SC.2008.5214715%20}}
+
+@inproceedings{Romo:2009zr,
+	Address = {Minneapolis, Minnesota, USA},
+	Author = {Romo, Tod D. and Grossfield, Alan},
+	Booktitle = {31st Annual International Conference of the IEEE EMBS},
+	Date-Added = {2016-05-31 06:14:03 +0000},
+	Date-Modified = {2016-05-31 06:14:03 +0000},
+	Organization = {IEEE},
+	Pages = {2332--2335},
+	Title = {{LOOS}: An Extensible Platform for the Structural Analysis of Simulations},
+	Year = {2009},
+	Abstract = {We	have	developed	LOOS	(Lightweight	Object- Oriented Structure-analysis library) as an object-oriented li- brary designed to facilitate the rapid development of tools for the structural analysis of simulations. LOOS supports the native file formats of most common simulation packages including AMBER, CHARMM, CNS, Gromacs, NAMD, Tinker, and X-PLOR. Encapsulation and polymorphism are used to simultaneously provide a stable interface to the programmer and make LOOS easily extensible. A rich atom selection language based on the C expression syntax is included as part of the library. LOOS enables students and casual programmer- scientists to rapidly write their own analytical tools in a compact and expressive manner resembling scripting. LOOS is written in C++ and makes extensive use of the Standard Template Library and Boost, and is freely available under the GNU General Public License (version 3) (http://loos.sourceforge.net). LOOS has been tested on Linux and MacOS X, but is written to be portable and should work on most Unix-based platforms.},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QUC4uLy4uLy4uLy4uLy4uLy4uL0RvY3VtZW50cy9QdWJsaWNhdGlvbnMvcGRmL0JpYkRlc2svSUVFRV9FTUJTXzMxX1JvbW9fMjAwOWEucGRm0hcLGBlXTlMuZGF0YU8RAdAAAAAAAdAAAgAABERhdGEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANMkDAxIKwAAABYyQBtJRUVFX0VNQlNfMzFfUm9tb18yMDA5YS5wZGYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFkzzyH6eLgAAAAAAAAAAAAYABQAACQAAAAAAAAAAAAAAAAAAAAAHQmliRGVzawAAEAAIAADTJG58AAAAEQAIAADIfwCeAAAAAQAUABYyQAAWMj4AFi9YABU+DAAAGeEAAgBPRGF0YTpvbGl2ZXI6AERvY3VtZW50czoAUHVibGljYXRpb25zOgBwZGY6AEJpYkRlc2s6AElFRUVfRU1CU18zMV9Sb21vXzIwMDlhLnBkZgAADgA4ABsASQBFAEUARQBfAEUATQBCAFMAXwAzADEAXwBSAG8AbQBvAF8AMgAwADAAOQBhAC4AcABkAGYADwAKAAQARABhAHQAYQASAEYvb2xpdmVyL0RvY3VtZW50cy9QdWJsaWNhdGlvbnMvcGRmL0JpYkRlc2svSUVFRV9FTUJTXzMxX1JvbW9fMjAwOWEucGRmABMADS9Wb2x1bWVzL0RhdGEA//8AAIAG0hscHR5aJGNsYXNzbmFtZVgkY2xhc3Nlc11OU011dGFibGVEYXRhox0fIFZOU0RhdGFYTlNPYmplY3TSGxwiI1xOU0RpY3Rpb25hcnmiIiBfEA9OU0tleWVkQXJjaGl2ZXLRJidUcm9vdIABAAgAEQAaACMALQAyADcAQABGAE0AVQBgAGcAagBsAG4AcQBzAHUAdwCEAI4A4QDmAO4CwgLEAskC1ALdAusC7wL2Av8DBAMRAxQDJgMpAy4AAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAADMA==}}
 
 @unpublished{Nguyen:2016aa,
 	Author = {Nguyen, Hai and Roe, Daniel R. and Swails, Jason and Case, David A.},

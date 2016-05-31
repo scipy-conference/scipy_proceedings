@@ -280,6 +280,16 @@ Through this approach only a single frame of data is present in memory at any ti
    for ts in u.trajectory[::10]:
        ag.positions
 
+In some cases, such as selecting a specific frames (as in the calculation of time correlation functions), skipping of frames (as in the iterator ``u.trajectory[5000::1000]``), or parallelization over trajectory blocks in a map/reduce pattern :cite:`Tu:2008dq`, sequential reading of trajectories is highly inefficient when the underlying trajectory reader does not implement random access to time frames on disk.
+Many trajectory formats suffer from this shortcoming, including the popular Gromacs XTC and TRR formats, but also commonly used multi-frame PDB files and other text-based formats such as XYZ.
+Earlier versions of LOOS :cite:`Romo:2009zr` had implemented a mechanism by which the trajectory was read once on loading and frame offsets on disk were computed that could be used to directly seek to individual frames.
+MDAnalysis implements the same algorithm for TRR and XTC files but additionaly also saves the offsets to disk (as a compressed NumPy array).
+When a trajectory is loaded again then instead of reading the whole trajectory, only the persistent offsets are read (provided they have not become stale as checked by very conservative criteria such as modification time and size of the original file, which are saved with the offsets).
+In cases of terabyte-sized trajectories, the persistent offset approach can save  hundreds of seconds for the initial loading of the ``Universe``.
+Current development work is extending the persistent offset scheme to all trajectory readers, which will provide random access for all trajectories in a completely automatic and transparent manner to the user.
+
+
+
 Example: Per-residue RMSF
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
