@@ -303,26 +303,47 @@ We can add categories to individual Treants:
 .. code-block:: python
 
     # add categories to individual members
-    >>> b['oak'].categories.add({'age': 'adult', 'type': 'deciduous', 'bark': 'mossy'})
-    >>> b['elm'].categories.add({'age': 'young', 'type': 'deciduous', 'bark': 'smooth'})
-    >>> b['maple'].categories.add({'age': 'young', 'type': 'deciduous', 'bark': 'mossy'})
-    >>> b['sequoia'].categories.add({'age': 'old', 'type': 'evergreen', 'bark': 'fibrous', 'home': 'california'})
+    >>> b['oak'].categories.add({'age': 'adult', 
+                                 'type': 'deciduous',
+                                 'bark': 'mossy'})
+    >>> b['elm'].categories.add({'age': 'young',
+                                 'type': 'deciduous',
+                                 'bark': 'smooth'})
+    >>> b['maple'].categories.add({'age': 'young',
+                                   'type': 'deciduous',
+                                   'bark': 'mossy'})
+    >>> b['sequoia'].categories.add({'age': 'old',
+                                     'type': 'evergreen',
+                                     'bark': 'fibrous',
+                                     'home': 'california'})
     
-    # will add value 'north america' to category 'continent' for all members
-    >>> b.categories.add({'continent': 'north america'})
+    # add value 'north america' to category 'continent'
+    # for all members
+    >>> b.categories.add({'plant': 'tree'})
 
 We can access categories for an individual member:    
 
 .. code-block:: python
 
     >>> b['sequoia'].categories
-    <AggCategories({u'home': [u'california'], u'age': [u'old'], u'type': [u'evergreen'], u'bark': [u'fibrous'], u'continent': [u'north america']})>
+    <AggCategories({'home': ['california'],
+                    'age': ['old'],
+                    'type': ['evergreen'],
+                    'bark': [u'fibrous'],
+                    'plant': ['tree']})>
 
 The *aggregated* categories for all members in a Bundle are accessible via `datreant.core.Bundle.categories`, which gives a view of the categories with keys present in (common to) *every* member Treant:
 
 .. code-block:: python
     >>> b.categories
-    <AggCategories({u'age': [u'adult', u'young', u'young', u'old'], u'type': [u'deciduous', u'deciduous', u'deciduous', u'evergreen'], u'bark': [u'mossy', u'smooth', u'mossy', u'fibrous'], u'continent': [u'north america', u'north america', u'north america', u'north america']})>
+    <AggCategories({'age': ['adult', 'young',
+                            'young', 'old'],
+                    'type': ['deciduous', 'deciduous',
+                             'deciduous', 'evergreen'],
+                    'bark': ['mossy', 'smooth',
+                             'mossy', 'fibrous'],
+                    'plant': ['tree', 'tree',
+                              'tree', 'tree']})>
 
 Each element of the list associated with a given key corresponds to the value for each member, in member order.
 We can also access categories present among *any* member:
@@ -330,10 +351,11 @@ We can also access categories present among *any* member:
 .. code-block:: python
 
     >>> b.categories.any
-    {u'age': [u'adult', u'young', u'young', u'old'],
-     u'bark': [u'mossy', u'smooth', u'mossy', u'fibrous'],
-     u'home': [None, None, None, u'california'],
-     u'type': [u'deciduous', u'deciduous', u'deciduous', u'evergreen']}
+    {'age': ['adult', 'young', 'young', 'old'],
+     'bark': ['mossy', 'smooth', 'mossy', 'fibrous'],
+     'home': [None, None, None, 'california'],
+     'type': ['deciduous', 'deciduous',
+              'deciduous', 'evergreen']}
 
 Members that do not have a given key will have `None` as the corresponding value in the list.
 Accessing values for a list of keys:
@@ -341,15 +363,16 @@ Accessing values for a list of keys:
 .. code-block:: python
 
     >>> b.categories[['age', 'home']]
-    [[u'adult', u'young', u'young', u'old'], [None, None, None, u'california']]
+    [['adult', 'young', 'young', 'old'],
+     [None, None, None, 'california']]
 
 or a set of keys:
 
 .. code-block:: python
 
     >>> b.categories[{'age', 'home'}]
-    {'age': [u'adult', u'young', u'young', u'old'],
-     'home': [None, None, None, u'california']}
+    {'age': ['adult', 'young', 'young', 'old'],
+     'home': [None, None, None, 'california']}
 
 returns, respectively, a list or dictionary (corresponding to the inputted keys) of lists of values, where the list for a given key is in member order.
 Perhaps the most powerful feature of categories is the `groupby()` method, which, given an inputted key, can be used to group specific members in a Bundle by their corresonding category values.
@@ -358,16 +381,16 @@ If we want to group members by their 'bark', we can use `groupby()` to obtain a 
 .. code-block:: python
 
     >>> b.categories.groupby('bark')
-    {u'fibrous': <Bundle([<Treant: 'sequoia'>])>,
-     u'mossy': <Bundle([<Treant: 'oak'>, <Treant: 'maple'>])>,
-     u'smooth': <Bundle([<Treant: 'elm'>])>}
+    {'fibrous': <Bundle([<Treant: 'sequoia'>])>,
+     'mossy': <Bundle([<Treant: 'oak'>, <Treant: 'maple'>])>,
+     'smooth': <Bundle([<Treant: 'elm'>])>}
 
 Say we would like to get members grouped by both their 'bark' and 'home':
 
 .. code-block:: python
 
     b.categories.groupby({'bark', 'home'})
-    {(u'fibrous', u'california'): <Bundle([<Treant: 'sequoia'>])>}
+    {('fibrous', 'california'): <Bundle([<Treant: 'sequoia'>])>}
 
 We get only a single member for the pair of keys `('fibrous', 'california')` since 'sequoia' is the only Treant having the 'home' category.
 It is clear that categories are useful by themselves as a means of labeling a Treant to, for instance, denote the types of data that it may contain or the manner in which the data were obtained.
