@@ -57,7 +57,7 @@ This is particularly the case for fields centered around simulation: simulation 
 And with increases in computational power, it is often necessary to store intermediate results from large amounts of simulation data so it can be accessed and explored interactively.
 
 These problems make data management difficult, and serve as a barrier to answering scientific questions.
-To make things easier, ``datreant`` is a collection of packages that provide a Pythonic interface to the filesystem and the data that lives within it.
+To make things easier, ``datreant`` is a namespace package that provides a Pythonic interface to the filesystem and the data that lives within it.
 It solves a boring problem, so we can focus on interesting ones.
 
 
@@ -291,7 +291,42 @@ Splitting Treants on categories
 
 Treant modularity with attachable Limbs
 ---------------------------------------
+``Treant`` objects manipulate their tags and categories using ``Tags`` and ``Categories`` objects, respectively.
+These are examples of ``Limb`` objects: attachable components which serve to extend the capabilities of a ``Treant``.
+While ``Tags`` and ``Categories`` are attached by default to all ``Treant`` objects, custom ``Limb`` subclasses can be defined to doconvenient things.
 
+``datreant`` is a namespace package, with the dependency-light core components included in ``datreant.core``.
+Another package currently in the ``datreant`` namespace is ``datreant.data``, which includes a set of convenience ``Limb`` objects for storing and retrieving ``pandas`` and ``numpy`` datasets.
+We can attach a ``Data`` ``Limb`` to a ``Treant`` with:
+
+.. code-block:: python
+
+   >>> import datreant.data
+   >>> s.attach('data')
+   >>> s.data
+   <Data([])>
+
+and we can immediately start using it to store e.g. a ``pandas`` Series:
+
+.. code-block:: python
+
+   >>> import numpy as np
+   >>> sn = pd.Series(np.sin(
+   ...     np.linspace(0, 8*np.pi, num=200))
+   >>> s.data['sinusoid'] = sn
+
+and we can get it back just as easily:
+
+.. code-block:: python
+
+   >>> s.data['sinusoid'].head()
+             A         B
+   0  0.609263 -1.451863
+   1  0.240316 -0.836541
+   2 -0.091984 -0.211093
+
+What's more, ``datreant.data`` also includes a corresponding ``AggLimb`` for ``Bundle`` objects, allowing for automatic aggregation of datasets by name across all member ``Treant`` objects.
+If we collect and store datasets for each member in our ``Bundle``, we can 
 
 Using Treants as the basis for dataset access and manipulation with the PyData stack
 ------------------------------------------------------------------------------------
@@ -301,8 +336,6 @@ Using Treants as the basis for dataset access and manipulation with the PyData s
 .. would love to give Fireworks a shout-out here, since building workflows that operate on Treants works *really* well
 
 
-Other packages in the datreant namespace
-----------------------------------------
 
 Building domain-specific applications on datreant
 -------------------------------------------------
