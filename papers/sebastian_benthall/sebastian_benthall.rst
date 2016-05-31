@@ -27,8 +27,8 @@ An Ecological Approach to Software Supply Chain Risk Management
    analytic assumptions about the propogation of vulnerability and exposure
    through a software supply chain, we can predict high risk "hot spots"
    in the ecosystem in need of additional investment. We present features of
-   Ion Channel that assist with the collection and analysis of software dependency
-   information. We present statistical properties of
+   Ion Channel that assist with the collection and analysis of software
+   dependency information. We present statistical properties of
    empirical data from the Python Package Index and GitHub as complex networks,
    and demonstrate the results of our ecosystem modeling strategy on this data
    when combined with simulated data.
@@ -158,21 +158,29 @@ Computing risk
 Data collection and publication
 -------------------------------
 
-**Here is a description of Ion Channel. What data we pulled from PyPI and what we did with it.**
+**Description of Ion Channel. What data we pulled from PyPI and what we did with it.**
 
-**We may also use data from GitHub for this paper.**
+**Data from GitHub used.**
 
-**What data do we need to simulate? Maybe risk and exposure data.**
+**Simulated data.**
 
 Empirical and Simulation Results
 --------------------------------
 
+.. figure:: dependencies-1.png
+   :scale: 20%
+   :figclass: bht
+
+   Visualization of PyPi dependency network, created using Gephi[Bastian2009]_. This visualization does not include singleton nodes with zero degree, which are the vast majority of nodes. :label:`depfig`
+
+
+
 Statistical properties of the software dependency network
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Here it would be good to put some statistical properties of the software**
-**dependency network. From a complex networks perspective, these trees are going**
-**to look markedly different from e.g. social networks.**
+**Some statistical properties of the dependency network.**
+
+**How it is different from and similar to other complex networks.**
 
 Hot spot analysis
 ~~~~~~~~~~~~~~~~~
@@ -198,6 +206,8 @@ Research and Business Ethics
 
 References
 ----------
+
+.. [Bastian2009] Bastian, Mathieu, Sebastien Heymann, and Mathieu Jacomy. "Gephi: an open source software for exploring and manipulating networks." ICWSM 8 (2009): 361-362.
 
 .. [Cordona2012] Cardona, Omar-Daria, et al. "Determinants of risk: exposure and vulnerability." (2012).
 
