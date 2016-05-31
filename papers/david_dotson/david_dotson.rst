@@ -105,7 +105,7 @@ For example, a ``Treant`` can store any number of descriptive tags that are usef
    >>> t.tags
    <Tags(['plant', 'syrup'])>
 
-And in the other Python session, we see the same ``Treant``:
+And in the other Python session, the same ``Treant`` with the same tags is visible:
 
 .. code-block:: python
 
@@ -113,7 +113,7 @@ And in the other Python session, we see the same ``Treant``:
    >>> t.tags
    <Tags(['plant', 'syrup'])>
 
-Internally, advisory locking is done to avoid race conditions, making a ``Treant`` multiprocessing safe.
+Internally, advisory locking is done to avoid race conditions, making a ``Treant`` multiprocessing-safe.
 
 
 Introspecting a Treant's Tree
