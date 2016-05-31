@@ -419,6 +419,17 @@ Such large systems are challenging to work with, including their visualization, 
 .. _lipid diffusion analysis code: https://github.com/tylerjereddy/diffusion_analysis_MD_simulations
 
 
+Visualization
+-------------
+
+The ``MDAnalysis.visualization`` name space contains modules that primarily produce visualizations of molecular systems.
+Currently it contains functions that generate specialized streamline visualizations of lipid diffusion in membrane bilayers :cite:`C3FD00145H`. In short, the algorithm decomposes any given membrane into a grid and tracks the displacement of lipids between different grid elements, emphasizing collective lipid motions.
+Both 2D (``MDAnalysis.visualization.streamlines``) and 3D (``MDAnalysis.visualization.streamlines_3D``) implementations are available in MDAnalysis. Sample input data files are available online from the Flows_ website along with the expected output visualizations.
+
+
+.. _Flows: http://sbcb.bioch.ox.ac.uk/flows/MDAnalysis.html
+
+
 Other packages that use MDAnalysis
 ----------------------------------
 
