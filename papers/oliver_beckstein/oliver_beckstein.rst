@@ -233,7 +233,7 @@ To allow the analysis of such large simulations on an average workstation (or ev
 The trajectory data can be accessed through the trajectory attribute of a Universe.
 Changing the frame of the trajectory object updates the underlying arrays that AtomGroups point to.
 In this way the positions attribute of an AtomGroup within the iteration over a trajectory will give access to the positions at each frame.
-Through this approach only a single frame of data is present in memory at any time, allowing for large datasets, from half a million particles :cite:`Ingolfsson2014` to tens of millions, to be dissected with minimal resources.
+Through this approach only a single frame of data is present in memory at any time, allowing for large datasets, from half a million particles :cite:`Ingolfsson2014` to tens of millions (see also section `Application to Large Systems`_), to be dissected with minimal resources.
 
 .. show working with the trajectory object to access the time data
 .. code-block:: python
@@ -394,6 +394,29 @@ Given that for systems with 10 M atoms this process used to take over 100 s, the
       +----------+-----------+----------+----------+
 
 .. _`vesicle library`: https://github.com/Becksteinlab/vesicle_library
+
+
+.. _`Application to Large Systems`:
+
+Application to Large Systems
+----------------------------
+
+MDAnalysis has been used extensively to study extremely large simulation systems.
+A coarse-grained model of the influenza A virion outer lipid envelope (5 M particles) was simulated for 5 microseconds and the resulting trajectory was analyzed using MDAnalysis :cite:`pmid25703376`.
+For example, the open source `lipid diffusion analysis code`_ (for spherical structures and planar bilayers) used to assess the diffusion constants of the influenza A proteins and lipids-- is built on MDAnalysis.
+The construction of the CG dengue virion envelope (1 M particles) was largely dependent on MDAnalysis :cite:`pmid26833387`.
+The symmetry operators in the deposited dengue protein shell PDB file were applied to a simulated asymmetic unit in a bilayer, effectively tiling both proteins and lipids into the appropriate positions on the virion surface :cite:`pmid26833387`.
+
+.. figure:: figs/flu_simulations.pdf
+
+   Simulation of a coarse-grained model of the influenza A virion membrane (purple/red) close to a model of the human plasma membrane (brown). **A**: Left: initial frame. Right: system after 40 ns . A horizontal black guide line is used to emphasize the rising plasma membrane position. The images were produced with VMD :cite:`Humphrey:1996aa`. **B**   Maximum :math:`Z` (vertical) coordinate values for the influenza A virus envelope and the plasma membrane are tracked over the course of the simulation, indicating that the membrane rises to rapidly.  :label:`fig:virion`
+
+More recently, a 12.7 M CG particle system combining the influenza A envelope and a model of a plasma membrane :cite:`doi:10.1021/jacs.5b08048` were simulated together (Figure :ref:`fig:virion` A).
+MDAnalysis was used to assess the stability of this enormous system by tracking, for example, the changes in :math:`Z` coordinate values for different system components (Figure :ref:`fig:virion` B).
+In this case, the membrane appeared to rise too rapidly over the course of 50 ns, which suggests that the simulation system will likely have to be redesigned.
+Such large systems are challenging to work with, including their visualization, and analysis of quantitites based on particle coordinates is essential to assess the correct behavior of the simulations.
+
+.. _lipid diffusion analysis code: https://github.com/tylerjereddy/diffusion_analysis_MD_simulations
 
 
 Other packages that use MDAnalysis
