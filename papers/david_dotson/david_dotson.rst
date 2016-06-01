@@ -96,7 +96,7 @@ The state file contains all the information needed to generate an identical inst
    <Treant: 'maple'>
 
 Making a modification to the ``Treant`` in one session is immediately reflected by the same ``Treant`` in any other session.
-For example we can add tags in the first python session, a ``Treant`` can store any number of descriptive tags that are useful for differentiating it from others:
+For example we can add tags in the first python session; a ``Treant`` can store any number of descriptive tags that are useful for differentiating it from others:
 
 .. code-block:: python
 
