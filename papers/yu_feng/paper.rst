@@ -454,15 +454,18 @@ any special requirements from the facility.
     #SBATCH -n 2048
     #SBATCH -p debug
 
-    export PBCAST=/project/projectdirs/m779/python-mpi
+    export PBCAST=/usr/common/contrib/bccp/python-mpi-bcast
 
     source $PBCAST/activate.sh \
         /dev/shm/local "srun -n 1024"
 
     # Tier 1 : anaconda
-    # Tier 2 : commonly used packages
     bcast -v $PBCAST/2.7-anaconda.tar.gz \
              $HOME/fitsio-0.9.8.tar.gz
+
+    # Tier 2 : commonly used packages
+    # e.g. installed in $PYTHONUSERBASE
+    bcast-userbase
 
     # Tier 3 : User application
     mirror /home/mytestapp/ \
@@ -475,7 +478,7 @@ any special requirements from the facility.
 Integration with NERSC Facilities
 +++++++++++++++++++++++++++++++++
 
-On the NERSC systems where python-mpi-bcast was originally developed,
+On the NERSC systems where ``python-mpi-bcast`` was originally developed,
 we also provide a default installation of ``python-mpi-bcast``
 that is integrated with the ``modules`` system and the Anaconda based
 Python installations. The full integration source code is hosted together
@@ -501,7 +504,7 @@ and the other line to mirror the application to a local file system with the
     module load python/3.4-anaconda
 
     # NERSC integration
-    PBCAST=/project/projectdirs/m779/python-mpi
+    PBCAST=/usr/common/contrib/bccp/python-mpi-bcast
     source $PBCAST/nersc/activate.sh
 
     # Directly deliver the user application
