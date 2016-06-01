@@ -330,7 +330,7 @@ Universes and AtomGroups can be visualized in Jupyter notebooks using nglview_, 
 
    MDAnalysis can be used with nglview_ to directly visualize molecules and trajectories in Jupyter_ notebooks. The adenylate kinase (AdK) protein from one of the included test trajectories is shown. :label:`fig:nglview`.
 
-Other Python packages that have become extremely useful in notebook-based analysis work flows are pandas_  :cite:`McKinney2010` for rapid analysis of time series analysis, distributed_ for simple parallelization, FireWorks_ :cite:`Jain:2015aa` for complex work flows, and MDSynthesis_ for organizing, bundling and querying many simulations.
+Other Python packages that have become extremely useful in notebook-based analysis work flows are pandas_  :cite:`McKinney2010` for rapid analysis of time series analysis, distributed_ :cite:`Rocklin:2015aa` for simple parallelization, FireWorks_ :cite:`Jain:2015aa` for complex work flows, and MDSynthesis_ :cite:`Dotson:2016aa` for organizing, bundling and querying many simulations.
 
 
 .. _`Analysis Module`:
