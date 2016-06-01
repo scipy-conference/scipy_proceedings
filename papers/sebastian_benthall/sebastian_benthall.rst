@@ -213,6 +213,8 @@ References
 
 .. [Girardot2013] O. Girardot. STATE OF THE PYTHON/PYPI DEPENDENCY GRAPH. 2013
 
+.. [LaBelle2004] N. LaBelle, E. Wallingford. 2004. Inter-package dependency networks in open-source software.
+
 .. [Schweik2012] C. Schweik and R. English. *Internet Success: A Study of Open-Source Software Commons*,
       The MIT Press. 2012
 
