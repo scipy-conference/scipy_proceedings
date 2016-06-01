@@ -444,7 +444,8 @@ with pip as follows::
 
 For the latest development version::
 
-  $ pip install git+https://github.com/FOSSEE/online_test.git#egg=yaksh
+  $ pip install \
+  git+https://github.com/FOSSEE/online_test.git#egg=yaksh
 
 To setup a demo instance on can run ::
 
@@ -481,8 +482,9 @@ programming questions.  The programming questions will require a set of test
 cases.  In the case of a Python programming question, a simple question could
 be of the form::
 
-  Write a function called factorial(n) which takes a single integer argument
-  and returns the factorial of the number given.
+  Write a function called factorial(n) which takes
+  a single integer argument and returns the
+  factorial of the number given.
 
 The question will also be accompanied with a few test cases of the form::
 
@@ -607,34 +609,71 @@ traditionally been held in December.  The conferences are largely funded by
 the FOSSEE project.  The project staff manage the local organization almost
 completely.  The conference website is at http://scipy.in
 
-We have an attendance of around 250 people each year.  A large number of these
+We have an attendance of around 200 people each year.  A large number of these
 are new users.  The conference is typically well received and many people are
 aware of the SciPy community through these efforts.  Each year we invite a
-leading expert in the community.  The first conference had Travis Oliphant
-keynote and the conference in 2015 had Andreas Kloeckner as the keynote.  We
-also invite experts from India to deliver invited talks and keynotes.  Jarrod
-Millman and Dr. Ajith Kumar were also invited speakers at the 2015
-conference.
+leading expert in the community to keynote at the conference.  The first
+conference had Travis Oliphant keynote and the conference in 2015 had Andreas
+Kloeckner as the keynote.  We also invite several other important speakers.
+Jarrod Millman and Dr. Ajith Kumar were also invited speakers at the 2015
+conference.  The Table :ref:`tab:scipy` provides more information on the
+number of participants and the keynote speakers at SciPy India each year.
 
+.. table:: SciPy India conference information. :label:`tab:scipy`
+
+    ===== ==================  ============= =================================
+    Year  Venue               Participants  Keynote/Invited speakers
+    ===== ==================  ============= =================================
+    2009  Technopark,          150          Travis Oliphant, Jarrod Millman
+          Tiruvananthapuram,                David Cournapeau, Chris Burns
+          Kerala
+    2010  IIIT Hyderabad       200          Perry Greenfield, Fernando Perez,
+                                            John Hunter, Stefan va der Walt,
+                                            Satrajit Ghosh
+    2011  IIT Bombay           180          Eric Jones, Gael Varoquaux,
+                                            Emmanuelle Gouillart, Mateusz P
+    2012  IIT Bombay           200          Ole Nielsen, Ajith Kumar,
+                                            Kannan Moudgalya
+    2013  IIT Bombay           180          Ondrej Certik, Ajith Kumar
+    2014  IIT Bombay           170          Romain Guillebert, Ajith Kumar,
+                                            Prof. Kannan, Prof. Phatak
+    2015  IIT Bombay           190          Andreas Klockner, Jarrod M,
+                                            Ajith Kumar
+    ===== ==================  ============= =================================
 
 
 Future plans
 ------------
 
-- Python in CBSE curriculum and issues
-- Python in school initiative
+The Python group plans to build on the existing work.  We will continue to
+generate textbook companions, provide support for the workshops conducted by
+the spoken-tutorial team, continue to work on the Yaksh interface.  In
+addition we plan to promote the use of Python in the CBSE school curriculum.
+
+The CBSE board has already included Python as an alternative to C++ in the
+11th and 12th grade exams.  Unfortunately, there is quite a bit of resistance
+towards this as many teachers are unfamiliar with Python.  We plan to support
+schools in this initiative over the next year.
 
 
 Conclusions
 ------------
 
+The FOSSEE Python group has helped spread the use of Python.  The group has
+also helped the other sister FOSSEE groups with respect to any Python related
+support when possible.  It is our hope that the code and other material that
+we have generated is also of use to the wider community across the world.
 
 
 Acknowledgments
 ----------------
 
-This work would not be possible without the work of many of the FOSSEE staff
-members involved in this project.
+We are grateful to MHRD for their continued support of FOSSEE.  Our thanks to
+the PIs of the FOSSEE project and also Asokan Pichai who helped shape the
+FOSSEE project over the first few years.  This work would not be possible
+without the work of the FOSSEE staff members involved in this project.  The
+past and present members of the project are listed here:
+http://python.fossee.in/about/
 
 
 References
