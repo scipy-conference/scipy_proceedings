@@ -397,7 +397,7 @@ Say we would like to get members grouped by both their 'bark' and 'home':
     {('fibrous', 'california'): <Bundle([<Treant: 'sequoia'>])>}
 
 We get only a single member for the pair of keys `('fibrous', 'california')` since 'sequoia' is the only Treant having the 'home' category.
-It is clear that categories are useful by themselves as a means of labeling a Treant to denote the types of data that it may contain or the manner in which the data were obtained.
+Categories are useful as labels to denote the types of data that a Treant may contain or how the data were obtained.
 By leveraging the `groupby()` method, one can then extract the Treants (and the data they contain) corresponding to selected categories without having to explicitly access each member (and its data).
 This feature can be particularly powerful in cases where, say, many Treants have been created and categorized to handle incoming data over an extended period of time; one may then quickly gather the data one needs from a bird's-eye view using category selection mechanisms.
 
