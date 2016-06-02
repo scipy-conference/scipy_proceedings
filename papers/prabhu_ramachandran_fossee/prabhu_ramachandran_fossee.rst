@@ -70,8 +70,8 @@ FOSS tools for their curricular activities.  This also requires development
 efforts in order to either enhance existing projects or fill in any areas
 where FOSS tools are lacking.  There are about 10+ PIs actively involved in
 various sub-projects.  Some of the most active projects are Scilab, Python,
-eSim (an EDA tool), OpenFOAM, Osdag (open source design of steel structures),
-etc.
+eSim (an EDA tool), OpenFOAM, and Osdag (open source design of steel
+structures).
 
 After the initial efforts in 2009 and 2010 we found that some of our
 initiatives worked and scaled up well whereas others did not.  As a result,
@@ -105,7 +105,8 @@ paper in 2014 [kmm14]_ discusses in detail the approach and design decisions
 made by the FOSSEE and spoken-tutorials projects.  In particular the paper
 discusses spoken tutorials, textbook companions, and lab migrations.  In this
 paper we focus on the Python-specific activities that are of potential direct
-interest to the SciPy community.
+interest to the SciPy community.  The FOSSEE Python group
+website [FOSSEE-Python]_ also has more information.
 
 
 
@@ -160,8 +161,9 @@ material.
 
 The FOSSEE team generates the spoken tutorials and the spoken tutorial team
 coordinates the conduct of workshops where students use this material to teach
-themselves Python.  FOSSEE staff also help support user questions that may
-arise during these workshops.
+themselves Python.  FOSSEE staff also supports by attending to user questions
+that may arise during these workshops and also during the stand-alone use of
+spoken tutorials.
 
 
 
@@ -178,10 +180,10 @@ documentation.
 Textbook companions offer an interesting approach to this task.  As discussed
 in detail in [kmm14]_, textbook companions are created by writing Python code
 for every solved example in a textbook.  Students create these textbook
-companions which are then reviewed by either teachers reviewers at FOSSEE.
+companions which are then reviewed by either teachers or reviewers at FOSSEE.
 This task scales very well as students are eager to take up the task. Students
-are given an honorarium of Rs. 10000 after their textbooks are reviewed.
-Currently, there are over 530 Scilab textbook companions [STC]_ created.  The
+are given an honorarium and a certificate after their textbooks pass a review.
+Currently, there are over 530 Scilab textbook companions [STC]_ created. The
 Python project has 395 completed books with over 225 textbooks in progress.
 The Python companions are hosted online at http://tbc-python.fossee.in
 
@@ -218,7 +220,8 @@ The process works as follows:
     a separate IPython notebook.
  4. The student also uploads a few screenshots of their favorite notebooks
     that are displayed.
- 5. The textbook is reviewed and any corrections are made by the contributor.
+ 5. The submitted code is reviewed and any corrections are made by the
+    contributor.
  6. The notebooks are then committed to the git repository.
  7. The committed notebooks are automatically picked up by the TBC web
     application.
@@ -269,12 +272,14 @@ A large number of solved examples are indeed quite simple but there are
 several that are fairtly involved.  Some of the submitted textbook companions
 are very well made.  These are highlighted in the editor's pick section.
 
-The Python TBC's have not been advertised too much yet and we have not been
-keeping careful track of the number of hits.  We are planning to popularize
-these more in the future.  It is still unclear as to how different people are
-using the notebooks.  We do have very good feedback from the contributors to
-the project.  Many of them have enjoyed creating these notebooks and have
-benefitted by this effort.  Some contributor comments are quoted in [kmm14]_.
+We are yet to formally announce and advertise about the textbook companions
+for Python facility.  Once announced, we would then start to analyze the usage
+and popularity of this resource.  We are planning to popularize these more in
+the future.  It is still unclear as to how different people are using the
+notebooks.  We do have very good feedback from the contributors
+[testimonials]_ to the project.  Many of them have enjoyed creating these
+notebooks and have benefitted by this effort.  Some contributor comments are
+quoted in [kmm14]_.
 
 
 .. _tmpnb:  https://github.com/jupyter/tmpnb
@@ -337,17 +342,17 @@ team helps in this regard.
 Online test tool: Yaksh
 ------------------------
 
-Assessment of students is a very important task during training.  This is
-necessary both from the perspective of effective teaching as well as learning.
-For an instructor, testing early and often is helpful because it provides
-immediate feedback on which students need help and which of them are doing
-well.  For students, doing well in a test gives them confidence and doing
-poorly teaches them where they should concentrate harder or get help.
-Unfortunately, assessment is not usually a pleasant task.  Assessment is
-doubly important when learning a programming language as in India there are
-students who learn how to program but never write more than a few lines of
-code.  Programming requires practice and encouraging students to program is
-very important.
+Assessing the programming skills of students is a very important task during
+training.  This is necessary both from the perspective of effective teaching
+as well as learning.  For an instructor, testing early and often is helpful
+because it provides immediate feedback on which students need help and which
+of them are doing well.  For students, doing well in a test gives them
+confidence and doing poorly teaches them where they should concentrate harder
+or get help.  Unfortunately, assessment is not usually a pleasant task.
+Assessment is doubly important when learning a programming language as in
+India there are students who learn how to program but never write more than a
+few lines of code.  Programming requires practice and encouraging students to
+program is very important.
 
 For FOSSEE this is also important from the perspective of being able to
 certify students.  The Spoken Tutorial team conducts a large number of
@@ -538,12 +543,12 @@ supported by Yaksh.  Some documentation for this is also provided in the
 
 
 In addition to these features yaksh also has an experimental web-API that
-allows an instructor to utilize yaksh externally.  An instructor could create
-questions and a question paper from the yaksh interface but have users take
-the test on say an Jupyter notebook interface.  This is still being developed
-but a proof of concept is already available.  In order to do this, a user
-could simply add yaksh.js to their HTML and call a few API methods to fetch as
-well as submit user answers.
+allows an instructor to utilize yaksh from their own web sites or HTML
+documents.  An instructor could create questions and a question paper from the
+yaksh interface but have users take the test on say an Jupyter notebook
+interface.  This is still being developed but a proof of concept is already
+available.  In order to do this, a user could simply add ``yaksh.js`` to their
+HTML and call a few API methods to fetch as well as submit user answers.
 
 .. _PyPI: http://pypi.python.org
 .. _Yaksh: https://github.com/FOSSEE/online_test
@@ -647,13 +652,18 @@ Future plans
 
 The Python group plans to build on the existing work.  We will continue to
 generate textbook companions, provide support for the workshops conducted by
-the spoken-tutorial team, continue to work on the Yaksh interface.  In
-addition we plan to promote the use of Python in the CBSE school curriculum.
+the spoken-tutorial team, and continue to work on the Yaksh interface.
+The existing Python spoken tutorials will be updated and new ones will be
+created as required.  These spoken tutorials will also be dubbed to other
+Indian languages.
 
-The CBSE board has already included Python as an alternative to C++ in the
-11th and 12th grade exams.  Unfortunately, there is quite a bit of resistance
-towards this as many teachers are unfamiliar with Python.  We plan to support
-schools in this initiative over the next year.
+In addition we plan to promote the use of Python in the CBSE school
+curriculum.  The CBSE board has already included Python as an alternative to
+C++ in the 11th and 12th grade exams.  Unfortunately, there is quite a bit of
+resistance towards this as many teachers are unfamiliar with Python.  We plan
+to support schools in this initiative over the next year.  We will continue to
+use textbook companions for the school initiative as well and also create
+specific spoken tutorials for the school curriculum.
 
 
 Conclusions
@@ -683,6 +693,9 @@ References
     Tutorials, Proceedings of the 13th Python in Science Conference, SciPy,
     July 2014.
 
+.. [FOSSEE-Python] FOSSEE Python group website.  http://python.fossee.in, last
+    seen on June 2nd 2016.
+
 .. [STC] Scilab Team at FOSSEE, Scilab textbook companions,
     http://scilab.in/Textbook_Companion_Project, May 2016.
 
@@ -692,3 +705,6 @@ References
 .. [PR11] Prabhu Ramachandran.  FOSSEE: Python and Education, Python
     for science and education, Scipy India 2011, 4th-11th December 2011,
     Mumbai India.
+
+.. [testimonials] Python texbook companion testimonials.
+    http://python.fossee.in/testimonials/1/ Seen on Jun 1, 2016
