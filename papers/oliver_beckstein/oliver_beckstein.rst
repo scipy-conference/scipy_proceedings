@@ -507,6 +507,7 @@ RG was supported by BBSRC grant BB/J014478/1.
 ML was supported by the Max Planck Society.
 JB was supported by the TOP programme of Prof. Marrink, financed by the Netherlands Organisation for Scientific Research (NWO).
 TR was supported by the Canadian Institutes of Health Research, the Wellcome Trust, the Leverhulme Trust, and Somerville College; computational resources for TR's work were provided by PRACE, HPC-Europa2, CINES (France), and the SBCB unit (Oxford).
+MNM was supported by the NWO VENI grant 722.013.010.
 SLS was supported in part by a Wally Stoelzel Fellowship from the Department of Physics at Arizona State University.
 JD was in part supported by a Wellcome Trust grant 092970/Z/10/Z.
 DLD was in part supported by a Molecular Imaging Fellowship from the Department of Physics at Arizona State University.
