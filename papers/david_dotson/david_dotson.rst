@@ -608,7 +608,7 @@ References
            Array: A Structure for Efficient Numerical Computation, Computing in
            Science & Engineering, 13, 22-30 (2011)
 .. [Roc15] Matthew Rocklin. Dask: Parallel Computation with Blocked algorithms
-           and Task Scheduling, Proceedings of the 14th Python in Science Conference, 130-131 (2010)
+           and Task Scheduling, Proceedings of the 14th Python in Science Conference, 130-136 (2015)
 .. [Jai15] Anubhav Jain, et. al. FireWorks: a dynamic workflow system designed
            for high-throughput applications. Concurrency Computat.: Pract.
            Exper., 27: 5037–5059. doi: 10.1002/cpe.3505 (2015)
