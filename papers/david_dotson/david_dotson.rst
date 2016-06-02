@@ -61,7 +61,7 @@ Furthermore, with ever-increasing computational power, it is often necessary to 
 
 Managing the volume and complexity of these data is becoming increasingly difficult problem in and of itself; data management is a challenge to scientific reproducibility and ultimately presents a substantial barrier to answering scientific questions.
 One approach to this problem is ``datreant``, a namespace package that provides a Pythonic interface to the filesystem and the data that lives within it.
-By consolidating Python-based post-processing and analysis with the accessing, generation, and storage of raw and intermediate data, ``datrent`` is designed to solve a boring problem so we can focus more attention on interesting ones.
+By consolidating Python-based post-processing and analysis with the accessing, generation, and storage of raw and intermediate data, ``datreant`` is designed to solve a boring problem so we can focus more attention on interesting ones.
 
 
 Treants as filesystem manipulators
@@ -81,11 +81,11 @@ We can create a ``Treant`` with:
 This creates a directory ``maple/`` in the filesystem (if it did not already exist), and places a special state file inside which stores the Treant's state.
 This file also serves as a flagpost indicating that this is more than just a directory::
 
-    > ls maple 
+    > ls maple
     Treant.1dcbb3b1-c396-4bc6-975d-3ae1e4c2983a.json
 
 The name of this file includes the type of Treant to which it corresponds, as well as the ``uuid`` of the Treant, its unique identifier.
-The state file contains all the information needed to generate an identical instance of this ``Treant``, so that we can start a separate Python session and use immediately use the same Treant there:
+The state file contains all the information needed to generate an identical instance of this ``Treant``, so that we can start a separate Python session and immediately use the same Treant there:
 
 .. code-block:: python
 
@@ -96,7 +96,7 @@ The state file contains all the information needed to generate an identical inst
    <Treant: 'maple'>
 
 Making a modification to the ``Treant`` in one session is immediately reflected by the same ``Treant`` in any other session.
-For example, a ``Treant`` can store any number of descriptive tags that are useful for differentiating it from others:
+For example we can add tags in the first python session; a ``Treant`` can store any number of descriptive tags that are useful for differentiating it from others:
 
 .. code-block:: python
 
@@ -172,7 +172,7 @@ and we can introspect the file directly:
    0,-0.573730932177663,-0.08857033924376226
    1,0.03157276797041359,-0.10977921690694506
    2,-0.2080757315892524,0.6825003213837373
-    
+
 Using ``Treant``, ``Tree``, and ``Leaf`` objects, we can work with the filesystem Pythonically without giving much attention to *where* these objects live within that filesystem.
 This becomes especially powerful when we have many directories/files we want to work with, possibly in many different places.
 
@@ -188,7 +188,7 @@ If we have many more Treants, perhaps scattered about the filesystem:
 
 .. code-block:: python
 
-   >>> for path in ('an/elm/', 'the/oldest/oak', 
+   >>> for path in ('an/elm/', 'the/oldest/oak',
    ...              'the/oldest/tallest/sequoia'):
    ...     dtr.Treant(path)
 
@@ -306,7 +306,7 @@ We can add categories to individual Treants:
 .. code-block:: python
 
     # add categories to individual members
-    >>> b['oak'].categories = {'age': 'adult', 
+    >>> b['oak'].categories = {'age': 'adult',
                                'type': 'deciduous',
                                'bark': 'mossy'}
     >>> b['elm'].categories = {'age': 'young',
@@ -319,12 +319,12 @@ We can add categories to individual Treants:
                                    'type': 'evergreen',
                                    'bark': 'fibrous',
                                    'home': 'california'}
-    
-    # add value 'north america' to category 'continent'
+
+    # add value 'tree' to category 'plant'
     # for all members
     >>> b.categories.add({'plant': 'tree'})
 
-We can access categories for an individual member:    
+We can access categories for an individual member:
 
 .. code-block:: python
 
@@ -332,7 +332,7 @@ We can access categories for an individual member:
     <AggCategories({'home': ['california'],
                     'age': ['old'],
                     'type': ['evergreen'],
-                    'bark': [u'fibrous'],
+                    'bark': ['fibrous'],
                     'plant': ['tree']})>
 
 The *aggregated* categories for all members in a Bundle are accessible via `datreant.core.Bundle.categories`, which gives a view of the categories with keys present in (common to) *every* member Treant:
@@ -379,7 +379,7 @@ or a set of keys:
      'home': [None, None, None, 'california']}
 
 returns, respectively, a list or dictionary (corresponding to the inputted keys) of lists of values, where the list for a given key is in member order.
-Perhaps the most powerful feature of categories is the `groupby()` method, which, given an inputted key, can be used to group specific members in a Bundle by their corresonding category values.
+Perhaps the most powerful feature of categories is the `groupby()` method, which, given a key, can be used to group specific members in a Bundle by their corresonding category values.
 If we want to group members by their 'bark', we can use `groupby()` to obtain a dictionary of members for each value of 'bark':
 
 .. code-block:: python
@@ -397,7 +397,7 @@ Say we would like to get members grouped by both their 'bark' and 'home':
     {('fibrous', 'california'): <Bundle([<Treant: 'sequoia'>])>}
 
 We get only a single member for the pair of keys `('fibrous', 'california')` since 'sequoia' is the only Treant having the 'home' category.
-It is clear that categories are useful by themselves as a means of labeling a Treant to, for instance, denote the types of data that it may contain or the manner in which the data were obtained.
+Categories are useful as labels to denote the types of data that a Treant may contain or how the data were obtained.
 By leveraging the `groupby()` method, one can then extract the Treants (and the data they contain) corresponding to selected categories without having to explicitly access each member (and its data).
 This feature can be particularly powerful in cases where, say, many Treants have been created and categorized to handle incoming data over an extended period of time; one may then quickly gather the data one needs from a bird's-eye view using category selection mechanisms.
 
@@ -443,7 +443,7 @@ and we can get it back just as easily:
    dtype: float64
 
 What's more, ``datreant.data`` also includes a corresponding ``AggLimb`` for ``Bundle`` objects, allowing for automatic aggregation of datasets by name across all member ``Treant`` objects.
-If we collect and store a similar datasets for each member in our ``Bundle``: 
+If we collect and store a similar datasets for each member in our ``Bundle``:
 
 .. code-block:: python
 
@@ -499,7 +499,7 @@ which we can use for aggregated analysis, or perhaps just pretty plots (Figure :
 
    Plot of sinusoidal toy datasets aggregated and plotted by source Treant. :label:`fig:sines`
 
-The ``Data`` limb stores Pandas and NumPy objects in HDF5_ within a Treant's own tree.
+The ``Data`` limb stores Pandas and NumPy objects in the HDF5_ format within a Treant's own tree.
 It can also store arbitrary (but pickleable) Python objects as pickles, making it a flexible interface for quick data storage and retrieval.
 However, it ultimately serves as an example for how ``Treant`` and ``Bundle`` objects can be extended to do complex but convenient things.
 
@@ -547,7 +547,7 @@ We can use the MDAnalysis ``HydrogenBondAnalysis`` class to collect the data for
     import MDAnalysis.analysis.hbonds as hbonds
     import pandas as pd
     import seaborn as sns
-    
+
     b = mds.discover('NhaA_i2o_transitions')
 
     def get_hbonds(sim):
