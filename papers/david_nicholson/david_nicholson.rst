@@ -169,6 +169,10 @@ To compare algorithms, I drew a random sample from a training set, and then used
 
 Comparison of all machine learning algorithms was greatly facilitated by Scikit-learn [PEDREGOSA2011]_. I did use the Liblinear package [FAN2008]_ directly, instead of the implementation in Scikit-learn, to follow as closely as possible the methods in [TACH2014]_ (see http://scikit-learn.org/stable/modules/linear_model.html#liblinear-differences). I interacted with Liblinear through the Python API (https://github.com/ninjin/liblinear/tree/master/python) compiled for a 64-bit system. The hyperparameters were those used in [TACH2014]_: L2-regularized L2-loss with the cost parameter fixed at 1. Both k-Nearest Neighbors (k-NN) and the support vector machine with radial basis function (SVM-RBF) were implemented via Scikit-learn. For k-NN, I weighted distances by their inverse because I found empirically that this improved classification. I did not test other weightings. For SVM, the RBF hyperparameters 'C' and 'gamma' were found for each set of training samples using grid search.
 
+Acknowledgements
+----------------
+
+Thank you to Samuel J. Sober for supporting this work in every way. I would also like to acknowledge helpful input from Shamim Nemati, Supreeth Prajwal, Alex Dunlap, and Kyle Srivastava. Thanks also to all members of the Sober lab, my science family, especially to Jonah Queen, undisputed champion and reigning king of syllable labeling.
 
 References
 ----------
