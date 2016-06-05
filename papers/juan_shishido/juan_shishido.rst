@@ -244,10 +244,14 @@ this, we used spaCy's part-of-speech tagger. We use spaCy's "coarse-grained"
 tags, of which there are 19, in order to maintain low-cardinality. These tags
 expand upon Petrov, Das, and McDonald's "universal part-of-speech tagset."
 
-Instead of dimensionality reduction followed by clustering, we decided to
-attempt non-negative matrix factorization (NMF). We instead decided to cluster
-first and then examine the distribution of demographic information across
-clusters.
+In addition to lexical characteristics, we were interested in understanding
+the semantics of the text. To do this, we used non-negative matrix
+factorization (NMF) in order to find latent (or hidden) structure in the text.
+This structure is in the form of "topics" or "clusters" which can be described
+by particular tokens. With this, we then examined the distribution of users
+across clusters by demographic split. The idea was to determine whether
+particular groups of users were more likely to write about particular topics or
+themes in their essays.
 
 After running NMF to cluster users, we ran a keyword analysis on the essays for
 each resulting group. The keyword algorithm takes the 1000 most frequent
