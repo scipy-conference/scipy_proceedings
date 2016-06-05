@@ -436,7 +436,9 @@ particular can be viewed more easily.  In addition, the ``pysph dump_vtk``
 command can be used to dump VTK output files that can be used to visualize the
 output using any tool that supports VTK files like ParaView etc.  This can use
 either Mayavi or can use pyvisfile_ which has no dependency on VTK.  The data
-files can be loaded in Python very easily, for example::
+files can be loaded in Python very easily, for example:
+
+.. code-block:: python
 
     from pysph.solver.utils import load
     data = load('elliptical_drop_100.hdf5')
@@ -444,13 +446,17 @@ files can be loaded in Python very easily, for example::
     data = load('elliptical_drop_100.npz')
 
 This provides a dictionary from which one can obtain the particle arrays and
-solver data::
+solver data:
+
+.. code-block:: python
 
     particle_arrays = data['arrays']
     solver_data = data['solver_data']
 
 ``particle_arrays`` is a dictionary of all the PySPH particle arrays.
-One can obtain the PySPH particle array, ``fluid``, like so::
+One can obtain the PySPH particle array, ``fluid``, like so:
+
+.. code-block:: python
 
     fluid = particle_arrays['fluid']
     p = fluid.p
@@ -494,10 +500,41 @@ followed by details on the underlying design of PySPH.
 Essential software engineering
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Git/bitbucket/PRs
-- Unit and functional tests
-- Documentation
-- Continuous integration on multiple platforms
+PySPH follows several of the standard software development practices that most
+modern open source implementations follow.  For example:
+
+- Our sources are hosted on bitbucket (http://pysph.bitbucket.org).  We are
+  thinking of shifting to github because github has much better integration
+  with continuous integration services and this is a rather frustrating pain
+  point with bitbucket.
+- The new-style BSD license is used for the software.
+- We use pull-requests to review all new features of bug fixes.  At this point
+  there is only a single reviewer (the author) but this should hopefully
+  increase over time.
+- PySPH has a reasonable set of unit tests and functional tests.  Each time a
+  bug is found, a test case is first created (when possible or reasonable),
+  and then fixed.  nose_ is used for discovering and executing tests.  One of
+  our functional tests runs one time step of every single example that ships
+  with PySPH.  tox_ based tests are also supported.  This makes it easy to
+  test on Python 2.6, 2.7 and 3.x.
+- We use continuous integration services from http://shippable.com for Linux,
+  http://appveyor.com for Windows and http://codeship.com for faster Linux
+  builds.
+- Our documentation is generated using Sphinx and hosted online on
+  http://pysph.readthedocs.io.
+- Releases are pushed to pypi.
+- The `pysph-users mailing list
+  <https://groups.google.com/forum/#!forum/pysph-users>`_ is also available
+  where users can post their questions.  Unfortunately, the response time is
+  currently slow as the author does not have the time for this but we are
+  hoping this will improve as more graduate students start getting involved
+  with PySPH.
+
+These greatly improve the quality, reliability and usability of the software
+and also encourage open collaboration.
+
+
+.. _tox: https://pypi.python.org/pypi/tox
 
 
 Design overview
@@ -530,15 +567,38 @@ Reproducibility
 Future plans
 -------------
 
-- GPU
-- Cleanup
+In the future, we hope to develop the following features for PySPH:
+
+- A GPU backend which should allow effective utilization of GPUs with minimal
+  changes to the API.
+- Cleanup and potential generalization of the parallel code.
+- Implement more SPH schemes.
+- Better support for variable :math:`h`.
+- Cleanup of many of the current equations implemented.
+- Support for implicit SPH schemes and other related particle methods.
+- Advanced algorithms for adaptive resolution.
+
 
 Conclusions
 -----------
+
+In this paper a broad overview of the SPH method was provided.  The background
+and context of the PySPH package was discussed.  A very high-level description
+of the PySPH features were provided followed by an overview of the design.
+From the description it can be seen that PySPH provides a powerful API and
+allows users to focus on the specifics of the SPH scheme which they are
+interested in.  By abstracting out the high-performance aspects even
+inexperienced programmers can use the high-level API and produce useful
+simulations that run quickly and scale fairly well with multiple cores and
+processors.  The paper also discusses how PySPH facilitates reproducible
+research.
 
 
 Acknowledgements
 -----------------
 
-Thanks to all the major PySPH developers: Kunal, Chandrashekhar, Pankaj, and
-others.
+I would like to thank Kunal Puri, Chandrashekhar Kaushik, Pankaj Pandey and
+the other PySPH developers and contributors for their work on PySPH.  I thank
+the department of aerospace engineering, IIT Bombay for their continued
+support, excellent academic environment and academic freedom that they have
+extended to me over the years.
