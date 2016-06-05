@@ -220,6 +220,30 @@ single text block for each user. In grouping all essays together introduced
 unnecessary noise into our analysis. Instead, we decided to focus our analysis
 on two separate essays: "My Self Summary" and "Favorite Books, Movies, TV."
 
+We began by exploring the lexical features of the text. Our goal was to
+determine whether there existed inherent differences in writing styles by
+demographic split. We considered essay length, the use of profanity and slang
+terms, and part-of-speech usage.
+
+When determining essay length, we used our tokenizer, as opposed to, say,
+simply splitting the text on white-space. This was mainly to be consistent with
+our downstream analyses, such as predictive modeling.
+
+A list of profane words was obtained from the "Comprehensive Perl Archive
+Network" website. Slang terms include words such as "dough," which refers to
+money, and acronyms like "LMAO," which stands for "laughing my ass off." These
+terms come from the Wiktionary Category:Slang page. Note that there is overlap
+between the profane and slang lists.
+
+Finally, we were interested in whether there were differences in the types of
+words used by different groups of individuals. For example, do certain
+users tend to use verbs ("action" words) more often than other groups of users?
+To answer questions like these, we first had to associate parts of speech (also
+known as "lexical categories") with each term (or "token") in our corpus. To do
+this, we used spaCy's part-of-speech tagger. We use spaCy's "coarse-grained"
+tags, of which there are 19, in order to maintain low-cardinality. These tags
+expand upon Petrov, Das, and McDonald's "universal part-of-speech tagset."
+
 Instead of dimensionality reduction followed by clustering, we decided to
 attempt non-negative matrix factorization (NMF). We instead decided to cluster
 first and then examine the distribution of demographic information across
