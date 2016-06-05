@@ -286,7 +286,7 @@ The current version of PySPH supports the following:
   that the user does not have to change code to use multiple machines.  This
   feature requires mpi4py_ and Zoltan_ to be installed.
 - PySPH provides a built-in 3D viewer for the particle data generated.  The
-  viewer requires Mayavi_ :cite:`it:mayavi:cise:gael2011` to be installed.
+  viewer requires Mayavi_ :cite:`it:mayavi:cise:gael2011` To be installed.
 - PySPH is also free and currently hosted at http://pysph.bitbucket.org
 
 
@@ -303,12 +303,192 @@ implementation in greater detail.
 High-level overview
 ~~~~~~~~~~~~~~~~~~~
 
-- Installation
-- Getting started
-- Visualizing and post-processing
-- Using multiple cores.
-- Distributed computing.
-- Extending PySPH
+PySPH is tested to work with Python-2.6.x to 2.7.x and also with Python
+3.4/3.5.  PySPH is a typical Python package and can be installed fairly easily
+by running::
+
+  $ pip install pysph
+
+PySPH will require a C++ compiler.  On Linux, this is trivial to get and
+usually probably pre-installed.  On OS X clang will work as will gcc (which
+can be easily installed using brew_). On Windows the Visual C++ Compiler for
+Python will need to be installed.  Detailed instructions for all these are
+available from the `PySPH documentation`_.
+
+If one wishes to use OpenMP,
+
+- On Linux one needs to have libgomp installed.
+- On OS X one needs to install OpenMP for clang or one could use GCC which
+  supports Openmp.
+- On Windows, just having the Visual C++ computer for Python will work.
+
+If one wishes to use MPI for distributed computing, one must install Zoltan_
+which is typically easy to install.  PySPH provides a simple script for this.
+mpi4py_ is also needed in this case.
+
+PySPH also provides an optional 3D viewer and this depends on Mayavi_.
+
+In summary, PySPH is easy to install if one has a C++ compiler installed.
+MPI support is a little involved due to the requirement to install Zoltan_.
+
+
+.. _brew: http://brew.sh/
+.. _PySPH Documentation: http://pysph.readthedocs.io
+
+
+Once PySPH is installed an executable called ``pysph`` is available.  This is
+a convenient entry point for various tasks.  Running ``pysph -h`` will provide
+a listing of these possible tasks.
+
+The test suite can be run using::
+
+  $ pysph test
+
+This uses nose_ internally and can be passed any arguments that nosetests
+accepts.
+
+PySPH installs about 30 useful examples along with the sources and any of
+these examples can be readily run.  For example::
+
+  $ pysph run
+  1. cavity
+     Lid driven cavity using the Transport Velocity
+     formulation. (10 minutes)
+  2. couette
+     Couette flow using the transport velocity
+     formulation (30 seconds).
+  [...]
+  6. elliptical_drop
+     Evolution of a circular patch of incompressible
+     fluid. (60 seconds)
+  [...]
+  Enter example number you wish to run:
+
+
+Will provide a listing of the examples prompting for a particular one to run.
+Each example also provides a convenient time estimate if it were to be run in
+serial.  The example number can be provided at the prompt or if one knows the
+example to run one may directly specify it::
+
+  $ pysph run elliptical_drop
+
+This example will accept a large number of command line arguments.  So one
+could also do::
+
+  $ pysph run elliptical_drop -h
+
+to find out the possible arguments.
+
+``pysph run`` will execute the standard example.  Note that internally this is
+somewhat equivalent to running::
+
+  $ python -m "pysph.examples.elliptical_drop"
+
+The example may therefore be imported in Python and also extended by users.
+This is by design.
+
+When the example is run using ``pysph run``, the example documentation is
+first printed and then the example is run.  The example will typically dump
+the output of the computations to a directory called ``example_name_output``,
+in the above case this would be ``elliptical_drop_output``.  This output can
+be viewed using the Mayavi viewer.  This can be done using::
+
+  $ pysph view elliptical_drop_output
+
+This will start up the viewer with the saved files dumped in the directory.
+Figure :ref:`fig:pysph-viewer` provides a very convenient interface to view
+the data.  On the right side, one has a standard Mayavi widget which also
+features a Mayavi icon on the toolbar.  Running this will open the Mayavi UI
+with which one can easily change the visualization.  On the left pane there
+are three sub panels.  On the top one can see a slider for the file
+count. This can be used to move through the simulation in time.  This can be
+also animated by checking the "Play" checkbox which will iterate over the
+files.  The "Directory" button allows one to view data from a different output
+directory.  Hitting the refresh button will rescan the directory to check for
+any new files.  This makes it convenient to visualize the results from a
+running simulation.  The "Connection" tab can be used when the visualization
+is in "Live mode" when it can connect to a running simulation and view the
+data live.  While this is very cool in principle, it is seldom used in
+practice as it is a lot more efficient to just view the dumped files and the
+"Refresh" button is convenient.  Regardless, it does show another feature of
+PySPH in that one can actually pause a running simulation and query it if
+needed.  Below this pane is a "Solver" pane which shows the various solver
+parameters of interest.  The "Movie" tab allows a user to dump screenshots and
+easily produce a movie if needed.  At the bottom of the interface are two
+panels called "Particle arrays" and "Interpolator".  The particle arrays lists
+all the particles and different scalar properties associated with the SPH
+simulation.  Right at the bottom is a button to launch a Python shell.  This
+can be used for advanced scripting and is seldom used by beginners.  This
+entire viewer is written using about 1024 lines of code and ships with PySPH.
+
+
+.. figure:: mayavi_viewer.png
+   :alt: Mayavi-based viewer bundled with PySPH.
+
+   The viewer provides a convenient interface to view data dumped by
+   simulations. :label:`fig:pysph-viewer`
+
+
+PySPH output can be dumped either in the form of ``.npz`` files (which are
+generated by NumPy_) or HDF5 files if h5py_ is installed.  These files can be
+viewed using other tools or with Python scripting if desired.  The HDF5 in
+particular can be viewed more easily.  In addition, the ``pysph dump_vtk``
+command can be used to dump VTK output files that can be used to visualize the
+output using any tool that supports VTK files like ParaView etc.  This can use
+either Mayavi or can use pyvisfile_ which has no dependency on VTK.  The data
+files can be loaded in Python very easily, for example::
+
+    from pysph.solver.utils import load
+    data = load('elliptical_drop_100.hdf5')
+    # if one has only npz files the syntax is the same.
+    data = load('elliptical_drop_100.npz')
+
+This provides a dictionary from which one can obtain the particle arrays and
+solver data::
+
+    particle_arrays = data['arrays']
+    solver_data = data['solver_data']
+
+``particle_arrays`` is a dictionary of all the PySPH particle arrays.
+One can obtain the PySPH particle array, ``fluid``, like so::
+
+    fluid = particle_arrays['fluid']
+    p = fluid.p
+
+Here ``p`` is a NumPy array of the pressure of each particle.  Particle arrays
+are described in greater detail in the following sections.  Our intention here
+is to show that the dumped data can be very easily loaded back into Python if
+desired.
+
+
+.. _nose: https://pypi.python.org/pypi/nose
+.. _NumPy: http://numpy.scipy.org
+.. _h5py: http://www.h5py.org
+.. _pyvisfile: http://mathema.tician.de/software/pyvisfile
+
+
+As discussed earlier PySPH supports OpenMP and MPI.  To use multiple cores on
+a computer one can simply run an example or script as::
+
+  $ pysph run elliptical_drop --openmp
+
+This will use OpenMP transparently and should work for all the PySPH
+examples.  PySPH will honor the ``OMP_NUM_THREADS`` environment variable to
+pick the number of threads.  If PySPH is installed with MPI support through
+Zoltan, then one may run for example::
+
+  $ mpirun -np 4 pysph run dam_break_3d
+
+This will run the ``dam_break_3d`` example with 4 processors.  The amount of
+scale-up depends on the size of the problem and the network.  OpenMP will
+scale fairly well for moderately sized problems.  Note that for a general
+PySPH script written by the user, the command to run would simply be::
+
+  $ mpirun -np 4 python my_script.py
+
+This provides a very high-level introduction to PySPH in general.  The next
+section discusses some essential software engineering in brief.  This is
+followed by details on the underlying design of PySPH.
 
 
 Essential software engineering
