@@ -23,6 +23,8 @@
 			  Systems, Section of Signal and Information Processing, Aalborg
 			  University, 9220 Aalborg, Denmark
 
+:bibliography: references
+
 ----------------------------------------------------------------------
 Validating Function Arguments in Python Signal Processing Applications
 ----------------------------------------------------------------------
@@ -611,23 +613,283 @@ arguments.
 The Suggested Python Constructs to Use
 ======================================
 
+There are a lot of Python constructs which could potentially be used as
+showcased by the existing solutions. PyContracts allows the user to specify the
+validation scheme through the docstring of a function. However, most users
+would not expect docstrings to be parsed to yield the validation scheme, and
+furthermore the format used to specify the validation scheme would not be
+obvious because of the lack of restrictions put on docstrings. Therefore,
+docstrings are not suggested as a Python construct to use here. Annotations, as
+used by MyPy, are relatively new to Python, but that should not disqualify them
+from being used. However, the format used would not be obvious because there
+are few restrictions put on annotations so with the exception of type hints
+which are insufficient for this purpose. Therefore, annotations are not
+suggested as a Python construct to use here.
+
+Next, there are the object oriented Python constructs. Metaclasses, as used by,
+PyDBC, have existed for a long time. However, these have changed over time, and
+so the metaclass attribute feature of Python 2 no longer works in Python 3, and
+only one metaclass is allowed per class in the more recent Python
+versions. Furthermore, the behaviour of metaclasses makes them impair the
+readability, especially to users that are unfamiliar with the
+construct. Therefore, metaclasses are not suggested as a Python construct to
+use here. Descriptors, as used by Traits, Traitlets, and Numtraits, are another
+feature applicable to object oriented Python, and these can provide flexibility
+and readability. However, they are limited to object oriented Python, and
+furthermore it seems unpythonic to validate function arguments by invoking
+descriptors through class instance attribute assignment. Therefore, descriptors
+are not suggested as a Python construct to use here.
+
+Decorators, as used by PyValid and PyContracts, are a well-known and general
+Python construct. However, it is not immediately apparent if something goes on
+"under the hood", and the pythonic approach is to specify the validation scheme
+of all function arguments in a single decorator call, both of which affect
+readability. Therefore, decorators are not suggested as a Python construct to
+use here.
+
+The suggested Python construct values explicit over implicit, does not look
+"magical", and promotes readability. The suggestion is to define a nested
+function for validating the arguments of a function and explicitly calling this
+validation function. The nested function is preferred over preceding the
+function code by calls directly to a validation package as to clearly separate
+validation from the rest of the code.
+
 
 Magni Reference Implementation
 ------------------------------
+
+A reference implementation of the suggested validation strategy is made
+available by the open source Magni Python package :cite:`Oxvig2014` through the
+subpackage ``magni.utils.validation``. The subpackage contains the following
+functions:
+
+.. code-block:: python
+
+   decorate_validation(func)
+   disable_validation()
+   validate_generic(
+       name, type_, value_in=None, len_=None,
+       keys_in=None, has_keys=None, ignore_none=False,
+       var=None)
+   validate_levels(name, levels)
+   validate_numeric(
+       name, type_, range_='[-inf;inf]', shape=(),
+       precision=None, ignore_none=False, var=None)
+
+Of these, ``validate_generic`` and ``validate_levels`` are concerned with
+validating objects outside the scope of the present paper. The function,
+``disable_validation`` can be used to disable validation globally. Although
+discouraged, this can be done to remove the overhead of validating function
+arguments. As the name suggests, ``decorate_validation`` is a decorator, and
+this should be used to decorate every validation function with the sole purpose
+of being able to disable validation. Using the suggested validation strategy
+with Magni, the following structure is used for all validation:
+
+.. code-block:: python
+
+   from magni.utils.validation import *
+
+   def func(*args, **kwargs):
+       @decorate_validation
+       def validate_input():
+           pass  # validation calls
+
+       validate_input()
+
+       pass  # the body of func
+
+The remaining function, ``validate_numeric``, is used to validate numeric
+objects based on application-driven data types as required by the suggested
+validation scheme of the validation scheme. The ``type_`` argument is used for
+specifying one or more of the ``boolean``, ``integer``, ``floating``, and
+``complex`` subtype specifiers. The ``range_`` argument is used for specifying
+the set of valid values with a minimum value and a maximum value both of which
+may be included or excluded. The ``shape`` argument is used for specifying the
+shape with the entry, -1 allowing an arbitrary shape for a given dimension and
+any non-negative entry giving a fixed shape for a given dimension.
+
+The remaining arguments of ``validate_numeric`` are not directly related to the
+validation scheme but rather to the surrounding Python code. The ``precision``
+argument is used for specifying one or more allowed precisions in terms of bits
+per value. The ``name`` argument is used for specifying which argument of the
+function to validate with the particular validation call. The ``ignore_none``
+argument is a flag indicating if the validation call should ignore ``None``
+objects and thereby accept them as valid. The ``var`` argument is irrelevant to
+the scope of the present paper and the reader is referred to the documentation
+for more information.
+
+Additional resources for ``magni`` are:
+
+* Official releases: `doi:10.5278/VBN/MISC/Magni`__
+* Online documentation: http://magni.readthedocs.io
+* GitHub repository: https://github.com/SIP-AAU/Magni
+
+__ http://dx.doi.org/10.5278/VBN/MISC/Magni
 
 
 Examples
 ========
 
+As mentioned in relation to the suggested validation schemes, there should be
+an application-driven data type representing the most general numerical value
+being able to assume any numerical value of any shape. The following example
+validates a variable against exactly this application-driven data type. The
+validation only fails when a non-numerical object is passed as argument to
+``func``.
+
+.. code-block:: python
+
+   from magni.utils.validation import *
+   import numpy as np
+
+   def func(var):
+       @decorate_validation
+       def validate_input():
+           all_types = ('boolean', 'integer',
+                        'floating', 'complex')
+           validate_numeric(
+               'var', all_types, shape=None)
+
+       validate_input()
+
+       pass  # the body of the func
+
+   # The following will pass:
+   func(42)
+   func(3.14)
+   func(np.empty((5, 5), dtype=np.complex_))
+   # The following will fail:
+   func('string')
+
+In the next example, the application-driven data type is any non-negative
+real scalar. The validation fails when a complex object or a negative float is
+passed as argument to ``func``.
+
+.. code-block:: python
+
+   from magni.utils.validation import *
+
+   def func(var):
+       @decorate_validation
+       def validate_input():
+           real = ('integer', 'floating')
+           validate_numeric(
+               'var', real, range_='[0;inf]')
+
+       validate_input()
+
+       pass  # the body of the func
+
+   # The following will pass:
+   func(0)
+   func(3.14)
+   # The following will fail:
+   func(1j)
+   func(-3.14)
+
+Notice, that the ``range_`` argument in the validation call of the previous
+includes the values zero and infinity using ``[...]``. One or both of these
+values could be excluded using ``(...)`` or ``]...[`` as is the case in the
+next example. The validation fails when a zero-valued object is passed as
+argument to ``func``.
+
+.. code-block:: python
+
+   from magni.utils.validation import *
+
+   def func(var):
+       @decorate_validation
+       def validate_input():
+           real = ('integer', 'floating')
+           validate_numeric(
+               'var', real, range_='(0;inf)')
+
+       validate_input()
+
+       pass  # the body of the func
+
+   # The following will pass:
+   func(3.14)
+   # The following will fail:
+   func(0.)
+
+In the final example, the application-driven data type is any real matrix with
+its first dimension equal to 5, i.e. :math:`\mathbb{R}^{5 \times n}` for any
+non-negative integer :math:`n`. The validation fails when an
+:math:`\mathbb{R}^{10 \times 5}` object or :math:`\mathbb{R}^{5 \times 5 \times
+5}` object is passed as argument to ``func``.
+
+.. code-block:: python
+
+   from magni.utils.validation import *
+   import numpy as np
+
+   def func(var):
+       @decorate_validation
+       def validate_input():
+           real = ('integer', 'floating')
+           validate_numeric(
+               'var', real, shape=(5, -1))
+
+       validate_input()
+
+       pass  # the body of the func
+
+   # The following will pass:
+   func(np.empty((5, 5)))
+   func(np.empty((5, 10)))
+   # The following will fail:
+   func(np.empty((10, 5)))
+   func(np.empty((5, 5, 5)))
+
+
 Requirements
 ============
+
+The required dependencies for ``magni`` (as of version 1.4.0) are:
+
+- Python >= 2.7 / 3.3
+- Matplotlib :cite:`Hunter2007` (Tested on version >= 1.3)
+- NumPy :cite:`Walt2011` (Tested on version >= 1.8)
+- PyTables [#]_ (Tested on version >= 3.1)
+- SciPy :cite:`Oliphant2007` (Tested on version >= 0.14)
+
+.. [#] See http://www.pytables.org/
+
+In addition to these requirements, ``magni`` has a number of optional dependencies but none of these are relevant to the usage of ``magni.utils.validation``.
+
 
 Quality Assurance
 =================
 
+The Magni Python package has been developed according to best practices for
+developing scientific software :cite:`Wilson2014`, and every included piece of
+code has been reviewed by at least one person other than its
+author. Furthermore, the PEP 8 [#]_ style guide is adhered to, no function has
+a cyclomatic complexity :cite:`McCabe1976` exceeding 10, the code is fully
+documented, and an extensive test suite accompanies the package. More details
+about the quality assurance of ``magni`` is given in :cite:`Oxvig2014`.
+
+.. [#] See https://www.python.org/dev/peps/pep-0008/
+.. [#] See https://travis-ci.org/
+
 
 Conclusions
 -----------
+
+We have argued that function arguments should be validated according to data
+types at a higher abstraction level than actual Python types, and we have named
+these application-driven data types. Based on a discussion of existing
+validation solutions, we have suggested a Python validation strategy including
+three aspects: 1) The validation schemes that can be expressed. 2) The way the
+interface of the implementation allows the validation scheme to be
+specified. 3) The Python constructs used to allow Python to validate the
+function arguments. A reference implementation of this strategy is available in
+the open source Magni Python package which we have presented along with a
+number of examples. In short, ``magni`` and more generally the validation
+strategy should be used to abstract function argument validation from Python to
+signal processing, to make validation ease to write, and to enhance readability
+of validation.
 
 
 Acknowledgements
