@@ -267,6 +267,43 @@ analyses and visualizations on words which defined differences between groups
 Results
 -------
 
+In this section, we describe our findings. We start with a discussion of our
+lexical-based analyses before discussing our semantic-based results.
+Lexical-based characteristics include essay length, use of profanity and slang
+terms, as well as part-of-speech usage. Our analyses focus on two demographic
+dimensions—sex and drug usage—and on two essays—"my self summary" and "favorite
+books, movies, shows, music, food."
+
+We first compare lexical-based characteristics on the self-summary text by sex.
+Our sample includes 21,321 females and 31,637 females. Note that the difference
+between this and the 59,946 users in the data set is due to our dropping users
+with less than five tokens in a particular essay. We find that, on average,
+females write just under 150 words (tokens, actually) compared to males' 139,
+though the variance is higher for the males than the females. This difference
+is statistically significant.
+
+In order to compare part-of-speech usage, we first associate part-of-speech
+tags with every token in the self-summary corpus. This results in counts by
+user and tag. Because of the difference in essay length we saw above, we
+normalize these values based on the essay length. For example, if, out of 100
+tokens, a particular user uses 25 verbs, a value of 0.25 would be associated
+with the verb tag for that user. Of the 15 possible tags, we focused on three:
+adjectives, nouns, and verbs. This is summarized in the following table.
+
+   +----------------+--------+--------+-------------+
+   | Part-of-Speech | Female | Male   | Significant |
+   +================+========+========+=============+
+   | Adjectives     | 10.61% | 10.16% | *           |
+   +----------------+--------+--------+-------------+
+   | Nouns          | 18.65% | 18.86% | *           |
+   +----------------+--------+--------+-------------+
+   | Verbs          | 18.28% | 18.27% |             |
+   +----------------+--------+--------+-------------+
+
+We find that, in the self-summary essay, females use more adjectives than
+males do. For nouns, it's the other way around. Interestingly, neither sex uses
+verbs more often than the other.
+
 Our first attempt at visualizing tokens that make the groupings distinctive was
 to plot a histogram of the difference in relative frequency between tokens for
 a given group versus other groups (Fig 3). This can be done between clusters
