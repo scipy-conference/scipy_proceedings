@@ -54,15 +54,14 @@ Introduction
 ------------
 .. must motivate datreant, and make a good sell as to why it is a useful and general-purpose tool
 
-In many scientific fields, especially those analyzing experimental or numerical simulation data, there is an existing ecosystem of specialized tools and file formats which new tools must work around.
+In many scientific fields, especially those analyzing experimental or simulation data, there is an existing ecosystem of specialized tools and file formats which new tools must work around.
 Consequently, the filesystem ends up serving as a *de facto* database, with directory trees the zeroth-order data structure for scientific data.
-This is particularly true for fields centered around numerical simulation: simulation systems can vary widely in size, composition, rules, parameters, and starting conditions.
-Furthermore, with ever-increasing computational power, it is often necessary to store intermediate results from large amounts of simulation data such that they may be accessed and explored interactively.
+This is particularly true for fields centered around simulation: simulation systems can vary widely in size, composition, rules, parameters, and starting conditions.
+And with ever-increasing computational power, it is often necessary to store intermediate results from large amounts of simulation data so that it may be accessed and explored interactively.
 
-Managing the volume and complexity of these data is becoming increasingly difficult problem in and of itself; data management is a challenge to scientific reproducibility and ultimately presents a substantial barrier to answering scientific questions.
+These problems make data management difficult, and serve as a barrier to answering scientific questions.
 One approach to this problem is ``datreant``, a namespace package that provides a Pythonic interface to the filesystem and the data that lives within it.
-By consolidating Python-based post-processing and analysis with the accessing, generation, and storage of raw and intermediate data, ``datreant`` is designed to solve a boring problem so we can focus more attention on interesting ones.
-
+It solves a boring problem, so we can focus on interesting ones.
 
 Treants as filesystem manipulators
 ----------------------------------
@@ -96,7 +95,8 @@ The state file contains all the information needed to generate an identical inst
    <Treant: 'maple'>
 
 Making a modification to the ``Treant`` in one session is immediately reflected by the same ``Treant`` in any other session.
-For example we can add tags in the first python session; a ``Treant`` can store any number of descriptive tags that are useful for differentiating it from others:
+For example, a ``Treant`` can store any number of descriptive tags to differentiate it from others.
+We can add tags in the first Python session:
 
 .. code-block:: python
 
@@ -140,7 +140,7 @@ and so we now have::
                 +-- text/
 
 Accessing paths in this way returns ``Tree`` and ``Leaf`` objects, which refer to directories and files, respectively.
-These paths may not point to directories or files that actually exist, but they can be used to create and work with ``Tree`` and ``Leaf`` elements.
+These paths may not point to directories or files that actually exist, but they can be used to create and work with these filesystem elements.
 
 We can, for example, easily store a Pandas_ [McK10]_ DataFrame somewhere in the tree for reference later:
 
@@ -225,7 +225,7 @@ But in addition to these, we can use metadata features such as **tags** and **ca
 Filtering Treants with tags
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Tags are individual strings that describe a Treant.
-Settings the tags for each of our Treants separately:
+Setting the tags for each of our Treants separately:
 
 .. code-block:: python
 
@@ -233,7 +233,7 @@ Settings the tags for each of our Treants separately:
    >>> b['sequoia'].tags = ['huge', 'plant']
    >>> b['oak'].tags = ['for building', 'plant', 'building']
    >>> b['elm'].tags = ['firewood', 'shady', 'paper',
-                         'plant', 'building']
+                        'plant', 'building']
 
 we can now work with these tags in aggregate:
 
@@ -262,7 +262,7 @@ for construction work:
 
    # gives a boolean index for members with this tag
    >>> b.tags['building']
-   [False, False, True, True]
+   [True, False, False, True]
 
    # we can use this to index the Bundle itself
    >>> b[b.tags['building']]
@@ -324,18 +324,19 @@ We can add categories to individual Treants:
     # for all members
     >>> b.categories.add({'plant': 'tree'})
 
-We can access categories for an individual member:
+and we can access categories for individual Treants:
 
 .. code-block:: python
 
-    >>> b['sequoia'].categories
-    <AggCategories({'home': ['california'],
-                    'age': ['old'],
-                    'type': ['evergreen'],
-                    'bark': ['fibrous'],
-                    'plant': ['tree']})>
+    >>> seq = b['sequoia'][0]
+    >>> seq.categories
+    <Categories({'home': 'california',
+                 'age': 'old',
+                 'type': 'evergreen',
+                 'bark': 'fibrous',
+                 'plant': 'tree'})>
 
-The *aggregated* categories for all members in a Bundle are accessible via `datreant.core.Bundle.categories`, which gives a view of the categories with keys present in (common to) *every* member Treant:
+The aggregated categories for all members in a ``Bundle`` are accessible via `Bundle.categories`, which gives a view of the categories with keys common to *every* member Treant:
 
 .. code-block:: python
 
@@ -350,7 +351,7 @@ The *aggregated* categories for all members in a Bundle are accessible via `datr
                               'tree', 'tree']})>
 
 Each element of the list associated with a given key corresponds to the value for each member, in member order.
-Using `b.categories` is equivalent to `b.categories.all`; we can also access categories present among *any* member:
+Using `Bundle.categories` is equivalent to `Bundle.categories.all`; we can also access categories present among *any* member:
 
 .. code-block:: python
 
@@ -378,9 +379,9 @@ or a set of keys:
     {'age': ['adult', 'young', 'young', 'old'],
      'home': [None, None, None, 'california']}
 
-returns, respectively, a list or dictionary (corresponding to the inputted keys) of lists of values, where the list for a given key is in member order.
-Perhaps the most powerful feature of categories is the `groupby()` method, which, given a key, can be used to group specific members in a Bundle by their corresonding category values.
-If we want to group members by their 'bark', we can use `groupby()` to obtain a dictionary of members for each value of 'bark':
+returns, respectively, a list or dictionary of lists of values, where the list for a given key is in member order.
+Perhaps the most powerful feature of categories is the `groupby` method, which, given a key, can be used to group specific members in a ``Bundle`` by their corresonding category values.
+If we want to group members by their 'bark', we can use `groupby` to obtain a dictionary of members for each value of 'bark':
 
 .. code-block:: python
 
@@ -398,16 +399,16 @@ Say we would like to get members grouped by both their 'bark' and 'home':
 
 We get only a single member for the pair of keys `('fibrous', 'california')` since 'sequoia' is the only Treant having the 'home' category.
 Categories are useful as labels to denote the types of data that a Treant may contain or how the data were obtained.
-By leveraging the `groupby()` method, one can then extract the Treants (and the data they contain) corresponding to selected categories without having to explicitly access each member (and its data).
-This feature can be particularly powerful in cases where, say, many Treants have been created and categorized to handle incoming data over an extended period of time; one may then quickly gather the data one needs from a bird's-eye view using category selection mechanisms.
-
+By leveraging the `groupby` method, one can then extract the Treants (and the data they contain) by selected categories without having to explicitly access each member.
+This feature can be particularly powerful in cases where, say, many Treants have been created and categorized to handle incoming data over an extended period of time;
+one can then quickly gather any data needed without having to think about low-level details.
 
 
 Treant modularity with attachable Limbs
 ---------------------------------------
 ``Treant`` objects manipulate their tags and categories using ``Tags`` and ``Categories`` objects, respectively.
 These are examples of ``Limb`` objects: attachable components which serve to extend the capabilities of a ``Treant``.
-While ``Tags`` and ``Categories`` are attached by default to all ``Treant`` objects, custom ``Limb`` subclasses can be defined to for additional functionality.
+While ``Tags`` and ``Categories`` are attached by default to all ``Treant`` objects, custom ``Limb`` subclasses can be defined for additional functionality.
 
 ``datreant`` is a namespace package, with the dependency-light core components included in ``datreant.core``.
 Another package currently in the ``datreant`` namespace is ``datreant.data``, which includes a set of convenience ``Limb`` objects for storing and retrieving Pandas and NumPy_ [vdW11]_ datasets.
@@ -443,7 +444,7 @@ and we can get it back just as easily:
    dtype: float64
 
 What's more, ``datreant.data`` also includes a corresponding ``AggLimb`` for ``Bundle`` objects, allowing for automatic aggregation of datasets by name across all member ``Treant`` objects.
-If we collect and store a similar datasets for each member in our ``Bundle``:
+If we collect and store similar datasets for each member in our ``Bundle``:
 
 .. code-block:: python
 
@@ -512,7 +513,7 @@ Although it is possible to extend ``datreant`` objects with limbs to do complex 
 ``datreant`` fundamentally serves as a Pythonic interface to the filesystem, bringing value to datasets and analysis results by making them easily accessible now and later.
 As data structures and file formats change, ``datreant`` objects can always be used in the same way to supplement the way these tools are used.
 
-Because a ``Treant`` is both a Python object and a filesystem object, they work remarkably well with distributed computation libraries such as dask.distributed_ [Roc15]_ and workflow execution frameworks such as Fireworks_ [Jai15]_.
+Because each Treant is both a Python object and a filesystem object, they work remarkably well with distributed computation libraries such as dask.distributed_ [Roc15]_ and workflow execution frameworks such as Fireworks_ [Jai15]_.
 Treant metadata features such as tags and categories can be used for automated workflows, including backups and remote copies to external compute resources, making work on datasets less imperative and more declarative when desired.
 
 .. _dask.distributed: http://distributed.readthedocs.io
@@ -527,7 +528,7 @@ Not only do objects such as ``Bundle`` work just fine with ``Treant`` subclasses
 
 The first example of a domain-specific package built around ``datreant`` is MDSynthesis_, a module that enables high-level management and exploration of molecular dynamics simulation data.
 MDSynthesis gives a Pythonic interface to molecular dynamics trajectories using MDAnalysis_ [MiA11]_, giving the ability to work with the data from many simulations scattered throughout the filesystem with ease.
-It makes it possible to write analysis code that can work across many varieties of simulation, but even more importantly, MDSynthesis allows interactive work with the results from hundreds of simulations at once without much effort.
+This package makes it possible to write analysis code that can work across many varieties of simulation, but even more importantly, MDSynthesis allows interactive work with the results from hundreds of simulations at once without much effort.
 
 .. _MDAnalysis: http://www.mdanalysis.org/
 
@@ -539,7 +540,7 @@ A ``Sim`` featues special limbs for storing an MDAnalysis_ ``Universe`` definiti
 As an example of effectively using ``Sims``, say we have 50 biased molecular dynamics simulations that sample the conformational change of the ion transport protein NhaA [Lee14]_ from the inward-open to outward-open state (Figure :ref:`fig:nhaa`).
 Let's also say that we are interested in how many hydrogen bonds exist at any given time between the two domains as they move past each other.
 
-We can use the MDAnalysis ``HydrogenBondAnalysis`` class to collect the data for each ``Sim`` using ``Bundle.map`` for process parallelism, and store it using the ``datreant.data`` limb:
+We can use the MDAnalysis ``HydrogenBondAnalysis`` class to collect the data for each ``Sim`` using ``Bundle.map`` for process parallelism, storing the results using the ``datreant.data`` limb:
 
 .. code-block:: python
 
@@ -579,13 +580,13 @@ and visualize the result (Figure :ref:`fig:hbonds`):
 
 .. figure:: figs/nhaa.png
 
-   A cartoon rendering of an outward-open model (top) and an inward-open crystallographic structure (PDB ID: 4AU5 [Lee14]_) (bottom) of *Escherichia coli NhaA*. :label:`fig:nhaa`
+   A cartoon rendering of an outward-open model (top) and an inward-open crystallographic structure (PDB ID: 4AU5 [Lee14]_) (bottom) of *Escherichia coli* NhaA. :label:`fig:nhaa`
 
 .. figure:: figs/hbonds.pdf
 
-   The number of hydrogen bonds between the core and dimerization domain during a conformational transition between the inward-open and outward-open state of EcNhaA  :label:`fig:hbonds`
+   The number of hydrogen bonds between the core and dimerization domain during a conformational transition between the inward-open and outward-open state of EcNhaA.  :label:`fig:hbonds`
 
-By making it relatively easy to work with what can often be many terabytes of simulation data spread over tens or hundreds of trajectories, MDSynthesis_ has greatly improved the time it takes to iterate on new ideas toward answering real biological questions.
+By making it relatively easy to work with what can often be many terabytes of simulation data spread over tens or hundreds of trajectories, MDSynthesis_ has greatly reduced the time it takes to iterate on new ideas toward answering real biological questions.
 
 Final thoughts
 --------------
