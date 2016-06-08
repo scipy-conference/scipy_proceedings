@@ -536,7 +536,7 @@ Leveraging molecular dynamics data with MDSynthesis
 MDSynthesis_ defines a ``Treant`` subclass called a ``Sim``.
 A ``Sim`` featues special limbs for storing an MDAnalysis_ ``Universe`` definition and custom atom selections within its state file, allowing for painless recall of raw simulation data and groups of atoms of interest.
 
-As an example of effectively using ``Sims``, say we have 50 biased molecular dynamics simulations that sample the conformational change of the ion transport protein NhaA from the inward-open to outward-open state.
+As an example of effectively using ``Sims``, say we have 50 biased molecular dynamics simulations that sample the conformational change of the ion transport protein NhaA [Lee14]_ from the inward-open to outward-open state.
 Let's also say that we are interested in how many hydrogen bonds exist at any given time between the two domains as they move past each other.
 
 We can use the MDAnalysis ``HydrogenBondAnalysis`` class to collect the data for each ``Sim`` using ``Bundle.map`` for process parallelism, and store it using the ``datreant.data`` limb:
@@ -579,11 +579,11 @@ and visualize the result:
 
 .. figure:: figs/nhaa.png
 
-   A cartoon rendering of an outward-open model (top) and an inward-open crystallographic structure (PDB ID: 4AU5) (bottom) of *Escherichia coli NhaA*. :label:`fig:nhaa`
+   A cartoon rendering of an outward-open model (top) and an inward-open crystallographic structure (PDB ID: 4AU5 [Lee14]_) (bottom) of *Escherichia coli NhaA*. :label:`fig:nhaa`
 
 .. figure:: figs/hbonds.pdf
 
-   The number of hydrogen bonds between the core and dimerization domain during a conformational transition between the inward-open and outward-open state of EcNhaA :label:`fig:hbonds`
+   The number of hydrogen bonds between the core and dimerization domain during a conformational transition between the inward-open and outward-open state of EcNhaA  :label:`fig:hbonds`
 
 By making it relatively easy to work with what can often be many terabytes of simulation data spread over tens or hundreds of trajectories, MDSynthesis_ has greatly improved the time it takes to iterate on new ideas toward answering real biological questions.
 
@@ -609,11 +609,16 @@ References
            Science & Engineering, 13, 22-30 (2011)
 .. [Roc15] Matthew Rocklin. Dask: Parallel Computation with Blocked algorithms
            and Task Scheduling, Proceedings of the 14th Python in Science Conference, 130-136 (2015)
-.. [Jai15] Anubhav Jain, et. al. FireWorks: a dynamic workflow system designed
-           for high-throughput applications. Concurrency Computat.: Pract.
-           Exper., 27: 5037–5059. doi: 10.1002/cpe.3505 (2015)
+.. [Jai15] A. Jain, S. P. Ong, W. Chen, B. Medasani, X. Qu, M. Kocher, M. Brafman,
+           G. Petretto, G.-M. Rignanese, G. Hautier, D. Gunter, and K. A. Persson.
+	   FireWorks: a dynamic workflow system designed for high-throughput applications.
+	   Concurrency Computat.: Pract. Exper., 27: 5037–5059. doi: 10.1002/cpe.3505 (2015)
 .. [McK10] Wes McKinney. Data Structures for Statistical Computing in Python,
            Proceedings of the 9th Python in Science Conference, 51-56 (2010)
 .. [MiA11] N. Michaud-Agrawal, E. J. Denning, T. B. Woolf and O. Beckstein.
-           MDAnalysis: A toolkit for the analysis of molecular dynamics simulations.
+           MDAnalysis: A toolkit for the analysis of molecular dynamics simulations,
            J Comp Chem, 32: 2319-2327. doi: 10.1002/jcc.21787 (2011)
+.. [Lee14] C. Lee, S. Yashiro, D. L. Dotson, P. Uzdavinys, S. Iwata, M. S. P. Sansom,
+           C. von Ballmoos, O. Beckstein, D. Drew, and A. D. Cameron.
+	   Crystal structure of the sodium-proton antiporter NhaA dimer and new mechanistic insights,
+	   J Gen Physiol, 144:529–544. doi: 10.1085/jgp.201411219 (2014)
