@@ -87,7 +87,7 @@ is not a science".
 
 In computer science, however, there is a long history of security achieved through static analysis.
 [Wagner2000]_ points out that the dependency of modern Internet systems on legacy code and the
-sheer complexity of source code involved makes manual source code level auditiing infeasible.
+sheer complexity of source code involved makes manual source code level auditing infeasible.
 Therefore, static analysis tools based on firm mathematical foundations are significant
 for providing computer security at scale. 
 
@@ -129,28 +129,138 @@ range of threats--including novel threats such as attacks of software communitie
 Modeling Ecological Risk in Software
 ------------------------------------
 
-
 Software dependency and project risk
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-While it has been suggested that using software dependency information can augment assessments of project risk, suggested uses of this information are unspecific. This is partly due to a larger problem, the ambiguity of how 'risk' is used in a software development context.
+While it has been suggested that using software dependency information can augment assessments 
+of project risk, suggested uses of this information are unspecific. This is partly due to a 
+larger problem, the ambiguity of how 'risk' is used in a software development context.
 
-If we break down the sources of risk and how these effect the need for security investments analytically, we can distinguish between several different factors.
+If we break down the sources of risk and how these effect the need for security investments analytically, 
+we can distinguish between several different factors.
 
-* Vulnerability. A software project's vulnerability is its intrinsic susceptability to attack. CVE data is about software vulnerability. Being written in a language in which it is hard to write secure code (such as C and C++) can be a predictor of vulnerability.
+* Vulnerability. A software project's vulnerability is its intrinsic susceptability to attack. 
+  CVE data is about software vulnerability. Being written in a language in which it is hard to 
+  write secure code (such as C and C++) can be a predictor of vulnerability.
 * Exposure. A software project's exposure is its extrinsic availability to attack. Being directly exposed to a network is a source of exposure.
 
-Vulnerability and exposure are distinct elements of a software project's risk. Analyzing them separately and then combining them in a principled way will give us a better understanding of a project's risk.
+Vulnerability and exposure are distinct elements of a software project's risk. 
+Analyzing them separately and then combining them in a principled way will give us a better understanding of a project's risk.
 
-Dependencies complicate the way we think about vulnerability and exposure. A software project does not just include the code in its own repository; it also includes the code of all of its dependencies. And a project does not need to be installed directly to be exposed--it can be installed as a dependency of another project. Based on these observations, we can articulate two heuristics for use of dependency topology in assessing project risk.
+Dependencies complicate the way we think about vulnerability and exposure. 
+A software project does not just include the code in its own repository; 
+it also includes the code of all of its dependencies. 
+And a project does not need to be installed directly to be exposed--it can be installed 
+as a dependency of another project. 
+Based on these observations, we can articulate two heuristics for use of 
+dependency topology in assessing project risk.
 
-* If A depends on B, then a vulnerabilitt in B implies a corresponding vulnerability in A.
+* If A depends on B, then a vulnerability in B implies a corresponding vulnerability in A.
 * If A depends on B, then an exposure to A implies an exposure to B.
 
-While there are exceptions to these rules, they are a principled analytic way of related vulnerability, exposure, and software dependency that can be implemented as a heuristic and tested as a hypothesis.
+While there are exceptions to these rules, they are a principled analytic way of related vulnerability, exposure, 
+and software dependency that can be implemented as a heuristic and tested as a hypothesis.
+
+Robustness and fragility, resilience and brittleness
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The risk analysis framework described above is very general.
+Due to this generality, it suffers from the ambiguity of its terms.
+In particular, "vulnerability" can, dependent on the application of this
+framework, be literal software vulnerabilities such as would be reported
+in a CVE.
+But when we analyze the software ecosystem as a supply chain, we are
+often concerned about higher level properties that serve as general proxies
+for whole classes of error or failure.
+
+We find the distinction between system *robustness* and system *resilience* helpful.
+We define the *robustness* of a system as its invulnerability to threats and hazards,
+as a function of its current state. A system that is not robust is *fragile*.
+We define the *resilience* of a system as its capacity to recover quickly from injury
+or failure. A system that is not resilient is *brittle*.
+A mature, well-tested system will be robust.
+A system with an active community ready to respond to the discovered of a new exploit
+will be resilient.
+
+A system can be robust, or resilient, or both, or neither.
+Robustness and resilience can be in tension with each other.
+The more dynamic a software project is, measured as a function of the activity
+of the community and frequency of new commits, the more likely that it will
+be resilient, responding to new threat information. But it is also likely to
+be less robust, as new code might introduce new software flaws.
+
 
 Computing risk
 ~~~~~~~~~~~~~~~
+
+The risk analysis framework presented above is designed to be very
+generalizable, factoring risk into abstract *exposure* and *vulnerability*
+factors and then making minimal assumptions about how these factors propagate
+through the dependency graph.
+
+In practice, the application of this framework will depend on the selection
+of package metadata used to measure exposure and vulnerability. Below is a
+Python implementation of efficient risk computation using a directed graph
+representation of package dependencies and NetworkX. [Hagberg2008]_
+In this code, we use a precomputed 'fragility' metric as the vulnerability
+variable, and the number of downloads of each package as the exposure variable.
+
+.. code-block:: python
+
+    import networkx as nx
+
+    G = nx.read_gexf('pkg.gexf')
+
+    # select proxy empirical variables for
+    # vulnerability and exposure
+
+    vulnerability_metric = 'fragility'
+    exposure_metric = 'downloads'
+
+    # efficiently compute ecosystem vulnerability
+    # and assign as attribute
+
+    ecosystem_vulnerability = {}
+
+    for i in nx.topological_sort(G,reverse=True):
+    
+        ecosystem_vulnerability[i] = 
+                G.node[i][vulnerability_metric] 
+                + sum([ecosystem_vulnerability[j]
+                       for j in G.neighbors(i)]) 
+
+    nx.set_node_attributes(G,
+                           'ecosystem_vulnerability',
+                           ecosystem_vulnerability)
+
+    # efficiently compute ecosystem exposure 
+    # and assign as attribute
+    
+    ecosystem_exposure = {}
+
+    for i in nx.topological_sort(G):
+    
+         ecosystem_exposure[i] = 
+                G.node[i][exposure_metric]
+                + sum([ecosystem_exposure[j]
+                       for j in G.predecessors(i)]) 
+
+    nx.set_node_attributes(G,
+                           'ecosystem_exposure',
+                           ecosystem_exposure)
+
+    # efficiently compute ecosystem risk
+    # and assign as attribute
+    
+    ecosystem_risk= {}
+
+    for i in nx.topological_sort(G):
+        ecosystem_risk[i] = 
+                G.node[i]['ecosystem_vulnerability'] 
+                * G.node[i]['ecosystem_exposure']
+
+
+
 
 **Algorithms, with source code, for computing risk on a dependency network.**
 
@@ -158,11 +268,23 @@ Computing risk
 Data collection and publication
 -------------------------------
 
-**Description of Ion Channel. What data we pulled from PyPI and what we did with it.**
+Data for this analysis comes from two source. For package and release metadata,
+we used data requested from PyPI, the Python Package Index.
+This data provides for data about the publication date and number of
+downloads for each software release.
 
-**Data from GitHub used.**
+We also downloaded each Python release and inspected it for the presence of a ``setup.py``
+file. We then extracted package dependency information from ``setup.py`` through
+its ``install_requires`` field.
 
-**Simulated data.**
+Python dependencies are determined through executing Python install scripts.
+Therefore, our method of discovering package dependencies through static
+analysis of the source code does not capture all cases.
+
+For each package, we consider its dependencies to be the union of all requirements
+for all releases. While this loses some of the available information, it is sufficient
+for this first analysis of the PyPI ecosystem. We will use more of the available information
+and take into account more of the complexity of Python package management in future work.
 
 Empirical and Simulation Results
 --------------------------------
@@ -178,12 +300,16 @@ Empirical and Simulation Results
 Statistical properties of the software dependency network
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+
 **Some statistical properties of the dependency network.**
 
 **How it is different from and similar to other complex networks.**
 
 Hot spot analysis
 ~~~~~~~~~~~~~~~~~
+
+
 
 **Visualization of hot spots based on the data here.**
 
@@ -212,6 +338,8 @@ References
 .. [Cordona2012] Cardona, Omar-Daria, et al. "Determinants of risk: exposure and vulnerability." (2012).
 
 .. [Girardot2013] O. Girardot. STATE OF THE PYTHON/PYPI DEPENDENCY GRAPH. 2013
+
+.. [Hagberg2008] Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, “Exploring network structure, dynamics, and function using NetworkX”, in Proceedings of the 7th Python in Science Conference (SciPy2008), Gäel Varoquaux, Travis Vaught, and Jarrod Millman (Eds), (Pasadena, CA USA), pp. 11–15, Aug 2008
 
 .. [LaBelle2004] N. LaBelle, E. Wallingford. 2004. Inter-package dependency networks in open-source software.
 
