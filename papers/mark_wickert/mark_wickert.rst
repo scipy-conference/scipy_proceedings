@@ -107,13 +107,28 @@ Not present in this project, but part of the CA code signal, is a 50 bit/s data 
 
 * A satellite health message
 
+
 This project is entirely computer simulation based, but the design of the simulation assumes that the receiver
-front-end utilizes the RTL-SDR software defined radio dongle [3]. What this means is that real signals capture
+front-end utilizes the RTL-SDR software defined radio dongle [RTLSDR]_. What this means is that real signals capture
 from the RTL-SDR may also be used. Making use of these signals is non-trival, as additional signal processing
 is needed to estimate the Doppler frequency error and if the data bits are to be recovered, the L1 carrier phase
 needs to be tracked. These aspects of the framework as currently under development (mid Spring 2016) for a
 communications theory course.
 
+Background Theory
+=================
+
+Waveforms Fig. :ref:`fig1`.
+
+.. figure:: scipy_2016_fig1.pdf
+   :scale: 55%
+   :align: center
+   :figclass: htb
+
+   User time delay measurement using cross correlation with the local replica code. :label:`fig1`
+
+
+Some text following this figure and caption.
 
 
 From System Block Diagram to Python Class Design
@@ -121,6 +136,15 @@ From System Block Diagram to Python Class Design
 
 To be written using the project reader document.
 
+
+Results
+=======
+
+
+Simulation Examples
+-------------------
+
+To be written using the project reader document and project solutions contained in a Jupyter notebook.
 
 
 Student Feedback
@@ -132,10 +156,6 @@ synchronization.
 
 More ...
 
-Simulation Examples
--------------------
-
-To be written using the project reader document and project solutions contained in a Jupyter notebook.
 
 Conclusions and Future Work
 ---------------------------
