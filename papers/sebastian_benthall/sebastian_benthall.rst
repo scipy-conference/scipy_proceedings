@@ -293,18 +293,107 @@ Empirical and Simulation Results
    :scale: 20%
    :figclass: bht
 
-   Visualization of PyPi dependency network, created using Gephi[Bastian2009]_. This visualization does not include singleton nodes with zero degree, which are the vast majority of nodes. :label:`depfig`
+   Visualization of PyPi dependency network, created using Gephi [Bastian2009]_. This visualization does not include singleton nodes with zero degree, which are the vast majority of nodes. :label:`depfig`
+
 
 
 
 Statistical properties of the software dependency network
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The PyPI package dependency network resembles classical complex networks, with
+some notable departures.
+
+A early claim in complex network theory by [Newman2002]_, [Newman2003]_ is that
+random complex networks will exhibit negative degree assortativity, and that social
+networks will exhibit positive degree assortativity due to homophily or other
+effects of group membership on network growth.
+[Noldus2015]_ notes that in directed graphs, there are four variations on the
+degree assortativity metric as for each pair of adjacent nodes one can consider
+each node's in-degree and out-degree.
+The degree assortativity metrics for the PyPI dependency graph are given
+in :ref:`datable`.
+
+The PyPI package dependency network notably  has *in-in* degree assortativity of
+:math:`0.19`, and *out-in* degree assortativity of :math:`-0.16`.
+The *in-out* and *out-out* degree assortativities are both close to zero.
+We have constructed the graph with the semantics that an edge from A to B
+implies that A depends on B.
+
+.. table:: Degree assortativity metrics for the PyPI dependency graph. :label:`datable`
+
+   +------------+----------------+
+   | Metric     | Value          |
+   +============+================+
+   | *in-in*    |   :math:`0.19` |
+   +------------+----------------+
+   | *in-out*   |   :math:`0.05` |
+   +------------+----------------+
+   | *out-in*   |  :math:`-0.16` |
+   +------------+----------------+
+   | *out-out*  |  :math:`-0.04` |
+   +------------+----------------+
+
+What explains this strange network structure? One reason is that
+there is much greater variation in out-degree than in in-degree.
+:label:`odtable` shows the top ten most depended on packages.
+:label:`idtable` shows the top ten packages with the most dependencies.
+Four packages, ``requests``, ``six``, ``django``, and ``pyyaml`` have
+out-degree over 1000. 
+
+.. table:: Top ten most depended on packages. :label:`odtable`
+
+   +-----------------------+----------------+
+   | Package               | Out-Degree     |
+   +=======================+================+
+   | ``requests``          |   :math:`2125` |
+   +-----------------------+----------------+
+   | ``six``               |   :math:`1381` |
+   +-----------------------+----------------+
+   | ``django``            |   :math:`1174` |
+   +-----------------------+----------------+
+   | ``pyyaml``            |    :math:`775` |
+   +-----------------------+----------------+
+   | ``zope.interface``    |    :math:`663` |
+   +-----------------------+----------------+
+   | ``lxml``              |    :math:`619` |
+   +-----------------------+----------------+
+   | ``flask``             |    :math:`607` |
+   +-----------------------+----------------+
+   | ``python-dateutil``   |    :math:`599` |
+   +-----------------------+----------------+
+   | ``zope.component``    |    :math:`550` |
+   +-----------------------+----------------+
+   | ``jinja2``            |    :math:`507` |
+   +-----------------------+----------------+
+
+.. table:: Top ten packages by number of dependencies. :label:`idtable`
+
+   +------------------------+---------------+
+   | Package                | Out-Degree    |
+   +========================+===============+
+   | ``plone``              |    :math:`92` |
+   +------------------------+---------------+
+   | ``mypypi``             |    :math:`53` |
+   +------------------------+---------------+
+   | ``invenio``            |    :math:`52` |
+   +------------------------+---------------+
+   | ``ztfy.sendit``        |    :math:`48` |
+   +------------------------+---------------+
+   | ``ztfy.blog``          |    :math:`47` |
+   +------------------------+---------------+
+   | ``smartybot``          |    :math:`47` |
+   +------------------------+---------------+
+   | ``icemac.addressbook`` |    :math:`41` |
+   +------------------------+---------------+
+   | ``sentry``             |    :math:`40` |
+   +------------------------+---------------+
+   | ``products.silva``     |    :math:`38` |
+   +------------------------+---------------+
+   | ``ztfy.scheduler``     |    :math:`37` |
+   +------------------------+---------------+
 
 
-**Some statistical properties of the dependency network.**
-
-**How it is different from and similar to other complex networks.**
 
 Hot spot analysis
 ~~~~~~~~~~~~~~~~~
@@ -335,6 +424,14 @@ References
 
 .. [Bastian2009] Bastian, Mathieu, Sebastien Heymann, and Mathieu Jacomy. "Gephi: an open source software for exploring and manipulating networks." ICWSM 8 (2009): 361-362.
 
+.. [Clauset2007]  A. Clauset, C.R. Shalizi, and M.E.J. Newman. Power-law distributions 
+                  in empirical data. arXiv:0706.1062, June 2007.
+
+.. [Mitzenmacher2003] Mitzenmacher, M. 2003.
+                      "A Brief History of Generative Models for Power Law
+                      and Lognormal Distributions."
+                      Internet Mathematics Vol. 1, No. 2: 226-251
+
 .. [Cordona2012] Cardona, Omar-Daria, et al. "Determinants of risk: exposure and vulnerability." (2012).
 
 .. [Girardot2013] O. Girardot. STATE OF THE PYTHON/PYPI DEPENDENCY GRAPH. 2013
@@ -342,6 +439,15 @@ References
 .. [Hagberg2008] Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, “Exploring network structure, dynamics, and function using NetworkX”, in Proceedings of the 7th Python in Science Conference (SciPy2008), Gäel Varoquaux, Travis Vaught, and Jarrod Millman (Eds), (Pasadena, CA USA), pp. 11–15, Aug 2008
 
 .. [LaBelle2004] N. LaBelle, E. Wallingford. 2004. Inter-package dependency networks in open-source software.
+
+.. [Newman2002] Newman, M. E. J. 2002. "Assortative mixing in networks."
+
+.. [Newman2003] Newman, M. E. J. 2003. "Mixing patterns in networks."
+                Phys. Rev. E 67, 026126
+
+.. [Noldus2015] Noldus, R and Mieghem, P. 2015. "Assortativity in Complex Networks"
+                Journal of Complex Networks. doi: 10.1093/comnet/cnv005
+
 
 .. [Schweik2012] C. Schweik and R. English. *Internet Success: A Study of Open-Source Software Commons*,
       The MIT Press. 2012
