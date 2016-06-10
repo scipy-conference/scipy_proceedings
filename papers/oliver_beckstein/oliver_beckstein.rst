@@ -296,7 +296,7 @@ As a complete example consider the calculation of the |Calpha| root mean square 
 .. math::
    :label: eq:RMSF
    
-   \rho_i = \sqrt{\left\langle\left(\mathbf{x}_i(t) - \langle\mathbf{x}_i\rangle\right)\right\rangle}
+   \rho_i = \sqrt{\left\langle\left(\mathbf{x}_i(t) - \langle\mathbf{x}_i\rangle\right)^2\right\rangle}
 
 The code in Figure :ref:`fig:rmsf-example` A shows how MDAnalysis in combination with NumPy can be used to implement Eq. :ref:`eq:RMSF`.
 The topology information and the trajectory are loaded into a ``Universe`` instance; |Calpha| atoms are selected with the MDAnalysis selection syntax and stored as the ``AtomGroup`` instance ``ca``.
