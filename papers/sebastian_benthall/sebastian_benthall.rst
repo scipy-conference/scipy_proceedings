@@ -405,7 +405,37 @@ out-degree over 1000.
 Hot spot analysis
 ~~~~~~~~~~~~~~~~~
 
+.. figure:: dependencies-1.png
+   :scale: 20%
+   :figclass: bht
 
+   Visualization of PyPi dependency network, created using Gephi [Bastian2009]_. This visualization does not include singleton nodes with zero degree, which are the vast majority of nodes. :label:`depfig`
+
+.. raw:: latex
+         
+         \begin{table*}
+
+         \begin{longtable*}{lrrrrrrrr}
+         \toprule
+         {} &  Log Eco. Risk &  Log Eco. Vulnerability &  Log Eco. Exposure &  Fragility &  Num. Releases &  Downloads &  In Degree &  Out Degree \\
+         \midrule
+         zope.app.publisher &           17.542019 &                     6.949592 &                10.592427 &   0.038462 &                  26 &     232460 &         24 &          54 \\
+         zope.app.form      &           17.536552 &                     6.891872 &                10.644679 &   0.038462 &                  26 &     265370 &         19 &          45 \\
+         five.formlib       &           17.443073 &                     6.469394 &                10.973679 &   0.200000 &                   5 &     127280 &         13 &          10 \\
+         plone              &           17.440513 &                     2.368530 &                15.073846 &   0.012658 &                  79 &     387614 &         96 &         152 \\
+         zope.interface     &           17.419383 &                    10.480572 &                 6.938811 &   0.032258 &                  31 &    8685819 &          0 &         841 \\
+         zope2              &           17.410435 &                     6.396271 &                11.014165 &   0.031250 &                  32 &     241354 &         28 &         163 \\
+         zope.traversing    &           17.317531 &                     8.396160 &                 8.921371 &   0.035714 &                  28 &     367494 &          9 &         181 \\
+         zope.schema        &           17.290764 &                     9.613889 &                 7.676874 &   0.032258 &                  31 &     624429 &          4 &         399 \\
+         zope.site          &           17.281870 &                     7.599601 &                 9.682269 &   0.071429 &                  14 &     255063 &          9 &          72 \\
+         zope.container     &           17.272675 &                     7.730937 &                 9.541738 &   0.050000 &                  20 &     294873 &         20 &         119 \\
+         \bottomrule
+         \end{longtable*}
+
+     \caption{Highest risk Python packages. All logs base 10.
+           \DUrole{label}{quanitities-table}}
+
+   \end{table*}
 
 **Visualization of hot spots based on the data here.**
 
