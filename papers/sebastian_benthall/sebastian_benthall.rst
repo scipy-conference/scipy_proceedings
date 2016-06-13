@@ -394,6 +394,13 @@ out-degree over 1000.
    +------------------------+---------------+
 
 
+.. figure:: exposure-vulnerability-plot.png
+   :figclass: bht
+
+   Hex plot of log vulnerbality and log exposure of each package, with bin density scored on log scale. All logs are base 10. Exposure is more widely distributed than vulnerability, the vast majority of packages score low. There is a fringe of packages that are either highy vulnerable, highly exposed, or both. There is a log-linear tradeoff between high vulnerability and high exposure. This is most likely due to the fact that ecosystem vulnerability and ecosystem exposure both depend on an package's position in the dependency network. :label:`depfig`
+
+
+
 
 Hot spot analysis
 ~~~~~~~~~~~~~~~~~
