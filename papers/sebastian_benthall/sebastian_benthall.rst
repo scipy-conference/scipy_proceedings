@@ -426,6 +426,39 @@ out-degree over 1000.
 
    Hex plot of log vulnerbality and log exposure of each package, with bin density scored on log scale. All logs are base 10. Exposure is more widely distributed than vulnerability, the vast majority of packages score low. There is a fringe of packages that are either highy vulnerable, highly exposed, or both. There is a log-linear tradeoff between high vulnerability and high exposure. This is most likely due to the fact that ecosystem vulnerability and ecosystem exposure both depend on an package's position in the dependency network. :label:`depfig`
 
+Computing fragility and exposure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The risk analysis framework described above defines *exposure* and 
+*vulnerability* as abstact components of risk that can be defined
+depending on the hazards and threats under consideration.
+In the example of this study, we will define these variables with
+an interest in the general prediction of robustness in widely used
+software.
+This sort of analysis would be useful in, for example, determining
+which software packages are in need of further investment in order
+to reduce risk globally.
+
+In the following analysis, we will define *exposure* to be the
+number of times a package has been downloaded.
+This metadata is provided by PyPI for each package directly.
+We assume for the sake of this analysis that more widely downloaded
+software is more widely used and exposed to threats.
+
+We will define *vulnerability* specifically in terms of software
+*fragility*, and make the assumption that software that has had
+more releases is less fragile.
+While it is true that sometimes a new software release can introduce
+new flaws into software, we assume that on average more releases
+mean a more active community, more robust development processes,
+and greater maturity in the project lifecycle.
+Specifically for the purpose of this study we will define
+
+.. math::
+
+   fragility(p) = \frac{1}{number_of_releases(p)}
+
+In future work, we will revise and validate these metrics.
 
 
 
@@ -489,6 +522,13 @@ It is an open question to what extent this framework is useful for assessing
 software robustness (absence of software errors that can be exploited, for
 example) and software resilience (capacity of software development communities
 to respond to known exploits).
+
+While we have in this work considered the entire software ecosystem compressed
+into a single static graph, in fact the software ecosystem is always changing
+in time.
+Both package dependencies and metadata variables that proxy for exposure and
+vulnerabilty change over time.
+In future work we will develop a dynamic version of this risk-management algorithm.
 
 The research presented here deals exclusively with data about technical organization.
 However, as we expand into research into how software developers and their interactions
