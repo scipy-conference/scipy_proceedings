@@ -18,8 +18,8 @@ Launching Python Applications on Peta-scale Massively Parallel Systems
 
 .. class:: abstract
 
-    We introduce a method to launch python applications at near native speed on
-    large high performance computing systems.  The python run-time and other
+    We introduce a method to launch Python applications at near native speed on
+    large high performance computing systems.  The Python run-time and other
     dependencies are bundled and delivered to computing nodes via a broadcast
     operation. The interpreter is instructed to use the local version of the files
     on the computing node, removing the shared file system as a bottleneck during
@@ -42,7 +42,7 @@ Launching Python Applications on Peta-scale Massively Parallel Systems
 
 .. class:: keywords
 
-   python, high performance computing, development environment, application
+   Python, high performance computing, development environment, application
 
 Introduction
 ------------
@@ -81,7 +81,7 @@ nearly bring an entire file system to a halt.
 
 .. figure:: python-file-ops.pdf
 
-    Number of file system requests during python start-up.
+    Number of file system requests during Python start-up.
     Solid lines: Python 2.
     Dashed lines: Python 3.
     We increase the number of entries in ``PYTHONPATH`` to simulate the
@@ -91,12 +91,12 @@ nearly bring an entire file system to a halt.
 
 Unfortunately, the Python interpreter is such an application, as has been repeatedly
 demonstrated in previous studies
-:cite:`asher2012,mpiimport,slither,Enkovaara201117`. During start-up, a python
+:cite:`asher2012,mpiimport,slither,Enkovaara201117`. During start-up, a Python
 application will generate thousands of file system requests to locate and
 import files for scripts and compiled extension modules. We demonstrate the
 extent of the problematic behavior in Figure :ref:`fig-filereq`, where we
 measure the number of file system requests associated with several fairly
-commonly used python packages 
+commonly used Python packages 
 on a typical system (Anaconda 2 and 3 in this case). The measurement is performed
 with ``strace -ff -e file``. For either Python 2 or
 Python 3, the number of file system operations increases linearly with the
@@ -551,17 +551,17 @@ measurement of wall clock time of python-mpi-bcast for a dummy Python 2
 application on the Cray XC30 system Edison at NERSC and the Cray XT system
 BlueWaters at NCSA. The dummy application imports the scipy package on all
 ranks before exiting.  We point out that in the benchmark it is important to
-import python packages as done in a real application, because most of the
-metadata requests are to locate python scripts of packages rather than dynamic
+import Python packages as done in a real application, because most of the
+metadata requests are to locate Python scripts of packages rather than dynamic
 libraries associated with extension modules. Therefore, a benchmark based on
 performance of ``simulating`` dynamic libraries :cite:`pynamic` does not
-properly represent the true launch time of a realistic python application. Note
+properly represent the true launch time of a realistic Python application. Note
 that because Python 3 and Python 2 are treated the same by python-mpi-bcast, we
 do not perform another set of benchmarks for Python 3. 
 
 The job includes two steps: the first involves the statically linked bcast
 program that delivers the bundles to the computing nodes (which does not
-involve python), and the second launches the python application. 
+involve Python), and the second launches the Python application. 
 
 The bcast step consists of two major components, a call to ``MPI_Bcast`` and a
 call to ``libarchive``:cite:`libarchive` to inflate the tar ball. 
@@ -576,11 +576,11 @@ the 'tar' stage of the bcast time step, as seen by comparing the tests with
 49,152 ranks (2048 nodes), 98,304 ranks( 4096 nodes), and 127,440 ranks (5310
 nodes). 
 
-The time spent in the python application (second job step) increases slowly as
+The time spent in the Python application (second job step) increases slowly as
 well, but the increase becomes more significant as the size of the job
 approaches the capability of the system. An additional cause of the increase
 can be attributed to the remaining few requests to the shared file system for
-unbundled shared libraries and python configuration files that are not rerouted
+unbundled shared libraries and Python configuration files that are not rerouted
 (e.g. the configuration of mpi4py package is hard coded on the shared file
 system). 
 
