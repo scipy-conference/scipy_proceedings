@@ -129,9 +129,19 @@ If features from preceding and following syllables improve k-NN performance, the
 When using the same features to train all models, SVM-RBF still outperforms k-NN that in turn outperforms linear SVM
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Above I showed that k-NN can yield higher average accuracy than linear SVM. I did not train the k-NN with the same features as the linear SVM though, because I was concerned that the 536-dimensional feature vector would yield poor results for k-NN. (In high-dimensional spaces, everything is close to everything, so the distances used by k-NN to determine nearest neighbor become uninformative. [BEYER1999]_)
 
-.. figure:: linsvm_avg_acc_by_song.png
+This leaves unanswered the question of whether differences in accuracy are due to the features used or the ability of the algorithms to fit models to the feature space (or some combination of both). To compare how the algorithms perform when trained with the same feature set, I repeated the experiments using a set of 20 acoustic features from [TACH2014]_. For all 4 birds I tested, SVM-RBF outperformed k-NN, as shown in :ref:`fig10`. SVM-RBF acheived higher average accuracy with less training data than k-NN. Likewise, k-NN outperformed linear SVM.
 
+.. figure:: svmrbf_linsvm_knn_same_ftrs_avg_acc_by_song.png
+
+    **Accuracy v. number of songs used to train SVM-RBF, k-NN, and linear SVM, all trained with acoustic features from [TACH2014]_ ** *Y axis: average accuracy across labels, x axis: number of songs used to train.* :label:`fig10`
+
+I also repeated the experiments using the features I found worked for k-NN . Here, the results were less clear. As shown in :ref:`fig11`, for three birds, SVM-RBF performed about as well as k-NN, and both performed better than linear SVM. For bird 4, k-NN on average performed better but the replicates showed high variance in the average accuracy.
+
+.. figure:: svmrbf_linsvm_knn_same_ftrs_avg_acc_by_song.png
+
+    **Accuracy v. number of songs used to train SVM-RBF, k-NN, and linear SVM, all trained with features originally used for k-NN  ** *Y axis: average accuracy across labels, x axis: number of songs used to train.* :label:`fig11`
 
 
 Conclusion
@@ -139,9 +149,11 @@ Conclusion
 
 There are two clear results from these experiments. First, the linear SVM method proposed in [TACH2014]_ is impaired by syllables in the songs of some Bengalese Finches, most likely intro syllables. Second, use of the radial basis function as a kernel can improve SVM performance when applied to the features in [TACH2014]_.
 
-I can not say from these results how often the method of [TACH2014]_ will be impaired by any given bird's song. What I can say is that for 2 of the 4 birds tested, average accuracy did not approach 99% until at least 33 songs were used to train the classifier (birds 2 and 3, :ref:`fig3`), and for one bird, average accuracy never went above 97% (bird 1, :ref:`fig3`). By comparison, when using SVM-RBF with the same feature set, 6 songs was enough to achieve >99% average accuracy for 3 of the 4 birds (as shown in :ref:`fig8`). 
+I can not say from these results how often the method of [TACH2014]_ will be impaired by any given bird's song. What I can say is that for two of the four birds tested, average accuracy did not approach 99% until at least 33 songs were used to train the classifier (birds 2 and 3, :ref:`fig3`), and for one bird, average accuracy never went above 97% (bird 1, :ref:`fig3`). By comparison, when using SVM-RBF with the same feature set, 6 songs was enough to achieve >99% average accuracy for 3 of the 4 birds (as shown in :ref:`fig8`). 
 
-Similarly, I can not say from the results whether the differences in accuracy between SVM and k-NN are due to the different features used or due to the methods themselves. Experiments in progress will repeat the tests while holding the set of features constant. If I find any difference in the accuracy that different methods achieve with a given set of features, that would indicate how well the methods can use that feature set to estimate class membership. I also need to test whether any differences in accuracy translate into meaningful differences in results obtained from analysis of song. For instance, the small increase in accuracy I obtained by adding duration features to the SVM-RBF feature set could be statistically significant, but it might not matter for the effect sizes seen in behavioral studies of song. In other words, the original [TACH2014]_ feature set might yield good enough classifiers to detect the changes in song that experimenters care about.
+I can also say that for all four birds, even when the feature set is held constant, linear SVM is always outpeformed by k-NN and SVM-RBF. Again, I can not say from my results how often this would be the case for any given Bengalese finch song. But I would say the large difference in average accuracy between linear SVM and the other two methods for the four birds tested here (:ref: `fig10` and :ref: `fig11`) certainly suggests that in general the other two methods will outperform linear SVM. Interestingly, the set of acoustic features developed by [TACH2014]_ yielded the best accuracy of all three algorithms in that experiment. In other words, instead of using a 536-feature vector with the linear SVM, one can use the 20 features with SVM-RBF, achieving higher accuracy with less training time. 
+
+It remains to be tested whether any differences in accuracy translate into meaningful differences in results obtained from analysis of song. For instance, the small increase in accuracy I obtained by adding duration features to the SVM-RBF feature set could be statistically significant, but it might not matter for the effect sizes seen in behavioral studies of song. That is to say that the original [TACH2014]_ feature set might yield good enough classifiers to detect the changes in song that experimenters care about.
 
 There are also other issues to be dealt with to make machine learning methods practical for birdsong researchers. One is how well each method can provide an estimate that a given classification is correct. The libSVM library, for example, can provide probability estimates using a computationally expensive 5-fold cross-validation. But, because the soft margin in the libSVM training algorithm allows some misclassifications, it's likely that some samples will actually be misclassified yet still appear to have a high probability of being correct. As [KOGAN2008]_ recognized in their study, it is also important to determine how well these algorithms deal with the presence of sounds that are not part of song, e.g., calls, wing flaps, etc. Such events are rare enough that they may be difficult to detect without changes to the training algorithm, but frequent enough that if misclassified as syllables they could affect analyses of song.
 
