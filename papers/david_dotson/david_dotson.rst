@@ -34,7 +34,7 @@ But it can be tedious and error prone to work directly with the filesystem to re
 **datreant** makes working with directory structures and files Pythonic with **Treants**: specially marked directories with distinguishing characteristics that can be discovered, queried, and filtered.
 Treants can be manipulated individually and in aggregate, with mechanisms for granular access to the directories and files in their trees.
 Disparate datasets stored in any format (CSV_, HDF5_, NetCDF_, Feather_, etc.) scattered throughout a filesystem can thus be manipulated as meta-datasets of Treants.
-**datreant** is modular and extensible by design to allow specialized applications to be built on top of it, with **MDSynthesis_** as an example for working with molecular dynamics simulation data. http://datreant.org/
+**datreant** is modular and extensible by design to allow specialized applications to be built on top of it, with MDSynthesis_ as an example for working with molecular dynamics simulation data. http://datreant.org/
 
 .. _CSV: https://docs.python.org/2/library/csv.html
 .. _HDF5: https://www.hdfgroup.org/HDF5/
@@ -57,11 +57,14 @@ Introduction
 In many scientific fields, especially those analyzing experimental or simulation data, there is an existing ecosystem of specialized tools and file formats which new tools must work around.
 Consequently, the filesystem ends up serving as a *de facto* database, with directory trees the zeroth-order data structure for scientific data.
 This is particularly true for fields centered around simulation: simulation systems can vary widely in size, composition, rules, parameters, and starting conditions.
-And with ever-increasing computational power, it is often necessary to store intermediate results from large amounts of simulation data so that it may be accessed and explored interactively.
+And with ever-increasing computational power, it is often necessary to store intermediate results from large amounts of simulation data so that they may be accessed and explored interactively.
 
-These problems make data management difficult, and serve as a barrier to answering scientific questions.
-One approach to this problem is ``datreant``, a namespace package that provides a Pythonic interface to the filesystem and the data that lives within it.
-It solves a boring problem, so we can focus on interesting ones.
+These problems make data management difficult, and ultimately serve as a barrier to answering scientific questions.
+To address this, we present ``datreant``, a Pythonic interface to the filesystem. 
+``datreant`` deals primarily in **Treants**: specially marked directories with distinguishing characteristics that can be discovered, queried, and filtered.
+Treants can be manipulated individually and in aggregate, with mechanisms for granular access to the directories and files in their trees.
+By way of Treants, ``datreant`` adds a lightweight abstraction layer to the filesystem, allowing researchers to focus more on *what* is stored and less on *where*.
+This greatly reduces the tedium of storing, retrieving, and operating on datasets of interest, no matter how they are organized.
 
 Treants as filesystem manipulators
 ----------------------------------
@@ -140,7 +143,7 @@ and so we now have::
                 +-- text/
 
 Accessing paths in this way returns ``Tree`` and ``Leaf`` objects, which refer to directories and files, respectively.
-These paths may not point to directories or files that actually exist, but they can be used to create and work with these filesystem elements.
+These paths need not point to directories or files that actually exist, but they can be used to create and work with these filesystem elements.
 
 We can, for example, easily store a Pandas_ [McK10]_ DataFrame somewhere in the tree for reference later:
 
@@ -586,7 +589,7 @@ and visualize the result (Figure :ref:`fig:hbonds`):
 
    The number of hydrogen bonds between the core and dimerization domain during a conformational transition between the inward-open and outward-open state of EcNhaA.  :label:`fig:hbonds`
 
-By making it relatively easy to work with what can often be many terabytes of simulation data spread over tens or hundreds of trajectories, MDSynthesis_ has greatly reduced the time it takes to iterate on new ideas toward answering real biological questions.
+By making it relatively easy to work with what can often be many terabytes of simulation data spread over tens or hundreds of trajectories, MDSynthesis_ greatly reduces the time it takes to iterate on new ideas toward answering real biological questions.
 
 Final thoughts
 --------------
