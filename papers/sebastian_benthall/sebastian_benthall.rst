@@ -260,10 +260,37 @@ variable, and the number of downloads of each package as the exposure variable.
                 * G.node[i]['ecosystem_exposure']
 
 
+Removing cycles
+~~~~~~~~~~~~~~~
 
+The above algorithm has one very important limitation: it
+assumes that there are no cycles in the dependency graph.
+This property is necessary for the nodes to have a well-defined
+topological order.
+However, Python package dependencies do indeed include many cycles.
+We can adapt any directed cyclic graph into a directed
+acyclic graph simply by removing one edge from every cycle.
 
-**Algorithms, with source code, for computing risk on a dependency network.**
+.. code-block:: python
 
+    def remove_cycles(G):
+        cycles = nx.simple_cycles(G)
+
+        for c in cycles:
+            try:
+                if len(c) == 1:
+                    G.remove_edge(c[0],c[0])
+                else:
+                    G.remove_edge(c[0],c[1])
+            except:
+                pass
+
+One way to improve this algorithm would be to remove as few edges as
+possible in order to eliminate all cycles.
+Another way to improve this algorithm would be to adapt the heuristic
+assumptions that motivate this framework to make reasonable allowances
+for cycle dependencies.
+We leave the elaboration of this algorithm for future work.
 
 Data collection and publication
 -------------------------------
