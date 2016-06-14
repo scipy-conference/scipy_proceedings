@@ -313,16 +313,19 @@ for all releases. While this loses some of the available information, it is suff
 for this first analysis of the PyPI ecosystem. We will use more of the available information
 and take into account more of the complexity of Python package management in future work.
 
-Empirical and Simulation Results
+Empirical and Modeling Results
 --------------------------------
 
-.. figure:: dependencies-1.png
-   :scale: 20%
+.. figure:: dependencies-2.png
+   :scale: 35%
    :figclass: bht
 
-   Visualization of PyPi dependency network, created using Gephi [Bastian2009]_. This visualization does not include singleton nodes with zero degree, which are the vast majority of nodes. :label:`depfig`
+   Visualization of PyPi dependency network, created using Gephi [Bastian2009]_. This visualization does not include singleton nodes with zero degree, which are the vast majority of nodes. Node size is proportional to out degree. Nodes ar colored by the log (base 10) of package ecosystem risk. Red nodes are higher risk.:label:`depfig`
 
-
+Our data collection process created a network with :math:`66,536` nodes and :math:`72939` edges.
+Over half of the nodes, :math:`33,573`, have no edge. This isolates them from the
+dependency network.
+Of the remaining :math:`32,963`, :math:`31,473` belong to a single *giant connected component*.
 
 
 Statistical properties of the software dependency network
@@ -465,11 +468,6 @@ In future work, we will revise and validate these metrics.
 Hot spot analysis
 ~~~~~~~~~~~~~~~~~
 
-.. figure:: dependencies-1.png
-   :scale: 20%
-   :figclass: bht
-
-   Visualization of PyPi dependency network, created using Gephi [Bastian2009]_. This visualization does not include singleton nodes with zero degree, which are the vast majority of nodes. :label:`depfig`
 
 .. raw:: latex
          
