@@ -441,19 +441,36 @@ Hot spot analysis
 
 **Discussion of implications of network statistics on distribution of risk.**
 
-Research and Business Ethics
-----------------------------
 
-**Discussion of research ethics.**
+Discussion and future work
+--------------------------
 
-* As "Big Data" research goes, this is benign because open source developers generally consider their activity public.
-* Study of dependency structure is study of technology and institutions, not human subjects research.
-* As we begin to look at developer activity data, this raises some issues of surveillance
-* Approaching problem as a search for positive quality/reliability rather than labeling
-  particular developers as liabilities eases problems of reputation.
+This paper proposes a novel framework of predicting risk in software infrastructure
+based on static analysis of package dependencies and minimal assumptions about
+the distribution of exposure and vulnerability in software.
+We have demonstrated the implications of this framework using the PyPI package
+ecosystem and specific proxy variables for the components of risk.
+A major shortcoming of our analysis is the lack of validation against
+a gold standard data of *ground truth* regarding software risk.
 
+In future work, we will test this framework using other data sets, including
+data from project issue trackers (such as GitHub) and Common Vulnerabilities
+and Exposure (CVE) data.
+We anticipate that linking this data with package
+dependencies will require a non-trivial amount of work on entity resolution.
+It is an open question to what extent this framework is useful for assessing
+software robustness (absence of software errors that can be exploited, for
+example) and software resilience (capacity of software development communities
+to respond to known exploits).
 
-
+The research presented here deals exclusively with data about technical organization.
+However, as we expand into research into how software developers and their interactions
+are predictive of software risk, we encounter interesting ethical questions.
+Though all the data we intend to use is public and more importantly known
+to be public in the context of software development, study of human subjects is
+nevertheless sensitive.
+Our research agenda depends critically on maintaining the trust of the developer
+communities we study.
 
 
 References
