@@ -126,6 +126,14 @@ If features from preceding and following syllables improve k-NN performance, the
 
     **Accuracy v. number of songs used to train SVM-RBF and SVM-RBF with duration features added** *Y axis: average accuracy across labels, x axis: number of songs used to train.* In all cases, the added duration features yielded a higher accuracy. :label:`fig9`
 
+When using the same features to train all models, SVM-RBF still outperforms k-NN that in turn outperforms linear SVM
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+.. figure:: linsvm_avg_acc_by_song.png
+
+
+
 Conclusion
 ----------
 
