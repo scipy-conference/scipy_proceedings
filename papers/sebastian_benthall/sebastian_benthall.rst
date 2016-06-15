@@ -18,21 +18,14 @@ An Ecological Approach to Software Supply Chain Risk Management
 
 .. class:: abstract
 
-   Robustness and resilience of software infrastructure are essential for
-   cybersecurity. Existing approaches to software assurance focus on
+   Existing approaches to software assurance focus on
    evaluating individual software projects in isolation. We propose
    a novel method of risk management that considers the total ecosystem
-   of software development, inclusive of interdependent software packages
-   and the communities of people that develop them. By making minimal
-   analytic assumptions about the propogation of vulnerability and exposure
-   through a software supply chain, we can predict high risk "hot spots"
-   in the ecosystem in need of additional investment. We present features of
-   Ion Channel that assist with the collection and analysis of software
-   dependency information. We present statistical properties of
-   empirical data from the Python Package Index and GitHub as complex networks,
-   and demonstrate the results of our ecosystem modeling strategy on this data
-   when combined with simulated data.
-   We consider the research and business ethics of this work. 
+   of software development. Our model makes minimal assumptions about the 
+   propogation of vulnerability and exposure through a software supply chain. 
+   Combined with data collected from package management systems, this model
+   indicates "hot spots" in the ecosystem of higher expected risk. 
+   We demonstrate this model using data collected from PyPI.
 
 .. class:: keywords
 
@@ -52,28 +45,20 @@ ecosystems.
 The Heartbleed bug in OpenSSL is anas an example of community failure
 example of how vulnerabilities
 in open source software can be a major security risk. [Wheeler2014]_
-(**Reference recent nodejs leftpad bug as well.**)
+The recent failure of React, Babel, and many other NPM packages
+due to the removal of one 11 line dependency, ``left-pad``,
+shows how dependency complex itself can be a risk factor
+for production software. [Haney2016]_ 
 Open source software projects make their source code and developer
 activity data openly available for analysis.
 Despite its openness, there are many ways this data can be used
 to mitigate software risk that have not been explored.
 
-Our approach builds on prior work in software assurance, community evaluation,
-and supply chain risk assessment by taking the entire open source software ecosystem
-into consideration in the analysis.
-By software ecosystem, we mean the whole system of interdependent software packages
-under development, the developers themselves, their communications, and the infrastructure 
-they use to manage their development practices.
-
 With a small number of analytic assumptions about the propagation of vulnerability
 and exposure through the software dependency network, we have developed a model
 of ecosystem risk that predicts "hot spots" in need of more investment.
 In this paper, we demonstrate this model using real software dependency data extracted
-from PyPI using Ion Channel, GitHub data, as well as simulated data.
-
-We will also discuss the ethics of performing this research and using it in a commercial
-product. We conclude that establishing trust the trust of the developer community is
-an important part of our research and business model.
+from PyPI using Ion Channel.
 
 
 Prior work
@@ -556,6 +541,8 @@ References
 .. [Girardot2013] O. Girardot. STATE OF THE PYTHON/PYPI DEPENDENCY GRAPH. 2013
 
 .. [Hagberg2008] Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, “Exploring network structure, dynamics, and function using NetworkX”, in Proceedings of the 7th Python in Science Conference (SciPy2008), Gäel Varoquaux, Travis Vaught, and Jarrod Millman (Eds), (Pasadena, CA USA), pp. 11–15, Aug 2008
+
+.. [Haney2016] David Haney. 2016. "NPM & left-pad: Have We Forgotten How To Program?" ``http://www.haneycodes.net/npm-left-pad-have-we-forgotten-how-to-program/``
 
 .. [LaBelle2004] N. LaBelle, E. Wallingford. 2004. Inter-package dependency networks in open-source software.
 
