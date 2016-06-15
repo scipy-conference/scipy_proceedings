@@ -305,7 +305,7 @@ Empirical and Modeling Results
    :scale: 35%
    :figclass: bht
 
-   Visualization of PyPi dependency network, created using Gephi [Bastian2009]_. This visualization does not include singleton nodes with zero degree, which are the vast majority of nodes. Node size is proportional to out degree. Nodes ar colored by the log (base 10) of package ecosystem risk. Red nodes are higher risk.:label:`depfig`
+   Visualization of PyPi dependency network, created using Gephi [Bastian2009]_. This visualization does not include singleton nodes with zero degree, which are the vast majority of nodes. Node size is proportional to out degree. Nodes ar colored by the log (base 10) of package ecosystem risk. Red nodes are higher risk. The large red cluster consists of projects related to the Zope web application server, including the Plone content management system.
 
 Our data collection process created a network with :math:`66,536` nodes and :math:`72939` edges.
 Over half of the nodes, :math:`33,573`, have no edge. This isolates them from the
@@ -412,7 +412,7 @@ out-degree over 1000.
 .. figure:: exposure-vulnerability-plot.png
    :figclass: bht
 
-   Hex plot of log vulnerbality and log exposure of each package, with bin density scored on log scale. All logs are base 10. Exposure is more widely distributed than vulnerability, the vast majority of packages score low. There is a fringe of packages that are either highy vulnerable, highly exposed, or both. There is a log-linear tradeoff between high vulnerability and high exposure. This is most likely due to the fact that ecosystem vulnerability and ecosystem exposure both depend on an package's position in the dependency network. :label:`depfig`
+   Hex plot of log vulnerbality and log exposure of each package, with bin density scored on log scale. All logs are base 10. Exposure is more widely distributed than vulnerability, the vast majority of packages score low. There is a fringe of packages that are either highy vulnerable, highly exposed, or both. There is a log-linear tradeoff between high vulnerability and high exposure. This is most likely due to the fact that ecosystem vulnerability and ecosystem exposure both depend on an package's position in the dependency network. 
 
 Computing fragility and exposure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -480,9 +480,9 @@ Hot spot analysis
 
    \end{table*}
 
-**Visualization of hot spots based on the data here.**
+Our analysis suggests that the riskiest packages in the Python ecosystem are those that are part of the Zope web application server and the Plone content management system built on it. The Zope community has declared that Zope is now a legacy system and do not recommended that developers use these projects. Therefore, our analytic findings are consistent with community and domain knowledge regarding the resilience of these communities. Despite htese warnings, the Plone community is still active and many web sites may still depend on this legacy technology. This study motivates further work on the resilience of Zope to new security threats.
 
-**Discussion of implications of network statistics on distribution of risk.**
+We have also identified ``six``, a Python 2 and Python 3 compatibility library, as an ecosystem risk hot spot. The second most dependend on project in PyPI, ``six`` inherits its exposure from all of its downstream descendents. For this reason, it is important to ensure that ``six`` does not have any security-related flaws.
 
 
 Discussion and future work
