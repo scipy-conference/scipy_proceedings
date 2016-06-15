@@ -104,7 +104,7 @@ I next looked at what had been done previously and found that the Troyer lab had
 
 As shown in :ref:`fig7`, addition of these features was sufficient to achieve classification accuracy better than the linear SVM with less training samples for three of the four birds.
 
-.. figure:: linsvm_v_knn_avg_acc_by_song
+.. figure:: linsvm_v_knn_avg_acc_by_song.png
 
     **Accuracy v. number of songs used to train linear SVM and k-NN algorithms** *Y axis: average accuracy across labels, x axis: number of songs used to train.* In three out of four cases, k-NN yields higher accuracy than linear SVM, and in every case, k-NN yielded higher accuracy with less training data, although linear SVM outperformed k-NN for bird 4 given 15 songs or more. :label:`fig7`
 
@@ -113,7 +113,7 @@ Use of a radial basis function (RBF) rescues SVM accuracy
 
 Results of the previous experiments suggest that accurate syllable classification requires a non-linear decision boundary, like those provided by k-NN, probably because of the variability in intro syllables. Commonly, the radial basis function (RBF) is used as a non-linear kernel with SVMs to deal with such situations. I again used the same features that Tachibana et al. 2014 used, but replaced the linear SVM with an SVM using an RBF. The RBF rescued SVM accuracy.
 
-.. figure:: svmrbf_v_knn_avg_acc_by_song
+.. figure:: svmrbf_v_knn_avg_acc_by_song.png
 
     **Accuracy v. number of songs used to train k-NN and SVM-RBF algorithms** *Y axis: average accuracy across labels, x axis: number of songs used to train.* SVM-RBF performs better than k-NN for two of the four birds, and for three of the four birds achieves higher than 99% accuracy. :label:`fig8`
 
@@ -135,14 +135,13 @@ This leaves unanswered the question of whether differences in accuracy are due t
 
 .. figure:: svmrbf_linsvm_knn_same_ftrs_avg_acc_by_song.png
 
-    **Accuracy v. number of songs used to train SVM-RBF, k-NN, and linear SVM, all trained with acoustic features from [TACH2014]_ ** *Y axis: average accuracy across labels, x axis: number of songs used to train.* :label:`fig10`
+    **Accuracy v. number of songs used to train SVM-RBF, k-NN, and linear SVM, all trained with the same acoustic features** *Y axis: average accuracy across labels, x axis: number of songs used to train.* :label:`fig10`
 
 I also repeated the experiments using the features I found worked for k-NN . Here, the results were less clear. As shown in :ref:`fig11`, for three birds, SVM-RBF performed about as well as k-NN, and both performed better than linear SVM. For bird 4, k-NN on average performed better but the replicates showed high variance in the average accuracy.
 
-.. figure:: svmrbf_linsvm_knn_same_ftrs_avg_acc_by_song.png
+.. figure:: svmrbf_linsvm_knn_knn_ftrs_avg_acc_by_song.png
 
-    **Accuracy v. number of songs used to train SVM-RBF, k-NN, and linear SVM, all trained with features originally used for k-NN  ** *Y axis: average accuracy across labels, x axis: number of songs used to train.* :label:`fig11`
-
+    **Accuracy v. number of songs used to train SVM-RBF, k-NN, and linear SVM, all trained with features originally used for k-NN** *Y axis: average accuracy across labels, x axis: number of songs used to train.* :label:`fig11`
 
 Conclusion
 ----------
@@ -158,7 +157,6 @@ It remains to be tested whether any differences in accuracy translate into meani
 There are also other issues to be dealt with to make machine learning methods practical for birdsong researchers. One is how well each method can provide an estimate that a given classification is correct. The libSVM library, for example, can provide probability estimates using a computationally expensive 5-fold cross-validation. But, because the soft margin in the libSVM training algorithm allows some misclassifications, it's likely that some samples will actually be misclassified yet still appear to have a high probability of being correct. As [KOGAN2008]_ recognized in their study, it is also important to determine how well these algorithms deal with the presence of sounds that are not part of song, e.g., calls, wing flaps, etc. Such events are rare enough that they may be difficult to detect without changes to the training algorithm, but frequent enough that if misclassified as syllables they could affect analyses of song.
 
 Taken together, the results here demonstrate the importance of comparing how different classifiers perform in a given problem domain. By comparing classifiers I hoped to build upon the previous studies I cited. Those studies showed that machine learning methods can facilitate a much more fine-grained analyses of birdsong, but my results suggest that there are still some issues with practical application of these methods. Sharing code, results, and raw data will help resolve these issues and lead to better results for both biologists and artificial intelligence researchers studying birdsong. 
-
 
 Methods
 ----------
