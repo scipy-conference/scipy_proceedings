@@ -81,7 +81,7 @@ physical process.
         \hline
         {\bf Physical Process} & {\bf Components}\\
         \hline 
-        Convection & Community Climate Model (CCM3) (Zhang-McFarlane?) \\
+        Convection & Community Climate Model (CCM3) (Zhang-McFarlane) \\
                & Emanuel \\
                & Emanuel hard adjustment \\
                & simplified Betts-Miller \\
