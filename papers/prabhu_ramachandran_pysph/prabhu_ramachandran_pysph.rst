@@ -101,10 +101,10 @@ PySPH features a reasonable test-suite and we use continuous integration
 servers to test it on Linux and Windows.  Our documentation is hosted on
 http://pysph.readthedocs.org.  The framework supports several of the standard
 SPH schemes.  A suite of about 30 examples are provided.  These are shipped as
-part of the sources and installed when a user does a pip install for example.
-The examples are written in a way that makes it easy to extend and also
-perform comparisons between schemes.  These features make PySPH well suited
-for reproducible numerical work.  In fact one of our recent papers was written
+part of the sources and installed when a user does a pip install.  The
+examples are written in a way that makes it easy to extend and also perform
+comparisons between schemes.  These features make PySPH well suited for
+reproducible numerical work.  In fact one of our recent papers was written
 such that every figure in the paper is automatically generated using PySPH.
 
 In this paper we discuss the use, design, and implementation of PySPH.  In the
@@ -365,14 +365,14 @@ these examples can be readily run.  For example::
   Enter example number you wish to run:
 
 
-Will provide a listing of the examples prompting for a particular one to run.
-Each example also provides a convenient time estimate if it were to be run in
-serial.  The example number can be provided at the prompt.  If the name of the
-example to run is known, one may directly specify it::
+Provides a listing of the examples available and prompts for a particular one.
+Each example also provides a convenient (but rough) time estimate for the
+example to run to completion in serial.  If the name of the example is known,
+one may directly specify it as::
 
   $ pysph run elliptical_drop
 
-This example will accept a large number of command line arguments.  To find
+The examples will accept a large number of command line arguments.  To find
 these one can run::
 
   $ pysph run elliptical_drop -h
@@ -690,12 +690,13 @@ We next look inside the ``create_particles`` and ``create_scheme`` methods:
         # remove particles outside the circle
         indices = []
         for i in range(len(x)):
-            if sqrt(x[i]*x[i] + y[i]*y[i]) - 1 > 1e-10:
+            dist = sqrt(x[i]*x[i] + y[i]*y[i])
+            if dist - 1 > 1e-10:
                 indices.append(i)
 
         pa = get_particle_array(
-              x=x, y=y, m=m, rho=rho, h=h, p=p, u=u, v=v,
-              cs=cs, name='fluid')
+            x=x, y=y, m=m, rho=rho, h=h, p=p,
+            u=u, v=v, cs=cs, name='fluid')
         pa.remove_particles(indices)
 
         self.scheme.setup_properties([pa])
@@ -710,9 +711,10 @@ We next look inside the ``create_particles`` and ``create_scheme`` methods:
         kernel = Gaussian(dim=2)
         dt = 5e-6; tf = 0.0076
         s.configure_solver(
-            kernel=kernel, integrator_cls=EPECIntegrator,
-            dt=dt, tf=tf,
-            adaptive_timestep=True, cfl=0.3, n_damp=50,
+            kernel=kernel,
+            integrator_cls=EPECIntegrator,
+            dt=dt, tf=tf, adaptive_timestep=True,
+            cfl=0.3, n_damp=50,
         )
         return s
 
@@ -776,9 +778,11 @@ code is listed below:
 
                 MomentumEquation(
                     dest='fluid', sources=['fluid'],
-                    alpha=self.alpha, beta=0.0, c0=self.co),
+                    alpha=self.alpha, beta=0.0,
+                    c0=self.co),
 
-                XSPHCorrection(dest='fluid', sources=['fluid']),
+                XSPHCorrection(dest='fluid',
+                               sources=['fluid']),
 
             ]),
         ]
@@ -933,16 +937,34 @@ The md5sum of the Cython code is checked and if an extension for that md5sum
 exists the code is not recompiled.  Care is taken to look for changes in
 dependencies of this generated source.
 
-As a result of this, our code performs as well as a hand-written FOTRAN code.
-We have compared running both 2D and 3D problems with the SPHysics serial
-code.  Our code is about 1.3 to 1.5 times slower.  In 2D this is because by
-default our implementation is 3D.  In addition SPHysics symmetrizes the
-inter-particle computations, i.e. while computing the interaction of a source
-on a destination, they also compute the opposite force and store it.  This
-appears to give them the extra 1.3 fold speed improvement.  Regardless, it is
-clear that PySPH is comparable in performance with SPHysics.  However, PySPH
-is a lot easier to use and much easier to extend.
+As a result of this, our code performs almost as well as a hand-written FOTRAN
+code.  We have compared running both 2D and 3D problems with the SPHysics
+serial code.  In 2D our code is about 1.5 times slower.  This is in part
+because by default our implementation is 3D.  In 3D PySPH seems 1.3 times
+slower.  SPHysics symmetrizes the inter-particle computations, i.e. while
+computing the interaction of a source on a destination, they also compute the
+opposite force and store it.  This appears to provide additional performance
+gains.  Regardless, it is clear that PySPH is comparable in performance with
+SPHysics.  However, PySPH is a lot easier to use and much easier to extend.
 
+PySPH also displays good scale-up with OpenMP.  Consider the cube example
+which considers a cube of a user-defined number of particles (100000 by
+default), and takes 5 timesteps.  On a quad-core machine we obtain the
+following results in serial::
+
+  $ pysph run cube --disable-output
+  [...]
+  Run took: 7.13911 secs
+
+and the following in parallel::
+
+  $ pysph run cube --disable-output --openmp
+  [...]
+  Run took: 1.71387 secs
+
+This gives a speedup of about 4.16.  This shows that the scale up is
+excellent.  Good scale up has been observed in the distributed case but is not
+discussed here.
 
 
 .. _Mako: https://pypi.python.org/pypi/Mako
