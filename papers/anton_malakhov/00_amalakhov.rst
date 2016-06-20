@@ -15,24 +15,35 @@ COMPOSABLE MULTI-THREADING FOR PYTHON LIBRARIES
    with each other leading to overhead and inefficiency. We'll show how to fix this problem.
 
 .. class:: keywords
-   Multithreading, Oversubscription, Parallel Computations, Carallelism, Threading, Dask, Joblib, Numpy, Scipy
-   
-Blog
-----
-In the Beta release of Intel® Distribution for Python* I am proud to introduce something new and unusual for the Python world. It is an experimental module which unlocks additional performance for multi-threaded Python programs by enabling threading composability between two or more thread-enabled libraries.
+   Multi-threading, Over-subscription, Parallel Computations, Parallelism, Threading, Dask, Joblib, Numpy, Scipy
 
-Threading composability can accelerate programs by avoiding inefficient threads allocation (called oversubscription) when there are more software threads than available hardware resources.
+Over-subscription
+-----------------
+Multi-processing parallelism in Python might be inefficient due to memory-related overhead. On the other hand, multi-threaded parallelism is know to be more efficient but with Python, it suffers from the GIL. However, when it comes to numeric computations, most of the time is spent in native codes where the GIL can easily be released. This is why libraries such as Dask and Numba can use multi-threading to greatly speed up the computations. But being used together in a nested way, e.g. when a Dask task calls Numba's threaded ufunc, it leads to the situation where there are more active software threads than available hardware resources. This situation is called over-subscription and it can lead to sub-optimal execution due to frequent context switches, thread migration, broken cache-locality, and finally to a load imbalance when some threads finished their work but others are stuck along with the overall progress.
 
-The biggest improvement is achieved when a task pool like the ThreadPool from standard library or libraries like Dask or Joblib (used in multi-threading mode) execute tasks calling compute-intensive functions of Numpy/Scipy/PyDAAL which in turn are parallelized using Intel® MKL or/and Intel® Threading Building Blocks (Intel® TBB).
+Another example are Numpy/Scipy libraries. When they are accelerated using Intel(R) Math Kernel Library (Intel MKL) like the ones shipped as part of Intel(R) Distribution for Python. Intel MKL is usually threaded using OpenMP which is known for not easily co-existing even with itself. In particular, OpenMP threads keep spin-waiting after the work is done -- which is usually necessary to reduce work distribution overhead for the next possible parallel region. But it plays against it with another thread pool because while OpenMP worker threads keep consuming CPU time in spin-waiting, the other parallel work like Numba's ufunc (target=parallel) cannot start until OpenMP threads stop spinning or are pre-empted by the OS.
 
-The module implements Pool class with the standard interface using Intel® TBB which can be used to replace Python’s ThreadPool. Thanks to the monkey-patching technique implemented in class Monkey, no source code change is needed in order to unlock additional speedups.
+Though overheads from linear over-subscription (e.g. 2x) are not always visible on the application level for small systems and can be tolerable in many cases. But the worst case is when a program starts multiple parallel tasks and each of these tasks ends up executing an OpenMP parallel region. This results in quadratic over-subscription which ruins multi-threaded performance on systems with significant number of threads (roughly, tens and more).
 
-Let’s try it!
+Especially, over-subscription is bad for Many Integrated Core (MIC) systems such as Intel(R) Xeon Phi which support more than 2 hundred hardware threads. In such big systems, sometimes it is not even possible to create as many software threads as the number of hardware threads multiplied by itself. It will just eat up all the available RAM.
 
-Assuming you have installed Intel® Distribution for Python, we need to install Dask library which makes parallelism very simple for Python:
 
-source <path to Intel® Distribution for Python*>/bin/pythonvars.sh
-conda install dask
+Threading Composability
+-----------------------
+Our approach to solve these co-existence problems is to share one thread pool among all the program modules and native libraries so that one task scheduler will take care of composability between them. Intel(R) Threading Building Blocks (Intel TBB) library works as such a task scheduler in our solution. Intel TBB is a wide-spread and recognized C++ library for enabling multi-core parallelism. It was designed for composability and nested parallelism support from its foundation so that preventing of over-subscription is a specialization of this library.
+
+In the Intel® Distribution for Python* 2017 Beta, I introduce an experimental module which unlocks opportunities for additional performance for multi-threaded Python programs by enabling threading composability between two or more thread-enabled libraries. Threading composability can accelerate programs by avoiding inefficient threads allocation discussed above.
+
+The module implements Pool class with the standard Python interface using Intel® TBB which can be used to replace Python’s ThreadPool. Thanks to the monkey-patching technique implemented in class Monkey, no source code change is needed in order to enable single thread pool across different Python modules. It also enables TBB-based threading layer for Intel(R) MKL which automatically enables composable parallelism for Numpy and Scipy calls.
+
+Using TBB module
+----------------
+For our first experiment, we need Intel® Distribution for Python to be installed along with Dask library:
+
+.. code-block:: shell
+
+    source <path to Intel® Distribution for Python*>/bin/pythonvars.sh
+    conda install dask
 
 Now, let’s write a simple program in bench.py which exploits nested parallelism and prints time spent for the computation, like the following:
 
@@ -58,13 +69,19 @@ And to unlock additional performance::
 
     python -m TBB bench.py
 
-That's it! Depending on machine configuration, you can get about 20%-50% reduction of the compute time for this particular example or even more if there is a background activity on the machine.
+[TODO: Replace with real data] That's it! Depending on machine configuration, you can get about 20%-50% reduction of the compute time for this particular example or even more if there is a background activity on the machine.
 
-Disclaimers: TBB module does not work well for blocking I/O operations, it is applicable only for tasks which do not block in the operating system. This version of TBB module is experimental and might be not sufficiently optimized and verified with different use-cases.
+Numba
+-----
+Another area where we applied Intel TBB is Numba. I replaced multi-threading runtime used by original Numba with implementation based on TBB tasks. It improved performance even without nested parallelism:
+[Diagram here]
 
-For additional details on how to use the TBB module, please refer to built-in documentation, e.g. run `pydoc TBB`.
+[TODO: add another example with nested parallelism based on Numba and the performance data]
 
-This module is available in sources as preview feature of Intel TBB 4.4 Update 5 release.
+Multi-processing
+----------------
+[TODO: I can show that TBB helps even with multiprocessing parallelism and discuss ways how it can be further improved]
 
-We’ll greatly appreciate your feedback! Please get back to me, especially if you are interested enough to use it in your production/every-day environment. And if you are a lucky attendee of PyCon 2016 in Portland, Oregon, I'll be glad to meet you at my poster presentation "Composable Multi-threading for Python Libraries".
-
+Disclaimers
+-----------
+TBB module does not work well for blocking I/O operations, it is applicable only for tasks which do not block in the operating system. This version of TBB module is experimental and might be not sufficiently optimized and verified with different use-cases. In particular, it does not yet use master thread efficiently as regular TBB program is supposed to do. But all these problems well go away as more users will be interested in solving theirs composability issues and the TBB module is further developed.
