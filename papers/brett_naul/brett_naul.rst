@@ -313,7 +313,6 @@ using the ``cesium`` library is given in Section ?.
 
 Web frontend
 ============
-
 The ``cesium`` frontend provides easy, web-based access to time series
 analysis, addressing three common use cases:
 
@@ -346,7 +345,6 @@ following features:
 
 Backend to frontend communication
 ---------------------------------
-
 Traditionally, web frontends communicate with backends via API
 requests. For example, to add a new user, the frontend would make an
 asynchronous Javascript (AJAX) POST to `/create_user`. The request
@@ -385,7 +383,6 @@ communication.
 
 Deployment
 ----------
-
 While deployment detail of the web frontend is beyond the scope of
 this paper, it should be noted that it was designed with
 scalibility in mind.
@@ -394,7 +391,7 @@ An NGINX proxy exposes a pool of websocket and WSGI servers to the
 user.  This gives us the flexibility to choose the best implementation
 of each.  Communications between WSGI servers and WebSocket servers
 happen through a `ZeroMq <http://zeromq.org/>`_ XPUB-XSUB pipeline
-(but can be replaced with any other broker, e.g. RabbitMQ
+(but can be replaced with any other broker, e.g. `RabbitMQ
 <https://blog.pivotal.io/pivotal/products/rabbitmq-hits-one-million-messages-per-second-on-google-compute-engine>`_).
 
 The overarching design principle is to connect together several, small
@@ -604,13 +601,12 @@ keyword argument.
             skew       (name, channel) float64 0.0328 -0.09271 -0.0041 0.06368 ...
             std        (name, channel) float64 40.41 48.81 47.14 47.07 44.91 45.02 ...
 
-The EEG time series considered here consist of univariate signal measurements along a
-uniform time grid. But
-``featurize_time_series``
-also accepts multi-channel data; to demonstrate this, we will decompose each signal into
+The EEG time series considered here consist of univariate signal measurements
+along a uniform time grid. But ``featurize_time_series`` also accepts
+multi-channel data; to demonstrate this, we will decompose each signal into
 five frequency bands using a discrete wavelet transform as suggested by Subasi
-[?], and then
-featurize each band separately using the five functions from above.
+[?], and then featurize each band separately using the five functions from
+above.
 
 .. code-block:: python
 
@@ -832,3 +828,20 @@ version, or wait til after...*
 
 Conclusion
 ==========
+The ``cesium`` framework provides tools that allow anyone from machine learning
+specialists to domain experts without any machine learning experience to rapidly
+prototype explanatory models for their time series data and quickly generate
+predictions for new, unlabeled data. Aside from the applications to time domain
+informatics, our project has several aspects which are relevant to the broader
+scientific Python community.
+
+First, the dual nature of the project (Python backend vs. web frontend) presents
+both unique challenges and interesting opportunities in striking a balance
+between accessibility and flexibility of the two components.
+Second, the ``cesium`` project places a strong emphasis on reproducible
+workflows: all actions performed within the web frontend are logged and can be
+easily exported to an IPython notebook that exactly reproduces the steps of the
+analysis. Finally, the scope of our project is simultaneously both narrow (time
+series analysis) and broad (numerous distinct scientific disciplines), so
+determining how much domain-specific functionality to include is an ongoing
+challenge.
