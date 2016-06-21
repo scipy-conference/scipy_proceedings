@@ -379,7 +379,7 @@ simulated temperature :cite:`Das2012a,Uddi2012`.
 Implementation of UConnRCMPy
 ----------------------------
 
-UConnRCMPy is constructed in a heirarchical manner, with different classes representing different
+UConnRCMPy is constructed in a hierarchical manner, with different classes representing different
 levels of the data. The lowest level representation is the ``VoltageTrace`` that contains the raw
 voltage signal and timing recorded by the DAQ, as well as the filtered and smoothed voltage traces.
 The filtering and smoothing algorithms are implemented as separate methods so they can be reused
