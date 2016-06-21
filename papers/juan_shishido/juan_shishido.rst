@@ -317,6 +317,36 @@ profanity. 56% of users use some form of slang in their self-summary essays.
 Females use slang at a lower rate than males—54% vs. 57%—a difference that is
 statistically significant.
 
+We use NMF to help us understand the subject matter that users find interesting
+and important about themselves and, thus, choose to write about. This provides
+insight into the way they choose to self-present. In addition to particular
+themes, NMF allows us to consider stylistic expression. Choosing the number of
+NMF components—these can be thought of as topics—is an arbitrary and iterative
+process. For the self-summary essay, we chose to start with XX.
+
+Several expected themes emerged. Some users, for example, chose to highlight
+personality traits. Some did so by mentioning specific characteristics such as
+humor while others were less specific, mentioning phrases such as, "easy going."
+Other users focused on describing the types of activities they enjoyed. Hiking,
+traveling, and cooking were popular choices. Others chose to mention what they
+were looking for, whether that be a long-term relationship, a friendship, or
+sex. Topics are summarized in the table below.
+
+   +----------------+---------------------------------------------------------+
+   | Topic          | Tokens                                                  |
+   +================+=========================================================+
+   | 0              |                                                         |
+   +----------------+---------------------------------------------------------+
+   | 1              |                                                         |
+   +----------------+---------------------------------------------------------+
+
+The following figure shows the distribution over topics by sex. We see that,
+for most topics, the proportion of females and males is fairly even. One
+notable exception is with the enthusiastic group, which females belong to at
+almost twice the rate of males. Users in this group use modifiers such as,
+"love," "really," and "absolutely" regardless of the activities they are
+describing.
+
 Our first attempt at visualizing tokens that make the groupings distinctive was
 to plot a histogram of the difference in relative frequency between tokens for
 a given group versus other groups (Fig 3). This can be done between clusters
