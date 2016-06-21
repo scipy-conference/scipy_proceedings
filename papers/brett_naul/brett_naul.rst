@@ -345,7 +345,7 @@ following features:
 
 
 Backend to frontend communication
-`````````````````````````````````
+---------------------------------
 
 Traditionally, web frontends communicate with backends via API
 requests. For example, to add a new user, the frontend would make an
@@ -384,7 +384,7 @@ communication.
                Flask, the web framework we use.
 
 Deployment
-``````````
+----------
 
 While deployment detail of the web frontend is beyond the scope of
 this paper, it should be noted that it was designed with
