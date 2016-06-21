@@ -3,7 +3,7 @@
 :institution: University of California, Berkeley
 :corresponding:
 
-:author: Stéfan Van Der Walt
+:author: Stéfan van der Walt
 :email: stefanv@berkeley.edu
 :institution: University of California, Berkeley
 
@@ -28,16 +28,16 @@
 
 .. class:: abstract
 
-   The analysis of time series data is a fundamental part of many scientific
-   disciplines, but there are few resources meant to help domain scientists to
-   easily explore time course datasets: traditional statistical models of time
+   The analysis of time series data is a common procedure in many scientific
+   disciplines, yet there are few resources available to domain scientists for
+   easily exploring time course datasets: traditional statistical models of time
    series are often too rigid to explain complex time domain behavior, while
    popular machine learning packages deal almost exclusively with 'fixed-width'
    datasets containing a uniform number of features. ``cesium`` is a time
    series analysis framework, consisting of a Python library as well as a web
    front-end interface, that allows researchers to apply modern machine
-   learning techniques to time series data in a way that is simple, easily
-   reproducible, and extensible.
+   learning techniques to time series data in a simple, easily
+   reproducible, and extensible way.
 
 .. class:: keywords
 
@@ -313,21 +313,39 @@ using the ``cesium`` library is given in Section ?.
 
 Web frontend
 ============
-The ``cesium`` web frontend allows for quicker and simpler access
-to new users who simply want to upload a dataset and experiment with feature
-extraction and classification. 
+
+The ``cesium`` frontend provides easy, web-based access to time series
+analysis, addressing three common use cases:
+
+1. A scientist needs to perform time series analysis, but is
+   **unfamiliar with programming** and library usage.
+2. A group of scientists want to **collaboratively explore** different
+   methods for time-series analysis.
+3. A scientist is unfamiliar with time-series analysis, and wants to
+   **learn** how to apply various methods to her data, using **industry best
+   practices**.
 
 .. figure:: architecture
 
    Architetural diagram of ``cesium`` analysis platform *TODO: UPDATE*. :label:`architecture`
 
-- Supporting safe cloud-based execution of user-uploaded code via Docker
-- Offering (free, short-term) trial sessions using MS Azure
-- tradeoffs between more powerful backend Python library and more accessible web frontend
-- tracking/reporting an entire exploratory workflow for the start-to-finish reproducibility
-        - *IPython notebook...?*
+The front-end system (together with its deployed backend), offers the
+following features:
 
-*TODO paraphrase*
+ - Distributed, parallelized fitting of machine learning models.
+ - Isolated [#isolation]_, cloud-based execution of user-uploaded code.
+ - Visualization and analysis of results.
+ - Tracking of an entire exploratory workflow from start-to-finish for
+   reproducibility (in progress).
+ - Downloads of Jupyter notebooks to replicate analyses (in progress).
+
+.. [#isolation] Isolation is currently provided by limiting the user
+                to non-privileged access inside a Docker container.  This
+                does not theoretically guarantee 100% isolation.
+
+
+Backend to frontend communication
+`````````````````````````````````
 
 Traditionally, web frontends communicate with backends via API
 requests. For example, to add a new user, the frontend would make an
@@ -339,66 +357,52 @@ These types of calls are designed for short-lived request-answer
 sessions: the answer has to come back before the connection times out,
 otherwise the frontend is responsible for implementing logic for
 recovery. When the backend has to deal with a longer running task,
-the frontend typically polls repeatedly to see when it is done.
+the frontend typically polls repeatedly to see when it is done.  Other
+solutions include long polling or server-side events.
 
-Another common scenario is one where the server wants to push updates
-through to clients as they become available. E.g., the server may
-scan a news resource once an hour, and then publish the results to all
-connected clients. The traditional solution is to either
-use long polling or server-side events.
-
-Both of the above situations can be handled gracefully using
+In our situation, tasks execute on the order of several (sometimes
+tens of) minutes.  This situation can be handled gracefully using
 WebSockets---the caveat being that these can be intimidating to set
 up, especially in Python.
 
-This article presents a simple recipe for adding WebSocket support to
-your Python web server. It works with any WSGI server (Flask, Django,
-Pylons, etc.), and allows scaling up as demand increases.
+We have implemented a simple interface for doing so that we informally
+call *message flow*.  It adds WebSocket support to any Python WSGI
+WSGI server (Flask, Django[^#channels], Pylons, etc.), and allows scaling up as demand
+increases.
 
-Our end goal is to provide a pattern through which implementation of a
-data flow model such as `Flux <https://facebook.github.io/flux/>`_
-becomes trivial. Information always flows in one direction: from
-frontend to backend via API calls, and from backend to frontend via
-WebSocket communication.
+A detailed writup of *message flow* can be found on the Cesium blog at
+<INSERT URL>.  It allows us to implement trivially modern data flow
+models such as `Flux <https://facebook.github.io/flux/>`_, where
+information always flows in one direction: from frontend to backend
+via API calls, and from backend to frontend via WebSocket
+communication.
 
-The following diagram shows the different components of the system:
+.. [^channels] At PyCon2016, Andrew Godwin presented a similar
+               solution for Django called "channels".  The work
+               described here happened before we became aware of
+               Andrew's, and generalizes beyond Django to, e.g.,
+               Flask, the web framework we use.
 
-.. figure:: cesium-message-flow
+Deployment
+``````````
 
-   Diagram of web frontend message flow communication.
+While deployment detail of the web frontend is beyond the scope of
+this paper, it should be noted that it was designed with
+scalibility in mind.
 
-There are two primary server pools: web servers, and web socket
-servers. The web servers can be any WSGI compatible server,
-e.g. Flask, Django, Pyramid, etc. 
-Our implementation runs on top of
-`Tornado's WebSocket implementation <http://www.tornadoweb.org/en/stable/websocket.html>`_.
+An NGINX proxy exposes a pool of websocket and WSGI servers to the
+user.  This gives us the flexibility to choose the best implementation
+of each.  Communications between WSGI servers and WebSocket servers
+happen through a `ZeroMq <http://zeromq.org/>`_ XPUB-XSUB pipeline
+(but can be replaced with any other broker, e.g. RabbitMQ
+<https://blog.pivotal.io/pivotal/products/rabbitmq-hits-one-million-messages-per-second-on-google-compute-engine>`_).
 
-We run both these services behind an nginx proxy, which redirects any requests
-to `/websocket` to the WebSocket pool and the rest to the Flask app (running on
-a Unix socket).
-
-To allow communication between web servers and WebSocket servers, a
-`ZeroMq <http://zeromq.org/>`_ XPUB-XSUB pipeline is established (this is a very
-simple form of a message broker, and comprises a mere 20 lines of code.
-
-The frontend connects to the backend using a
-`reconnecting WebSocket <https://github.com/joewalnes/reconnecting-websocket>`_.
-To ensure that users cannot listen to one another's communications,
-each frontend client receives a `JSON Web Token <https://jwt.io/>`_.
-This token is then sent to the WebSocket for authentication.
-
-To keep the different micro-services up and running, we use
-`Supervisor <http://supervisord.org/>`_.
-
-Each individual component is extremely simple and does only the one thing it was
+The overarching design principle is to connect together several, small
+component, each performing only one, simple task---the one it was
 designed for.
 
-Horizontal scaling is a only matter of launching more servers. This is true for
-all services except the current message proxy implementation, which can easily
-`be replaced with RabbitMQ <https://blog.pivotal.io/pivotal/products/rabbitmq-hits-one-million-messages-per-second-on-google-compute-engine>`_.
-
-Scalability
------------
+Computational Scalability
+-------------------------
 In many fields, the volumes of time series data available can be immense.
 ``cesium`` makes the process of analyzing time series easily parallelizable and
 scaleable; scaling an analysis from a single system to a large cluster should
@@ -410,7 +414,7 @@ anything from automatically utilizing all the available cores of a single machin
 to assigning jobs across a large cluster. Similarly, both parts of the
 ``cesium`` framework include support for various distributed filesystems, so
 that analyses can be performed without copying the entire dataset into a
-centralized location. 
+centralized location.
 
 While the ``cesium`` library is written in pure Python, the overhead of the
 featurization tasks is minimal; the majority of the work is done by the feature
