@@ -444,20 +444,20 @@ notebook versions are available for every example workflow.
 
 Example EEG dataset analysis
 ============================
-In this example we'll compare
-various techniques for epilepsy detection using a classic EEG time series dataset from
-Andrzejak et al. [?].
-The raw data are separated into five classes: Z, O, N, F, and S; we will consider a
-three-class classification problem of distinguishing normal (Z, O), interictal (N, F), and
+In this example we'll compare various techniques for epilepsy detection using a
+classic EEG time series dataset from Andrzejak et al. [?].  The raw data are
+separated into five classes: Z, O, N, F, and S; we will consider a three-class
+classification problem of distinguishing normal (Z, O), interictal (N, F), and
 ictal (S) signals. We'll show how to perform the exact same analysis using both
 the backend Python library and the web frontend.
-#Here we present an example analysis of a light curve dataset from astronomy
-#performed using both the Python library and the equivalent frontend workflow. 
-#The problem involves classifying light curves (i.e., time series consisting
-#of times, star brightness values (in magnitudes), and measurement errors) based
-#on the type of star from which they were collected. We follow the approach
-#of [?] using the same 810 training examples but with a reduced set of features
-#for simplicity.
+
+.. Here we present an example analysis of a light curve dataset from astronomy
+   performed using both the Python library and the equivalent frontend workflow. 
+   The problem involves classifying light curves (i.e., time series consisting
+   of times, star brightness values (in magnitudes), and measurement errors) based
+   on the type of star from which they were collected. We follow the approach
+   of [?] using the same 810 training examples but with a reduced set of features
+   for simplicity.
 
 Python library
 --------------
@@ -720,82 +720,82 @@ model from a set of time series and make predictions on new, unlabeled data. In
 upcoming posts we'll introduce the web frontend for ``cesium`` and describe how
 the same analysis can be performed in a browser with no setup or coding required.
 
-#Here we load the data from the built-in library of example datasets, specify the
-#features to use, and compute the feature values. We also include a (trivial)
-#custom feature ``variance`` which is the square of another feature ``std``.
-#
-#.. code-block:: python
-#
-#        from cesium import featurize
-#        from cesium.datasets import asas_training
-#
-#        data = asas_training.fetch_asas_training()
-#        # Choose a small subset of useful light curve features
-#        features = ['flux_percentile_ratio_mid20',
-#                    'fold2P_slope_10percentile',
-#                    'fold2P_slope_90percentile',
-#                    'freq1_amplitude1', 'freq1_amplitude2',
-#                    'freq1_freq', 'gskew',
-#                    'median_absolute_deviation',
-#                    'percent_difference_flux_percentile',
-#                    'scatter_res_raw', 'skew', 'std',
-#                    'stetson_j', 'var']
-#        fset = featurize.featurize_time_series(
-#                   data['times'], data['measurements'],
-#                   data['errors'], features_to_use=features,
-#                   targets=data['classes'].values,
-#                   labels=data['classes'].index,
-#                   use_celery=True,
-#                   custom_functions={'variance':
-#                                     (np.square, 'std')})
-#
-#Next, we'll split the data into train and test subsets and train a random forest
-#classifier from the set of features computed above.
-#
-#.. code-block:: python
-#
-#        from sklearn.cross_validation import train_test_split
-#        from cesium import build_model
-#
-#        # TODO clean up
-#        # Choose a subset of classes
-#        class_list = ['Mira', 'Classical_Cepheid', 'RR_Lyrae_FM']
-#        labels = data['classes'].iloc[[x in class_list for x in
-#                                      data['classes']]].index.values
-#        fset = fset.sel(name=labels)
-#
-#        # Select train/test indices
-#        train, test = train_test_split(labels, train_size=0.8,
-#                                       stratify=fset.target)
-#        model = build_model.build_model_from_featureset(
-#                    fset.sel(name=train),
-#                    model_type='RandomForestClassifier',
-#                    model_options={'n_estimators': 100})
-#
-#We may also choose the hyperparameter ``n_estimators`` from a grid via
-#cross-valdiation:
-#
-#.. code-block:: python
-#
-#        model = build_model.build_model_from_featureset(
-#                    fset.sel(name=train),
-#                    model_type='RandomForestClassifier',
-#                    params_to_optimize={'n_estimators':
-#                                        [10, 100, 1000]})
-#
-#Finally, we'll check our prediction accuracy on the test data:
-#
-#.. code-block:: python
-#
-#        from cesium import predict
-#
-#        Y_test = predict.model_predictions(fset.sel(name=test),
-#                                           model,
-#                                           return_probs=False)
-#        print((Y_test.values ==
-#               fset.sel(name=test).target.values).mean())
-#
-#        >> 0.924528301887
+.. Here we load the data from the built-in library of example datasets, specify the
+   features to use, and compute the feature values. We also include a (trivial)
+   custom feature ``variance`` which is the square of another feature ``std``.
+   
+   .. code-block:: python
+   
+           from cesium import featurize
+           from cesium.datasets import asas_training
+   
+           data = asas_training.fetch_asas_training()
+           # Choose a small subset of useful light curve features
+           features = ['flux_percentile_ratio_mid20',
+                       'fold2P_slope_10percentile',
+                       'fold2P_slope_90percentile',
+                       'freq1_amplitude1', 'freq1_amplitude2',
+                       'freq1_freq', 'gskew',
+                       'median_absolute_deviation',
+                       'percent_difference_flux_percentile',
+                       'scatter_res_raw', 'skew', 'std',
+                       'stetson_j', 'var']
+           fset = featurize.featurize_time_series(
+                      data['times'], data['measurements'],
+                      data['errors'], features_to_use=features,
+                      targets=data['classes'].values,
+                      labels=data['classes'].index,
+                      use_celery=True,
+                      custom_functions={'variance':
+                                        (np.square, 'std')})
+   
+   Next, we'll split the data into train and test subsets and train a random forest
+   classifier from the set of features computed above.
+   
+   .. code-block:: python
+   
+           from sklearn.cross_validation import train_test_split
+           from cesium import build_model
+   
+           # TODO clean up
+           # Choose a subset of classes
+           class_list = ['Mira', 'Classical_Cepheid', 'RR_Lyrae_FM']
+           labels = data['classes'].iloc[[x in class_list for x in
+                                         data['classes']]].index.values
+           fset = fset.sel(name=labels)
+   
+           # Select train/test indices
+           train, test = train_test_split(labels, train_size=0.8,
+                                          stratify=fset.target)
+           model = build_model.build_model_from_featureset(
+                       fset.sel(name=train),
+                       model_type='RandomForestClassifier',
+                       model_options={'n_estimators': 100})
+   
+   We may also choose the hyperparameter ``n_estimators`` from a grid via
+   cross-valdiation:
+   
+   .. code-block:: python
+   
+           model = build_model.build_model_from_featureset(
+                       fset.sel(name=train),
+                       model_type='RandomForestClassifier',
+                       params_to_optimize={'n_estimators':
+                                           [10, 100, 1000]})
+   
+   Finally, we'll check our prediction accuracy on the test data:
+   
+   .. code-block:: python
+   
+           from cesium import predict
+   
+           Y_test = predict.model_predictions(fset.sel(name=test),
+                                              model,
+                                              return_probs=False)
+           print((Y_test.values ==
+                  fset.sel(name=test).target.values).mean())
+   
+           >> 0.924528301887
 
 Web frontend
 ------------
