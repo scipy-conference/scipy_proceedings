@@ -282,6 +282,19 @@ females write just under 150 words (tokens, actually) compared to males' 139,
 though the variance is higher for the males than the females. This difference
 is statistically significant.
 
+For profanity and slang, instead of comparing frequencies across demographic
+splits, we compare the proportion of users who use these terms.
+
+In the self-summary essay, profanity is rarely used. Overall, only 6% of users
+include such terms in their descriptions. 5.8% of females use profanity in
+their self-summaries compared to 6.1% of males. This difference is not
+statistically significant.
+
+Not surprisingly, slang is much more prevalent (on a per-user basis) than
+profanity. 56% of users use some form of slang in their self-summary essays.
+Females use slang at a lower rate than males—54% vs. 57%—a difference that is
+statistically significant.
+
 In order to compare part-of-speech usage, we first associate part-of-speech
 tags with every token in the self-summary corpus. This results in counts by
 user and tag. Because of the difference in essay length we saw above, we
@@ -304,18 +317,33 @@ We find that, in the self-summary essay, females use more adjectives than
 males do. For nouns, it's the other way around. Interestingly, neither sex uses
 verbs more often than the other.
 
-For profanity and slang, instead of comparing frequencies across demographic
-splits, we compare the proportion of users who use these terms.
+In addition to part-of-speech usage, we can explore particular terms associated
+with parts-of-speech that are distinctive to a particular group. We do this by
+comparing relative token frequencies. The 15 most-distinctive adjective,
+noun, and verb tokens, by sex, are summarized below.
 
-In the self-summary essay, profanity is rarely used. Overall, only 6% of users
-include such terms in their descriptions. 5.8% of females use profanity in
-their self-summaries compared to 6.1% of males. This difference is not
-statistically significant.
-
-Not surprisingly, slang is much more prevalent (on a per-user basis) than
-profanity. 56% of users use some form of slang in their self-summary essays.
-Females use slang at a lower rate than males—54% vs. 57%—a difference that is
-statistically significant.
+   +----------------+----------------------------+----------------------------+
+   | Part-of-Speech | Female                     | Male                       |
+   +================+============================+============================+
+   | Adjectives     | my happy independent       | that nice more few other   |
+   |                | favorite sweet silly       | most its cool interesting  |
+   |                | important passionate warm  | your easy good which must  |
+   |                | amazing beautiful          | last                       |
+   |                | adventurous creative loyal |                            |
+   |                | social                     |                            |
+   +----------------+----------------------------+----------------------------+
+   | Nouns          | who girl family friends    | guy sports music something |
+   |                | love someone life person   | francisco women what       |
+   |                | yoga heart men wine things | guitar video computer      |
+   |                | adventures dancing         | stuff games years company  |
+   |                |                            | name                       |
+   +----------------+----------------------------+----------------------------+
+   | Verbs          | love am laugh have being   | was 's been m 've 'll play |
+   |                | are loving travel be       | moved working get playing  |
+   |                | laughing appreciate        | 'm like know laid          |
+   |                | traveling dancing          |                            |
+   |                | exploring loves            |                            |
+   +----------------+----------------------------+----------------------------+
 
 We use NMF to help us understand the subject matter that users find interesting
 and important about themselves and, thus, choose to write about. This provides
