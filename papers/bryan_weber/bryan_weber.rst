@@ -17,7 +17,7 @@ UConnRCMPy: Python-based data analysis for Rapid Compression Machines
     The ignition delay of a fuel/air mixture is an important quantity in designing combustion
     devices, and these data are also used to validate computational kinetic models for combustion.
     One of the typical experimental devices used to measure the ignition delay is called a Rapid
-    Compression Machine (RCM). This work presents UConnRCMPy, an open-source Python package to
+    Compression Machine (RCM). This paper presents UConnRCMPy, an open-source Python package to
     process experimental data from the RCM at the University of Connecticut. Given an experimental
     measurement, UConnRCMPy computes the thermodynamic conditions in the reaction chamber of the RCM
     during an experiment along with the ignition delay. UConnRCMPy relies on several packages from
@@ -71,7 +71,7 @@ oxidizer mixture inside a reaction chamber. After the end of compression (EOC), 
 RCM experiments is the pressure measured as a function of time in the reaction chamber. This
 pressure trace is then processed to extract the ignition delay.
 
-In this work, the design and operation of a software package to process the pressure data collected
+In this paper, the design and operation of a software package to process the pressure data collected
 from RCMs is described. This package, called UConnRCMPy :cite:`uconnrcmpy`, is designed to enable
 reproducible analysis of the data acquired from the RCM at the University of Connecticut (UConn).
 Despite the initial focus on data from the UConn RCM, the package is designed to be extensible so
@@ -687,7 +687,7 @@ method to determine the optimal cutoff frequency in the filtering algorithm.
 Acknowledgements
 ----------------
 
-This material is based on work supported by the National Science Foundation under Grant No.
+This material is based on paper supported by the National Science Foundation under Grant No.
 CBET-1402231.
 
 .. |TC| replace:: :math:`T_C`
