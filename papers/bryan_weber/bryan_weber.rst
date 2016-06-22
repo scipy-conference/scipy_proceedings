@@ -72,7 +72,7 @@ RCM experiments is the pressure measured as a function of time in the reaction c
 pressure trace is then processed to extract the ignition delay.
 
 In this paper, the design and operation of a software package to process the pressure data collected
-from RCMs is described. This package, called UConnRCMPy :cite:`uconnrcmpy`, is designed to enable
+from RCMs is described. Our package, called UConnRCMPy :cite:`uconnrcmpy`, is designed to enable
 reproducible analysis of the data acquired from the RCM at the University of Connecticut (UConn).
 Despite the initial focus on data from the UConn RCM, the package is designed to be extensible so
 that it can be used for data in different formats while providing a consistent interface to the
