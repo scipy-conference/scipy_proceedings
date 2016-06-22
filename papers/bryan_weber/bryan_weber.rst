@@ -241,7 +241,7 @@ average window was chosen empirically.
 
 For some conditions, the reactants may undergo two distinct stages of ignition. These cases can be
 distinguished by a pair of peaks in the first time derivative of the pressure. For some two-stage
-ignition cases, the first-stage pressure rise (and consequently the peak in the derivative) are
+ignition cases, the first-stage pressure rise, and consequently the peak in the derivative, are
 relatively weak, making it hard to distinguish the peak due to ignition from the background noise.
 This is currently the area requiring the most manual intervention, and one area where significant
 improvements can be made by refining the differentiation and filtering/smoothing algorithms. An
