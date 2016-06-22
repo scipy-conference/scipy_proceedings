@@ -350,7 +350,7 @@ and important about themselves and, thus, choose to write about. This provides
 insight into the way they choose to self-present. In addition to particular
 themes, NMF allows us to consider stylistic expression. Choosing the number of
 NMF components—these can be thought of as topics—is an arbitrary and iterative
-process. For the self-summary essay, we chose to start with XX.
+process. For the self-summary essay, we chose to start with 25.
 
 Several expected themes emerged. Some users, for example, chose to highlight
 personality traits. Some did so by mentioning specific characteristics such as
@@ -358,14 +358,95 @@ humor while others were less specific, mentioning phrases such as, "easy going."
 Other users focused on describing the types of activities they enjoyed. Hiking,
 traveling, and cooking were popular choices. Others chose to mention what they
 were looking for, whether that be a long-term relationship, a friendship, or
-sex. Topics are summarized in the table below.
+sex. Topics and a selection of their highest weighted tokens are summarized in
+the table below. (Note that a complete list of the 50 highest weighted tokens
+for each topic is available in the appendix.)
 
    +----------------+---------------------------------------------------------+
    | Topic          | Tokens                                                  |
    +================+=========================================================+
-   | 0              |                                                         |
+   | meet & greet   | meet new people, looking meet new, love meeting new,    |
+   |                | new friends, enjoy meeting, interesting people,         |
+   |                | want meet, 'm new, people love, experiences             |
    +----------------+---------------------------------------------------------+
-   | 1              |                                                         |
+   | the city       | san francisco, moved san francisco, city,               |
+   |                | living san francisco, just moved san, native,           |
+   |                | san diego, grew, originally, recently                   |
+   +----------------+---------------------------------------------------------+
+   | enthusiastic   | love travel, love laugh, love outdoors, love love,      |
+   |                | laugh, dance, love cook, especially, life love,         |
+   |                | love life                                               |
+   +----------------+---------------------------------------------------------+
+   | straight talk  | know, just, want, ask, message, just ask, really,       |
+   |                | talk, write, questions                                  |
+   +----------------+---------------------------------------------------------+
+   | about me       | 'm pretty, 'm really, 'm looking, 'm just, say 'm,      |
+   |                | think 'm, 'm good, 'm trying, nerd, 'm working          |
+   +----------------+---------------------------------------------------------+
+   | novelty        | new things, trying new, trying new things, new places,  |
+   |                | learning new things, exploring, restaurants,            |
+   |                | things love, love trying, different                     |
+   +----------------+---------------------------------------------------------+
+   | seeking        | 'm looking, guy, relationship, looking meet, share,     |
+   |                | woman, nice, just looking, man, partner                 |
+   +----------------+---------------------------------------------------------+
+   | carefree       | easy going, 'm easy going, easy going guy,              |
+   |                | pretty easy going, laid, love going, enjoy going,       |
+   |                | simple, friendly, likes                                 |
+   +----------------+---------------------------------------------------------+
+   | casual         | guy, lol, chill, nice, old, pretty, alot, laid, kinda,  |
+   |                | wanna                                                   |
+   +----------------+---------------------------------------------------------+
+   | enjoy          | like, 'd like, things like, really like, n't like,      |
+   |                | feel like, stuff, like people, like going, watch        |
+   +----------------+---------------------------------------------------------+
+   | transplant     | moved, sf, years ago, school, east coast, city,         |
+   |                | just moved, college, went, california                   |
+   +----------------+---------------------------------------------------------+
+   | nots           | n't, ca n't, does n't, really, wo n't, n't like,        |
+   |                | n't know, n't really, did n't, probably                 |
+   +----------------+---------------------------------------------------------+
+   | moments        | spend time, good time, lot, free time, spending time,   |
+   |                | lot time, spend lot, time friends, time 'm, working     |
+   +----------------+---------------------------------------------------------+
+   | personality    | humor, good sense humor, good time, good conversation,  |
+   |                | sarcastic, love good, dry, good company, appreciate,    |
+   |                | listener                                                |
+   +----------------+---------------------------------------------------------+
+   | amusing        | fun loving, 'm fun, having fun, outgoing, guy, girl,    |
+   |                | adventurous, like fun, looking fun, spontaneous         |
+   +----------------+---------------------------------------------------------+
+   | review         | let 's, think, way, self, right, thing, say, little,    |
+   |                | profile, summary                                        |
+   +----------------+---------------------------------------------------------+
+   | region         | bay area, moved bay area, bay area native, grew,        |
+   |                | living, 'm bay area, east bay, raised bay area, east,   |
+   |                | originally
+   +----------------+---------------------------------------------------------+
+   | career-focused | work hard, play hard, hard working, progress, harder,   |
+   |                | job, try, love work, company, busy                      |
+   +----------------+---------------------------------------------------------+
+   | locals         | born, raised, born raised, california, raised bay area, |
+   |                | college, school, sf, berkeley, oakland                  |
+   +----------------+---------------------------------------------------------+
+   | unconstrained  | open minded, creative, honest, relationship,            |
+   |                | adventurous, curious, passionate, intelligent, heart,   |
+   |                | independent                                             |
+   +----------------+---------------------------------------------------------+
+   | active         | enjoy, friends, family, hiking, watching, outdoors,     |
+   |                | travelling, hanging, cooking, sports                    |
+   +----------------+---------------------------------------------------------+
+   | creative       | music, art, live, movies, live music, play, food,       |
+   |                | games, dancing, books                                   |
+   +----------------+---------------------------------------------------------+
+   | carpe diem     | live, world, fullest, enjoy life, experiences,          |
+   |                | passionate, love life, moment, living life, life short  |
+   +----------------+---------------------------------------------------------+
+   | cheerful       | person, people, make, laugh, think, funny, kind, happy, |
+   |                | honest, smile                                           |
+   +----------------+---------------------------------------------------------+
+   | jet setter     | 've, lived, years, world, traveled, year, spent,        |
+   |                | countries, different, europe                            |
    +----------------+---------------------------------------------------------+
 
 The following figure shows the distribution over topics by sex. We see that,
