@@ -30,116 +30,182 @@ successes.
 History
 -------
 
-MONTE is the latest in a long-line of Deep Space Navigation software
-sets developed at JPL spanning back to the dawn of the space age. The
-first artificial satellite sent to orbit by the United States was
-Explorer I, and when it launched in 1958, NASA had yet to be
-established as an official government agency. CalTech and its
-Jet Propulsion Laboratory led the development and operations effort
-for Explorer I.
+The United States began its reconnaissance of the solar system in the
+early 1960s. As NASA developed new technologies to build and operate
+robotic probes in deep space, JPL was working out how to guide those
+probes to their destinations. In order to fly a spacecraft to Mars or
+Jupiter, engineers needed a way to model its trajectory through
+interplanetary space. They needed to collect `tracking data` that
+would allow them to make informed adjustments to their trajectory
+models. They also needed a way of designing maneuvers that would nudge
+a wayward probe back on course.
 
-In the 1960's, JPL organized its growing expertise in trajectory
-design and spacecraft orbit determination into the Single Precision
-Orbit Determination Program (SPODP), which supported the early robotic
-reconnaissance of the Moon and inner solar system by navigating the
-Ranger, Surveyor, Lunar Orbiter, and early Mariner and Pioneer
-missions.
+The problem of `deep space navigation` quickly became coupled with
+software and computing. The first programs JPL wrote to navigate
+spacecraft were written on punch-cards and processed through an
+IBM 7090 mainframe. [Eke05]_ Advances in computing technology were eagerly
+consumed by navigators, as more storage and faster processing meant
+the models used fly spacecraft could be made increasingly detailed
+and sophisticaed.
 
 Starting in 1964, a group of engineers, led by Ted Moyer, began
-developing the algorithms and software which would eventually become
-the Double Precision Trajectory and Orbit Determination Program
-(DPTRAJ/ODP). The DPTRAJ/ODP was used by JPL to navigate the "Golden Age"
-of deep space exploration, including the later Mariner and Pioneer
-Missions, Viking, Voyager, Magellan, Galileo and Cassini. This work
-was codified in Moyer's foundational orbit determination papers
-[Moy71]_ and [Moy03]_.
+developing the astrodynamic algorithms and software that would
+eventually become the Double Precision Trajectory and Orbit
+Determination Program, or DPTRAJ/ODP([Moy71]_, [Moy03]_). Over its
+fourty-plus years of active life, the DPTRAJ/ODP was used by JPL to
+navigate the "Golden Age" of deep space exploration. This included the
+later Mariner and Pioneer Missions, Viking, Voyager, Magellan, Galileo,
+Cassini and more. Also over this time its base language moved through
+Fortan IV, Fortran V, Fortran 77 and Fortran 95 as the computational
+appetites of navigators grew ever larger.
 
-The story of MONTE begins in 1998, when JPL's navigation section
-commissioned an update to the aging DPTRAJ/ODP library. The primary
-idea was translate the Fortran-based legacy software into a more
-maintainable, extensible and better tested C++ / Python application.
-Throughout the first half of the 2000s, the reorganization of the
-navigation algorithms into a rigorously tested, object-oriented
-software package continued. In 2007, MONTE got its first operational
-assignment navigating the Mars Phoenix mission. As MONTE grew in
-capability over the next five years, all the remaining DPTRAJ/ODP
-missions transitioned to MONTE.
+By 1998 it was clear that the aging DPTRAJ/ODP needed to be updated
+once again. Rather than initiate another refactor of the DPTRAJ/ODP,
+JPL's navigation section commissioned a brand new effort that would
+depart from its predacessor in two important ways. First, the new
+software would be an object-oriented library, written in C++ and
+exposed to the user as a Python-language library. Second, it would
+be a general-purpose astrodyanmic computing platform, not a dedicated
+navigation program like the DPTRAJ/ODP. The goal was to create a single
+library that could be used for astrodynamic research, space mission
+design, planetary science, in addition to deep space navigation. This
+new project was affectionalely named the Mission Analysis, Operations,
+and Navigation Toolkit Environment, or MONTE-Python for short.
+
+Throughout the first half of the 2000s, MONTE was carefully constructed
+by reshaping the algorithms under-pinning the DPTRAJ/ODP into a
+rigoursly tested and well documented object-oriented software package.
+In 2007, MONTE got its first operational assignment and successfully
+navigated NASA's Phoenix lander to Mars. Since 2012 MONTE has powered
+all flight navigation services at JPL, including the Cassini extended
+mission, Mars Science Laboratory, MAVEN, GRAIL, Dawn, Mars Recoinassance
+Orbiter, Juno, and more. [Eva16]_
 
 Deep Space Navigation
 ---------------------
 
-The practice of navigating spacecraft in deep space encompasses three
-interelated disciplines: (1) Designing a reference trajectory which describes
-the planned flight path of the spacecraft (mission design), (2) keeping track
-of the actual spacecraft position while the mission is in flight (orbit
-determination), and (3) designing maneuvers to bring the spacecraft back to
-the reference trajectory when it has strayed (flight path control, Figure
-:ref:`tour`).
-
 .. figure:: figures/cassinitour.png
 
-    Illustration of Cassini's reference trajectory at Saturn. The mission
-    designers built this trajectory, and the orbit determination and maneuver
-    design teams keep the spacecraft flying on these orbits during the
-    mission. :label:`tour`
+    Illustration of Cassini's reference trajectory at Saturn. The
+    mission designers built this trajectory, and the orbit determination
+    and maneuver design teams keep the spacecraft flying on these orbits
+    during the mission. :label:`tour`
 
-The process of designing a spacecraft reference trajectory begins at the very
-earliest stages of mission planning. The mission design navigators work very
-closely with the science teams to put together a reference orbit that allows
-the spacecraft to take all the desired science measurements. They also work
-with mission planners and spacecraft system engineers to make sure that the
-spacecraft is able to withstand the rigors of it's planned trajectory.
-After iterating through design after design, a process which often takes years
-(and may still be revised later while the spacecraft is in flight), the result
-is the mission reference trajectory. It will be up to the orbit determination
-and flight path control teams to make sure the spacecraft actually follows this
-flight plan when the spacecraft finally launches.
+At JPL, the practice of navigating robotic probes in deep space is
+broken down into three interelated disciplines: (1) Designing a
+reference trajectory which describes the planned flight path of the
+spacecraft (*mission design*), (2) keeping track of the actual
+spacecraft position while the mission is in flight (*orbit
+determination*), and (3) designing maneuvers to bring the spacecraft
+back to the reference trajectory when it has strayed (*flight path
+control*, Figure :ref:`tour`).
+
+The process of designing a spacecraft reference trajectory begins at
+the earliest stages of mission planning. Navigators work very closely
+with mission science teams to put together a reference orbit that
+allows the spacecraft to take all the desired science measurements.
+They also work with mission planners and spacecraft system engineers
+to make sure that the spacecraft is able to withstand the rigors of
+its planned trajectory. After iterating through designs, a process
+which often takes years (and may still be revised later while the
+spacecraft is in flight), the result is the mission reference
+trajectory. It will be up to the orbit determination and flight path
+control teams to make sure the spacecraft actually follows this flight
+plan when the spacecraft finally launches.
 
 The job of the orbit determination team is to keep track of where the
-spacecraft has been (orbit reconstruction), is currently (orbit determination),
-and where it will go in the future (orbit prediction). The spacecraft is always
-drifting away from it's planned flight path because of disturbances it
-encounters in space. Even small disturbances, like the pressure of sunlight on
-the spacecraft, can add up over time and push the spacecraft off course. The
-mission designers do their best to account for these disturbances while creating
-the reference orbit, but there is no accounting for randomness and
-unpredictability of the real world. To further complicate matters, once the
-spacecraft leaves the launch-pad, it can no longer be directly observed anymore.
-Orbit determination analysts must process various forms of tracking data that
-are tied mathematically to the evolution of the spacecraft orbit to figure out
-it's position at any given time.
+spacecraft has been (orbit reconstruction), where it is currently
+(orbit determination), and where it will go in the future (orbit
+prediction). The spacecraft is always drifting away from its planned
+flight path because of small disturbances it encounters in space. Even
+the slight pressure of sunlight on the spacecraft can add up over time
+and push a mission off course. The trajectory designers do their best
+to account for these disturbances when creating the reference orbit,
+but there is no accounting for the randomness and unpredictability of
+the real world. To further complicate matters, once the spacecraft
+leaves the launch-pad, it can no longer be directly observed. Orbit
+determination analysts must process various forms of tracking data that
+are tied mathematically to the evolution of the spacecraft orbit to
+figure out its position at any given time.
 
-Once the orbit determination team has a good estimate for the current location
-of the spacecraft, the flight path control team is responsible for evaluating
-how far the spacecraft has drifted from the reference trajectory and designing
-a maneuver to get the spacecraft back on course. The result of this maneuver
-design is a delta-V vector, which stands for delta-Velocity or change in
-velocity. This delta-V vector represents the direction and magnitude of the
-required change in the spacecraft velocity which must be accomplished to get
-the spacecraft back on course. Once in hand, this delta-V vector will be sent
-to the spacecraft propulsion team, who will decompose it into actual thruster
-firings on the spacecraft. These will be uplinked to the spacecraft, which will
-then perform the maneuver.
+Once the orbit determination team has a good estimate for the current
+location of the spacecraft, the flight path control team is responsible
+for evaluating how far the spacecraft has drifted from the reference
+trajectory and designing a maneuver to get the spacecraft back on
+course. The result of this maneuver design is a :math:`\Delta~V` vector,
+which stands for delta-velocity or change in velocity. This
+:math:`\Delta~V` vector represents the direction and magnitude of the
+required change in the spacecraft velocity which must be accomplished
+to get the spacecraft back on course. Once in hand, this
+:math:`\Delta~V` vector will be sent to the spacecraft propulsion team,
+who will decompose it into actual thruster firings on the spacecraft.
+These will be uplinked to the spacecraft, which will then perform the
+maneuver.
 
-After a maneuver has been performed, the cycle repeats. Perhaps the thrusters
-were slightly misaligned, or the engine cutoff was a second too late. The orbit
-determination team must take more tracking data to find out. This iterative
-relationship between orbit determination and flight path control continues
-without pause through the lifetime of a flight mission. The spacecraft is
-constantly wandering off, and must be patiently nudged back on course.
+After a maneuver has been performed, the cycle repeats. Perhaps the
+thrusters were slightly misaligned, or the engine cutoff was a second
+too late. The orbit determination team must take more tracking data to
+find out. This iterative relationship between orbit determination and
+flight path control continues without pause through the lifetime of a
+flight mission. The spacecraft is constantly wandering off, and must
+be patiently brought back on course.
 
-Library Overview
-----------------
+MONTE as a Platform
+--------------------
 
-The Mission Analysis, Operations, and Navigation Toolkit Environment
-(MONTE) is JPL's signature astrodynamic computing platform. It
-supports all phases of space mission development, from early stage
-mission design and analysis through flight navigation services.
+As previously mentioned, MONTE was built to be general purpose
+astrodynamic computing platform, not a dedicated navigation
+application. It supplies the models and computational algorithms needed
+for trajectory design, orbit determination and flight path control
+but doesn't force the end-user into any specific work-mode or
+interface. As a result, before MONTE can be used on a flight mission,
+it must be *deployed* for that mission. This entails using MONTE in
+cooperation with other applications and libraries to assemble a custom
+navigation framework.
+
+The process of deploying MONTE for a flight mission can be very labor
+intensive. The effort to build a navigation system for the Cassini
+Extended Mission took over two years, and required the use of many
+other Python libraries in addition to MONTE. The resulting navigation
+framework can't be properly characterized as MONTE itself. Rather, it
+is a custom application built using the MONTE library to peform
+navigation for that specific mission.
+
+This is important to note because it illustrates the way in which
+MONTE is likely to be useful to those outside JPL. Deep space
+navigation is (not yet at least) a very large discipline. The majority
+of astrodynamic computing occurs in other contexts like Earth-centered
+navigation, collision avoidance analysis, cooperative and
+non-cooperative rendevous in orbit, etc. Much the same way that MONTE
+can be configured and deployed for deep space navigation, it can
+also be brought to bear on these and other problems across the
+aerospace industry.
+
+As a general purpose astrodynamic computing platform, MONTE has a lot
+to offer. It provides a solid foundation of core systems that can
+be used to quickly define an aerospace problem. These include models
+for trajectories and trajectory queries, coordinate frames and
+rotations, high-precision time, astrodynamic event searches, numerical
+integrators, configurable optimizers, and many more. By starting with
+MONTE, a user can focus on solving the actual problem at hand, and
+leave the important-but-incidental infrastructure to MONTE.
+
+MONTE also plays nicely with other scientific Python libraries like
+NumPy, SciPy, matplotlib, IPython (Jupyter), etc. In this way, if
+MONTE is missing a capability important to a certain problem, the rest
+of the Python scientific computing stack can be used to build that
+capability and interface seemlessly with MONTE. It can be embedded
+in custom GUI applications, run on a back-end server, executed in
+paralell across a cluster of nodes, and pretty much anything you would
+expect of a dynamic, well constructed Python library.
+
+MONTE Library Overview
+----------------------
 
 Most of the functionality of MONTE is encapsulated in the ``Monte`` and
 ``mpy`` libraries. ``Monte`` is written in C++ and wrapped in Python.
 It is presented to the end user as a normal, importable Python-language
-module. The ``mpy`` module is written entirely in Python, and contains
+module. The ``mpy`` module is written entirely in Python and contains
 higher level applications built using ``Monte`` and other open-source
 Python libraries.
 
@@ -151,7 +217,7 @@ this class belongs to the main MONTE library (e.g. ``M.TrajLeg``,
 with respect to Saturn at the time of its Saturn Orbit Insertion (SOI)
 burn. [#]_
 
-.. [#] All MONTE code in this paper is current as of the v116 delivery.
+.. [#] All MONTE code in this paper is current as of the v121 delivery.
 
 .. code-block:: python
 
@@ -265,7 +331,7 @@ illustrated in Figure :ref:`trajfig`.
 Coordinate Frames
 ^^^^^^^^^^^^^^^^^
 
-The MONTE trajectory and coordinate frame systems are very analogous,
+The MONTE trajectory and coordinate frame systems are very analogous
 and have a tight integration that enables powerful state requests.
 Figure :ref:`trajcoordfig` illustrates these similarities and how the
 two systems are integrated.
@@ -286,6 +352,36 @@ MONTE allows a user to search through astrodynamic relationships in a
 given BOA database in pursuit of particular events. For instance, the
 ``M.AltitudeEvent`` class allows a user to search for when a spacecraft
 is within a certain altitude range from another body.
+
+Numerical Integration
+^^^^^^^^^^^^^^^^^^^^^
+
+MONTE provides a framework for numerically integrating spacecraft and
+natural body trajectories, subject to a set of force models. The
+resulting trajectory has the Cartesian position and velocity of the
+body over time, and optionally the partial derivatives of state
+parameters with respect to parameters in the force models. A
+walk-through of setting up MONTE's numerical integration system for a
+simple gravitational propagation is shown in Figure :ref:`integfig`.
+
+In addition to trajectories, MONTE also allows numerical integrations
+of Mass, Coordinate Frames, Time and user defined equations.
+
+.. figure:: figures/integ.png
+
+   Overview of MONTE's numerical integration system. :label:`integfig`
+
+Parameters and Partial Derivatives
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+MONTE's parameter system supports the calculation of partial
+derivatives for astrodynamic variables, which can then be used in
+optimization and estimation. Every variable that belongs to the
+parameter system is responsible for not only calculating its value,
+but also its partial derivative with respect to any other parameters.
+These partial derivatives are contained in a special set of classes
+that employ operator overloading to correctly combine partial
+derivatives under various arithmatic operations. [Smi16]_
 
 Exploring bodies in motion
 --------------------------
@@ -675,6 +771,11 @@ for Voyager 2 confirms this, and reveals the cause of this departure.
    trajectory south below the plane of the ecliptic by about 30 degrees.*
 
 
+Conclusion
+----------
+
+Some kind of conclusion here.
+
 References
 ----------
 
@@ -687,3 +788,11 @@ References
 .. [Moy03] T. Moyer, *Formulation for Observed and Computed Values of Deep Space Network Data Types for Navigation*,
          John-Wiley & Sons, Inc. Hoboken, Jew Jersey, 2003.
 
+.. [Eke05] J. Ekelund, *History of the ODP at JPL*,
+         Internal Document, Jet Propulsion Laboaratory, Pasadena 2005.
+
+.. [Smi16] J. Smith, *Distributed Parameter System for Optimization and Filtering in Astrodynamic Software*,
+         26th AAS/AIAA Spaceflight Mechanics Meeting 2016 proceedings, Napa, CA.
+
+.. [Eva16] S. Evans, *MONTE: The Next Generation of Mission Design & Navigation Software*,
+         The 6th International Conference on Astrodynamics Tools and Techniques (ICATT) proceedings 2016, Darmstadt, Germany.
