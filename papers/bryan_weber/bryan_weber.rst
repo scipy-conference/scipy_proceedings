@@ -700,9 +700,9 @@ overload the ``add_experiment`` method, to create an ``AltExperiment``, instead 
             # Omit the plotting code...
 
 Then, the ``AltExperiment`` overloads the ``parse_file_name`` method of the ``Experiment`` class to
-parse the alternate format. The user must make sure to return the expected values as defined in the
-docstring for the original ``parse_file_name`` method, or else overload other methods that consume
-the file name information.
+parse the alternate format. The user must make sure the new ``parse_file_name`` method returns the
+expected values as defined in the docstring for the original ``parse_file_name`` method, or else
+overload other methods that consume the file name information.
 
 .. code:: python
 
