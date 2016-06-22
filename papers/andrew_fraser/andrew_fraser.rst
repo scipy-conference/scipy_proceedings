@@ -544,12 +544,11 @@ The only property of the HE that this ideal rate stick measures is the
 detonation velocity.  Code in `F_UNCLE.Experiments.Stick` derives that
 velocity following Section 2A of Fickett and Davis [ficket2000]_
 (entitled *The Simplest Theory*).  At the Chapman Jouguet (CJ) state,
-the following three curves are tangent in the :math:`p,v` plane:
+these two curves are tangent in the :math:`p,v` plane:
 
 * The Rayleigh line which gives a relation implied by conservation
   laws between pressure and density (or specific volume) before and
   after a shock.
-* The Hugoniot curve, which is not used in this analysis.
 * An isentrope.  erally one must use the Hugoniot to determine which
   isentrope goes through the CJ state, but it is assumed that each
   isentrope considered goes through the CJ state.
