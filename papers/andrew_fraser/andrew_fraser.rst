@@ -98,7 +98,21 @@ able to account for the known constraints on the functional form
 because they allow physically impossible functions.  Many parametric
 approaches overly constrain the function and do not span the allowable
 function-space [vaughan2014].  For several physics processes, we need both estimates
-such functions and bounds on our uncertainty about them.
+of such functions and bounds on our uncertainty about them.
+
+To ensure that the results of this project are verifiable and
+reproducible, we distribute the source code for the [F_UNCLE]_
+project.  Additionally, we use this project to learn good software
+development practices within Los Alamos National Laboratory.  The
+project is designed to be modular, allowing a wide range of
+experiments and simulations to be used in the analysis.  The code is
+self documenting, with full docstring coverage, and is converted into
+online documentation  using [sphinx]_.  Each class has a test suite to allow
+unit testing.  Tests are collected and run using [nose]_.  Each file
+is also tested using [pylint]_ with all default checks enabled to
+ensure it adheres to python coding standards, including PEP8.
+Graphics in this paper were generated using [matplotlib]_ and the code
+made use of the [numpy]_ package.
 
 As we began developing alogrithms to calculate those estimates and
 bounds, we our legacy codes and software practices got in the way.
@@ -111,20 +125,6 @@ supercomputer job control scripts and delays waiting for runs slowed
 development.  To enable focus on math and algorithms, we wrote the
 code [F_UNCLE]_ which solves surrogate problems in a few minutes on a
 desktop computer.
-
-To ensure that the results of this project are verifiable and
-reproducible, we distribute the source code for the [F_UNCLE]_
-project.  Additionally, we use this project to learn good software
-development practices within Los Alamos National Laboratory.  The
-project is designed to be modular, allowing a wide range of
-experiments and simulations to be used in the analysis.  The code is
-self documenting, with full docstring coverage, and is converted into
-a user manual using [sphinx]_.  Each class has a test suite to allow
-unit testing.  Tests are collected and run using [nose]_.  Each file
-is also tested using [pylint]_ with all default checks enabled to
-ensure it adheres to python coding standards, including PEP8.
-Graphics in this paper were generated using [matplotlib]_ and the code
-made use of the [numpy]_ package.
 
 [F_UNCLE]_ uses constrained optimization and physical models with many
 degrees of freedom to span a large portion of the allowable function
@@ -522,7 +522,10 @@ sensor positions given by Pemberton et al.  [pemberton2011]_ for their
 
 .. figure:: stick.png
 
-   The rate stick experiment
+   The rate stick experiment showing the detonation wave propagating
+   through the rate stick at the CJ velocity. Detonation velocity
+   is measured by the arrival time of the shock at the sensors placed
+   along the stick
 
    
 Implementation
@@ -616,17 +619,13 @@ the two curves labeled *experiment* and *fit*.
    :align: center  
 	   
    Isentropes, Rayleigh lines and CJ conditions. Starting from the
-   isentrope labeled *nominal* and using data from a simulated
-   experiment based on the isentrope labeled *experiment*, the
+   isentrope labeled *Prior EOS* and using data from a simulated
+   experiment based on the isentrope labeled *True EOS*, the
    optimization algorithm described in the Algorithm section produced
-   the estimate labeled *fit*.  Solving Eqn. :ref:`eq-fv` for the
-   *experiment* and *fit* isentropes yields the two Rayleigh lines
-   that appear.  They are are nearly identical because the detonation
-   velocities (and hence the experimental and fit data) are given by
-   their slopes.  Outside of the CJ points where the Rayleigh lines
-   are tangent to the isentropes, the data does not constrain the
-   isentropes, and in fact they are quite
-   different. :label:`fig-cj-stick`
+   the estimate labeled *Fit EOS*.  Solving Eqn. :ref:`eq-fv` for  the
+   *Fit EOS* isentropes yields a  Rayleigh lines.  Outside of the CJ
+   points where the Rayleigh line is tangent to the isentropes, the
+   data does not constrain the isentropes. :label:`fig-cj-stick`
 
 Comparison to Pseudo Experimental Data
 --------------------------------------
@@ -733,26 +732,23 @@ equation of state. Similar results are shown in Figure
 at early times is reduced by and order of magnitude as the optimized
 EOS model approached the *true* EOS.
 
-.. figure:: scipy2016_figure2.png
+.. figure:: scipy2016_figure3.png
    :align: center   
 
-   Fitting an isentrope to rate stick data.  In the upper plot, black
-   +'s denote measured shock arrival time at 7 positions.  The blue
+   Fitting an isentrope to rate stick data.  In the upper plot, green
+   +'s denote measured shock arrival time at various positions.  The blue
    line represents the shock velocity calculated from the nominal EOS,
-   and the other lines come from the sequence of isentropes that the
-   optimization algorithm described in the text generates as it seeks
-   an isentrope that will produce a simulation that matches the data.
-   That sequence of isentropes appears in the lower
-   plot. :label:`fig-opt-stick`
+   and the black line is the result of the optimization algorithm described
+   in the text. :label:`fig-opt-stick`
 
 
-.. figure:: scipy2016_figure3.png
+.. figure:: scipy2016_figure4.png
    :align: center	   
 
-   Sequential estimation of the maximum *a posteriori* probability
-   parameters of :math:`f`.  The *true* EOS appears as *experimental*
-   in the upper plot, and the optimization starts with the *nominal*
-   and ends with *fit*.  The corresponding velocity for the gun as a
+   Estimation of the maximum *a posteriori* probability
+   parameters of the gun experiment.  The *True EOS* appears
+   in the upper plot, and the optimization starts with the *Prior EOS*
+   and ends with *Fit EOS*.  The corresponding velocity for the gun as a
    function of position appears in the middle plot, and the sequence
    of errors in the forecast velocity time series after each step in
    the optimization appears in the lower plot. The estimation also
@@ -779,17 +775,14 @@ procedure and :math:`\Fisher(\hat c)`.  The largest eigenvalue
 largest, ie, the rank of :math:`\Fisher(\hat c)` is one to within
 machine precision.
 
-.. figure:: scipy2016_figure4.png
+.. figure:: scipy2016_figure2.png
    :align: center
    :class: w	   
 
-   Fisher Information of the Rate Stick Experiment.  The sequence of
-   log likelihoods produced by the optimization procedure appear in
-   the upper left, and the corresponding isentropes appear in the
-   upper right.  The largest three eigenvalues of :math:`\Fisher(\hat
-   c)` appear in the lower left and the eigenfunction corresponding to
-   the largest eigenvalue appears in the lower
-   left. :label:`fig-info-stick`
+   Fisher Information of the Rate Stick Experiment. The largest three
+   eigenvalues of :math:`\Fisher(\hat c)` appear in the upper plott and
+   the eigenfunction corresponding to the largest eigenvalue appears in
+   he lower plot. :label:`fig-info-stick`
    
 
 The Fisher information matrix of the gun experiment is more complex as
@@ -803,13 +796,10 @@ influential at the start of the experiment.
 .. figure:: scipy2016_figure5
    :align: center	    
 
-   Fisher Information of the Gun Experiment.  The sequence of log
-   likelihoods produced by the optimization procedure appear in the
-   upper left, and the corresponding isentropes appear in the upper
-   right.  The largest nine eigenvalues of :math:`\Fisher(\hat c)`
-   appear in the lower left and the eigenfunctions corresponding to
-   the largest four eigenvalues appear in the lower
-   left. :label:`fig-info-gun`
+   Fisher Information of the Gun Experiment.  The largest four
+   eigenvalues of :math:`\Fisher(\hat c)`
+   appear in the upper plot and the eigenfunctions corresponding to
+   the largest four eigenvalues appear in the lower plot. :label:`fig-info-gun`
 
 These preliminary investigations of the Fisher information matrix show
 how this matrix can be informative in describing the uncertainty
