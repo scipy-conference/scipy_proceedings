@@ -582,12 +582,6 @@ and the first non-reactive experiment is added to the ``Condition``:
     cond_00_in_02_mm.add_experiment(Path(
         'NR_00_in_02_mm_373K-1278t-100x-19-Jul-15-1652.txt'))
 
-.. .. figure:: figures/nonreactive-run.png
-..
-..     Comparison of the non-reactive pressure trace to the reference reactive pressure trace. Also
-..     plotted is a linear fit to the initial pressure to assist in determining the compression time.
-..     :label:`nonreactive-run`
-
 UConnRCMPy determines that this is a non-reactive experiment and generates a new figure. This figure
 compares the current non-reactive case with the reference reactive case as specified in
 ``volume-trace.yaml``. For this particular example, the pressure traces are shown in Fig.
