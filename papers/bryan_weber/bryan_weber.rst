@@ -276,16 +276,17 @@ volume is equal to the piston velocity. In UConnRCMPy, Eq. :ref:`first-law` is i
 
 In Cantera, intensive thermodynamic information about the system is stored in an instance of the
 ``Solution`` class. The ``Solution`` classes used in this study model simple, compressible systems
-and require two independent intensive properties, plus the composition, to fix the state. In
-addition to evaluating thermodynamic data, Cantera :cite:`cantera` contains several objects used to
-model homogeneous reacting systems; the two used in this paper are a ``Reservoir`` and an
-``IdealGasReactor``, which are subclasses of the generic ``Reactor`` class. The specific
-``IdealGasReactor`` class is preferred over the generic ``Reactor`` class in this study because the
-energy equation is directly solved in terms of the temperature (i.e., Eq. :ref:`first-law`) in an
-``IdealGasReactor``. A ``Solution`` object is installed in each ``Reactor`` subclass to manage the
-state information and evaluate thermodynamic properties. The difference between the ``Reservoir``
-and the ``IdealGasReactor`` is simply that the state (i.e., the pressure, temperature, and chemical
-composition) of the ``Solution`` in a ``Reservoir`` is fixed.
+and require two independent properties, plus the composition, to fix the state. The two properties
+must be intensive (i.e., not dependent on system size), and are typically chosen from the pressure,
+temperature, and density. In addition to evaluating thermodynamic data, Cantera :cite:`cantera`
+contains several objects used to model homogeneous reacting systems; the two used in this paper are
+a ``Reservoir`` and an ``IdealGasReactor``, which are subclasses of the generic ``Reactor`` class.
+The specific ``IdealGasReactor`` class is preferred over the generic ``Reactor`` class in this study
+because the energy equation is directly solved in terms of the temperature (i.e., Eq.
+:ref:`first-law`) in an ``IdealGasReactor``. A ``Solution`` object is installed in each ``Reactor``
+subclass instance to manage the state information and evaluate thermodynamic properties. The
+difference between the ``Reservoir`` and the ``IdealGasReactor`` is simply that the state (i.e., the
+pressure, temperature, and chemical composition) of the ``Solution`` in a ``Reservoir`` is fixed.
 
 Integrating Eq. :ref:`first-law` requires knowledge of the volume of the reaction chamber as a
 function of time. To calculate the volume as a function of time, it is assumed that there is a core
