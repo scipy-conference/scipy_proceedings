@@ -1,6 +1,9 @@
-:author: Jonathon Smith, William Taber, Theodore Drain, Scott Evans, James Evans, Michelle Guevara, William Schulze, Richard Sunseri, Hsi-Cheng Wu
+:author: Jonathon Smith, William Taber, Theodore Drain, Scott Evans,
+         James Evans, Michelle Guevara, William Schulze,
+         Richard Sunseri, Hsi-Cheng Wu
 :email: jonathon.j.smith@jpl.nasa.gov
-:institution: Jet Propulsion Laboratory, California Intitute of Technology / NASA
+:institution: Jet Propulsion Laboratory,
+              California Institute of Technology / NASA
 :corresponding:
 
 --------------------------------------
@@ -46,39 +49,39 @@ spacecraft were written on punch-cards and processed through an
 IBM 7090 mainframe. [Eke05]_ Advances in computing technology were eagerly
 consumed by navigators, as more storage and faster processing meant
 the models used fly spacecraft could be made increasingly detailed
-and sophisticaed.
+and sophisticated.
 
 Starting in 1964, a group of engineers, led by Ted Moyer, began
 developing the astrodynamic algorithms and software that would
 eventually become the Double Precision Trajectory and Orbit
 Determination Program, or DPTRAJ/ODP([Moy71]_, [Moy03]_). Over its
-fourty-plus years of active life, the DPTRAJ/ODP was used by JPL to
+forty-plus years of active life, the DPTRAJ/ODP was used by JPL to
 navigate the "Golden Age" of deep space exploration. This included the
 later Mariner and Pioneer Missions, Viking, Voyager, Magellan, Galileo,
 Cassini and more. Also over this time its base language moved through
-Fortan IV, Fortran V, Fortran 77 and Fortran 95 as the computational
+Fortran IV, Fortran V, Fortran 77 and Fortran 95 as the computational
 appetites of navigators grew ever larger.
 
 By 1998 it was clear that the aging DPTRAJ/ODP needed to be updated
 once again. Rather than initiate another refactor of the DPTRAJ/ODP,
 JPL's navigation section commissioned a brand new effort that would
-depart from its predacessor in two important ways. First, the new
+depart from its predecessor in two important ways. First, the new
 software would be an object-oriented library, written in C++ and
 exposed to the user as a Python-language library. Second, it would
 be a general-purpose astrodyanmic computing platform, not a dedicated
 navigation program like the DPTRAJ/ODP. The goal was to create a single
 library that could be used for astrodynamic research, space mission
 design, planetary science, in addition to deep space navigation. This
-new project was affectionalely named the Mission Analysis, Operations,
+new project was affectionately named the Mission Analysis, Operations,
 and Navigation Toolkit Environment, or MONTE-Python for short.
 
 Throughout the first half of the 2000s, MONTE was carefully constructed
 by reshaping the algorithms under-pinning the DPTRAJ/ODP into a
-rigoursly tested and well documented object-oriented software package.
+rigorously tested and well documented object-oriented software package.
 In 2007, MONTE got its first operational assignment and successfully
 navigated NASA's Phoenix lander to Mars. Since 2012 MONTE has powered
 all flight navigation services at JPL, including the Cassini extended
-mission, Mars Science Laboratory, MAVEN, GRAIL, Dawn, Mars Recoinassance
+mission, Mars Science Laboratory, MAVEN, GRAIL, Dawn, Mars Reconnaissance
 Orbiter, Juno, and more. [Eva16]_
 
 Deep Space Navigation
@@ -92,7 +95,7 @@ Deep Space Navigation
     during the mission. :label:`tour`
 
 At JPL, the practice of navigating robotic probes in deep space is
-broken down into three interelated disciplines: (1) Designing a
+broken down into three interrelated disciplines: (1) Designing a
 reference trajectory which describes the planned flight path of the
 spacecraft (*mission design*), (2) keeping track of the actual
 spacecraft position while the mission is in flight (*orbit
@@ -168,7 +171,7 @@ intensive. The effort to build a navigation system for the Cassini
 Extended Mission took over two years, and required the use of many
 other Python libraries in addition to MONTE. The resulting navigation
 framework can't be properly characterized as MONTE itself. Rather, it
-is a custom application built using the MONTE library to peform
+is a custom application built using the MONTE library to perform
 navigation for that specific mission.
 
 This is important to note because it illustrates the way in which
@@ -176,7 +179,7 @@ MONTE is likely to be useful to those outside JPL. Deep space
 navigation is (not yet at least) a very large discipline. The majority
 of astrodynamic computing occurs in other contexts like Earth-centered
 navigation, collision avoidance analysis, cooperative and
-non-cooperative rendevous in orbit, etc. Much the same way that MONTE
+non-cooperative rendezvous in orbit, etc. Much the same way that MONTE
 can be configured and deployed for deep space navigation, it can
 also be brought to bear on these and other problems across the
 aerospace industry.
@@ -190,17 +193,43 @@ integrators, configurable optimizers, and many more. By starting with
 MONTE, a user can focus on solving the actual problem at hand, and
 leave the important-but-incidental infrastructure to MONTE.
 
-MONTE also plays nicely with other scientific Python libraries like
-NumPy, SciPy, matplotlib, IPython (Jupyter), etc. In this way, if
-MONTE is missing a capability important to a certain problem, the rest
-of the Python scientific computing stack can be used to build that
-capability and interface seemlessly with MONTE. It can be embedded
-in custom GUI applications, run on a back-end server, executed in
-paralell across a cluster of nodes, and pretty much anything you would
-expect of a dynamic, well constructed Python library.
+MONTE and the Python Ecosystem
+------------------------------
 
-MONTE Library Overview
-----------------------
+MONTE has a decidedly friendly stance when it comes to working with
+other libraries in the Python scientific computing stack. It makes
+heavy use of many open source Python libraries like matplotlib and
+IPython (Jupyter), and reciprocally tries to make it easy for users
+of these systems to interface with MONTE. Many of MONTE's classes
+can transform themselves in NumPy data types - a common pattern is
+for MONTE classes to have a ``.toArray`` method which returns a
+``numpy.ndarray``. Additionally, the MONTE team has a history of
+collaboration with matplotlib dating all the way back to the early
+00's. They have contributed code that makes matplotlib able to
+natively plot MONTE's unit and time systems, and have also
+open-sourced a custom matplotlib styling-system developed in house.
+
+The MONTE project started in 1998 at a time when the Python language
+was still very new. As a result, MONTE has several custom systems that
+are redundant in the current Python landscape. For instance, MONTE
+developed an interactive shell similar to IPython (although it has
+largely been deprecated in favor of IPython) and a custom unit test
+system. It also has several numerical computing classes that would
+generally be dispatched to NumPy in a brand new project. Perhaps
+most noticeably, MONTE has its own programming style guidelines which
+are not PEP-8 compliant, again because it precedes PEP-8 historically
+by three years.
+
+Historical quirks aside, MONTE considers itself a member of
+the Python scientific programming community and aims to integrate
+as seamlessly as possible with other Python libraries. It can be
+embedded in custom GUI applications, run on a back-end server,
+executed in parallel across a cluster of nodes, and pretty much
+anything else you would expect of a dynamic, well constructed
+Python library.
+
+Library Overview
+----------------
 
 Most of the functionality of MONTE is encapsulated in the ``Monte`` and
 ``mpy`` libraries. ``Monte`` is written in C++ and wrapped in Python.
@@ -246,16 +275,11 @@ burn. [#]_
     casAtSoi = tset.state(soiTime, "Cassini", "Saturn",
       "EMO2000")
 
-Lets take time now to walk through some of MONTE's core systems,
-several of which were used in the above example.
+Several of MONTE's core systems - the basic astrodynamic scaffolding
+that supports its more advanced functionality - are used in the above
+example. Lets take a short tour now through some of these systems to
+get a sense for the type of platform MONTE supplies.
 
-Core Library Systems
---------------------
-
-MONTE's core systems are the scaffolding that support its more advanced
-functionality. Time, units, trajectories, coordinate frames, event
-finding, and tying them all together, MONTE's data broker, the Binary
-Object Archive or BOA.
 
 BOA
 ^^^
@@ -381,34 +405,54 @@ parameter system is responsible for not only calculating its value,
 but also its partial derivative with respect to any other parameters.
 These partial derivatives are contained in a special set of classes
 that employ operator overloading to correctly combine partial
-derivatives under various arithmatic operations. [Smi16]_
+derivatives under various mathematical operations. [Smi16]_
 
-Exploring bodies in motion
---------------------------
+Example: Exploring bodies in motion
+-----------------------------------
 
-We now take a step further and show how we can use the systems described
-above to explore astrodynamic relationships. For the following
-examples we will be using the Voyager 2 spacecraft ephemeris, which can
-be downloaded at http://naif.jpl.nasa.gov/pub/naif/VOYAGER/kernels/spk/. The
-file name at the time of this writing is "voyager_2.ST+1992_m05208u.merged.bsp",
-which we will shorten to just "voyager2.bsp" for ease of use.
+What follows is a narrated example of how MONTE can be used, in this
+case interactively, to explore astrodynamic relationships. Generally,
+MONTE is scripted or assembled into custom applications that solve
+complex end-user problems. However, it is also very useful as an
+off-the-cuff exploratory tool as we will see below. The reader is
+encouraged to walk through the example herself if she has access to
+MONTE. If not, hopefully the example itself will give a sense for what
+working with the MONTE library is like.
 
-*JPL hosts two excellent websites for accessing trajectory data for
-natural solar system bodies and deep-space probes. The Horizons website (
-http://ssd.jpl.nasa.gov/horizons.cgi) is maintained by JPL's Solar System
-Dynamics group, and has a very expansive and powerful webapp for getting
-ephemerides in a variety of formats. The Navigation and Ancillary Data
-Facility (NAIF) at JPL hosts the navigation section of NASA's Planetary
-Database System. At it's website (http://naif.jpl.nasa.gov/naif/data.html)
-you will find a host of downloadable binary navigation files, which can be
-used with the SPICE toolkit, and of course, with MONTE.*
+Examples are always more fun when you have a concrete goal you're
+working toward. For this example, we will explore the Voyager 2
+trajectory. We will identify the time and distance of the Uranus
+planetary encounter, and also find the time periods where Voyager 2
+was in solar conjunction. Along the way we will pause occasionally
+to highlight various aspects of MONTEs core systems. Also, if our
+exploration happens to turn up anything interesting (it will), we will
+take some time to investigate what we find.
 
 Voyager 2 Trajectory
 ^^^^^^^^^^^^^^^^^^^^
 
-Lets start off by creating a BOA database and loading the default data sets for
-planetary ephemerides, coordinate frames, and body data. We will also load in
-our Voyager 2 trajectory.
+Lets start off by creating a BOA database and loading the default data
+sets for planetary ephemerides, coordinate frames, and body parameters.
+We will also load in our Voyager 2 trajectory. [#]_
+
+.. [#]
+    JPL hosts two excellent websites for accessing trajectory data for
+    natural solar system bodies and deep-space probes. The Horizons
+    website (http://ssd.jpl.nasa.gov/horizons.cgi) is maintained by
+    JPL's Solar System Dynamics group, and has a very expansive and
+    powerful webapp for getting ephemerides in a variety of formats.
+    The Navigation and Ancillary Data Facility (NAIF) at JPL hosts the
+    navigation section of NASA's Planetary Database System. At it's
+    website (http://naif.jpl.nasa.gov/naif/data.html) you will find a
+    host of downloadable binary navigation files, which can be used
+    with the SPICE toolkit, and of course, with MONTE.
+
+    For the following examples we will be using the Voyager 2
+    spacecraft trajectory, which can be downloaded at
+    http://naif.jpl.nasa.gov/pub/naif/VOYAGER/kernels/spk/. The file
+    name at the time of this writing is
+    "voyager_2.ST+1992_m05208u.merged.bsp", which we will shorten to
+    just "voyager2.bsp" for ease of use.
 
 .. code-block:: python
 
@@ -419,12 +463,11 @@ our Voyager 2 trajectory.
       ...:   ["ephem/planet/de405", "frame", "body"] )
    In [5]: boa.load( "voyager2.bsp" )
 
-Now lets retrieve the TrajSet manager from the BOA. As previously mentioned,
-any BOA that has one or more trajectories will automatically be assigned a
-TrajSet to manage them. We will use the BOA accessor TrajSetBoa to get
-the TrajSet from the BOA. Once we have the TrajSet, we list all the
-trajectories that are on the BOA (and being managed) using the
-``.getAll`` method.
+Now lets retrieve the trajectory manager (``M.TrajSet``) from the BOA.
+We will use the BOA accessor ``M.TrajSetBoa`` to get a handle to the
+``M.TrajSet`` itself. Once we have the manager in hand, we can list all
+the trajectories that are on the BOA using the ``M.TrajSet.getAll``
+method.
 
 .. code-block:: python
 
@@ -439,12 +482,13 @@ trajectories that are on the BOA (and being managed) using the
             'Pluto Barycenter', 'Sun'
             'Solar System Barycenter', 'Voyager 2']
 
-Good, so we have our solar system and our spacecraft. Now lets see what we can
-start doing. First, lets check the span of our Voyager 2 trajectory, e.g. the
-interval for which there is data about it's trajectory, using the
-``TrajSet.totalInterval`` method. Note that if the trajectory has been updated at
-the NAIF PDS website, the exact span you get may be different than what is
-listed below.
+The list of bodies returned by ``M.TrajSet.getAll`` confirms that we
+have successfully loaded our solar system and spacecraft. Lets kick
+off our analysis by checking the span of our Voyager 2 trajectory, e.g.
+the interval over which we have data. We can do this using the
+``M.TrajSet.totalInterval`` method. *Note that if the trajectory has
+been updated at the NAIF PDS website, the exact span you get may be
+different than what is listed below.*
 
 .. code-block:: python
 
@@ -456,11 +500,13 @@ listed below.
    )
 
 
-It looks like the trajectory starts just post-launch in 1977, extends through
-the present and has predictions out into the future. As a first step, lets find
-the distance of Voyager 2 from Earth right now. We can use the ``Epoch.now``
-static method to get the current time, and then use our TrajSet to request
-the state of Voyager 2 with respect to Earth at the current time.
+It looks like the trajectory starts just after launch in 1977, extends
+through the present, and has predictions out into the future. We can
+use our manager to request states at any time in this window. Lets find
+the distance of Voyager 2 from Earth right now. We can use the
+``M.Epoch.now`` static method to get the current time, and then use
+our manager to request the state of Voyager 2 with respect to Earth at
+this time.
 
 .. code-block:: python
 
@@ -477,12 +523,12 @@ the state of Voyager 2 with respect to Earth at the current time.
    Vel: -2.415141211951430e+01  2.640692963340520e+00
         -1.128801136174438e+01
 
-To get the current state of the Voyager 2 spacecraft we used the
-``TrajSet.state`` method, passing in the time at which to retrieve the state,
-the target body, the reference body, and the coordinate frame to return the
-state in. Because TrajSet has a global view of all the different
-trajectories in our BOA, we could request the state of Voyager 2 with respect
-to any other body for which we have a trajectory.
+We used the ``M.TrajSet.state`` method to perform our query, which
+required us to specify the time, target body, reference body, and
+coordinate frame for the return state. Because ``M.TrajSet`` has a
+global view of all the trajectories in our BOA, we can request states
+with respect to any body for which we have a trajectory, for instance
+Venus or Neptune.
 
 .. code-block:: python
 
@@ -510,12 +556,12 @@ to any other body for which we have a trajectory.
    Vel:  2.036299646730726e+00 -8.760646249684767e+00
         -1.606470435709401e+01
 
-The object returned by the ``TrajSet.state`` method is a MONTE State class.
-The State class captures the relative position, velocity and acceleration
-(or some subset) of one body with respect to another at a given time. It has a
-number of methods that help with extracting and transforming the information it
-contains. For instance, we can find the magnitude of the distance from Earth to
-Voyager 2 like this.
+The ``M.TrajSet.state`` method returns an ``M.State`` object.
+``M.State`` captures the relative position, velocity and acceleration
+(or some subset) of one body with respect to another at a given time.
+It has a number of methods that help with extracting and transforming
+the information it contains. For instance, we can find the magnitude
+of the distance from Earth to Voyager 2 like this.
 
 .. code-block:: python
 
@@ -526,15 +572,14 @@ Voyager 2 like this.
    In [28]: vygrTwoPoskm.convert( 'AU' )
    Out[28]: 104.33813824888766
 
-Likewise, State has methods to get the magnitude of the relative velocity
-(``.velMag``) and acceleration (``.accMag``), and much more. Often, when you
-are reading states from a trajectory, you are interested making repeated calls
-for the same body with respect to the same center, but at a number of different
-times. TrajSet works fine for this application, but if the target and
-center bodies don't change on repeated calls, some optimizations can be made for
-better performance. The TrajQuery class is provided for this use case, and
-can be thought of as simply a special case of TrajSet - where the body and
-center are fixed for every call.
+When reading states from a trajectory you are often interested in
+making repeated calls for the same body and center but at several
+different times. ``M.TrajSet`` works fine for this application, but
+if the target and center bodies don't change on repeated calls, some
+optimizations can be made for better performance. The ``M.TrajQuery``
+class is provided for this use case, and can be thought of as simply a
+special case of ``M.TrajSet`` where the body and center are fixed for
+every call.
 
 .. code-block:: python
 
@@ -550,34 +595,36 @@ center are fixed for every call.
    Vel: -2.415141211951430e+01  2.640692963340520e+00
         -1.128801136174438e+01
 
-In addition to providing optimization and a simpler interface, TrajQuery also
-lets you control how light-time corrections are applied (this is a more
-advanced use case, so we will only mention it here).
+In addition to providing optimization and a simpler interface,
+``M.TrajQuery`` also lets you control how light-time corrections are
+applied (this is a more advanced use case, so we will only mention it
+here).
 
 Uranus Encounter
 ^^^^^^^^^^^^^^^^
 
-We said earlier that TrajSet and CoordSet, in their role as manager
-classes, have a global view of the trajectory and coordinate systems. This
-high-level perspective allows them to work with the *relationships* between
-different bodies and frames, a capability we have so far used in a general
-sense, primarily to get states between bodies in a given coordinate
-frame at a given time. However, there are certain specific relationships
-between bodies and frames that can be of great interest to an analyst. For
-instance, identifying the time at which two bodies achieve their closest
-approach (periapse), and the magnitude of that minimum distance, can
-be a very important astrodynamic metric. We could certainly estimate these
-quantities using trajectory queries, perhaps by plotting the relative distance
-between the two bodies, and looking for the local minima. However, MONTE
-provides us with an infrastructure for searching through various
-relationship-spaces and identifying some of these key events. This
-infrastructure is composed of EventSpec classes, which allow us to define
-the type of event we are looking for and search through the requisite
-relationships to identify occurrences, and an Event class which is used to
-report the relevant data associated with an occurrence. Lets see how this works
-in practice.  We will use ApsisEvent (which is a specific type of
-EventSpec) to find the precise time and distance of Voyager 2's closest
-approach with Uranus. The first step is to define our ApsisEvent.
+We said earlier that ``M.TrajSet`` and ``M.CoordSet``, in their roles
+as manager classes, have a global view of the trajectory and
+coordinate systems. This high-level perspective allows them to work
+with the *relationships* between different bodies and frames, a
+capability we have so far used to get relative states between bodies.
+However, there are certain specific relationships between bodies and
+frames that can be of particular interest to an analyst. For instance,
+identifying the time at which two bodies achieve their closest approach
+(periapse) and the magnitude of that minimum distance can be a very
+important astrodynamic metric. We can certainly estimate these
+quantities using trajectory queries, perhaps by plotting the relative
+distance between two bodies and looking for the local minima.
+However, MONTE provides us with infrastructure for searching through
+various relationship-spaces and identifying some of these key events.
+The ``M.EventSpec`` set of classes classes allow us to define the
+type of event we are looking for and then search through the requisite
+relationships to identify occurrences. The ``M.Event`` class is used to
+report the relevant data associated with an occurrence. Lets see how
+this works in practice.  We will use ``M.ApsisEvent`` (which is a
+specific type of ``M.EventSpec``) to find the precise time and
+distance of Voyager 2's closest approach with Uranus. The first step
+is to define our ``M.ApsisEvent``.
 
 
 .. code-block:: python
@@ -587,14 +634,15 @@ approach with Uranus. The first step is to define our ApsisEvent.
    In [7]: apsisSearch = M.ApsisEvent( vygrTwoUranusQuery,
       ...:   "PERIAPSIS" )
 
-ApsisEvent takes as it's first argument a TrajQuery instance that is
-configured to return the state of our target body with respect to the desired
-center (in this case, the state of Voyager 2 with respect to Uranus). The
-second argument specifies what type of apsis we are looking for; this can
-be "PERIAPSIS", "APOAPSIS", or "ANY", which returns occurrences of both periapse
-and apoapse. Now that we have our event type defined, we can use the ``.search``
-method to locate the apsis. To run the search, we need to provide a time
-interval to search over, and a search step size.
+``M.ApsisEvent`` takes as its first argument an ``M.TrajQuery``
+instance that is configured to return the state of our target body with
+respect to the desired center (in this case, Voyager 2 with respect to
+Uranus). The second argument specifies what type of apsis we are
+looking for; this can be "PERIAPSIS", "APOAPSIS", or the catch-all
+"ANY". Once the event type is defined, the ``M.ApsisEvent.search``
+method can be called to perform the search and located the apses.
+To call this method we need to provide a time interval to search over
+and a search step size.
 
 .. code-block:: python
 
@@ -604,16 +652,17 @@ interval to search over, and a search step size.
    In [16]: foundEvents = apsisSearch.search(
        ...:   searchInterval, stepSize )
 
-The result of the search, which we have saved in the variable ``foundEvents``,
-is an EventSet container class. This container will have all Events
-found matching the EventSpec in the search window. In our case, there
-should be only one close encounter with Uranus, so there should be only a
-single event inside our EventSpec. However, if we were searching for the
-periapse for an Earth orbiter, for instance, this would contain every separate
-periapse occurrence in the search window. EventSet has a number of useful
-methods for sorting and filtering events, however, since we should have only
-one event (which we can confirm using the ``.size`` method on the EventSet),
-we can read it out directly.
+The result of the search, which we have saved in the variable
+``foundEvents``, is an ``M.EventSet`` container class. This container
+has all the events found matching our event specification in the search
+window. In our case, there should be only one close encounter with
+Uranus, so there should be only a single event inside our
+``M.EventSet``. However, if we were searching for the periapse of an
+Earth orbiter this would contain every separate periapse occurrence in
+the search window. ``M.EventSet`` has a number of useful methods for
+sorting, filtering and returning events. However, since we should have
+only one event (which we can confirm using the ``M.EventSet.size``
+method) we can read it out directly from the first index.
 
 .. code-block:: python
 
@@ -629,17 +678,19 @@ we can read it out directly.
    Epoch: 24-JAN-1986 17:59:45.6473 ET
    Value:  1.071300446056250e+05 * km
 
-Another relationship which can play a significant role in deep space missions
-is the angular offset between the Earth-Sun line and Earth-Spacecraft line
-(often referred to as the Sun-Earth-Probe (SEP) angle). At low SEP values, the
-spacecraft appears very close to the Sun from the vantage of Earth, requiring
-radio transmissions from Earth to pass through the near-solar environment before
-reaching the spacecraft. The highly-charged solar atmosphere can interfere with
-the radio signal, which is why flight projects try to avoid performing critical
-mission operations during periods of low-SEP. Lets set up an event search to find
-periods of low-SEP for Voyager 2, from mission start through the end of our
-trajectory data. We will do this using the AngleEvent event specification
-class.
+Another relationship which can play a significant role in deep space
+missions is the angular offset between the Earth-Sun line and
+Earth-Spacecraft line (often referred to as the Sun-Earth-Probe (SEP)
+angle). At low SEP values, the spacecraft appears very close to the
+Sun from the vantage of Earth, requiring radio transmissions from Earth
+to pass through the near-solar environment before reaching the
+spacecraft. The highly-charged solar atmosphere can interfere with
+the signals, which is why flight projects try to avoid performing
+critical mission operations during periods of low-SEP (known as
+"solar conjunction"). Lets set up an event search to find periods of
+low-SEP for Voyager 2, from mission start through the end of our
+trajectory data. We will do this using the ``M.AngleEvent`` event
+specification class.
 
 .. code-block:: python
 
@@ -649,16 +700,15 @@ class.
    In [25]: foundEvents = sepSearch.search(searchWindow,
        ...:   1 *hour)
 
-We constructed our AngleEvent by defining the Sun-Earth-Probe angle - we
-input the Sun for body one, the Earth as the center, and Voyager 2 as body two.
-We also set twelve degrees as the angle of interest, and instructed the
-specification to record periods "BELOW" twelve degrees as an event. There are
-several other ways to define an AngleEvent that may be more appropriate to
-other applications, but this one suited our purposes perfectly. Once again, we
-can call the ``.size`` method on the returned EventSet to find how many
-low-SEP windows we found. We can also use the ``.maxInterval`` and
-``.minInterval`` methods to search for the largest and smallest SEP windows,
-respectively.
+We constructed our ``M.AngleEvent`` by defining the Sun-Earth-Probe
+angle - we input the Sun for body one, the Earth as the vertex, and
+Voyager 2 as body two. We also set twelve degrees as the angle of
+interest, and instructed the specification to record periods "BELOW"
+twelve degrees as an event. After running the search, we can once again
+call the ``M.EventSet.size`` method to find how many low-SEP windows
+we found. We can also use the ``M.EventSet.maxInterval`` and
+``M.EventSet.minInterval`` methods to search for the largest and
+smallest SEP windows, respectively.
 
 .. code-block:: python
 
@@ -683,8 +733,9 @@ respectively.
    End  : 07-JAN-1993 21:30:07.6066 ET
    Value:  1.199999999999999e+01 * deg
 
-We can loop through all the events found in our search using Python iterator
-syntax, and print out the time periods of each found low-SEP region.
+We can loop through all the events found in our search using Python
+iterator syntax, and print out the time periods of each found
+low-SEP region.
 
 .. code-block:: python
 
@@ -711,21 +762,25 @@ syntax, and print out the time periods of each found low-SEP region.
         '07-JAN-1993 21:30:07.6066 ET' ],
    )
 
-It looks like low-SEP periods occur on a near-yearly basis, which makes sense;
-as the Earth makes a complete rotation around the Sun, there is bound to be a
-period of time when the Sun falls in the line-of-sight of Voyager 2. Curiously
-though, the last found low-SEP region was in the winter of 1992. After this
-time, the Sun no longer obscures the Earth's view of Voyager 2 at all! We
-suspect that something must have happened to the orbit of Voyager 2 sometime
-previous to 1992 to change the annual low-SEP viewing geometry dynamic. If
-Voyager 2 were to somehow leave the plane of the solar-system, the Earth would
-have a constant unobstructed view of the spacecraft permanently. Lets
-investigate this theory by looking at the distance of Voyager 2 from the
-solar-system ecliptic plane. We will do this by setting up a trajectory query
-to return the state of Voyager 2 with respect to the Sun in EMO2000 coordinates.
-The Z-component of the position vector will then yield the offset from the
-ecliptic plane. We will plot this distance over the course of the Voyager 2
-mission and see how this distance evolved.
+It looks like low-SEP periods occur on a near-yearly basis, which makes
+sense; as the Earth makes a complete rotation around the Sun, there is
+bound to be a period of time when the Sun falls in the line-of-sight of
+Voyager 2. Curiously though, the last found low-SEP region was in the
+winter of 1992. After this time, the Sun no longer obscures the
+Earth's view of Voyager 2 at all! We suspect that something must have
+happened to the orbit of Voyager 2 sometime prior to 1992 to change
+the annual low-SEP viewing geometry dynamic.
+
+If Voyager 2 were to somehow leave the plane of the solar-system, the
+Earth would have a constant unobstructed view of the spacecraft
+permanently. Lets investigate this theory by looking at the distance of
+Voyager 2 from the solar system ecliptic plane. We will do this by
+setting up a trajectory query to return the state of Voyager 2 with
+respect to the Sun in EMO2000 coordinates (the EMO2000 coordinate frame
+measures Z with respect to the solar system plane). The Z-component of
+the  position vector will then yield the offset from the ecliptic
+plane. We will plot this distance over the course of the Voyager 2
+mission to see how this distance evolves.
 
 .. code-block:: python
 
@@ -759,16 +814,18 @@ The resulting plot should look similar to Figure :ref:`v2aturanus`.
     Distance in kilometers of Voyager 2 from the solar system
     ecliptic plane. :label:`v2aturanus`
 
-Sure enough, it appears something happened in 1989 that caused Voyager 2 to
-depart from the ecliptic plane. A quick glance at the Wikipedia page
-for Voyager 2 confirms this, and reveals the cause of this departure.
+Sure enough, it appears something happened in 1989 that caused
+Voyager 2 to depart from the ecliptic plane. A quick glance at the
+Wikipedia page for Voyager 2 confirms this, and reveals the cause of
+this departure.
 
-   *Voyager 2's closest approach to Neptune occurred on August 25, 1989 ...
-   Since the plane of the orbit of Triton is tilted significantly with respect
-   to the plane of the ecliptic, through mid-course corrections, Voyager 2 was
-   directed into a path several thousand miles over the north pole of Neptune
-   ... The net and final effect on the trajectory of Voyager 2 was to bend its
-   trajectory south below the plane of the ecliptic by about 30 degrees.*
+   *Voyager 2's closest approach to Neptune occurred on August 25,
+   1989 ... Since the plane of the orbit of Triton is tilted
+   significantly with respect to the plane of the ecliptic, through
+   mid-course corrections, Voyager 2 was directed into a path several
+   thousand miles over the north pole of Neptune ... The net and final
+   effect on the trajectory of Voyager 2 was to bend its trajectory
+   south below the plane of the ecliptic by about 30 degrees.*
 
 
 Conclusion
@@ -782,14 +839,14 @@ References
 .. [Ntr12] R. Sunseri, H.-C. Wu, S. Evans, J. Evans, T. Drain, and M. Guevara, *Mission Analysis, Operations, and
          Navigation Toolkit Environment (MONTE) Version 040*, NASA Tech Briefs , Vol. 36, No. 9, 2012.
 
-.. [Moy71] T. Moyer, *Mathematical Formulation of the Doube-Precision Orbit Determination Program (DPODP)*,
-           TR 32-1527 Jet Propulsion Laboaratory, Pasadena 1971.
+.. [Moy71] T. Moyer, *Mathematical Formulation of the Double-Precision Orbit Determination Program (DPODP)*,
+           TR 32-1527 Jet Propulsion Laboratory, Pasadena 1971.
 
 .. [Moy03] T. Moyer, *Formulation for Observed and Computed Values of Deep Space Network Data Types for Navigation*,
          John-Wiley & Sons, Inc. Hoboken, Jew Jersey, 2003.
 
 .. [Eke05] J. Ekelund, *History of the ODP at JPL*,
-         Internal Document, Jet Propulsion Laboaratory, Pasadena 2005.
+         Internal Document, Jet Propulsion Laboratory, Pasadena 2005.
 
 .. [Smi16] J. Smith, *Distributed Parameter System for Optimization and Filtering in Astrodynamic Software*,
          26th AAS/AIAA Spaceflight Mechanics Meeting 2016 proceedings, Napa, CA.
