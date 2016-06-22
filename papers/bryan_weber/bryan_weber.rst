@@ -399,8 +399,10 @@ derivative of the experimental pressure trace, as discussed in `Calculating Igni
 All of the information about a particular experiment is stored in the ``Experiment`` class. When
 initialized, the ``Experiment`` expects an instance of the ``pathlib.Path`` class; if none is
 provided, it prompts the user to enter a file name that is expected to be in the current working
-directory. Then a ``VoltageTrace`` is created, followed by an ``ExperimentalPressureTrace``. The
-pressure trace from the latter is processed to extract the ignition delay(s).
+directory. The file name should point to a tab-delimited plain text file that contains the voltage
+trace recorded by LabView from one experimental run. Then UConnRCMPy creates an instance of
+``VoltageTrace``, followed by an instance of ``ExperimentalPressureTrace``. The pressure trace from
+the latter is processed to extract the ignition delay(s).
 
 The main user interface to UConnRCMPy is through the ``Condition`` class, the highest level of data
 representation. The intended use of this class is in an interactive Python interpreter (the author
