@@ -292,14 +292,16 @@ Integrating Eq. :ref:`first-law` requires knowledge of the volume of the reactio
 function of time. To calculate the volume as a function of time, it is assumed that there is a core
 of gas in the reaction chamber that undergoes an isentropic compression :cite:`Lee1998`.
 Furthermore, it is assumed that there is negligible reactant consumption during the compression
-stroke. Then, a Cantera ``Solution`` object is initialized at the initial temperature, pressure, and
-composition of the reaction chamber.
+stroke.
 
-After initialization the initial mass-specific entropy (|s0|) and density (|rho0|) are recorded. The
-initial volume is arbitrarily taken to be :math:`V_0=1.0\,\text{m}^3`. The initial volume used in
-constructing the volume trace is arbitrary provided that the same value for the volume is used for
-the initial volume in the ``Reactor``-based simulations described below. However, extensive
-quantities such as the total heat release during ignition cannot be compared to experimental values.
+Constructing the volume trace is triggered by the user by running the ``create_volume_trace`` method
+that implements the following procedure. A Cantera ``Solution`` object is initialized at the initial
+temperature, pressure, and composition of the reaction chamber. After initialization the initial
+mass-specific entropy (|s0|) and density (|rho0|) are recorded. The initial volume is arbitrarily
+taken to be :math:`V_0=1.0\,\text{m}^3`. The initial volume used in constructing the volume trace is
+arbitrary provided that the same value for the volume is used for the initial volume in the
+``Reactor``-based simulations described below. However, extensive quantities such as the total heat
+release during ignition cannot be compared to experimental values.
 
 The measured pressure at each point in the pressure trace (:math:`P_i`) is used with the previously
 recorded initial entropy (|s0|) to set the state of the ``Solution`` object sequentially. At each
