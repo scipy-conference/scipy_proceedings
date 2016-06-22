@@ -721,9 +721,11 @@ UConnRCMPy provides a framework to enable consistent analysis of RCM data. Becau
 and extensible, UConnRCMPy can help to ensure that RCM data in the community can be analyzed in a
 reproducible manner; in addition, it can be easily modified and used for data in any format. In this
 sense, UConnRCMPy can be used more generally to process any RCM experiments where the ignition delay
-is the primary output. Future plans for UConnRCMPy include the development of a robust test suite to
-prevent regressions and document correct usage of the framework, as well as the development of a
-method to determine the optimal cutoff frequency in the filtering algorithm.
+is the primary output.
+
+Future plans for UConnRCMPy include the development of a robust test suite to prevent regressions
+and document correct usage of the framework, as well as the development of a method to determine the
+optimal cutoff frequency in the filtering algorithm.
 
 Acknowledgements
 ----------------
