@@ -339,12 +339,15 @@ the solver steps towards the end time of the simulation, the state of the system
 integrator time step, producing simulated pressure, volume, and temperature traces. Finally, the EOC
 temperature is recorded as the simulated temperature at the EOC.
 
-Two simulations are conducted using this procedure. In the first, the multiplier for all the
-reaction rates is set to zero, to simulate a constant composition (non-reactive) process. In the
-second, the reactions are allowed to proceed as normal. The temperature traces from the two
-simulations are compared to each other and the inclusion of the reactions does not change |TC|,
-validating the assumption of adiabatic, constant composition compression. Nonetheless, when
-conducting simulations to compare a kinetic model to experimental results, it is important to
+Two simulations can be triggered by the user that utilize this procedure. In the first, the
+multiplier for all the reaction rates is set to zero, to simulate a constant composition
+(non-reactive) process. In the second, the reactions are allowed to proceed as normal. Only the
+non-reactive simulation is necessary to determine |TC|.
+
+When a reactive simulation is conducted, the user must compare the temperature traces from the two
+simulations to verify that the inclusion of the reactions does not change |TC|, validating the
+assumption of adiabatic, constant composition compression. Although the value of |TC| is the same,
+when conducting simulations to compare a kinetic model to experimental results, it is important to
 include the species equations in the solution of Eq. :ref:`first-law` due to the buildup of a pool
 of radicals that affects the processes after the EOC :cite:`Mittal2008`, although it does not affect
 the computation of |TC|.
