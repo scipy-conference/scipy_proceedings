@@ -389,14 +389,14 @@ UConnRCMPy is constructed in a hierarchical manner, with different classes repre
 levels of the data. The lowest level representation is the ``VoltageTrace`` that contains the raw
 voltage signal and timing recorded by the DAQ, as well as the filtered and smoothed voltage traces.
 The filtering and smoothing algorithms are implemented as separate methods so they can be reused
-in other situations.
+in other situations and are run automatically when the ``VoltageTrace`` is initialized.
 
-One step up from the ``VoltageTrace`` is the ``ExperimentalPressureTrace`` class. This class takes
-a ``VoltageTrace`` in the ``__init__`` method and processes it into a pressure trace, given the
-multiplication factor and the initial pressure. This class also contains methods to compute the
+One step up from the ``VoltageTrace`` is the ``ExperimentalPressureTrace`` class. This class
+consumes a ``VoltageTrace`` and processes it into a pressure trace, given the multiplication factor
+from the charge amplifier and the initial pressure. This class also contains methods to compute the
 derivative of the experimental pressure trace, as discussed in `Calculating Ignition Delay`_.
 
-All of the information about a particular experiment is stored in the ``Experiment`` class. When
+All of the information about a particular experimental run is stored in the ``Experiment`` class. When
 initialized, the ``Experiment`` expects an instance of the ``pathlib.Path`` class; if none is
 provided, it prompts the user to enter a file name that is expected to be in the current working
 directory. The file name should point to a tab-delimited plain text file that contains the voltage
@@ -405,19 +405,21 @@ trace recorded by LabView from one experimental run. Then UConnRCMPy creates an 
 the latter is processed to extract the ignition delay(s).
 
 The main user interface to UConnRCMPy is through the ``Condition`` class, the highest level of data
-representation. The intended use of this class is in an interactive Python interpreter (the author
-prefers the Jupyter Notebook with an IPython kernel :cite:`Perez2007`). Due to the dependence on the
-``pathlib`` library, UConnRCMPy must be used with Python 3.4 or greater.
+representation. The ``Condition`` class contains all of the information pertaining to the
+experiments at a given condition. The intended use of this class is in an interactive Python
+interpreter (the author prefers the Jupyter Notebook with an IPython kernel :cite:`Perez2007`). Due
+to the dependence on the ``pathlib`` library, UConnRCMPy must be used with Python 3.4 or greater.
 
-To begin, the user creates an instance of the ``Condition`` class and adds experiments to the
-instance using the ``add_experiment`` method. This method creates an instance of class
-``Experiment`` for each experiment passed in. As each experiment is processed by UConnRCMPy, the
-information from that run is added to the system clipboard for pasting into some spreadsheet
-software. In the current version, the information copied is the time of day of the experiment, the
-initial pressure, the initial temperature, the pressure at the EOC, the overall and first stage
-ignition delays, an estimate of the EOC temperature, and some information about the compression
-ratio of the reactor. Finally, each experiment is added to a dictionary keyed by the file name
-storing the experiment.
+To begin, the user creates an instance of the ``Condition`` class and conducts the first reactive
+experimental run at a given condition. When the run is finished (each run takes approximately 1
+minute), the user adds the experiment to the ``Condition`` instance using the ``add_experiment``
+method. This method creates an instance of class ``Experiment`` for each experiment passed in. As
+each experiment is processed by UConnRCMPy, the information from that run is added to the system
+clipboard for pasting into some spreadsheet software. In the current version, the information copied
+is the time of day of the experiment, the initial pressure, the initial temperature, the pressure at
+the EOC, the overall and first stage ignition delays, an estimate of the EOC temperature, and some
+information about the compression ratio of the reactor. Finally, each experiment is added to a
+dictionary keyed by the file name of the text file storing the experimental voltage trace.
 
 Two plots are optionally created each time a reactive experiment is added to the ``Condition``
 (plotting is controlled by passing a boolean argument ``plotting`` to the ``Condition`` when it is
@@ -426,28 +428,55 @@ the pressure traces of each of the experiments that are added to the ``Condition
 is an individual plot for each experiment showing the pressure trace and the time derivative of the
 pressure trace.
 
-In general, for a set of experiments at a given condition, all of the reactive cases are run first.
-The experiment chosen as the reference experiment (i.e., the one whose ignition delay and |TC| are
-reported) for a given condition is the one whose overall ignition delay is closest to the mean
-overall ignition delay among the experiments at a given condition. Once the reference experiment is
-selected, non-reactive experiments are run at the same initial conditions as the reference
-experiment. Non-reactive experiments are added to the ``Condition`` by the same ``add_experiment``
-method and UConnRCMPy automatically determines whether the experiment is reactive or non-reactive.
-Adding a non-reactive experiment creates a figure comparing the pressure trace of the non-reactive
-experiment with the reference reactive experiment.
+In general, for a given condition, the user will conduct and process all of the reactive experiments
+before conducting any non-reactive experiments. Then, the user chooses one of the reactive
+experiments as the reference experiment for the condition (i.e., the one whose ignition delay(s) and
+|TC| are reported). The reference experiment is defined as the experimental run whose overall
+ignition delay is closest to the mean overall ignition delay among the experiments at a given
+condition. To select the reference experiment, the user puts the file name of the reference experiment
+into a YAML format file called ``volume-trace.yaml`` with the key ``reacfile`` as shown below in the
+`Usage Example`_ section.
 
-When the user is satisfied with the agreement of the reactive and non-reactive pressure traces, the
-creation of the volume trace is triggered by running the ``create_volume_trace`` method of the
-``Condition``. This function goes through the process of converting the reactive pressure trace
-(before the EOC) and the non-reactive pressure trace (after the EOC) to a volume trace. The actual
-computation of the volume trace (as described previously) is done by the ``VolumeFromPressure``
-class. This class expects a pressure trace, initial temperature, and initial volume. First, the
-volume trace of the reactive (pre-EOC) portion is generated using the pre-EOC pressure trace, the
-experimental initial temperature, and an initial volume of :math:`V_0 = 1.0\,\text{m}^3`, as discussed
-previously.A temperature trace is also constructed for the pre-EOC pressure trace using the
-``TemperatureFromPressure`` class. The last value of this temperature trace provides an estimate for
-|TC|; although this value is not the reported value, it typically differs by :math:`\pm`\ 2 K from
-the reported value due to slight differences in the choice of the compression time (see below).
+Once the reference reactive experiment is selected, the user runs non-reactive experiments at the
+same initial conditions as the reference experiment. The user adds non-reactive experiments to the
+``Condition`` by the same ``add_experiment`` method and UConnRCMPy automatically determines whether
+the experiment is reactive or non-reactive. Adding a non-reactive experiment creates a figure
+comparing the pressure trace of the non-reactive experiment with the reference reactive experiment.
+If the user adds a non-reactive experiment before creating the ``volume-trace.yaml`` file, or if the
+file referenced in the ``reacfile`` key is not present in the current working directory, UConnRCMPy
+throws a ``FileNotFound`` exception.
+
+When the user is satisfied with the agreement of the reactive and non-reactive pressure traces, they
+choose a reference non-reactive experiment and add the file name of that file into the
+``volume-trace.yaml`` file. Then, the user triggers creation of the volume trace by running the
+``create_volume_trace`` method of the ``Condition``. This function converts the reactive pressure
+trace (before the EOC) and the non-reactive pressure trace (after the EOC) to a volume trace.
+
+The ``create_volume_trace`` function relies on a YAML file located in the current working directory
+called ``volume-trace.yaml``. This file must contain several parameters necessary to reproduce the
+analysis. These parameters must be specified by the user, and include the compression time, the file
+names of the reference reactive and non-reactive experiments, and the end times for the reactive and
+non-reactive experiments. The reactive end time determines the length of the output pressure trace,
+while the non-reactive end time determines the length of the volume trace. The length of the volume
+trace is also determined by the compression time, which should be set to a time such that the
+starting point is before the beginning of the compression. All three times should be specified in
+ms.
+
+Two optional parameters can also be specified in ``volume-trace.yaml``. These are offset parameters
+used to control the precise point where the switch from the reactive pressure trace to the
+non-reactive pressure trace occurs in the volume trace. These parameters may be necessary if the
+determination of the EOC does not result in aligned compression strokes for the reactive and
+non-reactive experiments, but they are not generally necessary.
+
+The actual computation of the volume trace (as described in `Calculating the EOC Temperature`_) is
+done by the ``VolumeFromPressure`` class. This class expects a pressure trace, initial temperature,
+and initial volume. First, the volume trace of the reactive (pre-EOC) portion is generated using the
+pre-EOC pressure trace, the experimental initial temperature, and an initial volume of
+:math:`V_0=1.0\,\text{m}^3`, as discussed in `Calculating the EOC Temperature`_. A temperature trace
+is also constructed for the pre-EOC pressure trace using the ``TemperatureFromPressure`` class. The
+last value of this temperature trace provides an estimate for |TC|; although this value is not the
+reported value, it typically differs by :math:`\pm`\ 2 K from the reported value due to slight
+differences in the choice of the compression time.
 
 For the non-reactive (post-EOC) volume trace, the initial temperature is estimated as the final
 value of the temperature trace constructed for the pre-EOC period. Furthermore, the initial volume
@@ -466,31 +495,16 @@ the pressure at the beginning of compression is put on the system clipboard to b
 spreadsheet to record the |P0| used for simulations. This may differ slightly from the |P0| read
 from the static transducer due to noise in the signal.
 
-The ``create_volume_trace`` function relies on a YAML file located in the current working directory
-called ``volume-trace.yaml``. This file must contain several parameters necessary to reproduce the
-analysis. These parameters must be specified by the user, and include the compression time, the file
-names of the reference reactive and non-reactive experiments, and the end times for the reactive and
-non-reactive experiments. The reactive end time determines the length of the output pressure trace,
-while the non-reactive end time determines the length of the volume trace. The length of the volume
-trace is also determined by the compression time, which should be set to a time such that the
-starting point is before the beginning of the compression. All three times should be specified in
-ms.
-
-Two optional parameters can also be specified in ``volume-trace.yaml``. These are offset parameters
-used to control the precise point where the switch from the reactive pressure trace to the
-non-reactive pressure trace occurs in the volume trace. These parameters may be necessary if the
-determination of the EOC does not result in aligned compression strokes for the reactive and
-non-reactive experiments, but they are not generally necessary.
-
-The final step is to use the volume trace in a simulation to determine |TC|. This is accomplished
-with the ``compare_to_sim`` method. This function takes two optional arguments, ``run_reactive`` and
-``run_nonreactive``, both of which are booleans. These determine which type of simulation should be
-run; by default, ``run_reactive`` is ``False`` and ``run_nonreactive`` is ``True`` because the
-reactive simulations may take substantial time. There is no restriction on combinations of values
-for the arguments; either or both may be ``True`` or ``False``. The ``compare_to_sim`` method relies
-on the ``run_simulation`` method, which in turn adds instances of the class ``Simulation`` to the
-``Condition`` instance. If either type of simulation has already been added to the ``Condition``
-instance, the user is asked whether they would like to overwrite the existing simulation.
+The final step is to use the volume trace in a simulation to determine |TC|. To begin the
+simulations, the user calls the ``compare_to_sim`` method of the ``Condition``. This function takes
+two optional arguments, ``run_reactive`` and ``run_nonreactive``, both of which are booleans. These
+determine which type of simulation should be conducted; by default, ``run_reactive`` is ``False``
+and ``run_nonreactive`` is ``True`` because the reactive simulations may take substantial time.
+There is no restriction on combinations of values for the arguments; either or both may be ``True``
+or ``False``. The ``compare_to_sim`` method relies on the ``run_simulation`` method, which in turn
+adds instances of the class ``Simulation`` to the ``Condition`` instance. If either type of
+simulation has already been added to the ``Condition`` instance, the user is asked whether they
+would like to overwrite the existing simulation.
 
 The ``Simulation`` class sets up the simulation in Cantera and controls the running simulation.
 Importantly, the maximum time step is set to be the time step used in the volume trace, so that the
@@ -545,7 +559,9 @@ Standard Interface
 These experiments were conducted with mixtures of propane, oxygen, and nitrogen :cite:`Dames2016`.
 The CTI file necessary to run this example can be found in the Supplementary Material of the work by
 Dames et al. :cite:`Dames2016`. The condition in this example is for a fuel rich mixture, with a
-target |PC| of 30 bar. First, the ``Condition`` is created and the experiments are added
+target |PC| of 30 bar. The user creates the ``Condition``, then conducts a reactive experiment with
+the RCM and adds the experiment to the ``Condition``. This process is repeated 5 times to ensure
+repeatable data is obtained.
 
 .. code:: python
 
@@ -554,39 +570,46 @@ target |PC| of 30 bar. First, the ``Condition`` is created and the experiments a
     %matplotlib
 
     cond_00_in_02_mm = Condition()
+    # Conduct reactive experiment #1 on the RCM
     cond_00_in_02_mm.add_experiment(Path(
         '00_in_02_mm_373K-1285t-100x-19-Jul-15-1620.txt'))
+    # Conduct reactive experiment #2 on the RCM
     cond_00_in_02_mm.add_experiment(Path(
         '00_in_02_mm_373K-1282t-100x-19-Jul-15-1626.txt'))
+    # Conduct reactive experiment #3 on the RCM
     cond_00_in_02_mm.add_experiment(Path(
         '00_in_02_mm_373K-1282t-100x-19-Jul-15-1633.txt'))
+    # Conduct reactive experiment #4 on the RCM
     cond_00_in_02_mm.add_experiment(Path(
         '00_in_02_mm_373K-1282t-100x-19-Jul-15-1640.txt'))
+    # Conduct reactive experiment #5 on the RCM
     cond_00_in_02_mm.add_experiment(Path(
         '00_in_02_mm_373K-1282t-100x-19-Jul-15-1646.txt'))
 
-This generates a figure showing all of the experiments together (the axis limits have been adjusted
-from the default), as shown in Fig. :ref:`all-runs`. It also generates one figure per experiment.
-The figures showing each experiment look similar to Fig. :ref:`ign-delay-def`, but the non-reactive
-trace is not plotted and the EOC and ignition delays are not labeled.
+This sequence generates a figure showing all of the experiments together, as shown in Fig.
+:ref:`all-runs` (the axis limits have been adjusted from the default). It also generates one figure
+per experiment. The figures showing each experiment look similar to Fig. :ref:`ign-delay-def`, but
+the non-reactive trace is not plotted and the EOC and ignition delays are not labeled.
 
 .. figure:: figures/all-runs.png
 
     All of the runs at the example experimental condition. The legend shows the date and time the
     experiment was conducted. :label:`all-runs`
 
-From the runs at this condition, it is determined that the reference experiment is the run that took
-place at 16:33. The filename of this run is added to the ``volume-trace.yaml`` file:
+By examining the ignition delays copied to a spreadsheet for the runs at this condition, the user
+determines that the reference experiment is the run that took place at 16:33. The user adds the
+filename of this run to the ``volume-trace.yaml`` file:
 
 .. code:: yaml
 
     reacfile: >
       00_in_02_mm_373K-1282t-100x-19-Jul-15-1633.txt
 
-and the first non-reactive experiment is added to the ``Condition``:
+and the user conducts the first non-reactive experiment and adds it to the ``Condition``:
 
 .. code:: python
 
+    # Conduct non-reactive experiment #1 on the RCM
     cond_00_in_02_mm.add_experiment(Path(
         'NR_00_in_02_mm_373K-1278t-100x-19-Jul-15-1652.txt'))
 
@@ -596,8 +619,17 @@ compares the current non-reactive case with the reference reactive case as speci
 :ref:`ign-delay-def`. In this case, the non-reactive pressure agrees very well with the reactive
 pressure and no further experiments are necessary; in principle, any number of non-reactive
 experiments can be conducted and added to the figure for comparison. Since there is good agreement
-between the non-reactive and reactive pressure traces, we can move on to generating the volume
-trace. First, the rest of the parameters in ``volume-trace.yaml`` must be specified. ``comptime`` is
+between the non-reactive and reactive pressure traces, the user adds the non-reactive reference file
+name to ``volume-trace.yaml``.
+
+.. code:: yaml
+
+    reacfile: >
+      00_in_02_mm_373K-1282t-100x-19-Jul-15-1633.txt
+    nonrfile: >
+      NR_00_in_02_mm_373K-1278t-100x-19-Jul-15-1652.txt
+
+Then, the user specifies the rest of the parameters in ``volume-trace.yaml``. ``comptime`` is
 usually specified by guess-and-check after comparison with the figure, ``reacend`` is typically
 chosen to be shortly after the main pressure peak due to ignition, and ``nonrend`` is typically
 chosen to be 400 ms.
@@ -614,7 +646,7 @@ chosen to be 400 ms.
 
 It is often convenient to use a YAML library to dump the ``volume-trace.yaml`` file from the
 interpreter, instead of having a text editor open. In either case, once ``volume-trace.yaml`` is
-created, ``create_volume_trace`` can be run. As mentioned previously, ``comptime`` is determined by
+updated, ``create_volume_trace`` can be run. As mentioned previously, ``comptime`` is determined by
 comparison with the fit to the initial pressure, as shown in Fig. :ref:`pressure-comparison`. In
 this case, the compression has clearly started at approximately :math:`t > -0.028\,\text{s}`. The
 time prior to that where the pressure appears to stabilize around the initial pressure is
@@ -628,10 +660,11 @@ approximately :math:`t = -0.033\,\text{s}`, giving a compression time of 33 ms.
     line for Computed Pressure exactly, as expected, and so is not shown.
     :label:`pressure-comparison`
 
-The final step is to run the simulations to calculate |TC| and the simulated ignition delay. This is
-done through the ``compare_to_sim`` function, which places the calculated values of |TC| and the
-ignition delay into the system clipboard (provided that both the non-reactive and reactive
-simulations are run). The plot generated by this method is shown in Fig. :ref:`sim-comp`.
+The final step is to conduct the simulations to calculate |TC| and the simulated ignition delay.
+This is done by the user by running the ``compare_to_sim`` function, which places the calculated
+values of |TC| and the ignition delay into the system clipboard (provided that both the non-reactive
+and reactive simulations are conducted). The plot generated by this method is shown in Fig.
+:ref:`sim-comp`.
 
 .. code:: python
 
