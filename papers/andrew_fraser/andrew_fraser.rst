@@ -81,11 +81,13 @@
      
 .. class:: keywords
 
-   add, keywords, to, the, document
+   uncertainty quantification, Bayesian inference, convex
+   optimization, reproducible research, function estimation, equation
+   of state
 
 Introduction
 ============
-
+  
 There are many physical process whose general behavior is known though
 not an exact mathematical representation.  Such epistemic uncertainty
 can arise in processes which occur at extreme regimes where direct
@@ -95,10 +97,8 @@ functional form of such processes included Gaussian Process Modeling
 able to account for the known constraints on the functional form
 because they allow physically impossible functions.  Many parametric
 approaches overly constrain the function and do not span the allowable
-function-space.  For several physics processes, we need both estimates
+function-space [vaughan2014].  For several physics processes, we need both estimates
 such functions and bounds on our uncertainty about them.
-
-Cite PUBS paper?
 
 As we began developing alogrithms to calculate those estimates and
 bounds, we our legacy codes and software practices got in the way.
@@ -295,7 +295,8 @@ use the following iterative procedure to find :math:`\hat \theta`, the
             \left. \frac{d^2}{d\theta^2} \log(p(x_k|\theta)\right|_{\theta=\theta_{i-1}}\nonumber \\
             &\equiv \Sigma^{-1} + \sum_k P_{i,k}
 
-   where in :math:`P_{i,k}` and :math:`q_{i,k}`,  :math:`i` is the iteration number and :math:`k` is the experiment number.
+   where in :math:`P_{i,k}` and :math:`q_{i,k}`, :math:`i` is the
+   iteration number and :math:`k` is the experiment number.
 
 #. Calculate :math:`G_i` and :math:`h_i` to express the appropriate
    constraints
@@ -318,7 +319,70 @@ The assumption that the experiments are statistically independent
 enables the calculations for each experiment :math:`k` in to be done
 independently. In the next few sections, we describe both the data
 from each experiment and the procedure for calculating :math:`P_i[k]`
-and :math:`q_i[k]`.
+and :math:`q_i[k]`. 
+
+The code for the main optimization loop is given below
+
+.. code-block:: python
+   
+  for i in xrange(maxiter):
+      # get the sensitivity matrix
+      self._get_sens(sims, model, initial_data)
+
+      # update the log likelyhood
+      new_log_like = prior_weight*self.model_log_like()\
+                     +self.sim_log_like(initial_data)
+   
+      if np.fabs(log_like - new_log_like) < atol\
+         and np.fabs((log_like - new_log_like)\
+	    /new_log_like) < reltol:
+          conv = True
+          break
+      else:
+          log_like = new_log_like
+      #end
+
+      # Solve the QP problem
+      local_sol = self._local_opt(sims,
+                                  model,
+                                  initial_data)
+				  
+      # Perform a zooming line search
+      # along the direction of best improvement
+      # in log likleyhood      
+      d_hat = np.array(local_sol['x']).reshape(-1)   
+      n_steps = 5
+      costs = np.zeros(n_steps)
+      iter_data = []
+      initial_dof = model.get_dof()
+      besti = 0 # inex of max likelyhood
+      max_step = 10 # step size
+      while besti == 0:
+          # zoom in each iteration
+          max_step /= 10.0
+	  # break once the step is too small
+          if max_step < 1E-10:
+              besti = 1
+              break
+          x_list = np.linspace(0, max_step, n_steps)
+          for i, x_i in enumerate(x_list):
+              model.set_dof(initial_dof + x_i * d_hat)
+              costs[i] = prior_weight*\
+	         self.model_log_like()
+              iter_data.append(self.compare(sims,model))
+              costs[i] += self.sim_log_like(iter_data[-1])           
+          #end
+
+	  # The max liklyhood is the min log likelyhood as
+	  # likelyhood is less than 1.0
+          besti = np.argmax(costs)
+      #end
+
+      # Update the model with the degrees of freedom
+      model.set_dof(initial_dof + d_hat * x_list[besti])
+      initial_data = iter_data[besti]
+   #end
+
 
 The following sections describe the examples currently implemented in
 F_UNCLE.  The components are the model parameters :math:`\theta`
@@ -341,7 +405,6 @@ have the following properties:
 * Monotonic
 * Convex
 
-Here, let us introduce the following notation:
 
 * :math:`\vol` Specific volume
 * :math:`p` Pressure
@@ -401,7 +464,9 @@ We set :math:`\Delta = 0.05`.  These choices yield:
 Thus we have the following notation for splines and an a prior
 distribution over :math:`\EOS`.
 
-* :math:`\cf,\fbasis`  Vector of coefficients and cubic spline basis functions that define an EOS.  We will use :math:`cf[i]` and :math:`\fbasis[i]` to denote components.
+* :math:`\cf,\fbasis` Vector of coefficients and cubic spline basis
+  functions that define an EOS.  We will use :math:`cf[i]` and
+  :math:`\fbasis[i]` to denote components.
 * :math:`\mu_\eos, \Sigma_\eos` Mean and covariance of prior
   distribution of EOS.  In a context that requires coordinates, we let
   :math:`\mu_\eos = \left( \cf[0], \cf[1], \ldots , \cf[n] \right)^T`.
@@ -409,8 +474,6 @@ distribution over :math:`\EOS`.
 
 The Nominal and *True* EOS
 --------------------------
-
-Let's have a new figure here that compares the two
 
 For each experiment, data comes from a simulation using a *true*
 function and each optimization starts from the nominal EOS which is
@@ -423,7 +486,8 @@ and a scale :math:`s_k`, with:
 
    b_k(v) = \frac{s_k F}{v_k^3} e^{- \frac{(v-v_k)^2}{2w_k^2}}
 
-Throughout the remainder of this paper, the *true* EOS that we have used to generate pseudo-experimental data is:
+Throughout the remainder of this paper, the *true* EOS that we have
+used to generate pseudo-experimental data is:
 
 .. math::
    :label: eq-actual
@@ -441,12 +505,26 @@ where:
    w_0 &= .1 \frac{\text{cm}^3}{\text{g}} &    w_1 &= .1 \frac{\text{cm}^3}{\text{g}}\\
    s_0 &= .25 &  s_1 &= -.3 
 
+.. figure:: scipy2016_figure1eos.png
+
+   The prior and nominal *true* equation of state functuion. The two models differ near at a specific volume of 0.4 g cm :math:`^{-1}`
+   
 
 A Rate Stick
 ============
 
-The  data from this experiment represent a sequence of times that a detonation shock is measured arriving at locations along a stick of HE that is so thick that the detonation velocity is not reduced by curvature.  The code for the pseudo data uses the average density and sensor positions given by Pemberton et al. [pemberton2011]_ for their *Shot 1*.
+The data from this experiment represent a sequence of times that a
+detonation shock is measured arriving at locations along a stick of HE
+that is so thick that the detonation velocity is not reduced by
+curvature.  The code for the pseudo data uses the average density and
+sensor positions given by Pemberton et al.  [pemberton2011]_ for their
+*Shot 1*.
 
+.. figure:: stick.png
+
+   The rate stick experiment
+
+   
 Implementation
 --------------
 
@@ -465,11 +543,16 @@ velocity following Section 2A of Fickett and Davis [ficket2000]_
 (entitled *The Simplest Theory*).  At the Chapman Jouguet (CJ) state,
 the following three curves are tangent in the :math:`p,v` plane:
 
-* The Rayleigh line which gives a relation implied by conservation laws between pressure and density (or specific volume) before and after a shock.
+* The Rayleigh line which gives a relation implied by conservation
+  laws between pressure and density (or specific volume) before and
+  after a shock.
 * The Hugoniot curve, which is not used in this analysis.
-* An isentrope.  Generally one must use the Hugoniot to determine which isentrope goes through the CJ state, but it is assumed that each isentrope considered goes through the CJ state.
+* An isentrope.  erally one must use the Hugoniot to determine which
+  isentrope goes through the CJ state, but it is assumed that each
+  isentrope considered goes through the CJ state.
 
-On page 17 of Fickett and Davis [ficket2000]_, Equation 2.3 expresses the Rayleigh  line as,
+On page 17 of Fickett and Davis [ficket2000]_, Equation 2.3 expresses
+the Rayleigh line as,
 
 .. math::
    :label: eq-rayleigh
@@ -485,13 +568,16 @@ where:
 * :math:`p` is the pressure at positions behind the wave
 * :math:`v` is the specific volume at positions behind the wave.
 
-Rearranging the terms in :ref:`eq-rayleigh` yields this relation between pressure and volume after the shock,
+Rearranging the terms in :ref:`eq-rayleigh` yields this relation
+between pressure and volume after the shock,
 
 .. math::
    
    p = R(v,V) \equiv p_0 + \frac{V^2(v_0-v)}{v_0^2}.
 
-The detonation velocity can be located by solving for the velocity where Rayleigh line is tangent to the isentrope, known as the Chapman Jouguet (CJ) point.
+The detonation velocity can be located by solving for the velocity
+where Rayleigh line is tangent to the isentrope, known as the Chapman
+Jouguet (CJ) point.
 
 .. math::
    :type: align
@@ -520,17 +606,36 @@ denote that solution, we write :ref:`eq-fcond` as,
 
    F(v(V),V) = 0.
 
-The code now solved for the root of :ref:`eq-fv` using `scipy.optimize.brentq` to get :math:`V_{\text{CJ}}` and then assigns :math:`v_{\text{CJ}} = v(V_{\text{CJ}})`. Figure :ref:`fig-cj-stick` depicts three isentropes and the results of solving :ref:`eq-fv` for the two curves labeled *experiment* and *fit*.
+The code now solved for the root of :ref:`eq-fv` using
+`scipy.optimize.brentq` to get :math:`V_{\text{CJ}}` and then assigns
+:math:`v_{\text{CJ}} = v(V_{\text{CJ}})`. Figure :ref:`fig-cj-stick`
+depicts three isentropes and the results of solving :ref:`eq-fv` for
+the two curves labeled *experiment* and *fit*.
 
-.. figure:: CJ_stick.pdf
+.. figure:: scipy2016_figure1.png
    :align: center  
 	   
-   Isentropes, Rayleigh lines and CJ conditions. Starting from the isentrope labeled *nominal* and using data from a simulated experiment based on the isentrope labeled *experiment*, the optimization algorithm described in the Algorithm section produced the estimate labeled *fit*.  Solving Eqn. :ref:`eq-fv` for the *experiment* and *fit* isentropes yields the two Rayleigh lines that appear.  They are are nearly identical because the detonation velocities (and hence the experimental and fit data) are given by their slopes.  Outside of the CJ points where the Rayleigh lines are tangent to the isentropes, the data does not constrain the isentropes, and in fact they are quite different. :label:`fig-cj-stick`
+   Isentropes, Rayleigh lines and CJ conditions. Starting from the
+   isentrope labeled *nominal* and using data from a simulated
+   experiment based on the isentrope labeled *experiment*, the
+   optimization algorithm described in the Algorithm section produced
+   the estimate labeled *fit*.  Solving Eqn. :ref:`eq-fv` for the
+   *experiment* and *fit* isentropes yields the two Rayleigh lines
+   that appear.  They are are nearly identical because the detonation
+   velocities (and hence the experimental and fit data) are given by
+   their slopes.  Outside of the CJ points where the Rayleigh lines
+   are tangent to the isentropes, the data does not constrain the
+   isentropes, and in fact they are quite
+   different. :label:`fig-cj-stick`
 
 Comparison to Pseudo Experimental Data
 --------------------------------------
 
-The previous simulation calculated the detonation velocity, :math:`V_{\text{CJ}}(\eos)`, while experimental data were a series of times when the shock reached a given position on the rate-stick. The simulated detonation velocity could be related to these arrival times using:
+The previous simulation calculated the detonation velocity,
+:math:`V_{\text{CJ}}(\eos)`, while experimental data were a series of
+times when the shock reached a given position on the rate-stick. The
+simulated detonation velocity could be related to these arrival times
+using:
 
 .. math::
 
@@ -538,7 +643,9 @@ The previous simulation calculated the detonation velocity, :math:`V_{\text{CJ}}
 
 where :math:`x[j]` were the locations of each sensor measuring arrival time.
 
-The sensitivity of the simulated response at the set of arrival times to the spline coefficients governing the equation of state is given by:
+The sensitivity of the simulated response at the set of arrival times
+to the spline coefficients governing the equation of state is given
+by:
 
 .. math::
    
@@ -549,16 +656,23 @@ where the derivative was evaluated using finite differences.
 The Gun
 =======
 
-Want new figure(s) illustrating the gun
-
 The data from this experiment are a time series of measurements of a
 projectile's velocity as it accelerates down a gun barrel driven by
 the expanding products-of-combustion of HE.
 
+
+.. figure:: gun.png
+
+   The gun experiment
+
+   
 Implementation
 --------------
 
-The position and velocity history of the projectile is generated by the `scipy.integrate.odeint` algorithm. This method  solves the differential equation  for the projectile position and velocity as it is accelerated along the barrel. 
+The position and velocity history of the projectile is generated by
+the `scipy.integrate.odeint` algorithm. This method solves the
+differential equation for the projectile position and velocity as it
+is accelerated along the barrel.
 
 .. math::
    :label: eq-gun-difeq
@@ -575,14 +689,25 @@ where:
 * :math:`A` is the cross-sectional area of the barrel
 * :math:`m_{HE}` is the initial mass of high explosives
 * :math:`m_{proj}` is the mass of the projectile  
-* :math:`\eos` is the equation of state which relates the pressure to the specific volume of the HE products-of-combustion
+* :math:`\eos` is the equation of state which relates the pressure to
+  the specific volume of the HE products-of-combustion
 
-The acceleration is computed based the projectile's mass and the force resulting from the uniform pressure acting on the projectile. This pressure is related to the projectile's position by the EOS, assuming that the projectile perfectly seals the barrel so the mass of products-of-combustion behind the projectile remains constant.
+The acceleration is computed based the projectile's mass and the force
+resulting from the uniform pressure acting on the projectile. This
+pressure is related to the projectile's position by the EOS, assuming
+that the projectile perfectly seals the barrel so the mass of
+products-of-combustion behind the projectile remains constant.
 
 Comparison to Psudo Experimental Data
 -------------------------------------
 
-The experimental data were also the result of this simulation but performed using the nominal *true* EOS described previously. These experimental data were a series of times and corresponding velocities. To compare the experiments to simulations, which may use a different time discretization, the simulated response was represented by a spline, and was compared to the experiments at each experimental time stamp.  
+The experimental data were also the result of this simulation but
+performed using the nominal *true* EOS described previously. These
+experimental data were a series of times and corresponding
+velocities. To compare the experiments to simulations, which may use a
+different time discretization, the simulated response was represented
+by a spline, and was compared to the experiments at each experimental
+time stamp.
 
 .. math::
    :label: gun_sens
@@ -599,40 +724,92 @@ where:
 Numerical Results
 =================
 
-The algorithm was applied to the sets of simulation results and pseudo experimental data for both the rate-stick and gun models. Figure :ref:`fig-opt-stick` shows the improved agreement between the simulated and *experimental* arrival times as the algorithm adjust the equation of state. Similar results are shown in Figure :ref:`fig-fve-gun` , where the significant error in velocity history at early times is reduced by and order of magnitude as the optimized EOS model approached the *true* EOS.
+The algorithm was applied to the sets of simulation results and pseudo
+experimental data for both the rate-stick and gun models. Figure
+:ref:`fig-opt-stick` shows the improved agreement between the
+simulated and *experimental* arrival times as the algorithm adjust the
+equation of state. Similar results are shown in Figure
+:ref:`fig-fve-gun` , where the significant error in velocity history
+at early times is reduced by and order of magnitude as the optimized
+EOS model approached the *true* EOS.
 
-.. figure:: opt_stick.pdf
+.. figure:: scipy2016_figure2.png
    :align: center   
 
-   Fitting an isentrope to rate stick data.  In the upper  plot, black +'s denote measured shock arrival time at 7 positions.  The blue line represents the shock velocity calculated from the nominal EOS, and the other lines come from the sequence of isentropes that the optimization algorithm described in the text generates as it seeks an isentrope that will produce a simulation that matches the data.  That sequence of isentropes appears in the lower plot. :label:`fig-opt-stick`
+   Fitting an isentrope to rate stick data.  In the upper plot, black
+   +'s denote measured shock arrival time at 7 positions.  The blue
+   line represents the shock velocity calculated from the nominal EOS,
+   and the other lines come from the sequence of isentropes that the
+   optimization algorithm described in the text generates as it seeks
+   an isentrope that will produce a simulation that matches the data.
+   That sequence of isentropes appears in the lower
+   plot. :label:`fig-opt-stick`
 
 
-.. figure:: fve_gun.pdf
+.. figure:: scipy2016_figure3.png
    :align: center	   
 
-   Sequential estimation of the maximum *a posteriori* probability parameters of :math:`f`.  The *true* EOS appears as *experimental* in the upper plot, and the optimization starts with the *nominal* and ends with *fit*.  The corresponding velocity for the gun as a function of position appears in the middle plot, and the sequence of errors in the forecast velocity time series after each step in the optimization appears in the lower plot. The estimation also used experimental data from the rate stick. :label:`fig-fve-gun`
+   Sequential estimation of the maximum *a posteriori* probability
+   parameters of :math:`f`.  The *true* EOS appears as *experimental*
+   in the upper plot, and the optimization starts with the *nominal*
+   and ends with *fit*.  The corresponding velocity for the gun as a
+   function of position appears in the middle plot, and the sequence
+   of errors in the forecast velocity time series after each step in
+   the optimization appears in the lower plot. The estimation also
+   used experimental data from the rate stick. :label:`fig-fve-gun`
 
 
 Fisher Information Matrix
 -------------------------
 
-The Fisher information matrix characterizes how tightly the experimental data constrain the spline coefficients. This matrix can be better understood through a spectral decomposition to show the magnitude of the eigenvalues and the eigenvector behavior.
+The Fisher information matrix characterizes how tightly the
+experimental data constrain the spline coefficients. This matrix can
+be better understood through a spectral decomposition to show the
+magnitude of the eigenvalues and the eigenvector behavior.
 
-The eigenvalues and eigenvectors of the Fisher information matrix of the rate-stick experiment are shown in Figure :ref:`fig-info-stick`. Only the CJ point on the EOS influences the forecast data, :math:`\mu(c)`.  Thus only one degree of freedom in the model influences the likelihood and Fisher Information matrix, :math:`\Fisher`, should have a rank of one. Figure :ref:`fig-info-stick` illustrates characteristics of the optimization procedure and :math:`\Fisher(\hat c)`.  The largest eigenvalue :math:`\Fisher(\hat c)` is :math:`10^{16}` larger than the next largest, ie, the rank of :math:`\Fisher(\hat c)` is one to within machine precision.
+The eigenvalues and eigenvectors of the Fisher information matrix of
+the rate-stick experiment are shown in Figure
+:ref:`fig-info-stick`. Only the CJ point on the EOS influences the
+forecast data, :math:`\mu(c)`.  Thus only one degree of freedom in the
+model influences the likelihood and Fisher Information matrix,
+:math:`\Fisher`, should have a rank of one. Figure
+:ref:`fig-info-stick` illustrates characteristics of the optimization
+procedure and :math:`\Fisher(\hat c)`.  The largest eigenvalue
+:math:`\Fisher(\hat c)` is :math:`10^{16}` larger than the next
+largest, ie, the rank of :math:`\Fisher(\hat c)` is one to within
+machine precision.
 
-.. figure:: info_stick.pdf
+.. figure:: scipy2016_figure4.png
    :align: center
    :class: w	   
 
-   Fisher Information of the Rate Stick Experiment.  The sequence of log likelihoods produced by the optimization procedure appear in the upper left, and the corresponding isentropes appear in the upper right.  The largest three eigenvalues of :math:`\Fisher(\hat c)` appear in the lower left and the eigenfunction corresponding to the largest eigenvalue appears in the lower left. :label:`fig-info-stick`
+   Fisher Information of the Rate Stick Experiment.  The sequence of
+   log likelihoods produced by the optimization procedure appear in
+   the upper left, and the corresponding isentropes appear in the
+   upper right.  The largest three eigenvalues of :math:`\Fisher(\hat
+   c)` appear in the lower left and the eigenfunction corresponding to
+   the largest eigenvalue appears in the lower
+   left. :label:`fig-info-stick`
    
 
-The Fisher information matrix of the gun experiment is more complex as changes to the EOS affect the entire time history of the projectile velocity. In Figure :ref:`fig-info-gun` There is no clear *dominating* eigenvalue, the largest eigenvalue corresponds to an eigenvector which is more influential at larger projectile displacements while the next three largest eigenvalues correspond to eigenvectors which are more influential at the start of the experiment.
+The Fisher information matrix of the gun experiment is more complex as
+changes to the EOS affect the entire time history of the projectile
+velocity. In Figure :ref:`fig-info-gun` There is no clear *dominating*
+eigenvalue, the largest eigenvalue corresponds to an eigenvector which
+is more influential at larger projectile displacements while the next
+three largest eigenvalues correspond to eigenvectors which are more
+influential at the start of the experiment.
 
-.. figure:: info_gun
+.. figure:: scipy2016_figure5
    :align: center	    
 
-   Fisher Information of the Gun Experiment.  The sequence of log likelihoods produced by the optimization procedure appear in the upper left, and the corresponding isentropes appear in the upper right.  The largest nine eigenvalues of :math:`\Fisher(\hat c)` appear in the lower left and the eigenfunctions corresponding to the largest four eigenvalues appear in the lower left. :label:`fig-info-gun`
+   Fisher Information of the Gun Experiment.  The sequence of log
+   likelihoods produced by the optimization procedure appear in the
+   upper left, and the corresponding isentropes appear in the upper
+   right.  The largest nine eigenvalues of :math:`\Fisher(\hat c)`
+   appear in the lower left and the eigenfunctions corresponding to
+   the largest four eigenvalues appear in the lower
+   left. :label:`fig-info-gun`
 
 These preliminary investigations of the Fisher information matrix show
 how this matrix can be informative in describing the uncertainty
@@ -686,29 +863,55 @@ particular:
 References
 ==========
 
-.. [hixson2000] Hixson, R. S. et al. "Release isentropes of overdriven
-		plastic-bonded explosive PBX-9501", Journal of Applied
-		Physics, 88:6287-6293, December 2000.
+.. [vaughan2014] Vaughan, D. E. and Preston, D. L. "Physical Uncertainty
+		 Bounds (PUB)". LA-UR-14-20441, Los Alamos National
+		 Laboratory, Los Alamos, NM.
+		 
+.. [pemberton2011] Pemberton et al. "Test Report for Equation of State
+                   Measurements of PBX-9501". LA-UR-11-04999, Los
+                   Alamos National Laboratory, Los Alamos, NM.
 
-.. [pemberton2011] Pemberton et al. "Test Report for Equation of State Measurements of PBX-9501". LA-UR-11-04999, Los Alamos National Laboratory, Los Alamos, NM.
+.. [hixson2000] test
+	       
+.. [ficket2000] Ficket, W. and
+                Davis, W. C., 2000. "Detonation". University of
+                California Press: Berkeley, CA.
 
-.. [ficket2000] Ficket, W. and Davis, W. C., 2000. "Detonation". University of California Press: Berkeley, CA.	     
+.. [F_UNCLE] "F_UNCLE: Functional Uncertainty Constrained by Law and
+             Experiment" `https://github.com/fraserphysics/F_UNCLE
+             <https://github.com/fraserphysics/F_UNCLE>`_ [Online;
+             accessed 2016-05-27].
 
-.. [F_UNCLE] "F_UNCLE: Functional Uncertainty Constrained by Law and Experiment" `https://github.com/fraserphysics/F_UNCLE <https://github.com/fraserphysics/F_UNCLE>`_ [Online; accessed 2016-05-27].
+.. [Scipy] Jones, E., Oliphant, E., Peterson, P., et al. "SciPy\: Open
+           Source Scientific Tools for Python", 2001-,
+           `<http://www.scipy.org/>`_ [Online; accessed 2016-05-27].
 
-.. [Scipy] Jones, E., Oliphant, E., Peterson, P., et al. "SciPy\: Open Source Scientific Tools for Python", 2001-, `<http://www.scipy.org/>`_ [Online; accessed 2016-05-27].
+.. [matplotlib] Hunter, J. D.. "Matplotlib\: A 2D Graphics
+                Environment", Computing in Science & Engineering,
+                **9**, 90-95 (2007), `DOI:10.1109/MCSE.2007.55
+                <https://doi.org/10.1109/MCSE.2007.55>`_
 
-.. [matplotlib] Hunter, J. D.. "Matplotlib\: A 2D Graphics Environment", Computing in Science & Engineering, **9**, 90-95 (2007), `DOI:10.1109/MCSE.2007.55 <https://doi.org/10.1109/MCSE.2007.55>`_
+.. [numpy] van der Walt, S. , Colbert, C. S.  and Varoquaux, G.. "The
+           NumPy Array\: A Structure for Efficient Numerical
+           Computation", Computing in Science \& Engineering, **13**,
+           22-30 (2011), `DOI:10.1109/MCSE.2011.37
+           <https://doi.org/10.1109/MCSE.2011.37>`_
 
-.. [numpy] van der Walt, S. , Colbert, C. S.  and Varoquaux, G.. "The NumPy Array\: A Structure for Efficient Numerical Computation", Computing in Science \& Engineering, **13**, 22-30 (2011), `DOI:10.1109/MCSE.2011.37 <https://doi.org/10.1109/MCSE.2011.37>`_
+.. [cvxopt] Andersen, M. and Vandenberghe, L.. "cvxopt\: Convex
+            Optimization Package" `<http://cvxopt.org/>`_ [Online;
+            accessed 2016-05-27].
 
-.. [cvxopt] Andersen, M. and Vandenberghe, L.. "cvxopt\: Convex Optimization Package" `<http://cvxopt.org/>`_  [Online; accessed 2016-05-27].
+.. [sphinx] "sphinx\: Python Documentation Generator"
+            `<http://www.sphinx-doc.org/>`_ [Online; accessed
+            2016-05-27].
 
-.. [sphinx] "sphinx\: Python Documentation Generator" `<http://www.sphinx-doc.org/>`_  [Online; accessed 2016-05-27].
+.. [pylint] "pylint\: Python Code Static Checker"
+            `<https://www.pylint.org/>`_ [Online; accessed
+            2016-05-27].
 
-.. [pylint] "pylint\: Python Code Static Checker" `<https://www.pylint.org/>`_  [Online; accessed 2016-05-27].
-
-.. [nose] "nose: Nose Extends Unittest to Make Testing Easier" `<https://pypi.python.org/pypi/nose/1.3.7>`_ [Online; accessed 2016-05-27].
+.. [nose] "nose: Nose Extends Unittest to Make Testing Easier"
+          `<https://pypi.python.org/pypi/nose/1.3.7>`_ [Online;
+          accessed 2016-05-27].
    
        
        
