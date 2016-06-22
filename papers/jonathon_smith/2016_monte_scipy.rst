@@ -20,11 +20,13 @@ Saturn, Ceres, and many solar system small bodies. At its core, MONTE
 consists of low-level astrodynamic libraries that are written in C++
 and presented to the end user as an importable Python language module.
 These libraries form the basis on which Python-language applications
-are built for specific astrodynamic applications, like trajectory
+are built for specific astrodynamic applications, such as trajectory
 design and optimization, orbit determination, flight path control, and
-more. This paper gives a brief history of the project, shows some
-examples of MONTE in action, and relates the stories of its greatest
-successes.
+more. The first half of this paper gives context to the MONTE project
+by outlining its history, the field of deep space navigation and where
+MONTE fits into the current Python landscape. The second half gives
+an overview of the main MONTE libraries and provides a narrative
+example of how it can be used for astrodynamic analysis.
 
 .. class:: keywords
 
@@ -177,7 +179,7 @@ navigation for that specific mission.
 This is important to note because it illustrates the way in which
 MONTE is likely to be useful to those outside JPL. Deep space
 navigation is (not yet at least) a very large discipline. The majority
-of astrodynamic computing occurs in other contexts like Earth-centered
+of astrodynamic computing occurs in other contexts such as Earth-centered
 navigation, collision avoidance analysis, cooperative and
 non-cooperative rendezvous in orbit, etc. Much the same way that MONTE
 can be configured and deployed for deep space navigation, it can
@@ -198,7 +200,7 @@ MONTE and the Python Ecosystem
 
 MONTE has a decidedly friendly stance when it comes to working with
 other libraries in the Python scientific computing stack. It makes
-heavy use of many open source Python libraries like matplotlib and
+heavy use of many open source Python libraries such as matplotlib and
 IPython (Jupyter), and reciprocally tries to make it easy for users
 of these systems to interface with MONTE. Many of MONTE's classes
 can transform themselves in NumPy data types - a common pattern is
@@ -831,7 +833,12 @@ this departure.
 Conclusion
 ----------
 
-Some kind of conclusion here.
+MONTE is the most powerful astrodynamic computing library in the world.
+It has been extensively tested and verified by flying actual spacecraft
+to destinations all over the solar system. As a platform, it has a lot
+to offer anyone doing aerospace related computation, especially those
+who love working with the Python language.
+
 
 References
 ----------
