@@ -348,9 +348,9 @@ noun, and verb tokens, by sex, are summarized below.
 We use NMF to help us understand the subject matter that users find interesting
 and important about themselves and, thus, choose to write about. This provides
 insight into the way they choose to self-present. In addition to particular
-themes, NMF allows us to consider stylistic expression. Choosing the number of
-NMF components—these can be thought of as topics—is an arbitrary and iterative
-process. For the self-summary essay, we chose to start with 25.
+themes, NMF also allows us to consider stylistic expression. Choosing the
+number of NMF components—these can be thought of as topics—is an arbitrary and
+iterative process. For the self-summary essay, we chose to start with 25.
 
 Several expected themes emerged. Some users, for example, chose to highlight
 personality traits. Some did so by mentioning specific characteristics such as
@@ -449,34 +449,19 @@ for each topic is available in the appendix.)
    |                | countries, different, europe                            |
    +----------------+---------------------------------------------------------+
 
-The following figure shows the distribution over topics by sex. We see that,
-for most topics, the proportion of females and males is fairly even. One
-notable exception is with the enthusiastic group, which females belong to at
-almost twice the rate of males. Users in this group use modifiers such as,
-"love," "really," and "absolutely" regardless of the activities they are
-describing.
+In order to determine whether there are differences in the topics or themes
+that OkCupid users choose to write about in their self-summaries, we plot the
+distribution over topics by demographic split. This allows us to identify how
+often certain themes are being written about and whether those themes are
+distinct to particular demographic groups.
 
-Our first attempt at visualizing tokens that make the groupings distinctive was
-to plot a histogram of the difference in relative frequency between tokens for
-a given group versus other groups (Fig 3). This can be done between clusters
-(comparing a single cluster to all of the other clusters) or within clusters
-(comparing a single demographic group to all other groups). This visualization
-doesn’t penalize infrequent tokens like word clouds do, but it was more
-difficult to view the individual words.
-
-In order to determine if there were demographic differences in the distribution
-of users across groups, we calculated the percentage of each demographic
-represented in each cluster (or NMF group), normalized by the total number of
-people in that particular demographic group. We visually examined the clusters
-and noted the ones dominated by a particular demographic group. For example,
-in the "Favorite books, movie, TV" essay, we noted that group 7 was dominated
-by people identifying as black relative to other ethnic groups (Fig 5, left).
-
-An added benefit of plotting the distribution of cluster membership is that we
-can determine how much certain themes are being written about for a particular
-essay. For example, in Fig 5 above, group 6 has a low number of users across
-all demographic splits, indicating that relatively few individuals wrote about
-the theme associated that cluster.
+The following figure shows the distribution over topics by sex. We see that
+the highest proportion of users, of either sex, are in the "about me" group.
+This is not surprising given that we're analyzing the self-summary essays. For
+most topics, the proportion of females and males is faily even. One notable
+exception is with the "enthusiastic" group, which females belong to at almost
+twice the rate of males. Users in this group use modifiers such as, "love,"
+"really," and "absolutely" regardless of the activities they are describing.
 
 We were also able to split and combine demographic groups, for example gender
 and sexual orientation (Fig 6). For the “Self Summary” essay we noted that
