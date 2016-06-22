@@ -363,11 +363,11 @@ in simulations that compare predicted ignition delays to the experimental values
 
 To conduct this modeling, a non-reactive experiment is conducted, where |O2| in the oxidizer is
 replaced with |N2| to maintain a similar specific heat ratio but suppress the oxidation reactions
-that lead to ignition. The pressure trace from this non-reactive experiment closely matches that
-from the reactive experiment during the compression stroke, further validating the assumption of
-adiabatic, constant composition compression. Furthermore, the non-reactive pressure trace closely
-matches the reactive pressure trace after the EOC until exothermic reactions cause the pressure in
-the reactive experiment to begin to increase.
+that lead to ignition. The pressure trace from this non-reactive experiment should closely match
+that from the reactive experiment during the compression stroke, further validating the assumption
+of adiabatic, constant composition compression. Furthermore, the non-reactive pressure trace should
+closely match the reactive pressure trace after the EOC until exothermic reactions cause the
+pressure in the reactive experiment to begin to increase.
 
 To apply the effect of the post-compression heat loss into the simulations, the reaction chamber is
 modeled as undergoing an adiabatic volume expansion. Since the post compression time is modeled as
