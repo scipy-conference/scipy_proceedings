@@ -375,12 +375,12 @@ an isentropic expansion, the same procedure is used as in the computation of |TC
 volume trace for the post-EOC time. The only difference is that the non-reactive pressure trace is
 used after the EOC instead of the reactive pressure trace. Once the volume trace is generated, it
 can be applied to a simulation by concatenating the volume trace of the compression stroke and the
-post-EOC volume trace together and following the procedure outlined previously. For consistency, the
-ignition delay in a reactive simulation is defined in the same manner as in the reactive
-experiments, as the maxima of the time derivative of the pressure trace. This procedure has been
-validated experimentally by measuring the temperature in the reaction chamber during and after the
-compression stroke. The temperature of the reactants was found to be within :math:`\pm`\ 5 K of the
-simulated temperature :cite:`Das2012a,Uddi2012`.
+post-EOC volume trace together and following the procedure outlined in `Calculating the EOC
+Temperature`_. For consistency, the ignition delay in a reactive simulation is defined in the same
+manner as in the reactive experiments, as the maxima of the time derivative of the pressure trace.
+This procedure has been validated experimentally by measuring the temperature in the reaction
+chamber during and after the compression stroke. The temperature of the reactants was found to be
+within :math:`\pm`\ 5 K of the simulated temperature :cite:`Das2012a,Uddi2012`.
 
 Implementation of UConnRCMPy
 ----------------------------
@@ -394,7 +394,7 @@ in other situations.
 One step up from the ``VoltageTrace`` is the ``ExperimentalPressureTrace`` class. This class takes
 a ``VoltageTrace`` in the ``__init__`` method and processes it into a pressure trace, given the
 multiplication factor and the initial pressure. This class also contains methods to compute the
-derivative of the experimental pressure trace, as discussed previously.
+derivative of the experimental pressure trace, as discussed in `Calculating Ignition Delay`_.
 
 All of the information about a particular experiment is stored in the ``Experiment`` class. When
 initialized, the ``Experiment`` expects an instance of the ``pathlib.Path`` class; if none is
@@ -498,10 +498,10 @@ As the simulation runs, the solution time, temperature, pressure, and simulated 
 to lists that are converted to NumPy arrays :cite:`vanderWalt2011` when the simulation finishes.
 Once the simulation finishes, the derivative is computed using second order Lagrange polynomials, as
 suggested by Chapra and Canale :cite:`Chapra2010` because the time step is not constant in the
-simulation. Finally, |TC| and the overall ignition delay (if a reactive simulation was run) are sent
-to the system clipboard to be pasted into a spreadsheet. The first stage ignition delay must be
-found manually because determining peaks in the derivative is currently unreliable, as mentioned
-previously for experiments.
+simulation. Finally, |TC| and the overall ignition delay (if a reactive simulation was conducted)
+are sent to the system clipboard to be pasted into a spreadsheet. The first stage ignition delay
+must be found manually because determining peaks in the derivative is currently unreliable, as
+mentioned in `Calculating Ignition Delay`_ for experiments.
 
 The ``compare_to_sim`` method also plots the experimental pressure trace and any of the simulated
 pressure traces that have been generated. If the simulated reactive pressure trace is generated,
