@@ -463,15 +463,101 @@ exception is with the "enthusiastic" group, which females belong to at almost
 twice the rate of males. Users in this group use modifiers such as, "love,"
 "really," and "absolutely" regardless of the activities they are describing.
 
-We were also able to split and combine demographic groups, for example gender
-and sexual orientation (Fig 6). For the “Self Summary” essay we noted that
-clusters 1 and 6 were dominated by gay men, while group 2 was dominated by
-women, both gay and straight. Upon examining the word clouds for these
-demographic splits we noted that cluster 1 discussed San Francisco and the act
-of moving or locations and changing. The word cloud for group 6 was represented
-by n-grams discussing searching for a relationship and types of relationships.
-This is in contrast to cluster 2, which was dominated by women and whose word
-cloud seemed to encompass stereotypical cliches.
+We can further examine online self-presentation by considering the other
+available essays in the OkCupid data set. It has been noted that, "people do
+actually define themselves through music and relate to other people through
+it" [Col15]_. It is possible that this extends to other media, such as books or
+movies, too. We consider the "favorite books, movies, shows, music, food" essay
+next. Note that because the favorites text is less expository and more
+list-like, we do not consider a lexical-based analysis. Instead, we use NMF to
+identify themes (or genres). Like with the self-summaries, we choose 25 topics.
+The following table lists the topics and a selection of their highest weighted
+tokens.
+
+   +----------------+---------------------------------------------------------+
+   | Topic          | Tokens                                                  |
+   +================+=========================================================+
+   |                |                                                         |
+   +----------------+---------------------------------------------------------+
+   | TV-hits        | mad men, arrested development, breaking bad, 30 rock,   |
+   |                | tv, parks, sunny, wire, dexter, office                  |
+   +----------------+---------------------------------------------------------+
+   | enthusiastic   | love food, love music, love movies, love love, cook,    |
+   |                | love good, eat, food, love read, books love             |
+   +----------------+---------------------------------------------------------+
+   |                |                                                         |
+   +----------------+---------------------------------------------------------+
+   | genres-movies  | sci fi, action, comedy, horror, fantasy, movies, drama, |
+   |                | romantic, classic, adventure                            |
+   +----------------+---------------------------------------------------------+
+   | genres-music   | hip hop, rock, r&b, jazz, reggae, rap, pop, country,    |
+   |                | classic, old                                            |
+   +----------------+---------------------------------------------------------+
+   | TV-comedies-0  | big bang theory, met mother, big lebowski, friends,     |
+   |                | house, office, community, walking dead, new girl, bones |
+   +----------------+---------------------------------------------------------+
+   | genres-food    | italian, thai, mexican, food, indian, chinese,          |
+   |                | japanese, sushi, french, vietnamese                     |
+   +----------------+---------------------------------------------------------+
+   | teen           | harry potter, hunger games, twilight, dragon tattoo,    |
+   |                | pride prejudice, harry met sally, disney, vampire,      |
+   |                | trilogy, lady gaga                                      |
+   +----------------+---------------------------------------------------------+
+   |                |                                                         |
+   +----------------+---------------------------------------------------------+
+   | movies-drama   | eternal sunshine, spotless mind, litte miss sunshine,   |
+   |                | amelie, garden state, lost, life, beautiful,            |
+   |                | lost translation, beauty                                |
+   +----------------+---------------------------------------------------------+
+   |                |                                                         |
+   +----------------+---------------------------------------------------------+
+   |                |                                                         |
+   +----------------+---------------------------------------------------------+
+   |                |                                                         |
+   +----------------+---------------------------------------------------------+
+   | music-rock     | david, black, john, tom, radiohead, bob, brothers,      |
+   |                | beatles, black keys, bowie                              |
+   +----------------+---------------------------------------------------------+
+   | movies-sci-fi  | star, lord, wars, rings, star trek, trilogy, series,    |
+   |                | matrix, princess, bride                                 |
+   +----------------+---------------------------------------------------------+
+   | TV-comedies-1  | modern family, family guy, office, south park,          |
+   |                | met mother, glee, simpsons, american dad, 30 rock,      |
+   |                | colbert                                                 |
+   +----------------+---------------------------------------------------------+
+   |                | fight club, shawshank redemption, pulp fiction,         |
+   |                | fear loathing, peppers, red hot, vegas, american,       |
+   |                | catcher rye, big lebowski                               |
+   +----------------+---------------------------------------------------------+
+   |                |                                                         |
+   +----------------+---------------------------------------------------------+
+   |                |                                                         |
+   +----------------+---------------------------------------------------------+
+   |                |                                                         |
+   +----------------+---------------------------------------------------------+
+   |                |                                                         |
+   +----------------+---------------------------------------------------------+
+   |                |                                                         |
+   +----------------+---------------------------------------------------------+
+
+The favorites topics are more difficult to categorize than the self-summaries.
+In some cases, genres (or media) overlap. For example, in the TV-comedies-0
+group, "The Walking Dead," a drama, is listed. In other cases, we see groups
+that are potentially similar. However, it is possible that these groups (e.g.,
+the multiple TV comedies groups) are, indeed, different, even if only slightly.
+This might suggest that the number of NMF components is too high, but we prefer
+the granularity it provides. In fact, we'll show that we are able to create
+subordinate groupings from the above topics from which we can extract
+distinctive tokens and compare demographic splits. We'll begin by examining the
+distribution over topics by sex.
+
+The most popular topics, for both females and males, are "TV-hits" and
+"music-rock," with about 16% of each sex writing about shows or artists in
+those groups. We see more separation between the sexes in the favorites essay
+than we did with the self-summaries. The enthusiastic group is, again,
+distinctly female. A distinctly male category includes films such as "Fight
+Club" and "The Shawshank Redemption" and musical artists such as the Red Hot
+Chili Peppers.
 
 We also created superordinate groupings. For example, for the "Favorite book,
 movies, TV" essay, clusters 2, 15, and 24 were all characterized by n-grams
@@ -546,3 +632,7 @@ References
 
 .. [Sch13] Personality, gender, and age in the language of social media: The
            open-vocabulary approach.
+
+.. [Col15] Collingwood, J. (2015). Preferred Music Style Is Tied to Personality.
+           Psych Central. Retrieved on June 22, 2016, from
+           http://psychcentral.com/lib/preferred-music-style-is-tied-to-personality/
