@@ -657,7 +657,7 @@ approximately :math:`t = -0.033\,\text{s}`, giving a compression time of 33 ms.
     Comparison of the reactive pressure trace, the pressure trace output to the text file, the
     pressure trace computed from the volume trace, and the linear fit to the initial pressure
     demonstrating the choice of compression time. The green line for Output Pressure follows the red
-    line for Computed Pressure exactly, as expected, and so is not shown.
+    line for Computed Pressure exactly, as expected, and so is not visible.
     :label:`pressure-comparison`
 
 The final step is to conduct the simulations to calculate |TC| and the simulated ignition delay.
