@@ -119,11 +119,11 @@ prior to the start of compression. In addition, the output range of 0 V to 10 V 
 operator to correspond to a particular pressure range by setting a "scale factor". Typical values
 for the scale factor range between 10 bar/V and 100 bar/V.
 
-The voltage output from the charge amplifier is digitized by a hardware DAQ and recorded into a
-plain text file by a LabView Virtual Instrument. The voltage is sampled at a rate chosen by the
-operator, typically between 50 kHz and 100 kHz. This provides sufficient resolution for events on
-the order of milliseconds; the typical ignition delay measured in this system approximately ranges
-from 5 ms to 100 ms.
+The voltage output from the charge amplifier is digitized by a hardware data acquisition system
+(DAQ) and recorded into a plain text file by a LabView Virtual Instrument. The voltage is sampled at
+a rate chosen by the operator, typically between 50 kHz and 100 kHz. This provides sufficient
+resolution for events on the order of milliseconds; the typical ignition delay measured in this
+system approximately ranges from 5 ms to 100 ms.
 
 .. figure:: figures/raw-voltage.png
 
