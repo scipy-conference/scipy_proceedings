@@ -61,10 +61,8 @@
 .. class:: abstract
 
    We describe our use of the Python ecosystem of scientific software
-   to develop and explore techinques for estimating unknown functions
-   and our uncertainty about them.
-	   
-   Many physical processes can be represented by functions with known
+   to develop and explore techniques for estimating unknown functions
+   and our uncertainty about them. Many physical processes can be represented by functions with known
    general behavior which however we cannot specify precisely. The
    `F_UNCLE` project develops theory and code for understanding the
    uncertainty about such functions given the constraints of both laws
@@ -112,9 +110,9 @@ unit testing.  Tests are collected and run using [nose]_.  Each file
 is also tested using [pylint]_ with all default checks enabled to
 ensure it adheres to python coding standards, including PEP8.
 Graphics in this paper were generated using [matplotlib]_ and the code
-made use of the [numpy]_ package.
+made use of the [numpy]_ and [scipy]_ packages.
 
-As we began developing alogrithms to calculate those estimates and
+As we began developing algorithms to calculate those estimates and
 bounds, we our legacy codes and software practices got in the way.
 For our first physics process, we chose to reexamine the data and
 model described by [hixson2000]_, and to integrate the data described
@@ -201,7 +199,7 @@ Gaussian approximation calculated at
 
 Since :math:`\theta` does not appear in the denominator on the right
 hand side of Equation (:ref:`eq-bayes`), in a Taylor series expansion
-of the log of the a posteriori distribution about :math:`\hat \theta`
+of the log of the *a posteriori* distribution about :math:`\hat \theta`
 the denominator only contributes a constant added to expansions of the
 log of the likelihood and the log of the prior.
 
@@ -329,10 +327,12 @@ The code for the main optimization loop is given below
       # get the sensitivity matrix
       self._get_sens(sims, model, initial_data)
 
-      # update the log likelyhood
+      # update the log likelihood based on the current
+      # model
       new_log_like = prior_weight*self.model_log_like()\
                      +self.sim_log_like(initial_data)
-   
+
+      # check convergence
       if np.fabs(log_like - new_log_like) < atol\
          and np.fabs((log_like - new_log_like)\
 	    /new_log_like) < reltol:
@@ -343,40 +343,34 @@ The code for the main optimization loop is given below
       #end
 
       # Solve the QP problem
+      # using `cvxopt.qp`
       local_sol = self._local_opt(sims,
                                   model,
                                   initial_data)
 				  
-      # Perform a zooming line search
+      # Perform a line search
       # along the direction of best improvement
-      # in log likleyhood      
+      # in log likelihood      
       d_hat = np.array(local_sol['x']).reshape(-1)   
       n_steps = 5
       costs = np.zeros(n_steps)
       iter_data = []
       initial_dof = model.get_dof()
-      besti = 0 # inex of max likelyhood
-      max_step = 10 # step size
-      while besti == 0:
-          # zoom in each iteration
-          max_step /= 10.0
-	  # break once the step is too small
-          if max_step < 1E-10:
-              besti = 1
-              break
-          x_list = np.linspace(0, max_step, n_steps)
-          for i, x_i in enumerate(x_list):
-              model.set_dof(initial_dof + x_i * d_hat)
-              costs[i] = prior_weight*\
-	         self.model_log_like()
-              iter_data.append(self.compare(sims,model))
-              costs[i] += self.sim_log_like(iter_data[-1])           
-          #end
-
-	  # The max liklyhood is the min log likelyhood as
-	  # likelyhood is less than 1.0
-          besti = np.argmax(costs)
+      besti = 0 # index of max likelihood
+      max_step = 0.5 # step size
+      x_list = np.linspace(0, max_step, n_steps)
+      # find the log likelihood on each step
+      # in the search direction
+      for i, x_i in enumerate(x_list):
+          model.set_dof(initial_dof + x_i * d_hat)
+          costs[i] = prior_weight*\
+             self.model_log_like()
+          iter_data.append(self.compare(sims,model))
+          costs[i] += self.sim_log_like(iter_data[-1])           
       #end
+
+      # Locate the point of max log likelihood
+      besti = np.argmax(costs)
 
       # Update the model with the degrees of freedom
       model.set_dof(initial_dof + d_hat * x_list[besti])
@@ -405,7 +399,8 @@ have the following properties:
 * Monotonic
 * Convex
 
-
+Here, let us introduce the following notation: 
+  
 * :math:`\vol` Specific volume
 * :math:`p` Pressure
 * :math:`\eos` An EOS that maps specific volume to pressure, :math:`\eos: \vol \mapsto \pressure`.
@@ -440,7 +435,7 @@ coefficients.  We start with a nominal EOS
    :label: eq-nom
 	 
    \eosnom(\vol) = \frac{F}{\vol^3}, \text{ where } F \leftrightarrow
-   2.56\times10^9 \text{Pa} \text{ at one gram/cc}
+   2.56\times10^9 \text{Pa} \text{ at one cm}^{3}\text{g}^{-1}
 
 and over a finite domain we approximate it by a cubic spline with
 coefficients :math:`\left\{\tilde \cf[i] \right\}`.  Thus :math:`c`,
@@ -493,7 +488,7 @@ used to generate pseudo-experimental data is:
    :label: eq-actual
    :type: align
 	  
-   f(v)&= \frac{F}{v^3} + b_0(v) + b_1(v)
+   f(v)&= \frac{F}{v^3} + b_0(v) 
 
 
 where:
@@ -501,13 +496,13 @@ where:
 .. math::
    :type: align
 
-   v_0 &= .4 \frac{\text{cm}^3}{\text{g}}   &  v_1 &= .5 \frac{\text{cm}^3}{\text{g}}  \\
-   w_0 &= .1 \frac{\text{cm}^3}{\text{g}} &    w_1 &= .1 \frac{\text{cm}^3}{\text{g}}\\
-   s_0 &= .25 &  s_1 &= -.3 
+   v_0 &= .4\, \text{cm}^3\text{g}^{-1}\\
+   w_0 &= .1\, \text{cm}^3\text{g}^{-1}\\
+   s_0 &= .0625 \\
 
 .. figure:: scipy2016_figure1eos.png
 
-   The prior and nominal *true* equation of state functuion. The two models differ near at a specific volume of 0.4 g cm :math:`^{-1}`
+   The prior and nominal *true* equation of state function. The two models differ near at a specific volume of 0.4 g cm :math:`^{-1}`
    
 
 A Rate Stick
@@ -525,33 +520,28 @@ sensor positions given by Pemberton et al.  [pemberton2011]_ for their
    The rate stick experiment showing the detonation wave propagating
    through the rate stick at the CJ velocity. Detonation velocity
    is measured by the arrival time of the shock at the sensors placed
-   along the stick
+   along the stick.
 
    
 Implementation
 --------------
 
-A simple explanation that the CJ state is the post detonation state as
-calculated from conservation laws.
+.. A simple explanation of this that the CJ state is the post detonation state as calculated from conservation laws.
 
-Want a new simple figure that illustrates the CJ construction.
-
-Reduce/simplify calculations for CJ below.  Emphasize that the only
-part of the isentrop that influences the CJ calculation is at the
-point of tangency.
+.. Reduce/simplify calculations for CJ below.  Emphasize that the only part of the isentrop that influences the CJ calculation is at the point of tangency.
 
 The only property of the HE that this ideal rate stick measures is the
 detonation velocity.  Code in `F_UNCLE.Experiments.Stick` derives that
 velocity following Section 2A of Fickett and Davis [ficket2000]_
-(entitled *The Simplest Theory*).  At the Chapman Jouguet (CJ) state,
-these two curves are tangent in the :math:`p,v` plane:
+(entitled *The Simplest Theory*).  The detonation velocity is determined from the
+location of the the Chapman Jouguet (CJ) state, where the following two curves are tangent in the :math:`p,v` plane:
 
 * The Rayleigh line which gives a relation implied by conservation
   laws between pressure and density (or specific volume) before and
-  after a shock.
-* An isentrope.  erally one must use the Hugoniot to determine which
-  isentrope goes through the CJ state, but it is assumed that each
-  isentrope considered goes through the CJ state.
+  after a shock traveling at a given velocity.
+* An isentrope, giving the relationship between pressure and specific volume in the products of detonation assuming the flow is adiabatic. This assumption is reasonable given the short timescales at which the experiment occurs.  
+
+The Rayleigh line is a function of velocity while the EOS is not. Locating the velocity which makes these two curves tangent locates the CJ point and detonation velocity in the HE. The EOS function only affects the detonation velocity in the vicinity of the CJ point. Therefore, this experiment only gives information about the EOS for specific volumes near the specific volume of the CJ point.
 
 On page 17 of Fickett and Davis [ficket2000]_, Equation 2.3 expresses
 the Rayleigh line as,
@@ -587,32 +577,29 @@ Jouguet (CJ) point.
    F(v,V) &= \eos(v) - R(v,V)\\
    F'(v,V) &= \frac{d \eos}{d v} - \frac{V^2}{v_0^2},
 
-At the CJ point:
+At the CJ point, the Rayleigh line and the EOS have the same value of pressure, so the following condition holds:
 
 .. math::	  
    :label: eq-fcond
 	   
    F(v,V) = 0 
 
+Also at the CJ point, the Rayleigh line and EOS have the same slope, so this relation holds as well.
+
 .. math::
    :label: eq-dfcond
 
    F'(v,V) = 0.
 
-For a given value of :math:`V`, the `scipy.optimize.brentq` method is
-used to solve :ref:`eq-dfcond` for :math:`v`.  Letting :math:`v(V)`
-denote that solution, we write :ref:`eq-fcond` as,
+
+First a line search using the `scipy.optimize.brentq` method is used to determine the specific volume where the slope of the EOS and Rayleigh line are equal, for a given velocity, :math:`V`. The solution of this line search is :math:`v(V)`. A second line search finds the value of velocity such that the EOS and Rayleigh line were coincident, i. e.
 
 .. math::
    :label: eq-fv
 
    F(v(V),V) = 0.
 
-The code now solved for the root of :ref:`eq-fv` using
-`scipy.optimize.brentq` to get :math:`V_{\text{CJ}}` and then assigns
-:math:`v_{\text{CJ}} = v(V_{\text{CJ}})`. Figure :ref:`fig-cj-stick`
-depicts three isentropes and the results of solving :ref:`eq-fv` for
-the two curves labeled *experiment* and *fit*.
+The solution to these nested line searches yielded a point where the EOS and Rayleigh line were tangent, the CJ point by definition. Figure :ref:`fig-cj-stick` shows the Rayleigh line, CJ point and EOS after this procedure.
 
 .. figure:: scipy2016_figure1.png
    :align: center  
@@ -622,7 +609,7 @@ the two curves labeled *experiment* and *fit*.
    experiment based on the isentrope labeled *True EOS*, the
    optimization algorithm described in the Algorithm section produced
    the estimate labeled *Fit EOS*.  Solving Eqn. :ref:`eq-fv` for  the
-   *Fit EOS* isentropes yields a  Rayleigh lines.  Outside of the CJ
+   *Fit EOS* isentropes yields a  Rayleigh lines  Outside of the CJ
    points where the Rayleigh line is tangent to the isentropes, the
    data does not constrain the isentropes. :label:`fig-cj-stick`
 
@@ -661,7 +648,7 @@ the expanding products-of-combustion of HE.
 
 .. figure:: gun.png
 
-   The gun experiment
+   The gun experiment. The projectile of a given mass and cross-sectional area is accelerated down the barrel by the expanding products of combustion from the high explosives in the barrel.
 
    
 Implementation
@@ -748,9 +735,7 @@ EOS model approached the *true* EOS.
    parameters of the gun experiment.  The *True EOS* appears
    in the upper plot, and the optimization starts with the *Prior EOS*
    and ends with *Fit EOS*.  The corresponding velocity for the gun as a
-   function of position appears in the middle plot, and the sequence
-   of errors in the forecast velocity time series after each step in
-   the optimization appears in the lower plot. The estimation also
+   function of position appears in the lower plot. The estimation also
    used experimental data from the rate stick. :label:`fig-fve-gun`
 
 
@@ -770,16 +755,15 @@ model influences the likelihood and Fisher Information matrix,
 :math:`\Fisher`, should have a rank of one. Figure
 :ref:`fig-info-stick` illustrates characteristics of the optimization
 procedure and :math:`\Fisher(\hat c)`.  The largest eigenvalue
-:math:`\Fisher(\hat c)` is :math:`10^{16}` larger than the next
-largest, ie, the rank of :math:`\Fisher(\hat c)` is one to within
-machine precision.
+:math:`\Fisher(\hat c)` is :math:`10^{4}` larger than the next
+largest, ie, the rank of :math:`\Fisher(\hat c)` is effectively unity.
 
 .. figure:: scipy2016_figure2.png
    :align: center
    :class: w	   
 
    Fisher Information of the Rate Stick Experiment. The largest three
-   eigenvalues of :math:`\Fisher(\hat c)` appear in the upper plott and
+   eigenvalues of :math:`\Fisher(\hat c)` appear in the upper plot and
    the eigenfunction corresponding to the largest eigenvalue appears in
    he lower plot. :label:`fig-info-stick`
    
@@ -788,9 +772,9 @@ The Fisher information matrix of the gun experiment is more complex as
 changes to the EOS affect the entire time history of the projectile
 velocity. In Figure :ref:`fig-info-gun` There is no clear *dominating*
 eigenvalue, the largest eigenvalue corresponds to an eigenvector which
-is more influential at larger projectile displacements while the next
+is more influential at smaller projectile displacements while the next
 three largest eigenvalues correspond to eigenvectors which are more
-influential at the start of the experiment.
+influential across the range of displacements.
 
 .. figure:: scipy2016_figure5
    :align: center	    
@@ -809,9 +793,6 @@ experiment.
    
 Conclusion, Caveats and Future Work
 ===================================
-
-Emphasize software and say that we intend to publish physics and
-math/stat/opt separately.
 
 We have described an iterative procedure for estimating functions
 based on experimental data in a manner that enforces chosen
@@ -846,8 +827,7 @@ particular:
 * The optimization procedure is ad hoc.  We have already begun to
   consider other optimization algorithms.
 
-	
-	   
+The modular design of [F_UNCLE]_ means that it can be easily extended to model any process where there is a simulation which depends on a model with an unknown functional form. The self documenting capabilities of the code and the test suites included with the source code will help others integrate other existing models and simulations into this framework to allow it to be applied to many other physical problems.	   
 
 References
 ==========
@@ -860,7 +840,7 @@ References
                    Measurements of PBX-9501". LA-UR-11-04999, Los
                    Alamos National Laboratory, Los Alamos, NM.
 
-.. [hixson2000] test
+.. [hixson2000] Hixson, R. S. et al., 2000. "Release isentropes of overdriven plastic-bonded explosive PBX-9501." *J. Applied Physics* **88** (11) pp. 6287-6293
 	       
 .. [ficket2000] Ficket, W. and
                 Davis, W. C., 2000. "Detonation". University of
