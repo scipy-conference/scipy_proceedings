@@ -469,11 +469,14 @@ available essays in the OkCupid data set. It has been noted that, "people do
 actually define themselves through music and relate to other people through
 it" [Col15]_. It is possible that this extends to other media, such as books or
 movies, too. We consider the "favorite books, movies, shows, music, food" essay
-next. Note that because the favorites text is less expository and more
-list-like, we do not consider a lexical-based analysis. Instead, we use NMF to
-identify themes (or genres). Like with the self-summaries, we choose 25 topics.
-The following table lists the topics and a selection of their highest weighted
-tokens.
+next.
+
+As with the self-summaries, we drop users who write less than 5 tokens for this
+essay. There are 11,836 such cases. Note that because the favorites text is
+less expository and more list-like, we do not consider a lexical-based analysis.
+Instead, we use NMF to identify themes (or genres). Like with the
+self-summaries, we choose 25 topics. The following table lists the topics and a
+selection of their highest weighted tokens.
 
    +----------------+---------------------------------------------------------+
    | Topic          | Tokens                                                  |
@@ -573,16 +576,20 @@ which corresponds to female-favored movies, has a higher proportion of females.
 The "movied-drama-0" group—the last of the four movie clusters—includes a
 relatively even proportion of users along this demographic split.
 
-We were able to explore several other demographic splits. The most interesting
-was related to drug usage. Fig 8 shows the distribution of the drug usage
-categories (yes, no, and unknown) for each cluster. Interestingly, individuals
-in the "unknown" category—those for whom we had no information—closely followed
-the self-identified drug users. That is, when the proportion of drug users in a
-particular cluster was high (or low), so we was the proportion of unknown drug
-users. This was most distinctive when the separation between drug users and
-non-drug users was large (e.g., groups 3, 7, 21, and others). Our hypothesis is
-that it is possible that individuals who do not respond to the drug usage
-question might not want to admit that they use drugs.
+To this point, we have only considered differences by sex. Next, we examine the
+distribution over topics by drug usage. In this demographic category, users
+identify as drug users or non-drug users. To this, we add a third level for
+users who declined the state their drug usage status. There are 6,859 drug
+users, 29,402 non-drug users, and 11,849 unknowns.
+
+This plot shows more intra-cluster variation than the previous one.
+Interestingly, users for whom we had no drug usage information—those in the
+"unknown" category—tend to follow the self-identified drug users. That is, most
+of the time, the proportion of drugs users and unknowns in a particular cluster
+is similar. This is especially true in cases where difference in proportions
+of drug users and non-drug users is large. This unexpected finding leads us to
+hypothesize that individuals who do not respond to the drug usage question
+might abstain in order to avoid admitting they use drugs.
 
 Future Work
 -----------
