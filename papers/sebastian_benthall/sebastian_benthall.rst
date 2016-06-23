@@ -526,6 +526,11 @@ Our research agenda depends critically on maintaining the trust of the developer
 communities we study.
 
 
+Acknowledgements
+----------------
+
+We gratefully acknowledge JC Herz for her helpful comments.
+
 References
 ----------
 
