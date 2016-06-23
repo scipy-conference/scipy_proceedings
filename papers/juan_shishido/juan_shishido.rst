@@ -591,6 +591,26 @@ of drug users and non-drug users is large. This unexpected finding leads us to
 hypothesize that individuals who do not respond to the drug usage question
 might abstain in order to avoid admitting they use drugs.
 
+Of course, because we don't have access to ground truth, any methods we employ
+to investigate this will be cursory. Still, we wish to explore ways that might
+help us gain insight to this question. To do this, we use a predictive modeling
+approach. We train a logistic regression model on a binary outcome, using only
+drug users and non-drug users. For consistency, we use the same text
+representation we've used up to this point—TF-IDF weights on unigrams, bigrams,
+and trigrams. In addition, we balance the classes by randomly sampling 6,859
+accounts from the non-drug user population. We then predict class labels on the
+unknown group.
+
+Our model predicts that 55% of the unknowns are drug users and that 45% are not.
+However, when we look at the proportion or predicted drug users by NMF cluster,
+we find intriguing patterns. In the "music-rock" group—the group with the
+largest disparity between users and non-users—83% of unknows are classified as
+drug users. In contrast, only 25% of the unknowns in the "TV-comedied-0" group
+are classified as such. While this cluster includes "The Big Lebowski," which
+is identified as a "stoner film" [She13]_, it also features "The Big Bang
+Theory," "How I Met Your Mother," "NCIS," "New Girl," and "Seinfeld," which we
+would argue are decidedly not drug-related.
+
 Future Work
 -----------
 
@@ -653,3 +673,7 @@ References
 .. [Mon09] Monroe, B. L., Colaresi, M. P., & Quinn, K. M. (2008). Fightin'words:
            Lexical feature selection and evaluation for identifying the content
            of political conflict. Political Analysis, 16(4), 372-403.
+
+.. [She13] Sheffield, Rob (2013). 10 Best Stoner Movies of All Time. Rolling
+           Stones. Retrieved on June 23, 2016, from
+           http://www.rollingstone.com/movies/lists/the-greatest-stoner-movies-of-all-time-20130606
