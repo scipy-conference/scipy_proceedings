@@ -349,8 +349,9 @@ We use NMF to help us understand the subject matter that users find interesting
 and important about themselves and, thus, choose to write about. This provides
 insight into the way they choose to self-present. In addition to particular
 themes, NMF also allows us to consider stylistic expression. Choosing the
-number of NMF components—these can be thought of as topics—is an arbitrary and
-iterative process. For the self-summary essay, we chose to start with 25.
+number of NMF components—these can be thought of as topics to which users are
+clustered—is an arbitrary and iterative process. For the self-summary essay, we
+chose to start with 25.
 
 Several expected themes emerged. Some users, for example, chose to highlight
 personality traits. Some did so by mentioning specific characteristics such as
@@ -458,7 +459,7 @@ distinct to particular demographic groups.
 The following figure shows the distribution over topics by sex. We see that
 the highest proportion of users, of either sex, are in the "about me" group.
 This is not surprising given that we're analyzing the self-summary essays. For
-most topics, the proportion of females and males is faily even. One notable
+most topics, the proportion of females and males is fairly even. One notable
 exception is with the "enthusiastic" group, which females belong to at almost
 twice the rate of males. Users in this group use modifiers such as, "love,"
 "really," and "absolutely" regardless of the activities they are describing.
@@ -505,7 +506,7 @@ tokens.
    +----------------+---------------------------------------------------------+
    |                |                                                         |
    +----------------+---------------------------------------------------------+
-   | movies-drama   | eternal sunshine, spotless mind, litte miss sunshine,   |
+   | movies-drama-0 | eternal sunshine, spotless mind, litte miss sunshine,   |
    |                | amelie, garden state, lost, life, beautiful,            |
    |                | lost translation, beauty                                |
    +----------------+---------------------------------------------------------+
@@ -525,7 +526,7 @@ tokens.
    |                | met mother, glee, simpsons, american dad, 30 rock,      |
    |                | colbert                                                 |
    +----------------+---------------------------------------------------------+
-   |                | fight club, shawshank redemption, pulp fiction,         |
+   | movies-drama-1 | fight club, shawshank redemption, pulp fiction,         |
    |                | fear loathing, peppers, red hot, vegas, american,       |
    |                | catcher rye, big lebowski                               |
    +----------------+---------------------------------------------------------+
@@ -547,8 +548,8 @@ that are potentially similar. However, it is possible that these groups (e.g.,
 the multiple TV comedies groups) are, indeed, different, even if only slightly.
 This might suggest that the number of NMF components is too high, but we prefer
 the granularity it provides. In fact, we'll show that we are able to create
-subordinate groupings from the above topics from which we can extract
-distinctive tokens and compare demographic splits. We'll begin by examining the
+superordinate groupings from the above topics from which we can extract
+distinctive tokens for particular demographic groups. We'll first examine the
 distribution over topics by sex.
 
 The most popular topics, for both females and males, are "TV-hits" and
@@ -559,13 +560,18 @@ distinctly female. A distinctly male category includes films such as "Fight
 Club" and "The Shawshank Redemption" and musical artists such as the Red Hot
 Chili Peppers.
 
-We also created superordinate groupings. For example, for the "Favorite book,
-movies, TV" essay, clusters 2, 15, and 24 were all characterized by n-grams
-referring to movies. We decided to combine those groups into a superordinate
-"movie" grouping and look at its distribution across males and females (Fig 7).
-We found the male cluster dominated by Star Wars, Fight Club, and Lord of the
-Rings, while the female cluster was dominated by love, Harry Potter, Hunger
-Games, Little Miss Sunshine, and Pride and Prejudice.
+As noted earlier, we are able to create superordinate groupings by combining
+clusters. In the favorites essay, for example, there are four groups related to
+movies. In order to extract demographic-distinctive tokens, we use the
+smoothed log-odds-ratio that accounts for variance as described by Monroe,
+Colaresi, and Quinn [Mon09]_. The top movies for females were Harry Potter,
+Pride & Prejudice, and Hunger Games while males favored Star Wars, The Matrix,
+and Fight Club. Note that the "movies-sci-fi" and "movies-drama-1" groups,
+whose highest weighted tokens refer to the male-favored movies, have a higher
+proportion of males than females. Similarly, the "teen" group, which
+which corresponds to female-favored movies, has a higher proportion of females.
+The "movied-drama-0" group—the last of the four movie clusters—includes a
+relatively even proportion of users along this demographic split.
 
 We were able to explore several other demographic splits. The most interesting
 was related to drug usage. Fig 8 shows the distribution of the drug usage
@@ -636,3 +642,7 @@ References
 .. [Col15] Collingwood, J. (2015). Preferred Music Style Is Tied to Personality.
            Psych Central. Retrieved on June 22, 2016, from
            http://psychcentral.com/lib/preferred-music-style-is-tied-to-personality/
+
+.. [Mon09] Monroe, B. L., Colaresi, M. P., & Quinn, K. M. (2008). Fightin'words:
+           Lexical feature selection and evaluation for identifying the content
+           of political conflict. Political Analysis, 16(4), 372-403.
