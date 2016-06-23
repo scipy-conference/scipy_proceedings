@@ -482,6 +482,9 @@ Hot spot analysis
 
 Our analysis suggests that the riskiest packages in the Python ecosystem are those that are part of the Zope web application server and the Plone content management system built on it. The Zope community has declared that Zope is now a legacy system and do not recommended that developers use these projects. Therefore, our analytic findings are consistent with community and domain knowledge regarding the resilience of these communities. Despite htese warnings, the Plone community is still active and many web sites may still depend on this legacy technology. This study motivates further work on the resilience of Zope to new security threats.
 
+[Walsh2011]_ noted that Plone has an order of magnitude lower number of vulnerabilites reported in Mitre's Common Vulnerabilities and Exposures database compared to other popular CMS's like Joomla, Drupal, and Wordpress. This has lead [Wiki2016]_ to assert that Plone's security record is cause of its widespread adoption by government and non-government organizations. [Byrne2013]_ has challenged this conclusion, noting that the high number of recorded vulnerabilites may just as likely be due to the much greater popularity of the other CMS's. That Drupal, Wordpress, and Joomla are all written in PHP is another confounding factor.
+Drupal, Joomla, and Wordpress are beyond the scope of our study, which is concerned only with the PyPI ecosystem. In our risk modeling framework, Plone score poorly compared to other Python web frameworks such as Django and Flask. 
+
 We have also identified ``six``, a Python 2 and Python 3 compatibility library, as an ecosystem risk hot spot. The second most dependend on project in PyPI, ``six`` inherits its exposure from all of its downstream descendents. For this reason, it is important to ensure that ``six`` does not have any security-related flaws.
 
 
@@ -528,6 +531,8 @@ References
 
 .. [Bastian2009] Bastian, Mathieu, Sebastien Heymann, and Mathieu Jacomy. "Gephi: an open source software for exploring and manipulating networks." ICWSM 8 (2009): 361-362.
 
+.. [Byrne2013] Byrne, Tony. "Is Plone Really More Secure Than Drupal and Joomla?" Web log post. Real Story Group. N.p., 11 Feb. 2013. Web. 23 June 2016.
+
 .. [Clauset2007]  A. Clauset, C.R. Shalizi, and M.E.J. Newman. Power-law distributions 
                   in empirical data. arXiv:0706.1062, June 2007.
 
@@ -560,7 +565,11 @@ References
 
 .. [Verdon2004] D. Verdon and G. McGraw, "Risk analysis in software design," in IEEE Security & Privacy, vol. 2, no. 4, pp. 79-84, July-Aug. 2004.
 
+.. [Walsh2011] Walsh, M. (2011, March 11). Gov 2.0 guide to Plone. Retrieved June 23, 2016, from ``http://www.govfresh.com/2011/03/gov-2-0-guide-to-plone/``
+
 .. [Wagner2000] David A. Wagner. 2000. Static Analysis and Computer Security: New Techniques for Software Assurance. Ph.D. Dissertation. University of California, Berkeley. AAI3002306.
+
+.. [Wiki2016] Plone (software). (2016, May 5). In Wikipedia, The Free Encyclopedia. Retrieved 18:20, June 23, 2016, from ``https://en.wikipedia.org/w/index.php?title=Plone_(software)&oldid=718838043``
 
 .. [Wheeler2014] Wheeler, David A. How to Prevent the next Heartbleed. 2014-10-20.
       ``http://www.dwheeler.com/essays/heartbleed.html``
