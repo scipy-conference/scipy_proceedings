@@ -59,29 +59,24 @@
 .. [1] LA-UR-16-23717
 
 .. class:: abstract
-
-   We describe our use of the Python ecosystem of scientific software
-   to develop and explore techniques for estimating unknown functions
-   and our uncertainty about them. Many physical processes can be represented by functions with known
-   general behavior which however we cannot specify precisely. The
-   `F_UNCLE` project develops theory and code for understanding the
-   uncertainty about such functions given the constraints of both laws
-   governing the function's behavior and experimental data. Here, we
-   present a procedure for determining both the most likely function
-   to represent a physical process as well as understanding how this
-   function is constrained by the given experimental data. An example
-   application of this process is given for estimating the equation of
-   state for the products-of-combustion of a high explosive. Simulated
-   data are compared to reduced order models for two different
-   experiments and the best estimate for the equation of state is
-   given as well as information about how informative each experiment
-   is in determining the best equation of state model.
+		  
+   Many physical processes are modeled by unspecified functions.
+   Here, we describe work on the `F_UNCLE` project which uses the
+   Python ecosystem of scientific software to develop and explore
+   techniques for estimating such unknown functions and our
+   uncertainty about them.  The work provides ideas for quantifying
+   uncertainty about functions given the constraints of both laws
+   governing the function's behavior and experimental data.  As an
+   example, we investigate pressure as a function of volume for the
+   gases produced by detonating an imaginary explosive.  We estimate
+   both a *best* pressure function and how well a collection of
+   experiments constrains uncertainty about the function.
      
 .. class:: keywords
 
-   uncertainty quantification, Bayesian inference, convex
+   python, uncertainty quantification, Bayesian inference, convex
    optimization, reproducible research, function estimation, equation
-   of state
+   of state, inverse problems
 
 Introduction
 ============
@@ -90,13 +85,27 @@ There are many physical process whose general behavior is known though
 not an exact mathematical representation.  Such epistemic uncertainty
 can arise in processes which occur at extreme regimes where direct
 measurement is challenging.  Existing approaches for estimating the
-functional form of such processes included Gaussian Process Modeling
+functional form of such processes include Gaussian Process Modeling
 (GPM) and parametric models.  Traditional GPM approaches may not be
 able to account for the known constraints on the functional form
 because they allow physically impossible functions.  Many parametric
 approaches overly constrain the function and do not span the allowable
-function-space [vaughan2014].  For several physics processes, we need both estimates
-of such functions and bounds on our uncertainty about them.
+function-space [vaughan2014].  One often needs both estimates of such
+functions and bounds on uncertainty about them.
+
+*Inverting* a realistic physical model to estimate an unknown function
+for real experimental data is often difficult.  For example Hixson et
+al. [hixson2000]_ found they needed a disparate collection of several
+computer languages and several numerical packages and simulation
+tools.  They tied the tools together by hand in a manner that we find
+diffcult to replicate.
+
+In addition to needing *Best Practices for Scientific Software*, we
+need surrogate problems because waiting for realistic simulations
+slows development.
+
+We are also working on probability distributions in constrained sets
+of function space.
 
 To ensure that the results of this project are verifiable and
 reproducible, we distribute the source code for the [F_UNCLE]_
