@@ -93,71 +93,58 @@ approaches overly constrain the function and do not span the allowable
 function-space [vaughan2014].  One often needs both estimates of such
 functions and bounds on uncertainty about them.
 
-*Inverting* a realistic physical model to estimate an unknown function
-for real experimental data is often difficult.  For example Hixson et
-al. [hixson2000]_ found they needed a disparate collection of several
-computer languages and several numerical packages and simulation
-tools.  They tied the tools together by hand in a manner that we find
-diffcult to replicate.
+The task of *Inverting* a realistic physical model to estimate an
+unknown function for real experimental data presents several
+challenges.  For example Hixson et al. [hixson2000]_ found they needed
+a disparate collection of several computer languages and several
+numerical packages and simulation tools.  They tied the tools together
+by hand in a manner that we cannot replicate.  The task often requires
+coordinating many long running simulations on high performance
+computers (HPC) that have ungainly job control languages (JCL).  And
+finally in order to implement a Bayesian analysis one must define and
+manipulate probability measures on sets in function space.
 
-In addition to needing *Best Practices for Scientific Software*, we
-need surrogate problems because waiting for realistic simulations
-slows development.
+We are organizing our efforts to address these challenges under the
+title `F_UNCLE`.  To separate algorithmic development from the delays
+of HPC runs and the code required to wrap JCL, we will use surrogate
+problems with simulations that run in a few seconds on a desktop
+computer.  We are using the project to learn and demonstrate *Best
+Practices for Scientific Computing* (eg, [wilson2014]_) and
+*Reproducible Research* (eg, [fomel2009]_).  In this paper, we present
+preliminary results from our first such surrogate problem.
 
-We are also working on probability distributions in constrained sets
-of function space.
-
-To ensure that the results of this project are verifiable and
-reproducible, we distribute the source code for the [F_UNCLE]_
-project.  Additionally, we use this project to learn good software
-development practices within Los Alamos National Laboratory.  The
-project is designed to be modular, allowing a wide range of
-experiments and simulations to be used in the analysis.  The code is
+The work is designed to be modular, allowing a wide range of
+experiments and simulations to be used in an analysis.  The code is
 self documenting, with full docstring coverage, and is converted into
-online documentation  using [sphinx]_.  Each class has a test suite to allow
-unit testing.  Tests are collected and run using [nose]_.  Each file
-is also tested using [pylint]_ with all default checks enabled to
+online documentation using [sphinx]_.  Each class has a test suite to
+allow unit testing.  Tests are collected and run using [nose]_.  Each
+file is also tested using [pylint]_ with all default checks enabled to
 ensure it adheres to python coding standards, including PEP8.
 Graphics in this paper were generated using [matplotlib]_ and the code
 made use of the [numpy]_ and [scipy]_ packages.
 
-As we began developing algorithms to calculate those estimates and
-bounds, we our legacy codes and software practices got in the way.
-For our first physics process, we chose to reexamine the data and
-model described by [hixson2000]_, and to integrate the data described
-by [pemberton2011]_ into the estimates.  Each iteration of an
-optimization loop for that problem requires running simulations on a
-supercomputers that take days of CPU time.  Writing code to wrap
-supercomputer job control scripts and delays waiting for runs slowed
-development.  To enable focus on math and algorithms, we wrote the
-code [F_UNCLE]_ which solves surrogate problems in a few minutes on a
-desktop computer.
-
 [F_UNCLE]_ uses constrained optimization and physical models with many
 degrees of freedom to span a large portion of the allowable function
 space while disallowing functions which do not follow the known
-constraints on the function.
+constraints on the function.  The analysis determines the function
+which maximizes the probability of :math:`K` different simulations
+matching :math:`K` corresponding data-sets while meeting all
+constraints given by *a priori* knowledge of the functional form.  We
+characterize our uncertainty about this function using the Fisher
+information matrix of the likelihood function.
 
-This approach, demonstrated in the [F_UNCLE]_ project, provides a way
-to describe the uncertainty in the functional form of such a physical
-process.  The analysis determines the function which maximizes the
-probability of :math:`K` different simulations matching :math:`K`
-corresponding data-sets while meeting all constraints given by *a
-priori* knowledge of the functional form.  We characterize our
-uncertainty about this function using the Fisher information matrix of
-the likelihood function.
-
-In this paper, the functional form under investigation is the equation
-of state (EOS) for the products-of-combustion of a High Explosive
-(HE). The EOS relates the pressure to the specific volume of the
-products-of-combustion mixture. Previous work in this field
+For our first surrogate problem, we investigate the equation of state
+(EOS) for the products-of-detonation of a hypothetical High Explosive
+(HE).  The EOS relates the pressure to the specific volume of the
+products-of-detonation mixture.  Previous work in this field
 [ficket2000]_ has shown this function to be positive, monotonically
 decreasing and convex. However, the extreme pressures and temperatures
-of HE products-of-combustion preclude experimental measurements of the
-EOS directly, and its behavior must be inferred.  Two examples of
-experiments are given: the detonation velocity of a *rate stick* of HE
-and the velocity of a projectile driven by HE. The behavior of both
-these experiments is highly dependent on the EOS model.
+of HE products-of-detonation preclude experimental measurements of the
+EOS directly, and its behavior must be inferred.  To date we have
+incorporated two examples of experiments: The detonation velocity of a
+*rate stick* of HE and the velocity of a projectile driven by HE. The
+behavior of both these experiments depend sensitively on the EOS
+function.
 
 The following sections describe the choices made in modeling the EOS
 function, the algorithm used for estimating the function and the use
@@ -166,13 +153,10 @@ function.  We describe two sets of simulations and synthetic
 experimental data and present an EOS function fit to represent both
 these experiments as well as a spectral analysis of the Fisher
 information matrix.  While the results are limited to an illustration
-of the [F_UNCLE]_ project applied to synthetic data and simple models,
-the [F_UNCLE]_ approach can be applied to real data and complex finite
-difference simulations. Some preliminary results from work on
-estimating the EOS of the high explosive PBX-9501 appear in the
-concluding section.  In doing that work we rely on [F_UNCLE]_ for
-developing and testing code and ideas.
-
+of the ideas applied to synthetic data and simple models, the approach
+can be applied to real data and complex finite difference
+simulations. Some preliminary results from work on estimating the EOS
+of the high explosive PBX-9501 appear in the concluding section.
 
 Fisher Information and a Sequence of Quadratic Programs
 =======================================================
@@ -246,21 +230,23 @@ respect to :math:`\theta`, and under certain regularity conditions, then
 the Fisher information may also be written as”
 
 .. math::
+   :label: eq-fisher
 
    \mathcal{I}(\theta) = - \operatorname{E}
      \left[\left. \frac{\partial^2}{\partial\theta^2} \log
          p(X;\theta)\right|\theta \right].
 
-Thus if the second derivative in is constant with respect to :math:`x`
-(As it would be for a Gaussian likelihood), then one may say that an
-experiment constrains uncertainty through its Fisher Information.
+Thus if the second derivative in Equation (:ref:`eq-fisher`) is
+constant with respect to :math:`x` (As it would be for a Gaussian
+likelihood), then one may say that an experiment constrains
+uncertainty through its Fisher Information.
 
 Iterative Optimization
 ----------------------
 
-We use the log of the a posteriori probability as the objective function.
-Dropping terms that don't depend on :math:`\theta`, we write the cost function
-as follows:
+We maximize the *log* of the a posteriori probability as the objective
+function which is equivalent to :ref:`eq-map`.  Dropping terms that
+don't depend on :math:`\theta`, we write the cost function as follows:
 
 .. math::
    :type: align
@@ -288,9 +274,10 @@ use the following iterative procedure to find :math:`\hat \theta`, the
 	     P_i &\equiv \left. \frac{d^2}{d\theta^2} C(\theta)\right|_{\theta=\theta_{i-1}}
 	 
 
-   Since the experiments are independent the joint likelihood is the
+   Since the experiments are independent, the joint likelihood is the
    product of the individual likelihoods and the log of the joint
-   likelihood is the sum of the logs of the individual likelihoods, ie,
+   likelihood is the sum of the logs of the individual likelihoods,
+   ie,
 
    .. math::
       :type: align
@@ -328,81 +315,17 @@ independently. In the next few sections, we describe both the data
 from each experiment and the procedure for calculating :math:`P_i[k]`
 and :math:`q_i[k]`. 
 
-The code for the main optimization loop is given below
-
-.. code-block:: python
-   
-  for i in xrange(maxiter):
-      # get the sensitivity matrix
-      self._get_sens(sims, model, initial_data)
-
-      # update the log likelihood based on the current
-      # model
-      new_log_like = prior_weight*self.model_log_like()\
-                     +self.sim_log_like(initial_data)
-
-      # check convergence
-      if np.fabs(log_like - new_log_like) < atol\
-         and np.fabs((log_like - new_log_like)\
-	    /new_log_like) < reltol:
-          conv = True
-          break
-      else:
-          log_like = new_log_like
-      #end
-
-      # Solve the QP problem
-      # using `cvxopt.qp`
-      local_sol = self._local_opt(sims,
-                                  model,
-                                  initial_data)
-				  
-      # Perform a line search
-      # along the direction of best improvement
-      # in log likelihood      
-      d_hat = np.array(local_sol['x']).reshape(-1)   
-      n_steps = 5
-      costs = np.zeros(n_steps)
-      iter_data = []
-      initial_dof = model.get_dof()
-      besti = 0 # index of max likelihood
-      max_step = 0.5 # step size
-      x_list = np.linspace(0, max_step, n_steps)
-      # find the log likelihood on each step
-      # in the search direction
-      for i, x_i in enumerate(x_list):
-          model.set_dof(initial_dof + x_i * d_hat)
-          costs[i] = prior_weight*\
-             self.model_log_like()
-          iter_data.append(self.compare(sims,model))
-          costs[i] += self.sim_log_like(iter_data[-1])           
-      #end
-
-      # Locate the point of max log likelihood
-      besti = np.argmax(costs)
-
-      # Update the model with the degrees of freedom
-      model.set_dof(initial_dof + d_hat * x_list[besti])
-      initial_data = iter_data[besti]
-   #end
-
-
-The following sections describe the examples currently implemented in
-F_UNCLE.  The components are the model parameters :math:`\theta`
-which define an unknown EOS function and two experiments, namely a gun
-and a rate stick.
-
 Equation of State
 =================
 :label:`eos`
 
-For the present work, we say that the thing we want to
-estimate, :math:`\theta`, represents the equation of state (EOS)
-of a gas.  We also say that the state of the gas in experiments
-always lies on an isentrope and consequently the only relevant
-data is the pressure as a function of specific volume (ml/gram)
-of the gas.  For physical plausibility, we constrain the function to
-have the following properties:
+For our surrogate problem, we say that the thing we want to estimate,
+:math:`\theta`, represents the equation of state (EOS) of a gas.  We
+also say that the state of the gas in experiments always lies on an
+isentrope and consequently the only relevant data is the pressure as a
+function of specific volume (ml/gram) of the gas.  For physical
+plausibility, we constrain the function to have the following
+properties:
 
 * Positive
 * Monotonic
@@ -412,7 +335,8 @@ Here, let us introduce the following notation:
   
 * :math:`\vol` Specific volume
 * :math:`p` Pressure
-* :math:`\eos` An EOS that maps specific volume to pressure, :math:`\eos: \vol \mapsto \pressure`.
+* :math:`\eos` An EOS that maps specific volume to pressure,
+  :math:`\eos: \vol \mapsto \pressure`.
 * :math:`v_0` The minimum relevant volume.
 * :math:`v_1` The maximum relevant volume.
 * :math:`\EOS` The set of possible EOS functions, :math:`p(v), v_0 \leq v
@@ -500,18 +424,13 @@ used to generate pseudo-experimental data is:
    f(v)&= \frac{F}{v^3} + b_0(v) 
 
 
-where:
-
-.. math::
-   :type: align
-
-   v_0 &= .4\, \text{cm}^3\text{g}^{-1}\\
-   w_0 &= .1\, \text{cm}^3\text{g}^{-1}\\
-   s_0 &= .0625 \\
+where: :math:`v_0 = .4\, \text{cm}^3\text{g}^{-1}`, :math:`~w_0 = .1\,
+\text{cm}^3\text{g}^{-1}` and :math:`~s_0 = .0625`.
 
 .. figure:: scipy2016_figure1eos.png
 
-   The prior and nominal *true* equation of state function. The two models differ near at a specific volume of 0.4 g cm :math:`^{-1}`
+   The prior and nominal *true* equation of state function. The two
+   models differ near at a specific volume of 0.4 g cm :math:`^{-1}`
    
 
 A Rate Stick
@@ -535,80 +454,28 @@ sensor positions given by Pemberton et al.  [pemberton2011]_ for their
 Implementation
 --------------
 
-.. A simple explanation of this that the CJ state is the post detonation state as calculated from conservation laws.
-
-.. Reduce/simplify calculations for CJ below.  Emphasize that the only part of the isentrop that influences the CJ calculation is at the point of tangency.
-
-The only property of the HE that this ideal rate stick measures is the
-detonation velocity.  Code in `F_UNCLE.Experiments.Stick` derives that
-velocity following Section 2A of Fickett and Davis [ficket2000]_
-(entitled *The Simplest Theory*).  The detonation velocity is determined from the
-location of the the Chapman Jouguet (CJ) state, where the following two curves are tangent in the :math:`p,v` plane:
-
-* The Rayleigh line which gives a relation implied by conservation
-  laws between pressure and density (or specific volume) before and
-  after a shock traveling at a given velocity.
-* An isentrope, giving the relationship between pressure and specific volume in the products of detonation assuming the flow is adiabatic. This assumption is reasonable given the short timescales at which the experiment occurs.  
-
-The Rayleigh line is a function of velocity while the EOS is not. Locating the velocity which makes these two curves tangent locates the CJ point and detonation velocity in the HE. The EOS function only affects the detonation velocity in the vicinity of the CJ point. Therefore, this experiment only gives information about the EOS for specific volumes near the specific volume of the CJ point.
-
-On page 17 of Fickett and Davis [ficket2000]_, Equation 2.3 expresses
-the Rayleigh line as,
+The only property that influences the ideal measurements of rate stick
+data is the HE detonation velocity.  Code in
+`F_UNCLE.Experiments.Stick` calculates that velocity following Section
+2A of Fickett and Davis [ficket2000]_ (entitled *The Simplest
+Theory*).  The calculation solves for conditions at what is called the
+*Chapman Jouguet* (CJ) state.  The CJ state is defined implicitly by a
+line (called the *Rayleigh line*) in the :math:`(p,v)` plane that goes
+through :math:`(p_0,v_0)`, the pressure and volume before detonation,
+and :math:`(p_\text{CJ},v_{CJ})`.  The essential requirement is that
+the Rayleigh line be tangent to the isentrope or EOS curve in the
+:math:`(p,v)` plane.  The slope of the Rayleigh line that satisfies
+those conditions defines the CJ velocity, :math:`V` in terms of the
+following equation:
 
 .. math::
-   :label: eq-rayleigh
-	   
-   \rho_0^2 V^2 - (p-p_0)/(v_0-v) = 0,
+   	   
+   \frac{V^2}{v_0^2} = \frac{p_\text{CJ}-p_0}{v_0-v_\text{CJ}}.
 
-where:
-
-* :math:`\rho_0` is the initial density (before detonation wave arrives)
-* :math:`v_0\equiv\frac{1}{\rho_0}` is the initial specific volume
-* :math:`p_0` is the initial pressure
-* :math:`V` is the velocity of the detonation wave
-* :math:`p` is the pressure at positions behind the wave
-* :math:`v` is the specific volume at positions behind the wave.
-
-Rearranging the terms in :ref:`eq-rayleigh` yields this relation
-between pressure and volume after the shock,
-
-.. math::
-   
-   p = R(v,V) \equiv p_0 + \frac{V^2(v_0-v)}{v_0^2}.
-
-The detonation velocity can be located by solving for the velocity
-where Rayleigh line is tangent to the isentrope, known as the Chapman
-Jouguet (CJ) point.
-
-.. math::
-   :type: align
-	  
-   F(v,V) &= \eos(v) - R(v,V)\\
-   F'(v,V) &= \frac{d \eos}{d v} - \frac{V^2}{v_0^2},
-
-At the CJ point, the Rayleigh line and the EOS have the same value of pressure, so the following condition holds:
-
-.. math::	  
-   :label: eq-fcond
-	   
-   F(v,V) = 0 
-
-Also at the CJ point, the Rayleigh line and EOS have the same slope, so this relation holds as well.
-
-.. math::
-   :label: eq-dfcond
-
-   F'(v,V) = 0.
-
-
-First a line search using the `scipy.optimize.brentq` method is used to determine the specific volume where the slope of the EOS and Rayleigh line are equal, for a given velocity, :math:`V`. The solution of this line search is :math:`v(V)`. A second line search finds the value of velocity such that the EOS and Rayleigh line were coincident, i. e.
-
-.. math::
-   :label: eq-fv
-
-   F(v(V),V) = 0.
-
-The solution to these nested line searches yielded a point where the EOS and Rayleigh line were tangent, the CJ point by definition. Figure :ref:`fig-cj-stick` shows the Rayleigh line, CJ point and EOS after this procedure.
+The `F_UNCLE` code uses the `scipy.optimize.brentq` method in a nested
+loop to solve for :math:`(p_\text{CJ},v_{CJ})`.  Figure
+:ref:`fig-cj-stick` shows the EOS and both the Rayleigh line and the
+CJ point that the procedure yields.
 
 .. figure:: scipy2016_figure1.png
    :align: center  
@@ -617,10 +484,9 @@ The solution to these nested line searches yielded a point where the EOS and Ray
    isentrope labeled *Prior EOS* and using data from a simulated
    experiment based on the isentrope labeled *True EOS*, the
    optimization algorithm described in the Algorithm section produced
-   the estimate labeled *Fit EOS*.  Solving Eqn. :ref:`eq-fv` for  the
-   *Fit EOS* isentropes yields a  Rayleigh lines  Outside of the CJ
-   points where the Rayleigh line is tangent to the isentropes, the
-   data does not constrain the isentropes. :label:`fig-cj-stick`
+   the estimate labeled *Fit EOS*.  Solving for the CJ state of *Fit
+   EOS* isentropes yields a Rayleigh line.  The data constrains the
+   isentrope only at :math:`v_\text{CJ}`. :label:`fig-cj-stick`
 
 Comparison to Pseudo Experimental Data
 --------------------------------------
@@ -652,12 +518,15 @@ The Gun
 
 The data from this experiment are a time series of measurements of a
 projectile's velocity as it accelerates down a gun barrel driven by
-the expanding products-of-combustion of HE.
+the expanding products-of-detonation of HE.
 
 
 .. figure:: gun.png
 
-   The gun experiment. The projectile of a given mass and cross-sectional area is accelerated down the barrel by the expanding products of combustion from the high explosives in the barrel.
+   The gun experiment. The projectile of a given mass and
+   cross-sectional area is accelerated down the barrel by the
+   expanding products of combustion from the high explosives in the
+   barrel.
 
    
 Implementation
@@ -684,16 +553,16 @@ where:
 * :math:`m_{HE}` is the initial mass of high explosives
 * :math:`m_{proj}` is the mass of the projectile  
 * :math:`\eos` is the equation of state which relates the pressure to
-  the specific volume of the HE products-of-combustion
+  the specific volume of the HE products-of-detonation
 
 The acceleration is computed based the projectile's mass and the force
 resulting from the uniform pressure acting on the projectile. This
 pressure is related to the projectile's position by the EOS, assuming
 that the projectile perfectly seals the barrel so the mass of
-products-of-combustion behind the projectile remains constant.
+products-of-detonation behind the projectile remains constant.
 
-Comparison to Psudo Experimental Data
--------------------------------------
+Comparison to Pseudo Experimental Data
+--------------------------------------
 
 The experimental data were also the result of this simulation but
 performed using the nominal *true* EOS described previously. These
@@ -710,10 +579,9 @@ time stamp.
 
 where:
 
-* :math:`\hat{v}` is the velocity given from the spline fit to simulated :math:`v(t)` data
+* :math:`\hat{v}` is the velocity given from the spline fit to
+  simulated :math:`v(t)` data
 * :math:`t_{exp}` is the times where experimental data were available
-
- 
     
 Numerical Results
 =================
@@ -724,7 +592,7 @@ experimental data for both the rate-stick and gun models. Figure
 simulated and *experimental* arrival times as the algorithm adjust the
 equation of state. Similar results are shown in Figure
 :ref:`fig-fve-gun` , where the significant error in velocity history
-at early times is reduced by and order of magnitude as the optimized
+at early times is reduced by an order of magnitude as the optimized
 EOS model approached the *true* EOS.
 
 .. figure:: scipy2016_figure3.png
@@ -836,7 +704,13 @@ particular:
 * The optimization procedure is ad hoc.  We have already begun to
   consider other optimization algorithms.
 
-The modular design of [F_UNCLE]_ means that it can be easily extended to model any process where there is a simulation which depends on a model with an unknown functional form. The self documenting capabilities of the code and the test suites included with the source code will help others integrate other existing models and simulations into this framework to allow it to be applied to many other physical problems.	   
+We have designed the [F_UNCLE]_ code  so that one can easily
+use it to model any process where there is a simulation which depends
+on a model with an unknown functional form. The self documenting
+capabilities of the code and the test suites included with the source
+code will help others integrate other existing models and simulations
+into this framework to allow it to be applied to many other physical
+problems.
 
 References
 ==========
@@ -844,13 +718,22 @@ References
 .. [vaughan2014] Vaughan, D. E. and Preston, D. L. "Physical Uncertainty
 		 Bounds (PUB)". LA-UR-14-20441, Los Alamos National
 		 Laboratory, Los Alamos, NM.
-		 
+
 .. [pemberton2011] Pemberton et al. "Test Report for Equation of State
                    Measurements of PBX-9501". LA-UR-11-04999, Los
-                   Alamos National Laboratory, Los Alamos, NM.
+		   Alamos National Laboratory, Los Alamos, NM.
 
-.. [hixson2000] Hixson, R. S. et al., 2000. "Release isentropes of overdriven plastic-bonded explosive PBX-9501." *J. Applied Physics* **88** (11) pp. 6287-6293
-	       
+.. [wilson2014] Wilson, Greg, et al. "Best practices for scientific
+		computing." PLoS Biol 12.1 (2014): e1001745.
+
+.. [fomel2009] Fomel, Sergey, and Jon F. Claerbout. "Reproducible
+	       research." Computing in Science & Engineering 11.1
+	       (2009): 5-7.
+
+.. [hixson2000] Hixson, R. S. et al., 2000. "Release isentropes of
+                overdriven plastic-bonded explosive PBX-9501."
+                *J. Applied Physics* **88** (11) pp. 6287-6293
+
 .. [ficket2000] Ficket, W. and
                 Davis, W. C., 2000. "Detonation". University of
                 California Press: Berkeley, CA.
@@ -860,9 +743,9 @@ References
              <https://github.com/fraserphysics/F_UNCLE>`_ [Online;
              accessed 2016-05-27].
 
-.. [Scipy] Jones, E., Oliphant, E., Peterson, P., et al. "SciPy\: Open
-           Source Scientific Tools for Python", 2001-,
-           `<http://www.scipy.org/>`_ [Online; accessed 2016-05-27].
+.. [scipy] Jones, E., Oliphant, E., Peterson, P., et al. "SciPy\: Open
+	   Source Scientific Tools for Python", 2001-,
+	   `<http://www.scipy.org/>`_ [Online; accessed 2016-05-27].
 
 .. [matplotlib] Hunter, J. D.. "Matplotlib\: A 2D Graphics
                 Environment", Computing in Science & Engineering,
@@ -890,11 +773,11 @@ References
 .. [nose] "nose: Nose Extends Unittest to Make Testing Easier"
           `<https://pypi.python.org/pypi/nose/1.3.7>`_ [Online;
           accessed 2016-05-27].
-   
-       
-       
-	     
-.. .. [hill1997] Hill, L. G., 1997. "Detonation Product Equation-of-State Directly From the Cylinder Test". Proc. 21st Int. Symp. on Shock Waves, Great Keppel Insland, Australia.
+
+.. [hill1997] Hill, L. G., 1997. "Detonation Product Equation-of-State
+              Directly From the Cylinder Test". Proc. 21st
+              Int. Symp. on Shock Waves, Great Keppel Insland,
+              Australia.
 
 ..
    Local Variables:
