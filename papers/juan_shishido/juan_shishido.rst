@@ -368,7 +368,7 @@ for each topic is available in the appendix.)
    +----------------+---------------------------------------------------------+
    | region         | bay area, moved bay area, bay area native, grew,        |
    |                | living, 'm bay area, east bay, raised bay area, east,   |
-   |                | originally
+   |                | originally                                              |
    +----------------+---------------------------------------------------------+
    | career-focused | work hard, play hard, hard working, progress, harder,   |
    |                | job, try, love work, company, busy                      |
