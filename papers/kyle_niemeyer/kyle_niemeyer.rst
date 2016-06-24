@@ -682,7 +682,7 @@ Acknowledgements
 ----------------
 
 I'd like to thank Bryan Weber of the University of Connecticut for helpful
-discussions on the ChemKED format.
+discussions on the ChemKED format and an early review of this paper.
 
 ==========
 References
