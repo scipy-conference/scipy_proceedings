@@ -109,31 +109,15 @@ Methodology
 Algorithms
 ~~~~~~~~~~
 
-K-means
-*******
+Logistic Regression
+*******************
 
-K-means clustering.
+Logistic regression
 
-The goal of any clustering approach is to find subgroups of observations in a
-data set. Typically, we wish to find groups, or clusters, whose members are
-similar to each other.
+Log-Odds-Ratio
+**************
 
-K-means splits a data set into k non-overlapping clusters. Each cluster is
-described by its "centroid," which corresponds to the mean value of the
-observations in the cluster.
-
-The first step with K-means is to choose the initial centroids. One way to do
-this is to randomly select k data set observations. However, centroids do not
-need to correspond to actual data points. The next step is to assign every
-observation to its nearest centroid. The groups of observations associated with
-each centroid constitute a cluster. Cluster centroids are then updated by
-finding the new mean value of each cluster. Finally, observations are
-reassigned to the nearest cluster centroid. This continues until cluster
-assignments no longer change or until the change is below some specified
-threshold.
-
-Choosing k and defining a similarity metric&mdash;recall that the goal with
-clustering is to find *similar* groups&mdash;are important considerations.
+Log-odds-ratio
 
 NMF
 ***
@@ -163,53 +147,15 @@ essay group membership. We chose to have 25 groupings somewhat arbitrarily,
 though we did try using cosine similarity measures to determine when the
 groupings were the most dissimilar.
 
-Initial Approach
-~~~~~~~~~~~~~~~~
+Permutation Testing
+*******************
 
-We initially proposed using LWIC to featurize the data as was done in numerous
-previous studies of online dating [Nag09]_ [Tom12]_ [Bon05]_. However, a more
-recent study analyzing a much larger dataset [Sch13]_ reported that using an
-"open" vocabulary resulted in more generalizable results than the "closed" set
-available through LIWC. Instead of using LIWC, we created and selected our
-features using unigram, bigram, and trigram tokens from the combined text
-across the 10 essays for each user. The bigrams and trigram tokens were
-selected using their PMI, calculated as the frequency of the phrase divided by
-the product of the individual words in that phrase. Bigrams were restricted to
-those with a PMI > 4 and trigrams were restricted to those with a PMI > 6, as
-described in Schwartz et al. (2013). We restricted all tokens to those that
-appeared in at least 1% of the documents.
+Permutation testing
 
-After tokenizing the data, we applied PCA on the resulting features. The data
-was noisier than we anticipated, and required 50 principal components to
-account for 48% of the variance (Fig 1). PCA performed much worse when we
-scaled the data values. Whitening the data did not have an effect. We had also
-intended to apply varimax rotation in order to have a clearer interpretation of
-the principal components, but after clustering on the reduced dimensions we
-decided that it would not have that great of an effect.
+TF-IDF
+******
 
-We subsequently applied k-means clustering to the users in the reduced feature
-space. To choose the number of clusters, we used the silhouette score, which
-calculates a ratio using the mean intra-cluster distance and the mean
-nearest-cluster distance for each sample. Because the dataset was so large, we
-calculated the score on subsets of the data, creating a bootstrap estimate of
-the score. We applied k-means clustering with 3, 5, 7, and 9 clusters, and
-chose the number of clusters with the highest silhouette score.
-
-After selecting the number of clusters based on the silhouette score, we
-analyzed the distribution of users across clusters and found that some clusters
-had very few users and that the overall distribution of users across clusters
-was very unbalanced, with most clusters consisting of a single user. When
-analyzing the essays in clusters of single users, we discovered that those
-clusters corresponded to users who had written very little. As a result, we
-decided to limit our analysis to users who had used at least 100 tokens across
-their 10 essays.
-
-Yet even with the additional preprocessing, dimensionality reduction, and
-clustering, the groupings were sparse and uneven. We decided that PCA and
-k-means clustering were probably not well-suited for our dataset. We attempted
-using k-modes (from: https://github.com/nicodv/kmodes) instead of k-means, and
-although the clusters were more evenly distributed (Fig 2), the costs were
-extremely high.
+Term frequency-inverse doument frequency
 
 Final Approach
 ~~~~~~~~~~~~~~
