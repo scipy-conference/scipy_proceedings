@@ -104,7 +104,7 @@ computers (HPC) that have ungainly job control languages (JCL).  And
 finally in order to implement a Bayesian analysis one must define and
 manipulate probability measures on sets in function space.
 
-We are organizing our efforts to address these challenges under the
+We are organizing our efforts to address those challenges under the
 title `F_UNCLE`.  To separate algorithmic development from the delays
 of HPC runs and the code required to wrap JCL, we will use surrogate
 problems with simulations that run in a few seconds on a desktop
@@ -148,7 +148,7 @@ function.
 
 The following sections describe the choices made in modeling the EOS
 function, the algorithm used for estimating the function and the use
-of the Fisher information to characterize the uncertainty in the
+of the Fisher information to characterize the uncertainty about the
 function.  We describe two sets of simulations and synthetic
 experimental data and present an EOS function fit to represent both
 these experiments as well as a spectral analysis of the Fisher
@@ -372,7 +372,7 @@ coefficients.  We start with a nominal EOS
 
 and over a finite domain we approximate it by a cubic spline with
 coefficients :math:`\left\{\tilde \cf[i] \right\}`.  Thus :math:`c`,
-the vector of spline coefficients is the set of unknown parameters
+the vector of spline coefficients, is the set of unknown parameters
 that we have previously let :math:`\theta` denote.  Then we assign a
 variance to each coefficient:
 
@@ -432,7 +432,7 @@ and :math:`s_1 = -.3`.
 .. figure:: scipy2016_figure1eos.pdf
 
    The prior and nominal *true* equation of state function. The two
-   models differ near at a specific volume of 0.4 g cm :math:`^{-1}`
+   models differ most at a specific volume of 0.4 g cm :math:`^{-1}`
    
 
 A Rate Stick
@@ -483,8 +483,8 @@ CJ point that the procedure yields.
    :align: center  
 	   
    Isentropes, Rayleigh lines and CJ conditions. Starting from the
-   isentrope labeled *Prior EOS* and using data from a simulated
-   experiment based on the isentrope labeled *True EOS*, the
+   isentrope labeled *Prior EOS* and using data from simulated
+   experiments based on the isentrope labeled *True EOS*, the
    optimization algorithm described in the Algorithm section produced
    the estimate labeled *Fit EOS*.  Solving for the CJ state of *Fit
    EOS* isentropes yields a Rayleigh line.  The data constrains the
@@ -493,10 +493,10 @@ CJ point that the procedure yields.
 Comparison to Pseudo Experimental Data
 --------------------------------------
 
-The previous simulation calculated the detonation velocity,
+The previous section calculated the detonation velocity,
 :math:`V_{\text{CJ}}(\eos)`, while experimental data were a series of
 times when the shock reached a given position on the rate-stick. The
-simulated detonation velocity could be related to these arrival times
+simulated detonation velocity can be related to these arrival times
 using:
 
 .. math::
@@ -519,7 +519,7 @@ The Gun
 =======
 
 The data from this experiment are a time series of measurements of a
-projectile's velocity as it accelerates down a gun barrel driven by
+projectile's velocity as it accelerates along a gun barrel driven by
 the expanding products-of-detonation of HE.
 
 
@@ -591,11 +591,11 @@ Numerical Results
 The algorithm was applied to the sets of simulation results and pseudo
 experimental data for both the rate-stick and gun models. Figure
 :ref:`fig-opt-stick` shows the improved agreement between the
-simulated and *experimental* arrival times as the algorithm adjust the
+simulated and *experimental* arrival times after the algorithm adjusts the
 equation of state. Similar results are shown in Figure
 :ref:`fig-fve-gun` , where the significant error in velocity history
-at early times is reduced by an order of magnitude as the optimized
-EOS model approached the *true* EOS.
+at early times is reduced by an order of magnitude with the optimized
+EOS model.
 
 .. figure:: scipy2016_figure3.pdf
    :align: center   
@@ -635,7 +635,7 @@ model influences the likelihood and Fisher Information matrix,
 :ref:`fig-info-stick` illustrates characteristics of the optimization
 procedure and :math:`\Fisher(\hat c)`.  The largest eigenvalue
 :math:`\Fisher(\hat c)` is :math:`10^{4}` larger than the next
-largest, ie, the rank of :math:`\Fisher(\hat c)` is effectively unity.
+largest. We expected the rank to be one to within numerical precision.
 
 .. figure:: scipy2016_figure2.pdf
    :align: center
@@ -655,7 +655,7 @@ is more influential at smaller projectile displacements while the next
 three largest eigenvalues correspond to eigenvectors which are more
 influential across the range of displacements.
 
-.. figure:: scipy2016_figure5
+.. figure:: scipy2016_figure5.pdf
    :align: center	    
 
    Fisher Information of the Gun Experiment.  The largest four
@@ -675,15 +675,15 @@ Conclusion, Caveats and Future Work
 
 We have described an iterative procedure for estimating functions
 based on experimental data in a manner that enforces chosen
-characteristics.  The code [F_UNCLE]_ implements the procedure and we used
-it to make the figures in the previous sections.  [F_UNCLE]_ runs on a
-modest desktop computer and makes the figures in a few minutes.  That
-speed and simplicity allows one to easily try out new ideas and code.
-We have relied on [F_UNCLE]_ to guide work with real experimental data and
-simulations on high performance computers that use proprietary
-software.  Figure :ref:`fig-pbx` is the result of applying the ideas
-presented here to the physical experiments described in
-[pemberton2011]_.
+constraints.  The [F_UNCLE]_ code implements the procedure and we
+used it to make the figures in the previous sections.  The code runs
+on a modest desktop computer and makes the figures in a few minutes.
+That speed and simplicity allows one to easily try out new ideas and
+code.  We have relied on the [F_UNCLE]_ code to guide work with real
+experimental data and simulations on high performance computers that
+use proprietary software.  Figure :ref:`fig-pbx` is the result of
+applying the ideas presented here to the physical experiments
+described in [pemberton2011]_.
 
 .. figure:: fit_v.pdf
    :align: center
@@ -694,9 +694,9 @@ presented here to the physical experiments described in
    scheme yields the EOSs that produce the traces labeled
    :math:`fit_n`. :label:`fig-pbx`
 
-[F_UNCLE]_ has been useful for us, and while we believe it could be useful
-for others, we emphasize that it is a work in progress.  In
-particular:
+The [F_UNCLE]_ code has been useful for us, and while we believe it
+could be useful for others, we emphasize that it is a work in
+progress.  In particular:
 
 * The prior is inconsistent.  We hope to analyze and perhaps mitigate
   the effects of that inconsistency in future work.
