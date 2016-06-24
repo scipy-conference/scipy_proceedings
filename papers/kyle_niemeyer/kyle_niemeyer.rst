@@ -541,7 +541,7 @@ procedure, given various required and optional parameters:
 
  * ``model_name``: a string with the chemical kinetic model filename
 
- * ``spec_keys_file``: a string with the name of a JSON file identifying
+ * ``spec_keys_file``: a string with the name of a YAML file identifying
    important species
 
  * ``dataset_file``: a string with the name of a file listing the ChemKED files
@@ -553,7 +553,7 @@ procedure, given various required and optional parameters:
  * ``results_path``: a string with the local path for placing results files.
    This is optional; the defalut is ``'results'``
 
- * ``model_variant_file``: a string with the name of a JSON file identifying
+ * ``model_variant_file``: a string with the name of a YAML file identifying
    ranges of conditions for variants of the kinetic model. This is optional;
    the default is ``None``
 
@@ -561,53 +561,53 @@ procedure, given various required and optional parameters:
    simulations in parallel. This is optional; the default is the maximum number
    of available threads minus one
 
-A few of these parameters require greater explanation. The species key JSON
+A few of these parameters require greater explanation. The species key YAML
 file ``spec_keys_file`` is needed because different chemical kinetic models
 internally use different names for species. PyTeCK needs to interpret these
 names in order to set the initial mixture composition, and potentially identify
 a species target to detect ignition. This file contains entries (for multiple
 model files, if desired) of the form:
 
-.. code-block:: json
+.. code-block:: yaml
 
-    {
-        "model_name": {
-            "O2": "O2",
-            "N2": "N2",
-            "nC7H16": "C7H16",
-            "CO2": "CO2"
-        },
-    }
+    ---
+    model_name:
+        H2: "H2"
+        O2: "O2"
+        Ar: "AR"
 
-In this case, most of the necessary species names are consistent with the
-names used internally by PyTeCK, other than *n*\ -heptane (``nC7H16``).
+where the key indicates the internal species name and the value is the name
+used by the model.
+In this case, the necessary species names are mostly consistent with the
+names used internally by PyTeCK, other than the capitalization of argon (``AR``).
+Names will likely differ more noticeably for other kinetic models; for example,
+internally the species *n*\ -heptane is represented by ``nC7H16``, while other
+models may use ``C7H16``, ``C7H16-1``, or ``NXC7H16``, for example.
 
-The ``model_variant_file`` JSON file is only needed in certain cases where
+The ``model_variant_file`` YAML file is only needed in certain cases where
 the chemical kinetic model needs internal, manual changes for different ranges
 of conditions (such as pressure or bath gas). This file may contain entries of
 the form:
 
-.. code-block:: json
+.. code-block:: yaml
 
-    {
-        "model_name": {
-            "bath gases": {
-                "N2": "_N2",
-                "Ar": "_Ar"
-            },
-            "pressures": {
-                "1": "_1atm.cti",
-                "9": "_9atm.cti",
-                "15": "_15atm.cti",
-                "50": "_50atm.cti",
-                "100": "_100atm.cti"
-            }
-        },
-    }
+    ---
+    model_name:
+        bath gases:
+            N2: "_N2"
+            Ar: "_Ar"
+        pressures:
+            1: "_1atm.cti"
+            9: "_9atm.cti"
+            15: "_15atm.cti"
+            50: "_50atm.cti"
+            100: "_100atm.cti"
 
 where the keys indicate extensions to be added to ``model_name``, in order of
-``bath gases`` and then ``pressures``. For models that need such variants, all
-combinations need to be present in the ``model_path`` directory.
+``bath gases`` and then ``pressures``, and the values represent the extensions
+to the base filename given by ``model_name``.
+For models that need such variants, all combinations need to be present in the
+``model_path`` directory.
 
 In order to determine the performance of a given model, ``evaluate_model``
 parses the ChemKED file(s), then sets up and runs simulations as described
@@ -658,7 +658,7 @@ uncertainty.
 After calculating the error associated with a dataset using Equation
 (:ref:`errorfunc`), and then the overall error metric for a model using Equation
 (:ref:`overallerror`), the performance results are printed to screen and saved
-to a JSON file.
+to a YAML file.
 
 ===========================
 Conclusions and Future Work
