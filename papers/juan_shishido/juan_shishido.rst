@@ -1,7 +1,6 @@
 :author: Matar Haller
 :email: matar@berkeley.edu
 :institution: Helen Wills Neuroscience Institute, University of California, Berkeley
-:corresponding:
 
 :author: Jaya Narasimhan
 :email: jnaras@berkeley.edu
@@ -10,6 +9,7 @@
 :author: Juan Shishido
 :email: juanshishido@berkeley.edu
 :institution: School of Information, University of California, Berkeley
+:corresponding:
 
 ----------------------------------------------------------
 Tell Me Something I Don't Know: Analyzing OkCupid Profiles
@@ -82,26 +82,27 @@ The data was obtained from: https://github.com/everett-wetchler/okcupid
 [Wet15]_. Profile information from 59,000+ OkCupid users that were online on
 06/30/2012. The users were within 25 miles of the San Francisco Bay Area. Each
 profile contains the user’s height, body type, religion, ethnicity, religion,
-as well as 10 essays on different topics. We used the 10 essays for text
-analysis and the demographic data for trends.
+as well as 10 essays on different topics. Each profile consisted of 10 free-text essays for text
+analysis and the demographic data for categorical grouping.
 
-Processing
+Preprocessing
 ~~~~~~~~~~
 
-First, we identified essays that we wanted to run analysis on. The essay text
-was cleaned by removing line break characters, urls, and stripping white
+The analysis was focused on on two separate essays: "My Self Summary" and "Favorite Books, Movies, TV."
+
+Essay text was first cleaned by removing line break characters, urls, and stripping white
 spaces. If a user wrote less than 5 words for the given essay, s/he was removed
 from the analysis. Finally, stopwords and punctuation were removed.
 
 The essay was tokenized using the happyfuntokenizer
-(http://sentiment.christopherpotts.net/tokenizing.html), which is well suited
+(http://sentiment.christopherpotts.net/tokenizing.html) (CITE, LINK?), which is well suited
 for online communication as it maintains emoticons as discrete tokens. Finally,
 a tfidf matrix was created with unigrams, bigrams and trigrams, dropping words
 with <0.01 document frequency.
 
 To reduce cardinality, we combined demographic categories. For example,there
 were 7,648 unique values for languages spoken, so we reduced the language
-category to a number representing the number of languages listed by the user.
+category to a number representing the number of languages listed by the user. (NEED A RELEVANT EXAMPLE - DIDN"T USE LANG)
 
 Methodology
 -----------
@@ -125,32 +126,30 @@ NMF
 Non-negative matrix factorization.
 
 For document clustering, the document corpus can be projected onto a
-"k-dimensional semantic space," with each axis corresponding to a particular
+k-dimensional semantic space, with each axis corresponding to a particular
 topic and each document being represented as a linear combination of those
 topics [Xu_03]_. With methods such as latent semantic indexing, the derived
 latent semantic space is orthogonal. Because of this, these type of methods
 can't easily handle cases where corpus topics overlap, as can often be the
-case. NMF, on the other hand, because the derived latent semantic space is not
-required to be orthogonal, can find directions for related or overlapping
-topics.
+case. Conversely, NMF, can find directions for related or overlapping
+topics because the derived latent semantic space is not
+required to be orthogonal,
 
-We applied NMF to each essay of interest using Scikit-Learn version 0.16, which
+NMF was applied to each essay of interest using scikit-learn (version 0.16), which
 uses the projected gradient solver [Lin07]_. NMF utilizes document frequency
-counts, so we calculated the tfidf matrix for unigrams, bigrams, and trigrams.
-We limited the tokens to those that appeared in at least 1% of the documents.
-We calculated NMF with k = 25, which factorized the tfidf matrix into two
-matrices, W and H. The dimensions are n_samples x 25 and 25 x n_features for W
+counts, so the tfidf matrix for unigrams, bigrams, and trigrams was calculated, while limiting
+tokens to those appearing in at least 1% of the documents (minimum frequency).
+NMF was calculated with k = 25 dimensions, which factorized the tfidf matrix into two
+matrices, W and H. The dimensions were n_samples x 25 and 25 x n_features for W
 and H, respectively. Group descriptions were given by top-ranked terms (the
 most distinctive) in the columns of H. Document membership weights were given
-by the rows of W. We calculated the maximum value in each row of W to determine
-essay group membership. We chose to have 25 groupings somewhat arbitrarily,
-though we did try using cosine similarity measures to determine when the
-groupings were the most dissimilar.
+by the rows of W. The maximum value in each row of W  determined
+essay group membership.
 
 Permutation Testing
 *******************
 
-Permutation testing
+Permutation testing ( WE DIDN"T END UP DOING THIS - SKIP?)
 
 TF-IDF
 ******
@@ -160,55 +159,35 @@ Term frequency-inverse doument frequency
 Final Approach
 ~~~~~~~~~~~~~~
 
-The initial essay preprocessing contributed a significant amount of noise to
-our analysis. Specifically, while preprocessing, we combined all essays into a
-single text block for each user. In grouping all essays together introduced
-unnecessary noise into our analysis. Instead, we decided to focus our analysis
-on two separate essays: "My Self Summary" and "Favorite Books, Movies, TV."
-
 We began by exploring the lexical features of the text. Our goal was to
 determine whether there existed inherent differences in writing styles by
 demographic split. We considered essay length, the use of profanity and slang
 terms, and part-of-speech usage.
 
-When determining essay length, we used our tokenizer, as opposed to, say,
-simply splitting the text on white-space. This was mainly to be consistent with
-our downstream analyses, such as predictive modeling.
+Essay length was determined based on the tokenized essays.
+This emphasized content words (IS THIS TRUE - DID YOU REMOVE STOPWORDS?), and did not
+inflate the length estimate with urls and stopwords.
 
 A list of profane words was obtained from the "Comprehensive Perl Archive
 Network" website. Slang terms include words such as "dough," which refers to
-money, and acronyms like "LMAO," which stands for "laughing my ass off." These
-terms come from the Wiktionary Category:Slang page. Note that there is overlap
-between the profane and slang lists.
+money, and acronyms like "LOL". These terms come from the Wiktionary Category:Slang page.
+Note that there is overlap between the profane and slang lists.
+(BE SPECIFIC WHAT DID WITH THE SLANG)
 
-Finally, we were interested in whether there were differences in the types of
-words used by different groups of individuals. For example, do certain
-users tend to use verbs ("action" words) more often than other groups of users?
-To answer questions like these, we first had to associate parts of speech (also
-known as "lexical categories") with each term (or "token") in our corpus. To do
-this, we used spaCy's part-of-speech tagger. We use spaCy's "coarse-grained"
-tags, of which there are 19, in order to maintain low-cardinality. These tags
-expand upon Petrov, Das, and McDonald's "universal part-of-speech tagset."
+Finally, differences in the types of words used by different groups of individuals were analyzed.
+For example, do certain users use verbs more often than other groups of users?
+Each token in the corpus was associated with a lexical category (part of speech)
+by using spaCy's part-of-speech tagger. The use of spaCy's coarse-grained
+tags (19) maintained low-cardinality. These tags expand upon
+Petrov, Das, and McDonald's universal part-of-speech tagset. (CITE)
 
-In addition to lexical characteristics, we were interested in understanding
-the semantics of the text. To do this, we used non-negative matrix
-factorization (NMF) in order to find latent (or hidden) structure in the text.
+Text semantics were also analysed in addition to lexical characteristics.
+Non-negative matrix factorization (NMF) was used to identify latent structure in the text.
 This structure is in the form of "topics" or "clusters" which can be described
-by particular tokens. With this, we then examined the distribution of users
-across clusters by demographic split. The idea was to determine whether
-particular groups of users were more likely to write about particular topics or
-themes in their essays.
+by particular tokens. In order to determine whether particular demographics were more likely to
+write about particular topics, the distribution of users across topics was calculated relative to each demographic group.
 
-After running NMF to cluster users, we ran a keyword analysis on the essays for
-each resulting group. The keyword algorithm takes the 1000 most frequent
-unigrams and extracts hypernyms from them using WordNet. After the hypernyms
-are calculated, it uses examples of these hypernyms as seeds to find contextual
-4-grams. It then filters the 4-grams to keep only those that occur more than 20
-times. While the keywords adequately summarized and described the terms in a
-given cluster, they were not sufficiently distinct between clusters because the
-most frequent words were used across many groups. Instead we focused our next
-analyses and visualizations on words which defined differences between groups
-(that would characterize one cluster relative to the others).
+LOG ODDS RATIO?
 
 Results
 -------
