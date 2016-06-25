@@ -603,27 +603,27 @@ discussed by Niemeyer [Niemeyer2016]_.
 The function ``eval_model.evaluate_model`` controls the overall evaluation
 procedure, given various required and optional parameters:
 
- * ``model_name``: a string with the chemical kinetic model filename
+* ``model_name``: a string with the chemical kinetic model filename
 
- * ``spec_keys_file``: a string with the name of a YAML file identifying
-   important species
+* ``spec_keys_file``: a string with the name of a YAML file identifying
+  important species
 
- * ``dataset_file``: a string with the name of a file listing the ChemKED files
-   to be used, where the files are simply given in a newline delimited list
+* ``dataset_file``: a string with the name of a file listing the ChemKED files
+  to be used, where the files are simply given in a newline delimited list
 
- * ``model_path``: a string with the directory containing ``model_name``.
-   This is optional; the default is ``'models'``
+* ``model_path``: a string with the directory containing ``model_name``.
+  This is optional; the default is ``'models'``
 
- * ``results_path``: a string with the directory for placing results files.
-   This is optional; the default is ``'results'``
+* ``results_path``: a string with the directory for placing results files.
+  This is optional; the default is ``'results'``
 
- * ``model_variant_file``: a string with the name of a YAML file identifying
-   ranges of conditions for variants of the kinetic model. This is optional;
-   the default is ``None``
+* ``model_variant_file``: a string with the name of a YAML file identifying
+  ranges of conditions for variants of the kinetic model. This is optional;
+  the default is ``None``
 
- * ``num_threads``: an integer with the number of CPU threads to use to perform
-   simulations in parallel. This is optional; the default is the maximum number
-   of available threads minus one
+* ``num_threads``: an integer with the number of CPU threads to use to perform
+  simulations in parallel. This is optional; the default is the maximum number
+  of available threads minus one
 
 A few of these parameters require greater explanation. The species key YAML
 file ``spec_keys_file`` is needed because different chemical kinetic models
