@@ -259,12 +259,9 @@ of lists, with the ``column`` index and units identifed:
             - [0.00E+000, 5.47669375000E+002]
             - [1.00E-003, 5.46608789894E+002]
 
-More complete examples of ChemKED files for shock tube and RCM
+Additional examples of ChemKED files for shock tube and RCM
 experiments can be found in the PyTeCK ``tests`` directory
-[Niemeyer2016b]_. In particular, additional metadata about the source of data
-(including authors) and experimental apparatus is recommended. However, this is
-not needed to perform model validation using PyTeCK, and additional description
-is beyond the scope of this paper.
+[Niemeyer2016b]_.
 
 The function ``parse_files.read_experiment`` takes a ChemKED-format file
 as input, and returns a dictionary with the necessary information in order to
