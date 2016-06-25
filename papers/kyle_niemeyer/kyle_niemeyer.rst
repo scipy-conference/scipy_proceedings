@@ -647,8 +647,8 @@ names used internally by PyTeCK, other than the capitalization of argon (``AR``)
 Names will likely differ more noticeably for other kinetic models; for example,
 internally the species *n*\ -heptane is represented by ``nC7H16``, while other
 models may use ``C7H16``, ``C7H16-1``, or ``NXC7H16``, for example.
-While PyTeCK has a preferred naming convention for some species (found in the
-``spec_key`` and ``spec_key_rev`` dictionaries in the ``utils.py`` module),
+PyTeCK has a preferred naming convention for some species (found in the
+``spec_key`` and ``spec_key_rev`` dictionaries in the ``utils.py`` module), but
 for correct results the species name keys given in the ``spec_keys_file`` just
 need to match names of species in the ChemKED files.
 
