@@ -145,7 +145,7 @@ It hides the complexity of accessing data and frees the user from having to impl
 MDAnalysis currently supports more than 25 different file formats and covers the vast majority of data formats that are used in the biomolecular simulation community, including the formats required and produced by the most popular packages such as NAMD :cite:`Phillips:2005ek`, Amber :cite:`Case:2005uq`, Gromacs :cite:`Abraham:2015aa`, CHARMM :cite:`Brooks:2009pt`, LAMMPS :cite:`Plimpton:1995rw`, DL_POLY :cite:`Todorov:2006kx`, HOOMD :cite:`Glaser:2015ys` as well as the Protein Data Bank PDB format :cite:`Berman:2000aa` and various other specialized formats.
 
 Since the original publication :cite:`Michaud-Agrawal:2011fu`, improvements in speed and data structures make it now possible to work with terabyte-sized trajectories containing up to ~10 million particles.
-MDAnalysis also comes with specialized analysis classes in the ``MDAnalysis.analysis`` module that are unique to MDAnalysis such as *LeafletFinder*, a graph-based algorithm for the analysis of lipid bilayers :cite:`Michaud-Agrawal:2011fu`, or *Path Similarity Analysis* for the quantitative comparison of macromolecular conformational changes :cite:`Seyler:2015fk`.
+MDAnalysis also comes with specialized analysis classes in the ``MDAnalysis.analysis`` module that are unique to MDAnalysis such as *LeafletFinder* (in the ``leaflet`` module), a graph-based algorithm for the analysis of lipid bilayers :cite:`Michaud-Agrawal:2011fu`, or *Path Similarity Analysis* (``psa``) for the quantitative comparison of macromolecular conformational changes :cite:`Seyler:2015fk`.
 
 
 Code base
@@ -278,12 +278,13 @@ Through this approach only a single frame of data is present in memory at any ti
    for ts in u.trajectory[::10]:
        ag.positions
 
-In some cases, such as selecting a specific frames (as in the calculation of time correlation functions), skipping of frames (as in the iterator ``u.trajectory[5000::1000]``), or parallelization over trajectory blocks in a map/reduce pattern :cite:`Tu:2008dq`, sequential reading of trajectories is highly inefficient when the underlying trajectory reader does not implement random access to time frames on disk.
+In some cases it is necessary to access frames of trajectories in a random access pattern or at least be able to rapidly access a starting frame anywhere in the trajectory.  
+Examples for such usage are the calculation of time correlation functions, skipping of frames (as in the iterator ``u.trajectory[5000::1000]``), or parallelization over trajectory blocks in a map/reduce pattern :cite:`Tu:2008dq`. If the underlying trajectory reader only implements linear sequential reading from the beginning, searching for specific frames becomes extremely inefficient, effectively prohibiting random access to time frames on disk.
 Many trajectory formats suffer from this shortcoming, including the popular Gromacs XTC and TRR formats, but also commonly used multi-frame PDB files and other text-based formats such as XYZ.
 LOOS :cite:`Romo:2009zr` implemented a mechanism by which the trajectory was read once on loading and frame offsets on disk were computed that could be used to directly seek to individual frames.
-MDAnalysis implements the same algorithm for TRR and XTC files but additionally also saves the offsets to disk (as a compressed NumPy array).
-When a trajectory is loaded again then instead of reading the whole trajectory, only the persistent offsets are read (provided they have not become stale as checked by  conservative criteria such as changes in file name, modification time, and size of the original file, which are all saved with the offsets).
-In cases of terabyte-sized trajectories, the persistent offset approach can save  hundreds of seconds for the initial loading of the ``Universe`` (after an initial one-time cost of scanning the trajectory).
+Based on this idea, MDAnalysis implements a fast frame scanning algorithm for TRR and XTC files and also saves the offsets to disk (as a compressed NumPy array).
+When a trajectory is loaded again then instead of reading the whole trajectory, only the persistent offsets are read (provided they have not become stale as checked by conservative criteria such as changes in file name, modification time, and size of the original file, which are all saved with the offsets).
+In cases of terabyte-sized trajectories, the persistent offset approach can save hundreds of seconds for the initial loading of the ``Universe`` (after an initial one-time cost of scanning the trajectory).
 Current development work is extending the persistent offset scheme to all trajectory readers, which will provide random access for all trajectories in a completely automatic and transparent manner to the user.
 
 
@@ -347,16 +348,16 @@ The API to these different algorithms is being unified with a common ``AnalysisB
 Most other tools hand the user analysis algorithms as black boxes.
 We want to avoid that and allow the user to adapt an analysis to their needs.
 
-The new ``Contacts`` class is a good example a generic API that allows easy adaptations of algorithms while still offering an easy setup for standard analysis types.
+The new ``Contacts`` class is a good example of a generic API that allows straightforward implementation of algorithms while still offering an easy setup for standard analysis types.
 The ``Contacts`` class is calculating a contact map for atoms in a frame and compares it with a reference map using different metrics.
 The used metric then decides which quantity is measured.
 A common quantity is the fraction of native contacts, where native contacts are all atom pairs that are close to each other in a reference structure.
 The fraction of native contacts is often used in protein folding to determine when a protein is folded.
 For native contacts two major types of metrics are considered: ones based on differentiable functions :cite:`Best2013` and ones based on hard cut-offs  :cite:`Franklin2007` (which we set as the default implementation).
 We have designed the API to choose between the two metrics and pass user defined functions to develop new metrics or measure other quantities.
-This generic interface allowed us to implement a "q1q2" analysis :cite:`Franklin2007` on top of the ``Contacts`` class.
-Below is incomplete code example that shows how to implement a q1q2 analysis, the default value for the *method* kwarg is overwritten with a user defined method *radius_cut_q*.
-A more detailed explanation can be found in the docs.
+This generic interface allowed us to implement a ":math:`q_1 q_2`" analysis :cite:`Franklin2007` on top of the ``Contacts`` class; :math:`q_1` and :math:`q_2` refer to the fractions of native contacts that are present in a protein structure relative to *two* reference states 1 and 2.
+Below is an incomplete code example that shows how to implement a :math:`q_1 q_2` analysis, the default value for the *method* kwarg is overwritten with a user defined method *radius_cut_q*.
+A more detailed explanation can be found in the documentation.
 
 .. code-block:: python
 
@@ -372,7 +373,7 @@ A more detailed explanation can be found in the docs.
                        step=step,
                        kwargs={'radius': radius})
 
-This type of flexible analysis algorithm paired with a collection of base classes allow quick and easy analysis of simulations as well as development of new ones.
+This type of flexible analysis algorithm paired with a collection of base classes enables rapid and easy analysis of simulations as well as development of new ones.
 
 
 Visualization module
@@ -459,7 +460,7 @@ Analysis of large systems
 -------------------------
 
 MDAnalysis has been used extensively to study extremely large simulation systems for long simulation times.
-Marrink and co-workers :cite:`Ingolfsson2014` used MDAnalysis to analyze a realistic model of the plasma membrane with 63 different lipid species and over half a million particles for 40 µs. They discovered that transient domains with liquid-ordered character formed and disappeared on the microsecond time scale, with different lipid species clustering in a lipid-specific manner.
+Marrink and co-workers :cite:`Ingolfsson2014` used MDAnalysis to analyze a realistic model of the  membrane of a mammalian cell with 63 different lipid species and over half a million particles for 40 µs. They discovered that transient domains with liquid-ordered character formed and disappeared on the microsecond time scale, with different lipid species clustering in a lipid-specific manner.
 A coarse-grained model of the influenza A virion outer lipid envelope (5 M particles) was simulated for 5 microseconds and the resulting trajectory was analyzed using MDAnalysis :cite:`pmid25703376` and the open source MDAnalysis-based `lipid diffusion analysis code`_,  which calculates the diffusion constants of lipids for spherical structures and planar bilayers :cite:`Reddy:2014aa`.
 The construction of the CG dengue virion envelope (1 M particles) was largely dependent on MDAnalysis :cite:`pmid26833387`.
 The symmetry operators in the deposited dengue protein shell PDB file were applied to a simulated asymmetric unit in a bilayer, effectively tiling both proteins and lipids into the appropriate positions on the virion surface.
