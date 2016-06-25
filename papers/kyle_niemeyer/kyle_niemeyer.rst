@@ -48,9 +48,39 @@ This work aims to support quantitative validation of kinetic models by:
  quantitatively evaluates the performance of chemical kinetics models
  based on available experimental data.
 
-This papers describes the components of PyTeCK, including the experimental
+Fundamental combustion experiments typically study the behavior of fuels in
+idealized configuratinos at conditions relevant to applications in
+transporation, aerospace, or power generation. These produce useful data for
+validating chemical kinetic models, which in turn can be used to simulate
+more complex applications such as internal combustion or gas turbine engines.
+The autoignition delay of a fuel/oxidizer mixture represents the time required
+for the mixture to ignite (i.e., experience a rapid increase in temperature and
+corresponding consumption of fuel and oxidizer) after arriving at a specified
+initial state. Autoignition occurs in many practical applications, such as knock
+in spark-ignition engines or ignition in compression-ignition and gas turbine
+engines, and so ignition delay measurements provide useful validation measures
+for models aimed at capturing such phenomena.
+
+(Other combustion experimental measurements—such as extinction in perfectly
+stirred reactors, species profiles in jet-stirred reactors, and laminar flame
+speeds—also provide useful information about fuel combustion characteristics,
+but these are not considered in this paper.)
+
+Experiments measuring ignition delay times can typically be divided into two
+categories: shock tubes and rapid compression machines.
+In shock tubes, discussed in detail in the literature [Chaos2010]_
+[Hanson2014]_, a diaphragm separates high-pressure gases from a lower-pressure
+mixture of fuel and oxidizer; rupturing the diaphragm propagates a (compressive)
+shock wave into the fuel/oxidizer mixture, rapidly increasing the temperature
+pressure, which leads to autoignition after a delay. In contrast, rapid
+compression machines, reviewed recently by Sung and Curran [Sung2014]_, emulate
+a single compression stroke in an internal combustion engine; the compression
+of a piston rapidly raises the temperature and pressure of a fuel/oxidizer
+mixture, after which ignition occurs.
+
+This paper describes the components of PyTeCK, including the experimental
 data parser, simulation framework, and solution post-processing. In addition,
-the papers explains the theoretical basis for the models of shock tubes and
+the paper explains the theoretical basis for the models of shock tubes and
 rapid compression machines.
 
 ========================
