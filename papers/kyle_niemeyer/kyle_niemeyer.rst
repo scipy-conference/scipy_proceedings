@@ -807,7 +807,7 @@ results, and creating an open database of ChemKED files for experimental data.
 Acknowledgements
 ----------------
 
-I'd like to thank Bryan Weber of the University of Connecticut for helpful
+I thank Bryan Weber of the University of Connecticut for helpful
 discussions on the ChemKED format and an early review of this paper.
 
 ==========
