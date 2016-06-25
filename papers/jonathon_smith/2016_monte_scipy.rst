@@ -38,20 +38,25 @@ History
 The United States began its reconnaissance of the solar system in the
 early 1960s. As NASA developed new technologies to build and operate
 robotic probes in deep space, JPL was working out how to guide those
-probes to their destinations. In order to fly a spacecraft to Mars or
-Jupiter, engineers needed a way to model its trajectory through
-interplanetary space. They needed to collect `tracking data` that
-would allow them to make informed adjustments to their trajectory
-models. They also needed a way of designing maneuvers that would nudge
-a wayward probe back on course.
+probes to their destinations. In order to fly spacecraft to Mars or
+Jupiter, engineers needed a way to model their trajectories through
+interplanetary space. This was partly a problem of **astrodynamics**, a
+field of study that mathematically describes how man-made objects move
+through space. It was also a problem of computation because
+engineers needed a way to actually solve these complex astrodynamic
+equations for real spacecraft. Beyond modeling the motion of spacecraft,
+engineers needed a way to actually measure the location of spacecraft
+over time so they could make informed corrections to their models. They
+also needed a way of designing engine burns, or maneuvers, that would
+nudge a wayward probe back on course.
 
-The problem of `deep space navigation` quickly became coupled with
-software and computing. The first programs JPL wrote to navigate
-spacecraft were written on punch-cards and processed through an
-IBM 7090 mainframe. [Eke05]_ Advances in computing technology were eagerly
-consumed by navigators, as more storage and faster processing meant
-the models used fly spacecraft could be made increasingly detailed
-and sophisticated.
+These efforts, collectively known as *deep space navigation*,
+quickly became coupled with software and computing. The first
+programs JPL wrote to navigate spacecraft were written on punch-cards
+and processed through an IBM 7090 mainframe. [Eke05]_ Advances in
+computing technology were eagerly consumed by navigators, as more
+storage and faster processing meant the models used fly spacecraft
+could be made increasingly detailed and sophisticated.
 
 Starting in 1964, a group of engineers, led by Ted Moyer, began
 developing the astrodynamic algorithms and software that would
@@ -73,18 +78,19 @@ exposed to the user as a Python-language library. Second, it would
 be a general-purpose astrodyanmic computing platform, not a dedicated
 navigation program like the DPTRAJ/ODP. The goal was to create a single
 library that could be used for astrodynamic research, space mission
-design, planetary science, in addition to deep space navigation. This
-new project was affectionately named the Mission Analysis, Operations,
-and Navigation Toolkit Environment, or MONTE-Python for short.
+design, planetary science, etc - in addition to deep space navigation.
+This new project was affectionately named the Mission Analysis,
+Operations, and Navigation Toolkit Environment, or MONTE-Python for
+short.
 
 Throughout the first half of the 2000s, MONTE was carefully constructed
 by reshaping the algorithms under-pinning the DPTRAJ/ODP into a
 rigorously tested and well documented object-oriented software package.
-In 2007, MONTE got its first operational assignment and successfully
-navigated NASA's Phoenix lander to Mars. Since 2012 MONTE has powered
-all flight navigation services at JPL, including the Cassini extended
-mission, Mars Science Laboratory, MAVEN, GRAIL, Dawn, Mars Reconnaissance
-Orbiter, Juno, and more. [Eva16]_
+In 2007, MONTE got its first operational assignment navigating NASA's
+Phoenix lander to a successful encoutner with Mars. Since 2012 MONTE
+has powered all flight navigation services at JPL, including the
+Cassini extended mission, Mars Science Laboratory, MAVEN, GRAIL, Dawn,
+Mars Reconnaissance Orbiter, Juno, and more. [Eva16]_
 
 Deep Space Navigation
 ---------------------
@@ -162,7 +168,7 @@ As previously mentioned, MONTE was built to be general purpose
 astrodynamic computing platform, not a dedicated navigation
 application. It supplies the models and computational algorithms needed
 for trajectory design, orbit determination and flight path control
-but doesn't force the end-user into any specific work-mode or
+but doesn't force the end-user into any specific workflow or
 interface. As a result, before MONTE can be used on a flight mission,
 it must be *deployed* for that mission. This entails using MONTE in
 cooperation with other applications and libraries to assemble a custom
@@ -178,15 +184,18 @@ navigation for that specific mission.
 
 This is important to note because it illustrates the way in which
 MONTE is likely to be useful to those outside JPL. Deep space
-navigation is (not yet at least) a very large discipline. The majority
-of astrodynamic computing occurs in other contexts such as Earth-centered
-navigation, collision avoidance analysis, cooperative and
-non-cooperative rendezvous in orbit, etc. Much the same way that MONTE
+navigation is (not yet at least) a very high-demand field. The majority
+of astrodynamic computing occurs in other contexts such as
+Earth-centered navigation (weather and communication satellites, etc),
+collision avoidance analysis (making sure two spacecraft don't run
+into each other), cooperative rendezvous (docking a cargo-ship to the
+International Space Station) and non-cooperative rendezvous (capturing
+a malfunctioning satellite), etc. Much the same way that MONTE
 can be configured and deployed for deep space navigation, it can
 also be brought to bear on these and other problems across the
 aerospace industry.
 
-As a general purpose astrodynamic computing platform, MONTE has a lot
+As a general purpose astrodynamic platform, MONTE has a lot
 to offer. It provides a solid foundation of core systems that can
 be used to quickly define an aerospace problem. These include models
 for trajectories and trajectory queries, coordinate frames and
@@ -219,8 +228,7 @@ largely been deprecated in favor of IPython) and a custom unit test
 system. It also has several numerical computing classes that would
 generally be dispatched to NumPy in a brand new project. Perhaps
 most noticeably, MONTE has its own programming style guidelines which
-are not PEP-8 compliant, again because it precedes PEP-8 historically
-by three years.
+are not PEP-8 compliant, again because it precedes PEP-8 by three years.
 
 Historical quirks aside, MONTE considers itself a member of
 the Python scientific programming community and aims to integrate
@@ -246,9 +254,14 @@ this class belongs to the main MONTE library (e.g. ``M.TrajLeg``,
 ``M.Gm``, etc). The following example shows a simple script using the
 ``Monte`` and mpy libraries to get the state of the Cassini spacecraft
 with respect to Saturn at the time of its Saturn Orbit Insertion (SOI)
-burn. [#]_
+burn. [#]_ [#]_
 
 .. [#] All MONTE code in this paper is current as of the v121 delivery.
+
+.. [#] Saturn Orbit Insertion was a spacecraft maneuver that occured
+       as Cassini approached Saturn. It changed the course of the
+       spacecraft so that instead of flying past Saturn, it captured
+       into orbit around the planet.
 
 .. code-block:: python
 
@@ -288,9 +301,10 @@ BOA
 
 The Binary Object Archive (BOA) is MONTE's primary data management
 system. Most MONTE classes that define concrete objects (for instance,
-``M.Gm`` which defines a natural body GM, or ``M.FiniteBurn`` which
-defines a spacecraft burn) are stored in BOA, and accessed by MONTE's
-astrodynamic functions from BOA.
+``M.Gm`` which defines the standard gravitational paramter for a
+natural body, or ``M.FiniteBurn`` which defines a spacecraft burn)
+are stored in BOA, and accessed by MONTE's astrodynamic functions from
+BOA.
 
 BOA is based on the binary XDR data format, which allows data to be
 written-to and read-from binary on different operating systems and
@@ -316,6 +330,7 @@ default data loader (``mpy.io.data``) and serve to help an analyst get a
 
 Time and Units
 ^^^^^^^^^^^^^^
+
 MONTE has support for the Te, TDT, TAI, GPS, UTC, and UT1 time systems.
 The primary class used for dealing with time is ``M.Epoch`` which
 stores specific times and also allows a user to convert between
@@ -383,7 +398,8 @@ Numerical Integration
 ^^^^^^^^^^^^^^^^^^^^^
 
 MONTE provides a framework for numerically integrating spacecraft and
-natural body trajectories, subject to a set of force models. The
+natural body trajectories, subject to a set of force models such
+as gravity, solar radiation pressure, atmospheric drag, etc. The
 resulting trajectory has the Cartesian position and velocity of the
 body over time, and optionally the partial derivatives of state
 parameters with respect to parameters in the force models. A
@@ -415,7 +431,7 @@ Example: Exploring bodies in motion
 What follows is a narrated example of how MONTE can be used, in this
 case interactively, to explore astrodynamic relationships. Generally,
 MONTE is scripted or assembled into custom applications that solve
-complex end-user problems. However, it is also very useful as an
+complex end-user problems. However, it is also useful as an
 off-the-cuff exploratory tool as we will see below. The reader is
 encouraged to walk through the example herself if she has access to
 MONTE. If not, hopefully the example itself will give a sense for what
@@ -434,8 +450,9 @@ Voyager 2 Trajectory
 ^^^^^^^^^^^^^^^^^^^^
 
 Lets start off by creating a BOA database and loading the default data
-sets for planetary ephemerides, coordinate frames, and body parameters.
-We will also load in our Voyager 2 trajectory. [#]_
+sets for planetary ephemerides (the trajectories of all the planets
+in the solar system), coordinate frames, and body parameters like mass
+and shape. We will also load in our Voyager 2 trajectory. [#]_
 
 .. [#]
     JPL hosts two excellent websites for accessing trajectory data for
@@ -597,10 +614,9 @@ every call.
    Vel: -2.415141211951430e+01  2.640692963340520e+00
         -1.128801136174438e+01
 
-In addition to providing optimization and a simpler interface,
-``M.TrajQuery`` also lets you control how light-time corrections are
-applied (this is a more advanced use case, so we will only mention it
-here).
+
+This can be very useful when you are sampling states from a trajectory,
+for instance to create a plot of an orbit.
 
 Uranus Encounter
 ^^^^^^^^^^^^^^^^
