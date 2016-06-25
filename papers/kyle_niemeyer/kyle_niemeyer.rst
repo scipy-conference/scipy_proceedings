@@ -76,9 +76,16 @@ pressure, which leads to autoignition after a delay. In contrast, rapid
 compression machines, reviewed recently by Sung and Curran [Sung2014]_, emulate
 a single compression stroke in an internal combustion engine; the compression
 of a piston rapidly raises the temperature and pressure of a fuel/oxidizer
-mixture, after which ignition occurs.
+mixture, after which ignition occurs. Shock tubes and rapid compression machines
+offer complementary approaches to measuring ignition delay times, as the former
+are typically limited to higher temperatures while the latter can reach
+low-to-intermediate temperatures.
 
-This paper describes the components of PyTeCK, including the experimental
+In this paper, a data format is proposed for capturing results from
+experimental measurements of autoignition delay times. In addition,
+this paper describes the components of PyTeCK, a software package that
+quantities the performance of a chemical kinetic model in reproducing
+experimental ignition delays. This includes discussion of the experimental
 data parser, simulation framework, and solution post-processing. In addition,
 the paper explains the theoretical basis for the models of shock tubes and
 rapid compression machines.
