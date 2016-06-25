@@ -200,7 +200,10 @@ Chaumeix et al. [Chaumeix2007]_:
 This example contains the all of the information needed to evaluate the
 performance of a chemical kinetic model with five datapoints. In addition, the
 file includes metadata about the file itself, as well as reference information.
-The necessary elements include the type of experiment given by
+While these elements, including ``file-author``, ``file-version``, and the
+various entries in ``reference`` are not required by PyTeCK, a valid ChemKED
+file should include this information to be complete.
+The elements necessary for PyTeCK include the type of experiment given by
 ``experiment-type`` (currently limited to ``Ignition delay``), the ``kind`` of
 apparatus used to measure ignition delay (``shock tube`` or
 ``rapid compression machine``), and then a list of
@@ -210,6 +213,14 @@ information. Mandatory datapoint elements include the initial ``temperature``,
 ``ignition-delay`` and ``ignition-type`` (means by which ignition is detected).
 All quantities provided include a magnitude and units, which will be
 interpreted by Pint [Grecco2016]_.
+Since many experimental datasets hold certain properties constant (e.g.,
+composition, pressure) while varying a single quantity (e.g., temperature),
+properties that are common to all of the ``datapoints`` can be given in a
+``common-properties`` element with an arbitrary anchor label (e.g., ``&pres``
+above for the constant pressure), and then referred to in each datapoint
+with a reference (``*pres``). However, every datapoint should still contain the
+complete information needed to reproduce its conditions; the
+``common-properties`` element is for convenience only.
 
 Additional elements may be needed to model ignition in both shock tubes and
 RCMs. Under certain conditions
