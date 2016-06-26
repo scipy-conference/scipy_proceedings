@@ -890,13 +890,13 @@ References
                    PyTeCK version 0.1.0, GitHub repository, 2016.
                    https://GitHub.com/kyleniemeyer/PyTeCK
 
-.. [Olm2014] C. Olm, I. G. Zsély, R. Pálvölgyi, T. Varga, T. Nagy, H. J, Curran,
+.. [Olm2014] C. Olm, I. G. Zsely, R. Pálvölgyi, T. Varga, T. Nagy, H. J, Curran,
              and T. Turányi.
              "Comparison of the performance of several recent hydrogen
              combustion mechanisms," *Combust. Flame* 161:2219–34, 2014.
              http://dx.doi.org/10.1016/j.combustflame.2014.03.006
 
-.. [Olm2015] C. Olm, I. G. Zsély, T. Varga, H. J. Curran, and T. Turányi.
+.. [Olm2015] C. Olm, I. G. Zsely, T. Varga, H. J. Curran, and T. Turányi.
              "Comparison of the performance of several recent syngas combustion
              mechanisms," *Combust. Flame* 162:1793–812, 2015.
              http://dx.doi.org/10.1016/j.combustflame.2014.12.001
