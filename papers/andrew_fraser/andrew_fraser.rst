@@ -421,11 +421,13 @@ used to generate pseudo-experimental data is:
    :label: eq-actual
    :type: align
 	  
-   f(v)&= \frac{F}{v^3} + b_0(v) 
+   f(v)&= \frac{F}{v^3} + b_0(v) + b_1(v)
 
 
 where: :math:`v_0 = .4\, \text{cm}^3\text{g}^{-1}`, :math:`~w_0 = .1\,
-\text{cm}^3\text{g}^{-1}` and :math:`~s_0 = .0625`.
+\text{cm}^3\text{g}^{-1}`, :math:`~s_0 = .25`, :math:`v_1 = .5\,
+\text{cm}^3\text{g}^{-1}`, :math:`w_1 = .1\, \text{cm}^3\text{g}^{-1}`,
+and :math:`s_1 = -.3`.
 
 .. figure:: scipy2016_figure1eos.pdf
 
@@ -598,7 +600,7 @@ EOS model approached the *true* EOS.
 .. figure:: scipy2016_figure3.pdf
    :align: center   
 
-   Fitting an isentrope to rate stick data.  In the upper plot, green
+   Fitting an isentrope to rate stick data.  Green
    +'s denote measured shock arrival time at various positions.  The blue
    line represents the shock velocity calculated from the nominal EOS,
    and the black line is the result of the optimization algorithm described
@@ -641,7 +643,7 @@ largest, ie, the rank of :math:`\Fisher(\hat c)` is effectively unity.
 
    Fisher Information of the Rate Stick Experiment. The largest three
    eigenvalues of :math:`\Fisher(\hat c)` appear in the upper plot and
-   the eigenfunction corresponding to the largest eigenvalue appears in
+   the eigenfunction corresponding to these three eigenvalues appears in
    he lower plot. :label:`fig-info-stick`
    
 
