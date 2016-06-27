@@ -427,7 +427,7 @@ used to generate pseudo-experimental data is:
 where: :math:`v_0 = .4\, \text{cm}^3\text{g}^{-1}`, :math:`~w_0 = .1\,
 \text{cm}^3\text{g}^{-1}` and :math:`~s_0 = .0625`.
 
-.. figure:: scipy2016_figure1eos.png
+.. figure:: scipy2016_figure1eos.pdf
 
    The prior and nominal *true* equation of state function. The two
    models differ near at a specific volume of 0.4 g cm :math:`^{-1}`
@@ -443,7 +443,7 @@ curvature.  The code for the pseudo data uses the average density and
 sensor positions given by Pemberton et al.  [pemberton2011]_ for their
 *Shot 1*.
 
-.. figure:: stick.png
+.. figure:: stick.pdf
 
    The rate stick experiment showing the detonation wave propagating
    through the rate stick at the CJ velocity. Detonation velocity
@@ -477,7 +477,7 @@ loop to solve for :math:`(p_\text{CJ},v_{CJ})`.  Figure
 :ref:`fig-cj-stick` shows the EOS and both the Rayleigh line and the
 CJ point that the procedure yields.
 
-.. figure:: scipy2016_figure1.png
+.. figure:: scipy2016_figure1.pdf
    :align: center  
 	   
    Isentropes, Rayleigh lines and CJ conditions. Starting from the
@@ -521,7 +521,7 @@ projectile's velocity as it accelerates down a gun barrel driven by
 the expanding products-of-detonation of HE.
 
 
-.. figure:: gun.png
+.. figure:: gun.pdf
 
    The gun experiment. The projectile of a given mass and
    cross-sectional area is accelerated down the barrel by the
@@ -595,7 +595,7 @@ equation of state. Similar results are shown in Figure
 at early times is reduced by an order of magnitude as the optimized
 EOS model approached the *true* EOS.
 
-.. figure:: scipy2016_figure3.png
+.. figure:: scipy2016_figure3.pdf
    :align: center   
 
    Fitting an isentrope to rate stick data.  In the upper plot, green
@@ -605,7 +605,7 @@ EOS model approached the *true* EOS.
    in the text. :label:`fig-opt-stick`
 
 
-.. figure:: scipy2016_figure4.png
+.. figure:: scipy2016_figure4.pdf
    :align: center	   
 
    Estimation of the maximum *a posteriori* probability
@@ -635,7 +635,7 @@ procedure and :math:`\Fisher(\hat c)`.  The largest eigenvalue
 :math:`\Fisher(\hat c)` is :math:`10^{4}` larger than the next
 largest, ie, the rank of :math:`\Fisher(\hat c)` is effectively unity.
 
-.. figure:: scipy2016_figure2.png
+.. figure:: scipy2016_figure2.pdf
    :align: center
    :class: w	   
 
