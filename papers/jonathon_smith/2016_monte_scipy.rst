@@ -26,7 +26,10 @@ more. The first half of this paper gives context to the MONTE project
 by outlining its history, the field of deep space navigation and where
 MONTE fits into the current Python landscape. The second half gives
 an overview of the main MONTE libraries and provides a narrative
-example of how it can be used for astrodynamic analysis.
+example of how it can be used for astrodynamic analysis. MONTE is not
+currently available for free and open download. **For information on
+licencing MONTE and getting a copy visit**
+`montepy.jpl.nasa.gov <http://montepy.jpl.nasa.gov/>`_.
 
 .. class:: keywords
 
@@ -112,7 +115,7 @@ back to the reference trajectory when it has strayed (*flight path
 control*, Figure :ref:`tour`).
 
 The process of designing a spacecraft reference trajectory begins at
-the earliest stages of mission planning. Navigators work very closely
+the earliest stages of mission planning. Navigators work closely
 with mission science teams to put together a reference orbit that
 allows the spacecraft to take all the desired science measurements.
 They also work with mission planners and spacecraft system engineers
@@ -184,7 +187,7 @@ navigation for that specific mission.
 
 This is important to note because it illustrates the way in which
 MONTE is likely to be useful to those outside JPL. Deep space
-navigation is (not yet at least) a very high-demand field. The majority
+navigation is (not yet at least) a high-demand field. The majority
 of astrodynamic computing occurs in other contexts such as
 Earth-centered navigation (weather and communication satellites, etc),
 collision avoidance analysis (making sure two spacecraft don't run
@@ -209,7 +212,7 @@ MONTE and the Python Ecosystem
 
 MONTE has a decidedly friendly stance when it comes to working with
 other libraries in the Python scientific computing stack. It makes
-heavy use of many open source Python libraries such as matplotlib and
+heavy use of many open-source Python libraries such as matplotlib and
 IPython (Jupyter), and reciprocally tries to make it easy for users
 of these systems to interface with MONTE. Many of MONTE's classes
 can transform themselves in NumPy data types - a common pattern is
@@ -221,7 +224,7 @@ natively plot MONTE's unit and time systems, and have also
 open-sourced a custom matplotlib styling-system developed in house.
 
 The MONTE project started in 1998 at a time when the Python language
-was still very new. As a result, MONTE has several custom systems that
+was still relatively new. As a result, MONTE has several custom systems that
 are redundant in the current Python landscape. For instance, MONTE
 developed an interactive shell similar to IPython (although it has
 largely been deprecated in favor of IPython) and a custom unit test
@@ -245,8 +248,8 @@ Most of the functionality of MONTE is encapsulated in the ``Monte`` and
 ``mpy`` libraries. ``Monte`` is written in C++ and wrapped in Python.
 It is presented to the end user as a normal, importable Python-language
 module. The ``mpy`` module is written entirely in Python and contains
-higher level applications built using ``Monte`` and other open-source
-Python libraries.
+higher level applications built using ``Monte`` and other Python
+libraries.
 
 Convention is to import the main ``Monte`` library as ``M``. Throughout
 this paper, if a class is referred to with the prefix ``M.``, it means
@@ -258,7 +261,7 @@ burn. [#]_ [#]_
 
 .. [#] All MONTE code in this paper is current as of the v121 delivery.
 
-.. [#] Saturn Orbit Insertion was a spacecraft maneuver that occured
+.. [#] Saturn Orbit Insertion was a spacecraft maneuver that occurred
        as Cassini approached Saturn. It changed the course of the
        spacecraft so that instead of flying past Saturn, it captured
        into orbit around the planet.
@@ -458,7 +461,7 @@ and shape. We will also load in our Voyager 2 trajectory. [#]_
     JPL hosts two excellent websites for accessing trajectory data for
     natural solar system bodies and deep-space probes. The Horizons
     website (http://ssd.jpl.nasa.gov/horizons.cgi) is maintained by
-    JPL's Solar System Dynamics group, and has a very expansive and
+    JPL's Solar System Dynamics group, and has an expansive and
     powerful webapp for getting ephemerides in a variety of formats.
     The Navigation and Ancillary Data Facility (NAIF) at JPL hosts the
     navigation section of NASA's Planetary Database System. At it's
@@ -615,7 +618,7 @@ every call.
         -1.128801136174438e+01
 
 
-This can be very useful when you are sampling states from a trajectory,
+This can be useful when you are sampling states from a trajectory,
 for instance to create a plot of an orbit.
 
 Uranus Encounter
@@ -629,7 +632,7 @@ capability we have so far used to get relative states between bodies.
 However, there are certain specific relationships between bodies and
 frames that can be of particular interest to an analyst. For instance,
 identifying the time at which two bodies achieve their closest approach
-(periapse) and the magnitude of that minimum distance can be a very
+(periapse) and the magnitude of that minimum distance can be an
 important astrodynamic metric. We can certainly estimate these
 quantities using trajectory queries, perhaps by plotting the relative
 distance between two bodies and looking for the local minima.
@@ -643,7 +646,6 @@ this works in practice.  We will use ``M.ApsisEvent`` (which is a
 specific type of ``M.EventSpec``) to find the precise time and
 distance of Voyager 2's closest approach with Uranus. The first step
 is to define our ``M.ApsisEvent``.
-
 
 .. code-block:: python
 
@@ -855,6 +857,12 @@ to destinations all over the solar system. As a platform, it has a lot
 to offer anyone doing aerospace related computation, especially those
 who love working with the Python language.
 
+Acknowledgements
+----------------
+
+This work was carried out at the Jet Propulsion Laboratory,
+California Institute of Technology, under a contract with the
+National Aeronautics and Space Administration.
 
 References
 ----------
