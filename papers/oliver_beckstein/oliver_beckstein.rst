@@ -108,10 +108,6 @@ MDAnalysis is available under the GNU General Public License v2.
    molecular dynamics simulations, science, chemistry, physics, biology
 
 
-.. For example file, see ../00_vanderwalt/00_vanderwalt.rst
-.. Shows how to do figures, maths, raw latex, tables, citations
-
-
 Introduction
 ------------
 
@@ -311,7 +307,7 @@ The final result is plotted with matplotlib_ :cite:`Hunter:2007aa` as the RMSF o
 
    Example for how to calculate the root mean square fluctuation (RMSF) for each residue in a protein with MDAnalysis and NumPy. **A**: Based on the input simulation data (topology and trajectory in the Gromacs format (TPR and XTC), MDAnalysis makes coordinates of the selected |Calpha| atoms available as NumPy arrays. From these coordinates, the RMSF is calculated by averaging over all frames in the trajectory. The RMSF is then plotted with matplotlib_. The algorithm to calculate the variance in a single pass is due to Welford :cite:`Welford:1962aa`. **B**: |Calpha| RMSF for each residue. :label:`fig:rmsf-example`
 
-The example demonstrates how the abstractions that MDAnalysis provides enable users to write very concise code where the computations on data are cleanly separated from the task of extracting the data from the simulation trajectories.
+The example demonstrates how the abstractions that MDAnalysis provides enable users to write concise code where the computations on data are cleanly separated from the task of extracting the data from the simulation trajectories.
 These characteristics make it easy to rapidly prototype new algorithms.
 In our experience, most new analysis algorithms are developed by first prototyping a simple script (like the one in Figure :ref:`fig:rmsf-example`), often inside a Jupyter_ notebook (see section `Interactive Use and Visualization`_).
 Then the code is cleaned up, tested and packaged into a module.
@@ -412,7 +408,7 @@ This new data structure has lead to performance improvements in our whole code b
 The largest improvement is in accessing subsets of Atoms which is now over 40 times faster (Table :ref:`tab:performance-slicing-atomgroup`), an operation that is used everywhere in MDAnalysis.
 Speed-ups of a factor of around five to seven were realized for accessing Atom attributes for whole AtomGroup instances (Table :ref:`tab:performance-accessing-attributes`).
 The improved topology data structures are also much faster to initialize, which translates into speed-ups of about three for the task of loading a system from a file (for instance, in the Gromacs GRO format or the Protein Databank PDB format) into a `Universe` instance (Table :ref:`tab:performance-loading-gro`).
-Given that for systems with 10 M atoms this process used to take over 100 s, the reduction in load time down to a third is very valuable — and it came essentially "for free" as a by-product of improving the underlying topology data structures.
+Given that for systems with 10 M atoms this process used to take over 100 s, the reduction in load time down to a third is a substantial improvement — and it came essentially "for free" as a by-product of improving the underlying topology data structures.
 
 
 .. table:: Performance comparison of subselecting an AtomGroup from an existing one using the  new system (upcoming release v0.16.0) against the old (v0.15.0). Subselections were slices of the same size (82,056 atoms). Shorter processing times are better. The benchmarks systems were taken from the `vesicle library`_ :cite:`Kenney:2015aa` and are listed with their approximate number of particles ("# atoms"). Benchmarks were performed on a laptop with an Intel Core i5 2540M 2.6 GHz processor, 8 GB of RAM and a SSD drive. :label:`tab:performance-slicing-atomgroup`
@@ -495,7 +491,7 @@ Conclusions
 
 MDAnalysis provides a uniform interface to simulation data, which comes in a bewildering array of formats.
 It enables users to rapidly write code that is portable and immediately usable in virtually all biomolecular simulation communities.
-It has a very active international developer community with researchers that are expert developers and users of a wide range of simulation codes.
+It has an active international developer community with researchers that are expert developers and users of a wide range of simulation codes.
 MDAnalysis is widely used (the original paper :cite:`Michaud-Agrawal:2011fu` has been cited more than 195 times) and forms the foundation for more specialized biomolecular simulation tools.
 Ongoing and future developments will improve performance further, introduce transparent parallelization schemes to utilize multi-core and GPU systems efficiently, and interface with the `SPIDAL library`_ for high performance data analytics algorithms.
 
