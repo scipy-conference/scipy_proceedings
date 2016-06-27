@@ -184,6 +184,7 @@ When backwards-incompatible changes are inevitable, we provide tools (based on t
 .. _community mailing list: https://groups.google.com/forum/#!forum/mdnalysis-discussion
 .. _ENCORE: https://github.com/encore-similarity/encore
 .. _ProtoMD: https://github.com/CTCNano/proto_md
+.. _`ST-analyzer`: http://im.compbio.ku.edu/st-analyzer/
 .. _introductory tutorial: http://www.mdanalysis.org/MDAnalysisTutorial/
 .. _documentation: http://docs.mdanalysis.org
 .. _`MDAnalysis/mdanalysis`: https://github.com/MDAnalysis/mdanalysis
@@ -481,7 +482,8 @@ Other packages that use MDAnalysis
 The user interface and modular design work well in complex scripted work flows and for interactive work, as discussed in section `Interactive Use and Visualization`_.
 MDAnalysis also serves as foundation for other packages.
 For example, ProtoMD_ :cite:`Somogyi:2016aa`  is a toolkit that facilitates the development of algorithms for multiscale (MD) simulations and uses MDAnalysis for on-the-fly calculations of the collective variables that drive the coarse-grained degrees of freedom.
-The ENCORE_ package :cite:`Tiberti:2015fk` enables users to compare conformational ensembles generated either from simulations alone or synergistically with experiments. 
+The ENCORE_ package :cite:`Tiberti:2015fk` enables users to compare conformational ensembles generated either from simulations alone or synergistically with experiments.
+MDAnalysis is also the backend for `ST-analyzer`_ :cite:`Jeong:2014nx`, a standalone graphical user interface toolset to perform various trajectory analyses.
 MDSynthesis_ :cite:`Dotson:2016aa` (which is based on  datreant_ (Dotson et al, this issue)) gives a Pythonic interface to molecular dynamics trajectories using MDAnalysis, giving the ability to work with the data from many simulations scattered throughout the file system with ease. It makes it possible to write analysis code that can work across many varieties of simulation, but even more importantly, MDSynthesis allows interactive work with the results from hundreds of simulations at once without much effort.
 
 
