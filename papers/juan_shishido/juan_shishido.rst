@@ -149,12 +149,35 @@ essay group membership.
 Permutation Testing
 *******************
 
-Permutation testing ( WE DIDN"T END UP DOING THIS - SKIP?)
+Permutation testing
+
+Hypothesis testing provides ways to determine the likelihood of an observed
+test statistic under a null hypothesis. A permutation test uses randomization
+to compute that likelihood. There are several advantages to using randomization
+to make inferences. Traditional methods, such as t-tests or F-tests, assume
+that outcomes are independent and that they follow a normal distribution with
+mean :math:`\mu` and variance :math:`sigma^2` [Oeh10]_. In addition,
+permutation tests do not require large samples and "can be applied to all sorts
+of outcomes, including counts, durations, or ranks" [Ger12]_.
+
+Permutation tests provide an exact sampling distribution of a test statistic
+under the null hypothesis [Ger12]_. They do so by computing the test statistic
+for every way that labels can be associated with the observed data. In practice,
+permutations are rarely ever completely enumerated. Instead, the sampling
+distribution is approximated by randomly shuffling the labels :math:`P` times.
+
+To determine the likelihood of the observed test statistic, find the proportion
+of times that the absolute value of the permuted test statistics are greater
+than or equal to the absolute value of the observed test statistic. This is the
+:math:`p`-value for a two-tailed hypothesis. Permutation-based methods can be
+used to compare two samples or to assess the performance of classifiers[Oja10]_.
 
 TF-IDF
 ******
 
 Term frequency-inverse doument frequency
+
+
 
 Final Approach
 ~~~~~~~~~~~~~~
@@ -602,3 +625,13 @@ References
 .. [She13] Sheffield, Rob (2013). 10 Best Stoner Movies of All Time. Rolling
            Stones. Retrieved on June 23, 2016, from
            http://www.rollingstone.com/movies/lists/the-greatest-stoner-movies-of-all-time-20130606
+
+.. [Oeh10] Oehlert, Gary W (2010). A First Course in Design and Analysis of
+           Experiments.
+
+.. [Ger12] Gerber, Alan S. and Green, Donald P (2012). Field Experiments:
+           Design, Analysis, and Interpretation.
+
+.. [Oha10] Ojala, M., & Garriga, G. C. (2010). Permutation tests for studying
+           classifier performance. Journal of Machine Learning Research,
+           11(Jun), 1833-1863.
