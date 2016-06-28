@@ -2,6 +2,10 @@
 % mode at
 % http://http://nxg.me.uk/dist/textpos/textpos.pdf
 
+\newcommand\cf{c_f}
+\newcommand{\vol}{v}
+\newcommand{\eos}{f}
+\newcommand{\eosnom}{\tilde f}
 \newcommand{\argmin}{\operatorname*{argmin}}
 \newcommand{\argmax}{\operatorname*{argmax}}
 \newcommand{\normal}[2]{{\cal N}(#1,#2)}
@@ -67,6 +71,11 @@
 
 \begin{textblock}{23}(0,0) \Title{Functional UNcertainty Constrained
     by Law and Experiment (F \underline{U.N.C.L.E.})}
+\end{textblock}
+\begin{textblock}{2}(21,0)
+  \begin{center}
+    \resizebox{0.7\textwidth}{!}{\includegraphics{authors.jpg}}
+  \end{center}
 \end{textblock}
 
 \begin{textblock}{2}(0,12)
@@ -135,28 +144,111 @@
     \EV{X_k}{\left[\left. \frac{\partial^2}{\partial\theta^2} \log
           p(X_k;\theta)\right|\theta \right]}$
   \end{description}
+  % \vspace{2cm}
+  % \begin{center}
+  %   \vspace{2cm}
+  %   \resizebox{0.3\textwidth}{!}{\includegraphics{authors.jpg}} \\
+  %   Photograph of the authors
+  % \end{center}
+\end{textblock}
+\begin{textblock}{6}(0,8.7)
+  \LHead{Bibliography}
+  
+  Pemberton et al. "Test Report for Equation of State Measurements of
+  PBX-9501". LA-UR-11-04999, Los Alamos National Laboratory, Los
+  Alamos, NM.
 
-  \begin{align*}
-    x &= y \\
-    m &= \text{more}
-  \end{align*}
+  Hixson, R. S. et al., 2000. "Release isentropes of overdriven
+  plastic-bonded explosive PBX-9501."  \emph{J. Applied Physics}
+  \textbf{88} (11) pp. 6287-6293
+
+  Ficket, W. and Davis, W. C., 2000. "Detonation". University of
+  California Press: Berkeley, CA.
+
+  Andersen, M. and Vandenberghe, L.. "cvxopt\: Convex Optimization
+  Package" http://cvxopt.org
+
+  Jones, E., Oliphant, E., Peterson, P., et al. "SciPy\: Open Source
+  Scientific Tools for Python", 2001-, http://www.scipy.org
+
+  "F\_UNCLE: Functional Uncertainty Constrained by Law and Experiment".\\
+  LA-CC-16-034, Los Alamos National Laboratory,
+  https://github.com/fraserphysics/F\_UNCLE
+
+  % van der Walt, S. , Colbert, C. S.  and Varoquaux, G.. "The NumPy
+  % Array\: A Structure for Efficient Numerical Computation", Computing
+  % in Science \& Engineering, \textbf{13}, 22-30 (2011),
+  % `DOI:10.1109/MCSE.2011.37 <https://doi.org/10.1109/MCSE.2011.37>`
+
+  % Vaughan, D. E. and Preston, D. L. "Physical Uncertainty Bounds
+  % (PUB)". LA-UR-14-20441, Los Alamos National Laboratory, Los Alamos,
+  % NM.
+
+  % Hunter, J. D.. "Matplotlib\: A 2D Graphics Environment", Computing
+  % in Science \& Engineering, \textbf{9}, 90-95 (2007),
+  % `DOI:10.1109/MCSE.2007.55 <https://doi.org/10.1109/MCSE.2007.55>`
+\end{textblock}
+\newcommand\colB{7}
+\newcommand\colC{11}
+\newcommand\colD{15}
+\newcommand\colE{19}
+%%%%%%%%%Upper Right Row on EOS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\EOSY{1.3}
+\begin{textblock}{4}(\colB,\EOSY)
+  \LHead{Unknown EOS function}
+
   \resizebox{0.9\textwidth}{!}{\includegraphics{eos_nom_true.pdf}}\\
-  \resizebox{0.9\textwidth}{!}{\includegraphics{old/basis.pdf}} \\
+\end{textblock}
+\begin{textblock}{3.7}(\colC,\EOSY)
+  \begin{description}
+  \item[Pressure] unknown function, $p(\vol)$
+  \item[Spline] Represent functions as cubic splines with fixed knot
+    locations.  Optimize over coefficients.
+  \item[Prior] Gaussian with mean coefficients, $\cf[i]$, fit to
+    \begin{equation*}
+      \eosnom(\vol) = \frac{F}{\vol^3}, \text{ where } F \leftrightarrow
+      2.56\times10^9 \text{Pa} \text{ at one cm}^{3}\text{g}^{-1}
+    \end{equation*}
+    and variance
+    \begin{equation*}
+      \sigma^2[i] = \left( 0.05 \cdot\cf[i] \right)^2
+    \end{equation*}
+
+  \item[Constraints] Enforced by CVXOPT, (Not consistent with prior)
+    \begin{itemize}
+    \item Positive
+    \item Monotonic
+    \item Convex
+    \end{itemize}
+  \end{description}
+\end{textblock}
+\begin{textblock}{4}(\colD,\EOSY)
+  \begin{center}
+    \resizebox{0.7\textwidth}{!}{\includegraphics{old/basis.pdf}} \\
+    Cubic spline basis functions with first and second derivatives.
+  \end{center}
+\end{textblock}
+\begin{textblock}{4}(\colE,\EOSY)
+  \vspace{2cm}
+  \begin{center}
   \resizebox{0.9\textwidth}{!}{\includegraphics{real.pdf}}\\
+  Photon Doppler velocimetry (PDV) data and sequence of fits to
+  experiments on PBX-9501.
+  \end{center}
 \end{textblock}
 
 %%%%%%%%%Upper Right Row on Rate Stick%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand\StickY{1.3}
-\begin{textblock}{4}(7,\StickY)
+\newcommand\StickY{5}
+\begin{textblock}{4}(\colB,\StickY)
   \LHead{Rate Stick Experiment}\\
   \resizebox{0.9\textwidth}{!}{\includegraphics{stick.pdf}}\\
 \end{textblock}
 
-\begin{textblock}{4}(11,\StickY)
+\begin{textblock}{4}(\colC,\StickY)
   \resizebox{0.9\textwidth}{!}{\includegraphics{stick_xt.pdf}}\\
 \end{textblock}
 
-\begin{textblock}{4}(15,\StickY)
+\begin{textblock}{4}(\colD,\StickY)
   \resizebox{0.9\textwidth}{!}{\includegraphics{stick_CJ.pdf}}\\
   Detonation velocity from Chapman Jouguet conditions:
   \begin{itemize}
@@ -167,18 +259,18 @@
 
 \end{textblock}
 
-\begin{textblock}{4}(19,\StickY)
+\begin{textblock}{4}(\colE,\StickY)
   \resizebox{0.9\textwidth}{!}{\includegraphics{stick_fisher.pdf}}\\
 \end{textblock}
 
 %%%%%%%%Lower Right Row on Gun%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand\GunY{6}
-\begin{textblock}{4}(7,\GunY)
+\newcommand\GunY{9}
+\begin{textblock}{4}(\colB,\GunY)
   \LHead{Gun Experiment}\\
   \resizebox{0.9\textwidth}{!}{\includegraphics{gun.pdf}}\\
 \end{textblock}
 
-\begin{textblock}{3.5}(11,\GunY)
+\begin{textblock}{3.5}(\colC,\GunY)
   \begin{align*}
     F &= m\cdot a \\
     p(v)\cdot A &= m \cdot \frac{d^2}{d t^2} x \\
@@ -207,11 +299,11 @@
   
 \end{textblock}
 
-\begin{textblock}{4}(15,\GunY)
+\begin{textblock}{4}(\colD,\GunY)
   \resizebox{0.9\textwidth}{!}{\includegraphics{gun_tv.pdf}}\\
 \end{textblock}
 
-\begin{textblock}{4}(19,\GunY)
+\begin{textblock}{4}(\colE,\GunY)
   \resizebox{0.9\textwidth}{!}{\includegraphics{gun_fisher.pdf}}\\
 \end{textblock}
 
