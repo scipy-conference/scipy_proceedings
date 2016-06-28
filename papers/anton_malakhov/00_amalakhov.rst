@@ -32,17 +32,17 @@ Threading Composability
 -----------------------
 Our approach to solve these co-existence problems is to share one thread pool among all the program modules and native libraries so that one task scheduler will take care of composability between them. Intel(R) Threading Building Blocks (Intel TBB) library works as such a task scheduler in our solution. Intel TBB is a wide-spread and recognized C++ library for enabling multi-core parallelism. It was designed for composability and nested parallelism support from its foundation so that preventing of over-subscription is a specialization of this library.
 
-In the Intel® Distribution for Python* 2017 Beta, I introduce an experimental module which unlocks opportunities for additional performance for multi-threaded Python programs by enabling threading composability between two or more thread-enabled libraries. Threading composability can accelerate programs by avoiding inefficient threads allocation discussed above.
+In the Intel(R) Distribution for Python* 2017 Beta, I introduce an experimental module which unlocks opportunities for additional performance for multi-threaded Python programs by enabling threading composability between two or more thread-enabled libraries. Threading composability can accelerate programs by avoiding inefficient threads allocation discussed above.
 
-The module implements Pool class with the standard Python interface using Intel® TBB which can be used to replace Python’s ThreadPool. Thanks to the monkey-patching technique implemented in class Monkey, no source code change is needed in order to enable single thread pool across different Python modules. It also enables TBB-based threading layer for Intel(R) MKL which automatically enables composable parallelism for Numpy and Scipy calls.
+The module implements Pool class with the standard Python interface using Intel(R) TBB which can be used to replace Python’s ThreadPool. Thanks to the monkey-patching technique implemented in class Monkey, no source code change is needed in order to enable single thread pool across different Python modules. It also enables TBB-based threading layer for Intel(R) MKL which automatically enables composable parallelism for Numpy and Scipy calls.
 
 Using TBB module
 ----------------
-For our first experiment, we need Intel® Distribution for Python to be installed along with Dask library:
+For our first experiment, we need Intel(R) Distribution for Python to be installed along with Dask library:
 
 .. code-block:: shell
 
-    source <path to Intel® Distribution for Python*>/bin/pythonvars.sh
+    source <path to Intel(R) Distribution for Python*>/bin/pythonvars.sh
     conda install dask
 
 Now, let’s write a simple program in bench.py which exploits nested parallelism and prints time spent for the computation, like the following:
@@ -59,7 +59,7 @@ Now, let’s write a simple program in bench.py which exploits nested parallelism 
      
     print(time.time() - t0)
 
-Here, Dask splits the array into chunks and processes them in parallel using multiple threads. But each Dask task executes expensive matrix multiplication (`dot’) which is accelerated using Intel® MKL under the hood and thus multi-threaded by itself. It results in nested parallelism which is handled best with Intel® TBB.
+Here, Dask splits the array into chunks and processes them in parallel using multiple threads. But each Dask task executes expensive matrix multiplication (`dot’) which is accelerated using Intel(R) MKL under the hood and thus multi-threaded by itself. It results in nested parallelism which is handled best with Intel(R) TBB.
 
 To run it as is (baseline)::
 
