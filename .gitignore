@@ -2,3 +2,17 @@ output
 _build
 *.pyc
 *~
+*.ps
+/poster/eos_nom_true.pdf
+/poster/gun.pdf
+/poster/gun_fisher.pdf
+/poster/gun_tv.pdf
+/poster/old
+/poster/poster.aux
+/poster/poster.log
+/poster/poster.pdf
+/poster/real.pdf
+/poster/stick.pdf
+/poster/stick_CJ.pdf
+/poster/stick_fisher.pdf
+/poster/stick_xt.pdf
