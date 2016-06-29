@@ -175,9 +175,23 @@ used to compare two samples or to assess the performance of classifiers[Oja10]_.
 TF-IDF
 ******
 
-Term frequency-inverse doument frequency
+Term frequency-inverse document frequency
 
+Machine learning tasks require numerical inputs. There are several ways to
+represent text as numerical feature vectors. Features typically correspond to
+distinct tokens or to sequences of adjacent tokens. A token is a series of
+characters, such as a word, that is treated as a distinct unit [Bir10]_.
 
+One way to represent a corpus, or collection of text documents, is as a matrix
+of token counts. This weights terms by their absolute frequencies. In some
+cases, highly-wighted terms, such as "a" or "the," may not be very informative.
+Instead, token counts can be weighted using tf-idf.
+
+Tf-idf is the product of the term frequency and the inverse document frequency.
+The term frequency refers to the *relative* frequency of term :math:`t` in
+document :math:`d`. The inverse document frequency is the log of the total
+number of documents :math:`N` to the number of documents that contain term
+:math:`t`.
 
 Final Approach
 ~~~~~~~~~~~~~~
@@ -635,3 +649,6 @@ References
 .. [Oha10] Ojala, M., & Garriga, G. C. (2010). Permutation tests for studying
            classifier performance. Journal of Machine Learning Research,
            11(Jun), 1833-1863.
+
+.. [Bir10] Bird, S., Klein, E., & Loper E. (2010). Natural Language Processing
+           with Python.
