@@ -1,16 +1,18 @@
 :author: Sebastian Benthall
 :email: sb@ischool.berkeley.edu
-:institution: Ion Channel
+:institution: Ion Channel, ionchannel.io
 :institution: UC Berkeley School of Information
 :corresponding:
 
 :author: Travis Pinney
 :email: travis.pinney@ionchannel.io
-:institution: Ion Channel
+:institution: Ion Channel, ionchannel.io
 
 :author: Kit Plummer
 :email: kit.plummer@ionchannel.io
-:institution: Ion Channel
+:institution: Ion Channel, ionchannel.io
+:institution: kit.plummer@ionchannel.io
+
 
 ---------------------------------------------------------------
 An Ecological Approach to Software Supply Chain Risk Management
@@ -42,17 +44,18 @@ We are developing novel ways to manage software risk through
 supply chain intelligence, with a focus on open source software
 ecosystems.
 
-The Heartbleed bug in OpenSSL is anas an example of community failure
+The Heartbleed bug in OpenSSL is an example of community failure
 example of how vulnerabilities
 in open source software can be a major security risk. [Wheeler2014]_
 The recent failure of React, Babel, and many other NPM packages
-due to the removal of one 11 line dependency, ``left-pad``,
-shows how dependency complex itself can be a risk factor
+due to the removal of one small dependency, ``left-pad``,
+shows how dependencies can be a risk factor
 for production software. [Haney2016]_ 
+As dependencies become more numerous and interlinked, the 
+complexity of the system increases, as does the scope of risk management.
 Open source software projects make their source code and developer
 activity data openly available for analysis.
-Despite its openness, there are many ways this data can be used
-to mitigate software risk that have not been explored.
+This data can be used to mitigate software risk that have not been explored.
 
 With a small number of analytic assumptions about the propagation of vulnerability
 and exposure through the software dependency network, we have developed a model
@@ -89,12 +92,14 @@ projects based on large-scale analysis of SourceForge data, as well as survey an
 interview data. They define successful project as one that performs a useful function
 and has had at least three releases. They identify several key predictive factors to
 project success, including data that indicates usefulness (such as number of downloads),
-number of hours contributed to the project, 
+number of hours contributed to the project, and communicativeness of the project leader.
 
-Our approach synthesizes these precedents in computer security and software community analysis.
-We see risk analysis as a science that at its best adopts techniques from static analysis.
-However, we look not only at the source code of computing systems, but also more broadly
-at developers and their communications. We are looking for mathematically firm principles
+Our approach synthesizes these precedents in computer security and software 
+community analysis.
+We see risk analysis as a science that employs static analysis techniques, 
+but also looks more broadly at developer communities and the rate and flow 
+of their activities and communications.
+We are looking for mathematically firm principles
 of software supply chain risk management.
 
 As this supply chain resembles a complex ecosystem more than a simple 'chain' or stack,
@@ -117,23 +122,24 @@ Modeling Ecological Risk in Software
 Software dependency and project risk
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-While it has been suggested that using software dependency information can augment assessments 
-of project risk, suggested uses of this information are unspecific. This is partly due to a 
-larger problem, the ambiguity of how 'risk' is used in a software development context.
+While it has been suggested that using software dependency information can 
+augment assessments of project risk, suggested uses of this information 
+are unspecific. This is partly due to a larger problem: the ambiguity of 
+how 'risk' is used in a software development context.
 
-If we break down the sources of risk and how these effect the need for security investments analytically, 
-we can distinguish between several different factors.
+If we break down the sources of risk and how these affect the need for security 
+investments analytically, we can distinguish between several different factors.
 
-* Vulnerability. A software project's vulnerability is its intrinsic susceptability to attack. 
-  CVE data is about software vulnerability. Being written in a language in which it is hard to 
-  write secure code (such as C and C++) can be a predictor of vulnerability.
+* Vulnerability. A software project's vulnerability is its intrinsic susceptability to attack.  CVE data is about software vulnerability. Being written in a language in which it is hard to write secure code (such as C and C++) can be a predictor of vulnerability.
 * Exposure. A software project's exposure is its extrinsic availability to attack. Being directly exposed to a network is a source of exposure.
 
+
 Vulnerability and exposure are distinct elements of a software project's risk. 
-Analyzing them separately and then combining them in a principled way will give us a better understanding of a project's risk.
+Analyzing them separately and then combining them in a principled way gives us a better 
+understanding of a project's risk.
 
 Dependencies complicate the way we think about vulnerability and exposure. 
-A software project does not just include the code in its own repository; 
+A software project doesn't just include the code in its own repository; 
 it also includes the code of all of its dependencies. 
 And a project does not need to be installed directly to be exposed--it can be installed 
 as a dependency of another project. 
@@ -353,7 +359,7 @@ What explains this strange network structure? One reason is that
 there is much greater variation in out-degree than in in-degree.
 :label:`odtable` shows the top ten most depended on packages.
 :label:`idtable` shows the top ten packages with the most dependencies.
-Four packages, ``requests``, ``six``, ``django``, and ``pyyaml`` have
+Three packages, ``requests``, ``six``, and ``django``  have
 out-degree over 1000. 
 
 .. table:: Top ten most depended on packages. :label:`odtable`
@@ -412,7 +418,7 @@ out-degree over 1000.
 .. figure:: exposure-vulnerability-plot.png
    :figclass: bht
 
-   Hex plot of log vulnerbality and log exposure of each package, with bin density scored on log scale. All logs are base 10. Exposure is more widely distributed than vulnerability, the vast majority of packages score low. There is a fringe of packages that are either highy vulnerable, highly exposed, or both. There is a log-linear tradeoff between high vulnerability and high exposure. This is most likely due to the fact that ecosystem vulnerability and ecosystem exposure both depend on an package's position in the dependency network. 
+   Hex plot of log vulnerability and log exposure of each package, with bin density scored on log scale. All logs are base 10. Exposure is more widely distributed than vulnerability. Vulnerability scores for the vast majority of packages are low. There is a fringe of packages that are either highly vulnerable, highly exposed, or both. There is a log-linear tradeoff between high vulnerability and high exposure. This is most likely due to the fact that ecosystem vulnerability and ecosystem exposure both depend on an package's position in the dependency network. 
 
 Computing fragility and exposure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -423,7 +429,7 @@ depending on the hazards and threats under consideration.
 In the example of this study, we will define these variables with
 an interest in the general prediction of robustness in widely used
 software.
-This sort of analysis would be useful in, for example, determining
+This sort of analysis would be useful in determining
 which software packages are in need of further investment in order
 to reduce risk globally.
 
@@ -510,20 +516,21 @@ example) and software resilience (capacity of software development communities
 to respond to known exploits).
 
 While we have in this work considered the entire software ecosystem compressed
-into a single static graph, in fact the software ecosystem is always changing
-in time.
-Both package dependencies and metadata variables that proxy for exposure and
+into a single static graph, in fact the software ecosystem is always changing.
+Package dependencies and metadata variables that proxy for exposure and
 vulnerabilty change over time.
 In future work we will develop a dynamic version of this risk-management algorithm.
 
 The research presented here deals exclusively with data about technical organization.
-However, as we expand into research into how software developers and their interactions
-are predictive of software risk, we encounter interesting ethical questions.
+However, as we expand into research into how software communities and their interactions
+are predictive of software risk, we must be mindful of ethical considerations.
 Though all the data we intend to use is public and more importantly known
 to be public in the context of software development, study of human subjects is
 nevertheless sensitive.
 Our research agenda depends critically on maintaining the trust of the developer
 communities we study.
+For this reason we are dedicated to ecosystems and software projects,
+which aggregate individual efforts, as the fundamental unit of analysis.
 
 
 Acknowledgements
