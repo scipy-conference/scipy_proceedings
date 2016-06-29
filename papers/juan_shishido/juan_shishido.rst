@@ -101,8 +101,14 @@ a tfidf matrix was created with unigrams, bigrams and trigrams, dropping words
 with <0.01 document frequency.
 
 To reduce cardinality, we combined demographic categories. For example,there
-were 7,648 unique values for languages spoken, so we reduced the language
-category to a number representing the number of languages listed by the user. (NEED A RELEVANT EXAMPLE - DIDN"T USE LANG)
+were several unique values for self-identified ethnicity, including people who
+identified as more than one. We combined these people into a "mixed"
+category and thus reduced the number of categories for ethnicity. 
+(BOTH DRUGS AND GENDER DID NOT HAVE A REDUCTION IN CATEGORIES.
+BUT ETHNICITY MAY COME UP IN FUTURE WORK???)
+
+Furthermore, not all users provided an answer for each demographic
+question, such as drug usage. We replaced these answers with "unknown."
 
 Methodology
 -----------
@@ -113,7 +119,8 @@ Algorithms
 Logistic Regression
 *******************
 
-Logistic regression
+Logistic regression (DO WE NEED TO EXPLAIN THIS? IT'S QUITE 
+SELF-EXPLANATORY IMHO. UNLESS WE DID SOMETHING WEIRD)
 
 Log-Odds-Ratio
 **************
