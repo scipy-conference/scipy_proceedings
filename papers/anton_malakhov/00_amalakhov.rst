@@ -47,10 +47,10 @@ For our first experiment, we need Intel |R| Distribution for Python* :cite:`inte
 
 .. code-block:: sh
 
-    # install Intel |R| Distribution for Python*
+    # install Intel(R) Distribution for Python*
     <path to installer of the Distribution>/install.sh
     # setup environment
-    source <Intel |R| Distribution for Python*>/bin/pythonvars.sh
+    source <path to the Distribution>/bin/pythonvars.sh
     # install Dask
     conda install dask
 
@@ -86,10 +86,11 @@ Here, Dask splits the array into 10 chunks and processes them in parallel using 
 Let's run it in 3 different modes:
 
 .. code-block:: sh
+    :linenos:
 
-    python bench.py              # Default MKL
+    python bench.py                   # Default MKL
     OMP_NUM_THREADS=1 python bench.py # Serial
-    python -m TBB bench.py    # Intel TBB mode
+    python -m TBB bench.py            # Intel TBB mode
 
 .. figure:: dask_qr_bench.png
    
