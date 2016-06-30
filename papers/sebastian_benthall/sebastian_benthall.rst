@@ -8,6 +8,10 @@
 :email: travis.pinney@ionchannel.io
 :institution: Ion Channel, ionchannel.io
 
+:author: JC Herz
+:email: jnhq@yahoo.com
+:institution: Ion Channel, ionchannel.io
+
 :author: Kit Plummer
 :email: kit.plummer@ionchannel.io
 :institution: Ion Channel, ionchannel.io
@@ -536,7 +540,7 @@ which aggregate individual efforts, as the fundamental unit of analysis.
 Acknowledgements
 ----------------
 
-We gratefully acknowledge JC Herz for her helpful comments.
+We gratefully acknowledge David Lippa for his helpful comments.
 
 References
 ----------
