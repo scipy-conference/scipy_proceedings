@@ -34,30 +34,28 @@ attributes in their online profiles.
 Introduction
 ------------
 
-Online dating has become a common way of finding mates, with 22% of 25-34 year
-olds having used online dating [Pew15]_. Previous studies suggest that the
-free text portion of online dating profiles is an important factor (after
-photographs) for assessing attractiveness [Fio08]_. Research into the
-principle of homophily suggests that people tend to associate and bond with
-similar others and that this principle strongly structures social networks and
-ties, most prominently by race and ethnicity [McP01]_. Perhaps not
+The way that people self-present online has broad implications for the
+relationships they pursue. Online dating has become a common way of finding
+mates, with 22% of 25-34 year olds having used online dating [Pew15]_. Previous
+studies suggest that the free text portion of online dating profiles is an
+important factor (after photographs) for assessing attractiveness [Fio08]_.
+Research into the principle of homophily suggests that people tend to associate
+and bond with similar others and that this principle strongly structures social
+networks and ties, most prominently by race and ethnicity [McP01]_. Perhaps not
 surprisingly, research suggests that homophily extends to online dating, with
-people seeing mates similar to themselves [Fio05]_. However, it remains unclear
-if people within a particular demographic group self-present in a similar way
-when searching for a mate online.
+people seeking mates similar to themselves [Fio05]_. However, it remains
+unclear if people within a particular demographic group self-present in similar
+ways when searching for a mate online.
 
-The original intent of this project was to analyze demographic trends in
-self-presentation in online profiles. Specifically, we were interested in
-whether demographic groups are distinct in the ways in which they present
-themselves online, and specifically whether people from different demographic
-groups would self-present in distinct ways. We extended the previous natural
-language processing analyses of online dating [Nag09]_ by combining natural
-language processing with machine learning on a larger scale. We leveraged
-multiple approaches including clustering and topic modeling, as well as feature
-selection and modeling strategies. By exploring the relationship between free
-text self-descriptions and demographics, we find that we can predict a user's
-demographic makeup based on their user essays, and we discover some unexpected
-insights into deception.
+In this paper, we analyze demographic trends in online self-presentation. We
+were interested in learning whether demographic groups are distinct in the ways
+in which they self-present online. We extend previous natural language
+processing (NLP) analyses of online dating [Nag09]_ by combining NLP with
+machine learning on a larger scale. We leveraged multiple approaches including
+clustering and topic modeling as well as feature selection and modeling
+strategies. By exploring the relationship between free text self-descriptions
+and demographics, we find that we can predict a user's demographic makeup and
+discover some unexpected insights into deception.
 
 Data
 ----
