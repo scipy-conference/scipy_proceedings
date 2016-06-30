@@ -63,12 +63,16 @@ Data
 Description
 ~~~~~~~~~~~
 
-The data was obtained from: https://github.com/everett-wetchler/okcupid
-[Wet15]_. Profile information from 59,000+ OkCupid users that were online on
-06/30/2012. The users were within 25 miles of the San Francisco Bay Area. Each
-profile contains the user’s height, body type, religion, ethnicity, religion,
-as well as 10 essays on different topics. Each profile consisted of 10 free-text essays for text
-analysis and the demographic data for categorical grouping.
+The data was obtained from Albert Y. Kim's JSE_OkCupid repository[1]_. Profile
+information is available for 59,946 OkCupid users that were members as of
+06/26/2012, lived within 25 miles of San Francisco, had been active in the
+previous year, and had at least one photo in their profile [Wet12]_.
+The data set contains free-text responses to 10 essay prompts as well as the
+following user characteristics: age, body type, diet, drinking status, drug
+usage status, education level, ethnicity, height, income, job type, location,
+number of childrem, sexual orientation, attitude toward pets, religion, sex,
+astrological sign, smoking status, number of language spoken, and relationship
+status.
 
 Preprocessing
 ~~~~~~~~~~~~~
@@ -596,6 +600,14 @@ Acknowledge
 ..      :usepackage: somepackage
 
 ..      Some custom LaTeX source here.
+
+Footnotes
+---------
+.. [1] https://github.com/rudeboybert/JSE_OkCupid. Our original data source was
+       Everett Wetchler's okcupid repository (https://github.com/everett-wetchler/okcupid).
+       However, after commit ``0d62e62``, in which the data was "fully
+       anonimized" to exclude essays, we switched to Kim's repository. As far
+       as we can tell, this data set is the same as the Wetchler original.
 
 References
 ----------
