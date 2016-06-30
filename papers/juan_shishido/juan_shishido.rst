@@ -194,38 +194,51 @@ document :math:`d`. The inverse document frequency is the log of the total
 number of documents :math:`N` to the number of documents that contain term
 :math:`t`.
 
-Final Approach
-~~~~~~~~~~~~~~
+Approach
+~~~~~~~~
+
+Our analyses focus on two demographic dimensions—sex and drug usage—and on two
+essays—"my self summary" and "favorite books, movies, shows, music, food."
 
 We began by exploring the lexical features of the text. Our goal was to
 determine whether there existed inherent differences in writing styles by
 demographic split. We considered essay length, the use of profanity and slang
 terms, and part-of-speech usage.
 
-Essay length was determined based on the tokenized essays.
-This emphasized content words (IS THIS TRUE - DID YOU REMOVE STOPWORDS?), and did not
-inflate the length estimate with urls and stopwords.
+Essay length was determined based on the tokenized essays. We used spaCy's
+default tokenizer, which is well suited for online communication as it
+maintains emoticons as discrete tokens, and removed punctuation.
 
 A list of profane words was obtained from the "Comprehensive Perl Archive
 Network" website. Slang terms include words such as "dough," which refers to
-money, and acronyms like "LOL". These terms come from the Wiktionary Category:Slang page.
-Note that there is overlap between the profane and slang lists.
-(BE SPECIFIC WHAT DID WITH THE SLANG)
+money, and acronyms like "LOL." These terms come from the Wiktionary
+Category:Slang page. Note that there is overlap between the profane and slang
+lists.
 
-Finally, differences in the types of words used by different groups of individuals were analyzed.
-For example, do certain users use verbs more often than other groups of users?
-Each token in the corpus was associated with a lexical category (part of speech)
-by using spaCy's part-of-speech tagger. The use of spaCy's coarse-grained
-tags (19) maintained low-cardinality. These tags expand upon
-Petrov, Das, and McDonald's universal part-of-speech tagset. (CITE)
+Each token in the corpus was associated with a lexical category using spaCy's
+part-of-speech tagger. spaCy supports 19 coarse-grained tags that expand upon
+Petrov, Das, and McDonald's universal part-of-speech tagset [Pet11]_.
 
-Text semantics were also analysed in addition to lexical characteristics.
-Non-negative matrix factorization (NMF) was used to identify latent structure in the text.
-This structure is in the form of "topics" or "clusters" which can be described
-by particular tokens. In order to determine whether particular demographics were more likely to
-write about particular topics, the distribution of users across topics was calculated relative to each demographic group.
+Differences in lexical features by demographic were analyzed using permutation
+testing. We first compared average essay length by sex. Next, we examined
+whether the proportion of females using profanity was different than the
+proportion of males using such terms. The same was done for slang. Finally, we
+compared the average proportion of adjectives, nouns, and verbs and identified
+the most distinctive terms in each lexical category by sex using the smoothed
+log-odds-ratio that accounts for variance.
 
-LOG ODDS RATIO?
+Text semantics were also analyzed. Non-negative matrix factorization (NMF) was
+used to identify latent structure in the text. This structure is in the form of
+"topics" or "clusters" which can be described by particular tokens. This was
+done for both essays. In order to determine whether particular demographics
+were more likely to write about particular topics, the distribution of users
+across topics was calculated relative to each demographic group. In cases where
+we are able to create superordinate groupings from NMF topics—for example, by
+combining semantically similar clusters—we use the log-odds-ratio to find
+distinctive tokens.
+
+Finally, we fit a logistic regression model to predict drug usage status for
+users in the "unknown" category.
 
 Results
 -------
@@ -233,9 +246,7 @@ Results
 In this section, we describe our findings. We start with a discussion of our
 lexical-based analyses before discussing our semantic-based results.
 Lexical-based characteristics include essay length, use of profanity and slang
-terms, as well as part-of-speech usage. Our analyses focus on two demographic
-dimensions—sex and drug usage—and on two essays—"my self summary" and "favorite
-books, movies, shows, music, food."
+terms, as well as part-of-speech usage.
 
 We first compare lexical-based characteristics on the self-summary text by sex.
 Our sample includes 21,321 females and 31,637 females. Note that the difference
