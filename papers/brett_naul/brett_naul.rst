@@ -66,13 +66,14 @@ In an era when more time series data are being collected than can be visually
 inspected by domain experts, however, computational frameworks must necessarily
 act as human surrogates. Capturing the subtleties that domain experts intuit in
 time series data (and perhaps even besting the experts) is a non-trivial task.
-In this respect, machine learning (ML) has already been used to great success
+In this respect, machine learning has already been used to great success
 in several disciplines, including text classification, image retrieval,
 segmentation of remote sensing data, internet traffic classification, video
 analysis, and classification of medical data. Even if the results are similar,
-some obvious advantages over human involvement are that ML algorithms are
-tunable, repeatable, and deterministic. A computational framework built with
-elasticity can scale, whereas experts (and even crowdsourcing) cannot.
+some obvious advantages over human involvement are that machine learning
+algorithms are tunable, repeatable, and deterministic. A computational
+framework built with elasticity can scale, whereas experts (and even
+crowdsourcing) cannot.
 
 Despite the importance of time series in scientific research, there are few
 resources available that allow domain scientists to easily build robust
@@ -128,9 +129,9 @@ more informed decisions.
 2. **Neuroscience time series classification.** The study of
 neural systems presents a wide variety of challenges in time series
 analysis, made more pressing by the growing volume of high-quality,
-heterogenous sensor data that cannot be effectively inspected visually.
+heterogeneous sensor data that cannot be effectively inspected visually.
 Indeed, neuroscience experiments now produce vast amounts of time series
-data that can have very different structures, spatial resolution, and
+data that can have entirely different structures, spatial resolution, and
 temporal resolution, depending on the recording technique.
 Ultimately, we wish to connect complex recorded output to high-level
 cognition patterns:
@@ -191,17 +192,17 @@ Simple and reproducible workflows
 =================================
 One bold contention—if only in light of our impetus to produce reproducible
 science—is that all inputs demanding some form of classification or annotation
-statement should be piped through an ML-based framework. To this end, there has
-been growing availability of many open-source tools that implement near
-cutting-edge ML algorithms: packages within the R [?] and Python programming
+statement should be piped through a machine learning-based framework. To this end, there has
+been growing availability of many open-source tools that implement a wide variety of
+machine learning algorithms: packages within the R [?] and Python programming
 languages [?], standalone Java-based packages such as Moa [?] and Weka [?],
 and online webservices such as the Google Prediction API. To a domain scientist
-that does not have a formal training in ML, however, the availability of such
+that does not have a formal training in machine learning, however, the availability of such
 packages are both a blessing and a curse. On one hand, everyone now has access
-to cutting edge ML algorithms. But on the other, these algorithms tend to be
-black boxes with a few enigmatic knobs to turn. A domain scientist may
-rightfully ask just which of the many algorithms to use, which parameters to
-tune, and what the results actually mean.
+to nearly every conceivable machine learning algorithm. But on the other, these
+algorithms tend to be black boxes with a few enigmatic knobs to turn. A domain
+scientist may rightfully ask just which of the many algorithms to use, which
+parameters to tune, and what the results actually mean.
 
 Building a functioning machine learning pipeline involves much more than
 choosing a mathematical model for your data. The goal of ``cesium`` is to
@@ -246,7 +247,7 @@ extraction codes and must run on thousands or more of time series per night. The
 ``featurize`` module allows users to select from a large library of
 features, including both general time series features and domain-specific 
 features drawn from various scientific disciplines. Some other advantages of
-the ``featurize`` module include: support for both evenly- and unevenly-spaced
+the ``featurize`` module include: support for both evenly and unevenly spaced
 time series (i.e., where the time between samples is not constant); ability to
 incorporate measurement errors, which can be provided for each data point of
 each time series; and support for multi-channel data, for which features are
@@ -346,7 +347,7 @@ following features:
  - Downloads of Jupyter notebooks to replicate analyses (in progress).
 
 .. [#isolation] Isolation is currently provided by limiting the user
-                to non-privileged access inside a Docker container.  This
+                to non-privileged access inside a Docker container. This
                 does not theoretically guarantee 100% isolation.
 
 
@@ -362,28 +363,28 @@ These types of calls are designed for short-lived request-answer
 sessions: the answer has to come back before the connection times out,
 otherwise the front end is responsible for implementing logic for
 recovery. When the back end has to deal with a longer running task,
-the front end typically polls repeatedly to see when it is done.  Other
+the front end typically polls repeatedly to see when it is done. Other
 solutions include long polling or server-side events.
 
 In our situation, tasks execute on the order of several (sometimes
-tens of) minutes.  This situation can be handled gracefully using
+tens of) minutes. This situation can be handled gracefully using
 WebSockets |---| the caveat being that these can be intimidating to set
 up, especially in Python.
 
 We have implemented a simple interface for doing so that we informally
-call *message flow*.  It adds WebSocket support to any Python WSGI
+call *message flow*. It adds WebSocket support to any Python WSGI
 WSGI server (Flask, Django[^#channels], Pylons, etc.), and allows scaling up as demand
 increases.
 
 A detailed writup of *message flow* can be found on the Cesium blog at
-<INSERT URL>.  It allows us to implement trivially modern data flow
+<INSERT URL>. It allows us to implement trivially modern data flow
 models such as `Flux <https://facebook.github.io/flux/>`_, where
 information always flows in one direction: from front end to bac kend
 via API calls, and from back end to front end via WebSocket
 communication.
 
 .. [^channels] At PyCon2016, Andrew Godwin presented a similar
-               solution for Django called "channels".  The work
+               solution for Django called "channels". The work
                described here happened before we became aware of
                Andrew's, and generalizes beyond Django to, e.g.,
                Flask, the web framework we use.
@@ -394,15 +395,14 @@ While the deployment details of the web front end are beyond the scope of this p
 should be noted that it was designed with scalibility in mind.
 
 An NGINX proxy exposes a pool of websocket and WSGI servers to the
-user.  This gives us the flexibility to choose the best implementation
-of each.  Communications between WSGI servers and WebSocket servers
+user. This gives us the flexibility to choose the best implementation
+of each. Communications between WSGI servers and WebSocket servers
 happen through a `ZeroMq <http://zeromq.org/>`_ XPUB-XSUB pipeline
 (but can be replaced with any other broker, e.g., `RabbitMQ
 <https://blog.pivotal.io/pivotal/products/rabbitmq-hits-one-million-messages-per-second-on-google-compute-engine>`_).
 
-The overarching design principle is to connect together several, small
-component, each performing only one, simple task |---| the one it was
-designed for.
+The overarching design principle is to connect several, small component, each
+performing only one, simple task |---| the one it was designed for.
 
 Computational Scalability
 -------------------------
@@ -452,7 +452,7 @@ notebook versions are available for every example workflow.
 Example EEG dataset analysis
 ============================
 In this example we'll compare various techniques for epilepsy detection using a
-classic EEG time series dataset from Andrzejak et al. [?].  The raw data are
+classic EEG time series dataset from Andrzejak et al. [?]. The raw data are
 separated into five classes: Z, O, N, F, and S; we will consider a three-class
 classification problem of distinguishing normal (Z, O), interictal (N, F), and
 ictal (S) signals. We'll show how to perform the exact same analysis using both
