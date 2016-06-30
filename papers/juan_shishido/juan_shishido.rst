@@ -86,29 +86,23 @@ as well as 10 essays on different topics. Each profile consisted of 10 free-text
 analysis and the demographic data for categorical grouping.
 
 Preprocessing
-~~~~~~~~~~
+~~~~~~~~~~~~~
 
-The analysis was focused on on two separate essays: "My Self Summary" and "Favorite Books, Movies, TV."
+Line break characters and URLs were removed from the essay text. Multiple
+periods, dashes, and white spaces were replaced by single instances. Users who
+wrote less than 5 words for a given essay—this was determined by splitting the
+text on white space—were removed from the analysis.
 
-Essay text was first cleaned by removing line break characters, urls, and stripping white
-spaces. If a user wrote less than 5 words for the given essay, s/he was removed
-from the analysis. Finally, stopwords and punctuation were removed.
+We combined levels for 10 demographic variables with multiple categories. For
+example, there were several unique values for self-identified ethnicity,
+including people who identified as more than one. We grouped these individuals
+into a "multi-ethnic" category in order to reduce the cardinality in ethnicity.
+For drug usage, users who responded "sometimes" or "often" were grouped into a
+"yes" category. Individuals who answered "never" were assigned to the "no"
+group and we created an "unknown" category for users who did not answer.
 
-The essay was tokenized using the happyfuntokenizer
-(http://sentiment.christopherpotts.net/tokenizing.html) (CITE, LINK?), which is well suited
-for online communication as it maintains emoticons as discrete tokens. Finally,
-a tfidf matrix was created with unigrams, bigrams and trigrams, dropping words
-with <0.01 document frequency.
-
-To reduce cardinality, we combined demographic categories. For example,there
-were several unique values for self-identified ethnicity, including people who
-identified as more than one. We combined these people into a "mixed"
-category and thus reduced the number of categories for ethnicity. 
-(BOTH DRUGS AND GENDER DID NOT HAVE A REDUCTION IN CATEGORIES.
-BUT ETHNICITY MAY COME UP IN FUTURE WORK???)
-
-Furthermore, not all users provided an answer for each demographic
-question, such as drug usage. We replaced these answers with "unknown."
+The 10 demographic variables that were recategorized were: religion, job, drugs,
+diet, body type, drinks, sign, ethnicity, pets, and speaks.
 
 Methodology
 -----------
