@@ -17,32 +17,19 @@ Tell Me Something I Don't Know: Analyzing OkCupid Profiles
 
 .. class:: abstract
 
-The way that people self-present online while dating has broad implications for
-the relationships they pursue. Here we present an analysis of 59,000+ OkCupid
-user profiles that examines word usage patterns across sexual orientations,
-drug usage status, and ethnicities. We find that individuals in particular
-demographic groups self-present in consistent ways. Our results also suggest
-that users may unintentionally reveal demographic attributes in their online
-profiles.
-
-In this paper we analyze online self-presentation by combining natural language
-processing (NLP) with machine learning. We use this approach to motivate a
-discussion of how to successfully mine text data. We describe our initial
-approach, explain why it was problematic, and discuss modifications that made
-it successful. In doing so, we review standard NLP techniques, challenge
-accepted "norms," and cover several ways to represent text data. We explain
-clustering and topic modeling, including k-means and nonnegative matrix
-factorization, and discuss why we chose the latter. We then present unexpected
-similarities between self-identified drug users and those who declined to
-reveal their drug status. Finally, we discuss utilizing permutation testing for
-identifying deceit in online self-presentation and discuss how we're working to
-extend this analysis.
-
-This work was completed using SciPy, NumPy, pandas, Scikit-Learn, and NLTK.
+In this paper, we present an analysis of 59,000 OkCupid user profiles that
+examines online self-presentation by combining natural language processing
+(NLP) with machine learning. We analyze word usage patterns by sex and drug
+usage status. In doing so, we review standard NLP techniques, cover several
+ways to represent text data, and explain topic modeling. We find that
+individuals in particular demographic groups self-present in consistent ways.
+Our results also suggest that users may unintentionally reveal demographic
+attributes in their online profiles.
 
 .. class:: keywords
 
-   natural language processing, machine learning, okcupid, online dating
+   natural language processing, machine learning, topic modeling, okcupid,
+   online dating
 
 Introduction
 ------------
