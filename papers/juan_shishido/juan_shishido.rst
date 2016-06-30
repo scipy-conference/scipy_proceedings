@@ -63,7 +63,7 @@ Data
 Description
 ~~~~~~~~~~~
 
-The data was obtained from Albert Y. Kim's JSE_OkCupid repository[1]_. Profile
+The data was obtained from Albert Y. Kim's JSE_OkCupid repository [1]_. Profile
 information is available for 59,946 OkCupid users that were members as of
 06/26/2012, lived within 25 miles of San Francisco, had been active in the
 previous year, and had at least one photo in their profile [Wet12]_.
