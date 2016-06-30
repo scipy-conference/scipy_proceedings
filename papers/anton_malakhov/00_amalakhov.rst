@@ -89,7 +89,7 @@ Let's run it in 3 different modes:
     :linenos:
 
     python bench.py                   # Default MKL
-    OMP_NUM_THREADS=1 python bench.py # Serial
+    OMP_NUM_THREADS=1 python bench.py # Serial MKL
     python -m TBB bench.py            # Intel TBB mode
 
 .. figure:: dask_qr_bench.png
@@ -101,6 +101,8 @@ Figure :ref:`qrpic` shows times (lower is better) acquired on 32-core (no HT) ma
 The second command runs this benchmark with innormost OpenMP parallelism disabled. It results in the worst performance for Numpy version since everything is now serialized. And Dask version is not able to close the gap completely since it has only 10 tasks which can run in parallel while Numpy with parallel MKL is able to utilize the whole machine with 32 threads.
 
 The last command demostrates how Intel TBB can be enabled as orchestrator of multi-threaded modules. TBB module runs the benchmark in context of :code:`with TBB.Monkey():` which replaces standard Python *ThreadPool* class used by Dask and also switches MKL into TBB mode. Numpy with TBB shows more than double time comparing to default Numpy run. This happens because TBB-based threading in MKL is new and not as optimized as OpenMP-based MKL threading implementation. But despite that fact, Dask in TBB mode shows the best performance for this benchamark, more than 50% improvement comparing to default Numpy. This happens because the Dask version exposes more parallelism to the system without oversubscription overheads, hiding latencies of serial regions and fork-join synchronization in MKL functions.
+
+.. [#] For more complete information about compiler optimizations, see our Optimization Notice
 
 Case study
 ----------
@@ -114,6 +116,8 @@ Previous example was intentionaly selected to be small enough to fit into this p
 The leftmost result was acquired on pure, non-accelerated Python which comes by default on Fedora 23. It is the base. Running the same application without modifications with Intel |R| Distribution for Python* results in 17x times speedup. One reason for this performance increase is that Intel |R| MKL runs computations in parallel. Thus for sake of experiment, outermost parallelism was implemented on the application level processing different user requests in parallel. For the same system-default python the new version helped to close the gap with MKL-based version though not completely: with x15 times faster than the base. However, running same parallel application with Intel Distribution resulted in worse performance (11x). This is explained by overheads induced by oversubscription.
 
 In order to remove overheads, previous experiment was executed with TBB module on the command line. It results in the best performance for the application - x27 times speedup against the base.
+
+.. [#] For more complete information about compiler optimizations, see our Optimization Notice
 
    
 Numba
@@ -131,6 +135,14 @@ Disclaimers
 -----------
 TBB module does not work well for blocking I/O operations, it is applicable only for tasks which do not block in the operating system. This version of TBB module is experimental and might be not sufficiently optimized and verified with different use-cases. In particular, it does not yet use master thread efficiently as regular TBB program is supposed to do. But all these problems well go away as more users will be interested in solving theirs composability issues and the TBB module is further developed.
 
+References
+----------
+.. [ParUniv] Vipin Kumar E.K. *A Tale of Two High-Performance Libraries*,
+             The Parallel Universe Magazine, Special Edition, 2016.
+             https://software.intel.com/en-us/intel-parallel-universe-magazine
+
+.. figure:: opt-notice-en_080411.png
+   :figclass: b
 .. |C| unicode:: 0xA9 .. copyright sign
    :ltrim:
 .. |R| unicode:: 0xAE .. registered sign
