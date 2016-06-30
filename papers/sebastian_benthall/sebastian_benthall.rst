@@ -9,13 +9,15 @@
 :institution: Ion Channel, ionchannel.io
 
 :author: JC Herz
-:email: jnhq@yahoo.com
+:email:  jc.herz@ionchannel.io
+:institution:  jc.herz@ionchannel.io
 :institution: Ion Channel, ionchannel.io
+
 
 :author: Kit Plummer
 :email: kit.plummer@ionchannel.io
-:institution: Ion Channel, ionchannel.io
 :institution: kit.plummer@ionchannel.io
+:institution: Ion Channel, ionchannel.io
 
 
 ---------------------------------------------------------------
