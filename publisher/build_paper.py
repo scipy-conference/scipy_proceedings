@@ -169,7 +169,7 @@ def tex2pdf_singlepass(out_path):
                 cwd=out_path,
                 )
         out_bib, err = run.communicate()
-        if err or 'Error' in out_bib:
+        if err or 'Error' in out_bib.decode():
             print("Error compiling BiBTeX")
             return out_bib, False
 
