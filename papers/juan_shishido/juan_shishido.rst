@@ -323,8 +323,7 @@ Other users focused on describing the types of activities they enjoyed. Hiking,
 traveling, and cooking were popular choices. Others chose to mention what they
 were looking for, whether that be a long-term relationship, a friendship, or
 sex. Topics and a selection of their highest weighted tokens are summarized in
-the table below. (Note that a complete list of the 50 highest weighted tokens
-for each topic is available in the appendix.)
+the table below.
 
    +----------------+---------------------------------------------------------+
    | Topic          | Tokens                                                  |
@@ -427,6 +426,10 @@ exception is with the "enthusiastic" group, which females belong to at almost
 twice the rate of males. Users in this group use modifiers such as, "love,"
 "really," and "absolutely" regardless of the activities they are describing.
 
+.. figure:: self-summary-sex.png
+
+   Self-Summaries
+
 We can further examine online self-presentation by considering the other
 available essays in the OkCupid data set. It has been noted that, "people do
 actually define themselves through music and relate to other people through
@@ -444,7 +447,8 @@ selection of their highest weighted tokens.
    +----------------+---------------------------------------------------------+
    | Topic          | Tokens                                                  |
    +================+=========================================================+
-   |                |                                                         |
+   | like           | like, music like, movies like, really like, stuff,      |
+   |                | food like, things, like music, books like, like movies  |
    +----------------+---------------------------------------------------------+
    | TV-hits        | mad men, arrested development, breaking bad, 30 rock,   |
    |                | tv, parks, sunny, wire, dexter, office                  |
@@ -452,7 +456,10 @@ selection of their highest weighted tokens.
    | enthusiastic   | love food, love music, love movies, love love, cook,    |
    |                | love good, eat, food, love read, books love             |
    +----------------+---------------------------------------------------------+
-   |                |                                                         |
+   | favorite-0     | favorite, favorite food, favorite movies,               |
+   |                | favorite books, favorite music, favorite movie,         |
+   |                | favorite book, favorite shows, favorite tv,             |
+   |                | time favorite                                           |
    +----------------+---------------------------------------------------------+
    | genres-movies  | sci fi, action, comedy, horror, fantasy, movies, drama, |
    |                | romantic, classic, adventure                            |
@@ -460,27 +467,36 @@ selection of their highest weighted tokens.
    | genres-music   | hip hop, rock, r&b, jazz, reggae, rap, pop, country,    |
    |                | classic, old                                            |
    +----------------+---------------------------------------------------------+
+   | misc-0         | fan, reading, food 'm, right, 'm big, really,           |
+   |                | currently, music 'm, just, open                         |
+   +----------------+---------------------------------------------------------+
    | TV-comedies-0  | big bang theory, met mother, big lebowski, friends,     |
    |                | house, office, community, walking dead, new girl, bones |
    +----------------+---------------------------------------------------------+
    | genres-food    | italian, thai, mexican, food, indian, chinese,          |
    |                | japanese, sushi, french, vietnamese                     |
    +----------------+---------------------------------------------------------+
+   | nots           | ca n't, watch, n't really, does, n't like, does n't,    |
+   |                | think, eat, n't watch tv, n't read                      |
+   +----------------+---------------------------------------------------------+
    | teen           | harry potter, hunger games, twilight, dragon tattoo,    |
    |                | pride prejudice, harry met sally, disney, vampire,      |
    |                | trilogy, lady gaga                                      |
    +----------------+---------------------------------------------------------+
-   |                |                                                         |
+   | everything     | books, movies, food, music, shows, country, dance,      |
+   |                | action, lots, horror                                    |
    +----------------+---------------------------------------------------------+
    | movies-drama-0 | eternal sunshine, spotless mind, litte miss sunshine,   |
    |                | amelie, garden state, lost, life, beautiful,            |
    |                | lost translation, beauty                                |
    +----------------+---------------------------------------------------------+
-   |                |                                                         |
+   | time periods   | 80, let, good, 90, life, just, 70, world, time, man     |
    +----------------+---------------------------------------------------------+
-   |                |                                                         |
+   | avid           | read lot, time, watch, listen, recently, lately,        |
+   |                | love read, watch lot, favorites, just read              |
    +----------------+---------------------------------------------------------+
-   |                |                                                         |
+   | misc-1         | list, just, long, ask, way, goes, things, try,          |
+   |                | favorites, far                                          |
    +----------------+---------------------------------------------------------+
    | music-rock     | david, black, john, tom, radiohead, bob, brothers,      |
    |                | beatles, black keys, bowie                              |
@@ -496,15 +512,22 @@ selection of their highest weighted tokens.
    |                | fear loathing, peppers, red hot, vegas, american,       |
    |                | catcher rye, big lebowski                               |
    +----------------+---------------------------------------------------------+
-   |                |                                                         |
+   | kinds          | kinds music, love kinds, kinds food, kinds movies,      |
+   |                | listen, different, country, foods, comedy, action       |
    +----------------+---------------------------------------------------------+
-   |                |                                                         |
+   | favorite-1     | favorite book, favorite movie, food, music, good, fav,  |
+   |                | book read, reading, great, best                         |
    +----------------+---------------------------------------------------------+
-   |                |                                                         |
+   | novelty        | enjoy, new, types, trying, reading, things, foods,      |
+   |                | types music, films, different                           |
    +----------------+---------------------------------------------------------+
-   |                |                                                         |
+   | TV-drama       | game thrones, ender 's game, walking dead, true blood,  |
+   |                | series, currently, hunger games, dexter, song ice,      |
+   |                | boardwalk empire                                        |
    +----------------+---------------------------------------------------------+
-   |                |                                                         |
+   | genres-books   | fiction, non fiction, science fiction, fiction books,   |
+   |                | read non fiction, historical fiction, films, books,     |
+   |                | documentaries, biographies                              |
    +----------------+---------------------------------------------------------+
 
 The favorites topics are more difficult to categorize than the self-summaries.
@@ -517,6 +540,10 @@ the granularity it provides. In fact, we'll show that we are able to create
 superordinate groupings from the above topics from which we can extract
 distinctive tokens for particular demographic groups. We'll first examine the
 distribution over topics by sex.
+
+.. figure:: favorites-sex.png
+
+   Favorites
 
 The most popular topics, for both females and males, are "TV-hits" and
 "music-rock," with about 16% of each sex writing about shows or artists in
@@ -553,6 +580,10 @@ is similar. This is especially true in cases where difference in proportions
 of drug users and non-drug users is large. This unexpected finding leads us to
 hypothesize that individuals who do not respond to the drug usage question
 might abstain in order to avoid admitting they use drugs.
+
+.. figure:: favorites-drugs.png
+
+   Favorites
 
 Of course, because we don't have access to ground truth, any methods we employ
 to investigate this will be cursory. Still, we wish to explore ways that might
