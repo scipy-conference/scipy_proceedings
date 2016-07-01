@@ -93,27 +93,16 @@ group and we created an "unknown" category for users who did not answer.
 The 10 demographic variables that were recategorized were: religion, job, drugs,
 diet, body type, drinks, sign, ethnicity, pets, and speaks.
 
-Methodology
------------
-
-Algorithms
-~~~~~~~~~~
-
-Logistic Regression
-*******************
-
-Logistic regression (DO WE NEED TO EXPLAIN THIS? IT'S QUITE 
-SELF-EXPLANATORY IMHO. UNLESS WE DID SOMETHING WEIRD)
+Methods
+-------
 
 Log-Odds-Ratio
-**************
+~~~~~~~~~~~~~~
 
 Log-odds-ratio
 
-NMF
-***
-
-Non-negative matrix factorization.
+Non-negative Matrix Factorization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For document clustering, the document corpus can be projected onto a
 k-dimensional semantic space, with each axis corresponding to a particular
@@ -137,9 +126,7 @@ by the rows of W. The maximum value in each row of W  determined
 essay group membership.
 
 Permutation Testing
-*******************
-
-Permutation testing
+~~~~~~~~~~~~~~~~~~~
 
 Hypothesis testing provides ways to determine the likelihood of an observed
 test statistic under a null hypothesis. A permutation test uses randomization
@@ -162,10 +149,8 @@ than or equal to the absolute value of the observed test statistic. This is the
 :math:`p`-value for a two-tailed hypothesis. Permutation-based methods can be
 used to compare two samples or to assess the performance of classifiers[Oja10]_.
 
-TF-IDF
-******
-
-Term frequency-inverse document frequency
+Term Frequency-Inverse Document Frequency
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Machine learning tasks require numerical inputs. There are several ways to
 represent text as numerical feature vectors. Features typically correspond to
@@ -175,7 +160,8 @@ characters, such as a word, that is treated as a distinct unit [Bir10]_.
 One way to represent a corpus, or collection of text documents, is as a matrix
 of token counts. This weights terms by their absolute frequencies. In some
 cases, highly-wighted terms, such as "a" or "the," may not be very informative.
-Instead, token counts can be weighted using tf-idf.
+Instead, token counts can be weighted using term frequency-inverse document
+frequency (tf-idf).
 
 Tf-idf is the product of the term frequency and the inverse document frequency.
 The term frequency refers to the *relative* frequency of term :math:`t` in
@@ -184,7 +170,7 @@ number of documents :math:`N` to the number of documents that contain term
 :math:`t`.
 
 Approach
-~~~~~~~~
+--------
 
 Our analyses focus on two demographic dimensions—sex and drug usage—and on two
 essays—"my self summary" and "favorite books, movies, shows, music, food."
@@ -216,15 +202,17 @@ compared the average proportion of adjectives, nouns, and verbs and identified
 the most distinctive terms in each lexical category by sex using the smoothed
 log-odds-ratio that accounts for variance.
 
-Text semantics were also analyzed. Non-negative matrix factorization (NMF) was
-used to identify latent structure in the text. This structure is in the form of
-"topics" or "clusters" which can be described by particular tokens. This was
-done for both essays. In order to determine whether particular demographics
-were more likely to write about particular topics, the distribution of users
-across topics was calculated relative to each demographic group. In cases where
-we are able to create superordinate groupings from NMF topics—for example, by
-combining semantically similar clusters—we use the log-odds-ratio to find
-distinctive tokens.
+Text semantics were also analyzed. The corpus was transformed into a tf-idf
+matrix containing unigrams, bigrams, and trigrams. Terms that appeared in less
+than 0.5% of documents were dropped. Non-negative matrix factorization (NMF)
+was used to identify latent structure in the text. This structure is in the
+form of "topics" or "clusters" which can be described by particular tokens.
+This was done for both essays. In order to determine whether particular
+demographics were more likely to write about particular topics, the
+distribution of users across topics was calculated relative to each demographic
+group. In cases where we are able to create superordinate groupings from NMF
+topics—for example, by combining semantically similar clusters—we use the
+log-odds-ratio to find distinctive tokens.
 
 Finally, we fit a logistic regression model to predict drug usage status for
 users in the "unknown" category.
@@ -281,31 +269,25 @@ males do. For nouns, it's the other way around. Interestingly, neither sex uses
 verbs more often than the other.
 
 In addition to part-of-speech usage, we can explore particular terms associated
-with parts-of-speech that are distinctive to a particular group. We do this by
-comparing relative token frequencies. The 15 most-distinctive adjective,
-noun, and verb tokens, by sex, are summarized below.
+with parts-of-speech that are distinctive to a particular group. We do this
+using the log-odds-ratio. The 10 most-distinctive adjective, noun, and verb
+tokens, by sex, are summarized below.
 
    +----------------+----------------------------+----------------------------+
    | Part-of-Speech | Female                     | Male                       |
    +================+============================+============================+
-   | Adjectives     | my happy independent       | that nice more few other   |
-   |                | favorite sweet silly       | most its cool interesting  |
-   |                | important passionate warm  | your easy good which must  |
-   |                | amazing beautiful          | last                       |
-   |                | adventurous creative loyal |                            |
-   |                | social                     |                            |
+   | Adjectives     | independent sweet my sassy | nice cool its that few     |
+   |                | silly happy warm favorite  | interesting martial most   |
+   |                | girly fabulous             | masculine more             |
    +----------------+----------------------------+----------------------------+
-   | Nouns          | who girl family friends    | guy sports music something |
-   |                | love someone life person   | francisco women what       |
-   |                | yoga heart men wine things | guitar video computer      |
-   |                | adventures dancing         | stuff games years company  |
-   |                |                            | name                       |
+   | Nouns          | girl family who yoga men   | guy computer engineer      |
+   |                | gal heels love dancing     | guitar sports software     |
+   |                | friends                    | women video technology     |
+   |                |                            | geek                       |
    +----------------+----------------------------+----------------------------+
-   | Verbs          | love am laugh have being   | was 's been m 've 'll play |
-   |                | are loving travel be       | moved working get playing  |
-   |                | laughing appreciate        | 'm like know laid          |
-   |                | traveling dancing          |                            |
-   |                | exploring loves            |                            |
+   | Verbs          | love am laugh laughing     | m was play playing laid    |
+   |                | dancing adore loving       | 'll working hit moved been |
+   |                | dance appreciate being     |                            |
    +----------------+----------------------------+----------------------------+
 
 We use NMF to help us understand the subject matter that users find interesting
