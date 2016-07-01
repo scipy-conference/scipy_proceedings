@@ -7,6 +7,8 @@
 :author: Travis Pinney
 :email: travis.pinney@ionchannel.io
 :institution: Ion Channel, ionchannel.io
+:institution: travis.pinney@ionchannel.io
+
 
 :author: JC Herz
 :email:  jc.herz@ionchannel.io
