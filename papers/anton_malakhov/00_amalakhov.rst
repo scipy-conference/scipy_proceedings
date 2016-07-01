@@ -98,7 +98,7 @@ Let's run it in 3 different modes:
 
 Figure :ref:`qrpic` shows times (lower is better) acquired on 32-core (no HT) machine with 64GB RAM. By default, Dask version runs worse than Numpy version because 10 outermost tasks end up calling 10 OpenMP-based parallel regions which creates 10 times more threads than available hardware resourses.
 
-The second command runs this benchmark with innormost OpenMP parallelism disabled. It results in the worst performance for Numpy version since everything is now serialized. And Dask version is not able to close the gap completely since it has only 10 tasks which can run in parallel while Numpy with parallel MKL is able to utilize the whole machine with 32 threads.
+The second command runs this benchmark with innormost OpenMP parallelism disabled. It results in the worst performance for Numpy version since everything is now serialized. And Dask version is not able to close the gap completely since it has only 10 tasks which can run in parallel while Numpy with parallel MKL is able to utilize the whole machine with 32 threads. The reason why only 10 tasks were selected for this demonstration is the following. If top-level parallelism can load all the available cores on the machine, there is no much sense in the nested parallelism and Intel |R| TBB shows no speedup over serial MKL version. In such cases, TBB can help by load-balancing at the end of the work, but this example is quite balanced so that there is also no visible difference.
 
 The last command demostrates how Intel TBB can be enabled as orchestrator of multi-threaded modules. TBB module runs the benchmark in context of :code:`with TBB.Monkey():` which replaces standard Python *ThreadPool* class used by Dask and also switches MKL into TBB mode. Numpy with TBB shows more than double time comparing to default Numpy run. This happens because TBB-based threading in MKL is new and not as optimized as OpenMP-based MKL threading implementation. But despite that fact, Dask in TBB mode shows the best performance for this benchamark, more than 50% improvement comparing to default Numpy. This happens because the Dask version exposes more parallelism to the system without oversubscription overheads, hiding latencies of serial regions and fork-join synchronization in MKL functions.
 
@@ -122,18 +122,25 @@ In order to remove overheads, previous experiment was executed with TBB module o
    
 Numba
 -----
-Another area where we applied Intel TBB is Numba. I replaced multi-threading runtime used by original Numba with implementation based on TBB tasks. It improved performance even without nested parallelism:
-[Diagram here]
+Another area where we applied Intel TBB is Numba. Original Numba's multi-threading runtime was replaced with implementation based on TBB tasks. It improved performance even without nested parallelism.
 
-[TODO: add another example with nested parallelism based on Numba and the performance data]
+.. figure:: numba_tbb.png
+
+    Black Scholes benchmark implemented with @numba.guvectorize and target=parallel. :label:`numbatbb`
+
+On the Figure :ref:`numbatbb` you can see how TBB performs better on Black Scholes benchmark with many data sizes.
 
 Multi-processing
 ----------------
 [TODO: I can show that TBB helps even with multiprocessing parallelism and discuss ways how it can be further improved]
 
-Disclaimers
+Limitations
 -----------
 TBB module does not work well for blocking I/O operations, it is applicable only for tasks which do not block in the operating system. This version of TBB module is experimental and might be not sufficiently optimized and verified with different use-cases. In particular, it does not yet use master thread efficiently as regular TBB program is supposed to do. But all these problems well go away as more users will be interested in solving theirs composability issues and the TBB module is further developed.
+
+Conclusion
+----------
+TBF
 
 References
 ----------
