@@ -35,7 +35,7 @@ oxidation, heat release, and pollutant emissions. These models are typically
 validated using qualitative, rather than quantitative, comparisons with limited
 sets of experimental data. Furthermore, while a plethora of published data exist
 for quantities of interest such as autoignition delay and laminar flame speed,
-most of it is not available in machine-readable formats. Such data is commonly
+most are not available in machine-readable formats. Such data is commonly
 offered in CSV files, Excel spreadsheets, PDF tables, or even embedded in
 figures.
 
@@ -51,12 +51,12 @@ This work aims to support quantitative validation of kinetic models by:
 Fundamental combustion experiments typically study the behavior of fuels in
 idealized configuratinos at conditions relevant to applications in
 transporation, aerospace, or power generation. These produce useful data for
-validating chemical kinetic models, which in turn can be used to simulate
+validating chemical kinetic models, which in turn can support simulations of
 more complex applications such as internal combustion or gas turbine engines.
 The autoignition delay of a fuel/oxidizer mixture represents the time required
 for the mixture to ignite (i.e., experience a rapid increase in temperature and
 corresponding consumption of fuel and oxidizer) after arriving at a specified
-initial state. Autoignition occurs in many practical applications, such as knock
+initial state. Autoignition occurs in practical applications such as knock
 in spark-ignition engines or ignition in compression-ignition and gas turbine
 engines, and so ignition delay measurements provide useful validation measures
 for models aimed at capturing such phenomena.
@@ -66,28 +66,28 @@ stirred reactors, species profiles in jet-stirred reactors, and laminar flame
 speeds—also provide useful information about fuel combustion characteristics,
 but these are not considered in this paper.)
 
-Experiments measuring ignition delay times can typically be divided into two
-categories: shock tubes and rapid compression machines.
+Ignition delay times are typically measured with two categories of experiments:
+shock tubes and rapid compression machines.
 In shock tubes, discussed in detail in the literature [Chaos2010]_
 [Hanson2014]_, a diaphragm separates high-pressure gases from a lower-pressure
-mixture of fuel and oxidizer; rupturing the diaphragm propagates a (compressive)
-shock wave into the fuel/oxidizer mixture, rapidly increasing the temperature
-pressure, which leads to autoignition after a delay. In contrast, rapid
-compression machines, reviewed recently by Sung and Curran [Sung2014]_, emulate
+mixture of fuel and oxidizer. Rupturing the diaphragm propagates a (compressive)
+shock wave into the fuel/oxidizer mixture, quickly increasing the temperature
+and pressure and leading to autoignition after a time delay. In contrast, rapid
+compression machines, reviewed by Sung and Curran [Sung2014]_, emulate
 a single compression stroke in an internal combustion engine; the compression
-of a piston rapidly raises the temperature and pressure of a fuel/oxidizer
-mixture, after which ignition occurs. Shock tubes and rapid compression machines
-offer complementary approaches to measuring ignition delay times, as the former
-are typically limited to higher temperatures while the latter can reach
-low-to-intermediate temperatures.
+of a piston raises the temperature and pressure of a fuel/oxidizer
+mixture in a short period of time, after which ignition occurs.
+Shock tubes and rapid compression machines offer complementary approaches to
+measuring ignition delay times, as the former are typically limited to higher
+temperatures while the latter can reach low-to-intermediate temperatures.
 
-In this paper, a data format is proposed for capturing results from
-experimental measurements of autoignition delay times. In addition,
-this paper describes the components of PyTeCK, a software package that
+In this paper, I propose a data format for capturing results from
+experimental measurements of autoignition delay times.
+This paper also describes the components of PyTeCK, a software package that
 quantifies the performance of a chemical kinetic model in reproducing
 experimental ignition delays. This includes discussion of the experimental
-data parser, simulation framework, and solution post-processing. In addition,
-the paper explains the theoretical basis for the models of shock tubes and
+data parser, simulation framework, and solution post-processing.
+The paper also explains the theoretical basis for the models of shock tubes and
 rapid compression machines.
 
 ========================
@@ -97,8 +97,8 @@ Implementation of PyTeCK
 PyTeCK consists of three primary modules:
 
  1. ``parse_files`` contains functions to read the YAML-encoded experimental
- data file using ``PyYAML``. This process is broken down into a number of
- smaller functions to enable easier unit testing.
+ data file using ``PyYAML``. Smaller functions comprise this process
+ to enable easier unit testing.
 
  2. ``simulation`` contains the ``Simulation`` class and relevant functions for
  initiating, setting up, and running cases, and then processing the results.
@@ -107,24 +107,24 @@ PyTeCK consists of three primary modules:
  on experimental data, and then runs simulations in parallel using the
  ``multiprocessing`` module.
 
-The implementation of each primary module is explained in the next three sections.
-In addition, in order to detect peaks in targeted quantities (e.g., pressure,
-temperature) to determine the ignition delay time, the module ``detect_peaks``
-is included, based on the work of Duarte [Duarte2015]_.
-Exceptions raised while reading YAML files are included in ``exceptions.py``,
-a single Pint-based unit registry [Grecco2016]_ is initialized in ``utils.py``,
-and quantity validation functions are provided in ``validation.py``.
+The next three sections explain the implementation of each primary module.
+PyTeCK also includes the module ``detect_peaks``, based on the work of Duarte
+[Duarte2015]_, for detecting peaks in targeted quantities (e.g., pressure,
+temperature) to determine the ignition delay time. Supporting modules
+in PyTeCK include ``exceptions.py`` for raising exceptions while reading YAML
+files, ``utils.py`` that initializes a single Pint-based unit registry
+[Grecco2016]_, and ``validation.py`` that provides quantity validation functions.
 
-PyTeCK relies on a number of scientific Python software tools.
+PyTeCK relies on well-established scientific Python software tools.
 These include NumPy [vanderWalt2011]_ for large array manipulation,
 SciPy [Jones2001]_ for interpolation, Pint [Grecco2016]_ for
 interpreting and converting between units, PyTables [Alted2002]_ for HDF5 file
 manipulation, Cantera [Goodwin2016]_ for chemical kinetics, and
-``pytest`` [Krekel2016]_ for unit testing. In addition, Travis-CI [Travis2016]_
-is used for continuous integration testing.
+``pytest`` [Krekel2016]_ for unit testing. Travis-CI [Travis2016]_ also provides
+continuous integration testing.
 
-PyTeCK is availably openly via a GitHub repository [Niemeyer2016b]_
-under an MIT license.
+PyTeCK is available under an open-source MIT license via a GitHub repository
+[Niemeyer2016b]_.
 
 Parsing ChemKED files
 ---------------------
@@ -132,7 +132,7 @@ Parsing ChemKED files
 The PyTeCK module ``parse_files`` parses experimental data encoded in the
 newly proposed ChemKED (**chem**\ ical **k**\ inetics **e**\ xperimental
 **d**\ ata) format. ChemKED builds on XML-based ``ReSpecTh`` of Varga et al.
-[Varga2015a]_ [Varga2015b]_—which in turn is based on the PrIMe data format
+[Varga2015a]_ [Varga2015b]_—which in turn builds on the PrIMe data format
 [Frenklach2007]_ [You2012]_ [PrIMe2016]_—but is written in YAML
 instead of XML. While XML is a powerful markup language, YAML offers a number
 of advantages: parsers and libraries exist for most programming langauges,
@@ -234,12 +234,12 @@ Chaumeix et al. [Chaumeix2007]_:
           composition: *comp
           ignition-type: *ign
 
-This example contains the all of the information needed to evaluate the
-performance of a chemical kinetic model with five datapoints. In addition, the
-file includes metadata about the file itself, as well as reference information.
+This example contains all the information needed to evaluate the
+performance of a chemical kinetic model with five datapoints. The file
+also includes metadata about the file itself, as well as reference information.
 While these elements, including ``file-author``, ``file-version``, and the
-various entries in ``reference`` are not required by PyTeCK, a valid ChemKED
-file should include this information to be complete.
+entries in ``reference``, are not required by PyTeCK, a valid ChemKED
+file should include this information for completeness.
 The elements necessary for PyTeCK include the type of experiment given by
 ``experiment-type`` (currently limited to ``Ignition delay``), the ``kind`` of
 apparatus used to measure ignition delay (``shock tube`` or
@@ -247,24 +247,24 @@ apparatus used to measure ignition delay (``shock tube`` or
 experimental ``datapoints`` given as associative arrays with necessary
 information. Mandatory datapoint elements include the initial ``temperature``,
 ``pressure``, and mixture ``composition``, as well as the experimental
-``ignition-delay`` and ``ignition-type`` (means by which ignition is detected).
-All quantities provided include a magnitude and units, which will be
-interpreted by Pint [Grecco2016]_.
+``ignition-delay`` and ``ignition-type`` (means by which PyTeCk detects
+ignition). All quantities provided include a magnitude and units, which
+Pint [Grecco2016]_ interprets.
 Since many experimental datasets hold certain properties constant (e.g.,
 composition, pressure) while varying a single quantity (e.g., temperature),
-properties that are common to all of the ``datapoints`` can be given in a
-``common-properties`` element with an arbitrary anchor label (e.g., ``&pres``
-above for the constant pressure), and then referred to in each datapoint
-with a reference (``*pres``). However, every datapoint should still contain the
-complete information needed to reproduce its conditions; the
-``common-properties`` element is for convenience only.
+a ``common-properties`` element can desribe properties common to all
+``datapoints``, using an arbitrary anchor label (e.g., ``&pres``
+above for the constant pressure). Each datapoint then refers to the common
+property with a reference (``*pres``). However, every datapoint should still
+contain the complete information needed to reproduce its conditions; the
+``common-properties`` element is used for convenience.
 
-Additional elements may be needed to model ignition in both shock tubes and
-RCMs. Under certain conditions
+Modeling ignition in shock tubes or RCMs may require additional elements to
+capture nonidealities. Under certain conditions
 that lead to longer ignition delay times, shock tubes can exhibit pressure rise
-prior to the ignition event. This is typically expressed in the literature with
+before ignition. This is typically expressed in the literature with
 a constant pressure rise rate at a fraction of the initial pressure (with units
-of inverse time), and can be encoded in ChemKED as items in the associative
+of inverse time), and ChemKED files encode this as an item in the associative
 array describing an experimental datapoint:
 
 .. code-block:: yaml
@@ -296,12 +296,11 @@ of lists, with the ``column`` index and units identified:
             - [0.00E+000, 5.47669375000E+002]
             - [1.00E-003, 5.46608789894E+002]
 
-Additional examples of ChemKED files for shock tube and RCM
-experiments can be found in the PyTeCK ``tests`` directory
-[Niemeyer2016b]_.
+The PyTeCK ``tests`` directory [Niemeyer2016b]_ contains more examples of
+ChemKED files for shock tube and RCM experiments.
 
 The function ``parse_files.read_experiment`` takes a ChemKED-format file
-as input, and returns a dictionary with the necessary information in order to
+as input, and returns a dictionary with the necessary information to
 perform simulations of the experimental datapoints.
 The ``parse_files.get_experiment_kind`` and ``parse_files.get_datapoints``
 functions perform important checking of input information
@@ -394,19 +393,20 @@ particular experiment type being modeled. For example, an input
 ChemKED file describing a shock tube experiment cannot include
 ``compression-time`` or ``volume-history`` elements.
 
-After the simulation parameters are parsed and checked, the
+After parsing and checking the simulation parameters, the
 ``parse_files.create_simulations`` function creates a list of ``Simulation``
 objects.
 
 Autoignition simulation procedure
 ---------------------------------
 
-Once a list of ``Simulation`` objects has been initialized, the member function
+Once ``parse_files.create_simulations`` initializes a list of ``Simulation``
+objects, the member function
 ``setup_case`` prepares each object to perform a simulation by initiating the
 governing equations that model shock tubes and rapid compression
-machines. These equations will briefly be described.
+machines. These equations are briefly described next.
 
-The thermochemical state of a general chemical kinetic system can be expressed
+The thermochemical state of a general chemical kinetic system is expressed
 with a composition state vector :math:`\Phi`:
 
 .. math::
@@ -415,9 +415,9 @@ with a composition state vector :math:`\Phi`:
 
 where :math:`T` is the temperature, :math:`Y_i` is the mass fraction of the
 *i*\ th species, and :math:`N_{\text{sp}}` is the number of species represented
-by the chemical kinetic model. This thermochemical state can be advanced in time
-when modeling both experimental types using a system of ordinary differential
-equations, derived from conservation of mass and energy:
+by the chemical kinetic model. A system of ordinary differential equations
+advances this thermochemical state when modeling both experimental types,
+derived from conservation of mass and energy:
 
 .. math::
     :label: systemodes
@@ -449,19 +449,19 @@ and :math:`\dot{\omega}_i` is the overall molar production rate of the
 *i*\ th species. PyTeCK solves the system given by Equation (:ref:`systemodes`)
 using a Cantera [Goodwin2016]_ ``ReactorNet`` that connects ``IdealGasReactor``
 and ``Reservoir`` objects separated by a ``Wall``. The ``Wall`` may or may not
-be moving, depending on whether the system being modeled is constant or varying
+be moving, depending on whether the modeled system has constant or varying
 volume.
 
 The simplest way to model both shock tubes and RCM experiments is by assuming
-an adiabatic, constant-volume process. In this case, Equation (:ref:`tempderiv`)
-is simplified by assuming :math:`\frac{dv}{dt} = 0`, and the ``Wall`` is
+an adiabatic, constant-volume process. In this case, I simplify Equation
+(:ref:`tempderiv`) by assuming :math:`\frac{dv}{dt} = 0`, and the ``Wall`` is
 initialized with ``velocity=0``:
 
 .. code-block:: python
 
     self.wall = ct.Wall(self.reac, env, A=1.0, velocity=0)
 
-However, this approach does not account for either preignition pressure rise
+This approach does not account for either preignition pressure rise
 observed in some shock tube experiments [Chaos2010]_ [Hanson2014]_ or heat loss
 in RCMs [Sung2014]_. RCM volume histories are typically provided directly,
 but publications describing shock tube experiments with observed preignition
@@ -514,28 +514,29 @@ and ``PressureRiseProfile`` when pressure-rise value is specified
             )
         )
 
-Additional details about the chemical kinetic model and initial conditions
-are needed to initialize the ``PressureRiseProfile`` object, in order to
-construct the discrete volume-time history via Equations (:ref:`pressurehistory`)
-and (:ref:`volumehistory`) using the ``simulation.create_volume_history``
-function. Objects of both classes contain the derivative of volume
-:math:`dv / dt`. This is obtained by numerically
-differentiating the volume history via the ``simulation.first_derivative``,
-which uses ``numpy.gradient`` to calculate second-order central differences at
-interior points and second-order one-sided differences (either forward or
+PyTeCK needs more details about the chemical kinetic model and
+initial conditions to initialize the ``PressureRiseProfile`` object, and
+specifically to construct the discrete volume-time history via Equations
+(:ref:`pressurehistory`) and (:ref:`volumehistory`) using the
+``simulation.create_volume_history`` function.
+Objects of both classes contain the derivative of volume
+:math:`dv / dt`, which PyTeCK obtains by numerically
+differentiating the volume history via ``simulation.first_derivative``. This
+function uses ``numpy.gradient`` to calculate second-order central differences
+at interior points and second-order one-sided differences (either forward or
 backward) at the edge points. When called, the ``VolumeProfile`` or
 ``PressureRiseProfile`` object returns the derivative of volume at the
 specified time (i.e., the velocity of the ``Wall``), using ``numpy.interp``
 to interpolate as needed.
 
-After each ``Simulation`` is prepared, the ``run_case`` member function actually
-runs each simulation. Each simulation is prepared and run
-independently to allow the use of ``multiprocessing`` workers to perform in
-parallel (if desired), as described in the next section. When running a
-simulation, PyTeCK creates an HDF5 file and opens it as a
-PyTables [Alted2002]_ table, then simply performs integration steps until the
-desired end time is reached
-(set as 100 times the experimental ignition delay):
+After each ``setup_case`` prepares a ``Simulation`` object,
+the ``run_case`` member function actually
+runs each simulation. PyTeCK prepares and runs each simulation
+independently to allow the use of ``multiprocessing`` workers to perform these
+steps in parallel (if desired), as described in the next section. When running
+a simulation, PyTeCK creates an HDF5 file and opens it as a
+PyTables [Alted2002]_ table, then performs integration steps until it
+reaches desired end time (set as 100 times the experimental ignition delay):
 
 .. code-block:: python
 
@@ -578,21 +579,21 @@ desired end time is reached
         # Write ``table`` to disk
         table.flush()
 
-At every timestep, the time and information about the current thermochemical
-state (temperature, pressure, volume, and species mass fractions) are saved to
-the HDF5 table. The Cantera ``ReactorNet.step`` function performs a single
-integration step, selecting an appropriate time-step size based on estimated
-integration error.
+At every timestep, ``run_case`` saves the time and information about the
+current thermochemical state (temperature, pressure, volume, and species mass
+fractions) to the HDF5 table. The Cantera ``ReactorNet.step`` function performs
+a single integration step, selecting an appropriate time-step size based on
+estimated integration error.
 
-Finally, the ``process_results`` member function can be called to determine the
+Finally, a call to the ``process_results`` member function determines the
 autoignition delay by opening the saved simulation results. The method by which
-ignition is detected depends on the target and type specified in the input
+it detects ignition depends on the target and type specified in the input
 ChemKED file. Target quantities include pressure, temperature, and mass fractions
 of commonly used species such as the OH and CH radicals (as well as their
-excited equivalents OH\ :sup:`*` and CH\ :sup:`*`). Ignition is detected by
-finding the location of either the maximum value of the target quantity
-(e.g., ``type: max``) or the maximum value of the derivative of the quantity
-(e.g., ``type: d/dt max``):
+excited equivalents OH\ :sup:`*` and CH\ :sup:`*`). ``process_results`` detects
+ignition by finding the location of either the maximum value of the target
+quantity (e.g., ``type: max``) or the maximum value of the derivative of the
+quantity (e.g., ``type: d/dt max``):
 
 .. code-block:: python
 
@@ -646,7 +647,7 @@ is adapted from the work of Olm et al. [Olm2014]_ [Olm2015]_, and briefly
 discussed by Niemeyer [Niemeyer2016]_.
 
 The function ``eval_model.evaluate_model`` controls the overall evaluation
-procedure, given various required and optional parameters:
+procedure, given the required and optional parameters:
 
 * ``model_name``: a string with the chemical kinetic model filename
 
@@ -654,7 +655,7 @@ procedure, given various required and optional parameters:
   important species
 
 * ``dataset_file``: a string with the name of a file listing the ChemKED files
-  to be used, where the files are simply given in a newline delimited list
+  to be used, which gives the filenames in a newline delimited list
 
 * ``model_path``: a string with the directory containing ``model_name``.
   This is optional; the default is ``'models'``
@@ -670,10 +671,10 @@ procedure, given various required and optional parameters:
   simulations in parallel. This is optional; the default is the maximum number
   of available threads minus one
 
-A few of these parameters require greater explanation. The species key YAML
-file ``spec_keys_file`` is needed because different chemical kinetic models
-internally use different names for species. PyTeCK needs to interpret these
-names in order to set the initial mixture composition, and potentially identify
+A few of these parameters require greater explanation. PyTeCK needs the species
+key YAML file ``spec_keys_file`` because different chemical kinetic models
+internally use different names for species. PyTeCK interprets these
+names to set the initial mixture composition, and potentially identify
 a species target to detect ignition. This file contains entries (for multiple
 model files, if desired) of the form:
 
@@ -687,17 +688,17 @@ model files, if desired) of the form:
 
 where the key indicates the internal PyTeCK species name and the value is the
 name used by the model.
-In this case, the necessary species names are mostly consistent with the
+In this case, the necessary species names are consistent with the
 names used internally by PyTeCK, other than the capitalization of argon (``AR``).
-Names will likely differ more noticeably for other kinetic models; for example,
-internally the species *n*\ -heptane is represented by ``nC7H16``, while other
+Names will likely differ for other kinetic models; for example,
+internally ``nC7H16`` represents the species *n*\ -heptane, while other
 models may use ``C7H16``, ``C7H16-1``, or ``NXC7H16``, for example.
 PyTeCK has a preferred naming convention for some species (found in the
 ``spec_key`` and ``spec_key_rev`` dictionaries in the ``utils.py`` module), but
-for correct results the species name keys given in the ``spec_keys_file`` just
+for correct results the species name keys given in the ``spec_keys_file`` only
 need to match names of species in the ChemKED files.
 
-The ``model_variant_file`` YAML file is only needed in certain, uncommon cases
+The ``model_variant_file`` YAML file is only needed in certain (uncommon) cases
 where the chemical kinetic model needs internal, manual changes for different
 ranges of conditions (such as pressure or bath gas). This file may contain
 entries of the form:
@@ -716,7 +717,7 @@ entries of the form:
             50: "_50atm.cti"
             100: "_100atm.cti"
 
-where the keys indicate extensions to be added to ``model_name``, in order of
+where the keys are extensions added to ``model_name``, in order of
 ``bath gases`` and then ``pressures``, and the values represent the extensions
 to the base filename given by ``model_name``.
 For models that need such variants, all combinations need to be present in the
@@ -727,14 +728,15 @@ different bath gases and pressure ranges. For a case with nitrogen as the bath
 gas and at pressures around 9 atm, the resulting file name would be
 ``Princeton-2009_N2_9atm.cti``.
 
-In order to determine the performance of a given model, ``evaluate_model``
-parses the ChemKED file(s), then sets up and runs simulations as described
-previously. A ``multiprocessing.Pool`` is used to perform simulations in
-parallel, creating ``simulation_worker`` objects for each case. Then,
-``process_results`` calculates the simulated ignition delays.
+To determine the performance of a given model, ``evaluate_model``
+parses the ChemKED file(s), then sets up and runs simulations as described.
+A ``multiprocessing.Pool`` can perform simulations in
+parallel if multiple CPU threads are available, creating ``simulation_worker``
+objects for each case. Then, ``process_results`` calculates the simulated
+ignition delays.
 
-The overall performance of a model is given by the average error function over
-all of the experimental datasets:
+PyTeCK reports the overall performance of a model by the average error function
+over all the experimental datasets:
 
 .. math::
     :label: overallerror
@@ -742,10 +744,10 @@ all of the experimental datasets:
     E = \frac{1}{N} \sum_{i=1}^N E_i
 
 where :math:`N` is the number of datasets and :math:`E_i` is the error function
-for a particular dataset. A lower :math:`E` value indicates that the model more
-closely matches the experimental data.
-This is given as the average squared difference of the
-ignition delay times divided by the variance of the experimental data:
+for a particular dataset. A lower :math:`E` value indicates that the model
+better matches the experimental data.
+The error function for a dataset :math:`E_i` is the average squared difference
+of the ignition delay times divided by the variance of the experimental data:
 
 .. math::
     :label: errorfunc
@@ -762,15 +764,14 @@ and the superscripts "exp" and "sim" represent experimental
 and simulated results, respectively.
 
 The experimental variance :math:`\sigma` serves as a weighting factor for datasets
-based on the estimated uncertainty of results. The contribution to :math:`E_i`
-from discrepancies between model predictions and experimental data of a
-dataset with high variance will be reduced compared to datasets with lower
-variance.
+based on the estimated uncertainty of results. This term reduces the
+contribution to :math:`E` of a dataset with high variance, from discrepancies
+between model predictions and experimental data, compared to datasets with
+lower variance.
 Ideally, publications describing experimental results would provide
 uncertainty values for ignition delay results, but these are difficult to
-estimate for shock tube and rapid compression machines and therefore not
-usually given. Thus, for now, PyTeCK estimates all variance values, even when
-uncertainty may be provided.
+estimate for shock tube and rapid compression machines and thus not
+commonly reported. Thus, for now, PyTeCK estimates all variance values.
 
 PyTeCK estimates the variance with the ``eval_model.estimate_std_dev`` function,
 by first fitting a ``scipy.interpolate.UnivariateSpline`` of order three
@@ -782,9 +783,9 @@ PyTeCK sets 0.1 as a lower bound for the uncertainty in ignition delay time,
 based on the precedent set by Olm et al. [Olm2014]_ [Olm2015]_.
 
 After calculating the error associated with a dataset using Equation
-(:ref:`errorfunc`), and then the overall error metric for a model using Equation
-(:ref:`overallerror`), the performance results are printed to screen and saved
-to a YAML file.
+(:ref:`errorfunc`) and the overall error metric for a model using Equation
+(:ref:`overallerror`), ``evaluate_model`` prints the performance results
+to screen and saves them in a YAML file.
 
 ===========================
 Conclusions and Future Work
@@ -793,10 +794,10 @@ Conclusions and Future Work
 PyTeCK provides an open, Python-based framework for rigorously quantifying the
 performance of chemical kinetic models using experimental autoignition data
 generated from shock tube and rapid compression machine experiments. It can be
-used to easily compare various models for describing the combustion of a given
+used to compare models for describing the combustion of a given
 fuel and identify areas for improvement. Along with the software framework,
-this paper describes a new YAML-based data standard, ChemKED, that can be used
-to encode experimental results in a human- and machine-readable manner.
+this paper describes a new YAML-based data standard, ChemKED, that
+encodes experimental results in a human- and machine-readable manner.
 
 Immediate plans for PyTeCK include better documentation generated by Sphinx
 [Brandl2016]_ and hosted on `Read The Docs <https://readthedocs.org/>`_.
