@@ -161,13 +161,14 @@ In :code:`magni.reproducibility`, a differentiation is made between *annotations
   
 Requirements
 ************
-Magni uses PyTables as its interface to HDF5 databases. Thus, had :code:`magni.reproducibility` been a package of its own,  only Python and PyTables would have been requirements for its use. The full requirements for using :code:`magni` (as of version 1.4.0) are [#]_
+Magni uses PyTables as its interface to HDF5 databases. Thus, had :code:`magni.reproducibility` been a package of its own,  only Python and PyTables would have been requirements for its use. The full requirements for using :code:`magni` (as of version 1.5.0) are [#]_
 
 * Python >= 2.7 / 3.3
 * Matplotlib :cite:`Hunter2007` (Tested on version >= 1.3)
 * NumPy :cite:`Walt2011` (Tested on version >= 1.8)
 * PyTables [#]_ (Tested on version >= 3.1)
 * SciPy :cite:`Oliphant2007` (Tested on version >= 0.14)
+* Setuptools [#]_ (Tested on version >= 11.3)
 
 When using the Conda [#]_ package management system  for handling the Python environment used in the computation, :code:`magni.reproducibility` may optionally use Conda to capture details about the Python environment. Thus, we have one optional dependency
 
@@ -175,6 +176,7 @@ When using the Conda [#]_ package management system  for handling the Python env
 
 .. [#] More details about Python and the Scientific Python Stack are available at http://python.org and http://scipy.org
 .. [#] See http://www.pytables.org/
+.. [#] See http://setuptools.readthedocs.io/
 .. [#] See http://conda.pydata.org/docs/ as well as https://www.youtube.com/watch?v=UaIvrDWrIWM
   
 Usage Examples
