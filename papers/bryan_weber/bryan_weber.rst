@@ -770,7 +770,7 @@ optimal cutoff frequency in the filtering algorithm.
 Acknowledgements
 ----------------
 
-This material is based on paper supported by the National Science Foundation under Grant No.
+This paper is based on material supported by the National Science Foundation under Grant No.
 CBET-1402231.
 
 .. |TC| replace:: :math:`T_C`
