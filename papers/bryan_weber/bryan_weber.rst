@@ -643,7 +643,9 @@ filename of this run to the ``volume-trace.yaml`` file:
     reacfile: >
       00_in_02_mm_373K-1282t-100x-19-Jul-15-1633.txt
 
-and the user conducts the first non-reactive experiment and adds it to the ``Condition``:
+Note that the file must be named exactly ``volume-trace.yaml`` and it must be located in the current
+working directory. Next, the user conducts the first non-reactive experiment and adds it to the
+``Condition``:
 
 .. code:: python
 
