@@ -72,16 +72,31 @@ RCM experiments is the pressure measured as a function of time in the reaction c
 pressure trace is then processed to extract the ignition delay.
 
 In this paper, the design and operation of a software package to process the pressure data collected
-from RCMs is described. Our package, called UConnRCMPy :cite:`uconnrcmpy`, is designed to enable
-reproducible analysis of the data acquired from the RCM at the University of Connecticut (UConn).
-Despite the initial focus on data from the UConn RCM, the package is designed to be extensible so
-that it can be used for data in different formats while providing a consistent interface to the
-user.
+from RCMs is described. Our package, called UConnRCMPy :cite:`uconnrcmpy`, is designed analyze the
+data acquired from the RCM at the University of Connecticut (UConn). Despite the initial focus on
+data from the UConn RCM, the package is designed to be extensible so that it can be used for data in
+different formats while providing a consistent interface to the user.
 
-First, this paper will introduce the fundamentals of RCM operation and data processing. Then, the
-implementation of UConnRCMPy will be described, including the use of many packages from the
-scientific Python software ecosystem. Finally, a brief demonstration of the use of UConnRCMPy and
-its extensibility will be given.
+Recognizing that reproducible research is an important goal for the scientific community
+:cite:`NatureEds2016`, and that the code used to process experimental data is an important part of
+reproducing research, the primary goal of UConnRCMPy is to enable consistent, reproducible analysis
+of RCM data. Thus, UConnRCMPy offers a convenient and citable interface to all of the features
+required to process standard RCM data including:
+
+* Filtering and smoothing the raw voltage recorded from the hardware data acquisition system (DAQ)
+* Converting the voltage trace into a pressure trace using settings recorded from the RCM
+* Processing the pressure trace to determine parameters of interest in reporting the experiments,
+  including the ignition delay and machine-specific effects on the experiment
+* Conducting simulations utilizing the experimental information to calculate the temperature during
+  the experiment
+
+This paper serves to describe some of the important aspects of RCM data processing, particularly the
+choices that the operator must make that are rarely documented. In addition, as a complement to the
+in-source documentation, this paper documents the design choices and interface of UConnRCMPy. First,
+this paper introduces the fundamentals of RCM operation and data processing. Then, the
+implementation of UConnRCMPy is described, including the use of many packages from the scientific
+Python software ecosystem. Finally, a brief demonstration of the use of UConnRCMPy and its
+extensibility is given.
 
 Background
 ----------
@@ -119,11 +134,11 @@ prior to the start of compression. In addition, the output range of 0 V to 10 V 
 operator to correspond to a particular pressure range by setting a "scale factor". Typical values
 for the scale factor range between 10 bar/V and 100 bar/V.
 
-The voltage output from the charge amplifier is digitized by a hardware data acquisition system
-(DAQ) and recorded into a plain text file by a LabView Virtual Instrument. The voltage is sampled at
-a rate chosen by the operator, typically between 50 kHz and 100 kHz. This provides sufficient
-resolution for events on the order of milliseconds; the typical ignition delay measured in this
-system approximately ranges from 5 ms to 100 ms.
+The voltage output from the charge amplifier is digitized by a hardware DAQ and recorded into a
+plain text file by a LabView Virtual Instrument. The voltage is sampled at a rate chosen by the
+operator, typically between 50 kHz and 100 kHz. This provides sufficient resolution for events on
+the order of milliseconds; the typical ignition delay measured in this system approximately ranges
+from 5 ms to 100 ms.
 
 .. figure:: figures/raw-voltage.png
 
@@ -544,7 +559,7 @@ UConnRCMPy is documented using standard Python docstrings for functions and clas
 documentation is converted to HTML files by the Sphinx documentation generator :cite:`Brandl2016`.
 The format of the docstrings conforms to the NumPy docstring format so that the autodoc module of
 Sphinx can be used. The documentation is available on the web at
-http://bryanwweber.github.io/UConnRCMPy/.
+https://bryanwweber.github.io/UConnRCMPy/.
 
 Usage Example
 -------------
