@@ -293,15 +293,19 @@ In Cantera, intensive thermodynamic information about the system is stored in an
 ``Solution`` class. The ``Solution`` classes used in this study model simple, compressible systems
 and require two independent properties, plus the composition, to fix the state. The two properties
 must be intensive (i.e., not dependent on system size), and are typically chosen from the pressure,
-temperature, and density. In addition to evaluating thermodynamic data, Cantera :cite:`cantera`
-contains several objects used to model homogeneous reacting systems; the two used in this paper are
-a ``Reservoir`` and an ``IdealGasReactor``, which are subclasses of the generic ``Reactor`` class.
-The specific ``IdealGasReactor`` class is preferred over the generic ``Reactor`` class in this study
-because the energy equation is directly solved in terms of the temperature (i.e., Eq.
-:ref:`first-law`) in an ``IdealGasReactor``. A ``Solution`` object is installed in each ``Reactor``
-subclass instance to manage the state information and evaluate thermodynamic properties. The
-difference between the ``Reservoir`` and the ``IdealGasReactor`` is simply that the state (i.e., the
-pressure, temperature, and chemical composition) of the ``Solution`` in a ``Reservoir`` is fixed.
+temperature, and density. The thermodynamic information for each species is read from a file in the
+CTI format, described in the Cantera documentation :cite:`cantera`, when a ``Solution`` instance is
+created.
+
+In addition to evaluating thermodynamic data, Cantera :cite:`cantera` contains several objects used
+to model homogeneous reacting systems; the two used in this paper are a ``Reservoir`` and an
+``IdealGasReactor``, which are subclasses of the generic ``Reactor`` class. The specific
+``IdealGasReactor`` class is preferred over the generic ``Reactor`` class in this study because the
+energy equation is directly solved in terms of the temperature (i.e., Eq. :ref:`first-law`) in an
+``IdealGasReactor``. A ``Solution`` object is installed in each ``Reactor`` subclass instance to
+manage the state information and evaluate thermodynamic properties. The difference between the
+``Reservoir`` and the ``IdealGasReactor`` is simply that the state (i.e., the pressure, temperature,
+and chemical composition) of the ``Solution`` in a ``Reservoir`` is fixed.
 
 Integrating Eq. :ref:`first-law` requires knowledge of the volume of the reaction chamber as a
 function of time. To calculate the volume as a function of time, it is assumed that there is a core
@@ -573,10 +577,29 @@ Standard Interface
 
 These experiments were conducted with mixtures of propane, oxygen, and nitrogen :cite:`Dames2016`.
 The CTI file necessary to run this example can be found in the Supplementary Material of the work by
-Dames et al. :cite:`Dames2016`. The condition in this example is for a fuel rich mixture, with a
-target |PC| of 30 bar. The user creates the ``Condition``, then conducts a reactive experiment with
-the RCM and adds the experiment to the ``Condition``. This process is repeated 5 times to ensure
-repeatable data is obtained.
+Dames et al. :cite:`Dames2016`. It must be named exactly ``species.cti`` and placed in the current
+working directory. Then, the composition of the mixture under consideration must be added to the
+``initial_state`` parameter of the ``ideal_gas`` method:
+
+.. code:: python
+
+    ideal_gas(
+        name='gas',
+        elements=...,
+        species=...,
+        reactions='all',
+        initial_state=state(
+            temperature=300.0, pressure=OneAtm,
+            mole_fractions=(
+                'C3H8:0.0403,O2:0.1008,N2:0.8589')))
+
+Ellipses indicate input that was truncated to save space; the truncated input is present in the file
+available with the work of Dames et al. The initial temperature and pressure are arbitrary, since
+those are set based on information stored in the filename of the experiment, but the
+``mole_fractions`` must be set to the appropriate values. The condition in this example is for a
+fuel rich mixture, with a target |PC| of 30 bar. The user creates the ``Condition``, then conducts a
+reactive experiment with the RCM and adds the experiment to the ``Condition``. This process is
+repeated 5 times to ensure repeatable data is obtained.
 
 .. code:: python
 
