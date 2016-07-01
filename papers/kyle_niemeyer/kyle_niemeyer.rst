@@ -32,7 +32,7 @@ Introduction
 
 Combustion simulations require chemical kinetic models to predict fuel
 oxidation, heat release, and pollutant emissions. These models are typically
-validated using qualitative—rather than quantitative comparisons—with limited
+validated using qualitative, rather than quantitative, comparisons with limited
 sets of experimental data. Furthermore, while a plethora of published data exist
 for quantities of interest such as autoignition delay and laminar flame speed,
 most of it is not available in machine-readable formats. Such data is commonly
@@ -84,7 +84,7 @@ low-to-intermediate temperatures.
 In this paper, a data format is proposed for capturing results from
 experimental measurements of autoignition delay times. In addition,
 this paper describes the components of PyTeCK, a software package that
-quantities the performance of a chemical kinetic model in reproducing
+quantifies the performance of a chemical kinetic model in reproducing
 experimental ignition delays. This includes discussion of the experimental
 data parser, simulation framework, and solution post-processing. In addition,
 the paper explains the theoretical basis for the models of shock tubes and
@@ -104,8 +104,8 @@ PyTeCK consists of three primary modules:
  initiating, setting up, and running cases, and then processing the results.
 
  3. ``eval_model`` uses the previous two modules to set up simulations based
- on experimental data, and then runs simulations in parallel using
- ``multiprocessing``.
+ on experimental data, and then runs simulations in parallel using the
+ ``multiprocessing`` module.
 
 The implementation of each primary module is explained in the next three sections.
 In addition, in order to detect peaks in targeted quantities (e.g., pressure,
@@ -121,7 +121,7 @@ SciPy [Jones2001]_ for interpolation, Pint [Grecco2016]_ for
 interpreting and converting between units, PyTables [Alted2002]_ for HDF5 file
 manipulation, Cantera [Goodwin2016]_ for chemical kinetics, and
 ``pytest`` [Krekel2016]_ for unit testing. In addition, Travis-CI [Travis2016]_
-is used for continuous integration.
+is used for continuous integration testing.
 
 PyTeCK is availably openly via a GitHub repository [Niemeyer2016b]_
 under an MIT license.
@@ -281,7 +281,7 @@ Simulations of RCM experiments commonly provide
 a volume-time history to capture nonideal pre- and post-ignition heat losses,
 as well as effects due to the compression stroke.
 This data can be provided with experimental ``datapoints`` in ChemKED as a list
-of lists, with the ``column`` index and units identifed:
+of lists, with the ``column`` index and units identified:
 
 .. code-block:: yaml
 
@@ -804,8 +804,8 @@ Longer term plans for PyTeCK include extending support for other experimental
 types, including laminar flames and flow reactors, building in visualization of
 results, and creating an open database of ChemKED files for experimental data.
 
-Acknowledgements
-----------------
+Acknowledgments
+---------------
 
 I thank Bryan Weber of the University of Connecticut for helpful
 discussions on the ChemKED format and an early review of this paper.
