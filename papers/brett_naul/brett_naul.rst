@@ -16,7 +16,7 @@
 :institution: Lawrence Berkeley National Laboratory
 :institution: University of California, Berkeley
 
-:author: Fernando Perez
+:author: Fernando Pérez
 :email: fperez@lbl.gov
 :institution: Lawrence Berkeley National Laboratory
 :institution: University of California, Berkeley
@@ -80,7 +80,7 @@ resources available that allow domain scientists to easily build robust
 computational inference workflows for their own time series data, let alone
 data gathered more broadly in their field. The difficulties involved in
 constructing such a framework can often greatly outweigh those of analyzing the
-data itself: per :cite:`Scu14`:,
+data itself: per :cite:`scu2014`:,
  
         It may be surprising to the academic community to know that only a tiny
         fraction of the code in many machine learning systems is actually doing
@@ -112,19 +112,20 @@ scientific disciplines in mind.
 1. **Astronomical time series classification.** The Large Synoptic Survey
 Telescope (LSST), beginning in 2020, will survey the entire night’s sky
 every few days producing high-quality time series data on approximately 800
-million variable sources and transient events [?]. Much of the best
+million variable sources and transient events :cite:`lsst2009`. Much of the best
 science in the time-domain (e.g., the discovery of the accelerating universe
-and dark energy using Type Ia supernovae [?]) requires intelligent use
-of follow-up resources. Not knowing which of the millions of variable
-sources to follow-up with larger telescopes and specialized instruments is
-tantamount to not having discovered those sources in the first place.
-We need to create actionable discoveries that lead to timely and
-more informed decisions.
+and dark energy using Type Ia supernovae :cite:`perlmutter1999,riess1998`)
+requires intelligent use of follow-up resources. Not knowing which of the
+millions of variable sources to follow-up with larger telescopes and
+specialized instruments is tantamount to not having discovered those sources in
+the first place. We need to create actionable discoveries that lead to timely
+and more informed decisions.
 
 .. figure:: cesium-astro
 
-   Typical data for a classification task on variable stars [?]: shown are flux
-   measurements for three stars irregularly sampled in time. :label:`astro`
+   Typical data for a classification task on variable stars from the All Sky
+   Automated Survey; shown are flux measurements for three stars
+   irregularly sampled in time :cite:`richards2012`. :label:`astro`
 
 2. **Neuroscience time series classification.** The study of
 neural systems presents a wide variety of challenges in time series
@@ -146,12 +147,12 @@ specific to each recording method. Furthermore, in all modalities the
 volumes of available data are rapidly increasing. The neuroscience community
 is turning to the use of
 large-scale machine learning tools to extract insight from these complex
-datasets [?].
+datasets :cite:`lotte2007`.
 However, the community lacks tools to validate and compare data analysis
 approaches in a robust, efficient and reproducible manner: even recent
 expert reviews on the matter leave many of these critical methodological
-questions open for the user to explore in an ad-hoc way and with little
-principled guidance [?]. In addition, the problems of feature selection
+questions open for the user to explore in an ad hoc way and with little
+principled guidance :cite:`perez2007`. In addition, the problems of feature selection
 vary across data modalities (EEG, fMRI, etc.), yet these different
 modalities offer complementary views on the same underlying phenomena.
 
@@ -161,28 +162,28 @@ modalities offer complementary views on the same underlying phenomena.
 
 3. **Earthquake detection, characterization and warning.** Earthquake early
 warning (EEW) systems are currently in operation in Japan, Mexico, Turkey,
-Taiwan and Romania [?] and are under development in the US [?]. These
-first-generation systems, most notably in Japan, have employed sophisticated
-remote sensors, real-time connectivity to major broadcast outlets (such as
-TV and radio), and have a growing heritage of successful rapid assessment of
-threat levels to populations and industry.
-Traditionally these warning systems trigger from data obtained by
-high-quality seismic networks with sensors placed every \~10 km. The
-algorithms used to detect earthquakes are based on methodologies developed
-in the 1960s. However, today’s accelerometers are embedded in many consumer
-electronics including computers and smartphones. There is tremendous
-potential to improve earthquake detection methods using streaming
-classification analysis both using traditional network data and also
-harnessing massive data from consumer electronics. The Big Data challenges
-in the statistical modeling of such streams arise due to lower-quality
-detectors in higher noise environments and the requirement that events be
-triggered on in real-time (thus precluding more sophisticated,
-computationally demanding algorithms). The main tension in determining an
-optimal triggering procedure is the mitigation of false-positives (spurious
-triggering) versus false-negative (failure to trigger on a real event). The
-impact on national priorities for emergency response is clear: faster and
-more robust classification of earthquakes from noisy sensor data can enable
-the increase of the warning time from rupture to devastating impact.
+Taiwan and Romania :cite:`allen2009` and are under development in the US
+:cite:`brown2011`. These first-generation systems, most notably in Japan, have
+employed sophisticated remote sensors, real-time connectivity to major
+broadcast outlets (such as TV and radio), and have a growing heritage of
+successful rapid assessment of threat levels to populations and industry.
+Traditionally these warning systems trigger from data obtained by high-quality
+seismic networks with sensors placed every \~10 km. The algorithms used to
+detect earthquakes are based on methodologies developed in the 1960s. However,
+today’s accelerometers are embedded in many consumer electronics including
+computers and smartphones. There is tremendous potential to improve earthquake
+detection methods using streaming classification analysis both using
+traditional network data and also harnessing massive data from consumer
+electronics. The Big Data challenges in the statistical modeling of such
+streams arise due to lower-quality detectors in higher noise environments and
+the requirement that events be triggered on in real-time (thus precluding more
+sophisticated, computationally demanding algorithms). The main tension in
+determining an optimal triggering procedure is the mitigation of
+false-positives (spurious triggering) versus false-negative (failure to trigger
+on a real event). The impact on national priorities for emergency response is
+clear: faster and more robust classification of earthquakes from noisy sensor
+data can enable the increase of the warning time from rupture to devastating
+impact.
 
 .. figure:: cesium-seismo
 
@@ -192,17 +193,19 @@ Simple and reproducible workflows
 =================================
 One bold contention—if only in light of our impetus to produce reproducible
 science—is that all inputs demanding some form of classification or annotation
-statement should be piped through a machine learning-based framework. To this end, there has
-been growing availability of many open-source tools that implement a wide variety of
-machine learning algorithms: packages within the R [?] and Python programming
-languages [?], standalone Java-based packages such as Moa [?] and Weka [?],
-and online webservices such as the Google Prediction API. To a domain scientist
-that does not have a formal training in machine learning, however, the availability of such
-packages are both a blessing and a curse. On one hand, everyone now has access
-to nearly every conceivable machine learning algorithm. But on the other, these
-algorithms tend to be black boxes with a few enigmatic knobs to turn. A domain
-scientist may rightfully ask just which of the many algorithms to use, which
-parameters to tune, and what the results actually mean.
+statement should be piped through a machine learning-based framework. To this
+end, there has been growing availability of many open-source tools that
+implement a wide variety of machine learning algorithms: packages within the R
+:cite:`team2013` and Python programming languages :cite:`pedregosa2011`,
+standalone Java-based packages such as Moa :cite:`bifet2010` and Weka
+:cite:`hall2009`, and online webservices such as the Google Prediction API. To
+a domain scientist that does not have a formal training in machine learning,
+however, the availability of such packages are both a blessing and a curse. On
+one hand, everyone now has access to nearly every conceivable machine learning
+algorithm. But on the other, these algorithms tend to be black boxes with a few
+enigmatic knobs to turn. A domain scientist may rightfully ask just which of
+the many algorithms to use, which parameters to tune, and what the results
+actually mean.
 
 Building a functioning machine learning pipeline involves much more than
 choosing a mathematical model for your data. The goal of ``cesium`` is to
@@ -237,8 +240,9 @@ One main component of the ``cesium`` framework is the back-end Python library.
 Our framework primarily implements "feature-based methods", wherein the raw
 input time series data is used to compute "features" that compactly capture the
 complexity of the signal space (but at lower dimensionality); standard machine
-learning approaches (such as random forests [?] and support vector machines
-[?]) may then be used for supervised classification or regression.
+learning approaches (such as random forests :cite:`breiman2001` and support
+vector machines :cite:`suykens1999`) may then be used for supervised
+classification or regression.
 
 Feature generation is non-trivial both algorithmically and logistically. For
 example, the example analysis in Section ? for astronomical time-series is
@@ -259,14 +263,17 @@ such as maximum/minimum values, mean/median values, and standard deviation or me
 absolute deviation are a few such examples. Other simple features might also
 involve the measurement errors or the sampling times themselves. More
 complex features could be the estimated parameters for various fitted
-statistical models: Figure :ref:`cesium-ls` shows a multi-frequency,
+statistical models: Figure :ref:`ls` shows a multi-frequency,
 multi-harmonic Lomb-Scargle model that describes the rich periodic behavior in
-an example time series [?]. Parameters from this fitted model such as
-estimated periods and amplitudes can all be used as ``cesium`` features.
+an example time series :cite:`lomb1976,scargle1982`. Parameters from this
+fitted model such as estimated periods and amplitudes can all be used as
+``cesium`` features.
+*TODO expand on Lomb-Scargle*
 
 .. figure:: cesium-ls
 
-   Fitted multi-harmonic Lomb-Scargle model for a light curve from a periodic Mira-class star. :label:`ls`
+   Fitted multi-harmonic Lomb-Scargle model for a light curve from a periodic
+   Mira-class star. :label:`ls`
 
 In order to eliminate redundant computation,
 the set of necessary computations is represented internally as a directed
@@ -452,37 +459,25 @@ notebook versions are available for every example workflow.
 Example EEG dataset analysis
 ============================
 In this example we'll compare various techniques for epilepsy detection using a
-classic EEG time series dataset from Andrzejak et al. [?]. The raw data are
-separated into five classes: Z, O, N, F, and S; we will consider a three-class
-classification problem of distinguishing normal (Z, O), interictal (N, F), and
-ictal (S) signals. We'll show how to perform the exact same analysis using both
-the back-end Python library and the web front end.
+classic EEG time series dataset from Andrzejak et al. :cite:`andrzejak2001`.
+The raw data are separated into five classes: Z, O, N, F, and S; we will
+consider a three-class classification problem of distinguishing normal (Z, O),
+interictal (N, F), and ictal (S) signals. We'll show how to perform the
+same analysis using both the back-end Python library and the web front end.
 
 .. Here we present an example analysis of a light curve dataset from astronomy
    performed using both the Python library and the equivalent front end workflow. 
    The problem involves classifying light curves (i.e., time series consisting
    of times, star brightness values (in magnitudes), and measurement errors) based
    on the type of star from which they were collected. We follow the approach
-   of [?] using the same 810 training examples but with a reduced set of features
+   of :cite:`` using the same 810 training examples but with a reduced set of features
    for simplicity.
 
 Python library
 --------------
-*TODO: formatting; shorten*
-
 First, we'll load the data and inspect a representative time series from each class:
-
-.. code-block:: python
-
-        from cesium import datasets
-        
-        eeg = datasets.fetch_andrzejak()
-        
-        # Group together classes (Z, O), (N, F), (S) as normal, interictal, ictal
-        eeg["classes"] = eeg["classes"].astype('U16') #  allocate memory for longer class names
-        eeg["classes"][np.logical_or(eeg["classes"]=="Z", eeg["classes"]=="O")] = "Normal"
-        eeg["classes"][np.logical_or(eeg["classes"]=="N", eeg["classes"]=="F")] = "Interictal"
-        eeg["classes"][eeg["classes"]=="S"] = "Ictal"
+Figure :ref:`eeg` shows one time series from each of the three classes, after the time
+series are loaded from ``cesium.datasets.andrzejak``.
 
 
 Once the data is loaded, we can generate features for each time series using the
@@ -498,60 +493,43 @@ featurized serially.
 .. code-block:: python
         
         from cesium import featurize
-        features_to_use = ['amplitude',
+
+        features_to_use = ['amplitude', 'maximum', 'max_slope',
+                           'median', 'median_absolute_deviation',
                            'percent_beyond_1_std',
-                           'maximum',
-                           'max_slope',
-                           'median',
-                           'median_absolute_deviation',
-                           'percent_close_to_median',
-                           'minimum',
-                           'skew',
-                           'std',
-                           'weighted_average']
-        fset_cesium = featurize.featurize_time_series(times=eeg["times"],
-                                                      values=eeg["measurements"],
-                                                      errors=None,
-                                                      features_to_use=features_to_use,
-                                                      targets=eeg["classes"], use_celery=True)
-        print(fset_cesium)
+                           'percent_close_to_median', 'minimum',
+                           'skew', 'std', 'weighted_average']
+        fset_cesium = featurize.featurize_time_series(
+                          times=eeg["times"],
+                          values=eeg["measurements"],
+                          errors=None,
+                          features_to_use=features_to_use,
+                          targets=eeg["classes"])
 
 .. code-block:: python
 
         <xarray.Dataset>
-        Dimensions:                    (channel: 1, name: 500)
+        Dimensions:   (channel: 1, name: 500)
         Coordinates:
-          * channel                    (channel) int64 0
-          * name                       (name) int64 0 1 2 3 4 5 6 7 8 9 10 11 12 13 ...
-            target                     (name) object 'Normal' 'Normal' 'Normal' ...
+        * channel   (channel) int64 0
+        * name      (name) int64 0 1 ...
+          target    (name) object 'Normal' 'Normal' ...
         Data variables:
-            minimum                    (name, channel) float64 -146.0 -254.0 -146.0 ...
-            amplitude                  (name, channel) float64 143.5 211.5 165.0 ...
-            median_absolute_deviation  (name, channel) float64 28.0 32.0 31.0 31.0 ...
-            percent_beyond_1_std       (name, channel) float64 0.1626 0.1455 0.1523 ...
-            maximum                    (name, channel) float64 141.0 169.0 184.0 ...
-            median                     (name, channel) float64 -4.0 -51.0 13.0 -4.0 ...
-            percent_close_to_median    (name, channel) float64 0.505 0.6405 0.516 ...
-            max_slope                  (name, channel) float64 1.111e+04 2.065e+04 ...
-            skew                       (name, channel) float64 0.0328 -0.09271 ...
-            weighted_average           (name, channel) float64 -4.132 -52.44 12.71 ...
-            std                        (name, channel) float64 40.41 48.81 47.14 ...
+          minimum   (name, channel) float64 -146.0 -254.0 ...
+          amplitude (name, channel) float64 143.5 211.5 ...
+          ...
 
 
-The output of
-``featurize_time_series``
-is an ``xarray.Dataset`` which contains all the feature information needed to train a machine
-learning model: feature values are stored as data variables, and the time series index/class
-label are stored as coordinates (a ``channel`` coordinate will also be used later for
-multi-channel data).
+The output of ``featurize_time_series`` is an ``xarray.Dataset`` which contains all the
+feature information needed to train a machine learning model: feature values are stored as
+data variables, and the time series index/class label are stored as coordinates (a
+``channel`` coordinate will also be used later for multi-channel data).
 
 Custom feature functions not built into ``cesium`` may be passed in using the
 ``custom_functions`` keyword, either as a dictionary ``{feature_name: function}``, or as a
-``dask`` graph. Functions should take
-three arrays ``times, measurements, errors`` as inputs; details can be found in the
-``cesium.featurize``
-documentation.
-Here we'll compute five standard features for EEG analysis provided by Guo et al. [?]:
+``dask`` graph. Functions should take three arrays ``times, measurements, errors`` as
+inputs; details can be found in the ``cesium.featurize`` documentation. Here we'll
+compute five standard features for EEG analysis suggested by Guo et al. :cite:`guo2011`:
 
 .. code-block:: python
                 
@@ -586,62 +564,62 @@ keyword argument.
             'skew': skew_signal
         }
         
-        fset_guo = featurize.featurize_time_series(times=eeg["times"], values=eeg["measurements"],
-                                                   errors=None, targets=eeg["classes"], 
-                                                   features_to_use=list(guo_features.keys()),
-                                                   custom_functions=guo_features,
-                                                   use_celery=True)
-        print(fset_guo)
+        fset_guo = featurize.featurize_time_series(
+                       times=eeg["times"],
+                       values=eeg["measurements"],
+                       errors=None, targets=eeg["classes"], 
+                       features_to_use=guo_features.keys(),
+                       custom_functions=guo_features)
 
 .. code-block:: python
 
         <xarray.Dataset>
         Dimensions:    (channel: 1, name: 500)
         Coordinates:
-          * channel    (channel) int64 0
-          * name       (name) int64 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 ...
-            target     (name) object 'Normal' 'Normal' 'Normal' 'Normal' 'Normal' ...
+        * channel    (channel) int64 0
+        * name       (name) int64 0 1 ...
+          target     (name) object 'Normal' 'Normal' ...
         Data variables:
-            abs_diffs  (name, channel) float64 4.695e+04 6.112e+04 5.127e+04 ...
-            mean       (name, channel) float64 -4.132 -52.44 12.71 -3.992 -18.0 ...
-            mean2      (name, channel) float64 1.65e+03 5.133e+03 2.384e+03 ...
-            skew       (name, channel) float64 0.0328 -0.09271 -0.0041 0.06368 ...
-            std        (name, channel) float64 40.41 48.81 47.14 47.07 44.91 45.02 ...
+          abs_diffs  (name, channel) float64 4695.2 6112.6 ...
+          mean       (name, channel) float64 -4.132 -52.44 ...
+          mean2      (name, channel) float64 1652.0 5133.3 ...
+          skew       (name, channel) float64 0.0328 -0.09271 ...
+          std        (name, channel) float64 40.41 48.81 ...
 
-The EEG time series considered here consist of univariate signal measurements
-along a uniform time grid. But ``featurize_time_series`` also accepts
-multi-channel data; to demonstrate this, we will decompose each signal into
-five frequency bands using a discrete wavelet transform as suggested by Subasi
-[?], and then featurize each band separately using the five functions from
-above.
+The EEG time series considered here consist of univariate signal measurements along a
+uniform time grid. But ``featurize_time_series`` also accepts multi-channel data; to
+demonstrate this, we will decompose each signal into five frequency bands using a discrete
+wavelet transform as suggested by Subasi :cite:`subasi2007`, and then featurize each band
+separately using the five functions from above.
 
 .. code-block:: python
 
         import pywt
         
         n_channels = 5
-        eeg["dwts"] = [pywt.wavedec(m, pywt.Wavelet('db1'), level=n_channels-1)
+        eeg["dwts"] = [pywt.wavedec(m, pywt.Wavelet('db1'),
+                                    level=n_channels-1)
                        for m in eeg["measurements"]]
-        fset_dwt = featurize.featurize_time_series(times=None, values=eeg["dwts"], errors=None,
-                                                   features_to_use=list(guo_features.keys()),
-                                                   targets=eeg["classes"],
-                                                   custom_functions=guo_features)
-        print(fset_dwt)
+        fset_dwt = featurize.featurize_time_series(
+                       times=None, values=eeg["dwts"], errors=None,
+                       features_to_use=guo_features.keys(),
+                       targets=eeg["classes"],
+                       custom_functions=guo_features)
         
 .. code-block:: python
 
         <xarray.Dataset>
         Dimensions:    (channel: 5, name: 500)
         Coordinates:
-          * channel    (channel) int64 0 1 2 3 4
-          * name       (name) int64 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 ...
-            target     (name) object 'Normal' 'Normal' 'Normal' 'Normal' 'Normal' ...
+        * channel    (channel) int64 0 1 ...
+        * name       (name) int64 0 1 ...
+          target     (name) object 'Normal' 'Normal' ...
         Data variables:
-            abs_diffs  (name, channel) float64 2.513e+04 1.806e+04 3.241e+04 ...
-            skew       (name, channel) float64 -0.0433 0.06578 0.2999 0.1239 0.1179 ...
-            mean2      (name, channel) float64 1.294e+04 5.362e+03 2.321e+03 664.4 ...
-            mean       (name, channel) float64 -17.08 -6.067 -0.9793 0.1546 0.03555 ...
-            std        (name, channel) float64 112.5 72.97 48.17 25.77 10.15 119.8 ...
+          abs_diffs  (name, channel) float64 25131 18069 ...
+          skew       (name, channel) float64 -0.0433 0.06578 ...
+          mean2      (name, channel) float64 12944 5362.3 ...
+          mean       (name, channel) float64 -17.08 -6.067 ...
+          std        (name, channel) float64 112.5 72.97 ...
 
 
 The output featureset has the same form as before, except now the ``channel`` coordinate is
@@ -663,7 +641,7 @@ features, it also handles reshaping the featureset into a (rectangular) form tha
 compatible with ``scikit-learn``.
 
 For this example, we'll test a random forest classifier for the built-in ``cesium`` features,
-and a 3-nearest neighbors classifier for the others, as suggested by Guo et al. [?].
+and a 3-nearest neighbors classifier for the others, as in :cite:`guo2011`.
 
 .. code-block:: python
         
@@ -674,18 +652,20 @@ and a 3-nearest neighbors classifier for the others, as suggested by Guo et al. 
         
         train, test = train_test_split(np.arange(len(eeg["classes"])), random_state=0)
         
-        rfc_param_grid = {'n_estimators': [8, 16, 32, 64, 128, 256, 512, 1024]}
-        model_cesium = build_model_from_featureset(fset_cesium.isel(name=train),
-                                                  RandomForestClassifier(max_features='auto',
-                                                                         random_state=0),
-                                                  params_to_optimize=rfc_param_grid)
+        rfc_param_grid = {'n_estimators': [8, 32, 128, 512]}
+        model_cesium = build_model_from_featureset(
+                           fset_cesium.isel(name=train),
+                           RandomForestClassifier(),
+                           params_to_optimize=rfc_param_grid)
         knn_param_grid = {'n_neighbors': [1, 2, 3, 4]}
-        model_guo = build_model_from_featureset(fset_guo.isel(name=train),
-                                                KNeighborsClassifier(),
-                                                params_to_optimize=knn_param_grid)
-        model_dwt = build_model_from_featureset(fset_dwt.isel(name=train),
-                                                KNeighborsClassifier(),
-                                                params_to_optimize=knn_param_grid)
+        model_guo = build_model_from_featureset(
+                        fset_guo.isel(name=train),
+                        KNeighborsClassifier(),
+                        params_to_optimize=knn_param_grid)
+        model_dwt = build_model_from_featureset(
+                        fset_dwt.isel(name=train),
+                        KNeighborsClassifier(),
+                        params_to_optimize=knn_param_grid)
 
 Making predictions for new time series based on these models follows the same pattern:
 first the time series are featurized using
@@ -698,25 +678,35 @@ and then predictions are made based on these features using
         from sklearn.metrics import accuracy_score
         from cesium.predict import model_predictions
         
-        preds_cesium = model_predictions(fset_cesium, model_cesium, return_probs=False)
-        preds_guo = model_predictions(fset_guo, model_guo, return_probs=False)
-        preds_dwt = model_predictions(fset_dwt, model_dwt, return_probs=False)
+        preds_cesium = model_predictions(
+                           fset_cesium, model_cesium,
+                           return_probs=False)
+        preds_guo = model_predictions(fset_guo, model_guo,
+                           return_probs=False)
+        preds_dwt = model_predictions(fset_dwt, model_dwt,
+                           return_probs=False)
         
-        print("Built-in cesium features: training accuracy={:.2%}, test accuracy={:.2%}".format(
-                  accuracy_score(preds_cesium[train], eeg["classes"][train]),
-                  accuracy_score(preds_cesium[test], eeg["classes"][test])))
-        print("Guo et al. features: training accuracy={:.2%}, test accuracy={:.2%}".format(
-                  accuracy_score(preds_guo[train], eeg["classes"][train]),
-                  accuracy_score(preds_guo[test], eeg["classes"][test])))
-        print("Wavelet transform features: training accuracy={:.2%}, test accuracy={:.2%}".format(
-                  accuracy_score(preds_dwt[train], eeg["classes"][train]),
-                  accuracy_score(preds_dwt[test], eeg["classes"][test])))
+        print("Builtin: train acc={:.2%}, test acc={:.2%}"\
+              .format(accuracy_score(preds_cesium[train],
+                                     eeg["classes"][train]),
+                      accuracy_score(preds_cesium[test],
+                                     eeg["classes"][test])))
+        print("Guo et al.: train acc={:.2%}, test acc={:.2%}"\
+              .format(accuracy_score(preds_guo[train],
+                                     eeg["classes"][train]),
+                      accuracy_score(preds_guo[test],
+                                     eeg["classes"][test])))
+        print("Wavelets: train acc={:.2%}, test acc={:.2%}"\
+              .format(accuracy_score(preds_dwt[train],
+                                     eeg["classes"][train]),
+                      accuracy_score(preds_dwt[test],
+                                     eeg["classes"][test])))
 
 .. code-block:: python
 
-        Built-in cesium features: training accuracy=100.00%, test accuracy=83.20%
-        Guo et al. features: training accuracy=90.93%, test accuracy=84.80%
-        Wavelet transform features: training accuracy=100.00%, test accuracy=95.20%
+        Builtin: train acc=100.00%, test acc=83.20%
+        Guo et al.: train acc=90.93%, test acc=84.80%
+        Wavelets: train acc=100.00%, test acc=95.20%
 
 The workflow presented here is intentionally simplistic and omits many important steps
 such as feature selection, model parameter selection, etc., which may all be
@@ -724,85 +714,8 @@ incorporated just as they would for any other ``scikit-learn`` analysis.
 But with essentially three function calls (``featurize_time_series``,
 ``build_model_from_featureset``, and ``model_predictions``), we are able to build a
 model from a set of time series and make predictions on new, unlabeled data. In
-upcoming posts we'll introduce the web front end for ``cesium`` and describe how
+the next section we'll introduce the web front end for ``cesium`` and describe how
 the same analysis can be performed in a browser with no setup or coding required.
-
-.. Here we load the data from the built-in library of example datasets, specify the
-   features to use, and compute the feature values. We also include a (trivial)
-   custom feature ``variance`` which is the square of another feature ``std``.
-   
-   .. code-block:: python
-   
-           from cesium import featurize
-           from cesium.datasets import asas_training
-   
-           data = asas_training.fetch_asas_training()
-           # Choose a small subset of useful light curve features
-           features = ['flux_percentile_ratio_mid20',
-                       'fold2P_slope_10percentile',
-                       'fold2P_slope_90percentile',
-                       'freq1_amplitude1', 'freq1_amplitude2',
-                       'freq1_freq', 'gskew',
-                       'median_absolute_deviation',
-                       'percent_difference_flux_percentile',
-                       'scatter_res_raw', 'skew', 'std',
-                       'stetson_j', 'var']
-           fset = featurize.featurize_time_series(
-                      data['times'], data['measurements'],
-                      data['errors'], features_to_use=features,
-                      targets=data['classes'].values,
-                      labels=data['classes'].index,
-                      use_celery=True,
-                      custom_functions={'variance':
-                                        (np.square, 'std')})
-   
-   Next, we'll split the data into train and test subsets and train a random forest
-   classifier from the set of features computed above.
-   
-   .. code-block:: python
-   
-           from sklearn.cross_validation import train_test_split
-           from cesium import build_model
-   
-           # TODO clean up
-           # Choose a subset of classes
-           class_list = ['Mira', 'Classical_Cepheid', 'RR_Lyrae_FM']
-           labels = data['classes'].iloc[[x in class_list for x in
-                                         data['classes']]].index.values
-           fset = fset.sel(name=labels)
-   
-           # Select train/test indices
-           train, test = train_test_split(labels, train_size=0.8,
-                                          stratify=fset.target)
-           model = build_model.build_model_from_featureset(
-                       fset.sel(name=train),
-                       model_type='RandomForestClassifier',
-                       model_options={'n_estimators': 100})
-   
-   We may also choose the hyperparameter ``n_estimators`` from a grid via
-   cross-valdiation:
-   
-   .. code-block:: python
-   
-           model = build_model.build_model_from_featureset(
-                       fset.sel(name=train),
-                       model_type='RandomForestClassifier',
-                       params_to_optimize={'n_estimators':
-                                           [10, 100, 1000]})
-   
-   Finally, we'll check our prediction accuracy on the test data:
-   
-   .. code-block:: python
-   
-           from cesium import predict
-   
-           Y_test = predict.model_predictions(fset.sel(name=test),
-                                              model,
-                                              return_probs=False)
-           print((Y_test.values ==
-                  fset.sel(name=test).target.values).mean())
-   
-           >> 0.924528301887
 
 Web front end
 -------------
@@ -854,3 +767,6 @@ determining how much domain-specific functionality to include is an ongoing
 challenge.
 
 *TODO roadmap?*
+
+References
+==========
