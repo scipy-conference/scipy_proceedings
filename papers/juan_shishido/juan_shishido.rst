@@ -1,10 +1,12 @@
 :author: Matar Haller
 :email: matar@berkeley.edu
 :institution: Helen Wills Neuroscience Institute, University of California, Berkeley
+:equal-contributor:
 
 :author: Jaya Narasimhan
 :email: jnaras@berkeley.edu
 :institution: Department of Electrical Engineering and Computer Science, University of California, Berkeley
+:equal-contributor:
 
 :author: Juan Shishido
 :email: juanshishido@berkeley.edu
@@ -45,24 +47,25 @@ percent of 35-44 year olds, 13 percent of 45-54 year olds, and 12 percent of
 
 Previous studies suggest that the free text portion of online dating profiles
 is an important factor (after photographs) for assessing attractiveness
-[Fio08]_. Research into the principle of homophily suggests that people tend to
+[Fio08]_. The principle of homophily posits that people tend to
 associate and bond with similar others and that this principle strongly
 structures social networks and ties, most prominently by race and ethnicity
 [McP01]_. Perhaps not surprisingly, research suggests that homophily extends to
 online dating, with people seeking mates similar to themselves [Fio05]_.
 However, it remains unclear whether people within particular demographic groups,
-such as sex or ethnicity, self-present in similar ways when searching for a mate
-online.
+such as sex or ethnicity, self-present in similar ways when searching for a
+mate online.
 
-In this paper, we analyze demographic trends in online self-presentation. We
-were interested in learning whether demographic groups are distinct in the ways
-in which they self-present online. We extend previous natural language
-processing (NLP) analyses of online dating [Nag09]_ by combining NLP with
-machine learning on a larger scale. We leveraged multiple approaches including
-clustering and topic modeling as well as feature selection and modeling
-strategies. By exploring the relationship between free text self-descriptions
-and demographics, we find that we can predict a user's demographic makeup and
-discover some unexpected insights into deception.
+In this paper, we analyze demographic trends in online self-presentation.
+Specifically, we focus on whether people signal demograpic characteristics
+through the way they present themselves online. We extend previous natural
+language processing (NLP) analyses of online dating [Nag09]_ by combining NLP
+with supervised and unsupervised machine learning on a larger scale. We
+leverage multiple approaches including clustering and topic modeling as well as
+feature selection and modeling strategies. By exploring the relationships
+between free text self-descriptions and demographics, we find that we can
+predict a user's demographic makeup and also find some unexpected insights into
+deception.
 
 Data
 ----
@@ -86,19 +89,13 @@ Preprocessing
 
 Line break characters and URLs were removed from the essay text. Multiple
 periods, dashes, and white spaces were replaced by single instances. Users who
-wrote less than 5 words for a given essay—this was determined by splitting the
-text on white space—were removed from the analysis.
+wrote less than 5 words for a given essay (determined by splitting the
+text on white space) were removed from the analysis.
 
-We combined levels for 10 demographic variables with multiple categories. For
-example, there were several unique values for self-identified ethnicity,
-including people who identified as more than one. We grouped these individuals
-into a "multi-ethnic" category in order to reduce the cardinality in ethnicity.
-For drug usage, users who responded "sometimes" or "often" were grouped into a
-"yes" category. Individuals who answered "never" were assigned to the "no"
-group and we created an "unknown" category for users who did not answer.
-
-The 10 demographic variables that were recategorized were: religion, job, drugs,
-diet, body type, drinks, sign, ethnicity, pets, and speaks.
+We combined drug usage status levels. Specifically, users who responded
+"sometimes" or "often" were grouped into a "yes" category. Individuals who
+answered "never" were assigned to the "no" group and we created an "unknown"
+category for users who did not answer.
 
 Methods
 -------
@@ -106,7 +103,14 @@ Methods
 Log-Odds-Ratio
 ~~~~~~~~~~~~~~
 
-Log-odds-ratio
+One metric for comparing word usage across groups is to calculate the
+log-odds-ratio. The odds for word :math:`w` in the usage of group :math:`g`
+are defined as :math:`O_{iw} = \frac{f_{iw}}{(1 - f_{iw})}` where :math:`f_{iw}`
+is the frequency count of word :math:`w` normalized by total count of words
+used by group :math:`i`. If a word is used only by one group, its log-odds-ratio
+is infinite. Therefore, a constant is added to each frequency when calculating
+the odds. The log of the ratio of the adjusted odds between groups is  then
+taken and used to compare word usage across groups. 
 
 Non-negative Matrix Factorization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -116,10 +120,9 @@ k-dimensional semantic space, with each axis corresponding to a particular
 topic and each document being represented as a linear combination of those
 topics [Xu_03]_. With methods such as latent semantic indexing, the derived
 latent semantic space is orthogonal. Because of this, these type of methods
-can't easily handle cases where corpus topics overlap, as can often be the
-case. Conversely, NMF, can find directions for related or overlapping
-topics because the derived latent semantic space is not
-required to be orthogonal,
+can't easily handle cases where corpus topics overlap, as is often the case.
+Conversely, NMF, finds directions for related or overlapping topics because the
+derived latent semantic space is not required to be orthogonal.
 
 NMF was applied to each essay of interest using scikit-learn (version 0.17.1),
 which uses the coordinate descent solver. NMF utilizes document frequency
@@ -136,26 +139,22 @@ determined essay group membership.
 Permutation Testing
 ~~~~~~~~~~~~~~~~~~~
 
-Hypothesis testing provides ways to determine the likelihood of an observed
-test statistic under a null hypothesis. A permutation test uses randomization
-to compute that likelihood. There are several advantages to using randomization
-to make inferences. Traditional methods, such as t-tests or F-tests, assume
-that outcomes are independent and that they follow a normal distribution with
-mean :math:`\mu` and variance :math:`sigma^2` [Oeh10]_. In addition,
-permutation tests do not require large samples and "can be applied to all sorts
-of outcomes, including counts, durations, or ranks" [Ger12]_.
-
 Permutation tests provide an exact sampling distribution of a test statistic
 under the null hypothesis [Ger12]_. They do so by computing the test statistic
 for every way that labels can be associated with the observed data. In practice,
 permutations are rarely ever completely enumerated. Instead, the sampling
 distribution is approximated by randomly shuffling the labels :math:`P` times.
 
-To determine the likelihood of the observed test statistic, find the proportion
+The likelihood of the observed test statistic is determined as the proportion
 of times that the absolute value of the permuted test statistics are greater
 than or equal to the absolute value of the observed test statistic. This is the
 :math:`p`-value for a two-tailed hypothesis. Permutation-based methods can be
-used to compare two samples or to assess the performance of classifiers[Oja10]_.
+used to compare two samples or to assess the performance of classifiers [Oja10]_.
+
+There are several advantages to using randomization to make inferences as
+opposed to parametric methods. Permutation tests do not assume normality, do
+not require large samples and "can be applied to all sorts of outcomes,
+including counts, durations, or ranks" [Ger12]_.
 
 Term Frequency-Inverse Document Frequency
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -166,10 +165,9 @@ distinct tokens or to sequences of adjacent tokens. A token is a series of
 characters, such as a word, that is treated as a distinct unit [Bir10]_.
 
 One way to represent a corpus, or collection of text documents, is as a matrix
-of token counts. This weights terms by their absolute frequencies. In some
-cases, highly-wighted terms, such as "a" or "the," may not be very informative.
-Instead, token counts can be weighted using term frequency-inverse document
-frequency (tf-idf).
+of token counts. This weights terms by their absolute frequencies. Often,
+highly-wighted terms, such as "a" or "the," are not informative, so token
+counts are weighted using term frequency-inverse document frequency (tf-idf).
 
 Tf-idf is the product of the term frequency and the inverse document frequency.
 The term frequency refers to the *relative* frequency of term :math:`t` in
@@ -205,10 +203,10 @@ Petrov, Das, and McDonald's universal part-of-speech tagset [Pet11]_.
 Differences in lexical features by demographic were analyzed using permutation
 testing. We first compared average essay length by sex. Next, we examined
 whether the proportion of females using profanity was different than the
-proportion of males using such terms. The same was done for slang. Finally, we
-compared the average proportion of adjectives, nouns, and verbs and identified
-the most distinctive terms in each lexical category by sex using the smoothed
-log-odds-ratio that accounts for variance.
+proportion of males using such terms. The same was done for slang words.
+Finally, we compared the average proportion of adjectives, nouns, and verbs and
+identified the most distinctive terms in each lexical category by sex using the
+smoothed log-odds-ratio, which accounts for variance.
 
 Text semantics were also analyzed. The corpus was transformed into a tf-idf
 matrix using spaCy's default tokenizer with punctuation removed. We chose to
@@ -217,11 +215,11 @@ appeared in less than 0.5% of documents were removed. Non-negative matrix
 factorization (NMF) was used to identify latent structure in the text. This
 structure is in the form of "topics" or "clusters" which can be described by
 particular tokens. This was done for both essays. In order to determine whether
-particular demographics were more likely to write about particular topics, the
-distribution of users across topics was calculated relative to each demographic
-group. In cases where we are able to create superordinate groupings from NMF
-topics—for example, by combining semantically similar clusters—we use the
-log-odds-ratio to find distinctive tokens.
+particular demographics groups were more likely to write about particular
+topics, the distribution of users across topics was calculated relative to each
+demographic group. In cases where we are able to create superordinate groupings
+from NMF topics—for example, by combining semantically similar clusters—we use
+the log-odds-ratio to find distinctive tokens.
 
 Finally, we fit a logistic regression model to predict drug usage status for
 users in the "unknown" category.
@@ -638,7 +636,7 @@ Footnotes
 
 References
 ----------
-.. [Pew15] 5 Facts About Online Dating.
+.. [Pew16] 5 Facts About Online Dating.
 
 .. [Fio08] Assessing Attractiveness in Online Dating Profiles.
 
