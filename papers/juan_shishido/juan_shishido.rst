@@ -180,11 +180,17 @@ Approach
 
 Our analyses focus on two demographic dimensions—sex and drug usage—and on two
 essays—"my self summary" and "favorite books, movies, shows, music, food."
+These essays were chosen because we believe they provide a reliable
+representation of self-presentation and because most users chose to respond to
+them. "The most private thing I am willing to admit" prompt, on the other hand,
+was ignored by 32 percent of users. Other essays in this data set may provide
+additional insight into self-presentation and we may possibly consider those in
+future analyses.
 
-We began by exploring the lexical features of the text. Our goal was to
-determine whether there existed inherent differences in writing styles by
-demographic split. We considered essay length, the use of profanity and slang
-terms, and part-of-speech usage.
+We began by exploring the lexical features of the text as a way to determine
+whether there were differences in writing styles by demographic split. We
+considered essay length, the use of profanity and slang terms, and
+part-of-speech usage.
 
 Essay length was determined based on the tokenized essays. We used spaCy's
 default tokenizer, which is well suited for online communication as it
@@ -211,15 +217,17 @@ smoothed log-odds-ratio, which accounts for variance.
 Text semantics were also analyzed. The corpus was transformed into a tf-idf
 matrix using spaCy's default tokenizer with punctuation removed. We chose to
 include unigrams, bigrams, and trigrams [2]_. Stop words [3]_ and terms that
-appeared in less than 0.5% of documents were removed. Non-negative matrix
-factorization (NMF) was used to identify latent structure in the text. This
-structure is in the form of "topics" or "clusters" which can be described by
-particular tokens. This was done for both essays. In order to determine whether
-particular demographics groups were more likely to write about particular
-topics, the distribution of users across topics was calculated relative to each
-demographic group. In cases where we are able to create superordinate groupings
-from NMF topics—for example, by combining semantically similar clusters—we use
-the log-odds-ratio to find distinctive tokens.
+appeared in less than 0.5% of documents were removed. Stemming, the process of
+of removing word affixes, was not done.
+
+Non-negative matrix factorization (NMF) was used to identify latent structure
+in the text. This structure is in the form of "topics" or "clusters" which can
+be described by particular tokens. This was done for both essays. In order to
+determine whether particular demographics groups were more likely to write
+about particular topics, the distribution of users across topics was calculated
+relative to each demographic group. In cases where we are able to create
+superordinate groupings from NMF topics—for example, by combining semantically
+similar clusters—we use the log-odds-ratio to find distinctive tokens.
 
 Finally, we fit a logistic regression model to predict drug usage status for
 users in the "unknown" category.
