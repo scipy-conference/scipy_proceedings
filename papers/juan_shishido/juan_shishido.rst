@@ -76,7 +76,7 @@ Description
 The data was obtained from Albert Y. Kim's JSE_OkCupid repository [1]_. Profile
 information is available for 59,946 OkCupid users that were members as of
 06/26/2012, lived within 25 miles of San Francisco, had been active in the
-previous year, and had at least one photo in their profile [Wet12]_.
+previous year, and had at least one photo in their profile [Wet15]_.
 The data set contains free-text responses to 10 essay prompts as well as the
 following user characteristics: age, body type, diet, drinking status, drug
 usage status, education level, ethnicity, height, income, job type, location,
@@ -678,9 +678,12 @@ References
 .. [Ger12] Gerber, Alan S. and Green, Donald P (2012). Field Experiments:
            Design, Analysis, and Interpretation.
 
-.. [Oha10] Ojala, M., & Garriga, G. C. (2010). Permutation tests for studying
+.. [Oja10] Ojala, M., & Garriga, G. C. (2010). Permutation tests for studying
            classifier performance. Journal of Machine Learning Research,
            11(Jun), 1833-1863.
 
 .. [Bir10] Bird, S., Klein, E., & Loper E. (2010). Natural Language Processing
            with Python.
+
+.. [Pet11] Petrov, S., Das, D., & McDonald, R. (2011). A universal part-of-speech
+           tagset. arXiv preprint arXiv:1104.2086.
