@@ -28,24 +28,31 @@ attributes in their online profiles.
 
 .. class:: keywords
 
-   natural language processing, machine learning, topic modeling, okcupid,
-   online dating
+   natural language processing, machine learning, supervised learning,
+   unsupervised learning, topic modeling, okcupid, online dating
 
 Introduction
 ------------
 
 The way that people self-present online has broad implications for the
-relationships they pursue. Online dating has become a common way of finding
-mates, with 22% of 25-34 year olds having used online dating [Pew15]_. Previous
-studies suggest that the free text portion of online dating profiles is an
-important factor (after photographs) for assessing attractiveness [Fio08]_.
-Research into the principle of homophily suggests that people tend to associate
-and bond with similar others and that this principle strongly structures social
-networks and ties, most prominently by race and ethnicity [McP01]_. Perhaps not
-surprisingly, research suggests that homophily extends to online dating, with
-people seeking mates similar to themselves [Fio05]_. However, it remains
-unclear if people within a particular demographic group self-present in similar
-ways when searching for a mate online.
+relationships they pursue. Online dating has become a more common and more
+acceptable way of finding mates. Almost half of Americans know someone who uses
+or who has met a partner through online dating and 59% believe online dating is
+a good way to meet people [Pew16]_. Online dating sites or mobile dating apps
+are used by 27 percent of 18-24 year olds, 22 percent of 25-34 year olds, 21
+percent of 35-44 year olds, 13 percent of 45-54 year olds, and 12 percent of
+55-64 year olds [Pew16]_.
+
+Previous studies suggest that the free text portion of online dating profiles
+is an important factor (after photographs) for assessing attractiveness
+[Fio08]_. Research into the principle of homophily suggests that people tend to
+associate and bond with similar others and that this principle strongly
+structures social networks and ties, most prominently by race and ethnicity
+[McP01]_. Perhaps not surprisingly, research suggests that homophily extends to
+online dating, with people seeking mates similar to themselves [Fio05]_.
+However, it remains unclear whether people within particular demographic groups,
+such as sex or ethnicity, self-present in similar ways when searching for a mate
+online.
 
 In this paper, we analyze demographic trends in online self-presentation. We
 were interested in learning whether demographic groups are distinct in the ways
@@ -114,16 +121,17 @@ case. Conversely, NMF, can find directions for related or overlapping
 topics because the derived latent semantic space is not
 required to be orthogonal,
 
-NMF was applied to each essay of interest using scikit-learn (version 0.16), which
-uses the projected gradient solver [Lin07]_. NMF utilizes document frequency
-counts, so the tfidf matrix for unigrams, bigrams, and trigrams was calculated, while limiting
-tokens to those appearing in at least 1% of the documents (minimum frequency).
-NMF was calculated with k = 25 dimensions, which factorized the tfidf matrix into two
-matrices, W and H. The dimensions were n_samples x 25 and 25 x n_features for W
-and H, respectively. Group descriptions were given by top-ranked terms (the
-most distinctive) in the columns of H. Document membership weights were given
-by the rows of W. The maximum value in each row of W  determined
-essay group membership.
+NMF was applied to each essay of interest using scikit-learn (version 0.17.1),
+which uses the coordinate descent solver. NMF utilizes document frequency
+counts, so the tf-idf matrix for unigrams, bigrams, and trigrams was calculated,
+while limiting tokens to those appearing in at least 0.5% of the documents
+(minimum frequency). NMF was calculated with 25 dimensions, which factorized
+the tf-idf matrix into two matrices, :math:`W` and :math:`H`. The dimensions
+were math:`n_samples x 25` and :math:`25 x n_features` for :math:`W` and
+:math:`H`, respectively. Group descriptions were given by top-ranked terms (the
+most distinctive) in the columns of :math:`H`. Document membership weights were
+given by the rows of :math:`W`. The maximum value in each row of :math:`W`
+determined essay group membership.
 
 Permutation Testing
 ~~~~~~~~~~~~~~~~~~~
@@ -203,12 +211,13 @@ the most distinctive terms in each lexical category by sex using the smoothed
 log-odds-ratio that accounts for variance.
 
 Text semantics were also analyzed. The corpus was transformed into a tf-idf
-matrix containing unigrams, bigrams, and trigrams. Terms that appeared in less
-than 0.5% of documents were dropped. Non-negative matrix factorization (NMF)
-was used to identify latent structure in the text. This structure is in the
-form of "topics" or "clusters" which can be described by particular tokens.
-This was done for both essays. In order to determine whether particular
-demographics were more likely to write about particular topics, the
+matrix using spaCy's default tokenizer with punctuation removed. We chose to
+include unigrams, bigrams, and trigrams [2]_. Stop words [3]_ and terms that
+appeared in less than 0.5% of documents were removed. Non-negative matrix
+factorization (NMF) was used to identify latent structure in the text. This
+structure is in the form of "topics" or "clusters" which can be described by
+particular tokens. This was done for both essays. In order to determine whether
+particular demographics were more likely to write about particular topics, the
 distribution of users across topics was calculated relative to each demographic
 group. In cases where we are able to create superordinate groupings from NMF
 topics—for example, by combining semantically similar clusters—we use the
@@ -622,6 +631,11 @@ Footnotes
        anonimized" to exclude essays, we switched to Kim's repository. As far
        as we can tell, this data set is the same as the Wetchler original.
 
+.. [2] Unigrams are single tokens. Bigrams refer to two adjacent and trigrams
+       to three adjacent tokens.
+
+.. [3] Stop words are words that appear with very high frequency, such as 
+
 References
 ----------
 .. [Pew15] 5 Facts About Online Dating.
@@ -638,8 +652,6 @@ References
            `<https://github.com/everett-wetchler/okcupid.git>`_
 
 .. [Xu_03] Document clustering based on non-negative matrix factorization.
-
-.. [Lin07] Projected gradient methods for non-negative matrix factorization.
 
 .. [Tom12] What lies beneath: The linguistic traces of deception in online
            dating profiles.
