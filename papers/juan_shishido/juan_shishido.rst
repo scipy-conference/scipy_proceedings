@@ -130,7 +130,7 @@ counts, so the tf-idf matrix for unigrams, bigrams, and trigrams was calculated,
 while limiting tokens to those appearing in at least 0.5% of the documents
 (minimum frequency). NMF was calculated with 25 dimensions, which factorized
 the tf-idf matrix into two matrices, :math:`W` and :math:`H`. The dimensions
-were math:`n_samples x 25` and :math:`25 x n_features` for :math:`W` and
+were :math:`n_samples x 25` and :math:`25 x n_features` for :math:`W` and
 :math:`H`, respectively. Group descriptions were given by top-ranked terms (the
 most distinctive) in the columns of :math:`H`. Document membership weights were
 given by the rows of :math:`W`. The maximum value in each row of :math:`W`
@@ -203,8 +203,8 @@ Category:Slang page. Note that there is overlap between the profane and slang
 lists.
 
 Each token in the corpus was associated with a lexical category using spaCy's
-part-of-speech tagger. spaCy supports 19 coarse-grained tags that expand upon
-Petrov, Das, and McDonald's universal part-of-speech tagset [Pet11]_.
+part-of-speech tagger. spaCy supports 19 coarse-grained tags [2]_ that expand
+upon Petrov, Das, and McDonald's universal part-of-speech tagset [Pet11]_.
 
 Differences in lexical features by demographic were analyzed using permutation
 testing. We first compared average essay length by sex. Next, we examined
@@ -216,7 +216,7 @@ smoothed log-odds-ratio, which accounts for variance.
 
 Text semantics were also analyzed. The corpus was transformed into a tf-idf
 matrix using spaCy's default tokenizer with punctuation removed. We chose to
-include unigrams, bigrams, and trigrams [2]_. Stop words [3]_ and terms that
+include unigrams, bigrams, and trigrams [3]_. Stop words [4]_ and terms that
 appeared in less than 0.5% of documents were removed. Stemming, the process of
 of removing word affixes, was not done.
 
@@ -241,12 +241,9 @@ Lexical-based characteristics include essay length, use of profanity and slang
 terms, as well as part-of-speech usage.
 
 We first compare lexical-based characteristics on the self-summary text by sex.
-Our sample includes 21,321 females and 31,637 males. Note that the difference
-between this and the 59,946 users in the data set is due to our dropping users
-with less than five tokens in a particular essay. We find that, on average,
-females write just under 150 words (tokens, actually) compared to males' 139,
-though the variance is higher for the males than the females. This difference
-is statistically significant.
+Our sample includes 21,321 females and 31,637 males [5]_. We find that, on
+average, females write 150 terms compared to males' 139. This difference is
+statistically significant, based on permutation-based hypothesis testing.
 
 For profanity and slang, instead of comparing frequencies across demographic
 splits, we compare the proportion of users who use these terms.
@@ -637,10 +634,17 @@ Footnotes
        anonimized" to exclude essays, we switched to Kim's repository. As far
        as we can tell, this data set is the same as the Wetchler original.
 
-.. [2] Unigrams are single tokens. Bigrams refer to two adjacent and trigrams
+.. [2] https://spacy.io/docs#token-postags.
+
+.. [3] Unigrams are single tokens. Bigrams refer to two adjacent and trigrams
        to three adjacent tokens.
 
-.. [3] Stop words are words that appear with very high frequency, such as 
+.. [4] Stop words are words that appear with very high frequency, such as "the"
+       or "to."
+
+.. [5] The difference between the number of users in the data set and the
+       number of users in the analysis is due to the fact that we drop users
+       that write less than five tokens for a particular essay.
 
 References
 ----------
