@@ -1,15 +1,17 @@
 :author: Matar Haller
 :email: matar@berkeley.edu
 :institution: Helen Wills Neuroscience Institute, University of California, Berkeley
+:equal-contributor:
 
 :author: Jaya Narasimhan
 :email: jnaras@berkeley.edu
 :institution: Department of Electrical Engineering and Computer Science, University of California, Berkeley
+:equal-contributor:
 
 :author: Juan Shishido
 :email: juanshishido@berkeley.edu
 :institution: School of Information, University of California, Berkeley
-:corresponding: Juan Shishido (juanshishido@berkeley.edu)
+:corresponding:
 
 ----------------------------------------------------------
 Tell Me Something I Don't Know: Analyzing OkCupid Profiles
