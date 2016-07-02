@@ -12,70 +12,71 @@ PySPH: a reproducible and high-performance framework for smoothed particle hydro
 .. class:: abstract
 
     Smoothed Particle Hydrodynamics (SPH) is a general purpose technique to
-    numerically compute the solutions to partial differential equations.  The
-    method is grid-free and uses particles to discretize the various
-    properties of interest.  The method is Lagrangian and particles are moved
-    with the local velocity.
+    numerically compute the solutions to partial differential equations such
+    as those used to simulate fluid and solid mechanics.  The method is
+    grid-free and uses particles to discretize the various properties of
+    interest (such as density, fluid velocity, pressure etc.).  The method is
+    Lagrangian and particles are moved with the local velocity.
 
     PySPH is an open source framework for Smoothed Particle Hydrodynamics.  It
     is implemented in a mix of Python and Cython.  It is designed to be easy
     to use on multiple platforms, high-performance and support parallel
     execution.  Users write pure-Python code and HPC code is generated on the
     fly, compiled, and executed.  PySPH supports OpenMP and MPI for
-    distributed computing.  This is transparent to the user.  PySPH is also
-    designed to make it easy to perform reproducible research.  In this paper
-    we discuss the design and implementation of PySPH.
+    distributed computing, in a way that is transparent to the user.  PySPH is
+    also designed to make it easy to perform reproducible research.  In this
+    paper we discuss the design and implementation of PySPH.
 
 
 Background and Introduction
 ----------------------------
 
 SPH (Smoothed Particle Hydrodynamics) is a general purpose technique to
-numerically compute the solutions to partial differential equations.  The
-method is grid-free and uses particles to discretize the various properties of
-interest.  The method is Lagrangian and particles are moved with the local
-velocity.  The method was originally developed for astrophysical problems
-:cite:`lucy77`, :cite:`monaghan77` (compressible gas-dynamics) but has since
-been extended to simulate incompressible fluids
-:cite:`sph:fsf:monaghan-jcp94`, solid mechanics :cite:`sph-elastic:gray:2001`,
-free-surface problems :cite:`sph:fsf:monaghan-jcp94` and a variety of other
-problems.  Monaghan :cite:`monaghan-review:2005`, provides a good review of
-the method.
+numerically compute the solutions to partial differential equations used to
+simulate fluid and solid mechanics.  The method is grid-free and uses
+particles to discretize the various properties of interest.  The method is
+Lagrangian and particles are moved with the local velocity.  The method was
+originally developed for astrophysical problems :cite:`lucy77`,
+:cite:`monaghan77` (compressible gas-dynamics) but has since been extended to
+simulate incompressible fluids :cite:`sph:fsf:monaghan-jcp94`, solid mechanics
+:cite:`sph-elastic:gray:2001`, free-surface problems
+:cite:`sph:fsf:monaghan-jcp94` and a variety of other problems.  Monaghan
+:cite:`monaghan-review:2005`, provides a good review of the method.
 
 The SPH method is relatively easy to implement.  This has resulted in a large
-number of schemes and implementations proposed by various researchers.  It is
-often difficult to reproduce published results due to the variety of
-implementations.  While a few standard packages like (SPHysics
+number of schemes and implementations proposed by various researchers.  SPH
+schemes differ in the details of how the governing equations are approximated.
+It is often difficult to reproduce published results due to the variety of
+implementations.  While a few standard packages like SPHysics
 :cite:`sphysics`, DualSPHysics :cite:`dualsphysics`, JOSEPHINE
 :cite:`josephine-sph:cpc:2015`, GADGET-2 :cite:`gadget2-springel:mnras:2005`
-etc.)  exist, they are usually tailor-made for particular applications and are
-not general purpose.  They are all implemented in FORTRAN (77 or 90) or C.
-They do not have a convenient Python interface.
+etc. exist, they are usually tailor-made for particular applications and are
+not general purpose.  They are all implemented in FORTRAN (77 or 90) or C, and
+do not have a convenient Python interface.
 
 Our group has been developing PySPH (http://pysph.bitbucket.org) over the last
 5 years.  PySPH is open source, and distributed under the new BSD license.
 Our initial implementation was based on Cython :cite:`behnel2010cython` and
 also featured some parallelization using MPI.  This was presented at SciPy
 2010 :cite:`PR-pysph-scipy-2010`.  Unfortunately, this previous version of
-PySPH, proved difficult to use as users were forced to implement most of their
+PySPH proved difficult to use as users were forced to implement most of their
 code in Cython.  This was not a matter of simply writing a few high
-performance functions in Cython.  Our library is object oriented and
+performance functions in Cython.  The PySPH library is object oriented and
 supporting a new SPH formulation would require subclassing one or more classes
-and this would need to be done with Cython.  Our type system also ended up
-becoming more rigid because if we desired performance as well as a general
-purpose code, all the types needed to be pre-defined.  In addition, writing
-all this in Cython meant that users had to manage compilation and linking the
-Cython code during development.  This was not pleasant.
+and this would need to be done with Cython.  This made the design more rigid
+as all the types needed to be pre-defined.  Writing all this in Cython meant
+that users had to manage compilation and linking the Cython code during
+development.  This made development with PySPH inconvenient.
 
-It was felt that we might as well have implemented it all in C++ and exposed a
-Python interface to that.  A traditional compiled language has more developer
-tooling around it.  For example debugging, performance tuning, profiling would
-all be easier if everything were written in C or C++.  Unfortunately, such a
-mixed code-base would not be as easy to use, extend or maintain as a largely
-pure Python library.  In our experience, a pure Python library is a lot easier
-for say an undergraduate student to grasp and use over a C/C++ code.  Others
-are also finding this to be true :cite:`py:nature:2015`.  Many of the top US
-universities are teaching Python as their first language
+It was felt that we might as well have implemented the core library in C++ and
+exposed a Python interface to it.  A traditional compiled language has more
+developer tooling around it.  For example debugging, performance tuning,
+profiling would all be easier if everything were written in C or C++.
+Unfortunately, such a mixed code-base would not be as easy to use, extend or
+maintain as a largely pure Python library.  In our experience, a pure Python
+library is a lot easier for say an undergraduate student to grasp and use over
+a C/C++ code.  Others are also finding this to be true :cite:`py:nature:2015`.
+Many of the top US universities are teaching Python as their first language
 :cite:`py:teaching-us`. This means that a Python library would also be easier
 for relatively inexperienced programmers.  It is also true that a Python
 library would be easier and shorter to write for the other
@@ -98,7 +99,7 @@ running on a cluster of machines via MPI.  This is seamless and a serial
 script using PySPH can be run with almost no changes using MPI.
 
 PySPH features a reasonable test-suite and continuous integration servers are
-used to test it on Linux and Windows.  The documentation is hosted on
+used to test it on Linux and Windows.  The documentation is hosted at
 http://pysph.readthedocs.org.  The framework supports several of the standard
 SPH schemes.  A suite of about 30 examples are provided.  These are shipped as
 part of the sources and installed when a user does a pip install.  The
@@ -221,8 +222,8 @@ Numerical implementation
 As discussed in the previous section, in an SPH scheme, the field properties
 are first discretized into particles carrying them.  Partial differential
 equations are reduced to a system of coupled ordinary differential equations
-and discretized using an SPH approximation.  This results in a system of ODEs
-for each particle.  These ODEs need to be integrated in time along with
+(ODEs) and discretized using an SPH approximation.  This results in a system of
+ODEs for each particle.  These ODEs need to be integrated in time along with
 suitable boundary and initial conditions in order to solve a particular
 problem.  To summarize, a typical SPH computation proceeds as follows,
 
@@ -247,8 +248,8 @@ Given the total accelerations, the ODEs can be readily integrated with a
 variety of schemes.  Any general purpose abstraction of the SPH method must
 hence provide functionality to:
 
-1. Easily discretize properties into particles.  This is easily done with
-   ``numpy`` arrays representing the property values in Python.
+1. Easily represent the discretized properties of particles.  This is easily
+   done with ``numpy`` arrays representing the property values in Python.
 2. Given a particle, identify the neighbors that influence the particle.  This
    is typically called Nearest Neighbor Particle Search (NNPS) in the
    literature.
@@ -289,8 +290,13 @@ The current version of PySPH supports the following:
   feature requires mpi4py_ and Zoltan_ to be installed.
 - PySPH provides a built-in 3D viewer for the particle data generated.  The
   viewer requires Mayavi_ :cite:`it:mayavi:cise:gael2011` To be installed.
-- PySPH is also free and currently hosted at http://pysph.bitbucket.org
+- PySPH is also open-source and currently hosted at http://pysph.bitbucket.org
 
+Currently, PySPH supports the simulation of compressible and incompressible
+fluid flows (with and without free-surfaces), simple rigid-body motion, and
+elastic dynamics for solids.  It does not support astro-physical simulations
+since it lacks the tree-code needed to simulate graviational forces.  This can
+be added but is not the current focus.
 
 In the following subsection we provide a high-level overview of PySPH and see
 how it can be used by a user.  Subsequent subsections discuss the design and
@@ -326,10 +332,10 @@ If one wishes to use OpenMP,
 
 If one wishes to use MPI for distributed computing, one must install Zoltan_
 which is typically easy to install.  PySPH provides a simple script for this.
-mpi4py_ is also needed in this case.  Unfortunately, MPI is not tested on
-Windows by us currently.
-
-PySPH also provides an optional 3D viewer and this depends on Mayavi_.
+mpi4py_ is also needed in this case.  Zoltan is used for load-balancing and
+distributing the particles efficiently on distributed machines.
+Unfortunately, MPI is not tested on Windows by us currently.  PySPH also
+provides an optional 3D viewer and this depends on Mayavi_.
 
 In summary, PySPH is easy to install if one has a C++ compiler installed.
 MPI support is a little involved due to the requirement to install Zoltan_.
@@ -355,8 +361,6 @@ these examples can be readily run.  For example::
   1. cavity
      Lid driven cavity using the Transport Velocity
      formulation. (10 minutes)
-  [...]
-  6. elliptical_drop
   [...]
   Enter example number you wish to run:
 
@@ -402,7 +406,7 @@ data from a different output directory.  Hitting the refresh button will
 rescan the directory to check for any new files.  This makes it convenient to
 visualize the results from a running simulation.  The "Connection" tab can be
 used when the visualization is in "Live mode" when it can connect to a running
-simulation and view the data live.  While this is very cool in principle, it
+simulation and view the data live.  While this is very useful in principle, it
 is seldom used in practice as it is a lot more efficient to just view the
 dumped files and use the "Refresh" button is convenient.  Regardless, it does
 show another feature of PySPH in that one can actually pause a running
@@ -450,19 +454,14 @@ solver data:
 
     particle_arrays = data['arrays']
     solver_data = data['solver_data']
-
-``particle_arrays`` is a dictionary of all the PySPH particle arrays.
-One can obtain the PySPH particle array, ``fluid``, like so:
-
-.. code-block:: python
-
     fluid = particle_arrays['fluid']
     p = fluid.p
 
-Here ``p`` is a NumPy array of the pressure of each particle.  Particle arrays
-are described in greater detail in the following sections.  Our intention here
-is to show that the dumped data can be very easily loaded back into Python if
-desired.
+where ``particle_arrays`` is a dictionary of all the PySPH particle arrays.
+``solver_data`` is another dictionary with solver properties and ``p`` is a
+NumPy array of the pressure of each particle.  Particle arrays are described
+in greater detail in the following sections.  Our intention here is to show
+that the dumped data can be very easily loaded into Python if desired.
 
 
 .. _nose: https://pypi.python.org/pypi/nose
@@ -506,10 +505,10 @@ PySPH follows several of the standard software development practices that most
 modern open source implementations follow.  For example:
 
 - Our sources are hosted on bitbucket (http://pysph.bitbucket.org).  We are
-  thinking of shifting to github because github has much better integration
+  thinking of shifting to GitHub because GitHub has much better integration
   with continuous integration services and this is a rather frustrating pain
   point with bitbucket.
-- We use pull-requests to review all new features and bug fixes.  At this
+- We use pull requests to review all new features and bug fixes.  At this
   point there is only a single reviewer (the author) but this should hopefully
   increase over time.
 - PySPH has a reasonable set of unit tests and functional tests.  Each time a
@@ -523,7 +522,7 @@ modern open source implementations follow.  For example:
   builds.
 - Our documentation is generated using Sphinx and hosted online on
   http://pysph.readthedocs.io.
-- Releases are pushed to pypi.
+- Releases are pushed to the Python Package Index (PyPI).
 - The `pysph-users mailing list
   <https://groups.google.com/forum/#!forum/pysph-users>`_ is also available
   where users can post their questions.  Unfortunately, the response time is
@@ -674,8 +673,7 @@ We next look inside the ``create_particles`` and ``create_scheme`` methods:
    :linenos:
 
     def create_particles(self):
-        x, y = mgrid[-1.05:1.05+1e-4:dx,
-                     -1.05:1.05+1e-4:dx]
+        x, y = mgrid[-1.:1.05:dx,-1.:1.05:dx]
         x, y = x.ravel(), y.ravel()
         m = ones_like(x)*dx*dx
         h = ones_like(x)*hdx*dx
@@ -694,7 +692,6 @@ We next look inside the ``create_particles`` and ``create_scheme`` methods:
             x=x, y=y, m=m, rho=rho, h=h, p=p,
             u=u, v=v, cs=cs, name='fluid')
         pa.remove_particles(indices)
-
         self.scheme.setup_properties([pa])
         return [pa]
 
@@ -720,7 +717,7 @@ created that set the position, mass, smoothing radius :math:`h`, the velocity
 etc.  The arrays are all one dimensional.  The indices that are outside the
 circle are identified between lines 11 and 14 and these are removed in
 line 20.  This could have also been done with pure NumPy indexing.  In Line 17
-the particle array instance is created and is called ``"fluid"``.  Line 22
+the particle array instance is created and is called ``'fluid'``.  Line 22
 delegates to the ``scheme`` to setup any additional properties for the
 particle array and finally a list of particle arrays is returned.
 
@@ -779,7 +776,6 @@ code is listed below:
 
                 XSPHCorrection(dest='fluid',
                                sources=['fluid']),
-
             ]),
         ]
         return equations
@@ -936,7 +932,7 @@ dependencies of this generated source.
 As a result of this, the code performs almost as well as a hand-written FOTRAN
 code.  We have compared running both 2D and 3D problems with the SPHysics
 serial code.  In 2D our code is about 1.5 times slower.  This is in part
-because by default the PySPH implementation is 3D.  In 3D PySPH is about 1.3
+because by default the PySPH implementation is 3D.  In 3D, PySPH is about 1.3
 times slower.  SPHysics symmetrizes the inter-particle computations,
 i.e. while computing the interaction of a source on a destination, they also
 compute the opposite force and store it.  This appears to provide additional
@@ -964,30 +960,27 @@ The object-oriented API of PySPH makes it easy to extend and use.  The design
 allows for a large amount of code reuse.
 
 We have found that it is extremely important to treat our examples to be as
-important as the source itself.  This forces us to design our examples to be
-reusable.  This is extremely important for various reasons:
+important as the source itself and that these should be shipped with the
+installation as part of the sources.  This forces us to design our examples to
+be reusable.  This is extremely important as:
 
-- It forces a clean API for an end-user.  This drives us to minimize
+- it forces a clean API for an end-user.  This drives us to minimize
   repetitive code, and simplify the API.
-- The examples are all reusable.  If a user wishes to try a new scheme they
-  need to just focus on the new scheme.  The particle creation and post
-  processing are already implemented.
+- the examples are all reusable.  If a user wishes to try a new scheme they
+  need to just focus on the new scheme.
+- it makes the library easier to use.
 
-- We find that while post-processing results, we also dump out the
-  post-processed data into a separate file.  This makes it trivial to compare
-  the output of different schemes.
+While post-processing results, the post-processed data is dumped into a
+separate file.  This makes it trivial to compare the output of different
+schemes.  Some simple tools in ``pysph.tools.automation`` are provided which
+make it easy to use PySPH in an automation framework.
 
-- Shipping the examples with the installation is very important.
-
-- We also provide some simple tools in ``pysph.tools.automation`` which make
-  it easy to use PySPH in an automation framework.
-
-Recently, we have used these features to make an entire publication completely
-reproducible.  Every figure produced in the paper (a total of 23 in number)
-are produced with a single driver script making it possible to rerun all the
-simulations with a single command.  This will be described in a future
-publication.  However, it is important to note that PySPH thus allows for
-reproducible computation for SPH.
+Recently, we have used these features to make an entire publication
+:cite:`PR-edac-submit` completely reproducible.  Every figure produced in the
+paper (a total of 23 in number) is produced with a single driver script
+making it possible to rerun all the simulations with a single command.  This
+will be described in a future publication.  However, it is important to note
+that PySPH allows for reproducible computation with the SPH method.
 
 
 Plans
