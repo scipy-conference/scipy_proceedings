@@ -97,15 +97,16 @@ that of a lower-level language implementation.  PySPH has always supported
 running on a cluster of machines via MPI.  This is seamless and a serial
 script using PySPH can be run with almost no changes using MPI.
 
-PySPH features a reasonable test-suite and we use continuous integration
-servers to test it on Linux and Windows.  Our documentation is hosted on
+PySPH features a reasonable test-suite and continuous integration servers are
+used to test it on Linux and Windows.  The documentation is hosted on
 http://pysph.readthedocs.org.  The framework supports several of the standard
 SPH schemes.  A suite of about 30 examples are provided.  These are shipped as
 part of the sources and installed when a user does a pip install.  The
 examples are written in a way that makes it easy to extend and also perform
 comparisons between schemes.  These features make PySPH well suited for
-reproducible numerical work.  In fact one of our recent papers was written
-such that every figure in the paper is automatically generated using PySPH.
+reproducible numerical work.  In fact one of the author's recent papers
+:cite:`PR-edac-submit` was written such that every figure in the paper is
+automatically generated using PySPH.
 
 In this paper we discuss the use, design, and implementation of PySPH.  In the
 next section we provide a high-level overview of the SPH method.
@@ -354,13 +355,8 @@ these examples can be readily run.  For example::
   1. cavity
      Lid driven cavity using the Transport Velocity
      formulation. (10 minutes)
-  2. couette
-     Couette flow using the transport velocity
-     formulation (30 seconds).
   [...]
   6. elliptical_drop
-     Evolution of a circular patch of incompressible
-     fluid. (60 seconds)
   [...]
   Enter example number you wish to run:
 
@@ -937,34 +933,24 @@ The md5sum of the Cython code is checked and if an extension for that md5sum
 exists the code is not recompiled.  Care is taken to look for changes in
 dependencies of this generated source.
 
-As a result of this, our code performs almost as well as a hand-written FOTRAN
+As a result of this, the code performs almost as well as a hand-written FOTRAN
 code.  We have compared running both 2D and 3D problems with the SPHysics
 serial code.  In 2D our code is about 1.5 times slower.  This is in part
-because by default our implementation is 3D.  In 3D PySPH seems 1.3 times
-slower.  SPHysics symmetrizes the inter-particle computations, i.e. while
-computing the interaction of a source on a destination, they also compute the
-opposite force and store it.  This appears to provide additional performance
-gains.  Regardless, it is clear that PySPH is comparable in performance with
-SPHysics.  However, PySPH is a lot easier to use and much easier to extend.
+because by default the PySPH implementation is 3D.  In 3D PySPH is about 1.3
+times slower.  SPHysics symmetrizes the inter-particle computations,
+i.e. while computing the interaction of a source on a destination, they also
+compute the opposite force and store it.  This appears to provide additional
+performance gains.  Regardless, it is clear that PySPH is comparable in
+performance with SPHysics.  However, PySPH is a lot easier to use and much
+easier to extend.
 
 PySPH also displays good scale-up with OpenMP.  Consider the cube example
 which considers a cube of a user-defined number of particles (100000 by
-default), and takes 5 timesteps.  On a quad-core machine we obtain the
-following results in serial::
-
-  $ pysph run cube --disable-output
-  [...]
-  Run took: 7.13911 secs
-
-and the following in parallel::
-
-  $ pysph run cube --disable-output --openmp
-  [...]
-  Run took: 1.71387 secs
-
-This gives a speedup of about 4.16.  This shows that the scale up is
-excellent.  Good scale up has been observed in the distributed case but is not
-discussed here.
+default), and takes 5 timesteps.  One can run ``pysph run cube
+--disable-output`` and compare the time taken to run this with ``--openmp``.
+On a quad-core Macbook Pro this produces a speedup of about 4.16.  This shows
+that the scale up is excellent.  Good scale up has been observed in the
+distributed case but is not discussed here.
 
 
 .. _Mako: https://pypi.python.org/pypi/Mako
@@ -1004,10 +990,10 @@ publication.  However, it is important to note that PySPH thus allows for
 reproducible computation for SPH.
 
 
-Future plans
--------------
+Plans
+-------
 
-In the future, we hope to develop the following features for PySPH:
+In the future, the plan is to develop the following features:
 
 - A GPU backend which should allow effective utilization of GPUs with minimal
   changes to the API.
