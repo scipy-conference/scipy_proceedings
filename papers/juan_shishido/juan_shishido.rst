@@ -241,7 +241,7 @@ Lexical-based characteristics include essay length, use of profanity and slang
 terms, as well as part-of-speech usage.
 
 We first compare lexical-based characteristics on the self-summary text by sex.
-Our sample includes 21,321 females and 31,637 females. Note that the difference
+Our sample includes 21,321 females and 31,637 males. Note that the difference
 between this and the 59,946 users in the data set is due to our dropping users
 with less than five tokens in a particular essay. We find that, on average,
 females write just under 150 words (tokens, actually) compared to males' 139,
@@ -265,7 +265,7 @@ In order to compare part-of-speech usage, we first associate part-of-speech
 tags with every token in the self-summary corpus. This results in counts by
 user and tag. Because of the difference in essay length we saw above, we
 normalize these values based on the essay length. For example, if, out of 100
-tokens, a particular user uses 25 verbs, a value of 0.25 would be associated
+tokens, a particular user used 25 verbs, a value of 0.25 would be associated
 with the verb tag for that user. Of the 15 possible tags, we focused on three:
 adjectives, nouns, and verbs. This is summarized in the following table.
 
@@ -279,12 +279,12 @@ adjectives, nouns, and verbs. This is summarized in the following table.
    | Verbs          | 18.28% | 18.27% |             |
    +----------------+--------+--------+-------------+
 
-We find that, in the self-summary essay, females use more adjectives than
-males do. For nouns, it's the other way around. Interestingly, neither sex uses
+We found that, in the self-summary essay, females used more adjectives than
+males did. For nouns, it was the other way around. Interestingly, neither sex used
 verbs more often than the other.
 
 In addition to part-of-speech usage, we can explore particular terms associated
-with parts-of-speech that are distinctive to a particular group. We do this
+with parts-of-speech that are distinctive to a particular group. We did this
 using the log-odds-ratio. The 10 most-distinctive adjective, noun, and verb
 tokens, by sex, are summarized below.
 
@@ -418,9 +418,9 @@ distinct to particular demographic groups.
 The following figure shows the distribution over topics by sex. We see that
 the highest proportion of users, of either sex, are in the "about me" group.
 This is not surprising given that we're analyzing the self-summary essays. For
-most topics, the proportion of females and males is fairly even. One notable
-exception is with the "enthusiastic" group, which females belong to at almost
-twice the rate of males. Users in this group use modifiers such as, "love,"
+most topics, the proportion of females and males was fairly even. One notable
+exception was with the "enthusiastic" group, which females belong to at almost
+twice the rate of males. Users in this group used modifiers such as, "love,"
 "really," and "absolutely" regardless of the activities they are describing.
 
 .. figure:: self-summary-sex.png
