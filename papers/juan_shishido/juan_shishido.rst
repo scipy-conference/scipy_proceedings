@@ -648,54 +648,54 @@ Footnotes
 
 References
 ----------
-.. [Pew16] 5 Facts About Online Dating.
-
-.. [Fio08] Assessing Attractiveness in Online Dating Profiles.
-
-.. [McP01] Birds of a feather: Homophily in social networks.
-
-.. [Fio05] Homophily in Online Dating: When Do You Like Someone Like Yourself?.
-
-.. [Nag09] Nagarajan and Hearst, An Examination of Language Use in Online Dating Profiles, 2009
-
-.. [Wet15] Everett Wetchler, okcupid, (2015), GitHub repository,
-           `<https://github.com/everett-wetchler/okcupid.git>`_
-
-.. [Xu_03] Document clustering based on non-negative matrix factorization.
-
-.. [Tom12] What lies beneath: The linguistic traces of deception in online
-           dating profiles.
-
-.. [Bon05] Language of lies in prison: Linguistic classification of prisoners'
-           truthful and deceptive natural language.
-
-.. [Sch13] Personality, gender, and age in the language of social media: The
-           open-vocabulary approach.
+.. [Bir10] Bird, S., Klein, E., & Loper, E. (2009). Natural language processing
+           with Python. "O'Reilly Media, Inc.".
 
 .. [Col15] Collingwood, J. (2015). Preferred Music Style Is Tied to Personality.
            Psych Central. Retrieved on June 22, 2016, from
            http://psychcentral.com/lib/preferred-music-style-is-tied-to-personality/
 
+.. [Fio05] Fiore, A. T., & Donath, J. S. (2005, April). Homophily in online
+           dating: when do you like someone like yourself?. In CHI'05 Extended
+           Abstracts on Human Factors in Computing Systems (pp. 1371-1374). ACM.
+
+.. [Fio08] Fiore, A. T., Taylor, L. S., Mendelsohn, G. A., & Hearst, M. (2008,
+           April). Assessing attractiveness in online dating profiles. In
+           Proceedings of the SIGCHI Conference on Human Factors in Computing
+           Systems (pp. 797-806). ACM.
+
+.. [Ger12] Gerber, A. S., & Green, D. P. (2012). Field experiments: Design,
+           analysis, and interpretation. WW Norton.
+
+.. [McP01] McPherson, M., Smith-Lovin, L., & Cook, J. M. (2001). Birds of a
+           feather: Homophily in social networks. Annual review of sociology,
+           415-444.
+
 .. [Mon09] Monroe, B. L., Colaresi, M. P., & Quinn, K. M. (2008). Fightin'words:
            Lexical feature selection and evaluation for identifying the content
            of political conflict. Political Analysis, 16(4), 372-403.
 
-.. [She13] Sheffield, Rob (2013). 10 Best Stoner Movies of All Time. Rolling
-           Stones. Retrieved on June 23, 2016, from
-           http://www.rollingstone.com/movies/lists/the-greatest-stoner-movies-of-all-time-20130606
-
-.. [Oeh10] Oehlert, Gary W (2010). A First Course in Design and Analysis of
-           Experiments.
-
-.. [Ger12] Gerber, Alan S. and Green, Donald P (2012). Field Experiments:
-           Design, Analysis, and Interpretation.
+.. [Nag09] Nagarajan, M., & Hearst, M. A. (2009, March). An Examination of
+           Language Use in Online Dating Profiles. In ICWSM.
 
 .. [Oja10] Ojala, M., & Garriga, G. C. (2010). Permutation tests for studying
            classifier performance. Journal of Machine Learning Research,
            11(Jun), 1833-1863.
 
-.. [Bir10] Bird, S., Klein, E., & Loper E. (2010). Natural Language Processing
-           with Python.
-
 .. [Pet11] Petrov, S., Das, D., & McDonald, R. (2011). A universal part-of-speech
            tagset. arXiv preprint arXiv:1104.2086.
+
+.. [Pew16] Smith, Aaron, & Anderson, Monica (2016). 5 Facts About Online Dating.
+           Retrieved from http://www.pewresearch.org/fact-tank/2016/02/29/5-facts-about-online-dating/.
+
+.. [She13] Sheffield, Rob (2013). 10 Best Stoner Movies of All Time. Rolling
+           Stones. Retrieved on June 23, 2016, from
+           http://www.rollingstone.com/movies/lists/the-greatest-stoner-movies-of-all-time-20130606
+
+.. [Wet15] Everett Wetchler, okcupid, (2015), GitHub repository,
+           `<https://github.com/everett-wetchler/okcupid.git>`_
+
+.. [Xu_03] Xu, W., Liu, X., & Gong, Y. (2003, July). Document clustering based
+           on non-negative matrix factorization. In Proceedings of the 26th
+           annual international ACM SIGIR conference on Research and
+           development in informaion retrieval (pp. 267-273). ACM.
