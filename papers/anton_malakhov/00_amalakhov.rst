@@ -1,24 +1,26 @@
 :author: Anton Malakhov
 :email: Anton.Malakhov@intel.com
 :institution: Intel Corporation
+:year: 2016
 
 -----------------------------------------------
 Composable Multi-Threading for Python Libraries
 -----------------------------------------------
 
 .. class:: abstract
-
    Python is popular among numeric communities that value it for easy to use number crunching modules like Numpy/Scipy, Dask, Numba, and many others.
    These modules often use multi-threading for efficient parallelism (on a node) in order to utilize all the available CPU cores.
    Nevertheless, their threads can interfere with each other leading to overhead and inefficiency if used together in one application.
    The lost performance can still be recovered if all the multi-threaded parties are coordinated.
-   This paper describes usage of Intel |R| Threading Building Blocks (Intel |R| TBB), an open-source cross-platform library for multi-core parallelism, as coordination layer for Python libraries which helps to extract additional performance for numeric applications on multi-core systems.
+   This paper describes usage of Intel |R| Threading Building Blocks (Intel |R| TBB), an open-source cross-platform library for multi-core parallelism, as coordination layer for Python modules.
+   It helps to extract additional performance for numeric applications on multi-core systems.
 
 .. class:: keywords
    Multi-threading, GIL, Over-subscription, Parallel Computations, Parallelism, Multi-core, Dask, Joblib, Numpy, Scipy, Numba
 
 Motivation
-------------
+----------
+The fundamental shift toward parallelism was loudly declared more than 10 years :cite:`hsutter`.
 [TODO: multi-core, amdahl law]
 
 Issues of Over-subscription
@@ -178,7 +180,7 @@ That's where Numba :cite:`numba` can be efficiently used.
 Numba is a Just-In-Time compiler (JIT) based on LLVM :cite:`llvm`.
 It aims to close the gap in performance between Python and statically typed, compiled languages like C/C++, which also have popular implementation based on LLVM.
 
-Numba implements the notion of universal functions (ufunc, a scalar function which can used for precessing arrays as well) defined in Scipy :cite:`ufunc` and extends it to a computation kernel that can be not only mapped onto arrays but also spread the work across multiple cores.
+Numba implements the notion of universal functions (ufunc, a scalar function which can be used for processing arrays as well) defined in Scipy :cite:`ufunc` and extends it to a computation kernel that can be not only mapped onto arrays but also spread the work across multiple cores.
 The original Numba version implements it using pool of native threads and simple work-sharing scheduler, which coordinates work distribution between them.
 If used in a parallel numeric Python application, it adds the third thread pool to the existing threading mess.
 Thus, our strategy was to put it on top of common Intel |R| TBB runtime as well.
@@ -190,43 +192,55 @@ Nevertheless, even that resulted in improved performance and even without nested
 
     Black Scholes benchmark running with Numba on 32 threads. :label:`numbatbb`
 
-The Figure :ref:`numbatbb` shows how original and Intel |R| TBB-based runtimes perform with Black Scholes benchmark implemented with Numba similar to the following code:
+The Figure :ref:`numbatbb` shows how original Numba and TBB-based version perform with Black Scholes :cite:`bsform` benchmark implemented with Numba. The following code is a simplified version of this benchmark that gives an idea how to write a parallel code using Numba:
 
 .. code-block:: python
     :linenos:
 
-    @nb.guvectorize('(f4[:],f4[:],f4[:],f4[:],f4[:]'\
-                    ',f4[:])', '(),(),(),(),(),()',
-                    nopython=True, target='parallel')
-    def BlackScholes(S, X, T, V, C, P):
-        q = V[0] * sqrt(T[0])
-        d1 = (log(S[0]/X[0])+(R+.5*V[0]*V[0])*T[0])/q
-        d2 = d1 - q
-        n1 = cnd_numba(d1)
-        n2 = cnd_numba(d2)
-        e  = exp(-R[0] * T[0])
-        C[0] = (S[0] * n1 - X[0] * e * n2)
-        P[0] = (X[0] * e * (1.-n2) - S[0] * (1.-n1))
+    import numba as nb, numpy.random as rng
+    from math import sqrt, log, erf, exp
+
+    @nb.vectorize('(f8,f8,f8,f8,f8)',target='parallel')
+    def BlackScholes(S, X, T, R, V):
+        VqT = V * sqrt(T)
+        d1 = (log(S / X) + (R + .5*V*V) * T) / VqT
+        d2 = d1 - VqT
+        n1 = .5 + .5 * erf(d1 * 1./sqrt(2.))
+        n2 = .5 + .5 * erf(d2 * 1./sqrt(2.))
+        eRT  = exp(-R * T)
+        return S * n1 - X * eRT * n2 # Call price
+        # Put price = (X * eRT * (1.-n2) - S * (1.-n1))
+
+    price  = rng.uniform(10., 50., 10**6) # array
+    strike = rng.uniform(10., 50., 10**6) # array
+    time   = rng.uniform(1.0, 2.0, 10**6) # array
+    BlackScholes(price, strike, time, .1, .2)
+
+
+Here is the scalar function :code:`BlackScholes` is applied (*broadcasted*) by Numba to every element of the input arrays.
+And :code:`target='parallel'` specifies to run the computation using multiple threads.
+The real benchmark computes also the put price using :code:`numba.guvectorize`, uses approximated CND function instead of ERF for better SIMD optimization, optimizes sequence of math operations for speed, and repeats the calculation multiple times.
 
 
 Limitations and Future Work
 ---------------------------
 Intel |R| TBB does not work well for blocking I/O operations because it limits number of active threads.
 It is applicable only for tasks, which do not block in the operating system.
-If your program uses blocking I/O, please consider using asynchronous I/O that blocks only one thread for the event loop.
+If your program uses blocking I/O, please consider using asynchronous I/O that blocks only one thread for the event loop and so prevents other threads from being blocked.
 
 Python module for Intel |R| TBB is in an experimental stage and might be not sufficiently optimized and verified with different use-cases.
 In particular, it does not yet use master thread efficiently as a regular TBB program is supposed to do.
+This reduces performace for small workloads and on systems with small number of hardware threads.
 
-As was shown before, Intel |R| MKL does not optimize TBB-based threading layer as good as OpenMP threading layer and there are huge gaps in stand-alone performance between them.
+As was shown before, Intel |R| MKL does not optimize TBB-based threading layer as well as OpenMP threading layer and there are significant gaps in stand-alone performance between them.
 In particular, TBB-based MKL is not yet efficient on Intel |R| Xeon |R| Phi processors.
-However, all these problems can go away as more users will be interested in solving theirs composability issues and Intel |R| MKL and the TBB module are further developed.
-But Intel needs see the demand for these features in order to allocate resources.
-So, please contact Intel in order to indicate your interest.
+However, all these problems can go away as more users will become interested in solving theirs composability issues and Intel |R| MKL and the TBB module are further developed.
+But Intel needs see the demand for these features in order to allocate necessary resources.
+Thus, please contact Intel in order to indicate your interest.
 
 Another limitation is that Intel |R| TBB coordinates threads only inside single process while the most popular approach to parallelism in Python is multi-processing.
-Intel |R| TBB survives better than OpenMP in oversubscribed environment because it does not rely on the particular number of threads participating in parallel computation at any moment, thus the threads preempted by the OS are not affecting overall progress.
-Nevertheless, it is possible to implement cross-process coordination mechanism that prevents creation and consumption of excessive threads system-wise.
+Intel |R| TBB survives in oversubscribed environment better than OpenMP because it does not rely on the particular number of threads participating in a parallel computation at any given moment, thus the threads preempted by the OS are not affecting overall progress.
+Nevertheless, it is possible to implement cross-process coordination mechanism that prevents creation and consumption of the excessive threads system-wise.
 
 On the other hand, slow adoption of Intel |R| TBB by Intel |R| MKL suggests to find and evaluate alternative ways such as implementation of restricted subset of OpenMP on top of TBB threads or vice-versa, OpenMP threads used as Intel |R| TBB workers.
 In both cases, we have prototypes with initial experimental data.
