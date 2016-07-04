@@ -8,6 +8,7 @@ Composable Multi-Threading for Python Libraries
 -----------------------------------------------
 
 .. class:: abstract
+
    Python is popular among numeric communities that value it for easy to use number crunching modules like Numpy/Scipy, Dask, Numba, and many others.
    These modules often use multi-threading for efficient parallelism (on a node) in order to utilize all the available CPU cores.
    Nevertheless, their threads can interfere with each other leading to overhead and inefficiency if used together in one application.
@@ -16,11 +17,12 @@ Composable Multi-Threading for Python Libraries
    It helps to extract additional performance for numeric applications on multi-core systems.
 
 .. class:: keywords
+
    Multi-threading, GIL, Over-subscription, Parallel Computations, Parallelism, Multi-core, Dask, Joblib, Numpy, Scipy, Numba
 
 Motivation
 ----------
-The fundamental shift toward parallelism was loudly declared more than 11 years ago [HSutter]_ and multi-core processors become ubiquitous nowadays [ACM14]_.
+The fundamental shift toward parallelism was loudly declared more than 11 years ago [HSutter]_ and multi-core processors become ubiquitous nowadays [ACM2014]_.
 However, software world changes slowly and Python along with its compute-bound ecosystem is not an exception.
 Python suffers from several issues which make it suboptimal for parallel processing.
 
@@ -31,12 +33,14 @@ Multi-processing type of parallelism is popular in Python but it is prone to ine
 On the other hand, multi-threaded parallelism is known to be more efficient but with Python, it suffers from the limitations of the global interpreter lock [GIL]_ which prevents scaling of Python programs effectively serializing them.
 However, when it comes to numeric computations, most of the time is spent in native codes where the GIL can easily be released and programs can scale.
 
+.. [GIL] TODO
+
 Scaling parallel programs is not an easy thing. There are two fundamental laws which mathematically describe and predict scalability of a program: Amdahl's and Gustafson-Barsis' laws [AmdVsGus]_.
 According to Amdahl's Law, speedup is limited by the serial portion of the work, which effectively puts a limit on scalability of parallel processing for a fixed-size work.
 Python is especially vulnerable to this because it makes serial part of the same code much slower than if implemented in other languages due to its deeply dynamic and interpretative nature.
 Moreover, the GIL makes things serial wherever they potentially can be parallel, further adding to the serial portion.
 
-.. [AmVsGus] http://www.drdobbs.com/parallel/amdahls-law-vs-gustafson-barsis-law/240162980
+.. [AmdVsGus] http://www.drdobbs.com/parallel/amdahls-law-vs-gustafson-barsis-law/240162980
 
 Gustafson-Barsis' law gives some hope stating that if the problem-size grows along with the number of parallel processors, while the serial portion grows slowly or remains fixed, speedup grows as processors are added.
 This might relax the concerns regarding Python as a language for parallel computing since the serial portion is mostly fixed in Python when all the data-processing is hidden behind libraries like Numpy and Scipy which are written in other languages.
@@ -254,7 +258,7 @@ The Figure :ref:`numbatbb` shows how original Numba and TBB-based version perfor
     BlackScholes(price, strike, time, .1, .2)
 
 
-Here is the scalar function :code:`BlackScholes` is applied (*broadcasted*) by Numba to every element of the input arrays.
+Here is the scalar function :code:`BlackScholes`, consisting of many elementary and transcendental operations, is applied (*broadcasted*) by Numba to every element of the input arrays.
 And :code:`target='parallel'` specifies to run the computation using multiple threads.
 The real benchmark computes also the put price using :code:`numba.guvectorize`, uses approximated CND function instead of ERF for better SIMD optimization, optimizes sequence of math operations for speed, and repeats the calculation multiple times.
 
