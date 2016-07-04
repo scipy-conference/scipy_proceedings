@@ -57,9 +57,9 @@ such as sex or ethnicity, self-present in similar ways when searching for a
 mate online.
 
 In this paper, we analyze demographic trends in online self-presentation.
-Specifically, we focus on whether people signal demograpic characteristics
+Specifically, we focus on whether people signal demographic characteristics
 through the way they present themselves online. We extend previous natural
-language processing (NLP) analyses of online dating [Nag09]_ by combining NLP
+language processing analyses of online dating [Nag09]_ by combining NLP
 with supervised and unsupervised machine learning on a larger scale. We
 leverage multiple approaches including clustering and topic modeling as well as
 feature selection and modeling strategies. By exploring the relationships
@@ -80,7 +80,7 @@ previous year, and had at least one photo in their profile [Wet15]_.
 The data set contains free-text responses to 10 essay prompts as well as the
 following user characteristics: age, body type, diet, drinking status, drug
 usage status, education level, ethnicity, height, income, job type, location,
-number of childrem, sexual orientation, attitude toward pets, religion, sex,
+number of children, sexual orientation, attitude toward pets, religion, sex,
 astrological sign, smoking status, number of language spoken, and relationship
 status.
 
@@ -121,8 +121,9 @@ topic and each document being represented as a linear combination of those
 topics [Xu_03]_. With methods such as latent semantic indexing, the derived
 latent semantic space is orthogonal. Because of this, these type of methods
 can't easily handle cases where corpus topics overlap, as is often the case.
-Conversely, NMF, finds directions for related or overlapping topics because the
-derived latent semantic space is not required to be orthogonal.
+Conversely, non-negative matrix factorization (NMF), finds directions for
+related or overlapping topics because the derived latent semantic space is not
+required to be orthogonal.
 
 NMF was applied to each essay of interest using scikit-learn (version 0.17.1),
 which uses the coordinate descent solver. NMF utilizes document frequency
@@ -220,7 +221,7 @@ include unigrams, bigrams, and trigrams [3]_. Stop words [4]_ and terms that
 appeared in less than 0.5% of documents were removed. Stemming, the process of
 of removing word affixes, was not done.
 
-Non-negative matrix factorization (NMF) was used to identify latent structure
+Non-negative matrix factorization was used to identify latent structure
 in the text. This structure is in the form of "topics" or "clusters" which can
 be described by particular tokens. This was done for both essays. In order to
 determine whether particular demographics groups were more likely to write
@@ -391,7 +392,7 @@ the table below.
    |                | independent                                             |
    +----------------+---------------------------------------------------------+
    | active         | enjoy, friends, family, hiking, watching, outdoors,     |
-   |                | travelling, hanging, cooking, sports                    |
+   |                | traveling, hanging, cooking, sports                    |
    +----------------+---------------------------------------------------------+
    | creative       | music, art, live, movies, live music, play, food,       |
    |                | games, dancing, books                                   |
@@ -557,7 +558,7 @@ and Fight Club. Note that the "movies-sci-fi" and "movies-drama-1" groups,
 whose highest weighted tokens refer to the male-favored movies, have a higher
 proportion of males than females. Similarly, the "teen" group, which
 which corresponds to female-favored movies, has a higher proportion of females.
-The "movied-drama-0" group—the last of the four movie clusters—includes a
+The "movies-drama-0" group—the last of the four movie clusters—includes a
 relatively even proportion of users along this demographic split.
 
 To this point, we have only considered differences by sex. Next, we examine the
@@ -584,7 +585,7 @@ to investigate this will be cursory. Still, we wish to explore ways that might
 help us gain insight to this question. To do this, we use a predictive modeling
 approach. We train a logistic regression model on a binary outcome, using only
 drug users and non-drug users. For consistency, we use the same text
-representation we've used up to this point—TF-IDF weights on unigrams, bigrams,
+representation we've used up to this point—tf-idf weights on unigrams, bigrams,
 and trigrams. In addition, we balance the classes by randomly sampling 6,859
 accounts from the non-drug user population. We then predict class labels on the
 unknown group.
@@ -592,8 +593,8 @@ unknown group.
 Our model predicts that 55% of the unknowns are drug users and that 45% are not.
 However, when we look at the proportion or predicted drug users by NMF cluster,
 we find intriguing patterns. In the "music-rock" group—the group with the
-largest disparity between users and non-users—83% of unknows are classified as
-drug users. In contrast, only 25% of the unknowns in the "TV-comedied-0" group
+largest disparity between users and non-users—83% of unknowns are classified as
+drug users. In contrast, only 25% of the unknowns in the "TV-comedies-0" group
 are classified as such. While this cluster includes "The Big Lebowski," which
 is identified as a "stoner film" [She13]_, it also features "The Big Bang
 Theory," "How I Met Your Mother," "NCIS," "New Girl," and "Seinfeld," which we
@@ -611,6 +612,7 @@ Conclude
 
 Acknowledgements
 ----------------
+
 Acknowledge
 
 .. Customised LaTeX packages
