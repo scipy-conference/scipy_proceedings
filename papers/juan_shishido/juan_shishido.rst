@@ -131,7 +131,7 @@ counts, so the tf-idf matrix for unigrams, bigrams, and trigrams was calculated,
 while limiting tokens to those appearing in at least 0.5% of the documents
 (minimum frequency). NMF was calculated with 25 dimensions, which factorized
 the tf-idf matrix into two matrices, :math:`W` and :math:`H`. The dimensions
-were :math:`n_samples x 25` and :math:`25 x n_features` for :math:`W` and
+were ``n_samples x 25`` and ``25 x n_features`` for :math:`W` and
 :math:`H`, respectively. Group descriptions were given by top-ranked terms (the
 most distinctive) in the columns of :math:`H`. Document membership weights were
 given by the rows of :math:`W`. The maximum value in each row of :math:`W`
