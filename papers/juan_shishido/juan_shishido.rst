@@ -267,19 +267,22 @@ tokens, a particular user used 25 verbs, a value of 0.25 would be associated
 with the verb tag for that user. Of the 15 possible tags, we focused on three:
 adjectives, nouns, and verbs. This is summarized in the following table.
 
-   +----------------+--------+--------+-------------+
-   | Part-of-Speech | Female | Male   | Significant |
-   +================+========+========+=============+
-   | Adjectives     | 10.61% | 10.16% | *           |
-   +----------------+--------+--------+-------------+
-   | Nouns          | 18.65% | 18.86% | *           |
-   +----------------+--------+--------+-------------+
-   | Verbs          | 18.28% | 18.27% |             |
-   +----------------+--------+--------+-------------+
+.. table:: Proportion of parts-of-speech used, by sex. ``**`` significant at
+           the 0.01 level.
+
+   +-------------------+--------+--------+
+   | Part-of-Speech    | Female | Male   |
+   +===================+========+========+
+   | Adjectives ``**`` | 10.61% | 10.16% |
+   +-------------------+--------+--------+
+   | Nouns ``**``      | 18.65% | 18.86% |
+   +-------------------+--------+--------+
+   | Verbs             | 18.28% | 18.27% |
+   +-------------------+--------+--------+
 
 We found that, in the self-summary essay, females used more adjectives than
-males did. For nouns, it was the other way around. Interestingly, neither sex used
-verbs more often than the other.
+males did. For nouns, it was the other way around. Interestingly, neither sex
+used verbs more often than the other.
 
 In addition to part-of-speech usage, we can explore particular terms associated
 with parts-of-speech that are distinctive to a particular group. We did this
