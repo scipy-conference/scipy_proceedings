@@ -20,50 +20,88 @@ Composable Multi-Threading for Python Libraries
 
 Motivation
 ----------
-The fundamental shift toward parallelism was loudly declared more than 10 years :cite:`hsutter`.
-[TODO: multi-core, amdahl law]
+The fundamental shift toward parallelism was loudly declared more than 11 years ago [HSutter]_ and multi-core processors become ubiquitous nowadays [ACM14]_.
+However, software world changes slowly and Python along with its compute-bound ecosystem is not an exception.
+Python suffers from several issues which make it suboptimal for parallel processing.
+
+.. [HSutter] http://www.gotw.ca/publications/concurrency-ddj.htm
+.. [ACM2014] http://ubiquity.acm.org/article.cfm?id=2618393
+
+Multi-processing type of parallelism is popular in Python but it is prone to inefficiency due to memory-related overhead.
+On the other hand, multi-threaded parallelism is known to be more efficient but with Python, it suffers from the limitations of the global interpreter lock [GIL]_ which prevents scaling of Python programs effectively serializing them.
+However, when it comes to numeric computations, most of the time is spent in native codes where the GIL can easily be released and programs can scale.
+
+Scaling parallel programs is not an easy thing. There are two fundamental laws which mathematically describe and predict scalability of a program: Amdahl's and Gustafson-Barsis' laws [AmdVsGus]_.
+According to Amdahl's Law, speedup is limited by the serial portion of the work, which effectively puts a limit on scalability of parallel processing for a fixed-size work.
+Python is especially vulnerable to this because it makes serial part of the same code much slower than if implemented in other languages due to its deeply dynamic and interpretative nature.
+Moreover, the GIL makes things serial wherever they potentially can be parallel, further adding to the serial portion.
+
+.. [AmVsGus] http://www.drdobbs.com/parallel/amdahls-law-vs-gustafson-barsis-law/240162980
+
+Gustafson-Barsis' law gives some hope stating that if the problem-size grows along with the number of parallel processors, while the serial portion grows slowly or remains fixed, speedup grows as processors are added.
+This might relax the concerns regarding Python as a language for parallel computing since the serial portion is mostly fixed in Python when all the data-processing is hidden behind libraries like Numpy and Scipy which are written in other languages.
+Nevertheless, bigger problem size means more operational memory to be used for processing it but the memory is a limited resource.
+And even working with Big Data, it must be processed by chunks that fit into RAM.
+
+
+Nested Parallelism
+------------------
+Thus, the best strategy to efficiently load a multi-core system is still to fight against serial regions and synchronization.
+One way to do that is expose parallelism on all the possible levels of an application.
+For example, make outermost loops parallel or explore functional or pipeline type of parallelism on the application level.
+Python libraries like Dask, Joblib, and even built-in multiprocessing module including its :code:`ThreadPool` class are helpful here.
+While on the innermost level, data-parallelism can be delivered by Python modules like Numpy and Scipy.
+These modules can be accelerated with an optimized math library like Intel |R| Math Kernel Library (Intel |R| MKL), which is multi-threaded internally using OpenMP by default.
+
+When everything is combined together, it results in the construction where a code from one parallel region calls a function with another parallel region inside.
+This is called *nested parallelism*.
+And it is efficient way for hiding latencies of synchronization and serial regions which are inevitable part of regular Numpy/Scipy programs.
 
 Issues of Over-subscription
 ---------------------------
-Multi-processing parallelism in Python is prone to inefficiency due to memory-related overhead.
-On the other hand, multi-threaded parallelism is known to be more efficient but with Python, it suffers from the limitations of the global interpreter lock (GIL) :cite:`gil` which prevents scaling of Python programs.
-However, when it comes to numeric computations, most of the time is spent in native codes where the GIL can easily be released and programs can scale.
-This is why Python libraries such as Dask and Numba can use multi-threading to greatly speed up the computations.
-Nevertheless, these libraries do not coordinate the creation or pooling of threads, and leads to the situation where there are more active software threads than available hardware resources.
-This situation is called over-subscription and it can lead to sub-optimal execution due to frequent context switches, thread migration, broken cache-locality, and finally to a load imbalance when some threads finished their work but others are stuck along with the overall progress.
+Nevertheless, the libraries named above do not coordinate the creation or pooling of threads, which leads to the situation where there are more active software threads than available hardware resources.
+This situation is called *over-subscription*.
+It can lead to sub-optimal execution due to frequent context switches, thread migration, broken cache-locality, and finally to a load imbalance when some threads finished their work but others are stuck along with the overall progress.
 
-Another example are Numpy/Scipy libraries.
-For example in  Intel |R| Distribution for Python, they are accelerated using Intel |R| Math Kernel Library (Intel |R| MKL).
-Intel |R| MKL is threaded by default using OpenMP which is known for its inherent restrictions [TODO: summarize the restrictions before diving into one or more examples.
-You claim there are multiple restrictions and are well-known, but without citation (of what they are, that it's a well known problem, etc)].
-For instance, OpenMP keeps the threads active so they can be reused in subsequent parallel regions.
+For example, OpenMP (used by Numpy/Scipy) keeps the threads active (by default) so they can be reused in subsequent parallel regions.
 Usually, this is useful approach to reduce work distribution overhead.
-But with another active thread pool in the application, it plays against better performance because while OpenMP worker threads keep consuming CPU time in busy-waiting loops, the other parallel work (like Numba's code with :code:`target=parallel`) cannot start until OpenMP threads stop spinning or are pre-empted by the OS.
+But with another active thread pool in the application, it plays against better performance because while OpenMP worker threads keep consuming CPU time in busy-waiting loops, the other parallel work cannot start until OpenMP threads stop spinning or are preempted by the OS.
 
-Though overhead from linear over-subscription (e.g. 2x) is not always visible on the application level (especially for small systems) and it can be tolerated in many cases when the work for parallel region is big enough.
+Though overhead from linear over-subscription (e.g. 2x) is not always visible on the application level (especially for small systems) and it can be tolerated in many cases when the work for parallel regions is big enough.
 However, the worst case is when a program starts multiple parallel tasks and each of these tasks ends up executing an OpenMP parallel region.
 This results in quadratic over-subscription (with default settings) which ruins multi-threaded performance on systems with significant number of threads (roughly, tens and more).
 In some big systems, sometimes, it is not even possible to create as many software threads as the number of hardware threads multiplied by itself, it just eats up all the available resources [TODO: reword].
 
+Threading Composability
+-----------------------
+Altogether, the co-existing issues of multi-threaded components define *threading composability* of a program module or a component.
+A perfect composable component should be able to function efficiently among other such components without affecting their efficiency.
+Apparently, the first thing toward composable threading system is to avoid creation of excessive software threads and preventing over-subscription.
+That efficiently means that a component and especially a parallel region cannot dictate how many threads it needs for execution (*mandatory parallelism*).
+Instead, it should expose available parallelism to a work scheduler (*optional parallelism*), which is usually implemented using user-level work-stealing task schedulers that coordinate tasks between components and parallel regions and map them onto software threads.
+Since such a task scheduler shares single thread pool among all the program modules and native libraries, it has to be efficient enough to be attractive for high-performance libraries.
+Or otherwise, these libraries will not be able or willing to switch their own threading model to new scheme.
 
-Solution
---------
+Intel Solution
+--------------
 .. figure:: components.png
 
    Intel |R| Threading Building Blocks is used as a common coordinating runtime for different Python modules. :label:`components`
 
-Our approach to solve these co-existence problems is to share single thread pool among all the program modules and native libraries so that one user-level non-preemptive task scheduler will take care of composability between them.
-Intel |R| Threading Building Blocks (Intel |R| TBB) library works as such a task scheduler in our solution, see Figure :ref:`components`.
-Intel |R| TBB is an open-source, cross-platform, recognized C++ library for enabling multi-core parallelism.
-It was designed for composability and nested parallelism support from its foundation so that preventing of over-subscription is a specialization of this library.
+Intel approach to achieve threading composability is to use Intel |R| Threading Building Blocks (Intel |R| TBB) library as a common coordinating task scheduler, see Figure :ref:`components`.
+Intel |R| TBB is an open-source, cross-platform, mature and recognized C++ library for enabling multi-core parallelism.
+It was designed for composability, optional and nested parallelism support from its foundation.
 
 In the Intel |R| Distribution for Python 2017 Beta and later as part of Intel |R| TBB release 4.4 Update 4, I introduce an experimental module which unlocks opportunities for additional performance for multi-threaded Python programs by enabling threading composability between two or more thread-enabled libraries.
-Threading composability can accelerate programs by avoiding inefficient thread allocation as discussed above.
+Thanks to threading composability, it can accelerate programs by avoiding inefficient thread allocation as discussed above.
 
 The TBB module implements :code:`Pool` class with the standard Python interface using Intel |R| TBB which can be used to replace Python's *ThreadPool*.
 [TODO:eleborate on what is Mokey-patching] Thanks to the monkey-patching technique implemented in class :code:`Monkey`, no source code change is needed in order to enable single thread pool across different Python modules.
-It also enables TBB-based threading layer for Intel |R| MKL which automatically enables composable parallelism for Numpy and Scipy calls.
+It also enables TBB-based threading layer for Intel |R| MKL [ParUniv]_ which automatically enables composable parallelism for Numpy and Scipy calls.
 
+.. [ParUniv] Vipin Kumar E.K. *A Tale of Two High-Performance Libraries*,
+             The Parallel Universe Magazine, Special Edition, 2016.
+             https://software.intel.com/en-us/intel-parallel-universe-magazine
 
 Usage example
 -------------
@@ -132,21 +170,20 @@ Moreover, the Dask version is not able to close the gap completely since it has 
 The reason why only 10 tasks were selected for this demonstration is the following.
 If top-level parallelism can load all the available cores on the machine, there is no much sense in the nested parallelism and Intel |R| TBB shows no speedup over serial MKL version.
 In such cases, TBB could help by load-balancing at the end of the work, but this example is already quite balanced, so that there is no visible difference.
-TODO:this a modelling benchmark, functional parallelism.
+TODO:this a modeling benchmark, functional parallelism.
 
 The last command demonstrates how Intel TBB can be enabled as orchestrator of multi-threaded modules.
 TBB module runs the benchmark in context of :code:`with TBB.Monkey():` which replaces standard Python *ThreadPool* class used by Dask and also switches MKL into TBB mode.
 Numpy with TBB shows more than double time comparing to default Numpy run.
 This happens because TBB-based threading in MKL is new and not as optimized as OpenMP-based MKL threading implementation.
 But despite that fact, Dask in TBB mode shows the best performance for this benchmark, more than 50% improvement comparing to default Numpy.
-This happens because the Dask version exposes more parallelism to the system without oversubscription overhead, hiding latencies of serial regions and fork-join synchronization in MKL functions.
+This happens because the Dask version exposes more parallelism to the system without over-subscription overhead, hiding latencies of serial regions and fork-join synchronization in MKL functions.
 
 .. [#] For more complete information about compiler optimizations, see our Optimization Notice :cite:`optnot`
 
 
 Case study
 ----------
-
 Previous example was intentionally selected to be small enough to fit into this paper with all the sources.
 Another case study :cite:`codefest` is closer to real-world applications.
 It implements recommendation system similar to the ones used on popular web-sites for generating suggestions for the next application to download or the next movie to watch.
@@ -164,7 +201,7 @@ One reason for this performance increase is that Intel |R| MKL runs computations
 Thus for sake of experiment, outermost parallelism was implemented on the application level processing different user requests in parallel.
 For the same system-default python, the new version helped to close the gap with MKL-based version though not completely: with 15 times faster than the base.
 However, running same parallel application with Intel Distribution resulted in worse performance (11x).
-This is explained by overhead induced by oversubscription.
+This is explained by overhead induced by over-subscription.
 
 In order to remove overhead, previous experiment was executed with TBB module on the command line.
 It results in the best performance for the application - 27 times speedup against the base.
@@ -230,7 +267,7 @@ If your program uses blocking I/O, please consider using asynchronous I/O that b
 
 Python module for Intel |R| TBB is in an experimental stage and might be not sufficiently optimized and verified with different use-cases.
 In particular, it does not yet use master thread efficiently as a regular TBB program is supposed to do.
-This reduces performace for small workloads and on systems with small number of hardware threads.
+This reduces performance for small workloads and on systems with small number of hardware threads.
 
 As was shown before, Intel |R| MKL does not optimize TBB-based threading layer as well as OpenMP threading layer and there are significant gaps in stand-alone performance between them.
 In particular, TBB-based MKL is not yet efficient on Intel |R| Xeon |R| Phi processors.
@@ -244,8 +281,8 @@ Nevertheless, it is possible to implement cross-process coordination mechanism t
 
 On the other hand, slow adoption of Intel |R| TBB by Intel |R| MKL suggests to find and evaluate alternative ways such as implementation of restricted subset of OpenMP on top of TBB threads or vice-versa, OpenMP threads used as Intel |R| TBB workers.
 In both cases, we have prototypes with initial experimental data.
-Another approach is suggested by the observation that a moderate oversubscription, such as from two fully subscribed thread pools, does not significantly affect performance of the most workloads.
-In this case, solving quadratic oversubscription from running multiple OpenMP regions at the same time should be practical alternative.
+Another approach is suggested by the observation that a moderate over-subscription, such as from two fully subscribed thread pools, does not significantly affect performance of the most workloads.
+In this case, solving quadratic over-subscription from running multiple OpenMP regions at the same time should be practical alternative.
 Therefore, the solution for that can be as simple as "Global OpenMP Lock" (GOL) or more elaborated inter-process semaphore that coordinates OpenMP threads.
 
 
@@ -253,17 +290,14 @@ Conclusion
 ----------
 This paper described the issues of multi-threaded programs and libraries such as GIL, over-subscription, and threading composability.
 These issues affect performance of Python libraries and frameworks such as Numpy, Scipy, and Numba.
-Suggested solution is to use a common threading runtime such as Intel |R| TBB which limits number of threads in order to prevent oversubscription and coordinates parallel execution of independent program modules.
+Suggested solution is to use a common threading runtime such as Intel |R| TBB which limits number of threads in order to prevent over-subscription and coordinates parallel execution of independent program modules.
 Python module for Intel |R| TBB was implemented to substitute Python's ThreadPool implementation and switch Intel |R| MKL into TBB-based mode.
 The examples mentioned in the paper show promising results where thanks to nested parallelism and TBB threading mode, the best performance was achieved.
-Intel |R| TBB along with the Python module are avaiable in open-source :cite:`opentbb` for different platforms and architectures while Intel |R| Distribution for Python accelerated with Intel |R| MKL is available for free as stand-alone package :cite:`intelpy` and on anaconda.org/intel chanel.
+Intel |R| TBB along with the Python module are available in open-source :cite:`opentbb` for different platforms and architectures while Intel |R| Distribution for Python accelerated with Intel |R| MKL is available for free as stand-alone package :cite:`intelpy` and on anaconda.org/intel channel.
 Therefore, everyone are welcome to try it out and provide feedback, bug reports, and feature requests.
 
 References
 ----------
-.. [ParUniv] Vipin Kumar E.K. *A Tale of Two High-Performance Libraries*,
-             The Parallel Universe Magazine, Special Edition, 2016.
-             https://software.intel.com/en-us/intel-parallel-universe-magazine
 
 .. figure:: opt-notice-en_080411.png
    :figclass: b
