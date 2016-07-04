@@ -675,15 +675,15 @@ Conclusion, Caveats and Future Work
 
 We have described an iterative procedure for estimating functions
 based on experimental data in a manner that enforces chosen
-constraints.  The [F_UNCLE]_ code implements the procedure and we
+constraints.  The [F_UNCLE]_ code implements the procedure, and we
 used it to make the figures in the previous sections.  The code runs
-on a modest desktop computer and makes the figures in a few minutes.
-That speed and simplicity allows one to easily try out new ideas and
-code.  We have relied on the [F_UNCLE]_ code to guide work with real
-experimental data and simulations on high performance computers that
-use proprietary software.  Figure :ref:`fig-pbx` is the result of
-applying the ideas presented here to the physical experiments
-described in [pemberton2011]_.
+on a modest desktop computer and makes the figures in a fraction of a
+minute.  That speed and simplicity allows one to easily try out new
+ideas and code.  We have relied on the [F_UNCLE]_ code to guide work
+with real experimental data and simulations on high performance
+computers that use proprietary software.  Figure :ref:`fig-pbx` is the
+result of applying the ideas presented here to the physical
+experiments described in [pemberton2011]_.
 
 .. figure:: fit_v.pdf
    :align: center
