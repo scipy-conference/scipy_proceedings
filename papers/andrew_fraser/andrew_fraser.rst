@@ -24,7 +24,8 @@
     \newcommand{\field}[1]{\mathbb{#1}}
     \newcommand\REAL{\field{R}}
     \newcommand\Z{\field{Z}}
-    \newcommand{\partialfixed}[3]{\left. \frac{\partial #1}{\partial#2}\right|_#3}
+    \newcommand{\partialfixed}[3]{\left. \frac{\partial
+      #1}{\partial#2}\right|_#3}
     \newcommand{\partiald}[2]{\frac{\partial #1}{\partial #2}}
     \newcommand{\argmin}{\operatorname*{argmin}}
     \newcommand{\argmax}{\operatorname*{argmax}}
@@ -66,11 +67,14 @@
    techniques for estimating such unknown functions and our
    uncertainty about them.  The work provides ideas for quantifying
    uncertainty about functions given the constraints of both laws
-   governing the function's behavior and experimental data.  As an
-   example, we investigate pressure as a function of volume for the
-   gases produced by detonating an imaginary explosive.  We estimate
-   both a *best* pressure function and how well a collection of
-   experiments constrains uncertainty about the function.
+   governing the function's behavior and experimental data.  We
+   present an analysis of pressure as a function of volume for the
+   gases produced by detonating an imaginary explosive, estimating a
+   *best* pressure function and using estimates of *Fisher
+   information* to quantify how well a collection of experiments
+   constrains uncertainty about the function.  A need to model
+   particular physical processes has driven our work on the project,
+   and we conclude with a plot from such a process.
      
 .. class:: keywords
 
@@ -80,83 +84,98 @@
 
 Introduction
 ============
-  
-There are many physical process whose general behavior is known though
-not an exact mathematical representation.  Such epistemic uncertainty
-can arise in processes which occur at extreme regimes where direct
-measurement is challenging.  Existing approaches for estimating the
-functional form of such processes include Gaussian Process Modeling
-(GPM) and parametric models.  Traditional GPM approaches may not be
-able to account for the known constraints on the functional form
-because they allow physically impossible functions.  Many parametric
-approaches overly constrain the function and do not span the allowable
-function-space [vaughan2014].  One often needs both estimates of such
-functions and bounds on uncertainty about them.
 
-The task of *Inverting* a realistic physical model to estimate an
-unknown function for real experimental data presents several
-challenges.  For example Hixson et al. [hixson2000]_ found they needed
-a disparate collection of several computer languages and several
-numerical packages and simulation tools.  They tied the tools together
-by hand in a manner that we cannot replicate.  The task often requires
-coordinating many long running simulations on high performance
-computers (HPC) that have ungainly job control languages (JCL).  And
-finally in order to implement a Bayesian analysis one must define and
-manipulate probability measures on sets in function space.
+One often must quantitatively characterize the accuracy of models of
+physical material properties which are based on existing theory and
+experiments.  If the accuracy is inadequate, one must then evaluate
+whether or not proposed experiments or theoretical work will provide
+the necessary information.  Faced with these tasks, we have chosen to
+first work on the equation of state (EOS) of the gas produced by
+detonating an explosive called PBX-9501 because it is relatively
+simple.  In particular Hixson et al. [hixson2000]_ describe a model
+that roughly defines its properties in terms of an unknown one
+dimensional function (pressure as a function of volume on a special
+path) and simple constraints.  This EOS estimation problem shares the
+following challenges with many of the other material models that we
+must analyze:
 
-We are organizing our efforts to address these challenges under the
-title `F_UNCLE`.  To separate algorithmic development from the delays
-of HPC runs and the code required to wrap JCL, we will use surrogate
-problems with simulations that run in a few seconds on a desktop
-computer.  We are using the project to learn and demonstrate *Best
-Practices for Scientific Computing* (eg, [wilson2014]_) and
-*Reproducible Research* (eg, [fomel2009]_).  In this paper, we present
-preliminary results from our first such surrogate problem.
+#. The uncertain object is a *function*.  In principal it has an
+   infinite number of degrees of freedom.  In order to implement a
+   Bayesian analysis one must define and manipulate probability
+   measures on sets in function space.  We do not know how to define a
+   probability measure on sets in function space, and we do not know
+   how to compare the utility of different families of parametric
+   approximations.
 
-The work is designed to be modular, allowing a wide range of
-experiments and simulations to be used in an analysis.  The code is
-self documenting, with full docstring coverage, and is converted into
-online documentation using [sphinx]_.  Each class has a test suite to
-allow unit testing.  Tests are collected and run using [nose]_.  Each
-file is also tested using [pylint]_ with all default checks enabled to
-ensure it adheres to python coding standards, including PEP8.
-Graphics in this paper were generated using [matplotlib]_ and the code
-made use of the [numpy]_ and [scipy]_ packages.
+#. Understanding the constraints on the unknown function and the
+   connection between it and experimental measurements requires
+   understanding some detailed physics.
 
+#. Simulations of some of the experiments run for more than a few
+   minutes on high performance computers.  The job control is unwieldy
+   as are the mechanisms for expressing trial instances of the unknown
+   functions and connecting them to the simulations.
+
+We are organizing our efforts to address those challenges under the
+title `F_UNCLE` (Functional UNcertainty Constrained by
+Law and Experiment).  We work in two parallel modes as we
+develop ideas and algorithms.  We write code for a surrogate problem
+that runs in a fraction of a minute on a PC, and we write code for
+fitting a model to PBX-9501 in a high performance computing
+environment.  Our focus shifts back and forth as we find and resolve
+problems.  As we have progressed, we have found that improving our software
+practices makes it easier to express ideas, test them on PCs and
+implement them on the HPCs.  In this paper, we introduce the
+[F_UNCLE]_ code, the surrogate problem we have developed for the EOS and
+our analysis of that problem.
+
+We are using the project to learn and demonstrate *Best Practices for
+Scientific Computing* (eg, [wilson2014]_) and *Reproducible Research*
+(eg, [fomel2009]_).  The work is designed to be modular, allowing a
+wide range of experiments and simulations to be used in an analysis.
+The code is self documenting, with full docstring coverage, and is
+converted into online documentation using [sphinx]_.  Each class has a
+test suite to allow unit testing.  Tests are collected and run using
+[nose]_.  Each file is also tested using [pylint]_ with all default
+checks enabled to ensure it adheres to python coding standards,
+including PEP8.  Graphics in this paper were generated using
+[matplotlib]_ and the code made use of the [numpy]_ and [scipy]_
+packages.
+
+The task of mapping measurements to estimates of the characteristics
+of models for the physical processes that generated them is called an
+*inverse problem*.  Classic examples include RADAR, tomography and
+image estimation.  Our problems differ from those in the diverse and
+indirect nature of the measurements and in the kinds of constraints.
 [F_UNCLE]_ uses constrained optimization and physical models with many
 degrees of freedom to span a large portion of the allowable function
-space while disallowing functions which do not follow the known
-constraints on the function.  The analysis determines the function
-which maximizes the probability of :math:`K` different simulations
-matching :math:`K` corresponding data-sets while meeting all
-constraints given by *a priori* knowledge of the functional form.  We
-characterize our uncertainty about this function using the Fisher
-information matrix of the likelihood function.
+space while strictly enforcing constraints.  The analysis determines
+the function which maximizes the a posteriori probability (the MAP
+estimate) using simulations to match :math:`K` data-sets.  We
+characterize how each experiment constrains our uncertainty about the
+function in terms of its *Fisher information*.
 
-For our first surrogate problem, we investigate the equation of state
-(EOS) for the products-of-detonation of a hypothetical High Explosive
-(HE).  The EOS relates the pressure to the specific volume of the
-products-of-detonation mixture.  Previous work in this field
-[ficket2000]_ has shown this function to be positive, monotonically
-decreasing and convex. However, the extreme pressures and temperatures
-of HE products-of-detonation preclude experimental measurements of the
-EOS directly, and its behavior must be inferred.  To date we have
-incorporated two examples of experiments: The detonation velocity of a
-*rate stick* of HE and the velocity of a projectile driven by HE. The
-behavior of both these experiments depend sensitively on the EOS
-function.
+For the surrogate problem, we investigate the equation of state (EOS)
+for the products-of-detonation of a hypothetical High Explosive (HE).
+The EOS relates the pressure to the specific volume of the
+products-of-detonation mixture.  We follow traditional practice (eg,
+[ficket2000]_) and constrain the function to be positive,
+monotonically decreasing and convex.  To date we have incorporated two
+examples of experiments: The detonation velocity of a *rate stick* of
+HE and the velocity of a projectile driven by HE. The behavior of both
+these experiments depend sensitively on the EOS function.
 
 The following sections describe the choices made in modeling the EOS
 function, the algorithm used for estimating the function and the use
-of the Fisher information to characterize the uncertainty in the
+of the Fisher information to characterize the uncertainty about the
 function.  We describe two sets of simulations and synthetic
 experimental data and present an EOS function fit to represent both
 these experiments as well as a spectral analysis of the Fisher
 information matrix.  While the results are limited to an illustration
 of the ideas applied to synthetic data and simple models, the approach
-can be applied to real data and complex finite difference
-simulations. Some preliminary results from work on estimating the EOS
-of the high explosive PBX-9501 appear in the concluding section.
+can be applied to real data and complex simulations. Some preliminary
+results from work on estimating the EOS of the high explosive PBX-9501
+appear in the concluding section.
 
 Fisher Information and a Sequence of Quadratic Programs
 =======================================================
@@ -246,7 +265,7 @@ Iterative Optimization
 
 We maximize the *log* of the a posteriori probability as the objective
 function which is equivalent to :ref:`eq-map`.  Dropping terms that
-don't depend on :math:`\theta`, we write the cost function as follows:
+do not depend on :math:`\theta`, we write the cost function as follows:
 
 .. math::
    :type: align
