@@ -48,7 +48,7 @@ Analysis of birdsong (for neuroscience or the many other fields that study this 
     :align: center
     :figclass: w
 
-    **Spectrogram of Bengalese Finch song.** *Letters below the time axis, e..g, "i","a","b",..., are labels for syllables, discrete elements of song separated by brief silent intervals. Frequency (kHz) on the y axis and time on the x axis.* z:label:`fig1`
+    **Spectrogram of Bengalese Finch song.** *Letters below the time axis, e..g, "i","a","b",..., are labels for syllables, discrete elements of song separated by brief silent intervals. Frequency (kHz) on the y axis and time on the x axis.* :label:`fig1`
 
 In most species, each individual has a unique song that usually bears some similarity to the song of the bird that tutored it, but is not a direct copy. To analyze song, experimenters label syllables by hand. However, songbirds produce thousands of songs a day, more than can be labeled.
 
