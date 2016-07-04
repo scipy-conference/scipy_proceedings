@@ -237,7 +237,7 @@ the normal or Gaussian
    :type: align
 
    \theta|x &\sim {{\cal N}\left( \hat \theta,\Sigma = H^{-1} \right)}\\
-     p(\theta|x) &= \frac{1}{\sqrt{(2\pi)^{k}|\Sigma|}} \exp\left(
+     p(\theta|x) &= \frac{1}{\sqrt{(2\pi)^{\text{dim}}|\Sigma|}} \exp\left(
        -\frac{1}{2}(\theta-\hat\theta)^\mathrm{T}\Sigma^{-1}
         (\theta-\hat\theta) \right).
 
@@ -246,7 +246,7 @@ distribution by the second derivative of their log likelihoods.
 
 Quoting Wikipedia: “If :math:`p(x|\theta)` is twice differentiable with
 respect to :math:`\theta`, and under certain regularity conditions, then
-the Fisher information may also be written as”
+the Fisher information may also be written as
 
 .. math::
    :label: eq-fisher
@@ -255,10 +255,15 @@ the Fisher information may also be written as”
      \left[\left. \frac{\partial^2}{\partial\theta^2} \log
          p(X;\theta)\right|\theta \right].
 
-Thus if the second derivative in Equation (:ref:`eq-fisher`) is
-constant with respect to :math:`x` (As it would be for a Gaussian
-likelihood), then one may say that an experiment constrains
-uncertainty through its Fisher Information.
+[...] The Cramér–Rao bound states that the inverse of the Fisher
+information is a lower bound on the variance of any unbiased
+estimator”
+
+Our simulated measurements have Gaussian likelihood function in which
+the unknown function only influences the mean.  That characterisitc
+yields a simple calculation of :ref:`eq-fisher` that only depends on
+the derivative of the mean with respect to the unknown function and
+the covariance of the likelihood function.
 
 Iterative Optimization
 ----------------------
