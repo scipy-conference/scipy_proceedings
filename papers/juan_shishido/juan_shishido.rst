@@ -392,7 +392,7 @@ the table below.
    |                | independent                                             |
    +----------------+---------------------------------------------------------+
    | active         | enjoy, friends, family, hiking, watching, outdoors,     |
-   |                | traveling, hanging, cooking, sports                    |
+   |                | traveling, hanging, cooking, sports                     |
    +----------------+---------------------------------------------------------+
    | creative       | music, art, live, movies, live music, play, food,       |
    |                | games, dancing, books                                   |
