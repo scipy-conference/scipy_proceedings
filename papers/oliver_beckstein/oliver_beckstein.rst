@@ -111,7 +111,7 @@ MDAnalysis is available under the GNU General Public License v2.
 Introduction
 ------------
 
-Molecular dynamics (MD) simulations of biological molecules have become an important tool to elucidate the relationship between molecular structure and physiological function.
+Molecular dynamics (MD) simulations of biological molecules have become an important tool to elucidate the relationship between molecular structure and physiological function :cite:`Dror:2012cr,Orozco:2014dq`.
 Simulations are performed with highly optimized software packages on HPC resources but most codes generate output trajectories in their own formats so that the development of new trajectory analysis algorithms is confined to specific user communities and widespread adoption and further development is delayed.
 Typical trajectory sizes range from gigabytes to terabytes so it is typically not feasible to convert trajectories into a range of different formats just to use a tool that requires this specific format.
 Instead, a framework is required that provides a common interface to raw simulation data.
