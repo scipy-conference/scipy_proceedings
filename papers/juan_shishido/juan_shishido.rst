@@ -45,7 +45,7 @@ are used by 27 percent of 18-24 year olds, 22 percent of 25-34 year olds, 21
 percent of 35-44 year olds, 13 percent of 45-54 year olds, and 12 percent of
 55-64 year olds [Pew16]_.
 
-Previous studies suggest that the free text portion of online dating profiles
+Previous studies suggest that the free-text portion of online dating profiles
 is an important factor (after photographs) for assessing attractiveness
 [Fio08]_. The principle of homophily posits that people tend to
 associate and bond with similar others and that this principle strongly
@@ -63,9 +63,9 @@ language processing analyses of online dating [Nag09]_ by combining NLP
 with supervised and unsupervised machine learning on a larger scale. We
 leverage multiple approaches including clustering and topic modeling as well as
 feature selection and modeling strategies. By exploring the relationships
-between free text self-descriptions and demographics, we discover that we can
+between free-text self-descriptions and demographics, we discover that we can
 predict users' demographic makeup and also find some unexpected insights into
-unintentional demographic signals in free text writing.
+unintentional demographic signals in free-text writing.
 
 Data
 ----
@@ -251,12 +251,12 @@ average, females write significantly longer than males (150 terms compared to 13
 
 For profanity and slang, instead of comparing frequencies across demographic
 splits, we compare the proportion of users who use these terms.
-Profanity was rarely used in the self-summary essay. Overall, only 6% of users
+Profanity was rarely used in the self-summary essay. Overall, only 6 percent of users
 included such terms in their self-descriptions. The difference was not significantly significant by sex 
 (5.8% of females versus 6.1% of males).
 
 Not surprisingly, slang was much more prevalent (on a per-user basis) than
-profanity. 56% of users used some form of slang in their self-summary essays.
+profanity. 56 percent of users used some form of slang in their self-summary essays.
 Females used slang at a significantly lower rate than males (54% vs. 57%, p = XXX).
 
 To compare part-of-speech usage, we first associated part-of-speech
@@ -519,7 +519,7 @@ selection of their highest weighted tokens.
 
 The favorites topics for this essay were more difficult to categorize than the self-summaries.
 In some cases, genres (or media) overlapped. For example, the TV-comedies-0
-group included "The Walking Dead," which is a drama. There was also overlap between groups..
+group included "The Walking Dead," which is a drama. There was also overlap between groups.
 This might suggest that the number of NMF components was too high, but the
 granularity these topics provided was used for further analyses. We created
 superordinate groupings from the topics from which extracted
@@ -531,7 +531,7 @@ distribution over topics by sex.
    Favorites
 
 The most popular topics, for both females and males, were "TV-hits" and
-"music-rock," with about 16% of each sex writing about shows or artists in
+"music-rock," with about 16 percent of each sex writing about shows or artists in
 those groups. We see more separation between the sexes in the favorites essay
 than we did with the self-summaries. The enthusiastic group is, again,
 distinctly female. A distinctly male category includes films such as "Fight
@@ -547,7 +547,7 @@ and Fight Club. The "movies-sci-fi" and "movies-drama-1" groups,
 whose highest weighted tokens referred to the male-favored movies, had a higher
 proportion of males than females. Similarly, the "teen" group, which
 which corresponded to female-favored movies, had a higher proportion of females.
-The "movies-drama-0" group—the last of the four movie clusters—includes a
+The "movies-drama-0" group — the last of the four movie clusters — includes a
 relatively even proportion of users along this demographic split. (THE ANALYSIS IN THIS PARAGRAPH DOESN"T MAKE SENSE - SEEMS CIRCULAR)
 
 We next examined the distribution over topics by drug usage. In this demographic category, users
@@ -567,24 +567,47 @@ who did not respond to the drug usage question abstained in order to avoid admit
 
    Favorites
 
-Although we were unable to test this hypothesis directly due to lack of ground-truth drug-usage status for these users, 
-the manner by which free text writing styles may unintentionally disclose demographic attributes is an intriguing avenue for research.
-We use a predictive modeling approach to attempt to gain insights to this question.
-Specifically, we trained a logistic regression model on a binary outcome, using only
-drug users and non-drug users. We used tf-idf weights on unigrams, bigrams,
-and trigrams as in the previous analyses. We also balanced the classes by randomly sampling 6,859
-accounts from the non-drug user population. We then predicted class labels on the
-group of unknown drug usage status.
+Although we were unable to test this hypothesis directly due to lack of
+ground-truth drug-usage status for these users, the manner by which free-text
+writing styles may unintentionally disclose demographic attributes is an
+intriguing avenue for research. We used a predictive modeling approach to
+attempt to gain insights to this question. Specifically, we trained a logistic
+regression model on a binary outcome, using only drug users and non-drug users.
+We used tf-idf weights on unigrams, bigrams, and trigrams as in the previous
+analyses. We also balanced the classes by randomly sampling 6,859 accounts
+from the non-drug user population. The data was split into training (80%) and
+test (20%) sets in order to assess model accuracy. We then predicted class
+labels on the group of unknown drug usage status.
 
-Our model predicted that 55% of the unknown unsers were drug users and that 45% were not.
-However, when we examined the proportion of predicted drug users by NMF cluster,
-we found intriguing patterns. In the "music-rock" group — the group with the
-largest disparity between users and non-users — 83% of unknowns were classified as
-drug users. In contrast, only 25% of the unknowns in the "TV-comedies-0" group
-were classified as such. While this cluster included "The Big Lebowski," which
-is identified as a "stoner film" [She13]_, it also features "The Big Bang
-Theory," "How I Met Your Mother," "NCIS," "New Girl," and "Seinfeld," which we
-would argue are decidedly not drug-related.
+Our initial model, which used only the favorites text, accurately predicted
+68.0 percent of drug users. It predicted that 55 percent of the unknown users
+were drug users and that 45 percent were not. When we examined the proportion
+of predicted user by NMF cluster, however, we found intriguing patterns. In the
+"music-rock" group — the group with the largest disparity between users and
+non-users — 84 percent of unknowns were classified as drug users. In contrast,
+only 25 percent of the unknowns in the "TV-comedies-0" group were classified as
+such. While this cluster included "The Big Lebowski," which is identified as a
+"stoner film" [She13]_, it also features "The Big Bang Theory," "How I Met Your
+Mother," "NCIS," "New Girl," and "Seinfeld," which we would argue are decidedly
+not drug-related.
+
+These results prompted us to see how well we could predict drug usage status
+based on text alone. For this, we combined the text of all 10 essays and
+dropped the 2,496 users who used less than five tokens in the full-text. As
+before, we randomly sampled from the non-users in order to balance the classes
+and split the data into training and test sets.
+
+The full-text model accuracy increased to 72.7 percent. We used the feature
+weights to find the 25 most-predictive drug-usage terms. These are listed below.
+
+::
+
+  sex, shit, music, weed, party, beer, dubstep, fuck, drinking, smoking,
+  partying, chill, hair, park, fucking, dj, burning, electronic, drunk, ass,
+  reggae, robbins, dude, smoke, cat
+
+Drug users in this data set reference drinking, smoking, partying, and music
+more then non-users and also use particular profane terms.
 
 Conclusion
 ----------
