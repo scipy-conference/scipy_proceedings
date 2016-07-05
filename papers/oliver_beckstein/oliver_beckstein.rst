@@ -118,15 +118,27 @@ Instead, a framework is required that provides a common interface to raw simulat
 Here we describe the MDAnalysis_ library :cite:`Michaud-Agrawal:2011fu` that addresses this problem by abstracting access to the raw simulation data.
 MDAnalysis presents a uniform object-oriented Python interface to the user.
 Since its original publication in 2011 :cite:`Michaud-Agrawal:2011fu`, MDAnalysis has been widely adopted and has undergone substantial changes.
-Here we provide a short introduction to MDAnalysis and its capabilities and provide and overview over recent improvements.
+Here we provide a short introduction to MDAnalysis and its capabilities and an overview over recent improvements.
 
 MDAnalysis was initially inspired by MDTools_ for Python (J.C. Phillips, unpublished) and MMTK_ :cite:`Hinsen:2000kx`.
+MDTools pioneered the key idea to use an extensible and object-oriented language, namely, Python, to provide a high-level interface for the construction and analysis of molecular systems for MD simulations.
+MMTK became a tool kit to build MD simulation applications on the basis of a concise object model of a molecular system.
+MDAnalysis was built on an object model similar to that of MMTK with a strong focus on providing universal high-level building blocks for the analysis of MD trajectories, but for a much wider range of formats than previously available.
 MDAnalysis has been publicly available since January 2008 and is one of the longest actively maintained Python packages for the analysis of molecular simulations.
-Since then many other packages have appeared, such as LOOS_/PyLOOS :cite:`Romo:2009zr,Romo:2014bh`, mdtraj_ :cite:`McGibbon:2015aa` or pytraj_ :cite:`Nguyen:2016aa` (a versatile Python frontend to the popular ``cpptraj`` tool :cite:`Roe:2013zr`), to name only a few.
+Since then many other packages have appeared that primarily function as libraries for providing access to simulation data from within Python.
+Three popular examples are PyLOOS_ :cite:`Romo:2014bh`, mdtraj_ :cite:`McGibbon:2015aa`, and pytraj_ :cite:`Nguyen:2016aa`.
+PyLOOS :cite:`Romo:2014bh` consists of Python bindings to the C++ LOOS_ library :cite:`Romo:2009zr`; in order to aid novice users, LOOS also provides about 140 small stand-alone tools that each focus on a single task.
+mdtraj :cite:`McGibbon:2015aa` is similar to MDAnalysis in many aspects but focuses even more on being a light-weight building block for other packages; it also includes a number of innovative performance optimizations.
+pytraj_ :cite:`Nguyen:2016aa` is a versatile Python frontend to the popular and powerful ``cpptraj`` tool :cite:`Roe:2013zr` and is particularly geared towards users of the Amber MD package :cite:`Case:2005uq`.
+These three packages and MDAnalysis have in common that they are built on an object model of the underlying data (such as groups of particles or a trajectory), use compiled code in C, C++ or Cython to accelerate time critical bottlenecks, and have a "Pythonic" user interface. 
+LOOS and MDAnalysis share a similar object-oriented philosophy in their user interface design.
+In contrast, mdtraj and pytraj :cite:`Nguyen:2016aa` expose a functional user interface. 
+Both approaches have advantages and the existence of different "second generation" Python packages for the analysis of MD simulations provides many good choices for users and a fast moving and stimulating environment for developers.
 
 .. _MDAnalysis: http://mdanalysis.org
 .. _MDTools: http://www.ks.uiuc.edu/Development/MDTools/Python/
 .. _MMTK: http://dirac.cnrs-orleans.fr/MMTK/
+.. _PyLOOS: http://loos.sourceforge.net/
 .. _LOOS: http://loos.sourceforge.net/
 .. _mdtraj: http://mdtraj.org/
 .. _pytraj: https://github.com/Amber-MD/pytraj
@@ -353,7 +365,7 @@ The fraction of native contacts is often used in protein folding to determine wh
 For native contacts two major types of metrics are considered: ones based on differentiable functions :cite:`Best2013` and ones based on hard cut-offs  :cite:`Franklin2007` (which we set as the default implementation).
 We have designed the API to choose between the two metrics and pass user defined functions to develop new metrics or measure other quantities.
 This generic interface allowed us to implement a ":math:`q_1 q_2`" analysis :cite:`Franklin2007` on top of the ``Contacts`` class; :math:`q_1` and :math:`q_2` refer to the fractions of native contacts that are present in a protein structure relative to *two* reference states 1 and 2.
-Below is an incomplete code example that shows how to implement a :math:`q_1 q_2` analysis, the default value for the *method* kwarg is overwritten with a user defined method *radius_cut_q*.
+Below is an incomplete code example that shows how to implement a :math:`q_1 q_2` analysis, the default value for the *method* keyword argument is overwritten with a user defined method *radius_cut_q*.
 A more detailed explanation can be found in the documentation.
 
 .. code-block:: python
@@ -483,7 +495,7 @@ The user interface and modular design work well in complex scripted work flows a
 MDAnalysis also serves as foundation for other packages.
 For example, ProtoMD_ :cite:`Somogyi:2016aa`  is a toolkit that facilitates the development of algorithms for multiscale (MD) simulations and uses MDAnalysis for on-the-fly calculations of the collective variables that drive the coarse-grained degrees of freedom.
 The ENCORE_ package :cite:`Tiberti:2015fk` enables users to compare conformational ensembles generated either from simulations alone or synergistically with experiments.
-MDAnalysis is also the backend for `ST-analyzer`_ :cite:`Jeong:2014nx`, a standalone graphical user interface toolset to perform various trajectory analyses.
+MDAnalysis is also the back end for `ST-analyzer`_ :cite:`Jeong:2014nx`, a standalone graphical user interface tool set to perform various trajectory analyses.
 MDSynthesis_ :cite:`Dotson:2016aa` (which is based on  datreant_ (Dotson et al, this issue)) gives a Pythonic interface to molecular dynamics trajectories using MDAnalysis, giving the ability to work with the data from many simulations scattered throughout the file system with ease. It makes it possible to write analysis code that can work across many varieties of simulation, but even more importantly, MDSynthesis allows interactive work with the results from hundreds of simulations at once without much effort.
 
 
