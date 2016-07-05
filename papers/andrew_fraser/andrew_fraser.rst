@@ -201,7 +201,7 @@ the parameters as
 .. math::
    :label: eq-bayes
 
-   p(\theta|x) = \frac{p_l(x|\theta) p_p(\theta)}{\int p_l(x|\phi) p_p(x) d\phi}.
+   p(\theta|x) = \frac{p_l(x|\theta) p_p(\theta)}{\int p_l(x|\phi) p_p(\phi) d\phi}.
 
 Rather than implement Equation (:ref:`eq-bayes`) exactly, we use a
 Gaussian approximation calculated at
@@ -209,7 +209,7 @@ Gaussian approximation calculated at
 .. math::
    :label: eq-map
 
-   \hat \theta \equiv {\operatorname*{argmax}}_{\phi} p(\theta|x).
+   \hat \theta \equiv {\operatorname*{argmax}}_{\theta} p(\theta|x).
 
 Since :math:`\theta` does not appear in the denominator on the right
 hand side of Equation (:ref:`eq-bayes`), in a Taylor series expansion
@@ -337,8 +337,8 @@ use the following iterative procedure to find :math:`\hat \theta`, the
    where in :math:`P_{i,k}` and :math:`q_{i,k}`, :math:`i` is the
    iteration number and :math:`k` is the experiment number.
 
-#. Calculate :math:`G_i` and :math:`h_i` to express the appropriate
-   constraints [2]_ 
+#. Calculate the matrix :math:`G_i` and the vector :math:`h_i` to
+   express the appropriate constraints [2]_.
 
 #. Calculate :math:`\theta_i = \theta_{i-1} + d` by solving the
    quadratic program
@@ -358,6 +358,18 @@ use the following iterative procedure to find :math:`\hat \theta`, the
        last knot to be positive and have negative slope.  We also
        constrain the second derivative to be positive at every knot.
        See the [F_UNCLE]_ code and documentation for more details.
+
+This algorithm differs from modern SQP methods as each QP sub-problem
+is has no knowledge of the previous iteration. This choice is
+justified as the algorithm converges in less than 5 outer loop
+iterations. This unconventional formulation helps accelerate
+convergence as the algorithm does not need multiple outer loop
+iterations to obtain a good estimate of the Hessian, as in modern SQP
+methods.
+
+.. figure:: scipy2016_figure6.pdf
+
+   Convergence history of a typical solution to the MAP optimization problem
    
 The assumption that the experiments are statistically independent
 enables the calculations for each experiment :math:`k` in to be done
@@ -410,7 +422,7 @@ is beyond the scope of this paper.)
 Constraining :math:`\eos` to be positive and to be a convex function
 of :math:`\vol` is sufficient to ensure that it is also monotonic.
 Although we are working on a definition of a probability measure on a
-sets of functions that obeys those constraints and is further
+sets of functions that obeys those onstraints and is further
 constrained by :math:`\frac{\left| \eos(\vol) -
 \mu_\eos(\vol)\right|}{\mu_\eos(\vol)} \leq \Delta`, for now, we
 characterize the prior as Gaussian.  As we search for the mean of the
@@ -534,6 +546,13 @@ For each trial EOS, the `F_UNCLE` code uses the
 :math:`(p_\text{CJ},v_{CJ})`.  Figure :ref:`fig-cj-stick` shows the
 EOS and both the Rayleigh line and the CJ point that the procedure
 yields.
+
+.. The `scipy.optimize.brentq` was chosen as it did not require an
+   initial estimate of detonation velocity but rather used the bounds
+   of the detonation velocity, which could be estimated *a
+   priori*. With good estimates of the detonation velocity bounds, the
+   algorithm was sufficiently robust to be used within the MAP
+   optimization procedure described previously.
 
 .. figure:: scipy2016_figure1.pdf
    :align: center  
@@ -780,42 +799,40 @@ problems.
 References
 ==========
 
-.. [vaughan2014] Vaughan, D. E. and Preston, D. L. "Physical Uncertainty
-		 Bounds (PUB)". LA-UR-14-20441, Los Alamos National
-		 Laboratory, Los Alamos, NM.
-
-.. [pemberton2011] Pemberton et al. "Test Report for Equation of State
-                   Measurements of PBX-9501". LA-UR-11-04999, Los
-		   Alamos National Laboratory, Los Alamos, NM.
-
-.. [wilson2014] Wilson, Greg, et al. "Best practices for scientific
-		computing." PLoS Biol 12.1 (2014): e1001745.
-
-.. [fomel2009] Fomel, Sergey, and Jon F. Claerbout. "Reproducible
-	       research." Computing in Science & Engineering 11.1
-	       (2009): 5-7.
-
-.. [hixson2000] Hixson, R. S. et al., 2000. "Release isentropes of
-                overdriven plastic-bonded explosive PBX-9501."
-                *J. Applied Physics* **88** (11) pp. 6287-6293
+.. [cvxopt] Andersen, M. and Vandenberghe, L.. "cvxopt\: Convex
+            Optimization Package" `<http://cvxopt.org/>`_ [Online;
+            accessed 2016-05-27].
 
 .. [ficket2000] Ficket, W. and
                 Davis, W. C., 2000. "Detonation". University of
                 California Press: Berkeley, CA.
+
+.. [fomel2009] Fomel, Sergey, and Jon F. Claerbout. "Reproducible
+	       research." Computing in Science & Engineering 11.1
+	       (2009): 5-7.
 
 .. [F_UNCLE] "F_UNCLE: Functional Uncertainty Constrained by Law and
              Experiment" `https://github.com/fraserphysics/F_UNCLE
              <https://github.com/fraserphysics/F_UNCLE>`_ [Online;
              accessed 2016-05-27].
 
-.. [scipy] Jones, E., Oliphant, E., Peterson, P., et al. "SciPy\: Open
-	   Source Scientific Tools for Python", 2001-,
-	   `<http://www.scipy.org/>`_ [Online; accessed 2016-05-27].
+.. [hill1997] Hill, L. G., 1997. "Detonation Product Equation-of-State
+              Directly From the Cylinder Test". Proc. 21st
+              Int. Symp. on Shock Waves, Great Keppel Insland,
+              Australia.
+
+.. [hixson2000] Hixson, R. S. et al., 2000. "Release isentropes of
+                overdriven plastic-bonded explosive PBX-9501."
+                *J. Applied Physics* **88** (11) pp. 6287-6293
 
 .. [matplotlib] Hunter, J. D.. "Matplotlib\: A 2D Graphics
                 Environment", Computing in Science & Engineering,
                 **9**, 90-95 (2007), `DOI:10.1109/MCSE.2007.55
                 <https://doi.org/10.1109/MCSE.2007.55>`_
+
+.. [nose] "nose: Nose Extends Unittest to Make Testing Easier"
+          `<https://pypi.python.org/pypi/nose/1.3.7>`_ [Online;
+          accessed 2016-05-27].
 
 .. [numpy] van der Walt, S. , Colbert, C. S.  and Varoquaux, G.. "The
            NumPy Array\: A Structure for Efficient Numerical
@@ -823,26 +840,32 @@ References
            22-30 (2011), `DOI:10.1109/MCSE.2011.37
            <https://doi.org/10.1109/MCSE.2011.37>`_
 
-.. [cvxopt] Andersen, M. and Vandenberghe, L.. "cvxopt\: Convex
-            Optimization Package" `<http://cvxopt.org/>`_ [Online;
-            accessed 2016-05-27].
-
-.. [sphinx] "sphinx\: Python Documentation Generator"
-            `<http://www.sphinx-doc.org/>`_ [Online; accessed
-            2016-05-27].
+.. [pemberton2011] Pemberton et al. "Test Report for Equation of State
+                   Measurements of PBX-9501". LA-UR-11-04999, Los
+		   Alamos National Laboratory, Los Alamos, NM.
 
 .. [pylint] "pylint\: Python Code Static Checker"
             `<https://www.pylint.org/>`_ [Online; accessed
             2016-05-27].
 
-.. [nose] "nose: Nose Extends Unittest to Make Testing Easier"
-          `<https://pypi.python.org/pypi/nose/1.3.7>`_ [Online;
-          accessed 2016-05-27].
+.. [scipy] Jones, E., Oliphant, E., Peterson, P., et al. "SciPy\: Open
+	   Source Scientific Tools for Python", 2001-,
+	   `<http://www.scipy.org/>`_ [Online; accessed 2016-05-27].
 
-.. [hill1997] Hill, L. G., 1997. "Detonation Product Equation-of-State
-              Directly From the Cylinder Test". Proc. 21st
-              Int. Symp. on Shock Waves, Great Keppel Insland,
-              Australia.
+
+.. [sphinx] "sphinx\: Python Documentation Generator"
+            `<http://www.sphinx-doc.org/>`_ [Online; accessed
+            2016-05-27].
+
+.. .. [vaughan2014] Vaughan, D. E. and Preston, D. L. "Physical Uncertainty
+		 Bounds (PUB)". LA-UR-14-20441, Los Alamos National
+		 Laboratory, Los Alamos, NM.
+
+.. [wilson2014] Wilson, Greg, et al. "Best practices for scientific
+		computing." PLoS Biol 12.1 (2014): e1001745.
+		
+
+
 
 ..
    Local Variables:
