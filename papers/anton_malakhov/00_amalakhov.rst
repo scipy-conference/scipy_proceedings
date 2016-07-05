@@ -100,7 +100,8 @@ In the Intel |R| Distribution for Python 2017 Beta and later, as part of Intel |
 Thanks to threading composability, it can accelerate programs by avoiding inefficient thread allocation as discussed above.
 
 The TBB module implements :code:`Pool` class with the standard Python interface using Intel |R| TBB which can be used to replace Python's :code:`ThreadPool`.
-[TODO:eleborate on what is Mokey-patching] Thanks to the monkey-patching technique implemented in class :code:`Monkey`, no source code change is needed in order to enable single thread pool across different Python modules.
+Python allows to dynamically replace any object (e.g. class or function) at runtime (*monkey patching*).
+Thanks to this technique implemented in class :code:`Monkey`, no source code change is needed in order to enable single thread pool across different Python modules.
 It also enables the TBB-based threading layer for Intel |R| MKL which automatically enables composable parallelism [ParUniv]_ for Numpy and Scipy calls.
 
 .. [ParUniv] Vipin Kumar E.K. *A Tale of Two High-Performance Libraries*,
@@ -172,9 +173,10 @@ It results in the worst performance for Numpy version since everything is now se
 Moreover, the Dask version is not able to close the gap completely since it has only 10 tasks, which can run in parallel, while Numpy with parallel MKL is able to utilize the whole machine with 32 threads.
 
 The reason why only 10 tasks were selected for this demonstration is as follows.
-If top-level parallelism can load all the available cores on the machine, there is not much sense using nested parallelism and Intel |R| TBB shows no speedup over serial MKL version.
-In such cases, TBB could help by load-balancing at the end of the work, but this example is already quite balanced, so there is no visible difference.
-TODO:this a modeling benchmark, functional parallelism.
+If top-level parallelism can load all the available cores on the machine, there is not much sense using nested parallelism and Intel |R| TBB version shows no speedup over serial MKL version.
+In such cases, Intel |R| TBB could help by load-balancing at the end of the work, but this example is already quite balanced, so there is no visible difference.
+This example also models behavior of real-life applicationd which usually do not have enoght parallelism on the outermost level.
+For instance, outermost parallelism can be of functional or pipeline type which restricts the maximum number of tasks running in parallel.
 
 The last command demonstrates how Intel TBB can be enabled as the orchestrator of multi-threaded modules.
 TBB module runs the benchmark in the context of :code:`with TBB.Monkey():` which replaces standard Python *ThreadPool* class used by Dask and also switches MKL into TBB mode.
@@ -209,8 +211,6 @@ This is explained by overhead induced by over-subscription.
 
 In order to remove overhead, the previous experiment was executed with TBB module on the command line.
 It results in the best performance for the application - 27 times speedup over the base.
-
-.. [#] For more complete information about compiler optimizations, see our Optimization Notice :cite:`optnot`
 
    
 Numba
@@ -261,6 +261,8 @@ The Figure :ref:`numbatbb` shows how original Numba and TBB-based version perfor
 Here is the scalar function :code:`BlackScholes`, consisting of many elementary and transcendental operations, which is applied (*broadcasted*) by Numba to every element of the input arrays.
 Additionally, :code:`target='parallel'` specifies to run the computation using multiple threads.
 The real benchmark also computes the put price using :code:`numba.guvectorize`, uses approximated CND function instead of ERF for better SIMD optimization, optimizes the sequence of math operations for speed, and repeats the calculation multiple times.
+
+.. [#] For more complete information about compiler optimizations, see our Optimization Notice :cite:`optnot`
 
 
 Limitations and Future Work
