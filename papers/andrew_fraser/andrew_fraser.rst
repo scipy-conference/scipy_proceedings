@@ -52,6 +52,7 @@
     \newcommand\Lbb{\mathbb{L}}
     \newcommand\epv{\epsilon_v}
     \newcommand\epf{\epsilon_f}
+    \newcommand{\EV}{\field{E}}
 	      
 ==========================================================
  Functional Uncertainty Constrained by Law and Experiment
@@ -85,19 +86,19 @@
 Introduction
 ============
 
-One often must quantitatively characterize the accuracy of models of
-physical material properties which are based on existing theory and
-experiments.  If the accuracy is inadequate, one must then evaluate
-whether or not proposed experiments or theoretical work will provide
-the necessary information.  Faced with these tasks, we have chosen to
-first work on the equation of state (EOS) of the gas produced by
-detonating an explosive called PBX-9501 because it is relatively
-simple.  In particular Hixson et al. [hixson2000]_ describe a model
-that roughly defines its properties in terms of an unknown one
-dimensional function (pressure as a function of volume on a special
-path) and simple constraints.  This EOS estimation problem shares the
-following challenges with many of the other material models that we
-must analyze:
+Some tasks require one to quantitatively characterize the accuracy of
+models of physical material properties which are based on existing
+theory and experiments.  If the accuracy is inadequate, one must then
+evaluate whether or not proposed experiments or theoretical work will
+provide the necessary information.  Faced with several such tasks, we
+have chosen to first work on the equation of state (EOS) of the gas
+produced by detonating an explosive called PBX-9501 because it is
+relatively simple.  In particular Hixson et al. [hixson2000]_ describe
+a model form that roughly defines its properties in terms of an
+unknown one dimensional function (pressure as a function of volume on
+a special path) and simple constraints.  This EOS estimation problem
+shares the following challenges with many of the other material models
+that we must analyze:
 
 #. The uncertain object is a *function*.  In principal it has an
    infinite number of degrees of freedom.  In order to implement a
@@ -146,20 +147,21 @@ The task of mapping measurements to estimates of the characteristics
 of models for the physical processes that generated them is called an
 *inverse problem*.  Classic examples include RADAR, tomography and
 image estimation.  Our problems differ from those in the diverse and
-indirect nature of the measurements and in the kinds of constraints.
-[F_UNCLE]_ uses constrained optimization and physical models with many
-degrees of freedom to span a large portion of the allowable function
-space while strictly enforcing constraints.  The analysis determines
-the function which maximizes the a posteriori probability (the MAP
-estimate) using simulations to match :math:`K` data-sets.  We
-characterize how each experiment constrains our uncertainty about the
-function in terms of its *Fisher information*.
+indirect nature of the measurements, the absence of translation
+invariance and in the kinds of constraints.  [F_UNCLE]_ uses
+constrained optimization and physical models with many degrees of
+freedom to span a large portion of the allowable function space while
+strictly enforcing constraints.  The analysis determines the function
+which maximizes the a posteriori probability (the MAP estimate) using
+simulations to match :math:`K` data-sets.  We characterize how each
+experiment constrains our uncertainty about the function in terms of
+its *Fisher information*.
 
-For the surrogate problem, we investigate the equation of state (EOS)
-for the products-of-detonation of a hypothetical High Explosive (HE).
-The EOS relates the pressure to the specific volume of the
-products-of-detonation mixture.  We follow traditional practice (eg,
-[ficket2000]_) and constrain the function to be positive,
+As a surrogate problem, we have chosen to investigate the equation of
+state (EOS) for the products-of-detonation of a hypothetical High
+Explosive (HE).  The EOS relates the pressure to the specific volume
+of the products-of-detonation mixture.  We follow traditional practice
+(eg, [ficket2000]_) and constrain the function to be positive,
 monotonically decreasing and convex.  To date we have incorporated two
 examples of experiments: The detonation velocity of a *rate stick* of
 HE and the velocity of a projectile driven by HE. The behavior of both
@@ -168,14 +170,14 @@ these experiments depend sensitively on the EOS function.
 The following sections describe the choices made in modeling the EOS
 function, the algorithm used for estimating the function and the use
 of the Fisher information to characterize the uncertainty about the
-function.  We describe two sets of simulations and synthetic
-experimental data and present an EOS function fit to represent both
-these experiments as well as a spectral analysis of the Fisher
-information matrix.  While the results are limited to an illustration
-of the ideas applied to synthetic data and simple models, the approach
-can be applied to real data and complex simulations. Some preliminary
-results from work on estimating the EOS of the high explosive PBX-9501
-appear in the concluding section.
+function.  Results so far indicate optimization can find good
+approximations to the unknown functions and that analysis of Fisher
+information can quantify how various experiments constrain uncertainty
+about their different aspects.  While these preliminary results are
+limited to an illustration of the ideas applied to synthetic data and
+simple models, the approach can be applied to real data and complex
+simulations.  A plot from work on estimating the EOS of the high
+explosive PBX-9501 appear in the concluding section.
 
 Fisher Information and a Sequence of Quadratic Programs
 =======================================================
@@ -231,7 +233,7 @@ log of the likelihood and the log of the prior.
      + R
 
 Dropping the higher order terms in the remainder :math:`R` in leaves
-the normal or Gaussian
+the normal or Gaussian approximation
 
 .. math::
    :type: align
@@ -251,7 +253,7 @@ the Fisher information may also be written as
 .. math::
    :label: eq-fisher
 
-   \mathcal{I}(\theta) = - \operatorname{E}
+   \mathcal{I}(\theta) = - \EV_X
      \left[\left. \frac{\partial^2}{\partial\theta^2} \log
          p(X;\theta)\right|\theta \right].
 
@@ -260,7 +262,7 @@ information is a lower bound on the variance of any unbiased
 estimator”
 
 Our simulated measurements have Gaussian likelihood function in which
-the unknown function only influences the mean.  That characterisitc
+the unknown function only influences the mean.  That characteristic
 yields a simple calculation of :ref:`eq-fisher` that only depends on
 the derivative of the mean with respect to the unknown function and
 the covariance of the likelihood function.
@@ -317,7 +319,7 @@ use the following iterative procedure to find :math:`\hat \theta`, the
    iteration number and :math:`k` is the experiment number.
 
 #. Calculate :math:`G_i` and :math:`h_i` to express the appropriate
-   constraints
+   constraints [2]_ 
 
 #. Calculate :math:`\theta_i = \theta_{i-1} + d` by solving the
    quadratic program
@@ -333,6 +335,11 @@ use the following iterative procedure to find :math:`\hat \theta`, the
       
 #. If not converged go back to step 1.
 
+.. [2] For our surrogate problem, we constrain the function at the
+       last knot to be positive and have negative slope.  We also
+       constrain the second derivative to be positive at every knot.
+       See the [F_UNCLE]_ code and documentation for more details.
+   
 The assumption that the experiments are statistically independent
 enables the calculations for each experiment :math:`k` in to be done
 independently. In the next few sections, we describe both the data
@@ -413,7 +420,7 @@ We set :math:`\Delta = 0.05`.  These choices yield:
    \mu_\eos &\leftrightarrow \left\{\tilde c[i] \right\} \\
    \Sigma_\eos[i,j] &= \tilde \sigma^2[i] \delta_{i,j}
 
-Thus we have the following notation for splines and an a prior
+Thus we have the following notation for splines and a prior
 distribution over :math:`\EOS`.
 
 * :math:`\cf,\fbasis` Vector of coefficients and cubic spline basis
@@ -498,10 +505,11 @@ following equation:
    	   
    \frac{V^2}{v_0^2} = \frac{p_\text{CJ}-p_0}{v_0-v_\text{CJ}}.
 
-The `F_UNCLE` code uses the `scipy.optimize.brentq` method in a nested
-loop to solve for :math:`(p_\text{CJ},v_{CJ})`.  Figure
-:ref:`fig-cj-stick` shows the EOS and both the Rayleigh line and the
-CJ point that the procedure yields.
+For each trial EOS, the `F_UNCLE` code uses the
+`scipy.optimize.brentq` method in a nested loop to solve for
+:math:`(p_\text{CJ},v_{CJ})`.  Figure :ref:`fig-cj-stick` shows the
+EOS and both the Rayleigh line and the CJ point that the procedure
+yields.
 
 .. figure:: scipy2016_figure1.pdf
    :align: center  
@@ -517,35 +525,42 @@ CJ point that the procedure yields.
 Comparison to Pseudo Experimental Data
 --------------------------------------
 
-The previous section calculated the detonation velocity,
-:math:`V_{\text{CJ}}(\eos)`, while experimental data were a series of
-times when the shock reached a given position on the rate-stick. The
-simulated detonation velocity can be related to these arrival times
-using:
+The previous section explained how to calculate the detonation
+velocity, :math:`V_{\text{CJ}}(\eos)`, but the *experimental* data are
+a series of times when the shock reached specified positions on the
+rate-stick.  The simulated detonation velocity is related to these
+arrival times by:
 
 .. math::
 
    t[j] = \frac{x[j]}{V_{\text{CJ}}(\eos)}.
 
-where :math:`x[j]` were the locations of each sensor measuring arrival time.
+where :math:`x[j]` are the locations of each sensor measuring arrival
+time.
 
-The sensitivity of the simulated response at the set of arrival times
-to the spline coefficients governing the equation of state is given
-by:
+We let :math:`D` denote the sensitivity of the set of simulated
+arrival times to the spline coefficients governing the equation of
+state, and write:
 
 .. math::
    
-  D[j,i] \equiv \frac{\partial t[j]}{\partial c[i]}
+  D[j,i] \equiv \frac{\partial t[j]}{\partial c[i]}.
 
-where the derivative was evaluated using finite differences.
+We use finite differences to estimate :math:`D`.
 
 The Gun
 =======
 
 The data from this experiment are a time series of measurements of a
 projectile's velocity as it accelerates along a gun barrel driven by
-the expanding products-of-detonation of HE.
+the expanding products-of-detonation of HE.  Newton's equation
 
+.. math::
+   
+   F = ma
+
+determines the velocity time series.  The pressure from the EOS times
+the area of the barrel cross section is the force.
 
 .. figure:: gun.pdf
 
@@ -590,13 +605,12 @@ products-of-detonation behind the projectile remains constant.
 Comparison to Pseudo Experimental Data
 --------------------------------------
 
-The experimental data were also the result of this simulation but
-performed using the nominal *true* EOS described previously. These
-experimental data were a series of times and corresponding
-velocities. To compare the experiments to simulations, which may use a
-different time discretization, the simulated response was represented
-by a spline, and was compared to the experiments at each experimental
-time stamp.
+We generated *experimental data* using our simulation code with the
+nominal *true* EOS described previously. These experimental data were
+a series of times and corresponding velocities. To compare the
+experiments to simulations, which may use a different time
+discretization, the simulated response was represented by a spline,
+and was compared to the experiments at each experimental time stamp.
 
 .. math::
    :label: gun_sens
@@ -727,7 +741,8 @@ progress.  In particular:
 * The choice of splines is not justified.  We plan to compare the
   performance of coordinate system options in terms of quantities such
   as bias and variance in future work.
-* The optimization procedure is ad hoc.  We have already begun to
+* The optimization procedure is ad hoc and we have not considered
+  convergence or stability.  We have already begun to
   consider other optimization algorithms.
 
 We have designed the [F_UNCLE]_ code  so that one can easily
