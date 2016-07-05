@@ -84,6 +84,16 @@ number of children, sexual orientation, attitude toward pets, religion, sex,
 astrological sign, smoking status, number of language spoken, and relationship
 status.
 
+This data set was selected because its diverse set of essay prompts and the
+availability of detailed user characteristics provide ideal means for examining
+online self-presentation. Previous work using this data focused on exploratory
+data analysis, basic text analysis, and on using logistic regression to predict
+sex using only height [Kim15]_. Thus, our work provides new ways of examining
+this data set.
+
+This data set is public, as authorized by OkCupid president and co-founder
+Christian Rudder [Kim15]_.
+
 Preprocessing
 ~~~~~~~~~~~~~
 
@@ -671,6 +681,10 @@ References
 
 .. [Ger12] Gerber, A. S., & Green, D. P. (2012). Field experiments: Design,
            analysis, and interpretation. WW Norton.
+
+.. [Kim15] Kim, A. Y., & Escobedo-Land, A. (2015). OkCupid Data for Introductory
+           Statistics and Data Science Courses. Journal of Statistics Education,
+           23(2), n2.
 
 .. [McP01] McPherson, M., Smith-Lovin, L., & Cook, J. M. (2001). Birds of a
            feather: Homophily in social networks. Annual review of sociology,
