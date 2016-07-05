@@ -63,19 +63,19 @@
 .. class:: abstract
 		  
    Many physical processes are modeled by unspecified functions.
-   Here, we describe work on the `F_UNCLE` project which uses the
-   Python ecosystem of scientific software to develop and explore
-   techniques for estimating such unknown functions and our
-   uncertainty about them.  The work provides ideas for quantifying
-   uncertainty about functions given the constraints of both laws
-   governing the function's behavior and experimental data.  We
-   present an analysis of pressure as a function of volume for the
-   gases produced by detonating an imaginary explosive, estimating a
-   *best* pressure function and using estimates of *Fisher
-   information* to quantify how well a collection of experiments
-   constrains uncertainty about the function.  A need to model
-   particular physical processes has driven our work on the project,
-   and we conclude with a plot from such a process.
+   Here, we introduce the `F_UNCLE` project which uses the Python
+   ecosystem of scientific software to develop and explore techniques
+   for estimating such unknown functions and our uncertainty about
+   them.  The work provides ideas for quantifying uncertainty about
+   functions given the constraints of both laws governing the
+   function's behavior and experimental data.  We present an analysis
+   of pressure as a function of volume for the gases produced by
+   detonating an imaginary explosive, estimating a *best* pressure
+   function and using estimates of *Fisher information* to quantify
+   how well a collection of experiments constrains uncertainty about
+   the function.  A need to model particular physical processes has
+   driven our work on the project, and we conclude with a plot from
+   such a process.
      
 .. class:: keywords
 
@@ -130,17 +130,17 @@ implement them on the HPCs.  In this paper, we introduce the
 [F_UNCLE]_ code, the surrogate problem we have developed for the EOS and
 our analysis of that problem.
 
-We are using the project to learn and demonstrate *Best Practices for
-Scientific Computing* (eg, [wilson2014]_) and *Reproducible Research*
-(eg, [fomel2009]_).  The work is designed to be modular, allowing a
-wide range of experiments and simulations to be used in an analysis.
-The code is self documenting, with full docstring coverage, and is
-converted into online documentation using [sphinx]_.  Each class has a
-test suite to allow unit testing.  Tests are collected and run using
-[nose]_.  Each file is also tested using [pylint]_ with all default
-checks enabled to ensure it adheres to python coding standards,
-including PEP8.  Graphics in this paper were generated using
-[matplotlib]_ and the code made use of the [numpy]_ and [scipy]_
+We are also using the project to learn and demonstrate *Best Practices
+for Scientific Computing* (eg, [wilson2014]_) and *Reproducible
+Research* (eg, [fomel2009]_).  The work is designed to be modular,
+allowing a wide range of experiments and simulations to be used in an
+analysis.  The code is self documenting, with full docstring coverage,
+and is converted into online documentation using [sphinx]_.  Each
+class has a test suite to allow unit testing.  Tests are collected and
+run using [nose]_.  Each file is also tested using [pylint]_ with all
+default checks enabled to ensure it adheres to python coding
+standards, including PEP8.  Graphics in this paper were generated
+using [matplotlib]_ and the code made use of the [numpy]_ and [scipy]_
 packages.
 
 The task of mapping measurements to estimates of the characteristics
@@ -152,7 +152,7 @@ invariance and in the kinds of constraints.  [F_UNCLE]_ uses
 constrained optimization and physical models with many degrees of
 freedom to span a large portion of the allowable function space while
 strictly enforcing constraints.  The analysis determines the function
-which maximizes the a posteriori probability (the MAP estimate) using
+that maximizes the a posteriori probability (the MAP estimate) using
 simulations to match :math:`K` data-sets.  We characterize how each
 experiment constrains our uncertainty about the function in terms of
 its *Fisher information*.
@@ -262,10 +262,29 @@ information is a lower bound on the variance of any unbiased
 estimator”
 
 Our simulated measurements have Gaussian likelihood function in which
-the unknown function only influences the mean.  That characteristic
-yields a simple calculation of :ref:`eq-fisher` that only depends on
-the derivative of the mean with respect to the unknown function and
-the covariance of the likelihood function.
+the unknown function only influences the mean.  Thus we calculate the
+second derivative of the log likelihood as follows:
+
+.. math::
+   :type: align
+   
+   L &\equiv -\frac{1}{2} \left(x - \mu(\theta) \right)^T \Sigma^{-1}
+	  \left(x - \mu(\theta) \right) +C \\
+	  \partiald{L}{\theta} &= \left(x - \mu(\theta) \right)^T
+	  \Sigma^{-1} \partiald{\mu}{\theta}  \\
+	  \frac{\partial^2}{\partial \theta^2} L &=
+	  -\left(\partiald{\mu}{\theta}\right)^T \Sigma^{-1}
+	  \left(\partiald{\mu}{\theta})\right) + \left(x - \mu(\theta)
+	  \right)^T \Sigma^{-1} \frac{\partial^2 \mu}{\partial
+      \theta^2} \\
+      &\quad \text{and} \\
+   \EV_X \frac{\partial^2}{\partial \theta^2} L &\approx -\left(\partiald{\mu}{\theta}\right)^T
+	  \Sigma^{-1} \left(\partiald{\mu}{\theta}\right).
+   
+The approximation is valid if either :math:`\frac{\partial^2
+\mu}{\partial \theta^2}` is roughly constant or :math:`\left(x -
+\mu(\theta) \right)` is small (both of which are probably true).
+
 
 Iterative Optimization
 ----------------------
@@ -333,7 +352,7 @@ use the following iterative procedure to find :math:`\hat \theta`, the
    where :math:`\preceq` means that for each component the left hand
    side is less than or equal to the right hand side.
       
-#. If not converged go back to step 1.
+#. If not converged go back to step 2.
 
 .. [2] For our surrogate problem, we constrain the function at the
        last knot to be positive and have negative slope.  We also
@@ -353,7 +372,7 @@ Equation of State
 For our surrogate problem, we say that the thing we want to estimate,
 :math:`\theta`, represents the equation of state (EOS) of a gas.  We
 also say that the state of the gas in experiments always lies on an
-isentrope and consequently the only relevant data is the pressure as a
+isentrope [3]_ and consequently the only relevant data is the pressure as a
 function of specific volume (ml/gram) of the gas.  For physical
 plausibility, we constrain the function to have the following
 properties:
@@ -362,6 +381,11 @@ properties:
 * Monotonic
 * Convex
 
+.. [3] In an *isentropic* expansion or compression there is no heat
+       conduction.  Our isentropic approximation relies on the
+       expansion being so rapid that there is not enough time for heat
+       conduction.
+   
 Here, let us introduce the following notation: 
   
 * :math:`\vol` Specific volume
@@ -514,7 +538,7 @@ yields.
 .. figure:: scipy2016_figure1.pdf
    :align: center  
 	   
-   Isentropes, Rayleigh lines and CJ conditions. Starting from the
+   Isentropes, a Rayleigh line and the CJ conditions. Starting from the
    isentrope labeled *Prior EOS* and using data from simulated
    experiments based on the isentrope labeled *True EOS*, the
    optimization algorithm described in the Algorithm section produced
@@ -565,7 +589,7 @@ the area of the barrel cross section is the force.
 .. figure:: gun.pdf
 
    The gun experiment. The projectile of a given mass and
-   cross-sectional area is accelerated down the barrel by the
+   cross-sectional area is accelerated along the barrel by the
    expanding products of combustion from the high explosives in the
    barrel.
 
