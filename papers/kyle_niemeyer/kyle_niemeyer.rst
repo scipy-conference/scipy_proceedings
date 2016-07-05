@@ -257,7 +257,7 @@ ignition). All quantities provided include a magnitude and units, which
 Pint [Grecco2016]_ interprets.
 Since many experimental datasets hold certain properties constant (e.g.,
 composition, pressure) while varying a single quantity (e.g., temperature),
-a ``common-properties`` element can desribe properties common to all
+a ``common-properties`` element can describe properties common to all
 ``datapoints``, using an arbitrary anchor label (e.g., ``&pres``
 above for the constant pressure). Each datapoint then refers to the common
 property with a reference (``*pres``). However, every datapoint should still
@@ -541,7 +541,7 @@ independently to allow the use of ``multiprocessing`` workers to perform these
 steps in parallel (if desired), as described in the next section. When running
 a simulation, PyTeCK creates an HDF5 file and opens it as a
 PyTables [Alted2002]_ table, then performs integration steps until it
-reaches desired end time (set as 100 times the experimental ignition delay):
+reaches the desired end time (set as 100 times the experimental ignition delay):
 
 .. code-block:: python
 
