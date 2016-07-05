@@ -128,18 +128,18 @@ scientific disciplines in mind.
 1. **Astronomical time series classification.** Beginning in 2020, the Large
    Synoptic Survey Telescope (LSST) will survey the entire night’s sky every few
    days producing high-quality time series data on approximately 800 million
-   transient events and sources with variable brightness (Figure
-   :ref:`cesium-astro` depicts the brightness of several types of star over
-   the course of several years) :cite:`lsst2009`.  Much of the best science in
-   the time domain (e.g., the discovery of the accelerating universe and dark
-   energy using Type Ia supernovae :cite:`perlmutter1999,riess1998`) consists of
-   first identifying possible phenomena of interest using broad data mining
-   approaches and following up by collecting more detailed data using other,
-   more precise observational tools. For many transient events, the time scale
-   during which observations can be collected can be on the order of days or
-   hours. Not knowing which of the millions of variable sources to examine more
-   closely with larger telescopes and specialized instruments is tantamount to
-   not having discovered those sources at all. Discoveries must be identified
+   transient events and sources with variable brightness (Figure :ref:`astro`
+   depicts the brightness of several types of star over the course of several
+   years) :cite:`lsst2009`. Much of the best science in the time domain (e.g.,
+   the discovery of the accelerating universe and dark energy using Type Ia
+   supernovae :cite:`perlmutter1999,riess1998`) consists of first identifying
+   possible phenomena of interest using broad data mining approaches and
+   following up by collecting more detailed data using other, more precise
+   observational tools. For many transient events, the time scale during which
+   observations can be collected can be on the order of days or hours. Not
+   knowing which of the millions of variable sources to examine more closely
+   with larger telescopes and specialized instruments is tantamount to not
+   having discovered those sources at all. Discoveries must be identified
    quickly or in real time so that informed decisions can be made about how best
    to allocate additional observational resources.
 
@@ -153,30 +153,18 @@ scientific disciplines in mind.
    neural systems presents a wide variety of challenges in time series analysis,
    made more pressing by the growing volume of high-quality, heterogeneous
    sensor data that cannot be effectively inspected visually.
-   Figure :ref:`cesium-eeg` shows an example of different types of EEG signals
+   Figure :ref:`eeg` shows an example of different types of EEG signals
    that might need to be classified in order to make treatment decisions.
    Neuroscience experiments now produce vast amounts of time series data that
-   can have entirely different structures, spatial resolutions, and temporal
-   resolutions, depending on the recording technique. Ultimately, we wish to
-   connect complex recorded output to high-level cognition patterns: *How did
-   that subject formulate the image of what they were seeing? What motion were
-   they trying to instigate on their body? What are they thinking?* Given the
-   prevalence of these various recording methods in experimental neuroscience,
-   much of our data will arrive as time series but in a multitude of different
-   possible forms: from a few channels with good spatial localization to
-   hundreds of channels with poor spatial resolution; from low to very high
-   sampling rates; and with various types of confounds and recording artifacts
-   specific to each recording method. Furthermore, in every case the volumes of
-   available data are rapidly increasing. The neuroscience community is turning
-   to the use of large-scale machine learning tools to extract insight from
-   these complex datasets :cite:`lotte2007`. However, the community lacks tools
-   to validate and compare data analysis approaches in a robust, efficient and
-   reproducible manner: even recent expert reviews on the matter leave many of
-   these critical methodological questions open for the user to explore in an ad
-   hoc way and with little principled guidance :cite:`perez2007`. In addition,
-   the problems of feature selection vary across data modalities (EEG, fMRI,
-   etc.), yet these different modalities offer complementary views on the same
-   underlying phenomena.
+   can have entirely different structures and spatial/temporal
+   resolutions, depending on the recording technique.
+   The neuroscience community is turning to the use of large-scale machine
+   learning tools to extract insight from large, complex datasets
+   :cite:`lotte2007`. However, the community lacks tools to validate and compare
+   data analysis approaches in a robust, efficient and reproducible manner: even
+   recent expert reviews on the matter leave many of these critical
+   methodological questions open for the user to explore in an ad hoc way and
+   with little principled guidance :cite:`perez2007`.
 
 .. figure:: cesium-eeg
 
@@ -188,7 +176,7 @@ scientific disciplines in mind.
    :cite:`brown2011`. These systems have employed sophisticated remote sensors,
    real-time connectivity to major broadcast outlets (such as TV and radio), and
    have a growing resumé of successful rapid assessment of threat levels to
-   populations and industry.  Traditionally these warning systems trigger from
+   populations and industry. Traditionally these warning systems trigger from
    data obtained by high-quality seismic networks with sensors placed every \~10
    km. Today, however, accelerometers are embedded in many consumer electronics
    including computers and smartphones. There is tremendous potential to improve
@@ -217,7 +205,7 @@ scientific questions. ``cesium`` includes a number of out-of-the-box feature
 engineering workflows that transform raw time
 series data to extract signal from the noise. By recording the inputs,
 parameters, and outputs of previous experiments, ``cesium`` allows researchers
-to answer new questions that arise out of previous lines of inquiry.  Saved
+to answer new questions that arise out of previous lines of inquiry. Saved
 ``cesium`` workflows can be can be applied to new data as it arrives and shared
 with collaborators or published so that others may apply the same
 beginning-to-end analysis for their own data.
@@ -347,11 +335,10 @@ multi-channel), as well as time series filenames or labels, class labels or
 regression targets, and other arbitrary metadata to be used in building a
 statistical model.
 
-In order to simplify building ``sckit-learn`` models from (non-rectangular)
-feature set data, the following functions are provided in the ``build_model``
-submodule:
+The ``build_model`` contains tools meant to to simplify the process of building
+``sckit-learn`` models from (non-rectangular) feature set data submodule:
 
-- ``build_model_from_featureset(featureset, ...)``
+- ``model_from_featureset(featureset, ...)``
   
   - Returns a fitted ``scikit-learn`` model based on the input feature data.
 
@@ -360,11 +347,6 @@ submodule:
 
   - Model parameters can be passed in as fixed values, or as ranges of values
     from which to select via cross-validation.
-
-- ``rectangularize_featureset(featureset)``
-
-  - Called internally by ``build_model_from_featureset`` to reshape feature data
-    in a way that is consumable by ``scikit-learn`` models.
 
 Analogous helper functions for prediction are available in the ``predict`` module:
 
@@ -418,6 +400,7 @@ representation so that built-in features can be reused for the evaluation of
 user-specified functions.
 
 .. figure:: dask
+   :scale: 40%
 
    Example of a directed feature computation graph using ``dask``. :label:`dask`
 
@@ -459,7 +442,7 @@ The ``cesium`` web front end consists of several components:
   tasks.
 
 - A JavaScript-based web interface implemented using React
-  :cite:`gackenheimer2016a` and Redux :cite:`gackenheimer2016b` to display results to users.
+  :cite:`gackenheimer2015a` and Redux :cite:`gackenheimer2015b` to display results to users.
 
 - A custom WebSocket communication system (which we informally call *message
   flow*) that notifies the front end when back-end tasks complete.
@@ -473,9 +456,9 @@ An NGINX proxy exposes a pool of WebSocket and Web Server Gateway Interface
 implementation of each. Communications between WSGI servers and WebSocket
 servers happen through a ZeroMq XPub-XSub (multi-publisher publisher-subscriber)
 pipeline :cite:`hintjens2013`, but could be replaced with any other broker,
-e.g., RabbitMQ :cite:`videla2012`.  The "message flow" paradigm adds WebSocket
+e.g., RabbitMQ :cite:`videla2012`. The "message flow" paradigm adds WebSocket
 support to any Python WSGI server (Flask, Django [#channels]_, Pylons, etc.), and
-allows scaling up as demand increases.  It also implement trivially modern data
+allows scaling up as demand increases. It also implement trivially modern data
 flow models such as Flux/Redux, where information always flows in one direction:
 from front end to back end via Hypertext Transfer Protocol (HTTP) calls, and
 from back end to front end via WebSocket communication.
@@ -567,7 +550,6 @@ featurized serially.
 .. code-block:: python
         
         from cesium import featurize
-
         features_to_use = ['amplitude', 'maximum', 'max_slope',
                            'median', 'median_absolute_deviation',
                            'percent_beyond_1_std',
@@ -607,9 +589,8 @@ compute five standard features for EEG analysis suggested by Guo et al. :cite:`g
 
 .. code-block:: python
                 
-        import numpy as np
-        import scipy.stats
-        
+        import numpy as np, scipy.stats
+
         def mean_signal(t, m, e):
             return np.mean(m)
         
@@ -637,7 +618,6 @@ keyword argument.
             'abs_diffs': abs_diffs_signal,
             'skew': skew_signal
         }
-        
         fset_guo = featurize.featurize_time_series(
                        times=eeg["times"],
                        values=eeg["measurements"],
@@ -656,9 +636,7 @@ keyword argument.
         Data variables:
           abs_diffs  (name, channel) float64 4695.2 6112.6 ...
           mean       (name, channel) float64 -4.132 -52.44 ...
-          mean2      (name, channel) float64 1652.0 5133.3 ...
-          skew       (name, channel) float64 0.0328 -0.09271 ...
-          std        (name, channel) float64 40.41 48.81 ...
+          ...
 
 The EEG time series considered here consist of univariate signal measurements along a
 uniform time grid. But ``featurize_time_series`` also accepts multi-channel data. To
@@ -669,10 +647,9 @@ separately using the five functions from above.
 .. code-block:: python
 
         import pywt
-        
-        n_channels = 5
+
         eeg["dwts"] = [pywt.wavedec(m, pywt.Wavelet('db1'),
-                                    level=n_channels-1)
+                                    level=4)
                        for m in eeg["measurements"]]
         fset_dwt = featurize.featurize_time_series(
                        times=None, values=eeg["dwts"], errors=None,
@@ -691,10 +668,7 @@ separately using the five functions from above.
         Data variables:
           abs_diffs  (name, channel) float64 25131 18069 ...
           skew       (name, channel) float64 -0.0433 0.06578 ...
-          mean2      (name, channel) float64 12944 5362.3 ...
-          mean       (name, channel) float64 -17.08 -6.067 ...
-          std        (name, channel) float64 112.5 72.97 ...
-
+          ...
 
 The output feature set has the same form as before, except now the ``channel`` coordinate is
 used to index the features by the corresponding frequency band. The functions in
@@ -703,10 +677,10 @@ single- or multi-channel data, so no additional steps are required to train
 models or make predictions for multichannel feature sets using the ``cesium``
 library.
 
-Model building in ``cesium`` is handled by the ``build_model_from_featureset``
+Model building in ``cesium`` is handled by the ``model_from_featureset``
 function in the ``cesium.build_model`` submodule. The feature set output by
 ``featurize_time_series`` contains both the feature and target information
-needed to train a model; ``build_model_from_featureset`` is simply a wrapper
+needed to train a model; ``model_from_featureset`` is simply a wrapper
 that calls the ``fit`` method of a given ``scikit-learn`` model with the
 appropriate inputs. In the case of multichannel features, it also handles
 reshaping the feature set into a (rectangular) form that is compatible with
@@ -717,24 +691,25 @@ and a 3-nearest neighbors classifier for the others, as in :cite:`guo2011`.
 
 .. code-block:: python
         
-        from cesium.build_model import build_model_from_featureset
+        from cesium.build_model import model_from_featureset
         from sklearn.ensemble import RandomForestClassifier
         from sklearn.neighbors import KNeighborsClassifier
         from sklearn.cross_validation import train_test_split
         
-        train, test = train_test_split(np.arange(len(eeg["classes"])), random_state=0)
+        train, test = train_test_split(500)
         
         rfc_param_grid = {'n_estimators': [8, 32, 128, 512]}
-        model_cesium = build_model_from_featureset(
+        model_cesium = model_from_featureset(
                            fset_cesium.isel(name=train),
                            RandomForestClassifier(),
                            params_to_optimize=rfc_param_grid)
+
         knn_param_grid = {'n_neighbors': [1, 2, 3, 4]}
-        model_guo = build_model_from_featureset(
+        model_guo = model_from_featureset(
                         fset_guo.isel(name=train),
                         KNeighborsClassifier(),
                         params_to_optimize=knn_param_grid)
-        model_dwt = build_model_from_featureset(
+        model_dwt = model_from_featureset(
                         fset_dwt.isel(name=train),
                         KNeighborsClassifier(),
                         params_to_optimize=knn_param_grid)
@@ -747,9 +722,7 @@ and then predictions are made based on these features using
 
 .. code-block:: python
         
-        from sklearn.metrics import accuracy_score
         from cesium.predict import model_predictions
-        
         preds_cesium = model_predictions(
                            fset_cesium, model_cesium,
                            return_probs=False)
@@ -757,6 +730,8 @@ and then predictions are made based on these features using
                            return_probs=False)
         preds_dwt = model_predictions(fset_dwt, model_dwt,
                            return_probs=False)
+
+And finally, checking the accuracy of our various models, we find:
 
 .. code-block:: python
 
@@ -768,7 +743,7 @@ The workflow presented here is intentionally simplistic and omits many important
 such as feature selection, model parameter selection, etc., which may all be
 incorporated just as they would for any other ``scikit-learn`` analysis.
 But with essentially three function calls (``featurize_time_series``,
-``build_model_from_featureset``, and ``model_predictions``), we are able to build a
+``model_from_featureset``, and ``model_predictions``), we are able to build a
 model from a set of time series and make predictions on new, unlabeled data. In
 the next section we'll introduce the web front end for ``cesium`` and describe how
 the same analysis can be performed in a browser with no setup or coding required.
@@ -780,7 +755,7 @@ Web front end
 Here we briefly demonstrate how the above analysis could be conducted using only
 the web front end. Note that the user interface presented here is a preliminary version
 and is undergoing frequent updates and additions. The basic workflow follows the
-same *featurize|---|build model|---|predict* pattern. First,
+same *featurize* |---| *build model* |---| *predict* pattern. First,
 data is uploaded as in Figure :ref:`web2`. Features are
 selected from available built-in functions as in Figure :ref:`web3`,
 or may be computed from user-uploaded Python code which is securely executed
