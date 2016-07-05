@@ -21,12 +21,12 @@ Tell Me Something I Don't Know: Analyzing OkCupid Profiles
 
 In this paper, we present an analysis of 59,000 OkCupid user profiles that
 examines online self-presentation by combining natural language processing
-(NLP) with machine learning. We analyze word usage patterns by self-reported sex and drug
-usage status. In doing so, we review standard NLP techniques, cover several
-ways to represent text data, and explain topic modeling. We find that
-individuals in particular demographic groups self-present in consistent ways.
-Our results also suggest that users may unintentionally reveal demographic
-attributes in their online profiles.
+(NLP) with machine learning. We analyze word usage patterns by self-reported
+sex and drug usage status. In doing so, we review standard NLP techniques,
+cover several ways to represent text data, and explain topic modeling. We find
+that individuals in particular demographic groups self-present in consistent
+ways. Our results also suggest that users may unintentionally reveal
+demographic attributes in their online profiles.
 
 .. class:: keywords
 
@@ -85,10 +85,11 @@ astrological sign, smoking status, number of language spoken, and relationship
 status.
 
 This data set was selected because its diverse set of essay prompts and the
-availability of detailed user characteristics provided ideal means for examining
-online self-presentation. Previous work using this data focused on exploratory
-data analysis, basic text analysis, and on using logistic regression to predict
-sex using only height [Kim15]_. Thus, the present study is a novel approach for this data.
+availability of detailed user characteristics provided ideal means for
+examining online self-presentation. Previous work using this data focused on
+exploratory data analysis, basic text analysis, and on using logistic
+regression to predict sex using only height [Kim15]_. Thus, the present study
+is a novel approach for this data.
 
 This data set is public, as authorized by OkCupid president and co-founder
 Christian Rudder [Kim15]_.
@@ -97,10 +98,11 @@ Preprocessing
 ~~~~~~~~~~~~~
 
 Line break characters and URLs were removed from the essay text. Multiple
-periods, dashes, and white spaces were replaced by single instances. Essays were tokenized (segmented)
-into individual words using spaCy's default tokenizer, which is well suited for online communication as it
-maintains emoticons as discrete tokens, and removes punctuation. 
-Users who wrote less than 5 words for a given essay were removed from the analysis.
+periods, dashes, and white spaces were replaced by single instances. Essays
+were tokenized (segmented) into individual words using spaCy's default
+tokenizer, which is well suited for online communication as it maintains
+emoticons as discrete tokens, and removes punctuation. Users who wrote less
+than 5 words for a given essay were removed from the analysis.
 
 We combined drug usage status levels. Specifically, users who responded
 "sometimes" or "often" were grouped into a "yes" category. Individuals who
@@ -110,6 +112,7 @@ category for users who did not answer.
 
 Methods
 -------
+
 Term Frequency-Inverse Document Frequency
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -137,9 +140,10 @@ One metric for comparing word usage across groups is to calculate the
 log-odds-ratio. The odds for word :math:`w` in the usage of group :math:`g`
 are defined as :math:`O_{iw} = \frac{f_{iw}}{(1 - f_{iw})}` where :math:`f_{iw}`
 is the frequency count of word :math:`w` normalized by total count of words
-used by group :math:`i`. If a word is used only by one group, its log-odds-ratio
-is infinite. Therefore, a constant is added to each frequency when calculating
-the odds. The log of the ratio of the adjusted odds between groups is then used to compare word usage across groups. 
+used by group :math:`i`. If a word is used only by one group, its
+log-odds-ratio is infinite. Therefore, a constant is added to each frequency
+when calculating the odds. The log of the ratio of the adjusted odds between
+groups is then used to compare word usage across groups. 
 
 
 Non-negative Matrix Factorization
@@ -151,16 +155,17 @@ topic and each document being represented as a linear combination of those
 topics [Xu_03]_. Methods such as latent semantic indexing require the derived
 latent semantic space to be orthogonal. Because of this, these type of methods
 do not work well when corpus topics overlap, as is often the case.
-Conversely, non-negative matrix factorization (NMF) does not require the latent semantic space
-to be orthogonal, and therefore is able to find directions for related or overlapping topics.
+Conversely, non-negative matrix factorization (NMF) does not require the latent
+semantic space to be orthogonal, and therefore is able to find directions for
+related or overlapping topics.
 
 NMF was applied to each essay of interest using scikit-learn (version 0.17.1),
 which uses the coordinate descent solver. NMF utilizes document frequency
 counts, so the tf-idf matrix for unigrams, bigrams, and trigrams was calculated,
 while limiting tokens to those appearing in at least 0.5% of the documents
-(minimum frequency). NMF was calculated with 25 dimensions, which factorized
-the tf-idf matrix into two matrices, :math:`W` and :math:`H`. The dimensions
-were ``n_samples x 25`` and ``25 x n_features`` for :math:`W` and
+(minimum frequency). NMF was calculated with :math:`k` dimensions, which
+factorized the tf-idf matrix into two matrices, :math:`W` and :math:`H`. The
+dimensions were ``n_samples x k`` and ``k x n_features`` for :math:`W` and
 :math:`H`, respectively. Group descriptions were given by top-ranked terms (the
 most distinctive) in the columns of :math:`H`. Document membership weights were
 given by the rows of :math:`W`. The maximum value in each row of :math:`W`
@@ -171,9 +176,10 @@ Permutation Testing
 
 Permutation tests provide an exact sampling distribution of a test statistic
 under the null hypothesis [Ger12]_ by computing the test statistic
-for every manner by which labels can be associated with the observed data. In practice,
-permutations are rarely ever completely enumerated. Instead, the sampling
-distribution is approximated by randomly shuffling the labels :math:`P` times.
+for every manner by which labels can be associated with the observed data. In
+practice, permutations are rarely ever completely enumerated. Instead, the
+sampling distribution is approximated by randomly shuffling the labels :math:`P`
+times.
 
 The likelihood of the observed test statistic is determined as the proportion
 of times that the absolute value of the permuted test statistics are greater
@@ -189,26 +195,26 @@ including counts, durations, or ranks" [Ger12]_.
 Approach
 --------
 
-Our analyses focus on two demographic dimensions — sex and drug usage — and on two
-essays — "My self summary" and "Favorite books, movies, shows, music, food."
-These essays were selected because they were answered by most users. For example,
-"The most private thing I am willing to admit" prompt was ignored by 32 percent of users. 
-Other essays in this data set may provide additional insight into self-presentation and will be analyzed in the future.
+Our analyses focus on two demographic dimensions — sex and drug usage — and on
+two essays — "My self summary" and "Favorite books, movies, shows, music, food."
+These essays were selected because they were answered by most users. For
+example, "The most private thing I am willing to admit" prompt was ignored by
+32 percent of users.  Other essays in this data set may provide additional
+insight into self-presentation and will be analyzed in the future.
 
 We began by exploring the lexical features of the text as a way to determine
 whether there were differences in writing styles by demographic split. We
 considered essay length, the use of profanity and slang terms, and
 part-of-speech usage. 
 
-Essay length was determined based on the tokenized essays. 
-A list of profane words was obtained from the "Comprehensive Perl Archive
-Network" website. Slang terms include words such as "dough," which refers to
-money, and acronyms like "LOL." These terms come from the Wiktionary
-Category:Slang page. Note that there is overlap between the profane and slang
-lists.
+Essay length was determined based on the tokenized essays. A list of profane
+words was obtained from the "Comprehensive Perl Archive Network" website. Slang
+terms include words such as "dough," which refers to money, and acronyms like
+"LOL." These terms come from the Wiktionary Category:Slang page [2]_. Note that
+there is overlap between the profane and slang lists.
 
 Each token in the corpus was associated with a lexical category using spaCy's
-part-of-speech tagger. spaCy supports 19 coarse-grained tags [2]_ that expand
+part-of-speech tagger. spaCy supports 19 coarse-grained tags [3]_ that expand
 upon Petrov, Das, and McDonald's universal part-of-speech tagset [Pet11]_.
 
 Differences in lexical features by demographic were analyzed using permutation
@@ -221,52 +227,55 @@ smoothed log-odds-ratio, which accounts for variance.
 
 Text semantics were also analyzed. The corpus was transformed into a tf-idf
 matrix using spaCy's default tokenizer with punctuation removed. We chose to
-include unigrams, bigrams, and trigrams [3]_. Stop words [4]_ and terms that
+include unigrams, bigrams, and trigrams [4]_. Stop words [5]_ and terms that
 appeared in less than 0.5% of documents were removed. Stemming, the process of
 of removing word affixes, was not done.
 
-Non-negative matrix factorization was used to identify latent structure
-in the text. This structure is in the form of "topics" or "clusters" which can
-be described by particular tokens. 
-In order to determine whether particular demographic groups were more likely to write
-about particular topics, the distribution of users across topics was calculated
-relative to each demographic group. In cases where we are able to create
-superordinate groupings from NMF topics — for example, by combining semantically
-similar clusters — we use the log-odds-ratio to find distinctive tokens for the superordinate grouping.
+Non-negative matrix factorization was used to identify latent structure in the
+text. This structure is in the form of "topics" or "clusters" which can be
+described by particular tokens. In order to determine whether particular
+demographic groups were more likely to write about particular topics, the
+distribution of users across topics was calculated relative to each demographic
+group. In cases where we are able to create superordinate groupings from NMF
+topics — for example, by combining semantically similar clusters — we use the
+log-odds-ratio to find distinctive tokens for the superordinate grouping.
 
 Finally, we fit a logistic regression model to predict drug usage status for
-users in the "Unknown" drug usage category.
+users in the "unknown" drug usage category.
 
 Results
 -------
 
 In this section, we describe our findings. We start with a discussion of our
-lexical-based analyses before discussing semantic-based results.
-Lexical-based characteristics include essay length, use of profanity and slang
-terms, as well as part-of-speech usage.
+lexical-based analyses before discussing semantic-based results. Lexical-based
+characteristics include essay length, use of profanity and slang terms, as well
+as part-of-speech usage.
 
 We first compare lexical-based characteristics on the self-summary text by sex.
-Our sample includes 21,321 females and 31,637 males [5]_. We find that, on
-average, females write significantly longer than males (150 terms compared to 139, p = XXX).
+Our sample includes 21,321 females and 31,637 males [6]_. We find that, on
+average, females write significantly more than males (150 terms compared to 139,
+:math:`p` = 0.00).
 
 For profanity and slang, instead of comparing frequencies across demographic
-splits, we compare the proportion of users who use these terms.
-Profanity was rarely used in the self-summary essay. Overall, only 6 percent of users
-included such terms in their self-descriptions. The difference was not significantly significant by sex 
-(5.8% of females versus 6.1% of males).
+splits, we compare the proportion of users who use these terms. Profanity was
+rarely used in the self-summary essay. Overall, only 6 percent of users
+included such terms in their self-descriptions. The difference was not
+significantly significant by sex (5.8% of females versus 6.1% of males,
+:math:`p` = 0.14).
 
 Not surprisingly, slang was much more prevalent (on a per-user basis) than
-profanity. 56 percent of users used some form of slang in their self-summary essays.
-Females used slang at a significantly lower rate than males (54% vs. 57%, p = XXX).
+profanity. 56 percent of users used some form of slang in their self-summary
+essays. Females used slang at a significantly lower rate than males (54% versus
+57%, :math:`p` = 0.00).
 
-To compare part-of-speech usage, we first associated part-of-speech
-tags with every token in the self-summary corpus. This results in counts by
-user and part of speech. Each user's counts were then normalized by the user's essay length to account for
-essay length differences between users. Of the 15 possible part of speech tags, we focused on
-adjectives, nouns, and verbs.
+To compare part-of-speech usage, we first associated part-of-speech tags with
+every token in the self-summary corpus. This results in counts by user and
+part-of-speech. Each user's counts were then normalized by the user's essay
+length to account for essay length differences between users. Of the 19
+possible part-of-speech tags, we focused on adjectives, nouns, and verbs.
 
-.. table:: Proportion of parts-of-speech used, by sex. ``**`` significant at
-           the 0.01 level.
+.. table:: Proportion of part-of-speech terms used, by sex. Asterisks (``**``)
+           denote statistically significant differences at the 0.01 level.
 
    +-------------------+--------+--------+
    | Part-of-Speech    | Female | Male   |
@@ -278,8 +287,9 @@ adjectives, nouns, and verbs.
    | Verbs             | 18.28% | 18.27% |
    +-------------------+--------+--------+
 
-Females used significantly more adjectives than males, while males used significantly more nouns than females (p = 0.01 for both). 
-There was no difference in verb usage between the sexes.
+Females used significantly more adjectives than males, while males used
+significantly more nouns than females (:math:`p` = 0.00 for both). There was no
+difference in verb usage between the sexes (:math:`p` = 0.91).
 
 In addition to part-of-speech usage, we explored specific terms associated
 with parts-of-speech that were distinctive to a particular sex. We did this
@@ -303,16 +313,18 @@ tokens for each sex are summarized below.
    |                | dance appreciate being     |                            |
    +----------------+----------------------------+----------------------------+
 
-NMF was used to provide insights into the underlying topics that users chose to describe themselves. 
-Choosing the number of NMF components (topics to which users are clustered) is an arbitrary and iterative process. 
-For the self-summary essay, we chose 25 components. This resulted in a diverse set of manageable topics.
+NMF was used to provide insights into the underlying topics that users chose to
+describe themselves. Choosing the number of NMF components (topics to which
+users are clustered) is an arbitrary and iterative process. For the
+self-summary essay, we chose 25 components. This resulted in a diverse, but
+manageable set of topics.
 
-Several expected themes emerged. Many users chose to highlight personality traits, for example "humor" or "easy-going", 
-while others focused on describing the types of activities they enjoyed. Hiking,
-traveling, and cooking were popular choices. Others chose to mention what they
-were looking, whether that be a long-term relationship, a friendship, or
-sex. Topics the highest weighted tokens for each are summarized in
-the table below.
+Several expected themes emerged. Many users chose to highlight personality
+traits, for example "humor" or "easy-going," while others focused on describing
+the types of activities they enjoyed. Hiking, traveling, and cooking were
+popular choices. Others chose to mention what they were looking, whether that
+be a long-term relationship, a friendship, or sex. Topics and the highest
+weighted tokens for each are summarized in the table below.
 
    +----------------+---------------------------------------------------------+
    | Topic          | Tokens                                                  |
@@ -401,32 +413,33 @@ the table below.
    |                | countries, different, europe                            |
    +----------------+---------------------------------------------------------+
 
-In order to determine whether there were differences in the topics
-that OkCupid users chose to write about in their self-summaries, we plotted the
-distribution over topics by demographic split. This allowed us to identify if specific topics were
-distinct to particular demographic groups.
+In order to determine whether there were differences in the topics that OkCupid
+users chose to write about in their self-summaries, we plotted the distribution
+over topics by demographic split. This allowed us to identify if specific
+topics were distinct to particular demographic groups.
 
-The following figure shows the distribution over topics by sex for the self-summary essy. 
-The highest proportion of users, of either sex, were in the "about me" group.
-This is not surprising given that the essay prompt. For
-most topics, the proportion of females and males was fairly even. One notable
-exception was with the "enthusiastic" topic, which females belonged to at almost
-twice the rate of males. Users in this group used modifiers such as, "love,"
-"really," and "absolutely" regardless of the activities they were describing.
+The following figure shows the distribution over topics by sex for the
+self-summary essy. The highest proportion of users, of either sex, were in the
+"about me" group. This is not surprising given the essay prompt. For most
+topics, the proportion of females and males was fairly even. One notable
+exception was with the "enthusiastic" topic, which females belonged to at
+almost twice the rate of males. Users in this group used modifiers such as,
+"love," "really," and "absolutely" regardless of the activities they were
+describing.
 
 .. figure:: self-summary-sex.png
 
    Self-Summaries
 
-We further examined online self-presentation by considering the other
-available essays in the OkCupid data set. Previous psychology research suggests that
-people's preferred music styles is tied to their personalities [Col15]_, and it is 
-possible that this extends to other media, such as books or movies. 
-We next analyzed the "favorite books, movies, shows, music, food" essay.
+We further examined online self-presentation by considering the other available
+essays in the OkCupid data set. Previous psychology research suggests that
+people's preferred music styles is tied to their personalities [Col15]_, and it
+is possible that this extends to other media, such as books or movies. We next
+analyzed the "Favorite books, movies, shows, music, food" essay.
 
-As with the self-summaries, we removed users who wrote less than 5 tokens for this
-essay (11,836 such cases). Note that because the favorites text is
-less expository and more list-like, we did not perform a lexical-based analysis.
+As with the self-summaries, we removed users who wrote less than 5 tokens for
+this essay (11,836 such cases). Note that because the favorites text is less
+expository and more list-like, we did not perform a lexical-based analysis.
 Instead, we used NMF to identify topics (or genres). Like with the
 self-summaries, we chose 25 topics. The following table lists the topics and a
 selection of their highest weighted tokens.
@@ -517,51 +530,52 @@ selection of their highest weighted tokens.
    |                | documentaries, biographies                              |
    +----------------+---------------------------------------------------------+
 
-The favorites topics for this essay were more difficult to categorize than the self-summaries.
-In some cases, genres (or media) overlapped. For example, the TV-comedies-0
-group included "The Walking Dead," which is a drama. There was also overlap between groups.
-This might suggest that the number of NMF components was too high, but the
-granularity these topics provided was used for further analyses. We created
-superordinate groupings from the topics from which extracted
-distinctive tokens for particular demographic groups. We'll first examine the
-distribution over topics by sex.
+The favorites topics for this essay were more difficult to categorize than the
+self-summaries. In some cases, genres (or media) overlapped. For example, the
+"TV-comedies-0" group included "The Walking Dead," which is a drama. There was
+also overlap between groups. This might suggest that the number of NMF
+components was too high, but the granularity these topics provided was used for
+further analyses. We created superordinate groupings from the topics from which
+we extracted distinctive tokens for particular demographic groups. We'll first
+examine the distribution over topics by sex.
 
 .. figure:: favorites-sex.png
 
    Favorites
 
 The most popular topics, for both females and males, were "TV-hits" and
-"music-rock," with about 16 percent of each sex writing about shows or artists in
-those groups. We see more separation between the sexes in the favorites essay
-than we did with the self-summaries. The enthusiastic group is, again,
+"music-rock," with about 16 percent of each sex writing about shows or artists
+in those groups. We see more separation between the sexes in the favorites
+essay than we did with the self-summaries. The enthusiastic group is, again,
 distinctly female. A distinctly male category includes films such as "Fight
 Club" and "The Shawshank Redemption" and musical artists such as the Red Hot
 Chili Peppers.
 
-We created superordinate groupings by combining clusters. 
-There were four groups related to movies. In order to extract demographic-distinctive tokens, we used the
-smoothed log-odds-ratio which accounts for variance as described by Monroe,
-Colaresi, and Quinn [Mon09]_. The top movies for females were Harry Potter,
-Pride & Prejudice, and Hunger Games while males favored Star Wars, The Matrix,
-and Fight Club. The "movies-sci-fi" and "movies-drama-1" groups,
+We created superordinate groupings by combining clusters. There were four
+groups related to movies. In order to extract demographic-distinctive tokens,
+we used the smoothed log-odds-ratio which accounts for variance as described by
+Monroe, Colaresi, and Quinn [Mon09]_. The top movies for females were Harry
+Potter, Pride & Prejudice, and Hunger Games while males favored Star Wars, The
+Matrix, and Fight Club. The "movies-sci-fi" and "movies-drama-1" groups,
 whose highest weighted tokens referred to the male-favored movies, had a higher
 proportion of males than females. Similarly, the "teen" group, which
 which corresponded to female-favored movies, had a higher proportion of females.
-The "movies-drama-0" group — the last of the four movie clusters — includes a
-relatively even proportion of users along this demographic split. (THE ANALYSIS IN THIS PARAGRAPH DOESN"T MAKE SENSE - SEEMS CIRCULAR)
+This reflects the terms found by the log-odds-ratio.
 
-We next examined the distribution over topics by drug usage. In this demographic category, users
-self-identified as drug users or non-drug users. To this, we added a third level for
-users who declined the state their drug usage status. There were 6,859 drug
-users, 29,402 non-drug users, and 11,849 unknowns.
+We next examined the distribution over topics by drug usage. In this
+demographic category, users self-identified as drug users or non-drug users. To
+this, we added a third level for users who declined the state their drug usage
+status. There were 6,859 drug users, 29,402 non-drug users, and 11,849 unknowns.
 
 This plot shows more intra-cluster variation than the previous one.
-Interestingly, the distribution across topics of users for whom we had no drug usage information — those in the
-"unknown" category — tended to follow the distribution of self-identified drug users. That is, most
-of the time, the proportion of drugs users and unknowns in a particular cluster
-was similar. This was especially true in cases where difference in proportions
-of drug users and non-drug users was large. This unexpected finding may suggest that individuals 
-who did not respond to the drug usage question abstained in order to avoid admitting they did use drugs.
+Interestingly, the distribution across topics of users for whom we had no drug
+usage information — those in the "unknown" category — tended to follow the
+distribution of self-identified drug users. That is, most of the time, the
+proportion of drugs users and unknowns in a particular cluster was similar.
+This was especially true in cases where difference in proportions of drug users
+and non-drug users was large. This unexpected finding may suggest that
+individuals who did not respond to the drug usage question abstained in order
+to avoid admitting they did use drugs.
 
 .. figure:: favorites-drugs.png
 
@@ -612,12 +626,28 @@ more then non-users and also use particular profane terms.
 Conclusion
 ----------
 
-The current study extended previous NLP analyses of online dating profiles. The scope of this work was larger than previous studies, both because of the size of the datasets (previous studies used much smaller datasets) and because of the novel combination of NLP with both supervised and unsupervised machine learning techniques. To our knowledge, there is currently no study that combines these techniques to identify unintentional cues in online self-presentation as well as predict demographics from free-text self descriptions. The idea that people may unintentionally be providing information about themselves in the way that they answer questions online is an intruiging avenue for future research and can also be extended to deception online.
+The current study extended previous NLP analyses of online dating profiles. The
+scope of this work was larger than previous studies, both because of the size
+of the datasets (previous studies used much smaller datasets) and because of
+the novel combination of NLP with both supervised and unsupervised machine
+learning techniques. To our knowledge, there is currently no study that
+combines these techniques to identify unintentional cues in online
+self-presentation as well as predict demographics from free-text self
+descriptions. The idea that people may unintentionally be providing information
+about themselves in the way that they answer questions online is an intruiging
+avenue for future research and can also be extended to deception online.
 
 Acknowledgements
 ----------------
 
-This project began as a final project for an Applied Natural Language Processing course at the School of Information at the University of California, Berkeley. We would like to thank Marti Hearst for her guidance in the "right" way to do NLP and in pushing us to explore new and exciting data sets. We would also like to thank David Bamman for fruitful discussions on NLP and ideas for permutation testing.
+This work began as a final project for the Applied Natural Language Processing
+course at the School of Information at the University of California, Berkeley.
+We would like to thank Marti Hearst for her guidance in the "right" way to do
+NLP and in pushing us to explore new and exciting data sets. We would also like
+to thank David Bamman for fruitful discussions on NLP and ideas for permutation
+testing. We are also thankful for our reviewer's time and effort. Their
+comments and suggestions were invaluable, helping us more clearly organize our
+analyses and thoughts.
 
 .. Customised LaTeX packages
 .. -------------------------
@@ -640,15 +670,17 @@ Footnotes
        anonimized" to exclude essays, we switched to Kim's repository. As far
        as we can tell, this data set is the same as the Wetchler original.
 
-.. [2] https://spacy.io/docs#token-postags.
+.. [2] https://simple.wiktionary.org/wiki/Category:Slang.
 
-.. [3] Unigrams are single tokens. Bigrams refer to two adjacent and trigrams
+.. [3] https://spacy.io/docs#token-postags.
+
+.. [4] Unigrams are single tokens. Bigrams refer to two adjacent and trigrams
        to three adjacent tokens.
 
-.. [4] Stop words are words that appear with very high frequency, such as "the"
+.. [5] Stop words are words that appear with very high frequency, such as "the"
        or "to."
 
-.. [5] The difference between the number of users in the data set and the
+.. [6] The difference between the number of users in the data set and the
        number of users in the analysis is due to the fact that we drop users
        that write less than five tokens for a particular essay.
 
