@@ -37,22 +37,22 @@
    require already-featurized dataset inputs. ``cesium`` is and end-to-end time
    series analysis framework, consisting of a Python library as well as a web
    front-end interface, that allows researchers to featurize raw data and apply
-   modern machine learning techniques in a simple, easily reproducible, and
-   extensible way. Users can apply out-of-the-box feature engineering workflows
-   as well as save and replay their own analyses. Any steps taken in the front
-   end can also be exported to an IPython notebook, so users can quickly iterate
-   within the front end and then fine-tune their analysis using the more
+   modern machine learning techniques in a simple, reproducible, and extensible
+   way. Users can apply out-of-the-box feature engineering workflows as well as
+   save and replay their own analyses. Any steps taken in the front end can also
+   be exported to an Jupyter notebook, so users can iterate between possible
+   models within the front end and then fine-tune their analysis using the more
    flexible back-end library.
 
 .. class:: keywords
 
-   time series, machine learning, reproducibile science
+   time series, machine learning, reproducible science
 
 Introduction
 ============
 From the reading of electroencephalograms (EEGs) to earthquake seismograms to
 light curves of astronomical variable stars, gleaning insight from time series
-data has been central to a broad range of scientific and medical disciplines.
+data has been central to a broad range of scientific disciplines.
 When simple analytical thresholds or models suffice, technicians and experts can
 be easily removed from the process of inspection and discovery by employing
 custom algorithms. But when dynamical systems are not easily modeled (e.g.,
@@ -63,12 +63,12 @@ variability and find important (perhaps life-threatening) outliers. *Does this
 person have an irregular heartbeat? What type of supernova occurred in that
 galaxy?* Even in the presence of sensor noise and intrinsic diversity of the
 samples, well-trained domain specialists show a remarkable ability to make
-discerning statements about the complex data.
+discerning statements about complex data.
 
 In an era when more time series data are being collected than can be visually
 inspected by domain experts, however, computational frameworks must necessarily
 act as human surrogates. Capturing the subtleties that domain experts intuit in
-time series data (and perhaps even besting the experts) is a non-trivial task.
+time series data (let alone besting the experts) is a non-trivial task.
 In this respect, machine learning has already been used to great success in
 several disciplines, including text classification, image retrieval,
 segmentation of remote sensing data, internet traffic classification, video
@@ -83,21 +83,21 @@ resources available that allow domain scientists to easily build robust
 computational inference workflows for their own time series data, let alone
 data gathered more broadly in their field. The difficulties involved in
 constructing such a framework can often greatly outweigh those of analyzing the
-data itself: per :cite:`scu2014`:,
+data itself:
  
         It may be surprising to the academic community to know that only a tiny
         fraction of the code in many machine learning systems is actually doing
         "machine learning". When we recognize that a mature system might end up
         being (at most) 5% machine learning code and (at least) 95% glue code,
         reimplementation rather than reuse of a clumsy API looks like a much
-        better strategy.
+        better strategy. :cite:`scu2014`
 
-Even if a domain scientists works closely with machine learning experts, the
+Even if a domain scientist works closely with machine learning experts, the
 software engineering requirements are daunting. Being a modern data-driven
-scientist should not, we believe, require an army of software engineers, machine
-learning experts, statisticians and production operators. ``cesium`` was created
-to allow domain experts to focus on the questions at hand rather than needing to
-architect a complete engineering project.
+scientist should not, require an army of software engineers, machine
+learning experts, statisticians and production operators. ``cesium``
+:cite:`cesium` was created to allow domain experts to focus on the questions at
+hand rather than needing to architect a complete engineering project.
 
 The analysis workflow of ``cesium`` can be used in two forms: a web front end
 which allows researchers to upload their data, perform analyses, and visualize
@@ -122,24 +122,26 @@ end.
 
 Example time series machine learning problems
 =============================================
-``cesium`` was designed with several time series inference challenges across various
+``cesium`` was designed with several time series inference use cases across various
 scientific disciplines in mind.
  
-1. **Astronomical time series classification.** The Large Synoptic Survey
-   Telescope (LSST), beginning in 2020, will survey the entire night’s sky every
-   few days producing high-quality time series data on approximately 800 million
-   variable sources and transient events :cite:`lsst2009`. Much of the best
-   science in the time domain (e.g., the discovery of the accelerating universe
-   and dark energy using Type Ia supernovae :cite:`perlmutter1999,riess1998`)
-   consists of first identifying possible phenomena of interest using broad data
-   mining approaches and following up by collecting more detailed data using
-   other, more precise observational tools. For many transient events, the time
-   scale during which observations can be collected can be on the order of days
-   or hours. Not knowing which of the millions of variable sources to examine
-   more closely with larger telescopes and specialized instruments is tantamount
-   to not having discovered those sources in the first place. Discoveries must
-   be identified quickly or in real time so that informed decisions can be made
-   about how best to allocate additional observational resources.
+1. **Astronomical time series classification.** Beginning in 2020, the Large
+   Synoptic Survey Telescope (LSST) will survey the entire night’s sky every few
+   days producing high-quality time series data on approximately 800 million
+   transient events and sources with variable brightness (Figure
+   :ref:`cesium-astro` depicts the brightness of several types of star over
+   the course of several years) :cite:`lsst2009`.  Much of the best science in
+   the time domain (e.g., the discovery of the accelerating universe and dark
+   energy using Type Ia supernovae :cite:`perlmutter1999,riess1998`) consists of
+   first identifying possible phenomena of interest using broad data mining
+   approaches and following up by collecting more detailed data using other,
+   more precise observational tools. For many transient events, the time scale
+   during which observations can be collected can be on the order of days or
+   hours. Not knowing which of the millions of variable sources to examine more
+   closely with larger telescopes and specialized instruments is tantamount to
+   not having discovered those sources at all. Discoveries must be identified
+   quickly or in real time so that informed decisions can be made about how best
+   to allocate additional observational resources.
 
 .. figure:: cesium-astro
 
@@ -150,17 +152,19 @@ scientific disciplines in mind.
 2. **Neuroscience time series classification.** The study of
    neural systems presents a wide variety of challenges in time series analysis,
    made more pressing by the growing volume of high-quality, heterogeneous
-   sensor data that cannot be effectively inspected visually. Indeed,
-   neuroscience experiments now produce vast amounts of time series data that
-   can have entirely different structures, spatial resolution, and temporal
-   resolution, depending on the recording technique. Ultimately, we wish to
+   sensor data that cannot be effectively inspected visually.
+   Figure :ref:`cesium-eeg` shows an example of different types of EEG signals
+   that might need to be classified in order to make treatment decisions.
+   Neuroscience experiments now produce vast amounts of time series data that
+   can have entirely different structures, spatial resolutions, and temporal
+   resolutions, depending on the recording technique. Ultimately, we wish to
    connect complex recorded output to high-level cognition patterns: *How did
    that subject formulate the image of what they were seeing? What motion were
    they trying to instigate on their body? What are they thinking?* Given the
    prevalence of these various recording methods in experimental neuroscience,
    much of our data will arrive as time series but in a multitude of different
-   possible forms: from a few channels with high spatial localization to
-   hundreds of channels with unknown spatial specificity; from low to very high
+   possible forms: from a few channels with good spatial localization to
+   hundreds of channels with poor spatial resolution; from low to very high
    sampling rates; and with various types of confounds and recording artifacts
    specific to each recording method. Furthermore, in every case the volumes of
    available data are rapidly increasing. The neuroscience community is turning
@@ -176,36 +180,21 @@ scientific disciplines in mind.
 
 .. figure:: cesium-eeg
 
-   EEG signals from patients with epilepsy. :label:`eeg`
+   EEG signals from patients with epilepsy :cite:`andrzejak2001`. :label:`eeg`
 
 3. **Earthquake detection, characterization and warning.** Earthquake early
    warning (EEW) systems are currently in operation in Japan, Mexico, Turkey,
    Taiwan and Romania :cite:`allen2009` and are under development in the US
-   :cite:`brown2011`. These first-generation systems, most notably in Japan,
-   have employed sophisticated remote sensors, real-time connectivity to major
-   broadcast outlets (such as TV and radio), and have a growing resumé of
-   successful rapid assessment of threat levels to populations and industry.
-   Traditionally these warning systems trigger from data obtained by
-   high-quality seismic networks with sensors placed every \~10 km. The
-   algorithms used to detect earthquakes are based on methodologies developed in
-   the 1960s. However, today’s accelerometers are embedded in many consumer
-   electronics including computers and smartphones. There is tremendous
-   potential to improve earthquake detection methods using streaming
-   classification analysis both using traditional network data and also
-   harnessing massive data from consumer electronics. The Big Data challenges in
-   the statistical modeling of such streams arise due to lower-quality detectors
-   in higher noise environments and the requirement that events be triggered on
-   in real-time (thus precluding more sophisticated, computationally demanding
-   algorithms). The main tension in determining an optimal triggering procedure
-   is the mitigation of false positives (spurious triggering) versus false
-   negatives (failure to trigger on a real event). The importance of these
-   questions for national emergency response is clear: faster and more robust
-   classification of earthquakes from noisy sensor data can increase warning
-   times, mitigate damage to resources, and even prevent loss of life.
-
-.. figure:: cesium-seismo
-
-   Seismograms from a small California earthquake on April 6, 2016. :label:`seismo`
+   :cite:`brown2011`. These systems have employed sophisticated remote sensors,
+   real-time connectivity to major broadcast outlets (such as TV and radio), and
+   have a growing resumé of successful rapid assessment of threat levels to
+   populations and industry.  Traditionally these warning systems trigger from
+   data obtained by high-quality seismic networks with sensors placed every \~10
+   km. Today, however, accelerometers are embedded in many consumer electronics
+   including computers and smartphones. There is tremendous potential to improve
+   earthquake detection methods using streaming classification analysis both
+   using traditional network data and also harnessing massive data from consumer
+   electronics. 
 
 Simple and reproducible workflows
 =================================
@@ -214,18 +203,18 @@ tools that implement a wide variety of machine learning algorithms: packages
 within the R :cite:`team2013` and Python programming languages
 :cite:`pedregosa2011`, standalone Java-based packages such as Moa
 :cite:`bifet2010` and Weka :cite:`hall2009`, and online webservices such as the
-Google Prediction API, to name a few. To a domain scientist that does not have a
+Google Prediction API, to name a few. To a domain scientist that does not have
 formal training in machine learning, however, the availability of such packages
-is both a blessing and a curse. On one hand, everyone now has access to nearly
-every conceivable machine learning algorithm. At the same time, these algorithms
-tend to be black boxes with a few enigmatic knobs to turn. A domain scientist
-may rightfully ask just which of the many algorithms to use, which parameters to
-tune, and what the results actually mean.
+is both a blessing and a curse. On one hand, most machine learning algorithms
+are now widely accessible to all researchers. At the same time, these algorithms
+tend to be black boxes with potentially many enigmatic knobs to turn. A domain
+scientist may rightfully ask just which of the many algorithms to use, which
+parameters to tune, and what the results actually mean.
 
 The goal of ``cesium`` is to simplify the analysis pipeline so that scientists
 can spend less time solving technical computing problems and more time answering
 scientific questions. ``cesium`` includes a number of out-of-the-box feature
-engineering workflows, such as periodogram analysis, that transform raw time
+engineering workflows that transform raw time
 series data to extract signal from the noise. By recording the inputs,
 parameters, and outputs of previous experiments, ``cesium`` allows researchers
 to answer new questions that arise out of previous lines of inquiry.  Saved
@@ -235,7 +224,7 @@ beginning-to-end analysis for their own data.
 
 For advanced users or users who wish to delve into the source code corresponding
 to a workflow producing through the ``cesium`` web front end, we have provided
-the ability to produce an ``IPython`` notebook from a saved workflow with a
+the ability to produce a Jupyter notebook :cite:`perez2007` from a saved workflow with a
 single click. While our goal is to have the front end to be as robust and
 flexible as possible, ultimately there will always be special cases where an
 analysis requires tools which have not been anticipated, or where the debugging
@@ -261,8 +250,8 @@ at addressing the following uses cases:
 
 Our framework primarily implements "feature-based methods", wherein the raw
 input time series data is used to compute "features" that compactly capture the
-complexity of the signal space within a lower-dimensional feature space;
-standard machine learning approaches (such as random forests :cite:`breiman2001`
+complexity of the signal space within a lower-dimensional feature space.
+Standard machine learning approaches (such as random forests :cite:`breiman2001`
 and support vector machines :cite:`suykens1999`) may then be used for supervised
 classification or regression. 
 
@@ -277,8 +266,8 @@ featurization process include:
 - Ability to incorporate measurement errors, which can be provided for each data
   point of each time series (if applicable).
 
-- Support for multi-channel data, for which features are computed separately for
-  each dimension of the input data.
+- Support for multi-channel data, in which case features are computed separately
+  for each dimension of the input data.
 
 Example features
 ----------------
@@ -319,9 +308,9 @@ steps: featurization, model building, and prediction on new data. The majority o
 the ``cesium.build_model`` and ``cesium.predict`` submodules primarily provide
 interfaces between sets of feature data, which contain both feature data and a
 variety of metadata about the input time series, and machine learning models
-from ``scikit-learn`` [?], which require dense, rectangular input data. Note
-that, as ``cesium`` is under active development, some of the following details
-are subject to change.
+from ``scikit-learn`` :cite:`pedregosa2011`, which require dense, rectangular
+input data. Note that, as ``cesium`` is under active development, some of the
+following details are subject to change.
 
 The featurization step is performed using one of two main functions:
 
@@ -341,7 +330,8 @@ The featurization step is performed using one of two main functions:
 - ``featurize_data_files(uris, ...)``,
 
   - Takes in a list of file paths or URIs and dispatches featurization tasks to
-    Celery workers.
+    be computed in parallel via Celery :cite:`celery`, a Python distributed task
+    queue.
 
   - Data is loaded only remotely by the workers rather than being copied, so
     this approach should be preferred for very large input datasets.
@@ -350,7 +340,7 @@ The featurization step is performed using one of two main functions:
     as ``featurize_data_files``.
 
 The output of both functions is a ``Dataset`` object from the ``xarray`` library
-[?], which will also be referred to here as a "feature set" (more about
+:cite:`xarray`, which will also be referred to here as a "feature set" (more about
 ``xarray`` is given in the next section). The feature set stores the computed
 feature values for each function (indexed by channel, if the input data is
 multi-channel), as well as time series filenames or labels, class labels or
@@ -389,29 +379,43 @@ Analogous helper functions for prediction are available in the ``predict`` modul
     have not yet been featurized by dispatching featurization tasks to Celery
     workers and then passing the resulting featureset to ``model_predictions``.
 
-The main function ``model_predictions`` takes a set of already-computed features
-and predicts the corresponding class labels or regression targets.
-Alternatively, the ``predict_data_files`` function can be used to make
-predictions from raw time series data that is stored on disk; the features that
-were used to train the given model will be computed for the new input data and
-then used to make predictions. Depending on the quality of the predictions, new
-models can easily be trained with more or fewer features without recomputing all the
-previous feature values until the analysis is complete.
+After a model is initially trained or predictions have been made, new models can
+be trained with more features or uninformative features can be removed until the
+result is satisfactory.
 
+Other technological details
+---------------------------
+``cesium`` is implemented in Python, along with some C code (integrated via
+Cython) for especially computationally-intensive feature calculations.
+Our library also relies upon many other open source Python projects, including
+``scikit-learn``, ``pandas``, ``xarray``, and ``dask``. As the first two
+choices are somewhat obvious, here we will briefly describe the roles of the
+latter two libraries.
 
-Other technological components
-------------------------------
-In order to eliminate redundant computation,
-the set of necessary computations is represented internally as a directed
-acyclic graph (DAG) and evaluated efficiently via ``dask`` (see Figure
-:ref:`dask` for an example).
-In addition to the built-in features, custom feature computation functions can
-be passed in directly by the user; such custom functions can similarly make use
-of the internal ``dask`` representation so that built-in features can be reused
-for the evaluation of user-specified functions. Finally, meta-features (whose
-for each time series is specified in advance) can also be passed to
-``featurize_time_series`` and stored in the same output dataset alongside
-computed feature values.
+As mentioned above, feature data generated by ``cesium`` is returned as a
+``Dataset`` object from the ``xarray`` package, which according to the
+documentation "resembles an in-memory representation of a NetCDF file, and
+consists of variables, coordinates and attributes which together form a self
+describing dataset". A ``Dataset`` allows multi-channel feature data to be
+faithfully represented in memory as a multidimensional array so that the effects
+of each feature (across all channels) or channel (across all features) can be
+evaluated directly, while also storing metadata and features that are not
+channel-specific. Storing feature outputs in NetCDF format allows for faster and
+more space-efficient serialization and loading of results (as compared to a
+text-based format).
+
+The ``dask`` library provides a wide range of tools for organizing computational
+tasks. ``cesium`` makes use of only one small component: within ``dask``, tasks
+are organized as a directed acyclic graph (DAG), with the results of some tasks
+serving as the inputs to others. Tasks can then be computed in an efficient
+order by ``dask``'s scheduler. Within ``cesium``, many features rely on other
+features as inputs, so internally we represent our computations as ``dask``
+graphs in order to minimize redundant computations and peak memory usage (part
+of an example DAG involving the Lomb-Scargle periodogram is depicted in Figure
+:ref:`dask`). In addition to the built-in features, custom feature functions
+passed in directly by the user can similarly make use of the internal ``dask``
+representation so that built-in features can be reused for the evaluation of
+user-specified functions.
 
 .. figure:: dask
 
@@ -419,20 +423,18 @@ computed feature values.
 
 Web front end
 =============
-The ``cesium`` front end provides easy, web-based access to time series
+The ``cesium`` front end provides web-based access to time series
 analysis, addressing three common use cases:
 
 1. A scientist needs to perform time series analysis, but is
    **unfamiliar with programming** and library usage.
+
 2. A group of scientists want to **collaboratively explore** different
    methods for time-series analysis.
+
 3. A scientist is unfamiliar with time-series analysis, and wants to **learn**
    how to apply various methods to their data, using **industry best
    practices**.
-
-.. figure:: architecture
-
-   Architetural diagram of ``cesium`` analysis platform *TODO: UPDATE*. :label:`architecture`
 
 The front-end system (together with its deployed back end), offers the
 following features:
@@ -445,69 +447,52 @@ following features:
  - Downloads of Jupyter notebooks to replicate analyses (in progress).
 
 .. [#isolation] Isolation is currently provided by limiting the user
-                to non-privileged access inside a Docker container. This
-                does not theoretically guarantee 100% isolation.
+                to non-privileged access inside a Docker :cite:`docker`
+                container. This does not theoretically guarantee 100% isolation.
 
+Implementation
+--------------
+The ``cesium`` web front end consists of several components:
 
-Back end to front end communication
------------------------------------
-Traditionally, web front ends communicate with back ends via API
-requests. For example, to add a new user, the front end would make an
-asynchronous JavaScript (AJAX) POST to `/create_user`. The request
-returns with a status and some data, which the front end relays to the
-user as appropriate.
+- A Python-based Flask :cite:`flask` server which provides a REST API for
+  managing datasets and launching featurization, model-building, and prediction
+  tasks.
 
-These types of calls are designed for short-lived request-answer
-sessions: the answer has to come back before the connection times out,
-otherwise the front end is responsible for implementing logic for
-recovery. When the back end has to deal with a longer running task,
-the front end typically polls repeatedly to see when it is done. Other
-solutions include long polling or server-side events.
+- A JavaScript-based web interface implemented using React
+  :cite:`gackenheimer2016a` and Redux :cite:`gackenheimer2016b` to display results to users.
 
-In our situation, tasks execute on the order of several (sometimes
-tens of) minutes. This situation can be handled gracefully using
-WebSockets |---| the caveat being that these can be intimidating to set
-up, especially in Python.
+- A custom WebSocket communication system (which we informally call *message
+  flow*) that notifies the front end when back-end tasks complete.
 
-We have implemented a simple interface for doing so that we informally call *message
-flow*. It adds WebSocket support to any Python WSGI server (Flask, Django, Pylons, etc.),
-and allows scaling up as demand increases.
+While the deployment details of the web front end are beyond the scope of this
+paper, it should be noted that it was designed with scalability in mind.
+The overarching design principle is to connect several small components, each
+performing only one, simple task.
+An NGINX proxy exposes a pool of WebSocket and Web Server Gateway Interface
+(WSGI) servers to the user. This gives us the flexibility to choose the best
+implementation of each. Communications between WSGI servers and WebSocket
+servers happen through a ZeroMq XPub-XSub (multi-publisher publisher-subscriber)
+pipeline :cite:`hintjens2013`, but could be replaced with any other broker,
+e.g., RabbitMQ :cite:`videla2012`.  The "message flow" paradigm adds WebSocket
+support to any Python WSGI server (Flask, Django [#channels]_, Pylons, etc.), and
+allows scaling up as demand increases.  It also implement trivially modern data
+flow models such as Flux/Redux, where information always flows in one direction:
+from front end to back end via Hypertext Transfer Protocol (HTTP) calls, and
+from back end to front end via WebSocket communication.
 
-A detailed writup of *message flow* can be found on the Cesium blog at <INSERT URL>. It
-allows us to implement trivially modern data flow models such as `Flux
-<https://facebook.github.io/flux/>`_, where information always flows in one direction:
-from front end to back end via API calls, and from back end to front end via WebSocket
-communication.
-
-.. [^channels] At PyCon2016, Andrew Godwin presented a similar
+.. [#channels] At PyCon2016, Andrew Godwin presented a similar
                solution for Django called "channels". The work
                described here happened before we became aware of
                Andrew's, and generalizes beyond Django to, e.g.,
                Flask, the web framework we use.
 
-Deployment
-----------
-While the deployment details of the web front end are beyond the scope of this paper, it
-should be noted that it was designed with scalability in mind.
-
-An NGINX proxy exposes a pool of websocket and WSGI servers to the
-user. This gives us the flexibility to choose the best implementation
-of each. Communications between WSGI servers and WebSocket servers
-happen through a `ZeroMq <http://zeromq.org/>`_ XPUB-XSUB pipeline
-(but can be replaced with any other broker, e.g., `RabbitMQ
-<https://blog.pivotal.io/pivotal/products/rabbitmq-hits-one-million-messages-per-second-on-google-compute-engine>`_).
-
-The overarching design principle is to connect several, small component, each
-performing only one, simple task |---| the one it was designed for.
-
 Computational Scalability
 -------------------------
-In many fields, the volumes of time series data available can be immense.
-``cesium`` makes the process of analyzing time series easily parallelizable and
-scaleable; scaling an analysis from a single system to a large cluster should
-be easy and accessible to non-technical experts.
+In many fields, the volumes of available time series data can be immense.
+``cesium`` includes features to help parallelize and scale an analysis from a
+single system to a large cluster.
 
-Both the back-end library and web front end make use of Celery and RabbitMQ for
+Both the back-end library and web front end make use of Celery :cite:`celery` for
 distributing featurization tasks to multiple workers; this could be used for
 anything from automatically utilizing all the available cores of a single machine,
 to assigning jobs across a large cluster. Similarly, both parts of the
@@ -524,7 +509,7 @@ minimize memory footprint and reduce computation times.
 
 Automated testing and documentation
 -----------------------------------
-While the back-end library and web front end are developed in separate GitHub
+Because the back-end library and web front end are developed in separate GitHub
 repositories, the connections between the two somewhat complicate the continuous
 integration testing setup. Both repositories are integrated with
 `Travis CI <https://travis-ci.com/>`_ for
@@ -540,10 +525,12 @@ Text format via ``numpydoc``; the result is combined with the rest of our
 documentation and rendered as HTML using ``sphinx``. Code examples (without
 output) are stored in the repository in Markdown format as opposed to Jupyter
 notebooks since this format is better suited to version control. During the
-doc-build process, the Markdown is converted to notebook format using
+doc-build process, the Markdown is converted to Jupyter notebook format using
 ``notedown``, then executed using ``nbconvert`` and converted back to Markdown
-(with outputs included), to be finally rendered by ``sphinx``. Both the HTML and
-notebook versions are available for every example workflow.
+(with outputs included), to be finally rendered by ``sphinx``. 
+This allows the code examples to be saved in a human-readable and version
+control-friendly format while still allowing the user to execute the code
+themselves via a downloadable notebook.
 
 Example EEG dataset analysis
 ============================
@@ -607,10 +594,10 @@ featurized serially.
           ...
 
 
-The output of ``featurize_time_series`` is an ``xarray.Dataset`` which contains all the
-feature information needed to train a machine learning model: feature values are stored as
-data variables, and the time series index/class label are stored as coordinates (a
-``channel`` coordinate will also be used later for multi-channel data).
+The resulting ``Dataset`` contains all the feature information needed to train a
+machine learning model: feature values are stored as data variables, and the
+time series index/class label are stored as coordinates (a ``channel``
+coordinate will also be used later for multi-channel data).
 
 Custom feature functions not built into ``cesium`` may be passed in using the
 ``custom_functions`` keyword, either as a dictionary ``{feature_name: function}``, or as a
@@ -674,7 +661,7 @@ keyword argument.
           std        (name, channel) float64 40.41 48.81 ...
 
 The EEG time series considered here consist of univariate signal measurements along a
-uniform time grid. But ``featurize_time_series`` also accepts multi-channel data; to
+uniform time grid. But ``featurize_time_series`` also accepts multi-channel data. To
 demonstrate this, we will decompose each signal into five frequency bands using a discrete
 wavelet transform as suggested by Subasi :cite:`subasi2007`, and then featurize each band
 separately using the five functions from above.
@@ -711,21 +698,19 @@ separately using the five functions from above.
 
 The output feature set has the same form as before, except now the ``channel`` coordinate is
 used to index the features by the corresponding frequency band. The functions in
-``cesium.build_model``
-and ``cesium.predict``
-all accept feature sets from single- or multi-channel data, so no additional steps are
-required to train models or make predictions for multichannel feature sets using the
-``cesium`` library.
+``cesium.build_model`` and ``cesium.predict`` all accept feature sets from
+single- or multi-channel data, so no additional steps are required to train
+models or make predictions for multichannel feature sets using the ``cesium``
+library.
 
-Model building in ``cesium`` is handled by the
-``build_model_from_featureset``
+Model building in ``cesium`` is handled by the ``build_model_from_featureset``
 function in the ``cesium.build_model`` submodule. The feature set output by
-``featurize_time_series``
-contains both the feature and target information needed to train a
-model; ``build_model_from_featureset`` is simply a wrapper that calls the ``fit`` method of a
-given ``scikit-learn`` model with the appropriate inputs. In the case of multichannel
-features, it also handles reshaping the feature set into a (rectangular) form that is
-compatible with ``scikit-learn``.
+``featurize_time_series`` contains both the feature and target information
+needed to train a model; ``build_model_from_featureset`` is simply a wrapper
+that calls the ``fit`` method of a given ``scikit-learn`` model with the
+appropriate inputs. In the case of multichannel features, it also handles
+reshaping the feature set into a (rectangular) form that is compatible with
+``scikit-learn``.
 
 For this example, we'll test a random forest classifier for the built-in ``cesium`` features,
 and a 3-nearest neighbors classifier for the others, as in :cite:`guo2011`.
@@ -772,22 +757,6 @@ and then predictions are made based on these features using
                            return_probs=False)
         preds_dwt = model_predictions(fset_dwt, model_dwt,
                            return_probs=False)
-        
-        print("Builtin: train acc={:.2%}, test acc={:.2%}"\
-              .format(accuracy_score(preds_cesium[train],
-                                     eeg["classes"][train]),
-                      accuracy_score(preds_cesium[test],
-                                     eeg["classes"][test])))
-        print("Guo et al.: train acc={:.2%}, test acc={:.2%}"\
-              .format(accuracy_score(preds_guo[train],
-                                     eeg["classes"][train]),
-                      accuracy_score(preds_guo[test],
-                                     eeg["classes"][test])))
-        print("Wavelets: train acc={:.2%}, test acc={:.2%}"\
-              .format(accuracy_score(preds_dwt[train],
-                                     eeg["classes"][train]),
-                      accuracy_score(preds_dwt[test],
-                                     eeg["classes"][test])))
 
 .. code-block:: python
 
@@ -806,15 +775,19 @@ the same analysis can be performed in a browser with no setup or coding required
 
 Web front end
 -------------
-*TODO Add web clickthrough.*
+*TODO Replace with new styling, if time allows*
 
-*How much will the front end be changing? Just the styling or will the actual
-flow be different? Could go ahead and write it up before we finish the new
-version, or wait til after...*
-
-.. figure:: web1
-
-   "Projects" tab :label:`web1`
+Here we briefly demonstrate how the above analysis could be conducted using only
+the web front end. Note that the user interface presented here is a preliminary version
+and is undergoing frequent updates and additions. The basic workflow follows the
+same *featurize|---|build model|---|predict* pattern. First,
+data is uploaded as in Figure :ref:`web2`. Features are
+selected from available built-in functions as in Figure :ref:`web3`,
+or may be computed from user-uploaded Python code which is securely executed
+within a Docker container. Once features have been extracted, models can be
+created as in Figure :ref:`web4`, and finally predictions can be made as in
+Figure :ref:`web5`. Currently the options for exploring feature importance and
+model accuracy are limited, but this is again an area of active development.
 
 .. figure:: web2
 
@@ -832,28 +805,42 @@ version, or wait til after...*
 
    "Predict" tab :label:`web5`
 
+Future work
+===========
+The ``cesium`` project is under active development. Some of our upcoming goals
+include:
+
+- Full support for exporting Jupyter notebooks from workflows created within the
+  web front end.
+
+- Additional features from other scientific disciplines (currently the majority
+  of available features are taken from applications in astronomy).
+
+- Improved web front end user interface with more tools for visualizing and
+  exploring a user's raw data, feature values, and model outputs.
+
+- More tools to streamline the process of iteratively exploring new models based
+  on results of previous experiments.
 
 Conclusion
 ==========
 The ``cesium`` framework provides tools that allow anyone from machine learning
 specialists to domain experts without any machine learning experience to rapidly
-prototype explanatory models for their time series data and quickly generate
-predictions for new, unlabeled data. Aside from the applications to time domain
-informatics, our project has several aspects which are relevant to the broader
-scientific Python community.
+prototype explanatory models for their time series data and generate predictions
+for new, unlabeled data. Aside from the applications to time domain informatics,
+our project has several aspects which are relevant to the broader scientific
+Python community.
 
 First, the dual nature of the project (Python back end vs. web front end) presents
 both unique challenges and interesting opportunities in striking a balance
 between accessibility and flexibility of the two components.
 Second, the ``cesium`` project places a strong emphasis on reproducible
 workflows: all actions performed within the web front end are logged and can be
-easily exported to an IPython notebook that exactly reproduces the steps of the
+easily exported to an Jupyter notebook that exactly reproduces the steps of the
 analysis. Finally, the scope of our project is simultaneously both narrow (time
 series analysis) and broad (numerous distinct scientific disciplines), so
 determining how much domain-specific functionality to include is an ongoing
 challenge.
-
-*TODO roadmap?*
 
 References
 ==========
