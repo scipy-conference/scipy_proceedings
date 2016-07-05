@@ -618,8 +618,9 @@ weights to find the 25 most-predictive drug-usage terms. These are listed below.
 
 ::
 
-  sex, shit, music, weed, party, beer, dubstep, fuck, drinking, smoking,
-  partying, chill, hair, park, fucking, dj, burning, electronic, drunk, ass,
+  sex, shit, music, weed, party, beer, dubstep, fuck,
+  drinking, smoking, partying, chill, hair, park,
+  fucking, dj, burning, electronic, drunk, ass,
   reggae, robbins, dude, smoke, cat
 
 Drug users in this data set reference drinking, smoking, partying, and music
