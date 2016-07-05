@@ -111,16 +111,16 @@
   \item[A posteriori distribution]
     \begin{equation*}
       p(\theta|x) = \frac{p_l(x|\theta) p_p(\theta)}{\int p_l(x|\phi)
-        p_p(x) d\phi}
+        p_p(\phi) d\phi}
     \end{equation*}
   \item[MAP] Maximum A posteriori Probability
     \begin{equation*}
-      \hat \theta \equiv \argmax_{\phi} p(\theta|x)
+      \hat \theta \equiv \argmax_{\theta} p(\theta|x)
     \end{equation*}
   \item[Taylor series]
     \begin{align*}
       &\log \left( p(\theta|x) \right) = \log \left( \frac{p_l(x|\hat \theta)
-        p_p(\hat \theta)}{\int p_l(x|\phi) p_p(x) d\phi} \right) \\
+        p_p(\hat \theta)}{\int p_l(x|\phi) p_p(\phi) d\phi} \right) \\
       &\qquad~+ \frac{1}{2}
         \left( \theta - \hat \theta \right)^T \left(
         \frac{d^2 \log\left( p_l(x|\phi) \right) }{d\phi^2} +
@@ -154,26 +154,26 @@
 \begin{textblock}{6}(0,8.7)
   \LHead{Bibliography}
   
-  Pemberton et al. "Test Report for Equation of State Measurements of
-  PBX-9501". LA-UR-11-04999, Los Alamos National Laboratory, Los
-  Alamos, NM.
+  Andersen, M. and Vandenberghe, L.. ``cvxopt\: Convex Optimization
+  Package'' http://cvxopt.org
 
-  Hixson, R. S. et al., 2000. "Release isentropes of overdriven
-  plastic-bonded explosive PBX-9501."  \emph{J. Applied Physics}
-  \textbf{88} (11) pp. 6287-6293
-
-  Ficket, W. and Davis, W. C., 2000. "Detonation". University of
+  Ficket, W. and Davis, W. C., 2000. ``Detonation''. University of
   California Press: Berkeley, CA.
 
-  Andersen, M. and Vandenberghe, L.. "cvxopt\: Convex Optimization
-  Package" http://cvxopt.org
-
-  Jones, E., Oliphant, E., Peterson, P., et al. "SciPy\: Open Source
-  Scientific Tools for Python", 2001-, http://www.scipy.org
-
-  "F\_UNCLE: Functional Uncertainty Constrained by Law and Experiment".\\
+  ``F\_UNCLE: Functional Uncertainty Constrained by Law and Experiment''.\\
   LA-CC-16-034, Los Alamos National Laboratory,
   https://github.com/fraserphysics/F\_UNCLE
+  
+  Hixson, R. S. et al., 2000. ``Release isentropes of overdriven
+  plastic-bonded explosive PBX-9501''  \emph{J. Applied Physics}
+  \textbf{88} (11) pp. 6287-6293
+
+  Jones, E., Oliphant, E., Peterson, P., et al. ``SciPy\: Open Source
+  Scientific Tools for Python'', 2001-, http://www.scipy.org
+  
+  Pemberton et al. ``Test Report for Equation of State Measurements of
+  PBX-9501''. LA-UR-11-04999, Los Alamos National Laboratory, Los
+  Alamos, NM.
 
   % van der Walt, S. , Colbert, C. S.  and Varoquaux, G.. "The NumPy
   % Array\: A Structure for Efficient Numerical Computation", Computing
@@ -224,7 +224,7 @@
 \end{textblock}
 \begin{textblock}{4}(\colD,\EOSY)
   \begin{center}
-    \resizebox{0.7\textwidth}{!}{\includegraphics{old/basis.pdf}} \\
+    \resizebox{0.7\textwidth}{!}{\includegraphics{basis.pdf}} \\
     Cubic spline basis functions with first and second derivatives.
   \end{center}
 \end{textblock}
@@ -241,7 +241,7 @@
 \newcommand\StickY{5}
 \begin{textblock}{4}(\colB,\StickY)
   \LHead{Rate Stick Experiment}\\
-  \resizebox{0.9\textwidth}{!}{\includegraphics{stick.pdf}}\\
+  \resizebox{0.9\textwidth}{!}{\includegraphics{stick_poster.pdf}}\\
 \end{textblock}
 
 \begin{textblock}{4}(\colC,\StickY)
@@ -267,14 +267,14 @@
 \newcommand\GunY{9}
 \begin{textblock}{4}(\colB,\GunY)
   \LHead{Gun Experiment}\\
-  \resizebox{0.9\textwidth}{!}{\includegraphics{gun.pdf}}\\
+  \resizebox{0.9\textwidth}{!}{\includegraphics{gun_poster.pdf}}\\
 \end{textblock}
 
 \begin{textblock}{3.5}(\colC,\GunY)
   \begin{align*}
     F &= m\cdot a \\
     p(v)\cdot A &= m \cdot \frac{d^2}{d t^2} x \\
-    p(A\cdot x) \frac{A}{m} &= \frac{d^2}{d t^2} x \\
+    p\left(\frac{A\cdot x}{m_{H.E.}}\right) \frac{A}{m} &= \frac{d^2}{d t^2} x \\
     \begin{bmatrix}
       z_1 \\ z_2
     \end{bmatrix}
@@ -295,7 +295,6 @@
   \item scipy.integrate.odeint $\rightarrow~[V_0, V_1, \cdots, V_N]$
   \item scipy.interpolate.UnivariateSpline $\rightarrow~V(t)$
   \end{itemize}
-
   
 \end{textblock}
 

@@ -1,9 +1,5 @@
+poster.pdf:
 
-
-stick.pdf:
-	ln -s ../papers/andrew_fraser/stick.pdf $@
-gun.pdf:
-	ln -s ../papers/andrew_fraser/gun.pdf $@
 eos_nom_true.pdf:
 	ln -s ../papers/andrew_fraser/scipy2016_figure1eos.pdf $@
 real.pdf:
@@ -19,9 +15,9 @@ gun_tv.pdf:
 gun_fisher.pdf:
 	ln -s ../papers/andrew_fraser/scipy2016_figure5.pdf $@
 
-FIGS = stick eos_nom_true gun stick_xt stick_CJ stick_fisher gun_tv gun_fisher\
+FIGS =  eos_nom_true stick_xt stick_CJ stick_fisher gun_tv gun_fisher\
 real
-FIGURES = $(patsubst %, %.pdf, $(FIGS))
+FIGURES = $(patsubst %, %.pdf, $(FIGS)) 
 
 poster.pdf: poster.tex ${FIGURES}
 	pdflatex poster
