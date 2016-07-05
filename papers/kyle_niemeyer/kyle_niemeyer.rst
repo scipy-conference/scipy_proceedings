@@ -16,7 +16,7 @@ PyTeCK: a Python-based automatic testing package for chemical kinetic models
    open-source Python-based package for automatic testing of chemical kinetic
    models. Given a model of interest, PyTeCK automatically parses experimental
    datasets encoded in a YAML format, validates the self-consistency of each
-   dataset, and performs simulations for each experimental datapoint. It then
+   dataset, and performs simulations for each experimental data point. It then
    reports a quantitative metric of the model's performance, based on the
    discrepancy between experimental and simulated values and weighted by
    experimental variance. The initial version of PyTeCK supports shock tube
@@ -240,7 +240,7 @@ Chaumeix et al. [Chaumeix2007]_:
           ignition-type: *ign
 
 This example contains all the information needed to evaluate the
-performance of a chemical kinetic model with five datapoints. The file
+performance of a chemical kinetic model with five data points. The file
 also includes metadata about the file itself, as well as reference information.
 While these elements, including ``file-author``, ``file-version``, and the
 entries in ``reference``, are not required by PyTeCK, a valid ChemKED
@@ -250,17 +250,17 @@ The elements necessary for PyTeCK include the type of experiment given by
 apparatus used to measure ignition delay (``shock tube`` or
 ``rapid compression machine``), and then a list of
 experimental ``datapoints`` given as associative arrays with necessary
-information. Mandatory datapoint elements include the initial ``temperature``,
-``pressure``, and mixture ``composition``, as well as the experimental
-``ignition-delay`` and ``ignition-type`` (means by which PyTeCk detects
-ignition). All quantities provided include a magnitude and units, which
+information. Mandatory elements of each entry in``datapoints`` include the initial
+``temperature``, ``pressure``, and mixture ``composition``, as well as the
+experimental ``ignition-delay`` and ``ignition-type`` (means by which PyTeCk
+detects ignition). All quantities provided include a magnitude and units, which
 Pint [Grecco2016]_ interprets.
 Since many experimental datasets hold certain properties constant (e.g.,
 composition, pressure) while varying a single quantity (e.g., temperature),
 a ``common-properties`` element can describe properties common to all
 ``datapoints``, using an arbitrary anchor label (e.g., ``&pres``
-above for the constant pressure). Each datapoint then refers to the common
-property with a reference (``*pres``). However, every datapoint should still
+above for the constant pressure). Each data point then refers to the common
+property with a reference (``*pres``). However, every data point should still
 contain the complete information needed to reproduce its conditions; the
 ``common-properties`` element is used for convenience.
 
@@ -270,7 +270,7 @@ that lead to longer ignition delay times, shock tubes can exhibit pressure rise
 before ignition. This is typically expressed in the literature with
 a constant pressure rise rate at a fraction of the initial pressure (with units
 of inverse time), and ChemKED files encode this as an item in the associative
-array describing an experimental datapoint:
+array describing an experimental data point:
 
 .. code-block:: yaml
 
@@ -306,7 +306,7 @@ ChemKED files for shock tube and RCM experiments.
 
 The function ``parse_files.read_experiment()`` takes a ChemKED-format file
 as input, and returns a dictionary with the necessary information to
-perform simulations of the experimental datapoints.
+perform simulations of the experimental data points.
 The ``parse_files.get_experiment_kind()`` and ``parse_files.get_datapoints()``
 functions perform important checking of input information
 for consistency and validity of quantities via the ``validation`` module.
@@ -761,7 +761,7 @@ of the ignition delay times divided by the variance of the experimental data:
     \frac{\log \tau_{ij}^{\text{exp}} - \log \tau_{ij}^{\text{sim}} }
     { \sigma (\log \tau_{ij}^{\text{exp}}) }  \right)^2 \;,
 
-where :math:`N_i` is the number of datapoints in dataset :math:`i`,
+where :math:`N_i` is the number of data points in dataset :math:`i`,
 :math:`\tau_{ij}` is the :math:`j`\ th ignition delay value in the
 :math:`i`\ th dataset, :math:`\sigma` is the experimental variance,
 :math:`\log` indicates the natural logarithm (rather than base-10),
