@@ -129,10 +129,10 @@ Since then many other packages have appeared that primarily function as librarie
 Three popular examples are PyLOOS_ :cite:`Romo:2014bh`, mdtraj_ :cite:`McGibbon:2015aa`, and pytraj_ :cite:`Nguyen:2016aa`.
 PyLOOS :cite:`Romo:2014bh` consists of Python bindings to the C++ LOOS_ library :cite:`Romo:2009zr`; in order to aid novice users, LOOS also provides about 140 small stand-alone tools that each focus on a single task.
 mdtraj :cite:`McGibbon:2015aa` is similar to MDAnalysis in many aspects but focuses even more on being a light-weight building block for other packages; it also includes a number of innovative performance optimizations.
-pytraj_ :cite:`Nguyen:2016aa` is a versatile Python frontend to the popular and powerful ``cpptraj`` tool :cite:`Roe:2013zr` and is particularly geared towards users of the Amber MD package :cite:`Case:2005uq`.
+pytraj :cite:`Nguyen:2016aa` is a versatile Python frontend to the popular and powerful ``cpptraj`` tool :cite:`Roe:2013zr` and is particularly geared towards users of the Amber MD package :cite:`Case:2005uq`.
 These three packages and MDAnalysis have in common that they are built on an object model of the underlying data (such as groups of particles or a trajectory), use compiled code in C, C++ or Cython to accelerate time critical bottlenecks, and have a "Pythonic" user interface. 
 LOOS and MDAnalysis share a similar object-oriented philosophy in their user interface design.
-In contrast, mdtraj and pytraj :cite:`Nguyen:2016aa` expose a functional user interface. 
+In contrast, mdtraj and pytraj expose a functional user interface. 
 Both approaches have advantages and the existence of different "second generation" Python packages for the analysis of MD simulations provides many good choices for users and a fast moving and stimulating environment for developers.
 
 .. _MDAnalysis: http://mdanalysis.org
@@ -507,7 +507,7 @@ MDAnalysis provides a uniform interface to simulation data, which comes in a bew
 It enables users to rapidly write code that is portable and immediately usable in virtually all biomolecular simulation communities.
 It has an active international developer community with researchers that are expert developers and users of a wide range of simulation codes.
 MDAnalysis is widely used (the original paper :cite:`Michaud-Agrawal:2011fu` has been cited more than 195 times) and forms the foundation for more specialized biomolecular simulation tools.
-Ongoing and future developments will improve performance further, introduce transparent parallelization schemes to utilize multi-core and GPU systems efficiently, and interface with the `SPIDAL library`_ for high performance data analytics algorithms.
+Ongoing and future developments will improve performance further, introduce transparent parallelization schemes to utilize multi-core and GPU systems efficiently, and interface with the `SPIDAL library`_ for high performance data analytics algorithms :cite:`Qiu:2014aa`.
 
 
 Acknowledgments
