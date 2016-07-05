@@ -35,9 +35,9 @@ oxidation, heat release, and pollutant emissions. These models are typically
 validated using qualitative, rather than quantitative, comparisons with limited
 sets of experimental data. Furthermore, while a plethora of published data exist
 for quantities of interest such as autoignition delay and laminar flame speed,
-most are not available in machine-readable formats. Such data is commonly
-offered in CSV files, Excel spreadsheets, PDF tables, or even embedded in
-figures.
+most are not available in a standardized machine-readable format.
+Such data is commonly offered in poorly documented, nonstandard CSV files and
+Excel spreadsheets, or even contained in PDF tables or figures.
 
 This work aims to support quantitative validation of kinetic models by:
 
@@ -49,7 +49,7 @@ This work aims to support quantitative validation of kinetic models by:
  based on available experimental data.
 
 Fundamental combustion experiments typically study the behavior of fuels in
-idealized configuratinos at conditions relevant to applications in
+idealized configurations at conditions relevant to applications in
 transporation, aerospace, or power generation. These produce useful data for
 validating chemical kinetic models, which in turn can support simulations of
 more complex applications such as internal combustion or gas turbine engines.
@@ -60,26 +60,29 @@ initial state. Autoignition occurs in practical applications such as knock
 in spark-ignition engines or ignition in compression-ignition and gas turbine
 engines, and so ignition delay measurements provide useful validation measures
 for models aimed at capturing such phenomena.
-
-(Other combustion experimental measurements—such as extinction in perfectly
+Other combustion experimental measurements—such as extinction in perfectly
 stirred reactors, species profiles in jet-stirred reactors, and laminar flame
 speeds—also provide useful information about fuel combustion characteristics,
-but these are not considered in this paper.)
+but these are not considered in this paper.
 
 Ignition delay times are typically measured with two categories of experiments:
 shock tubes and rapid compression machines.
-In shock tubes, discussed in detail in the literature [Chaos2010]_
-[Hanson2014]_, a diaphragm separates high-pressure gases from a lower-pressure
+In shock tubes, a diaphragm separates high-pressure gases from a lower-pressure
 mixture of fuel and oxidizer. Rupturing the diaphragm propagates a (compressive)
 shock wave into the fuel/oxidizer mixture, quickly increasing the temperature
-and pressure and leading to autoignition after a time delay. In contrast, rapid
-compression machines, reviewed by Sung and Curran [Sung2014]_, emulate
+and pressure and leading to autoignition after a time delay. Chaos and Dryer
+[Chaos2010]_, and more recently Hanson and Davidson [Hanson2014]_, discuss shock
+tubes in more detail. In contrast, rapid compression machines, reviewed by
+Sung and Curran [Sung2014]_, emulate
 a single compression stroke in an internal combustion engine; the compression
 of a piston raises the temperature and pressure of a fuel/oxidizer
 mixture in a short period of time, after which ignition occurs.
 Shock tubes and rapid compression machines offer complementary approaches to
-measuring ignition delay times, as the former are typically limited to higher
-temperatures while the latter can reach low-to-intermediate temperatures.
+measuring ignition delay times. Shock tubes can investigate a wide range of
+temperatures (600–2500 K) [Hanson2014]_, although problems with pre-ignition
+pressure rise occur at higher pressures and temperatures below around 1100 K
+[Petersen2009]_, [Chaos2010]_, while rapid compression machines can reach
+low-to-intermediate temperatures (600–1100 K) [Sung2014]_.
 
 In this paper, I propose a data format for capturing results from
 experimental measurements of autoignition delay times.
@@ -130,13 +133,15 @@ Parsing ChemKED files
 ---------------------
 
 The PyTeCK module ``parse_files`` parses experimental data encoded in the
-newly proposed ChemKED (**chem**\ ical **k**\ inetics **e**\ xperimental
-**d**\ ata) format. ChemKED builds on XML-based ``ReSpecTh`` of Varga et al.
+ChemKED (**chem**\ ical **k**\ inetics **e**\ xperimental **d**\ ata) format
+proposed by this paper. ChemKED builds on XML-based ``ReSpecTh`` of Varga et al.
 [Varga2015a]_ [Varga2015b]_—which in turn builds on the PrIMe data format
 [Frenklach2007]_ [You2012]_ [PrIMe2016]_—but is written in YAML
 instead of XML. While XML is a powerful markup language, YAML offers a number
 of advantages: parsers and libraries exist for most programming langauges,
-it supports multiple data types and arrays, and YAML files are human-readable.
+it supports multiple data types and arrays. YAML files are also
+intended for data and more readable by humans, which allows easier
+composition and could encourage adoption.
 
 The code block below shows a complete example of an autoignition dataset for an
 hydrogen/oxygen/argon (``H2/O2/Ar``) mixture, taken from Figure 12 (right) of
@@ -901,6 +906,12 @@ References
              "Comparison of the performance of several recent syngas combustion
              mechanisms," *Combust. Flame* 162:1793–812, 2015.
              http://dx.doi.org/10.1016/j.combustflame.2014.12.001
+
+.. [Petersen2009]  E. L. Petersen, M. Lamnaouer, J. de Vries, H. J. Curran,
+                   J. M. Simmie, M. Fikri, et al. "Discrepancies between shock
+                   tube and rapid compression machine ignition at low
+                   temperatures and high pressures," *Shock Waves*, 1:739–44,
+                   2009. http://dx.doi.org/10.1007/978-3-540-85168-4_119
 
 .. [PrIMe2016] "Process Informatics Model,"
                http://primekinetics.org. Accessed: 29-05-2016.
