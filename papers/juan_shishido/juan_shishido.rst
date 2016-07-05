@@ -322,7 +322,7 @@ insight into the way they choose to self-present. In addition to particular
 themes, NMF also allows us to consider stylistic expression. Choosing the
 number of NMF components—these can be thought of as topics to which users are
 clustered—is an arbitrary and iterative process. For the self-summary essay, we
-chose to start with 25.
+chose 25 components. This resulted in a diverse set of manageable topics.
 
 Several expected themes emerged. Some users, for example, chose to highlight
 personality traits. Some did so by mentioning specific characteristics such as
