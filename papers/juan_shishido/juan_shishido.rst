@@ -67,13 +67,15 @@ between free-text self-descriptions and demographics, we discover that we can
 predict users' demographic makeup and also find some unexpected insights into
 unintentional demographic signals in free-text writing.
 
+Code and data for this work are available in our ``okcupid`` GitHub repository [1]_.
+
 Data
 ----
 
 Description
 ~~~~~~~~~~~
 
-The data was obtained from Albert Y. Kim's JSE_OkCupid repository [1]_. Profile
+The data was obtained from Albert Y. Kim's JSE_OkCupid repository [2]_. Profile
 information was available for 59,946 OkCupid users that were members as of
 06/26/2012, lived within 25 miles of San Francisco, had been active in the
 previous year, and had at least one photo in their profile [Wet15]_.
@@ -210,11 +212,11 @@ part-of-speech usage.
 Essay length was determined based on the tokenized essays. A list of profane
 words was obtained from the "Comprehensive Perl Archive Network" website. Slang
 terms include words such as "dough," which refers to money, and acronyms like
-"LOL." These terms come from the Wiktionary Category:Slang page [2]_. Note that
+"LOL." These terms come from the Wiktionary Category:Slang page [3]_. Note that
 there is overlap between the profane and slang lists.
 
 Each token in the corpus was associated with a lexical category using spaCy's
-part-of-speech tagger. spaCy supports 19 coarse-grained tags [3]_ that expand
+part-of-speech tagger. spaCy supports 19 coarse-grained tags [4]_ that expand
 upon Petrov, Das, and McDonald's universal part-of-speech tagset [Pet11]_.
 
 Differences in lexical features by demographic were analyzed using permutation
@@ -227,7 +229,7 @@ smoothed log-odds-ratio, which accounts for variance.
 
 Text semantics were also analyzed. The corpus was transformed into a tf-idf
 matrix using spaCy's default tokenizer with punctuation removed. We chose to
-include unigrams, bigrams, and trigrams [4]_. Stop words [5]_ and terms that
+include unigrams, bigrams, and trigrams [5]_. Stop words [6]_ and terms that
 appeared in less than 0.5% of documents were removed. Stemming, the process of
 of removing word affixes, was not done.
 
@@ -252,7 +254,7 @@ characteristics include essay length, use of profanity and slang terms, as well
 as part-of-speech usage.
 
 We first compare lexical-based characteristics on the self-summary text by sex.
-Our sample includes 21,321 females and 31,637 males [6]_. We find that, on
+Our sample includes 21,321 females and 31,637 males [7]_. We find that, on
 average, females write significantly more than males (150 terms compared to 139,
 :math:`p` = 0.00).
 
@@ -664,23 +666,25 @@ analyses and thoughts.
 
 Footnotes
 ---------
-.. [1] https://github.com/rudeboybert/JSE_OkCupid. Our original data source was
+.. [1] https://github.com/juanshishido/okcupid.
+
+.. [2] https://github.com/rudeboybert/JSE_OkCupid. Our original data source was
        Everett Wetchler's okcupid repository (https://github.com/everett-wetchler/okcupid).
        However, after commit ``0d62e62``, in which the data was "fully
        anonimized" to exclude essays, we switched to Kim's repository. As far
        as we can tell, this data set is the same as the Wetchler original.
 
-.. [2] https://simple.wiktionary.org/wiki/Category:Slang.
+.. [3] https://simple.wiktionary.org/wiki/Category:Slang.
 
-.. [3] https://spacy.io/docs#token-postags.
+.. [4] https://spacy.io/docs#token-postags.
 
-.. [4] Unigrams are single tokens. Bigrams refer to two adjacent and trigrams
+.. [5] Unigrams are single tokens. Bigrams refer to two adjacent and trigrams
        to three adjacent tokens.
 
-.. [5] Stop words are words that appear with very high frequency, such as "the"
+.. [6] Stop words are words that appear with very high frequency, such as "the"
        or "to."
 
-.. [6] The difference between the number of users in the data set and the
+.. [7] The difference between the number of users in the data set and the
        number of users in the analysis is due to the fact that we drop users
        that write less than five tokens for a particular essay.
 
