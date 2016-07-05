@@ -421,7 +421,7 @@ over topics by demographic split. This allowed us to identify if specific
 topics were distinct to particular demographic groups.
 
 The following figure shows the distribution over topics by sex for the
-self-summary essy. The highest proportion of users, of either sex, were in the
+self-summary essay. The highest proportion of users, of either sex, were in the
 "about me" group. This is not surprising given the essay prompt. For most
 topics, the proportion of females and males was fairly even. One notable
 exception was with the "enthusiastic" topic, which females belonged to at
@@ -624,7 +624,7 @@ weights to find the 25 most-predictive drug-usage terms. These are listed below.
   reggae, robbins, dude, smoke, cat
 
 Drug users in this data set reference drinking, smoking, partying, and music
-more then non-users and also use particular profane terms.
+more than non-users and also use particular profane terms.
 
 Conclusion
 ----------
@@ -637,7 +637,7 @@ learning techniques. To our knowledge, there is currently no study that
 combines these techniques to identify unintentional cues in online
 self-presentation as well as predict demographics from free-text self
 descriptions. The idea that people may unintentionally be providing information
-about themselves in the way that they answer questions online is an intruiging
+about themselves in the way that they answer questions online is an intriguing
 avenue for future research and can also be extended to deception online.
 
 Acknowledgements
