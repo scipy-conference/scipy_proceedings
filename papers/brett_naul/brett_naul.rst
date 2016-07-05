@@ -228,10 +228,10 @@ scientific questions. ``cesium`` includes a number of out-of-the-box feature
 engineering workflows, such as periodogram analysis, that transform raw time
 series data to extract signal from the noise. By recording the inputs,
 parameters, and outputs of previous experiments, ``cesium`` allows researchers
-to iterate and answer new questions that arise out of previous lines of inquiry.
-Saved ``cesium`` workflows can be can be applied to new data as it arrives and
-shared with collaborators or published so that others may apply the exact same
-beginning-to-end technique for their own data.
+to answer new questions that arise out of previous lines of inquiry.  Saved
+``cesium`` workflows can be can be applied to new data as it arrives and shared
+with collaborators or published so that others may apply the same
+beginning-to-end analysis for their own data.
 
 For advanced users or users who wish to delve into the source code corresponding
 to a workflow producing through the ``cesium`` web front end, we have provided
@@ -247,40 +247,160 @@ program.
 
 ``cesium`` library
 ==================
-One main component of the ``cesium`` framework is the back-end Python library.
+The first half of the ``cesium`` framework is the back-end Python library, aimed
+at addressing the following uses cases:
+
+1. A domain scientist who is comfortable with programming but is **unfamiliar
+   with time series analysis or machine learning**.
+
+2. A scientist who is experienced with time series analysis but is looking for
+   **new features** that can better capture patterns within their data.
+
+3. A user of the ``cesium`` web front end who realizes she requires additional
+   functionality and wishes to add additional stages to their workflow.
+
 Our framework primarily implements "feature-based methods", wherein the raw
 input time series data is used to compute "features" that compactly capture the
-complexity of the signal space (but at lower dimensionality); standard machine
-learning approaches (such as random forests :cite:`breiman2001` and support
-vector machines :cite:`suykens1999`) may then be used for supervised
-classification or regression.
+complexity of the signal space within a lower-dimensional feature space;
+standard machine learning approaches (such as random forests :cite:`breiman2001`
+and support vector machines :cite:`suykens1999`) may then be used for supervised
+classification or regression. 
 
-The ``featurize`` module allows users to select from a large library of features,
+``cesium`` allows users to select from a large library of features,
 including both general time series features and domain-specific features drawn from
-various scientific disciplines. Some other advantages of the ``featurize`` module include:
-support for both evenly and unevenly spaced time series (i.e., where the time between
-samples is not constant); ability to incorporate measurement errors, which can be provided
-for each data point of each time series; and support for multi-channel data, for which
-features are computed for each dimension of the measurement values.
-*TODO expand this and move somewhere more prominent*
+various scientific disciplines. Some specific advantages of the ``cesium``
+featurization process include:
 
+- Support for both regularly and irregularly sampled time series (i.e., where
+  the time lags between data points are not constant).
+
+- Ability to incorporate measurement errors, which can be provided for each data
+  point of each time series (if applicable).
+
+- Support for multi-channel data, for which features are computed separately for
+  each dimension of the input data.
+
+Example features
+----------------
 Some ``cesium`` features are extremely simple and intuitive: summary statistics
 such as maximum/minimum values, mean/median values, and standard deviation or median
-absolute deviation are a few such examples. Other simple features might also
-involve the measurement errors or the sampling times themselves. More
-complex features could be the estimated parameters for various fitted
-statistical models: Figure :ref:`ls` shows a multi-frequency,
-multi-harmonic Lomb-Scargle model that describes the rich periodic behavior in
-an example time series :cite:`lomb1976,scargle1982`. Parameters from this
-fitted model such as estimated periods and amplitudes can all be used as
-``cesium`` features.
-*TODO expand on Lomb-Scargle*
+absolute deviation are a few such examples. Other features involve
+measurement errors if they are available: for example, a mean and standard
+deviation that is weighted by measurement errors allows noisy data with 
+large outliers to be modeled more precisely.
 
 .. figure:: cesium-ls
 
    Fitted multi-harmonic Lomb-Scargle model for a light curve from a periodic
    Mira-class star. :label:`ls`
 
+Other more involved features could be the estimated parameters for various fitted
+statistical models: Figure :ref:`ls` shows a multi-frequency,
+multi-harmonic Lomb-Scargle model that describes the rich periodic behavior in
+an example time series :cite:`lomb1976,scargle1982`. In particular, a time
+series is modeled as a periodic function
+
+.. math::
+
+   \tilde{y}(t) = \sum_{i=1}^m \sum_{j=1}^n A_{ij} \cos i \omega_j t + B_{ij} \sin i \omega_j t,
+
+where the parameters :math:`A_{ij}, B_{ij},` and :math:`\omega_j` are selected
+via non-convex optimization to minimize the residual sum of squares
+(weighted by measurement errors if applicable). The estimated periods,
+amplitudes, phases, and goodness-of-fits can then be used as features which
+broadly characterize the periodicity of the input time series.
+
+API details
+-----------
+Here we provide a few examples of the main ``cesium`` API components that would
+be used in a typical analysis task. A workflow will typically consist of three
+steps: featurization, model building, and prediction on new data. The majority of
+``cesium`` functionality is contained within the ``cesium.featurize`` submodule;
+the ``cesium.build_model`` and ``cesium.predict`` submodules primarily provide
+interfaces between sets of feature data, which contain both feature data and a
+variety of metadata about the input time series, and machine learning models
+from ``scikit-learn`` [?], which require dense, rectangular input data. Note
+that, as ``cesium`` is under active development, some of the following details
+are subject to change.
+
+The featurization step is performed using one of two main functions:
+
+- ``featurize_time_series(times, values, errors, ...)``
+
+  - Takes in data that is already present in memory and computes the requested
+    features (passed in as string feature names) for each time series.
+
+  - Features can be computed in parallel across workers (``use_celery=True``) or
+    locally in serial (``False``).
+
+  - Class labels/regression targets and metadata/features with known values are
+    passed in and stored in the output dataset.
+
+  - Additional feature functions can be passed in as ``custom_functions``.
+
+- ``featurize_data_files(uris, ...)``,
+
+  - Takes in a list of file paths or URIs and dispatches featurization tasks to
+    Celery workers.
+
+  - Data is loaded only remotely by the workers rather than being copied, so
+    this approach should be preferred for very large input datasets.
+
+  - Features, metadata, and custom feature functions are passed in the same way
+    as ``featurize_data_files``.
+
+The output of both functions is a ``Dataset`` object from the ``xarray`` library
+[?], which will also be referred to here as a "feature set" (more about
+``xarray`` is given in the next section). The feature set stores the computed
+feature values for each function (indexed by channel, if the input data is
+multi-channel), as well as time series filenames or labels, class labels or
+regression targets, and other arbitrary metadata to be used in building a
+statistical model.
+
+In order to simplify building ``sckit-learn`` models from (non-rectangular)
+feature set data, the following functions are provided in the ``build_model``
+submodule:
+
+- ``build_model_from_featureset(featureset, ...)``
+  
+  - Returns a fitted ``scikit-learn`` model based on the input feature data.
+
+  - A pre-initialized (but untrained) model can be passed in, or the model type
+    can be passed in as a string.
+
+  - Model parameters can be passed in as fixed values, or as ranges of values
+    from which to select via cross-validation.
+
+- ``rectangularize_featureset(featureset)``
+
+  - Called internally by ``build_model_from_featureset`` to reshape feature data
+    in a way that is consumable by ``scikit-learn`` models.
+
+Analogous helper functions for prediction are available in the ``predict`` module:
+
+- ``model_predictions(featureset, model, ...)``
+
+  - Generates predictions from a feature set outputted by
+    ``featurize_time_series`` or ``featurize_data_files``.
+
+- ``predict_data_files(file_paths, model, ...)``
+
+  - Like ``featurize_data_files``, generate predictions for time series which
+    have not yet been featurized by dispatching featurization tasks to Celery
+    workers and then passing the resulting featureset to ``model_predictions``.
+
+The main function ``model_predictions`` takes a set of already-computed features
+and predicts the corresponding class labels or regression targets.
+Alternatively, the ``predict_data_files`` function can be used to make
+predictions from raw time series data that is stored on disk; the features that
+were used to train the given model will be computed for the new input data and
+then used to make predictions. Depending on the quality of the predictions, new
+models can easily be trained with more or fewer features without recomputing all the
+previous feature values until the analysis is complete.
+
+
+Other technological components
+------------------------------
 In order to eliminate redundant computation,
 the set of necessary computations is represented internally as a directed
 acyclic graph (DAG) and evaluated efficiently via ``dask`` (see Figure
@@ -297,40 +417,6 @@ computed feature values.
 
    Example of a directed feature computation graph using ``dask``. :label:`dask`
 
-Feature data is returned in a single ``xarray.Dataset`` which contains all the
-necessary information to build models and make predictions for a dataset. Time
-series data that is already present in memory can be processed using the
-``featurize.featurize_time_series`` function, or a list of URIs can be passed in
-to ``featurize.featurize_data_files``, which can distribute the locations of
-the time series data to workers so that they may be processed in parallel by
-multiple machines.
-
-Once a given set of feature data has been computed, the ``build_model`` module makes it 
-simple to train a machine learning model from ``scikit-learn`` on the given
-features. In particular, the function
-``build_model.build_model_from_featureset`` builds a model of the specified type
-from an input set of feature data that can then be used to make classification or
-regression predictions. The function can also accepts a ``params_to_optimize``
-keyword, which allows for automatic selection of hyperparameters via
-cross-validation; for example, for ``model_type=RandomForestClassifier``, a grid
-of possible values for the ``sckit-learn`` parameter ``n_estimators`` could be
-passed in and the best-performing model (in the cross-validation sense) would be
-returned. Overall, the ``build_model`` module serves mostly as an interface
-between ``scikit-learn`` models-fitting, which requires rectangular arrays as
-input data, and the full set of (possibly multi-dimensional) feature and
-meta-feature data; most of the work of model tuning or validation is performed
-in the same way as for any machine learning analysis using ``sckit-learn``.
-
-The final step of making predictions is performed using the ``predict`` module.
-The main function ``model_predictions`` takes a set of already-computed features
-and predicts the corresponding class labels or regression targets.
-Alternatively, the ``predict_data_files`` function can be used to make
-predictions from raw time series data that is stored on disk; the features that
-were used to train the given model will be computed for the new input data and
-then used to make predictions. Depending on the quality of the predictions, new
-models can easily be trained with more or fewer features without recomputing all the
-previous feature values until the analysis is complete.
-
 Web front end
 =============
 The ``cesium`` front end provides easy, web-based access to time series
@@ -340,8 +426,8 @@ analysis, addressing three common use cases:
    **unfamiliar with programming** and library usage.
 2. A group of scientists want to **collaboratively explore** different
    methods for time-series analysis.
-3. A scientist is unfamiliar with time-series analysis, and wants to
-   **learn** how to apply various methods to her data, using **industry best
+3. A scientist is unfamiliar with time-series analysis, and wants to **learn**
+   how to apply various methods to their data, using **industry best
    practices**.
 
 .. figure:: architecture
@@ -623,22 +709,22 @@ separately using the five functions from above.
           std        (name, channel) float64 112.5 72.97 ...
 
 
-The output featureset has the same form as before, except now the ``channel`` coordinate is
+The output feature set has the same form as before, except now the ``channel`` coordinate is
 used to index the features by the corresponding frequency band. The functions in
 ``cesium.build_model``
 and ``cesium.predict``
-all accept featuresets from single- or multi-channel data, so no additional steps are
-required to train models or make predictions for multichannel featuresets using the
+all accept feature sets from single- or multi-channel data, so no additional steps are
+required to train models or make predictions for multichannel feature sets using the
 ``cesium`` library.
 
 Model building in ``cesium`` is handled by the
 ``build_model_from_featureset``
-function in the ``cesium.build_model`` submodule. The featureset output by
+function in the ``cesium.build_model`` submodule. The feature set output by
 ``featurize_time_series``
 contains both the feature and target information needed to train a
 model; ``build_model_from_featureset`` is simply a wrapper that calls the ``fit`` method of a
 given ``scikit-learn`` model with the appropriate inputs. In the case of multichannel
-features, it also handles reshaping the featureset into a (rectangular) form that is
+features, it also handles reshaping the feature set into a (rectangular) form that is
 compatible with ``scikit-learn``.
 
 For this example, we'll test a random forest classifier for the built-in ``cesium`` features,
