@@ -697,7 +697,8 @@ chosen to be 400 ms.
     nonrend: 400
     reacend: 80
 
-It is often convenient to use a YAML library to dump the ``volume-trace.yaml`` file from the
+This sample represents a minimal example of the necessary information in the ``volume-trace.yaml``
+file. It is often convenient to use a YAML library to dump the ``volume-trace.yaml`` file from the
 interpreter, instead of having a text editor open. In either case, once ``volume-trace.yaml`` is
 updated, ``create_volume_trace`` can be run. As mentioned previously, ``comptime`` is determined by
 comparison with the fit to the initial pressure, as shown in Fig. :ref:`pressure-comparison`. In
