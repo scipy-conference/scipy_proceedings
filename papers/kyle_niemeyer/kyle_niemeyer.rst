@@ -804,7 +804,9 @@ Acknowledgments
 ---------------
 
 I thank Bryan Weber of the University of Connecticut for helpful
-discussions on the ChemKED format and an early review of this paper.
+discussions on the ChemKED format and an early review of this paper. I also
+thank Matt McCormick, Erik Tollerud, and Katy Huff for their helpful review
+comments.
 
 ==========
 References
