@@ -28,7 +28,8 @@ MONTE fits into the current Python landscape. The second half gives
 an overview of the main MONTE libraries and provides a narrative
 example of how it can be used for astrodynamic analysis. **For
 information on licensing MONTE and getting a copy visit**
-`montepy.jpl.nasa.gov <http://montepy.jpl.nasa.gov/>`_.
+`montepy.jpl.nasa.gov <http://montepy.jpl.nasa.gov/>`_ **or
+email** mdn_software@jpl.nasa.gov.
 
 .. class:: keywords
 
