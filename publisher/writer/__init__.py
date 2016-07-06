@@ -217,7 +217,7 @@ class Translator(LaTeXTranslator):
             self.author_emails = ['john@doe.com']
             authors = ['']
 
-        copyright_holder = self.copyright_holder or (self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.'))
+        copyright_holder = "California Institute of Technology. Government sponsorship acknowledged." #self.copyright_holder or (self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.'))
         author_notes = r'''%%
 
           \noindent%%
