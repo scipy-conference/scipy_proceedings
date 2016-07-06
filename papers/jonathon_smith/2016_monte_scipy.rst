@@ -17,7 +17,7 @@ The Mission Analysis, Operations, and Navigation Toolkit Environment
 computing platform. It was built to support JPL's deep space exploration
 program, and has been used to fly robotic spacecraft to Mars, Jupiter,
 Saturn, Ceres, and many solar system small bodies. At its core, MONTE
-consists of low-level astrodynamic libraries that are written in C++
+consists of low-level astrodynamic libraries that are written in C++,
 and presented to the end user as an importable Python language module.
 These libraries form the basis on which Python-language applications
 are built for specific astrodynamic applications, such as trajectory
@@ -45,9 +45,9 @@ Jupiter, engineers needed a way to model their trajectories through
 interplanetary space. This was partly a problem of **astrodynamics**, a
 field of study that mathematically describes how man-made objects move
 through space. It was also a problem of computation because
-engineers needed a way to actually solve these complex astrodynamic
+engineers needed a way to solve these complex astrodynamic
 equations for real spacecraft. Beyond modeling the motion of spacecraft,
-engineers needed a way to actually measure the location of spacecraft
+engineers needed a way to measure the location of spacecraft
 over time so they could make informed corrections to their models. They
 also needed a way of designing engine burns, or maneuvers, that would
 nudge a wayward probe back on course.
@@ -77,10 +77,10 @@ JPL's navigation section commissioned a brand new effort that would
 depart from its predecessor in two important ways. First, the new
 software would be an object-oriented library, written in C++ and
 exposed to the user as a Python-language library. Second, it would
-be a general-purpose astrodyanmic computing platform, not a dedicated
+be a general-purpose astrodynamic computing platform, not a dedicated
 navigation program like the DPTRAJ/ODP. The goal was to create a single
 library that could be used for astrodynamic research, space mission
-design, planetary science, etc - in addition to deep space navigation.
+design, planetary science, etc., in addition to deep space navigation.
 This new project was affectionately named the Mission Analysis,
 Operations, and Navigation Toolkit Environment, or MONTE-Python for
 short.
@@ -105,9 +105,9 @@ Deep Space Navigation
     during the mission. :label:`tour`
 
 At JPL, the practice of navigating robotic probes in deep space is
-broken down into three interrelated disciplines: (1) Designing a
+broken down into three interrelated disciplines: (1) designing a
 reference trajectory which describes the planned flight path of the
-spacecraft (*mission design*), (2) keeping track of the actual
+spacecraft (*mission design*), (2) keeping track of the
 spacecraft position while the mission is in flight (*orbit
 determination*), and (3) designing maneuvers to bring the spacecraft
 back to the reference trajectory when it has strayed (*flight path
@@ -123,7 +123,7 @@ its planned trajectory. Through a process of increasingly detailed
 iterations, a process which often takes years, the mission reference
 trajectory is produced. This reference trajectory serves as the flight
 plan for the spacecraft. It will be up to the orbit determination and
-flight path control teams to make sure the spacecraft actually follows
+flight path control teams to make sure the spacecraft follows
 this flight plan when the spacecraft finally launches.
 
 The job of the orbit determination team is to keep track of where the
@@ -151,7 +151,7 @@ which stands for delta-velocity or change in velocity. This
 required change in the spacecraft velocity which must be accomplished
 to get the spacecraft back on course. Once in hand, this
 :math:`\Delta V` vector will be sent to the spacecraft propulsion team,
-who will decompose it into actual thruster firings on the spacecraft.
+who will decompose it into thruster firings on the spacecraft.
 These will be uplinked to the spacecraft, which will then perform the
 maneuver.
 
@@ -202,7 +202,7 @@ attractive as a general purpose astrodynamic platform. These include
 models for trajectories and trajectory queries, coordinate frames and
 rotations, high-precision time, astrodynamic event searches, numerical
 integrators, configurable optimizers, and many more. By starting with
-MONTE, a user can focus on solving the actual problem at hand, and
+MONTE, a user can focus on solving the problem at hand, and
 leave the important-but-incidental infrastructure to MONTE.
 
 MONTE and the Python Ecosystem
@@ -219,7 +219,9 @@ for MONTE classes to have a ``.toArray`` method which returns a
 collaboration with matplotlib dating all the way back to the early
 2000s. They have contributed code that makes matplotlib able to
 natively plot MONTE's unit and time systems, and have also
-open-sourced a custom matplotlib styling-system developed in house.
+open-sourced a custom matplotlib styling-system
+(`github.com/nasa/mplStyle <https://github.com/nasa/mplStyle>`_)
+developed in house.
 
 The MONTE project started in 1998 at a time when the Python language
 was still relatively new. As a result, MONTE has several custom systems
@@ -289,8 +291,8 @@ burn. [#]_ [#]_
     casAtSoi = tset.state(soiTime, "Cassini", "Saturn",
       "EMO2000")
 
-Several of MONTE's core systems - the basic astrodynamic scaffolding
-that supports its more advanced functionality - are used in the above
+Several of MONTE's core systems --- the basic astrodynamic scaffolding
+that supports its more advanced functionality --- are used in the above
 example. These are explained in a short tour of MONTE below.
 
 
@@ -299,12 +301,13 @@ BOA
 
 The Binary Object Archive (BOA) is MONTE's primary data management
 system. Most MONTE classes that define concrete objects (for instance,
-``M.Gm`` which defines the standard gravitational paramter for a
+``M.Gm`` which defines the standard gravitational parameter for a
 natural body or ``M.FiniteBurn`` which defines a spacecraft burn)
 are stored in BOA, and accessed by MONTE's astrodynamic functions from
 BOA.
 
-BOA is based on the binary XDR data format, which allows data to be
+BOA is based on the binary `XDR <http://www.rfc-base.org/rfc-4506.html>`_
+data format, which allows data to be
 written-to and read-from binary on different operating systems and
 using different transport layers (e.g. you can read and write locally
 to your hard disk, or over a network connection).
@@ -351,7 +354,7 @@ Trajectories
 
 MONTE models spacecraft and natural body trajectories in a number of
 underlying formats; most of the differences involve how many data
-points along the trajectory are actually stored, and how to
+points along the trajectory are stored, and how to
 interpolate between these points. In addition, MONTE provides
 conversion routines which allow some external trajectory formats to
 be read and written (including NAIF "bsp" files, international "oem"
@@ -383,7 +386,7 @@ two systems are integrated.
 MONTE models coordinate frames in a number of underlying formats and
 provides conversion routines which allow some external coordinate
 frame formats to be read and written (including
-NAIF "ck"files).
+NAIF "ck" files).
 
 .. figure:: figures/traj_coord.png
 
