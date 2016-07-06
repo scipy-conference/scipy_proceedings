@@ -769,8 +769,11 @@ based on the precedent set by Olm et al. [Olm2014]_ [Olm2015]_.
 
 After calculating the error associated with a dataset using Equation
 (:ref:`errorfunc`) and the overall error metric for a model using Equation
-(:ref:`overallerror`), ``evaluate_model()`` prints the performance results
-to screen and saves them in a YAML file.
+(:ref:`overallerror`), ``evaluate_model()`` saves the performance results to
+a YAML file and returns the associated dictionary if ``evaluate_model()`` was
+called programmatically. If the ``--print`` command line option was given, or
+the ``print_results`` option set to ``True`` when calling ``evaluate_model()``,
+then the results are also printed to screen.
 
 ===========================
 Conclusions and Future Work
