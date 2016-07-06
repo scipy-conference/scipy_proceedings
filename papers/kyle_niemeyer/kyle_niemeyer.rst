@@ -618,7 +618,8 @@ discussed by Niemeyer [Niemeyer2016]_.
 The function ``eval_model.evaluate_model()`` controls the overall evaluation
 procedure, given the required and optional parameters:
 
-* ``model_name``: a string with the chemical kinetic model filename
+* ``model_name``: a string with the name of the Cantera-format chemical kinetic
+  model file (e.g., CTI file)
 
 * ``spec_keys_file``: a string with the name of a YAML file identifying
   important species
@@ -640,7 +641,19 @@ procedure, given the required and optional parameters:
   simulations in parallel. This is optional; the default is the maximum number
   of available threads minus one
 
-A few of these parameters require greater explanation. PyTeCK needs the species
+A few of these parameters require greater explanation. The chemical kinetic
+model, also referred to as "chemical reaction mechanism", needs to be provided
+in Cantera's `CTI file (CanTera Input file) format
+<http://cantera.github.io/docs/sphinx/html/cti/input-files.html>`_
+[Goodwin2016]_. This file contains a description of the elements, species
+(including names, molecular composition, and thermodynamic property data), and
+reactions (including reversibility, stoichiometry, Arrhenius rate parameters,
+third-body species efficiencies, and pressure dependence).
+Although the use of the CTI format in the literature has increased recently,
+often models are instead available in the older Chemkin format [Kee1996]_. Such
+files can be converted using the Cantera-provided utility ``ck2cti``.
+
+PyTeCK needs the species
 key YAML file ``spec_keys_file`` because different chemical kinetic models
 internally use different names for species. PyTeCK interprets these
 names to set the initial mixture composition, and potentially identify
@@ -669,9 +682,10 @@ For correct results the species name keys given in the ``spec_keys_file`` file
 only need to match names of species in the ChemKED files.
 
 The ``model_variant_file`` YAML file is needed in certain (uncommon) cases
-where the chemical kinetic model needs internal, manual changes for different
-ranges of conditions (such as pressure or bath gas). This file may contain
-entries of the form:
+where the chemical kinetic model needs manual changes to apply to different
+ranges of conditions (such as pressure or bath gas). In other words, different
+versions of the CTI file need to be created for accurate performance under
+different conditions. This file may contain entries of the form:
 
 .. code-block:: yaml
 
@@ -693,8 +707,9 @@ to the base filename given by ``model_name``.
 For models that need such variants, all combinations need to be present in the
 ``model_path`` directory. As an example, the kinetic model of Haas et al.
 [Haas2009]_ for mixtures of *n*\ -heptane, isooctane, and toluene, which I term
-``Princeton-2009``, has certain reactions that require manual changes for the
-different bath gases and pressure ranges. For a case with nitrogen as the bath
+``Princeton-2009``, has certain reactions that require rate parameters to be
+changed manually for different bath gases and pressure ranges.
+For a case with nitrogen as the bath
 gas and at pressures around 9 atm, the resulting file name would be
 ``Princeton-2009_N2_9atm.cti``.
 
@@ -855,6 +870,12 @@ References
 .. [Jones2001] E. Jones, T. Oliphant, P. Peterson, et al.
                "SciPy: Open source scientific tools for Python," 2001–.
                http://www.scipy.org/
+
+.. [Kee1996] R. J. Kee, F. M. Rupley, E. Meeks, and J. A. Miller.
+             "CHEMKIN-III: A FORTRAN chemical kinetics package for the analysis
+             of gas-phase chemical and plasma kinetics,"
+             Sandia National Laboratories Report SAND96-8216, May 1996.
+             http://dx.doi.org/10.2172/481621
 
 .. [Krekel2016] H. Krekel.
                 pytest version 2.9.1, GitHub repository, 2016.
