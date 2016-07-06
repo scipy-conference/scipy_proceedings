@@ -204,9 +204,11 @@ offset, it can be subtracted from the voltage trace
 
     P(t) = F \cdot \left[\overline{V}(t) - \overline{V}(0)\right] + P_0
 
-where :math:`\overline{V}(0)` is the initial voltage of the filtered and smoothed signal. The result
-is a vector of pressure values that must be further processed to determine the time of the EOC and
-the ignition delay.
+where :math:`\overline{V}(0)` is the initial voltage of the filtered and smoothed signal. Assuming
+the noise in the signal has an equal probability of being above or below the mean voltage, choosing
+the initial point (i.e., :math:`\overline{V}(0)`) to set the voltage offset is equivalent to
+choosing any other point prior to the start of compression. The result is a vector of pressure
+values that must be further processed to determine the time of the EOC and the ignition delay.
 
 Finding the EOC
 ===============
