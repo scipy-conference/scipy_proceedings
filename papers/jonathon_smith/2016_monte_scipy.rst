@@ -73,7 +73,7 @@ appetites of navigators grew ever larger.
 
 By 1998 it was clear that the aging DPTRAJ/ODP needed to be updated
 once again. Rather than initiate another refactor of the DPTRAJ/ODP,
-JPL's navigation section commissioned a brand new effort that would
+JPL's navigation section commissioned a new effort that would
 depart from its predecessor in two important ways. First, the new
 software would be an object-oriented library, written in C++ and
 exposed to the user as a Python-language library. Second, it would
