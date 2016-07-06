@@ -97,7 +97,8 @@ rapid compression machines.
 Implementation of PyTeCK
 ========================
 
-PyTeCK consists of three primary modules:
+PyTeCK is packaged as a standard Python package using setuptools, and
+consists of three primary modules:
 
  1. ``parse_files`` contains functions to read the YAML-encoded experimental
  data file using the ``PyYAML`` module. Smaller functions comprise this process
@@ -127,7 +128,10 @@ manipulation, Cantera [Goodwin2016]_ for chemical kinetics, and
 continuous integration testing.
 
 PyTeCK is available under an open-source MIT license via a GitHub repository
-[Niemeyer2016b]_.
+[Niemeyer2016b]_. It can be installed using setuptools by downloading the
+source code files and executing ``python setup.py install``. More mature versions
+of PyTeCK will be distributed on `PyPI <https://pypi.python.org/pypi>`_ (Python
+Package Index).
 
 Parsing ChemKED files
 ---------------------
