@@ -416,8 +416,8 @@ objects, the member function
 governing equations that model shock tubes and rapid compression
 machines. These equations are briefly described next.
 
-The thermochemical state of a general chemical kinetic system is expressed
-with a composition state vector :math:`\Phi`:
+A composition state vector :math:`\Phi` defines the thermochemical state of a
+general chemical kinetic system:
 
 .. math::
 
@@ -456,11 +456,17 @@ where :math:`c_v` is the mass-averaged constant-volume specific heat of the
 mixture, :math:`e_i` is the internal energy of the *j*\ th species in mass
 units, :math:`v` is the specific volume of the mixture,
 and :math:`\dot{\omega}_i` is the overall molar production rate of the
-*i*\ th species. PyTeCK solves the system given by Equation (:ref:`systemodes`)
-using a Cantera [Goodwin2016]_ ``ReactorNet`` that connects ``IdealGasReactor``
-and ``Reservoir`` objects separated by a ``Wall``. The ``Wall`` may or may not
-be moving, depending on whether the modeled system has constant or varying
-volume.
+*i*\ th species.
+
+PyTeCK relies on Cantera [Goodwin2016]_ for handling most chemical kinetics
+calculations. Cantera is an open-source software library that provides tools
+for solving problems related to chemical kinetics, thermodynamics, and transport
+processes. The core of Cantera is written in C++, but it provides interfaces for
+Python and Matlab. PyTeCK uses a Cantera [Goodwin2016]_ ``ReactorNet`` object
+to solve the system given by Equation (:ref:`systemodes`), by connecting
+``IdealGasReactor`` and ``Reservoir`` objects separated by a ``Wall``.
+The ``Wall`` may or may not be moving, depending on whether the modeled system
+has varying or constant volume, respectively.
 
 The simplest way to model both shock tubes and RCM experiments is by assuming
 an adiabatic, constant-volume process. In this case, I simplify Equation
