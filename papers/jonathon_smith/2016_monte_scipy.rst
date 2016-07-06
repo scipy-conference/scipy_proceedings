@@ -63,7 +63,7 @@ could be made increasingly detailed and sophisticated.
 Starting in 1964, a group of engineers, led by Ted Moyer, began
 developing the astrodynamic algorithms and software that would
 eventually become the Double Precision Trajectory and Orbit
-Determination Program, or DPTRAJ/ODP([Moy71]_, [Moy03]_). Over its
+Determination Program, or DPTRAJ/ODP ([Moy71]_, [Moy03]_). Over its
 forty-plus years of active life, JPL engineers used the DPTRAJ/ODP to
 navigate the "Golden Age" of deep space exploration. This included the
 later Mariner and Pioneer Missions, Viking, Voyager, Magellan, Galileo,
@@ -222,14 +222,12 @@ natively plot MONTE's unit and time systems, and have also
 open-sourced a custom matplotlib styling-system developed in house.
 
 The MONTE project started in 1998 at a time when the Python language
-was still relatively new. As a result, MONTE has several custom systems that
-are redundant in the current Python landscape. For instance, MONTE
+was still relatively new. As a result, MONTE has several custom systems
+that are redundant in the current Python landscape. For instance, MONTE
 developed an interactive shell similar to IPython (although it has
-largely been deprecated in favor of IPython) and a custom unit test
-system. It also has several numerical computing classes that would
-generally be dispatched to NumPy in a brand new project. Perhaps
-most noticeably, MONTE has its own programming style guidelines which
-are not PEP-8 compliant, again because it precedes PEP-8 by three years.
+largely been deprecated in favor of IPython) and has several numerical
+computing classes that would generally be dispatched to NumPy in a
+brand new project.
 
 Historical quirks aside, MONTE considers itself a member of
 the Python scientific programming community and aims to integrate
@@ -332,7 +330,7 @@ default data loader (``mpy.io.data``) and serve to help an analyst get a
 Time and Units
 ^^^^^^^^^^^^^^
 
-MONTE has support for the Te, TDT, TAI, GPS, UTC, and UT1 time systems.
+MONTE has support for the TDB, TT, TAI, GPS, UTC, and UT1 time systems.
 The primary class used for dealing with time is ``M.Epoch`` which
 stores specific times and also allows a user to convert between
 different time frames.
@@ -699,7 +697,7 @@ angle). At low SEP values, the spacecraft appears very close to the
 Sun from the vantage of Earth, requiring radio transmissions from Earth
 to pass through the near-solar environment before reaching the
 spacecraft. Flight projects avoid critical mission operations during
-these times becase the highly-charged solar atmosphere can interfere
+these times because the highly-charged solar atmosphere can interfere
 with radio signals.
 
 We can set up an event search to find periods of low-SEP for Voyager 2,
@@ -845,11 +843,11 @@ this departure.
 Conclusion
 ----------
 
-MONTE is the most powerful astrodynamic computing library in the world.
-It has been extensively tested and verified by flying actual spacecraft
-to destinations all over the solar system. It's a compelling platform
-for anyone doing aerospace related computation, especially those who
-love working with the Python language.
+MONTE is one of the most powerful astrodynamic computing libraries in
+the world. It has been extensively tested and verified by flying actual
+spacecraft to destinations all over the solar system. It's a compelling
+platform for anyone doing aerospace related computation, especially
+those who love working with the Python language.
 
 Acknowledgements
 ----------------
