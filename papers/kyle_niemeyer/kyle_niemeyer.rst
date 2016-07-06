@@ -86,7 +86,8 @@ low-to-intermediate temperatures (600–1100 K) [Sung2014]_.
 
 In this paper, I propose a data format for capturing results from
 experimental measurements of autoignition delay times.
-This paper also describes the components of PyTeCK, a software package that
+This paper also describes the components of PyTeCK (**Py**\ thon-based **te**\
+sting of **c**\ hemical **k**\ inetic models), a software package that
 quantifies the performance of a chemical kinetic model in reproducing
 experimental ignition delays. This includes discussion of the experimental
 data parser, simulation framework, and solution post-processing.
