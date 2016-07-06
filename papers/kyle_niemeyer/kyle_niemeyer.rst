@@ -545,54 +545,14 @@ independently to allow the use of ``multiprocessing`` workers to perform these
 steps in parallel (if desired), as described in the next section. When running
 a simulation, PyTeCK creates an HDF5 file and opens it as a
 PyTables [Alted2002]_ table, then performs integration steps until it
-reaches the desired end time (set as 100 times the experimental ignition delay):
-
-.. code-block:: python
-
-    with tables.open_file(self.properties['save-file'],
-                          mode='w',
-                          title=self.properties['id']
-                          ) as h5file:
-
-        table = h5file.create_table(where=h5file.root,
-                                    name='simulation',
-                                    description=table_def
-                                    )
-        # Row instance for saving timestep information
-        timestep = table.row
-        # Save initial conditions
-        timestep['time'] = self.reac_net.time
-        timestep['temperature'] = self.reac.T
-        timestep['pressure'] = self.reac.thermo.P
-        timestep['volume'] = self.reac.volume
-        timestep['mass_fractions'] = self.reac.Y
-        # Add ``timestep`` to table
-        timestep.append()
-
-        # Main time integration loop; continue
-        # integration while time of the ``ReactorNet``
-        # is less than specified end time.
-        while self.reac_net.time < self.time_end:
-            self.reac_net.step(self.time_end)
-
-            # Save new timestep information
-            timestep['time'] = self.reac_net.time
-            timestep['temperature'] = self.reac.T
-            timestep['pressure'] = self.reac.thermo.P
-            timestep['volume'] = self.reac.volume
-            timestep['mass_fractions'] = self.reac.Y
-
-            # Add ``timestep`` to table
-            timestep.append()
-
-        # Write ``table`` to disk
-        table.flush()
-
+reaches the desired end time (set as 100 times the experimental ignition delay).
 At every timestep, ``run_case()`` saves the time and information about the
 current thermochemical state (temperature, pressure, volume, and species mass
 fractions) to the HDF5 table. The Cantera ``ReactorNet.step()`` function performs
 a single integration step, selecting an appropriate time-step size based on
-estimated integration error.
+estimated integration error. Internally, ``step()`` uses the CVODE implicit
+integrator [Cohen1996]_, part of the SUNDIALS suite [Hindmarsh2005]_,
+to advance the state of the ``IdealGasReactor`` contained by the ``ReactorNet``.
 
 Finally, a call to the ``process_results()`` member function determines the
 autoignition delay by opening the saved simulation results. The method by which
@@ -844,6 +804,10 @@ References
                   32:2216–2226, 2007.
                   https://dx.doi.org/10.1016/j.ijhydene.2007.04.008
 
+.. [Cohen1996] S. D. Cohen and A. C. Hindmarsh.
+               "CVODE, A Stiff/Nonstiff ODE Solver in C," *Comput. Phys.*,
+               10:138–143, 1996. http://dx.doi.org/10.1063/1.4822377
+
 .. [Duarte2015] M. Duarte.
                 "Notes on Scientific Computing for Biomechanics and Motor Control,"
                 GitHub repository, 2015. https://GitHub.com/demotu/BMC
@@ -872,6 +836,12 @@ References
                 "Recent advances in laser absorption and shock tube methods for
                 studies of combustion chemistry," *Prog. Energy. Comb. Sci.*,
                 44:103–14, 2014. http://dx.doi.org/10.1016/j.pecs.2014.05.001
+
+.. [Hindmarsh2005] A. C. Hindmarsh, P. N. Brown, K. E. Grant, S. L. Lee,
+                   R. Serban, D. E. Shumaker, and C. S. Woodward.
+                   "SUNDIALS: Suite of nonlinear and differential/algebraic
+                   equation solvers," *ACM Trans. Math. Software.*, 31:363–396,
+                   2005. http://dx.doi.org/10.1145/1089014.1089020
 
 .. [Huff2015] K. Huff and X. Wang.
               PyRK v0.2, Figshare, Feb 2015.
