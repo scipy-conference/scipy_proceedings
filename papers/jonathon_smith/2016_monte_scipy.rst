@@ -27,7 +27,7 @@ by outlining its history, the field of deep space navigation and where
 MONTE fits into the current Python landscape. The second half gives
 an overview of the main MONTE libraries and provides a narrative
 example of how it can be used for astrodynamic analysis. **For
-information on licencing MONTE and getting a copy visit**
+information on licensing MONTE and getting a copy visit**
 `montepy.jpl.nasa.gov <http://montepy.jpl.nasa.gov/>`_.
 
 .. class:: keywords
@@ -88,7 +88,7 @@ short.
 Throughout the first half of the 2000s, MONTE was carefully constructed
 by reshaping the algorithms under-pinning the DPTRAJ/ODP into a
 rigorously tested and well documented object-oriented software package.
-In 2007, MONTE got its first operational assignment navigating NASA's
+In 2007, MONTE had its first operational assignment navigating NASA's
 Phoenix lander to a successful encoutner with Mars. Since 2012, MONTE
 has powered all flight navigation services at JPL, including the
 Cassini extended mission, Mars Science Laboratory, MAVEN, GRAIL, Dawn,
@@ -119,12 +119,12 @@ with mission science teams to put together a reference orbit that
 allows the spacecraft to take all the desired science measurements.
 They also work with mission planners and spacecraft system engineers
 to make sure that the spacecraft is able to withstand the rigors of
-its planned trajectory. After iterating through designs, a process
-which often takes years (and may still be revised later while the
-spacecraft is in flight), the result is the mission reference
-trajectory. It will be up to the orbit determination and flight path
-control teams to make sure the spacecraft actually follows this flight
-plan when the spacecraft finally launches.
+its planned trajectory. Through a process of increasingly detailed
+iterations, a process which often takes years, the mission reference
+trajectory is produced. This reference trajectory serves as the flight
+plan for the spacecraft. It will be up to the orbit determination and
+flight path control teams to make sure the spacecraft actually follows
+this flight plan when the spacecraft finally launches.
 
 The job of the orbit determination team is to keep track of where the
 spacecraft has been (orbit reconstruction), where it is currently
@@ -139,18 +139,18 @@ the real world. To further complicate matters, once the spacecraft
 leaves the launch-pad, it can no longer be directly observed. Orbit
 determination analysts must process various forms of tracking data that
 are tied mathematically to the evolution of the spacecraft orbit to
-figure out its position at any given time.
+determine its position at any given time.
 
 Once the orbit determination team has a good estimate for the current
 location of the spacecraft, the flight path control team is responsible
 for evaluating how far the spacecraft has drifted from the reference
 trajectory and designing a maneuver to get the spacecraft back on
-course. The result of this maneuver design is a :math:`\Delta~V` vector,
+course. The result of this maneuver design is a :math:`\Delta V` vector,
 which stands for delta-velocity or change in velocity. This
-:math:`\Delta~V` vector represents the direction and magnitude of the
+:math:`\Delta V` vector represents the direction and magnitude of the
 required change in the spacecraft velocity which must be accomplished
 to get the spacecraft back on course. Once in hand, this
-:math:`\Delta~V` vector will be sent to the spacecraft propulsion team,
+:math:`\Delta V` vector will be sent to the spacecraft propulsion team,
 who will decompose it into actual thruster firings on the spacecraft.
 These will be uplinked to the spacecraft, which will then perform the
 maneuver.
@@ -189,8 +189,8 @@ MONTE is likely to be useful to those outside JPL. Deep space
 navigation is (not yet at least) a high-demand field. The majority
 of astrodynamic computing occurs in other contexts such as
 Earth-centered navigation (weather and communication satellites, etc),
-collision avoidance analysis (making sure two spacecraft don't run
-into each other), cooperative rendezvous (docking a cargo-ship to the
+collision avoidance analysis (making sure two spacecraft don't collide),
+cooperative rendezvous (docking a cargo-ship to the
 International Space Station) and non-cooperative rendezvous (capturing
 a malfunctioning satellite), etc. Much the same way that MONTE
 can be configured and deployed for deep space navigation, it can
@@ -291,8 +291,7 @@ burn. [#]_ [#]_
 
 Several of MONTE's core systems - the basic astrodynamic scaffolding
 that supports its more advanced functionality - are used in the above
-example. Lets take a short tour now through some of these systems to
-get a sense for the type of platform MONTE supplies.
+example. These are explained in a short tour of MONTE below.
 
 
 BOA
@@ -301,7 +300,7 @@ BOA
 The Binary Object Archive (BOA) is MONTE's primary data management
 system. Most MONTE classes that define concrete objects (for instance,
 ``M.Gm`` which defines the standard gravitational paramter for a
-natural body, or ``M.FiniteBurn`` which defines a spacecraft burn)
+natural body or ``M.FiniteBurn`` which defines a spacecraft burn)
 are stored in BOA, and accessed by MONTE's astrodynamic functions from
 BOA.
 
@@ -330,10 +329,15 @@ default data loader (``mpy.io.data``) and serve to help an analyst get a
 Time and Units
 ^^^^^^^^^^^^^^
 
-MONTE has support for the TDB, TT, TAI, GPS, UTC, and UT1 time systems.
-The primary class used for dealing with time is ``M.Epoch`` which
-stores specific times and also allows a user to convert between
-different time frames.
+In the astrodynamic community there are multiple time systems used
+to describe the dynamics of a spacecraft and to specify the time of an
+observation. While necessary, multiple systems for specifying time
+can add considerable complexity to software.  In MONTE, time
+is encapsulated in the ``M.Epoch`` class, which supports time
+definition in the TDB, TT, TAI, GPS, UTC, and UT1.  This class handles
+the problem of transforming times between different frames thereby
+allowing the user to specify times in the most convenient form for
+their application.
 
 MONTE's unit system supports the notions of time, length, mass, and
 angle. It has implemented operator overloading to allow unit
@@ -405,8 +409,10 @@ parameters with respect to parameters in the force models. A
 walk-through of setting up MONTE's numerical integration system for a
 simple gravitational propagation is shown in Figure :ref:`integfig`.
 
-In addition to trajectories, MONTE also allows numerical integrations
-of Mass, Coordinate Frames, Time and user defined equations.
+In addition to trajectories, MONTE also allows numerical integration
+of mass (for instance due to burning of propellant), coordinate frames
+(rigid body dynamics), time (relativistic time transformations) and
+user-defined ordinary differential equations.
 
 .. figure:: figures/integ.png
 
@@ -427,30 +433,28 @@ derivatives under various mathematical operations. [Smi16]_
 Example: Exploring bodies in motion
 -----------------------------------
 
-The following is a narrated example that uses MONTE interactively to
-explore astrodynamic relationships. Generally, MONTE is scripted or
-assembled into custom applications that solve complex end-user
-problems. However, it is also useful as an off-the-cuff exploratory
-tool as we will see below. You are encouraged to walk through
-the example yourself if you have access to MONTE. If not, hopefully
-the example itself gives a sense of the MONTE library experience.
+Generally, MONTE is scripted or assembled into custom applications
+that solve complex end-user problems. However, it is also useful as an
+off-the-cuff tool to explore astrodynamic relationships as we will see
+in the narrated example below.
 
-Examples are always more fun when you have a concrete goal you are
-working toward. For this example, we will explore the Voyager 2
-trajectory. We will identify the time and distance of the Uranus
-planetary encounter, and also find the time periods where Voyager 2
-was in solar conjunction. Along the way we will pause occasionally
-to highlight various aspects of MONTE's core systems. Also, if our
-exploration happens to turn up anything interesting (it will), we will
-take some time to investigate what we find.
+For this example, we will explore the Voyager 2 trajectory. We will
+identify the time and distance of the Uranus planetary encounter, and
+also find the time periods where Voyager 2 was in line with the sun.
+was in solar conjunction. Along the way we will highlight various
+aspects of MONTE's core systems. Also, if our exploration happens to
+turn up anything interesting (it will), we will take some time to
+investigate what we find.
 
 Voyager 2 Trajectory
 ^^^^^^^^^^^^^^^^^^^^
 
-Lets start off by creating a BOA database and loading the default data
-sets for planetary ephemerides (the trajectories of all the planets
-in the solar system), coordinate frames, and body parameters like mass
-and shape. We will also load in our Voyager 2 trajectory. [#]_
+We begin by specifying the model of the solar system during Voyager's
+mission.  This is done by creating a BOA database and loading the
+default data sets for planetary ephemerides (the trajectories of all
+the planets in the solar system), coordinate frames, and body
+parameters like mass and shape. We will also load in our Voyager 2
+trajectory. [#]_
 
 .. [#]
     JPL hosts two excellent websites for accessing trajectory data for
@@ -480,9 +484,12 @@ and shape. We will also load in our Voyager 2 trajectory. [#]_
       ...:   ["ephem/planet/de405", "frame", "body"] )
    In [5]: boa.load( "voyager2.bsp" )
 
-Now lets retrieve the trajectory manager (``M.TrajSet``) from the BOA.
-We will use the BOA accessor ``M.TrajSetBoa`` to get a handle to the
-``M.TrajSet`` itself. Once we have the manager in hand, we can list all
+The trajectories of Voyager and the natural bodies of the solar system
+are coordinated by the trajectory manager (``M.TrajSet``) that is
+supplied by BOA we just created. We can retrieve the trajectory manager
+using its BOA accessor ``M.TrajSetBoa``. Every object that resides in
+BOA has an accessor (often named ``M.ClassNameBoa``) that allows it to
+be read to and from the database. Once in hand, we can list all
 the trajectories that are on the BOA using the ``M.TrajSet.getAll``
 method.
 
@@ -500,9 +507,9 @@ method.
             'Solar System Barycenter', 'Voyager 2']
 
 The list of bodies returned by ``M.TrajSet.getAll`` confirms that we
-have successfully loaded our solar system and spacecraft. We will
-begin our analysis by checking the span of the Voyager 2 trajectory, e.g.
-the interval over which we have data, using the
+have successfully loaded our solar system and spacecraft.
+We continue our analysis by checking the span of the Voyager 2
+trajectory, e.g. the interval over which we have data, using the
 ``M.TrajSet.totalInterval`` method. *Note that if the trajectory has
 been updated at the NAIF PDS website, the exact span you get may be
 different than what is listed below.*
@@ -517,12 +524,12 @@ different than what is listed below.*
    )
 
 
-The trajectory starts just after launch in 1977, extends through the
-present, and has predictions out into the future. We can use the
-trajectory manager to request states at any time in this window. For
-instance, we can find the distance of Voyager 2 from Earth right now.
-The ``M.Epoch.now`` static method returns the current time and this
-can be passed to the trajectory manager to request the state of
+The Voyager 2 trajectory starts just after launch in 1977, extends
+through the present, and has predictions out into the future. We can
+use the trajectory manager to request states at any time in this
+window. For instance, we can find the distance of Voyager 2 from Earth
+right now. The ``M.Epoch.now`` static method returns the current time
+and this can be passed to the trajectory manager to request the state of
 Voyager 2 with respect to Earth.
 
 .. code-block:: python
@@ -577,8 +584,8 @@ The ``M.TrajSet.state`` method returns an ``M.State`` object.
 ``M.State`` captures the relative position, velocity and acceleration
 (or some subset) of one body with respect to another at a given time.
 It has a number of methods that help with extracting and transforming
-the information it contains. For instance, we can find the magnitude
-of the distance from Earth to Voyager 2 like this.
+the information it contains. For instance, we can find the distance
+from Earth to Voyager 2 like this.
 
 .. code-block:: python
 
@@ -631,8 +638,8 @@ identifying the time at which two bodies achieve their closest approach
 important astrodynamic metric. We can certainly estimate these
 quantities using trajectory queries, perhaps by plotting the relative
 distance between two bodies and looking for the local minima.
-However, MONTE provides tools for searching through
-various relationship-spaces and identifying some of these key events.
+However, MONTE provides tools for searching through various
+relationship-spaces and identifying some of these key events.
 The ``M.EventSpec`` set of classes allow us to define a particular
 event type then search through the requisite relationships to
 identify specific occurrences. The ``M.Event`` class is used to
@@ -655,7 +662,7 @@ respect to the desired center (in this case, Voyager 2 with respect to
 Uranus). The second argument specifies what type of apsis we are
 looking for; this can be "PERIAPSIS", "APOAPSIS", or the catch-all
 "ANY". Once the event type is defined, the ``M.ApsisEvent.search``
-method can be called to perform the search and located the apses.
+method can be called to perform the search and locate the apses.
 To call this method we need to provide a time interval to search over
 and a search step size.
 
@@ -672,9 +679,9 @@ The result of the search, which we have saved in the variable
 has all the events found matching our specification in the search
 window. ``M.EventSet`` has a number of useful methods for
 sorting, filtering and returning events. In this case there
-should only be one event returned (because Voyager 2 had only a single
-flyby of Uranus) which we can read out by indexing into the
-``M.EventSet``.
+should only be one event returned since there was only one closest
+approach of Voyager 2 to Uranus. We can read out this event by
+indexing into the ``M.EventSet``.
 
 .. code-block:: python
 
@@ -774,19 +781,19 @@ low-SEP region.
         '07-JAN-1993 21:30:07.6066 ET' ],
    )
 
-It looks like low-SEP periods occur on a near-yearly basis, which makes
-sense; as the Earth makes a complete rotation around the Sun, there is
-bound to be a period of time when the Sun falls in the line-of-sight of
-Voyager 2. Curiously though, the last found low-SEP region was in the
-winter of 1992. After this time, the Sun no longer obscures the
-Earth's view of Voyager 2 at all! We suspect that something must have
-happened to the orbit of Voyager 2 sometime prior to 1992 to change
-the annual low-SEP viewing geometry dynamic.
+As we can see, low-SEP periods occur on a near-yearly basis. This makes
+sense because as the Earth makes a complete rotation around the Sun,
+there is bound to be a period of time when the Sun falls in the
+line-of-sight of Voyager 2. Curiously though, the last low-SEP
+region found was in the winter of 1992. After this time, the Sun no
+longer obscures the Earth's view of Voyager 2 at all! Evidently,
+Voyager 2s trajectory changed in a way that disrupted this the annual
+low-SEP viewing geometry dynamic.
 
 If Voyager 2 were to somehow leave the plane of the solar-system, the
 Earth would have a constant unobstructed view of the spacecraft
 permanently. We can investigate this theory by looking at the distance
-of Voyager 2 from the solar system ecliptic plane. We will do this by
+of Voyager 2 from the solar system ecliptic plane. We do this by
 setting up a trajectory query to return the state of
 Voyager 2 with respect to the Sun in EMO2000 coordinates (the EMO2000
 coordinate frame measures Z with respect to the solar system plane).
@@ -819,17 +826,16 @@ the Voyager 2 mission to see how this distance evolves.
    In [72]: ax.set_ylabel(
        ...:   "Distance from Ecliptic Plane (Km)" )
 
-The resulting plot should look similar to Figure :ref:`v2aturanus`.
+The generated plot is shown in Figure :ref:`v2aturanus`.
 
 .. figure:: figures/v2aturanus.png
 
     Distance in kilometers of Voyager 2 from the solar system
     ecliptic plane. :label:`v2aturanus`
 
-Sure enough, it appears something happened in 1989 that caused
-Voyager 2 to depart from the ecliptic plane. A quick glance at the
-Wikipedia page for Voyager 2 confirms this, and reveals the cause of
-this departure.
+It appears that something happened in 1989 to cause Voyager 2 to depart
+from the ecliptic plane. A quick glance at the Wikipedia page for
+Voyager 2 confirms this, and reveals the cause of this departure.
 
    *Voyager 2's closest approach to Neptune occurred on August 25,
    1989 ... Since the plane of the orbit of Triton is tilted
@@ -845,9 +851,9 @@ Conclusion
 
 MONTE is one of the most powerful astrodynamic computing libraries in
 the world. It has been extensively tested and verified by flying actual
-spacecraft to destinations all over the solar system. It's a compelling
+spacecraft to destinations in the solar system. It's a compelling
 platform for anyone doing aerospace related computation, especially
-those who love working with the Python language.
+for those who love working with the Python language.
 
 Acknowledgements
 ----------------
