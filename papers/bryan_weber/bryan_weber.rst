@@ -115,7 +115,7 @@ The RCMs at the University of Connecticut have been described extensively elsewh
 that is pneumatically accelerated and hydraulically decelerated. In a typical experiment, the
 reaction chamber is first evacuated to an absolute pressure near 1 Torr, measured by a high-accuracy
 static pressure transducer. Next, the reactants are filled in to the desired initial pressure
-(|P0|), and a low dead volume valve on the reaction chamber is closed. Compression is triggered by a
+(|P0|), and a valve on the reaction chamber is closed. Compression is triggered by a
 digital control circuit. After compression, the piston is held in place to create a constant volume
 chamber in which reactions proceed. For appropriate combinations of pressure, temperature, and
 mixture composition, ignition will occur after some delay period. A single
