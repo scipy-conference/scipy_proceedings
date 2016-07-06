@@ -149,14 +149,19 @@ operator, typically between 50 kHz and 100 kHz. This provides sufficient resolut
 the order of milliseconds; the typical ignition delay measured in this system approximately ranges
 from 5 ms to 100 ms.
 
-.. figure:: figures/raw-voltage.png
+.. raw:: latex
 
-    Raw voltage trace and the voltage trace after filtering and smoothing from a typical RCM
-    experiment. Note that the voltage in the figure varies from 0 V to 1 V because the scale factor
-    is 100 bar/V and the maximum pressure for this case is near 100 bar. (a): Close up of the time
-    around the EOC, demonstrating the fidelity of the smoothed and filtered signal with the original
-    signal. (b): Close up of the time before the start of compression, demonstrating the offset of
-    the initial voltage slightly below 0 V. :label:`raw-voltage`
+    \begin{figure*}
+        \centering
+        \includegraphics[width=0.75\textwidth]{figures/raw-voltage.png}
+        \caption{Raw voltage trace and the voltage trace after filtering and smoothing from a
+        typical RCM experiment. Note that the voltage in the figure varies from 0 V to 1 V because
+        the scale factor is 100 bar/V and the maximum pressure for this case is near 100 bar. (a):
+        Close up of the time around the EOC, demonstrating the fidelity of the smoothed and filtered
+        signal with the original signal. (b): Close up of the time before the start of compression,
+        demonstrating the offset of the initial voltage slightly below 0 V.}
+        \label{raw-voltage}
+    \end{figure*}
 
 Figure :ref:`raw-voltage` shows a typical voltage trace measured from the RCM at UConn. Several
 features are apparent from this figure. First, the compression stroke takes approximately 30 ms to
@@ -635,15 +640,10 @@ repeated 5 times to ensure repeatable data is obtained.
     cond_00_in_02_mm.add_experiment(Path(
         '00_in_02_mm_373K-1282t-100x-19-Jul-15-1646.txt'))
 
-This sequence generates a figure showing all of the experiments together, as shown in Fig.
-:ref:`all-runs` (the axis limits have been adjusted from the default). It also generates one figure
-per experiment. The figures showing each experiment look similar to Fig. :ref:`ign-delay-def`, but
-the non-reactive trace is not plotted and the EOC and ignition delays are not labeled.
-
-.. figure:: figures/all-runs.png
-
-    All of the runs at the example experimental condition. The legend shows the date and time the
-    experiment was conducted. :label:`all-runs`
+This sequence generates a figure showing all of the experiments together. It also generates one
+figure per experiment. The figures showing each experiment look similar to Fig.
+:ref:`ign-delay-def`, but the non-reactive trace is not plotted and the EOC and ignition delays are
+not labeled.
 
 By examining the ignition delays copied to a spreadsheet for the runs at this condition, the user
 determines that the reference experiment is the run that took place at 16:33. The user adds the
