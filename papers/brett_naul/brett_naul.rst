@@ -292,8 +292,8 @@ API details
 Here we provide a few examples of the main ``cesium`` API components that would
 be used in a typical analysis task. A workflow will typically consist of three
 steps: featurization, model building, and prediction on new data. The majority of
-``cesium`` functionality is contained within the ``cesium.featurize`` submodule;
-the ``cesium.build_model`` and ``cesium.predict`` submodules primarily provide
+``cesium`` functionality is contained within the ``cesium.featurize`` module;
+the ``cesium.build_model`` and ``cesium.predict`` modules primarily provide
 interfaces between sets of feature data, which contain both feature data and a
 variety of metadata about the input time series, and machine learning models
 from ``scikit-learn`` :cite:`pedregosa2011`, which require dense, rectangular
@@ -336,7 +336,7 @@ regression targets, and other arbitrary metadata to be used in building a
 statistical model.
 
 The ``build_model`` contains tools meant to to simplify the process of building
-``sckit-learn`` models from (non-rectangular) feature set data submodule:
+``sckit-learn`` models from (non-rectangular) feature set data module:
 
 - ``model_from_featureset(featureset, ...)``
   
@@ -678,7 +678,7 @@ models or make predictions for multichannel feature sets using the ``cesium``
 library.
 
 Model building in ``cesium`` is handled by the ``model_from_featureset``
-function in the ``cesium.build_model`` submodule. The feature set output by
+function in the ``cesium.build_model`` module. The feature set output by
 ``featurize_time_series`` contains both the feature and target information
 needed to train a model; ``model_from_featureset`` is simply a wrapper
 that calls the ``fit`` method of a given ``scikit-learn`` model with the
