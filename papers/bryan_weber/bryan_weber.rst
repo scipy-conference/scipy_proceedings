@@ -90,6 +90,15 @@ required to process standard RCM data including:
 * Conducting simulations utilizing the experimental information to calculate the temperature during
   the experiment
 
+Previous software used to analyze RCM data has generally been undocumented and untested
+in-house/personalized code specific to the researcher conducting the experiments. Moreover, the
+software typically used to estimate the temperature in the experiments is difficult to integrate
+with the data processing code, introducing inefficiencies and possible errors. To the best of the
+authors' knowledge, UConnRCMPy is the first package for analysis of standard RCM data to be
+presented in detail in the literature. In addition, UConnRCMPy tightly integrates the temperature
+estimation routines into the workflow, reducing the disadvantages of using an entirely separate
+program.
+
 This paper serves to describe some of the important aspects of RCM data processing, particularly the
 choices that the operator must make that are rarely documented. In addition, as a complement to the
 in-source documentation, this paper documents the design choices and interface of UConnRCMPy. First,
