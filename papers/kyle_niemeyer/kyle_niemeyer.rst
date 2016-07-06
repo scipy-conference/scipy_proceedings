@@ -253,8 +253,8 @@ experimental ``datapoints`` given as associative arrays with necessary
 information. Mandatory elements of each entry in``datapoints`` include the initial
 ``temperature``, ``pressure``, and mixture ``composition``, as well as the
 experimental ``ignition-delay`` and ``ignition-type`` (means by which PyTeCk
-detects ignition). All quantities provided include a magnitude and units, which
-Pint [Grecco2016]_ interprets.
+detects ignition, discussed in more detail later). All quantities provided
+include a magnitude and units, which Pint [Grecco2016]_ interprets.
 Since many experimental datasets hold certain properties constant (e.g.,
 composition, pressure) while varying a single quantity (e.g., temperature),
 a ``common-properties`` element can describe properties common to all
@@ -698,9 +698,10 @@ names used internally by PyTeCK, other than the capitalization of argon (``AR``)
 Names will likely differ for other kinetic models; for example,
 internally ``nC7H16`` represents the species *n*\ -heptane, while other
 models may use ``C7H16``, ``C7H16-1``, or ``NXC7H16``, for example.
-PyTeCK has a preferred naming convention for some species (found in the
-``spec_key`` and ``spec_key_rev`` dictionaries in the ``utils`` module), but
-for correct results the species name keys given in the ``spec_keys_file`` file
+PyTeCK's internal naming convention for key species is given by the
+``SPEC_KEY`` and ``SPEC_KEY_REV`` dictionaries in the ``utils`` module, and
+can be obtained by calling ``utils.print_species_names()``.
+For correct results the species name keys given in the ``spec_keys_file`` file
 only need to match names of species in the ChemKED files.
 
 The ``model_variant_file`` YAML file is needed in certain (uncommon) cases
