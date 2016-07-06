@@ -191,12 +191,14 @@ signal-to-noise ratio are currently being investigated.
     Power spectral density profiles of the original, filtered, and filtered and smoothed signals,
     showing the peaks of noise above 10 kHz. :label:`frequency`
 
-After filtering, the signal is smoothed by a moving average filter with a width of 21 points. It is
-desired that the signal remain the same length through this operation, but the convolution operation
-used to apply the moving average zero-pads the first and last 10 points. To avoid a bias in the
-initial voltage, the first 10 points are set equal to the value of the 11th point; the final 10
-points are not important in the rest of the analysis and are ignored. The result of the filtering
-and smoothing operations is shown on Fig. :ref:`raw-voltage`.
+After filtering, the signal is smoothed by a moving average filter with a width of 21 points. This
+width was selected empirically based on Fig. :ref:`raw-voltage` to minimize the deviation of the
+smoothed voltage from the raw voltage during the ignition, and methods to automatically choose an
+optimal width are being investigated. It is desired that the signal remain the same length through
+this operation, but the convolution operation used to apply the moving average zero-pads the first
+and last 10 points. To avoid a bias in the initial voltage, the first 10 points are set equal to the
+value of the 11th point; the final 10 points are not important in the rest of the analysis and are
+ignored. The result of the filtering and smoothing operations is shown on Fig. :ref:`raw-voltage`.
 
 Offset Correction and Pressure Calculation
 ==========================================
