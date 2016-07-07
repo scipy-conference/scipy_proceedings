@@ -70,8 +70,8 @@ FOSS tools for their curricular activities.  This also requires development
 efforts in order to either enhance existing projects or fill in any areas
 where FOSS tools are lacking.  There are around ten PIs actively involved in
 various sub-projects.  Some of the most active projects are Scilab, Python,
-eSim (an EDA tool), OpenFOAM, and Osdag (open source design of steel
-structures).
+eSim (an Electronic Design Automation tool), OpenFOAM, and Osdag (open source
+design of steel structures).
 
 After the initial efforts in 2009 and 2010 it was found that some of the
 initiatives worked and scaled up well whereas others did not.  As a result,
@@ -294,14 +294,14 @@ students be able to write simple programs at least.
 In 2011, the author saw Chris Boesch run a `programming contest
 <http://singpath.com>`_ at PyCon APAC 2011.  The contest was entirely online,
 and users could submit their code and obtained instant feedback.  The system
-was built on top of GAE.  This made testing programming lively and enjoyable.
-The author along with the FOSSEE team have built a Django_ application to do
-something similar.  The package is called Yaksh_, is Open Source, and the
-sources are available at http://github.com/FOSSEE/online_test.  The initial
-version of Yaksh was used to administer programming quizzes for the online
-teacher training course based on the SDES course in late 2011.  More than 600
-simultaneous users took their tests on this interface.  This work was
-presented at SciPy India 2011 [PR11]_.
+was built on top of Google App Engine.  This made testing programming lively
+and enjoyable.  The author along with the FOSSEE team have built a Django_
+application to do something similar.  The package is called Yaksh_, is Open
+Source, and the sources are available at http://github.com/FOSSEE/online_test.
+The initial version of Yaksh was used to administer programming quizzes for
+the online teacher training course based on the SDES course in late 2011.
+More than 600 simultaneous users took their tests on this interface.  This
+work was presented at SciPy India 2011 [PR11]_.
 
 Yaksh provides a simple interface for an instructor to create a question paper
 with mutiple-choice questions (MCQ) as well as full-fledged programming
@@ -728,14 +728,14 @@ as required.  These spoken tutorials will also be dubbed to other Indian
 languages.
 
 In addition the Python group plans to promote the use of Python in the CBSE
-school curriculum.  The CBSE board has already included Python as an
-alternative to C++ in the 11th and 12th grade exams.  Unfortunately, there is
-quite a bit of resistance towards this as many teachers are unfamiliar with
-Python.  The plan is to support schools in this initiative over the next year.
-Textbook companions will be prepared for the school initiative.
-Spoken-tutorials tailor-made to the school curriculum will also be generated.
-This is an exciting new development but a significant amount of work is still
-necessary.
+(Central Board of Secondary Education) school curriculum.  The CBSE board has
+already included Python as an alternative to C++ in the 11th and 12th grade
+exams.  Unfortunately, there is quite a bit of resistance towards this as many
+teachers are unfamiliar with Python.  The plan is to support schools in this
+initiative over the next year.  Textbook companions will be prepared for the
+school initiative.  Spoken-tutorials tailor-made to the school curriculum will
+also be generated.  This is an exciting new development but a significant
+amount of work is still necessary.
 
 Conclusions
 ------------
