@@ -550,11 +550,14 @@ featurized serially.
 .. code-block:: python
         
         from cesium import featurize
-        features_to_use = ['amplitude', 'maximum', 'max_slope',
-                           'median', 'median_absolute_deviation',
+
+        features_to_use = ['amplitude', 'maximum',
+                           'max_slope', 'median',
+                           'median_absolute_deviation',
                            'percent_beyond_1_std',
-                           'percent_close_to_median', 'minimum',
-                           'skew', 'std', 'weighted_average']
+                           'percent_close_to_median',
+                           'minimum', 'skew', 'std',
+                           'weighted_average']
         fset_cesium = featurize.featurize_time_series(
                           times=eeg["times"],
                           values=eeg["measurements"],
