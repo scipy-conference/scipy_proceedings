@@ -12,12 +12,12 @@ The FOSSEE Python Project
 .. class:: abstract
 
     The FOSSEE (Free Open Source Software for Science and Engineering
-    Education) project (http://fossee.in) is a project funded by the Ministry
-    of Human Resources and Development, MHRD, (http://mhrd.gov.in) of the
-    Government of India.  The FOSSEE project is based out of IIT Bombay and
-    the goal of the project is to eliminate the use of proprietary tools in
-    the college curriculum.  FOSSEE promotes various open source packages.
-    Python is one of them.
+    Education) project (http://fossee.in) is funded by the Ministry of Human
+    Resources and Development, MHRD, (http://mhrd.gov.in) of the Government of
+    India.  The FOSSEE project is based out of IIT Bombay and the goal of the
+    project is to eliminate the use of proprietary tools in the college
+    curriculum.  FOSSEE promotes various open source packages.  Python is one
+    of them.
 
     In this paper, the Python-related activities and initiatives of FOSSEE are
     discussed.  The group focuses on promoting the use of Python in the
@@ -517,12 +517,12 @@ rather than towards the end.  This would result in a much smoother experience.
 Based on the overall experience, it is clear that Yaksh is an effective tool
 for students and teachers alike.
 
-Future plans
-~~~~~~~~~~~~~
+Plans
+~~~~~~
 
-Yaksh will continue to be improved based on the usage of the FOSSEE team and
-that of others.  It is hoped that this is also of use to the community.
-The future goals for the yaksh project are to:
+Yaksh will continue to be improved based on the needs of the FOSSEE team and
+that of others.  It is hoped that this is also of use to the community.  The
+future goals for the yaksh project are to:
 
 - Clean up and come up with a stable web-API.
 - Support the use of Jupyter notebooks for tests.
@@ -531,32 +531,45 @@ The future goals for the yaksh project are to:
   students.
 
 
-
 Textbook companions
 --------------------
 
-It is important for FOSS tools to have good documentation.  While the SciPy
-project has plenty of good online documentation, this may not always be
-adequate from the perspective of a beginner.  Good quality documentation is
-not easy to write and requires both expertise as well as the ability to
-explain things at the level of the user.  This is often difficult for a
-developer who knows almost everything about the package.  On the other hand it
-is not always easy for an inexperienced user to write documentation.
+Spoken-tutorials allow FOSSEE to reach out to a larger audience and train
+students and teachers on the use of FOSS tools and packages.  The SDES course
+is similar to the Software Carpentry effort and offers a full-fledged course
+that readies students for computational science.  Yaksh facilitates both of
+these by making it easier to test students on their programming skills.
 
-Textbook companions offer an interesting approach to this task.  As discussed
-in detail in [kmm14]_, textbook companions are created by writing Python code
-for every solved example in a textbook.  Students create these textbook
-companions which are then reviewed by either teachers or reviewers at FOSSEE.
-This task scales very well as students are eager to take up the task. Students
-are given an honorarium and a certificate after their textbooks pass a review.
-Currently, there are over 530 Scilab textbook companions [STC]_ created. The
-Python project has 395 completed books with over 225 textbooks in progress.
-The Python companions are hosted online at http://tbc-python.fossee.in
+While Python in general and the SciPy project in particular have plenty of
+good online documentation, this may not always be adequate from the
+perspective of a beginner.  Good quality documentation is not easy to write
+and requires both expertise as well as the ability to explain things at the
+level of the user.  This is often difficult for a developer who knows almost
+everything about the package.  On the other hand it is not always easy for an
+inexperienced user to write documentation either.
+
+Students are often interested in taking internships and desire to participate
+in software projects that are relevant to their area of interest.  Is it
+possible to engage these students in a way where they are able to contribute
+meaningful documentation in an area of their interest?
+
+Textbook companions offer an interesting approach in this context.  As
+discussed in detail in [kmm14]_, textbook companions are created by writing
+Python code for every solved example in a textbook.  Students create these
+textbook companions which are then reviewed by either teachers or reviewers at
+FOSSEE.  This task scales very well as students are eager to take up the task.
+They already know the subject matter as the textbook is part of their
+curriculum.  The examples are already solved, so they have to convert the
+solved example into appropriate Python code.  Students are given an honorarium
+and a certificate after their textbooks pass a review.  Currently, there are
+over 530 Scilab textbook companions [STC]_ created. The Python project has 416
+completed books with over 200 textbooks in progress.  The Python textbook
+companions are hosted online at http://tbc-python.fossee.in
 
 The Python Textbook Companions (PTC's) are submitted in the form of Jupyter
 notebooks.  This is important for several reasons:
 
-- Jupyter  notebooks allow us to put together, formatted HTML, code, and the
+- Jupyter notebooks allow one to put together formatted HTML, code, and the
   results in one self-contained file.
 - IPython notebooks are easy to render and a HTML listing can be generated.
 - The file can also be hosted online and interactively used.
@@ -585,16 +598,24 @@ The process works as follows:
 3. The student then completes the entire book.  Each chapter is submitted as
    a separate IPython notebook.
 4. The student also uploads a few screenshots of their favorite notebooks
-   that are displayed.
+   that are displayed on the interface.
 5. The submitted code is reviewed and any corrections are made by the
    contributor.
 6. The notebooks are then committed to the git repository.
-7. The committed notebooks are automatically picked up by the TBC web
-   application.
+7. The completed notebooks are hosted by the TBC web application.
 
 After the textbook is reviewed and accepted the student is sent an honorarium
 for their work.  Fig. :ref:`fig:tbc-main` shows the main Python TBC interface
 with information about the project and the editor's picks.
+
+Approximately 3 proposals for new textbooks are submitted each week.  Of
+these, around one is rejected if the book is either a programming language
+book or it is already completed.  Initially many proposals were C or C++
+programming books which were being converted to Python.  This has since been
+discontinued and such books are no longer accepted.  Of the submissions,
+around 70% of the submissions are from males, 40% of the submissions are by
+students, another 40% from teachers, and the remaining 20% from working
+professionals.
 
 .. figure:: python_tbc_main.png
    :alt: The main landing page for the Python TBC site.
@@ -620,10 +641,10 @@ also available.  The entire book can be downloaded as a ZIP file.
 Upon clicking a chapter, a typical rendered HTML file is seen.  This is seen
 in Fig. :ref:`fig:tbc-render`.  A button to edit the chapter is seen, this
 will fire up a tmpnb_ instance which allows users to easily modify and run the
-code.  This makes it extremely convenient to view, modify, copy, and learn the
+code.  This makes it extremely convenient to view, modify, and learn the
 created content.  In the figure, one can see an icon for entering comments.
-This links a disqus comment field at the bottom of the page.  This lists all
-current comments and allows users to submit new comments on the particular
+This links to a disqus comment field at the bottom of the page.  This lists
+all current comments and allows users to submit new comments on the particular
 chapter.
 
 .. figure:: tbc_render.png
@@ -635,82 +656,123 @@ chapter.
 
 
 A large number of solved examples are indeed quite simple but there are
-several that are fairly involved.  These are highlighted in the editor's pick
-section.
+several that are fairly involved.  These textbooks are highlighted in the
+editor's pick section.
 
-We are yet to formally announce and advertise about the textbook companions
-for Python facility.  Once announced, we would then start to analyze the usage
-and popularity of this resource.  We are planning to popularize these more in
-the future.  It is still unclear as to how different people are using the
-notebooks.  We do have very good feedback from the contributors
-[testimonials]_ to the project.  Many of them have enjoyed creating these
-notebooks and have benefited by this effort.  Some contributor comments are
-quoted in [kmm14]_.
-
+The Python textbook companion effort of FOSSEE has not been formally announced
+and advertised in the wider SciPy community.  Once announced, the plan is to
+start to analyze the usage and popularity of this resource.  It is still
+unclear as to how different people are using the notebooks.  Some good
+feedback has been received from the contributors [testimonials]_ to the
+project.  Many of them have enjoyed creating these notebooks and have
+benefited by this effort.  Some contributor comments are quoted in [kmm14]_.
 
 .. _tmpnb:  https://github.com/jupyter/tmpnb
 .. _Django: https://www.djangoproject.com/
 
+The textbook companions are an interesting project since:
 
+1. It provides ready-to-use examples of how to apply a given software package
+   or set of tools to a particular problem.
+2. They scale well and can be easily crowd sourced.
+3. The scale of the current effort allows one to ask interesting questions,
+   for example "what are the different uses of the FFT in science and
+   engineering?".
+4. It provides an interesting alternative to internships and projects for
+   undergraduate students looking to learn and contribute something
+   meaningful.
+
+The texbook companions thus complement the other initiatives of the
+FOSSEE-Python group.
 
 
 Scipy India
 ------------
 
+The SciPy India conference provides an opportunity for those interested in
+Python to learn new developments, talk about how they have used Python, meet
+other interested users/developers and participate in the community.
+
 The Python FOSSEE group has also been organizing the SciPy India conference
-since 2009.  We have organized 7 conferences thus far.  The conferences have
-traditionally been held in December.  The conferences are largely funded by
-the FOSSEE project.  The project staff manage the local organization almost
+since 2009.  Seven conferences have been organized thus far.  The conferences
+have traditionally been held in December.  They are largely funded by the
+FOSSEE project.  The project staff manage the local organization almost
 completely.  The conference website is at http://scipy.in
 
-We have an attendance of around 200 people each year.  A large number of these
+There is an attendance of about 200 people each year.  A large number of these
 are new users.  The conference is typically well received and many people are
-aware of the SciPy community through these efforts.  Each year we invite a
-leading expert in the community to keynote at the conference.  The first
+aware of the SciPy community through these efforts.  Each year a leading
+expert in the community is invited to keynote at the conference.  The first
 conference had Travis Oliphant keynote and the conference in 2015 had Andreas
-Kloeckner as the keynote.  We also invite several other important speakers.
-Jarrod Millman and Dr. Ajith Kumar were also invited speakers at the 2015
-conference.
+Kloeckner as the keynote.  Several other important members of the extended
+SciPy community from India and abroad have spoken at the conference.
 
+Originally, sprints were conducted but this did not prove very effective.  The
+conference now focuses on high-quality tutorials for two days and a single day
+for the conference itself.  Many college professors attend the conference and
+many go back and encourage their students to use the tools and participate in
+the future.
 
 
 Future plans
 ------------
 
-The Python group plans to build on the existing work.  We will continue to
-generate textbook companions, provide support for the workshops conducted by
-the spoken-tutorial team, and continue to work on the Yaksh interface.
-The existing Python spoken tutorials will be updated and new ones will be
-created as required.  These spoken tutorials will also be dubbed to other
-Indian languages.
+The Python group plans to build on the existing work.  The team will continue
+to generate textbook companions, provide support for the workshops conducted
+by the spoken-tutorial team, and continue to work on the Yaksh interface.  The
+existing Python spoken tutorials will be updated and new ones will be created
+as required.  These spoken tutorials will also be dubbed to other Indian
+languages.
 
-In addition we plan to promote the use of Python in the CBSE school
-curriculum.  The CBSE board has already included Python as an alternative to
-C++ in the 11th and 12th grade exams.  Unfortunately, there is quite a bit of
-resistance towards this as many teachers are unfamiliar with Python.  We plan
-to support schools in this initiative over the next year.  We will continue to
-use textbook companions for the school initiative as well and also create
-specific spoken tutorials for the school curriculum.
-
+In addition the Python group plans to promote the use of Python in the CBSE
+school curriculum.  The CBSE board has already included Python as an
+alternative to C++ in the 11th and 12th grade exams.  Unfortunately, there is
+quite a bit of resistance towards this as many teachers are unfamiliar with
+Python.  The plan is to support schools in this initiative over the next year.
+Textbook companions will be prepared for the school initiative.
+Spoken-tutorials tailor-made to the school curriculum will also be generated.
+This is an exciting new development but a significant amount of work is still
+necessary.
 
 Conclusions
 ------------
 
-The FOSSEE Python group has helped spread the use of Python.  The group has
-also helped the other sister FOSSEE groups with respect to any Python related
-support when possible.  It is our hope that the code and other material that
-we have generated is also of use to the wider community across the world.
+As discussed in this paper, the FOSSEE project has used several interesting
+approaches to spread Python in India.  Spoken tutorials help deliver good
+self-learning training material to a large audience.  The SDES course allows
+students to learn effective computational skills as part of their curriculum.
+Yaksh is an open source tool that can be used to effectively test the
+programming skills of a student.  Together, these tools maybe be effectively
+used by instructors to teach computational tools and programming to a large
+number of students.  The author's experience with using Yaksh while teaching
+students at different levels has also been shared.  It seems that testing
+students often on their programming is an effective way to have them practice
+their programming skills and provide quick feedback to the instructor.
+
+Textbook companions offer an interesting alternative to documentation and
+scales well.  The very fact that FOSSEE has helped facilitate around 500+
+textbook companions shows that this activity scales and has potential to make
+a difference.
+
+The FOSSEE Python group has helped spread the use of Python in India.  The
+group has also helped the other sister FOSSEE groups with respect to any
+Python related support when possible.  It is hoped that the code and other
+material that has been generated is of use to the wider community across the
+world.
 
 
 Acknowledgments
 ----------------
 
-We are grateful to MHRD for their continued support of FOSSEE.  Our thanks to
-the PIs of the FOSSEE project and also Asokan Pichai who helped shape the
-FOSSEE project over the first few years.  This work would not be possible
-without the work of the FOSSEE staff members involved in this project.  The
-past and present members of the project are listed here:
-http://python.fossee.in/about/
+FOSSEE would not exist but for the continued support of MHRD and we are
+grateful to them for this.  The project would not be a success without the
+efforts of the many PIs of the FOSSEE project especially Prof. Kannan
+Moudgalya of IIT Bombay who also leads the spoken-tutorial project.  The
+author wishes to thank Asokan Pichai who helped shape the FOSSEE project over
+the first few years.  This work would not be possible without the efforts of
+the many FOSSEE staff members.  The past and present members of the project
+are listed here: http://python.fossee.in/about/  the author wishes to thank
+them all.
 
 
 References
