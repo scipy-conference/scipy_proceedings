@@ -1,5 +1,5 @@
 
-:author: Andrew M. Fraser
+:Author: Andrew M. Fraser
 :email: afraser@lanl.gov
 :institution: XCP-8, Los Alamos National Laboratory
 :corresponding:
