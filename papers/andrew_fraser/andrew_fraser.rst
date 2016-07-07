@@ -299,12 +299,12 @@ second derivative of the log likelihood as follows:
 	  \right)^T \Sigma^{-1} \frac{\partial^2 \mu}{\partial
       \theta^2} \\
       &\quad \text{and} \\
-   \EV_X \frac{\partial^2}{\partial \theta^2} L &\approx -\left(\partiald{\mu}{\theta}\right)^T
-	  \Sigma^{-1} \left(\partiald{\mu}{\theta}\right).
+   \EV_X \frac{\partial^2}{\partial \theta^2} L &= -\left(\partiald{\mu}{\theta}\right)^T
+	  \Sigma^{-1} \left(\partiald{\mu}{\theta}\right),
    
-The approximation is valid if either :math:`\frac{\partial^2
-\mu}{\partial \theta^2}` is roughly constant or :math:`\left(x -
-\mu(\theta) \right)` is small (both of which are probably true).
+because :math:`\Sigma^{-1}\frac{\partial^2 \mu}{\partial \theta^2}` is
+independent of :math:`X` and :math:`\EV_X \left(x - \mu(\theta)
+\right) = 0`.
 
 
 Iterative Optimization
@@ -745,7 +745,7 @@ largest. We expected the rank to be one to within numerical precision.
 
    Fisher Information of the Rate Stick Experiment. The four nonzero
    eigenvalues of :math:`\Fisher(\hat c)` appear in the upper plot and
-   the eigenfunction corresponding to those eigenvalues appears in he
+   the eigenfunction corresponding to those eigenvalues appears in the
    lower plot. :label:`fig-info-stick`
    
 
