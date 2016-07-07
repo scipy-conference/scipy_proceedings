@@ -743,10 +743,10 @@ largest. We expected the rank to be one to within numerical precision.
    :align: center
    :class: w	   
 
-   Fisher Information of the Rate Stick Experiment. The largest three
+   Fisher Information of the Rate Stick Experiment. The four nonzero
    eigenvalues of :math:`\Fisher(\hat c)` appear in the upper plot and
-   the eigenfunction corresponding to these three eigenvalues appears in
-   he lower plot. :label:`fig-info-stick`
+   the eigenfunction corresponding to those eigenvalues appears in he
+   lower plot. :label:`fig-info-stick`
    
 
 The Fisher information matrix of the gun experiment is more complex as
@@ -761,9 +761,9 @@ influential across the range of displacements.
    :align: center	    
 
    Fisher Information of the Gun Experiment.  The largest four
-   eigenvalues of :math:`\Fisher(\hat c)`
-   appear in the upper plot and the eigenfunctions corresponding to
-   the largest four eigenvalues appear in the lower plot. :label:`fig-info-gun`
+   eigenvalues of :math:`\Fisher(\hat c)` appear in the upper plot and
+   the eigenfunctions corresponding to the largest four eigenvalues
+   appear in the lower plot. :label:`fig-info-gun`
 
 These preliminary investigations of the Fisher information matrix show
 how this matrix can be informative in describing the uncertainty
