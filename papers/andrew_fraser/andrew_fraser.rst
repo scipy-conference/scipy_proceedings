@@ -138,10 +138,31 @@ analysis.  The code is self documenting, with full docstring coverage,
 and is converted into online documentation using [sphinx]_.  Each
 class has a test suite to allow unit testing.  Tests are collected and
 run using [nose]_.  Each file is also tested using [pylint]_ with all
-default checks enabled to ensure it adheres to python coding
+default checks enabled to ensure it adheres to Python coding
 standards, including PEP8.  Graphics in this paper were generated
 using [matplotlib]_ and the code made use of the [numpy]_ and [scipy]_
-packages.
+packages.  Among the reasons we chose the Python/SciPy ecosystem, the
+most important are:
+
+Readable
+   Writing in Python helps us implement the most important point in
+   [wilson2014]_ : "Write programs for people, not computers."
+
+Versatile
+   The Python Standard Library lets easily us connect our scripts to
+   other code, eg, submitting HPC jobs and wrapping libraries written
+   in other languages.
+
+Community support
+   Because of the large number of other users, it is easy to get
+   answers to questions.
+
+Numerical packages
+   We use a host of modules from Numpy, SciPy and other sources. 
+
+Portable
+   With the Python/SciPy ecosystem, it is easy to write code that
+   runs on our desktops and also runs in our HPC environment.
 
 The task of mapping measurements to estimates of the characteristics
 of models for the physical processes that generated them is called an
@@ -722,10 +743,10 @@ largest. We expected the rank to be one to within numerical precision.
    :align: center
    :class: w	   
 
-   Fisher Information of the Rate Stick Experiment. The largest three
+   Fisher Information of the Rate Stick Experiment. The four nonzero
    eigenvalues of :math:`\Fisher(\hat c)` appear in the upper plot and
-   the eigenfunction corresponding to these three eigenvalues appears in
-   he lower plot. :label:`fig-info-stick`
+   the eigenfunction corresponding to those eigenvalues appears in he
+   lower plot. :label:`fig-info-stick`
    
 
 The Fisher information matrix of the gun experiment is more complex as
@@ -740,9 +761,9 @@ influential across the range of displacements.
    :align: center	    
 
    Fisher Information of the Gun Experiment.  The largest four
-   eigenvalues of :math:`\Fisher(\hat c)`
-   appear in the upper plot and the eigenfunctions corresponding to
-   the largest four eigenvalues appear in the lower plot. :label:`fig-info-gun`
+   eigenvalues of :math:`\Fisher(\hat c)` appear in the upper plot and
+   the eigenfunctions corresponding to the largest four eigenvalues
+   appear in the lower plot. :label:`fig-info-gun`
 
 These preliminary investigations of the Fisher information matrix show
 how this matrix can be informative in describing the uncertainty
