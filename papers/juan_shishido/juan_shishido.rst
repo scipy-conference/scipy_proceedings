@@ -88,8 +88,8 @@ status.
 
 This data set was selected because its diverse set of essay prompts and because the
 availability of detailed user characteristics provided ideal means for
-examining the link between online self-presentation and demographics. <SHOULD WE INCLUDE WHAT THE PROMPTS WERE?>
-Previous work using this data was primiarily exploratory, with some basic text analysis 
+examining the link between online self-presentation and demographics.
+Previous work using this data was primarily exploratory, with some basic text analysis 
 and with logistic regression to predict sex using only height [Kim15]_. 
 The present study extends previous work by analyzing additional features and by
 introducing novel analyses.
@@ -561,7 +561,7 @@ Matrix, and Fight Club. The "movies-sci-fi" and "movies-drama-1" groups,
 whose highest weighted tokens referred to the male-favored movies, had a higher
 proportion of males than females. Similarly, the "teen" group, which
 which corresponded to female-favored movies, had a higher proportion of females.
-This reflects the terms found by the log-odds-ratio. <I STILL THIS THINK THIS PARAGRAPH IS CIRCULAR, BUT MAYBE I JUST DONT GET IT>
+This reflects the terms found by the log-odds-ratio.
 
 We next examined the distribution over topics by drug usage. In this
 demographic category, users self-identified as drug users or non-drug users. To
