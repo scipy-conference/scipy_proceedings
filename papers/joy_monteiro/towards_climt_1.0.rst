@@ -190,7 +190,7 @@ To summarize, each component (encapsulated in the ``Component`` class) provides 
 execution loop, and the model is stepped forward in time by integrating these tendencies using the
 leapfrog integrator. Optionally,
 the model state is displayed using a wrapper over ``matplotlib`` and written to disk using the ``netCDF4`` library.
-Since the model state variable are Numpy arrays, they can be easily accessed by external Python
+Since the model state variables are Numpy arrays, they can be easily accessed by external Python
 libraries for online processing or any other purpose.
 
 Combining multiple ``Component`` objects is made possible using the ``Federation`` class. Combining
@@ -395,7 +395,7 @@ Monitoring fields and I/O
     
 CliMT also provides for real time display (monitoring) of the simulated fields. Currently, up to four fields
 can be monitored. Monitoring is activated by providing an additional argument during component
-instantiation called ``MonitorFields``. ``MonitorFields`` is a list of upto four fields that are
+instantiation called ``MonitorFields``. ``MonitorFields`` is a list of up to four fields that are
 part of the simulation. If the field is three dimensional, the zonal average (average along
 longitude) is displayed. The frequency at which the display is refreshed is decided by the
 ``MonitorFreq`` argument.
