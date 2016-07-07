@@ -221,7 +221,7 @@ log of the likelihood and the log of the prior.
    :type: align
 
    &\log \left( p(\theta|x) \right) = \log \left( \frac{p_l(x|\hat \theta)
-         p_p(\hat \theta)}{\int p_l(x|\phi) p_p(x) d\phi} \right) \nonumber \\
+         p_p(\hat \theta)}{\int p_l(x|\phi) p_p(\phi) d\phi} \right) \nonumber \\
      &\qquad~+ \frac{1}{2}
      \left( \theta - \hat \theta \right)^T \left(
        \frac{d^2 \log\left( p_l(x|\phi) \right) }{d\phi^2} +
