@@ -5,9 +5,9 @@
 :corresponding:
 
 
---------------------------
-The FOSSEE Python Project
---------------------------
+--------------------------------------------------------------------
+Spreading the Adoption of Python in India: the FOSSEE Python Project
+--------------------------------------------------------------------
 
 .. class:: abstract
 
@@ -22,31 +22,30 @@ The FOSSEE Python Project
     In this paper, the Python-related activities and initiatives of FOSSEE are
     discussed.  The group focuses on promoting the use of Python in the
     college curriculum.  The important activities of this group include the
-    creation of spoken-tutorials on Python, the creation of over 400+
-    IPython-based textbook companions, an online testing tool for a variety of
-    programming languages, a course akin to software carpentry at IIT Bombay,
-    the organization of the SciPy India conference, and finally spreading the
-    adoption of Python in schools and colleges.  In this paper an overview of
-    the activities of this group are discussed.
-
+    creation of spoken-tutorials on Python, the creation of 400+ IPython-based
+    textbook companions, an online testing tool for a variety of programming
+    languages, a course akin to software carpentry at IIT Bombay, the
+    organization of the SciPy India conference, and finally spreading the
+    adoption of Python in schools and colleges.  The paper discusses how these
+    tools may be used to teach Python in the context of collegiate education
+    and computational science.
 
 Introduction
 -------------
 
 The FOSSEE project (http://fossee.in) started in 2009 with the goal of helping
 minimize the use of proprietary software in the college curriculum in India.
-The project is funded by the Ministry of Human Resources and Development,
-MHRD, (http://mhrd.gov.in) of the Government of India.  FOSSEE is part of the
-MHRD's National Mission on Education through ICT (NMEICT).  The NMEICT project
-started in 2009 as initiative to improve the quality of education in India.
-As part of this project there have been several initiatives.  One important
-example is the NPTEL project (http://nptel.ac.in) which provides content for
-over 900 courses at the graduate and post-graduate level (400 web-based and
-500 video-based) online.  These are proving to be extremely useful all over
-the country.  Other projects include the Spoken Tutorial project
-(http://spoken-tutorial.org) which has also been previously presented at SciPy
-2014 [kmm14]_.  FOSSEE is one such project that is the outcome of the NMEICT
-funding.
+The project is funded by the Ministry of Human Resources and Development, MHRD
+(http://mhrd.gov.in) of the Government of India.  FOSSEE is part of the MHRD's
+National Mission on Education through ICT (NMEICT).  NMEICT started in 2009 as
+an initiative to improve the quality of education in India.  As part of this
+mission there have been several initiatives.  One important example is the
+NPTEL project (http://nptel.ac.in) which provides content for over 900 courses
+at the undergraduate and graduate level (400 web-based and 500 video-based)
+online.  These are proving to be extremely useful all over the country.  Other
+projects include the Spoken Tutorial project (http://spoken-tutorial.org)
+which has also been previously presented at SciPy 2014 [kmm14]_.  FOSSEE is
+one such project that is the outcome of the NMEICT funding.
 
 The FOSSEE project is based out of IIT Bombay and promotes the use of various
 open source packages in order to help eliminate the use of proprietary
@@ -69,7 +68,7 @@ In order to help reduce the dependence on commercial packages, the FOSSEE
 project's efforts are focused towards training students and teachers to use
 FOSS tools for their curricular activities.  This also requires development
 efforts in order to either enhance existing projects or fill in any areas
-where FOSS tools are lacking.  There are about 10+ PIs actively involved in
+where FOSS tools are lacking.  There are around ten PIs actively involved in
 various sub-projects.  Some of the most active projects are Scilab, Python,
 eSim (an EDA tool), OpenFOAM, and Osdag (open source design of steel
 structures).
@@ -83,9 +82,9 @@ each sub-project produces the following output:
   particular software package.
 
 - Organize a crowd-sourced development of "textbook companions" for popular
-  textbooks used in the curriculum.  A textbook companion is created when
-  every solved example in a text is solved using a particular open source
-  software package like Scilab or Python.
+  textbooks used in the curriculum.  A textbook companion is created by coding
+  every solved example in a text using a particular open source software
+  package like Scilab or Python.
 
 - Support user questions on a forum for the packages that are promoted.
 
@@ -100,7 +99,7 @@ each sub-project produces the following output:
   teachers.
 
 Some of these are project specific.  For example, the Scilab project is able
-to help with lab migrations as Scilab is a close equivalent to Matlab and this
+to perform lab migrations as Scilab is a close equivalent to Matlab and this
 makes it easier for people to switch to it from Matlab.  Kannnan Moudgalya's
 paper in 2014 [kmm14]_ discusses in detail the approach and design decisions
 made by the FOSSEE and spoken-tutorials projects.  In particular the paper
@@ -138,21 +137,21 @@ scalable.  A sister project, the spoken-tutorial project
 (http://spoken-tutorial.org) pioneered the generation and dissemination of
 spoken-tutorials.  A spoken tutorial is basically a carefully designed
 screencast for a roughly 10 minute duration or less.  Any screencast cannot
-qualify as a spoken-tutorial.  A spoken tutorial also requires a carefully
-written script.  Notably, a spoken tutorial should be made such that a novice
-can understand it.  The spoken-tutorial project ensures that all new tutorials
+qualify as a spoken-tutorial.  A spoken tutorial requires a carefully written
+script.  Notably, a spoken tutorial should be made such that a novice can
+understand it.  The spoken-tutorial project ensures that all new tutorials
 undergo a novice check to make sure that this is indeed the case.  This
 involves asking a novice to go over the script and ensure that they are able
-to reproduce the entire script and follow it.  This allows a spoken tutorial
-to be dubbed into multiple languages.  A series of spoken tutorials can thus
-be used to effectively teach a programming language or software package.  As
-such, a spoken tutorial is not a substitute for classroom instruction of the
-traditional kind.  It has been used to teach a programming language or
-introduce a software package effectively.
+to reproduce the entire script and follow it.  This carefully written script
+allows a spoken tutorial to be dubbed into multiple languages.  A series of
+spoken tutorials can thus be used to effectively teach a programming language
+or software package.  As such, a spoken tutorial is not a substitute for
+classroom instruction of the traditional kind.  It has been most effectively
+used to teach a programming language or introduce a software package.
 
 The major advantage of the spoken tutorial is that it retains a high quality
 of instruction, can be used for self-learning, and scales extremely well.  In
-addition these tutorials can also be dubbed into various local languages.  The
+addition, these tutorials can be dubbed into various local languages.  The
 spoken tutorial project has trained over a million students and teachers on a
 variety of software packages.  The project hosts over 700 individual
 spoken-tutorials.  Over 20 different Indian languages are supported.
@@ -165,11 +164,11 @@ with IPython, plotting with matplotlib, etc.  Currently these are only
 available in `English
 <http://spoken-tutorial.org/tutorial-search/?search_language=English&search_foss=Python&page=1>`_.
 
-Fig. :ref:`fig:py-st` shows a typical Python spoken tutorial.  It shows the
-main screencast video.  Below the video is an outline of the tutorial.
-Information on installation and other instructions is also listed.  Users can
-also easily navigate to prerequisite tutorials.  In addition, users can post
-their questions on the forum.
+Fig. :ref:`fig:py-st` shows a typical Python spoken tutorial as hosted on the
+spoken-tutorial website.  It shows the main screencast video.  Below the video
+is an outline of the tutorial.  Information on installation and other
+instructions is also listed.  Users can easily navigate to prerequisite
+tutorials.  In addition, users can post their questions on the forum.
 
 .. figure:: python_spoken_tutorial.png
    :alt: Python spoken tutorials on the spoken-tutorial.org website.
@@ -186,9 +185,8 @@ http://spoken-tutorial.org/statistics/training/
 
 The FOSSEE team generates the spoken tutorials and the spoken tutorial team
 coordinates the conduct of workshops where students use this material to teach
-themselves Python.  FOSSEE staff also supports by attending to user questions
-that may arise during these workshops and also during the stand-alone use of
-spoken tutorials.
+themselves Python.  FOSSEE staff members support these workshops by attending
+to user questions that may arise.
 
 Spoken tutorials have thus become an effective way to scale up training on
 open source packages.  For a motivated and skilled user, spoken-tutorials and
@@ -206,12 +204,13 @@ SDES is an acronym that stands for Software Development Techniques for
 Engineers and Scientists.  As discussed earlier, the Python group initially
 focused on teaching Python at various colleges.  It was soon felt that
 students needed to learn how to use Unix shells effectively, use version
-control, a bit of LaTeX, good software development practices in addition to
-Python.  Students are often unaware of the right set of tools to learn.  Most
-students undergo a basic computer programming course in their first year but
-this is rarely enough for them to perform their curricular tasks.
+control, basic knowledge of LaTeX, good software development practices in
+addition to Python.  Students are often unaware of the right set of tools to
+learn.  Most students undergo a basic computer programming course in their
+first year but this is rarely enough for them to perform their curricular
+tasks.
 
-In order to fill this need a course was designed in late 2009.  The course is
+In order to fill this need, a course was designed in late 2009.  The course is
 titled Software Development techniques for Engineers and Scientists (SDES).
 This course takes inspiration from the Software Carpentry Course material
 [SWC]_.  However, the course is tailored for undergraduate students.  The
@@ -252,11 +251,12 @@ enough.  A more aggressive and systematic approach is needed to push students
 to work consistently over the duration of the course, rather than in the last
 minute.  It was also found that it is difficult for students and instructors
 to pick meaningful projects that are neither too trivial or too difficult.
-For the next delivery the plan is to encourage students to work systematically
-on their projects.  Studying the project git logs to assess team contribution
-and systematic work is one approach that is being considered.  Instead of
-always picking new projects, one possibility is to give them a pool of
-existing projects and ask them to improve them.
+For the next delivery, the plan is to encourage students to work
+systematically on their projects.  Studying the git logs of the student
+project repositories to assess team contribution and systematic work is one
+approach that is being considered.  Instead of always picking new projects,
+one possibility is to give them an existing project and ask them to improve
+it.
 
 The SDES course was offered as part of a 1000 teacher training course offered
 in 2011 at IIT Bombay.  This course had over 600 participants who took the
@@ -295,7 +295,7 @@ In 2011, the author saw Chris Boesch run a `programming contest
 <http://singpath.com>`_ at PyCon APAC 2011.  The contest was entirely online,
 and users could submit their code and obtained instant feedback.  The system
 was built on top of GAE.  This made testing programming lively and enjoyable.
-The author along with the FOSSEE team built a Django_ application to do
+The author along with the FOSSEE team have built a Django_ application to do
 something similar.  The package is called Yaksh_, is Open Source, and the
 sources are available at http://github.com/FOSSEE/online_test.  The initial
 version of Yaksh was used to administer programming quizzes for the online
@@ -321,12 +321,12 @@ student.  The ability to submit multiple times gives them comfort in that they
 know that they can gradually fix their code.  This makes students less
 anxious.  They also immediately know that their answer is correct if they get
 it right.  This makes a significant difference.  Clearly this is not enough to
-teach programming, however, this is a very useful aid.
+teach all aspects of programming, however, this is a very useful aid.
 
-Yaksh also provides a convenient monitoring interface for the instructor which
+Yaksh provides a convenient monitoring interface for the instructor which
 provides, at a glance, information on the students' performance.  Each
 submission of a student is logged and can be seen by the moderator.  This is
-extremely useful for an instructor.
+useful for an instructor.
 
 Yaksh works best with Python since it has been used mostly for Python tests
 but does support multiple other programming languages like C, C++, Java, Bash,
@@ -366,6 +366,8 @@ Fig. :ref:`fig:yaksh-login` shows the login screen for Yaksh, which features a
 small video that demonstrates how the interface can be used.
 Fig. :ref:`fig:yaksh-mcq` shows the interface for an MCQ and
 Fig. :ref:`fig:yaksh-code` shows the interface for a programming question.
+The top bar shows the time remaining to take the question.  A question
+navigator is provided for students to quickly move between questions.
 
 Fig. :ref:`fig:yaksh-monitor` shows a typical moderator interface while
 monitoring a running quiz.  The interface shows the number of questions each
@@ -377,7 +379,7 @@ Installation and running a demo
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Yaksh is a Python package and is distributed on PyPI_.  Yaksh can be installed
-with pip.  When installed an executable script ``yaksh`` is created.  To setup
+with pip.  When installed, an executable script ``yaksh`` is created.  To setup
 a demo instance on can run ::
 
   $ yaksh create_demo
@@ -428,7 +430,7 @@ As many questions as desired may be created.  For other languages assertions
 are not easily possible but standard input/output based questions are easily
 handled.  More sophisticated test support is also possible (for example one
 could easily support some form of assertions for C/C++ if a template were used
-to generate the files).  The architecture of yaksh will support this fairly
+to generate the files).  The architecture of yaksh supports this fairly
 easily.
 
 Questions could also be imported from a Python script.  The interface lets
@@ -440,7 +442,7 @@ one could conduct a 15 minute quiz with a 30 minute activity window.  The
 students can be allowed to attempt the quiz either once or multiple times as
 desired.  This is often useful when teaching new users.  Questions are
 automatically graded.  A user either gets the full marks or zero if the tests
-fail.  In the future we will also support partial grading depending on the
+fail.  In the future yaksh will also support partial grading depending on the
 number of test cases the code passes.
 
 In terms of the internal design, yaksh is fairly simple.
@@ -453,14 +455,13 @@ In terms of the internal design, yaksh is fairly simple.
   server with the user code and any additional data (like the test cases
   etc.).  This is executed by the server process.
 
-- Unfortunately, XML/RPC can only handle 2 simultaneous connections.  We thus
-  need a "farm" of these code servers and a manage a pool of these servers.
-  The Django app then connects to any available server and executes the code.
+- Unfortunately, XML/RPC can only handle 2 simultaneous connections.
+  Therefore, a pool of these servers is created and managed.  The Django app
+  then connects to any available server and executes the code.
 
 - In order to prevent issues with infinite loops, we use the ``signal`` module
-  to send ``SIGALRM`` in a finite amount of time (that is configurable).  The
-  default is 2 seconds but this can be easily configured.  This works very
-  well.
+  to send ``SIGALRM`` in a finite amount of time.  The default is 2 seconds
+  but this can be easily configured.
 
 The code server can be easily run within a docker container and this is also
 supported by Yaksh.  Some documentation for this is also provided in the
@@ -472,9 +473,9 @@ In addition to these features yaksh also has an experimental web-API that
 allows an instructor to utilize yaksh from their own web sites or HTML
 documents.  An instructor could create questions and a question paper from the
 yaksh interface but have users take the test on say an Jupyter notebook
-interface.  This is still being developed but a proof of concept is already
-available.  In order to do this, a user could simply add ``yaksh.js`` to their
-HTML and call a few API methods to fetch as well as submit user answers.
+interface.  This is still being developed but a proof of concept is available.
+In order to do this, a user could simply add ``yaksh.js`` to their HTML and
+call a few API methods to fetch as well as submit user answers.
 
 .. _PyPI: http://pypi.python.org
 .. _Yaksh: https://github.com/FOSSEE/online_test
@@ -489,9 +490,10 @@ Yaksh has also been used for the online course with over 600 participants and
 worked quite well.  This was however done in 2011 and thereafter has only been
 used for smaller classes.
 
-Recently Yaksh was used to teach first year undergraduate students Python as
-part of a data analysis and interpretation course.  Many students were new to
-programming and a lot was learned about how well this could work.
+Recently, Yaksh was used by the author to teach first year undergraduate
+students Python as part of a data analysis and interpretation course.  Many
+students were new to programming and a lot was learned about how well this
+could work.
 
 Yaksh definitely made it much easier to assess the understanding of students.
 Initially the students were not given tests but were given Jupyter notebooks
@@ -502,20 +504,21 @@ simple problems (many taken from the exercise problems that were already
 given).  Surprisingly, many of the students were struggled badly.  Even the
 best students were not able to finish all problems.  This showed that a lot
 more practice was needed.  As a result, 7 different quizzes with a few
-problems each were conducted.  Towards the end when some students were still
-struggling a special class was conducted where a long-running quiz was given.
-Around 20 poorly performing students were identified.  These students came to
-a special class and solved 10 problems using yaksh over the course of 2 hours.
-The monitoring facility was immensely useful as one could walk over to a
-struggling student and provide assistance or point a TA in their direction.
-Yaksh proved extremely useful.  The students all seemed to like the
-experience and understood the importance of actually programming versus
-learning the language syntax.
+problems each were conducted.  After about 5 such quizzes it was found that
+some students were still having difficulties understanding basic concepts.
+These were students who were completely new to programming.  Around 20 poorly
+performing students were identified.  These students came to a special class
+and solved 10 problems using yaksh over the course of 2 hours.  The monitoring
+facility was immensely useful as one could walk over to a struggling student
+and provide assistance or point a TA in their direction.  The students all
+seemed to like the experience and understood the importance of actually
+programming versus learning the language syntax.  Their performance in the
+subsequent quizzes and assignments improved significantly.
 
-In the future one should ensure that students are tested from the get-go
-rather than towards the end.  This would result in a much smoother experience.
-Based on the overall experience, it is clear that Yaksh is an effective tool
-for students and teachers alike.
+One major lesson learned was that one should ensure that students are tested
+from the get-go rather than towards the end.  This would result in a much
+smoother experience.  Based on the overall experience, it is clear that Yaksh
+is an effective tool for students and teachers alike.
 
 Plans
 ~~~~~~
@@ -566,10 +569,10 @@ over 530 Scilab textbook companions [STC]_ created. The Python project has 416
 completed books with over 200 textbooks in progress.  The Python textbook
 companions are hosted online at http://tbc-python.fossee.in
 
-The Python Textbook Companions (PTC's) are submitted in the form of Jupyter
+The Python Textbook Companions (PTC's) are submitted in the form of IPython
 notebooks.  This is important for several reasons:
 
-- Jupyter notebooks allow one to put together formatted HTML, code, and the
+- IPython notebooks allow one to put together formatted HTML, code, and the
   results in one self-contained file.
 - IPython notebooks are easy to render and a HTML listing can be generated.
 - The file can also be hosted online and interactively used.
@@ -624,7 +627,7 @@ professionals.
    companions. :label:`fig:tbc-main`
 
 
-Fig. :ref:`fig:tbc-text` shows a typical textbook.  The Jupyter notebooks for
+Fig. :ref:`fig:tbc-text` shows a typical textbook.  The IPython notebooks for
 each chapter can be viewed or downloaded.  More information on the book itself
 can be seen including an ISBN search link for the student to learn more about
 a book, a link to the actual IPython notebook on github and other details are
@@ -641,10 +644,10 @@ also available.  The entire book can be downloaded as a ZIP file.
 Upon clicking a chapter, a typical rendered HTML file is seen.  This is seen
 in Fig. :ref:`fig:tbc-render`.  A button to edit the chapter is seen, this
 will fire up a tmpnb_ instance which allows users to easily modify and run the
-code.  This makes it extremely convenient to view, modify, and learn the
-created content.  In the figure, one can see an icon for entering comments.
-This links to a disqus comment field at the bottom of the page.  This lists
-all current comments and allows users to submit new comments on the particular
+code.  This makes it convenient to view, modify, and learn the created
+content.  In the figure, one can see an icon for entering comments.  This
+links to a disqus comment field at the bottom of the page.  This lists all
+current comments and allows users to submit new comments on the particular
 chapter.
 
 .. figure:: tbc_render.png
@@ -656,8 +659,8 @@ chapter.
 
 
 A large number of solved examples are indeed quite simple but there are
-several that are fairly involved.  These textbooks are highlighted in the
-editor's pick section.
+several that are fairly involved.  Some of the nicer textbooks are highlighted
+in the editor's pick section.
 
 The Python textbook companion effort of FOSSEE has not been formally announced
 and advertised in the wider SciPy community.  Once announced, the plan is to
@@ -670,11 +673,11 @@ benefited by this effort.  Some contributor comments are quoted in [kmm14]_.
 .. _tmpnb:  https://github.com/jupyter/tmpnb
 .. _Django: https://www.djangoproject.com/
 
-The textbook companions are an interesting project since:
+In summary, the textbook companions are of interest because:
 
-1. It provides ready-to-use examples of how to apply a given software package
+1. They provide ready-to-use examples of how to apply a given software package
    or set of tools to a particular problem.
-2. They scale well and can be easily crowd sourced.
+2. They scale well and can be easily crowd-sourced.
 3. The scale of the current effort allows one to ask interesting questions,
    for example "what are the different uses of the FFT in science and
    engineering?".
@@ -690,10 +693,10 @@ Scipy India
 ------------
 
 The SciPy India conference provides an opportunity for those interested in
-Python to learn new developments, talk about how they have used Python, meet
-other interested users/developers and participate in the community.
+Python to learn of new developments, talk about how they have used Python,
+meet other interested users/developers and participate in the community.
 
-The Python FOSSEE group has also been organizing the SciPy India conference
+The Python FOSSEE group has been organizing the SciPy India conference
 since 2009.  Seven conferences have been organized thus far.  The conferences
 have traditionally been held in December.  They are largely funded by the
 FOSSEE project.  The project staff manage the local organization almost
@@ -714,8 +717,8 @@ many go back and encourage their students to use the tools and participate in
 the future.
 
 
-Future plans
-------------
+Plans for the future
+---------------------
 
 The Python group plans to build on the existing work.  The team will continue
 to generate textbook companions, provide support for the workshops conducted
@@ -738,16 +741,17 @@ Conclusions
 ------------
 
 As discussed in this paper, the FOSSEE project has used several interesting
-approaches to spread Python in India.  Spoken tutorials help deliver good
-self-learning training material to a large audience.  The SDES course allows
-students to learn effective computational skills as part of their curriculum.
-Yaksh is an open source tool that can be used to effectively test the
-programming skills of a student.  Together, these tools maybe be effectively
-used by instructors to teach computational tools and programming to a large
-number of students.  The author's experience with using Yaksh while teaching
-students at different levels has also been shared.  It seems that testing
-students often on their programming is an effective way to have them practice
-their programming skills and provide quick feedback to the instructor.
+approaches to spread Python in India.  Spoken tutorials help deliver
+good-quality self-learning training material to a large audience.  The SDES
+course allows students to learn effective computational skills as part of
+their curriculum.  Yaksh is an open source tool that can be used to
+effectively test the programming skills of a student.  Together, these tools
+and materials maybe be effectively used by instructors to teach computational
+tools and programming to a large number of students.  The author's experience
+with using Yaksh while teaching students at different levels has also been
+shared.  It seems that testing students often on their programming is an
+effective way to have them practice their programming skills and provide quick
+feedback to the instructor.
 
 Textbook companions offer an interesting alternative to documentation and
 scales well.  The very fact that FOSSEE has helped facilitate around 500+
@@ -772,7 +776,8 @@ author wishes to thank Asokan Pichai who helped shape the FOSSEE project over
 the first few years.  This work would not be possible without the efforts of
 the many FOSSEE staff members.  The past and present members of the project
 are listed here: http://python.fossee.in/about/  the author wishes to thank
-them all.
+them all.  The author wishes to thank the reviewers of this manuscript for
+their suggestions that have made this manuscript better.
 
 
 References
