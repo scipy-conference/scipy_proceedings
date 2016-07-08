@@ -40,9 +40,9 @@
    modern machine learning techniques in a simple, reproducible, and extensible
    way. Users can apply out-of-the-box feature engineering workflows as well as
    save and replay their own analyses. Any steps taken in the front end can also
-   be exported to an Jupyter notebook, so users can iterate between possible
-   models within the front end and then fine-tune their analysis using the more
-   flexible back-end library.
+   be exported to a Jupyter notebook, so users can iterate between possible
+   models within the front end and then fine-tune their analysis using the
+   additional capabilities of the back-end library.
 
 .. class:: keywords
 
@@ -93,11 +93,11 @@ data itself:
         better strategy. :cite:`scu2014`
 
 Even if a domain scientist works closely with machine learning experts, the
-software engineering requirements are daunting. Being a modern data-driven
-scientist should not, require an army of software engineers, machine
+software engineering requirements can be daunting. Being a modern data-driven
+scientist should not require an army of software engineers, machine
 learning experts, statisticians and production operators. ``cesium``
 :cite:`cesium` was created to allow domain experts to focus on the questions at
-hand rather than needing to architect a complete engineering project.
+hand rather than needing to assemble a complete engineering project.
 
 The analysis workflow of ``cesium`` can be used in two forms: a web front end
 which allows researchers to upload their data, perform analyses, and visualize
@@ -201,26 +201,29 @@ parameters to tune, and what the results actually mean.
 
 The goal of ``cesium`` is to simplify the analysis pipeline so that scientists
 can spend less time solving technical computing problems and more time answering
-scientific questions. ``cesium`` includes a number of out-of-the-box feature
-engineering workflows that transform raw time
-series data to extract signal from the noise. By recording the inputs,
-parameters, and outputs of previous experiments, ``cesium`` allows researchers
-to answer new questions that arise out of previous lines of inquiry. Saved
-``cesium`` workflows can be can be applied to new data as it arrives and shared
-with collaborators or published so that others may apply the same
-beginning-to-end analysis for their own data.
+scientific questions. ``cesium`` provides a library of feature extraction
+techniques inspired by analyses from many scientific disciplines, as well as a
+surrounding framework for building and analyzing models from the resulting
+feature information using ``scikit-learn`` (or potentially other machine
+learning tools).
+
+By recording the inputs, parameters, and outputs of previous experiments,
+`cesium`` allows researchers to answer new questions that arise out of
+previous lines of inquiry. Saved ``cesium`` workflows can be applied to new
+data as it arrives and shared with collaborators or published so that others
+may apply the same beginning-to-end analysis for their own data.
 
 For advanced users or users who wish to delve into the source code corresponding
-to a workflow producing through the ``cesium`` web front end, we have provided
-the ability to produce a Jupyter notebook :cite:`perez2007` from a saved workflow with a
-single click. While our goal is to have the front end to be as robust and
-flexible as possible, ultimately there will always be special cases where an
-analysis requires tools which have not been anticipated, or where the debugging
-process requires a more detailed look at the intermediate stages of the
-analysis. Exporting a workflow to a runnable notebook provides a more detailed,
-lower-level look at how the analysis is being performed, and can also allow the
-user to reuse certain steps from a given analysis within any other Python
-program.
+to a workflow produced through the ``cesium`` web front end, we are implementing
+the ability to produce a Jupyter notebook :cite:`perez2007` from a saved
+workflow with a single click. While our goal is to have the front end to be as
+robust and flexible as possible, ultimately there will always be special cases
+where an analysis requires tools which have not been anticipated, or where the
+debugging process requires a more detailed look at the intermediate stages of
+the analysis. Exporting a workflow to a runnable notebook provides a more
+detailed, lower-level look at how the analysis is being performed, and can also
+allow the user to reuse certain steps from a given analysis within any other
+Python program.
 
 ``cesium`` library
 ==================
@@ -233,7 +236,7 @@ at addressing the following uses cases:
 2. A scientist who is experienced with time series analysis but is looking for
    **new features** that can better capture patterns within their data.
 
-3. A user of the ``cesium`` web front end who realizes she requires additional
+3. A user of the ``cesium`` web front end who realizes they require additional
    functionality and wishes to add additional stages to their workflow.
 
 Our framework primarily implements "feature-based methods", wherein the raw
@@ -248,8 +251,7 @@ including both general time series features and domain-specific features drawn f
 various scientific disciplines. Some specific advantages of the ``cesium``
 featurization process include:
 
-- Support for both regularly and irregularly sampled time series (i.e., where
-  the time lags between data points are not constant).
+- Support for both regularly and irregularly sampled time series.
 
 - Ability to incorporate measurement errors, which can be provided for each data
   point of each time series (if applicable).
@@ -271,24 +273,26 @@ large outliers to be modeled more precisely.
    Fitted multi-harmonic Lomb-Scargle model for a light curve from a periodic
    Mira-class star. :label:`ls`
 
-Other more involved features could be the estimated parameters for various fitted
-statistical models: Figure :ref:`ls` shows a multi-frequency,
+Other more involved features could be the estimated parameters for various
+fitted statistical models: Figure :ref:`ls` shows a multi-frequency,
 multi-harmonic Lomb-Scargle model that describes the rich periodic behavior in
-an example time series :cite:`lomb1976,scargle1982`. In particular, a time
-series is modeled as a periodic function
+an example time series :cite:`lomb1976,scargle1982`. The Lomb-Scargle method is
+one approach for generalizing the process of Fourier analysis of frequency
+spectra to the case of irregularly sampled time series. In particular, a time
+series is modeled as a superposition of periodic functions
 
 .. math::
 
-   \tilde{y}(t) = \sum_{i=1}^m \sum_{j=1}^n A_{ij} \cos i \omega_j t + B_{ij} \sin i \omega_j t,
+   \tilde{y}(t) = \sum_{k=1}^m \sum_{l=1}^n A_{kl} \cos k \omega_l t + B_{kl} \sin k \omega_l t,
 
-where the parameters :math:`A_{ij}, B_{ij},` and :math:`\omega_j` are selected
+where the parameters :math:`A_{kl}, B_{kl},` and :math:`\omega_l` are selected
 via non-convex optimization to minimize the residual sum of squares
 (weighted by measurement errors if applicable). The estimated periods,
-amplitudes, phases, and goodness-of-fits can then be used as features which
-broadly characterize the periodicity of the input time series.
+amplitudes, phases, goodness-of-fits, and power spectrum can then be used as
+features which broadly characterize the periodicity of the input time series.
 
-API details
------------
+Usage overview
+--------------
 Here we provide a few examples of the main ``cesium`` API components that would
 be used in a typical analysis task. A workflow will typically consist of three
 steps: featurization, model building, and prediction on new data. The majority of
@@ -307,8 +311,8 @@ The featurization step is performed using one of two main functions:
   - Takes in data that is already present in memory and computes the requested
     features (passed in as string feature names) for each time series.
 
-  - Features can be computed in parallel across workers (``use_celery=True``) or
-    locally in serial (``False``).
+  - Features can be computed in parallel across workers via Celery, a Python
+    distributed task queue :cite:`celery`, or locally in serial.
 
   - Class labels/regression targets and metadata/features with known values are
     passed in and stored in the output dataset.
@@ -318,8 +322,7 @@ The featurization step is performed using one of two main functions:
 - ``featurize_data_files(uris, ...)``,
 
   - Takes in a list of file paths or URIs and dispatches featurization tasks to
-    be computed in parallel via Celery :cite:`celery`, a Python distributed task
-    queue.
+    be computed in parallel via Celery.
 
   - Data is loaded only remotely by the workers rather than being copied, so
     this approach should be preferred for very large input datasets.
@@ -336,7 +339,7 @@ regression targets, and other arbitrary metadata to be used in building a
 statistical model.
 
 The ``build_model`` contains tools meant to to simplify the process of building
-``sckit-learn`` models from (non-rectangular) feature set data module:
+``sckit-learn`` models from (non-rectangular) feature set data:
 
 - ``model_from_featureset(featureset, ...)``
   
@@ -365,8 +368,8 @@ After a model is initially trained or predictions have been made, new models can
 be trained with more features or uninformative features can be removed until the
 result is satisfactory.
 
-Other technological details
----------------------------
+Implementation details
+----------------------
 ``cesium`` is implemented in Python, along with some C code (integrated via
 Cython) for especially computationally-intensive feature calculations.
 Our library also relies upon many other open source Python projects, including
@@ -387,7 +390,7 @@ more space-efficient serialization and loading of results (as compared to a
 text-based format).
 
 The ``dask`` library provides a wide range of tools for organizing computational
-tasks. ``cesium`` makes use of only one small component: within ``dask``, tasks
+full process of exporting tasks. ``cesium`` makes use of only one small component: within ``dask``, tasks
 are organized as a directed acyclic graph (DAG), with the results of some tasks
 serving as the inputs to others. Tasks can then be computed in an efficient
 order by ``dask``'s scheduler. Within ``cesium``, many features rely on other
@@ -427,11 +430,16 @@ following features:
  - Visualization and analysis of results.
  - Tracking of an entire exploratory workflow from start-to-finish for
    reproducibility (in progress).
- - Downloads of Jupyter notebooks to replicate analyses (in progress).
+ - Downloads of Jupyter notebooks to replicate analyses [#notebook]_.
 
 .. [#isolation] Isolation is currently provided by limiting the user
                 to non-privileged access inside a Docker :cite:`docker`
-                container. This does not theoretically guarantee 100% isolation.
+                container.
+
+.. [#notebook] Our current implementation of the front end includes the ability
+	       to track all of a user's actions in order to produce a notebook
+	       version, but the full process of generating the notebook is still
+	       a work in progress.
 
 Implementation
 --------------
@@ -460,7 +468,7 @@ e.g., RabbitMQ :cite:`videla2012`. The "message flow" paradigm adds WebSocket
 support to any Python WSGI server (Flask, Django [#channels]_, Pylons, etc.), and
 allows scaling up as demand increases. It also implement trivially modern data
 flow models such as Flux/Redux, where information always flows in one direction:
-from front end to back end via Hypertext Transfer Protocol (HTTP) calls, and
+from front end to back end via HTTP (Hypertext Transfer Protocol) calls, and
 from back end to front end via WebSocket communication.
 
 .. [#channels] At PyCon2016, Andrew Godwin presented a similar
@@ -610,7 +618,7 @@ compute five standard features for EEG analysis suggested by Guo et al. :cite:`g
             return scipy.stats.skew(m)
 
 Now we'll pass the desired feature functions as a dictionary via the ``custom_functions``
-keyword argument.
+keyword argument (functions can also be passed in as a list or a ``dask`` graph).
 
 .. code-block:: python
         
@@ -753,7 +761,7 @@ the same analysis can be performed in a browser with no setup or coding required
 
 Web front end
 -------------
-*TODO Replace with new styling, if time allows*
+*TODO Replace with new styling once color scheme is finalized*
 
 Here we briefly demonstrate how the above analysis could be conducted using only
 the web front end. Note that the user interface presented here is a preliminary version
@@ -788,8 +796,8 @@ Future work
 The ``cesium`` project is under active development. Some of our upcoming goals
 include:
 
-- Full support for exporting Jupyter notebooks from workflows created within the
-  web front end.
+- Full support for exporting Jupyter notebooks from any workflow created within
+  the web front end.
 
 - Additional features from other scientific disciplines (currently the majority
   of available features are taken from applications in astronomy).
@@ -814,7 +822,7 @@ both unique challenges and interesting opportunities in striking a balance
 between accessibility and flexibility of the two components.
 Second, the ``cesium`` project places a strong emphasis on reproducible
 workflows: all actions performed within the web front end are logged and can be
-easily exported to an Jupyter notebook that exactly reproduces the steps of the
+easily exported to a Jupyter notebook that exactly reproduces the steps of the
 analysis. Finally, the scope of our project is simultaneously both narrow (time
 series analysis) and broad (numerous distinct scientific disciplines), so
 determining how much domain-specific functionality to include is an ongoing
