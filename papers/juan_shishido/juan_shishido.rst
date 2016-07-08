@@ -668,7 +668,8 @@ thoughts and analyses.
 
 Footnotes
 ---------
-.. [1] https://github.com/juanshishido/okcupid.
+.. [1] https://github.com/juanshishido/okcupid. Jupyter notebook with analysis
+       results: https://github.com/juanshishido/okcupid/blob/master/OkNLP-paper.ipynb
 
 .. [2] https://github.com/rudeboybert/JSE_OkCupid. Our original data source was
        Everett Wetchler's okcupid repository (https://github.com/everett-wetchler/okcupid).
