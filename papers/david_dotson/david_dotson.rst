@@ -132,7 +132,7 @@ We can, for example, work with directory structures rather easily:
    >>> data
    <Tree: 'maple/a/place/for/data/'>
 
-This ``Tree`` object points to a path in the Treant's own tree, but it does not necessarily exist.
+This ``Tree`` object points to a path in the Treant's own tree, but it need not necessarily exist.
 We can check this with:
 
 
@@ -184,6 +184,8 @@ We can, for example, easily store a Pandas_ [McK10]_ DataFrame somewhere in the 
    >>> data
    <Tree: 'maple/a/place/for/data/'>
    >>> df.to_csv(data['random_dataframe.csv'].abspath)
+
+   # take a look at the contents of `data`
    >>> data.draw()
    data/
    +-- random_dataframe.csv
@@ -195,13 +197,15 @@ and we can introspect the file directly:
    >>> csv = data['random_dataframe.csv']
    >>> csv
    <Leaf: 'maple/a/place/for/data/random_dataframe.csv'>
+
+   # this should look like a CSV file
    >>> print(csv.read())
    ,A,B
    0,-0.573730932177663,-0.08857033924376226
    1,0.03157276797041359,-0.10977921690694506
    2,-0.2080757315892524,0.6825003213837373
 
-Using ``Treant``, ``Tree``, and ``Leaf`` objects, we can work with the filesystem Pythonically without giving much attention to *where* these objects live within that filesystem.
+Using ``Treant``, ``Tree``, and ``Leaf`` objects, we can work with the filesystem Pythonically without giving much attention to precisely *where* these objects live within that filesystem.
 This becomes especially powerful when we have many directories/files we want to work with, possibly in many different places.
 
 .. _Pandas: http://pandas.pydata.org/
@@ -218,6 +222,8 @@ If we have many more Treants, perhaps scattered about the filesystem:
 
    >>> for path in ('an/elm/', 'the/oldest/oak',
    ...              'the/oldest/tallest/sequoia'):
+   ...
+   ...     # make a Treant in filesystem at path
    ...     dtr.Treant(path)
 
 we can gather them up with ``datreant.core.discover``:
@@ -299,22 +305,22 @@ or getting back Treants that are both good for construction *and* used for makin
 
 .. code-block:: python
 
-   # a list of tags serves as an *and* query
+   # a list of tags serves as an *intersection* query
    >>> b[b.tags[['building', 'furniture']]]
    <Bundle([])>
 
 which in this case none of them are.
 
-Other tag expressions can be constructed using tuples (for *or* operations) and sets (for *not and*), and nesting of any of these works as expected:
+Other tag expressions can be constructed using tuples (for *or*/*union* operations) and sets (for a *negated intersection*), and nesting of any of these works as expected:
 
 .. code-block:: python
 
-   # we can get *or* by using a tuple instead of a list
+   # we can get a *union* by using a tuple
    >>> b[b.tags['building', 'furniture']]
    <Bundle([<Treant: 'maple'>, <Treant: 'oak'>,
             <Treant: 'elm'>])>
 
-   # and we can get *not and* by using a set
+   # we can get a *negated intersection* by using a set
    >>> b[b.tags[{'building', 'furniture'}]]
    <Bundle([<Treant: 'sequoia'>, <Treant: 'maple'>,
             <Treant: 'oak'>, <Treant: 'elm'>])>
@@ -361,7 +367,7 @@ and we can access categories for individual Treants:
                  'bark': 'fibrous',
                  'plant': 'tree'})>
 
-The aggregated categories for all members in a ``Bundle`` are accessible via `Bundle.categories`, which gives a view of the categories with keys common to *every* member Treant:
+The aggregated categories for all members in a ``Bundle`` are accessible via ``Bundle.categories``, which gives a view of the categories with keys common to *every* member Treant:
 
 .. code-block:: python
 
@@ -376,7 +382,7 @@ The aggregated categories for all members in a ``Bundle`` are accessible via `Bu
                               'tree', 'tree']})>
 
 Each element of the list associated with a given key corresponds to the value for each member, in member order.
-Using `Bundle.categories` is equivalent to `Bundle.categories.all`; we can also access categories present among *any* member:
+Using ``Bundle.categories`` is equivalent to ``Bundle.categories.all``; we can also access categories present among *any* member:
 
 .. code-block:: python
 
@@ -387,7 +393,7 @@ Using `Bundle.categories` is equivalent to `Bundle.categories.all`; we can also 
      'type': ['deciduous', 'deciduous',
               'deciduous', 'evergreen']}
 
-Members that do not have a given key will have `None` as the corresponding value in the list.
+Members that do not have a given key will have ``None`` as the corresponding value in the list.
 Accessing values for a list of keys:
 
 .. code-block:: python
@@ -405,28 +411,30 @@ or a set of keys:
      'home': [None, None, None, 'california']}
 
 returns, respectively, a list or dictionary of lists of values, where the list for a given key is in member order.
-Perhaps the most powerful feature of categories is the `groupby` method, which, given a key, can be used to group specific members in a ``Bundle`` by their corresonding category values.
-If we want to group members by their 'bark', we can use `groupby` to obtain a dictionary of members for each value of 'bark':
+Perhaps the most powerful feature of categories is the ``groupby`` method, which, given a key, can be used to group specific members in a ``Bundle`` by their corresonding category values.
+If we want to group members by their ``'bark'``, we can use ``groupby`` to obtain a dictionary of members for each value of ``'bark'``:
 
 .. code-block:: python
 
     >>> b.categories.groupby('bark')
     {'fibrous': <Bundle([<Treant: 'sequoia'>])>,
-     'mossy': <Bundle([<Treant: 'oak'>, <Treant: 'maple'>])>,
+     'mossy': <Bundle([<Treant: 'oak'>,
+                       <Treant: 'maple'>])>,
      'smooth': <Bundle([<Treant: 'elm'>])>}
 
-Say we would like to get members grouped by both their 'bark' and 'home':
+Say we would like to get members grouped by both their ``'bark'`` and ``'home'``:
 
 .. code-block:: python
 
     >>> b.categories.groupby({'bark', 'home'})
-    {('fibrous', 'california'): <Bundle([<Treant: 'sequoia'>])>}
+    {('fibrous', 'california'):
+        <Bundle([<Treant: 'sequoia'>])>}
 
-We get only a single member for the pair of keys `('fibrous', 'california')` since 'sequoia' is the only Treant having the 'home' category.
+We get only a single member for the pair of keys ``('fibrous', 'california')`` since ``'sequoia'`` is the only Treant having the ``'home'`` category.
 Categories are useful as labels to denote the types of data that a Treant may contain or how the data were obtained.
-By leveraging the `groupby` method, one can then extract the Treants (and the data they contain) by selected categories without having to explicitly access each member.
-This feature can be particularly powerful in cases where, say, many Treants have been created and categorized to handle incoming data over an extended period of time;
-one can then quickly gather any data needed without having to think about low-level details.
+By leveraging the ``groupby`` method, one can extract Treants by selected categories without having to explicitly access each member.
+This feature can be particularly powerful in cases where many Treants have been created and categorized to handle incoming data over an extended period of time;
+one can quickly gather any data needed without having to think about low-level details.
 
 
 Treant modularity with attachable Limbs
@@ -439,7 +447,7 @@ While ``Tags`` and ``Categories`` are attached by default to all ``Treant`` obje
 The dependencies of ``datreant.core`` include backports of standard library modules such as ``pathlib`` and ``scandir``, as well as lightweight modules such as ``fuzzywuzzy`` and ``asciitree``.
 
 ``datreant.core`` remains lightweight because other packages in the ``datreant`` namespace can have any dependencies they require.
-Another such packages is ``datreant.data``, which includes a set of convenience ``Limb`` objects for storing and retrieving Pandas and NumPy_ [vdW11]_ datasets in HDF5 using PyTables_ and h5py_ internally.
+One such package is ``datreant.data``, which includes a set of convenience ``Limb`` objects for storing and retrieving Pandas and NumPy_ [vdW11]_ datasets in HDF5 using PyTables_ and h5py_ internally.
 
 We can attach a ``Data`` limb to a ``Treant`` with:
 
