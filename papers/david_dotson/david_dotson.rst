@@ -541,6 +541,7 @@ A ``Sim`` featues special limbs for storing an MDAnalysis_ ``Universe`` definiti
 
 As an example of effectively using ``Sims``, say we have 50 biased molecular dynamics simulations that sample the conformational change of the ion transport protein NhaA [Lee14]_ from the inward-open to outward-open state (Figure :ref:`fig:nhaa`).
 Let's also say that we are interested in how many hydrogen bonds exist at any given time between the two domains as they move past each other.
+These ``Sim`` objects already exist in the filesystem, each having a ``Universe`` definition already set to point to its unique trajectory file(s).
 
 We can use the MDAnalysis ``HydrogenBondAnalysis`` class to collect the data for each ``Sim`` using ``Bundle.map`` for process parallelism, storing the results using the ``datreant.data`` limb:
 
