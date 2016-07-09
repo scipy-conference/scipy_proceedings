@@ -55,7 +55,8 @@ Introduction
 .. must motivate datreant, and make a good sell as to why it is a useful and general-purpose tool
 
 In many scientific fields, especially those analyzing experimental or simulation data, there is an existing ecosystem of specialized tools and file formats which new tools must work around.
-Consequently, the filesystem ends up serving as a *de facto* database, with directory trees the zeroth-order data structure for scientific data.
+Consequently, specialized database systems may be unsuitable for data management and storage. 
+In these cases the filesystem ends up serving as a *de facto* database, with directory trees the zeroth-order data structure for scientific data.
 This is particularly true for fields centered around simulation: simulation systems can vary widely in size, composition, rules, parameters, and starting conditions.
 And with ever-increasing computational power, it is often necessary to store intermediate results from large amounts of simulation data so that they may be accessed and explored interactively.
 
