@@ -118,6 +118,7 @@ And in the other Python session, the same ``Treant`` with the same tags is visib
    <Tags(['plant', 'syrup'])>
 
 Internally, advisory locking is done to avoid race conditions, making a ``Treant`` multiprocessing-safe.
+A ``Treant`` can also be moved, either locally within the same filesystem or to a remote filesystem, and it will continue to work as expected.
 
 
 Introspecting a Treant's Tree
