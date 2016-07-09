@@ -564,11 +564,13 @@ getting stuck in a local minima.
    dashed red line is the nodal line estimated by the SVC. 
    :label:`class-dc`
 
-As an example, in Fig. :ref:`class-dc` we show the classification results for the
-3146815 event. The (dashed red) line shows the nodal line of the classifier function.
-The (solid red) line is the template shear solution, orientated by optimizing
-the correlation function, and the (solid green) line shows the preferred solution
-estimated by HASH.  
+
+As an example, in Fig. :ref:`class-dc` we show the classification results 
+for the 3146815 event. The (dashed red) line shows the nodal line of the 
+classifier function. The (solid red) line is the template shear solution, 
+orientated by optimizing the correlation function, and the (solid green) 
+line shows the preferred 
+solution estimated by HASH.  
 
 
 Discussion
@@ -745,7 +747,7 @@ References
 .. [Ben81] A. Ben-Menahem and S. J. Singh *Seismic Waves and Sources*
 	   Springer-Verlag New York Inc., 1981
 
-.. [Aki02] K. Aki and P. G. Richards *Quantitative seismology, second edition*
+.. [Aki02] K. Aki and P. G. Richards *Quantitative Seismology, second ed.*
 	   University Science Books, 2002
 
 .. [Morse53] M. Morse and F. Feshbach, Methods of theoretical physics
@@ -759,9 +761,11 @@ References
 	   FPFIT, FPPLOT, and FPPAGE: FORTRAN computer programs for calculating and displaying earthquake
 	   faultplane solutions, U.S. Geol. Surv. Open-File Rept. 85-739, 109 Pp.
 
-.. [Morrison] M. A. Morrison and G. A. Parker, Australian Journal of Physics 40, 465 (1987).
+.. [Morrison] M. A. Morrison and G. A. Parker, 
+    Australian Journal of Physics 40, 465 (1987).
    
-.. [Scholkopf] B. Scholkopf and A. Smola, Learning with Kernels, The MIT Press, 2002
+.. [Scholkopf] B. Scholkopf and A. Smola, 
+    Learning with Kernels, The MIT Press, 2002
 
 .. [sklearn] Fabian Pedregosa, Gaël Varoquaux, Alexandre Gramfort, Vincent Michel, Bertrand Thirion, Olivier Grisel, Mathieu Blondel, Peter Prettenhofer, Ron Weiss, Vincent Dubourg, Jake Vanderplas, Alexandre Passos, David Cournapeau, Matthieu Brucher, Matthieu Perrot, Édouard Duchesnay. Scikit-learn: Machine Learning in Python, Journal of Machine Learning Research, 12, 2825-2830 (2011)
 
@@ -777,8 +781,8 @@ References
 	   DOI: 10.1785/gssrl.81.3.530
 
 .. [HashPy] hashpy,
-	    https://github.com/markcwill/hashpy,
-	    DOI:10.5281/zenodo.9808
+      https://github.com/markcwill/hashpy,
+      DOI:10.5281/zenodo.9808
 
 .. [mplstereonet] mplstereonet,
 		  https://pypi.python.org/pypi/mplstereonet
