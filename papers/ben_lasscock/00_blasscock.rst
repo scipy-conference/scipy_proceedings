@@ -9,21 +9,16 @@ Generalized earthquake classification
 .. class:: abstract
 
 	   
-   The problem we tackle in the is paper is one of characterizing the
-   source of an earthquake based on identifying the nodal lines of
-   the radiation pattern it produces. These characteristics are the
-   mode of failure of the rock (shear or tensile), the orientation of
-   the fault plane and direction of slip. We will also extend the
-   derive a correlation coefficient that can be used to compare the
-   source mechanisms of different earthquakes.  This information is
-   relevant to both hazard and commercial seismic monitoring.  We will
-   formulate this problem in terms of a simple binary classification
-   on the surface of the sphere, where the classes are the polarity of
-   the first motion at observed various seismic stations, and the
-   separating hyper-plane is the solution for nodal lines of the
-   radiation pattern. Our design goal was to derive an algorithm that
-   would be both robust to misclassification of the polarity data and
-   suitable for online processing. We will then go on to derive a
+   We characterize the source of an earthquake based on identifying
+   the nodal lines of the radiation pattern it produces. These
+   characteristics are the mode of failure of the rock (shear or
+   tensile), the orientation of the fault plane and direction of
+   slip. We will also derive a correlation coefficient comparing the
+   source mechanisms of different earthquakes.  The problem is
+   formulated in terms of a simple binary classification on the
+   surface of the sphere. Our design goal was to derive an algorithm
+   that would be both robust to misclassification of the observed data
+   and suitable for online processing. We will then go on to derive a
    mapping which translates the learned solution for the separating
    hyper-plane back to the physics of the problem, that is, the
    probable source type and orientation. For reproducibility, we will
@@ -39,23 +34,21 @@ Introduction
 
 In this paper we are going to explain how to classify earthquake data
 using a support vector classifier (SVC) and then how to interpret the
-result physically. We will be drawing on the scikits-learn [sklearn]_
-project for the SVC, the Obspy seismological Python package for some
-utility routines and mplstereonet [#]_, which is a matplotlib [mpl]_
+result physically. We will be drawing on the scikit-learn [sklearn]_
+project for the SVC, the Obspy seismological Python package [Obspy]_ for some
+utility routines and mplstereonet [mplstereonet]_, which is a matplotlib [mpl]_
 plugin for visualization.
 
-.. [#] https://pypi.python.org/pypi/mplstereonet
-
 Much of the discussion will center around deriving a mapping from the
-solution of the SVC to the spectral content of the earthquake source
-mechanism. The key concept we will be elaborating on is understanding
-the relationship between what we call input and feature spaces of the
-SVC. The results of the classification are curves separating points on
-the surface of the focal sphere (the input space), which is the domain
-of the input data.  However, the physics and understanding of the
-result lies in the representation of the solution in the feature
-space, which is the higher dimensional space where the classifier
-solves the classification problem.
+solution of the SVC to the physical process that originated the
+earthquake.  The key concept we will be elaborating on is
+understanding the relationship between what we call input and feature
+spaces of the SVC. The results of the classification are curves
+separating points on the surface of the focal sphere (the input
+space), which is the domain of the input data.  However, the physics
+and understanding of the result lies in the representation of the
+solution in the feature space, which a higher dimensional space
+where the classifier may linearly separate the data.
 
 For the sake of reproducibility, the demonstration will use the same
 dataset provided with the the US Geological Survey (USGS) HASH
@@ -63,12 +56,15 @@ software [#]_. HASH [HASH]_ is an earthquake classification code
 provided by the USGS, it is built upon an earlier package called
 FPFIT, which implements a least squares classifier. For each case we
 will be comparing, and contrasting our solutions with those generated
-by HASH which we generally expect to be very similar.  This will also
-give us an opportunity to contrast least squares classification
-[HASH]_ with kernel methods (SVC), with a discussion about robustness
-of the solution misclassification of the data.
+by HASH, which we generally expect to be similar.  
 
 .. [#] http://earthquake.usgs.gov/research/software/index.php
+
+Our discussion will include annotated software explaining the important
+steps in the computation.  And we will be contributing software [#]_ to
+reproduce the results of this paper.
+
+.. [#] https://github.com/blasscoc/FocalMechClassifier
 
 
 .. figure:: seismogram-wr1.png
@@ -79,86 +75,80 @@ of the solution misclassification of the data.
    The data was obtained by querying the IRIS database 
    http://ds.iris.edu/ds/nodes/dmc/data/types/events/. :label:`seismogram`
    
-.. figure:: WR1.png
+.. figure:: WR1-2.png
 	    	   
    A portion of the Australian seismic network showing the location
    of the Warramunga seismic array, the map was obtained from
    http://www.fdsn.org/networks/detail/AU/. :label:`WR1.png`
 
-Consider a particular example where we would apply the analysis
-presented in this paper. In Fig. :ref:`seismogram`, we show a
-seismogram (recording) of an earthquake that was located in Solomon
-Islands.  The recording shown was made by the WR1 node of the
-Warramunga seismic array, which is part of the Australian seismic
-network, shown partially in Fig. :ref:`WR1.png`. The goal of hazard
-monitoring in this case would be to characterize the deformation of
-the earth (focal mechanism) that caused this earthquake. The analysis
-would involve first locating the source spatially and then classifying
-its focal mechanism, and importantly the orientation of the fault
-plane. The orientation of the fault plan is important because
-displacement of the sea-floor can cause Tsunami. The algorithm
-discussed in this paper provides the analysis of the focal mechanism,
-with the extension that we can also compare the spectrum of the
-solution with a past events located in this area. This additional
-information maybe useful for decision making regarding what action
-should be taken given the risk of a historical (or perhaps modeled)
-scenario repeating.
-
-Our discussion will include annotated software explaining important
-steps in the computation.  And will be contributing software [#]_ to
-estimate solutions for fault plane orientation, and a correlation
-coefficients.
-
-.. [#] https://github.com/blasscoc/FocalMechClassifier
 
 Problem statement
 -----------------
 
+Consider a particular example where we would apply the analysis
+presented in this paper. In Fig. :ref:`seismogram`, we show a
+seismogram (recording) of an earthquake that was located in Solomon
+Islands. The black and white glyph is a graphical representation of
+the type of focal mechanism. The orientation of the nodal lines of
+this glyph displays the orientation of the fault plane.  The
+recording shown was made by the WR1 node of the Warramunga seismic
+array, which is part of the Australian seismic network, shown
+partially in Fig. :ref:`WR1.png`. The goal of hazard monitoring in
+this case would be to characterize the deformation of the earth (focal
+mechanism) that caused this earthquake. This analysis would involve
+first locating the source spatially and then classifying its focal
+mechanism, and importantly the orientation of the fault plane. The
+orientation of the fault plan is important because displacement of the
+sea-floor can cause Tsunami. The algorithm discussed in this paper
+provides the analysis of the focal mechanism, with the extension that
+we can also compare the spectrum of the solution with a past events
+located in this area. This additional information may be useful for
+decision making regarding what action should be taken given the risk
+of a historical (or perhaps modeled) scenario repeating.
+
 We proceed by detailing exactly the parameters of the problem at hand.
-The raw data are observations the initial arrival of energy from this
-earthquake, which is a compressional "P-wave". The first motion
-(initial displacement) recorded at this station is identified (or
-picked) as shown by a red dot in Fig. :ref:`WR1.png`. Consider this is
-as a radiation amplitude from the earthquake measured at a particular
+The raw data are recordings of the initial arrival of energy from this
+earthquake, measured across a seismic network. From each recording,
+the initial displacement (or first motion) is identified (or picked),
+as shown by a red dot in Fig. :ref:`WR1.png`.  Consider this is as a
+radiation amplitude from the earthquake measured at a particular
 location. Further measurements across the seismic network begin to
 inform the shape of the radiation pattern created by the
 event. However, a radiation pattern measured far from the event
 becomes distorted because of the refraction of the seismic wave as it
 propagates through the earth.  To remove this distortion, this energy
-must migrated back to the neighborhood of the estimated source
-location. We call this neighborhood the focal sphere. The process of
-picking and locating seismic events is beyond the scope of this
-paper. However, seismograms can be requested from the IRIS database
-[#]_ and a suit of Python tools for processing this data is made
-available by the Obspy [#]_ Python project.
+must migrated, along an estimated ray path, back to the neighborhood of
+the estimated source location . We call this neighborhood the focal
+sphere. The process of picking, locating and migrating seismic events
+is beyond the scope of this paper. However, seismograms can be
+requested from the IRIS database [#]_ and a suite of Python tools for
+processing this data is made available by the Obspy [Obspy]_ Python
+project.
 
 .. [#] http://www.iris.edu
-.. [#] https://www.obspy.org/
-.. [#] See scipy.special.sph_harm
 
 The input data to our analysis is the polarity (signed amplitude) of
-the pick, and the azimuth and co-latitude of the observation migrated
+the picks, and the azimuth and co-latitude of the observation migrated
 onto the focal sphere.The design goal is to provide an online tool for
 characterizing the source mechanism. The emphasis is on robustness of
 the algorithm, without the need for post facto processing of the
 data. We also need a system that provides natural metrics of
-similarity between seismic events. 
+similarity between seismic events.
 
-Since we are dealing with the compressional waves in the earth, we
-expect that an observed radiation pattern should be related to the
-eigenfunctions of the scalar wave-equation, the spherical harmonic
-functions [#]_, hence the polarity data should be classified by the
-signed amplitude of a superposition of these functions. We will learn
-this classifying function using the SVC. However, it is the spectral
-representation of the radiation pattern contains the physical meaning
-of the solution.  The spectral content of the source mechanism also
-provides for metrics of similarity. Note that, this line of reasoning
-leads us down a somewhat different than the usual method of analysis
-based on the moment tensor, see [Aki02]_.
+Physically, the initial arrival of energy will be in the form of a
+compressional wave. The amplitude of these compressional waves are
+solutions to the scalar wave equation, which are the spherical
+harmonic functions [#]_. Hence any function that classifies the
+polarity data should be a superposition of these spherical
+harmonics. We will learn this classifying function using the
+SVC. However, it is the spectral representation (harmonic content) of
+the radiation pattern that contains the physical meaning of the solution.
+
+.. [#] See scipy.special.sph_harm
 
 In Sec.`Theory` we will review the basic results we need from the
-theory of seismic sources. Then in Sec. `Existing least squares
-methods` we will existing methods for classifying earthquake data.
+theory of seismic sources. In Sec. `Existing least squares
+methods` we will review existing methods for classifying earthquake data.
 The Sec. `Earthquake - Learning with Kernels` reviews the Python code
 used in the classification, and derives a mapping between the input
 space of the problem, to the feature space (represented by the
@@ -179,7 +169,7 @@ Theory
    \begin{tabular} {ccc}
    Source & (Fault normal/slip) & Template \cr
    \hline
-   D.C. &
+   Shear &
    (31) + (13) & $-i(Y_{12} + Y_{-12})$\cr
 	Tensile & 
 	(3) & $\alpha Y_{00} + 4\sqrt{5} Y_{02}$\cr
@@ -241,7 +231,7 @@ The black areas of this beachball diagram represents the region where
 the displacement at the source is radially outward (vice versa for the
 white regions). The nodal lines represent the separating margin
 between classes of data (outward and inward displacement). For the
-shear source, the nodal lines represent the fault and auxiliary planes
+shear source, the nodal lines are called the fault and auxiliary planes
 respectively.
 
 One observation we can immediately take away from Fig
@@ -250,7 +240,7 @@ different. The nodal lines of the shear source are great circles,
 which is not the case from the tensile source. That means there is no
 rotation or smooth deformation that can make one look like the other.
 This suggests that the two source are distinguishable, but also
-that there is some potential from identifying admixtures of the two
+that there is some potential of identifying admixtures of the two
 based on their spectral content. 
 
 
@@ -271,30 +261,23 @@ to the data. A modern code built upon FPFIT is the HASH algorithm
 [#]_ website. The HASH software comes with an example "NorthRidge"
 dataset which we will use to demonstrate our method. We compare the
 results of our algorithm with the results of HASH, which is the
-current state of the art. Hashpy is a Python project for wrappering
-HASH [#]_.
+current state of the art. Hashpy [HashPy]_ is a Python project for wrappering
+HASH.
 
 .. [#] http://earthquake.usgs.gov/research/software/index.php
-.. [#] HashPy https://github.com/markcwill/hashpy.
 
 Figure :ref:`yarn` demonstrates how the FPFIT algorithm works.  The
-coordinate system in the figure is a stereonet projection [#]_ of the
+coordinate system in the figure is a stereonet projection [mplstereonet]_ of the
 lower half space of a sphere. The solid red (open blue) dots are
-outward (inward) polarity measured across a seismic network for the
+positive (negative) polarity measured across a seismic network for the
 3146815 event, which was taken from the Northridge dataset
 "north1.phase" supplied with the HASH software. Recall, FPFIT is a
-least squares method, however the function it is optimizing need not be
-particularly convex. As such, there are many solutions that have a
+least squares method, however the function it is optimizing need not
+be particularly convex. As such, there are many solutions that have a
 similar goodness of fit.  Using a grid search method, FPFIT draws a
-ensemble of these possible solutions for the fault orientation. The
-red lines are the fault (and auxiliary) planes for each solution. The
-blue line preferred or most likely solution. In some cases the cost
-function optimized by FPFIT can become multi-modal, which leads to
-instability in the solution. An example of this kind of instability is
-discussed in [HASH], which shows an example where misclassifying
-single polarity data radically changes the solution.
+ensemble of these possible solutions (red lines). The blue line is the
+preferred or most likely solution.
 
-.. [#] Stereonet project code provided by https://pypi.python.org/pypi/mplstereonet
 
 Earthquake - Learning with Kernels
 ----------------------------------
@@ -308,17 +291,32 @@ Earthquake - Learning with Kernels
    The dashed lines represent a separating margin between the two classes, the solid
    line represents the optimal separating hyper-plane. :label:`svc`
 
-In this section we discuss the classification algorithm used, and the application
-of the Python scikits-learn. Whilst our interest was classification of earthquakes,
-the algorithm is applicable for any classification problem defined on a sphere.
+In this section we discuss the classification algorith we develop
+using the Python scikit-learn library. Whilst our interest was
+classification of earthquakes, the algorithm is applicable for any
+classification problem defined on a sphere.
 
-Define the input space of the problem as the surface of the focal sphere, represented
-for example by the stereonet in Fig. :ref:`yarn`. The data is not linearly separable
-on this space. The strategy of the SVC is to project the problem
-into a higher dimensional feature space. And in this feature space, determine the
-best hyper-plane to separate the two classes of data by maximizing the width of the
-separating margin, subject to the constraint that the classes are either side of the
-separating margin, Fig. :ref:`svc` shows a schematic of the algorithm.
+Define the input space of the problem as the surface of the focal
+sphere, represented for example by the stereonet in
+Fig. :ref:`yarn`. The data is not linearly separable on this
+space. The strategy of the SVC is to project the problem into a higher
+dimensional feature space. And in this feature space, determine the
+best hyper-plane to separate the two classes of data by maximizing the
+width of the separating margin, subject to the constraint that the
+classes are either side of the separating margin, Fig. :ref:`svc`
+shows a schematic of the algorithm. An important feature of the SVC is
+that it is robust to misclassification close to the descision
+boundary.  Physically these are curves where the amplitude of the
+radiation is becoming small and then changing sign. What we believe to
+be more important than the overall rate of misclassification of the
+algorithm, is the stability of the result given erroneous input data.
+
+
+
+|
+|
+|
+
 
 .. code-block:: python
 
@@ -355,7 +353,7 @@ separating margin, Fig. :ref:`svc` shows a schematic of the algorithm.
 		    intercept, in_sample)
 
 A Python implementation of the support vector classifier is included in the
-scikits-learn machine learning suite of codes. The projection to a higher
+scikit-learn machine learning suite of codes. The projection to a higher
 dimensional space is done using a kernel, and evaluated in the input space
 using the kernel trick. For classification on a sphere, we need to use an
 inner product kernel, which has the form
@@ -366,26 +364,25 @@ inner product kernel, which has the form
    k(\vec{x},\vec{x}_{i}) = (\langle \vec{x}, \vec{x}_{i} \rangle + 1)^{d}\ .
 	 
 Here "d" is the degree of the kernel. The parameter "C" in the above code
-snippet is a slack variable. This allows for a soft thresholding, which allows
+snippet is a slack variable. This provides a soft thresholding, which allows
 for some misclassification; the default value is usually sufficient.
    
 .. raw:: latex
 
-   Given a set of data $y_{i}$, which is either 1 or -1, the support
-   vector machine learns a corresponding set of coefficients
-   $\alpha_{i}$ and intercept $\beta_{0}$, which determines a classifying function
-   in the input space,
-   \begin{equation}
-   f(\vec{x}) = \sum_{i=1}^{N} \alpha_{i}y_{i}k(\vec{x},\vec{x}_{i}) + \beta_{0}\ .
-   \end{equation}
-   In our application, the zero of this function is the nodal line, and the sign
-   of the function is a prediction for the the direction of the displacement
-   radial to the focal sphere, given the observed data.
-   Not all of the data is relevant for determining the best separating
-   margin, many of the coefficients $\alpha_{i}$ maybe zero. The
-   support vectors are the locations of the data where $\alpha_{i}$
-   are non-zero. The product $\alpha_{i}y_{i}$ associated with each of the
-   support vectors is called the dual coefficients (see the code snippet).
+   Given a set of data $y_{i}$, the support vector machine learns a
+   corresponding set of coefficients $\alpha_{i}$ and intercept
+   $\beta_{0}$, which determines a classifying function in the input
+   space, \begin{equation} f(\vec{x}) = \sum_{i=1}^{N}
+   \alpha_{i}y_{i}k(\vec{x},\vec{x}_{i}) + \beta_{0}\ .
+   \end{equation} In our application, the zero of this function is the
+   nodal line, and the sign of the function is a prediction for
+   the direction of the displacement radial to the focal sphere, given
+   the observed data.  Not all of the data is relevant for determining
+   the best separating margin, many of the coefficients $\alpha_{i}$
+   maybe zero. The support vectors are the locations of the data where
+   $\alpha_{i}$ are non-zero. The product $\alpha_{i}y_{i}$ associated
+   with each of the support vectors is called the dual coefficients
+   (see the code snippet).
 	 
 .. figure:: class_3146815_example.png
 
@@ -397,7 +394,7 @@ to an event from the Northridge dataset. The red line represents zeros
 of the classifying function f(x), the green line is the solution for the fault
 (and auxiliary) planes determined by HASH. Note that the auxiliary
 plane is computed using the aux_plane function provided by the Obspy
-library. The learned nodal line is simply connected, the zeros of the
+library [Obspy]_. The learned nodal line is simply connected, the zeros of the
 classifying function f(x) have been determined using matplotlib's contour
 function.
 
@@ -409,7 +406,7 @@ and its orientation.  To be physically meaningful, we need an
 expression for the nodal lines in terms of its spectrum in the basis of
 spherical harmonic functions. In this basis we can then use the seismic
 source theory of [Ben81]_ to relate the result to a physical process.
-What we what is to determine the spectral content of f(x), 
+What we want is to determine the spectral content of f(x), 
 
 .. math::
    :type: equation
@@ -417,7 +414,7 @@ What we what is to determine the spectral content of f(x),
    f(\vec{x}) = \sum_{l=1}^{\infty}\sum_{m=-l}^{l} \hat{f}_{lm}Y_{lm}(\theta,\psi)
 
 that is, we want to derive its representation in the feature space.
-The steps in deriving this representation, are to first expand the inner
+The steps in deriving this representation are to first expand the inner
 product kernel in terms of the Legendre polynomials [Scholkopf]_,
 
 .. raw:: latex
@@ -435,8 +432,8 @@ product kernel in terms of the Legendre polynomials [Scholkopf]_,
    \end{align*}
 
 When we do this, we see that the degree parameter provides a natural truncation on the complexity of the
-function we are learning. This gives us the intermediate result which expresses the separating margin
-in terms of Legendre polynomials of the inner product
+function we are learning. This gives us an intermediate result which expresses the separating margin
+in terms of Legendre polynomials
 
 .. math::
    :type: equation
@@ -482,10 +479,11 @@ we can show that inner product is,
                        &=& \sum_{l=0}^{\infty}\sum_{m,n} \hat{g}^{*}_{ln}\hat{f}_{lm}\ ,
 
 here the integral is over the surface of the focal sphere and the
-star-notation means complex conjugation.  In the context of hazard
-monitoring, we could use the as a metric of risk, without having to
-propose a source mechanism or fault plane orientation, provided of
-course we have a catalog of earthquakes that are of interest to us.
+star-notation means complex conjugation.
+
+In the context of hazard monitoring, we could use the as a metric of
+risk, without having to propose a source mechanism or fault plane
+orientation.
 
 Physical Interpretation
 -----------------------
@@ -497,13 +495,11 @@ how would we estimate the most likely orientation of the fault plane
 in this model?
 
 First of all, in Table 1, we have a template for the spectral content
-of the shear source for a particular direction of fault normal and slip
-direction. Using this template we might compute a function g(x), and
-then generate a rotation in the input space to realign the fault
-plane. Note we will define rotations in terms of the Euler angles
-(which we can relate to strike, dip and rake of the fault). Then
-optimize the correlation with the classifying function learned by the
-SVC, with respect to the Euler angles,
+of the shear source given a particular orientation.  Using this
+template we compute a function g(x), and then generate a rotation in
+the input space to realign it with the classifying function f(x).  This
+rotation would be estimated by optimizing a correlation coefficient
+with respect to the Euler angles,
 
 .. math::
    :type: eqnarray
@@ -511,18 +507,25 @@ SVC, with respect to the Euler angles,
    \langle g, f\rangle &=& \arg\max_{\alpha, \beta, \gamma}\
    \int d^{3}x\ g^{*}(R(\alpha, \beta, \gamma)\vec{x}) \  f(\vec{x})\  \cr   
 
-Here, R represents are rotation matrix.  This would be a relatively
-complicated procedure because we would need to re-evaluate the
-function g(x) at each iteration of the optimization. It is far more
-efficient to instead generate the rotations in the feature space. To
-do this we borrow from quantum theory, and present Wigner's D-matrices,
+Here, R represents a rotation matrix.  This would be a relatively
+complicated procedure in the input space because we would need to
+re-evaluate the function g(x) at each iteration of the
+optimization. It is far more efficient to instead generate rotations
+in the feature space. To do this we borrow from quantum theory, and
+present Wigner's D-matrices,
 
 .. math::
    :type: eqnarray
 
    g(R(\alpha, \beta, \gamma)\vec{x}) &=& \sum_{l=0}^{\infty}\sum_{m,n}\
                                      D^{l}_{mn}(\alpha, \beta, \gamma) \hat{g}_{ln}Y_{lm}(\theta,\psi)\ .
-				     
+
+Wigner's D-matrices are operators which generate rotations in the
+feature space of the problem. This means that we can translate a
+template solution (Table 1.) in a particular orientation, to a
+solution in any arbitrary orientation, by acting on its spectral
+content.
+   
 .. code-block:: python
 		
    from scipy.optimize import minimize
@@ -549,12 +552,11 @@ The function corr_shear shown in the code snippet implements the
 optimization of the above equation. The function WignerD2 implements
 the Wigner-D matrices defined in [Morrison]_, the variable "prop" is
 the projection of the learned solution onto the rotated template shear
-solution shown in Table 1, and Alm are the quadrupole terms
-from the learned spectral content of the source, we neglect the monopole
-term because the shear mechanism has zero monopole content.
-The initial guess is found scanning a coarse grid to find the best the
-quadrant with the highest initial correlation. This stops the
-Scipy's default minimization [scipy]_ getting stuck in a local minima.
+solution shown in Table 1, and Alm is the learned spectral
+content of the source.  The initial guess is found scanning a coarse
+grid to find the best the quadrant with the highest initial
+correlation. This stops Scipy's default minimization [scipy]_
+getting stuck in a local minima.
 
 .. figure:: class_3146815_dc.png
 
@@ -572,9 +574,9 @@ estimated by HASH.
 Discussion
 -----------
 
-In Figures :ref:`class-example` and :ref:`class-dc` we have show examples of the classification
+In Figures :ref:`class-example` and :ref:`class-dc` we have shown examples of the classification
 and fault plane estimation methods. In this section we want to explore the robustness of the
-algorithm and try to gain some insight into the correlation functions.
+algorithm and try to gain some insight into the utility of the correlation functions.
 
 .. figure:: class_3145744_norev.png
 
@@ -587,17 +589,17 @@ algorithm and try to gain some insight into the correlation functions.
 The HASH program has an input (scsn.reverse) which identifies stations
 whose polarity was found to be erroneous in the past. These reversals
 are applied post facto to correct the input polarity data.  We will
-use this feature to demonstrate and example where the support vector
-and least squares classifiers behaves very differently. In Fig
-:ref:`flipped` we give an example comparing the results with (solid
-lines) and without (dashed lines) the benefit of the polarity
-correction. In this example, the polarity of a single station is
-changed (highlighted by the black arrow). This point is very close to
-the nodal line estimated by the SVC, which, given the soft
+use this feature to demonstrate an example where the support vector
+and least squares classifiers behaves differently. In Fig
+:ref:`flipped` we give an example where we flipped the polarity of a
+single datum (indicated by the black arrow). The corresponding
+solutions are shown with (solid lines) and without (dashed lines) the
+benefit of the polarity correction. The datum that was changed is
+close to the nodal line estimated by the SVC, which, given the soft
 thresholding, is forgiving of misclassification along its separating
-margin. The solution for the nodal line is largely unchanged. On the
-other hand, the strategy of FPFIT is to minimize the overall rate of
-misclassification. And indeed, in each case, it finds the optimal
+margin. The SVC solution for the nodal line is largely unchanged. On
+the other hand, the strategy of FPFIT is to minimize the overall rate
+of misclassification. And indeed, in each case, it finds the optimal
 solution on this basis. In fact, in terms of misclassified point,
 FPFIT outperforms the SVC classifier. But we would question whether
 minimizing the overall rate of misclassification is reasonable from an
@@ -627,12 +629,12 @@ score Eq. :ref:`correl`.  To provide an example of how we might use
 this correlation score, we take the event 3146815, which has the
 largest number of data associate with it, and compute the correlation
 coefficient with each of the other events in the Northridge
-dataset. According to the reference [HASH]_ the Northridge dataset we
-analyzing is expected to contain similar source mechanisms and
+dataset. According to [HASH]_, the Northridge dataset we 
+analyzed is expected to contain similar source mechanisms and
 certainly we see that the correlation score is high for the majority
 of the events. To test the sensitivity of the metric, we also compute
 the correlation between event 3146815 and itself rotated by 90-degrees
-strike, and we see that this has very low correlation, which we would
+strike, and we see that this has low correlation, which we would
 expect.
    
 .. figure:: highlo.png
@@ -643,11 +645,11 @@ expect.
    represent the maximum and minimum correlation score
    with event 3146815. :label:`highlo`
 	    
-In :ref:`highlo` we provide a visualization of the events with the
+In Fig. :ref:`highlo` we provide a visualization of the events with the
 highest (top right) and lowest (bottom right) correlation score
 comparing with event 3146815 (top left).  The orientation of the nodal
 lines for event 3153955, which has the lowest correlation score,
-indeed is qualitatively very different than solution for
+indeed is qualitatively different than the solution for
 event 3146815. Qualitatively, we have demonstrated that the
 correlation score is a reasonable metric of similarity. Determining
 the actual statistical significance of the correlation score is left
@@ -673,15 +675,15 @@ to estimate fault plane orientation. The key to efficiency here was to generate
 rotations in the feature space of the problem using Wigner's D
 matrices.
 
-At each step along the way, we made a comparison with similar solution
+At each step along the way, we made a comparison with similar solutions
 obtained with the HASH algorithm [HASH]_, and found good general
 agreement. However, we argued that for this application, the
 optimization strategy of the SVC should prove more robust to
 misclassification, than the least squares method.
 
 Finally, we showed that the correlation coefficient was able to
-discriminate sources that were very similar to those that appeared to
-be very different.  This technique has some promise as a tool for
+discriminate sources that were similar to those that appeared to
+be different.  This technique has some promise as a tool for
 comparing different earthquakes.
 
 
@@ -689,28 +691,29 @@ Appendix
 --------
 :label:`App`
 
-The template solutions shown in Table 1 were derived solutions
-tabulated in Table 4.4 of [Ben81]_.  The solutions for the first P-wave
-arrival are given in terms of the Hansen vector L (in spherical polar
-coordinates) of the form,
+The template solutions shown in Table 1 were derived from solutions
+tabulated in Table 4.4 of [Ben81]_.  Table 4.4 of [Ben81]_ gives the
+solutions for the first P-wave arrival in terms of the
+Hansen vector L (in spherical polar coordinates) of the form,
 
 .. math:: 
    :type: equation
 	
    \vec{L}_{lm}(r,\theta,\phi) = \vec{\nabla} h^{2}_{l}(r) \tilde{Y}_{lm}(\theta,\phi) \ ,
    
-where \"h\" is the spherical Hankel functions of a second kind. The amplitudes of the 
-first break are required to be measured radially, the projection of the Hansen vector radially is,
+where \"h\" is the spherical Hankel functions of a second kind. The
+amplitudes of the first break are required to be measured radially to
+the focal sphere, the projection of the Hansen vector radially is,
 
 .. math:: 
    :type: equation
 
    \hat{r}\cdot \vec{L}_{lm}(r,\theta,\phi) = \frac{\partial}{\partial r} h^{2}_{l}(r) \tilde{Y}_{lm}(\theta,\phi) \ .
    
-The azimuthal variation is given by the spherical harmonic function,
+The angular variation is given by the spherical harmonic function,
 up to an overall phase associated with radial
 component. Asymptotically (measurements are made far from the source),
-the Hankel functions tend to [Morse53]_,
+in this limit the Hankel functions tend to [Morse53]_,
 
 .. math:: 
    :type: equation
@@ -720,7 +723,7 @@ the Hankel functions tend to [Morse53]_,
 which introduces a relative phase when collecting terms of different
 degree.  We also note that the normalization of the spherical harmonics
 used in [Ben81]_ does not include the Cordon Shortley phase
-convention. Since we are applying the Wigner-D matrices to generate
+convention. Since we are using Wigner-D matrices to generate
 rotations, it is convenient to use that convention,
 
 .. math:: 
@@ -766,3 +769,15 @@ References
 
 
 .. [mpl] John D. Hunter. Matplotlib: A 2D Graphics Environment, Computing in Science & Engineering, 9, 90-95 (2007), DOI:10.1109/MCSE.2007.55
+
+.. [Obspy] M. Beyreuther, R. Barsch, L. Krischer, T. Megies, Y. Behr and J. Wassermann (2010),
+	   ObsPy: A Python Toolbox for Seismology,
+	   SRL, 81(3), 530-533,
+	   DOI: 10.1785/gssrl.81.3.530
+
+.. [HashPy] hashpy,
+	    https://github.com/markcwill/hashpy,
+	    DOI:10.5281/zenodo.9808
+
+.. [mplstereonet] mplstereonet,
+		  https://pypi.python.org/pypi/mplstereonet
