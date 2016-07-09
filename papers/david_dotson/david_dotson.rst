@@ -122,16 +122,40 @@ Internally, advisory locking is done to avoid race conditions, making a ``Treant
 Introspecting a Treant's Tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 A ``Treant`` can be used to introspect and manipulate its filesystem tree.
-We can, for example, create directory structures rather easily:
+We can, for example, work with directory structures rather easily:
 
 .. code-block:: python
 
-   >>> t['a/place/for/data/'].makedirs()
+   >>> data = t['a/place/for/data/']
+   >>> data
    <Tree: 'maple/a/place/for/data/'>
+
+This ``Tree`` object points to a path in the Treant's own tree, but it does not necessarily exist.
+We can check this with:
+
+
+.. code-block:: python
+
+   >>> data.exists
+   False
+
+This behavior is by design for ``Tree`` objects (as well as ``Leaf`` objects; see below).
+We want to be able to work freely with paths without creating filesystem objects for each, at least until we are ready.
+
+We can make a ``Tree`` exist in the filesystem easily enough:
+
+.. code-block:: python
+
+    >>> data.makedirs()
+
+and if we also make another directory, too:
+
+.. code-block:: python
+
    >>> t['a/place/for/text/'].makedirs()
    <Tree: 'maple/a/place/for/text/'>
 
-and so we now have::
+we now have::
 
    >>> t.draw()
    maple/
@@ -144,11 +168,10 @@ and so we now have::
 
 Accessing paths in this way returns ``Tree`` and ``Leaf`` objects, which refer to directories and files, respectively.
 These paths need not point to directories or files that actually exist, but they can be used to create and work with these filesystem elements.
+It should be noted that creating a ``Tree`` does *not* create a ``Treant``.
+Treants are considered special enough to warrant having a state file with metadata, and making every directory a Treant would make them less useful.
 
 We can, for example, easily store a Pandas_ [McK10]_ DataFrame somewhere in the tree for reference later:
-
-.. todo: change to an example where we store a dataframe with arboreal data;
-.. more fun, less space, fits theme
 
 .. code-block:: python
 
@@ -297,7 +320,6 @@ Other tag expressions can be constructed using tuples (for *or* operations) and 
 Using tag expressions, we can filter to Treants of interest from a ``Bundle`` counting many, perhaps hundreds, of Treants as members.
 A common workflow is to use ``datreant.core.discover`` to gather up many Treants from a section of the filesystem, then use tags to extract only those Treants one actually needs.
 
-.. todo: add a note on fuzzy matching (with a reference) if there's space
 
 Splitting Treants on categories
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -411,9 +433,12 @@ Treant modularity with attachable Limbs
 These are examples of ``Limb`` objects: attachable components which serve to extend the capabilities of a ``Treant``.
 While ``Tags`` and ``Categories`` are attached by default to all ``Treant`` objects, custom ``Limb`` subclasses can be defined for additional functionality.
 
-
 ``datreant`` is a namespace package, with the dependency-light core components included in ``datreant.core``.
-Another package currently in the ``datreant`` namespace is ``datreant.data``, which includes a set of convenience ``Limb`` objects for storing and retrieving Pandas and NumPy_ [vdW11]_ datasets.
+The dependencies of ``datreant.core`` include backports of standard library modules such as ``pathlib`` and ``scandir``, as well as lightweight modules such as ``fuzzywuzzy`` and ``asciitree``.
+
+``datreant.core`` remains lightweight because other packages in the ``datreant`` namespace can have any dependencies they require.
+Another such packages is ``datreant.data``, which includes a set of convenience ``Limb`` objects for storing and retrieving Pandas and NumPy_ [vdW11]_ datasets in HDF5 using PyTables_ and h5py_ internally.
+
 We can attach a ``Data`` limb to a ``Treant`` with:
 
 .. code-block:: python
@@ -444,6 +469,16 @@ and we can get it back just as easily:
    3    0.369885
    4    0.483966
    dtype: float64
+
+Looking at the directory structure of ``"maple"``, we see that the data was stored in an HDF5 file under a directory corresponding to the name we stored it with:
+
+.. code-block:: python
+
+   >>> t.draw()
+   maple/
+    +-- sinusoid/
+    |   +-- pdData.h5
+    +-- Treant.1dcbb3b1-c396-4bc6-975d-3ae1e4c2983a.json
 
 What's more, ``datreant.data`` also includes a corresponding ``AggLimb`` for ``Bundle`` objects, allowing for automatic aggregation of datasets by name across all member ``Treant`` objects.
 If we collect and store similar datasets for each member in our ``Bundle``:
@@ -507,6 +542,8 @@ It can also store arbitrary (but pickleable) Python objects as pickles, making i
 However, it ultimately serves as an example for how ``Treant`` and ``Bundle`` objects can be extended to do complex but convenient things.
 
 .. _NumPy: http://www.numpy.org/
+.. _PyTables: http://www.pytables.org/
+.. _h5py: http://www.h5py.org/
 
 
 Using Treants as the basis for dataset access and manipulation with the PyData stack
@@ -565,6 +602,8 @@ We can use the MDAnalysis ``HydrogenBondAnalysis`` class to collect the data for
 
         sim.data['hbonds'] = pd.DataFrame(hb.table)
 
+    # process parallelism provided internally 
+    # with `multiprocessing` 
     b.map(get_hbonds, processes=16)
 
 Then we can retrieve the datasets in aggregate using the ``Bundle`` ``datreant.data`` limb
