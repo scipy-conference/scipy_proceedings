@@ -258,8 +258,7 @@ we can now work with these tags in aggregate:
     'shady',
     'syrup'}
 
-and we can filter on them. For example, getting all Treants that are good
-for construction work:
+and we can filter on them. For example, getting all Treants that are good for construction work:
 
 .. code-block:: python
 
@@ -271,8 +270,7 @@ for construction work:
    >>> b[b.tags['building']]
    <Bundle([<Treant: 'oak'>, <Treant: 'elm'>])>
 
-or getting back Treants that are both good for construction *and* used for
-making furniture by giving tags as a list:
+or getting back Treants that are both good for construction *and* used for making furniture by giving tags as a list:
 
 .. code-block:: python
 
@@ -303,8 +301,8 @@ A common workflow is to use ``datreant.core.discover`` to gather up many Treants
 
 Splitting Treants on categories
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Categories are key-value pairs that provide another mechanism by which Treants can be distinguished.
-We can add categories to individual Treants:
+Categories are key-value pairs that provide another mechanism for distinguishing Treants.
+We can add categories to each Treant:
 
 .. code-block:: python
 
@@ -413,6 +411,7 @@ Treant modularity with attachable Limbs
 These are examples of ``Limb`` objects: attachable components which serve to extend the capabilities of a ``Treant``.
 While ``Tags`` and ``Categories`` are attached by default to all ``Treant`` objects, custom ``Limb`` subclasses can be defined for additional functionality.
 
+
 ``datreant`` is a namespace package, with the dependency-light core components included in ``datreant.core``.
 Another package currently in the ``datreant`` namespace is ``datreant.data``, which includes a set of convenience ``Limb`` objects for storing and retrieving Pandas and NumPy_ [vdW11]_ datasets.
 We can attach a ``Data`` limb to a ``Treant`` with:
@@ -460,8 +459,8 @@ If we collect and store similar datasets for each member in our ``Bundle``:
    >>> b.categories['frequency'] = [1, 2, 3, 4]
    >>> for mem in b:
    ...     freq = mem.categories['frequency']
-   ...     mem.data['sinusoid'] = np.sin(
-   ...         freq * np.linspace(0, 8*np.pi, num=200))
+   ...     mem.data['sinusoid'] = pd.Series(np.sin(
+   ...         freq * np.linspace(0, 8*np.pi, num=200)))
 
 then we can retrieve all of them into a single, multi-index Pandas ``Series``:
 
@@ -496,8 +495,8 @@ which we can use for aggregated analysis, or perhaps just pretty plots (Figure :
 .. code-block:: python
 
    >>> for name, group in sines.groupby(level=0):
-   ...     df = group.reset_index(level=0, drop=True)
-   ...     df.plot(legend=True, label=name)
+   ...     s = group.reset_index(level=0, drop=True)
+   ...     s.plot(legend=True, label=name)
 
 .. figure:: figs/sines.png
 
