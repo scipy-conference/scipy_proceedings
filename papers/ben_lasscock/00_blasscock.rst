@@ -41,17 +41,17 @@ plugin for visualization.
 
 Much of the discussion will center around deriving a mapping from the
 solution of the SVC to the physical process that originated the
-earthquake. The key concept we will be elaborating on is
-understanding the relationship between what we call input and feature
-spaces of the SVC. The results of the classification are curves
-separating points on the surface of the focal sphere (the input
-space), which is the domain of the input data.  However, the physics
-and understanding of the result lies in the representation of the
-solution in the feature space, which a higher dimensional space
-where the classifier may linearly separate the data.
+earthquake. The key concept we will be elaborating on is understanding
+the relationship between what we call the input and feature spaces of
+the SVC. The results of the classification are curves separating
+points on the surface of the focal sphere (the input space), which is
+the domain of the input data.  However, the physics and understanding
+of the result lies in the representation of the solution in the
+feature space, which a higher dimensional space where the classifier
+may linearly separate the data.
 
 For the sake of reproducibility, the demonstration will use the same
-dataset provided with the the US Geological Survey (USGS) HASH
+dataset provided with the US Geological Survey (USGS) HASH
 software. HASH [HASH]_ is an earthquake classification code
 provided by the USGS and it is built upon an earlier package called
 FPFIT, which implements a least squares classifier. For each case we
@@ -462,7 +462,7 @@ comparing the two sources is a correlation coefficient,
    :label: correl
    :type: equation
 	  
-   \rho = \frac{\Vert \langle g, f\rangle \Vert}{\Vert g\Vert\Vert f \Vert}\ .
+   \rho = \frac{\Vert \langle g, f\rangle \Vert^{2}}{\Vert g\Vert\Vert f \Vert}\ .
 
 Using the orthogonality condition of the spherical harmonic functions,
 we can show that inner product is,
@@ -599,7 +599,7 @@ thresholding, is forgiving of misclassification along its separating
 margin. The SVC solution for the nodal line is largely unchanged. On
 the other hand, the strategy of FPFIT is to minimize the overall rate
 of misclassification. And indeed, in each case, it finds the optimal
-solution on this basis. In fact, in terms of misclassified point,
+solution on this basis. In fact, in terms of misclassified points,
 FPFIT outperforms the SVC classifier. But we would question whether
 minimizing the overall rate of misclassification is reasonable from an
 applied perspective.  Consider that since the nodal line represents a
