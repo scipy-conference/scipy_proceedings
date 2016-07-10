@@ -23,26 +23,30 @@
 
 :bibliography: mybib
 
------------------------------------------------------------
-``cesium``: Machine Learning for Time Series Data in Python
------------------------------------------------------------
+---------------------------------------------------------------
+``cesium``: Open-Source Inference Platform for Time-Series Data
+---------------------------------------------------------------
 
 .. class:: abstract
 
    Inference on time series data is a common requirement in many scientific
-   disciplines, yet there are few resources available to domain scientists to
-   easily, robustly, and repeatably build inference work flows on time series
-   data: traditional statistical models of time series are often too rigid to
-   explain complex time domain behavior, while popular machine learning packages
-   require already-featurized dataset inputs. ``cesium`` is and end-to-end time
-   series analysis framework, consisting of a Python library as well as a web
-   front-end interface, that allows researchers to featurize raw data and apply
-   modern machine learning techniques in a simple, reproducible, and extensible
-   way. Users can apply out-of-the-box feature engineering workflows as well as
-   save and replay their own analyses. Any steps taken in the front end can also
-   be exported to a Jupyter notebook, so users can iterate between possible
-   models within the front end and then fine-tune their analysis using the
-   additional capabilities of the back-end library.
+   disciplines and internet of things (IoT) applications, yet there are few
+   resources available to domain scientists to easily, robustly, and repeatably
+   build such complex inference workflows: traditional statistical
+   models of time series are often too rigid to explain complex time domain
+   behavior, while popular machine learning packages require already-featurized
+   dataset inputs. Moreover, the software engineering tasks required to
+   instantiate the computational platform are daunting. ``cesium`` is an
+   end-to-end time series analysis framework, consisting of a Python library as
+   well as a web front-end interface, that allows researchers to featurize raw
+   data and apply modern machine learning techniques in a simple, reproducible,
+   and extensible way. Users can apply out-of-the-box feature engineering
+   workflows as well as save and replay their own analyses. Any steps taken in
+   the front end can also be exported to a Jupyter notebook, so users can
+   iterate between possible models within the front end and then fine-tune their
+   analysis using the additional capabilities of the back-end library. The
+   open-source packages make us of many use modern Python toolkits, including
+   ``xarray``, ``dask``, Celery, Flask, and ``scikit-learn``.
 
 .. class:: keywords
 
@@ -66,7 +70,7 @@ samples, well-trained domain specialists show a remarkable ability to make
 discerning statements about complex data.
 
 In an era when more time series data are being collected than can be visually
-inspected by domain experts, however, computational frameworks must necessarily
+inspected by domain experts, computational frameworks must necessarily
 act as human surrogates. Capturing the subtleties that domain experts intuit in
 time series data (let alone besting the experts) is a non-trivial task.
 In this respect, machine learning has already been used to great success in
@@ -87,17 +91,17 @@ data itself:
  
         It may be surprising to the academic community to know that only a tiny
         fraction of the code in many machine learning systems is actually doing
-        "machine learning". When we recognize that a mature system might end up
-        being (at most) 5% machine learning code and (at least) 95% glue code,
-        reimplementation rather than reuse of a clumsy API looks like a much
-        better strategy. :cite:`scu2014`
+        "machine learning"...a mature system might end up
+        being (at most) 5% machine learning code and (at least) 95% glue code.
+        :cite:`scu2014`
 
 Even if a domain scientist works closely with machine learning experts, the
-software engineering requirements can be daunting. Being a modern data-driven
-scientist should not require an army of software engineers, machine
-learning experts, statisticians and production operators. ``cesium``
-:cite:`cesium` was created to allow domain experts to focus on the questions at
-hand rather than needing to assemble a complete engineering project.
+software engineering requirements can be daunting. It is our opinion that being
+a modern data-driven scientist should not require an army of software engineers,
+machine learning experts, statisticians and production operators. ``cesium``
+:cite:`cesium` was created to allow domain experts to focus on the inference
+questions at hand rather than needing to assemble a complete engineering
+project.
 
 The analysis workflow of ``cesium`` can be used in two forms: a web front end
 which allows researchers to upload their data, perform analyses, and visualize
@@ -112,7 +116,7 @@ generating predictions. The library also supplies data structures for storing
 time series (including support for irregularly-sampled time series and
 measurement errors), features, and other relevant metadata.
 
-In the next section, we'll describe a few motivating examples of scientific time
+In the next section, we describe a few motivating examples of scientific time
 series analysis problems. The subsequent sections describe in detail the
 ``cesium`` library and web front end, including the different pieces of
 functionality provided and various design questions and decisions that arose
@@ -149,15 +153,12 @@ scientific disciplines in mind.
    Automated Survey; shown are flux measurements for three stars
    irregularly sampled in time :cite:`richards2012`. :label:`astro`
 
-2. **Neuroscience time series classification.** The study of
-   neural systems presents a wide variety of challenges in time series analysis,
-   made more pressing by the growing volume of high-quality, heterogeneous
-   sensor data that cannot be effectively inspected visually.
-   Figure :ref:`eeg` shows an example of different types of EEG signals
+2. **Neuroscience time series classification.**
    that might need to be classified in order to make treatment decisions.
    Neuroscience experiments now produce vast amounts of time series data that
-   can have entirely different structures and spatial/temporal
-   resolutions, depending on the recording technique.
+   can have entirely different structures and spatial/temporal resolutions,
+   depending on the recording technique.
+   Figure :ref:`eeg` shows an example of different types of EEG signals
    The neuroscience community is turning to the use of large-scale machine
    learning tools to extract insight from large, complex datasets
    :cite:`lotte2007`. However, the community lacks tools to validate and compare
@@ -227,8 +228,8 @@ Python program.
 
 ``cesium`` library
 ==================
-The first half of the ``cesium`` framework is the back-end Python library, aimed
-at addressing the following uses cases:
+The first half of the ``cesium`` framework is the back-end Python-based library,
+aimed at addressing the following uses cases:
 
 1. A domain scientist who is comfortable with programming but is **unfamiliar
    with time series analysis or machine learning**.
@@ -271,7 +272,8 @@ large outliers to be modeled more precisely.
 .. figure:: cesium-ls
 
    Fitted multi-harmonic Lomb-Scargle model for a light curve from a periodic
-   Mira-class star. :label:`ls`
+   Mira-class star. ``cesium`` automatically generates numerous features based
+   on Lomb-Scargle periodogram analysis. :label:`ls`
 
 Other more involved features could be the estimated parameters for various
 fitted statistical models: Figure :ref:`ls` shows a multi-frequency,
@@ -374,7 +376,7 @@ Implementation details
 Cython) for especially computationally-intensive feature calculations.
 Our library also relies upon many other open source Python projects, including
 ``scikit-learn``, ``pandas``, ``xarray``, and ``dask``. As the first two
-choices are somewhat obvious, here we will briefly describe the roles of the
+choices are somewhat obvious, here we briefly describe the roles of the
 latter two libraries.
 
 As mentioned above, feature data generated by ``cesium`` is returned as a
@@ -390,14 +392,16 @@ more space-efficient serialization and loading of results (as compared to a
 text-based format).
 
 The ``dask`` library provides a wide range of tools for organizing computational
-full process of exporting tasks. ``cesium`` makes use of only one small component: within ``dask``, tasks
+full process of exporting tasks. ``cesium`` makes use of only one small
+component: within ``dask``, tasks
 are organized as a directed acyclic graph (DAG), with the results of some tasks
 serving as the inputs to others. Tasks can then be computed in an efficient
 order by ``dask``'s scheduler. Within ``cesium``, many features rely on other
 features as inputs, so internally we represent our computations as ``dask``
-graphs in order to minimize redundant computations and peak memory usage (part
+graphs in order to minimize redundant computations and peak memory usage. Part
 of an example DAG involving the Lomb-Scargle periodogram is depicted in Figure
-:ref:`dask`). In addition to the built-in features, custom feature functions
+:ref:`dask`: circles represent functions, and rectangles the inputs/outputs of
+the various steps. In addition to the built-in features, custom feature functions
 passed in directly by the user can similarly make use of the internal ``dask``
 representation so that built-in features can be reused for the evaluation of
 user-specified functions.
@@ -425,12 +429,16 @@ analysis, addressing three common use cases:
 The front-end system (together with its deployed back end), offers the
 following features:
 
- - Distributed, parallelized fitting of machine learning models.
- - Isolated [#isolation]_, cloud-based execution of user-uploaded code.
- - Visualization and analysis of results.
- - Tracking of an entire exploratory workflow from start-to-finish for
-   reproducibility (in progress).
- - Downloads of Jupyter notebooks to replicate analyses [#notebook]_.
+- Distributed, parallelized fitting of machine learning models.
+
+- Isolated [#isolation]_, cloud-based execution of user-uploaded featurization code.
+
+- Visualization and analysis of results.
+
+- Tracking of an entire exploratory workflow from start-to-finish for
+  reproducibility (in progress).
+
+- Downloads of Jupyter notebooks to replicate analyses [#notebook]_.
 
 .. [#isolation] Isolation is currently provided by limiting the user
                 to non-privileged access inside a Docker :cite:`docker`
@@ -525,11 +533,11 @@ themselves via a downloadable notebook.
 
 Example EEG dataset analysis
 ============================
-In this example we'll compare various techniques for epilepsy detection using a
+In this example we compare various techniques for epilepsy detection using a
 classic EEG time series dataset from Andrzejak et al. :cite:`andrzejak2001`.
-The raw data are separated into five classes: Z, O, N, F, and S; we will
+The raw data are separated into five classes: Z, O, N, F, and S; we 
 consider a three-class classification problem of distinguishing normal (Z, O),
-interictal (N, F), and ictal (S) signals. We'll show how to perform the
+interictal (N, F), and ictal (S) signals. We show how to perform the
 same analysis using both the back-end Python library and the web front end.
 
 .. Here we present an example analysis of a light curve dataset from astronomy
@@ -542,7 +550,7 @@ same analysis using both the back-end Python library and the web front end.
 
 Python library
 --------------
-First, we'll load the data and inspect a representative time series from each class:
+First, we load the data and inspect a representative time series from each class:
 Figure :ref:`eeg` shows one time series from each of the three classes, after the time
 series are loaded from ``cesium.datasets.andrzejak``.
 
@@ -595,7 +603,7 @@ coordinate will also be used later for multi-channel data).
 Custom feature functions not built into ``cesium`` may be passed in using the
 ``custom_functions`` keyword, either as a dictionary ``{feature_name: function}``, or as a
 ``dask`` graph. Functions should take three arrays ``times, measurements, errors`` as
-inputs; details can be found in the ``cesium.featurize`` documentation. Here we'll
+inputs; details can be found in the ``cesium.featurize`` documentation. Here we
 compute five standard features for EEG analysis suggested by Guo et al. :cite:`guo2011`:
 
 .. code-block:: python
@@ -617,7 +625,7 @@ compute five standard features for EEG analysis suggested by Guo et al. :cite:`g
         def skew_signal(t, m, e):
             return scipy.stats.skew(m)
 
-Now we'll pass the desired feature functions as a dictionary via the ``custom_functions``
+Now we pass the desired feature functions as a dictionary via the ``custom_functions``
 keyword argument (functions can also be passed in as a list or a ``dask`` graph).
 
 .. code-block:: python
@@ -697,7 +705,7 @@ appropriate inputs. In the case of multichannel features, it also handles
 reshaping the feature set into a (rectangular) form that is compatible with
 ``scikit-learn``.
 
-For this example, we'll test a random forest classifier for the built-in ``cesium`` features,
+For this example, we test a random forest classifier for the built-in ``cesium`` features,
 and a 3-nearest neighbors classifier for the others, as in :cite:`guo2011`.
 
 .. code-block:: python
@@ -756,7 +764,7 @@ incorporated just as they would for any other ``scikit-learn`` analysis.
 But with essentially three function calls (``featurize_time_series``,
 ``model_from_featureset``, and ``model_predictions``), we are able to build a
 model from a set of time series and make predictions on new, unlabeled data. In
-the next section we'll introduce the web front end for ``cesium`` and describe how
+the next section we introduce the web front end for ``cesium`` and describe how
 the same analysis can be performed in a browser with no setup or coding required.
 
 Web front end
@@ -807,6 +815,10 @@ include:
 
 - More tools to streamline the process of iteratively exploring new models based
   on results of previous experiments.
+
+- Better support for sharing data and results among teams.
+
+- Extension to unsupervised problems.
 
 Conclusion
 ==========
