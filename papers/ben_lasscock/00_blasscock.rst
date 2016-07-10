@@ -2,9 +2,6 @@
 :email: blasscoc@gmail.com
 :institution: Geotrace Technologies
 
-:author: Brendon Hall
-:institution: Enthought
-
 -------------------------------------
 Generalized earthquake classification
 -------------------------------------
@@ -311,9 +308,6 @@ radiation is becoming small and then changing sign. What we believe to
 be more important than the overall rate of misclassification of the
 algorithm, is the stability of the result given erroneous input data.
 
-|
-|
-|
 
 .. code-block:: python
 
