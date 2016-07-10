@@ -36,22 +36,24 @@ demographic attributes in their online profiles.
 Introduction
 ------------
 
-Online dating has become a common and acceptable way of finding mates. 
-Almost half of Americans know someone who uses
-or who has met a partner through online dating and 59% believe online dating is
-a good way to meet people [Pew16]_. Online dating sites or mobile dating apps
-are used by 27 percent of 18-24 year olds, 22 percent of 25-34 year olds, 21
-percent of 35-44 year olds, 13 percent of 45-54 year olds, and 12 percent of
-55-64 year olds [Pew16]_. Given the popularity of online dating, the way that people 
-self-present online has broad implications for the relationships they pursue. 
+Online dating has become a common and acceptable way of finding mates. Of
+American adults, 41 percent know someone who uses online dating, 29 percent
+know someone who has met a partner this way, and 59 percent believe online
+dating is a good way to meet people [Pew16]_. As of 2015, online dating sites
+or mobile dating apps were used by 27 percent of 18-24 year olds, 22 percent of
+25-34 year olds, 21 percent of 35-44 year olds, 13 percent of 45-54 year olds,
+and 12 percent of 55-64 year olds [Pew16]_. Relative to 2013, usage increased
+across all age groups, except 25-34 year olds. Given the popularity of online
+dating, the way that people self-present online has broad implications for the
+relationships they pursue.
 
 Previous studies suggest that the free-text portion of online dating profiles
 is an important factor (after photographs) for assessing attractiveness
-[Fio08]_. The principle of homophily posits that people tend to
-associate and bond with similar others and that this principle strongly
-structures social networks and ties, most prominently by race and ethnicity
-[McP01]_. Perhaps not surprisingly, research suggests that homophily extends to
-online dating, with people seeking mates similar to themselves [Fio05]_.
+[Fio08]_. The principle of homophily posits that people tend to associate and
+bond with individuals who are similar to themselves and that this principle
+strongly structures social networks and ties, most prominently by race and
+ethnicity [McP01]_. Perhaps not surprisingly, research suggests that homophily
+extends to online dating, with people seeking mates similar to themselves [Fio05]_.
 However, it remains unclear whether people within particular demographic groups,
 such as sex or ethnicity, self-present in similar ways when searching for a
 mate online.
@@ -59,15 +61,23 @@ mate online.
 In this paper, we analyze demographic trends in online self-presentation.
 Specifically, we focus on whether people signal demographic characteristics
 through the way they present themselves online. We extend previous natural
-language processing analyses of online dating [Nag09]_ by combining NLP
-with supervised and unsupervised machine learning on a larger scale. We
-leverage multiple approaches including clustering and topic modeling as well as
+language processing analyses of online dating [Nag09]_ by using a much larger
+sample [#]_ and by combining NLP with supervised and unsupervised machine
+learning. We leverage multiple approaches including clustering and topic modeling as well as
 feature selection and modeling strategies. By exploring the relationships
 between free-text self-descriptions and demographics, we discover that we can
 predict users' demographic makeup and also find some unexpected insights into
 unintentional demographic signals in free-text writing.
 
-Code and data for this work are available in our ``okcupid`` GitHub repository [1]_.
+.. [#] [Nag09]_'s uses a sample of 1,000 individuals.
+
+Code and data for this work are available in our ``okcupid`` GitHub repository
+[#]_. A Jupyter notebook with the analysis results is also available [#]_.
+
+.. [#] https://github.com/juanshishido/okcupid.
+
+.. [#] https://github.com/juanshishido/okcupid/blob/master/OkNLP-paper.ipynb
+
 
 Data
 ----
@@ -75,8 +85,7 @@ Data
 Description
 ~~~~~~~~~~~
 
-The data was obtained from Albert Y. Kim's JSE_OkCupid repository [2]_. Profile
-information was available for 59,946 OkCupid users that were members as of
+Profile information [#]_ was available for 59,946 OkCupid users that were members as of
 06/26/2012, lived within 25 miles of San Francisco, had been active in the
 previous year, and had at least one photo in their profile [Wet15]_.
 The data set contained free-text responses to 10 essay prompts as well as the
@@ -85,6 +94,12 @@ usage status, education level, ethnicity, height, income, job type, location,
 number of children, sexual orientation, attitude toward pets, religion, sex,
 astrological sign, smoking status, number of language spoken, and relationship
 status.
+
+.. [#] https://github.com/rudeboybert/JSE_OkCupid. Our original data source was
+       Everett Wetchler's ``okcupid`` repository (https://github.com/everett-wetchler/okcupid).
+       However, after commit ``0d62e62``, in which the data was "fully
+       anonimized" to exclude essays, we switched to Kim's repository. Kim uses
+       the original Wetchler data.
 
 This data set was selected because its diverse set of essay prompts and because the
 availability of detailed user characteristics provided ideal means for
@@ -102,10 +117,13 @@ Preprocessing
 
 Line break characters and URLs were removed from the essay text. Multiple
 periods, dashes, and white spaces were replaced by single instances. Essays
-were tokenized (segmented) into individual words using spaCy's default
+were segmented into individual words using spaCy's [Hon15]_ [#]_ default
 tokenizer, which is well suited for online communication as it maintains
 emoticons as discrete tokens, and removes punctuation. Users who wrote less
 than 5 words for a given essay were removed from the analysis.
+
+.. [#] We use version 0.101.0. GitHub, 10 May 2016.
+       https://github.com/spacy-io/spaCy/releases/tag/0.101.0.
 
 We combined drug usage status levels. Specifically, users who responded
 "sometimes" or "often" were grouped into a "yes" category. Individuals who
@@ -162,10 +180,10 @@ Conversely, non-negative matrix factorization (NMF) does not require the latent
 semantic space to be orthogonal, and therefore is able to find directions for
 related or overlapping topics.
 
-NMF was applied to each essay of interest using scikit-learn (version 0.17.1),
+NMF was applied to each essay of interest using scikit-learn [Ped11]_ [#]_,
 which uses the coordinate descent solver. NMF utilizes document frequency
 counts, so the tf-idf matrix for unigrams, bigrams, and trigrams was calculated,
-while limiting tokens to those appearing in at least 0.5% of the documents
+while limiting tokens to those appearing in at least 0.5 percent of the documents
 (minimum frequency). NMF was calculated with :math:`k` dimensions, which
 factorized the tf-idf matrix into two matrices, :math:`W` and :math:`H`. The
 dimensions were ``n_samples x k`` and ``k x n_features`` for :math:`W` and
@@ -173,6 +191,12 @@ dimensions were ``n_samples x k`` and ``k x n_features`` for :math:`W` and
 most distinctive) in the columns of :math:`H`. Document membership weights were
 given by the rows of :math:`W`. The maximum value in each row of :math:`W`
 determined essay group membership.
+
+.. [#] We use version 0.17.1. GitHub, 18 Feb 2016.
+       https://github.com/scikit-learn/scikit-learn/releases/tag/0.17.1-1.
+       This is particularly important for NMF as the coordinate descent solver
+       is the default as of 0.17.0. Using the deprecated projected gradient
+       solver will lead to different results.
 
 Permutation Testing
 ~~~~~~~~~~~~~~~~~~~
@@ -213,12 +237,16 @@ part-of-speech usage.
 Essay length was determined based on the tokenized essays. A list of profane
 words was obtained from the "Comprehensive Perl Archive Network" website. Slang
 terms include words such as "dough," which refers to money, and acronyms like
-"LOL." These terms come from the Wiktionary Category:Slang page [3]_. Note that
+"LOL." These terms come from the Wiktionary Category:Slang page [#]_. Note that
 there is overlap between the profane and slang lists.
 
+.. [#] https://simple.wiktionary.org/wiki/Category:Slang.
+
 Each token in the corpus was associated with a lexical category using spaCy's
-part-of-speech tagger. spaCy supports 19 coarse-grained tags [4]_ that expand
+part-of-speech tagger. spaCy supports 19 coarse-grained tags [#]_ that expand
 upon Petrov, Das, and McDonald's universal part-of-speech tagset [Pet11]_.
+
+.. [#] https://spacy.io/docs#token-postags.
 
 Differences in lexical features by demographic were analyzed using permutation
 testing. We first compared average essay length by sex. Next, we examined
@@ -230,9 +258,16 @@ smoothed log-odds-ratio, which accounts for variance.
 
 Text semantics were also analyzed. The corpus was transformed into a tf-idf
 matrix using spaCy's default tokenizer with punctuation removed. We chose to
-include unigrams, bigrams, and trigrams [5]_. Stop words [6]_ and terms that
-appeared in less than 0.5% of documents were removed. Stemming, the process of
-of removing word affixes, was not performed.
+include unigrams, bigrams, and trigrams [#]_. Stop words [#]_ and terms that
+appeared in less than 0.5 percent of documents were removed. Stemming, the process of
+of removing word affixes, was not performed. This resulted in a vocabulary size
+of 2,058 for the self-summaries essay and 2,898 for the favorites essay.
+
+.. [#] Unigrams are single tokens. Bigrams refer to two adjacent and trigrams
+       to three adjacent tokens.
+
+.. [#] Stop words are words that appear with very high frequency, such as "the"
+       or "to."
 
 Non-negative matrix factorization was used to identify latent structure in the
 text. This structure was in the form of "topics" or "clusters" which were
@@ -255,13 +290,17 @@ characteristics include essay length, use of profanity and slang terms, as well
 as part-of-speech usage.
 
 We first compared lexical-based characteristics on the self-summary text by sex.
-Our sample included 21,321 females and 31,637 males [7]_. On average, females wrote significantly 
+Our sample included 21,321 females and 31,637 males [#]_. On average, females wrote significantly 
 longer essays than males (150 terms compared to 139, :math:`p` < 0.001).
+
+.. [#] The difference between the number of users in the data set and the
+       number of users in the analysis is due to the fact that we drop users
+       that write less than five tokens for a particular essay.
 
 We next compared the proportion of users who utilized profanity and slang. Profanity was
 rarely used in the self-summary essay. Overall, only 6 percent of users
 included profanity in their self-descriptions. The difference was not
-significantly significant by sex (5.8% of females versus 6.1% of males,
+statistically significant by sex (5.8% of females versus 6.1% of males,
 :math:`p` = 0.14).
 
 Not surprisingly, slang was much more prevalent (on a per-user basis) than
@@ -270,13 +309,15 @@ essays. Females used slang at a significantly lower rate than males (54% versus
 57%, :math:`p` < 0.001).
 
 To compare part-of-speech usage, we first associated part-of-speech tags with
-every token in the self-summary corpus. This results in counts by user and
+every token in the self-summary corpus. This resulted in counts by user and
 part-of-speech. Each user's counts were then normalized by the user's essay
 length to account for essay length differences between users. Of the 19
-possible part-of-speech tags, we focused on adjectives, nouns, and verbs.
+possible part-of-speech tags, we focused on adjectives, nouns, and verbs. The
+proportions of part-of-speech terms used is shown in Table :ref:`pos-freq`. 
 
 .. table:: Proportion of part-of-speech terms used, by sex. Asterisks (``**``)
            denote statistically significant differences at the 0.01 level.
+           :label:`pos-freq`
 
    +-------------------+--------+--------+
    | Part-of-Speech    | Female | Male   |
@@ -294,8 +335,10 @@ difference in verb usage between the sexes (:math:`p` = 0.91).
 
 In addition to part-of-speech usage, we explored specific terms associated
 with parts-of-speech that were distinctive to a particular sex. We did this
-using the log-odds-ratio. The 10 most-distinctive adjective, noun, and verb
-tokens for each sex are summarized below.
+using the log-odds-ratio. Table :ref:`pos-terms` summarizes this, below.
+
+.. table:: The 10 most-distinctive adjective, noun, and verb tokens , by sex.
+           :label:`pos-terms`
 
    +----------------+----------------------------+----------------------------+
    | Part-of-Speech | Female                     | Male                       |
@@ -323,9 +366,12 @@ manageable set of topics.
 Several expected themes emerged. Many users chose to highlight personality
 traits, for example "humor" or "easy-going," while others focused on describing
 the types of activities they enjoyed. Hiking, traveling, and cooking were
-popular choices. Others chose to mention what they were looking, whether that
-be a long-term relationship, a friendship, or sex. Topics and the highest
-weighted tokens for each are summarized in the table below. Note that topic names were hand-labeled.
+popular choices. Others chose to mention what they were looking for, whether that
+was a long-term relationship, a friendship, or sex. Topics and the highest
+weighted tokens for each are summarized in Table :ref:`self-summary-topics`.
+Note that topic names were hand-labeled.
+
+.. table:: Self-summary topics and associated terms. :label:`self-summary-topics`
 
    +----------------+---------------------------------------------------------+
    | Topic          | Tokens                                                  |
@@ -419,7 +465,7 @@ users chose to write about in their self-summaries, we plotted the distribution
 over topics by demographic split. This allowed us to identify if specific
 topics were distinct to particular demographic groups.
 
-The following figure shows the distribution over topics by sex for the
+Figure :ref:`self-summary-sex` shows the distribution over topics by sex for the
 self-summary essay. The highest proportion of users, of either sex, were in the
 "about me" topic. This is not surprising given the essay prompt. For most
 topics, females and males were mostly evenly distributed. One notable
@@ -430,7 +476,7 @@ describing.
 
 .. figure:: self-summary-sex.png
 
-   Self-Summaries
+   Self-summary distribution over topics :label:`self-summary-sex`
 
 We further examined online self-presentation by considering the other available
 essays in the OkCupid data set. Previous psychology research suggests that
@@ -442,8 +488,10 @@ As with the self-summaries, we removed users who wrote less than 5 tokens for
 this essay (11,836 such cases). Note that because the favorites text is less
 expository and more list-like, we did not perform a lexical-based analysis.
 Instead, we used NMF to identify topics (or genres). Like with the
-self-summaries, we chose 25 topics. The following table lists the topics and a
-selection of their highest weighted tokens.
+self-summaries, we chose 25 topics. Table :ref:`favorites-topics` lists the
+topics and a selection of their highest weighted tokens.
+
+.. table:: Favorites topics and associated terms. :label:`favorites-topics`
 
    +----------------+---------------------------------------------------------+
    | Topic          | Tokens                                                  |
@@ -537,12 +585,13 @@ self-summaries. In some cases, genres (or media) overlapped. For example, the
 also overlap between groups. This might suggest that the number of NMF
 components was too high, but the granularity these topics provided was used for
 further analyses. We created superordinate groupings from the topics from which
-we extracted distinctive tokens for particular demographic groups. We first
-examined the distribution over topics by sex.
+we extracted distinctive tokens for particular demographic groups, showing the
+approach's flexibility. Figure :ref:`favorites-sex` shows the distribution over
+topics, by sex.
 
 .. figure:: favorites-sex.png
 
-   Favorites
+   Favorites distribution over topics, by sex :label:`favorites-sex`
 
 The most popular topics, for both females and males, were "TV-hits" and
 "music-rock," with about 16 percent of each sex writing about shows or artists
@@ -563,11 +612,15 @@ proportion of males than females. Similarly, the "teen" group, which
 which corresponded to female-favored movies, had a higher proportion of females.
 This reflects the terms found by the log-odds-ratio.
 
-We next examined the distribution over topics by drug usage. In this
+Figure :ref:`favorites-drugs` shows the distribution over topics by drug usage. In this
 demographic category, users self-identified as drug users or non-drug users. To
 this, we added a third level for users who declined the state their drug usage
 status. There were 6,859 drug users, 29,402 non-drug users, and 11,849 users who did not state their drug usage status
 ("unknown").
+
+.. figure:: favorites-drugs.png
+
+   Favorites distribution over topics, by drug usage status :label:`favorites-drugs`
 
 There was more intra-cluster variation in the distribution of users across topics than for the demographic split by sex.
 Interestingly, the distribution across topics of users for whom we had no drug
@@ -578,10 +631,6 @@ This was especially true in cases where difference in proportions of drug users
 and non-drug users was large. This unexpected finding may suggest that
 individuals who did not respond to the drug usage question abstained in order
 to avoid admitting they did use drugs.
-
-.. figure:: favorites-drugs.png
-
-   Favorites
 
 Although we were unable to test this hypothesis directly due to lack of
 ground-truth drug-usage status for these users, the manner by which free-text
@@ -615,14 +664,23 @@ before, we randomly sampled from the non-users in order to balance the classes
 and split the data into training and test sets.
 
 The full-text model accuracy increased to 72.7 percent. We used the feature
-weights to find the 25 most-predictive drug-usage terms. These are listed below.
+weights to find the 25 most-predictive drug-usage terms. These are listed below,
+with the odds ratio [#]_ shown in parentheses.
+
+.. [#] Logistic regression coefficient estimates are given as log odds ratios.
+       The odds ratios, which say how much a one unit increase affects the odds
+       of being a drug user, are calculated by exponentiating.
 
 ::
 
-  sex, shit, music, weed, party, beer, dubstep, fuck,
-  drinking, smoking, partying, chill, hair, park,
-  fucking, dj, burning, electronic, drunk, ass,
-  reggae, robbins, dude, smoke, cat
+  sex (68.96), shit (45.51), music (20.95),
+  weed (18.46), party (15.54), beer (14.18),
+  dubstep (13.86), fuck (12.28), drinking (11.48),
+  smoking (11.39), partying (10.59), chill (9.45),
+  hair (8.84), park (8.09), fucking (7.93), dj (7.9),
+  burning (7.78), electronic (7.05), drunk (6.67),
+  ass (6.36), reggae (6.18), robbins (5.81),
+  dude (5.74), smoke (5.68), cat (5.5)
 
 Drug users in this data set reference drinking, smoking, partying, and music
 more than non-users and also use particular profane terms.
@@ -666,31 +724,6 @@ thoughts and analyses.
 
 ..      Some custom LaTeX source here.
 
-Footnotes
----------
-.. [1] https://github.com/juanshishido/okcupid. Jupyter notebook with analysis
-       results: https://github.com/juanshishido/okcupid/blob/master/OkNLP-paper.ipynb
-
-.. [2] https://github.com/rudeboybert/JSE_OkCupid. Our original data source was
-       Everett Wetchler's okcupid repository (https://github.com/everett-wetchler/okcupid).
-       However, after commit ``0d62e62``, in which the data was "fully
-       anonimized" to exclude essays, we switched to Kim's repository. As far
-       as we can tell, this data set is the same as the Wetchler original.
-
-.. [3] https://simple.wiktionary.org/wiki/Category:Slang.
-
-.. [4] https://spacy.io/docs#token-postags.
-
-.. [5] Unigrams are single tokens. Bigrams refer to two adjacent and trigrams
-       to three adjacent tokens.
-
-.. [6] Stop words are words that appear with very high frequency, such as "the"
-       or "to."
-
-.. [7] The difference between the number of users in the data set and the
-       number of users in the analysis is due to the fact that we drop users
-       that write less than five tokens for a particular essay.
-
 References
 ----------
 .. [Bir10] Bird, S., Klein, E., & Loper, E. (2009). Natural language processing
@@ -712,6 +745,8 @@ References
 .. [Ger12] Gerber, A. S., & Green, D. P. (2012). Field experiments: Design,
            analysis, and interpretation. WW Norton.
 
+.. [Hon16] Honnibal, M (2016). spaCy. [Computer software]. https://spacy.io/.
+
 .. [Kim15] Kim, A. Y., & Escobedo-Land, A. (2015). OkCupid Data for Introductory
            Statistics and Data Science Courses. Journal of Statistics Education,
            23(2), n2.
@@ -730,6 +765,11 @@ References
 .. [Oja10] Ojala, M., & Garriga, G. C. (2010). Permutation tests for studying
            classifier performance. Journal of Machine Learning Research,
            11(Jun), 1833-1863.
+
+.. [Ped11] Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B.,
+           Grisel, O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., &
+           Vanderplas, J. (2011). Scikit-learn: Machine learning in Python.
+           Journal of Machine Learning Research, 12(Oct), 2825-2830.
 
 .. [Pet11] Petrov, S., Das, D., & McDonald, R. (2011). A universal part-of-speech
            tagset. arXiv preprint arXiv:1104.2086.
