@@ -282,8 +282,8 @@ Another limitation is that Intel |R| TBB only coordinates threads inside a singl
 Intel |R| TBB survives in an oversubscribed environment better than OpenMP because it does not rely on the particular number of threads participating in a parallel computation at any given moment, thus the threads preempted by the OS do not prevent the computation from making an overall progress.
 Nevertheless, it is possible to implement a cross-process mechanism to coordinate resources utilization and avoid over-subscription.
 
-Another approach is suggested by the observation that a moderate over-subscription, such as from two fully subscribed thread pools, does not significantly affect performance for most use cases.
-In this case, preventing quadratic over-subscription from nested parallelism (in particular, with OpenMP) can be a practical alternative.
+A different approach is suggested by the observation that a moderate over-subscription, such as from two fully subscribed thread pools, does not significantly affect performance for most use cases.
+In this case, preventing quadratic over-subscription from the nested parallelism (in particular, with OpenMP) can be a practical alternative.
 Therefore, the solution for that can be as simple as "Global OpenMP Lock" (GOL) or a more elaborate inter-process semaphore that coordinates OpenMP parallel regions.
 
 
