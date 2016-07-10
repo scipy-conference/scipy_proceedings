@@ -2,6 +2,9 @@
 :email: blasscoc@gmail.com
 :institution: Geotrace Technologies
 
+:author: Brendon Hall
+:institution: Enthought
+
 -------------------------------------
 Generalized earthquake classification
 -------------------------------------
@@ -684,11 +687,10 @@ agreement. However, we argued that for this application, the
 optimization strategy of the SVC should prove more robust to
 misclassification than the least squares method.
 
-Finally, we showed that the correlation coefficient was able to
-discriminate sources that were similar to those that appeared to
-be different.  This technique has some promise as a tool for
-comparing different earthquakes.
-
+Finally, we showed qualitatively, that the correlation coefficient
+provided a good metric for comparison between sources within the
+Northridge dataset.  This technique has some promise as a tool for
+earthquake monitoring.
 
 Appendix 
 --------
