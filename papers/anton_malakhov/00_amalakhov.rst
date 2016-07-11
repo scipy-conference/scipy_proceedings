@@ -9,48 +9,49 @@ Composable Multi-Threading for Python Libraries
 
 .. class:: abstract
 
-   Python is popular among numeric communities that value it for easy to use number crunching modules like NumPy [NumPy]_, SciPy [SciPy]_, Dask [Dask]_, Numba [Numba]_, and many others.
+   Python is popular among numeric communities that value it for easy to use number crunching modules like [NumPy]_, [SciPy]_, [Dask]_, [Numba]_, and many others.
    These modules often use multi-threading for efficient parallelism (on a node) in order to utilize all the available CPU cores.
    Nevertheless, their threads can interfere with each other leading to overhead and inefficiency if used together in one application.
    The lost performance can still be recovered if all the multi-threaded parties are coordinated.
    This paper describes usage of Intel |R| Threading Building Blocks (Intel |R| TBB), an open-source cross-platform library for multi-core parallelism [TBB]_, as the composability layer for Python modules.
    It helps to unlock additional performance for numeric applications on multi-core systems.
 
-.. [NumPy] NumPy, http://www.numpy.org/
-.. [SciPy] SciPy, https://www.scipy.org/
-.. [Dask]  Dask, http://dask.pydata.org/
-.. [Numba] Numba, http://numba.pydata.org/
-.. [TBB]   Intel |R| TBB open-source site, https://www.threadingbuildingblocks.org/
-
 .. class:: keywords
 
    Multi-threading, GIL, Over-subscription, Parallel Computations, Parallelism, Multi-core, Dask, Joblib, NumPy, SciPy, Numba
 
+.. [NumPy] NumPy, http://www.numpy.org/
+.. [SciPy] SciPy, https://www.scipy.org/
+.. [Dask]  Dask, http://dask.pydata.org/
+.. [Numba] Numba, http://numba.pydata.org/
+.. [TBB]   Intel(R) TBB open-source site, https://www.threadingbuildingblocks.org/
+
+
 Motivation
 ----------
-The fundamental shift toward parallelism was loudly declared more than 11 years ago [HSutter]_ and multi-core processors have become ubiquitous nowadays [ACM2014]_.
+The fundamental shift toward parallelism was loudly declared more than 11 years ago [HSutter]_ and multi-core processors have become ubiquitous nowadays [WTichy]_.
 However, the software world changes slowly and Python along with its computing ecosystem is not an exception.
 Python suffers from several issues which make it suboptimal for parallel processing.
 
-.. [HSutter] Herb Sutter, "The Free Lunch Is Over", Dr. Dobb's Journal, 30(3), March 2005
+.. [HSutter] Herb Sutter, "The Free Lunch Is Over", Dr. Dobb's Journal, 30(3), March 2005.
              http://www.gotw.ca/publications/concurrency-ddj.htm
-.. [ACM2014] Walter Tichy, "The Multicore Transformation", Ubiquity, Volume 2014 Issue May, May 2014. DOI: 10.1145/2618393
+.. [WTichy]  Walter Tichy, "The Multicore Transformation", Ubiquity, Volume 2014 Issue May, May 2014. DOI: 10.1145/2618393.
              http://ubiquity.acm.org/article.cfm?id=2618393
 
 The multi-processing type of parallelism is popular in Python but it is prone to inefficiency due to memory-related overhead.
 On the other hand, multi-threaded parallelism is known to be more efficient but with Python, it suffers from the limitations of the global interpreter lock [GIL]_, which prevents scaling of Python programs effectively serializing them.
 However, when it comes to numeric computations, most of the time is spent in native code where the GIL can easily be released and programs can scale.
 
-.. [GIL] David Beazley, “Understanding the Python GIL”, PyCON Python Conference, Atlanta, Georgia, 2010.
+.. [GIL] David Beazley, "Understanding the Python GIL", PyCON Python Conference, Atlanta, Georgia, 2010.
          http://www.dabeaz.com/python/UnderstandingGIL.pdf
 
-Scaling parallel programs is not an easy thing. There are two fundamental laws which mathematically describe and predict scalability of a program: Amdahl's Law and Gustafson-Barsis' Law [AmdVsGus]_.
+Scaling parallel programs is not an easy thing. There are two fundamental laws which mathematically describe and predict scalability of a program: Amdahl's Law and Gustafson-Barsis' Law [AGlaws]_.
 According to Amdahl's Law, speedup is limited by the serial portion of the work, which effectively puts a limit on scalability of parallel processing for a fixed-size job.
 Python is especially vulnerable to this because it makes the serial part of the same code much slower compared to implementations  in typed languages due to its deeply dynamic and interpretative nature.
 Moreover, the GIL makes things serial often where they potentially can be parallel, further adding to the serial portion of a program.
 
-.. [AmdVsGus] Michael McCool, Arch Robison, James Reinders, "Amdahl's Law vs. Gustafson-Barsis' Law", Dr. Dobb's Parallel, October 22, 2013
-               http://www.drdobbs.com/parallel/amdahls-law-vs-gustafson-barsis-law/240162980
+.. [AGlaws] Michael McCool, Arch Robison, James Reinders, "Amdahl's Law vs. Gustafson-Barsis' Law", Dr. Dobb's Parallel, October 22, 2013.
+            http://www.drdobbs.com/parallel/amdahls-law-vs-gustafson-barsis-law/240162980
 
 Gustafson-Barsis' law offers some hope stating that if the problem-size grows along with the number of parallel processors, while the serial portion grows slowly or remains fixed, speedup grows as processors are added.
 This might relax the concerns regarding Python as a language for parallel computing since the serial portion is mostly fixed in Python when all the data-processing is hidden behind libraries like NumPy and SciPy which are written in other languages.
@@ -69,8 +70,8 @@ These modules can be accelerated with an optimized math library like Intel |R| M
 
 .. [mproc]  Python documentation on *multiprocessing*, https://docs.python.org/library/multiprocessing.html
 .. [Joblib] Joblib, http://pythonhosted.org/joblib/
-.. [OpenMP] The OpenMP |R| API specification for parallel programming, http://openmp.org/
-.. [MKL]    Intel |R| MKL, https://software.intel.com/intel-mkl
+.. [OpenMP] The OpenMP(R) API specification for parallel programming, http://openmp.org/
+.. [MKL]    Intel(R) MKL, https://software.intel.com/intel-mkl
 
 When everything is combined together, it results in a construction where code from one parallel region calls a function with another parallel region inside.
 This is called *nested parallelism*.
@@ -127,7 +128,7 @@ Usage example
 -------------
 For our first experiment, we need Intel |R| Distribution for Python [IntelPy]_ to be installed along with the Dask [Dask]_ library which simplifies parallelism with Python.
 
-.. [IntelPy] Intel |R| Distribution for Python, https://software.intel.com/python-distribution
+.. [IntelPy] Intel(R) Distribution for Python, https://software.intel.com/python-distribution
 
 .. code-block:: sh
 
@@ -200,7 +201,7 @@ This happens because TBB-based threading in MKL is new and not as optimized as t
 However despite that fact, Dask in TBB mode shows the best performance for this benchmark, roughly 50% improvement compared to default NumPy.
 This happens because the Dask version exposes more parallelism to the system without over-subscription overhead, hiding latencies of serial regions and fork-join synchronization in MKL functions.
 
-.. [#*] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
+.. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
 
 Case study
 ----------
@@ -211,7 +212,7 @@ However, the core of the algorithm is still quite simple and spends most of the 
 Figure :ref:`casestudy` shows results collected on an older machine with a bigger number of cores.
 
 .. [FedLitC] Alexey Fedotov, Vasilij Litvinov, "Faster, Python!" (in Russian), CodeFest, Novosibirsk, 2016
-              http://2016.codefest.ru/lecture/1117
+             http://2016.codefest.ru/lecture/1117
 .. figure:: case_study.png
 
     Case study results: Generation of User Recommendations. :label:`casestudy`
@@ -239,13 +240,13 @@ It aims to close the gap in performance between Python and statically typed, com
 
 .. [LLVM] The LLVM Compiler Infrastructure, http://llvm.org/
 
-Numba implements the notion of universal functions ([ufunc]_, a scalar function which can be used for processing arrays as well) defined in SciPy and extends it to a computation kernel that can be not only mapped onto arrays but can also spread the work across multiple cores.
+Numba implements the notion of universal functions (ufunc, a scalar function which can be used for processing arrays as well) defined in SciPy [ufunc]_ and extends it to a computation kernel that can be not only mapped onto arrays but can also spread the work across multiple cores.
 The original Numba version implements it using a pool of native threads and a simple work-sharing scheduler, which coordinates work distribution between them.
 If used in a parallel numeric Python application, it adds a third thread pool to the existing threading mess described in previous sections.
 Thus, our strategy was to put it on top of the common Intel |R| TBB runtime as well.
 
 .. [ufunc] Universal functions (ufunc), SciPy documentation
-            http://docs.scipy.org/doc/numpy/reference/ufuncs.html
+           http://docs.scipy.org/doc/numpy/reference/ufuncs.html
 
 The original version of Numba's multi-threading runtime was replaced with a very basic and naive implementation based on TBB tasks.
 Nevertheless, even without nested parallelism and advanced features of Intel |R| TBB such as work partitioning algorithms, it resulted in improved performance.
@@ -257,7 +258,7 @@ Nevertheless, even without nested parallelism and advanced features of Intel |R|
 Figure :ref:`numbatbb` shows how original Numba and TBB-based versions perform with the Black Scholes [BSform]_ benchmark implemented with Numba.
 The following code is a simplified version of this benchmark that gives an idea how to write parallel code using Numba:
 
-.. [BSform] Fischer Black, Myron Scholes, "The Pricing of Options and Corporate Liabilities", Journal of Political Economy 81 (3) 1973: 637–654. doi:10.1086/260062
+.. [BSform] Fischer Black, Myron Scholes, "The Pricing of Options and Corporate Liabilities", Journal of Political Economy 81 (3) 1973: 637-654. doi:10.1086/260062
 
 .. code-block:: python
     :linenos:
@@ -286,7 +287,8 @@ Here is the scalar function :code:`BlackScholes`, consisting of many elementary 
 Additionally, :code:`target='parallel'` specifies to run the computation using multiple threads.
 The real benchmark also computes the put price using :code:`numba.guvectorize`, uses approximated CND function instead of ERF for better SIMD optimization, optimizes the sequence of math operations for speed, and repeats the calculation multiple times.
 
-.. [#*] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
+.. [OptNote] https://software.intel.com/en-us/articles/optimization-notice
+.. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
 
 
 Limitations and Future Work
@@ -319,12 +321,11 @@ These issues affect performance of Python libraries and frameworks such as NumPy
 The suggested solution is to use a common threading runtime such as Intel |R| TBB which limits the number of threads in order to prevent over-subscription and coordinates parallel execution of independent program modules.
 Python module for Intel |R| TBB was implemented to substitute Python's ThreadPool implementation and switch Intel |R| MKL into TBB-based mode.
 The examples mentioned in the paper show promising results, where thanks to nested parallelism and TBB threading mode, the best performance was achieved.
-Intel |R| TBB along with the Python module are available in open-source [TBB]_ for different platforms and architectures while Intel |R| Distribution for Python accelerated with Intel |R| MKL is available for free as a stand-alone package [intelpy]_ and on anaconda.org/intel channel.
+Intel |R| TBB along with the Python module are available in open-source [TBB]_ for different platforms and architectures while Intel |R| Distribution for Python accelerated with Intel |R| MKL is available for free as a stand-alone package [IntelPy]_ and on anaconda.org/intel channel.
 Therefore, everyone is welcome to try it out and provide feedback, bug reports, and feature requests.
 
 References
 ----------
-.. [OptNote] https://software.intel.com/en-us/articles/optimization-notice
 
 .. figure:: opt-notice-en_080411.png
    :figclass: b
