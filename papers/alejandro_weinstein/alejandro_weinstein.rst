@@ -49,7 +49,7 @@ In this work we present a Python program able to fit experimental data to a RL m
 A Decision Making Model
 -----------------------
 
-In this section we present the model used in this work to describe how an agent (either an artificial one or a human) learn to interact with an environment. The setup assumes that at the discrete time :math:`t` the agent selects action :math:`a_t` from the set :math:`\mathcal{A}=\{1, \ldots, n\}`. After executing that action the agent gets a reward :math:`r_t \in \mathbb{R}`, according to the properties of the environment. Typically these properties are stochastic and are defined in terms of probabilities conditioned by the action. This sequence is repeated :math:`T` times. The objective of the agent is to take actions to maximize the total reward
+In this section we present the model used in this work to describe how an agent (either an artificial one or a human) learns to interact with an environment. The setup assumes that at the discrete time :math:`t` the agent selects action :math:`a_t` from the set :math:`\mathcal{A}=\{1, \ldots, n\}`. After executing that action the agent gets a reward :math:`r_t \in \mathbb{R}`, according to the properties of the environment. Typically these properties are stochastic and are defined in terms of probabilities conditioned by the action. This sequence is repeated :math:`T` times. The objective of the agent is to take actions to maximize the total reward
 
 .. math::
 
@@ -107,7 +107,7 @@ the corresponding :math:`\alpha_c` and :math:`\beta_c`. The model is fit by maxi
 
 where the probability :math:`P(a_t, c_t)` is calculated using equations (:ref:`EqUpdate`) and (:ref:`EqSoftmax`). 
 
-Once one have access to the likelihood function, the parameters are found by determining the :math:`\alpha_c` and :math:`\beta_c` that maximize the function. In practice, this is done by minimizing the negative of the logarithm of the likelihood function [Daw11]_. In other words, the estimate of the model parameters are given by
+Once one has access to the likelihood function, the parameters are found by determining the :math:`\alpha_c` and :math:`\beta_c` that maximize the function. In practice, this is done by minimizing the negative of the logarithm of the likelihood function [Daw11]_. In other words, the estimate of the model parameters are given by
 
 .. math::
    :label: EqOptimize
