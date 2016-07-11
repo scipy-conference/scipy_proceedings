@@ -125,10 +125,10 @@ than 5 words for a given essay were removed from the analysis.
 .. [#] We use version 0.101.0. GitHub, 10 May 2016.
        https://github.com/spacy-io/spaCy/releases/tag/0.101.0.
 
-We combined drug usage status levels. Specifically, users who responded
-"sometimes" or "often" were grouped into a "yes" category. Individuals who
-answered "never" were assigned to the "no" group and we created an "unknown"
-category for users who did not answer.
+In order to reduce the number of categories, we combined drug usage status
+levels. Specifically, users who responded "sometimes" or "often" were grouped
+into a "yes" category. Individuals who answered "never" were assigned to the
+"no" group and we created an "unknown" category for users who did not answer.
 
 
 Methods
@@ -171,7 +171,7 @@ Non-negative Matrix Factorization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For document clustering, the document corpus is projected onto a
-k-dimensional semantic space, with each axis corresponding to a particular
+:math:`k`-dimensional semantic space, with each axis corresponding to a particular
 topic and each document being represented as a linear combination of those
 topics [Xu_03]_. Methods such as latent semantic indexing require the derived
 latent semantic space to be orthogonal, so this class of methods
@@ -187,10 +187,10 @@ while limiting tokens to those appearing in at least 0.5 percent of the document
 (minimum frequency). NMF was calculated with :math:`k` dimensions, which
 factorized the tf-idf matrix into two matrices, :math:`W` and :math:`H`. The
 dimensions were ``n_samples x k`` and ``k x n_features`` for :math:`W` and
-:math:`H`, respectively. Group descriptions were given by top-ranked terms (the
-most distinctive) in the columns of :math:`H`. Document membership weights were
-given by the rows of :math:`W`. The maximum value in each row of :math:`W`
-determined essay group membership.
+:math:`H`, respectively. Group descriptions were given by top-ranked terms in
+the columns of :math:`H`. Document membership weights were given by the rows of
+:math:`W`. The maximum value in each row of :math:`W` determined essay group
+membership.
 
 .. [#] We use version 0.17.1. GitHub, 18 Feb 2016.
        https://github.com/scikit-learn/scikit-learn/releases/tag/0.17.1-1.
@@ -256,7 +256,7 @@ Finally, we compared the average proportion of adjectives, nouns, and verbs and
 identified the most distinctive terms in each lexical category by sex using the
 smoothed log-odds-ratio, which accounts for variance.
 
-Text semantics were also analyzed. The corpus was transformed into a tf-idf
+We also analyzed text semantics by transforming the corpus into a tf-idf
 matrix using spaCy's default tokenizer with punctuation removed. We chose to
 include unigrams, bigrams, and trigrams [#]_. Stop words [#]_ and terms that
 appeared in less than 0.5 percent of documents were removed. Stemming, the process of
@@ -357,19 +357,24 @@ using the log-odds-ratio. Table :ref:`pos-terms` summarizes this, below.
    |                | dance appreciate being     |                            |
    +----------------+----------------------------+----------------------------+
 
+Distinctly-female adjectives are mostly descriptive. Males, on the other hand,
+use more quantity-based and demonstrative adjectives. For nouns, females focus
+on relationship- and experience-based terms while males write about work,
+sports, and technology. (Note that ``'ll`` is the contracted form of "will.")
+
 NMF was then used to provide insights into the underlying topics that users chose to
 describe themselves. Selecting the number of NMF components (topics to which
 users are clustered) is an arbitrary and iterative process. For the
 self-summary essay, we chose 25 components, which resulted in a diverse, but
-manageable set of topics.
+manageable, set of topics.
 
 Several expected themes emerged. Many users chose to highlight personality
 traits, for example "humor" or "easy-going," while others focused on describing
 the types of activities they enjoyed. Hiking, traveling, and cooking were
-popular choices. Others chose to mention what they were looking for, whether that
-was a long-term relationship, a friendship, or sex. Topics and the highest
-weighted tokens for each are summarized in Table :ref:`self-summary-topics`.
-Note that topic names were hand-labeled.
+popular choices. Others chose to mention what kind of interaction they were
+seeking, whether that was a long-term relationship, a friendship, or sex.
+Topics and the highest weighted tokens for each are summarized in Table
+:ref:`self-summary-topics`. Note that topic names were hand-labeled.
 
 .. table:: Self-summary topics and associated terms. :label:`self-summary-topics`
 
@@ -479,8 +484,8 @@ describing.
    Self-summary distribution over topics :label:`self-summary-sex`
 
 We further examined online self-presentation by considering the other available
-essays in the OkCupid data set. Previous psychology research suggests that
-people's preferred music styles are tied to their personalities [Col15]_, and it
+essays in the OkCupid data set. Previous psychology research suggests that a
+person's preferred music styles are tied to their personalities [Col15]_, and it
 is possible that this extends to other media, such as books or movies. We next
 analyzed the "Favorite books, movies, shows, music, food" essay.
 
@@ -633,7 +638,7 @@ individuals who did not respond to the drug usage question abstained in order
 to avoid admitting they did use drugs.
 
 Although we were unable to test this hypothesis directly due to lack of
-ground-truth drug-usage status for these users, the manner by which free-text
+the true drug-usage status for these users, the manner by which free-text
 writing styles may unintentionally disclose demographic attributes is an
 intriguing avenue for research. We used a predictive modeling approach to
 attempt to gain insights into this question. Specifically, we trained a logistic
@@ -667,8 +672,8 @@ The full-text model accuracy increased to 72.7 percent. We used the feature
 weights to find the 25 most-predictive drug-usage terms. These are listed below,
 with the odds ratio [#]_ shown in parentheses.
 
-.. [#] Logistic regression coefficient estimates are given as log odds ratios.
-       The odds ratios, which say how much a one unit increase affects the odds
+.. [#] Logistic regression coefficient estimates are given as log-odds-ratios.
+       The odds-ratios, which say how much a one unit increase affects the odds
        of being a drug user, are calculated by exponentiating.
 
 ::
@@ -685,19 +690,29 @@ with the odds ratio [#]_ shown in parentheses.
 Drug users in this data set reference drinking, smoking, partying, and music
 more than non-users and also use particular profane terms.
 
-Conclusion
-----------
+Conclusion and Future Work
+--------------------------
 
 The current study extended previous NLP analyses of online dating profiles. The
 scope of this work was larger than previous studies, both because of the size
-of the datasets (previous studies used much smaller datasets) and because of
-the novel combination of NLP with both supervised and unsupervised machine
-learning techniques (NMF and logistic regression). To our knowledge, there is currently no study that
-combines these techniques to identify unintentional cues in online
-self-presentation as well as predict demographics from free-text self
-descriptions. The idea that people may unintentionally be providing information
-about themselves in the way that they answer questions online is an intriguing
-avenue for future research and can also be extended to deception online.
+of the data set and because of the novel combination of NLP with both
+supervised and unsupervised machine learning techniques, such as logistic
+regression and NMF. To our knowledge, there is currently no study that combines
+these techniques to identify unintentional cues in online self-presentation or
+uses them to predict demographics from free-text self descriptions. The idea
+that people may unintentionally be providing information about themselves in
+the way that they answer questions online is an intriguing avenue for future
+research and can also be extended to deception online.
+
+This work serves as an initial exploration for analyzing self-presentation in
+the context of online dating. Given the availability of other demographic
+characteristics, such as ethnicity and education level, future work will focus
+on describing the ways in which other demographic groups tend to describe
+themselves. We would also like to explore recent advancements in language
+modeling techniques, such as word embeddings. Most importantly, future work
+will involve exploring methods that might help us better identify deception. If
+the data ever becomes available, we would like to explore how the *way* that
+people choose to self-present affects the interactions they have.
 
 Acknowledgements
 ----------------
