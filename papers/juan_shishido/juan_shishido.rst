@@ -117,7 +117,7 @@ Preprocessing
 
 Line break characters and URLs were removed from the essay text. Multiple
 periods, dashes, and white spaces were replaced by single instances. Essays
-were segmented into individual words using spaCy's [Hon15]_ [#]_ default
+were segmented into individual words using spaCy's [Hon16]_ [#]_ default
 tokenizer, which is well suited for online communication as it maintains
 emoticons as discrete tokens, and removes punctuation. Users who wrote less
 than 5 words for a given essay were removed from the analysis.
