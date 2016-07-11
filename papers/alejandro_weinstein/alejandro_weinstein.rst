@@ -135,7 +135,7 @@ The study was approved by the University of Manchester research ethics committee
    a card, the participant wins or lose the amount of points indicated on the
    card, according to the probabilities associated with the cue. The outcome of
    the trial is indicated by a stimulus, where the win or lose outcome is
-   indicated by an arrow up or down, respectively.
+   indicated by an arrow up or down, respectively
    [Mas12]_. :label:`FigStimulus`
 
 Implementation and Results
