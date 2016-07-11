@@ -143,13 +143,13 @@ def tex2pdf_singlepass(out_path):
             )
     out, err = run.communicate()
 
-    if "Fatal" in out.decode() or run.returncode:
+    if b"Fatal" in out or run.returncode:
         print("PDFLaTeX error output:")
         print("=" * 80)
-        print(out.decode())
+        print(out)
         print("=" * 80)
         if err:
-            print(err.decode())
+            print(err)
             print("=" * 80)
 
         # Errors, exit early
@@ -169,12 +169,11 @@ def tex2pdf_singlepass(out_path):
                 cwd=out_path,
                 )
         out_bib, err = run.communicate()
-
-        if err:
+        if err or b'Error' in out_bib:
             print("Error compiling BiBTeX")
             return out_bib, False
 
-    if "Label(s) may have changed." in out.decode():
+    if b"Label(s) may have changed." in out:
         return out, True
 
     return out, False
@@ -188,13 +187,13 @@ def page_count(pdflatex_stdout, paper_dir):
         print("*** WARNING: PDFLaTeX failed to generate output.")
         return
 
-    regexp = re.compile('Output written on paper.pdf \((\d+) pages')
+    regexp = re.compile(b'Output written on paper.pdf \((\d+) pages')
     cfgname = os.path.join(paper_dir, 'paper_stats.json')
 
     d = options.cfg2dict(cfgname)
 
     for line in pdflatex_stdout.splitlines():
-        m = regexp.match(line.decode())
+        m = regexp.match(line)
         if m:
             pages = m.groups()[0]
             d.update({'pages': int(pages)})
