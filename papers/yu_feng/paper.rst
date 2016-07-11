@@ -47,7 +47,7 @@ Launching Python Applications on Peta-scale Massively Parallel Systems
 Introduction
 ------------
 
-The use of a scripting or interpretive programming language in high performance
+The use of a scripting or interpreted programming language in high performance
 computing has the potential to go beyond post-processing and plotting results.
 Modern super-computers support dynamic linking and shared libraries, and thus,
 are capable of running the interpreters of a scripting programming language.
@@ -56,7 +56,7 @@ Modern interpreters of scripting languages are equipped with the Just-In-Time
 performances close to C or Fortran :cite:`numba,julia,v8`. The Python
 programming language is of particular interest due to its large number of
 libraries and its wide user base. There are several Python bindings of the
-Message Passing Interface (MPI)[#MPI]_ :cite:`mpi4py2011,miller2002pympi`.
+Message Passing Interface (MPI) [#MPI]_ :cite:`mpi4py2011,miller2002pympi`.
 Bindings for
 higher level abstractions, e.g. :cite:`Spotz:2012:PRA:2590240.2590247` also exist,
 allowing one to write complex parallel applications with MPI for simulations
@@ -71,9 +71,10 @@ However, it is still traditionally believed that Python does not coexist with
 large scale high performance computing. The major barrier is due to the slow
 and unpredictable amount of time required to launch Python applications on such systems.
 For example, it has been shown that the start-up time sometimes increases to hours
-for jobs with a relative small scale 
-(a hundred ranks: a rank is defined as one of the concurrent processes of the application).
+for jobs with a relative small scale (a hundred ranks ..[#rank]).
 Some quantitative benchmarks can be see in :cite:`slither,mpiimport`.
+
+.. [#rank] A rank is defined as one of the concurrent processes of the application.
 
 The issue is an interplay between the current file system architecture on
 Peta-scale systems and the behavior of the Python interpreter.  Peta-scale
@@ -151,7 +152,7 @@ packages.
 
 The application delivery mechanism on a super-computer can deliver the full
 binary executable to the computing nodes.
-In fact, older systems can only deliver one staticly linked executable
+In fact, older systems can only deliver one statically linked executable
 file to the computing nodes during the job launch.
 The support of dynamic libraries on Cray systems was once very limited :cite:`zhaoshared`
 -- a significant amount of work has been invested to solve this limitation in the context of shared library objects
@@ -387,12 +388,15 @@ computing environment, take the most time to install, yet barely change during
 the life-cycle of a project. Most super-computing facilities already maintain
 some form of these packages with the ``modules`` system, e.g. NCSA has a
 comprehensive set of Python packages :cite:`bwp`, and NERSC has the anaconda 2 and 3
-based Python distribution.
+based Python distribution. 
 
 It is straightforward to create bundles of these pre-installed components. We
 provide the ``bundle`` command with python-mpi-bcast for creating a bundle
 from a pre-installed 'modules' path. It is a good practice to create one bundle
 for each 'modules' path.
+The process can be time consuming, even though it does not invole compiling any
+source code packages. For example, creating a Tier 1 bundle from a full binary anaconda
+installation typically takes 5 minutes at NERSC facilities.
 
 Tier 2 components
 +++++++++++++++++
@@ -535,9 +539,9 @@ Benchmark and Performance
     Time measurements of python-mpi-bcast on Edison, a Cray XC 30 system at
     NERSC. We perform tests launching a dummy Python 2 application (that imports
     scipy) with up to 127,440 MPI ranks. The total time in the bcast job step is
-    shown in circles. The two major time consuming components of bcast, the call to
-    ``MPI_Bcast`` ('x') and the call to the ``tar`` command,
-    are also shown ('+'). Note
+    shown in stars. The two major time consuming components of bcast, the call to
+    ``MPI_Bcast`` (:math:`\times`) and the call to the ``tar`` command,
+    are also shown (:math:`+`). Note
     that large jobs incur a large overhead in the job step such that the sum of
     the latter differs from the job step times. The total time of the job step that
     launches the dummy application is shown in squares. The total time of both job
@@ -550,8 +554,9 @@ Benchmark and Performance
     Time measurements of python-mpi-bcast on BlueWaters. a Cray XT system at
     NCSA. We perform tests launching a dummy Python 2 application (that imports
     scipy) with up to 127,440 MPI ranks. The total time in the bcast job step is
-    shown in circles. The two major time consuming components of bcast, the call to
-    ``MPI_Bcast`` ('x') and the call to the 'tar' command, are also shown ('+'). Note
+    shown in stars. The two major time consuming components of bcast, the call to
+    ``MPI_Bcast`` (:math:`\times`) and the call to the 'tar' command,
+    are also shown (:math:`+`). Note
     that large jobs incur a large overhead in the job step such that the sum of
     the latter differs from the job step times. The total time of the job step that
     launches the dummy application is shown in squares. The total time of both job
@@ -645,7 +650,7 @@ Further integration into the job system is also possible to provide a fully
 opaque user experience.
 
 Finally, with few modifications, ``python-mpi-bcast`` can be easily
-generalized to support applications written in other interpretive languages
+generalized to support applications written in other interpreted languages
 such as Julia and R.
 
 Given that large-scale Python applications can be launched
@@ -655,7 +660,7 @@ complex computational applications at large scale with Python.
 
 We highly welcome reimplementing the stratagies
 documented in the paper as an extension of the Conda package distribution system, and provide
-the full source code of ``python-mpi-bcast`` is hosted
+the full source code of ``python-mpi-bcast``
 at https://github.com/rainwoodman/python-mpi-bcast.
 
 **Acknowledgment**
