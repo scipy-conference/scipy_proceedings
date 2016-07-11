@@ -17,7 +17,7 @@ The Mission Analysis, Operations, and Navigation Toolkit Environment
 computing platform. It was built to support JPL's deep space exploration
 program, and has been used to fly robotic spacecraft to Mars, Jupiter,
 Saturn, Ceres, and many solar system small bodies. At its core, MONTE
-consists of low-level astrodynamic libraries that are written in C++,
+consists of low-level astrodynamic libraries that are written in C++
 and presented to the end user as an importable Python language module.
 These libraries form the basis on which Python-language applications
 are built for specific astrodynamic applications, such as trajectory
@@ -67,13 +67,13 @@ eventually become the Double Precision Trajectory and Orbit
 Determination Program, or DPTRAJ/ODP ([Moy71]_, [Moy03]_). Over its
 forty-plus years of active life, JPL engineers used the DPTRAJ/ODP to
 navigate the "Golden Age" of deep space exploration. This included the
-later Mariner and Pioneer Missions, Viking, Voyager, Magellan, Galileo,
+later Mariner and Pioneer missions, Viking, Voyager, Magellan, Galileo,
 Cassini and more. Also over this time, its base language moved through
 Fortran IV, Fortran V, Fortran 77 and Fortran 95 as the computational
 appetites of navigators grew ever larger.
 
 By 1998 it was clear that the aging DPTRAJ/ODP needed to be updated
-once again. Rather than initiate another refactor of the DPTRAJ/ODP,
+once again. Rather than initiate another refactor,
 JPL's navigation section commissioned a new effort that would
 depart from its predecessor in two important ways. First, the new
 software would be an object-oriented library, written in C++ and
@@ -214,7 +214,7 @@ other libraries in the Python scientific computing stack. It makes
 heavy use of many open-source Python libraries such as matplotlib and
 IPython (Jupyter), and reciprocally tries to make it easy for users
 of these systems to interface with MONTE. Many of MONTE's classes
-can transform themselves into NumPy data types - a common pattern is
+can transform themselves into NumPy data types --- a common pattern is
 for MONTE classes to have a ``.toArray`` method which returns a
 ``numpy.ndarray``. Additionally, the MONTE team has a history of
 collaboration with matplotlib dating all the way back to the early
@@ -227,10 +227,9 @@ developed in house.
 The MONTE project started in 1998 at a time when the Python language
 was still relatively new. As a result, MONTE has several custom systems
 that are redundant in the current Python landscape. For instance, MONTE
-developed an interactive shell similar to IPython (although it has
-largely been deprecated in favor of IPython) and has several numerical
-computing classes that would generally be dispatched to NumPy in a
-brand new project.
+developed an interactive shell similar to IPython and has several
+numerical computing classes that would generally be dispatched to
+NumPy in a brand new project.
 
 Historical quirks aside, MONTE considers itself a member of
 the Python scientific programming community and aims to integrate
@@ -254,7 +253,7 @@ Convention is to import the main ``Monte`` library as ``M``. Throughout
 this paper, if a class is referred to with the prefix ``M.``, it means
 this class belongs to the main MONTE library (e.g. ``M.TrajLeg``,
 ``M.Gm``, etc). The following example shows a simple script using the
-``Monte`` and mpy libraries to get the state of the Cassini spacecraft
+``Monte`` and ``mpy`` libraries to get the state of the Cassini spacecraft
 with respect to Saturn at the time of its Saturn Orbit Insertion (SOI)
 burn. [#]_ [#]_
 
@@ -284,12 +283,12 @@ burn. [#]_ [#]_
     soiTime = M.Epoch("01-JUL-2004 02:48:00 UTC")
 
     # Get the trajectory manager from the BOA database
-    tset = M.TrajSetBoa.read(boa)
+    traj = M.TrajSetBoa.read(boa)
 
     # Request the state of Cassini at SOI from the
     # trajectory manager in a Saturn-centered Earth
     # Mean Orbit of 2000 coordinate frame
-    casAtSoi = tset.state(soiTime, "Cassini", "Saturn",
+    casAtSoi = traj.state(soiTime, "Cassini", "Saturn",
       "EMO2000")
 
 Several of MONTE's core systems --- the basic astrodynamic scaffolding
@@ -338,7 +337,7 @@ to describe the dynamics of a spacecraft and to specify the time of an
 observation. While necessary, multiple systems for specifying time
 can add considerable complexity to software.  In MONTE, time
 is encapsulated in the ``M.Epoch`` class, which supports time
-definition in the TDB, TT, TAI, GPS, UTC, and UT1.  This class handles
+definition in the TDB, TT, TAI, GPS, UTC, and UT1 systems.  This class handles
 the problem of transforming times between different frames thereby
 allowing the user to specify times in the most convenient form for
 their application.
@@ -358,7 +357,7 @@ underlying formats; most of the differences involve how many data
 points along the trajectory are stored, and how to
 interpolate between these points. In addition, MONTE provides
 conversion routines which allow some external trajectory formats to
-be read and written (including NAIF "bsp" files, international "oem"
+be read and written (including NAIF "bsp" files and international "oem"
 files).
 
 The ``M.TrajSet`` class is MONTE's trajectory manager, and is
@@ -445,10 +444,9 @@ in the narrated example below.
 For this example, we will explore the Voyager 2 trajectory. We will
 identify the time and distance of the Uranus planetary encounter, and
 also find the time periods where Voyager 2 was in line with the sun.
-was in solar conjunction. Along the way we will highlight various
-aspects of MONTE's core systems. Also, if our exploration happens to
-turn up anything interesting (it will), we will take some time to
-investigate what we find.
+Along the way we will highlight various aspects of MONTE's core systems.
+Also, if our exploration happens to turn up anything interesting
+(it will), we will take some time to investigate what we find.
 
 Voyager 2 Trajectory
 ^^^^^^^^^^^^^^^^^^^^
@@ -499,8 +497,8 @@ method.
 
 .. code-block:: python
 
-   In [6]: tset = M.TrajSetBoa.read( boa )
-   In [7]: tset.getAll()
+   In [6]: traj = M.TrajSetBoa.read( boa )
+   In [7]: traj.getAll()
    Out[7]: ['Mercury', 'Mercury Barycenter',
             'Venus', 'Venus Barycenter',
             'Earth', 'Earth Barycenter', 'Moon',
@@ -520,7 +518,7 @@ different than what is listed below.*
 
 .. code-block:: python
 
-   In [8]: tset.totalInterval( "Voyager 2" )
+   In [8]: traj.totalInterval( "Voyager 2" )
    Out[8]:
    TimeInterval(
       [ '20-AUG-1977 15:32:32.1830 ET',
@@ -539,7 +537,7 @@ Voyager 2 with respect to Earth.
 .. code-block:: python
 
    In [11]: currentTime = M.Epoch.now()
-   In [12]: vygrTwoNow = tset.state(currentTime,
+   In [12]: vygrTwoNow = traj.state(currentTime,
        ...:   "Voyager 2", "Earth", "EME2000" )
    In [13]: vygrTwoNow
    Out[13]:
@@ -560,7 +558,7 @@ Venus or Neptune.
 
 .. code-block:: python
 
-   In [14]: vygrTwoNowVenus = tset.state( currentTime,
+   In [14]: vygrTwoNowVenus = traj.state( currentTime,
        ...:   "Voyager 2", "Venus", "EME2000" )
    In [15]: vygrTwoNowVenus
    Out[15]:
@@ -572,7 +570,7 @@ Venus or Neptune.
    Vel: -4.457126033807687e+00 -3.509301445530399e+01
         -2.760459587874612e+01
 
-   In [17]: vygrTwoNowNeptune = tset.state(currentTime,
+   In [17]: vygrTwoNowNeptune = traj.state(currentTime,
        ...:   "Voyager 2", "Neptune Barycenter", "EME2000" )
    In [18]: vygrTwoNowNeptune
    Out[18]:
@@ -601,7 +599,7 @@ from Earth to Voyager 2 like this.
    Out[28]: 104.33813824888766
 
 When reading states from a trajectory you are often interested in
-making repeated calls for the same body and center but at several
+making repeated calls for the same body and center but at
 different times. ``M.TrajSet`` works fine for this application, but
 if the target and center bodies don't change on repeated calls, some
 optimizations can be made for better performance. The ``M.TrajQuery``
@@ -639,13 +637,10 @@ However, there are certain specific relationships between bodies and
 frames that can be of particular interest to an analyst. For instance,
 identifying the time at which two bodies achieve their closest approach
 (periapse) and the magnitude of that minimum distance can be an
-important astrodynamic metric. We can certainly estimate these
-quantities using trajectory queries, perhaps by plotting the relative
-distance between two bodies and looking for the local minima.
-However, MONTE provides tools for searching through various
-relationship-spaces and identifying some of these key events.
-The ``M.EventSpec`` set of classes allow us to define a particular
-event type then search through the requisite relationships to
+important astrodynamic metric. MONTE provides tools for searching
+through various relationship-spaces and identifying some of these
+key events. The ``M.EventSpec`` set of classes allow us to define a
+particular event type then search through the requisite relationships to
 identify specific occurrences. The ``M.Event`` class is used to
 report the relevant data associated with an occurrence.
 
@@ -661,7 +656,7 @@ distance of Voyager 2's closest approach with Uranus.
       ...:   "PERIAPSIS" )
 
 ``M.ApsisEvent`` takes as its first argument an ``M.TrajQuery``
-instance that is configured to return the state of our target body with
+object that is configured to return the state of our target body with
 respect to the desired center (in this case, Voyager 2 with respect to
 Uranus). The second argument specifies what type of apsis we are
 looking for; this can be "PERIAPSIS", "APOAPSIS", or the catch-all
@@ -719,7 +714,7 @@ the ``M.AngleEvent`` event specification class.
 
    In [20]: sepSearch = M.AngleEvent(boa, "Sun", "Earth"
        ...:   "Voyager 2", 12 *deg, "BELOW")
-   In [23]: searchWindow = tset.totalInterval("Voyager 2")
+   In [23]: searchWindow = traj.totalInterval("Voyager 2")
    In [25]: foundEvents = sepSearch.search(searchWindow,
        ...:   1 *hour)
 
@@ -786,7 +781,7 @@ low-SEP region.
    )
 
 As we can see, low-SEP periods occur on a near-yearly basis. This makes
-sense because as the Earth makes a complete rotation around the Sun,
+sense because as the Earth makes a complete revolution around the Sun,
 there is bound to be a period of time when the Sun falls in the
 line-of-sight of Voyager 2. Curiously though, the last low-SEP
 region found was in the winter of 1992. After this time, the Sun no
@@ -855,7 +850,7 @@ Conclusion
 
 MONTE is one of the most powerful astrodynamic computing libraries in
 the world. It has been extensively tested and verified by flying actual
-spacecraft to destinations in the solar system. It's a compelling
+spacecraft to destinations in the solar system. It is a compelling
 platform for anyone doing aerospace related computation, especially
 for those who love working with the Python language.
 
