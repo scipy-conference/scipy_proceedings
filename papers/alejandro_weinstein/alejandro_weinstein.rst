@@ -258,7 +258,7 @@ Before using our implementation of the model estimation method with real data, i
    maximum likelihood are :math:`\widehat{\alpha}=0.11` and
    :math:`\widehat{\beta}=0.49` (red plus sign). :label:`FigLikelihood`
 
-It is good practice to visualize the raw experimental data before doing any further analysis. In this case, this means showing the actions taken by each subject for each trial. Ideally, we wish to show the behaviors of all the subject for a given context in a single figure, to get an overview of the whole experiment. Fortunately, the Seaborn library [Was16]_ allows us to do this with very little effort. Figure :ref:`FigAllActions` shows the result for the context with a probability of winning of 80%. We also add vertical lines (blue for winning and red for losing) for each trial.
+It is good practice to visualize the raw experimental data before doing any further analysis. In this case, this means showing the actions taken by each subject for each trial. Ideally, we wish to show the behaviors of all the subject for a given context in a single figure, to get an overview of the whole experiment. Fortunately, the Seaborn library [Was16]_ allows us to do this with little effort. Figure :ref:`FigAllActions` shows the result for the context with a probability of winning of 80%. We also add vertical lines (blue for winning and red for losing) for each trial.
 
 Finally, we can fit a model for each subject. To do this we perform the maximum likelihood estimation of the parameters using the experimental data. Figure :ref:`FigFitExperimental` shows the estimated :math:`\widehat{\alpha}` and :math:`\widehat{\beta}` for each subject, and for the context with probability of winning 80% (in blue) and 20% (in red).
 
