@@ -149,7 +149,8 @@ The code for the artificial agent is organized around two classes. The class ``C
 
     class ContextualBandit(object):
 	def __init__(self):
-	    # Contexts and their probabilities of winning
+	    # Contexts and their probabilities of 
+            # winning
 	    self.contexts = {'punishment': 0.2,
 			     'neutral': 0.5,
 			     'reward': 0.8}
