@@ -431,8 +431,9 @@ implies that A depends on B.
    | *out-out*  |  :math:`-0.04` |
    +------------+----------------+
 
-What explains this strange network structure? One reason is that
-there is much greater variation in out-degree than in in-degree.
+This is a strange structure because its assortativity measures
+defy the assortativity patterns seen in other complex networks.
+One reason is that there is much greater variation in out-degree than in in-degree.
 :label:`odtable` shows the top ten most depended on packages.
 :label:`idtable` shows the top ten packages with the most dependencies.
 Three packages, ``requests``, ``six``, and ``django``  have
