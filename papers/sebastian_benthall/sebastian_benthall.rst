@@ -331,6 +331,7 @@ assumes that there are no cycles in the dependency graph.
 This property is necessary for the nodes to have a well-defined
 topological order.
 However, Python package dependencies do indeed include many cycles.
+An amusing example are the packages ``chicken`` and ``egg``.
 We can adapt any directed cyclic graph into a directed
 acyclic graph simply by removing one edge from every cycle.
 
@@ -353,6 +354,7 @@ possible in order to eliminate all cycles.
 Another way to improve this algorithm would be to adapt the heuristic
 assumptions that motivate this framework to make reasonable allowances
 for cycle dependencies.
+It is unknown how these changes will effect the results.
 We leave the elaboration of this algorithm for future work.
 
 Data collection and publication
@@ -360,7 +362,7 @@ Data collection and publication
 
 Data for this analysis comes from two sources. For package and release metadata,
 we used data requested from PyPI, the Python Package Index.
-This data provides for data about the publication date and number of
+This includes the publication date and number of
 unique downloads for each software release.
 
 We also downloaded each Python release and inspected it for the presence of a ``setup.py``
