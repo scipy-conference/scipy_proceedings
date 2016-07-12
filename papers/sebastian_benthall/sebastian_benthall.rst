@@ -114,8 +114,12 @@ and has had at least three releases. They identify several key predictive factor
 project success, including data that indicates usefulness (such as number of downloads),
 number of hours contributed to the project, and communicativeness of the project leader.
 
-These precedents focus on individual software projects and their suscpetiblity
+These precedents focus on individual software projects and their susceptiblity
 to technical and community failure.
+[Nagappan2005]_ and [Nagappan2007]_ look at dependency relationships between packages
+and specifically relative code churn (changes in lines of code) between dependent packages
+as a cause of system defects in Windows Server 2003.
+
 We build on these approaches by considering security as a function of
 the total software supply chain.
 This supply chain resembles a complex ecosystem more than a simple 'chain' or stack.
@@ -219,10 +223,12 @@ will be resilient.
 
 A system can be robust, or resilient, or both, or neither.
 Robustness and resilience can be in tension with each other.
-The more dynamic a software project is, measured as a function of the activity
+For example, the more churn a software project is, measured as a function of the activity
 of the community and frequency of new commits, the more likely that it will
-be resilient, responding to new threat information. But it is also likely to
-be less robust, as new code might introduce new software flaws.
+be resilient, responding to new threat information.
+But it is also likely to be less robust, as new code might introduce new software flaws.
+[Nagappan2005]_ and [Nagappan2007]_ find that relative code churn between dependent packages
+is a significant predictor of system defect.
 We refer to a system that is not robust is *fragile*,
 and a system that is not resilient is *brittle*.
 
@@ -625,6 +631,10 @@ References
 .. [IonChannel] (n.d.). Retrieved July 12, 2016, from http://ionchannel.io/
 
 .. [LaBelle2004] N. LaBelle, E. Wallingford. 2004. Inter-package dependency networks in open-source software.
+
+.. [Nagappan2005] Nagappan, N., & Ball, T. (2005, May). Use of relative code churn measures to predict system defect density. In Proceedings. 27th International Conference on Software Engineering, 2005. ICSE 2005. (pp. 284-292). IEEE.
+
+.. [Nagappan2007] Nagappan, N., & Ball, T. (2007). Explaining failures using software dependences and churn metrics. In Proceedings of the 1st International Symposium on Empirical Software Engineering and Measurement.
 
 .. [Newman2002] Newman, M. E. J. 2002. "Assortative mixing in networks."
 
