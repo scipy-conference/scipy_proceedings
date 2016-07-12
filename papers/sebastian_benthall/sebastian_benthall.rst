@@ -383,7 +383,8 @@ Empirical and Modeling Results
 Our data collection process created a network with :math:`66,536` nodes and :math:`72,939` edges.
 Over half of the nodes, :math:`33,573`, have no edge. This isolates them from the
 dependency network.
-Of the remaining :math:`32,963`, :math:`31,473` belong to a single *giant connected component*.
+Of the remaining :math:`32,963`, :math:`31,473` belong to a single giant connected component.
+This preponderance of one component is a consistent feature of complex networks more generally.
 
 
 Statistical properties of the software dependency network
