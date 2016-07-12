@@ -66,20 +66,25 @@ processing applications and scientific computing in general, large amounts of
 numerical data are passed to any number of functions that inherently impose
 limitations upon that data. If such functions do not validate their arguments,
 these limitations may be violated without raising exceptions leading to
-potentially erroneous results. Thus, explicit validation may not only spare the
-user a lot of frustration by providing useful exceptions but may also prevent
-erroneous results and thereby ensure the credibility of works in scientific
-computing.
+potentially erroneous results. Thus, although impairing the performance,
+explicit validation may not only spare the user a lot of frustration by
+providing useful exceptions but may also prevent erroneous results and thereby
+ensure the credibility of works in scientific computing.
 
 The usage of explicit function argument validation could be considered
-"unpythonic" as it goes against dynamic typing and duck typing which relies on
-documentation, clear code and testing to ensure correct usage. Even so, there
-exist a number of solutions to validating function arguments in Python relying
-on a wide range of language constructs and interfaces. The validation
-capabilities of these solutions vary greatly from type, attribute, and value
-checks to fully customisable checks. Most of the solutions do, however, seem to
-have an interface which relates to the data model used by Python and therefore
-translates to Python check in a straighforward way.
+"unpythonic" [#]_ as it goes against dynamic typing :cite:`Cordeiro2013` and
+duck typing :cite:`Cordeiro2013` by not relying on documentation, clear code
+and testing to ensure correct usage. Even so, there exist a number of solutions
+to validating function arguments in Python relying on a wide range of language
+constructs and interfaces. The validation capabilities of these solutions vary
+greatly from type, attribute, and value checks to fully customisable
+checks. Among these solutions are PyDBC, Traitlets and Numtraits, MyPy,
+PyValid, and PyContracts which are all discussed later. Most of the solutions
+do, however, seem to have an interface which relates to the data model used by
+Python and therefore translates to Python check in a straighforward way.
+
+.. [#] For an informal yet fitting definition, see
+       http://stackoverflow.com/questions/25011078/what-does-pythonic-mean
 
 Unfortunately, there are a number of shortcomings with the existing validation
 strategies as implemented in the existing Python packages with validation
@@ -246,16 +251,22 @@ example in the following way:
        if not hasattr(a, '__getitem__'):
            raise TypeError('Descriptive message.')
 
+       if not hasattr(a[0], '__pow__'):
+           raise TypeError('Descriptive message.')
+
        print(a[0]**0.5)
 
 Clearly, this approach to validation is along the lines of duck typing as it
 explicitly checks for the presence of the required attribute. In the example,
-``a`` may hold values of any type that defines the ``__getitem__`` attribute.
-Unlike with the first way to test for validity, the validation in the above
-example is not restrictive enough as already explained using the example with
-the dictionary. Furthermore, the power operation of ``**`` does not as such
-require the presence of any attribute and yet only works for number-like values
-making it cumbersome to check ``a[0]`` for validity with this approach.
+``a`` may hold values of any type that defines the ``__getitem__`` attribute,
+and ``a[0]`` may hold values of any type that defines the ``__pow__``
+attribute.  Unlike with the first way to test for validity, the validation in
+the above example is not restrictive enough as already explained using the
+example with the dictionary. The same check could be achieved in a cleaner and
+more thorough way using abstract base classes [#]_, but this solution would
+essentially suffer from the same type of problem.
+
+.. [#] See https://docs.python.org/2/glossary.html#term-abstract-base-class
 
 Neither of the two ways to test for validity mentioned, consider the fact that
 the square root operation is only defined for non-negative ``a[0]`` values if
@@ -267,8 +278,11 @@ could rewrite the ``do_something`` example in the following way:
 .. code-block:: python
 
    def do_something(a):
+       if len(a) < 1:
+           raise ValueError('Descriptive message.')
+
        if a[0] < 0:
-           raise TypeError('Descriptive message.')
+           raise ValueError('Descriptive message.')
 
        print(a[0]**0.5)
 
@@ -276,20 +290,20 @@ Obviously, this approach would have to be combined with something else to
 ensure that ``a`` is indeed a sequence and ``a[0]`` is indeed a number as
 covered by the first two ways to test for validity.
 
-The above approaches do not even consider less common although valid cases such
-as non-derived types that only implicitly define the required attributes. Even
-more so, it is apparent that there is no straightforward way to test for
-validity based solely on what a value *is*, *can do*, or *contains*. A possible
-explanation for this is that all three approaches express the validation scheme
-in terms of Python objects rather than in terms of the data they hold. Indeed,
-it was easy to identify and in plain writing express that the function argument
-of the ``do_something`` example must be a sequence with a non-negative,
-numerical first item. Expressing the validation scheme in this way does provide
-a layer of abstraction.
-
 
 The Concept of Application-Driven Data Types
-============================================
+--------------------------------------------
+
+The approaches presented in the previous section do not even consider less
+common although valid cases such as non-derived types that only implicitly
+define the required attributes. Even more so, it is apparent that there is no
+straightforward way to test for validity based solely on what a value *is*,
+*can do*, or *contains*. A possible explanation for this is that all three
+approaches express the validation scheme in terms of Python objects rather than
+in terms of the data they hold. Indeed, it was easy to identify and in plain
+writing express that the function argument of the ``do_something`` example must
+be a sequence with a non-negative, numerical first item. Expressing the
+validation scheme in this way does provide a layer of abstraction.
 
 Instead of checking if the value of ``a`` is a certain Python type, it would be
 convenient to be able to check if the value of ``a`` is a sequence. Likewise,
@@ -388,7 +402,17 @@ As for validation strategy, the following observations are made:
 Traits, Traitlets, and Numtraits
 ================================
 
-Traits [#]_ is an extensive package by Enthought which provides class attributes with the additional characteristics of customisable initialisation, validation, delegation, notification, and even visualisation. Traitlets [#]_ is a lightweight Traits-like module which provides customisable validation, default values, and notification. Finally, Numtraits [#]_ adds to Traitlets with a numerical trait with more versatility in validation than that of the numerical traits of Traitlets. Thus, although hardly as intended by the developers, function argument validation can be performed using an attribute for each function argument. In the following example, the function argument, ``a``, of the function, ``exemplify`` is validated to be a real scalar in the range :math:`[0;1]`:
+Traits [#]_ is an extensive package by Enthought which provides class
+attributes with the additional characteristics of customisable initialisation,
+validation, delegation, notification, and even visualisation. Traitlets [#]_ is
+a lightweight Traits-like module which provides customisable validation,
+default values, and notification. Finally, Numtraits [#]_ adds to Traitlets
+with a numerical trait with more versatility in validation than that of the
+numerical traits of Traitlets. Thus, although hardly as intended by the
+developers, function argument validation can be performed using an attribute
+for each function argument. In the following example, the function argument,
+``a``, of the function, ``exemplify`` is validated to be a real scalar in the
+range :math:`[0;1]`:
 
 .. [#] See http://docs.enthought.com/traits/
 .. [#] See http://traitlets.readthedocs.org/
@@ -545,7 +569,9 @@ PyContracts
 ===========
 
 PyContracts [#]_ is a Python package that allows declaring constraints on
-function arguments and return values. In the following example, the function argument, ``a``, of the function, ``exemplify`` is validated to be a real scalar in the range :math:`[0;1]`:
+function arguments and return values. In the following example, the function
+argument, ``a``, of the function, ``exemplify`` is validated to be a real
+scalar in the range :math:`[0;1]`:
 
 .. [#] See http://andreacensi.github.com/contracts/
 
@@ -627,9 +653,9 @@ effectively, the suggested validation strategy can be considered less strict
 than static type checking but more strict than duck type checking.
 
 The numerical trait of the Numtraits package has an interesting approach which
-is compatible with the concept of application-driven data types. The numerical
-trait does not distinguish between Python data types as long as they are
-numerical, and this corresponds to the most general numerical
+is not too different from the concept of application-driven data types. The
+numerical trait does not distinguish between Python data types as long as they
+are numerical, and this corresponds to the most general numerical
 application-driven data type able to assume any numerical value of any
 shape. Furthermore, the numerical trait allows restricting the data type to
 more restrictive data types by specifying a number of dimensions, a specific
@@ -713,18 +739,27 @@ of all function arguments in a single decorator call, both of which affect
 readability. Therefore, decorators are not suggested as a Python construct to
 use here.
 
-The suggested Python construct values explicit over implicit, does not look
-"magical", and promotes readability. The suggestion is to define a nested
-function for validating the arguments of a function and explicitly calling this
-validation function. The nested function is preferred over preceding the
-function code by calls directly to a validation package as to clearly separate
-validation from the rest of the code.
+The suggested Python construct values explicit over implicit and promotes
+readability. The suggestion is to define and explicitly call a nested
+validation function with no arguments. There are a number of obvious
+alternatives which are not suggested for different reasons:
+
+* It is not suggested to precede the function code by calls directly to a
+  validation package because this does not clearly separate validation from the
+  rest of the code.
+* It is not suggested to use arguments for the validation function because this
+  could potentially lead to error-prone validation if the validation function
+  arguments are wrongly named or ordered, or the function arguments are renamed
+  or reordered.
+* It is not suggested to use a global rather than nested validation function
+  because this could potentially separate the validation from the function and
+  thus reduce readability.
 
 
 Magni Reference Implementation
 ------------------------------
 
-A reference implementation of the suggested validation strategy is made
+A reference implementation of the **suggested validation strategy** is made
 available by the open source Magni Python package :cite:`Oxvig2014` through the
 subpackage ``magni.utils.validation``. The subpackage contains the following
 functions:
@@ -749,7 +784,8 @@ discouraged, this can be done to remove the overhead of validating function
 arguments. As the name suggests, ``decorate_validation`` is a decorator, and
 this should be used to decorate every validation function with the sole purpose
 of being able to disable validation. Using the suggested validation strategy
-with Magni, the following structure is used for all validation:
+with Magni, the following structure is used for all validation adhering to
+**the suggested Python constructs to use**:
 
 .. code-block:: python
 
@@ -765,14 +801,16 @@ with Magni, the following structure is used for all validation:
        pass  # the body of func
 
 The remaining function, ``validate_numeric``, is used to validate numeric
-objects based on application-driven data types as required by the suggested
-validation scheme of the validation scheme. The ``type_`` argument is used for
-specifying one or more of the ``boolean``, ``integer``, ``floating``, and
-``complex`` subtype specifiers. The ``range_`` argument is used for specifying
-the set of valid values with a minimum value and a maximum value both of which
-may be included or excluded. The ``shape`` argument is used for specifying the
-shape with the entry, -1 allowing an arbitrary shape for a given dimension and
-any non-negative entry giving a fixed shape for a given dimension.
+objects based on application-driven data types as proposed by **the suggested
+validation scheme** of the validation strategy. This is done using the
+interface as proposed by **the suggested interface type** of the validation
+strategy: The ``type_`` argument is used for specifying one or more of the
+``boolean``, ``integer``, ``floating``, and ``complex`` subtype specifiers. The
+``range_`` argument is used for specifying the set of valid values with a
+minimum value and a maximum value both of which may be included or
+excluded. The ``shape`` argument is used for specifying the shape with the
+entry, -1 allowing an arbitrary shape for a given dimension and any
+non-negative entry giving a fixed shape for a given dimension.
 
 The remaining arguments of ``validate_numeric`` are not directly related to the
 validation scheme but rather to the surrounding Python code. The ``precision``
@@ -971,7 +1009,10 @@ The required dependencies for ``magni`` (as of version 1.4.0) are:
 
 .. [#] See http://www.pytables.org/
 
-In addition to these requirements, ``magni`` has a number of optional dependencies but none of these are relevant to the usage of ``magni.utils.validation``.
+It should be noted that the requirements other than Python and NumPy are due to
+``magni`` rather than ``magni.utils.validation``. In addition to the above
+requirements, ``magni`` has a number of optional dependencies but none of these
+are relevant to the usage of ``magni.utils.validation``.
 
 
 Quality Assurance
