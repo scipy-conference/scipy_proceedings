@@ -62,7 +62,7 @@ ecosystems.
 The Heartbleed bug in OpenSSL is an example of community failure
 and of how vulnerabilities
 in open source software can be a major security risk. [Wheeler2014]_
-The recent failure of React, Babel, and many other NPM packages
+The recent failure of React, Babel, and many other npm packages
 due to the removal of one small dependency, ``left-pad``,
 shows how dependencies can be a risk factor
 for production software. [Haney2016]_ 
