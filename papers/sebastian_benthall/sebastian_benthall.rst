@@ -92,7 +92,9 @@ computer science and other fields.
 
 There is a long history of security achieved through static analysis of source code.
 [Wagner2000]_ points out that the dependency of modern Internet systems on legacy code and the
-sheer complexity of source code involved makes manual source code level auditing infeasible.
+sheer complexity of source code involved makes manual source code level auditing very difficult.
+While some complex projects are audited by large and dedicated communities, not all software
+systems are so gifted in human resources.
 Therefore, static analysis tools based on firm mathematical foundations are significant
 for providing computer security at scale. 
 
