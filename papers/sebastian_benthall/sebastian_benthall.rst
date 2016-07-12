@@ -580,6 +580,18 @@ provide actionable insights into security that are relevant to practicing softwa
 
 We have also identified ``six``, a Python 2 and Python 3 compatibility library, as an ecosystem risk hot spot. The second most depended on project in PyPI, ``six`` inherits its exposure from all of its downstream descendants. For this reason, it is important to ensure that ``six`` does not have any security-related flaws.
 
+We must admit that there is another reason why the Plone ecosystem has score
+highly in software risk.
+The Zope and Plone packages are notably dense in their dependency connectivity.
+In the original dependency network, before cycles were excised from the graph
+by removing edges, many Zope and Plone packages were implicated in large cycles
+of mutual dependency.
+Even with many of these edges removed, it is possible that packages in this subsystem
+are more likely to be linked by multiple disitinct paths.
+With our present algorithm, this would result in some packages being double counted.
+Due to this technical complication, we must conclude that our results, though suggestive,
+are only tentative pending future work.
+
 
 Discussion and future work
 --------------------------
