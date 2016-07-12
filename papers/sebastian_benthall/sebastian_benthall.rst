@@ -441,7 +441,7 @@ effects of group membership on network growth.
 degree assortativity metric as for each pair of adjacent nodes one can consider
 each node's in-degree and out-degree.
 The degree assortativity metrics for the PyPI dependency graph are given
-in :ref:`datable`.
+in Table :ref:`datable`.
 
 The PyPI package dependency network notably  has *in-in* degree assortativity of
 :math:`0.19`, and *out-in* degree assortativity of :math:`-0.16`.
@@ -466,8 +466,8 @@ implies that A depends on B.
 This is a strange structure because its assortativity measures
 defy the assortativity patterns seen in other complex networks.
 One reason is that there is much greater variation in out-degree than in in-degree.
-:label:`odtable` shows the top ten most depended on packages.
-:label:`idtable` shows the top ten packages with the most dependencies.
+Table :ref:`odtable` shows the top ten most depended on packages.
+Table :ref:`idtable` shows the top ten packages with the most dependencies.
 Three packages, ``requests``, ``six``, and ``django``  have
 out-degree over 1000. 
 
