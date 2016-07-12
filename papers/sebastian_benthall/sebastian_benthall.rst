@@ -378,7 +378,7 @@ Empirical and Modeling Results
    :scale: 35%
    :figclass: bht
 
-   Visualization of PyPI dependency network. Annotated dependency graph (see *Implementation of risk computation*) was exported as .gexf, loaded into Gephi, styled using Force Atlas layout, and colored by ecosystem risk property [Bastian2009]_. This visualization does not include singleton nodes with zero degree, which are the vast majority of nodes. Node size is proportional to out degree. Nodes are colored by the log (base 10) of package ecosystem risk. Red nodes are higher risk. The large red cluster consists of projects related to the Zope web application server, including the Plone content management system.
+   Visualization of PyPI dependency network. Annotated dependency graph (see *Implementation of risk computation*) was exported as .gexf, loaded into Gephi [Bastian2009]_, styled using Force Atlas layout, and colored by ecosystem risk property. This visualization does not include singleton nodes with zero degree, which are the vast majority of nodes. Node size is proportional to out degree. Nodes are colored by the log (base 10) of package ecosystem risk. Red nodes are higher risk. The large red cluster consists of projects related to the Zope web application server, including the Plone content management system.
 
 Our data collection process created a network with :math:`66,536` nodes and :math:`72,939` edges.
 Over half of the nodes, :math:`33,573`, have no edge. This isolates them from the
@@ -430,7 +430,7 @@ there is much greater variation in out-degree than in in-degree.
 Three packages, ``requests``, ``six``, and ``django``  have
 out-degree over 1000. 
 
-.. table:: Top ten most depended on packages. :label:`odtable`
+.. table:: Top ten most dependencies. :label:`odtable`
 
    +-----------------------+----------------+
    | Package               | Out-Degree     |
