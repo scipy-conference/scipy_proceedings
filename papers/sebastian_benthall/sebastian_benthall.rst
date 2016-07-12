@@ -491,7 +491,7 @@ out-degree over 1000.
 Computing fragility and exposure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The risk analysis framework described above defines *exposure* and 
+Our risk analysis framework defines *exposure* and 
 *vulnerability* as abstract components of risk that can be defined
 depending on the hazards and threats under consideration.
 In the example of this study, we will define these variables with
