@@ -229,15 +229,18 @@ be resilient, responding to new threat information.
 But it is also likely to be less robust, as new code might introduce new software flaws.
 [Nagappan2005]_ and [Nagappan2007]_ find that relative code churn between dependent packages
 is a significant predictor of system defect.
+
 We refer to a system that is not robust is *fragile*,
 and a system that is not resilient is *brittle*.
+Fragility and brittleness are two distinct and general ways in which a component
+of a software ecosystem might be vulnerable.
 
 
-Computing risk
-~~~~~~~~~~~~~~~
+Implementation of risk computation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The risk analysis framework presented above is designed to be very
-generalizable, factoring risk into abstract *exposure* and *vulnerability*
+The risk analysis framework presented in the above section *Software dependency and project risk*
+is designed to be widely applicable, factoring risk into abstract *exposure* and *vulnerability*
 factors and then making minimal assumptions about how these factors propagate
 through the dependency graph.
 
@@ -247,6 +250,8 @@ Python implementation of efficient risk computation using a directed graph
 representation of package dependencies and NetworkX. [Hagberg2008]_
 In this code, we use a precomputed 'fragility' metric as the vulnerability
 variable, and the number of downloads of each package as the exposure variable.
+(See the section *Computing fragility and exposure* for an explanation of how
+fragility was calculated in our empirical results.)
 
 .. code-block:: python
 
