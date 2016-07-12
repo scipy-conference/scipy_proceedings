@@ -406,7 +406,7 @@ What we want is to determine the spectral content of f(x),
 .. math::
    :type: equation
 
-   f(\vec{x}) = \sum_{l=1}^{\infty}\sum_{m=-l}^{l} \hat{f}_{lm}Y_{lm}(\theta,\psi)
+   f(\vec{x}) = \sum_{l=1}^{\infty}\sum_{m=-l}^{l} \hat{f}_{lm}Y_{lm}(\theta,\phi)
 
 that is, we want to derive its representation in the feature space.
 The steps in deriving this representation are to first expand the inner
@@ -441,8 +441,8 @@ The next step is to apply the addition theorem to express this in terms of the s
 .. math::
    :type: equation
 
-    P_{l}(\langle\vec{x},\vec{x}_{i}\rangle) = \sum_{m=-l}^{l} Y^{*}_{lm}(\theta^{\prime},\psi^{\prime})\
-                              Y_{lm}(\theta,\psi)\ .
+    P_{l}(\langle\vec{x},\vec{x}_{i}\rangle) = \sum_{m=-l}^{l} Y^{*}_{lm}(\theta^{\prime},\phi^{\prime})\
+                              Y_{lm}(\theta,\phi)\ .
 
 The result is a formula for the spectral content of the focal mechanism given the dual coefficients
 estimated by the support vector classifier,
@@ -451,7 +451,7 @@ estimated by the support vector classifier,
    :type: equation
 	  
 	  \hat{f}_{lm} = \frac{4\pi}{2l + 1}\sum_{i=1}^{N}\alpha_{i} y_{i} a_{l} \
-	                         Y^{*}_{lm}(\theta^{\prime},\psi^{\prime})\ .
+	                         Y^{*}_{lm}(\theta^{\prime},\phi^{\prime})\ .
 
 
 Finally, suppose we have solutions for the classification from two different
@@ -513,7 +513,7 @@ present Wigner's D-matrices,
    :type: eqnarray
 
    g(R(\alpha, \beta, \gamma)\vec{x}) &=& \sum_{l=0}^{\infty}\sum_{m,n}\
-                                     D^{l}_{mn}(\alpha, \beta, \gamma) \hat{g}_{ln}Y_{lm}(\theta,\psi)\ .
+                                     D^{l}_{mn}(\alpha, \beta, \gamma) \hat{g}_{ln}Y_{lm}(\theta,\phi)\ .
 
 Wigner's D-matrices are operators which generate rotations in the
 feature space of the problem. This means that we can translate a
