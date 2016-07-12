@@ -307,6 +307,15 @@ fragility was calculated in our empirical results.)
                 G.node[i]['ecosystem_vulnerability'] 
                 * G.node[i]['ecosystem_exposure']
 
+A significant problem with this implementation of risk calculation
+is that if node A is accessible to node B through multiple distinct
+paths, then the vulnerability (or exposure) of B will be counted
+towards A's ecosystem vulnerability (or exposure) once for each path.
+A superior version of this algorithm would ensure that each node was
+only counted once in ecosystem measurements.
+The version of the algorithm presented above uses a heuristic measure
+for performance reasons.
+
 
 Removing cycles
 ~~~~~~~~~~~~~~~
