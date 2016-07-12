@@ -298,7 +298,9 @@ are a good fit, declared when the standard error is below 0.3 for both :math:`\w
 
 We notice from this result that not all behaviors can be properly fitted with the RL model. This is a known limitation of this model [Daw11]_. We also observe that in general the parameters associated with the "lose context" exhibit larger values of learning rate :math:`\alpha` and smaller values of inverse temperature :math:`\beta`. Although at this point of our research it is not clear the reason for this difference, we conjecture that this phenomenon can be explained by two factors. First, in the lose context people bet smaller amounts after learning that the probability of wining is low in this context. This means that the term :math:`(r_t - Q_t(a_t, c_t))` in equation (1) is smaller compared to the win context. Thus, a larger learning rate is needed to get an update on the action value function of a magnitude similar to the win context. [#]_ Secondly, it is known that humans commonly exhibit a loss aversion behavior [Kah84]_. This can explain, at least in part, the larger learning rates  observed for the lose context, since it could be argued that people penalized more their violation of their expectations, as reflected by the term :math:`(r_t - Q_t(a_t, c_t))` of equation (1), when they were experiencing the losing situation.
 
-.. [#] This difference suggests that the experimental design should be modified to equalize this effect between the contexts. 
+.. [#] This difference suggests that the experimental design should be modified to equalize this effect between the contexts.
+
+In terms of execution time, running a simulation of the artificial agent consisting of 360 steps takes 34 milliseconds; minimizing the NLL function  for a single subject takes 21 milliseconds; and fitting the model for all 43 subjects, including loading the experimental data from the hard disk, takes 14 seconds. All these measurements were made using the IPython ``%timeit`` magic function in a standard laptop (Intel Core i5 processor with 8 gigabytes of RAM).
 
 Discussion
 ----------
