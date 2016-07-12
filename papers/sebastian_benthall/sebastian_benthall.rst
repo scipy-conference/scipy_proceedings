@@ -158,7 +158,7 @@ how 'risk' is used in a software development context.
 If we break down the sources of risk and how these affect the need for security 
 investments analytically, we can distinguish between several different factors.
 
-* Vulnerability. A software project's vulnerability is its intrinsic susceptibility to attack.  CVE data is about software vulnerability. Being written in a language in which it is hard to write secure code (such as C and C++) can be a predictor of vulnerability.
+* Vulnerability. A software project's vulnerability is its intrinsic susceptibility to attack.  Common Vulnerability and Exposure (CVE) data is about software vulnerability. Being written in a language in which it is hard to write secure code (such as C and C++) can be a predictor of vulnerability.
 * Exposure. A software project's exposure is its extrinsic availability to attack. Being directly exposed to a network is a source of exposure.
 
 
