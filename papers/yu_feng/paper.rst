@@ -651,17 +651,16 @@ opaque user experience.
 
 Finally, with few modifications, ``python-mpi-bcast`` can be easily
 generalized to support applications written in other interpreted languages
-such as Julia and R.
+such as Julia and R.  In addition, we highly welcome reimplementing the stratagies
+documented in the paper as an extension of the Conda package distribution system, and provide
+the full source code of ``python-mpi-bcast``
+at https://github.com/rainwoodman/python-mpi-bcast.
 
 Given that large-scale Python applications can be launched
 extremely efficiently on state-of-the-art super-computing systems, it is the time
 for the high-performance computing community to begin serious development of
 complex computational applications at large scale with Python.
 
-We highly welcome reimplementing the stratagies
-documented in the paper as an extension of the Conda package distribution system, and provide
-the full source code of ``python-mpi-bcast``
-at https://github.com/rainwoodman/python-mpi-bcast.
 
 **Acknowledgment**
 
