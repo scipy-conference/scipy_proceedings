@@ -51,21 +51,19 @@ An Ecological Approach to Software Supply Chain Risk Management
 Introduction
 ------------
 
-Critical systems that depend on complex software are open
-to many kinds of risk.
+Systems that depend on complex software are open to many kinds of risk.
 One typical approach to software security that mitigates this
 risk is static analysis.
-We are developing novel methods to manage software risk through
-supply chain intelligence, with a focus on open source software
-ecosystems.
+We are developing novel methods to manage software risk through supply chain
+intelligence, with a focus on open source software ecosystems.
 
-The Heartbleed bug in OpenSSL is an example of community failure
-and of how vulnerabilities
-in open source software can be a major security risk. [Wheeler2014]_
+The Heartbleed bug in OpenSSL is an example of community failure and of 
+how vulnerabilities in open source software can be a major security risk. [Wheeler2014]_
 The recent failure of React, Babel, and many other npm packages
 due to the removal of one small dependency, ``left-pad``,
-shows how dependencies can be a risk factor
-for production software. [Haney2016]_ 
+shows how dependencies can be a risk factor for production software. [Haney2016]_ 
+These high profile examples, quite different from each other,
+illustrate how software risk traverses the supply chain.
 As dependencies become more numerous and interlinked, the 
 complexity of the system increases, as does the scope of risk management.
 Open source software projects make their source code and developer
