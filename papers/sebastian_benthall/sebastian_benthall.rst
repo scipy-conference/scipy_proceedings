@@ -105,6 +105,8 @@ extensive literature review of scholarly and commercial work on the subject.
 They then apply this metric to Debian packages and have successfully identified 
 projects needing investment. This work is available on-line as the CII Census project [CensusProject]_.
 
+While software security studies general focus on the possibility of technical failure of
+software systems, open source software exposes an addition risk of community failure.
 [Schweik2012]_ is a comprehensive study of the success and failure of open source
 projects based on large-scale analysis of SourceForge data, as well as survey and
 interview data. They define a successful project as one that performs a useful function
