@@ -125,15 +125,18 @@ climate change adaptation research developed by Cardona [Cardona2012]_ and widel
 by the World Bank's Global Facility for Disaster Risk Reduction, and others. [Yamin2013]_
 
 This framework evaluates the expected cost of low-probability events by distinguishing three factors
-of risk. *Hazards* are potentially damaging factors from the environment; the
-cybersecurity equivalents are *threats*. *Exposure* refers to the inventory of elements
-in place where hazards occur; the cybersecurity equivalent is *assets*. *Vulnerabilities*
-are defined as the propensity of exposed elements to suffer adverse effects when impacted
-by a hazard. Expected risk is then straightforwardly computed as the product of the
-probability of hazard and the vulnerable exposure of the system. By adapting this
-framework to cybersecurity in the software ecosystem, we are able to consider a wide
-range of threats--including novel threats such as attacks of software communities themselves.
+of risk: hazards, exposure, and vulnerabilities.
+*Hazards* are potentially damaging factors from the environment. 
+*Exposure* refers to the inventory of elements in places where hazards occur.
+*Vulnerabilities* are defined as the propensity of exposed elements to suffer adverse effects when impacted
+by a hazard. 
+Expected risk is then straightforwardly calculated using the formula:
 
+.. math::
+
+   risk = hazard * vulnerability * exposure
+
+We adapting this framework to cybersecurity in the software ecosystem.
 There are significant differences between modeling risk from natural hazards and
 modeling cybersecurity risk.
 Most notably, cybersecurity threats can be deliberately adversarial, detecting and
