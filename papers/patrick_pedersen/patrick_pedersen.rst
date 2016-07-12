@@ -108,7 +108,10 @@ observations made, we then present the suggested Python validation
 strategy. Following this specification, we detail a reference implementation of
 it and give examples of its usage. Finally, we conclude on what is achieved by
 the presented validation strategy and reference implementation as well as when
-to use them.
+to use them. All code examples have been run with Python 2.7 unless otherwise
+noted, all tracebacks have been removed to save space, and exception messages
+and the like have been broken across multiple lines using trailing backslashes
+where necessary.
 
 
 Validation in Python at a glance
@@ -116,13 +119,14 @@ Validation in Python at a glance
 
 For the purpose of exemplifying the concepts discussed in this section, we
 define a simple Python function for returning the square root of the first item
-of a sequence, and, obviously, only a sequence with a non-negative, numerical
-first item should be a valid argument of this function:
+of a sequence. Obviously, only a sequence with a non-negative, numerical first
+item, :math:`a_0 \in \mathbb{R}_{\geq 0}`, should be a valid argument of this
+function.
 
 .. code-block:: python
 
    def do_something(a):
-       return a[0]**0.5
+       print(a[0]**0.5)
 
 To quote the Zen of Python [#]_, "there should be one-- and preferably only
 one --obvious way to do it" when faced with solving a task in Python, and the
@@ -154,8 +158,10 @@ built-in ``int`` type does not define ``__getitem__``:
 
 .. code-block:: python
 
-   integer = 42
-   do_something(integer)
+   >>> integer = 42
+   >>> do_something(integer)
+   TypeError: 'int' object has no attribute \
+   '__getitem__'
 
 With the following call, a ``TypeError`` exception is raised with a message
 that "``'int'`` object has no attribute ``'__getitem__'``". First of all, even
@@ -173,8 +179,9 @@ type defines ``__getitem__`` but with a different purpose than the
 
 .. code-block:: python
 
-   dictionary = {-1: 0, 0: 1}
-   do_something(dictionary)
+   >>> dictionary = {-1: 0, 0: 1}
+   >>> do_something(dictionary)
+   1.0
 
 The intention of the function is to operate on the first item of the function
 argument, but ``dictionary`` is unordered meaning that there is no such thing
@@ -206,7 +213,7 @@ following way:
        if not isinstance(a[0], int):
            raise TypeError('Descriptive message.')
 
-       return a[0]**0.5
+       print(a[0]**0.5)
 
 Obviously, this approach to validation goes against dynamical typing as it
 restricts variables to only hold values of certain types. In the example, ``a``
@@ -218,8 +225,9 @@ following call should pass but instead fails the validation checks:
 
 .. code-block:: python
 
-   sequence = (0., 1.)
-   do_something(sequence)
+   >>> sequence = (0., 1.)
+   >>> do_something(sequence)
+   TypeError: Descriptive message.
 
 The issue is that a number of Python types represent sequences, and a number of
 Python types represent numbers. This could be accounted for in the example, but
@@ -238,7 +246,7 @@ example in the following way:
        if not hasattr(a, '__getitem__'):
            raise TypeError('Descriptive message.')
 
-       return a[0]**0.5
+       print(a[0]**0.5)
 
 Clearly, this approach to validation is along the lines of duck typing as it
 explicitly checks for the presence of the required attribute. In the example,
@@ -262,7 +270,7 @@ could rewrite the ``do_something`` example in the following way:
        if a[0] < 0:
            raise TypeError('Descriptive message.')
 
-       return a[0]**0.5
+       print(a[0]**0.5)
 
 Obviously, this approach would have to be combined with something else to
 ensure that ``a`` is indeed a sequence and ``a[0]`` is indeed a number as
@@ -317,8 +325,10 @@ validation strategy: 1) The validation schemes that can be expressed and
 through that the abstraction level of the application-driven data types. 2) The
 way the interface of the implementation allows the validation scheme to be
 specified. 3) The Python constructs used to allow Python to validate the
-function arguments against the validation specification. Thus, the emphasis of
-this section is not to give a complete review of all existing solutions.
+function arguments against the validation specification. Additionally, the
+relevant versions of Python are mentioned as 4) under each solution. Thus, the
+emphasis of this section is not to give a complete review of all existing
+solutions.
 
 
 PyDBC
@@ -328,7 +338,7 @@ Although the original PyDBC [#]_ is long outdated, it represents an approach
 worth mentioning. The package allows so-called contracts to be specified using
 method preconditions, method postconditions, and class invariants. Thus,
 function argument validation can be performed using method preconditions. In
-the following outdated example, the function argument, ``a``, of the function,
+the following example, the function argument, ``a``, of the function,
 ``exemplify`` is validated to be a real scalar in the range :math:`[0;1]`:
 
 .. [#] See http://www.nongnu.org/pydbc/
@@ -346,8 +356,13 @@ the following outdated example, the function argument, ``a``, of the function,
            assert isinstance(a, float)
            assert 0 <= a <= 1
 
-   example = Example()
-   example.exemplify(0.5)
+When an invalid value is passed, the following assertion error occurs:
+
+.. code-block:: python
+
+   >>> example = Example()
+   >>> example.exemplify(-0.5)
+   AssertionError
 
 As for validation strategy, the following observations are made:
 
@@ -363,6 +378,11 @@ As for validation strategy, the following observations are made:
    metaclasses. When the metaclass creates the class, it rewrites the function
    ``exemplify`` to first invoke the function named ``exemplify__pre`` when
    ``exemplify`` is called following a fixed naming scheme.
+
+4. PyDBC was intended for Python 2.2 and has not been changed since 2005, but
+   the package does work with Python 2.7. It does, however, not work with
+   Python 3, but the same functionality could indeed be implemented in
+   Python 3.
 
 
 Traits, Traitlets, and Numtraits
@@ -387,8 +407,14 @@ Traits [#]_ is an extensive package by Enthought which provides class attributes
 
            pass  # do something
 
-   example = Example()
-   example.exemplify(0.5)
+When an invalid value is passed, the following assertion error occurs:
+
+.. code-block:: python
+
+   >>> example = Example()
+   >>> example.exemplify(-0.5)
+   traitlets.traitlets.TraitError: _a should be in \
+   the range [0:1]
 
 As for validation strategy, the following observations are made:
 
@@ -408,6 +434,8 @@ As for validation strategy, the following observations are made:
    descriptors which modify the retrieving and modification of attribute values
    of objects. Thus, when assigning a new value to an attribute, the relevant
    descriptor validates the new value.
+
+4. Traitlets and Numtraits work with Python 2.7 and with Python 3.3 or above.
 
 
 Annotations, Type Hints, and MyPy
@@ -437,7 +465,16 @@ real scalar:
    def exemplify(a: float):
        pass  # do something
 
-   exemplify(0.5)
+   exemplify('0')
+
+When the script above is passed to MyPy using Python 3.5, the following message
+is produced:
+
+.. code-block:: bash
+
+   $ mypy example.py
+   example.py:4: error: Argument 1 to "exemplify" has \
+   incompatible type "str"; expected "float"
 
 As for validation strategy, the following observations are made:
 
@@ -451,6 +488,12 @@ As for validation strategy, the following observations are made:
 
 3. The Python constructs used rely only on annotations and runs offline and
    separately of normal execution of Python code.
+
+4. PEP 484 was accepted for Python 3.5, but the syntax is compatible with that
+   of PEP 3107 which was accepted for Python 3.0, and thus MyPy works with
+   Python 3.2 or above. Furthermore, PEP 484 suggests a syntax for Python 2.7
+   using comments instead of annotations, and MyPy supports this and thus also
+   works with Python 2.7.
 
 
 PyValid
@@ -471,7 +514,14 @@ is validated to be a real scalar:
    def exemplify(a):
        pass  # do something
 
-   exemplify(0.5)
+When an invalid value is passed, the following assertion error occurs:
+
+.. code-block:: python
+
+   >>> exemplify(0)
+   pyvalid.__exceptions.ArgumentValidationError: The \
+   1st argument of exemplify() is not in a \
+   [<type 'float'>]
 
 As for validation strategy, the following observations are made:
 
@@ -487,6 +537,8 @@ As for validation strategy, the following observations are made:
 3. The Python constructs used rely on decorators by including an ``accept``
    decorator in order to precede function execution by function argument
    validation.
+
+4. PyValid works with Python 2.6 or above and with Python 3.
 
 
 PyContracts
@@ -505,7 +557,19 @@ function arguments and return values. In the following example, the function arg
    def exemplify(a):
        pass  # do something
 
-   exemplify(0.5)
+When an invalid value is passed, the following assertion error occurs:
+
+.. code-block:: python
+
+   >>> exemplify(-0.5)
+   contracts.interface.ContractNotRespected: Breach \
+   for argument 'a' to exemplify().
+   Condition -0.5 >= 0 not respected
+   checking: >=0             for value: Instance of \
+   <type 'float'>: -0.5
+   checking: float,>=0,<=1   for value: Instance of \
+   <type 'float'>: -0.5
+   Variables bound in inner context:
 
 As for validation strategy, the following observations are made:
 
@@ -531,6 +595,8 @@ As for validation strategy, the following observations are made:
    is either specified through arguments of the decorator, through annotations
    in the form of type hints or custom annotations, or through docstrings
    following a specific format.
+
+4. PyContracts works with Python 2 and with Python 3.
 
 
 The Suggested Python Validation Strategy
@@ -687,7 +753,7 @@ with Magni, the following structure is used for all validation:
 
 .. code-block:: python
 
-   from magni.utils.validation import *
+   from magni.utils.validation import decorate_validation
 
    def func(*args, **kwargs):
        @decorate_validation
@@ -739,7 +805,8 @@ validation only fails when a non-numerical object is passed as argument to
 
 .. code-block:: python
 
-   from magni.utils.validation import *
+   from magni.utils.validation import decorate_validation
+   from magni.utils.validation import validate_numeric
    import numpy as np
 
    def func(var):
@@ -754,20 +821,29 @@ validation only fails when a non-numerical object is passed as argument to
 
        pass  # the body of the func
 
-   # The following will pass:
-   func(42)
-   func(3.14)
-   func(np.empty((5, 5), dtype=np.complex_))
-   # The following will fail:
-   func('string')
-
-In the next example, the application-driven data type is any non-negative
-real scalar. The validation fails when a complex object or a negative float is
-passed as argument to ``func``.
+When valid values are passed, nothing happens:
 
 .. code-block:: python
 
-   from magni.utils.validation import *
+   >>> func(42)
+   >>> func(3.14)
+   >>> func(np.empty((5, 5), dtype=np.complex_))
+
+However, when a non-numerical object is passed, the following exception occurs:
+
+.. code-block:: python
+
+   >>> func('string')
+   TypeError: The value(s) of >>var<<, 'string', must \
+   be numeric.
+
+In the next example, the application-driven data type is any non-negative
+real scalar, i.e., :math:`\mathbb{R}_{\geq 0}`.
+
+.. code-block:: python
+
+   from magni.utils.validation import decorate_validation
+   from magni.utils.validation import validate_numeric
 
    def func(var):
        @decorate_validation
@@ -780,22 +856,37 @@ passed as argument to ``func``.
 
        pass  # the body of the func
 
-   # The following will pass:
-   func(0)
-   func(3.14)
-   # The following will fail:
-   func(1j)
-   func(-3.14)
+When valid values are passed, nothing happens:
+
+.. code-block:: python
+
+   >>> func(0)
+   >>> func(3.14)
+
+However, when a complex object or a negative float is passed, the following
+exception occurs:
+
+.. code-block:: python
+
+   >>> func(1j)
+   TypeError: The value(s) of >>var.dtype<<, \
+   <type 'complex'>, must be in ('integer', 'floating').
+
+.. code-block:: python
+
+   >>> func(-3.14)
+   ValueError: The value(s) of >>min(real(var))<<, \
+   -3.14, must be >= 0.
 
 Notice, that the ``range_`` argument in the validation call of the previous
 includes the values zero and infinity using ``[...]``. One or both of these
 values could be excluded using ``(...)`` or ``]...[`` as is the case in the
-next example. The validation fails when a zero-valued object is passed as
-argument to ``func``.
+next example, i.e., :math:`\mathbb{R}_{> 0}`.
 
 .. code-block:: python
 
-   from magni.utils.validation import *
+   from magni.utils.validation import decorate_validation
+   from magni.utils.validation import validate_numeric
 
    def func(var):
        @decorate_validation
@@ -808,20 +899,28 @@ argument to ``func``.
 
        pass  # the body of the func
 
-   # The following will pass:
-   func(3.14)
-   # The following will fail:
-   func(0.)
-
-In the final example, the application-driven data type is any real matrix with
-its first dimension equal to 5, i.e. :math:`\mathbb{R}^{5 \times n}` for any
-non-negative integer :math:`n`. The validation fails when an
-:math:`\mathbb{R}^{10 \times 5}` object or :math:`\mathbb{R}^{5 \times 5 \times
-5}` object is passed as argument to ``func``.
+When a valid value is passed, nothing happens:
 
 .. code-block:: python
 
-   from magni.utils.validation import *
+   >>> func(3.14)
+
+However, when a zero-valued object is passed, the following exception occurs:
+
+.. code-block:: python
+
+   >>> func(0.)
+   ValueError: The value(s) of >>min(real(var))<<, \
+   0.0, must be > 0.
+
+In the final example, the application-driven data type is any real matrix with
+its first dimension equal to 5, i.e. :math:`\mathbb{R}^{5 \times n}` for any
+non-negative integer :math:`n`.
+
+.. code-block:: python
+
+   from magni.utils.validation import decorate_validation
+   from magni.utils.validation import validate_numeric
    import numpy as np
 
    def func(var):
@@ -835,12 +934,28 @@ non-negative integer :math:`n`. The validation fails when an
 
        pass  # the body of the func
 
-   # The following will pass:
-   func(np.empty((5, 5)))
-   func(np.empty((5, 10)))
-   # The following will fail:
-   func(np.empty((10, 5)))
-   func(np.empty((5, 5, 5)))
+When a valid value is passed, nothing happens:
+
+.. code-block:: python
+
+   >>> func(np.empty((5, 5)))
+   >>> func(np.empty((5, 10)))
+
+However, when an :math:`\mathbb{R}^{10 \times 5}` object or an
+:math:`\mathbb{R}^{5 \times 5 \times 5}` object is passed, the following
+exception occurs:
+
+.. code-block:: python
+
+   >>> func(np.empty((10, 5)))
+   ValueError: The value(s) of>>var.shape[0]<<, 10, \
+   must be 5.
+
+.. code-block:: python
+
+   >>> func(np.empty((5, 5, 5)))
+   ValueError: The value(s) of >>len(var.shape)<<, 3, \
+   must be 2.
 
 
 Requirements
