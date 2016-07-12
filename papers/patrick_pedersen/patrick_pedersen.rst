@@ -73,13 +73,13 @@ The usage of explicit function argument validation could be considered
 "unpythonic" [#]_ as it goes against dynamic typing :cite:`Cordeiro2013` and
 duck typing :cite:`Cordeiro2013` by not relying on documentation, clear code
 and testing to ensure correct usage. Even so, there exist a number of solutions
-to validating function arguments in Python relying on a wide range of language
+for validating function arguments in Python relying on a wide range of language
 constructs and interfaces. The validation capabilities of these solutions vary
 greatly from type, attribute, and value checks to fully customisable
 checks. Among these solutions are PyDBC, Traitlets and Numtraits, MyPy,
 PyValid, and PyContracts which are all discussed later. Most of the solutions
 do, however, seem to have an interface which relates to the data model used by
-Python and therefore translates to Python check in a straighforward way.
+Python and therefore translates to Python check in a straightforward way.
 
 .. [#] For an informal yet fitting definition, see
        http://stackoverflow.com/questions/25011078/what-does-pythonic-mean
@@ -133,9 +133,9 @@ function.
 
 To quote the Zen of Python [#]_, "there should be one-- and preferably only
 one --obvious way to do it" when faced with solving a task in Python, and the
-obvious ways to solve common tasks are oftentimes referred to as Pythonic
+obvious ways to solve common tasks are oftentimes referred to as pythonic
 idioms. When it comes to function argument validation in Python, the most
-Pythonic idiom is to clearly document what a function expects and then just try
+pythonic idiom is to clearly document what a function expects and then just try
 to use whatever gets passed to the function and either let exceptions propagate
 or catch attribute errors and raise other exceptions instead. This approach is
 well-suited for Python because it is a dynamically typed language. Basically,
@@ -149,7 +149,7 @@ duck. That is, if a value exhibits the desired behaviour, then that value
 probably is valid. Translated to our example, if the value of the function
 argument, ``a``, has the ``__getitem__`` attribute which Python uses internally
 for retrieving the first item, then ``a`` probably is valid. Thus, the most
-Pythonic idiom would rely on documentation, clear code, and testing to ensure
+pythonic idiom would rely on documentation, clear code, and testing to ensure
 correct usage rather than explicitly testing function arguments to ensure
 conformity to the intentions of the function.
 
@@ -167,18 +167,16 @@ built-in ``int`` type does not define ``__getitem__``:
    '__getitem__'
 
 With the following call, a ``TypeError`` exception is raised with a message
-that "``'int'`` object has no attribute ``'__getitem__'``". First of all, even
-with this very simple example, such an exception message is less sensical than
-desired. Second of all, such an exception is as likely to occur in some obscure
+that "``'int'`` object has no attribute ``'__getitem__'``". Even with this
+simple example, such an exception message is less sensible than
+desired. Furthermore, such an exception is as likely to occur in some obscure
 function call and, thus, be accompanied by a traceback with more levels than
-anyone would want.
-
-However, at least the presence of an exception indicates that something did not
-go as expected. What happens, however, if the value of a function argument is
-valid by the reckoning of duck typing but does not conform to the intentions of
-the function? This is the case with the following call as the built-in ``dict``
-type defines ``__getitem__`` but with a different purpose than the
-``__getitem__`` of sequences:
+anyone would want. However, at least the presence of an exception indicates
+that something did not go as expected. What happens, however, if the value of a
+function argument is valid by the reckoning of duck typing but does not conform
+to the intentions of the function? This is the case with the following call as
+the built-in ``dict`` type defines ``__getitem__`` but with a different purpose
+than the ``__getitem__`` of sequences:
 
 .. code-block:: python
 
@@ -196,7 +194,7 @@ validation can lead to hard-to-debug exceptions or even worse to unexpected or
 erroneous behaviour. The benefit of explicit function argument validation is
 that the mentioned problems should be avoided. Furthermore, by having such
 validation for functions that are part of a public API of released packages,
-the pacakge is made more trustworthy and user-friendly.
+the package is made more trustworthy and user-friendly.
 
 
 How to Test for Validity
@@ -238,10 +236,10 @@ the point to stress is that the programmer should not have to know about every
 single Python type, nor should he or she have to explicitly list a large number
 of Python types for each validation check.
 
-Thus, another way to test for validity would be to check if the value of a
-variable displays a certain behaviour. That is, to determine the validity based
-on what a value *can do*. For example, we could rewrite the ``do_something``
-example in the following way:
+Another way to test for validity would be to check if the value of a variable
+displays a certain behaviour. That is, to determine the validity based on what
+a value *can do*. For example, we could rewrite the ``do_something`` example in
+the following way:
 
 .. code-block:: python
 
@@ -501,12 +499,12 @@ is produced:
 As for validation strategy, the following observations are made:
 
 1. The validation scheme of MyPy requires specifying a static Python type or a
-   union of static Python types. This is hardly surpricing for a static type
+   union of static Python types. This is hardly surprising for a static type
    checker.
 
 2. As mentioned, the syntax of annotations is given by PEP 3107, and the format
-   of the type hints is given by PEP 484 making the type hints very explicit
-   and readable although a less well-known feature of Python.
+   of the type hints is given by PEP 484 making the type hints explicit and
+   readable although a less well-known feature of Python.
 
 3. The Python constructs used rely only on annotations and runs offline and
    separately of normal execution of Python code.
