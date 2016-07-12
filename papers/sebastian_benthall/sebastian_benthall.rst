@@ -104,7 +104,7 @@ Initiative (CII) and published by the Institute for Defense Analysis.
 This metric is based on their expertise in software development analytics and an 
 extensive literature review of scholarly and commercial work on the subject. 
 They then apply this metric to Debian packages and have successfully identified 
-projects needing investment. This work is available on-line as the CII Census project.
+projects needing investment. This work is available on-line as the CII Census project [CensusProject]_.
 
 [Schweik2012]_ is a comprehensive study of the success and failure of open source
 projects based on large-scale analysis of SourceForge data, as well as survey and
@@ -571,6 +571,8 @@ References
                       "A Brief History of Generative Models for Power Law
                       and Lognormal Distributions."
                       Internet Mathematics Vol. 1, No. 2: 226-251
+
+.. [CensusProject] Census Project. (n.d.). Retrieved July 12, 2016, from https://www.coreinfrastructure.org/programs/census-project
 
 .. [Cordona2012] Cardona, Omar-Daria, et al. "Determinants of risk: exposure and vulnerability." (2012).
 
