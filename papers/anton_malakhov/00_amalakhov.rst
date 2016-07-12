@@ -10,7 +10,7 @@ Composable Multi-Threading for Python Libraries
 .. class:: abstract
 
    Python is popular among numeric communities that value it for easy to use number crunching modules like [NumPy]_, [SciPy]_, [Dask]_, [Numba]_, and many others.
-   These modules often use multi-threading for efficient parallelism (on a node) in order to utilize all the available CPU cores.
+   These modules often use multi-threading for efficient multi-core parallelism in order to utilize all the available CPU cores.
    Nevertheless, their threads can interfere with each other leading to overhead and inefficiency if used together in one application.
    The lost performance can still be recovered if all the multi-threaded parties are coordinated.
    This paper describes usage of Intel |R| Threading Building Blocks (Intel |R| TBB), an open-source cross-platform library for multi-core parallelism [TBB]_, as the composability layer for Python modules.
