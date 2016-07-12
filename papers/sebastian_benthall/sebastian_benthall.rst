@@ -235,6 +235,40 @@ and a system that is not resilient is *brittle*.
 Fragility and brittleness are two distinct and general ways in which a component
 of a software ecosystem might be vulnerable.
 
+Computing fragility and exposure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Our risk analysis framework defines exposure and 
+vulnerability as abstract components of risk that can be defined
+depending on the hazards and threats under consideration.
+In the example of this study, we will define these variables with
+an interest in the general prediction of robustness in widely used
+software.
+This sort of analysis would be useful in determining
+which software packages are in need of further investment in order
+to reduce risk globally.
+
+In the following analysis, we will define *exposure* to be the
+number of times a package has been downloaded.
+We assume for the sake of this analysis that more widely downloaded
+software is more widely used and exposed to threats.
+This metadata is provided by PyPI for each package directly.
+
+We will define vulnerability specifically in terms of software
+fragility, and make the assumption that software that has had
+more releases is less fragile.
+While it is true that sometimes a new software release can introduce
+new flaws into software, we assume that on average more releases
+mean a more active community, more robust development processes,
+and greater maturity in the project lifecycle.
+Specifically for the purpose of this study we will define
+
+.. math::
+
+   fragility(p) = \frac{1}{text{number\_of\_releases}(p)}
+
+In future work, we will revise and validate these metrics.
+
 
 Implementation of risk computation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -496,40 +530,6 @@ out-degree over 1000.
    :figclass: bht
 
    Hex plot of log vulnerability and log exposure of each package, with bin density scored on log scale. All logs are base 10. Exposure is more widely distributed than vulnerability. Vulnerability scores for the vast majority of packages are low. There is a fringe of packages that are either highly vulnerable, highly exposed, or both. There is a log-linear tradeoff between high vulnerability and high exposure. This is most likely due to the fact that ecosystem vulnerability and ecosystem exposure both depend on an package's position in the dependency network. 
-
-Computing fragility and exposure
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Our risk analysis framework defines exposure and 
-vulnerability as abstract components of risk that can be defined
-depending on the hazards and threats under consideration.
-In the example of this study, we will define these variables with
-an interest in the general prediction of robustness in widely used
-software.
-This sort of analysis would be useful in determining
-which software packages are in need of further investment in order
-to reduce risk globally.
-
-In the following analysis, we will define *exposure* to be the
-number of times a package has been downloaded.
-We assume for the sake of this analysis that more widely downloaded
-software is more widely used and exposed to threats.
-This metadata is provided by PyPI for each package directly.
-
-We will define vulnerability specifically in terms of software
-fragility, and make the assumption that software that has had
-more releases is less fragile.
-While it is true that sometimes a new software release can introduce
-new flaws into software, we assume that on average more releases
-mean a more active community, more robust development processes,
-and greater maturity in the project lifecycle.
-Specifically for the purpose of this study we will define
-
-.. math::
-
-   fragility(p) = \frac{1}{text{number\_of\_releases}(p)}
-
-In future work, we will revise and validate these metrics.
 
 
 
