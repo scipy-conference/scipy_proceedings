@@ -114,18 +114,17 @@ and has had at least three releases. They identify several key predictive factor
 project success, including data that indicates usefulness (such as number of downloads),
 number of hours contributed to the project, and communicativeness of the project leader.
 
-Our approach synthesizes these precedents in computer security and software 
-community analysis.
-We see risk analysis as a science that employs static analysis techniques, 
-but also looks more broadly at developer communities and the rate and flow 
-of their activities and communications.
-We are looking for mathematically firm principles
-of software supply chain risk management.
+These precedents focus on individual software projects and their suscpetiblity
+to technical and community failure.
+We build on these approaches by considering security as a function of
+the total software supply chain.
+This supply chain resembles a complex ecosystem more than a simple 'chain' or stack.
+We draw inspiration from a risk management strategy approached used in another kind
+of complex system, namely disaster risk reduction and
+climate change adaptation research developed by Cardona [Cardona2012]_ and widely used
+by the World Bank's Global Facility for Disaster Risk Reduction, and others. [Yamin2013]_
 
-As this supply chain resembles a complex ecosystem more than a simple 'chain' or stack,
-our risk management strategy is adopted from work on disaster risk reduction and
-climate change adaptation research. [Cordona2012]_ and others use a framework for
-evaluating the expected cost of low-probability events that distinguishes three factors
+This framework evaluates the expected cost of low-probability events by distinguishing three factors
 of risk. *Hazards* are potentially damaging factors from the environment; the
 cybersecurity equivalents are *threats*. *Exposure* refers to the inventory of elements
 in place where hazards occur; the cybersecurity equivalent is *assets*. *Vulnerabilities*
@@ -134,6 +133,15 @@ by a hazard. Expected risk is then straightforwardly computed as the product of 
 probability of hazard and the vulnerable exposure of the system. By adapting this
 framework to cybersecurity in the software ecosystem, we are able to consider a wide
 range of threats--including novel threats such as attacks of software communities themselves.
+
+There are significant differences between modeling risk from natural hazards and
+modeling cybersecurity risk.
+Most notably, cybersecurity threats can be deliberately adversarial, detecting and
+exploiting specific weaknesses rather than presenting a general hazard.
+In this work we focus on the interplay between exposure and vulnerability in
+the software ecosystem and abstract away the specificity of a threat model.
+We see an analytic treatment of that interplay as a valuable step in tractable
+security analysis of the software supply chain.
 
 
 Modeling Ecological Risk in Software
@@ -552,6 +560,15 @@ communities we study.
 For this reason we are dedicated to ecosystems and software projects,
 which aggregate individual efforts, as the fundamental unit of analysis.
 
+..
+  Our approach synthesizes these precedents in computer security and software 
+  community analysis.
+  We see risk analysis as a science that employs static analysis techniques, 
+  but also looks more broadly at developer communities and the rate and flow 
+  of their activities and communications.
+  We are looking for mathematically firm principles
+  of software supply chain risk management.
+..
 
 Acknowledgements
 ----------------
@@ -575,7 +592,7 @@ References
 
 .. [CensusProject] Census Project. (n.d.). Retrieved July 12, 2016, from https://www.coreinfrastructure.org/programs/census-project
 
-.. [Cordona2012] Cardona, Omar-Daria, et al. "Determinants of risk: exposure and vulnerability." (2012).
+.. [Cardona2012] Cardona, Omar-Daria, et al. "Determinants of risk: exposure and vulnerability." (2012).
 
 .. [Girardot2013] O. Girardot. STATE OF THE PYTHON/PYPI DEPENDENCY GRAPH. 2013
 
@@ -611,5 +628,7 @@ References
       ``http://www.dwheeler.com/essays/heartbleed.html``
 
 .. [Wheeler2015] D. Wheeler and S. Khakimov. *Open Source Security Census: Open Source Software Projects Needing Security Investments*, Institute for Defense Analysis. 2015
+
+.. [Yamin2013] Yamin, Luis Eduardo; Ghesquiere, Francis; Cardona, Omar Dario; Ordaz, Mario Gustavo. 2013. Modelacion probabilista para la gestion del riesgo de desastre. Washington DC ; World Bank. http://documents.worldbank.org/curated/en/2013/07/18100020/colombia-probabilistic-modeling-disaster-risk-management-modelacion-probabilista-para-la-gestion-del-riesgo-de-desastre
 
 
