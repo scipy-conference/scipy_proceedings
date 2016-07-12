@@ -248,10 +248,14 @@ In practice, the application of this framework will depend on the selection
 of package metadata used to measure exposure and vulnerability. Below is a
 Python implementation of efficient risk computation using a directed graph
 representation of package dependencies and NetworkX. [Hagberg2008]_
+It imports data as a graph, where packages are nodes, directed edges indicate
+package dependencies, and relevant metadata are precomputed properties of the nodes.
 In this code, we use a precomputed 'fragility' metric as the vulnerability
 variable, and the number of downloads of each package as the exposure variable.
 (See the section *Computing fragility and exposure* for an explanation of how
 fragility was calculated in our empirical results.)
+Running this code imports the data from a ``.gexf`` file, computes the ecosystem risk
+of each package, and exports the data to a different file.
 
 .. code-block:: python
 
@@ -306,6 +310,8 @@ fragility was calculated in our empirical results.)
         ecosystem_risk[i] = 
                 G.node[i]['ecosystem_vulnerability'] 
                 * G.node[i]['ecosystem_exposure']
+
+    nx.write_gexf(G,'pkg-with-risk.gexf')
 
 A significant problem with this implementation of risk calculation
 is that if node A is accessible to node B through multiple distinct
