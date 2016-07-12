@@ -554,10 +554,22 @@ Hot spot analysis
 
    \end{table*}
 
-Our analysis suggests that the riskiest packages in the Python ecosystem are those that are part of the Zope web application server and the Plone content management system built on it. The Zope community has declared that Zope is now a legacy system and does not recommend that developers use these projects. Therefore, our analytic findings are consistent with community and domain knowledge regarding the resilience of these communities. Despite these warnings, the Plone community is still active and many web sites may still depend on this legacy technology. This study motivates further work on the resilience of Zope to new security threats.
+Our analysis suggests that the riskiest packages in the Python ecosystem are those that are part of the Zope web application server and the Plone content management system (CMS) built on it. The Zope community has declared that Zope is now a legacy system and does not recommend that developers use these projects. Therefore, our analytic findings are consistent with community and domain knowledge regarding the resilience of these communities. Despite these warnings, the Plone community is still active and many web sites may still depend on this legacy technology. This study motivates further work on the resilience of Zope to new security threats.
 
-[Walsh2011]_ noted that Plone has an order of magnitude lower number of vulnerabilites reported in Mitre's Common Vulnerabilities and Exposures database compared to other popular CMS's like Joomla, Drupal, and Wordpress. This has lead [Wiki2016]_ to assert that Plone's security record is cause of its widespread adoption by government and non-government organizations. [Byrne2013]_ has challenged this conclusion, noting that the high number of recorded vulnerabilites may just as likely be due to the much greater popularity of the other CMS's. That Drupal, Wordpress, and Joomla are all written in PHP is another confounding factor.
-Drupal, Joomla, and Wordpress are beyond the scope of our study, which is concerned only with the PyPI ecosystem. In our risk modeling framework, Plone score poorly compared to other Python web frameworks such as Django and Flask. 
+The security properties of Plone have been the subject of considerable informal debate.
+[Walsh2011]_ noted that Plone has an order of magnitude lower number of vulnerabilites reported in 
+Mitre's Common Vulnerabilities and Exposures database compared to other popular CMSes like 
+Joomla, Drupal, and Wordpress. 
+This has lead Wikipedia [Wiki2016]_ to assert that Plone's security record is cause of its widespread 
+adoption by government and non-government organizations. 
+[Byrne2013]_ has challenged this conventional wisdom, noting that the high number of recorded vulnerabilites may 
+just as likely be due to the much greater popularity of the other CMS's. 
+That Drupal, Wordpress, and Joomla are all written in PHP is another confounding factor.
+Drupal, Joomla, and Wordpress are beyond the scope of our study, which is concerned only 
+with the PyPI ecosystem.
+In our risk analysis, Plone score poorly compared to other Python web frameworks such as Django and Flask. 
+We take this as an indication that beyond its scientific merits, our risk analysis method can 
+provide actionable insights into security that are relevant to practicing software engineers.
 
 We have also identified ``six``, a Python 2 and Python 3 compatibility library, as an ecosystem risk hot spot. The second most depended on project in PyPI, ``six`` inherits its exposure from all of its downstream descendants. For this reason, it is important to ensure that ``six`` does not have any security-related flaws.
 
