@@ -355,7 +355,7 @@ Data collection and publication
 Data for this analysis comes from two sources. For package and release metadata,
 we used data requested from PyPI, the Python Package Index.
 This data provides for data about the publication date and number of
-downloads for each software release.
+unique downloads for each software release.
 
 We also downloaded each Python release and inspected it for the presence of a ``setup.py``
 file. We then extracted package dependency information from ``setup.py`` through
@@ -365,10 +365,11 @@ Python dependencies are determined through executing Python install scripts.
 Therefore, our method of discovering package dependencies through static
 analysis of the source code does not capture all cases.
 
-For each package, we consider dependencies to be the union of all requirements
-for all releases. While this loses some of the available information, it is sufficient
-for this first analysis of the PyPI ecosystem. We will use more of the available information
-and take into account more of the complexity of Python package management in future work.
+For each package, we consider dependencies to be the recursive union of all requirements
+for all releases.
+Specifically we collapse all releases of a package into a single node in the dependency graph.
+While this loses some of the available information, it is sufficient
+for this prelimenary analysis of the PyPI ecosystem. 
 
 Empirical and Modeling Results
 --------------------------------
@@ -610,6 +611,15 @@ which aggregate individual efforts, as the fundamental unit of analysis.
 
 ..
   You also need to talk about package version management, which I see as a hole. In Python, it might not be possible to have conflicting versions, but I've seen it in Java and other languages. 
+..
+
+..
+  Future work will execut setup scripts to get full dependencies
+..
+
+..
+  We will use more of the available information
+  and take into account more of the complexity of Python package management in future work.
 ..
 
 Acknowledgements
