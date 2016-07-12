@@ -296,6 +296,9 @@ are a good fit, declared when the standard error is below 0.3 for both :math:`\w
    80% probability of winning. The vertical bars show if the subject won (blue)
    or lost (red) in that particular trial. :label:`FigAllActions`
 
+We notice from this result that not all behaviors can be properly fitted with the RL model. This is a known limitation of this model [Daw11]_. We also observe that in general the parameters associated with the "lose context" exhibit larger values of learning rate :math:`\alpha` and smaller values of inverse temperature :math:`\beta`. Although at this point of our research it is not clear the reason for this difference, we conjecture that this phenomenon can be explained by two factors. First, in the lose context people bet smaller amounts after learning that the probability of wining is low in this context. This means that the term :math:`(r_t - Q_t(a_t, c_t))` in equation (1) is smaller compared to the win context. Thus, a larger learning rate is needed to get an update on the action value function of a magnitude similar to the win context. [#]_ Secondly, it is known that humans commonly exhibit a loss aversion behavior [Kah84]_. This can explain, at least in part, the larger learning rates  observed for the lose context, since it could be argued that people penalized more their violation of their expectations, as reflected by the term :math:`(r_t - Q_t(a_t, c_t))` of equation (1), when they were experiencing the losing situation.
+
+.. [#] This difference suggests that the experimental design should be modified to equalize this effect between the contexts. 
 
 Discussion
 ----------
@@ -323,9 +326,12 @@ References
            models*, Decision making, affect, and learning: Attention and
            performance XXIII, vol. 23, p. 1, 2011.
 
+.. [Kah84] D. Kahneman and A. Tversky. *Choices, values, and frames.*, American
+           psychologist 39.4, 1984.
+
 .. [Lan08] J. Langford, and T. Zhang, *The epoch-greedy algorithm for
            multi-armed bandits with side information*, Advances in neural
-           information processing systems (2008).
+           information processing systems, 2008.
 
 .. [Mas12] L. Mason, N. O’Sullivan, R. P. Bentall, and W. El-Deredy, *Better
            Than I Thought: Positive Evaluation Bias in Hypomania*, PLoS ONE,
@@ -336,8 +342,8 @@ References
            nonreinforcement*, Classical conditioning II: Current research and
            theory, vol. 2, pp. 64–99, 1972.
 
-.. [Sut98] Sutton, R. S., & Barto, A. G. (1998). Reinforcement
-           Learning. Cambridge, Massachusetts: The MIT press.
+.. [Sut98] R. Sutton and A. Barto, Reinforcement
+           Learning. Cambridge, Massachusetts: The MIT press, 1998.
 
 .. [Wie12] M. Wiering and M. van Otterlo, Eds., Reinforcement Learning,
            vol. 12. Berlin, Heidelberg: Springer Berlin Heidelberg, 2012.
