@@ -596,14 +596,40 @@ are only tentative pending future work.
 Discussion and future work
 --------------------------
 
+We have synthesized techniques from computer security and disaster
+risk reduction to develop a novel method of predicting risk in the
+software ecosystem.
+This fits within the broad scope of supply chain analysis, though
+we recognize that the software ecosystem as a whole is not merely
+a chain, but a complex network with a distinctive topology.
+We approach risk analysis as a science that employs static analysis techniques
+but also looks more broadly at developer communities and the rate and flow 
+of their activities and communications.
 This paper proposes a novel framework of predicting risk in software infrastructure
-based on static analysis of package dependencies and minimal assumptions about
+based on static analysis of package dependencies, metadata about downloads and
+release schedules, and minimal assumptions about
 the distribution of exposure and vulnerability in software.
 We have demonstrated the implications of this framework using the PyPI package
-ecosystem and specific proxy variables for the components of risk.
+ecosystem.
+
+There are many ways to improve our data proprocessing and operational logic.
+Rather than extracting dependencies from ``setup.py`` using a regular expression,
+it would be far better to run the setup scripts and extract requirements from
+the resulting Python objects.
+We have also in this work considered the entire software ecosystem compressed
+into a single static graph.
+In fact the software ecosystem is always changing.
+Packages often specify which versions of software they depend on;
+taking this into account complicates our model of vulnerability
+propagetion
+Package dependencies and metadata variables that proxy for exposure and
+vulnerabilty also change over time.
+We intend to develop a dynamic version of this risk-management algorithm,
+capable of live updating of risk metrics based on events in PyPI,
+in future work.
+
 A major shortcoming of our analysis is the lack of validation against
 a gold standard data of *ground truth* regarding software risk.
-
 In future work, we will test this framework using other data sets, including
 data from project issue trackers (such as GitHub) and Common Vulnerabilities
 and Exposure (CVE) data.
@@ -613,12 +639,6 @@ It is an open question to what extent this framework is useful for assessing
 software robustness (absence of software errors that can be exploited, for
 example) and software resilience (capacity of software development communities
 to respond to known exploits).
-
-While we have in this work considered the entire software ecosystem compressed
-into a single static graph, in fact the software ecosystem is always changing.
-Package dependencies and metadata variables that proxy for exposure and
-vulnerabilty change over time.
-In future work we will develop a dynamic version of this risk-management algorithm.
 
 The research presented here deals exclusively with data about technical organization.
 However, as we expand into research into how software communities and their interactions
@@ -632,26 +652,10 @@ For this reason we are dedicated to ecosystems and software projects,
 which aggregate individual efforts, as the fundamental unit of analysis.
 
 ..
-  Our approach synthesizes these precedents in computer security and software 
-  community analysis.
-  We see risk analysis as a science that employs static analysis techniques, 
-  but also looks more broadly at developer communities and the rate and flow 
-  of their activities and communications.
-  We are looking for mathematically firm principles
-  of software supply chain risk management.
+  Scientific computing packages -- how risky.
 ..
-
 ..
-  You also need to talk about package version management, which I see as a hole. In Python, it might not be possible to have conflicting versions, but I've seen it in Java and other languages. 
-..
-
-..
-  Future work will execut setup scripts to get full dependencies
-..
-
-..
-  We will use more of the available information
-  and take into account more of the complexity of Python package management in future work.
+  Discussion should include the mapping of ecological risk, etc. onto software risk, etc. (per the title)
 ..
 
 Acknowledgements
