@@ -503,12 +503,12 @@ to reduce risk globally.
 
 In the following analysis, we will define *exposure* to be the
 number of times a package has been downloaded.
-This metadata is provided by PyPI for each package directly.
 We assume for the sake of this analysis that more widely downloaded
 software is more widely used and exposed to threats.
+This metadata is provided by PyPI for each package directly.
 
-We will define *vulnerability* specifically in terms of software
-*fragility*, and make the assumption that software that has had
+We will define vulnerability specifically in terms of software
+fragility, and make the assumption that software that has had
 more releases is less fragile.
 While it is true that sometimes a new software release can introduce
 new flaws into software, we assume that on average more releases
@@ -518,7 +518,7 @@ Specifically for the purpose of this study we will define
 
 .. math::
 
-   fragility(p) = \frac{1}{number_of_releases(p)}
+   fragility(p) = \frac{1}{text{number\_of\_releases}(p)}
 
 In future work, we will revise and validate these metrics.
 
