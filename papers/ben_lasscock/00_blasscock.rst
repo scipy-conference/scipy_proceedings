@@ -408,7 +408,12 @@ What we want is to determine the spectral content of f(x),
 
    f(\vec{x}) = \sum_{l=1}^{\infty}\sum_{m=-l}^{l} \hat{f}_{lm}Y_{lm}(\theta,\phi)
 
-that is, we want to derive its representation in the feature space.
+.. raw:: latex
+
+   that is, we want to derive its representation in the feature
+   space. Here, the azimuth $\theta$ and colatitude $\phi$, are the angles
+   that orientate the unit vector $\vec{x}$.
+
 The steps in deriving this representation are to first expand the inner
 product kernel in terms of the Legendre polynomials [Scholkopf]_,
 
