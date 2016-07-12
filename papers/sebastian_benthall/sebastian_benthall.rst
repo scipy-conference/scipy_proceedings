@@ -55,12 +55,12 @@ Critical systems that depend on complex software are open
 to many kinds of risk.
 Typical approaches to software security have mitigated this
 risk with static analysis.
-We are developing novel ways to manage software risk through
+We are developing novel methods to manage software risk through
 supply chain intelligence, with a focus on open source software
 ecosystems.
 
 The Heartbleed bug in OpenSSL is an example of community failure
-example of how vulnerabilities
+and of how vulnerabilities
 in open source software can be a major security risk. [Wheeler2014]_
 The recent failure of React, Babel, and many other NPM packages
 due to the removal of one small dependency, ``left-pad``,
@@ -70,7 +70,7 @@ As dependencies become more numerous and interlinked, the
 complexity of the system increases, as does the scope of risk management.
 Open source software projects make their source code and developer
 activity data openly available for analysis.
-This data can be used to mitigate software risk that have not been explored.
+This data can be used to mitigate software risk in ways that have not been explored.
 
 With a small number of analytic assumptions about the propagation of vulnerability
 and exposure through the software dependency network, we have developed a model
@@ -94,7 +94,7 @@ sheer complexity of source code involved makes manual source code level auditing
 Therefore, static analysis tools based on firm mathematical foundations are significant
 for providing computer security at scale. 
 
-[Wheeler2015]_ develops a risk index for determing which open source software projects need 
+[Wheeler2015]_ develops a risk index for determining which open source software projects need 
 security investments. This work is part of the Linux Foundation (LF) Core Infrastructure 
 Initiative (CII) and published by the Institute for Defense Analysis. 
 This metric is based on their expertise in software development analytics and an 
@@ -104,7 +104,7 @@ projects needing investment. This work is available on-line as the CII Census pr
 
 [Schweik2012]_ is a comprehensive study of the success and failure of open source
 projects based on large-scale analysis of SourceForge data, as well as survey and
-interview data. They define successful project as one that performs a useful function
+interview data. They define a successful project as one that performs a useful function
 and has had at least three releases. They identify several key predictive factors to
 project success, including data that indicates usefulness (such as number of downloads),
 number of hours contributed to the project, and communicativeness of the project leader.
@@ -120,9 +120,9 @@ of software supply chain risk management.
 As this supply chain resembles a complex ecosystem more than a simple 'chain' or stack,
 our risk management strategy is adopted from work on disaster risk reduction and
 climate change adaptation research. [Cordona2012]_ and others use a framework for
-evaluating expected cost of low-probability events that distinguishes three factors
+evaluating the expected cost of low-probability events that distinguishes three factors
 of risk. *Hazards* are potentially damaging factors from the environment; the
-cybersecurity equivalent are *threats*. *Exposure* refers to the inventory of elements
+cybersecurity equivalents are *threats*. *Exposure* refers to the inventory of elements
 in place where hazards occur; the cybersecurity equivalent is *assets*. *Vulnerabilities*
 are defined as the propensity of exposed elements to suffer adverse effects when impacted
 by a hazard. Expected risk is then straightforwardly computed as the product of the
@@ -145,7 +145,7 @@ how 'risk' is used in a software development context.
 If we break down the sources of risk and how these affect the need for security 
 investments analytically, we can distinguish between several different factors.
 
-* Vulnerability. A software project's vulnerability is its intrinsic susceptability to attack.  CVE data is about software vulnerability. Being written in a language in which it is hard to write secure code (such as C and C++) can be a predictor of vulnerability.
+* Vulnerability. A software project's vulnerability is its intrinsic susceptibility to attack.  CVE data is about software vulnerability. Being written in a language in which it is hard to write secure code (such as C and C++) can be a predictor of vulnerability.
 * Exposure. A software project's exposure is its extrinsic availability to attack. Being directly exposed to a network is a source of exposure.
 
 
@@ -164,7 +164,7 @@ dependency topology in assessing project risk.
 * If A depends on B, then a vulnerability in B implies a corresponding vulnerability in A.
 * If A depends on B, then an exposure to A implies an exposure to B.
 
-While there are exceptions to these rules, they are a principled analytic way of related vulnerability, exposure, 
+While there are exceptions to these rules, they are a principled analytic way of relating vulnerability, exposure, 
 and software dependency that can be implemented as a heuristic and tested as a hypothesis.
 
 Robustness and fragility, resilience and brittleness
@@ -301,7 +301,7 @@ We leave the elaboration of this algorithm for future work.
 Data collection and publication
 -------------------------------
 
-Data for this analysis comes from two source. For package and release metadata,
+Data for this analysis comes from two sources. For package and release metadata,
 we used data requested from PyPI, the Python Package Index.
 This data provides for data about the publication date and number of
 downloads for each software release.
@@ -314,7 +314,7 @@ Python dependencies are determined through executing Python install scripts.
 Therefore, our method of discovering package dependencies through static
 analysis of the source code does not capture all cases.
 
-For each package, we consider its dependencies to be the union of all requirements
+For each package, we consider dependencies to be the union of all requirements
 for all releases. While this loses some of the available information, it is sufficient
 for this first analysis of the PyPI ecosystem. We will use more of the available information
 and take into account more of the complexity of Python package management in future work.
@@ -326,7 +326,7 @@ Empirical and Modeling Results
    :scale: 35%
    :figclass: bht
 
-   Visualization of PyPi dependency network, created using Gephi [Bastian2009]_. This visualization does not include singleton nodes with zero degree, which are the vast majority of nodes. Node size is proportional to out degree. Nodes ar colored by the log (base 10) of package ecosystem risk. Red nodes are higher risk. The large red cluster consists of projects related to the Zope web application server, including the Plone content management system.
+   Visualization of PyPi dependency network, created using Gephi [Bastian2009]_. This visualization does not include singleton nodes with zero degree, which are the vast majority of nodes. Node size is proportional to out degree. Nodes are colored by the log (base 10) of package ecosystem risk. Red nodes are higher risk. The large red cluster consists of projects related to the Zope web application server, including the Plone content management system.
 
 Our data collection process created a network with :math:`66,536` nodes and :math:`72939` edges.
 Over half of the nodes, :math:`33,573`, have no edge. This isolates them from the
@@ -439,7 +439,7 @@ Computing fragility and exposure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The risk analysis framework described above defines *exposure* and 
-*vulnerability* as abstact components of risk that can be defined
+*vulnerability* as abstract components of risk that can be defined
 depending on the hazards and threats under consideration.
 In the example of this study, we will define these variables with
 an interest in the general prediction of robustness in widely used
@@ -501,12 +501,12 @@ Hot spot analysis
 
    \end{table*}
 
-Our analysis suggests that the riskiest packages in the Python ecosystem are those that are part of the Zope web application server and the Plone content management system built on it. The Zope community has declared that Zope is now a legacy system and do not recommended that developers use these projects. Therefore, our analytic findings are consistent with community and domain knowledge regarding the resilience of these communities. Despite htese warnings, the Plone community is still active and many web sites may still depend on this legacy technology. This study motivates further work on the resilience of Zope to new security threats.
+Our analysis suggests that the riskiest packages in the Python ecosystem are those that are part of the Zope web application server and the Plone content management system built on it. The Zope community has declared that Zope is now a legacy system and does not recommend that developers use these projects. Therefore, our analytic findings are consistent with community and domain knowledge regarding the resilience of these communities. Despite these warnings, the Plone community is still active and many web sites may still depend on this legacy technology. This study motivates further work on the resilience of Zope to new security threats.
 
 [Walsh2011]_ noted that Plone has an order of magnitude lower number of vulnerabilites reported in Mitre's Common Vulnerabilities and Exposures database compared to other popular CMS's like Joomla, Drupal, and Wordpress. This has lead [Wiki2016]_ to assert that Plone's security record is cause of its widespread adoption by government and non-government organizations. [Byrne2013]_ has challenged this conclusion, noting that the high number of recorded vulnerabilites may just as likely be due to the much greater popularity of the other CMS's. That Drupal, Wordpress, and Joomla are all written in PHP is another confounding factor.
 Drupal, Joomla, and Wordpress are beyond the scope of our study, which is concerned only with the PyPI ecosystem. In our risk modeling framework, Plone score poorly compared to other Python web frameworks such as Django and Flask. 
 
-We have also identified ``six``, a Python 2 and Python 3 compatibility library, as an ecosystem risk hot spot. The second most dependend on project in PyPI, ``six`` inherits its exposure from all of its downstream descendents. For this reason, it is important to ensure that ``six`` does not have any security-related flaws.
+We have also identified ``six``, a Python 2 and Python 3 compatibility library, as an ecosystem risk hot spot. The second most depended on project in PyPI, ``six`` inherits its exposure from all of its downstream descendants. For this reason, it is important to ensure that ``six`` does not have any security-related flaws.
 
 
 Discussion and future work
@@ -551,7 +551,7 @@ which aggregate individual efforts, as the fundamental unit of analysis.
 Acknowledgements
 ----------------
 
-We gratefully acknowledge David Lippa for his helpful comments.
+We gratefully acknowledge David Lippa, Kyle Niemeyer, and J. Edward Pickle for their helpful comments.
 
 References
 ----------
