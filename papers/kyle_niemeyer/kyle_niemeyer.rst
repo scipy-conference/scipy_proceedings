@@ -782,6 +782,41 @@ called programmatically. If the ``--print`` command line option was given, or
 the ``print_results`` option set to ``True`` when calling ``evaluate_model()``,
 then the results are also printed to screen.
 
+=============
+Example Usage
+=============
+
+This section provides an example of using PyTeCK to compare the performance of
+12 chemical kinetic models for hydrogen oxidation [Niemeyer2016c]_ using a
+collection of experimental shock tube ignition delay data [Niemeyer2016d]_.
+54 data sets from 14 publications comprise this collection, with a total of 786
+ignition data points.
+Both the set of models and ChemKED experimental data set are available openly
+via the respective references.
+
+After installing PyTeCK [Niemeyer2016b]_, and placing the model and experimental
+data files in appropriate locations (``h2-models`` and ``h2-files``, in this
+example), each model can be evaluated by executing a command similar to
+``PyTeCK -m GRI30-1999.cti -k h2-model-species-keys.yaml -d h2-data-list.txt
+-dp h2-files -mp h2-models``, with the appropriate model name inserted in place
+of ``GRI30-1999.cti``.
+
+.. figure:: h2-model-comparison.pdf
+
+    Average error functions, with standard deviations, for the 12 models of
+    hydrogen oxidation. Models are arranged in order of publication, going from
+    the oldest to the newest. :label:`h2results`
+
+Figure :ref:`h2results` compares the performances of the 12 hydrogen models,
+showing both the average error function :math:`E` as well as the standard
+deviation of :math:`E_i` values across data sets. Lower error function values
+indicate better agreement with experimental data. While the actual values are
+not important for the current example, generally both the average and variation
+of error function decrease with publication year of the models---indicating an
+overall improvment of model fidelity with time. Although this example only
+considers subsets of both the models and experimental data of Olm et al.'s
+study [Olm2014]_, the results generally agree.
+
 ===========================
 Conclusions and Future Work
 ===========================
@@ -901,8 +936,16 @@ References
                   https://dx.doi.org/10.6084/m9.figshare.3120724
 
 .. [Niemeyer2016b] K. E. Niemeyer.
-                   PyTeCK version 0.1.0, GitHub repository, 2016.
-                   https://GitHub.com/kyleniemeyer/PyTeCK
+                   PyTeCK version 0.1.0, Zenodo, 2016.
+                   https://dx.doi.org/10.5281/zenodo.57565
+
+.. [Niemeyer2016c] K. E. Niemeyer.
+                   "Selected hydrogen chemical kinetic models," figshare, 2016.
+                   https://dx.doi.org/10.6084/m9.figshare.3482906.v1
+
+.. [Niemeyer2016d] K. E. Niemeyer.
+                   "Hydrogen shock tube ignition dataset," figshare, 2016.
+                   https://dx.doi.org/10.6084/m9.figshare.3482918.v1
 
 .. [Olm2014] C. Olm, I. G. Zsely, R. Pálvölgyi, T. Varga, T. Nagy, H. J, Curran,
              and T. Turányi.
@@ -953,3 +996,71 @@ References
              "Process Informatics Tools for Predictive Modeling: Hydrogen
              Combustion," *Int. J. Chem. Kinet.*, 44:101–116, 2012.
              https://dx.doi.org/10.1002/kin.20627
+
+========
+Appendix
+========
+
+The following code snippet can be used to reproduce Fig. :ref:`h2results` using
+the produced by PyTeCK following the instructions given in the Example Usage
+section.
+
+.. code-block:: python
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from matplotlib.ticker import ScalarFormatter
+    from matplotlib.backends.backend_pdf import PdfPages
+    import brewer2mpl
+    import yaml
+
+    names = ['GRI30-1999', 'OConaire-2004', 'Zsely-2005',
+             'Konnov-2008', 'Rasmussen-2008', 'Hong-2011',
+             'Burke-2012', 'Keromnes-2013', 'CRECK-2014',
+             'UCSD-2014', 'ELTE-2015', 'Li-2015'
+             ]
+
+    ind = np.arange(len(names))
+
+    error_funcs = []
+    error_stds = []
+    for name in names:
+    with open(name + '-results.yaml', 'r') as f:
+        results = yaml.load(f)
+        error_func = results['average error function']
+        std_dev = results['error function '
+                          'standard deviation']
+        error_funcs.append(error_func)
+        error_stds.append(std_dev)
+
+    # colors for boxes
+    box_colors = brewer2mpl.get_map('Set3',
+                                    'qualitative',
+                                    len(names)
+                                    ).mpl_colors
+
+    fig, ax = plt.subplots()
+    yerr = [np.zeros(len(names)), error_stds]
+    ax.bar(ind, error_funcs, align='center',
+           color=box_colors, linewidth=0,
+           yerr=yerr, error_kw=dict(ecolor='g',
+           lw=2, capsize=0)
+           )
+
+    fmt = ScalarFormatter(useOffset=False)
+    ax.xaxis.set_major_formatter(fmt)
+
+    ax.set_ylabel('Error functions')
+    ax.set_xticks(ind)
+    ax.set_xticklabels(names, rotation='vertical')
+    ax.set_xlim([-0.5, ind[-1] + 0.5])
+    plt.subplots_adjust(bottom=0.25)
+
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.yaxis.set_ticks_position('none')
+    ax.xaxis.set_ticks_position('none')
+    ax.grid(axis = 'y', color ='white', linestyle='-')
+
+    plt.show()
