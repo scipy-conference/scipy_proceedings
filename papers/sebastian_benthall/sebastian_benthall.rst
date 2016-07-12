@@ -567,7 +567,7 @@ just as likely be due to the much greater popularity of the other CMS's.
 That Drupal, Wordpress, and Joomla are all written in PHP is another confounding factor.
 Drupal, Joomla, and Wordpress are beyond the scope of our study, which is concerned only 
 with the PyPI ecosystem.
-In our risk analysis, Plone score poorly compared to other Python web frameworks such as Django and Flask. 
+In our risk analysis, Plone scores poorly compared to other Python web frameworks such as Django and Flask. 
 We take this as an indication that beyond its scientific merits, our risk analysis method can 
 provide actionable insights into security that are relevant to practicing software engineers.
 
