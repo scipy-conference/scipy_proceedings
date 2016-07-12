@@ -87,8 +87,10 @@ Their emphasis is on architecture-level analysis and its iterative role in softw
 Security is achieved through managing information flows through architecturally distinct tiers of trust.
 They argue for a team-based approach with diverse knowledge and experience because "risk analysis
 is not a science".
+Contrary to this, our work develops a scientific theory of risk analysis, building on work from
+computer science and other fields.
 
-In computer science, however, there is a long history of security achieved through static analysis.
+There is a long history of security achieved through static analysis of source code.
 [Wagner2000]_ points out that the dependency of modern Internet systems on legacy code and the
 sheer complexity of source code involved makes manual source code level auditing infeasible.
 Therefore, static analysis tools based on firm mathematical foundations are significant
