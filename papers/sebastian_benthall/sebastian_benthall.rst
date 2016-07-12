@@ -153,17 +153,22 @@ Modeling Ecological Risk in Software
 Software dependency and project risk
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-While it has been suggested that using software dependency information can 
-augment assessments of project risk, suggested uses of this information 
-are unspecific. This is partly due to a larger problem: the ambiguity of 
-how 'risk' is used in a software development context.
+Some previous studies of software risk [Wheeler2015]_ have suffered from 
+the ambiguity of how 'risk' is used in a software development context.
+Security research is often contextualizes problems within a specific
+threat model.
+But for some applications, such as identifying software projects
+in need of additional investment in order to mitigate risk from
+generalized and potentially unknown threats, this kind of threat
+modeling is inappropriate.
+A general concern with supply chain security motivates a different
+approach.
 
 If we break down the sources of risk and how these affect the need for security 
-investments analytically, we can distinguish between several different factors.
+investments analytically, we can distinguish between several different factors:
 
-* Vulnerability. A software project's vulnerability is its intrinsic susceptibility to attack.  Common Vulnerability and Exposure (CVE) data is about software vulnerability. Being written in a language in which it is hard to write secure code (such as C and C++) can be a predictor of vulnerability.
-* Exposure. A software project's exposure is its extrinsic availability to attack. Being directly exposed to a network is a source of exposure.
-
+* Vulnerability. A software project's vulnerability is its intrinsic susceptibility to attack. Common Vulnerability and Exposure (CVE) records are good examples of specific software vulnerabilities. But software's vulnerability can also be predicted from a general property, such as the language it's written in. (Some languages, such as C++, are harder to write in securely and therefore generally more vulnerable [Wheeler2015]_)
+* Exposure. A software project's exposure is its extrinsic availability to attack. A direct network connection is a source of exposure.
 
 Vulnerability and exposure are distinct elements of a software project's risk. 
 Analyzing them separately and then combining them in a principled way gives us a better 
@@ -171,16 +176,24 @@ understanding of a project's risk.
 
 Dependencies complicate the way we think about vulnerability and exposure. 
 A software project doesn't just include the code in its own repository; 
-it also includes the code of all of its dependencies. 
-And a project does not need to be installed directly to be exposed--it can be installed 
+it also includes the code of all of its dependencies, often tied to a specific version. 
+Furthermore, a project does not need to be installed directly to be exposed--it can be installed 
 as a dependency of another project. 
 Based on these observations, we can articulate two heuristics for use of 
-dependency topology in assessing project risk.
+dependency topology in assessing project risk:
 
 * If A depends on B, then a vulnerability in B implies a corresponding vulnerability in A.
 * If A depends on B, then an exposure to A implies an exposure to B.
 
-While there are exceptions to these rules, they are a principled analytic way of relating vulnerability, exposure, 
+For example, if a web application (A) uses a generic web application framework (B), and that
+web application is installed and recieving web traffic, then there is an instance
+of the web framework installed and recieving web traffic.
+If there is a vulnerability in the web application framework (such as a susceptibility
+to SQL injection attacks), then the web application will inherit that vulnerability.
+There are exceptions to these rules.
+Developers of the web application (A) might recognize the vulnerability to SQL injection
+and fix the problem without pushing the change upstream (to B).
+Nevertheless, this is a principled analytic way of relating vulnerability, exposure, 
 and software dependency that can be implemented as a heuristic and tested as a hypothesis.
 
 Robustness and fragility, resilience and brittleness
@@ -571,6 +584,10 @@ which aggregate individual efforts, as the fundamental unit of analysis.
   of their activities and communications.
   We are looking for mathematically firm principles
   of software supply chain risk management.
+..
+
+..
+  You also need to talk about package version management, which I see as a hole. In Python, it might not be possible to have conflicting versions, but I've seen it in Java and other languages. 
 ..
 
 Acknowledgements
