@@ -205,8 +205,8 @@ often concerned about higher level properties that serve as general proxies
 for whole classes of error or failure.
 
 
-Robustness and fragility, resilience and brittleness
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Robustness and resilience
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We find the distinction between system *robustness* and system *resilience* helpful.
 We define the *robustness* of a system as its invulnerability to threats and hazards,
