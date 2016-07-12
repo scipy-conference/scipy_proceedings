@@ -364,10 +364,10 @@ Data for this analysis comes from two sources. For package and release metadata,
 we used data requested from PyPI, the Python Package Index.
 This includes the publication date and number of
 unique downloads for each software release.
-
 We also downloaded each Python release and inspected it for the presence of a ``setup.py``
 file. We then extracted package dependency information from ``setup.py`` through
 its ``install_requires`` field.
+This data is available in ``.gexf`` format [Benthall2016]_.
 
 Python dependencies are determined through executing Python install scripts.
 Therefore, our method of discovering package dependencies through static
@@ -652,6 +652,8 @@ References
 ----------
 
 .. [Bastian2009] Bastian, Mathieu, Sebastien Heymann, and Mathieu Jacomy. "Gephi: an open source software for exploring and manipulating networks." ICWSM 8 (2009): 361-362.
+
+.. [Benthall2016] Sebastian Benthall. (2016). PyPI Packages Annotated. Zenodo. 10.5281/zenodo.57563
 
 .. [Byrne2013] Byrne, Tony. "Is Plone Really More Secure Than Drupal and Joomla?" Web log post. Real Story Group. N.p., 11 Feb. 2013. Web. 23 June 2016.
 
