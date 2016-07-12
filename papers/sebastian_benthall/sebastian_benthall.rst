@@ -76,12 +76,11 @@ With a small number of analytic assumptions about the propagation of vulnerabili
 and exposure through the software dependency network, we have developed a model
 of ecosystem risk that predicts "hot spots" in need of more investment.
 In this paper, we demonstrate this model using real software dependency data extracted
-from PyPI using Ion Channel [IonChannel2016]_.
+from PyPI using Ion Channel [IonChannel]_.
 
 
 Prior work
 ----------
-
 [Verdon2004]_ outline the diversity of methods used for risk analysis in software design.
 Their emphasis is on architecture-level analysis and its iterative role in software development.
 Security is achieved through managing information flows through architecturally distinct tiers of trust.
@@ -582,7 +581,7 @@ References
 
 .. [Haney2016] David Haney. 2016. "NPM & left-pad: Have We Forgotten How To Program?" ``http://www.haneycodes.net/npm-left-pad-have-we-forgotten-how-to-program/``
 
-.. [IonChannel2016] (n.d.). Retrieved July 12, 2016, from http://ionchannel.io/
+.. [IonChannel] (n.d.). Retrieved July 12, 2016, from http://ionchannel.io/
 
 .. [LaBelle2004] N. LaBelle, E. Wallingford. 2004. Inter-package dependency networks in open-source software.
 
