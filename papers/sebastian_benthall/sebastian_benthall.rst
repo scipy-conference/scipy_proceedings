@@ -76,7 +76,7 @@ With a small number of analytic assumptions about the propagation of vulnerabili
 and exposure through the software dependency network, we have developed a model
 of ecosystem risk that predicts "hot spots" in need of more investment.
 In this paper, we demonstrate this model using real software dependency data extracted
-from PyPI using Ion Channel.
+from PyPI using Ion Channel [IonChannel2016]_.
 
 
 Prior work
@@ -575,6 +575,8 @@ References
 .. [Hagberg2008] Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, “Exploring network structure, dynamics, and function using NetworkX”, in Proceedings of the 7th Python in Science Conference (SciPy2008), Gäel Varoquaux, Travis Vaught, and Jarrod Millman (Eds), (Pasadena, CA USA), pp. 11–15, Aug 2008
 
 .. [Haney2016] David Haney. 2016. "NPM & left-pad: Have We Forgotten How To Program?" ``http://www.haneycodes.net/npm-left-pad-have-we-forgotten-how-to-program/``
+
+.. [IonChannel2016] (n.d.). Retrieved July 12, 2016, from http://ionchannel.io/
 
 .. [LaBelle2004] N. LaBelle, E. Wallingford. 2004. Inter-package dependency networks in open-source software.
 
