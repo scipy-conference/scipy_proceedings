@@ -37,16 +37,16 @@ An Ecological Approach to Software Supply Chain Risk Management
    Our model analytically separates vulnerability and exposure as elements of
    software risk, then makes minimal assumptions about the propogation of these values
    through a software supply chain. 
-   Combined with data collected from package management systems, this model
+   Combined with data collected from package management systems, our model
    indicates "hot spots" in the ecosystem of higher expected risk. 
-   We demonstrate this model using data collected from PyPI.
+   We demonstrate this model using data collected from the Python Package Index (PyPI).
    Our results suggest that Zope and Plone related projects carry the highest risk of
    all PyPI packages because they are widely used even though their core libraries
    are no longer maintained.
 
 .. class:: keywords
 
-   risk management, software dependencies, complex networks
+   risk management, software dependencies, complex networks, software vulnerabilities, software security
 
 Introduction
 ------------
