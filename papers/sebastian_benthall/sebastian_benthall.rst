@@ -196,23 +196,23 @@ and fix the problem without pushing the change upstream (to B).
 Nevertheless, this is a principled analytic way of relating vulnerability, exposure, 
 and software dependency that can be implemented as a heuristic and tested as a hypothesis.
 
-Robustness and fragility, resilience and brittleness
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 The risk analysis framework described above is very general.
 Due to this generality, it suffers from the ambiguity of its terms.
-In particular, "vulnerability" can, dependent on the application of this
-framework, be literal software vulnerabilities such as would be reported
-in a CVE.
-But when we analyze the software ecosystem as a supply chain, we are
+Depending on the application of this framework, "vulnerability" refer to literal 
+software vulnerabilities such as would be reported in a CVE.
+When we analyze the software ecosystem as a supply chain, we are
 often concerned about higher level properties that serve as general proxies
 for whole classes of error or failure.
 
+
+Robustness and fragility, resilience and brittleness
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 We find the distinction between system *robustness* and system *resilience* helpful.
 We define the *robustness* of a system as its invulnerability to threats and hazards,
-as a function of its current state. A system that is not robust is *fragile*.
+as a function of its current state. 
 We define the *resilience* of a system as its capacity to recover quickly from injury
-or failure. A system that is not resilient is *brittle*.
+or failure.
 A mature, well-tested system will be robust.
 A system with an active community ready to respond to the discovered of a new exploit
 will be resilient.
@@ -223,6 +223,8 @@ The more dynamic a software project is, measured as a function of the activity
 of the community and frequency of new commits, the more likely that it will
 be resilient, responding to new threat information. But it is also likely to
 be less robust, as new code might introduce new software flaws.
+We refer to a system that is not robust is *fragile*,
+and a system that is not resilient is *brittle*.
 
 
 Computing risk
