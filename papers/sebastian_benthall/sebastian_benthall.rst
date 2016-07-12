@@ -53,8 +53,8 @@ Introduction
 
 Critical systems that depend on complex software are open
 to many kinds of risk.
-Typical approaches to software security have mitigated this
-risk with static analysis.
+One typical approach to software security that mitigates this
+risk is static analysis.
 We are developing novel methods to manage software risk through
 supply chain intelligence, with a focus on open source software
 ecosystems.
