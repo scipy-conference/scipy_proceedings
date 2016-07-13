@@ -296,7 +296,7 @@ are a good fit, declared when the standard error is below 0.3 for both :math:`\w
 
 .. figure:: experimental_fit.pdf
    :align: center
-   :scale: 60%
+   :scale: 43%
 
    Estimated model parameters. Each point shows the estimated
    :math:`\widehat{\alpha}_c` and :math:`\widehat{\beta}_c` for each subject
