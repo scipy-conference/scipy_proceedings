@@ -122,7 +122,13 @@ Details about the calculation of the likelihood function and its optimization  a
 Experimental Data
 -----------------
 
-The data used in this work consists on the record of a computerized card game played by 46 participants of the experiment. The game consists of 360 trials. Each trial begins with the presentation of a cue during one second. This cue can be a circle, a square or a triangle. The cue indicates the probability of winning on that trial. These probabilities are 20%, 50% and 80%, and are unknown to the participants. The trial continues with the presentation of four cards with values 23, 14, 8 and 3. The participant select one of these cards and wins or loses the amount of points indicated on the selected card, according to the probabilities defined by the cue. The outcome of the trial is indicated by a stimulus that lasts one second. The trial ends with a blank inter-trial stimulus that also last one second. Figure :ref:`FigStimulus` shows a schematic of the stimulus presentation. Participants were instructed to maximize their winnings and minimize their losses. See [Mas12]_ for more details about the experimental design.
+The data used in this work consists on the record of a computerized card game played by 46 participants of the experiment. The game consists of 360 trials. Each trial begins with the presentation of a cue during one second. This cue can be a circle, a square or a triangle. The cue indicates the probability of winning on that trial. These probabilities are 20%, 50% and 80%, and are unknown to the participants. The trial continues with the presentation of four cards with values 23, 14, 8 and 3. The participant select one of these cards and wins or loses the amount of points indicated on the selected card, according to the probabilities defined by the cue. The outcome of the trial is indicated by a stimulus that lasts one second (an arrow pointing up for winning and down for losing). The trial ends with a blank inter-trial stimulus that also last one second. Figure :ref:`FigStimulus` shows a schematic of the stimulus presentation. Participants were instructed to maximize their winnings and minimize their losses. See [Mas12]_ for more details about the experimental design. 
+
+Note that in the context with probability of winning 50% any strategy followed by the subject will produce an expected reward of 0. Thus, there is nothing to learn for this context. For this reason, we do not consider this context in the following analysis. [#]_
+
+.. [#] This condition was included in the original work to do a behavioral
+       study not related to decision making.
+
 
 The study was approved by the University of Manchester research ethics committee. Informed written consent was obtained from all participants.
 
@@ -224,8 +230,8 @@ In this function, after the classes are initialized, the ``run`` method is run o
    Simulation results for an experiment with :math:`\alpha=0.1` and
    :math:`\beta=0.5`. Actions made by the agent when the context has a
    probability of winning of 80% (top) and 20% (bottom). The plots also show a
-   blue and red vertical bar for each trial where the agent won and lose,
-   respectively. :label:`FigSim`
+   vertical bar for each trial indicating if the agent won (blue) or lose
+   (red). :label:`FigSim`
 
 The key step in the estimation of the parameters is the computation of the likelihood function described by equation (:ref:`EqLikelihood`). As explained before, for numerical reasons one works with the negative of the likelihood function of the parameters :math:`-\log(\mathcal{L}(\alpha_c, \beta_c))`. The following code snippet describes the steps used to compute the negative log likelihood function.
 
