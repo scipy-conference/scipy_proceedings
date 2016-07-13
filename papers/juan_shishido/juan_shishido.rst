@@ -36,38 +36,37 @@ demographic attributes in their online profiles.
 Introduction
 ------------
 
-Online dating has become a common and acceptable way of finding mates. Of
-American adults, 41 percent know someone who uses online dating, 29 percent
-know someone who has met a partner this way, and 59 percent believe online
-dating is a good way to meet people [Pew16]_. As of 2015, online dating sites
-or mobile dating apps were used by 27 percent of 18-24 year olds, 22 percent of
-25-34 year olds, 21 percent of 35-44 year olds, 13 percent of 45-54 year olds,
-and 12 percent of 55-64 year olds [Pew16]_. Relative to 2013, usage increased
-across all age groups, except 25-34 year olds. Given the popularity of online
-dating, the way that people self-present online has broad implications for the
-relationships they pursue.
+Online dating has become a common and acceptable way of finding mates. In the
+United States, 41 percent of adults know someone who uses online dating, 29
+percent know someone who has met a partner this way, and 59 percent believe
+online dating is a good way to meet people [Pew16]_. In 2015, online dating
+sites or mobile dating apps were used by 27 percent of 18-24 year olds, 22
+percent of 25-34 year olds, 21 percent of 35-44 year olds, 13 percent of 45-54
+year olds, and 12 percent of 55-64 year olds [Pew16]_. Relative to 2013, usage
+across every age group, except 25-34 year olds, increased. Given the popularity
+of online dating, the way that people self-present online has broad
+implications for the relationships they pursue.
 
 Previous studies suggest that the free-text portion of online dating profiles
 is an important factor (after photographs) for assessing attractiveness
 [Fio08]_. The principle of homophily posits that people tend to associate and
-bond with individuals who are similar to themselves and that this principle
-strongly structures social networks and ties, most prominently by race and
-ethnicity [McP01]_. Perhaps not surprisingly, research suggests that homophily
-extends to online dating, with people seeking mates similar to themselves [Fio05]_.
-However, it remains unclear whether people within particular demographic groups,
-such as sex or ethnicity, self-present in similar ways when searching for a
-mate online.
+bond with individuals who are similar to themselves and that this strongly
+structures social networks, most prominently by race and ethnicity [McP01]_.
+Perhaps not surprisingly, research suggests that homophily extends to online
+dating, with people seeking mates similar to themselves [Fio05]_. However, it
+remains unclear whether people within particular demographic groups, such as
+sex or ethnicity, self-present in similar ways when searching for a mate online.
 
 In this paper, we analyze demographic trends in online self-presentation.
 Specifically, we focus on whether people signal demographic characteristics
 through the way they present themselves online. We extend previous natural
 language processing analyses of online dating [Nag09]_ by using a much larger
 sample [#]_ and by combining NLP with supervised and unsupervised machine
-learning. We leverage multiple approaches including clustering and topic modeling as well as
-feature selection and modeling strategies. By exploring the relationships
-between free-text self-descriptions and demographics, we discover that we can
-predict users' demographic makeup and also find some unexpected insights into
-unintentional demographic signals in free-text writing.
+learning. We leverage multiple approaches including clustering and topic
+modeling as well as feature selection and modeling strategies. By exploring the
+relationships between free-text self-descriptions and demographics, we discover
+that we can predict users' demographic makeup and also find some unexpected
+insights into unintentional signaling of demographic characteristics.
 
 .. [#] [Nag09]_'s uses a sample of 1,000 individuals.
 
@@ -85,15 +84,15 @@ Data
 Description
 ~~~~~~~~~~~
 
-Profile information [#]_ was available for 59,946 OkCupid users that were members as of
-06/26/2012, lived within 25 miles of San Francisco, had been active in the
-previous year, and had at least one photo in their profile [Wet15]_.
-The data set contained free-text responses to 10 essay prompts as well as the
-following user characteristics: age, body type, diet, drinking status, drug
-usage status, education level, ethnicity, height, income, job type, location,
-number of children, sexual orientation, attitude toward pets, religion, sex,
-astrological sign, smoking status, number of language spoken, and relationship
-status.
+Profile information [#]_ was available for 59,946 OkCupid users that were
+members as of 06/26/2012, lived within 25 miles of San Francisco, had been
+active in the previous year, and had at least one photo in their profile
+[Wet15]_. The data set contained free-text responses to 10 essay prompts as
+well as the following user characteristics: age, body type, diet, drinking
+status, drug usage status, education level, ethnicity, height, income, job type,
+location, number of children, sexual orientation, attitude toward pets,
+religion, sex, astrological sign, smoking status, number of language spoken,
+and relationship status.
 
 .. [#] https://github.com/rudeboybert/JSE_OkCupid. Our original data source was
        Everett Wetchler's ``okcupid`` repository (https://github.com/everett-wetchler/okcupid).
@@ -101,35 +100,40 @@ status.
        anonimized" to exclude essays, we switched to Kim's repository. Kim uses
        the original Wetchler data.
 
-This data set was selected because its diverse set of essay prompts and because the
-availability of detailed user characteristics provided ideal means for
-examining the link between online self-presentation and demographics.
-Previous work using this data was primarily exploratory, with some basic text analysis 
-and with logistic regression to predict sex using only height [Kim15]_. 
-The present study extends previous work by analyzing additional features and by
-introducing novel analyses.
+This public [#]_ data set was selected for its diverse set of essay prompts and
+availability of detailed user characteristics, which enabled us to examine the
+connection between online self-presentation and demographics. This data set has
+previously been used to demonstrate the basics of text analysis as well as how
+to fit a simple logistic regression model to predict sex using only height
+[Kim15]_. The present study extends previous work by analyzing additional
+features and by introducing novel analyses.
 
-This data set is public, as authorized by OkCupid president and co-founder
-Christian Rudder [Kim15]_.
+.. [#] As authorized by OkCupid president and co-founder Christian Rudder [Kim15]_.
 
 Preprocessing
 ~~~~~~~~~~~~~
 
 Line break characters and URLs were removed from the essay text. Multiple
 periods, dashes, and white spaces were replaced by single instances. Essays
-were segmented into individual words using spaCy's [Hon16]_ [#]_ default
-tokenizer, which is well suited for online communication as it maintains
-emoticons as discrete tokens, and removes punctuation. Users who wrote less
-than 5 words for a given essay were removed from the analysis.
+were segmented, first into sentences and then into individual terms, using
+spaCy's [Hon16]_ [#]_ default tokenizer, which is well suited for online
+communication as it maintains emoticons as discrete tokens. This allowed us to
+differentiate between the syntactic way that special characters are
+traditionally used and the meaning that's conveyed when they are used in
+particular combinations. Punctuation was removed *after* the text was tokenized
+[#]_. Finally, users who wrote less than five words for a given essay were
+removed from the analysis.
 
-.. [#] We use version 0.101.0. GitHub, 10 May 2016.
+.. [#] We used version 0.101.0. GitHub, 10 May 2016.
        https://github.com/spacy-io/spaCy/releases/tag/0.101.0.
+
+.. [#] Punctuation is needed for the sentence tokenizer and sentences are
+       important for the part-of-speech tagging.       
 
 In order to reduce the number of categories, we combined drug usage status
 levels. Specifically, users who responded "sometimes" or "often" were grouped
 into a "yes" category. Individuals who answered "never" were assigned to the
 "no" group and we created an "unknown" category for users who did not answer.
-
 
 Methods
 -------
@@ -153,7 +157,6 @@ document :math:`d`. The inverse document frequency is the log of the total
 number of documents :math:`N` to the number of documents that contain term
 :math:`t`.
 
-
 Log-Odds-Ratio
 ~~~~~~~~~~~~~~
 
@@ -166,33 +169,31 @@ log-odds-ratio is infinite. Therefore, a constant is added to each frequency
 when calculating the odds. The log of the ratio of the adjusted odds between
 groups can then be used to compare word usage across groups. 
 
-
 Non-negative Matrix Factorization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For document clustering, the document corpus is projected onto a
-:math:`k`-dimensional semantic space, with each axis corresponding to a particular
-topic and each document being represented as a linear combination of those
-topics [Xu_03]_. Methods such as latent semantic indexing require the derived
-latent semantic space to be orthogonal, so this class of methods
-does not work well when corpus topics overlap, as is often the case.
-Conversely, non-negative matrix factorization (NMF) does not require the latent
-semantic space to be orthogonal, and therefore is able to find directions for
-related or overlapping topics.
+:math:`k`-dimensional semantic space, with each axis corresponding to a
+particular topic and each document being represented as a linear combination of
+those topics [Xu_03]_. Methods such as latent semantic indexing require the
+derived latent semantic space to be orthogonal, so this class of methods does
+not work well when corpus topics overlap, as is often the case. Conversely,
+non-negative matrix factorization (NMF) does not require the latent semantic
+space to be orthogonal, and therefore is able to find directions for related or
+overlapping topics.
 
 NMF was applied to each essay of interest using scikit-learn [Ped11]_ [#]_,
 which uses the coordinate descent solver. NMF utilizes document frequency
 counts, so the tf-idf matrix for unigrams, bigrams, and trigrams was calculated,
-while limiting tokens to those appearing in at least 0.5 percent of the documents
-(minimum frequency). NMF was calculated with :math:`k` dimensions, which
-factorized the tf-idf matrix into two matrices, :math:`W` and :math:`H`. The
-dimensions were ``n_samples x k`` and ``k x n_features`` for :math:`W` and
-:math:`H`, respectively. Group descriptions were given by top-ranked terms in
-the columns of :math:`H`. Document membership weights were given by the rows of
-:math:`W`. The maximum value in each row of :math:`W` determined essay group
-membership.
+while limiting tokens to those appearing in at least 0.5 percent of the
+documents. NMF was calculated with :math:`k` dimensions, which factorized the
+tf-idf matrix into two matrices, :math:`W` and :math:`H`. The dimensions were
+``n_samples x k`` and ``k x n_features`` for :math:`W` and :math:`H`,
+respectively. Group descriptions were given by top-ranked terms in the columns
+of :math:`H`. Document membership weights were given by the rows of :math:`W`.
+The maximum value in each row of :math:`W` determined essay group membership.
 
-.. [#] We use version 0.17.1. GitHub, 18 Feb 2016.
+.. [#] We used version 0.17.1. GitHub, 18 Feb 2016.
        https://github.com/scikit-learn/scikit-learn/releases/tag/0.17.1-1.
        This is particularly important for NMF as the coordinate descent solver
        is the default as of 0.17.0. Using the deprecated projected gradient
@@ -216,21 +217,20 @@ used to compare two samples or to assess the performance of classifiers [Oja10]_
 
 There are several advantages to using randomization to make inferences as
 opposed to parametric methods. Permutation tests do not assume normality, do
-not require large samples and "can be applied to all sorts of outcomes,
+not require large samples, and "can be applied to all sorts of outcomes,
 including counts, durations, or ranks" [Ger12]_.
 
 Approach
 --------
 
-Our analyses focus on two demographic dimensions — sex and drug usage — and on
-two essays — "My self summary" and "Favorite books, movies, shows, music, food."
-These essays were selected because they were answered by most users. For
-example, "The most private thing I am willing to admit" prompt was ignored by
-32 percent of users. Other essays in this data set may provide additional
-insight into self-presentation and will be analyzed in the future.
+Our analyses focused on two demographic dimensions — sex and drug usage — and
+on two essays — "My self summary" and "Favorite books, movies, shows, music,
+food." These essays were selected because they were answered by most users.
+"The most private thing I am willing to admit" prompt, for example, was ignored
+by 32 percent of users.
 
 We began by exploring the lexical features of the text as a way to determine
-whether there were differences in writing styles by demographic split. We
+whether there were differences in writing styles by demographic group. We
 considered essay length, the use of profanity and slang terms, and
 part-of-speech usage. 
 
@@ -256,12 +256,12 @@ Finally, we compared the average proportion of adjectives, nouns, and verbs and
 identified the most distinctive terms in each lexical category by sex using the
 smoothed log-odds-ratio, which accounts for variance.
 
-We also analyzed text semantics by transforming the corpus into a tf-idf
-matrix using spaCy's default tokenizer with punctuation removed. We chose to
-include unigrams, bigrams, and trigrams [#]_. Stop words [#]_ and terms that
-appeared in less than 0.5 percent of documents were removed. Stemming, the process of
-of removing word affixes, was not performed. This resulted in a vocabulary size
-of 2,058 for the self-summaries essay and 2,898 for the favorites essay.
+We also analyzed text semantics by transforming the corpus into a tf-idf matrix
+using spaCy's default tokenizer. We chose to include unigrams, bigrams, and
+trigrams [#]_. Stop words [#]_ and terms that appeared in less than 0.5 percent
+of documents were removed. Stemming, the process of removing word affixes, was
+not performed. This resulted in a vocabulary size of 2,058 for the
+self-summaries essay and 2,898 for the favorites essay.
 
 .. [#] Unigrams are single tokens. Bigrams refer to two adjacent and trigrams
        to three adjacent tokens.
@@ -270,43 +270,41 @@ of 2,058 for the self-summaries essay and 2,898 for the favorites essay.
        or "to."
 
 Non-negative matrix factorization was used to identify latent structure in the
-text. This structure was in the form of "topics" or "clusters" which were
-described by particular tokens. In order to determine whether particular
-demographic groups were more likely to write about particular topics, the
-distribution of users across topics was calculated relative to each demographic
-group. In cases where we are able to create superordinate groupings from NMF
-topics — for example, by combining semantically similar clusters — we use the
-log-odds-ratio to find distinctive tokens for the superordinate grouping.
+text. This structure represented "topics" or "clusters" which were described by
+particular tokens. In order to determine whether particular demographic groups
+were more likely to write about certain topics, the relative distribution of
+users over topics was plotted. In cases where we were able to create
+superordinate groupings from NMF topics — for example, by combining
+semantically similar clusters — we used the log-odds-ratio to find their
+distinctive tokens.
 
-Finally, we fit a logistic regression model to predict drug usage status for
-users in the "Unknown" drug usage category.
+Based on our findings, we decided to fit a logistic regression model to predict
+drug usage status.
 
 Results
 -------
 
-In this section, we describe our findings. We start with a discussion of our
-lexical-based analyses before discussing semantic-based results. Lexical-based
-characteristics include essay length, use of profanity and slang terms, as well
-as part-of-speech usage.
+In this section, we describe our lexical- and semantic-based findings.
 
 We first compared lexical-based characteristics on the self-summary text by sex.
-Our sample included 21,321 females and 31,637 males [#]_. On average, females wrote significantly 
-longer essays than males (150 terms compared to 139, :math:`p` < 0.001).
+Our sample included 21,321 females and 31,637 males [#]_. On average, females
+wrote significantly longer essays than males (150 terms compared to 139,
+:math:`p` < 0.001).
 
 .. [#] The difference between the number of users in the data set and the
        number of users in the analysis is due to the fact that we drop users
        that write less than five tokens for a particular essay.
 
-We next compared the proportion of users who utilized profanity and slang. Profanity was
-rarely used in the self-summary essay. Overall, only 6 percent of users
-included profanity in their self-descriptions. The difference was not
-statistically significant by sex (5.8% of females versus 6.1% of males,
+Next, we compared the proportion of users who utilized profanity and slang.
+Profanity was rarely used in the self-summary essay. Overall, only 6 percent of
+users included profane terms in their self-descriptions. The difference by sex
+was not statistically significant (5.8% of females versus 6.1% of males,
 :math:`p` = 0.14).
 
-Not surprisingly, slang was much more prevalent (on a per-user basis) than
-profanity. 56 percent of users used some form of slang in their self-summary
-essays. Females used slang at a significantly lower rate than males (54% versus
-57%, :math:`p` < 0.001).
+Not surprisingly, slang was much more prevalent than profanity. 56 percent of
+users used some form of slang in their self-summary essays and females used
+slang at a significantly lower rate than males (54% versus 57%, :math:`p` <
+0.001).
 
 To compare part-of-speech usage, we first associated part-of-speech tags with
 every token in the self-summary corpus. This resulted in counts by user and
@@ -330,8 +328,8 @@ proportions of part-of-speech terms used is shown in Table :ref:`pos-freq`.
    +-------------------+--------+--------+
 
 Females used significantly more adjectives than males, while males used
-significantly more nouns than females (:math:`p` < 0.001 for both). There was no
-difference in verb usage between the sexes (:math:`p` = 0.91).
+significantly more nouns than females (:math:`p` < 0.001 for both). There was
+no difference in verb usage between the sexes (:math:`p` = 0.91).
 
 In addition to part-of-speech usage, we explored specific terms associated
 with parts-of-speech that were distinctive to a particular sex. We did this
@@ -362,11 +360,11 @@ use more quantity-based and demonstrative adjectives. For nouns, females focus
 on relationship- and experience-based terms while males write about work,
 sports, and technology. (Note that ``'ll`` is the contracted form of "will.")
 
-NMF was then used to provide insights into the underlying topics that users chose to
-describe themselves. Selecting the number of NMF components (topics to which
-users are clustered) is an arbitrary and iterative process. For the
-self-summary essay, we chose 25 components, which resulted in a diverse, but
-manageable, set of topics.
+NMF was then used to provide insight into the underlying topics that users
+chose to use to describe themselves. Selecting the number of NMF components
+(topics to which users are clustered) is an arbitrary and iterative process.
+For the self-summary essay, we chose 25 components, which resulted in a diverse,
+but manageable, set of topics.
 
 Several expected themes emerged. Many users chose to highlight personality
 traits, for example "humor" or "easy-going," while others focused on describing
