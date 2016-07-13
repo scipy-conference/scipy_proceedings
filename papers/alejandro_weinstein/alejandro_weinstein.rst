@@ -103,7 +103,7 @@ the corresponding :math:`\alpha_c` and :math:`\beta_c`. The model is fit by maxi
 .. math::
    :label: EqLikelihood
 
-   \mathcal{L}(\alpha_t, \beta_t) = \prod_{t=1}^T P(a_t, c_t),
+   \mathcal{L}(\alpha_c, \beta_c) = \prod_{t=1}^T P(a_t, c_t),
 
 where the probability :math:`P(a_t, c_t)` is calculated using equations (:ref:`EqUpdate`) and (:ref:`EqSoftmax`). 
 
