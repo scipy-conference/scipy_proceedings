@@ -314,7 +314,7 @@ possible part-of-speech tags, we focused on adjectives, nouns, and verbs. The
 proportions of part-of-speech terms used is shown in Table :ref:`pos-freq`. 
 
 .. table:: Proportion of part-of-speech terms used, by sex. Asterisks (``**``)
-           denote statistically significant differences at the 0.01 level.
+           denote statistically significant differences at the 0.001 level.
            :label:`pos-freq`
 
    +-------------------+--------+--------+
