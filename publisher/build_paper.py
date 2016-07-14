@@ -171,6 +171,10 @@ def tex2pdf_singlepass(out_path):
         out_bib, err = run.communicate()
         if err or b'Error' in out_bib:
             print("Error compiling BiBTeX")
+            print("bibtex error output:")
+            print("=" * 80)
+            print(out_bib)
+            print("=" * 80)
             return out_bib, False
 
     if b"Label(s) may have changed." in out:
