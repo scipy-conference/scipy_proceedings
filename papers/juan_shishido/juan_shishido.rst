@@ -113,9 +113,9 @@ features and by introducing novel analyses.
 Preprocessing
 ~~~~~~~~~~~~~
 
-Line break characters and URLs were removed from the essay text. Multiple
-periods, dashes, and white spaces were replaced by single instances. Essays
-were segmented, first into sentences and then into individual terms, using
+Line break characters, URLs, and HTML tags were removed from the essay text. Multiple
+periods, dashes, and white spaces were replaced by single instances, and all text was converted to lowercase.
+Essays were segmented, first into sentences and then into individual terms, using
 spaCy's [Hon16]_ [#]_ default tokenizer, which is well suited for online
 communication as it maintains emoticons as discrete tokens. This allowed us to
 differentiate between the syntactic way that special characters are
@@ -720,9 +720,8 @@ course at the School of Information at the University of California, Berkeley.
 We would like to thank Marti Hearst for her guidance in the "right" way to do
 NLP and in pushing us to explore new and exciting data sets. We would also like
 to thank David Bamman for fruitful discussions on NLP and ideas for permutation
-testing. We are also thankful for our reviewer's time and effort. Their
-comments and suggestions were invaluable, helping us organize our
-thoughts and analyses.
+testing. We would especially like to thank our reviewers, in particular David Lippa. 
+His comments were invaluable for helping us organize our thoughts and analyses.
 
 .. Customised LaTeX packages
 .. -------------------------
