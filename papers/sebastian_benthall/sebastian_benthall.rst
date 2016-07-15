@@ -688,7 +688,7 @@ References
 
 .. [Hagberg2008] Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, “Exploring network structure, dynamics, and function using NetworkX”, in Proceedings of the 7th Python in Science Conference (SciPy2008), Gäel Varoquaux, Travis Vaught, and Jarrod Millman (Eds), (Pasadena, CA USA), pp. 11–15, Aug 2008
 
-.. [Haney2016] David Haney. 2016. "NPM & left-pad: Have We Forgotten How To Program?" ``http://www.haneycodes.net/npm-left-pad-have-we-forgotten-how-to-program/``
+.. [Haney2016] David Haney. 2016. "NPM & left-pad: Have We Forgotten How To Program?" http://www.haneycodes.net/npm-left-pad-have-we-forgotten-how-to-program/
 
 .. [IonChannel] (n.d.). Retrieved July 12, 2016, from http://ionchannel.io/
 
@@ -712,14 +712,14 @@ References
 
 .. [Verdon2004] D. Verdon and G. McGraw, "Risk analysis in software design," in IEEE Security & Privacy, vol. 2, no. 4, pp. 79-84, July-Aug. 2004.
 
-.. [Walsh2011] Walsh, M. (2011, March 11). Gov 2.0 guide to Plone. Retrieved June 23, 2016, from ``http://www.govfresh.com/2011/03/gov-2-0-guide-to-plone/``
+.. [Walsh2011] Walsh, M. (2011, March 11). Gov 2.0 guide to Plone. Retrieved June 23, 2016, from http://www.govfresh.com/2011/03/gov-2-0-guide-to-plone/
 
 .. [Wagner2000] David A. Wagner. 2000. Static Analysis and Computer Security: New Techniques for Software Assurance. Ph.D. Dissertation. University of California, Berkeley. AAI3002306.
 
-.. [Wiki2016] Plone (software). (2016, May 5). In Wikipedia, The Free Encyclopedia. Retrieved 18:20, June 23, 2016, from ``https://en.wikipedia.org/w/index.php?title=Plone_(software)&oldid=718838043``
+.. [Wiki2016] Plone (software). (2016, May 5). In Wikipedia, The Free Encyclopedia. Retrieved 18:20, June 23, 2016, from https://en.wikipedia.org/w/index.php?title=Plone_(software)&oldid=718838043
 
 .. [Wheeler2014] Wheeler, David A. How to Prevent the next Heartbleed. 2014-10-20.
-      ``http://www.dwheeler.com/essays/heartbleed.html``
+      http://www.dwheeler.com/essays/heartbleed.html
 
 .. [Wheeler2015] D. Wheeler and S. Khakimov. *Open Source Security Census: Open Source Software Projects Needing Security Investments*, Institute for Defense Analysis. 2015
 
