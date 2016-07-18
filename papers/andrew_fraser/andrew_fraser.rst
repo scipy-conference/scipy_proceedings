@@ -148,10 +148,9 @@ Readable
    Writing in Python helps us implement the most important point in
    [wilson2014]_ : "Write programs for people, not computers."
 
-Versatile
-   The Python Standard Library lets easily us connect our scripts to
-   other code, eg, submitting HPC jobs and wrapping libraries written
-   in other languages.
+Versatile The Python Standard Library lets us easily connect our
+   scripts to other code, eg, submitting HPC jobs and wrapping
+   libraries written in other languages.
 
 Community support
    Because of the large number of other users, it is easy to get
@@ -211,7 +210,7 @@ Our analysis is approximately Bayesian and Gaussian. We suppose that:
    :math:`x_k` is the data from the :math:`k^{th}` experiment
 
 #. We have a likelihood function :math:`p_l(x|\theta) = \prod_k
-   p_l(x_k|\theta)` in which the data from different experiments are
+   p_k(x_k|\theta)` in which the data from different experiments are
    conditionally independent given the parameters :math:`\theta`
 
 #. We have a prior on the parameters :math:`p_p(\theta)`
@@ -236,7 +235,7 @@ Since :math:`\theta` does not appear in the denominator on the right
 hand side of Equation (:ref:`eq-bayes`), in a Taylor series expansion
 of the log of the *a posteriori* distribution about :math:`\hat \theta`
 the denominator only contributes a constant added to expansions of the
-log of the likelihood and the log of the prior.
+log of the likelihood and the log of the prior, and
 
 .. math::
    :type: align
@@ -251,7 +250,7 @@ log of the likelihood and the log of the prior.
      \label{eq:taylor}
      &\qquad\equiv C + \frac{1}{2}
      \left( \theta - \hat \theta \right)^T H \left( \theta - \hat \theta \right)
-     + R
+     + R.
 
 Dropping the higher order terms in the remainder :math:`R` in leaves
 the normal or Gaussian approximation
@@ -266,10 +265,9 @@ the normal or Gaussian approximation
 
 With this approximation, experiments constrain the a posteriori
 distribution by the second derivative of their log likelihoods.
-
-Quoting Wikipedia: “If :math:`p(x|\theta)` is twice differentiable with
-respect to :math:`\theta`, and under certain regularity conditions, then
-the Fisher information may also be written as
+Quoting Wikipedia: “If :math:`p(x|\theta)` is twice differentiable
+with respect to :math:`\theta`, and under certain regularity
+conditions, then the Fisher information may also be written as
 
 .. math::
    :label: eq-fisher
@@ -282,7 +280,7 @@ the Fisher information may also be written as
 information is a lower bound on the variance of any unbiased
 estimator”
 
-Our simulated measurements have Gaussian likelihood function in which
+Our simulated measurements have Gaussian likelihood functions in which
 the unknown function only influences the mean.  Thus we calculate the
 second derivative of the log likelihood as follows:
 
@@ -395,8 +393,8 @@ methods.
 The assumption that the experiments are statistically independent
 enables the calculations for each experiment :math:`k` in to be done
 independently. In the next few sections, we describe both the data
-from each experiment and the procedure for calculating :math:`P_i[k]`
-and :math:`q_i[k]`. 
+from each experiment and the procedure for calculating :math:`P_{i,k}`
+and :math:`q_{i,k}`. 
 
 Equation of State
 =================
@@ -459,7 +457,7 @@ coefficients.  We start with a nominal EOS
    2.56\times10^9 \text{Pa} \text{ at one cm}^{3}\text{g}^{-1}
 
 and over a finite domain we approximate it by a cubic spline with
-coefficients :math:`\left\{\tilde \cf[i] \right\}`.  Thus :math:`c`,
+coefficients :math:`\left\{\tilde \cf[j] \right\}`.  Thus :math:`c`,
 the vector of spline coefficients, is the set of unknown parameters
 that we have previously let :math:`\theta` denote.  Then we assign a
 variance to each coefficient:
@@ -467,22 +465,22 @@ variance to each coefficient:
 .. math::
   :label: eq-3
 
-  \sigma^2[i] = \left( \cf[i] \Delta \right)^2.
+  \sigma^2[j] = \left( \cf[j] \Delta \right)^2.
 
 We set :math:`\Delta = 0.05`.  These choices yield:
 
 .. math::
    :type: align
 	  
-   \mu_\eos &\leftrightarrow \left\{\tilde c[i] \right\} \\
-   \Sigma_\eos[i,j] &= \tilde \sigma^2[i] \delta_{i,j}
+   \mu_\eos &\leftrightarrow \left\{\tilde c[j] \right\} \\
+   \Sigma_\eos[i,j] &= \tilde \sigma^2[j] \delta_{i,j}
 
 Thus we have the following notation for splines and a prior
 distribution over :math:`\EOS`.
 
 * :math:`\cf,\fbasis` Vector of coefficients and cubic spline basis
-  functions that define an EOS.  We will use :math:`cf[i]` and
-  :math:`\fbasis[i]` to denote components.
+  functions that define an EOS.  We will use :math:`cf[j]` and
+  :math:`\fbasis[j]` to denote components.
 * :math:`\mu_\eos, \Sigma_\eos` Mean and covariance of prior
   distribution of EOS.  In a context that requires coordinates, we let
   :math:`\mu_\eos = \left( \cf[0], \cf[1], \ldots , \cf[n] \right)^T`.
@@ -597,9 +595,9 @@ arrival times by:
 
 .. math::
 
-   t[j] = \frac{x[j]}{V_{\text{CJ}}(\eos)}.
+   t[i] = \frac{x[i]}{V_{\text{CJ}}(\eos)}.
 
-where :math:`x[j]` are the locations of each sensor measuring arrival
+where :math:`x[i]` are the locations of each sensor measuring arrival
 time.
 
 We let :math:`D` denote the sensitivity of the set of simulated
@@ -608,7 +606,7 @@ state, and write:
 
 .. math::
    
-  D[j,i] \equiv \frac{\partial t[j]}{\partial c[i]}.
+  D[i,j] \equiv \frac{\partial t[i]}{\partial c[j]}.
 
 We use finite differences to estimate :math:`D`.
 
@@ -655,7 +653,7 @@ where:
 * :math:`x(t)` is the position of the projectile along the barrel  
 * :math:`v(t)` is the velocity of the projectile
 * :math:`A` is the cross-sectional area of the barrel
-* :math:`m_{HE}` is the initial mass of high explosives
+* :math:`m_{HE}` is the mass of high explosives
 * :math:`m_{proj}` is the mass of the projectile  
 * :math:`\eos` is the equation of state which relates the pressure to
   the specific volume of the HE products-of-detonation
@@ -679,7 +677,7 @@ and was compared to the experiments at each experimental time stamp.
 .. math::
    :label: gun_sens
 	   
-   D[j,i] = \partiald{\hat{v}(t_{exp}[j])}{\cf[i]}
+   D[i,j] = \partiald{\hat{v}(t_{exp}[i])}{\cf[j]}
 
 where:
 
@@ -760,9 +758,9 @@ influential across the range of displacements.
 .. figure:: scipy2016_figure5.pdf
    :align: center	    
 
-   Fisher Information of the Gun Experiment.  The largest four
+   Fisher Information of the Gun Experiment.  The largest five
    eigenvalues of :math:`\Fisher(\hat c)` appear in the upper plot and
-   the eigenfunctions corresponding to the largest four eigenvalues
+   the eigenfunctions corresponding to the largest five eigenvalues
    appear in the lower plot. :label:`fig-info-gun`
 
 These preliminary investigations of the Fisher information matrix show
