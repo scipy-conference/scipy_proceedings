@@ -148,7 +148,8 @@ Readable
    Writing in Python helps us implement the most important point in
    [wilson2014]_ : "Write programs for people, not computers."
 
-Versatile The Python Standard Library lets us easily connect our
+Versatile
+   The Python Standard Library lets us easily connect our
    scripts to other code, eg, submitting HPC jobs and wrapping
    libraries written in other languages.
 
@@ -172,7 +173,7 @@ invariance and in the kinds of constraints.  [F_UNCLE]_ uses
 constrained optimization and physical models with many degrees of
 freedom to span a large portion of the allowable function space while
 strictly enforcing constraints.  The analysis determines the function
-that maximizes the a posteriori probability (the MAP estimate) using
+that maximizes the *a posteriori* probability (the MAP estimate) using
 simulations to match :math:`K` data-sets.  We characterize how each
 experiment constrains our uncertainty about the function in terms of
 its *Fisher information*.
@@ -183,8 +184,8 @@ Explosive (HE).  The EOS relates the pressure to the specific volume
 of the products-of-detonation mixture.  We follow traditional practice
 (eg, [ficket2000]_) and constrain the function to be positive,
 monotonically decreasing and convex.  To date we have incorporated two
-examples of experiments: The detonation velocity of a *rate stick* of
-HE and the velocity of a projectile driven by HE. The behavior of both
+examples of experiments: the detonation velocity of a *rate stick* of
+HE, and the velocity of a projectile driven by HE. The behavior of both
 these experiments depend sensitively on the EOS function.
 
 The following sections describe the choices made in modeling the EOS
@@ -308,7 +309,7 @@ independent of :math:`X` and :math:`\EV_X \left(x - \mu(\theta)
 Iterative Optimization
 ----------------------
 
-We maximize the *log* of the a posteriori probability as the objective
+We maximize the *log* of the *a posteriori* probability as the objective
 function which is equivalent to :ref:`eq-map`.  Dropping terms that
 do not depend on :math:`\theta`, we write the cost function as follows:
 
@@ -404,7 +405,7 @@ For our surrogate problem, we say that the thing we want to estimate,
 :math:`\theta`, represents the equation of state (EOS) of a gas.  We
 also say that the state of the gas in experiments always lies on an
 isentrope [3]_ and consequently the only relevant data is the pressure as a
-function of specific volume (ml/gram) of the gas.  For physical
+function of specific volume (:math:`\text{cm}^3`/gram) of the gas.  For physical
 plausibility, we constrain the function to have the following
 properties:
 
@@ -479,7 +480,7 @@ Thus we have the following notation for splines and a prior
 distribution over :math:`\EOS`.
 
 * :math:`\cf,\fbasis` Vector of coefficients and cubic spline basis
-  functions that define an EOS.  We will use :math:`cf[j]` and
+  functions that define an EOS.  We will use :math:`\cf[j]` and
   :math:`\fbasis[j]` to denote components.
 * :math:`\mu_\eos, \Sigma_\eos` Mean and covariance of prior
   distribution of EOS.  In a context that requires coordinates, we let
@@ -498,7 +499,7 @@ and a scale :math:`s_k`, with:
 
 .. math::
 
-   b_k(v) = \frac{s_k F}{v_k^3} e^{- \frac{(v-v_k)^2}{2w_k^2}}
+   b_k(v) = \frac{s_k F}{v_k^3} e^{- \dfrac{(v-v_k)^2}{2w_k^2}}
 
 Throughout the remainder of this paper, the *true* EOS that we have
 used to generate pseudo-experimental data is:
@@ -518,7 +519,8 @@ and :math:`s_1 = -.3`.
 .. figure:: scipy2016_figure1eos.pdf
 
    The prior and nominal *true* equation of state function. The two
-   models differ most at a specific volume of 0.4 g cm :math:`^{-1}`
+   models differ most at a specific volume of 0.4
+   :math:`\text{cm}^{3}\text{g}^{-1}`
    
 
 A Rate Stick
@@ -621,8 +623,8 @@ the expanding products-of-detonation of HE.  Newton's equation
    
    F = ma
 
-determines the velocity time series.  The pressure from the EOS times
-the area of the barrel cross section is the force.
+determines the velocity time series.  The product of the pressure from
+the EOS and the area of the barrel cross section is the force.
 
 .. figure:: gun.pdf
 
@@ -691,18 +693,18 @@ Numerical Results
 The algorithm was applied to the sets of simulation results and pseudo
 experimental data for both the rate-stick and gun models. Figure
 :ref:`fig-opt-stick` shows the improved agreement between the
-simulated and *experimental* arrival times after the algorithm adjusts the
-equation of state. Similar results are shown in Figure
-:ref:`fig-fve-gun` , where the significant error in velocity history
-at early times is reduced by an order of magnitude with the optimized
-EOS model.
+simulated and *experimental* arrival times for the rate-stick after
+the algorithm adjusts the equation of state. Similar results are shown
+in Figure :ref:`fig-fve-gun` for the gun experiment, where the
+significant error in velocity history at early times is reduced by an
+order of magnitude with the optimized EOS model.
 
 .. figure:: scipy2016_figure3.pdf
    :align: center   
 
    Fitting an isentrope to rate stick data.  Green
    +'s denote measured shock arrival time at various positions.  The blue
-   line represents the shock velocity calculated from the nominal EOS,
+   line represents the shock velocity calculated from the prior EOS,
    and the black line is the result of the optimization algorithm described
    in the text. :label:`fig-opt-stick`
 
