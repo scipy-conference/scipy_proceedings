@@ -23,9 +23,9 @@
 
 :bibliography: mybib
 
----------------------------------------------------------------
-``cesium``: Open-Source Inference Platform for Time-Series Data
----------------------------------------------------------------
+----------------------------------------------------------
+``cesium``: Open-Source Platform for Time-Series Inference
+----------------------------------------------------------
 
 .. class:: abstract
 
@@ -769,8 +769,6 @@ the same analysis can be performed in a browser with no setup or coding required
 
 Web front end
 -------------
-*TODO Replace with new styling once color scheme is finalized*
-
 Here we briefly demonstrate how the above analysis could be conducted using only
 the web front end. Note that the user interface presented here is a preliminary version
 and is undergoing frequent updates and additions. The basic workflow follows the
