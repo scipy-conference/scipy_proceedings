@@ -732,12 +732,15 @@ The eigenvalues and eigenvectors of the Fisher information matrix of
 the rate-stick experiment are shown in Figure
 :ref:`fig-info-stick`. Only the CJ point on the EOS influences the
 forecast data, :math:`\mu(c)`.  Thus only one degree of freedom in the
-model influences the likelihood and Fisher Information matrix,
-:math:`\Fisher`, should have a rank of one. Figure
-:ref:`fig-info-stick` illustrates characteristics of the optimization
-procedure and :math:`\Fisher(\hat c)`.  The largest eigenvalue
-:math:`\Fisher(\hat c)` is :math:`10^{4}` larger than the next
-largest. We expected the rank to be one to within numerical precision.
+model should influence the likelihood and the Fisher Information
+matrix, :math:`\Fisher`, should have a rank of one. In Figure
+:ref:`fig-info-stick`, the largest eigenvalue is :math:`10^15` larger
+than the next largest eigenvalue, showing that the solution is
+dominated by a single eigenvector and that :math:`\Fisher` effectively
+had a rank of one. The eigenvector corresponding to this eigenvalue is
+most influential about the specific volume corresponding to the CJ
+state.
+
 
 .. figure:: scipy2016_figure2.pdf
    :align: center
