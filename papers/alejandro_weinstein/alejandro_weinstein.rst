@@ -225,7 +225,7 @@ In this function, after the classes are initialized, the ``run`` method is run o
 
 .. figure:: softmax_experiment.pdf
    :align: center
-   :scale: 50%
+   :scale: 47%
 
    Simulation results for an experiment with :math:`\alpha=0.1` and
    :math:`\beta=0.5`. Actions made by the agent when the context has a
