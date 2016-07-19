@@ -749,7 +749,8 @@ state.
    Fisher Information of the Rate Stick Experiment. The four nonzero
    eigenvalues of :math:`\Fisher(\hat c)` appear in the upper plot and
    the eigenfunction corresponding to those eigenvalues appears in the
-   lower plot. :label:`fig-info-stick`
+   lower plot. The second eigenvalue is zero to machine
+   precision. :label:`fig-info-stick`
    
 
 The Fisher information matrix of the gun experiment is more complex as
