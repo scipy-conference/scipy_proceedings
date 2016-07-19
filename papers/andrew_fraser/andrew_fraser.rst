@@ -442,7 +442,7 @@ is beyond the scope of this paper.)
 Constraining :math:`\eos` to be positive and to be a convex function
 of :math:`\vol` is sufficient to ensure that it is also monotonic.
 Although we are working on a definition of a probability measure on a
-sets of functions that obeys those onstraints and is further
+sets of functions that obeys those constraints and is further
 constrained by :math:`\frac{\left| \eos(\vol) -
 \mu_\eos(\vol)\right|}{\mu_\eos(\vol)} \leq \Delta`, for now, we
 characterize the prior as Gaussian.  As we search for the mean of the
@@ -728,29 +728,23 @@ experimental data constrain the spline coefficients. This matrix can
 be better understood through a spectral decomposition to show the
 magnitude of the eigenvalues and the eigenvector behavior.
 
-The eigenvalues and eigenvectors of the Fisher information matrix of
-the rate-stick experiment are shown in Figure
-:ref:`fig-info-stick`. Only the CJ point on the EOS influences the
-forecast data, :math:`\mu(c)`.  Thus only one degree of freedom in the
-model should influence the likelihood and the Fisher Information
-matrix, :math:`\Fisher`, should have a rank of one. In Figure
-:ref:`fig-info-stick`, the largest eigenvalue is :math:`10^15` larger
-than the next largest eigenvalue, showing that the solution is
-dominated by a single eigenvector and that :math:`\Fisher` effectively
-had a rank of one. The eigenvector corresponding to this eigenvalue is
-most influential about the specific volume corresponding to the CJ
-state.
+Figure :ref:`fig-info-stick` illustrates the spectral decomposition of
+the Fisher information matrix for the rate-stick experiment.  To
+machine precision, there is only one nonzero eigenvalue.  We expect
+that because only the CJ point on the EOS influences the forecast
+data, :math:`\mu(c)`.  The eigenvector corresponding to this
+eigenvalue is most influential about the specific volume corresponding
+to the CJ state.
 
 
 .. figure:: scipy2016_figure2.pdf
    :align: center
    :class: w	   
 
-   Fisher Information of the Rate Stick Experiment. The four nonzero
-   eigenvalues of :math:`\Fisher(\hat c)` appear in the upper plot and
-   the eigenfunction corresponding to those eigenvalues appears in the
-   lower plot. The second eigenvalue is zero to machine
-   precision. :label:`fig-info-stick`
+   Fisher Information of the Rate Stick Experiment. The largest two
+   eigenvalues of :math:`\Fisher(\hat c)` appear in the upper plot,
+   and the eigenfunction corresponding to the largest eigenvalue
+   appears in the lower plot.  :label:`fig-info-stick`
    
 
 The Fisher information matrix of the gun experiment is more complex as
