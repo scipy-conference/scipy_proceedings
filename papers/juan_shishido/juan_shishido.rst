@@ -358,7 +358,9 @@ using the log-odds-ratio. Table :ref:`pos-terms` summarizes this, below.
 Distinctly-female adjectives are mostly descriptive. Males, on the other hand,
 use more quantity-based and demonstrative adjectives. For nouns, females focus
 on relationship- and experience-based terms while males write about work,
-sports, and technology. (Note that ``'ll`` is the contracted form of "will.")
+sports, and technology. (Note that ``m`` corresponds to the contracted form of
+"am" when "Im" (no apostrophe) is tokenized and that ``'ll`` is the contracted
+form of "will" in terms such as "I'll.")
 
 NMF was then used to provide insight into the underlying topics that users
 chose to use to describe themselves. Selecting the number of NMF components
@@ -471,11 +473,12 @@ topics were distinct to particular demographic groups.
 Figure :ref:`self-summary-sex` shows the distribution over topics by sex for the
 self-summary essay. The highest proportion of users, of either sex, were in the
 "about me" topic. This is not surprising given the essay prompt. For most
-topics, females and males were mostly evenly distributed. One notable
-exception was with the "enthusiastic" topic, to which females belonged at
-almost twice the rate of males. Users in this group used modifiers such as,
-"love," "really," and "absolutely" regardless of the activities they were
-describing.
+topics, females and males were mostly evenly distributed. For example, the
+proportion of females who emphasized their careers or travel or other topics
+was similar to the proportion of males who did the same. One exception was with
+the "enthusiastic" topic, to which females belonged at almost twice the rate of
+males. Users in this group used modifiers such as, "love," "really," and
+"absolutely" regardless of the activities they were describing.
 
 .. figure:: self-summary-sex.png
 
@@ -585,12 +588,11 @@ topics and a selection of their highest weighted tokens.
 The topics for this essay were less distinctive than the topics for the
 self-summaries. In some cases, genres (or media) overlapped. For example, the
 "TV-comedies-0" group included "The Walking Dead," which is a drama. There was
-also overlap between groups. This might suggest that the number of NMF
-components was too high, but the granularity these topics provided was used for
-further analyses. We created superordinate groupings from the topics from which
-we extracted distinctive tokens for particular demographic groups, showing the
-approach's flexibility. Figure :ref:`favorites-sex` shows the distribution over
-topics, by sex.
+also overlap between groups. Still, we decided to keep 25 components. The
+granularity these topics provided was used for further analyses. We created
+superordinate groupings from the topics from which we extracted distinctive
+tokens for particular demographic groups, showing the approach's flexibility.
+Figure :ref:`favorites-sex` shows the distribution over topics, by sex.
 
 .. figure:: favorites-sex.png
 
@@ -708,8 +710,8 @@ characteristics, such as ethnicity and education level, future work will focus
 on describing the ways in which other demographic groups tend to describe
 themselves. We would also like to explore recent advancements in language
 modeling techniques, such as word embeddings. Most importantly, future work
-will involve exploring methods that might help us better identify deception. If
-the data ever becomes available, we would like to explore how the *way* that
+will involve exploring methods to help us better identify deception. If the
+data ever becomes available, we would like to explore how the *way* that
 people choose to self-present affects the interactions they have.
 
 Acknowledgements
