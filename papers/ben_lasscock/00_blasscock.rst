@@ -302,7 +302,7 @@ best hyper-plane to separate the two classes of data by maximizing the
 width of the separating margin, subject to the constraint that the
 classes are either side of the separating margin, Fig. :ref:`svc`
 shows a schematic of the algorithm. An important feature of the SVC is
-that it is robust to misclassification close to the descision
+that it is robust to misclassification close to the decision
 boundary.  Physically these are curves where the amplitude of the
 radiation is becoming small and then changing sign. What we believe to
 be more important than the overall rate of misclassification of the
