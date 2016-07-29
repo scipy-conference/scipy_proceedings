@@ -35,13 +35,13 @@ An Ecological Approach to Software Supply Chain Risk Management
    We demonstrate a technique that evaluates an entire ecosystem of software
    projects, taking into account the dependencey structure between packages.
    Our model analytically separates vulnerability and exposure as elements of
-   software risk, then makes minimal assumptions about the propogation of these values
+   software risk, then makes minimal assumptions about the propagation of these values
    through a software supply chain. 
    Combined with data collected from package management systems, our model
    indicates "hot spots" in the ecosystem of higher expected risk. 
    We demonstrate this model using data collected from the Python Package Index (PyPI).
    Our results suggest that Zope and Plone related projects carry the highest risk of
-   all PyPI packages because they are widely used even though their core libraries
+   all PyPI packages because they are widely used and their core libraries
    are no longer maintained.
 
 .. class:: keywords
@@ -62,7 +62,7 @@ how vulnerabilities in open source software can be a major security risk. [Wheel
 The recent failure of React, Babel, and many other npm packages
 due to the removal of one small dependency, ``left-pad``,
 shows how dependencies can be a risk factor for production software. [Haney2016]_ 
-These high profile examples, quite different from each other,
+These high profile examples, though quite different from each other,
 illustrate how software risk traverses the supply chain.
 As dependencies become more numerous and interlinked, the 
 complexity of the system increases, as does the scope of risk management.
@@ -104,7 +104,8 @@ They then apply this metric to Debian packages and have successfully identified
 projects needing investment. This work is available on-line as the CII Census project [CensusProject]_.
 
 While software security studies general focus on the possibility of technical failure of
-software systems, open source software exposes an addition risk of community failure.
+software systems, open source software exposes an additional risk of community failure.
+Development of a software project may cease before it reaches a state of usability and maturity.
 [Schweik2012]_ is a comprehensive study of the success and failure of open source
 projects based on large-scale analysis of SourceForge data, as well as survey and
 interview data. They define a successful project as one that performs a useful function
@@ -119,12 +120,12 @@ and specifically relative code churn (changes in lines of code) between dependen
 as a cause of system defects in Windows Server 2003.
 
 We build on these approaches by considering security as a function of
-the total software supply chain.
+the entire software supply chain.
 This supply chain resembles a complex ecosystem more than a simple 'chain' or stack.
-We draw inspiration from a risk management strategy approached used in another kind
+We draw inspiration from a risk management strategy approaches used in another kind
 of complex system, namely disaster risk reduction and
 climate change adaptation research developed by Cardona [Cardona2012]_ and widely used
-by the World Bank's Global Facility for Disaster Risk Reduction, and others. [Yamin2013]_
+by the World Bank's Global Facility for Disaster Risk Reduction among others  [Yamin2013]_.
 
 This framework evaluates the expected cost of low-probability events by distinguishing three factors
 of risk: hazards, exposure, and vulnerabilities.
@@ -157,7 +158,7 @@ Software dependency and project risk
 
 Some previous studies of software risk [Wheeler2015]_ have suffered from 
 the ambiguity of how 'risk' is used in a software development context.
-Security research is often contextualizes problems within a specific
+Security research often contextualizes problems within a specific
 threat model.
 But for some applications, such as identifying software projects
 in need of additional investment in order to mitigate risk from
@@ -179,8 +180,8 @@ understanding of a project's risk.
 Dependencies complicate the way we think about vulnerability and exposure. 
 A software project doesn't just include the code in its own repository; 
 it also includes the code of all of its dependencies, often tied to a specific version. 
-Furthermore, a project does not need to be installed directly to be exposed--it can be installed 
-as a dependency of another project. 
+Furthermore, a package does not need to be installed directly to be exposed--it can be installed 
+as a dependency of another project, or as a transitive dependency.
 Based on these observations, we can articulate two heuristics for use of 
 dependency topology in assessing project risk:
 
@@ -190,6 +191,7 @@ dependency topology in assessing project risk:
 For example, if a web application (A) uses a generic web application framework (B), and that
 web application is installed and recieving web traffic, then there is an instance
 of the web framework installed and recieving web traffic.
+The framework is exposed through the web application.
 If there is a vulnerability in the web application framework (such as a susceptibility
 to SQL injection attacks), then the web application will inherit that vulnerability.
 There are exceptions to these rules.
@@ -199,8 +201,8 @@ Nevertheless, this is a principled analytic way of relating vulnerability, expos
 and software dependency that can be implemented as a heuristic and tested as a hypothesis.
 
 The risk analysis framework described above is very general.
-Due to this generality, it suffers from the ambiguity of its terms.
-Depending on the application of this framework, "vulnerability" refer to literal 
+Due to this generality, the framework suffers from the ambiguity of its terms.
+Depending on the application of this framework, "vulnerability" refers to literal 
 software vulnerabilities such as would be reported in a CVE.
 When we analyze the software ecosystem as a supply chain, we are
 often concerned about higher level properties that serve as general proxies
@@ -219,17 +221,17 @@ A mature, well-tested system will be robust.
 A system with an active community ready to respond to the discovered of a new exploit
 will be resilient.
 
-A system can be robust, or resilient, or both, or neither.
+A system can be robust, or resilient, both, or neither.
 Robustness and resilience can be in tension with each other.
 For example, the more churn a software project is, measured as a function of the activity
 of the community and frequency of new commits, the more likely that it will
 be resilient, responding to new threat information.
 But it is also likely to be less robust, as new code might introduce new software flaws.
 [Nagappan2005]_ and [Nagappan2007]_ find that relative code churn between dependent packages
-is a significant predictor of system defect.
+is a significant predictor of system defects.
 
-We refer to a system that is not robust is *fragile*,
-and a system that is not resilient is *brittle*.
+We refer to a system that is not robust as *fragile*,
+and a system that is not resilient as *brittle*.
 Fragility and brittleness are two distinct and general ways in which a component
 of a software ecosystem might be vulnerable.
 
@@ -253,17 +255,16 @@ software is more widely used and exposed to threats.
 This metadata is provided by PyPI for each package directly.
 
 We will define vulnerability specifically in terms of software
-fragility, and make the assumption that software that has had
-more releases is less fragile.
+fragility, and make the assumption that frequently released software is less fragile.
 While it is true that sometimes a new software release can introduce
-new flaws into software, we assume that on average more releases
+new flaws into software, we assume that, on average, more releases
 mean a more active community, more robust development processes,
 and greater maturity in the project lifecycle.
 Specifically for the purpose of this study we will define
 
 .. math::
 
-   fragility(p) = \frac{1}{text{number\_of\_releases}(p)}
+   fragility(p) = \frac{1}{number\_of\_releases(p)}
 
 In future work, we will revise and validate these metrics.
 
@@ -283,10 +284,8 @@ representation of package dependencies and NetworkX. [Hagberg2008]_
 It imports data as a graph, where packages are nodes, directed edges indicate
 package dependencies, and relevant metadata are precomputed properties of the nodes.
 In this code, we use a precomputed 'fragility' metric as the vulnerability
-variable, and the number of downloads of each package as the exposure variable.
-(See the section *Computing fragility and exposure* for an explanation of how
-fragility was calculated in our empirical results.)
-Running this code imports the data from a ``.gexf`` file, computes the ecosystem risk
+variable, and the number of unique downloads of each package as the exposure variable.
+Running this code imports the data from a Graph Exchange XML Format (GEXF) file, computes the ecosystem risk
 of each package, and exports the data to a different file.
 
 .. code-block:: python
@@ -401,8 +400,8 @@ file. We then extracted package dependency information from ``setup.py`` through
 its ``install_requires`` field.
 This data is available in ``.gexf`` format [Benthall2016]_.
 
-Python dependencies are determined through executing Python install scripts.
-Therefore, our method of discovering package dependencies through static
+Python dependencies are determined through execution of Python install scripts.
+Therefore, our method of discovering package dependencies via static
 analysis of the source code does not capture all cases.
 
 For each package, we consider dependencies to be the recursive union of all requirements
@@ -424,7 +423,7 @@ Our data collection process created a network with :math:`66,536` nodes and :mat
 Over half of the nodes, :math:`33,573`, have no edge. This isolates them from the
 dependency network.
 Of the remaining :math:`32,963`, :math:`31,473` belong to a single giant connected component.
-This preponderance of one component is a consistent feature of complex networks more generally.
+Complex networks often exhibit the preponderance of a single connected component like this.
 
 
 Statistical properties of the software dependency network
@@ -571,7 +570,8 @@ This has lead Wikipedia [Wiki2016]_ to assert that Plone's security record is ca
 adoption by government and non-government organizations. 
 [Byrne2013]_ has challenged this conventional wisdom, noting that the high number of recorded vulnerabilites may 
 just as likely be due to the much greater popularity of the other CMS's. 
-That Drupal, Wordpress, and Joomla are all written in PHP is another confounding factor.
+That Drupal, Wordpress, and Joomla are all written in PHP is another confounding factor,
+as PHP may be a language prone to security problems.
 Drupal, Joomla, and Wordpress are beyond the scope of our study, which is concerned only 
 with the PyPI ecosystem.
 In our risk analysis, Plone scores poorly compared to other Python web frameworks such as Django and Flask. 
@@ -605,28 +605,12 @@ a chain, but a complex network with a distinctive topology.
 We approach risk analysis as a science that employs static analysis techniques
 but also looks more broadly at developer communities and the rate and flow 
 of their activities and communications.
-This paper proposes a novel framework of predicting risk in software infrastructure
+This paper proposes a framework of predicting risk in software infrastructure
 based on static analysis of package dependencies, metadata about downloads and
 release schedules, and minimal assumptions about
 the distribution of exposure and vulnerability in software.
 We have demonstrated the implications of this framework using the PyPI package
 ecosystem.
-
-There are many ways to improve our data proprocessing and operational logic.
-Rather than extracting dependencies from ``setup.py`` using a regular expression,
-it would be far better to run the setup scripts and extract requirements from
-the resulting Python objects.
-We have also in this work considered the entire software ecosystem compressed
-into a single static graph.
-In fact the software ecosystem is always changing.
-Packages often specify which versions of software they depend on;
-taking this into account complicates our model of vulnerability
-propagetion
-Package dependencies and metadata variables that proxy for exposure and
-vulnerabilty also change over time.
-We intend to develop a dynamic version of this risk-management algorithm,
-capable of live updating of risk metrics based on events in PyPI,
-in future work.
 
 A major shortcoming of our analysis is the lack of validation against
 a gold standard data of *ground truth* regarding software risk.
@@ -639,6 +623,23 @@ It is an open question to what extent this framework is useful for assessing
 software robustness (absence of software errors that can be exploited, for
 example) and software resilience (capacity of software development communities
 to respond to known exploits).
+
+In future work we will improve our data proprocessing and operational logic.
+In this paper we determined dependencies using a regular expression to
+statically analyze each package's ``setup.py`` file.
+As requirements are in fact determined upon installation by executing Python code,
+we can get more accurate data by running the setup scripts and extracting requirements
+from the resulting Python objects.
+
+We have also in this work considered the entire software ecosystem compressed
+into a single static graph.
+In fact the software ecosystem is always changing.
+Packages often specify which versions of software they depend on;
+taking this into account complicates our model of vulnerability propagation.
+Package dependencies and metadata variables that proxy for exposure and
+vulnerabilty also change over time.
+We intend to develop a dynamic version of this risk-management algorithm
+which updates risk metrics based on live events in PyPI.
 
 The research presented here deals exclusively with data about technical organization.
 However, as we expand into research into how software communities and their interactions
