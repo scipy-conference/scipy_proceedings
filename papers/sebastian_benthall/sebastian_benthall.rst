@@ -624,22 +624,24 @@ software robustness (absence of software errors that can be exploited, for
 example) and software resilience (capacity of software development communities
 to respond to known exploits).
 
-In future work we will improve our data proprocessing and operational logic.
-In this paper we determined dependencies using a regular expression to
-statically analyze each package's ``setup.py`` file.
-As requirements are in fact determined upon installation by executing Python code,
-we can get more accurate data by running the setup scripts and extracting requirements
-from the resulting Python objects.
+There is also room to improve our data preprocessing in future work.
+For the work in this paper, Python dependencies were discovered using
+crude static analysis. 
+We used a regular expression to parse each package's ``setup.py`` file.
+Python requirements are in fact determined upon package installation by executing Python code.
+We can get more accurate data by running the setup scripts and extracting 
+requirements from the resulting Python objects.
 
-We have also in this work considered the entire software ecosystem compressed
-into a single static graph.
-In fact the software ecosystem is always changing.
-Packages often specify which versions of software they depend on;
-taking this into account complicates our model of vulnerability propagation.
-Package dependencies and metadata variables that proxy for exposure and
-vulnerabilty also change over time.
-We intend to develop a dynamic version of this risk-management algorithm
-which updates risk metrics based on live events in PyPI.
+We simplified the dependency graph by considering any requirement relation
+between any versions of two packages to be sufficient for an edge in the
+final graph.
+In reality, package requirements configurations often refer to specific
+versions or version ranges in their dependencies.
+In order to take this into account, we will need to reexamine our
+risk model and its assumptions about vulnerability and exposure propagation.
+A fully dynamic version of our risk model would also take into account
+how proxy variables such as number of unique downloads change between
+versions.
 
 The research presented here deals exclusively with data about technical organization.
 However, as we expand into research into how software communities and their interactions
