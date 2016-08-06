@@ -318,13 +318,19 @@ Therefore, the solution for that can be as simple as "Global OpenMP Lock" (GOL) 
 
 Conclusion
 ----------
-This paper described the issues of multi-threaded programs and libraries such as GIL, over-subscription, and threading composability.
-These issues affect performance of Python libraries and frameworks such as NumPy, SciPy, and Numba.
-The suggested solution is to use a common threading runtime such as Intel |R| TBB which limits the number of threads in order to prevent over-subscription and coordinates parallel execution of independent program modules.
-A Python module for Intel |R| TBB was implemented to substitute Python's ThreadPool implementation and switch Intel |R| MKL into TBB-based mode.
-The examples mentioned in the paper show promising results, where thanks to nested parallelism and TBB threading mode, the best performance was achieved.
+This paper justifies the necessity of broader usage of nested parallelism for multi-core systems.
+It defines the threading composability and discusses the issues of Python programs and libraries, which use multi-core parallelism, such as GIL and over-subscription.
+These issues affect performance of the Python programs that use libraries like NumPy, SciPy, Dask, and Numba.
+
+The suggested solution is to use a common threading runtime library such as Intel |R| TBB which limits the number of threads in order to prevent over-subscription and coordinates parallel execution of independent program modules.
+A Python module for Intel |R| TBB was introduced to substitute Python's ThreadPool implementation and switch Intel |R| MKL into TBB-based threading mode, which enables threading composability for mentioned Python libraries.
+
+The examples mentioned in the paper show promising results, where thanks to nested parallelism and threading composability, the best performance was achieved.
+In particular, QR decomposition example is faster by almost 50% comparing to the baseline implementation that uses parallelism only on the innermost level.
+This result was confirmed by the case study of a recommendation system where almost 40% improvement was achieved.
+And finally, Intel |R| TBB was proved as a mature multi-threading system by replacing threading runtime implemented in Numba and achieving more than 3 times speedup on several problem sizes.
+
 Intel |R| TBB along with the Python module are available in open-source [TBB]_ for different platforms and architectures while Intel |R| Distribution for Python accelerated with Intel |R| MKL is available for free as a stand-alone package [IntelPy]_ and on anaconda.org/intel channel.
-Therefore, everyone is welcome to try it out and provide feedback, bug reports, and feature requests.
 
 
 References
