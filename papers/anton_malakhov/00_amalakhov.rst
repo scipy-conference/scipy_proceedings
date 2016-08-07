@@ -45,7 +45,8 @@ However, when it comes to numeric computations, most of the time is spent in nat
 .. [GIL] David Beazley, "Understanding the Python GIL", PyCON Python Conference, Atlanta, Georgia, 2010.
          http://www.dabeaz.com/python/UnderstandingGIL.pdf
 
-Scaling parallel programs is not an easy thing. There are two fundamental laws which mathematically describe and predict scalability of a program: Amdahl's Law and Gustafson-Barsis' Law [AGlaws]_.
+Scaling parallel programs is not an easy thing.
+There are two fundamental laws which mathematically describe and predict scalability of a program: Amdahl's Law and Gustafson-Barsis' Law [AGlaws]_.
 According to Amdahl's Law, speedup is limited by the serial portion of the work, which effectively puts a limit on scalability of parallel processing for a fixed-size job.
 Python is especially vulnerable to this because it makes the serial part of the same code much slower compared to implementations  in some other languages due to its deeply dynamic and interpretative nature.
 Moreover, the GIL makes things serial often where they potentially can be parallel, further adding to the serial portion of a program.
@@ -259,6 +260,9 @@ Nevertheless, even without nested parallelism and advanced features of Intel |R|
     Black Scholes benchmark running with Numba on 32 threads. :label:`numbatbb`
 
 Figure :ref:`numbatbb` shows how original Numba and TBB-based versions perform with the Black Scholes [BSform]_ benchmark implemented with Numba.
+Whether the problem size is small or big, they work at almost the same speed.
+However, TBB-based Numba performs up to 3 or 4 times faster for the problem sizes in between.
+
 The following code is a simplified version of this benchmark that gives an idea how to write parallel code using Numba:
 
 .. [BSform] Fischer Black, Myron Scholes, "The Pricing of Options and Corporate Liabilities", Journal of Political Economy 81 (3) 1973: 637-654. doi:10.1086/260062
@@ -318,14 +322,14 @@ Therefore, the solution for that can be as simple as "Global OpenMP Lock" (GOL) 
 
 Conclusion
 ----------
-This paper justifies the necessity of broader usage of nested parallelism for multi-core systems.
+This paper substantiates the necessity of broader usage of nested parallelism for multi-core systems.
 It defines the threading composability and discusses the issues of Python programs and libraries, which use multi-core parallelism, such as GIL and over-subscription.
 These issues affect performance of the Python programs that use libraries like NumPy, SciPy, Dask, and Numba.
 
 The suggested solution is to use a common threading runtime library such as Intel |R| TBB which limits the number of threads in order to prevent over-subscription and coordinates parallel execution of independent program modules.
 A Python module for Intel |R| TBB was introduced to substitute Python's ThreadPool implementation and switch Intel |R| MKL into TBB-based threading mode, which enables threading composability for mentioned Python libraries.
 
-The examples mentioned in the paper show promising results, where thanks to nested parallelism and threading composability, the best performance was achieved.
+The examples referred in the paper show promising results, where thanks to nested parallelism and threading composability, the best performance was achieved.
 In particular, QR decomposition example is faster by almost 50% comparing to the baseline implementation that uses parallelism only on the innermost level.
 This result was confirmed by the case study of a recommendation system where almost 40% improvement was achieved.
 And finally, Intel |R| TBB was proved as a mature multi-threading system by replacing threading runtime implemented in Numba and achieving more than 3 times speedup on several problem sizes.
