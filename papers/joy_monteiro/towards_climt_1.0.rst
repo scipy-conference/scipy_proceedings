@@ -488,6 +488,11 @@ to address in the future include:
 With these additions, we hope CliMT will be the framework of choice for a wide audience, from
 undergraduates to scientists to explore questions in climate science.
 
+Acknowledgements
+----------------
+
+This work is supported by funding from the Swedish e-Science Research Centre (``http://www.e-science.se/``).
+
 .. .. figure:: figure1.png
    :scale: 20%
    :figclass: bht
