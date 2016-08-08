@@ -201,7 +201,7 @@ The last command demonstrates how Intel |R| TBB can be enabled as the orchestrat
 The TBB module runs the benchmark in the context of :code:`with TBB.Monkey():` which replaces the standard Python *ThreadPool* class used by Dask and also switches MKL into TBB mode.
 In this mode, NumPy executes in more than twice the time compared to the default NumPy run.
 This happens because TBB-based threading in MKL is new and not as optimized as the OpenMP-based MKL threading implementation.
-However despite that fact, Dask in TBB mode shows the best performance for this benchmark, roughly 50% improvement compared to default NumPy.
+However despite that fact, Dask in TBB mode shows the best performance for this benchmark, 46% improvement compared to default NumPy.
 This happens because the Dask version exposes more parallelism to the system without over-subscription overhead, hiding latencies of serial regions and fork-join synchronization in MKL functions.
 
 .. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
@@ -322,16 +322,16 @@ Therefore, the solution for that can be as simple as "Global OpenMP Lock" (GOL) 
 
 Conclusion
 ----------
-This paper substantiates the necessity of broader usage of nested parallelism for multi-core systems.
-It defines the threading composability and discusses the issues of Python programs and libraries, which use multi-core parallelism, such as GIL and over-subscription.
-These issues affect performance of the Python programs that use libraries like NumPy, SciPy, Dask, and Numba.
+This paper starts with substantiating the necessity of broader usage of nested parallelism for multi-core systems.
+Then, it defines threading composability and discusses the issues of Python programs and libraries which use nested parallelism with multi-core systems, such as GIL and over-subscription.
+These issues affect performance of Python programs that use libraries like NumPy, SciPy, Dask, and Numba.
 
 The suggested solution is to use a common threading runtime library such as Intel |R| TBB which limits the number of threads in order to prevent over-subscription and coordinates parallel execution of independent program modules.
 A Python module for Intel |R| TBB was introduced to substitute Python's ThreadPool implementation and switch Intel |R| MKL into TBB-based threading mode, which enables threading composability for mentioned Python libraries.
 
-The examples referred in the paper show promising results, where thanks to nested parallelism and threading composability, the best performance was achieved.
-In particular, QR decomposition example is faster by almost 50% comparing to the baseline implementation that uses parallelism only on the innermost level.
-This result was confirmed by the case study of a recommendation system where almost 40% improvement was achieved.
+The examples referred in the paper show promising results, where, thanks to nested parallelism and threading composability, the best performance was achieved.
+In particular, QR decomposition example is faster by 46% comparing to the baseline implementation that uses parallelism only on the innermost level.
+This result was confirmed by the case study of a recommendation system where 59% increase was achieved for the similar base.
 And finally, Intel |R| TBB was proved as a mature multi-threading system by replacing threading runtime implemented in Numba and achieving more than 3 times speedup on several problem sizes.
 
 Intel |R| TBB along with the Python module are available in open-source [TBB]_ for different platforms and architectures while Intel |R| Distribution for Python accelerated with Intel |R| MKL is available for free as a stand-alone package [IntelPy]_ and on anaconda.org/intel channel.
