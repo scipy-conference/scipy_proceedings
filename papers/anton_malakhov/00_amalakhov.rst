@@ -255,10 +255,6 @@ Thus, our strategy was to put it on top of the common Intel |R| TBB runtime as w
 The original version of Numba's multi-threading runtime was replaced with a very basic and naive implementation based on TBB tasks.
 Nevertheless, even without nested parallelism and advanced features of Intel |R| TBB such as work partitioning algorithms, it resulted in improved performance.
 
-.. figure:: numba_tbb.png
-
-    Black Scholes benchmark running with Numba on 32 threads. :label:`numbatbb`
-
 Figure :ref:`numbatbb` shows how original Numba and TBB-based versions perform with the Black Scholes [BSform]_ benchmark implemented with Numba.
 Whether the problem size is small or big, they work at almost the same speed.
 However, TBB-based Numba performs up to 3 or 4 times faster for the problem sizes in between.
@@ -294,8 +290,9 @@ Here is the scalar function :code:`BlackScholes`, consisting of many elementary 
 Additionally, :code:`target='parallel'` specifies to run the computation using multiple threads.
 The real benchmark also computes the put price using :code:`numba.guvectorize`, uses an approximated function instead of :code:`erf()` for better SIMD optimization, optimizes the sequence of math operations for speed, and repeats the calculation multiple times.
 
-.. [OptNote] https://software.intel.com/en-us/articles/optimization-notice
-.. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
+.. figure:: numba_tbb.png
+
+    Black Scholes benchmark running with Numba on 32 threads. :label:`numbatbb`
 
 
 Limitations and Future Work
@@ -310,6 +307,9 @@ This reduces performance for small workloads and on systems with small numbers o
 
 As was discussed above, the TBB-based implementation of Intel |R| MKL threading layer is yet in its infancy and is therefore suboptimal.
 However, all these problems can be eliminated as more users will become interested in solving their composability issues and Intel |R| MKL and the TBB module are further developed.
+
+.. [OptNote] https://software.intel.com/en-us/articles/optimization-notice
+.. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
 
 Another limitation is that Intel |R| TBB only coordinates threads inside a single process while the most popular approach to parallelism in Python is multi-processing.
 Intel |R| TBB survives in an oversubscribed environment better than OpenMP because it does not rely on the particular number of threads participating in a parallel computation at any given moment, thus the threads preempted by the OS do not prevent the computation from making an overall progress.
