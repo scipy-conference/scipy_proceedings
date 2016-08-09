@@ -2,6 +2,7 @@
 :email: Anton.Malakhov@intel.com
 :institution: Intel Corporation
 :year: 2016
+:video: http://www.youtube.com/watch?v=kfQcWez2URE
 
 -----------------------------------------------
 Composable Multi-Threading for Python Libraries
@@ -18,7 +19,7 @@ Composable Multi-Threading for Python Libraries
 
 .. class:: keywords
 
-   Multi-threading, GIL, Over-subscription, Parallel Computations, Parallelism, Multi-core, Dask, Joblib, NumPy, SciPy, Numba
+   Multi-threading, Over-subscription, Parallel Computations, Nested Parallelism, Multi-core, Python, GIL, Dask, Joblib, NumPy, SciPy, Numba, TBB
 
 .. [NumPy] NumPy, http://www.numpy.org/
 .. [SciPy] SciPy, https://www.scipy.org/
