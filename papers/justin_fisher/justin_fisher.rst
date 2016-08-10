@@ -24,9 +24,9 @@ In the remainder of this section, eight goals are stated that any integration of
 
 1.1. Object-Oriented Goals.
 ===========================
-	**O1.  Familiar Python objects in familiar class hierarchies.** A good integration of Python OOP and NumPy should make it easy to take code that began as pure Python OOP and to expose the attributes of arrayed Python objects for use in fast NumPy functions.  In particular, object arrays should contain familiar Python objects, situated in familiar class hierarchies.  For example, if A is a list, tuple, or array of ordinary Python objects, a simple command like ``OA = ObjArray( A )`` should suffice to create an array of those objects with easy access to the other features listed below. 
+	**O1.  Familiar Python objects in familiar class hierarchies.** A good integration of Python OOP and NumPy should make it easy to take code that began as pure Python OOP and to expose the attributes of arrayed Python objects for use in fast NumPy functions.  In particular, we'd want object arrays to contain familiar Python objects, situated in familiar class hierarchies.  For example, if A is a list, tuple, or array of ordinary Python objects, a simple command like ``OA = ObjArray( A )`` should suffice to create an array of those objects with easy access to the other features listed below. 
 
-	**O2.  Flexible object size and diverse methods.**  Different objects in the same array may contain data of different sizes (e.g., strings of different lengths), and some may possess attributes or methods that others lack.  This flexibility is a distinguishing feature of Python's OOP and is appreciated by many programmers.  NumPy itself does not generally allow this sort of flexibility, but a good integration of OOP with NumPy should. 
+	**O2.  Flexible object size.**  Different objects in the same class may contain data of different sizes (e.g., strings of different lengths), and some may possess attributes or methods that others lack.  This flexibility is a distinguishing feature of Python's OOP and is appreciated by many programmers.  NumPy itself does not generally allow this sort of flexibility, but our integration of OOP with NumPy should. 
 
 	**O3.  Attributes of arrayed objects should be collectively accessible by familiar dot idiom.**  If ``Adam`` is an individual object, then all Python programmers know that ``Adam.height`` probably returns Adam's height attribute.  We should support parallel behavior for arrays of objects.  For example, if ``people`` is an array of person objects, then ``people.height`` should return an array the same shape as ``people``, containing each person's ``.height`` attribute. 
 
@@ -135,12 +135,10 @@ Coupling an object's attribute to a buffer creates a property with the same name
 
 Coupled buffers experience no slowdown at all for NumPy operations on the buffers, which are usually the operations for which speed is most crucial (goal N1).  Coupling may cause slight slowdown accessing or changing attributes from the object side though, because these operations are redirected to the relevant portion of the buffer.  This slowdown might be significant by NumPy standards, but not by the standards usually applicable for Python code that operates on objects one at a time.  
 
-4.2.  Coupling Pandas Dataframes and SQL-Style Queries.
+4.2.  Coupling Pandas Dataframes.
 =================================
 
-Pandas' ``dataframe`` is a subclass of NumPy's ``ndarray``, so slices of dataframes are themselves NumPy arrays, and hence can be coupled to ObjArray attributes, e.g. using ``OA.couple_to_array('x', df.x)``.  Hence, Pandas users can straight-forwardly employ ObjArray too.  (Future versions of ObjArray may further streamline this integration, e.g., allowing coupling of multiple attributes at once, or even coupling all attributes labeled in a dataframe.)  Coupled dataframes can allow Pandas users to write full-fledged OOP code, and to have its execution automatically produce the appropriate changes in a dataframe, while changes in the dataframe similarly automatically effectively produce changes in object attributes.  This also allows Pandas users to employ objects that participate in class hierarchies, that possess some (non-coupled) attributes of arbitrary size, and that possess other (coupled) attributes that are situated in a dataframe for fast NumPy or Pandas operations. 
-
-This form of coupling can also allow for SQL-style queries of attributes of objects in an ObjArray, using Crouching Alchemy Hidden Pandas to query the coupled dataframe. [Atr05]_ This would allow one to deal with arrayed objects as Python objects, and/or to access their attributes as NumPy arrays or Pandas Dataframes, and/or to query them SQL-style, with all synchronization between these different views of the same underlying data being done automatically behind the scenes.
+Pandas' ``dataframe`` is a subclass of NumPy's ``ndarray``, so slices of dataframes are themselves NumPy arrays, and hence can be coupled to ObjArray attributes, e.g. using ``OA.couple_to_array('x', df.x)``.  Hence, Pandas users can straight-forwardly employ ObjArray too.  (Future versions of ObjArray may further streamline this integration, e.g., allowing coupling of multiple attributes at once, or even coupling all attributes labeled in a dataframe.)  Coupled dataframes can allow Pandas users to write full-fledged OOP code, and to have its execution automatically produce the appropriate changes in a dataframe, while changes in the dataframe similarly automatically effectively produce changes in object attributes.  This also allows Pandas users to employ objects that participate in class hierarchies, that possess some (non-coupled) attributes of arbitrary size, and that possess other (coupled) attributes that are situated in a dataframe for fast NumPy or Pandas operations.
 
 5.  Benchmarking.
 -----------------
@@ -244,6 +242,3 @@ References
 .. [Atr03] Wes McKinney. Data Structures for Statistical Computing in Python, Proceedings of the 9th Python in Science Conference, 51-56 (2010)
 
 .. [Atr04] Hoyer, S., Hamman, J. (In preparation). Xarray: N-D labeled arrays and datasets in Python. Journal of Open Research Software.
-
-.. [Atr05] Bayer, M.  Crouching Alchemist Hidden Pandas (CALCHIPAN), https://bitbucket.org/zzzeek/calchipan/ [Online; accessed 2016-08-07].
-           
