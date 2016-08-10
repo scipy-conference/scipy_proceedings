@@ -1,0 +1,5 @@
+figures/Tc__P0__T0_373K_pressure.txt
+figures/volume.csv
+figures/*.pdf
+figures/.ipynb_checkpoints
+figures/*.dot
