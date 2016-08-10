@@ -10,14 +10,14 @@
      },
      "year": "2016",
      "editor": [
-        "Stéfan van der Walt",
-        "Jarrod Millman"
+        "Sebastian Benthall",
+        "Scott Rostrup"
      ],
-     "volume": 3,
+     "volume": 1,
      "number": 1,
      "isbn": "value",
      "location": "Austin, Texas",
-     "dates": "June 28 - July 3",
+     "dates": "July 11 - July 17",
      "copyright": {
        "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
        "proceedings": ["The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
@@ -27,26 +27,26 @@
   },
   "organization": [
 
-        {
+      {
             "name": "Conference Chairs",
             "members": [
-                {"name": "Jarrod Millman",
-                 "org": "UC Berkeley"},
-                {"name": "Travis Oliphant",
-                 "org": "Enthought, Inc."}
+                {"name": "Aric Hagberg",
+                 "org": "Los Alamos National Laboratory"},
+                {"name": "Prabhu Ramanchandran",
+                 "org": "Enthought, Inc. & IIT Bombay"}
                 ]
         },
   
         {
             "name": "Program Chairs",
             "members": [
-                {"name": "Stéfan van der Walt",
-                 "org": "Applied Mathematics, Stellenbosch University"},
-                {"name": "Someone else",
-                 "org": "Some company"}
+                {"name": "Serge Rey",
+                 "org": "Arizona State University"},
+                {"name": "Nelle Varoquaux",
+                 "org": "Mines ParisTech, Institut Curie, INSERM"}
                 ]
         }
-    ],
+  ],
 
   "sponsored_students": [
       {
