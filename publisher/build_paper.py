@@ -107,26 +107,6 @@ def rst2tex(in_path, out_path):
 
 def tex2pdf(out_path):
 
-    # Sometimes Latex want us to rebuild because labels have changed.
-    # We will try at most 5 times.
-    for i in range(5):
-        out, retry = tex2pdf_singlepass(out_path)
-        if not retry:
-            # Building succeeded or failed outright
-            break
-    return out
-
-
-def tex2pdf_singlepass(out_path):
-    """
-    Returns
-    -------
-    out : str
-        LaTeX output.
-    retry : bool
-        Whether another round of building is needed.
-    """
-
     import subprocess
     command_line = 'pdflatex -halt-on-error paper.tex'
 
@@ -134,7 +114,6 @@ def tex2pdf_singlepass(out_path):
     #    from asking for any missing files via stdin prompts,
     #    which mess up our build process.
     dummy = tempfile.TemporaryFile()
-
     run = subprocess.Popen(command_line, shell=True,
             stdin=dummy,
             stdout=subprocess.PIPE,
@@ -143,17 +122,18 @@ def tex2pdf_singlepass(out_path):
             )
     out, err = run.communicate()
 
-    if b"Fatal" in out or run.returncode:
+    if "Fatal" in out.decode() or run.returncode:
         print("PDFLaTeX error output:")
         print("=" * 80)
-        print(out)
+        print(out.decode())
         print("=" * 80)
         if err:
-            print(err)
+            print(err.decode())
             print("=" * 80)
 
         # Errors, exit early
-        return out, False
+        return out
+
 
     # Compile BiBTeX if available
     stats_file = os.path.join(out_path, 'paper_stats.json')
@@ -168,15 +148,25 @@ def tex2pdf_singlepass(out_path):
                 stderr=subprocess.PIPE,
                 cwd=out_path,
                 )
-        out_bib, err = run.communicate()
-        if err or b'Error' in out_bib:
+        out, err = run.communicate()
+
+        if err:
             print("Error compiling BiBTeX")
-            return out_bib, False
+            return out
 
-    if b"Label(s) may have changed." in out:
-        return out, True
 
-    return out, False
+    # -- returncode always 0, have to check output for error
+    if not run.returncode:
+        # -- pdflatex has to run twice to actually work
+        run = subprocess.Popen(command_line, shell=True,
+                stdin=dummy,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                cwd=out_path,
+                )
+        out, err = run.communicate()
+
+    return out
 
 
 def page_count(pdflatex_stdout, paper_dir):
@@ -187,13 +177,13 @@ def page_count(pdflatex_stdout, paper_dir):
         print("*** WARNING: PDFLaTeX failed to generate output.")
         return
 
-    regexp = re.compile(b'Output written on paper.pdf \((\d+) pages')
+    regexp = re.compile('Output written on paper.pdf \((\d+) pages')
     cfgname = os.path.join(paper_dir, 'paper_stats.json')
 
     d = options.cfg2dict(cfgname)
 
     for line in pdflatex_stdout.splitlines():
-        m = regexp.match(line)
+        m = regexp.match(line.decode())
         if m:
             pages = m.groups()[0]
             d.update({'pages': int(pages)})
