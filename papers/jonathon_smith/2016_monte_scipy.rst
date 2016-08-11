@@ -5,6 +5,7 @@
 :institution: Jet Propulsion Laboratory,
               California Institute of Technology / NASA
 :corresponding:
+:copyright_holder: California Institute of Technology. Government sponsorship acknowledged.
 
 --------------------------------------
 MONTE Python for Deep Space Navigation
