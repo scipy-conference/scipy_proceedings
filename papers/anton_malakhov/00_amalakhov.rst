@@ -2,7 +2,8 @@
 :email: Anton.Malakhov@intel.com
 :institution: Intel Corporation
 :year: 2016
-:video: http://www.youtube.com/watch?v=kfQcWez2URE
+
+:video: https://youtu.be/kfQcWez2URE
 
 -----------------------------------------------
 Composable Multi-Threading for Python Libraries
