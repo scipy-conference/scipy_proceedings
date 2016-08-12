@@ -5,6 +5,8 @@
 :author: Jordan W. Suchow
 :institution: University of California, Berkeley
 
+:video: https://youtu.be/S55EFUOu4O0
+
 :bibliography: mybib
 
 ========================================================================

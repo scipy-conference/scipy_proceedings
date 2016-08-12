@@ -3,6 +3,8 @@
 :institution: School of Mechanical, Industrial, and Manufacturing Engineering, Oregon State University
 :corresponding:
 
+:video: https://youtu.be/Ke3Ip25C4pY
+
 ----------------------------------------------------------------------------
 PyTeCK: a Python-based automatic testing package for chemical kinetic models
 ----------------------------------------------------------------------------

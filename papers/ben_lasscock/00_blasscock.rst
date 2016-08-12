@@ -2,6 +2,8 @@
 :email: blasscoc@gmail.com
 :institution: Geotrace Technologies
 
+:video: https://youtu.be/uT0Nkf0BA7o
+
 -------------------------------------
 Generalized earthquake classification
 -------------------------------------
