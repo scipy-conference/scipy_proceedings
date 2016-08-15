@@ -6,7 +6,8 @@
 
     {{for student in sponsored_students}}
       <li>{{html_quote(student['name']) | html}},
-      <em>{{html_quote(student['org']) | html}},
+      <em>{{html_quote(student['org']) | html}}
+          {{if student['location']}}, {{endif}}
           {{html_quote(student['location']) | html}}</em>
       </li>
     {{endfor}}

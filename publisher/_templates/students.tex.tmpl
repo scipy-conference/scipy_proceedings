@@ -14,7 +14,7 @@
 {{for student in sponsored_students}}
       \item[] \normalsize\textsc{%
 {{student['name']}}}, \small{%
-{{student['org']}}, {{student['location']}}}
+{{student['org']}}{{if student['location']}}, {{endif}}{{student['location']}}}
 {{endfor}}
 
 \end{itemize}
