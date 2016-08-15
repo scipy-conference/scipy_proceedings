@@ -38,21 +38,206 @@
         },
   
         {
-            "name": "Program Chairs",
+            "name": "Program",
             "members": [
                 {"name": "Serge Rey",
                  "org": "Arizona State University"},
                 {"name": "Nelle Varoquaux",
                  "org": "Mines ParisTech, Institut Curie, INSERM"}
                 ]
-        }
+        },
+  
+        {
+            "name": "Communications",
+            "members": [
+                {"name": "Julie Krugler Hollek",
+                 "org": "Twitter"}
+                ]
+        },
+  
+        {
+            "name": "Birds of a Feather",
+            "members": [
+                {"name": "Aashish Chaudhary",
+                 "org": "Kitware"},
+                {"name": "Mike Hearne",
+                 "org": "USGS"}
+                ]
+        },
+  
+        {
+            "name": "Proceedings",
+            "members": [
+                {"name": "Sebastian Benthall",
+                 "org": "University of Califronia - Berkeley"},
+                {"name": "Scott Rostrup",
+                 "org": "AI and Robotics Startup"}
+                ]
+        },
+  
+        {
+            "name": "Financial Aid",
+            "members": [
+                {"name": "Scott Collis",
+                 "org": "Argonne National Laboratory"},
+                {"name": "Eric Ma",
+                 "org": "MIT"}
+                ]
+        },
+  
+        {
+            "name": "Tutorials",
+            "members": [
+                {"name": "Ben Root",
+                 "org": "Atmospheric and Environmental Research, Inc."},
+                {"name": "Justin Vincent",
+                 "org": "Google"}
+                ]
+        },
+  
+        {
+            "name": "Sprints",
+            "members": [
+                {"name": "Andrew Collette",
+                 "org": "Enthough Inc."},
+                {"name": "Dharhas Pothina",
+                 "org": "US Army Corps of Engineers, ERDC"}
+                ]
+        },
+  
+        {
+            "name": "Diversity",
+            "members": [
+                {"name": "Julie Krugler Hollek",
+                 "org": "Twitter"}
+                ]
+        },
+  
+        {
+            "name": "Activities",
+            "members": [
+                {"name": "Chris Niemira",
+                 "org": "AOL"},
+                {"name": "Randy Paffenroth",
+                 "org": "Worcester Polytechnic Institute"
+                }
+                ]
+        },
+  
+        {
+            "name": "Sponsors",
+            "members": [
+                {"name": "Jill Cowan",
+                 "org": "Enthought"}
+                ]
+        },
+  
+        {
+            "name": "Financial",
+            "members": [
+                {"name": "Bill Cowan",
+                 "org": "Enthought"},
+                {"name": "Jodi Havranek",
+                 "org": "Enthought"}
+                ]
+        },
+
+      {
+          "name" : "Logistics",
+          "members" : [
+              {"name": "Jill Cowan",
+               "org": "Enthought"},
+              {"name": "Leah Jones",
+               "org": "Enthought"}
+              ]
+      }
   ],
 
   "sponsored_students": [
       {
-          "name": "First name",
-          "org": "University",
-          "location": "Where from"
+          "name": "Filipe Fernandes",
+          "org": "SECOORA",
+          "location": ""
+      },
+      {
+          "name": "Isuru Fernando",
+          "org": "University of Moratuwa",
+          "location": ""
+      },
+      {
+          "name": "Gilbert Forsyth",
+          "org": "George Washington University",
+          "location": ""
+      },
+      {
+          "name": "Kestrel Gorlick",
+          "org": "Northern Arizona University",
+          "location": ""
+      },
+      {
+          "name": "Deborah Hanus",
+          "org": "Harvard University",
+          "location": ""
+      },
+      {
+          "name": "Matar Haller",
+          "org": "UC Berkeley",
+          "location": ""
+      },
+      {
+          "name": "Noelle Held",
+          "org": "MIT-WHOI Joint Program in Oceanography",
+          "location": ""
+      },
+      {
+          "name": "Amit Kumar",
+          "org": "SymPy",
+          "location": ""
+      },
+      {
+          "name": "Nelson Liu",
+          "org": "University of Washington",
+          "location": ""
+      },
+      {
+          "name": "Taylor Oshan",
+          "org": "Arizona State University/Python Spatial Analysis Library",
+          "location": ""
+      },
+      {
+          "name": "Thomas Robitaille",
+          "org": "Freelance",
+          "location": ""
+      },
+      {
+          "name": "Sartaj Singh",
+          "org": "SymPy",
+          "location": ""
+      },
+      {
+          "name": "Aman Singh",
+          "org": "Scipy",
+          "location": ""
+      },
+      {
+          "name": "Lois Smith",
+          "org": "University of Michigan",
+          "location": ""
+      },
+      {
+          "name": "Elizabeth Wickes",
+          "org": "University of Illinois at Urbana-Champaign",
+          "location": ""
+      },
+      {
+          "name": "Pamela Wu",
+          "org": "NYU Medical Center",
+          "location": ""
+      },
+      {
+          "name": "V. Zachary",
+          "org": "Golkhou ASU",
+          "location": ""
       }
   ]
 }
