@@ -72,14 +72,6 @@ class Translator(LaTeXTranslator):
     def depart_author(self, node):
         pass
 
-    def visit_author(self, node):
-        self.author_names.append(self.encode(node.astext()))
-        self.author_institution_map[self.author_names[-1]] = []
-        raise nodes.SkipNode
-
-    def depart_author(self, node):
-        pass
-
     def visit_classifier(self, node):
         pass
 
