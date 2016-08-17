@@ -250,6 +250,7 @@ class Translator(LaTeXTranslator):
                                'author': self.author_names,
                                'author_email': self.author_emails,
                                'author_institution': self.author_institutions,
+                               'author_institution_map' : self.author_institution_map,
                                'abstract': self.abstract_text,
                                'keywords': self.keywords,
                                'copyright_holder': copyright_holder,
