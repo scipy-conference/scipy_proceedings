@@ -7,6 +7,8 @@
 :corresponding:
 :copyright_holder: California Institute of Technology. Government sponsorship acknowledged.
 
+:video: https://youtu.be/E3RhKKpm4TM
+
 --------------------------------------
 MONTE Python for Deep Space Navigation
 --------------------------------------

@@ -21,6 +21,8 @@
 :institution: kit.plummer@ionchannel.io
 :institution: Ion Channel, ionchannel.io
 
+:video: https://youtu.be/6UnuPhTPdnM
+
 
 ---------------------------------------------------------------
 An Ecological Approach to Software Supply Chain Risk Management

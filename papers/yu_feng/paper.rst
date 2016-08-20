@@ -9,6 +9,7 @@
 :email: nhand@berkeley.edu
 :institution: Berkeley Center for Cosmological Physics, University of California, Berkeley CA 94720
 
+:video: https://youtu.be/CfrRDI71vTc
 
 :bibliography: mybib
 

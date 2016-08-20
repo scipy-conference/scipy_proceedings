@@ -10,6 +10,8 @@
 :email: tl@es.aau.dk
 :institution: Faculty of Engineering and Science, Department of Electronic Systems, Aalborg University, 9220 Aalborg, Denmark
 
+.. :video: Poster Session 
+
 :bibliography: references
 
 --------------------------------------------------------------------------------------------

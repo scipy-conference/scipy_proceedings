@@ -50,6 +50,8 @@
 :institution: Arizona State University, Tempe, Arizona, USA
 :corresponding:
 
+:video: https://youtu.be/zVQGFysYDew
+
 :bibliography: ``mdanalysis``
 
 

@@ -13,6 +13,8 @@
 :institution: Helen Wills Neuroscience Institute, University of California, Berkeley
 :equal-contributor:
 
+:video: https://youtu.be/dtgmMj8W298
+
 ----------------------------------------------------------
 Tell Me Something I Don't Know: Analyzing OkCupid Profiles
 ----------------------------------------------------------
