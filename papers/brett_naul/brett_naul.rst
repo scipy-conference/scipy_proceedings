@@ -21,6 +21,8 @@
 :institution: Lawrence Berkeley National Laboratory
 :institution: University of California, Berkeley
 
+:video: https://youtu.be/ZgHGCfwExw0
+
 :bibliography: mybib
 
 ----------------------------------------------------------

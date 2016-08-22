@@ -23,6 +23,8 @@
 :email: oliver.beckstein@asu.edu
 :institution: Arizona State University, Tempe, Arizona, USA
 
+:video: https://youtu.be/enLHDZoch0U
+
 -----------------------------------------------------------
 datreant: persistent, Pythonic trees for heterogeneous data
 -----------------------------------------------------------

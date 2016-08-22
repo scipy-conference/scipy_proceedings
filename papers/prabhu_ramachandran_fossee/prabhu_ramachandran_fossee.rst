@@ -4,6 +4,8 @@
 :institution: IIT Bombay, Mumbai, India
 :corresponding:
 
+:video: https://youtu.be/6UnuPhTPdnM
+
 
 --------------------------------------------------------------------
 Spreading the Adoption of Python in India: the FOSSEE Python Project

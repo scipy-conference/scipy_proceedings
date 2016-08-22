@@ -8,6 +8,8 @@
 :email: saandrews@lanl.gov
 :institution: XCP-8, Los Alamos National Laboratory
 
+.. :video: Poster Session
+
 .. latex::
 
     \newcommand{\dmudc}{\left(\frac{\partial \mu(c)}{\partial c} \right)}

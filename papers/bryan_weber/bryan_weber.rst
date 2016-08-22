@@ -6,6 +6,8 @@
 :email: chih-jen.sung@uconn.edu
 :institution: Mechanical Engineering Department, University of Connecticut, Storrs, CT 06269
 
+:video: https://youtu.be/tsjqkIAh8cw
+
 :bibliography: SciPy-2016
 
 ---------------------------------------------------------------------
