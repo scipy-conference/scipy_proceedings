@@ -23,7 +23,6 @@
 			  Systems, Section of Signal and Information Processing, Aalborg
 			  University, 9220 Aalborg, Denmark
 
-.. :video: Poster Session
 
 :bibliography: references
 

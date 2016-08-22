@@ -17,7 +17,6 @@
 :email: mfuentes018@gmail.com
 :institution: Universidad de Valparaiso, Chile
 
-.. :video: Poster Session
 
 --------------------------------------------------
 Fitting Human Decision Making Models using Python

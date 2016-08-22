@@ -7,7 +7,6 @@
 :email: rodrigo@misu.su.se
 :institution: MISU, Stockholm University
 
-.. :video: Poster Session
 
 :bibliography: climt
 

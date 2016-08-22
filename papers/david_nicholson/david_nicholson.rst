@@ -2,7 +2,6 @@
 :email: dnicho4@emory.edu
 :institution: Emory University, graduate program in Neuroscience, Biology department
 
-.. :video: Poster Session
 
 ---------------------------------------------------------------------------------
 Comparison of machine learning methods applied to birdsong element classification

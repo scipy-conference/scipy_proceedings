@@ -8,7 +8,6 @@
 :email: saandrews@lanl.gov
 :institution: XCP-8, Los Alamos National Laboratory
 
-.. :video: Poster Session
 
 .. latex::
 
