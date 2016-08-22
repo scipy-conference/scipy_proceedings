@@ -150,6 +150,47 @@
               {"name": "Leah Jones",
                "org": "Enthought"}
               ]
+      },
+      {
+          "name" : "Proceedings Reviewers",
+          "members" : [
+              {"name" : "Tom Aldcroft"},
+              {"name" : "Ankur Ankan"},
+              {"name" : "Dani Arribas-Bel"},
+              {"name" : "Kyle Barbary"},
+              {"name" : "Sebastian Benthall"},
+              {"name" : "Matthias Bussonier"},
+              {"name" : "Chris Calloway"},
+              {"name" : "Ondrej Certík"},
+              {"name" : "Dav Clark"},
+              {"name" : "Matthew Collier"},
+              {"name" : "Jean Connelly"},
+              {"name" : "Ben Darwin"},
+              {"name" : "Juan Duque"},
+              {"name" : "Carson Farmer"},
+              {"name" : "David Folch"},
+              {"name" : "Chris Fonnesbeck"},
+              {"name" : "Matt Hall"},
+              {"name" : "Katy Huff"},
+              {"name" : "Hans Peter Langtangen"},
+              {"name" : "Dan Lewis"},
+              {"name" : "David Lippa"},
+              {"name" : "Matthew McCormick"},
+              {"name" : "Kyle Niemeyer"},
+              {"name" : "Mike Pacer"},
+              {"name" : "Randy Paffenroth"},
+              {"name" : "Florian Rathgeber"},
+              {"name" : "Thomas Robitaille"},
+              {"name" : "Matthew Rocklin"},
+              {"name" : "Scott Rostrup"},
+              {"name" : "Dan Schult"},
+              {"name" : "Skipper Seabold"},
+              {"name" : "Bill Spotz"},
+              {"name" : "Jordan Suchow"},
+              {"name" : "Erik Tollerud"},
+              {"name" : "Jake Vanderplas"},
+              {"name" : "Bryan W. Weber"}
+          ]
       }
   ],
 
