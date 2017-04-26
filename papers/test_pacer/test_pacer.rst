@@ -12,9 +12,9 @@
 :institution: Egyptian Embassy, S.P.Q.R.
 :institution: Yet another place, S.P.Q.R.
 
-:author: Brutus
-:email: brutus@rome.it
-:institution: Unaffiliated
+:author: Test M P
+:email: ishallappearagain@rome.it
+:institution: universe
 :bibliography: mybib
 
 
