@@ -7,10 +7,8 @@
 :email: mark37@rome.it
 :institution: Egyptian Embassy, S.P.Q.R.
 
-:author: Jarrod Millman
-:email: millman@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
-:institution: Yet another place, S.P.Q.R.
+:author: Ian Rose 
+:email: ianrrose@berkley.edu
 
 :author: Test M P
 :email: ishallappearagain@rome.it
