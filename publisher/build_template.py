@@ -23,9 +23,11 @@ class TeXTemplate(tempita.Template):
 def _from_template(tmpl_basename, config, use_html=True):
     tmpl = os.path.join(template_dir, tmpl_basename + '.tmpl')
     if use_html:
-        template = tempita.HTMLTemplate(open(tmpl, 'r').read())
+        with io.open(tmpl, mode='r') as f:
+            template = tempita.HTMLTemplate(f.read())
     else:
-        template = TeXTemplate(open(tmpl, 'r').read())
+        with io.open(tmpl, mode='r') as f:
+            template = TeXTemplate(f.read())
     return template.substitute(config)
 
 def from_template(tmpl_basename, config, dest_fn):
