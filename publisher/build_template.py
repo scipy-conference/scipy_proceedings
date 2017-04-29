@@ -2,7 +2,9 @@
 
 import os
 import sys
-import shlex, subprocess
+import shlex
+import subprocess
+import io
 
 import tempita
 from conf import bib_dir, build_dir, template_dir, html_dir
@@ -33,7 +35,7 @@ def from_template(tmpl_basename, config, dest_fn):
     outfile = _from_template(tmpl_basename, config, use_html=use_html)
     outname = os.path.join(build_dir, extension, dest_fn)
 
-    with open(outname, mode='w') as f:
+    with io.open(outname, mode='w') as f:
         f.write(outfile)
 
 def bib_from_tmpl(bib_type, config, target):
@@ -59,7 +61,7 @@ def html_from_tmpl(src, config, target):
     dest_fn = os.path.join(html_dir, target + '.html')
     extension = os.path.splitext(dest_fn)[1][1:]
     outname = os.path.join(build_dir, extension, dest_fn)
-    with open(outname, mode='w') as f:
+    with io.open(outname, mode='w') as f:
         f.write(outfile)
 
 if __name__ == "__main__":
