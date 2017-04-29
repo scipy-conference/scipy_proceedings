@@ -13,7 +13,7 @@
   'unready' to flag the current state of the review process.
 - Only once a reviewer is satisfied that the review process is complete and the submission should
   be accepted to the proceedings, should they affix the 'ready' label. 
-- Reviewers should come to a final 'ready', 'unready' decision before **July 10th** at 18:00 PST.
+- Reviewers should come to a final 'ready', 'unready' decision before **July 1st** at 18:00 PST.
 
 ## Instructions for Authors
 
@@ -30,7 +30,7 @@ paper:
   [scipy_proceedings](https://github.com/scipy-conference/scipy_proceedings)
   repository on GitHub.
 
-- Check out the 2016 branch (``git checkout 2016``).
+- Check out the 2017 branch (``git checkout 2017``).
 
 - An example paper is provided in ``papers/00_vanderwalt``.  Create a new
   directory ``papers/firstname_surname``, copy the example paper into it, and
@@ -42,7 +42,7 @@ paper:
 
 - Once you are ready to submit your paper, file a pull request on GitHub.
   **Please ensure that you file against the correct branch**--your branch
-  should be named 2016, and the pull-request should be against our 2016
+  should be named 2017, and the pull-request should be against our 2017
   branch.
 
 - Please do not modify any files outside of your paper directory.
@@ -51,23 +51,24 @@ paper:
 
 Authors may make changes to their submisions throughout the review process.
 
-There are many different styles of review (some do paragrpah comments, others
+There are many different styles of review (some do paragraph comments, others
 do 'code review' style line edits) and the process is open.
 
 We encourage authors and reviewers to work together iteratively to make each 
 others papers the best they can be.
 Combine the best principles of open source development and academic publication.
 
-These dates are the 
+These dates are the tentative timeline for 2017:
 
-- May 30th - Initial submissions
-- June 7th - Reviewers assigned
-- June 30th - Reviews due
-- June 30th- July 10th: Authors revised papers based on reviews
-- July 10th - Acceptance/rejection of papers.
-- July 11-18th - Conference
-- July 30th - Final submissions due
-- August 8th - Publication.
+- May 4th - Authors invited to submit full papers
+- May 30th - Initial submissions due
+- June 1st - Reviewers assigned
+- June 15th - Reviews due
+- June 15th-July 1st: Authors revise papers based on reviews
+- July 1st - Acceptance/rejection of papers
+- July 5th - Papers must be camera-ready
+- July 10-16th - Conference
+- July 20th - Publication
 
 ## General Guidelines
 
@@ -80,7 +81,7 @@ These dates are the
 
 ## Review Criteria
 
-A small subcommittee of the SciPy 2016 organizing committee has created [this
+A small subcommittee of the SciPy 2017 organizing committee has created [this
 set of suggested review
 criteria](https://github.com/scipy-conference/scipy_proceedings/blob/master/review_criteria.md)
 to help guide authors and reviewers alike. Suggestions and amendments to these
@@ -127,7 +128,7 @@ su -c `dnf install python-docutils texlive-collection-basic texlive-collection-f
 ## Build Server
 
 Thanks to the great and wonderful Katy Huff, there is a server online 
-building the open pull requests [here](http://zibi.bids.berkeley.edu:5000). You may be 
+building the open pull requests [here](http://zibi.bids.berkeley.edu:7001). You may be 
 able to pull a built PDF for review from there.
 
 ## For organizers
