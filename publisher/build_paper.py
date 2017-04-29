@@ -8,6 +8,8 @@ import re
 import tempfile
 import glob
 import shutil
+import io
+
 from distutils import dir_util
 
 from writer import writer
@@ -97,7 +99,7 @@ def rst2tex(in_path, out_path):
         print("Error: no paper configuration found")
 
     tex_file = os.path.join(out_path, 'paper.tex')
-    with open(tex_file, 'wb') as f:
+    with io.open(tex_file, 'wb') as f:
         try:
             tex = tex.encode('utf-8')
         except (AttributeError, UnicodeDecodeError):
