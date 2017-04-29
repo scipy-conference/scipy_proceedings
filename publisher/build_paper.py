@@ -77,11 +77,7 @@ def rst2tex(in_path, out_path):
                 'halt_level': 3,  # 2: warn; 3: error; 4: severe
                 }
 
-    try:
-        rst, = glob.glob(os.path.join(in_path, '*.rst'))
-    except ValueError:
-        raise RuntimeError("Found more than one input .rst--not sure which "
-                           "one to use.")
+    rst = _glob_for_one_file(in_path, '*.rst')    
 
     with io.open(rst, mode='r') as f:
         content = header + f.read()
@@ -207,24 +203,90 @@ def page_count(pdflatex_stdout, paper_dir):
     options.dict2cfg(d, cfgname)
 
 
+def _glob_for_one_file(path, pattern):
+    try:
+        file_found, = glob.glob(os.path.join(path, pattern))
+    except ValueError:
+        raise RuntimeError("Found more than one input matching {}--not sure which "
+                           "one to use.".format(pattern))
+
+    return file_found
+
+class NotebookConverter(object):
+    
+    def __init__(self, paper_id='', keep_rst=False):
+        
+        self.paper_id = paper_id
+        self.in_path = os.path.join(papers_dir, self.paper_id)
+        self.out_path = os.path.join(output_dir, self.paper_id)
+        self.keep_rst = keep_rst
+
+        try:
+            self.ipynb_path = _glob_for_one_file(self.in_path, '*.ipynb')
+        except RuntimeError:
+            self.ipynb_path = None
+
+    def nb_to_rst(self):
+        """
+        This converts the notebook found on init (at `self.ipynb_path`) to an
+        rst file.
+        """
+        from nbconvert import RSTExporter
+        from nbconvert.writers import FilesWriter
+        import nbformat
+        
+        with io.open(self.ipynb_path, mode="r") as f:
+            nb = nbformat.read(f, as_version=4)
+        
+        rst_exporter = RSTExporter()
+        nbconvert_writer = FilesWriter(build_directory=self.in_path)
+        output, resources = rst_exporter.from_notebook_node(nb)
+        nbconvert_writer.write(output, resources, notebook_name=self.paper_id)
+        self.input_rst_file_path = _glob_for_one_file(self.in_path, '*.rst') 
+
+    def convert(self):
+        """
+        This executs the `nb_to_rst` conversion step.
+        """
+        if self.ipynb_path:
+            print("Converting {0}.ipynb to {0}.rst".format(self.paper_id))
+            self.nb_to_rst()
+
+    def cleanup(self):
+        if self.ipynb_path and not self.keep_rst:
+            os.remove(self.input_rst_file_path)
+
+
+
 def build_paper(paper_id):
+    """
+    Build the paper given the basename of the paper's directory.
+    
+    E.g., if `papers/00_bibderwalt`, `paper_id = '00_bibderwalt'`.
+    
+    Input: paper_id: string
+    """
+
     out_path = os.path.join(output_dir, paper_id)
     in_path = os.path.join(papers_dir, paper_id)
+    nbconverter = NotebookConverter(paper_id) 
+    nbconverter.convert()
     print("Building:", paper_id)
+    
 
     rst2tex(in_path, out_path)
     pdflatex_stdout = tex2pdf(out_path)
     page_count(pdflatex_stdout, out_path)
+    nbconverter.cleanup()
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: build_paper.py paper_directory")
         sys.exit(-1)
-
     in_path = os.path.normpath(sys.argv[1])
     if not os.path.isdir(in_path):
         print("Cannot open directory: %s" % in_path)
         sys.exit(-1)
-
+    
     paper_id = os.path.basename(in_path)
     build_paper(paper_id)
