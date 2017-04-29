@@ -9,11 +9,13 @@ review criteria are enthusiastically welcomed via discussion or pull request.
 ## Written Quality
 
 - Prose should be written in English.
-- Prose should clearly communicate the narrative.
+- Prose should clearly and consistently communicate the narrative (e.g. consistent
+  tense and person; use of active voice; etc)
 - The written style should convey information that furthers the knowledge or 
   research of the reader.
 - Due to the interdisciplinary nature of SciPy, highly domain-specific jargon 
   should be avoided or explained where possible.
+- Papers that do not meet quality standards may not be approved for publication.
 
 ## Technical Content
 
@@ -41,16 +43,21 @@ review criteria are enthusiastically welcomed via discussion or pull request.
 
 ## Other Requirements
 
-- All mentioned software should be formally cited wherever possible.
+- All mentioned software should be formally and consistently cited wherever
+  possible.
 - Acronyms should be spelled out upon first mention.
 - License conditions on images and figures must be respected (Creative Commons, 
   etc.).
 - Mathematical and other symbols should be defined.
 - Definitions should include consistent units where appropriate.
+- Avoid long paragraphs of your rich text file to enable reviewers to target
+  specific sections with their comments. GitHub comments are per line of text.
+- Avoid custom LaTeX markup where possible.
 
 ### Length
 
-- The compiled version should be no longer than 8 pages, including figures.  
+- The compiled version should be no longer than 8 pages, including figures, source
+  code, appendices, etc.  
 
 ### Figures
 
@@ -60,6 +67,7 @@ review criteria are enthusiastically welcomed via discussion or pull request.
 ### Code Snippets
 
 - Code snippets should be formatted to fit inside a single column without
-  overflow.
+  overflow. Please make sure to check the build server's copy of your
+  paper; it's the authoritative view of how your paper will appear.
 - If not in Python, the language in the code snippet should be mentioned.
 - Code snippets should follow a common style guide. PEP8 is preferred.
