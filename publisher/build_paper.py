@@ -83,12 +83,11 @@ def rst2tex(in_path, out_path):
         raise RuntimeError("Found more than one input .rst--not sure which "
                            "one to use.")
 
-
-    content = header + open(rst, 'r').read()
-
+    with io.open(rst, mode='r') as f:
+        content = header + f.read()
+    
     tex = dc.publish_string(source=content, writer=writer,
                             settings_overrides=settings)
-
 
     stats_file = os.path.join(out_path, 'paper_stats.json')
     d = options.cfg2dict(stats_file)
@@ -99,7 +98,7 @@ def rst2tex(in_path, out_path):
         print("Error: no paper configuration found")
 
     tex_file = os.path.join(out_path, 'paper.tex')
-    with io.open(tex_file, 'wb') as f:
+    with io.open(tex_file, mode='wb') as f:
         try:
             tex = tex.encode('utf-8')
         except (AttributeError, UnicodeDecodeError):
