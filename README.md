@@ -51,7 +51,7 @@ paper:
 
 Authors may make changes to their submisions throughout the review process.
 
-There are many different styles of review (some do paragaph comments, others
+There are many different styles of review (some do paragraph comments, others
 do 'code review' style line edits) and the process is open.
 
 We encourage authors and reviewers to work together iteratively to make each 
