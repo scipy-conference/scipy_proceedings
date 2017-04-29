@@ -13,7 +13,7 @@
   'unready' to flag the current state of the review process.
 - Only once a reviewer is satisfied that the review process is complete and the submission should
   be accepted to the proceedings, should they affix the 'ready' label. 
-- Reviewers should come to a final 'ready', 'unready' decision before **July 10th** at 18:00 PST.
+- Reviewers should come to a final 'ready', 'unready' decision before **July 1st** at 18:00 PST.
 
 ## Instructions for Authors
 
@@ -64,11 +64,11 @@ These dates are the tentative timeline for 2017:
 - May 30th - Initial submissions due
 - June 1st - Reviewers assigned
 - June 15th - Reviews due
-- June 15th- July 1st: Authors revise papers based on reviews
+- June 15th-July 1st: Authors revise papers based on reviews
 - July 1st - Acceptance/rejection of papers
-- July 5th - All edits final
-- July 10th - Publication
+- July 5th - Papers must be camera-ready
 - July 10-16th - Conference
+- July 20th - Publication
 
 ## General Guidelines
 
