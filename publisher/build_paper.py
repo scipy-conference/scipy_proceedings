@@ -231,20 +231,22 @@ def build_paper(paper_id):
     nbconverter.cleanup()
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: build_paper.py paper_directory [--debug]")
+    if len(sys.argv)<2:
+        print("Usage: 1 build_paper.py paper_directory [--debug]")
         sys.exit(-1)
 
-    if len(sys.argv) >3:
-        print("Usage: build_paper.py paper_directory [--debug]")
+    if len(sys.argv)>=3:
+        print("Usage: 3 build_paper.py paper_directory [--debug]")
         sys.exit(-1)
     
-    if len(sys.argv > 2) and sys.argv[2]=="--debug":
+    if len(sys.argv)>2 and sys.argv[2]=="--debug":
         nb_debug= True
-    else:
+    elif len(sys.argv)>2:
         nb_debug = False
         print("Usage: build_paper.py paper_directory [--debug]")
         sys.exit(-1)
+    else:
+        nb_debug = False
 
     in_path = os.path.normpath(sys.argv[1])
     if not os.path.isdir(in_path):
