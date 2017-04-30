@@ -24,19 +24,20 @@ class NotebookConverter(object):
         self.out_path = os.path.join(output_dir, self.paper_id)
         self.keep_rst = keep_rst
         self.debug = debug
-        
+
         if config is None:
             self.config = {}
         else:
             self.config = config
 
-        if self.debug:
+        if self.debug or debug_clear:
             self.debug_dir = os.path.join(self.in_path,'debug')
             try: 
                 os.makedirs(self.debug_dir)
             except FileExistsError:
                 if debug_clear:
-                    os.remove(self.debug_dir)
+                    shutil.rmtree(self.debug_dir)
+                if self.debug:
                     os.makedirs(self.debug_dir)
         
         try:
@@ -72,7 +73,6 @@ class NotebookConverter(object):
     
     def create_debug_file_path(self):
         rst_files = glob.glob(os.path.join(self.debug_dir, "*.rst"))
-        import ipdb; ipdb.set_trace()
         self.num_debug_files = len(rst_files)
         file_basename = os.path.basename(self.input_rst_file_path)
         new_file_name = (os.path.splitext(file_basename)[0] +
