@@ -205,7 +205,7 @@ def page_count(pdflatex_stdout, paper_dir):
     options.dict2cfg(d, cfgname)
 
 
-def build_paper(paper_id):
+def build_paper(paper_id, nb_debug = False):
     """
     Build the paper given the basename of the paper's directory.
     
@@ -231,11 +231,12 @@ def build_paper(paper_id):
     nbconverter.cleanup()
 
 if __name__ == "__main__":
+
     if len(sys.argv)<2:
         print("Usage: 1 build_paper.py paper_directory [--debug]")
         sys.exit(-1)
 
-    if len(sys.argv)>=3:
+    if len(sys.argv)>3:
         print("Usage: 3 build_paper.py paper_directory [--debug]")
         sys.exit(-1)
     
@@ -254,4 +255,4 @@ if __name__ == "__main__":
         sys.exit(-1)
     
     paper_id = os.path.basename(in_path)
-    build_paper(paper_id)
+    build_paper(paper_id, nb_debug=nb_debug)
