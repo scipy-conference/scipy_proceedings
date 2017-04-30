@@ -216,7 +216,7 @@ def build_paper(paper_id):
 
     out_path = os.path.join(output_dir, paper_id)
     in_path = os.path.join(papers_dir, paper_id)
-    nbconverter = NotebookConverter(paper_id = paper_id,  debug_clear=True) 
+    nbconverter = NotebookConverter(paper_id = paper_id, debug=True) 
     nbconverter.convert()
     print("Building:", paper_id)
     

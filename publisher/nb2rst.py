@@ -37,8 +37,8 @@ class NotebookConverter(object):
             except FileExistsError:
                 if debug_clear:
                     shutil.rmtree(self.debug_dir)
-                if self.debug:
-                    os.makedirs(self.debug_dir)
+                    if self.debug:
+                        os.makedirs(self.debug_dir)
         
         try:
             self.ipynb_path = glob_for_one_file(self.in_path, '*.ipynb')
