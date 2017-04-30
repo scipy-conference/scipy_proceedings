@@ -216,7 +216,11 @@ def build_paper(paper_id):
 
     out_path = os.path.join(output_dir, paper_id)
     in_path = os.path.join(papers_dir, paper_id)
-    nbconverter = NotebookConverter(paper_id = paper_id, debug=True) 
+    try:
+        nb_debug
+    except:
+        nb_debug = True
+    nbconverter = NotebookConverter(paper_id = paper_id, debug=nb_debug) 
     nbconverter.convert()
     print("Building:", paper_id)
     
@@ -227,9 +231,21 @@ def build_paper(paper_id):
     nbconverter.cleanup()
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: build_paper.py paper_directory")
+    if len(sys.argv) < 2:
+        print("Usage: build_paper.py paper_directory [--debug]")
         sys.exit(-1)
+
+    if len(sys.argv) >3:
+        print("Usage: build_paper.py paper_directory [--debug]")
+        sys.exit(-1)
+    
+    if len(sys.argv > 2) and sys.argv[2]=="--debug":
+        nb_debug= True
+    else:
+        nb_debug = False
+        print("Usage: build_paper.py paper_directory [--debug]")
+        sys.exit(-1)
+
     in_path = os.path.normpath(sys.argv[1])
     if not os.path.isdir(in_path):
         print("Cannot open directory: %s" % in_path)
