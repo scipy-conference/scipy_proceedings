@@ -30,12 +30,12 @@ class NotebookConverter(object):
             self.config = config
 
         if self.debug:
-            self.debug_dir = os.path.join(papers_dir,'debug')
+            self.debug_dir = os.path.join(self.in_path,'debug')
             try: 
                 os.makedirs(self.debug_dir)
             except FileExistsError:
-                rst_files = glob.glob(os.path.join(self.debug_dir, "**/*.rst"))
-                self.num_debug_files = len(rst_files)
+                pass
+        
         try:
             self.ipynb_path = glob_for_one_file(self.in_path, '*.ipynb')
         except RuntimeError:
@@ -49,7 +49,7 @@ class NotebookConverter(object):
         
         with io.open(self.ipynb_path, mode="r") as f:
             nb = nbformat.read(f, as_version=4)
-        
+       
         c = Config()
         c.update(self.config)
 
@@ -68,6 +68,9 @@ class NotebookConverter(object):
             self.nb_to_rst()
     
     def create_debug_file_path(self):
+        rst_files = glob.glob(os.path.join(self.debug_dir, "*.rst"))
+        import ipdb; ipdb.set_trace()
+        self.num_debug_files = len(rst_files)
         file_basename = os.path.basename(self.input_rst_file_path)
         new_file_name = (os.path.splitext(file_basename)[0] +
                         str(self.num_debug_files + 1) + 
@@ -82,6 +85,6 @@ class NotebookConverter(object):
             
             if self.debug:
                 self.create_debug_file_path()
-                shutil.copy(self.input_rst_file_path, self.debug_file_path())
+                shutil.copy(self.input_rst_file_path, self.debug_file_path)
 
             os.remove(self.input_rst_file_path)
