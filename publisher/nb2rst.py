@@ -16,7 +16,8 @@ from utils import glob_for_one_file
 
 class NotebookConverter(object):
     
-    def __init__(self, config=None, paper_id='', keep_rst=False, debug=False):
+    def __init__(self, config=None, paper_id='', keep_rst=False, debug=False,
+                 debug_clear=False):
         
         self.paper_id = paper_id
         self.in_path = os.path.join(papers_dir, self.paper_id)
@@ -34,7 +35,9 @@ class NotebookConverter(object):
             try: 
                 os.makedirs(self.debug_dir)
             except FileExistsError:
-                pass
+                if debug_clear:
+                    os.remove(self.debug_dir)
+                    os.makedirs(self.debug_dir)
         
         try:
             self.ipynb_path = glob_for_one_file(self.in_path, '*.ipynb')
