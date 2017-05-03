@@ -116,6 +116,16 @@ class Translator(LaTeXTranslator):
     def depart_field_body(self, node):
         raise nodes.SkipNode
 
+
+    def footmark(self, n):
+        '''Insert footmark #n.  Footmark 1 is reserved for
+        the corresponding author. Footmark 2 is reserved for
+        the equal contributors.\
+        '''
+        return ('\\setcounter{footnotecounter}{%d}' % n,
+                '\\fnsymbol{footnotecounter}')
+
+
     def depart_document(self, node):
         LaTeXTranslator.depart_document(self, node)
 
@@ -127,24 +137,17 @@ class Translator(LaTeXTranslator):
             for inst in self.author_institution_map[auth]:
                 institution_authors.setdefault(inst, []).append(auth)
 
-        def footmark(n):
-            '''Insert footmark #n.  Footmark 1 is reserved for
-            the corresponding author. Footmark 2 is reserved for
-            the equal contributors.\
-            '''
-            return ('\\setcounter{footnotecounter}{%d}' % n,
-                    '\\fnsymbol{footnotecounter}')
 
         # Build a footmark for the corresponding author
-        corresponding_footmark = footmark(1)
+        corresponding_footmark = self.footmark(1)
 
         # Build a footmark for equal contributors
-        equal_footmark = footmark(2)
+        equal_footmark = self.footmark(2)
 
         # Build one footmark for each institution
         institute_footmark = {}
         for i, inst in enumerate(institution_authors):
-            institute_footmark[inst] = footmark(i + 3)
+            institute_footmark[inst] = self.footmark(i + 3)
 
         footmark_template = r'\thanks{%(footmark)s %(instutions)}'
         corresponding_auth_template = r'''%%
