@@ -146,12 +146,12 @@ class Translator(LaTeXTranslator):
         for i, inst in enumerate(institution_authors):
             institute_footmark[inst] = footmark(i + 3)
 
-        footmark_template = ur'\thanks{%(footmark)s %(instutions)}'
-        corresponding_auth_template = ur'''%%
+        footmark_template = r'\thanks{%(footmark)s %(instutions)}'
+        corresponding_auth_template = r'''%%
           %(footmark_counter)s\thanks{%(footmark)s %%
           Corresponding author: \protect\href{mailto:%(email)s}{%(email)s}}'''
 
-        equal_contrib_template = ur'''%%
+        equal_contrib_template = r'''%%
           %(footmark_counter)s\thanks{%(footmark)s %%
           These authors contributed equally.}'''
 
@@ -173,7 +173,7 @@ class Translator(LaTeXTranslator):
                 footmarks += u''.join(equal_footmark)
             if auth in self.corresponding:
                 footmarks += u''.join(corresponding_footmark)
-            authors += [ur'%(author)s$^{%(footmark)s}$' %
+            authors += [r'%(author)s$^{%(footmark)s}$' %
                         {u'author': auth,
                         u'footmark': footmarks}]
 
@@ -194,7 +194,7 @@ class Translator(LaTeXTranslator):
             for inst in self.author_institution_map[auth]:
                 if not inst in institutions_mentioned:
                     fm_counter, fm = institute_footmark[inst]
-                    authors[-1] += ur'%(footmark_counter)s\thanks{%(footmark)s %(institution)s}' % \
+                    authors[-1] += r'%(footmark_counter)s\thanks{%(footmark)s %(institution)s}' % \
                                 {u'footmark_counter': fm_counter,
                                  u'footmark': fm,
                                  u'institution': inst}
@@ -212,7 +212,7 @@ class Translator(LaTeXTranslator):
             authors = [u'']
 
         copyright_holder = self.copyright_holder or (self.author_names[0] + (u'.' if len(self.author_names) == 1 else u' et al.'))
-        author_notes = ur'''%%
+        author_notes = r'''%%
 
           \noindent%%
           Copyright\,\copyright\,%(year)s %(copyright_holder)s %(copyright)s%%
@@ -222,7 +222,7 @@ class Translator(LaTeXTranslator):
          u'copyright_holder': copyright_holder,
          u'copyright': options[u'proceedings'][u'copyright'][u'article']}
 
-        authors[-1] += ur'\thanks{%s}' % author_notes
+        authors[-1] += r'\thanks{%s}' % author_notes
 
 
         ## Set up title and page headers
@@ -232,13 +232,13 @@ class Translator(LaTeXTranslator):
         else:
             video_template = u'\\\\\\vspace{5mm}\\tt\\url{%s}\\vspace{-5mm}' % self.video_url
 
-        title_template = ur'\newcounter{footnotecounter}' \
-                ur'\title{%s}\author{%s' \
-                ur'%s}\maketitle'
+        title_template = r'\newcounter{footnotecounter}' \
+                r'\title{%s}\author{%s' \
+                r'%s}\maketitle'
         title_template = title_template % (title, u', '.join(authors),
                                            video_template)
 
-        marks = ur'''
+        marks = r'''
           \renewcommand{\leftmark}{%s}
           \renewcommand{\rightmark}{%s}
         ''' % (options[u'proceedings'][u'title'][u'short'], title.upper())
@@ -339,9 +339,9 @@ class Translator(LaTeXTranslator):
         filename = node.attributes[u'uri']
 
         if self.figure_type == u'figure*':
-            width = ur'\textwidth'
+            width = r'\textwidth'
         else:
-            width = ur'\columnwidth'
+            width = r'\columnwidth'
 
         figure_opts = []
 
@@ -350,10 +350,10 @@ class Translator(LaTeXTranslator):
 
         # Only add \columnwidth if scale or width have not been specified.
         if u'scale' not in node.attributes and u'width' not in node.attributes:
-            figure_opts.append(ur'width=\columnwidth')
+            figure_opts.append(r'width=\columnwidth')
 
-        self.out.append(ur'\noindent\makebox[%s][%s]' % (width, align[0]))
-        self.out.append(ur'{\includegraphics[%s]{%s}}' % (u','.join(figure_opts),
+        self.out.append(r'\noindent\makebox[%s][%s]' % (width, align[0]))
+        self.out.append(r'{\includegraphics[%s]{%s}}' % (u','.join(figure_opts),
                                                          filename))
 
     def visit_footnote(self, node):
@@ -375,16 +375,16 @@ class Translator(LaTeXTranslator):
         else:
             self.table_type = u'table'
 
-        self.out.append(ur'\begin{%s}' % self.table_type)
+        self.out.append(r'\begin{%s}' % self.table_type)
         LaTeXTranslator.visit_table(self, node)
 
     def depart_table(self, node):
         LaTeXTranslator.depart_table(self, node)
 
-        self.out.append(ur'\caption{%s}' % ''.join(self.table_caption))
+        self.out.append(r'\caption{%s}' % ''.join(self.table_caption))
         self.table_caption = []
 
-        self.out.append(ur'\end{%s}' % self.table_type)
+        self.out.append(r'\end{%s}' % self.table_type)
         self.active_table.set(u'preamble written', 1)
         self.active_table.set_table_style(u'booktabs')
 
