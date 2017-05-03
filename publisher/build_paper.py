@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 
 import docutils.core as dc
 import os.path
@@ -50,7 +50,7 @@ def rst2tex(in_path, out_path):
     shutil.copy(scipy_status, out_path)
     scipy_style = os.path.join(base_dir, '_static/scipy.sty')
     shutil.copy(scipy_style, out_path)
-    preamble = r'''\usepackage{scipy}'''
+    preamble = u'''\\usepackage{scipy}'''
 
     # Add the LaTeX commands required by Pygments to do syntax highlighting
 
@@ -203,7 +203,6 @@ def page_count(pdflatex_stdout, paper_dir):
             pages = m.groups()[0]
             d.update({'pages': int(pages)})
             break
-
     options.dict2cfg(d, cfgname)
 
 
