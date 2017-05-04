@@ -32,6 +32,10 @@ paper:
 
 - Check out the 2017 branch (``git checkout 2017``).
 
+- Create a new environment (using your choice of environment manager, e.g., ``pyenv`` or ``conda``).
+
+- Install/update the required python libraries (``pip install -U -r requirements.txt``).
+
 - An example paper is provided in ``papers/00_vanderwalt``.  Create a new
   directory ``papers/firstname_surname``, copy the example paper into it, and
   modify to your liking.
