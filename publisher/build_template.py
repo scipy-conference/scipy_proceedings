@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 import os
 import sys
 import shlex
@@ -16,9 +17,11 @@ class TeXTemplate(tempita.Template):
             value = value.replace('&', '\&')
         elif sys.version_info[0] >= 3 and isinstance(value, str):
             value = value.replace('&', '\&')
-        else:
+        elif sys.version_info[0] < 3 :
+            value = unicode(value)
+        else: 
             value = str(value)
-        return value.encode('utf-8')
+        return value
 
 def _from_template(tmpl_basename, config, use_html=True):
     tmpl = os.path.join(template_dir, tmpl_basename + '.tmpl')
