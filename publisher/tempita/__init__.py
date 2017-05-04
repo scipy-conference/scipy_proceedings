@@ -33,10 +33,17 @@ from __future__ import unicode_literals
 import re
 import sys
 import cgi
-from urllib import quote as url_quote
+
 import os
 import tokenize
-from cStringIO import StringIO
+
+try: 
+    from urllib import quote as url_quote
+    from cStringIO import StringIO
+except ImportError: 
+    from urllib.parse import quote as url_quote
+    from io import StringIO
+
 from tempita._looper import looper
 from tempita.compat3 import bytes, basestring_, next, is_unicode, coerce_text
 
