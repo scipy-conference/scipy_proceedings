@@ -3,6 +3,7 @@
 #
 ##### requirements without version specifiers
 pygments
+pytest
+testpath
 ##### requirements with version specifiers
 docutils == 0.12
-
