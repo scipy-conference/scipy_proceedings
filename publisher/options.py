@@ -1,6 +1,7 @@
 """
 Configuration utilities.
 """
+from __future__ import print_function, unicode_literals
 
 __all__ = ['options']
 
@@ -25,8 +26,21 @@ def cfg2dict(filename):
     if not os.path.exists(filename):
         print('*** Warning: %s does not exist.' % filename)
         return {}
-    with io.open(filename,  mode='r', encoding='utf-8') as f:
-        return json.loads(f.read())
+
+    _backup_filename = filename+'.bak'
+    if os.path.exists(_backup_filename):
+        os.remove(_backup_filename)
+        print('found previous backup file {}, removing...'.format(_backup_filename))
+
+    try: 
+        with io.open(filename,  mode='r', encoding='utf-8') as f:
+            return json.loads(f.read())
+    except ValueError as err:
+        os.rename(filename,filename+'.bak')
+        print('{} is not a valid json file, moving to {} for debugging.'
+              'Running again will remove backup file.'
+              .format(filename, _backup_filename))
+        return {} 
 
 def dict2cfg(d, filename):
     """Write dictionary out to config file.
