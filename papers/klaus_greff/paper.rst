@@ -9,8 +9,8 @@
 :institution: University of Freiburg
 
 :author: Martin Chovanec
-:email: chovanecm@gmail.com
-:institution: Egyptian Embassy, S.P.Q.R.
+:email: chovamar@fit.cvut.cz
+:institution: Czech Technical University in Prague
 
 :author: Jürgen Schmidhuber
 :email: juergen@idsia.ch
