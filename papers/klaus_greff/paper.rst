@@ -1,28 +1,28 @@
-:author: Gaius Caesar
-:email: jj@rome.it
-:institution: Senate House, S.P.Q.R.
+:author: Klaus Greff
+:email: klaus@idsia.ch
+:institution: IDSIA
+:institution: USI
+:institution: SUPSI
+
+:author: Aaron Klein
+:email: kleinaa@cs.uni-freiburg.de
+:institution: University of Freiburg
+
+:author: Martin Chovanec
+:email: chovanecm@gmail.com
 :institution: Egyptian Embassy, S.P.Q.R.
 
-:author: Mark Anthony
-:email: mark37@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
-
-:author: Jarrod Millman
-:email: millman@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
-:institution: Yet another place, S.P.Q.R.
-
-:author: Brutus
-:email: brutus@rome.it
-:institution: Unaffiliated
-:bibliography: mybib
+:author: Jürgen Schmidhuber
+:email: juergen@idsia.ch
+:institution: IDSIA
+:bibliography: SUPSI
 
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
-------------------------------------------------
-A Numerical Perspective to Terraforming a Desert
-------------------------------------------------
+------------------------------------------------------------
+Sacred: How I Learned to Stop Worrying and Love the Research
+------------------------------------------------------------
 
 .. class:: abstract
 
