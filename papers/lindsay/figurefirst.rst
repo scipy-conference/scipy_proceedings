@@ -1,26 +1,20 @@
-:author: Gaius Caesar
-:email: jj@rome.it
-:institution: Senate House, S.P.Q.R.
-:institution: Egyptian Embassy, S.P.Q.R.
+:author: Theodore Lindsay
+:email: thlindsay1@gmail.com
+:institution: Caltech
 
-:author: Mark Anthony
-:email: mark37@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
+:author: Peter Weir
+:email: peter.weir@gmail.com
+:institution: Yelp
 
-:author: Jarrod Millman
-:email: millman@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
-:institution: Yet another place, S.P.Q.R.
+:author: Floris van Breugel
+:email: florisvb@gmail.com
+:institution: University of Washington
 
-:author: Brutus
-:email: brutus@rome.it
-:institution: Unaffiliated
+:github: http://flyranch.github.io/figurefirst/
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
-
-------------------------------------------------
-A Numerical Perspective to Terraforming a Desert
-------------------------------------------------
+-----------------------------------------------------------
+FigureFirst: A Layout First Approach for Scientific Figures
+-----------------------------------------------------------
 
 .. class:: abstract
 
@@ -31,7 +25,7 @@ Building on this architecture we have implemented a number of features that make
 
 .. class:: keywords
 
-   terraforming, desert, numerical perspective
+   plotting, figures, svg, matplotlib
 
 Introduction
 ------------
