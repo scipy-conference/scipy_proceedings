@@ -50,7 +50,7 @@ Usage
 
 With figurefirst creating a new figure generally involves four steps:
 
-1) **Design the layout file.** Fundamentally this means decorating a specific subset of the objects in the svg files with xml tags that identify what objects are something figurefirst should expose to Python. If using inkscape, we facilitate this step with a number of optional inkscape extensions.
+1) **Design the layout file.** Fundamentally this means decorating a specific subset of the objects in the svg files with xml tags that identify what objects are something figurefirst should expose to Python. If using inkscape, we facilitate this step with a number of optional inkscape extensions (Fig. 2).
 
 2) **Import the layout into python.** This is accomplished by constructing a :code:`FigureLayout` object with the path to the layout and then calling the :code:`make_mplfigures` method of this object to generate :code:`matplotlib` figures and axes as specified in the layout.
 
@@ -58,7 +58,11 @@ With figurefirst creating a new figure generally involves four steps:
 
 4) **Save to svg.** This will merge svg graphics with matplotlib figures allow ing complex vector art to be quickly incorporated as overlays or underays to your data presentation.
 
-Figure 2: single axis, svg editor, inkscape extension, data. 
+.. figure:: simple_dialogue_xml_editor.png
+   :scale: 80%
+   :align: center
+
+   Screenshots of Inkscape illustrating the two mechanisms for applying the correct xml tags, which are used by FigureFirst to generate MatPlotLib axes.
 
 To illustrate some the capabilities of FigureFirst, consider the task of making a more complex figure that describes three behavioral metrics for three different animals. With FigureFirst, one can draw the layout for one of the animals, and then use this layout as a template for the other two (Fig. 3A-B). Thus, if you decide to change the relative sizes of the axes, or add / remove an axis, this only needs to be done once (to the template). In this example, each of the three groups was created using a new MatPlotLib figure, which is then saved to a seperate layer in the SVG file (Fig. 3C). This organization makes it possible to update the three groups with new data independently (saving computational time). Often when working on a scientific figure early in the process, the overall layout and figure size is unknown. Or perhaps the figure needs to be reformatted for a different journal's size, or for a poster or powerpoint format. With FigureFirst these changes are as easy as rearranging the rectangles in Inkscape, and rerunning the same exact code (Fig. 3D-E). This exemplifies the key contribution of FigureFirst: seperating figure layout from the data analysis, so that the software is not cluttered with code to generate the layout, and allowing for quick reorganization of the layout. 
 
@@ -78,6 +82,15 @@ When quickly prototyping analysis and figures, it can be easy to lose track of w
 
    FigureFirst makes it easy to keep track of when, how, and why your figures are created by embedding the time modified, user notes, and full traceback directly into each FigureFirst generated layer. 
 
+FigureFirst can also expose many types of SVG objects to python, including text, patches, circles, etc (Fig. 5). This makes it possible to use the Inkscape user interface to place labels, arrows, etc. while using python to edit their attributes based on the data.
+
+.. figure:: svgitems_overview.png
+   :scale: 80%
+   :align: center
+
+   FigureFirst makes svg items accessible to python. (A) Example layout. (B) Screenshot of Inkscape illustrating how the svgitem tag is implemented. (C) Output after applying color and text attributes to the svgitems. The code used to generate this output is available as a Jupyter Notebook on our github page here: https://github.com/FlyRanch/figurefirst/tree/master/examples/svgitems
+
+
 
 
 
@@ -92,3 +105,8 @@ Future Directions
 
 Thus far, we have focused our development efforts on using FigureFirst in conjunction with Inkscape. Inkscape is convenient in that it is (a) open source, (b) has a strong feature set, (c) uses the open svg standard, (d) is available for all major operating systems, (d) is available for all major operating systems, and (ede) it has a built- -in xml editor. In principle, however, any svg-compatible capable-compatible graphical layout software can be used. In the future we plan to test other user interfaces to help increase our user base. 
 
+Adding Javascript based SVG editor to Jupyter Notebook to facilitate quick FigureFirst layout creation.
+
+Expand traceback features to make open data and science easy and hassle free.
+
+Help make Inkscape more efficient for large patch collections.
