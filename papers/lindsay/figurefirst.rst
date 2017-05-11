@@ -58,8 +58,27 @@ With figurefirst creating a new figure generally involves four steps:
 
 4) **Save to svg.** This will merge svg graphics with matplotlib figures allow ing complex vector art to be quickly incorporated as overlays or underays to your data presentation.
 
+Figure 2: single axis, svg editor, inkscape extension, data. 
 
-As a simple example, consider constructing a two figure with non-uniform axes sizes. The documentation to the matplotlib GridSpec v.xx module provides one such example (figure xxx A). To construct a similar plot in figurefirst, we would use Inkscape to draw five boxes in an svg layout document (Figure xx B). This layout document contains the information on the dimensions of the figure as well as the placement and aspect ratio of the axes. Also, rather than specify the labels programmatically in Python we have included them on a separate layer in svg. It is also worth noting that this layout is a bit different than the output of GridSpec: ax2-5 are visually offset from ax1, and the label placement is less ridged. We have done this pointedly to illustrate an advantage of using a layout this more flexible axes placement would be difficult to implement directly in code.
+To illustrate some the capabilities of FigureFirst, consider the task of making a more complex figure that describes three behavioral metrics for three different animals. With FigureFirst, one can draw the layout for one of the animals, and then use this layout as a template for the other two (Fig. 3A-B). Thus, if you decide to change the relative sizes of the axes, or add / remove an axis, this only needs to be done once (to the template). In this example, each of the three groups was created using a new MatPlotLib figure, which is then saved to a seperate layer in the SVG file (Fig. 3C). This organization makes it possible to update the three groups with new data independently (saving computational time). Often when working on a scientific figure early in the process, the overall layout and figure size is unknown. Or perhaps the figure needs to be reformatted for a different journal's size, or for a poster or powerpoint format. With FigureFirst these changes are as easy as rearranging the rectangles in Inkscape, and rerunning the same exact code (Fig. 3D-E). This exemplifies the key contribution of FigureFirst: seperating figure layout from the data analysis, so that the software is not cluttered with code to generate the layout, and allowing for quick reorganization of the layout. 
+
+.. figure:: example_templates.png
+   :scale: 100%
+   :align: center
+   :figclass: w
+
+   Creating and rearranging multi-panel figures using FigureFirst's template feature. (A) Layout for a figure. (B) Output. (C) Inkscape screenshot illustrating the layered structure. (D) Rearranged layout. (E) Output for the new layout (code remains identical). The code used to generate these figures is available as a Jupyter Notebook on out github page: https://github.com/FlyRanch/figurefirst/blob/master/examples/figure_groups_and_templates/figure_templates_example.ipynb
+
+When quickly prototyping analysis and figures, it can be easy to lose track of when you may have updated a figure, and what code you used to generate it. FigureFirst makes it easy to embed this information into the SVG file (Fig. 4). In the future, we plan to expand this capability by optionally linking the traceback to a github page so that when a FigureFirst generated SVG file is shared, other viewers can quickly find the code and data used to generate the figure. This option would directly and automatically link the scientific publication with the data and software, thereby facilitating open science with minimal user overhead.     
+
+.. figure:: traceback_and_notes.png
+   :scale: 100%
+   :align: center
+   :figclass: w
+
+   FigureFirst makes it easy to keep track of when, how, and why your figures are created by embedding the time modified, user notes, and full traceback directly into each FigureFirst generated layer. 
+
+
 
 
 Architecture
