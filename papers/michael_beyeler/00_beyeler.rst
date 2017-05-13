@@ -17,6 +17,7 @@
 :author: Ione Fine
 :email: ionefine@uw.edu
 :institution: Department of Psychology, University of Washington
+:bibliography: bibliography
 
 :video: https://github.com/uwescience/pulse2percept
 
@@ -60,7 +61,7 @@ such as retinitis pigmentosa and age-related macular degeneration,
 by electrically stimulating remaining retinal cells.
 Clinical experience with these implants shows that these are still early days,
 with current technologies resulting in nontrivial distortions of the
-perceptual experience [Fin15]_.
+perceptual experience :cite:`FineBoynton2015`.
 We have developed a computational model of bionic vision that simulates
 the perceptual experience of retinal prosthesis patients
 across a wide range of implant configurations.
@@ -81,13 +82,160 @@ discuss and conclude.
 Methods
 -------
 
-Here's how the model works.
+.. figure:: figure1.eps
+   :align: center
+   :figclass: w
+   :scale: 35%
+
+   This is a wide figure, specified by adding "w" to the figclass.  It is also
+   center aligned, by setting the align keyword (can be left, right or center).
+   :label:`figmodel`
+
+The full model cascade for an Argus I epiretinal prosthesis is illustrated in
+Fig. :ref:`figmodel`, although this model generalizes to other epiretinal
+and subretinal configurations.
+
+The device consists of electrodes of 260 um or 520 um
+diameter arranged in a checkerboard pattern (Fig. :ref:`figmodel` A).
+In this example, input to the model was a pair of simulated pulse
+trains phase-shifted by :math:`\delta` ms,
+which were delivered to two individual simulated electrodes.
+The current spread for
+each electrode decreased as a function of distance from the electrode center
+(heat map in A).
+We modeled the sensitivity of axon fibers (green lines in B;
+location of the array with respect to the optic disc was inferred from 
+patients' fundus photographs) as decreasing exponentially as a 
+function of distance from the soma.
+The resulting sensitivity profile (heat map in B) was then convolved with a 
+gamma function to model the impulse response function of retinal ganglion cells 
+(:math:`\tau = 0.42` ms; C). 
+We modeled loss of sensitivity as a function of previous stimulation by 
+subtracting accumulated cathodic charge after convolution with a gamma function 
+(:math:`\tau = 45.3` ms)
+from the output of the retinal ganglion cells (D).
+The signal was then half-rectified, passed through a static
+nonlinearity (E), and convolved with a slow gamma function intended to model 
+slower perceptual processes
+(:math:`\tau = 26.3` ms; F). 
+The output of the model was a map of brightness values (arbitrary units) over time. 
+Subjective brightness was defined as the highest brightness value in the map.
 
 
 
 
 Implementation and Results
 --------------------------
+
+The code is organized into different submodules:
+
+- :code:`api`: The API
+- :code:`retina`: All retinal stuff
+- :code:`implants`: All implants
+- :code:`stimuli`: All stimuli
+- :code:`files`: All I/O
+- :code:`utils`: All utility functions
+
+A minimal usage example is given in the listing below:
+
+.. code-block:: python
+
+   import pulse2percept as p2p
+
+   # Place an Argus II array centered over the fovea
+   implant = p2p.implants.ArgusII(x_center=0,
+                                  y_center=0)
+
+   # Start the stimulation framework, select joblib
+   # backend
+   sim = p2p.Simulation(implant, engine='joblib',
+                        num_jobs=8)
+
+   # Set optional parameters of the different retinal
+   # layers; e.g, spatial sampling (`ssample`) and
+   # temporal sampling rate (`tsample`)
+   ssample = 100  # microns
+   tsample = 0.005 / 1000  # seconds
+   sim.set_optic_fiber_layer(sampling=ssample)
+   sim.set_ganglion_cell_layer(tsample=tsample)
+
+   # Generate a stimulus: Biphasic pulse, 20 uA, 50 Hz,
+   # 0.5 second duration
+   pt = p2p.stimuli.PulseTrain(tsample, freq=50, amp=20,
+                               dur=0.5)
+   stim = {'E1': pt}
+
+   # From pulse train to percept
+   percept = sim.pulse2percept(stim, tol=0.25,
+                               layers=['GCL', 'OFL'])
+
+
+
+Extensibility is provided through class inheritance.
+This allows users to create their own:
+
+- Ganglion cell models: Inherit from :code:`p2p.retina.TemporalModel`
+- Retinal implants: Inherit from :code:`p2p.implants.ElectrodeArray`
+- Stimuli: Inherit from :code:`p2p.stimuli.PulseTrain`
+
+
+A new ganglion cell model works on a single pixel.
+It must provide a property called :code:`tsample`,
+which is the temporal sampling rate,
+and a method called :code:`model_cascade`,
+which translates a single-pixel pulse train into
+a single-pixel percept:
+
+.. code-block:: python
+
+   class MyGanglionCellModel(TemporalModel):
+       def __init__(self, tsample, **kwargs):
+           self._tsample = tsample
+
+       @property
+       def tsample(self):
+           return self._tsample
+
+       def model_cascade(self, ecv):
+           pass
+
+
+It can then be passed to the simulation framework:
+
+.. code-block:: python
+
+   mymodel = MyGanglionCellModel(tsample=0.005 / 1000)
+   sim.set_ganglion_cell_layer(mymodel)
+
+
+Creating a new array involves inheriting from
+:code:`pulse2percept.implants.ElectrodeArray`
+and providing a property :code:`etype`,
+which is the electrode type
+(e.g., epiretinal, subretinal).
+
+Creating a new array is as simple as:
+
+.. code-block:: python
+
+   import pulse2percept as p2p
+
+   class MyArray(p2p.implants.ElectrodeArray):
+       def __init__(self, etype):
+           self.etype = etype
+
+
+Creating new stimuli works the same way, either by inheriting
+from :code:`pulse2percept.utils.TimeSeries`.
+But, you can also inherit
+from :code:`pulse2percept.stimuli.MonophasicPulse`,
+:code:`pulse2percept.stimuli.BiphasicPulse`,
+or :code:`pulse2percept.stimuli.PulseTrain`:
+
+
+
+
+We can create new stimuli:
 
 Some implementation details and some results.
 
@@ -233,18 +381,13 @@ pulvinar id metus.
 .. [#] On the one hand, a footnote.
 .. [#] On the other hand, another footnote.
 
-.. figure:: figure1.png
+.. figure:: figure2.png
 
    This is the caption. :label:`egfig`
 
-.. figure:: figure1.png
-   :align: center
-   :figclass: w
 
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
 
-.. figure:: figure1.png
+.. figure:: figure2.png
    :scale: 20%
    :figclass: bht
 
@@ -347,12 +490,5 @@ The GeForce TITAN X used for this research was donated
 by the NVIDIA Corporation.
 
 
-References
-----------
-.. [Fin15] I. Fine and G. M. Boynton. *Pulse trains to percepts: the challenge of creating a perceptually intelligible world with sight recovery technologies*, Philos Trans R Soc Lond B Biol Sci 370(1677): 20140208, doi:`10.1098/rstb.2014.0208 <http://dx.doi.org/10.1098/rstb.2014.0208>`_.
-
-.. [Hor09] A. Horsager, S. H. Greenwald, J. D. Weiland, M. S. Humayun, R. J. Greenberg, M. J. McMahon, G. M. Boynton, and I. Fine. *Predicting visual sensitivity in retinal prosthesis patients*, Invest Ophthalmol Vis Sci 50(4): 1483-1491, doi:`10.1167/iovs.08-2595 <http://dx.doi.org/10.1167/iovs.08-2595>`_.
-
-.. [Hor11] A. Horsager, G. M. Boynton, R. J. Greenberg, and I. Fine. *Temporal interactions during pairedelectrode stimulation in two retinal prosthesis subjects*, Invest Ophthalmol Vis Sci 52(1): 549-557, doi:`10.1167/iovs.10-5282 <http://dx.doi.org/10.1167/iovs.10-5282>`_.
 
 
