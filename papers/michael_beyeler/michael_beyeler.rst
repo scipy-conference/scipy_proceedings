@@ -315,9 +315,9 @@ All parameter values are given in Table :ref:`tableparams`.
 Implementation and Results
 --------------------------
 
-All code can be found at `https://github.com/uwescience/pulse2percept`_,
+All code can be found at https://github.com/uwescience/pulse2percept,
 with up-to-date documentation
-available at `https://uwescience.github.io/pulse2percept`.
+available at https://uwescience.github.io/pulse2percept.
 In addition, the latest stable release is available on the Python Package Index
 and can be installed using pip:
 
