@@ -49,19 +49,95 @@ pulse2percept: A Python-based simulation framework for bionic vision
 
 .. class:: keywords
 
-   terraforming, desert, numerical perspective
+   bionic vision, retinal implant, pulse2percept
 
 
 Introduction
 ------------
 
-Retinal prostheses aim to recover functional vision in patients
-blinded by degenerative retinal diseases,
-such as retinitis pigmentosa and age-related macular degeneration,
-by electrically stimulating remaining retinal cells.
-Clinical experience with these implants shows that these are still early days,
-with current technologies resulting in nontrivial distortions of the
-perceptual experience :cite:`FineBoynton2015`.
+Two of the most frequenct causes of blindness in the developed world
+are retinitis pigmentosa (RP) and age-related macular degeneration (AMD)
+:cite:`Bunker1984,EyeDiseases2004`.
+Both diseases begin with the degeneration of photoreceptors in the retina,
+though in later stages other retinal cells
+(such as bipolar, amacrine, and ganglion cells) are affected as well.
+Despite a significant loss of retinal ganglion cells in advanced stages
+of RP and AMD,
+their morphological structure and connections to the optic nerve
+seem to be relatively well maintained :cite:`Humayun1999,Mazzoni2008`.
+This has led researchers to develop implanatable microelectronic
+visual prostheses that, analogous to cochlear implants,
+directly stimulate remaining retinal neurons with electrical current.
+The ultimate goal of most implants is to generate useful vision
+in blind patients by transforming visual information into a spatial
+and temporal sequence of electrical pulses
+(see Fig. :ref:`retinalimplants`).
+
+.. figure:: figure1.jpg
+   :align: center
+   :scale: 70%
+
+   A schematic overview of an epiretinal prosthesis.
+   TODO Should probably redo the figure to avoid copyright issue with
+   Boston Retinal Implant group.
+   :label:`retinalimplants`
+
+To date, two different retinal prosthesis systems are already approved
+for commercial use in patients across the US and Europe.
+The Argus II device (Second Sight Medical Products Inc., :cite:`daCruz2016`)
+is an `epiretinal` prosthesis,
+which is placed on top of the retinal surface,
+above the optic fiber layer;
+thus directly stimulating retinal ganglion cells
+while bypassing other retinal layers.
+The Alpha-IMS system (Retina Implant AG, :cite:`Stingl2015`),
+on the other hand, is a `subretinal` device,
+which is placed on the outer surface of the retina,
+between the photoreceptor layer and the retinal pigment epithelium;
+thus directly stimulating retinal bipolar cells.
+At the same time, a number of other devices have either started
+or are planning to start clinical trials in the near future,
+potentially offering a wide range of sight restoration options
+for blinded individuals within a decade :cite:`Fine2015`.
+
+.. figure:: figure1.eps
+   :align: center
+   :figclass: w
+   :scale: 35%
+
+   Full model cascade. TODO explain.
+   :label:`figmodel`
+
+However, clinical experience with existing retinal prostheses make it
+apparent that the vision provided by these devices differs substantially
+from normal sight.
+Patients report the experience of prosthetic vision as being like
+`"looking at the night sky where you have millions of twinkly lights
+that almost look like chaos"`
+:cite:`PioneerPress2015`.
+Patients report perceptual distortions of the visual imagery created
+by these devices in both space and time:
+For example, stimulating even a single electrode leads to percepts
+that vary dramatically in shape
+(e.g., varying in description from "blobs", to "streaks" and "half-moons")
+and duration (e.g., fading over time).
+These perceptual distortions are thought to result from interactions
+between implant electronics and the underlying neurophysiology
+:cite:`FineBoynton2015,Beyeler2017`,
+but the exact mechanisms remain poorly understood.
+Therefore, in order to create perceptually meaningful vision,
+it is necessary to predictly generate a range of brightness levels
+over both space and time.
+
+.. Clinical experience with these implants shows that these are still early days,
+.. with current technologies resulting in nontrivial distortions of the
+.. perceptual experience :cite:`FineBoynton2015`.
+
+.. Here we present *pulse2percept*, an open-source Python implementation
+.. of a computational model that can predict the perceptual experience
+.. of retinal prosthesis patients across a wide range of
+.. implant configurations.
+
 We have developed a computational model of bionic vision that simulates
 the perceptual experience of retinal prosthesis patients
 across a wide range of implant configurations.
@@ -82,14 +158,12 @@ discuss and conclude.
 Methods
 -------
 
-.. figure:: figure1.eps
-   :align: center
-   :figclass: w
-   :scale: 35%
-
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
-   :label:`figmodel`
+We developed a model that uses similar math as cochlear implants
+:cite:`Horsager2009,Nanduri2012`.
+Model parameters were fit to psychophysical data such as
+threshold data and patient drawings.
+Detailed methods can be found in the above two papers,
+here we give a brief overview.
 
 The full model cascade for an Argus I epiretinal prosthesis is illustrated in
 Fig. :ref:`figmodel`, although this model generalizes to other epiretinal
@@ -107,19 +181,109 @@ We modeled the sensitivity of axon fibers (green lines in B;
 location of the array with respect to the optic disc was inferred from 
 patients' fundus photographs) as decreasing exponentially as a 
 function of distance from the soma.
-The resulting sensitivity profile (heat map in B) was then convolved with a 
-gamma function to model the impulse response function of retinal ganglion cells 
-(:math:`\tau = 0.42` ms; C). 
-We modeled loss of sensitivity as a function of previous stimulation by 
-subtracting accumulated cathodic charge after convolution with a gamma function 
-(:math:`\tau = 45.3` ms)
-from the output of the retinal ganglion cells (D).
-The signal was then half-rectified, passed through a static
-nonlinearity (E), and convolved with a slow gamma function intended to model 
-slower perceptual processes
-(:math:`\tau = 26.3` ms; F). 
-The output of the model was a map of brightness values (arbitrary units) over time. 
-Subjective brightness was defined as the highest brightness value in the map.
+
+The resulting sensitivity profile (heat map in B) was then convolved
+pixel-by-pixel with a number of linear (boxes C, D, and F)
+and nonlinear (box E) steps to model the temporal senstivity
+of the retinal tissue,
+similar to models of auditory stimulation in cochlear implant users.
+
+Linear responses were modeled as temporal low-pass filters,
+or "leaky integrators",
+modeled with gamma functions of order :math:`n`:
+
+.. math::
+   :label: eqgamma
+
+   \delta(t, n, \tau) = \frac{\exp(-t / \tau)}{\tau (n - 1)!} \Big( \frac{t}{\tau} \Big)^{n-1}
+
+where :math:`t` is time,
+:math:`n` is the number of identical, cascading stages,
+and :math:`\tau` is the time constant of the filter.
+
+We began by convolving the electrical input stimulus :math:`f(s,t)`
+with a one-stage gamma function (:math:`n=1`,
+time constant :math:`\tau_1 = 0.42` ms)
+to model the impulse response function of retinal ganglion cells
+(Fig. :ref:`figmodel` C):
+
+.. math::
+   :label: eqfast
+
+   r_1(s,t) = f(s,t) * \delta(t, 1, \tau_1),
+
+where :math:`*` denotes convolution.
+
+We assumed that the system became less sensitive as a function of
+accumulated charge.
+This was implemented by calculting the amount of accumulating charge
+at each point of time in the stimulus, :math:`c(t)`,
+and colvolving this accumulation with a second one-stage gamma function
+(:math:`n=1`, time constant :math:`tau_2 = 45.3` ms;
+Fig. :ref:`figmodel` D).
+The output of this convolution was scaled by a factor
+:math:`\epsilon_1 = 8.3` and subtracted from :math:`r_1` (Eq. :ref:`eqfast`):
+
+.. math::
+   :label: eqacc
+
+   r_2(s,t) = r_1(s,t) - \epsilon_1\big( c(s,t) * \delta(t, 1, \tau_2) \big).
+
+The response :math:`r_2(s,t)` was then passed through a stationary
+nonlinearity (:ref:`figmodel` E) to model the nonlinear input-output
+relationship of ganglion cell firing:
+
+.. math::
+   :label: eqnonlinear
+
+   r_3(s,t) = r_2(s,t) \frac{\alpha}{1 + \exp{\frac{i - \max_t{r_2(s,t)}}{s}}}
+
+where :math:`\alpha = 14` (asymptote),
+:math:`s = 3` (slope),
+and :math:`i = 16` (shift) were chosen
+to match the observed psychophysical data.
+
+Finally, the response :math:`r_3(s,t)` was convolved with another low-pass
+filter described as a three-stage gamma function
+(:math:`n = 3`, :math:`tau_3 = 26.3` ms)
+intended to model slower perceptual processes in the brain
+(:ref:`figmodel` F):
+
+.. math::
+   :label: eqslow
+
+   r_4(s,t) = \epsilon_2 r_3(s,t) * \delta(t, 3, \tau_3),
+
+where :math:`epsilon_2 = 1000` was a scaling factor used to
+fit the output to subjective brightness values in [0, 100]
+reported by patients on single-electrode stimulation tasks.
+Thus the output of the model was a map of subjective brightness values
+that change over time.
+An example percept generated by the model is shown on the right-hand
+side of Fig. :ref:`figmodel`, along with the perceived percept as
+reported by one of the subjects.
+
+.. The output of the model was a map of brightness values (arbitrary units) over time. 
+.. Subjective brightness was defined as the highest brightness value in the map.
+
+All parameter values are given in Table :ref:`tableparams`.
+
+.. raw:: latex
+
+   \begin{table}[h]
+     \begin{tabular}{|r|r|r|}
+     \hline
+     Name & Parameter & Value \\
+     \hline
+     Time constant: ganglion cell impulse response & $\tau_1$ & 0.42 ms \\
+     Time constant: charge accumulation & $\tau_2$ & 45.3 ms \\
+     Time constant: cortical response & $\tau_3$ & 26.3 ms \\
+     TODO & & \\
+     \hline
+     \end{tabular}
+     \caption{Parameter values}
+     \label{tableparams}
+   \end{table}
 
 
 
@@ -157,7 +321,8 @@ A minimal usage example is given in the listing below:
    ssample = 100  # microns
    tsample = 0.005 / 1000  # seconds
    sim.set_optic_fiber_layer(sampling=ssample)
-   sim.set_ganglion_cell_layer(tsample=tsample)
+   sim.set_ganglion_cell_layer(model='Nanduri2012',
+                               tsample=tsample)
 
    # Generate a stimulus: Biphasic pulse, 20 uA, 50 Hz,
    # 0.5 second duration
@@ -189,13 +354,6 @@ a single-pixel percept:
 .. code-block:: python
 
    class MyGanglionCellModel(TemporalModel):
-       def __init__(self, tsample, **kwargs):
-           self._tsample = tsample
-
-       @property
-       def tsample(self):
-           return self._tsample
-
        def model_cascade(self, ecv):
            pass
 
@@ -204,7 +362,7 @@ It can then be passed to the simulation framework:
 
 .. code-block:: python
 
-   mymodel = MyGanglionCellModel(tsample=0.005 / 1000)
+   mymodel = MyGanglionCellModel()
    sim.set_ganglion_cell_layer(mymodel)
 
 
@@ -291,192 +449,6 @@ that can allow any user to directly compare the perceptual experiences
 likely to be produced across different devices.
 
 
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-With code-highlighting:
-
-.. code-block:: python
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-Maybe also in another language, and with line numbers:
-
-.. code-block:: c
-   :linenos:
-
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
-
-Or a snippet from the above code, starting at the correct line number:
-
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
-
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
-
-Important Part
---------------
-
-It is well known that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
-
-.. math::
-
-   g(x) = \int_0^\infty f(x) dx
-
-or on multiple, aligned lines:
-
-.. math::
-   :type: eqnarray
-
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
-
-The area of a circle and volume of a sphere are given as
-
-.. math::
-   :label: circarea
-
-   A(r) = \pi r^2.
-
-.. math::
-   :label: spherevol
-
-   V(r) = \frac{4}{3} \pi r^3
-
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
-pulvinar id metus.
-
-.. [#] On the one hand, a footnote.
-.. [#] On the other hand, another footnote.
-
-.. figure:: figure2.png
-
-   This is the caption. :label:`egfig`
-
-
-
-.. figure:: figure2.png
-   :scale: 20%
-   :figclass: bht
-
-   This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top.
-   Note that for now, scale is relative to a completely arbitrary original
-   reference size which might be the original size of your image - you probably
-   have to play with it. :label:`egfig2`
-
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
-
-.. table:: This is the caption for the materials table. :label:`mtable`
-
-   +------------+----------------+
-   | Material   | Units          |
-   +============+================+
-   | Stone      | 3              |
-   +------------+----------------+
-   | Water      | 12             |
-   +------------+----------------+
-   | Cement     | :math:`\alpha` |
-   +------------+----------------+
-
-
-We show the different quantities of materials required in Table
-:ref:`mtable`.
-
-
-.. The statement below shows how to adjust the width of a table.
-
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.8\linewidth}
-
-
-.. table:: This is the caption for the wide table.
-   :class: w
-
-   +--------+----+------+------+------+------+--------+
-   | This   | is |  a   | very | very | wide | table  |
-   +--------+----+------+------+------+------+--------+
-
-Unfortunately, restructuredtext can be picky about tables, so if it simply
-won't work try raw LaTeX:
-
-
-.. raw:: latex
-
-   \begin{table*}
-
-     \begin{longtable*}{|l|r|r|r|}
-     \hline
-     \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
-     \cline{2-4}
-      & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
-     \hline
-     Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
-     \hline
-     Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
-     \hline
-     Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
-     \hline
-     Percent Difference & 44\% & 41\% & 43\%\tabularnewline
-     \hline
-     \end{longtable*}
-
-     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
-
-   \end{table*}
-
-Perhaps we want to end off with a quote by Lao Tse [#]_:
-
-  *Muddy water, let stand, becomes clear.*
-
-.. [#] :math:`\mathrm{e^{-i\pi}}`
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
 
 
 Acknowledgments
