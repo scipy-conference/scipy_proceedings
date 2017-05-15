@@ -58,49 +58,67 @@ Introduction
 Two of the most frequenct causes of blindness in the developed world
 are retinitis pigmentosa (RP) and age-related macular degeneration (AMD)
 :cite:`Bunker1984,EyeDiseases2004`.
-Both diseases begin with the degeneration of photoreceptors in the retina,
-though in later stages other retinal cells
-(such as bipolar, amacrine, and ganglion cells) are affected as well.
-Despite a significant loss of retinal ganglion cells in advanced stages
-of RP and AMD,
-their morphological structure and connections to the optic nerve
-seem to be relatively well maintained :cite:`Humayun1999,Mazzoni2008`.
-This has led researchers to develop implanatable microelectronic
-visual prostheses that, analogous to cochlear implants,
-directly stimulate remaining retinal neurons with electrical current.
-The ultimate goal of most implants is to generate useful vision
-in blind patients by transforming visual information into a spatial
-and temporal sequence of electrical pulses
-(see Fig. :ref:`retinalimplants`).
+Both diseases are identified by a progressive degeneration of
+photoreceptors in the retina,
+resulting in severe visual impairment.
+In severe end-stage RP, approximately 95% of photoreceptors,
+20% of bipolar cells,
+and 70% of ganglion cells degenerate :cite:`Santos1997`.
+A significant fraction of the inner retinal neurons are spared,
+but the absence of photoreceptors prevents useful vision.
 
-.. figure:: figure1.jpg
+Despite a significant loss of retinal ganglion cells - which represent
+the output layer of the retina that sends visual signals to the brain
+via the optic nerve -, their morphological structure and
+connectivity seem to be relatively well maintained
+:cite:`Humayun1999,Mazzoni2008`.
+This has raised the possibility for patients blinded by these diseases
+to potentially have their vision restored via the implantation
+of microelectronic retinal prostheses.
+
+Analogous to cochlear implants, the goal of electronic retinal prostheses
+is to electrically stimulate the surviving retinal neurons
+in order to evoke neuronal responses that are transmitted
+to the brain and interpreted by patients as visual percepts
+(see Fig. :ref:`figimplant` A).
+
+.. figure:: figimplant.png
    :align: center
-   :scale: 70%
+   :scale: 25%
 
-   A schematic overview of an epiretinal prosthesis.
-   TODO Should probably redo the figure to avoid copyright issue with
-   Boston Retinal Implant group.
-   :label:`retinalimplants`
+   Electronic retinal prosthesis.
+   A) Light from the visual scene is captured by an external camera and
+   transformed into electrical pulses delivered through electrodes
+   to stimulate the retina.
+   B) Prostheses can be placed in the epiretinal, subretinal, or
+   suprachoroidal space.
+   TODO Need to redo the figure in order to avoid copyright issues.
+   :label:`figimplant`
 
-To date, two different retinal prosthesis systems are already approved
-for commercial use in patients across the US and Europe.
-The Argus II device (Second Sight Medical Products Inc., :cite:`daCruz2016`)
-is an `epiretinal` prosthesis,
-which is placed on top of the retinal surface,
-above the optic fiber layer;
-thus directly stimulating retinal ganglion cells
-while bypassing other retinal layers.
-The Alpha-IMS system (Retina Implant AG, :cite:`Stingl2015`),
-on the other hand, is a `subretinal` device,
-which is placed on the outer surface of the retina,
-between the photoreceptor layer and the retinal pigment epithelium;
-thus directly stimulating retinal bipolar cells.
+Several types of retinal prostheses are currently in development,
+varying in user interface, light-detection method, signal processing,
+and microelectrode placement within the retina
+(for a recent review see :cite:`Weiland2016`).
+The three main locations for microelectrode array placement are the
+`epiretinal` (i.e., on top of the retinal surface, above the optic fiber layer),
+`subretinal` (i.e., between bipolar cells and retinal pigmented epithelium),
+and `suprachoroidal` space (i.e., between the choroid and the sclera)
+as shown in Fig. :ref:`figimplant` B).
+Each of these approaches is similar in that light from the visual scene
+is captured and transformed into electrical pulses delivered through electrodes
+to stimulate the retina.
+
+Two of these systems are already approved for commercial
+use in patients across the US and Europe:
+the Argus II device
+(epiretinal, Second Sight Medical Products Inc., :cite:`daCruz2016`)
+and the Alpha-IMS system (subretinal, Retina Implant AG, :cite:`Stingl2015`).
 At the same time, a number of other devices have either started
 or are planning to start clinical trials in the near future,
 potentially offering a wide range of sight restoration options
 for blinded individuals within a decade :cite:`Fine2015`.
 
-.. figure:: figure1.eps
+.. figure:: figmodel.eps
    :align: center
    :figclass: w
    :scale: 35%
@@ -112,9 +130,11 @@ However, clinical experience with existing retinal prostheses make it
 apparent that the vision provided by these devices differs substantially
 from normal sight.
 Patients report the experience of prosthetic vision as being like
-`"looking at the night sky where you have millions of twinkly lights
-that almost look like chaos"`
-:cite:`PioneerPress2015`.
+:cite:`PioneerPress2015`:
+
+  *"... looking at the night sky where you have millions of twinkly lights
+  that almost look like chaos"*
+
 Patients report perceptual distortions of the visual imagery created
 by these devices in both space and time:
 For example, stimulating even a single electrode leads to percepts
@@ -138,15 +158,17 @@ over both space and time.
 .. of retinal prosthesis patients across a wide range of
 .. implant configurations.
 
-We have developed a computational model of bionic vision that simulates
-the perceptual experience of retinal prosthesis patients
-across a wide range of implant configurations.
+We have previously developed a computational model of bionic vision
+that simulates the perceptual experience of retinal prosthesis patients
+across a wide range of implant configurations
+:cite:`Horsager2009,Nanduri2012`.
 Here we present an open-source implementation of these models as part of
 *pulse2percept*, a Python-based simulation framework that relies solely on
-open-source contributions of the NumPy/SciPy stacks and the broader
-Python community.
-The model has been validated against human pyschophysical data,
-and generalizes across individual electrodes, patients, and devices.
+open-source contributions of the NumPy and SciPy stacks
+as well as the broader Python community.
+We hope that this library will contribute substantially to the field of medicine
+by providing a tool to accelerate the development of visual prostheses
+suitable for human trials.
 
 The remainder of this paper is organized as follows:
 explain the computational model,
@@ -155,8 +177,8 @@ show some results,
 discuss and conclude.
 
 
-Methods
--------
+Computational Model of Bionic Vision
+------------------------------------
 
 We developed a model that uses similar math as cochlear implants
 :cite:`Horsager2009,Nanduri2012`.
@@ -164,6 +186,8 @@ Model parameters were fit to psychophysical data such as
 threshold data and patient drawings.
 Detailed methods can be found in the above two papers,
 here we give a brief overview.
+The model has been validated against human pyschophysical data,
+and generalizes across individual electrodes, patients, and devices.
 
 The full model cascade for an Argus I epiretinal prosthesis is illustrated in
 Fig. :ref:`figmodel`, although this model generalizes to other epiretinal
@@ -291,7 +315,29 @@ All parameter values are given in Table :ref:`tableparams`.
 Implementation and Results
 --------------------------
 
-The code is organized into different submodules:
+All code can be found at `https://github.com/uwescience/pulse2percept`_,
+with up-to-date documentation
+available at `https://uwescience.github.io/pulse2percept`.
+In addition, the latest stable release is available on the Python Package Index
+and can be installed using pip:
+
+.. code-block:: bash
+
+   $ pip install pulse2percept
+
+All code presented in this paper is current as of the v0.2 release.
+
+We use modern software development practices :cite:`Wilson:2014aa,Stodden:2014tg` with continuous integration (provided by Travis CI) and an extensive automated test suite (containing over 3500 tests with >92% coverage for our core modules). Development occurs on GitHub through pull requests that are reviewed by core developers and other contributors, supported by the results from the automated tests, test coverage reports provided by Coveralls, and QuantifiedCode code quality reports. Users and developers communicate extensively on the community mailing list (Google groups) and the GitHub issue tracker; new users and developers are very welcome and most user contributions are eventually integrated into the code base. The development and release process is transparent to users through open discussions and announcements and a full published commit history and changes. Releases are numbered according to the semantic versioning convention so that users can immediately judge the impact of a new release on their existing code base, even without having to consult the CHANGELOG documentation. Old code is slowly deprecated so that users have ample opportunity to update the code although we generally attempt to break as little code as possible. When backwards-incompatible changes are inevitable, we provide tools (based on the Python standard library's lib2to3) to automatically refactor code or warn users of possible problems with their existing code.
+
+
+Code Organization
+~~~~~~~~~~~~~~~~~
+
+The project seeks a trade-off between object oriented programming
+and ease of use.
+
+*pulse2percept* is packaged as a standard Python package, and consists
+of the following primary modules:
 
 - :code:`api`: The API
 - :code:`retina`: All retinal stuff
@@ -300,7 +346,16 @@ The code is organized into different submodules:
 - :code:`files`: All I/O
 - :code:`utils`: All utility functions
 
-A minimal usage example is given in the listing below:
+
+Basic Usage
+~~~~~~~~~~~
+
+A minimal usage example is given in the listing below.
+
+Convention is to import the main :code:`pulse2percept` module
+as :code:`p2p`. Throughout this paper, if a class is referred
+to with the prefix :code:`p2p`, it means this class belongs to
+the main pulse2percept library (e.g., :code:`p2p.retina`).
 
 .. code-block:: python
 
@@ -335,6 +390,8 @@ A minimal usage example is given in the listing below:
                                layers=['GCL', 'OFL'])
 
 
+Extensibility
+~~~~~~~~~~~~~
 
 Extensibility is provided through class inheritance.
 This allows users to create their own:
@@ -392,8 +449,8 @@ or :code:`pulse2percept.stimuli.PulseTrain`:
 
 
 
-
-We can create new stimuli:
+Implementation Details
+~~~~~~~~~~~~~~~~~~~~~~
 
 Some implementation details and some results.
 
@@ -414,17 +471,34 @@ just-in-time compilation (Numba).
 
 
 
+Computational Performance
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We measured computational performance and scalability.
+It doesn't run in real time but is pretty good,
+I mean look at the pretty figure!
+
+.. figure:: figure2.png
+   :align: center
+   :scale: 50%
+
+   Computational performance. TODO
+   :label:`figperformance`
+
 
 Discussion
 ----------
 
+We have presented an open-source, Python-based framework for modeling
+the visual processing in retinal prosthesis patients.
+
 *pulse2percept* has a number of potential uses.
 
-For device developers, creating “virtual patients” with this software
+For device developers, creating "virtual patients" with this software
 can facilitate the development of improved pulse stimulation protocols
 for existing devices, including generating datasets
 for machine learning approaches.
-“Virtual patients” are also a useful tool for device development,
+"Virtual patients" are also a useful tool for device development,
 making it possible to rapidly predict vision across
 different implant configurations.
 We are currently collaborating with two leading manufacturers
@@ -440,7 +514,7 @@ and some only publish a selective subset of data.
 This makes it extremely difficult to compare patient visual performance
 across different devices.
 Any simulations that currently exist are proprietary and not available
-to the scientific community, and manufacturer-published ‘simulations’
+to the scientific community, and manufacturer-published 'simulations'
 of prosthetic vision are sometimes misleading,
 if they do not take account of substantial neurophysiological distortions
 in space and time.
