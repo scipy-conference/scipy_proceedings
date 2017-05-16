@@ -76,7 +76,7 @@ In our experiments we observed significant speedups of the many-to-one matching 
 Usage Overview
 --------------
 
-MatchPy can be installed using ``pip install matchpy`` and al necessary classes can be imported with
+MatchPy can be installed using ``pip install matchpy`` and all necessary classes can be imported with
 :py:`from matchpy import *`. Expressions in MatchPy consist of symbols and operations.
 For patterns, wildcards can also be used as placeholders. Optionally, patterns can have further
 constraints that restrict what they can match.
@@ -97,8 +97,30 @@ enables dynamic operation creation:
 
     >>> MyOp = Operation.new('MyOp', Arity.variadic)
 
+TODO
+
 Many-to-one Matching
 --------------------
+
+MatchPy also includes two additional algorithms for matching: ``ManyToOneMatcher`` and
+``DiscriminationNet``. Both enable matching multiple pattern against a single subject
+much faster than matching each pattern individually using ``match``. The later can only be used
+for syntactic patterns, i.e. patterns without associative/commutative operations and sequence
+variables. Both are based on discrimination nets which are a data structure similar to a
+decision tree. ``ManyToOneMatcher`` uses a non-deterministic discrimination net with
+backtracking, while ``DiscriminationNet`` is deterministic.
+
+.. figure:: dn.pdf
+
+   Example Discrimination Net. :label:`fig:dn`
+
+In Figure :ref:`fig:dn`, an example for a non-deterministic discrimination net is shown.
+:math:`f` is a function symbol, :math:`a` and :math:`b` and constant symbols, and :math:`x^*` and
+:math:`y` are variables. Matching starts at the root and proceeds along the transitions.
+Simultaneously, the subject is traversed in preorder and each symbol is check against the
+transitions. Only transitions which match the current subterm can be used. Once a final state is
+reached, its label gives a list of matching patterns. For the non-deterministic discrimination net,
+all possibilities need to be explored via backtracking.
 
 TODO
 
@@ -202,12 +224,11 @@ The resulting pattern will only match diagonal matrices:
 Application: Finding matches for a BLAS kernel
 ..............................................
 
-Lets assume we want to find all subexpressions of some expression which we can compute efficiently with
+Lets assume we want to find all subexpressions of some linear algebra expression which we can compute efficiently with
 the `?TRMM`_ BLAS_ routine. These all have the form :math:`\alpha \times op(A)  \times B` or :math:`\alpha  \times B  \times op(A)` where
 :math:`op(A)` is either the identity function or transposition, and :math:`A` is a triangular matrix.
-For this example, we will leave out all variants where :math:`\alpha \neq 1`.
-
-First, we define the variables and constraints we need:
+For this example, we will leave out all variants where :math:`\alpha \neq 1`. We can construct the
+patterns using sequence variables to capture the remaining operands of the multiplication:
 
 .. code-block:: python
 
@@ -217,11 +238,6 @@ First, we define the variables and constraints we need:
     after_ = Wildcard.star('after')
     A_is_triangular = CustomConstraint(
       lambda A: 'triangular' in A.properties)
-
-Then we can construct the patterns, using sequence variables to capture the remaining operands
-of the multiplication:
-
-.. code-block:: python
 
     trmm_patterns = [
       Pattern(Times(before_, A_, B_, after_),
