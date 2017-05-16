@@ -73,6 +73,35 @@ as an open-source library for Python called MatchPy_. In addition to regular one
 this library also includes an efficient many-to-one matching algorithm that uses generalized discrimination nets.
 In our experiments we observed significant speedups of the many-to-one matching over one-to-one matching.
 
+Usage Overview
+--------------
+
+MatchPy can be installed using ``pip install matchpy`` and al necessary classes can be imported with
+:py:`from matchpy import *`. Expressions in MatchPy consist of symbols and operations.
+For patterns, wildcards can also be used as placeholders. Optionally, patterns can have further
+constraints that restrict what they can match.
+
+To use MatchPy, one first has to define some operations. This can either be done by creating a
+subclass of the ``Operation`` class:
+
+.. code-block:: python
+
+    class MyOperation(Operation):
+      name = 'MyOperation'
+      arity = Arity.variadic
+
+Alternatively, they can be constructed with the ``Operation.new`` convenience function which also
+enables dynamic operation creation:
+
+.. code-block:: pycon
+
+    >>> MyOp = Operation.new('MyOp', Arity.variadic)
+
+Many-to-one Matching
+--------------------
+
+TODO
+
 Example Domain: Linear Algebra
 ------------------------------
 
@@ -114,7 +143,7 @@ transposition, and inversion. The following Python code defines the classes:
       name = '^-1'
 
 Matrix symbols have a set of properties which can be checked by constraints on the patterns. For
-``Plus`` and ``Times``, the ``Operation.new`` shorthand is used to quickly create the classes.
+``Plus`` and ``Times``, the ``Operation.new`` convenience function is used to quickly create the classes.
 If ``one_identity`` is ``True``, :math:`op(x) = x` holds and and occurences of the operation with a
 single argument are simplified. ``infix`` has just cosmetic effects and makes the string
 representation of the operation use infix instead of prefix notation. For the unary operations,
@@ -225,12 +254,100 @@ conducted on an Intel Core i5-2500K 3.3 GHz CPU with 8GB of RAM.
 Linear Algebra
 ..............
 
-TODO
+The operations for the linear algebra problem are shown in Table :ref:`tbl:laop`. The patterns
+all match BLAS_ kernels similar to the example pattern which was previously described. The pattern
+set consists of 199 such patterns. Out of those, 61 have an addition as outermost operation, 135
+are patterns for products, and 3 are patterns for single matrices. A lot of these patterns only
+differ in terms of constraints, e.g. there are ten distinct patterns matching :math:`A \times B`
+with different constraints on the two matrices. By removing the sequence variables from the product
+patterns, these pattern can be made syntactic when ignoring the multiplication's associativity.
+In the following, we refer to the set of patterns with sequence variables as ``LinAlg``
+and the set of syntactic product patterns as ``Syntactic``.
+
+.. table This is the caption for the materials table. :label:`mtable`
+   :class: w
+   +-----------------------------+-----------------+----------+--------------------------+
+   | Operation                   | Symbol          | Arity    | Properties               |
+   +=============================+=================+==========+==========================+
+   | Multiplication              | :math:`\times`  | variadic | associative              |
+   +-----------------------------+-----------------+----------+--------------------------+
+   | Addition                    | :math:`+`       | variadic | associative, commutative |
+   +-----------------------------+-----------------+----------+--------------------------+
+   | Transposition               | :math:`{}^T`    | unary    |                          |
+   +-----------------------------+-----------------+----------+--------------------------+
+   | Inversion                   | :math:`{}^{-1}` | unary    |                          |
+   +-----------------------------+-----------------+----------+--------------------------+
+   | Inversion and Transposition | :math:`{}^{-T}` | unary    |                          |
+   +-----------------------------+-----------------+----------+--------------------------+
+
+
+.. latex::
+    :usepackage: booktabs
+
+    \begin{table}
+        \centering
+        \renewcommand{\arraystretch}{1.2}
+        \begin{tabular}{l c c p{1.5cm}}
+            \toprule
+            \textbf{Operation} & \textbf{Symbol} & \textbf{Arity} & \textbf{Properties} \\
+            \midrule
+            Multiplication & $\times$ & variadic & associative \\
+            Addition & $+$ & variadic & associative,\newline commutative \\
+            Transposition & ${}^T$ & unary & \\
+            Inversion & ${}^{-1}$ & unary & \\
+            Inversion and Transposition & ${}^{-T}$ & unary & \\
+            \bottomrule
+        \end{tabular}
+        \caption{Linear Algebra Operations}
+    \label{tbl:laop}
+    \end{table}
+
+The subjects were randomly generated such that matrices had random properties and each factor could
+randomly be transposed/inverted. The number of factors was chosen according to a normal
+distribution with :math:`\mu = 5`. The total subject set consisted of 70 random products and 30 random sums.
+Out of the pattern set, random subsets were used to examine the influence of the pattern set size on
+the matching time. Across multiple subsets and repetitions per subject, the mean match and setup
+times were measured. Matching was performed both with the ``match`` function and the
+``ManyToOneMatcher`` (MTOM). The results are displayed in Figure :ref:`fig:linalgtime`.
+
+.. figure:: linalg_times.pdf
+
+   Timing Results for ``LinAlg``. :label:`fig:linalgtime`
+
+As expected, both setup and match times grow with the pattern set size. The growth of the
+many-to-one match time is much slower than the one for one-to-one matching. This is also expected,
+because the simultaneous matching is more efficient. However, the growth of setup time for the
+many-to-one matcher beckons the question whether the speedup of the many-to-one matching is worth it.
+
+.. figure:: linalg_speed.pdf
+
+   Comparison for ``LinAlg``. :label:`fig:linalgspeed`
+
+Figure :ref:`fig:linalgspeed` depicts both the speedup and the break even point for many-to-one
+matching for ``LinAlg``. The first graph indicates that the speedup of many-to-one matching
+increases with larger pattern sets. But in order to fully profit from that speedup, the setup
+cost of many-to-one matching must be amortized. Therefore, the second graph shows the break even
+point for many-to-one matching in terms of number of subjects. If for a given number of patterns and
+subjects the corresponding point is above the line, then many-to-one matching is overall faster.
+In this example, when matching more than eight times, many-to-one matching is overall always faster
+than one-to-one matching.
 
 Syntactic
 '''''''''
 
-TODO
+For the syntactic product patterns we compared the ``match`` function, the ``ManyToOneMatcher``
+(MTOM) and the ``DiscriminationNet`` (DN). Again, randomly generated subjects were used. The
+resulting speedups and break even points are displayed in Figure :ref:`fig:syntacticspeed`.
+
+.. figure:: syntactic_speed.pdf
+
+   Comparison for ``Syntactic``. :label:`fig:syntacticspeed`
+
+In this case, the discrimination net is the fastest overall reaching a speedup of up to 60.
+However, because it also has the highest setup time, it only outperforms the many-to-one matcher
+after about 100 subjects for larger pattern set sizes. In practice, the discrimination net is likely
+the best choice for syntactic patterns, as long as the discrimination net does not grow to large.
+In the worst case, the size of the discrimination net can grow exponentially in the number of patterns.
 
 Abstract Syntax Trees
 .....................
@@ -240,6 +357,8 @@ It is part of the standard library package ``lib2to3`` which has a collection of
 To find matching parts of the code, those fixers use pattern matching on the abstract syntax tree (AST).
 Such an AST can be represented in the MatchPy data structures.
 We converted some of the patterns used by ``lib2to3`` both to demonstrate the generality of MatchPy and to evaluate the performance of many-to-one matching.
+Because the fixers are applied one after another and can modify the AST after each match,
+it would be difficult to use many-to-one matching for ``lib2to3`` in practice.
 
 The following is an example of such a pattern:
 
@@ -286,8 +405,6 @@ The setup time can also mostly be eliminated by saving the many-to-one matcher t
 Compared the one-to-one matching implementation in MatchPy, the many-to-one matching achieves a speedup of about 60.
 This is due to the fact that for any given subject less than 1% of patterns match.
 When taking into account the setup time of the many-to-one matcher, this means that the break even point for it is at about 200 subjects.
-Because the fixers are applied one after another and can modify the AST after each match,
-it would be difficult to use many-to-one matching for ``lib2to3`` in practice.
 
 ..  setup 1.397398018220357
     matchpy 0.7200570708846341
@@ -297,11 +414,8 @@ it would be difficult to use many-to-one matching for ``lib2to3`` in practice.
     Converted: 36
     Original: 46
 
-Conclusions and Future Work
----------------------------
-
 Conclusions
-...........
+-----------
 
 We have presented MatchPy, which is a pattern matching library for Python with support for sequence variables and associative/commutative functions.
 This library includes algorithms and data structures for both one-to-one and many-to-one matching.
@@ -324,14 +438,14 @@ In terms of the size of the many-to-one matcher, the growth of the net seems to 
 The efficiency of using many-to-one matching also heavily depends on the actual pattern set, i.e. the degree of similarity and overlap between the patterns.
 
 Future Work
-...........
+-----------
 
 We plan on extending MatchPy with more powerful pattern matching features to make it useful for an even wider range of applications.
 The greatest challenge with additional features is likely to implement them for many-to-one matching.
 In the following, we will discuss some possibilities for extending the library.
 
 Additional pattern features
-'''''''''''''''''''''''''''
+...........................
 
 In the future, we plan to implement similar functionality to the ``Repeated``, ``Sequence``, and ``Alternatives`` functions from Mathematica.
 These provide another level of expressive power which cannot be replicated with the current feature set of MatchPy's pattern matching.
@@ -341,7 +455,7 @@ With context variables, MatchPy's pattern matching would be as powerful as XPath
 Similarly, function variables that can match any function symbol would also be useful for those applications.
 
 Integration
-'''''''''''
+...........
 
 Currently, in order to use MatchPy, any data structures must be adapted to inherit from the MatchPy expression classes.
 Where that is not possible, for example because the data structures are provided by a third party library, translation functions need to be applied.
@@ -360,7 +474,7 @@ Better integration of MatchPy with SymPy would provide the users of SymPy with m
 However, Matchpy would required selective commutativity to be fully compatible with SymPy.
 
 Performance
-'''''''''''
+...........
 
 If pattern matching is a major part of an application, its running time can significantly impact the overall speed.
 Reimplementing parts of MatchPy as a C module would likely result in a substantial speedup.
@@ -371,7 +485,7 @@ While code generation for syntactic pattern matching has been the subject of var
 feature set of MatchPy is another potential area of future research.
 
 Functional pattern matching
-'''''''''''''''''''''''''''
+...........................
 
 Since Python does not have pattern matching as a language feature, MatchPy could be
 extended to provide a syntax similar to other functional programming languages.
@@ -386,7 +500,7 @@ The following is an example of what such a syntax could look like:
        elif case(f(z_)):
            ....
 
-There are already several libraries for Python which implement such a functionality for syntacitc
+There are already several libraries for Python which implement such a functionality for syntactic
 patterns and native data structures (e.g. MacroPy_, patterns_ or PyPatt_).
 However, the usefulness of this feature needs further evaluation.
 
