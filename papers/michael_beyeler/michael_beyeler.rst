@@ -67,12 +67,12 @@ and 70% of ganglion cells degenerate :cite:`Santos1997`.
 A significant fraction of the inner retinal neurons are spared,
 but the absence of photoreceptors prevents useful vision.
 
-Despite a significant loss of retinal ganglion cells -- which represent
-the output layer of the retina that sends visual signals to the brain
-via the optic nerve -- their morphological structure and
-connectivity seem to be relatively well maintained
-:cite:`Humayun1999,Mazzoni2008`. **[ARIEL: I thought RGCs are relatively spared? The previous sentence implies that RGCs are lost]**
-This has raised the possibility for patients blinded by these diseases
+Although decimated in number, the surviving retinal ganglion
+cells -- which represent the output layer of the retina that
+sends visual signals to the brain via the optic nerve -- seem to
+maintain their morphological structure and connectivity
+:cite:`Humayun1999,Mazzoni2008`.
+This has raised the possibility for patients blinded by RP and AMD
 to potentially have their vision restored via the implantation
 of microelectronic retinal prostheses.
 
@@ -108,6 +108,15 @@ Each of these approaches is similar in that light from the visual scene
 is captured and transformed into electrical pulses delivered through electrodes
 to stimulate the retina.
 
+.. figure:: figmodel.eps
+   :align: center
+   :figclass: w
+   :scale: 35%
+
+   Full model cascade. TODO explain.
+   :label:`figmodel`
+
+
 Two of these systems are approved for commercial
 use and have already been implanted in patients across the US and Europe:
 the Argus II device
@@ -117,14 +126,6 @@ At the same time, a number of other devices have either started
 or are planning to start clinical trials in the near future,
 potentially offering a wide range of sight restoration options
 for blinded individuals within a decade :cite:`Fine2015`.
-
-.. figure:: figmodel.eps
-   :align: center
-   :figclass: w
-   :scale: 35%
-
-   Full model cascade. TODO explain.
-   :label:`figmodel`
 
 However, clinical experience with existing retinal prostheses makes it
 apparent that the vision provided by these devices differs substantially
@@ -322,10 +323,10 @@ modules:
 
 - :code:`api`: Provides a top-level Application Programming Interface.
 - :code:`retina`: Includes implementations of the temporal cascade of events
-described in equations 1-5, as well as implementation of a model of the retinal
-distribution of nerve fibers, based on :cite:`JAN09`
+  described in equations 1-5, as well as implementation of a model of the retinal
+  distribution of nerve fibers, based on :cite:`JAN09`
 - :code:`implants`: Implementations of the details of different retinal
-prosthetic implants. This includes
+  prosthetic implants. This includes
 - :code:`stimuli`: All stimuli
 - :code:`files`: All I/O
 - :code:`utils`: Utility and helper functions used in various parts of the code.
@@ -339,39 +340,166 @@ A minimal usage example is given in the listing below.
 Convention is to import the main :code:`pulse2percept` module
 as :code:`p2p`. Throughout this paper, if a class is referred
 to with the prefix :code:`p2p`, it means this class belongs to
-the main pulse2percept library (e.g., :code:`p2p.retina`).
+the main pulse2percept library (e.g., :code:`p2p.retina`):
 
 .. code-block:: python
+   :linenos:
 
    import pulse2percept as p2p
 
-   # Place an Argus II array centered over the fovea
-   implant = p2p.implants.ArgusII(x_center=0,
-                                  y_center=0)
+Then an array can be placed at a particular location on the retina,
+with respect to the fovea (microns). It can be placed at some height
+above the tissue and rotated as you see fit:
 
-   # Start the stimulation framework, select joblib
-   # backend
+.. code-block:: python
+   :linenos:
+   :linenostart: 2
+
+   import numpy as np
+   implant = p2p.implants.ArgusI(x_center=-800,
+                                 y_center=0,
+                                 h=80,
+                                 rot=np.deg2rad(35))
+
+An electrode array is a wrapper around a list of
+:code:`p2p.implants.Electrode` objects, which are accessible
+via indexing or iteration (e.g., via
+:code:`[for i in implant]`).
+In addition, every electrode in the array has its own name
+(in the Argus I array, they are A1 - A16;
+corresponding to the names that are commonly
+used by Second Sight Medical Products Inc.).
+The first electrode in the array can be accessed both via its
+index (:code:`implant[0]`) and its name (:code:`implant['A1']`).
+
+Once the array is created, it can be passed to the simulation framework.
+This is also where you specify the backend.
+
+.. code-block:: python
+   :linenos:
+   :linenostart: 7
+
    sim = p2p.Simulation(implant, engine='joblib',
                         num_jobs=8)
 
-   # Set optional parameters of the different retinal
-   # layers; e.g, spatial sampling (`ssample`) and
-   # temporal sampling rate (`tsample`)
+The simulation framework provides a number of setter functions
+for the different layers of the retina.
+These allow for flexible specificaton of optional settings,
+while abstracting the underlying functionality.
+Things that can be set include the spatial sampling rate of the
+retina in the optic fiber layer (where the ganglion cell axons are):
+
+.. code-block:: python
+   :linenos:
+   :linenostart: 9
+
    ssample = 100  # microns
-   tsample = 0.005 / 1000  # seconds
    sim.set_optic_fiber_layer(sampling=ssample)
-   sim.set_ganglion_cell_layer(model='Nanduri2012',
+
+
+.. figure:: figure2.png
+   :align: center
+   :scale: 50%
+
+   Computational performance. TODO
+   :label:`figinputoutput`
+
+
+Similarly, for the ganglion cell layer we can choose one of the
+pre-existing cascade models and specify a temporal sampling rate.
+It's also possible to specify your own (custom) model, see
+the section on extensibility below.
+
+.. code-block:: python
+   :linenos:
+   :linenostart: 11
+
+   tsample = 0.005 / 1000  # seconds
+   sim.set_ganglion_cell_layer('Nanduri2012',
                                tsample=tsample)
 
-   # Generate a stimulus: Biphasic pulse, 20 uA, 50 Hz,
-   # 0.5 second duration
-   pt = p2p.stimuli.PulseTrain(tsample, freq=50, amp=20,
-                               dur=0.5)
-   stim = {'E1': pt}
+Finally, a stimulation protocol can be specified by assigning
+stimuli from the :code:`p2p.stimuli` module to specific
+electrodes.
+An example is to set up a pulse train of particular stimulation
+frequency and current amplitude. Because of safety considerations,
+all real-world stimuli must be balanced biphasic pulse trains
+(meaning they must have a positive and negative phase of equal area,
+so that the net current delivered to the tissue sums to zero).
+One way is to specify a pulse train for each electrode in the array.
+However, for large array this becomes cumbersome.
+Therefore, an easier way is to assign pulse trains to electrodes
+via a dictionary:
+
+.. code-block:: python
+   :linenos:
+   :linenostart: 14
+
+   # Stimulate two specific electrodes
+   stim = {
+       'C1': p2p.stimuli.PulseTrain(tsample, freq=50,
+                                    amp=20, dur=0.5)
+       'B3': p2p.stimuli.PulseTrain(tsample, freq=50,
+                                    amp=20, dur=0.5)
+   }
+
+At this point, we can visualize the array's location on the retina
+with the :code:`sim.plot_fundus` method. If we pass it the
+:code:`stim` dictionary, it will highlight the stimulated electrodes
+in the array:
+
+.. code-block:: python
+   :linenos:
+   :linenostart: 21
+
+   sim.plot_fundus(stim)
+
+The output can be seen in Fig. :ref:`figinputoutput` A.
+
+Finally, the created stimulus serves as input to
+:code:`sim.pulse2percept`, which is used to convert the
+pulse trains into a percept.
+Here we can choose to ignore pixels whose intensity values
+are smaller than 25% of the largest value
+(in order to save time),
+and which retinal layers to consider for processing
+(e.g., 'OFL': optic fiber layer, 'GCL': ganglion cell layer):
+
+.. code-block:: python
+   :linenos:
+   :linenostart: 22
 
    # From pulse train to percept
    percept = sim.pulse2percept(stim, tol=0.25,
                                layers=['GCL', 'OFL'])
+
+Here, the output :code:`percept` is a :code:`p2p.utils.TimeSeries`
+object that contains the timeseries data in its :code:`data`
+container.
+We get a timeseries of brightness values (arbitrary units)
+for every pixel in the percept image.
+*pulse2percept* offers a bunch of functions to save the output
+as a movie file (via Scikit-Video and ffmpeg).
+Alternatively, we retrieve the brightest frame of the timeseries:
+
+.. code-block:: python
+   :linenos:
+   :linenostart: 25
+
+   frame = p2p.get_brightest_frame(percept)
+
+Then we can plot it with the help of Matplotlib:
+
+.. code-block:: python
+   :linenos:
+   :linenostart: 26
+
+   import matplotlib.pyplot as plt
+   %matplotlib inline
+   plt.imshow(frame, cmap='gray')
+
+The output is shown in Fig. :ref:`figinputoutput` B.
+
 
 
 Extensibility
@@ -395,8 +523,8 @@ a single-pixel percept:
 .. code-block:: python
 
    class MyGanglionCellModel(TemporalModel):
-       def model_cascade(self, ecv):
-           pass
+       def model_cascade(self, in_arr, pt_list, layers):
+           return in_array
 
 
 It can then be passed to the simulation framework:
@@ -557,5 +685,5 @@ as well as a grant by the Gordon & Betty Moore Foundation and
 the Alfred P. Sloan Foundation to the University of Washington
 eScience Institute Data Science Environment (MB and AR).
 The GeForce TITAN X used for this research was donated
-by the NVIDIA Corporation, and research credits for cloud computin were
-provided by Amazon Web Services.
+by the NVIDIA Corporation, and research credits for cloud computing
+were provided by Amazon Web Services.
