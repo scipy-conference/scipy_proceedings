@@ -73,6 +73,148 @@ as an open-source library for Python called MatchPy_. In addition to regular one
 this library also includes an efficient many-to-one matching algorithm that uses generalized discrimination nets.
 In our experiments we observed significant speedups of the many-to-one matching over one-to-one matching.
 
+Example Domain: Linear Algebra
+------------------------------
+
+As an example, we will create the classes necessary to construct linear algebra expressions.
+These expressions consist of scalars, vectors, and matrices, as well as multiplication, addition,
+transposition, and inversion. The following Python code defines the classes:
+
+.. code-block:: python
+
+    class Scalar(Symbol):
+        pass
+
+    class Vector(Symbol):
+        pass
+
+    class Matrix(Symbol):
+      def __init__(self, name, properties=[]):
+        super().__init__(name)
+        self.properties = frozenset(properties)
+
+    Times = Operation.new(
+      '*', Arity.variadic, 'Times',
+      associative=True, one_identity=True,
+      infix=True)
+    Plus = Operation.new('+', Arity.variadic, 'Plus',
+      one_identity=True, infix=True,
+      commutative=True, associative=True)
+
+    class PostfixUnaryOperation(Operation):
+      arity = Arity.unary
+      def __str__(self):
+        return '({}){}'.format(self.operands[0],
+          self.name)
+
+    class Transpose(PostfixUnaryOperation):
+      name = '^T'
+
+    class Inverse(PostfixUnaryOperation):
+      name = '^-1'
+
+Matrix symbols have a set of properties which can be checked by constraints on the patterns. For
+``Plus`` and ``Times``, the ``Operation.new`` shorthand is used to quickly create the classes.
+If ``one_identity`` is ``True``, :math:`op(x) = x` holds and and occurences of the operation with a
+single argument are simplified. ``infix`` has just cosmetic effects and makes the string
+representation of the operation use infix instead of prefix notation. For the unary operations,
+custom classes are implemented in order to override their string representation.
+
+With these definitions, symbols and expressions can be created:
+
+.. code-block:: python
+
+    a = Scalar('a')
+    v = Vector('v')
+    M1 = Matrix('M1', ['diagonal', 'square'])
+    M2 = Matrix('M2', ['symmetric', 'square'])
+    M3 = Matrix('M3', ['triangular'])
+
+    expression = Plus(Times(a, Transpose(A)), B)
+
+Finally, patterns can be constructed using wildcards:
+
+.. code-block:: python
+
+    x_ = Wildcard.dot('x')
+    y_ = Wildcard.dot('y')
+    pattern = Pattern(Plus(x_, y_))
+
+This pattern matches the above expression. Note that there are multiple matches possible, because the
+addition is commutative. We only print the first match:
+
+.. code-block:: pycon
+
+    >>> print(next(match(expression, pattern)))
+    {x -> (a * (A)^T), y -> B}
+
+Patterns can be limited in what is matched by adding constraints. A constraint is essentially a callback,
+that gets the match substitution and can return either ``True`` or ``False``. You can either use the
+``CustomConstraint`` class with any (lambda) function, or create your own subclass of the ``Constraint`` class.
+
+For example, if we want to only match triangular matrices with a certain variable, we can create a constraint for that:
+
+.. code-block:: pycon
+
+    X_ = Wildcard.symbol('X', Matrix)
+    X_is_diagonal_matrix = CustomConstraint(
+      lambda X: 'triangular' in X.properties)
+    X_pattern = Pattern(X_, X_is_diagonal_matrix)
+
+The resulting pattern will only match diagonal matrices:
+
+.. code-block:: pycon
+
+    >>> is_match(A, X_pattern)
+    True
+    >>> is_match(B, X_pattern)
+    False
+
+Application: Finding matches for a BLAS kernel
+..............................................
+
+Lets assume we want to find all subexpressions of some expression which we can compute efficiently with
+the `?TRMM`_ BLAS_ routine. These all have the form :math:`\alpha \times op(A)  \times B` or :math:`\alpha  \times B  \times op(A)` where
+:math:`op(A)` is either the identity function or transposition, and :math:`A` is a triangular matrix.
+For this example, we will leave out all variants where :math:`\alpha \neq 1`.
+
+First, we define the variables and constraints we need:
+
+.. code-block:: python
+
+    A_ = Wildcard.symbol('A', Matrix)
+    B_ = Wildcard.symbol('B', Matrix)
+    before_ = Wildcard.star('before')
+    after_ = Wildcard.star('after')
+    A_is_triangular = CustomConstraint(
+      lambda A: 'triangular' in A.properties)
+
+Then we can construct the patterns, using sequence variables to capture the remaining operands
+of the multiplication:
+
+.. code-block:: python
+
+    trmm_patterns = [
+      Pattern(Times(before_, A_, B_, after_),
+        A_is_triangular),
+      Pattern(Times(before_, Transpose(A_), B_, after_),
+        A_is_triangular),
+      Pattern(Times(before_, B_, A_, after_),
+        A_is_triangular),
+      Pattern(Times(before_, B_, Transpose(A_), after_),
+        A_is_triangular),
+    ]
+
+As an example, we can find all matches for the first pattern using ``match``:
+
+.. code-block:: pycon
+
+    >>> expr = Times(Transpose(M3), M1, M3, M2)
+    >>> print(next(match(expr, trmm_patterns[0])))
+    {A -> M3, B -> M2, after -> (), before -> ((M3)^T, M1)}
+
+.. _`?TRMM`: https://software.intel.com/en-us/node/468494
+.. _BLAS: http://www.netlib.org/blas/
 
 Experiments
 -----------
