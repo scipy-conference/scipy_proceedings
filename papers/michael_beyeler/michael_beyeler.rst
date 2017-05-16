@@ -29,13 +29,13 @@ pulse2percept: A Python-based simulation framework for bionic vision
 .. class:: abstract
 
    By 2020 roughly 200 million people worldwide will suffer from photoreceptor
-   diseases such as retinitis pigmentosa and age-related macular degeneration, 
-   and a variety of retinal sight restoration technologies are being developed 
+   diseases such as retinitis pigmentosa and age-related macular degeneration,
+   and a variety of retinal sight restoration technologies are being developed
    to target these diseases.
    Two brands of retinal prostheses are already being implanted in patients.
-   Analogous to cochlear implants, these devices use a grid of electrodes to 
+   Analogous to cochlear implants, these devices use a grid of electrodes to
    stimulate remaining retinal cells.
-   However, clinical experience with these implants has made it apparent that 
+   However, clinical experience with these implants has made it apparent that
    the vision restored by these devices differs substantially
    from normal sight.
    Here we present *pulse2percept*, an open-source Python implementation
@@ -67,11 +67,11 @@ and 70% of ganglion cells degenerate :cite:`Santos1997`.
 A significant fraction of the inner retinal neurons are spared,
 but the absence of photoreceptors prevents useful vision.
 
-Despite a significant loss of retinal ganglion cells - which represent
+Despite a significant loss of retinal ganglion cells -- which represent
 the output layer of the retina that sends visual signals to the brain
-via the optic nerve -, their morphological structure and
+via the optic nerve -- their morphological structure and
 connectivity seem to be relatively well maintained
-:cite:`Humayun1999,Mazzoni2008`.
+:cite:`Humayun1999,Mazzoni2008`. **[ARIEL: I thought RGCs are relatively spared? The previous sentence implies that RGCs are lost]**
 This has raised the possibility for patients blinded by these diseases
 to potentially have their vision restored via the implantation
 of microelectronic retinal prostheses.
@@ -108,8 +108,8 @@ Each of these approaches is similar in that light from the visual scene
 is captured and transformed into electrical pulses delivered through electrodes
 to stimulate the retina.
 
-Two of these systems are already approved for commercial
-use in patients across the US and Europe:
+Two of these systems are approved for commercial
+use and have already been implanted in patients across the US and Europe:
 the Argus II device
 (epiretinal, Second Sight Medical Products Inc., :cite:`daCruz2016`)
 and the Alpha-IMS system (subretinal, Retina Implant AG, :cite:`Stingl2015`).
@@ -126,28 +126,26 @@ for blinded individuals within a decade :cite:`Fine2015`.
    Full model cascade. TODO explain.
    :label:`figmodel`
 
-However, clinical experience with existing retinal prostheses make it
+However, clinical experience with existing retinal prostheses makes it
 apparent that the vision provided by these devices differs substantially
 from normal sight.
 Patients report the experience of prosthetic vision as being like
 :cite:`PioneerPress2015`:
-
-  *"... looking at the night sky where you have millions of twinkly lights
-  that almost look like chaos"*
-
-Patients report perceptual distortions of the visual imagery created
-by these devices in both space and time:
+*"... looking at the night sky where you have millions of twinkly lights that almost look like chaos"*.
+Patients report
+perceptual distortions of the visual imagery created by these devices in both
+space and time:
 For example, stimulating even a single electrode leads to percepts
 that vary dramatically in shape
 (e.g., varying in description from "blobs", to "streaks" and "half-moons")
 and duration (e.g., fading over time).
 These perceptual distortions are thought to result from interactions
 between implant electronics and the underlying neurophysiology
-:cite:`FineBoynton2015,Beyeler2017`,
-but the exact mechanisms remain poorly understood.
-Therefore, in order to create perceptually meaningful vision,
-it is necessary to predictly generate a range of brightness levels
-over both space and time.
+:cite:`FineBoynton2015,Beyeler2017`.
+In order to create perceptually meaningful vision,
+it is necessary to predictably generate a range of brightness levels
+over both space and time, in a manner that incorporates these complex
+interactions.
 
 .. Clinical experience with these implants shows that these are still early days,
 .. with current technologies resulting in nontrivial distortions of the
@@ -164,8 +162,8 @@ across a wide range of implant configurations
 :cite:`Horsager2009,Nanduri2012`.
 Here we present an open-source implementation of these models as part of
 *pulse2percept*, a Python-based simulation framework that relies solely on
-open-source contributions of the NumPy and SciPy stacks
-as well as the broader Python community.
+open-source contributions from the NumPy and SciPy stack, as well as the
+broader Python community.
 We hope that this library will contribute substantially to the field of medicine
 by providing a tool to accelerate the development of visual prostheses
 suitable for human trials.
@@ -182,19 +180,20 @@ Computational Model of Bionic Vision
 
 We developed a model that uses similar math as cochlear implants
 :cite:`Horsager2009,Nanduri2012`.
-Model parameters were fit to psychophysical data such as
-threshold data and patient drawings.
-Detailed methods can be found in the above two papers,
-here we give a brief overview.
-The model has been validated against human pyschophysical data,
-and generalizes across individual electrodes, patients, and devices.
+Model parameters were chosen to fit data from experiments in which patients
+with prosthetic devices were asked to report about their threshold for
+perceiving stimulation, and from experiments in which patients drew the shapes
+of the percepts evoked by stimulation. It generalizes across individual
+electrodes, patients, and devices, as well as across different experiments.
+Detailed methods can be found in the above two papers. Here we provied a brief
+overview.
 
 The full model cascade for an Argus I epiretinal prosthesis is illustrated in
 Fig. :ref:`figmodel`, although this model generalizes to other epiretinal
 and subretinal configurations.
 
-The device consists of electrodes of 260 um or 520 um
-diameter arranged in a checkerboard pattern (Fig. :ref:`figmodel` A).
+The device consists of electrodes of 260 :math:`\mu m` and 520 :math:`\mu m`
+diameter, arranged in a checkerboard pattern (Fig. :ref:`figmodel` A).
 In this example, input to the model was a pair of simulated pulse
 trains phase-shifted by :math:`\delta` ms,
 which were delivered to two individual simulated electrodes.
@@ -202,8 +201,8 @@ The current spread for
 each electrode decreased as a function of distance from the electrode center
 (heat map in A).
 We modeled the sensitivity of axon fibers (green lines in B;
-location of the array with respect to the optic disc was inferred from 
-patients' fundus photographs) as decreasing exponentially as a 
+location of the array with respect to the optic disc was inferred from
+patients' fundus photographs) as decreasing exponentially as a
 function of distance from the soma.
 
 The resulting sensitivity profile (heat map in B) was then convolved
@@ -242,8 +241,8 @@ We assumed that the system became less sensitive as a function of
 accumulated charge.
 This was implemented by calculting the amount of accumulating charge
 at each point of time in the stimulus, :math:`c(t)`,
-and colvolving this accumulation with a second one-stage gamma function
-(:math:`n=1`, time constant :math:`tau_2 = 45.3` ms;
+and convolving this accumulation with a second one-stage gamma function
+(:math:`n=1`, time constant :math:`\tau_2 = 45.3` ms;
 Fig. :ref:`figmodel` D).
 The output of this convolution was scaled by a factor
 :math:`\epsilon_1 = 8.3` and subtracted from :math:`r_1` (Eq. :ref:`eqfast`):
@@ -269,7 +268,7 @@ to match the observed psychophysical data.
 
 Finally, the response :math:`r_3(s,t)` was convolved with another low-pass
 filter described as a three-stage gamma function
-(:math:`n = 3`, :math:`tau_3 = 26.3` ms)
+(:math:`n = 3`, :math:`\tau_3 = 26.3` ms)
 intended to model slower perceptual processes in the brain
 (:ref:`figmodel` F):
 
@@ -278,7 +277,7 @@ intended to model slower perceptual processes in the brain
 
    r_4(s,t) = \epsilon_2 r_3(s,t) * \delta(t, 3, \tau_3),
 
-where :math:`epsilon_2 = 1000` was a scaling factor used to
+where :math:`\epsilon_2 = 1000` was a scaling factor used to
 fit the output to subjective brightness values in [0, 100]
 reported by patients on single-electrode stimulation tasks.
 Thus the output of the model was a map of subjective brightness values
@@ -287,7 +286,7 @@ An example percept generated by the model is shown on the right-hand
 side of Fig. :ref:`figmodel`, along with the perceived percept as
 reported by one of the subjects.
 
-.. The output of the model was a map of brightness values (arbitrary units) over time. 
+.. The output of the model was a map of brightness values (arbitrary units) over time.
 .. Subjective brightness was defined as the highest brightness value in the map.
 
 All parameter values are given in Table :ref:`tableparams`.
@@ -310,41 +309,26 @@ All parameter values are given in Table :ref:`tableparams`.
    \end{table}
 
 
-
-
 Implementation and Results
 --------------------------
-
-All code can be found at https://github.com/uwescience/pulse2percept,
-with up-to-date documentation
-available at https://uwescience.github.io/pulse2percept.
-In addition, the latest stable release is available on the Python Package Index
-and can be installed using pip:
-
-.. code-block:: bash
-
-   $ pip install pulse2percept
-
-All code presented in this paper is current as of the v0.2 release.
-
-We use modern software development practices :cite:`Wilson:2014aa,Stodden:2014tg` with continuous integration (provided by Travis CI) and an extensive automated test suite (containing over 3500 tests with >92% coverage for our core modules). Development occurs on GitHub through pull requests that are reviewed by core developers and other contributors, supported by the results from the automated tests, test coverage reports provided by Coveralls, and QuantifiedCode code quality reports. Users and developers communicate extensively on the community mailing list (Google groups) and the GitHub issue tracker; new users and developers are very welcome and most user contributions are eventually integrated into the code base. The development and release process is transparent to users through open discussions and announcements and a full published commit history and changes. Releases are numbered according to the semantic versioning convention so that users can immediately judge the impact of a new release on their existing code base, even without having to consult the CHANGELOG documentation. Old code is slowly deprecated so that users have ample opportunity to update the code although we generally attempt to break as little code as possible. When backwards-incompatible changes are inevitable, we provide tools (based on the Python standard library's lib2to3) to automatically refactor code or warn users of possible problems with their existing code.
-
 
 Code Organization
 ~~~~~~~~~~~~~~~~~
 
 The project seeks a trade-off between object oriented programming
-and ease of use.
+and ease of use. To facilitate ease of use, the simulations in *pulse2percept*
+are organized as a standard Python package, consisting of the following primary
+modules:
 
-*pulse2percept* is packaged as a standard Python package, and consists
-of the following primary modules:
-
-- :code:`api`: The API
-- :code:`retina`: All retinal stuff
-- :code:`implants`: All implants
+- :code:`api`: Provides a top-level Application Programming Interface.
+- :code:`retina`: Includes implementations of the temporal cascade of events
+described in equations 1-5, as well as implementation of a model of the retinal
+distribution of nerve fibers, based on :cite:`JAN09`
+- :code:`implants`: Implementations of the details of different retinal
+prosthetic implants. This includes
 - :code:`stimuli`: All stimuli
 - :code:`files`: All I/O
-- :code:`utils`: All utility functions
+- :code:`utils`: Utility and helper functions used in various parts of the code.
 
 
 Basic Usage
@@ -462,12 +446,18 @@ ranging from electrical activation of individual retinal ganglion cells
 on the sub-millisecond time scale to visual perception occurring
 over several seconds.
 
-Like the brain, we solved this problem through parallelization.
-Computations were parallelized across small patches of the retina
-using two back ends (Joblib and Dask),
-with both multithreading and multiprocessing options.
-Math-heavy sections of the code were additionally sped up using
-just-in-time compilation (Numba).
+Like the brain, we solved this problem through parallelization. Computations
+were parallelized across small patches of the retina using two back ends (Joblib
+:cite:`JOB16` and Dask :cite:`DASK16`), with both multithreading and
+multiprocessing options. A major computational bottleneck in computing the
+temporal response in each patch of retina are convolutions of arrays describing
+the responses of parts of the model at high temoral resolution (e.g., equations
+2 and 3). These math-heavy sections of the code were additionally sped up using
+the two following strategies: wherever possible, a direct convlution with the
+entire time-series was avoided, by preprocessing sparse pulse input arrays, and
+only convolving with those parts of the time-series that included non-zero
+amplitudes. Furthermore, the calculation was sped up wih LLVM-base compilation
+implemented using Numba :cite:`LAM15`.
 
 
 
@@ -484,6 +474,42 @@ I mean look at the pretty figure!
 
    Computational performance. TODO
    :label:`figperformance`
+
+Software availability and development
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+All code can be found at https://github.com/uwescience/pulse2percept,
+with up-to-date documentation
+available at https://uwescience.github.io/pulse2percept.
+In addition, the latest stable release is available on the Python Package Index
+and can be installed using pip:
+
+.. code-block:: bash
+
+  $ pip install pulse2percept
+
+All code presented in this paper is current as of the v0.2 release.
+
+We use modern software development practices
+:cite:`Wilson:2014aa,Stodden:2014tg` with continuous integration (provided by
+Travis CI) and an extensive automated test suite (containing over 50 tests
+with >90% coverage for our core modules). Development occurs on GitHub through
+pull requests that are reviewed by core developers and other contributors,
+supported by the results from the automated tests, test coverage reports
+provided by Coveralls, and QuantifiedCode code quality reports. Users and
+developers communicate extensively on the community mailing list (Google
+groups) and the GitHub issue tracker; new users and developers are very welcome
+and most user contributions are eventually integrated into the code base. The
+development and release process is transparent to users through open
+discussions and announcements and a full published commit history and changes.
+Releases are numbered according to the semantic versioning convention so that
+users can immediately judge the impact of a new release on their existing code
+base, even without having to consult the CHANGELOG documentation. Old code is
+slowly deprecated so that users have ample opportunity to update the code
+although we generally attempt to break as little code as possible. When
+backwards-incompatible changes are inevitable, we provide tools (based on the
+Python standard library's lib2to3) to automatically refactor code or warn users
+of possible problems with their existing code.
 
 
 Discussion
@@ -523,8 +549,6 @@ that can allow any user to directly compare the perceptual experiences
 likely to be produced across different devices.
 
 
-
-
 Acknowledgments
 ---------------
 This work was supported by the Washington Research Foundation Funds
@@ -533,8 +557,5 @@ as well as a grant by the Gordon & Betty Moore Foundation and
 the Alfred P. Sloan Foundation to the University of Washington
 eScience Institute Data Science Environment (MB and AR).
 The GeForce TITAN X used for this research was donated
-by the NVIDIA Corporation.
-
-
-
-
+by the NVIDIA Corporation, and research credits for cloud computin were
+provided by Amazon Web Services.
