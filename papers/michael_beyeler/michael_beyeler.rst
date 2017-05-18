@@ -58,13 +58,14 @@ Introduction
 Two of the most frequenct causes of blindness in the developed world
 are retinitis pigmentosa (RP) and age-related macular degeneration (AMD)
 :cite:`Bunker1984,EyeDiseases2004`.
-Both diseases are identified by a progressive degeneration of
+Both of these diseases are hereditary,
+and can be identified by a progressive degeneration of
 photoreceptors in the retina,
 resulting in severe visual impairment.
 In severe end-stage RP, approximately 95% of photoreceptors,
 20% of bipolar cells,
 and 70% of ganglion cells degenerate :cite:`Santos1997`.
-A significant fraction of the inner retinal neurons are spared,
+A significant fraction of bipolar and ganglion cells are spared,
 but the absence of photoreceptors prevents useful vision.
 
 Although decimated in number, the surviving retinal ganglion
@@ -130,70 +131,74 @@ for blinded individuals within a decade :cite:`Fine2015`.
 However, clinical experience with existing retinal prostheses makes it
 apparent that the vision provided by these devices differs substantially
 from normal sight.
-Patients report the experience of prosthetic vision as being like
-:cite:`PioneerPress2015`:
-*"... looking at the night sky where you have millions of twinkly lights that almost look like chaos"*.
-Patients report
-perceptual distortions of the visual imagery created by these devices in both
-space and time:
+Evidence suggests that the interactions between implant electronics and
+the underlying neurophysiology cause nontrivial perceptual distortions
+in both space and time :cite:`FineBoynton2015,Beyeler2017`
+that severely limit the quality of the generated visual experience.
 For example, stimulating even a single electrode leads to percepts
 that vary dramatically in shape
 (e.g., varying in description from "blobs", to "streaks" and "half-moons")
 and duration (e.g., fading over time).
-These perceptual distortions are thought to result from interactions
-between implant electronics and the underlying neurophysiology
-:cite:`FineBoynton2015,Beyeler2017`.
-In order to create perceptually meaningful vision,
-it is necessary to predictably generate a range of brightness levels
-over both space and time, in a manner that incorporates these complex
-interactions.
+Rather than seeing clear and sharp contours of objects,
+patients report their visual experience to be more like
+:cite:`PioneerPress2015`:
+*"... looking at the night sky where you have millions of twinkly lights
+that almost look like chaos"*.
 
-.. Clinical experience with these implants shows that these are still early days,
-.. with current technologies resulting in nontrivial distortions of the
-.. perceptual experience :cite:`FineBoynton2015`.
+We have previously developed a computational model of bionic vision
+that can explain these perceptual distortions
+across a wide range of implant configurations and stimulation protocols
+:cite:`Horsager2009,Nanduri2012`.
+Here we present an open-source implementation of these models as part of
+*pulse2percept*, a Python-based simulation framework that relies solely on
+the NumPy and SciPy stacks, as well as contributions
+from the broader Python community.
+Based on the detailed specification of a patient's implant configuration,
+and given a desired electrical stimulation protocol,
+the model then predicts the perceptual distortions experienced
+by this "virtual patient" over both space and time.
+We hope that this library will contribute substantially
+to the field of medicine
+by providing a tool to accelerate the development of visual prostheses
+suitable for human trials.
 
 .. Here we present *pulse2percept*, an open-source Python implementation
 .. of a computational model that can predict the perceptual experience
 .. of retinal prosthesis patients across a wide range of
 .. implant configurations.
 
-We have previously developed a computational model of bionic vision
-that simulates the perceptual experience of retinal prosthesis patients
-across a wide range of implant configurations
-:cite:`Horsager2009,Nanduri2012`.
-Here we present an open-source implementation of these models as part of
-*pulse2percept*, a Python-based simulation framework that relies solely on
-open-source contributions from the NumPy and SciPy stack, as well as the
-broader Python community.
-We hope that this library will contribute substantially to the field of medicine
-by providing a tool to accelerate the development of visual prostheses
-suitable for human trials.
 
 The remainder of this paper is organized as follows:
-explain the computational model,
-talk about implementation details,
-show some results,
-discuss and conclude.
+We start by detailing the computational model that underlies *pulse2percept*,
+before we give a simple usage example and go into implementation details.
+We then review our solutions to various technical challenges,
+and conclude by discussing the broader impact for this work
+for the computational neuroscience and neural engineering communities.
 
 
 Computational Model of Bionic Vision
 ------------------------------------
 
-We developed a model that uses similar math as cochlear implants
-:cite:`Horsager2009,Nanduri2012`.
+Analogous to models of cochlear implants,
+the here presented computational model closely mimics sensory information
+processing in the human retina
+in response to electrical stimulation.
+The model consists of a number of linear and nonlinear filtering steps
+that process an electrical pulse pattern in both space and time.
 Model parameters were chosen to fit data from experiments in which patients
 with prosthetic devices were asked to report about their threshold for
 perceiving stimulation, and from experiments in which patients drew the shapes
-of the percepts evoked by stimulation. It generalizes across individual
+of the percepts evoked by stimulation.
+The model has been shown to generalize across individual
 electrodes, patients, and devices, as well as across different experiments.
-Detailed methods can be found in the above two papers. Here we provied a brief
-overview.
+Detailed methods can be found in :cite:`Horsager2009,Nanduri2012,Beyeler2017`.
+Here we provide a brief overview.
 
 The full model cascade for an Argus I epiretinal prosthesis is illustrated in
 Fig. :ref:`figmodel`, although this model generalizes to other epiretinal
 and subretinal configurations.
 
-The device consists of electrodes of 260 :math:`\mu m` and 520 :math:`\mu m`
+The Argus I device consists of electrodes of 260 :math:`\mu m` and 520 :math:`\mu m`
 diameter, arranged in a checkerboard pattern (Fig. :ref:`figmodel` A).
 In this example, input to the model was a pair of simulated pulse
 trains phase-shifted by :math:`\delta` ms,
@@ -310,6 +315,7 @@ All parameter values are given in Table :ref:`tableparams`.
    \end{table}
 
 
+
 Implementation and Results
 --------------------------
 
@@ -324,18 +330,23 @@ modules:
 - :code:`api`: Provides a top-level Application Programming Interface.
 - :code:`retina`: Includes implementations of the temporal cascade of events
   described in equations 1-5, as well as implementation of a model of the retinal
-  distribution of nerve fibers, based on :cite:`JAN09`
-- :code:`implants`: Implementations of the details of different retinal
-  prosthetic implants. This includes
-- :code:`stimuli`: All stimuli
-- :code:`files`: All I/O
+  distribution of nerve fibers, based on :cite:`JAN09`.
+- :code:`implants`: Provides implementations of the details of different retinal
+  prosthetic implants. This includes Second Sight's Argus I and Argus II arrays,
+  but can easily be extended to custom implants (see Section Extensibility).
+- :code:`stimuli`: Includes implementations of commonly used electrical stimulation
+  protocols, including means to translate images and movies into simulated
+  electrical pulse trains.
+- :code:`files`: Includes a simple means to load and store data as images
+  and videos.
 - :code:`utils`: Utility and helper functions used in various parts of the code.
 
 
 Basic Usage
 ~~~~~~~~~~~
 
-A minimal usage example is given in the listing below.
+Here we give a minimal usage example to produce the percept shown on the right-hand
+side of Fig. :ref:`figmodel`.
 
 Convention is to import the main :code:`pulse2percept` module
 as :code:`p2p`. Throughout this paper, if a class is referred
@@ -397,14 +408,6 @@ retina in the optic fiber layer (where the ganglion cell axons are):
    sim.set_optic_fiber_layer(sampling=ssample)
 
 
-.. figure:: figure2.png
-   :align: center
-   :scale: 50%
-
-   Computational performance. TODO
-   :label:`figinputoutput`
-
-
 Similarly, for the ganglion cell layer we can choose one of the
 pre-existing cascade models and specify a temporal sampling rate.
 It's also possible to specify your own (custom) model, see
@@ -417,6 +420,15 @@ the section on extensibility below.
    tsample = 0.005 / 1000  # seconds
    sim.set_ganglion_cell_layer('Nanduri2012',
                                tsample=tsample)
+
+
+.. figure:: figinputoutput.png
+   :align: center
+   :scale: 25%
+
+   Input/output. TODO
+   :label:`figinputoutput`
+
 
 Finally, a stimulation protocol can be specified by assigning
 stimuli from the :code:`p2p.stimuli` module to specific
@@ -618,26 +630,6 @@ and can be installed using pip:
 
 All code presented in this paper is current as of the v0.2 release.
 
-We use modern software development practices
-:cite:`Wilson:2014aa,Stodden:2014tg` with continuous integration (provided by
-Travis CI) and an extensive automated test suite (containing over 50 tests
-with >90% coverage for our core modules). Development occurs on GitHub through
-pull requests that are reviewed by core developers and other contributors,
-supported by the results from the automated tests, test coverage reports
-provided by Coveralls, and QuantifiedCode code quality reports. Users and
-developers communicate extensively on the community mailing list (Google
-groups) and the GitHub issue tracker; new users and developers are very welcome
-and most user contributions are eventually integrated into the code base. The
-development and release process is transparent to users through open
-discussions and announcements and a full published commit history and changes.
-Releases are numbered according to the semantic versioning convention so that
-users can immediately judge the impact of a new release on their existing code
-base, even without having to consult the CHANGELOG documentation. Old code is
-slowly deprecated so that users have ample opportunity to update the code
-although we generally attempt to break as little code as possible. When
-backwards-incompatible changes are inevitable, we provide tools (based on the
-Python standard library's lib2to3) to automatically refactor code or warn users
-of possible problems with their existing code.
 
 
 Discussion
@@ -672,6 +664,7 @@ to the scientific community, and manufacturer-published 'simulations'
 of prosthetic vision are sometimes misleading,
 if they do not take account of substantial neurophysiological distortions
 in space and time.
+
 A major goal of *pulse2percept* is to provide open-source simulations
 that can allow any user to directly compare the perceptual experiences
 likely to be produced across different devices.
