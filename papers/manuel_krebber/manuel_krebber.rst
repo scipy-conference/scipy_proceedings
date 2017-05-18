@@ -23,8 +23,8 @@ MatchPy: A Pattern Matching Library
 .. class:: abstract
 
    Pattern matching is a powerful tool for symbolic computations, based on the well-defined theory of term rewriting systems.
-   Application domains include algebraic expressions, abstract syntax trees or XML and JSON data.
-   Unfortunately, no implementations of pattern matching as general and flexible as in Mathematica exists for Python.
+   Application domains include algebraic expressions, abstract syntax trees, and XML and JSON data.
+   Unfortunately, no implementation of pattern matching as general and flexible as in Mathematica exists for Python.
    Therefore, we created the open source module MatchPy_, which offers similar pattern matching functionality in Python.
    In addition, we implemented a novel algorithm which finds matches for large pattern sets more efficiently by exploiting similarities between patterns.
 
@@ -37,19 +37,19 @@ Introduction
 
 Pattern matching is a powerful tool which is part of many functional programming languages as well as computer algebra systems such as Mathematica.
 It is useful for many applications including symbolic computation, term simplification, term rewriting systems, automated theorem proving, and model checking.
-Term rewriting systems can be used with pattern matching to find matches for the rewrite rules and transform terms.
+Term rewriting systems rely on pattern matching to find matches for the rewrite rules.
 In functional programming languages, pattern matching enables a more readable and intuitive expression of algorithms.
 
 Among the existing systems, Mathematica offers the most expressive pattern matching.
 Its pattern matching offers similar expressiveness as regular expressions in Python, but for symbolic tree structures instead of strings.
 Patterns are used widely in Mathematica, e.g. in function definitions or for manipulating expressions.
-Users can define custom function symbols which can also be associative and/or commutative.
-Mathematica also offers sequence variables which can match a sequence of expressions instead of a single expression.
+It is possible to define custom function symbols which can be associative and/or commutative.
+Mathematica also offers sequence variables which can match a sequence of expressions instead of a single one.
 They are especially useful when working with variadic function symbols.
 
 There is currently no open source alternative to Mathematica with comparable pattern matching capabilities.
 In particular, we are interested in similar pattern matching for an experimental linear algebra compiler written in Python.
-Unfortunately, Mathematica is proprietary and nothing has been published on the underlying pattern matching algorithm.
+Unfortunately, Mathematica is proprietary and there are no publications on the underlying pattern matching algorithm.
 
 Previous work predominantly covers syntactic pattern matching, i.e. associative/commutative/variadic
 function symbols are not supported. Specifically, no existing work allows function symbols
@@ -57,7 +57,7 @@ which are either commutative or associative but not both. However, there are dom
 functions have those properties, e.g. matrix multiplication in linear algebra.
 Most of the existing pattern matching libraries for Python only support syntactic patterns.
 While the pattern matching in SymPy_ can work with associative/commutative functions, it is limited to finding a single match and does not support sequence variables.
-However, we are interested in finding all possible matches for a pattern.
+However, we are also interested in finding all possible matches for a pattern.
 
 In many applications, a fixed set of patterns will be matched repeatedly against different subjects.
 The simultaneous matching of multiple patterns is called many-to-one matching, as opposed to
@@ -66,10 +66,10 @@ Many-to-one matching can be sped up by exploiting similarities between patterns.
 This has already been the subject of research for both syntactic and AC pattern matching, but not with
 the full feature set described above.
 Discrimination nets are the state-of-the-art solution for many-to-one matching.
-Our goal is to generalize this approach to support the aforementioned full feature set.
+Our goal is to generalize this approach to support all the aforementioned features.
 
 We implemented pattern matching with sequence variables and associative/commutative function symbols
-as an open-source library for Python called MatchPy_. In addition to regular one-to-one matching,
+as an open-source library for Python called MatchPy_. In addition to standard one-to-one matching,
 this library also includes an efficient many-to-one matching algorithm that uses generalized discrimination nets.
 In our experiments we observed significant speedups of the many-to-one matching over one-to-one matching.
 
@@ -123,6 +123,8 @@ reached, its label gives a list of matching patterns. For the non-deterministic 
 all possibilities need to be explored via backtracking.
 
 TODO
+
+Full details can be found in the master thesis on this topic :cite:`thesis`.
 
 Example Domain: Linear Algebra
 ------------------------------
@@ -437,14 +439,15 @@ We have presented MatchPy, which is a pattern matching library for Python with s
 This library includes algorithms and data structures for both one-to-one and many-to-one matching.
 Because non-syntactic pattern matching is NP-hard, in the worst case the pattern matching will take exponential time.
 Nonetheless, our experiments on real world examples indicate that many-to-one matching can give a significant speedup over one-to-one matching.
-However, the employed discrimination nets come with a one-time construction cost which needs to be amortized before using them is faster than one-to-one matching.
+However, the employed discrimination nets come with a one-time construction cost.
+This needs to be amortized before using them is faster than one-to-one matching.
 In our experiments, the break even point for many-to-one matching was always reached well within the typical number of subjects for the respective application.
 Therefore, many-to-one matching is likely to result in a compelling speedup in practice.
 
 For syntactic patterns, we also compared the syntactic discrimination net with the many-to-one matcher.
 As expected, discrimination nets are faster at matching, but also have a significantly higher setup time.
 Furthermore, their number of states can grow exponentially with the number of patterns, making them unsuitable for some pattern sets.
-Overall, for the limited cases where they are applicable, discrimination nets offer better performance than a many-to-one matcher.
+Overall, if applicable, discrimination nets offer better performance than a many-to-one matcher.
 
 Which pattern matching algorithm is the fastest for a given application depends on many factors.
 Hence, it is not possible to give a general recommendation.
@@ -467,8 +470,11 @@ In the future, we plan to implement similar functionality to the ``Repeated``, `
 These provide another level of expressive power which cannot be replicated with the current feature set of MatchPy's pattern matching.
 Another useful feature are context variables as described by Kutsia :cite:`Kutsia2006`.
 They allow matching subterms at arbitrary depths which is especially useful for structures like XML.
-With context variables, MatchPy's pattern matching would be as powerful as XPath :cite:`Robie2017` or CSS selectors :cite:`Rivoal2017` for such structures.
+With context variables, MatchPy's pattern matching would be as powerful as XPath_ or `CSS selectors`_ for such structures.
 Similarly, function variables that can match any function symbol would also be useful for those applications.
+
+.. _XPath: https://www.w3.org/TR/2017/REC-xpath-31-20170321/
+.. _`CSS selectors`: https://www.w3.org/TR/2017/NOTE-css-2017-20170131/
 
 Integration
 ...........
