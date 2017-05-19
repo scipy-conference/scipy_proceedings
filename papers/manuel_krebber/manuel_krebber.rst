@@ -102,29 +102,118 @@ TODO
 Many-to-one Matching
 --------------------
 
+**TODO:** Full details can be found in the master thesis on this topic :cite:`thesis`.
+
 MatchPy also includes two additional algorithms for matching: ``ManyToOneMatcher`` and
 ``DiscriminationNet``. Both enable matching multiple pattern against a single subject
 much faster than matching each pattern individually using ``match``. The later can only be used
 for syntactic patterns, i.e. patterns without associative/commutative operations and sequence
 variables. Both are based on discrimination nets which are a data structure similar to a
-decision tree. ``ManyToOneMatcher`` uses a non-deterministic discrimination net with
-backtracking, while ``DiscriminationNet`` is deterministic.
+decision tree used to speed up many-to-one matching :cite:`Christian1993,Graef1991,Nedjah1997`.
+The ``ManyToOneMatcher`` uses a non-deterministic discrimination net with
+backtracking, while the ``DiscriminationNet`` is deterministic.
 
 .. figure:: dn.pdf
 
    Example Discrimination Net. :label:`fig:dn`
 
 In Figure :ref:`fig:dn`, an example for a non-deterministic discrimination net is shown.
-:math:`f` is a function symbol, :math:`a` and :math:`b` and constant symbols, and :math:`x^*` and
-:math:`y` are variables. Matching starts at the root and proceeds along the transitions.
+It contains three patterns that match Python lists: One matches the list that consists of a single 1,
+the second one matches a list with exactly two elements where the last element is 0, and the third pattern
+matches any list where the first element is 1. Note, that these patterns can also match nested lists,
+e.g. the second pattern would also match :math:`[[2, 1], 0]`.
+
+Matching starts at the root and proceeds along the transitions.
 Simultaneously, the subject is traversed in preorder and each symbol is check against the
-transitions. Only transitions which match the current subterm can be used. Once a final state is
-reached, its label gives a list of matching patterns. For the non-deterministic discrimination net,
-all possibilities need to be explored via backtracking.
+transitions. Only transitions matching the current subterm can be used. Once a final state is
+reached, its label gives a list of matching patterns. For non-deterministic discrimination nets,
+all possibilities need to be explored via backtracking. The discrimination net allows to
+reduce the matching costs, because common parts of different pattern only need to be matched once.
+For non-matching transitions, their whole subtree is pruned and all the patterns are excluded
+at once, further reducing the match cost.
 
-TODO
+In Figure :ref:`fig:dn`, for the subject :math:`[1, 0]`:, there are two paths and therefore two
+matching patterns: :math:`[\pmb{y}, 0]` matches with :math:`\{ \pmb{y} \mapsto 1 \}` and
+:math:`[1, \pmb{x}^{\pmb{*}}]` matches with :math:`\{ \pmb{x}^{\pmb{*}} \mapsto 0 \}`. Both the
+:math:`\pmb{y}`-transiton and the 1-transition can be used in the second state to match a 1.
 
-Full details can be found in the master thesis on this topic :cite:`thesis`.
+Compared to existing discrimination net variants, we added transitions for the end of a compound term
+to support variadic functions. Furthermore, we added support for both associative function symbols
+and sequence variables. Finally, our discrimination net supports transitions restricted to
+symbol classes (i.e. ``Symbol`` subclasses) in addition to the ones that match just a specific symbol.
+We decided to use a non-deterministic discrimination net instead of a deterministic one, since
+the number of states of the later would grow exponentially with the number of patterns. While
+the ``DiscriminationNet`` also has support for sequence variables, in practice the net became to large
+to use with just a dozen patterns.
+
+Commutative Many-to-one Matching
+--------------------------------
+
+Many-to-one matching for commutative terms is more involved. We use a nested ``CommutativeMatcher``
+which in turn uses another ``ManyToOneMatcher`` to match the subterms. Our approach is similar to
+the one used by Bachmair and Kirchner in their respecitive works :cite:`Bachmair1995,Kirchner2001`.
+We match all the subterms of the commutative function in the subject with a many-to-one matcher
+constructed from the subpatterns of the commutative function in the pattern (except for sequence
+variables, which are handled separately). The resulting matches
+form a bipartite graph, where one set of nodes consists of the subject subterms and the other
+contains all the pattern subterms. Two nodes are connected by an edge iff the pattern matches the
+subject. Such an edge is also labeled with the match substitution(s). Finding an overall match is then
+accomplished by finding a maximum matching in this graph. However, for the matching to be valid, all the
+substitutions on its edges must be compatible, i.e. they cannot have contradicting replacements for
+the same variable. We use the Hopcroft-Karp algorithm :cite:`Hopcroft1973` to find an initial
+maximum matching. However, since we are also interested in all matches and the inital matching might
+have incompatible substitutions, we use the algorithm described by Uno, Fukuda and Matsui
+:cite:`Fukuda1994,Uno1997` to enumerate all maximum matchings.
+
+We want to avoid yielding redundant matches, therefore we extended the bipartite graph by introducing
+a total order over its two node set. This enables to determine whether the edges of a matching
+maintain the order induced by the subjects or if some of the edges "cross". Formally,
+for all edge pairs :math:`(p, s), (p', s') \in M` we require
+:math:`(s \equiv s' \wedge p > p') \implies s > s'` to hold where :math:`M` is the matching,
+:math:`s, s'` are subjects, and :math:`p, p'` are patterns.
+An example of this is given in Figure :ref:`fig:bipartite2`. The order of the nodes is indicated by
+the numbers next to them. The only two maximum matchings for this particular match graph are
+displayed. In the left matching, the edges with the same subject cross and hence this matching is
+discarded. The other matching is used because it maintains the order. This ensures only unique
+matches are yielded.
+
+.. figure:: bipartite2.pdf
+
+   Example for Order in Bipartite Graph. :label:`fig:bipartite2`
+
+Sequence variables
+..................
+
+Once we have found a match using the bipartite graph, if the pattern contains sequence variables,
+we have to distribute the remaining subject subterms among them. This is accomplished by generating
+and solving several linear Diophantine equations. As an example, let the remaining subterms be
+:math:`a, b, b, b` and the sequence variables be :math:`\pmb{x}^{\pmb{*}}, \pmb{y}^{\pmb{+}}, \pmb{y}^{\pmb{+}}`.
+This means that the possible distributions are given by the non-negative integer solutions of these equations:
+
+.. math::
+    :type: eqnarray
+
+    1 &=& x_a + 2 y_a \\
+    3 &=& x_b + 2 y_b
+
+Because :math:`\pmb{y}^{\pmb{+}}` requires at least one term, we have the additional constraint
+:math:`y_a + y_b \geq 1`. The only possible solution :math:`x_a = 1, x_b = 1, y_a = 0, y_b = 1`
+corresponds to the match substitution :math:`\{\pmb{x}^{\pmb{*}} \mapsto (a, b), \pmb{y}^{\pmb{+}} \mapsto (b) \}`.
+
+Extensive research has been done on solving linear Diophantine equations and linear Diophantine
+equation systems :cite:`Weinstock1960,Bond1967,Lambert1988,Clausen1989,Aardal2000`. In our case
+the equations are actually independant expect for requiring at least one term for plus variables.
+Also, the non-negative solutions can be found more easily. We use an adaptation of the
+algorithm used in SymPy_ which recursively reduces any linear Diophantine equation to equations
+of the form :math:`ax + by = d`. Those can be solved efficiently with the Extended Euclidian algorithm
+:cite:`Menezes1996`. Then the solutions for those can be combined into a solution for the original
+equation.
+
+All coefficients in those equations are likely very small, because they correspond to the multiplicity
+of sequence variables. Similarly, the number of variables in the equations is usually small as they
+map to sequence variables. The constant is the multiplicity of a subject term and hence also
+usually small. Overall, the number of distict equations that are solved is small and the
+solutions are cached. This reduces the impact of the sequence variables on the overall run time.
 
 Example Domain: Linear Algebra
 ------------------------------
