@@ -484,7 +484,7 @@ Now we print the PSNR of the noisy and denoised images, and display the referenc
 
 .. code-block:: python
 
-  print('%.3 dB   %.3 dB' % (sm.psnr(img, imgn),
+  print('%.3f dB   %.3f dB' % (sm.psnr(img, imgn),
 	sm.psnr(img, imgd)))
 
   fig = plot.figure(figsize=(21, 7))
