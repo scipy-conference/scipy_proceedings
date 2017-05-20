@@ -13,6 +13,7 @@
 :institution: Egyptian Embassy, S.P.Q.R.
 :institution: Yet another place, S.P.Q.R.
 :equal-contributor:
+:corresponding:
 
 :author: Brutus
 :email: brutus@rome.it
