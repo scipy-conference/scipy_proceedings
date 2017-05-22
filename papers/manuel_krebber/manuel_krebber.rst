@@ -163,13 +163,182 @@ This replacement rule can be used to sort a list when applied repeatedly with ``
 
 More examples can be found in `MatchPy's documentation <https://matchpy.readthedocs.io/latest/>`_.
 
+Example Domain: Linear Algebra
+------------------------------
+
+As an example, we will create the classes necessary to construct linear algebra expressions.
+These expressions consist of scalars, vectors, and matrices, as well as multiplication, addition,
+transposition, and inversion. The following Python code defines the classes:
+
+.. code-block:: python
+
+    class Scalar(Symbol):
+        pass
+
+    class Vector(Symbol):
+        pass
+
+    class Matrix(Symbol):
+      def __init__(self, name, properties=[]):
+        super().__init__(name)
+        self.properties = frozenset(properties)
+
+    Times = Operation.new(
+      '*', Arity.variadic, 'Times',
+      associative=True, one_identity=True,
+      infix=True)
+    Plus = Operation.new('+', Arity.variadic, 'Plus',
+      one_identity=True, infix=True,
+      commutative=True, associative=True)
+
+    class PostfixUnaryOperation(Operation):
+      arity = Arity.unary
+      def __str__(self):
+        return '({}){}'.format(self.operands[0],
+          self.name)
+
+    class Transpose(PostfixUnaryOperation):
+      name = '^T'
+
+    class Inverse(PostfixUnaryOperation):
+      name = '^-1'
+
+Matrix symbols have a set of properties which can be checked by constraints on the patterns. For
+``Plus`` and ``Times``, the ``Operation.new`` convenience function is used to quickly create the classes.
+If ``one_identity`` is ``True``, :math:`op(x) = x` holds and and occurences of the operation with a
+single argument are simplified. ``infix`` has just cosmetic effects and makes the string
+representation of the operation use infix instead of prefix notation. For the unary operations,
+custom classes are implemented in order to override their string representation.
+
+Application: Finding matches for a BLAS kernel
+..............................................
+
+Lets assume we want to find all subexpressions of some linear algebra expression which we can compute efficiently with
+the `?TRMM`_ BLAS_ routine. These all have the form :math:`\alpha \times op(A)  \times B` or :math:`\alpha  \times B  \times op(A)` where
+:math:`op(A)` is either the identity function or transposition, and :math:`A` is a triangular matrix.
+For this example, we will leave out all variants where :math:`\alpha \neq 1`. We can construct the
+patterns using sequence variables to capture the remaining operands of the multiplication:
+
+.. code-block:: python
+
+    A_ = Wildcard.symbol('A', Matrix)
+    B_ = Wildcard.symbol('B', Matrix)
+    before_ = Wildcard.star('before')
+    after_ = Wildcard.star('after')
+    A_is_triangular = CustomConstraint(
+      lambda A: 'triangular' in A.properties)
+
+    trmm_patterns = [
+      Pattern(Times(before_, A_, B_, after_),
+        A_is_triangular),
+      Pattern(Times(before_, Transpose(A_), B_, after_),
+        A_is_triangular),
+      Pattern(Times(before_, B_, A_, after_),
+        A_is_triangular),
+      Pattern(Times(before_, B_, Transpose(A_), after_),
+        A_is_triangular),
+    ]
+
+As an example, we can find all matches for the first pattern using ``match``:
+
+.. code-block:: pycon
+
+    >>> expr = Times(Transpose(M3), M1, M3, M2)
+    >>> print(next(match(expr, trmm_patterns[0])))
+    {A -> M3, B -> M2, after -> (), before -> ((M3)^T, M1)}
+
+.. _`?TRMM`: https://software.intel.com/en-us/node/468494
+.. _BLAS: http://www.netlib.org/blas/
+
+Challenges
+----------
+
+While there are plenty of implementations of syntactic matching and the algorithms are well known,
+the pattern matching in MatchPy has several more challenging features.
+
+Associativity/Sequence variables
+................................
+
+Associativity enables arbitrary grouping of arguments for matching: For example, :math:`1 + a + b`
+matches :math:`1 + \pmb{x}` with :math:`\{ \pmb{x} \mapsto a + b \}`, because we can group the
+arguments as :math:`1 + (a + b)`. Basically, when regular
+variables are arguments of an associative function, they behave like sequence variables.
+Both can result in multiple distinct matches for a single pattern. In constrast, for syntactic
+patterns there is always at most one match. This means that the matching algorithm needs to be
+non-deterministic to explore all potential matches. We employ backtracking with the help of Python
+generators to enable this. Associative matching is NP-complete :cite:`Benanav1987`.
+
+Commutativity
+.............
+
+Matching commutative functions is difficult, because matches need to be found independant of the
+argument order. Commutative matching has been shown to be NP-complete :cite:`Benanav1987`.
+It is possible to solve this by matching all permutations of the subjects arguments
+against all permutations of the pattern arguments. However, with this naive approach, a total of
+:math:`n!m!` combinations have to be matched where :math:`n` is the number of subject arguments
+and :math:`m` the number of pattern arguments. Most of these combinations will likely not match
+or yield redunant matches.
+
+Instead, we interpret the arguments as a multiset, i.e. an orderless collection that allows
+repetition of elements. Also, we use the following order for matching a commutative term:
+
+1. Constant arguments
+2. Matched variables, i.e. variables that already have a value assigned in the current substitution
+3. Non-variable arguments
+4. Repeat step 2
+5. Regular variables
+6. Sequence variables
+
+Each of those steps reduces the search space for successive steps. This also means that if one step
+finds no match, the remaining steps do not have to be performed. Note that steps 3, 5 and 6 can
+yield multiple matches and backtracking is employed to check every combination. This can speed up
+matching significantly. Because step 6 is the most involved, it is described in more detail in the
+next section.
+
+Sequence Variables in Commutative Functions
+...........................................
+
+The distribution of :math`n` subjects subterms onto :math`m` sequence variables within a
+commutative function symbol can yield up to :math`m^n` distict solutions. Enumerating all of the
+is accomplished by generating and solving several linear Diophantine equations. As an example,
+lets assume we want to match :math:`f(a, b, b, b)` with
+:math:`f(\pmb{x}^{\pmb{*}}, \pmb{y}^{\pmb{+}}, \pmb{y}^{\pmb{+}})` where :math:`f` is commutative.
+This means that the possible distributions are given by the non-negative integer solutions of
+these equations:
+
+.. math::
+    :type: eqnarray
+
+    1 &=& x_a + 2 y_a \\
+    3 &=& x_b + 2 y_b
+
+Because :math:`\pmb{y}^{\pmb{+}}` requires at least one term, we have the additional constraint
+:math:`y_a + y_b \geq 1`. The only possible solution :math:`x_a = 1, x_b = 1, y_a = 0, y_b = 1`
+corresponds to the match substitution :math:`\{\pmb{x}^{\pmb{*}} \mapsto (a, b), \pmb{y}^{\pmb{+}} \mapsto (b) \}`.
+
+Extensive research has been done on solving linear Diophantine equations and linear Diophantine
+equation systems :cite:`Weinstock1960,Bond1967,Lambert1988,Clausen1989,Aardal2000`. In our case
+the equations are actually independant expect for requiring at least one term for plus variables.
+Also, the non-negative solutions can be found more easily. We use an adaptation of the
+algorithm used in SymPy_ which recursively reduces any linear Diophantine equation to equations
+of the form :math:`ax + by = d`. Those can be solved efficiently with the Extended Euclidian algorithm
+:cite:`Menezes1996`. Then the solutions for those can be combined into a solution for the original
+equation.
+
+All coefficients in those equations are likely very small, because they correspond to the multiplicity
+of sequence variables. Similarly, the number of variables in the equations is usually small as they
+map to sequence variables. The constant is the multiplicity of a subject term and hence also
+usually small. Overall, the number of distict equations that are solved is small and the
+solutions are cached. This reduces the impact of the sequence variables on the overall run time.
+
+
 Many-to-one Matching
 --------------------
 
 Since most applications for pattern matching will repeatedly match a fixed set of patterns against
 multiple subjects, we implemented many-to-one matching for MatchPy. We will give a brief overview
-over the underlying algorithms. Full details can be found in the master thesis that MatchPy is
-based on :cite:`thesis`.
+over the underlying algorithms. Full details can be found in the master thesis :cite:`thesis` that MatchPy is
+based on.
 
 MatchPy also includes two additional algorithms for matching: ``ManyToOneMatcher`` and
 ``DiscriminationNet``. Both enable matching multiple pattern against a single subject
@@ -244,180 +413,11 @@ displayed. In the left matching, the edges with the same subject cross and hence
 discarded. The other matching is used because it maintains the order. This ensures only unique
 matches are yielded.
 
+Once a matching for the subpatterns is obtained, the remaining
+
 .. figure:: bipartite2.pdf
 
    Example for Order in Bipartite Graph. :label:`fig:bipartite2`
-
-Sequence variables
-..................
-
-Once we have found a match using the bipartite graph, if the pattern contains sequence variables,
-we have to distribute the remaining subject subterms among them. This is accomplished by generating
-and solving several linear Diophantine equations. As an example, let the remaining subterms be
-:math:`a, b, b, b` and the sequence variables be :math:`\pmb{x}^{\pmb{*}}, \pmb{y}^{\pmb{+}}, \pmb{y}^{\pmb{+}}`.
-This means that the possible distributions are given by the non-negative integer solutions of these equations:
-
-.. math::
-    :type: eqnarray
-
-    1 &=& x_a + 2 y_a \\
-    3 &=& x_b + 2 y_b
-
-Because :math:`\pmb{y}^{\pmb{+}}` requires at least one term, we have the additional constraint
-:math:`y_a + y_b \geq 1`. The only possible solution :math:`x_a = 1, x_b = 1, y_a = 0, y_b = 1`
-corresponds to the match substitution :math:`\{\pmb{x}^{\pmb{*}} \mapsto (a, b), \pmb{y}^{\pmb{+}} \mapsto (b) \}`.
-
-Extensive research has been done on solving linear Diophantine equations and linear Diophantine
-equation systems :cite:`Weinstock1960,Bond1967,Lambert1988,Clausen1989,Aardal2000`. In our case
-the equations are actually independant expect for requiring at least one term for plus variables.
-Also, the non-negative solutions can be found more easily. We use an adaptation of the
-algorithm used in SymPy_ which recursively reduces any linear Diophantine equation to equations
-of the form :math:`ax + by = d`. Those can be solved efficiently with the Extended Euclidian algorithm
-:cite:`Menezes1996`. Then the solutions for those can be combined into a solution for the original
-equation.
-
-All coefficients in those equations are likely very small, because they correspond to the multiplicity
-of sequence variables. Similarly, the number of variables in the equations is usually small as they
-map to sequence variables. The constant is the multiplicity of a subject term and hence also
-usually small. Overall, the number of distict equations that are solved is small and the
-solutions are cached. This reduces the impact of the sequence variables on the overall run time.
-
-Example Domain: Linear Algebra
-------------------------------
-
-As an example, we will create the classes necessary to construct linear algebra expressions.
-These expressions consist of scalars, vectors, and matrices, as well as multiplication, addition,
-transposition, and inversion. The following Python code defines the classes:
-
-.. code-block:: python
-
-    class Scalar(Symbol):
-        pass
-
-    class Vector(Symbol):
-        pass
-
-    class Matrix(Symbol):
-      def __init__(self, name, properties=[]):
-        super().__init__(name)
-        self.properties = frozenset(properties)
-
-    Times = Operation.new(
-      '*', Arity.variadic, 'Times',
-      associative=True, one_identity=True,
-      infix=True)
-    Plus = Operation.new('+', Arity.variadic, 'Plus',
-      one_identity=True, infix=True,
-      commutative=True, associative=True)
-
-    class PostfixUnaryOperation(Operation):
-      arity = Arity.unary
-      def __str__(self):
-        return '({}){}'.format(self.operands[0],
-          self.name)
-
-    class Transpose(PostfixUnaryOperation):
-      name = '^T'
-
-    class Inverse(PostfixUnaryOperation):
-      name = '^-1'
-
-Matrix symbols have a set of properties which can be checked by constraints on the patterns. For
-``Plus`` and ``Times``, the ``Operation.new`` convenience function is used to quickly create the classes.
-If ``one_identity`` is ``True``, :math:`op(x) = x` holds and and occurences of the operation with a
-single argument are simplified. ``infix`` has just cosmetic effects and makes the string
-representation of the operation use infix instead of prefix notation. For the unary operations,
-custom classes are implemented in order to override their string representation.
-
-With these definitions, symbols and expressions can be created:
-
-.. code-block:: python
-
-    a = Scalar('a')
-    v = Vector('v')
-    M1 = Matrix('M1', ['diagonal', 'square'])
-    M2 = Matrix('M2', ['symmetric', 'square'])
-    M3 = Matrix('M3', ['triangular'])
-
-    expression = Plus(Times(a, Transpose(A)), B)
-
-Finally, patterns can be constructed using wildcards:
-
-.. code-block:: python
-
-    x_ = Wildcard.dot('x')
-    y_ = Wildcard.dot('y')
-    pattern = Pattern(Plus(x_, y_))
-
-This pattern matches the above expression. Note that there are multiple matches possible, because the
-addition is commutative. We only print the first match:
-
-.. code-block:: pycon
-
-    >>> print(next(match(expression, pattern)))
-    {x -> (a * (A)^T), y -> B}
-
-Patterns can be limited in what is matched by adding constraints. A constraint is essentially a callback,
-that gets the match substitution and can return either ``True`` or ``False``. You can either use the
-``CustomConstraint`` class with any (lambda) function, or create your own subclass of the ``Constraint`` class.
-
-For example, if we want to only match triangular matrices with a certain variable, we can create a constraint for that:
-
-.. code-block:: pycon
-
-    X_ = Wildcard.symbol('X', Matrix)
-    X_is_diagonal_matrix = CustomConstraint(
-      lambda X: 'triangular' in X.properties)
-    X_pattern = Pattern(X_, X_is_diagonal_matrix)
-
-The resulting pattern will only match diagonal matrices:
-
-.. code-block:: pycon
-
-    >>> is_match(A, X_pattern)
-    True
-    >>> is_match(B, X_pattern)
-    False
-
-Application: Finding matches for a BLAS kernel
-..............................................
-
-Lets assume we want to find all subexpressions of some linear algebra expression which we can compute efficiently with
-the `?TRMM`_ BLAS_ routine. These all have the form :math:`\alpha \times op(A)  \times B` or :math:`\alpha  \times B  \times op(A)` where
-:math:`op(A)` is either the identity function or transposition, and :math:`A` is a triangular matrix.
-For this example, we will leave out all variants where :math:`\alpha \neq 1`. We can construct the
-patterns using sequence variables to capture the remaining operands of the multiplication:
-
-.. code-block:: python
-
-    A_ = Wildcard.symbol('A', Matrix)
-    B_ = Wildcard.symbol('B', Matrix)
-    before_ = Wildcard.star('before')
-    after_ = Wildcard.star('after')
-    A_is_triangular = CustomConstraint(
-      lambda A: 'triangular' in A.properties)
-
-    trmm_patterns = [
-      Pattern(Times(before_, A_, B_, after_),
-        A_is_triangular),
-      Pattern(Times(before_, Transpose(A_), B_, after_),
-        A_is_triangular),
-      Pattern(Times(before_, B_, A_, after_),
-        A_is_triangular),
-      Pattern(Times(before_, B_, Transpose(A_), after_),
-        A_is_triangular),
-    ]
-
-As an example, we can find all matches for the first pattern using ``match``:
-
-.. code-block:: pycon
-
-    >>> expr = Times(Transpose(M3), M1, M3, M2)
-    >>> print(next(match(expr, trmm_patterns[0])))
-    {A -> M3, B -> M2, after -> (), before -> ((M3)^T, M1)}
-
-.. _`?TRMM`: https://software.intel.com/en-us/node/468494
-.. _BLAS: http://www.netlib.org/blas/
 
 Experiments
 -----------
