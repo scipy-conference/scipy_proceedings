@@ -635,18 +635,16 @@ Similarly, function variables that can match any function symbol would also be u
 Integration
 ...........
 
-Currently, in order to use MatchPy, any data structures must be adapted to inherit from the MatchPy expression classes.
-Where that is not possible, for example because the data structures are provided by a third party library, translation functions need to be applied.
-This also means that native Python data structures like lists or tuples cannot be used directly for the pattern matching.
-In general, the inheritance-based pattern matching makes the integration of MatchPy into existing projects difficult.
-Therefore, it would be useful, to have an abstraction that allows users to use their existing data structures with MatchPy.
+Currently, in order to use MatchPy, any data structures must be adapted to provide its children via
+an iterator. Where that is not possible, for example because the data structures are provided by a
+third party library, translation functions need to be applied.
+This means that simple data objects are native data structures such as dicts are currently not supported directly.
+Therefore, it would be useful, to have a better way of using existing data structures with MatchPy.
 
 In particular, easy integration with SymPy_ is an important goal, because it is a popular tool for working with symbolic mathematics.
 SymPy already implements `a form of pattern matching <http://docs.sympy.org/0.7.2/tutorial.html#pattern-matching>`_ which is less powerful than MatchPy.
 It lacks support for sequence variables, symbol wildcards and constraints.
-While SymPy has predefined properties for symbols (e.g. a symbol can be an integer, non-negative, etc.),
-it is not possible to add custom properties to symbols (e.g. matrix properties such as symmetric, triangular, etc.).
-On the other hand, those properties in SymPy allow each invidual constant symbols to be commutative or non-commutative instead of everything within a certain function symbol.
+Each constant symbol in SymPy can have properties that allow it be commutative or non-commutative.
 One benefit of this approach is easier modeling of linear algebra multiplication, where matrices and vectors do not commute, but scalars do.
 Better integration of MatchPy with SymPy would provide the users of SymPy with more powerful pattern matching tools.
 However, Matchpy would required selective commutativity to be fully compatible with SymPy.
