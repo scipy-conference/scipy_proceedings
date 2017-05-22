@@ -202,6 +202,14 @@ and the other uses multi-channel dictionary filters :math:`\mathbf{d}_{c,m}` and
 
 In the former case the representation of each channel is completely independent unless they are coupled via an :math:`\ell_{2,1}` norm term :cite:`wohlberg-2016-convolutional`, which is supported by class ``admm.cbpdn.ConvBPDNJoint``.
 
+An important issue that has received surprisingly little attention in the literature is the need to explicitly consider the representation of the smooth/low frequency image component when constructing convolutional sparse representations. If this component is not properly taken into account, convolutional sparse representations tend to give poor results. As briefly mentioned in :cite:`wohlberg-2016-efficient` (Sec. I), the simplest approach is to lowpass filter the image to be represented, computing the sparse representation on the highpass residual. In this approach the lowpass component forms part of the complete image representation, and should, of course, be added to the reconstruction from the sparse representation in order to reconstruct the image being represented. SPORCO supports this separation of an image into lowpass/highpass components via the function ``util.tikhonov_filter``, which computes the lowpass component of :math:`\mathbf{s}` as the solution of the problem
+
+.. math::
+   \mathrm{argmin}_\mathbf{x} \; \frac{1}{2} \left\|\mathbf{x} - \mathbf{s}
+   \right\|_2^2 + \frac{\lambda}{2} \sum_i \| G_i \mathbf{x} \|_2^2 \;\;,
+
+where :math:`G_i` is an operator computing the derivative along index :math:`i`, and :math:`\lambda` is a parameter controlling the amount of smoothing.
+In some cases it is not feasible to handle the lowpass component via such a pre-processing strategy, making it necessary to include the lowpass component in the CSC optimization problem itself. The simplest approach to doing so is to append an impulse filter to the dictionary and include a gradient regularisation term on corresponding coefficient map in the functional (Sec. 3) :cite:`wohlberg-2016-convolutional2`. This approach is supported by class ``cbpdn.ConvBPDNGradReg``, the use of which is demonstrated in section *Removal of Impulse Noise via CSC*.
 
 
 Convolutional Dictionary Learning
