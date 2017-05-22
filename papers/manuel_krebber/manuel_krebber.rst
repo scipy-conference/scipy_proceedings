@@ -78,31 +78,98 @@ Usage Overview
 
 MatchPy can be installed using ``pip install matchpy`` and all necessary classes can be imported with
 :py:`from matchpy import *`. Expressions in MatchPy consist of symbols and operations.
-For patterns, wildcards can also be used as placeholders. Optionally, patterns can have further
-constraints that restrict what they can match.
-
-To use MatchPy, one first has to define some operations. This can either be done by creating a
-subclass of the ``Operation`` class:
-
-.. code-block:: python
-
-    class MyOperation(Operation):
-      name = 'MyOperation'
-      arity = Arity.variadic
-
-Alternatively, they can be constructed with the ``Operation.new`` convenience function which also
-enables dynamic operation creation:
+For patterns, wildcards can also be used as placeholders. Similarly to the
+`notation <https://reference.wolfram.com/language/guide/Patterns.html>`_ that
+Mathematica uses, we will append an underscore to wildcard names to
+distinguish them from constant symbols. Optionally, patterns can have further
+constraints that restrict what they can match. You can use MatchPy with native Python types
+such as lists and ints:
 
 .. code-block:: pycon
 
-    >>> MyOp = Operation.new('MyOp', Arity.variadic)
+    >>> x_ = Wildcard.dot('x')
+    >>> next(match([0, 1], Pattern([x_, 1])))
+    {'x': 0}
 
-TODO
+You can also define custom operations by creating a subclass of the ``Operation`` class:
+
+.. code-block:: python
+
+    class MyOp(Operation):
+      name = 'MyOp'
+      arity = Arity.variadic
+      associative = True
+      commutative = True
+      one_identity = True
+
+These can also be associative and/or commutative which influences what a pattern can match.
+Nested associative operations have to be variadic and are automatically flattened:
+
+.. code-block:: pycon
+
+    >>> print(MyOp(0, MyOp(1, 2)))
+    MyOp(0, 1, 2)
+
+The argument of commutative operations are automatically sorted:
+
+.. code-block:: pycon
+
+    >>> print(MyOp(2, 1, 3))
+    MyOp(1, 2, 3)
+
+Sequence wildcards can match a sequence of arguments:
+
+.. code-block:: pycon
+
+    >>> y___ = Wildcard.star('y')
+    >>> next(match([1, 2, 3], Pattern([x_, y___])))
+    {'x': 1, 'y': (2, 3)}
+
+Note that patterns containing multiple sequence variables or patterns with commutative operations
+can have multiple matches:
+
+.. code-block:: pycon
+
+    >>> z_ = Wildcard.dot('z')
+    >>> pattern = Pattern(MyOp(x_, z_))
+    >>> list(match(MyOp(1, 2), pattern))
+    [{'x': 2, 'z': 1}, {'x': 1, 'z': 2}]
+
+We can use the ``CustomConstraint`` class to create a constraint that checks whether
+the substitution for ``a`` is smaller than the one for ``b``:
+
+.. code-block:: python
+
+    a_ = Wildcard.dot('a')
+    b_ = Wildcard.dot('b')
+    h___ = Wildcard.star('h')
+    t___ = Wildcard.star('t')
+    a_lt_b = CustomConstraint(lambda a, b: a < b)
+
+With this constraint we can define a replacement rule that basically describes bubble sort:
+
+.. code-block:: pycon
+
+    >>> pattern = Pattern([h___, b_, a_, t___], a_lt_b)
+    >>> rule = ReplacementRule(pattern,
+                    lambda a, b, h, t: [*h, a, b, *t])
+
+This replacement rule can be used to sort a list when applied repeatedly with ``replace_all``:
+
+.. code-block:: pycon
+
+    >>> replace_all([1, 4, 3, 2], [rule])
+    [1, 2, 3, 4]
+
+More examples can be found in `MatchPy's documentation <https://matchpy.readthedocs.io/latest/>`_.
 
 Many-to-one Matching
 --------------------
 
-**TODO:** Full details can be found in the master thesis on this topic :cite:`thesis`.
+Since most applications for pattern matching will repeatedly match a fixed set of patterns against
+multiple subjects, we implemented many-to-one matching for MatchPy. We will give a brief overview
+over the underlying algorithms. Full details can be found in the master thesis that MatchPy is
+based on :cite:`thesis`.
 
 MatchPy also includes two additional algorithms for matching: ``ManyToOneMatcher`` and
 ``DiscriminationNet``. Both enable matching multiple pattern against a single subject
