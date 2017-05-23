@@ -176,13 +176,13 @@ SymPy's :code:`solve` utility.
 
 .. code-block:: python
 
-    from sympy import solve
+   from sympy import solve
 
-    stencil = solve(eq, u.forward)[0]
+   stencil = solve(eq, u.forward)[0]
 
-    [In] print(stencil)
-    [Out] (h*u(t, x, y) - 2.0*s*u(t, x, y)
-         + s*u(t, x, y - h) + s*u(t, x - h, y))/h
+   [In] print(stencil)
+   [Out] (h*u(t, x, y) - 2.0*s*u(t, x, y)
+        + s*u(t, x, y - h) + s*u(t, x - h, y))/h
 
 The above variable :code:`stencil` now represents the RHS of
 Eq. :ref:`2dconvdiscr`, allowing us to build a
@@ -191,15 +191,15 @@ follows:
 
 .. code-block:: python
 
-    op = Operator(Eq(u.forward, stencil),
-                  subs={h: dx, s:dt})
+   op = Operator(Eq(u.forward, stencil),
+                 subs={h: dx, s:dt})
 
-    # Set initial condition as a "hat function"
-    u.data[:] = 1.
-    u.data[int(.5 / dx):int(1 / dx + 1),
-                int(.5 / dy):int(1 / dy + 1)] = 2.
+   # Set initial condition as a "hat function"
+   u.data[:] = 1.
+   u.data[int(.5 / dx):int(1 / dx + 1),
+          int(.5 / dy):int(1 / dy + 1)] = 2.
 
-    op(u=u, time=100)  # Apply for 100 timesteps
+   op(u=u, time=100)  # Apply for 100 timesteps
 
 *<TODO: A few words about the substitutions>*
 In the above example we initialise the data assigned to :code:`u` as
@@ -224,8 +224,104 @@ In the above example we initialise the data assigned to :code:`u` as
 Laplace equation
 ~~~~~~~~~~~~~~~~
 
-Burgers Equation
-~~~~~~~~~~~~~~~~
+The above example showed how Devito can be used to create finite
+difference stencil oprators from only a few lines of high-level
+symbolic code. For more complex examples, boundary conditions are
+required though, which are not currently provided through the symbolic
+high-level API. However, for exactly this reason, Devito provides a
+low-level, or "indexed" API, where custom SymPy expressions can be
+created with explicitly resolved grid accesses to manually inject
+boundary custom code into the auto-generation toolchain.
+
+To demonstrate this, we will use the Laplace example from the original
+CFD tutorials (step 9), which implements the steady-state heat equation
+with Dirichlet and Neuman boundary conditions. The governing equation
+for this problem is
+
+.. math::
+   :label: 2dlaplace
+
+   \frac{\partial ^2 p}{\partial x^2} + \frac{\partial ^2 p}{\partial y^2} = 0
+
+The rearranged discretised form is
+
+.. math::
+   :label: 2dlaplace_discr
+
+   p_{i,j}^n = \frac{\Delta y^2(p_{i+1,j}^n+p_{i-1,j}^n)
+           +\Delta x^2(p_{i,j+1}^n + p_{i,j-1}^n)}
+           {2(\Delta x^2 + \Delta y^2)}
+
+Using a similar approach to the previous example, we can construct
+the SymPy expression to update the state of a field :math:`p`. For
+demonstration purposes we will use two separate function objects
+of type :code:`DenseData` in this example, since the Laplace equation
+does not contain a time-dependence.
+
+*<Some words on the BC types and the definition of the prescibed BC>*
+
+.. code-block:: python
+
+   # Create two separate symbols with space dimensions
+   p = DenseData(name='p', shape=(nx, ny),
+                 space_order=2)
+   pn = DenseData(name='pn', shape=(nx, ny),
+                  space_order=2)
+
+   # Create an additional symbol for our prescibed BC
+   bc_right = DenseData(name='bc_right', shape=(nx, ),
+                        dimensions=(x, ))
+   bc_right.data[:] = np.linspace(0, 1, nx)
+
+   # Define equation and sovle for the central point
+   eq = Eq(a * pn.laplace)
+   stencil = solve(eq, pn)[0]
+   # The update expression to populate buffer `p`
+   eq_stencil = Eq(p, stencil)
+
+   # Create explicit boundary condition expressions
+   bc = [Eq(p.indexed[x, 0], 0.)]
+   bc += [Eq(p.indexed[x, ny-1], bc_right.indexed[x])]
+   bc += [Eq(p.indexed[0, y], p.indexed[1, y])]
+   bc += [Eq(p.indexed[nx-1, y], p.indexed[nx-2, y])]
+
+   # Build operator with update and BC expressions
+   op = Operator(expressions=[eq_stencil] + bc,
+                 subs={h: dx, a: 1.})
+
+After buildign the operator, we can now use it in a time-independent
+conversion loop, but we do need to make sure we switch between buffers.
+
+.. code-block:: python
+
+   l1norm = 1
+   counter = 0
+   while l1norm > 1.e-4:
+       # Determine buffer order
+       if counter % 2 == 0:
+           _p, _pn = p, pn
+       else:
+           _p, _pn = pn, p
+
+       # Apply operator
+       op(p=_p, pn=_pn)
+
+       # Compute L1 norm
+       l1norm = (np.sum(np.abs(_p.data[:])
+                 - np.abs(_pn.data[:]))
+                 / np.sum(np.abs(_pn.data[:])))
+       counter += 1
+
+
+.. figure:: 2dlaplace_init.png
+   :scale: 42%
+
+   Initial condition of :code:`pn.data` in the 2D Laplace example.
+
+.. figure:: 2dlaplace_final.png
+   :scale: 42%
+
+   State of :code:`p.data` after convergence in Laplace example.
 
 Seismic Inversion
 ~~~~~~~~~~~~~~~~~
