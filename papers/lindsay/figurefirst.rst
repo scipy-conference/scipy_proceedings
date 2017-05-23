@@ -9,6 +9,7 @@
 :author: Floris van Breugel
 :email: florisvb@gmail.com
 :institution: University of Washington
+:corresponding:
 
 :github: http://flyranch.github.io/figurefirst/
 
@@ -43,20 +44,20 @@ We created the open-source FigureFirst library to enable interoperability betwee
    :align: center
    :figclass: w
 
-   Comparison between different methods of figure creation. (A) Making figures without figure first. (B) The itterative layout-based workflow enabled by figurefirst.
+   Overview of the approach to figure creation using figurefirst. (A-C) A common workflow for generating scientific figures without figurefirst. (A) Data are plotted in anaylysis software and panels are organised using text-oriented styling tools such as subplot or gridspec. (B) Semi-finished figures are exported into a vector-graphics format and any final styling and annotation is applied in vector editing software. (C) In many cases these final edits will need to be re-applied if the data or analysis changes (D-F) The itterative layout-based workflow enabled by figurefirst. (D) The user designs a figure layout in svg, specifying the location and aspect-ratio of putative plotting axes. Additional vector art such as arrows or stylized axes spines can be included in the layout document. (E) Figurefirst will interpret the layout document and generate matplotlib axis and figures that the user can use to plot in python. (F) When saving, the generated plots are merged with the original layout to incoporate the non-matplotlib graphics. Note that this approach allows changes to the figure layout or analyis code to be applied at any point in the workflow.
 
 Usage
 -----
 
 With figurefirst creating a new figure generally involves four steps:
 
-1) **Design the layout file.** Fundamentally this means decorating a specific subset of the objects in the svg files with xml tags that identify what objects are something figurefirst should expose to Python. If using inkscape, we facilitate this step with a number of optional inkscape extensions (Fig. 2).
+1) **Design the layout file.** (Fig 1D) Fundamentally this means decorating a specific subset of the objects in the svg files with xml tags that identify what objects  figurefirst should expose to Python . For instance the user specifies a matplotlib axes by tagging an SVG :code:`<rect/>` with the :code:`<figurefirst:axes>` tag. If using inkscape, we facilitate this step with a number of optional inkscape extensions (Fig. 2).
 
-2) **Import the layout into python.** This is accomplished by constructing a :code:`FigureLayout` object with the path to the layout and then calling the :code:`make_mplfigures` method of this object to generate :code:`matplotlib` figures and axes as specified in the layout.
+2) **Import the layout into python.** (Fig 1E) This is accomplished by constructing a :code:`FigureLayout` object with the path to the layout and then calling the :code:`make_mplfigures` method of this object to generate :code:`matplotlib` figures and axes as specified in the layout.
 
-3) **Plot data.** All the newly created figure axes are available within the :code:`axes` dictionary of the :code:`FigureLayout` object.
+3) **Plot data.** (Fig 1F) All the newly created figure axes are available within the :code:`axes` dictionary of the :code:`FigureLayout` object.
 
-4) **Save to svg.** This will merge svg graphics with matplotlib figures allow ing complex vector art to be quickly incorporated as overlays or underays to your data presentation.
+4) **Save to svg.** This will merge svg graphics with matplotlib figures allowing complex vector art to be quickly incorporated as overlays or underays to your data presentation.
 
 .. figure:: simple_dialogue_xml_editor.png
    :scale: 80%
@@ -64,7 +65,28 @@ With figurefirst creating a new figure generally involves four steps:
 
    Screenshots of Inkscape illustrating the two mechanisms for applying the correct xml tags, which are used by FigureFirst to generate MatPlotLib axes.
 
-To illustrate some the capabilities of FigureFirst, consider the task of making a more complex figure that describes three behavioral metrics for three different animals. With FigureFirst, one can draw the layout for one of the animals, and then use this layout as a template for the other two (Fig. 3A-B). Thus, if you decide to change the relative sizes of the axes, or add / remove an axis, this only needs to be done once (to the template). In this example, each of the three groups was created using a new MatPlotLib figure, which is then saved to a seperate layer in the SVG file (Fig. 3C). This organization makes it possible to update the three groups with new data independently (saving computational time). Often when working on a scientific figure early in the process, the overall layout and figure size is unknown. Or perhaps the figure needs to be reformatted for a different journal's size, or for a poster or powerpoint format. With FigureFirst these changes are as easy as rearranging the rectangles in Inkscape, and rerunning the same exact code (Fig. 3D-E). This exemplifies the key contribution of FigureFirst: seperating figure layout from the data analysis, so that the software is not cluttered with code to generate the layout, and allowing for quick reorganization of the layout. 
+As an example, to generate figure 1 we used inkscape to construct a .svg document  called 'workflow_layout.svg' containing a layer with a 2 by 3 grid of grey rectangles. We then used the tag axis inkscape extension (figure 2) to tag each :code:`<rect/>` with a  :code:`<figurefirst:axes>` tag that provides the axes with a unique name as an attribute. For instance we taged the grey rectangle that became panel C with :code:`<figurefirst:axis figurefirst:name="plot_data" />.` In this example we have drawn in the axes spines and included this with the arrows and other annotations on a separate layer in the .svg file to illustrate one potential application of incuding vector art overlays in a layout document.
+
+In python we then can plot some data to this axis using the following code:
+
+.. code-block:: python
+   :linenos:
+
+   import figurefirst as fifi
+   layout = fifi.FigureLayout('workflow_layout.svg')
+   layout.make_mplfigures()
+   fifi.mpl_functions.kill_all_spines(layout)
+   x = np.linspace(0,2*pi); y = np.sin(x)
+   layout.axes['plot_data'].plot(x,y)
+   layout.save('workflow.svg')
+
+lines 2 and 3 are responsible for parsing the layout document and generating the matplotlib figures. In line 4 we pass the layout to a helper function in the mpl_functions submodule that removes the axes spines from all the axes contained within the layout. Lines 5-6 plot the data and in line 7 we save the layout to a new svg document called 'workflow.svg' with all the matplotlib axes associated with this figure inserted in a new layer. Note that there is nothing keeping us from using this new document as a layout document itself.
+
+Since the figurefirst:name attribute of the tagged <rect> will be used as the key in the layout.axes dictionary, we needed each panel in this example to have a unique name. Unfortunately, this can be a cumbersom requirement since often times scientific data will have a nested or higherarchical structure -- a series of similar experiments performed under slightly different conditons. We found that when generating the code to plot a figure, it is useful if the organization of the layout document refects the organization of the data itself. Thus, we have provided two mechanisms to allow a higherhical structure in the layout design: groups and templates. Though the interface for working with these objects differs they both generate a nested structure in the layout.axes dictionary. 
+
+When using groups the higherarchy is specified in svg by enclosing a set of tagged axes within the <g> container taged with <figurefirst:group> with a figurefirst:name attribute. The axes are then exposed to the user in python as objects keyed tuples such as (groupname, axesname). Note that the depth of the higherarchy is arbitrary. 
+
+To illustrate using the template feature, consider the task of making a more complex figure that describes three behavioral metrics for three different animals. With FigureFirst, one can draw the layout for one of the animals, and then use this layout as a template for the other two (Fig. 3A-B). Thus, if you decide to change the relative sizes of the axes, or add / remove an axis, this only needs to be done once (to the template). In this example, each of the three groups was created using a new matplotlib figure, which is then saved to a seperate layer in the SVG file (Fig. 3C). This organization makes it possible to update the three groups with new data independently (saving computational time). Often when working on a scientific figure early in the process, the overall layout and figure size is unknown. Or perhaps the figure needs to be reformatted for a different journal's size, or for a poster or powerpoint format. With FigureFirst these changes are as easy as rearranging the rectangles in Inkscape, and rerunning the same exact code (Fig. 3D-E). This exemplifies the key contribution of FigureFirst: seperating figure layout from the data analysis, so that the software is not cluttered with code to generate the layout, and allowing for quick reorganization of the layout. 
 
 .. figure:: example_templates.png
    :scale: 100%
@@ -92,12 +114,16 @@ FigureFirst can also expose many types of SVG objects to python, including text,
 
 
 
-
-
 Architecture
 ------------
 
-FigureFirst uses a minimal Document Object Model interface (xml.dom.minidom) to parse and write to an svg file. We use define a set of xml tags that the user may use to decorate a subset of svg objects. Our library then exposes a a programing interface that addsexposesadds plotting functionality toforto these items from the layout document in PpPython.  We use the FigureFirst namespace in our xml to ensure that theseourthese tags will not collide with any other tags in the document in the document. 
+FigureFirst uses a minimal Document Object Model interface (xml.dom.minidom) to parse and write to an svg file. We use define a set of xml tags that the user may use to decorate a subset of svg objects. Our library then exposes a a programing interface that exposes plotting functionality to these items from the layout document in Python.  We use the FigureFirst namespace in our xml to ensure that these tags will not collide with any other tags in the document.
+
+When constructing a FigureFirst.FigureLayout, figurefirst parses the SVG document and transforms tagged SVG elements into a python object that holds the key graphical data specified by SVG. For instance, as mentioned above, a box tagged with `<figurefirst:axes>` will be used to create a figurefirst.Axes object that contains the x,y position of the origin, as well as the height and width of the tagged box. FigureFirst axes objects are organized within a grouping hierarchy specified by the svg groups or inkscape layers that enclose the tagged box. Like the axes, these groups and layers are exposed to FigureFirst using xml tags:  `<figurefirst:group>` and `<figurefirst:figure>` respectively. 
+
+We use inkscape layers as the top level of the grouping hierarchy, each layer will generate a new matplotlib figure instance that will hold the enclosed `<figurefirst:axes>` objects - the dimensions of these figures are determined by the dimensions of the svg document. Additional levels of grouping are specified by tagging groups with the `<figurefirst:group>` tag. In the case that a `<figurefirst:figure>` tag is not indicated, all the axes of the document are collected into the default figure with the name 'none'. 
+
+The `<figurefirst:figure>` tag can also be used at the level of groups and individual boxes to support figure templates. Templates (Fig xxx) allow a sub-layout prototype to be replicated multiple times within the context of a larger document. To use templates a group of `<figurefirst:axes>` boxes is tagged with a `<figurefirst:figure>` tag. This template is then targeted to single boxes that are then tagged with the `<figurefirst:figure>` that contains a `figurefirst:name` attribute indicating the name of the template to use. The template is then scaled and translated to fit within the bounds of the target.
 
 
 Future Directions
