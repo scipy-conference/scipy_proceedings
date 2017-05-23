@@ -6,6 +6,10 @@
 :email: barthels@aices.rwth-aachen.de
 :institution: RWTH Aachen University, AICES, HPAC Group
 
+:author: Paolo Bientinesi
+:email: pauldj@aices.rwth-aachen.de
+:institution: RWTH Aachen University, AICES, HPAC Group
+
 :bibliography: literature
 
 .. latex::
@@ -37,8 +41,7 @@ Introduction
 
 Pattern matching is a powerful tool which is part of many functional programming languages as well as computer algebra systems such as Mathematica.
 It is useful for many applications including symbolic computation, term simplification, term rewriting systems, automated theorem proving, and model checking.
-Term rewriting systems rely on pattern matching to find matches for the rewrite rules.
-In functional programming languages, pattern matching enables a more readable and intuitive expression of algorithms.
+In this paper, we present a pattern matching implementation for Python and the optimizations it provides.
 
 Among the existing systems, Mathematica offers the most expressive pattern matching.
 Its pattern matching offers similar expressiveness as regular expressions in Python, but for symbolic tree structures instead of strings.
@@ -48,7 +51,7 @@ Mathematica also offers sequence variables which can match a sequence of express
 They are especially useful when working with variadic function symbols.
 
 There is currently no open source alternative to Mathematica with comparable pattern matching capabilities.
-In particular, we are interested in similar pattern matching for an experimental linear algebra compiler written in Python.
+In particular, we are interested in similar pattern matching for Python.
 Unfortunately, Mathematica is proprietary and there are no publications on the underlying pattern matching algorithm.
 
 Previous work predominantly covers syntactic pattern matching, i.e. associative/commutative/variadic
@@ -58,6 +61,7 @@ functions have those properties, e.g. matrix multiplication in linear algebra.
 Most of the existing pattern matching libraries for Python only support syntactic patterns.
 While the pattern matching in SymPy_ can work with associative/commutative functions, it is limited to finding a single match and does not support sequence variables.
 However, we are also interested in finding all possible matches for a pattern.
+Furthermore, SymPy is limited to mathematical expressions and does not provide general symbolic pattern matching.
 
 In many applications, a fixed set of patterns will be matched repeatedly against different subjects.
 The simultaneous matching of multiple patterns is called many-to-one matching, as opposed to
@@ -68,22 +72,34 @@ the full feature set described above.
 Discrimination nets are the state-of-the-art solution for many-to-one matching.
 Our goal is to generalize this approach to support all the aforementioned features.
 
-We implemented pattern matching with sequence variables and associative/commutative function symbols
-as an open-source library for Python called MatchPy_. In addition to standard one-to-one matching,
-this library also includes an efficient many-to-one matching algorithm that uses generalized discrimination nets.
-In our experiments we observed significant speedups of the many-to-one matching over one-to-one matching.
+**Old:**
+
+We implemented pattern matching with sequence variables and associative/commutative function symbols as an open-source library for Python called MatchPy_.
+In addition to standard one-to-one matching, this library also includes an efficient many-to-one matching algorithm that uses generalized discrimination nets.
+We present our experiments where we observed significant speedups of the many-to-one matching over one-to-one matching.
+
+**New:**
+
+The contributions discussed in this paper are
+
+- the Python library MatchPy_,
+- pattern matching with sequence variables and associative/commutative/variadic function symbols,
+- many-to-one matching with the above features,
+- and experiments to evaluate the performance of many-to-one matching.
 
 Usage Overview
 --------------
 
 MatchPy can be installed using ``pip install matchpy`` and all necessary classes can be imported with
-:py:`from matchpy import *`. Expressions in MatchPy consist of symbols and operations.
-For patterns, wildcards can also be used as placeholders. Similarly to the
-`notation <https://reference.wolfram.com/language/guide/Patterns.html>`_ that
-Mathematica uses, we will append an underscore to wildcard names to
-distinguish them from constant symbols. Optionally, patterns can have further
-constraints that restrict what they can match. You can use MatchPy with native Python types
-such as lists and ints:
+:py:`from matchpy import *`. Expressions in MatchPy consist of constant symbols and operations.
+For patterns, wildcards can also be used as placeholders. We will use
+`Mathematica's notation <https://reference.wolfram.com/language/guide/Patterns.html>`_ for
+wildcards, i.e. we will append underscores to wildcards to distinguish them from symbols.
+
+You can use MatchPy with native Python types such as lists and ints. The following is a example
+of how you can match a subject ``[0, 1]`` against a pattern ``[x_, 1]``. The expected match here
+is the replacement ``0`` for ``x_``. We use next because we only want to use the first (and in this
+case only) match of the pattern:
 
 .. code-block:: pycon
 
@@ -91,7 +107,19 @@ such as lists and ints:
     >>> next(match([0, 1], Pattern([x_, 1])))
     {'x': 0}
 
-You can also define custom operations by creating a subclass of the ``Operation`` class:
+In addition to regular (dot) variables, MatchPy also supports sequence wildcards.
+They can match a sequence of arguments and we denote them with two or three trailing underscores
+for plus and star wildcards, respectively. Star wildcards can match an empty sequence, while
+plus wildcards require at least one argument to match.
+
+.. code-block:: pycon
+
+    >>> y___ = Wildcard.star('y')
+    >>> next(match([1, 2, 3], Pattern([x_, y___])))
+    {'x': 1, 'y': (2, 3)}
+
+In the following, we will omit the definition of new variables as they can be done in the same way.
+In addition to native types, you can also define custom operations by creating a subclass of the ``Operation`` class:
 
 .. code-block:: python
 
@@ -100,50 +128,29 @@ You can also define custom operations by creating a subclass of the ``Operation`
       arity = Arity.variadic
       associative = True
       commutative = True
-      one_identity = True
 
-These can also be associative and/or commutative which influences what a pattern can match.
-Nested associative operations have to be variadic and are automatically flattened:
-
-.. code-block:: pycon
-
-    >>> print(MyOp(0, MyOp(1, 2)))
-    MyOp(0, 1, 2)
-
-The argument of commutative operations are automatically sorted:
+The name and arity are required attributes, while the others are optional and influence the behavior of the operations.
+Nested associative operations have to be variadic and are automatically flattened.
+Furthermore, regular variables behave similar to sequence variables as arguments of associative functions, because
+the associativity allows arbitrary parenthesization of arguments:
 
 .. code-block:: pycon
 
-    >>> print(MyOp(2, 1, 3))
-    MyOp(1, 2, 3)
+    >>> next(match(MyOp(0, 1, 2), Pattern(MyOp(x_, 2))))
+    {'x': MyOp(0, 1)}
 
-Sequence wildcards can match a sequence of arguments:
-
-.. code-block:: pycon
-
-    >>> y___ = Wildcard.star('y')
-    >>> next(match([1, 2, 3], Pattern([x_, y___])))
-    {'x': 1, 'y': (2, 3)}
-
-Note that patterns containing multiple sequence variables or patterns with commutative operations
-can have multiple matches:
+The argument of commutative operations are automatically sorted.
+Note that patterns with commutative operations can have multiple matches, because their arguments can be reordered arbitrarily.
 
 .. code-block:: pycon
 
-    >>> z_ = Wildcard.dot('z')
-    >>> pattern = Pattern(MyOp(x_, z_))
-    >>> list(match(MyOp(1, 2), pattern))
+    >>> list(match(MyOp(1, 2), Pattern(MyOp(x_, z_))))
     [{'x': 2, 'z': 1}, {'x': 1, 'z': 2}]
 
-We can use the ``CustomConstraint`` class to create a constraint that checks whether
-the substitution for ``a`` is smaller than the one for ``b``:
+We can use the ``CustomConstraint`` class to create a constraint that checks whether ``a`` is smaller than ``b``:
 
 .. code-block:: python
 
-    a_ = Wildcard.dot('a')
-    b_ = Wildcard.dot('b')
-    h___ = Wildcard.star('h')
-    t___ = Wildcard.star('t')
     a_lt_b = CustomConstraint(lambda a, b: a < b)
 
 With this constraint we can define a replacement rule that basically describes bubble sort:
@@ -161,282 +168,22 @@ This replacement rule can be used to sort a list when applied repeatedly with ``
     >>> replace_all([1, 4, 3, 2], [rule])
     [1, 2, 3, 4]
 
-More examples can be found in `MatchPy's documentation <https://matchpy.readthedocs.io/latest/>`_.
-
-Example Domain: Linear Algebra
-------------------------------
-
-As an example, we will create the classes necessary to construct linear algebra expressions.
-These expressions consist of scalars, vectors, and matrices, as well as multiplication, addition,
-transposition, and inversion. The following Python code defines the classes:
-
-.. code-block:: python
-
-    class Scalar(Symbol):
-        pass
-
-    class Vector(Symbol):
-        pass
-
-    class Matrix(Symbol):
-      def __init__(self, name, properties=[]):
-        super().__init__(name)
-        self.properties = frozenset(properties)
-
-    Times = Operation.new(
-      '*', Arity.variadic, 'Times',
-      associative=True, one_identity=True,
-      infix=True)
-    Plus = Operation.new('+', Arity.variadic, 'Plus',
-      one_identity=True, infix=True,
-      commutative=True, associative=True)
-
-    class PostfixUnaryOperation(Operation):
-      arity = Arity.unary
-      def __str__(self):
-        return '({}){}'.format(self.operands[0],
-          self.name)
-
-    class Transpose(PostfixUnaryOperation):
-      name = '^T'
-
-    class Inverse(PostfixUnaryOperation):
-      name = '^-1'
-
-Matrix symbols have a set of properties which can be checked by constraints on the patterns. For
-``Plus`` and ``Times``, the ``Operation.new`` convenience function is used to quickly create the classes.
-If ``one_identity`` is ``True``, :math:`op(x) = x` holds and and occurences of the operation with a
-single argument are simplified. ``infix`` has just cosmetic effects and makes the string
-representation of the operation use infix instead of prefix notation. For the unary operations,
-custom classes are implemented in order to override their string representation.
-
-Application: Finding matches for a BLAS kernel
-..............................................
-
-Lets assume we want to find all subexpressions of some linear algebra expression which we can compute efficiently with
-the `?TRMM`_ BLAS_ routine. These all have the form :math:`\alpha \times op(A)  \times B` or :math:`\alpha  \times B  \times op(A)` where
-:math:`op(A)` is either the identity function or transposition, and :math:`A` is a triangular matrix.
-For this example, we will leave out all variants where :math:`\alpha \neq 1`. We can construct the
-patterns using sequence variables to capture the remaining operands of the multiplication:
-
-.. code-block:: python
-
-    A_ = Wildcard.symbol('A', Matrix)
-    B_ = Wildcard.symbol('B', Matrix)
-    before_ = Wildcard.star('before')
-    after_ = Wildcard.star('after')
-    A_is_triangular = CustomConstraint(
-      lambda A: 'triangular' in A.properties)
-
-    trmm_patterns = [
-      Pattern(Times(before_, A_, B_, after_),
-        A_is_triangular),
-      Pattern(Times(before_, Transpose(A_), B_, after_),
-        A_is_triangular),
-      Pattern(Times(before_, B_, A_, after_),
-        A_is_triangular),
-      Pattern(Times(before_, B_, Transpose(A_), after_),
-        A_is_triangular),
-    ]
-
-As an example, we can find all matches for the first pattern using ``match``:
+Sequence variables can also be used to match subsequences that match a constraint.
+For example, we can use the this to find all subsequences of integers that sum up to 5.
+In the following example, we will use anonymous wildcards which have not name and are hence not part of the match substitution:
 
 .. code-block:: pycon
 
-    >>> expr = Times(Transpose(M3), M1, M3, M2)
-    >>> print(next(match(expr, trmm_patterns[0])))
-    {A -> M3, B -> M2, after -> (), before -> ((M3)^T, M1)}
+    >>> x_sums_to_5 = CustomConstraint(
+    ...                         lambda x: sum(x) = 5)
+    >>> pattern = Pattern([___, x__, ___], x_sums_to_5)
+    >>> list(match([1, 2, 3, 1, 1, 2], pattern))
+    [{'x': (2, 3)}, {'x': (3, 1, 1)}]
 
-.. _`?TRMM`: https://software.intel.com/en-us/node/468494
-.. _BLAS: http://www.netlib.org/blas/
+More examples can be found in `MatchPy's documentation <https://matchpy.readthedocs.io/latest/>`_.
 
-Challenges
-----------
-
-While there are plenty of implementations of syntactic matching and the algorithms are well known,
-the pattern matching in MatchPy has several more challenging features.
-
-Associativity/Sequence variables
-................................
-
-Associativity enables arbitrary grouping of arguments for matching: For example, :math:`1 + a + b`
-matches :math:`1 + \pmb{x}` with :math:`\{ \pmb{x} \mapsto a + b \}`, because we can group the
-arguments as :math:`1 + (a + b)`. Basically, when regular
-variables are arguments of an associative function, they behave like sequence variables.
-Both can result in multiple distinct matches for a single pattern. In constrast, for syntactic
-patterns there is always at most one match. This means that the matching algorithm needs to be
-non-deterministic to explore all potential matches. We employ backtracking with the help of Python
-generators to enable this. Associative matching is NP-complete :cite:`Benanav1987`.
-
-Commutativity
-.............
-
-Matching commutative functions is difficult, because matches need to be found independant of the
-argument order. Commutative matching has been shown to be NP-complete :cite:`Benanav1987`.
-It is possible to solve this by matching all permutations of the subjects arguments
-against all permutations of the pattern arguments. However, with this naive approach, a total of
-:math:`n!m!` combinations have to be matched where :math:`n` is the number of subject arguments
-and :math:`m` the number of pattern arguments. Most of these combinations will likely not match
-or yield redunant matches.
-
-Instead, we interpret the arguments as a multiset, i.e. an orderless collection that allows
-repetition of elements. Also, we use the following order for matching a commutative term:
-
-1. Constant arguments
-2. Matched variables, i.e. variables that already have a value assigned in the current substitution
-3. Non-variable arguments
-4. Repeat step 2
-5. Regular variables
-6. Sequence variables
-
-Each of those steps reduces the search space for successive steps. This also means that if one step
-finds no match, the remaining steps do not have to be performed. Note that steps 3, 5 and 6 can
-yield multiple matches and backtracking is employed to check every combination. This can speed up
-matching significantly. Because step 6 is the most involved, it is described in more detail in the
-next section.
-
-Sequence Variables in Commutative Functions
-...........................................
-
-The distribution of :math`n` subjects subterms onto :math`m` sequence variables within a
-commutative function symbol can yield up to :math`m^n` distict solutions. Enumerating all of the
-is accomplished by generating and solving several linear Diophantine equations. As an example,
-lets assume we want to match :math:`f(a, b, b, b)` with
-:math:`f(\pmb{x}^{\pmb{*}}, \pmb{y}^{\pmb{+}}, \pmb{y}^{\pmb{+}})` where :math:`f` is commutative.
-This means that the possible distributions are given by the non-negative integer solutions of
-these equations:
-
-.. math::
-    :type: eqnarray
-
-    1 &=& x_a + 2 y_a \\
-    3 &=& x_b + 2 y_b
-
-Because :math:`\pmb{y}^{\pmb{+}}` requires at least one term, we have the additional constraint
-:math:`y_a + y_b \geq 1`. The only possible solution :math:`x_a = 1, x_b = 1, y_a = 0, y_b = 1`
-corresponds to the match substitution :math:`\{\pmb{x}^{\pmb{*}} \mapsto (a, b), \pmb{y}^{\pmb{+}} \mapsto (b) \}`.
-
-Extensive research has been done on solving linear Diophantine equations and linear Diophantine
-equation systems :cite:`Weinstock1960,Bond1967,Lambert1988,Clausen1989,Aardal2000`. In our case
-the equations are actually independant expect for requiring at least one term for plus variables.
-Also, the non-negative solutions can be found more easily. We use an adaptation of the
-algorithm used in SymPy_ which recursively reduces any linear Diophantine equation to equations
-of the form :math:`ax + by = d`. Those can be solved efficiently with the Extended Euclidian algorithm
-:cite:`Menezes1996`. Then the solutions for those can be combined into a solution for the original
-equation.
-
-All coefficients in those equations are likely very small, because they correspond to the multiplicity
-of sequence variables. Similarly, the number of variables in the equations is usually small as they
-map to sequence variables. The constant is the multiplicity of a subject term and hence also
-usually small. Overall, the number of distict equations that are solved is small and the
-solutions are cached. This reduces the impact of the sequence variables on the overall run time.
-
-
-Many-to-one Matching
---------------------
-
-Since most applications for pattern matching will repeatedly match a fixed set of patterns against
-multiple subjects, we implemented many-to-one matching for MatchPy. We will give a brief overview
-over the underlying algorithms. Full details can be found in the master thesis :cite:`thesis` that MatchPy is
-based on.
-
-MatchPy also includes two additional algorithms for matching: ``ManyToOneMatcher`` and
-``DiscriminationNet``. Both enable matching multiple pattern against a single subject
-much faster than matching each pattern individually using ``match``. The later can only be used
-for syntactic patterns, i.e. patterns without associative/commutative operations and sequence
-variables. Both are based on discrimination nets which are a data structure similar to a
-decision tree used to speed up many-to-one matching :cite:`Christian1993,Graef1991,Nedjah1997`.
-The ``ManyToOneMatcher`` uses a non-deterministic discrimination net with
-backtracking, while the ``DiscriminationNet`` is deterministic.
-
-.. figure:: dn.pdf
-
-   Example Discrimination Net. :label:`fig:dn`
-
-In Figure :ref:`fig:dn`, an example for a non-deterministic discrimination net is shown.
-It contains three patterns that match Python lists: One matches the list that consists of a single 1,
-the second one matches a list with exactly two elements where the last element is 0, and the third pattern
-matches any list where the first element is 1. Note, that these patterns can also match nested lists,
-e.g. the second pattern would also match :math:`[[2, 1], 0]`.
-
-Matching starts at the root and proceeds along the transitions.
-Simultaneously, the subject is traversed in preorder and each symbol is check against the
-transitions. Only transitions matching the current subterm can be used. Once a final state is
-reached, its label gives a list of matching patterns. For non-deterministic discrimination nets,
-all possibilities need to be explored via backtracking. The discrimination net allows to
-reduce the matching costs, because common parts of different pattern only need to be matched once.
-For non-matching transitions, their whole subtree is pruned and all the patterns are excluded
-at once, further reducing the match cost.
-
-In Figure :ref:`fig:dn`, for the subject :math:`[1, 0]`:, there are two paths and therefore two
-matching patterns: :math:`[\pmb{y}, 0]` matches with :math:`\{ \pmb{y} \mapsto 1 \}` and
-:math:`[1, \pmb{x}^{\pmb{*}}]` matches with :math:`\{ \pmb{x}^{\pmb{*}} \mapsto 0 \}`. Both the
-:math:`\pmb{y}`-transiton and the 1-transition can be used in the second state to match a 1.
-
-Compared to existing discrimination net variants, we added transitions for the end of a compound term
-to support variadic functions. Furthermore, we added support for both associative function symbols
-and sequence variables. Finally, our discrimination net supports transitions restricted to
-symbol classes (i.e. ``Symbol`` subclasses) in addition to the ones that match just a specific symbol.
-We decided to use a non-deterministic discrimination net instead of a deterministic one, since
-the number of states of the later would grow exponentially with the number of patterns. While
-the ``DiscriminationNet`` also has support for sequence variables, in practice the net became to large
-to use with just a dozen patterns.
-
-Commutative Many-to-one Matching
---------------------------------
-
-Many-to-one matching for commutative terms is more involved. We use a nested ``CommutativeMatcher``
-which in turn uses another ``ManyToOneMatcher`` to match the subterms. Our approach is similar to
-the one used by Bachmair and Kirchner in their respecitive works :cite:`Bachmair1995,Kirchner2001`.
-We match all the subterms of the commutative function in the subject with a many-to-one matcher
-constructed from the subpatterns of the commutative function in the pattern (except for sequence
-variables, which are handled separately). The resulting matches
-form a bipartite graph, where one set of nodes consists of the subject subterms and the other
-contains all the pattern subterms. Two nodes are connected by an edge iff the pattern matches the
-subject. Such an edge is also labeled with the match substitution(s). Finding an overall match is then
-accomplished by finding a maximum matching in this graph. However, for the matching to be valid, all the
-substitutions on its edges must be compatible, i.e. they cannot have contradicting replacements for
-the same variable. We use the Hopcroft-Karp algorithm :cite:`Hopcroft1973` to find an initial
-maximum matching. However, since we are also interested in all matches and the inital matching might
-have incompatible substitutions, we use the algorithm described by Uno, Fukuda and Matsui
-:cite:`Fukuda1994,Uno1997` to enumerate all maximum matchings.
-
-We want to avoid yielding redundant matches, therefore we extended the bipartite graph by introducing
-a total order over its two node set. This enables to determine whether the edges of a matching
-maintain the order induced by the subjects or if some of the edges "cross". Formally,
-for all edge pairs :math:`(p, s), (p', s') \in M` we require
-:math:`(s \equiv s' \wedge p > p') \implies s > s'` to hold where :math:`M` is the matching,
-:math:`s, s'` are subjects, and :math:`p, p'` are patterns.
-An example of this is given in Figure :ref:`fig:bipartite2`. The order of the nodes is indicated by
-the numbers next to them. The only two maximum matchings for this particular match graph are
-displayed. In the left matching, the edges with the same subject cross and hence this matching is
-discarded. The other matching is used because it maintains the order. This ensures only unique
-matches are yielded.
-
-Once a matching for the subpatterns is obtained, the remaining
-
-.. figure:: bipartite2.pdf
-
-   Example for Order in Bipartite Graph. :label:`fig:bipartite2`
-
-Experiments
------------
-
-To evaluate the performance of MatchPy, we performed several experiments. All experiments were
-conducted on an Intel Core i5-2500K 3.3 GHz CPU with 8GB of RAM.
-
-Linear Algebra
-..............
-
-The operations for the linear algebra problem are shown in Table :ref:`tbl:laop`. The patterns
-all match BLAS_ kernels similar to the example pattern which was previously described. The pattern
-set consists of 199 such patterns. Out of those, 61 have an addition as outermost operation, 135
-are patterns for products, and 3 are patterns for single matrices. A lot of these patterns only
-differ in terms of constraints, e.g. there are ten distinct patterns matching :math:`A \times B`
-with different constraints on the two matrices. By removing the sequence variables from the product
-patterns, these pattern can be made syntactic when ignoring the multiplication's associativity.
-In the following, we refer to the set of patterns with sequence variables as ``LinAlg``
-and the set of syntactic product patterns as ``Syntactic``.
+Application Example: Finding matches for a BLAS kernel
+......................................................
 
 .. table This is the caption for the materials table. :label:`mtable`
    :class: w
@@ -475,6 +222,238 @@ and the set of syntactic product patterns as ``Syntactic``.
         \caption{Linear Algebra Operations}
     \label{tbl:laop}
     \end{table}
+
+BLAS_ is a collection of optimized routines that can compute very specific linear algebra operations efficiently.
+As an example, assume we want to find all subexpressions of some linear algebra expression which we can compute with the `?TRMM`_ BLAS routine.
+These all have the form :math:`\alpha \times op(A)  \times B` or :math:`\alpha  \times B  \times op(A)` where
+:math:`op(A)` is either the identity function or transposition, and :math:`A` is a triangular matrix.
+For this example, we will leave out all variants where :math:`\alpha \neq 1`.
+Note that this is meant merely as an example use case for pattern matching and not as a general solution for compiling linear algebra expressions.
+
+In order to model the linear algebra expressions, we use the operations shown in Table :ref:`tbl:laop`.
+In addition, we have special symbol subclasses for scalars, vectors and matrices.
+Matrices also have a set of properties, e.g. they can be triangular, symmetric, square, etc.
+For those patterns we will also use a special kind of dot variable, that is restricted to only match a specific kind of symbol.
+Finally, we can construct the patterns using sequence variables to capture the remaining operands of the multiplication:
+
+.. code-block:: python
+
+    A_ = Wildcard.symbol('A', Matrix)
+    B_ = Wildcard.symbol('B', Matrix)
+    A_is_triangular = CustomConstraint(
+      lambda A: 'triangular' in A.properties)
+
+    trmm_patterns = [
+      Pattern(Times(h___, A_, B_, t___),
+        A_is_triangular),
+      Pattern(Times(h___, Transpose(A_), B_, t___),
+        A_is_triangular),
+      Pattern(Times(h___, B_, A_, t___),
+        A_is_triangular),
+      Pattern(Times(h___, B_, Transpose(A_), t___),
+        A_is_triangular),
+    ]
+
+With these patterns, we can find all matches for the `?TRMM`_ routine within a product:
+
+.. code-block:: pycon
+
+    >>> expr = Times(Transpose(M3), M1, M3, M2)
+    >>> for i, pattern in enumerate(trmm_patterns):
+    ...   for substitution in match(expr, pattern):
+    ...     print('{} with {}'.format(i, substitution))
+    0 with {A -> M3, B -> M2, t -> (), h -> ((M3)^T, M1)}
+    1 with {A -> M3, B -> M1, t -> (M3, M2), h -> ()}
+    2 with {A -> M3, B -> M1, t -> ((M3)^T), h -> (M2)}
+
+.. _`?TRMM`: https://software.intel.com/en-us/node/468494
+.. _BLAS: http://www.netlib.org/blas/
+
+Challenges
+----------
+
+While there are plenty of implementations of syntactic matching and the algorithms are well known,
+the pattern matching in MatchPy has several more challenging features.
+
+Associativity/Sequence variables
+................................
+
+Associativity enables arbitrary grouping of arguments for matching:
+For example, ``1 + a + b`` matches ``1 + x_`` with :math:`\{ x \mapsto a + b \}`, because we can group the arguments as ``1 + (a + b)``.
+Basically, when regular variables are arguments of an associative function, they behave like sequence variables.
+Both can result in multiple distinct matches for a single pattern.
+In contrast, for syntactic patterns there is always at most one match.
+This means that the matching algorithm needs to be non-deterministic to explore all potential matches for associative terms or terms with sequence variables.
+We employ backtracking with the help of Python generators to enable this.
+Associative matching is NP-complete :cite:`Benanav1987`.
+
+Commutativity
+.............
+
+Matching commutative terms is difficult, because matches need to be found independent of the argument order.
+Commutative matching has been shown to be NP-complete :cite:`Benanav1987`.
+It is possible to solve this by matching all permutations of the subjects arguments against all permutations of the pattern arguments.
+However, with this naive approach, a total of :math:`n!m!` combinations have to be matched where :math:`n` is the number of subject arguments
+and :math:`m` the number of pattern arguments.
+Most of these combinations will likely not match or yield redundant matches.
+
+Instead, we interpret the arguments as a multiset, i.e. an orderless collection that allows repetition of elements.
+Also, we use the following order for matching a commutative term:
+
+1. Constant arguments
+2. Matched variables, i.e. variables that already have a value assigned in the current substitution
+3. Non-variable arguments
+4. Repeat step 2
+5. Regular variables
+6. Sequence variables
+
+Each of those steps reduces the search space for successive steps.
+This also means that if one step finds no match, the remaining steps do not have to be performed.
+Note that steps 3, 5 and 6 can yield multiple matches and backtracking is employed to check every combination.
+Because step 6 is the most involved, it is described in more detail in the next section.
+
+Sequence Variables in Commutative Functions
+...........................................
+
+The distribution of :math:`n` subjects subterms onto :math:`m` sequence variables within a
+commutative function symbol can yield up to :math:`m^n` distinct solutions.
+Enumerating all of the is accomplished by generating and solving several linear Diophantine equations.
+As an example, lets assume we want to match ``f(a, b, b, b)`` with ``f(x___, y__, y__)`` where ``f`` is commutative.
+This means that the possible distributions are given by the non-negative integer solutions of these equations:
+
+.. math::
+    :type: eqnarray
+
+    1 &=& x_a + 2 y_a \\
+    3 &=& x_b + 2 y_b
+
+:math:`x_a` determines how many times ``a`` is included in the substitution for ``x``.
+Because ``y__`` requires at least one term, we have the additional constraint :math:`y_a + y_b \geq 1`.
+The only possible solution :math:`x_a = 1, x_b = 1, y_a = 0, y_b = 1` corresponds to the match substitution :math:`\{ x \mapsto (a, b), y \mapsto (b) \}`.
+
+Extensive research has been done on solving linear Diophantine equations and linear Diophantine
+equation systems :cite:`Weinstock1960,Bond1967,Lambert1988,Clausen1989,Aardal2000`. In our case
+the equations are actually independent expect for requiring at least one term for plus variables.
+Also, the non-negative solutions can be found more easily. We use an adaptation of the
+algorithm used in SymPy_ which recursively reduces any linear Diophantine equation to equations
+of the form :math:`ax + by = d`. Those can be solved efficiently with the Extended Euclidian algorithm
+:cite:`Menezes1996`. Then the solutions for those can be combined into a solution for the original
+equation.
+
+All coefficients in those equations are likely very small, because they correspond to the multiplicity
+of sequence variables. Similarly, the number of variables in the equations is usually small as they
+map to sequence variables. The constant is the multiplicity of a subject term and hence also
+usually small. Overall, the number of distinct equations that are solved is small and the
+solutions are cached. This reduces the impact of the sequence variables on the overall run time.
+
+Optimizations
+-------------
+
+Since most applications for pattern matching will repeatedly match a fixed set of patterns against
+multiple subjects, we implemented many-to-one matching for MatchPy.
+The goal of many-to-one matching is to utilize similarities between patterns to match them more efficiently.
+We will give a brief overview over the many-to-one matching algorithm used by MatchPy.
+Full details can be found in the master thesis :cite:`thesis` that MatchPy is based on.
+
+Many-to-one Matching
+....................
+
+MatchPy includes two additional algorithms for matching: ``ManyToOneMatcher`` and ``DiscriminationNet``.
+Both enable matching multiple pattern against a single subject much faster than matching each pattern individually using ``match``.
+The later can only be used for syntactic patterns and implements a state-of-the-art deterministic discrimination net.
+A discrimination net is a data structure similar to a decision tree or a finite automaton :cite:`Christian1993,Graef1991,Nedjah1997`.
+The ``ManyToOneMatcher`` utilizes a generalized form of non-deterministic discrimination nets that support sequence variables and associative function symbols.
+Furthermore, as elaborated in the next section, it can also match commutative terms.
+
+.. figure:: dn.pdf
+
+   Example Discrimination Net. :label:`fig:dn`
+
+In Figure :ref:`fig:dn`, an example for a non-deterministic discrimination net is shown.
+It contains three patterns that match Python lists: One matches the list that consists of a single 1,
+the second one matches a list with exactly two elements where the last element is 0, and the third pattern
+matches any list where the first element is 1. Note, that these patterns can also match nested lists,
+e.g. the second pattern would also match ``[[2, 1], 0]``.
+
+Matching starts at the root and proceeds along the transitions.
+Simultaneously, the subject is traversed in preorder and each symbol is check against the
+transitions. Only transitions matching the current subterm can be used. Once a final state is
+reached, its label gives a list of matching patterns. For non-deterministic discrimination nets,
+all possibilities need to be explored via backtracking. The discrimination net allows to
+reduce the matching costs, because common parts of different pattern only need to be matched once.
+For non-matching transitions, their whole subtree is pruned and all the patterns are excluded
+at once, further reducing the match cost.
+
+In Figure :ref:`fig:dn`, for the subject ``[1, 0]``, there are two paths and therefore two
+matching patterns: ``[y_, 0]`` matches with :math:`\{ y \mapsto 1 \}` and
+``[1, x___]`` matches with :math:`\{ x \mapsto 0 \}`. Both the
+``y``-transition and the ``1``-transition can be used in the second state to match a ``1``.
+
+Compared to existing discrimination net variants, we added transitions for the end of a compound term
+to support variadic functions. Furthermore, we added support for both associative function symbols
+and sequence variables. Finally, our discrimination net supports transitions restricted to
+symbol classes (i.e. ``Symbol`` subclasses) in addition to the ones that match just a specific symbol.
+We decided to use a non-deterministic discrimination net instead of a deterministic one, since
+the number of states of the later would grow exponentially with the number of patterns. While
+the ``DiscriminationNet`` also has support for sequence variables, in practice the net became to large
+to use with just a dozen patterns.
+
+Commutative Many-to-one Matching
+................................
+
+Many-to-one matching for commutative terms is more involved. We use a nested ``CommutativeMatcher``
+which in turn uses another ``ManyToOneMatcher`` to match the subterms. Our approach is similar to
+the one used by Bachmair and Kirchner in their respective works :cite:`Bachmair1995,Kirchner2001`.
+We match all the subterms of the commutative function in the subject with a many-to-one matcher
+constructed from the subpatterns of the commutative function in the pattern (except for sequence
+variables, which are handled separately). The resulting matches
+form a bipartite graph, where one set of nodes consists of the subject subterms and the other
+contains all the pattern subterms. Two nodes are connected by an edge iff the pattern matches the
+subject. Such an edge is also labeled with the match substitution(s). Finding an overall match is then
+accomplished by finding a maximum matching in this graph. However, for the matching to be valid, all the
+substitutions on its edges must be compatible, i.e. they cannot have contradicting replacements for
+the same variable. We use the Hopcroft-Karp algorithm :cite:`Hopcroft1973` to find an initial
+maximum matching. However, since we are also interested in all matches and the initial matching might
+have incompatible substitutions, we use the algorithm described by Uno, Fukuda and Matsui
+:cite:`Fukuda1994,Uno1997` to enumerate all maximum matchings.
+
+We want to avoid yielding redundant matches, therefore we extended the bipartite graph by introducing
+a total order over its two node sets. This enables determining whether the edges of a matching
+maintain the order induced by the subjects or whether some of the edges "cross". Formally,
+for all edge pairs :math:`(p, s), (p', s') \in M` we require
+:math:`(s \equiv s' \wedge p > p') \implies s > s'` to hold where :math:`M` is the matching,
+:math:`s, s'` are subjects, and :math:`p, p'` are patterns.
+An example of this is given in Figure :ref:`fig:bipartite2`. The order of the nodes is indicated by
+the numbers next to them. The only two maximum matchings for this particular match graph are
+displayed. In the left matching, the edges with the same subject cross and hence this matching is
+discarded. The other matching is used because it maintains the order. This ensures only unique
+matches are yielded.
+Once a matching for the subpatterns is obtained, the remaining subject arguments are distributed
+in the same way as for one-to-one matching which has been described before.
+
+.. figure:: bipartite2.pdf
+
+   Example for Order in Bipartite Graph. :label:`fig:bipartite2`
+
+Experiments
+-----------
+
+To evaluate the performance of MatchPy, we performed several experiments. All experiments were
+conducted on an Intel Core i5-2500K 3.3 GHz CPU with 8GB of RAM. Our focus is on relative
+performance of one-to-one and many-to-one matching rather than the absolute performance.
+
+Linear Algebra
+..............
+
+The operations for the linear algebra problem are shown in Table :ref:`tbl:laop`. The patterns
+all match BLAS_ kernels similar to the example pattern which was previously described. The pattern
+set consists of 199 such patterns. Out of those, 61 have an addition as outermost operation, 135
+are patterns for products, and 3 are patterns for single matrices. A lot of these patterns only
+differ in terms of constraints, e.g. there are ten distinct patterns matching :math:`A \times B`
+with different constraints on the two matrices. By removing the sequence variables from the product
+patterns, these pattern can be made syntactic when ignoring the multiplication's associativity.
+In the following, we refer to the set of patterns with sequence variables as ``LinAlg``
+and the set of syntactic product patterns as ``Syntactic``.
 
 The subjects were randomly generated such that matrices had random properties and each factor could
 randomly be transposed/inverted. The number of factors was chosen according to a normal
@@ -623,7 +602,7 @@ Additional pattern features
 ...........................
 
 In the future, we plan to implement similar functionality to the ``Repeated``, ``Sequence``, and ``Alternatives`` functions from Mathematica.
-These provide another level of expressive power which cannot be replicated with the current feature set of MatchPy's pattern matching.
+These provide another level of expressive power which cannot be fully replicated with the current feature set of MatchPy.
 Another useful feature are context variables as described by Kutsia :cite:`Kutsia2006`.
 They allow matching subterms at arbitrary depths which is especially useful for structures like XML.
 With context variables, MatchPy's pattern matching would be as powerful as XPath_ or `CSS selectors`_ for such structures.
@@ -638,7 +617,7 @@ Integration
 Currently, in order to use MatchPy, any data structures must be adapted to provide its children via
 an iterator. Where that is not possible, for example because the data structures are provided by a
 third party library, translation functions need to be applied.
-This means that simple data objects are native data structures such as dicts are currently not supported directly.
+Also, some native data structures such as dicts are currently not supported directly.
 Therefore, it would be useful, to have a better way of using existing data structures with MatchPy.
 
 In particular, easy integration with SymPy_ is an important goal, because it is a popular tool for working with symbolic mathematics.
@@ -648,6 +627,7 @@ Each constant symbol in SymPy can have properties that allow it be commutative o
 One benefit of this approach is easier modeling of linear algebra multiplication, where matrices and vectors do not commute, but scalars do.
 Better integration of MatchPy with SymPy would provide the users of SymPy with more powerful pattern matching tools.
 However, Matchpy would required selective commutativity to be fully compatible with SymPy.
+Also, SymPy supports older Python versions, while MatchPy requires Python 3.6.
 
 Performance
 ...........
