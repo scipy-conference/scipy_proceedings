@@ -113,7 +113,7 @@ Each ``Experiment`` automatically comes with a command-line interface, but they 
 
 The command-line interface allows changing arbitrary configuration entries, using the standard python syntax like this:
 
-.. code-block::
+.. code-block:: python
 
     > python example.py run with C=3.4e-2 gamma=0.5
 
@@ -136,10 +136,11 @@ All of the above can just as easily accomplished directly from python:
 After each of these calls ``r`` will contain a ``Run`` object with all kinds of details about the run including the result and the (modified) configuration.
 
 
+
 Bookkeeping
 -----------
 
-``Experiment``s implement the observer pattern :cite:`gamma1994` by publishing all kinds of information in the form of events and allowing observers to subscribe to them.
+``Experiment`` s implement the observer pattern :cite:`gamma1994` by publishing all kinds of information in the form of events and allowing observers to subscribe to them.
 These events are fired when a run is started, every couple of seconds while it is running and once it stops (either successfully or by failing).
 Sacred ships with an observer that stores all the information about the run in a MongoDB database, but the interface also supports adding custom observers.
 
@@ -150,57 +151,30 @@ The MongoObserver collects a lot of information about the experiment and the run
 
 Configuration
     configuration values used for this run
-    \item[Source Code] source code of all used source files
-    \item[Dependencies] version of all detected package dependencies
-    \item[Host] information about the host that is running the experiment
-    \item[Metadata] start and stop times, status, result or fail-trace if needed
-    \item[Custom Info] a dictionary of custom information
-    \item[stdout] captured console output of the run
-    \item[Resources and Artifacts] extra files needed or created by the run that should be saved
-\end{description}
+Source Code
+    source code of all used source files
+Dependencies
+    version of all detected package dependencies
+Host
+    information about the host that is running the experiment
+Metadata
+    start and stop times, status, result or fail-trace if needed
+Custom info
+    a dictionary of custom information
+stdout
+    captured console output of the run
+Resources and Artifacts
+     extra files needed or created by the run that should be saved
 
-\subsection{MongoDB}
+
+MongoDB
++++++++
 
 :cite:`mongo` is a noSQL database, or more precisely a *Document Database*:
 It allows the storage of arbitrary JSON documents without the need for a schema like in a SQL database.
 These database entries can be queried based on their content and structure.
 This flexibility makes it a good fit for Sacred, because it permits arbitrary configuration for each experiment that can still be queried and filtered later on.
 In particular this feature has been very useful to perform large scale studies like the one in :cite:`greff2015`.
-
-% \begin{listing*}
-% \begin{lstlisting}[numbers=left]
-% {
-%   "_id" : ObjectId("5575aa4d123967150bf934c7"),
-%   "config" : {
-%     "C" : 1,
-%     "gamma" : 0.7,
-%     "seed" : 757825173},
-%   "experiment" : {
-%     "name" : "iris_rbf_svm",
-%     "dependencies" : [["numpy", "1.9.2"],
-%                       ["sacred", "0.6.3"],
-%                       ["sklearn", "0.15.2"]],
-%     "sources" : [["[...]/example.py", "d00e3a8be6b35960744db3794a0f2462"]]},
-%   "result" : 0.9833333333333333,
-%   "info" : {},
-%   "captured_out" : "",
-%   "status" : "COMPLETED",
-%   "start_time" : ISODate("2015-06-08T16:44:29.349Z"),
-%   "heartbeat" : ISODate("2015-06-08T16:44:29.359Z"),
-%   "stop_time" : ISODate("2015-06-08T16:44:29.360Z"),
-%   "host" : {
-%     "hostname" : "Pecorino",
-%     "os_info" : "Linux-3.13.0-52",
-%     "cpu" : "Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz",
-%     "cpu_count" : 8,
-%     "python_version" : "3.4.0"},
-%   "artifacts" : [ ],
-%   "resources" : [ ] }
-% \end{lstlisting}
-% \vspace{-2em}
-% \caption{Example MongoDB entry (slightly shortened) as saved by Sacred}
-% 
-% \end{listing*}
 
 
 Reproducibility
@@ -220,6 +194,7 @@ Also if the seed is set to a fixed value as part of the code, then all runs will
 Sacred solves these problems by always generating a seed for each experiment that is stored as part of the configuration.
 It can be accessed from the code in the same way as every other config entry, but Sacred can also automatically generate seeds and PRNGs that deterministically depend on that root seed for you.
 Furthermore, Sacred automatically seeds the global PRNGs of the ``random`` and ``numpy`` modules, thus making most applications of randomization reproducible without any intervention of the user.
+
 
 
 Related Work
@@ -276,13 +251,15 @@ A detail view shows the hyperparameters used, information about the machine and 
 Sacredboard comes with a lightweight web server, such that it can be easily installed as a Python package. It only requires Python and a recent web browser to run. Currently it only supports MongoDB, but in future work we will provide an interface to the various other backends that are supported by Sacred.
 
 
+
 :cite:`hume48`
+
 
 
 Bibliographies, citations and block quotes
 ------------------------------------------
 
-If you wish to have a block quote, you can just indent the text, as in 
+If you wish to have a block quote, you can just indent the text, as in
 
     When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication. :cite:`hume48`
 
@@ -320,7 +297,7 @@ Or a snippet from the above code, starting at the correct line number:
    for (int i = 0; i < 10; i++) {
        /* do something */
    }
- 
+
 Important Part
 --------------
 
