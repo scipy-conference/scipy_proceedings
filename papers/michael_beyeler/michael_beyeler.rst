@@ -589,7 +589,18 @@ over several seconds.
 Like the brain, we solved this problem through parallelization. Computations
 were parallelized across small patches of the retina using two back ends (Joblib
 :cite:`JOB16` and Dask :cite:`DASK16`), with both multithreading and
-multiprocessing options. A major computational bottleneck in computing the
+multiprocessing options.
+The user can select from available back ends when setting up the simulation
+framework:
+
+sim = p2p.Simulation(engine=engine, num_jobs=num_jobs)
+
+where engine can be either "serial", "joblib", or "dask",
+and num_jobs optionally specifies how many cores should be used.
+
+
+
+A major computational bottleneck in computing the
 temporal response in each patch of retina are convolutions of arrays describing
 the responses of parts of the model at high temoral resolution (e.g., equations
 2 and 3). These math-heavy sections of the code were additionally sped up using
