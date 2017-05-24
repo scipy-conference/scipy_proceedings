@@ -132,18 +132,21 @@ express finite difference problems in a concise symbolic notation:
 Fluid dynamics examples
 -----------------------
 
-The following CFD examples are based on Lorena Barba's CFD introduction blog:
+In the following section we are going to demonstrate the use of the
+Devito API to implement two examples from classical fluid dynamics,
+before demonstrating Devito operators in a seismic inversion context.
+Both CFD examples are based in part on tutorials from the introductory
+blog "CFD Python: 12 steps to Navier-Stokes"[#]_ by the
+Lorena A. Barba group.
 
-http://lorenabarba.com/blog/cfd-python-12-steps-to-navier-stokes/
-
-This will be followed by a quick demonstration of seismic inversion operators.
+.. [#] http://lorenabarba.com/blog/cfd-python-12-steps-to-navier-stokes/
 
 Linear Convection
 ~~~~~~~~~~~~~~~~~
 
-We will demonstrate a basic Devito operator definition based on step
-5, a linear two-dimensional convection flow. The governing equation we
-are implementing here is:
+We will demonstrate a basic Devito operator definition based on a
+linear two-dimensional convection flow (step 5 in the original
+tutorials). The governing equation we are implementing here is:
 
 .. math::
    :label: 2dconvection
@@ -158,7 +161,13 @@ as
 .. math::
    :label: 2dconvdiscr
 
-   u_{i,j}^{n+1} = u_{i,j}^n-c \frac{\Delta t}{\Delta x}(u_{i,j}^n-u_{i-1,j}^n)-c \frac{\Delta t}{\Delta y}(u_{i,j}^n-u_{i,j-1}^n)
+   u_{i,j}^{n+1} = u_{i,j}^n-c \frac{\Delta t}{\Delta x}(u_{i,j}^n-u_{i-1,j}^n)
+   - c \frac{\Delta t}{\Delta y}(u_{i,j}^n-u_{i,j-1}^n)
+
+where the subscripts :math:`i` and :math:`j` denote indices in the
+space dimensions and the superscript :math:`n` denotes the index in
+time, while :math:`\Delta t`, :math:`\Delta x`, :math:`\Delta y`
+denote the spacing in time and space dimensions respectively.
 
 The first thing we need is a function object that we can take build
 a timestepping scheme with. For this purpose Devito provides so-called
@@ -185,7 +194,7 @@ and time derivatives of.
 The above expression results in a :code:`sympy.Equation` object that
 contains the fully discretised form of Eq. :ref:`2dconvection`,
 including placeholder symbols for spacing in space (:code:`h`) and
-time (:code:`s`). These spacign symbols will be resolved during the
+time (:code:`s`). These spacing symbols will be resolved during the
 code generation process, as described in **FORWARD-REF**. It is also
 important to note here that the explicit generation of the space
 derivatives :code:`u_dx` and :code:`u_dy` is due to the use of a
@@ -194,9 +203,11 @@ similar notation to the forward derivative in time (:code:`u.dt`) will
 soon be provided.
 
 In order to create a functional :code:`Operator` object, the
-expression :code:`eq` needs to be re-arranged so that we may
-solve for the unknown :math:`u_{i,j}^{n+1}`. This is easily achieved by using
-SymPy's :code:`solve` utility.
+expression :code:`eq` needs to be re-arranged so that we may solve for
+the unknown :math:`u_{i,j}^{n+1}`. This is easily achieved by using
+SymPy's :code:`solve` utility and the Devito shorthand
+:code:`u.forward` which denotes the furthest forward stencil point in
+a time derivative (:math:`u_{i,j}^{n+1}`).
 
 .. code-block:: python
 
@@ -209,9 +220,11 @@ SymPy's :code:`solve` utility.
         + s*u(t, x, y - h) + s*u(t, x - h, y))/h
 
 The above variable :code:`stencil` now represents the RHS of
-Eq. :ref:`2dconvdiscr`, allowing us to build a
-:code:`devito.Operator` and apply it over an initial data set as
-follows:
+Eq. :ref:`2dconvdiscr`, allowing us to construct a SymPy expression
+that updates :math:`u_{i,j}^{n+1}` and build a :code:`devito.Operator`
+from it. When creating this operator we also supply concnrete values
+for the spacing terms :code:`h` and :code:`s` via an additional
+substitution map argument :code:`subs`.
 
 .. code-block:: python
 
@@ -225,8 +238,9 @@ follows:
 
    op(u=u, time=100)  # Apply for 100 timesteps
 
-*<TODO: A few words about the substitutions>*
-In the above example we initialise the data assigned to :code:`u` as
+Using this operator we can now re-create the example from the original
+tutorial by initialising the data associated with the symbolic function
+:math:`u`, :code:`u.data`,  with a "hat function" according to
 
 .. math::
    :type: eqnarray
@@ -236,13 +250,21 @@ In the above example we initialise the data assigned to :code:`u` as
 
 .. figure:: 2dconv_init.png
    :scale: 42%
+   :figclass: hbt
 
-   Initial condition of :code:`u.data` in the 2D convection example.
+   Initial condition of :code:`u.data` in the 2D convection
+   example. :label:`fig2dconv`
 
 .. figure:: 2dconv_final.png
    :scale: 42%
+   :figclass: hbt
 
-   State of :code:`u.data` after 100 timesteps in convection example.
+   State of :code:`u.data` after 100 timesteps in convection
+   example. :label:`fig2dconvfinal`
+
+The initial condition and the final result after executing the operator
+for 100 timesteps are depicted in Figures :ref:`fig2dconv` and
+:ref:`fig2dconvfinal` respectively.
 
 
 Laplace equation
@@ -255,7 +277,7 @@ required though, which are not currently provided through the symbolic
 high-level API. However, for exactly this reason, Devito provides a
 low-level, or "indexed" API, where custom SymPy expressions can be
 created with explicitly resolved grid accesses to manually inject
-boundary custom code into the auto-generation toolchain.
+custom code into the auto-generation toolchain.
 
 To demonstrate this, we will use the Laplace example from the original
 CFD tutorials (step 9), which implements the steady-state heat equation
