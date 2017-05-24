@@ -42,26 +42,30 @@ Furthermore it helps to organize and keep the results reproducible by storing al
    terraforming, desert, numerical perspective
 
 Introduction
-------------
+============
 
-Machine learning research has become largely empirical and typically includes a large number of  computational experiments run with many different hyperparameter settings.
-This process holds many practical challenges that distract from the underlying research, such as hyperparameter tuning, ensuring reproducibility, bookkeeping of the runs, maintaining an overview, and organizing the runs.
-There exists many tools to tackle different aspects of this process like databases, version control systems, command-line interface generators, tools for automated hyperparameter optimization, spreadsheets, and so on.
-However, there exist few tools that integrate these aspects into a unified system, so each tool has to be learned and used separately, each incurring its own overhead.
+A major part of machine learning research has become empirical and typically includes a large number of  computational experiments run with many different hyperparameter settings.
+This process holds many practical challenges such as flexible exposition of hyperparameters, hyperparameter tuning, ensuring reproducibility, bookkeeping of the runs, and organizing and maintaining an overview over  the results.
 To make matters worse, experiments are often run on diverse and heterogeneous environments ranging from laptops to cloud computing nodes.
-Due to deadline pressure and the inherently unpredictable nature of research there is usually little incentive for researchers to build robust infrastructure, and as a result research code often evolves quickly and important aspects like bookkeeping and reproducibility tend to fall through the cracks.
+Due to deadline pressure and the inherently unpredictable nature of research there is usually little incentive for researchers to build robust infrastructure.
+As a result, research code often evolves quickly and bad trade-offs are made that sacrifice important aspects like bookkeeping and reproducibility.
 
 
-The process of ML research still involves a lot of manual work apart from the actual innovation.
-This includes making the implementation configurable, tuning the hyperparamters, storing and organizing the parameters and results, and making sure they are reproducible.
-For many of these problems automatic solutions exist, but integrating them with the experiment still requires a lot of manual work.
-This is why under the pressure of deadlines important pillars of research like reproducibility often get neglected.
-What is missing is a framework that integrates solutions to all these parts together, such that dealing with these problems becomes effortless.
-This is the gap that Sacred tries to fill.
+Many tools exist for tackling different aspects of this process like databases, version control systems, command-line interface generators, tools for automated hyperparameter optimization, spreadsheets, and so on.
+However, very few tools even attempt to integrate these aspects into a unified system, so each tool has to be learned and used separately, each incurring its own overhead.
+Since there is no common basis to build a workflow, the tools people build will be tied to their particular setup.
+This impedes sharing and collaboration on a toolchain for important problems like optimizing hyperparameters, summarizing and analysing results, rerunning experiments, distributing runs.
+
+Sacred aims to fill this gap by providing the basic infrastructure for running computational experiments.
+It is our hope that it will help researchers and foster the development of a rich collaborative ecosystem of shared tools.
+In the following we briefly introduce Sacred and two supporting tools:
+Labwatch integrates a convenient unified interface to many automated hyperparameter optimizers like robo, pysmack, or hyperopt.
+Sacredboard offers a web-based interface to view runs and supports maintaining an overview and organizing results.
+
 
 
 Sacred
-------
+======
 Sacred[1] is an open source python framework that aims provide a unified workflow for running machine learning experiments that addresses the aforementioned challenges.
 It was designed for maximum convenience while requiring only minimal boilerplate, to ensure that it remains useful even under deadline pressure.
 Experiments represent the core abstraction of Sacred, and can be executed from python or through the automatically generated command-line interface.
@@ -196,9 +200,31 @@ It can be accessed from the code in the same way as every other config entry, bu
 Furthermore, Sacred automatically seeds the global PRNGs of the ``random`` and ``numpy`` modules, thus making most applications of randomization reproducible without any intervention of the user.
 
 
+Labwatch
+========
+The correct hyperparameter setting for machine learning algorithms can often make the difference between state-of-the-art performance or random guessing.
+A growing number of tools that can automate the optimization of hyperparameters have recently emerged that allow the users to, instead of manual tuning, define a searchspace and leave the search for good configurations to the optimizer.
+Labwatch provides a simple way for defining searchspaces that is well integrated into the Sacred workflow, and integrates hyperparameter optimizers such as various Bayesian optimization methods (e.g RoBO[2], SMAC[3]) random search, or Bandit strategies  (Hyperband [4])
+For bookkeeping it leverages the database storage of evaluated hyperparameter configurations, which allows parallel distributed optimization and also enables the use of post hoc tools for assessing hyperparameter importance (e.g Fanova [5]).
+
+
+Sacredboard
+===========
+Sacredboard[6] provides a convenient way for browsing runs of experiments stored in a Sacred database. In a web browser window, a list of both running and finished experiments can be viewed, together with their current state and results.
+A detail view shows the hyperparameters used, information about the machine and environment where the experiment was run, and the standard output produced by the experiment.
+Sacredboard comes with a lightweight web server, such that it can be easily installed as a Python package. It only requires Python and a recent web browser to run. Currently it only supports MongoDB, but in future work we will provide an interface to the various other backends that are supported by Sacred.
+
+
+
+Example
+=======
+
+
+
+
 
 Related Work
-------------
+============
 There are only a few projects that we are aware of that have a focus similar to Sacred with the closest one being Sumatra :cite:`davison2012`.
 It comes as a command-line tool that can operate also with non-python experiments, and helps to do all the bookkeeping.
 Under the hood it uses a SQL database to store all the runs and comes with a versatile web-interface to view and edit the stored information.
@@ -222,8 +248,12 @@ For this reason we chose not to build Sacred ontop of an experiment database, to
 That being said, we believe there is a lot of value in adding (optional) interfaces to experiment databases to Sacred.
 
 
-Roadmap
--------
+Conclusion
+==========
+
+
+Future Work
+===========
 Sacred is a framework that mainly integrates different solutions to data-science research problems.
 Because of that, there are many useful ways in which it could be extended. Apart from the above mentioned interface to OpenML the following points are high up our list:
 
@@ -237,223 +267,7 @@ Ideally this will take the form of a web-interface that connects directly to the
 Another popular request is to have a bookkeeping backend that supports local storage. That could be in the form of flat files in a directory or a SQLite database. These backends are particularly easy to add so we also hope for contributions from the users for more specialized usecases.
 
 
-Labwatch
---------
-The correct hyperparameter setting for machine learning algorithms can often make the difference between state-of-the-art performance or random guessing.
-A growing number of tools that can automate the optimization of hyperparameters have recently emerged that allow the users to, instead of manual tuning, define a searchspace and leave the search for good configurations to the optimizer.
-Labwatch provides a simple way for defining searchspaces that is well integrated into the Sacred workflow, and integrates hyperparameter optimizers such as various Bayesian optimization methods (e.g RoBO[2], SMAC[3]) random search, or Bandit strategies  (Hyperband [4])
-For bookkeeping it leverages the database storage of evaluated hyperparameter configurations, which allows parallel distributed optimization and also enables the use of post hoc tools for assessing hyperparameter importance (e.g Fanova [5]).
 
-Sacredboard
------------
-Sacredboard[6] provides a convenient way for browsing runs of experiments stored in a Sacred database. In a web browser window, a list of both running and finished experiments can be viewed, together with their current state and results.
-A detail view shows the hyperparameters used, information about the machine and environment where the experiment was run, and the standard output produced by the experiment.
-Sacredboard comes with a lightweight web server, such that it can be easily installed as a Python package. It only requires Python and a recent web browser to run. Currently it only supports MongoDB, but in future work we will provide an interface to the various other backends that are supported by Sacred.
-
-
-
-:cite:`hume48`
-
-
-
-Bibliographies, citations and block quotes
-------------------------------------------
-
-If you wish to have a block quote, you can just indent the text, as in
-
-    When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication. :cite:`hume48`
-
-
-Source code examples
---------------------
-
-With code-highlighting:
-
-.. code-block:: python
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-Maybe also in another language, and with line numbers:
-
-.. code-block:: c
-   :linenos:
-
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
-
-Or a snippet from the above code, starting at the correct line number:
-
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
-
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
-
-Important Part
---------------
-
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
-
-.. math::
-
-   g(x) = \int_0^\infty f(x) dx
-
-or on multiple, aligned lines:
-
-.. math::
-   :type: eqnarray
-
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
-
-The area of a circle and volume of a sphere are given as
-
-.. math::
-   :label: circarea
-
-   A(r) = \pi r^2.
-
-.. math::
-   :label: spherevol
-
-   V(r) = \frac{4}{3} \pi r^3
-
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
-pulvinar id metus.
-
-.. [#] On the one hand, a footnote.
-.. [#] On the other hand, another footnote.
-
-.. figure:: figure1.png
-
-   This is the caption. :label:`egfig`
-
-.. figure:: figure1.png
-   :align: center
-   :figclass: w
-
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
-
-.. figure:: figure1.png
-   :scale: 20%
-   :figclass: bht
-
-   This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top.
-   Note that for now, scale is relative to a completely arbitrary original
-   reference size which might be the original size of your image - you probably
-   have to play with it. :label:`egfig2`
-
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
-
-.. table:: This is the caption for the materials table. :label:`mtable`
-
-   +------------+----------------+
-   | Material   | Units          |
-   +============+================+
-   | Stone      | 3              |
-   +------------+----------------+
-   | Water      | 12             |
-   +------------+----------------+
-   | Cement     | :math:`\alpha` |
-   +------------+----------------+
-
-
-We show the different quantities of materials required in Table
-:ref:`mtable`.
-
-
-.. The statement below shows how to adjust the width of a table.
-
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.8\linewidth}
-
-
-.. table:: This is the caption for the wide table.
-   :class: w
-
-   +--------+----+------+------+------+------+--------+
-   | This   | is |  a   | very | very | wide | table  |
-   +--------+----+------+------+------+------+--------+
-
-Unfortunately, restructuredtext can be picky about tables, so if it simply
-won't work try raw LaTeX:
-
-
-.. raw:: latex
-
-   \begin{table*}
-
-     \begin{longtable*}{|l|r|r|r|}
-     \hline
-     \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
-     \cline{2-4}
-      & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
-     \hline
-     Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
-     \hline
-     Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
-     \hline
-     Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
-     \hline
-     Percent Difference & 44\% & 41\% & 43\%\tabularnewline
-     \hline
-     \end{longtable*}
-
-     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
-
-   \end{table*}
-
-Perhaps we want to end off with a quote by Lao Tse [#]_:
-
-  *Muddy water, let stand, becomes clear.*
-
-.. [#] :math:`\mathrm{e^{-i\pi}}`
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
-
-References
-----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
+Acknowledgements
+================
 
