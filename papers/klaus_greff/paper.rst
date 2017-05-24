@@ -32,11 +32,6 @@ In this talk we’ll present a toolchain for conducting and organizing computati
 These tools are agnostic of the methods and libraries used, and instead focus on solving the universal everyday problems of running computational experiments like reproducing results, bookkeeping, tuning hyperparameters, and organizing and analyising the runs and results.
 Attendees will be introduced to the core features of these libraries, and learn how they can form the basis for an effective and efficient workflow for machine learning research.
 
-
-We introduce Sacred, an open-source Python framework to help set up, run, and organize machine learning experiments.
-It focuses on convenience of use and features a powerful configuration system that can combine entries from within the code, from config-files, and from the command-line.
-Furthermore it helps to organize and keep the results reproducible by storing all relevant information in a database.
-
 .. class:: keywords
 
    terraforming, desert, numerical perspective
@@ -66,48 +61,109 @@ Sacredboard offers a web-based interface to view runs and supports maintaining a
 
 Sacred
 ======
-Sacred[1] is an open source python framework that aims provide a unified workflow for running machine learning experiments that addresses the aforementioned challenges.
-It was designed for maximum convenience while requiring only minimal boilerplate, to ensure that it remains useful even under deadline pressure.
-Experiments represent the core abstraction of Sacred, and can be executed from python or through the automatically generated command-line interface.
-They feature a flexible and powerful system for managing and updating configurations of hyperparameters that can be defined in native python using decorated functions, dictionaries or configuration files.
+Sacred is an open source python framework that aims to bundle solutions for the most frequent challenges when conducting computational experiments.
+It doesn't enforce any particular workflow, and is independent of the choice of machine learning libraries.
+Sacred was designed to remain useful even under deadline pressure, and therefore tries to
+offer maximum convenience while minimizing boilerplate code.
+
+
+.. By combining these features into a unified but flexible workflow with minimum boilerplate, Sacred  enables its users to focus on research and still ensures that all the relevant information for each run are captured.
+   The standardized configuration process allows streamlined integration with other tools such as Labwatch, for hyperparameter optimization.
+   By storing the data in a central database comprehensive query and sorting functionality for bookeeping becomes available, thus enabling downstream analysis and allowing other tools such as Sacredboard to provide a powerful graphical user interface organizing runs and maintaining an overview.
+
+
+Overview
+--------
+To adopt Sacred all that is required is to instantiate an ``Experiment`` and to decorate a main function that serves as entry-point:
+
+.. code-block:: python
+
+    from sacred import Experiment
+    ex = Experiment()
+    ...
+    @ex.automain
+    def main():
+        ...
+
+.. The Experiment class represent the core abstraction of Sacred
+
+Hyperparameters can then be defined in native python using special decorated functions, dictionaries or configuration files (see :ref:`configuration`).
+The experiment can be run through an automatically generated command-line interface, or from python by calling ``ex.run()``.
+Both modes offer the same ways for passing options, setting parameters, and adding observers.
+Sacred then 1) interprets the options 2) evaluates the parameter configuration 3) gathers information about dependencies and host, and 4) constructs and calls a ``Run`` object that is responsible for executing the main function.
+The Run captures the stdout, custom information and fires events to the observers at regular intervals for bookkeeping (see :ref:`bookkeeping`).
 For each run, relevant information like parameters, package dependencies, host information, source code, and results are automatically captured, and are saved regularly by optional observers.
-The standard observer writes to a MongoDB, but several other observers are available  for other databases, disk storage, or sending out notifications.
-
-By combining these features into a unified but flexible workflow with minimum boilerplate, Sacred  enables its users to focus on research and still ensures that all the relevant information for each run are captured.
-The standardized configuration process allows streamlined integration with other tools such as Labwatch, for hyperparameter optimization.
-By storing the data in a central database comprehensive query and sorting functionality for bookeeping becomes available, thus enabling downstream analysis and allowing other tools such as Sacredboard to provide a powerful graphical user interface organizing runs and maintaining an overview.
-
-
-
-Sacred is an open-source Python library designed for easy of use and to be minimally intrusive to research code.
-The sourcecode was released under the MIT licence on Github (2015).
-Its main goal is to help with all the problems of day to day machine learning research, while requiring only minimal adjustments of the code.
-The core abstraction in Sacred is the Experiment which has at least a name and a main method.
-Converting a python script into an experiment is very easy and involves only adding a handful of lines as demonstrated in Listing 1.
-Once that is done Sacred helps to making it configurable, run it from the command-line, and keep track of all runs by storing all related information like configuration, results, the source code, dependencies, random seeds, etc. in a database.
+Several observers are available for databases, disk storage, or sending out notifications.
 
 
 
 Configuration
 -------------
-Each Experiment has a configuration whose entries represent its (hyper-)paramaters.
-An important goal of Sacred is to make it convenient to expose these parameters, such that they can be automatically optimized and kept track of.
+An important goal of Sacred is to make it convenient to define, expose and use hyperparameters, which we'll call the configuration of the experiment.
 
-Setting up
-++++++++++
-The preferred way to set up the configuration is by decorating a function with ``@ex.config`` which adds the variables from its local scope to the configuration.
-This is syntactically convenient and allows using the full expressiveness of python.
-For users that prefer plain dictionaries or external configuration files, those can also easily be added to the configuration.
+Defining a Configuration
+++++++++++++++++++++++++
+The main way to set up the configuration is through so called ConfigScopes.
+This means decorating a function with ``@ex.config`` which sacred executes and adds its local variables the configuration:
+
+.. code-block:: python
+
+    @ex.config
+    def cfg():
+        variant = 'simple'
+        learning_rate = 0.1
+        filename = 'stuff_{}.log'.format(a)
+
+This is syntactically convenient and allows using the full expressiveness of python, which includes calling functions and variables that depend on others.
+For users that instead prefer plain dictionaries or external configuration files, those can also be used.
 All the entries of the configuration are enforced to be JSON-serializable, such that they can easily be stored and queried.
 
-Accessing
-+++++++++
+Using Config Values
++++++++++++++++++++
 To make all configuration entries easily accessible, Sacred employs the mechanism of *dependency injection*.
-Every captured function can simply accept any configuration entry as a parameter.
+That means, any function decorated by ``@ex.capture`` simply accept any configuration entry as a parameter.
 Whenever such a function is called Sacred will automatically fill in those parameters from the configuration.
-The main function is automatically considered a captured function, and so is any other function decorated with ``@ex.capture``.
+This allows for flexible and convenient use of the hyperparameters everywhere:
 
+.. code-block:: python
 
+    @ex.capture
+    def do_stuff(variant, learning_rate=1.0):
+        ...
+
+    ...
+
+    do_stuff()  # parameters are automatically filled
+    do_stuff('debug')  # manually set
+
+Injection follows the priority 1. explicitly passed arguments 2. config values 3. default values.
+.. Main function and commands are automatically captured
+
+Updating Parameters
++++++++++++++++++++
+Configuration values can be set (overridden) externally when running an experiment.
+This can happen both from the commandline
+
+.. code-block:: bash
+
+    >> python my_experiment.py with variant='complex'
+
+or from python calls:
+
+.. code-block:: python
+
+    from my_experiment import ex
+    ex.run(config_updates={'variant': 'complex'})
+
+Sacred treats these values as fixed and given when executing the ConfigScopes.
+In this way they influence dependent values as you would expect (so here: ``filename='stuff_complex'``).
+
+Sometimes a particular set of settings belongs together and should be saved.
+To collect them sacred offers the concept of named configs.
+They are defined similar to configurations using ``@ex.named_config``, dictionaries, or from config files.
+They can be added en-block from the commandline and from python, and are treated as a set of updates.
+
+.. example ??
 
 
 Running
@@ -219,7 +275,7 @@ Sacredboard comes with a lightweight web server, such that it can be easily inst
 Example
 =======
 
-
+fobor
 
 
 
@@ -250,7 +306,7 @@ That being said, we believe there is a lot of value in adding (optional) interfa
 
 Conclusion
 ==========
-
+fobor
 
 Future Work
 ===========
@@ -270,4 +326,13 @@ Another popular request is to have a bookkeeping backend that supports local sto
 
 Acknowledgements
 ================
+fobof
 
+
+
+
+.. Customised LaTeX packages
+.. -------------------------
+
+.. latex::
+   :usepackage: microtype
