@@ -129,7 +129,7 @@ express finite difference problems in a concise symbolic notation:
   accepts a mixture of high-level and low-level expressions to allow
   the injection of customised code.
 
-Fluid dynamics examples
+Fluid Dynamics Examples
 -----------------------
 
 In the following section we are going to demonstrate the use of the
@@ -369,8 +369,128 @@ conversion loop, but we do need to make sure we switch between buffers.
 
    State of :code:`p.data` after convergence in Laplace example.
 
-Seismic inversion example
+Seismic Inversion Example
 -------------------------
+
+The primary motivating application behind the design of Devito are
+seismic inversion problems that require highly optimized wave
+propagation operators for forward and adjoint models.
+
+.. math::
+    m \frac{\partial^2 u}{\partial t^2}
+    + \eta \frac{\partial u}{\partial t} - \nabla^2 u = q
+
+where :math:`u` denotes the pressure wave field, :math:`m` is the
+square slowness, :math:`q` is the source term and :math:`\eta` denotes
+the spatially varying dampening factor used to implement an absorbing
+boundary condition.
+
+On top of fast stencil operators, seismic inversion kernels also rely
+on sparse point interpolation to inject the modelled wave as a point
+source (:math:`q`) and to infer the recorded value at individual point
+locations, to model so-called "receiver" hydrophones. To accomodate
+this, Devito provides another symbolic data type :code:`PointData`,
+which allows the generation of sparse-point interpolation expressions
+using the "indexed" low-level API.
+
+*<Describe the forward code, in particular the use of PointData objects.>*
+
+.. code-block:: python
+
+   def forward(model, m, eta, src, rec, order=2):
+       # Create the wavefeld function
+       u = TimeData(name='u', shape=model.shape,
+                    time_order=2, space_order=order)
+
+       # Derive stencil from symbolic equation
+       eqn = m * u.dt2 - u.laplace + eta * u.dt
+       stencil = solve(eqn, u.forward)[0]
+       eqn = [Eq(u.forward, stencil)]
+
+       # Add source injection and receiver interpolation
+       src_term = src.inject(field=u,
+                             expr=src * dt**2 / m)
+       rec_term = rec.interpolate(expr=u)
+
+       # Create operator with source and receiver terms
+       return Operator(eqn + src_term + rec_term,
+                       subs={s: dt, h: model.spacing})
+
+*<Describe the adjoint operator, in particular how we now solve
+for :code:`v.Backward` and invert time with
+:code:`time_axis=Backward`. Also highliight that the source/receiver
+role is now inverted.>*
+
+.. code-block:: python
+
+   def adjoint(model, m, eta, srca, rec, order=2):
+       # Create the adjoint wavefeld function
+       v = TimeData(name='v', shape=model.shape,
+                    time_order=2, space_order=order)
+
+       # Derive stencil from symbolic equation
+       # Note the inversion of the dampening term
+       eqn = m * v.dt2 - v.laplace - eta * v.dt
+       stencil = solve(eqn, u.forward)[0]
+       eqn = [Eq(v.backward, stencil)]
+
+       # Inject the previous receiver readings
+       rec_term = rec.inject(field=v,
+                             expr=rec * dt**2 / m)
+
+       # Interpolate the adjoint-source
+       srca_term = srca.interpolate(expr=v)
+
+       # Create operator with source and receiver terms
+       return Operator(eqn + rec_term + srca_term,
+                       subs={s: dt, h: model.spacing},
+                       time_axis=Backward)
+
+*<Having established how to build the required operators
+we can now define the workflow for our adjoint example:>*
+
+.. code-block:: python
+
+   # Create the seismic model of the domain
+   model = Model(...)
+
+   # Create source with Ricker wavelet
+   src = PointData(name='src', ntime=ntime,
+                   ndim=2, npoint=1)
+   src.data[0, :] = ricker_wavelet(ntime)
+   src.coordinates.data[:] = source_coords
+
+   # Create receiver and adjoint-source
+   rec = PointData(name='rec', ntime=ntime,
+                   ndim=2, npoint=101)
+   rec.coordinates.data[:] = receiver_coords
+   srca = PointData(name='srca', ntime=ntime,
+                    ndim=2, npoint=1)
+   srca.coordinates.data[:] = source_coords
+
+   # Create symbol for square slowness
+   m = DenseData(name='m', shape=model.shape,
+                 space_order=order)
+   m.data[:] = model  # Set m from model data
+
+   # Create dampening term from model
+   eta = DenseData(name='eta', shape=shape,
+                   space_order=order)
+   eta.data[:] = model.dampening
+
+   # Execute foward and adjoint runs
+   fwd = forward(model, m, eta, src, rec)
+   fwd(time=ntime)
+   adj = adjoint(model, m, eta, srca, rec)
+   adj(time=ntime)
+
+   # Test prescribed against adjoint source
+   adjoint_test(src.data, srca.data)
+
+*<The above test can be used to verify the accuracy of the forward
+propagation and adjoint operators and has been shown to agree for
+2D and 3D implementations.>* **[CITE]**
+
 
 Automated code generation
 -------------------------
