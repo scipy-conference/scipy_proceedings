@@ -494,15 +494,80 @@ propagation and adjoint operators and has been shown to agree for
 
 Automated code generation
 -------------------------
-The code generation process happens under the :code:`Operator` object
-and relies on multiple compiler passes, as well as optimisation
-stages.
 
-Performance
-~~~~~~~~~~~
+The role of the :code:`Operator` in the previous examples is to
+generate semantically equivalent C code to the provided SymPy
+expressions, complete with loop constructs and annotations for
+performance optimisation, such as OpenMP pragmas. Unlike many other
+DSL-based frameworks, Devito employs actual compiler technology during
+the code generation and optimisation process. The symbolic
+specification is progressively lowered to C code through a series of
+passes manipulating abstract syntax trees (AST), rather than working
+with rigid templates. This software engineering choice has an
+invaluable impact on maintainability, extensibility and composability.
 
-YASK-Integration
-~~~~~~~~~~~~~~~~
+The code generation process consists of a sequence of compiler passes,
+which progressively lower the symbolic representation to C. Following
+the initial resolution of explicit grid indices into the low-level
+format, Devito is able to apply several types of automated performance
+optimisation throughout the code generation pipeline, which are grouped
+into two distinct sub-modules:
+
+* **DSE - Devito Symbolic Engine:** The first set of optimisation
+  passes consists of manipulating SymPy equations with the aim to
+  decrease the number of floating-point operations performed when
+  evaluating a single grid point. This initial optimisation is
+  performed following an initial analysis of the provided expressions
+  and consists of sub-passes such as common sub-expressions
+  elimination, detection and promotion of time-invariants, and
+  factorization of common finite-difference weights. These
+  transformations not only optimize the operation count, but they also
+  improve the symbolic processing and low-level compilation times of
+  later processing stages.
+
+* **DLE - Devito Loop Engine:** After the initial symbolic processing
+  Devito schedules the optimised expressions in a set of loops by
+  creating an Abstract Syntax Tree (AST). The loop engine (DLE) is now
+  able to perform typical lopp-level optimisations in mutiple passes
+  by manipulating this AST, including data alignment through array
+  annotations and padding, SIMD vectorization through OpenMP pragmas
+  and thread parallelism through OpenMP pragmas. On top of that, loop
+  blocking is used to fully exploit the memory bandwidth of a target
+  architecture by increasing data locality and thus cache
+  utilization. Since the effectiveness of the blocking technique is
+  highly architecture-dependent, Devito can determine optimal block
+  size through runtime auto-tuning.
+
+Performance Benchmark
+~~~~~~~~~~~~~~~~~~~~~
+
+<*Hardware spec for (Endeavour?) Broadwell nodes.>*
+
+.. figure:: acoustic_dle.pdf
+   :scale: 60%
+
+   *<Performance optimisation results for DLE with limited DSE.>*
+
+<*Results for DLE and auto-tuned thread-parallel runs.>*
+
+.. figure:: acoustic_maxperf.pdf
+   :scale: 60%
+
+   Performance benchmarks with
+
+*<Full-throttle performance benchmarks. It is worth noting that peak
+performance may drop with DSE, but that is expected as less "empty
+flops" are performed.>*
+
+
+Integration with YASK
+~~~~~~~~~~~~~~~~~~~~~
+
+*<YASK, and why it is so great.>* **[CITE]**
+
+*<Ongoing integration effort as an alternative backend. Also
+highlighting that this underpins the generality idea of the backend
+engines.>*
 
 Discussion
 ----------
