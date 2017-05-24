@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 744.09448819 1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="additonal_features.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.562264"
+     inkscape:cx="338.47129"
+     inkscape:cy="927.08855"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1680"
+     inkscape:window-height="954"
+     inkscape:window-x="0"
+     inkscape:window-y="1"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <image
+       sodipodi:absref="/Users/psilentp/Desktop/scipy_proceedings/papers/lindsay/traceback_clip.png"
+       y="11.552338"
+       x="424.72626"
+       id="image4214"
+       xlink:href="file:///Users/psilentp/Desktop/scipy_proceedings/papers/lindsay/traceback_clip.png"
+       preserveAspectRatio="none"
+       height="155.28311"
+       width="272.17392" />
+    <image
+       sodipodi:absref="/Users/psilentp/Desktop/scipy_proceedings/papers/lindsay/svgitem_testoutput.png"
+       y="78.212532"
+       x="1.1173992"
+       id="image4335"
+       xlink:href="file:///Users/psilentp/Desktop/scipy_proceedings/papers/lindsay/svgitem_testoutput.png"
+       preserveAspectRatio="none"
+       height="111.96605"
+       width="167.94907" />
+    <image
+       sodipodi:absref="/Users/psilentp/Desktop/scipy_proceedings/papers/lindsay/example_svgitem_layout.png"
+       y="-2.4367311"
+       x="2.5582447"
+       id="image5471"
+       xlink:href="file:///Users/psilentp/Desktop/scipy_proceedings/papers/lindsay/example_svgitem_layout.png"
+       preserveAspectRatio="none"
+       height="109.79221"
+       width="164.68831" />
+  </g>
+</svg>
