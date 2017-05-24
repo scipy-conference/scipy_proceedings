@@ -82,33 +82,57 @@ achieved by the auto-generated and optimised code.
 Background
 ----------
 
+*<Embedded DSLs in Python, including Fenics/UFL and Firedrake, leading
+to the power of symbolic adjoint computation.>*
+
+*<Use of DSLs for FD and stencil optimisation frameworks.>*
+
 Design and API
 --------------
 
-*The primary objective of the Devito DSL is to enable the quick and
-effecitve creation of finite difference operators for use in a
-realistic scientific modelling context. As such it is imperative for
-Devito API to be composable with ...*
+The primary objective of Devito is to enable the quick and effective
+creation of highly optimised finite difference operators for use in a
+realistic scientific application context. As such, its design is
+centred around composability with the existing Python software stack
+to provide users with the tools to dynamically generate optimised
+stencil computation kernels, but also to enable access to the full
+scientific software stack in the Python ecosystem. In addition, to
+accommodate the needs of "real life" scientific applications, a
+secondary API is provided that enables users to inject custom
+expressions, such as boundary conditions or sparse point
+interpolation, into the generate kernels.
 
-*So we create objects that behave symbolically like
-functions, but carry real user data. One rationale for that duality
-is that many stencil optimisation algorithms rely on data layout changes,
-so that Devito needs to be in control of data handling as well as symbolics.*
+Moreover, the use of SymPy as the driver for the symbolic generation
+of stencil expressions and the subsequent code-generation are at the
+heart of the Devito philosophy. While SymPy is fully capable of
+auto-generating low-level C code for pre-compiled execution from
+high-level symbolic expressions, Devito is designed to combine theses
+capabilities with the latest advances in stencil compiler technology.
+The result is a framework that is capable of automatically generating
+and optimising complex stencil code from high-level symbolic
+definitions.
 
-*At the core we use SymPy for code-generation, although we provide
-a small bit of high-level syntax on top. This allows us to automate
-the finite difference discretisation through SymPy. Ultimately,
-everything is based on an :code:`Operator`. This will accept SymPy
-expression with symbolic replacement maps and compiler settings to
-create kernels. The code-gen process happens in various stages, so
-that we may use a "low-level" API to inject custom code.*
+The Devito API is based around two key concepts that allow users to
+express finite difference problems in a concise symbolic notation:
 
-*<Placeholder: Layer diagram>*
+* **Symbolic data objects:** Devito's high-level symbolic objects
+  behave like :code:`sympy.Function` objects and provide a set of
+  shorthand notations for generating derivative expressions, while
+  also managing user data. The rationale for this duality is that many
+  stencil optimisation algorithms rely on data layout changes,
+  mandating that Devito needs to be in control of data allocation and
+  access.
 
-Examples
---------
+* **Operator:** An :code:`Operator` creates, compiles and executes a
+  single executable kernel from a set of SymPy expressions. The code
+  generation and optimisation process involves various stages and
+  accepts a mixture of high-level and low-level expressions to allow
+  the injection of customised code.
 
-The follwoing CFD examples are based on Lorena Barba's CFD introduction blog:
+Fluid dynamics examples
+-----------------------
+
+The following CFD examples are based on Lorena Barba's CFD introduction blog:
 
 http://lorenabarba.com/blog/cfd-python-12-steps-to-navier-stokes/
 
@@ -323,8 +347,8 @@ conversion loop, but we do need to make sure we switch between buffers.
 
    State of :code:`p.data` after convergence in Laplace example.
 
-Seismic Inversion
-~~~~~~~~~~~~~~~~~
+Seismic inversion example
+-------------------------
 
 Automated code generation
 -------------------------
