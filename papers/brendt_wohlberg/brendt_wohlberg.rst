@@ -546,7 +546,7 @@ We illustrate the ease of extending of modifying existing algorithms in SPORCO b
    \left \|  \sum_m \mathbf{d}_m * \mathbf{x}_m - \mathbf{s}
    \right \|_1 + \lambda \sum_m \| \mathbf{x}_m \|_1 \;.
 
-This optimization problem is not included in SPORCO, but CBPDN with mask decoupling
+This optimization problem is not included in SPORCO, but there is an existing algorithm that can easily be adapted. CBPDN with mask decoupling
 
 .. math::
    \mathrm{argmin}_\mathbf{x} \;
@@ -567,7 +567,7 @@ This optimization problem is not included in SPORCO, but CBPDN with mask decoupl
      \right) = \left( \begin{array}{c} \mathbf{s} \\
      \mathbf{0} \end{array} \right) \;\;,
 
-where :math:`D \mathbf{x} = \sum_m \mathbf{d}_m * \mathbf{x}_m`. This splitting decouples the data fidelity term from the :math:`\mathbf{x}` update, making it easy to replace the :math:`\ell_2` norm with an :math:`\ell_1` norm. Ideally we would also include a gradient penalty term to assist in the representation of the low frequency image component. While this relatively straightforward, it is more complex than the norm modification, and is omitted from this example. Instead of including a representation of the low frequency image component within the optimization, we use the low frequency component estimated by the previous example, subtracting it from the signal passed to the CSC algorithm, and adding it back to the solution of this algorithm.
+where :math:`D \mathbf{x} = \sum_m \mathbf{d}_m * \mathbf{x}_m`. This splitting decouples the data fidelity term from the :math:`\mathbf{x}` update, making it easy to replace the :math:`\ell_2` norm with an :math:`\ell_1` norm. (Ideally we would also include a gradient penalty term to assist in the representation of the low frequency image component. While this relatively straightforward, it is more complex than the norm modification, and is omitted from this example.) Instead of including a representation of the low frequency image component within the optimization, we use the low frequency component estimated by the previous example, subtracting it from the signal passed to the CSC algorithm, and adding it back to the solution of this algorithm.
 
 We turn now to the implementation of the SPORCO extension example.  The module imports and definitions of functions ``pad`` and ``crop`` are the same as for the example in section *Removal of Impulse Noise via CSC*, and are not repeated here. Our main task is to modify ``cbpdn.ConvBPDNMaskDcpl``, the class for solving the CBPDN with mask decoupling problem, to replace the :math:`\ell_2` norm data fidelity term with an :math:`\ell_1` norm. The :math:`\mathbf{y}` step of this class is
 
@@ -658,7 +658,7 @@ the following modules:
 Conclusion
 ----------
 
-SPORCO is an actively maintained and thoroughly documented open source Python package for computing with sparse representations. While standard sparse representations are supported, the focus is on convolutional sparse representations for which SPORCO provides a wide range of features than any other publicly available library. The set of ADMM classes on which the optimization algorithms is based is also potentially useful a much broader range of convex optimization problems.
+SPORCO is an actively maintained and thoroughly documented open source Python package for computing with sparse representations. While standard sparse representations are supported, the focus is on convolutional sparse representations for which SPORCO provides a wider range of features than any other publicly available library. The set of ADMM classes on which the optimization algorithms are based is also potentially useful for a much broader range of convex optimization problems.
 
 
 
