@@ -27,7 +27,7 @@ Optimised finite difference computation from symbolic equations
 
 Domain-specific high-productivity environments are playing an
 increasingly important role in scientific computing due to the
-increased levels of abstraction and automation they provide. In this
+levels of abstraction and automation they provide. In this
 paper we introduce Devito, an open-source domain-specific framework for
 solving partial differential equations from symbolic problem
 definitions by the finite difference method. We highlight the
@@ -44,9 +44,9 @@ Introduction
 ------------
 
 Domain-specific high-productivity environments are playing an
-increasingly important role in scientific computing. The increased
-level of abstraction and automation provided by such frameworks not
-only increases productivity and accelerates innovation, but allows the
+increasingly important role in scientific computing. The level
+of abstraction and automation provided by such frameworks not only
+increases productivity and accelerates innovation, but also allows the
 combination of expertise from different specialised disciplines. This
 synergy is necessary when creating the complex software stack needed
 to solve leading edge scientific problems, since domain specialists as
@@ -375,8 +375,8 @@ Seismic Inversion Example
 The primary motivating application behind the design of Devito are
 seismic exploration problems that require highly optimized wave
 propagation operators for forward modelling and adjoint-based
-inversion. Of course, the speed and accuracy of the generated kernels
-is of vital importance, but the ability to efficiently define rigorous
+inversion. Obviously, the speed and accuracy of the generated kernels
+is of vital importance. Moreover, the ability to efficiently define rigorous
 forward modelling and adjoint operators from high-level symbolic
 definitions also implies that domain scientists are able to quickly
 adjust the numerical method and discretisation to the individual problem
@@ -606,7 +606,7 @@ into two distinct sub-modules:
 * **DLE - Devito Loop Engine:** After the initial symbolic processing
   Devito schedules the optimised expressions in a set of loops by
   creating an Abstract Syntax Tree (AST). The loop engine (DLE) is now
-  able to perform typical lopp-level optimisations in mutiple passes
+  able to perform typical loop-level optimisations in multiple passes
   by manipulating this AST, including data alignment through array
   annotations and padding, SIMD vectorization through OpenMP pragmas
   and thread parallelism through OpenMP pragmas. On top of that, loop
