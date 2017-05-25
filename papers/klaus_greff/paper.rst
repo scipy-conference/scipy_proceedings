@@ -166,71 +166,53 @@ They can be added en-block from the commandline and from python, and are treated
 .. example ??
 
 
-Running
--------
-Sacred interferes as little as possible with running an ``Experiment``, thus leaving the user free to incorporate them in whatever workflow they are used to.
-Each ``Experiment`` automatically comes with a command-line interface, but they can just as easily be called directly from other Python code.
-
-The command-line interface allows changing arbitrary configuration entries, using the standard python syntax like this:
-
-.. code-block:: python
-
-    > python example.py run with C=3.4e-2 gamma=0.5
-
-
-Apart from running the main function (here: ``run``) it also provides commands to inspect the configuration (``print\_config``) and to display the dependencies (``print\_dependencies``).
-It also provides flags to get help, control the log-level, add a MongoDB observer, and for debugging. The command-line interface also allows adding custom commands, by just decorating a function with ``@ex.command``.
-
-All of the above can just as easily accomplished directly from python:
-
-.. code-block:: python
-
-    from example import ex
-    # runs the default configuration
-    r = ex.run()
-    # run with updated configuration
-    r = ex.run(config_updates={'C': 3.4e2, 'gamma': 0.5})
-    # run the print_config command
-    r = ex.run_command('print_config', config_updates={'gamma': 7})
-
-After each of these calls ``r`` will contain a ``Run`` object with all kinds of details about the run including the result and the (modified) configuration.
-
-
 
 Bookkeeping
 -----------
 
-``Experiment`` s implement the observer pattern :cite:`gamma1994` by publishing all kinds of information in the form of events and allowing observers to subscribe to them.
-These events are fired when a run is started, every couple of seconds while it is running and once it stops (either successfully or by failing).
-Sacred ships with an observer that stores all the information about the run in a MongoDB database, but the interface also supports adding custom observers.
+Bookkeeping in Sacred is accomplished by implementing the observer pattern :cite:`gamma1994`:
+The experiment publishes all kinds of information in the form of events that zero or more observers can subscribe to.
+Observers can be added dynamicall from the commandline or directly in code:
+
+.. code-block::
+
+    from sacred.observers import MongoObserver
+    ex.observers.append(MongoObserver.create("DBNAME"))
 
 Collected Information
 +++++++++++++++++++++
-The MongoObserver collects a lot of information about the experiment and the run. Most importantly of course it will save the configuration and the result. But it will also among others save a snapshot of the source-code, a list of auto-detected package dependencies and the stdout of the experiment. Below is a summary of all the collected data:
+Events are fired when a run is started, every couple of seconds while it is running (heartbeat) and once it stops (either successfully or by failing).
+This way information is available already during runtime, and partial data is captured even in case of failures. 
+
+Sacred collects a lot of information about the experiment and the run. 
+Most importantly of course it will save the configuration and the result. 
+But it will also among others save a snapshot of the source-code, a list of auto-detected package dependencies and the stdout of the experiment. 
+Below is a summary of all the collected data:
 
 
 Configuration
     configuration values used for this run
 Source Code
-    source code of all used source files
+    source code of all detected source files
 Dependencies
-    version of all detected package dependencies
+    version numbers for all detected package dependencies
 Host
-    information about the host that is running the experiment
+    information about the host that is running the experiment including CPU, OS, and python version. Optionally also other informatino like GPU or environment variables.
 Metadata
-    start and stop times, status, result or fail-trace if needed
-Custom info
-    a dictionary of custom information
-stdout
-    captured console output of the run
-Resources and Artifacts
-     extra files needed or created by the run that should be saved
+    start and stop times, current status, result, and fail-trace (if needed)
+Live Information
+     Including captured stdout, extra files needed or created by the run that should be saved, custom information, and custom metrics about the experiment.
 
 
-MongoDB
-+++++++
+Observers
++++++++++
 
-:cite:`mongo` is a noSQL database, or more precisely a *Document Database*:
+Sacred ships with observers that stores all the information from these events in a MongoDB, SQL database, or locally on disk.
+Furthermore ther are two observers that can send notifications about runs via Telegram or Slack.
+However, the observer interface is generic and supports easy addition of custom observers.
+
+The recommended observer is the ``MongoObserver`` that writes to a MongoDB:cite:`mongo`.
+MongoDB is a noSQL database, or more precisely a *Document Database*:
 It allows the storage of arbitrary JSON documents without the need for a schema like in a SQL database.
 These database entries can be queried based on their content and structure.
 This flexibility makes it a good fit for Sacred, because it permits arbitrary configuration for each experiment that can still be queried and filtered later on.
@@ -239,9 +221,17 @@ In particular this feature has been very useful to perform large scale studies l
 
 Reproducibility
 ---------------
-Maybe the most important goal of Sacred is to collect all the necessary information to make all the runs reproducible.
+An important goal of Sacred is to collect all the necessary information to make computational experiments reproducible.
+The result of such an experiment depends on several factors including: the source code, versions of the used packages, the host system, resources, and (pseudo-)randomness.
+To ensure reproducibility Sacred attempts to automatically collect as much data about these factors as possible.
+
+Dependencies
+++++++++++++
+When an experiment is started Sacred uses python inspection to detect imported packages and determines their version-numbers.
+This detection, will catch all dependencies that are imported from the main file before the experiment was started. 
+This might miss certain nested imports, but further dependencies can easily be added manually 
+
 To ensure that it features a simple integrated version control system that guarantees that for each run all the required files are stored in the same database.
-Notice that the database entry in autoref{lst:mongo} contains the name and MD5 hash of the ``example.py`` file (line 12).
 Sacred actually also saves the contents of that file in a separate collection.
 The same mechanism can also be used to save additional resources or files created by the run (called artifacts).
 
