@@ -36,6 +36,8 @@ ADMM
 The ADMM :cite:`boyd-2010-distributed` framework addresses problems of the form
 
 .. math::
+   :label: eq:admmform
+
     \mathrm{argmin}_{\mathbf{x},\mathbf{y}} \;\;
     f(\mathbf{x}) + g(\mathbf{y}) \;\;\mathrm{such\;that}\;\;
     A\mathbf{x} + B\mathbf{y} = \mathbf{c} \;\;.
@@ -546,30 +548,71 @@ We illustrate the ease of extending of modifying existing algorithms in SPORCO b
    \left \|  \sum_m \mathbf{d}_m * \mathbf{x}_m - \mathbf{s}
    \right \|_1 + \lambda \sum_m \| \mathbf{x}_m \|_1 \;.
 
-This optimization problem is not included in SPORCO, but there is an existing algorithm that can easily be adapted. CBPDN with mask decoupling
+Ideally we would also include a gradient penalty term to assist in the representation of the low frequency image component. While this relatively straightforward, it is a bit more complex to implement, and is omitted from this example. Instead of including a representation of the low frequency image component within the optimization, we use the low frequency component estimated by the previous example, subtracting it from the signal passed to the CSC algorithm, and adding it back to the solution of this algorithm.
+
+An algorithm for the problem in Equation (:ref:`eq:l1cbpdn`) is not included in SPORCO, but there is an existing algorithm that can easily be adapted. CBPDN with mask decoupling, with mask array :math:`W`,
 
 .. math::
+   :label: eq:mskdcpl
+
    \mathrm{argmin}_\mathbf{x} \;
    (1/2) \left\|  W \left(\sum_m \mathbf{d}_m * \mathbf{x}_m -
    \mathbf{s}\right) \right\|_2^2 + \lambda \sum_m
    \| \mathbf{x}_m \|_1 \;\;,
 
-(:math:`W` is a mask array), is solved via the ADMM problem
+is solved via the ADMM problem
 
 .. math::
    :type: align
+   :label: eq:mskdcpladmm
 
    & \mathrm{argmin}_{\mathbf{x},\mathbf{y}_0,\mathbf{y}_1} \;
-   (1/2) \| W \mathbf{y}_0 \|_2^2 + \lambda \| \mathbf{y}_1 \|_1 \\
+   (1/2) \| W \mathbf{y}_0 \|_2^2 + \lambda \| \mathbf{y}_1 \|_1 \nonumber \\
    & \;\text{such that}\;
    \left( \begin{array}{c} D \\ I \end{array} \right) \mathbf{x}
    - \left( \begin{array}{c} \mathbf{y}_0 \\ \mathbf{y}_1 \end{array}
      \right) = \left( \begin{array}{c} \mathbf{s} \\
      \mathbf{0} \end{array} \right) \;\;,
 
-where :math:`D \mathbf{x} = \sum_m \mathbf{d}_m * \mathbf{x}_m`. This splitting decouples the data fidelity term from the :math:`\mathbf{x}` update, making it easy to replace the :math:`\ell_2` norm with an :math:`\ell_1` norm. (Ideally we would also include a gradient penalty term to assist in the representation of the low frequency image component. While this relatively straightforward, it is more complex than the norm modification, and is omitted from this example.) Instead of including a representation of the low frequency image component within the optimization, we use the low frequency component estimated by the previous example, subtracting it from the signal passed to the CSC algorithm, and adding it back to the solution of this algorithm.
+where :math:`D \mathbf{x} = \sum_m \mathbf{d}_m * \mathbf{x}_m`. We can express Equation (:ref:`eq:l1cbpdn`) using the same variable splitting, as
 
-We turn now to the implementation of the SPORCO extension example.  The module imports and definitions of functions ``pad`` and ``crop`` are the same as for the example in section *Removal of Impulse Noise via CSC*, and are not repeated here. Our main task is to modify ``cbpdn.ConvBPDNMaskDcpl``, the class for solving the CBPDN with mask decoupling problem, to replace the :math:`\ell_2` norm data fidelity term with an :math:`\ell_1` norm. The :math:`\mathbf{y}` step of this class is
+.. math::
+   :type: align
+   :label: eq:l1cbpdnadmm
+
+   & \mathrm{argmin}_{\mathbf{x},\mathbf{y}_0,\mathbf{y}_1} \;
+   \| W \mathbf{y}_0 \|_1 + \lambda \| \mathbf{y}_1 \|_1 \nonumber \\
+   & \;\text{such that}\;
+   \left( \begin{array}{c} D \\ I \end{array} \right) \mathbf{x}
+   - \left( \begin{array}{c} \mathbf{y}_0 \\ \mathbf{y}_1 \end{array}
+     \right) = \left( \begin{array}{c} \mathbf{s} \\
+     \mathbf{0} \end{array} \right) \;\;.
+
+(We don't need the :math:`W` for the immediate problem at hand, but there isn't any reason for discarding it.) Since Equation (:ref:`eq:l1cbpdnadmm`) has no :math:`f(\mathbf{x})` term (see Equation (:ref:`eq:admmform`)), and has the same constraint as Equation (:ref:`eq:mskdcpladmm`), the :math:`\mathbf{x}` and :math:`\mathbf{u}` steps for these two problems are the same.  The :math:`\mathbf{y}` step for Equation (:ref:`eq:mskdcpladmm`) decomposes into the two independent subproblems
+
+.. math::
+   :type: align
+
+   \mathbf{y}_0^{(j+1)} &= \mathrm{argmin}_{\mathbf{y}_0} \frac{1}{2}
+    \left\| W \mathbf{y}_0 \right\|_2^2 + \frac{\rho}{2}
+    \left\| \mathbf{y}_0 \!-\! (D \mathbf{x}^{(j+1)}  - \mathbf{s}
+    + \mathbf{u}_0^{(j)}) \right\|_2^2 \\
+   \mathbf{y}_1^{(j+1)} &= \mathrm{argmin}_{\mathbf{y}_1}  \lambda
+   \| \mathbf{y}_1 \|_1 + \frac{\rho}{2} \left\| \mathbf{y}_1 -
+    (\mathbf{x}^{(j+1)}   + \mathbf{u}_1^{(j)}) \right\|_2^2 \;.
+
+The only difference between the ADMM algorithms for Equations (:ref:`eq:mskdcpladmm`) and (:ref:`eq:l1cbpdnadmm`) is in the :math:`\mathbf{y}_0` subproblem, which becomes
+
+.. math::
+
+   \mathbf{y}_0^{(j+1)} = \mathrm{argmin}_{\mathbf{y}_0}
+    \left\| W \mathbf{y}_0 \right\|_1 + \frac{\rho}{2}
+    \left\| \mathbf{y}_0 \!-\! (D \mathbf{x}^{(j+1)}  - \mathbf{s}
+    + \mathbf{u}_0^{(j)}) \right\|_2^2 \;.
+
+Therefore, the only modifications we expect to make to the class implementing the problem in Equation (:ref:`eq:mskdcpl`) are changing the computation of the functional value, and part of the :math:`\mathbf{y}` step.
+
+We turn now to the implementation for this example. The module import statements and definitions of functions ``pad`` and ``crop`` are the same as for the example in section *Removal of Impulse Noise via CSC*, and are not repeated here. Our main task is to modify ``cbpdn.ConvBPDNMaskDcpl``, the class for solving the problem in Equation (:ref:`eq:mskdcpl`), to replace the :math:`\ell_2` norm data fidelity term with an :math:`\ell_1` norm. The :math:`\mathbf{y}` step of this class is
 
 .. code-block:: python
 
