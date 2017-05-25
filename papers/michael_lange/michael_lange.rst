@@ -605,11 +605,11 @@ into two distinct sub-modules:
 
 * **DLE - Devito Loop Engine:** After the initial symbolic processing
   Devito schedules the optimised expressions in a set of loops by
-  creating an Abstract Syntax Tree (AST). The loop engine (DLE) is now
-  able to perform typical loop-level optimisations in multiple passes
-  by manipulating this AST, including data alignment through array
-  annotations and padding, SIMD vectorization through OpenMP pragmas
-  and thread parallelism through OpenMP pragmas. On top of that, loop
+  creating an AST. The loop engine (DLE) is now able to perform
+  typical loop-level optimisations in multiple passes by manipulating
+  this AST, including data alignment through array annotations
+  and padding, SIMD vectorization through OpenMP pragmas and
+  thread parallelism through OpenMP pragmas. On top of that, loop
   blocking is used to fully exploit the memory bandwidth of a target
   architecture by increasing data locality and thus cache
   utilization. Since the effectiveness of the blocking technique is
@@ -641,11 +641,39 @@ flops" are performed.>*
 Integration with YASK
 ~~~~~~~~~~~~~~~~~~~~~
 
-*<YASK, and why it is so great.>* **[CITE]**
+As already explained, Devito is based upon actual compiler technology, and its
+backend presents a highly modular structure, with each transformation pass
+taking as input an AST and returning a new, different AST. One of the reasons
+behind this software engineering strategy, which is clearly more challenging than a
+template-based solution, is to ease the integration of external tools. One such
+tool is the YASK stencil optimizer **[CITE]**. We are currently integrating
+YASK within the DLE; YASK will replace some (but not all) of the existing DLE
+passes.
 
-*<Ongoing integration effort as an alternative backend. Also
-highlighting that this underpins the generality idea of the backend
-engines.>*
+The DLE passes are organized in a hierarchy of classes. Each class represents a
+specific code transformation pipeline; each stage of the pipeline manipulates
+ASTs. Integrating YASK becomes then a conceptually simple task, which boils
+down to three actions: (i) adding a new transformation pipeline to the DLE;
+(ii) adding a new array type, to ease storage layout transformations and data
+views (YASK employs a data layout different than the conventional row-major
+format); (iii) creating the proper Python bindings in YASK so that Devito can
+drive the code generation process. At the moment of writing, some progress has
+already been made: 1) Devito ASTs can now automatically be translated into YASK
+ASTs through an extremely simple tree visitor; 2) a Devito-generated acoustic
+wave equation code could be run from within YASK (i.e., with the input data
+still coming from YASK users).
+
+It has been shown that real-world stencil codes optimised through YASK may
+achieve an exceptionally high fraction of the attainable machine peak [YASK].
+Further, initial prototyping (manual optimization of Devito-generated code
+through YASK) revealed that YASK may also outperform the loop optimization
+engine currently available in Devito, besides ensuring seamless performance
+portability across a range of computer architectures. On the other hand, YASK
+is a C++ based framework that, unlike Devito, does not rely on symbolic
+mathematics and processing; in other words, it operates at a much lower level
+of abstraction. These observations, as well as the outcome of the initial
+prototyping phase, motivate the on-going Devito-YASK integration effort.
+
 
 Discussion
 ----------
