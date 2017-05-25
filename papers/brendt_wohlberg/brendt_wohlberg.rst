@@ -210,7 +210,7 @@ An important issue that has received surprisingly little attention in the litera
    \mathrm{argmin}_\mathbf{x} \; \frac{1}{2} \left\|\mathbf{x} - \mathbf{s}
    \right\|_2^2 + \frac{\lambda}{2} \sum_i \| G_i \mathbf{x} \|_2^2 \;\;,
 
-where :math:`G_i` is an operator computing the derivative along aixs :math:`i` of the array represented as vector :math:`\mathbf{x}`, and :math:`\lambda` is a parameter controlling the amount of smoothing.
+where :math:`G_i` is an operator computing the derivative along axis :math:`i` of the array represented as vector :math:`\mathbf{x}`, and :math:`\lambda` is a parameter controlling the amount of smoothing.
 In some cases it is not feasible to handle the lowpass component via such a pre-processing strategy, making it necessary to include the lowpass component in the CSC optimization problem itself. The simplest approach to doing so is to append an impulse filter to the dictionary and include a gradient regularisation term on corresponding coefficient map in the functional (Sec. 3) :cite:`wohlberg-2016-convolutional2`. This approach is supported by class ``admm.cbpdn.ConvBPDNGradReg``, the use of which is demonstrated in section *Removal of Impulse Noise via CSC*.
 
 
@@ -539,7 +539,7 @@ Finally, we save the low frequency image component estimate as an NPZ file, for 
 Extending SPORCO
 ----------------
 
-We illustrate the ease of extending of modifying existing algorithms in SPORCO by contructing an alternative approach to removing impulse noise via CSC. The previous method gave good results, but the weight on the filter representing the impulse noise is an additional parameter that has to be tuned. This parameter can be avoided by switching to an :math:`\ell_1` data fidelity term instead of including dictionary filters to represent the impulse noise, as in the problem :cite:`wohlberg-2016-convolutional2`
+We illustrate the ease of extending of modifying existing algorithms in SPORCO by constructing an alternative approach to removing impulse noise via CSC. The previous method gave good results, but the weight on the filter representing the impulse noise is an additional parameter that has to be tuned. This parameter can be avoided by switching to an :math:`\ell_1` data fidelity term instead of including dictionary filters to represent the impulse noise, as in the problem :cite:`wohlberg-2016-convolutional2`
 
 .. math::
    :label: eq:l1cbpdn
