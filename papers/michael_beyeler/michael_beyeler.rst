@@ -5,11 +5,6 @@
 :institution: eScience Institute, University of Washington
 :corresponding:
 
-:author: Ariel Rokem
-:email: arokem@gmail.com
-:institution: eScience Institute, University of Washington
-:institution: Institute for Neuroengineering, University of Washington
-
 :author: Geoffrey M. Boynton
 :email: gboynton@uw.edu
 :institution: Department of Psychology, University of Washington
@@ -17,6 +12,12 @@
 :author: Ione Fine
 :email: ionefine@uw.edu
 :institution: Department of Psychology, University of Washington
+
+:author: Ariel Rokem
+:email: arokem@gmail.com
+:institution: eScience Institute, University of Washington
+:institution: Institute for Neuroengineering, University of Washington
+
 :bibliography: bibliography
 
 :video: https://github.com/uwescience/pulse2percept
@@ -55,26 +56,12 @@ pulse2percept: A Python-based simulation framework for bionic vision
 Introduction
 ------------
 
-Two of the most frequenct causes of blindness in the developed world
+Two of the most frequent causes of blindness in the developed world
 are retinitis pigmentosa (RP) and age-related macular degeneration (AMD)
 :cite:`Bunker1984,EyeDiseases2004`.
 Both of these diseases have a hereditary component,
-and begin with a progressive degeneration of
-photoreceptors in the retina.
-In severe end-stage RP, approximately 95% of photoreceptors,
-20% of bipolar cells,
-and 70% of ganglion cells degenerate,  :cite:`Santos1997`,
-resulting in severe visual impairment. 
-Despite a significant fraction of bipolar and ganglion cells being spared,
-the absence of photoreceptors means that little or no useful vision is retained in the later stages of these diseases.
-
-Microelectronic retinal prostheses target surviving retinal bipolar and ganglion cells. Ganglion cells represent the output layer of the retina. Each ganglion cell sends an electrical signals to the brain via a long axon fiber that passes from the ganglion cell body to the optic nerve. Bipolar cells form an intermediate layer between photoreceptors and ganglion cells. As well as being reduced in number, these remaining cells also undergo corruptive re-modeling in late stages of the disease [MARC]. However at intermediate disease stages, the basic wiring of the non-photoreceptor layers can still be observed 
-:cite:`Humayun1999,Mazzoni2008`.
-
-
-Analogous to cochlear implants, the goal of electronic retinal prostheses is to electrically stimulate the surviving retinal neurons in order to evoke neuronal responses that are transmitted
-to the brain and interpreted by patients as visual percepts
-(see Fig. :ref:`figimplant` A).
+and are characterized by a progressive degeneration of photoreceptors
+in the retina that lead to gradual loss of vision.
 
 .. figure:: figimplant.png
    :align: center
@@ -89,25 +76,125 @@ to the brain and interpreted by patients as visual percepts
    TODO Need to redo the figure in order to avoid copyright issues.
    :label:`figimplant`
 
-Several types of retinal prostheses are currently in development. These vary in their user interface, light-detection method, signal processing,
+
+Microelectronic retinal prostheses have been developed in an effort
+to restore sight to individuals suffering from these diseases.
+Analogous to cochlear implants,
+these devices function by electrically stimulating 
+surviving retinal neurons
+in order to evoke neuronal responses that are transmitted
+to the brain and interpreted by patients as visual percepts
+(Fig. :ref:`figimplant`).
+Two of these devices are already approved for commercial use,
+and a number of other devices have either started 
+or are planning to start clinical trials in the near future,
+potentially offering a wide range of sight restoration options
+for blinded individuals within a decade :cite:`Fine2015`.
+
+However, a major challenge in the development of retinal prostheses
+is the prediction of what patients will see when they use their devices.
+Clinical trials have shown that the electrical stimulation of the retina
+leads to nontrivial perceptual distortions, blah.
+
+Our goal was thus to develop a simulation framework that could describe
+the visual percepts of patients over space and time.
+We refer to these simulations as 'virtual patients', 
+analogous to the virtual prototyping that has
+proved so useful in other complex engineering applications.
+
+Here we present an open-source implementation of these models as part of
+*pulse2percept*, a Python-based simulation framework that relies solely on
+the NumPy and SciPy stacks, as well as contributions
+from the broader Python community.
+Based on the detailed specification of a patient's implant configuration,
+and given a desired electrical stimulation protocol,
+the model predicts the perceptual distortions experienced
+by this "virtual patient" over both space and time.
+
+We hope that this library will contribute substantially to the field of medicine
+by providing a tool to accelerate the development of visual prostheses
+suitable for human trials.
+For researchers this tool can be used to improve stimulation protocols 
+for existing devices, and provide a design-tool for future devices.
+For government agencies such as the FDA and Medicare this tool 
+can help guide reimbursement decisions. 
+For patients and doctors it can help guide patients and doctors in their decision 
+as to when or whether to be implanted, and which device to select.
+
+The remainder of this paper is organized as follows:
+We start by introducing the neuroscience background necessary to understand the problem,
+and detailing the computational model that underlies *pulse2percept*,
+before we give a simple usage example and go into implementation details.
+We then review our solutions to various technical challenges,
+and conclude by discussing the broader impact for this work
+for the computational neuroscience and neural engineering communities 
+in more detail.
+
+
+
+Electrical stimulation of the retina to produce artificial vision
+-----------------------------------------------------------------
+
+The first steps in seeing begin in the retina,
+where a mosaic of photoreceptors 
+converts incoming light into an electrochemical signal
+that encodes the intensity of light as a function of position
+(two dimensions), wavelength, and time :cite:`Rodieck1998`.
+The electrochemical signal is then passed on to 
+other specialized neuronal circuits
+consisting of a variety of cell types
+(such as bipolar, amacrine, and horizontal cells),
+which extract basic sensory cues, such as spatial contrast
+and temporal frequency.
+These sensory cues are then encoded across approximately
+1.5 million retinal ganglion cells, which form the output layer
+of the retina.
+Each ganglion cell relays the electrical signal to the brain
+via a long axon fiber that passes from the ganglion cell body
+to the optic nerve.
+
+Diseases such as RP and AMD are characterized by a
+progressive degeneration of photoreceptors.
+As these diseases progress,
+more and more cells from all layers of the retina are affected
+:cite:`Humayun1999,Mazzoni2008`.
+In severe end-stage RP, approximately 95% of photoreceptors,
+20% of bipolar cells,
+and 70% of ganglion cells degenerate,  :cite:`Santos1997`,
+resulting in severe visual impairment. 
+As well as being reduced in number, these remaining cells also undergo corruptive
+re-modeling in late stages of the disease :cite:`Marc2003a,Marc2003b`.
+As a result, little or no useful vision is retained.
+
+Microelectronic retinal prostheses have been developed in an effort to 
+restore sight to individuals suffering from RP or AMD.
+Analogous to cochlear implants,
+the goal of retinal prostheses is to electrically stimulate 
+surviving bipolar or ganglion cells
+in order to evoke neuronal responses that are interpreted by the brain
+as visual percepts.
+
+Several types of retinal prostheses are currently in development.
+These vary in their user interface, light-detection method, signal processing,
 and microelectrode placement within the retina
 (for a recent review see :cite:`Weiland2016`).
-As far as our model is concerned, the critical factor is the placement of the microelectrodes. The three main locations for microelectrode implant placement are 
+As far as our model is concerned, the critical factor is the placement
+of the microelectrodes.
+The three main locations for microelectrode implant placement are 
 `epiretinal` (i.e., on top of the retinal surface, above the ganglion cells),
 `subretinal` (i.e., next to the bipolar cells in the space of the missing photoreceptors),
 and `suprachoroidal` (i.e., between the choroid and the sclera)
-as shown in Fig. :ref:`figimplant` B).
+as shown in Fig. :ref:`figretina`).
 Each of these approaches is similar in that light from the visual scene
 is captured and transformed into electrical pulses delivered through electrodes
 to stimulate the retina.
 
-.. figure:: figmodel.eps
+.. figure:: figimplant.png
    :align: center
-   :figclass: w
-   :scale: 35%
+   :scale: 25%
 
-   Full model cascade. TODO explain.
-   :label:`figmodel`
+   TODO make sure to introduce INL, GCL, OFL
+   :label:`figretina`
 
 
 Two of these systems are approved for commercial
@@ -127,57 +214,90 @@ Interactions between implant electronics and
 the underlying neurophysiology cause nontrivial perceptual distortions
 in both space and time :cite:`FineBoynton2015,Beyeler2017`
 that severely limit the quality of the generated visual experience.
-For example, stimulating a single electrode does not always (or even usually) result in the experience of a 'dot' of light. Instead, stimulating a single electrode leads to percepts
-that vary dramatically in shape, varying in description from "blobs", to "streaks" and "half-moons". Percepts also do not remain constant over time. The percept produced by stimulating a single electrode with a continuous pulse train fades over time: usually over a course of seconds the percept will completely disappear.
-As a result, when using their cameras to experience the visual world, patients do not report seeing an interpretable world. One patient describe it as like:cite:`PioneerPress2015`:
+For example, stimulating a single electrode does not always (or even usually)
+result in the experience of a "dot" of light.
+Instead, stimulating a single electrode leads to percepts
+that vary dramatically in shape, varying in description from "blobs",
+to "streaks" and "half-moons".
+Percepts also do not remain constant over time.
+The percept produced by stimulating a single electrode
+with a continuous pulse train fades over time:
+usually over a course of seconds the percept will completely disappear.
+As a result, when using their cameras to experience the visual world,
+patients do not report seeing an interpretable world.
+One patient describe it as like :cite:`PioneerPress2015`:
 *"... looking at the night sky where you have millions of twinkly lights
 that almost look like chaos"*.
 
-Our goal was to develop a simulation framework that could describe patient percepts over space and time -- a 'virtual patient' analogous to the virtual prototyping that has proved so useful in other complex engineering applications. We hope that this library will contribute substantially to the field of medicine by providing a tool to accelerate the development of visual prostheses suitable for human trials.For researchers this tool can be used to improve stimulation protocols for existing devices, and provide a design-tool for future devices. For government agencies such as the FDA and Medicare this tool can help guide reimbursement decisions. For patients and doctors it can help guide patients and doctors in their decision as to when or whether to be implanted, and which device to select. 
+TODO
+That's where we come in.
 
-Our simulation tool integrates and generalizes two computational models of bionic vision that separately explained spatial : cite:`Nanduri2012` and temporal :cite:`Horsager2009` perceptual distortions for the Second Sight Argus 1 and Argus 2 implants.
+.. Our goal was to develop a simulation framework
+.. that could describe patient percepts
+.. over space and time -- a 'virtual patient'
+.. analogous to the virtual prototyping
+.. that has proved so useful in other complex engineering applications.
+.. We hope that this library will contribute substantially to the field of medicine
+.. by providing a tool to accelerate the development of visual prostheses
+.. suitable for human trials.
+.. For researchers this tool can be used to improve stimulation protocols 
+.. for existing devices, and provide a design-tool for future devices.
+.. For government agencies such as the FDA and Medicare this tool 
+.. can help guide reimbursement decisions. 
+.. For patients and doctors it can help guide patients and doctors in their decision 
+.. as to when or whether to be implanted, and which device to select. 
 
-Here we present an open-source implementation of these models as part of
-*pulse2percept*, a Python-based simulation framework that relies solely on
-the NumPy and SciPy stacks, as well as contributions
-from the broader Python community.
-Based on the detailed specification of a patient's implant configuration,
-and given a desired electrical stimulation protocol,
-the model then predicts the perceptual distortions experienced
-by this "virtual patient" over both space and time.
+.. Our simulation tool integrates and generalizes two computational models 
+.. of bionic vision that separately explained spatial :cite:`Nanduri2012`
+.. and temporal :cite:`Horsager2009` perceptual distortions
+.. for the Second Sight Argus I and Argus II implants.
 
-This simulation had the goal of meeting four significant computational challenges. First, ease of use. The intended users of this simulation include researchers or government officials who collect or assess perceptual data on prosthetic implants (MDs rather than computer scientists). Second, we our implementation is highly flexible as far as the engineering specifications of implants is concerned. It is impossible to predict the engineering specifications (e.g. implant hardware design and stimulation protocols) of future implants. Indeed, within most companies the specifications of implants currently in design is closely guarded intellectual property. Third, modularity in terms of the computational model. As research continues in this field, it is likely that the underlying computational models converting electrical stimulation to patient percept will improve. We used a modular design that makes it easy to update individual components of the model. Finally, our simulation requires computations that were both intensive in terms of both spatial and temporal resolution. Like the retina, this was solved by using a fully parallelized architecture, calculations were carried out independently across each small patch of the retina. 
-
-
-.. Here we present *pulse2percept*, an open-source Python implementation
-.. of a computational model that can predict the perceptual experience
-.. of retinal prosthesis patients across a wide range of
-.. implant configurations.
+.. Here we present an open-source implementation of these models as part of
+.. *pulse2percept*, a Python-based simulation framework that relies solely on
+.. the NumPy and SciPy stacks, as well as contributions
+.. from the broader Python community.
+.. Based on the detailed specification of a patient's implant configuration,
+.. and given a desired electrical stimulation protocol,
+.. the model then predicts the perceptual distortions experienced
+.. by this "virtual patient" over both space and time.
 
 
-The remainder of this paper is organized as follows:
-We start by detailing the computational model that underlies *pulse2percept*,
-before we give a simple usage example and go into implementation details.
-We then review our solutions to various technical challenges,
-and conclude by discussing the broader impact for this work
-for the computational neuroscience and neural engineering communities in more detail.
+
 
 
 Computational Model of Bionic Vision
 ------------------------------------
 
 Analogous to models of cochlear implants,[REF] the goal of our
-computational model is to approximate, via a number of linear and nonlinear filtering steps, the neural computations that convert an electrical pulse pattern in both space and time into a perceptual experience. 
+computational model is to approximate,
+via a number of linear and nonlinear filtering steps,
+the neural computations that convert an electrical pulse pattern 
+in both space and time into a perceptual experience. 
 
-Model parameters were chosen to fit data from a variety of experiments in patients with prosthetic devices. For example, in some experiments patients were asked to report whether or not they detected a percept. Across many trials, the minimum stimulation current amplitude needed to reliably detect the presence of a percept on 80% of trials was found. This threshold was compared across a variety of pulse trains. In other experiments patients reported the apparent brightness or size of percepts on a rating scale. In others  patients drew the shapes
-of the percepts evoked by stimulation.
+Our simulation tool integrates and generalizes two computational models 
+of bionic vision that separately explained spatial :cite:`Nanduri2012`
+and temporal :cite:`Horsager2009` perceptual distortions
+for the Second Sight Argus I and Argus II implants.
+
+Model parameters were chosen to fit data from a variety of experiments 
+in patients with prosthetic devices.
+For example, in some experiments patients were asked to report whether or not 
+they detected a percept. 
+Across many trials, the minimum stimulation current amplitude needed 
+to reliably detect the presence of a percept on 80% of trials was found. 
+This threshold was compared across a variety of pulse trains. 
+In other experiments patients reported the apparent brightness or size of percepts 
+on a rating scale. 
+In others patients drew the shapes of the percepts evoked by stimulation.
 The model has been shown to generalize across individual
 electrodes, patients, and devices, as well as across different experiments.
-Detailed methods of how the model was validated can be found in :cite:`Horsager2009,Nanduri2012,Beyeler2017`.
+Detailed methods of how the model was validated 
+can be found in :cite:`Horsager2009,Nanduri2012,Beyeler2017`.
 Here we provide a brief overview.
 
 The full model cascade for an Argus I epiretinal prosthesis is illustrated in
-Fig. :ref:`figmodel`. However, as described above, this model was designed to generalize to other epiretinal
+Fig. :ref:`figmodel`. 
+However, as described above, this model was designed to generalize to other epiretinal
 and subretinal configurations.
 
 The Argus I device consists of electrodes of 260 :math:`\mu m` and 520 :math:`\mu m`
@@ -186,21 +306,45 @@ In this example, input to the model was a pair of simulated pulse
 trains phase-shifted by :math:`\delta` ms,
 which were delivered to two individual simulated electrodes.
 
-The first stages of the model are only in the space domain, and describe the spatial distortions resulting from interactions between the electronics and the neuroanatomy of the retina. The current spread for
-each electrode decreases as a function of distance from the electrode center, both in the x, y plane and as a function of electrode height (z). Thus, the heat maps in A describes the electrical current field across the retinal surface for each individual electrode.
+The first stages of the model are only in the space domain, 
+and describe the spatial distortions resulting from interactions 
+between the electronics and the neuroanatomy of the retina. 
+The current spread for each electrode decreases as a function of distance 
+from the electrode center, 
+both in the x, y plane and as a function of electrode height (z).
+Thus, the heat maps in A describes the electrical current field 
+across the retinal surface for each individual electrode.
 
 
 EQUATION.
 
-As described above, each ganglion cell has an axon fiber that travels from that ganglion cell body to the optic nerve. Stimulated electrodes can induce action potentials in axon fibers as well as cell bodies. Thus if an axon fiber passes under a stimulated electrode it will produce a percept in the perceived location of that axon's cell body. We modeled the sensitivity of the ganglion cell axon fibers (green lines in B;
-location of the implant with respect to the optic disc inferred from patients' fundus photographs) as decreasing exponentially as a function of distance from the ganglion cell body.
+As described above, each ganglion cell has an axon fiber 
+that travels from that ganglion cell body to the optic nerve. 
+Stimulated electrodes can induce action potentials in axon fibers 
+as well as cell bodies. 
+Thus if an axon fiber passes under a stimulated electrode 
+it will produce a percept in the perceived location of that axon's cell body. 
+We modeled the sensitivity of the ganglion cell axon fibers (green lines in B;
+location of the implant with respect to the optic disc 
+inferred from patients' fundus photographs) 
+as decreasing exponentially as a function of distance from the ganglion cell body.
 
-Thus, for each electrode, the heat maps in B describe a 'effective stimulation map' across the retinal surface for each electrode; the expected percept produced by stimulating that electrode.
+Thus, for each electrode, the heat maps in B describe a 'effective stimulation map' 
+across the retinal surface for each electrode; 
+the expected percept produced by stimulating that electrode.
 
+The remaining stages of the model carry out temporal computations 
+that are fully parallelized in the space domain. 
+For each point in the retina a series of linear (boxes C, D, and F) 
+and nonlinear (box E) computations in the time domain 
+were used to approximate temporal processing within retina and cortex.
 
-The remaining stages of the model carry out temporal computations that are fully parallelized in the space domain. For each point in the retina a series of linear (boxes C, D, and F) and nonlinear (box E) computations in the time domain were used to approximate temporal processing within retina and cortex.
-
-As can be seen in the figure above, any given electrode generally only stimulates a small subregion of the retina. As a consequence, when only a few electrodes are active significant speed savings can often be obtained by skipping pixels which will not be significantly stimulated by that electrode, for example pixels whose intensity values in this heat map are less than a certain percent (e.g. 25%) of the largest value. 
+As can be seen in the figure above, 
+any given electrode generally only stimulates a small subregion of the retina. 
+As a consequence, when only a few electrodes are active significant speed savings 
+can often be obtained by skipping pixels which will not be significantly stimulated 
+by that electrode, for example pixels whose intensity values in this heat map 
+are less than a certain percent (e.g. 25%) of the largest value. 
 
 Linear responses were modeled as temporal low-pass filters,
 or "leaky integrators",
@@ -315,11 +459,15 @@ modules:
 - :code:`implants`: Provides implementations of the details of different retinal
   prosthetic implants. This includes Second Sight's Argus I and Argus II implants,
   but can easily be extended to custom implants (see Section on extensibility).
-- :code:`retina`: Includes implementation of a model of the retinal distribution of nerve fibers, based on :cite:`JAN09` and an implementation of the temporal cascade of events
+- :code:`retina`: Includes implementation of a model of the retinal distribution 
+  of nerve fibers, based on :cite:`Jansonius2009`, and an implementation of the 
+  temporal cascade of events
   described in equations 1-5. Again this can be easily modified.
 - :code:`stimuli`: Includes implementations of commonly used electrical stimulation
   protocols, including means to translate images and movies into simulated
-  electrical pulse trains. Again, this can easily be extended to custom stimulation protocols (see Section Extensibility).
+  electrical pulse trains.
+  Again, this can easily be extended to custom stimulation protocols 
+  (see Section Extensibility).
 - :code:`files`: Includes a simple means to load and store data as images
   and videos.
 - :code:`utils`: Utility and helper functions used in various parts of the code.
@@ -383,7 +531,9 @@ while abstracting the underlying functionality.
 
 'retina',
 
-This includes the implementation of a model of the retinal distribution of nerve fibers, based on :cite:`JAN09` and implementations of the temporal cascade of events described in equations 1-5. 
+This includes the implementation of a model of the retinal distribution of nerve fibers, 
+based on :cite:`Jansonius2009` and implementations of the temporal cascade of events 
+described in equations 1-5. 
 
 Things that can be set include the spatial sampling rate of the
 retina in the optic fiber layer (where the ganglion cell axons are):
@@ -467,9 +617,14 @@ Finally, the created stimulus serves as input to
 :code:`sim.pulse2percept`, which is used to convert the
 pulse trains into a percept.
 
-Using this model it is possible to generate simulations of the predicted percepts for simple input stimuli, such as a pair of electrodes. It is also possible to generate simulations of what a patient with a prosthetic implant might experience with more complex stimulation patterns, such as stimulation of a grid of electrodes in the shape of the letter E.
+Using this model it is possible to generate simulations of the predicted percepts 
+for simple input stimuli, such as a pair of electrodes. 
+It is also possible to generate simulations of what a patient with a prosthetic implant 
+might experience with more complex stimulation patterns, 
+such as stimulation of a grid of electrodes in the shape of the letter E.
 
-At this stage in the model it is possible to consider which retinal layers are included in the temporal model
+At this stage in the model it is possible to consider which retinal layers 
+are included in the temporal model
 (e.g., 'OFL': optic fiber layer, 'GCL': ganglion cell layer):
 THIS UNCLEAR TOO
 
@@ -518,7 +673,8 @@ The output is shown in Fig. :ref:`figinputoutput` B.
 Extensibility
 ~~~~~~~~~~~~~
 
-As described above, this simulation was designed to allow users to generate their own implants,retinal models, and pulse trains. 
+As described above, this simulation was designed to allow users 
+to generate their own implants, retinal models, and pulse trains. 
 
 Extensibility is provided through class inheritance.
 
@@ -556,7 +712,15 @@ a single-pixel percept over time:
 
    class MyGanglionCellModel(TemporalModel):
        def model_cascade(self, in_arr, pt_list, layers):
-           return in_array
+           """Add docstring
+
+           Parameters
+           ----------
+           in_arr : array_like
+           pt_list : list
+           layers : list
+           """
+           return in_arr
 
 
 This method can then be passed to the simulation framework:
@@ -565,6 +729,9 @@ This method can then be passed to the simulation framework:
 
    mymodel = MyGanglionCellModel()
    sim.set_ganglion_cell_layer(mymodel)
+
+It will then automatically be selected as the right ganglion cell
+model when :code:`sim.pulse2percept` is called.
 
 
 - Stimuli: Inherit from :code:`p2p.stimuli.PulseTrain`
@@ -579,43 +746,79 @@ or :code:`pulse2percept.stimuli.PulseTrain`:
 
 EXAMPLE
 
+
+
 Implementation Details
 ~~~~~~~~~~~~~~~~~~~~~~
 
 As described above, the main challenge during *pulse2percept*'s development
 was computational cost:
 the simulations require a fine subsampling of space,
-and span several orders of magnitude in time. In the space domain we wanted the model to be capable of simulating
-electrical activation of individual retinal ganglion cells. In the temporal domain the model needed to be capable of 
+and span several orders of magnitude in time. 
+In the space domain we wanted the model to be capable of simulating
+electrical activation of individual retinal ganglion cells. 
+In the temporal domain the model needed to be capable of 
 dealing with pulse trains containing indvidual pulses on the sub-millisecond time 
 scale that last over several seconds.
  
 Like the brain, we solved this problem through parallelization in the spatial domain. 
 After an initial stage that implemented spatial interactions within the retina, computations
 were parallelized across small patches of the retina using two back ends (Joblib
-:cite:`JOB16` and Dask :cite:`DASK16`), with both multithreading and
+:cite:`Joblib2016` and Dask :cite:`Dask2016`), with both multithreading and
 multiprocessing options. 
 
 A second major computational bottleneck was computing the
-temporal response for each patch of retina. Initial stages of the model require convolutions of arrays (e.g., equations
-2 and 3).that describe responses of the model  at high temoral resolution (sampling rates on the order of 25 um) for 
-pulse trains lasting for several seconds. These numerically-heavy sections of the code were sped up using a conjunction of
-three strategies. First, as described above, any given electrode generally only stimulates a subregion of the retina. As a consequence, when only a few electrodes are active significant speed savings were often be obtained by ignoring pixels which will not be significantly stimulated by that electrode. Second, electrical stimulation is often carried out at relatively low pulse train frequencies of less than 30 Hz. Since the individual pulses within the pulse train are usually very short (~75-450 microseconds), input pulse trains are generally extremely sparse.
-We exploited this to speed up computation time by avoiding direct convolution with the
-entire time-series whenever possible. Preprocessing of sparse pulse train input arrays allowed us to only carry out temporal convolution for those parts 
+temporal response for each patch of retina. 
+Initial stages of the model require convolutions of arrays (e.g., equations
+2 and 3) that describe responses of the model at high temoral resolution 
+(sampling rates on the order of 25 um) for 
+pulse trains lasting for several seconds. 
+These numerically-heavy sections of the code were sped up using a conjunction of
+three strategies. 
+First, as described above, any given electrode generally only stimulates 
+a subregion of the retina. 
+As a consequence, when only a few electrodes are active,
+significant speed savings could often be obtained 
+by ignoring pixels which will not be significantly stimulated by that electrode. 
+Second, electrical stimulation is often carried out at 
+relatively low pulse train frequencies of less than 30 Hz. 
+Since the individual pulses within the pulse train are usually very short 
+(~75-450 microseconds), input pulse trains are generally extremely sparse.
+We exploited this to speed up computation time by avoiding direct convolution 
+with the entire time-series whenever possible. 
+Preprocessing of sparse pulse train input arrays allowed us to 
+only carry out temporal convolution for those parts 
 of the time-series that included non-zero current amplitudes. 
 Finally, these convolutions were sped up wih LLVM-base compilation
-implemented using Numba :cite:`LAM15`.
+implemented using Numba :cite:`Lam2015`.
 
 
 Computational Performance
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We measured computational performance and scalability. Performance shown here was based on a XX computer, with XXX. 
+We measured computational performance and scalability.
+Performance shown here was based on a XX computer, with XXX. 
 
-The inital stage of the model calculates distortions across the retina.  This stage of the model scales as a function of both the number of spatial sampling points in the retina and the spatial sampling of axonal pathways, as shown in Figure 2a. However it should be noted that this stage only needs to be carried out once for a given implant/retina combination. When comparing the effects of different pulse trains a stored map of spatial distortions can be used. 
+The inital stage of the model calculates distortions across the retina.
+This stage of the model scales as a function of 
+both the number of spatial sampling points in the retina 
+and the spatial sampling of axonal pathways, 
+as shown in Figure 2a. 
+However it should be noted that this stage only needs to be carried out once 
+for a given implant/retina combination. 
+When comparing the effects of different pulse trains 
+a stored map of spatial distortions can be used. 
 
-The remainder of the model is carried out in parallel, so computational time increases linearly with the number of spatial sampling points. Because computations are calculated across patches of the retina, the speed of the model is unaffected by the number of electrodes. The time taken per spatial sampling point depends on a number of factors: the duration of the pulse train, the temporal sampling of the pulse train, and the sparsity of the pulse train input. Figure 2b shows performance as a function of pulse train duration for 10 (very sparse), 60 and 200 Hz pulse trains containing 0.45 ms biphasic pulses (see inset). For each pulse train high and low temporal sampling rates are shown: 0.05 and 0.15 ms. 
+The remainder of the model is carried out in parallel, 
+so computational time increases linearly with the number of spatial sampling points. 
+Because computations are calculated across patches of the retina, 
+the speed of the model is largely unaffected by the number of electrodes. 
+The time taken per spatial sampling point depends on a number of factors: 
+the duration of the pulse train, the temporal sampling of the pulse train, 
+and the sparsity of the pulse train input. 
+Figure 2b shows performance as a function of pulse train duration for 10 (very sparse), 
+60 and 200 Hz pulse trains containing 0.45 ms biphasic pulses (see inset). 
+For each pulse train high and low temporal sampling rates are shown: 0.05 and 0.15 ms. 
 
 
 .. figure:: figure2.png
@@ -625,6 +828,7 @@ The remainder of the model is carried out in parallel, so computational time inc
    Computational performance. (A) Computational performance for computing spatial distortions. Compute time to generate a 'effective stimulation map' is shown as a function of the number of spatial sampling points used to characterize the retina. The three curves represents three different samplings of ganglion cell axon pathways. (B) Computational performance in the time domain. Compute time for a 1000 patches of retina is shown as a function of pulse train duration for 3 pulse train frequencies (10, 60, 200Hz) at high and low temporal sampling rates (0.05 and 0.15 ms). 
  
    :label:`figperformance` 
+
 
 Software availability and development
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -641,51 +845,113 @@ and can be installed using pip:
 
 All code presented in this paper is current as of the v0.2 release.
 
+
+
+
+
 Discussion
 ----------
 
 We present here an open-source, Python-based framework for modeling
-the visual processing in retinal prosthesis patients. This software generates a simulation of the perceptual experience of individual prosthetic users - a 'virtual patient'. 
+the visual processing in retinal prosthesis patients. 
+This software generates a simulation of the perceptual experience 
+of individual prosthetic users - a 'virtual patient'. 
 
 The goal of *pulse2percept* is to provide open-source simulations
 that can allow any user to evaluate the perceptual experiences
-likely to be produced across both current and future devices devices. 
+likely to be produced across both current and future devices.
+In specific, the software was designed to meet 
+four software design specifications:
 
-*pulse2percept* has a number of potential uses.
+TODO
 
-For device developers, creating "virtual patients" with this software
-can facilitate the development of improved pulse stimulation protocols
-for existing devices, including generating datasets
-for machine learning approaches for finding improved stimulation protocols that minimize spatial and temporal distortions.
+1. *Ease of use*: The intended users of this simulation include 
+   researchers or government officials who collect or assess perceptual data 
+   on prosthetic implants (MDs rather than computer scientists),
+   even without technical background.
+2. *Modularity*: As research continues in this field, 
+   it is likely that the underlying computational models 
+   converting electrical stimulation to patient percept will improve. 
+   We used a modular design that makes it easy to update 
+   individual components of the model.
+3. *Flexibility*: Allows for rapid prototyping and integration with other
+   analysis or visualization libraries from the Python community.
+   Allows for users to play with parameters, and use the ones that fit
+   their desired device. Indeed, within most companies the specifications 
+   of implants currently in design is closely guarded intellectual property.
+4. *Extensibility*: We made it easy to extend the software with custom
+   implants, stimulation protocols, or retinal models.
 
-"Virtual patients" also provide a useful tool for implant development,
+As a result of these design considerations, *pulse2percept* has a number
+of potential uses.
+
+.. New device development
+Device developers can use virtual patients to get an idea of how their
+implant will perform even before a physical prototype has been created.
+This is reminiscent of the practice of virtual prototyping in other
+engineering fields. It becomes possible to make predictions about the
+perceptual consequences of individual design considerations,
+such as for specific electrode geometries and stimulation protocols.
+
+.. For device developers, creating virtual patients with this software
+.. can facilitate the development of improved pulse stimulation protocols
+.. for existing devices, including generating datasets
+.. for machine learning approaches for finding improved stimulation protocols 
+.. that minimize spatial and temporal distortions.
+
+.. Realistic estimate of current devices
+Virtual patients also provide a useful tool for implant development,
 making it possible to rapidly predict vision across
 different implant configurations.
 We are currently collaborating with two leading manufacturers
-to validate the use this software for both of these purposes.
+to validate the use of this software for both of these purposes.
 
-Virtual patients such as these can also play an important role in the wider community. Manufacturer-published 'simulations'
-of prosthetic vision do not take account of the substantial neurophysiological distortions
-in space and time that are observed in actual patients. As such their predictions of visual outcomes might be misleading to a naive viewer. Any more sophisticated simulations that currently exist are proprietary and not available
+Virtual patients such as these can also play an important role
+in the wider community OF WHOM. Manufacturer-published 'simulations'
+of prosthetic vision do not take account of the 
+substantial neurophysiological distortions
+in space and time that are observed in actual patients.
+As such their predictions of visual outcomes might be misleading 
+to a naive viewer. 
+Any more sophisticated simulations that currently exist 
+are proprietary and not available
 to the public or the scientific community.
 
-DO WE WANT THIS PARAGRAPH?Device manufacturers currently develop their own behavioral tests, only test a limited number of patients (who vary widely in age and cognitive abilities),
-and some only publish a selective subset of data. Even small differences in task protocols can have significant effects on how patients perform. As a result it has been extremely difficult to evaluate the relative effectiveness of different implants. Simulations such as ours can integrate help differentiate the vision quality provided by different devices.
+.. DO WE WANT THIS PARAGRAPH?Device manufacturers currently develop 
+.. their own behavioral tests, only test a limited number of patients 
+.. (who vary widely in age and cognitive abilities),
+.. and some only publish a selective subset of data. 
+.. Even small differences in task protocols can have significant effects 
+.. on how patients perform. 
+.. As a result it has been extremely difficult to evaluate 
+.. the relative effectiveness of different implants. 
+.. Simulations such as ours can integrate help differentiate 
+.. the vision quality provided by different devices.
 
-Prosthetic implants are expensive technology - costing roughly $100k per patient. Currently these implants are reimbursed on a trial basis across many countries in Europe, and are only reimbursed in a subset of states in the USA.    Simulations such as these can help guide government agencies such as the FDA and Medicare in reimbursement decisions.
+.. Determine usefulness via government bodies
+Prosthetic implants are expensive technology - costing roughly $100k per patient. 
+Currently these implants are reimbursed on a trial basis 
+across many countries in Europe, 
+and are only reimbursed in a subset of states in the USA.
+Simulations such as these can help guide government agencies 
+such as the FDA and Medicare in reimbursement decisions.
 
-Most importantly,these simulations can help patients, their families and doctors make an informed choice when deciding at what stage of vision loss a prosthetic device would be helpful. 
+.. Improve patient quality of life
+Most importantly, these simulations can help patients, 
+their families, and doctors make an informed choice 
+when deciding at what stage of vision loss 
+a prosthetic device would be helpful. 
 
 
 
 Acknowledgments
 ---------------
-This work was supported by the Washington Research Foundation Funds
-for Innovation in Neuroengineering and Data-Intensive Discovery (MB),
-as well as a grant by the Gordon & Betty Moore Foundation and
-the Alfred P. Sloan Foundation to the University of Washington
-eScience Institute Data Science Environment (MB and AR).National 
-Institute of Health EY-014645 (IF) and EY-12925 (GMB)
-The GeForce TITAN X used for this research was donated
-by the NVIDIA Corporation, and research credits for cloud computing
-were provided by Amazon Web Services.
+Supported by the Washington Research Foundation Funds for 
+Innovation in Neuroengineering and Data-Intensive Discovery (M.B.), 
+by a grant from the Gordon & Betty Moore Foundation and the 
+Alfred P. Sloan Foundation to the University of Washington 
+eScience Institute Data Science Environment (M.B. and A.R.), 
+and by the National Institutes of Health 
+(NEI EY-12925 to G.M.B., EY-014645 to I.F.).
+Research credits for cloud computing were provided by 
+Amazon Web Services.
