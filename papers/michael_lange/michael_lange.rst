@@ -373,8 +373,17 @@ Seismic Inversion Example
 -------------------------
 
 The primary motivating application behind the design of Devito are
-seismic inversion problems that require highly optimized wave
-propagation operators for forward and adjoint models.
+seismic exploration problems that require highly optimized wave
+propagation operators for forward modelling and adjoint-based
+inversion. Of course, the speed and accuracy of the generated kernels
+is of vital importance, but the ability to efficiently define rigorous
+forward modelling and adjoint operators from high-level symbolic
+definitions also implies that domain scientists are able to quickly
+adjust the numerical method and discretisation to the individual problem
+and hardware architecture **[CITE]**. In the following example we will
+demonstrate the generation of forward and adjoint operators for the
+acoustic wave equation to implement the so-called adjoint test. The
+governing equation is defined as
 
 .. math::
     m \frac{\partial^2 u}{\partial t^2}
@@ -388,12 +397,45 @@ boundary condition.
 On top of fast stencil operators, seismic inversion kernels also rely
 on sparse point interpolation to inject the modelled wave as a point
 source (:math:`q`) and to infer the recorded value at individual point
-locations, to model so-called "receiver" hydrophones. To accomodate
-this, Devito provides another symbolic data type :code:`PointData`,
-which allows the generation of sparse-point interpolation expressions
-using the "indexed" low-level API.
+locations. To accomodate this, Devito provides another symbolic data
+type :code:`PointData`, which allows the generation of sparse-point
+interpolation expressions using the "indexed" low-level API. These
+symbolic objects provide utility routines
+:code:`pt.interpolate(expression)` and :code:`pt.inject(field,
+expression)` to create symbolic expressions that perform linear
+interpolation between the sparse points and the cartesian grid for
+insertion into :code:`Operator` kernels. A separate set of explicit
+coordinate values are associated with the sparse point objects for
+this purpose in addition to the function values stored in the
+:code:`data` property.
 
-*<Describe the forward code, in particular the use of PointData objects.>*
+Adjoint Test
+~~~~~~~~~~~~
+
+The first step for implementing the adjoint test is to build a forward
+operator that models the wave propagating through an anisotropic
+medium, where the square slowness of the wave is denoted as :math:`m`.
+Since :code:`m`, as well as the boundary dampening function
+:code:`eta`, are re-used between forward and adjoint runs the only
+symbolic data object we need to create here is the wavefield :code:`u`
+in order to implement amd re-arrange our discretised equation
+:code:`eqn` to form the update expression for :code:`u`.  It is
+important to note here that the spatial discretisation of the
+:code:`u.laplace` term is provided by the user.
+      
+In addition to the state update of :code:`u`, we are also inserting
+two additional terms into the forward modelling operator:
+
+* :code:`src_term` injects the modelled wave at a point location
+  according to a prescribed time series stored in :code:`src.data`
+  that is accessible in symbolic form via the symbol :code:`src` in
+  the term :code:`src * dt**2 / m`. **[ADD LINE NUMBERS]**
+
+* :code:`rec_term` adds the expression to interpolate the wavefield
+  :code:`u` for a set of "receiver" hydrophones that measure the
+  propagated wave at a varying distances from the source. The
+  resulting interpolated point data will be stored in
+  :code:`rec.data` and is accessible to the user as a NumPy array.
 
 .. code-block:: python
 
@@ -405,7 +447,7 @@ using the "indexed" low-level API.
        # Derive stencil from symbolic equation
        eqn = m * u.dt2 - u.laplace + eta * u.dt
        stencil = solve(eqn, u.forward)[0]
-       eqn = [Eq(u.forward, stencil)]
+       update_u = [Eq(u.forward, stencil)]
 
        # Add source injection and receiver interpolation
        src_term = src.inject(field=u,
@@ -413,13 +455,32 @@ using the "indexed" low-level API.
        rec_term = rec.interpolate(expr=u)
 
        # Create operator with source and receiver terms
-       return Operator(eqn + src_term + rec_term,
+       return Operator(update_u + src_term + rec_term,
                        subs={s: dt, h: model.spacing})
 
-*<Describe the adjoint operator, in particular how we now solve
-for :code:`v.Backward` and invert time with
-:code:`time_axis=Backward`. Also highliight that the source/receiver
-role is now inverted.>*
+After buildign a forward operator, we can now implement the adjoint
+operator in a similar fashion. Using the provided symbols :code:`m`
+and :code:`eta`, we can again define the adjoint wavefield :code:`v`
+and implement its update expression from the discretised
+equation. However, since the adjoint operator needs to operato
+backwards in time there are two notable differences:
+
+* The update expression now updates the backward stencil point in the
+  time derivative :math:`v_{i,j}^{n-1}`, denoted as
+  :code:`v.backward`.  In addition to that, the :code:`Operator` is
+  forced to invert its internal time loop by providing the argument
+  :code:`time_axis=Backward`
+* Since the acoustic wave equation is self-adjoint, the only change
+  required in the governing equation is to inverte the dampening term
+  :code:`eta * u.dt`.
+
+Morevover, the role of the sparse point objects has now switched:
+Instead of injecting the source term, we are now injecting the
+previously recorded receiver values into the adjoint wavefield, while
+we are interpolating the resulting wave at the original source
+location. The difference between the measured readings in the adjoint
+run and the original time series is the core error measure of the
+adjoint test.
 
 .. code-block:: python
 
@@ -432,7 +493,7 @@ role is now inverted.>*
        # Note the inversion of the dampening term
        eqn = m * v.dt2 - v.laplace - eta * v.dt
        stencil = solve(eqn, u.forward)[0]
-       eqn = [Eq(v.backward, stencil)]
+       update_v = [Eq(v.backward, stencil)]
 
        # Inject the previous receiver readings
        rec_term = rec.inject(field=v,
@@ -442,12 +503,18 @@ role is now inverted.>*
        srca_term = srca.interpolate(expr=v)
 
        # Create operator with source and receiver terms
-       return Operator(eqn + rec_term + srca_term,
+       return Operator(update_v + rec_term + srca_term,
                        subs={s: dt, h: model.spacing},
                        time_axis=Backward)
 
-*<Having established how to build the required operators
-we can now define the workflow for our adjoint example:>*
+Having established how to build the required operators we can now
+define the workflow for our adjoint example.  For illustration
+purposes we are using a utility object :code:`Model` that provides the
+core information for seismic inversion runs, such as the values for
+:code:`m` and the dampening term :code:`eta`, as well as the
+coordinates of the point source and receiver hydrophones. It is worth
+noting that the spatial discretisation and thus the stencil size of
+the oeprators is still fully parameterisable.
 
 .. code-block:: python
 
@@ -460,10 +527,12 @@ we can now define the workflow for our adjoint example:>*
    src.data[0, :] = ricker_wavelet(ntime)
    src.coordinates.data[:] = source_coords
 
-   # Create receiver and adjoint-source
+   # Create empty set of receivers
    rec = PointData(name='rec', ntime=ntime,
                    ndim=2, npoint=101)
    rec.coordinates.data[:] = receiver_coords
+
+   # Create empty adjoint source symbol
    srca = PointData(name='srca', ntime=ntime,
                     ndim=2, npoint=1)
    srca.coordinates.data[:] = source_coords
@@ -487,9 +556,18 @@ we can now define the workflow for our adjoint example:>*
    # Test prescribed against adjoint source
    adjoint_test(src.data, srca.data)
 
-*<The above test can be used to verify the accuracy of the forward
+
+.. figure:: shot_record.png
+   :scale: 50%
+
+   *<Shot record of the measured point values in
+   :code:`rec.data`.>* :label:`figshotrecord`
+
+The above test can be used to verify the accuracy of the forward
 propagation and adjoint operators and has been shown to agree for
-2D and 3D implementations.>* **[CITE]**
+2D and 3D implementations **[CITE]**. The shot record of the data
+measured at the receiver locations after the forward run is shown
+in :ref:`figshotrecord`.
 
 
 Automated code generation
