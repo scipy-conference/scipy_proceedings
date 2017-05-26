@@ -169,10 +169,10 @@ space dimensions and the superscript :math:`n` denotes the index in
 time, while :math:`\Delta t`, :math:`\Delta x`, :math:`\Delta y`
 denote the spacing in time and space dimensions respectively.
 
-The first thing we need is a function object that we can take build
-a timestepping scheme with. For this purpose Devito provides so-called
-:code:`TimeData` objects that encapsulate functions that one may take space
-and time derivatives of.
+The first thing we need is a function object with which we can build
+a timestepping scheme. For this purpose Devito provides so-called
+:code:`TimeData` objects that encapsulate functions that are differentiable
+in space and time.
 
 .. code-block:: python
 
@@ -222,7 +222,7 @@ a time derivative (:math:`u_{i,j}^{n+1}`).
 The above variable :code:`stencil` now represents the RHS of
 Eq. :ref:`2dconvdiscr`, allowing us to construct a SymPy expression
 that updates :math:`u_{i,j}^{n+1}` and build a :code:`devito.Operator`
-from it. When creating this operator we also supply concnrete values
+from it. When creating this operator we also supply concrete values
 for the spacing terms :code:`h` and :code:`s` via an additional
 substitution map argument :code:`subs`.
 
@@ -458,11 +458,11 @@ two additional terms into the forward modelling operator:
        return Operator(update_u + src_term + rec_term,
                        subs={s: dt, h: model.spacing})
 
-After buildign a forward operator, we can now implement the adjoint
+After building a forward operator, we can now implement the adjoint
 operator in a similar fashion. Using the provided symbols :code:`m`
 and :code:`eta`, we can again define the adjoint wavefield :code:`v`
 and implement its update expression from the discretised
-equation. However, since the adjoint operator needs to operato
+equation. However, since the adjoint operator needs to operate
 backwards in time there are two notable differences:
 
 * The update expression now updates the backward stencil point in the
@@ -471,10 +471,10 @@ backwards in time there are two notable differences:
   forced to invert its internal time loop by providing the argument
   :code:`time_axis=Backward`
 * Since the acoustic wave equation is self-adjoint, the only change
-  required in the governing equation is to inverte the dampening term
+  required in the governing equation is to invert the sign of the dampening term
   :code:`eta * u.dt`.
 
-Morevover, the role of the sparse point objects has now switched:
+Moreover, the role of the sparse point objects has now switched:
 Instead of injecting the source term, we are now injecting the
 previously recorded receiver values into the adjoint wavefield, while
 we are interpolating the resulting wave at the original source
@@ -606,7 +606,7 @@ into two distinct sub-modules:
 * **DLE - Devito Loop Engine:** After the initial symbolic processing
   Devito schedules the optimised expressions in a set of loops by
   creating an Abstract Syntax Tree (AST). The loop engine (DLE) is now
-  able to perform typical lopp-level optimisations in mutiple passes
+  able to perform typical loop-level optimisations in mutiple passes
   by manipulating this AST, including data alignment through array
   annotations and padding, SIMD vectorization through OpenMP pragmas
   and thread parallelism through OpenMP pragmas. On top of that, loop
