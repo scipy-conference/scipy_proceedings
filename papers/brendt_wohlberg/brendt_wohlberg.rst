@@ -539,7 +539,7 @@ Finally, we save the low frequency image component estimate as an NPZ file, for 
 Extending SPORCO
 ----------------
 
-We illustrate the ease of extending of modifying existing algorithms in SPORCO by constructing an alternative approach to removing impulse noise via CSC. The previous method gave good results, but the weight on the filter representing the impulse noise is an additional parameter that has to be tuned. This parameter can be avoided by switching to an :math:`\ell_1` data fidelity term instead of including dictionary filters to represent the impulse noise, as in the problem :cite:`wohlberg-2016-convolutional2`
+We illustrate the ease of extending or modifying existing algorithms in SPORCO by constructing an alternative approach to removing impulse noise via CSC. The previous method gave good results, but the weight on the filter representing the impulse noise is an additional parameter that has to be tuned. This parameter can be avoided by switching to an :math:`\ell_1` data fidelity term instead of including dictionary filters to represent the impulse noise, as in the problem :cite:`wohlberg-2016-convolutional2`
 
 .. math::
    :label: eq:l1cbpdn
@@ -626,7 +626,7 @@ We turn now to the implementation for this example. The module import statements
 
 	super(ConvBPDNMaskDcpl, self).ystep()
 
-where the ``Y0`` block of ``Y`` represents the variable in the data fidelity term, and the ``Y1`` block represents the variable in the regularization term. All we need do to change the data fidelity term to an :math:`\ell_1` norm is to modify the calculation of ``Y0`` to be a soft thresholding instead of the calculation derived from the existing :math:`\ell_2` norm. We also need to override method ``obfn_g0`` so that the functional values are calculated correctly, taking into account the change of the data fidelity term. We end up with a definition of our class solving Equation (:ref:`eq:l1cbpdn`) consisting of only a few lines of additional code
+where the ``Y0`` and ``Y1`` blocks of ``Y`` respectively represent :math:`\mathbf{y}_0` and :math:`\mathbf{y}_1` in Equation (:ref:`eq:l1cbpdnadmm`). All we need do to change the data fidelity term to an :math:`\ell_1` norm is to modify the calculation of ``Y0`` to be a soft thresholding instead of the calculation derived from the existing :math:`\ell_2` norm. We also need to override method ``obfn_g0`` so that the functional values are calculated correctly, taking into account the change of the data fidelity term. We end up with a definition of our class solving Equation (:ref:`eq:l1cbpdn`) consisting of only a few lines of additional code
 
 .. code-block:: python
 
@@ -691,9 +691,9 @@ the following modules:
 
 * ``plot``: Functions for plotting graphs or 3D surfaces and visualising images, providing simplified access to matplotlib functionality.
 
-* ``linalg``: Various linear algebra and related functions, including solvers for specific forms of linear system and filters for computing image gradients.
+* ``linalg``: Linear algebra and related functions, including solvers for specific forms of linear system and filters for computing image gradients.
 
-* ``metric``: Various image quality metrics including standard metrics such as MSE, SNR, and PSNR.
+* ``metric``: Image quality metrics including standard metrics such as MSE, SNR, and PSNR.
 
 * ``cdict``: A constrained dictionary class that constrains the allowed dict keys, and also initialises the dict with default content on instantiation. All of the inverse problem algorithm options classes are derived from this class.
 
@@ -701,7 +701,7 @@ the following modules:
 Conclusion
 ----------
 
-SPORCO is an actively maintained and thoroughly documented open source Python package for computing with sparse representations. While standard sparse representations are supported, the focus is on convolutional sparse representations for which SPORCO provides a wider range of features than any other publicly available library. The set of ADMM classes on which the optimization algorithms are based is also potentially useful for a much broader range of convex optimization problems.
+SPORCO is an actively maintained and thoroughly documented open source Python package for computing with sparse representations. Standard sparse representations are supported, but the main focus is on convolutional sparse representations for which SPORCO provides a wider range of features than any other publicly available library. The set of ADMM classes on which the optimization algorithms are based is also potentially useful for a much broader range of convex optimization problems.
 
 
 
