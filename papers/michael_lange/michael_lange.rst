@@ -27,7 +27,7 @@ Optimised finite difference computation from symbolic equations
 
 Domain-specific high-productivity environments are playing an
 increasingly important role in scientific computing due to the
-increased levels of abstraction and automation they provide. In this
+levels of abstraction and automation they provide. In this
 paper we introduce Devito, an open-source domain-specific framework for
 solving partial differential equations from symbolic problem
 definitions by the finite difference method. We highlight the
@@ -44,9 +44,9 @@ Introduction
 ------------
 
 Domain-specific high-productivity environments are playing an
-increasingly important role in scientific computing. The increased
-level of abstraction and automation provided by such frameworks not
-only increases productivity and accelerates innovation, but allows the
+increasingly important role in scientific computing. The level
+of abstraction and automation provided by such frameworks not only
+increases productivity and accelerates innovation, but also allows the
 combination of expertise from different specialised disciplines. This
 synergy is necessary when creating the complex software stack needed
 to solve leading edge scientific problems, since domain specialists as
@@ -375,8 +375,8 @@ Seismic Inversion Example
 The primary motivating application behind the design of Devito are
 seismic exploration problems that require highly optimized wave
 propagation operators for forward modelling and adjoint-based
-inversion. Of course, the speed and accuracy of the generated kernels
-is of vital importance, but the ability to efficiently define rigorous
+inversion. Obviously, the speed and accuracy of the generated kernels
+is of vital importance. Moreover, the ability to efficiently define rigorous
 forward modelling and adjoint operators from high-level symbolic
 definitions also implies that domain scientists are able to quickly
 adjust the numerical method and discretisation to the individual problem
@@ -641,11 +641,39 @@ flops" are performed.>*
 Integration with YASK
 ~~~~~~~~~~~~~~~~~~~~~
 
-*<YASK, and why it is so great.>* **[CITE]**
+As already explained, Devito is based upon actual compiler technology, and its
+backend presents a highly modular structure, with each transformation pass
+taking as input an AST and returning a new, different AST. One of the reasons
+behind this software engineering strategy, which is clearly more challenging than a
+template-based solution, is to ease the integration of external tools. One such
+tool is the YASK stencil optimizer **[CITE]**. We are currently integrating
+YASK within the DLE; YASK will replace some (but not all) of the existing DLE
+passes.
 
-*<Ongoing integration effort as an alternative backend. Also
-highlighting that this underpins the generality idea of the backend
-engines.>*
+The DLE passes are organized in a hierarchy of classes. Each class represents a
+specific code transformation pipeline; each stage of the pipeline manipulates
+ASTs. Integrating YASK becomes then a conceptually simple task, which boils
+down to three actions: (i) adding a new transformation pipeline to the DLE;
+(ii) adding a new array type, to ease storage layout transformations and data
+views (YASK employs a data layout different than the conventional row-major
+format); (iii) creating the proper Python bindings in YASK so that Devito can
+drive the code generation process. At the moment of writing, some progress has
+already been made: 1) Devito ASTs can now automatically be translated into YASK
+ASTs through an extremely simple tree visitor; 2) a Devito-generated acoustic
+wave equation code could be run from within YASK (i.e., with the input data
+still coming from YASK users).
+
+It has been shown that real-world stencil codes optimised through YASK may
+achieve an exceptionally high fraction of the attainable machine peak [YASK].
+Further, initial prototyping (manual optimization of Devito-generated code
+through YASK) revealed that YASK may also outperform the loop optimization
+engine currently available in Devito, besides ensuring seamless performance
+portability across a range of computer architectures. On the other hand, YASK
+is a C++ based framework that, unlike Devito, does not rely on symbolic
+mathematics and processing; in other words, it operates at a much lower level
+of abstraction. These observations, as well as the outcome of the initial
+prototyping phase, motivate the on-going Devito-YASK integration effort.
+
 
 Discussion
 ----------
