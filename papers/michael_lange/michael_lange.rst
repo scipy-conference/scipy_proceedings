@@ -271,7 +271,7 @@ Laplace equation
 ~~~~~~~~~~~~~~~~
 
 The above example showed how Devito can be used to create finite
-difference stencil oprators from only a few lines of high-level
+difference stencil operators from only a few lines of high-level
 symbolic code. For more complex examples, boundary conditions are
 required though, which are not currently provided through the symbolic
 high-level API. However, for exactly this reason, Devito provides a
@@ -335,7 +335,7 @@ does not contain a time-dependence.
    op = Operator(expressions=[eq_stencil] + bc,
                  subs={h: dx, a: 1.})
 
-After buildign the operator, we can now use it in a time-independent
+After building the operator, we can now use it in a time-independent
 conversion loop, but we do need to make sure we switch between buffers.
 
 .. code-block:: python
@@ -373,7 +373,7 @@ Seismic Inversion Example
 -------------------------
 
 The primary motivating application behind the design of Devito are
-seismic exploration problems that require highly optimized wave
+seismic exploration problems that require highly optimised wave
 propagation operators for forward modelling and adjoint-based
 inversion. Obviously, the speed and accuracy of the generated kernels
 is of vital importance. Moreover, the ability to efficiently define rigorous
@@ -396,8 +396,8 @@ boundary condition.
 
 On top of fast stencil operators, seismic inversion kernels also rely
 on sparse point interpolation to inject the modelled wave as a point
-source (:math:`q`) and to infer the recorded value at individual point
-locations. To accomodate this, Devito provides another symbolic data
+source (:math:`q`) and to record the pressure at individual point
+locations. To accommodate this, Devito provides another symbolic data
 type :code:`PointData`, which allows the generation of sparse-point
 interpolation expressions using the "indexed" low-level API. These
 symbolic objects provide utility routines
@@ -413,28 +413,28 @@ Adjoint Test
 ~~~~~~~~~~~~
 
 The first step for implementing the adjoint test is to build a forward
-operator that models the wave propagating through an anisotropic
+operator that models the wave propagating through an isotropic
 medium, where the square slowness of the wave is denoted as :math:`m`.
 Since :code:`m`, as well as the boundary dampening function
 :code:`eta`, are re-used between forward and adjoint runs the only
 symbolic data object we need to create here is the wavefield :code:`u`
-in order to implement amd re-arrange our discretised equation
-:code:`eqn` to form the update expression for :code:`u`.  It is
-important to note here that the spatial discretisation of the
-:code:`u.laplace` term is provided by the user.
+in order to implement and re-arrange our discretised equation
+:code:`eqn` to form the update expression for :code:`u`.
       
 In addition to the state update of :code:`u`, we are also inserting
 two additional terms into the forward modelling operator:
 
-* :code:`src_term` injects the modelled wave at a point location
+* :code:`src_term` injects a pressure source at a point location
   according to a prescribed time series stored in :code:`src.data`
-  that is accessible in symbolic form via the symbol :code:`src` in
-  the term :code:`src * dt**2 / m`. **[ADD LINE NUMBERS]**
+  that is accessible in symbolic form via the symbol :code:`src`.
+  The scaling factor in :code:`src_term` is coded by hand but can 
+  be automatically inferred.
+   **[ADD LINE NUMBERS]**
 
 * :code:`rec_term` adds the expression to interpolate the wavefield
   :code:`u` for a set of "receiver" hydrophones that measure the
-  propagated wave at a varying distances from the source. The
-  resulting interpolated point data will be stored in
+  propagated wave at a varying distances from the source for every
+  time step. The resulting interpolated point data will be stored in
   :code:`rec.data` and is accessible to the user as a NumPy array.
 
 .. code-block:: python
@@ -468,19 +468,26 @@ backwards in time there are two notable differences:
 * The update expression now updates the backward stencil point in the
   time derivative :math:`v_{i,j}^{n-1}`, denoted as
   :code:`v.backward`.  In addition to that, the :code:`Operator` is
-  forced to invert its internal time loop by providing the argument
+  forced to reverse its internal time loop by providing the argument
   :code:`time_axis=Backward`
-* Since the acoustic wave equation is self-adjoint, the only change
-  required in the governing equation is to invert the sign of the dampening term
-  :code:`eta * u.dt`.
+* Since the acoustic wave equation is self-adjoint without dampening, 
+  the only change required in the governing equation is to invert the
+  sign of the dampening term :code:`eta * u.dt`. The first derivative
+  is an antisymmetric operator and its adjoint minus itself.
 
 Moreover, the role of the sparse point objects has now switched:
 Instead of injecting the source term, we are now injecting the
 previously recorded receiver values into the adjoint wavefield, while
 we are interpolating the resulting wave at the original source
-location. The difference between the measured readings in the adjoint
-run and the original time series is the core error measure of the
-adjoint test.
+location. As the injection and interpolations are part of the kernel, 
+we also insure that these two are adjoints of each other. The adjoint 
+test is the core definition of the adjoint of a linear operator. The 
+mathematical correctness of the adjoint is required for mathematical 
+adjoint-based optimisations methods that are only guarantied to converged 
+with the correct adjoint. The test can be written as:
+
+.. math::
+   <src, adjoint(rec)> = <forward(src), rec>
 
 .. code-block:: python
 
@@ -554,7 +561,7 @@ the oeprators is still fully parameterisable.
    adj(time=ntime)
 
    # Test prescribed against adjoint source
-   adjoint_test(src.data, srca.data)
+   adjoint_test(src.data, srca.data, rec.data)
 
 
 .. figure:: shot_record.png
