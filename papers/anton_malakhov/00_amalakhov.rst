@@ -1,16 +1,27 @@
 :author: Anton Malakhov
 :email: Anton.Malakhov@intel.com
 :institution: Intel Corporation
-:year: 2016
+:year: 2017
 
-:video: https://youtu.be/kfQcWez2URE
+:author: Anton Gorshkov
+:email: Anton.V.Gorshkov@intel.com
+:institution: Intel Corporation
+:year: 2017
 
------------------------------------------------
-Composable Multi-Threading for Python Libraries
------------------------------------------------
+:author: Terry Wilmarth
+:email: Terry.L.Wilmarth@intel.com
+:institution: Intel Corporation
+:year: 2017
+
+:video: TODO: Add video link
+
+---------------------------------------------------------------------
+Composable Multi-Threading and Multi-Processing for Numeric Libraries
+---------------------------------------------------------------------
 
 .. class:: abstract
 
+   **[TODO: rewrite]**
    Python is popular among numeric communities that value it for easy to use number crunching modules like [NumPy]_, [SciPy]_, [Dask]_, [Numba]_, and many others.
    These modules often use multi-threading for efficient multi-core parallelism in order to utilize all the available CPU cores.
    Nevertheless, their threads can interfere with each other leading to overhead and inefficiency if used together in one application.
@@ -20,7 +31,7 @@ Composable Multi-Threading for Python Libraries
 
 .. class:: keywords
 
-   Multi-threading, Over-subscription, Parallel Computations, Nested Parallelism, Multi-core, Python, GIL, Dask, Joblib, NumPy, SciPy, Numba, TBB
+   Multi-threading, Multi-processing, Over-subscription, Parallel Computations, Nested Parallelism, Multi-core, Python, GIL, Dask, Joblib, NumPy, SciPy, Numba, TBB, OpenMP
 
 .. [NumPy] NumPy, http://www.numpy.org/
 .. [SciPy] SciPy, https://www.scipy.org/
@@ -40,9 +51,10 @@ Python suffers from several issues which make it suboptimal for parallel process
 .. [WTichy]  Walter Tichy, "The Multicore Transformation", Ubiquity, Volume 2014 Issue May, May 2014. DOI: 10.1145/2618393.
              http://ubiquity.acm.org/article.cfm?id=2618393
 
-The parallelism with multiple isolated processes is popular in Python but it is prone to inefficiency due to memory-related overhead.
-On the other hand, multi-threaded parallelism is known to be more efficient but with Python, though it suffers from the limitations of the global interpreter lock [GIL]_, which prevents scaling of Python programs effectively serializing them.
+The parallelism with multiple isolated processes is popular and widely used in Python since it allows to avoid the issues with the Python infamous global interpreter lock [GIL]_, but it is prone to inefficiency due to memory-related overhead.
+On the other hand, multi-threaded parallelism is known to be more efficient but has all the limitations of the GIL, which prevents scaling of Python programs effectively serializing them.
 However, when it comes to numeric computations, most of the time is spent in native code where the GIL can easily be released and programs can scale.
+Thus both multi-processing and multi-threading approaches are valuable for Python users and have its own areas of applicability.
 
 .. [GIL] David Beazley, "Understanding the Python GIL", PyCON Python Conference, Atlanta, Georgia, 2010.
          http://www.dabeaz.com/python/UnderstandingGIL.pdf
@@ -50,7 +62,7 @@ However, when it comes to numeric computations, most of the time is spent in nat
 Scaling parallel programs is not an easy thing.
 There are two fundamental laws which mathematically describe and predict scalability of a program: Amdahl's Law and Gustafson-Barsis' Law [AGlaws]_.
 According to Amdahl's Law, speedup is limited by the serial portion of the work, which effectively puts a limit on scalability of parallel processing for a fixed-size job.
-Python is especially vulnerable to this because it makes the serial part of the same code much slower compared to implementations  in some other languages due to its deeply dynamic and interpretative nature.
+Python is especially vulnerable to this because it makes the serial part of the same code much slower compared to implementations in some other languages due to its deeply dynamic and interpretative nature.
 Moreover, the GIL makes things serial often where they potentially can be parallel, further adding to the serial portion of a program.
 
 .. [AGlaws] Michael McCool, Arch Robison, James Reinders, "Amdahl's Law vs. Gustafson-Barsis' Law", Dr. Dobb's Parallel, October 22, 2013.
@@ -66,8 +78,8 @@ As result, the best strategy to efficiently load a multi-core system is still to
 Nested Parallelism
 ------------------
 One way to do that is to expose parallelism on all the possible levels of an application, for example, by making outermost loops parallel or exploring functional or pipeline types of parallelism on the application level.
-Python libraries that help to achieve this are Dask [Dask]_, Joblib [Joblib]_, and even the built-in :code:`multiprocessing` module [mproc]_ (including its :code:`ThreadPool` class).
-On the innermost level, data-parallelism can be delivered by Python modules like NumPy [Numpy]_ and SciPy [SciPy]_.
+Python libraries that help to achieve this are Dask [Dask]_, Joblib [Joblib]_, and even the built-in :code:`multiprocessing` module [mproc]_ (including its :code:`ThreadPool` and :code:`Pool` classes).
+On the innermost level, data-parallelism can be delivered by Python modules like NumPy [NumPy]_ and SciPy [SciPy]_.
 These modules can be accelerated with an optimized math library like Intel |R| Math Kernel Library (Intel |R| MKL) [MKL]_, which is multi-threaded internally using OpenMP [OpenMP]_ (with default settings).
 
 .. [mproc]  Python documentation on *multiprocessing*, https://docs.python.org/library/multiprocessing.html
@@ -101,37 +113,33 @@ Altogether, the co-existing issues of multi-threaded components define *threadin
 A perfectly composable component should be able to function efficiently among other such components without affecting their efficiency.
 The first aspect of building a composable threading system is to avoid creation of an excessive number of software threads, preventing over-subscription.
 That effectively means that a component and especially a parallel region cannot dictate how many threads it needs for execution (*mandatory parallelism*).
-Instead, it should expose available parallelism to a work scheduler (*optional parallelism*), which is often implemented as a user-level work stealing task scheduler that coordinates tasks between components and parallel regions and map them onto software threads.
+Instead, it should expose available parallelism to a work scheduler (*optional parallelism*), which is often implemented as a user-level task scheduler that coordinates tasks between components and parallel regions and map them onto software threads.
 Since such a task scheduler shares a single thread pool among all the program modules and native libraries, it has to be efficient enough to be attractive for high-performance libraries.
 Otherwise, these libraries will not be able or willing to switch their own threading model to the new scheme.
 
 
-Intel Solution
---------------
+Setting Affinity Masks
+----------------------
+**[TODO: add description]**
+
+
+Serialization of OpenMP Parallel Regions
+----------------------------------------
+**[TODO: add description]**
+
+
+Cross-Process Work Stealing Task Scheduler for Intel |R| TBB
+------------------------------------------------------------
 .. figure:: components.png
 
    Intel |R| Threading Building Blocks is used as a common runtime for different Python modules. :label:`components`
 
-Intel's approach to achieve threading composability is to use Intel |R| Threading Building Blocks (Intel |R| TBB) library as the common work scheduler, see Figure :ref:`components`.
-Intel |R| TBB is an open-source, cross-platform, mature and recognized C++ library for enabling multi-core parallelism.
-It was designed for composability, as well as optional and nested parallelism support.
-
-In the Intel |R| Distribution for Python 2017 Beta and later, as part of Intel |R| TBB release 4.4 Update 5, I introduce an experimental module which unlocks the potential for additional performance for multi-threaded Python programs by enabling threading composability between two or more thread-enabled libraries.
-Thanks to threading composability, it can accelerate programs by avoiding inefficient thread allocation as discussed above.
-
-The TBB module implements a :code:`Pool` class with the standard Python interface using Intel |R| TBB which can be used to replace Python's :code:`ThreadPool`.
-Python allows users to dynamically replace any object (e.g. class or function) at runtime (*monkey patching*).
-Thanks to this technique implemented in class :code:`Monkey`, no source code change is needed in order to enable single thread pool across different Python modules.
-The TBB module also switches Intel |R| MKL to use TBB-based threading layer, which automatically enables composable parallelism [ParUniv]_ for NumPy and SciPy calls.
-
-.. [ParUniv] Vipin Kumar E.K. *A Tale of Two High-Performance Libraries*,
-             The Parallel Universe Magazine, Special Edition, 2016.
-             https://software.intel.com/intel-parallel-universe-magazine
+**[TODO: add description]**
 
 
-Usage example
--------------
-For our first experiment, we need Intel |R| Distribution for Python [IntelPy]_ to be installed along with the Dask [Dask]_ library which simplifies parallelism with Python.
+Balanced QR Decomposition with Dask
+-----------------------------------
+For our experiments, we need Intel |R| Distribution for Python [IntelPy]_ to be installed along with the Dask [Dask]_ library which simplifies parallelism with Python.
 
 .. [IntelPy] Intel(R) Distribution for Python, https://software.intel.com/python-distribution
 
@@ -144,41 +152,30 @@ For our first experiment, we need Intel |R| Distribution for Python [IntelPy]_ t
     # install Dask
     conda install dask
 
-The code below is a simple program using NumPy that validates QR decomposition by multiplying computed components and comparing the result against the original input:
-
-.. code-block:: python
-    :linenos:
-
-    import time, numpy as np
-    x = np.random.random((100000, 2000))
-    t0 = time.time()
-    q, r = np.linalg.qr(x)
-    test = np.allclose(x, q.dot(r))
-    assert(test)
-    print(time.time() - t0)
-
-And here is the same program using Dask:
+The code below is a simple program using Dask that validates QR decomposition by multiplying computed components and comparing the result against the original input:
 
 .. code-block:: python
     :linenos:
 
     import time, dask, dask.array as da
-    x = da.random.random((100000, 2000),
-                   chunks=(10000, 2000))
-    t0 = time.time()
-    q, r = da.linalg.qr(x)
-    test = da.all(da.isclose(x, q.dot(r)))
-    assert(test.compute()) # threaded
-    print(time.time() - t0)
+    x = da.random.random((440000, 1000), chunks=(10000, 1000))
+    for i in range(3):
+        t0 = time.time()
+        q, r = da.linalg.qr(x)
+        test = da.all(da.isclose(x, q.dot(r)))
+        test.compute(num_workers=44)
+        print(time.time() - t0)
 
-Here, Dask splits the array into 10 chunks and processes them in parallel using multiple threads.
+Here, Dask splits the array into 44 chunks and processes them in parallel using multiple threads.
 However, each Dask task executes the same NumPy matrix operations which are accelerated using Intel |R| MKL under the hood and thus multi-threaded by default.
 This combination results in nested parallelism, i.e. when one parallel component calls another component, which is also threaded.
 
-The reason why the Dask version was set to have only 10 tasks is to model real-life applications with limited parallelism on the outermost level, which is quite typical for functional and pipeline types of parallelism.
+**[TODO: rewrite]**
+The reason why the Dask version was set to have only 44 tasks is to model real-life applications with limited parallelism on the outermost level, which is quite typical for functional and pipeline types of parallelism.
 Such cases might benefit the most from enabling parallelism at inner levels of the code.
 In the case when the top-level parallelism can load all the available cores and is well-balanced, nested parallelism is not that likely to improve performance (but can make it much worse without a composable threading solution).
 
+**[TODO: rewrite]**
 Here is an example of running the benchmark program in three different modes:
 
 .. code-block:: sh
@@ -188,11 +185,8 @@ Here is an example of running the benchmark program in three different modes:
     OMP_NUM_THREADS=1 python bench.py # Serial MKL
     python -m TBB bench.py            # Intel TBB mode
 
-.. figure:: dask_qr_bench.png
-   
-   Execution times for QR validation example. :label:`qrpic`
-
-Figure :ref:`qrpic` shows performance results acquired on a 32-core (no hyper-threading) machine with 64GB memory. The results presented here were acquired with cpython v3.5.1; however, there is no performance difference with cpython v2.7.1.
+**[TODO: rewrite]**
+Figure SOME shows performance results acquired on a 32-core (no hyper-threading) machine with 64GB memory. The results presented here were acquired with cpython v3.5.1; however, there is no performance difference with cpython v2.7.1.
 The Dask version runs slower than the NumPy version with the default setting because 10 outermost tasks end up calling 10 OpenMP-based parallel regions that create 10 times more threads than available hardware resources.
 
 The second command runs this benchmark with innermost OpenMP parallelism disabled.
@@ -209,96 +203,29 @@ This happens because the Dask version exposes more parallelism to the system wit
 .. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
 
 
-Case study
-----------
-The previous example was intentionally selected to be small enough to fit into this paper with all the sources.
-Here is another case study [FedLitC]_ that is closer to real-world applications.
-It implements a recommendation system similar to the ones used on popular web-sites for generating suggestions for the next application to download or the next movie to watch.
-However, the core of the algorithm is still quite simple and spends most of the time in matrix multiplication.
-Figure :ref:`casestudy` shows results collected on an older machine with a bigger number of cores.
-
-.. [FedLitC] Alexey Fedotov, Vasilij Litvinov, "Faster, Python!" (in Russian), CodeFest, Novosibirsk, 2016
-             http://2016.codefest.ru/lecture/1117
-.. figure:: case_study.png
-
-    Case study results: Generation of User Recommendations. :label:`casestudy`
-
-The leftmost result in Figure :ref:`casestudy` was acquired on pure, non-accelerated Python that comes by default on Fedora 23.
-It is used as the base of comparison.
-Running the same application without modifications with Intel |R| Distribution for Python results in a 17 times speedup.
-One reason for this performance increase is that Intel |R| MKL runs computations in parallel.
-Thus, for the sake of experiment, outermost parallelism was implemented on the application level processing different user requests in parallel.
-For the same system-default python, the new version helped to close the gap with the MKL-based version though not completely: executing 15 times faster than the base.
-However, running the same parallel application with the Intel Distribution resulted in worse performance (11x).
-This is explained by overhead induced by over-subscription.
-
-In order to remove overhead, the previous experiment was executed with the TBB module on the command line.
-It results in the best performance for the application - 27 times speedup over the base.
+Balanced Eignevalues Search with NumPy
+--------------------------------------
+**[TODO: add text]**
 
 
-Numba
------
-NumPy and SciPy provide a rich but fixed set of mathematical instruments accelerated with C extensions.
-However, sometimes one might need non-standard math to be as fast as C extensions.
-That's where Numba [Numba]_ can be efficiently used.
-Numba is a Just-In-Time compiler (JIT) based on LLVM [LLVM]_.
-It aims to close the gap in performance between Python and statically typed, compiled languages like C/C++, which also have popular implementation based on LLVM.
-
-.. [LLVM] The LLVM Compiler Infrastructure, http://llvm.org/
-
-Numba implements the notion of universal functions (ufunc, a scalar function which can be used for processing arrays as well) defined in SciPy [ufunc]_ and extends it to a computation kernel that can be not only mapped onto arrays but can also spread the work across multiple cores.
-The original Numba version implements it using a pool of native threads and a simple work-sharing scheduler, which coordinates work distribution between them.
-If used in a parallel numeric Python application, it adds a third thread pool to the existing threading mess described in previous sections.
-Thus, our strategy was to put it on top of the common Intel |R| TBB runtime as well.
-
-.. [ufunc] Universal functions (ufunc), SciPy documentation
-           http://docs.scipy.org/doc/numpy/reference/ufuncs.html
-
-The original version of Numba's multi-threading runtime was replaced with a very basic and naive implementation based on TBB tasks.
-Nevertheless, even without nested parallelism and advanced features of Intel |R| TBB such as work partitioning algorithms, it resulted in improved performance.
-
-Figure :ref:`numbatbb` shows how original Numba and TBB-based versions perform with the Black Scholes [BSform]_ benchmark implemented with Numba.
-Whether the problem size is small or big, they work at almost the same speed.
-However, TBB-based Numba performs up to 3 or 4 times faster for the problem sizes in between.
-
-The following code is a simplified version of this benchmark that gives an idea how to write parallel code using Numba:
-
-.. [BSform] Fischer Black, Myron Scholes, "The Pricing of Options and Corporate Liabilities", Journal of Political Economy 81 (3) 1973: 637-654. doi:10.1086/260062
-
-.. code-block:: python
-    :linenos:
-
-    import numba as nb, numpy.random as rng
-    from math import sqrt, log, erf, exp
-
-    @nb.vectorize('(f8,f8,f8,f8,f8)',target='parallel')
-    def BlackScholes(S, X, T, R, V):
-        VqT = V * sqrt(T)
-        d1 = (log(S / X) + (R + .5*V*V) * T) / VqT
-        d2 = d1 - VqT
-        n1 = .5 + .5 * erf(d1 * 1./sqrt(2.))
-        n2 = .5 + .5 * erf(d2 * 1./sqrt(2.))
-        eRT  = exp(-R * T)
-        return S * n1 - X * eRT * n2 # Call price
-        # Put price = (X * eRT * (1.-n2) - S * (1.-n1))
-
-    price  = rng.uniform(10., 50., 10**6) # array
-    strike = rng.uniform(10., 50., 10**6) # array
-    time   = rng.uniform(1.0, 2.0, 10**6) # array
-    BlackScholes(price, strike, time, .1, .2)
+Unbalanced QR Decomposition with Dask
+-------------------------------------
+**[TODO: add text]**
 
 
-Here is the scalar function :code:`BlackScholes`, consisting of many elementary and transcendental operations, which is applied (*broadcasted*) by Numba to every element of the input arrays.
-Additionally, :code:`target='parallel'` specifies to run the computation using multiple threads.
-The real benchmark also computes the put price using :code:`numba.guvectorize`, uses an approximated function instead of :code:`erf()` for better SIMD optimization, optimizes the sequence of math operations for speed, and repeats the calculation multiple times.
+Unbalanced Eigenvalues Search with NumPy
+----------------------------------------
+**[TODO: add text]**
 
-.. figure:: numba_tbb.png
 
-    Black Scholes benchmark running with Numba on 32 threads. :label:`numbatbb`
+Solutions Applicability
+-----------------------
+**[TODO: add text]**
 
 
 Limitations and Future Work
 ---------------------------
+**[TODO: rewrite]**
 Intel |R| TBB does not work well for blocking I/O operations because it limits the number of active threads.
 It is applicable only for tasks, which do not block in the operating system.
 If your program uses blocking I/O, please consider using asynchronous I/O that blocks only one thread for the event loop and so prevents other threads from being blocked.
@@ -324,6 +251,7 @@ Therefore, the solution for that can be as simple as "Global OpenMP Lock" (GOL) 
 
 Conclusion
 ----------
+**[TODO: rewrite]**
 This paper starts with substantiating the necessity of broader usage of nested parallelism for multi-core systems.
 Then, it defines threading composability and discusses the issues of Python programs and libraries which use nested parallelism with multi-core systems, such as GIL and over-subscription.
 These issues affect performance of Python programs that use libraries like NumPy, SciPy, Dask, and Numba.
