@@ -127,7 +127,7 @@ scientific software stack in the Python ecosystem. In addition, to
 accommodate the needs of "real life" scientific applications, a
 secondary API is provided that enables users to inject custom
 expressions, such as boundary conditions or sparse point
-interpolation, into the generate kernels.
+interpolation, into the generated kernels.
 
 Moreover, the use of SymPy as the driver for the symbolic generation
 of stencil expressions and the subsequent code-generation are at the
@@ -202,7 +202,7 @@ a timestepping scheme. For this purpose Devito provides so-called
 differentiable in space and time. With this we can either derive
 symbolic expressions for the backward derivatives directly via the
 :code:`first_derivative` utility, or use the shorthand notation
-:code:`u.dt` provided by :code:`TimeData` objects toe derive the
+:code:`u.dt` provided by :code:`TimeData` objects to derive the
 forward derivative in time.
 
 .. code-block:: python
@@ -224,14 +224,15 @@ forward derivative in time.
 
 The above expression results in a :code:`sympy.Equation` object that
 contains the fully discretised form of Eq. :ref:`2dconvection`,
-including placeholder symbols for grid spacing in space (:code:`h`)
-and time (:code:`s`). These spacing symbols will be resolved during
-the code generation process, as described in the `code generation
-section`_. It is also important to note here that the explicit
-generation of the space derivatives :code:`u_dx` and :code:`u_dy` is
-due to the use of a backward derivative in space to align with the
-original example. A similar notation to the forward derivative in time
-(:code:`u.dt`) will soon be provided.
+including placeholder symbols for grid spacing in space (:code:`h`,
+assuming :math:`\Delta x = \Delta y`) and time (:code:`s`). These
+spacing symbols will be resolved during the code generation process,
+as described in the `code generation section`_. It is also important
+to note here that the explicit generation of the space derivatives
+:code:`u_dx` and :code:`u_dy` is due to the use of a backward
+derivative in space to align with the original example. A similar
+notation to the forward derivative in time (:code:`u.dt`) will soon be
+provided.
 
 In order to create a functional :code:`Operator` object, the
 expression :code:`eq` needs to be re-arranged so that we may solve for
@@ -399,9 +400,13 @@ the state update expression to create our :code:`Operator` object.
                  subs={h: dx, a: 1.})
 
 After building the operator, we can now use it in a time-independent
-convergence loop, but we do need to make sure we switch between
-buffers. The according initial condition and the resulting steady-state
-solution are depicted in Figures :ref:`fig2dlaplace` and
+convergence loop. However, in this example we need to make sure to
+explicitly exchange the role of the buffers :code:`p` and :code:`pn`.
+This can be achieved by supplying symbolic data objects via keyword
+arguments when invoking the operator, where the name of the argument
+is matched against the name of the original symbol used to create the
+operator. The according initial condition and the resulting
+steady-state solution are depicted in Figures :ref:`fig2dlaplace` and
 :ref:`fig2dlaplacefinal` respectively.
 
 .. code-block:: python
@@ -440,18 +445,19 @@ solution are depicted in Figures :ref:`fig2dlaplace` and
 Seismic Inversion Example
 -------------------------
 
-The primary motivating application behind the design of Devito are
-seismic exploration problems that require highly optimised wave
-propagation operators for forward modelling and adjoint-based
-inversion. Obviously, the speed and accuracy of the generated kernels
-is of vital importance. Moreover, the ability to efficiently define rigorous
-forward modelling and adjoint operators from high-level symbolic
-definitions also implies that domain scientists are able to quickly
-adjust the numerical method and discretisation to the individual problem
-and hardware architecture [Louboutin17a]_. In the following example we will
-demonstrate the generation of forward and adjoint operators for the
-acoustic wave equation to implement the so-called adjoint test. The
-governing equation is defined as
+The primary motivating application behind the design of Devito is
+the solution of seismic exploration problems that require highly
+optimised wave propagation operators for forward modelling and
+adjoint-based inversion. Obviously, the speed and accuracy of the
+generated kernels are of vital importance. Moreover, the ability to
+efficiently define rigorous forward modelling and adjoint operators
+from high-level symbolic definitions also implies that domain
+scientists are able to quickly adjust the numerical method and
+discretisation to the individual problem and hardware architecture
+[Louboutin17a]_. In the following example we will demonstrate the
+generation of forward and adjoint operators for the acoustic wave
+equation to implement the so-called adjoint test. The governing
+equation is defined as
 
 .. math::
     m \frac{\partial^2 u}{\partial t^2}
@@ -473,7 +479,7 @@ symbolic objects provide utility routines
 expression)` to create symbolic expressions that perform linear
 interpolation between the sparse points and the cartesian grid for
 insertion into :code:`Operator` kernels. A separate set of explicit
-coordinate values are associated with the sparse point objects for
+coordinate values is associated with the sparse point objects for
 this purpose in addition to the function values stored in the
 :code:`data` property.
 
@@ -484,7 +490,7 @@ The first step for implementing the adjoint test is to build a forward
 operator that models the wave propagating through an isotropic
 medium, where the square slowness of the wave is denoted as :math:`m`.
 Since :code:`m`, as well as the boundary dampening function
-:code:`eta`, are re-used between forward and adjoint runs the only
+:code:`eta`, is re-used between forward and adjoint runs the only
 symbolic data object we need to create here is the wavefield :code:`u`
 in order to implement and re-arrange our discretised equation
 :code:`eqn` to form the update expression for :code:`u`.
