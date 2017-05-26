@@ -147,10 +147,10 @@ Fluid Dynamics Examples
 
 In the following section we are going to demonstrate the use of the
 Devito API to implement two examples from classical fluid dynamics,
-before demonstrating Devito operators in a seismic inversion context.
-Both CFD examples are based in part on tutorials from the introductory
-blog "CFD Python: 12 steps to Navier-Stokes"[#]_ by the
-Lorena A. Barba group.
+before highlighting the role of Devito operators in a seismic
+inversion context.  Both CFD examples are based in part on tutorials
+from the introductory blog "CFD Python: 12 steps to Navier-Stokes"[#]_
+by the Lorena A. Barba group.
 
 .. [#] http://lorenabarba.com/blog/cfd-python-12-steps-to-navier-stokes/
 
@@ -184,8 +184,12 @@ denote the spacing in time and space dimensions respectively.
 
 The first thing we need is a function object with which we can build
 a timestepping scheme. For this purpose Devito provides so-called
-:code:`TimeData` objects that encapsulate functions that are differentiable
-in space and time.
+:code:`TimeData` objects that encapsulate functions that are
+differentiable in space and time. With this we can either derive
+symbolic expressions for the backward derivatives directly via the
+:code:`first_derivative` utility, or use the shorthand notation
+:code:`u.dt` provided by :code:`TimeData` objects toe derive the
+forward derivative in time.
 
 .. code-block:: python
 
@@ -206,14 +210,14 @@ in space and time.
 
 The above expression results in a :code:`sympy.Equation` object that
 contains the fully discretised form of Eq. :ref:`2dconvection`,
-including placeholder symbols for spacing in space (:code:`h`) and
-time (:code:`s`). These spacing symbols will be resolved during the
-code generation process, as described in the `code generation section`_. It is also
-important to note here that the explicit generation of the space
-derivatives :code:`u_dx` and :code:`u_dy` is due to the use of a
-backward derivative in space to align with the original example. A
-similar notation to the forward derivative in time (:code:`u.dt`) will
-soon be provided.
+including placeholder symbols for grid spacing in space (:code:`h`)
+and time (:code:`s`). These spacing symbols will be resolved during
+the code generation process, as described in the `code generation
+section`_. It is also important to note here that the explicit
+generation of the space derivatives :code:`u_dx` and :code:`u_dy` is
+due to the use of a backward derivative in space to align with the
+original example. A similar notation to the forward derivative in time
+(:code:`u.dt`) will soon be provided.
 
 In order to create a functional :code:`Operator` object, the
 expression :code:`eq` needs to be re-arranged so that we may solve for
@@ -258,8 +262,8 @@ tutorial by initialising the data associated with the symbolic function
 .. math::
    :type: eqnarray
 
-   2\ \text{for}\ 0.5 \leq x, y \leq 1 \\
-   1\ \text{everywhere else}
+   2\ &\text{for}\ 0.5 \leq x, y \leq 1 \\
+   1\ &\text{everywhere else}
 
 .. figure:: 2dconv_init.png
    :scale: 42%
@@ -317,8 +321,6 @@ demonstration purposes we will use two separate function objects
 of type :code:`DenseData` in this example, since the Laplace equation
 does not contain a time-dependence.
 
-*<Some words on the BC types and the definition of the prescibed BC>*
-
 .. code-block:: python
 
    # Create two separate symbols with space dimensions
@@ -327,20 +329,54 @@ does not contain a time-dependence.
    pn = DenseData(name='pn', shape=(nx, ny),
                   space_order=2)
 
-   # Create an additional symbol for our prescibed BC
-   bc_right = DenseData(name='bc_right', shape=(nx, ),
-                        dimensions=(x, ))
-   bc_right.data[:] = np.linspace(0, 1, nx)
-
-   # Define equation and sovle for the central point
+   # Define equation and solve for center point in `pn`
    eq = Eq(a * pn.laplace)
    stencil = solve(eq, pn)[0]
    # The update expression to populate buffer `p`
    eq_stencil = Eq(p, stencil)
 
+Just as the original tutorial, our initial condition in this example
+is :math:`p = 0` and the flow will be driven by the boundary
+conditions
+
+.. math::
+   :type: eqnarray
+
+   p=0\ &\text{at}\ x=0\\
+   p=y\ &\text{at}\ x=2\\
+   \frac{\partial p}{\partial y}=0\ &\text{at}\ y=0,\ 1
+
+To implement these BCs we can utilise the :code:`.indexed` property
+that Devito symbols provide to get a symbol of type
+:code:`sympy.IndexedBase`, which in turn allows us to use matrix
+indexing notation (square brackets) to create symbols of type
+:code:`sympy.Indexed` instead of :code:`sympy.Function`. This notation
+allows users to hand-code stencil expressions using explicit relative
+grid indices, for example :code:`p[x, y] - p[x-1, y] / h` for the
+discretized backward derivative :math:`\frac{\partial u}{\partial x}`.
+The symbols :code:`x` and :code:`y` hereby represent the respective
+problem dimensions and cause the expression to be executed over the
+entire data dimension, similar to Python's :code:`:` operator.
+
+The Dirichlet BCs in the Laplace example can thus be implemented by
+creating a :code:`sympy.Eq` object that assign either fixed values or
+a prescribed function, such as the utility symbol :code:`bc_top` in or
+example, along the top and bottom boundary of our domain. To implement
+the Neumann BCs we again follow the original tutorial by assigning the
+second grid column from the side boundaries the value of the outermost
+column. The resulting SymPy expressions can then be used alongside
+the state update expression to create our :code:`Operator` object.
+
+.. code-block:: python
+
+   # Create an additional symbol for our prescibed BC
+   bc_top = DenseData(name='bc_top', shape=(nx, ),
+                      dimensions=(x, ))
+   bc_top.data[:] = np.linspace(0, 1, nx)
+
    # Create explicit boundary condition expressions
    bc = [Eq(p.indexed[x, 0], 0.)]
-   bc += [Eq(p.indexed[x, ny-1], bc_right.indexed[x])]
+   bc += [Eq(p.indexed[x, ny-1], bc_top.indexed[x])]
    bc += [Eq(p.indexed[0, y], p.indexed[1, y])]
    bc += [Eq(p.indexed[nx-1, y], p.indexed[nx-2, y])]
 
@@ -349,7 +385,10 @@ does not contain a time-dependence.
                  subs={h: dx, a: 1.})
 
 After building the operator, we can now use it in a time-independent
-conversion loop, but we do need to make sure we switch between buffers.
+convergence loop, but we do need to make sure we switch between
+buffers. The according initial condition and the resulting steady-state
+solution are depicted in Figures :ref:`fig2dlaplace` and
+:ref:`fig2dlaplacefinal` respectively.
 
 .. code-block:: python
 
@@ -375,12 +414,14 @@ conversion loop, but we do need to make sure we switch between buffers.
 .. figure:: 2dlaplace_init.png
    :scale: 42%
 
-   Initial condition of :code:`pn.data` in the 2D Laplace example.
+   Initial condition of :code:`pn.data` in the 2D Laplace
+   example. :label:`fig2dlaplace`
 
 .. figure:: 2dlaplace_final.png
    :scale: 42%
 
-   State of :code:`p.data` after convergence in Laplace example.
+   State of :code:`p.data` after convergence in Laplace
+   example. :label:`fig2dlaplacefinal`
 
 Seismic Inversion Example
 -------------------------
@@ -441,12 +482,12 @@ two additional terms into the forward modelling operator:
   according to a prescribed time series stored in :code:`src.data`
   that is accessible in symbolic form via the symbol :code:`src`.
   The scaling factor in :code:`src_term` is coded by hand but can 
-  be automatically inferred. **[ADD LINE NUMBERS]**
+  be automatically inferred.
 
 * :code:`rec_term` adds the expression to interpolate the wavefield
   :code:`u` for a set of "receiver" hydrophones that measure the
-  propagated wave at a varying distances from the source for every
-  time step. The resulting interpolated point data will be stored in
+  propagated wave at varying distances from the source for every time
+  step. The resulting interpolated point data will be stored in
   :code:`rec.data` and is accessible to the user as a NumPy array.
 
 .. code-block:: python
@@ -566,14 +607,14 @@ the oeprators is still fully parameterisable.
    adj(time=ntime)
 
    # Test prescribed against adjoint source
-   adjoint_test(src.data, srca.data, rec.data)
+   adjoint_test(src.data, srca.data)
 
 
 .. figure:: shot_record.png
    :scale: 50%
 
-   *<Shot record of the measured point values in
-   :code:`rec.data`.>* :label:`figshotrecord`
+   Shot record of the measured point values in :code:`rec.data` after
+   the forward run. :label:`figshotrecord`
 
 The adjoint test is the core definition of the adjoint of a linear
 operator. The mathematical correctness of the adjoint is required for
