@@ -53,14 +53,14 @@ to solve leading edge scientific problems, since domain specialists as
 well as high performance computing experts are required to fully
 leverage modern computing architectures. Based on this philosophy we
 introduce Devito, an open-source domain-specific framework for solving
-partial differential equations from symbolic problem definitions by
-the finite difference method.
+partial differential equations (PDE) from symbolic problem definitions
+by the finite difference method.
 
 Symbolic computation, where optimized numerical code is automatically
 derived from a high-level problem definition, is a powerful technique
 that allows domain scientists to focus on algorithmic development
 rather than implementation details. For this reason Devito exposes an
-API based on Python (SymPy) [Meuer17]_ that allow users to express
+API based on Python (SymPy) [Meurer17]_ that allow users to express
 equations symbolically, from which it generates and executes optimized
 stencil code via just-in-time (JIT) compilation. Using latest advances
 in stencil compiler research, Devito thus provides domain scientists
@@ -82,8 +82,21 @@ achieved by the auto-generated and optimised code.
 Background
 ----------
 
-*<Embedded DSLs in Python, including Fenics/UFL and Firedrake, leading
-to the power of symbolic adjoint computation.>*
+The attraction of using domain-specific languages to generically
+solve PDEs via a high-level mathematical notation is by no means new
+and has lead to various purpose-built software packages and compilers
+dating back to 1962 [Iverson62]_, [Cardenas70]_ [Umetani85]_ [Cook88]_
+[VanEngelen96]_. Following the emergence of Python as widely used
+programming language in scientific research, embedded DSLs for more
+specialised domains came to the fore, most notably the FEniCS
+[Logg12]_ and Firedrake [Rathgeber16]_ frameworks that both implement
+the unified Form Language (UFL) [Alnaes14]_ for the symbolic
+definition of finite element problems in the weak form. The increased
+level of abstraction that such high-level languages provide decouples
+the problem definition from its implementation, thus allowing domain
+scientists and mathematicians to focus on more advanced methods, such
+as the automation of adjoint models as demonstrated by Dolfin-Adjoint
+[Farrell13]_.
 
 *<Use of DSLs for FD and stencil optimisation frameworks.>*
 
@@ -195,7 +208,7 @@ The above expression results in a :code:`sympy.Equation` object that
 contains the fully discretised form of Eq. :ref:`2dconvection`,
 including placeholder symbols for spacing in space (:code:`h`) and
 time (:code:`s`). These spacing symbols will be resolved during the
-code generation process, as described in **FORWARD-REF**. It is also
+code generation process, as described in the `code generation section`_. It is also
 important to note here that the explicit generation of the space
 derivatives :code:`u_dx` and :code:`u_dy` is due to the use of a
 backward derivative in space to align with the original example. A
@@ -380,7 +393,7 @@ is of vital importance. Moreover, the ability to efficiently define rigorous
 forward modelling and adjoint operators from high-level symbolic
 definitions also implies that domain scientists are able to quickly
 adjust the numerical method and discretisation to the individual problem
-and hardware architecture **[CITE]**. In the following example we will
+and hardware architecture [Louboutin17a]_. In the following example we will
 demonstrate the generation of forward and adjoint operators for the
 acoustic wave equation to implement the so-called adjoint test. The
 governing equation is defined as
@@ -428,8 +441,7 @@ two additional terms into the forward modelling operator:
   according to a prescribed time series stored in :code:`src.data`
   that is accessible in symbolic form via the symbol :code:`src`.
   The scaling factor in :code:`src_term` is coded by hand but can 
-  be automatically inferred.
-   **[ADD LINE NUMBERS]**
+  be automatically inferred. **[ADD LINE NUMBERS]**
 
 * :code:`rec_term` adds the expression to interpolate the wavefield
   :code:`u` for a set of "receiver" hydrophones that measure the
@@ -480,14 +492,7 @@ Instead of injecting the source term, we are now injecting the
 previously recorded receiver values into the adjoint wavefield, while
 we are interpolating the resulting wave at the original source
 location. As the injection and interpolations are part of the kernel, 
-we also insure that these two are adjoints of each other. The adjoint 
-test is the core definition of the adjoint of a linear operator. The 
-mathematical correctness of the adjoint is required for mathematical 
-adjoint-based optimisations methods that are only guarantied to converged 
-with the correct adjoint. The test can be written as:
-
-.. math::
-   <src, adjoint(rec)> = <forward(src), rec>
+we also insure that these two are adjoints of each other.
 
 .. code-block:: python
 
@@ -570,12 +575,21 @@ the oeprators is still fully parameterisable.
    *<Shot record of the measured point values in
    :code:`rec.data`.>* :label:`figshotrecord`
 
-The above test can be used to verify the accuracy of the forward
-propagation and adjoint operators and has been shown to agree for
-2D and 3D implementations **[CITE]**. The shot record of the data
-measured at the receiver locations after the forward run is shown
-in :ref:`figshotrecord`.
+The adjoint test is the core definition of the adjoint of a linear
+operator. The mathematical correctness of the adjoint is required for
+mathematical adjoint-based optimisations methods that are only
+guarantied to converged with the correct adjoint. The test can be
+written as:
 
+.. math:: <src,\ adjoint(rec)> = <forward(src),\ rec>
+
+The adjoint test can be used to verify the accuracy of the forward
+propagation and adjoint operators and has been shown to agree for 2D
+and 3D implementations [Louboutin17b]_. The shot record of the data
+measured at the receiver locations after the forward run is shown in
+:ref:`figshotrecord`.
+
+.. _`code generation section`:
 
 Automated code generation
 -------------------------
@@ -653,7 +667,7 @@ backend presents a highly modular structure, with each transformation pass
 taking as input an AST and returning a new, different AST. One of the reasons
 behind this software engineering strategy, which is clearly more challenging than a
 template-based solution, is to ease the integration of external tools. One such
-tool is the YASK stencil optimizer **[CITE]**. We are currently integrating
+tool is the YASK stencil optimizer [Yount16]_. We are currently integrating
 YASK within the DLE; YASK will replace some (but not all) of the existing DLE
 passes.
 
@@ -687,7 +701,48 @@ Discussion
 
 References
 ----------
-.. [Meuer17] Meurer A, Smith CP, Paprocki M, Čertík O, Kirpichev SB,
+
+.. [Alnaes14] M. S. Alnæs, A. Logg, K. B. Ølgaard, M. E. Rognes,
+              and G. N.  Wells, “Unified Form Language: a
+              domain-specific language for weak formulations of
+              partial differential equations,” ACM Transactions on
+              Mathematical Software (TOMS), vol. 40,
+              no. 2, p. 9, 2014.
+
+.. [Cardenas70] Cárdenas, A. F. and Karplus, W. J.: PDEL -- a language
+                for partial differential equations, Communications of
+                the ACM, 13, 184–191, 1970.
+
+.. [Cook88] Cook Jr, G. O.: ALPAL: A tool for the development of
+            large-scale simulation codes, Tech. rep., Lawrence
+            Livermore National Lab., CA (USA), 1988.
+
+.. [Farrell13] Farrell, P. E., Ham, D. A., Funke, S. W., and
+               Rognes, M. E.: Automated Derivation of the Adjoint of
+               High-Level Transient Finite Element Programs, SIAM
+               Journal on Scientific Computing, 35, C369–C393,
+               doi:10.1137/120873558,
+               http://dx.doi.org/10.1137/120873558, 2013.
+
+.. [Iverson62] Iverson, K.: A Programming Language, Wiley, 1962.
+
+.. [Logg12] Logg, A., Mardal, K.-A., Wells, G. N., et al.: Automated
+            Solution of Differential Equations by the Finite Element
+            Method, Springer, doi:10.1007/978-3-642-23099-8, 2012.
+
+.. [Louboutin17a] Louboutin, M., Lange, M., Herrmann, F. J., Kukreja,
+                  N., and Gorman, G.: Performance prediction of
+                  finite-difference solvers for different computer
+                  architectures, Computers Geosciences, 105, 148--157,
+                  https://doi.org/10.1016/j.cageo.2017.04.014, 2017.
+
+.. [Louboutin17b] M. Louboutin, M. Lange, F. Luporini, N. Kukreja, F. Herrmann,
+                  P. Velesko, and G. Gorman: Code generation from
+                  symbolic finite-difference for geophysical
+                  exploration. In preparation for Geoscientific Model
+                  Development (GMD), 2017.
+
+.. [Meurer17] Meurer A, Smith CP, Paprocki M, Čertík O, Kirpichev SB,
              Rocklin M, Kumar A, Ivanov S, Moore JK, Singh S,
              Rathnayake T, Vig S, Granger BE, Muller RP, Bonazzi F,
              Gupta H, Vats S, Johansson F, Pedregosa F, Curry MJ,
@@ -695,3 +750,39 @@ References
              Cimrman R, Scopatz A. (2017) SymPy: symbolic computing in
              Python. PeerJ Computer Science 3:e103
              https://doi.org/10.7717/peerj-cs.103
+
+.. [Rathgeber16] Rathgeber, F., Ham, D. A., Mitchell, L., Lange, M.,
+                 Luporini, F., McRae, A. T. T., Bercea, G.,
+                 Markall, G. R., and Kelly, P. H. J.: Firedrake:
+                 automating the finite element method by composing
+                 abstractions. ACM Trans. Math. Softw.,
+                 43(3):24:1–24:27, 2016. URL:
+                 http://arxiv.org/abs/1501.01809, arXiv:1501.01809,
+                 doi:10.1145/2998441.
+
+.. [Umetani85] Umetani, Y.: DEQSOL A numerical Simulation Language for
+               Vector/Parallel Processors, Proc. IFIP TC2/WG22, 1985, 5,
+               147–164, 1985.
+
+.. [VanEngelen96] R. Van Engelen, L. Wolters, and G. Cats, “Ctadel: A
+                  generator of multi-platform high performance codes
+                  for pde-based scientific applications,” in
+                  Proceedings of the 10th international conference on
+                  Supercomputing. ACM, 1996, pp. 86–93.
+
+.. [Yount15] C. Yount, "Vector Folding: Improving Stencil Performance
+             via Multi-dimensional SIMD-vector Representation," 2015
+             IEEE 17th International Conference on High Performance
+             Computing and Communications, 2015 IEEE 7th International
+             Symposium on Cyberspace Safety and Security, and 2015
+             IEEE 12th International Conference on Embedded Software
+             and Systems, New York, NY, 2015, pp. 865-870.
+             https://doi.org/10.1109/HPCC-CSS-ICESS.2015.27
+
+.. [Yount16] C. Yount, J. Tobin, A. Breuer and A. Duran, "YASK—Yet
+             Another Stencil Kernel: A Framework for HPC Stencil
+             Code-Generation and Tuning," 2016 Sixth International
+             Workshop on Domain-Specific Languages and High-Level
+             Frameworks for High Performance Computing (WOLFHPC), Salt
+             Lake City, UT, 2016, pp. 30-39.
+             https://doi.org/10.1109/WOLFHPC.2016.08
