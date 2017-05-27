@@ -409,6 +409,10 @@ operator. The according initial condition and the resulting
 steady-state solution are depicted in Figures :ref:`fig2dlaplace` and
 :ref:`fig2dlaplacefinal` respectively.
 
+.. raw:: latex
+
+   \pagebreak
+
 .. code-block:: python
 
    l1norm = 1
@@ -487,13 +491,17 @@ Adjoint Test
 ~~~~~~~~~~~~
 
 The first step for implementing the adjoint test is to build a forward
-operator that models the wave propagating through an isotropic
-medium, where the square slowness of the wave is denoted as :math:`m`.
-Since :code:`m`, as well as the boundary dampening function
-:code:`eta`, is re-used between forward and adjoint runs the only
-symbolic data object we need to create here is the wavefield :code:`u`
-in order to implement and re-arrange our discretised equation
-:code:`eqn` to form the update expression for :code:`u`.
+operator that models the wave propagating through an isotropic medium,
+where the square slowness of the wave is denoted as :math:`m`.  Since
+:code:`m`, as well as the boundary dampening function :code:`eta`, is
+re-used between forward and adjoint runs the only symbolic data object
+we need to create here is the wavefield :code:`u` in order to
+implement and re-arrange our discretised equation :code:`eqn` to form
+the update expression for :code:`u`. It is worth noting that the
+:code:`u.laplace` shorthand notation used here expands to the set of
+second derivatives in all spatial dimensions, thus making allowing us
+to use the same formulation for two-dimensional and three-dimensional
+problems.
       
 In addition to the state update of :code:`u`, we are also inserting
 two additional terms into the forward modelling operator:
@@ -648,7 +656,7 @@ The adjoint test can be used to verify the accuracy of the forward
 propagation and adjoint operators and has been shown to agree for 2D
 and 3D implementations [Louboutin17b]_. The shot record of the data
 measured at the receiver locations after the forward run is shown in
-:ref:`figshotrecord`.
+Figure :ref:`figshotrecord`.
 
 .. _`code generation section`:
 
@@ -701,23 +709,56 @@ into two distinct sub-modules:
 Performance Benchmark
 ~~~~~~~~~~~~~~~~~~~~~
 
-<*Hardware spec for (Endeavour?) Broadwell nodes.>*
+The effectiveness of the automated performance optimisation performed
+by the Devito backend engines can be demonstrated using the forward
+operator constructed in the above example. The following performance
+benchmarks were run with for a three-dimensional grid of size
+:math:`512\times512\times512` with varying spatial discretisations
+resulting in different stencil sizes with increasing operational
+intensity (OI). The benchmark runs were performed on on a Intel(R)
+Xeon E5-2620 v4 2.1Ghz "Broadwell" CPU with a single memory socket and
+8 cores per socket and the slope of the roofline models was derived
+using the Stream Triad benchmark.
+
+The first set of benchmark results, shown in Figure :ref:`figperfdle`,
+demonstrates the performance gains achieved through loop-level
+optimisations. For these runs the symbolic optimisations were kept at
+a "basic" settings, where only common sub-expressions elimination is
+performed on the kernel expressions. Of particular interest are the
+performance gains achieved by increasing the loop engine mode from
+"basic" to "advanced", to insert loop blocking and explicit
+vectorization directives into the generated code. Due to the improved
+memory bandwidth utilization the performance increased to between
+52% and 74% of the achievable peak. It is also worth noting that more
+aggressive optimisation in the "speculative" DLE mode, directives for
+non-temporal stores and row-wise data alignment through additional
+padding, did not yield any consistent improvements due to the low OI
+inherent to the acoustic formulation of the wave equation and the
+subsequent memory bandwidth limitations of the kernel.
 
 .. figure:: acoustic_dle.pdf
    :scale: 60%
 
-   *<Performance optimisation results for DLE with limited DSE.>*
+   Performance benchmarks for loop-level
+   optimisations. :label:`figperfdle`
 
-<*Results for DLE and auto-tuned thread-parallel runs.>*
+On top of loop-level performance optimisations, Figure
+:ref:`figmaxperf` shows the achieved performance with additional
+symbolic optimisations and flop reductions enabled. While the peak
+performance shows only small effects from this set of optimisations
+due to the inherent memory bandwidth limitations of the kernel, it is
+interesting to note a distinct reduction in operational intensity
+between equivalent stencil sizes in Figures :ref:`figperfdle` and
+:ref:`figmaxperf`. This entails that, despite only marginal runtime
+changes, the generated code is performing less flops per stencil
+point, which is of vital importance for compute-dominated kernels with
+large a OI [Louboutin17a]_.
 
 .. figure:: acoustic_maxperf.pdf
    :scale: 60%
 
-   Performance benchmarks with
-
-*<Full-throttle performance benchmarks. It is worth noting that peak
-performance may drop with DSE, but that is expected as less "empty
-flops" are performed.>*
+   Performance benchmarks with full symbolic and loop-level
+   optimisations. :label:`figmaxperf`
 
 
 Integration with YASK
@@ -745,16 +786,18 @@ ASTs through an extremely simple tree visitor; 2) a Devito-generated acoustic
 wave equation code could be run from within YASK (i.e., with the input data
 still coming from YASK users).
 
-It has been shown that real-world stencil codes optimised through YASK may
-achieve an exceptionally high fraction of the attainable machine peak [YASK].
-Further, initial prototyping (manual optimization of Devito-generated code
-through YASK) revealed that YASK may also outperform the loop optimization
-engine currently available in Devito, besides ensuring seamless performance
-portability across a range of computer architectures. On the other hand, YASK
-is a C++ based framework that, unlike Devito, does not rely on symbolic
-mathematics and processing; in other words, it operates at a much lower level
-of abstraction. These observations, as well as the outcome of the initial
-prototyping phase, motivate the on-going Devito-YASK integration effort.
+It has been shown that real-world stencil codes optimised through YASK
+may achieve an exceptionally high fraction of the attainable machine
+peak [Yount15]_ [Yount16]_.  Further, initial prototyping (manual
+optimization of Devito-generated code through YASK) revealed that YASK
+may also outperform the loop optimization engine currently available
+in Devito, besides ensuring seamless performance portability across a
+range of computer architectures. On the other hand, YASK is a C++
+based framework that, unlike Devito, does not rely on symbolic
+mathematics and processing; in other words, it operates at a much
+lower level of abstraction. These observations, as well as the outcome
+of the initial prototyping phase, motivate the on-going Devito-YASK
+integration effort.
 
 
 Discussion
