@@ -13,7 +13,7 @@
 :institution: Intel Corporation
 :year: 2017
 
-:video: TODO: Add video link
+:video: Unknown
 
 ---------------------------------------------------------------------
 Composable Multi-Threading and Multi-Processing for Numeric Libraries
@@ -158,7 +158,8 @@ The code below is a simple program using Dask that validates QR decomposition by
     :linenos:
 
     import time, dask, dask.array as da
-    x = da.random.random((440000, 1000), chunks=(10000, 1000))
+    x = da.random.random((440000, 1000),
+                         chunks=(10000, 1000))
     for i in range(3):
         t0 = time.time()
         q, r = da.linalg.qr(x)
@@ -170,53 +171,157 @@ Here, Dask splits the array into 44 chunks and processes them in parallel using 
 However, each Dask task executes the same NumPy matrix operations which are accelerated using Intel |R| MKL under the hood and thus multi-threaded by default.
 This combination results in nested parallelism, i.e. when one parallel component calls another component, which is also threaded.
 
-**[TODO: rewrite]**
-The reason why the Dask version was set to have only 44 tasks is to model real-life applications with limited parallelism on the outermost level, which is quite typical for functional and pipeline types of parallelism.
-Such cases might benefit the most from enabling parallelism at inner levels of the code.
-In the case when the top-level parallelism can load all the available cores and is well-balanced, nested parallelism is not that likely to improve performance (but can make it much worse without a composable threading solution).
-
-**[TODO: rewrite]**
-Here is an example of running the benchmark program in three different modes:
+Here is an example of running the benchmark program in five different modes:
 
 .. code-block:: sh
     :linenos:
 
-    python bench.py                   # Default MKL
-    OMP_NUM_THREADS=1 python bench.py # Serial MKL
-    python -m TBB bench.py            # Intel TBB mode
+    python bench.py         # Default OpenMP mode
+    KMP_BLOCKTIME=0 OMP_NUM_THREADS=4 \
+        python bench.py     # Tunned OpenMP mode
+    python -m SMP bench.py  # OpenMP + SMP mode
+    KMP_COMPOSABILITY=mode=exclusive \
+        python bench.py     # Composable OpenMP mode
+    python -m TBB bench.py  # Composable TBB mode
 
-**[TODO: rewrite]**
-Figure SOME shows performance results acquired on a 32-core (no hyper-threading) machine with 64GB memory. The results presented here were acquired with cpython v3.5.1; however, there is no performance difference with cpython v2.7.1.
-The Dask version runs slower than the NumPy version with the default setting because 10 outermost tasks end up calling 10 OpenMP-based parallel regions that create 10 times more threads than available hardware resources.
+.. figure:: dask_static.png
 
-The second command runs this benchmark with innermost OpenMP parallelism disabled.
-It results in the worst performance for the NumPy version since everything is now serialized.
-Moreover, the Dask version is not able to close the gap completely since it has only 10 tasks, which can run in parallel, while NumPy with parallel MKL is able to utilize the whole machine with 32 threads.
+   Execution times for balanced QR decomposition workload. :label:`sdask`
 
-The last command demonstrates how Intel |R| TBB can be enabled as the orchestrator of multi-threaded modules.
-The TBB module runs the benchmark in the context of :code:`with TBB.Monkey():` which replaces the standard Python *ThreadPool* class used by Dask and also switches MKL into TBB mode.
-In this mode, NumPy executes in more than twice the time compared to the default NumPy run.
-This happens because TBB-based threading in MKL is new and not as optimized as the OpenMP-based MKL threading implementation.
-However despite that fact, Dask in TBB mode shows the best performance for this benchmark, 46% improvement compared to default NumPy.
-This happens because the Dask version exposes more parallelism to the system without over-subscription overhead, hiding latencies of serial regions and fork-join synchronization in MKL functions.
+Figure :ref:`sdask` shows performance results acquired on a 44-core (88-thread) machine with 128GB memory. The results presented here were acquired with cpython v3.5.2; however, there is no significant performance difference with cpython v2.7.12.
+By default Dask will process a chunk in a separate thread so there will be 44 threads on the top level. Also each chunk will be computed in parallel with 44 OpenMP workers.
+Thus there will be 1936 threads in total which tries to acquire 44 cores that is not effective.
+
+An obvious way to improve performance is to tune OpenMP runtime using environment variables. First of all it's needed to limit total number of threads.
+Let's set 2x over-subsctiption instead of quadratic as our target. Since we work on 88-thread machine, to archive it we should set number of threads per parallel region to 4 ((88 CPU threads / 44 top level threads) * 2x over-subscription).
+Also we noticed that reducing period of time after which OpenMP worker will go to sleep helps to improve performance in such workloads with over-subscription (it works best for multi-processing case but helps for multi-threading as well).
+That's why another option here is KMP_BLOCKTIME that sets to zero. As one can see such simple optimizations allows to reduce computational time to more than 3x.
+
+The third mode with *SMP.py* module in fact does the same optimizations but automatically and shows the same level of performance as the second one. Moreover it is more flexible and allows to work carefully with several thread/process pools in scope of one application even if they have different sizes.
+Thus we invite to use it as an advanced alternative to manual OpenMP tunning.
+
+The fourth and fifth modes represents our dynamic OpenMP and Intel |R| TBB based approaches. Both modes allows to improve default result but exclusive execution with OpenMP works faster.
+As it was described above OpenMP based solution allows to process chunks one by one without any over-subscription. And since each separate chunk can utilize the whole CPU - such approach works fine here.
+In contrast work stealing task scheduler from  Intel |R| TBB is trully dynamic and tries to use the only thread pool to process all given tasks simultanioulsy. As a result one has worse cache utilization as well as bigger overhead of work balancing.
 
 .. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
 
 
 Balanced Eignevalues Search with NumPy
 --------------------------------------
-**[TODO: add text]**
+The code below performs an algorithm of eigenvalues and right eigenvectors search in a square matrix using Numpy:
 
+.. code-block:: python
+    :linenos:
+
+    import time, numpy as np
+    from multiprocessing.pool import ThreadPool
+    x = np.random.random((256, 256))
+    p = ThreadPool(44)
+    for j in range(3):
+        t0 = time.time()
+        p.map(np.linalg.eig, [x for i in range(1024)])
+        print(time.time() - t0)
+
+In this example we process several matricies from an array in parallel using :code:`ThreadPool` while each separate matrix is computed using OpenMP parallel regions from Intel |R| MKL.
+As a result, simillary to QR decomposition benchmark we've faced with quadratic oversubscription here.
+But this code has a distinctive feature - in spite of parallel execution of eigenvalues search algorithm it can't fully utilize all available CPU cores. That's why an additional level of parallelizm we used here may significantly improve overall benchmark performance.
+
+.. figure:: numpy_static.png
+
+   Execution time for balanced eignevalues search workload. :label:`snumpy`
+
+Figure :ref:`snumpy` shows benchmark execution time in the same five modes as we used for QR decomposition.
+As previously the best choice here is to limit number of threads statically eigher using manual settings or *SMP.py* module. Such approach allows to obtain more than 3x speed-up.
+But this time Intel |R| TBB based approach looks much better than serialization of OpenMP parallel regions. And the reason is low CPU utilization in each separate chunk.
+In fact exclusive OpenMP mode leads to serial matrix processing, one by one, so significant part of the CPU stays unsed.
+As a result, execution time in this case becomes even larger than by default.
 
 Unbalanced QR Decomposition with Dask
 -------------------------------------
-**[TODO: add text]**
+In previous sections we looked into balanced workloads where amount of work per thread on top level is near the same.
+It's rather expected that for such cases the best solution is static one. But what if one need to deal with dynamic workloads where amount of work per thread or process may vary?
+To investigate such cases we've developed unbalanced versions of our static benchmarks. An idea we used is the following. There is a single thread pool with 44 workers.
+But this time we will perform computations in three stages. The first stage will use only one thread from the pool which is able to fully utilize the whole CPU.
+During the second stage half of top level threads will be used (22 in our examples). And on the third stage the whole pool will be employed (44 threads).
+
+The code above demonstrates unbalanced version of QR decomposition workload:
+
+.. code-block:: python
+    :linenos:
+
+    import time, dask, dask.array as da
+    def qr(x):
+        t0 = time.time()
+        q, r = da.linalg.qr(x)
+        test = da.all(da.isclose(x, q.dot(r)))
+        test.compute(num_workers=44)
+        print(time.time() - t0)
+    x01 = da.random.random((440000, 1000),
+                           chunks=(440000, 1000))
+    x22 = da.random.random((440000, 1000),
+                           chunks=(20000, 1000))
+    x44 = da.random.random((440000, 1000),
+                           chunks=(10000, 1000))
+    qr(x01)
+    qr(x22)
+    qr(x44)
+
+To run this benchmark we've used the already familiar four modes: default, OpenMP with *SMP.py*, composable OpenMP and composable Intel |R| TBB.
+We don't give here the results of OpenMP with manual optimizations since it's very close to the mode "OMP + SMP" 
+
+.. figure:: dask_dynamic.png
+
+   Execution times for unbalanced QR decomposition workload. :label:`ddask`
+
+Figure :ref:`ddask` demonstrates time of execution for all four modes. First observation here is that static *SMP.py* approach can't provide us the best performance in case of unbalanced workloads.
+Since we have the only pool here with fixed number of workers and don't know which of these workers will be really used and how intensively, it's difficult to set an appropriate number of threads statically.
+So we limit number of threads per parallel region based on size of the pool only. As a result, on the first stage just a few threads are really used that leads to performance degradation.
+From the other hand the second and the third stages work well. But it total we have mediocre result.
+
+Work stealing scheduler from Intel |R| TBB works better than default version but due to redundunt work balancing in this particular case it has significant overhead and not the best performance result.
+
+And the best execution time one can obtain using exclusive OpenMP mode. Since it's enough work to do in each parallel region, just their serialization allows to eliminate over-subscription issues and get the best performance - near 34% speed-up.
 
 
 Unbalanced Eigenvalues Search with NumPy
 ----------------------------------------
-**[TODO: add text]**
+The second dynamic exapmle we'd like to discuss is based on eigenvalues search algorithm from NumPy:
 
+.. code-block:: python
+    :linenos:
+
+    import time, numpy as np
+    from multiprocessing.pool import ThreadPool
+    from functools import partial
+
+    x = np.random.random((256, 256))
+    y = np.random.random((8192, 8192))
+    p = ThreadPool
+
+    t0 = time.time()
+    mmul = partial(np.matmul, y)
+    p.map(mmul, [y for i in range(6)], 6)
+    print(time.time() - t0)
+
+    t0 = time.time()
+    p.map(np.linalg.eig, [x for i in range(1408)], 64)
+    print(time.time() - t0)
+
+    t0 = time.time()
+    p.map(np.linalg.eig, [x for i in range(1408)], 32)
+    print(time.time() - t0)
+
+In this workload we have same three stages. The second and the third stage computes eignevalues and the first one performs matrix multiplication.
+The reason of why we don't use eignevalues search for the first stage as well is that it can't fully load CPU as we planned.
+
+.. figure:: numpy_dynamic.png
+
+   Execution time for unbalanced eignevalues search workload. :label:`dnumpy`
+
+From figure :ref:`dnumpy` one can see that the best solution for this workload is work stealing scheduler from Intel |R| TBB which allows to reduce execution time on 35%.
+*SMP.py* module works even slower than default version due to the same issues as described for unbalanced QR decomposition example.
+And as for the mode with serialization of OpenMP parallel regions - it works significantly slower than default version since there is no enough work for each parallel region that leads to CPU underutilization.
 
 Solutions Applicability
 -----------------------
