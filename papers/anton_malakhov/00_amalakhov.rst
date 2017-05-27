@@ -170,6 +170,7 @@ The code below is a simple program using Dask that validates QR decomposition by
 Here, Dask splits the array into 44 chunks and processes them in parallel using multiple threads.
 However, each Dask task executes the same NumPy matrix operations which are accelerated using Intel |R| MKL under the hood and thus multi-threaded by default.
 This combination results in nested parallelism, i.e. when one parallel component calls another component, which is also threaded.
+Further we will talk mostly about multi-threading case but according to our investigations all conclusions that will be shown are applicable for multi-processing case as well.
 
 Here is an example of running the benchmark program in five different modes:
 
@@ -323,9 +324,47 @@ From figure :ref:`dnumpy` one can see that the best solution for this workload i
 *SMP.py* module works even slower than default version due to the same issues as described for unbalanced QR decomposition example.
 And as for the mode with serialization of OpenMP parallel regions - it works significantly slower than default version since there is no enough work for each parallel region that leads to CPU underutilization.
 
+
+Acceptable Level of Over-subscription
+-------------------------------------
+One more thing we'd like to discuss here is which level of over-subscription is acceptable from performance point of view.
+In other words starting from which size of top level thread or process pool we faced with performance issues due to over-subscription.
+To check it we run our balanced eigenvalues search workload with different pool sizes from 1 to 88 (since we have machine with 88-thread CPU).
+
+.. figure:: scalability_multithreading.png
+
+   Multi-threading scalability of eigenvalues seach workload. :label:`smt`
+
+Figure :ref:`smt` shows scalability results for multi-threading case. Two modes are compared here: default one and OpenMP with *SMP.py* as the best approach for this benchmark.
+As one can see, visible difference in execution time between these two methods starts from 8 threads in top level pool and became larger while size of pool increases.
+
+.. figure:: scalability_multiprocessing.png
+
+   Multi-processing scalability of eigenvalues seach workload. :label:`smp`
+
+Multi-processing scalability results are shown on figure :ref:`smp`.
+They can be obtained from the same eigenvalues search workload if one just replaces :code:'ThreadPool' to :code:`Pool`.
+And results here are very similar to multi-threading case - over-subscription effects become visible starting from 8 processes on top level of parallelization.
+
+
 Solutions Applicability
 -----------------------
-**[TODO: add text]**
+Let's summarize all the results we obtained earlier.
+All three suggested approaches to fight with over-subscription issues are valuable and allow to obtain significant performance increase for both multi-threading and multi-processing cases.
+Moreover they are complements each over and have their own fields of applicability.
+
+.. figure:: recommendation_table.png
+
+   How to choose the best approach to deal with over-subscription issues. :label:`rtable`
+
+*SMP.py* module works perfectly for the balanced workloads where each pool uses all its workers with near the same load level. And compared with manual tunning of OpenMP options it's more stable since it can work with any pools with different sizes in scope of application without performance degradation.
+And what is also important - it works with Intel |R| TBB as well.
+
+Exclusive mode for OpenMP runtime works best with unbalanced benchmarks for the cases there it's enough work for each innermost parallel region.
+
+And truly dynamic work stealing scheduler from Intel |R| TBB allows to obtain the best performance if innermost parallel regions can't fully utilize the whole CPU and have varying amount of work to do.
+
+To summarize all our conclusions we've prepared the table that should help to choose which approach will work best for your case (see figure :ref:`rtable`).
 
 
 Limitations and Future Work
