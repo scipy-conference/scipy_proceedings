@@ -46,6 +46,9 @@ pulse2percept: A Python-based simulation framework for bionic vision
    exposes the different building blocks of the software,
    making it easy for users to simulate
    novel implants, stimuli, and retinal models.
+   We hope that this library will contribute substantially to the field of medicine
+   by providing a tool to accelerate the development of visual prostheses
+   suitable for human trials.
 
 
 .. class:: keywords
@@ -63,17 +66,14 @@ Both of these diseases have a hereditary component,
 and are characterized by a progressive degeneration of photoreceptors
 in the retina that lead to gradual loss of vision.
 
-.. figure:: figimplant.png
+.. figure:: figure1.jpg
    :align: center
    :scale: 25%
 
    Electronic retinal prosthesis.
-   A) Light from the visual scene is captured by an external camera and
-   transformed into electrical pulses delivered through electrodes
+   Light from the visual scene is captured by an external camera and
+   transformed into electrical pulses delivered through microelectrodes
    to stimulate the retina.
-   B) Prostheses can be placed in the epiretinal, subretinal, or
-   suprachoroidal space.
-   TODO Need to redo the figure in order to avoid copyright issues.
    :label:`figimplant`
 
 
@@ -93,8 +93,10 @@ for blinded individuals within a decade :cite:`Fine2015`.
 
 However, a major challenge in the development of retinal prostheses
 is the prediction of what patients will see when they use their devices.
-Clinical trials have shown that the electrical stimulation of the retina
-leads to nontrivial perceptual distortions, blah.
+Interactions between implant electronics and
+the underlying neurophysiology cause nontrivial perceptual distortions
+in both space and time :cite:`FineBoynton2015,Beyeler2017`
+that severely limit the quality of the generated visual experience.
 
 Our goal was thus to develop a simulation framework that could describe
 the visual percepts of patients over space and time.
@@ -132,8 +134,8 @@ in more detail.
 
 
 
-Electrical stimulation of the retina to produce artificial vision
------------------------------------------------------------------
+Background
+----------
 
 The first steps in seeing begin in the retina,
 where a mosaic of photoreceptors 
@@ -141,7 +143,7 @@ converts incoming light into an electrochemical signal
 that encodes the intensity of light as a function of position
 (two dimensions), wavelength, and time :cite:`Rodieck1998`.
 The electrochemical signal is then passed on to 
-other specialized neuronal circuits
+specialized neuronal circuits
 consisting of a variety of cell types
 (such as bipolar, amacrine, and horizontal cells),
 which extract basic sensory cues, such as spatial contrast
@@ -173,18 +175,25 @@ the goal of retinal prostheses is to electrically stimulate
 surviving bipolar or ganglion cells
 in order to evoke neuronal responses that are interpreted by the brain
 as visual percepts.
+The electrical stimulus delivers charge to the cell membrane that 
+depolarizes the neuron and opens voltage-sensitive ion channels.
+This bypasses the natural presynaptic neurotransmitter excitation 
+and causes the activated neurons to stimulate their postsynaptic targets.
+Therefore, selective spatiotemporal modulation of retinal neurons 
+with an array of electrodes should allow a prosthesis to 
+coordinate retinal activity in lieu
+of natural photoreceptor input :cite:`Weiland2016`.
 
 Several types of retinal prostheses are currently in development.
 These vary in their user interface, light-detection method, signal processing,
 and microelectrode placement within the retina
 (for a recent review see :cite:`Weiland2016`).
 As far as our model is concerned, the critical factor is the placement
-of the microelectrodes.
+of the microelectrodes (Fig. :ref:`figretina`.
 The three main locations for microelectrode implant placement are 
 `epiretinal` (i.e., on top of the retinal surface, above the ganglion cells),
 `subretinal` (i.e., next to the bipolar cells in the space of the missing photoreceptors),
-and `suprachoroidal` (i.e., between the choroid and the sclera)
-as shown in Fig. :ref:`figretina`).
+and `suprachoroidal` (i.e., between the choroid and the sclera).
 Each of these approaches is similar in that light from the visual scene
 is captured and transformed into electrical pulses delivered through electrodes
 to stimulate the retina.
@@ -208,17 +217,17 @@ potentially offering a wide range of sight restoration options
 for blinded individuals within a decade :cite:`Fine2015`.
 
 However, clinical experience with existing retinal prostheses makes it
-apparent that the vision provided by these devices differs very substantially
+apparent that the vision provided by these devices differs substantially
 from normal sight.
 Interactions between implant electronics and
 the underlying neurophysiology cause nontrivial perceptual distortions
 in both space and time :cite:`FineBoynton2015,Beyeler2017`
 that severely limit the quality of the generated visual experience.
 For example, stimulating a single electrode does not always (or even usually)
-result in the experience of a "dot" of light.
+result in the experience of a 'dot' of light.
 Instead, stimulating a single electrode leads to percepts
-that vary dramatically in shape, varying in description from "blobs",
-to "streaks" and "half-moons".
+that vary dramatically in shape, varying in description from 'blobs',
+to 'streaks' and 'half-moons'.
 Percepts also do not remain constant over time.
 The percept produced by stimulating a single electrode
 with a continuous pulse train fades over time:
@@ -229,8 +238,12 @@ One patient describe it as like :cite:`PioneerPress2015`:
 *"... looking at the night sky where you have millions of twinkly lights
 that almost look like chaos"*.
 
-TODO
-That's where we come in.
+Although computational models have been developed to describe 
+some of these distortions for a small number of behavioral observations
+in either space :cite:`Nanduri2012` or time :cite:`Horsager2009`,
+here we present a model that can describe not just the spatial distortions,
+but also the temporal nonlinearities and spatiotemporal interactions 
+reported across a wide range of conditions, devices, and patients.
 
 .. Our goal was to develop a simulation framework
 .. that could describe patient percepts
@@ -261,7 +274,13 @@ That's where we come in.
 .. the model then predicts the perceptual distortions experienced
 .. by this "virtual patient" over both space and time.
 
+.. figure:: figmodel.eps
+   :align: center
+   :figclass: w
+   :scale: 35%
 
+   Full model cascade.
+   :label:`figmodel`
 
 
 
@@ -270,14 +289,14 @@ Computational Model of Bionic Vision
 
 Analogous to models of cochlear implants,[REF] the goal of our
 computational model is to approximate,
-via a number of linear and nonlinear filtering steps,
-the neural computations that convert an electrical pulse pattern 
-in both space and time into a perceptual experience. 
+via a number of linear filtering and nonlinear processing steps,
+the neural computations that convert a spatiotemporal electrical pulse pattern 
+into a perceptual experience. 
 
-Our simulation tool integrates and generalizes two computational models 
-of bionic vision that separately explained spatial :cite:`Nanduri2012`
-and temporal :cite:`Horsager2009` perceptual distortions
-for the Second Sight Argus I and Argus II implants.
+.. Our simulation tool integrates and generalizes two computational models 
+.. of bionic vision that separately explained spatial :cite:`Nanduri2012`
+.. and temporal :cite:`Horsager2009` perceptual distortions
+.. for the Second Sight Argus I and Argus II implants.
 
 Model parameters were chosen to fit data from a variety of experiments 
 in patients with prosthetic devices.
@@ -306,48 +325,57 @@ In this example, input to the model was a pair of simulated pulse
 trains phase-shifted by :math:`\delta` ms,
 which were delivered to two individual simulated electrodes.
 
-The first stages of the model are only in the space domain, 
-and describe the spatial distortions resulting from interactions 
+The first stages of the model describe the spatial distortions 
+resulting from interactions 
 between the electronics and the neuroanatomy of the retina. 
-The current spread for each electrode decreases as a function of distance 
-from the electrode center, 
-both in the x, y plane and as a function of electrode height (z).
-Thus, the heat maps in A describes the electrical current field 
-across the retinal surface for each individual electrode.
+We assumed that the current density caused by electrical stimulation decreased
+as a function of distance from the edge of the electrode
+:cite:`Ahuja2008`:
 
+TODO add Rattay 2014 book chapter
 
-EQUATION.
+.. math::
+   :label: eqcurrentspread
 
-As described above, each ganglion cell has an axon fiber 
-that travels from that ganglion cell body to the optic nerve. 
-Stimulated electrodes can induce action potentials in axon fibers 
-as well as cell bodies. 
-Thus if an axon fiber passes under a stimulated electrode 
-it will produce a percept in the perceived location of that axon's cell body. 
-We modeled the sensitivity of the ganglion cell axon fibers (green lines in B;
-location of the implant with respect to the optic disc 
-inferred from patients' fundus photographs) 
-as decreasing exponentially as a function of distance from the ganglion cell body.
+   c(d) = \frac{\alpha}{\alpha + d^n}
 
-Thus, for each electrode, the heat maps in B describe a 'effective stimulation map' 
-across the retinal surface for each electrode; 
-the expected percept produced by stimulating that electrode.
+where :math:`d` was the 3D Euclidean distance to the electrode edge,
+:math:`\alpha = 14000` and the exponent :math:`n=1.69`.
 
-The remaining stages of the model carry out temporal computations 
-that are fully parallelized in the space domain. 
-For each point in the retina a series of linear (boxes C, D, and F) 
-and nonlinear (box E) computations in the time domain 
-were used to approximate temporal processing within retina and cortex.
+Due to the fact that epiretinal implants sit on top of the optic fiber layer,
+they do not only stimulate ganglion cell bodies but also ganglion cell axons
+(Fig. :ref:`figretina`).
+To the brain, activating an axon fiber that passes under a stimulated electrode
+is indistinguishable from activating the corresponding ganglion cell *body*.
+The produced visual percept will thus appear in the 
+spatial location for which the corresponding ganglion cell 
+usually encodes information.
+It has been shown that ganglion cells send their axons on highly stereotyped
+pathways to the optic disc (green lines in Fig. :ref:`figmodel` B),
+which have been mathematically described before :cite:`Jansionius2009`.
+As a result, electrical stimulation of axon fibers leads to predictable
+visual 'streaks' or 'comet trails' that are aligned with the axonal pathways.
 
-As can be seen in the figure above, 
-any given electrode generally only stimulates a small subregion of the retina. 
-As a consequence, when only a few electrodes are active significant speed savings 
-can often be obtained by skipping pixels which will not be significantly stimulated 
-by that electrode, for example pixels whose intensity values in this heat map 
-are less than a certain percent (e.g. 25%) of the largest value. 
+We thus further adjusted the spatial map of current densities by 
+accounting for axonal stimulation.
+We modeled the sensitivity of axon fibers as decreasing exponentially
+as a function of distance from the corresponding ganglion cell bodies.
+The resulting tissue activation map across the retinal surface is shown
+as a heatmap in Fig. :ref:`figmodel` B
+(the hotter the color, the higher the current).
 
-Linear responses were modeled as temporal low-pass filters,
-or "leaky integrators",
+Every pixel of the current density map was then modulated by the applied
+electrical pulse train in order to predict a perceived brightness value
+that varied over time.
+This involved applying a series of linear filtering 
+(:ref:`figmodel` C, D, and F) 
+and nonlinear processing (:ref:`figmodel` E) steps in the time domain
+meant to approximate the processing of visual information within the retina
+and visual cortex.
+
+Linear responses in Fig. :ref:`figmodel` C, D, and F
+were modeled as temporal low-pass filters,
+or 'leaky integrators',
 modeled with gamma functions of order :math:`n`:
 
 .. math::
@@ -359,7 +387,9 @@ where :math:`t` is time,
 :math:`n` is the number of identical, cascading stages,
 and :math:`\tau` is the time constant of the filter.
 
-We began by convolving the electrical input stimulus :math:`f(s,t)`
+The first temporal processing step involved convolving the
+timeseries of tissue activation strengths :math:`f(t)`
+at a particular spatial location
 with a one-stage gamma function (:math:`n=1`,
 time constant :math:`\tau_1 = 0.42` ms)
 to model the impulse response function of retinal ganglion cells
@@ -368,7 +398,7 @@ to model the impulse response function of retinal ganglion cells
 .. math::
    :label: eqfast
 
-   r_1(s,t) = f(s,t) * \delta(t, 1, \tau_1),
+   r_1(t) = f(t) * \delta(t, 1, \tau_1),
 
 where :math:`*` denotes convolution.
 
@@ -385,23 +415,23 @@ The output of this convolution was scaled by a factor
 .. math::
    :label: eqacc
 
-   r_2(s,t) = r_1(s,t) - \epsilon_1\big( c(s,t) * \delta(t, 1, \tau_2) \big).
+   r_2(t) = r_1(t) - \epsilon_1\big( c(t) * \delta(t, 1, \tau_2) \big).
 
-The response :math:`r_2(s,t)` was then passed through a stationary
+The response :math:`r_2(t)` was then passed through a stationary
 nonlinearity (:ref:`figmodel` E) to model the nonlinear input-output
 relationship of ganglion cell firing:
 
 .. math::
    :label: eqnonlinear
 
-   r_3(s,t) = r_2(s,t) \frac{\alpha}{1 + \exp{\frac{i - \max_t{r_2(s,t)}}{s}}}
+   r_3(t) = r_2(t) \frac{\alpha}{1 + \exp{\frac{i - \max_t{r_2(t)}}{s}}}
 
 where :math:`\alpha = 14` (asymptote),
 :math:`s = 3` (slope),
 and :math:`i = 16` (shift) were chosen
 to match the observed psychophysical data.
 
-Finally, the response :math:`r_3(s,t)` was convolved with another low-pass
+Finally, the response :math:`r_3(t)` was convolved with another low-pass
 filter described as a three-stage gamma function
 (:math:`n = 3`, :math:`\tau_3 = 26.3` ms)
 intended to model slower perceptual processes in the brain
@@ -410,18 +440,26 @@ intended to model slower perceptual processes in the brain
 .. math::
    :label: eqslow
 
-   r_4(s,t) = \epsilon_2 r_3(s,t) * \delta(t, 3, \tau_3),
+   r_4(t) = \epsilon_2 r_3(t) * \delta(t, 3, \tau_3),
 
 where :math:`\epsilon_2 = 1000` was a scaling factor used to
 fit the output to subjective brightness values in a range of [0, 100].
-Thus the output of the model was a map of subjective brightness values
-that change over time.
-An example percept generated by the model is shown on the right-hand
-side of Fig. :ref:`figmodel`, along with the perceived percept as
-reported by one of the subjects.
 
-.. The output of the model was a map of brightness values (arbitrary units) over time.
-.. Subjective brightness was defined as the highest brightness value in the map.
+The output of the model was thus a movie of brightness values that corresponded
+to the predicted perceptual experience of the patient.
+An example percept generated is shown on the right-hand side of :ref:`figmodel`
+('predicted percept', brightest frame in the movie).
+Parameters of the model could thus be fit to psychophysical data by
+comparing the predicted percepts to behavioral data from Argus I and II patients
+(e.g., 'patient drawing', averaged over five trials).
+
+.. As can be seen in the figure above, 
+.. any given electrode generally only stimulates a small subregion of the retina. 
+.. As a consequence, when only a few electrodes are active significant speed savings 
+.. can often be obtained by skipping pixels which will not be significantly stimulated 
+.. by that electrode, for example pixels whose intensity values in this heat map 
+.. are less than a certain percent (e.g. 25%) of the largest value. 
+
 
 All parameter values are given in Table :ref:`tableparams`.
 
@@ -458,11 +496,11 @@ modules:
 - :code:`api`: Provides a top-level Application Programming Interface.
 - :code:`implants`: Provides implementations of the details of different retinal
   prosthetic implants. This includes Second Sight's Argus I and Argus II implants,
-  but can easily be extended to custom implants (see Section on extensibility).
+  but can easily be extended to feature custom implants (see Section Extensibility).
 - :code:`retina`: Includes implementation of a model of the retinal distribution 
   of nerve fibers, based on :cite:`Jansonius2009`, and an implementation of the 
-  temporal cascade of events
-  described in equations 1-5. Again this can be easily modified.
+  temporal cascade of events described in equations 1-5.
+  Again, this can easily be extended to custom temporal models (see Section Extensibility).
 - :code:`stimuli`: Includes implementations of commonly used electrical stimulation
   protocols, including means to translate images and movies into simulated
   electrical pulse trains.
@@ -470,7 +508,7 @@ modules:
   (see Section Extensibility).
 - :code:`files`: Includes a simple means to load and store data as images
   and videos.
-- :code:`utils`: Utility and helper functions used in various parts of the code.
+- :code:`utils`: Includes various utility and helper functions.
 
 
 Basic Usage
