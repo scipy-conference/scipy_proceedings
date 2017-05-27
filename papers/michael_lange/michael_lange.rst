@@ -803,6 +803,40 @@ integration effort.
 Discussion
 ----------
 
+In this paper we present the finite difference DSL Devito and
+demonstrate its high-level API to generate two fluid dynamics
+operators and a full seismic inversion example. We highlight the
+relative ease with which to create complex operators from only a few
+lines of high-level Python code while utilising highly optimised
+auto-generated C kernels via JIT compilation. On top of purely
+symbolic top-level API based on SymPy, we demonstrate how to utilise
+Devito's secondary API to inject custom expressions into the code
+generation toolchain to implement Dirichlet and Neumann boundary
+conditions, as well as the sparse-point interpolation routines
+required by seismic inversion operators.
+
+Moreover, we demonstrate that Devito-generated kernels are capable of
+exploiting modern high performance computing architectures by
+achieving a significant percentage of machine peak. Devito's
+code-generation engines achieve this by automating well-known
+performance optimisations, as well as domain-specific optimisations,
+such as flop reduction techniques - all while maintaining full
+compatibility with the scientific software stack available through the
+open-source Python ecosystem.
+
+Acknowledgements
+----------------
+
+This work was financially supported in part by the Natural Sciences
+and Engineering Research Council of Canada Collaborative Research and
+Development Grant DNOISE II (CDRP J 375142-08), EPSRC grant
+EP/L000407/1, the Imperial College London Intel Parallel Computing
+Centre, British Gas, SENAI CIMATEC and the MCTI (Federal Govt of
+Brazil) scholarship MCTI/FINEP/CNPq 384214/2015-0. This research was
+carried out as part of the SINBAD II project with the support of the
+member organizations of the SINBAD Consortium.
+
+
 References
 ----------
 
