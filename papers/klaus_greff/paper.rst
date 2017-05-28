@@ -136,7 +136,8 @@ This allows for flexible and convenient use of the hyperparameters everywhere:
     do_stuff()  # parameters are automatically filled
     do_stuff('debug')  # manually set
 
-Injection follows the priority 1. explicitly passed arguments 2. config values 3. default values.
+Injection follows the priority: 1. explicitly passed arguments, 2. config values, 3. default values.
+
 .. Main function and commands are automatically captured
 
 Updating Parameters
