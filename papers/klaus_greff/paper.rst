@@ -61,7 +61,7 @@ Sacredboard offers a web-based interface to view runs and supports maintaining a
 
 Sacred
 ======
-Sacred is an open source python framework that aims to bundle solutions for the most frequent challenges when conducting computational experiments.
+Sacred is an open source Python framework that aims to bundle solutions for the most frequent challenges when conducting computational experiments.
 It does not enforce any particular workflow, and is independent of the choice of machine learning libraries.
 Sacred was designed to remain useful even under deadline pressure, and therefore tries to
 offer maximum convenience while minimizing boilerplate code.
@@ -87,8 +87,8 @@ To adopt Sacred all that is required is to instantiate an ``Experiment`` and to 
 
 .. The Experiment class represent the core abstraction of Sacred
 
-Hyperparameters can then be defined in native python using special decorated functions, dictionaries or configuration files (see :ref:`configuration`).
-The experiment can be run through an automatically generated command-line interface, or from python by calling ``ex.run()``.
+Hyperparameters can then be defined in native Python using special decorated functions, dictionaries or configuration files (see :ref:`configuration`).
+The experiment can be run through an automatically generated command-line interface, or from Python by calling ``ex.run()``.
 Both modes offer the same ways for passing options, setting parameters, and adding observers.
 Sacred then 1) interprets the options 2) evaluates the parameter configuration 3) gathers information about dependencies and host, and 4) constructs and calls a ``Run`` object that is responsible for executing the main function.
 The Run captures the stdout, custom information and fires events to the observers at regular intervals for bookkeeping (see :ref:`bookkeeping`).
@@ -114,7 +114,7 @@ This means decorating a function with ``@ex.config`` which Sacred executes and a
         learning_rate = 0.1
         filename = 'stuff_{}.log'.format(a)
 
-This is syntactically convenient and allows using the full expressiveness of python, which includes calling functions and variables that depend on others.
+This is syntactically convenient and allows using the full expressiveness of Python, which includes calling functions and variables that depend on others.
 For users that instead prefer plain dictionaries or external configuration files, those can also be used.
 All the entries of the configuration are enforced to be JSON-serializable, such that they can easily be stored and queried.
 
@@ -148,7 +148,7 @@ This can happen both from the commandline
 
     >> python my_experiment.py with variant='complex'
 
-or from python calls:
+or from Python calls:
 
 .. code-block:: python
 
@@ -161,7 +161,7 @@ In this way they influence dependent values as you would expect (so here: ``file
 Sometimes a particular set of settings belongs together and should be saved.
 To collect them sacred offers the concept of named configs.
 They are defined similar to configurations using ``@ex.named_config``, dictionaries, or from config files.
-They can be added en-block from the commandline and from python, and are treated as a set of updates.
+They can be added en-block from the commandline and from Python, and are treated as a set of updates.
 
 .. example ??
 
@@ -197,7 +197,7 @@ Source Code
 Dependencies
     version numbers for all detected package dependencies
 Host
-    information about the host that is running the experiment including CPU, OS, and python version. Optionally also other informatino like GPU or environment variables.
+    information about the host that is running the experiment including CPU, OS, and Python version. Optionally also other informatino like GPU or environment variables.
 Metadata
     start and stop times, current status, result, and fail-trace (if needed)
 Live Information
@@ -227,7 +227,7 @@ To ensure reproducibility Sacred attempts to automatically collect as much data 
 
 Dependencies
 ++++++++++++
-When an experiment is started Sacred uses python inspection to detect imported packages and determines their version-numbers.
+When an experiment is started Sacred uses Python inspection to detect imported packages and determines their version-numbers.
 This detection, will catch all dependencies that are imported from the main file before the experiment was started. 
 This might miss certain nested imports, but further dependencies can easily be added manually 
 
@@ -318,7 +318,7 @@ Labwatch triggers the optimizer to suggest a new configuration based on all conf
 
 Every hyperparameter optimization method such as Bayesian optimization or random search often needs to do evaluate some configuration before it approaches a good region in the search space.
 This means that Labwatch needs to run the same experiment multiple times.
-Labwatch's Labassitant allows to easily do this from python via:
+Labwatch's Labassitant allows to easily do this from Python via:
 
 .. code-block:: python
 
@@ -444,7 +444,7 @@ Example
 Related Work
 ============
 There are only a few projects that we are aware of that have a focus similar to Sacred with the closest one being Sumatra :cite:`davison2012`.
-It comes as a command-line tool that can operate also with non-python experiments, and helps to do all the bookkeeping.
+It comes as a command-line tool that can operate also with non-Python experiments, and helps to do all the bookkeeping.
 Under the hood it uses a SQL database to store all the runs and comes with a versatile web-interface to view and edit the stored information.
 The main drawback of Sumatra, and indeed the main reason why we opted for our own library is its workflow.
 It requires initializing a project directory, the parameters need to be in a separate file and the experiment must be an executable that takes the name of a config-file as a command-line parameter.
@@ -454,9 +454,9 @@ It uses the linux kernel to track *all* files, including data, programs and libr
 These files are then bundled together and because it also includes system libraries the resulting package can be run on virtually any other linux machine.
 It does not help organization or bookkeeping, but, given that the user takes care of parameters and randomness, provides a very thorough solution to the problem of reproducibility.
 
-:cite:`jobman` is a python library that grew out of the need for scheduling lots of machine learning experiments.
+:cite:`jobman` is a Python library that grew out of the need for scheduling lots of machine learning experiments.
 It helps with organizing hyperparameter searches and as a side-effect it also keeps track of hyperparameters and results.
-It requires the experiment to take the form a python function with a certain signature.
+It requires the experiment to take the form a Python function with a certain signature.
 
 Experiment databases :cite:`vanschoren2012, smith2014` make an effort to unify the storage of machine learning problems and experiments by expressing them in a common language.
 By standardizing that language they improve comparability and communicability of the results.
