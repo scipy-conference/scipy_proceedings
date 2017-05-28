@@ -62,7 +62,7 @@ Sacredboard offers a web-based interface to view runs and supports maintaining a
 Sacred
 ======
 Sacred is an open source python framework that aims to bundle solutions for the most frequent challenges when conducting computational experiments.
-It doesn't enforce any particular workflow, and is independent of the choice of machine learning libraries.
+It does not enforce any particular workflow, and is independent of the choice of machine learning libraries.
 Sacred was designed to remain useful even under deadline pressure, and therefore tries to
 offer maximum convenience while minimizing boilerplate code.
 
@@ -99,7 +99,7 @@ Several observers are available for databases, disk storage, or sending out noti
 
 Configuration
 -------------
-An important goal of Sacred is to make it convenient to define, expose and use hyperparameters, which we'll call the configuration of the experiment.
+An important goal of Sacred is to make it convenient to define, expose and use hyperparameters, which we will call the configuration of the experiment.
 
 Defining a Configuration
 ++++++++++++++++++++++++
@@ -452,7 +452,7 @@ It requires initializing a project directory, the parameters need to be in a sep
 The CDE project :cite:`guo2012` takes a completely different and much more general approach to facilitate reproducible research.
 It uses the linux kernel to track *all* files, including data, programs and libraries that were used for an experiment.
 These files are then bundled together and because it also includes system libraries the resulting package can be run on virtually any other linux machine.
-It doesn't help organization or bookkeeping, but, given that the user takes care of parameters and randomness, provides a very thorough solution to the problem of reproducibility.
+It does not help organization or bookkeeping, but, given that the user takes care of parameters and randomness, provides a very thorough solution to the problem of reproducibility.
 
 :cite:`jobman` is a python library that grew out of the need for scheduling lots of machine learning experiments.
 It helps with organizing hyperparameter searches and as a side-effect it also keeps track of hyperparameters and results.
