@@ -182,7 +182,7 @@ Observers can be added dynamically from the commandline or directly in code:
 
 Collected Information
 +++++++++++++++++++++
-Events are fired when a run is started, every couple of seconds while it is running (heartbeat) and once it stops (either successfully or by failing).
+Events are fired when a run is started, every couple of seconds while it is running (heartbeat), and once it stops, (either successfully or by failing).
 This way information is available already during runtime, and partial data is captured even in case of failures. 
 
 Sacred collects a lot of information about the experiment and the run. 
@@ -212,7 +212,7 @@ Sacred ships with observers that stores all the information from these events in
 Furthermore ther are two observers that can send notifications about runs via Telegram or Slack.
 However, the observer interface is generic and supports easy addition of custom observers.
 
-The recommended observer is the ``MongoObserver`` that writes to a MongoDB:cite:`mongo`.
+The recommended observer is the ``MongoObserver`` that writes to a MongoDB :cite:`mongo`.
 MongoDB is a noSQL database, or more precisely a *Document Database*:
 It allows the storage of arbitrary JSON documents without the need for a schema like in a SQL database.
 These database entries can be queried based on their content and structure.
@@ -229,7 +229,7 @@ To ensure reproducibility Sacred attempts to automatically collect as much data 
 Dependencies
 ++++++++++++
 When an experiment is started Sacred uses Python inspection to detect imported packages and determines their version-numbers.
-This detection, will catch all dependencies that are imported from the main file before the experiment was started. 
+This detection will catch all dependencies that are imported from the main file before the experiment was started.
 This might miss certain nested imports, but further dependencies can easily be added manually 
 
 To ensure that it features a simple integrated version control system that guarantees that for each run all the required files are stored in the same database.
@@ -250,16 +250,16 @@ Furthermore, Sacred automatically seeds the global PRNGs of the ``random`` and `
 Labwatch
 ========
 
-Finding the correct hyperparameter setting for machine learning algorithms is often done by try and error even though it sometimes makes the difference between state-of-the-art performance or performance that is as good as random guessing.
-A growing number of tools that can automate the optimization of hyperparameters have recently emerged that allow users to, instead of manual tuning, define a searchspace and leave the search for good configurations to the optimizer.
+Finding the correct hyperparameter setting for machine learning algorithms is often done by trial and error even though it sometimes makes the difference between state-of-the-art performance or performance that is as good as random guessing.
+A growing number of tools that can automate the optimization of hyperparameters have recently emerged, allowing users, instead of manual tuning, to define a searchspace and leave the search for good configurations to the optimizer.
 However, in practice each optimizer often requires users to adapt their code to a certain interface.
-Labwatch supports an unified interface through Sacred to a variety of hyperparameter optimizers that allows for an easy integration of hyperparameter optimization into the daily workflow.
+Labwatch supports a unified interface through Sacred to a variety of hyperparameter optimizers that allows for an easy integration of hyperparameter optimization into the daily workflow.
 
 
 LabAssistant
 ------------
 
-At the heart of Labwatch is the so called LabAssistant which connects the Sacred experiment with a hyperparameter configuration search space, simply dubbed searchspace and an hyperparameter optimizer through a database.
+At the heart of Labwatch is the so called LabAssistant, which connects the Sacred experiment with a hyperparameter configuration search space, simply dubbed searchspace and a hyperparameter optimizer through a database.
 
 .. code-block:: python
 
@@ -275,7 +275,7 @@ At the heart of Labwatch is the so called LabAssistant which connects the Sacred
 
 .. Labwatch provides a simple way for defining searchspaces that is well integrated into the Sacred workflow, and integrates hyperparameter optimizers such as various Bayesian optimization methods (e.g `RoBO <https://github.com/automl/RoBO/>`_ , `SMAC <https://github.com/automl/SMAC3/>`_) random search, or bandit strategies  (Hyperband [4])
 
-If the experiment is now called with a searchspace rather than a configuration, Labwatch will pass all entries of this experiment in the database to the hyperparameter optimizer and let it suggest a configuration. This configurations is then used to run the experiment.
+If the experiment is now called with a searchspace rather than a configuration, Labwatch will pass all entries of this experiment in the database to the hyperparameter optimizer and let it suggest a configuration. This configuration is then used to run the experiment.
 
  
 For bookkeeping it leverages the database storage of evaluated hyperparameter configurations, which allows parallel distributed optimization and also enables the use of post hoc tools for assessing hyperparameter importance (e.g Fanova :cite:`hutter-icml14a`).
@@ -285,7 +285,7 @@ For bookkeeping it leverages the database storage of evaluated hyperparameter co
 Search Spaces
 -------------
 
-In general Labwatch distinguishes between *categorical* hyperparameters that can have only discret choices and *numerical* hyperparameters that can have either integer or float values.
+In general Labwatch distinguishes between *categorical* hyperparameters that can have only discret choices, and *numerical* hyperparameters that can have either integer or float values.
 For each hyperparameter the search space defines a prior distribution (e.g. uniform or Gaussian) as well as its type and its scale (e.g. log scale, linear scale) and a default value.
 
 Search spaces follow the same interface as Sacred's named configs:
@@ -315,9 +315,9 @@ Now by executing the Experiment for instance through the command line:
 
     >> python my_experiment.py with search_space
 
-Labwatch triggers the optimizer to suggest a new configuration based on all configuration that are stored in the database and have been drawn from the same search space.
+Labwatch triggers the optimizer to suggest a new configuration based on all configurations that are stored in the database and have been drawn from the same search space.
 
-Every hyperparameter optimization method such as Bayesian optimization or random search often needs to do evaluate some configuration before it approaches a good region in the search space.
+Every hyperparameter optimization method, such as Bayesian optimization or random search, often needs to evaluate some configuration before it approaches a good region in the search space.
 This means that Labwatch needs to run the same experiment multiple times.
 Labwatch's Labassitant allows to easily do this from Python via:
 
@@ -325,14 +325,14 @@ Labwatch's Labassitant allows to easily do this from Python via:
 
     a.run_suggestion(100)
 
-This runs the same experiment 100 times with different hyperparameter configuration and saves all results in a database.
+This runs the same experiment 100 times with different hyperparameter configurations and saves all results to a database.
 
 
 
 Multiple search spaces
 ++++++++++++++++++++++
 
-Since search spaces are named configurations, Labwatch also allows to have multiple search spaces, which is very convenient if one wants to keep single hyperparameters fixed and to only optimize a few other hyperparameters.
+Since search spaces are named configurations, Labwatch also allows to have multiple search spaces, which is very convenient if one wants to keep single hyperparameters fixed and only optimize a few other hyperparameters.
 Assume that we now only want to optimize the learning rate and keep the batch size fixed, we can create a second smaller search space:
 
 .. code-block:: python
@@ -352,7 +352,7 @@ We can run our experiment now in the same way but calling it with this new searc
 
 
 Labwatch passes only entries of the database from the same search space to the optimizer in order to avoid inconsistencies. The optimizer will now only suggest a value for the learning rate. 
-All other hyperparameter such as the batch size are set to the values that are defined in the config.
+All other hyperparameters, such as the batch size, are set to the values that are defined in the config.
 
 
 
@@ -365,19 +365,19 @@ Even though the interface for all optimizer is the same, every optimizer has its
 The following list gives a brief overview of optimizers that can be used with Labwatch and in which
 setting they work and which they do not. For more details we refer to the corresponding papers:
 
-- **Random search** is probably the most simplest hyperparameter optimization method :cite:`bergstra-jmlr12a`. It just samples hyperparameter
+- **Random search** is probably the simplest hyperparameter optimization method :cite:`bergstra-jmlr12a`. It just samples hyperparameter
   configurations randomly from the corresponding prior distributions. Due to its simplicity, random search works in discrete as well as continuous search
   spaces and can be easily run in parallel.
 
 - **Bayesian optimization**  fits a probabilistic model to capture the current believe of the objective function :cite:`shahriari-ieee16a, snoek-nips12a`.
-  To select a new configuration, it uses an utility function that only depend on the
+  To select a new configuration, it uses a utility function that only depends on the
   probabilistic model to trade off exploration and exploitation. Here we use a Gaussian process to model our objective
-  function, which work well in low (<10) dimensional continuous search spaces but do not work with categorical
+  function, which works well in low (<10) dimensional continuous search spaces but does not work with categorical
   hyperparameters.
 
 - **SMAC** is also a Bayesian optimization method but uses random forest instead of Gaussian processes to model
-  the objective function :cite:`hutter-lion11a`. That allows it to work in high dimensional mixed continuous and discret input space but will 
-  be probably outperformed by Gaussian process based Bayesian optimization in low dimensional continuous search space :cite:`eggensperger-bayesopt13`.
+  the objective function :cite:`hutter-lion11a`. That allows it to work in high dimensional mixed continuous and discret input spaces but will
+  be probably outperformed by Gaussian process based Bayesian optimization in low dimensional continuous search spaces :cite:`eggensperger-bayesopt13`.
 
 
 
@@ -447,12 +447,12 @@ Related Work
 There are only a few projects that we are aware of that have a focus similar to Sacred with the closest one being Sumatra :cite:`davison2012`.
 It comes as a command-line tool that can operate also with non-Python experiments, and helps to do all the bookkeeping.
 Under the hood it uses a SQL database to store all the runs and comes with a versatile web-interface to view and edit the stored information.
-The main drawback of Sumatra, and indeed the main reason why we opted for our own library is its workflow.
+The main drawback of Sumatra, and indeed the main reason why we opted for our own library, is its workflow.
 It requires initializing a project directory, the parameters need to be in a separate file and the experiment must be an executable that takes the name of a config-file as a command-line parameter.
 
 The CDE project :cite:`guo2012` takes a completely different and much more general approach to facilitate reproducible research.
 It uses the linux kernel to track *all* files, including data, programs and libraries that were used for an experiment.
-These files are then bundled together and because it also includes system libraries the resulting package can be run on virtually any other linux machine.
+These files are then bundled together and because it also includes system libraries, the resulting package can be run on virtually any other linux machine.
 It does not help organization or bookkeeping, but, given that the user takes care of parameters and randomness, provides a very thorough solution to the problem of reproducibility.
 
 :cite:`jobman` is a Python library that grew out of the need for scheduling lots of machine learning experiments.
@@ -460,7 +460,7 @@ It helps with organizing hyperparameter searches and as a side-effect it also ke
 It requires the experiment to take the form a Python function with a certain signature.
 
 Experiment databases :cite:`vanschoren2012, smith2014` make an effort to unify the storage of machine learning problems and experiments by expressing them in a common language.
-By standardizing that language they improve comparability and communicability of the results.
+By standardizing that language, they improve comparability and communicability of the results.
 The most wellknown example of might be the OpenML project \cite{vanschoren2014}.
 Expressing experiments in a common language implies certain restrictions on the performed experiments.
 For this reason we chose not to build Sacred ontop of an experiment database, to keep it applicable to as many usecases as possible.
@@ -474,13 +474,13 @@ fobor
 Future Work
 ===========
 Sacred is a framework that mainly integrates different solutions to data-science research problems.
-Because of that, there are many useful ways in which it could be extended. Apart from the above mentioned interface to OpenML the following points are high up our list:
+Because of that, there are many useful ways in which it could be extended. Apart from the above mentioned interface to OpenML, the following points are high up our list:
 
-Hyperparameter optimization has become a common and very important part of machine learning research, and with the powerful configuration system of Sacred in place this an obvious next step.
-So with the next release (0.7) of Sacred we plan to ease integration of tools like ``spearmint`` :cite:`snoek2012` and ``hyperopt`` :cite:`bergstra2013` into the workflow.
+Hyperparameter optimization has become a common and very important part of machine learning research, and with the powerful configuration system of Sacred in place, this an obvious next step.
+So with the next release (0.7) of Sacred, we plan to ease integration of tools like ``spearmint`` :cite:`snoek2012` and ``hyperopt`` :cite:`bergstra2013` into the workflow.
 In the same vein it is necessary to include tools for analysing the importance of hyperparameters like the FANOVA framework of :cite:`hutter2014`.
 
-The next important step will be to also provide a graphical interface to help inspecting and edit past and current runs.
+The next important step will also be to provide a graphical interface to help inspecting and editing past and current runs.
 Ideally this will take the form of a web-interface that connects directly to the database.
 
 Another popular request is to have a bookkeeping backend that supports local storage. That could be in the form of flat files in a directory or a SQLite database. These backends are particularly easy to add so we also hope for contributions from the users for more specialized usecases.
