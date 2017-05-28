@@ -248,39 +248,46 @@ Furthermore, Sacred automatically seeds the global PRNGs of the ``random`` and `
 
 Labwatch
 ========
-The correct hyperparameter setting for machine learning algorithms can often make the difference between state-of-the-art performance or random guessing.
-A growing number of tools that can automate the optimization of hyperparameters have recently emerged that allow the users to, instead of manual tuning, define a searchspace and leave the search for good configurations to the optimizer.
+
+Finding the correct hyperparameter setting for machine learning algorithms is often done by try and error even though it sometimes makes the difference between state-of-the-art performance or performance that is as good as random guessing.
+A growing number of tools that can automate the optimization of hyperparameters have recently emerged that allow users to, instead of manual tuning, define a searchspace and leave the search for good configurations to the optimizer.
+However, in practice each optimizer often requires users to adapt their code to a certain interface.
+Labwatch supports an unified interface through Sacred to a variety of hyperparameter optimizers that allows for an easy integration of hyperparameter optimization into the daily workflow.
 
 
 LabAssistant
 ------------
 
-The heart of Labwatch it the so called Labassistant which connects the Sacred Experiment with a hyperparameter configuration search space, dubbed searchspace and an optimizer.
+At the heart of Labwatch is the so called LabAssistant which connects the Sacred experiment with a hyperparameter configuration search space, simply dubbed searchspace and an hyperparameter optimizer through a database.
 
 .. code-block:: python
 
     from sacred import Experiment
     from labwatch.assistant import LabAssistant
-
+    from labwatch.optimizers import RandomSearch
+    
     ex = Experiment()       
-    a = LabAssistant(ex,
-                     "labwatch_demo",
+    a = LabAssistant(experiment=ex,
+                     database_name="labwatch",
                      optimizer=RandomSearch)
 
 
-Labwatch provides a simple way for defining searchspaces that is well integrated into the Sacred workflow, and integrates hyperparameter optimizers such as various Bayesian optimization methods (e.g `RoBO <https://github.com/automl/RoBO/>`_ , `SMAC <https://github.com/automl/SMAC3/>`_) random search, or bandit strategies  (Hyperband [4])
+.. Labwatch provides a simple way for defining searchspaces that is well integrated into the Sacred workflow, and integrates hyperparameter optimizers such as various Bayesian optimization methods (e.g `RoBO <https://github.com/automl/RoBO/>`_ , `SMAC <https://github.com/automl/SMAC3/>`_) random search, or bandit strategies  (Hyperband [4])
 
+If the experiment is now called with a searchspace rather than a configuration, Labwatch will pass all entries of this experiment in the database to the hyperparameter optimizer and let it suggest a configuration. This configurations is then used to run the experiment.
 
+ 
+For bookkeeping it leverages the database storage of evaluated hyperparameter configurations, which allows parallel distributed optimization and also enables the use of post hoc tools for assessing hyperparameter importance (e.g Fanova :cite:`hutter-icml14a`).
 
 
 
 Search Spaces
 -------------
 
-Generally Labwatch distinguishes between *categorical* hyperparameters that can have only discret choices and *numerical* hyperparameters that can have either integer or float values.
-The search space defines for each hyperparameter a prior distribution (e.g. uniform or Gaussian) as well as its type and its scale (e.g. log, linear) and a default value.
+In general Labwatch distinguishes between *categorical* hyperparameters that can have only discret choices and *numerical* hyperparameters that can have either integer or float values.
+For each hyperparameter the search space defines a prior distribution (e.g. uniform or Gaussian) as well as its type and its scale (e.g. log scale, linear scale) and a default value.
 
-They follow the same interface as Sacred's named configs:
+Search spaces follow the same interface as Sacred's named configs:
 
 .. code-block:: python
 
@@ -307,11 +314,25 @@ Now by executing the Experiment for instance through the command line:
 
     >> python my_experiment.py with search_space
 
-Labwatch triggers the optimizer to suggest a new configuration based on all configuration that are stored in the database drawn from the specified searchspace and forward it to Sacred in order to run the experiment with this configuration.
+Labwatch triggers the optimizer to suggest a new configuration based on all configuration that are stored in the database and have been drawn from the same search space.
+
+Every hyperparameter optimization method such as Bayesian optimization or random search often needs to do evaluate some configuration before it approaches a good region in the search space.
+This means that Labwatch needs to run the same experiment multiple times.
+Labwatch's Labassitant allows to easily do this from python via:
+
+.. code-block:: python
+
+    a.run_suggestion(100)
+
+This runs the same experiment 100 times with different hyperparameter configuration and saves all results in a database.
 
 
 
-Since searchspaces are basically named config, Labwatch also allows to have multiple searchspaces, which is very convenient if one wants to keep single hyperparameters fixed and to only optimize a few other hyperparameters
+Multiple search spaces
+++++++++++++++++++++++
+
+Since search spaces are named configurations, Labwatch also allows to have multiple search spaces, which is very convenient if one wants to keep single hyperparameters fixed and to only optimize a few other hyperparameters.
+Assume that we now only want to optimize the learning rate and keep the batch size fixed, we can create a second smaller search space:
 
 .. code-block:: python
 
@@ -322,14 +343,15 @@ Since searchspaces are basically named config, Labwatch also allows to have mult
                                      default=10e-2,
                                      log_scale=True)
 
-By now calling: 
+We can run our experiment now in the same way but calling it with this new search space: 
 
 .. code-block:: bash
 
     >> python my_experiment.py with small_search_space
 
-For the batch size now the value stored in the config would be used.
 
+Labwatch passes only entries of the database from the same search space to the optimizer in order to avoid inconsistencies. The optimizer will now only suggest a value for the learning rate. 
+All other hyperparameter such as the batch size are set to the values that are defined in the config.
 
 
 
@@ -337,36 +359,24 @@ Hyperparameter Optimizers
 -------------------------
 
 
-Labwatch offers a simple interface to a variety of state-of-the-art hyperparameter optimization methods.
-Note that every optimizer has its own properties and might not work for all use cases.
-The following list will give you a brief overview of the optimizer that can be used with labwatch and in which
-setting they would work. For more details we refer to the corresponding papers:
+Labwatch offers a simple but also flexible interface to a variety of state-of-the-art hyperparameter optimization methods.
+Even though the interface for all optimizer is the same, every optimizer has its own properties and might not work in all use cases.
+The following list gives a brief overview of optimizers that can be used with Labwatch and in which
+setting they work and which they do not. For more details we refer to the corresponding papers:
 
-- **Random search** is probably the simplest hyperparameter optimization method. It just samples hyperparameter
-  configurations from the prior. The nice thing with random search is that it works in all search
-  spaces and is easy to parallelize.
+- **Random search** is probably the most simplest hyperparameter optimization method :cite:`bergstra-jmlr12a`. It just samples hyperparameter
+  configurations randomly from the corresponding prior distributions. Due to its simplicity, random search works in discrete as well as continuous search
+  spaces and can be easily run in parallel.
 
-- **Bayesian optimization** fits a probabilistic model to capture the current believe of the objective function.
-  To select a new configuration, it use an utility function that only depend on the
-  probabilistic model to trade off exploration and exploitation. Here we use Gaussian process to model our objective
-  function, which work well in low (<10) dimensional continuous input spaces but do not work with categorical
+- **Bayesian optimization**  fits a probabilistic model to capture the current believe of the objective function :cite:`shahriari-ieee16a, snoek-nips12a`.
+  To select a new configuration, it uses an utility function that only depend on the
+  probabilistic model to trade off exploration and exploitation. Here we use a Gaussian process to model our objective
+  function, which work well in low (<10) dimensional continuous search spaces but do not work with categorical
   hyperparameters.
 
 - **SMAC** is also a Bayesian optimization method but uses random forest instead of Gaussian processes to model
-  the objective function. It works in high dimensional mixed continuous and discret input space but will be
-  be probably outperformed by GP-based Bayesian optimization in the low dimensional continuous space.
- 
-For bookkeeping it leverages the database storage of evaluated hyperparameter configurations, which allows parallel distributed optimization and also enables the use of post hoc tools for assessing hyperparameter importance (e.g Fanova [5]).
-
-Every hyperparameter optimization method such as Bayesian optimization or random search often needs to do some function evaluations to find a good configuration, which for Labwatch means that the same experiment needs to be run multiple time.
-Labwatch's Labassitant allows to easily do this from python via:
-
-.. code-block:: python
-
-    a.run_suggestion(100)
-
-This runs the experiment 100 times and saves all hyperparameter configurations and their results in a database.
-
+  the objective function :cite:`hutter-lion11a`. That allows it to work in high dimensional mixed continuous and discret input space but will 
+  be probably outperformed by Gaussian process based Bayesian optimization in low dimensional continuous search space :cite:`eggensperger-bayesopt13`.
 
 
 
