@@ -41,63 +41,59 @@ Introduction
 
 Pattern matching is a powerful tool which is part of many functional programming languages as well as computer algebra systems such as Mathematica.
 It is useful for many applications including symbolic computation, term simplification, term rewriting systems, automated theorem proving, and model checking.
-In this paper, we present a pattern matching implementation for Python and the optimizations it provides.
+In this paper, we present a pattern matching library for Python and the underlying algorithms.
 
-Among the existing systems, Mathematica offers the most expressive pattern matching.
-Its pattern matching offers similar expressiveness as regular expressions in Python, but for symbolic tree structures instead of strings.
-Patterns are used widely in Mathematica, e.g. in function definitions or for manipulating expressions.
+The goal of pattern matching is to find a match substitution given a subject term and a pattern which is an term with placeholders :cite:`Baader1998`.
+The substitution maps placeholders in the pattern to replacement terms.
+A match is a substitution that can be applied to the pattern with the result being the original subject.
+This basic form of pattern matching without sequence variables or any special function symbols is called syntactic matching.
+
+Among the existing systems, Mathematica_ arguably offers the most expressive pattern matching.
+Its pattern matching offers similar expressiveness as Python's regular expressions, but for symbolic tree structures instead of strings.
+Patterns are used widely in Mathematica, e.g. in function definitions or for manipulating terms.
 It is possible to define custom function symbols which can be associative and/or commutative.
-Mathematica also offers sequence variables which can match a sequence of expressions instead of a single one.
-They are especially useful when working with variadic function symbols.
+Mathematica also offers sequence variables which can match a sequence of terms instead of a single one.
+These are especially useful when working with variadic function symbols.
+Mathics_ is an open source computer algebra system written in Python that aims to replicate the syntax and functionality of Mathematica.
+However, it is not a good choice if the only intended use for it is its pattern matching.
 
-There is currently no open source alternative to Mathematica with comparable pattern matching capabilities.
-In particular, we are interested in similar pattern matching for Python.
-Unfortunately, Mathematica is proprietary and there are no publications on the underlying pattern matching algorithm.
-
-Previous work predominantly covers syntactic pattern matching, i.e. associative/commutative/variadic
-function symbols are not supported. Specifically, no existing work allows function symbols
-which are either commutative or associative but not both. However, there are domains where
-functions have those properties, e.g. matrix multiplication in linear algebra.
+We believe that no existing work has covered pattern matching with function symbols which are either commutative or associative but not both at the same time.
+However, there are functions with those properties, e.g. matrix multiplication or arithmetic mean.
 Most of the existing pattern matching libraries for Python only support syntactic patterns.
-While the pattern matching in SymPy_ can work with associative/commutative functions, it is limited to finding a single match and does not support sequence variables.
-However, we are also interested in finding all possible matches for a pattern.
-Furthermore, SymPy is limited to mathematical expressions and does not provide general symbolic pattern matching.
+While the pattern matching in SymPy_ can work with associative/commutative functions, it is limited to finding a single match.
+Nonetheless, for some applications it is interesting to find all possible matches for a pattern.
+Furthermore, SymPy does not support sequence variables and is limited to predefined set of mathematical operations.
 
-In many applications, a fixed set of patterns will be matched repeatedly against different subjects.
-The simultaneous matching of multiple patterns is called many-to-one matching, as opposed to
-one-to-one matching which denotes matching with a single pattern.
+In many applications, a fixed set of patterns is matched repeatedly against different subjects.
+The simultaneous matching of multiple patterns is called many-to-one matching, as opposed to one-to-one matching which denotes matching with a single pattern.
 Many-to-one matching can be sped up by exploiting similarities between patterns.
-This has already been the subject of research for both syntactic and AC pattern matching, but not with
-the full feature set described above.
-Discrimination nets are the state-of-the-art solution for many-to-one matching.
+This has already been the subject of research for both syntactic :cite:`Christian1993,Graef1991,Nedjah1997`
+and associative-commutative pattern matching :cite:`Kounalis1991,Bachmair1993,Lugiez1994,Bachmair1995,Eker1995,Kirchner2001`, but not with the full feature set described above.
+Discrimination nets :cite:`Bundy1984` are the state-of-the-art solution for many-to-one matching.
 Our goal is to generalize this approach to support all the aforementioned features.
 
-**Old:**
+In this paper, we present the open-source library for Python MatchPy_ which provides pattern matching with sequence variables and associative/commutative function symbols.
+In addition to standard one-to-one matching, MatchPy also includes an efficient many-to-one matching algorithm that uses generalized discrimination nets.
+First, we give an overview of what MatchPy can be used for.
+Secondly, we explain some of the challenges arising from the non-syntactic pattern matching features and how we solve them.
+Then we give an overview of how many-to-one matching is realized and optimized in MatchPy.
+Next, we present our experiments where we observed significant speedups of the many-to-one matching over one-to-one matching.
+Finally, we give draw some conclusions from the experiments and propose future work on MatchPy.
 
-We implemented pattern matching with sequence variables and associative/commutative function symbols as an open-source library for Python called MatchPy_.
-In addition to standard one-to-one matching, this library also includes an efficient many-to-one matching algorithm that uses generalized discrimination nets.
-We present our experiments where we observed significant speedups of the many-to-one matching over one-to-one matching.
-
-**New:**
-
-The contributions discussed in this paper are
-
-- the Python library MatchPy_,
-- pattern matching with sequence variables and associative/commutative/variadic function symbols,
-- many-to-one matching with the above features,
-- and experiments to evaluate the performance of many-to-one matching.
+.. _Mathematica: https://www.wolfram.com/mathematica/
+.. _Mathics: http://mathics.github.io/
 
 Usage Overview
 --------------
 
 MatchPy can be installed using ``pip install matchpy`` and all necessary classes can be imported with
 :py:`from matchpy import *`. Expressions in MatchPy consist of constant symbols and operations.
-For patterns, wildcards can also be used as placeholders. We will use
+For patterns, wildcards can also be used as placeholders. We use
 `Mathematica's notation <https://reference.wolfram.com/language/guide/Patterns.html>`_ for
-wildcards, i.e. we will append underscores to wildcards to distinguish them from symbols.
+wildcards, i.e. we append underscores to wildcard names to distinguish them from symbols.
 
-You can use MatchPy with native Python types such as lists and ints. The following is a example
-of how you can match a subject ``[0, 1]`` against a pattern ``[x_, 1]``. The expected match here
+MatchPy can be used with native Python types such as lists and ints. The following is a example
+of how the subject ``[0, 1]`` can be matched against the pattern ``[x_, 1]``. The expected match here
 is the replacement ``0`` for ``x_``. We use next because we only want to use the first (and in this
 case only) match of the pattern:
 
@@ -118,8 +114,8 @@ plus wildcards require at least one argument to match.
     >>> next(match([1, 2, 3], Pattern([x_, y___])))
     {'x': 1, 'y': (2, 3)}
 
-In the following, we will omit the definition of new variables as they can be done in the same way.
-In addition to native types, you can also define custom operations by creating a subclass of the ``Operation`` class:
+In the following, we omit the definition of new variables as they can be done in the same way.
+In addition to native types, one can also define custom operations by creating a subclass of the ``Operation`` class:
 
 .. code-block:: python
 
@@ -169,8 +165,8 @@ This replacement rule can be used to sort a list when applied repeatedly with ``
     [1, 2, 3, 4]
 
 Sequence variables can also be used to match subsequences that match a constraint.
-For example, we can use the this to find all subsequences of integers that sum up to 5.
-In the following example, we will use anonymous wildcards which have not name and are hence not part of the match substitution:
+For example, we can use the this feature to find all subsequences of integers that sum up to 5.
+In the following example, we use anonymous wildcards which have not name and are hence not part of the match substitution:
 
 .. code-block:: pycon
 
@@ -185,7 +181,7 @@ More examples can be found in `MatchPy's documentation <https://matchpy.readthed
 Application Example: Finding matches for a BLAS kernel
 ......................................................
 
-.. table This is the caption for the materials table. :label:`mtable`
+.. table Linear Algebra Operations :label:`tbl:laop`
    :class: w
    +-----------------------------+-----------------+----------+--------------------------+
    | Operation                   | Symbol          | Arity    | Properties               |
@@ -223,17 +219,17 @@ Application Example: Finding matches for a BLAS kernel
     \label{tbl:laop}
     \end{table}
 
-BLAS_ is a collection of optimized routines that can compute very specific linear algebra operations efficiently.
-As an example, assume we want to find all subexpressions of some linear algebra expression which we can compute with the `?TRMM`_ BLAS routine.
-These all have the form :math:`\alpha \times op(A)  \times B` or :math:`\alpha  \times B  \times op(A)` where
+BLAS_ is a collection of optimized routines that can compute specific linear algebra operations efficiently.
+As an example, assume we want to match all subexpressions of a linear algebra expression which we can compute with the `?TRMM`_ BLAS routine.
+These have the form :math:`\alpha \times op(A)  \times B` or :math:`\alpha  \times B  \times op(A)` where
 :math:`op(A)` is either the identity function or transposition, and :math:`A` is a triangular matrix.
-For this example, we will leave out all variants where :math:`\alpha \neq 1`.
+For this example, we leave out all variants where :math:`\alpha \neq 1`.
 Note that this is meant merely as an example use case for pattern matching and not as a general solution for compiling linear algebra expressions.
 
 In order to model the linear algebra expressions, we use the operations shown in Table :ref:`tbl:laop`.
 In addition, we have special symbol subclasses for scalars, vectors and matrices.
 Matrices also have a set of properties, e.g. they can be triangular, symmetric, square, etc.
-For those patterns we will also use a special kind of dot variable, that is restricted to only match a specific kind of symbol.
+For those patterns we also use a special kind of dot variable, that is restricted to only match a specific kind of symbol.
 Finally, we can construct the patterns using sequence variables to capture the remaining operands of the multiplication:
 
 .. code-block:: python
@@ -254,7 +250,8 @@ Finally, we can construct the patterns using sequence variables to capture the r
         A_is_triangular),
     ]
 
-With these patterns, we can find all matches for the `?TRMM`_ routine within a product:
+With these patterns, we can find all matches for the `?TRMM`_ routine within a product.
+In this example, ``M1``, ``M2`` and ``M3`` are matrices, but only ``M3`` is triangular:
 
 .. code-block:: pycon
 
@@ -264,7 +261,10 @@ With these patterns, we can find all matches for the `?TRMM`_ routine within a p
     ...     print('{} with {}'.format(i, substitution))
     0 with {A -> M3, B -> M2, t -> (), h -> ((M3)^T, M1)}
     1 with {A -> M3, B -> M1, t -> (M3, M2), h -> ()}
-    2 with {A -> M3, B -> M1, t -> ((M3)^T), h -> (M2)}
+    2 with {A -> M3, B -> M1, t -> (M2), h -> ((M3)^T)}
+
+For this product, a total of three matches are found.
+One match is for the first two matrices, the next is for the last two matrices, and the last match is for the second and third matrix.
 
 .. _`?TRMM`: https://software.intel.com/en-us/node/468494
 .. _BLAS: http://www.netlib.org/blas/
@@ -295,7 +295,7 @@ Commutative matching has been shown to be NP-complete :cite:`Benanav1987`.
 It is possible to solve this by matching all permutations of the subjects arguments against all permutations of the pattern arguments.
 However, with this naive approach, a total of :math:`n!m!` combinations have to be matched where :math:`n` is the number of subject arguments
 and :math:`m` the number of pattern arguments.
-Most of these combinations will likely not match or yield redundant matches.
+It is likely that most of these combinations do not match or yield redundant matches.
 
 Instead, we interpret the arguments as a multiset, i.e. an orderless collection that allows repetition of elements.
 Also, we use the following order for matching a commutative term:
@@ -329,7 +329,7 @@ This means that the possible distributions are given by the non-negative integer
 
 :math:`x_a` determines how many times ``a`` is included in the substitution for ``x``.
 Because ``y__`` requires at least one term, we have the additional constraint :math:`y_a + y_b \geq 1`.
-The only possible solution :math:`x_a = 1, x_b = 1, y_a = 0, y_b = 1` corresponds to the match substitution :math:`\{ x \mapsto (a, b), y \mapsto (b) \}`.
+The only possible solution :math:`x_a = x_b = y_b = 1 \wedge y_a = 0` corresponds to the match substitution :math:`\{ x \mapsto (a, b), y \mapsto (b) \}`.
 
 Extensive research has been done on solving linear Diophantine equations and linear Diophantine
 equation systems :cite:`Weinstock1960,Bond1967,Lambert1988,Clausen1989,Aardal2000`. In our case
@@ -349,10 +349,10 @@ solutions are cached. This reduces the impact of the sequence variables on the o
 Optimizations
 -------------
 
-Since most applications for pattern matching will repeatedly match a fixed set of patterns against
+Since most applications for pattern matching repeatedly match a fixed set of patterns against
 multiple subjects, we implemented many-to-one matching for MatchPy.
 The goal of many-to-one matching is to utilize similarities between patterns to match them more efficiently.
-We will give a brief overview over the many-to-one matching algorithm used by MatchPy.
+in this section, we give a brief overview over the many-to-one matching algorithm used by MatchPy.
 Full details can be found in the master thesis :cite:`thesis` that MatchPy is based on.
 
 Many-to-one Matching
@@ -572,7 +572,7 @@ Conclusions
 
 We have presented MatchPy, which is a pattern matching library for Python with support for sequence variables and associative/commutative functions.
 This library includes algorithms and data structures for both one-to-one and many-to-one matching.
-Because non-syntactic pattern matching is NP-hard, in the worst case the pattern matching will take exponential time.
+Because non-syntactic pattern matching is NP-hard, in the worst case the pattern matching takes exponential time.
 Nonetheless, our experiments on real world examples indicate that many-to-one matching can give a significant speedup over one-to-one matching.
 However, the employed discrimination nets come with a one-time construction cost.
 This needs to be amortized before using them is faster than one-to-one matching.
@@ -596,7 +596,7 @@ Future Work
 
 We plan on extending MatchPy with more powerful pattern matching features to make it useful for an even wider range of applications.
 The greatest challenge with additional features is likely to implement them for many-to-one matching.
-In the following, we will discuss some possibilities for extending the library.
+In the following, we discuss some possibilities for extending the library.
 
 Additional pattern features
 ...........................
