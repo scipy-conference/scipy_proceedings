@@ -125,9 +125,9 @@ Tested libraries
 Acknowledgments
 ---------------
 
-MK was supported by grant ACI-1443054 from the National Science Foundation.
-OB was supported in part by grant ACI-1443054 from the National Science Foundation.
-Computational resources were in part provided by the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1053575 (allocation MCB130177 to OB).
+MK and IP were supported by grant ACI-1443054 from the National Science Foundation.
+SJ and OB were supported in part by grant ACI-1443054 from the National Science Foundation.
+Computational resources were in part provided by the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1053575 (allocation MCB130177 to OB and allocation TG-MCB090174 to JS).
 
 
 References
