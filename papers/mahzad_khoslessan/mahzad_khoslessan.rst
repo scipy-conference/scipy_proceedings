@@ -62,26 +62,22 @@ We show that obtaining good parallel performance depends on multiple factors suc
 Effect of I/O Environment
 =========================
 
+In MDAnalysis library, trajectories from MD simulations are a frame by frame description of the motion of particles as a function of time. To allow the analysis of large trajectories, MDAnalysis only loads a single frame into memory at any time [Gowers2016]_.
+Some file systems are designed to run on a single CPU while others like Network File System (NFS) which is among distributed file systems are designed to let different processes on multiple computers access a common set of files. These file systems guarantees sequential consistency which means that it prevents any process from reading a file while another process is reading the file. Distributed parallel file systems (Lustre) allow simultaneous access to the file by different processes; however it is very important to have a parallel I/O library; otherwise the file system will process the I/O requests it gets serially, yielding no real benefit from doing parallel I/O.
+For XTC file format, file size is smaller as compared to the other formats because of in-built compression. In addition, MDAnalysis implements a fast frame scanning algorithm for XTC files. This algorithm computes frame offsets and saves the offsets to disk as a hidden file once the trajectory is read the first time. When a trajectory is loaded again then instead of reading the whole trajectory the offset is used to seek individual frames. As a result, the time it takes a process to load a frame into memory is short. In fact, each frame I/O will be followed by decompressing of that frame as soon as it is loaded into memory. Thus, as soon as the frame is loaded into memory by one process, the file system will let the next process to load another frame into memory. This happens while the first process is decompressing the loaded frame.
+Figure [] show the I/O pattern compared between different file formats. For XTC file format, sort of pipelining is happening [] which means that as soon as one process finishes frame I/O, and start decompressing it, the other process can start another frame I/O. However, this is not the case for DCD and netCDF file format [].
+There is no in- built compression for these types of file formats and as a result file sizes are larger. This will result in higher I/O time (Which is the bottleneck here) and therefore, the whole time one process is loading a frame into memory other processes are waiting. The I/O time is larger for netCDF file format as compared to DCD file format. This is since netCDF has a more complicated file format. 
+Reading an existing netCDF dataset involves opening the dataset; inquiring about dimensions, variables, and attributes; reading variable data; and closing the dataset [ref]. In fact, netCDF has a very sophisticated format, while DCD has a very simple file format. This is why DCD is showing a weak scaling by increasing parallelism whereas netCDF file format is being scaled reasonably well by increasing parallelism across many cores.
 
-
-
-
-.. _fig-main:
-
-.. |logo1| image:: figs/IO-time-DCD300.pdf    
-   :scale: 50%
-.. |logo2| image:: figs/IO-time-XTC300.pdf
-   :scale: 50%
-.. |logo3| image:: figs/IO-time-NCDF300.pdf
-   :scale: 50%
-
-+--------------+-------------+--------------+
-| |logo1|      | |logo2|     | |logo3|      |
-+--------------+-------------+--------------+
-     
 
 Effect of File Format
 =====================
+
+Figures [] and [] show comparison of job execution time, total compute and I/O time averaged over all processes and the difference between these two times for 300X and 600X trajectories and for all file formats respectively.
+As can be seen, job execution time does not scale very well across parallelisms from 1 to 72 for all formats.
+XTC and NCDF file formats reveals much better scaling as compared to DCD file format. As shown in Figure [], the results from different machines lie on top of each other for total compute and IO time for XTC and NCDF file formats; however, this is not the case for job execution time. Unlike job execution time, total compute and I/O time averaged over all processes reveals a reasonable scaling. 
+The same behavior can be seen for other trajectory sizes as shown also in Figures 36 to 41. Based on the present result, there is a difference between job execution time, and total compute and I/O time averaged over all processes. This difference increases with increase in trajectory size for all file formats for all machines. 
+This time difference is much smaller for Comet and Stampede as compared to other machines. In order to find the underlying reasons for this difference, web interface of Dask is used to obtain information about the amount of time spent on the communication between workers, and different computations at the worker level in the Map-reduce job.
 
 Challenges for Good HPC Performance
 ===================================
