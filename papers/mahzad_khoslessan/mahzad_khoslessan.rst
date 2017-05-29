@@ -25,11 +25,7 @@ Abstract
 ========
 
 The analysis of biomolecular computer simulations has become a challenge because the amount of output data is now routinely in the terabyte range.
-<<<<<<< HEAD
 We evaluate if this challenge can be met by a parallel map-reduce approach with the Dask_ parallel computing library for task-graph based computing coupled with our MDAnalysis_ Python library for the analysis of molecular dynamics (MD) simulations [Gowers2016]_.
-=======
-We evaluate if this challenge can be met by a parallel map-reduce approach with the Dask_ parallel computing library for task-graph based computing coupled with our MDAnalysis_ Python library for the analysis of molecular dynamics (MD) simulations.
->>>>>>> d2157f23427e5d3900629ce6dc73b29531ad605c
 We performed a representative performance evaluation, taking into account the highly heterogeneous computing environment that researchers typically work in together with the diversity of existing file formats for MD trajectory data.
 We found that the the underlying storage system (solid state drives, parallel file systems, or simple spinning platter disks) can be a deciding performance factor that leads to data ingestion becoming the primary bottle neck in the analysis work flow.
 However, the choice of the data file format can mitigate the effect of the storage system; in particular, the commonly used "Gromacs XTC" trajectory format, which is highly compressed, can exhibit strong scaling close to ideal due to trading a decrease in global storage access load against an increase in local per-core cpu-intensive decompression.
@@ -123,17 +119,9 @@ Comparison of Performance of Map-Reduce Job Between MPI for Python and Dask Fram
 ======================================================================================
 
 
-<<<<<<< HEAD
-=======
-MK and IP were supported by grant ACI-1443054 from the National Science Foundation.
-SJ and OB were supported in part by grant ACI-1443054 from the National Science Foundation.
-Computational resources were in part provided by the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1053575 (allocation MCB130177 to OB and allocation TG-MCB090174 to JS).
->>>>>>> d2157f23427e5d3900629ce6dc73b29531ad605c
-
-
 
 Acknowledgments
----------------
+===============
 
 MK and IP were supported by grant ACI-1443054 from the National Science Foundation.
 SJ and OB were supported in part by grant ACI-1443054 from the National Science Foundation.
