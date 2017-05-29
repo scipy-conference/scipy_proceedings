@@ -383,9 +383,19 @@ setting they work and which they do not. For more details we refer to the corres
 
 Sacredboard
 ===========
-Sacredboard[6] provides a convenient way for browsing runs of experiments stored in a Sacred database. In a web browser window, a list of both running and finished experiments can be viewed, together with their current state and results.
-A detail view shows the hyperparameters used, information about the machine and environment where the experiment was run, and the standard output produced by the experiment.
-Sacredboard comes with a lightweight web server, such that it can be easily installed as a Python package. It only requires Python and a recent web browser to run. Currently it only supports MongoDB, but in future work we will provide an interface to the various other backends that are supported by Sacred.
+Sacredboard provides a convenient way for browsing runs of experiments stored in a Sacred database.
+It comes as a Python package that connects to the database and
+In a web browser window, a list of both running and finished experiments can be viewed, together with their current state and results.
+A detail view shows the hyperparameters used, information about the machine and environment where the experiment was run,
+and the standard output produced by the experiment.
+Sacredboard comes with a lightweight web server, such that it can be easily installed as a Python package.
+It only requires Python and a recent web browser to run. Currently it only supports MongoDB,
+but in future work we will provide an interface to the various other backends that are supported by Sacred.
+
+.. figure:: sacredboard.png
+   :scale: 35 %
+   :alt: map to buried treasure
+
 
 
 
