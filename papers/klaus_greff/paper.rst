@@ -123,8 +123,8 @@ This is syntactically convenient and allows using the full expressiveness of Pyt
 For users that instead prefer plain dictionaries or external configuration files, those can also be used.
 All the entries of the configuration are enforced to be JSON-serializable, such that they can easily be stored and queried.
 
-Using Config Values
-+++++++++++++++++++
+.. Using Config Values
+
 To make all configuration entries easily accessible, Sacred employs the mechanism of *dependency injection*.
 That means, any function decorated by ``@ex.capture`` simply accept any configuration entry as a parameter.
 Whenever such a function is called Sacred will automatically fill in those parameters from the configuration.
@@ -145,8 +145,8 @@ Injection follows the priority: 1. explicitly passed arguments, 2. config valu
 
 .. Main function and commands are automatically captured
 
-Updating Parameters
-+++++++++++++++++++
+.. Updating Parameters
+
 Configuration values can be set (overridden) externally when running an experiment.
 This can happen both from the commandline
 
@@ -170,57 +170,6 @@ They are defined similar to configurations using ``@ex.named_config``, dictionar
 They can be added en-block from the commandline and from Python, and are treated as a set of updates.
 
 .. example ??
-
-
-
-Bookkeeping
------------
-
-Bookkeeping in Sacred is accomplished by implementing the observer pattern :cite:`gamma1994`:
-The experiment publishes all kinds of information in the form of events that zero or more observers can subscribe to.
-Observers can be added dynamically from the commandline or directly in code:
-
-.. code-block:: python
-
-    from sacred.observers import MongoObserver
-    ex.observers.append(MongoObserver.create("DBNAME"))
-
-
-
-Events are fired when a run is started, every couple of seconds while it is running (heartbeat), and once it stops, (either successfully or by failing).
-This way information is available already during runtime, and partial data is captured even in case of failures. 
-
-Sacred collects a lot of information about the experiment and the run. 
-Most importantly of course it will save the configuration and the result. 
-But it will also among others save a snapshot of the source-code, a list of auto-detected package dependencies and the stdout of the experiment. 
-Below is a summary of all the collected data:
-
-
-Configuration
-    configuration values used for this run
-Source Code
-    source code of all detected source files
-Dependencies
-    version numbers for all detected package dependencies
-Host
-    information about the host that is running the experiment including CPU, OS, and Python version. Optionally also other informatino like GPU or environment variables.
-Metadata
-    start and stop times, current status, result, and fail-trace (if needed)
-Live Information
-     Including captured stdout, extra files needed or created by the run that should be saved, custom information, and custom metrics about the experiment.
-
-
-
-Sacred ships with observers that stores all the information from these events in a MongoDB, SQL database, or locally on disk.
-Furthermore ther are two observers that can send notifications about runs via Telegram or Slack.
-However, the observer interface is generic and supports easy addition of custom observers.
-
-The recommended observer is the ``MongoObserver`` that writes to a MongoDB :cite:`mongo`.
-MongoDB is a noSQL database, or more precisely a *Document Database*:
-It allows the storage of arbitrary JSON documents without the need for a schema like in a SQL database.
-These database entries can be queried based on their content and structure.
-This flexibility makes it a good fit for Sacred, because it permits arbitrary configuration for each experiment that can still be queried and filtered later on.
-In particular this feature has been very useful to perform large scale studies like the one in :cite:`greff2015`.
 
 
 Reproducibility
@@ -264,6 +213,60 @@ It can be accessed from the code in the same way as every other config entry.
 .. but Sacred can also automatically generate seeds and PRNGs that deterministically depend on that root seed for you.
 
 Furthermore, Sacred automatically seeds the global PRNGs of the ``random`` and ``numpy`` modules when starting an experiment, thus making most sources of randomization reproducible without any intervention from the user.
+
+
+
+
+Bookkeeping
+-----------
+
+Bookkeeping in Sacred is accomplished by implementing the observer pattern :cite:`gamma1994`:
+The experiment publishes all the collected information in the form of events that zero or more observers can subscribe to.
+Observers can be added dynamically from the commandline or directly in code:
+
+.. code-block:: python
+
+    from sacred.observers import MongoObserver
+    ex.observers.append(MongoObserver.create("DBNAME"))
+
+
+
+Events are fired when a run is started, every couple of seconds while it is running (heartbeat), and once it stops, (either successfully or by failing).
+This way information is available already during runtime, and partial data is captured even in case of failures. 
+
+Sacred collects a lot of information about the experiment and the run. 
+Most importantly of course it will save the configuration and the result.
+Below is a summary of all the collected data:
+
+
+Configuration
+    configuration values used for this run
+Source Code
+    source code of all detected source files
+Dependencies
+    version numbers for all detected package dependencies
+Host
+    information about the host that is running the experiment including CPU, OS, and Python version. Optionally also other informatino like GPU or environment variables.
+Metadata
+    start and stop times, current status, result, and fail-trace (if needed)
+Live Information
+     Including captured stdout, extra files needed or created by the run that should be saved, custom information, and custom metrics about the experiment.
+
+
+
+Sacred ships with observers that stores all the information from these events in a MongoDB, SQL database, or locally on disk.
+Furthermore ther are two observers that can send notifications about runs via Telegram or Slack.
+However, the observer interface is generic and supports easy addition of custom observers.
+
+The recommended observer is the ``MongoObserver`` that writes to a MongoDB :cite:`mongo`.
+MongoDB is a noSQL database, or more precisely a *Document Database*:
+It allows the storage of arbitrary JSON documents without the need for a schema like in a SQL database.
+These database entries can be queried based on their content and structure.
+This flexibility makes it a good fit for Sacred, because it permits arbitrary configuration for each experiment that can still be queried and filtered later on.
+In particular this feature has been very useful to perform large scale studies like the one in :cite:`greff2015`.
+
+
+
 
 
 Labwatch
@@ -430,7 +433,7 @@ the info dictionary content (``.info.custom_key``), hostname (``.host.hostname``
 
 
 Detail View
-------------
+-----------
 
 Clicking on any of the displayed runs expands the row to a detail view
 that shows the hyperparameters used, information about the machine and environment where the experiment was run,
@@ -438,7 +441,7 @@ and the standard output produced by the experiment.
 The view is organised as a collapsible table, allowing dictionaries and arrays to be easily browsed.
 
 Connecting to TensorBoard
---------------------------
+-------------------------
 
 Users of the TensorFlow library for machine intelligence :cite:`tensorflow` can benefit from integration between Sacredboard and TensorBoard.
 Provided that the experiment was annotated with ``@sacred.stflow.LogFileWriter(ex)`` as in our example below and a TensorFlow log has been created during the run,
@@ -529,26 +532,21 @@ Example
 
 Related Work
 ============
-There are only a few projects that we are aware of that have a focus similar to Sacred with the closest one being Sumatra :cite:`davison2012`.
-It comes as a command-line tool that can operate also with non-Python experiments, and helps to do all the bookkeeping.
-Under the hood it uses a SQL database to store all the runs and comes with a versatile web-interface to view and edit the stored information.
-The main drawback of Sumatra, and indeed the main reason why we opted for our own library, is its workflow.
-It requires initializing a project directory, the parameters need to be in a separate file and the experiment must be an executable that takes the name of a config-file as a command-line parameter.
+We are aware only of a few projects that have a focus similarly broad as Sacred, the closest one being Sumatra :cite:`davison2012`.
+It comes as a command-line tool and web-interface that can operate also with non-Python experiments, and uses a SQL database to store all the runs.
+The main drawback of Sumatra, that it enforces a specific workflow including initializing a project directory, the parameters need to be in a separate file and the experiment must be an executable that takes the name of a config-file as a command-line parameter.
 
-The CDE project :cite:`guo2012` takes a completely different and much more general approach to facilitate reproducible research.
-It uses the linux kernel to track *all* files, including data, programs and libraries that were used for an experiment.
-These files are then bundled together and because it also includes system libraries, the resulting package can be run on virtually any other linux machine.
-It does not help organization or bookkeeping, but, given that the user takes care of parameters and randomness, provides a very thorough solution to the problem of reproducibility.
+Some projects including FGLab :cite:`fglab`, the proprietary Aetros :cite:`aetros`, and Neptune :cite:`neptune`, focus mainly on providing a dashboard.
+:cite:`jobman` is a Python library for scheduling lots of machine learning experiments which also  helps in organizing hyperparameter searches and bookkeeping.
+Several projects exist with a focus on reproducible experiments, like ReproZip :cite:`chirigati2016reprozip`, CDE :cite:`guo2012`, PTU :cite:`pham2013using`, CARE :cite:`janin2014care`.
+They trace dependencies and help in packaging everything that is needed to rerun an experiment exactly.
 
-:cite:`jobman` is a Python library that grew out of the need for scheduling lots of machine learning experiments.
-It helps with organizing hyperparameter searches and as a side-effect it also keeps track of hyperparameters and results.
-It requires the experiment to take the form a Python function with a certain signature.
 
-Experiment databases :cite:`vanschoren2012, smith2014` make an effort to unify the storage of machine learning problems and experiments by expressing them in a common language.
+Experiment databases :cite:`vanschoren2012, smith2014, empirical` make an effort to unify the process and storage of machine learning problems and experiments by expressing them in a common language.
 By standardizing that language, they improve comparability and communicability of the results.
-The most wellknown example of might be the OpenML project \cite{vanschoren2014}.
-Expressing experiments in a common language implies certain restrictions on the performed experiments.
-For this reason we chose not to build Sacred ontop of an experiment database, to keep it applicable to as many usecases as possible.
+The most wellknown example of might be the OpenML project :cite:`vanschoren2014`.
+This standardization has benefits, but also imposes certain restrictions on the conducted experiments.
+To keep Sacred as general as possible, we therefore chose not to build it ontop of an experiment database.
 That being said, we believe there is a lot of value in adding (optional) interfaces to experiment databases to Sacred.
 
 
