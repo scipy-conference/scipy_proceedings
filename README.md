@@ -77,7 +77,7 @@ These dates are the tentative timeline for 2017:
 ## General Guidelines
 
 - All figures and tables should have captions.
-- All figures and tables should be inline in the text (i.e., not grouped at the end). 
+- Figures and tables should be positioned inline, close to their explanatory text.
 - License conditions on images and figures must be respected (Creative Commons,
   etc.).
 - Code snippets should be formatted to fit inside a single column without
