@@ -1,9 +1,11 @@
 #!/usr/bin/env python
+from __future__ import unicode_literals
 
 import os
 import sys
 import shutil
 import subprocess
+import io
 
 import conf
 import options
@@ -31,7 +33,7 @@ def paper_stats(paper_id, start):
 
     print('"%s" from p. %s to %s' % (paper_id, start, stop))
 
-    with open(os.path.join(output_dir, paper_id, 'page_numbers.tex'), 'w') as f:
+    with io.open(os.path.join(output_dir, paper_id, 'page_numbers.tex'), 'w') as f:
         f.write('\setcounter{page}{%s}' % start)
 
     # Build table of contents

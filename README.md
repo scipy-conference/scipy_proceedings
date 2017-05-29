@@ -32,6 +32,10 @@ paper:
 
 - Check out the 2017 branch (``git checkout 2017``).
 
+- Create a new environment (using your choice of environment manager, e.g., ``pyenv`` or ``conda``).
+
+- Install/update the required python libraries (``pip install -U -r requirements.txt``).
+
 - An example paper is provided in ``papers/00_vanderwalt``.  Create a new
   directory ``papers/firstname_surname``, copy the example paper into it, and
   modify to your liking.
@@ -127,9 +131,9 @@ su -c `dnf install python-docutils texlive-collection-basic texlive-collection-f
 
 ## Build Server
 
-Thanks to the great and wonderful Katy Huff, there is a server online 
-building the open pull requests [here](http://zibi.bids.berkeley.edu:7001). You may be 
-able to pull a built PDF for review from there.
+There is a server online building the open pull requests 
+[here](http://zibi.bids.berkeley.edu:7001). You should be able to pull a built PDF 
+for review from there.
 
 ## For organizers
 
