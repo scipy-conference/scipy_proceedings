@@ -415,10 +415,11 @@ Additional conditions can be applied using a query form above the list by specif
 that corresponds to one of the variables defined in the experiment Configuration.
 
 In such way, the user can specify multiple filters to be applied at once.
-It is additionally possible to filter by other experiment properties, not limited to the configuration values.
+It is additionally possible to filter by other experiment properties, not only by configuration values.
 To do this, a dot (.) must be prepended before the property name to tell Sacredboard to relate the query to the Run object itself rather than to its config property.
-Querying elements of dictionaries can be done using the dot notation (e.g. .info.my_dict.my_key) and the same applies for array indices.
-
+Querying elements of dictionaries can be done using the dot notation (e.g. ``.info.my_dict.my_key``) and the same applies for array indices.
+A few useful properties to filter on include: the standard output (``.captured_out``), experiment name (``.experiment.name``),
+the info dictionary content (``.info.custom_key``), hostname (``.host.hostname``) and the value returned from the experiment's main function (``.result``).
 
 
 .. figure:: sacredboard.png
@@ -440,8 +441,8 @@ Connecting to TensorBoard
 --------------------------
 
 Users of the TensorFlow library for machine intelligence :cite:`tensorflow` can benefit from integration between Sacredboard and TensorBoard.
-Provided that the experiment was annotated with ``@sacred.stflow.LogFileWriter(ex)`` annotation as in our example below and a TensorFlow log has been created during the run,
-it is possible launch TensorBoard directly from the Run detail view as long as the path to the TensorFlow log does not change and is accessible from the computer where Sacredboard is running.
+Provided that the experiment was annotated with ``@sacred.stflow.LogFileWriter(ex)`` as in our example below and a TensorFlow log has been created during the run,
+it is possible launch TensorBoard directly from the Run detail view as long as the path to the TensorFlow log did not change and is accessible from the computer where Sacredboard is running.
 This is, however, still an experimental feature. If TensorBoard fails to start, it is necessary to check that it is installed in the same Python environment as Sacredboard,
 and that no other TensorBoard instance is running. Terminating all TensorBoard instances started from Sacredboard can be done by navigating to a special URL:
 
@@ -451,10 +452,24 @@ We are working to overcome this limitation.
 
 
 Plotting Metrics
-------------------
-TBD
+----------------
+Even when not using TensorFlow and TensorBoard, you can take advantage of visualising various metrics such as accuracy or the loss function in Sacredboard.
+Metrics can be tracked by adding the ``_run`` variable to the experiment function
+signature and calling the logging method that specifies an arbitrary metric name, its value, and optionally
+the iteration number:
 
-but in future work we will provide an interface to the various other backends that are supported by Sacred.
+.. code-block:: python
+
+    _run.log_scalar("test.accuracy", 35.25, step=50)
+
+If omitted, Sacred remembers the last step number of each metric and increments it by one during the subsequent call.
+Sacredboard can [#]_ display the Run metrics as plots in the detail view.
+
+.. [#] Work in progress, expected to be done in July.
+
+
+As of now, Sacredboard only supports the MongoDB backend of Sacred. However, there are already attempts both from from the community and the developers
+to add support for other backends too.
 
 
 .. _sacred-example:
