@@ -1,8 +1,8 @@
 :author: Klaus Greff
 :email: klaus@idsia.ch
-:institution: IDSIA
-:institution: USI
-:institution: SUPSI
+:institution: Istituto Dalle Molle di Studi sull'Intelligenza Artificiale (IDSIA)
+:institution: Università della Svizzera italiana (USI)
+:institution: Scuola universitaria professionale della Svizzera italiana (SUPSI)
 
 :author: Aaron Klein
 :email: kleinaa@cs.uni-freiburg.de
@@ -12,15 +12,20 @@
 :email: chovamar@fit.cvut.cz
 :institution: Czech Technical University in Prague
 
+:author: Frank Hutter
+:email: fh@cs.uni-freiburg.de
+:institution: University of Freiburg
+
 :author: Jürgen Schmidhuber
 :email: juergen@idsia.ch
-:institution: IDSIA
-:institution: SUPSI
+:institution: Istituto Dalle Molle di Studi sull'Intelligenza Artificiale (IDSIA)
+:institution: Università della Svizzera italiana (USI)
+:institution: Scuola universitaria professionale della Svizzera italiana (SUPSI)
 
 :bibliography: sacred
 
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
+.. .:video: http://www.youtube.com/watch?v=dhRUe-gz690
 
 ------------------------------------------------------------
 Sacred: How I Learned to Stop Worrying and Love the Research
@@ -180,8 +185,8 @@ Observers can be added dynamically from the commandline or directly in code:
     from sacred.observers import MongoObserver
     ex.observers.append(MongoObserver.create("DBNAME"))
 
-Collected Information
-+++++++++++++++++++++
+
+
 Events are fired when a run is started, every couple of seconds while it is running (heartbeat), and once it stops, (either successfully or by failing).
 This way information is available already during runtime, and partial data is captured even in case of failures. 
 
@@ -205,8 +210,6 @@ Live Information
      Including captured stdout, extra files needed or created by the run that should be saved, custom information, and custom metrics about the experiment.
 
 
-Observers
-+++++++++
 
 Sacred ships with observers that stores all the information from these events in a MongoDB, SQL database, or locally on disk.
 Furthermore ther are two observers that can send notifications about runs via Telegram or Slack.
@@ -223,28 +226,44 @@ In particular this feature has been very useful to perform large scale studies l
 Reproducibility
 ---------------
 An important goal of Sacred is to collect all the necessary information to make computational experiments reproducible.
-The result of such an experiment depends on several factors including: the source code, versions of the used packages, the host system, resources, and (pseudo-)randomness.
-To ensure reproducibility Sacred attempts to automatically collect as much data about these factors as possible.
+The result of such an experiment depends on many factors including: the source code, versions of the used packages, system libraries, data-files, the host system, and (pseudo-)randomness.
+Tools for reproducible research such as ReproZip :cite:`chirigati2016reprozip`, CDE :cite:`guo2012`, PTU :cite:`pham2013using` and CARE :cite:`janin2014care` trace and package all datafiles and libraries used during a run at the system level.
+While these tools are the correct way to go to *ensure* reproducibility, they come with a significant overhead in terms of time and space.
+Sacred in contrast aims to provide a practical *default option*, that captures *most* relevant information, while keeping the overhead and required manual work at a minimum.
+To that end it tackles four key areas individually: 1) source code, 2) package dependencies, 3) host system, 4) resources, and 5) randomness.
 
-Dependencies
-++++++++++++
-When an experiment is started Sacred uses Python inspection to detect imported packages and determines their version-numbers.
-This detection will catch all dependencies that are imported from the main file before the experiment was started.
-This might miss certain nested imports, but further dependencies can easily be added manually 
 
-To ensure that it features a simple integrated version control system that guarantees that for each run all the required files are stored in the same database.
-Sacred actually also saves the contents of that file in a separate collection.
-The same mechanism can also be used to save additional resources or files created by the run (called artifacts).
+The source code of an experiment is arguably the most important piece of information for reproducing any result.
+To manage the quickly evolving code, it is considered good practice to use a version control system such as Git.
+In practice however, research-code is often adapted too rapidly.
+A common pattern is to quickly change something and start a run, even before properly committing the changes.
+To ensure reproducibility even with such an unstructured and spontaneous implementation workflow, Sacred always stores source files alongside the run information.
+This very basic version control mechanism guarantees that the current version of the code is saved, by automatically detecting relevant source-files by inspection.
+Sacred also supports a more strict Git based workflow and can automatically collect the current commit and state of the repository for each run.
+The optional ``--enforce-clean / -e`` flag forces the repository to be clean (not contain any uncommitted changes) before the experiment can be run.
 
-There is one major obstacle of reproducibility left: randomness.
+.. MENTION? though relevant files can also be added manually by ``ex.add_source_file(FILENAME)``.
+.. MENTION? removes duplication
+
+
+Python package dependencies too are handled automatically by Sacred.
+When an experiment is started Sacred detects imported packages and determines their version-numbers by inspection.
+This detection will catch all dependencies that are imported from the main file before the experiment was started and should cover most usecases.
+It might, however, miss certain nested imports, so further dependencies can be added manually using ``ex.add_package_dependency(NAME, VERSION)``.
+
+
+Sacred also collects a small set of information about the host system including the hostname, type and version of the operating system, Python version, and the CPU.
+Optionally it supports information about GPUs, and environment variables, and it can be easily extended to collect any custom information.
+
+
 Randomization is an important part of many machine learning algorithms, but it inherently conflicts with the goal of reproducibility.
 The solution of course is to use pseudo random number generators (PRNG) that take a seed and generate seemingly random numbers from that in a deterministic fashion.
-But this is only effective if the seed of the PRNG is not manually set and kept track of.
-Also if the seed is set to a fixed value as part of the code, then all runs will share the same randomness, which can be an undesired effect.
+But if the seed is set to a fixed value as part of the code, then all runs will share the same randomness, which can be an undesired effect.
+Sacred solves this problems by always generating a seed for each experiment that is stored as part of the configuration.
+It can be accessed from the code in the same way as every other config entry.
+.. but Sacred can also automatically generate seeds and PRNGs that deterministically depend on that root seed for you.
 
-Sacred solves these problems by always generating a seed for each experiment that is stored as part of the configuration.
-It can be accessed from the code in the same way as every other config entry, but Sacred can also automatically generate seeds and PRNGs that deterministically depend on that root seed for you.
-Furthermore, Sacred automatically seeds the global PRNGs of the ``random`` and ``numpy`` modules, thus making most applications of randomization reproducible without any intervention of the user.
+Furthermore, Sacred automatically seeds the global PRNGs of the ``random`` and ``numpy`` modules when starting an experiment, thus making most sources of randomization reproducible without any intervention from the user.
 
 
 Labwatch
