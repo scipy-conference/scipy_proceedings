@@ -95,7 +95,7 @@ Effect of Striping
 Effect of Oversubscribing
 -------------------------
 
-Effect of Scheduler Overhead
+Examining Scheduler Overhead
 ----------------------------
 
 Scheduler Plugin Results
