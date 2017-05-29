@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 
+
 import os
 import sys
-import shlex, subprocess
+import shlex
+import subprocess
+import io
 
 import tempita
 from conf import bib_dir, build_dir, template_dir, html_dir
@@ -14,16 +17,20 @@ class TeXTemplate(tempita.Template):
             value = value.replace('&', '\&')
         elif sys.version_info[0] >= 3 and isinstance(value, str):
             value = value.replace('&', '\&')
-        else:
+        elif sys.version_info[0] < 3 :
+            value = unicode(value)
+        else: 
             value = str(value)
-        return value.encode('utf-8')
+        return value
 
 def _from_template(tmpl_basename, config, use_html=True):
     tmpl = os.path.join(template_dir, tmpl_basename + '.tmpl')
     if use_html:
-        template = tempita.HTMLTemplate(open(tmpl, 'r').read())
+        with io.open(tmpl, mode='r') as f:
+            template = tempita.HTMLTemplate(f.read())
     else:
-        template = TeXTemplate(open(tmpl, 'r').read())
+        with io.open(tmpl, mode='r') as f:
+            template = TeXTemplate(f.read())
     return template.substitute(config)
 
 def from_template(tmpl_basename, config, dest_fn):
@@ -33,7 +40,7 @@ def from_template(tmpl_basename, config, dest_fn):
     outfile = _from_template(tmpl_basename, config, use_html=use_html)
     outname = os.path.join(build_dir, extension, dest_fn)
 
-    with open(outname, mode='w') as f:
+    with io.open(outname, mode='w') as f:
         f.write(outfile)
 
 def bib_from_tmpl(bib_type, config, target):
@@ -59,7 +66,7 @@ def html_from_tmpl(src, config, target):
     dest_fn = os.path.join(html_dir, target + '.html')
     extension = os.path.splitext(dest_fn)[1][1:]
     outname = os.path.join(build_dir, extension, dest_fn)
-    with open(outname, mode='w') as f:
+    with io.open(outname, mode='w') as f:
         f.write(outfile)
 
 if __name__ == "__main__":

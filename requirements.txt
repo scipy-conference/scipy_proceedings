@@ -1,0 +1,9 @@
+#
+##### scipy_proceedings requirements file for 2017
+#
+##### requirements without version specifiers
+pygments
+pytest
+testpath
+##### requirements with version specifiers
+docutils == 0.12
