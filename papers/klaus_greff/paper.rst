@@ -383,21 +383,62 @@ setting they work and which they do not. For more details we refer to the corres
 
 Sacredboard
 ===========
-Sacredboard provides a convenient way for browsing runs of experiments stored in a Sacred database.
-It comes as a Python package that connects to the database and
-In a web browser window, a list of both running and finished experiments can be viewed, together with their current state and results.
-A detail view shows the hyperparameters used, information about the machine and environment where the experiment was run,
-and the standard output produced by the experiment.
-Sacredboard comes with a lightweight web server, such that it can be easily installed as a Python package.
-It only requires Python and a recent web browser to run. Currently it only supports MongoDB,
-but in future work we will provide an interface to the various other backends that are supported by Sacred.
+Sacredboard provides a convenient way for browsing runs of experiments stored in a Sacred MongoDB database.
+It comes as a Python package installable to the researcher's computer or on a server.
+Users may access it via their web browser to get a list of both running and finished experiments together with their current state and results
+and to see detailed information about the experiment configuration and its standard output
+that gets automatically updated as the experiment is running.
+
+Filtering
+---------
+In order not to get lost in the results, we have prepared a filtering capability that allows e.g. finished experiments to be quickly filtered out from the view.
+Additional conditions can be applied using a query form above the list by specifying the comparison operator and a numerical or string value for a configuration property name
+that corresponds to one of the variables defined in the experiment Configuration.
+
+In such way, the user can specify multiple filters to be applied at once.
+It is additionally possible to filter by other experiment properties, not limited to the configuration values.
+To do this, a dot (.) must be prepended before the property name to tell Sacredboard to relate the query to the Run object itself rather than to its config property.
+Querying elements of dictionaries can be done using the dot notation (e.g. .info.my_dict.my_key) and the same applies for array indices.
+
+
 
 .. figure:: sacredboard.png
-   :scale: 35 %
-   :alt: map to buried treasure
+    :scale: 35 %
+    :alt: Sacredboard interface
+
+    Sacredboard user interface
 
 
+Detail View
+------------
 
+Clicking on any of the displayed runs expands the row to a detail view
+that shows the hyperparameters used, information about the machine and environment where the experiment was run,
+and the standard output produced by the experiment.
+The view is organised as a collapsible table, allowing dictionaries and arrays to be easily browsed.
+
+Connecting to TensorBoard
+--------------------------
+
+Users of the TensorFlow library for machine intelligence :cite:`tensorflow` can benefit from integration between Sacredboard and TensorBoard.
+Provided that the experiment was annotated with ``@sacred.stflow.LogFileWriter(ex)`` annotation as in our example below and a TensorFlow log has been created during the run,
+it is possible launch TensorBoard directly from the Run detail view as long as the path to the TensorFlow log does not change and is accessible from the computer where Sacredboard is running.
+This is, however, still an experimental feature. If TensorBoard fails to start, it is necessary to check that it is installed in the same Python environment as Sacredboard,
+and that no other TensorBoard instance is running. Terminating all TensorBoard instances started from Sacredboard can be done by navigating to a special URL:
+
+    http://localhost:5000/tensorboard/stop
+
+We are working to overcome this limitation.
+
+
+Plotting Metrics
+------------------
+TBD
+
+but in future work we will provide an interface to the various other backends that are supported by Sacred.
+
+
+.. _sacred-example:
 
 Example
 =======
