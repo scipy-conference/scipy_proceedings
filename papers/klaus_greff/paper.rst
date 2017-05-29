@@ -552,27 +552,39 @@ That being said, we believe there is a lot of value in adding (optional) interfa
 
 Conclusion
 ==========
-fobor
+Sacred is an open source python framework which aims to provide infrastructure for computational experiments, with minimal boilerplate and maximum convenience.
+
+We've presented its key features and demonstrated how they interact to tackle some of the basic problems of computational experimentation, like managing parameters, bookkeeping and reproducibility.
+We hope that through convenience and modularity, Sacred will help building a rich ecosystem of tools.
+We've introduced two such supporting tools:
+Labwatch interfaces the powerful configuration system of sacred with several hyperparamter optimization libraries, thus significantly simplifying the tuning of configurations.
+Sacredboard on the other hand provides a web-based interface to view recorded runs, facilitating a live overview of all the experiments.
+
+
 
 Future Work
 ===========
-Sacred is a framework that mainly integrates different solutions to data-science research problems.
-Because of that, there are many useful ways in which it could be extended. Apart from the above mentioned interface to OpenML, the following points are high up our list:
-
-Hyperparameter optimization has become a common and very important part of machine learning research, and with the powerful configuration system of Sacred in place, this an obvious next step.
-So with the next release (0.7) of Sacred, we plan to ease integration of tools like ``spearmint`` :cite:`snoek2012` and ``hyperopt`` :cite:`bergstra2013` into the workflow.
-In the same vein it is necessary to include tools for analysing the importance of hyperparameters like the FANOVA framework of :cite:`hutter2014`.
-
-The next important step will also be to provide a graphical interface to help inspecting and editing past and current runs.
-Ideally this will take the form of a web-interface that connects directly to the database.
-
-Another popular request is to have a bookkeeping backend that supports local storage. That could be in the form of flat files in a directory or a SQLite database. These backends are particularly easy to add so we also hope for contributions from the users for more specialized usecases.
+* support for other workflows
+    * separate evaluation scripts
+    * partial evaluation
+    * continue runs
+* more downstream tools
+    * jupyter notebook
+    * hyperparameter impact summary
+    * generate summaries/reports
+* unified interface to query different observers
+* integration with OpenML
+* easier reproduction of runs
+    * integration with reproZip?
+    * integration with docker?
+* improve support for scheduling runs
+* dynamic ingredients (?)
 
 
 
 Acknowledgements
 ================
-fobof
+TODO: Mention funding
 
 
 
