@@ -46,7 +46,7 @@ In this paper, we present a pattern matching library for Python and the underlyi
 The goal of pattern matching is to find a match substitution given a subject term and a pattern which is an term with placeholders :cite:`Baader1998`.
 The substitution maps placeholders in the pattern to replacement terms.
 A match is a substitution that can be applied to the pattern with the result being the original subject.
-This basic form of pattern matching without sequence variables or any special function symbols is called syntactic matching.
+This basic form of pattern matching is called syntactic matching.
 
 Among the existing systems, Mathematica_ arguably offers the most expressive pattern matching.
 Its pattern matching offers similar expressiveness as Python's regular expressions, but for symbolic tree structures instead of strings.
@@ -78,7 +78,7 @@ First, we give an overview of what MatchPy can be used for.
 Secondly, we explain some of the challenges arising from the non-syntactic pattern matching features and how we solve them.
 Then we give an overview of how many-to-one matching is realized and optimized in MatchPy.
 Next, we present our experiments where we observed significant speedups of the many-to-one matching over one-to-one matching.
-Finally, we give draw some conclusions from the experiments and propose future work on MatchPy.
+Finally, we draw some conclusions from the experiments and propose future work on MatchPy.
 
 .. _Mathematica: https://www.wolfram.com/mathematica/
 .. _Mathics: http://mathics.github.io/
@@ -94,7 +94,7 @@ wildcards, i.e. we append underscores to wildcard names to distinguish them from
 
 MatchPy can be used with native Python types such as lists and ints. The following is a example
 of how the subject ``[0, 1]`` can be matched against the pattern ``[x_, 1]``. The expected match here
-is the replacement ``0`` for ``x_``. We use next because we only want to use the first (and in this
+is the replacement ``0`` for ``x_``. We use `next` because we only want to use the first (and in this
 case only) match of the pattern:
 
 .. code-block:: pycon
@@ -273,7 +273,7 @@ Challenges
 ----------
 
 While there are plenty of implementations of syntactic matching and the algorithms are well known,
-the pattern matching in MatchPy has several more challenging features.
+pattern matching MatchPy is challenging since it comprises several NP-complete problems.
 
 Associativity/Sequence variables
 ................................
@@ -352,15 +352,15 @@ Optimizations
 Since most applications for pattern matching repeatedly match a fixed set of patterns against
 multiple subjects, we implemented many-to-one matching for MatchPy.
 The goal of many-to-one matching is to utilize similarities between patterns to match them more efficiently.
-in this section, we give a brief overview over the many-to-one matching algorithm used by MatchPy.
-Full details can be found in the master thesis :cite:`thesis` that MatchPy is based on.
+in this section, we give a brief overview of the many-to-one matching algorithm used by MatchPy.
+Full details can be found in the master thesis :cite:`thesis`.
 
 Many-to-one Matching
 ....................
 
 MatchPy includes two additional algorithms for matching: ``ManyToOneMatcher`` and ``DiscriminationNet``.
-Both enable matching multiple pattern against a single subject much faster than matching each pattern individually using ``match``.
-The later can only be used for syntactic patterns and implements a state-of-the-art deterministic discrimination net.
+Both enable matching multiple patterns against a single subject much faster than matching each pattern individually using ``match``.
+The latter can only be used for syntactic patterns and implements a state-of-the-art deterministic discrimination net.
 A discrimination net is a data structure similar to a decision tree or a finite automaton :cite:`Christian1993,Graef1991,Nedjah1997`.
 The ``ManyToOneMatcher`` utilizes a generalized form of non-deterministic discrimination nets that support sequence variables and associative function symbols.
 Furthermore, as elaborated in the next section, it can also match commutative terms.
@@ -438,9 +438,8 @@ in the same way as for one-to-one matching which has been described before.
 Experiments
 -----------
 
-To evaluate the performance of MatchPy, we performed several experiments. All experiments were
-conducted on an Intel Core i5-2500K 3.3 GHz CPU with 8GB of RAM. Our focus is on relative
-performance of one-to-one and many-to-one matching rather than the absolute performance.
+To evaluate the performance of MatchPy, we conducted experiments on an Intel Core i5-2500K 3.3 GHz CPU with 8GB of RAM.
+Our focus is on relative performance of one-to-one and many-to-one matching rather than the absolute performance.
 
 Linear Algebra
 ..............
@@ -570,12 +569,11 @@ When taking into account the setup time of the many-to-one matcher, this means t
 Conclusions
 -----------
 
-We have presented MatchPy, which is a pattern matching library for Python with support for sequence variables and associative/commutative functions.
+We have presented MatchPy, a pattern matching library for Python with support for sequence variables and associative/commutative functions.
 This library includes algorithms and data structures for both one-to-one and many-to-one matching.
-Because non-syntactic pattern matching is NP-hard, in the worst case the pattern matching takes exponential time.
+Because non-syntactic pattern matching is NP-hard, in the worst case the pattern matching times grows exponentially with the length of the pattern.
 Nonetheless, our experiments on real world examples indicate that many-to-one matching can give a significant speedup over one-to-one matching.
-However, the employed discrimination nets come with a one-time construction cost.
-This needs to be amortized before using them is faster than one-to-one matching.
+However, the employed discrimination nets come with a one-time construction cost which needs to be amortized to benefit from their speedup.
 In our experiments, the break even point for many-to-one matching was always reached well within the typical number of subjects for the respective application.
 Therefore, many-to-one matching is likely to result in a compelling speedup in practice.
 
@@ -614,19 +612,18 @@ Similarly, function variables that can match any function symbol would also be u
 Integration
 ...........
 
-Currently, in order to use MatchPy, any data structures must be adapted to provide its children via
-an iterator. Where that is not possible, for example because the data structures are provided by a
-third party library, translation functions need to be applied.
+Currently, in order to use MatchPy, any data structures must be adapted to provide their children via an iterator.
+Where that is not possible, for example because the data structures are provided by a third party library, translation functions need to be applied.
 Also, some native data structures such as dicts are currently not supported directly.
 Therefore, it would be useful, to have a better way of using existing data structures with MatchPy.
 
 In particular, easy integration with SymPy_ is an important goal, because it is a popular tool for working with symbolic mathematics.
 SymPy already implements `a form of pattern matching <http://docs.sympy.org/0.7.2/tutorial.html#pattern-matching>`_ which is less powerful than MatchPy.
 It lacks support for sequence variables, symbol wildcards and constraints.
-Each constant symbol in SymPy can have properties that allow it be commutative or non-commutative.
+Each constant symbol in SymPy can have properties that allow it to be commutative or non-commutative.
 One benefit of this approach is easier modeling of linear algebra multiplication, where matrices and vectors do not commute, but scalars do.
 Better integration of MatchPy with SymPy would provide the users of SymPy with more powerful pattern matching tools.
-However, Matchpy would required selective commutativity to be fully compatible with SymPy.
+However, Matchpy would require selective commutativity to be fully compatible with SymPy.
 Also, SymPy supports older Python versions, while MatchPy requires Python 3.6.
 
 Performance
