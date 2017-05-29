@@ -67,7 +67,7 @@ and are characterized by a progressive degeneration of photoreceptors
 in the retina that lead to gradual loss of vision.
 
 Microelectronic retinal prostheses have been developed in an effort
-to restore sight to individuals suffering from these diseases.
+to restore sight to RP and AMD patients.
 Analogous to cochlear implants,
 these devices function by electrically stimulating 
 surviving retinal neurons
@@ -87,7 +87,7 @@ the underlying neurophysiology cause nontrivial perceptual distortions
 in both space and time :cite:`FineBoynton2015,Beyeler2017`
 that severely limit the quality of the generated visual experience.
 
-.. figure:: figure1.jpg
+.. figure:: figimplant.jpg
    :align: center
    :scale: 65%
 
@@ -157,8 +157,8 @@ to the optic nerve.
 
 Diseases such as RP and AMD are characterized by a
 progressive degeneration of photoreceptors.
-As these diseases progress,
-more and more cells from all layers of the retina are affected
+As they progress,
+all layers of the retina are affected
 :cite:`Humayun1999,Mazzoni2008`.
 In severe end-stage RP, approximately 95% of photoreceptors,
 20% of bipolar cells,
@@ -189,7 +189,7 @@ These vary in their user interface, light-detection method, signal processing,
 and microelectrode placement within the retina
 (for a recent review see :cite:`Weiland2016`).
 As far as our model is concerned, the critical factor is the placement
-of the microelectrodes (Fig. :ref:`figretina`.
+of the microelectrodes (Fig. :ref:`figretina`).
 The three main locations for microelectrode implant placement are 
 `epiretinal` (i.e., on top of the retinal surface, above the ganglion cells),
 `subretinal` (i.e., next to the bipolar cells in the space of the missing photoreceptors),
@@ -198,11 +198,19 @@ Each of these approaches is similar in that light from the visual scene
 is captured and transformed into electrical pulses delivered through electrodes
 to stimulate the retina.
 
-.. figure:: figimplant.png
+.. figure:: figretina.png
    :align: center
-   :scale: 25%
+   :scale: 60%
 
-   TODO make sure to introduce INL, GCL, OFL
+   Diagram of the retina and common locations of retinal prosthesis microelectrode arrays.
+   Retinitis pigmentosa causes severe photoreceptor generation.
+   Epiretinal electrode arrays are placed in the vitreous pace next to ganglion cells.
+   Subretinal arrays are inserted by creating a space between the choroid and remaining
+   retinal tissue.
+   Suprachoroidal arrays are placed behind the choroid.
+   *pulse2percept* allows for simulation of processing in the inner nuclear layer (INL),
+   ganglion cell layer (GCL), and optic fiber layer (OFL).
+   Based on "Retina layers" by Peter Hartmann, CC BY-SA 3.0.
    :label:`figretina`
 
 
@@ -222,6 +230,14 @@ for blinded individuals within a decade :cite:`Fine2015`.
    :scale: 35%
 
    Full model cascade.
+   A simulated electrical stimulus is processed by a series of linear
+   filtering and nonlinear processing steps concerned with the spatial
+   (A, B) and temporal sensitivity (C--F) of the retinal tissue.
+   An Argus I device is shown (16 electrodes of 260 or 520 microns
+   diameter arranged in a checkerboard pattern).
+   The output of the model is a prediction of the visual percept in
+   both space and time (example frame shown), which can be compared
+   against human patients' drawings.
    :label:`figmodel`
 
 However, clinical experience with existing retinal prostheses makes it
@@ -236,10 +252,9 @@ result in the experience of a 'dot' of light.
 Instead, stimulating a single electrode leads to percepts
 that vary dramatically in shape, varying in description from 'blobs',
 to 'streaks' and 'half-moons'.
-Percepts also do not remain constant over time.
 The percept produced by stimulating a single electrode
-with a continuous pulse train fades over time:
-usually over a course of seconds the percept will completely disappear.
+with a continuous pulse train also fades over time,
+usually disappearing over a course of seconds.
 As a result, when using their cameras to experience the visual world,
 patients do not report seeing an interpretable world.
 One patient describe it as like :cite:`PioneerPress2015`:
@@ -288,7 +303,7 @@ reported across a wide range of conditions, devices, and patients.
 Computational Model of Bionic Vision
 ------------------------------------
 
-Analogous to models of cochlear implants,[REF] the goal of our
+Analogous to models of cochlear implants :cite:`Shannon1989`, the goal of our
 computational model is to approximate,
 via a number of linear filtering and nonlinear processing steps,
 the neural computations that convert a spatiotemporal electrical pulse pattern 
@@ -341,9 +356,9 @@ as a function of distance from the edge of the electrode
 where :math:`d` was the 3D Euclidean distance to the electrode edge,
 :math:`\alpha = 14000` and the exponent :math:`n=1.69`.
 
-Due to the fact that epiretinal implants sit on top of the optic fiber layer,
-they do not only stimulate ganglion cell bodies but also ganglion cell axons
-(Fig. :ref:`figretina`).
+Due to the fact that epiretinal implants sit on top of the optic fiber layer
+(Fig. :ref:`figretina`),
+they do not only stimulate ganglion cell bodies but also ganglion cell axons.
 To the brain, activating an axon fiber that passes under a stimulated electrode
 is indistinguishable from activating the corresponding ganglion cell *body*.
 The produced visual percept will thus appear in the 
@@ -351,7 +366,7 @@ spatial location for which the corresponding ganglion cell
 usually encodes information.
 It has been shown that ganglion cells send their axons on highly stereotyped
 pathways to the optic disc (green lines in Fig. :ref:`figmodel` B),
-which have been mathematically described before :cite:`Jansionius2009`.
+which have been mathematically described before :cite:`Jansonius2009`.
 As a result, electrical stimulation of axon fibers leads to predictable
 visual 'streaks' or 'comet trails' that are aligned with the axonal pathways.
 
@@ -367,8 +382,8 @@ Every pixel of the current density map was then modulated by the applied
 electrical pulse train in order to predict a perceived brightness value
 that varied over time.
 This involved applying a series of linear filtering 
-(:ref:`figmodel` C, D, and F) 
-and nonlinear processing (:ref:`figmodel` E) steps in the time domain
+(Fig. :ref:`figmodel` C, D, and F) 
+and nonlinear processing (Fig. :ref:`figmodel` E) steps in the time domain
 meant to approximate the processing of visual information within the retina
 and visual cortex.
 
@@ -474,7 +489,6 @@ comparing the predicted percepts to behavioral data from Argus I and II patients
 ..      Time constant: ganglion cell impulse response & $\tau_1$ & 0.42 ms \\
 ..      Time constant: charge accumulation & $\tau_2$ & 45.3 ms \\
 ..      Time constant: cortical response & $\tau_3$ & 26.3 ms \\
-..      TODO & & \\
 ..      \hline
 ..      \end{tabular}
 ..      \caption{Parameter values}
@@ -500,7 +514,7 @@ modules:
   but can easily be extended to feature custom implants (see Section Extensibility).
 - :code:`retina`: Includes implementation of a model of the retinal distribution 
   of nerve fibers, based on :cite:`Jansonius2009`, and an implementation of the 
-  temporal cascade of events described in equations 1-5.
+  temporal cascade of events described in Eqs. 2--6.
   Again, this can easily be extended to custom temporal models (see Section Extensibility).
 - :code:`stimuli`: Includes implementations of commonly used electrical stimulation
   protocols, including means to translate images and movies into simulated
@@ -533,8 +547,10 @@ the main pulse2percept library (e.g., :code:`p2p.retina`):
 ....................
 
 Our goal was to create electrode implant objects that could be configured in a highly flexible manner.  
-As far as placement is concerned, an implant can be placed at a particular location on the retina,
-with respect to the fovea (microns) and rotated as you see fit. The height of the implant with respect to the tissue (including subretinal vs. epiretinal configuration) can also specified (Are tilted implants specified at the electrode level??):
+As far as placement is concerned, an implant can be placed at a particular location on the retina
+(:code:`x_center`, :code:`y_center)
+with respect to the fovea (in microns),
+and rotated as you see fit (:code:`rot`):
 
 .. code-block:: python
    :linenos:
@@ -546,10 +562,19 @@ with respect to the fovea (microns) and rotated as you see fit. The height of th
                                  h=80,
                                  rot=np.deg2rad(35))
 
+Here, we make use of the :code:`ArgusI` array type, which provides pre-defined values
+for array type ('epiretinal') and electrode diameters.
+In addition, the distance between the array and the retinal tissue can be specified via the height parameter
+(:code:`h`), either on a per-electrode basis (as a list) 
+or using the same value for all electrodes (as a scalar).
+
 The electrodes within the implant can also be specified. An implant is a wrapper around a list of
 :code:`p2p.implants.Electrode` objects, which are accessible
 via indexing or iteration (e.g., via
-:code:`[for i in implant]`). The size and location of each individual electrode within the implant can be specified. Once configured, every Electrode object in the implant can be assigned a name
+:code:`[for i in implant]`).
+This allows for specification of electrode diameter, position, and distance to the retinal tissue
+on a per-electrode basis.
+Once configured, every :code:`Electrode` object in the implant can also be assigned a name
 (in the Argus I implant, they are A1 - A16;
 corresponding to the names that are commonly
 used by Second Sight Medical Products Inc.).
@@ -557,7 +582,8 @@ The first electrode in the implant can be accessed both via its
 index (:code:`implant[0]`) and its name (:code:`implant['A1']`).
 
 Once the implant is created, it can be passed to the simulation framework.
-This is also where you specify the backend.
+This is also where you specify the backend
+(currently supported are 'serial', 'joblib', and 'dask'):
 
 .. code-block:: python
    :linenos:
@@ -576,37 +602,53 @@ while abstracting the underlying functionality.
 ..................
 
 This includes the implementation of a model of the retinal distribution of nerve fibers, 
-based on :cite:`Jansonius2009` and implementations of the temporal cascade of events 
-described in equations 1-5. 
+based on :cite:`Jansonius2009`, and implementations of the temporal cascade of events 
+described in Eqs. 2--6.
 
-Things that can be set include the spatial sampling rate of the
-retina in the optic fiber layer (where the ganglion cell axons are):
+Things that can be set include the spatial sampling rate of
+the optic fiber layer (:code:`ssample`) as well as the
+spatial extent of the retinal patch to be simulated
+(given by the corner points :code:`[xlo, ylo]` and :code:`[xhi, yhi]`).
+If the coordinates of the latter are not given,
+a patch large enough to fit the specified electrode array will be
+automatically selected:
 
 .. code-block:: python
    :linenos:
    :linenostart: 9
 
    ssample = 100  # microns
-   sim.set_optic_fiber_layer(sampling=ssample)
+   num_axon_samples = 801
+   sim.set_optic_fiber_layer(ssample=ssample,
+                             num_axon_samples=801)
 
 
 Similarly, for the ganglion cell layer we can choose one of the
-pre-existing cascade models and specify a temporal sampling rate.
+pre-existing cascade models and specify a temporal sampling rate:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 11
+   :linenostart: 13
 
    tsample = 0.005 / 1000  # seconds
    sim.set_ganglion_cell_layer('Nanduri2012',
                                tsample=tsample)
 
+As its name suggest, :code:`'Nanduri2012'` implements the model
+detailed in :cite:`Nanduri2012`.
+Other options include :code:`'Horsager2009'` :cite:`Horsager2009`
+and :code:`'latest'`.
 
 .. figure:: figinputoutput.png
    :align: center
-   :scale: 25%
+   :scale: 20%
 
-   Input/output. TODO
+   Model input/output generated by the example code.
+   (A) An epiretinal Argus I array is placed near the fovea, and
+   two electrodes ('C1' and 'B3') are stimulated with 50 Hz,
+   20 uA pulse trains. The plot is created by lines 34--36.
+   (B) Predicted visual percept (example frame shown).
+   The plot is created by line 41.
    :label:`figinputoutput`
 
 It's also possible to specify your own (custom) model, see the section on extensibility below.
@@ -630,11 +672,11 @@ It is possible to specify a pulse train for each electrode in the implant as fol
 
 .. code-block:: python
    :linenos:
-   :linenostart: 14
+   :linenostart: 16
 
    # Stimulate two electrodes, rest zero
    stim = []
-   for elec in argus:
+   for elec in implant:
        if elec.name == 'C1' or elec.name == 'B3':
            # 50 Hz, 20 uA, 0.5 sec duration
            pt = p2p.stimuli.PulseTrain(tsample,
@@ -655,7 +697,7 @@ via a dictionary:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 26
+   :linenostart: 28
 
    stim = {
        'C1': p2p.stimuli.PulseTrain(tsample, freq=50,
@@ -669,8 +711,10 @@ At this point, we can highlight the stimulated electrodes in the array:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 32
+   :linenostart: 34
 
+   import matplotlib.pyplot as plt
+   %matplotlib inline
    sim.plot_fundus(stim)
 
 The output can be seen in Fig. :ref:`figinputoutput` A.
@@ -688,7 +732,7 @@ such as stimulation of a grid of electrodes in the shape of the letter E.
 At this stage in the model it is possible to consider which retinal layers 
 are included in the temporal model,
 by selecting from the following list
-(see Fig. :ref:`figretina`):
+(see Fig. :ref:`figretina` for a schematic of the anatomy):
 
 * :code:`'OFL'`: optic fiber layer (OFL), where ganglion cell axons reside
 * :code:`'GCL'`: ganglion cell layer (GCL), where ganglion cell bodies reside
@@ -699,7 +743,7 @@ to the :code:`pulse2percept` method:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 33
+   :linenostart: 37
 
    # From pulse train to percept
    percept = sim.pulse2percept(stim, tol=0.25,
@@ -721,7 +765,7 @@ Alternatively, it is possible to retrieve the brightest (mean over all pixels) f
 
 .. code-block:: python
    :linenos:
-   :linenostart: 36
+   :linenostart: 40
 
    frame = p2p.get_brightest_frame(percept)
 
@@ -729,10 +773,8 @@ Then we can plot it with the help of Matplotlib:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 37
+   :linenostart: 41
 
-   import matplotlib.pyplot as plt
-   %matplotlib inline
    plt.imshow(frame, cmap='gray')
 
 The output is shown in Fig. :ref:`figinputoutput` B.
@@ -749,7 +791,7 @@ For example, a percept can be stored to an MP4 file as follows:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 40
+   :linenostart: 42
 
    # Save movie at 15 frames per second
    p2p.files.save_video(percept, 'mypercept.mp4',
@@ -761,7 +803,7 @@ format:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 43
+   :linenostart: 45
 
    # Load video as (M x N x T), M: height,
    # N: width, T: number of frames
@@ -774,12 +816,12 @@ electrode array:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 46
+   :linenostart: 48
 
-   from_img = p2p.stimuli.image2pulsetrain('myimage.jpg',
-                                           argus)
-   from_vid = p2p.stimuli.video2pulsetrain('mymovie.avi',
-                                           argus)
+   from_img = p2p.stimuli.image2pulsetrain('myimg.jpg',
+                                           implant)
+   from_vid = p2p.stimuli.video2pulsetrain('mymov.avi',
+                                           implant)
 
 These functions come with a number of options to specify whether
 brightness should be encoded as pulse train amplitude or frequency,
@@ -808,7 +850,7 @@ which is the electrode type
 
 .. code-block:: python
    :linenos:
-   :linenostart: 50
+   :linenostart: 52
 
    import pulse2percept as p2p
 
@@ -830,7 +872,7 @@ Then new electrodes can be added by utilizing the
 
 .. code-block:: python
    :linenos:
-   :linenostart: 63
+   :linenostart: 65
 
    myimplant = MyImplant('epiretinal')
    x, y = 10, 20  # distance from fovea (um)
@@ -852,7 +894,7 @@ a single-pixel percept over time:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 68
+   :linenostart: 70
 
    class MyGanglionCellModel(TemporalModel):
        def model_cascade(self, in_arr, pt_list, layers):
@@ -880,7 +922,7 @@ This method can then be passed to the simulation framework:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 89
+   :linenostart: 91
 
    mymodel = MyGanglionCellModel()
    sim.set_ganglion_cell_layer(mymodel)
@@ -915,7 +957,7 @@ pulses as follows:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 91
+   :linenostart: 93
 
    class MyBiphasicPulse(p2p.utils.TimeSeries):
 
@@ -943,41 +985,62 @@ pulses as follows:
 Implementation Details
 ~~~~~~~~~~~~~~~~~~~~~~
 
-As described above, the main challenge during *pulse2percept*'s development
+The main challenge during *pulse2percept*'s development
 was computational cost:
 the simulations require a fine subsampling of space,
 and span several orders of magnitude in time. 
 In the space domain we wanted the model to be capable of simulating
 electrical activation of individual retinal ganglion cells. 
 In the temporal domain the model needed to be capable of 
-dealing with pulse trains containing indvidual pulses on the sub-millisecond time 
+dealing with pulse trains containing indvidiual pulses on the sub-millisecond time 
 scale that last over several seconds.
- 
-Like the brain, we solved this problem through parallelization in the spatial domain. 
-After an initial stage that implemented spatial interactions within the retina, computations
-were parallelized across small patches of the retina using two back ends (Joblib
-:cite:`Joblib2016` and Dask :cite:`Dask2016`), with both multithreading and
-multiprocessing options. 
 
-A second major computational bottleneck was computing the
-temporal response for each patch of retina. 
-Initial stages of the model require convolutions of arrays (e.g., equations
-2 and 3) that describe responses of the model at high temoral resolution 
-(sampling rates on the order of 25 um) for 
-pulse trains lasting for several seconds. 
+.. figure:: figperformance.png
+   :align: center
+   :scale: 70%
+   :figclass: w
+
+   Computational performance.
+   (A) Compute time to generate an 'effective stimulation map' is shown as a function of
+   the number of spatial sampling points used to characterize the retina.
+   (B) Speedup factor (serial execution time / parallel execution time) is shown 
+   as a function of the number of CPU cores.
+   Execution times were collected for the an Argus II array (60 electrodes)
+   simulating the letter 'A' (roughly 40 active electrodes, 20 Hz/20 uA pulse trains)
+   over a period of 500 ms (:code:`tsample` was 10 microseconds,
+   :code:`ssample` was 50 microns).
+   Joblib and Dask parallelization back ends gave similar results. 
+   :label:`figperformance` 
+
+ 
+Like the brain, we solved this problem through parallelization. 
+Spatial interactions were confined to an initial stage of processing
+(Boxes A and B in Fig. :ref:`figmodel`),
+after which all spatial computations could be parallized
+using two back ends (Joblib :cite:`Joblib2016` and Dask :cite:`Dask2016`), 
+with both multithreading and multiprocessing options. 
+
+However, even after parallelization, computing the temporal response
+remained a computational bottleneck.
+Initial stages of the temporal model require convolutions of arrays
+(e.g., Eqs. 2 and 3) that describe responses of the model at high temporal resolution
+(sampling rates on the order of 10 microseconds) for
+pulse trains lasting for at least 500 milliseconds. 
 These numerically-heavy sections of the code were sped up using a conjunction of
-three strategies. 
+three strategies.
 First, as described above, any given electrode generally only stimulates 
 a subregion of the retina. 
 As a consequence, when only a few electrodes are active,
 significant speed savings could often be obtained 
-by ignoring pixels which will not be significantly stimulated by that electrode. 
+by ignoring pixels which will not be significantly stimulated by that electrode
+(see tolerance parameter :code:`tol` on line 38 of the example code).
 Second, electrical stimulation is often carried out at 
-relatively low pulse train frequencies of less than 30 Hz. 
+relatively low pulse train frequencies of less than 50 Hz. 
 Since the individual pulses within the pulse train are usually very short 
 (~75-450 microseconds), input pulse trains are generally extremely sparse.
-We exploited this to speed up computation time by avoiding direct convolution 
-with the entire time-series whenever possible. 
+We exploited this fact to speed up computation time by avoiding direct convolution 
+with the entire time-series whenever possible,
+instead relying on a custom-built sparse convolution function.
 Preprocessing of sparse pulse train input arrays allowed us to 
 only carry out temporal convolution for those parts 
 of the time-series that included non-zero current amplitudes. 
@@ -988,38 +1051,37 @@ implemented using Numba :cite:`Lam2015`.
 Computational Performance
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We measured computational performance and scalability.
-Performance shown here was based on a XX computer, with XXX. 
+We measured computational performance of the model for 
+both spatial and temporal processing.
+All simulations were run on a 12-core Intel Core i7-5930K
+operating at 3.50 GHz (64GB of RAM).
 
-The inital stage of the model calculates distortions across the retina.
-This stage of the model scales as a function of 
-both the number of spatial sampling points in the retina 
-and the spatial sampling of axonal pathways, 
-as shown in Fig. :ref:`figinputoutput` A. 
-However it should be noted that this stage only needs to be carried out once 
-for a given implant/retina combination. 
-When comparing the effects of different pulse trains 
-a stored map of spatial distortions can be used. 
+The initial stages of the model scaled as a function of the number
+of spatial sampling points in the retina,
+as shown in Fig. :ref:`figperformance` A.
+Since the spatial arrangement of axonal pathways does not depend
+on the stimulation protocol or retinal implant,
+*pulse2percept* automatically stores and re-uses the generated
+spatial map depending on the specified set of spatial parameters.
 
 The remainder of the model is carried out in parallel, 
-so computational time increases linearly with the number of spatial sampling points. 
-Because computations are calculated across patches of the retina, 
-the speed of the model is largely unaffected by the number of electrodes. 
-The time taken per spatial sampling point depends on a number of factors: 
-the duration of the pulse train, the temporal sampling of the pulse train, 
-and the sparsity of the pulse train input. 
-Figure 2b shows performance as a function of pulse train duration for 10 (very sparse), 
-60 and 200 Hz pulse trains containing 0.45 ms biphasic pulses (see inset). 
-For each pulse train high and low temporal sampling rates are shown: 0.05 and 0.15 ms. 
+with the resulting speedup factor shown in Fig. :ref:`figperformance` B.
+Here, the speedup factor was calculated as the ratio of single-core execution time
+and parallel execution time.
+The maximum speedup factor was obtained with eight cores,
+above which the simulation shifted from being CPU bound to being memory bound,
+leading to a decrease in speedup.
+Due to the current design constraints (see Discussion),
+the software is better suited for rapid prototyping rather than real-time execution.
+At its best, simulating typical stimulation of an Argus II over a timecourse of
+500 milliseconds
+(at 50 microns spatial resolution and 10 microseconds temporal resolution)
+required 79 seconds of execution time.
+Line profiling revealed that most of the time was spent executing the
+slow convolutions of Boxes D and F (see Fig. :ref:`figmodel`),
+thus heavily relying on the computational performance of the SciPy implementation
+of the Fast Fourier Transform.
 
-
-.. figure:: figure2.png
-   :align: center
-   :scale: 50%
-
-   Computational performance. (A) Computational performance for computing spatial distortions. Compute time to generate a 'effective stimulation map' is shown as a function of the number of spatial sampling points used to characterize the retina. The three curves represents three different samplings of ganglion cell axon pathways. (B) Computational performance in the time domain. Compute time for a 1000 patches of retina is shown as a function of pulse train duration for 3 pulse train frequencies (10, 60, 200Hz) at high and low temporal sampling rates (0.05 and 0.15 ms). 
- 
-   :label:`figperformance` 
 
 
 Software availability and development
@@ -1047,15 +1109,13 @@ Discussion
 We present here an open-source, Python-based framework for modeling
 the visual processing in retinal prosthesis patients. 
 This software generates a simulation of the perceptual experience 
-of individual prosthetic users - a 'virtual patient'. 
+of individual prosthetic users -- a 'virtual patient'. 
 
 The goal of *pulse2percept* is to provide open-source simulations
 that can allow any user to evaluate the perceptual experiences
 likely to be produced across both current and future devices.
 In specific, the software was designed to meet 
 four software design specifications:
-
-TODO
 
 1. *Ease of use*: The intended users of this simulation include 
    researchers or government officials who collect or assess perceptual data 
@@ -1101,7 +1161,7 @@ We are currently collaborating with two leading manufacturers
 to validate the use of this software for both of these purposes.
 
 Virtual patients such as these can also play an important role
-in the wider community OF WHOM. Manufacturer-published 'simulations'
+in the wider community. Manufacturer-published 'simulations'
 of prosthetic vision do not take account of the
 substantial neurophysiological distortions
 in space and time that are observed in actual patients.
@@ -1124,7 +1184,7 @@ to the public or the scientific community.
 
 .. Determine usefulness via government bodies
 
-Prosthetic implants are expensive technology - costing roughly $100k per patient. 
+Prosthetic implants are expensive technology -- costing roughly $100k per patient. 
 Currently these implants are reimbursed on a trial basis 
 across many countries in Europe, 
 and are only reimbursed in a subset of states in the USA.
