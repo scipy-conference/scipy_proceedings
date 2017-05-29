@@ -444,7 +444,7 @@ Application
 
 The use of ``pyMolDyn`` is described in detail in the online
 documentation (see links above). To illustrate its usage, we take the
-attached input file `AgGeS-Box.xzy <https://github.com/sciapp/pyMolDyn/blob/master/data/AgGeS-Box.xyz>`_,
+attached input file `AgGeS-Box.xzy <https://raw.githubusercontent.com/sciapp/pyMolDyn/develop/data/AgGeS-BOX.xyz>`_,
 which shows a result of a 500-atom simulation of an amorphous alloy
 of Ag, Ge, and S (:math:`\textrm{Ag}_{100}\textrm{Ge}_{168}\textrm{S}_{232}`)
 in a cubic box of size :angstrom:`21.799`. :cite:`Aetal15` The first
