@@ -37,8 +37,8 @@ solving partial differential equations from symbolic problem
 definitions by the finite difference method. We highlight the
 generation and automated execution of highly optimized stencil code
 from only a few lines of high-level symbolic Python for a set of
-operators used in seismic inversion problems, before exploring the use
-of Devito for a range of scientific equations.
+scientific equations, before exploring the use of Devito operators in
+seismic inversion problems.
 
 .. class:: keywords
 
@@ -48,8 +48,8 @@ Introduction
 ------------
 
 Domain-specific high-productivity environments are playing an
-increasingly important role in scientific computing. The level
-of abstraction and automation provided by such frameworks not only
+increasingly important role in scientific computing. The level of
+abstraction and automation provided by such frameworks not only
 increases productivity and accelerates innovation, but also allows the
 combination of expertise from different specialised disciplines. This
 synergy is necessary when creating the complex software stack needed
@@ -86,11 +86,11 @@ achieved by the auto-generated and optimised code.
 Background
 ----------
 
-The attraction of using domain-specific languages to generically
+The attraction of using domain-specific languages (DSL) to generically
 solve PDEs via a high-level mathematical notation is by no means new
 and has lead to various purpose-built software packages and compilers
 dating back to 1962 [Iverson62]_, [Cardenas70]_ [Umetani85]_ [Cook88]_
-[VanEngelen96]_. Following the emergence of Python as widely used
+[VanEngelen96]_. Following the emergence of Python as a widely used
 programming language in scientific research, embedded DSLs for more
 specialised domains came to the fore, most notably the FEniCS
 [Logg12]_ and Firedrake [Rathgeber16]_ frameworks that both implement
@@ -123,21 +123,21 @@ realistic scientific application context. As such, its design is
 centred around composability with the existing Python software stack
 to provide users with the tools to dynamically generate optimised
 stencil computation kernels, but also to enable access to the full
-scientific software stack in the Python ecosystem. In addition, to
-accommodate the needs of "real life" scientific applications, a
-secondary API is provided that enables users to inject custom
-expressions, such as boundary conditions or sparse point
-interpolation, into the generated kernels.
+scientific software ecosystem. In addition, to accommodate the needs
+of "real life" scientific applications, a secondary API is provided
+that enables users to inject custom expressions, such as boundary
+conditions or sparse point interpolation routines, into the generated
+kernels.
 
 Moreover, the use of SymPy as the driver for the symbolic generation
 of stencil expressions and the subsequent code-generation are at the
 heart of the Devito philosophy. While SymPy is fully capable of
 auto-generating low-level C code for pre-compiled execution from
 high-level symbolic expressions, Devito is designed to combine theses
-capabilities with the latest advances in stencil compiler technology.
-The result is a framework that is capable of automatically generating
-and optimising complex stencil code from high-level symbolic
-definitions.
+capabilities with automatic performance optimisation based on the
+latest advances in stencil compiler technology. The result is a
+framework that is capable of automatically generating and optimising
+complex stencil code from high-level symbolic definitions.
 
 The Devito API is based around two key concepts that allow users to
 express finite difference problems in a concise symbolic notation:
@@ -201,7 +201,8 @@ a timestepping scheme. For this purpose Devito provides so-called
 :code:`TimeData` objects that encapsulate functions that are
 differentiable in space and time. With this we can either derive
 symbolic expressions for the backward derivatives directly via the
-:code:`first_derivative` utility, or use the shorthand notation
+:code:`first_derivative` utility with the argument :code:`side=left`
+indicating backward differences, or use the shorthand notation
 :code:`u.dt` provided by :code:`TimeData` objects to derive the
 forward derivative in time.
 
@@ -235,7 +236,7 @@ notation to the forward derivative in time (:code:`u.dt`) will soon be
 provided.
 
 In order to create a functional :code:`Operator` object, the
-expression :code:`eq` needs to be re-arranged so that we may solve for
+expression :code:`eq` needs to be rearranged so that we may solve for
 the unknown :math:`u_{i,j}^{n+1}`. This is easily achieved by using
 SymPy's :code:`solve` utility and the Devito shorthand
 :code:`u.forward` which denotes the furthest forward stencil point in
@@ -321,7 +322,8 @@ for this problem is
 
    \frac{\partial ^2 p}{\partial x^2} + \frac{\partial ^2 p}{\partial y^2} = 0
 
-The rearranged discretised form is
+The rearranged discretised form, assuming a central difference scheme
+for second derivatives, is
 
 .. math::
    :label: 2dlaplace_discr
@@ -334,7 +336,9 @@ Using a similar approach to the previous example, we can construct
 the SymPy expression to update the state of a field :math:`p`. For
 demonstration purposes we will use two separate function objects
 of type :code:`DenseData` in this example, since the Laplace equation
-does not contain a time-dependence.
+does not contain a time-dependence. The shorthand expressions
+:code:`pn.dx2` and :code:`pn.dy2` hereby denote the second derivatives
+in :math:`x` and :math:`y`.
 
 .. code-block:: python
 
@@ -345,7 +349,7 @@ does not contain a time-dependence.
                   space_order=2)
 
    # Define equation and solve for center point in `pn`
-   eq = Eq(a * pn.laplace)
+   eq = Eq(a * pn.dx2 + pn.dy2)
    stencil = solve(eq, pn)[0]
    # The update expression to populate buffer `p`
    eq_stencil = Eq(p, stencil)
@@ -375,23 +379,24 @@ entire data dimension, similar to Python's :code:`:` operator.
 
 The Dirichlet BCs in the Laplace example can thus be implemented by
 creating a :code:`sympy.Eq` object that assign either fixed values or
-a prescribed function, such as the utility symbol :code:`bc_top` in or
-example, along the top and bottom boundary of our domain. To implement
+a prescribed function, such as the utility symbol :code:`bc_right` in or
+example, along the left and right boundary of our domain. To implement
 the Neumann BCs we again follow the original tutorial by assigning the
-second grid column from the side boundaries the value of the outermost
-column. The resulting SymPy expressions can then be used alongside
-the state update expression to create our :code:`Operator` object.
+second grid row from the top and bottom boundaries the value of the
+outermost row. The resulting SymPy expressions can then be used
+alongside the state update expression to create our :code:`Operator`
+object.
 
 .. code-block:: python
 
    # Create an additional symbol for our prescibed BC
-   bc_top = DenseData(name='bc_top', shape=(nx, ),
+   bc_right = DenseData(name='bc_right', shape=(nx, ),
                       dimensions=(x, ))
-   bc_top.data[:] = np.linspace(0, 1, nx)
+   bc_right.data[:] = np.linspace(0, 1, nx)
 
    # Create explicit boundary condition expressions
    bc = [Eq(p.indexed[x, 0], 0.)]
-   bc += [Eq(p.indexed[x, ny-1], bc_top.indexed[x])]
+   bc += [Eq(p.indexed[x, ny-1], bc_right.indexed[x])]
    bc += [Eq(p.indexed[0, y], p.indexed[1, y])]
    bc += [Eq(p.indexed[nx-1, y], p.indexed[nx-2, y])]
 
@@ -496,11 +501,11 @@ where the square slowness of the wave is denoted as :math:`m`.  Since
 :code:`m`, as well as the boundary dampening function :code:`eta`, is
 re-used between forward and adjoint runs the only symbolic data object
 we need to create here is the wavefield :code:`u` in order to
-implement and re-arrange our discretised equation :code:`eqn` to form
+implement and rearrange our discretised equation :code:`eqn` to form
 the update expression for :code:`u`. It is worth noting that the
 :code:`u.laplace` shorthand notation used here expands to the set of
-second derivatives in all spatial dimensions, thus making allowing us
-to use the same formulation for two-dimensional and three-dimensional
+second derivatives in all spatial dimensions, thus allowing us to use
+the same formulation for two-dimensional and three-dimensional
 problems.
       
 In addition to the state update of :code:`u`, we are also inserting
@@ -595,7 +600,7 @@ core information for seismic inversion runs, such as the values for
 :code:`m` and the dampening term :code:`eta`, as well as the
 coordinates of the point source and receiver hydrophones. It is worth
 noting that the spatial discretisation and thus the stencil size of
-the oeprators is still fully parameterisable.
+the operators is still fully parameterisable.
 
 .. code-block:: python
 
@@ -723,16 +728,16 @@ using the Stream Triad benchmark.
 The first set of benchmark results, shown in Figure :ref:`figperfdle`,
 demonstrates the performance gains achieved through loop-level
 optimisations. For these runs the symbolic optimisations were kept at
-a "basic" settings, where only common sub-expressions elimination is
+a "basic" setting, where only common sub-expressions elimination is
 performed on the kernel expressions. Of particular interest are the
 performance gains achieved by increasing the loop engine mode from
 "basic" to "advanced", to insert loop blocking and explicit
 vectorization directives into the generated code. Due to the improved
 memory bandwidth utilization the performance increased to between
 52% and 74% of the achievable peak. It is also worth noting that more
-aggressive optimisation in the "speculative" DLE mode, directives for
+aggressive optimisation in the "speculative" DLE mode (directives for
 non-temporal stores and row-wise data alignment through additional
-padding, did not yield any consistent improvements due to the low OI
+padding) did not yield any consistent improvements due to the low OI
 inherent to the acoustic formulation of the wave equation and the
 subsequent memory bandwidth limitations of the kernel.
 
@@ -764,27 +769,27 @@ large a OI [Louboutin17a]_.
 Integration with YASK
 ~~~~~~~~~~~~~~~~~~~~~
 
-As already explained, Devito is based upon actual compiler technology, and its
-backend presents a highly modular structure, with each transformation pass
-taking as input an AST and returning a new, different AST. One of the reasons
-behind this software engineering strategy, which is clearly more challenging than a
-template-based solution, is to ease the integration of external tools. One such
-tool is the YASK stencil optimizer [Yount16]_. We are currently integrating
-YASK within the DLE; YASK will replace some (but not all) of the existing DLE
-passes.
+As mentioned previously, Devito is based upon actual compiler
+technology with a highly modular structure. Each backend
+transformation pass is based on manipulating an input AST and
+returning a new, different AST. One of the reasons behind this
+software engineering strategy, which is clearly more challenging than
+a template-based solution, is to ease the integration of external
+tools, such as the YASK stencil optimizer [Yount16]_. We are currently
+in the process of integrating YASK to complement the DLE, so that YASK
+may replace some (but not all) DLE passes.
 
-The DLE passes are organized in a hierarchy of classes. Each class represents a
-specific code transformation pipeline; each stage of the pipeline manipulates
-ASTs. Integrating YASK becomes then a conceptually simple task, which boils
-down to three actions: (i) adding a new transformation pipeline to the DLE;
-(ii) adding a new array type, to ease storage layout transformations and data
-views (YASK employs a data layout different than the conventional row-major
-format); (iii) creating the proper Python bindings in YASK so that Devito can
-drive the code generation process. At the moment of writing, some progress has
-already been made: 1) Devito ASTs can now automatically be translated into YASK
-ASTs through an extremely simple tree visitor; 2) a Devito-generated acoustic
-wave equation code could be run from within YASK (i.e., with the input data
-still coming from YASK users).
+The DLE passes are organized in a hierarchy of classes where each
+class represents a specific code transformation pipeline based on AST
+manipulations. Integrating YASK becomes then a conceptually simple
+task, which boils down to three actions:
+
+1. Adding a new transformation pipeline to the DLE.
+2. Adding a new array type, to ease storage layout transformations
+   and data views (YASK employs a data layout different than the
+   conventional row-major format).
+3. Creating the proper Python bindings in YASK so that Devito can
+   drive the code generation process.
 
 It has been shown that real-world stencil codes optimised through YASK
 may achieve an exceptionally high fraction of the attainable machine
