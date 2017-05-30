@@ -389,9 +389,9 @@ Labwatch triggers the optimizer to suggest a new configuration based on all conf
 
 
 Multiple search spaces
-++++++++++++++++++++++
+----------------------
 
-Since search spaces are named configurations, Labwatch also allows to have multiple search spaces, which is very convenient if one wants to keep single hyperparameters fixed and only optimize a few other hyperparameters.
+Labwatch also allows to have multiple search spaces, which is very convenient if one wants to keep a set of hyperparameters fixed and only optimize a few others.
 Assume that we only want to optimize the learning rate and keep the batch size fixed, we can create a second smaller search space:
 
 .. code-block:: python
@@ -411,7 +411,7 @@ We can run our experiment now in the same way but by calling it with this new se
 
 
 the optimizer will now only suggest a value for the learning rate and keeps all other hyperparameters, such as the batch size, fixed to the values that are defined in the config.
-Labwatch passes only entries of the database from the same search space to the optimizer in order to avoid inconsistencies.
+
 
 Hyperparameter Optimizers
 -------------------------
@@ -440,8 +440,8 @@ Basically, optimizers need to implement only the ``suggest_configuration()`` met
 
 
 Even though the interface for all optimizer is the same, every optimizer has its own properties and might not work in all use cases.
-The following list gives a brief overview of optimizers that can be used with Labwatch and in which
-setting they work and which they do not. For more details we refer to the corresponding papers:
+The following list gives a brief overview of optimizers that can be used with Labwatch and the setting they do and do not work in.
+For more details we refer to the corresponding papers:
 
 - **Random search** is probably the simplest hyperparameter optimization method :cite:`bergstra-jmlr12a`. It just samples hyperparameter
   configurations randomly from the corresponding prior distributions. Due to its simplicity, random search works in discrete as well as continuous search
