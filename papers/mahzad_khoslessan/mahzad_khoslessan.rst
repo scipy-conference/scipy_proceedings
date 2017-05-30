@@ -93,26 +93,37 @@ In summary, Dask together with MDAnalysis makes it straightforward to implement 
 We show that obtaining good parallel performance depends on multiple factors such as storage system and trajectory file format and provide guidelines for how to optimize trajectory analysis throughput within the constraints of a heterogeneous research computing environment.
 
 
+Results and Discussion
+======================
+
 Effect of I/O Environment
-=========================
+-------------------------
 
 In MDAnalysis library, trajectories from MD simulations are a frame by frame description of the motion of particles as a function of time. 
 To allow the analysis of large trajectories, MDAnalysis only loads a single frame into memory at any time :cite:`Gowers:2016aa, Michaud-Agrawal:2011fu`.
 Some file systems are designed to run on a single CPU while others like Network File System (NFS) which is among distributed file systems are designed to let different processes on multiple computers access a common set of files.
 These file systems guarantees sequential consistency which means that it prevents any process from reading a file while another process is reading the file. 
 Distributed parallel file systems (Lustre) allow simultaneous access to the file by different processes; however it is very important to have a parallel I/O library; otherwise the file system will process the I/O requests it gets serially, yielding no real benefit from doing parallel I/O.
-Figure [] show the I/O pattern compared between different file formats.
+
+.. figure:: figs/panels/trj-access-patterns.pdf
+
+   I/O pattern for reading frames in parallel from commonly used MD trajectory formats.
+   **A** Gromacs XTC file format.
+   **B** CHARMM/NAMD DCD file format and Amber netCDF format.
+   :label:`fig:pattern-formats`
+
+
 XTC file format takes advantage of in-built compression and as a result has smaller file size as compared to the other formats. 
 In addition, MDAnalysis implements a fast frame scanning algorithm for XTC files.
 This algorithm computes frame offsets and saves the offsets to disk as a hidden file once the trajectory is read the first time. 
 When a trajectory is loaded again then instead of reading the whole trajectory the offset is used to seek individual frames. 
 As a result, the time it takes a process to load a frame into memory is short. 
-In addition, each frame I/O will be followed by decompressing of that frame as soon as it is loaded into memory. 
+In addition, each frame I/O will be followed by decompressing of that frame as soon as it is loaded into memory (see Figure :ref:`fig:pattern-formats` A). 
 Thus, as soon as the frame is loaded into memory by one process, the file system will let the next process to load another frame into memory.
 This happens while the first process is decompressing the loaded frame.
 As a result, the overlapping of the data requests for the same calculation will be less frequent.
 However, there is no in-built compression for DCD and netCDF file formats and as a result file sizes are larger.
-This will result in higher I/O time and therefore overlapping of per frame trajectory data access. 
+This will result in higher I/O time and therefore overlapping of per frame trajectory data access (Figure :ref:`fig:pattern-formats` B). 
 The I/O time is larger for netCDF file format as compared to DCD file format due to larger file size.
 This is since netCDF has a more complicated file format. 
 Reading an existing netCDF dataset involves opening the dataset; inquiring about dimensions, variables, and attributes; reading variable data; and closing the dataset [ref].
@@ -122,7 +133,7 @@ Our study showed that SSD can be very helpful (especially for dcd file format) a
 Also we anticipate that, heavy analyses that take lenger time, per frame trajectory data access happens less often and accession times gradually become staggered across CPUs which can be considered for future studies.
 
 Effect of File Format
-=====================
+---------------------
 
 Figures [] to [] summarizes speedups and parallel efficiencies for 300X and 600X trajectories and all file formats for multiprocessing and distributed scheduler respectively.
 According to Figures [] DCD file format does not scale at all by increasing parallelism across different cores.
@@ -165,7 +176,7 @@ As can be seen from the results, due to different reasons, some tasks (so-called
 
 
 Challenges for Good HPC Performance
-===================================
+-----------------------------------
 
 There is a caveat needs to be added here that all results were obtained during normal, multi-user, production periods on all machines.
 In fact, the time the jobs take to run are affected by the other jobs on the system.  
@@ -187,14 +198,14 @@ Because our Map-reduce job is pleasantly parallel, all of our processes have the
 Therefore, observing these stragglers is unexpected and the following sections in the present study aim to identify the reason for which we are seeing these stragglers.
 
 Performance Optimization
-========================
+------------------------
 In the present section, we have tested different features of our computing environment to see if we can identify the reason for those stragglers and improve performance by avoiding the stragglers.
 Lustre Striping, oversubscribingi, scheduler throughput are tested to examine their effect on the performance. In addition, scheduler plugin is used to validate our observation using web interface.
 In fact, we create a plugin that performs logging whenever a task changes state.
 Through the scheduler plugin we will be able to get lots of information about a task whenever it finishes computing.
 
 Effect of Lustre Striping
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 As discussed before, the overlapping of data requests from different processes can lead to higher I/O time and as a result poor performance.
 This is especially strongly affecting our results since our compute per frame is not heavy and as a result the overlapping of data requests is more frequent.
 The effect on the performance is strongly dependent on file format and some formats like XTC file formats which take advantage of in-built decompression are less affected by the contention from many data requests from many processes.
@@ -208,7 +219,7 @@ As can be seen, IO time is level across parallelism up to 72 cores which means t
 However, we are still seeing these stragglers and the overal speed-up is not improved.  
 
 Effect of Oversubscribing
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 One useful way to robust our code to uncertainty in computations is to submit many more tasks than the numer of cores. 
 This may allow Dask to load balance appropriately, and as a result avoiding the stragglers.
@@ -227,12 +238,16 @@ Examining Scheduler Throughput
 
 
 Comparison of Performance of Map-Reduce Job Between MPI for Python and Dask Frameworks
-======================================================================================
+--------------------------------------------------------------------------------------
+
 Based on the results presented in previous sections, it turned out that the stragglers are not because of the network, shared resources or scheduler throughput.
 Lustre striping improves I/O time; however, the job computation is still delayed and as a result lead to poor speed-up when extended to multiple nodes.    
 In order to make sure if the stragglers are created because of scheduler overhead in Dask framework we have tried to measure the performance of our Map-Reduce job using MPI-based implementation.
 This will let us figure out whether the stragglers observed in the present benchmark using Dask parallel libray are as a result of scheduler overhead or the environment itself.
 
+
+Conclusions
+===========
 
 
 Acknowledgments
