@@ -67,7 +67,7 @@ Sacredboard offers a web-based interface to view runs and supports maintaining a
 
 Sacred
 ======
-Sacred is an open source Python framework that aims to bundle solutions for some of the most frequent challenges of computational research.
+Sacred [#]_ is an open source Python framework that aims to bundle solutions for some of the most frequent challenges of computational research.
 It does not enforce any particular workflow, and is independent of the choice of machine learning libraries.
 Sacred was designed to remain useful even under deadline pressure, and therefore tries to
 offer maximum convenience while minimizing boilerplate code.
@@ -75,6 +75,10 @@ By combining these features into a unified but flexible workflow, Sacred  enable
 Its standardized configuration process allows streamlined integration with other tools such as Labwatch, for hyperparameter optimization.
 Through storage of run information in a central database comprehensive query and sorting functionality for bookeeping becomes available.
 This further enables downstream analysis and allows other tools such as Sacredboard to provide a powerful user interface for organizing results.
+
+
+.. [#] https://github.com/IDSIA/Sacred
+
 
 
 Overview
@@ -92,14 +96,26 @@ A minimal example would thus look like this:
         return 42
 
 
+This experiment is ready to be run and would return a *result* of 42.
+It already features an automatically generated commandline interface, collects relevant information about dependencies and the host system, and can do bookkeeping if any observers are added (e.g. through the commandline).
+The experiment can be extended in several ways to define (hyper-) parameters that can later be changed externally.
 
-Hyperparameters can then be defined in native Python using special decorated functions, dictionaries or configuration files (see :ref:`configuration`).
-The experiment can be run through an automatically generated command-line interface, or from Python by calling ``ex.run()``.
+The experiment can be run through its command-line interface, or directly from Python by calling ``ex.run()``.
 Both modes offer the same ways for passing options, setting parameters, and adding observers.
-Sacred then 1) interprets the options 2) evaluates the parameter configuration 3) gathers information about dependencies and host, and 4) constructs and calls a ``Run`` object that is responsible for executing the main function.
-The Run captures the stdout, custom information and fires events to the observers at regular intervals for bookkeeping (see :ref:`bookkeeping`).
+Once this experiment is started Sacred will 1) interpret the options 2) evaluate the parameter configuration 3) gathers information about dependencies and host, and 4) constructs and calls a ``Run`` object that is responsible for executing the main function.
+In the previous minimal example the output would look like this:
+
+.. code-block:: bash
+
+    WARNING - my_example - No observers have been added to this run
+    INFO - my_example - Running command 'main'
+    INFO - my_example - Started
+    INFO - my_example - Result: 42
+    INFO - my_example - Completed after 0:00:00
+
 For each run, relevant information like parameters, package dependencies, host information, source code, and results are automatically captured, and are saved regularly by optional observers.
-Several observers are available for databases, disk storage, or sending out notifications.
+The Run also captures the stdout, custom information and fires events at regular intervals that observed for bookkeeping.
+Several built-in observers are available for databases, disk storage, or sending out notifications.
 
 
 
