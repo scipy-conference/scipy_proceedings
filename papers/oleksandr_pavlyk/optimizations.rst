@@ -58,11 +58,10 @@ In addition to initial Fast Fourier Transforms (FFT) optimizations offered in pr
 
 Arithmetic and transcendental expressions
 -----------------------------------------
-NumPy is designed for high-performance basic arithmetic and transcendental operations on ndarrays. Some umath primitives are optimized to benefit from SSE, AVX and (recently) from AVX2 instruction sets, but not from AVX-512. Also, original NumPy functions did not take advantage of multiple cores. Update 2 provides substantial changes to the guts of NumPy to incorporate the Intel MKL Vector Math Library (VML) in respective umath primitives, which enables support for all available cores on a system and all CPU instruction sets.
-The logic in Update 2 NumPy umath works as follows:
-* For short NumPy arrays, the overheads to distribute work across multiple threads are high relative to the amount of computation work. In such cases, Update 2 uses the Intel MKL Short Vector Math Library (SVML), which is optimized for good performance across a range of Intel CPUs on short vectors.
-* For large arrays, threading overheads are lower compared to the amount of computation and Update 2 uses the Intel MKL VML, which is optimized for utilizing multiple cores and a range of Intel CPUs.
-NumPy Arithmetic and transcendental operations on vector-vector and vector-scalar are accelerated up to 400x for Intel |R| Xeon Phi |TM| processors.
+
+.. include:: umath_optimizations/umath_optimizations.rst
+
+
 
 Memory management optimizations
 -------------------------------
