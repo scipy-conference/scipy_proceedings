@@ -20,9 +20,9 @@ FigureFirst: A Layout-first Approach for Scientific Figures
 .. class:: abstract
 
 One major reason that Python has been widely adopted as a scientific computing platform is the availability of powerful visualization libraries. Although these tools facilitate discovery and data exploration, they are difficult to use when constructing the sometimes intricate figures required to advance the narrative of a scientific manuscript. For this reason, figure creation often follows an inefficient serial process, where simple representations of raw data are constructed in analysis software and then imported into desktop publishing software to construct the final figure. Though the graphical user interface of publishing software is uniquely tailored to the production of publication quality layouts, once the data are imported, all edits must be re-applied if the analysis code or raw data changes. 
-Here we introduce a new Python package, FigureFirst, that allows users to design figures and analyze data in a parallel fashion, making it easy to generate and continuously update aesthetically pleasing and informative figures directly from raw data. To accomplish this, FigureFirst acts as a bridge between the Scalable Vector Graphics (SVG) format and MatPlotLib plotting in Python. 
-With FigureFirst, the user specifies the layout of a figure by drawing a set of rectangles on the page using a standard SVG editor such as Inkscape. In Python, FigureFirst uses this layout file to generate MatPlotLib figures and axes in which the user can plot the data. Additionally, FigureFirst saves the populated figures back into the original SVG layout file. This means that after making adjustments to the layout in Inkscape, the script can be run again, updating the data layers to match the new layout.
-Building on this architecture we have implemented a number of features that make complex tasks remarkably easy including axis templates; changing attributes of standard SVG items such as their size, shape, color, and text; and an api for adding JessyInk extensions to MatPlotLib objects for automatically generating animated slide presentations. All of the code and templates are available on our github page: http://flyranch.github.io/FigureFirst/.
+Here we introduce a new Python package, FigureFirst, that allows users to design figures and analyze data in a parallel fashion, making it easy to generate and continuously update aesthetically pleasing and informative figures directly from raw data. To accomplish this, FigureFirst acts as a bridge between the Scalable Vector Graphics (SVG) format and MatPlotLib [Hunter08]_ plotting in Python. 
+With FigureFirst, the user specifies the layout of a figure by drawing a set of rectangles on the page using a standard SVG editor such as Inkscape [Altert13]_. In Python, FigureFirst uses this layout file to generate MatPlotLib figures and axes in which the user can plot the data. Additionally, FigureFirst saves the populated figures back into the original SVG layout file. This means that after making adjustments to the layout in Inkscape, the script can be run again, updating the data layers to match the new layout.
+Building on this architecture we have implemented a number of features that make complex tasks remarkably easy including axis templates; changing attributes of standard SVG items such as their size, shape, color, and text; and an api for adding JessyInk [Jagannathan12]_ extensions to MatPlotLib objects for automatically generating animated slide presentations. All of the code and templates are available on our github page: http://flyranch.github.io/FigureFirst/.
 
 .. class:: keywords
 
@@ -31,22 +31,18 @@ Building on this architecture we have implemented a number of features that make
 Introduction
 ------------
 
-Visualization has long been a critical element in the iterative process of science. Skill with the pen allowed the early pioneers of the scientific revolution to share, explain, and convince: Galileo was trained in the Florentine Acatamie delle Arti del Disegno; and the intricate drawings of Da Vinci and Vesalius served to overturn Galen’s entrenched theories. 
+Visualization has long been a critical element in the iterative process of science. Skill with the pen allowed the early pioneers of the scientific revolution to share, explain, and convince: Galileo was trained in the Florentine Acatamie delle Arti del Disegno; and the intricate drawings of Da Vinci and Vesalius served to overturn Galen’s entrenched theories, with the Vesalius's historic textbook paving the way for William Harvey's discovery of a unified circulatory system [Aird11]_.
 
-[need another sentence to give a little more context to Galen's theories? What were they?]
+Although new web-enabled media formats are emerging to provide alternative mechanisms for scientific communication, the static printed publication remains the centerpiece of scientific discourse. A well designed sequence of data-rich figures makes it easy for other researchers across disciplines to follow the narrative, assess the quality of the data, criticize the work, and remember the conclusions. In fact, the importance of the narrative in organizing and structuring the logic of research has led some to propose that writing the manuscript should be a more integral part of the original design and execution of experiments [Whitesides04]_. According to this view, the researcher should create a text outline, as well as a visual story-board, long before all of the data have been collected and analyzed. As new results come to light, the story-board is updated with new data and new experiments.  
 
-[hume48]_
-
-Although new web-enabled media formats are emerging to provide alternative mechanisms for scientific communication, the static printed publication remains the centerpiece of scientific discourse. A well designed sequence of data-rich figures makes it easy for other researchers across disciplines to follow the narrative, assess the quality of the data, criticize the work, and remember the conclusions [1]. In fact, the importance of the narrative in organizing and structuring the logic of research has led some to propose that writing the manuscript should be a more integral part of the original design and execution of experiments [2]. According to this view, the researcher should create a text outline, as well as a visual story-board, long before all of the data have been collected and analyzed. As new results come to light, the story-board is updated with new data and new experiments.  
-
-.. figure:: workflow.pdf
+.. figure:: workflow.png
    :scale: 100%
    :align: center
    :figclass: w
 
    Overview of the approach to figure creation using FigureFirst. (A-C) A common workflow for generating scientific figures without FigureFirst. (A) Data are plotted in anaylysis software and panels are organized using text-oriented styling tools such as subplot or gridspec. (B) Semi-finished figures are exported into a vector-graphics format and any final styling and annotation is applied in vector editing software. (C) In many cases these final edits will need to be re-applied if the data or analysis changes (D-F) The itterative layout-based workflow enabled by FigureFirst. (D) The user designs a figure layout in SVG, specifying the location and aspect-ratio of putative plotting axes. Additional vector art such as arrows or stylized axes spines can be included in the layout document. (E) FigureFirst interprets the layout document and generates MatPlotLib axes and figures that the user can use to plot in Python. (F) When saving, the generated plots are merged with the original layout to incoporate the non-MatPlotLib graphics. Note that this approach allows changes to the figure layout or analyis code to be applied at any point in the workflow.
  
-From a practical standpoint, taking this iterative approach with data-rich figures is challenging because desktop publishing and illustration software is not integrated with scientific analysis software. A few of the commercial software packages such as MATLAB and SigmaPlot provide some graphical tools to assist in figure layout, but these tools are severely limited compared to those available in vector graphics software such as Inkscape or Adobe Illustrator, especially for creating multi-panel figures. For this reason, figure generation usually follows a unidirectional workflow in which authors first write code to analyze and plot the raw data, and only later do they import the figures into desktop publishing software for final editing and styling for press (Fig. 1A-C).
+From a practical standpoint, taking this iterative approach with data-rich figures is challenging because desktop publishing and illustration software is not integrated with scientific analysis software. A few of the commercial software packages such as MATLAB(TM) and SigmaPlot(TM) provide some graphical tools to assist in figure layout, but these tools are severely limited compared to those available in vector graphics software such as Inkscape or Adobe Illustrator(TM), especially for creating multi-panel figures. For this reason, figure generation usually follows a unidirectional workflow in which authors first write code to analyze and plot the raw data, and only later do they import the figures into desktop publishing software for final editing and styling for press (Fig. 1A-C).
  
 We created the open-source FigureFirst library to enable interoperability between open-source plotting and analysis tools available in Python (e.g. MatPlotLib) and the graphical user interface provided by Scalable Vector Graphics (SVG) editors such as the open-source application Inkscape. By drawing a series of boxes in a blank SVG document, a researcher may rapidly generate a prototype of a multi-panel figure, and then populate this figure using powerful analysis and plotting functions in Python. The FigureFirst library allows the user to insert these plots back into the prototype SVG document, completing the loop between visualization and analysis. As data are collected, individual sub-panels in the figure may be populated, moved, resized or removed as the events of the ongoing study warrant. In this manner, the library facilitates a more iterative approach to this key aspect of the scientific method. Finally, by embedding information about the scripts used to generate the final figures within the SVG document itself, FigureFirst makes it possible to store an automatically updated and complete traceback from raw data to a publication quality figure encapsulating the analysis routine within the final figure. Thus, every step of the process may be kept under version control and published along with the manuscript, greatly increasing the transparency and reproducibility of the final publication.
 
@@ -64,9 +60,13 @@ With FigureFirst creating a new figure generally involves four steps:
 
 4) **Save to SVG.** This merges SVG graphics with MatPlotLib figures, allowing complex vector art to be quickly incorporated as overlays or underlays to your data presentation.
 
-As an example, to generate Figure 1 we used Inkscape to construct a .SVG document  called 'workflow_layout.SVG' containing a layer with a 2 by 3 grid of grey rectangles. We then used the tag axis inkscape extension (Figure 2) to tag each :code:`<rect/>` with a  :code:`<figurefirst:axes>` tag that has a unique name as an attribute. For instance we tagged the gray rectangle that became panel C with :code:`<figurefirst:axis figurefirst:name="plot_data" />.` In this example we have drawn in the axes spines and included this with the arrows and other annotations on a separate layer in the .SVG file to illustrate one way to use vector art overlays in a layout document. 
+As an example, to generate Figure 1 we used Inkscape to construct a .SVG document  called 'workflow_layout.SVG' containing a layer with a 2 by 3 grid of grey rectangles. We then used the tag axis inkscape extension (Figure 2) to tag each :code:`<rect/>` with a  :code:`<figurefirst:axes>` tag that has a unique name as an attribute. For instance we tagged the gray rectangle that became panel F with :code:`<figurefirst:axis figurefirst:name="plot_data" />.` In this example we have drawn in the axes spines and included this with the arrows and other annotations on a separate layer in the .SVG file to illustrate one way to use vector art overlays in a layout document. 
 
-In Python we then can plot some data to this axis using the following code:
+In Python we then use the figurefirst module can plot some data to this axis using the following code:
+
+.. raw:: latex
+
+    \newpage
 
 .. code-block:: python
    :linenos:
@@ -134,12 +134,12 @@ The axis methods feature allows the user to include Python code in the layout do
 
 In keeping with the notion that vector editing software is better suited for designing the visual landscape of a figure than code, we created the :code:`<pathspec>` tag to create a way for users to generate a pallet of line and patch styles within the layout document and pass these to plotting functions in Python. Using this tool a user can explore different stroke widths, colors and transparencies in inkscape and then quickly pass these styles  as keyword arguments to MatPlotLib plotting functions. 
 
-.. figure:: additional_features.pdf
+.. figure:: additional_features.png
    :scale: 100%
    :align: center
    :figclass: w
 
-   Additional features that use FigureFirst as an interface layer between SVG and Python. (A-B) SVGitems allows the attributes of SVG objects in the layout document to be to be edited and modified in Python. In the layout (A) the text item I1, the three small :code:`<rects/>` as well as the three :code:`<path/>` objects are tagged with :code:`<figurefirst:SVGitem figurefirst:name=somename>` allowing the text and color of the objects to be changed in the final output shown in B. (C-D) Using :code:`<figurefirst:pathspec>` and :code:`<figurefirst:pathspec>` tags a palet of line and patch styles can be defined in SVG (C) and then passed as keyword arguments to MatPlotLib plotting functions to generate the plot in D. (E) FigureFirst simplifies keeping track of when, how, and why your figures are created by embedding the time modified, user notes, and full traceback directly into each FigureFirst generated layer. 
+   Additional features that use FigureFirst as an interface layer between SVG and Python. (A-B) SVGitems allows the attributes of SVG objects in the layout document to be to be edited and modified in Python. In the layout (A) the text item I1, the three small :code:`<rects/>` as well as the three :code:`<path/>` objects are tagged with :code:`<figurefirst:SVGitem figurefirst:name=somename>` allowing the text and color of the objects to be changed in the final output shown in B. (C-D) Using :code:`<figurefirst:pathspec>` and :code:`<figurefirst:patchspec>` a palet of line or patch styles respectively, can be defined in SVG (C) and then passed as keyword arguments to MatPlotLib plotting functions to generate the plot in D. (E) FigureFirst simplifies keeping track of when, how, and why your figures are created by embedding the time modified, user notes, and full traceback directly into each FigureFirst generated layer. 
 
 The two tools described above allow the user to pass information from SVG to Python; we have also implemented features that allow data to be passed from Python back into SVG. For instance the :code:`pass_xml()` method of the layout class can be used to identify axes as slides in a jessyink (https://launchpad.net/jessyink) presentation, or attach mousover events or even custom javascript routines to a plotted path.
 
@@ -189,6 +189,13 @@ As described previously in the Additional SVG/Python interoperability section, w
 
 References
 ----------
-.. [hume48] D. Hume. *An enquiry concerning human understanding*,
-           Hackett (Indianapolis, IN), 1748.
-
+.. [Aird11] W. C. Aird. *Discovery of the cardiovascular system: from Galen to William Harvey.*, 
+            Journal of Thrombosis and Haemostasis, 9 (Suppl. 1): 118-129, July 2011.
+.. [Altert13] M Albert, J. Andler, T. Bah, P. Barbry-Blot, J. Barraud, B. Baxter  *Inkscape.*, 
+            www.inkscape.org, 2013.
+.. [Hunter08] John D. Hunter.  *Matplotlib: A 2D graphics environment.*,
+            Computing In Science & Engineering 9.3: 90-95, 2007.
+.. [Jagannathan12] Arvind Krishnaa Jagannathan, Srikrishnan Suresh, and Vishal Gautham Venkataraaman. *A Canvas-Based Presentation Tool Using Scalable Vector Graphics.*, 
+            2012 IEEE Fourth International Conference on Technology for Education. 2012.
+.. [Whitesides04] George M. Whitesides,  *'Whitesides' group: writing a paper.*,
+            Advanced Materials 16.15: 1375-1377. 2004.
