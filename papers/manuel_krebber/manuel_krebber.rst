@@ -89,16 +89,16 @@ Finally, we draw some conclusions from the experiments and propose future work o
 Usage Overview
 --------------
 
-MatchPy can be installed using ``pip install matchpy`` and all necessary classes can be imported with
-:py:`from matchpy import *`. Expressions in MatchPy consist of constant symbols and operations.
-For patterns, wildcards can also be used as placeholders. We use
-`Mathematica's notation <https://reference.wolfram.com/language/guide/Patterns.html>`_ for
-wildcards, i.e. we append underscores to wildcard names to distinguish them from symbols.
+MatchPy can be installed using ``pip install matchpy`` and all necessary classes can be imported with :py:`from matchpy import *`.
+Expressions in MatchPy consist of constant symbols and operations.
+For patterns, wildcards can also be used as placeholders.
+We use `Mathematica's notation <https://reference.wolfram.com/language/guide/Patterns.html>`_ for wildcards,
+i.e. we append underscores to wildcard names to distinguish them from symbols.
 
-MatchPy can be used with native Python types such as lists and ints. The following is an example
-of how the subject ``[0, 1]`` can be matched against the pattern ``[x_, 1]``. The expected match here
-is the replacement ``0`` for ``x_``. We use `next` because we only want to use the first (and in this
-case only) match of the pattern:
+MatchPy can be used with native Python types such as lists and ints.
+The following is an example of how the subject ``[0, 1]`` can be matched against the pattern ``[x_, 1]``.
+The expected match here is the replacement ``0`` for ``x_``.
+We use `next` because we only want to use the first (and in this case only) match of the pattern:
 
 .. code-block:: pycon
 
@@ -107,9 +107,8 @@ case only) match of the pattern:
     {'x': 0}
 
 In addition to regular (dot) variables, MatchPy also supports sequence wildcards.
-They can match a sequence of arguments and we denote them with two or three trailing underscores
-for plus and star wildcards, respectively. Star wildcards can match an empty sequence, while
-plus wildcards require at least one argument to match.
+They can match a sequence of arguments and we denote them with two or three trailing underscores for plus and star wildcards, respectively.
+Star wildcards can match an empty sequence, while plus wildcards require at least one argument to match.
 
 .. code-block:: pycon
 
@@ -130,8 +129,8 @@ In addition to native types, one can also define custom operations by creating a
 
 The name and arity are required attributes, while the others are optional and influence the behavior of the operations.
 Nested associative operations have to be variadic and are automatically flattened.
-Furthermore, regular variables behave similar to sequence variables as arguments of associative functions, because
-the associativity allows arbitrary parenthesization of arguments:
+Furthermore, regular variables behave similar to sequence variables as arguments of associative functions,
+because the associativity allows arbitrary parenthesization of arguments:
 
 .. code-block:: pycon
 
@@ -294,8 +293,8 @@ Commutativity
 Matching commutative terms is difficult because matches need to be found independent of the argument order.
 Commutative matching has been shown to be NP-complete, too :cite:`Benanav1987`.
 It is possible to find all matches by matching all permutations of the subjects arguments against all permutations of the pattern arguments.
-However, with this naive approach, a total of :math:`n!m!` combinations have to be matched where :math:`n` is the number of subject arguments
-and :math:`m` the number of pattern arguments.
+However, with this naive approach, a total of :math:`n!m!` combinations have to be matched where
+:math:`n` is the number of subject arguments and :math:`m` the number of pattern arguments.
 It is likely that most of these combinations do not match or yield redundant matches.
 
 Instead, we interpret the arguments as a multiset, i.e. an orderless collection that allows repetition of elements.
@@ -333,13 +332,12 @@ Because ``y__`` requires at least one term, we have the additional constraint :m
 The only possible solution :math:`x_a = x_b = y_b = 1 \wedge y_a = 0` corresponds to the match substitution :math:`\{ x \mapsto (a, b), y \mapsto (b) \}`.
 
 Extensive research has been done on solving linear Diophantine equations and linear Diophantine
-equation systems :cite:`Weinstock1960,Bond1967,Lambert1988,Clausen1989,Aardal2000`. In our case
-the equations are actually independent expect for the additional constraints for plus variables.
-Also, the non-negative solutions can be found more easily. We use an adaptation of the
-algorithm used in SymPy_ which recursively reduces any linear Diophantine equation to equations
-of the form :math:`ax + by = d`. Those can be solved efficiently with the Extended Euclidian algorithm
-:cite:`Menezes1996`. Then the solutions for those can be combined into a solution for the original
-equation.
+equation systems :cite:`Weinstock1960,Bond1967,Lambert1988,Clausen1989,Aardal2000`.
+In our case the equations are actually independent expect for the additional constraints for plus variables.
+Also, the non-negative solutions can be found more easily.
+We use an adaptation of the algorithm used in SymPy_ which recursively reduces any linear Diophantine equation to equations of the form :math:`ax + by = d`.
+Those can be solved efficiently with the Extended Euclidian algorithm :cite:`Menezes1996`.
+Then the solutions for those can be combined into a solution for the original equation.
 
 All coefficients in those equations are likely very small since they correspond to the multiplicity of sequence variables.
 Similarly, the number of variables in the equations is usually small as they map to sequence variables.
@@ -371,33 +369,30 @@ Furthermore, as elaborated in the next section, it can also match commutative te
    Example Discrimination Net. :label:`fig:dn`
 
 In Figure :ref:`fig:dn`, an example for a non-deterministic discrimination net is shown.
-It contains three patterns that match Python lists: One matches the list that consists of a single 1,
-the second one matches a list with exactly two elements where the last element is 0, and the third pattern
-matches any list where the first element is 1. Note, that these patterns can also match nested lists,
-e.g. the second pattern would also match ``[[2, 1], 0]``.
+It contains three patterns that match Python lists:
+One matches the list that consists of a single 1, the second one matches a list with exactly two elements
+where the last element is 0, and the third pattern matches any list where the first element is 1.
+Note, that these patterns can also match nested lists, e.g. the second pattern would also match ``[[2, 1], 0]``.
 
 Matching starts at the root and proceeds along the transitions.
-Simultaneously, the subject is traversed in preorder and each symbol is checked against the
-transitions. Only transitions matching the current subterm can be used. Once a final state is
-reached, its label gives a list of matching patterns. For non-deterministic discrimination nets,
-all possibilities need to be explored via backtracking. The discrimination net allows to
-reduce the matching costs, because common parts of different pattern only need to be matched once.
-For non-matching transitions, their whole subtree is pruned and all the patterns are excluded
-at once, further reducing the match cost.
+Simultaneously, the subject is traversed in preorder and each symbol is checked against the transitions.
+Only transitions matching the current subterm can be used.
+Once a final state is reached, its label gives a list of matching patterns.
+For non-deterministic discrimination nets, all possibilities need to be explored via backtracking.
+The discrimination net allows to reduce the matching costs, because common parts of different pattern only need to be matched once.
+For non-matching transitions, their whole subtree is pruned and all the patterns are excluded at once, further reducing the match cost.
 
-In Figure :ref:`fig:dn`, for the subject ``[1, 0]``, there are two paths and therefore two
-matching patterns: ``[y_, 0]`` matches with :math:`\{ y \mapsto 1 \}` and
-``[1, x___]`` matches with :math:`\{ x \mapsto 0 \}`. Both the
-``y``-transition and the ``1``-transition can be used in the second state to match a ``1``.
+In Figure :ref:`fig:dn`, for the subject ``[1, 0]``, there are two paths and therefore two matching patterns:
+``[y_, 0]`` matches with :math:`\{ y \mapsto 1 \}` and ``[1, x___]`` matches with :math:`\{ x \mapsto 0 \}`.
+Both the ``y``-transition and the ``1``-transition can be used in the second state to match a ``1``.
 
-Compared to existing discrimination net variants, we added transitions for the end of a compound term
-to support variadic functions. Furthermore, we added support for both associative function symbols
-and sequence variables. Finally, our discrimination net supports transitions restricted to
-symbol classes (i.e. ``Symbol`` subclasses) in addition to the ones that match just a specific symbol.
-We decided to use a non-deterministic discrimination net instead of a deterministic one, since
-the number of states of the later would grow exponentially with the number of patterns. While
-the ``DiscriminationNet`` also has support for sequence variables, in practice the net became to large
-to use with just a dozen patterns.
+Compared to existing discrimination net variants, we added transitions for the end of a compound term to support variadic functions.
+Furthermore, we added support for both associative function symbols and sequence variables.
+Finally, our discrimination net supports transitions restricted to symbol classes (i.e. ``Symbol`` subclasses)
+in addition to the ones that match just a specific symbol.
+We decided to use a non-deterministic discrimination net instead of a deterministic one, since the number
+of states of the later would grow exponentially with the number of patterns.
+While the ``DiscriminationNet`` also has support for sequence variables, in practice the net became to large to use with just a dozen patterns.
 
 Commutative Many-to-one Matching
 ................................
@@ -473,27 +468,24 @@ However, the growth of setup time for the many-to-one matcher beckons the questi
 
    Comparison for ``LinAlg``. :label:`fig:linalgspeed`
 
-Figure :ref:`fig:linalgspeed` depicts both the speedup and the break even point for many-to-one
-matching for ``LinAlg``. The first graph indicates that the speedup of many-to-one matching
-increases with larger pattern sets. But in order to profit from that speedup, the setup
-cost of many-to-one matching must be amortized. Therefore, the second graph shows the break even
-point for many-to-one matching in terms of number of subjects. If for a given number of patterns and
-subjects the corresponding point is above the line, then many-to-one matching is overall faster.
-In this example, when matching more than eight times, many-to-one matching is overall always faster
-than one-to-one matching.
+Figure :ref:`fig:linalgspeed` depicts both the speedup and the break even point for many-to-one matching for ``LinAlg``.
+The first graph indicates that the speedup of many-to-one matching increases with larger pattern sets.
+But in order to profit from that speedup, the setup cost of many-to-one matching must be amortized.
+Therefore, the second graph shows the break even point for many-to-one matching in terms of number of subjects.
+If for a given number of patterns and subjects the corresponding point is above the line, then many-to-one matching is overall faster.
+In this example, when matching more than eight times, many-to-one matching is overall always faster than one-to-one matching.
 
-For the syntactic product patterns we compared the ``match`` function, the ``ManyToOneMatcher``
-(MTOM) and the ``DiscriminationNet`` (DN). Again, randomly generated subjects were used. The
-resulting speedups and break even points are displayed in Figure :ref:`fig:syntacticspeed`.
+For the syntactic product patterns we compared the ``match`` function, the ``ManyToOneMatcher`` (MTOM) and the ``DiscriminationNet`` (DN).
+Again, randomly generated subjects were used.
+The resulting speedups and break even points are displayed in Figure :ref:`fig:syntacticspeed`.
 
 .. figure:: syntactic_speed.pdf
 
    Comparison for ``Syntactic``. :label:`fig:syntacticspeed`
 
 In this case, the discrimination net is the fastest overall reaching a speedup of up to 60.
-However, because it also has the highest setup time, it only outperforms the many-to-one matcher
-after about 100 subjects for larger pattern set sizes. In practice, the discrimination net is likely
-the best choice for syntactic patterns, as long as the discrimination net does not grow to large.
+However, because it also has the highest setup time, it only outperforms the many-to-one matcher after about 100 subjects for larger pattern set sizes.
+In practice, the discrimination net is likely the best choice for syntactic patterns, as long as the discrimination net does not grow to large.
 In the worst case, the size of the discrimination net can grow exponentially in the number of patterns.
 
 Abstract Syntax Trees
@@ -518,10 +510,11 @@ The following is an example of such a pattern:
         ')' > > ')' >
     >
 
-It matches an ``isinstance`` expression with a tuple as second argument. Its tree structure is
-illustrated in Figure :ref:`fig:ast`. The corresponding fixer cleans up duplications generated by previous
-fixers. For example :py:`isinstance(x, (int, long))` would be converted by another fixer into
-:py:`isinstance(x, (int, int))`, which in turn is then simplified to :py:`isinstance(x, int)` by this fixer.
+It matches an ``isinstance`` expression with a tuple as second argument.
+Its tree structure is illustrated in Figure :ref:`fig:ast`.
+The corresponding fixer cleans up duplications generated by previous fixers.
+For example :py:`isinstance(x, (int, long))` would be converted by another fixer into :py:`isinstance(x, (int, int))`,
+which in turn is then simplified to :py:`isinstance(x, int)` by this fixer.
 
 .. figure:: ast.pdf
    :scale: 80 %
@@ -533,9 +526,8 @@ Some patterns could not be converted, because they contain features that MatchPy
 The features include negated subpatterns (e.g. :py:`not atom<'(' [any] ')'>`)
 and subpatterns that allow an aritrary number of repetitions (e.g. :py:`any (',' any)+`).
 
-Furthermore, some of the AST patterns contain alternative or optional subpatterns, e.g.
-:py:`power<'input' args=trailer<'(' [any] ')'>>`. These features are also not directly supported
-by MatchPy, but they can be replicated by using multiple patterns.
+Furthermore, some of the AST patterns contain alternative or optional subpatterns, e.g. :py:`power<'input' args=trailer<'(' [any] ')'>>`.
+These features are also not directly supported by MatchPy, but they can be replicated by using multiple patterns.
 For those ``lib2to3`` patterns, all combinations of the alternatives were generated and added as invividual patterns.
 This resulted in about 1200 patterns for the many-to-one matcher that completely cover the original 36 patterns.
 
@@ -618,15 +610,13 @@ If pattern matching is a major part of an application, its running time can sign
 Reimplementing parts of MatchPy as a C module would likely result in a substantial speedup.
 Alternatively, adapting part of the code to Cython_ could be another option to increase the speed.
 Furthermore, generating source code for a pattern set similar to parser generators for formal grammars could improve matching performance.
-While code generation for syntactic pattern matching has been the subject of various works
-:cite:`Augustsson1985,Fessant2001,Maranget2008,Moreau2003`, its application with the extended
-feature set of MatchPy is another potential area of future research.
+While code generation for syntactic pattern matching has been the subject of various works :cite:`Augustsson1985,Fessant2001,Maranget2008,Moreau2003`,
+its application with the extended feature set of MatchPy is another potential area of future research.
 
 Functional pattern matching
 ...........................
 
-Since Python does not have pattern matching as a language feature, MatchPy could be
-extended to provide a syntax similar to other functional programming languages.
+Since Python does not have pattern matching as a language feature, MatchPy could be extended to provide a syntax similar to other functional programming languages.
 However, without a switch statement as part of the language, there is a limit to the syntax of this pattern expression.
 The following is an example of what such a syntax could look like:
 
