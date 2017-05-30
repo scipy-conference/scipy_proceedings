@@ -278,7 +278,7 @@ MongoDB is a noSQL database, or more precisely a *Document Database*:
 It allows the storage of arbitrary JSON documents without the need for a schema like in a SQL database.
 These database entries can be queried based on their content and structure.
 This flexibility makes it a good fit for Sacred, because it permits arbitrary configuration for each experiment that can still be queried and filtered later on.
-This feature in particular has been very useful to perform large scale studies like the one in :cite:`greff2015`.
+This feature in particular has been very useful to perform large scale studies like the one in previous work :cite:`greff2015`.
 A slightly shortened example database entry corresponding to our minimal example from above could look like this:
 
 
@@ -639,8 +639,7 @@ This way Sacred could offer basic support for distributing computations.
 
 Acknowledgements
 ================
-TODO: Mention funding
-
+This research was supported by the EU project ``INPUT'' (H2020-ICT-2015 grant no. 687795).
 Access to computing and storage facilities owned by parties and projects contributing to the Czech National Grid Infrastructure MetaCentrum provided under the programme “Projects of Large Research, Development, and Innovations Infrastructures” (CESNET LM2015042) is greatly appreciated.
 
 
