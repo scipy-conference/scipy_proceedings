@@ -32,10 +32,10 @@ Accelerating Scientific Python with Intel Optimizations
     It is well known that the performance difference between python and basic C code can be 200x.
     Did you know that for numerically intensive code there is another 240x or more speedup possible?
     The performance comes from software’s ability to take advantage of your CPU's multiple cores,
-     SIMD instructions, and high performance caches.
+    SIMD instructions, and high performance caches.
     This talk is for python programmers who want to get the most out of their hardware
-     but do not have time or expertise to re-code their applications using native extensions,
-     Cython, or Just-In-Time compilers that generate native code.
+    but do not have time or expertise to re-code their applications using native extensions,
+    Cython, or Just-In-Time compilers that generate native code.
 
 .. class:: keywords
 
