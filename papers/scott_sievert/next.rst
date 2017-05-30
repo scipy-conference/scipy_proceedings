@@ -69,7 +69,7 @@ been motivated in part by a popular dataset that contains many images with
 object locations and labels generated via crowdsourcing
 :cite:`deng2009imagenet`. New optimization methods to aid the generation of
 these object recognition methods have been generated and analyzed
-:cite:`bottou2010large`, and improved :cite:`recht2011hogwild`.
+:cite:`bottou2010large`, as well as improved :cite:`recht2011hogwild`.
 
 The cost of collecting crowdsourcing responses has become significant, but data
 collection is often done without consideration to the cost of `how` the data
@@ -97,23 +97,22 @@ Problem statement
 
 Crowdsourcing tasks can involve an overwhelming number of possible queries.
 Naive collection methods do not pose queries aimed at achieving a particular
-goal and tend to ask uninformative questions. These naive methods cannot be
-used in many cases because, in practice, they fail to yield useful results
-given the number of responses that can be collected.
+goal and tend to ask uninformative questions. In practice, these naive methods
+cannot be used. In many cases, they fail to yield useful results given the
+number of responses that can be collected.
 
 A technique to pose informative queries is called `adaptive sampling` where
-future queries are selected using previous responses and is applicable to
+future queries are selected using previous responses and can be applied to
 simple crowdsourcing queries.  Adaptive sampling depends on an objective goal
 (e.g., classification accuracy) and selects queries to present that will help
-achieve a given goal quickly. This is a benefit that has been theoretically
-shown to exist :cite:`castro2005faster` and is practically useful by requiring
-fewer data.
+achieve a given goal quickly. This benefit has been theoretically shown to
+exist :cite:`castro2005faster` and is practically useful by requiring fewer
+data.
 
 .. figure:: figures/data-flow.png
     :scale: 50%
 
-    The data flow required to connect crowdsourcing and adaptive data
-    collection. :label:`data-flow`
+    The data flow required to adaptively collect crowdsourcing data. :label:`data-flow`
 
 However, using adaptive sampling in a crowdsourcing setting is difficult.
 Crowdsourcing is a general purpose tool that only asks many humans questions;
@@ -124,7 +123,7 @@ sampling present many challenges in both systems and mathematics stemming from
 the fact that adaptive algorithms require tight integration with the human
 responses, as shown in Figure :ref:`data-flow`.
 
-Then, the problem that ultimately needs to be solved is finding a means to
+Then, the problem that ultimately needs to be solved is to find a means to
 productively and efficiently gather crowdsourced data. Being able to ask
 informative questions provides means to find an answer quickly and efficiently,
 optimizing both cost and time.
@@ -168,7 +167,7 @@ Our system
 ----------
 
 The system we have developed at the UW–Madison is called NEXT [#]_ [#]_ which
-provides adaptive crowdsourcing data collection, or selects which query to
+provides adaptive crowdsourcing data collection by selecting which query to
 present `next`. NEXT also provides
 
 .. [#] Homepage at http://nextml.org
@@ -208,16 +207,19 @@ visit to this webpage or after responding to another query. One caption is
 presented below the comic with buttons to rate the caption as "unfunny",
 "somewhat funny" or "funny". Every time one of these buttons is pressed, the
 adaptive algorithm processes the response and generates a new query. Each week,
-we collect up to a million ratings and from over 10,000 users.
+we collect and record [#]_ up to a million ratings and from over 10,000 users.
+
+.. [#] https://github.com/nextml/caption-contest-data
 
 The New Yorker’s goal is to find the funniest caption from this set of 5,000
-captions. To achieve this goal, the algorithm of choice (KL-UCB at
-:cite:`kaufmann2013information`) only samples captions that can possibly be
-the funniest. If a caption has received only "unfunny" ratings, it is probably
-not the funniest caption and should not be further sampled. For the cartoon
-shown in Figure :ref:`example-query`, the top three captions were "Like you've
-never taken anything from a hotel room", "Like I'm the first person who's tried
-sleeping their way to the top" and "And yet you embraced the standing desk".
+captions. To achieve this goal, both algorithms of choice
+(:cite:`jamieson2014lil` and KL-UCB at :cite:`kaufmann2013information`) only
+sample captions that can possibly be the funniest. If a caption has received
+only "unfunny" ratings, it is probably not the funniest caption and should not
+be further sampled. For the cartoon shown in Figure :ref:`example-query`, the
+top three captions were "Like you've never taken anything from a hotel room",
+"Like I'm the first person who's tried sleeping their way to the top" and "And
+yet you embraced the standing desk".
 
 
 NEXT Architecture
