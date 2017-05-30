@@ -186,12 +186,20 @@ However, we are still seeing these stragglers and the overal speed-up is not imp
 Effect of Oversubscribing
 -------------------------
 
-Examining Scheduler Throughput
-------------------------------
+One useful way to robust our code to uncertainty in computations is to submit many more tasks than the numer of cores. 
+This may allow Dask to load balance appropriately, and as a result avoiding the stragglers.
+In order for this we set the number of tasks to be three times the number of workers. 
+Striping is also activated and is set to three which is also equal to number of nodes.
+Figures [] and [] show the speed up and I/O time plots obtained for XTC file format (600X).
+As can be seen, we are still seeing these stragglers and the overal speed-up is not improved.
+In oredr to see if the calculation is load balanced and the same amount of load is assigned to each worker by the scheduler, scheduler pluging is used to get detailed information about a task and to also validate our observationis obtained from web-interface. 
+The results from scheduler pluging is described in the following section.
 
 Scheduler Plugin Results
 ------------------------
 
+Examining Scheduler Throughput
+------------------------------
 
 
 Comparison of Performance of Map-Reduce Job Between MPI for Python and Dask Frameworks
