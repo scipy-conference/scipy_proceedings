@@ -561,10 +561,9 @@ That being said, we believe there is a lot of value in adding (optional) interfa
 Conclusion
 ==========
 Sacred is an open source python framework which aims to provide infrastructure for computational experiments, with minimal boilerplate and maximum convenience.
-
-We've presented its key features and demonstrated how they interact to tackle some of the basic problems of computational experimentation, like managing parameters, bookkeeping and reproducibility.
+This paper presented its key features and demonstrated how they interact to tackle some of the basic problems of computational experimentation, like managing parameters, bookkeeping and reproducibility.
 We hope that through convenience and modularity, Sacred will help building a rich ecosystem of tools.
-We've introduced two such supporting tools:
+Two such supporting tools are Labwatch and Sacredboard.
 Labwatch interfaces the powerful configuration system of sacred with several hyperparamter optimization libraries, thus significantly simplifying the tuning of configurations.
 Sacredboard on the other hand provides a web-based interface to view recorded runs, facilitating a live overview of all the experiments.
 
@@ -572,21 +571,21 @@ Sacredboard on the other hand provides a web-based interface to view recorded ru
 
 Future Work
 ===========
-* support for other workflows
-    * separate evaluation scripts
-    * partial evaluation
-    * continue runs
-* more downstream tools
-    * jupyter notebook
-    * hyperparameter impact summary
-    * generate summaries/reports
-* unified interface to query different observers
-* integration with OpenML
-* easier reproduction of runs
-    * integration with reproZip?
-    * integration with docker?
-* improve support for scheduling runs
-* dynamic ingredients (?)
+Sacred has been useful for a many researchers already, but there are still many possible improvements on our roadmap.
+For one we'd like to support more complex experimental setups, like having separate training and evaluation scripts as is common with large Tensorflow models.
+Similarly interesting would be to offer support and a clear workflow for continuation of aborted runs
+
+While Sacred helps with capturing relevant information about experiments, it doesn't offer much support for organizing and analysing the results.
+To tackle this issue we plan to provide a unified interface for querying the records created by different observers.
+This semi-standardized format will enable the creation of general analysis tools, and extend the applicability of existing tools like Sacredboard.
+
+Another important direction is to simplify the process of actually reproducing Sacred experiments.
+An integration with tools like Docker or ReproZip could allow for completely automated re-running of experiments.
+
+Finally, we plan on improving the support of Sacred for scheduling and distributing runs.
+It already supports "queueing up" experiments, which only creates a database entry containing the sources, desired configuration, and the status ``QUEUED``.
+In the future we hope to include workers, that can be run on different machines and which will fetch queued runs from the database and execute them.
+This way Sacred could offer basic support for distributing computations.
 
 
 
