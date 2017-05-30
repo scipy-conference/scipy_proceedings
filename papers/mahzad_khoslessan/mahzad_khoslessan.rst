@@ -37,6 +37,10 @@
 .. definitions (like \newcommand)
 
 .. |Calpha| replace:: :math:`\mathrm{C}_\alpha`
+.. |tcomp| replace:: :math:`t_\text{compute}`
+.. |tIO| replace:: :math:`t_\text{I/O}`
+.. |avg_tcomp| replace:: :math:`\langle t_\text{compute} \rangle`
+.. |avg_tIO| replace:: :math:`\langle t_\text{I/O} \rangle`
 
 -------------------------------------------------------------------------
 Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
@@ -44,6 +48,7 @@ Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
 
 .. class:: abstract
 
+<<<<<<< HEAD
 The analysis of biomolecular computer simulations has become a challenge because the amount of output data is now routinely in the terabyte range.
 We evaluate if this challenge can be met by a parallel map-reduce approach with the Dask_ parallel computing library for task-graph based computing coupled with our MDAnalysis_ Python library for the analysis of molecular dynamics (MD) simulations `Gowers:2016aa, Michaud-Agrawal:2011fu`.
 We performed a representative performance evaluation, taking into account the highly heterogeneous computing environment that researchers typically work in together with the diversity of existing file formats for MD trajectory data.
@@ -51,10 +56,20 @@ We found that the the underlying storage system (solid state drives, parallel fi
 However, the choice of the data file format can mitigate the effect of the storage system; in particular, the commonly used Gromacs XTC trajectory format, which is highly compressed, can exhibit strong scaling close to ideal due to trading a decrease in global storage access load against an increase in local per-core cpu-intensive decompression.
 Scaling was tested on single node and multiple nodes on national and local supercomputing resources as well as typical workstations.
 In summary, we show that, due to the focus on high interoperability in the scientific Python eco system, it is straightforward to implement map-reduce with Dask in MDAnalysis and provide an in-depth analysis of the considerations to obtain good parallel performance on HPC resources.
+=======
+   The analysis of biomolecular computer simulations has become a challenge because the amount of output data is now routinely in the terabyte range.
+   We evaluate if this challenge can be met by a parallel map-reduce approach with the Dask_ parallel computing library for task-graph based computing coupled with our MDAnalysis_ Python library for the analysis of molecular dynamics (MD) simulations.
+   We performed a representative performance evaluation, taking into account the highly heterogeneous computing environment that researchers typically work in together with the diversity of existing file formats for MD trajectory data.
+   We found that the the underlying storage system (solid state drives, parallel file systems, or simple spinning platter disks) can be a deciding performance factor that leads to data ingestion becoming the primary bottle neck in the analysis work flow.
+   However, the choice of the data file format can mitigate the effect of the storage system; in particular, the commonly used Gromacs XTC trajectory format, which is highly compressed, can exhibit strong scaling close to ideal due to trading a decrease in global storage access load against an increase in local per-core cpu-intensive decompression.
+   Scaling was tested on single node and multiple nodes on national and local supercomputing resources as well as typical workstations.
+   In summary, we show that, due to the focus on high interoperability in the scientific Python eco system, it is straightforward to implement map-reduce with Dask in MDAnalysis and provide an in-depth analysis of the considerations to obtain good parallel performance on HPC resources.
+>>>>>>> b87fbe9d2063fe99d6d2d9f069130f930179f57f
 
-Keywords
-========
-MDAnalysis, High Performance Computing, Dask, Map-Reduce, MPI
+
+.. class:: Keywords
+
+   MDAnalysis, High Performance Computing, Dask, Map-Reduce, MPI
 
 
 Introduction
@@ -141,7 +156,8 @@ Also we anticipate that, heavy analyses that take lenger time, per frame traject
 Effect of File Format
 =====================
 
-Figures [] to [] summarizes speedups and parallel efficiencies for 300X and 600X trajectories and all file formats for multiprocessing and distributed scheduler respectively. According to Figures [] DCD file format does not scale at all by increasing parallelism across different cores.
+Figures [] to [] summarizes speedups and parallel efficiencies for 300X and 600X trajectories and all file formats for multiprocessing and distributed scheduler respectively.
+According to Figures [] DCD file format does not scale at all by increasing parallelism across different cores.
 This is due to the overlapping of the data access requests from different processes.
 XTC file format express reasonably well scaling with the increase in parallelism up to the limit of 24 (single node) for all trajectory sizes for all machines (multiprocessing scheduler) and Comet and Stampede (for distributed scheduler).
 The NCDF file format scales very well up to 8 cores for all trajectory sizes.
@@ -156,10 +172,11 @@ Because Dask parallel computing library is too high level, it is really hard to 
 The difference between job execution time and total compute and I/O time measured inside our code is very small for the results obtained using multiprocessing scheduler; however, it is considerable for the results obtained using distributed scheduler.
 In order to obtain more insight on the underlying network behavior both at the worker level and communication level and in order be able to see where this difference originates from we have used the web interface of the Dask library.
 This web interface is launched whenever Dask scheduler is launched.
-Table \ref{tab:time-comparison} summarizes the average and max total compute and I/O time measured through our code, max total compute and I/O time measured using the web interface and job execution time for each of the cases tested.
+Table :ref:`tab:time-comparison` summarizes the average and max total compute and I/O time measured through our code, max total compute and I/O time measured using the web interface and job execution time for each of the cases tested.
 As seen from the tests performed on ASU Saguaro, there is a very small difference between maximum total compute and I/O time and job execution time.
 This difference is mostly due to communications performed in the reduction process.
 In addition, maximum total compute and I/O time measured using the web interface and our code are very close.
+<<<<<<< HEAD
 As can be seen from the results, due to different reasons, some tasks (so-called Stragglers) are considerably slower than the others, delaying the completion of the job.
 
 +-------------------------------------------+--------------------------------------------+-------------------------------------------+
@@ -194,6 +211,26 @@ As can be seen from the results, due to different reasons, some tasks (so-called
    +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
    | SDSC Comet |      54        |               36.15                 |               43.58             |              104.25            |        105.1       |
    +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
+=======
+As can be seen from the results, due to different reasons, some tasks (so-called "stragglers") are considerably slower than the others, delaying the completion of the job.
+
+
+.. @mkhoshle: please expand the table. reST table syntax: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#tables
+.. or use raw latex tables (see example in papers/00_bibderwalt/00_bibderwalt.rst
+.. .
+.. I made the table full width and used reST replacements, defined at the beginning of the file in order
+.. to keep it readable.
+
+
+.. table:: Time comparison :label:`tab:time-comparison`
+   :class: w
+   
+   +------------+----------+-------------+-----------+
+   | trajectory | resource | |avg_tcomp| | |avg_tIO| |
+   +============+==========+=============+===========+
+   | XTC 600x   | comet    |  xxx        |  yyy      |
+   +------------+----------+-------------+-----------+
+>>>>>>> b87fbe9d2063fe99d6d2d9f069130f930179f57f
 
 
 Challenges for Good HPC Performance
