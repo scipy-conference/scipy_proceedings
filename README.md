@@ -17,8 +17,8 @@
 
 ## Instructions for Authors
 
-Submissions must be received by **May 30th** at 23:59 PST, but modifications are
-allowed during the open review period which ends July 5th at 18:00 PST.  Submissions are
+Submissions must be received by **June 6th** at 23:59 PST, but modifications are
+allowed during the open review period which ends July 8th at 18:00 PST.  Submissions are
 considered received once a Pull Request has been opened following the procedure
 outlines below.
 
@@ -65,12 +65,12 @@ Combine the best principles of open source development and academic publication.
 These dates are the tentative timeline for 2017:
 
 - May 4th - Authors invited to submit full papers
-- May 30th - Initial submissions due
-- June 1st - Reviewers assigned
-- June 15th - Reviews due
-- June 15th-July 1st: Authors revise papers based on reviews
-- July 1st - Acceptance/rejection of papers
-- July 5th - Papers must be camera-ready
+- June 6th - Initial submissions due
+- June 7th - Reviewers assigned
+- June 21st - Reviews due
+- June 21st -July 7th: Authors revise papers based on reviews
+- July 7th - Acceptance/rejection of papers
+- July 8th - Papers must be camera-ready
 - July 10-16th - Conference
 - July 20th - Publication
 
