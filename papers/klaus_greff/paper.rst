@@ -241,7 +241,7 @@ Bookkeeping
 -----------
 
 Bookkeeping in Sacred is accomplished by implementing the observer pattern :cite:`gamma1994`:
-The experiment publishes all the collected information in the form of events that zero or more observers can subscribe to.
+The experiment publishes all the collected information in the form of events, to which observers can subscribe.
 Observers can be added dynamically from the commandline or directly in code:
 
 .. code-block:: python
@@ -252,26 +252,21 @@ Observers can be added dynamically from the commandline or directly in code:
 
 
 Events are fired when a run is started, every couple of seconds while it is running (heartbeat), and once it stops, (either successfully or by failing).
-This way information is available already during runtime, and partial data is captured even in case of failures. 
+This way information is available already during runtime, and partial data is captured even in case of failures.
+The most important events are:
 
-Sacred collects a lot of information about the experiment and the run. 
-Most importantly of course it will save the configuration and the result.
-Below is a summary of all the collected data:
-
-
-Configuration
-    configuration values used for this run
-Source Code
-    source code of all detected source files
-Dependencies
-    version numbers for all detected package dependencies
-Host
-    information about the host that is running the experiment including CPU, OS, and Python version. Optionally also other information like GPU or environment variables.
-Metadata
-    start and stop times, current status, result, and fail-trace (if needed)
-Live Information
-     Including captured stdout, extra files needed or created by the run that should be saved, custom information, and custom metrics about the experiment.
-
+Started Event
+    Fired when running an experiment, just before the main method is executed.
+    Contains configuration values, start time, package dependencies, host information, and some meta information.
+Heartbeat Event
+    Fired continuously every 10 seconds while the experiment is running.
+    Contains the beat time, captured stdout/stderr, custom information, and preliminary result.
+Completed Event
+    Fired once the experiment completes successfully.
+    Contains the stop time and the result.
+Failed Event
+    Fired if the experiment aborts due to an exception.
+    Contains the stop time and the stack trace.
 
 
 Sacred ships with observers that stores all the information from these events in a MongoDB, SQL database, or locally on disk.
@@ -283,25 +278,58 @@ MongoDB is a noSQL database, or more precisely a *Document Database*:
 It allows the storage of arbitrary JSON documents without the need for a schema like in a SQL database.
 These database entries can be queried based on their content and structure.
 This flexibility makes it a good fit for Sacred, because it permits arbitrary configuration for each experiment that can still be queried and filtered later on.
-In particular this feature has been very useful to perform large scale studies like the one in :cite:`greff2015`.
+This feature in particular has been very useful to perform large scale studies like the one in :cite:`greff2015`.
+A slightly shortened example database entry corresponding to our minimal example from above could look like this:
 
 
+.. code-block:: json
 
+    {"_id": 1,
+     "captured_out": "[...]",
+     "status": "COMPLETED",
+     "start_time": "2017-05-30T20:34:38.855Z",
+     "experiment": {
+         "mainfile": "minimal.py",
+         "sources": [["minimal.py", "ObjectId([...])"]],
+         "repositories": [],
+         "name": "minimal",
+         "dependencies": ["numpy==1.11.0",
+                          "sacred==0.7.0"],
+         "base_dir": "/home/greff/examples"},
+     "result": 42,
+     "info": {},
+     "meta": {"command": "main",
+              "options": ["..."]},
+     "format": "MongoObserver-0.7.0",
+     "resources": [],
+     "host": {"os": "Linux-3.16.0-4-amd64-x86_64",
+              "cpu": "Intel(R) Core(TM) i5-4460  CPU",
+              "hostname": "zephyr",
+              "ENV": {},
+              "python_version": "3.4.2"},
+     "heartbeat": "2017-05-30T20:34:38.902Z",
+     "config": {"seed": 620395134},
+     "command": "main",
+     "artifacts": [],
+     "stop_time": "2017-05-30T20:34:38.901Z"
+     }
 
 
 Labwatch
 ========
 
 Finding the correct hyperparameter setting for machine learning algorithms is often done by trial and error even though it sometimes makes the difference between state-of-the-art performance or performance that is as good as random guessing.
-A growing number of tools that can automate the optimization of hyperparameters have recently emerged, allowing users, instead of manual tuning, to define a searchspace and leave the search for good configurations to the optimizer.
+A growing number of tools that can automate the optimization of hyperparameters have recently emerged, allowing users to define a searchspace and leave the search for good configurations to the optimizer, instead resorting to manual tuning.
 However, in practice each optimizer often requires users to adapt their code to a certain interface.
-Labwatch supports a unified interface through Sacred to a variety of hyperparameter optimizers that allows for an easy integration of hyperparameter optimization into the daily workflow.
+Labwatch simplifies this process by integrating a unified interface to a variety of hyperparameter optimizers into Sacred.
+This allows for an easy integration of hyperparameter optimization into the daily workflow.
 
 
 LabAssistant
 ------------
 
-At the heart of Labwatch is the so called LabAssistant, which connects the Sacred experiment with a hyperparameter configuration search space, simply dubbed searchspace and a hyperparameter optimizer through a database.
+At the heart of Labwatch is the so called LabAssistant, which connects the Sacred experiment with a hyperparameter configuration search space (in short: *searchspace*) and a hyperparameter optimizer through a MongoDB database.
+When using Labwatch the required boilerplate code becomes:
 
 .. code-block:: python
 
@@ -320,7 +348,7 @@ At the heart of Labwatch is the so called LabAssistant, which connects the Sacre
 If the experiment is now called with a searchspace rather than a configuration, Labwatch will pass all entries of this experiment in the database to the hyperparameter optimizer and let it suggest a configuration. This configuration is then used to run the experiment.
 
  
-For bookkeeping it leverages the database storage of evaluated hyperparameter configurations, which allows parallel distributed optimization and also enables the use of post hoc tools for assessing hyperparameter importance (e.g Fanova :cite:`hutter-icml14a`).
+For bookkeeping it leverages the database storage of evaluated hyperparameter configurations, which allows parallel distributed optimization and also enables the use of post hoc tools for assessing hyperparameter importance (e.g. Fanova :cite:`hutter-icml14a`).
 
 
 
