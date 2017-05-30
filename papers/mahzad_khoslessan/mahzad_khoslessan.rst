@@ -70,13 +70,30 @@ We show that obtaining good parallel performance depends on multiple factors suc
 Effect of I/O Environment
 =========================
 
-In MDAnalysis library, trajectories from MD simulations are a frame by frame description of the motion of particles as a function of time. To allow the analysis of large trajectories, MDAnalysis only loads a single frame into memory at any time :cite:`Gowers:2016aa, Michaud-Agrawal:2011fu`.
-Some file systems are designed to run on a single CPU while others like Network File System (NFS) which is among distributed file systems are designed to let different processes on multiple computers access a common set of files. These file systems guarantees sequential consistency which means that it prevents any process from reading a file while another process is reading the file. Distributed parallel file systems (Lustre) allow simultaneous access to the file by different processes; however it is very important to have a parallel I/O library; otherwise the file system will process the I/O requests it gets serially, yielding no real benefit from doing parallel I/O.
-For XTC file format, file size is smaller as compared to the other formats because of in-built compression. In addition, MDAnalysis implements a fast frame scanning algorithm for XTC files. This algorithm computes frame offsets and saves the offsets to disk as a hidden file once the trajectory is read the first time. When a trajectory is loaded again then instead of reading the whole trajectory the offset is used to seek individual frames. As a result, the time it takes a process to load a frame into memory is short. In fact, each frame I/O will be followed by decompressing of that frame as soon as it is loaded into memory. Thus, as soon as the frame is loaded into memory by one process, the file system will let the next process to load another frame into memory. This happens while the first process is decompressing the loaded frame.
-Figure [] show the I/O pattern compared between different file formats. For XTC file format, sort of pipelining is happening [] which means that as soon as one process finishes frame I/O, and start decompressing it, the other process can start another frame I/O. However, this is not the case for DCD and netCDF file format [].
-There is no in- built compression for these types of file formats and as a result file sizes are larger. This will result in higher I/O time (Which is the bottleneck here) and therefore, the whole time one process is loading a frame into memory other processes are waiting. The I/O time is larger for netCDF file format as compared to DCD file format. This is since netCDF has a more complicated file format. 
-Reading an existing netCDF dataset involves opening the dataset; inquiring about dimensions, variables, and attributes; reading variable data; and closing the dataset [ref]. In fact, netCDF has a very sophisticated format, while DCD has a very simple file format. This is why DCD is showing a weak scaling by increasing parallelism whereas netCDF file format is being scaled reasonably well by increasing parallelism across many cores.
-
+In MDAnalysis library, trajectories from MD simulations are a frame by frame description of the motion of particles as a function of time. 
+To allow the analysis of large trajectories, MDAnalysis only loads a single frame into memory at any time :cite:`Gowers:2016aa, Michaud-Agrawal:2011fu`.
+Some file systems are designed to run on a single CPU while others like Network File System (NFS) which is among distributed file systems are designed to let different processes on multiple computers access a common set of files.
+These file systems guarantees sequential consistency which means that it prevents any process from reading a file while another process is reading the file. 
+Distributed parallel file systems (Lustre) allow simultaneous access to the file by different processes; however it is very important to have a parallel I/O library; otherwise the file system will process the I/O requests it gets serially, yielding no real benefit from doing parallel I/O.
+Figure [] show the I/O pattern compared between different file formats.
+XTC file format takes advantage of in-built compression and as a result has smaller file size as compared to the other formats. 
+In addition, MDAnalysis implements a fast frame scanning algorithm for XTC files.
+This algorithm computes frame offsets and saves the offsets to disk as a hidden file once the trajectory is read the first time. 
+When a trajectory is loaded again then instead of reading the whole trajectory the offset is used to seek individual frames. 
+As a result, the time it takes a process to load a frame into memory is short. 
+In addition, each frame I/O will be followed by decompressing of that frame as soon as it is loaded into memory. 
+Thus, as soon as the frame is loaded into memory by one process, the file system will let the next process to load another frame into memory.
+This happens while the first process is decompressing the loaded frame.
+As a result, the overlapping of the data requests for the same calculation will be less frequent.
+However, there is no in-built compression for DCD and netCDF file formats and as a result file sizes are larger.
+This will result in higher I/O time and therefore overlapping of per frame trajectory data access. 
+The I/O time is larger for netCDF file format as compared to DCD file format due to larger file size.
+This is since netCDF has a more complicated file format. 
+Reading an existing netCDF dataset involves opening the dataset; inquiring about dimensions, variables, and attributes; reading variable data; and closing the dataset [ref].
+In fact, netCDF has a very sophisticated format, while DCD has a very simple file format.
+This is why DCD is showing a weak scaling by increasing parallelism whereas netCDF file format is being scaled reasonably well by increasing parallelism across many cores.
+Our study showed that SSD can be very helpful (especially for dcd file format) and can improve the performance due to speed up in access time.
+Also we anticipate that, heavy analyses that take lenger time, per frame trajectory data access happens less often and accession times gradually become staggered across CPUs which can be considered for future studies.
 
 Effect of File Format
 =====================
