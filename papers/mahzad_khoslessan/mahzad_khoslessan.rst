@@ -37,6 +37,10 @@
 .. definitions (like \newcommand)
 
 .. |Calpha| replace:: :math:`\mathrm{C}_\alpha`
+.. |tcomp| replace:: :math:`t_\text{compute}`
+.. |tIO| replace:: :math:`t_\text{I/O}`
+.. |avg_tcomp| replace:: :math:`\langle t_\text{compute} \rangle`
+.. |avg_tIO| replace:: :math:`\langle t_\text{I/O} \rangle`
 
 -------------------------------------------------------------------------
 Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
@@ -120,7 +124,8 @@ Also we anticipate that, heavy analyses that take lenger time, per frame traject
 Effect of File Format
 =====================
 
-Figures [] to [] summarizes speedups and parallel efficiencies for 300X and 600X trajectories and all file formats for multiprocessing and distributed scheduler respectively. According to Figures [] DCD file format does not scale at all by increasing parallelism across different cores.
+Figures [] to [] summarizes speedups and parallel efficiencies for 300X and 600X trajectories and all file formats for multiprocessing and distributed scheduler respectively.
+According to Figures [] DCD file format does not scale at all by increasing parallelism across different cores.
 This is due to the overlapping of the data access requests from different processes.
 XTC file format express reasonably well scaling with the increase in parallelism up to the limit of 24 (single node) for all trajectory sizes for all machines (multiprocessing scheduler) and Comet and Stampede (for distributed scheduler).
 The NCDF file format scales very well up to 8 cores for all trajectory sizes.
@@ -135,11 +140,29 @@ Because Dask parallel computing library is too high level, it is really hard to 
 The difference between job execution time and total compute and I/O time measured inside our code is very small for the results obtained using multiprocessing scheduler; however, it is considerable for the results obtained using distributed scheduler.
 In order to obtain more insight on the underlying network behavior both at the worker level and communication level and in order be able to see where this difference originates from we have used the web interface of the Dask library.
 This web interface is launched whenever Dask scheduler is launched.
-Table \ref{tab:time-comparison} summarizes the average and max total compute and I/O time measured through our code, max total compute and I/O time measured using the web interface and job execution time for each of the cases tested.
+Table :ref:`tab:time-comparison` summarizes the average and max total compute and I/O time measured through our code, max total compute and I/O time measured using the web interface and job execution time for each of the cases tested.
 As seen from the tests performed on ASU Saguaro, there is a very small difference between maximum total compute and I/O time and job execution time.
 This difference is mostly due to communications performed in the reduction process.
 In addition, maximum total compute and I/O time measured using the web interface and our code are very close.
-As can be seen from the results, due to different reasons, some tasks (so-called `Stragglers') are considerably slower than the others, delaying the completion of the job.
+As can be seen from the results, due to different reasons, some tasks (so-called "stragglers") are considerably slower than the others, delaying the completion of the job.
+
+
+.. @mkhoshle: please expand the table. reST table syntax: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#tables
+.. or use raw latex tables (see example in papers/00_bibderwalt/00_bibderwalt.rst
+.. .
+.. I made the table full width and used reST replacements, defined at the beginning of the file in order
+.. to keep it readable.
+
+
+.. table:: Time comparison :label:`tab:time-comparison`
+   :class: w
+   
+   +------------+----------+-------------+-----------+
+   | trajectory | resource | |avg_tcomp| | |avg_tIO| |
+   +============+==========+=============+===========+
+   | XTC 600x   | comet    |  xxx        |  yyy      |
+   +------------+----------+-------------+-----------+
+
 
 Challenges for Good HPC Performance
 ===================================
