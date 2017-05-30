@@ -42,19 +42,19 @@ Introduction
 ------------
 
 A central task in machine learning and data science is the comparison and selection of models. The evaluation of a single model is very simple, and can be carried out in a reproducible fashion using the standard scikit pipeline. Organizing the evaluation of a large number of models is tricky; while there are no real theory problems present, the logistics and coordination can be tedious. Evaluating a continuously growing zoo of models is thus an even more painful task. Unfortunately, this last case is also quite common.
- 
-The task is simple: find the best combination of pre-processing steps and predictive models with respect to an objective criterion. Logistically this can be problematic: a small example might involve three classification models, and two data preprocessing steps with two possible variations for each — overall 12 combinations. For each of these combinations we would like to perform a grid search of predefined hyperparameters on a fixed cross-validation dataset, computing performance metrics for each option (for example ROC AUC). Clearly this can become complicated quickly. On the other hand, many of these combinations share substeps, and re-running such shared steps amounts to a loss of compute time. 
- 
-Reskit [1] is a Python library that helps researchers manage this problem. Specifically, it automates the process of choosing the best pipeline, i.e. choosing the best set of data transformations and classifiers/regressors. The researcher specifies the possible processing steps and the scikit objects involved, then Reskit expands these steps to each possible pipeline, excluding forbidden combinations. Reskit represents these pipelines in a convenient pandas dataframe, so the researcher can directly visualize and manipulate the experiments. 
- 
-Reskit then runs each experiment and presents results which are provided to the user through a pandas dataframe. For example, for each pipeline’s classifier, Reskit could  grid search on cross-validation to find the best classifier’s parameters and report metric mean and standard deviation for each tested pipeline. Reskit also allows you to cache interim calculations to avoid unnecessary recalculations. 
+
+The task is simple: find the best combination of pre-processing steps and predictive models with respect to an objective criterion. Logistically this can be problematic: a small example might involve three classification models, and two data preprocessing steps with two possible variations for each — overall 12 combinations. For each of these combinations we would like to perform a grid search of predefined hyperparameters on a fixed cross-validation dataset, computing performance metrics for each option (for example ROC AUC). Clearly this can become complicated quickly. On the other hand, many of these combinations share substeps, and re-running such shared steps amounts to a loss of compute time.
+
+Reskit [1] is a Python library that helps researchers manage this problem. Specifically, it automates the process of choosing the best pipeline, i.e. choosing the best set of data transformations and classifiers/regressors. The researcher specifies the possible processing steps and the scikit objects involved, then Reskit expands these steps to each possible pipeline, excluding forbidden combinations. Reskit represents these pipelines in a convenient pandas dataframe, so the researcher can directly visualize and manipulate the experiments.
+
+Reskit then runs each experiment and presents results which are provided to the user through a pandas dataframe. For example, for each pipeline’s classifier, Reskit could  grid search on cross-validation to find the best classifier’s parameters and report metric mean and standard deviation for each tested pipeline. Reskit also allows you to cache interim calculations to avoid unnecessary recalculations.
 
 Main features of Reskit
 -----------------------
 
 — En masse experiments with combinatorial expansion of step options, running each option and returning results in a convenient format for human consumption (Pandas dataframe).
 — Step caching. Standard SciKit-learn pipelines cannot cache temporary steps. Reskit includes the option  to save fixed steps, so in next pipeline specified steps won’t be recalculated.
-— Forbidden combination constraints. Not all possible combinations of pipelines are viable or meaningfully different. For example, in a classification task comparing the performance of  logistic regression and decision trees the former requires feature scaling while the latter may not. In this case you can block the unnecessary pair. Reskit supports general tuple blocking as well. 
+— Forbidden combination constraints. Not all possible combinations of pipelines are viable or meaningfully different. For example, in a classification task comparing the performance of  logistic regression and decision trees the former requires feature scaling while the latter may not. In this case you can block the unnecessary pair. Reskit supports general tuple blocking as well.
 — Full compatibility with scikit-learn objects. Reskit can use any scikit-learn data transforming object and/or predictive model, and many other libraries that uses the scikit template.
 — Evaluation of multiple performance metrics simultaneously. Evaluation is simply another step in the pipeline, so we can specify a number of possible evaluation metrics and Reskit will expand out the computations for each metric for each pipeline.
 — The DataTransformer class, which is Reskit’s simplfied interface for specifying fit/transform methods in pipeline steps. A DataTransformer subclass need only specify one function.
@@ -64,12 +64,12 @@ Main features of Reskit
 How Reskit works
 ----------------
 
-Пример использования:
+Usage example:
 
 .. code-block:: python
  :linenos:
  :linenostart: 2
-  
+
   from sklearn.datasets import make_classification
   from reskit.core import Pipeliner
 
@@ -92,10 +92,10 @@ How Reskit works
 
   steps = [('scaler', scalers),
            ('classifier', classifiers)]
-        
+
   # setting grid search parameters
   param_grid = {'LR': {'penalty': ['l1', 'l2']},
-                'SVC': {'kernel': ['linear', 'poly', 'rbf', 'sigmoid']}} 
+                'SVC': {'kernel': ['linear', 'poly', 'rbf', 'sigmoid']}}
 
   # setting cross-validations for grid search and for evaluation
   grid_cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=0)
@@ -106,8 +106,9 @@ How Reskit works
   # launching experiment
   pipeliner.get_results(X, y, scoring=['roc_auc'])
 
-И вы типа получите следующее:
-  
+
+Result will be
+
 .. code-block:: bash
 
   Line: 1/4
@@ -119,53 +120,34 @@ How Reskit works
 .. csv-table::
   :file: papers/dmitry_petrov/overview_results.csv
 
-Когда инициализируется объект Pipeliner создается датафрейм со всевозможными
-пайплайнами. Вы можете посмотреть на этот датафрейм
+When Pipeliner initializes dataframe with all possible combinations is created
 
 .. code-block:: python
 
-  pipeliner.plan_table 
+  pipeliner.plan_table
 
 .. csv-table::
   :file: papers/dmitry_petrov/overview_plan_table.csv
 
-Когда вы запускаете метод get_results он идет по строкам этой таблицы и
-,если заданны шаги, которые нужно кэшировать, то кэширует их (здесь они не заданы).
-За это отвечает метод
+Gives results dataframe by defined pipelines.
 
-.. code-block:: python 
+.. code-block:: python
 
     pipeliner.transform_with_caching(X, y, row_keys)
 
-Он принимает делает нужные трансформации и сохраняет шаги последнего пайплайна
-в self._cached_X по ключам из row_keys, где row_keys это строковые идентификаторы,
-по которым вы можете получить объекты в self.named_steps, которые в свою очередь
-получены из steps, преобразованием их в словарь из листов тьюплов.
-
-Далее вызывается метод
+Description
 
 .. code-block:: python
 
   pipeliner.get_grid_search_results(self, X, y, row_keys,scoring):
 
-Оставшиеся шаги (в нашем случае все шаги строки) подаются в этот метод, как row_keys.
-С их помощью составляется обычный scikit-learn пайплайн и ищутся лучшие параметры.
-Возвращается словарь с полями, 'grid_{}_mean', 'grid_{}_std', 'grid_{}_best_params', значения
-этих полей вписываются в результирующу таблицу по колонкам полей.
-
-Далее запускается
+Description
 
 .. code-block:: python
 
   pipeliner.get_scores(self, X, y, row_keys, scoring):
 
-Здесь по аналогии в get_grid_search_results составляется пайплайн, но только уже
-получаются скоры по метрике scoring через cross_val_score для найденных лучших 
-параметров (которые сохранены в self.best_params по нужному ключю, но не знаю
-надо ли это писать, там ключ составляется из row_keys и scoring мерджа как
-строк). Метод возвращает эти скоры.
-
-В результате мы получаем заполненную таблицу, как мы видели выше.
+Description
 
 Of course, no paper would be complete without some source code.  Without
 highlighting, it would look like this::
@@ -363,5 +345,3 @@ References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
-
-
