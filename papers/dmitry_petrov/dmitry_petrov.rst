@@ -117,7 +117,7 @@ How Reskit works
 
 
 .. csv-table::
-  :file: overview_results.csv
+  :file: papers/dmitry_petrov/overview_results.csv
 
 Когда инициализируется объект Pipeliner создается датафрейм со всевозможными
 пайплайнами. Вы можете посмотреть на этот датафрейм
@@ -127,14 +127,15 @@ How Reskit works
   pipeliner.plan_table 
 
 .. csv-table::
-  :file: overview_plan_table.csv
+  :file: papers/dmitry_petrov/overview_plan_table.csv
 
 Когда вы запускаете метод get_results он идет по строкам этой таблицы и
 ,если заданны шаги, которые нужно кэшировать, то кэширует их (здесь они не заданы).
 За это отвечает метод
 
-.. code-block:: python
-  transform_with_caching(self, X, y, row_keys):
+.. code-block:: python 
+
+    pipeliner.transform_with_caching(X, y, row_keys)
 
 Он принимает делает нужные трансформации и сохраняет шаги последнего пайплайна
 в self._cached_X по ключам из row_keys, где row_keys это строковые идентификаторы,
@@ -144,7 +145,8 @@ How Reskit works
 Далее вызывается метод
 
 .. code-block:: python
-  get_grid_search_results(self, X, y, row_keys,scoring):
+
+  pipeliner.get_grid_search_results(self, X, y, row_keys,scoring):
 
 Оставшиеся шаги (в нашем случае все шаги строки) подаются в этот метод, как row_keys.
 С их помощью составляется обычный scikit-learn пайплайн и ищутся лучшие параметры.
@@ -154,7 +156,8 @@ How Reskit works
 Далее запускается
 
 .. code-block:: python
-  get_scores(self, X, y, row_keys, scoring):
+
+  pipeliner.get_scores(self, X, y, row_keys, scoring):
 
 Здесь по аналогии в get_grid_search_results составляется пайплайн, но только уже
 получаются скоры по метрике scoring через cross_val_score для найденных лучших 
